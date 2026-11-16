@@ -3,12 +3,12 @@ igMetaField *g_beHitLandModelTraversal_orderMetaField;
 
 beHitLandModelTraversal *beHitLandModelTraversal_Create(int allocator) {
     beHitLandModelTraversal_EnsureRegistered();
-    return (beHitLandModelTraversal *)igMetaObject_CreateInstance(*(int *)0x589380, allocator);
+    return (beHitLandModelTraversal *)igMetaObject_CreateInstance(g_beHitLandModelTraversal_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beHitLandModelTraversal_GetOrCreateMetaObject(void) {
     if (g_beHitLandModelTraversal_metaObject == 0) {
-        g_beHitLandModelTraversal_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beHitLandModelTraversal_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beHitLandModelTraversal_metaObject;
 }
@@ -36,7 +36,7 @@ int beHitLandModelTraversal_GetVTable(void) {
     obj._vtable = (int)&g_beHitLandModelTraversal_vtable[0];
     orderSlot = (char *)&obj._order;
     *(int *)orderSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beHitLandModelTraversal_vtable[0];
     igSmartPointer_beHitLandModelOrder_Destruct((igSmartPointer<igObject> *)orderSlot, -1);
     igIntersectTraversal_Destroy((igIntersectTraversal *)&obj, 0);
@@ -50,12 +50,12 @@ void beHitLandModelTraversal_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beHitLandModelTraversal_callbackList[] = { beHitLandModelOrder_EnsureRegistered, 0 };
 
-void *beHitLandModelTraversal_Register(void) {
+CallbackArray *beHitLandModelTraversal_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beHitLandModelTraversal_metaObject,
-        igIntersectTraversal_Register,
+        (igMetaObjectRegisterFunction)igIntersectTraversal_Register,
         igIntersectTraversal_GetPublishedMetaObject,
         beHitLandModelTraversal_GetMetaObjectFunction,
         "beHitLandModelTraversal",
@@ -72,8 +72,8 @@ void beHitLandModelTraversal_GetMetaObjectFunction(void)
     beHitLandModelTraversal_GetMetaObject();
 }
 
-int igIntersectTraversal_GetPublishedMetaObject(void) {
-    return g_igIntersectTraversal_metaObject[0];
+igMetaObject *igIntersectTraversal_GetPublishedMetaObject(void) {
+    return g_igIntersectTraversal_metaObject;
 }
 
 static FieldFactory g_beHitLandModelTraversal_ctorTable[] = {
@@ -92,9 +92,9 @@ static int g_beHitLandModelTraversal_fieldOffsets[] = {
 void beHitLandModelTraversal_InitFields(void) {
     int base;
     void *order;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beHitLandModelTraversal_metaObject;
+    meta = g_beHitLandModelTraversal_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandModelTraversal_ctorTable, 1);
     order = (void *)(igMetaObject_GetFieldAt(meta, base));

@@ -20,7 +20,7 @@ igMetaField *g_beNDMWWindow_modelCloseSeqNameListMetaField;
 
 igMetaObject *beNDMWWindow_GetOrCreateMetaObject(void) {
     if (g_beNDMWWindow_metaObject == 0) {
-        g_beNDMWWindow_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWWindow_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWWindow_metaObject;
 }
@@ -40,7 +40,7 @@ void beNDMWWindow_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWWindow_callbackList[] = { igInsightCore_EnsureRegistered, beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWWindowList_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWWindow_Register(void) {
+CallbackArray *beNDMWWindow_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -161,13 +161,13 @@ void beNDMWWindow_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWWindow_ctorTable, 0x12);
     insight = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)insight)->_refCounted = 0;
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
     subWindow = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
@@ -176,19 +176,19 @@ void beNDMWWindow_InitFields(void) {
     mother = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)mother)->_metaObject = (int)beNDMWWindow_GetOrCreateMetaObject();
     textCloseTypeList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
-    ((igObjectRefMetaField *)textCloseTypeList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)textCloseTypeList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)textCloseTypeList)->_construct = 1;
     textCloseNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
-    ((igObjectRefMetaField *)textCloseNameList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)textCloseNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)textCloseNameList)->_construct = 1;
     modelCloseInfoNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
-    ((igObjectRefMetaField *)modelCloseInfoNameList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)modelCloseInfoNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)modelCloseInfoNameList)->_construct = 1;
     modelCloseRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x10));
     ((igObjectRefMetaField *)modelCloseRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)modelCloseRamNoList)->_construct = 1;
     modelCloseSeqNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
-    ((igObjectRefMetaField *)modelCloseSeqNameList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)modelCloseSeqNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)modelCloseSeqNameList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWWindow_fieldTable, g_beNDMWWindow_fieldHandles, g_beNDMWWindow_fieldOffsets, base);
 }

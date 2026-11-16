@@ -6,7 +6,7 @@ igMetaField *g_beNDMWStatusCtrlSendBit_receiptMetaField;
 
 beNDMWStatusCtrlSendBit *beNDMWStatusCtrlSendBit_Create(int allocator) {
     beNDMWStatusCtrlSendBit_EnsureRegistered();
-    return (beNDMWStatusCtrlSendBit *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlSendBit_metaObject, allocator);
+    return (beNDMWStatusCtrlSendBit *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlSendBit_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWStatusCtrlSendBit_GetMetaObject(void) {
@@ -31,7 +31,7 @@ int beNDMWStatusCtrlSendBit_GetVTable(void) {
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlSendBit_vtable[0];
     obj._playerNoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlSendBit_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
@@ -45,7 +45,7 @@ void beNDMWStatusCtrlSendBit_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusCtrlSendBit_callbackList[] = { igIntList_EnsureRegistered, 0 };
 
-void *beNDMWStatusCtrlSendBit_Register(void) {
+CallbackArray *beNDMWStatusCtrlSendBit_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

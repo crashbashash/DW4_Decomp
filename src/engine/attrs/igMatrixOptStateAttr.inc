@@ -3,12 +3,12 @@ igMetaField *g_igMatrixOptStateAttr_enabledMetaField;
 
 void FUN_001359a0(int arg0) {
     FUN_00135ac0();
-    igMetaObject_CreateInstance(*(int *)0x55F000, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F000, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_001359e0(void) {
     if (g_igMatrixOptStateAttr_metaObject == 0) {
-        g_igMatrixOptStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igMatrixOptStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMatrixOptStateAttr_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igMatrixOptStateAttr_GetMetaObject(void)
 
 int igMatrixOptStateAttr_GetVTable(void) {
     struct Obj obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMatrixOptStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00135ac0(void)
@@ -33,9 +33,9 @@ void FUN_00135ac0(void)
     igMetaObject_RunStaticInit(igMatrixOptStateAttr_Register);
 }
 
-void igMatrixOptStateAttr_Register(void) {
+CallbackArray *igMatrixOptStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMatrixOptStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -55,7 +55,7 @@ void thunk_igMatrixOptStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igMatrixOptStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igMatrixOptStateAttr_fieldTable[] = {
     "_enabled",

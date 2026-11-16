@@ -10,7 +10,7 @@ void beNDMWWindowTitle_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWWindowTitle_Register);
 }
 
-void *beNDMWWindowTitle_Register(void) {
+CallbackArray *beNDMWWindowTitle_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */

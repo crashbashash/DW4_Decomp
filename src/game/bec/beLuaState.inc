@@ -3,12 +3,12 @@ igMetaField *g_beLuaState_lpMetaField;
 
 beLuaState *beLuaState_Create(int allocator) {
     beLuaState_EnsureRegistered();
-    return (beLuaState *)igMetaObject_CreateInstance(*(int *)0x5891B0, allocator);
+    return (beLuaState *)igMetaObject_CreateInstance(g_beLuaState_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beLuaState_GetOrCreateMetaObject(void) {
     if (g_beLuaState_metaObject == 0) {
-        g_beLuaState_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beLuaState_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beLuaState_metaObject;
 }
@@ -34,7 +34,7 @@ int beLuaState_GetVTable(void) {
     memPoolSlot = (igObject **)&obj._memPool;
     *memPoolSlot = 0;
     obj._vtable = (int)&g_beLuaState_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igLuaState_vtable[0];
     igObjectRef_Release(memPoolSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -47,12 +47,12 @@ void beLuaState_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLuaState_Register);
 }
 
-void *beLuaState_Register(void) {
+CallbackArray *beLuaState_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLuaState_metaObject,
-        igLuaState_Register,
+        (igMetaObjectRegisterFunction)igLuaState_Register,
         igLuaState_GetPublishedMetaObject,
         beLuaState_GetMetaObjectFunction,
         "beLuaState",
@@ -69,8 +69,8 @@ void beLuaState_GetMetaObjectFunction(void)
     beLuaState_GetMetaObject();
 }
 
-int igLuaState_GetPublishedMetaObject(void) {
-    return g_igLuaState_metaObject[0];
+igMetaObject *igLuaState_GetPublishedMetaObject(void) {
+    return g_igLuaState_metaObject;
 }
 
 static FieldFactory g_beLuaState_ctorTable[] = {
@@ -88,9 +88,9 @@ static int g_beLuaState_fieldOffsets[] = {
 
 void beLuaState_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beLuaState_metaObject;
+    meta = g_beLuaState_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLuaState_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beLuaState_fieldTable, g_beLuaState_fieldHandles, g_beLuaState_fieldOffsets, base);

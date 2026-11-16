@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWStatusPowerSocket_metaObject;
 
 beNDMWStatusPowerSocket *beNDMWStatusPowerSocket_Create(int allocator) {
     beNDMWStatusPowerSocket_EnsureRegistered();
-    return (beNDMWStatusPowerSocket *)igMetaObject_CreateInstance(g_beNDMWStatusPowerSocket_metaObject, allocator);
+    return (beNDMWStatusPowerSocket *)igMetaObject_CreateInstance(g_beNDMWStatusPowerSocket_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWStatusPowerSocket_GetMetaObject(void) {
@@ -19,7 +19,7 @@ int beNDMWStatusPowerSocket_GetVTable(void) {
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
     *(int **)&obj._vtable = &g_beNDMWStatusPowerSocket_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusPowerSocket_vtable[0];
     beNDMWStatusCtrlBaseEquip_Destroy((beNDMWStatusCtrlBaseEquip *)&obj, 0);
     return vtable;
@@ -30,7 +30,7 @@ void beNDMWStatusPowerSocket_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusPowerSocket_Register);
 }
 
-void *beNDMWStatusPowerSocket_Register(void) {
+CallbackArray *beNDMWStatusPowerSocket_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -3,7 +3,7 @@ igMetaField *g_beUnicodeObj_bufferMetaField;
 
 beUnicodeObj *beUnicodeObj_Create(int allocator) {
     beUnicodeObj_EnsureRegistered();
-    return (beUnicodeObj *)igMetaObject_CreateInstance(*(int *)0x589640, allocator);
+    return (beUnicodeObj *)igMetaObject_CreateInstance(g_beUnicodeObj_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beUnicodeObj_GetMetaObject(void) {
@@ -24,7 +24,7 @@ int beUnicodeObj_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beUnicodeObj_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -35,7 +35,7 @@ void beUnicodeObj_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beUnicodeObj_Register);
 }
 
-void *beUnicodeObj_Register(void) {
+CallbackArray *beUnicodeObj_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -73,9 +73,9 @@ static int g_beUnicodeObj_fieldOffsets[] = {
 void beUnicodeObj_InitFields(void) {
     int base;
     void *buffer;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beUnicodeObj_metaObject;
+    meta = g_beUnicodeObj_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beUnicodeObj_ctorTable, 1);
     buffer = (void *)(igMetaObject_GetFieldAt(meta, base));

@@ -9,7 +9,7 @@ igMetaField *g_igViewportAttr_farZMetaField;
 
 igMetaObject *FUN_00130440(void) {
     if (g_igViewportAttr_metaObject == 0) {
-        g_igViewportAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igViewportAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igViewportAttr_metaObject;
 }
@@ -27,11 +27,11 @@ int igViewportAttr_GetVTable(void) {
     int temp_s0;
     char *ps;
     int *temp_a0;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igViewportAttr_vtable[0];
     ps = &u.b[28];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igViewportAttr_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
@@ -52,9 +52,9 @@ void igViewportAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igViewportAttr_callbackList[] = { FUN_0014bd20, 0 };
 
-void igViewportAttr_Register(void) {
+CallbackArray *igViewportAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewportAttr_metaObject,
         igVisualAttribute_Register,
@@ -78,13 +78,13 @@ igMetaObject *FUN_00130610(void) {
 }
 
 static FieldFactory g_igViewportAttr_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
 };
 static const char *g_igViewportAttr_fieldTable[] = {
     "_x",
@@ -139,7 +139,7 @@ StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage) {
         char *value=self->value;
         if(value) {
             int *header=(int *)(value-8);
-            if(--header[1]==0) StringChunk_ReleaseHeader((void *)header[0], (int)header);
+            if(--header[1]==0) StringChunk_ReleaseHeader((StringChunk *)((void *)header[0]), (StringTokenHeader *)header);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }

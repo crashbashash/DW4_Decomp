@@ -1,13 +1,13 @@
 int FUN_0019f480(int arg0) {
     igGraphPathList_EnsureRegistered();
-    return igMetaObject_CreateInstance((int)g_igGraphPathList_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igGraphPathList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *g_igGraphPathList_metaObject;
 
 igMetaObject *FUN_0019f4c0(void) {
     if (g_igGraphPathList_metaObject == 0) {
-        g_igGraphPathList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGraphPathList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGraphPathList_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igGraphPathList_GetMetaObject(void)
 int igGraphPathList_GetVTable(void) {
     int tmp[8];
     int off;
-    igObject_InitHeader(&tmp[0]);
+    igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&g_igGraphPathList_vtable[0];
-    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
+    off = *(int *)((char *)g_objectSystem + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -36,9 +36,9 @@ void igGraphPathList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igGraphPathList_callbackList[] = { igGraphPath_EnsureRegistered, 0 };
 
-void igGraphPathList_Register(void) {
+CallbackArray *igGraphPathList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGraphPathList_metaObject,
         igObjectList_Register,

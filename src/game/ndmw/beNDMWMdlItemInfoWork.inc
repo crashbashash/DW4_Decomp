@@ -10,7 +10,7 @@ igMetaField *g_beNDMWMdlItemInfoWork_isColorLightMetaField;
 
 beNDMWMdlItemInfoWork *beNDMWMdlItemInfoWork_Create(int allocator) {
     beNDMWMdlItemInfoWork_EnsureRegistered();
-    return (beNDMWMdlItemInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlItemInfoWork_metaObject, allocator);
+    return (beNDMWMdlItemInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlItemInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMdlItemInfoWork_GetReadyMetaObject(void) {
@@ -26,7 +26,7 @@ done:
 
 int beNDMWMdlItemInfoWork_GetVTable(void) {
     ItemInfoWork work;
-    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&work + *(int *)((char *)(char *)g_objectSystem + 916));
 }
 
 igSmartPointer<igObject> *igSmartPointer_beNDMWItemBase_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
@@ -35,9 +35,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWItemBase_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -55,7 +55,7 @@ void beNDMWMdlItemInfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWMdlItemInfoWork_callbackList[] = { beNDMWItemBase_EnsureRegistered, 0 };
 
-void *beNDMWMdlItemInfoWork_Register(void) {
+CallbackArray *beNDMWMdlItemInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

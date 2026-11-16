@@ -21,7 +21,7 @@ int beHitLandModelInfoRam_GetVTable(void) {
     *dataListSlot = 0;
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     obj._vtable = (int)&g_beHitLandModelInfoRam_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     igObjectRef_Release(dataListSlot);
     return vtable;
@@ -32,7 +32,7 @@ void beHitLandModelInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandModelInfoRam_Register);
 }
 
-void *beHitLandModelInfoRam_Register(void) {
+CallbackArray *beHitLandModelInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

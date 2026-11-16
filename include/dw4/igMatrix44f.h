@@ -2,6 +2,7 @@
 #define DW4_IGMATRIX44F_H
 
 #include "dw4/igMath.h"
+#include "dw4/igVec3f.h"
 
 extern "C" {
 void igMatrix44f_SetIdentity(float *matrix);
@@ -9,6 +10,10 @@ void igMatrix44f_FromRows(float *matrix, const igVec4f *row0, const igVec4f *row
                   const igVec4f *row3);
 /* The matrices are 16 floats, row-major, translation in elements 12-14. */
 void igMatrix44f_GetTranslation(const float *matrix, float *vector);
+/* Sets elements 12-14 to `vector`, leaving the rest. */
+void igMatrix44f_SetTranslation(float *matrix, const float *vector);
+/* The identity with `translation` in elements 12-14. */
+void igMatrix44f_FromTranslation(float *matrix, const igVec3f &translation);
 void igMatrix44f_MakeEulerRotation(void *matrix, float x, float y, float z);
 void igMatrix44f_SetEulerRotation(float *m, float x, float y, float z);
 void igMatrix44f_SetQuaternion(float *m, float *q);

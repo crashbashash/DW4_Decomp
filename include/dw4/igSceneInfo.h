@@ -1,6 +1,7 @@
 #ifndef DW4_IGSCENEINFO_H
 #define DW4_IGSCENEINFO_H
 
+struct CallbackArray;
 struct igMetaObject;
 struct igSceneInfo;
 
@@ -15,7 +16,7 @@ struct igSceneInfo *igSceneInfo_CreateInstance(int allocator);
 void *igSceneInfo_Destroy(struct igSceneInfo *self, short flags);
 struct igMetaObject *igSceneInfo_GetMetaObject(void);
 struct igMetaObject *igSceneInfo_GetOrCreateMetaObject(void);
-void igSceneInfo_Register(void);
+struct CallbackArray *igSceneInfo_Register(void);
 
 #ifdef __cplusplus
 }

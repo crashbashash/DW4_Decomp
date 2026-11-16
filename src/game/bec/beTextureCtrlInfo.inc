@@ -23,7 +23,7 @@ int beTextureCtrlInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beTextureCtrlInfo_vtable[0];
     obj._dataList_ = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beTextureCtrlInfo_vtable[0];
     igSmartPointer_igNamedObjectList_Destruct(&obj._dataList_, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -37,7 +37,7 @@ void beTextureCtrlInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beTextureCtrlInfo_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
 
-void *beTextureCtrlInfo_Register(void) {
+CallbackArray *beTextureCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -79,13 +79,13 @@ static int g_beTextureCtrlInfo_fieldOffsets[] = {
 void beTextureCtrlInfo_InitFields(void) {
     int base;
     void *dataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beTextureCtrlInfo_metaObject;
+    meta = g_beTextureCtrlInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTextureCtrlInfo_ctorTable, 2);
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)dataList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beTextureCtrlInfo_fieldTable, g_beTextureCtrlInfo_fieldHandles, g_beTextureCtrlInfo_fieldOffsets, base);
 }

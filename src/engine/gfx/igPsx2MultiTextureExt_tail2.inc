@@ -26,8 +26,8 @@ void FUN_0016fea0(A_16fea0 *arg0, int arg1, int arg2, int arg3) {
     } else {
         var_a0 = 0;
     }
-    p2CurrentProgram[0] = arg1;
-    p2CurrentGsRegisters[0] = &p2GsRegisterSets[0] + var_a0;
+    p2CurrentProgram = arg1;
+    p2CurrentGsRegisters = &p2GsRegisterSets[0] + var_a0;
     if (arg0->f28 != 0) {
         p2SetBlendEquation(arg0->f32, arg0->f36, arg0->f40, arg0->f44, arg0->f48);
     } else {
@@ -71,7 +71,7 @@ void FUN_0016fea0(A_16fea0 *arg0, int arg1, int arg2, int arg3) {
             break;
         }
     }
-    p2CurrentProgram[0] = 0;
-    p2CurrentGsRegisters[0] = &p2GsRegisterSets[0];
+    p2CurrentProgram = 0;
+    p2CurrentGsRegisters = &p2GsRegisterSets[0];
 }
 

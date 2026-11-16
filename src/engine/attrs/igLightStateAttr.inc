@@ -5,12 +5,12 @@ igMetaField *g_igLightStateAttr_internalMetaField;
 
 void FUN_001361b0(int arg0) {
     igLightStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F060, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F060, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_001361f0(void) {
     if (g_igLightStateAttr_metaObject == 0) {
-        g_igLightStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igLightStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLightStateAttr_metaObject;
 }
@@ -30,13 +30,13 @@ int igLightStateAttr_GetVTable(void) {
     int *a1;
     int v0;
     S_ref *p0, *p1;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     p0 = (S_ref *)&u.b[12];
     p1 = (S_ref *)&u.b[16];
     u.vt = (int)&g_igLightStateAttr_vtable[0];
     *(int *)p0 = 0;
     *(int *)p1 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igLightStateAttr_vtable[0];
     if (p1 != 0) {
         p1 = *(S_ref **)p1;
@@ -92,9 +92,9 @@ void igLightStateAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igLightStateAttr_callbackList[] = { igLightAttr_EnsureRegistered, igObject_EnsureRegistered, 0 };
 
-void igLightStateAttr_Register(void) {
+CallbackArray *igLightStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLightStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -114,9 +114,9 @@ void thunk_igLightStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igLightStateAttr_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igLightStateAttr_fieldTable[] = {
     "_light",

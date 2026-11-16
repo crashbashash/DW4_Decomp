@@ -60,7 +60,7 @@ public:
 };
 /* The matrix of a transform node held as a plain reference field. */
 static inline float *NodeMatrix(int node) { return ((igTransform *)node)->_m; }
-extern "C" int igTraversal_RegisterFunction(int, igMetaObject *, void (*)(void));
+extern "C" void igTraversal_RegisterFunction(struct igTraversalFunctionList *table, struct igMetaObject *meta, void *function);
 extern "C" int thunk_igAABox_Transform(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
@@ -100,7 +100,7 @@ extern "C" int beModelCtrlInfoRideOn2_GetMeta(void);
 extern "C" float sqrtf(float);
 extern "C" int igMatrix44f_GetTranslation(int, float *);
 extern "C" void *beModelCtrlInfoRideOn_Create(...);
-extern "C" int beMessenger_GetBool(...);
+extern "C" unsigned char beMessenger_GetBool(struct beMessenger *self, int index);
 extern "C" int beMessenger_GetBoolCount(...);
 extern "C" int beMessenger_GetInt(...);
 extern "C" int beMessenger_GetStringCount(...);
@@ -376,7 +376,7 @@ extern "C" beModelCtrlInfoRideOn2 *beModelCtrlInfoRideOn2_Create(int);
 extern "C" beModelCtrlInfoAI *beModelCtrlInfoAI_Create(int);
 extern "C" beModelCtrlInfoHitBody *beModelCtrlInfoHitBody_Create(int);
 extern "C" void beModelCtrlSubCom_StopAll(int, beBaseInfoRam *);
-extern "C" void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName, const char *seqName, float startFrame, const igVec3f &offset, igVec3f rotation, int isSeqDead, int isPositionLock);
+extern "C" void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName, const char *seqName, float startFrame, const igVec3f &offset, igVec3f rotation, unsigned char isSeqDead, unsigned char isPositionLock);
 /* The work's sub-command list (effects, sounds, hit boxes started by commands). */
 static inline beModelCtrlSubCom *SubCommands(beModelCtrlInfoWork *work) { return (beModelCtrlSubCom *)work->_subCommand; }
 extern "C" void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *, float);
@@ -544,10 +544,10 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
 }
 
 void beMeterCtrlNode_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beMeterCtrlNode_ResolveMetaObject(), (void (*)())beMeterCtrlNode_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], (igMetaObject *)beMeterCtrlNode_ResolveMetaObject(), (void *)beMeterCtrlNode_TraversalFunction);
 }
 
-void beModelCtrl_DrawDebugHitBox(void)
+void beModelCtrl_DrawDebugHitBox(beModelCtrl *self, igNode *node, igAABox *box, float *color)
 {
 }
 
@@ -1280,7 +1280,7 @@ void beModelCtrl_CheckWallAndFloor(beModelCtrl *self, beBaseInfo *info, beBaseIn
         ramNo = ram->_ramNo;
         name = name ? name : (int)emptyString;
         beMessenger_SendNamed(self->_messenger, HITLANDDELIVER, name, ramNo, kind);
-        if (work->_luaWHit != 0 && beMessenger_GetBool(self->_messenger, 1) != 0) {
+        if (work->_luaWHit != 0 && beMessenger_GetBool((beMessenger *)self->_messenger, 1)) {
             int name = info->_name;
             name = name ? name : (int)emptyString;
             beModelCtrl_CallLua(self, ram, (const char *)work->_luaWHit, WHit, (const char *)name, 0, 0, (const char *)0, 0, 0);
@@ -1305,8 +1305,8 @@ void beModelCtrl_CheckWallAndFloor(beModelCtrl *self, beBaseInfo *info, beBaseIn
                 hasFloorModel = 0;
             }
         }
-        landed = beMessenger_GetBool(self->_messenger, 0);
-        floorHit = beMessenger_GetBool(self->_messenger, 1) & 0xFF;
+        landed = beMessenger_GetBool((beMessenger *)self->_messenger, 0);
+        floorHit = beMessenger_GetBool((beMessenger *)self->_messenger, 1);
         rideOnChanged = false;
         if (work->_isFallCheck) {
             if (((int)beModelCtrl_QueryMove(self, ram, work, 4))) {
@@ -2159,7 +2159,7 @@ void beModelCtrl_UpdateWaitCheck(beModelCtrl *self, beModelCtrlInfo *info, beBas
         int ramNo = ram->_ramNo;
         name = name ? name : (int)emptyString;
         beMessenger_SendNamed(self->_messenger, ACTION_2, name, ramNo, ISCOMEND);
-        if (beMessenger_GetBool(self->_messenger, 0) != 0) {
+        if (beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
             END_WAIT();
         }
     } else if (strcmp(work->_wCheckName, Moving) == 0) {
@@ -2612,7 +2612,7 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
     parentRamNo = beMessenger_GetInt(self->_messenger, 0);
     igVec3f offset = beMessenger_GetVec3(self->_messenger, 0);
     igVec3f rotation = beMessenger_GetVec3Count(self->_messenger) == 2 ? beMessenger_GetVec3(self->_messenger, 1) : *(igVec3f *)g_vec3Zero;
-    posLock = beMessenger_GetBool(self->_messenger, 0);
+    posLock = beMessenger_GetBool((beMessenger *)self->_messenger, 0);
     hitParentName = (char *)beMessenger_GetString(self->_messenger, 2);
     {
         char *token;
@@ -2853,7 +2853,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         if (ram->_isRun != 0 && work != 0) {
             beModelCtrlSubCom_AddEffect(SubCommands(work), beMessenger_GetString(MESSENGER, 0), beMessenger_GetString(MESSENGER, 1), beMessenger_GetFloat(MESSENGER, 0),
                 beMessenger_GetVec3(MESSENGER, 0), beMessenger_GetVec3Count(MESSENGER) == 2 ? beMessenger_GetVec3(MESSENGER, 1) : *(igVec3f *)g_vec3Zero,
-                beMessenger_GetBool(MESSENGER, 0), beMessenger_GetBool(MESSENGER, 1));
+                beMessenger_GetBool((beMessenger *)MESSENGER, 0), beMessenger_GetBool((beMessenger *)MESSENGER, 1));
         }
         return 1;
     case MSG_SETSOUND:

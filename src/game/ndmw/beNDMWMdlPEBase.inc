@@ -13,7 +13,7 @@ void beNDMWMdlPEBase_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlPEBase_Register);
 }
 
-void *beNDMWMdlPEBase_Register(void) {
+CallbackArray *beNDMWMdlPEBase_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */

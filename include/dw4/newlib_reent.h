@@ -114,4 +114,8 @@ typedef struct __sFILE FILE;
 extern struct _reent *_impure_ptr;
 #define _REENT _impure_ptr
 
+/* the error number the system-call wrappers set, and errno.c's accessor for the current one */
+extern int errno;
+int *__errno(void);
+
 #endif

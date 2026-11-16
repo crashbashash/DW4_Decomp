@@ -6,17 +6,23 @@
 #pragma push
 #pragma readonly_strings on
 
+#include "dw4/igViewerSceneInfoManager.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igView.h"
+#include "dw4/igModel.h"
+#include "dw4/ViewerOptions.h"
+#include "dw4/StringPool.h"
+#include "dw4/igViewModel.h"
+#include "dw4/igReport.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igNamedObject.h"
 extern "C" {
 
 int FUN_002377c0(...);
-int igViewerSceneInfoManager_ResetView(...);
 int FUN_002370c0(...);
 
-int __dl__FPv(...);
 
-extern "C" int igInsightCore_RemoveManager(void *, void *);
 
-int igInsightCore_RemoveRenderer(...);
 
 
 int FUN_00236ca0(int);
@@ -43,10 +49,8 @@ struct L1 { char pad[44]; L2 *p44; };
 struct B { char pad[16]; long long ll16; };
 extern "C" void FUN_00237730(igInsightCore *);
 
-int igView_SetModel(...);
 
-typedef struct R { int w0; int refs; } R;
-typedef struct S2 { char pad[8]; R *obj; int f12; } S2;
+typedef struct S2 { char pad[8]; igObject *obj; int f12; } S2;
 
 class ViewerClock {
 public:
@@ -54,41 +58,17 @@ public:
     virtual void setSeconds(float seconds);
 };
 
-int igModel_NotifyViews(...);
 
 extern int DAT_0058cd80[4];
 
 int igViewManager_OnKeyEvent(void *arg0);
 class DW4VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(); };
 
-int __nw__FUi(...);
-int ViewerOptions_Construct(...);
 int FUN_00464170(...);
-int StringChunk_ReleaseHeader(...);
 
-extern int g_igViewModel_hfovMetaField[4];
-extern int g_igViewModel_nearPlaneMetaField[4];
-extern int g_igViewModel_farPlaneMetaField[4];
 typedef struct Obj { char p[80]; float f80; float f84; float f88; } Obj;
 typedef struct Arg { char p[12]; Obj *o; } Arg;
 typedef struct Rec { int t; int z; int v; } Rec;
-typedef struct Frame {
-    void *f0;
-    char pad[60];
-    float f64;
-    unsigned char b68;
-    char pad2[3];
-    float f72;
-    float f76;
-    char pad3[133];
-    unsigned char f213;
-    char pad4[2];
-    unsigned char f216;
-    char pad5[15];
-    int f232;
-    void *f236;
-} Frame;
-extern Frame *g_sharedViewerOptions[4];
 
 int Gap__Viewer__igViewManager__vfunc_24(void *arg0);
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
@@ -102,8 +82,6 @@ typedef struct ViewModelEvent {
     int data;
 } ViewModelEvent;
 extern int DAT_0058cd40;
-int igReport_Info(...);
-void igMatrix44f_SetIdentity(float *);
 int igMatrix44f_Invert(int *, float *, float *);
 extern unsigned char GPR_00554e7c;
 extern unsigned char GPR_00554e80;
@@ -115,32 +93,24 @@ igObject *FUN_00459340(int);
 igObject *FUN_0045e230(int);
 igObject *FUN_0045be30(int);
 igObject *FUN_0045dbe0(int);
-int igInsightCore_AddRendererOrder(...);
-int igInsightCore_AddRenderer(...);
-int igInsightCore_AddManager(...);
-int StringPool_Allocate(...);
-int StringPool_Construct(...);
-void *StringPool_Intern(...);
-int igNamedObject_SetName(...);
-extern int g_stringPool[4];
 
 static inline void releaseString(void *p) {
     if (p != 0) {
         int *h = (int *)((char *)p - 8);
         int rc = *(int *)((char *)p - 4) - 1;
         *(int *)((char *)p - 4) = rc;
-        if (rc == 0) StringChunk_ReleaseHeader(*h, h);
+        if (rc == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
     }
 }
 
 static inline void *intern(const char *s) {
     if (s == 0) return 0;
-    if (g_stringPool[0] == 0) {
-        int pool = StringPool_Allocate(16);
+    if (g_stringPool == 0) {
+        StringPool *pool = (StringPool *)StringPool_Allocate(16);
         if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    return StringPool_Intern(g_stringPool[0], s);
+    return StringPool_Intern(g_stringPool, s);
 }
 
 struct StringRef {
@@ -148,35 +118,34 @@ struct StringRef {
     ~StringRef() { releaseString(p); }
 };
 
-InsightCore *igInsightCore_CreateInstance(int);
 
 ViewerSetup::ViewerSetup(igObject *w)
-    : core(igInsightCore_CreateInstance(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),
+    : core((InsightCore *)igInsightCore_CreateInstance(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),
       actors(FUN_0045e230(0), AdoptReference()), dataPump(FUN_0045be30(0), AdoptReference()), showLogo(1),
       logo(FUN_0045dbe0(0), AdoptReference()), window(w, kRetainReference) {
     igObject *next = window.p;
     if (next != 0) {
         InsightCore *c = core.p;
         c->window = next;
-        if (g_sharedViewerOptions[0] == 0) {
-            Frame *f = (Frame *)__nw__FUi(240);
-            if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
-            g_sharedViewerOptions[0] = f;
+        if (g_sharedViewerOptions == 0) {
+            SharedViewerOptions *f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
+            if (f != 0) f = ViewerOptions_Construct(f);
+            g_sharedViewerOptions = f;
         }
-        g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
+        g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
         {
-            Frame *g = g_sharedViewerOptions[0];
-            showLogo = g->f213 != 0 && !(g->f216 != 0);
+            SharedViewerOptions *g = g_sharedViewerOptions;
+            showLogo = g->showLogo != 0 && !(g->benchmark != 0);
         }
-        if (g_sharedViewerOptions[0] != 0) {
-            if (--g_sharedViewerOptions[0]->f232 <= 0) {
-                Frame *s1 = g_sharedViewerOptions[0];
+        if (g_sharedViewerOptions != 0) {
+            if (--g_sharedViewerOptions->useCount <= 0) {
+                SharedViewerOptions *s1 = g_sharedViewerOptions;
                 if (s1 != 0) {
-                    if (&s1->f236) releaseString(s1->f236);
-                    if (s1 != 0) releaseString(s1->f0);
-                    __dl__FPv(s1);
+                    if (&s1->internedString) releaseString((void *)s1->internedString);
+                    if (s1 != 0) releaseString(s1->extraCommandLine);
+                    operator delete(s1);
                 }
-                g_sharedViewerOptions[0] = 0;
+                g_sharedViewerOptions = 0;
             }
         }
         if (showLogo) {
@@ -184,24 +153,24 @@ ViewerSetup::ViewerSetup(igObject *w)
             StringRef overlays;
             scenes.p = intern("Scenes done");
             overlays.p = intern("Overlays done");
-            igInsightCore_AddRendererOrder(core.p, scenes.p, logo.p);
-            igInsightCore_AddRendererOrder(core.p, logo.p, overlays.p);
-            igInsightCore_AddRenderer(core.p, logo.p);
+            igInsightCore_AddRendererOrder((igInsightCore *)core.p, (igObject *)scenes.p, logo.p);
+            igInsightCore_AddRendererOrder((igInsightCore *)core.p, logo.p, (igObject *)overlays.p);
+            igInsightCore_AddRenderer((igInsightCore *)core.p, logo.p);
         }
-        igInsightCore_AddManager(core.p, sceneInfo.p);
-        igInsightCore_AddManager(core.p, dataPump.p);
-        igNamedObject_SetName(actors.p, "Actor manager");
-        igInsightCore_AddManager(core.p, actors.p);
+        igInsightCore_AddManager((igInsightCore *)core.p, sceneInfo.p);
+        igInsightCore_AddManager((igInsightCore *)core.p, dataPump.p);
+        igNamedObject_SetName((igNamedObject *)actors.p, "Actor manager");
+        igInsightCore_AddManager((igInsightCore *)core.p, actors.p);
     }
 }
 
 ViewerSetup::~ViewerSetup() {
     if (window.p != 0) {
-        igInsightCore_RemoveManager(core.p, dataPump.p);
-        igInsightCore_RemoveManager(core.p, actors.p);
-        igInsightCore_RemoveManager(core.p, sceneInfo.p);
+        igInsightCore_RemoveManager((igInsightCore *)core.p, dataPump.p);
+        igInsightCore_RemoveManager((igInsightCore *)core.p, actors.p);
+        igInsightCore_RemoveManager((igInsightCore *)core.p, sceneInfo.p);
         if (showLogo != 0) {
-            igInsightCore_RemoveRenderer(core.p, logo.p);
+            igInsightCore_RemoveRenderer((igInsightCore *)core.p, logo.p);
         }
     }
 }
@@ -242,9 +211,9 @@ int ViewerSetup_Update(ViewerSetup *setup) {
     return r;
 }
 
-int ViewerSetup_ResetView(ViewerSetup *setup)
+void ViewerSetup_ResetView(ViewerSetup *setup)
 {
-    return igViewerSceneInfoManager_ResetView((int)setup->sceneInfo.p);
+    igViewerSceneInfoManager_ResetView((igViewerSceneInfoManager *)setup->sceneInfo.p);
 }
 
 int ViewerSetup_ClearInfos(ViewerSetup *setup)
@@ -254,27 +223,27 @@ int ViewerSetup_ClearInfos(ViewerSetup *setup)
 
 void igViewManager_SetViewMode(igViewManager *manager, igViewMode *mode) {
     S2 *arg0 = (S2 *)manager;
-    R *arg1 = (R *)mode;
-    R *temp_a0;
-    R *temp_a0_2;
+    igObject *arg1 = (igObject *)mode;
+    igObject *temp_a0;
+    igObject *temp_a0_2;
 
     temp_a0 = arg0->obj;
     if (temp_a0 != 0) {
-        igView_SetModel(temp_a0, 0);
+        igView_SetModel((igView *)temp_a0, 0);
     }
     if (arg1 != 0) {
-        arg1->refs = arg1->refs + 1;
+        arg1->_refCount = arg1->_refCount + 1;
     }
     temp_a0_2 = arg0->obj;
     if (temp_a0_2 != 0) {
-        temp_a0_2->refs = temp_a0_2->refs - 1;
-        if (((unsigned long long)((long long)temp_a0_2->refs << 0x29) >> 0x29) == 0) {
+        temp_a0_2->_refCount = temp_a0_2->_refCount - 1;
+        if (((unsigned long long)((long long)(int)temp_a0_2->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(temp_a0_2);
         }
     }
     arg0->obj = arg1;
     if (arg1 != 0) {
-        igView_SetModel(arg1, arg0->f12);
+        igView_SetModel((igView *)arg1, (igModel *)arg0->f12);
     }
 }
 
@@ -297,7 +266,7 @@ void igViewManager_SetSceneUpVector(igViewManager *manager, const float *upVecto
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = DAT_0058cd80[0];
-    igModel_NotifyViews(manager->_viewModel, buf);
+    igModel_NotifyViews((igModel *)manager->_viewModel, (ModelChange *)buf);
 }
 
 int igViewManager_OnKeyEvent(void *arg0) {
@@ -315,68 +284,68 @@ void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
     Rec r1;
     Rec r2;
     Rec r3;
-    Frame *s0;
-    Frame *f;
+    SharedViewerOptions *s0;
+    SharedViewerOptions *f;
     void *p;
     int *h;
     int rc;
     FUN_00464170(scene, sp60, &sp6C, 1, -1);
-    if (g_sharedViewerOptions[0] == 0) {
-        f = (Frame *)__nw__FUi(240);
-        if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
-        g_sharedViewerOptions[0] = f;
+    if (g_sharedViewerOptions == 0) {
+        f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
+        if (f != 0) f = ViewerOptions_Construct(f);
+        g_sharedViewerOptions = f;
     }
-    g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
-    s0 = g_sharedViewerOptions[0];
-    if (!(sp6C <= 0.0f) && s0->b68 != 0) {
+    g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
+    s0 = g_sharedViewerOptions;
+    if (!(sp6C <= 0.0f) && s0->autoPlanes != 0) {
         arg0->o->f84 = sp6C / 100.0f;
         arg0->o->f88 = 3.0f * sp6C;
     } else {
-        arg0->o->f84 = s0->f72;
-        arg0->o->f88 = s0->f76;
+        arg0->o->f84 = s0->defaultNearPlane;
+        arg0->o->f88 = s0->defaultFarPlane;
     }
     r1.z = 0;
     r1.t = 2;
-    r1.v = g_igViewModel_nearPlaneMetaField[0];
-    igModel_NotifyViews(arg0->o, &r1);
+    r1.v = (int)g_igViewModel_nearPlaneMetaField;
+    igModel_NotifyViews((igModel *)arg0->o, (ModelChange *)&r1);
     r2.t = 2;
     r2.z = 0;
-    r2.v = g_igViewModel_farPlaneMetaField[0];
-    igModel_NotifyViews(arg0->o, &r2);
-    arg0->o->f80 = s0->f64;
+    r2.v = (int)g_igViewModel_farPlaneMetaField;
+    igModel_NotifyViews((igModel *)arg0->o, (ModelChange *)&r2);
+    arg0->o->f80 = s0->horizontalFieldOfView;
     r3.t = 2;
     r3.z = 0;
-    r3.v = g_igViewModel_hfovMetaField[0];
-    igModel_NotifyViews(arg0->o, &r3);
-    if (g_sharedViewerOptions[0] != 0) {
-        if (--g_sharedViewerOptions[0]->f232 <= 0) {
-            f = g_sharedViewerOptions[0];
+    r3.v = (int)g_igViewModel_hfovMetaField;
+    igModel_NotifyViews((igModel *)arg0->o, (ModelChange *)&r3);
+    if (g_sharedViewerOptions != 0) {
+        if (--g_sharedViewerOptions->useCount <= 0) {
+            f = g_sharedViewerOptions;
             if (f != 0) {
-                if (&f->f236) {
-                    p = f->f236;
+                if (&f->internedString) {
+                    p = (void *)f->internedString;
                     if (p != 0) {
                         h = (int *)((char *)(p) - 8);
                         rc = *(int *)((char *)(p) - 4) - 1;
                         *(int *)((char *)(p) - 4) = rc;
                         if (rc == 0) {
-                            StringChunk_ReleaseHeader(*h, h);
+                            StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
                         }
                     }
                 }
                 if (f != 0) {
-                    p = f->f0;
+                    p = f->extraCommandLine;
                     if (p != 0) {
                         h = (int *)((char *)(p) - 8);
                         rc = *(int *)((char *)(p) - 4) - 1;
                         *(int *)((char *)(p) - 4) = rc;
                         if (rc == 0) {
-                            StringChunk_ReleaseHeader(*h, h);
+                            StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
                         }
                     }
                 }
-                __dl__FPv(f);
+                operator delete(f);
             }
-            g_sharedViewerOptions[0] = 0;
+            g_sharedViewerOptions = 0;
         }
     }
 }
@@ -447,7 +416,7 @@ int Gap__Viewer__igViewManager__vfunc_32(igViewManager *self, int width, int hei
     event.type = 2;
     event.arg = 0;
     event.data = DAT_0058cd40;
-    igModel_NotifyViews((igViewModel *)self->_viewModel, &event);
+    igModel_NotifyViews((igModel *)self->_viewModel, (ModelChange *)&event);
     return 0;
 }
 
@@ -475,7 +444,7 @@ void igViewManager_PrintViewMatrix(igViewManager *self) {
     }
 }
 
-void Gap__Viewer__igViewManager__vfunc_13(int *a) { igView_SetModel(a[2], a[3]); }
+void Gap__Viewer__igViewManager__vfunc_13(int *a) { igView_SetModel((igView *)a[2], (igModel *)a[3]); }
 
 int Gap__Viewer__igViewManager__vfunc_22(void) {
     return (int)g_igViewManager_metaObject;

@@ -23,7 +23,7 @@ int beCameraDemoData_GetVTable(void) {
     obj._vtable = (int)&g_beCameraDemoData_vtable[0];
     cameraPathSlot = (igObject **)&obj._cameraPath;
     *cameraPathSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCameraDemoData_vtable[0];
     igObjectRef_Release(cameraPathSlot);
     return vtable;
@@ -36,7 +36,7 @@ void beCameraDemoData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCameraDemoData_callbackList[] = { igGraphPath_EnsureRegistered, 0 };
 
-void *beCameraDemoData_Register(void) {
+CallbackArray *beCameraDemoData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -82,13 +82,13 @@ static int g_beCameraDemoData_fieldOffsets[] = {
 void beCameraDemoData_InitFields(void) {
     int base;
     void *cameraPath;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCameraDemoData_metaObject;
+    meta = g_beCameraDemoData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraDemoData_ctorTable, 3);
     cameraPath = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)cameraPath)->_metaObject = igGraphPath_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)cameraPath)->_metaObject = (int)igGraphPath_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beCameraDemoData_fieldTable, g_beCameraDemoData_fieldHandles, g_beCameraDemoData_fieldOffsets, base);
 }
 

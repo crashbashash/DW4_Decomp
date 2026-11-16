@@ -25,7 +25,7 @@ igMetaField *g_beNDMWLoadIntf2SelSlot_st3MetaField;
 
 beNDMWLoadIntf2SelSlot *beNDMWLoadIntf2SelSlot_Create(int allocator) {
     beNDMWLoadIntf2SelSlot_EnsureRegistered();
-    return (beNDMWLoadIntf2SelSlot *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2SelSlot_metaObject, allocator);
+    return (beNDMWLoadIntf2SelSlot *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2SelSlot_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2SelSlot_ResolveMetaObject(void)
@@ -50,7 +50,7 @@ int beNDMWLoadIntf2SelSlot_GetVTable(void) {
     *nameRef = 0;
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2SelSlot_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);
@@ -65,7 +65,7 @@ void beNDMWLoadIntf2SelSlot_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLoadIntf2SelSlot_callbackList[] = { beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWLoadIntf2ComMdlCtrl_EnsureRegistered, beNDMWLoadIntf2TextOrder_EnsureRegistered, beNDMWLoadCtrl2CommonIntf_EnsureRegistered, 0 };
 
-void *beNDMWLoadIntf2SelSlot_Register(void) {
+CallbackArray *beNDMWLoadIntf2SelSlot_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -199,31 +199,31 @@ void beNDMWLoadIntf2SelSlot_InitFields(void) {
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
     meta = (void *)(g_beNDMWLoadIntf2SelSlot_metaObject);
-    base = igMetaObject_GetFieldCount(meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2SelSlot_ctorTable, 0x16);
-    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
-    nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
+    inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex((char *)((igMetaObject *)meta)->_metaFields, (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText(nameField, "SELSLOT");
+    igStringMetaField_SetDefaultText((igMetaField *)nameField, "SELSLOT");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2SelSlot_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;
     if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(nameField);
     }
-    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    messenger = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
-    padManager = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    padManager = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;
-    comMdlCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    comMdlCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)comMdlCtrl)->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)comMdlCtrl)->_refCounted = 0;
-    textOrder = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    textOrder = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)textOrder)->_metaObject = (int)beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)textOrder)->_refCounted = 0;
-    commonIntf = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    commonIntf = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)commonIntf)->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)commonIntf)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadIntf2SelSlot_fieldTable, g_beNDMWLoadIntf2SelSlot_fieldHandles, g_beNDMWLoadIntf2SelSlot_fieldOffsets, base);

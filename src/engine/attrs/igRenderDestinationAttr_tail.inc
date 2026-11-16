@@ -51,12 +51,6 @@ struct RenderDestinationDesc {
 };
 
 extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_46(igObject *context, RenderDestinationDesc *desc);
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_50(igObject *context);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_53(igObject *context, int renderDestination, int *sizeX, int *sizeY);
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_54(igObject *context, int renderDestination);
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_55(igObject *context, int renderDestination);
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_56(igObject *context, int renderDestination);
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_57(igObject *context, int renderDestination);
 
 /* apply: create the render destination on first use (copying the current one's format unless
  * `_iCreateMode` is 1, or adopting it when 2), then hold the context. */
@@ -68,16 +62,16 @@ extern "C" void Gap__Attrs__igRenderDestinationAttr__apply(RenderDestinationAttr
     if (!self->_bEnabled) {
         return;
     }
-    self->_iPrevRDHandle = Gap__Gfx__igPsx2VisualContext__vfunc_50(context);
+    self->_iPrevRDHandle = Gap__Gfx__igPsx2VisualContext__vfunc_50((igPsx2VisualContext *)context);
     if (self->_iRDHandle < 0) {
         if (self->_iCreateMode != 1) {
-            Gap__Gfx__igPsx2VisualContext__vfunc_53(context, self->_iPrevRDHandle, &sizeX, &sizeY);
+            Gap__Gfx__igPsx2VisualContext__vfunc_53((igPsx2VisualContext *)context, self->_iPrevRDHandle, &sizeX, &sizeY);
             self->_iSizeX = sizeX;
             self->_iSizeY = sizeY;
-            self->_iColorBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_54(context, self->_iPrevRDHandle);
-            self->_iAlphaBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_55(context, self->_iPrevRDHandle);
-            self->_iDepthBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_56(context, self->_iPrevRDHandle);
-            self->_iStencilBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_57(context, self->_iPrevRDHandle);
+            self->_iColorBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_54((igPsx2VisualContext *)context, self->_iPrevRDHandle);
+            self->_iAlphaBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_55((igPsx2VisualContext *)context, self->_iPrevRDHandle);
+            self->_iDepthBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_56((igPsx2VisualContext *)context, self->_iPrevRDHandle);
+            self->_iStencilBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_57((igPsx2VisualContext *)context, self->_iPrevRDHandle);
         }
         if (self->_iCreateMode == 2) {
             self->_iRDHandle = self->_iPrevRDHandle;
@@ -117,7 +111,7 @@ void Gap__Attrs__igRenderDestinationAttr__vfunc_26(OO *arg0, void **arg1) {
 
 void Gap__Attrs__igRenderDestinationAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 void Gap__Attrs__igRenderDestinationAttr__vfunc_28(X_13fea0 *arg0) {

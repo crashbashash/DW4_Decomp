@@ -7,13 +7,11 @@
 #define EXEC_ARGC_MAX (EXEC_ARG_SLOTS - 1)
 
 unsigned int strlen(const char *s);
-int InitTLB(void);
 int _ExecPS2(void *entry, void *gp, int argc, char **argv);
 void _LoadExecPS2(const char *filename, int argc, char **argv);
 void _Exit(int status);
 void _ExecOSD(int argc, char **argv);
 
-extern char *_kExecArg;
 extern SyscallEntry SysEntry_exit;
 
 /* system call 90 once kCopy is installed: a copy into kernel memory */

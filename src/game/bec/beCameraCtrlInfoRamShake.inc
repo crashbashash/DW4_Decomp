@@ -11,7 +11,7 @@ igMetaField *g_beCameraCtrlInfoRamShake_movePointMetaField;
 
 beCameraCtrlInfoRamShake *beCameraCtrlInfoRamShake_Create(int allocator) {
     beCameraCtrlInfoRamShake_EnsureRegistered();
-    return (beCameraCtrlInfoRamShake *)igMetaObject_CreateInstance(*(int *)0x589C38, allocator);
+    return (beCameraCtrlInfoRamShake *)igMetaObject_CreateInstance(g_beCameraCtrlInfoRamShake_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beCameraCtrlInfoRamShake_GetMetaObject(void) {
@@ -37,7 +37,7 @@ int beCameraCtrlInfoRamShake_GetVTable(void) {
     obj._vtable = (int)&g_beCameraCtrlInfoRamShake_vtable[0];
     moveCodeSlot = (char **)&obj._moveCode;
     *moveCodeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCameraCtrlInfoRamShake_vtable[0];
     igStringRef_Release(moveCodeSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -50,7 +50,7 @@ void beCameraCtrlInfoRamShake_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCameraCtrlInfoRamShake_Register);
 }
 
-void *beCameraCtrlInfoRamShake_Register(void) {
+CallbackArray *beCameraCtrlInfoRamShake_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -121,19 +121,19 @@ void beCameraCtrlInfoRamShake_InitFields(void) {
     igStringMetaField *clone;
 
     meta = (void *)g_beCameraCtrlInfoRamShake_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beCameraCtrlInfoRamShake_ctorTable, 8);
-    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beCameraCtrlInfoRamShake_ctorTable, 8);
+    found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "SHK");
     clone->_externalEnumStorage = (int)(&g_beCameraCtrlInfoRamShake_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    igMetaObject_NameFields(meta, g_beCameraCtrlInfoRamShake_fieldTable, g_beCameraCtrlInfoRamShake_fieldHandles, g_beCameraCtrlInfoRamShake_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beCameraCtrlInfoRamShake_fieldTable, g_beCameraCtrlInfoRamShake_fieldHandles, g_beCameraCtrlInfoRamShake_fieldOffsets, base);
 }
 
 igMetaEnum *g_beCameraCtrlInfoRamShake_msgActionMetaEnum;

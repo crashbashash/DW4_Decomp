@@ -24,7 +24,7 @@ int beFontInfoData_GetVTable(void) {
     obj._vtable = (int)&g_beFontInfoData_vtable[0];
     obj._attrSet = 0;
     obj._kind = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFontInfoData_vtable[0];
     igStringRef_Destruct(&obj._kind, -1);
     igSmartPointer_igAttrSet_Destruct(&obj._attrSet, -1);
@@ -39,7 +39,7 @@ void beFontInfoData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beFontInfoData_callbackList[] = { igAttrSet_EnsureRegistered, 0 };
 
-void *beFontInfoData_Register(void) {
+CallbackArray *beFontInfoData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -101,13 +101,13 @@ static int g_beFontInfoData_fieldOffsets[] = {
 void beFontInfoData_InitFields(void) {
     int base;
     void *attrSet;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beFontInfoData_metaObject;
+    meta = g_beFontInfoData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFontInfoData_ctorTable, 7);
     attrSet = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)attrSet)->_metaObject = igAttrSet_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)attrSet)->_metaObject = (int)igAttrSet_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beFontInfoData_fieldTable, g_beFontInfoData_fieldHandles, g_beFontInfoData_fieldOffsets, base);
 }
 

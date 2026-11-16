@@ -9,7 +9,7 @@ igMetaEnum *g_beNDMWLoadCtrl2CtrlData_messageMetaEnum;
 
 beNDMWLoadCtrl2CtrlData *beNDMWLoadCtrl2CtrlData_Create(int allocator) {
     beNDMWLoadCtrl2CtrlData_EnsureRegistered();
-    return (beNDMWLoadCtrl2CtrlData *)igMetaObject_CreateInstance(g_beNDMWLoadCtrl2CtrlData_metaObject, allocator);
+    return (beNDMWLoadCtrl2CtrlData *)igMetaObject_CreateInstance(g_beNDMWLoadCtrl2CtrlData_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWLoadCtrl2CtrlData_GetReadyMetaObject(void) {
@@ -30,7 +30,7 @@ int beNDMWLoadCtrl2CtrlData_GetVTable(void) {
     *nameRef = 0;
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     *(int **)&obj._vtable = &g_beNDMWLoadCtrl2CtrlData_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);
@@ -43,7 +43,7 @@ void beNDMWLoadCtrl2CtrlData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWLoadCtrl2CtrlData_Register);
 }
 
-void *beNDMWLoadCtrl2CtrlData_Register(void) {
+CallbackArray *beNDMWLoadCtrl2CtrlData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -104,19 +104,19 @@ void beNDMWLoadCtrl2CtrlData_InitFields(void) {
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
     meta = (void *)(g_beNDMWLoadCtrl2CtrlData_metaObject);
-    base = igMetaObject_GetFieldCount(meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadCtrl2CtrlData_ctorTable, 5);
-    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
-    nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
+    inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex((char *)((igMetaObject *)meta)->_metaFields, (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText(nameField, "CTRL");
+    igStringMetaField_SetDefaultText((igMetaField *)nameField, "CTRL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadCtrl2CtrlData_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;
     if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(nameField);
     }
-    igBoolMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(meta, base)), 1);
+    igBoolMetaField_SetDefaultValue((igMetaObject_GetFieldAt((igMetaObject *)meta, base)), 1);
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadCtrl2CtrlData_fieldTable, g_beNDMWLoadCtrl2CtrlData_fieldHandles, g_beNDMWLoadCtrl2CtrlData_fieldOffsets, base);
 }
 

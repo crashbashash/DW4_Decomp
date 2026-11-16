@@ -55,23 +55,13 @@
 
 #define POLLS_PER_NODATA 5000
 
-void _dmaRefImage(_sceMpegDecoder *dec);
-void _sprClear(unsigned int addr, int size);
 void _getAllRefs(_sceMpegDecoder *dec, int x, int y, int macroblock_type, int motion_type, int PMV[2][2][2],
                  int mv_field_sel[2][2], int dmvector[2]);
 void _getRef0(_sceMpegDecoder *dec, _sceMpegPicture *ref, int refParity, int dstParity, int dstRow, int rows, int x,
               int y, int mvx, int mvy, int fieldMode, int average);
 void _doMC(_sceMpegDecoder *dec, int buffer);
 int _waitBdec(_sceMpegDecoder *dec);
-void _nextStartCode(_sceMpegDecoder *dec);
-int _sliceHeader(_sceMpegDecoder *dec);
-
-void _sceMpegWaitIpuIdle(_sceMpegDecoder *dec);
-void _ipuCommand(_sceMpegDecoder *dec, unsigned int cmd);
 int _ipuVdec(_sceMpegDecoder *dec, int table);
-unsigned int _ipuShowBits(_sceMpegDecoder *dec, int n);
-void _ipuFlushBits(_sceMpegDecoder *dec, int n);
-unsigned int _ipuGetBits(_sceMpegDecoder *dec, int n);
 void _motionVector(_sceMpegDecoder *dec, int *PMV, int *dmvector, int h_r_size, int v_r_size, int dmv, int mvscale,
                    int full_pel_vector);
 

@@ -38,12 +38,12 @@ int FUN_0014ad60(void) {
 
 int FUN_0014adc0(int arg0) {
     FUN_0014af80();
-    return igMetaObject_CreateInstance(g_igVertexStream_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igVertexStream_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0014ae00(void) {
     if (g_igVertexStream_metaObject == 0) {
-        g_igVertexStream_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igVertexStream_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igVertexStream_metaObject;
 }
@@ -67,13 +67,13 @@ int igVertexStream_GetVTable(void) {
     void *temp_a0;
     void *temp_v1;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q0 = (void **)&u.b[8];
     *q0 = 0;
     u.vt = (int)(&g_igVertexStream_vtable[0]);
     q1 = (S_ref *)&u.b[20];
     *(int *)q1 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)(&g_igVertexStream_vtable[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
@@ -92,7 +92,7 @@ int igVertexStream_GetVTable(void) {
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
             *(int *)((char *)(temp_v1) - 4) = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -106,9 +106,9 @@ void FUN_0014af80(void)
 
 static igMetaObjectCallback g_igVertexStream_callbackList[] = { FUN_0014b2a0, 0 };
 
-void igVertexStream_Register(void) {
+CallbackArray *igVertexStream_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexStream_metaObject,
         igNamedObject_Register,
@@ -128,12 +128,12 @@ void thunk_igVertexStream_GetMetaObject(void) {
 }
 
 static FieldFactory g_igVertexStream_ctorTable[] = {
-    igRawRefMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igVertexStream_fieldTable[] = {
     "_stream",

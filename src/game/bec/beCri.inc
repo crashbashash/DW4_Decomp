@@ -14,12 +14,12 @@ igMetaField *g_beCri_dataTypeMetaField;
 
 beCri *beCri_CreateInstance(int allocator) {
     beCri_EnsureRegistered();
-    return (beCri *)igMetaObject_CreateInstance(*(int *)0x589AD8, allocator);
+    return (beCri *)igMetaObject_CreateInstance(g_beCri_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beCri_GetOrCreateMetaObject(void) {
     if (g_beCri_metaObject == 0) {
-        g_beCri_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCri_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCri_metaObject;
 }
@@ -44,14 +44,14 @@ int beCri_GetVTable(void) {
     obj._hdSEs = 0;
     obj._infoList = 0;
     obj._lsBinObjs = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCri_vtable[0];
     igSmartPointer_igObjectList_Destruct(&obj._lsBinObjs, -1);
     igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
     igSmartPointer_beCriHandleList_Destruct((igSmartPointer<igObject> *)(&obj._hdSEs), (short)(-1));
     igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj._hdENV), (short)(-1));
     igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj._hdBGM), (short)(-1));
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -88,7 +88,7 @@ void beCri_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCri_callbackList[] = { beSystem_EnsureRegistered, beCriHandle_EnsureRegistered, beCriHandleList_EnsureRegistered, igInfoList_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
-void *beCri_Register(void) {
+CallbackArray *beCri_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -178,24 +178,24 @@ void beCri_InitFields(void) {
     int base;
 
     meta = (void *)g_beCri_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beCri_ctorTable, 0xC);
-    system = (void *)(igMetaObject_GetFieldAt(meta, base));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beCri_ctorTable, 0xC);
+    system = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)system)->_refCounted = 0;
-    hdBGM = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    hdBGM = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)hdBGM)->_metaObject = (int)beCriHandle_GetOrCreateMetaObject();
-    hdENV = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    hdENV = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)hdENV)->_metaObject = (int)beCriHandle_GetOrCreateMetaObject();
-    hdSEs = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    hdSEs = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
     ((igObjectRefMetaField *)hdSEs)->_metaObject = (int)beCriHandleList_GetOrCreateMetaObject();
     ((igRefMetaField *)hdSEs)->_construct = 1;
-    infoList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)infoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    infoList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)infoList)->_construct = 1;
-    lsBinObjs = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)lsBinObjs)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    lsBinObjs = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
+    ((igObjectRefMetaField *)lsBinObjs)->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)lsBinObjs)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beCri_fieldTable, g_beCri_fieldHandles, g_beCri_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beCri_fieldTable, g_beCri_fieldHandles, g_beCri_fieldOffsets, base);
 }
 

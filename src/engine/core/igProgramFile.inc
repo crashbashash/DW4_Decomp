@@ -27,7 +27,7 @@ int igProgramFile_GetVTable(void) {
         if (o != 0) {
             ((igObject *)o)->_refCount = ((igObject *)o)->_refCount - 1;
             if ((((igObject *)o)->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }

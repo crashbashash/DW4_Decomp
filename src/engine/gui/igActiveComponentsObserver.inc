@@ -5,7 +5,7 @@ igMetaField *g_igActiveComponentsObserver_oldPushedComponentMetaField;
 
 int FUN_0044e990(int arg0) {
     igActiveComponentsObserver_RunStaticInit();
-    return igMetaObject_CreateInstance((int)g_igActiveComponentsObserver_metaObject, arg0);
+    return (int)(igMetaObject_CreateInstance(g_igActiveComponentsObserver_metaObject, (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igActiveComponentsObserver_GetMetaObject(void)
@@ -25,7 +25,7 @@ int igActiveComponentsObserver_GetVTable(void) {
     char *p4C;
     char *p48;
     char *p50;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igActiveComponentsObserver_vtable[0];
     p48 = &u.b[12];
     *(int *)p48 = 0;
@@ -33,7 +33,7 @@ int igActiveComponentsObserver_GetVTable(void) {
     *(int *)p4C = 0;
     p50 = &u.b[20];
     *(int *)p50 = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igActiveComponentsObserver_vtable[0];
     if (p50 != 0) {
         v1 = *(int **)p50;
@@ -72,9 +72,9 @@ void igActiveComponentsObserver_RunStaticInit(void)
 
 static igMetaObjectCallback g_igActiveComponentsObserver_callbackList[] = { igGuiComponent_EnsureRegistered, 0 };
 
-void igActiveComponentsObserver_Register(void) {
+CallbackArray *igActiveComponentsObserver_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActiveComponentsObserver_metaObject,
         igView_Register,
@@ -122,14 +122,14 @@ void igActiveComponentsObserver_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igActiveComponentsObserver_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igActiveComponentsObserver_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igActiveComponentsObserver_ctorTable, 3);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
+    temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_igActiveComponentsObserver_fieldTable, g_igActiveComponentsObserver_fieldHandles, g_igActiveComponentsObserver_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igActiveComponentsObserver_fieldTable, g_igActiveComponentsObserver_fieldHandles, g_igActiveComponentsObserver_fieldOffsets, temp_s2);
 }
 

@@ -2,7 +2,7 @@ igMetaObject *g_igGenericAttrDefaultManager_metaObject;
 
 void FUN_00137ab0(int arg0) {
     FUN_00137b80();
-    igMetaObject_CreateInstance(*(int *)0x55F1C0, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F1C0, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igGenericAttrDefaultManager_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igGenericAttrDefaultManager_GetMetaObject(void)
 int igGenericAttrDefaultManager_GetVTable(void) {
     struct O_137b40 o;
     int pad[2];
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = g_igGenericAttrDefaultManager_vtable;
-    return *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00137b80(void)
@@ -26,9 +26,9 @@ void FUN_00137b80(void)
     igMetaObject_RunStaticInit(igGenericAttrDefaultManager_Register);
 }
 
-void igGenericAttrDefaultManager_Register(void) {
+CallbackArray *igGenericAttrDefaultManager_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGenericAttrDefaultManager_metaObject,
         igAttrDefaultManager_Register,

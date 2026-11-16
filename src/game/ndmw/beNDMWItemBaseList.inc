@@ -2,12 +2,12 @@ igMetaObject *g_beNDMWItemBaseList_metaObject;
 
 beNDMWItemBaseList *beNDMWItemBaseList_Create(int allocator) {
     beNDMWItemBaseList_EnsureRegistered();
-    return (beNDMWItemBaseList *)igMetaObject_CreateInstance(g_beNDMWItemBaseList_metaObject, allocator);
+    return (beNDMWItemBaseList *)igMetaObject_CreateInstance(g_beNDMWItemBaseList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWItemBaseList_GetOrCreateMetaObject(void) {
     if (g_beNDMWItemBaseList_metaObject == 0) {
-        g_beNDMWItemBaseList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWItemBaseList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWItemBaseList_metaObject;
 }
@@ -25,7 +25,7 @@ int beNDMWItemBaseList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWItemBaseList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWItemBaseList_EnsureRegistered(void)
@@ -35,7 +35,7 @@ void beNDMWItemBaseList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWItemBaseList_callbackList[] = { beNDMWItemBase_EnsureRegistered, 0 };
 
-void *beNDMWItemBaseList_Register(void) {
+CallbackArray *beNDMWItemBaseList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

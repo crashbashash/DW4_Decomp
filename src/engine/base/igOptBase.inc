@@ -69,7 +69,7 @@ void igOptBase_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igOptBase_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igRegistry_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00225dc0();
     igMetaObject_NameFields(temp_s0, g_igOptBase_fieldTable, g_igOptBase_fieldHandles, g_igOptBase_fieldOffsets, temp_s2);

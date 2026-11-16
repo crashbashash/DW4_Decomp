@@ -178,16 +178,14 @@ struct ViewerGuiStyle {
 
 ViewerGuiStyle g_viewerGuiStyle;
 
-extern "C" {
-ViewerAction *igViewerAction_Create(void *pool);
-void igBasicColorChanger_SetColor(igBasicColorChanger *changer, int highlighted, int on, int disabled, const igVec4f *color);
-void igOnOffColorChanger_SetColor(igBasicColorChanger *changer, int highlighted, int on, int disabled, const igVec4f *color);
-extern int g_igViewerGuiFactory_metaObject[4];
-}
+#include "dw4/igViewerAction.h"
+#include "dw4/igBasicColorChanger.h"
+#include "dw4/igOnOffColorChanger.h"
+#include "dw4/igViewerGuiFactory.h"
 
 static inline void createAction(igSmartPointer<ViewerAction> &holder, AdoptReference) {
     igRelease(holder.p);
-    holder.p = igViewerAction_Create(0);
+    holder.p = (ViewerAction *)igViewerAction_Create(0);
 }
 
 /* A new action bound to `ref` and `function`. */
@@ -243,6 +241,6 @@ extern "C" void Gap__Viewer__igViewerGuiFactory__resetFields(GuiFactory *self) {
     igOnOffColorChanger_SetColor(self->_smallIconOnOffColor, 0, 0, 1, &g_viewerGuiStyle.disabledTextColor);
 }
 
-extern "C" int igViewerGuiFactory_GetMeta(void) {
-    return g_igViewerGuiFactory_metaObject[0];
+extern "C" igMetaObject *igViewerGuiFactory_GetMeta(void) {
+    return g_igViewerGuiFactory_metaObject;
 }

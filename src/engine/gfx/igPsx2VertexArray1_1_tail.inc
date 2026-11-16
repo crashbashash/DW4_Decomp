@@ -1,6 +1,6 @@
 igMetaObject *FUN_00152370(void) {
     if (g_igPsx2VertexArray1_1_metaObject == 0) {
-        g_igPsx2VertexArray1_1_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igPsx2VertexArray1_1_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igPsx2VertexArray1_1_metaObject;
 }
@@ -16,14 +16,14 @@ igMetaObject *igPsx2VertexArray1_1_GetMetaObject(void)
 int igPsx2VertexArray1_1_GetVTable(void) {
     struct Obj_152410 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w[5] = 0;
     obj.w[6] = 0;
     obj.vt = &g_igPsx2VertexArray1_1_vtable[0];
     obj.w[11] = 0;
     obj.w[12] = 0;
     obj.w[13] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igPsx2VertexArray1_1_vtable[0];
     FUN_00152560((void **)&obj.w[13], -1);
     igSmartPointer_igPointerList_Destruct(&obj.w[12], -1);
@@ -80,9 +80,9 @@ void FUN_001525e0(void)
 
 static igMetaObjectCallback g_igPsx2VertexArray1_1_callbackList[] = { igPointerList_EnsureRegistered, FUN_001528e0, 0 };
 
-void igPsx2VertexArray1_1_Register(void) {
+CallbackArray *igPsx2VertexArray1_1_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2VertexArray1_1_metaObject,
         igVertexArray1_1_Register,
@@ -102,13 +102,13 @@ igMetaObject *FUN_00152670(void) {
 }
 
 static FieldFactory g_igPsx2VertexArray1_1_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igLongMetaField_Create,
-    igIntArrayMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
+    (FieldFactory)igIntArrayMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igPsx2VertexArray1_1_fieldTable[] = {
     "_pBlendedVertsList",
@@ -173,12 +173,12 @@ void igPsx2VertexArray1_1_InitFields(void) {
 
 int FUN_001527c0(int arg0) {
     FUN_001528e0();
-    return igMetaObject_CreateInstance(g_igPsx2LongList_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igPsx2LongList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 int FUN_00152800(void) {
     if (g_igPsx2LongList_metaObject == 0) {
-        g_igPsx2LongList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igPsx2LongList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return (int)g_igPsx2LongList_metaObject;
 }

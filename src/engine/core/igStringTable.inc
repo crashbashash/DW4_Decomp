@@ -55,7 +55,7 @@ igObject **igSmartPointer_igCharListNoClean_Destruct(igObject **self, short flag
             }
         }
         if (flags > 0) {
-            __dl__FPv(self);
+            operator delete(self);
         }
     }
     return self;

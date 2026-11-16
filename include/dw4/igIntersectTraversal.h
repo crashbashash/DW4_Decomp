@@ -1,6 +1,7 @@
 #ifndef DW4_IGINTERSECTTRAVERSAL_H
 #define DW4_IGINTERSECTTRAVERSAL_H
 
+struct CallbackArray;
 struct igIntersectTraversal;
 struct igMetaObject;
 
@@ -9,7 +10,8 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igIntersectTraversal_metaObject;
-void igIntersectTraversal_Register(void);
+struct igIntersectTraversal *igIntersectTraversal_Destroy(struct igIntersectTraversal *self, short deleteFlag);
+struct CallbackArray *igIntersectTraversal_Register(void);
 void igIntersectTraversal_ResetStacks(struct igIntersectTraversal *traversal);
 
 #ifdef __cplusplus

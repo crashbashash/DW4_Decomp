@@ -1,6 +1,6 @@
 int Gap__Sg__igShaderFactory__vfunc_23(void *dummy, VA_1d8980 *arg1, void *, int) {
     VO_1d8980 *shader = ((P_1d8980 *)arg1)->f36;
-    igSmartPointer<Attr> attr(((Attr *)FUN_0013aec0(igObject_GetAllocator())));
+    igSmartPointer<Attr> attr(((Attr *)FUN_0013aec0(igObject_GetAllocator((igObject *)dummy))));
     shader->v100();
     shader->v96(attr.get(), attr.get(), 0);
     arg1->v124();

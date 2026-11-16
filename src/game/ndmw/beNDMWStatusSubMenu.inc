@@ -7,7 +7,7 @@ igMetaField *g_beNDMWStatusSubMenu_playerDeviceCntMetaField;
 
 beNDMWStatusSubMenu *beNDMWStatusSubMenu_Create(int allocator) {
     beNDMWStatusSubMenu_EnsureRegistered();
-    return (beNDMWStatusSubMenu *)igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, allocator);
+    return (beNDMWStatusSubMenu *)igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWStatusSubMenu_GetMetaObject(void) {
@@ -34,7 +34,7 @@ int beNDMWStatusSubMenu_GetVTable(void) {
     obj._deviceFolderList = 0;
     obj._playerNoList = 0;
     obj._playerDeviceCnt = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusSubMenu_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._playerDeviceCnt, -1);
     igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
@@ -49,9 +49,9 @@ igSmartPointer<igObject> *beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destru
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -63,7 +63,7 @@ void beNDMWStatusSubMenu_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusSubMenu_callbackList[] = { beNDMWWindowCtrl_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWStatusSubMenu_Register(void) {
+CallbackArray *beNDMWStatusSubMenu_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

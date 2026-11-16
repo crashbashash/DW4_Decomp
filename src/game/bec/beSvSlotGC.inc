@@ -13,7 +13,7 @@ int beSvSlotGC_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beSvSlotGC_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beSvSlotGC_EnsureRegistered(void)
@@ -21,7 +21,7 @@ void beSvSlotGC_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvSlotGC_Register);
 }
 
-void *beSvSlotGC_Register(void) {
+CallbackArray *beSvSlotGC_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

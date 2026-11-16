@@ -3,12 +3,12 @@ igMetaField *g_beBkColor_isClearMetaField;
 
 beBkColor *beBkColor_CreateInstance(int allocator) {
     beBkColor_EnsureRegistered();
-    return (beBkColor *)igMetaObject_CreateInstance(*(int *)0x589D10, allocator);
+    return (beBkColor *)igMetaObject_CreateInstance(g_beBkColor_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beBkColor_GetOrCreateMetaObject(void) {
     if (g_beBkColor_metaObject == 0) {
-        g_beBkColor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beBkColor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beBkColor_metaObject;
 }
@@ -34,7 +34,7 @@ int beBkColor_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beBkColor_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -47,7 +47,7 @@ void beBkColor_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beBkColor_Register);
 }
 
-void *beBkColor_Register(void) {
+CallbackArray *beBkColor_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,9 +84,9 @@ static int g_beBkColor_fieldOffsets[] = {
 
 void beBkColor_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beBkColor_metaObject;
+    meta = g_beBkColor_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBkColor_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beBkColor_fieldTable, g_beBkColor_fieldHandles, g_beBkColor_fieldOffsets, base);

@@ -4,7 +4,7 @@ igMetaField *g_igCustomStateCollection_flagsMetaField;
 
 void FUN_0014efb0(int arg0) {
     FUN_0014f0c0();
-    igMetaObject_CreateInstance(g_igCustomStateCollection_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igCustomStateCollection_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igCustomStateCollection_GetMetaObject(void)
@@ -19,12 +19,12 @@ int igCustomStateCollection_GetVTable(void) {
     struct W o;
     int r;
     int *p; int *a1; int t;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = g_igCustomStateCollection_vtable;
     *(int *)((char *)&o + 20) = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = g_igCustomStateCollection_vtable;
-    if (&*(int *)((char *)&o + 20) != 0) { p = *(int **)((char *)&o + 20); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader(*a1, a1); } }
+    if (&*(int *)((char *)&o + 20) != 0) { p = *(int **)((char *)&o + 20); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1); } }
     return r;
 }
 
@@ -35,9 +35,9 @@ void FUN_0014f0c0(void)
 
 static igMetaObjectCallback g_igCustomStateCollection_callbackList[] = { FUN_0014f240, 0 };
 
-void igCustomStateCollection_Register(void) {
+CallbackArray *igCustomStateCollection_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCustomStateCollection_metaObject,
         igObjectList_Register,
@@ -57,8 +57,8 @@ void thunk_igCustomStateCollection_GetMetaObject(void) {
 }
 
 static FieldFactory g_igCustomStateCollection_ctorTable[] = {
-    igStringMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igCustomStateCollection_fieldTable[] = {
     "_name",

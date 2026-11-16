@@ -2,7 +2,7 @@ igMetaObject *g_igAppearanceListList_metaObject;
 
 igMetaObject *igAppearanceListList_GetOrCreateMetaObject(void) {
     if (g_igAppearanceListList_metaObject == 0) {
-        g_igAppearanceListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAppearanceListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAppearanceListList_metaObject;
 }
@@ -23,7 +23,7 @@ int igAppearanceListList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_igAppearanceListList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAppearanceListList_EnsureRegistered(void)
@@ -33,7 +33,7 @@ void igAppearanceListList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAppearanceListList_callbackList[] = { igAppearanceList_EnsureRegistered, 0 };
 
-void *igAppearanceListList_Register(void) {
+CallbackArray *igAppearanceListList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -59,7 +59,7 @@ igMetaObject *g_igModelViewMatrixBoneSelectListBec_metaObject;
 
 igMetaObject *igModelViewMatrixBoneSelectListBec_GetOrCreateMetaObject(void) {
     if (g_igModelViewMatrixBoneSelectListBec_metaObject == 0) {
-        g_igModelViewMatrixBoneSelectListBec_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igModelViewMatrixBoneSelectListBec_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igModelViewMatrixBoneSelectListBec_metaObject;
 }

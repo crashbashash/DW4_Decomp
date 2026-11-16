@@ -4,12 +4,12 @@ igMetaField *g_beMatCtrlInfoWork_matOnPlListsMetaField;
 
 beMatCtrlInfoWork *beMatCtrlInfoWork_Create(int allocator) {
     beMatCtrlInfoWork_EnsureRegistered();
-    return (beMatCtrlInfoWork *)igMetaObject_CreateInstance(*(int *)0x5890C0, allocator);
+    return (beMatCtrlInfoWork *)igMetaObject_CreateInstance(g_beMatCtrlInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beMatCtrlInfoWork_GetOrCreateMetaObject(void) {
     if (g_beMatCtrlInfoWork_metaObject == 0) {
-        g_beMatCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMatCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMatCtrlInfoWork_metaObject;
 }
@@ -34,7 +34,7 @@ int beMatCtrlInfoWork_GetVTable(void) {
     *runFlagListSlot = 0;
     matOnPlListsSlot = (igObject **)&obj._matOnPlLists;
     *matOnPlListsSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMatCtrlInfoWork_vtable[0];
     igObjectRef_Release(matOnPlListsSlot);
     igObjectRef_Release(runFlagListSlot);
@@ -48,7 +48,7 @@ void beMatCtrlInfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMatCtrlInfoWork_callbackList[] = { igBoolList_EnsureRegistered, igIntListList_EnsureRegistered, 0 };
 
-void *beMatCtrlInfoWork_Register(void) {
+CallbackArray *beMatCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -91,16 +91,16 @@ void beMatCtrlInfoWork_InitFields(void) {
     int base;
     void *matOnPlLists;
     void *runFlagList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMatCtrlInfoWork_metaObject;
+    meta = g_beMatCtrlInfoWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlInfoWork_ctorTable, 2);
     runFlagList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)runFlagList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)runFlagList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)runFlagList)->_construct = 1;
     matOnPlLists = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)matOnPlLists)->_metaObject = igIntListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)matOnPlLists)->_metaObject = (int)igIntListList_GetOrCreateMetaObject();
     ((igRefMetaField *)matOnPlLists)->_construct = 1;
     igMetaObject_NameFields(meta, g_beMatCtrlInfoWork_fieldTable, g_beMatCtrlInfoWork_fieldHandles, g_beMatCtrlInfoWork_fieldOffsets, base);
 }

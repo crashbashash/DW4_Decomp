@@ -3,26 +3,26 @@
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/beLOA.h"
 #include "dw4/beLua.h"
+#include "dw4/StringPool.h"
+#include "dw4/beLuaInfo.h"
+#include "dw4/beLuaState.h"
+#include "dw4/beSystem.h"
+#include "dw4/igAttrStackManager.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igModelViewMatrixAttr.h"
+#include "dw4/igObject.h"
+#include "dw4/igTraversal.h"
+#include <stdio.h>
+#include <string.h>
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
 extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);
-extern "C" int igTraversal_RegisterFunction(int, igMetaObject *, void (*)(void));
-extern "C" int sprintf(char *, const char *, ...);
-extern "C" int StringPool_Allocate(int);
-extern "C" int StringPool_Construct(int);
-extern "C" int StringPool_Intern(int, const char *);
-extern "C" void StringChunk_ReleaseHeader(int, void *);
-extern "C" int strcmp(const char *, const char *);
-extern "C" int Memory_GetAllocatorBySelector(int);
-extern "C" void igInsightCore_AddToScheduler(int, char *);
-extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int igObject_Destroy(...);
 extern "C" void beLua_Stop(void);
 extern "C" void beLua_Update(void);
 extern "C" igMetaObject *beLua_GetMeta(void);
-extern "C" int igObject_IsKindOf(int, int);
-extern "C" int ObjectList_AppendRetained(int, int);
 extern "C" int g_igCommonTraversal_travProcs[4];
 /* Resolves a script name through the interned-string pool (the given name, or "<stage>/lua" when none
  * is given), walks every beLuaInfo in the receiver's info list and every beLuaData in that info's data
@@ -42,7 +42,6 @@ public:
     virtual int RunFile(char *path);                                        /* slot 22 */
     virtual int RunBuffer(void *data, unsigned size, const char *name);     /* slot 23 */
 };
-extern "C" int g_stringPool[4];
 extern "C" char text_s_lua[];
 extern "C" char percent_s_slash_percent_s_2[];
 extern "C" char emptyString[];
@@ -51,17 +50,11 @@ class LuaStrRef {
 public:
     char *value;
     LuaStrRef() : value(0) {}
-    ~LuaStrRef() { char *o = value; if (o) { int *hd = (int *)o - 2; int r = *(int *)(o - 4) - 1; *(int *)(o - 4) = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } }
+    ~LuaStrRef() { char *o = value; if (o) { int *hd = (int *)o - 2; int r = *(int *)(o - 4) - 1; *(int *)(o - 4) = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); } }
 };
-extern "C" igObject *beLuaState_Create(int);
-extern "C" int igObject_GetAllocator(beLua *);
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beLua_Activate(beLua *self, int unusedArg);
 extern "C" void beLua_Deactivate(beLua *self, int unusedArg);
-extern "C" int g_beSystem_metaObject[4];
 extern "C" void beLua_Start(beLua *self);
-extern "C" int g_beLuaInfo_metaObject[4];
 extern "C" int beLua_AddInfo(beLua *self, int info);
 extern "C" void beLua_RemoveAllInfo(beLua *self);
 
@@ -69,12 +62,6 @@ int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node) {
     return beLOA_Traverse(node, traversal);
 }
 
-extern "C" void igMatrix44f_GetTranslation(const float *matrix, float *vector);
-extern "C" void List_RemoveWordAt(igObjectList *list, int index);
-extern "C" void igAttrStackManager_PushOverrideAttr(igAttrStackManager *attrs, igAttr *attr);
-extern "C" void igAttrStackManager_PopOverrideAttr(igAttrStackManager *attrs, igAttr *attr);
-extern "C" int igTraversal_TraverseChildren(igCommonTraversal *traversal, beLOA *node);
-extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 /* the colour attribute's value setter is virtual slot 30 (vtable offset 128) */
 class OverrideAttr {
 public:
@@ -136,7 +123,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
     switch (node->_status) {
     case 0:
     case 2:
-        modelView = (igModelViewMatrixAttr *)CurrentAttr(traversal, g_igModelViewMatrixAttr_metaObject[0]);
+        modelView = (igModelViewMatrixAttr *)CurrentAttr(traversal, g_igModelViewMatrixAttr_metaObject);
         igMatrix44f_GetTranslation(modelView->_m, position);
         if (position[0] * position[0] + position[1] * position[1] + position[2] * position[2] < node->_range) {
             if (node->_status == 0) {
@@ -178,15 +165,15 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
                     igObject_Destroy(attr);
                 }
             }
-            List_RemoveWordAt(list, 0);
+            List_RemoveWordAt((igDataList *)list, 0);
             ((igObject **)list->_data)[list->_count] = 0;
         }
     } else {
         list = (igObjectList *)node->_overrideAttrList;
         if (list->_count == 0) {
-            ObjectList_AppendRetained((int)list, node->_blendStateAttr);
-            ObjectList_AppendRetained(node->_overrideAttrList, node->_blendFunctionAttr);
-            ObjectList_AppendRetained(node->_overrideAttrList, node->_colorAttr);
+            ObjectList_AppendRetained((igObjectList *)list, (igObject *)node->_blendStateAttr);
+            ObjectList_AppendRetained((igObjectList *)node->_overrideAttrList, (igObject *)node->_blendFunctionAttr);
+            ObjectList_AppendRetained((igObjectList *)node->_overrideAttrList, (igObject *)node->_colorAttr);
         }
         ((OverrideAttr *)node->_colorAttr)->SetValue(node->_color);
     }
@@ -194,7 +181,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
     for (i = 0; i < ((igObjectList *)node->_overrideAttrList)->_count; i++) {
         igAttrStackManager_PushOverrideAttr(attrs, ((igAttr **)OverrideAttrsOf(node)->_data)[i]);
     }
-    result = igTraversal_TraverseChildren(traversal, node);
+    result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
     for (j = ((igObjectList *)node->_overrideAttrList)->_count - 1; j >= 0; j--) {
         igAttrStackManager_PopOverrideAttr(attrs, ((igAttr **)OverrideAttrsOf(node)->_data)[j]);
     }
@@ -205,7 +192,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
 }
 
 void beLOA_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beLOA_GetMetaObject(), (void (*)())beLOA_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], (igMetaObject *)beLOA_GetMetaObject(), (void *)beLOA_TraversalFunction);
 }
 
 int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
@@ -222,33 +209,33 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
 
     if (given == 0) {
         sprintf(buf1, text_s_lua, (char *)((beSystem *)self->_system)->_stageName);
-        if (g_stringPool[0] == 0) {
-            a = StringPool_Allocate(16);
-            if (a) a = StringPool_Construct(a);
-            g_stringPool[0] = a;
+        if (g_stringPool == 0) {
+            a = (int)StringPool_Allocate(16);
+            if (a) a = (int)(StringPool_Construct((StringPool *)a));
+            g_stringPool = (StringPool *)a;
         }
-        s = (char *)StringPool_Intern(g_stringPool[0], buf1);
+        s = (char *)StringPool_Intern(g_stringPool, buf1);
         old = ref.value;
         if (old) {
             int *hd = (int *)old - 2;
             int r = *(int *)(old - 4) - 1;
             *(int *)(old - 4) = r;
-            if (r == 0) StringChunk_ReleaseHeader(*hd, hd);
+            if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
         }
         ref.value = s;
     } else {
-        if (g_stringPool[0] == 0) {
-            a = StringPool_Allocate(16);
-            if (a) a = StringPool_Construct(a);
-            g_stringPool[0] = a;
+        if (g_stringPool == 0) {
+            a = (int)StringPool_Allocate(16);
+            if (a) a = (int)(StringPool_Construct((StringPool *)a));
+            g_stringPool = (StringPool *)a;
         }
-        s = (char *)StringPool_Intern(g_stringPool[0], given);
+        s = (char *)StringPool_Intern(g_stringPool, given);
         old = ref.value;
         if (old) {
             int *hd = (int *)old - 2;
             int r = *(int *)(old - 4) - 1;
             *(int *)(old - 4) = r;
-            if (r == 0) StringChunk_ReleaseHeader(*hd, hd);
+            if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
         }
         ref.value = s;
     }
@@ -280,11 +267,11 @@ void beLua_ResetLuaState(beLua *self) {
     int ownerAllocator;
     igObject *luaState;
 
-    ownerAllocator = igObject_GetAllocator(self);
+    ownerAllocator = (int)igObject_GetAllocator(self);
     if (g_useOwnerAllocator != 0) {
         allocator = ownerAllocator;
     } else {
-        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     }
     luaState = (igObject *)self->_luaState;
     if (luaState != 0) {
@@ -302,7 +289,7 @@ void beLua_ResetLuaState(beLua *self) {
  * unused. */
 void beLua_Activate(beLua *self, int unusedArg)
 {
-    igInsightCore_AddToScheduler(self->_insight, (char *)self);
+    igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 /* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
@@ -310,12 +297,12 @@ void beLua_Activate(beLua *self, int unusedArg)
  * is unused. */
 void beLua_Deactivate(beLua *self, int unusedArg)
 {
-    igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 void beLua_Start(beLua *self) {
     igObject *luaState;
-    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    self->_system = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject));
     luaState = (igObject *)(self->_luaState);
     IG_OBJECT_RELEASE(luaState);
     self->_luaState = 0;
@@ -326,8 +313,8 @@ void beLua_Stop(void)
 }
 
 int beLua_AddInfo(beLua *self, int info) {
-    if (igObject_IsKindOf(info, g_beLuaInfo_metaObject[0]) != 0) {
-        ObjectList_AppendRetained(self->_infoList, info);
+    if (igObject_IsKindOf((void *)info, g_beLuaInfo_metaObject) != 0) {
+        ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
         return 1;
     }
     return 0;

@@ -9,9 +9,9 @@ igMetaObject *igPsx2Clut_GetMetaObject(void)
 int igPsx2Clut_GetVTable(void) {
     struct Obj_154450 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igPsx2Clut_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00154490(void)
@@ -19,9 +19,9 @@ void FUN_00154490(void)
     igMetaObject_RunStaticInit(igPsx2Clut_Register);
 }
 
-void igPsx2Clut_Register(void) {
+CallbackArray *igPsx2Clut_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2Clut_metaObject,
         igClut_Register,
@@ -41,8 +41,8 @@ igMetaObject *FUN_00154510(void) {
 }
 
 static FieldFactory g_igPsx2Clut_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igPsx2Clut_fieldTable[] = {
     "_id",

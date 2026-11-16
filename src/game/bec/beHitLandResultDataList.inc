@@ -2,7 +2,7 @@ igMetaObject *g_beHitLandResultDataList_metaObject;
 
 igMetaObject *beHitLandResultDataList_GetOrCreateMetaObject(void) {
     if (g_beHitLandResultDataList_metaObject == 0) {
-        g_beHitLandResultDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beHitLandResultDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beHitLandResultDataList_metaObject;
 }
@@ -21,7 +21,7 @@ int beHitLandResultDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beHitLandResultDataList_vtable[0];
-    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
+    off = *(int *)((char *)g_objectSystem + 916);
     return *(int *)((char *)&obj + off);
 }
 
@@ -32,7 +32,7 @@ void beHitLandResultDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beHitLandResultDataList_callbackList[] = { beHitLandResultData_EnsureRegistered, 0 };
 
-void *beHitLandResultDataList_Register(void) {
+CallbackArray *beHitLandResultDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

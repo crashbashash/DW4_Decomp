@@ -21,7 +21,7 @@ long long beCri_PlayEffect(struct beCri *self, struct igObjectList *names, struc
 long long beCri_PlayStream(struct beCri *self, struct igObjectList *names, struct beSoundData *cue);
 void beCri_ReleasePartitions(struct beCri *self);
 void beCri_SetFreezeAudible(struct beCri *self, int audible);
-void beCri_SetFx(struct beCri *self, char *name);
+void beCri_SetFx(struct beCri *self, const char *name);
 void beCri_SetSndfVolume(struct beCri *self, int volume);
 void beCri_SetupPartitions(struct beCri *self, int count, int insideFiles);
 bool beCri_StartSfpTransfers(struct beCri *self);

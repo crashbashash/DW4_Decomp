@@ -8,7 +8,7 @@ igMetaField *g_beBaseInfoRamTimer_keikaFrameMetaField;
 
 beBaseInfoRamTimer *beBaseInfoRamTimer_Create(int allocator) {
     beBaseInfoRamTimer_EnsureRegistered();
-    return (beBaseInfoRamTimer *)igMetaObject_CreateInstance(*(int *)0x589D78, allocator);
+    return (beBaseInfoRamTimer *)igMetaObject_CreateInstance(g_beBaseInfoRamTimer_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beBaseInfoRamTimer_GetMetaObject(void) {
@@ -29,7 +29,7 @@ int beBaseInfoRamTimer_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beBaseInfoRamTimer_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -40,7 +40,7 @@ void beBaseInfoRamTimer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beBaseInfoRamTimer_Register);
 }
 
-void *beBaseInfoRamTimer_Register(void) {
+CallbackArray *beBaseInfoRamTimer_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -97,9 +97,9 @@ static int g_beBaseInfoRamTimer_fieldOffsets[] = {
 
 void beBaseInfoRamTimer_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beBaseInfoRamTimer_metaObject;
+    meta = g_beBaseInfoRamTimer_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBaseInfoRamTimer_ctorTable, 6);
     igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base))), 1.0f);

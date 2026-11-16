@@ -65,7 +65,8 @@ static inline void insertRetained(igTDataList<igObject *> *list, int index, igOb
 /* Adds object to the list, in front of the first listed object that the order ranks after it. An
  * object the order does not rank goes at the end, and with `unique` set one already listed is left
  * alone. */
-void igRendererOrderedList_Append(igDependencyOrderedListView *self, igObject *object, int unique) {
+void igRendererOrderedList_Append(igDependencyOrderedList *list, igObject *object, int unique) {
+    igDependencyOrderedListView *self = (igDependencyOrderedListView *)list;
     int rank = indexOfObject(self->_order, object);
     if (rank < 0) {
         if (unique != 0) {
@@ -135,16 +136,16 @@ void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
     }
     children->_count = 0;
     for (i = 0; i < copy->_count; i++) {
-        igRendererOrderedList_Append(owner, ((igObject **)copy->_data)[i], 0);
+        igRendererOrderedList_Append((igDependencyOrderedList *)owner, ((igObject **)copy->_data)[i], 0);
     }
 }
 
-void igRendererOrderedList_Clear(char *self) {
+void igRendererOrderedList_Clear(igDependencyOrderedList *self) {
     igTDataList<igObject *> *list;
     int n;
     int i;
     igObject *object;
-    list = *(igTDataList<igObject *> **)(self + 8);
+    list = (igTDataList<igObject *> *)self->_objectList;
     n = list->_count;
     for (i = 0; i < n; i++) {
         object = list->_data[i];

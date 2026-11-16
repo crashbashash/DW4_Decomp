@@ -632,5 +632,5 @@ done:
     return result;
 }
 
-static inline igMetaField *cast0(igMetaField *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMetaField_metaObject) != 0) { return o; } return 0; }
+static inline igMetaField *cast0(igMetaField *o) { if (o != 0 && igObject_IsKindOf((igObject *)o, (igMetaObject *)g_igMetaField_metaObject) != 0) { return o; } return 0; }
 

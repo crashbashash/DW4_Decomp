@@ -3,7 +3,7 @@ igMetaField *g_beModelCtrlData_comListMetaField;
 
 igMetaObject *beModelCtrlData_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlData_metaObject == 0) {
-        g_beModelCtrlData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beModelCtrlData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beModelCtrlData_metaObject;
 }
@@ -31,7 +31,7 @@ int beModelCtrlData_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlData_vtable[0];
     comListSlot = (igObject **)&obj._comList;
     *comListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlData_vtable[0];
     igObjectRef_Release(comListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -46,7 +46,7 @@ void beModelCtrlData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlData_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
 
-void *beModelCtrlData_Register(void) {
+CallbackArray *beModelCtrlData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,13 +84,13 @@ static int g_beModelCtrlData_fieldOffsets[] = {
 void beModelCtrlData_InitFields(void) {
     int base;
     void *comList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlData_metaObject;
+    meta = g_beModelCtrlData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlData_ctorTable, 1);
     comList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)comList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)comList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)comList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beModelCtrlData_fieldTable, g_beModelCtrlData_fieldHandles, g_beModelCtrlData_fieldOffsets, base);
 }

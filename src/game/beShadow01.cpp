@@ -1,12 +1,18 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igLightAttrDispatchView.h"
+#include "dw4/beBaseInfoManager.h"
+#include "dw4/beShadow01.h"
+#include "dw4/beShadow01Info.h"
+#include "dw4/beTargetObj.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igGroup.h"
+#include "dw4/igLightAttr.h"
+#include "dw4/igObject.h"
+#include "dw4/igProjectiveShadowShader.h"
 
-extern "C" void igObject_Destroy(...);
-extern "C" int List_Reserve(...);
-extern "C" int beShadow01_GetInfoMeta(void);
-extern "C" int beShadow01_GetMeta(void);
-extern "C" int ObjectList_AppendRetained(...);
+extern "C" igMetaObject *beShadow01_GetInfoMeta(void);
+extern "C" igMetaObject *beShadow01_GetMeta(void);
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
         --object->_refCount;
@@ -15,13 +21,7 @@ struct ReleaseRef { static inline void go(igObject *object) {
     }
 } };
 extern "C" void beShadow01_Prepare(beShadow01 *self);
-extern "C" int g_beShadow01Info_metaObject[4];
-extern "C" int g_beShadow01_metaObject[4];
-extern "C" int igGroup_AppendChild(igProjectiveShadowShader *group, int child);
 extern "C" void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info);
-extern "C" int igObject_IsKindOf(beShadow01Info *, int);
-extern "C" int beBaseInfoManager_AddInfo(beShadow01 *, beShadow01Info *);
-extern "C" int g_beShadow01Info_metaObject[4];
 extern "C" int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info);
 
 void beShadow01_Prepare(beShadow01 *self) {
@@ -79,9 +79,9 @@ void beShadow01_Prepare(beShadow01 *self) {
     self->_savePos[2] = 0.0f;
 }
 
-int beShadow01_GetInfoMeta(void)
+igMetaObject *beShadow01_GetInfoMeta(void)
 {
-    return g_beShadow01Info_metaObject[0];
+    return g_beShadow01Info_metaObject;
 }
 
 /* Adds the casters and receivers of the infos that arrived before a shader was there
@@ -105,8 +105,8 @@ void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info) {
         off = 0;
         do {
             it = *(beShadow01Info **)((char *)((beShadow01InfoList *)self->_svInfoList)->_data + off);
-            if (it->_casterNode != 0) ObjectList_AppendRetained(shader->_shadowCasters, it->_casterNode);
-            if (it->_receiverNode != 0) igGroup_AppendChild(shader, it->_receiverNode);
+            if (it->_casterNode != 0) ObjectList_AppendRetained((igObjectList *)shader->_shadowCasters, (igObject *)it->_casterNode);
+            if (it->_receiverNode != 0) igGroup_AppendChild((igGroup *)shader, (igNode *)it->_receiverNode);
             i += 1;
             off += 4;
         } while (i < n);
@@ -131,13 +131,13 @@ void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info) {
         ((igObject **)list->_data)[i3] = 0;
     }
     list->_count = 0;
-    if (!(0 < ((beShadow01InfoList *)self->_svInfoList)->_count)) List_Reserve(self->_svInfoList, 0, 4);
+    if (!(0 < ((beShadow01InfoList *)self->_svInfoList)->_count)) List_Reserve((igDataList *)self->_svInfoList, 0, 4);
 }
 
 int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info) {
     igProjectiveShadowShader *shader;
 
-    if (igObject_IsKindOf(info, g_beShadow01Info_metaObject[0]) != 0) {
+    if (igObject_IsKindOf(info, g_beShadow01Info_metaObject) != 0) {
         shader = (igProjectiveShadowShader *)info->_projShadowShader;
         if (shader != 0) {
             shader->_drawReceiver = 0;
@@ -151,9 +151,9 @@ int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info) {
                 shader->_left = -100.0f;
             }
             beShadow01_AttachPendingInfos(self, info);
-            beBaseInfoManager_AddInfo(self, info);
+            beBaseInfoManager_AddInfo((beBaseInfoManager *)self, (beBaseInfo *)info);
         } else {
-            ObjectList_AppendRetained(self->_svInfoList, info);
+            ObjectList_AppendRetained((igObjectList *)self->_svInfoList, (igObject *)info);
         }
         return 1;
     }
@@ -161,13 +161,10 @@ int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info) {
 }
 
 extern "C" void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram);
-extern "C" int beTargetObj_GetPlayerCentre(float *out);
-extern "C" void igProjectiveShadowShader_ConfigureSharedAttrs(void);
 extern "C" void igProjectiveShadowShader_Initialize(igProjectiveShadowShader *shader);
 /* The projective shadow pass's shared texture-function attribute for texture unit 0. */
 extern "C" igTextureFunctionAttr *g_shadowTextureFunctionAttr0[4];
 /* The igLightAttr meta-field of the light's direction; its _offset locates the field. */
-extern "C" igMetaField *g_igLightAttr_directionMetaField[4];
 /* True when the vectors differ in any component. */
 static inline bool Vec3Differs(const igVec3f &a, const igVec3f &b) {
     return a.x != b.x || a.y != b.y || a.z != b.z;
@@ -211,7 +208,7 @@ void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
         igVec3f &saved = *(igVec3f *)self->_savePos;
         if (Vec3Differs(centre, saved)) {
             igLightAttr *light = (igLightAttr *)((igProjectiveShadowShader *)info->_projShadowShader)->_light;
-            float *direction = (float *)((char *)light + g_igLightAttr_directionMetaField[0]->_offset);
+            float *direction = (float *)((char *)light + g_igLightAttr_directionMetaField->_offset);
             ((igLightAttrDispatchView *)light)->setPosition(&centre.x);
             Vec3Copy(light->_cachedPosition, &centre.x);
             Vec3Copy(light->_cachedDirection, direction);
@@ -220,7 +217,7 @@ void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
     }
 }
 
-int beShadow01_GetMeta(void)
+igMetaObject *beShadow01_GetMeta(void)
 {
-    return g_beShadow01_metaObject[0];
+    return g_beShadow01_metaObject;
 }

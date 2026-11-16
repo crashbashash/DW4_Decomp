@@ -3,7 +3,7 @@ igMetaField *g_igMatrixObject_mMetaField;
 
 void FUN_001e4c50(int arg0) {
     FUN_001e4d30();
-    igMetaObject_CreateInstance(g_igMatrixObject_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igMatrixObject_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igMatrixObject_GetMetaObject(void)
@@ -16,10 +16,10 @@ igMetaObject *igMatrixObject_GetMetaObject(void)
 
 int igMatrixObject_GetVTable(void) {
     struct Obj_1e4ce0 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMatrixObject_vtable[0];
-    igMatrix44f_SetIdentity(obj.pad + 4);
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igMatrix44f_SetIdentity((float *)(obj.pad + 4));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_001e4d30(void)
@@ -27,9 +27,9 @@ void FUN_001e4d30(void)
     igMetaObject_RunStaticInit(igMatrixObject_Register);
 }
 
-void igMatrixObject_Register(void) {
+CallbackArray *igMatrixObject_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMatrixObject_metaObject,
         igObject_Register,
@@ -49,7 +49,7 @@ void thunk_igMatrixObject_GetMetaObject(void) {
 }
 
 static FieldFactory g_igMatrixObject_ctorTable[] = {
-    igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igMatrixObject_fieldTable[] = {
     "_m",
@@ -66,8 +66,8 @@ void igMatrixObject_InitFields(void) {
     igMetaObject *meta;
 
     meta = g_igMatrixObject_metaObject;
-    firstField = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igMatrixObject_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_igMatrixObject_fieldTable, g_igMatrixObject_fieldHandles, g_igMatrixObject_fieldOffsets, firstField);
+    firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igMatrixObject_ctorTable, 1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igMatrixObject_fieldTable, g_igMatrixObject_fieldHandles, g_igMatrixObject_fieldOffsets, firstField);
 }
 

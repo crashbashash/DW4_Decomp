@@ -16,17 +16,17 @@ int igBillboard_GetVTable(void) {
     union U_1a4fd0 u;
     int temp_s0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[2] = 0;
     u.w[3] = 0;
     u.w[4] = 0;
     u.w[7] = 0;
     u.w[0] = (int)(&g_igBillboard_vtable[0]);
     u.w[15] = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.w[0] = (int)(&g_igBillboard_vtable[0]);
     FUN_00142d10(&u.w[15], -1);
-    igGroup_Destroy((struct T_195a90 *)&u.w[0], 0);
+    igGroup_Destroy((igGroup *)&u.w[0], 0);
     return temp_s0;
 }
 
@@ -37,9 +37,9 @@ void igBillboard_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igBillboard_callbackList[] = { igModelViewMatrixAttr_EnsureRegistered, 0 };
 
-void igBillboard_Register(void) {
+CallbackArray *igBillboard_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBillboard_metaObject,
         igGroup_Register,
@@ -59,10 +59,10 @@ void thunk_igBillboard_GetMetaObject(void) {
 }
 
 static FieldFactory g_igBillboard_ctorTable[] = {
-    igIntMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igBillboard_fieldTable[] = {
     "_mode",
@@ -93,19 +93,19 @@ void igBillboard_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igBillboard_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBillboard_ctorTable, 4);
-    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
+    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     spA[0] = 0;
     spA[2] = 1.0f;
     spA[1] = 0;
     igVec3fMetaField_SetDefault(temp_a0, spA);
-    temp_a0_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
+    temp_a0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
     spB[0] = 0;
     spB[1] = 0;
     spB[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0_2, spB);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
     *(int *)((char *)(temp_s1) + 56) = FUN_001356f0();
     *(char *)((char *)(temp_s1) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBillboard_fieldTable, g_igBillboard_fieldHandles, g_igBillboard_fieldOffsets, temp_s2);

@@ -20,7 +20,7 @@ int beWaterMoveData_GetVTable(void) {
     obj._vtable = (int)&g_beWaterMoveData_vtable[0];
     posListSlot = (igObject **)&obj._posList;
     *posListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beWaterMoveData_vtable[0];
     igObjectRef_Release(posListSlot);
     return vtable;
@@ -33,7 +33,7 @@ void beWaterMoveData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beWaterMoveData_callbackList[] = { igVec3fList_EnsureRegistered, 0 };
 
-void *beWaterMoveData_Register(void) {
+CallbackArray *beWaterMoveData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -79,13 +79,13 @@ static int g_beWaterMoveData_fieldOffsets[] = {
 void beWaterMoveData_InitFields(void) {
     int base;
     void *posList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beWaterMoveData_metaObject;
+    meta = g_beWaterMoveData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beWaterMoveData_ctorTable, 3);
     posList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)posList)->_metaObject = igVec3fList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)posList)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)posList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beWaterMoveData_fieldTable, g_beWaterMoveData_fieldHandles, g_beWaterMoveData_fieldOffsets, base);
 }

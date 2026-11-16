@@ -20,7 +20,7 @@ int beLoadingNode_GetVTable(void) {
     obj._parentList = 0;
     obj._childList = 0;
     obj._vtable = (int)&g_beLoadingNode_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beLoadingNode_vtable[0];
     beNodeAnim_Destroy((beNodeAnim *)&obj, (long long)0);
     return vtable;
@@ -33,7 +33,7 @@ beNodeAnim *beNodeAnim_Destroy(beNodeAnim *self, long long delete_storage) {
         if (self != 0) {
             self->_vtable = (int)&g_igGroup_vtable[0];
             igSmartPointer_igNodeList_Destruct(&self->_childList, -1);
-            igNode_Destroy((int **)self, 0);
+            igNode_Destroy((igNode *)self, 0);
         }
         if ((short)delete_storage > 0) {
             Memory_FreeBufferAliasC(self);
@@ -47,7 +47,7 @@ void beLoadingNode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLoadingNode_Register);
 }
 
-void *beLoadingNode_Register(void) {
+CallbackArray *beLoadingNode_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -92,9 +92,9 @@ static int g_beLoadingNode_fieldOffsets[] = {
 
 void beLoadingNode_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beLoadingNode_metaObject;
+    meta = g_beLoadingNode_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLoadingNode_ctorTable, 2);
     igMetaObject_NameFields(meta, g_beLoadingNode_fieldTable, g_beLoadingNode_fieldHandles, g_beLoadingNode_fieldOffsets, base);

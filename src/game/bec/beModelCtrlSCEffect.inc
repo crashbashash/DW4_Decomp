@@ -9,7 +9,7 @@ igMetaField *g_beModelCtrlSCEffect_isPositionLockMetaField;
 
 beModelCtrlSCEffect *beModelCtrlSCEffect_Create(int allocator) {
     beModelCtrlSCEffect_EnsureRegistered();
-    return (beModelCtrlSCEffect *)igMetaObject_CreateInstance(*(int *)0x588800, allocator);
+    return (beModelCtrlSCEffect *)igMetaObject_CreateInstance(g_beModelCtrlSCEffect_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beModelCtrlSCEffect_GetMetaObject(void) {
@@ -32,7 +32,7 @@ int beModelCtrlSCEffect_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
     *modelNameSlot = 0;
     *seqNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
     igStringRef_Release(seqNameSlot);
     igStringRef_Release(modelNameSlot);
@@ -44,7 +44,7 @@ void beModelCtrlSCEffect_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlSCEffect_Register);
 }
 
-void *beModelCtrlSCEffect_Register(void) {
+CallbackArray *beModelCtrlSCEffect_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -105,9 +105,9 @@ static int g_beModelCtrlSCEffect_fieldOffsets[] = {
 
 void beModelCtrlSCEffect_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlSCEffect_metaObject;
+    meta = g_beModelCtrlSCEffect_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlSCEffect_ctorTable, 7);
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base)), -1);

@@ -2,7 +2,7 @@ igMetaObject *g_igInsightPluginList_metaObject;
 
 igMetaObject *FUN_002325c0(void) {
     if (g_igInsightPluginList_metaObject == 0) {
-        g_igInsightPluginList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igInsightPluginList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igInsightPluginList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igInsightPluginList_GetMetaObject(void)
 int igInsightPluginList_GetVTable(void) {
     struct Obj_232660 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igInsightPluginList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_002326a0(void)
@@ -30,9 +30,9 @@ void FUN_002326a0(void)
 
 static igMetaObjectCallback g_igInsightPluginList_callbackList[] = { FUN_00232780, 0 };
 
-void igInsightPluginList_Register(void) {
+CallbackArray *igInsightPluginList_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igInsightPluginList_metaObject,
         igObjectList_Register,

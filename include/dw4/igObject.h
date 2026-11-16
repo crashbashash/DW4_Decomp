@@ -24,8 +24,8 @@ struct igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 /* igObject's virtual-slot defaults, which derived classes' vtables share. */
 void Gap__Core__igObject__constructFields(struct igObject *self, int flags);
 void Gap__Core__igObject__destructFields(struct igObject *self);
-void Gap__Core__igObject__userConstruct(void);
-void Gap__Core__igObject__userDestruct(void);
+void Gap__Core__igObject__userConstruct(struct igObject *self);
+void Gap__Core__igObject__userDestruct(struct igObject *self);
 void Gap__Core__igObject__resetFields(struct igObject *self, int flags);
 void igObject_InitDefaults(struct igObject *self);
 void igObject_ReleaseDefaults(struct igObject *self);

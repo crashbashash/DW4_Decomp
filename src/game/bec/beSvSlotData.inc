@@ -19,7 +19,7 @@ void beSvSlotData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvSlotData_Register);
 }
 
-void *beSvSlotData_Register(void) {
+CallbackArray *beSvSlotData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -72,9 +72,9 @@ static int g_beSvSlotData_fieldOffsets[] = {
 
 void beSvSlotData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvSlotData_metaObject;
+    meta = g_beSvSlotData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvSlotData_ctorTable, 5);
     igMetaObject_NameFields(meta, g_beSvSlotData_fieldTable, g_beSvSlotData_fieldHandles, g_beSvSlotData_fieldOffsets, base);

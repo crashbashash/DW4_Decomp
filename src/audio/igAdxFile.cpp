@@ -25,11 +25,14 @@ enum { ADXF_SEEK_SET, ADXF_SEEK_CUR, ADXF_SEEK_END };
 /* The warning reporter's answers. */
 enum { kReportContinue = 1, kReportIgnoreAlways = 2 };
 
-struct igResult {
-    int value;
-    bool succeeded();
-};
-
+#include "dw4/igObject.h"
+#include "dw4/igMetaObject.h"
+#include "dw4/igMemory.h"
+#include "dw4/igReport.h"
+#include "dw4/igAdx.h"
+#include <string.h>
+#include "dw4/cri/sndf.h"
+#include "dw4/igResult.h"
 extern "C" {
 /* CRI ADXF, on the handle in `_adxf` */
 int ADXF_Open(char *fname, int dir);   /* open by name */
@@ -41,34 +44,14 @@ int ADXF_Tell(int adxf);               /* tell, in sectors */
 int ADXF_GetFsizeSct(int adxf);               /* file size in sectors */
 int ADXF_GetStat(int adxf);               /* status */
 
-void Gap__Core__igObject__constructFields(igObject *self);
-void Gap__Core__igObject__userConstruct(igObject *self);
-void Gap__Core__igObject__userDestruct(igObject *self);
-void Gap__Core__igObject__resetFields(igObject *self);
-void *igObject_GetAllocator(igObject *self);
-int igMetaObject_CountInstances(igMetaObject *meta, int recursive);
-char *Memory_AllocateAlignedWithAllocator(int size, int align, void *allocator); /* aligned allocation */
-int Memory_FreeBufferWithAllocator(int buffer, int allocator);
 void igFile_SetFileName(igObject *file, const char *fileName); /* sets igFile::_fileName */
-int igReport_Info(const char *format, ...);  /* reports a warning */
 int igReport_Printf(const char *format, ...);  /* prints */
 int igReport_Flush(...);
-int igAdx_FindAfsFile(int fileName);  /* the file's index in the AFS file list, or -1 */
-void igAdx_ExecVsync(void);
-void igAdx_ExecServer(int);
-int strcmp(const char *, const char *);
-int strcpy(char *, int);
-int memcpy(char *, char *, int);
 
-extern int g_resultSuccess[4];
-extern int g_resultFailure[4];
-extern unsigned char g_adxIopReady;
 unsigned char g_igAdxFile_ignoreReadModeWarning;
 unsigned char g_igAdxFile_ignoreWriteWarning;
 unsigned char g_igAdxFile_ignoreOpenModeWarning;
 }
-
-inline bool igResult::succeeded() { return value == g_resultSuccess[0]; }
 
 /* igAdxFile's own virtual function it calls on itself: open with a mode (slot 21,
  * igAdxFile_OpenWithMode).
@@ -88,21 +71,18 @@ public:
     virtual void s20(); virtual void s21(); virtual void s22();
     virtual igResult sleep(unsigned long long time);
 };
-struct ThreadList { int _vtable; unsigned int _refCount; int _count; int _capacity; SleepingThread **_data; };
-struct ThreadManager { int _vtable; unsigned int _refCount; ThreadList *_threads; };
 
+#include "dw4/igThread.h"
 extern "C" {
-extern ThreadManager *g_threadManager;
-extern igAdxAfsFileList *g_adxAfsFileList[4]; /* the files the AFS partitions hold */
 
-void igAdxFile_constructFields(igAdxFile *self)
+void igAdxFile_constructFields(igAdxFile *self, int flags)
 {
-    Gap__Core__igObject__constructFields(self);
+    Gap__Core__igObject__constructFields(self, flags);
 }
 
-void igAdxFile_resetFields(igAdxFile *self)
+void igAdxFile_resetFields(igAdxFile *self, int flags)
 {
-    Gap__Core__igObject__resetFields(self);
+    Gap__Core__igObject__resetFields(self, flags);
     self->_pBufferPtr = self->_pBuffer;
     self->_bBufferFilled = 0;
     self->_iBufferPos = 0;
@@ -129,11 +109,11 @@ int igAdxFile_GetMeta(void)
 void igAdxFile_destructFields(igAdxFile *self)
 {
     if (self->_pBuffer != 0) {
-        Memory_FreeBufferWithAllocator(self->_pBuffer, (int)igObject_GetAllocator(self));
+        Memory_FreeBufferWithAllocator((void *)self->_pBuffer, igObject_GetAllocator(self));
         self->_pBufferPtr = 0;
     }
     if (self->_pTmpBuffer != 0) {
-        Memory_FreeBufferWithAllocator(self->_pTmpBuffer, (int)igObject_GetAllocator(self));
+        Memory_FreeBufferWithAllocator((void *)self->_pTmpBuffer, igObject_GetAllocator(self));
     }
 }
 
@@ -152,7 +132,7 @@ int igAdxFile_WaitForReadEnd(igAdxFile *self)
 {
     while (igAdxFile_GetReadStatus(self) != ADXF_STAT_READEND) {
         if (self->_bUseAsync && self->_bUseAlchemyAsync) {
-            g_threadManager->_threads->_data[0]->sleep(self->_lSleepTime);
+            ((SleepingThread *)g_threadManager->_threadList->_data[0])->sleep(self->_lSleepTime);
         } else {
             igAdx_ExecVsync();
         }
@@ -179,11 +159,11 @@ void igAdxFile_OpenWithMode(igResult *result, igAdxFile *self, OpenMode mode)
     igAdxAfsFile *entry;
 
     if (g_adxIopReady == 0) {
-        result->value = g_resultFailure[0];
+        *result = g_resultFailure;
         return;
     }
     if (self->_bIsOpen) {
-        result->value = g_resultSuccess[0];
+        *result = g_resultSuccess;
         return;
     }
     if (mode == kDefaultOpenMode) {
@@ -213,7 +193,7 @@ void igAdxFile_OpenWithMode(igResult *result, igAdxFile *self, OpenMode mode)
                 g_igAdxFile_ignoreWriteWarning = 1;
             }
         }
-        result->value = g_resultFailure[0];
+        *result = g_resultFailure;
         return;
     default:
         if (!g_igAdxFile_ignoreOpenModeWarning) {
@@ -223,24 +203,24 @@ void igAdxFile_OpenWithMode(igResult *result, igAdxFile *self, OpenMode mode)
                 g_igAdxFile_ignoreOpenModeWarning = 1;
             }
         }
-        result->value = g_resultFailure[0];
+        *result = g_resultFailure;
         return;
     case kReadBinary:
     open:
-        index = igAdx_FindAfsFile(self->_fileName);
+        index = igAdx_FindAfsFile((const char *)self->_fileName);
         if (index != -1) {
-            entry = ((igAdxAfsFile **)g_adxAfsFileList[0]->_data)[index];
+            entry = ((igAdxAfsFile **)g_adxAfsFileList->_data)[index];
             self->_adxf = ADXF_OpenAfs(entry->_ptNumber, entry->_fileNumber);
         } else {
-            strcpy(fileName, self->_fileName);
+            strcpy(fileName, (const char *)self->_fileName);
             self->_adxf = ADXF_Open(fileName, 0);
         }
         if (self->_adxf == 0) {
-            result->value = g_resultFailure[0];
+            *result = g_resultFailure;
             return;
         }
         self->_bIsOpen = 1;
-        result->value = g_resultSuccess[0];
+        *result = g_resultSuccess;
         return;
     }
 }
@@ -260,9 +240,9 @@ igAdxFile *igAdxFile_OpenFile(igAdxFile *self, const char *fileName, const char 
 
     igFile_SetFileName(self, fileName);
     if (strcmp(mode, "rb") == 0) {
-        opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kReadBinary).succeeded();
+        opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kReadBinary) == g_resultSuccess;
     } else if (strcmp(mode, "r") == 0) {
-        opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kRead).succeeded();
+        opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kRead) == g_resultSuccess;
     } else {
         return 0;
     }

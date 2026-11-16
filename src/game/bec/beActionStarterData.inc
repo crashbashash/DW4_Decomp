@@ -25,7 +25,7 @@ int beActionStarterData_GetVTable(void) {
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
     messageSlot = (char **)&obj._message;
     *messageSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
     igStringRef_Release(messageSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -38,7 +38,7 @@ void beActionStarterData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beActionStarterData_Register);
 }
 
-void *beActionStarterData_Register(void) {
+CallbackArray *beActionStarterData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -91,9 +91,9 @@ static int g_beActionStarterData_fieldOffsets[] = {
 
 void beActionStarterData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beActionStarterData_metaObject;
+    meta = g_beActionStarterData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beActionStarterData_ctorTable, 5);
     igMetaObject_NameFields(meta, g_beActionStarterData_fieldTable, g_beActionStarterData_fieldHandles, g_beActionStarterData_fieldOffsets, base);

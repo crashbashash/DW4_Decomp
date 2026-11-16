@@ -12,24 +12,24 @@ static inline void set(R_456780 *&field, R_456780 *value) {
     field = value;
 }
 
-void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self) {
-    Gap__Core__igObject__resetFields(self);
+void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self, int flags) {
+    Gap__Core__igObject__resetFields((igObject *)self, flags);
     igSmartPointer<R_456780> first(0);
-    int allocator = igObject_GetAllocator(self);
+    int allocator = (int)(igObject_GetAllocator((igObject *)self));
     first.release();
     first.p = (R_456780 *)FUN_0044f0b0(allocator);
     igView_SetModel((igView *)(first.get()), (igModel *)self->f12);
-    ObjectList_AppendRetained(self->f16, first.get());
-    igSmartPointer<R_456780> second((R_456780 *)FUN_0044ecb0(igObject_GetAllocator(self)));
+    ObjectList_AppendRetained((igObjectList *)self->f16, (igObject *)(first.get()));
+    igSmartPointer<R_456780> second((R_456780 *)FUN_0044ecb0((int)(igObject_GetAllocator((igObject *)self))));
     second.get()->wc = (int)self;
     igView_SetModel((igView *)(second.get()), (igModel *)self->f12);
-    ObjectList_AppendRetained(self->f16, second.get());
-    allocator = igObject_GetAllocator(self);
+    ObjectList_AppendRetained((igObjectList *)self->f16, (igObject *)(second.get()));
+    allocator = (int)(igObject_GetAllocator((igObject *)self));
     first.release();
     first.p = (R_456780 *)FUN_0044e990(allocator);
     igView_SetModel((igView *)(first.get()), (igModel *)self->f12);
-    ObjectList_AppendRetained(self->f16, first.get());
-    igGroup_AppendChild(self->f20, self->f28);
+    ObjectList_AppendRetained((igObjectList *)self->f16, (igObject *)(first.get()));
+    igGroup_AppendChild((igGroup *)self->f20, (igNode *)self->f28);
     R_456780 *value = self->f20;
     X_456780 *x = self->f8;
     set(x->f12, value);
@@ -51,7 +51,7 @@ void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, int visible) {
         return;
     }
     temp_a0 = ((M_4569c0 *)gui->_mouseCursor)->t;
-    temp_a0->f24 = g_vec4Zero[0];
+    temp_a0->f24 = g_vec4Zero.x;
     temp_a0->f28 = DAT_004e1174[0];
     temp_a0->f32 = DAT_004e1178[0];
     temp_a0->f36 = DAT_004e117c[0];
@@ -96,7 +96,7 @@ void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
         }
     }
     if (arg1 != 0) {
-        igGroup_AppendChild(arg0->f28, arg1->f8->f8);
+        igGroup_AppendChild((igGroup *)arg0->f28, (igNode *)arg1->f8->f8);
     }
     igGuiSystem_SetMouseCursorVisible(gui, arg0->f32);
     sp30.a = 2;

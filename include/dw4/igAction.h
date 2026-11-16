@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igAction_metaObject;
-void igAction_Register(void);
+struct CallbackArray *igAction_Register(void);
 struct igMetaObject *igAction_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus

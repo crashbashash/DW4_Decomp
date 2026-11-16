@@ -35,7 +35,7 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         inv[1] = y;
     }
     FUN_00190cb0(rot, inv);
-    igMatrix44f_GetQuaternion(o->_quatList->_data[index], rot);
+    igMatrix44f_GetQuaternion(o->_quatList->_data[index], (float *)rot);
 }
 
 void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {
@@ -69,7 +69,7 @@ int FUN_001dd370(void *arg0) {
     int var_v0;
 
     var_v0 = 1;
-    if (*(float *)((char *)(arg0) + 44) == g_vec3Zero[0]) {
+    if (*(float *)((char *)(arg0) + 44) == g_vec3Zero.x) {
         var_v0 = 0;
     }
     if (var_v0 == 0) {
@@ -93,11 +93,11 @@ void FUN_001dd3e0(void *arg0, int arg1) {
     int i;
     n = ((V_1dd3e0 *)arg0)->vCount();
     for (i = 0; i < n; i++) {
-        igMatrix44f_SetIdentity(sp50);
+        igMatrix44f_SetIdentity((float *)sp50);
         ((V_1dd3e0 *)arg0)->vGet(i, sp50);
         igMatrix44f_Multiply(sp50, sp50, arg1);
         ((V_1dd3e0 *)arg0)->vSet(i, sp50);
-        ((F_1dd3e0 *)arg0)->a = g_vec3Zero[0];
+        ((F_1dd3e0 *)arg0)->a = g_vec3Zero.x;
         ((F_1dd3e0 *)arg0)->b = DAT_004e105c[0];
         ((F_1dd3e0 *)arg0)->c = DAT_004e1060[0];
     }

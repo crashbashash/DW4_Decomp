@@ -51,7 +51,7 @@ void beMessenger_PushArgContext(struct beMessenger *self);
 void beMessenger_RegisterReceiver(struct beMessenger *self, struct beBaseInfoRam *ram, const char *group, const char *name, int id);
 void beMessenger_RegisterReceiverFromInfo(struct beMessenger *self, struct beBaseInfoRam *ram, const char *group);
 void beMessenger_ResizeBool(struct beMessenger *self, int count);
-int beMessenger_ResolveEnumValue(struct beMessenger *self, struct igMetaEnum *metaEnum, const char *name);
+unsigned int beMessenger_ResolveEnumValue(struct beMessenger *self, struct igMetaEnum *metaEnum, const char *name);
 void beMessenger_SelectGroup(struct beMessenger *self, const char *group);
 void beMessenger_SelectReceivers(struct beMessenger *self, const char *group, const char *name, int id);
 void beMessenger_SendDelayedGroup(struct beMessenger *self, const char *group, const char *message, long long delay);
@@ -68,6 +68,21 @@ extern struct igMetaObject *g_beMessenger_metaObject;
 
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef __cplusplus
+#include "dw4/igVec3f.h"
+
+/* A vector passed by value: the caller copies it and the definition reads the copy's three floats. */
+inline void beMessenger_AppendVec3(struct beMessenger *self, igVec3f value) {
+    beMessenger_AppendVec3(self, &value.x);
+}
+
+/* The vector reply as a value: callers that take it by value get it built in a temporary. */
+struct beMessengerVec3 : igVec3f {
+    beMessengerVec3(struct beMessenger *self, int index) { beMessenger_GetVec3(&x, self, index); }
+    const float *data() const { return &x; }
+};
 #endif
 
 #endif

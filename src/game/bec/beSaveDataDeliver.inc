@@ -4,7 +4,7 @@ igMetaField *g_beSaveDataDeliver_dataMetaField;
 
 igMetaObject *beSaveDataDeliver_GetOrCreateMetaObject(void) {
     if (g_beSaveDataDeliver_metaObject == 0) {
-        g_beSaveDataDeliver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSaveDataDeliver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSaveDataDeliver_metaObject;
 }
@@ -25,7 +25,7 @@ int beSaveDataDeliver_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beSaveDataDeliver_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beSaveDataDeliver_EnsureRegistered(void)
@@ -33,7 +33,7 @@ void beSaveDataDeliver_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSaveDataDeliver_Register);
 }
 
-void *beSaveDataDeliver_Register(void) {
+CallbackArray *beSaveDataDeliver_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -75,9 +75,9 @@ static int g_beSaveDataDeliver_fieldOffsets[] = {
 void beSaveDataDeliver_InitFields(void) {
     int base;
     void *data;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSaveDataDeliver_metaObject;
+    meta = g_beSaveDataDeliver_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSaveDataDeliver_ctorTable, 2);
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));

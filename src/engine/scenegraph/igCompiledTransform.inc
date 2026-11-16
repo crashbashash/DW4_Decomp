@@ -1,6 +1,6 @@
 int FUN_001a3590(int arg0) {
     FUN_001a3700();
-    return igMetaObject_CreateInstance((int)g_igCompiledTransform_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igCompiledTransform_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *g_igCompiledTransform_metaObject;
@@ -29,20 +29,20 @@ int igCompiledTransform_GetVTable(void) {
     struct Rc *temp_a0;
     struct Rc *temp_a0_2;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q1 = &u.p[3];
     q2 = &u.p[6];
     u.w[0] = (int)(&g_igCompiledTransform_vtable[0]);
     *q1 = 0;
     *q2 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.w[0] = (int)(&g_igCompiledTransform_vtable[0]);
     if (q2 != 0) {
         temp_a0 = (struct Rc *)*q2;
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
     }
@@ -51,7 +51,7 @@ int igCompiledTransform_GetVTable(void) {
         if (temp_a0_2 != 0) {
             temp_a0_2->rc = temp_a0_2->rc - 1;
             if ((temp_a0_2->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0_2);
+                igObject_Destroy((igObject *)temp_a0_2);
             }
         }
     }
@@ -65,9 +65,9 @@ void FUN_001a3700(void)
 
 static igMetaObjectCallback g_igCompiledTransform_callbackList[] = { FUN_00194e70, igStringObj_EnsureRegistered, 0 };
 
-void igCompiledTransform_Register(void) {
+CallbackArray *igCompiledTransform_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCompiledTransform_metaObject,
         igObject_Register,
@@ -87,14 +87,14 @@ void thunk_igCompiledTransform_GetMetaObject(void) {
 }
 
 static FieldFactory g_igCompiledTransform_ctorTable[] = {
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igRawRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igCompiledTransform_fieldTable[] = {
     "_parentIdx",
@@ -136,25 +136,25 @@ void igCompiledTransform_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igCompiledTransform_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCompiledTransform_ctorTable, 8);
-    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2))->f38 = 0;
-    temp_s1 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))->f38 = 0;
+    temp_s1 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     temp_s1->f56 = (int)FUN_00194dd0();
     temp_s1->f38 = 0;
-    temp_v0 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
+    temp_v0 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     igIntMetaField_SetDefault(temp_v0, -1);
     temp_v0->f38 = 0;
-    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3))->f38 = 0;
-    temp_s1_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
+    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3))->f38 = 0;
+    temp_s1_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4));
     temp_s1_2->f56 = igStringObj_GetOrCreateMetaObject();
     temp_s1_2->f52 = 1;
     temp_s1_2->f38 = 0;
-    temp_v0_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
+    temp_v0_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5));
     igBoolMetaField_SetDefaultValue(temp_v0_2, 1);
     temp_v0_2->f38 = 0;
-    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6))->f38 = 0;
-    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7))->f38 = 0;
+    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6))->f38 = 0;
+    ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7))->f38 = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCompiledTransform_fieldTable, g_igCompiledTransform_fieldHandles, g_igCompiledTransform_fieldOffsets, temp_s2);
 }
 

@@ -50,7 +50,7 @@ int FUN_00155340(FieldTypeTable *table, unsigned int type) {
         case 37:
         case 38:
         case 39:
-            return g_igVec4fMetaField_metaObject;
+            return (int)g_igVec4fMetaField_metaObject;
         case 40:
         case 41:
         case 42:
@@ -58,7 +58,7 @@ int FUN_00155340(FieldTypeTable *table, unsigned int type) {
         case 44:
         case 45:
         case 46:
-            return g_igMatrix44fMetaField_metaObject;
+            return (int)g_igMatrix44fMetaField_metaObject;
         default:
             return 0;
         }
@@ -76,47 +76,47 @@ int FUN_00155340(FieldTypeTable *table, unsigned int type) {
 }
 
 int FUN_00155490(void) {
-    return g_igMetaField_metaObject[0];
+    return (int)g_igMetaField_metaObject;
 }
 
 StringRef FUN_001554a0(int arg1) {
     int i;
     char *s;
     int r;
-    igSmartPointer<Ref_1554a0> text(igStringObj_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString[0])));
-    igStringObj_Set(text.get(), arg1);
-    igStringObj_ToLower(text.get());
+    igSmartPointer<Ref_1554a0> text((Ref_1554a0 *)igStringObj_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
+    igStringObj_Set((igStringObj *)((int)(text.get())), (char *)arg1);
+    igStringObj_ToLower((igStringObj *)(text.get()));
     for (i = text.get()->len - 1; i >= 0; i--) {
         if (text.get()->str[i] == 0x5F) {
-            igStringObj_Erase(text.get(), i, 1);
+            igStringObj_Erase((igStringObj *)(text.get()), i, 1);
         }
     }
     s = text.get()->str;
     if (s == 0) {
-        s = (char *)g_stringObjEmptyText[0];
+        s = (char *)g_stringObjEmptyText;
     }
     if (s == 0) {
         r = 0;
     } else {
-        if (g_stringPool[0] == 0) {
-            r = StringPool_Allocate(0x10);
+        if (g_stringPool == 0) {
+            r = (int)StringPool_Allocate(0x10);
             if (r != 0) {
-                r = StringPool_Construct(r);
+                r = (int)StringPool_Construct((StringPool *)r);
             }
-            g_stringPool[0] = r;
+            g_stringPool = (StringPool *)r;
         }
-        r = (int)StringPool_Intern(g_stringPool[0], s);
+        r = (int)StringPool_Intern(g_stringPool, s);
     }
     return StringRef((char *)r);
 }
 
 void *igObject_GetMetaObject_Virtual(void){return (void *)g_igObject_metaObject[0];}
 
-void FUN_00155c00(int *out, Owner *owner, int id) {
+void FUN_00155c00(igResult *out, Owner *owner, int id) {
     int i;
     List *l = owner->a;
     if (id >= l->count || l->data[id] == 0) {
-        *out = g_resultFailure[0];
+        *out = g_resultFailure;
         return;
     }
     for (i = 0; i < owner->b->count; i++) {
@@ -133,7 +133,7 @@ void FUN_00155c00(int *out, Owner *owner, int id) {
         REL(o);
         if (la->count && id >= 0 && id < la->count) la->data[id] = 0;
     }
-    *out = g_resultSuccess[0];
+    *out = g_resultSuccess;
 }
 
 void FUN_00155db0(O_155db0 *arg0) {
@@ -303,7 +303,7 @@ void FUN_00156340(S0_156340 *arg0, void **arg1) {
         temp_v1 = *(int *)((char *)(temp_a0_2) - 4) - 1;
         *(int *)((char *)(temp_a0_2) - 4) = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
         }
     }
     arg0->f58 = (int)((int) *arg1);
@@ -320,7 +320,7 @@ static inline void release(T_1566c0 *object) {
 
 void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, int arg5) {
     igSmartPointer<T_1566c0> converted(0);
-    igSmartPointer<T_1566c0> spare((T_1566c0 *)FUN_0014db20(igObject_GetAllocator(arg0)));
+    igSmartPointer<T_1566c0> spare((T_1566c0 *)FUN_0014db20((int)igObject_GetAllocator((igObject *)arg0)));
     int spA4;
     int spA0;
     int sp9C;
@@ -329,7 +329,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     int var_s4;
     int var_s3;
     if ((arg1->f84 + (arg1->f64 + (arg1->f72 + (arg1->f40 + (arg1->f36 + (arg1->f28 + arg1->f32)))))) & 7) {
-        void **a = (void **)igObject_GetAllocator(arg0);
+        void **a = (void **)igObject_GetAllocator((igObject *)arg0);
         release(converted.p);
         converted.p = (T_1566c0 *)igImage_CreateInstance((int)a);
         T_1566c0 *created = converted.p;
@@ -352,12 +352,12 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     arg0->f16 = sp9C;
     arg0->f76 = spA0;
     {
-        void **alloc = (void **)igObject_GetAllocator(arg0);
+        void **alloc = (void **)igObject_GetAllocator((igObject *)arg0);
         void **v;
         if (g_useOwnerAllocator != 0) {
             v = alloc;
         } else {
-            v = (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
+            v = (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
         }
         arg0->f52 = (int)((VA *)v)->vX(arg0->f48, 0x80);
     }
@@ -366,13 +366,13 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     var_s5 = (char *)arg0->f52;
     var_s4 = src->f52 + arg3 * src->f76 + arg2 * ((src->f84 + (src->f64 + (src->f72 + (src->f40 + (src->f36 + (src->f28 + src->f32)))))) >> 3);
     while (var_s3 < arg5) {
-        memcpy(var_s5, var_s4, arg0->f76);
+        memcpy(var_s5, (void *)var_s4, arg0->f76);
         var_s3 += 1;
         var_s4 += src->f76;
         var_s5 += arg0->f76;
     }
     if (arg1->f68 != 0) {
-        void **a2 = (void **)igObject_GetAllocator(arg0);
+        void **a2 = (void **)igObject_GetAllocator((igObject *)arg0);
         release(arg0->f68);
         arg0->f68 = (T_1566c0 *)FUN_0014fa50((int)a2);
         FUN_00154c90((igClut *)arg0->f68, (igClut *)arg1->f68, 1);
@@ -478,7 +478,7 @@ void FUN_00158400(S0_158400 *arg0, int arg1, int arg2) {
 
     temp_a0 = arg0->f34;
     if ((temp_a0 != 0) && (arg0->f3C != 0)) {
-        Memory_FreeBuffer(temp_a0);
+        Memory_FreeBuffer((void *)temp_a0);
     }
     arg0->f34 = arg1;
     arg0->f3C = 0U;
@@ -544,12 +544,12 @@ void FUN_001585d0(S_1585d0 *arg0) {
 
     temp_a0 = arg0->f34;
     if ((temp_a0 != 0) && (arg0->f3c != 0)) {
-        Memory_FreeBuffer(temp_a0);
+        Memory_FreeBuffer((void *)temp_a0);
         arg0->f34 = 0;
     }
     igImage_UpdateFormatInfo((igImage *)arg0);
-    var_v0 = (void **)(igObject_GetAllocator(arg0));
-    var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]));
+    var_v0 = (void **)(igObject_GetAllocator((igObject *)arg0));
+    var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage));
     arg0->f34 = ((DW4VC_220_2 *)(var_v0))->vX((int)(arg0->f30), (int)(0x80));
     arg0->f3c = 1;
 }
@@ -583,8 +583,8 @@ int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
         arg0->f64 = 0;
         st->v25(&sp5C, 4, 1);
         st->v25(&sp5C, 4, 1);
-        var_v0 = (void **)igObject_GetAllocator(arg0);
-        var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
+        var_v0 = (void **)igObject_GetAllocator((igObject *)arg0);
+        var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
         arg0->f52 = ((VAlloc *)var_v0)->v53(arg0->f48, 0x80);
         arg0->f60 = 1;
         st->v25(arg0->f52, 1, arg0->f48);
@@ -615,7 +615,7 @@ int FUN_00158f40(void) {
 int FUN_00158f50(S_158f50 *arg0, int arg1) {
     int sp5C, sp58, sp54, sp50, sp4C, sp48, sp44;
     int r;
-    if (arg0->f52 != 0 && arg0->f60 != 0) Memory_FreeBuffer(arg0->f52);
+    if (arg0->f52 != 0 && arg0->f60 != 0) Memory_FreeBuffer((void *)arg0->f52);
     arg0->f52 = 0;
     arg0->f64 = 0;
     arg0->f72 = 0;
@@ -639,7 +639,7 @@ int FUN_00158f50(S_158f50 *arg0, int arg1) {
         }
         return 1;
     }
-    igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)igFile_Create(igObject_GetAllocator(arg0)));
+    igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)igFile_Create(igObject_GetAllocator((igObject *)arg0)));
     int sp3C;
     if (sp40.p->v23(arg1, "rb") == 0) {
         return 0;
@@ -678,11 +678,11 @@ void FUN_001592c0(LongListStorageView *self) {
 
     storage = self->storage;
     if (storage != 0) {
-        igObject_FreeMemory(self, storage);
+        igObject_FreeMemory((igObject *)self, (void *)storage);
     }
     buffer = self->buffer;
     if ((buffer != 0) && (self->ownsBuffer != 0)) {
-        Memory_FreeBuffer(buffer);
+        Memory_FreeBuffer((void *)buffer);
         self->buffer = 0;
     }
 }
@@ -738,28 +738,28 @@ void FUN_0015a030(struct A_15a030 *arg0) {
     int *s0;
     int tmp;
 
-    igObject_UserPostLoad(arg0);
+    igObject_UserPostLoad();
     tmp = arg0->f56;
     if (tmp != 0) {
-        if (g_stringPool[0] == 0) {
-            var_v0 = StringPool_Allocate(0x10);
+        if (g_stringPool == 0) {
+            var_v0 = (int)StringPool_Allocate(0x10);
             if (var_v0 != 0) {
-                var_v0 = StringPool_Construct(var_v0);
+                var_v0 = (int)StringPool_Construct((StringPool *)var_v0);
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool = (StringPool *)var_v0;
         }
-        s0 = (int *)StringPool_Intern(g_stringPool[0], tmp);
+        s0 = (int *)StringPool_Intern(g_stringPool, (char *)tmp);
         old = arg0->f88;
         if (old != 0) {
             a1 = old - 2;
             v1 = old[-1] - 1;
             old[-1] = v1;
             if (v1 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+                StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
             }
         }
         arg0->f88 = s0;
-        igObject_FreeMemory(arg0, arg0->f56);
+        igObject_FreeMemory((igObject *)arg0, (void *)arg0->f56);
         arg0->f56 = 0;
     }
     FUN_0015a100((S_15a100 *)arg0);
@@ -785,8 +785,8 @@ void FUN_0015a100(S_15a100 *arg0) {
     }
     igImage_UpdateFormatInfo((igImage *)arg0);
     if (arg0->f52 != 0 && n != arg0->f76) {
-        al = (A_15a100 *)igObject_GetAllocator(arg0);
-        al = (g_useOwnerAllocator != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
+        al = (A_15a100 *)igObject_GetAllocator((igObject *)arg0);
+        al = (g_useOwnerAllocator != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
         buf = al->vX(arg0->f48, 0x80);
         src = arg0->f52;
         dst = buf;
@@ -845,7 +845,7 @@ int FUN_0015a380(S_15a380 *arg0) {
 
 void FUN_0015a420(C_15a420 *o, int a1, int a2, int a3, int a4, int a5) {
     o->v28(a2); o->v26(a4); o->v27(a5); o->v30(a3);
-    if (a1 != o->f52) { o->v29(); int y = o->f48; int x = o->f52; memcpy(x, a1, y); } else { o->f60 = 1; igImage_UpdateFormatInfo((igImage *)o); }
+    if (a1 != o->f52) { o->v29(); int y = o->f48; int x = o->f52; memcpy((void *)x, (void *)a1, y); } else { o->f60 = 1; igImage_UpdateFormatInfo((igImage *)o); }
 }
 
 void FUN_0015a500(void *arg0, int arg1) {
@@ -937,15 +937,15 @@ void FUN_0015aaf0(unsigned char *dst, unsigned char *src, int count)
         *dst = (*src & 0xF) << 4;
 }
 
-void FUN_0015ab50(int arg0, int arg1) {
-    if (arg0 != arg1) {
-        memmove();
+void FUN_0015ab50(void *dst, const void *src, unsigned int size) {
+    if (dst != src) {
+        memmove(dst, src, size);
     }
 }
 
-void FUN_0015ab70(int arg0, int arg1) {
-    if (arg0 != arg1) {
-        memmove();
+void FUN_0015ab70(void *dst, const void *src, unsigned int size) {
+    if (dst != src) {
+        memmove(dst, src, size);
     }
 }
 
@@ -1003,7 +1003,7 @@ void FUN_0015ad30(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, in
 }
 
 int FUN_0015ad50(char *arg0) {
-    int n = strlen();
+    int n = strlen(arg0);
 
     while (n > 0) {
         n--;
@@ -1032,7 +1032,7 @@ int FUN_0015adb0(S0_15adb0 *arg0, int arg1, int arg2, int arg3) {
         var_s1 = arg0->f16 * 4;
     }
     if (arg0->f8 == 0) {
-        temp_v0 = (Rc_15adb0 *)igObject_GetAllocator(arg0);
+        temp_v0 = (Rc_15adb0 *)igObject_GetAllocator((igObject *)arg0);
         if (temp_v0 != 0) {
             temp_v0->rc = temp_v0->rc + 1;
         }

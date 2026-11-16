@@ -5,7 +5,7 @@ igMetaField *g_ParticleTimer_timeMetaField;
 
 igMetaObject *ParticleTimer_GetOrCreateMetaObject(void) {
     if (g_ParticleTimer_metaObject == 0) {
-        g_ParticleTimer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_ParticleTimer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_ParticleTimer_metaObject;
 }
@@ -31,7 +31,7 @@ int ParticleTimer_GetVTable(void) {
     obj._attributes = 0;
     obj._renderList = 0;
     obj._vtable = (int)&g_ParticleTimer_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_ParticleTimer_vtable[0];
     igGeometry_Destroy((igGeometry *)&obj, 0);
     return vtable;
@@ -42,12 +42,12 @@ void ParticleTimer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(ParticleTimer_Register);
 }
 
-void *ParticleTimer_Register(void) {
+CallbackArray *ParticleTimer_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_ParticleTimer_metaObject,
-        igGeometry_Register,
+        (igMetaObjectRegisterFunction)igGeometry_Register,
         igGeometry_GetPublishedMetaObject,
         ParticleTimer_GetMetaObjectFunction,
         "ParticleTimer",
@@ -89,9 +89,9 @@ void ParticleTimer_InitFields(void) {
     int base;
     void *time;
     void *timeBias;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_ParticleTimer_metaObject;
+    meta = g_ParticleTimer_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_ParticleTimer_ctorTable, 3);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);

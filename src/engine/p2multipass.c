@@ -3,6 +3,8 @@
  * capabilities are read per pass. p2SetPassCount sets how many passes there are. */
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
+#include "dw4/dmaChannel.h"
+#include "dw4/p2draw.h"
 #include "dw4/p2multipass.h"
 
 /* GS TEX0.TFX, p2TextureFunction */
@@ -309,11 +311,6 @@ void p2GetPassMasks(int pass, unsigned int *frameMask, unsigned int *zbufMask) {
     }
 }
 
-extern int p2DisplayListMode;
-extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
-void p2GrowDisplayList(void);
-void p2SubmitDmaPacket(int channel);
-
 /* Writing past the limit of the current VIF1 packet hands it over: while a display list is
  * recorded the list grows a block instead. */
 static inline void p2EndVif1Write(void) {
@@ -385,11 +382,6 @@ typedef struct p2ParticleFormat {
     short vuAddress3;
     int vertexFormat;
 } p2ParticleFormat;
-
-extern int p2VertexFormat;
-extern int p2CurrentPrimitive;
-extern p2VuBufferLayout p2VuBuffers;
-int p2LayoutVuBuffers(void);
 
 /* Lays out a particle block for `format`: the vertex format and attribute kind its components
  * need, how many particles a row holds (what one VU batch takes, whole primitives), where each

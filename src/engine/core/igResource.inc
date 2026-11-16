@@ -81,7 +81,7 @@ void **igSmartPointer_igDirectoryList_Destruct(void **self, long long deleteFlag
             }
         }
         if ((short)deleteFlag > 0) {
-            __dl__FPv(self);
+            operator delete(self);
         }
     }
     return self;
@@ -91,7 +91,7 @@ igQueue **igSmartPointer_igQueue_Destruct(igQueue **self, short deleteFlag) {
     if (self) {
         igQueue *queue = *self;
         if (queue) { queue->_refCount -= 1; if ((queue->_refCount & 0x7fffff) == 0) igObject_Destroy(queue); }
-        if (deleteFlag > 0) __dl__FPv(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

@@ -29,7 +29,7 @@ int beAction2MOTIONSET_GetVTable(void) {
     *hokanModeSlot = 0;
     loopModeSlot = (char **)&obj._loopMode;
     *loopModeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beAction2MOTIONSET_vtable[0];
     igStringRef_Release(loopModeSlot);
     igStringRef_Release(hokanModeSlot);
@@ -43,7 +43,7 @@ void beAction2MOTIONSET_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beAction2MOTIONSET_Register);
 }
 
-void *beAction2MOTIONSET_Register(void) {
+CallbackArray *beAction2MOTIONSET_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -88,9 +88,9 @@ static int g_beAction2MOTIONSET_fieldOffsets[] = {
 
 void beAction2MOTIONSET_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beAction2MOTIONSET_metaObject;
+    meta = g_beAction2MOTIONSET_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beAction2MOTIONSET_ctorTable, 3);
     igMetaObject_NameFields(meta, g_beAction2MOTIONSET_fieldTable, g_beAction2MOTIONSET_fieldHandles, g_beAction2MOTIONSET_fieldOffsets, base);

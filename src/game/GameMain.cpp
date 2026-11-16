@@ -29,15 +29,13 @@
 #include "dw4/beSystem.h"
 #include "dw4/softfloat.h"
 #include "dw4/sony/sifdev.h"
+#include <string.h>
 
 #pragma push
 #pragma readonly_strings on
 #define RELEASE_SHIFTED(v) { igObject *t_ = (igObject *)(v); if (t_ != 0) { t_->_refCount = t_->_refCount - 1; if (((unsigned long long) ((long long) (int) t_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(t_); } } }
 /* matching construct: out-of-line ctor/dtor classes reproduce the retail unwind table (retail 0x2595e0 table 0x542b5c: App dtor 0x234b90, Blk dtor 0x25a330, scope guard dtor 0x2599b0) */
 struct App { char options[232]; igIntList *intList; igStringRefList *stringList; App(); ~App(); };
-/* The C library: the units built with -Iinclude have no libc header. */
-extern "C" char *strcpy(char *dst, const char *src);
-extern "C" unsigned int strlen(const char *s);
 struct Guard { ~Guard() { igObjectSystem_Release(); } };
 /* The allocator a new pool comes from: the owner's, or the user-0 pool when the owner allocator is off. */
 static inline int PoolAllocator(int owner) {
@@ -132,9 +130,6 @@ public:
 extern "C" { bool g_atfilePrefixSet; }
 extern "C" { unsigned char g_atstreamFullReload = 1; }
 extern "C" { unsigned char g_startupFlagB = 1; }
-/* Kept here: the returned holder's type names the destructor copy this file emits (igSmartPointer<igPsx2Window>),
- * while the definition returns its own window view. */
-extern "C" igSmartPointer<igPsx2Window> Viewer_CreateDisplay(int allocator);
 /* The viewer application: the viewer setup (its window sits at +24), the repeat counts and model names of the
  * command line, the quit flag, the model files found on the disc and the loading message. */
 struct Blk {
@@ -201,7 +196,7 @@ struct Assign {
     }
 };
 /* The manager when it is a viewer scene-info manager, else null. */
-static inline igViewerSceneInfoManager *AsSceneInfoManager(void *manager) {
+static inline igViewerSceneInfoManager *AsSceneInfoManager(igObject *manager) {
     if (manager != 0 && igObject_IsKindOf(manager, g_igViewerSceneInfoManager_metaObject) != 0) return (igViewerSceneInfoManager *)manager; else return 0;
 }
 /* Defined below their first use. */

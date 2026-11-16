@@ -2,7 +2,7 @@ igMetaObject *g_bePlaySEList_metaObject;
 
 igMetaObject *bePlaySEList_GetOrCreateMetaObject(void) {
     if (g_bePlaySEList_metaObject == 0) {
-        g_bePlaySEList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_bePlaySEList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_bePlaySEList_metaObject;
 }
@@ -17,7 +17,7 @@ int bePlaySEList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_bePlaySEList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void bePlaySEList_EnsureRegistered(void)
@@ -27,7 +27,7 @@ void bePlaySEList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_bePlaySEList_callbackList[] = { bePlaySE_EnsureRegistered, 0 };
 
-void *bePlaySEList_Register(void) {
+CallbackArray *bePlaySEList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

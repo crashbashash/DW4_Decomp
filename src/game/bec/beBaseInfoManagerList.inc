@@ -14,7 +14,7 @@ int beBaseInfoManagerList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beBaseInfoManagerList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beBaseInfoManagerList_EnsureRegistered(void)
@@ -24,7 +24,7 @@ void beBaseInfoManagerList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beBaseInfoManagerList_callbackList[] = { beBaseInfoManager_EnsureRegistered, 0 };
 
-void *beBaseInfoManagerList_Register(void) {
+CallbackArray *beBaseInfoManagerList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

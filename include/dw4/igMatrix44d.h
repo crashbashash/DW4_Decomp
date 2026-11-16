@@ -1,11 +1,11 @@
 #ifndef DW4_IGMATRIX44D_H
 #define DW4_IGMATRIX44D_H
 
+#include <string.h>
 #include "dw4/igMath.h"
 
 extern "C" {
 void igMatrix44d_SetIdentity(long long *matrix);
-void *memcpy(void *dest, const void *src, unsigned int size);
 }
 
 /* Alchemy's 4x4 double matrix: identity by default, or copied from four rows. */

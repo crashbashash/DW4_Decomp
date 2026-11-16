@@ -10,8 +10,11 @@
  * before them. A finish sequence is a GS SIGNAL id written behind the submitted work: the signal
  * handler records each id the GS reaches, so a thread can wait for everything up to one. */
 #include "dw4/eekernel.h"
+#include "dw4/libkernl.h"
 #include "dw4/p2core.h"
 #include "dw4/p2dma.h"
+#include "dw4/dmaChannel.h"
+#include "dw4/p2gs.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -49,29 +52,11 @@ typedef union p2GsDispfb {
     } field;
 } p2GsDispfb;
 
-int DIntr(void);
-int EIntr(void);
-int p2GetDisplayFlags(void);
-void p2SendGsRegister(int reg);
 void FUN_001f8190(int reg);
-long long p2readGSPrivRegister(int reg);
-void p2SubmitDmaPacket(int channel, p2DmaPacket *packet);
-void p2AddDmaPredicate(int channel, int (*test)(long long arg), long long arg);
-long long p2AddPreviousFinishFuncPredicate(void);
-void p2RegisterPredicateName(int (*predicate)(long long), const char *name);
-int p2TryStartDmaPacket(int channel);
 void p2UploadViewport(void);
-void p2BuildDisplayPacket(void);
 int swapbuffersPredicate(long long frame);
-int swapbuffersDrawPredicate(long long buffer);
 void p2AddFinishFunc(void (*func)(p2FinishFunc *finish, int arg), int arg);
-int p2NewFinishSequence(int signal);
-void p2FlushVif1Packet(void);
 
-extern int p2FirstOpen;
-extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
-extern int p2BlockedSema;
-extern int p2PreviousFinishFuncDone;
 extern p2GsDispfb p2GsDispfb1;
 extern p2GsDispfb p2GsDispfb2;
 extern p2DmaTag p2DisplayPacketTag;
@@ -79,7 +64,6 @@ extern struct SemaParam p2SwapSemaParam;
 
 extern p2FinishFunc *p2FinishTail;
 extern p2FinishFunc *p2FinishHead;
-extern p2FinishFunc *p2FreeFinishFuncs;
 extern int p2VsyncSwapPending;
 extern int p2FrameDrawn;
 extern int p2LastDrawBuffer;
@@ -94,10 +78,6 @@ extern int p2SwapLatency;
 extern int p2SwapOnVsync;
 extern int p2FinishesPending;
 extern long long p2FrameStartTime;
-extern long long p2FramesTimed;
-extern long long p2FrameTimeTotal;
-extern unsigned long long p2FrameTimeMax;
-extern unsigned long long p2FrameTimeMin;
 extern int p2SwapInterval;
 extern int p2VsyncsSinceSwap;
 extern int p2GsSignalCount;
@@ -407,7 +387,7 @@ void p2FlushVif1Packet(void) {
     p2DmaPacket *packet = p2DmaCurrentPacket[P2_DMA_VIF1];
 
     if (packet->chain != packet->cursor || packet->finishPredicate != 0) {
-        p2SubmitDmaPacket(P2_DMA_VIF1, packet);
+        p2SubmitDmaPacket(P2_DMA_VIF1);
     }
 }
 #pragma pop

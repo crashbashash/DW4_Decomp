@@ -26,7 +26,7 @@ int beSoundInfo_GetVTable(void) {
     fnameListSlot = (char *)&obj._fnameList;
     *(int *)fnameListSlot = 0;
     obj._dataType = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSoundInfo_vtable[0];
     igStringRef_Destruct(&obj._dataType, -1);
     igSmartPointer_igNamedObjectList_Destruct(fnameListSlot, -1);
@@ -41,7 +41,7 @@ void beSoundInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSoundInfo_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
 
-void *beSoundInfo_Register(void) {
+CallbackArray *beSoundInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -91,13 +91,13 @@ static int g_beSoundInfo_fieldOffsets[] = {
 void beSoundInfo_InitFields(void) {
     int base;
     void *fnameList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSoundInfo_metaObject;
+    meta = g_beSoundInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSoundInfo_ctorTable, 4);
     fnameList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)fnameList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)fnameList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beSoundInfo_fieldTable, g_beSoundInfo_fieldHandles, g_beSoundInfo_fieldOffsets, base);
 }
 

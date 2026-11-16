@@ -17,9 +17,9 @@ int beNDMWLoadIntf2Info_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2Info_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2Info_vtable[0];
-    beBaseInfo_Destroy(&obj, 0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, 0);
     return vtable;
 }
 
@@ -28,7 +28,7 @@ void beNDMWLoadIntf2Info_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWLoadIntf2Info_Register);
 }
 
-void *beNDMWLoadIntf2Info_Register(void) {
+CallbackArray *beNDMWLoadIntf2Info_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

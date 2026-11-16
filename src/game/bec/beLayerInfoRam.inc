@@ -18,7 +18,7 @@ int beLayerInfoRam_GetVTable(void) {
     dataListSlot = (igObject **)&obj._dataList;
     *dataListSlot = 0;
     obj._vtable = (int)&g_beLayerInfoRam_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     igObjectRef_Release(dataListSlot);
     return vtable;
@@ -29,7 +29,7 @@ void beLayerInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLayerInfoRam_Register);
 }
 
-void *beLayerInfoRam_Register(void) {
+CallbackArray *beLayerInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

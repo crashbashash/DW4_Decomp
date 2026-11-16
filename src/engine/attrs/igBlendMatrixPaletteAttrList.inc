@@ -2,7 +2,7 @@ igMetaObject *g_igBlendMatrixPaletteAttrList_metaObject;
 
 igMetaObject *FUN_00139820(void) {
     if (g_igBlendMatrixPaletteAttrList_metaObject == 0) {
-        g_igBlendMatrixPaletteAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBlendMatrixPaletteAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBlendMatrixPaletteAttrList_metaObject;
 }
@@ -17,9 +17,9 @@ igMetaObject *igBlendMatrixPaletteAttrList_GetMetaObject(void)
 
 int igBlendMatrixPaletteAttrList_GetVTable(void) {
     int obj[8];
-    igObject_InitHeader(obj);
+    igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igBlendMatrixPaletteAttrList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00139900(void)
@@ -29,9 +29,9 @@ void FUN_00139900(void)
 
 static igMetaObjectCallback g_igBlendMatrixPaletteAttrList_callbackList[] = { FUN_00139ab0, 0 };
 
-void igBlendMatrixPaletteAttrList_Register(void) {
+CallbackArray *igBlendMatrixPaletteAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendMatrixPaletteAttrList_metaObject,
         igObjectList_Register,

@@ -12,7 +12,7 @@ igMetaField *g_igCompressedTransformSequence1_5Data_scaleRangeMetaField;
 
 igMetaObject *FUN_001a24f0(void) {
     if (g_igCompressedTransformSequence1_5Data_metaObject == 0) {
-        g_igCompressedTransformSequence1_5Data_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igCompressedTransformSequence1_5Data_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igCompressedTransformSequence1_5Data_metaObject;
 }
@@ -28,13 +28,13 @@ igMetaObject *igCompressedTransformSequence1_5Data_GetMetaObject(void)
 int igCompressedTransformSequence1_5Data_GetVTable(void) {
     struct Obj_1a2590 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igCompressedTransformSequence1_5Data_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igCompressedTransformSequence1_5Data_vtable[0];
     FUN_00164870(&obj.w5, -1);
     FUN_00164870(&obj.w4, -1);
@@ -50,9 +50,9 @@ void FUN_001a2640(void)
 
 static igMetaObjectCallback g_igCompressedTransformSequence1_5Data_callbackList[] = { igUnsignedShortList_EnsureRegistered, 0 };
 
-void igCompressedTransformSequence1_5Data_Register(void) {
+CallbackArray *igCompressedTransformSequence1_5Data_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCompressedTransformSequence1_5Data_metaObject,
         igObject_Register,
@@ -72,16 +72,16 @@ void thunk_igCompressedTransformSequence1_5Data_GetMetaObject(void) {
 }
 
 static FieldFactory g_igCompressedTransformSequence1_5Data_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
 };
 static const char *g_igCompressedTransformSequence1_5Data_fieldTable[] = {
     "_compressedTranslationList",
@@ -129,16 +129,16 @@ void igCompressedTransformSequence1_5Data_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igCompressedTransformSequence1_5Data_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCompressedTransformSequence1_5Data_ctorTable, 0xA);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igUnsignedShortList_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igUnsignedShortList_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igUnsignedShortList_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igUnsignedShortList_GetOrCreateMetaObject();
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCompressedTransformSequence1_5Data_fieldTable, g_igCompressedTransformSequence1_5Data_fieldHandles, g_igCompressedTransformSequence1_5Data_fieldOffsets, temp_s2);
 }
 

@@ -1,4 +1,4 @@
-void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_24(void *arg0, int arg1) {
+void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_24(void *arg0, igPsx2VisualContext *arg1) {
     Gap__Gfx__igPsx2VisualContext__vfunc_203(arg1, *(unsigned short *)((char *)arg0 + 76) + 10, (char *)arg0 + 0xC);
 }
 
@@ -19,7 +19,7 @@ void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_17(void *arg0) {
 void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_26(void *arg0, void **arg1) {
     int sp30[16];
 
-    igMatrix44f_SetIdentity(sp30);
+    igMatrix44f_SetIdentity((float *)sp30);
     ((V832 *)arg1)->vX(*(unsigned short *)((char *)(arg0) + 76) + 0xA, sp30);
     ((V128 *)arg0)->vX(sp30);
 }

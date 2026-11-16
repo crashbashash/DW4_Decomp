@@ -1,6 +1,7 @@
 /* sifcmd.c - libkernl's SIF command layer (libkernl.a sifcmd.o): the handler tables the IOP's
  * commands are dispatched through, the software registers, and sending commands over SIF0/SIF1. */
 #include "dw4/sony/sif.h"
+#include "dw4/eekernel.h"
 #include "dw4/eekernel_gp.h"
 #include "dw4/libkernl.h"
 
@@ -14,13 +15,6 @@
 #define SIF_CMD_PACKET_MAX 112
 /* the transfer attributes of the packet's own DMA: end-of-transfer, interrupt on the IOP */
 #define SIF_DMA_PACKET 0x44
-
-typedef struct {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
-} sceSifDmaData;
 
 /* the SIF registers sceSifInitCmd hands the receive buffer and the command data over in */
 #define SIF_SYSREG_SUBADDR 0x80000000
@@ -39,9 +33,6 @@ typedef struct {
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
 
 int AddDmacHandler(int channel, int (*handler)(int), int next);
-int RemoveDmacHandler(int channel, int id);
-unsigned int sceSifGetReg(unsigned int reg);
-int sceSifSetReg(unsigned int reg, unsigned int value);
 int sceSifSetDChain(void);
 
 static int _cmd_init_check = 0;
@@ -53,9 +44,7 @@ static sceSifCmdState _data_table;
 static sceSifCmdData _sys_buffer[SIF_SYS_CMD_MAX] __attribute__((aligned(64)));
 static unsigned int soft_reg[32];
 
-unsigned int sceSifSetDma(sceSifDmaData *transfers, int count);
 unsigned int isceSifSetDma(sceSifDmaData *transfers, int count);
-unsigned int sceSifSendCmd(unsigned int cid, void *packet, int size, void *src, void *dest, int len);
 static int _sceSifCmdIntrHdlr(int channel);
 int isceSifSetDChain(void);
 

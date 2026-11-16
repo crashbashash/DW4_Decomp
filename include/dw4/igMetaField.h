@@ -20,6 +20,7 @@ struct igMetaField *igMetaField_Init(struct igMetaField *field);
 void igMetaField_SetFieldName(struct igMetaField *self, void **newName);
 void igMetaField_FinalizeDescriptor(struct igMetaField *field);
 struct __internalObjectList *igMetaField_GetMetaFieldList(void);
+extern int g_igMetaField_vtable[4];
 
 #ifdef __cplusplus
 }

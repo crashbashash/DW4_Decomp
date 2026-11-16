@@ -13,7 +13,7 @@ void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, igMemoryPoolView *al
     if (old) {
         ((igObject *)old)->_refCount--;
         if ((((igObject *)old)->_refCount & 0x7fffff) == 0)
-            igObject_Destroy(old);
+            igObject_Destroy((igObject *)old);
     }
     self->_aliasedMemoryPool = (int)alias;
     if (alias) self->_isReassignable = alias->CanTransferTo((igMemoryPoolView *)self);

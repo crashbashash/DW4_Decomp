@@ -2,8 +2,8 @@ void FUN_00141710(void *arg0) {
     *(short *)((char *)(arg0) + 10) = (short) *(int *)((char *)(arg0) + 16);
 }
 
-void Gap__Attrs__igTextureStateAttr__vfunc_24(S_141720 *arg0, int arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_117(arg1, arg0->f16, arg0->b12);
+void Gap__Attrs__igTextureStateAttr__vfunc_24(igTextureStateAttr *self, igPsx2VisualContext *context) {
+    Gap__Gfx__igPsx2VisualContext__vfunc_117(context, self->_unitID, self->_enabled);
 }
 
 void Gap__Attrs__igTextureStateAttr__vfunc_17(void *arg0) {

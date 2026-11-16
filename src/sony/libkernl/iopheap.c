@@ -24,9 +24,6 @@ typedef struct {
 /* the IOP heap server's RPC id */
 #define IH_SERVER 0x80000003
 
-void sceSifInitRpc(unsigned int mode);
-int sceSifBindRpc(sceSifClientData *client, unsigned int sid, unsigned int mode);
-
 /* negative until sceSifInitIopHeap has bound the server */
 static int _bind = -1;
 static sceSifClientData cd;

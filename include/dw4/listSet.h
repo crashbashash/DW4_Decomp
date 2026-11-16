@@ -1,6 +1,8 @@
 #ifndef DW4_LISTSET_H
 #define DW4_LISTSET_H
 
+#include "dw4/beNDMWLoadIntf2.h"
+
 /* The list's inline `set`: stores `value` at `index` when the index is inside the list. The value is
    a `const T &`, so a constant argument (0, false, 0.0f) becomes an unnamed `.data`/`.sdata` temporary
    (the retail zero data) instead of a named global. `List` is any list class with `_count` and `_data`. */
@@ -16,10 +18,9 @@ template <class List, class T> static inline void ListStore(List *list, int inde
 
 /* The same for an int list whose storage is read through the list's data accessor (a call, as the game's
    code makes it). */
-extern "C" int beNDMWLoadIntf2_igIntList_GetData(...);
 template <class List> static inline void IntListSet(List *list, int index, const int &value) {
     int count = list->_count;
-    if (count != 0 && index >= 0 && index < count) ((int *)beNDMWLoadIntf2_igIntList_GetData(list))[index] = value;
+    if (count != 0 && index >= 0 && index < count) ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)list))[index] = value;
 }
 
 #endif

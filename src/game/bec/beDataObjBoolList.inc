@@ -3,7 +3,7 @@ igMetaField *g_beDataObjBoolList_dataMetaField;
 
 beDataObjBoolList *beDataObjBoolList_Create(int allocator) {
     beDataObjBoolList_EnsureRegistered();
-    return (beDataObjBoolList *)igMetaObject_CreateInstance(*(int *)0x589888, allocator);
+    return (beDataObjBoolList *)igMetaObject_CreateInstance(g_beDataObjBoolList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beDataObjBoolList_GetMetaObject(void) {
@@ -29,7 +29,7 @@ int beDataObjBoolList_GetVTable(void) {
     obj._vtable = (int)&g_beDataObjBoolList_vtable[0];
     dataSlot = (igObject **)&obj._data;
     *dataSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDataObjBoolList_vtable[0];
     igObjectRef_Release(dataSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -44,7 +44,7 @@ void beDataObjBoolList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDataObjBoolList_callbackList[] = { igBoolList_EnsureRegistered, 0 };
 
-void *beDataObjBoolList_Register(void) {
+CallbackArray *beDataObjBoolList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -82,13 +82,13 @@ static int g_beDataObjBoolList_fieldOffsets[] = {
 void beDataObjBoolList_InitFields(void) {
     int base;
     void *data;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDataObjBoolList_metaObject;
+    meta = g_beDataObjBoolList_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDataObjBoolList_ctorTable, 1);
     data = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)data)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)data)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)data)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDataObjBoolList_fieldTable, g_beDataObjBoolList_fieldHandles, g_beDataObjBoolList_fieldOffsets, base);
 }

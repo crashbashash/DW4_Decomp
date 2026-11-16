@@ -6,7 +6,7 @@ igMetaField *g_beCriAudio_errVolumeMetaField;
 
 igMetaObject *beCriAudio_GetOrCreateMetaObject(void) {
     if (g_beCriAudio_metaObject == 0) {
-        g_beCriAudio_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCriAudio_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCriAudio_metaObject;
 }
@@ -34,7 +34,7 @@ int beCriAudio_GetVTable(void) {
     obj._vtable = (int)&g_beCriAudio_vtable[0];
     *adxtSlot = 0;
     *sndfSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCriAudio_vtable[0];
     igObjectRef_Release(sndfSlot);
     igObjectRef_Release(adxtSlot);
@@ -48,7 +48,7 @@ void beCriAudio_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCriAudio_callbackList[] = { igAdxAudio_EnsureRegistered, beCriSndf_EnsureRegistered, 0 };
 
-void *beCriAudio_Register(void) {
+CallbackArray *beCriAudio_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -99,13 +99,13 @@ void beCriAudio_InitFields(void) {
     int base;
     void *sndf;
     void *adxt;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCriAudio_metaObject;
+    meta = g_beCriAudio_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCriAudio_ctorTable, 4);
     adxt = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)adxt)->_metaObject = igAdxAudio_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)adxt)->_metaObject = (int)igAdxAudio_GetOrCreateMetaObject();
     sndf = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)sndf)->_metaObject = (int)beCriSndf_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beCriAudio_fieldTable, g_beCriAudio_fieldHandles, g_beCriAudio_fieldOffsets, base);

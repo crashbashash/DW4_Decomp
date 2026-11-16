@@ -403,12 +403,12 @@ void igStringObj_SetN(igStringObj *self, int text, int length) {
     }
 }
 
-void igStringObj_Set(int self, int text) {
+void igStringObj_Set(igStringObj *self, const char *text) {
     if (text != 0) {
-        igStringObj_SetN((igStringObj *)self, text, strlen((const char *)text));
+        igStringObj_SetN(self, (int)text, strlen(text));
         return;
     }
-    igStringObj_Clear((igStringObj *)self);
+    igStringObj_Clear(self);
 }
 
 int igStringObj_Clear(igStringObj *self) {
@@ -456,7 +456,7 @@ void igStringObj_ToLower(igStringObj *self) {
 
     buffer = self->_buffer;
     if (buffer != 0) {
-        strlwr(buffer);
+        strlwr((char *)buffer);
     }
 }
 
@@ -494,8 +494,8 @@ bool igStringObj_ParseBool(igStringObj *o, char *out) {
     return r;
 }
 
-void igStringObj_SetInt(int self, int value, int format) {
-    igStringObj_Format((igStringObj *)self, (const char *)format, value);
+void igStringObj_SetInt(int self, int value, const char *format) {
+    igStringObj_Format((igStringObj *)self, format, value);
 }
 
 void igStringObj_SetFloat(int string, void *format, float value) {
@@ -512,7 +512,7 @@ void igStringObj_SetBool(int self, int value, int upperCase) {
         } else {
             upperText = (int *)("FALSE");
         }
-        igStringObj_Set(self, (int)upperText);
+        igStringObj_Set((igStringObj *)self, (const char *)upperText);
         return;
     }
     if (value != 0) {
@@ -520,7 +520,7 @@ void igStringObj_SetBool(int self, int value, int upperCase) {
     } else {
         lowerText = (int *)("false");
     }
-    igStringObj_Set(self, (int)lowerText);
+    igStringObj_Set((igStringObj *)self, (const char *)lowerText);
 }
 
 int igStringObj_Format(igStringObj *self, const char *format, ...) {
@@ -558,12 +558,12 @@ void igStringObj_KeepExtension(igStringObj *o) {
             if (pick(base, e)[i] == '.') {
                 /* read _buffer as a char * word: an int-typed read would be merged with base's load,
                  * and retail loads it again here */
-                t = *(char **)&o->_buffer; igStringObj_Set((int)o, (int)((t == 0 ? e : t) + i));
+                t = *(char **)&o->_buffer; igStringObj_Set(o, (t == 0 ? e : t) + i);
                 return;
             }
             if (pick(base, e)[i] == '/' || pick(base, e)[i] == '\\') break;
         }
-        igStringObj_Set((int)o, (int)e);
+        igStringObj_Set(o, e);
     }
 }
 
@@ -575,12 +575,12 @@ void igStringObj_RemovePathFilename(igStringObj *p) {
         while (q--, base < q) {
             if (*q == 0x5C || *q == 0x2F) {
                 *q = 0;
-                igStringObj_Set((int)p, (int)(char *)p->_buffer);
+                igStringObj_Set(p, (char *)p->_buffer);
                 break;
             }
         }
         if (q == (char *)p->_buffer) {
-            igStringObj_Set((int)p, (*(int *)&g_stringObjEmptyText));
+            igStringObj_Set(p, g_stringObjEmptyText);
         }
     }
 }
@@ -594,7 +594,7 @@ void igStringObj_StripDirectory(int *self) {
         while (--p, start < (unsigned int)p) {
             char c = *p;
             if (c == 0x5C || c == 0x2F) {
-                igStringObj_Set((int)self, (int)(p + 1));
+                igStringObj_Set((igStringObj *)self, p + 1);
                 return;
             }
         }
@@ -660,9 +660,9 @@ int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
         return 0;
     }
     *(igStringObj **)&tmp = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
-    igStringObj_Set((int)tmp, (int)((char *)self->_buffer + end));
+    igStringObj_Set(tmp, (char *)self->_buffer + end);
     igStringObj_Insert((igStringObj *)tmp, (char *)self->_buffer, 0, pos);
-    igStringObj_Set((int)self, (int)(igStringObj_Text(tmp)));
+    igStringObj_Set(self, igStringObj_Text(tmp));
     held = tmp;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;
@@ -734,7 +734,7 @@ void igStringObj_Trim(igStringObj *self) {
         while (*p != 0 && (_ctype_[*p + 1] & 8)) {
             p += 1;
         }
-        igStringObj_Set((int)self, (int)p);
+        igStringObj_Set(self, p);
         Memory_FreeBuffer(copy);
     }
 }

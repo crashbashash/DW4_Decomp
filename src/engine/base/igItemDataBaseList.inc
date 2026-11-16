@@ -70,7 +70,7 @@ void igItemDataBaseList_InitFields(void) {
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, (igMetaField *)temp_s0);
     temp_s0->f4 = temp_s0->f4 - 1;
     if (((unsigned long long) ((long long) temp_s0->f4 << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s0);
+        igObject_Destroy((igObject *)temp_s0);
     }
 }
 

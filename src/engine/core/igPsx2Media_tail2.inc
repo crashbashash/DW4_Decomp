@@ -47,7 +47,7 @@ void Gap__Core__igPsx2Media__constructFields(igPsx2MediaView *self, int extra1) 
     self->_headAndTailBuffer = (char *)igObject_MallocAligned((igObject *)self, 0x80, 0x40);
     self->_commandBuffer = (MediaIoRequest *)igObject_MallocAligned((igObject *)self, 0x90, 0x10);
     buffer = (int)self->_headAndTailBuffer;
-    SyncDCache(buffer, buffer + 0x80);
+    SyncDCache((void *)buffer, (void *)(buffer + 0x80));
     pool = ((MediaHandlePool *)Memory_AllocateDefaultBuffer(0x10));
     if (pool != 0) {
         pool->limit = 8;
@@ -77,7 +77,7 @@ void Gap__Core__igPsx2Media__destructFields(igPsx2MediaView *self) {
 }
 
 void Gap__Core__igPsx2Media__userConstruct(int self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMedia_SetDefaultMedia(self);
 }
 
@@ -98,7 +98,7 @@ void Gap__Core__igPsx2Media__resetFields(igPsx2MediaView *self, int extra1) {
     igPsx2IopRpcConnection_Bind(self->_connection, 0x12114);
     igPsx2IopRpcConnection_CallWithData(self->_connection, 19, (int)self->_headAndTailBuffer, 0, 0);
     DIntr();
-    sceSifAddCmdHandler(4, (void *)igPsx2Media_RpcCompletionHandler, 0);
+    sceSifAddCmdHandler(4, (sceSifCmdHandler)igPsx2Media_RpcCompletionHandler, 0);
     EIntr();
     g_igPsx2Media_rpcBuffer = (MediaRpcShared *)self;
     self->_sema->Create();
@@ -195,7 +195,7 @@ void igPsx2Media_MakeDevicePath(igPsx2MediaView *self, int index, char **path) {
     }
     if (usePrefix) {
         if (isDisc) {
-            igStringObj_Set((int)self->_conversionString, (int)((*(char * *)&g_igPsx2Media_devicePrefix)));
+            igStringObj_Set(self->_conversionString, *(char **)&g_igPsx2Media_devicePrefix);
             if (**path != '\\' && **path != '/') {
                 appendPath("\\", self->_conversionString);
             }
@@ -211,13 +211,13 @@ void igPsx2Media_MakeDevicePath(igPsx2MediaView *self, int index, char **path) {
             }
             appendPath(";1", self->_conversionString);
         } else {
-            igStringObj_Set((int)self->_conversionString, (int)((*(char * *)&g_igPsx2Media_devicePrefix)));
+            igStringObj_Set(self->_conversionString, *(char **)&g_igPsx2Media_devicePrefix);
             appendPath(*path, self->_conversionString);
         }
         text = (char *)self->_conversionString->_buffer;
         text = (text == 0) ? (g_stringObjEmptyText) : text;
     } else if (isDisc && strchr(*path, ';') == 0) {
-        igStringObj_Set((int)self->_conversionString, (int)(*path));
+        igStringObj_Set(self->_conversionString, *path);
         stop = strlen(*path);
         for (j = 6; j < stop; j++) {
             p = (char *)self->_conversionString->_buffer + j;
@@ -407,9 +407,9 @@ int igPsx2Media_SendIoRequest(igPsx2MediaView *self, int handle, int buffer, int
     request->callback = callback;
     request->context = context;
     request->extra = (int)extra;
-    SyncDCache(buffer, buffer + size);
+    SyncDCache((void *)buffer, (void *)(buffer + size));
     headAndTail = (int)self->_headAndTailBuffer;
-    SyncDCache(headAndTail, headAndTail + 0x80);
+    SyncDCache((void *)headAndTail, (void *)(headAndTail + 0x80));
     igPsx2IopRpcConnection_Call(self->_connection, 6, (int)request, 0x20, (int)p, 0x10, 1);
     return *p;
 }

@@ -2,7 +2,7 @@ igMetaObject *g_igNonRefCountedAttrList_metaObject;
 
 igMetaObject *FUN_0013ad40(void) {
     if (g_igNonRefCountedAttrList_metaObject == 0) {
-        g_igNonRefCountedAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igNonRefCountedAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igNonRefCountedAttrList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igNonRefCountedAttrList_GetMetaObject(void)
 int igNonRefCountedAttrList_GetVTable(void) {
     struct Obj_13ade0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igNonRefCountedAttrList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igNonRefCountedAttrList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igNonRefCountedAttrList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igNonRefCountedAttrList_callbackList[] = { FUN_0013b110, 0 };
 
-void igNonRefCountedAttrList_Register(void) {
+CallbackArray *igNonRefCountedAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igNonRefCountedAttrList_metaObject,
         igNonRefCountedObjectList_Register,

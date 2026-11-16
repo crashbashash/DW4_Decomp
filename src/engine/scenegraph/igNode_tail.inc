@@ -2,7 +2,7 @@ int Gap__Sg__igNode__vfunc_22(void) {
     return ((int)g_igNode_metaObject);
 }
 
-void igGraphPath_GetTransform(igGraphPath *path, igMatrix44f *matrix, int time) {
+void igGraphPath_GetTransform(igGraphPath *path, igMatrix44f *matrix, long long time) {
     FUN_001c59f0((OO *)path, FUN_001c59e0(path), (int)matrix, time);
 }
 
@@ -81,7 +81,7 @@ int FUN_001c5d70(T_1c5d70 *self, int a1, O_1c5d70 *a2) {
         r.p = a2;
         f = self->f28;
         if (r.p != 0) r.p->f4 = r.p->f4 + 1;
-        List_InsertWords(f, a1, 1, &r);
+        List_InsertWords((igDataList *)f, a1, 1, &r);
         FUN_001d32f0((S_1d32f0 *)self, a2->f20);
         return 1;
     } else {
@@ -103,7 +103,7 @@ void FUN_001c5e20(T_1c5e20 *arg0) {
     for (var_s2 = 0; var_s2 < var_s0; var_s2++) {
         arg0->f28->f16[var_s2]->vX(arg0);
     }
-    Gap__Core__igObject__vfunc_08__001d3390((void *)arg0);
+    Gap__Core__igObject__vfunc_08__001d3390((igObject *)arg0);
 }
 
 Ref_1c5eb0 igGroup_RemoveChildAt(S_1c5eb0 *host, int idx) {
@@ -116,9 +116,9 @@ Ref_1c5eb0 igGroup_RemoveChildAt(S_1c5eb0 *host, int idx) {
         Obj_1c5eb0 *e = l->data[idx];
         if (e) {
             --e->refs;
-            if (((unsigned long long)(long long)e->refs & 0x7fffffULL) == 0) igObject_Destroy((void *)e);
+            if (((unsigned long long)(long long)e->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)e);
         }
-        List_RemoveWordAt(l, idx);
+        List_RemoveWordAt((igDataList *)l, idx);
         l->data[l->n] = 0;
         FUN_001c6110((O_1c6110 *)host, obj.p->f20);
         return obj;

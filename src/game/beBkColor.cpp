@@ -1,11 +1,11 @@
 #include "dw4/reflected.h"
 #include "dw4/igWindowDispatchView.h"
+#include "dw4/beBkColor.h"
+#include "dw4/beBkColorInfo.h"
 
-extern "C" int beBkColor_GetInfoMeta(void);
-extern "C" int beBkColor_GetMeta(void);
+extern "C" igMetaObject *beBkColor_GetInfoMeta(void);
+extern "C" igMetaObject *beBkColor_GetMeta(void);
 extern "C" void beBkColor_Prepare(beBkColor *self);
-extern "C" int g_beBkColorInfo_metaObject[4];
-extern "C" int g_beBkColor_metaObject[4];
 
 extern "C" void beBkColor_UpdateRam(beBkColor *self);
 
@@ -13,9 +13,9 @@ void beBkColor_Prepare(beBkColor *self) {
     self->_isClear = 0;
 }
 
-int beBkColor_GetInfoMeta(void)
+igMetaObject *beBkColor_GetInfoMeta(void)
 {
-    return g_beBkColorInfo_metaObject[0];
+    return g_beBkColorInfo_metaObject;
 }
 
 void beBkColor_UpdateRam(beBkColor *self) {
@@ -28,8 +28,8 @@ void beBkColor_UpdateRam(beBkColor *self) {
     }
 }
 
-int beBkColor_GetMeta(void)
+igMetaObject *beBkColor_GetMeta(void)
 {
-    return g_beBkColor_metaObject[0];
+    return g_beBkColor_metaObject;
 }
 

@@ -4,7 +4,7 @@ igMetaField *g_igViewerAction_functionMetaField;
 
 igViewerAction *igViewerAction_Create(int allocator) {
     FUN_00459190();
-    return (igViewerAction *)igMetaObject_CreateInstance(g_igViewerAction_metaObject, allocator);
+    return (igViewerAction *)igMetaObject_CreateInstance(g_igViewerAction_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *igViewerAction_GetMetaObject(void) {
@@ -18,9 +18,9 @@ void *igViewerAction_GetMetaObject(void) {
 int igViewerAction_GetVTable(void) {
     int tmp[8];
     int off;
-    igObject_InitHeader(&tmp[0]);
+    igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&g_igViewerAction_vtable[0];
-    off = *(int *)((char *)(((int *)g_objectSystem[0])) + 916);
+    off = *(int *)((char *)(((int *)g_objectSystem)) + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -31,9 +31,9 @@ void FUN_00459190(void)
 
 static igMetaObjectCallback g_igViewerAction_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, 0 };
 
-void igViewerAction_Register(void) {
+CallbackArray *igViewerAction_Register(void) {
     ViewerLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerAction_metaObject,
         igAction_Register,
@@ -76,13 +76,13 @@ void igViewerAction_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = g_igViewerAction_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igViewerAction_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerAction_ctorTable, 2);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 60) = 0;
-    f2 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
+    f2 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1);
     *(short *)((char *)f2 + 20) = 0xC;
-    igMetaObject_NameFields(temp_s0, g_igViewerAction_fieldTable, g_igViewerAction_fieldHandles, g_igViewerAction_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerAction_fieldTable, g_igViewerAction_fieldHandles, g_igViewerAction_fieldOffsets, temp_s2);
 }
 

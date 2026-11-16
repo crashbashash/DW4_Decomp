@@ -4,7 +4,7 @@ igMetaField *g_beBaseInfo_ramListMetaField;
 
 igMetaObject *beBaseInfo_GetOrCreateMetaObject(void) {
     if (g_beBaseInfo_metaObject == 0) {
-        g_beBaseInfo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beBaseInfo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beBaseInfo_metaObject;
 }
@@ -21,7 +21,7 @@ void beBaseInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beBaseInfo_callbackList[] = { beBaseInfoDataList_EnsureRegistered, beBaseInfoRamList_EnsureRegistered, 0 };
 
-void *beBaseInfo_Register(void) {
+CallbackArray *beBaseInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -64,9 +64,9 @@ void beBaseInfo_InitFields(void) {
     int base;
     void *ramList;
     void *dataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beBaseInfo_metaObject;
+    meta = g_beBaseInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBaseInfo_ctorTable, 2);
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base));

@@ -7,7 +7,7 @@ struct beMessengerGroup;
 extern "C" {
 #endif
 
-struct beMessengerGroup *beMessengerGroup_Create(void *allocator);
+struct beMessengerGroup *beMessengerGroup_Create(int allocator);
 
 #ifdef __cplusplus
 }

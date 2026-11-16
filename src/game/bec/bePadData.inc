@@ -24,7 +24,7 @@ igMetaField *g_bePadData_2ndtimeMetaField;
 
 bePadData *bePadData_Create(int allocator) {
     bePadData_EnsureRegistered();
-    return (bePadData *)igMetaObject_CreateInstance(*(int *)0x588550, allocator);
+    return (bePadData *)igMetaObject_CreateInstance(g_bePadData_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *bePadData_GetMetaObject(void) {
@@ -40,7 +40,7 @@ int bePadData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_bePadData_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void bePadData_EnsureRegistered(void)
@@ -48,7 +48,7 @@ void bePadData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(bePadData_Register);
 }
 
-void *bePadData_Register(void) {
+CallbackArray *bePadData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -173,9 +173,9 @@ void bePadData_InitFields(void) {
     int LStick;
     int RStick;
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_bePadData_metaObject;
+    meta = g_bePadData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_bePadData_ctorTable, 0x16);
     LStick = ((int)igMetaObject_GetFieldAt(meta, base + 1));

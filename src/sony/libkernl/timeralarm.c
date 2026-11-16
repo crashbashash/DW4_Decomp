@@ -10,27 +10,18 @@ typedef unsigned long u_long;
 #define KE_NO_ALARM 0x80008005
 #define KE_ILLEGAL_HANDLER 0x80000016
 
-/* the callback's return: 0 frees the alarm, anything else is the next schedule */
-typedef int (*AlarmCallback)(int id, int schedule, int actual, int arg);
-
 /* An alarm's id is its address shifted up by 4 with the low byte of its counter's id (odd, so never
  * 0) below it; the alarms are 16-byte aligned. */
 typedef struct Alarm {
     struct Alarm *next;
     volatile int counter;
     AlarmCallback callback;
-    int arg;
+    void *arg;
 } Alarm;
 
 #define ALARM_OF(id) ((Alarm *)(((unsigned int)(id) >> 8) << 4))
 #define ALARM_ID(a, counter) (((int)(a) << 4) | ((counter) & 0xfe) | 1)
 
-int AllocTimerCounter(void);
-int iAllocTimerCounter(void);
-int FreeTimerCounter(int id);
-int iFreeTimerCounter(int id);
-int StartTimerCounter(int id);
-int iStartTimerCounter(int id);
 int SetTimerHandler(int id, u_long schedule, int (*handler)(int, int, int, Alarm *), Alarm *arg);
 int iSetTimerHandler(int id, u_long schedule, int (*handler)(int, int, int, Alarm *), Alarm *arg);
 
@@ -61,7 +52,7 @@ static int AlarmHandler(int counter, int schedule, int actual, Alarm *alarm)
     return next;
 }
 
-int SetTimerAlarm(u_long clocks, AlarmCallback callback, int arg)
+int SetTimerAlarm(u_long clocks, AlarmCallback callback, void *arg)
 {
     Alarm *alarm;
     Alarm *head;
@@ -93,7 +84,7 @@ int SetTimerAlarm(u_long clocks, AlarmCallback callback, int arg)
     return ALARM_ID(alarm, counter);
 }
 
-int iSetTimerAlarm(u_long clocks, AlarmCallback callback, int arg)
+int iSetTimerAlarm(u_long clocks, AlarmCallback callback, void *arg)
 {
     Alarm *alarm;
     Alarm *head;

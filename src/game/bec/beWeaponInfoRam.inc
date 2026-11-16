@@ -18,7 +18,7 @@ int beWeaponInfoRam_GetVTable(void) {
     dataListSlot = (igObject **)&obj._dataList;
     *dataListSlot = 0;
     obj._vtable = (int)&g_beWeaponInfoRam_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     igObjectRef_Release(dataListSlot);
     return vtable;
@@ -53,7 +53,7 @@ void beWeaponInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beWeaponInfoRam_Register);
 }
 
-void *beWeaponInfoRam_Register(void) {
+CallbackArray *beWeaponInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

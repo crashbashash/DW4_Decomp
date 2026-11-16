@@ -4,7 +4,7 @@ igMetaField *g_igCameraMode_cameraMetaField;
 
 igCameraMode *igCameraMode_Create(int allocator) {
     FUN_0045cdc0();
-    return (igCameraMode *)igMetaObject_CreateInstance(g_igCameraMode_metaObject, allocator);
+    return (igCameraMode *)igMetaObject_CreateInstance(g_igCameraMode_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igCameraMode_GetMetaObject(void) {
@@ -22,15 +22,15 @@ int igCameraMode_GetVTable(void) {
     S_ref *q2;
     
     
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&g_igViewMode_vtable[0]);
-    igMatrix44f_SetIdentity(&u.w[3]);
+    igMatrix44f_SetIdentity((float *)&u.w[3]);
     u.w[0] = (int)(&g_igCameraMode_vtable[0]);
     q1 = (S_ref *)&u.b[76];
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[80];
     *(int *)q2 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
     u.w[0] = (int)(&g_igCameraMode_vtable[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
@@ -60,9 +60,9 @@ void FUN_0045cdc0(void)
 
 static igMetaObjectCallback g_igCameraMode_callbackList[] = { igGraphPath_EnsureRegistered, igCamera_EnsureRegistered, 0 };
 
-void igCameraMode_Register(void) {
+CallbackArray *igCameraMode_Register(void) {
     ViewerLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCameraMode_metaObject,
         igViewMode_Register,
@@ -105,12 +105,12 @@ void igCameraMode_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = g_igCameraMode_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igCameraMode_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igGraphPath_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igCamera_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_igCameraMode_fieldTable, g_igCameraMode_fieldHandles, g_igCameraMode_fieldOffsets, temp_s2);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCameraMode_ctorTable, 2);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igGraphPath_GetOrCreateMetaObject());
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)(igCamera_GetOrCreateMetaObject());
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCameraMode_fieldTable, g_igCameraMode_fieldHandles, g_igCameraMode_fieldOffsets, temp_s2);
 }
 

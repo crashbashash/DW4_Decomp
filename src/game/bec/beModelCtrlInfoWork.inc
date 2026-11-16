@@ -52,12 +52,12 @@ igMetaField *g_beModelCtrlInfoWork_baseAABoxMetaField;
 
 beModelCtrlInfoWork *beModelCtrlInfoWork_Create(int allocator) {
     beModelCtrlInfoWork_EnsureRegistered();
-    return (beModelCtrlInfoWork *)igMetaObject_CreateInstance(*(int *)0x588888, allocator);
+    return (beModelCtrlInfoWork *)igMetaObject_CreateInstance(g_beModelCtrlInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beModelCtrlInfoWork_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlInfoWork_metaObject == 0) {
-        g_beModelCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beModelCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beModelCtrlInfoWork_metaObject;
 }
@@ -72,7 +72,7 @@ void *beModelCtrlInfoWork_GetMetaObject(void) {
 
 int beModelCtrlInfoWork_GetVTable(void) {
     ModelCtrlInfoWorkView work;
-    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem + 916));
 }
 
 void *beModelCtrlInfoWork_Destroy(beModelCtrlInfoWork *self, long long delete_storage) {
@@ -284,7 +284,7 @@ void beModelCtrlInfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { beDataObjInt_EnsureRegistered, beModelCtrlData_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, beModelCtrlInfoAI_EnsureRegistered, beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoDataTrc_EnsureRegistered, beModelCtrlMoveObjectList_EnsureRegistered, beModelCtrlInfoRideOn_EnsureRegistered, igGroup_EnsureRegistered, beModelCtrlInfoHitBody_EnsureRegistered, beModelCtrlSubCom_EnsureRegistered, igAABox_EnsureRegistered, 0 };
 
-void *beModelCtrlInfoWork_Register(void) {
+CallbackArray *beModelCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -533,9 +533,9 @@ void beModelCtrlInfoWork_InitFields(void) {
     void *aI;
     void *posLockNode;
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlInfoWork_metaObject;
+    meta = g_beModelCtrlInfoWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoWork_ctorTable, 0x32);
     mHp = (void *)(igMetaObject_GetFieldAt(meta, base));
@@ -548,17 +548,17 @@ void beModelCtrlInfoWork_InitFields(void) {
     comData = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)comData)->_metaObject = (int)beModelCtrlData_GetOrCreateMetaObject();
     labelSeqList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)labelSeqList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)labelSeqList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     labelNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)labelNameList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)labelNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     labelOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
-    ((igObjectRefMetaField *)labelOffsetList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)labelOffsetList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xB), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xC), 0);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0xF), 1);
     pdMoveDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
-    ((igObjectRefMetaField *)pdMoveDataList)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)pdMoveDataList)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)pdMoveDataList)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x12), 0);
     aI = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
@@ -578,7 +578,7 @@ void beModelCtrlInfoWork_InitFields(void) {
     rideOnData = (void *)(igMetaObject_GetFieldAt(meta, base + 0x28));
     ((igObjectRefMetaField *)rideOnData)->_metaObject = (int)beModelCtrlInfoRideOn_GetOrCreateMetaObject();
     debugHitBoxNode = (void *)(igMetaObject_GetFieldAt(meta, base + 0x29));
-    ((igObjectRefMetaField *)debugHitBoxNode)->_metaObject = igGroup_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)debugHitBoxNode)->_metaObject = (int)igGroup_GetOrCreateMetaObject();
     hitBody = (void *)(igMetaObject_GetFieldAt(meta, base + 0x2A));
     ((igObjectRefMetaField *)hitBody)->_metaObject = (int)beModelCtrlInfoHitBody_GetOrCreateMetaObject();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x2B), 1);
@@ -590,7 +590,7 @@ void beModelCtrlInfoWork_InitFields(void) {
     ((igObjectRefMetaField *)subCommand)->_metaObject = (int)beModelCtrlSubCom_GetOrCreateMetaObject();
     ((igRefMetaField *)subCommand)->_construct = 1;
     baseAABox = (void *)(igMetaObject_GetFieldAt(meta, base + 0x31));
-    ((igObjectRefMetaField *)baseAABox)->_metaObject = igAABox_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)baseAABox)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beModelCtrlInfoWork_fieldTable, g_beModelCtrlInfoWork_fieldHandles, g_beModelCtrlInfoWork_fieldOffsets, base);
 }
 

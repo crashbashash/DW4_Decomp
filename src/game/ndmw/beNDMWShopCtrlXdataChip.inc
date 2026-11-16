@@ -3,7 +3,7 @@ igMetaField *g_beNDMWShopCtrlXdataChip_itemBaseListMetaField;
 
 beNDMWShopCtrlXdataChip *beNDMWShopCtrlXdataChip_Create(int allocator) {
     beNDMWShopCtrlXdataChip_EnsureRegistered();
-    return (beNDMWShopCtrlXdataChip *)igMetaObject_CreateInstance(g_beNDMWShopCtrlXdataChip_metaObject, allocator);
+    return (beNDMWShopCtrlXdataChip *)igMetaObject_CreateInstance(g_beNDMWShopCtrlXdataChip_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopCtrlXdataChip_GetMetaObject(void) {
@@ -28,7 +28,7 @@ int beNDMWShopCtrlXdataChip_GetVTable(void) {
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopCtrlXdataChip_vtable[0];
     obj._itemBaseList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlXdataChip_vtable[0];
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._itemBaseList, -1);
     beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
@@ -42,7 +42,7 @@ void beNDMWShopCtrlXdataChip_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlXdataChip_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlXdataChip_Register(void) {
+CallbackArray *beNDMWShopCtrlXdataChip_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

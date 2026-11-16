@@ -22,7 +22,7 @@ int beGeneraterInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beGeneraterInfo_vtable[0];
     obj._dataList_ = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beGeneraterInfo_vtable[0];
     igSmartPointer_beGeneraterDataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), (long long)(-1));
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -49,7 +49,7 @@ void beGeneraterInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beGeneraterInfo_callbackList[] = { beGeneraterDataList_EnsureRegistered, 0 };
 
-void *beGeneraterInfo_Register(void) {
+CallbackArray *beGeneraterInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -87,9 +87,9 @@ static int g_beGeneraterInfo_fieldOffsets[] = {
 void beGeneraterInfo_InitFields(void) {
     int base;
     void *dataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beGeneraterInfo_metaObject;
+    meta = g_beGeneraterInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beGeneraterInfo_ctorTable, 1);
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base));

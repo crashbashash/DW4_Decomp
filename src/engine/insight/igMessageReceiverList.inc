@@ -2,7 +2,7 @@ igMetaObject *g_igMessageReceiverList_metaObject;
 
 igMetaObject *FUN_00231790(void) {
     if (g_igMessageReceiverList_metaObject == 0) {
-        g_igMessageReceiverList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igMessageReceiverList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMessageReceiverList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igMessageReceiverList_GetMetaObject(void)
 int igMessageReceiverList_GetVTable(void) {
     struct Obj_231830 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMessageReceiverList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_00231870(void)
@@ -30,9 +30,9 @@ void FUN_00231870(void)
 
 static igMetaObjectCallback g_igMessageReceiverList_callbackList[] = { FUN_00231950, 0 };
 
-void igMessageReceiverList_Register(void) {
+CallbackArray *igMessageReceiverList_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMessageReceiverList_metaObject,
         igObjectList_Register,

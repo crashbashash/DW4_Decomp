@@ -21,7 +21,7 @@ int beModelCtrlAIMAP_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlAIMAP_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -32,7 +32,7 @@ void beModelCtrlAIMAP_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlAIMAP_Register);
 }
 
-void *beModelCtrlAIMAP_Register(void) {
+CallbackArray *beModelCtrlAIMAP_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

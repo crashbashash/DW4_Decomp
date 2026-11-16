@@ -5,12 +5,12 @@ igMetaField *g_beNDMWStatus_subWndNoMetaField;
 
 beNDMWStatus *beNDMWStatus_CreateInstance(int allocator) {
     beNDMWStatus_EnsureRegistered();
-    return (beNDMWStatus *)igMetaObject_CreateInstance(g_beNDMWStatus_metaObject, allocator);
+    return (beNDMWStatus *)igMetaObject_CreateInstance(g_beNDMWStatus_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWStatus_GetOrCreateMetaObject(void) {
     if (g_beNDMWStatus_metaObject == 0) {
-        g_beNDMWStatus_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWStatus_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWStatus_metaObject;
 }
@@ -34,10 +34,10 @@ int beNDMWStatus_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWStatus_vtable[0];
     windowProRef = &obj._windowPro;
     *windowProRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatus_vtable[0];
     beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)windowProRef, -1);
-    beBaseInfoManager_Destroy(&obj, 0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -48,7 +48,7 @@ void beNDMWStatus_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatus_callbackList[] = { beNDMWWindow_EnsureRegistered, 0 };
 
-void *beNDMWStatus_Register(void) {
+CallbackArray *beNDMWStatus_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

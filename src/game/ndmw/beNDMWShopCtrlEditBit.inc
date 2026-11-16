@@ -4,7 +4,7 @@ igMetaField *g_beNDMWShopCtrlEditBit_editMaxMetaField;
 
 beNDMWShopCtrlEditBit *beNDMWShopCtrlEditBit_Create(int allocator) {
     beNDMWShopCtrlEditBit_EnsureRegistered();
-    return (beNDMWShopCtrlEditBit *)igMetaObject_CreateInstance(g_beNDMWShopCtrlEditBit_metaObject, allocator);
+    return (beNDMWShopCtrlEditBit *)igMetaObject_CreateInstance(g_beNDMWShopCtrlEditBit_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWShopCtrlEditBit_GetMetaObject(void)
@@ -29,7 +29,7 @@ int beNDMWShopCtrlEditBit_GetVTable(void) {
     obj._modelCloseRamNoList = 0;
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopCtrlEditBit_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlEditBit_vtable[0];
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
@@ -40,7 +40,7 @@ void beNDMWShopCtrlEditBit_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlEditBit_Register);
 }
 
-void *beNDMWShopCtrlEditBit_Register(void) {
+CallbackArray *beNDMWShopCtrlEditBit_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

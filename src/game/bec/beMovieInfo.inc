@@ -17,7 +17,7 @@ int beMovieInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     obj._vtable = (int)&g_beMovieInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMovieInfo_vtable[0];
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
@@ -28,7 +28,7 @@ void beMovieInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMovieInfo_Register);
 }
 
-void *beMovieInfo_Register(void) {
+CallbackArray *beMovieInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

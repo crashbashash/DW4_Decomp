@@ -8,6 +8,7 @@
 #define DW4_P2CORE_H
 
 #define P2_PROGRAM_COUNT 16
+#define P2_VU_PROGRAM_COUNT 384
 
 /* The GS registers of a register set, by index; bit n of p2GsDirtyRegisters marks register n. */
 enum p2GsRegister {
@@ -359,6 +360,22 @@ typedef struct p2DisplayState {
     int renderTarget;                   /* -1 while drawing to the display buffer */
 } p2DisplayState;
 
+/* A VU program: the microcode the symbol table names, where it sits in VU memory once loaded. */
+typedef struct p2VuProgram {
+    long long key;                /* which variant of a program this is */
+    int size;
+    int state;
+    int index;
+    unsigned int code;            /* the microcode in the VU1 symbol image */
+    struct p2VuProgram *alias;
+    int reserved;
+    int address;
+    int listValue;                /* the program list's value beside key and flags; nothing reads it */
+    unsigned int flags;           /* P2_VU_PROGRAM_*; the slot in the high half */
+    char *name;
+    int reservedWords[4];
+} p2VuProgram;
+
 struct p2Clut;
 struct p2Image;
 struct p2Texture;
@@ -376,6 +393,15 @@ extern long long p2GsDirtyRegisters;
 extern int p2ExtraPassCount;
 extern p2DisplayState p2Display;
 extern int p2DisplayFlags;
+extern int p2FirstOpen;
+extern int p2DisplayClosing;
+extern int p2DisplayListMode;
+extern int p2BlockedSema;
+extern int p2PreviousFinishFuncDone;
+extern p2VuBufferLayout p2VuBuffers;
+extern p2VuProgram p2VuPrograms[P2_VU_PROGRAM_COUNT];
+extern struct p2Image *p2ImagePool;
+extern p2DisplayList *p2DisplayListPool;
 
 p2DisplayList *p2BeginDisplayList(int mode);
 void p2Clear(int mask, unsigned int colour, int depth);
@@ -392,8 +418,8 @@ void p2FreeImage(struct p2Image *image);
 int p2GetComponentFixedScale(int component, int *scale);
 int p2GetComponentSize(int component);
 int p2GetDisplayFlags(void);
-short p2GetDisplayListBlendMatrixCount(p2DisplayList *list);
-short p2GetDisplayListBlendWeightCount(p2DisplayList *list);
+int p2GetDisplayListBlendMatrixCount(p2DisplayList *list);
+int p2GetDisplayListBlendWeightCount(p2DisplayList *list);
 unsigned int p2GetDisplayListData(p2DisplayList *list);
 int p2GetDisplayListSize(p2DisplayList *list);
 void p2GetDisplaySize(int *width, int *height, int *framePsm, int *depthPsm);
@@ -422,11 +448,16 @@ void p2SetComponentLayout(int component, int isSigned, int integerBits, int frac
 void p2SetDepthFunction(int function, int writeDisabled);
 void p2SetDestinationAlphaMode(int mode);
 void p2SetDitherMatrix(long long matrix);
-void p2SetFog(int mode, float start, float end, float density);
+void p2SetFog(int mode, int unused, float start, float end, float density, float unused0, float unused1,
+              float unused2);
 void p2SetFogColour(float r, float g, float b);
-void p2SetFrameBufferAlpha(int on);
-void p2SetPixelAlphaBlend(int on);
+void p2SetFrameBufferAlpha(unsigned char on);
+void p2SetPixelAlphaBlend(unsigned char on);
 void p2SetScissor(int x, int y, int width, int height);
+void p2SetSoftwareBlendSource(const float *positions, const float *matrices, const void *weights,
+                              const unsigned char *indices, int indexStride);
+/* `matrixCount`, the context's blend matrix count, is passed by the caller and not read. */
+int p2SoftwareBlend(int count, int weights, float *out, int matrixCount);
 void p2UploadComponentScales(void);
 
 #ifdef __cplusplus

@@ -47,7 +47,7 @@ void **igSmartPointer_igPluginRepositoryList_Destruct(void **pointer, long long 
             }
         }
         if ((short)flags > 0) {
-            __dl__FPv(pointer);
+            operator delete(pointer);
         }
     }
     return pointer;
@@ -65,7 +65,7 @@ void **igSmartPointer_igLibraryLoader_Destruct(void **pointer, short flags) {
             }
         }
         if (flags > 0) {
-            __dl__FPv(pointer);
+            operator delete(pointer);
         }
     }
     return pointer;
@@ -77,9 +77,9 @@ igSmartPointer<igObject> *igSmartPointer_igLibraryList_Destruct(igSmartPointer<i
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }

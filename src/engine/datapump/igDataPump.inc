@@ -7,7 +7,7 @@ igMetaField *g_igDataPump_dpiMetaField;
 
 void FUN_001e5950(int arg0) {
     FUN_001e5ab0();
-    igMetaObject_CreateInstance(g_igDataPump_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igDataPump_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igDataPump_GetMetaObject(void)
@@ -21,14 +21,14 @@ igMetaObject *igDataPump_GetMetaObject(void)
 int igDataPump_GetVTable(void) {
     struct Obj_1e59e0 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igDataPump_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igDataPump_vtable[0];
     FUN_001c7600(&obj.w6, -1);
     igStringRef_Destruct(&obj.w5, -1);
@@ -45,9 +45,9 @@ void FUN_001e5ab0(void)
 
 static igMetaObjectCallback g_igDataPump_callbackList[] = { igObject_EnsureRegistered, igMetaField_EnsureRegistered, FUN_001e55d0, 0 };
 
-void igDataPump_Register(void) {
+CallbackArray *igDataPump_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDataPump_metaObject,
         igObject_Register,
@@ -103,18 +103,18 @@ void igDataPump_InitFields(void) {
     igMetaObject *meta;
 
     meta = g_igDataPump_metaObject;
-    firstField = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igDataPump_ctorTable, 5);
-    destObjField = (void *)(igMetaObject_GetFieldAt(meta, firstField));
+    firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igDataPump_ctorTable, 5);
+    destObjField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField));
     *(int *)((char *)(destObjField) + 56) = (int)((int) g_igObject_metaObject[0]);
     *(char *)((char *)(destObjField) + 52) = 1;
-    destMetaField = (void *)(igMetaObject_GetFieldAt(meta, firstField + 1));
+    destMetaField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1));
     *(int *)((char *)(destMetaField) + 56) = igMetaField_GetOrCreateMetaObject();
     *(char *)((char *)(destMetaField) + 38) = 0;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, firstField + 2), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, firstField + 3), 0);
-    dpiField = (void *)(igMetaObject_GetFieldAt(meta, firstField + 4));
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3), 0);
+    dpiField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4));
     *(int *)((char *)(dpiField) + 56) = (int)FUN_001e5530();
-    igMetaObject_NameFields(meta, g_igDataPump_fieldTable, g_igDataPump_fieldHandles, g_igDataPump_fieldOffsets, firstField);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igDataPump_fieldTable, g_igDataPump_fieldHandles, g_igDataPump_fieldOffsets, firstField);
 }
 

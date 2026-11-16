@@ -3,7 +3,7 @@ igMetaField *g_beNDMWShopCtrlEvolve_shinkaCtrlMetaField;
 
 beNDMWShopCtrlEvolve *beNDMWShopCtrlEvolve_Create(int allocator) {
     beNDMWShopCtrlEvolve_EnsureRegistered();
-    return (beNDMWShopCtrlEvolve *)igMetaObject_CreateInstance(g_beNDMWShopCtrlEvolve_metaObject, allocator);
+    return (beNDMWShopCtrlEvolve *)igMetaObject_CreateInstance(g_beNDMWShopCtrlEvolve_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopCtrlEvolve_GetMetaObject(void) {
@@ -33,7 +33,7 @@ int beNDMWShopCtrlEvolve_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWShopCtrlEvolve_vtable[0];
     shinkaCtrlRef = &obj._shinkaCtrl;
     *shinkaCtrlRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlEvolve_vtable[0];
     igSmartPointer_beNDMWShinkaCtrl_Destruct((igSmartPointer<igObject> *)shinkaCtrlRef, -1);
     beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
@@ -46,9 +46,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWShinkaCtrl_Destruct(igSmartPointe
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -60,7 +60,7 @@ void beNDMWShopCtrlEvolve_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlEvolve_callbackList[] = { beNDMWShinkaCtrl_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlEvolve_Register(void) {
+CallbackArray *beNDMWShopCtrlEvolve_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

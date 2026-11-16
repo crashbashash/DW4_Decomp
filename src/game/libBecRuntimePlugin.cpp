@@ -1,58 +1,54 @@
 #include "dw4/reflected.h"
+#include "dw4/be.h"
+#include "dw4/beAction2.h"
+#include "dw4/beActionStarter.h"
+#include "dw4/beBkColor.h"
+#include "dw4/beCameraCtrl.h"
+#include "dw4/beChangePosTransform.h"
+#include "dw4/beCri.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beDemoManager.h"
+#include "dw4/beFileListInfoManager.h"
+#include "dw4/beFont.h"
+#include "dw4/beGenerater.h"
+#include "dw4/beHitLandDeliv.h"
+#include "dw4/beHitLandModel.h"
+#include "dw4/beLayerCtl.h"
+#include "dw4/beLightCtrl.h"
+#include "dw4/beLua.h"
+#include "dw4/beMatCtrl.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beMeterCtrl.h"
+#include "dw4/beMovie.h"
+#include "dw4/beNumberCtrl.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beParticleCtrl2.h"
+#include "dw4/bePoint01.h"
+#include "dw4/beSaveUtil.h"
+#include "dw4/beSeCtl.h"
+#include "dw4/beSelectCtrl.h"
+#include "dw4/beShadow01.h"
+#include "dw4/beSound.h"
+#include "dw4/beStaticInfoCtl.h"
+#include "dw4/beSwitchCtrl.h"
+#include "dw4/beSystem.h"
+#include "dw4/beTargetObj.h"
+#include "dw4/beTextureCtrl.h"
+#include "dw4/beTimer.h"
+#include "dw4/beWaterPlain.h"
+#include "dw4/beWeapon.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/libBecRuntimePlugin.h"
 
-extern "C" int igObject_Destroy(igObject *object);
-extern "C" int igObject_GetAllocator(igObject *object);
-extern "C" int Memory_GetAllocatorBySelector(int selector);
-extern "C" void igInsightCore_AddManager(igInsightCore *core, int manager);
-extern "C" void igInsightCore_RemoveManager(igInsightCore *core, int manager);
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int kIGMemoryPoolHandleUser0[4];
-extern "C" int g_libBecRuntimePlugin_metaObject[4];
-extern "C" int beSystem_CreateInstance(int allocator);
-extern "C" int be_CreateInstance(int allocator);
-extern "C" int beMessenger_CreateInstance(int allocator);
-extern "C" int beCri_CreateInstance(int allocator);
-extern "C" int beFileListInfoManager_CreateInstance(int allocator);
-extern "C" int bePadManager_CreateInstance(int allocator);
-extern "C" int beStaticInfoCtl_CreateInstance(int allocator);
-extern "C" int beDBManager_CreateInstance(int allocator);
-extern "C" int beLua_CreateInstance(int allocator);
-extern "C" int beDemoManager_CreateInstance(int allocator);
-extern "C" int beBkColor_CreateInstance(int allocator);
-extern "C" int beSound_CreateInstance(int allocator);
-extern "C" int beSeCtl_CreateInstance(int allocator);
-extern "C" int beWaterPlain_CreateInstance(int allocator);
-extern "C" int beLayerCtl_CreateInstance(int allocator);
-extern "C" int beFont_CreateInstance(int allocator);
-extern "C" int beMovie_CreateInstance(int allocator);
-extern "C" int beSaveUtil_CreateInstance(int allocator);
-extern "C" int beChangePosTransform_CreateInstance(int allocator);
-extern "C" int beHitLandModel_CreateInstance(int allocator);
-extern "C" int beHitLandDeliv_CreateInstance(int allocator);
-extern "C" int beSelectCtrl_CreateInstance(int allocator);
-extern "C" int beMeterCtrl_CreateInstance(int allocator);
-extern "C" int beTargetObj_CreateInstance(int allocator);
-extern "C" int beAction2_CreateInstance(int allocator);
-extern "C" int beWeapon_CreateInstance(int allocator);
-extern "C" int beCameraCtrl_CreateInstance(int allocator);
-extern "C" int beShadow01_CreateInstance(int allocator);
-extern "C" int beGenerater_CreateInstance(int allocator);
-extern "C" int bePoint01_CreateInstance(int allocator);
-extern "C" int beMatCtrl_CreateInstance(int allocator);
-extern "C" int beActionStarter_CreateInstance(int allocator);
-extern "C" int beParticleCtrl2_CreateInstance(int allocator);
-extern "C" int beSwitchCtrl_CreateInstance(int allocator);
-extern "C" int beLightCtrl_CreateInstance(int allocator);
-extern "C" int beNumberCtrl_CreateInstance(int allocator);
-extern "C" int beTextureCtrl_CreateInstance(int allocator);
-extern "C" int beTimer_CreateInstance(int allocator);
 
 /* vfunc_21 replaces every manager with a fresh instance, released through the refcount in the low
  * 23 bits of _refCount and allocated from the plugin's own allocator when g_useOwnerAllocator is set,
  * then adds each manager that exists to the core. vfunc_22 removes them again. */
 static inline int PluginAllocator(libBecRuntimePlugin *plugin) {
-    int allocator = igObject_GetAllocator(plugin);
-    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+    int allocator = (int)igObject_GetAllocator(plugin);
+    return g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
 }
 
 static inline void ReleaseRef(int field) {
@@ -67,17 +63,17 @@ static inline void ReleaseRef(int field) {
 
 static inline void AddManager(igInsightCore *core, int manager) {
     if (manager != 0) {
-        igInsightCore_AddManager(core, manager);
+        igInsightCore_AddManager(core, (igObject *)manager);
     }
 }
 
 static inline void RemoveManager(igInsightCore *core, int manager) {
     if (manager != 0) {
-        igInsightCore_RemoveManager(core, manager);
+        igInsightCore_RemoveManager(core, (igObject *)manager);
     }
 }
 
-#define REPLACE_MANAGER(field, create) { int allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = create(allocator); }
+#define REPLACE_MANAGER(field, create) { int allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = (int)create(allocator); }
 
 extern "C" void libBecRuntimePlugin_Attach(libBecRuntimePlugin *plugin, igInsightCore *core) {
     REPLACE_MANAGER(_system, beSystem_CreateInstance)
@@ -204,6 +200,6 @@ extern "C" void libBecRuntimePlugin_Detach(libBecRuntimePlugin *plugin, igInsigh
     RemoveManager(core, plugin->_timer);
 }
 
-extern "C" int libBecRuntimePlugin_GetMeta(void) {
-    return g_libBecRuntimePlugin_metaObject[0];
+extern "C" igMetaObject *libBecRuntimePlugin_GetMeta(void) {
+    return g_libBecRuntimePlugin_metaObject;
 }

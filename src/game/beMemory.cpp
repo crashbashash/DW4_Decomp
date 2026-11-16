@@ -1,3 +1,4 @@
+#include "dw4/beMemory.h"
 
 extern "C" void beMemory_Activate(void);
 extern "C" void beMemory_Deactivate(void);
@@ -6,8 +7,7 @@ extern "C" void beMemory_Stop(void);
 extern "C" int beMemory_AddInfo(void);
 extern "C" void beMemory_RemoveAllInfo(void);
 extern "C" void beMemory_Update(void);
-extern "C" int beMemory_GetMeta(void);
-extern "C" int g_beMemory_metaObject[4];
+extern "C" igMetaObject *beMemory_GetMeta(void);
 
 /* Slot 21, empty override. */
 void beMemory_Activate(void)
@@ -44,7 +44,7 @@ void beMemory_Update(void)
 {
 }
 
-int beMemory_GetMeta(void)
+igMetaObject *beMemory_GetMeta(void)
 {
-    return g_beMemory_metaObject[0];
+    return g_beMemory_metaObject;
 }

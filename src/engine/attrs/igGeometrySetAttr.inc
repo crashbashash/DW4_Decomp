@@ -38,13 +38,13 @@ int igGeometrySetAttr_GetVTable(void) {
     S_ref *q0;
     S_ref *q1;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igGeometrySetAttr_vtable[0];
     q1 = (S_ref *)&u.b[12];
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igGeometrySetAttr_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -92,9 +92,9 @@ void igGeometrySetAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igGeometrySetAttr_callbackList[] = { igVisualContext_EnsureRegistered, igGeometryAttrList_EnsureRegistered, 0 };
 
-void igGeometrySetAttr_Register(void) {
+CallbackArray *igGeometrySetAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometrySetAttr_metaObject,
         igVisualAttribute_Register,
@@ -114,11 +114,11 @@ void thunk_igGeometrySetAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igGeometrySetAttr_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igEnumMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igGeometrySetAttr_fieldTable[] = {
     "_vc",
@@ -154,7 +154,7 @@ void igGeometrySetAttr_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igGeometrySetAttr_ctorTable, 5);
     temp_s2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    temp_s2->f56 = igVisualContext_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)igVisualContext_GetOrCreateMetaObject();
     temp_s2->f38 = 0;
     temp_s2->f40 = 1;
     temp_s2->f39 = 1;

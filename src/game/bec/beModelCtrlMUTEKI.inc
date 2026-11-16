@@ -19,7 +19,7 @@ int beModelCtrlMUTEKI_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlMUTEKI_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -30,7 +30,7 @@ void beModelCtrlMUTEKI_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlMUTEKI_Register);
 }
 
-void *beModelCtrlMUTEKI_Register(void) {
+CallbackArray *beModelCtrlMUTEKI_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -67,9 +67,9 @@ static int g_beModelCtrlMUTEKI_fieldOffsets[] = {
 
 void beModelCtrlMUTEKI_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlMUTEKI_metaObject;
+    meta = g_beModelCtrlMUTEKI_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlMUTEKI_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beModelCtrlMUTEKI_fieldTable, g_beModelCtrlMUTEKI_fieldHandles, g_beModelCtrlMUTEKI_fieldOffsets, base);

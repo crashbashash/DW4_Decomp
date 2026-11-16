@@ -6,7 +6,7 @@ igMetaField *g_beBaseInfoManager_isUpdateRunMetaField;
 
 igMetaObject *beBaseInfoManager_GetOrCreateMetaObject(void) {
     if (g_beBaseInfoManager_metaObject == 0) {
-        g_beBaseInfoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beBaseInfoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beBaseInfoManager_metaObject;
 }
@@ -26,7 +26,7 @@ void beBaseInfoManager_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beBaseInfoManager_callbackList[] = { beSystem_EnsureRegistered, beMessenger_EnsureRegistered, beBaseInfoList_EnsureRegistered, 0 };
 
-void *beBaseInfoManager_Register(void) {
+CallbackArray *beBaseInfoManager_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -78,9 +78,9 @@ void beBaseInfoManager_InitFields(void) {
     void *infoList;
     void *messenger;
     void *system;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beBaseInfoManager_metaObject;
+    meta = g_beBaseInfoManager_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBaseInfoManager_ctorTable, 4);
     system = (void *)(igMetaObject_GetFieldAt(meta, base));

@@ -16,7 +16,7 @@ igMetaObject *igActorInfo_GetMetaObject(void)
 int igActorInfo_GetVTable(void) {
     struct Obj_1aa1b0 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w2 = 0;
     obj.vt = &g_igActorInfo_vtable[0];
     obj.w5 = 0;
@@ -24,7 +24,7 @@ int igActorInfo_GetVTable(void) {
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igActorInfo_vtable[0];
     igSmartPointer_igAppearanceList_Destruct((ObjectRefWord *)&obj.w9, -1);
     FUN_001a7a80((void * *)&obj.w8, -1);
@@ -43,7 +43,7 @@ void **FUN_001aa290(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -61,7 +61,7 @@ void **igSmartPointer_igActorList_Destruct(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -79,7 +79,7 @@ void **igSmartPointer_igAnimationDatabase_Destruct(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {
@@ -96,9 +96,9 @@ void FUN_001aa410(void)
 
 static igMetaObjectCallback g_igActorInfo_callbackList[] = { igActor_EnsureRegistered, igActorList_EnsureRegistered, igAnimationDatabase_EnsureRegistered, igAnimationCombinerList_EnsureRegistered, igAppearanceList_EnsureRegistered, 0 };
 
-void igActorInfo_Register(void) {
+CallbackArray *igActorInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActorInfo_metaObject,
         igInfo_Register,
@@ -118,11 +118,11 @@ void thunk_igActorInfo_GetMetaObject(void) {
 }
 
 static FieldFactory g_igActorInfo_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igActorInfo_fieldTable[] = {
     "_actor",
@@ -156,19 +156,19 @@ void igActorInfo_InitFields(void) {
     void *temp_s1;
 
     temp_s1 = (void *)g_igActorInfo_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igActorInfo_ctorTable, 5);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
+    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001aa730();
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
+    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igActorList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)));
+    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igAnimationDatabase_GetOrCreateMetaObject();
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
+    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001a83b0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
+    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igAppearanceList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igActorInfo_fieldTable, g_igActorInfo_fieldHandles, g_igActorInfo_fieldOffsets, temp_s0);

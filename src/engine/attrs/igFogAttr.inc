@@ -15,9 +15,9 @@ igMetaObject *igFogAttr_GetMetaObject(void)
 
 int igFogAttr_GetVTable(void) {
     struct Obj_137df0 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igFogAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igFogAttr_EnsureRegistered(void)
@@ -25,9 +25,9 @@ void igFogAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFogAttr_Register);
 }
 
-void igFogAttr_Register(void) {
+CallbackArray *igFogAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFogAttr_metaObject,
         igVisualAttribute_Register,
@@ -47,11 +47,11 @@ void thunk_igFogAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igFogAttr_ctorTable[] = {
-    igEnumMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igVec4fMetaField_CreateInstance,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
 };
 static const char *g_igFogAttr_fieldTable[] = {
     "_mode",

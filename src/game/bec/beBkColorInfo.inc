@@ -18,7 +18,7 @@ int beBkColorInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     obj._vtable = (int)&g_beBkColorInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBkColorInfo_vtable[0];
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
@@ -29,7 +29,7 @@ void beBkColorInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beBkColorInfo_Register);
 }
 
-void *beBkColorInfo_Register(void) {
+CallbackArray *beBkColorInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -66,9 +66,9 @@ static int g_beBkColorInfo_fieldOffsets[] = {
 
 void beBkColorInfo_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beBkColorInfo_metaObject;
+    meta = g_beBkColorInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBkColorInfo_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beBkColorInfo_fieldTable, g_beBkColorInfo_fieldHandles, g_beBkColorInfo_fieldOffsets, base);

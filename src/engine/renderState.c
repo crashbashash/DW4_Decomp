@@ -1,22 +1,21 @@
+#include <math.h>
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
+#include "dw4/dmaChannel.h"
+#include "dw4/p2draw.h"
+#include "dw4/p2gs.h"
 #include "dw4/renderState.h"
 int *FUN_00202f60(int *arg0, long long arg1);
+int FUN_00202fa0(long long arg0);
 extern int FUN_001f8b50();
 extern int FUN_001fffb0();
 extern int FUN_00200980();
-extern int p2LayoutVuBuffers();
 extern int FUN_00204ea0();
-extern int p2DisplayListMode;
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
-extern int p2VuPrograms[16];
-int p2GetVuProgramAddress();
-int p2FindVuProgramByBitCount();
 void *FUN_00203000();
 extern int DAT_0056ae40[4];
 int Memory_FreeToSelector();
 void *Memory_AllocateAligned16();
-double sqrt(double);
 
 /* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
  * entry per combination of that feature's settings (-1: none); the slot's programs points at it and
@@ -166,7 +165,6 @@ void FUN_001ff3b0(int arg0) {
     }
 }
 
-typedef struct GsPacketBuffer { char pad0[40]; unsigned int *end; unsigned int pad44; unsigned int *cursor; } GsPacketBuffer;
 typedef union VifCode { unsigned int word; unsigned short imm; } VifCode;
 typedef struct GifTag {
     unsigned long long NLOOP:15;
@@ -179,10 +177,6 @@ typedef struct GifTag {
     unsigned long long NREG:4;
     unsigned long long REGS;
 } GifTag;
-extern GsPacketBuffer *DAT_00568f04;
-void p2GrowDisplayList();
-void p2SubmitDmaPacket();
-extern int p2CurrentPrimitive;
 extern int DAT_00490d38;
 extern int DAT_00569308;
 
@@ -214,8 +208,6 @@ enum {
  * other three unchanged. */
 #define P2_LIGHTING_FUNCTIONS_MASK 0xFCFCFCFC
 
-extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
-extern int p2LoadVuPrograms();
 
 p2DmaTag p2FunctionTablesTag = {{ 0x10000001, 0, 0, 0 }};
 p2VifUnpack p2LightingFunctionsUnpack = { 0x70004027 };
@@ -225,7 +217,6 @@ unsigned int p2FunctionTablesFlush = 0x10000000;
 unsigned int p2LightingFunctionsStmask = 0x20000000;
 void p2UpdateLights();
 void p2UploadBlendMatrices();
-void p2FlushGsRegisters();
 void p2StoreStateCacheEntry();
 void p2SendGifTags(void);
 void p2SendPassSetup(void);
@@ -392,7 +383,7 @@ void p2SendGifTags(void) {
     GifTag *tag;
     int bits;
 
-    p = DAT_00568f04->cursor;
+    p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
     prim = p2CurrentPrimitive;
     if (prim == 0) {
         texPrim = 0;
@@ -446,8 +437,8 @@ void p2SendGifTags(void) {
     p[11] = ((unsigned int *)&p2GifTagTexPrim)[2];
     p2SentGifTags0 = ((__int128 *)p)[1];
     p2SentGifTags1 = ((__int128 *)p)[2];
-    DAT_00568f04->cursor = p + 12;
-    if (DAT_00568f04->cursor >= DAT_00568f04->end) {
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 12);
+    if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
         if (p2DisplayListMode != 0) {
             p2GrowDisplayList();
         } else {
@@ -591,7 +582,6 @@ unsigned int p2VuBufferHalvesUnpack = 0x6D01004C;
 unsigned int p2VuBufferLayoutFlush = 0x11000000;
 VifCode p2VuBufferBase = { 0x03000000 };
 VifCode p2VuBufferOffset = { 0x02000000 };
-extern p2VuBufferLayout p2VuBuffers;
 extern int p2VifOffset, p2VifBase;
 
 /* Sends p2VuBuffers: its addresses as bytes and halfwords to the VU1 program's constants, and its
@@ -646,7 +636,6 @@ void p2SendVuBufferLayout(void) {
 int p2VariantsFirstSetup = 1;
 
 void FUN_00202300(void) {
-    int FUN_00202fa0(long long); /* load-bearing: the caller loads a 64-bit argument (ld) and reads an int result; the definition takes int and returns long long */
     int *temp_v0;
     int *temp_v0_10;
     int *temp_v0_11;
@@ -946,7 +935,7 @@ void FUN_00202300(void) {
     p2VariantsBit25[11] = p2VariantsBit25[3];
     p2VariantsBit25[15] = p2VariantsBit25[3];
     if (p2VariantsFirstSetup != 0) {
-        p2CachedProgramAddresses[0] = p2GetVuProgramAddress(p2VariantsBit30[2], p2VariantsBit25[1], p2VariantsBit22[0], p2VariantsBit30[0]);
+        p2CachedProgramAddresses[0] = p2GetVuProgramAddress(p2VariantsBit30[2]);
         p2CachedProgramAddresses[1] = p2GetVuProgramAddress(p2VariantsBit30[3]);
         var_a0 = 0;
         do {
@@ -998,19 +987,19 @@ int p2GetPassProgramAddress(int arg0) {
     temp_a1 = ((unsigned int) p2ProgramFlags[0] >> 0xF) & 3;
     if (arg0 == 1) {
         if (p2VertexArrayMask & 0x400) {
-            return p2GetVuProgramAddress(p2VariantsBit11[p2VariantSlots[11].index], temp_a1, temp_a2);
+            return p2GetVuProgramAddress(p2VariantsBit11[p2VariantSlots[11].index]);
         }
         goto block_6;
     }
 block_6:
     if ((arg0 == 1) && (p2VertexArrayMask & 0x10000)) {
-        return p2GetVuProgramAddress(p2VariantsBit18[p2VariantSlots[18].index], temp_a1, temp_a2);
+        return p2GetVuProgramAddress(p2VariantsBit18[p2VariantSlots[18].index]);
     }
     if ((temp_a2 != 0) || (temp_a1 != 0)) {
-        return p2GetVuProgramAddress(p2VariantsBit22[p2VariantSlots[22].index], temp_a1, temp_a2);
+        return p2GetVuProgramAddress(p2VariantsBit22[p2VariantSlots[22].index]);
     }
     if (p2VertexArrayMask & 0x210400) {
-        var_v0 = p2GetVuProgramAddress(p2VariantsBit25[p2VariantSlots[25].index], temp_a1, temp_a2);
+        var_v0 = p2GetVuProgramAddress(p2VariantsBit25[p2VariantSlots[25].index]);
     }
     return var_v0;
 }
@@ -1022,8 +1011,8 @@ int *FUN_00202f60(int *arg0, long long arg1) {
     return arg0;
 }
 
-long long FUN_00202fa0(int arg0) {
-    int m;
+int FUN_00202fa0(long long arg0) {
+    long long m;
     unsigned int i;
     int c;
     int j;

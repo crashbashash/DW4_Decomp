@@ -1,6 +1,6 @@
 int FUN_00198b60(int arg0) {
     FUN_00198c30();
-    return igMetaObject_CreateInstance((int)g_igShaderProcessor_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igShaderProcessor_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *g_igShaderProcessor_metaObject;
@@ -15,9 +15,9 @@ igMetaObject *igShaderProcessor_GetMetaObject(void)
 
 int igShaderProcessor_GetVTable(void) {
     struct Obj_198bf0 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igShaderProcessor_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00198c30(void)
@@ -25,9 +25,9 @@ void FUN_00198c30(void)
     igMetaObject_RunStaticInit(igShaderProcessor_Register);
 }
 
-void igShaderProcessor_Register(void) {
+CallbackArray *igShaderProcessor_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igShaderProcessor_metaObject,
         igObject_Register,

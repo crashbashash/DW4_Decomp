@@ -1,27 +1,5 @@
+#include "dw4/sony/sif.h"
 #include "dw4/libkernl.h"
-typedef struct sceSifRpcData {
-    void *paddr;
-    unsigned int pid;
-    int tid;
-    unsigned int mode;
-} sceSifRpcData;
-
-typedef struct sceSifClientData {
-    sceSifRpcData rpcd;
-    unsigned int command;
-    void *buff;
-    void *cbuff;
-    void (*end_function)(void *);
-    void *end_param;
-    void *serve;
-} sceSifClientData;
-
-typedef struct sceSifDmaData {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
-} sceSifDmaData;
 
 /* One frame of the pad state padman.irx DMAs to the EE; the caller's 64-byte aligned area holds two,
    and the one with the higher frame count is the current one. */
@@ -105,11 +83,6 @@ typedef struct PadPortState {
 #define LIBPAD_VERSION_MAJOR 4
 #define LIBPAD_VERSION_MINOR 0
 
-int sceSifBindRpc(sceSifClientData *client, unsigned int rpc_number, int mode);
-int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send, int ssize, void *receive,
-                  int rsize, void (*end_function)(void *), void *end_param);
-int sceSifDmaStat(unsigned int id);
-unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
 void *memcpy(void *dst, const void *src, unsigned int n);
 void *memset(void *dst, int value, unsigned int n);
 char *strcpy(char *dst, const char *src);

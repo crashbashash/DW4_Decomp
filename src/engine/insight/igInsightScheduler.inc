@@ -2,7 +2,7 @@ igMetaObject *g_igInsightScheduler_metaObject;
 
 igMetaObject *FUN_00232470(void) {
     if (g_igInsightScheduler_metaObject == 0) {
-        g_igInsightScheduler_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igInsightScheduler_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igInsightScheduler_metaObject;
 }
@@ -20,9 +20,9 @@ void FUN_00232510(void)
     igMetaObject_RunStaticInit(igInsightScheduler_Register);
 }
 
-void igInsightScheduler_Register(void) {
+CallbackArray *igInsightScheduler_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igInsightScheduler_metaObject,
         igObject_Register,
@@ -31,7 +31,7 @@ void igInsightScheduler_Register(void) {
         "igInsightScheduler",
         8, /* instance size */
         0,
-        &igInsightScheduler_SetAbstractProxy_002325a0[0], /* post-init hook */
+        igInsightScheduler_SetAbstractProxy_002325a0, /* post-init hook */
         0, /* extra callback item */
         0 /* callback list */
     );

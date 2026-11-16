@@ -1,20 +1,19 @@
+#include "dw4/beKeyboardReceiver.h"
+#include "dw4/igObject.h"
 
-extern "C" void Gap__Core__igObject__userConstruct(void);
-extern "C" void Gap__Core__igObject__userDestruct(void);
-extern "C" void beKeyboardReceiver_userConstruct(void);
-extern "C" void beKeyboardReceiver_userDestruct(void);
+extern "C" void beKeyboardReceiver_userConstruct(struct beKeyboardReceiver *self);
+extern "C" void beKeyboardReceiver_userDestruct(struct beKeyboardReceiver *self);
 extern "C" int beKeyboardReceiver_OnKeyEvent(void);
-extern "C" int beKeyboardReceiver_GetMeta(void);
-extern "C" int g_beKeyboardReceiver_metaObject[4];
+extern "C" igMetaObject *beKeyboardReceiver_GetMeta(void);
 
-void beKeyboardReceiver_userConstruct(void)
+void beKeyboardReceiver_userConstruct(struct beKeyboardReceiver *self)
 {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
 }
 
-void beKeyboardReceiver_userDestruct(void)
+void beKeyboardReceiver_userDestruct(struct beKeyboardReceiver *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
 /* Slot 21, empty override returning 0. */
@@ -23,8 +22,8 @@ int beKeyboardReceiver_OnKeyEvent(void) {
 }
 
 /* Slot 20, GetMetaObject. */
-int beKeyboardReceiver_GetMeta(void)
+igMetaObject *beKeyboardReceiver_GetMeta(void)
 {
-    return g_beKeyboardReceiver_metaObject[0];
+    return g_beKeyboardReceiver_metaObject;
 }
 

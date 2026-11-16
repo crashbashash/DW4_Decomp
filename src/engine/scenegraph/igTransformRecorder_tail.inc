@@ -103,7 +103,7 @@ int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1) {
     obj->v(buf);
     FUN_001b1030((igAttrStackManager *)x, (igAttr *)obj);
     r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
-    FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int *)g_igModelViewMatrixAttr_metaObject)[0]);
+    FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int)g_igModelViewMatrixAttr_metaObject));
     if (r == 2) {
         return 2;
     }
@@ -137,9 +137,9 @@ int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
     n = node->_boneIndices->_count;
     if (frame->_capacity < n) {
         if (frame->_matrices != 0) {
-            igObject_FreeMemory(frame, frame->_matrices);
+            igObject_FreeMemory((igObject *)frame, frame->_matrices);
         }
-        frame->_matrices = igObject_MallocAligned(frame, n << 6, 16);
+        frame->_matrices = (char *)igObject_MallocAligned((igObject *)frame, n << 6, 16);
         frame->_capacity = n;
     }
     frame->_count = n;

@@ -20,10 +20,10 @@ int igParticleAttr_GetVTable(void) {
      int r;
      Q *q;
 
-     igObject_InitHeader(&o);
+     igObject_InitHeader((igObject *)&o);
      o.vt = &g_igParticleAttr_vtable[0];
      o.s = 0;
-     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+     r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
      o.vt = &g_igParticleAttr_vtable[0];
      if (&o.s != 0) {
          q = o.s;
@@ -44,9 +44,9 @@ void igParticleAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igParticleAttr_callbackList[] = { FUN_0014cd90, 0 };
 
-void igParticleAttr_Register(void) {
+CallbackArray *igParticleAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igParticleAttr_metaObject,
         igVisualAttribute_Register,
@@ -66,13 +66,13 @@ void thunk_igParticleAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igParticleAttr_ctorTable[] = {
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igLongMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
 };
 static const char *g_igParticleAttr_fieldTable[] = {
     "_bUseCurrentTime",

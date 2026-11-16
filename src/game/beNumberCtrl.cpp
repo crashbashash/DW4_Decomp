@@ -1,29 +1,22 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igVertexArrayLock.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNumberCtrl.h"
+#include "dw4/beNumberCtrlInfo.h"
+#include "dw4/beNumberCtrlInfoWork.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
 
 extern "C" void beNumberCtrl_Prepare(void);
-extern "C" int beNumberCtrl_GetInfoMeta(void);
+extern "C" igMetaObject *beNumberCtrl_GetInfoMeta(void);
 extern "C" void beNumberCtrl_UpdateRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram);
 extern "C" void beNumberCtrl_DisplayNumber(beNumberCtrl *self, beNumberCtrlInfoRam *ram, int number, int reserved);
 extern "C" int beNumberCtrl_CalcChangeNum(beNumberCtrl *self, int difference);
 extern "C" void beNumberCtrl_OnAddRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram);
 extern "C" int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMessengerWork *work);
-extern "C" int beNumberCtrl_GetMeta(void);
-extern "C" beNumberCtrlInfoWork *beNumberCtrlInfoWork_Create(int allocator);
-extern "C" int beNumberCtrl_GetMessageEnum(void);
+extern "C" igMetaObject *beNumberCtrl_GetMeta(void);
 extern "C" int igVertexArrayLock_Init(igVertexArrayLock *lock);
-extern "C" int igObject_GetAllocator(void *object);
-extern "C" int Memory_GetAllocatorBySelector(int selector);
-extern "C" int beMessenger_ResolveEnumValue(int messenger, int enumeration, int name);
-extern "C" int beMessenger_RegisterReceiver(int messenger, void *receiver, char *group, int *name, int ramNo);
-extern "C" int beMessenger_AppendInt(int messenger, int value);
-extern "C" int beMessenger_GetIntCount(int messenger);
-extern "C" int beMessenger_GetInt(int messenger, int index);
-extern "C" int g_beNumberCtrlInfo_metaObject[4];
-extern "C" int g_beNumberCtrl_metaObject[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int emptyString[4];
 extern "C" char NUMBERCTRL_4[];
 
@@ -32,8 +25,8 @@ enum NumberCtrlMessage { kGetValue = 0, kSetValue = 1, kSetValueDirect = 2, kAdd
 
 /* The allocator new members come from: the owner's own, or the user pool. */
 static inline int allocatorFor(void *owner) {
-    int allocator = igObject_GetAllocator(owner);
-    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    int allocator = (int)(igObject_GetAllocator((igObject *)owner));
+    return (int)(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
 }
 
 /* Makes `work` the ram's counter record, retaining it and releasing the one it held. */
@@ -47,9 +40,9 @@ void beNumberCtrl_Prepare(void)
 {
 }
 
-int beNumberCtrl_GetInfoMeta(void)
+igMetaObject *beNumberCtrl_GetInfoMeta(void)
 {
-    return g_beNumberCtrlInfo_metaObject[0];
+    return g_beNumberCtrlInfo_metaObject;
 }
 
 /* Counts the displayed number toward the real one by the change step, one step a frame. */
@@ -193,18 +186,18 @@ void beNumberCtrl_OnAddRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram) {
     int ramNo = ram->_ramNo;
     int *name = (int *)((beNumberCtrlInfo *)ram->_parentInfo)->_name;
     name = name != 0 ? name : emptyString;
-    beMessenger_RegisterReceiver(self->_messenger, ram, NUMBERCTRL_4, name, ramNo);
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, NUMBERCTRL_4, (const char *)name, ramNo);
 }
 
 /* GETVALUE answers the real number; SETVALUE shows a number at once, ADDVALUE adds to the real
  * number and has the display count toward it. */
 int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMessengerWork *work) {
     int value = work->_message;
-    beMessenger_ResolveEnumValue(self->_messenger, beNumberCtrl_GetMessageEnum(), value);
+    beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beNumberCtrl_GetMessageEnum(), (const char *)value);
     beNumberCtrlInfoWork *counter = (beNumberCtrlInfoWork *)ram->_work;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beNumberCtrl_GetMessageEnum(), value)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beNumberCtrl_GetMessageEnum(), (const char *)value)) {
     case kGetValue:
-        if (counter != 0) beMessenger_AppendInt(self->_messenger, counter->_realNum);
+        if (counter != 0) beMessenger_AppendInt((beMessenger *)self->_messenger, counter->_realNum);
         return 1;
     case kSetValue:
         if (counter == 0) {
@@ -212,8 +205,8 @@ int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMesse
             setWork(ram, (igObject *)created.p);
             counter = created.p;
         }
-        if (beMessenger_GetIntCount(self->_messenger) == 0) return 1;
-        value = beMessenger_GetInt(self->_messenger, 0);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) return 1;
+        value = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
         if (value < 0) value = 0;
         if (ram->_maxValue < value) value = ram->_maxValue;
         beNumberCtrl_DisplayNumber(self, ram, value, 0);
@@ -227,9 +220,9 @@ int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMesse
             setWork(ram, (igObject *)created.p);
             counter = created.p;
         }
-        if (beMessenger_GetIntCount(self->_messenger) == 0) return 1;
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) return 1;
         value = counter->_realNum;
-        counter->_realNum = value + beMessenger_GetInt(self->_messenger, 0);
+        counter->_realNum = value + beMessenger_GetInt((beMessenger *)self->_messenger, 0);
         if (counter->_realNum < 0) counter->_realNum = 0;
         if (ram->_maxValue < counter->_realNum) counter->_realNum = ram->_maxValue;
         counter->_changeNum = beNumberCtrl_CalcChangeNum(self, counter->_realNum - counter->_dispNum);
@@ -239,7 +232,7 @@ int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMesse
     }
 }
 
-int beNumberCtrl_GetMeta(void)
+igMetaObject *beNumberCtrl_GetMeta(void)
 {
-    return g_beNumberCtrl_metaObject[0];
+    return g_beNumberCtrl_metaObject;
 }

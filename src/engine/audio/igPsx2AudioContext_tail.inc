@@ -5,8 +5,8 @@ void Gap__igPsx2AudioContext__vfunc_23(ContextView *arg0, int arg1) {
     arg0->f8 = (unsigned char) (arg1 == 1);
 }
 
-void Gap__igPsx2AudioContext__vfunc_11(void) {
-    int allocator = igObject_GetAllocator();
+void Gap__igPsx2AudioContext__vfunc_11(igPsx2AudioContext *self) {
+    igMemoryPoolView *allocator = igObject_GetAllocator((igObject *)self);
     g_audioTableOwner.release();
     g_audioTableOwner.p = (igPsx2AudioSourceList *)FUN_001435c0(allocator);
 }
@@ -51,7 +51,7 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
         context->_connection = 0;
     }
     if (context->_batchMemory != 0) {
-        igObject_FreeMemory(context, context->_batchMemory);
+        igObject_FreeMemory((igObject *)context, (void *)context->_batchMemory);
         context->_batchMemory = 0;
     }
 }
@@ -59,7 +59,7 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
 void Gap__igPsx2AudioContext__vfunc_12(void **arg0) {
     ((DW4VC_100_0 *)(arg0))->vX();
     g_audioTableOwner.clear();
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 }
 
@@ -80,8 +80,8 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     struct InitRef *o;
     int s0; int *buf; int n; struct VoiceList *l;
     if (sceSifSearchModuleByName("Intrinsic_Sound_Module") < 0) {
-        if (igPsx2_LoadIopModule("igAudio.irx", 2, 0, 0) != *(RpcStatus *)g_resultSuccess) {
-            *arg0 = g_resultFailure[0];
+        if (igPsx2_LoadIopModule("igAudio.irx", 2, 0, 0) != *(RpcStatus *)&g_resultSuccess) {
+            *arg0 = g_resultFailure.v;
             return;
         }
     }
@@ -94,13 +94,13 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     }
     arg1->conn = (struct InitRef *)igPsx2IopRpcConnection_Create(s0);
     igPsx2IopRpcConnection_Bind(arg1->conn, 0x12111);
-    s0 = (int)igObject_MallocAligned(arg1, 0x10, 0x10);
+    s0 = (int)igObject_MallocAligned((igObject *)arg1, 0x10, (unsigned short)0x10);
     buf = (int *)s0;
     buf[0] = arg1->f24;
     buf[1] = arg1->f32;
     buf[2] = arg1->f36;
     n = arg1->f32 + arg1->f36;
-    if (n >= ((struct VoiceList *)g_audioTableOwner.p)->count) List_Reserve(((struct VoiceList *)g_audioTableOwner.p), n, 0x24);
+    if (n >= ((struct VoiceList *)g_audioTableOwner.p)->count) List_Reserve((igDataList *)(((struct VoiceList *)g_audioTableOwner.p)), n, 0x24);
     n = arg1->f32 + arg1->f36;
     l = ((struct VoiceList *)g_audioTableOwner.p);
     if (n >= 0) {
@@ -110,14 +110,14 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     n = ((struct VoiceList *)g_audioTableOwner.p)->count;
     if (n != 0) memset((void *)((struct VoiceList *)g_audioTableOwner.p)->data, 0, n * 0x24);
     SendRpc(arg1->conn, 0x20000, s0, 0x10, 0, 0, 0);
-    igObject_FreeMemory(arg1, s0);
+    igObject_FreeMemory((igObject *)arg1, (void *)s0);
     CallRpc(arg1->conn, 0x40000, 0x3FFF3FFFu, 0, 0);
     CallRpc(arg1->conn, 0x40001, 0x3FFF3FFF, 0, 0);
-    arg1->f40 = (int)igObject_MallocAligned(arg1, 0x2000, 0x10);
+    arg1->f40 = (int)igObject_MallocAligned((igObject *)arg1, 0x2000, (unsigned short)0x10);
     DIntr();
-    sceSifAddCmdHandler(3, FUN_00143800, 0);
+    sceSifAddCmdHandler((unsigned int)3, (void (*)(void *, void *))FUN_00143800, (void *)0);
     EIntr();
-    *arg0 = g_resultSuccess[0];
+    *arg0 = g_resultSuccess.v;
 }
 }
 
@@ -170,7 +170,7 @@ void Gap__igPsx2AudioContext__vfunc_29(int *arg0, void *arg1, int arg2) {
     }
     igPsx2IopRpcConnection_CallNoData(&sp3C, *(int *)((char *)(arg1) + 12), arg2 | 0x90000, 0);
     ((VoiceUsedFlag *)temp_s0)->b0 = 0;
-    *arg0 = g_resultSuccess[0];
+    *arg0 = g_resultSuccess.v;
 }
 
 /* matching construct: a small sweep of spellings */
@@ -226,16 +226,16 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
 
     s3 = arg6;
     if (arg3 & 0xF) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure.v;
         return;
     }
     e = (UploadEntry *)((char *)((UploadTable *)g_audioTableOwner.p)->tab + arg2 * 36);
     if (e->c0) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure.v;
         return;
     }
-    p = igObject_MallocAligned(arg1, 16, 16);
-    q = igObject_MallocAligned(arg1, 16, 16);
+    p = (int *)(igObject_MallocAligned((igObject *)arg1, 16, (unsigned short)16));
+    q = (int *)(igObject_MallocAligned((igObject *)arg1, 16, (unsigned short)16));
     if (e->b2) {
         k = 4;
     } else if (e->b3) {
@@ -250,7 +250,7 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
     p[1] = arg5;
     p[2] = arg4;
     p[3] = arg3 & 0xDFFFFFFF;
-    SyncDCache(arg3, arg3 + arg5);
+    SyncDCache((void *)arg3, (void *)(arg3 + arg5));
     if (s3) {
         igPsx2IopRpcConnection_Call(&spAC, arg1->h, arg2 | 0x70000, p, 16, 0, 0, 0);
         if (arg8 != 0) {
@@ -261,7 +261,7 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
     } else {
         igPsx2IopRpcConnection_Call(&spA8, arg1->h, arg2 | 0x70000, p, 16, q, 16, 0);
     }
-    igObject_FreeMemory(arg1, p);
+    igObject_FreeMemory((igObject *)arg1, (void *)p);
     e->c4 = 1;
     v = *q;
     if (v != -1) {
@@ -273,11 +273,11 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
         } else {
             e->b3 = 1;
         }
-        igObject_FreeMemory(arg1, q);
-        *arg0 = g_resultSuccess[0];
+        igObject_FreeMemory((igObject *)arg1, (void *)q);
+        *arg0 = g_resultSuccess.v;
     } else {
-        igObject_FreeMemory(arg1, q);
-        *arg0 = g_resultFailure[0];
+        igObject_FreeMemory((igObject *)arg1, (void *)q);
+        *arg0 = g_resultFailure.v;
     }
 }
 
@@ -288,18 +288,18 @@ void Gap__igPsx2AudioContext__vfunc_48(int *arg0, void *arg1, int arg2, int arg3
 
     igPsx2IopRpcConnection_CallWithData(&sp28, *(int *)((char *)(arg1) + 12), arg2 | 0x80000, arg3, &sp2C, 1);
     if (sp2C == 2) {
-        *arg0 = g_resultSuccess[0];
+        *arg0 = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure.v;
     }
 }
 
 int Gap__igPsx2AudioContext__vfunc_51(igPsx2AudioContext *self) {
     int rpcStatus;
     int replyBuffer;
-    void **allocator;
+    igMemoryPoolView *allocator;
 
-    allocator = (void **)(igObject_GetAllocator());
+    allocator = igObject_GetAllocator((igObject *)self);
     replyBuffer = ((AllocatorAllocateSlot *)(allocator))->Allocate((int)(0x20), (int)(0x10));
     igPsx2IopRpcConnection_Call(&rpcStatus, self->_connection, 0x10000, 0, 0, replyBuffer, 0x20, 0);
     return replyBuffer;
@@ -338,13 +338,13 @@ void Gap__igPsx2AudioContext__vfunc_34(int *arg0, void *arg1, int arg2, float fp
     } else {
         ((B11 *)temp_a2)->f = 1;
     }
-    *arg0 = g_resultSuccess[0];
+    *arg0 = g_resultSuccess.v;
 }
 }
 
 extern "C" {
-PanResult Gap__igPsx2AudioContext__vfunc_35(char *arg1, int arg2, float fparg0) {
-    PanResult status;
+igResult Gap__igPsx2AudioContext__vfunc_35(char *arg1, int arg2, float fparg0) {
+    igResult status;
     VoiceFlags35 *e;
     int s2;
 
@@ -365,7 +365,7 @@ PanResult Gap__igPsx2AudioContext__vfunc_35(char *arg1, int arg2, float fparg0) 
     } else {
         e->b0 = 1;
     }
-    return PanResult(g_resultSuccess[0]);
+    return g_resultSuccess;
 }
 }
 
@@ -378,7 +378,7 @@ void Gap__igPsx2AudioContext__vfunc_36(int *arg0, ContextView *arg1, int arg2, f
 
     e = &((VoiceTable40 *)g_audioTableOwner.p)->arr[arg2];
     if (e->a3) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure.v;
         return;
     }
     whole = (int)floor(arg3);
@@ -390,7 +390,7 @@ void Gap__igPsx2AudioContext__vfunc_36(int *arg0, ContextView *arg1, int arg2, f
     } else {
         e->c1 = 1;
     }
-    *arg0 = g_resultSuccess[0];
+    *arg0 = g_resultSuccess.v;
 }
 
 void Gap__igPsx2AudioContext__vfunc_42(int arg0, int arg1, unsigned char arg2) {
@@ -517,7 +517,7 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
         g_streamingSemaphore = p;
         p->a92();
         g_streamingSemaphore->a132((void *)1);
-        s0 = igThread_Create(0);
+        s0 = (ThreadRef *)(igThread_Create(0));
         if (s0 != 0) {
             s0->references = s0->references + 1;
         }
@@ -533,7 +533,7 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
         ((AudioThread *)arg0->_streamingThread)->a140(arg1);
         ((AudioThread *)arg0->_streamingThread)->a120();
         DIntr();
-        sceSifAddCmdHandler(0, &FUN_00143840, &g_pendingIopCallbackValue);
+        sceSifAddCmdHandler((unsigned int)0, (void (*)(void *, void *))&FUN_00143840, (void *)&g_pendingIopCallbackValue);
         EIntr();
     }
 }

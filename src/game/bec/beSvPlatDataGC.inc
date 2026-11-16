@@ -34,7 +34,7 @@ int beSvPlatDataGC_GetVTable(void) {
     obj._vtable = (int)&g_beSvPlatDataGC_vtable[0];
     fileNameSlot = (char **)&obj._fileName;
     *fileNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvPlatDataGC_vtable[0];
     igStringRef_Release(fileNameSlot);
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
@@ -47,7 +47,7 @@ void beSvPlatDataGC_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvPlatDataGC_Register);
 }
 
-void *beSvPlatDataGC_Register(void) {
+CallbackArray *beSvPlatDataGC_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -142,26 +142,26 @@ void beSvPlatDataGC_InitFields(void) {
     igIntMetaField *clone;
 
     meta = (void *)g_beSvPlatDataGC_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSvPlatDataGC_ctorTable, 0xD);
-    found = (void **)(igMetaObject_FindFieldByName(meta, "_connectMax"));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beSvPlatDataGC_ctorTable, 0xD);
+    found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_connectMax"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 2);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataGC_connectMaxStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    dataOffSet = igMetaObject_GetFieldAt(meta, base + 2);
+    dataOffSet = igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2);
     ((igIntArrayMetaField *)dataOffSet)->_num = 2;
-    banTplData = (igMetaObject_GetFieldAt(meta, base + 9));
+    banTplData = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));
     ((igMemoryRefMetaField *)banTplData)->_memType = igCharMetaField_GetDefaultDescriptor();
-    iconTplData = (igMetaObject_GetFieldAt(meta, base + 0xB));
+    iconTplData = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB));
     ((igMemoryRefMetaField *)iconTplData)->_memType = igCharMetaField_GetDefaultDescriptor();
-    comment = igMetaObject_GetFieldAt(meta, base + 0xC);
+    comment = igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC);
     ((igCharArrayMetaField *)comment)->_num = 0x40;
-    igMetaObject_NameFields(meta, g_beSvPlatDataGC_fieldTable, g_beSvPlatDataGC_fieldHandles, g_beSvPlatDataGC_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beSvPlatDataGC_fieldTable, g_beSvPlatDataGC_fieldHandles, g_beSvPlatDataGC_fieldOffsets, base);
 }
 

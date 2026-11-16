@@ -4,6 +4,35 @@
 #include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igSkeletonDispatchView.h"
+#include "dw4/beAction2.h"
+#include "dw4/beAction2FADESET.h"
+#include "dw4/beAction2FLASHSET.h"
+#include "dw4/beAction2Info.h"
+#include "dw4/beAction2InfoWork.h"
+#include "dw4/beAction2JOINTSET.h"
+#include "dw4/beAction2MOTIONSET.h"
+#include "dw4/beAction2WAITCHECK.h"
+#include "dw4/beBaseInfoRam.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beModelCtrlNode2.h"
+#include "dw4/igActor.h"
+#include "dw4/igAnimationCombiner.h"
+#include "dw4/igAnimationState.h"
+#include "dw4/igBlendStateAttr.h"
+#include "dw4/igColorAttr.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igEnbayaAnimationSource.h"
+#include "dw4/igEnbayaTransformSource.h"
+#include "dw4/igLightingStateAttr.h"
+#include "dw4/igMemory.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igMetaObject.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include "dw4/igTextureStateAttr.h"
+#include "dw4/igTransformSource.h"
+#include "dw4/softfloat.h"
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
 
@@ -96,50 +125,12 @@ static inline void SetMaskBit(igBitMask *mask, unsigned int n) {
 }
 
 extern "C" {
-int beMessenger_RegisterReceiverFromInfo(int messenger, beAction2InfoRam *ram, const char *name);
-int beBaseInfoRam_IsTimerExpired(beAction2InfoRam *ram, const char *name);
-int beBaseInfoRam_RemoveTimer(beAction2InfoRam *ram, const char *name);
-int beBaseInfoRam_StartTimer(beAction2InfoRam *ram, const char *name, long long duration);
-float beBaseInfoRam_GetTimerFrameDelta(beAction2InfoRam *ram, const char *name);
-int beBaseInfoRam_SetAllTimerScales(beAction2InfoRam *ram, float scale);
-int beBaseInfoRam_RemoveAllTimers(beAction2InfoRam *ram);
 int ObjectList_RemoveFirstRetained(int *result, int list, int object, int start);
-int ObjectList_AppendRetained(int list, igObject *object);
-int igObject_GetAllocator(void *object);
-int igObject_IsKindOf(void *object, int meta);
-int Memory_GetAllocatorBySelector(int selector);
-void Memory_FreeBuffer(int buffer);
 void Color4f_Unpack(Color4f *out, unsigned int format, unsigned int packed);
-void *igTextureStateAttr_CreateInstance(int allocator);
-void *igLightingStateAttr_CreateInstance(int allocator);
-void *igColorAttr_CreateInstance(int allocator);
-void *igBlendStateAttr_CreateInstance(int allocator);
-void *beAction2InfoWork_CreateInstance(void *allocator);
-long long beModelCtrlNode2_LocalTime(int node, long long now);
-int UnsignedDivMod64_Cached(long long dividend, long long divisor, long long *remainder);
-void igAnimationState_UpdateLocalTime(void *state, long long now);
-long long __fixsfdi(float);
 int igAnimationCombiner_Update(void *combiner, long long now);
-void *igProperty_FindByName(int list, int field, int name);
-int igAnimationCombiner_AddAnimationBlend(void *combiner, void *animation, int combineMode, int transitionMode, int status, int *priority, int perBone, long long transitionTime, float startRatio, float endRatio, int startTime);
-int igAnimationCombiner_ResetToPose(void *combiner, void *from);
-int igAnimationCombiner_RemoveAllStates(int combiner);
-int igAnimationCombiner_AddAnimation(void *combiner, int animation, int combineMode, int transitionMode, int status);
-int igActor_SetAnimationSystem(void *actor, void *combiner);
-int beAction2_GetMessageEnum(void);
-unsigned int beMessenger_ResolveEnumValue(int messenger, int enumeration, void *name);
-void beMessenger_AppendBool(int messenger, unsigned char value);
-int beMessenger_AppendObject(int messenger, int object);
-int beMessenger_AppendMatrix(int messenger, int matrix);
-int beMessenger_AppendString(int messenger, void *text);
-int beMessenger_GetString(int messenger, int index);
-int beMessenger_SendNamed(int messenger, const char *message, void *sender, int ramNo, void *name);
-int strcmp(const void *, const char *);
-int List_Reserve(void *list, int count, int capacity);
-void *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
 
 void beAction2_Prepare(void);
-int beAction2_GetInfoMeta(void);
+igMetaObject *beAction2_GetInfoMeta(void);
 void beAction2_OnAddRam(beAction2 *self, beAction2InfoRam *ram);
 void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram);
 int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component);
@@ -154,22 +145,10 @@ int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
 void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram);
 void beAction2_UpdateRam(beAction2 *self, beAction2InfoRam *ram);
 int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name);
-int beAction2_GetMeta(void);
+igMetaObject *beAction2_GetMeta(void);
 void beBaseInfoManager_OnAddInfo(void);
 int beBaseInfoManager_OnMessage(void);
 
-extern int g_beAction2Info_metaObject[4];
-extern int g_beAction2_metaObject[4];
-extern igMetaObject *g_beAction2FLASHSET_metaObject[4];
-extern igMetaObject *g_beAction2WAITCHECK_metaObject[4];
-extern igMetaObject *g_beAction2FADESET_metaObject[4];
-extern igMetaObject *g_beAction2JOINTSET_metaObject[4];
-extern igMetaObject *g_beAction2MOTIONSET_metaObject[4];
-extern int g_igEnbayaTransformSource_metaObject[4];
-extern int g_propertyNameField[4];
-extern int kIGMemoryPoolHandleUser1[4];
-extern unsigned char g_useOwnerAllocator;
-extern float g_enbayaPlayOnceEndOffset[4];
 float g_randomWaitMinimum;
 extern int emptyString[4];
 }
@@ -179,16 +158,16 @@ void beAction2_Prepare(void)
 {
 }
 
-int beAction2_GetInfoMeta(void)
+igMetaObject *beAction2_GetInfoMeta(void)
 {
-    return g_beAction2Info_metaObject[0];
+    return g_beAction2Info_metaObject;
 }
 
 /* Registers the ram as the receiver of ACTION messages and clears its running flag. */
 void beAction2_OnAddRam(beAction2 *self, beAction2InfoRam *ram) {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "ACTION");
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, "ACTION");
     ram->_isRun = 0;
-    g_enbayaPlayOnceEndOffset[0] = -1.0f / 30.0f;
+    g_enbayaPlayOnceEndOffset = -1.0f / 30.0f;
 }
 
 /* When the FLASH timer runs out, takes the flash's override attributes back off the node. */
@@ -204,7 +183,7 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
     case 0:
         break;
     case 1:
-        if (beBaseInfoRam_IsTimerExpired(ram, "FLASH") != 0) {
+        if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "FLASH") != 0) {
             list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
             if (work->_blendStateAttr == 0) {
                 ObjectList_RemoveFirstRetained(&removed2, list, work->_colorAttr, 0);
@@ -220,7 +199,7 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
             attr = (igObject *)work->_textureStateAttr;
             IG_OBJECT_RELEASE(attr);
             work->_textureStateAttr = 0;
-            beBaseInfoRam_RemoveTimer(ram, "FLASH");
+            beBaseInfoRam_RemoveTimer((beBaseInfoRam *)ram, "FLASH");
             work->_flashSt0 = 0;
         }
     }
@@ -233,12 +212,12 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
     beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
     int list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
     if (work->_colorAttr == 0) {
-        int ownerAllocator = igObject_GetAllocator(manager);
-        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        int ownerAllocator = (int)igObject_GetAllocator(manager);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained(list, created.p);
+        ObjectList_AppendRetained((igObjectList *)list, created.p);
         attr = created.p;
         if (attr != 0) attr->_refCount = attr->_refCount + 1;
         old = (igObject *)work->_colorAttr;
@@ -246,12 +225,12 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
         work->_colorAttr = (int)attr;
     }
     if (work->_textureStateAttr == 0) {
-        int ownerAllocator = igObject_GetAllocator(manager);
-        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        int ownerAllocator = (int)igObject_GetAllocator(manager);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         AttrRef<3> created((igObject *)igTextureStateAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained(list, created.p);
+        ObjectList_AppendRetained((igObjectList *)list, created.p);
         attr = created.p;
         if (attr != 0) attr->_refCount = attr->_refCount + 1;
         old = (igObject *)work->_textureStateAttr;
@@ -259,12 +238,12 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
         work->_textureStateAttr = (int)attr;
     }
     if (work->_lightingStateAttr == 0) {
-        int ownerAllocator = igObject_GetAllocator(manager);
-        int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        int ownerAllocator = (int)igObject_GetAllocator(manager);
+        int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained(list, created.p);
+        ObjectList_AppendRetained((igObjectList *)list, created.p);
         attr = created.p;
         if (attr != 0) attr->_refCount = attr->_refCount + 1;
         old = (igObject *)work->_lightingStateAttr;
@@ -279,7 +258,7 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
     ((OverrideAttr *)work->_textureStateAttr)->SetValue(0);
     ((OverrideAttr *)work->_lightingStateAttr)->SetValue(0);
     work->_flashSt0 = 1;
-    beBaseInfoRam_StartTimer(ram, "FLASH", 66666668);
+    beBaseInfoRam_StartTimer((beBaseInfoRam *)ram, "FLASH", 66666668);
     return 1;
 }
 
@@ -298,7 +277,7 @@ void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram) {
     info = (beAction2Info *)ram->_parentInfo;
     switch (work->_waitSt0) {
     case 1:
-        if (beBaseInfoRam_IsTimerExpired(ram, "WAIT") != 0) {
+        if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "WAIT") != 0) {
             work->_waitSt0 = 0;
             beAction2_StartComponents(manager, ram);
         }
@@ -316,7 +295,7 @@ void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram) {
                 UnsignedDivMod64_Cached(offset - startTime, duration, &remainder);
                 remainder += startTime;
             }
-            igAnimationState_UpdateLocalTime(state, beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime));
+            igAnimationState_UpdateLocalTime(state, beModelCtrlNode2_LocalTime((beModelCtrlNode2 *)ram->_node, ((igInsightCore *)manager->_insight)->_worldTime));
             if (duration <= state->_localTime) {
                 work->_waitSt0 = 0;
                 beAction2_StartComponents(manager, ram);
@@ -353,7 +332,7 @@ int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
         frames = g_randomWaitMinimum + (float)r / 100.0f;
     }
     case 'F':
-        beBaseInfoRam_StartTimer(ram, "WAIT", __fixsfdi(1e9f * frames / 60.0f));
+        beBaseInfoRam_StartTimer((beBaseInfoRam *)ram, "WAIT", __fixsfdi(1e9f * frames / 60.0f));
         work->_waitSt0 = 1;
         break;
     case 'M':
@@ -385,7 +364,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         int list;
         int removed0, removed1, removed2;
         igObject *attr;
-        frames = beBaseInfoRam_GetTimerFrameDelta(ram, "FADE");
+        frames = beBaseInfoRam_GetTimerFrameDelta((beBaseInfoRam *)ram, "FADE");
         if (frames != 0.0f) {
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
             alpha = &color.w;
@@ -408,7 +387,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
                 attr = (igObject *)work->_blendStateAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_blendStateAttr = 0;
-                beBaseInfoRam_RemoveTimer(ram, "FADE");
+                beBaseInfoRam_RemoveTimer((beBaseInfoRam *)ram, "FADE");
                 work->_fadeSt0 = 3;
             }
         }
@@ -419,7 +398,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         Color4f color;
         float *alpha;
         float next;
-        frames = beBaseInfoRam_GetTimerFrameDelta(ram, "FADE");
+        frames = beBaseInfoRam_GetTimerFrameDelta((beBaseInfoRam *)ram, "FADE");
         if (frames != 0.0f) {
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
             next = work->_fadeValue - frames * work->_fadeAddValue;
@@ -429,7 +408,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
             ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
             work->_fadeValue = *alpha;
             if (*alpha <= 0.0f) {
-                beBaseInfoRam_RemoveTimer(ram, "FADE");
+                beBaseInfoRam_RemoveTimer((beBaseInfoRam *)ram, "FADE");
                 work->_fadeSt0 = 3;
             }
         }
@@ -452,12 +431,12 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
         ClearMaskBit(mask, ram->_ramNo);
     } else {
         if (work->_colorAttr == 0) {
-            int ownerAllocator = igObject_GetAllocator(manager);
-            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            int ownerAllocator = (int)igObject_GetAllocator(manager);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
             AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
-            ObjectList_AppendRetained(list, created.p);
+            ObjectList_AppendRetained((igObjectList *)list, created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;
             old = (igObject *)work->_colorAttr;
@@ -465,12 +444,12 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
             work->_colorAttr = (int)attr;
         }
         if (work->_blendStateAttr == 0) {
-            int ownerAllocator = igObject_GetAllocator(manager);
-            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            int ownerAllocator = (int)igObject_GetAllocator(manager);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
             AttrRef<1> created((igObject *)igBlendStateAttr_CreateInstance(allocator));
-            ObjectList_AppendRetained(list, created.p);
+            ObjectList_AppendRetained((igObjectList *)list, created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;
             old = (igObject *)work->_blendStateAttr;
@@ -478,12 +457,12 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
             work->_blendStateAttr = (int)attr;
         }
         if (work->_lightingStateAttr == 0) {
-            int ownerAllocator = igObject_GetAllocator(manager);
-            int allocator = g_useOwnerAllocator ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            int ownerAllocator = (int)igObject_GetAllocator(manager);
+            int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
             AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
-            ObjectList_AppendRetained(list, created.p);
+            ObjectList_AppendRetained((igObjectList *)list, created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;
             old = (igObject *)work->_lightingStateAttr;
@@ -515,7 +494,7 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
             work->_fadeAddValue = component->_fadeValue / component->_fadeTime;
             work->_fadeSt0 = 2;
         }
-        beBaseInfoRam_StartTimer(ram, "FADE", 0);
+        beBaseInfoRam_StartTimer((beBaseInfoRam *)ram, "FADE", 0);
     }
     return 1;
 }
@@ -529,7 +508,7 @@ void beAction2JOINTSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         break;
     case 1:
     case 2: {
-        long long now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+        long long now = beModelCtrlNode2_LocalTime((beModelCtrlNode2 *)ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
         long long end = work->_jointEndTimeL;
         bool changed = false;
         while (now > end) {
@@ -614,7 +593,7 @@ void beAction2MOTIONSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         combiner = ((igAnimationCombiner **)((igObjectList *)((igAnimationDatabase *)((beAction2Info *)ram->_parentInfo)->_animationDatabase)->_combinerList)->_data)[ram->_ramNo];
         states = (igAnimationStateList *)combiner->_animationStateList;
         if (states->_count != 1) {
-            now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+            now = beModelCtrlNode2_LocalTime((beModelCtrlNode2 *)ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
             igAnimationCombiner_Update(combiner, now);
             count = ((igAnimationStateList *)combiner->_animationStateList)->_count;
             i = 0;
@@ -625,7 +604,7 @@ void beAction2MOTIONSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         }
         if (states->_count == 1) {
             if (((igAnimationState **)states->_data)[0]->_timeScale != ((beModelCtrlNode2 *)ram->_node)->_timeScale) {
-                now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+                now = beModelCtrlNode2_LocalTime((beModelCtrlNode2 *)ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
                 node = (beModelCtrlNode2 *)ram->_node;
                 scale = node->_timeScale;
                 first = ((igAnimationState **)states->_data)[0];
@@ -652,7 +631,7 @@ int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
     int name = component->_name;
     int nameOrEmpty;
     if (name != 0) nameOrEmpty = name; else nameOrEmpty = (int)emptyString;
-    igAnimation *animation = (igAnimation *)igProperty_FindByName(animations, g_propertyNameField[0], nameOrEmpty);
+    igAnimation *animation = (igAnimation *)igProperty_FindByName((igObjectList *)animations, g_propertyNameField, (const char *)nameOrEmpty);
     igAnimationCombiner *combiner = ((igAnimationCombiner **)((igAnimationCombinerList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[ram->_ramNo];
     long biasOld; /* matching construct: decomp-permuter (found on beAction2MOTIONSET_Update) — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
     float zero = 0.0f;
@@ -669,7 +648,7 @@ int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
     if (((igAnimationStateList *)combiner->_animationStateList)->_count >= 2) igAnimationCombiner_ResetToPose(combiner, 0);
     int priority = animation->_priority;
     igAnimationCombiner_AddAnimationBlend(combiner, animation, 1, 1, 1, &priority, 0, transitionTime, blend, 1.0f, 0);
-    long long now = beModelCtrlNode2_LocalTime(ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
+    long long now = beModelCtrlNode2_LocalTime((beModelCtrlNode2 *)ram->_node, ((igInsightCore *)manager->_insight)->_worldTime);
     igAnimationCombiner_Update(combiner, now);
     if (((char *)component->_hokanMode)[0] == 'S') {
         igAnimationState *state = ((igAnimationState **)((igAnimationStateList *)combiner->_animationStateList)->_data)[0];
@@ -697,7 +676,7 @@ int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
     for (j = 0; j < tracks->_count; j++) {
         void *source = (void *)((igAnimationTrack **)tracks->_data)[j]->_source;
         if (source != 0) {
-            if (igObject_IsKindOf(source, g_igEnbayaTransformSource_metaObject[0]) != 0) {
+            if (igObject_IsKindOf(source, g_igEnbayaTransformSource_metaObject) != 0) {
                 igEnbayaAnimationSource *enbaya = (igEnbayaAnimationSource *)((igEnbayaTransformSource *)source)->_enbayaAnimationSource;
                 if (isLoop) enbaya->_playMode = 0; else enbaya->_playMode = 4;
                 break;
@@ -736,19 +715,19 @@ void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram)
         do {
             keepGoing = true;
             component = (((Action2ComponentList *)data->_comList)->_data)[index];
-            if (g_beAction2MOTIONSET_metaObject[0] == component->GetMeta()) {
+            if (g_beAction2MOTIONSET_metaObject == component->GetMeta()) {
                 keepGoing = beAction2MOTIONSET_Start(manager, ram, (beAction2MOTIONSET *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2JOINTSET_metaObject[0] == component->GetMeta()) {
+            } else if (g_beAction2JOINTSET_metaObject == component->GetMeta()) {
                 keepGoing = beAction2JOINTSET_Start(manager, ram, (beAction2JOINTSET *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2FADESET_metaObject[0] == component->GetMeta()) {
+            } else if (g_beAction2FADESET_metaObject == component->GetMeta()) {
                 keepGoing = beAction2FADESET_Start(manager, ram, (beAction2FADESET *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2WAITCHECK_metaObject[0] == component->GetMeta()) {
+            } else if (g_beAction2WAITCHECK_metaObject == component->GetMeta()) {
                 keepGoing = beAction2WAITCHECK_Start(manager, ram, (beAction2WAITCHECK *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2FLASHSET_metaObject[0] == component->GetMeta()) {
+            } else if (g_beAction2FLASHSET_metaObject == component->GetMeta()) {
                 keepGoing = beAction2FLASHSET_Start(manager, ram, (beAction2FLASHSET *)component) & 0xFF;
                 index += 1;
             }
@@ -811,30 +790,30 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
     }
     info = (beAction2Info *)ram->_parentInfo;
     ramNo = ram->_ramNo;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beAction2_GetMessageEnum(), name)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beAction2_GetMessageEnum(), (const char *)name)) {
     case 1: /* ISRUN */
-        beMessenger_AppendBool(self->_messenger, ram->_isRun);
+        beMessenger_AppendBool((beMessenger *)self->_messenger, ram->_isRun);
         break;
     case 0: { /* ISCOMEND */
         beAction2InfoWork *work = workRef.p;
         beAction2Data *data = (beAction2Data *)work->_comData;
         int index = work->_comIndex;
         if (work->_waitSt0 == 0 && index == ((igObjectList *)data->_comList)->_count) {
-            beMessenger_AppendBool(self->_messenger, 1);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
         } else {
-            beMessenger_AppendBool(self->_messenger, 0);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         }
         break;
     }
     case 3: /* GETAPPEARANCELIST */
         if (ram->_isRun != 0) {
-            beMessenger_AppendObject(self->_messenger, ram->_appearanceList);
-            beMessenger_AppendObject(self->_messenger, ((int *)((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_skeletonList)->_data)[0]);
+            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)ram->_appearanceList);
+            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)(((int *)((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_skeletonList)->_data)[0]));
         }
         break;
     case 4: /* GETBONEMATRIX */
         if (ram->_isRun != 0) {
-            int boneName = beMessenger_GetString(self->_messenger, 0);
+            int boneName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
             igActor *actor = (igActor *)((int *)((igObjectList *)ram->_actorList)->_data)[0];
             int bone = ((igSkeletonDispatchView *)((igAnimationCombiner *)actor->_animationSystem)->_animHierarchy)->FindBoneIndex((const char *)boneName);
             int matrix;
@@ -843,7 +822,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             } else {
                 matrix = ((igAnimationSystemDispatchView *)actor->_animationSystem)->GetBoneMatrix(bone);
             }
-            beMessenger_AppendMatrix(self->_messenger, matrix);
+            beMessenger_AppendMatrix((beMessenger *)self->_messenger, (void *)matrix);
         }
         break;
     case 2: { /* GETNAMELIST */
@@ -854,7 +833,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             void *dataName = (void *)((beAction2Data *)((int *)list->_data)[i])->_name;
             void *text;
             if (dataName != 0) text = dataName; else text = &emptyString[0];
-            beMessenger_AppendString(self->_messenger, text);
+            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)text);
         }
         break;
     }
@@ -864,7 +843,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             float ticks;
             int clockTicks;
             float scale = 0.0f;
-            beBaseInfoRam_SetAllTimerScales(ram, scale);
+            beBaseInfoRam_SetAllTimerScales((beBaseInfoRam *)ram, scale);
             clockTicks = (int)(((igInsightCore *)self->_insight)->_worldTime >> 0x12);
             node = (beModelCtrlNode2 *)ram->_node;
             ticks = (float)(unsigned int)clockTicks;
@@ -885,7 +864,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             float ticks;
             int clockTicks;
             float scale = 1.0f;
-            beBaseInfoRam_SetAllTimerScales(ram, scale);
+            beBaseInfoRam_SetAllTimerScales((beBaseInfoRam *)ram, scale);
             clockTicks = (int)(((igInsightCore *)self->_insight)->_worldTime >> 0x12);
             node = (beModelCtrlNode2 *)ram->_node;
             ticks = (float)(unsigned int)clockTicks;
@@ -902,7 +881,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
         break;
     default:
         mask = (igBitMask *)((igSwitch *)info->_switch)->_childMask;
-        if (strcmp(name, "NDSP") == 0) {
+        if (strcmp((const char *)name, "NDSP") == 0) {
             igObjectList *list = (igObjectList *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
             int count = list->_count;
             int i;
@@ -919,12 +898,12 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             list->_count = 0;
             int nonEmpty = ((igObjectList *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList)->_count > 0;
             if (!nonEmpty) {
-                List_Reserve((void *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList, 0, 4);
+                List_Reserve((igDataList *)((void *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList), 0, 4);
             }
             ClearMaskBit(mask, ramNo);
             { igObject *held = (igObject *)ram->_work; IG_OBJECT_RELEASE(held); }
             ram->_work = 0;
-            beBaseInfoRam_RemoveAllTimers(ram);
+            beBaseInfoRam_RemoveAllTimers((beBaseInfoRam *)ram);
             ram->_isRun = 0;
             if (info->_animationDatabase != 0) {
                 igObjectList *combiners = (igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList;
@@ -936,7 +915,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
                 int buffer;
                 int buffer2;
                 if (combiners != 0) {
-                    igAnimationCombiner_RemoveAllStates(((int *)combiners->_data)[ram->_ramNo]);
+                    igAnimationCombiner_RemoveAllStates((igAnimationCombiner *)(((int *)combiners->_data)[ram->_ramNo]));
                 }
                 actorCount = ((igObjectList *)ram->_actorList)->_count;
                 for (k = 0; k < actorCount; k++) {
@@ -944,13 +923,13 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
                     field = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMeta(), "_boneMatrixCacheArray");
                     buffer = *(int *)((char *)actor + field->_offset);
                     if (buffer != 0) {
-                        Memory_FreeBuffer(buffer);
+                        Memory_FreeBuffer((void *)buffer);
                         *(int *)((char *)actor + field->_offset) = 0;
                     }
                     field2 = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMeta(), "_blendMatrixCacheArray");
                     buffer2 = *(int *)((char *)actor + field2->_offset);
                     if (buffer2 != 0) {
-                        Memory_FreeBuffer(buffer2);
+                        Memory_FreeBuffer((void *)buffer2);
                         *(int *)((char *)actor + field2->_offset) = 0;
                     }
                 }
@@ -960,9 +939,9 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
         if (workRef.p == 0) {
             void *allocator = ((void *)igObject_GetAllocator(self));
             beAction2InfoWork *created;
-            allocator = g_useOwnerAllocator ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+            allocator = g_useOwnerAllocator ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
             { beAction2InfoWork *held = workRef.p; IG_OBJECT_RELEASE(held); }
-            workRef.p = (beAction2InfoWork *)beAction2InfoWork_CreateInstance(allocator);
+            workRef.p = (beAction2InfoWork *)beAction2InfoWork_CreateInstance((int)allocator);
             created = workRef.p;
             if (created != 0) created->_refCount = created->_refCount + 1;
             { igObject *held = (igObject *)ram->_work; IG_OBJECT_RELEASE(held); }
@@ -989,7 +968,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
                         if (hasCache) break;
                         igActor_SetAnimationSystem(actor, combiner);
                     }
-                    igAnimationCombiner_AddAnimation(combiner, ((int *)((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_animationList)->_data)[0], 0, 4, 0);
+                    igAnimationCombiner_AddAnimation(combiner, (igAnimation *)(((int *)((igObjectList *)((igAnimationDatabase *)info->_animationDatabase)->_animationList)->_data)[0]), 0, 4, 0);
                 }
             }
         } else {
@@ -997,7 +976,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             workRef.p->_isNoHokan = 0;
         }
         {
-            int data = (int)igProperty_FindByName(info->_dataList_, g_propertyNameField[0], (int)name);
+            int data = (int)igProperty_FindByName((igObjectList *)info->_dataList_, g_propertyNameField, (const char *)name);
             beAction2InfoWork *work = workRef.p;
             if (work->_comData != data) {
                 if (data != 0) ((igObject *)data)->_refCount = ((igObject *)data)->_refCount + 1;
@@ -1008,7 +987,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
                 int ramNumber = ram->_ramNo;
                 void *infoName;
                 if (info->_name != 0) infoName = (void *)info->_name; else infoName = &emptyString[0];
-                beMessenger_SendNamed(self->_messenger, "ACTION_BROADCAST", infoName, ramNumber, name);
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "ACTION_BROADCAST", (const char *)infoName, ramNumber, (const char *)name);
             }
         }
         break;
@@ -1016,9 +995,9 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
     return 1;
 }
 
-int beAction2_GetMeta(void)
+igMetaObject *beAction2_GetMeta(void)
 {
-    return g_beAction2_metaObject[0];
+    return g_beAction2_metaObject;
 }
 
 /* Shared default virtual slots that almost every class inherits, so most are empty or return a

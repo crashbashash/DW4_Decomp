@@ -60,10 +60,6 @@ typedef struct {
 } TtyInfo;
 
 int sceDeci2Open(unsigned short protocol, void *opt, void (*handler)(int event, int param, void *opt));
-int sceDeci2ReqSend(int s, char dest);
-void sceDeci2Poll(int s);
-int sceDeci2ExRecv(int s, void *buf, unsigned short size);
-int sceDeci2ExSend(int s, void *buf, unsigned short size);
 
 static Queue *QueueInit(int size);
 static void QueuePeekWriteDone(Queue *queue);

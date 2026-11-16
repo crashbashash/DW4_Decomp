@@ -8,7 +8,7 @@ struct igModel;
 extern "C" {
 #endif
 
-void igView_Register(void);
+struct CallbackArray *igView_Register(void);
 void igView_SetModel(struct igView *view, struct igModel *model);
 
 #ifdef __cplusplus

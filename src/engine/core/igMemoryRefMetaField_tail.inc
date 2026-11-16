@@ -53,7 +53,7 @@ void igMemoryRefMetaField_AddElementRefs(igMemoryRefMetaField *field,void *objec
     igObject *value;
     if(!field->_refCounted)return;
     if(!field->_memType)return;
-    if(!igObject_IsKindOf((void *)field->_memType, (igMetaObject *)((int)g_igObjectRefMetaField_metaObject)))return;
+    if(!igObject_IsKindOf((igObject *)field->_memType, (igMetaObject *)((int)g_igObjectRefMetaField_metaObject)))return;
     data=*(igObject ***)((char *)object+field->_offset);
     if(!data)return;
     n=Memory_GetBufferSize(data)>>2;
@@ -67,7 +67,7 @@ void igMemoryRefMetaField_ReleaseElementRefs(igMemoryRefMetaField *field,void *o
     igObject *value;
     if(!field->_refCounted)return;
     if(!field->_memType)return;
-    if(!igObject_IsKindOf((void *)field->_memType, (igMetaObject *)((int)g_igObjectRefMetaField_metaObject)))return;
+    if(!igObject_IsKindOf((igObject *)field->_memType, (igMetaObject *)((int)g_igObjectRefMetaField_metaObject)))return;
     data=*(igObject ***)((char *)object+field->_offset);
     if(!data)return;
     n=Memory_GetBufferSize(data)>>2;
@@ -100,7 +100,7 @@ void igMemoryRefMetaField_DeepCopy(igMemoryRefMetaField *self, int destination, 
         *(int *)(destination + self->_offset) = copy;
     }
     if (self->_memType != 0) {
-        if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
             int src = *(int *)(source + self->_offset);
             int dst = *(int *)(destination + self->_offset);
             if (src != 0 && dst != 0) {
@@ -113,7 +113,7 @@ void igMemoryRefMetaField_DeepCopy(igMemoryRefMetaField *self, int destination, 
                     *(int *)(dst + i * 4) = clone;
                 }
             }
-        } else if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)((int)g_igMemoryRefMetaField_metaObject)) != 0) {
+        } else if (igObject_IsKindOf((igObject *)self->_memType, (igMetaObject *)((int)g_igMemoryRefMetaField_metaObject)) != 0) {
             int src = *(int *)(source + self->_offset);
             int dst = *(int *)(destination + self->_offset);
             unsigned n = Memory_GetBufferSize((void *)src) >> 2;
@@ -148,7 +148,7 @@ void igMemoryRefMetaField_Print(igMemoryRefMetaField *self, int object, int dept
     if (depth != 0 && buffer != 0) {
         elementSize = ((igMetaFieldView *)self->_memType)->GetElementSize();
         count = Memory_GetBufferSize((void *)buffer) / elementSize;
-        if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
             for (i = 0; i < (int)count; i++) {
                 int e = *(int *)(buffer + i * 4);
                 if (e != 0) {
@@ -164,7 +164,7 @@ void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *self, int object
     unsigned int count;
     int i;
     igObjectDispatchView *element;
-    if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
+    if (igObject_IsKindOf((igObject *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
         elements = *(igObjectDispatchView ***)(object + self->_offset);
         if (elements != 0) {
             count = Memory_GetBufferSize((void *)elements) >> 2;

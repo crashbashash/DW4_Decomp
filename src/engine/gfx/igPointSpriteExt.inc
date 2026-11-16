@@ -35,7 +35,7 @@ int FUN_0014c290(void) {
 
 igMetaObject *FUN_0014c2f0(void) {
     if (g_igPointSpriteExt_metaObject == 0) {
-        g_igPointSpriteExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igPointSpriteExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igPointSpriteExt_metaObject;
 }
@@ -52,7 +52,7 @@ int igPointSpriteExt_GetVTable(void) {
     struct PointSpriteExtInstance o;
     int r;
     char *pa = (char *)&o;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.f8 = 0;
     o.vt = &g_igPointSpriteExt_vtable[0];
     o.f16 = 0;
@@ -62,7 +62,7 @@ int igPointSpriteExt_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)(pa + 168));
     igMatrix44f_SetIdentity((float *)(pa + 232));
     igMatrix44f_SetIdentity((float *)(pa + 296));
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igPointSpriteExt_vtable[0];
     igSmartPointer_igVertexArray_Destruct(&o.f24, -1);
     FUN_0014c580((O_14c580 *)&o, 0);
@@ -121,9 +121,9 @@ void FUN_0014c670(void)
 
 static igMetaObjectCallback g_igPointSpriteExt_callbackList[] = { igVisualContext_EnsureRegistered, igVertexArray_EnsureRegistered, 0 };
 
-void igPointSpriteExt_Register(void) {
+CallbackArray *igPointSpriteExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPointSpriteExt_metaObject,
         igContextExt_Register,
@@ -143,24 +143,24 @@ void thunk_igPointSpriteExt_GetMetaObject(void) {
 }
 
 static FieldFactory g_igPointSpriteExt_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igFloatMetaField_Create,
-    igBoolMetaField_Create,
-    igEnumMetaField_Create,
-    igMatrix44fMetaField_CreateInstance,
-    igMatrix44fMetaField_CreateInstance,
-    igMatrix44fMetaField_CreateInstance,
-    igMatrix44fMetaField_CreateInstance,
-    igMatrix44fMetaField_CreateInstance,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
 };
 static const char *g_igPointSpriteExt_fieldTable[] = {
     "_context",

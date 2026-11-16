@@ -4,12 +4,12 @@ igMetaField *g_beShadow01_savePosMetaField;
 
 beShadow01 *beShadow01_CreateInstance(int allocator) {
     beShadow01_EnsureRegistered();
-    return (beShadow01 *)igMetaObject_CreateInstance(*(int *)0x587F10, allocator);
+    return (beShadow01 *)igMetaObject_CreateInstance(g_beShadow01_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beShadow01_GetOrCreateMetaObject(void) {
     if (g_beShadow01_metaObject == 0) {
-        g_beShadow01_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beShadow01_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beShadow01_metaObject;
 }
@@ -31,7 +31,7 @@ int beShadow01_GetVTable(void) {
     obj._infoList = 0;
     obj._vtable = (int)&g_beShadow01_vtable[0];
     obj._svInfoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beShadow01_vtable[0];
     igSmartPointer_beShadow01InfoList_Destruct((igSmartPointer<igObject> *)(&obj._svInfoList), (short)(-1));
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
@@ -58,7 +58,7 @@ void beShadow01_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beShadow01_callbackList[] = { beShadow01InfoList_EnsureRegistered, 0 };
 
-void *beShadow01_Register(void) {
+CallbackArray *beShadow01_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -100,9 +100,9 @@ static int g_beShadow01_fieldOffsets[] = {
 void beShadow01_InitFields(void) {
     int base;
     void *svInfoList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beShadow01_metaObject;
+    meta = g_beShadow01_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beShadow01_ctorTable, 2);
     svInfoList = (void *)(igMetaObject_GetFieldAt(meta, base));

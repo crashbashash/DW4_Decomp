@@ -3,7 +3,7 @@ igMetaEnum *g_beNDMWWindowList_subWndMetaEnum;
 
 igMetaObject *beNDMWWindowList_GetOrCreateMetaObject(void) {
     if (g_beNDMWWindowList_metaObject == 0) {
-        g_beNDMWWindowList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWWindowList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWWindowList_metaObject;
 }
@@ -18,7 +18,7 @@ int beNDMWWindowList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWWindowList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWWindowList_EnsureRegistered(void)
@@ -28,7 +28,7 @@ void beNDMWWindowList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWWindowList_callbackList[] = { beNDMWWindow_EnsureRegistered, 0 };
 
-void *beNDMWWindowList_Register(void) {
+CallbackArray *beNDMWWindowList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

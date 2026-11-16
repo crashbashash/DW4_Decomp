@@ -32,7 +32,7 @@ int igIterateDerived_GetVTable(void) {
             o = *pr;
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }

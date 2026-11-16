@@ -24,17 +24,17 @@ int FUN_001abc20(int *arg0, int arg1) {
 char g_cleanCombinerStates;
 
 void FUN_001abca0(void) {
-    int allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+    int allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimationCombinerBoneInfoPool_instance.release();
     g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)igAnimationCombinerBoneInfoPool_Create(allocator);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
-    allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+    allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimationStatePool_instance.release();
     g_igAnimationStatePool_instance.p = (igAnimationStatePool *)igAnimationStatePool_Create(allocator);
-    allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+    allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimation_instance.release();
     g_igAnimation_instance.p = (igAnimation *)FUN_001a90f0(allocator);
-    igRegistry_GetValueBool(*(int *)((char *)(((int * *)g_objectSystem)[0]) + 56), 7, "cleanCombinerStates", &g_cleanCombinerStates, 0, 0);
+    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "cleanCombinerStates", (unsigned char *)&g_cleanCombinerStates, 0, 0);
 }
 
 void FUN_001abdf0(void) {
@@ -114,7 +114,7 @@ void FUN_001ac040(igAnimationCombiner *arg0, igAnimationState *arg1) {
         if (r != 0) {
             r->_refCount = r->_refCount - 1;
             if (((unsigned long long)((long long)*(int *)&r->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)r);
+                igObject_Destroy((igObject *)r);
             }
         }
     }
@@ -157,7 +157,7 @@ void FUN_001acb50(igAnimationCombiner *c) {
                             if (base != 0) {
                                 base->_refCount = base->_refCount - 1;
                                 if (((unsigned long long)((long long)(int)base->_refCount << 0x29) >> 0x29) == 0) {
-                                    igObject_Destroy((void *)base);
+                                    igObject_Destroy((igObject *)base);
                                 }
                             }
                         }
@@ -180,8 +180,8 @@ int FUN_001ad310(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5) 
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_4 *)(arg0))->vX((int)(sp40), (int)(arg3), (int)(arg4), (int)(arg5)) & 0xFF;
-    igMatrix44f_GetQuaternion(arg1, sp40);
-    igMatrix44f_GetTranslation(sp40, arg2);
+    igMatrix44f_GetQuaternion((float *)arg1, (float *)sp40);
+    igMatrix44f_GetTranslation((float *)sp40, (float *)arg2);
     return temp_s0;
 }
 

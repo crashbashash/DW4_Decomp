@@ -4,7 +4,7 @@ igMetaField *g_beModelCtrlSCSound_sndHandleMetaField;
 
 beModelCtrlSCSound *beModelCtrlSCSound_Create(int allocator) {
     beModelCtrlSCSound_EnsureRegistered();
-    return (beModelCtrlSCSound *)igMetaObject_CreateInstance(*(int *)0x5887B0, allocator);
+    return (beModelCtrlSCSound *)igMetaObject_CreateInstance(g_beModelCtrlSCSound_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beModelCtrlSCSound_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int beModelCtrlSCSound_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlSCSound_vtable[0];
     sndNameSlot = (char **)&obj._sndName;
     *sndNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlSCSound_vtable[0];
     igStringRef_Release(sndNameSlot);
     return vtable;
@@ -38,7 +38,7 @@ void beModelCtrlSCSound_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlSCSound_Register);
 }
 
-void *beModelCtrlSCSound_Register(void) {
+CallbackArray *beModelCtrlSCSound_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -83,9 +83,9 @@ static int g_beModelCtrlSCSound_fieldOffsets[] = {
 
 void beModelCtrlSCSound_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlSCSound_metaObject;
+    meta = g_beModelCtrlSCSound_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlSCSound_ctorTable, 2);
     igMetaObject_NameFields(meta, g_beModelCtrlSCSound_fieldTable, g_beModelCtrlSCSound_fieldHandles, g_beModelCtrlSCSound_fieldOffsets, base);

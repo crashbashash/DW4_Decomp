@@ -1,83 +1,83 @@
-int igParticleArray_Update(PA *arg0, int arg1, int arg2, int *arg3, float fparg0) {
+int igParticleArray_Update(igParticleArray *self, unsigned int num, unsigned int offset, int *status, float time) {
     int sp70[8];
     int temp_s0;
     O44 *a;
     O44 *t;
     O48 *b;
     O48 *u;
-    arg0->f28 = fparg0;
-    if (!(fparg0 <= arg0->f24 + arg0->f84)) {
-        *arg3 = 1;
+    self->_currentTime = time;
+    if (!(time <= self->_particleLifeEnd + self->_particleLifetimeEndOffset)) {
+        *status = 1;
         return 1;
     }
-    if (fparg0 < arg0->f20) {
-        *arg3 = 2;
+    if (time < self->_particleLifeStart) {
+        *status = 2;
         return 1;
     }
     DAT_00560668[0] += 1;
-    if (arg0->f44 == 0) {
-        if (arg0->f44 == 0) {
+    if (((O44 *)self->_context) == 0) {
+        if (((O44 *)self->_context) == 0) {
             a = (O44 *)igVisualContext_FindFirst();
             if (a != 0) {
                 a->refs = a->refs + 1;
             }
-            t = arg0->f44;
+            t = ((O44 *)self->_context);
             if (t != 0) {
                 t->refs = t->refs - 1;
                 if (((unsigned long long)((long long)t->refs << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(t);
                 }
             }
-            arg0->f44 = a;
-            if (arg0->f73 != 0 && arg0->f8->f32 != 0 && arg0->f48 == 0) {
-                b = arg0->f44->v104("igPointSpriteExt");
+            self->_context = (int)a;
+            if (self->_configured != 0 && ((HI *)self->_particleFormat)->f32 != 0 && ((O48 *)self->_pointSpriteInterface) == 0) {
+                b = ((O44 *)self->_context)->v104("igPointSpriteExt");
                 if (b != 0) {
                     b->refs = b->refs + 1;
                 }
-                u = arg0->f48;
+                u = ((O48 *)self->_pointSpriteInterface);
                 if (u != 0) {
                     u->refs = u->refs - 1;
                     if (((unsigned long long)((long long)u->refs << 0x29) >> 0x29) == 0) {
                         igObject_Destroy(u);
                     }
                 }
-                arg0->f48 = b;
+                self->_pointSpriteInterface = (int)b;
             }
         }
-        if (arg0->f44 != 0) {
-            if (arg0->f73 == 0) {
-                arg0->v92((int)arg0->f8, arg0->f12, arg0->f44, arg0->f20, arg0->f24);
+        if (((O44 *)self->_context) != 0) {
+            if (self->_configured == 0) {
+                ((PA *)self)->v92((int)((HI *)self->_particleFormat), self->_maxNum, ((O44 *)self->_context), self->_particleLifeStart, self->_particleLifeEnd);
             }
             goto L24;
         }
-        *arg3 = 1;
+        *status = 1;
         return 0;
     }
 L24:
-    arg0->f56 = arg1;
-    arg0->f88 = arg1;
-    arg0->f52 = arg2;
+    self->_particleNum = num;
+    self->_aliveParticleNum = num;
+    self->_particleOffset = offset;
     igVertexArrayLock_Init(sp70);
     sp70[1] = 0;
     sp70[0] = 0;
-    arg0->f40->v108(sp70, 1);
-    arg0->f40->v112(sp70, 2);
-    temp_s0 = arg0->f8->f44 > 0;
-    if (arg0->f72 == 0 && temp_s0 == 0) {
-        FUN_0015b880(arg0);
+    ((O40 *)self->_internalVertexArray)->v108(sp70, 1);
+    ((O40 *)self->_internalVertexArray)->v112(sp70, 2);
+    temp_s0 = ((HI *)self->_particleFormat)->f44 > 0;
+    if (self->_setConstant == 0 && temp_s0 == 0) {
+        FUN_0015b880((PA *)self);
     }
-    if (arg0->f76 != 0) {
-        if (arg0->f48 != 0) {
-            arg0->f48->v136(arg0->f8->f36);
+    if (((int (*)(float, unsigned int, unsigned int, int, unsigned int, O40 *, O48 *))self->_updateFunction) != 0) {
+        if (((O48 *)self->_pointSpriteInterface) != 0) {
+            ((O48 *)self->_pointSpriteInterface)->v136(((HI *)self->_particleFormat)->f36);
         }
-        arg0->f76(fparg0, arg1, arg2, arg0->f36, arg0->f32, arg0->f40, arg0->f48);
+        ((int (*)(float, unsigned int, unsigned int, int, unsigned int, O40 *, O48 *))self->_updateFunction)(time, num, offset, self->_particleArray, self->_particleDataSize, ((O40 *)self->_internalVertexArray), ((O48 *)self->_pointSpriteInterface));
     } else if (temp_s0 == 0) {
-        FUN_0015bc20(arg0, temp_s0, 1);
+        FUN_0015bc20((PA *)self, temp_s0, 1);
     } else {
-        FUN_0015bc20(arg0, temp_s0, 0);
+        FUN_0015bc20((PA *)self, temp_s0, 0);
     }
-    arg0->f72 = 1;
-    *arg3 = 0;
+    self->_setConstant = 1;
+    *status = 0;
     return 1;
 }
 

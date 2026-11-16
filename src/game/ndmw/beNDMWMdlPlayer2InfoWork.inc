@@ -7,7 +7,7 @@ igMetaEnum *g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum;
 
 beNDMWMdlPlayer2InfoWork *beNDMWMdlPlayer2InfoWork_Create(int allocator) {
     beNDMWMdlPlayer2InfoWork_EnsureRegistered();
-    return (beNDMWMdlPlayer2InfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, allocator);
+    return (beNDMWMdlPlayer2InfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWMdlPlayer2InfoWork_ResolveMetaObject(void) {
@@ -27,14 +27,14 @@ int beNDMWMdlPlayer2InfoWork_GetVTable(void) {
 
     beModelCtrlInfoWork_Construct((beModelCtrlInfoWork *)&obj);
     *(int **)&obj._vtable = &g_beNDMWMdlPlayer2InfoWork_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMdlPlayer2InfoWork_vtable[0];
     beModelCtrlInfoWork_Destroy((beModelCtrlInfoWork *)&obj, 0);
     return vtable;
 }
 
 void *beModelCtrlInfoWork_Construct(beModelCtrlInfoWork *self) {
-    igObject_InitHeader();
+    igObject_InitHeader(self);
     self->_vtable = (int)(&g_beModelCtrlInfoWork_vtable[0]);
     self->_mHp = 0;
     self->_hp = 0;
@@ -72,7 +72,7 @@ void beNDMWMdlPlayer2InfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlPlayer2InfoWork_Register);
 }
 
-void *beNDMWMdlPlayer2InfoWork_Register(void) {
+CallbackArray *beNDMWMdlPlayer2InfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -94,8 +94,8 @@ void beNDMWMdlPlayer2InfoWork_GetMetaObject(void)
     beNDMWMdlPlayer2InfoWork_ResolveMetaObject();
 }
 
-int beModelCtrlInfoWork_GetPublishedMetaObject(void) {
-    return g_beModelCtrlInfoWork_metaObject[0];
+igMetaObject *beModelCtrlInfoWork_GetPublishedMetaObject(void) {
+    return g_beModelCtrlInfoWork_metaObject;
 }
 
 static FieldFactory g_beNDMWMdlPlayer2InfoWork_ctorTable[] = {

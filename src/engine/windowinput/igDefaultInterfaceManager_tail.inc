@@ -165,7 +165,7 @@ void FUN_00147840(struct A *arg0) {
     }
     l->cnt = 0;
     if (0 >= arg0->list->cnt) {
-        List_Reserve(arg0->list, 0, 4);
+        List_Reserve((igDataList *)arg0->list, 0, 4);
     }
 }
 

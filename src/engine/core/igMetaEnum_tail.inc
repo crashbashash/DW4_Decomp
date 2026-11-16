@@ -154,7 +154,7 @@ MetaEnumView *igMetaEnum_Create(const char *name, const char **names, int *value
     }
     igObjectSystem_AppendMetaEnum((int *)(((*(int *)&g_objectSystem))), (int)metaEnum);
     metaEnum->_refCount = metaEnum->_refCount - 1;
-    if (((unsigned long long)((long long)metaEnum->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(metaEnum); }
+    if (((unsigned long long)((long long)metaEnum->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy((igObject *)metaEnum); }
     return metaEnum;
 }
 

@@ -21,7 +21,7 @@ int beChangePosTransformInfoRam_GetVTable(void) {
     obj._vtable = (int)&g_beChangePosTransformInfoRam_vtable[0];
     transformSlot = (igObject **)&obj._transform;
     *transformSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beChangePosTransformInfoRam_vtable[0];
     igObjectRef_Release(transformSlot);
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
@@ -36,7 +36,7 @@ void beChangePosTransformInfoRam_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beChangePosTransformInfoRam_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
-void *beChangePosTransformInfoRam_Register(void) {
+CallbackArray *beChangePosTransformInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -74,13 +74,13 @@ static int g_beChangePosTransformInfoRam_fieldOffsets[] = {
 void beChangePosTransformInfoRam_InitFields(void) {
     int base;
     void *transform;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beChangePosTransformInfoRam_metaObject;
+    meta = g_beChangePosTransformInfoRam_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beChangePosTransformInfoRam_ctorTable, 1);
     transform = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)transform)->_metaObject = igTransform_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)transform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beChangePosTransformInfoRam_fieldTable, g_beChangePosTransformInfoRam_fieldHandles, g_beChangePosTransformInfoRam_fieldOffsets, base);
 }
 

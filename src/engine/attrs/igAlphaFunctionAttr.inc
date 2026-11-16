@@ -4,7 +4,7 @@ igMetaField *g_igAlphaFunctionAttr_refValueMetaField;
 
 void FUN_0013b490(int arg0) {
     igAlphaFunctionAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F490, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F490, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igAlphaFunctionAttr_GetMetaObject(void)
@@ -18,9 +18,9 @@ igMetaObject *igAlphaFunctionAttr_GetMetaObject(void)
 int igAlphaFunctionAttr_GetVTable(void) {
     Obj_13b520 o;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igAlphaFunctionAttr_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAlphaFunctionAttr_EnsureRegistered(void)
@@ -28,9 +28,9 @@ void igAlphaFunctionAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAlphaFunctionAttr_Register);
 }
 
-void igAlphaFunctionAttr_Register(void) {
+CallbackArray *igAlphaFunctionAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAlphaFunctionAttr_metaObject,
         igVisualAttribute_Register,
@@ -50,8 +50,8 @@ void thunk_igAlphaFunctionAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAlphaFunctionAttr_ctorTable[] = {
-    igEnumMetaField_Create,
-    igFloatMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
 };
 static const char *g_igAlphaFunctionAttr_fieldTable[] = {
     "_func",
@@ -82,7 +82,7 @@ void igAlphaFunctionAttr_InitFields(void) {
     igMetaObject_NameFields(temp_s0, g_igAlphaFunctionAttr_fieldTable, g_igAlphaFunctionAttr_fieldHandles, g_igAlphaFunctionAttr_fieldOffsets, temp_s2);
 }
 
-void Gap__Attrs__igAlphaFunctionAttr__vfunc_24(S2* p, int q) { Gap__Gfx__igPsx2VisualContext__vfunc_219(q, p->a); Gap__Gfx__igPsx2VisualContext__vfunc_221(q, p->b); }
+void Gap__Attrs__igAlphaFunctionAttr__vfunc_24(S2* p, igPsx2VisualContext *q) { Gap__Gfx__igPsx2VisualContext__vfunc_219(q, p->a); Gap__Gfx__igPsx2VisualContext__vfunc_221(q, p->b); }
 
 void Gap__Attrs__igAlphaFunctionAttr__vfunc_26(void **arg0, void **arg1) {
     ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_880_0 *)(arg1))->vX()));

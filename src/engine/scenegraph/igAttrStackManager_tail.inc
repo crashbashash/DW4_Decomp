@@ -24,20 +24,20 @@ void Gap__Sg__igAttrStackManager__vfunc_23(struct O_1af890 *arg0) {
 void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
     unsigned char sp4F;
     int al; int idx; int z; struct L_1af920 *l;
-    Gap__Core__igObject__userConstruct(arg0);
+    Gap__Core__igObject__userConstruct((igObject *)arg0);
     if (arg1 == 0) {
         if (DAT_00562580[0] == 0) {
-            al = igObject_GetAllocator(arg0);
-            al = g_useOwnerAllocator != 0 ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute[0]);
+            al = (int)igObject_GetAllocator((igObject *)arg0);
+            al = (int)(g_useOwnerAllocator != 0 ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute));
             DAT_00562580[0] = ((struct L_1af920 *)FUN_001a51d0(al));
         }
         l = DAT_00562580[0];
         idx = n_of(l);
         if (idx < l->cap) { l->n = l->n + 1; } else { List_Resize((void *)l, idx + 1, 4); }
         l->data[idx] = (int)arg0;
-        z = ((struct Z * *)g_objectSystem)[0]->f56;
+        z = ((struct Z *)g_objectSystem)->f56;
         sp4F = arg0[60];
-        igRegistry_GetValueBool(z, 7, "simpleLightManagementState", &sp4F, 0, 0);
+        igRegistry_GetValueBool((igRegistry *)z, 7, "simpleLightManagementState", &sp4F, 0, 0);
         arg0[60] = sp4F;
     }
 }
@@ -48,7 +48,7 @@ void Gap__Sg__igAttrStackManager__vfunc_10(int arg0) {
     K key((void *)arg0);
     i = Finder::Find(((AttrStackList * *)DAT_00562580)[0], key);
     if (i >= 0) {
-        List_RemoveWordAt(((AttrStackList * *)DAT_00562580)[0], i);
+        List_RemoveWordAt((igDataList *)(((AttrStackList * *)DAT_00562580)[0]), i);
     }
     p = ((AttrStackList * *)DAT_00562580)[0];
     if (p->n == 0) {
@@ -58,7 +58,7 @@ void Gap__Sg__igAttrStackManager__vfunc_10(int arg0) {
         }
         ((AttrStackList * *)DAT_00562580)[0] = 0;
     }
-    Gap__Core__igObject__userDestruct(arg0);
+    Gap__Core__igObject__userDestruct((igObject *)arg0);
 }
 
 void FUN_001afb00(void) {
@@ -69,7 +69,7 @@ void FUN_001afb00(void) {
         rc = p->f4 - 1;
         p->f4 = rc;
         if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)p);
+            igObject_Destroy((igObject *)p);
         }
     }
     DAT_00562578[0] = 0;
@@ -79,14 +79,14 @@ void FUN_001afb60(char *arg0) {
     int n;
     int i;
     int idx;
-    if (igMetaObject_IsOfType(arg0, igAttr_GetMetaObject()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg0, igAttr_GetMetaObject()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
         if (((RefObj * *)DAT_00562578)[0] == 0) {
-            ((RefObj * *)DAT_00562578)[0] = igMetaObjectList_Create(((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+            ((RefObj * *)DAT_00562578)[0] = igMetaObjectList_Create(((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         }
         K key(arg0);
         idx = Finder_1afb60::Find(((RefObj * *)DAT_00562578)[0], key);
         if (idx < 0) {
-            ObjectList_AppendRetained(((RefObj * *)DAT_00562578)[0], arg0);
+            ObjectList_AppendRetained((igObjectList *)(((RefObj * *)DAT_00562578)[0]), (igObject *)arg0);
             if (((RefObj * *)DAT_00562580)[0] != 0) {
                 n = ((RefObj * *)DAT_00562580)[0]->count;
                 for (i = 0; i < n; i++) {
@@ -107,7 +107,7 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         id = meta->_id;
         if (id >= m->_attrStackIndexTableSize) {
             m->_attrStackIndexTableSize = id + 4;
-            m->_attrStackIndexTable = igObject_Reallocate(m, m->_attrStackIndexTable, m->_attrStackIndexTableSize * 4);
+            m->_attrStackIndexTable = (int *)igObject_Reallocate(m, m->_attrStackIndexTable, m->_attrStackIndexTableSize * 4);
         }
         units = FUN_001d8270((int)(meta));
         if (units <= 0) {
@@ -125,7 +125,7 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         m->_numAttrStacks = end;
         for (i = 0; i < units; i++, first++) {
             igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, i);
-            igSmartPointer<AttrStackRec> stack((AttrStackRec *)((AttrObj *)FUN_001a5a70(igObject_GetAllocator(m))));
+            igSmartPointer<AttrStackRec> stack((AttrStackRec *)((AttrObj *)FUN_001a5a70((int)igObject_GetAllocator(m))));
             AttrObj **slot;
             AttrObj *value;
             slot = &stack.p->_default;
@@ -146,7 +146,7 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
     }
 }
 
-void FUN_001b0000(T_1b0000 *arg0, int arg1, Obj_1b0000 *arg2, Obj_1b0000 *arg3)
+void FUN_001b0000(T_1b0000 *arg0, igMetaObject *arg1, Obj_1b0000 *arg2, Obj_1b0000 *arg3)
 {
     List *l;
     int n;
@@ -387,7 +387,7 @@ void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightState
         if (stack->_count == stack->_cachedOverride) {
             stack->_cachedOverride = -1;
         }
-        igAttrStackManager_MarkStackChanged((A_1b1490 *)self, (B_1b1490 *)stack, slot);
+        igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
     } else {
         igObject *top;
         void (*pop)(igObject *, int);
@@ -398,7 +398,7 @@ void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightState
             pop(top, self->_popProcData);
         }
         stack->_count = stack->_count - 1;
-        igAttrStackManager_MarkStackChanged((A_1b1490 *)self, (B_1b1490 *)stack, slot);
+        igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
     }
 }
 
@@ -406,13 +406,13 @@ void FUN_001b0dc0(O_1b0dc0 *arg0) {
     int n, i;
     n = arg0->c24->n;
     for (i = 0; i < n; i++) {
-        E2 *e = arg0->l->arr[i + arg0->base[g_igLightStateAttr_metaObject[0]->idx]]->f14;
+        E2 *e = arg0->l->arr[i + arg0->base[g_igLightStateAttr_metaObject->_id]]->f14;
         R_1b0dc0 **slot = &e->f10;
         R_1b0dc0 *r = *slot;
         if (r != 0) {
             r->f4 = (int)((int) (r->f4 - 1));
             if (((unsigned long long) ((long long) r->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)r);
+                igObject_Destroy((igObject *)r);
             }
         }
         *slot = 0;
@@ -457,7 +457,7 @@ void FUN_001b1030(igAttrStackManager *self, igAttr *attr) {
     slot = attr->_cachedUnitID + ((int *)self->_attrStackIndexTable)[slot];
     stack = (AttrObjectStack *)stack->_data[slot];
     stack->append((igObject *)attr);
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
 }
 
 void FUN_001b1100(struct A_1b1100 *arg0, struct B_1b1100 *arg1) {
@@ -474,7 +474,7 @@ n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
         temp_a2(x, arg0->f48);
     }
     temp_s0->n = temp_s0->n - 1;
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
 }
 
 void FUN_001b11b0(struct A_1b11b0 *arg0, struct B_1b11b0 *arg1) {
@@ -491,7 +491,7 @@ n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
         temp_a2(x, arg0->f48);
     }
     temp_s0->n = temp_s0->n - 1;
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
 }
 
 void FUN_001b1250(struct A_1b1250 *arg0, struct B_1b1250 *arg1, int arg2) {
@@ -508,7 +508,7 @@ n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
         temp_a2(x, arg0->f48);
     }
     temp_s0->n = temp_s0->n - 1;
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
 }
 
 void igAttrStackManager_PushOverrideAttr(igAttrStackManager *self, igAttr *attr) {
@@ -520,7 +520,7 @@ void igAttrStackManager_PushOverrideAttr(igAttrStackManager *self, igAttr *attr)
         stack->_cachedOverride = stack->_count;
     }
     stack->append((igObject *)attr);
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
 }
 
 void igAttrStackManager_PopOverrideAttr(igAttrStackManager *manager, igAttr *attr) {
@@ -542,38 +542,38 @@ void igAttrStackManager_PopOverrideAttr(igAttrStackManager *manager, igAttr *att
     if (temp_s0->n == temp_s0->f24) {
         temp_s0->f24 = -1;
     }
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)arg0, (struct B_1b1490 *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
 }
 
-void igAttrStackManager_MarkStackChanged(struct A_1b1490 *arg0, struct B_1b1490 *arg1, int arg2) {
+void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index) {
     int c1;
     int c2;
     struct L_1b1490 *l1;
     struct L_1b1490 *l2;
 
-    if (arg1->f32 == 0) {
-        l1 = arg0->f24;
+    if (stack->_hasChangedFromLastIncrementalFlush == 0) {
+        l1 = (struct L_1b1490 *)manager->_attrIncrementalUpdateList;
         c1 = l1->n;
         if (c1 < l1->cap) {
             l1->n = n_of_1b1490(l1) + 1;
         } else {
             List_Resize((void *)l1, c1 + 1, 4);
         }
-        l1->arr[c1] = arg2;
-        arg1->f32 = 1U;
+        l1->arr[c1] = index;
+        stack->_hasChangedFromLastIncrementalFlush = 1U;
     }
-    if (arg1->f40 == 0) {
-        l2 = arg0->f28;
+    if (stack->_hasChangedFromRoot == 0) {
+        l2 = (struct L_1b1490 *)manager->_attrRootUpdateList;
         c2 = l2->n;
         if (c2 < l2->cap) {
             l2->n = n_of_1b1490(l2) + 1;
         } else {
             List_Resize((void *)l2, c2 + 1, 4);
         }
-        l2->arr[c2] = arg2;
-        arg1->f40 = 1U;
+        l2->arr[c2] = index;
+        stack->_hasChangedFromRoot = 1U;
     }
-    arg0->f8 = 1;
+    manager->_stackChanged = 1;
 }
 
 void igBitMask_SetAll(igBitMask *mask) {

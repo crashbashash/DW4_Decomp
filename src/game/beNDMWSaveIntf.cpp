@@ -1,41 +1,37 @@
 #include "dw4/reflected.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beLua.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWDegiData.h"
+#include "dw4/beNDMWLoadCtrl2.h"
+#include "dw4/beNDMWLoadCtrl2CommonIntf.h"
+#include "dw4/beNDMWLoadIntf2.h"
+#include "dw4/beNDMWLoadIntf2ComMdlCtrl.h"
+#include "dw4/beNDMWLoadIntf2DataSelIntf.h"
+#include "dw4/beNDMWLoadIntf2DegiState.h"
+#include "dw4/beNDMWLoadIntf2DegiStateCtrl.h"
+#include "dw4/beNDMWLoadIntf2MesWin.h"
+#include "dw4/beNDMWLoadIntf2SelSlot.h"
+#include "dw4/beNDMWLoadIntf2TextOrder.h"
+#include "dw4/beNDMWLoadSavePlWork.h"
+#include "dw4/beNDMWLoadSlotPlayer.h"
+#include "dw4/beNDMWSaveIntf.h"
+#include "dw4/beNDMWSaveIntfCtrlData.h"
+#include "dw4/beNDMWSaveIntfInfo.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beSystem.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
 
-extern "C" int igObject_Destroy(void *);
-extern "C" void * beBaseInfoDataList_Create(...);
 extern "C" int beNDMWSaveIntf_GetInfoMeta(void);
 extern "C" int beNDMWSaveIntf_GetMeta(void);
-extern "C" void *beNDMWSaveIntfCtrlData_Create(...);
-extern "C" int beNDMWSaveIntf_GetMessageEnum(...);
-extern "C" void *beNDMWLoadIntf2SelSlot_Create(...);
-extern "C" void *beNDMWLoadIntf2DataSelIntf_Create(...);
-extern "C" void *beNDMWLoadIntf2DegiStateCtrl_Create(...);
-extern "C" void *beNDMWLoadIntf2DegiState_Create(...);
-extern "C" void *beNDMWLoadIntf2MesWin_Create(...);
-extern "C" void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
-extern "C" void *beNDMWLoadIntf2TextOrder_Create(...);
-extern "C" int beNDMWLoadIntf2DegiState__Init(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_GetInt(...);
-extern "C" int beMessenger_GetIntCount(...);
-extern "C" void *beMessenger_GetObject(...);
-extern "C" unsigned int beMessenger_ResolveEnumValue(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_SendNamed(...);
-extern "C" int beMessenger_SetInt(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" void *igProperty_FindByName(...);
 /* Header of every reference-counted engine object; the count is in the low 23 bits. */
 struct RefObject { int vtable; int refCount; };
-extern "C" RefObject * igInsightCore_FindManager(...);
-extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWSaveIntf_Prepare(beNDMWSaveIntf *self);
-extern "C" int g_beNDMWSaveIntfInfo_metaObject[4];
-extern "C" int g_beNDMWSaveIntf_metaObject[4];
-extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, const void *);
 extern "C" void beNDMWSaveIntf_OnAddRam(beNDMWSaveIntf *self, beBaseInfoRam *ram);
 /* The values of the save interface's Message enum (beNDMWSaveIntf_GetMessageEnum). */
 enum SaveMessage {
@@ -55,100 +51,30 @@ ModelPlacement g_saveModelPlacement[4] = {
     {-315.0f, 240.0f, 0.0f}, {-5.0f, 240.0f, 0.0f}, {-315.0f, 20.0f, 0.0f}, {-5.0f, 20.0f, 0.0f}
 };
 }
-extern "C" int g_propertyNameField[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" int g_beSystem_metaObject[4];
-extern "C" int g_beLua_metaObject[4];
-extern "C" unsigned char g_useOwnerAllocator;
 /* Owning stack reference to a newly created child object; one instantiation per child class (0 the
  * data list, 1 the control data, 2 text order, 3 model control, 4 message window, 5 slot selector,
  * 6 state control, 7 state data, 8 data selector), so each gets its own out-of-line destructor. */
 template <int kind> struct ChildRef {
     RefObject *object;
     ChildRef(RefObject *created) : object(created) {}
-    ~ChildRef() { RefObject *q = object; if (q != 0) { q->refCount = q->refCount - 1; if ((q->refCount & 0x7fffff) == 0) igObject_Destroy(q); } }
+    ~ChildRef() { RefObject *q = object; if (q != 0) { q->refCount = q->refCount - 1; if ((q->refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)q); } }
 };
 /* Creates the info record's child list on first use; every expansion keeps its own stack reference. */
 struct DataListGuard {
     static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        int own = igObject_GetAllocator(ram); int allocator; if (g_useOwnerAllocator != 0) { allocator = own; } else { allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
+        int own = (int)igObject_GetAllocator(ram); int allocator; if (g_useOwnerAllocator != 0) { allocator = own; } else { allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
         ChildRef<0> list((RefObject *)beBaseInfoDataList_Create(allocator)); RefObject *created; RefObject *old;
         created = list.object; if (created != 0) created->refCount = created->refCount + 1;
         old = (RefObject *)ram->_dataList;
-        if (old != 0) { old->refCount = old->refCount - 1; if (((unsigned long long)((long long)old->refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
+        if (old != 0) { old->refCount = old->refCount - 1; if (((unsigned long long)((long long)old->refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)old); }
         ram->_dataList = (int)created;
     }
     }
 };
 struct AllocatorValue { int allocator; AllocatorValue(const AllocatorValue &o) : allocator(o.allocator) {} };
-extern "C" int beNDMWLoadIntf2_igIntList_GetData(...);
-extern "C" void *beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(...);
-extern "C" int igDataList_GetCount(...);
-extern "C" void *beNDMWLoadSlotPlayer_Create(...);
-extern "C" void *beNDMWDegiData_Create(...);
-extern "C" int beNDMWLoadIntf2DegiState__RequestOpen(...);
-extern "C" int beNDMWLoadIntf2DegiState__RequestClose(...);
-extern "C" int beNDMWLoadIntf2DegiState__RequestConfirmClose(...);
-extern "C" int beNDMWLoadIntf2DegiState__Update(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__Init(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__OpenSaveArea(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__UpdateSelection(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__CloseAll(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__CloseSaveArea(...);
-extern "C" int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(...);
-extern "C" int beNDMWLoadIntf2SelSlot__Reset(...);
-extern "C" int beNDMWLoadIntf2SelSlot__Init(...);
-extern "C" int beNDMWLoadIntf2SelSlot__Open(...);
-extern "C" int beNDMWLoadIntf2SelSlot__UpdateSelection(...);
-extern "C" int beNDMWLoadIntf2SelSlot__PublishCursor(...);
-extern "C" int beNDMWLoadIntf2SelSlot__Close(...);
-extern "C" int beNDMWLoadIntf2SelSlot__RefreshSlotMarks(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__Close(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__Poll(...);
-extern "C" int beNDMWLoadSavePlWork__SetIsCtrl(...);
-extern "C" int beNDMWLoadSavePlWork__GetIsRdy(...);
-extern "C" int beNDMWLoadSavePlWork__GetIsEntry(...);
-extern "C" void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(...);
-extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(...);
-extern "C" AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(...);
-extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(...);
-extern "C" int beNDMWLoadIntf2MesWin__Update(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestOpen(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestClose(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestMessage(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestQuestion(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestPrompt(...);
-extern "C" int beNDMWLoadIntf2MesWin__Cancel(...);
-extern "C" int beNDMWLoadIntf2MesWin__GetIsCtrl(...);
-extern "C" int beNDMWLoadIntf2MesWin__GetCurPoint(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestMesErase(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestSystemMessage(...);
-extern "C" int beNDMWLoadIntf2MesWin__EndSystemMessage(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepReadMedia(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StartUtilFor(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(...);
-extern "C" int beNDMWDegiData__LoadFromProperties(...);
-extern "C" int List_Resize(...);
-extern "C" int beNDMWLoadIntf2_Memory_SelectAllocator(...);
-extern "C" void *beNDMWLoadIntf2_igObjectList_Get(...);
-extern "C" int beMessenger_AppendString(...);
-extern "C" void *bePadManager_GetPadForPlayer(...);
-extern "C" void *igProperty_GetRecordByte(...);
-extern "C" int * g_playerModelRow[4];
+/* kept local: igDataList_GetCount has no include/dw4 home (only BaseLibrary.h declares it). */
+extern "C" int igDataList_GetCount(int *p);
 struct ReleasedObject {
     int vtable;
     int refCount;
@@ -156,7 +82,7 @@ struct ReleasedObject {
         if (object) {
             --object->refCount;
             if (((unsigned long long)(long long)object->refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
     }
 };
@@ -174,24 +100,22 @@ struct AccessList {
     int getCount() const { return count; }
 };
 struct AllocatorChoice {
-    static int Select(const int *selector, int own) { if (g_useOwnerAllocator) return own; else return Memory_GetAllocatorBySelector(*selector); }
+    static int Select(const igMemoryPoolHandle *selector, int own) { if (g_useOwnerAllocator) return own; else return (int)Memory_GetAllocatorBySelector(*selector); }
 };
 struct ModelPos {
     float x, y, z, w;
     ModelPos(const ModelPos &o);
 };
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__StartAt(void *, int, const void *, const void *, ModelPos &, int);
 class NewDataListRef {
 public:
     void *value;
     NewDataListRef(const AllocatorValue &source) : value(beBaseInfoDataList_Create(source.allocator)) {}
     ~NewDataListRef();
 };
-extern "C" int *beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(void *, const NewDataListRef &);
 struct FreshDataList {
     static int *Assign(void *slot, int allocator) {
-        NewDataListRef created(beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser1[0], allocator)));
-        return beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(slot, created);
+        NewDataListRef created(beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser1, allocator)));
+        return (int *)beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign((ObjectRefTarget **)slot, (ObjectRefTarget **)&created);
     }
 };
 /* bePadData::_trigger bits the save dialogue reads. */
@@ -244,11 +168,11 @@ static inline int AllEntriesReady(void *works) {
     int entryCount = 0;
     int readyCount = 0;
     int index;
-    for (index = 0; index < igDataList_GetCount(works); index++) {
-        if ((beNDMWLoadSavePlWork__GetIsEntry(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(works, index)) & 0xFF) == 1) {
+    for (index = 0; index < igDataList_GetCount((int *)works); index++) {
+        if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
             entryCount += 1;
         }
-        if ((beNDMWLoadSavePlWork__GetIsRdy(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(works, index)) & 0xFF) == 1) {
+        if ((beNDMWLoadSavePlWork__GetIsRdy((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
             readyCount += 1;
         }
     }
@@ -258,8 +182,8 @@ static inline void EndInterface(beNDMWLoadCtrl2CommonIntf *common) {
     int index = 0;
     common->_intfStat = 3;
     void *works = (void *)(common->_flagWork);
-    for (index = 0; index < igDataList_GetCount(works); index++) {
-        beNDMWLoadSavePlWork__SetIsCtrl(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(works, index), 0);
+    for (index = 0; index < igDataList_GetCount((int *)works); index++) {
+        beNDMWLoadSavePlWork__SetIsCtrl((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index), 0);
     }
 }
 extern "C" void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram);
@@ -270,7 +194,7 @@ void beNDMWSaveIntf_Prepare(beNDMWSaveIntf *self) {
     RefObject *old;
 
     if (self->_padManager == 0) {
-        found = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+        found = (RefObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
         if (found != 0) {
             found->refCount = found->refCount + 1;
         }
@@ -278,7 +202,7 @@ void beNDMWSaveIntf_Prepare(beNDMWSaveIntf *self) {
         if (old != 0) {
             old->refCount = old->refCount - 1;
             if (((unsigned long long) ((long long) old->refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         self->_padManager = (int)found;
@@ -328,59 +252,59 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
     if (ram->_dataList != 0) {
         tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
-            FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
+            FreshDataList::Assign(&ram->_dataList, (int)igObject_GetAllocator(ram));
         }
-        ctrl = (beNDMWSaveIntfCtrlData *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "CTRL"));
+        ctrl = (beNDMWSaveIntfCtrlData *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), (int)g_propertyNameField, "CTRL"));
         tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
-            FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
+            FreshDataList::Assign(&ram->_dataList, (int)igObject_GetAllocator(ram));
         }
-        comMdl = (beNDMWLoadIntf2ComMdlCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "COMMDLCTRL"));
+        comMdl = (beNDMWLoadIntf2ComMdlCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), (int)g_propertyNameField, "COMMDLCTRL"));
         tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
-            FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
+            FreshDataList::Assign(&ram->_dataList, (int)igObject_GetAllocator(ram));
         }
-        mesWin = (beNDMWLoadIntf2MesWin *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "MESWIN"));
+        mesWin = (beNDMWLoadIntf2MesWin *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), (int)g_propertyNameField, "MESWIN"));
         tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
-            FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
+            FreshDataList::Assign(&ram->_dataList, (int)igObject_GetAllocator(ram));
         }
-        selSlot = (beNDMWLoadIntf2SelSlot *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "SELSLOT"));
+        selSlot = (beNDMWLoadIntf2SelSlot *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), (int)g_propertyNameField, "SELSLOT"));
         tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
-            FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
+            FreshDataList::Assign(&ram->_dataList, (int)igObject_GetAllocator(ram));
         }
-        common = (beNDMWLoadCtrl2CommonIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "COMMONINTF"));
+        common = (beNDMWLoadCtrl2CommonIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), (int)g_propertyNameField, "COMMONINTF"));
         tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
-            FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
+            FreshDataList::Assign(&ram->_dataList, (int)igObject_GetAllocator(ram));
         }
-        degiStates = (beNDMWLoadIntf2DegiStateCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "DEGISTATECTRL"));
+        degiStates = (beNDMWLoadIntf2DegiStateCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), (int)g_propertyNameField, "DEGISTATECTRL"));
         tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
-            FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
+            FreshDataList::Assign(&ram->_dataList, (int)igObject_GetAllocator(ram));
         }
-        dataSel = (beNDMWLoadIntf2DataSelIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "DATASELINTF"));
+        dataSel = (beNDMWLoadIntf2DataSelIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), (int)g_propertyNameField, "DATASELINTF"));
         beNDMWLoadIntf2ComMdlCtrl__Poll(comMdl);
         beNDMWLoadIntf2MesWin__Update(mesWin);
         padTrigger = 0;
-        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_isCtrl == 1) {
-            padTrigger = ((bePadData *)(bePadManager_GetPadForPlayer(self->_padManager, ram->_ramNo)))->_trigger;
+        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_isCtrl == 1) {
+            padTrigger = ((bePadData *)(bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo)))->_trigger;
         }
-        switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_sysStat0) {
+        switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_sysStat0) {
         case STAGE_WAIT_UTIL:
             countdownDone = 0;
-            switch ((((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_sysStat1)) {
+            switch ((((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_sysStat1)) {
             case 0:
                 beNDMWLoadIntf2MesWin__RequestSystemMessage(mesWin, TextId(ram, 0x51C));
-                SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(common->_flagWork, ram->_ramNo))), 1);
+                SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 1);
                 break;
             case 1:
-                waitWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo));
+                waitWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo));
                 remaining = waitWork->_sysCount0 - 1;
                 waitWork->_sysCount0 = remaining;
                 if (remaining <= 0) {
-                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_sysCount0 = 0; }
+                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_sysCount0 = 0; }
                     countdownDone = 1;
                 }
                 break;
@@ -392,7 +316,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     switch (ctrl->_st1) {
                     default: {
                         ModelPos openPos(*(ModelPos *)comMdl->_pos);
-                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselbase", "SQ_OPEN", openPos, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselbase", "SQ_OPEN", (float *)&openPos, 1);
                         NextStep(ctrl);
                         return;
                     }
@@ -403,34 +327,34 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         }
                         break;
                     case 2:
-                        beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-                        beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                        beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
-                        playerData = beMessenger_GetObject(self->_messenger, 0);
-                        if (*(unsigned char *)((char *)(igProperty_GetRecordByte(playerData, "ISUSE")) + 12) == 1) {
-                            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-                            beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                            beMessenger_DispatchSelected(self->_messenger, "CURRENT2BASE");
-                            beNDMWDegiData__LoadFromProperties(beNDMWLoadIntf2_igObjectList_Get(common->_gameUseData, ram->_ramNo), playerData);
+                        beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+                        beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
+                        beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETPLAYER");
+                        playerData = beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+                        if (*(unsigned char *)((char *)(igProperty_GetRecordByte((igObject *)playerData, "ISUSE")) + 12) == 1) {
+                            beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+                            beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
+                            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "CURRENT2BASE");
+                            beNDMWDegiData__LoadFromProperties((beNDMWDegiData *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_gameUseData, ram->_ramNo), (int)playerData);
                             EnterState(ctrl, SAVE_OPEN_WINDOW);
-                            { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
-                            { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isEntry = 1; }
+                            { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
+                            { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isEntry = 1; }
                             return;
                         }
                         if (ram->_ramNo == 0) {
-                            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-                            beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                            beMessenger_AppendString(self->_messenger, g_playerModelRow[0]);
-                            beMessenger_AppendString(self->_messenger, "\202\305\202\316\202\301\202\255\202\361");
-                            beMessenger_DispatchSelected(self->_messenger, "GAMESTART");
-                            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-                            beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                            beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
-                            playerData = beMessenger_GetObject(self->_messenger, 0);
-                            beNDMWDegiData__LoadFromProperties(beNDMWLoadIntf2_igObjectList_Get(common->_gameUseData, ram->_ramNo), playerData);
+                            beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+                            beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
+                            beMessenger_AppendString((beMessenger *)self->_messenger, g_playerModelRow[0].model);
+                            beMessenger_AppendString((beMessenger *)self->_messenger, "\202\305\202\316\202\301\202\255\202\361");
+                            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GAMESTART");
+                            beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+                            beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
+                            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETPLAYER");
+                            playerData = beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+                            beNDMWDegiData__LoadFromProperties((beNDMWDegiData *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_gameUseData, ram->_ramNo), (int)playerData);
                             return;
                         }
-                        { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isEntry = 0; }
+                        { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isEntry = 0; }
                         EnterState(ctrl, SAVE_DONE);
                         return;
                         break;
@@ -440,7 +364,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     switch (ctrl->_st1) {
                     case 0: {
                         ModelPos winPos(*(ModelPos *)comMdl->_pos);
-                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_OPEN", winPos, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_OPEN", (float *)&winPos, 1);
                         beNDMWLoadIntf2MesWin__RequestOpen(mesWin);
                         NextStep(ctrl);
                         return;
@@ -476,17 +400,17 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         switch (ctrl->_st2) {
                         case 0:
                             degiNo = ram->_ramNo;
-                            statusWin = beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0);
-                            beNDMWLoadIntf2DegiState__RequestOpen(statusWin, 1, degiNo);
+                            statusWin = (void *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0);
+                            beNDMWLoadIntf2DegiState__RequestOpen((beNDMWLoadIntf2DegiState *)statusWin, 1, degiNo);
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0)) & 0xFF) == 1) {
+                            if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) {
                                 if (ram->_ramNo == 0) {
                                     player = 1;
                                     otherEntry = 0;
                                     do {
-                                        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, player)))->_isEntry == 1) {
+                                        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, player)))->_isEntry == 1) {
                                             otherEntry = 1;
                         break;
                                         }
@@ -512,13 +436,13 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     case 0:
                         switch (ctrl->_st2) {
                         case 0:
-                            beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(common, ram->_ramNo, 2);
+                            beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(common, ram->_ramNo);
                             beNDMWLoadIntf2SelSlot__Init(selSlot);
                             EnterSlotState(selSlot, 0);
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2SelSlot__Open(selSlot, -1, 2) & 0xFF) == 1) {
+                            if ((beNDMWLoadIntf2SelSlot__Open(selSlot, -1) & 0xFF) == 1) {
                                 textId = -1;
                                 switch (common->_kindHard) {
                                 case 0:
@@ -542,7 +466,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     case 1:
                         switch (ctrl->_st2) {
                         case 0:
-                            if ((beNDMWLoadIntf2SelSlot__UpdateSelection(selSlot, ((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_isCtrl, 1) & 0xFF) == 1) {
+                            if ((beNDMWLoadIntf2SelSlot__UpdateSelection(selSlot, ((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_isCtrl, 1) & 0xFF) == 1) {
                                 if (selSlot->_isReOpenReq == 1) {
                                     NextStep(ctrl);
                                     return;
@@ -575,7 +499,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                 NextTick(ctrl);
                                 return;
                             case 1:
-                                switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_utilReturn) {
+                                switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_utilReturn) {
                                 case 0:
                                     NextStep(ctrl);
                                     return;
@@ -653,11 +577,11 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     case 1:
                         switch (ctrl->_st2) {
                         case 0:
-                            beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(dataSel, 0, 1);
+                            beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(dataSel, 0);
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DataSelIntf__OpenSaveArea(dataSel, 0, 1) & 0xFF) == 1) {
+                            if ((beNDMWLoadIntf2DataSelIntf__OpenSaveArea(dataSel, 0) & 0xFF) == 1) {
                                 EnterState(ctrl, SAVE_SELECT_DATA);
                                 return;
                             }
@@ -669,7 +593,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 case SAVE_SELECT_DATA:
                     switch (ctrl->_st1) {
                     case 0x0:
-                        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_isCutConnect == 1) {
+                        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_isCutConnect == 1) {
                             SetStep(ctrl, 0x64);
                             return;
                         }
@@ -707,7 +631,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 0x1:
-                            switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_utilReturn) {
+                            switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_utilReturn) {
                             case 0:
                                 ctrl->_isOneSave = 1;
                                 NextStep(ctrl);
@@ -729,7 +653,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 0x33:
-                            if ((beNDMWLoadIntf2SelSlot__Close(selSlot, 1, 2) & 0xFF) == 1) {
+                            if ((beNDMWLoadIntf2SelSlot__Close(selSlot) & 0xFF) == 1) {
                                 SetStep(ctrl, 0x64);
                                 return;
                             }
@@ -737,7 +661,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         }
                         break;
                     case 0x2:
-                        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_isCutConnect == 1) {
+                        if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_isCutConnect == 1) {
                             SetStep(ctrl, 0x64);
                             return;
                         }
@@ -748,7 +672,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin, 1) & 0xFF)) {
+                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
                                 NextSubstep(ctrl);
                                 return;
                             }
@@ -758,7 +682,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 3:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin, 1) & 0xFF)) {
+                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
                                 switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin)) {
                                 case 0:
                                     SetSubstep(ctrl, 5);
@@ -796,7 +720,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                         player = 1;
                                         otherEntry = 0;
                                         do {
-                                            if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, player)))->_isEntry == 1) {
+                                            if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, player)))->_isEntry == 1) {
                                                 otherEntry = 1;
                                                 break;
                                             }
@@ -874,7 +798,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                 SetSubstep(ctrl, 4);
                                 return;
                             }
-                            beNDMWLoadIntf2MesWin__RequestPrompt(mesWin, TextId(ram, 0x527), 1);
+                            beNDMWLoadIntf2MesWin__RequestPrompt(mesWin, TextId(ram, 0x527));
                             NextSubstep(ctrl);
                             return;
                         case 1:
@@ -902,16 +826,16 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         case 4:
                             switch (ctrl->_st3) {
                             case 0:
-                                beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0), 1);
+                                beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0), 1);
                                 beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_CLOSE", 1);
                                 beNDMWLoadIntf2MesWin__RequestClose(mesWin);
                                 NextTick(ctrl);
                                 return;
                             case 1:
-                                if (((beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0)) & 0xFF) == 1) && ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1)) {
+                                if (((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) && ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1)) {
                                     EnterState(ctrl, SAVE_DONE);
-                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isEntry = 0; }
-                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
+                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isEntry = 0; }
+                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
                                     return;
                                 }
                                 break;
@@ -920,11 +844,11 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         case 5:
                             switch (ctrl->_st3) {
                             case 0:
-                                beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0), 0);
+                                beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0), 0);
                                 NextTick(ctrl);
                                 return;
                             case 1:
-                                if ((beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0)) & 0xFF) == 1) {
+                                if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) {
                                     EnterState(ctrl, SAVE_ASK);
                                     return;
                                 }
@@ -938,7 +862,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 case SAVE_WAIT_PLAYERS:
                     switch (ctrl->_st1) {
                     case 0:
-                        { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isRdy = 1; }
+                        { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 1; }
                         ramNo = ram->_ramNo;
                         if (ramNo == 0) {
                             if (AllEntriesReady((void *)common->_flagWork) == 1) {
@@ -962,7 +886,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                     return;
                                 }
                                 if (padTrigger & PAD_CIRCLE) {
-                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
+                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
                                     NextStep(ctrl);
                                     return;
                                 }
@@ -973,7 +897,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                     return;
                                 }
                                 if (padTrigger & PAD_CIRCLE) {
-                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
+                                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
                                     NextStep(ctrl);
                                     return;
                                 }
@@ -986,7 +910,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                 return;
                             }
                             if (padTrigger & PAD_CIRCLE) {
-                                { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
+                                { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
                                 NextStep(ctrl);
                                 return;
                             }
@@ -996,11 +920,11 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     case 2:
                         switch (ctrl->_st2) {
                         case 0:
-                            beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0), 2);
+                            beNDMWLoadIntf2DegiState__RequestClose((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0), 2);
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0)) & 0xFF) == 1) {
+                            if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) {
                                 EnterState(ctrl, SAVE_ASK);
                                 return;
                             }
@@ -1015,7 +939,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             return;
                         case 1:
                             if (padTrigger & PAD_CIRCLE) {
-                                { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
+                                { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
                                 SetStep(ctrl, 2);
                                 return;
                             }
@@ -1053,33 +977,33 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
             }
             break;
         case STAGE_CLOSE:
-            switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_sysStat1) {
+            switch (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_sysStat1) {
             case 0:
                 switch (ctrl->_st0) {
                 case SAVE_DONE:
                 default:
-                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(common->_flagWork, ram->_ramNo))), 1);
+                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 1);
                     break;
                 case SAVE_WAIT_PLAYERS:
                     beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_CLOSE", 1);
                     beNDMWLoadIntf2MesWin__RequestClose(mesWin);
-                    beNDMWLoadIntf2DegiState__RequestConfirmClose(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0));
-                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(common->_flagWork, ram->_ramNo))), 2);
+                    beNDMWLoadIntf2DegiState__RequestConfirmClose((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0));
+                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 2);
                     break;
                 }
                 beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, "j_chrselbase", "SQ_CLOSE", 1);
                 return;
             case 1:
                 if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1) {
-                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isClose = 1; }
-                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(common->_flagWork, ram->_ramNo))), 3);
+                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isClose = 1; }
+                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 3);
                     return;
                 }
                 break;
             case 2:
-                if (((beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2_igObjectList_Get(degiStates->_statDataList, 0)) & 0xFF) == 1) && ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1)) {
-                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isClose = 1; }
-                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(common->_flagWork, ram->_ramNo))), 3);
+                if (((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) && ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1)) {
+                    { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isClose = 1; }
+                    SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 3);
                     return;
                 }
                 break;
@@ -1088,7 +1012,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
             }
             break;
         case STAGE_SAVE_DATA:
-            selectWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo));
+            selectWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo));
             switch (selectWork->_sysStat1) {
             case 0x0:
                 switch (selectWork->_sysStat2) {
@@ -1107,13 +1031,13 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
             case 0x1:
                 switch (selectWork->_sysStat2) {
                 default:
-                    if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo)))->_isCutConnect == 1) {
+                    if (((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_isCutConnect == 1) {
                         SetStageStep(selectWork, 0x64);
                         return;
                     }
                     switch (selectWork->_sysStat3) {
                     case 0:
-                        if (((beNDMWDegiData *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWLoadSlotPlayer *)(selectWork->_haveSaveData))->_saveDataList, dataSel->_svDataSelPoint)))->_isUse == 0) {
+                        if (((beNDMWDegiData *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWLoadSlotPlayer *)(selectWork->_haveSaveData))->_saveDataList, dataSel->_svDataSelPoint)))->_isUse == 0) {
                             beNDMWLoadIntf2MesWin__RequestPrompt(mesWin, TextId(ram, 0x508));
                         } else {
                             beNDMWLoadIntf2MesWin__RequestPrompt(mesWin, TextId(ram, 0x505));
@@ -1121,13 +1045,13 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         NextStageTick(selectWork);
                         return;
                     case 1:
-                        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin, 1) & 0xFF)) {
+                        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
                             NextStageTick(selectWork);
                             return;
                         }
                         break;
                     case 2:
-                        if (((beNDMWDegiData *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWLoadSlotPlayer *)(selectWork->_haveSaveData))->_saveDataList, dataSel->_svDataSelPoint)))->_isUse == 1) {
+                        if (((beNDMWDegiData *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWLoadSlotPlayer *)(selectWork->_haveSaveData))->_saveDataList, dataSel->_svDataSelPoint)))->_isUse == 1) {
                             beNDMWLoadIntf2MesWin__RequestQuestion(mesWin, TextId(ram, 0x50A), 0);
                         } else {
                             beNDMWLoadIntf2MesWin__RequestQuestion(mesWin, TextId(ram, 0x507), 0);
@@ -1135,7 +1059,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         NextStageTick(selectWork);
                         return;
                     case 3:
-                        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin, 1) & 0xFF)) {
+                        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
                             NextStageSubstep(selectWork);
                             return;
                         }
@@ -1149,7 +1073,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         NextStageTick(selectWork);
                         return;
                     case 1:
-                        if (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin, 2) == 0) {
+                        if (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin) == 0) {
                             if ((beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(dataSel, 0) & 0xFF) == 1) {
                                 NextStageSubstep(selectWork);
                                 return;
@@ -1162,7 +1086,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     }
                     break;
                 case 2:
-                    switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin, 2)) {
+                    switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin)) {
                     case 0:
                         NextStageStep(selectWork);
                         textId = -1;
@@ -1207,12 +1131,12 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     switch (selectWork->_sysStat3) {
                     case 0:
                         ((beSystem *)self->_system_)->_isResetEnable = 0;
-                        beNDMWLoadIntf2SelSlot__Reset(selSlot, 2);
+                        beNDMWLoadIntf2SelSlot__Reset(selSlot);
                         EnterSlotState(selSlot, 0);
                         NextStageTick(selectWork);
                         return;
                     case 1:
-                        if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
+                        if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
                             NextStageTick(selectWork);
                             return;
                         }
@@ -1274,7 +1198,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 }
                 break;
             case 0x3:
-                if ((selectWork->_sysStat3 == 0) && (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1)) {
+                if ((selectWork->_sysStat3 == 0) && (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1)) {
                     selectWork->_sysStat3 = 1;
                 }
                 switch (selectWork->_sysStat2) {
@@ -1349,7 +1273,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
             }
             break;
         case STAGE_CARD_ACCESS:
-            cardWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo));
+            cardWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo));
             switch (cardWork->_sysStat1) {
             case 0:
                 switch (beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(common, ram->_ramNo, mesWin, selSlot->_mcSelPoint, 3)) {
@@ -1381,7 +1305,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 }
                 break;
             case 1:
-                if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
+                if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
                     beNDMWLoadIntf2MesWin__Cancel(mesWin);
                     EnterStage(cardWork, STAGE_UTIL_DONE);
                     cardWork->_utilReturn = 2;
@@ -1461,7 +1385,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 }
                 break;
             case 3:
-                if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
+                if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
                     beNDMWLoadIntf2MesWin__Cancel(mesWin);
                     EnterStage(cardWork, STAGE_UTIL_DONE);
                     cardWork->_utilReturn = 2;
@@ -1554,9 +1478,9 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
             case 5:
                 slotPlayer = (void *)(0);
                 for (slot = 0; slot < ((beNDMWLoadSlotPlayerList *)(*(int *)&common->_slotSaveData))->_count; slot++) {
-                    beNDMWLoadSlotPlayer *candidate = (beNDMWLoadSlotPlayer *)beNDMWLoadIntf2_igObjectList_Get((common->_slotSaveData), slot);
+                    beNDMWLoadSlotPlayer *candidate = (beNDMWLoadSlotPlayer *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)(common->_slotSaveData), slot);
                     if (candidate->_connectNO == selSlot->_mcSelPoint) {
-                        slotPlayer = (void *)(beNDMWLoadIntf2_igObjectList_Get((common->_slotSaveData), slot));
+                        slotPlayer = (void *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)(common->_slotSaveData), slot));
                         break;
                     }
                 }
@@ -1574,7 +1498,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     } else {
                         List_Resize(accessList, accessCount + 1, 4);
                     }
-                    ((int *)beNDMWLoadIntf2_igIntList_GetData(accessList))[accessCount] = accessPlayer;
+                    ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)accessList))[accessCount] = accessPlayer;
                     cardWork->_haveSaveData = (int)(slotPlayer);
                     EnterStage(cardWork, STAGE_UTIL_DONE);
                     cardWork->_utilReturn = 0;
@@ -1617,7 +1541,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 }
                 break;
             case 7:
-                if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
+                if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_slot, selSlot->_mcSelPoint)))->_isConnect != 1) {
                     beNDMWLoadIntf2MesWin__Cancel(mesWin);
                     EnterStage(cardWork, STAGE_UTIL_DONE);
                     cardWork->_utilReturn = 2;
@@ -1699,20 +1623,20 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     break;
                 case 6:
                     {
-                    allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                    allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                     CreatedRef<1> newSlotPlayer((void *)(beNDMWLoadSlotPlayer_Create(allocator)));
                     degiIndex = 0;
                     do {
-                        allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                        allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                         {
                         CreatedRef<0> degiData((void *)(beNDMWDegiData_Create(allocator)));
-                        ObjectList_AppendRetained(((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_saveDataList, degiData.value);
+                        ObjectList_AppendRetained((igObjectList *)((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_saveDataList, (igObject *)degiData.value);
                         }
                         degiIndex += 1;
                     } while (degiIndex < 4);
                     degiIndex = 0;
                     do {
-                        ((beNDMWDegiData *)(beNDMWLoadIntf2_igObjectList_Get(((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_saveDataList, degiIndex)))->_isUse = 0;
+                        ((beNDMWDegiData *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_saveDataList, degiIndex)))->_isUse = 0;
                         degiIndex += 1;
                     } while (degiIndex < 4);
                     ((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_connectNO = (int)((int) selSlot->_mcSelPoint);
@@ -1724,8 +1648,8 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     } else {
                         List_Resize(accessList, newAccessCount + 1, 4);
                     }
-                    ((int *)beNDMWLoadIntf2_igIntList_GetData(accessList))[newAccessCount] = newAccessPlayer;
-                    ObjectList_AppendRetained((common->_slotSaveData), newSlotPlayer.value);
+                    ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)accessList))[newAccessCount] = newAccessPlayer;
+                    ObjectList_AppendRetained((igObjectList *)(common->_slotSaveData), (igObject *)newSlotPlayer.value);
                     cardWork->_haveSaveData = (int)(newSlotPlayer.value);
                     }
                     cardWork->_utilReturn = 0;
@@ -1736,7 +1660,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
             }
             break;
         case STAGE_UTIL_ERROR:
-            errorWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo));
+            errorWork = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo));
             if (common->_kindHard == 2) {
                 beNDMWLoadIntf2SelSlot__UpdateSelection(selSlot, 0, 0);
             }
@@ -1764,7 +1688,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         break;
                     }
                     beNDMWLoadIntf2MesWin__RequestPrompt(mesWin, textId);
-                } else if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get(mcUtil->_slot, selSlot->_mcSelPoint)))->_isConnect == 1) {
+                } else if (((beNDMWMcSlot *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)mcUtil->_slot, selSlot->_mcSelPoint)))->_isConnect == 1) {
                     cardResult = ((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_result;
                     if (common->_kindHard != 2) {
                         if (cardResult == 0xC) {
@@ -1946,15 +1870,15 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
         case STAGE_UTIL_DONE:
             index = 0;
             do {
-                work = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(common->_flagWork, index));
+                work = (beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, index));
                 index += 1;
                 EnterStage(work, STAGE_RESUME);
             } while (index < 4);
             return;
         case STAGE_RESUME:
             beNDMWLoadIntf2MesWin__EndSystemMessage(mesWin);
-            EnterStage(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(common->_flagWork, ram->_ramNo))), 0);
-            { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get(common->_flagWork, ram->_ramNo); work->_isCtrl = 1; }
+            EnterStage(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 0);
+            { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isCtrl = 1; }
             break;
         }
     }
@@ -1962,29 +1886,29 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
 
 int beNDMWSaveIntf_GetInfoMeta(void)
 {
-    return g_beNDMWSaveIntfInfo_metaObject[0];
+    return (int)g_beNDMWSaveIntfInfo_metaObject;
 }
 
 void beNDMWSaveIntf_OnAddRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "SAVEINTF_ALL");
-    beMessenger_RegisterReceiver(self->_messenger, ram, "SAVEINTF", 0, ram->_ramNo);
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, ram, "SAVEINTF_ALL");
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, ram, "SAVEINTF", 0, ram->_ramNo);
 }
 
 int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageArg *message) {
-    unsigned int command = beMessenger_ResolveEnumValue(self->_messenger, beNDMWSaveIntf_GetMessageEnum(), message->enumName);
+    unsigned int command = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beNDMWSaveIntf_GetMessageEnum(), (const char *)message->enumName);
     if (command == MSG_GENERATE) {
         if (ram->_dataList == 0) {
-            int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+            int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
             ChildRef<0> list((RefObject *)beBaseInfoDataList_Create(allocator)); RefObject *created; RefObject *old;
             created = list.object; if (created != 0) created->refCount = created->refCount + 1;
             old = (RefObject *)ram->_dataList;
-            if (old != 0) { old->refCount = old->refCount - 1; if (((unsigned long long)((long long)old->refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
+            if (old != 0) { old->refCount = old->refCount - 1; if (((unsigned long long)((long long)old->refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)old); }
             ram->_dataList = (int)created;
-            self->_system_ = ((int)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]));
+            self->_system_ = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject));
             {
-                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 ChildRef<1> ctrlData((RefObject *)beNDMWSaveIntfCtrlData_Create(allocator));
-                ObjectList_AppendRetained(ram->_dataList, ctrlData.object);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)ctrlData.object);
                 ((beNDMWSaveIntfCtrlData *)ctrlData.object)->_isRun = 1;
                 if (ram->_ramNo == 0) {
                     ((beNDMWSaveIntfCtrlData *)ctrlData.object)->_isRdy = 0;
@@ -1996,20 +1920,20 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                     ((beNDMWSaveIntfCtrlData *)ctrlData.object)->_isCtrl = 1;
                 }
             }
-            beMessenger_SendNamed(self->_messenger, "SAVECTRL", 0, 0, "GETCOMMON");
-            ObjectList_AppendRetained(ram->_dataList, beMessenger_GetObject(self->_messenger, 0));
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "SAVECTRL", 0, 0, "GETCOMMON");
+            ObjectList_AppendRetained((igObjectList *)ram->_dataList, beMessenger_GetObject((beMessenger *)self->_messenger, 0));
             {
-                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 ChildRef<2> textOrder((RefObject *)beNDMWLoadIntf2TextOrder_Create(allocator));
                 ((beNDMWLoadIntf2TextOrder *)textOrder.object)->_messenger = self->_messenger;
                 beNDMWLoadIntf2TextOrder *order = (beNDMWLoadIntf2TextOrder *)textOrder.object;
-                order->_lua = ((int)igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]));
-                ObjectList_AppendRetained(ram->_dataList, textOrder.object);
+                order->_lua = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject));
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)textOrder.object);
             }
             {
-                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 ChildRef<3> model((RefObject *)beNDMWLoadIntf2ComMdlCtrl_Create(allocator));
-                ObjectList_AppendRetained(ram->_dataList, model.object);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)model.object);
                 ((beNDMWLoadIntf2ComMdlCtrl *)model.object)->_messenger = self->_messenger;
                 int player = ram->_ramNo;
                 beNDMWLoadIntf2ComMdlCtrl *modelCtrl = (beNDMWLoadIntf2ComMdlCtrl *)model.object;
@@ -2022,71 +1946,71 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 modelCtrl->_pos[2] = z;
             }
             {
-                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 ChildRef<4> window((RefObject *)beNDMWLoadIntf2MesWin_Create(allocator));
                 ((beNDMWLoadIntf2MesWin *)window.object)->_ramNo = ram->_ramNo;
                 ((beNDMWLoadIntf2MesWin *)window.object)->_messenger = self->_messenger;
-                ((beNDMWLoadIntf2MesWin *)window.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
-                ObjectList_AppendRetained(ram->_dataList, window.object);
+                ((beNDMWLoadIntf2MesWin *)window.object)->_padManager = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject));
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)window.object);
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
+                ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
             }
             {
-                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 ChildRef<5> slots((RefObject *)beNDMWLoadIntf2SelSlot_Create(allocator));
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_ramNo = ram->_ramNo;
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_messenger = self->_messenger;
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_padManager = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject));
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL");
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_comMdlCtrl = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_textOrder = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_commonIntf = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
-                ObjectList_AppendRetained(ram->_dataList, slots.object);
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_commonIntf = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)slots.object);
             }
             {
-                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 ChildRef<6> stateCtrl((RefObject *)beNDMWLoadIntf2DegiStateCtrl_Create(allocator));
                 {
-                    int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                    int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                     ChildRef<7> upperState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
-                    void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
+                    void *commonIntf = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
                     DataListGuard::Ensure(ram);
-                    void *textOrderObj = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
+                    void *textOrderObj = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
                     DataListGuard::Ensure(ram);
-                    beNDMWLoadIntf2DegiState__Init(upperState.object, ram->_ramNo, commonIntf, textOrderObj, igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL"), self->_messenger, 0);
-                    ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, upperState.object);
+                    beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)upperState.object, ram->_ramNo, (int)commonIntf, (int)textOrderObj, igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL"), self->_messenger, 0);
+                    ObjectList_AppendRetained((igObjectList *)((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, (igObject *)upperState.object);
                 }
                 {
-                    int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                    int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                     ChildRef<7> lowerState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
-                    void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
+                    void *commonIntf = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
                     DataListGuard::Ensure(ram);
-                    void *textOrderObj = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
+                    void *textOrderObj = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
                     DataListGuard::Ensure(ram);
-                    beNDMWLoadIntf2DegiState__Init(lowerState.object, ram->_ramNo, commonIntf, textOrderObj, igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL"), self->_messenger, 1);
-                    ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, lowerState.object);
+                    beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)lowerState.object, ram->_ramNo, (int)commonIntf, (int)textOrderObj, igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL"), self->_messenger, 1);
+                    ObjectList_AppendRetained((igObjectList *)((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, (igObject *)lowerState.object);
                 }
-                ObjectList_AppendRetained(ram->_dataList, stateCtrl.object);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)stateCtrl.object);
             }
             {
-                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
+                int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 ChildRef<8> dataSel((RefObject *)beNDMWLoadIntf2DataSelIntf_Create(allocator));
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_padManager = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject));
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_comMdlCtrl = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_textOrder = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_commonIntf = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_commonIntf = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_mesWin = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "MESWIN");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_mesWin = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "MESWIN");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_statDisp = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "DEGISTATECTRL");
-                ObjectList_AppendRetained(ram->_dataList, dataSel.object);
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_statDisp = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "DEGISTATECTRL");
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)dataSel.object);
             }
         }
         return 1;
@@ -2095,25 +2019,25 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
         return 1;
     }
     DataListGuard::Ensure(ram);
-    beNDMWSaveIntfCtrlData *ctrl = (beNDMWSaveIntfCtrlData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "CTRL");
+    beNDMWSaveIntfCtrlData *ctrl = (beNDMWSaveIntfCtrlData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "CTRL");
     switch (command) {
     case MSG_LINKCOMMON:
-        ObjectList_AppendRetained(ram->_dataList, beMessenger_GetObject(self->_messenger, 0));
+        ObjectList_AppendRetained((igObjectList *)ram->_dataList, beMessenger_GetObject((beMessenger *)self->_messenger, 0));
         return 1;
     case MSG_ISENTRY:
-        if (beMessenger_GetIntCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, 0);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, 0);
         }
         if (ctrl->_isEntry == 1) {
-            beMessenger_SetInt(self->_messenger, 0, beMessenger_GetInt(self->_messenger, 0) + 1);
+            beMessenger_SetInt((beMessenger *)self->_messenger, 0, beMessenger_GetInt((beMessenger *)self->_messenger, 0) + 1);
         }
         return 1;
     case MSG_ISRDY:
-        if (beMessenger_GetIntCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, 0);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, 0);
         }
         if (ctrl->_isRdy == 1) {
-            beMessenger_SetInt(self->_messenger, 0, beMessenger_GetInt(self->_messenger, 0) + 1);
+            beMessenger_SetInt((beMessenger *)self->_messenger, 0, beMessenger_GetInt((beMessenger *)self->_messenger, 0) + 1);
         }
         return 1;
     case MSG_ONCTRL:
@@ -2125,11 +2049,11 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
     case MSG_SETSELECT_DATA:
         DataListGuard::Ensure(ram);
         {
-            beNDMWLoadCtrl2CommonIntf *common = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
+            beNDMWLoadCtrl2CommonIntf *common = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
             if (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)common->_flagWork)->_data)[ram->_ramNo]->_isRdy != 1) {
-                beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-                beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                beMessenger_DispatchSelected(self->_messenger, "GAMEREMOVE");
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+                beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GAMEREMOVE");
             }
         }
         return 1;
@@ -2140,7 +2064,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
 
 int beNDMWSaveIntf_GetMeta(void)
 {
-    return g_beNDMWSaveIntf_metaObject[0];
+    return (int)g_beNDMWSaveIntf_metaObject;
 }
 
 #pragma pop

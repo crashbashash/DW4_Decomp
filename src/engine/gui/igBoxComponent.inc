@@ -2,7 +2,7 @@ igMetaObject *g_igBoxComponent_metaObject;
 
 igMetaObject *igBoxComponent_GetOrCreateMetaObject(void) {
     if (g_igBoxComponent_metaObject == 0) {
-        g_igBoxComponent_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBoxComponent_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBoxComponent_metaObject;
 }
@@ -19,13 +19,13 @@ int igBoxComponent_GetVTable(void) {
     struct F f;
     int temp_s0;
 
-    igObject_InitHeader(&f);
+    igObject_InitHeader((igObject *)&f);
     f.w[2] = 0;
     f.w[3] = 0;
     f.w[4] = 0;
     f.w[6] = 0;
     f.vt = &g_igBoxComponent_vtable[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem) + 916));
     f.vt = &g_igBoxComponent_vtable[0];
     FUN_00450090((O_450090 *)&f, 0);
     return temp_s0;
@@ -36,9 +36,9 @@ void igBoxComponent_RunStaticInit(void)
     igMetaObject_RunStaticInit(igBoxComponent_Register);
 }
 
-void igBoxComponent_Register(void) {
+CallbackArray *igBoxComponent_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBoxComponent_metaObject,
         igGuiComponent_Register,

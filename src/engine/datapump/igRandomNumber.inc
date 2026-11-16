@@ -2,7 +2,7 @@ igMetaObject *g_igRandomNumber_metaObject;
 
 igMetaObject *igRandomNumber_GetOrCreateMetaObject(void) {
     if (g_igRandomNumber_metaObject == 0) {
-        g_igRandomNumber_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igRandomNumber_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igRandomNumber_metaObject;
 }
@@ -20,9 +20,9 @@ void igRandomNumber_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igRandomNumber_Register);
 }
 
-void igRandomNumber_Register(void) {
+CallbackArray *igRandomNumber_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igRandomNumber_metaObject,
         igObject_Register,
@@ -31,7 +31,7 @@ void igRandomNumber_Register(void) {
         "igRandomNumber",
         8, /* instance size */
         0,
-        &igRandomNumber_InitFields_001e4370[0],
+        igRandomNumber_InitFields_001e4370,
         0, /* extra callback item */
         0 /* callback list */
     );

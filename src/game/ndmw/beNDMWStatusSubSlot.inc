@@ -1,6 +1,6 @@
 beNDMWStatusSubSlot *beNDMWStatusSubSlot_Create(int allocator) {
     beNDMWStatusSubSlot_EnsureRegistered();
-    return (beNDMWStatusSubSlot *)igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, allocator);
+    return (beNDMWStatusSubSlot *)igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWStatusSubSlot_GetMetaObject(void) {
@@ -14,7 +14,7 @@ int beNDMWStatusSubSlot_GetVTable(void) {
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
     *(int **)&obj._vtable = &g_beNDMWStatusSubSlot_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusSubSlot_vtable[0];
     beNDMWStatusCtrlBaseEquip_Destroy((beNDMWStatusCtrlBaseEquip *)&obj, 0);
     return vtable;
@@ -26,9 +26,9 @@ igSmartPointer<igObject> *beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct(i
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }

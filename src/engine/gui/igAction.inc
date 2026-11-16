@@ -2,7 +2,7 @@ igMetaObject *g_igAction_metaObject;
 
 igMetaObject *FUN_00453250(void) {
     if (g_igAction_metaObject == 0) {
-        g_igAction_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAction_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAction_metaObject;
 }
@@ -20,9 +20,9 @@ void igAction_RunStaticInit(void)
     igMetaObject_RunStaticInit(igAction_Register);
 }
 
-void igAction_Register(void) {
+CallbackArray *igAction_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAction_metaObject,
         igObject_Register,

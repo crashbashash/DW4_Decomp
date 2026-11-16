@@ -34,7 +34,7 @@ int igIterateField_GetVTable(void) {
             v = p[1] - 1;
             p[1] = v;
             if ((p[1] & 0x7fffff) == 0) {
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
             }
         }
     }

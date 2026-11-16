@@ -1,5 +1,11 @@
 #include "dw4/p2dma.h"
 #include "dw4/dmaChannel.h"
+#include "dw4/p2core.h"
+#include "dw4/p2pool.h"
+#include "dw4/p2swap.h"
+#include "dw4/p2timer.h"
+#include "dw4/eekernel.h"
+#include "dw4/libkernl.h"
 #define D_CTRL ((unsigned int *)0x1000e000)
 #define D0_CHCR ((unsigned int *)0x10008000)
 #define D0_QWC ((unsigned int *)0x10008020)
@@ -11,39 +17,13 @@
 #define D2_QWC ((unsigned int *)0x1000a020)
 #define D2_TADR ((unsigned int *)0x1000a030)
 
-enum {
-    P2_POOL_DMA_PREDICATE = 7,
-    P2_POOL_DMA_COMPLETION = 8
-};
-
 typedef struct p2PredicateName {
     int (*predicate)(long long arg);
     const char *name;
 } p2PredicateName;
 
-struct SemaParam {
-    int currentCount;
-    int maxCount;
-    int initCount;
-    int numWaitThreads;
-    unsigned int attr;
-    unsigned int option;
-};
-
-int DIntr();
-int EIntr();
-int p2GrowPool();
-int p2ResetDmaPacketCount(int);
-int p2FlushVif1Packet(void);
 int Memory_FreeToSelector();
-void p2ReadClock(long long *);
-int FlushCache(int);
-int iReferSemaStatus();
-int iSignalSema();
-int WaitSema(int);
-int CreateSema(struct SemaParam *param);
 int AddDmacHandler(int channel, int (*handler)(int channel), int next);
-int EnableDmac(int channel);
 
 void p2CompleteDmaPacket(int channel, p2DmaPacket *packet);
 int p2Vif1DmaHandler(int channel);
@@ -51,36 +31,22 @@ int p2GifDmaHandler(int channel);
 void p2InitDmaPredicatePool(void);
 void p2InitDmaCompletionPool(void);
 int p2PreviousFinishFuncDonePredicate(long long arg);
-void p2RegisterPredicateName(int (*predicate)(long long), const char *name);
 void p2StartDmaPacket(int channel);
 
-extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
-extern p2DmaPacket *p2DmaLastPacket[P2_DMA_CHANNEL_COUNT];
 extern p2DmaPacket *p2DmaActivePacket[P2_DMA_CHANNEL_COUNT];
 extern long long p2DmaStartedSequence[P2_DMA_CHANNEL_COUNT];
 extern long long p2DmaCompletedSequence[P2_DMA_CHANNEL_COUNT];
 extern long long p2DmaWaitSequence[P2_DMA_CHANNEL_COUNT];
 extern char p2DmaChannelIdle[P2_DMA_CHANNEL_COUNT];
-extern int p2DmaPacketCount[P2_DMA_CHANNEL_COUNT];
 extern int p2DmaFreePackets[P2_DMA_CHANNEL_COUNT];
-extern p2DmaPredicate *p2DmaPredicatePool;
-extern p2DmaCompletion *p2DmaCompletionPool;
 extern p2PredicateName p2PredicateNames[10];
-extern int p2PreviousFinishFuncDone;
 extern char p2StoreImagePending;
 extern int p2DmaWaitSema;
-extern int p2BlockedSema;
-extern int p2DmaWaitTime;
 extern volatile p2DmaWatch p2DmaWatchFlags;
-extern int p2DmaHandlerIds[P2_DMA_CHANNEL_COUNT];
 extern struct SemaParam p2DmaWaitSemaParam;
 extern struct SemaParam DAT_00490d20;
-extern int p2FirstOpen;
-extern int p2DmaPacketSizeVif0;
 extern int DAT_00490c74;
-extern int p2DmaPacketSizeVif1;
 extern int DAT_00490c7c;
-extern int p2DmaPacketSizeGif;
 extern int DAT_00490c84;
 extern int DAT_00569090;
 extern int DAT_00569094;
@@ -178,7 +144,7 @@ void p2ReserveDmaPredicates(int count) {
         i++;
     }
     if (i != count) {
-        p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool, i);
+        p2GrowPool(P2_POOL_DMA_PREDICATE, &p2DmaPredicatePool);
     }
 }
 
@@ -249,7 +215,7 @@ void p2ReserveDmaCompletions(int count) {
         i++;
     }
     if (i != count) {
-        p2GrowPool(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool, i);
+        p2GrowPool(P2_POOL_DMA_COMPLETION, &p2DmaCompletionPool);
     }
 }
 

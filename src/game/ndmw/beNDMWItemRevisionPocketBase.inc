@@ -14,7 +14,7 @@ void beNDMWItemRevisionPocketBase_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWItemRevisionPocketBase_Register);
 }
 
-void *beNDMWItemRevisionPocketBase_Register(void) {
+CallbackArray *beNDMWItemRevisionPocketBase_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */

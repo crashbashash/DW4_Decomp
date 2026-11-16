@@ -7,7 +7,7 @@ igMetaField *g_beNDMWShopCtrlDiskSell_tankaMetaField;
 
 beNDMWShopCtrlDiskSell *beNDMWShopCtrlDiskSell_Create(int allocator) {
     beNDMWShopCtrlDiskSell_EnsureRegistered();
-    return (beNDMWShopCtrlDiskSell *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, allocator);
+    return (beNDMWShopCtrlDiskSell *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopCtrlDiskSell_GetMetaObject(void) {
@@ -32,7 +32,7 @@ int beNDMWShopCtrlDiskSell_GetVTable(void) {
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDiskSell_vtable[0];
     obj._diskIdList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDiskSell_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._diskIdList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
@@ -46,7 +46,7 @@ void beNDMWShopCtrlDiskSell_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlDiskSell_callbackList[] = { igIntList_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlDiskSell_Register(void) {
+CallbackArray *beNDMWShopCtrlDiskSell_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

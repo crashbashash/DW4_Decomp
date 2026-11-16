@@ -24,8 +24,8 @@ void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
     A_4551f0 *arg0 = (A_4551f0 *)arg0v;
     Rc_4551f0 *arg2 = (Rc_4551f0 *)arg2v;
     Ref_4551f0 sp4C;
-    sp4C.p = (Rc_4551f0 *)FUN_00450de0(igObject_GetAllocator());
-    ObjectList_AppendRetained(arg0->f8, sp4C.p);
+    sp4C.p = (Rc_4551f0 *)FUN_00450de0((int)(igObject_GetAllocator((igObject *)arg0v)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f8, (igObject *)sp4C.p);
     sp4C.p->f12 = (int)arg0;
     Rc_4551f0 *t = sp4C.p;
     if (arg2 != 0) {

@@ -2,7 +2,7 @@ igMetaObject *g_igAnimationTrackList_metaObject;
 
 igMetaObject *FUN_001a9d90(void) {
     if (g_igAnimationTrackList_metaObject == 0) {
-        g_igAnimationTrackList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAnimationTrackList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAnimationTrackList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igAnimationTrackList_GetMetaObject(void)
 int igAnimationTrackList_GetVTable(void) {
     struct Obj_1a9e30 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAnimationTrackList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAnimationTrackList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igAnimationTrackList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAnimationTrackList_callbackList[] = { igAnimationTrack_EnsureRegistered, 0 };
 
-void igAnimationTrackList_Register(void) {
+CallbackArray *igAnimationTrackList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationTrackList_metaObject,
         igObjectList_Register,

@@ -1,9 +1,9 @@
 void Gap__Attrs__igFogAttr__vfunc_24(igFogAttr *arg0, int arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_245(arg1, (unsigned int)arg0->_mode);
-    Gap__Gfx__igPsx2VisualContext__vfunc_243(arg1, arg0->_density);
+    Gap__Gfx__igPsx2VisualContext__vfunc_245((igPsx2VisualContext *)arg1, (unsigned int)arg0->_mode);
+    Gap__Gfx__igPsx2VisualContext__vfunc_243((igPsx2VisualContext *)arg1, arg0->_density);
     Gap__Gfx__igPsx2VisualContext__vfunc_247(arg1, arg0->_color);
-    Gap__Gfx__igPsx2VisualContext__vfunc_249(arg1, arg0->_nearVal);
-    Gap__Gfx__igPsx2VisualContext__vfunc_251(arg1, arg0->_farVal);
+    Gap__Gfx__igPsx2VisualContext__vfunc_249((igPsx2VisualContext *)arg1, arg0->_nearVal);
+    Gap__Gfx__igPsx2VisualContext__vfunc_251((igPsx2VisualContext *)arg1, arg0->_farVal);
 }
 
 void Gap__Attrs__igFogAttr__vfunc_26(F_13cd90 *arg0, C *arg1) {

@@ -11,9 +11,9 @@ igMetaObject *igAnimationCombinerBoneInfoList_GetMetaObject(void)
 int igAnimationCombinerBoneInfoList_GetVTable(void) {
     struct Obj_1a7fe0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAnimationCombinerBoneInfoList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAnimationCombinerBoneInfoList_EnsureRegistered(void)
@@ -23,9 +23,9 @@ void igAnimationCombinerBoneInfoList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAnimationCombinerBoneInfoList_callbackList[] = { FUN_001a8220, 0 };
 
-void igAnimationCombinerBoneInfoList_Register(void) {
+CallbackArray *igAnimationCombinerBoneInfoList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationCombinerBoneInfoList_metaObject,
         igObjectList_Register,

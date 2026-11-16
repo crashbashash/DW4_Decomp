@@ -128,7 +128,7 @@ int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFu
     if (self->_ref != 0) {
         igSmartPointer<igDirEntryView> entry(self->CloneViaMetadata(1), kRetainReference);
         dropCreationReference(entry.get());
-        igNamedObject_SetName((igNamedObject *)entry.get(), self->_entryName);
+        igNamedObject_SetName((igNamedObject *)entry.get(), (const char *)self->_entryName);
         entry->_refType = 0;
         entry->SetRef(self->_ref);
         entry->_index = ((igDirectoryView *)directory.get())->_count;

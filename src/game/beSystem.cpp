@@ -1,6 +1,12 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/beSystem.h"
+#include "dw4/StringPool.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/softfloat.h"
+#include <string.h>
 
 /* Header in front of every interned string token: owning chunk, then a full 32-bit reference
  * count. */
@@ -10,17 +16,6 @@ typedef struct StringTokenHeader {
 } StringTokenHeader;
 
 extern "C" {
-void igInsightCore_AddToScheduler(int insight, char *object);
-void igInsightCore_RemoveFromScheduler(int insight, char *object);
-int StringPool_Allocate(int size);
-int StringPool_Construct(int pool);
-int *StringPool_Intern(int pool, const void *text);
-int StringChunk_ReleaseHeader(int owner, StringTokenHeader *header);
-void *Memory_GetAllocatorBySelector(int selector);
-void *igObject_GetAllocator(beSystem *object);
-int strcmp(const char *, const char *);
-float __floatdisf(long long);
-int igInsightCore_AddInfo(int insight, int info);
 void igResource_StartAsyncLoading(igResource *resource);
 void igResource_StopAsyncLoading(igResource *resource);
 igDirectory *igResource_LoadDirectory(igResource *resource, int name);
@@ -28,12 +23,7 @@ int igResource_IsDirectoryLoaded(igResource *resource, int directory);
 int igResource_UnloadDirectory(igResource *resource, int name);
 
 extern igResource *g_globalContext[4];
-extern int g_stringPool[4];
 extern int g_resourceLoaderStackSize[4];
-extern int kIGMemoryPoolHandleUser0[4];
-extern int kIGMemoryPoolHandleUser1[4];
-extern int kIGMemoryPoolHandleTemporary[4];
-extern unsigned char g_useOwnerAllocator;
 extern int ndmw_igb[4];
 
 void beSystem_Activate(beSystem *self, int unusedArg);
@@ -49,13 +39,13 @@ igMetaObject *beSystem_GetMetaObject_Virtual(void);
 /* Hands the system to the insight scheduler unless it already holds it. */
 void beSystem_Activate(beSystem *self, int unusedArg)
 {
-    igInsightCore_AddToScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
+    igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
 /* Takes the system back out of the insight scheduler when it holds it. */
 void beSystem_Deactivate(beSystem *self, int unusedArg)
 {
-    igInsightCore_RemoveFromScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
 /* Activates the system with the ndmw.igb boot scene queued as the next stage, the resource's
@@ -75,21 +65,21 @@ void beSystem_Start(beSystem *self)
 
     self->_isFirstTime = 0;
     self->_isActive = 1;
-    if (g_stringPool[0] == 0) {
-        newPool = StringPool_Allocate(16);
+    if (g_stringPool == 0) {
+        newPool = (int)StringPool_Allocate(16);
         if (newPool != 0) {
-            newPool = StringPool_Construct(newPool);
+            newPool = (int)(StringPool_Construct((StringPool *)newPool));
         }
-        g_stringPool[0] = newPool;
+        g_stringPool = (StringPool *)newPool;
     }
-    stageToken = StringPool_Intern(g_stringPool[0], ndmw_igb);
+    stageToken = (int *)(StringPool_Intern(g_stringPool, (const char *)ndmw_igb));
     oldToken = (int *)self->_nextStage;
     if (oldToken != 0) {
         tokenHeader = (StringTokenHeader *)oldToken - 1;
         tokenRefCount = tokenHeader->refCount - 1;
         tokenHeader->refCount = tokenRefCount;
         if (tokenRefCount == 0) {
-            StringChunk_ReleaseHeader(tokenHeader->owner, tokenHeader);
+            StringChunk_ReleaseHeader((StringChunk *)tokenHeader->owner, tokenHeader);
         }
     }
     self->_nextStage = (int)stageToken;
@@ -99,7 +89,7 @@ void beSystem_Start(beSystem *self)
     g_globalContext[0]->_useMemoryPoolAssignmentsState = 0;
 
     objectPool = igObject_GetAllocator(self);
-    objectPool = g_useOwnerAllocator != 0 ? objectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+    objectPool = g_useOwnerAllocator != 0 ? objectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     objectResource = g_globalContext[0];
     if (objectPool != 0) {
         ((igObject *)objectPool)->_refCount = ((igObject *)objectPool)->_refCount + 1;
@@ -108,7 +98,7 @@ void beSystem_Start(beSystem *self)
     objectResource->_objectMemoryPool = (int)objectPool;
 
     pool = igObject_GetAllocator(self);
-    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     dataResource = g_globalContext[0];
     if (pool != 0) {
         ((igObject *)pool)->_refCount = ((igObject *)pool)->_refCount + 1;
@@ -117,7 +107,7 @@ void beSystem_Start(beSystem *self)
     dataResource->_dataMemoryPool = (int)pool;
 
     pool = igObject_GetAllocator(self); /* matching construct: manual — the temporary pool reuses the data pool's variable */
-    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+    pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
     temporaryResource = g_globalContext[0];
     if (pool != 0) {
         ((igObject *)pool)->_refCount = ((igObject *)pool)->_refCount + 1;
@@ -178,7 +168,7 @@ void beSystem_Update(beSystem *self)
         if (self->_nextStage != 0) {
             if (strcmp((const char *)self->_nextStage, (const char *)ndmw_igb) == 0) {
                 ndmwObjectPool = igObject_GetAllocator(self);
-                ndmwObjectPool = g_useOwnerAllocator != 0 ? ndmwObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+                ndmwObjectPool = g_useOwnerAllocator != 0 ? ndmwObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
                 ndmwObjectResource = g_globalContext[0];
                 if (ndmwObjectPool != 0) {
                     ((igObject *)ndmwObjectPool)->_refCount = ((igObject *)ndmwObjectPool)->_refCount + 1;
@@ -186,7 +176,7 @@ void beSystem_Update(beSystem *self)
                 igRelease((igObject *)ndmwObjectResource->_objectMemoryPool);
                 ndmwObjectResource->_objectMemoryPool = (int)ndmwObjectPool;
                 ndmwDataPool = igObject_GetAllocator(self);
-                ndmwDataPool = g_useOwnerAllocator != 0 ? ndmwDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+                ndmwDataPool = g_useOwnerAllocator != 0 ? ndmwDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
                 ndmwDataResource = g_globalContext[0];
                 if (ndmwDataPool != 0) {
                     ((igObject *)ndmwDataPool)->_refCount = ((igObject *)ndmwDataPool)->_refCount + 1;
@@ -195,7 +185,7 @@ void beSystem_Update(beSystem *self)
                 ndmwDataResource->_dataMemoryPool = (int)ndmwDataPool;
             } else {
                 defaultObjectPool = igObject_GetAllocator(self);
-                defaultObjectPool = g_useOwnerAllocator != 0 ? defaultObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+                defaultObjectPool = g_useOwnerAllocator != 0 ? defaultObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 defaultObjectResource = g_globalContext[0];
                 if (defaultObjectPool != 0) {
                     ((igObject *)defaultObjectPool)->_refCount = ((igObject *)defaultObjectPool)->_refCount + 1;
@@ -203,7 +193,7 @@ void beSystem_Update(beSystem *self)
                 igRelease((igObject *)defaultObjectResource->_objectMemoryPool);
                 defaultObjectResource->_objectMemoryPool = (int)defaultObjectPool;
                 defaultDataPool = igObject_GetAllocator(self);
-                defaultDataPool = g_useOwnerAllocator != 0 ? defaultDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+                defaultDataPool = g_useOwnerAllocator != 0 ? defaultDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 defaultDataResource = g_globalContext[0];
                 if (defaultDataPool != 0) {
                     ((igObject *)defaultDataPool)->_refCount = ((igObject *)defaultDataPool)->_refCount + 1;
@@ -218,21 +208,21 @@ void beSystem_Update(beSystem *self)
             }
             igRelease((igObject *)self->_bootDirectory);
             self->_bootDirectory = (int)directory;
-            if (g_stringPool[0] == 0) {
-                newPool = StringPool_Allocate(16);
+            if (g_stringPool == 0) {
+                newPool = (int)StringPool_Allocate(16);
                 if (newPool != 0) {
-                    newPool = StringPool_Construct(newPool);
+                    newPool = (int)(StringPool_Construct((StringPool *)newPool));
                 }
-                g_stringPool[0] = newPool;
+                g_stringPool = (StringPool *)newPool;
             }
-            emptyToken = StringPool_Intern(g_stringPool[0], 0);
+            emptyToken = (int *)StringPool_Intern(g_stringPool, 0);
             oldToken = (int *)self->_nextStage;
             if (oldToken != 0) {
                 tokenHeader = (StringTokenHeader *)oldToken - 1;
                 tokenRefCount = tokenHeader->refCount - 1;
                 tokenHeader->refCount = tokenRefCount;
                 if (tokenRefCount == 0) {
-                    StringChunk_ReleaseHeader(tokenHeader->owner, tokenHeader);
+                    StringChunk_ReleaseHeader((StringChunk *)tokenHeader->owner, tokenHeader);
                 }
             }
             self->_nextStage = (int)emptyToken;
@@ -243,7 +233,7 @@ void beSystem_Update(beSystem *self)
                 if (0 < infos->_count) {
                     byteOffset = 0;
                     do {
-                        igInsightCore_AddInfo(self->_insight, *(int *)(infos->_data + byteOffset));
+                        igInsightCore_AddInfo((igInsightCore *)self->_insight, (igObject *)(*(int *)(infos->_data + byteOffset)));
                         index += 1;
                         byteOffset += 4;
                     } while (index < infos->_count);
@@ -255,21 +245,21 @@ void beSystem_Update(beSystem *self)
             }
         } else {
             /* Unreachable: entering the handshake needs _nextStage or _bootDirectory set. */
-            if (g_stringPool[0] == 0) {
-                newPool = StringPool_Allocate(16);
+            if (g_stringPool == 0) {
+                newPool = (int)StringPool_Allocate(16);
                 if (newPool != 0) {
-                    newPool = StringPool_Construct(newPool);
+                    newPool = (int)(StringPool_Construct((StringPool *)newPool));
                 }
-                g_stringPool[0] = newPool;
+                g_stringPool = (StringPool *)newPool;
             }
-            emptyToken = StringPool_Intern(g_stringPool[0], 0);
+            emptyToken = (int *)StringPool_Intern(g_stringPool, 0);
             oldToken = (int *)self->_stageName;
             if (oldToken != 0) {
                 tokenHeader = (StringTokenHeader *)oldToken - 1;
                 tokenRefCount = tokenHeader->refCount - 1;
                 tokenHeader->refCount = tokenRefCount;
                 if (tokenRefCount == 0) {
-                    StringChunk_ReleaseHeader(tokenHeader->owner, tokenHeader);
+                    StringChunk_ReleaseHeader((StringChunk *)tokenHeader->owner, tokenHeader);
                 }
             }
             self->_stageName = (int)emptyToken;

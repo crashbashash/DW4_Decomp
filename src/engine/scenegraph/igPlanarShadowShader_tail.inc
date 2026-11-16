@@ -1,25 +1,25 @@
 void Gap__Sg__igPlanarShadowShader__vfunc_09(void **arg0, int arg1) {
     Gap__Sg__igNode__vfunc_09((void * *)arg0, arg1);
-    if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
-        DAT_00562798[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
-        DAT_005627a0[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+    if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
+        DAT_00562798[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+        DAT_005627a0[0] = (void **)(((void * *)FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627a0[0]))->vX((int)(0));
         ((DW4VC_132_1 *)(DAT_005627a0[0]))->vX((int)(0));
-        DAT_005627a8[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        DAT_005627a8[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627a8[0]))->vX((int)(1));
-        DAT_005627b0[0] = (void **)(((void * *)igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        DAT_005627b0[0] = (void **)(((void * *)igLightingStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627b0[0]))->vX((int)(0));
-        DAT_005627b8[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        DAT_005627b8[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627b8[0]))->vX((int)(0));
-        DAT_005627c8[0] = (void **)(((void * *)FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        DAT_005627c8[0] = (void **)(((void * *)FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627c8[0]))->vX((int)(0));
-        DAT_005627c0[0] = (void *)(FUN_00137070(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+        DAT_005627c0[0] = (void *)(FUN_00137070(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         *(int *)((char *)(DAT_005627c0[0]) + 12) = 1;
-        DAT_005627d0[0] = (void **)(FUN_00133610(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+        DAT_005627d0[0] = (void **)(FUN_00133610(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         ((DW4VC_128_1 *)(DAT_005627d0[0]))->vX((int)(1));
         ((DW4VC_136_1 *)(DAT_005627d0[0]))->vX((int)(2));
         ((DW4VC_140_3 *)(DAT_005627d0[0]))->vX((int)(0), (int)(3), (int)(3));
-        DAT_005627d8[0] = (void **)(FUN_00138690(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+        DAT_005627d8[0] = (void **)(FUN_00138690(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         ((DW4VC_132_1 *)(DAT_005627d8[0]))->vX((int)(0));
     }
 }
@@ -31,7 +31,7 @@ int Gap__Sg__igPlanarShadowShader__vfunc_22(void) {
 void Gap__Sg__igPlanarShadowShader__vfunc_10(T_1d39b0 *arg0)
 {
     Obj_1d39b0 *o;
-    if (igMetaObject_CountInstances(arg0->vX(), 1) == 0) {
+    if (igMetaObject_CountInstances((igMetaObject *)(arg0->vX()), 1) == 0) {
         o = ((Obj_1d39b0 * *)DAT_00562798)[0];
         if (o != 0) {
             o->references = o->references - 1;
@@ -99,10 +99,10 @@ void Gap__Sg__igPlanarShadowShader__vfunc_10(T_1d39b0 *arg0)
     FUN_001c5e20((T_1c5e20 *)arg0);
 }
 
-void Gap__Sg__igPlanarShadowShader__vfunc_39(igPlanarShadowShader *arg0, int dummy1, int arg2, int arg3) {
-    ObjectList_AppendRetained(arg0->_geoms);
-    ObjectList_AppendRetained(arg0->_mats, arg2);
-    ObjectList_AppendRetained(arg0->_blendmats, arg3);
+void Gap__Sg__igPlanarShadowShader__vfunc_39(igPlanarShadowShader *arg0, int geom, int arg2, int arg3) {
+    ObjectList_AppendRetained((igObjectList *)arg0->_geoms, (igObject *)geom);
+    ObjectList_AppendRetained((igObjectList *)arg0->_mats, (igObject *)arg2);
+    ObjectList_AppendRetained((igObjectList *)arg0->_blendmats, (igObject *)arg3);
 }
 
 void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
@@ -136,7 +136,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
             FUN_001908f0(sp70, arg1->_viewMatInv);
             igMatrix44f_Multiply(sp70, sp70, (char *)m + 12);
             igMatrix44f_Multiply(sp70, sp70, arg1->_viewMat);
-            nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject * *)g_igProjectionMatrixAttr_metaObject)[0]->_id]];
+            nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)g_igProjectionMatrixAttr_metaObject)->_id]];
             if (nd->_cachedOverride >= 0) {
                 s5 = (int *)((int *)nd->_data)[nd->_cachedOverride];
             } else if (nd->_count != 0) {

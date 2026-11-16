@@ -15,21 +15,21 @@ void Gap__igPsx2Window__vfunc_26(struct A_148b00 *arg0) {
         }
     }
     arg0->f24 = 0;
-    if (g_stringPool[0] == 0) {
-        var_v0 = StringPool_Allocate(0x10);
+    if (g_stringPool == 0) {
+        var_v0 = (int)(StringPool_Allocate(0x10));
         if (var_v0 != 0) {
-            var_v0 = StringPool_Construct(var_v0);
+            var_v0 = (int)(StringPool_Construct((StringPool *)var_v0));
         }
-        g_stringPool[0] = var_v0;
+        g_stringPool = (StringPool *)var_v0;
     }
-    s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
+    s1 = (int *)StringPool_Intern(g_stringPool, 0);
     old = arg0->f32;
     if (old != 0) {
         a1 = old - 2;
         v1 = old[-1] - 1;
         old[-1] = v1;
         if (v1 == 0) {
-            StringChunk_ReleaseHeader(*a1, a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
         }
     }
     arg0->f32 = s1;
@@ -62,18 +62,18 @@ void Gap__igPsx2Window__vfunc_25(igPsx2WindowView *self)
 }
 
 static inline void setWindowName(igPsx2Window *self, const char *name) {
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         void *pool = (void *)StringPool_Allocate(16);
-        if (pool != 0) pool = (void *)StringPool_Construct(pool);
-        g_stringPool[0] = (int)pool;
+        if (pool != 0) pool = (void *)StringPool_Construct((StringPool *)pool);
+        g_stringPool = (StringPool *)((int)pool);
     }
-    const char *interned = (const char *)StringPool_Intern(g_stringPool[0], name);
+    const char *interned = (const char *)StringPool_Intern(g_stringPool, name);
     int *old = (int *)self->_winName;
     if (old != 0) {
         int *header = old - 2;
         int refs = old[-1] - 1;
         old[-1] = refs;
-        if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+        if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
     }
     self->_winName = (int)interned;
 }
@@ -106,7 +106,7 @@ int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width,
         self->_width = w;
         self->_height = h;
     } else {
-        VisualContext *created = igVisualContext_CreateInstance(igObject_GetAllocator(self));
+        VisualContext *created = (VisualContext *)(igVisualContext_CreateInstance((int)(igObject_GetAllocator(self))));
         if (created != 0) created->_refCount = created->_refCount + 1;
         igRelease((igObject *)self->_vc);
         self->_vc = (int)created;
@@ -139,21 +139,21 @@ void Gap__igPsx2Window__vfunc_27(int *arg0, char *arg1) {
     int *s;
     int v;
     if ((arg1 != 0) && (*arg1 != 0)) {
-        if (g_stringPool[0] == 0) {
-            v = StringPool_Allocate(0x10);
+        if (g_stringPool == 0) {
+            v = (int)(StringPool_Allocate(0x10));
             if (v != 0) {
-                v = StringPool_Construct(v);
+                v = (int)(StringPool_Construct((StringPool *)v));
             }
-            g_stringPool[0] = v;
+            g_stringPool = (StringPool *)v;
         }
-        s = StringPool_Intern(g_stringPool[0], arg1);
+        s = (int *)(StringPool_Intern(g_stringPool, arg1));
         old = (int *)arg0[8];
         if (old != 0) {
             hdr = old - 2;
             v = old[-1] - 1;
             old[-1] = v;
             if (v == 0) {
-                StringChunk_ReleaseHeader(*hdr, hdr);
+                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
             }
         }
         arg0[8] = (int)s;
@@ -233,7 +233,7 @@ void Gap__igPsx2Window__vfunc_33(void *d0, int *arg1, int *arg2) {
 }
 
 void Gap__igPsx2Window__vfunc_40(int *status_out) {
-    *status_out = g_resultFailure[0];
+    *status_out = g_resultFailure.v;
 }
 
 /* igPsx2Window vtable slot 41 (+0xa4): leaf that returns 0 and ignores the window, the PS2

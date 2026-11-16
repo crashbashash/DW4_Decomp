@@ -5,7 +5,7 @@ igMetaField *g_beNDMWStatusCtrlSkill_skillListMetaField;
 
 beNDMWStatusCtrlSkill *beNDMWStatusCtrlSkill_Create(int allocator) {
     beNDMWStatusCtrlSkill_EnsureRegistered();
-    return (beNDMWStatusCtrlSkill *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlSkill_metaObject, allocator);
+    return (beNDMWStatusCtrlSkill *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlSkill_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWStatusCtrlSkill_GetMetaObject(void) {
@@ -33,7 +33,7 @@ int beNDMWStatusCtrlSkill_GetVTable(void) {
     shinkaCtrlRef = &obj._shinkaCtrl;
     *shinkaCtrlRef = 0;
     obj._skillList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlSkill_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._skillList, -1);
     igSmartPointer_beNDMWShinkaCtrl_Destruct((igSmartPointer<igObject> *)shinkaCtrlRef, -1);
@@ -48,7 +48,7 @@ void beNDMWStatusCtrlSkill_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusCtrlSkill_callbackList[] = { beNDMWShinkaCtrl_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWStatusCtrlSkill_Register(void) {
+CallbackArray *beNDMWStatusCtrlSkill_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

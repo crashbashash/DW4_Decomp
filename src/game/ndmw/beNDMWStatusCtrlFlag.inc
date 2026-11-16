@@ -3,7 +3,7 @@ igMetaField *g_beNDMWStatusCtrlFlag_impItemsMetaField;
 
 beNDMWStatusCtrlFlag *beNDMWStatusCtrlFlag_Create(int allocator) {
     beNDMWStatusCtrlFlag_EnsureRegistered();
-    return (beNDMWStatusCtrlFlag *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlFlag_metaObject, allocator);
+    return (beNDMWStatusCtrlFlag *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlFlag_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWStatusCtrlFlag_GetMetaObject(void) {
@@ -30,7 +30,7 @@ int beNDMWStatusCtrlFlag_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlFlag_vtable[0];
     impItemsRef = &obj._impItems;
     *impItemsRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlFlag_vtable[0];
     igSmartPointer_igIntList_Destruct(impItemsRef, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
@@ -44,7 +44,7 @@ void beNDMWStatusCtrlFlag_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusCtrlFlag_callbackList[] = { igIntList_EnsureRegistered, 0 };
 
-void *beNDMWStatusCtrlFlag_Register(void) {
+CallbackArray *beNDMWStatusCtrlFlag_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

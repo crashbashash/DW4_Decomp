@@ -3,7 +3,7 @@ igMetaField *g_igDepthStateAttr_enabledMetaField;
 
 void FUN_001384a0(int arg0) {
     igDepthStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F228, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F228, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igDepthStateAttr_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igDepthStateAttr_GetMetaObject(void)
 
 int igDepthStateAttr_GetVTable(void) {
     struct Obj obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igDepthStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igDepthStateAttr_EnsureRegistered(void)
@@ -26,9 +26,9 @@ void igDepthStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDepthStateAttr_Register);
 }
 
-void igDepthStateAttr_Register(void) {
+CallbackArray *igDepthStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDepthStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -48,7 +48,7 @@ void thunk_igDepthStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igDepthStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igDepthStateAttr_fieldTable[] = {
     "_enabled",

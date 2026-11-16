@@ -10,12 +10,12 @@ igMetaField *g_beMessenger_isMemoryAssignMetaField;
 
 beMessenger *beMessenger_CreateInstance(int allocator) {
     beMessenger_EnsureRegistered();
-    return (beMessenger *)igMetaObject_CreateInstance(*(int *)0x588F38, allocator);
+    return (beMessenger *)igMetaObject_CreateInstance(g_beMessenger_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beMessenger_GetOrCreateMetaObject(void) {
     if (g_beMessenger_metaObject == 0) {
-        g_beMessenger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMessenger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMessenger_metaObject;
 }
@@ -40,14 +40,14 @@ int beMessenger_GetVTable(void) {
     obj._workStack = 0;
     obj._delayStack = 0;
     obj._pushPopStack = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMessenger_vtable[0];
     igSmartPointer_beMessengerArgDataList_Destruct((igSmartPointer<igObject> *)(&obj._pushPopStack), (long long)(-1));
     igSmartPointer_beMessengerDelayList_Destruct((igSmartPointer<igObject> *)(&obj._delayStack), (short)(-1));
     igSmartPointer_beMessengerWorkList_Destruct((igSmartPointer<igObject> *)(&obj._workStack), (short)(-1));
     igSmartPointer_beMessengerGroupList_Destruct((igSmartPointer<igObject> *)(&obj._groupList), -1);
     igSmartPointer_beMessengerArgData_Destruct((igSmartPointer<igObject> *)&obj._argData, -1);
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -123,7 +123,7 @@ void beMessenger_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMessenger_callbackList[] = { beMessengerArgData_EnsureRegistered, beMessengerGroupList_EnsureRegistered, beMessengerWorkList_EnsureRegistered, beMessengerDelayList_EnsureRegistered, beMessengerArgDataList_EnsureRegistered, 0 };
 
-void *beMessenger_Register(void) {
+CallbackArray *beMessenger_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -196,22 +196,22 @@ void beMessenger_InitFields(void) {
     int base;
 
     meta = (void *)g_beMessenger_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beMessenger_ctorTable, 8);
-    argData = (void *)(igMetaObject_GetFieldAt(meta, base));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beMessenger_ctorTable, 8);
+    argData = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)argData)->_metaObject = (int)beMessengerArgData_GetOrCreateMetaObject();
-    groupList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    groupList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)groupList)->_metaObject = (int)beMessengerGroupList_GetOrCreateMetaObject();
     ((igRefMetaField *)groupList)->_construct = 1;
-    workStack = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    workStack = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)workStack)->_metaObject = (int)beMessengerWorkList_GetOrCreateMetaObject();
     ((igRefMetaField *)workStack)->_construct = 1;
-    delayStack = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    delayStack = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)delayStack)->_metaObject = (int)beMessengerDelayList_GetOrCreateMetaObject();
     ((igRefMetaField *)delayStack)->_construct = 1;
-    pushPopStack = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    pushPopStack = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)pushPopStack)->_metaObject = (int)beMessengerArgDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)pushPopStack)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beMessenger_fieldTable, g_beMessenger_fieldHandles, g_beMessenger_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beMessenger_fieldTable, g_beMessenger_fieldHandles, g_beMessenger_fieldOffsets, base);
 }
 

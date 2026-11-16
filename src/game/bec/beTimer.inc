@@ -7,12 +7,12 @@ igMetaField *g_beTimer_oldWorldTimeMetaField;
 
 beTimer *beTimer_CreateInstance(int allocator) {
     beTimer_EnsureRegistered();
-    return (beTimer *)igMetaObject_CreateInstance(*(int *)0x587C18, allocator);
+    return (beTimer *)igMetaObject_CreateInstance(g_beTimer_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beTimer_GetOrCreateMetaObject(void) {
     if (g_beTimer_metaObject == 0) {
-        g_beTimer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beTimer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beTimer_metaObject;
 }
@@ -37,7 +37,7 @@ int beTimer_GetVTable(void) {
     obj._vtable = (int)&g_beTimer_vtable[0];
     dataListSlot = (igObject **)&obj._dataList;
     *dataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beTimer_vtable[0];
     igObjectRef_Release(dataListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -52,7 +52,7 @@ void beTimer_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beTimer_callbackList[] = { beSystem_EnsureRegistered, bePadManager_EnsureRegistered, beLua_EnsureRegistered, beTimerDataList_EnsureRegistered, 0 };
 
-void *beTimer_Register(void) {
+CallbackArray *beTimer_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -109,9 +109,9 @@ void beTimer_InitFields(void) {
     void *luaManager;
     void *padManager;
     void *system;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beTimer_metaObject;
+    meta = g_beTimer_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTimer_ctorTable, 5);
     system = (void *)(igMetaObject_GetFieldAt(meta, base));

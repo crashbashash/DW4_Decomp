@@ -15,12 +15,12 @@ int igOnOffModel_GetVTable(void) {
     char *q1;
     void *temp_a0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igModel_vtable[0];
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_igOnOffModel_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igModel_vtable[0];
     if (q1 != 0) {
         temp_a0 = *(void **)q1;
@@ -39,9 +39,9 @@ void igOnOffModel_RunStaticInit(void)
     igMetaObject_RunStaticInit(igOnOffModel_Register);
 }
 
-void igOnOffModel_Register(void) {
+CallbackArray *igOnOffModel_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOnOffModel_metaObject,
         igGuiComponentModel_Register,
@@ -78,8 +78,8 @@ void igOnOffModel_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igOnOffModel_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igOnOffModel_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igOnOffModel_fieldTable, g_igOnOffModel_fieldHandles, g_igOnOffModel_fieldOffsets, temp_s1);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igOnOffModel_ctorTable, 1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igOnOffModel_fieldTable, g_igOnOffModel_fieldHandles, g_igOnOffModel_fieldOffsets, temp_s1);
 }
 

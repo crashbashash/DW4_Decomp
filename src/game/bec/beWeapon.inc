@@ -3,12 +3,12 @@ igMetaField *g_beWeapon_attachDataListMetaField;
 
 beWeapon *beWeapon_CreateInstance(int allocator) {
     beWeapon_EnsureRegistered();
-    return (beWeapon *)igMetaObject_CreateInstance(*(int *)0x587A68, allocator);
+    return (beWeapon *)igMetaObject_CreateInstance(g_beWeapon_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beWeapon_GetOrCreateMetaObject(void) {
     if (g_beWeapon_metaObject == 0) {
-        g_beWeapon_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beWeapon_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beWeapon_metaObject;
 }
@@ -30,7 +30,7 @@ int beWeapon_GetVTable(void) {
     obj._infoList = 0;
     obj._vtable = (int)&g_beWeapon_vtable[0];
     obj._attachDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beWeapon_vtable[0];
     beBaseInfoManager_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)(&obj._attachDataList), (short)(-1));
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
@@ -89,7 +89,7 @@ void beWeapon_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beWeapon_callbackList[] = { beWeaponAttachDataList_EnsureRegistered, 0 };
 
-void *beWeapon_Register(void) {
+CallbackArray *beWeapon_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -131,9 +131,9 @@ static int g_beWeapon_fieldOffsets[] = {
 void beWeapon_InitFields(void) {
     int base;
     void *attachDataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beWeapon_metaObject;
+    meta = g_beWeapon_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beWeapon_ctorTable, 1);
     attachDataList = (void *)(igMetaObject_GetFieldAt(meta, base));

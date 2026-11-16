@@ -33,7 +33,7 @@ int igObjectDirEntry_GetVTable(void) {
     o._vtable = (int)&g_igObjectDirEntry_vtable[0];
     igStringRef_Destruct(&o._typeMetaName, -1);
     igSmartPointer_igMetaObject_Destruct(&o._typeMeta, -1);
-    igDirEntry_Destroy(&o, 0);
+    igDirEntry_Destroy((igDirEntry *)&o, 0);
     return r;
 }
 

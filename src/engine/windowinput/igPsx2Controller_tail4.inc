@@ -32,7 +32,7 @@ float Gap__igPsx2Controller__vfunc_29(O_149230 *arg0, int arg1) {
     int i;
     int t;
     unsigned v;
-    long long d;
+    double d;
     unsigned char *p;
     float r;
     i = FUN_001480a0((O_1480a0 *)arg0, arg1);
@@ -42,9 +42,9 @@ float Gap__igPsx2Controller__vfunc_29(O_149230 *arg0, int arg1) {
         r = (float)v / 255.0f;
     } else {
     t = arg0->vX(arg1);
-    d = 0;
+    d = 0.0;
     if (t != 0) {
-        d = (long long)0x3FF00000 << 0x20;
+        d = 1.0;
     }
     r = dptofp(d);
     }

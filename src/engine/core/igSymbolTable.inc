@@ -48,9 +48,9 @@ igSmartPointer<igObject> *igSmartPointer_igUnsignedIntListNoClean_Destruct(igSma
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -62,11 +62,11 @@ void **igSmartPointer_igIntListNoClean_Destruct(void **pointer, short deleteFlag
         if (object != 0) {
             object[1] = object[1] - 1;
             if ((object[1] & 0x7fffff) == 0) {
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
             }
         }
         if (deleteFlags > 0) {
-            __dl__FPv(pointer);
+            operator delete(pointer);
         }
     }
     return pointer;
@@ -78,9 +78,9 @@ igSmartPointer<igObject> *igSmartPointer_igStringTable_Destruct(igSmartPointer<i
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }

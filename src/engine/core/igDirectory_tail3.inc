@@ -1,7 +1,7 @@
 int igDirectory_GetRefByName(int directory, int name) {
     igDirEntryView *entry;
 
-    entry = (igDirEntryView *)(((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, name)));
+    entry = (igDirEntryView *)(((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, (const char *)name)));
     if (entry == 0) {
         return 0;
     }
@@ -10,11 +10,11 @@ int igDirectory_GetRefByName(int directory, int name) {
 
 int igDirectory_GetObjectByName(int directory, int name) {
     igObjectDirEntry *entry;
-    entry = (igObjectDirEntry *)((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, name)); if (entry == 0) return 0; if (igObject_IsKindOf(entry, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) return entry->_ref; return 0;
+    entry = (igObjectDirEntry *)((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, (const char *)name)); if (entry == 0) return 0; if (igObject_IsKindOf(entry, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) return entry->_ref; return 0;
 }
 
 void *igDirectory_GetEntryByName(int directory, int name) {
-    return ((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, name));
+    return ((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, (const char *)name));
 }
 
 void igDirectory_MakeConcrete(igDirectoryView *self) {

@@ -1,4 +1,4 @@
-void Gap__Attrs__igRenderListAttr__vfunc_24(void *arg0, int arg1) {
+void Gap__Attrs__igRenderListAttr__vfunc_24(void *arg0, igPsx2VisualContext *arg1) {
     int temp_v1;
 
     temp_v1 = *(int *)((char *)(arg0) + 12);
@@ -13,7 +13,7 @@ void Gap__Attrs__igRenderListAttr__vfunc_26(void) {
 
 void Gap__Attrs__igRenderListAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 void Gap__Attrs__igRenderListAttr__vfunc_28(O_13ffd0 *arg0) {
@@ -44,7 +44,5 @@ struct SetRenderDestinationAttrView {
     RenderDestinationAttrView *_pRDAttr;
 };
 
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_48(igObject *context, int renderDestination, int *textureIndex);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_49(igObject *context, int renderDestination, int *textureIndex, int flags);
 
 

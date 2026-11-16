@@ -5,12 +5,12 @@ igMetaField *g_beNDMWMdlPlayer_gameRamMetaField;
 
 beNDMWMdlPlayer *beNDMWMdlPlayer_CreateInstance(int allocator) {
     beNDMWMdlPlayer_EnsureRegistered();
-    return (beNDMWMdlPlayer *)igMetaObject_CreateInstance(g_beNDMWMdlPlayer_metaObject, allocator);
+    return (beNDMWMdlPlayer *)igMetaObject_CreateInstance(g_beNDMWMdlPlayer_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMdlPlayer_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlPlayer_metaObject == 0) {
-        g_beNDMWMdlPlayer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMdlPlayer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMdlPlayer_metaObject;
 }
@@ -31,7 +31,7 @@ int beNDMWMdlPlayer_GetVTable(void) {
     obj._name = 0;
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlPlayer_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMdlPlayer_vtable[0];
     beNDMWMdlPEBase_Destroy((beNDMWMdlPEBase *)&obj, 0);
     return vtable;
@@ -72,7 +72,7 @@ void beNDMWMdlPlayer_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWMdlPlayer_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWGameRam_EnsureRegistered, 0 };
 
-void *beNDMWMdlPlayer_Register(void) {
+CallbackArray *beNDMWMdlPlayer_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -130,10 +130,10 @@ void beNDMWMdlPlayer_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWMdlPlayer_ctorTable, 3);
     viewerSIManager = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)viewerSIManager)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerSIManager)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)viewerSIManager)->_refCounted = 0;
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;
     gameRam = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)gameRam)->_metaObject = (int)beNDMWGameRam_GetOrCreateMetaObject();

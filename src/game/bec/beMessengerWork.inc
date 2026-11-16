@@ -6,9 +6,9 @@ igMetaField *g_beMessengerWork_messageMetaField;
 igMetaField *g_beMessengerWork_findRamNoListMetaField;
 igMetaField *g_beMessengerWork_findRamListMetaField;
 
-beMessengerWork *beMessengerWork_Create(void *allocator) {
+beMessengerWork *beMessengerWork_Create(int allocator) {
     beMessengerWork_EnsureRegistered();
-    return (beMessengerWork *)igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject,allocator);
+    return (beMessengerWork *)igMetaObject_CreateInstance(g_beMessengerWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beMessengerWork_GetMetaObject(void) {
@@ -30,7 +30,7 @@ int beMessengerWork_GetVTable(void) {
     obj._message = 0;
     obj._findRamNoList = 0;
     obj._findRamList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMessengerWork_vtable[0];
     igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._findRamList, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj._findRamNoList, -1);
@@ -44,7 +44,7 @@ void beMessengerWork_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerWo
 
 static igMetaObjectCallback g_beMessengerWork_callbackList[] = { igIntList_EnsureRegistered, beBaseInfoRamList_EnsureRegistered, 0 };
 
-void *beMessengerWork_Register(void) {
+CallbackArray *beMessengerWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -103,13 +103,13 @@ void beMessengerWork_InitFields(void) {
     int base;
     void *findRamList;
     void *findRamNoList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMessengerWork_metaObject;
+    meta = g_beMessengerWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMessengerWork_ctorTable, 6);
     findRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)findRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)findRamNoList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)findRamNoList)->_construct = 1;
     findRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
     ((igObjectRefMetaField *)findRamList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();

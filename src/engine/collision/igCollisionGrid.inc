@@ -17,12 +17,12 @@ igMetaField *g_igCollisionGrid_maxPriorityMetaField;
 
 void FUN_0023a040(int arg0) {
     FUN_0023a340();
-    igMetaObject_CreateInstance((int)g_igCollisionGrid_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igCollisionGrid_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0023a080(void) {
     if (g_igCollisionGrid_metaObject == 0) {
-        g_igCollisionGrid_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igCollisionGrid_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igCollisionGrid_metaObject;
 }
@@ -41,7 +41,7 @@ int igCollisionGrid_GetVTable(void) {
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igCollisionGrid_vtable[0];
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[12] = 0;
@@ -51,7 +51,7 @@ int igCollisionGrid_GetVTable(void) {
     *(int *)&u.b[48] = 0;
     *(int *)&u.b[52] = 0;
     *(int *)&u.b[56] = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igCollisionGrid_vtable[0];
     igSmartPointer_igAABox_Destruct(&u.b[56], -1);
     FUN_0023a2c0((void **)&u.b[52], -1);
@@ -107,9 +107,9 @@ void FUN_0023a340(void)
 
 static igMetaObjectCallback g_igCollisionGrid_callbackList[] = { FUN_0023a650, FUN_00239b20, igAABox_EnsureRegistered, 0 };
 
-void igCollisionGrid_Register(void) {
+CallbackArray *igCollisionGrid_Register(void) {
     CollisionLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionGrid_metaObject,
         igObject_Register,
@@ -141,7 +141,7 @@ static FieldFactory g_igCollisionGrid_ctorTable[] = {
     igIntMetaField_Create,
     igFloatMetaField_Create,
     igObjectRefMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
     igIntMetaField_Create,
     igIntMetaField_Create,
 };
@@ -210,33 +210,33 @@ void igCollisionGrid_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igCollisionGrid_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igCollisionGrid_ctorTable, 0xF);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCollisionGrid_ctorTable, 0xF);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0023a570();
     ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0023a570();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0023a570();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
+    temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_00239a40();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
+    temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_00239a40();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
+    temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_00239a40();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
+    temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_00239a40();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB));
+    temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igAABox_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD), 1);
-    igMetaObject_NameFields(temp_s0, g_igCollisionGrid_fieldTable, g_igCollisionGrid_fieldHandles, g_igCollisionGrid_fieldOffsets, temp_s1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD), 1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCollisionGrid_fieldTable, g_igCollisionGrid_fieldHandles, g_igCollisionGrid_fieldOffsets, temp_s1);
 }
 

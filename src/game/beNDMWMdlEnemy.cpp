@@ -1,30 +1,23 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beDataBase.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beModelCtrl.h"
+#include "dw4/beNDMWMdlEnemy.h"
+#include "dw4/beNDMWMdlEnemyInfoWork.h"
+#include "dw4/beNDMWMdlPEBase.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include <string.h>
 
 /* beNDMWMdlEnemy: the model controller of an enemy Digimon. It answers KIND_ENEMY, registers as an
  * ENEMY receiver, and on GENERATE creates the enemy's info work from the message (database record
  * and HP), asks the enemy database for the record's RARITY and, when it is set, sends SETRAREICON
  * back to the enemy's own info after a delay of 60. */
 
-extern "C" int strcmp(int, int *);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" void *beBaseInfoDataList_Create(...);
-extern "C" void beModelCtrl__OnGenerate(...);
-extern "C" void *beNDMWMdlEnemyInfoWork_Create(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int beDataBase_GetRecordInt(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_EnqueueSelected(...);
-extern "C" int beMessenger_GetInt(...);
-extern "C" int beMessenger_GetIntCount(...);
-extern "C" int beMessenger_GetObject(...);
-extern "C" int beMessenger_PopArgContext(...);
-extern "C" int beMessenger_PrepareDelayedSelection(...);
-extern "C" int beMessenger_PushArgContext(...);
-extern "C" int beMessenger_SendNamed(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
-extern "C" void beNDMWMdlPEBase_OnSequenceChange(void);
 extern "C" int KIND_ENEMY[4];
 extern "C" int emptyString[4];
 extern "C" int ENEMY_3[4];
@@ -33,10 +26,6 @@ extern "C" int enemy_2[4];
 extern "C" int GETDATABASE_8[4];
 extern "C" int RARITY[4];
 extern "C" int SETRAREICON[4];
-extern "C" int g_propertyNameField[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int g_beNDMWMdlEnemy_metaObject[4];
 
 /* Delay before the rare icon request is delivered. */
 #define RARE_ICON_DELAY 60
@@ -69,72 +58,72 @@ struct DataListSlot {
 extern "C" int beNDMWMdlEnemy_IsKind(int self, int kind);
 extern "C" void beNDMWMdlEnemy_RegisterReceiver(beNDMWMdlEnemy *self, int info, char *unused);
 extern "C" void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlEnemy_OnSequenceChange(void);
+extern "C" void beNDMWMdlEnemy_OnSequenceChange(beNDMWMdlEnemy *self, beBaseInfoRam *ram);
 extern "C" int beNDMWMdlEnemy__GetMeta(void);
 
 #pragma push
 #pragma readonly_strings on
 
 int beNDMWMdlEnemy_IsKind(int self, int kind) {
-    return strcmp(kind, &KIND_ENEMY[0]) == 0;
+    return strcmp((const char *)kind, (const char *)KIND_ENEMY) == 0;
 }
 
 void beNDMWMdlEnemy_RegisterReceiver(beNDMWMdlEnemy *self, int info, char *unused)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, ((char *)ENEMY_3));
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)info, (const char *)ENEMY_3);
 }
 
 void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
     beBaseInfo *info;
     beModelCtrlInfoRamData *record;
-    int *infoName;
+    const char *infoName;
     int rarity;
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
-        int allocator = igObject_GetAllocator(ram);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        igObject *created = (igObject *)beBaseInfoDataList_Create(allocator);
+        igMemoryPoolView *allocator = igObject_GetAllocator(ram);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        igObject *created = beBaseInfoDataList_Create((int)allocator);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x68 does) */
         DataListSlot::adopt(ram, created);
     }
-    record = igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], "ONE");
+    record = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     {
-        int allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        InfoWorkRef work((igObject *)beNDMWMdlEnemyInfoWork_Create(allocator));
+        igMemoryPoolView *allocator = igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        InfoWorkRef work(beNDMWMdlEnemyInfoWork_Create((int)allocator));
         igObject *held = work.p;
         if (held != 0) held->_refCount = held->_refCount + 1;
         ReleaseObject((igObject *)record->_work);
         record->_work = (int)held;
-        if (beMessenger_GetIntCount(self->_messenger) != 0) {
-            ((beNDMWMdlEnemyInfoWork *)work.p)->_recNo = beMessenger_GetInt(self->_messenger, 0);
-            ((beDataObjInt *)((beNDMWMdlEnemyInfoWork *)work.p)->_mHp)->_data = beMessenger_GetInt(self->_messenger, 1);
-            ((beDataObjInt *)((beNDMWMdlEnemyInfoWork *)work.p)->_hp)->_data = beMessenger_GetInt(self->_messenger, 1);
-            beMessenger_PushArgContext(self->_messenger);
-            beMessenger_SendNamed(self->_messenger, &DATABASE_8[0], &enemy_2[0], 0, &GETDATABASE_8[0]);
-            rarity = beDataBase_GetRecordInt(beMessenger_GetObject(self->_messenger, 0), ((beNDMWMdlEnemyInfoWork *)work.p)->_recNo, &RARITY[0]);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) != 0) {
+            ((beNDMWMdlEnemyInfoWork *)work.p)->_recNo = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+            ((beDataObjInt *)((beNDMWMdlEnemyInfoWork *)work.p)->_mHp)->_data = beMessenger_GetInt((beMessenger *)self->_messenger, 1);
+            ((beDataObjInt *)((beNDMWMdlEnemyInfoWork *)work.p)->_hp)->_data = beMessenger_GetInt((beMessenger *)self->_messenger, 1);
+            beMessenger_PushArgContext((beMessenger *)self->_messenger);
+            beMessenger_SendNamed((beMessenger *)self->_messenger, (const char *)DATABASE_8, (const char *)enemy_2, 0, (const char *)GETDATABASE_8);
+            rarity = beDataBase_GetRecordInt((beDataBase *)beMessenger_GetObject((beMessenger *)self->_messenger, 0), ((beNDMWMdlEnemyInfoWork *)work.p)->_recNo, (const char *)RARITY);
             if (rarity != 0) {
                 int ramNo = ram->_ramNo;
-                infoName = info->_name ? (int *)info->_name : &emptyString[0];
-                beMessenger_PrepareDelayedSelection(self->_messenger, &ENEMY_3[0], infoName, ramNo);
-                beMessenger_AppendInt(self->_messenger, rarity);
-                beMessenger_EnqueueSelected(self->_messenger, &SETRAREICON[0], RARE_ICON_DELAY);
+                infoName = info->_name ? (const char *)info->_name : (const char *)emptyString;
+                beMessenger_PrepareDelayedSelection((beMessenger *)self->_messenger, (const char *)ENEMY_3, infoName, ramNo);
+                beMessenger_AppendInt((beMessenger *)self->_messenger, rarity);
+                beMessenger_EnqueueSelected((beMessenger *)self->_messenger, (const char *)SETRAREICON, RARE_ICON_DELAY);
             }
-            beMessenger_PopArgContext(self->_messenger);
+            beMessenger_PopArgContext((beMessenger *)self->_messenger);
         }
     }
-    beModelCtrl__OnGenerate(self, ram);
+    beModelCtrl__OnGenerate((beModelCtrl *)self, ram);
 }
 
-void beNDMWMdlEnemy_OnSequenceChange(void)
+void beNDMWMdlEnemy_OnSequenceChange(beNDMWMdlEnemy *self, beBaseInfoRam *ram)
 {
-    beNDMWMdlPEBase_OnSequenceChange();
+    beNDMWMdlPEBase_OnSequenceChange((beNDMWMdlPEBase *)self, ram);
 }
 
 int beNDMWMdlEnemy__GetMeta(void)
 {
-    return g_beNDMWMdlEnemy_metaObject[0];
+    return (int)g_beNDMWMdlEnemy_metaObject;
 }
 
 #pragma pop

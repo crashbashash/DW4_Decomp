@@ -5,12 +5,12 @@ igMetaField *g_igTextureCoordSourceAttr_unitIDMetaField;
 
 void FUN_001325a0(int arg0) {
     igTextureCoordSourceAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55ED68, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55ED68, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_001325e0(void) {
     if (g_igTextureCoordSourceAttr_metaObject == 0) {
-        g_igTextureCoordSourceAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureCoordSourceAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureCoordSourceAttr_metaObject;
 }
@@ -30,9 +30,9 @@ done:
 int igTextureCoordSourceAttr_GetVTable(void) {
     struct Obj_132680 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureCoordSourceAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTextureCoordSourceAttr_EnsureRegistered(void)
@@ -40,9 +40,9 @@ void igTextureCoordSourceAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureCoordSourceAttr_Register);
 }
 
-void igTextureCoordSourceAttr_Register(void) {
+CallbackArray *igTextureCoordSourceAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureCoordSourceAttr_metaObject,
         igVisualAttribute_Register,
@@ -62,9 +62,9 @@ void thunk_igTextureCoordSourceAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureCoordSourceAttr_ctorTable[] = {
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTextureCoordSourceAttr_fieldTable[] = {
     "_mode",

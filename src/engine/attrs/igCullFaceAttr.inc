@@ -4,12 +4,12 @@ igMetaField *g_igCullFaceAttr_modeMetaField;
 
 void FUN_00138690(int arg0) {
     igCullFaceAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F238, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F238, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_001386d0(void) {
     if (g_igCullFaceAttr_metaObject == 0) {
-        g_igCullFaceAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igCullFaceAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igCullFaceAttr_metaObject;
 }
@@ -25,9 +25,9 @@ igMetaObject *igCullFaceAttr_GetMetaObject(void)
 int igCullFaceAttr_GetVTable(void) {
     struct Obj_138770 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igCullFaceAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igCullFaceAttr_EnsureRegistered(void)
@@ -35,9 +35,9 @@ void igCullFaceAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCullFaceAttr_Register);
 }
 
-void igCullFaceAttr_Register(void) {
+CallbackArray *igCullFaceAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCullFaceAttr_metaObject,
         igVisualAttribute_Register,
@@ -57,8 +57,8 @@ void thunk_igCullFaceAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igCullFaceAttr_ctorTable[] = {
-    igBoolMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igCullFaceAttr_fieldTable[] = {
     "_enabled",

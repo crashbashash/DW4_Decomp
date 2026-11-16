@@ -19,7 +19,10 @@ enum p2Primitive {
 
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
+#include "dw4/dmaChannel.h"
 #include "dw4/p2draw.h"
+#include "dw4/p2vif.h"
+#include "dw4/renderState.h"
 
 /* Bits of a program's p2ProgramFlags entry, as shifts. */
 enum p2ProgramFlagBit {
@@ -86,17 +89,7 @@ typedef void (*p2VertexSubmit)(unsigned int count, int first);
 
 int FUN_001fffb0(void);
 int FUN_00200980(void);
-int p2LayoutVuBuffers(void);
-int FUN_001ff3b0(int);
-int p2SendRenderState(int);
-void p2SetVifRowScale(float);
-float p2GetVifRowScale(void);
-int p2GetComponentFixedScale(int component, int *scale);
-int p2GetComponentSize(int component);
-int p2GetVifMask(void);
-void p2SetVifMask(int mask);
-void p2SubmitDmaPacket(int channel);
-void p2GrowDisplayList(void);
+void FUN_001ff3b0(int mask);
 
 void p2SubmitVertices(unsigned int count, int first, unsigned short *indices);
 /* Declared without a prototype: the recording submit passes it no index list. */
@@ -104,11 +97,6 @@ void p2SubmitIndexedVertices();
 void p2SubmitRecordedVertices(unsigned int count, int first);
 
 extern int p2RenderStateDirty;
-extern p2VuBufferLayout p2VuBuffers;
-extern int p2CurrentPrimitive;
-extern unsigned int p2ProgramFlags[];
-extern int p2CurrentProgram;
-extern int p2DisplayListMode;
 extern int p2SpriteSizeMode;
 extern int p2StatMask;
 extern unsigned int p2VifRowCommand;
@@ -129,17 +117,11 @@ extern p2DmaTag p2StripTag;
 extern p2VifCode p2StripUnpackCode;
 extern unsigned int p2StripGifTag[4];
 extern p2StripHeader p2NextStripHeader;
-extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
 extern p2VifCode p2VifModeCode;
 extern p2DmaTag p2ComponentUnpackTag;
 
-extern int p2VertexFormat;
-extern int p2DrawPipeline;
 extern p2VertexSubmit p2VertexSubmitter;
-extern int p2ConstantColour;
 extern unsigned long long p2IndexedVertexCount;
-extern unsigned long long p2VertexCount;
-extern unsigned long long p2PrimitiveCount;
 extern unsigned long long p2StatVertexCount1;
 extern unsigned long long p2StatVertexCount4;
 extern unsigned long long p2StatVertexCount2;

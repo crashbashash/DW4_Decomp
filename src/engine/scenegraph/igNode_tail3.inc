@@ -1,5 +1,5 @@
 void Gap__Sg__igNode__vfunc_09(void **arg0, int arg1) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)arg0);
     if (arg1 == 0) {
         ((DW4VC_112_2 *)(arg0))->vX((int)(((DW4VC_120_0 *)(arg0))->vX()), (int)(1));
     }
@@ -26,8 +26,8 @@ void FUN_001d3410(NodeSlots *o, void *with) {
     release_1d3410((int *)&held);
 }
 
-void Gap__Sg__igNode__resetFields(igNode *arg0) {
-    Gap__Core__igObject__resetFields();
+void Gap__Sg__igNode__resetFields(igNode *arg0, int flags) {
+    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
 
@@ -57,7 +57,7 @@ void **igSmartPointer_igSceneInfo_Destruct(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {

@@ -1,12 +1,12 @@
 #ifndef DW4_IGTDATALIST_H
 #define DW4_IGTDATALIST_H
+#include "dw4/reflected.h"
 
 extern "C" int List_Resize(void *, int, int);
 
-template <class T> class igTDataList {
+/* A typed igDataList: the igObject header, then the count, capacity and element array. */
+template <class T> class igTDataList : public igObject {
 public:
-    int _vtable;
-    unsigned int _refCount;
     int _count;
     int _capacity;
     T *_data;

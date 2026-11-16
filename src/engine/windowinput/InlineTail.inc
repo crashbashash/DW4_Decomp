@@ -2,8 +2,8 @@ igMetaObject *FUN_00149320(void) {
     return g_igInterfaceManager_metaObject;
 }
 
-void FUN_00149330(int a0) {
-    ObjectList_AppendRetained(*(int *)((char *)a0 + 8));
+void FUN_00149330(void *a0, igObject *object) {
+    ObjectList_AppendRetained(*(igObjectList **)((char *)a0 + 8), object);
 }
 
 int Gap__igDefaultInterfaceManager__vfunc_22(void) {
@@ -18,8 +18,8 @@ int Gap__igControllerList__vfunc_22(void) {
     return (int)g_igControllerList_metaObject;
 }
 
-int Gap__igNonRefCountedObjectStack__vfunc_22(void) {
-    return g_igNonRefCountedObjectStack_metaObject[0];
+igMetaObject *Gap__igNonRefCountedObjectStack__vfunc_22(void) {
+    return g_igNonRefCountedObjectStack_metaObject;
 }
 
 igMetaObject *Gap__igEventProducerList__vfunc_22(void) {

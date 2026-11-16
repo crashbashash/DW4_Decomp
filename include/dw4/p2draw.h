@@ -5,6 +5,16 @@
 extern "C" {
 #endif
 
+extern int p2CurrentPrimitive;
+extern int p2VertexFormat;
+extern int p2DrawPipeline;
+extern int p2ConstantColour;
+/* Statistics: vertices and primitives drawn, and vertices blended with four weights. */
+extern unsigned long long p2VertexCount;
+extern unsigned long long p2PrimitiveCount;
+extern long long p2StatFourWeightBlendVertices;
+
+void p2LayoutVuBuffers(void);
 void p2DrawIndexedSprites(unsigned int count, unsigned short *indices);
 void p2DrawIndexedTriangleFan(unsigned int count, unsigned short *indices);
 void p2DrawIndexedTriangleStrip(unsigned int count, unsigned short *indices);

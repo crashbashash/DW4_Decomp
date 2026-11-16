@@ -19,7 +19,7 @@ int beNumVerData_GetVTable(void) {
     obj._vtable = (int)&g_beNumVerData_vtable[0];
     verDataListSlot = (igObject **)&obj._verDataList;
     *verDataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beNumVerData_vtable[0];
     igObjectRef_Release(verDataListSlot);
     return vtable;
@@ -32,7 +32,7 @@ void beNumVerData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNumVerData_callbackList[] = { beNumVerInsideDataList_EnsureRegistered, 0 };
 
-void *beNumVerData_Register(void) {
+CallbackArray *beNumVerData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -74,9 +74,9 @@ static int g_beNumVerData_fieldOffsets[] = {
 void beNumVerData_InitFields(void) {
     int base;
     void *verDataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beNumVerData_metaObject;
+    meta = g_beNumVerData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNumVerData_ctorTable, 2);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);

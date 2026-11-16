@@ -15,7 +15,7 @@ void beModelCtrl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrl_callbackList[] = { beLua_EnsureRegistered, beTargetObj_EnsureRegistered, 0 };
 
-void *beModelCtrl_Register(void) {
+CallbackArray *beModelCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -62,9 +62,9 @@ void beModelCtrl_InitFields(void) {
     int base;
     void *targetObj;
     void *luaManager;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrl_metaObject;
+    meta = g_beModelCtrl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrl_ctorTable, 3);
     luaManager = (void *)(igMetaObject_GetFieldAt(meta, base));

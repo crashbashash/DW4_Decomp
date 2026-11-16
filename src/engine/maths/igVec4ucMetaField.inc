@@ -88,7 +88,7 @@ void FUN_00187190(void) {
             p = g_igVec4ucMetaField_descriptor;
             p->f4 = p->f4 - 1;
             if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
             }
             len = igMetaField_GetMetaFieldList()->_count;
             g_igVec4ucMetaField_descriptor->f18 = len - 1;

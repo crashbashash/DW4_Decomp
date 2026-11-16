@@ -3,12 +3,12 @@ igMetaField *g_igAlphaStateAttr_enabledMetaField;
 
 void FUN_0013b270(int arg0) {
     igAlphaStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F480, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F480, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0013b2b0(void) {
     if (g_igAlphaStateAttr_metaObject == 0) {
-        g_igAlphaStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAlphaStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAlphaStateAttr_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igAlphaStateAttr_GetMetaObject(void)
 
 int igAlphaStateAttr_GetVTable(void) {
     struct Obj obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAlphaStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAlphaStateAttr_EnsureRegistered(void)
@@ -33,9 +33,9 @@ void igAlphaStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAlphaStateAttr_Register);
 }
 
-void igAlphaStateAttr_Register(void) {
+CallbackArray *igAlphaStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAlphaStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -55,7 +55,7 @@ void thunk_igAlphaStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAlphaStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igAlphaStateAttr_fieldTable[] = {
     "_enabled",

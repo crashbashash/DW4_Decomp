@@ -1,16 +1,30 @@
 #ifndef DW4_IGREGISTRY_H
 #define DW4_IGREGISTRY_H
 
-/* The configuration registry: sections of named values read with a default, optionally created when missing. `registry` is the igRegistry the object system holds. */
+/* The configuration registry: sections of named values read with a default, optionally created when
+ * missing. `registry` is the igRegistry the object system holds (g_objectSystem->configRegistry).
+ * Each reader returns whether the value was found; when it was not, `defaultValue` is stored through
+ * the out pointer and, with `create`, written into the registry. */
+struct igMetaObject;
 struct igRegistry;
 struct igStringObj;
 
 extern "C" {
 int igRegistry_GetSectionIndex(struct igRegistry *self, char *name, int create);
-unsigned char igRegistry_GetValueBool(int registry, int section, const char *name, char *value, int defaultValue, int create);
-bool igRegistry_GetValueInt(int registry, int section, const char *key, int *out, int defaultValue, int create);
-int igRegistry_GetValueString(int registry, int section, const char *key, int **out, char *def, int create);
-int igRegistry_GetValueStringObj(int registry, int section, const char *key, struct igStringObj **out, const char *defaultValue, int create);
+unsigned char igRegistry_GetValueBool(struct igRegistry *registry, int section, const char *name, unsigned char *value, int defaultValue, int create);
+bool igRegistry_GetValueInt(struct igRegistry *registry, int section, const char *key, int *out, int defaultValue, int create);
+bool igRegistry_GetValueFloat(struct igRegistry *registry, int section, const char *key, float *out, int create, float defaultValue);
+/* `out` holds an interned string: the old one is released, the new one retained */
+int igRegistry_GetValueString(struct igRegistry *registry, int section, const char *key, char **out, char *def, int create);
+int igRegistry_GetValueStringObj(struct igRegistry *registry, int section, const char *key, struct igStringObj **out, const char *defaultValue, int create);
+/* Tail-jump copies of the readers in the data-pump library, with the readers' own signatures. */
+bool thunk_igRegistry_GetValueInt(struct igRegistry *registry, int section, const char *key, int *out, int defaultValue, int create);
+bool thunk_igRegistry_GetValueFloat(struct igRegistry *registry, int section, const char *key, float *out, int create, float defaultValue);
+int thunk_igRegistry_GetValueStringObj(struct igRegistry *registry, int section, const char *key, struct igStringObj **out, const char *defaultValue, int create);
+int thunk_igRegistry_GetValueString(struct igRegistry *registry, int section, const char *key, char **out, char *def, int create);
+unsigned char thunk_igRegistry_GetValueBool(struct igRegistry *registry, int section, const char *name, unsigned char *value, int defaultValue, int create);
+struct igMetaObject *igRegistry_GetOrCreateMetaObject(void);
+void igRegistry_EnsureRegistered(void);
 }
 
 #endif

@@ -17,7 +17,7 @@ void beDataBase_EnsureRegistered(void);
 struct igMetaObject *beDataBase_GetOrCreateMetaObject(void);
 unsigned long long beDataBase_GetRecordBool(struct beDataBase *self, int record, const char *key);
 int beDataBase_GetRecordCount(struct beDataBase *self);
-long long beDataBase_GetRecordInt(struct beDataBase *self, int record, const char *key);
+int beDataBase_GetRecordInt(struct beDataBase *self, int record, const char *key);
 char *beDataBase_GetRecordString(struct beDataBase *self, int record, const char *key);
 
 #ifdef __cplusplus

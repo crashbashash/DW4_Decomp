@@ -23,7 +23,7 @@ int beWeaponInfo_GetVTable(void) {
     obj._nodeList = 0;
     obj._boneNameList = 0;
     obj._seqDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beWeaponInfo_vtable[0];
     igSmartPointer_beWeaponSeqDataList_Destruct((igSmartPointer<igObject> *)&obj._seqDataList, (short)(-1));
     igSmartPointer_igNamedObjectList_Destruct(&obj._boneNameList, -1);
@@ -85,7 +85,7 @@ void beWeaponInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beWeaponInfo_callbackList[] = { igNodeList_EnsureRegistered, igNamedObjectList_EnsureRegistered, beWeaponSeqDataList_EnsureRegistered, 0 };
 
-void *beWeaponInfo_Register(void) {
+CallbackArray *beWeaponInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -137,16 +137,16 @@ void beWeaponInfo_InitFields(void) {
     void *nodeList;
     void *boneNameList;
     void *seqDataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beWeaponInfo_metaObject;
+    meta = g_beWeaponInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beWeaponInfo_ctorTable, 3);
     nodeList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)nodeList)->_metaObject = igNodeList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)nodeList)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)nodeList)->_construct = 1;
     boneNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)boneNameList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)boneNameList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)boneNameList)->_construct = 1;
     seqDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)seqDataList)->_metaObject = (int)beWeaponSeqDataList_GetOrCreateMetaObject();

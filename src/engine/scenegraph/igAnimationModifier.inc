@@ -30,17 +30,17 @@ int igAnimationModifier_GetVTable(void) {
     struct Obj_1a74f0 obj;
     char *o;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAnimationModifier_vtable[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igAnimationModifier_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -63,9 +63,9 @@ void FUN_001a7600(void)
 
 static igMetaObjectCallback g_igAnimationModifier_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
-void igAnimationModifier_Register(void) {
+CallbackArray *igAnimationModifier_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationModifier_metaObject,
         igObject_Register,
@@ -85,9 +85,9 @@ void thunk_igAnimationModifier_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAnimationModifier_ctorTable[] = {
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igAnimationModifier_fieldTable[] = {
     "_boneIndex",
@@ -112,12 +112,12 @@ void igAnimationModifier_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igAnimationModifier_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationModifier_ctorTable, 3);
-    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
+    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)), -1);
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
+    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
     igEnumMetaField_SetDefaultValue(temp_v0, 2);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_001a7440);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationModifier_fieldTable, g_igAnimationModifier_fieldHandles, g_igAnimationModifier_fieldOffsets, temp_s2);

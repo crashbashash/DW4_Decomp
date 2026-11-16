@@ -9,7 +9,8 @@ extern "C" {
 
 void Gap__Gfx__igParticleArray__resetFields(struct igParticleArray *array);
 void *igParticleArray_Destroy(struct igParticleArray *self, short flags);
-void igParticleArray_Register(void);
+struct CallbackArray *igParticleArray_Register(void);
+int igParticleArray_Update(struct igParticleArray *self, unsigned int num, unsigned int offset, int *status, float time);
 
 #ifdef __cplusplus
 }

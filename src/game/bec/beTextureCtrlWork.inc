@@ -4,12 +4,12 @@ igMetaField *g_beTextureCtrlWork_attributeListMetaField;
 
 beTextureCtrlWork *beTextureCtrlWork_Create(int allocator) {
     beTextureCtrlWork_EnsureRegistered();
-    return (beTextureCtrlWork *)igMetaObject_CreateInstance(*(int *)0x587CD0, allocator);
+    return (beTextureCtrlWork *)igMetaObject_CreateInstance(g_beTextureCtrlWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beTextureCtrlWork_GetOrCreateMetaObject(void) {
     if (g_beTextureCtrlWork_metaObject == 0) {
-        g_beTextureCtrlWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beTextureCtrlWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beTextureCtrlWork_metaObject;
 }
@@ -37,7 +37,7 @@ int beTextureCtrlWork_GetVTable(void) {
     *textureListSlot = 0;
     attributeListSlot = (igObject **)&obj._attributeList;
     *attributeListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beTextureCtrlWork_vtable[0];
     igObjectRef_Release(attributeListSlot);
     igObjectRef_Release(textureListSlot);
@@ -51,7 +51,7 @@ void beTextureCtrlWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beTextureCtrlWork_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
 
-void *beTextureCtrlWork_Register(void) {
+CallbackArray *beTextureCtrlWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -94,16 +94,16 @@ void beTextureCtrlWork_InitFields(void) {
     int base;
     void *attributeList;
     void *textureList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beTextureCtrlWork_metaObject;
+    meta = g_beTextureCtrlWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTextureCtrlWork_ctorTable, 2);
     textureList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)textureList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)textureList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)textureList)->_construct = 1;
     attributeList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)attributeList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)attributeList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)attributeList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beTextureCtrlWork_fieldTable, g_beTextureCtrlWork_fieldHandles, g_beTextureCtrlWork_fieldOffsets, base);
 }

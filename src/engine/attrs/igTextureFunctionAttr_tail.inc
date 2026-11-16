@@ -18,7 +18,7 @@ void FUN_001412a0(void) {
 }
 
 void Gap__Attrs__igTextureFunctionAttr__vfunc_11(void *arg0) {
-    igObject_InitDefaults();
+    igObject_InitDefaults((igObject *)arg0);
     *(int *)((char *)arg0 + 20) = 3;
     *(int *)((char *)arg0 + 24) = 0;
     *(int *)((char *)arg0 + 28) = 2;
@@ -26,10 +26,10 @@ void Gap__Attrs__igTextureFunctionAttr__vfunc_11(void *arg0) {
 }
 
 void Gap__Attrs__igTextureFunctionAttr__vfunc_12(void **arg0) {
-    if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
+    if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         g_igTextureFunctionAttr_multiTextureExt = 0;
     }
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 igMetaObject *Gap__Attrs__igTextureFunctionAttr__vfunc_22(void) {
@@ -56,7 +56,7 @@ void Gap__Attrs__igTextureFunctionAttr__vfunc_32(igTextureFunctionAttr *self, in
     self->_call_state = 0;
 }
 
-void Gap__Attrs__igTextureFunctionAttr__vfunc_24(void *arg0x, int arg1) {
+void Gap__Attrs__igTextureFunctionAttr__vfunc_24(void *arg0x, igPsx2VisualContext *arg1) {
     A_141410 *arg0 = (A_141410 *)arg0x;
     int temp_s0;
     if (g_igTextureFunctionAttr_multiTextureExt != 0) {

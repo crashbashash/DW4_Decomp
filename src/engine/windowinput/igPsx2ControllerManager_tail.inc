@@ -32,12 +32,12 @@ int igPsx2ControllerManager_GetVTable(void) {
     S_ref *q1;
     
     
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&DAT_00524f00[0]);
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&g_igPsx2ControllerManager_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.w[0] = (int)(&DAT_00524f00[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
@@ -56,9 +56,9 @@ void FUN_00146ee0(void)
     igMetaObject_RunStaticInit(igPsx2ControllerManager_Register);
 }
 
-void igPsx2ControllerManager_Register(void) {
+CallbackArray *igPsx2ControllerManager_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2ControllerManager_metaObject,
         igControllerManager_Register,
@@ -104,12 +104,12 @@ void igPsx2ControllerManager_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igPsx2ControllerManager_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igPsx2ControllerManager_ctorTable, 3);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPsx2ControllerManager_ctorTable, 3);
+    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00146d90);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
-    igMetaObject_NameFields(temp_s0, g_igPsx2ControllerManager_fieldTable, g_igPsx2ControllerManager_fieldHandles, g_igPsx2ControllerManager_fieldOffsets, temp_s2);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), 1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2ControllerManager_fieldTable, g_igPsx2ControllerManager_fieldHandles, g_igPsx2ControllerManager_fieldOffsets, temp_s2);
 }
 

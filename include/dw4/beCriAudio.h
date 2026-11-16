@@ -18,7 +18,7 @@ void beCriAudio_Resume(struct beCriAudio *self);
 void beCriAudio_SetVolume(struct beCriAudio *self, int volume);
 int beCriAudio_Setup(struct beCriAudio *self, int channels);
 void beCriAudio_Stop(struct beCriAudio *self);
-void beCriAudio_Suspend(struct beCriAudio *self, int unused);
+void beCriAudio_Suspend(struct beCriAudio *self);
 
 #ifdef __cplusplus
 }

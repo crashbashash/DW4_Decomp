@@ -13,7 +13,7 @@ int beSvSlotPS2_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beSvSlotPS2_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beSvSlotPS2_EnsureRegistered(void)
@@ -21,7 +21,7 @@ void beSvSlotPS2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvSlotPS2_Register);
 }
 
-void *beSvSlotPS2_Register(void) {
+CallbackArray *beSvSlotPS2_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

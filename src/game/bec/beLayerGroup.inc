@@ -18,7 +18,7 @@ int beLayerGroup_GetVTable(void) {
     nameSlot = (char **)&obj._name;
     *nameSlot = 0;
     obj._vtable = (int)&g_beLayerGroup_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -29,7 +29,7 @@ void beLayerGroup_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLayerGroup_Register);
 }
 
-void *beLayerGroup_Register(void) {
+CallbackArray *beLayerGroup_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

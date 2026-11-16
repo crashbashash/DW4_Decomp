@@ -189,7 +189,7 @@ int FUN_001e2d10(void **arg0, int arg1) {
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(&sp30[0])) & 0xFF;
-    igMatrix44f_GetQuaternion(arg1, &sp30[0]);
+    igMatrix44f_GetQuaternion((float *)arg1, (float *)&sp30[0]);
     return temp_s0;
 }
 
@@ -341,7 +341,7 @@ void Gap__Sg__igCommonTraversal__vfunc_29(S0_1e31f0 *arg0, S1_1e31f0 *arg1) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f44 = (int)(arg1);
@@ -390,7 +390,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_37(struct S_1e3300 *arg0) {
     if (temp_a0 != 0) {
         temp_a0->rc = temp_a0->rc - 1;
         if ((temp_a0->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->p8 = 0;
@@ -428,7 +428,7 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_26(void **arg0, int arg1) {
     int temp_s0;
 
     temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(sp30)) & 0xFF;
-    igMatrix44f_GetQuaternion(arg1, sp30);
+    igMatrix44f_GetQuaternion((float *)arg1, (float *)sp30);
     return temp_s0;
 }
 
@@ -989,7 +989,7 @@ void Gap__Core__igUnsignedIntList__vfunc_18(void *arg0) {
 
     temp_a1 = *(int *)((char *)arg0 + 8);
     if (temp_a1 < *(int *)((char *)arg0 + 12)) {
-        List_Reserve(arg0, temp_a1, 4);
+        List_Reserve((igDataList *)arg0, temp_a1, 4);
     }
 }
 
@@ -1007,7 +1007,7 @@ void Gap__Sg__igTraversalFunctionList__vfunc_18(void *arg0) {
 
     temp_a1 = *(int *)((char *)arg0 + 8);
     if (temp_a1 < *(int *)((char *)arg0 + 12)) {
-        List_Reserve(arg0, temp_a1, 4);
+        List_Reserve((igDataList *)arg0, temp_a1, 4);
     }
 }
 

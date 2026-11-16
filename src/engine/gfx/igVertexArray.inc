@@ -6,12 +6,12 @@ igMetaField *g_igVertexArray_usageFlagsMetaField;
 
 igVertexArray *igVertexArray_Create(int allocator) {
     igVertexArray_EnsureRegistered();
-    return (igVertexArray *)igMetaObject_CreateInstance(g_igVertexArray_metaObject, allocator);
+    return (igVertexArray *)igMetaObject_CreateInstance(g_igVertexArray_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igVertexArray_GetOrCreateMetaObject(void) {
     if (g_igVertexArray_metaObject == 0) {
-        g_igVertexArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igVertexArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igVertexArray_metaObject;
 }
@@ -29,9 +29,9 @@ void igVertexArray_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVertexArray_Register);
 }
 
-void igVertexArray_Register(void) {
+CallbackArray *igVertexArray_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVertexArray_metaObject,
         igObject_Register,
@@ -51,10 +51,10 @@ void thunk_igVertexArray_GetMetaObject(void) {
 }
 
 static FieldFactory g_igVertexArray_ctorTable[] = {
-    igMemoryRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igVertexArray_fieldTable[] = {
     "_vdata",

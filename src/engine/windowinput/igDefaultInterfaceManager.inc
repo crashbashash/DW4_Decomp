@@ -33,12 +33,12 @@ int igDefaultInterfaceManager_GetVTable(void) {
     int temp_s0;
     S_ref *q0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q0 = (S_ref *)&u.b[8];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_00524da0[0];
     u.vt = (int)&g_igDefaultInterfaceManager_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&DAT_00524da0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -57,9 +57,9 @@ void FUN_00146560(void)
     igMetaObject_RunStaticInit(igDefaultInterfaceManager_Register);
 }
 
-void igDefaultInterfaceManager_Register(void) {
+CallbackArray *igDefaultInterfaceManager_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDefaultInterfaceManager_metaObject,
         igInterfaceManager_Register,
@@ -156,8 +156,8 @@ void igDefaultInterfaceManager_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igDefaultInterfaceManager_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igDefaultInterfaceManager_ctorTable, 0x10);
-    igMetaObject_NameFields(temp_s0, g_igDefaultInterfaceManager_fieldTable, g_igDefaultInterfaceManager_fieldHandles, g_igDefaultInterfaceManager_fieldOffsets, temp_s1);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igDefaultInterfaceManager_ctorTable, 0x10);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igDefaultInterfaceManager_fieldTable, g_igDefaultInterfaceManager_fieldHandles, g_igDefaultInterfaceManager_fieldOffsets, temp_s1);
 }
 

@@ -11,9 +11,9 @@ igMetaObject *igBoolObject_GetMetaObject(void)
 
 int igBoolObject_GetVTable(void) {
     struct O o;
-    igObject_InitHeader(&o.vt);
+    igObject_InitHeader((igObject *)&o.vt);
     o.vt = g_igBoolObject_vtable;
-    return *(int *)((char *)&o.vt + *(int *)(g_objectSystem[0] + 916));
+    return *(int *)((char *)&o.vt + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_001e5ce0(void)
@@ -21,9 +21,9 @@ void FUN_001e5ce0(void)
     igMetaObject_RunStaticInit(igBoolObject_Register);
 }
 
-void igBoolObject_Register(void) {
+CallbackArray *igBoolObject_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBoolObject_metaObject,
         igObject_Register,
@@ -60,9 +60,9 @@ void igBoolObject_InitFields(void) {
     igMetaObject *meta;
 
     meta = g_igBoolObject_metaObject;
-    firstField = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igBoolObject_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_igBoolObject_fieldTable, g_igBoolObject_fieldHandles, g_igBoolObject_fieldOffsets, firstField);
+    firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igBoolObject_ctorTable, 1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igBoolObject_fieldTable, g_igBoolObject_fieldHandles, g_igBoolObject_fieldOffsets, firstField);
 }
 
 /* matching construct: declaration-order sweep — v, scale, count, i order */

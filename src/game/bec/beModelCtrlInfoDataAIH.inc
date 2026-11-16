@@ -30,7 +30,7 @@ int beModelCtrlInfoDataAIH_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlInfoDataAIH_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -41,7 +41,7 @@ void beModelCtrlInfoDataAIH_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoDataAIH_Register);
 }
 
-void *beModelCtrlInfoDataAIH_Register(void) {
+CallbackArray *beModelCtrlInfoDataAIH_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -112,18 +112,18 @@ void beModelCtrlInfoDataAIH_InitFields(void) {
     igStringMetaField *clone;
 
     meta = (void *)g_beModelCtrlInfoDataAIH_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataAIH_ctorTable, 8);
-    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beModelCtrlInfoDataAIH_ctorTable, 8);
+    found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "AIH");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIH_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    igMetaObject_NameFields(meta, g_beModelCtrlInfoDataAIH_fieldTable, g_beModelCtrlInfoDataAIH_fieldHandles, g_beModelCtrlInfoDataAIH_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beModelCtrlInfoDataAIH_fieldTable, g_beModelCtrlInfoDataAIH_fieldHandles, g_beModelCtrlInfoDataAIH_fieldOffsets, base);
 }
 

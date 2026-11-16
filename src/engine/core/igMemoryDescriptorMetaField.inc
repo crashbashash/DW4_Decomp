@@ -91,7 +91,7 @@ void igMemoryDescriptorMetaField_CreateDefaultDescriptor(void) {
                 void *held = (void *)g_igMemoryDescriptorMetaField_descriptor;
                 ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
                 if (((unsigned long long) ((long long) (int) ((igObject *)held)->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(held);
+                    igObject_Destroy((igObject *)held);
                 }
             }
             ((igMetaField *)g_igMemoryDescriptorMetaField_descriptor)->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
@@ -148,7 +148,7 @@ void igMemoryDescriptorMetaField_AddSubFields(int fieldList) {
     ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)field);
     ((igObject *)field)->_refCount = (int)((int) (((igObject *)field)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)field)->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(field);
+        igObject_Destroy((igObject *)field);
     }
 }
 

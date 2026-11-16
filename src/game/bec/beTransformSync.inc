@@ -11,7 +11,7 @@ void *beTransformSync_GetMetaObject(void) {
 
 int beTransformSync_GetVTable(void) {
     TransformSyncView transform;
-    return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem + 916));
 }
 
 igSmartPointer<igObject> *igSmartPointer_igTransformList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
@@ -34,12 +34,12 @@ void beTransformSync_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beTransformSync_callbackList[] = { igTransformList_EnsureRegistered, 0 };
 
-void *beTransformSync_Register(void) {
+CallbackArray *beTransformSync_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beTransformSync_metaObject,
-        igTransform_Register,
+        (igMetaObjectRegisterFunction)igTransform_Register,
         igTransform_GetPublishedMetaObject,
         beTransformSync_GetMetaObjectFunction,
         "beTransformSync",
@@ -72,13 +72,13 @@ static int g_beTransformSync_fieldOffsets[] = {
 void beTransformSync_InitFields(void) {
     int base;
     void *syncTransformList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beTransformSync_metaObject;
+    meta = g_beTransformSync_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTransformSync_ctorTable, 1);
     syncTransformList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)syncTransformList)->_metaObject = igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)syncTransformList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
     ((igRefMetaField *)syncTransformList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beTransformSync_fieldTable, g_beTransformSync_fieldHandles, g_beTransformSync_fieldOffsets, base);
 }

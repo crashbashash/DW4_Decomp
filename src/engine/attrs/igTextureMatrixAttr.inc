@@ -6,12 +6,12 @@ igMetaField *g_igTextureMatrixAttr_isProjectiveMetaField;
 
 void FUN_001317c0(int arg0) {
     igTextureMatrixAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55ECD8, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55ECD8, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_00131800(void) {
     if (g_igTextureMatrixAttr_metaObject == 0) {
-        g_igTextureMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureMatrixAttr_metaObject;
 }
@@ -27,10 +27,10 @@ igMetaObject *igTextureMatrixAttr_GetMetaObject(void)
 int igTextureMatrixAttr_GetVTable(void) {
     struct F_1318a0 f;
 
-    igObject_InitHeader(&f);
+    igObject_InitHeader((igObject *)&f);
     f.vt = &g_igTextureMatrixAttr_vtable[0];
-    igMatrix44f_SetIdentity(&f.w[2]);
-    return *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igMatrix44f_SetIdentity((float *)&f.w[2]);
+    return *(int *)((char *)&f + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTextureMatrixAttr_EnsureRegistered(void)
@@ -38,9 +38,9 @@ void igTextureMatrixAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureMatrixAttr_Register);
 }
 
-void igTextureMatrixAttr_Register(void) {
+CallbackArray *igTextureMatrixAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureMatrixAttr_metaObject,
         igVisualAttribute_Register,
@@ -60,10 +60,10 @@ void thunk_igTextureMatrixAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureMatrixAttr_ctorTable[] = {
-    igMatrix44fMetaField_CreateInstance,
-    igIntMetaField_Create,
-    igShortMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igShortMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igTextureMatrixAttr_fieldTable[] = {
     "_m",
@@ -115,7 +115,7 @@ void igTextureMatrixAttr_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
     FUN_0018c640(temp_s1, &o1);
     fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     fld->f48 = (int)FUN_00141520;
@@ -157,7 +157,7 @@ void *igInfo_Destroy(struct S *arg0, short arg1) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader(*h, h);
+                        StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
                     }
                 }
             }
@@ -183,7 +183,7 @@ void *igNamedObject_Destroy(struct S_131bc0 *arg0, short arg1) {
                 rc = *(int *)((char *)(p) - 4) - 1;
                 *(int *)((char *)(p) - 4) = rc;
                 if (rc == 0) {
-                    StringChunk_ReleaseHeader(*h, h);
+                    StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
                 }
             }
         }
@@ -195,6 +195,6 @@ void *igNamedObject_Destroy(struct S_131bc0 *arg0, short arg1) {
 }
 
 int FUN_00131c50(void) {
-    return g_igInfo_metaObject[0];
+    return (int)g_igInfo_metaObject;
 }
 

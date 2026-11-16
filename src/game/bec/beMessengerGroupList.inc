@@ -2,7 +2,7 @@ igMetaObject *g_beMessengerGroupList_metaObject;
 
 igMetaObject *beMessengerGroupList_GetOrCreateMetaObject(void) {
     if (g_beMessengerGroupList_metaObject == 0) {
-        g_beMessengerGroupList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMessengerGroupList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMessengerGroupList_metaObject;
 }
@@ -20,7 +20,7 @@ int beMessengerGroupList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beMessengerGroupList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beMessengerGroupList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beMessengerGroupList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMessengerGroupList_callbackList[] = { beMessengerGroup_EnsureRegistered, 0 };
 
-void *beMessengerGroupList_Register(void) {
+CallbackArray *beMessengerGroupList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

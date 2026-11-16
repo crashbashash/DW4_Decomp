@@ -11,14 +11,14 @@ int igPsx2Image_GetVTable(void) {
     int r;
     int *v1; int *a1; int v0; int *a0;
     char *pr; char *ps;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&DAT_00526800[0];
     pr = &u.b[68];
     *(int *)pr = 0;
     ps = &u.b[88];
     *(int *)ps = 0;
     u.vt = (int)&g_igPsx2Image_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&DAT_00526800[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -27,7 +27,7 @@ int igPsx2Image_GetVTable(void) {
             v0 = v1[-1] - 1;
             v1[-1] = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+                StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
             }
         }
     }
@@ -48,9 +48,9 @@ void FUN_00153e60(void)
     igMetaObject_RunStaticInit(igPsx2Image_Register);
 }
 
-void igPsx2Image_Register(void) {
+CallbackArray *igPsx2Image_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2Image_metaObject,
         igMemoryImage_Register,
@@ -59,7 +59,7 @@ void igPsx2Image_Register(void) {
         "igPsx2Image",
         0x5C, /* instance size */
         igPsx2Image_GetVTable,
-        &igPsx2Image_InitFields_00153ef0[0],           /* Field adder. */
+        igPsx2Image_InitFields_00153ef0,           /* Field adder. */
         0,                                             /* extra callback-vector item (none) */
         0                                              /* zero-terminated callback-vector item list (none) */
     );

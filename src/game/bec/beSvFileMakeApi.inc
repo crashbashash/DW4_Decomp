@@ -4,7 +4,7 @@ igMetaField *g_beSvFileMakeApi_saveWorkMetaField;
 
 beSvFileMakeApi *beSvFileMakeApi_Create(int allocator) {
     beSvFileMakeApi_EnsureRegistered();
-    return (beSvFileMakeApi *)igMetaObject_CreateInstance(*(int *)0x588280, allocator);
+    return (beSvFileMakeApi *)igMetaObject_CreateInstance(g_beSvFileMakeApi_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beSvFileMakeApi_GetMetaObject(void) {
@@ -26,7 +26,7 @@ int beSvFileMakeApi_GetVTable(void) {
     obj._vtable = (int)&g_beSvFileMakeApi_vtable[0];
     obj._earlyGamedata = 0;
     obj._saveWork = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvFileMakeApi_vtable[0];
     igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)(&obj._saveWork), (short)(-1));
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)(&obj._earlyGamedata), (long long)(-1));
@@ -41,7 +41,7 @@ void beSvFileMakeApi_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSvFileMakeApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveMemoryObj_EnsureRegistered, 0 };
 
-void *beSvFileMakeApi_Register(void) {
+CallbackArray *beSvFileMakeApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,9 +84,9 @@ void beSvFileMakeApi_InitFields(void) {
     int base;
     void *saveWork;
     void *earlyGamedata;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvFileMakeApi_metaObject;
+    meta = g_beSvFileMakeApi_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvFileMakeApi_ctorTable, 2);
     earlyGamedata = (void *)(igMetaObject_GetFieldAt(meta, base));

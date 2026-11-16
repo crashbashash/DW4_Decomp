@@ -34,7 +34,7 @@ done:
 
 int libNdmwRuntimePlugin_GetVTable(void) {
     NdmwRuntimePluginView plugin;
-    return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&plugin + *(int *)((char *)(char *)g_objectSystem + 916));
 }
 
 igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
@@ -43,9 +43,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -56,9 +56,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWStageCtl_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -69,9 +69,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWPanelWaza_Destruct(igSmartPointer
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -82,9 +82,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWLogo_Destruct(igSmartPointer<igOb
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -95,9 +95,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWTitle2_Destruct(igSmartPointer<ig
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -108,9 +108,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWLoadCtrl2_Destruct(igSmartPointer
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -121,9 +121,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWLoadIntf2_Destruct(igSmartPointer
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -134,9 +134,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWSaveCtrl_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -147,9 +147,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWSaveIntf_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -160,9 +160,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWGameRam_Destruct(igSmartPointer<i
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -173,9 +173,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWStatus_Destruct(igSmartPointer<ig
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -186,9 +186,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer_Destruct(igSmartPointer
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -199,9 +199,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer2_Destruct(igSmartPointe
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -212,9 +212,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPBullet_Destruct(igSmartPointe
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -225,9 +225,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEnemy_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -238,9 +238,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEBullet_Destruct(igSmartPointe
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -251,9 +251,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlObject_Destruct(igSmartPointer
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -264,9 +264,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlItem_Destruct(igSmartPointer<i
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -277,9 +277,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEffect_Destruct(igSmartPointer
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -290,9 +290,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapBase_Destruct(igSmartPointe
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -303,9 +303,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapCursor_Destruct(igSmartPoin
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -443,7 +443,7 @@ void libNdmwRuntimePlugin_EnsureRegistered(void)
 
 static igMetaObjectCallback g_libNdmwRuntimePlugin_callbackList[] = { beNDMWAfsSetup_EnsureRegistered, beNDMWStageCtl_EnsureRegistered, beNDMWPanelWaza_EnsureRegistered, beNDMWLogo_EnsureRegistered, beNDMWTitle2_EnsureRegistered, beNDMWLoadCtrl2_EnsureRegistered, beNDMWLoadIntf2_EnsureRegistered, beNDMWSaveCtrl_EnsureRegistered, beNDMWSaveIntf_EnsureRegistered, beNDMWGameRam_EnsureRegistered, beNDMWStatus_EnsureRegistered, beNDMWMdlPlayer_EnsureRegistered, beNDMWMdlPlayer2_EnsureRegistered, beNDMWMdlPBullet_EnsureRegistered, beNDMWMdlEnemy_EnsureRegistered, beNDMWMdlEBullet_EnsureRegistered, beNDMWMdlObject_EnsureRegistered, beNDMWMdlItem_EnsureRegistered, beNDMWMdlEffect_EnsureRegistered, beNDMWMdlMapBase_EnsureRegistered, beNDMWMdlMapCursor_EnsureRegistered, 0 };
 
-void *libNdmwRuntimePlugin_Register(void) {
+CallbackArray *libNdmwRuntimePlugin_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -586,49 +586,49 @@ void libNdmwRuntimePlugin_InitFields(void) {
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
     meta = (void *)g_libNdmwRuntimePlugin_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_libNdmwRuntimePlugin_ctorTable, 0x15);
-    afsSetup = (void *)(igMetaObject_GetFieldAt(meta, base));
+    afsSetup = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)afsSetup)->_metaObject = (int)beNDMWAfsSetup_GetOrCreateMetaObject();
-    stageCtl = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    stageCtl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)stageCtl)->_metaObject = (int)beNDMWStageCtl_GetOrCreateMetaObject();
-    panelWaza = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    panelWaza = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)panelWaza)->_metaObject = (int)beNDMWPanelWaza_GetOrCreateMetaObject();
-    logo = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    logo = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)logo)->_metaObject = (int)beNDMWLogo_GetOrCreateMetaObject();
-    title2 = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    title2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)title2)->_metaObject = (int)beNDMWTitle2_GetOrCreateMetaObject();
-    loadCtrl2 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    loadCtrl2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
     ((igObjectRefMetaField *)loadCtrl2)->_metaObject = (int)beNDMWLoadCtrl2_GetOrCreateMetaObject();
-    loadIntf2 = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    loadIntf2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
     ((igObjectRefMetaField *)loadIntf2)->_metaObject = (int)beNDMWLoadIntf2_GetOrCreateMetaObject();
-    saveCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    saveCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igObjectRefMetaField *)saveCtrl)->_metaObject = (int)beNDMWSaveCtrl_GetOrCreateMetaObject();
-    saveIntf = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    saveIntf = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8));
     ((igObjectRefMetaField *)saveIntf)->_metaObject = (int)beNDMWSaveIntf_GetOrCreateMetaObject();
-    gameRam = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    gameRam = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));
     ((igObjectRefMetaField *)gameRam)->_metaObject = (int)beNDMWGameRam_GetOrCreateMetaObject();
-    status = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
+    status = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA));
     ((igObjectRefMetaField *)status)->_metaObject = (int)beNDMWStatus_GetOrCreateMetaObject();
-    mdlPlayer = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
+    mdlPlayer = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB));
     ((igObjectRefMetaField *)mdlPlayer)->_metaObject = (int)beNDMWMdlPlayer_GetOrCreateMetaObject();
-    mdlPlayer2 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    mdlPlayer2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC));
     ((igObjectRefMetaField *)mdlPlayer2)->_metaObject = (int)beNDMWMdlPlayer2_GetOrCreateMetaObject();
-    mdlPBullet = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
+    mdlPBullet = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xD));
     ((igObjectRefMetaField *)mdlPBullet)->_metaObject = (int)beNDMWMdlPBullet_GetOrCreateMetaObject();
-    mdlEnemy = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
+    mdlEnemy = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xE));
     ((igObjectRefMetaField *)mdlEnemy)->_metaObject = (int)beNDMWMdlEnemy_GetOrCreateMetaObject();
-    mdlEBullet = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
+    mdlEBullet = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xF));
     ((igObjectRefMetaField *)mdlEBullet)->_metaObject = (int)beNDMWMdlEBullet_GetOrCreateMetaObject();
-    mdlObject = (void *)(igMetaObject_GetFieldAt(meta, base + 0x10));
+    mdlObject = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x10));
     ((igObjectRefMetaField *)mdlObject)->_metaObject = (int)beNDMWMdlObject_GetOrCreateMetaObject();
-    mdlItem = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
+    mdlItem = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x11));
     ((igObjectRefMetaField *)mdlItem)->_metaObject = (int)beNDMWMdlItem_GetOrCreateMetaObject();
-    mdlEffect = (void *)(igMetaObject_GetFieldAt(meta, base + 0x12));
+    mdlEffect = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x12));
     ((igObjectRefMetaField *)mdlEffect)->_metaObject = (int)beNDMWMdlEffect_GetOrCreateMetaObject();
-    mdlMapBase = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
+    mdlMapBase = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x13));
     ((igObjectRefMetaField *)mdlMapBase)->_metaObject = (int)beNDMWMdlMapBase_GetOrCreateMetaObject();
-    mdlMapCursor = (void *)(igMetaObject_GetFieldAt(meta, base + 0x14));
+    mdlMapCursor = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x14));
     ((igObjectRefMetaField *)mdlMapCursor)->_metaObject = (int)beNDMWMdlMapCursor_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_libNdmwRuntimePlugin_fieldTable, g_libNdmwRuntimePlugin_fieldHandles, g_libNdmwRuntimePlugin_fieldOffsets, base);
 }

@@ -60,7 +60,7 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     n2 = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 4, 1);
     if (n2 != 0) {
         s = n2->obj;
-        if (s != 0 && igObject_IsKindOf(s, g_igVec2fList_metaObject[0]) != 0) {
+        if (s != 0 && igObject_IsKindOf(s, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
             r = s;
         } else {
             r = 0;
@@ -110,7 +110,7 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
             v = 0;
             if (e != 0) {
                 o = e->obj;
-                if (o != 0 && igObject_IsKindOf(o, g_igVec2fList_metaObject[0]) != 0) {
+                if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
                     o = (Obj_17e980 *)o;
                 } else {
                     o = 0;
@@ -137,7 +137,7 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
                     v += arg2 * 8;
                 }
             }
-            p2SetTexCoordArray(i, v);
+            p2SetTexCoordArray(i, (float *)v);
         }
     }
 }
@@ -173,57 +173,57 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     }
     switch (arg2) {
     case 0x0:
-        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
         p2DrawPoints(arg3);
         break;
     case 0x1:
-        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
         p2DrawLines(arg3);
         break;
     case 0x2:
-        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
         p2DrawLineStrip(arg3);
         break;
     case 0x3:
-        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
         if (var_s0 == 0) {
             p2DrawTriangles(arg3);
         } else {
-            p2DrawIndexedTriangles(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedTriangles(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
         }
         break;
     case 0x4:
-        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
         if (var_s0 == 0) {
             p2DrawTriangleStrip(arg3);
         } else {
-            p2DrawIndexedTriangleStrip(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedTriangleStrip(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
         }
         break;
     case 0x5:
-        p2SetVertexArrays(spBC, spB8, spAC, spB4);
+        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
         if (var_s0 == 0) {
             p2DrawTriangleFan(arg3);
         } else {
-            p2DrawIndexedTriangleFan(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedTriangleFan(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
         }
         break;
     case 0x1000:
         if (FUN_0017e590((Self_17e590 *)arg0, arg1, var_s1, &spA8, &spB0) && (temp_s7 == 0)) {
             p2EnableCapability(0x1B);
         }
-        p2SetTexCoordArray(1, spB0);
-        p2SetVertexArrays(spBC, spA8, spAC, spB4);
+        p2SetTexCoordArray(1, (float *)spB0);
+        p2SetVertexArrays((float *)spBC, (float *)spA8, (unsigned int *)spAC, (float *)spB4);
         if (var_s0 == 0) {
             p2DrawSprites(arg3);
         } else {
-            p2DrawIndexedSprites(arg3, var_s0 + (var_s1 * 2));
+            p2DrawIndexedSprites(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
         }
         break;
     case 0x2000:
         var_s3 = arg0->f948->f8 + arg5;
         for (var_s0_2 = 0; var_s0_2 < arg3; var_s0_2++) {
-            p2SetVertexArrays(spBC, spB8, spAC, spB4);
+            p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
             p2DrawLineStrip(*var_s3);
             var_s1 += *var_s3;
             var_s3 += 1;
@@ -234,11 +234,11 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     case 0x2002:
         var_s3 = arg0->f948->f8 + arg5;
         for (var_s6 = 0; var_s6 < arg3; var_s6++) {
-            p2SetVertexArrays(spBC, spB8, spAC, spB4);
+            p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
             if (var_s0 == 0) {
                 p2DrawTriangleFan(*var_s3);
             } else {
-                p2DrawIndexedTriangleFan(*var_s3, var_s0 + (var_s1 * 2));
+                p2DrawIndexedTriangleFan(*var_s3, (unsigned short *)(var_s0 + (var_s1 * 2)));
             }
             var_s1 += *var_s3;
             var_s3 += 1;
@@ -249,12 +249,12 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     case 0x2001:
         var_s3 = arg0->f948->f8 + arg5;
         if (var_s0 == 0) {
-            p2SetVertexArrays(spBC, spB8, spAC, spB4);
+            p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
             p2DrawTriangleStrips(arg3, var_s3);
         } else {
             for (var_s6 = 0; var_s6 < arg3; var_s6++) {
-                p2SetVertexArrays(spBC, spB8, spAC, spB4);
-                p2DrawIndexedTriangleStrip(*var_s3, var_s0 + (var_s1 * 2));
+                p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
+                p2DrawIndexedTriangleStrip(*var_s3, (unsigned short *)(var_s0 + (var_s1 * 2)));
                 var_s1 += *var_s3;
                 var_s3 += 1;
                 FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4);

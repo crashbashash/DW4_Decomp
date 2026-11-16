@@ -3,7 +3,7 @@ igMetaField *g_beNDMWStatusCtrlBit_playerNoListMetaField;
 
 beNDMWStatusCtrlBit *beNDMWStatusCtrlBit_Create(int allocator) {
     beNDMWStatusCtrlBit_EnsureRegistered();
-    return (beNDMWStatusCtrlBit *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlBit_metaObject, allocator);
+    return (beNDMWStatusCtrlBit *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlBit_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWStatusCtrlBit_GetMetaObject(void) {
@@ -28,7 +28,7 @@ int beNDMWStatusCtrlBit_GetVTable(void) {
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlBit_vtable[0];
     obj._playerNoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlBit_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
@@ -42,7 +42,7 @@ void beNDMWStatusCtrlBit_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusCtrlBit_callbackList[] = { igIntList_EnsureRegistered, 0 };
 
-void *beNDMWStatusCtrlBit_Register(void) {
+CallbackArray *beNDMWStatusCtrlBit_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

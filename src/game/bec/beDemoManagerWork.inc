@@ -4,12 +4,12 @@ igMetaField *g_beDemoManagerWork_keepMesListMetaField;
 
 beDemoManagerWork *beDemoManagerWork_CreateInstance(int allocator) {
     beDemoManagerWork_EnsureRegistered();
-    return (beDemoManagerWork *)igMetaObject_CreateInstance(*(int *)0x5897D8, allocator);
+    return (beDemoManagerWork *)igMetaObject_CreateInstance(g_beDemoManagerWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beDemoManagerWork_GetOrCreateMetaObject(void) {
     if (g_beDemoManagerWork_metaObject == 0) {
-        g_beDemoManagerWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beDemoManagerWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beDemoManagerWork_metaObject;
 }
@@ -31,7 +31,7 @@ int beDemoManagerWork_GetVTable(void) {
     obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
     keepMesListSlot = (igObject **)&obj._keepMesList;
     *keepMesListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
     igObjectRef_Release(keepMesListSlot);
     return vtable;
@@ -44,7 +44,7 @@ void beDemoManagerWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDemoManagerWork_callbackList[] = { beDemoKeepMesList_EnsureRegistered, 0 };
 
-void *beDemoManagerWork_Register(void) {
+CallbackArray *beDemoManagerWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,9 +86,9 @@ static int g_beDemoManagerWork_fieldOffsets[] = {
 void beDemoManagerWork_InitFields(void) {
     int base;
     void *keepMesList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDemoManagerWork_metaObject;
+    meta = g_beDemoManagerWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDemoManagerWork_ctorTable, 2);
     keepMesList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));

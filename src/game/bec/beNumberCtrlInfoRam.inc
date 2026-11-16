@@ -31,7 +31,7 @@ int beNumberCtrlInfoRam_GetVTable(void) {
     numListSlot = &obj._numList;
     *numListSlot = 0;
     obj._work = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beNumberCtrlInfoRam_vtable[0];
     igSmartPointer_beNumberCtrlInfoWork_Destruct((igSmartPointer<igObject> *)(&obj._work), -1);
     igSmartPointer_beNumVerDataList_Destruct((igSmartPointer<igObject> *)numListSlot, (long long)(-1));
@@ -73,7 +73,7 @@ void beNumberCtrlInfoRam_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNumberCtrlInfoRam_callbackList[] = { igGeometry_EnsureRegistered, beNumVerDataList_EnsureRegistered, beNumberCtrlInfoWork_EnsureRegistered, 0 };
 
-void *beNumberCtrlInfoRam_Register(void) {
+CallbackArray *beNumberCtrlInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -133,13 +133,13 @@ void beNumberCtrlInfoRam_InitFields(void) {
     void *geometry;
     void *numList;
     void *work;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beNumberCtrlInfoRam_metaObject;
+    meta = g_beNumberCtrlInfoRam_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNumberCtrlInfoRam_ctorTable, 6);
     geometry = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)geometry)->_metaObject = igGeometry_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)geometry)->_metaObject = (int)igGeometry_GetOrCreateMetaObject();
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 0.09375f);
     numList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)numList)->_metaObject = (int)beNumVerDataList_GetOrCreateMetaObject();

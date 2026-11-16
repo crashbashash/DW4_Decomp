@@ -184,7 +184,6 @@ struct InitRef { int p0; int rc; };
 struct VoiceList { char p[8]; int count; int cap; int data; };
 struct InitContext { char p[12]; struct InitRef *conn; char q[8]; int f24; char r[4]; int f32; int f36; int f40; };
 
-struct PanResult { int v; PanResult(int x) { v = x; } PanResult() {} };
 struct VoiceFlags35 {
     char p[11];
     unsigned char b0 : 1;
@@ -203,7 +202,7 @@ struct VoiceFlags35 {
 struct VoiceTable35 { char p[16]; VoiceFlags35 *arr; };
 
 class DW4VC_128_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int vX(); };
-class DW4VC_132_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int vX(); };
+class DW4VC_132_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual unsigned short vX(); };
 class igPsx2AudioContextView {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -234,41 +233,38 @@ typedef struct VoiceStateBits {
 } VoiceStateBits;
 typedef union VoiceStateWord { VoiceStateBits r; int i; } VoiceStateWord;
 
-typedef void (*igMetaObjectCallback)();
-typedef igMetaField *(*FieldFactory)(void *);
 
 extern igSmartPointer<igPsx2AudioSourceList> g_audioTableOwner;
 
+#include "dw4/igObject.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObjectSystem.h"
+#include "dw4/igMetaObject.h"
+#include "dw4/igThread.h"
+#include "dw4/libkernl.h"
+#include <string.h>
 extern "C" {
-igMetaField *igBoolMetaField_Create(void *);
-igMetaField *igObjectRefMetaField_Create(void *);
-igMetaField *igUnsignedIntMetaField_Create(void *);
-igMetaField *igRawRefMetaField_Create(void *);
-igMetaField *igMemoryRefMetaField_Create(void *);
-igMetaField *igIntMetaField_Create(void *);
+#include "dw4/sony/sif.h"
+}
+#include <math.h>
+#include "dw4/igResult.h"
+extern "C" {
+class igMemoryPoolView;
+igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
+igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
+igMetaField *igUnsignedIntMetaField_Create(igMemoryPoolView *pool);
+igMetaField *igRawRefMetaField_Create(igMemoryPoolView *pool);
+igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool);
+igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
 void igPsx2IopRpcConnection_EnsureRegistered(void);
 void igThread_EnsureRegistered(void);
 void FUN_00145de0(void);
-extern int g_igDataList_metaObject[4];
-extern char igObject_GetMetaObject_ParentAccessor[];
-extern char igObject_Register[];
-extern char igAudioContext_GetPublishedMetaObject[];
-extern char igDataList_Register[];
-extern int kIGMemoryPoolHandleMetaData[4];
+extern igMetaObject *g_igDataList_metaObject;
+igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
-extern void *g_objectSystem[4];
 
-int igMetaObject_CreateInstance(int, int);
-igMetaObject *igMetaObject_Create(...);
-int Memory_GetAllocatorBySelector(...);
-void igMetaObject_RunStaticInit(void (*)(void));
-int igMetaObject_RegisterClass(...);
-int igMetaObject_CreateFields(...);
-void *igMetaObject_GetFieldAt(...);
-int igMetaObject_GetFieldCount(...);
-int igMetaObject_NameFields(...);
-int igObject_InitHeader(...);
 int __dl__FPv(...);
 int igBoolMetaField_SetDefaultValue(...);
 int FUN_00145d40(...);
@@ -276,35 +272,20 @@ int igUnsignedIntMetaField_GetDefaultDescriptor(...);
 int igThread_GetOrCreateMetaObject(...);
 int igPsx2IopRpcConnection_GetOrCreateMetaObject(...);
 int igUnsignedIntMetaField_SetDefaultValue(...);
-int igObject_GetAllocator(...);
-int igObject_ReleaseDefaults(...);
-void igObject_FreeMemory(...);
-int *igObject_MallocAligned(...);
 int igPsx2IopRpcConnection_CallNoData(...);
 int igPsx2IopRpcConnection_Call(...);
 int igPsx2IopRpcConnection_CallWithData(...);
 void *igSemaphore_Create(...);
-ThreadRef *igThread_Create(...);
-int DIntr(...);
-int sceSifAddCmdHandler(...);
-int EIntr(...);
-void SyncDCache(int, int);
-void *memset(void *, int, unsigned int);
-double floor(double);
 int sceSifSearchModuleByName(const char *);
 RpcStatus igPsx2_LoadIopModule(const char *, int, int, int);
 int FUN_00301000(InitContext *);
 int igPsx2IopRpcConnection_Create(int);
 RpcStatus igPsx2IopRpcConnection_Bind(InitRef *, int);
-void List_Resize(VoiceList *, int, int);
-extern int g_resultSuccess[4];
-extern int g_resultFailure[4];
-void List_Reserve(...);
-void *FUN_001435c0(int arg0);
+void *FUN_001435c0(igMemoryPoolView *pool);
 unsigned FUN_00145960(void *context, void *voice);
 int FUN_00145a10(void *arg0, void *voice);
 
-void igAudioContext_Register(void);
+CallbackArray *igAudioContext_Register(void);
 void thunk_igAudioContext_GetMetaObject(void);
 void igAudioContext_InitFields(void);
 void thunk_FUN_00143150(void);
@@ -313,12 +294,11 @@ void **FUN_00143250(void **arg0, short arg1);
 void **igSmartPointer_igThread_Destruct(struct RefCountBits **self, short flag);
 void **FUN_00143350(void **arg0, long long arg1);
 void FUN_001433d0(void);
-void igPsx2AudioContext_Register(void);
+CallbackArray *igPsx2AudioContext_Register(void);
 void igPsx2AudioContext_InitFields(void);
 void FUN_00143690(void);
-void igPsx2AudioSourceList_Register(void);
+CallbackArray *igPsx2AudioSourceList_Register(void);
 void thunk_igPsx2AudioSourceList_GetMetaObject(void);
-int igDataList_GetPublishedMetaObject(void);
 void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, int arg5, unsigned char arg6, int arg7, unsigned char arg8);
 
 #endif

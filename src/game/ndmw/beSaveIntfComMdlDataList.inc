@@ -2,7 +2,7 @@ igMetaObject *g_beSaveIntfComMdlDataList_metaObject;
 
 igMetaObject *beSaveIntfComMdlDataList_GetOrCreateMetaObject(void) {
     if (g_beSaveIntfComMdlDataList_metaObject == 0) {
-        g_beSaveIntfComMdlDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSaveIntfComMdlDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSaveIntfComMdlDataList_metaObject;
 }
@@ -20,7 +20,7 @@ int beSaveIntfComMdlDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beSaveIntfComMdlDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beSaveIntfComMdlDataList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beSaveIntfComMdlDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSaveIntfComMdlDataList_callbackList[] = { beSaveIntfComMdlData_EnsureRegistered, 0 };
 
-void *beSaveIntfComMdlDataList_Register(void) {
+CallbackArray *beSaveIntfComMdlDataList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

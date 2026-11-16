@@ -20,9 +20,9 @@ int beResetNode_GetVTable(void) {
     obj._parentList = 0;
     obj._childList = 0;
     obj._vtable = (int)&g_beResetNode_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beResetNode_vtable[0];
-    igGroup_Destroy(&obj, 0);
+    igGroup_Destroy((igGroup *)&obj, 0);
     return vtable;
 }
 
@@ -31,12 +31,12 @@ void beResetNode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beResetNode_Register);
 }
 
-void *beResetNode_Register(void) {
+CallbackArray *beResetNode_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beResetNode_metaObject,
-        igGroup_Register,
+        (igMetaObjectRegisterFunction)igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beResetNode_GetMetaObjectFunction,
         "beResetNode",
@@ -72,9 +72,9 @@ static int g_beResetNode_fieldOffsets[] = {
 
 void beResetNode_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beResetNode_metaObject;
+    meta = g_beResetNode_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beResetNode_ctorTable, 2);
     igMetaObject_NameFields(meta, g_beResetNode_fieldTable, g_beResetNode_fieldHandles, g_beResetNode_fieldOffsets, base);

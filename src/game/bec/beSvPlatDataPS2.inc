@@ -44,7 +44,7 @@ int beSvPlatDataPS2_GetVTable(void) {
     obj._fnameIcon1 = 0;
     obj._fnameIcon2 = 0;
     obj._image = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvPlatDataPS2_vtable[0];
     igSmartPointer_igObjectList_Destruct(&obj._image, -1);
     igStringRef_Destruct(&obj._fnameIcon2, -1);
@@ -63,7 +63,7 @@ void beSvPlatDataPS2_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSvPlatDataPS2_callbackList[] = { igObjectList_EnsureRegistered, 0 };
 
-void *beSvPlatDataPS2_Register(void) {
+CallbackArray *beSvPlatDataPS2_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -187,7 +187,7 @@ void beSvPlatDataPS2_InitFields(void) {
     int index;
     void **found;
     igEnumMetaField *field;
-    void *meta;
+    igMetaObject *meta;
     igIntMetaField *clone;
 
     meta = (igMetaObject *)(((void * *)&g_beSvPlatDataPS2_metaObject)[0]);
@@ -198,7 +198,7 @@ void beSvPlatDataPS2_InitFields(void) {
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 5);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataPS2_connectMaxStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
@@ -216,7 +216,7 @@ void beSvPlatDataPS2_InitFields(void) {
     field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0xE); field->_getMetaEnumFunction = 4;
     field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0x13); field->_getMetaEnumFunction = 2;
     igObjectRefMetaField *image = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x15));
-    image->_metaObject = igObjectList_GetOrCreateMetaObject();
+    image->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
     image->_construct = 1;
     igMetaObject_NameFields(meta, g_beSvPlatDataPS2_fieldTable, g_beSvPlatDataPS2_fieldHandles, g_beSvPlatDataPS2_fieldOffsets, base);
 }

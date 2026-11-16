@@ -18,8 +18,6 @@ typedef char *va_list;
 /* the conversion buffer's last index: the digits end there, and a zero-padded width stops there */
 #define PAD_MAX 31
 
-int kputs(char *s);
-
 static void serialPutchar(int c);
 
 static int count = 0;

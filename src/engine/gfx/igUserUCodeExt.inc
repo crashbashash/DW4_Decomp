@@ -13,9 +13,9 @@ void FUN_0014bbb0(void)
     igMetaObject_RunStaticInit(igUserUCodeExt_Register);
 }
 
-void igUserUCodeExt_Register(void) {
+CallbackArray *igUserUCodeExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igUserUCodeExt_metaObject,
         igContextExt_Register,

@@ -2,12 +2,12 @@ igMetaObject *g_igTextureList_metaObject;
 
 igTextureList *igTextureList_CreateInstance(int allocator) {
     igTextureList_EnsureRegistered();
-    return (igTextureList *)igMetaObject_CreateInstance(*(int *)0x55F418, allocator);
+    return (igTextureList *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F418, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igTextureList_GetOrCreateMetaObject(void) {
     if (g_igTextureList_metaObject == 0) {
-        g_igTextureList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureList_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igTextureList_GetMetaObject(void)
 int igTextureList_GetVTable(void) {
     struct Obj_13a400 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTextureList_EnsureRegistered(void)
@@ -35,9 +35,9 @@ void igTextureList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igTextureList_callbackList[] = { igTextureAttr_EnsureRegistered, 0 };
 
-void igTextureList_Register(void) {
+CallbackArray *igTextureList_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureList_metaObject,
         igObjectList_Register,

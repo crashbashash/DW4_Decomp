@@ -51,7 +51,7 @@ void FUN_00170510(Obj_170510 *o, int arg1) {
         t = o->t;
         if (t != 0) {
             POOL();
-            s1 = (char *)StringPool_Intern(g_stringPool[0], 0);
+            s1 = (char *)StringPool_Intern(g_stringPool, 0);
             STR_RELEASE(t->str);
             t->str = s1;
             Memory_FreeBuffer(t->buf);
@@ -69,7 +69,7 @@ void FUN_00170510(Obj_170510 *o, int arg1) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_75(igPsx2VisualContext *self, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_75(igPsx2VisualContext *self, unsigned char arg1) {
     S0_1706d0 *arg0 = (S0_1706d0 *)self;
     if (arg0->f1340 == (arg1 & 0xFF)) {
         DAT_00560848[0] += 1;
@@ -79,29 +79,29 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_75(igPsx2VisualContext *self, int arg1
     }
     arg0->f1340 = arg1;
     if (arg0->f1340 == 1) {
-        p2EnableCapability(8, arg1);
+        p2EnableCapability(8);
         return;
     }
-    p2DisableCapability(8, arg1);
+    p2DisableCapability(8);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_76(void *arg0) {
     return *(int *)((char *)(arg0) + 1340);
 }
 
-unsigned short Gap__Gfx__igPsx2VisualContext__vfunc_77(Obj_170750 *arg0, int arg1) {
+int Gap__Gfx__igPsx2VisualContext__vfunc_77(igPsx2VisualContext *self, int arg1) {
     Pool *p;
     int i;
-    unsigned short idx;
+    int idx;
     It_170750 *it;
     int v;
-    p = arg0->f1336;
+    p = ((Pool *)self->_pLightList);
     if (p->f4 <= 0) {
         p->f16 = (char *)Memory_ReallocateAlignedAlias(p->f16, (p->f0 + 4) * 0xA0, 0x10);
         memset(p->f16 + p->f0 * 0xA0, 0, 0x280);
         if (p->f2 < 4) {
             O_170750 *o = (O_170750 *)Memory_FindBufferOwner(p);
-            p->f12 = (short *)o->vX((int)p->f12, 8);
+            p->f12 = (unsigned short *)o->vX((int)p->f12, 8);
             p->f2 = 4;
         }
         i = 0;
@@ -114,7 +114,7 @@ unsigned short Gap__Gfx__igPsx2VisualContext__vfunc_77(Obj_170750 *arg0, int arg
     }
     idx = p->f12[p->f4 - 1];
     p->f4 = p->f4 - 1;
-    it = (It_170750 *)(arg0->f1336->f16 + idx * 0xA0);
+    it = (It_170750 *)(((Pool *)self->_pLightList)->f16 + idx * 0xA0);
     FUN_00170210(it);
     it->f152 = arg1;
     switch (arg1) {
@@ -182,7 +182,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_79(igPsx2VisualContext *self, int arg1,
         }
         return 0;
     }
-    p2DisableLight(e->f144, arg1, arg2, m);
+    p2DisableLight(e->f144);
     e->f148 = 0;
     *(int *)((int)DAT_00560858[0] + e->f144 * 4) = -1;
     return 1;
@@ -441,24 +441,24 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_93(void *arg0, int arg1) {
 
 void FUN_00171690(void *arg0, void *arg1) {
     if (*(unsigned char *)((char *)(arg1) + 148) != 0) {
-        p2SetLight(*(int *)((char *)(arg1) + 144));
+        p2SetLight(*(int *)((char *)(arg1) + 144), (p2Light *)arg1);
     }
 }
 
 void FUN_001716c0(void *arg0) {
-    *(float *)((char *)(arg0) + 16) = (float) g_vec4Zero[0];
+    *(float *)((char *)(arg0) + 16) = (float) g_vec4Zero.x;
     *(float *)((char *)(arg0) + 20) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 24) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 28) = (float) DAT_004e117c[0];
-    *(float *)((char *)(arg0) + 0) = (float) g_vec4Zero[0];
+    *(float *)((char *)(arg0) + 0) = (float) g_vec4Zero.x;
     *(float *)((char *)(arg0) + 4) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 8) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 12) = (float) DAT_004e117c[0];
-    *(float *)((char *)(arg0) + 48) = (float) g_vec4Zero[0];
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4Zero.x;
     *(float *)((char *)(arg0) + 52) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 56) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 60) = (float) DAT_004e117c[0];
-    *(float *)((char *)(arg0) + 32) = (float) g_vec4Zero[0];
+    *(float *)((char *)(arg0) + 32) = (float) g_vec4Zero.x;
     *(float *)((char *)(arg0) + 36) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 40) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 44) = (float) DAT_004e117c[0];
@@ -751,36 +751,36 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_116(igPsx2VisualContext *arg0, void *a
 }
 
 void FUN_00172330(void *arg0, void *arg1) {
-    p2SetMaterial(*(int *)((char *)arg1 + 80));
-    p2SetLightingColor(*(int *)((char *)arg0 + 1344) + 0x58);
+    p2SetMaterial(*(int *)((char *)arg1 + 80), (p2Material *)arg1);
+    p2SetLightingColor((float *)(*(int *)((char *)arg0 + 1344) + 0x58));
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_199(Obj_172370 *o, int k, int n) {
     switch (k) {
     case 0:
-        if (n >= o->s[0]->count) List_Reserve(o->s[0], n, 64);
+        if (n >= o->s[0]->count) List_Reserve((igDataList *)o->s[0], n, 64);
         break;
     case 1:
-        if (n >= o->s[1]->count) List_Reserve(o->s[1], n, 64);
+        if (n >= o->s[1]->count) List_Reserve((igDataList *)o->s[1], n, 64);
         break;
     case 2:
-        if (n >= o->s[2]->count) List_Reserve(o->s[2], n, 64);
+        if (n >= o->s[2]->count) List_Reserve((igDataList *)o->s[2], n, 64);
         break;
     case 10:
-        if (n >= o->s[4]->count) List_Reserve(o->s[4], n, 64);
-        if (n >= o->s[8]->count) List_Reserve(o->s[8], n, 64);
+        if (n >= o->s[4]->count) List_Reserve((igDataList *)o->s[4], n, 64);
+        if (n >= o->s[8]->count) List_Reserve((igDataList *)o->s[8], n, 64);
         break;
     case 11:
-        if (n >= o->s[5]->count) List_Reserve(o->s[5], n, 64);
-        if (n >= o->s[9]->count) List_Reserve(o->s[9], n, 64);
+        if (n >= o->s[5]->count) List_Reserve((igDataList *)o->s[5], n, 64);
+        if (n >= o->s[9]->count) List_Reserve((igDataList *)o->s[9], n, 64);
         break;
     case 12:
-        if (n >= o->s[6]->count) List_Reserve(o->s[6], n, 64);
-        if (n >= o->s[10]->count) List_Reserve(o->s[10], n, 64);
+        if (n >= o->s[6]->count) List_Reserve((igDataList *)o->s[6], n, 64);
+        if (n >= o->s[10]->count) List_Reserve((igDataList *)o->s[10], n, 64);
         break;
     case 13:
-        if (n >= o->s[7]->count) List_Reserve(o->s[7], n, 64);
-        if (n >= o->s[11]->count) List_Reserve(o->s[11], n, 64);
+        if (n >= o->s[7]->count) List_Reserve((igDataList *)o->s[7], n, 64);
+        if (n >= o->s[11]->count) List_Reserve((igDataList *)o->s[11], n, 64);
         break;
     }
 }
@@ -852,7 +852,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_202(Obj_172910 *o, int k) {
 
 static inline int n_of(const St_172b00 *list) { return list->n; }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_203(O_172b00 *arg0, int arg1, char *arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_203(igPsx2VisualContext *self, int arg1, char *arg2) {
     int sp15C, sp158, sp154, sp150;
     char sp110[64];
     char spD0[64];
@@ -861,47 +861,47 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_203(O_172b00 *arg0, int arg1, char *ar
     St_172b00 *t;
     switch (arg1) {
     case 0:
-        SET(arg0->s972, arg2)
-        t = arg0->s972;
+        SET((St_172b00 *)self->_projMat, arg2)
+        t = (St_172b00 *)self->_projMat;
         FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
         break;
     case 1:
-        SET(arg0->s976, arg2)
-        t = arg0->s976;
+        SET((St_172b00 *)self->_mvMat, arg2)
+        t = (St_172b00 *)self->_mvMat;
         FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
         break;
     case 2:
-        SET(arg0->s980, arg2)
-        t = arg0->s980;
+        SET((St_172b00 *)self->_texMat, arg2)
+        t = (St_172b00 *)self->_texMat;
         FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)sp110);
-        SETB(arg0->s988, arg2)
+        SETB((St_172b00 *)self->_blendMat0, arg2)
         igMatrix44f_Invert(&sp15C, sp110, arg2);
         FUN_001903d0(sp110);
-        SET(arg0->s1004, sp110)
+        SET((St_172b00 *)self->_invTransBlendMat0, sp110)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)spD0);
-        SETB(arg0->s992, arg2)
+        SETB((St_172b00 *)self->_blendMat1, arg2)
         igMatrix44f_Invert(&sp158, spD0, arg2);
         FUN_001903d0(spD0);
-        SET(arg0->s1008, spD0)
+        SET((St_172b00 *)self->_invTransBlendMat1, spD0)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)sp90);
-        SETB(arg0->s996, arg2)
+        SETB((St_172b00 *)self->_blendMat2, arg2)
         igMatrix44f_Invert(&sp154, sp90, arg2);
         FUN_001903d0(sp90);
-        SET(arg0->s1012, sp90)
+        SET((St_172b00 *)self->_invTransBlendMat2, sp90)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)sp50);
-        SETB(arg0->s1000, arg2)
+        SETB((St_172b00 *)self->_blendMat3, arg2)
         igMatrix44f_Invert(&sp150, sp50, arg2);
         FUN_001903d0(sp50);
-        SET(arg0->s1016, sp50)
+        SET((St_172b00 *)self->_invTransBlendMat3, sp50)
         break;
     }
 }
@@ -1130,7 +1130,7 @@ unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_212(void *arg0) {
     return *(int *)((char *)(arg0) + 1020);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_152(igPsx2VisualContext *self, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_152(igPsx2VisualContext *self, unsigned char arg1) {
     struct S_1743c0 *arg0 = (struct S_1743c0 *)self;
     if (g_igPsx2DisableExt_ext2Enabled != 0) {
         arg1 = 0;
@@ -1140,10 +1140,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_152(igPsx2VisualContext *self, int arg
     }
     arg0->f1032 = arg1;
     if (arg0->f1032 != 0) {
-        p2EnableCapability(2, arg1);
+        p2EnableCapability(2);
         return;
     }
-    p2DisableCapability(2, arg1);
+    p2DisableCapability(2);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_153(void *arg0) {
@@ -1218,11 +1218,11 @@ void FUN_00174510(struct R_174510 *arg0, int arg1, int arg2, int arg3, int arg4,
     } else {
         j = 0;
     }
-    p2CurrentProgram[0] = n;
-    p2CurrentGsRegisters[0] = (StageState *)((int *)p2GsRegisterSets + j * 112);
+    p2CurrentProgram = n;
+    p2CurrentGsRegisters = (p2GsRegisterSet *)((int *)p2GsRegisterSets + j * 112);
     FUN_00174640((int)arg0, n);
-    p2CurrentProgram[0] = 0;
-    p2CurrentGsRegisters[0] = p2GsRegisterSets;
+    p2CurrentProgram = 0;
+    p2CurrentGsRegisters = p2GsRegisterSets;
 }
 
 void FUN_00174640(int arg0, int arg1) {
@@ -1251,7 +1251,7 @@ void FUN_00174640(int arg0, int arg1) {
         var_a2 = 2;
         var_a4 = 0x80;
     }
-    p2SetBlendEquation(var_a0, var_a1, var_a2, var_a3, var_a4, temp_a5, tab);
+    p2SetBlendEquation(var_a0, var_a1, var_a2, var_a3, var_a4);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_217(igPsx2VisualContext *self, unsigned char enable)
@@ -1312,10 +1312,10 @@ void FUN_00174850(struct S174 *arg0, int arg1) {
     }
     arg0->f = arg1;
     if (temp_v1 == 1) {
-        p2DisableCapability(0x13, arg1);
+        p2DisableCapability(0x13);
         return;
     }
-    p2EnableCapability(0x13, arg1);
+    p2EnableCapability(0x13);
 }
 
 unsigned char FUN_001748c0(int *p)
@@ -1344,7 +1344,7 @@ void FUN_00174950(void *d0, int arg1) {
     p2DisableCapability(0x19);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_225(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_225(igPsx2VisualContext *self, unsigned char arg1, unsigned char arg2, unsigned char arg3, unsigned char arg4) {
     *(char *)((char *)(self) + 1252) = arg1;
     *(char *)((char *)(self) + 1253) = arg2;
     *(char *)((char *)(self) + 1254) = arg3;
@@ -1387,28 +1387,28 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_229(igPsx2VisualContext *self, int arg
     }
     arg0->f1268 = arg1;
     if (arg1 != 0) {
-        p2EnableCapability(DAT_0048a538[arg0->f1272], arg1);
+        p2EnableCapability(DAT_0048a538[arg0->f1272]);
         return;
     }
-    p2DisableCapability(DAT_0048a538[arg0->f1272], arg1);
+    p2DisableCapability(DAT_0048a538[arg0->f1272]);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_230(void *arg0) {
     return *(int *)((char *)(arg0) + 1268);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_231(struct P_174b10 *arg0, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_231(igPsx2VisualContext *self, int arg1) {
     int temp_a0;
 
-    temp_a0 = arg0->f1272;
-    if ((temp_a0 != arg1) && (arg0->f1268 != 0)) {
+    temp_a0 = self->_cullFaceMode;
+    if ((temp_a0 != arg1) && (self->_cullFaceEnable != 0)) {
         p2DisableCapability(DAT_0048a538[temp_a0]);
         p2EnableCapability(DAT_0048a538[arg1]);
     }
-    if (arg0->f1272 == arg1) {
+    if (self->_cullFaceMode == arg1) {
         DAT_005609a8[0] += 1;
     }
-    arg0->f1272 = arg1;
+    self->_cullFaceMode = arg1;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_232(void *arg0) {
@@ -1457,7 +1457,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_236(void *arg0) {
     return *(int *)((char *)(arg0) + 1280);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_237(igPsx2VisualContext *self, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_237(igPsx2VisualContext *self, unsigned char arg1) {
     struct S_174d70 *arg0 = (struct S_174d70 *)self;
     if (arg0->b == (arg1 & 0xFF)) {
         DAT_005609b4[0] += 1;
@@ -1508,7 +1508,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_162(void *arg0) {
     return *(int *)((char *)(arg0) + 1264);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_163(S0_174ee0 *arg0, unsigned int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_163(igPsx2VisualContext *self, unsigned int arg1) {
     switch (arg1) {
     case 0:
     case 1:
@@ -1517,7 +1517,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_163(S0_174ee0 *arg0, unsigned int arg1
     case 4:
     case 5:
     case 6:
-        if ((arg0->f4EC != 0) && (p2IsCapabilityEnabled(4) == 0)) {
+        if ((self->_stencilState != 0) && (p2IsCapabilityEnabled(4) == 0)) {
             p2EnableCapability(4);
         }
         break;
@@ -1525,31 +1525,31 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_163(S0_174ee0 *arg0, unsigned int arg1
         p2DisableCapability(4);
         break;
     }
-    if (arg0->f508 == arg1) {
+    if (self->_stencilFunc == arg1) {
         DAT_005609c0[0] += 1;
     }
-    arg0->f508 = arg1;
+    self->_stencilFunc = arg1;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_164(void *arg0) {
     return *(int *)((char *)(arg0) + 1288);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_165(igPsx2VisualContext *self) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_165(igPsx2VisualContext *self, int failOp, int passZPassOp, int passZFailOp) {
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_166(void) {
 
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_167(igPsx2VisualContext *self) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_167(igPsx2VisualContext *self, unsigned int readMask) {
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_168(void) {
     return -1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_169(igPsx2VisualContext *self) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_169(igPsx2VisualContext *self, unsigned int writeMask) {
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_170(void) {
@@ -1592,10 +1592,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *self, int arg
     }
     arg0->mode = arg1;
     if (arg1 != 0) {
-        p2EnableCapability(7, arg1);
+        p2EnableCapability(7);
         return;
     }
-    p2DisableCapability(7, arg1);
+    p2DisableCapability(7);
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_242(void *arg0) {
@@ -1702,11 +1702,11 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_252(void *arg0) {
     return *(float *)((char *)arg0 + 1332);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_253(int *arg0, struct S_1753f0 *arg1, struct E_1753f0 *arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_253(igResult *arg0, struct S_1753f0 *arg1, struct E_1753f0 *arg2) {
     if (arg1->b322 == 1) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure;
     } else if (arg2 == 0) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure;
     } else {
         arg1->b1348 = arg2->b0;
         arg1->b1349 = arg2->b1;
@@ -1715,7 +1715,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_253(int *arg0, struct S_1753f0 *arg1, 
         arg1->f1360 = arg2->f12;
         arg1->f1364 = arg2->f16;
         arg1->f1368 = arg2->f20;
-        *arg0 = g_resultSuccess[0];
+        *arg0 = g_resultSuccess;
     }
 }
 
@@ -1734,7 +1734,7 @@ int FUN_001754b0(struct S1754 *arg0, int arg1) {
         DAT_005609e4[0] += 1;
     }
     arg0->f = arg1;
-    return p2SetColorScaler(DAT_0048a520[arg1], (char *)arg0 + 0x598) != 0;
+    return p2SetColorScaler(DAT_0048a520[arg1], (float *)((char *)arg0 + 0x598)) != 0;
 }
 
 void FUN_00175510(struct S_175510 *arg0, float *arg1) {

@@ -61,7 +61,7 @@ igMetaObject *igGeometryAttr1_5_GetMetaObject(void)
 int igGeometryAttr1_5_GetVTable(void) {
     struct W_137430 o;
     int r;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.f[2] = 0;
     o.f[3] = 0;
     o.f[7] = 0;
@@ -69,7 +69,7 @@ int igGeometryAttr1_5_GetVTable(void) {
     o.f[10] = 0;
     o.vt = g_igGeometryAttr1_5_vtable;
     o.f[11] = 0;
-    r = *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = g_igGeometryAttr1_5_vtable;
     FUN_00137260((void **)&o.f[11], -1);
     FUN_00137530((O_137530 *)&o, 0);
@@ -120,9 +120,9 @@ void igGeometryAttr1_5_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igGeometryAttr1_5_callbackList[] = { FUN_0014c0d0, 0 };
 
-void igGeometryAttr1_5_Register(void) {
+CallbackArray *igGeometryAttr1_5_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometryAttr1_5_metaObject,
         igGeometryAttr_Register,
@@ -146,7 +146,7 @@ igMetaObject *FUN_00137770(void) {
 }
 
 static FieldFactory g_igGeometryAttr1_5_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igGeometryAttr1_5_fieldTable[] = {
     "_stripLengths",

@@ -1,20 +1,18 @@
 #include "dw4/igSmartPointer.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beModelCtrl.h"
+#include "dw4/beModelCtrlInfoWork.h"
+#include "dw4/beNDMWMdlEBullet.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include <string.h>
 
-extern "C" int strcmp(int, int *);
 extern "C" int beNDMWMdlEBullet_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlEBullet_RegisterReceiver(void);
 extern "C" int beNDMWMdlEBullet_GetMeta(void);
-extern "C" int beModelCtrl__OnGenerateFromParent(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int igObject_GetAllocator(...);
 extern "C" int KIND_EBULLET[4];
-extern "C" int g_beNDMWMdlEBullet_metaObject[4];
-extern "C" igObject *beModelCtrlInfoWork_Create(...);
-extern "C" igObject *beBaseInfoDataList_Create(...);
-extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
-extern "C" int g_propertyNameField[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -39,14 +37,14 @@ public:
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     igObject *s0;
     if (ram->_dataList == 0) {
-        int alloc = igObject_GetAllocator(ram);
-        int a;
+        igMemoryPoolView *alloc = igObject_GetAllocator(ram);
+        igMemoryPoolView *a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
-        igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
+        igSmartPointer<igObject> list(beBaseInfoDataList_Create((int)a));
         s0 = list.p;
         if (s0 != 0) {
             s0->_refCount++;
@@ -61,7 +59,7 @@ extern "C" void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *self, beBaseInfoRa
 #pragma readonly_strings on
 
 int beNDMWMdlEBullet_IsKind(int dummy0, int kind) {
-    return strcmp(kind, &KIND_EBULLET[0]) == 0;
+    return strcmp((const char *)kind, (const char *)KIND_EBULLET) == 0;
 }
 
 void beNDMWMdlEBullet_RegisterReceiver(void)
@@ -71,29 +69,29 @@ void beNDMWMdlEBullet_RegisterReceiver(void)
 void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *self, beBaseInfoRam *ram) {
     igObject *s0;
     beModelCtrlInfoRamData *s1;
-    int alloc;
-    int a;
+    igMemoryPoolView *alloc;
+    igMemoryPoolView *a;
     RamDataList::Ensure(ram);
-    s1 = igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], "ONE");
+    s1 = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     alloc = igObject_GetAllocator(self);
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
-        a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     }
-    ValueRef value(beModelCtrlInfoWork_Create(a));
+    ValueRef value(beModelCtrlInfoWork_Create((int)a));
     s0 = value.p;
     if (s0 != 0) {
         s0->_refCount++;
     }
     ReleaseRef::go((igObject *)s1->_work);
     s1->_work = (int)s0;
-    beModelCtrl__OnGenerateFromParent(self, ram);
+    beModelCtrl__OnGenerateFromParent((beModelCtrl *)self, ram);
 }
 
 int beNDMWMdlEBullet_GetMeta(void)
 {
-    return g_beNDMWMdlEBullet_metaObject[0];
+    return (int)g_beNDMWMdlEBullet_metaObject;
 }
 
 #pragma pop

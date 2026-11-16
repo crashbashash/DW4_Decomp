@@ -1,8 +1,10 @@
 /* glue.c - libkernl's newlib system-call glue: the console reads and writes through the DECI2 tty,
  * the heap grows up to EndOfHeap, files are unsupported. VSync waits on the INTC's vblank bit. */
 
+#include "dw4/eekernel.h"
 #include "dw4/eekernel_intr.h"
 #include "dw4/libkernl.h"
+#include "dw4/newlib_reent.h"
 
 /* newlib's struct stat with the EE's 64-bit long */
 struct stat {
@@ -39,13 +41,6 @@ struct stat {
 
 void SetVSyncFlag(int *flag, unsigned long *time);
 void *EndOfHeap(void);
-int sceTtyInit(void);
-int sceTtyRead(void *buf, int size);
-int sceTtyWrite(void *buf, int size);
-int *__errno(void);
-void Exit(int status);
-
-extern char _end[];
 
 static int ttyinit = 0;
 
@@ -69,7 +64,7 @@ void VSync(void)
 }
 
 /* VSync that also returns the time the kernel stamped at the vblank */
-unsigned long VSync2(void)
+long VSync2(void)
 {
     int interrupts;
     volatile struct {
@@ -123,7 +118,7 @@ int open(void)
     return -1;
 }
 
-int close(void)
+int close(int fd)
 {
     return -1;
 }
@@ -133,7 +128,7 @@ int ioctl(void)
     return -1;
 }
 
-int lseek(void)
+int lseek(int fd, int offset, int whence)
 {
     return -1;
 }
@@ -159,7 +154,7 @@ void *sbrk(int incr)
     return prev;
 }
 
-int isatty(void)
+int isatty(int fd)
 {
     return 1;
 }

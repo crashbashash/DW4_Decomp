@@ -29,7 +29,7 @@ int beHitLandDelivInfoRam_GetVTable(void) {
     obj._vtable = (int)&g_beHitLandDelivInfoRam_vtable[0];
     transformSlot = (igObject **)&obj._transform;
     *transformSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beHitLandDelivInfoRam_vtable[0];
     igObjectRef_Release(transformSlot);
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
@@ -44,7 +44,7 @@ void beHitLandDelivInfoRam_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beHitLandDelivInfoRam_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
-void *beHitLandDelivInfoRam_Register(void) {
+CallbackArray *beHitLandDelivInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -120,13 +120,13 @@ void beHitLandDelivInfoRam_InitFields(void) {
     int vc[3];
     void *landPos;
     void *oldPos;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beHitLandDelivInfoRam_metaObject;
+    meta = g_beHitLandDelivInfoRam_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandDelivInfoRam_ctorTable, 9);
     transform = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)transform)->_metaObject = igTransform_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)transform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), 3.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, 3 + base), 4.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, 4 + base), 4.0f);

@@ -1,11 +1,11 @@
 igGeometry *igGeometry_CreateInstance(int allocator) {
     igGeometry_EnsureRegistered();
-    return (igGeometry *)igMetaObject_CreateInstance((int)g_igGeometry_metaObject, allocator);
+    return (igGeometry *)igMetaObject_CreateInstance((igMetaObject *)g_igGeometry_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igGeometry_GetOrCreateMetaObject(void) {
     if (g_igGeometry_metaObject == 0) {
-        g_igGeometry_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGeometry_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGeometry_metaObject;
 }
@@ -21,7 +21,7 @@ igMetaObject *igGeometry_GetMetaObject(void)
 int igGeometry_GetVTable(void) {
     struct Obj_19fb80 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
@@ -29,7 +29,7 @@ int igGeometry_GetVTable(void) {
     obj.w8 = 0;
     obj.vt = &g_igGeometry_vtable[0];
     obj.w10 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igGeometry_vtable[0];
     FUN_0019d0a0((void * *)&obj.w10, -1);
     FUN_0019c0e0((struct S_19c0e0 *)&obj, 0);
@@ -38,14 +38,14 @@ int igGeometry_GetVTable(void) {
 
 void igGeometry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit(igGeometry_Register);
+    igMetaObject_RunStaticInit((CallbackArray * (*)())igGeometry_Register);
 }
 
 static igMetaObjectCallback g_igGeometry_callbackList[] = { FUN_00133f80, 0 };
 
-void igGeometry_Register(void) {
+CallbackArray *igGeometry_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometry_metaObject,
         igAttrSet_Register,
@@ -65,7 +65,7 @@ void thunk_igGeometry_GetMetaObject(void) {
 }
 
 static FieldFactory g_igGeometry_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igGeometry_fieldTable[] = {
     "_renderList",
@@ -86,19 +86,19 @@ void FUN_0019fca0(void) {
     void *temp_v0_2;
 
     temp_s1 = (void *)(g_igGeometry_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igGeometry_ctorTable, 1);
-    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, "_trigger")));
+    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_trigger")));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     igBoolMetaField_SetDefaultValue(temp_v0_2, 1);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igGeometry_triggerMetaField);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_v0_2) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((void *)temp_v0_2);
+        igObject_Destroy((igObject *)temp_v0_2);
     }
-    temp_s0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s2)));
+    temp_s0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2)));
     *(int *)((char *)(temp_s0) + 56) = FUN_00133e50();
     *(char *)((char *)(temp_s0) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igGeometry_fieldTable, g_igGeometry_fieldHandles, g_igGeometry_fieldOffsets, temp_s2);

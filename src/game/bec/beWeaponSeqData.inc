@@ -21,7 +21,7 @@ int beWeaponSeqData_GetVTable(void) {
     obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
     labelSlot = (char **)&obj._label;
     *labelSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
     igStringRef_Release(labelSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -34,7 +34,7 @@ void beWeaponSeqData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beWeaponSeqData_Register);
 }
 
-void *beWeaponSeqData_Register(void) {
+CallbackArray *beWeaponSeqData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -71,9 +71,9 @@ static int g_beWeaponSeqData_fieldOffsets[] = {
 
 void beWeaponSeqData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beWeaponSeqData_metaObject;
+    meta = g_beWeaponSeqData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beWeaponSeqData_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beWeaponSeqData_fieldTable, g_beWeaponSeqData_fieldHandles, g_beWeaponSeqData_fieldOffsets, base);

@@ -3,12 +3,12 @@ igMetaField *g_beSaveMemoryObj_memMetaField;
 
 beSaveMemoryObj *beSaveMemoryObj_CreateInstance(int allocator) {
     beSaveMemoryObj_EnsureRegistered();
-    return (beSaveMemoryObj *)igMetaObject_CreateInstance(*(int *)0x5883A0, allocator);
+    return (beSaveMemoryObj *)igMetaObject_CreateInstance(g_beSaveMemoryObj_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSaveMemoryObj_GetOrCreateMetaObject(void) {
     if (g_beSaveMemoryObj_metaObject == 0) {
-        g_beSaveMemoryObj_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSaveMemoryObj_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSaveMemoryObj_metaObject;
 }
@@ -26,7 +26,7 @@ int beSaveMemoryObj_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beSaveMemoryObj_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beSaveMemoryObj_EnsureRegistered(void)
@@ -34,7 +34,7 @@ void beSaveMemoryObj_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSaveMemoryObj_Register);
 }
 
-void *beSaveMemoryObj_Register(void) {
+CallbackArray *beSaveMemoryObj_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -72,9 +72,9 @@ static int g_beSaveMemoryObj_fieldOffsets[] = {
 void beSaveMemoryObj_InitFields(void) {
     int base;
     void *mem;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSaveMemoryObj_metaObject;
+    meta = g_beSaveMemoryObj_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSaveMemoryObj_ctorTable, 1);
     mem = (void *)(igMetaObject_GetFieldAt(meta, base));

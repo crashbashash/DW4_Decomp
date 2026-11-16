@@ -105,7 +105,6 @@ typedef union McApdx {
     unsigned char raw[192];
 } McApdx;
 
-int PollSema(int sema);
 char *strncpy(char *dst, const char *src, unsigned int n);
 unsigned int strlen(const char *s);
 void *memcpy(void *dst, const void *src, unsigned int n);

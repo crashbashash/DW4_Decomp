@@ -32,13 +32,13 @@ int igPsx2AudioContext_GetVTable(void) {
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igPsx2AudioContext_vtable[0];
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[48] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igPsx2AudioContext_vtable[0];
     FUN_00143350((void **)&u.b[48], -1);
     FUN_00143350((void **)&u.b[20], -1);
@@ -103,9 +103,9 @@ void FUN_001433d0(void)
 
 static igMetaObjectCallback g_igPsx2AudioContext_callbackList[] = { igPsx2IopRpcConnection_EnsureRegistered, igThread_EnsureRegistered, FUN_00145de0, 0 };
 
-void igPsx2AudioContext_Register(void) {
+CallbackArray *igPsx2AudioContext_Register(void) {
     AudioLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2AudioContext_metaObject,
         igAudioContext_Register,
@@ -184,22 +184,22 @@ void igPsx2AudioContext_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)(g_igPsx2AudioContext_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igPsx2AudioContext_ctorTable, 0xA);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPsx2AudioContext_ctorTable, 0xA);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igPsx2IopRpcConnection_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igThread_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
+    temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_00145d40();
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 0);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 2);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 0x30);
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3), 0);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5), 2);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6), 0x30);
+    temp_s1_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7));
     ((igMemoryRefMetaField *)temp_s1_4)->_memType = igUnsignedIntMetaField_GetDefaultDescriptor();
-    temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9));
+    temp_s1_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 9));
     ((igObjectRefMetaField *)temp_s1_5)->_metaObject = FUN_00145d40();
-    igMetaObject_NameFields(temp_s0, g_igPsx2AudioContext_fieldTable, g_igPsx2AudioContext_fieldHandles, g_igPsx2AudioContext_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2AudioContext_fieldTable, g_igPsx2AudioContext_fieldHandles, g_igPsx2AudioContext_fieldOffsets, temp_s2);
     *(int *)((char *)(g_igPsx2AudioContext_metaObject) + 64) = (int)thunk_igAudioContext_GetMetaObject;
 }
 

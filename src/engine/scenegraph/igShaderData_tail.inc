@@ -17,7 +17,7 @@ next:
         if (old != 0) {
             old->references = old->references - 1;
             if (((unsigned long long)((long long)old->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)old);
+                igObject_Destroy((igObject *)old);
             }
         }
         if (children->count != 0 && i >= 0 && i < children->count) {
@@ -34,10 +34,10 @@ guard:
     goto done;
 }
 
-void Gap__Sg__igShaderData__vfunc_24(void *arg0, int dummy1, int arg2, int arg3) {
-    ObjectList_AppendRetained(*(int *)((char *)(arg0) + 8));
-    ObjectList_AppendRetained(*(int *)((char *)(arg0) + 12), arg2);
-    ObjectList_AppendRetained(*(int *)((char *)(arg0) + 20), arg3);
+void Gap__Sg__igShaderData__vfunc_24(void *arg0, int item, int arg2, int arg3) {
+    ObjectList_AppendRetained(*(igObjectList **)((char *)(arg0) + 8), (igObject *)item);
+    ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 12)), (igObject *)arg2);
+    ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 20)), (igObject *)arg3);
 }
 
 void Gap__Sg__igShaderData__vfunc_25(struct ShaderDataView *arg0) {
@@ -52,7 +52,7 @@ void Gap__Sg__igShaderData__vfunc_25(struct ShaderDataView *arg0) {
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -71,7 +71,7 @@ void Gap__Sg__igShaderData__vfunc_25(struct ShaderDataView *arg0) {
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -90,7 +90,7 @@ void Gap__Sg__igShaderData__vfunc_25(struct ShaderDataView *arg0) {
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -106,7 +106,7 @@ void Gap__Sg__igShaderData__vfunc_25(struct ShaderDataView *arg0) {
     if (o != 0) {
         o->references = o->references - 1;
         if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0->_dataPumps = 0;
@@ -126,7 +126,7 @@ void FUN_001d86f0(struct S_1d86f0 *arg0, int arg1, igObject *arg2) {
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
         if (((unsigned long long) ((long long) (int) old->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)old);
+            igObject_Destroy((igObject *)old);
         }
     }
     n = l->_count;
@@ -149,7 +149,7 @@ void FUN_001d87b0(igTransformSequence *arg0, int arg1, igObject *arg2) {
     if (temp_a0 != 0) {
         temp_a0->_refCount = temp_a0->_refCount - 1;
         if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     temp_v1 = temp_s1->_count;
@@ -172,7 +172,7 @@ void FUN_001d8870(struct A_1d8870 *arg0, int arg1, igObject *arg2) {
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
         if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)old);
+            igObject_Destroy((igObject *)old);
         }
     }
     n = l->_count;

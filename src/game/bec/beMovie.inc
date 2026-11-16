@@ -4,12 +4,12 @@ igMetaField *g_beMovie_playingNameMetaField;
 
 beMovie *beMovie_CreateInstance(int allocator) {
     beMovie_EnsureRegistered();
-    return (beMovie *)igMetaObject_CreateInstance(*(int *)0x588788, allocator);
+    return (beMovie *)igMetaObject_CreateInstance(g_beMovie_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beMovie_GetOrCreateMetaObject(void) {
     if (g_beMovie_metaObject == 0) {
-        g_beMovie_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMovie_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMovie_metaObject;
 }
@@ -33,7 +33,7 @@ int beMovie_GetVTable(void) {
     obj._vtable = (int)&g_beMovie_vtable[0];
     obj._movie = 0;
     obj._playingName = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMovie_vtable[0];
     igStringRef_Destruct(&obj._playingName, -1);
     igSmartPointer_igMovieManager_Destruct(&obj._movie, -1);
@@ -48,7 +48,7 @@ void beMovie_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMovie_callbackList[] = { igMovieManager_EnsureRegistered, 0 };
 
-void *beMovie_Register(void) {
+CallbackArray *beMovie_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -90,13 +90,13 @@ static int g_beMovie_fieldOffsets[] = {
 void beMovie_InitFields(void) {
     int base;
     void *movie;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMovie_metaObject;
+    meta = g_beMovie_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMovie_ctorTable, 2);
     movie = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)movie)->_metaObject = igMovieManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)movie)->_metaObject = (int)igMovieManager_GetOrCreateMetaObject();
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 1), 0);
     igMetaObject_NameFields(meta, g_beMovie_fieldTable, g_beMovie_fieldHandles, g_beMovie_fieldOffsets, base);
 }

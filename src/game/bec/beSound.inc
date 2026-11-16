@@ -5,12 +5,12 @@ igMetaField *g_beSound_playSEsMetaField;
 
 beSound *beSound_CreateInstance(int allocator) {
     beSound_EnsureRegistered();
-    return (beSound *)igMetaObject_CreateInstance(*(int *)0x587EA8, allocator);
+    return (beSound *)igMetaObject_CreateInstance(g_beSound_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSound_GetOrCreateMetaObject(void) {
     if (g_beSound_metaObject == 0) {
-        g_beSound_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSound_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSound_metaObject;
 }
@@ -41,7 +41,7 @@ int beSound_GetVTable(void) {
     currentBGMSlot = &obj._currentBGM;
     *currentBGMSlot = 0;
     obj._playSEs = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSound_vtable[0];
     igSmartPointer_bePlaySEList_Destruct((igSmartPointer<igObject> *)(&obj._playSEs), (short)(-1));
     igStringRef_Destruct(currentBGMSlot, -1);
@@ -70,7 +70,7 @@ void beSound_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSound_callbackList[] = { beCri_EnsureRegistered, bePlaySEList_EnsureRegistered, 0 };
 
-void *beSound_Register(void) {
+CallbackArray *beSound_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -117,9 +117,9 @@ void beSound_InitFields(void) {
     int base;
     void *cri;
     void *playSEs;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSound_metaObject;
+    meta = g_beSound_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSound_ctorTable, 3);
     cri = (void *)(igMetaObject_GetFieldAt(meta, base));

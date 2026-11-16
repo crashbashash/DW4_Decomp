@@ -2,7 +2,7 @@ igMetaObject *g_igImageMipMapList_metaObject;
 
 igMetaObject *FUN_00132ff0(void) {
     if (g_igImageMipMapList_metaObject == 0) {
-        g_igImageMipMapList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igImageMipMapList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igImageMipMapList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igImageMipMapList_GetMetaObject(void)
 int igImageMipMapList_GetVTable(void) {
     Obj_133090 o;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igImageMipMapList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igImageMipMapList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igImageMipMapList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igImageMipMapList_callbackList[] = { igImage_EnsureRegistered, 0 };
 
-void igImageMipMapList_Register(void) {
+CallbackArray *igImageMipMapList_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igImageMipMapList_metaObject,
         igObjectList_Register,

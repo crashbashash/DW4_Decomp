@@ -3,12 +3,12 @@ igMetaField *g_beChangePosTransform_oldPosMetaField;
 
 beChangePosTransform *beChangePosTransform_CreateInstance(int allocator) {
     beChangePosTransform_EnsureRegistered();
-    return (beChangePosTransform *)igMetaObject_CreateInstance(*(int *)0x589B80, allocator);
+    return (beChangePosTransform *)igMetaObject_CreateInstance(g_beChangePosTransform_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beChangePosTransform_GetOrCreateMetaObject(void) {
     if (g_beChangePosTransform_metaObject == 0) {
-        g_beChangePosTransform_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beChangePosTransform_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beChangePosTransform_metaObject;
 }
@@ -31,7 +31,7 @@ int beChangePosTransform_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beChangePosTransform_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -44,7 +44,7 @@ void beChangePosTransform_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beChangePosTransform_Register);
 }
 
-void *beChangePosTransform_Register(void) {
+CallbackArray *beChangePosTransform_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -81,9 +81,9 @@ static int g_beChangePosTransform_fieldOffsets[] = {
 
 void beChangePosTransform_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beChangePosTransform_metaObject;
+    meta = g_beChangePosTransform_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beChangePosTransform_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beChangePosTransform_fieldTable, g_beChangePosTransform_fieldHandles, g_beChangePosTransform_fieldOffsets, base);

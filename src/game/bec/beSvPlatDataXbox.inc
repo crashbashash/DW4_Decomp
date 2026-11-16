@@ -25,7 +25,7 @@ int beSvPlatDataXbox_GetVTable(void) {
     obj._vtable = (int)&g_beSvPlatDataXbox_vtable[0];
     imageSlot = (igObject **)&obj._image;
     *imageSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvPlatDataXbox_vtable[0];
     igObjectRef_Release(imageSlot);
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
@@ -40,7 +40,7 @@ void beSvPlatDataXbox_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSvPlatDataXbox_callbackList[] = { beXboxImage24k_EnsureRegistered, 0 };
 
-void *beSvPlatDataXbox_Register(void) {
+CallbackArray *beSvPlatDataXbox_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -97,23 +97,23 @@ void beSvPlatDataXbox_InitFields(void) {
     igIntMetaField *clone;
 
     meta = (void *)g_beSvPlatDataXbox_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSvPlatDataXbox_ctorTable, 4);
-    found = (void **)(igMetaObject_FindFieldByName(meta, "_connectMax"));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beSvPlatDataXbox_ctorTable, 4);
+    found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_connectMax"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 9);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataXbox_connectMaxStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    image = (igMetaObject_GetFieldAt(meta, base + 1));
+    image = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)image)->_metaObject = (int)beXboxImage24k_GetOrCreateMetaObject();
     ((igRefMetaField *)image)->_construct = 1;
-    dataOffSet = igMetaObject_GetFieldAt(meta, base + 3);
+    dataOffSet = igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3);
     ((igIntArrayMetaField *)dataOffSet)->_num = 2;
-    igMetaObject_NameFields(meta, g_beSvPlatDataXbox_fieldTable, g_beSvPlatDataXbox_fieldHandles, g_beSvPlatDataXbox_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beSvPlatDataXbox_fieldTable, g_beSvPlatDataXbox_fieldHandles, g_beSvPlatDataXbox_fieldOffsets, base);
 }
 

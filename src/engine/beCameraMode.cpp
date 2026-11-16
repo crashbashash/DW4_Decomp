@@ -4,64 +4,50 @@
 #include "dw4/igCameraDispatchView.h"
 #include "dw4/igCameraMode.h"
 
+#include "dw4/igObject.h"
+#include "dw4/igGraphPath.h"
+#include "dw4/igModel.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igProbe.h"
+#include "dw4/igIntersectTraversal.h"
+/* Kept here, not dw4/igGuiSystem.h: retail's caller passes the byte unconverted, which an `int` parameter reorders,
+ * while the definition's unmasked test needs `int`. */
+struct igGuiSystem;
+struct igMouseCursor;
+extern "C" void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor);
+extern "C" void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, unsigned char visible);
+#include "dw4/igDataLists.h"
+#include "dw4/igViewModel.h"
+#include "dw4/igCamera.h"
+#include "dw4/igPickMode.h"
+#include "dw4/igRotateMode.h"
+#include "dw4/igFlyMode.h"
+#include "dw4/igViewMode.h"
+#include "dw4/igViewerParameters.h"
+#include <math.h>
+#include "dw4/igMathConstants.h"
 extern "C" {
 
-int igObject_IsKindOf(...);
-igObject *igGraphPath_GetTail(...);
-int igModel_NotifyViews(...);
 
 int igMatrix44f_Invert(...);
 int igMatrix44f_InvertOrthonormal(int *status, float *out, float *matrix);
 int igMatrix44f_MakeLookAt(...);
-int igMatrix44f_MakeEulerRotation(float *matrix, float x, float y, float z);
 int igMatrix44f_GetEulerAngles(float *matrix, float *x, float *y, float *z);
-int igMatrix44f_GetTranslation(...);
-int igMatrix44f_SetTranslation(float *matrix, float *translation);
-int igMatrix44f_SetIdentity(float *matrix);
 int Vec3f_TransformDirection(...);
 int Vec3f_TransformProjective(...);
-int igGraphPath_GetTransform(int path, float *matrix, long long time);
-int igGraphPath_SetNodes(igGraphPath *path, int nodes);
-igGraphPath *igGraphPath_Create(int);
-igProbe *igProbe_Create(int);
 int igRay_SetFromPoints(...);
 int igRay_Transform(...);
-int igIntersectTraversal_ResetStacks(...);
-int igGuiSystem_SetMouseCursorVisible(int guiSystem, unsigned char visible);
-int igGuiSystem_SetMouseCursor(...);
-int List_Resize(...);
-int ObjectList_AppendRetained(...);
-extern float sqrtf(float);
 
-extern int g_igViewModel_metaObject[4];
-extern int g_igCamera_metaObject[4];
-extern int g_igPickMode_metaObject[4];
-extern int g_igRotateMode_metaObject[4];
-extern int g_igFlyMode_metaObject[4];
-extern int g_igViewMode_metaObject[4];
 
 /* igViewModel's field handles, which a change notification names. */
-extern int g_igViewModel_viewMatrixMetaField[4];
-extern int g_igViewModel_hfovMetaField[4];
-extern int g_igViewModel_nearPlaneMetaField[4];
-extern int g_igViewModel_farPlaneMetaField[4];
-extern int g_igViewModel_positionMetaField[4];
-extern int g_igViewModel_directionMetaField[4];
-extern int g_igViewModel_viewUpVectorMetaField[4];
-extern int g_igViewModel_viewLeftVectorMetaField[4];
-extern int g_igViewerParameters_selectedObjectMetaField[4];
 extern int g_igGuiSystemModelMousePositionField[4];
 
-extern int g_vec3XAxis[4];
-extern int g_vec3ZAxis[4];
-extern const float g_vec3Zero[4];
-extern const float g_vec2Zero[2];
 
 /* The pick mode whose intersect traversal is running, for its hit callback. */
 extern igPickMode *g_pickingMode[4];
 
 /* What igModel_NotifyViews tells a model's views: type 2 is a changed field, sent by `sender`. */
-typedef struct ViewModelEvent { int type; int sender; int field; } ViewModelEvent;
+typedef struct ViewModelEvent { int type; void *sender; igMetaField *field; } ViewModelEvent;
 enum { VIEW_MODEL_FIELD_CHANGED = 2 };
 
 /* igViewMode's own virtual methods past igObject's; what slots 29 and 30 are for has not been named.
@@ -96,7 +82,7 @@ void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit);
 void igPickMode_Pick(igPickMode *self);
 
 static inline igObject *asCamera(igObject *o) {
-    if (o != 0 && igObject_IsKindOf(o, g_igCamera_metaObject[0]) != 0) {
+    if (o != 0 && igObject_IsKindOf(o, g_igCamera_metaObject) != 0) {
         return o;
     }
     return 0;
@@ -149,19 +135,19 @@ static inline void setHitPath(igPickMode *pickMode, const igSmartPointer<igGraph
 static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return igGraphPath_Create(0); }
 
 void Gap__Bec__beCameraMode__vfunc_21(igViewMode *self, igObject *model) {
-    igObject_IsKindOf(model, g_igViewModel_metaObject[0]);
+    igObject_IsKindOf(model, g_igViewModel_metaObject);
 }
 
 void Gap__Bec__beCameraMode__vfunc_22(igViewModeDispatchView *self, ViewModelEvent *event) {
-    int field = event->field;
+    igMetaField *field = event->field;
     int type;
-    if (field == g_igViewModel_viewMatrixMetaField[0]) {
+    if (field == g_igViewModel_viewMatrixMetaField) {
         igViewMode_UpdateInverseMatrix((igViewMode *)self);
         igViewMode_UpdateModelVectors((igViewMode *)self);
         return;
     }
-    if (field == g_igViewModel_positionMetaField[0] || field == g_igViewModel_directionMetaField[0] ||
-        field == g_igViewModel_viewUpVectorMetaField[0]) {
+    if (field == g_igViewModel_positionMetaField || field == g_igViewModel_directionMetaField ||
+        field == g_igViewModel_viewUpVectorMetaField) {
         igViewMode_UpdateViewMatrix((igViewMode *)self);
         return;
     }
@@ -202,22 +188,22 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     model->_position[1] = v[1];
     model->_position[2] = v[2];
     positionChanged.type = VIEW_MODEL_FIELD_CHANGED;
-    positionChanged.sender = (int)self;
-    positionChanged.field = g_igViewModel_positionMetaField[0];
-    igModel_NotifyViews(model, &positionChanged);
-    Vec3f_TransformDirection(model->_direction, &g_vec3ZAxis[0], self->_inverseMatrix);
+    positionChanged.sender = self;
+    positionChanged.field = g_igViewModel_positionMetaField;
+    igModel_NotifyViews((igModel *)model, (ModelChange *)&positionChanged);
+    Vec3f_TransformDirection(model->_direction, &g_vec3ZAxis, self->_inverseMatrix);
     model->_direction[0] = -model->_direction[0];
     model->_direction[1] = -model->_direction[1];
     model->_direction[2] = -model->_direction[2];
     directionChanged.type = VIEW_MODEL_FIELD_CHANGED;
-    directionChanged.sender = (int)self;
-    directionChanged.field = g_igViewModel_directionMetaField[0];
-    igModel_NotifyViews(model, &directionChanged);
-    Vec3f_TransformDirection(model->_viewLeftVector, &g_vec3XAxis[0], self->_inverseMatrix);
+    directionChanged.sender = self;
+    directionChanged.field = g_igViewModel_directionMetaField;
+    igModel_NotifyViews((igModel *)model, (ModelChange *)&directionChanged);
+    Vec3f_TransformDirection(model->_viewLeftVector, &g_vec3XAxis, self->_inverseMatrix);
     leftChanged.type = VIEW_MODEL_FIELD_CHANGED;
-    leftChanged.sender = (int)self;
-    leftChanged.field = g_igViewModel_viewLeftVectorMetaField[0];
-    igModel_NotifyViews(model, &leftChanged);
+    leftChanged.sender = self;
+    leftChanged.field = g_igViewModel_viewLeftVectorMetaField;
+    igModel_NotifyViews((igModel *)model, (ModelChange *)&leftChanged);
 }
 
 void igViewMode_UpdateViewMatrix(igViewMode *self) {
@@ -249,7 +235,7 @@ void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
             }
         }
         self->_cameraPath = (int)path;
-        camera = igGraphPath_GetTail(path);
+        camera = igGraphPath_GetTail((igGraphPath *)path);
         camera = asCamera(camera);
         if (camera != 0) {
             camera->_refCount = camera->_refCount + 1;
@@ -292,19 +278,19 @@ void igCameraMode_OnAttach(igCameraMode *self) {
         model->_hfov = (float) camera->_horizontalFieldOfView;
         hfovChanged[0] = VIEW_MODEL_FIELD_CHANGED;
         hfovChanged[1] = 0;
-        hfovChanged[2] = g_igViewModel_hfovMetaField[0];
-        igModel_NotifyViews(model, hfovChanged);
+        hfovChanged[2] = (int)g_igViewModel_hfovMetaField;
+        igModel_NotifyViews((igModel *)model, (ModelChange *)hfovChanged);
         model->_farPlane = farPlane;
         farChanged[0] = VIEW_MODEL_FIELD_CHANGED;
         farChanged[1] = 0;
-        farChanged[2] = g_igViewModel_farPlaneMetaField[0];
-        igModel_NotifyViews(model, farChanged);
+        farChanged[2] = (int)g_igViewModel_farPlaneMetaField;
+        igModel_NotifyViews((igModel *)model, (ModelChange *)farChanged);
         nearPlane = (nearPlane == 0.0f) ? farPlane / 1000.0f : nearPlane;
         model->_nearPlane = nearPlane;
         nearChanged[0] = VIEW_MODEL_FIELD_CHANGED;
         nearChanged[1] = 0;
-        nearChanged[2] = g_igViewModel_nearPlaneMetaField[0];
-        igModel_NotifyViews(model, nearChanged);
+        nearChanged[2] = (int)g_igViewModel_nearPlaneMetaField;
+        igModel_NotifyViews((igModel *)model, (ModelChange *)nearChanged);
     }
 }
 
@@ -318,7 +304,7 @@ void igCameraMode_Update(igCameraMode *self) {
     if (self->_camera != 0) {
         igMatrix44f_SetIdentity(world);
         model = (igViewModel *)self->_model;
-        igGraphPath_GetTransform(self->_cameraPath, world, model->_drawTime);
+        igGraphPath_GetTransform((igGraphPath *)self->_cameraPath, (igMatrix44f *)world, model->_drawTime);
         x = 0; y = 0; z = 0;
         igMatrix44f_GetEulerAngles(world, &x, &y, &z);
         igMatrix44f_GetTranslation(world, translation);
@@ -327,8 +313,8 @@ void igCameraMode_Update(igCameraMode *self) {
         igMatrix44f_InvertOrthonormal(&status, model->_viewMatrix, world);
         changed[0] = VIEW_MODEL_FIELD_CHANGED;
         changed[1] = 0;
-        changed[2] = g_igViewModel_viewMatrixMetaField[0];
-        igModel_NotifyViews(model, changed);
+        changed[2] = (int)g_igViewModel_viewMatrixMetaField;
+        igModel_NotifyViews((igModel *)model, (ModelChange *)changed);
     }
 }
 
@@ -421,8 +407,8 @@ void igFlyMode_Update(igFlyMode *self, float seconds) {
     igFlyMode_ApplyRotation(self, seconds);
     changed[0] = VIEW_MODEL_FIELD_CHANGED;
     changed[1] = 0;
-    changed[2] = g_igViewModel_viewMatrixMetaField[0];
-    igModel_NotifyViews(model, changed);
+    changed[2] = (int)g_igViewModel_viewMatrixMetaField;
+    igModel_NotifyViews((igModel *)model, (ModelChange *)changed);
 }
 
 void igFlyMode_OnAttach(igFlyMode *self) {
@@ -551,9 +537,9 @@ void igRotateMode_OnAttach(igRotateMode *state) {
     state->_roll = 0.0f;
     state->_pitch = 0.0f;
     state->_zoom = 1.0f;
-    state->_translation[0] = g_vec3Zero[0];
-    state->_translation[1] = g_vec3Zero[1];
-    state->_translation[2] = g_vec3Zero[2];
+    state->_translation[0] = g_vec3Zero.x;
+    state->_translation[1] = g_vec3Zero.y;
+    state->_translation[2] = g_vec3Zero.z;
     dx = model->_selectedCenter[0];
     dy = model->_selectedCenter[1];
     dz = model->_selectedCenter[2];
@@ -577,7 +563,7 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
     float dx = pickMode->_joystickT[0];
     float dy = pickMode->_joystickT[1];
     ViewModelEvent event;
-    bool moving = dx != g_vec2Zero[0] || dy != g_vec2Zero[1];
+    bool moving = dx != g_vec2Zero.x || dy != g_vec2Zero.y;
 
     if (moving) {
         dx *= seconds;
@@ -586,8 +572,8 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
         model->_mousePosition[1] += dy;
         event.type = VIEW_MODEL_FIELD_CHANGED;
         event.sender = 0;
-        event.field = g_igGuiSystemModelMousePositionField[0];
-        igModel_NotifyViews(model, &event);
+        event.field = (igMetaField *)g_igGuiSystemModelMousePositionField[0];
+        igModel_NotifyViews((igModel *)model, (ModelChange *)&event);
     }
 }
 
@@ -617,8 +603,8 @@ void igPickMode_OnMouseButton(igPickMode *self, int button, int pressed) {
             *selected = 0;
             changed.type = VIEW_MODEL_FIELD_CHANGED;
             changed.sender = 0;
-            changed.field = g_igViewerParameters_selectedObjectMetaField[0];
-            igModel_NotifyViews(self->_parameters, &changed);
+            changed.field = g_igViewerParameters_selectedObjectMetaField;
+            igModel_NotifyViews((igModel *)self->_parameters, (ModelChange *)&changed);
         }
     }
 }
@@ -641,7 +627,7 @@ void igPickMode_OnAttach(igPickMode *pickMode) {
     unprojected.b = 0;
     igSmartPointer<igProbe> probe(igProbe_Create(0));
     created = probe.get();
-    ObjectList_AppendRetained(created->_rays, pickMode->_ray);
+    ObjectList_AppendRetained((igObjectList *)created->_rays, (igObject *)pickMode->_ray);
     faceTypes = (igIntList *)created->_intersectFaceType;
     top = count_of(faceTypes);
     if (top < faceTypes->_capacity) {
@@ -669,15 +655,15 @@ void igPickMode_OnAttach(igPickMode *pickMode) {
         }
         pickMode->_savedCursor = (int)cursor;
         pickMode->_savedCursorState = ((igGuiSystem *)pickMode->_guiSystem)->_mouseCursorVisible;
-        igGuiSystem_SetMouseCursor(pickMode->_guiSystem, pickMode->_cursor);
-        igGuiSystem_SetMouseCursorVisible(pickMode->_guiSystem, 1);
+        igGuiSystem_SetMouseCursor((igGuiSystem *)pickMode->_guiSystem, (igMouseCursor *)pickMode->_cursor);
+        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)pickMode->_guiSystem, 1);
     }
 }
 
 void igPickMode_OnDetach(igPickMode *self) {
     if (self->_guiSystem != 0) {
-        igGuiSystem_SetMouseCursor(self->_guiSystem, self->_savedCursor);
-        igGuiSystem_SetMouseCursorVisible(self->_guiSystem, self->_savedCursorState);
+        igGuiSystem_SetMouseCursor((igGuiSystem *)self->_guiSystem, (igMouseCursor *)self->_savedCursor);
+        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)self->_guiSystem, self->_savedCursorState);
     }
 }
 
@@ -687,7 +673,7 @@ void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit) {
         self->_hit = 1;
         self->_impactLength = hit->distance;
         setHitPath(self, igSmartPointer<igGraphPath>(createGraphPath()));
-        igGraphPath_SetNodes((igGraphPath *)self->_hitPath, nodes);
+        igGraphPath_SetNodes((igGraphPath *)self->_hitPath, (igNodeList *)nodes);
     }
 }
 
@@ -704,7 +690,7 @@ void igPickMode_Pick(igPickMode *self) {
     point[1] = y;
     *(int *)&point[2] = 0x3F800000;
     Vec3f_TransformProjective(point, point, self->_inverseProjectionMatrix);
-    igRay_SetFromPoints(self->_ray, &g_vec3Zero[0], point);
+    igRay_SetFromPoints(self->_ray, &g_vec3Zero, point);
     igRay_Transform(self->_ray, self->_inverseMatrix);
     self->_impactLength = ((igRay *)self->_ray)->_len;
     self->_hit = 0;
@@ -715,7 +701,7 @@ void igPickMode_Pick(igPickMode *self) {
             igObject_Destroy(previous);
     }
     self->_hitPath = 0;
-    igIntersectTraversal_ResetStacks((igIntersectTraversalDispatchView *)self->_intersectTraversal);
+    igIntersectTraversal_ResetStacks((igIntersectTraversal *)((igIntersectTraversalDispatchView *)self->_intersectTraversal));
     ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->vfunc_27(model->_drawTime);
     g_pickingMode[0] = self;
     ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->vfunc_25(((igViewerParameters *)self->_parameters)->_scene);
@@ -734,29 +720,29 @@ void igPickMode_Pick(igPickMode *self) {
     *selected = (int)hitPath;
     changed[0] = VIEW_MODEL_FIELD_CHANGED;
     changed[1] = 0;
-    changed[2] = g_igViewerParameters_selectedObjectMetaField[0];
-    igModel_NotifyViews((igViewerParameters *)self->_parameters, changed);
+    changed[2] = (int)g_igViewerParameters_selectedObjectMetaField;
+    igModel_NotifyViews((igModel *)((igViewerParameters *)self->_parameters), (ModelChange *)changed);
 }
 
 /* Returns the metaobject handle of igPickMode, not of igViewManager. */
-int igPickMode_GetMeta(void) {
-    return g_igPickMode_metaObject[0];
+igMetaObject *igPickMode_GetMeta(void) {
+    return g_igPickMode_metaObject;
 }
 
-int igRotateMode_GetMeta(void) {
-    return g_igRotateMode_metaObject[0];
+igMetaObject *igRotateMode_GetMeta(void) {
+    return g_igRotateMode_metaObject;
 }
 
-int igFlyMode_GetMeta(void) {
-    return g_igFlyMode_metaObject[0];
+igMetaObject *igFlyMode_GetMeta(void) {
+    return g_igFlyMode_metaObject;
 }
 
 int igCameraMode_GetMeta(void) {
     return (int)g_igCameraMode_metaObject;
 }
 
-int igViewMode_GetMeta(void) {
-    return g_igViewMode_metaObject[0];
+igMetaObject *igViewMode_GetMeta(void) {
+    return g_igViewMode_metaObject;
 }
 
 }

@@ -17,10 +17,10 @@ int igTraversal_GetVTable(void) {
     struct Obj o;
     struct R *t;
     int r;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igTraversal_vtable[0];
     o.p = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igTraversal_vtable[0];
     if (&o.p != 0) {
         t = o.p;
@@ -46,7 +46,7 @@ void *FUN_00194490(struct S *arg0, short arg1) {
                 rc = *(int *)((char *)(p) + 4) - 1;
                 *(int *)((char *)(p) + 4) = rc;
                 if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((void *)p);
+                    igObject_Destroy((igObject *)p);
                 }
             }
         }
@@ -64,9 +64,9 @@ void FUN_00194530(void)
 
 static igMetaObjectCallback g_igTraversal_callbackList[] = { igTraversalFunctionList_EnsureRegistered, 0 };
 
-void igTraversal_Register(void) {
+CallbackArray *igTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTraversal_metaObject,
         igObject_Register,
@@ -86,11 +86,11 @@ void thunk_igTraversal_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTraversal_ctorTable[] = {
-    igBoolMetaField_Create,
-    igRawRefMetaField_Create,
-    igLongMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igTraversal_fieldTable[] = {
     "_nodeSelectProcEnabled",
@@ -120,18 +120,18 @@ void igTraversal_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igTraversal_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTraversal_ctorTable, 5);
-    igLongMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), -1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)));
+    igLongMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)), -1);
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019a720();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTraversal_fieldTable, g_igTraversal_fieldHandles, g_igTraversal_fieldOffsets, temp_s2);
-    igMetaObject_AddExitCallback(&thunk_FUN_001e0470);
+    igMetaObject_AddExitCallback((int)&thunk_FUN_001e0470);
 }
 
 void FUN_00194690(void) {
     FUN_001e0410();
-    igMetaObject_AddRegistrationCallback((int *)FUN_001e02e0);
+    igMetaObject_AddRegistrationCallback((int)((int *)FUN_001e02e0));
 }
 
 void thunk_FUN_001e0470(void) {

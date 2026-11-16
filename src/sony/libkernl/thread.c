@@ -39,10 +39,6 @@ typedef struct {
 int _iWakeupThread(int thread);
 int _iSuspendThread(int thread);
 int RotateThreadReadyQueue(int priority);
-unsigned long sceTimerUSec2BusClock(u_int sec, u_int usec);
-int SetTimerAlarm(unsigned long clock, int (*handler)(int, int, int, int), int arg);
-
-extern char _gp[];
 
 static int topId = 0;
 static char stack[TOP_THREAD_STACK_SIZE];
@@ -148,7 +144,7 @@ int iSuspendThread(int thread)
     return self;
 }
 
-static int _DelayThreadHandler(int id, int scheduled, int actual, int sema);
+static int _DelayThreadHandler(int id, int scheduled, int actual, void *sema);
 
 int DelayThread(u_int usec)
 {
@@ -163,7 +159,7 @@ int DelayThread(u_int usec)
     param.initCount = 0;
     sema = CreateSema(&param);
     if (sema < 0) return DELAY_ERROR_NO_SEMAPHORE;
-    ret = SetTimerAlarm(sceTimerUSec2BusClock(0, usec), _DelayThreadHandler, sema);
+    ret = SetTimerAlarm(sceTimerUSec2BusClock(0, usec), _DelayThreadHandler, (void *)sema);
     if (ret < 0) {
         DeleteSema(sema);
         return ret;
@@ -174,9 +170,9 @@ int DelayThread(u_int usec)
 }
 
 /* the alarm handler runs with interrupts masked and re-enables them before returning */
-static int _DelayThreadHandler(int id, int scheduled, int actual, int sema)
+static int _DelayThreadHandler(int id, int scheduled, int actual, void *sema)
 {
-    iSignalSema(sema);
+    iSignalSema((int)sema);
     __asm__("sync");
     __asm__("ei");
     return 0;

@@ -13,7 +13,7 @@ void Gap__igPsx2AudioSourceList__vfunc_18(igPsx2AudioSourceList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve(self, count, 0x24);
+        List_Reserve((igDataList *)self, count, 0x24);
     }
 }
 }

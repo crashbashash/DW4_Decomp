@@ -2,12 +2,12 @@ igMetaObject *g_beHitLandDeliv_metaObject;
 
 beHitLandDeliv *beHitLandDeliv_CreateInstance(int allocator) {
     beHitLandDeliv_EnsureRegistered();
-    return (beHitLandDeliv *)igMetaObject_CreateInstance(*(int *)0x589460, allocator);
+    return (beHitLandDeliv *)igMetaObject_CreateInstance(g_beHitLandDeliv_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beHitLandDeliv_GetOrCreateMetaObject(void) {
     if (g_beHitLandDeliv_metaObject == 0) {
-        g_beHitLandDeliv_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beHitLandDeliv_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beHitLandDeliv_metaObject;
 }
@@ -33,7 +33,7 @@ int beHitLandDeliv_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beHitLandDeliv_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -46,7 +46,7 @@ void beHitLandDeliv_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandDeliv_Register);
 }
 
-void *beHitLandDeliv_Register(void) {
+CallbackArray *beHitLandDeliv_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

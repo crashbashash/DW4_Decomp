@@ -4,7 +4,7 @@ igMetaField *g_igAttr_cachedAttrIndexMetaField;
 
 igMetaObject *FUN_0013b070(void) {
     if (g_igAttr_metaObject == 0) {
-        g_igAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAttr_metaObject;
 }
@@ -22,9 +22,9 @@ void FUN_0013b110(void)
     igMetaObject_RunStaticInit(igAttr_Register);
 }
 
-void igAttr_Register(void) {
+CallbackArray *igAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAttr_metaObject,
         igObject_Register,
@@ -44,8 +44,8 @@ void thunk_igAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAttr_ctorTable[] = {
-    igShortMetaField_Create,
-    igShortMetaField_Create,
+    (FieldFactory)igShortMetaField_Create,
+    (FieldFactory)igShortMetaField_Create,
 };
 static const char *g_igAttr_fieldTable[] = {
     "_cachedUnitID",
@@ -76,6 +76,6 @@ void igAttr_InitFields(void) {
 
 void FUN_0013b240(void) {
     FUN_0013b800();
-    igMetaObject_AddRegistrationCallback(&FUN_0013b8a0);
+    igMetaObject_AddRegistrationCallback((int)&FUN_0013b8a0);
 }
 

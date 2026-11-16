@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWMdlEnemyInfoWork_metaObject;
 
 beNDMWMdlEnemyInfoWork *beNDMWMdlEnemyInfoWork_Create(int allocator) {
     beNDMWMdlEnemyInfoWork_EnsureRegistered();
-    return (beNDMWMdlEnemyInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlEnemyInfoWork_metaObject, allocator);
+    return (beNDMWMdlEnemyInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlEnemyInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWMdlEnemyInfoWork_GetReadyMetaObject(void) {
@@ -19,7 +19,7 @@ int beNDMWMdlEnemyInfoWork_GetVTable(void) {
 
     beNDMWMdlPEBaseInfoWork_Construct((beNDMWMdlPEBaseInfoWork *)&obj);
     *(int **)&obj._vtable = &g_beNDMWMdlEnemyInfoWork_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMdlEnemyInfoWork_vtable[0];
     beNDMWMdlPEBaseInfoWork_Destroy((beNDMWMdlPEBaseInfoWork *)&obj, 0);
     return vtable;
@@ -30,7 +30,7 @@ void beNDMWMdlEnemyInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlEnemyInfoWork_Register);
 }
 
-void *beNDMWMdlEnemyInfoWork_Register(void) {
+CallbackArray *beNDMWMdlEnemyInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

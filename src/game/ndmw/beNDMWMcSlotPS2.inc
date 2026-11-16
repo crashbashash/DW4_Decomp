@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWMcSlotPS2_metaObject;
 
 beNDMWMcSlotPS2 *beNDMWMcSlotPS2_Create(int allocator) {
     beNDMWMcSlotPS2_EnsureRegistered();
-    return (beNDMWMcSlotPS2 *)igMetaObject_CreateInstance(g_beNDMWMcSlotPS2_metaObject, allocator);
+    return (beNDMWMcSlotPS2 *)igMetaObject_CreateInstance(g_beNDMWMcSlotPS2_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMcSlotPS2_GetReadyMetaObject(void) {
@@ -21,7 +21,7 @@ int beNDMWMcSlotPS2_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWMcSlotPS2_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWMcSlotPS2_EnsureRegistered(void)
@@ -29,7 +29,7 @@ void beNDMWMcSlotPS2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMcSlotPS2_Register);
 }
 
-void *beNDMWMcSlotPS2_Register(void) {
+CallbackArray *beNDMWMcSlotPS2_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

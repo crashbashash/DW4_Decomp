@@ -3,7 +3,7 @@ igMetaField *g_beNDMWShopDevice_salesListMetaField;
 
 beNDMWShopDevice *beNDMWShopDevice_Create(int allocator) {
     beNDMWShopDevice_EnsureRegistered();
-    return (beNDMWShopDevice *)igMetaObject_CreateInstance(g_beNDMWShopDevice_metaObject, allocator);
+    return (beNDMWShopDevice *)igMetaObject_CreateInstance(g_beNDMWShopDevice_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopDevice_GetMetaObject(void) {
@@ -31,7 +31,7 @@ int beNDMWShopDevice_GetVTable(void) {
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopDevice_vtable[0];
     obj._salesList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopDevice_vtable[0];
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._salesList, -1);
     beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
@@ -59,7 +59,7 @@ void beNDMWShopDevice_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopDevice_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, 0 };
 
-void *beNDMWShopDevice_Register(void) {
+CallbackArray *beNDMWShopDevice_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

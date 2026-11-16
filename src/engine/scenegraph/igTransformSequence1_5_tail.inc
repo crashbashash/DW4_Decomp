@@ -6,7 +6,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_68(S0 *arg0) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f10 = 0;
@@ -31,7 +31,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_67(S_1aba30 *arg0) {
     if (temp_a0 != 0) {
         temp_a0->f4 = temp_a0->f4 - 1;
         if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->ref = 0;
@@ -82,11 +82,11 @@ int FUN_001abb50(S_1abb50 *arg0, A *arg1) {
     if (r != 0) {
         r->refs = r->refs - 1;
         if (((unsigned long long)(long long)r->refs & 0x7fffffULL) == 0) {
-            igObject_Destroy((void *)r);
+            igObject_Destroy((igObject *)r);
         }
     }
     arg0->f8 = (Rc_1abb50 *)arg1;
-    arg0->f12 = igObject_AllocateStorage(arg0, n * 4);
+    arg0->f12 = igObject_AllocateStorage((igObject *)arg0, n * 4);
     return 1;
 }
 

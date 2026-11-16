@@ -15,7 +15,7 @@ int beModelCtrlWCHECK_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlWCHECK_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -26,7 +26,7 @@ void beModelCtrlWCHECK_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlWCHECK_Register);
 }
 
-void *beModelCtrlWCHECK_Register(void) {
+CallbackArray *beModelCtrlWCHECK_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

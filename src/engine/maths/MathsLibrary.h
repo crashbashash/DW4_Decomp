@@ -15,6 +15,7 @@
 #include "dw4/igObjectList.h"
 #include "dw4/igDataLists.h"
 #include <stdio.h>
+#include <math.h>
 
 extern "C" {
 
@@ -133,7 +134,6 @@ void FUN_0018e9b0(void);
 igMetaObject *FUN_00187010(void);
 
 extern int g_igVec4ucMetaField_vtable[4];
-extern int g_igMetaField_vtable[4];
 union U { int vt; char b[64]; };
 
 CallbackArray *igVec4ucMetaField_Register(void);
@@ -531,7 +531,6 @@ static inline float dotv(V2 a, V2 b) { return a.x * b.x + a.y * b.y + a.z * b.z;
 static inline float madd_(float o, float t, float d) { return o + t * d; }
 struct Ray { char pad[8]; V2 o; V2 d; float maxT; };
 
-float sqrtf(float);
 void FUN_00192dd0(float *arg0, float *arg1, float *arg2);
 
 static inline float dot(const V2 *a, const V2 *b) { return a->x * b->x + a->y * b->y + a->z * b->z; }
@@ -730,7 +729,6 @@ struct InstanceNode : public igObject { };
 unsigned FUN_002fe2c0(int);
 int FUN_002fe2e0(int, unsigned);
 int FUN_00301ee0(InstanceNode *, unsigned);
-int __dl__FPv(void *);
 igSmartPointer<InstanceNode> igMetaObject_CreateInstanceRef(int, int);
 struct NodeList : InstanceNode { int count; int capacity; InstanceNode **data; };
 struct InstanceListRef {
@@ -795,7 +793,7 @@ static inline void setElement(const InstanceListRef &list, int index, const igSm
         l->data[index] = value;
     }
 }
-#define REL(g) { OpTable *o=g; if(o){ --o->references; if(((unsigned long long)(long long)o->references & 0x7fffffULL)==0) igObject_Destroy(o);} }
+#define REL(g) { OpTable *o=g; if(o){ --o->references; if(((unsigned long long)(long long)o->references & 0x7fffffULL)==0) igObject_Destroy((igObject *)o);} }
 
 int FUN_0018f3e0(void);
 void FUN_0018f3f0(void);
@@ -818,54 +816,17 @@ void FUN_00190f50(float *arg0, float *arg1, float fparg0);
 
 }
 
-#include "dw4/igMatrix44d.h"
-#include "dw4/igMatrix44f.h"
+#include "dw4/igMathConstants.h"
 
 extern "C" {
 
-extern const igMatrix44d g_matrix44dIdentity;
-extern const igMatrix44d g_matrix44dZero;
-extern const igMatrix44f g_matrix44Identity;
-extern const igMatrix44f g_matrix44Zero;
-extern const igVec2d g_vec2dZero;
-extern const igVec2d g_vec2dXAxis;
-extern const igVec2d g_vec2dYAxis;
-extern const igVec2f g_vec2Zero;
-extern const igVec2f g_vec2XAxis;
-extern const igVec2f g_vec2YAxis;
-extern const igVec3d g_vec3dZero;
-extern const igVec3d g_vec3dOne;
-extern const igVec3d g_vec3dXAxis;
-extern const igVec3d g_vec3dYAxis;
-extern const igVec3d g_vec3dZAxis;
-extern const igVec3f g_vec3Zero;
-extern const igVec3f g_vec3One;
-extern const igVec3f g_vec3XAxis;
-extern const igVec3f g_vec3YAxis;
-extern const igVec3f g_vec3ZAxis;
-extern const igVec4d g_vec4dZero;
-extern const igVec4d g_vec4dOne;
-extern const igVec4d g_vec4dXAxis;
-extern const igVec4d g_vec4dYAxis;
-extern const igVec4d g_vec4dZAxis;
-extern const igVec4d g_vec4dWAxis;
-extern const igVec4f g_vec4Zero;
-extern const igVec4f g_vec4One;
-extern const igVec4f g_vec4XAxis;
-extern const igVec4f g_vec4YAxis;
-extern const igVec4f g_vec4ZAxis;
-extern const igVec4f g_vec4WAxis;
 
 
 typedef union U5 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U5;
-float cosf(float);
-float sinf(float);
 
 int igMatrix44f_PreMultiply(...);
 int igMatrix44f_Multiply(...);
 
-float atanf(float);
-float tanf(float);
 
 
 typedef union U6 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U6;
@@ -875,8 +836,6 @@ float FUN_00192290(float *m);
 
 typedef struct S6 { float f0; char p4[28]; float f32; float f36; float f40; char p44[12]; float f56; } S6;
 
-float asinf(float);
-float atan2f(float, float);
 
 struct CurvePoint4 { int a, b, c, d; };
 

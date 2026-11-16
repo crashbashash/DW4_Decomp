@@ -9,7 +9,7 @@ void igInsightCore_AddInfo(igInsightCore *self, igObject *info) {
             break;
         }
     }
-    ObjectList_AppendRetained(self->_infoList, info);
+    ObjectList_AppendRetained((igObjectList *)self->_infoList, info);
 }
 
 void FUN_002370c0(igInsightCore *arg0) {
@@ -43,7 +43,7 @@ void FUN_002370c0(igInsightCore *arg0) {
     }
     l->_count = 0;
     if (!(0 < ((igObjectList *)arg0->_infoList)->_count)) {
-        List_Reserve(arg0->_infoList, 0, 4);
+        List_Reserve((igDataList *)arg0->_infoList, 0, 4);
     }
 }
 
@@ -68,8 +68,8 @@ void FUN_00237280(int *arg0) {
     }
 }
 
-void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0) {
-    Gap__Core__igObject__resetFields();
+void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0, int flags) {
+    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     StringRef_237300 first("Clear done");
     StringRef_237300 second("Scenes done");
     StringRef_237300 third("Overlays done");
@@ -79,10 +79,10 @@ void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0) {
     igDependencyOrderedList_AddDependency(arg0->f28, first.p, second.p);
     igDependencyOrderedList_AddDependency(arg0->f28, second.p, third.p);
     igDependencyOrderedList_AddDependency(arg0->f28, arg0->f44, first.p);
-    igRendererOrderedList_Append(arg0->f28, arg0->f44, 0);
+    igRendererOrderedList_Append((igDependencyOrderedList *)arg0->f28, (igObject *)arg0->f44, 0);
     arg0->f72 = 0x40000;
     *(struct A_237300 **)(arg0->f36 + 8) = arg0;
-    igEventDispatcher_AddReceiver(arg0->f32, arg0->f36);
+    igEventDispatcher_AddReceiver((igEventDispatcher *)arg0->f32, (igObject *)arg0->f36);
 }
 
 void FUN_00237530(OO *arg0) {
@@ -92,7 +92,7 @@ void FUN_00237530(OO *arg0) {
     R_237530 *s0;
 
     if (arg0->f20 == 0) {
-        igSmartPointer<igWindowView> display = Viewer_CreateDisplay(0);
+        igSmartPointer<igWindow> display = Viewer_CreateDisplay(0);
         s0 = (R_237530 *)display.p;
         if (s0 != 0) {
             s0->rc = s0->rc + 1;

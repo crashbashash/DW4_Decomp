@@ -1,12 +1,27 @@
 #include "dw4/reflected.h"
 #include "dw4/beNDMWTitle2.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beLua.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWLoadIntf2ComMdlCtrl.h"
+#include "dw4/beNDMWLoadIntf2TextOrder.h"
+#include "dw4/beNDMWTitle2CtrlData.h"
+#include "dw4/beNDMWTitle2Info.h"
+#include "dw4/beNDMWTitle2Option.h"
+#include "dw4/bePadManager.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
 #define ALLOC(dst, obj)                                                                            \
     {                                                                                              \
-        int alloc = igObject_GetAllocator(obj);                                                    \
+        int alloc = (int)igObject_GetAllocator(obj);                                                    \
         if (g_useOwnerAllocator != 0) {                                                                   \
             dst = alloc;                                                                           \
         } else {                                                                                   \
-            dst = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);                                  \
+            dst = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);                                  \
         }                                                                                          \
     }
 #define SET_DATA(ref)                                                                              \
@@ -23,50 +38,10 @@
         infoRam->_dataList = (int)n;                                                               \
     }
 
-extern "C" int beMessenger_SendGroup(...);
-extern "C" int beMessenger_GetObject(...);
-extern "C" void * igProperty_GetRecord(...);
-extern "C" int igInsightCore_FindManager(...);
-extern "C" void *beBaseInfoDataList_Create(...);
-extern "C" void *beNDMWTitle2Option_Create(...);
-extern "C" void *beNDMWTitle2CtrlData_Create(...);
-extern "C" void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
-extern "C" void *beNDMWLoadIntf2TextOrder_Create(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__Start(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__Play(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__Close(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsRunning(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(...);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__Poll(...);
-extern "C" int beNDMWLoadIntf2TextOrder_PublishIdLines(...);
-extern "C" int TextOrder_PublishLineListOnly(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_AppendString(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_GetBool(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_SelectReceivers(...);
-extern "C" int beMessenger_SendNamed(...);
-extern "C" void *bePadManager_GetPadForPlayer(...);
-extern "C" int igObject_Destroy(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" void *igProperty_FindByName(...);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, const void *);
 extern "C" int beNDMWTitle2_GetInfoMeta(void);
 extern "C" int beNDMWTitle2_GetMeta(void);
-extern "C" int beNDMWTitle2CtrlData_GetMessageEnum(...);
-extern "C" int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger);
-extern "C" int g_propertyNameField[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" int g_beLua_metaObject[4];
-extern "C" unsigned char g_useOwnerAllocator;
 extern "C" { unsigned char g_commonSettingsValid; }
-extern "C" int g_beNDMWTitle2Info_metaObject[4];
-extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWTitle2_Prepare(beNDMWTitle2 *self);
 /* Outer state, CTRL._st0. */
 enum TitleState {
@@ -128,10 +103,10 @@ void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger) {
 
     self->_messenger = messenger;
     if (g_commonSettingsValid == 1) {
-        beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
-        commonSettings = beMessenger_GetObject(self->_messenger, 0);
-        self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, "CAMERAMODE")) + 12));
-        self->_lightConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, "LIGHTMODE")) + 12));
+        beMessenger_SendGroup((beMessenger *)self->_messenger, "GAMERAM", "GETCOMMON");
+        commonSettings = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+        self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord((igObject *)commonSettings, "CAMERAMODE")) + 12));
+        self->_lightConf = (int)((int) *(int *)((char *)(igProperty_GetRecord((igObject *)commonSettings, "LIGHTMODE")) + 12));
         self->_selLang = 0;
         return;
     }
@@ -161,7 +136,7 @@ void beNDMWTitle2_Prepare(beNDMWTitle2 *self) {
     igObject *padManager;
     igObject *held;
     if (self->_padManager == 0) {
-        padManager = (igObject *)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+        padManager = (igObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
         if (padManager != 0) {
             padManager->_refCount = padManager->_refCount + 1;
         }
@@ -232,26 +207,26 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
         SET_DATA(workListRef);
         ALLOC(allocator, self);
         TitleRef<TitleControl> ctrlRef(beNDMWTitle2CtrlData_Create(allocator));
-        ObjectList_AppendRetained(infoRam->_dataList, ctrlRef.p);
+        ObjectList_AppendRetained((igObjectList *)infoRam->_dataList, (igObject *)ctrlRef.p);
         ALLOC(allocator, self);
         {
             TitleRef<TitleModels> modelsRef(beNDMWLoadIntf2ComMdlCtrl_Create(allocator));
-            ObjectList_AppendRetained(infoRam->_dataList, modelsRef.p);
+            ObjectList_AppendRetained((igObjectList *)infoRam->_dataList, (igObject *)modelsRef.p);
             ((beNDMWLoadIntf2ComMdlCtrl *)modelsRef.p)->_messenger = self->_messenger;
         }
         ALLOC(allocator, self);
         {
             TitleRef<TitleOptions> optionRef(beNDMWTitle2Option_Create(allocator));
             beNDMWTitle2Option_InitSettings((beNDMWTitle2Option *)optionRef.p, (int)self->_messenger);
-            ObjectList_AppendRetained(infoRam->_dataList, optionRef.p);
+            ObjectList_AppendRetained((igObjectList *)infoRam->_dataList, (igObject *)optionRef.p);
         }
         ALLOC(allocator, self);
         {
             TitleRef<TitleText> textRef(beNDMWLoadIntf2TextOrder_Create(allocator));
             ((beNDMWLoadIntf2TextOrder *)textRef.p)->_messenger = self->_messenger;
             beNDMWLoadIntf2TextOrder *textOrder = (beNDMWLoadIntf2TextOrder *)textRef.p;
-            textOrder->_lua = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
-            ObjectList_AppendRetained(infoRam->_dataList, textRef.p);
+            textOrder->_lua = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject);
+            ObjectList_AppendRetained((igObjectList *)infoRam->_dataList, (igObject *)textRef.p);
         }
     }
     if (infoRam->_dataList == 0) {
@@ -259,22 +234,22 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    ctrl = (beNDMWTitle2CtrlData *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0],
+    ctrl = (beNDMWTitle2CtrlData *)(igProperty_FindByName((igObjectList *)infoRam->_dataList, g_propertyNameField,
                                                           "CTRL"));
     if (infoRam->_dataList == 0) {
         ALLOC(allocator, infoRam);
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    models = (beNDMWLoadIntf2ComMdlCtrl *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0], "COMMDLCTRL"));
+    models = (beNDMWLoadIntf2ComMdlCtrl *)(igProperty_FindByName((igObjectList *)infoRam->_dataList, g_propertyNameField, "COMMDLCTRL"));
     if (infoRam->_dataList == 0) {
         ALLOC(allocator, infoRam);
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    text = (beNDMWLoadIntf2TextOrder *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0], "TEXTORDER"));
+    text = (beNDMWLoadIntf2TextOrder *)(igProperty_FindByName((igObjectList *)infoRam->_dataList, g_propertyNameField, "TEXTORDER"));
     beNDMWLoadIntf2ComMdlCtrl__Poll(models);
-    pad = (bePadData *)(bePadManager_GetPadForPlayer(self->_padManager, 0));
+    pad = (bePadData *)(bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, 0));
     pressed = pad->_trigger;
     left = 1;
     stickDirs = pad->_lTrg | pad->_lRpt;
@@ -314,7 +289,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
         case 1:
             switch (ctrl->_st2) {
             case 0:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_startlogo") & 0xFF) != 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_startlogo") != 1) {
                     beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_startlogo", "SQ_OPEN", 1);
                 }
                 ctrl->_st2 = ctrl->_st2 + 1;
@@ -355,34 +330,34 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                         ctrl->_st3 = 0;
                         goto done;
                     }
-                    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL",
-                                                "j_startmenu01", 0, 1);
-                    beMessenger_AppendString(self->_messenger, "SQ_LINESL00");
-                    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
-                    if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
+                    beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL",
+                                                "j_startmenu01", 0);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, "SQ_LINESL00");
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ISSEQNAME");
+                    if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) != 1) {
                         ctrl->_st3 = 0x3E8;
                         goto done;
                     }
                     break;
                 case 0x3E8:
                     ctrl->_st3 = 0x3E9;
-                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_fadewn01", 0,
                                           "GENERATE");
-                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_fadewn01", 0,
                                           "SQ_BLOUT30");
                     goto done;
                 case 0x3E9:
-                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_startmenu01", 0,
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "j_startmenu01", 0,
                                           "ISRUN");
-                    if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
+                    if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == 0) {
                         ctrl->_st3 = 0x3EA;
                         goto done;
                     }
                     break;
                 case 0x3EA:
-                    beMessenger_SelectGroup(self->_messenger, "STAGECTL");
-                    beMessenger_AppendString(self->_messenger, "stagIS09");
-                    beMessenger_DispatchSelected(self->_messenger, "NEXTSTAGE");
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, "STAGECTL");
+                    beMessenger_AppendString((beMessenger *)self->_messenger, "stagIS09");
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "NEXTSTAGE");
                     ctrl->_st3 = 0x3EB;
                     goto done;
                 case 0x3EB:
@@ -540,7 +515,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
             TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
             SET_DATA(workListRef);
         }
-        option = (beNDMWTitle2Option *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0],
+        option = (beNDMWTitle2Option *)(igProperty_FindByName((igObjectList *)infoRam->_dataList, g_propertyNameField,
                                                               "OPTION"));
         switch (ctrl->_st1) {
         case 0:
@@ -814,28 +789,28 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                     }
                     switch (option->_ctrlPos) {
                     case OptionRowCamera:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") == 1) {
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINESL00", 0);
                         } else {
                             beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor12", "SQ_LINESL00", 0);
                         }
                         break;
                     case OptionRowLight:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") == 1) {
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINESL01", 0);
                         } else {
                             beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor12", "SQ_LINESL01", 0);
                         }
                         break;
                     case OptionRowCountry:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") == 1) {
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINESL02", 0);
                         } else {
                             beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor12", "SQ_LINESL02", 0);
                         }
                         break;
                     case OptionRowOk:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") == 1) {
                             beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor12", "SQ_CLOSE", 0);
                         }
                         break;
@@ -976,38 +951,38 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
             case 0:
                 ctrl->_st2 = 1;
                 ctrl->_st3 = 0;
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_fadewn01", 0,
                                       "GENERATE");
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_fadewn01", 0,
                                       "SQ_BLOUT30");
                 goto done;
             case 1:
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_startmenu01", 0,
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "j_startmenu01", 0,
                                       "ISRUN");
-                if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == 0) {
                     ctrl->_st2 = 2;
                     ctrl->_st3 = 0;
                     goto done;
                 }
                 break;
             case 2:
-                beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
-                commonSettings = beMessenger_GetObject(self->_messenger, 0);
+                beMessenger_SendGroup((beMessenger *)self->_messenger, "GAMERAM", "GETCOMMON");
+                commonSettings = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 savedCameraMode = option->_comConf;
                 savedLightMode = option->_lightConf;
                 /* Write the saved settings back into the GAMERAM common-settings records
                  * (value word at record +12). */
-                *(int *)((char *)(igProperty_GetRecord(commonSettings, "CAMERAMODE")) + 12) =
+                *(int *)((char *)(igProperty_GetRecord((igObject *)commonSettings, "CAMERAMODE")) + 12) =
                     savedCameraMode;
-                *(int *)((char *)(igProperty_GetRecord(commonSettings, "LIGHTMODE")) + 12) =
+                *(int *)((char *)(igProperty_GetRecord((igObject *)commonSettings, "LIGHTMODE")) + 12) =
                     savedLightMode;
                 g_commonSettingsValid = 1;
-                beMessenger_SendNamed(self->_messenger, "SOUND", 0, -1, "BGMSTOP");
-                beMessenger_SendNamed(self->_messenger, "SOUND", 0, -1, "ENVSTOP");
-                beMessenger_SendNamed(self->_messenger, "SOUND", 0, -1, "SESTOP");
-                beMessenger_SelectGroup(self->_messenger, "STAGECTL");
-                beMessenger_AppendString(self->_messenger, "stagIS08");
-                beMessenger_DispatchSelected(self->_messenger, "NEXTSTAGE");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SOUND", 0, -1, "BGMSTOP");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SOUND", 0, -1, "ENVSTOP");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SOUND", 0, -1, "SESTOP");
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, "STAGECTL");
+                beMessenger_AppendString((beMessenger *)self->_messenger, "stagIS08");
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, "NEXTSTAGE");
                 ctrl->_st2 = 3;
                 ctrl->_st3 = 0;
                 goto done;
@@ -1045,14 +1020,14 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
                 SET_DATA(workListRef);
             }
-            option = (beNDMWTitle2Option *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0],
+            option = (beNDMWTitle2Option *)(igProperty_FindByName((igObjectList *)infoRam->_dataList, g_propertyNameField,
                                                        "OPTION"));
             cameraMode = option->_comConf;
             lightMode = option->_lightConf;
-            beMessenger_SelectReceivers(self->_messenger, "LOADCTRL2", 0, 0);
-            beMessenger_AppendInt(self->_messenger, cameraMode);
-            beMessenger_AppendInt(self->_messenger, lightMode);
-            beMessenger_DispatchSelected(self->_messenger, "GENERATE_TITLE");
+            beMessenger_SelectReceivers((beMessenger *)self->_messenger, "LOADCTRL2", 0, 0);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, cameraMode);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, lightMode);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GENERATE_TITLE");
             ctrl->_st1 = ctrl->_st1 + 1;
             ctrl->_st3 = 0;
             ctrl->_st2 = 0;
@@ -1075,13 +1050,13 @@ done:
 
 int beNDMWTitle2_GetInfoMeta(void)
 {
-    return g_beNDMWTitle2Info_metaObject[0];
+    return (int)g_beNDMWTitle2Info_metaObject;
 }
 
 /* Slot 29: register the controller as the TITLE2 message receiver. */
 void beNDMWTitle2_OnAddRam(beNDMWTitle2 *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "TITLE2");
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)info, "TITLE2");
 }
 
 int beNDMWTitle2_OnMessage(beNDMWTitle2 *self, beBaseInfoRam *ram, beMessengerWork *message) {
@@ -1090,7 +1065,7 @@ int beNDMWTitle2_OnMessage(beNDMWTitle2 *self, beBaseInfoRam *ram, beMessengerWo
     if (ram->_dataList == 0) {
         return 1;
     }
-    command = beMessenger_ResolveEnumValue(self->_messenger, beNDMWTitle2CtrlData_GetMessageEnum(), message->_message);
+    command = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beNDMWTitle2CtrlData_GetMessageEnum(), (const char *)message->_message);
     switch (command) {
     case 0:
         ram->_st0 = 1;

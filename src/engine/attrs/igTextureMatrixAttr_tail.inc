@@ -1,4 +1,4 @@
-void Gap__Attrs__igTextureMatrixAttr__vfunc_24(S_1414d0 *p, int q) { FUN_0017c710(q, p->a, p->b); Gap__Gfx__igPsx2VisualContext__vfunc_203(q, p->a + 2, (char *)p + 12); }
+void Gap__Attrs__igTextureMatrixAttr__vfunc_24(S_1414d0 *p, int q) { FUN_0017c710(q, p->a, p->b); Gap__Gfx__igPsx2VisualContext__vfunc_203((igPsx2VisualContext *)q, p->a + 2, (char *)p + 12); }
 
 void FUN_00141520(void *arg0) {
     *(short *)((char *)(arg0) + 10) = (short) *(int *)((char *)(arg0) + 76);

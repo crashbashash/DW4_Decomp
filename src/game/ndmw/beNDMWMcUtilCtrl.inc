@@ -19,12 +19,12 @@ igMetaField *g_beNDMWMcUtilCtrl_st3MetaField;
 
 beNDMWMcUtilCtrl *beNDMWMcUtilCtrl_Create(int allocator) {
     beNDMWMcUtilCtrl_EnsureRegistered();
-    return (beNDMWMcUtilCtrl *)igMetaObject_CreateInstance(g_beNDMWMcUtilCtrl_metaObject, allocator);
+    return (beNDMWMcUtilCtrl *)igMetaObject_CreateInstance(g_beNDMWMcUtilCtrl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMcUtilCtrl_GetOrCreateMetaObject(void) {
     if (g_beNDMWMcUtilCtrl_metaObject == 0) {
-        g_beNDMWMcUtilCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMcUtilCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMcUtilCtrl_metaObject;
 }
@@ -46,7 +46,7 @@ int beNDMWMcUtilCtrl_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWMcUtilCtrl_vtable[0];
     obj._svData = 0;
     obj._slot = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMcUtilCtrl_vtable[0];
     if (&obj._slot != 0) {
         o = (igObject *)obj._slot;
@@ -76,7 +76,7 @@ void beNDMWMcUtilCtrl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWMcUtilCtrl_callbackList[] = { beMessenger_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, beNDMWMcSlotList_EnsureRegistered, 0 };
 
-void *beNDMWMcUtilCtrl_Register(void) {
+CallbackArray *beNDMWMcUtilCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -186,10 +186,10 @@ void beNDMWMcUtilCtrl_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWMcUtilCtrl_ctorTable, 0x11);
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     svData = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
-    ((igObjectRefMetaField *)svData)->_metaObject = beSaveDataDeliver_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)svData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
     ((igRefMetaField *)svData)->_construct = 1;
     slot = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)slot)->_metaObject = (int)beNDMWMcSlotList_GetOrCreateMetaObject();

@@ -28,12 +28,12 @@ void Gap__Attrs__igTextureBindAttr__vfunc_29(igTextureBindAttr *self) {
     }
 }
 
-void Gap__Attrs__igTextureBindAttr__vfunc_32(igTextureBindAttr *attr, void *context) {
+void Gap__Attrs__igTextureBindAttr__vfunc_32(igTextureBindAttr *attr, igPsx2VisualContext *context) {
     igTextureAttr *texture = (igTextureAttr *)attr->_texture;
     Gap__Gfx__igPsx2VisualContext__vfunc_127(context, texture ? texture->_texId : -1, attr->_unitID);
 }
 
-void Gap__Attrs__igTextureBindAttr__vfunc_24(igTextureBindAttr *attr, void *context) {
+void Gap__Attrs__igTextureBindAttr__vfunc_24(igTextureBindAttr *attr, igPsx2VisualContext *context) {
     igTextureAttrView *texture = (igTextureAttrView *)attr->_texture;
     int texId;
     if (texture == 0) {
@@ -88,7 +88,7 @@ void FUN_00140f40(void) {
     unsigned char sp1F;
 
     sp1F = 0;
-    igRegistry_GetValueBool(*(int *)((char *)g_objectSystem[0] + 56), 7, "enableIgTextureAttrFastApply", &sp1F, 0, 0);
+    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "enableIgTextureAttrFastApply", (unsigned char *)&sp1F, 0, 0);
     FUN_00140e90(sp1F);
 }
 

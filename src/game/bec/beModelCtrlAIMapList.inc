@@ -2,7 +2,7 @@ igMetaObject *g_beModelCtrlAIMapList_metaObject;
 
 igMetaObject *beModelCtrlAIMapList_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlAIMapList_metaObject == 0) {
-        g_beModelCtrlAIMapList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beModelCtrlAIMapList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beModelCtrlAIMapList_metaObject;
 }
@@ -20,7 +20,7 @@ int beModelCtrlAIMapList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beModelCtrlAIMapList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beModelCtrlAIMapList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beModelCtrlAIMapList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlAIMapList_callbackList[] = { beModelCtrlAIMap_EnsureRegistered, 0 };
 
-void *beModelCtrlAIMapList_Register(void) {
+CallbackArray *beModelCtrlAIMapList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

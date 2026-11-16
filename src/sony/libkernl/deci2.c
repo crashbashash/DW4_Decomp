@@ -1,5 +1,6 @@
 /* deci2.c - libkernl's DECI2 calls: each packs its arguments into a block and passes it, with the
  * function's number, to the kernel's Deci2Call. */
+#include "dw4/libkernl.h"
 
 #define DECI2_OPEN 1
 #define DECI2_CLOSE 2

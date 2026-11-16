@@ -1,5 +1,5 @@
 void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_10(void **arg0) {
-    if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
+    if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         ((DW4VC_200_0 *)(arg0))->vX();
     }
     FUN_001c1c60((T_1c1c60 *)arg0);
@@ -24,18 +24,18 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
 
     FUN_001c1e10();
     if (g_envMapMatrixOptStateAttr.p == 0) {
-        temp_s0 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapMatrixOptStateAttr.release();
         g_envMapMatrixOptStateAttr.p = (igMatrixOptStateAttr *)FUN_001359a0(temp_s0);
         ((DW4VC_128_1 *)g_envMapMatrixOptStateAttr.p)->vX(0);
-        temp_s0_2 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_2 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureMatrixStateAttr.release();
         g_envMapTextureMatrixStateAttr.p = (igTextureMatrixStateAttr *)FUN_001315d0(temp_s0_2);
         ((DW4VC_128_1 *)g_envMapTextureMatrixStateAttr.p)->vX(0);
         ((DW4VC_100_1 *)g_envMapTextureMatrixStateAttr.p)->vX(0);
     }
     if (g_envMapBlendZeroSrcAlphaUnit1.p == 0) {
-        temp_s0_3 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_3 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapBlendZeroSrcAlphaUnit1.release();
         g_envMapBlendZeroSrcAlphaUnit1.p = (igBlendFunctionAttr *)FUN_00139ed0(temp_s0_3);
         ((DW4VC_100_1 *)g_envMapBlendZeroSrcAlphaUnit1.p)->vX(1);
@@ -43,41 +43,41 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
         ((DW4VC_132_1 *)g_envMapBlendZeroSrcAlphaUnit1.p)->vX(4);
     }
     if (g_envMapPixelPipelineModeAttr.p == 0) {
-        temp_s0_4 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_4 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapPixelPipelineModeAttr.release();
         g_envMapPixelPipelineModeAttr.p = (igPixelPipelineModeAttr *)FUN_00134b60(temp_s0_4);
         ((T_1e08b0 *)g_envMapPixelPipelineModeAttr.p)->f12 = 3;
     }
     if (g_envMapTextureUnit1On.p == 0) {
-        temp_s0_5 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_5 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit1On.release();
         g_envMapTextureUnit1On.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_5);
         ((DW4VC_128_1 *)g_envMapTextureUnit1On.p)->vX(1);
         ((DW4VC_100_1 *)g_envMapTextureUnit1On.p)->vX(1);
     }
     if (g_envMapTextureUnit2On.p == 0) {
-        temp_s0_6 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_6 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit2On.release();
         g_envMapTextureUnit2On.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_6);
         ((DW4VC_128_1 *)g_envMapTextureUnit2On.p)->vX(1);
         ((DW4VC_100_1 *)g_envMapTextureUnit2On.p)->vX(2);
     }
     if (g_envMapTextureUnit1Off.p == 0) {
-        temp_s0_7 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_7 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit1Off.release();
         g_envMapTextureUnit1Off.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_7);
         ((DW4VC_128_1 *)g_envMapTextureUnit1Off.p)->vX(0);
         ((DW4VC_100_1 *)g_envMapTextureUnit1Off.p)->vX(1);
     }
     if (g_envMapTextureUnit2Off.p == 0) {
-        temp_s0_8 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_8 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit2Off.release();
         g_envMapTextureUnit2Off.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_8);
         ((DW4VC_128_1 *)g_envMapTextureUnit2Off.p)->vX(0);
         ((DW4VC_100_1 *)g_envMapTextureUnit2Off.p)->vX(2);
     }
     if (g_envMapBlendOneOneUnit1.p == 0) {
-        temp_s0_9 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_9 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapBlendOneOneUnit1.release();
         g_envMapBlendOneOneUnit1.p = (igBlendFunctionAttr *)FUN_00139ed0(temp_s0_9);
         ((DW4VC_100_1 *)g_envMapBlendOneOneUnit1.p)->vX(1);
@@ -85,7 +85,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
         ((DW4VC_132_1 *)g_envMapBlendOneOneUnit1.p)->vX(1);
     }
     if (g_envMapBlendOneOneUnit2.p == 0) {
-        temp_s0_10 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_10 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapBlendOneOneUnit2.release();
         g_envMapBlendOneOneUnit2.p = (igBlendFunctionAttr *)FUN_00139ed0(temp_s0_10);
         ((DW4VC_100_1 *)g_envMapBlendOneOneUnit2.p)->vX(2);
@@ -93,7 +93,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
         ((DW4VC_132_1 *)g_envMapBlendOneOneUnit2.p)->vX(1);
     }
     if (g_envMapColorMaskAttr.p == 0) {
-        temp_s0_11 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0_11 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapColorMaskAttr.release();
         g_envMapColorMaskAttr.p = (igColorMaskAttr *)FUN_00138cb0(temp_s0_11);
         ((DW4VC_128_4 *)g_envMapColorMaskAttr.p)->vX(0, 0, 0, 1);
@@ -121,21 +121,21 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
     A_1e1210 *a;
     FUN_001c20b0((Controller *)self);
     *(int *)((char *)self->f32 + 96) = 2;
-    if ((((A_1e1210 *)igTextureAttr_GetImage(self->f32, 0)) != 0) == 0) FUN_001c31e0(self->f32);
-    if (self->f52 != 0 && ((A_1e1210 *)igTextureAttr_GetImage(self->f52, 0)) != 0 && *(int *)((char *)((A_1e1210 *)igTextureAttr_GetImage(self->f52, 0)) + 44) == 0) {
-        a = ((A_1e1210 *)igTextureAttr_GetImage(self->f52, 0));
+    if ((((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f32, 0)) != 0) == 0) FUN_001c31e0(self->f32);
+    if (self->f52 != 0 && ((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0)) != 0 && *(int *)((char *)((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0)) + 44) == 0) {
+        a = ((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0));
         a->v28(1);
     }
     if (self->f73 != 0) FUN_00141190(self->f32, 1);
     self->f80->v30(2);
-    alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+    alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     t = self->f116;
     if (t != 0) {
         t->refs = t->refs - 1;
         if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
     }
     self->f116 = FUN_00133160(alloc);
-    alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+    alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     t = (Rc_1e1210 *)self->f112;
     if (t != 0) {
         t->refs = t->refs - 1;
@@ -144,7 +144,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
     self->f112 = ((B_1e1210 *)FUN_00139ed0(alloc));
     self->f112->v30(1);
     self->f112->v31(1);
-    alloc = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+    alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     t = self->f120;
     if (t != 0) {
         t->refs = t->refs - 1;
@@ -161,7 +161,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_52(S_1e1400 *arg0) {
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)p);
+            igObject_Destroy((igObject *)p);
         }
     }
     arg0->a = 0;
@@ -169,7 +169,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_52(S_1e1400 *arg0) {
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)p);
+            igObject_Destroy((igObject *)p);
         }
     }
     arg0->b = 0;
@@ -177,7 +177,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_52(S_1e1400 *arg0) {
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)p);
+            igObject_Destroy((igObject *)p);
         }
     }
     arg0->c = 0;
@@ -236,29 +236,29 @@ void FUN_001e16a0(EnvMapShaderView *arg0, void *) {
     float f;
     unsigned int v;
     EnvMapRef sp2C;
-    sp2C.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
+    sp2C.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
     EnvMapRef sp28;
-    sp28.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    ObjectList_AppendRetained(arg0->f64, sp2C.p);
-    ObjectList_AppendRetained(arg0->f68, sp28.p);
+    sp28.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)sp2C.p);
+    ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)sp28.p);
     arg0->f120->vX(2);
-    ObjectList_AppendRetained(sp2C.p, arg0->f120);
-    ObjectList_AppendRetained(sp28.p, arg0->f120);
-    ObjectList_AppendRetained(sp2C.p, g_envMapPixelPipelineModeAttr.p);
-    ObjectList_AppendRetained(sp28.p, g_envMapPixelPipelineModeAttr.p);
-    ObjectList_AppendRetained(sp2C.p, arg0->f116);
-    ObjectList_AppendRetained(sp28.p, arg0->f116);
-    ObjectList_AppendRetained(sp2C.p, DAT_00562738[0]);
-    ObjectList_AppendRetained(sp28.p, DAT_00562738[0]);
-    ObjectList_AppendRetained(sp2C.p, arg0->f80);
-    ObjectList_AppendRetained(sp28.p, arg0->f80);
-    ObjectList_AppendRetained(sp2C.p, g_envMapTextureMatrixStateAttr.p);
-    ObjectList_AppendRetained(sp28.p, g_envMapTextureMatrixStateAttr.p);
-    ObjectList_AppendRetained(sp2C.p, arg0->f76);
-    ObjectList_AppendRetained(sp28.p, arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f120);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f120);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)g_envMapPixelPipelineModeAttr.p);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)g_envMapPixelPipelineModeAttr.p);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)DAT_00562738[0]);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)DAT_00562738[0]);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)g_envMapTextureMatrixStateAttr.p);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)g_envMapTextureMatrixStateAttr.p);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f76);
     arg0->f84->f12 = 0;
-    ObjectList_AppendRetained(sp2C.p, arg0->f84);
-    ObjectList_AppendRetained(sp28.p, arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f84);
     f = arg0->f44;
     if (f != 1.0f) {
         if (!(f <= 1.0f) || f < 0.0f) {
@@ -271,30 +271,30 @@ void FUN_001e16a0(EnvMapShaderView *arg0, void *) {
         arg0->f112->vX(1);
     }
     arg0->f112->vY(0);
-    ObjectList_AppendRetained(sp2C.p, arg0->f112);
-    ObjectList_AppendRetained(sp28.p, arg0->f112);
-    ObjectList_AppendRetained(sp2C.p, g_envMapBlendOneOneUnit1.p);
-    ObjectList_AppendRetained(sp28.p, g_envMapBlendOneOneUnit1.p);
-    ObjectList_AppendRetained(sp2C.p, DAT_00562730[0]);
-    ObjectList_AppendRetained(sp28.p, DAT_00562730[0]);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)g_envMapBlendOneOneUnit1.p);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)g_envMapBlendOneOneUnit1.p);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)DAT_00562730[0]);
+    ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)DAT_00562730[0]);
     if (arg0->f36 != 0) {
-        ObjectList_AppendRetained(sp2C.p, g_envMapTextureUnit1On.p);
-        ObjectList_AppendRetained(sp28.p, g_envMapTextureUnit1On.p);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)g_envMapTextureUnit1On.p);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)g_envMapTextureUnit1On.p);
         EnvMapRef sp24;
-        sp24.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(arg0)));
+        sp24.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
         ((EnvMapAttrOps *)sp24.p)->d23(1);
         ((EnvMapAttrOps *)sp24.p)->vY(arg0->f36->f12);
-        ObjectList_AppendRetained(sp2C.p, sp24.p);
-        ObjectList_AppendRetained(sp28.p, sp24.p);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)sp24.p);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)sp24.p);
         arg0->f92->d23(1);
         arg0->f88->d23(1);
-        ObjectList_AppendRetained(sp2C.p, arg0->f92);
-        ObjectList_AppendRetained(sp28.p, arg0->f92);
-        ObjectList_AppendRetained(sp2C.p, arg0->f88);
-        ObjectList_AppendRetained(sp28.p, arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f88);
     } else {
-        ObjectList_AppendRetained(sp2C.p, g_envMapTextureUnit1Off.p);
-        ObjectList_AppendRetained(sp28.p, g_envMapTextureUnit1Off.p);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)g_envMapTextureUnit1Off.p);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)g_envMapTextureUnit1Off.p);
     }
 }
 
@@ -302,38 +302,38 @@ void FUN_001e1ac0(S_1e1ac0 *arg0, void *) {
     float f;
     unsigned int v;
     Ref_1e1ac0 sp2C;
-    sp2C.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator(arg0)));
+    sp2C.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
     Ref_1e1ac0 sp28;
-    sp28.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    ObjectList_AppendRetained(arg0->f64, sp2C.p);
-    ObjectList_AppendRetained(arg0->f68, sp28.p);
+    sp28.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)sp2C.p);
+    ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)sp28.p);
     Ref_1e1ac0 sp24;
-    sp24.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator(arg0)));
+    sp24.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
     Ref_1e1ac0 sp20;
-    sp20.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    ObjectList_AppendRetained(arg0->f64, sp24.p);
-    ObjectList_AppendRetained(arg0->f68, sp20.p);
-    ObjectList_AppendRetained(sp2C.p, ((X_1e1ac0 *)g_envMapMatrixOptStateAttr.p));
-    ObjectList_AppendRetained(sp20.p, ((X_1e1ac0 *)g_envMapMatrixOptStateAttr.p));
+    sp20.p = ((X_1e1ac0 *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)sp24.p);
+    ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)sp20.p);
+    ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)(((X_1e1ac0 *)g_envMapMatrixOptStateAttr.p)));
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)(((X_1e1ac0 *)g_envMapMatrixOptStateAttr.p)));
     if (arg0->f36 != 0) {
-        ObjectList_AppendRetained(sp2C.p, ((X_1e1ac0 * *)DAT_00562730)[0]);
-        ObjectList_AppendRetained(sp20.p, ((X_1e1ac0 * *)DAT_00562730)[0]);
-        ObjectList_AppendRetained(sp2C.p, arg0->f36);
-        ObjectList_AppendRetained(sp28.p, arg0->f36);
-        ObjectList_AppendRetained(sp2C.p, arg0->f92);
-        ObjectList_AppendRetained(sp28.p, arg0->f92);
-        ObjectList_AppendRetained(sp2C.p, arg0->f96);
-        ObjectList_AppendRetained(sp28.p, arg0->f96);
-        ObjectList_AppendRetained(sp2C.p, arg0->f88);
-        ObjectList_AppendRetained(sp28.p, arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)(((X_1e1ac0 * *)DAT_00562730)[0]));
+        ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)(((X_1e1ac0 * *)DAT_00562730)[0]));
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f36);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f36);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f96);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f96);
+        ObjectList_AppendRetained((igObjectList *)sp2C.p, (igObject *)arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)sp28.p, (igObject *)arg0->f88);
     } else {
-        ObjectList_AppendRetained(sp24.p, ((X_1e1ac0 * *)DAT_00562730)[0]);
-        ObjectList_AppendRetained(sp20.p, ((X_1e1ac0 * *)DAT_00562730)[0]);
+        ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)(((X_1e1ac0 * *)DAT_00562730)[0]));
+        ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)(((X_1e1ac0 * *)DAT_00562730)[0]));
     }
-    ObjectList_AppendRetained(sp24.p, arg0->f116);
-    ObjectList_AppendRetained(sp20.p, arg0->f116);
-    ObjectList_AppendRetained(sp24.p, ((X_1e1ac0 * *)DAT_00562738)[0]);
-    ObjectList_AppendRetained(sp20.p, ((X_1e1ac0 * *)DAT_00562738)[0]);
+    ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)(((X_1e1ac0 * *)DAT_00562738)[0]));
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)(((X_1e1ac0 * *)DAT_00562738)[0]));
     f = arg0->f44;
     if (f != 1.0f) {
         if (!(f <= 1.0f) || f < 0.0f) {
@@ -343,155 +343,155 @@ void FUN_001e1ac0(S_1e1ac0 *arg0, void *) {
         v = (unsigned int)(128.0f * arg0->f44);
         ((W112 *)arg0->f112)->b28 = (unsigned char)v;
     }
-    ObjectList_AppendRetained(sp24.p, arg0->f112);
-    ObjectList_AppendRetained(sp20.p, arg0->f112);
-    ObjectList_AppendRetained(sp24.p, arg0->f80);
-    ObjectList_AppendRetained(sp20.p, arg0->f80);
-    ObjectList_AppendRetained(sp24.p, ((X_1e1ac0 *)g_envMapTextureMatrixStateAttr.p));
-    ObjectList_AppendRetained(sp20.p, ((X_1e1ac0 *)g_envMapTextureMatrixStateAttr.p));
-    ObjectList_AppendRetained(sp24.p, arg0->f76);
-    ObjectList_AppendRetained(sp20.p, arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)(((X_1e1ac0 *)g_envMapTextureMatrixStateAttr.p)));
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)(((X_1e1ac0 *)g_envMapTextureMatrixStateAttr.p)));
+    ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)arg0->f76);
     arg0->f84->f12 = 0;
-    ObjectList_AppendRetained(sp24.p, arg0->f84);
-    ObjectList_AppendRetained(sp20.p, arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)sp24.p, (igObject *)arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)sp20.p, (igObject *)arg0->f84);
 }
 
 void FUN_001e1e70(EnvMapShaderView_1e1e70 *arg0, void *) {
     EnvMapRef r60;
-    r60.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
+    r60.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
     EnvMapRef r56;
-    r56.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    ObjectList_AppendRetained(arg0->f64, r60.p);
-    ObjectList_AppendRetained(arg0->f68, r56.p);
+    r56.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)r60.p);
+    ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)r56.p);
     EnvMapRef r52;
-    r52.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
+    r52.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
     EnvMapRef r48;
-    r48.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    ObjectList_AppendRetained(arg0->f64, r52.p);
-    ObjectList_AppendRetained(arg0->f68, r48.p);
+    r48.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)r52.p);
+    ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)r48.p);
     EnvMapRef r44;
-    r44.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
+    r44.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
     EnvMapRef r40;
-    r40.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    ObjectList_AppendRetained(arg0->f64, r44.p);
-    ObjectList_AppendRetained(arg0->f68, r40.p);
-    ObjectList_AppendRetained(r60.p, ((EnvMapAttr *)g_envMapMatrixOptStateAttr.p));
-    ObjectList_AppendRetained(r40.p, ((EnvMapAttr *)g_envMapMatrixOptStateAttr.p));
+    r40.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)r44.p);
+    ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)r40.p);
+    ObjectList_AppendRetained((igObjectList *)r60.p, (igObject *)(((EnvMapAttr *)g_envMapMatrixOptStateAttr.p)));
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)(((EnvMapAttr *)g_envMapMatrixOptStateAttr.p)));
     if (arg0->f36 != 0) {
-        ObjectList_AppendRetained(r60.p, DAT_00562730[0]);
-        ObjectList_AppendRetained(r40.p, DAT_00562730[0]);
-        ObjectList_AppendRetained(r60.p, arg0->f36);
-        ObjectList_AppendRetained(r56.p, arg0->f36);
-        ObjectList_AppendRetained(r60.p, arg0->f92);
-        ObjectList_AppendRetained(r56.p, arg0->f92);
-        ObjectList_AppendRetained(r60.p, arg0->f96);
-        ObjectList_AppendRetained(r56.p, arg0->f96);
-        ObjectList_AppendRetained(r60.p, arg0->f88);
-        ObjectList_AppendRetained(r56.p, arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)r60.p, (igObject *)DAT_00562730[0]);
+        ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)DAT_00562730[0]);
+        ObjectList_AppendRetained((igObjectList *)r60.p, (igObject *)arg0->f36);
+        ObjectList_AppendRetained((igObjectList *)r56.p, (igObject *)arg0->f36);
+        ObjectList_AppendRetained((igObjectList *)r60.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)r56.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)r60.p, (igObject *)arg0->f96);
+        ObjectList_AppendRetained((igObjectList *)r56.p, (igObject *)arg0->f96);
+        ObjectList_AppendRetained((igObjectList *)r60.p, (igObject *)arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)r56.p, (igObject *)arg0->f88);
     } else {
-        ObjectList_AppendRetained(r52.p, DAT_00562730[0]);
-        ObjectList_AppendRetained(r40.p, DAT_00562730[0]);
+        ObjectList_AppendRetained((igObjectList *)r52.p, (igObject *)DAT_00562730[0]);
+        ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)DAT_00562730[0]);
     }
     arg0->f84->f12 = 0;
-    ObjectList_AppendRetained(r52.p, arg0->f84);
-    ObjectList_AppendRetained(r40.p, arg0->f84);
-    ObjectList_AppendRetained(r52.p, ((EnvMapAttr * *)DAT_00562740)[0]);
-    ObjectList_AppendRetained(r48.p, ((EnvMapAttr * *)DAT_00562740)[0]);
-    ObjectList_AppendRetained(r52.p, arg0->f104);
-    ObjectList_AppendRetained(r48.p, arg0->f104);
-    ObjectList_AppendRetained(r52.p, arg0->f100);
-    ObjectList_AppendRetained(r48.p, arg0->f100);
-    ObjectList_AppendRetained(r52.p, ((EnvMapAttr *)g_envMapColorMaskAttr.p));
-    ObjectList_AppendRetained(r48.p, ((EnvMapAttr *)g_envMapColorMaskAttr.p));
-    ObjectList_AppendRetained(r52.p, g_igAlphaStateAttr_instance.p);
-    ObjectList_AppendRetained(r48.p, g_igAlphaStateAttr_instance.p);
-    ObjectList_AppendRetained(r44.p, arg0->f116);
-    ObjectList_AppendRetained(r40.p, arg0->f116);
-    ObjectList_AppendRetained(r44.p, DAT_00562738[0]);
-    ObjectList_AppendRetained(r40.p, DAT_00562738[0]);
+    ObjectList_AppendRetained((igObjectList *)r52.p, (igObject *)arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)r52.p, (igObject *)(((EnvMapAttr * *)DAT_00562740)[0]));
+    ObjectList_AppendRetained((igObjectList *)r48.p, (igObject *)(((EnvMapAttr * *)DAT_00562740)[0]));
+    ObjectList_AppendRetained((igObjectList *)r52.p, (igObject *)arg0->f104);
+    ObjectList_AppendRetained((igObjectList *)r48.p, (igObject *)arg0->f104);
+    ObjectList_AppendRetained((igObjectList *)r52.p, (igObject *)arg0->f100);
+    ObjectList_AppendRetained((igObjectList *)r48.p, (igObject *)arg0->f100);
+    ObjectList_AppendRetained((igObjectList *)r52.p, (igObject *)(((EnvMapAttr *)g_envMapColorMaskAttr.p)));
+    ObjectList_AppendRetained((igObjectList *)r48.p, (igObject *)(((EnvMapAttr *)g_envMapColorMaskAttr.p)));
+    ObjectList_AppendRetained((igObjectList *)r52.p, (igObject *)g_igAlphaStateAttr_instance.p);
+    ObjectList_AppendRetained((igObjectList *)r48.p, (igObject *)g_igAlphaStateAttr_instance.p);
+    ObjectList_AppendRetained((igObjectList *)r44.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)r44.p, (igObject *)DAT_00562738[0]);
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)DAT_00562738[0]);
     arg0->f112->vX(8);
-    ObjectList_AppendRetained(r44.p, arg0->f112);
-    ObjectList_AppendRetained(r40.p, arg0->f112);
-    ObjectList_AppendRetained(r44.p, arg0->f80);
-    ObjectList_AppendRetained(r40.p, arg0->f80);
-    ObjectList_AppendRetained(r44.p, g_envMapTextureMatrixStateAttr.p);
-    ObjectList_AppendRetained(r40.p, g_envMapTextureMatrixStateAttr.p);
-    ObjectList_AppendRetained(r44.p, arg0->f76);
-    ObjectList_AppendRetained(r40.p, arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)r44.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)r44.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)r44.p, (igObject *)g_envMapTextureMatrixStateAttr.p);
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)g_envMapTextureMatrixStateAttr.p);
+    ObjectList_AppendRetained((igObjectList *)r44.p, (igObject *)arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)r40.p, (igObject *)arg0->f76);
 }
 
 void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
     EnvMapRef a;
     EnvMapRef b;
     if (arg0->f104 == arg0->f88) {
-        assignRef_1e22c0(arg0->f104, EnvMapTempRef(((EnvMapAttr *)FUN_001325a0(igObject_GetAllocator(arg0)))));
+        assignRef_1e22c0(arg0->f104, EnvMapTempRef(((EnvMapAttr *)FUN_001325a0(igObject_GetAllocator((igObject *)arg0)))));
         arg0->f104->vX(0);
         arg0->f104->vY(arg0->f56);
     }
-    a.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    b.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-    ObjectList_AppendRetained(arg0->f64, a.p);
-    ObjectList_AppendRetained(arg0->f68, b.p);
+    a.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    b.p = ((EnvMapAttr *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+    ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)a.p);
+    ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)b.p);
     arg0->f120->vX(3);
-    ObjectList_AppendRetained(a.p, arg0->f120);
-    ObjectList_AppendRetained(b.p, arg0->f120);
-    ObjectList_AppendRetained(a.p, g_envMapPixelPipelineModeAttr.p);
-    ObjectList_AppendRetained(b.p, g_envMapPixelPipelineModeAttr.p);
-    ObjectList_AppendRetained(a.p, DAT_00562738[0]);
-    ObjectList_AppendRetained(b.p, DAT_00562738[0]);
-    ObjectList_AppendRetained(a.p, arg0->f116);
-    ObjectList_AppendRetained(b.p, arg0->f116);
-    ObjectList_AppendRetained(a.p, DAT_00562730[0]);
-    ObjectList_AppendRetained(b.p, DAT_00562730[0]);
-    ObjectList_AppendRetained(a.p, arg0->f80);
-    ObjectList_AppendRetained(b.p, arg0->f80);
-    ObjectList_AppendRetained(a.p, g_envMapTextureMatrixStateAttr.p);
-    ObjectList_AppendRetained(b.p, g_envMapTextureMatrixStateAttr.p);
-    ObjectList_AppendRetained(a.p, arg0->f76);
-    ObjectList_AppendRetained(b.p, arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f120);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f120);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)g_envMapPixelPipelineModeAttr.p);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)g_envMapPixelPipelineModeAttr.p);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)DAT_00562738[0]);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)DAT_00562738[0]);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f116);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)DAT_00562730[0]);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)DAT_00562730[0]);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f80);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)g_envMapTextureMatrixStateAttr.p);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)g_envMapTextureMatrixStateAttr.p);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f76);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f76);
     arg0->f84->f12 = 0;
-    ObjectList_AppendRetained(a.p, arg0->f84);
-    ObjectList_AppendRetained(b.p, arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f84);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f84);
     arg0->f112->vX(1);
     arg0->f112->vY(0);
-    ObjectList_AppendRetained(a.p, arg0->f112);
-    ObjectList_AppendRetained(b.p, arg0->f112);
-    ObjectList_AppendRetained(a.p, g_igAlphaStateAttr_instance.p);
-    ObjectList_AppendRetained(b.p, g_igAlphaStateAttr_instance.p);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f112);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)g_igAlphaStateAttr_instance.p);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)g_igAlphaStateAttr_instance.p);
     arg0->f104->d23(1);
-    ObjectList_AppendRetained(a.p, arg0->f104);
-    ObjectList_AppendRetained(b.p, arg0->f104);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f104);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f104);
     arg0->f100->d23(1);
-    ObjectList_AppendRetained(a.p, arg0->f100);
-    ObjectList_AppendRetained(b.p, arg0->f100);
-    ObjectList_AppendRetained(a.p, g_envMapTextureUnit1On.p);
-    ObjectList_AppendRetained(b.p, g_envMapTextureUnit1On.p);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f100);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f100);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)g_envMapTextureUnit1On.p);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)g_envMapTextureUnit1On.p);
     arg0->f108->d23(1);
     ((EnvMapAttrState *)arg0->f108)->f12 = 0;
-    ObjectList_AppendRetained(a.p, arg0->f108);
-    ObjectList_AppendRetained(b.p, arg0->f108);
-    ObjectList_AppendRetained(a.p, ((EnvMapAttr *)g_envMapBlendZeroSrcAlphaUnit1.p));
-    ObjectList_AppendRetained(b.p, ((EnvMapAttr *)g_envMapBlendZeroSrcAlphaUnit1.p));
-    ObjectList_AppendRetained(a.p, ((EnvMapAttr *)g_envMapBlendOneOneUnit2.p));
-    ObjectList_AppendRetained(b.p, ((EnvMapAttr *)g_envMapBlendOneOneUnit2.p));
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f108);
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f108);
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)(((EnvMapAttr *)g_envMapBlendZeroSrcAlphaUnit1.p)));
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)(((EnvMapAttr *)g_envMapBlendZeroSrcAlphaUnit1.p)));
+    ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)(((EnvMapAttr *)g_envMapBlendOneOneUnit2.p)));
+    ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)(((EnvMapAttr *)g_envMapBlendOneOneUnit2.p)));
     if (arg0->f36 != 0) {
-        ObjectList_AppendRetained(a.p, ((EnvMapAttr *)g_envMapTextureUnit2On.p));
-        ObjectList_AppendRetained(b.p, ((EnvMapAttr *)g_envMapTextureUnit2On.p));
+        ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)(((EnvMapAttr *)g_envMapTextureUnit2On.p)));
+        ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)(((EnvMapAttr *)g_envMapTextureUnit2On.p)));
         EnvMapRef c;
-        c.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(arg0)));
+        c.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
         ((EnvMapAttrOps *)c.p)->d23(2);
         ((EnvMapAttrOps *)c.p)->vY(arg0->f36->f12);
-        ObjectList_AppendRetained(a.p, c.p);
-        ObjectList_AppendRetained(b.p, c.p);
+        ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)c.p);
+        ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)c.p);
         arg0->f92->d23(2);
         arg0->f88->d23(2);
-        ObjectList_AppendRetained(a.p, arg0->f92);
-        ObjectList_AppendRetained(b.p, arg0->f92);
-        ObjectList_AppendRetained(a.p, arg0->f88);
-        ObjectList_AppendRetained(b.p, arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f92);
+        ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)arg0->f88);
+        ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)arg0->f88);
     } else {
-        ObjectList_AppendRetained(a.p, ((EnvMapAttr *)g_envMapTextureUnit2Off.p));
-        ObjectList_AppendRetained(b.p, ((EnvMapAttr *)g_envMapTextureUnit2Off.p));
+        ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)(((EnvMapAttr *)g_envMapTextureUnit2Off.p)));
+        ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)(((EnvMapAttr *)g_envMapTextureUnit2Off.p)));
     }
 }
 

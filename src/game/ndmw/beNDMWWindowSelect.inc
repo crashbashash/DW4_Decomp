@@ -18,7 +18,7 @@ void beNDMWWindowSelect_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWWindowSelect_callbackList[] = { igBoolList_EnsureRegistered, 0 };
 
-void *beNDMWWindowSelect_Register(void) {
+CallbackArray *beNDMWWindowSelect_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -82,7 +82,7 @@ void beNDMWWindowSelect_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWWindowSelect_ctorTable, 6);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)decideList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beNDMWWindowSelect_fieldTable, g_beNDMWWindowSelect_fieldHandles, g_beNDMWWindowSelect_fieldOffsets, base);
 }
 

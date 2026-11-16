@@ -9,7 +9,7 @@ igMetaField *g_igGuiComponent_linkedMetaField;
 
 igMetaObject *igGuiComponent_GetOrCreateMetaObject(void) {
     if (g_igGuiComponent_metaObject == 0) {
-        g_igGuiComponent_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGuiComponent_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGuiComponent_metaObject;
 }
@@ -25,13 +25,13 @@ igMetaObject *igGuiComponent_GetMetaObject(void)
 int igGuiComponent_GetVTable(void) {
     struct Obj_44ffe0 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igGuiComponent_vtable[0];
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igGuiComponent_vtable[0];
     FUN_00450370((ObjectRefWord *)&obj.w7, -1);
     FUN_004502f0((void **)&obj.w5, -1);
@@ -132,9 +132,9 @@ void igGuiComponent_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igGuiComponent_callbackList[] = { igGuiComponentController_EnsureRegistered, igGuiComponentModel_RunStaticInit, igGuiComponentAspect_EnsureRegistered, igGuiSystem_RunStaticInit, igGuiComponentNode_RunStaticInit, 0 };
 
-void igGuiComponent_Register(void) {
+CallbackArray *igGuiComponent_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGuiComponent_metaObject,
         igObject_Register,
@@ -201,23 +201,23 @@ void igGuiComponent_InitFields(void) {
     void *temp_s1;
 
     temp_s1 = (void *)g_igGuiComponent_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igGuiComponent_ctorTable, 7);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igGuiComponent_ctorTable, 7);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044fa40();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0044f790();
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0044fbb0();
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
+    temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_4)->_refCounted = 0;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
+    temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0044ded0();
     ((igObjectRefMetaField *)temp_s2_5)->_refCounted = 0;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
+    temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_0044f540();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_igGuiComponent_fieldTable, g_igGuiComponent_fieldHandles, g_igGuiComponent_fieldOffsets, temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igGuiComponent_fieldTable, g_igGuiComponent_fieldHandles, g_igGuiComponent_fieldOffsets, temp_s0);
 }
 

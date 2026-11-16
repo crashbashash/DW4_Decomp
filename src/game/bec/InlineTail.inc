@@ -6,10 +6,10 @@ igMetaObject *ParticleInfo_GetMeta(void)
 /* Runs the igObject base step, then (when `clearControls` is set) zeroes the particle control
  * data: `_points` (192 words) and `_numControls` (32 words). */
 void ParticleInfo_resetFields(ParticleInfo *self, int clearControls) {
-    Gap__Core__igObject__resetFields();
+    Gap__Core__igObject__resetFields((igObject *)self, clearControls);
     if (clearControls != 0) {
-        memset((int)self->_points, 0, sizeof(self->_points));
-        memset((int)self->_numControls, 0, sizeof(self->_numControls));
+        memset(self->_points, 0, sizeof(self->_points));
+        memset(self->_numControls, 0, sizeof(self->_numControls));
     }
 }
 
@@ -513,7 +513,7 @@ void beLuaDataObject_userDestruct(beLuaDataObject *self) {
 
     buffer = self->_data;
     if (buffer != 0) {
-        Memory_FreeBuffer(buffer);
+        Memory_FreeBuffer((void *)buffer);
     }
     self->_data = 0;
     Gap__Core__igObject__userDestruct(self);
@@ -880,16 +880,16 @@ igMetaObject *beNumVerData_GetMeta(void)
 void beNumVerData_userConstruct(beNumVerData *self, int flag) {
     int i;
     void *allocator;
-    Gap__Core__igObject__userConstruct(self, flag);
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
         i = 0;
         do {
             allocator = igObject_GetAllocator(self);
-            allocator = (g_useOwnerAllocator != 0) ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+            allocator = (g_useOwnerAllocator != 0) ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
             {
                 igSmartPointer<beNumVerInsideData> item((beNumVerInsideData *)beNumVerInsideData_Create((int)allocator));
-                ObjectList_AppendRetained((void *)self->_verDataList, item.p);
+                ObjectList_AppendRetained((igObjectList *)self->_verDataList, (igObject *)item.p);
             }
             i += 1;
         } while (i < 6);
@@ -981,7 +981,7 @@ igMetaObject *beSaveDataDeliver_GetMeta(void)
 }
 
 void beSaveDataDeliver_userConstruct(beSaveDataDeliver *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
 }
 
@@ -990,7 +990,7 @@ void beSaveDataDeliver_userDestruct(beSaveDataDeliver *self) {
 
     data = self->_data;
     if (data != 0) {
-        Memory_FreeBuffer(data);
+        Memory_FreeBuffer((void *)data);
     }
     self->_data = 0;
     self->_size = 0;
@@ -1024,16 +1024,16 @@ igMetaObject *beSvPlatDataGC_GetMeta(void)
 }
 
 void beSvPlatDataGC_userConstruct(beSvPlatDataGC *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
 }
 
 void beSvPlatDataGC_userDestruct(beSvPlatDataGC *self) {
     if (self->_banTplData != 0) {
-        Memory_FreeBuffer(self->_banTplData);
+        Memory_FreeBuffer((void *)self->_banTplData);
     }
     if (self->_iconTplData != 0) {
-        Memory_FreeBuffer(self->_iconTplData);
+        Memory_FreeBuffer((void *)self->_iconTplData);
     }
     self->_banTplData = 0;
     self->_iconTplData = 0;
@@ -1047,16 +1047,16 @@ igMetaObject *beSvPs2McImage128k_GetMeta(void)
 }
 
 void beSvPs2McImage128k_userConstruct(beSvPs2McImage128k *self, int flag) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
-        self->_data = Memory_AllocateDefaultBuffer(0x20000);
+        self->_data = (int)Memory_AllocateDefaultBuffer(0x20000);
     }
 }
 
 void beSvPs2McImage128k_userDestruct(beSvPs2McImage128k *self) {
     if (self->_data != 0) {
-        Memory_FreeBuffer(self->_data);
+        Memory_FreeBuffer((void *)self->_data);
     }
     self->_data = 0;
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
@@ -1074,10 +1074,10 @@ igMetaObject *beXboxImage24k_GetMeta(void)
 }
 
 void beXboxImage24k_userConstruct(beXboxImage24k *self, int flag) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
-        self->_data = Memory_AllocateDefaultBuffer(0x6000);
+        self->_data = (int)Memory_AllocateDefaultBuffer(0x6000);
         self->_dataSize = 0x6000;
     }
 }
@@ -1087,7 +1087,7 @@ void beXboxImage24k_userDestruct(beXboxImage24k *self) {
 
     data = self->_data;
     if (data != 0) {
-        Memory_FreeBuffer(data);
+        Memory_FreeBuffer((void *)data);
     }
     self->_data = 0;
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
@@ -1433,9 +1433,9 @@ igMetaObject *beLayerGroupList_GetElementMeta(void)
     return g_beLayerGroup_metaObject;
 }
 
-int igLightSetList_GetElementMeta(void)
+igMetaObject *igLightSetList_GetElementMeta(void)
 {
-    return g_igLightSet_metaObject[0];
+    return g_igLightSet_metaObject;
 }
 
 igMetaObject *beLuaDataList_GetElementMeta(void)
@@ -1548,9 +1548,9 @@ igMetaObject *beWeaponAttachDataList_GetElementMeta(void)
     return g_beWeaponAttachData_metaObject;
 }
 
-int igAppearanceListList_GetElementMeta(void)
+igMetaObject *igAppearanceListList_GetElementMeta(void)
 {
-    return g_igAppearanceList_metaObject[0];
+    return g_igAppearanceList_metaObject;
 }
 
 igMetaObject *beBaseInfoManagerList_GetElementMeta(void)

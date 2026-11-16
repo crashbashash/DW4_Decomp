@@ -1,4 +1,4 @@
-void Gap__Attrs__igTextureUnloadAttr__vfunc_24(void *arg0, int arg1) {
+void Gap__Attrs__igTextureUnloadAttr__vfunc_24(void *arg0, igPsx2VisualContext *arg1) {
     int temp_a2;
     void *temp_v1;
 
@@ -6,7 +6,7 @@ void Gap__Attrs__igTextureUnloadAttr__vfunc_24(void *arg0, int arg1) {
     if (temp_v1 != 0) {
         temp_a2 = *(int *)((char *)(temp_v1) + 36);
         if (temp_a2 != -1) {
-            Gap__Gfx__igPsx2VisualContext__vfunc_130(arg1, temp_a2, temp_a2);
+            Gap__Gfx__igPsx2VisualContext__vfunc_130(arg1, temp_a2);
         }
     }
 }

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void igInterfaceManager_Register(void);
+struct CallbackArray *igInterfaceManager_Register(void);
 
 #ifdef __cplusplus
 }

@@ -3,7 +3,7 @@ igMetaField *g_beModelCtrlSubCom_comListMetaField;
 
 igMetaObject *beModelCtrlSubCom_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlSubCom_metaObject == 0) {
-        g_beModelCtrlSubCom_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beModelCtrlSubCom_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beModelCtrlSubCom_metaObject;
 }
@@ -25,7 +25,7 @@ int beModelCtrlSubCom_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlSubCom_vtable[0];
     comListSlot = (igObject **)&obj._comList;
     *comListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlSubCom_vtable[0];
     igObjectRef_Release(comListSlot);
     return vtable;
@@ -38,7 +38,7 @@ void beModelCtrlSubCom_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlSubCom_callbackList[] = { igObjectList_EnsureRegistered, 0 };
 
-void *beModelCtrlSubCom_Register(void) {
+CallbackArray *beModelCtrlSubCom_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -76,13 +76,13 @@ static int g_beModelCtrlSubCom_fieldOffsets[] = {
 void beModelCtrlSubCom_InitFields(void) {
     int base;
     void *comList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlSubCom_metaObject;
+    meta = g_beModelCtrlSubCom_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlSubCom_ctorTable, 1);
     comList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)comList)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)comList)->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)comList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beModelCtrlSubCom_fieldTable, g_beModelCtrlSubCom_fieldHandles, g_beModelCtrlSubCom_fieldOffsets, base);
 }

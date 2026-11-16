@@ -10,7 +10,7 @@ igMetaField *g_beNDMWStatusCtrlD0_decideListMetaField;
 
 beNDMWStatusCtrlD0 *beNDMWStatusCtrlD0_Create(int allocator) {
     beNDMWStatusCtrlD0_EnsureRegistered();
-    return (beNDMWStatusCtrlD0 *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlD0_metaObject, allocator);
+    return (beNDMWStatusCtrlD0 *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlD0_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWStatusCtrlD0_GetMetaObject(void) {
@@ -39,7 +39,7 @@ int beNDMWStatusCtrlD0_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlD0_vtable[0];
     obj._kindList = 0;
     obj._decideList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlD0_vtable[0];
     igSmartPointer_igBoolList_Destruct(&obj._decideList, -1);
     igSmartPointer_igIntList_Destruct(&obj._kindList, -1);
@@ -54,7 +54,7 @@ void beNDMWStatusCtrlD0_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusCtrlD0_callbackList[] = { igIntList_EnsureRegistered, igBoolList_EnsureRegistered, 0 };
 
-void *beNDMWStatusCtrlD0_Register(void) {
+CallbackArray *beNDMWStatusCtrlD0_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -131,7 +131,7 @@ void beNDMWStatusCtrlD0_InitFields(void) {
     ((igRefMetaField *)kindList)->_construct = 1;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 6), 1);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)decideList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)decideList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWStatusCtrlD0_fieldTable, g_beNDMWStatusCtrlD0_fieldHandles, g_beNDMWStatusCtrlD0_fieldOffsets, base);
 }

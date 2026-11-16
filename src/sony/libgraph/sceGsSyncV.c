@@ -1,18 +1,8 @@
-typedef struct {
-    short inter;
-    short omode;
-    short ffmode;
-    unsigned short version;
-    int vsync_set;
-    int vsync_id;
-} GsGParam;
+#include "dw4/sony/libgraph.h"
+#include "dw4/libkernl.h"
 
 #define GS_CSR (*(volatile unsigned long long *)0x12001000)
 #define GS_CSR_FIELD 13
-
-GsGParam *sceGsGetGParam(void);
-void VSync(void);
-long long VSync2(void);
 
 int sceGsSyncV(void)
 {

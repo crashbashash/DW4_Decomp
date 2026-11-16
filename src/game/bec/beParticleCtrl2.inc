@@ -2,12 +2,12 @@ igMetaObject *g_beParticleCtrl2_metaObject;
 
 beParticleCtrl2 *beParticleCtrl2_CreateInstance(int allocator) {
     beParticleCtrl2_EnsureRegistered();
-    return (beParticleCtrl2 *)igMetaObject_CreateInstance(*(int *)0x588510, allocator);
+    return (beParticleCtrl2 *)igMetaObject_CreateInstance(g_beParticleCtrl2_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beParticleCtrl2_GetOrCreateMetaObject(void) {
     if (g_beParticleCtrl2_metaObject == 0) {
-        g_beParticleCtrl2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beParticleCtrl2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beParticleCtrl2_metaObject;
 }
@@ -33,7 +33,7 @@ int beParticleCtrl2_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beParticleCtrl2_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -46,7 +46,7 @@ void beParticleCtrl2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beParticleCtrl2_Register);
 }
 
-void *beParticleCtrl2_Register(void) {
+CallbackArray *beParticleCtrl2_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

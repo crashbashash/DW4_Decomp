@@ -2,7 +2,7 @@ igMetaObject *g_beWeaponSeqDataList_metaObject;
 
 igMetaObject *beWeaponSeqDataList_GetOrCreateMetaObject(void) {
     if (g_beWeaponSeqDataList_metaObject == 0) {
-        g_beWeaponSeqDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beWeaponSeqDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beWeaponSeqDataList_metaObject;
 }
@@ -20,7 +20,7 @@ int beWeaponSeqDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beWeaponSeqDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beWeaponSeqDataList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beWeaponSeqDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beWeaponSeqDataList_callbackList[] = { beWeaponSeqData_EnsureRegistered, 0 };
 
-void *beWeaponSeqDataList_Register(void) {
+CallbackArray *beWeaponSeqDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

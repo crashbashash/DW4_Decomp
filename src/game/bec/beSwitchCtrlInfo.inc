@@ -19,7 +19,7 @@ int beSwitchCtrlInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beSwitchCtrlInfo_vtable[0];
     obj._switchNode = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSwitchCtrlInfo_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switchNode), -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -46,7 +46,7 @@ void beSwitchCtrlInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSwitchCtrlInfo_callbackList[] = { igSwitch_EnsureRegistered, 0 };
 
-void *beSwitchCtrlInfo_Register(void) {
+CallbackArray *beSwitchCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,13 +84,13 @@ static int g_beSwitchCtrlInfo_fieldOffsets[] = {
 void beSwitchCtrlInfo_InitFields(void) {
     int base;
     void *switchNode;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSwitchCtrlInfo_metaObject;
+    meta = g_beSwitchCtrlInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSwitchCtrlInfo_ctorTable, 1);
     switchNode = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchNode)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchNode)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beSwitchCtrlInfo_fieldTable, g_beSwitchCtrlInfo_fieldHandles, g_beSwitchCtrlInfo_fieldOffsets, base);
 }
 

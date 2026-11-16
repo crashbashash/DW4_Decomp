@@ -3,12 +3,12 @@ igMetaField *g_beNDMWPanelWaza_padManagerMetaField;
 
 beNDMWPanelWaza *beNDMWPanelWaza_CreateInstance(int allocator) {
     beNDMWPanelWaza_EnsureRegistered();
-    return (beNDMWPanelWaza *)igMetaObject_CreateInstance(g_beNDMWPanelWaza_metaObject, allocator);
+    return (beNDMWPanelWaza *)igMetaObject_CreateInstance(g_beNDMWPanelWaza_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWPanelWaza_GetOrCreateMetaObject(void) {
     if (g_beNDMWPanelWaza_metaObject == 0) {
-        g_beNDMWPanelWaza_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWPanelWaza_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWPanelWaza_metaObject;
 }
@@ -34,7 +34,7 @@ int beNDMWPanelWaza_GetVTable(void) {
     infoListRef = &obj._infoList;
     *infoListRef = 0;
     *(int **)&obj._vtable = &g_beNDMWPanelWaza_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
     if (infoListRef != 0) {
         igRelease((igObject *)*infoListRef);
@@ -53,7 +53,7 @@ void beNDMWPanelWaza_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWPanelWaza_callbackList[] = { bePadManager_EnsureRegistered, 0 };
 
-void *beNDMWPanelWaza_Register(void) {
+CallbackArray *beNDMWPanelWaza_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -97,7 +97,7 @@ void beNDMWPanelWaza_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWPanelWaza_ctorTable, 1);
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;
     igMetaObject_NameFields(meta, g_beNDMWPanelWaza_fieldTable, g_beNDMWPanelWaza_fieldHandles, g_beNDMWPanelWaza_fieldOffsets, base);
 }

@@ -19,7 +19,7 @@ int beSaveIntfComMdlData_GetVTable(void) {
     *(int **)&obj._vtable = &g_beSaveIntfComMdlData_vtable[0];
     obj._openSQ = 0;
     obj._infoName = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beSaveIntfComMdlData_vtable[0];
     if (&obj._infoName != 0) {
         releaseString((const char *)obj._infoName);
@@ -35,7 +35,7 @@ void beSaveIntfComMdlData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSaveIntfComMdlData_Register);
 }
 
-void *beSaveIntfComMdlData_Register(void) {
+CallbackArray *beSaveIntfComMdlData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

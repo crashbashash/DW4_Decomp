@@ -13,12 +13,12 @@ igMetaEnum *g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum;
 
 beNDMWMdlPlayerInfoWork *beNDMWMdlPlayerInfoWork_Create(int allocator) {
     beNDMWMdlPlayerInfoWork_EnsureRegistered();
-    return (beNDMWMdlPlayerInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlPlayerInfoWork_metaObject, allocator);
+    return (beNDMWMdlPlayerInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlPlayerInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlPlayerInfoWork_metaObject == 0) {
-        g_beNDMWMdlPlayerInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMdlPlayerInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMdlPlayerInfoWork_metaObject;
 }
@@ -37,7 +37,7 @@ done:
 
 int beNDMWMdlPlayerInfoWork_GetVTable(void) {
     PlayerInfoWorkView work;
-    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&work + *(int *)((char *)(char *)g_objectSystem + 916));
 }
 
 beNDMWMdlPEBaseInfoWork *beNDMWMdlPEBaseInfoWork_Destroy(beNDMWMdlPEBaseInfoWork *self, short flags) {
@@ -116,7 +116,7 @@ void beNDMWMdlPlayerInfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWMdlPlayerInfoWork_callbackList[] = { igIntList_EnsureRegistered, 0 };
 
-void *beNDMWMdlPlayerInfoWork_Register(void) {
+CallbackArray *beNDMWMdlPlayerInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

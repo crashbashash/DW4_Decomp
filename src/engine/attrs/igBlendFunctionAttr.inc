@@ -51,12 +51,12 @@ igMetaEnum *FUN_00139e70(void) {
 
 void FUN_00139ed0(int arg0) {
     igBlendFunctionAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F3B8, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F3B8, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igBlendFunctionAttr_GetOrCreateMetaObject(void) {
     if (g_igBlendFunctionAttr_metaObject == 0) {
-        g_igBlendFunctionAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBlendFunctionAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBlendFunctionAttr_metaObject;
 }
@@ -74,11 +74,11 @@ int igBlendFunctionAttr_GetVTable(void) {
     int temp_s0;
     S_ref *p;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     p = (S_ref *)&u.b[24];
     u.vt = (int)&g_igBlendFunctionAttr_vtable[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igBlendFunctionAttr_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -99,9 +99,9 @@ void igBlendFunctionAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igBlendFunctionAttr_callbackList[] = { FUN_0014ff00, 0 };
 
-void igBlendFunctionAttr_Register(void) {
+CallbackArray *igBlendFunctionAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendFunctionAttr_metaObject,
         igVisualAttribute_Register,
@@ -121,17 +121,17 @@ void thunk_igBlendFunctionAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igBlendFunctionAttr_ctorTable[] = {
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igObjectRefMetaField_Create,
-    igUnsignedCharMetaField_Create,
-    igShortMetaField_Create,
-    igFloatMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igUnsignedCharMetaField_Create,
+    (FieldFactory)igShortMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igBlendFunctionAttr_fieldTable[] = {
     "_src",

@@ -25,7 +25,7 @@ int beTimerData_GetVTable(void) {
     obj._vtable = (int)&g_beTimerData_vtable[0];
     *resetConditionSlot = 0;
     *callLuaFileSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beTimerData_vtable[0];
     igStringRef_Release(callLuaFileSlot);
     igStringRef_Release(resetConditionSlot);
@@ -37,7 +37,7 @@ void beTimerData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beTimerData_Register);
 }
 
-void *beTimerData_Register(void) {
+CallbackArray *beTimerData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,9 +86,9 @@ static int g_beTimerData_fieldOffsets[] = {
 
 void beTimerData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beTimerData_metaObject;
+    meta = g_beTimerData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTimerData_ctorTable, 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base + 1)), 0);

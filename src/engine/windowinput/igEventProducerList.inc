@@ -2,7 +2,7 @@ igMetaObject *g_igEventProducerList_metaObject;
 
 igMetaObject *FUN_001460b0(void) {
     if (g_igEventProducerList_metaObject == 0) {
-        g_igEventProducerList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igEventProducerList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igEventProducerList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igEventProducerList_GetMetaObject(void)
 int igEventProducerList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igEventProducerList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_00146190(void)
@@ -30,9 +30,9 @@ void FUN_00146190(void)
 
 static igMetaObjectCallback g_igEventProducerList_callbackList[] = { FUN_00146270, 0 };
 
-void igEventProducerList_Register(void) {
+CallbackArray *igEventProducerList_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEventProducerList_metaObject,
         igObjectList_Register,

@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWItemAbilityChip_metaObject;
 
 beNDMWItemAbilityChip *beNDMWItemAbilityChip_Create(int allocator) {
     beNDMWItemAbilityChip_EnsureRegistered();
-    return (beNDMWItemAbilityChip *)igMetaObject_CreateInstance(g_beNDMWItemAbilityChip_metaObject, allocator);
+    return (beNDMWItemAbilityChip *)igMetaObject_CreateInstance(g_beNDMWItemAbilityChip_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWItemAbilityChip_GetReadyMetaObject(void) {
@@ -18,7 +18,7 @@ int beNDMWItemAbilityChip_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWItemAbilityChip_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWItemAbilityChip_EnsureRegistered(void)
@@ -26,7 +26,7 @@ void beNDMWItemAbilityChip_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWItemAbilityChip_Register);
 }
 
-void *beNDMWItemAbilityChip_Register(void) {
+CallbackArray *beNDMWItemAbilityChip_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -24,7 +24,7 @@ void **igSmartPointer_igAttrList_Destruct(void **arg0, short arg1) {
 igAttrPool *FUN_0013c060(void) {
     int allocator;
     if (g_igAttrPool_instance == 0) {
-        if (g_useOwnerAllocator != 0) { int owner = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]); allocator = owner; } else { int fallback = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute[0]); allocator = fallback; }
+        if (g_useOwnerAllocator != 0) { int owner = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent); allocator = owner; } else { int fallback = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute); allocator = fallback; }
         g_igAttrPool_instance.release();
         g_igAttrPool_instance.p = (igAttrPool *)FUN_0013a640(allocator);
     }

@@ -11,9 +11,9 @@ igMetaObject *igFogStateAttr_GetMetaObject(void)
 
 int igFogStateAttr_GetVTable(void) {
     struct Obj o;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igFogStateAttr_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igFogStateAttr_EnsureRegistered(void)
@@ -21,9 +21,9 @@ void igFogStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFogStateAttr_Register);
 }
 
-void igFogStateAttr_Register(void) {
+CallbackArray *igFogStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFogStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -43,7 +43,7 @@ void thunk_igFogStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igFogStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igFogStateAttr_fieldTable[] = {
     "_enabled",

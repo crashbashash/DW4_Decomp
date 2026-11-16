@@ -2,12 +2,12 @@ igMetaObject *g_beWaterPlain_metaObject;
 
 beWaterPlain *beWaterPlain_CreateInstance(int allocator) {
     beWaterPlain_EnsureRegistered();
-    return (beWaterPlain *)igMetaObject_CreateInstance(*(int *)0x587BF8, allocator);
+    return (beWaterPlain *)igMetaObject_CreateInstance(g_beWaterPlain_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beWaterPlain_GetOrCreateMetaObject(void) {
     if (g_beWaterPlain_metaObject == 0) {
-        g_beWaterPlain_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beWaterPlain_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beWaterPlain_metaObject;
 }
@@ -33,7 +33,7 @@ int beWaterPlain_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beWaterPlain_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -46,7 +46,7 @@ void beWaterPlain_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beWaterPlain_Register);
 }
 
-void *beWaterPlain_Register(void) {
+CallbackArray *beWaterPlain_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

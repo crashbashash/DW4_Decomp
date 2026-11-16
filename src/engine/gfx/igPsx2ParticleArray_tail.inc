@@ -9,14 +9,14 @@ igMetaObject *igPsx2ParticleArray_GetMetaObject(void)
 int igPsx2ParticleArray_GetVTable(void) {
     union U_1533f0 u;
     int t;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[40] = 0;
     *(int *)&u.b[44] = 0;
     *(int *)&u.b[48] = 0;
     *(int *)&u.b[68] = 0;
     u.vt = (int)&g_igPsx2ParticleArray_vtable[0];
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igPsx2ParticleArray_vtable[0];
     igParticleArray_Destroy((igParticleArray *)u.b, 0);
     return t;
@@ -27,9 +27,9 @@ void FUN_00153460(void)
     igMetaObject_RunStaticInit(igPsx2ParticleArray_Register);
 }
 
-void igPsx2ParticleArray_Register(void) {
+CallbackArray *igPsx2ParticleArray_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2ParticleArray_metaObject,
         igParticleArray_Register,
@@ -49,11 +49,11 @@ igMetaObject *FUN_001534e0(void) {
 }
 
 static FieldFactory g_igPsx2ParticleArray_ctorTable[] = {
-    igBoolMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igRawRefMetaField_Create,
-    igBoolMetaField_Create,
-    igLongMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
 };
 static const char *g_igPsx2ParticleArray_fieldTable[] = {
     "_hardwareSupport",

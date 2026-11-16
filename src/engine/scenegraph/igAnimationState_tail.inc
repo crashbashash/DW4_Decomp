@@ -56,7 +56,7 @@ int FUN_001af620(igAppearanceView *a, void *t) {
 }
 
 int igAppearance_AttachGraph(igAppearance *appearance, igNode *graph) {
-    return ObjectList_AppendRetained(appearance->_attachedGraphs, graph);
+    return ObjectList_AppendRetained((igObjectList *)appearance->_attachedGraphs, (igObject *)graph);
 }
 
 int igAppearance_DetachGraph(igAppearance *appearance, igNode *graph) {

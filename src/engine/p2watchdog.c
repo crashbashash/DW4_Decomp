@@ -2,19 +2,18 @@
  * p2DmaWatchFlags.busy and clears it when the wait ends; every four seconds the watchdog copies
  * busy into seen, and gives up if a bit it copied last time is still set. It also gives up when
  * p2WatchdogTicks, which p2SubmitDmaPacket resets, reaches 60. */
+#include <stdio.h>
+#include <stdlib.h>
 #include "dw4/eekernel.h"
+#include "dw4/p2core.h"
 #include "dw4/p2dma.h"
 #include "dw4/p2timer.h"
 #include "dw4/p2watchdog.h"
+#include "dw4/renderState.h"
 
 #pragma push
 #pragma readonly_strings on
 
-int printf(const char *format, ...);
-void abort(void);
-void exit(int status);
-int p2GetVuProgramName(int program);
-int p2IsVuProgramLoaded(int program);
 void p2RunWatchdog(void *arg);
 
 extern char _gp[];
@@ -24,8 +23,6 @@ volatile int p2WatchdogTicks;
 /* other threads and the DMA handlers write these words while the thread runs */
 volatile p2DmaWatch p2DmaWatchFlags;
 char p2WatchdogStack[0x1000];
-extern int p2FunctionTables[];
-extern int p2FunctionTableSizes[3];
 extern char newline[];
 
 void p2StartWatchdog(void) {
@@ -53,12 +50,12 @@ void p2PrintWatchdogReport(void) {
     int *handle1;
     int *handle2;
     int k;
-    int name0;
-    int name2;
+    char *name0;
+    char *name2;
     int i;
     int n;
     int j;
-    int name1;
+    char *name1;
     int bit;
 
     n = 0;

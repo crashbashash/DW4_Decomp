@@ -13,8 +13,10 @@ extern "C" {
 int igStringObj_HasFileExtensionText(char *text, char *extension);
 void *igStringObj_Create(int pool);
 void igStringObj_EnsureRegistered(void);
-void igStringObj_Set(int self, int text);
-void igStringObj_SetInt(int self, int value, int format);
+/* The text an empty igStringObj reads as (its buffer is null). */
+extern char *g_stringObjEmptyText;
+void igStringObj_Set(struct igStringObj *self, const char *text);
+void igStringObj_SetInt(int self, int value, const char *format);
 void igStringObj_Insert(struct igStringObj *self, char *insert, unsigned int at, unsigned int n);
 int igStringObj_Erase(struct igStringObj *self, unsigned int pos, unsigned int len);
 void igStringObj_ToLower(struct igStringObj *self);

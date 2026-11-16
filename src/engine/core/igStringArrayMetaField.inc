@@ -104,7 +104,7 @@ void igStringArrayMetaField_CreateDefaultDescriptor(void) {
             g = g_igStringArrayMetaField_descriptor;
             g[1] = g[1] - 1;
             if ((g[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(g);
+                igObject_Destroy((igObject *)g);
             }
             *(short *)((char *)g_igStringArrayMetaField_descriptor + 18) = (short)(((int *)igMetaField_GetMetaFieldList())[3] - 1);
             igMetaField_FinalizeDescriptor((igMetaField *)g_igStringArrayMetaField_descriptor);

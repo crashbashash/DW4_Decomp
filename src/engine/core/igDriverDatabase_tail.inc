@@ -4,7 +4,7 @@ void igDriverDatabase_InitDefaults(igDriverDatabase *database) {
     unsigned char verbose;
     int i;
     igObject_InitDefaults((igObject *)database);
-    igRegistry_GetValueBool((int)g_objectSystem->configRegistry, 2,"driverDatabaseVerbose", (char *)&verbose, database->_verbose, 1);
+    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2,"driverDatabaseVerbose", &verbose, database->_verbose, 1);
     database->_verbose = verbose;
     ObjectList_ResizeRetained((igTDataList<igObject *> *)database->_currentProperties, 13);
     ObjectList_ResizeRetained((igTDataList<igObject *> *)database->_subPropertyNames, 13);
@@ -25,7 +25,7 @@ void igDriverDatabase_ReleaseDefaults(int self) {
 }
 
 void igDriverDatabase_SetCurrentProperty(void *self, int property, int value) {
-    igStringObj_Set(((int *)((igObjectList *)((igDriverDatabase *)self)->_currentProperties)->_data)[property], value);
+    igStringObj_Set((igStringObj *)(((int *)((igObjectList *)((igDriverDatabase *)self)->_currentProperties)->_data)[property]), (const char *)value);
 }
 
 char *g_stringObjEmptyText = "";
@@ -142,7 +142,7 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
         self->_databaseFile = 0;
         return 0;
     }
-    igStringObj_Set(self->_databaseFileName, ((igFile *)opened)->_fileName);
+    igStringObj_Set((igStringObj *)self->_databaseFileName, (const char *)((igFile *)opened)->_fileName);
     igDriverDatabase_LoadDatabaseFile(self, (igFileView *)self->_databaseFile);
     ((igFileView *)self->_databaseFile)->Close();
     igRelease((igObject *)self->_databaseFile);
@@ -154,7 +154,7 @@ int igDriverDatabase_LoadFromFile(void *self, int text, int fileName) {
     if (text == 0) {
         return 0;
     }
-    igStringObj_Set(((igDriverDatabase *)self)->_databaseFileName, fileName);
+    igStringObj_Set((igStringObj *)((igDriverDatabase *)self)->_databaseFileName, (const char *)fileName);
     igDriverDatabase_LoadFromString(self, text);
     return 1;
 }
@@ -305,17 +305,17 @@ void igDriverDatabase_LoadFromString(void *self, int text) {
 }
 
 int igDriverDatabase_GetOSName(void *text) {
-    igStringObj_Set((int)text, (int)"psx2");
+    igStringObj_Set((igStringObj *)text, "psx2");
     return 1;
 }
 
 int igDriverDatabase_GetCpuVendor(void *text) {
-    igStringObj_Set((int)text, (int)"mips");
+    igStringObj_Set((igStringObj *)text, "mips");
     return 1;
 }
 
 int igDriverDatabase_GetCpuType(void *text) {
-    igStringObj_Set((int)text, (int)"psx2");
+    igStringObj_Set((igStringObj *)text, "psx2");
     return 1;
 }
 
@@ -475,7 +475,7 @@ void igDriverDatabase_ApplySettings(igDriverDatabase *self, igTDataList<ConfigPa
     for (i = 0; i < entries->_count; i++) {
         pair = entries->_data[i];
         key = igStringObj_Text(pair->key);
-        igRegistry_GetValueStringObj((int)registry, section, key, &scratch, (const char *)"", 0);
+        igRegistry_GetValueStringObj(registry, section, key, &scratch, (const char *)"", 0);
         key = igStringObj_Text(pair->key);
         value = igStringObj_Text(pair->value);
         igRegistry_SetValueString(registry, section, key, value);
@@ -505,7 +505,7 @@ int igDriverDatabase_ResolveSettingsSection(igDriverDatabase *self, igStringObj 
         char *s = (char *)sectionName->_buffer;
         char *key = (s == 0) ? g_stringObjEmptyText : s;
         s = (s == 0) ? g_stringObjEmptyText : s;
-        if ((igRegistry_GetValueStringObj(self->_overrideSource, self->_overrideSourceSection, key, &name, s, 0) & 0xff) == 0 && self->_overrideMode == 1) {
+        if ((igRegistry_GetValueStringObj((igRegistry *)self->_overrideSource, self->_overrideSourceSection, key, &name, s, 0) & 0xff) == 0 && self->_overrideMode == 1) {
             igRelease(name);
             return -1;
         }
@@ -545,7 +545,7 @@ bool igDriverDatabase_ParseIdentifier(igDriverDatabase *self, int *out) {
     if (sscanf((const char *)self->_dbIndex, "%[_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./\\-]", word) == 1) {
         self->_dbIndex = self->_dbIndex + strlen(word);
         *out = ((int)igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
-        igStringObj_Set(*out, (int)word);
+        igStringObj_Set((igStringObj *)*out, word);
         found = 1;
     }
     return found;
@@ -562,7 +562,7 @@ bool igDriverDatabase_ReadToken(char *parser, int *out) {
         database->_dbIndex = database->_dbIndex + strlen(buf);
         igDriverDatabase_TrimTrailingWhitespace((int)parser, (char *)buf);
         *out = ((int)igStringObj_Create(((int)igObject_GetAllocator((igObject *)parser))));
-        igStringObj_Set(*out, (int)buf);
+        igStringObj_Set((igStringObj *)*out, buf);
         found = true;
     }
     return found;
@@ -775,9 +775,9 @@ unsigned char igDriverDatabase_CompareTyped(igDriverDatabase *self, int valueTyp
         unsigned char first = 0;
         unsigned char second = 0;
         igSmartPointer<igStringObj> text((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
-        igStringObj_Set((int)text.get(), (int)actual);
+        igStringObj_Set(text.get(), actual);
         if (!igStringObj_ParseBool(text.get(), (char *)&first)) return 0;
-        igStringObj_Set((int)text.get(), (int)expected);
+        igStringObj_Set(text.get(), expected);
         if (!igStringObj_ParseBool(text.get(), (char *)&second)) return 0;
         result = igDriverDatabase_CompareBool((int)self, first, compareMode, second);
         break;
@@ -844,12 +844,12 @@ ConfigPair *igDriverDatabase_Setting_Destruct(ConfigPair *self, int delete_stora
         p = self->key;
         --p->_refCount;
         if (((unsigned long long)(long long)(int)p->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy((void *)p);
+            igObject_Destroy((igObject *)p);
         self->key = 0;
         q = self->value;
         --q->_refCount;
         if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy((void *)q);
+            igObject_Destroy((igObject *)q);
         self->value = 0;
         if ((short)delete_storage > 0) Memory_FreeBufferAliasB(self);
     }

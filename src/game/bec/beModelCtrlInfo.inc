@@ -16,7 +16,7 @@ int beModelCtrlInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beModelCtrlInfo_vtable[0];
     obj._kindString = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlInfo_vtable[0];
     igStringRef_Destruct(&obj._kindString, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -28,7 +28,7 @@ void beModelCtrlInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlInfo_Register);
 }
 
-void *beModelCtrlInfo_Register(void) {
+CallbackArray *beModelCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -65,9 +65,9 @@ static int g_beModelCtrlInfo_fieldOffsets[] = {
 
 void beModelCtrlInfo_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlInfo_metaObject;
+    meta = g_beModelCtrlInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlInfo_ctorTable, 1);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), 0);

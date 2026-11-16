@@ -15,7 +15,7 @@ igMetaField *g_beNDMWDegiData_dataMetaField;
 
 beNDMWDegiData *beNDMWDegiData_Create(int allocator) {
     beNDMWDegiData_RunStaticInit();
-    return (beNDMWDegiData *)igMetaObject_CreateInstance(g_beNDMWDegiData_metaObject, allocator);
+    return (beNDMWDegiData *)igMetaObject_CreateInstance(g_beNDMWDegiData_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWDegiData_GetReadyMetaObject(void) {
@@ -44,7 +44,7 @@ int beNDMWDegiData_GetVTable(void) {
     *dmkindRef = 0;
     dmNameRef = &obj._dmName;
     *dmNameRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWDegiData_vtable[0];
     if (dmNameRef != 0) {
         releaseString((const char *)*dmNameRef);
@@ -62,7 +62,7 @@ void beNDMWDegiData_RunStaticInit(void)
 
 static igMetaObjectCallback g_beNDMWDegiData_callbackList[] = { igInsightCore_EnsureRegistered, 0 };
 
-void *beNDMWDegiData_Register(void) {
+CallbackArray *beNDMWDegiData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -156,7 +156,7 @@ void beNDMWDegiData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWDegiData_ctorTable, 0xD);
     insight = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)insight)->_refCounted = 0;
     dmNameUni = igMetaObject_GetFieldAt(meta, base + 5);
     ((igUnsignedShortArrayMetaField *)dmNameUni)->_num = 0xA;

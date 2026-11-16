@@ -3,7 +3,7 @@ igMetaField *g_beDataObjIntList_dataMetaField;
 
 beDataObjIntList *beDataObjIntList_Create(int allocator) {
     beDataObjIntList_EnsureRegistered();
-    return (beDataObjIntList *)igMetaObject_CreateInstance(*(int *)0x5898A8, allocator);
+    return (beDataObjIntList *)igMetaObject_CreateInstance(g_beDataObjIntList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beDataObjIntList_GetMetaObject(void) {
@@ -26,7 +26,7 @@ int beDataObjIntList_GetVTable(void) {
     obj._vtable = (int)&g_beDataObjIntList_vtable[0];
     dataSlot = (igObject **)&obj._data;
     *dataSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDataObjIntList_vtable[0];
     igObjectRef_Release(dataSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -41,7 +41,7 @@ void beDataObjIntList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDataObjIntList_callbackList[] = { igIntList_EnsureRegistered, 0 };
 
-void *beDataObjIntList_Register(void) {
+CallbackArray *beDataObjIntList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -79,13 +79,13 @@ static int g_beDataObjIntList_fieldOffsets[] = {
 void beDataObjIntList_InitFields(void) {
     int base;
     void *data;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDataObjIntList_metaObject;
+    meta = g_beDataObjIntList_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDataObjIntList_ctorTable, 1);
     data = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)data)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)data)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)data)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDataObjIntList_fieldTable, g_beDataObjIntList_fieldHandles, g_beDataObjIntList_fieldOffsets, base);
 }

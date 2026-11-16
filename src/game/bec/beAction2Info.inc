@@ -24,7 +24,7 @@ int beAction2Info_GetVTable(void) {
     animationDatabaseSlot = &obj._animationDatabase;
     *animationDatabaseSlot = 0;
     obj._dataList_ = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beAction2Info_vtable[0];
     igSmartPointer_beAction2DataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), -1);
     igSmartPointer_igAnimationDatabase_Destruct(animationDatabaseSlot, -1);
@@ -53,7 +53,7 @@ void beAction2Info_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beAction2Info_callbackList[] = { igSwitch_EnsureRegistered, igAnimationDatabase_EnsureRegistered, beAction2DataList_EnsureRegistered, 0 };
 
-void *beAction2Info_Register(void) {
+CallbackArray *beAction2Info_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -101,15 +101,15 @@ void beAction2Info_InitFields(void) {
     void *switchField;
     void *animationDatabase;
     void *dataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beAction2Info_metaObject;
+    meta = g_beAction2Info_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beAction2Info_ctorTable, 3);
     switchField = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchField)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchField)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     animationDatabase = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)animationDatabase)->_metaObject = igAnimationDatabase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)animationDatabase)->_metaObject = (int)igAnimationDatabase_GetOrCreateMetaObject();
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)beAction2DataList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataList)->_construct = 1;

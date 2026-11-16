@@ -93,13 +93,13 @@ igMetaObject *beNDMWDegiData_GetMeta(void)
 void beNDMWDegiData_userConstruct(beNDMWDegiData *self, int flag) {
     int allocator;
 
-    Gap__Core__igObject__userConstruct(self, flag);
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
         self->_dataSize = 0x2000;
-        allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        self->_data = Memory_AllocateBufferDirect(0x2000, allocator);
+        allocator = (int)igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        self->_data = (int)Memory_AllocateBufferDirect(0x2000, (igMemoryPoolView *)allocator);
     }
 }
 
@@ -107,9 +107,9 @@ void beNDMWDegiData_userDestruct(beNDMWDegiData *self) {
     int allocator;
 
     if (self->_data != 0) {
-        allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        Memory_FreeBufferWithAllocator(self->_data, allocator);
+        allocator = (int)igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        Memory_FreeBufferWithAllocator((void *)self->_data, (igMemoryPoolView *)allocator);
     }
     self->_data = 0;
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
@@ -233,13 +233,13 @@ igMetaObject *beNDMWMcUtilCtrl_GetMeta(void)
 }
 
 void beNDMWMcUtilCtrl_userConstruct(beNDMWMcUtilCtrl *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct(self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-    beSaveDataDeliver_AllocateData(self->_svData, 0x8000);
+    beSaveDataDeliver_AllocateData((beSaveDataDeliver *)self->_svData, 0x8000);
 }
 
 void beNDMWMcUtilCtrl_userDestruct(beNDMWMcUtilCtrl *self) {
-    beSaveDataDeliver_FreeData(self->_svData);
+    beSaveDataDeliver_FreeData((beSaveDataDeliver *)self->_svData);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     Gap__Core__igObject__userDestruct(self);
 }
@@ -415,12 +415,12 @@ void beNDMWPanelWazaInfoWork_userConstruct(beNDMWPanelWazaInfoWork *self) {
     int rc;
     char *t;
 
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct(self);
     l = (igDataList *)self->_textSetList;
     if (l->_count < 0x31) {
         List_Reserve(l, 0x30, 4);
     }
-    StringList_Resize((igDataList *)self->_textSetList, 0x30);
+    StringList_Resize((igTDataList<char *> *)self->_textSetList, 0x30);
     {
         /* every text slot takes a share of one empty token */
         HeldStringRef empty(0);
@@ -438,7 +438,7 @@ void beNDMWPanelWazaInfoWork_userConstruct(beNDMWPanelWazaInfoWork *self) {
                 rc = ((int *)old)[-1] - 1;
                 ((int *)old)[-1] = rc;
                 if (rc == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
+                    StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
                 }
             }
             *p = empty.p;
@@ -472,21 +472,21 @@ void beNDMWPanelWazaInfoWork_TrimCapacity(beNDMWPanelWazaInfoWork *self) {
     igObject *playerWork;
 
     self->_retIsFire = 0;
-    if (g_stringPool[0] == 0) {
-        pool = StringPool_Allocate(0x10);
+    if (g_stringPool == 0) {
+        pool = (int)StringPool_Allocate(0x10);
         if (pool != 0) {
-            pool = StringPool_Construct(pool);
+            pool = (int)StringPool_Construct((StringPool *)pool);
         }
-        g_stringPool[0] = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    empty = (int *)StringPool_Intern(g_stringPool[0], 0);
+    empty = (int *)StringPool_Intern(g_stringPool, 0);
     oldLabel = (int *)self->_retWazaLabel;
     if (oldLabel != 0) {
         header = oldLabel - 2;
         refCount = oldLabel[-1] - 1;
         oldLabel[-1] = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader(*header, header);
+            StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
         }
     }
     self->_retWazaLabel = (int)empty;
@@ -528,18 +528,18 @@ void beNDMWPanelObjectStat_TrimCapacity(beNDMWPanelObjectStat *self) {
         off = 0;
         do {
             slot = (const char **)((char *)l->_data + off);
-            if (((void * *)g_stringPool)[0] == 0) {
+            if (((void *)g_stringPool) == 0) {
                 void *pool = ((void *)StringPool_Allocate(0x10));
-                if (pool != 0) pool = ((void *)StringPool_Construct(pool));
-                ((void * *)g_stringPool)[0] = pool;
+                if (pool != 0) pool = ((void *)StringPool_Construct((StringPool *)pool));
+                ((void *)g_stringPool) = pool;
             }
-            tok = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], 0));
+            tok = ((const char *)StringPool_Intern((StringPool *)g_stringPool, 0));
             held = *slot;
             if (held != 0) {
                 int *hd = (int *)held - 2;
                 int cnt = ((int *)held)[-1] - 1;
                 ((int *)held)[-1] = cnt;
-                if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd);
+                if (cnt == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
             }
             i++;
             *slot = tok;
@@ -693,7 +693,7 @@ void beNDMWPanelWazaInfoWork_igStringRefList_SetAll(igDataList *list, char **tok
                 refCount = *(int *)(held - 4) - 1;
                 *(int *)(held - 4) = refCount;
                 if (refCount == 0) {
-                    StringChunk_ReleaseHeader(*header, header);
+                    StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
                 }
             }
             i += 1;
@@ -716,14 +716,14 @@ int *beNDMWPanelWazaInfoWork_igStringRef_ConstructFromText(int *ref, int text) {
     if (text == 0) {
         token = 0;
     } else {
-        if (g_stringPool[0] == 0) {
-            pool = StringPool_Allocate(0x10);
+        if (g_stringPool == 0) {
+            pool = (int)StringPool_Allocate(0x10);
             if (pool != 0) {
-                pool = StringPool_Construct(pool);
+                pool = (int)StringPool_Construct((StringPool *)pool);
             }
-            g_stringPool[0] = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        token = ((int)StringPool_Intern(g_stringPool[0], text));
+        token = ((int)StringPool_Intern(g_stringPool, (const char *)text));
     }
     *ref = token;
     return ref;

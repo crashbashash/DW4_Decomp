@@ -2,7 +2,7 @@ igMetaObject *g_beSvSlotDataList_metaObject;
 
 igMetaObject *beSvSlotDataList_GetOrCreateMetaObject(void) {
     if (g_beSvSlotDataList_metaObject == 0) {
-        g_beSvSlotDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSvSlotDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSvSlotDataList_metaObject;
 }
@@ -20,7 +20,7 @@ int beSvSlotDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beSvSlotDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beSvSlotDataList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beSvSlotDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSvSlotDataList_callbackList[] = { beSvSlotData_EnsureRegistered, 0 };
 
-void *beSvSlotDataList_Register(void) {
+CallbackArray *beSvSlotDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWStatusSelect01_metaObject;
 
 beNDMWStatusSelect01 *beNDMWStatusSelect01_Create(int allocator) {
     beNDMWStatusSelect01_EnsureRegistered();
-    return (beNDMWStatusSelect01 *)igMetaObject_CreateInstance(g_beNDMWStatusSelect01_metaObject, allocator);
+    return (beNDMWStatusSelect01 *)igMetaObject_CreateInstance(g_beNDMWStatusSelect01_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWStatusSelect01_GetMetaObject(void) {
@@ -28,7 +28,7 @@ int beNDMWStatusSelect01_GetVTable(void) {
     obj._infoName = 0;
     obj._decideList = 0;
     *(int **)&obj._vtable = &g_beNDMWStatusSelect01_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusSelect01_vtable[0];
     beNDMWWindowSelect_Destroy((beNDMWWindowSelect *)&obj, 0);
     return vtable;
@@ -39,7 +39,7 @@ void beNDMWStatusSelect01_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusSelect01_Register);
 }
 
-void *beNDMWStatusSelect01_Register(void) {
+CallbackArray *beNDMWStatusSelect01_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

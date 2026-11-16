@@ -17,16 +17,6 @@
 #define SPR 0x70000000
 
 void *memset(void *dst, int value, unsigned int size);
-void sceIpuInit(void);
-void sceIpuSync(int mode, int timeout);
-void _ipuSetMpeg1(int mpeg1);
-int _sceMpegNextHeader(_sceMpegDecoder *dec);
-int _decPicture(_sceMpegDecoder *dec);
-int _updateRefImage(_sceMpegDecoder *dec, int second);
-void _sceMpegOutputFrame(_sceMpegDecoder *dec, int count, int output);
-void _sendDataToIPU(_sceMpegDecoder *dec, unsigned char *data, int size);
-int _sceMpegDefaultStopDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData);
-int _sceMpegDefaultRestartDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData);
 int sceMpegReset(sceMpeg *mp);
 int sceMpegClearRefBuff(sceMpeg *mp);
 void _sceMpegAlalcInit(_sceMpegAlalc *alalc, char *start, int size);

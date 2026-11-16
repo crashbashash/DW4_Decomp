@@ -4,6 +4,7 @@
 struct beBaseInfoRam;
 struct beModelCtrl;
 struct beModelCtrlInfoWork;
+struct CallbackArray;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -12,7 +13,7 @@ extern "C" {
 
 struct beModelCtrlInfoWork *beModelCtrlInfoWork_Create(int allocator);
 void *beModelCtrlInfoWork_Destroy(struct beModelCtrlInfoWork *self, long long delete_storage);
-void *beModelCtrlInfoWork_Register(void);
+struct CallbackArray *beModelCtrlInfoWork_Register(void);
 void beModelCtrlInfoWork_SetSeqLabel(struct beModelCtrl *self, struct beBaseInfoRam *ram, struct beModelCtrlInfoWork *work, const char *seqName, const char *labelName);
 
 extern struct igMetaObject *g_beModelCtrlInfoWork_metaObject;

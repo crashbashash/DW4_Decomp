@@ -31,14 +31,14 @@ int igPsx2Semaphore_GetMaximumCount(igPsx2Semaphore *self) {
 }
 
 int igPsx2Semaphore_GetCount(igPsx2Semaphore *self) {
-    int status[8];
+    SemaParam status;
     int semaId;
     semaId = self->_semaID;
     if (semaId < 0) {
         return self->_initCount;
     }
-    ReferSemaStatus(semaId, status);
-    return status[0];
+    ReferSemaStatus(semaId, &status);
+    return status.currentCount;
 }
 
 void igPsx2Semaphore_Create(int *result, igPsx2Semaphore *self) {
@@ -227,7 +227,7 @@ void SystemAllocator_GetStatistics(SystemAllocator *self, SystemMemoryStatistics
     stats->freeFromTop = bottom - heapTop;
     stats->heapTop = heapTop;
     stats->codeStart = (int)__code_start__;
-    stats->codeSize = (int)(beFont_Prepare + 0x90);
+    stats->codeSize = (int)((char *)beFont_Prepare + 0x90);
     stats->dataStart = (int)__data_start__;
     stats->dataSize = end - (unsigned)__data_start__;
     stats->initializedStart = (int)__data_start__;
@@ -286,14 +286,14 @@ void SystemAllocator_CollectProgramRegions(SystemAllocator *self, igDataList *re
 }
 
 int SystemAllocator_Sbrk(int self, int size) {
-    int s1 = sbrk(size);
+    int s1 = (int)sbrk(size);
     int low;
     int pad;
     if (s1 != -1) {
         low = s1 & 0xFFF;
         if (low != 0) {
             pad = 0x1000 - low;
-            if (sbrk(pad) == -1) {
+            if ((int)sbrk(pad) == -1) {
                 return -1;
             }
             s1 += pad;

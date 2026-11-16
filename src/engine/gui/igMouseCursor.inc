@@ -4,7 +4,7 @@ igMetaField *g_igMouseCursor_offsetMetaField;
 
 igMetaObject *FUN_0044e430(void) {
     if (g_igMouseCursor_metaObject == 0) {
-        g_igMouseCursor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igMouseCursor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMouseCursor_metaObject;
 }
@@ -21,10 +21,10 @@ int igMouseCursor_GetVTable(void) {
     struct Obj_44e4d0 obj;
     char *o;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMouseCursor_vtable[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igMouseCursor_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -45,9 +45,9 @@ void igMouseCursor_RunStaticInit(void)
 
 static igMetaObjectCallback g_igMouseCursor_callbackList[] = { igGeometryElement_EnsureRegistered, 0 };
 
-void igMouseCursor_Register(void) {
+CallbackArray *igMouseCursor_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMouseCursor_metaObject,
         igObject_Register,
@@ -68,7 +68,7 @@ void thunk_igMouseCursor_GetMetaObject(void) {
 
 static FieldFactory g_igMouseCursor_ctorTable[] = {
     igObjectRefMetaField_Create,
-    igVec2fMetaField_CreateInstance,
+    (FieldFactory)igVec2fMetaField_CreateInstance,
 };
 static const char *g_igMouseCursor_fieldTable[] = {
     "_geometryElement",
@@ -91,14 +91,14 @@ void igMouseCursor_InitFields(void) {
     int buf[2];
 
     temp_s0 = (void *)g_igMouseCursor_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igMouseCursor_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igMouseCursor_ctorTable, 2);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_004505b0();
-    temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     buf[0] = 0;
     buf[1] = 0;
     igVec2fMetaField_SetDefault(temp_a0, buf);
-    igMetaObject_NameFields(temp_s0, g_igMouseCursor_fieldTable, g_igMouseCursor_fieldHandles, g_igMouseCursor_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igMouseCursor_fieldTable, g_igMouseCursor_fieldHandles, g_igMouseCursor_fieldOffsets, temp_s2);
 }
 

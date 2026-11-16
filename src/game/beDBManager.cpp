@@ -2,16 +2,15 @@
 #include "dw4/igTDataList.h"
 #include "dw4/beDataBase.h"
 #include "dw4/beDBManager.h"
+#include "dw4/beDBManagerInfo.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igNamedObject.h"
 
-extern "C" int igProperty_FindByName(...);
 extern "C" void beDBManager_Prepare(void);
-extern "C" int beDBManager_GetInfoMeta(void);
+extern "C" igMetaObject *beDBManager_GetInfoMeta(void);
 extern "C" igMetaObject *beDBManager_GetMeta(void);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" void igInsightCore_RemoveFromScheduler(int, void *);
-extern "C" int beMessenger_AppendObject(int, int);
-extern "C" int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *values, const char *name);
-extern "C" int g_propertyNameField[4];
 // clang-format off
 /* beDataBase record lookup and row count, 0x003a93a0..0x003a9708. A beDataBase is a table of
  * records (rows). Its cells are split by type into six data lists (char, short, int, float, bool,
@@ -29,50 +28,49 @@ struct igProperty;
 typedef igTDataList<igProperty *> ColumnList;
 extern "C" char emptyString[];
 extern "C" int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *key, ColumnList *columns);
-extern "C" int g_beDBManagerInfo_metaObject[4];
 extern "C" char DATABASE_9[];
 extern "C" void beDBManager_OnAddRam(beDBManager *p0, int p1, char *p2);
 extern "C" void beDBManager_UpdateRam(beDBManager *p0, int p1);
 extern "C" int beDBManager_OnMessageText(beDBManager *self, beBaseInfoRam *ram, const char *message);
 
-int igProperty_GetRecord(int container, char *key, int unused)
+beDataObjInt *igProperty_GetRecord(igObject *container, const char *key)
 {
-    return igProperty_FindByName(container, g_propertyNameField[0], key);
+    return (beDataObjInt *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
-void igProperty_GetRecordIntList(int p0, char * p1, int p2)
+beDataObjIntList *igProperty_GetRecordIntList(igObject *container, const char *key)
 {
-    igProperty_FindByName(p0, *(int *)0x00585be0, p1);
+    return (beDataObjIntList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
-int igProperty_GetRecordByte(int container, char *key, int unused)
+beDataObjBool *igProperty_GetRecordByte(igObject *container, const char *key)
 {
-    return igProperty_FindByName(container, g_propertyNameField[0], key);
+    return (beDataObjBool *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
-int igProperty_GetRecordArray(int container, char *key, int unused)
+beDataObjBoolList *igProperty_GetRecordArray(igObject *container, const char *key)
 {
-    return igProperty_FindByName(container, g_propertyNameField[0], key);
+    return (beDataObjBoolList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
-void igProperty_GetRecordString(int p0, char * p1, int p2)
+beDataObjString *igProperty_GetRecordString(igObject *container, const char *key)
 {
-    igProperty_FindByName(p0, *(int *)0x00585be0, p1);
+    return (beDataObjString *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
-void igProperty_GetRecordStringList(int p0, char * p1, int p2)
+beDataObjStringList *igProperty_GetRecordStringList(igObject *container, const char *key)
 {
-    igProperty_FindByName(p0, *(int *)0x00585be0, p1);
+    return (beDataObjStringList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
-int igProperty_GetRecordFolder(int container, char *key, int unused)
+beDataObjObjectList *igProperty_GetRecordFolder(igObject *container, const char *key)
 {
-    return igProperty_FindByName(container, g_propertyNameField[0], key);
+    return (beDataObjObjectList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
-void igProperty_GetRecordFloatList(int p0, char * p1, int p2)
+beDataObjFloatList *igProperty_GetRecordFloatList(igObject *container, const char *key)
 {
-    igProperty_FindByName(p0, *(int *)0x00585be0, p1);
+    return (beDataObjFloatList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
 }
 
 #define BEDATABASE_NO_INDEX (-1)
@@ -88,7 +86,7 @@ int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *ke
     if (!columnCount) {
         return -1;
     }
-    found = igProperty_FindByName(columns, (void *)g_propertyNameField[0], key);
+    found = igProperty_FindByName((igObjectList *)columns, (igMetaField *)g_propertyNameField, key);
     if (!found) {
         return -1;
     }
@@ -98,8 +96,8 @@ int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *ke
 
 /* Integer cell for (record, key). Tries the char, short and int columns in turn (sign-extending
  * each) and yields 0 when the key is in none. */
-long long beDataBase_GetRecordInt(beDataBase *self, int record, const char *key) {
-    long long result;
+int beDataBase_GetRecordInt(beDataBase *self, int record, const char *key) {
+    int result;
     int index =
         beDataBase_FindRecordValueIndex(self, record, key, (ColumnList *)self->_charOffsetList);
     if (index != BEDATABASE_NO_INDEX)
@@ -166,27 +164,27 @@ void beDBManager_Prepare(void)
 {
 }
 
-int beDBManager_GetInfoMeta(void)
+igMetaObject *beDBManager_GetInfoMeta(void)
 {
-    return g_beDBManagerInfo_metaObject[0];
+    return g_beDBManagerInfo_metaObject;
 }
 
 void beDBManager_OnAddRam(beDBManager *p0, int p1, char *p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DATABASE_9);
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)p0->_messenger, (beBaseInfoRam *)p1, DATABASE_9);
 }
 
 void beDBManager_UpdateRam(beDBManager *p0, int p1)
 {
-    igInsightCore_RemoveFromScheduler(p0->_insight, p0);
+    igInsightCore_RemoveFromScheduler((igInsightCore *)p0->_insight, (igObject *)p0);
 }
 
 int beDBManager_OnMessageText(beDBManager *self, beBaseInfoRam *ram, const char *message) {
     beDBManagerInfo *info = (beDBManagerInfo *)ram->_parentInfo;
     int result;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beDBManager_GetMsgActionEnum(), message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beDBManager_GetMsgActionEnum(), message)) {
     case 0:
-        beMessenger_AppendObject(self->_messenger, info->_dataBase);
+        beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)info->_dataBase);
         result = 1;
         break;
     default:

@@ -1,46 +1,24 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/be.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beLua.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWLogo.h"
+#include "dw4/beNDMWLogoCtrlData.h"
+#include "dw4/beNDMWLogoInfo.h"
+#include "dw4/beNDMWMcUtilCtrl.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beSystem.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
 
 #pragma push
 #pragma readonly_strings on
 
-extern "C" int igInsightCore_FindManager(int insight, int metaObject);
-extern "C" int igObject_GetAllocator(void *object);
-extern "C" int Memory_GetAllocatorBySelector(int selector);
-extern "C" igObject *beBaseInfoDataList_Create(int allocator);
-extern "C" beNDMWLogoCtrlData *beNDMWLogoCtrlData_Create(int allocator);
-extern "C" igMetaEnum *beNDMWLogoCtrlData_GetMessageEnum(void);
-extern "C" beNDMWMcUtilCtrl *beNDMWMcUtilCtrl_Create(int allocator);
-extern "C" void ObjectList_AppendRetained(int list, void *object);
-extern "C" void *igProperty_FindByName(int list, int field, const char *name);
-extern "C" void *bePadManager_GetPadForPlayer(int padManager, int playerNo);
-extern "C" int beLua__RunNamedChunk(int lua, const char *name, int given);
-extern "C" void beMessenger_SendNamed(int messenger, const char *category, const char *name, int id, const char *selector);
-extern "C" void beMessenger_SelectReceivers(int messenger, const char *category, const char *name, int id);
-extern "C" void beMessenger_AppendString(int messenger, const char *text);
-extern "C" void beMessenger_AppendInt(int messenger, int value);
-extern "C" void beMessenger_DispatchSelected(int messenger, const char *selector);
-extern "C" bool beMessenger_GetBool(int messenger, int index);
-extern "C" int beMessenger_GetInt(int messenger, int index);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int messenger, int info, const char *name);
-extern "C" int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *enumeration, int name);
-extern "C" void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard);
-extern "C" void beNDMWMcUtilCtrl__Generate(beNDMWMcUtilCtrl *util);
-extern "C" unsigned char beNDMWMcUtilCtrl__CheckReady(beNDMWMcUtilCtrl *util);
-extern "C" void beNDMWMcUtilCtrl__Remove(beNDMWMcUtilCtrl *util);
-extern "C" bool beNDMWMcUtilCtrl__IsRemoved(beNDMWMcUtilCtrl *util);
-extern "C" void beNDMWMcUtilCtrl__Request(beNDMWMcUtilCtrl *util, int kind, int slot);
-extern "C" void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util);
-extern "C" int g_beSystem_metaObject[4];
-extern "C" int g_bePadManager_metaObject[4];
-extern "C" int g_beLua_metaObject[4];
-extern "C" int g_beNDMWLogoInfo_metaObject[4];
-extern "C" int g_beNDMWLogo_metaObject[4];
-extern "C" int g_propertyNameField[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int g_txtCallNo;
-extern "C" beBaseInfoRam *g_mdlEntity;
 
 extern "C" void beNDMWLogo_Prepare(beNDMWLogo *self);
 extern "C" void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam);
@@ -85,7 +63,7 @@ enum CardFlag { CardUnusable = 0x04, CardFull = 0x08, CardPresent = 0x80 };
 /* The owner's allocator, or the default selector's when owner allocation is off. */
 #define PICK_ALLOCATOR(allocator, owner) { \
     allocator = igObject_GetAllocator(owner); \
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
+    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 
 /* The step read afresh: `_st1 = CurrentStep(ctrl) + 1` reloads the value the switch tested. */
 static inline int CurrentStep(const beNDMWLogoCtrlData *ctrl) {
@@ -209,10 +187,10 @@ static inline void showAllSlots(beNDMWLogo *self) {
 
 void beNDMWLogo_Prepare(beNDMWLogo *self) {
     if (self->_padManager == 0) {
-        self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+        self->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
     }
     if (self->_system_ == 0) {
-        self->_system_ = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+        self->_system_ = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
     }
 }
 
@@ -222,25 +200,25 @@ void beNDMWLogo_Prepare(beNDMWLogo *self) {
  * on without saving or to check again. The numbers given to beNDMWLogo_RunMessageScript are
  * txt_Tar.lua call numbers. */
 void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
-    int allocator;
+    igMemoryPoolView *allocator;
     beNDMWLogoCtrlData *ctrl;
     beNDMWMcUtilCtrl *util;
 
     if (infoRam->_dataList == 0) {
         PICK_ALLOCATOR(allocator, self);
-        igSmartPointer<igObject> createdList(beBaseInfoDataList_Create(allocator));
+        igSmartPointer<igObject> createdList(beBaseInfoDataList_Create((int)allocator));
         setDataList(infoRam, createdList.p);
         PICK_ALLOCATOR(allocator, self);
-        igSmartPointer<beNDMWLogoCtrlData> createdCtrl(beNDMWLogoCtrlData_Create(allocator));
-        ObjectList_AppendRetained(infoRam->_dataList, createdCtrl.p);
+        igSmartPointer<beNDMWLogoCtrlData> createdCtrl(beNDMWLogoCtrlData_Create((int)allocator));
+        ObjectList_AppendRetained((igObjectList *)infoRam->_dataList, createdCtrl.p);
     }
     if (infoRam->_dataList == 0) {
         PICK_ALLOCATOR(allocator, infoRam);
-        igSmartPointer<igObject> createdList(beBaseInfoDataList_Create(allocator));
+        igSmartPointer<igObject> createdList(beBaseInfoDataList_Create((int)allocator));
         setDataList(infoRam, createdList.p);
     }
-    ctrl = (beNDMWLogoCtrlData *)igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0], "CTRL");
-    bePadManager_GetPadForPlayer(self->_padManager, 0);
+    ctrl = (beNDMWLogoCtrlData *)igProperty_FindByName((igObjectList *)infoRam->_dataList, g_propertyNameField, "CTRL");
+    bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, 0);
     switch (ctrl->_st0) {
     case LogoStateCardCheck:
         switch (ctrl->_st1) {
@@ -249,15 +227,15 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
             case 0:
                 switch (ctrl->_st3) {
                 case 0:
-                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "GENERATE");
-                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_OPEN");
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "GENERATE");
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_OPEN");
                     ctrl->_st3 = ctrl->_st3 + 1;
                     break;
                 case 1:
-                    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", "i_messwn", 0);
-                    beMessenger_AppendString(self->_messenger, "SQ_OPEN");
-                    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
-                    if (beMessenger_GetBool(self->_messenger, 0) == false) {
+                    beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, "SQ_OPEN");
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ISSEQNAME");
+                    if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == false) {
                         beNDMWLogo_RunMessageScript(self, 91200);
                         NEXT_PHASE(ctrl);
                     }
@@ -267,7 +245,7 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
             case 1:
                 PICK_ALLOCATOR(allocator, self);
                 igRelease((igObject *)self->_mcUtilCtrl);
-                self->_mcUtilCtrl = (int)beNDMWMcUtilCtrl_Create(allocator);
+                self->_mcUtilCtrl = (int)beNDMWMcUtilCtrl_Create((int)allocator);
                 beNDMWMcUtilCtrl__Init(mcUtil(self), self->_messenger, 0);
                 NEXT_PHASE(ctrl);
                 break;
@@ -429,13 +407,13 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
             case 2:
                 switch (ctrl->_st3) {
                 case 0:
-                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_CLOSE");
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_CLOSE");
                     beNDMWLogo_ClearMessageText(self);
                     ctrl->_st3 = ctrl->_st3 + 1;
                     break;
                 case 1:
-                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "ISRUN");
-                    if (beMessenger_GetBool(self->_messenger, 0) == false) {
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "ISRUN");
+                    if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == false) {
                         if (self->_isUseSave == 1) {
                             ENTER_STATE(ctrl, LogoStateRunLogo);
                         } else {
@@ -452,18 +430,18 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
     case LogoStateCardError:
         switch (ctrl->_st1) {
         case CardErrorOpen:
-            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "GENERATE");
-            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_OPEN");
-            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_memchkwn", 0, "GENERATE");
-            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_memchkwn", 0, "SQ_OPEN");
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "GENERATE");
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_OPEN");
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_memchkwn", 0, "GENERATE");
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_memchkwn", 0, "SQ_OPEN");
             findCardError(self);
             NEXT_STEP(ctrl);
             break;
         case CardErrorExplain:
-            beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", "i_messwn", 0);
-            beMessenger_AppendString(self->_messenger, "SQ_OPEN");
-            beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
-            if (beMessenger_GetBool(self->_messenger, 0) == false) {
+            beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0);
+            beMessenger_AppendString((beMessenger *)self->_messenger, "SQ_OPEN");
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ISSEQNAME");
+            if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == false) {
                 switch (self->_errType) {
                 case CardUnusable:
                     showFlaggedSlots(self, CardUnusable);
@@ -484,24 +462,24 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
         case CardErrorAcknowledge:
             switch (ctrl->_st2) {
             case 0:
-                beMessenger_SendNamed(self->_messenger, "SELECTCTRL", "i_messky", 0, "GENERATE");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SELECTCTRL", "i_messky", 0, "GENERATE");
                 NEXT_PHASE(ctrl);
                 break;
             case 1:
-                beMessenger_SendNamed(self->_messenger, "SELECTCTRL", "i_messky", 0, "ISEND");
-                if (beMessenger_GetBool(self->_messenger, 0) == true) {
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SELECTCTRL", "i_messky", 0, "ISEND");
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == true) {
                     beNDMWLogo_ClearMessageText(self);
                     NEXT_PHASE(ctrl);
                 }
                 break;
             case 2:
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_memchkwn", 0, "SQ_CLOSE");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_memchkwn", 0, "SQ_CLOSE");
                 beNDMWLogo_ClearMessageText(self);
                 NEXT_PHASE(ctrl);
                 break;
             case 3:
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_memchkwn", 0, "ISRUN");
-                if (beMessenger_GetBool(self->_messenger, 0) == false) {
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_memchkwn", 0, "ISRUN");
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == false) {
                     NEXT_STEP(ctrl);
                 }
                 break;
@@ -510,10 +488,10 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
         case CardErrorAsk:
             switch (ctrl->_st2) {
             case 0:
-                beMessenger_SelectReceivers(self->_messenger, "SELECTCTRL", "i_messcr", 0);
-                beMessenger_AppendInt(self->_messenger, 2);
-                beMessenger_AppendString(self->_messenger, "NOCANCEL");
-                beMessenger_DispatchSelected(self->_messenger, "GENERATE");
+                beMessenger_SelectReceivers((beMessenger *)self->_messenger, "SELECTCTRL", "i_messcr", 0);
+                beMessenger_AppendInt((beMessenger *)self->_messenger, 2);
+                beMessenger_AppendString((beMessenger *)self->_messenger, "NOCANCEL");
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GENERATE");
                 if (self->_errType == CardUnusable) {
                     beNDMWLogo_RunMessageScript(self, 91021);
                 } else if (self->_errType == CardFull) {
@@ -524,14 +502,14 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
                 NEXT_PHASE(ctrl);
                 break;
             case 1:
-                beMessenger_SendNamed(self->_messenger, "SELECTCTRL", "i_messcr", 0, "ISEND");
-                if (beMessenger_GetBool(self->_messenger, 0) == true) {
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SELECTCTRL", "i_messcr", 0, "ISEND");
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == true) {
                     NEXT_PHASE(ctrl);
                 }
                 break;
             case 2:
-                beMessenger_SendNamed(self->_messenger, "SELECTCTRL", "i_messcr", 0, "GETSELECT");
-                self->_select = beMessenger_GetInt(self->_messenger, 0);
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SELECTCTRL", "i_messcr", 0, "GETSELECT");
+                self->_select = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
                 NEXT_STEP(ctrl);
                 break;
             }
@@ -539,13 +517,13 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
         case CardErrorCloseAsk:
             switch (ctrl->_st2) {
             case 0:
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_CLOSE");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_CLOSE");
                 beNDMWLogo_ClearMessageText(self);
                 NEXT_PHASE(ctrl);
                 break;
             case 1:
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "ISRUN");
-                if (beMessenger_GetBool(self->_messenger, 0) == false) {
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "ISRUN");
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == false) {
                     NEXT_STEP(ctrl);
                 }
                 break;
@@ -561,15 +539,15 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
             }
             break;
         case CardErrorRetryOpen:
-            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "GENERATE");
-            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_OPEN");
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "GENERATE");
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_OPEN");
             NEXT_STEP(ctrl);
             break;
         case CardErrorRetryExplain:
-            beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", "i_messwn", 0);
-            beMessenger_AppendString(self->_messenger, "SQ_OPEN");
-            beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
-            if (beMessenger_GetBool(self->_messenger, 0) == false) {
+            beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0);
+            beMessenger_AppendString((beMessenger *)self->_messenger, "SQ_OPEN");
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ISSEQNAME");
+            if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == false) {
                 beNDMWLogo_RunMessageScript(self, 91100);
                 NEXT_STEP(ctrl);
             }
@@ -577,14 +555,14 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
         case CardErrorRetryAcknowledge:
             switch (ctrl->_st2) {
             case 0:
-                beMessenger_SelectReceivers(self->_messenger, "SELECTCTRL", "i_messky", 0);
-                beMessenger_AppendString(self->_messenger, "NOCANCEL");
-                beMessenger_DispatchSelected(self->_messenger, "GENERATE");
+                beMessenger_SelectReceivers((beMessenger *)self->_messenger, "SELECTCTRL", "i_messky", 0);
+                beMessenger_AppendString((beMessenger *)self->_messenger, "NOCANCEL");
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GENERATE");
                 NEXT_PHASE(ctrl);
                 break;
             case 1:
-                beMessenger_SendNamed(self->_messenger, "SELECTCTRL", "i_messky", 0, "ISEND");
-                if (beMessenger_GetBool(self->_messenger, 0) == true) {
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "SELECTCTRL", "i_messky", 0, "ISEND");
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == true) {
                     NEXT_STEP(ctrl);
                 }
                 break;
@@ -593,13 +571,13 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
         case CardErrorRetryClose:
             switch (ctrl->_st2) {
             case 0:
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_CLOSE");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "SQ_CLOSE");
                 beNDMWLogo_ClearMessageText(self);
                 NEXT_PHASE(ctrl);
                 break;
             case 1:
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_messwn", 0, "ISRUN");
-                if (beMessenger_GetBool(self->_messenger, 0) == false) {
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "i_messwn", 0, "ISRUN");
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == false) {
                     ENTER_STATE(ctrl, LogoStateCardCheck);
                 }
                 break;
@@ -612,7 +590,7 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
         break;
     case LogoStateRunLogo:
         g_mdlEntity = 0;
-        beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), "logo.lua", 0);
+        beLua__RunNamedChunk((beLua *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject), "logo.lua", 0);
         ENTER_STATE(ctrl, LogoStateDone);
         break;
     case LogoStateDone:
@@ -622,18 +600,18 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
 
 /* Shows message `callNo` through txt_Tar.lua. */
 void beNDMWLogo_RunMessageScript(beNDMWLogo *self, int callNo) {
-    int lua = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+    igObject *lua = igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject);
     g_txtCallNo = callNo;
     g_mdlEntity = 0;
-    beLua__RunNamedChunk(lua, "txt_Tar.lua", 0);
+    beLua__RunNamedChunk((beLua *)lua, "txt_Tar.lua", 0);
 }
 
 static inline void clearTextElement(beNDMWLogo *self, const char *textType, const char *textName) {
-    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
-    beMessenger_AppendString(self->_messenger, textType);
-    beMessenger_AppendString(self->_messenger, textName);
-    beMessenger_AppendString(self->_messenger, "CLR");
-    beMessenger_DispatchSelected(self->_messenger, "SWITCH");
+    beMessenger_SelectReceivers((beMessenger *)self->_messenger, "TEXTCTL", 0, -1);
+    beMessenger_AppendString((beMessenger *)self->_messenger, textType);
+    beMessenger_AppendString((beMessenger *)self->_messenger, textName);
+    beMessenger_AppendString((beMessenger *)self->_messenger, "CLR");
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "SWITCH");
 }
 
 /* Clears every text element the message scripts write. */
@@ -649,11 +627,11 @@ void beNDMWLogo_ClearMessageText(beNDMWLogo *self) {
 }
 
 int beNDMWLogo_GetInfoMeta(void) {
-    return g_beNDMWLogoInfo_metaObject[0];
+    return (int)g_beNDMWLogoInfo_metaObject;
 }
 
 void beNDMWLogo_OnAddRam(beNDMWLogo *self, int info) {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "LOGO");
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)info, "LOGO");
 }
 
 /* The controller's one message is resolved and ignored. */
@@ -661,12 +639,12 @@ int beNDMWLogo_OnMessage(beNDMWLogo *self, beBaseInfoRam *infoRam, beMessengerWo
     if (infoRam->_dataList == 0) {
         return 1;
     }
-    beMessenger_ResolveEnumValue(self->_messenger, beNDMWLogoCtrlData_GetMessageEnum(), message->_message);
+    beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beNDMWLogoCtrlData_GetMessageEnum(), (const char *)message->_message);
     return 1;
 }
 
 int beNDMWLogo_GetMeta(void) {
-    return g_beNDMWLogo_metaObject[0];
+    return (int)g_beNDMWLogo_metaObject;
 }
 
 #pragma pop

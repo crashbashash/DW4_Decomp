@@ -25,10 +25,10 @@ int beNDMWLoadCtrl2Info_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWLoadCtrl2Info_vtable[0];
     nameSelListRef = &obj._nameSelList;
     *nameSelListRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWLoadCtrl2Info_vtable[0];
     igSmartPointer_igObjectList_Destruct(nameSelListRef, -1);
-    beBaseInfo_Destroy(&obj, 0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, 0);
     return vtable;
 }
 
@@ -39,7 +39,7 @@ void beNDMWLoadCtrl2Info_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLoadCtrl2Info_callbackList[] = { igObjectList_EnsureRegistered, 0 };
 
-void *beNDMWLoadCtrl2Info_Register(void) {
+CallbackArray *beNDMWLoadCtrl2Info_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

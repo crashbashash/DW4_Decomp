@@ -41,7 +41,7 @@ int igStackMemoryPool_GetVTable(void) {
         if (object) {
             --*(int *)&object->_refCount;
             if (((unsigned long long)(long long)*(int *)&object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
     }
     return r;

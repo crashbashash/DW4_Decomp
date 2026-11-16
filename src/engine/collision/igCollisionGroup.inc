@@ -21,7 +21,7 @@ int igCollisionGroup_GetVTable(void) {
     int temp_s0;
     int *p;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
@@ -29,10 +29,10 @@ int igCollisionGroup_GetVTable(void) {
     u.vt = (int)&g_igCollisionGroup_vtable[0];
     p = (int *)&u.b[32];
     *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igCollisionGroup_vtable[0];
     igSmartPointer_igTransform_Destruct(p, -1);
-    igGroup_Destroy(u.b, 0);
+    igGroup_Destroy((igGroup *)u.b, 0);
     return temp_s0;
 }
 
@@ -43,12 +43,12 @@ void FUN_00239c80(void)
 
 static igMetaObjectCallback g_igCollisionGroup_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
-void igCollisionGroup_Register(void) {
+CallbackArray *igCollisionGroup_Register(void) {
     CollisionLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionGroup_metaObject,
-        igGroup_Register,
+        (igMetaObjectRegisterFunction)igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igCollisionGroup_GetMetaObject,
         "igCollisionGroup",
@@ -66,10 +66,10 @@ void thunk_igCollisionGroup_GetMetaObject(void) {
 
 static FieldFactory g_igCollisionGroup_ctorTable[] = {
     igObjectRefMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igIntMetaField_Create,
@@ -111,10 +111,10 @@ void igCollisionGroup_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igCollisionGroup_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igCollisionGroup_ctorTable, 8);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransform_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_igCollisionGroup_fieldTable, g_igCollisionGroup_fieldHandles, g_igCollisionGroup_fieldOffsets, temp_s2);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCollisionGroup_ctorTable, 8);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igTransform_GetOrCreateMetaObject());
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCollisionGroup_fieldTable, g_igCollisionGroup_fieldHandles, g_igCollisionGroup_fieldOffsets, temp_s2);
 }
 

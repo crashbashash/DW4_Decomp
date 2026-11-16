@@ -2,7 +2,7 @@ igMetaObject *g_igAnimationTransitionDefinitionList_metaObject;
 
 igMetaObject *FUN_001a9420(void) {
     if (g_igAnimationTransitionDefinitionList_metaObject == 0) {
-        g_igAnimationTransitionDefinitionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAnimationTransitionDefinitionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAnimationTransitionDefinitionList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igAnimationTransitionDefinitionList_GetMetaObject(void)
 int igAnimationTransitionDefinitionList_GetVTable(void) {
     int tmp[8];
     int off;
-    igObject_InitHeader(&tmp[0]);
+    igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&g_igAnimationTransitionDefinitionList_vtable[0];
-    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
+    off = *(int *)((char *)g_objectSystem + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -31,9 +31,9 @@ void igAnimationTransitionDefinitionList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAnimationTransitionDefinitionList_callbackList[] = { FUN_001a96c0, 0 };
 
-void igAnimationTransitionDefinitionList_Register(void) {
+CallbackArray *igAnimationTransitionDefinitionList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationTransitionDefinitionList_metaObject,
         igObjectList_Register,

@@ -2,7 +2,7 @@ igMetaObject *g_igOverrideAttrSet_metaObject;
 
 igMetaObject *FUN_0019c6a0(void) {
     if (g_igOverrideAttrSet_metaObject == 0) {
-        g_igOverrideAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igOverrideAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igOverrideAttrSet_metaObject;
 }
@@ -19,14 +19,14 @@ int igOverrideAttrSet_GetVTable(void) {
     struct F f;
     int temp_s0;
 
-    igObject_InitHeader(&f);
+    igObject_InitHeader((igObject *)&f);
     f.w[1] = 0;
     f.w[2] = 0;
     f.w[3] = 0;
     f.w[6] = 0;
     f.w[7] = 0;
     f.vt = &g_igOverrideAttrSet_vtable[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)g_objectSystem + 916));
     f.vt = &g_igOverrideAttrSet_vtable[0];
     FUN_0019c0e0((struct S_19c0e0 *)&f, 0);
     return temp_s0;
@@ -37,9 +37,9 @@ void FUN_0019c7b0(void)
     igMetaObject_RunStaticInit(igOverrideAttrSet_Register);
 }
 
-void igOverrideAttrSet_Register(void) {
+CallbackArray *igOverrideAttrSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOverrideAttrSet_metaObject,
         igAttrSet_Register,
@@ -66,7 +66,7 @@ struct R **igSmartPointer_igMetaObject_Destruct(struct R **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {

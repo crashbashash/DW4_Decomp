@@ -2,12 +2,12 @@ igMetaObject *g_beSwitchCtrl_metaObject;
 
 beSwitchCtrl *beSwitchCtrl_CreateInstance(int allocator) {
     beSwitchCtrl_EnsureRegistered();
-    return (beSwitchCtrl *)igMetaObject_CreateInstance(*(int *)0x587DF8, allocator);
+    return (beSwitchCtrl *)igMetaObject_CreateInstance(g_beSwitchCtrl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSwitchCtrl_GetOrCreateMetaObject(void) {
     if (g_beSwitchCtrl_metaObject == 0) {
-        g_beSwitchCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSwitchCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSwitchCtrl_metaObject;
 }
@@ -33,7 +33,7 @@ int beSwitchCtrl_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beSwitchCtrl_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -46,7 +46,7 @@ void beSwitchCtrl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSwitchCtrl_Register);
 }
 
-void *beSwitchCtrl_Register(void) {
+CallbackArray *beSwitchCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

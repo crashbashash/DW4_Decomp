@@ -19,7 +19,7 @@ int beCameraCtrlInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beCameraCtrlInfo_vtable[0];
     obj._data = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCameraCtrlInfo_vtable[0];
     igSmartPointer_igObject_Destruct(&obj._data, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -33,7 +33,7 @@ void beCameraCtrlInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCameraCtrlInfo_callbackList[] = { igObject_EnsureRegistered, 0 };
 
-void *beCameraCtrlInfo_Register(void) {
+CallbackArray *beCameraCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -71,9 +71,9 @@ static int g_beCameraCtrlInfo_fieldOffsets[] = {
 void beCameraCtrlInfo_InitFields(void) {
     int base;
     void *f;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCameraCtrlInfo_metaObject;
+    meta = g_beCameraCtrlInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraCtrlInfo_ctorTable, 1);
     f = igMetaObject_GetFieldAt(meta, base);

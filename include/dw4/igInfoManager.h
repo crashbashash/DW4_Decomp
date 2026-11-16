@@ -7,7 +7,7 @@ struct igInfoManager;
 extern "C" {
 #endif
 
-void igInfoManager_Register(void);
+struct CallbackArray *igInfoManager_Register(void);
 /* The destructor: releases the name, and frees the object when `flags` is positive. */
 void *igInfoManager_Destroy(struct igInfoManager *manager, short flags);
 

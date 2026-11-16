@@ -1,8 +1,6 @@
 #include "dw4/p2stateCache.h"
 
-extern p2StateCacheEntry *p2StateCache[P2_STATE_CACHE_BUCKETS];
 extern p2StateCacheEntry *p2CurrentStateCacheEntry;
-extern p2StateCacheEntry *p2FreeStateCacheEntries;
 extern long long p2LastStateKeys[4];
 extern unsigned long long *p2StateCachePacketArena;
 

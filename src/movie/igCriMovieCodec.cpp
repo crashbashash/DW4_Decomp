@@ -45,6 +45,14 @@ public:
     virtual int syncPauseState(igMovieInfo *movie);
 };
 
+#include "dw4/igObject.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igMemory.h"
+#include "dw4/igPsx2VisualContext.h"
+#include "dw4/igMovieInfo.h"
+#include "dw4/igAdx.h"
+#include "dw4/igCriMovieData.h"
+#include "dw4/igCriMovieCodec.h"
 extern "C" {
 int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called);
 static void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc);
@@ -62,29 +70,19 @@ void CriMovie_Free(igCriMovieCodec *codec, void *block);
 
 int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie, igObject **visualContext);
 int igCriMovieCodec_ReleaseDrawing(igCriMovieCodec *self);
-void Gap__igCriMovieData__resetFields(igCriMovieData *self);
-void Gap__igCriMovieCodec__constructFields(igCriMovieCodec *self);
-void Gap__igCriMovieCodec__destructFields(void);
+void Gap__igCriMovieData__resetFields(igCriMovieData *self, int flags);
+void Gap__igCriMovieCodec__constructFields(igCriMovieCodec *self, int flags);
+void Gap__igCriMovieCodec__destructFields(igCriMovieCodec *self);
 int igCriMovieCodec_IsReusable(void);
 int igCriMovieCodec_Close(igCriMovieCodec *self, igMovieInfo *movie);
 int igCriMovieCodec_Play(igCriMovieCodec *self, igMovieInfo *movie);
 int igCriMovieCodec_Pause(igCriMovieCodec *self, igMovieInfo *movie, int state);
 int igCriMovieCodec_SyncPauseState(igCriMovieCodecView *self, igMovieInfo *movie);
 int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie);
-int igCriMovieCodec_GetMeta(void);
-int igCriMovieData_GetMeta(void);
+igMetaObject *igCriMovieCodec_GetMeta(void);
+igMetaObject *igCriMovieData_GetMeta(void);
 
-void Gap__Core__igObject__constructFields(void);
-void Gap__Core__igObject__destructFields(void);
-void Gap__Core__igObject__resetFields(void);
-int igObject_IsKindOf(void *object, int metaObject);
-igMemoryPoolView *igObject_GetAllocator(void *object);
-igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
-void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool);
-int Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool);
 int igReportError(const char *format, ...);
-void igPsx2VisualContext_CallDmaChain(igObject *self, void *packet, int size, int flush);
-int igPsx2VisualContext_IsDisplayingFirstBuffer(igObject *self);
 void mwPlySetMallocFn(void *(*allocate)(igCriMovieCodec *, unsigned int),
                          void (*release)(igCriMovieCodec *, void *), igCriMovieCodec *context);
 int mwPlyIsPause(MwsfdPly *ply);
@@ -95,12 +93,8 @@ void ADXM_ExecMain(void);
 void MWSFD_ExecVsyncFrame(void);
 void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrmObj *frame);
 void mwPlyRelCurFrm(MwsfdPly *ply);
-int igMovieInfo_GetTiling(igMovieInfo *movie, int *tileWidth, int *tileHeight, int *tilesAcross, int *tilesDown);
 
-extern igSmartPointer<igAdxAfsFileList> g_adxAfsFileList;
-int igAdx_FindAfsFile(const char *name);
 igFileDispatchView *igFile_Create(igMemoryPoolView *pool);
-igCriMovieData *igCriMovieData_Create(igMemoryPoolView *pool);
 int ADXF_Open(const char *fname, int dir);
 int ADXF_OpenAfs(int ptid, int flid);
 void ADXF_Close(int adxf);
@@ -124,7 +118,6 @@ void mwPlyInitSfdFx(MwsfdInitPrm *prm);
 float log10f(float x);
 int igReportNotice(const char *format, ...);
 int igReport_Warning(const char *format, ...);
-extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_criMovieUseRawPath;
 extern unsigned char g_criMovieOpenFailedMuted;
 extern unsigned char g_criMovieAllocFailedMuted;
@@ -147,12 +140,7 @@ extern char Movie_height_doesn_t_match_info_height[];
 extern char On_PS2_the_width_and_height_of_a_movie[];
 void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, igObject *audioContext);
 int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie);
-extern unsigned char g_useOwnerAllocator;
 extern unsigned char g_criMovieDmaWarningMuted;
-extern int kIGMemoryPoolHandleUser0[4];
-extern int g_igPsx2VisualContext_metaObject[4];
-extern int g_igCriMovieCodec_metaObject[4];
-extern int g_igCriMovieData_metaObject[4];
 extern void *g_criMovieUploadPacket;
 extern int g_criMovieUploadPacketSize;
 extern char You_probably_didn_t_open_the_DMA[];
@@ -191,7 +179,7 @@ static inline AdxtObj *Adxt(igCriMovieData *data)
 
 static inline igCriMovieData *AsCriMovieData(void *object)
 {
-    if (object != 0 && igObject_IsKindOf(object, g_igCriMovieData_metaObject[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, g_igCriMovieData_metaObject) != 0) {
         return (igCriMovieData *)object;
     }
     return 0;
@@ -311,10 +299,10 @@ int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie,
     columns = (unsigned int)movie->_width >> 4;
     rows = (unsigned int)movie->_height >> 4;
     pool = igObject_GetAllocator(self);
-    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     g_criMovieUploadPacket = Memory_AllocateAlignedWithAllocator(((unsigned int)((((columns * rows * 6) + 0xA) * 4) + 0x3F) >> 6) << 8, 0x40, pool);
     object = *visualContext;
-    if ((object != 0) && (igObject_IsKindOf(object, g_igPsx2VisualContext_metaObject[0]) != 0)) {
+    if ((object != 0) && (igObject_IsKindOf(object, g_igPsx2VisualContext_metaObject) != 0)) {
         context = object;
     } else {
         context = 0;
@@ -327,7 +315,7 @@ int igCriMovieCodec_ReleaseDrawing(igCriMovieCodec *self) {
     igMemoryPoolView *pool;
 
     pool = igObject_GetAllocator(self);
-    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     Memory_FreeBufferWithAllocator(g_criMovieUploadPacket, pool);
     return 1;
 }
@@ -356,22 +344,22 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
     return 1;
 }
 
-void Gap__igCriMovieData__resetFields(igCriMovieData *self) {
-    Gap__Core__igObject__resetFields();
+void Gap__igCriMovieData__resetFields(igCriMovieData *self, int flags) {
+    Gap__Core__igObject__resetFields(self, flags);
     self->_mwply = 0;
     self->_adxt = 0;
     self->_macroFunction = 0;
 }
 
 /* Routes MWSFD's allocations through the codec's memory pool. */
-void Gap__igCriMovieCodec__constructFields(igCriMovieCodec *self) {
-    Gap__Core__igObject__constructFields();
+void Gap__igCriMovieCodec__constructFields(igCriMovieCodec *self, int flags) {
+    Gap__Core__igObject__constructFields(self, flags);
     mwPlySetMallocFn(&CriMovie_Allocate, &CriMovie_Free, self);
 }
 
-void Gap__igCriMovieCodec__destructFields(void)
+void Gap__igCriMovieCodec__destructFields(igCriMovieCodec *self)
 {
-    Gap__Core__igObject__destructFields();
+    Gap__Core__igObject__destructFields(self);
 }
 
 int igCriMovieCodec_IsReusable(void)
@@ -438,14 +426,14 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
         path = (char *)movie->_path;
     } else {
         pool = igObject_GetAllocator(self);
-        pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igFileDispatchView> file(igFile_Create(pool));
         path = file->MakeCompleteFilename((const char *)movie->_path);
     }
     afsIndex = igAdx_FindAfsFile(path);
     pool = igObject_GetAllocator(self);
-    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-    igSmartPointer<igCriMovieData> data(igCriMovieData_Create(pool));
+    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+    igSmartPointer<igCriMovieData> data(igCriMovieData_Create((int)pool));
     if (afsIndex != -1) {
         afsFile = ((igAdxAfsFile **)g_adxAfsFileList.p->_data)[afsIndex];
         adxf = ADXF_OpenAfs(afsFile->_ptNumber, afsFile->_fileNumber);
@@ -758,12 +746,12 @@ void CriMovie_Free(igCriMovieCodec *codec, void *block) {
     pool->Free(block);
 }
 
-int igCriMovieCodec_GetMeta(void)
+igMetaObject *igCriMovieCodec_GetMeta(void)
 {
-    return g_igCriMovieCodec_metaObject[0];
+    return g_igCriMovieCodec_metaObject;
 }
 
-int igCriMovieData_GetMeta(void)
+igMetaObject *igCriMovieData_GetMeta(void)
 {
-    return g_igCriMovieData_metaObject[0];
+    return g_igCriMovieData_metaObject;
 }

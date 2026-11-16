@@ -4,7 +4,7 @@ igMetaField *g_beHitLandResultData_ramNoMetaField;
 
 beHitLandResultData *beHitLandResultData_Create(int allocator) {
     beHitLandResultData_EnsureRegistered();
-    return (beHitLandResultData *)igMetaObject_CreateInstance(*(int *)0x5893E8, allocator);
+    return (beHitLandResultData *)igMetaObject_CreateInstance(g_beHitLandResultData_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beHitLandResultData_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int beHitLandResultData_GetVTable(void) {
     obj._vtable = (int)&g_beHitLandResultData_vtable[0];
     infoNameSlot = (char **)&obj._infoName;
     *infoNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beHitLandResultData_vtable[0];
     igStringRef_Release(infoNameSlot);
     return vtable;
@@ -38,7 +38,7 @@ void beHitLandResultData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandResultData_Register);
 }
 
-void *beHitLandResultData_Register(void) {
+CallbackArray *beHitLandResultData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -79,9 +79,9 @@ static int g_beHitLandResultData_fieldOffsets[] = {
 
 void beHitLandResultData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beHitLandResultData_metaObject;
+    meta = g_beHitLandResultData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandResultData_ctorTable, 2);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), "");

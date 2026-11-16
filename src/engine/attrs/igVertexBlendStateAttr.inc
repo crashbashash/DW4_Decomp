@@ -11,9 +11,9 @@ igMetaObject *igVertexBlendStateAttr_GetMetaObject(void)
 
 int igVertexBlendStateAttr_GetVTable(void) {
     struct Obj obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igVertexBlendStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igVertexBlendStateAttr_EnsureRegistered(void)
@@ -21,9 +21,9 @@ void igVertexBlendStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVertexBlendStateAttr_Register);
 }
 
-void igVertexBlendStateAttr_Register(void) {
+CallbackArray *igVertexBlendStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexBlendStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -43,7 +43,7 @@ void thunk_igVertexBlendStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igVertexBlendStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igVertexBlendStateAttr_fieldTable[] = {
     "_enabled",

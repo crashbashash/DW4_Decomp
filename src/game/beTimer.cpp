@@ -1,23 +1,20 @@
 #include "dw4/reflected.h"
+#include "dw4/beLua.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beSystem.h"
+#include "dw4/beTimer.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igObject.h"
+#include <string.h>
 
 extern "C" void beTimer_Activate(void);
 extern "C" void beTimer_Deactivate(void);
 extern "C" void beTimer_Stop(void);
 extern "C" int beTimer_AddInfo(void);
-extern "C" int beTimer_GetMeta(void);
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int igObject_Destroy(...);
-extern "C" int beLua__RunNamedChunk(...);
-extern "C" int beSystem_IsRunning(...);
-extern "C" int List_RemoveWordAt(...);
-extern "C" int strcmp(...);
-extern "C" int g_beTimer_metaObject[4];
-extern "C" int g_beSystem_metaObject[4];
-extern "C" int g_bePadManager_metaObject[4];
-extern "C" int g_beLua_metaObject[4];
+extern "C" igMetaObject *beTimer_GetMeta(void);
 extern "C" void beTimer_Start(beTimer *self);
 extern "C" void beTimer_RemoveAllInfo(beTimer *self);
-extern "C" bePadData *bePadManager_GetPadForPlayer(int padManager, int player);
 extern "C" int beTimer_HasPadInput(beTimer *self);
 extern "C" int NOPADDATA[4];
 extern "C" void beTimer_Update(beTimer *self);
@@ -31,9 +28,9 @@ void beTimer_Deactivate(void)
 }
 
 void beTimer_Start(beTimer *self) {
-    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
-    self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
-    self->_luaManager = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+    self->_system = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject));
+    self->_padManager = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject));
+    self->_luaManager = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject));
 }
 
 void beTimer_Stop(void)
@@ -73,7 +70,7 @@ int beTimer_HasPadInput(beTimer *self) {
     int i = 0;
     bePadData *pad;
     do {
-        pad = bePadManager_GetPadForPlayer(self->_padManager, i);
+        pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, i);
         /* matching construct: the double negation keeps the retail sltu/xori normalisation of the first test
          * without the bool truncation the C++ front end adds to a `!= 0` comparison */
         if (!!pad->_lStk) { return 1; }
@@ -95,7 +92,7 @@ void beTimer_Update(beTimer *self) {
         now = ((igInsightCore *)self->_insight)->_worldTime;
         delta = now - old;
         self->_oldWorldTime = now;
-        if (beSystem_IsRunning(self->_system) & 0xFF) {
+        if (beSystem_IsRunning((beSystem *)self->_system) & 0xFF) {
             n = ((beTimerDataList *)self->_dataList)->_count;
             i = 0;
             if (n > 0) {
@@ -103,7 +100,7 @@ void beTimer_Update(beTimer *self) {
                     off = i * 4;
                     it = ((beTimerData **)((beTimerDataList *)self->_dataList)->_data)[i];
                     if (it->_resetCondition != 0) {
-                        b = strcmp(it->_resetCondition, &NOPADDATA[0]) == 0 && beTimer_HasPadInput(self) != 0;
+                        b = strcmp((const char *)it->_resetCondition, (const char *)&NOPADDATA[0]) == 0 && beTimer_HasPadInput(self) != 0;
                         if (b) {
                             it->_downTimer = it->_startTime;
                         }
@@ -111,7 +108,7 @@ void beTimer_Update(beTimer *self) {
                     nv = it->_downTimer - delta;
                     it->_downTimer = nv;
                     if (nv < 0) {
-                        beLua__RunNamedChunk(self->_luaManager, it->_callLuaFile, 0);
+                        beLua__RunNamedChunk((beLua *)self->_luaManager, (const char *)it->_callLuaFile, 0);
                         l = (beTimerDataList *)self->_dataList;
                         o = ((igObject **)l->_data)[i];
                         if (o != 0) {
@@ -120,7 +117,7 @@ void beTimer_Update(beTimer *self) {
                                 igObject_Destroy(o);
                             }
                         }
-                        List_RemoveWordAt(l, i);
+                        List_RemoveWordAt((igDataList *)l, i);
                         n--;
                         i--;
                         ((int *)l->_data)[l->_count] = 0;
@@ -132,7 +129,7 @@ void beTimer_Update(beTimer *self) {
     }
 }
 
-int beTimer_GetMeta(void)
+igMetaObject *beTimer_GetMeta(void)
 {
-    return g_beTimer_metaObject[0];
+    return g_beTimer_metaObject;
 }

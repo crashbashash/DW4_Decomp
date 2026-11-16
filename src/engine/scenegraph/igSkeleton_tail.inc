@@ -43,9 +43,9 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
                 src = &ov->_source->_matrix;
                 if (ov->_mode == 2) { igMatrix44f_Copy(&m, src); }
                 if (ov->_mode == 3) {
-                    igMatrix44f_GetTranslation(&m, translation);
+                    igMatrix44f_GetTranslation((float *)&m, translation);
                     igMatrix44f_Copy(&m, src);
-                    igMatrix44f_SetTranslation(&m, translation);
+                    igMatrix44f_SetTranslation((float *)&m, translation);
                 } else if (ov->_mode == 0) {
                     igMatrix44f_PreMultiply(&m, src);
                 } else if (ov->_mode == 1) {
@@ -78,7 +78,7 @@ int Gap__Sg__igSkeleton__vfunc_27(S_1d9500 *arg0, int arg1) {
     for (i = 0; i < arg0->l->cnt; i++) {
         p = arg0->l->arr[i]->f8;
         p = p != 0 ? p : &emptyString[0];
-        if (strcasecmp(p, arg1) == 0) {
+        if (strcasecmp((char *)p, (char *)arg1) == 0) {
             return i;
         }
     }
@@ -152,7 +152,7 @@ void **FUN_001d9770(void **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
             if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {
@@ -168,7 +168,7 @@ ObjectRefWord *igSmartPointer_igAttrSet_Destruct(ObjectRefWord *self,int delete_
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
@@ -182,7 +182,7 @@ void **FUN_001d9870(void **arg0, short arg1) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((void *)r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (arg1 > 0) {

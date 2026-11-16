@@ -5,12 +5,12 @@ igMetaField *g_beCriSndf_isPlayingMetaField;
 
 beCriSndf *beCriSndf_Create(int allocator) {
     beCriSndf_EnsureRegistered();
-    return (beCriSndf *)igMetaObject_CreateInstance(*(int *)0x589AB0, allocator);
+    return (beCriSndf *)igMetaObject_CreateInstance(g_beCriSndf_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beCriSndf_GetOrCreateMetaObject(void) {
     if (g_beCriSndf_metaObject == 0) {
-        g_beCriSndf_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCriSndf_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCriSndf_metaObject;
 }
@@ -29,7 +29,7 @@ int beCriSndf_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beCriSndf_vtable[0];
-    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
+    off = *(int *)((char *)g_objectSystem + 916);
     return *(int *)((char *)&obj + off);
 }
 
@@ -38,7 +38,7 @@ void beCriSndf_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCriSndf_Register);
 }
 
-void *beCriSndf_Register(void) {
+CallbackArray *beCriSndf_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -83,9 +83,9 @@ static int g_beCriSndf_fieldOffsets[] = {
 
 void beCriSndf_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCriSndf_metaObject;
+    meta = g_beCriSndf_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCriSndf_ctorTable, 3);
     igMetaObject_NameFields(meta, g_beCriSndf_fieldTable, g_beCriSndf_fieldHandles, g_beCriSndf_fieldOffsets, base);

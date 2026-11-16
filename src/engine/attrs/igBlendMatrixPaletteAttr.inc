@@ -6,12 +6,12 @@ igMetaField *g_igBlendMatrixPaletteAttr_capacityMetaField;
 
 void FUN_00139990(int arg0) {
     FUN_00139ab0();
-    igMetaObject_CreateInstance(*(int *)0x55F360, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F360, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_001399d0(void) {
     if (g_igBlendMatrixPaletteAttr_metaObject == 0) {
-        g_igBlendMatrixPaletteAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBlendMatrixPaletteAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBlendMatrixPaletteAttr_metaObject;
 }
@@ -26,9 +26,9 @@ igMetaObject *igBlendMatrixPaletteAttr_GetMetaObject(void)
 
 int igBlendMatrixPaletteAttr_GetVTable(void) {
     union U_139a70 u;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igBlendMatrixPaletteAttr_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void FUN_00139ab0(void)
@@ -36,9 +36,9 @@ void FUN_00139ab0(void)
     igMetaObject_RunStaticInit(igBlendMatrixPaletteAttr_Register);
 }
 
-void igBlendMatrixPaletteAttr_Register(void) {
+CallbackArray *igBlendMatrixPaletteAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendMatrixPaletteAttr_metaObject,
         igVisualAttribute_Register,
@@ -58,10 +58,10 @@ void thunk_igBlendMatrixPaletteAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igBlendMatrixPaletteAttr_ctorTable[] = {
-    igMemoryRefMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igBlendMatrixPaletteAttr_fieldTable[] = {
     "_matrixCache",

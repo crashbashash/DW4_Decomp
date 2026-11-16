@@ -8,7 +8,7 @@ igMetaField *g_beNDMWStatusCtrlDisk_sendMaxMetaField;
 
 beNDMWStatusCtrlDisk *beNDMWStatusCtrlDisk_Create(int allocator) {
     beNDMWStatusCtrlDisk_EnsureRegistered();
-    return (beNDMWStatusCtrlDisk *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlDisk_metaObject, allocator);
+    return (beNDMWStatusCtrlDisk *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlDisk_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWStatusCtrlDisk_GetMetaObject(void)
@@ -36,7 +36,7 @@ int beNDMWStatusCtrlDisk_GetVTable(void) {
     obj._playerNoList = 0;
     obj._diskList = 0;
     obj._sendDisk = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlDisk_vtable[0];
     igSmartPointer_beNDMWItemDisk_Destruct((igSmartPointer<igObject> *)&obj._sendDisk, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._diskList, -1);
@@ -51,9 +51,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWItemDisk_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -65,7 +65,7 @@ void beNDMWStatusCtrlDisk_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusCtrlDisk_callbackList[] = { igIntList_EnsureRegistered, beNDMWItemBaseList_EnsureRegistered, beNDMWItemDisk_EnsureRegistered, 0 };
 
-void *beNDMWStatusCtrlDisk_Register(void) {
+CallbackArray *beNDMWStatusCtrlDisk_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

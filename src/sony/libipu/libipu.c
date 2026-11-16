@@ -1,15 +1,5 @@
+#include "dw4/sony/libipu.h"
 #include "dw4/libkernl.h"
-typedef struct sceIpuDmaEnv {
-    unsigned int d4madr;
-    unsigned int d4tadr;
-    unsigned int d4qwc;
-    unsigned int d4chcr;
-    unsigned int d3madr;
-    unsigned int d3qwc;
-    unsigned int d3chcr;
-    unsigned int ipubp;
-    unsigned int ipuctrl;
-} sceIpuDmaEnv;
 
 #define IPU_CMD (*(volatile unsigned int *)0x10002000)
 #define IPU_CTRL (*(volatile unsigned int *)0x10002010)
@@ -89,7 +79,7 @@ void sceIpuRestartDMA(sceIpuDmaEnv *env)
     }
 }
 
-int sceIpuSync(int mode)
+int sceIpuSync(int mode, unsigned short timeout)
 {
     int busy = 0;
 

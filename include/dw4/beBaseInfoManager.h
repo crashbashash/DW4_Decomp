@@ -3,6 +3,7 @@
 
 struct beBaseInfo;
 struct beBaseInfoManager;
+struct CallbackArray;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -14,7 +15,7 @@ struct beBaseInfoManager *beBaseInfoManager_Destroy(struct beBaseInfoManager *se
 void beBaseInfoManager_EnsureRegistered(void);
 struct igMetaObject *beBaseInfoManager_GetOrCreateMetaObject(void);
 struct igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
-void *beBaseInfoManager_Register(void);
+struct CallbackArray *beBaseInfoManager_Register(void);
 void beBaseInfoManager_Start(struct beBaseInfoManager *self);
 void beBaseInfoManager_Stop(struct beBaseInfoManager *self);
 

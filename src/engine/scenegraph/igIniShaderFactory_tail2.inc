@@ -7,7 +7,7 @@ bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniH
         ADD(a2);
         REL(self->r48);
         self->r48 = a2;
-        n = (IniHeldObject *)igObject_GetAllocator(a1);
+        n = (IniHeldObject *)igObject_GetAllocator((igObject *)a1);
         ADD(n);
         REL(self->r44);
         self->r44 = n;
@@ -43,7 +43,7 @@ void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list) {
                     IniEntry *e = entries->data[j];
                     if (igStringObj_HasFileExtension(e->name, ".file") != 0) {
                         char *s = e->value->text;
-                        s = (s == 0) ? g_stringObjEmptyText[0] : s;
+                        s = (s == 0) ? g_stringObjEmptyText : s;
                         FUN_001cdbb0((IniFactoryView *)self, s);
                     }
                 }
@@ -72,7 +72,7 @@ void Gap__Sg__igIniShaderFactory__vfunc_27(IniShaderFactoryFields *self) {
             IniFactoryEntry *e = igRegistry_GetValueEntry(self->f28, i);
             if (e != 0 && e->f16 != 0 && e->f12 != 0 && igStringObj_HasFileExtension(e->f16, ".file") != 0) {
                 char *path;
-                if (e->f12->name == 0) path = g_stringObjEmptyText[0]; else path = e->f12->name;
+                if (e->f12->name == 0) path = g_stringObjEmptyText; else path = e->f12->name;
                 FUN_001cdbb0((IniFactoryView *)self, path);
             }
         }
@@ -162,7 +162,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
         }
         SLOT(IniDocument, found) = ((IniDocument *)igObjectStringMap_GetObject(cache, name));
         { IniDocument *a_ = found; ADD(a_); }
-        if (found != 0 && igObject_IsKindOf(found, g_igRegistry_metaObject[0]) != 0) {
+        if (found != 0 && igObject_IsKindOf(found, (igMetaObject *)g_igRegistry_metaObject[0]) != 0) {
             IniDocument *keep = found;
             ADD(keep);
             DROP(IniDocument, parsed);
@@ -178,14 +178,14 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
             FINISH();
         }
         {
-            void *allocator = ((void *)igObject_GetAllocator(self));
+            void *allocator = ((void *)igObject_GetAllocator((igObject *)self));
             char *text;
             IniDocument *loading;
             DROP(IniDocument, parsed);
             SLOT(IniDocument, parsed) = igRegistry_Create(allocator);
             loading = parsed;
             text = path->text;
-            text = (text == 0) ? g_stringObjEmptyText[0] : text;
+            text = (text == 0) ? g_stringObjEmptyText : text;
             if (igRegistry_Load(loading, text, "") == 0) {
                 SET_OUT(0);
                 DROP(IniDocument, path);
@@ -203,7 +203,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
         DROP(IniDocument, result);
         SLOT(IniDocument, result) = keep;
     } else {
-        void *allocator = ((void *)igObject_GetAllocator(self));
+        void *allocator = ((void *)igObject_GetAllocator((igObject *)self));
         DROP(IniDocument, result);
         SLOT(IniDocument, result) = igRegistry_Create(allocator);
         igRegistry_Merge(result, parsed, 1);
@@ -222,14 +222,14 @@ SectionRef FUN_001cd9f0(IniShaderFactoryView *self, char *name) {
     SectionRef result(0);
     igSmartPointer<IniSectionText> section = FUN_001cdbb0((IniFactoryView *)self, name);
     if (section.get() != 0) {
-        void *allocator = (void *)igObject_GetAllocator(self);
+        void *allocator = (void *)igObject_GetAllocator((igObject *)self);
         char *text;
         result.release();
         result.p = igDriverDatabase_Create(allocator);
-        igObject_DeepCopy(result.get(), ((IniTypeTable *)g_objectSystem[0])->meta);
+        igObject_DeepCopy(result.get(), ((IniTypeTable *)g_objectSystem)->meta);
         IniSectionObject *created = result.get();
         text = section.get()->text;
-        text = (text == 0) ? g_stringObjEmptyText[0] : text;
+        text = (text == 0) ? g_stringObjEmptyText : text;
         if (igDriverDatabase_LoadFromFile(created, text, name) == 0) {
             result.release();
             result.p = 0;
@@ -263,7 +263,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             cache = self->cache;
         }
         found = ((IniSectionText *)igObjectStringMap_GetObject(cache.p, name));
-        if (found != 0 && igObject_IsKindOf(found, g_igStringObj_metaObject[0]) != 0) {
+        if (found != 0 && igObject_IsKindOf(found, (igMetaObject *)g_igStringObj_metaObject[0]) != 0) {
             result = found;
         }
     }
@@ -274,16 +274,16 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
         }
         {
-            void *allocator = ((void *)igObject_GetAllocator(self));
+            void *allocator = ((void *)igObject_GetAllocator((igObject *)self));
             char *text;
             char *buffer;
             IniFileHandle *opening;
             result.release();
-            result.p = ((IniSectionText *)igStringObj_Create(allocator));
-            igSmartPointer<IniFileHandle> file((IniFileHandle *)igFile_Create(((void *)igObject_GetAllocator(self))));
+            result.p = ((IniSectionText *)igStringObj_Create((int)allocator));
+            igSmartPointer<IniFileHandle> file((IniFileHandle *)igFile_Create(((void *)igObject_GetAllocator((igObject *)self))));
             text = path.p->text;
             opening = file.p;
-            text = (text == 0) ? g_stringObjEmptyText[0] : text;
+            text = (text == 0) ? g_stringObjEmptyText : text;
             if (opening->open(text, "rb") == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
@@ -294,8 +294,8 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             file.p->read(buffer, size, 1);
             file.p->close();
             buffer[size] = 0;
-            igStringObj_Set(result.p, buffer);
-            igObject_FreeMemory(self, buffer);
+            igStringObj_Set((igStringObj *)result.p, buffer);
+            igObject_FreeMemory((igObject *)self, buffer);
             if (self->mode != 0) {
                 igObjectStringMap_Add(cache.p, name, result.p);
             }

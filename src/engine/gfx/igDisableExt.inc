@@ -13,9 +13,9 @@ void FUN_0014f810(void)
     igMetaObject_RunStaticInit(igDisableExt_Register);
 }
 
-void igDisableExt_Register(void) {
+CallbackArray *igDisableExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igDisableExt_metaObject,
         igContextExt_Register,
@@ -24,7 +24,7 @@ void igDisableExt_Register(void) {
         "igDisableExt",
         0x14, /* instance size */
         0,
-        &igDisableExt_SetAbstractProxy_0014f8a0[0],   /* post-init hook */
+        igDisableExt_SetAbstractProxy_0014f8a0,   /* post-init hook */
         0, /* extra callback item */
         0 /* callback list */
     );

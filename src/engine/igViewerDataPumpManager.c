@@ -1,22 +1,20 @@
 #include "dw4/reflected.h"
 
 int FUN_001e68a0(int, int);
-int igInsightCore_AddToScheduler(int, void *);
-int igObject_IsKindOf(int, int);
+#include "dw4/igInsightCore.h"
+#include "dw4/igObject.h"
 
-extern int g_igDataPumpInfo_metaObject[4];
+#include "dw4/igDataPumpInfo.h"
 
-int igInsightCore_RemoveFromScheduler(int, void *);
-int igObject_Destroy(void *);
 
 void FUN_001e67a0(int, long long);
 
-extern int g_igViewerDataPumpManager_metaObject[4];
+#include "dw4/igViewerDataPumpManager.h"
 
-int igViewerDataPumpManager_AddInfo(void *arg0, int arg1) {
-    if (igObject_IsKindOf(arg1, g_igDataPumpInfo_metaObject[0]) != 0) {
-        FUN_001e68a0(*(int *)((char *)(arg0) + 16), arg1);
-        igInsightCore_AddToScheduler(*(int *)((char *)(arg0) + 12), arg0);
+int igViewerDataPumpManager_AddInfo(igViewerDataPumpManager *self, igObject *info) {
+    if (igObject_IsKindOf(info, g_igDataPumpInfo_metaObject) != 0) {
+        FUN_001e68a0(self->_dataPumpManager, (int)info);
+        igInsightCore_AddToScheduler((struct igInsightCore *)self->_insight, (igObject *)self);
         return 1;
     }
     return 0;
@@ -79,15 +77,15 @@ void igViewerDataPumpManager_RemoveAllInfo(igViewerDataPumpManager *arg0) {
         }
     }
     l->_count = 0;
-    igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
+    igInsightCore_RemoveFromScheduler((struct igInsightCore *)arg0->_insight, (igObject *)arg0);
 }
 
 void igViewerDataPumpManager_Update(int arg0) {
     FUN_001e67a0(*(int *)((char *)(arg0) + 16), *(long long *)((char *)(*(int *)((char *)(arg0) + 12)) + 80));
 }
 
-int Gap__Viewer__igViewerDataPumpManager__vfunc_22(void) {
-    return g_igViewerDataPumpManager_metaObject[0];
+struct igMetaObject *Gap__Viewer__igViewerDataPumpManager__vfunc_22(void) {
+    return g_igViewerDataPumpManager_metaObject;
 }
 
 void igViewerDataPumpManager_Start(void) {

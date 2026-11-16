@@ -25,7 +25,7 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     FUN_0019ac20((int *)p1);
     p2 = &u.b[120];
     FUN_001ab480((int *)p2);
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
     FUN_001ab400((ObjectRefWord *)p2, -1);
     FUN_0019aa90((void * *)p1, -1);
@@ -41,7 +41,7 @@ void **igSmartPointer_igBlendStateAttr_Destruct(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -71,7 +71,7 @@ Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
         if (arg0) {
             arg0->vt = g_igGroup_vtable;
             igSmartPointer_igNodeList_Destruct((void * *)((char *)arg0 + 28), -1);
-            igNode_Destroy((struct T_195970 *)arg0, 0);
+            igNode_Destroy((igNode *)arg0, 0);
         }
         if (arg1 > 0) {
             Memory_FreeBufferAliasC(arg0);
@@ -86,7 +86,7 @@ ObjectRefWord *FUN_001ab400(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
@@ -106,7 +106,7 @@ int *FUN_001ab490(int *p)
 }
 
 void *FUN_001ab4a0(igEnvironmentMapShader2 *arg0) {
-    igObject_InitHeader();
+    igObject_InitHeader((igObject *)arg0);
     arg0->_vtable = (int)(&g_igNamedObject_vtable[0]);
     arg0->_name = 0;
     arg0->_vtable = (int)(&g_igNode_vtable[0]);
@@ -139,9 +139,9 @@ void FUN_001ab540(void)
 
 static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { igBlendFunctionAttr_EnsureRegistered, FUN_00133290, FUN_001352b0, 0 };
 
-void igPsx2EnvironmentMapShader_Register(void) {
+CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2EnvironmentMapShader_metaObject,
         igEnvironmentMapShader2_Register,
@@ -161,9 +161,9 @@ igMetaObject *FUN_001ab5d0(void) {
 }
 
 static FieldFactory g_igPsx2EnvironmentMapShader_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igPsx2EnvironmentMapShader_fieldTable[] = {
     "_envMapBlendFunc",
@@ -189,15 +189,15 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)(g_igPsx2EnvironmentMapShader_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBlendFunctionAttr_GetOrCreateMetaObject();
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igBlendFunctionAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_persistent = 0;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, 1 + temp_s2)));
+    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, 1 + temp_s2)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_001331a0();
     ((igMetaField *)temp_s1_2)->_persistent = 0;
-    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, 2 + temp_s2)));
+    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, 2 + temp_s2)));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_001351d0();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_fieldTable, g_igPsx2EnvironmentMapShader_fieldHandles, g_igPsx2EnvironmentMapShader_fieldOffsets, temp_s2);
@@ -213,7 +213,7 @@ int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {
     for (i = 0; i < n; i++) {
         s = arg0->f20->data[i]->f8;
         s = s != 0 ? s : &emptyString[0];
-        if (strcmp(s, arg1) == 0) {
+        if (strcmp((char *)s, (char *)arg1) == 0) {
             return i;
         }
     }
@@ -227,7 +227,7 @@ int FUN_001ab770(void *arg0, void **arg1, void **arg2) {
     int var_s2;
     int temp_s1;
     int var_s0;
-    temp_v0 = (void *)(((void *)FUN_001a8c30(igObject_GetAllocator())));
+    temp_v0 = (void *)(((void *)FUN_001a8c30((int)igObject_GetAllocator((igObject *)arg0))));
     FUN_001abb50((S_1abb50 *)temp_v0, (A *)arg1);
     temp_s1 = ((DW4VC_96_0 *)(arg1))->vX();
     var_s0 = 0;
@@ -240,14 +240,14 @@ int FUN_001ab770(void *arg0, void **arg1, void **arg2) {
     }
     if (var_s0 != 0) {
         *(int *)((char *)(temp_v0) + 16) = var_s0;
-        ObjectList_AppendRetained(*(int *)((char *)(arg0) + 16), temp_v0);
+        ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 16)), (igObject *)temp_v0);
         *arg2 = temp_v0;
     } else {
         *arg2 = 0;
     }
     ((S1_1ab770 *)temp_v0)->f4 = (int)((int) (((S1_1ab770 *)temp_v0)->f4 - 1));
     if (((unsigned long long) ((long long) ((S1_1ab770 *)temp_v0)->f4 << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((void *)temp_v0);
+        igObject_Destroy((igObject *)temp_v0);
     }
     return var_s0;
 }

@@ -2,7 +2,7 @@ igMetaObject *g_igActorList_metaObject;
 
 igMetaObject *igActorList_GetOrCreateMetaObject(void) {
     if (g_igActorList_metaObject == 0) {
-        g_igActorList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igActorList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igActorList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igActorList_GetMetaObject(void)
 int igActorList_GetVTable(void) {
     struct Obj_1aa660 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igActorList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igActorList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igActorList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igActorList_callbackList[] = { igActor_EnsureRegistered, 0 };
 
-void igActorList_Register(void) {
+CallbackArray *igActorList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActorList_metaObject,
         igObjectList_Register,

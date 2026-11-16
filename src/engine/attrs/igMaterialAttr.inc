@@ -17,9 +17,9 @@ igMetaObject *igMaterialAttr_GetMetaObject(void)
 int igMaterialAttr_GetVTable(void) {
     struct Obj_135c30 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMaterialAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igMaterialAttr_EnsureRegistered(void)
@@ -27,9 +27,9 @@ void igMaterialAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMaterialAttr_Register);
 }
 
-void igMaterialAttr_Register(void) {
+CallbackArray *igMaterialAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMaterialAttr_metaObject,
         igVisualAttribute_Register,
@@ -49,12 +49,12 @@ void thunk_igMaterialAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igMaterialAttr_ctorTable[] = {
-    igFloatMetaField_Create,
-    igVec4fMetaField_CreateInstance,
-    igVec4fMetaField_CreateInstance,
-    igVec4fMetaField_CreateInstance,
-    igVec4fMetaField_CreateInstance,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igMaterialAttr_fieldTable[] = {
     "_shininess",

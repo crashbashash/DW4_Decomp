@@ -32,7 +32,7 @@ int beMeterCtrlOneData_GetVTable(void) {
     obj._node = 0;
     obj._hp = 0;
     obj._mHp = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMeterCtrlOneData_vtable[0];
     igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._mHp, (short)(-1));
     igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._hp, (short)(-1));
@@ -61,7 +61,7 @@ void beMeterCtrlOneData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMeterCtrlOneData_callbackList[] = { beMeterCtrlNode_EnsureRegistered, beDataObjInt_EnsureRegistered, 0 };
 
-void *beMeterCtrlOneData_Register(void) {
+CallbackArray *beMeterCtrlOneData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -153,9 +153,9 @@ void beMeterCtrlOneData_InitFields(void) {
     void *node;
     void *hp;
     void *mHp;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMeterCtrlOneData_metaObject;
+    meta = g_beMeterCtrlOneData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMeterCtrlOneData_ctorTable, 0xE);
     node = (void *)(igMetaObject_GetFieldAt(meta, base));

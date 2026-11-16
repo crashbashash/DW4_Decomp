@@ -21,7 +21,7 @@ int bePoint01Info_GetVTable(void) {
     obj._vtable = (int)&g_bePoint01Info_vtable[0];
     obj._switch = 0;
     obj._dataList_ = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_bePoint01Info_vtable[0];
     igSmartPointer_beGroupKeepList_Destruct((igSmartPointer<igObject> *)&obj._dataList_, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switch, -1);
@@ -49,7 +49,7 @@ void bePoint01Info_EnsureRegistered(void)
 
 static igMetaObjectCallback g_bePoint01Info_callbackList[] = { igSwitch_EnsureRegistered, beGroupKeepList_EnsureRegistered, 0 };
 
-void *bePoint01Info_Register(void) {
+CallbackArray *bePoint01Info_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -92,13 +92,13 @@ void bePoint01Info_InitFields(void) {
     int base;
     void *switchField;
     void *dataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_bePoint01Info_metaObject;
+    meta = g_bePoint01Info_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_bePoint01Info_ctorTable, 2);
     switchField = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchField)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchField)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)beGroupKeepList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataList)->_construct = 1;

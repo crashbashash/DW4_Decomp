@@ -11,9 +11,9 @@ void FUN_001a7080(void)
     igMetaObject_RunStaticInit(igAnimationSequence_Register);
 }
 
-void igAnimationSequence_Register(void) {
+CallbackArray *igAnimationSequence_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAnimationSequence_metaObject,
         igTransformSource_Register,

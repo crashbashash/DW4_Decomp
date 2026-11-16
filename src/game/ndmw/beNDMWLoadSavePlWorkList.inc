@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWLoadSavePlWorkList_metaObject;
 
 igMetaObject *beNDMWLoadSavePlWorkList_GetOrCreateMetaObject(void) {
     if (g_beNDMWLoadSavePlWorkList_metaObject == 0) {
-        g_beNDMWLoadSavePlWorkList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWLoadSavePlWorkList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWLoadSavePlWorkList_metaObject;
 }
@@ -20,7 +20,7 @@ int beNDMWLoadSavePlWorkList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWLoadSavePlWorkList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWLoadSavePlWorkList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beNDMWLoadSavePlWorkList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLoadSavePlWorkList_callbackList[] = { beNDMWLoadSavePlWork_EnsureRegistered, 0 };
 
-void *beNDMWLoadSavePlWorkList_Register(void) {
+CallbackArray *beNDMWLoadSavePlWorkList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

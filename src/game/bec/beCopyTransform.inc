@@ -11,7 +11,7 @@ igMetaObject *beCopyTransform_GetMetaObject(void) {
 
 int beCopyTransform_GetVTable(void) {
     CopyTransformView transform;
-    return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beCopyTransform_EnsureRegistered(void)
@@ -21,12 +21,12 @@ void beCopyTransform_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCopyTransform_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
-void *beCopyTransform_Register(void) {
+CallbackArray *beCopyTransform_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCopyTransform_metaObject,
-        igTransform_Register,
+        (igMetaObjectRegisterFunction)igTransform_Register,
         igTransform_GetPublishedMetaObject,
         beCopyTransform_GetMetaObjectFunction,
         "beCopyTransform",
@@ -59,13 +59,13 @@ static int g_beCopyTransform_fieldOffsets[] = {
 void beCopyTransform_InitFields(void) {
     int base;
     void *srcTransform;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCopyTransform_metaObject;
+    meta = g_beCopyTransform_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCopyTransform_ctorTable, 1);
     srcTransform = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)srcTransform)->_metaObject = igTransform_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)srcTransform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beCopyTransform_fieldTable, g_beCopyTransform_fieldHandles, g_beCopyTransform_fieldOffsets, base);
 }
 

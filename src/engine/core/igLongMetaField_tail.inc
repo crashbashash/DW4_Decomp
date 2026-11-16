@@ -92,7 +92,7 @@ void igMedia_ReleaseMediaList(void) {
     if (o != 0) {
         o[1] = o[1] - 1;
         if ((o[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     g_fileDeviceList.p = 0;

@@ -32,7 +32,7 @@ igMetaObject *Gap__Gui__igOnOffValueObserver__vfunc_22(void) {
 }
 
 void Gap__Gui__igOnOffValueObserver__vfunc_23(void *arg0, int arg1) {
-    igObject_IsKindOf(arg1, igOnOffModel_GetMetaObject());
+    igObject_IsKindOf((igObject *)arg1, igOnOffModel_GetMetaObject());
 }
 
 igMetaObject *Gap__Gui__igRadioGroupSelectedObserver__vfunc_22(void) {
@@ -40,7 +40,7 @@ igMetaObject *Gap__Gui__igRadioGroupSelectedObserver__vfunc_22(void) {
 }
 
 void Gap__Gui__igRadioGroupSelectedObserver__vfunc_23(void *arg0, int arg1) {
-    igObject_IsKindOf(arg1, igRadioGroupModel_GetMetaObject());
+    igObject_IsKindOf((igObject *)arg1, igRadioGroupModel_GetMetaObject());
 }
 
 igMetaObject *Gap__Gui__igRadioGroup__vfunc_22(void) {
@@ -68,7 +68,7 @@ igMetaObject *Gap__Gui__igActiveComponentsObserver__vfunc_22(void) {
 }
 
 void Gap__Gui__igActiveComponentsObserver__vfunc_23(void *arg0, int arg1) {
-    igObject_IsKindOf(arg1, igGuiSystemModel_GetMetaObject());
+    igObject_IsKindOf((igObject *)arg1, igGuiSystemModel_GetMetaObject());
 }
 
 igMetaObject *Gap__Gui__igMousePosObserver__vfunc_22(void) {
@@ -76,7 +76,7 @@ igMetaObject *Gap__Gui__igMousePosObserver__vfunc_22(void) {
 }
 
 void Gap__Gui__igMousePosObserver__vfunc_23(void *arg0, int arg1) {
-    igObject_IsKindOf(arg1, igGuiSystemModel_GetMetaObject());
+    igObject_IsKindOf((igObject *)arg1, igGuiSystemModel_GetMetaObject());
 }
 
 igMetaObject *Gap__Gui__igWindowSizeObserver__vfunc_22(void) {
@@ -84,7 +84,7 @@ igMetaObject *Gap__Gui__igWindowSizeObserver__vfunc_22(void) {
 }
 
 void Gap__Gui__igWindowSizeObserver__vfunc_23(void *arg0, int arg1) {
-    igObject_IsKindOf(arg1, igGuiSystemModel_GetMetaObject());
+    igObject_IsKindOf((igObject *)arg1, igGuiSystemModel_GetMetaObject());
 }
 
 igMetaObject *Gap__Gui__igGuiSystemModel__vfunc_22(void) {
@@ -120,7 +120,7 @@ int Gap__Gui__igDefaultAspect__vfunc_22(void) {
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_23(igDefaultAspect *self, int model) {
-    igObject_IsKindOf(model, igGuiComponentModel_GetMetaObject());
+    igObject_IsKindOf((igObject *)model, igGuiComponentModel_GetMetaObject());
 }
 
 igMetaObject *Gap__Gui__igOnOffColorChanger__vfunc_22(void) {
@@ -265,7 +265,7 @@ void Gap__Gui__igCharMetricsList__vfunc_18(igCharMetricsList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve(self, count, 0x28);
+        List_Reserve((igDataList *)self, count, 0x28);
     }
 }
 

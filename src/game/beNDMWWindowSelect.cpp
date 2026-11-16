@@ -1,21 +1,13 @@
 #include "dw4/reflected.h"
 #include "dw4/beNDMWWindowSelect.h"
 #include "dw4/beNDMWWindowSetupDispatchView.h"
-
-extern "C" int beMessenger_AppendBool(int messenger, int value);
-extern "C" int beMessenger_AppendInt(int messenger, int value);
-extern "C" int beMessenger_AppendString(int messenger, const char *text);
-extern "C" int beMessenger_AppendVec3(int messenger, float *vec);
-extern "C" int beMessenger_DispatchSelected(int messenger, const char *message);
-extern "C" int beMessenger_GetBool(int messenger, int index);
-extern "C" int beMessenger_GetInt(int messenger, int index);
-extern "C" int beMessenger_SelectReceivers(int messenger, const char *type, int name, int playerNo);
-extern "C" int beMessenger_SendNamed(int messenger, const char *type, int name, int playerNo, const char *message);
-extern "C" void *StringPool_Allocate(int size);
-extern "C" void *StringPool_Construct(void *pool);
-extern "C" char *StringPool_Intern(void *pool, const char *text);
-extern "C" int StringChunk_ReleaseHeader(int chunk, int *header);
-extern "C" void *g_stringPool[4];
+#include "dw4/StringPool.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWStatusSelect00.h"
+#include "dw4/beNDMWStatusSelect01.h"
+#include "dw4/beNDMWStatusSelectE0.h"
+#include "dw4/beNDMWStatusSelectE1.h"
+#include "dw4/beNDMWWindow.h"
 
 extern "C" char SELECTCTRL[];
 extern "C" char NOCANCEL[];
@@ -42,19 +34,14 @@ extern "C" char i_stcursor01[];
 extern "C" char i_stcursor02[];
 extern "C" char i_stmesscr[];
 
-extern "C" int g_beNDMWStatusSelectE1_metaObject[4];
-extern "C" int g_beNDMWStatusSelectE0_metaObject[4];
-extern "C" int g_beNDMWStatusSelect01_metaObject[4];
-extern "C" int g_beNDMWStatusSelect00_metaObject[4];
-
 /* The pooled-string singleton, created on first use. */
-static inline void *StringPool_Get(void) {
-    if (g_stringPool[0] == 0) {
-        void *pool = StringPool_Allocate(0x10);
+static inline StringPool *StringPool_Get(void) {
+    if (g_stringPool == 0) {
+        StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
         if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    return g_stringPool[0];
+    return g_stringPool;
 }
 
 /* Drops one share of a pooled string token (reference count at token[-1], chunk header at token[-2]). */
@@ -63,7 +50,7 @@ static inline void StringToken_Release(char *token) {
         int *header = (int *)token - 2;
         int refs = ((int *)token)[-1] - 1;
         ((int *)token)[-1] = refs;
-        if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+        if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
     }
 }
 
@@ -76,6 +63,7 @@ public:
     void Assign(char *fresh) { StringToken_Release(p); p = fresh; }
     ~StringRef() { StringToken_Release(p); }
 };
+/* kept local: StringList_AppendRetained's holder type is not shared yet (open item A7; the definer takes IniStrRef). */
 extern "C" int StringList_AppendRetained(int list, StringRef *token);
 
 /* Appends a pooled copy of `text` to a window string list; a null text appends a null token. */
@@ -89,12 +77,6 @@ extern "C" int StringList_AppendRetained(int list, StringRef *token);
     StringRef held(token); \
     StringList_AppendRetained(list, &held); }
 
-extern "C" int beNDMWWindow_ClearQueuedText(beNDMWWindowSelect *self);
-extern "C" int beNDMWWindow_PlayQueuedModelClose(beNDMWWindowSelect *self);
-extern "C" int beNDMWWindow_PollCloseComplete(beNDMWWindowSelect *self);
-extern "C" int beNDMWWindow_PresentModelAtOrigin(void *self, const char *model, int id, const char *sequence, const char *close);
-extern "C" int beNDMWWindow_RunMessageScript(void *self, const char *script, int entCode);
-extern "C" int beNDMWWindow_QueueText(void *self, const char *type, const char *name, const char *text, const char *align);
 extern "C" void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *self);
 extern "C" void beNDMWStatusSelect00_Setup(beNDMWStatusSelect00 *self);
 extern "C" void beNDMWStatusSelect01_Setup(beNDMWStatusSelect01 *self);
@@ -118,36 +100,36 @@ void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *view) {
     switch (s->_st0) {
     case 0:
         view->Setup();
-        beMessenger_SelectReceivers(s->_messenger, SELECTCTRL, s->_infoName, s->_playerNo);
-        beMessenger_AppendInt(s->_messenger, s->_selectMax);
-        beMessenger_AppendInt(s->_messenger, s->_startPoint);
+        beMessenger_SelectReceivers((beMessenger *)s->_messenger, SELECTCTRL, (const char *)s->_infoName, s->_playerNo);
+        beMessenger_AppendInt((beMessenger *)s->_messenger, s->_selectMax);
+        beMessenger_AppendInt((beMessenger *)s->_messenger, s->_startPoint);
         offset[0] = s->_offsetPos[0];
         offset[1] = s->_offsetPos[1];
         offset[2] = s->_offsetPos[2];
-        beMessenger_AppendVec3(s->_messenger, offset);
+        beMessenger_AppendVec3((beMessenger *)s->_messenger, offset);
         if (s->_isNoCancel != 0) {
-            beMessenger_AppendString(s->_messenger, NOCANCEL);
+            beMessenger_AppendString((beMessenger *)s->_messenger, NOCANCEL);
         }
         decide = *(igDataList **)&s->_decideList; /* matching construct: reading the field as a pointer lvalue keeps the loop's per-pass reloads */
         if (decide != 0) {
             i = 0;
             if (0 < decide->_count) {
                 do {
-                    beMessenger_AppendBool(s->_messenger, ((unsigned char *)(((igDataList *)s->_decideList)->_data + i))[0] /* matching construct: int _data + i keeps retail addu operand order */);
+                    beMessenger_AppendBool((beMessenger *)s->_messenger, ((unsigned char *)(((igDataList *)s->_decideList)->_data + i))[0] /* matching construct: int _data + i keeps retail addu operand order */);
                     i++;
                 } while (i < ((igDataList *)s->_decideList)->_count);
             }
         }
-        beMessenger_DispatchSelected(s->_messenger, GENERATE_4);
+        beMessenger_DispatchSelected((beMessenger *)s->_messenger, GENERATE_4);
         s->_st0 = s->_st0 + 1;
         s->_st3 = 0;
         s->_st2 = 0;
         s->_st1 = 0;
     case 1:
-        beMessenger_SendNamed(s->_messenger, SELECTCTRL, s->_infoName, s->_playerNo, GETSELECT);
-        ((beNDMWWindow *)s->_mother)->_retCode = beMessenger_GetInt(s->_messenger, 0);
-        beMessenger_SendNamed(s->_messenger, SELECTCTRL, s->_infoName, s->_playerNo, ISEND);
-        if ((beMessenger_GetBool(s->_messenger, 0) & 0xFF) == 0) {
+        beMessenger_SendNamed((beMessenger *)s->_messenger, SELECTCTRL, (const char *)s->_infoName, s->_playerNo, GETSELECT);
+        ((beNDMWWindow *)s->_mother)->_retCode = beMessenger_GetInt((beMessenger *)s->_messenger, 0);
+        beMessenger_SendNamed((beMessenger *)s->_messenger, SELECTCTRL, (const char *)s->_infoName, s->_playerNo, ISEND);
+        if (beMessenger_GetBool((beMessenger *)s->_messenger, 0) == 0) {
             break;
         }
         s->_st0 = s->_st0 + 1;
@@ -155,34 +137,34 @@ void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *view) {
         s->_st2 = 0;
         s->_st1 = 0;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(s);
-        beNDMWWindow_ClearQueuedText(s);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)s);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)s);
         s->_st0 = s->_st0 + 1;
         s->_st3 = 0;
         s->_st2 = 0;
         s->_st1 = 0;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(s) != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)s) != 0) {
             s->_isRun = 0;
         }
         break;
     case 4:
         if (beNDMWWindowSelect_CanRequestFO2TOP(s)) {
-            beMessenger_SelectReceivers(s->_messenger, SELECTCTRL, s->_infoName, s->_playerNo);
-            beMessenger_AppendInt(s->_messenger, s->_selectMax);
+            beMessenger_SelectReceivers((beMessenger *)s->_messenger, SELECTCTRL, (const char *)s->_infoName, s->_playerNo);
+            beMessenger_AppendInt((beMessenger *)s->_messenger, s->_selectMax);
             decide = *(igDataList **)&s->_decideList; /* matching construct: reading the field as a pointer lvalue keeps the loop's per-pass reloads */
             if (decide != 0) {
                 i = 0;
                 if (0 < decide->_count) {
                     do {
-                        beMessenger_AppendBool(s->_messenger, ((unsigned char *)(((igDataList *)s->_decideList)->_data + i))[0] /* matching construct: int _data + i keeps retail addu operand order */);
+                        beMessenger_AppendBool((beMessenger *)s->_messenger, ((unsigned char *)(((igDataList *)s->_decideList)->_data + i))[0] /* matching construct: int _data + i keeps retail addu operand order */);
                         i++;
                     } while (i < ((igDataList *)s->_decideList)->_count);
                 }
             }
-            beMessenger_DispatchSelected(s->_messenger, FO2TOP);
-            beMessenger_SendNamed(s->_messenger, SELECTCTRL, s->_infoName, s->_playerNo, GETSELECT);
-            ((beNDMWWindow *)s->_mother)->_retCode = beMessenger_GetInt(s->_messenger, 0);
+            beMessenger_DispatchSelected((beMessenger *)s->_messenger, FO2TOP);
+            beMessenger_SendNamed((beMessenger *)s->_messenger, SELECTCTRL, (const char *)s->_infoName, s->_playerNo, GETSELECT);
+            ((beNDMWWindow *)s->_mother)->_retCode = beMessenger_GetInt((beMessenger *)s->_messenger, 0);
         }
         s->_st0 = 1;
         s->_st3 = 0;
@@ -193,20 +175,20 @@ void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *view) {
 }
 
 bool beNDMWWindowSelect_CanRequestFO2TOP(beNDMWWindowSelect *self){
-    beMessenger_SendNamed(self->_messenger,SELECTCTRL,self->_infoName,self->_playerNo,ISFO2TOP);
-    return !beMessenger_GetBool(self->_messenger,0);
+    beMessenger_SendNamed((beMessenger *)self->_messenger,SELECTCTRL,(const char *)self->_infoName,self->_playerNo,ISFO2TOP);
+    return !beMessenger_GetBool((beMessenger *)self->_messenger,0);
 }
 
 void beNDMWStatusSelect00_Setup(beNDMWStatusSelect00 *self) {
     char *cursor;
-    beNDMWWindow_PresentModelAtOrigin(self, i_stmenu01, 0, SQ_3LINEUPOPEN, SQ_CLOSE_4);
+    beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu01, 0, SQ_3LINEUPOPEN, SQ_CLOSE_4);
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT08)
     INTERN_APPEND(self->_textCloseNameList, font000)
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT08)
     INTERN_APPEND(self->_textCloseNameList, font001)
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT08)
     INTERN_APPEND(self->_textCloseNameList, font002)
-    beNDMWWindow_RunMessageScript(self, txt_status_lua, 0xF);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua, 0xF);
     cursor = StringPool_Intern(StringPool_Get(), i_stcursor02);
     StringToken_Release((char *)self->_infoName);
     self->_infoName = (int)cursor;
@@ -233,15 +215,15 @@ void beNDMWStatusSelect01_Setup(beNDMWStatusSelect01 *self) {
         self->_selectMax = 4;
         break;
     }
-    beNDMWWindow_PresentModelAtOrigin(self, i_stmenu01, 0, sequence.p, SQ_CLOSE_4);
+    beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu01, 0, sequence.p, SQ_CLOSE_4);
     }
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font100, " ", "LEFT");
-    beNDMWWindow_QueueText(self, STWINFONT09, font000, " ", "LEFT");
-    beNDMWWindow_QueueText(self, STWINFONT09, font001, " ", "LEFT");
-    beNDMWWindow_QueueText(self, STWINFONT09, font002, " ", "LEFT");
-    beNDMWWindow_QueueText(self, STWINFONT09, font003, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_2, font100, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT09, font000, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT09, font001, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT09, font002, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT09, font003, " ", "LEFT");
     if (self->_entCode > 0) {
-        beNDMWWindow_RunMessageScript(self, txt_status_lua, self->_entCode);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua, self->_entCode);
     }
     cursor = StringPool_Intern(StringPool_Get(), i_stcursor02);
     StringToken_Release((char *)self->_infoName);
@@ -254,12 +236,12 @@ void beNDMWStatusSelect01_Setup(beNDMWStatusSelect01 *self) {
 
 void beNDMWStatusSelectE0_Setup(beNDMWStatusSelectE0 *self) {
     char *cursor;
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font100, " ", "LEFT");
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font000, " ", "LEFT");
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font001, " ", "LEFT");
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font002, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_2, font100, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_2, font000, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_2, font001, " ", "LEFT");
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_2, font002, " ", "LEFT");
     if (self->_entCode > 0) {
-        beNDMWWindow_RunMessageScript(self, txt_status_lua, self->_entCode);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua, self->_entCode);
     }
     cursor = StringPool_Intern(StringPool_Get(), i_stmesscr);
     StringToken_Release((char *)self->_infoName);
@@ -280,22 +262,22 @@ void beNDMWStatusSelectE1_Setup(beNDMWStatusSelectE1 *self) {
 
 int beNDMWStatusSelectE1_GetMeta(void)
 {
-    return g_beNDMWStatusSelectE1_metaObject[0];
+    return (int)g_beNDMWStatusSelectE1_metaObject;
 }
 
 int beNDMWStatusSelectE0_GetMeta(void)
 {
-    return g_beNDMWStatusSelectE0_metaObject[0];
+    return (int)g_beNDMWStatusSelectE0_metaObject;
 }
 
 int beNDMWStatusSelect01_GetMeta(void)
 {
-    return g_beNDMWStatusSelect01_metaObject[0];
+    return (int)g_beNDMWStatusSelect01_metaObject;
 }
 
 int beNDMWStatusSelect00_GetMeta(void)
 {
-    return g_beNDMWStatusSelect00_metaObject[0];
+    return (int)g_beNDMWStatusSelect00_metaObject;
 }
 
 int beNDMWWindowSelect_GetMeta(void)

@@ -4,34 +4,23 @@
 #include "dw4/igobject_release.h"
 #include "dw4/igControllerDispatchView.h"
 #include "dw4/bePadManager.h"
+#include "dw4/bePadData.h"
+#include "dw4/beSystem.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igEventDispatcher.h"
+#include "dw4/igHotKeyEventReceiver.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/igViewerSceneInfoManager.h"
 
-extern "C" void igInsightCore_AddToScheduler(int, char *);
-extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
-extern "C" void *igInsightCore_FindManager(...);
-extern "C" void *bePadData_Create(...);
-extern "C" int igEventDispatcher_AddReceiver(...);
-extern "C" int igEventDispatcher_AddReceiverOrder(...);
-extern "C" int igHotKeyEventReceiver_RemoveBinding(...);
-extern "C" int igViewerSceneInfoManager_CycleGuiVisibility(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" int igEventDispatcher_RemoveReceiver(int, int);
-extern "C" int igEventDispatcher_RemoveReceiverOrder(int, int, int);
 extern "C" int bePadManager_AddInfo(void);
 extern "C" void bePadManager_RemoveAllInfo(void);
 extern "C" igMetaObject *bePadManager_GetMeta(void);
-extern "C" int bePadData_UpdateButtons(...);
 extern "C" void bePadManager_Activate(bePadManager *self, int unusedArg);
 extern "C" void bePadManager_Deactivate(bePadManager *self, int unusedArg);
-extern "C" int kIGMemoryPoolHandleUser0[4];
-extern "C" int g_beSystem_metaObject[4];
-extern "C" int g_igViewerSceneInfoManager_metaObject[4];
-extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void bePadManager_Start(bePadManager *self);
 extern "C" void bePadManager_Stop(bePadManager *self);
-extern "C" int bePadData_UpdateLeftStick(bePadData *, igVec2f *);
-extern "C" int bePadData_UpdateRightStick(bePadData *, igVec2f *);
 extern "C" void bePadManager_Update(bePadManager *self);
 
 /* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
@@ -40,7 +29,7 @@ extern "C" void bePadManager_Update(bePadManager *self);
  * unused. */
 void bePadManager_Activate(bePadManager *self, int unusedArg)
 {
-    igInsightCore_AddToScheduler(self->_insight, (char *)self);
+    igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 /* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
@@ -48,11 +37,11 @@ void bePadManager_Activate(bePadManager *self, int unusedArg)
  * is unused. */
 void bePadManager_Deactivate(bePadManager *self, int unusedArg)
 {
-    igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 void bePadManager_Start(bePadManager *self) {
-    igObject *system = (igObject *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    igObject *system = (igObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
     if (system != 0) system->_refCount = system->_refCount + 1;
     {
         igObject *old = (igObject *)self->_system;
@@ -60,24 +49,24 @@ void bePadManager_Start(bePadManager *self) {
     }
     self->_system = (int)system;
     for (int i = 0; i < 5; i++) {
-        int ownerAllocator = igObject_GetAllocator(self);
-        igSmartPointer<igObject> padData((igObject *)bePadData_Create(g_useOwnerAllocator != 0 ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])));
-        ObjectList_AppendRetained(self->_padList, padData.p);
+        int ownerAllocator = (int)igObject_GetAllocator(self);
+        igSmartPointer<igObject> padData((igObject *)bePadData_Create((int)(g_useOwnerAllocator != 0 ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0))));
+        ObjectList_AppendRetained((igObjectList *)self->_padList, padData.p);
     }
     igInsightCore *insight = (igInsightCore *)self->_insight;
     int dispatcher = insight->_dispatcher;
-    igEventDispatcher_AddReceiverOrder(dispatcher, self->_kbReceiver, insight->_windowResizeReceiver);
-    igEventDispatcher_AddReceiver(dispatcher, self->_kbReceiver);
-    igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+    igEventDispatcher_AddReceiverOrder((igEventDispatcher *)dispatcher, (igObject *)self->_kbReceiver, (igObject *)insight->_windowResizeReceiver);
+    igEventDispatcher_AddReceiver((igEventDispatcher *)dispatcher, (igObject *)self->_kbReceiver);
+    igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
     int hotKeys = viewer->_hotKeyReceiver;
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 15);
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 3);
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 0);
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 10);
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 11);
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 1);
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 2);
-    igHotKeyEventReceiver_RemoveBinding(hotKeys, 12);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 15);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 3);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 0);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 10);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 11);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 1);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 2);
+    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 12);
     igViewerSceneInfoManager_CycleGuiVisibility(viewer);
 }
 
@@ -87,8 +76,8 @@ void bePadManager_Stop(bePadManager *self) {
 
     insight = (igInsightCore *)self->_insight;
     dispatcher = insight->_dispatcher;
-    igEventDispatcher_RemoveReceiverOrder(dispatcher, self->_kbReceiver, insight->_windowResizeReceiver);
-    igEventDispatcher_RemoveReceiver(dispatcher, self->_kbReceiver);
+    igEventDispatcher_RemoveReceiverOrder((igEventDispatcher *)dispatcher, (igObject *)self->_kbReceiver, (igObject *)insight->_windowResizeReceiver);
+    igEventDispatcher_RemoveReceiver((igEventDispatcher *)dispatcher, (igObject *)self->_kbReceiver);
 }
 
 int bePadManager_AddInfo(void) {
@@ -135,16 +124,16 @@ void bePadManager_Update(bePadManager *self) {
                 if (connected != 0) {
                     pad->getStick(0, &stick.x, &stick.y);
                     left.x = stick.x; left.y = stick.y;
-                    bePadData_UpdateLeftStick(slot, &left);
+                    bePadData_UpdateLeftStick(slot, (float *)&left);
                     pad->getStick(1, &stick.x, &stick.y);
                     right.x = stick.x; right.y = stick.y;
-                    bePadData_UpdateRightStick(slot, &right);
+                    bePadData_UpdateRightStick(slot, (float *)&right);
                     bePadData_UpdateButtons(slot, pad->getButtons());
                 } else {
                     noLeft.x = 0; noLeft.y = 0;
-                    bePadData_UpdateLeftStick(slot, &noLeft);
+                    bePadData_UpdateLeftStick(slot, (float *)&noLeft);
                     noRight.x = 0; noRight.y = 0;
-                    bePadData_UpdateRightStick(slot, &noRight);
+                    bePadData_UpdateRightStick(slot, (float *)&noRight);
                     bePadData_UpdateButtons(slot, 0);
                 }
             }

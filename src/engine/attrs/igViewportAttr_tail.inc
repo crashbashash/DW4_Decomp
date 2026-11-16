@@ -1,4 +1,4 @@
-void Gap__Attrs__igViewportAttr__vfunc_24(int *arg0, int arg1) {
+void Gap__Attrs__igViewportAttr__vfunc_24(int *arg0, igPsx2VisualContext *arg1) {
     Gap__Gfx__igPsx2VisualContext__vfunc_185(arg1, arg0[3], arg0[4], arg0[5], arg0[6], *(float *)&arg0[8], *(float *)&arg0[9]);
 }
 
@@ -34,7 +34,7 @@ extern "C" igObjectPointer igMetaObject_CreateInstanceRef(igMetaObject *meta, in
 
 /* The object when it is an igAttr, otherwise none. */
 static inline igObject *asAttr(igObject *object) {
-    if (object != 0 && igObject_IsKindOf((Item *)object, (int)g_igAttr_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf((Item *)object, (igMetaObject *)g_igAttr_metaObject) != 0) {
         return object;
     }
     return 0;
@@ -46,7 +46,7 @@ extern "C" igObjectPointer Gap__Attrs__igVisualContextAttrDefaultManager__create
     if (meta == 0 || self->_visualContext == 0) {
         return igObjectPointer(0, kRetainReference);
     }
-    igObjectPointer created = igMetaObject_CreateInstanceRef(meta, igObject_GetAllocator(self));
+    igObjectPointer created = igMetaObject_CreateInstanceRef(meta, (int)igObject_GetAllocator(self));
     igObject *object = asAttr(created.get());
     igObjectPointer attr(object, kRetainReference);
     if (attr != 0) {

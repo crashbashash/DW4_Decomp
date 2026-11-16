@@ -16,7 +16,7 @@ int beAction2InfoList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beAction2InfoList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beAction2InfoList_EnsureRegistered(void)
@@ -26,7 +26,7 @@ void beAction2InfoList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beAction2InfoList_callbackList[] = { beAction2Info_EnsureRegistered, 0 };
 
-void *beAction2InfoList_Register(void) {
+CallbackArray *beAction2InfoList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

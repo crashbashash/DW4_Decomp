@@ -11,6 +11,16 @@
 #include "dw4/beNDMWItemYellowArmor.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igRandomNumberDispatchView.h"
+#include "dw4/be.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beDataBase.h"
+#include "dw4/beLua.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWGameRam.h"
+#include "dw4/beNDMWMdlPEBaseInfoWork.h"
+#include "dw4/igInsightCore.h"
+#include <string.h>
+
 
 /* The _kindNo each beNDMWItem* class stamps on its items. */
 enum ItemKind {
@@ -38,39 +48,8 @@ enum ItemKind {
 #define ITEM_DISK_COUNT_SHIFT 16
 #define ITEM_DISK_COUNT_MASK 0xF
 
-/* A GAMERAM player or common record field found by name: its value sits after the 12-byte header. */
-typedef struct IntProperty {
-    char _header[12];
-    int _value;
-} IntProperty;
-typedef struct IntListProperty {
-    char _header[12];
-    igDataList *_value;
-} IntListProperty;
 
-extern "C" void beMessenger_SendNamed(...);
-extern "C" void *beMessenger_GetObject(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_AppendString(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_SendGroup(...);
-extern "C" int strcmp(const char *a, const char *b);
-extern "C" int igInsightCore_FindManager(...);
-extern "C" int beLua__RunNamedChunk(...);
-extern "C" int beNDMWGameRam_ChangeHp(...);
-extern "C" int beNDMWGameRam_ChangeMp(...);
-extern "C" int beNDMWMdlPEBaseInfoWork_IsPoisoned(...);
-extern "C" int beNDMWMdlPEBaseInfoWork_CurePoison(...);
-extern "C" int SYSsetGateStage(...);
-extern "C" void *igProperty_GetRecordIntList(...);
-extern "C" void *igProperty_GetRecord(...);
-extern "C" int beDataBase_GetRecordInt(beDataBase *, int, const char *);
-extern "C" unsigned long long beDataBase_GetRecordBool(beDataBase *, int, const char *);
-extern "C" char *beDataBase_GetRecordString(beDataBase *, int, const char *);
 
-extern "C" int g_beLua_metaObject[4];
-extern "C" int g_beNDMWGameRam_metaObject[4];
 
 /* Dispatch-only ABI projection of an item: MW's two-word vtable prefix plus 21 slots puts the
  * database selector (vfunc_21) at 92. */
@@ -143,7 +122,7 @@ extern "C" int beNDMWItemWeapon_GetMeta(void);
  * answers with. */
 beDataBase *beNDMWItemBase_RequestDataBase(beNDMWItemBase *self, beNDMWStatus *status,
                                            const char *name) {
-    void *messenger = (void *)status->_messenger;
+    beMessenger *messenger = (beMessenger *)status->_messenger;
     beMessenger_SendNamed(messenger, "DATABASE", name, 0, "GETDATABASE");
     return (beDataBase *)beMessenger_GetObject(messenger, 0);
 }
@@ -456,7 +435,7 @@ int beNDMWItemDisk_Use(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerN
 
     switch (recNo) {
     case 9: {
-        int ram = igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]);
+        beNDMWGameRam *ram = (beNDMWGameRam *)igInsightCore_FindManager((igInsightCore *)gameRam->_insight, g_beNDMWGameRam_metaObject);
         beNDMWGameRam_ChangeHp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "HP"), -1);
         beNDMWGameRam_ChangeMp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "MP"));
         return 0;
@@ -465,33 +444,33 @@ int beNDMWItemDisk_Use(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerN
     switch (recNo) {
     case 0: case 1: case 2: {
         int hp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "HP");
-        beNDMWGameRam_ChangeHp(igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, hp, -1);
+        beNDMWGameRam_ChangeHp((beNDMWGameRam *)igInsightCore_FindManager((igInsightCore *)gameRam->_insight, g_beNDMWGameRam_metaObject), playerNo, hp, -1);
         return 0;
     }
     }
     switch (recNo) {
     case 3: case 4: case 5: {
         int mp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "MP");
-        beNDMWGameRam_ChangeMp(igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, mp);
+        beNDMWGameRam_ChangeMp((beNDMWGameRam *)igInsightCore_FindManager((igInsightCore *)gameRam->_insight, g_beNDMWGameRam_metaObject), playerNo, mp);
         return 0;
     }
     }
     switch (recNo) {
     case 6: {
-        int messenger = gameRam->_messenger;
+        beMessenger *messenger = (beMessenger *)gameRam->_messenger;
         beMessenger_SendNamed(messenger, "PLAYER", 0, playerNo, "GETPEBASEWORK");
         void *model = beMessenger_GetObject(messenger, 0);
         beNDMWMdlPEBaseInfoWork *work = (beNDMWMdlPEBaseInfoWork *)beMessenger_GetObject(messenger, 1);
         if (beNDMWMdlPEBaseInfoWork_IsPoisoned(work) != 0) {
             int endurance = work->_poisonEndurance;
             if ((8 - endurance) >= (int)(systemRandom(gameRam->_system)->genrand() % 10U)) {
-                beNDMWMdlPEBaseInfoWork_CurePoison(work, model);
+                beNDMWMdlPEBaseInfoWork_CurePoison(work, (beBaseInfoRam *)model);
             }
         }
         return 0;
     }
     case 7: {
-        int messenger = gameRam->_messenger;
+        beMessenger *messenger = (beMessenger *)gameRam->_messenger;
         beMessenger_SelectGroup(messenger, "GAMERAM");
         beMessenger_AppendString(messenger, "P2PKOUKAMAGIC");
         beMessenger_AppendInt(messenger, playerNo);
@@ -501,9 +480,9 @@ int beNDMWItemDisk_Use(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerN
         return 0;
     }
     case 8: {
-        int lua = igInsightCore_FindManager(gameRam->_insight, g_beLua_metaObject[0]);
+        igObject *lua = igInsightCore_FindManager((igInsightCore *)gameRam->_insight, g_beLua_metaObject);
         SYSsetGateStage("Player", playerNo);
-        beLua__RunNamedChunk(lua, "gatedisc.lua", 0);
+        beLua__RunNamedChunk((beLua *)lua, "gatedisc.lua", 0);
         return 1;
     }
     }
@@ -532,18 +511,18 @@ int beNDMWItemInstant_Use(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int p
     int amount;
     igDataList *counters;
     int high;
-    int messenger;
+    beMessenger *messenger;
     int common;
     int bits;
     int player;
     int up;
-    IntProperty *field;
-    IntListProperty *upcnt;
+    beDataObjInt *field;
+    beDataObjIntList *upcnt;
     int counter;
     int roll;
     int count;
 
-    messenger = gameRam->_messenger;
+    messenger = (beMessenger *)gameRam->_messenger;
     beMessenger_SelectGroup(messenger, "GAMERAM");
     beMessenger_AppendInt(messenger, playerNo);
     beMessenger_DispatchSelected(messenger, "GETPLAYER");
@@ -554,12 +533,12 @@ int beNDMWItemInstant_Use(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int p
     case 0: {
         beMessenger_SendGroup(messenger, "GAMERAM", "GETPLAYER1");
         leader = (int)beMessenger_GetObject(messenger, 0);
-        level = ((IntProperty *)igProperty_GetRecord(leader, "LEVEL"))->_value;
-        rate = ((IntProperty *)igProperty_GetRecord(leader, "BITRITSU"))->_value;
+        level = igProperty_GetRecord((igObject *)leader, "LEVEL")->_data;
+        rate = igProperty_GetRecord((igObject *)leader, "BITRITSU")->_data;
         beMessenger_SendGroup(messenger, "GAMERAM", "GETCOMMON");
         common = (int)beMessenger_GetObject(messenger, 0);
-        bits = ((IntProperty *)igProperty_GetRecord(player, "BIT"))->_value;
-        igProperty_GetRecord(common, "DIFFICULTY");
+        bits = igProperty_GetRecord((igObject *)player, "BIT")->_data;
+        igProperty_GetRecord((igObject *)common, "DIFFICULTY");
         if (level < 19) { low = 10; high = 55; }
         else if (level < 39) { low = 55; high = 100; }
         else if (level < 60) { low = 87; high = 195; }
@@ -573,15 +552,15 @@ int beNDMWItemInstant_Use(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int p
             roll = draw + low;
         }
         amount = roll * (rate + 100) / 100;
-        field = (IntProperty *)igProperty_GetRecord(player, "BIT");
-        field->_value = bits + amount;
+        field = igProperty_GetRecord((igObject *)player, "BIT");
+        field->_data = bits + amount;
         self->_value = amount;
         break;
     }
     case 1: case 2: case 3: {
-        int xdata = ((IntProperty *)igProperty_GetRecord(player, "XDATA"))->_value;
-        field = (IntProperty *)igProperty_GetRecord(player, "XDATA");
-        field->_value = xdata + up;
+        int xdata = igProperty_GetRecord((igObject *)player, "XDATA")->_data;
+        field = igProperty_GetRecord((igObject *)player, "XDATA");
+        field->_data = xdata + up;
         break;
     }
     default:
@@ -601,12 +580,12 @@ int beNDMWItemInstant_Use(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int p
         case 18: case 19: counter = 9; break;
         case 20: case 21: counter = 10; break;
         }
-        upcnt = (IntListProperty *)igProperty_GetRecordIntList(player, "UPCNT");
+        upcnt = igProperty_GetRecordIntList((igObject *)player, "UPCNT");
         {
-            int current = ((int *)upcnt->_value->_data)[counter];
+            int current = ((int *)((igDataList *)upcnt->_data)->_data)[counter];
             count = current + up;
         }
-        counters = ((IntListProperty *)igProperty_GetRecordIntList(player, "UPCNT"))->_value;
+        counters = (igDataList *)igProperty_GetRecordIntList((igObject *)player, "UPCNT")->_data;
         if (counters->_count != 0 && counter >= 0 && counter < counters->_count) {
             ((int *)counters->_data)[counter] = count;
         }

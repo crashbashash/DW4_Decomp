@@ -4,12 +4,12 @@ igMetaField *g_igColorAttr_colorPackedMetaField;
 
 igColorAttr *igColorAttr_CreateInstance(int allocator) {
     igColorAttr_EnsureRegistered();
-    return (igColorAttr *)igMetaObject_CreateInstance(*(int *)0x55F2E0, allocator);
+    return (igColorAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F2E0, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igColorAttr_GetOrCreateMetaObject(void) {
     if (g_igColorAttr_metaObject == 0) {
-        g_igColorAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igColorAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igColorAttr_metaObject;
 }
@@ -25,9 +25,9 @@ igMetaObject *igColorAttr_GetMetaObject(void)
 int igColorAttr_GetVTable(void) {
     struct Obj_138fc0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igColorAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igColorAttr_EnsureRegistered(void)
@@ -35,9 +35,9 @@ void igColorAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igColorAttr_Register);
 }
 
-void igColorAttr_Register(void) {
+CallbackArray *igColorAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igColorAttr_metaObject,
         igVisualAttribute_Register,
@@ -57,8 +57,8 @@ void thunk_igColorAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igColorAttr_ctorTable[] = {
-    igVec4fMetaField_CreateInstance,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igColorAttr_fieldTable[] = {
     "_color",

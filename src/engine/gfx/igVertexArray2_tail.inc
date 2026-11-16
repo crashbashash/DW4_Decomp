@@ -1,13 +1,13 @@
-igVertexData *igVertexArray2__FindVertexData(A_15f430 *arg0, int arg1, int arg2) {
+igVertexData *igVertexArray2__FindVertexData(igVertexArray2 *self, int componentType, int componentIndex) {
     void *res;
     int i;
     O_15f430 *o;
     int n;
     res = 0;
-    n = arg0->l->n;
+    n = ((VL *)self->_objList)->n;
     for (i = 0; i < n; i++) {
-        o = (O_15f430 *)dw4_cast_or_null((char *)arg0->l->data[i], (int *)&g_igVertexData_metaObject);
-        if (arg1 == o->k0 && arg2 == o->k1) {
+        o = (O_15f430 *)dw4_cast_or_null((char *)((VL *)self->_objList)->data[i], (int *)&g_igVertexData_metaObject);
+        if (componentType == o->k0 && componentIndex == o->k1) {
             res = o;
             break;
         }
@@ -28,14 +28,14 @@ void FUN_0015f660(igVertexArray2 *arg0, igSmartPointer<Rc_17f2b0> list) {
             r = 0;
         }
         if (r != 0 && FUN_00164d60((int)arg0, (A_164d60 *)r) != 0) {
-            ObjectList_AppendRetained(list.p, r);
+            ObjectList_AppendRetained((igObjectList *)list.p, (igObject *)r);
         }
     }
 }
 
 /* matching construct: _data is a 4-byte reference field; the casts give the typed views (no layout effect) */
 int Gap__Gfx__igVertexArray2__vfunc_25(int arg0, int arg1) {
-    igVertexData *h = (igVertexData *)igVertexArray2__FindVertexData((A_15f430 *)arg0, 1, arg1);
+    igVertexData *h = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0, 1, arg1);
     if (h != 0) {
         int t = g_igVec3fList_metaObject[0];
         if (t == ((C_15f730 *)h->_data)->v20()) {

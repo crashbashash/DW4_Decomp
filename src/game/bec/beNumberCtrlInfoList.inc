@@ -13,7 +13,7 @@ int beNumberCtrlInfoList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beNumberCtrlInfoList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beNumberCtrlInfoList_EnsureRegistered(void)
@@ -23,7 +23,7 @@ void beNumberCtrlInfoList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNumberCtrlInfoList_callbackList[] = { beNumberCtrlInfo_EnsureRegistered, 0 };
 
-void *beNumberCtrlInfoList_Register(void) {
+CallbackArray *beNumberCtrlInfoList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -2,27 +2,24 @@
 #pragma push
 #pragma readonly_strings on
 #include "dw4/igVec3f.h"
+#include "dw4/beChangePosTransform.h"
+#include "dw4/beChangePosTransformInfo.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igMatrix44f.h"
 
 extern "C" void beChangePosTransform_Prepare(void);
-extern "C" int beChangePosTransform_GetInfoMeta(void);
+extern "C" igMetaObject *beChangePosTransform_GetInfoMeta(void);
 extern "C" void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTransformInfoRam *info);
-extern "C" int beChangePosTransform_GetMeta(void);
-extern "C" int g_beChangePosTransformInfo_metaObject[4];
-extern "C" int g_beChangePosTransform_metaObject[4];
+extern "C" igMetaObject *beChangePosTransform_GetMeta(void);
 extern "C" const igVec3f g_vec3Zero;
-extern "C" void beMessenger_SendGroup(int messenger, const char *group, const char *message);
-extern "C" int beMessenger_GetMatrixCount(int messenger);
-extern "C" void beMessenger_GetMatrix(float *out, int messenger, int index);
-extern "C" void igMatrix44f_GetTranslation(float *matrix, igVec3f *out);
-extern "C" void igMatrix44f_SetTranslation(float *matrix, igVec3f *translation);
 
 void beChangePosTransform_Prepare(void)
 {
 }
 
-int beChangePosTransform_GetInfoMeta(void)
+igMetaObject *beChangePosTransform_GetInfoMeta(void)
 {
-    return g_beChangePosTransformInfo_metaObject[0];
+    return g_beChangePosTransformInfo_metaObject;
 }
 
 static inline void DivideByCount(igVec3f &v, int count)
@@ -62,14 +59,14 @@ void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTrans
     switch (info->_st0) {
     case 0: {
         igVec3f centre = g_vec3Zero;
-        beMessenger_SendGroup(self->_messenger, "PLAYER", "GETMATRIX");
-        if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
-            int count = beMessenger_GetMatrixCount(self->_messenger);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, "PLAYER", "GETMATRIX");
+        if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
+            int count = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);
             for (int i = 0; i < count; i++) {
                 float playerMatrix[16];
                 igVec3f translation;
-                beMessenger_GetMatrix(playerMatrix, self->_messenger, i);
-                igMatrix44f_GetTranslation(playerMatrix, &translation);
+                beMessenger_GetMatrix(playerMatrix, (beMessenger *)self->_messenger, i);
+                igMatrix44f_GetTranslation(playerMatrix, (float *)&translation);
                 centre.x += translation.x;
                 centre.y += translation.y;
                 centre.z += translation.z;
@@ -78,7 +75,7 @@ void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTrans
         }
         float *transformMatrix = ((igTransform *)info->_transform)->_m;
         *(igVec3f *)self->_oldPos = centre;
-        igMatrix44f_SetTranslation(transformMatrix, &centre);
+        igMatrix44f_SetTranslation(transformMatrix, &centre.x);
         info->_st0++;
         info->_st3 = 0;
         info->_st2 = 0;
@@ -86,14 +83,14 @@ void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTrans
         break;
     }
     case 1: {
-        beMessenger_SendGroup(self->_messenger, "PLAYER", "GETMATRIX");
-        if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
+        beMessenger_SendGroup((beMessenger *)self->_messenger, "PLAYER", "GETMATRIX");
+        if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
             igVec3f centre = g_vec3Zero;
-            int count = beMessenger_GetMatrixCount(self->_messenger);
+            int count = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);
             for (int i = 0; i < count; i++) {
                 float playerMatrix[16];
-                beMessenger_GetMatrix(playerMatrix, self->_messenger, i);
-                igMatrix44f_GetTranslation(playerMatrix, &translations[i]);
+                beMessenger_GetMatrix(playerMatrix, (beMessenger *)self->_messenger, i);
+                igMatrix44f_GetTranslation(playerMatrix, (float *)&translations[i]);
                 centre.x += translations[i].x;
                 centre.y += translations[i].y;
                 centre.z += translations[i].z;
@@ -112,10 +109,10 @@ void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTrans
             float *transformMatrix = ((igTransform *)info->_transform)->_m;
             /* matching construct: hand search — `== false` tests the flag as an int (andi 0xff); `!allNear` does not */
             if (allNear == false) {
-                igMatrix44f_SetTranslation(transformMatrix, (igVec3f *)self->_oldPos);
+                igMatrix44f_SetTranslation(transformMatrix, self->_oldPos);
             } else {
                 *(igVec3f *)self->_oldPos = centre;
-                igMatrix44f_SetTranslation(transformMatrix, &centre);
+                igMatrix44f_SetTranslation(transformMatrix, &centre.x);
             }
         }
         break;
@@ -126,9 +123,9 @@ void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTrans
     }
 }
 
-int beChangePosTransform_GetMeta(void)
+igMetaObject *beChangePosTransform_GetMeta(void)
 {
-    return g_beChangePosTransform_metaObject[0];
+    return g_beChangePosTransform_metaObject;
 }
 
 #pragma pop

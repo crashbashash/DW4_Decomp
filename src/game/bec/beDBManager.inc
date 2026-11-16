@@ -2,12 +2,12 @@ igMetaObject *g_beDBManager_metaObject;
 
 beDBManager *beDBManager_CreateInstance(int allocator) {
     beDBManager_EnsureRegistered();
-    return (beDBManager *)igMetaObject_CreateInstance(*(int *)0x589958, allocator);
+    return (beDBManager *)igMetaObject_CreateInstance(g_beDBManager_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beDBManager_GetOrCreateMetaObject(void) {
     if (g_beDBManager_metaObject == 0) {
-        g_beDBManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beDBManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beDBManager_metaObject;
 }
@@ -33,7 +33,7 @@ int beDBManager_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beDBManager_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -46,7 +46,7 @@ void beDBManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beDBManager_Register);
 }
 
-void *beDBManager_Register(void) {
+CallbackArray *beDBManager_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

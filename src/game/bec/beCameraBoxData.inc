@@ -24,7 +24,7 @@ int beCameraBoxData_GetVTable(void) {
     obj._transformList = 0;
     obj._eyePosList = 0;
     obj._intPosList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCameraBoxData_vtable[0];
     igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._intPosList), (short)(-1));
     igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._eyePosList), (short)(-1));
@@ -41,7 +41,7 @@ void beCameraBoxData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCameraBoxData_callbackList[] = { igSwitch_EnsureRegistered, igGeometryList_EnsureRegistered, igTransformList_EnsureRegistered, 0 };
 
-void *beCameraBoxData_Register(void) {
+CallbackArray *beCameraBoxData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -99,24 +99,24 @@ void beCameraBoxData_InitFields(void) {
     void *transformList;
     void *eyePosList;
     void *intPosList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCameraBoxData_metaObject;
+    meta = g_beCameraBoxData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraBoxData_ctorTable, 5);
     switchField = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchField)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchField)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     geometryList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)geometryList)->_metaObject = igGeometryList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)geometryList)->_metaObject = (int)igGeometryList_GetOrCreateMetaObject();
     ((igRefMetaField *)geometryList)->_construct = 1;
     transformList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)transformList)->_metaObject = igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)transformList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
     ((igRefMetaField *)transformList)->_construct = 1;
     eyePosList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)eyePosList)->_metaObject = igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)eyePosList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
     ((igRefMetaField *)eyePosList)->_construct = 1;
     intPosList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)intPosList)->_metaObject = igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)intPosList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
     ((igRefMetaField *)intPosList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beCameraBoxData_fieldTable, g_beCameraBoxData_fieldHandles, g_beCameraBoxData_fieldOffsets, base);
 }

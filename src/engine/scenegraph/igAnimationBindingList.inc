@@ -2,7 +2,7 @@ igMetaObject *g_igAnimationBindingList_metaObject;
 
 igMetaObject *FUN_001a8ac0(void) {
     if (g_igAnimationBindingList_metaObject == 0) {
-        g_igAnimationBindingList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAnimationBindingList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAnimationBindingList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igAnimationBindingList_GetMetaObject(void)
 int igAnimationBindingList_GetVTable(void) {
     struct Obj_1a8b60 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAnimationBindingList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAnimationBindingList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igAnimationBindingList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAnimationBindingList_callbackList[] = { igAnimationBinding_EnsureRegistered, 0 };
 
-void igAnimationBindingList_Register(void) {
+CallbackArray *igAnimationBindingList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationBindingList_metaObject,
         igObjectList_Register,

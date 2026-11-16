@@ -5,7 +5,7 @@ igMetaField *g_igTextElement_textMetaField;
 
 igMetaObject *FUN_0044bce0(void) {
     if (g_igTextElement_metaObject == 0) {
-        g_igTextElement_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextElement_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextElement_metaObject;
 }
@@ -23,14 +23,14 @@ int igTextElement_GetVTable(void) {
 
     int temp_s2;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[2] = 0;
     u.w[10] = 0;
     u.w[0] = (int)(&g_igTextElement_vtable[0]);
     u.w[11] = 0;
     u.w[12] = 0;
     u.w[13] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.w[0] = (int)(&g_igTextElement_vtable[0]);
     igStringRef_Destruct(&u.w[13], -1);
     FUN_001353b0(&u.w[12], -1);
@@ -96,9 +96,9 @@ void igTextElement_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igTextElement_callbackList[] = { igFont_EnsureRegistered, FUN_001378f0, 0 };
 
-void igTextElement_Register(void) {
+CallbackArray *igTextElement_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextElement_metaObject,
         igGeometryElement_Register,
@@ -149,15 +149,15 @@ void igTextElement_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igTextElement_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igTextElement_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTextElement_ctorTable, 3);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_004507f0();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00137850();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), "");
-    igMetaObject_NameFields(temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), "");
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);
 }
 
 void *FUN_0044c110(struct S *arg0, short arg1) {

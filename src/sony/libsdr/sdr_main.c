@@ -1,13 +1,7 @@
 #include "dw4/eekernel_gp.h"
 #include "dw4/sony/sif.h"
+#include "dw4/sony/libsdr.h"
 #include "dw4/libkernl.h"
-
-typedef struct sceSifDmaData {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
-} sceSifDmaData;
 
 typedef char *ArgList;
 #define ARGS_START(args, last) ((args) = (ArgList)__builtin_next_arg(last) - (8 - __builtin_args_info(0)) * 8)
@@ -32,14 +26,6 @@ typedef struct {
 #define rSdProcBatchEx2 0x81d0
 #define rSdUserCommand0 0x9000
 #define rSdUserCommandF 0x90f0
-
-unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
-int sceSifDmaStat(unsigned int id);
-
-/* the IOP interrupt callbacks and their gp: libsdr's callback-thread file owns them */
-extern void *_sce_sdr_transIntr0Hdr, *_sce_sdr_transIntr1Hdr, *_sce_sdr_spu2IntrHdr;
-extern void *_sce_sdr_transIntr0Arg, *_sce_sdr_transIntr1Arg, *_sce_sdr_spu2IntrArg;
-extern void *_sce_sdr_transIntr0Gp, *_sce_sdr_transIntr1Gp, *_sce_sdr_spu2IntrGp;
 
 static sceSifEndFunc sceSdEndFunc = 0;
 static void *sceSdEndGp = 0;

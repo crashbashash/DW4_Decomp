@@ -16,9 +16,9 @@ done:
 
 int igMersenneTwisterRandomNumber_GetVTable(void) {
     struct Obj_1e45e0 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMersenneTwisterRandomNumber_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_001e4620(void)
@@ -26,9 +26,9 @@ void FUN_001e4620(void)
     igMetaObject_RunStaticInit(igMersenneTwisterRandomNumber_Register);
 }
 
-void igMersenneTwisterRandomNumber_Register(void) {
+CallbackArray *igMersenneTwisterRandomNumber_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMersenneTwisterRandomNumber_metaObject,
         igRandomNumber_Register,
@@ -70,10 +70,10 @@ void igMersenneTwisterRandomNumber_InitFields(void) {
     struct F *f;
 
     meta = g_igMersenneTwisterRandomNumber_metaObject;
-    firstField = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igMersenneTwisterRandomNumber_ctorTable, 2);
-    f = (struct F *)igMetaObject_GetFieldAt(meta, firstField + 1);
+    firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igMersenneTwisterRandomNumber_ctorTable, 2);
+    f = (struct F *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1);
     f->f52 = 0x270;
-    igMetaObject_NameFields(meta, g_igMersenneTwisterRandomNumber_fieldTable, g_igMersenneTwisterRandomNumber_fieldHandles, g_igMersenneTwisterRandomNumber_fieldOffsets, firstField);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igMersenneTwisterRandomNumber_fieldTable, g_igMersenneTwisterRandomNumber_fieldHandles, g_igMersenneTwisterRandomNumber_fieldOffsets, firstField);
 }
 

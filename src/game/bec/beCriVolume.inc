@@ -8,7 +8,7 @@ igMetaField *g_beCriVolume_unitMetaField;
 
 igMetaObject *beCriVolume_GetOrCreateMetaObject(void) {
     if (g_beCriVolume_metaObject == 0) {
-        g_beCriVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCriVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCriVolume_metaObject;
 }
@@ -29,7 +29,7 @@ int beCriVolume_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beCriVolume_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beCriVolume_EnsureRegistered(void)
@@ -37,7 +37,7 @@ void beCriVolume_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCriVolume_Register);
 }
 
-void *beCriVolume_Register(void) {
+CallbackArray *beCriVolume_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -94,9 +94,9 @@ static int g_beCriVolume_fieldOffsets[] = {
 
 void beCriVolume_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCriVolume_metaObject;
+    meta = g_beCriVolume_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCriVolume_ctorTable, 6);
     igMetaObject_NameFields(meta, g_beCriVolume_fieldTable, g_beCriVolume_fieldHandles, g_beCriVolume_fieldOffsets, base);

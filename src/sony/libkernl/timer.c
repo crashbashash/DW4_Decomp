@@ -1,6 +1,7 @@
 /* timer.c - the EE timer library on hardware timer 2: a 64-bit system time made of the 16-bit
  * counter and an overflow count, and 128 software counters, each of which may carry a handler
  * that cbTimerHandler calls when the counter reaches its schedule. */
+#include "dw4/eekernel.h"
 #include "dw4/libkernl.h"
 
 typedef unsigned long u_long;
@@ -80,9 +81,7 @@ typedef struct {
 #define COUNTER_ID(c) (((int)(c) << 4) | (c)->key)
 
 void *memset(void *dst, int value, unsigned int size);
-int _sceTimerAlarmInit(void);
 int AddIntcHandler2(int cause, int (*handler)(int), int next, void *arg);
-int RemoveIntcHandler(int cause, int id);
 void SetT2(unsigned int addr, unsigned int value);
 int cbTimerHandler(int cause, void *arg, void *addr);
 

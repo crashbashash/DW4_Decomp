@@ -4,12 +4,12 @@ igMetaField *g_igTextureStateAttr_unitIDMetaField;
 
 igTextureStateAttr *igTextureStateAttr_CreateInstance(int allocator) {
     igTextureStateAttr_EnsureRegistered();
-    return (igTextureStateAttr *)igMetaObject_CreateInstance(*(int *)0x55ECA8, allocator);
+    return (igTextureStateAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55ECA8, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igTextureStateAttr_GetOrCreateMetaObject(void) {
     if (g_igTextureStateAttr_metaObject == 0) {
-        g_igTextureStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureStateAttr_metaObject;
 }
@@ -29,9 +29,9 @@ done:
 int igTextureStateAttr_GetVTable(void) {
     struct Obj_131470 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTextureStateAttr_EnsureRegistered(void)
@@ -39,9 +39,9 @@ void igTextureStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureStateAttr_Register);
 }
 
-void igTextureStateAttr_Register(void) {
+CallbackArray *igTextureStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -61,8 +61,8 @@ void thunk_igTextureStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTextureStateAttr_fieldTable[] = {
     "_enabled",

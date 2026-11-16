@@ -13,9 +13,9 @@ void FUN_0014f240(void)
     igMetaObject_RunStaticInit(igCustomState_Register);
 }
 
-void igCustomState_Register(void) {
+CallbackArray *igCustomState_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igCustomState_metaObject,
         igNamedObject_Register,

@@ -10,11 +10,11 @@ int igPsx2IndexArray_GetVTable(void) {
     Obj_153aa0 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.ref = 0;
     obj.vt = &DAT_00526760[0];
     obj.vt = &g_igPsx2IndexArray_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &DAT_00526760[0];
     obj.releaseRef();
     return r;
@@ -25,9 +25,9 @@ void FUN_00153b40(void)
     igMetaObject_RunStaticInit(igPsx2IndexArray_Register);
 }
 
-void igPsx2IndexArray_Register(void) {
+CallbackArray *igPsx2IndexArray_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2IndexArray_metaObject,
         igIndexArray_Register,
@@ -36,7 +36,7 @@ void igPsx2IndexArray_Register(void) {
         "igPsx2IndexArray",
         0x1C, /* instance size */
         igPsx2IndexArray_GetVTable,
-        &igPsx2IndexArray_InitFields_00153bd0[0],     /* Field adder. */
+        igPsx2IndexArray_InitFields_00153bd0,     /* Field adder. */
         0,                                            /* extra callback-vector item (none) */
         0                                             /* zero-terminated callback-vector item list (none) */
     );

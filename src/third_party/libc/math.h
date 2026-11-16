@@ -21,6 +21,13 @@ double log10(double);
 double exp(double);
 double frexp(double, int *);
 double ldexp(double, int);
+float sinf(float);
+float cosf(float);
+float tanf(float);
+float asinf(float);
+float atanf(float);
+float atan2f(float, float);
+float sqrtf(float);
 #ifdef __cplusplus
 }
 #endif

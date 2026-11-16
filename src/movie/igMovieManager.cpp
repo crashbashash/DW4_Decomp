@@ -186,60 +186,44 @@ void igMovieRenderer_InitializeDrawing(igMovieRenderer *self);
 void igMovieRenderer_Traverse(void);
 void igMovieRenderer_Render(igMovieRenderer *self);
 void igMovieRenderer_ReleaseDrawing(igMovieRenderer *self);
-int igMovieRenderer_GetMeta(void);
-int igMovieManager_GetMeta(void);
+igMetaObject *igMovieRenderer_GetMeta(void);
+igMetaObject *igMovieManager_GetMeta(void);
 
-int igObject_GetAllocator(void *object);
-int Memory_GetAllocatorBySelector(int selector);
-int igObject_IsKindOf(void *object, int metaObject);
-int strcmp(const char *a, const char *b);
-int igObjectSystem_FindMetaByNameDefault(const char *name);
-igObject *igMetaObject_CreateInstance(int metaObject, int allocator);
-int ObjectList_AppendRetained(void *list, void *object);
-int List_RemoveWordAt(void *list, int index);
+#include "dw4/igObject.h"
+#include "dw4/igMemoryPoolContext.h"
+#include <string.h>
+#include "dw4/igMetaObject.h"
+#include "dw4/igDataLists.h"
 int igReportError(const char *format, ...);
-igObject *igMovieCodecList_Create(int allocator);
-igObject *igMovieInfoList_Create(int allocator);
-igAudioContextDispatchView *igAudioContext_CreateInstance(int allocator);
-igObject *igRendererOrderedList_CreateInstance(int allocator);
-void igInsightCore_AddToScheduler(int insight, igMovieManager *manager);
-void igInsightCore_RemoveFromScheduler(int insight, igMovieManager *manager);
-void igInsightCore_AddRenderer(int insight, int renderer);
-void igRendererOrderedList_Append(int list, igObject *renderer, int unique);
-void igRendererOrderedList_Clear(int list);
-igAttrSet *igAttrSet_CreateInstance(int allocator);
-igGeometry *igGeometry_CreateInstance(int allocator);
-igCamera *igCamera_CreateInstance(int allocator);
-igTransformDispatchView *igTransform_CreateInstance(int allocator);
-igSceneInfo *igSceneInfo_CreateInstance(int allocator);
-igImageDispatchView *igImage_CreateInstance(int allocator);
-igTextureAttrDispatchView *igTextureAttr_CreateInstance(int allocator);
-igTextureBindAttrView *igTextureBindAttr_CreateInstance(int allocator);
-igTextureList *igTextureList_CreateInstance(int allocator);
-igTextureBindAttrList *igTextureBindAttrList_Create(int allocator);
-igBlendStateAttrDispatchView *igBlendStateAttr_CreateInstance(int allocator);
-igTextureStateAttrDispatchView *igTextureStateAttr_CreateInstance(int allocator);
-igGeometryAttrDispatchView *igGeometryAttr_Create(int allocator);
-igVertexArrayDispatchView *igVertexArray_Create(int allocator);
-void igTextureAttr_SetImage(igTextureAttrDispatchView *texture, igImageDispatchView *image, int level);
-igImageDispatchView *igTextureAttr_GetImage(igTextureAttrDispatchView *texture, int level);
-void igNamedObject_SetName(void *object, const char *name);
-void igGroup_AppendChild(void *group, void *child);
-void igMatrix44f_FromTranslation(igMatrix44f *matrix, const igVec3f &translation);
+#include "dw4/igMovieCodecList.h"
+#include "dw4/igMovieInfoList.h"
+#include "dw4/igAudioContext.h"
+#include "dw4/igRendererOrderedList.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igAttrSet.h"
+#include "dw4/igGeometry.h"
+#include "dw4/igCamera.h"
+#include "dw4/igTransform.h"
+#include "dw4/igSceneInfo.h"
+#include "dw4/igImage.h"
+#include "dw4/igTextureAttr.h"
+#include "dw4/igTextureBindAttr.h"
+#include "dw4/igTextureList.h"
+#include "dw4/igTextureBindAttrList.h"
+#include "dw4/igBlendStateAttr.h"
+#include "dw4/igTextureStateAttr.h"
+#include "dw4/igGeometryAttr.h"
+#include "dw4/igVertexArray.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igGroup.h"
 igResult igMatrix44f_Invert(igMatrix44f *inverse, const igMatrix44f *matrix);
-void igSceneInfo_CollectCameras(igSceneInfo *info);
-void igInsightCore_AddInfo(int insight, igSceneInfo *info);
 int snprintf(char *buffer, unsigned int size, const char *format, ...);
-void *memset(void *s, int c, unsigned int n);
+#include "dw4/cri/adxt.h"
 
-extern unsigned char g_useOwnerAllocator;
-extern int kIGMemoryPoolHandleUser1[];
-extern int g_igMovieManager_metaObject[];
-extern int g_igMovieRenderer_metaObject[];
-extern int g_igMovieCodec_metaObject[];
-extern int g_igSceneInfo_metaObject[];
-extern int g_igAttrSet_metaObject[];
-extern int g_igTextureBindAttr_metaObject[];
+#include "dw4/igMovieManager.h"
+#include "dw4/igMovieRenderer.h"
+#include "dw4/igMovieCodec.h"
+#include "dw4/igPlanarShadowShader.h"
 extern int g_movieDefaultTileWidth;
 extern int g_movieDefaultTileHeight;
 extern igVec3f g_vec3ZAxis;
@@ -268,8 +252,8 @@ extern char Failed_to_build_the_scene_for_a_movie_info[];
 
 /* The pool the manager creates objects in: its own, unless the user pool is selected. */
 static inline int MovieAllocator(igMovieManager *self) {
-    int allocator = igObject_GetAllocator(self);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    int allocator = (int)igObject_GetAllocator(self);
+    return g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
 /* Gives the movie renderer its reference to the manager. */
@@ -301,21 +285,21 @@ static inline int NextPowerOfTwo(int n) {
 }
 
 static inline igSceneInfo *AsSceneInfo(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igSceneInfo_metaObject[0])) {
+    if (object != 0 && igObject_IsKindOf(object, g_igSceneInfo_metaObject)) {
         return (igSceneInfo *)object;
     }
     return 0;
 }
 
 static inline igAttrSet *AsAttrSet(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igAttrSet_metaObject[0])) {
+    if (object != 0 && igObject_IsKindOf(object, g_igAttrSet_metaObject)) {
         return (igAttrSet *)object;
     }
     return 0;
 }
 
 static inline igTextureBindAttrView *AsTextureBindAttr(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igTextureBindAttr_metaObject[0])) {
+    if (object != 0 && igObject_IsKindOf(object, g_igTextureBindAttr_metaObject)) {
         return (igTextureBindAttrView *)object;
     }
     return 0;
@@ -403,7 +387,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
     int i;
     igMovieInfo *movie;
     int allocator;
-    if (object != 0 && igObject_IsKindOf(object, (int)g_igMovieInfo_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, g_igMovieInfo_metaObject) != 0) {
         movie = (igMovieInfo *)object;
     } else {
         movie = 0;
@@ -437,9 +421,9 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                     return 0;
                 }
                 allocator = MovieAllocator(self);
-                igObject *created = igMetaObject_CreateInstance(meta, allocator);
+                igObject *created = igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)allocator);
                 igMovieCodecDispatchView *createdCodec;
-                if (created != 0 && igObject_IsKindOf(created, g_igMovieCodec_metaObject[0]) != 0) {
+                if (created != 0 && igObject_IsKindOf(created, g_igMovieCodec_metaObject) != 0) {
                     createdCodec = (igMovieCodecDispatchView *)created;
                 } else {
                     createdCodec = 0;
@@ -457,7 +441,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                         igRelease((igObject *)self->_codecList);
                         self->_codecList = (int)igMovieCodecList_Create(allocator);
                     }
-                    ObjectList_AppendRetained((void *)self->_codecList, codec.p);
+                    ObjectList_AppendRetained((igObjectList *)self->_codecList, (igObject *)codec.p);
                 }
             }
             (igSmartPointer<igMovieCodecDispatchView> &)movie->_codec = codec;
@@ -485,8 +469,8 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                         igRelease((igObject *)self->_movieList);
                         self->_movieList = (int)igMovieInfoList_Create(allocator);
                     }
-                    ObjectList_AppendRetained((void *)self->_movieList, movie);
-                    igInsightCore_AddToScheduler(self->_insight, self);
+                    ObjectList_AppendRetained((igObjectList *)self->_movieList, movie);
+                    igInsightCore_AddToScheduler((igInsightCore *)self->_insight, self);
                     SetMovieManager((igMovieRenderer *)self->_movieRenderer, self);
                     if (self->_rendererList == 0) {
                         allocator = MovieAllocator(self);
@@ -496,12 +480,12 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                     {
                         int n = ((igObjectListView *)((igRendererOrderedList *)((igInsightCore *)self->_insight)->_rendererList)->_objectList)->_count;
                         for (i = 0; i < n; i++) {
-                            igRendererOrderedList_Append(self->_rendererList,
+                            igRendererOrderedList_Append((igDependencyOrderedList *)self->_rendererList,
                                 ((igObjectListView *)((igRendererOrderedList *)((igInsightCore *)self->_insight)->_rendererList)->_objectList)->_data[(unsigned)i] /* matching construct: unsigned index keeps the scale inside the loop */, 0);
                         }
                     }
-                    igRendererOrderedList_Clear(((igInsightCore *)self->_insight)->_rendererList);
-                    igInsightCore_AddRenderer(self->_insight, self->_movieRenderer);
+                    igRendererOrderedList_Clear((igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList);
+                    igInsightCore_AddRenderer((igInsightCore *)self->_insight, (igObject *)self->_movieRenderer);
                     return 1;
                 }
                 if (g_movieSceneFailedMuted == 0) {
@@ -530,7 +514,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
 int igMovieManager_StopMovie(igMovieManager *self, void *object) {
     int index;
     igMovieInfo *movie;
-    if (object != 0 && igObject_IsKindOf(object, (int)g_igMovieInfo_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, g_igMovieInfo_metaObject) != 0) {
         movie = (igMovieInfo *)object;
     } else {
         movie = 0;
@@ -564,11 +548,11 @@ int igMovieManager_StopMovie(igMovieManager *self, void *object) {
             {
                 igMovieInfoListView *list = (igMovieInfoListView *)self->_movieList;
                 igRelease(list->_data[index]);
-                List_RemoveWordAt(list, index);
+                List_RemoveWordAt((igDataList *)list, index);
                 list->_data[list->_count] = 0;
             }
             if (((igMovieInfoListView *)self->_movieList)->_count == 0) {
-                igInsightCore_RemoveFromScheduler(self->_insight, self);
+                igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, self);
                 igRelease((igObject *)self->_movieList);
                 self->_movieList = 0;
             }
@@ -576,17 +560,17 @@ int igMovieManager_StopMovie(igMovieManager *self, void *object) {
                 igRelease((igObject *)self->_codecList);
                 self->_codecList = 0;
             }
-            igRendererOrderedList_Clear(((igInsightCore *)self->_insight)->_rendererList);
+            igRendererOrderedList_Clear((igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList);
             {
                 igRendererOrderedList *saved = (igRendererOrderedList *)self->_rendererList;
                 int n = ((igObjectListView *)saved->_objectList)->_count;
                 int i;
                 for (i = 0; i < n; i++) {
-                    igRendererOrderedList_Append(((igInsightCore *)self->_insight)->_rendererList,
+                    igRendererOrderedList_Append((igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList,
                                                  ((igObjectListView *)((igRendererOrderedList *)self->_rendererList)->_objectList)->_data[(unsigned)i], 0);
                 }
             }
-            igRendererOrderedList_Clear(self->_rendererList);
+            igRendererOrderedList_Clear((igDependencyOrderedList *)self->_rendererList);
             igRelease((igObject *)self->_rendererList);
             self->_rendererList = 0;
             return 1;
@@ -668,13 +652,13 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                                 binds.release();
                                 binds.p = igTextureBindAttrList_Create(allocator);
                             }
-                            ObjectList_AppendRetained(binds.p, bind.p);
+                            ObjectList_AppendRetained((igObjectList *)binds.p, (igObject *)bind.p);
                             if (textures == 0) {
                                 int allocator = MovieAllocator(self);
                                 textures.release();
                                 textures.p = igTextureList_CreateInstance(allocator);
                             }
-                            ObjectList_AppendRetained(textures.p, bind->_texture);
+                            ObjectList_AppendRetained((igObjectList *)textures.p, (igObject *)bind->_texture);
                         }
                     }
                 }
@@ -696,13 +680,13 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                 root.release();
                 root.p = igAttrSet_CreateInstance(allocator);
             }
-            igNamedObject_SetName(root.p, Scene_Root);
-            igSmartPointer<igBlendStateAttrDispatchView> blend(igBlendStateAttr_CreateInstance(MovieAllocator(self)));
+            igNamedObject_SetName((igNamedObject *)root.p, Scene_Root);
+            igSmartPointer<igBlendStateAttrDispatchView> blend((igBlendStateAttrDispatchView *)igBlendStateAttr_CreateInstance(MovieAllocator(self)));
             blend->setEnabled(true);
-            ObjectList_AppendRetained((void *)root->_attributes, blend.p);
-            igSmartPointer<igTextureStateAttrDispatchView> textureState(igTextureStateAttr_CreateInstance(MovieAllocator(self)));
+            ObjectList_AppendRetained((igObjectList *)root->_attributes, (igObject *)blend.p);
+            igSmartPointer<igTextureStateAttrDispatchView> textureState((igTextureStateAttrDispatchView *)igTextureStateAttr_CreateInstance(MovieAllocator(self)));
             textureState->setEnabled(true);
-            ObjectList_AppendRetained((void *)root->_attributes, textureState.p);
+            ObjectList_AppendRetained((igObjectList *)root->_attributes, (igObject *)textureState.p);
 
             float width;
             int movieHeight = movie->_height;
@@ -749,8 +733,8 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                         tile.p = igAttrSet_CreateInstance(allocator);
                     }
                     igSmartPointer<igGeometry> geometry(igGeometry_CreateInstance(MovieAllocator(self)));
-                    igSmartPointer<igGeometryAttrDispatchView> geometryAttr(igGeometryAttr_Create(MovieAllocator(self)));
-                    igSmartPointer<igVertexArrayDispatchView> vertices(igVertexArray_Create(MovieAllocator(self)));
+                    igSmartPointer<igGeometryAttrDispatchView> geometryAttr((igGeometryAttrDispatchView *)igGeometryAttr_Create(MovieAllocator(self)));
+                    igSmartPointer<igVertexArrayDispatchView> vertices((igVertexArrayDispatchView *)igVertexArray_Create(MovieAllocator(self)));
                     vertices->configure(format, 4, 2, 0);
                     /* the quad's left edge (0) and right edge (1), top vertex then bottom */
                     for (int edge = 0; edge <= 1; edge++) {
@@ -767,13 +751,13 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                     {
                         int allocator = MovieAllocator(self);
                         bind.release();
-                        bind.p = igTextureBindAttr_CreateInstance(allocator);
+                        bind.p = (igTextureBindAttrView *)igTextureBindAttr_CreateInstance(allocator);
                     }
-                    ObjectList_AppendRetained(binds.p, bind.p);
-                    ObjectList_AppendRetained((void *)tile->_attributes, bind.p);
-                    igGroup_AppendChild(tile.p, geometry.p);
-                    ObjectList_AppendRetained((void *)geometry->_attributes, geometryAttr.p);
-                    igGroup_AppendChild(root.p, tile.p);
+                    ObjectList_AppendRetained((igObjectList *)binds.p, (igObject *)bind.p);
+                    ObjectList_AppendRetained((igObjectList *)tile->_attributes, (igObject *)bind.p);
+                    igGroup_AppendChild((igGroup *)tile.p, (igNode *)geometry.p);
+                    ObjectList_AppendRetained((igObjectList *)geometry->_attributes, (igObject *)geometryAttr.p);
+                    igGroup_AppendChild((igGroup *)root.p, (igNode *)tile.p);
                     x += tileSizeX;
                 }
                 y -= tileSizeY;
@@ -781,17 +765,17 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             }
 
             igMatrix44f view;
-            igMatrix44f_FromTranslation(&view, igVec3f(0.0f, 0.0f, -1.2f));
+            igMatrix44f_FromTranslation(view.m, igVec3f(0.0f, 0.0f, -1.2f));
             igMatrix44f_Invert(&view, &view);
             igSmartPointer<igCamera> camera(igCamera_CreateInstance(MovieAllocator(self)));
-            igNamedObject_SetName(camera.p, Movie_camera);
+            igNamedObject_SetName((igNamedObject *)camera.p, Movie_camera);
             camera->_nearPlane = 0.0f;
             camera->_farPlane = 1.2f;
-            igSmartPointer<igTransformDispatchView> transform(igTransform_CreateInstance(MovieAllocator(self)));
-            igNamedObject_SetName(transform.p, Default_primitive_camera);
+            igSmartPointer<igTransformDispatchView> transform((igTransformDispatchView *)igTransform_CreateInstance(MovieAllocator(self)));
+            igNamedObject_SetName((igNamedObject *)transform.p, Default_primitive_camera);
             transform->SetMatrix(view.m);
-            igGroup_AppendChild(transform.p, camera.p);
-            igGroup_AppendChild(root.p, transform.p);
+            igGroup_AppendChild((igGroup *)transform.p, (igNode *)camera.p);
+            igGroup_AppendChild((igGroup *)root.p, (igNode *)transform.p);
             char name[256];
             snprintf(name, sizeof(name), s_Scene, movie->_name != 0 ? (const char *)movie->_name : (const char *)emptyString);
             {
@@ -799,10 +783,10 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                 sceneInfo.release();
                 sceneInfo.p = igSceneInfo_CreateInstance(allocator);
             }
-            igNamedObject_SetName(sceneInfo.p, name);
+            igNamedObject_SetName((igNamedObject *)sceneInfo.p, name);
             (igSmartPointer<igAttrSet> &)sceneInfo->_sceneGraph = root;
             igSceneInfo_CollectCameras(sceneInfo.p);
-            igInsightCore_AddInfo(self->_insight, sceneInfo.p);
+            igInsightCore_AddInfo((igInsightCore *)self->_insight, sceneInfo.p);
             (igSmartPointer<igSceneInfo> &)movie->_sceneInfo = sceneInfo;
         }
 
@@ -817,7 +801,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             {
                 int allocator = MovieAllocator(self);
                 image.release();
-                image.p = igImage_CreateInstance(allocator);
+                image.p = (igImageDispatchView *)igImage_CreateInstance(allocator);
             }
             image->setWidth(textureWidth);
             image->setHeight(textureHeight);
@@ -828,24 +812,24 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             {
                 int allocator = MovieAllocator(self);
                 texture.release();
-                texture.p = igTextureAttr_CreateInstance(allocator);
+                texture.p = (igTextureAttrDispatchView *)igTextureAttr_CreateInstance(allocator);
             }
             texture->_source = 2;
             texture->_videoBuffer = image->_pImage;
             texture->setMinFilter(movie->_minificationFilter);
             texture->setMagFilter(movie->_magnificationFilter);
-            igTextureAttr_SetImage(texture.p, image.p, 0);
+            igTextureAttr_SetImage((igTextureAttr *)texture.p, (igImage *)image.p, 0);
             ((igTextureBindAttrView **)binds->_data)[i]->setTexture((igObject *)texture.p);
-            ObjectList_AppendRetained(textures.p, texture.p);
+            ObjectList_AppendRetained((igObjectList *)textures.p, (igObject *)texture.p);
         }
         (igSmartPointer<igTextureList> &)movie->_runtimeTextures = textures;
         if (binds->_count == 1) {
-            image = igTextureAttr_GetImage(((igTextureBindAttrView **)binds->_data)[0]->_texture, 0);
+            image = (igImageDispatchView *)igTextureAttr_GetImage((igTextureAttr *)((igTextureBindAttrView **)binds->_data)[0]->_texture, 0);
         } else {
             {
                 int allocator = MovieAllocator(self);
                 image.release();
-                image.p = igImage_CreateInstance(allocator);
+                image.p = (igImageDispatchView *)igImage_CreateInstance(allocator);
             }
             image->setWidth(movie->_width);
             image->setHeight(movie->_height);
@@ -926,12 +910,12 @@ void igMovieRenderer_ReleaseDrawing(igMovieRenderer *self)
     igMovieManager_ReleaseDrawing((igMovieManager *)self->_movieManager);
 }
 
-int igMovieRenderer_GetMeta(void)
+igMetaObject *igMovieRenderer_GetMeta(void)
 {
-    return g_igMovieRenderer_metaObject[0];
+    return g_igMovieRenderer_metaObject;
 }
 
-int igMovieManager_GetMeta(void)
+igMetaObject *igMovieManager_GetMeta(void)
 {
-    return g_igMovieManager_metaObject[0];
+    return g_igMovieManager_metaObject;
 }

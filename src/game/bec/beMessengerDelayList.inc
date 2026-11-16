@@ -2,7 +2,7 @@ igMetaObject *g_beMessengerDelayList_metaObject;
 
 igMetaObject *beMessengerDelayList_GetOrCreateMetaObject(void) {
     if (g_beMessengerDelayList_metaObject == 0) {
-        g_beMessengerDelayList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMessengerDelayList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMessengerDelayList_metaObject;
 }
@@ -21,7 +21,7 @@ int beMessengerDelayList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beMessengerDelayList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beMessengerDelayList_EnsureRegistered(void)
@@ -31,7 +31,7 @@ void beMessengerDelayList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMessengerDelayList_callbackList[] = { beMessengerDelay_EnsureRegistered, 0 };
 
-void *beMessengerDelayList_Register(void) {
+CallbackArray *beMessengerDelayList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

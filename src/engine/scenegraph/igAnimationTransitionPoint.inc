@@ -15,10 +15,10 @@ int igAnimationTransitionPoint_GetVTable(void) {
      int r;
      Q *q;
 
-     igObject_InitHeader(&o);
+     igObject_InitHeader((igObject *)&o);
      o.vt = &g_igAnimationTransitionPoint_vtable[0];
      o.s = 0;
-     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+     r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
      o.vt = &g_igAnimationTransitionPoint_vtable[0];
      if (&o.s != 0) {
          q = o.s;
@@ -39,9 +39,9 @@ void FUN_001a9a80(void)
 
 static igMetaObjectCallback g_igAnimationTransitionPoint_callbackList[] = { FUN_001a9c90, 0 };
 
-void igAnimationTransitionPoint_Register(void) {
+CallbackArray *igAnimationTransitionPoint_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationTransitionPoint_metaObject,
         igObject_Register,
@@ -61,8 +61,8 @@ void thunk_igAnimationTransitionPoint_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAnimationTransitionPoint_ctorTable[] = {
-    igLongMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igAnimationTransitionPoint_fieldTable[] = {
     "_transitionTime",
@@ -83,9 +83,9 @@ void igAnimationTransitionPoint_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igAnimationTransitionPoint_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationTransitionPoint_ctorTable, 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a9bb0();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationTransitionPoint_fieldTable, g_igAnimationTransitionPoint_fieldHandles, g_igAnimationTransitionPoint_fieldOffsets, temp_s2);
 }

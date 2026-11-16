@@ -21,7 +21,7 @@ int beLayerInfo_GetVTable(void) {
     obj._vtable = (int)&g_beLayerInfo_vtable[0];
     groupsSlot = (char *)&obj._groups;
     *(int *)groupsSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beLayerInfo_vtable[0];
     igSmartPointer_beLayerGroupList_Destruct((igSmartPointer<igObject> *)groupsSlot, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -48,7 +48,7 @@ void beLayerInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beLayerInfo_callbackList[] = { beLayerGroupList_EnsureRegistered, 0 };
 
-void *beLayerInfo_Register(void) {
+CallbackArray *beLayerInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,9 +86,9 @@ static int g_beLayerInfo_fieldOffsets[] = {
 void beLayerInfo_InitFields(void) {
     int base;
     void *groups;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beLayerInfo_metaObject;
+    meta = g_beLayerInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLayerInfo_ctorTable, 1);
     groups = (void *)(igMetaObject_GetFieldAt(meta, base));

@@ -8,7 +8,7 @@ igMetaField *g_igVertexArray1_1_memPoolMetaField;
 
 int FUN_0014b680(int arg0) {
     igVertexArray1_1_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igVertexArray1_1_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igVertexArray1_1_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVertexArray1_1_GetMetaObject(void)
@@ -26,9 +26,9 @@ void igVertexArray1_1_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igVertexArray1_1_callbackList[] = { igMemoryPool_EnsureRegistered, 0 };
 
-void igVertexArray1_1_Register(void) {
+CallbackArray *igVertexArray1_1_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVertexArray1_1_metaObject,
         igVertexArray_Register,
@@ -52,12 +52,12 @@ igMetaObject *FUN_0014b7b0(void) {
 }
 
 static FieldFactory g_igVertexArray1_1_ctorTable[] = {
-    igStructMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igStructMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igVertexArray1_1_fieldTable[] = {
     "_vertexFormat",
@@ -93,27 +93,27 @@ void igVertexArray1_1_InitFields(void) {
     struct F *temp_s2_2;
 
     meta = g_igVertexArray1_1_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
+    fieldStart = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igVertexArray1_1_ctorTable, 6);
-    temp_s2 = (struct F *)(igMetaObject_GetFieldAt(meta, fieldStart));
+    temp_s2 = (struct F *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart));
     temp_s2->f20 = 4;
-    temp_s2 = (struct F *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
+    temp_s2 = (struct F *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 1));
     temp_s2->f60 = igFloatMetaField_GetDefaultDescriptor();
     temp_s2->f53 = 1;
     temp_s2->f64 = 1;
     temp_s2->f65 = 1;
-    temp_s2_2 = (struct F *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
+    temp_s2_2 = (struct F *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 2));
     temp_s2_2->f60 = igUnsignedCharMetaField_GetDefaultDescriptor();
     temp_s2_2->f53 = 1;
     temp_s2_2->f64 = 1;
     temp_s2_2->f65 = 1;
-    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 3)) + 38) = 0;
-    temp_s2_3 = (struct F *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
+    *(char *)((char *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 3)) + 38) = 0;
+    temp_s2_3 = (struct F *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 4));
     temp_s2_3->f60 = igFloatMetaField_GetDefaultDescriptor();
     temp_s2_3->f53 = 1;
     temp_s2_3->f64 = 1;
     temp_s2_3->f65 = 1;
-    temp_s2_4 = (struct F *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));
+    temp_s2_4 = (struct F *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 5));
     temp_s2_4->f56 = igMemoryPool_GetOrCreateMetaObject();
     temp_s2_4->f36 = 3;
     temp_s2_4->f38 = 0;

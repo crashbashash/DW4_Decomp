@@ -1,4 +1,4 @@
-void Gap__Attrs__igLightStateAttr__vfunc_24(S_13ef30 *arg0, int arg1) {
+void Gap__Attrs__igLightStateAttr__vfunc_24(S_13ef30 *arg0, igPsx2VisualContext *arg1) {
     if (arg0->f16 != 0) {
         if (arg0->f16->f16 == -1) {
             arg0->f16->vX();

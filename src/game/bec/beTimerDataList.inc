@@ -2,7 +2,7 @@ igMetaObject *g_beTimerDataList_metaObject;
 
 igMetaObject *beTimerDataList_GetOrCreateMetaObject(void) {
     if (g_beTimerDataList_metaObject == 0) {
-        g_beTimerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beTimerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beTimerDataList_metaObject;
 }
@@ -20,7 +20,7 @@ int beTimerDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beTimerDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beTimerDataList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beTimerDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beTimerDataList_callbackList[] = { beTimerData_EnsureRegistered, 0 };
 
-void *beTimerDataList_Register(void) {
+CallbackArray *beTimerDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

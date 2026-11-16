@@ -6,12 +6,12 @@ igMetaField *g_beLua_luaGlueMetaField;
 
 beLua *beLua_CreateInstance(int allocator) {
     beLua_EnsureRegistered();
-    return (beLua *)igMetaObject_CreateInstance(*(int *)0x589208, allocator);
+    return (beLua *)igMetaObject_CreateInstance(g_beLua_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beLua_GetOrCreateMetaObject(void) {
     if (g_beLua_metaObject == 0) {
-        g_beLua_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beLua_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beLua_metaObject;
 }
@@ -34,12 +34,12 @@ int beLua_GetVTable(void) {
     obj._infoList = 0;
     obj._luaState = 0;
     obj._luaGlue = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beLua_vtable[0];
     igSmartPointer_igLuaGlue_Destruct((igSmartPointer<igObject> *)(&obj._luaGlue), -1);
     igSmartPointer_beLuaState_Destruct((igSmartPointer<igObject> *)(&obj._luaState), (short)(-1));
     igSmartPointer_beBaseInfoList_Destruct((igSmartPointer<igObject> *)(&obj._infoList), -1);
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -76,7 +76,7 @@ void beLua_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beLua_callbackList[] = { beSystem_EnsureRegistered, beBaseInfoList_EnsureRegistered, beLuaState_EnsureRegistered, igLuaGlue_EnsureRegistered, 0 };
 
-void *beLua_Register(void) {
+CallbackArray *beLua_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -129,9 +129,9 @@ void beLua_InitFields(void) {
     void *infoList;
     void *luaState;
     void *luaGlue;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beLua_metaObject;
+    meta = g_beLua_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLua_ctorTable, 4);
     system = (void *)(igMetaObject_GetFieldAt(meta, base));
@@ -143,7 +143,7 @@ void beLua_InitFields(void) {
     luaState = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)luaState)->_metaObject = (int)beLuaState_GetOrCreateMetaObject();
     luaGlue = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)luaGlue)->_metaObject = igLuaGlue_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)luaGlue)->_metaObject = (int)igLuaGlue_GetOrCreateMetaObject();
     ((igRefMetaField *)luaGlue)->_construct = 1;
     igMetaObject_NameFields(meta, g_beLua_fieldTable, g_beLua_fieldHandles, g_beLua_fieldOffsets, base);
 }

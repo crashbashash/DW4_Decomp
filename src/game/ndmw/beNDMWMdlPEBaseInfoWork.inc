@@ -20,7 +20,7 @@ void *beNDMWMdlPEBaseInfoWork_ResolveMetaObject(void) {
 
 int beNDMWMdlPEBaseInfoWork_GetVTable(void) {
     PEBaseInfoWorkObj work;
-    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&work + *(int *)((char *)(char *)g_objectSystem + 916));
 }
 
 igSmartPointer<igObject> *igSmartPointer_igBoolList_Construct(igSmartPointer<igObject> *self)
@@ -36,7 +36,7 @@ void beNDMWMdlPEBaseInfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWMdlPEBaseInfoWork_callbackList[] = { igIntList_EnsureRegistered, igBoolList_EnsureRegistered, beMessenger_EnsureRegistered, 0 };
 
-void *beNDMWMdlPEBaseInfoWork_Register(void) {
+CallbackArray *beNDMWMdlPEBaseInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -121,22 +121,22 @@ void beNDMWMdlPEBaseInfoWork_InitFields(void) {
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
     meta = (void *)g_beNDMWMdlPEBaseInfoWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWMdlPEBaseInfoWork_ctorTable, 0xA);
-    dispRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    dispRamNoList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)dispRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
-    dispPosNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    dispPosNoList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)dispPosNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
-    timerList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    timerList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)timerList)->_metaObject = igIntList_GetOrCreateMetaObject();
-    isFirstList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)isFirstList)->_metaObject = igBoolList_GetOrCreateMetaObject();
-    downDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    isFirstList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
+    ((igObjectRefMetaField *)isFirstList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    downDataList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igObjectRefMetaField *)downDataList)->_metaObject = igIntList_GetOrCreateMetaObject();
-    upDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    upDataList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8));
     ((igObjectRefMetaField *)upDataList)->_metaObject = igIntList_GetOrCreateMetaObject();
-    messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
-    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    messenger = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWMdlPEBaseInfoWork_fieldTable, g_beNDMWMdlPEBaseInfoWork_fieldHandles, g_beNDMWMdlPEBaseInfoWork_fieldOffsets, base);
 }

@@ -11,9 +11,9 @@ igMetaObject *igEventReceiver_GetMetaObject(void)
 int igEventReceiver_GetVTable(void) {
     struct Obj_4512e0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igEventReceiver_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void igEventReceiver_EnsureRegistered(void)
@@ -21,9 +21,9 @@ void igEventReceiver_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEventReceiver_Register);
 }
 
-void igEventReceiver_Register(void) {
+CallbackArray *igEventReceiver_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEventReceiver_metaObject,
         igObject_Register,

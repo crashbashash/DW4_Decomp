@@ -19,7 +19,7 @@ int beNDMWAfsSetupInfo_GetVTable(void) {
     obj._name = 0;
     obj._insideFiles = 0;
     obj._dataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWAfsSetupInfo_vtable[0];
     igSmartPointer_beNDMWAfsSetupDataList_Destruct((igSmartPointer<igObject> *)&obj._dataList, -1);
     igSmartPointer_igAdxAfsFileList_Destruct(&obj._insideFiles, -1);
@@ -33,9 +33,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetupDataList_Destruct(igSmart
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -47,7 +47,7 @@ void beNDMWAfsSetupInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWAfsSetupInfo_callbackList[] = { igAdxAfsFileList_EnsureRegistered, beNDMWAfsSetupDataList_EnsureRegistered, 0 };
 
-void *beNDMWAfsSetupInfo_Register(void) {
+CallbackArray *beNDMWAfsSetupInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -96,7 +96,7 @@ void beNDMWAfsSetupInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWAfsSetupInfo_ctorTable, 2);
     insideFiles = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)insideFiles)->_metaObject = igAdxAfsFileList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insideFiles)->_metaObject = (int)igAdxAfsFileList_GetOrCreateMetaObject();
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)beNDMWAfsSetupDataList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beNDMWAfsSetupInfo_fieldTable, g_beNDMWAfsSetupInfo_fieldHandles, g_beNDMWAfsSetupInfo_fieldOffsets, base);

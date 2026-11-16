@@ -8,7 +8,7 @@
     do { \
         char *_s = (str); \
         if (_s != 0) { \
-            StringHeader *_h = (StringHeader *)_s - 1; \
+            StringTokenHeader *_h = (StringTokenHeader *)_s - 1; \
             if (--_h->refCount == 0) { \
                 StringChunk_ReleaseHeader(_h->owner, _h); \
             } \

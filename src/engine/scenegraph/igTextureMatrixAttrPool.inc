@@ -2,7 +2,7 @@ igMetaObject *g_igTextureMatrixAttrPool_metaObject;
 
 igMetaObject *FUN_00199b60(void) {
     if (g_igTextureMatrixAttrPool_metaObject == 0) {
-        g_igTextureMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureMatrixAttrPool_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igTextureMatrixAttrPool_GetMetaObject(void)
 int igTextureMatrixAttrPool_GetVTable(void) {
     struct Obj_199c00 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureMatrixAttrPool_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00199c40(void)
@@ -30,9 +30,9 @@ void FUN_00199c40(void)
 
 static igMetaObjectCallback g_igTextureMatrixAttrPool_callbackList[] = { igTextureMatrixAttr_EnsureRegistered, 0 };
 
-void igTextureMatrixAttrPool_Register(void) {
+CallbackArray *igTextureMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureMatrixAttrPool_metaObject,
         igObjectPool_Register,

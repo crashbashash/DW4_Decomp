@@ -20,7 +20,7 @@ int beModelCtrlPDMOVE_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlPDMOVE_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -31,7 +31,7 @@ void beModelCtrlPDMOVE_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlPDMOVE_Register);
 }
 
-void *beModelCtrlPDMOVE_Register(void) {
+CallbackArray *beModelCtrlPDMOVE_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -72,9 +72,9 @@ static int g_beModelCtrlPDMOVE_fieldOffsets[] = {
 
 void beModelCtrlPDMOVE_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlPDMOVE_metaObject;
+    meta = g_beModelCtrlPDMOVE_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlPDMOVE_ctorTable, 2);
     igMetaObject_NameFields(meta, g_beModelCtrlPDMOVE_fieldTable, g_beModelCtrlPDMOVE_fieldHandles, g_beModelCtrlPDMOVE_fieldOffsets, base);

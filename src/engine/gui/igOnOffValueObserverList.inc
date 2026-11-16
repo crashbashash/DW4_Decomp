@@ -2,7 +2,7 @@ igMetaObject *g_igOnOffValueObserverList_metaObject;
 
 igMetaObject *FUN_0044c880(void) {
     if (g_igOnOffValueObserverList_metaObject == 0) {
-        g_igOnOffValueObserverList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igOnOffValueObserverList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igOnOffValueObserverList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igOnOffValueObserverList_GetMetaObject(void)
 int igOnOffValueObserverList_GetVTable(void) {
     Obj_44c920 o;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igOnOffValueObserverList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void igOnOffValueObserverList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igOnOffValueObserverList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igOnOffValueObserverList_callbackList[] = { igOnOffValueObserver_EnsureRegistered, 0 };
 
-void igOnOffValueObserverList_Register(void) {
+CallbackArray *igOnOffValueObserverList_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOnOffValueObserverList_metaObject,
         igObjectList_Register,

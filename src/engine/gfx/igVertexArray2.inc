@@ -5,12 +5,12 @@ igMetaField *g_igVertexArray2_internalBufferMetaField;
 
 int FUN_0014a780(int arg0) {
     FUN_0014ab70();
-    return igMetaObject_CreateInstance(g_igVertexArray2_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igVertexArray2_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0014a7c0(void) {
     if (g_igVertexArray2_metaObject == 0) {
-        g_igVertexArray2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igVertexArray2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igVertexArray2_metaObject;
 }
@@ -27,13 +27,13 @@ int igVertexArray2_GetVTable(void) {
     struct Obj_14a860 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w[1] = 0;
     obj.vt = &g_igVertexArray2_vtable[0];
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[4] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igVertexArray2_vtable[0];
     FUN_0014aaf0((ObjectRefWord *)&obj.w[4], -1);
     igSmartPointer_igObjectList_Destruct((void **)&obj.w[3], -1);
@@ -97,9 +97,9 @@ void FUN_0014ab70(void)
 
 static igMetaObjectCallback g_igVertexArray2_callbackList[] = { igObjectList_EnsureRegistered, FUN_0014af80, igObject_EnsureRegistered, 0 };
 
-void igVertexArray2_Register(void) {
+CallbackArray *igVertexArray2_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexArray2_metaObject,
         igNamedObject_Register,
@@ -119,9 +119,9 @@ void thunk_igVertexArray2_GetMetaObject(void) {
 }
 
 static FieldFactory g_igVertexArray2_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igVertexArray2_fieldTable[] = {
     "_objList",

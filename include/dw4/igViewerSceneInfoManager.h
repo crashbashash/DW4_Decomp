@@ -14,7 +14,7 @@ struct igMetaObject *igViewerSceneInfoManager_GetOrCreateMetaObject(void);
 void igViewerSceneInfoManager_ResetView(struct igViewerSceneInfoManager *manager);
 void igViewerSceneInfoManager_CycleGuiVisibility(struct igViewerSceneInfoManager *manager);
 void igViewerSceneInfoManager_ResetOperationMode(struct igViewerSceneInfoManager *manager);
-void igViewerSceneInfoManager_DebugZoomOut(void);
+void igViewerSceneInfoManager_DebugZoomOut(struct igViewerSceneInfoManager *self);
 
 #ifdef __cplusplus
 }

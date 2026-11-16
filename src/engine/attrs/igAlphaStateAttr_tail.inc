@@ -1,4 +1,4 @@
-void Gap__Attrs__igAlphaStateAttr__vfunc_24(int arg0, int arg1) {
+void Gap__Attrs__igAlphaStateAttr__vfunc_24(int arg0, igPsx2VisualContext *arg1) {
     Gap__Gfx__igPsx2VisualContext__vfunc_217(arg1, *(unsigned char *)((char *)(arg0) + 12));
 }
 
@@ -20,7 +20,7 @@ void FUN_0013b810(int a0, int a1)
 }
 
 void FUN_0013b820(void *a) {
-    igObject_UserPostLoad(a);
+    igObject_UserPostLoad();
     ((short *)a)[5] = 0;
     ((short *)a)[4] = (((VC *)a)->vX())[2];
 }
@@ -35,7 +35,7 @@ void FUN_0013b860(void *p)
 void FUN_0013b8a0(void *arg0) {
     short temp_a0;
 
-    if ((igMetaObject_IsOfType(arg0, igAttr_GetMetaObject()) != 0) && (*(unsigned char *)((char *)(arg0) + 26) == 0)) {
+    if ((igMetaObject_IsOfType((igMetaObject *)arg0, igAttr_GetMetaObject()) != 0) && (*(unsigned char *)((char *)(arg0) + 26) == 0)) {
         temp_a0 = g_igAttr_nextAttrIndex;
         g_igAttr_nextAttrIndex = temp_a0 + 1;
         *(int *)((char *)(arg0) + 8) = (int)((int) temp_a0);

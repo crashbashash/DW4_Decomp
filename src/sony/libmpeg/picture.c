@@ -5,10 +5,6 @@
 #define P_TYPE 2
 #define B_TYPE 3
 
-int _pictureData(_sceMpegDecoder *dec);
-void _outputFrame(_sceMpegDecoder *dec, _sceMpegPicture *frame, int count);
-void _outputFieldPair(_sceMpegDecoder *dec, _sceMpegPicture *top, _sceMpegPicture *bottom, int count);
-
 /* Decodes the picture into its frame or field slot and marks the slot's picture decoded. */
 int _decPicture(_sceMpegDecoder *dec)
 {

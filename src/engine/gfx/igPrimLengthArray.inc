@@ -5,12 +5,12 @@ igMetaField *g_igPrimLengthArray_dataSizeMetaField;
 
 void FUN_0014bff0(int arg0) {
     FUN_0014c0d0();
-    igMetaObject_CreateInstance(g_igPrimLengthArray_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igPrimLengthArray_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0014c030(void) {
     if (g_igPrimLengthArray_metaObject == 0) {
-        g_igPrimLengthArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igPrimLengthArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igPrimLengthArray_metaObject;
 }
@@ -28,9 +28,9 @@ void FUN_0014c0d0(void)
     igMetaObject_RunStaticInit(igPrimLengthArray_Register);
 }
 
-void igPrimLengthArray_Register(void) {
+CallbackArray *igPrimLengthArray_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igPrimLengthArray_metaObject,
         igObject_Register,
@@ -50,9 +50,9 @@ void thunk_igPrimLengthArray_GetMetaObject(void) {
 }
 
 static FieldFactory g_igPrimLengthArray_ctorTable[] = {
-    igMemoryRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igPrimLengthArray_fieldTable[] = {
     "_lengthData",

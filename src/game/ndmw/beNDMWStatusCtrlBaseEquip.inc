@@ -1,5 +1,5 @@
 void *beNDMWStatusCtrlBaseEquip_Construct(beNDMWStatusCtrlBaseEquip *self) {
-    igObject_InitHeader();
+    igObject_InitHeader(self);
     /* beNDMWWindow part: sub-window, parent and the five close-list references */
     self->_vtable = (int)(&g_beNDMWWindow_vtable[0]);
     self->_subWindow = 0;

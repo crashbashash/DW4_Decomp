@@ -21,7 +21,7 @@ int beSvSlotXbox_GetVTable(void) {
     obj._vtable = (int)&g_beSvSlotXbox_vtable[0];
     nameSlot = (char **)&obj._name;
     *nameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvSlotXbox_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -32,7 +32,7 @@ void beSvSlotXbox_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvSlotXbox_Register);
 }
 
-void *beSvSlotXbox_Register(void) {
+CallbackArray *beSvSlotXbox_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -81,9 +81,9 @@ static int g_beSvSlotXbox_fieldOffsets[] = {
 
 void beSvSlotXbox_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvSlotXbox_metaObject;
+    meta = g_beSvSlotXbox_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvSlotXbox_ctorTable, 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), "");

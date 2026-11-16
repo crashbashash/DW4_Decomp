@@ -1,3 +1,5 @@
+#include "dw4/igFont.h"
+
 igMetaObject *g_igFont_metaObject;
 igMetaField *g_igFont_heightMetaField;
 igMetaField *g_igFont_baseLineMetaField;
@@ -6,7 +8,7 @@ igMetaField *g_igFont_vertexFlagsMetaField;
 
 igMetaObject *FUN_004507f0(void) {
     if (g_igFont_metaObject == 0) {
-        g_igFont_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igFont_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igFont_metaObject;
 }
@@ -26,9 +28,9 @@ void igFont_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igFont_callbackList[] = { igAttrList_EnsureRegistered, 0 };
 
-void igFont_Register(void) {
+CallbackArray *igFont_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igFont_metaObject,
         igNamedObject_Register,
@@ -78,11 +80,11 @@ void igFont_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igFont_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igFont_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAttrList_GetOrCreateMetaObject();
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igFont_ctorTable, 4);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igAttrList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igFont_fieldTable, g_igFont_fieldHandles, g_igFont_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFont_fieldTable, g_igFont_fieldHandles, g_igFont_fieldOffsets, temp_s2);
 }
 

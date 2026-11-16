@@ -2,7 +2,7 @@ igMetaObject *g_igMessageFilterList_metaObject;
 
 igMetaObject *FUN_002319d0(void) {
     if (g_igMessageFilterList_metaObject == 0) {
-        g_igMessageFilterList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igMessageFilterList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMessageFilterList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igMessageFilterList_GetMetaObject(void)
 int igMessageFilterList_GetVTable(void) {
     struct Obj_231a70 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMessageFilterList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_00231ab0(void)
@@ -30,9 +30,9 @@ void FUN_00231ab0(void)
 
 static igMetaObjectCallback g_igMessageFilterList_callbackList[] = { FUN_00231cb0, 0 };
 
-void igMessageFilterList_Register(void) {
+CallbackArray *igMessageFilterList_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMessageFilterList_metaObject,
         igObjectList_Register,

@@ -199,11 +199,11 @@ static inline void assign(igObject **slot, igObject *value) {
 }
 
 void igHotKeyEventReceiver_AddBinding(igHotKeyEventReceiver *receiver, int key, int button, igObject *action) {
-    igSmartPointer<Entry> entry((Entry *)FUN_0044dc20(igObject_GetAllocator(receiver)));
+    igSmartPointer<Entry> entry((Entry *)FUN_0044dc20((int)(igObject_GetAllocator(receiver))));
     entry->a = key;
     entry->b = button;
     assign(&entry->value, action);
-    ObjectList_AppendRetained(receiver->_hotKeyList, entry.get());
+    ObjectList_AppendRetained((igObjectList *)receiver->_hotKeyList, (igObject *)(entry.get()));
 }
 
 void igHotKeyEventReceiver_RemoveBinding(igHotKeyEventReceiver *receiver, int button) {
@@ -222,7 +222,7 @@ void igHotKeyEventReceiver_RemoveBinding(igHotKeyEventReceiver *receiver, int bu
                         igObject_Destroy(temp_a0);
                     }
                 }
-                List_RemoveWordAt(temp_s0, var_s1);
+                List_RemoveWordAt((igDataList *)temp_s0, var_s1);
                 temp_s0->f16[temp_s0->f8] = 0;
             } else {
                 temp_a0->f12 = 0x20;

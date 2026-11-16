@@ -8,6 +8,18 @@
 #include "dw4/listSet.h"
 #include "dw4/igTDataList.h"
 #include "dw4/beMatCtrl.h"
+#include "dw4/be.h"
+#include "dw4/beLua.h"
+#include "dw4/beMatCtrlInfo.h"
+#include "dw4/beMatCtrlInfoWork.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/igSwitch.h"
+#include <stdio.h>
 #pragma push
 #pragma readonly_strings on
 
@@ -40,40 +52,18 @@ typedef igSmartPointer<igTDataList<int> > MaskListRef;
 typedef igSmartPointer<beMatCtrlInfoWork> WorkRef;
 
 extern "C" {
-int igInsightCore_FindManager(int insight, int meta);
-void beMessenger_RegisterReceiver(int messenger, void *receiver, const char *name, const char *text, int value);
-unsigned int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *metaEnum, int name);
-void igSwitch_EnableAllChildren(int switchgraph);
-void igSwitch_DisableAllChildren(int switchgraph);
 int igAABox_IntersectPoint(igAABox *box, const float *point);
 
 void beMatCtrl_Prepare(beMatCtrl *self);
-int beMatCtrl_GetInfoMeta(void);
+igMetaObject *beMatCtrl_GetInfoMeta(void);
 void beMatCtrl_OnAddRam(beMatCtrl *self, beMatCtrlInfoRam *ram);
 void beMatCtrl_MarkContacts(beMatCtrl *self, igIntList *masks, beMatCtrlSearchList *nodes, int player, float *point, beMatCtrlDataList *materials);
 int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork *message);
 igMetaObject *beMatCtrl_GetMeta(void);
 void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram);
-void *igObject_GetAllocator(void *object);
-void *Memory_GetAllocatorBySelector(int selector);
-beMatCtrlInfoWork *beMatCtrlInfoWork_Create(void *allocator);
-igIntList *igIntList_Create(void *allocator);
-void ObjectList_AppendRetained(int list, void *object);
-void beMessenger_SendGroup(int messenger, const char *group, const char *message);
-int beMessenger_GetMatrixCount(int messenger);
-int beMessenger_GetInt(int messenger, int index);
-void beMessenger_GetMatrix(float *matrix, int messenger, int index);
-void igMatrix44f_GetTranslation(const float *matrix, float *point);
-int sprintf(char *buffer, const char *format, ...);
-int beLua__RunNamedChunk(int lua, const char *chunk, int given);
 
-extern int g_beLua_metaObject[4];
-extern int g_beMatCtrlInfo_metaObject[4];
 extern const char MATCTRL[];
 extern const char emptyString[];
-extern int kIGMemoryPoolHandleUser1[4];
-extern int g_mdlEntity[4];
-extern unsigned char g_useOwnerAllocator;
 }
 
 /* The mask lists' memory is addressed by byte offset: the queries scale the running material's index
@@ -172,17 +162,17 @@ static inline void DropMaskList(int &masks) {
 }
 
 void beMatCtrl_Prepare(beMatCtrl *self) {
-    self->_lua = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+    self->_lua = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject));
     DropMaskList(self->_wkMatOnList);
     DropMaskList(self->_wkMatOldOnList);
 }
 
-int beMatCtrl_GetInfoMeta(void) {
-    return g_beMatCtrlInfo_metaObject[0];
+igMetaObject *beMatCtrl_GetInfoMeta(void) {
+    return g_beMatCtrlInfo_metaObject;
 }
 
 void beMatCtrl_OnAddRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
-    beMessenger_RegisterReceiver(self->_messenger, ram, MATCTRL, 0, -1);
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, MATCTRL, 0, -1);
 }
 
 static inline beMatCtrlSearch *SearchNode(beMatCtrlSearchList *nodes, int i) {
@@ -251,7 +241,7 @@ static inline void StoreListRef(igObject *object, igObjectList *list, int index)
 
 static inline void *OwnerAllocator(beMatCtrl *self) {
     void *owner = igObject_GetAllocator(self);
-    return g_useOwnerAllocator != 0 ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    return g_useOwnerAllocator != 0 ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
 /* The work's current (0) and previous (1) mask list. */
@@ -289,22 +279,22 @@ void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
             igRelease((igObject *)ram->_work);
             ram->_work = 0;
             {
-                WorkRef created(beMatCtrlInfoWork_Create(OwnerAllocator(self)));
+                WorkRef created(beMatCtrlInfoWork_Create((int)OwnerAllocator(self)));
                 AssignRef(ram->_work, (igObject *)created.p);
                 work = (beMatCtrlInfoWork *)ram->_work;
             }
             int materialCount = ((beMatCtrlDataList *)info->_dataList_)->_count;
             {
-                igSmartPointer<igIntList> masks(igIntList_Create(OwnerAllocator(self)));
+                igSmartPointer<igIntList> masks(igIntList_Create((int)OwnerAllocator(self)));
                 SetListCount(masks.p, materialCount, sizeof(int));
                 FillList(masks.p, 0);
-                ObjectList_AppendRetained(work->_matOnPlLists, masks.p);
+                ObjectList_AppendRetained((igObjectList *)work->_matOnPlLists, (igObject *)masks.p);
             }
             {
-                igSmartPointer<igIntList> masks(igIntList_Create(OwnerAllocator(self)));
+                igSmartPointer<igIntList> masks(igIntList_Create((int)OwnerAllocator(self)));
                 SetListCount(masks.p, materialCount, sizeof(int));
                 FillList(masks.p, 0);
-                ObjectList_AppendRetained(work->_matOnPlLists, masks.p);
+                ObjectList_AppendRetained((igObjectList *)work->_matOnPlLists, (igObject *)masks.p);
             }
             SetListCount((igBoolList *)work->_runFlagList, materialCount, sizeof(bool));
             FillList((igBoolList *)work->_runFlagList, true);
@@ -320,22 +310,22 @@ void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
         igSmartPointer<igIntList> current(MaskListAt(work, 0), kRetainReference);
         igSmartPointer<igIntList> previous(MaskListAt(work, 1), kRetainReference);
         FillList(current.p, 0);
-        beMessenger_SendGroup(self->_messenger, "PLAYER", "GETMATRIX");
-        int resultCount = beMessenger_GetMatrixCount(self->_messenger);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, "PLAYER", "GETMATRIX");
+        int resultCount = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);
         for (int player = 0; player < PLAYER_MAX; player++) {
             unsigned char *exists = &self->_wkPlExist[player];
             *exists = 0;
             for (int i = 0; i < resultCount; i++) {
-                if (player == beMessenger_GetInt(self->_messenger, i)) {
+                if (player == beMessenger_GetInt((beMessenger *)self->_messenger, i)) {
                     *exists = 1;
                     break;
                 }
             }
         }
         for (int i = 0; i < resultCount; i++) {
-            int player = beMessenger_GetInt(self->_messenger, i);
+            int player = beMessenger_GetInt((beMessenger *)self->_messenger, i);
             if (self->_wkPlExist[player] != 0) {
-                beMessenger_GetMatrix(matrix, self->_messenger, i);
+                beMessenger_GetMatrix(matrix, (beMessenger *)self->_messenger, i);
                 igMatrix44f_GetTranslation(matrix, point);
                 beMatCtrl_MarkContacts(self, current.p, (beMatCtrlSearchList *)info->_search, player, point, (beMatCtrlDataList *)info->_dataList_);
             }
@@ -380,8 +370,8 @@ void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
                                 }
                             }
                         }
-                        g_mdlEntity[0] = 0;
-                        beLua__RunNamedChunk(self->_lua, chunk, 0);
+                        g_mdlEntity = 0;
+                        beLua__RunNamedChunk((beLua *)self->_lua, chunk, 0);
                         if (self->_wkChgFlagNO != -1) ListSet((igBoolList *)work->_runFlagList, self->_wkChgFlagNO, self->_wkChgFlag);
                         break;
                     }
@@ -395,12 +385,12 @@ void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
 
 int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork *message) {
     beMatCtrlInfo *info = (beMatCtrlInfo *)ram->_parentInfo;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beMatCtrl_GetMessageEnum(), message->_message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beMatCtrl_GetMessageEnum(), (const char *)message->_message)) {
     case MESSAGE_SHOWMAT:
-        igSwitch_EnableAllChildren(info->_switchgraph);
+        igSwitch_EnableAllChildren((igSwitch *)info->_switchgraph);
         break;
     case MESSAGE_HIDEMAT:
-        igSwitch_DisableAllChildren(info->_switchgraph);
+        igSwitch_DisableAllChildren((igSwitch *)info->_switchgraph);
         break;
     case MESSAGE_SHOW_LUACALL:
         self->_isLuaCallDisp = 1;

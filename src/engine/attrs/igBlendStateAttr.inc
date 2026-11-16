@@ -3,12 +3,12 @@ igMetaField *g_igBlendStateAttr_enabledMetaField;
 
 igBlendStateAttr *igBlendStateAttr_CreateInstance(int allocator) {
     igBlendStateAttr_EnsureRegistered();
-    return (igBlendStateAttr *)igMetaObject_CreateInstance(*(int *)0x55F348, allocator);
+    return (igBlendStateAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F348, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igBlendStateAttr_GetOrCreateMetaObject(void) {
     if (g_igBlendStateAttr_metaObject == 0) {
-        g_igBlendStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBlendStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBlendStateAttr_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igBlendStateAttr_GetMetaObject(void)
 
 int igBlendStateAttr_GetVTable(void) {
     struct Obj o;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igBlendStateAttr_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igBlendStateAttr_EnsureRegistered(void)
@@ -33,9 +33,9 @@ void igBlendStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBlendStateAttr_Register);
 }
 
-void igBlendStateAttr_Register(void) {
+CallbackArray *igBlendStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -55,7 +55,7 @@ void thunk_igBlendStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igBlendStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igBlendStateAttr_fieldTable[] = {
     "_enabled",

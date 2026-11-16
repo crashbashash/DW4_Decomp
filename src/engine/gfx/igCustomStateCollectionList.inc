@@ -2,12 +2,12 @@ igMetaObject *g_igCustomStateCollectionList_metaObject;
 
 int FUN_0014ee00(int arg0) {
     FUN_0014ef20();
-    return igMetaObject_CreateInstance(g_igCustomStateCollectionList_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igCustomStateCollectionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0014ee40(void) {
     if (g_igCustomStateCollectionList_metaObject == 0) {
-        g_igCustomStateCollectionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igCustomStateCollectionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igCustomStateCollectionList_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igCustomStateCollectionList_GetMetaObject(void)
 int igCustomStateCollectionList_GetVTable(void) {
     struct Obj_14eee0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igCustomStateCollectionList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_0014ef20(void)
@@ -35,9 +35,9 @@ void FUN_0014ef20(void)
 
 static igMetaObjectCallback g_igCustomStateCollectionList_callbackList[] = { FUN_0014f0c0, 0 };
 
-void igCustomStateCollectionList_Register(void) {
+CallbackArray *igCustomStateCollectionList_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCustomStateCollectionList_metaObject,
         igObjectList_Register,

@@ -4,7 +4,7 @@ igMetaField *g_igRenderListAttr_vcMetaField;
 
 igMetaObject *FUN_00133e50(void) {
     if (g_igRenderListAttr_metaObject == 0) {
-        g_igRenderListAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igRenderListAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igRenderListAttr_metaObject;
 }
@@ -22,11 +22,11 @@ int igRenderListAttr_GetVTable(void) {
     int temp_s0;
     S_ref *p;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     p = (S_ref *)&u.b[16];
     u.vt = (int)&g_igRenderListAttr_vtable[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igRenderListAttr_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -47,9 +47,9 @@ void FUN_00133f80(void)
 
 static igMetaObjectCallback g_igRenderListAttr_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
-void igRenderListAttr_Register(void) {
+CallbackArray *igRenderListAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRenderListAttr_metaObject,
         igVisualAttribute_Register,
@@ -69,8 +69,8 @@ void thunk_igRenderListAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igRenderListAttr_ctorTable[] = {
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igRenderListAttr_fieldTable[] = {
     "_handle",
@@ -98,7 +98,7 @@ void igRenderListAttr_InitFields(void) {
     igIntMetaField_SetDefault(temp_v0, -1);
     temp_v0->b38 = 0;
     temp_s1 = (struct F_134020 *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    temp_s1->f56 = igVisualContext_GetOrCreateMetaObject();
+    temp_s1->f56 = (int)igVisualContext_GetOrCreateMetaObject();
     temp_s1->b38 = 0;
     temp_s1->b40 = 1;
     temp_s1->b39 = 1;

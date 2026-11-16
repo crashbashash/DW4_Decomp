@@ -1,16 +1,10 @@
 #include "dw4/sony/libmpeg.h"
 #include "dw4/libkernl.h"
 
-void _ipuSetMpeg1(int mpeg1);
-void _ipuCommand(_sceMpegDecoder *dec, unsigned int command);
-void _sceMpegWaitIpuIdle(_sceMpegDecoder *dec);
-unsigned int _ipuGetBits(_sceMpegDecoder *dec, int n);
-void _extensionAndUserData(_sceMpegDecoder *dec);
 void _initSeq(sceMpeg *mp);
 void _setFieldPointers(_sceMpegPicture *p0, _sceMpegPicture *p1, _sceMpegPicture *p2, _sceMpegPicture *p3,
                        _sceMpegPicture *p4, _sceMpegPicture *p5, _sceMpegPicture *p6, _sceMpegPicture *p7,
                        _sceMpegPicture *p8, char *buffer0, char *buffer1, char *buffer2, int width, int height);
-void _sceMpegAlalcFree(_sceMpegAlalc *alalc);
 void _loadQuantMatrix(_sceMpegDecoder *dec, unsigned int command, unsigned char *matrix);
 
 #define IPU_SETIQ_INTRA 0x50000000

@@ -1,13 +1,14 @@
 #include "dw4/reflected.h"
 #include "dw4/beNDMWStatusCtrlD0.h"
+#include "dw4/beNDMWWindowSelect.h"
 #define STICK_UP 1
 #define STICK_RIGHT 2
 #define STICK_DOWN 4
 #define STICK_LEFT 8
 #define BUTTON_RIGHT 0x20
 #define BUTTON_LEFT 0x80
-#define NEWWIN(H, var, ctor, ga) { al = igObject_GetAllocator(ga);  al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);  igSmartPointer<H> var((H *)ctor(al));  beNDMWWindow_BindContext(var.p, self, self->_insight, self->_playerNo, 0);  lst = self->_subWindow;  ObjectList_AppendRetained(lst, var.p); }
-#define GRP(a, b) { beMessenger_SelectGroup(self->_messenger, LAYERCTL);  beMessenger_AppendString(self->_messenger, &a[0]);  beMessenger_AppendString(self->_messenger, &b[0]);  beMessenger_DispatchSelected(self->_messenger, SWITCH_4); }
+#define NEWWIN(H, var, ctor, ga) { al = igObject_GetAllocator(ga);  al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);  igSmartPointer<H> var((H *)ctor(al));  beNDMWWindow_BindContext(var.p, self, self->_insight, self->_playerNo, 0);  lst = self->_subWindow;  ObjectList_AppendRetained(lst, var.p); }
+#define GRP(a, b) { beMessenger_SelectGroup((beMessenger *)self->_messenger, LAYERCTL);  beMessenger_AppendString((beMessenger *)self->_messenger, &a[0]);  beMessenger_AppendString((beMessenger *)self->_messenger, &b[0]);  beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4); }
 #define NEXT0() { self->_st1 = self->_st1 + 1; self->_st3 = 0; self->_st2 = 0; }
 #define FIN(a) { self->_st1 = a; self->_st3 = 0; self->_st2 = 0; }
 #define RELEASE_OBJ(o) { \
@@ -16,16 +17,16 @@
         if (((unsigned long long)(long long)(int)(o)->_refCount & 0x7fffffULL) == 0) \
             igObject_Destroy(o); \
     } }
-#define SELALLOC(fb) (g_useOwnerAllocator ? (fb) : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])))
-#define SEL(d) beMessenger_SelectGroup(p->_messenger, d)
-#define APS(d) beMessenger_AppendString(p->_messenger, d)
-#define API(d) beMessenger_AppendInt(p->_messenger, d)
-#define DSP(d) beMessenger_DispatchSelected(p->_messenger, d)
+#define SELALLOC(fb) (g_useOwnerAllocator ? (fb) : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)))
+#define SEL(d) beMessenger_SelectGroup((beMessenger *)p->_messenger, d)
+#define APS(d) beMessenger_AppendString((beMessenger *)p->_messenger, (const char *)d)
+#define API(d) beMessenger_AppendInt((beMessenger *)p->_messenger, d)
+#define DSP(d) beMessenger_DispatchSelected((beMessenger *)p->_messenger, d)
 #define SUBCOUNT (((igObjectList *)p->_subWindow)->_count)
 #define PUSHB(LP, B) { int n_; igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); n_ = l_->_count; if (n_ < l_->_capacity) { l_->_count = n_ + 1; } else { List_Resize(l_, n_ + 1, 1); } ((unsigned char *)l_->_data)[n_] = (B); }
 #define SETB(LP, IDX, B) { igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); if (l_->_count != 0 && (IDX) >= 0 && (IDX) < l_->_count) { ((unsigned char *)l_->_data)[(IDX)] = (B); } }
 #define SWV(h) ((igObjectList *)*(int *)&(h))
-#define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && igObject_IsKindOf((W), g_beNDMWStatusCtrlD0_metaObject)) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
+#define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && igObject_IsKindOf((igObject *)(W), g_beNDMWStatusCtrlD0_metaObject)) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
 #define SETSLOT(L, IDX, V_) { Obj *v_ = (V_); Obj *old_; if (v_ != 0) { v_->_refCount = v_->_refCount + 1; } old_ = ((Obj **)(L)->_data)[(IDX)]; if (old_ != 0) { --old_->_refCount; if (((unsigned long long)(long long)(int)old_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old_); } if ((L)->_count != 0 && (IDX) >= 0 && (IDX) < (L)->_count) { ((Obj **)(L)->_data)[(IDX)] = v_; } }
 /* matching construct: cxx_sweep — the item is read inside its retain test */
 #define SET_ITEM(IDX, ITEM) { Obj *v; int r = (IDX); igObjectList *l = (igObjectList *)p->_powerSocket; \
@@ -36,11 +37,58 @@
 #define SETST(a, b) { p->_st0 = a; p->_st3 = 0; p->_st2 = 0; p->_st1 = 0; p->_st1 = b; p->_st3 = 0; p->_st2 = 0; }
 #define NEXT2() { p->_st2 = p->_st2 + 1; p->_st3 = 0; }
 #define REFRESH() { SEL(SUBWND_2); API(p->_playerNo); DSP(OFPREVIEW); }
-#define PUBLISH() { beMessenger_SelectReceivers(p->_messenger, GAMERAM_9, 0, 0); API(p->_playerNo); DSP(RECALCPLAYER_4); SEL(SUBWND_2); API(p->_playerNo); DSP(UPDATE); }
+#define PUBLISH() { beMessenger_SelectReceivers((beMessenger *)p->_messenger, GAMERAM_9, 0, 0); API(p->_playerNo); DSP(RECALCPLAYER_4); SEL(SUBWND_2); API(p->_playerNo); DSP(UPDATE); }
 #include "dw4/igSmartPointer.h"
+#include "dw4/igTDataList.h"
+#include "dw4/igResult.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
 #include "dw4/beNDMWWindowDispatchView.h"
+#include "dw4/StringPool.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beDataBase.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWGameRam.h"
+#include "dw4/beNDMWItemBaseList.h"
+#include "dw4/beNDMWListCtrl.h"
+#include "dw4/beNDMWLoadIntf2.h"
+#include "dw4/beNDMWShinkaCtrl.h"
+#include "dw4/beNDMWShopSelect00.h"
+#include "dw4/beNDMWShopSelect34.h"
+#include "dw4/beNDMWShopSelect52.h"
+#include "dw4/beNDMWStatus.h"
+#include "dw4/beNDMWStatusCtrl00.h"
+#include "dw4/beNDMWStatusCtrlBaseEquip.h"
+#include "dw4/beNDMWStatusCtrlBit.h"
+#include "dw4/beNDMWStatusCtrlDisk.h"
+#include "dw4/beNDMWStatusCtrlEquip.h"
+#include "dw4/beNDMWStatusCtrlFlag.h"
+#include "dw4/beNDMWStatusCtrlFolder.h"
+#include "dw4/beNDMWStatusCtrlSendBit.h"
+#include "dw4/beNDMWStatusCtrlSkill.h"
+#include "dw4/beNDMWStatusMainSlot.h"
+#include "dw4/beNDMWStatusPowerSocket.h"
+#include "dw4/beNDMWStatusSelect00.h"
+#include "dw4/beNDMWStatusSelect01.h"
+#include "dw4/beNDMWStatusSelectE0.h"
+#include "dw4/beNDMWStatusSelectE1.h"
+#include "dw4/beNDMWStatusSubMenu.h"
+#include "dw4/beNDMWStatusSubSlot.h"
+#include "dw4/beNDMWStatusTitle00.h"
+#include "dw4/beNDMWStatusTitle01.h"
+#include "dw4/beNDMWStatusTitle02.h"
+#include "dw4/beNDMWStatusTitle03.h"
+#include "dw4/beNDMWStatusTitle04.h"
+#include "dw4/beNDMWWindow.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beSystem.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/igStringObj.h"
+#include <stdio.h>
+#include <string.h>
 /* The element count of a list, read through a const view. */
 template <class List> static inline int ListCount(const List *list) { return list->_count; }
 /* The list index of a row shown on a page: the index of the page's first entry plus the row. */
@@ -48,96 +96,54 @@ static inline int RowIndex(int pageBase, int row) { return pageBase + row; }
 #define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define LIST_CLEAR_AT(L, i) { REL((L)->_data[i]); \
     if ((L)->_count != 0 && (i) >= 0 && (i) < (L)->_count) (L)->_data[i] = 0; }
-#define GET_ALLOC(v) { void *ga = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
+#define GET_ALLOC(v) { void *ga = igObject_GetAllocator((igObject *)self); if (g_useOwnerAllocator != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 #define RELEASE_STR(slot) { const char *held = slot; \
     if (held != 0) { int *hd = (int *)held - 2; \
         int cnt = ((int *)held)[-1] - 1; ((int *)held)[-1] = cnt; \
         if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 #define RETAIN_OBJ(o) { igObject *rr = (igObject *)(o); if (rr != 0) rr->_refCount = rr->_refCount + 1; }
 #define NEXT_ST0() { self->_st0 = self->_st0 + 1; self->_st3 = 0; self->_st2 = 0; self->_st1 = 0; }
-#define ALLOC(al) al = igObject_GetAllocator(self); al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-#define MSG() { beMessenger_SelectGroup(self->_messenger, TEXTCTL_5); beMessenger_AppendString(self->_messenger, STWINFONT29_3); beMessenger_AppendString(self->_messenger, font100_2); beMessenger_AppendString(self->_messenger, DISPOFF_2); beMessenger_DispatchSelected(self->_messenger, SWITCH_4); }
-#define CLEAR(lst) { igDataList *l = (igDataList *)(lst); int n = l->_count; int i; int *slot; int *nw; int o; int *old; if (0 < n) { i = 0; o = 0; do { slot = (int *)(l->_data + o); if (((int *)g_stringPool)[0] == 0) { int v = ((int)StringPool_Allocate(0x10)); if (v != 0) { v = ((int)StringPool_Construct(v)); } ((int *)g_stringPool)[0] = v; } nw = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0); old = (int *)*slot; if (old != 0) { int *hd = old - 2; int c = old[-1] - 1; old[-1] = c; if (c == 0) { StringChunk_ReleaseHeader(*hd, hd); } } i++; *slot = (int)nw; o += 4; } while (i < n); } l->_count = 0; }
+#define ALLOC(al) al = igObject_GetAllocator(self); al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+#define MSG() { beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5); beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3); beMessenger_AppendString((beMessenger *)self->_messenger, font100_2); beMessenger_AppendString((beMessenger *)self->_messenger, DISPOFF_2); beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4); }
+#define CLEAR(lst) { igDataList *l = (igDataList *)(lst); int n = l->_count; int i; int *slot; int *nw; int o; int *old; if (0 < n) { i = 0; o = 0; do { slot = (int *)(l->_data + o); if (g_stringPool == 0) { int v = ((int)StringPool_Allocate(0x10)); if (v != 0) { v = ((int)StringPool_Construct((StringPool *)v)); } g_stringPool = (StringPool *)v; } nw = (int *)StringPool_Intern(g_stringPool, 0); old = (int *)*slot; if (old != 0) { int *hd = old - 2; int c = old[-1] - 1; old[-1] = c; if (c == 0) { StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); } } i++; *slot = (int)nw; o += 4; } while (i < n); } l->_count = 0; }
 #define WSETI84(w, v) { beNDMWWindowSelect *wt = (beNDMWWindowSelect *)(w); wt->_selectMax = (v); }
 #define WSETI100(w, v) { beNDMWWindowSelect *wt = (beNDMWWindowSelect *)(w); wt->_startPoint = (v); }
 #define WSETPOS(w, x, y, z) { beNDMWWindowSelect *wt = (beNDMWWindowSelect *)(w); *(float *)&wt->_offsetPos[0] = (x); *(float *)&wt->_offsetPos[1] = (y); *(float *)&wt->_offsetPos[2] = (z); }
-#define MSG_SELECT_INT(v) { beMessenger_SelectGroup(self->_messenger, GAMERAM_9); \
-    beMessenger_AppendInt(self->_messenger, v); beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6); }
+#define MSG_SELECT_INT(v) { beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9); \
+    beMessenger_AppendInt((beMessenger *)self->_messenger, v); beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6); }
 #define NEXT_ST2() { self->_st2 = self->_st2 + 1; self->_st3 = 0; }
 #define SYNC_COUNT() { self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count; }
 #define WIN_PENDING() (((igObjectList *)self->_subWindow)->_count != self->_nowProcKazu)
 #define LIST_ADD(decided, val) { int n_ = ((igDataList *)(decided))->_count; igDataList *l_ = (igDataList *)(decided); \
     if (n_ < l_->_capacity) l_->_count = ListCount(l_) + 1; else List_Resize(l_, n_ + 1, 4); \
     ((int *)l_->_data)[n_] = (val); }
-#define SEND_CLOSE() beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3)
+#define SEND_CLOSE() beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3)
 #define RESET_ST1() { self->_st1 = 0; self->_st3 = 0; self->_st2 = 0; }
-#define MSG_STR3(a, b, c, d) { beMessenger_SelectGroup(self->_messenger, TEXTCTL_5); \
-    beMessenger_AppendString(self->_messenger, a); beMessenger_AppendString(self->_messenger, b); \
-    beMessenger_AppendString(self->_messenger, c); beMessenger_DispatchSelected(self->_messenger, d); }
+#define MSG_STR3(a, b, c, d) { beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5); \
+    beMessenger_AppendString((beMessenger *)self->_messenger, a); beMessenger_AppendString((beMessenger *)self->_messenger, b); \
+    beMessenger_AppendString((beMessenger *)self->_messenger, c); beMessenger_DispatchSelected((beMessenger *)self->_messenger, d); }
 #define CLOSE_LISTS() { igStringRefList *l1 = (igStringRefList *)self->_modelCloseInfoNameList; \
     StringRefList_ResetRange(l1, 0, l1->_count); l1->_count = 0; \
     ((igObjectList *)self->_modelCloseRamNoList)->_count = 0; \
     igStringRefList *l2 = (igStringRefList *)self->_modelCloseSeqNameList; \
     StringRefList_ResetRange(l2, 0, l2->_count); l2->_count = 0; }
-#define APO(d) beMessenger_AppendObject(p->_messenger, d)
+#define APO(d) beMessenger_AppendObject((beMessenger *)p->_messenger, d)
 #define SW(h) ((igObjectList *)(h))
 #define LIST_REMOVE(lst, idx) { igObjectList *l_ = (igObjectList *)(lst); int ix_ = (idx); \
-    beNDMWLoadIntf2_igObject_Release(beNDMWLoadIntf2_igObjectList_Get(l_, ix_)); beNDMWGameRam_igObjectList_Remove(l_, ix_); \
+    beNDMWLoadIntf2_igObject_Release((igObject *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)l_, ix_)); beNDMWGameRam_igObjectList_Remove(l_, ix_); \
     ((int *)l_->_data)[l_->_count] = 0; }
 
-extern "C" void beMessenger_SendNamed(...);
 extern "C" int beNDMWListCtrl_GetMeta(void);
-extern "C" beNDMWStatusTitle03 *beNDMWStatusTitle03_Create(void *allocator);
-extern "C" beNDMWStatusTitle02 *beNDMWStatusTitle02_Create(void *allocator);
-extern "C" beNDMWStatusTitle01 *beNDMWStatusTitle01_Create(void *allocator);
-extern "C" beNDMWStatusTitle00 *beNDMWStatusTitle00_Create(void *allocator);
-extern "C" beNDMWStatusSelect00 *beNDMWStatusSelect00_Create(void *allocator);
-extern "C" beNDMWStatusCtrlSkill *beNDMWStatusCtrlSkill_Create(void *allocator);
-extern "C" beNDMWStatusCtrlFolder *beNDMWStatusCtrlFolder_Create(void *allocator);
-extern "C" beNDMWStatusCtrlEquip *beNDMWStatusCtrlEquip_Create(void *allocator);
-extern "C" int beNDMWWindow_QueueText(...);
-extern "C" void * Memory_GetAllocatorBySelector(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int beMessenger_AppendString(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_GetBool(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_SelectReceivers(...);
-extern "C" int beNDMWWindow_BindContext(...);
-extern "C" int beNDMWWindow_ClearQueuedText(...);
-extern "C" int beNDMWWindow_PlayQueuedModelClose(...);
-extern "C" int beNDMWWindow_PollCloseComplete(...);
-extern "C" int beNDMWWindow_RequestChildrenClose(...);
-extern "C" void * igObject_GetAllocator(...);
-extern "C" int beNDMWWindow_RunMessageScript(...);
-extern "C" int igObject_IsKindOf(...);
-extern "C" beDataObjStringList *igProperty_GetRecordStringList(...);
-extern "C" beNDMWShopSelect00 *beNDMWShopSelect00_Create(void *allocator);
-extern "C" beNDMWStatusSelectE1 *beNDMWStatusSelectE1_Create(void *allocator);
 extern "C" void beNDMWStatusCtrlBaseEquip_PreviewSocketSwap(beNDMWStatusCtrlBaseEquip *p);
-extern "C" int List_Resize(...);
-extern "C" void StringChunk_ReleaseHeader(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_GetObject(...);
-extern "C" beDataObjObjectList *igProperty_GetRecordFolder(...);
-extern "C" void beMessenger_AppendVec3(int, float *);
 extern "C" void beNDMWStatusCtrlBaseEquip_ShowKindCursor(beNDMWStatusCtrlBaseEquip *self, int kind);
 extern "C" void beNDMWStatusCtrlBaseEquip_QueuePanelText(beNDMWStatusCtrlBaseEquip *self);
-extern "C" void * StringPool_Allocate(...);
-extern "C" void * StringPool_Construct(...);
-extern "C" const char * StringPool_Intern(...);
-extern "C" int igInsightCore_FindManager(...);
-extern "C" int igStringRefList_Create(...);
-extern "C" int igIntList_Create(...);
-extern "C" int beNDMWItemBase_GetRecordInt(...);
-extern "C" int beNDMWItemBase_GetRecordString(...);
-extern "C" void beNDMWWindow_PresentModelAtOrigin(...);
-extern "C" int beNDMWItemBase_GetRevisionColor(...);
-extern "C" int strlen(const void *);
-extern "C" int igStringObj_Set(void *, const char *);
-extern "C" int igStringObj_Insert(void *, const void *, int, int);
-extern "C" int __dl__FPv(...);
-extern "C" int ObjectList_FillRetained(...);
+/* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
+extern "C" int beNDMWItemBase_GetRecordInt(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
+extern "C" char *beNDMWItemBase_GetRecordString(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
+extern "C" unsigned long long beNDMWItemBase_GetRecordBool(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
+extern "C" void beNDMWItemBase_GetRevisionColor(float *color, beNDMWItemBase *item);
+/* kept local: no include/dw4 home (only CoreLibrary.h declares these). */
+extern "C" void ObjectList_FillRetained(igTDataList<igObject *> *list, igObject *object);
 extern "C" int beNDMWStatusMainSlot_GetMeta(void);
 extern "C" void beNDMWStatusSubSlot_PreviewPocketDevice(void);
 extern "C" void beNDMWStatusSubSlot_OpenPocketList(void);
@@ -147,31 +153,7 @@ extern "C" void beNDMWStatusSubSlot_OpenPocketFolder(void);
 extern "C" void beNDMWStatusSubSlot_EquipPocket(void);
 extern "C" void beNDMWStatusSubSlot_ClearPocket(void);
 extern "C" int beNDMWStatusSubSlot_GetMeta(void);
-extern "C" int beNDMWWindowSelect_CanRequestFO2TOP(...);
-extern "C" int beNDMWItemBase_GetRecordBool(...);
 extern "C" int beNDMWStatusCtrlD0_GetSelectedIndex(beNDMWStatusCtrlD0 *self);
-extern "C" void *beNDMWStatusSubMenu_Create(void *);
-extern "C" void *beNDMWStatusCtrlFlag_Create(void *);
-extern "C" void *beNDMWStatusCtrlDisk_Create(void *);
-extern "C" void *beNDMWStatusCtrlBit_Create(void *);
-extern "C" int beMessenger_SendGroup(...);
-extern "C" beDataObjBoolList *igProperty_GetRecordArray(...);
-extern "C" const char * beDataBase_GetRecordString(...);
-extern "C" void beNDMWLoadIntf2_igObjectList_Set(...);
-extern "C" void beNDMWLoadIntf2_igObject_Release(...);
-extern "C" void beNDMWLoadIntf2_igObject_Retain(...);
-extern "C" void *beNDMWShopSelect52_Create(void *);
-extern "C" beDataObjBool *igProperty_GetRecordByte(...);
-extern "C" int beNDMWStatusCtrlSendBit_Create(int);
-extern "C" void sprintf(...);
-extern "C" int beNDMWShopSelect34_Create(...);
-extern "C" int beNDMWWindow_ShowPaddedDigits(...);
-extern "C" int beMessenger_AppendObject(...);
-extern "C" void beNDMWShinkaCtrl_Setup(int, int, int);
-extern "C" void beNDMWWindow_SendModelSequence(...);
-extern "C" void *beNDMWLoadIntf2_igObjectList_Get(...);
-extern "C" void beNDMWGameRam_igObjectList_Remove(...);
-extern "C" void *beNDMWItemBaseList_Create(void *);
 extern "C" int beNDMWStatusSubMenu_GetMeta(void);
 extern "C" int beNDMWStatusCtrlSkill_GetMeta(void);
 extern "C" int beNDMWStatusCtrlSendBit_GetMeta(void);
@@ -184,7 +166,6 @@ extern "C" int beNDMWStatusPowerSocket_GetMeta(void);
 extern "C" int beNDMWStatusCtrlBaseEquip_GetMeta(void);
 extern "C" int beNDMWStatusCtrlEquip_GetMeta(void);
 extern "C" int beNDMWStatusCtrl00_GetMeta(void);
-extern "C" int g_beNDMWListCtrl_metaObject[4];
 extern "C" char i_stcursorleft[];
 extern "C" char SQ_HIDE[];
 extern "C" char SQ_CLOSE_3[];
@@ -193,8 +174,6 @@ extern "C" char SQ_SELECT[];
 extern "C" char MODELCTRL_3[];
 extern "C" char SQ_MOVEEND[];
 extern "C" char SQ_MOVENEXT[];
-extern "C" void beNDMWWindow_PresentModel(beNDMWListCtrl *, const char *, int, const char *, const char *, float *);
-extern "C" bePadData * bePadManager_GetPadForPlayer(...);
 extern "C" void beNDMWListCtrl_PresentPageArrows(beNDMWListCtrl *self,const float *leftArrowPos,const float *rightArrowPos);
 extern "C" bool beNDMWListCtrl_PrevPage(beNDMWListCtrl *self);
 extern "C" bool beNDMWListCtrl_NextPage(beNDMWListCtrl *self);
@@ -222,15 +201,8 @@ extern "C" char space[];
 extern "C" char LEFT_3[];
 extern "C" char ISRUN_5[];
 extern "C" char DISPON_2[];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self);
 extern "C" void beNDMWStatusCtrlEquip_Update(beNDMWStatusCtrlEquip *self);
-extern "C" beNDMWStatusTitle04 *beNDMWStatusTitle04_Create(void *allocator);
-extern "C" beNDMWStatusSelect01 *beNDMWStatusSelect01_Create(void *allocator);
-extern "C" beNDMWStatusPowerSocket *beNDMWStatusPowerSocket_Create(void *allocator);
-extern "C" beNDMWStatusMainSlot *beNDMWStatusMainSlot_Create(void *allocator);
-extern "C" beNDMWStatusSubSlot *beNDMWStatusSubSlot_Create(void *allocator);
 extern "C" char i_sttitle[];
 extern "C" char txt_status_lua_2[];
 extern "C" char font000_2[];
@@ -253,7 +225,6 @@ extern "C" char POWERSOCKETNAME_3[];
 extern "C" char PLAYERARMS_2[];
 extern "C" char GENERATE_7[];
 extern "C" char ONPREVIEW[];
-extern "C" void *g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -264,22 +235,23 @@ public:
     StringRef(const char *s) : p((char *)s) {}
     StringRef(void *s) : p((char *)s) {}
     StringRef(const StringRef &o) : p(o.p) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
+    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
     StringRef &operator=(const char *text) {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             void *pool = StringPool_Allocate(16);
-            if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool[0] = pool;
+            if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
+            g_stringPool = (StringPool *)pool;
         }
-        const char *token = StringPool_Intern(g_stringPool[0], text);
+        const char *token = StringPool_Intern(g_stringPool, text);
         const char *old = p;
-        if (old) { int *h = (int *)old - 2; int r = ((int *)old)[-1] - 1; ((int *)old)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); }
+        if (old) { int *h = (int *)old - 2; int r = ((int *)old)[-1] - 1; ((int *)old)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); }
         p = (char *)token;
         return *this;
     }
 };
-extern "C" int StringList_AppendRetained(int, const StringRef &);
-extern "C" StringRef StringList_CopyRetained(...);
+/* kept local: the retained-string holder type is not shared yet (open item A7). */
+extern "C" void StringList_AppendRetained(igStringRefList *list, const StringRef &value);
+extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 
 /* Interns a string in the shared string pool; a null text interns as null. */
 static inline const char *InternString(const char *text)
@@ -288,12 +260,12 @@ static inline const char *InternString(const char *text)
     if (text == 0) {
         token = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             void *pool = StringPool_Allocate(0x10);
-            if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool[0] = pool;
+            if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
+            g_stringPool = (StringPool *)pool;
         }
-        token = StringPool_Intern(g_stringPool[0], text);
+        token = StringPool_Intern(g_stringPool, text);
     }
     return token;
 }
@@ -307,7 +279,6 @@ extern "C" char font101[];
 extern "C" char font102[];
 extern "C" char font103[];
 extern "C" char font104[];
-extern "C" int g_beNDMWStatus_metaObject[4];
 extern "C" char TSUYOSA_2[];
 extern "C" char KASHIKOSA_2[];
 extern "C" char SEISHIN_2[];
@@ -362,14 +333,12 @@ extern "C" char SQ_POWEROPEN[];
 extern "C" void beNDMWStatusPowerSocket_PresentPanel(beNDMWStatusPowerSocket *self, int open);
 extern "C" char COLOR[];
 extern "C" void beNDMWStatusPowerSocket_RefreshSlotList(beNDMWStatusPowerSocket *self);
-extern "C" char *g_stringObjEmptyText[4];
 extern "C" char TXT_2[];
-extern "C" int g_beSystem_metaObject[4];
 extern "C" void beNDMWStatusPowerSocket_ShowSlotDescription(beNDMWStatusPowerSocket *a);
 extern "C" void beNDMWStatusPowerSocket_OpenSlotList(beNDMWStatusPowerSocket *self);
 extern "C" void beNDMWStatusPowerSocket_RefreshPocket(beNDMWStatusPowerSocket *self);
-extern "C" beNDMWStatusSelectE0 * beNDMWStatusSelectE0_Create(...);
-extern "C" igBoolList *igBoolList_Create(void *allocator);
+/* kept local: no include/dw4 home (CoreLibrary.h declares igBoolList_Create without its result). */
+extern "C" igBoolList *igBoolList_Create(int pool);
 extern "C" char CANCELCOLOR_2[];
 extern "C" void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self);
 extern "C" void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocket *self);
@@ -377,7 +346,6 @@ extern "C" void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocke
 extern "C" void beNDMWStatusPowerSocket_OpenDeviceFolder(beNDMWStatusPowerSocket *self);
 
 typedef struct PropertyRecordTable { char p16[16]; int *data; } PropertyRecordTable;
-extern "C" beDataObjIntList *igProperty_GetRecordIntList(...);
 extern "C" char DIGIMONNO_3[];
 extern "C" char SOUBI_2[];
 extern "C" char SKILL_2[];
@@ -396,7 +364,6 @@ extern "C" char SQ_MAINOPEN[];
 extern "C" void beNDMWStatusMainSlot_PresentPanel(beNDMWStatusMainSlot *self, int open);
 extern "C" void beNDMWStatusMainSlot_RefreshSlotList(beNDMWStatusMainSlot *self);
 extern "C" void beNDMWStatusMainSlot_ShowSlotDescription(beNDMWStatusMainSlot *a);
-extern "C" int g_beNDMWStatusMainSlot_metaObject[4];
 extern "C" void beNDMWStatusMainSlot_OpenSlotList(beNDMWStatusMainSlot *self);
 extern "C" void beNDMWStatusMainSlot_RefreshPocket(beNDMWStatusMainSlot *self);
 extern "C" void beNDMWStatusMainSlot_OpenSlotMenu(beNDMWStatusMainSlot *self);
@@ -405,10 +372,8 @@ extern "C" void beNDMWStatusMainSlot_OpenDeviceFolder(beNDMWStatusMainSlot *self
 extern "C" void beNDMWStatusMainSlot_PreviewPocketDevice(beNDMWStatusMainSlot * self, char * extra, char * unusedA, int unusedB);
 extern "C" void beNDMWStatusMainSlot_PreviewSlotDevice(beNDMWStatusMainSlot *self, int index);
 extern "C" void beNDMWStatusMainSlot_EquipPocket(beNDMWStatusMainSlot * self, char * unusedA, char * unusedB, char * unusedC);
-extern "C" int g_beNDMWStatus_metaObject[4];
 extern "C" char LEVEL_3[];
 extern "C" char LVPOINT[];
-extern "C" beDataObjInt *igProperty_GetRecord(...);
 extern "C" int beNDMWStatusMainSlot_CanEquip(beNDMWStatusMainSlot *self, int index);
 extern "C" void beNDMWStatusMainSlot_EquipSelected(beNDMWStatusMainSlot *self);
 extern "C" void beNDMWStatusMainSlot_OpenPocketList(beNDMWStatusMainSlot *self);
@@ -420,7 +385,6 @@ extern "C" char SQ_SUBOPEN[];
 extern "C" void beNDMWStatusSubSlot_PresentPanel(beNDMWStatusSubSlot *w, int open);
 extern "C" void beNDMWStatusSubSlot_RefreshSlotList(beNDMWStatusSubSlot *self);
 extern "C" void beNDMWStatusSubSlot_ShowSlotDescription(beNDMWStatusSubSlot *a);
-extern "C" int g_beNDMWStatusSubSlot_metaObject[4];
 extern "C" void beNDMWStatusSubSlot_OpenSlotList(beNDMWStatusSubSlot *self);
 extern "C" char font200[];
 extern "C" char font201[];
@@ -517,7 +481,6 @@ public:
     DeviceRef(const DeviceRef &r) : p(r.p) { if (p != 0) p->_refCount = p->_refCount + 1; }
     ~DeviceRef() { ReleaseObject((igObject *)p); }
 };
-extern "C" void beNDMWWindow_QueueObjectText(void *, void *, const char *, const DeviceRef &, void *);
 extern "C" void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self);
 extern "C" void StringRefList_ResetRange(igStringRefList *list, int first, int count);
 static inline void ZeroRange(igObjectList *list, int first, int count)
@@ -572,7 +535,6 @@ extern "C" char CURSOR_MOVE[];
 extern "C" char PLAY_3[];
 typedef igObject RefObj;
 extern "C" void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p);
-extern "C" int g_beNDMWStatusSelectE1_metaObject[4];
 extern "C" char SQ_BWINONOPEN[];
 extern "C" char SQ_BWINOFFOPEN[];
 extern "C" char SQ_WAZAOPEN[];
@@ -591,14 +553,14 @@ static inline void ClearStringRefList(int listHandle)
     int **slot; int *ref; int *old; int pool; int *a1; int c;
     for (i = 0; i < n; i++) {
         slot = &((int **)l->_data)[i];
-        if (((int *)g_stringPool)[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(16));
-            if (pool) pool = ((int)StringPool_Construct(pool));
-            ((int *)g_stringPool)[0] = pool;
+            if (pool) pool = ((int)StringPool_Construct((StringPool *)pool));
+            g_stringPool = (StringPool *)pool;
         }
-        ref = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
+        ref = (int *)StringPool_Intern(g_stringPool, 0);
         old = *slot;
-        if (old) { a1 = old - 2; c = old[-1] - 1; old[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); }
+        if (old) { a1 = old - 2; c = old[-1] - 1; old[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1); }
         *slot = ref;
     }
     l->_count = 0;
@@ -639,35 +601,23 @@ static inline void AppendBoth(ItemListRef &dst, igObjectList *a, igObjectList *b
     int i, j;
     for (i = 0; i < a->_count; i++) {
         int *e = (int *)((int *)a->_data)[i];
-        if (e != 0) ObjectList_AppendRetained(dst.p, e);
+        if (e != 0) ObjectList_AppendRetained((igObjectList *)dst.p, (igObject *)e);
         if (i == 0) {
             for (j = 0; j < b->_count; j++) {
                 int *e2 = (int *)((int *)b->_data)[j];
-                if (e2 != 0) ObjectList_AppendRetained(dst.p, e2);
+                if (e2 != 0) ObjectList_AppendRetained((igObjectList *)dst.p, (igObject *)e2);
             }
         }
     }
 }
 };
-struct RemovedSlot { int index; };
-extern "C" RemovedSlot ObjectList_RemoveFirstRetained(void *, int, int);
-extern "C" void List_RemoveWordAt(void *, int);
+/* kept local: no include/dw4 home (only CoreLibrary.h declares these). */
+extern "C" igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start);
 class ItemListRef;
 class DeviceRef;
 extern "C" void beNDMWStatusSubMenu_SortByRevision(void *, const ItemListRef &);
 extern "C" void beNDMWStatusSubMenu_SortByRecordNo(void *, const ItemListRef &);
 extern "C" void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self);
-extern "C" int g_beNDMWStatusSubMenu_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlSkill_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlSendBit_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlBit_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlDisk_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlFlag_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlFolder_metaObject[4];
-extern "C" int g_beNDMWStatusPowerSocket_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlBaseEquip_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlEquip_metaObject[4];
-extern "C" int g_beNDMWStatusCtrl00_metaObject[4];
 
 /* Window step state: _st0 is the phase (0 open, 1 run, 2 close, 3 wait for the close), _st1/_st2 the
  * nested steps and _st3 a per-step scratch value; entering a step clears the levels below it. */
@@ -695,8 +645,8 @@ template <class Window> static inline void SetStep2(Window *window, int step)
 /* The allocator new child windows come from. */
 static inline void *WindowAllocator(void *owner)
 {
-    void *allocator = igObject_GetAllocator(owner);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    void *allocator = igObject_GetAllocator((igObject *)owner);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
 /* Number of child windows; a child that finished has removed itself from the list. */
@@ -725,18 +675,18 @@ static inline void *WindowAllocator(void *owner)
 /* Asks MODELCTRL whether `model` is playing `sequence`; the answer is read with beMessenger_GetBool. */
 template <class Window> static inline void QueryModelSequence(Window *window, const char *model, const char *sequence)
 {
-    beMessenger_SelectReceivers(window->_messenger, MODELCTRL_3, model, 0);
-    beMessenger_AppendString(window->_messenger, sequence);
-    beMessenger_DispatchSelected(window->_messenger, ISSEQNAME_4);
+    beMessenger_SelectReceivers((beMessenger *)window->_messenger, MODELCTRL_3, model, 0);
+    beMessenger_AppendString((beMessenger *)window->_messenger, sequence);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, ISSEQNAME_4);
 }
 
 /* Shows or hides a background layer through LAYERCTL. */
 template <class Window> static inline void SwitchLayer(Window *window, const char *layer, const char *onOff)
 {
-    beMessenger_SelectGroup(window->_messenger, LAYERCTL);
-    beMessenger_AppendString(window->_messenger, layer);
-    beMessenger_AppendString(window->_messenger, onOff);
-    beMessenger_DispatchSelected(window->_messenger, SWITCH_4);
+    beMessenger_SelectGroup((beMessenger *)window->_messenger, LAYERCTL);
+    beMessenger_AppendString((beMessenger *)window->_messenger, layer);
+    beMessenger_AppendString((beMessenger *)window->_messenger, onOff);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, SWITCH_4);
 }
 
 /* The equipment panels' own slots 22-30, below igObject's 0-20 and the window's per-frame Update
@@ -792,34 +742,34 @@ template <class Window> static inline beNDMWListCtrlDispatchView *AsListCtrl(Win
  * of a device, UPDATE redraws the status sub-windows. */
 template <class Window> static inline void SendSubWindowCommand(Window *window, const char *command)
 {
-    beMessenger_SelectGroup(window->_messenger, SUBWND_2);
-    beMessenger_AppendInt(window->_messenger, window->_playerNo);
-    beMessenger_DispatchSelected(window->_messenger, command);
+    beMessenger_SelectGroup((beMessenger *)window->_messenger, SUBWND_2);
+    beMessenger_AppendInt((beMessenger *)window->_messenger, window->_playerNo);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, command);
 }
 
 /* GAMERAM: recompute the player's stats from the equipment. */
 template <class Window> static inline void RecalcPlayer(Window *window)
 {
-    beMessenger_SelectReceivers(window->_messenger, GAMERAM_9, 0, 0);
-    beMessenger_AppendInt(window->_messenger, window->_playerNo);
-    beMessenger_DispatchSelected(window->_messenger, RECALCPLAYER_4);
+    beMessenger_SelectReceivers((beMessenger *)window->_messenger, GAMERAM_9, 0, 0);
+    beMessenger_AppendInt((beMessenger *)window->_messenger, window->_playerNo);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, RECALCPLAYER_4);
 }
 
 /* GAMERAM: select a player's data object, read back with beMessenger_GetObject. */
 template <class Window> static inline void SelectPlayer(Window *window, int playerNo)
 {
-    beMessenger_SelectGroup(window->_messenger, GAMERAM_9);
-    beMessenger_AppendInt(window->_messenger, playerNo);
-    beMessenger_DispatchSelected(window->_messenger, GETPLAYER_6);
+    beMessenger_SelectGroup((beMessenger *)window->_messenger, GAMERAM_9);
+    beMessenger_AppendInt((beMessenger *)window->_messenger, playerNo);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, GETPLAYER_6);
 }
 
 /* TEXTCTL command without a value (DEFAULTCOLOR, CANCELCOLOR) to a text cell. */
 template <class Window> static inline void SendCellCommand(Window *window, const char *textType, const char *cell, const char *command)
 {
-    beMessenger_SelectGroup(window->_messenger, TEXTCTL_5);
-    beMessenger_AppendString(window->_messenger, textType);
-    beMessenger_AppendString(window->_messenger, cell);
-    beMessenger_DispatchSelected(window->_messenger, command);
+    beMessenger_SelectGroup((beMessenger *)window->_messenger, TEXTCTL_5);
+    beMessenger_AppendString((beMessenger *)window->_messenger, textType);
+    beMessenger_AppendString((beMessenger *)window->_messenger, cell);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, command);
 }
 
 /* Holds a new reference to `object` in `*slot`, releasing the one it replaces. */
@@ -865,14 +815,14 @@ static inline void ObjectList_Set(igObjectList *list, int index, igObject *objec
 /* Generates the PLAYERARMS_2 model for the name of the power chip in socket 0. */
 static inline void SendPowerSocketName(beNDMWStatusCtrlBaseEquip *self)
 {
-    StringRef name(StringList_CopyRetained(igProperty_GetRecordStringList(self->_playerList, POWERSOCKETNAME_3)->_data, 0));
-    beMessenger_SendNamed(self->_messenger, PLAYERARMS_2, name.p, self->_playerNo, GENERATE_7);
+    StringRef name(StringList_CopyRetained((igStringRefList *)igProperty_GetRecordStringList((igObject *)self->_playerList, POWERSOCKETNAME_3)->_data, 0));
+    beMessenger_SendNamed((beMessenger *)self->_messenger, PLAYERARMS_2, name.p, self->_playerNo, GENERATE_7);
 }
 
 /* The player's status record service (the insight's beNDMWStatus). */
 static inline int FindStatus(int insight)
 {
-    return igInsightCore_FindManager(insight, g_beNDMWStatus_metaObject[0]);
+    return (int)igInsightCore_FindManager((igInsightCore *)insight, g_beNDMWStatus_metaObject);
 }
 
 /* Item `index` of an item list held as an object reference. */
@@ -884,20 +834,20 @@ static inline beNDMWItemBase *ItemAt(int itemList, int index)
 /* TEXTCTL messages to a window's text cell (text type, cell name). */
 template <class Window> static inline void SetCellText(Window *window, const char *textType, const char *cell, const char *text)
 {
-    beMessenger_SelectGroup(window->_messenger, TEXTCTL_5);
-    beMessenger_AppendString(window->_messenger, textType);
-    beMessenger_AppendString(window->_messenger, cell);
-    beMessenger_AppendString(window->_messenger, text);
-    beMessenger_DispatchSelected(window->_messenger, TEXTSET_3);
+    beMessenger_SelectGroup((beMessenger *)window->_messenger, TEXTCTL_5);
+    beMessenger_AppendString((beMessenger *)window->_messenger, textType);
+    beMessenger_AppendString((beMessenger *)window->_messenger, cell);
+    beMessenger_AppendString((beMessenger *)window->_messenger, text);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, TEXTSET_3);
 }
 
 template <class Window> static inline void SwitchCell(Window *window, const char *textType, const char *cell, const char *onOff)
 {
-    beMessenger_SelectGroup(window->_messenger, TEXTCTL_5);
-    beMessenger_AppendString(window->_messenger, textType);
-    beMessenger_AppendString(window->_messenger, cell);
-    beMessenger_AppendString(window->_messenger, onOff);
-    beMessenger_DispatchSelected(window->_messenger, SWITCH_4);
+    beMessenger_SelectGroup((beMessenger *)window->_messenger, TEXTCTL_5);
+    beMessenger_AppendString((beMessenger *)window->_messenger, textType);
+    beMessenger_AppendString((beMessenger *)window->_messenger, cell);
+    beMessenger_AppendString((beMessenger *)window->_messenger, onOff);
+    beMessenger_DispatchSelected((beMessenger *)window->_messenger, SWITCH_4);
 }
 
 /* Create the previous/next page arrow models. The left arrow starts hidden; the right arrow is
@@ -905,13 +855,13 @@ template <class Window> static inline void SwitchCell(Window *window, const char
 void beNDMWListCtrl_PresentPageArrows(beNDMWListCtrl *self,const float *leftArrowPos,const float *rightArrowPos){
     float leftPos[4],rightShownPos[4],rightHiddenPos[4];
     leftPos[0]=leftArrowPos[0];leftPos[1]=leftArrowPos[1];leftPos[2]=leftArrowPos[2];
-    beNDMWWindow_PresentModel(self,i_stcursorleft,0,SQ_HIDE,SQ_CLOSE_3,leftPos);
+    beNDMWWindow_PresentModel((beNDMWWindow *)self,i_stcursorleft,0,SQ_HIDE,SQ_CLOSE_3,leftPos);
     if(self->_maxPage>1){
         rightShownPos[0]=rightArrowPos[0];rightShownPos[1]=rightArrowPos[1];rightShownPos[2]=rightArrowPos[2];
-        beNDMWWindow_PresentModel(self,i_stcursorright,0,SQ_SELECT,SQ_CLOSE_3,rightShownPos);
+        beNDMWWindow_PresentModel((beNDMWWindow *)self,i_stcursorright,0,SQ_SELECT,SQ_CLOSE_3,rightShownPos);
     }else{
         rightHiddenPos[0]=rightArrowPos[0];rightHiddenPos[1]=rightArrowPos[1];rightHiddenPos[2]=rightArrowPos[2];
-        beNDMWWindow_PresentModel(self,i_stcursorright,0,SQ_HIDE,SQ_CLOSE_3,rightHiddenPos);
+        beNDMWWindow_PresentModel((beNDMWWindow *)self,i_stcursorright,0,SQ_HIDE,SQ_CLOSE_3,rightHiddenPos);
     }
 }
 
@@ -926,7 +876,7 @@ bool beNDMWListCtrl_PrevPage(beNDMWListCtrl *self){
     unsigned stickHeld;
     bool leftPressed;
     bePadData *pad;
-    pad=bePadManager_GetPadForPlayer(self->_padManager,self->_playerNo);
+    pad=bePadManager_GetPadForPlayer((bePadManager *)self->_padManager,self->_playerNo);
     trigger=pad->_trigger;repeat=pad->_repeat;stickHeld=pad->_lStk;stickTrigger=pad->_lTrg;stickRepeat=pad->_lRpt;
     leftPressed=true;
     if(!((stickTrigger|stickRepeat)&STICK_LEFT)){
@@ -939,11 +889,11 @@ bool beNDMWListCtrl_PrevPage(beNDMWListCtrl *self){
     if(self->_nowPage>0&&leftPressed&&!upDownHeld){
         self->_nowPage--;changed=true;
         if(self->_nowPage==0){
-            beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_MOVEEND);
+            beMessenger_SendNamed((beMessenger *)self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_MOVEEND);
         }else{
-            beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_MOVENEXT);
+            beMessenger_SendNamed((beMessenger *)self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_MOVENEXT);
         }
-        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_SELECT);
+        beMessenger_SendNamed((beMessenger *)self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_SELECT);
     }
     return changed;
 }
@@ -960,7 +910,7 @@ bool beNDMWListCtrl_NextPage(beNDMWListCtrl *self){
     unsigned repeat;
     int page;
     bePadData *pad;
-    pad=bePadManager_GetPadForPlayer(self->_padManager,self->_playerNo);
+    pad=bePadManager_GetPadForPlayer((bePadManager *)self->_padManager,self->_playerNo);
     trigger=pad->_trigger;repeat=pad->_repeat;stickHeld=pad->_lStk;stickTrigger=pad->_lTrg;stickRepeat=pad->_lRpt;
     rightPressed=true;
     if(!((stickTrigger|stickRepeat)&STICK_RIGHT)){
@@ -974,11 +924,11 @@ bool beNDMWListCtrl_NextPage(beNDMWListCtrl *self){
     if(page<(self->_maxPage-1)&&rightPressed&&!upDownHeld){
         self->_nowPage=(page+1);changed=true;
         if(self->_nowPage==(self->_maxPage-1)){
-            beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_MOVEEND);
+            beMessenger_SendNamed((beMessenger *)self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_MOVEEND);
         }else{
-            beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_MOVENEXT);
+            beMessenger_SendNamed((beMessenger *)self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_MOVENEXT);
         }
-        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_SELECT);
+        beMessenger_SendNamed((beMessenger *)self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_SELECT);
     }
     return changed;
 }
@@ -992,34 +942,34 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
             switch (self->_st1) {
             case 0:
                 {
-                    igSmartPointer<beNDMWStatusTitle00> title(beNDMWStatusTitle00_Create(WindowAllocator(self)));
-                    beNDMWWindow_BindContext(title.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, title.p);
+                    igSmartPointer<beNDMWStatusTitle00> title(beNDMWStatusTitle00_Create((int)WindowAllocator(self)));
+                    beNDMWWindow_BindContext((beNDMWWindow *)title.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)title.p);
                 }
                 SetStep1(self, self->_st1 + 1);
                 return;
             case 1:
                 QueryModelSequence(self, i_stback, SQ_OPEN_5);
-                if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) != 1) {
                     SwitchLayer(self, BG01, DISPOFF_2);
                     SwitchLayer(self, BG02, DISPOFF_2);
                     SwitchLayer(self, BG03, DISPOFF_2);
                     SwitchLayer(self, GM01, DISPOFF_2);
                     SwitchLayer(self, GM03, DISPOFF_2);
                     {
-                        igSmartPointer<beNDMWStatusTitle01> title(beNDMWStatusTitle01_Create(WindowAllocator(self)));
-                        beNDMWWindow_BindContext(title.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, title.p);
+                        igSmartPointer<beNDMWStatusTitle01> title(beNDMWStatusTitle01_Create((int)WindowAllocator(self)));
+                        beNDMWWindow_BindContext((beNDMWWindow *)title.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)title.p);
                     }
                     {
-                        igSmartPointer<beNDMWStatusTitle02> title(beNDMWStatusTitle02_Create(WindowAllocator(self)));
-                        beNDMWWindow_BindContext(title.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, title.p);
+                        igSmartPointer<beNDMWStatusTitle02> title(beNDMWStatusTitle02_Create((int)WindowAllocator(self)));
+                        beNDMWWindow_BindContext((beNDMWWindow *)title.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)title.p);
                     }
                     {
-                        igSmartPointer<beNDMWStatusTitle03> title(beNDMWStatusTitle03_Create(WindowAllocator(self)));
-                        beNDMWWindow_BindContext(title.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, title.p);
+                        igSmartPointer<beNDMWStatusTitle03> title(beNDMWStatusTitle03_Create((int)WindowAllocator(self)));
+                        beNDMWWindow_BindContext((beNDMWWindow *)title.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)title.p);
                     }
                     self->_statusMenu = 0;
                     SetStep1(self, self->_st1 + 1);
@@ -1028,7 +978,7 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
                 break;
             case 2:
                 QueryModelSequence(self, i_messwn, SQ_STOPEN);
-                if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) != 1) {
                     SetStep0(self, self->_st0 + 1);
                     return;
                 }
@@ -1041,11 +991,11 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
                 switch (self->_st2) {
                 case 0: {
                     {
-                        igSmartPointer<beNDMWStatusSelect00> menu(beNDMWStatusSelect00_Create(WindowAllocator(self)));
-                        beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, menu.p);
+                        igSmartPointer<beNDMWStatusSelect00> menu(beNDMWStatusSelect00_Create((int)WindowAllocator(self)));
+                        beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)menu.p);
                         menu.p->_startPoint = self->_statusMenu;
-                        beNDMWWindow_QueueText(menu.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+                        beNDMWWindow_QueueText((beNDMWWindow *)menu.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
                     }
                     self->_nowProcKazu = CHILD_COUNT(self);
                     SetStep2(self, self->_st2 + 1);
@@ -1069,9 +1019,9 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
                 switch (self->_st2) {
                 case 0: {
                     {
-                        igSmartPointer<beNDMWStatusCtrlEquip> equip(beNDMWStatusCtrlEquip_Create(WindowAllocator(self)));
-                        beNDMWWindow_BindContext(equip.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, equip.p);
+                        igSmartPointer<beNDMWStatusCtrlEquip> equip(beNDMWStatusCtrlEquip_Create((int)WindowAllocator(self)));
+                        beNDMWWindow_BindContext((beNDMWWindow *)equip.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)equip.p);
                     }
                     self->_nowProcKazu = CHILD_COUNT(self);
                     SetStep2(self, self->_st2 + 1);
@@ -1088,9 +1038,9 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
                 switch (self->_st2) {
                 case 0: {
                     {
-                        igSmartPointer<beNDMWStatusCtrlFolder> folder(beNDMWStatusCtrlFolder_Create(WindowAllocator(self)));
-                        beNDMWWindow_BindContext(folder.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, folder.p);
+                        igSmartPointer<beNDMWStatusCtrlFolder> folder(beNDMWStatusCtrlFolder_Create((int)WindowAllocator(self)));
+                        beNDMWWindow_BindContext((beNDMWWindow *)folder.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)folder.p);
                     }
                     self->_nowProcKazu = CHILD_COUNT(self);
                     SetStep2(self, self->_st2 + 1);
@@ -1107,9 +1057,9 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
                 switch (self->_st2) {
                 case 0: {
                     {
-                        igSmartPointer<beNDMWStatusCtrlSkill> skill(beNDMWStatusCtrlSkill_Create(WindowAllocator(self)));
-                        beNDMWWindow_BindContext(skill.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, skill.p);
+                        igSmartPointer<beNDMWStatusCtrlSkill> skill(beNDMWStatusCtrlSkill_Create((int)WindowAllocator(self)));
+                        beNDMWWindow_BindContext((beNDMWWindow *)skill.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)skill.p);
                     }
                     self->_nowProcKazu = CHILD_COUNT(self);
                     SetStep2(self, self->_st2 + 1);
@@ -1135,8 +1085,8 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
                     return;
                 }
                 case 1:
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_messwn, 0, ISRUN_5);
-                    if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_messwn, 0, ISRUN_5);
+                    if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) != 1) {
                         SwitchLayer(self, BG01, DISPON_2);
                         SwitchLayer(self, BG02, DISPON_2);
                         SwitchLayer(self, BG03, DISPON_2);
@@ -1151,13 +1101,13 @@ void beNDMWStatusCtrl00_Update(beNDMWStatusCtrl00 *self) {
             }
             break;
         case 2:
-            beNDMWWindow_PlayQueuedModelClose(self);
-            beNDMWWindow_ClearQueuedText(self);
-            beNDMWWindow_RequestChildrenClose(self);
+            beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+            beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+            beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
             SetStep0(self, self->_st0 + 1);
             return;
         }
-    } else if (beNDMWWindow_PollCloseComplete(self) != 0) {
+    } else if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) {
         self->_isRun = 0;
     }
 }
@@ -1172,15 +1122,15 @@ void beNDMWStatusCtrlEquip_Update(beNDMWStatusCtrlEquip *self)
         switch (self->_entCode) {
         case 0:
         default: {
-            igSmartPointer<beNDMWStatusTitle04> title(beNDMWStatusTitle04_Create(WindowAllocator(self)));
-            beNDMWWindow_BindContext(title.p, self, self->_insight, self->_playerNo, 30);
-            ObjectList_AppendRetained(self->_subWindow, title.p);
+            igSmartPointer<beNDMWStatusTitle04> title(beNDMWStatusTitle04_Create((int)WindowAllocator(self)));
+            beNDMWWindow_BindContext((beNDMWWindow *)title.p, (igObject *)self, self->_insight, self->_playerNo, 30);
+            ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)title.p);
             break;
         }
         case 1: {
-            igSmartPointer<beNDMWStatusTitle02> title(beNDMWStatusTitle02_Create(WindowAllocator(self)));
-            beNDMWWindow_BindContext(title.p, self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained(self->_subWindow, title.p);
+            igSmartPointer<beNDMWStatusTitle02> title(beNDMWStatusTitle02_Create((int)WindowAllocator(self)));
+            beNDMWWindow_BindContext((beNDMWWindow *)title.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+            ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)title.p);
             break;
         }
         }
@@ -1205,20 +1155,20 @@ void beNDMWStatusCtrlEquip_Update(beNDMWStatusCtrlEquip *self)
                     break;
                 }
                 QueryModelSequence(self, model, sequence);
-                if ((beMessenger_GetBool(self->_messenger, 0) & 0xff) == 1) return;
+                if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == 1) return;
                 {
-                    igSmartPointer<beNDMWStatusSelect01> menu(beNDMWStatusSelect01_Create(WindowAllocator(self)));
-                    beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 31);
-                    ObjectList_AppendRetained(self->_subWindow, menu.p);
+                    igSmartPointer<beNDMWStatusSelect01> menu(beNDMWStatusSelect01_Create((int)WindowAllocator(self)));
+                    beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, 31);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)menu.p);
                     menu.p->_startPoint = self->_equipMenu;
-                    beNDMWWindow_QueueText(menu.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+                    beNDMWWindow_QueueText((beNDMWWindow *)menu.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 SetStep2(self, self->_st2 + 1);
             }
             case 1:
                 if (self->_retCode != -1)
-                    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, self->_retCode + 35);
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, self->_retCode + 35);
                 SetStep2(self, self->_st2 + 1);
                 self->_st3 = self->_retCode;
             case 2:
@@ -1256,25 +1206,25 @@ void beNDMWStatusCtrlEquip_Update(beNDMWStatusCtrlEquip *self)
                     case 1: {
                         void *allocator = WindowAllocator(self);
                         { igObject *old = panel.p; RELEASE_OBJ(old) }
-                        panel.p = (beNDMWStatusCtrlBaseEquip *)beNDMWStatusPowerSocket_Create(allocator);
+                        panel.p = (beNDMWStatusCtrlBaseEquip *)beNDMWStatusPowerSocket_Create((int)allocator);
                         panel.p->_kindListMax = 3;
                         break;
                     }
                     case 2: {
                         void *allocator = WindowAllocator(self);
                         { igObject *old = panel.p; RELEASE_OBJ(old) }
-                        panel.p = (beNDMWStatusCtrlBaseEquip *)beNDMWStatusMainSlot_Create(allocator);
+                        panel.p = (beNDMWStatusCtrlBaseEquip *)beNDMWStatusMainSlot_Create((int)allocator);
                         break;
                     }
                     case 3: {
                         void *allocator = WindowAllocator(self);
                         { igObject *old = panel.p; RELEASE_OBJ(old) }
-                        panel.p = (beNDMWStatusCtrlBaseEquip *)beNDMWStatusSubSlot_Create(allocator);
+                        panel.p = (beNDMWStatusCtrlBaseEquip *)beNDMWStatusSubSlot_Create((int)allocator);
                         break;
                     }
                     }
-                    beNDMWWindow_BindContext(panel.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, panel.p);
+                    beNDMWWindow_BindContext((beNDMWWindow *)panel.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)panel.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 SetStep2(self, self->_st2 + 1);
@@ -1291,13 +1241,13 @@ void beNDMWStatusCtrlEquip_Update(beNDMWStatusCtrlEquip *self)
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         SetStep0(self, self->_st0 + 1);
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self) != 0) self->_isRun = 0;
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) self->_isRun = 0;
         break;
     }
 }
@@ -1309,19 +1259,19 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
     case 0: {
         igObject *player;
         SEL(GAMERAM_9); API(p->_playerNo); DSP(GETPLAYER_6);
-        player = (igObject *)beMessenger_GetObject(p->_messenger, 0);
+        player = (igObject *)beMessenger_GetObject((beMessenger *)p->_messenger, 0);
         AssignReference(&p->_playerList, player);
-        AssignReference(&p->_powerSocket, (igObject *)igProperty_GetRecordFolder(p->_playerList, POWERSOCKET_3)->_data);
-        AssignReference(&p->_mainSlot, (igObject *)igProperty_GetRecordFolder(p->_playerList, MAINSLOT_3)->_data);
-        AssignReference(&p->_subSlot, (igObject *)igProperty_GetRecordFolder(p->_playerList, SUBSLOT_3)->_data);
-        AssignReference(&p->_wpuPocket, (igObject *)igProperty_GetRecordFolder(p->_playerList, POWERPOCKET_3)->_data);
-        AssignReference(&p->_apuPocket, (igObject *)igProperty_GetRecordFolder(p->_playerList, MAINPOCKET_3)->_data);
-        AssignReference(&p->_deviceFolder, (igObject *)igProperty_GetRecordFolder(p->_playerList, DEVICEFOLDER_3)->_data);
+        AssignReference(&p->_powerSocket, (igObject *)igProperty_GetRecordFolder((igObject *)p->_playerList, POWERSOCKET_3)->_data);
+        AssignReference(&p->_mainSlot, (igObject *)igProperty_GetRecordFolder((igObject *)p->_playerList, MAINSLOT_3)->_data);
+        AssignReference(&p->_subSlot, (igObject *)igProperty_GetRecordFolder((igObject *)p->_playerList, SUBSLOT_3)->_data);
+        AssignReference(&p->_wpuPocket, (igObject *)igProperty_GetRecordFolder((igObject *)p->_playerList, POWERPOCKET_3)->_data);
+        AssignReference(&p->_apuPocket, (igObject *)igProperty_GetRecordFolder((igObject *)p->_playerList, MAINPOCKET_3)->_data);
+        AssignReference(&p->_deviceFolder, (igObject *)igProperty_GetRecordFolder((igObject *)p->_playerList, DEVICEFOLDER_3)->_data);
         switch (p->_st1) { case 0: AsEquipPanel(p)->PresentPanel(1); beNDMWStatusCtrlBaseEquip_QueuePanelText(p); break; default: beNDMWStatusCtrlBaseEquip_ShowKindCursor(p, -1); break; }
         {
-            igSmartPointer<beNDMWStatusSelectE1> h(beNDMWStatusSelectE1_Create(WindowAllocator(p)));
-            beNDMWWindow_BindContext(h.p, p, p->_insight, p->_playerNo, 0);
-            ObjectList_AppendRetained(p->_subWindow, h.p);
+            igSmartPointer<beNDMWStatusSelectE1> h(beNDMWStatusSelectE1_Create((int)WindowAllocator(p)));
+            beNDMWWindow_BindContext((beNDMWWindow *)h.p, (igObject *)p, p->_insight, p->_playerNo, 0);
+            ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)h.p);
             h.p->_selectMax = p->_kindListMax;
             { float *q = h.p->_offsetPos; q[0] = -83.0f; q[1] = 148.0f; q[2] = 0.0f; }
             h.p->_startPoint = p->_kindListPos;
@@ -1408,7 +1358,7 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
                 SetStep2(p, p->_st2 + 1);
                 return;
             case 4:
-                beNDMWWindow_RunMessageScript(p, txt_status_lua_2, 0x7F);
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)p, txt_status_lua_2, 0x7F);
                 SetStep2(p, p->_st2 + 1);
                 p->_st3 = 0x3E7;
                 return;
@@ -1466,13 +1416,13 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
             switch (p->_st2) {
             case 0: {
                 int i;
-                igSmartPointer<beNDMWStatusSelectE1> hw(beNDMWStatusSelectE1_Create(WindowAllocator(p)));
-                beNDMWWindow_BindContext(hw.p, p, p->_insight, p->_playerNo, 0);
-                ObjectList_AppendRetained(p->_subWindow, hw.p);
+                igSmartPointer<beNDMWStatusSelectE1> hw(beNDMWStatusSelectE1_Create((int)WindowAllocator(p)));
+                beNDMWWindow_BindContext((beNDMWWindow *)hw.p, (igObject *)p, p->_insight, p->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)hw.p);
                 hw.p->_selectMax = p->_kindListMax;
                 { float *q = hw.p->_offsetPos; q[0] = -83.0f; q[1] = 148.0f; q[2] = 0.0f; }
                 hw.p->_startPoint = p->_kindListPos;
-                igSmartPointer<igBoolList> hl(igBoolList_Create(WindowAllocator(p)));
+                igSmartPointer<igBoolList> hl(igBoolList_Create((int)WindowAllocator(p)));
                 for (i = 0; i < p->_kindListMax; i++) {
                     if (i == p->_kindListPos) {
                         BoolList_Append(hl.p, false);
@@ -1592,10 +1542,10 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
                 return;
             case 12: {
                 int al = (int)WindowAllocator(p);
-                igSmartPointer<beNDMWShopSelect00> h((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((void *)al));
-                beNDMWWindow_BindContext(h.p, p, p->_insight, p->_playerNo, 0);
-                ObjectList_AppendRetained(p->_subWindow, h.p);
-                beNDMWWindow_RunMessageScript(p, txt_status_lua_2, 0x82);
+                igSmartPointer<beNDMWShopSelect00> h((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                beNDMWWindow_BindContext((beNDMWWindow *)h.p, (igObject *)p, p->_insight, p->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)h.p);
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)p, txt_status_lua_2, 0x82);
             }
                 p->_nowProcKazu = CHILD_COUNT(p);
                 SetStep2(p, p->_st2 + 1);
@@ -1621,13 +1571,13 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose();
-        beNDMWWindow_ClearQueuedText(p);
-        beNDMWWindow_RequestChildrenClose(p);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)p);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)p);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)p);
         SetStep0(p, p->_st0 + 1);
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete() != 0) { p->_isRun = 0; }
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)p) != 0) { p->_isRun = 0; }
         break;
     }
 }
@@ -1643,11 +1593,11 @@ void beNDMWStatusCtrlBaseEquip_PreviewSocketSwap(beNDMWStatusCtrlBaseEquip *p)
     } else {
         SET_ITEM(p->_kindListPos, retItem)
         SET_ITEM(p->_retCode, kindItem)
-        beMessenger_SelectReceivers(p->_messenger, GAMERAM_9, 0, 0); API(p->_playerNo); DSP(RECALCPLAYER_4);
+        beMessenger_SelectReceivers((beMessenger *)p->_messenger, GAMERAM_9, 0, 0); API(p->_playerNo); DSP(RECALCPLAYER_4);
         SEL(SUBWND_2); API(p->_playerNo); DSP(ONPREVIEW);
         SET_ITEM(p->_kindListPos, kindItem)
         SET_ITEM(p->_retCode, retItem)
-        beMessenger_SelectReceivers(p->_messenger, GAMERAM_9, 0, 0); API(p->_playerNo); DSP(RECALCPLAYER_4);
+        beMessenger_SelectReceivers((beMessenger *)p->_messenger, GAMERAM_9, 0, 0); API(p->_playerNo); DSP(RECALCPLAYER_4);
     }
 }
 
@@ -1660,40 +1610,40 @@ void beNDMWStatusCtrlBaseEquip_ShowKindCursor(beNDMWStatusCtrlBaseEquip *self, i
             SQ_OPEN00, SQ_OPEN01, SQ_OPEN02, SQ_OPEN03, SQ_OPEN04, SQ_OPEN05,
             SQ_OPEN06, SQ_OPEN07, SQ_OPEN08, SQ_OPEN09, SQ_OPEN10, SQ_OPEN11,
         };
-        beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursor04, 0, ISRUN_5);
-        if (beMessenger_GetBool(self->_messenger, 0) != 0) {
-            beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursor04, 0, sequences[kind]);
+        beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0, ISRUN_5);
+        if (beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
+            beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0, sequences[kind]);
             return;
         }
-        beMessenger_SelectReceivers(self->_messenger, MODELCTRL_3, i_stcursor04, 0);
-        beMessenger_AppendString(self->_messenger, sequences[kind]);
+        beMessenger_SelectReceivers((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0);
+        beMessenger_AppendString((beMessenger *)self->_messenger, sequences[kind]);
         position[2] = 0;
         position[0] = -83.0f;
         position[1] = 148.0f;
-        beMessenger_AppendVec3(self->_messenger, position);
-        beMessenger_DispatchSelected(self->_messenger, GENERATE_7);
+        beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)position);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, GENERATE_7);
         return;
     }
-    beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursor04, 0, ISRUN_5);
-    if (beMessenger_GetBool(self->_messenger, 0) != 0) {
-        beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
+    beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0, ISRUN_5);
+    if (beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
+        beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
     }
 }
 
 /* Queues the panel's text cells: the description line, the kind-list rows and the pocket rows. */
 void beNDMWStatusCtrlBaseEquip_QueuePanelText(beNDMWStatusCtrlBaseEquip *self) {
-    beNDMWWindow_QueueText(self, STWINFONT29_3, font100_2, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT10, g_statusFontNames[0], space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT10, g_statusFontNames[1], space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font000_2, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font001_2, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font002_2, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font100_2, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font101, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font102, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font103, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT11, font104, space, LEFT_3);
-    beNDMWWindow_QueueText(self, STWINFONT29_3, font100_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_3, font100_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT10, g_statusFontNames[0], space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT10, g_statusFontNames[1], space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font000_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font001_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font002_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font100_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font101, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font102, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font103, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT11, font104, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_3, font100_2, space, LEFT_3);
 }
 
 void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slot, int equipIdx) {
@@ -1738,30 +1688,30 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
             }
             if ((newItem->_kind == 3) == 1) {
                 alloc = igObject_GetAllocator(self);
-                alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+                alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 {
-                igSmartPointer<igObject> names((igObject *)igStringRefList_Create(alloc));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(TSUYOSA_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(KASHIKOSA_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(SEISHIN_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(SUBAYASA_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(RES_FIRE_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(RES_ICE_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(RES_THUNDER_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(RES_DARK_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(CHIMEIRITSU_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(HPDRAIN_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(MPDRAIN_2)));
-                StringList_AppendRetained((int)names.p, StringRef(InternString(CHOHATURITSU_2)));
-                rec = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                igSmartPointer<igObject> names((igObject *)igStringRefList_Create((int)alloc));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(TSUYOSA_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(KASHIKOSA_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(SEISHIN_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(SUBAYASA_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_FIRE_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_ICE_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_THUNDER_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_DARK_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(CHIMEIRITSU_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(HPDRAIN_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(MPDRAIN_2)));
+                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(CHOHATURITSU_2)));
+                rec = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                 alloc = igObject_GetAllocator(self);
-                alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-                igSmartPointer<igIntList> tmp = (igIntList *)igIntList_Create(alloc);
+                alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+                igSmartPointer<igIntList> tmp = (igIntList *)igIntList_Create((int)alloc);
                 cat = -1;
                 i = 0;
                 if (0 < ((StrList *)names.p)->_count) {
                     do {
-                        hit = beNDMWItemBase_GetRecordInt(newItem, rec, (int)(StringList_CopyRetained(names.p, i)).p) > 0;
+                        hit = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)newItem, (beNDMWStatus *)rec, (const char *)(int)(StringList_CopyRetained((igStringRefList *)names.p, i)).p) > 0;
                         if (hit != 0) { cat = i; break; }
                         i += 1;
                     } while (i < ((StrList *)names.p)->_count);
@@ -1773,7 +1723,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                     do {
                         it = *(EquipItem **)((char *)slotList->_data + off);
                         if (it != 0) {
-                            hit = beNDMWItemBase_GetRecordInt(it, rec, (int)(StringList_CopyRetained(names.p, cat)).p) > 0;
+                            hit = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)it, (beNDMWStatus *)rec, (const char *)(int)(StringList_CopyRetained((igStringRefList *)names.p, cat)).p) > 0;
                             if (hit != 0) {
                                 it->_equipped = 0;
                                 REL(*(EquipItem **)((char *)slotList->_data + off))
@@ -1807,7 +1757,7 @@ static inline void SetItemRetained(ItemList *list, int index, EquipItem *const &
 static inline igObjectList *SubWindows(const beNDMWStatusCtrlBaseEquip &window) { return (igObjectList *)window._subWindow; }
 
 /* The object as a device-folder list window, or null for any other kind of window. */
-static inline beNDMWStatusCtrlD0 *AsStatusCtrlD0(void *object)
+static inline beNDMWStatusCtrlD0 *AsStatusCtrlD0(igObject *object)
 {
     if (object != 0 && igObject_IsKindOf(object, g_beNDMWStatusCtrlD0_metaObject) != 0) return (beNDMWStatusCtrlD0 *)object;
     return 0;
@@ -1830,7 +1780,7 @@ void beNDMWStatus_PreviewEquipment(beNDMWStatusCtrlBaseEquip *self, ItemList *sl
         beNDMWStatusCtrlD0 *folder = 0;
         int child;
         for (child = 0; child < SubWindows(*self)->_count; child++) {
-            folder = AsStatusCtrlD0(((void **)SubWindows(*self)->_data)[child]);
+            folder = AsStatusCtrlD0(((igObject **)SubWindows(*self)->_data)[child]);
             if (folder != 0) break;
         }
         if (folder->_st0 == 1 && folder->_st1 == 1) {
@@ -1840,9 +1790,9 @@ void beNDMWStatus_PreviewEquipment(beNDMWStatusCtrlBaseEquip *self, ItemList *sl
                 bool equippable;
                 FindStatus(self->_insight);
                 device = ((ItemList *)self->_deviceFolder)->_data[row];
-                ItemListRef before(beNDMWItemBaseList_Create(WindowAllocator(self)));
+                ItemListRef before(beNDMWItemBaseList_Create((int)WindowAllocator(self)));
                 for (int i = 0; i < slotList->_count; i++) {
-                    ObjectList_AppendRetained(before.p, slotList->_data[i]);
+                    ObjectList_AppendRetained((igObjectList *)before.p, (igObject *)slotList->_data[i]);
                 }
                 equippable = false;
                 /* matching construct: tvpe variant search — the index conversion keeps the flag list first in the addu */
@@ -1896,7 +1846,7 @@ void beNDMWStatusPowerSocket_PresentPanel(beNDMWStatusPowerSocket *self, int ope
     int **slot2;
     int *nw2;
     if (open) {
-        beNDMWWindow_PresentModelAtOrigin(self, i_stsoubi, 0, SQ_POWEROPEN, SQ_CLOSE_3);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stsoubi, 0, SQ_POWEROPEN, SQ_CLOSE_3);
         int lines = -1;
         igObjectList *kinds = (igObjectList *)self->_powerSocket;
         if (kinds->_count > 0) {
@@ -1914,30 +1864,30 @@ void beNDMWStatusPowerSocket_PresentPanel(beNDMWStatusPowerSocket *self, int ope
             case 4: sequence = SQ_4LINEOPEN_2; break;
             case 5: sequence = SQ_5LINEOPEN; break;
             }
-            beNDMWWindow_PresentModelAtOrigin(self, i_stpocket, 0, sequence.p, SQ_CLOSE_3);
+            beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stpocket, 0, sequence.p, SQ_CLOSE_3);
         }
 
     } else {
-        beNDMWWindow_PlayQueuedModelClose();
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
         l = (igDataList *)self->_modelCloseInfoNameList;
         n = l->_count;
         for (i = 0; i < n; i++) {
             slot = &((int **)l->_data)[i];
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 pool = StringPool_Allocate(0x10);
                 if (pool != 0) {
-                    pool = StringPool_Construct(pool);
+                    pool = StringPool_Construct((StringPool *)pool);
                 }
-                g_stringPool[0] = pool;
+                g_stringPool = (StringPool *)pool;
             }
-            nw = (int *)StringPool_Intern(g_stringPool[0], (const char *)0);
+            nw = (int *)StringPool_Intern(g_stringPool, (const char *)0);
             old = *slot;
             if (old != 0) {
                 a1 = old - 2;
                 v1 = old[-1] - 1;
                 old[-1] = v1;
                 if (v1 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
+                    StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
                 }
             }
             *slot = nw;
@@ -1948,35 +1898,35 @@ void beNDMWStatusPowerSocket_PresentPanel(beNDMWStatusPowerSocket *self, int ope
         n2 = l2->_count;
         for (i2 = 0; i2 < n2; i2++) {
             slot2 = &((int **)l2->_data)[i2];
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 pool2 = StringPool_Allocate(0x10);
                 if (pool2 != 0) {
-                    pool2 = StringPool_Construct(pool2);
+                    pool2 = StringPool_Construct((StringPool *)pool2);
                 }
-                g_stringPool[0] = pool2;
+                g_stringPool = (StringPool *)pool2;
             }
-            nw2 = (int *)StringPool_Intern(g_stringPool[0], (const char *)0);
+            nw2 = (int *)StringPool_Intern(g_stringPool, (const char *)0);
             old2 = *slot2;
             if (old2 != 0) {
                 a12 = old2 - 2;
                 v12 = old2[-1] - 1;
                 old2[-1] = v12;
                 if (v12 == 0) {
-                    StringChunk_ReleaseHeader(*a12, a12);
+                    StringChunk_ReleaseHeader((StringChunk *)*a12, (StringTokenHeader *)a12);
                 }
             }
             *slot2 = nw2;
         }
         l2->_count = 0;
-        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
     }
 }
 
 void beNDMWStatusPowerSocket_RefreshSlotList(beNDMWStatusPowerSocket *self) {
     igVec3f b, a;
-    int status = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x88);
-    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x26);
+    int status = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x88);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x26);
     int i = 0;
     if (0 < (*(igObjectList **)&self->_powerSocket)->_count) {
         int item;
@@ -1992,25 +1942,25 @@ void beNDMWStatusPowerSocket_RefreshSlotList(beNDMWStatusPowerSocket *self) {
             } else {
                 int itemName;
                 name = DISPON_2;
-                itemName = beNDMWItemBase_GetRecordString(item, status, NAME_3);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, *row);
-                beMessenger_AppendString(self->_messenger, itemName);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
-                beNDMWItemBase_GetRevisionColor(&b, item);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, *row);
+                itemName = (int)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)status, NAME_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *row);
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)itemName);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
+                beNDMWItemBase_GetRevisionColor((float *)&b, (beNDMWItemBase *)item);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *row);
                 a = b;
-                beMessenger_AppendVec3(self->_messenger, (float *)&a);
-                beMessenger_DispatchSelected(self->_messenger, COLOR);
+                beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&a);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT11);
-            beMessenger_AppendString(self->_messenger, *row);
-            beMessenger_AppendString(self->_messenger, name);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *row);
+            beMessenger_AppendString((beMessenger *)self->_messenger, name);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
             i++;
             off += 4;
             row++;
@@ -2042,33 +1992,33 @@ void beNDMWStatusPowerSocket_ShowSlotDescription(beNDMWStatusPowerSocket *a) {
         item = *(int *)(items->_data + (slot * 4));
     }
     if (item != 0) {
-        recordString = (const char *)beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(a->_insight, g_beNDMWStatus_metaObject[0]), TXT_2);
+        recordString = (const char *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)a->_insight, g_beNDMWStatus_metaObject), TXT_2);
         digit[1] = 0;
         digit[0] = ((beNDMWItemRevisionPocketBase *)item)->_pocket + 0x30;
         {
-        igSmartPointer<igStringObj> description((igStringObj *)(((beSystem *)igInsightCore_FindManager(a->_insight, g_beSystem_metaObject[0]))->_globalStrObj), kRetainReference);
+        igSmartPointer<igStringObj> description((igStringObj *)(((beSystem *)igInsightCore_FindManager((igInsightCore *)a->_insight, g_beSystem_metaObject))->_globalStrObj), kRetainReference);
         igStringObj_Set(description.p, recordString);
         t2 = (igStringObj *)description.p;
         int length = t2->_length;
         igStringObj_Insert(t2, digit, length, strlen(digit));
         t3 = (igStringObj *)description.p;
         text = (int *)t3->_buffer;
-        text = (text == 0) ? ((int * *)g_stringObjEmptyText)[0] : text;
+        text = (text == 0) ? ((int *)g_stringObjEmptyText) : text;
         }
-        beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(a->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(a->_messenger, font000_2);
-        beMessenger_AppendString(a->_messenger, text);
-        beMessenger_DispatchSelected(a->_messenger, TEXTSET_3);
+        beMessenger_SelectGroup((beMessenger *)a->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)a->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)a->_messenger, font000_2);
+        beMessenger_AppendString((beMessenger *)a->_messenger, (const char *)text);
+        beMessenger_DispatchSelected((beMessenger *)a->_messenger, TEXTSET_3);
         onOff = (int *)(DISPON_2);
     } else {
         onOff = (int *)(DISPOFF_2);
     }
-    beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
-    beMessenger_AppendString(a->_messenger, STWINFONT29_3);
-    beMessenger_AppendString(a->_messenger, font000_2);
-    beMessenger_AppendString(a->_messenger, onOff);
-    beMessenger_DispatchSelected(a->_messenger, SWITCH_4);
+    beMessenger_SelectGroup((beMessenger *)a->_messenger, TEXTCTL_5);
+    beMessenger_AppendString((beMessenger *)a->_messenger, STWINFONT29_3);
+    beMessenger_AppendString((beMessenger *)a->_messenger, font000_2);
+    beMessenger_AppendString((beMessenger *)a->_messenger, (const char *)onOff);
+    beMessenger_DispatchSelected((beMessenger *)a->_messenger, SWITCH_4);
 }
 
 void beNDMWStatusPowerSocket_OpenSlotList(beNDMWStatusPowerSocket *self) {
@@ -2106,7 +2056,7 @@ void beNDMWStatusPowerSocket_RefreshPocket(beNDMWStatusPowerSocket *self) {
         case 4: sequence = SQ_4LINEOPEN_2; break;
         case 5: sequence = SQ_5LINEOPEN; break;
         }
-        beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stpocket, 0, sequence.p);
+        beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stpocket, 0, sequence.p);
     }
     int i = 0;
     /* matching construct: the loop guard reads the pocket list through a const view, so the body reloads it as retail
@@ -2128,18 +2078,18 @@ void beNDMWStatusPowerSocket_RefreshPocket(beNDMWStatusPowerSocket *self) {
                 show = (DISPOFF_2);
             } else {
                 show = (DISPON_2);
-                const char *name = ((const char *)beNDMWItemBase_GetRecordString(item, ((void *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0])), NAME_3));
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, font);
-                beMessenger_AppendString(self->_messenger, name);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                const char *name = ((const char *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)((void *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject)), NAME_3));
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, font);
+                beMessenger_AppendString((beMessenger *)self->_messenger, name);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT11);
-            beMessenger_AppendString(self->_messenger, font);
-            beMessenger_AppendString(self->_messenger, show);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+            beMessenger_AppendString((beMessenger *)self->_messenger, font);
+            beMessenger_AppendString((beMessenger *)self->_messenger, show);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
             i++;
         } while (i < ((igObjectList *)self->_wpuPocket)->_count);
     }
@@ -2157,10 +2107,10 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
     igIntList *t;
 
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, win.p);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
     switch (((beNDMWWindow *)self->_mother)->_entCode) {
     case 0:
         win.p->_entCode = 124;
@@ -2172,8 +2122,8 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
         break;
     }
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
-    igSmartPointer<igBoolList> flags((igBoolList *)igBoolList_Create((void *)a));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
+    igSmartPointer<igBoolList> flags(igBoolList_Create((int)a));
     BoolList_Append(flags.p, true);
     t = (igIntList *)self->_powerSocket;
     fl0 = false;
@@ -2207,10 +2157,10 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
             } else {
                 s3 = CANCELCOLOR_2;
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-            beMessenger_AppendString(self->_messenger, *p);
-            beMessenger_DispatchSelected(self->_messenger, s3);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *p);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, s3);
             l0 = flags.p;
             i += 1;
             p += 1;
@@ -2251,12 +2201,12 @@ void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocket *self) {
         AsEquipPanel(self)->EquipSelected();
         self->_retCode = self->_kindListPos;
         AsEquipPanel(self)->RefreshSlotList();
-        beMessenger_SelectReceivers(self->_messenger, GAMERAM_9, 0, 0);
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_4);
-        beMessenger_SelectGroup(self->_messenger, SUBWND_2);
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, UPDATE);
+        beMessenger_SelectReceivers((beMessenger *)self->_messenger, GAMERAM_9, 0, 0);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, RECALCPLAYER_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, SUBWND_2);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, UPDATE);
         self->_st0 = 0;
         self->_st3 = 0;
         self->_st2 = 0;
@@ -2278,14 +2228,14 @@ void beNDMWStatusPowerSocket_OpenDeviceFolder(beNDMWStatusPowerSocket *self) {
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
-        a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+        a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     }
     igSmartPointer<beNDMWStatusCtrlD0> win(beNDMWStatusCtrlD0_Create(a));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, win.p);
-    StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-    StringList_AppendRetained(win.p->_textCloseNameList, StringRef(InternString(font100_2)));
-    beNDMWWindow_RunMessageScript(win.p, txt_status_lua_2, 0x8B);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)));
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x8B);
     s0 = (igIntList *)win.p->_kindList;
     s1 = s0->_count;
     if (s1 < s0->_capacity) {
@@ -2311,12 +2261,12 @@ int beNDMWStatusPowerSocket_CanEquip(beNDMWStatusPowerSocket *self, int index) {
     int s2;
 
     s3 = ((int *)((beNDMWItemBaseList *)self->_deviceFolder)->_data)[index];
-    s0 = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-    s2 = igProperty_GetRecord(self->_playerList, DIGIMONNO_3)->_data;
-    fl = (1 << s2) & beNDMWItemBase_GetRecordInt(s3, s0, SOUBI_2);
-    s1 = (PropertyRecordTable *)igProperty_GetRecordIntList(self->_playerList, SKILL_2)->_data;
-    s0b = beNDMWItemBase_GetRecordInt(s3, s0, SKILL_2);
-    v0 = beNDMWItemBase_GetRecordInt(s3, s0, SKILLPOINT_2);
+    s0 = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
+    s2 = igProperty_GetRecord((igObject *)self->_playerList, DIGIMONNO_3)->_data;
+    fl = (1 << s2) & beNDMWItemBase_GetRecordInt((beNDMWItemBase *)s3, (beNDMWStatus *)s0, SOUBI_2);
+    s1 = (PropertyRecordTable *)igProperty_GetRecordIntList((igObject *)self->_playerList, SKILL_2)->_data;
+    s0b = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)s3, (beNDMWStatus *)s0, SKILL_2);
+    v0 = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)s3, (beNDMWStatus *)s0, SKILLPOINT_2);
     if ((fl != 0) && (s1->data[s0b] >= v0)) {
         return 1;
     }
@@ -2353,14 +2303,14 @@ void beNDMWStatusPowerSocket_OpenPocketList(beNDMWStatusPowerSocket *self) {
     if (g_useOwnerAllocator != 0) {
         alloc = (int)alloc;
     } else {
-        alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     }
-    igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((void *)alloc));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, win.p);
-    StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-    StringList_AppendRetained(win.p->_textCloseNameList, StringRef(InternString(font100_2)));
-    beNDMWWindow_RunMessageScript(win.p, txt_status_lua_2, 0x8A);
+    igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)alloc));
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)));
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x8A);
     pocketCount = 1;
     if (((igObjectList *)self->_powerSocket)->_count > 0) {
         beNDMWItemRevisionPocketBase *kind = ((beNDMWItemRevisionPocketBase **)((igObjectList *)self->_powerSocket)->_data)[self->_kindListPos];
@@ -2381,7 +2331,7 @@ void beNDMWStatusPowerSocket_ShowPocketDescription(beNDMWStatusPowerSocket *self
     beNDMWItemBase *item = 0;
     if (self->_retCode != -1) item = ItemAt(self->_wpuPocket, self->_retCode);
     if (item != 0) {
-        SetCellText(self, STWINFONT29_3, font000_2, (const char *)beNDMWItemBase_GetRecordString(item, FindStatus(self->_insight), TXT_2));
+        SetCellText(self, STWINFONT29_3, font000_2, (const char *)beNDMWItemBase_GetRecordString(item, (beNDMWStatus *)FindStatus(self->_insight), TXT_2));
         onOff = DISPON_2;
     } else {
         onOff = DISPOFF_2;
@@ -2414,26 +2364,26 @@ void beNDMWStatusPowerSocket_OpenPocketMenu(beNDMWStatusPowerSocket *self) {
     int a;
 
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained((unsigned int)self->_subWindow, win.p);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)(unsigned int)self->_subWindow, (igObject *)win.p);
     win.p->_selectMax = 2;
-    beNDMWWindow_QueueText(win.p, STWINFONT29_3, font000_2, space, LEFT_3);
-    beNDMWWindow_QueueText(win.p, STWINFONT29_3, font001_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font000_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font001_2, space, LEFT_3);
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
-    igSmartPointer<igBoolList> decide((igBoolList *)igBoolList_Create((void *)a));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
+    igSmartPointer<igBoolList> decide(igBoolList_Create((int)a));
     setDecideList(win, decide);
     append(decide, true);
     if (((int *)((beNDMWItemBaseList *)self->_wpuPocket)->_data)[self->_pocketPos] != 0) {
         append(decide, true);
     } else {
         append(decide, false);
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(self->_messenger, font001_2);
-        beMessenger_DispatchSelected(self->_messenger, CANCELCOLOR_2);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, font001_2);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, CANCELCOLOR_2);
     }
 }
 
@@ -2447,11 +2397,11 @@ void beNDMWStatusPowerSocket_OpenPocketFolder(beNDMWStatusPowerSocket *self) {
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
-        a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+        a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     }
     igSmartPointer<beNDMWStatusCtrlD0> child((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(a));
-    beNDMWWindow_BindContext(child.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, child.p);
+    beNDMWWindow_BindContext((beNDMWWindow *)child.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)child.p);
     s0 = (igDataList *)child.p->_kindList;
     s1 = s0->_count;
     if (s1 < s0->_capacity) {
@@ -2488,7 +2438,7 @@ void beNDMWStatusPowerSocket_ClearPocket(beNDMWStatusPowerSocket *self) {
             i += 1;
         } while (i < ((beNDMWItemBaseList *)(self->_wpuPocket))->_count);
     }
-    ObjectList_FillRetained((void *)(self->_wpuPocket), 0);
+    ObjectList_FillRetained((igTDataList<igObject *> *)(void *)(self->_wpuPocket), 0);
 }
 
 void beNDMWStatusMainSlot_PresentPanel(beNDMWStatusMainSlot *self, int open) {
@@ -2511,7 +2461,7 @@ void beNDMWStatusMainSlot_PresentPanel(beNDMWStatusMainSlot *self, int open) {
     int **slot2;
     int *nw2;
     if (open) {
-        beNDMWWindow_PresentModelAtOrigin(self, i_stsoubi, 0, SQ_MAINOPEN, SQ_CLOSE_3);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stsoubi, 0, SQ_MAINOPEN, SQ_CLOSE_3);
         int lines = -1;
         igObjectList *kinds = (igObjectList *)self->_mainSlot;
         if (kinds->_count > 0) {
@@ -2529,30 +2479,30 @@ void beNDMWStatusMainSlot_PresentPanel(beNDMWStatusMainSlot *self, int open) {
             case 4: sequence = SQ_4LINEOPEN_2; break;
             case 5: sequence = SQ_5LINEOPEN; break;
             }
-            beNDMWWindow_PresentModelAtOrigin(self, i_stpocket, 0, sequence.p, SQ_CLOSE_3);
+            beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stpocket, 0, sequence.p, SQ_CLOSE_3);
         }
 
     } else {
-        beNDMWWindow_PlayQueuedModelClose();
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
         l = (igDataList *)self->_modelCloseInfoNameList;
         n = l->_count;
         for (i = 0; i < n; i++) {
             slot = &((int **)l->_data)[i];
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 pool = StringPool_Allocate(0x10);
                 if (pool != 0) {
-                    pool = StringPool_Construct(pool);
+                    pool = StringPool_Construct((StringPool *)pool);
                 }
-                g_stringPool[0] = pool;
+                g_stringPool = (StringPool *)pool;
             }
-            nw = (int *)StringPool_Intern(g_stringPool[0], (const char *)0);
+            nw = (int *)StringPool_Intern(g_stringPool, (const char *)0);
             old = *slot;
             if (old != 0) {
                 a1 = old - 2;
                 v1 = old[-1] - 1;
                 old[-1] = v1;
                 if (v1 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
+                    StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
                 }
             }
             *slot = nw;
@@ -2563,34 +2513,34 @@ void beNDMWStatusMainSlot_PresentPanel(beNDMWStatusMainSlot *self, int open) {
         n2 = l2->_count;
         for (i2 = 0; i2 < n2; i2++) {
             slot2 = &((int **)l2->_data)[i2];
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 pool2 = StringPool_Allocate(0x10);
                 if (pool2 != 0) {
-                    pool2 = StringPool_Construct(pool2);
+                    pool2 = StringPool_Construct((StringPool *)pool2);
                 }
-                g_stringPool[0] = pool2;
+                g_stringPool = (StringPool *)pool2;
             }
-            nw2 = (int *)StringPool_Intern(g_stringPool[0], (const char *)0);
+            nw2 = (int *)StringPool_Intern(g_stringPool, (const char *)0);
             old2 = *slot2;
             if (old2 != 0) {
                 a12 = old2 - 2;
                 v12 = old2[-1] - 1;
                 old2[-1] = v12;
                 if (v12 == 0) {
-                    StringChunk_ReleaseHeader(*a12, a12);
+                    StringChunk_ReleaseHeader((StringChunk *)*a12, (StringTokenHeader *)a12);
                 }
             }
             *slot2 = nw2;
         }
         l2->_count = 0;
-        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
     }
 }
 
 void beNDMWStatusMainSlot_RefreshSlotList(beNDMWStatusMainSlot *self) {
     igVec3f b, a;
-    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x89);
-    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x28);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x89);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x28);
     int i = 0;
     if (0 < (*(igObjectList **)&self->_mainSlot)->_count) {
         int item;
@@ -2606,25 +2556,25 @@ void beNDMWStatusMainSlot_RefreshSlotList(beNDMWStatusMainSlot *self) {
             } else {
                 int rs;
                 name = DISPON_2;
-                rs = beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), NAME_3);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, *row);
-                beMessenger_AppendString(self->_messenger, rs);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
-                beNDMWItemBase_GetRevisionColor(&b, item);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, *row);
+                rs = (int)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject), NAME_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *row);
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)rs);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
+                beNDMWItemBase_GetRevisionColor((float *)&b, (beNDMWItemBase *)item);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *row);
                 a = b;
-                beMessenger_AppendVec3(self->_messenger, (float *)&a);
-                beMessenger_DispatchSelected(self->_messenger, COLOR);
+                beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&a);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT11);
-            beMessenger_AppendString(self->_messenger, *row);
-            beMessenger_AppendString(self->_messenger, name);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *row);
+            beMessenger_AppendString((beMessenger *)self->_messenger, name);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
             i++;
             off += 4;
             row++;
@@ -2645,11 +2595,11 @@ void beNDMWStatusMainSlot_ShowSlotDescription(beNDMWStatusMainSlot *a) {
         item = ((beNDMWItemRevisionPocketBase **)((igObjectList *)a->_mainSlot)->_data)[a->_retCode];
     }
     if (item != 0) {
-        recordString = (const char *)beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(a->_insight, g_beNDMWStatus_metaObject[0]), TXT_2);
+        recordString = (const char *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)a->_insight, g_beNDMWStatus_metaObject), TXT_2);
         buf[1] = 0;
         buf[0] = item->_pocket + 0x30;
         {
-        igSmartPointer<igStringObj> description((igStringObj *)(((beSystem *)igInsightCore_FindManager(a->_insight, g_beSystem_metaObject[0]))->_globalStrObj), kRetainReference);
+        igSmartPointer<igStringObj> description((igStringObj *)(((beSystem *)igInsightCore_FindManager((igInsightCore *)a->_insight, g_beSystem_metaObject))->_globalStrObj), kRetainReference);
         igStringObj_Set(description.p, recordString);
         /* matching construct: the held pointer is read through a cast, as the power socket's description reads it;
          * read plainly, the length takes another register */
@@ -2657,22 +2607,22 @@ void beNDMWStatusMainSlot_ShowSlotDescription(beNDMWStatusMainSlot *a) {
         int length = q->_length;
         igStringObj_Insert(q, buf, length, strlen(buf));
         p = description.p;
-        str = (p->_buffer == 0) ? g_stringObjEmptyText[0] : (char *)p->_buffer;
+        str = (p->_buffer == 0) ? g_stringObjEmptyText : (char *)p->_buffer;
         }
-        beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(a->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(a->_messenger, font000_2);
-        beMessenger_AppendString(a->_messenger, str);
-        beMessenger_DispatchSelected(a->_messenger, TEXTSET_3);
+        beMessenger_SelectGroup((beMessenger *)a->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)a->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)a->_messenger, font000_2);
+        beMessenger_AppendString((beMessenger *)a->_messenger, str);
+        beMessenger_DispatchSelected((beMessenger *)a->_messenger, TEXTSET_3);
         var = DISPON_2;
     } else {
         var = DISPOFF_2;
     }
-    beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
-    beMessenger_AppendString(a->_messenger, STWINFONT29_3);
-    beMessenger_AppendString(a->_messenger, font000_2);
-    beMessenger_AppendString(a->_messenger, var);
-    beMessenger_DispatchSelected(a->_messenger, SWITCH_4);
+    beMessenger_SelectGroup((beMessenger *)a->_messenger, TEXTCTL_5);
+    beMessenger_AppendString((beMessenger *)a->_messenger, STWINFONT29_3);
+    beMessenger_AppendString((beMessenger *)a->_messenger, font000_2);
+    beMessenger_AppendString((beMessenger *)a->_messenger, var);
+    beMessenger_DispatchSelected((beMessenger *)a->_messenger, SWITCH_4);
 }
 
 /* Enter state 1; the later state levels restart at 0 */
@@ -2700,7 +2650,7 @@ void beNDMWStatusMainSlot_RefreshPocket(beNDMWStatusMainSlot *self) {
         case 4: sequence = SQ_4LINEOPEN_2; break;
         case 5: sequence = SQ_5LINEOPEN; break;
         }
-        beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stpocket, 0, sequence.p);
+        beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stpocket, 0, sequence.p);
     }
     int i = 0;
     /* matching construct: the loop guard reads the pocket list through a const view, so the body reloads it as retail
@@ -2722,18 +2672,18 @@ void beNDMWStatusMainSlot_RefreshPocket(beNDMWStatusMainSlot *self) {
                 show = (DISPOFF_2);
             } else {
                 show = (DISPON_2);
-                const char *name = ((const char *)beNDMWItemBase_GetRecordString(item, ((void *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0])), NAME_3));
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, font);
-                beMessenger_AppendString(self->_messenger, name);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                const char *name = ((const char *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)((void *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject)), NAME_3));
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, font);
+                beMessenger_AppendString((beMessenger *)self->_messenger, name);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT11);
-            beMessenger_AppendString(self->_messenger, font);
-            beMessenger_AppendString(self->_messenger, show);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+            beMessenger_AppendString((beMessenger *)self->_messenger, font);
+            beMessenger_AppendString((beMessenger *)self->_messenger, show);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
             i++;
         } while (i < ((igObjectList *)self->_apuPocket)->_count);
     }
@@ -2751,15 +2701,15 @@ void beNDMWStatusMainSlot_OpenSlotMenu(beNDMWStatusMainSlot *self) {
     igIntList *t;
 
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, win.p);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
     win.p->_selectMax = 3;
     win.p->_entCode = 0x78;
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
-    igSmartPointer<igBoolList> flags((igBoolList *)igBoolList_Create((void *)a));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
+    igSmartPointer<igBoolList> flags(igBoolList_Create((int)a));
     BoolList_Append(flags.p, true);
     t = (igIntList *)self->_mainSlot;
     fl0 = false;
@@ -2793,10 +2743,10 @@ void beNDMWStatusMainSlot_OpenSlotMenu(beNDMWStatusMainSlot *self) {
             } else {
                 s3 = CANCELCOLOR_2;
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-            beMessenger_AppendString(self->_messenger, *p);
-            beMessenger_DispatchSelected(self->_messenger, s3);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *p);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, s3);
             l0 = flags.p;
             i += 1;
             p += 1;
@@ -2824,12 +2774,12 @@ void beNDMWStatusMainSlot_OnSlotMenuDecided(beNDMWStatusMainSlot *self) {
         AsEquipPanel(self)->EquipSelected();
         self->_retCode = self->_kindListPos;
         AsEquipPanel(self)->RefreshSlotList();
-        beMessenger_SelectReceivers(self->_messenger, GAMERAM_9, 0, 0);
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_4);
-        beMessenger_SelectGroup(self->_messenger, SUBWND_2);
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, UPDATE);
+        beMessenger_SelectReceivers((beMessenger *)self->_messenger, GAMERAM_9, 0, 0);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, RECALCPLAYER_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, SUBWND_2);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, UPDATE);
         self->_st0 = 0;
         self->_st3 = 0;
         self->_st2 = 0;
@@ -2847,13 +2797,13 @@ void beNDMWStatusMainSlot_OpenDeviceFolder(beNDMWStatusMainSlot *self) {
     igDataList *l;
 
     al = ((int)igObject_GetAllocator(self));
-    al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusCtrlD0> win(beNDMWStatusCtrlD0_Create(al));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, win.p);
-    StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-    StringList_AppendRetained(win.p->_textCloseNameList, StringRef(InternString(font100_2)));
-    beNDMWWindow_RunMessageScript(win.p, txt_status_lua_2, 139);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)));
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 139);
     l = (igDataList *)win.p->_kindList;
     c = l->_count;
     if (c < l->_capacity) {
@@ -2876,9 +2826,9 @@ int beNDMWStatusMainSlot_CanEquip(beNDMWStatusMainSlot *self, int index) {
     int player_level;
 
     item = *(int *)(((beNDMWItemBaseList *)self->_deviceFolder)->_data + (index * 4));
-    status = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-    player_level = igProperty_GetRecord(self->_playerList, LEVEL_3)->_data;
-    return player_level >= beNDMWItemBase_GetRecordInt(item, status, LVPOINT);
+    status = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
+    player_level = igProperty_GetRecord((igObject *)self->_playerList, LEVEL_3)->_data;
+    return player_level >= beNDMWItemBase_GetRecordInt((beNDMWItemBase *)item, (beNDMWStatus *)status, LVPOINT);
 }
 
 void beNDMWStatusMainSlot_EquipSelected(beNDMWStatusMainSlot *self) {
@@ -2900,11 +2850,11 @@ static inline ItemList *ApuPocket(const beNDMWStatusMainSlot &slot) { return (It
  * devices put aside for the preview and put back afterwards. */
 void beNDMWStatusMainSlot_PreviewSlotDevice(beNDMWStatusMainSlot *self, int index) {
     if (index == -1) {
-        ItemListRef pocketDevices(beNDMWItemBaseList_Create(WindowAllocator(self)));
+        ItemListRef pocketDevices(beNDMWItemBaseList_Create((int)WindowAllocator(self)));
         for (int i = 0; i < ApuPocket(*self)->_count; i++) {
-            ObjectList_AppendRetained(pocketDevices.p, ApuPocket(*self)->_data[i]);
+            ObjectList_AppendRetained((igObjectList *)pocketDevices.p, (igObject *)ApuPocket(*self)->_data[i]);
         }
-        ObjectList_FillRetained((ItemList *)self->_apuPocket, 0);
+        ObjectList_FillRetained((igTDataList<igObject *> *)(ItemList *)self->_apuPocket, 0);
         beNDMWStatus_PreviewEquipment((beNDMWStatusCtrlBaseEquip *)self, (ItemList *)self->_mainSlot, self->_kindListPos, index);
         for (int i = 0; i < ((ItemList *)pocketDevices.p)->_count; i++) {
             EquipItem *device = ((ItemList *)pocketDevices.p)->_data[i];
@@ -2919,14 +2869,14 @@ void beNDMWStatusMainSlot_PreviewSlotDevice(beNDMWStatusMainSlot *self, int inde
 void beNDMWStatusMainSlot_OpenPocketList(beNDMWStatusMainSlot *self) {
     void *alloc;
     int pocketCount;
-    alloc = igObject_GetAllocator();
-    alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-    igSmartPointer<beNDMWStatusSelectE1> win(((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc)));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    { beNDMWStatusSelectE1 *window = win.p; ObjectList_AppendRetained(self->_subWindow, window); }
-    StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-    StringList_AppendRetained(win.p->_textCloseNameList, StringRef(InternString(font100_2)));
-    beNDMWWindow_RunMessageScript(win.p, txt_status_lua_2, 0x8A);
+    alloc = igObject_GetAllocator(self);
+    alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+    igSmartPointer<beNDMWStatusSelectE1> win(((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)alloc)));
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    { beNDMWStatusSelectE1 *window = win.p; ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)window); }
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)));
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x8A);
     pocketCount = 1;
     igObjectList *kinds = (igObjectList *)self->_mainSlot;
     if (kinds->_count > 0) {
@@ -2953,47 +2903,47 @@ void beNDMWStatusMainSlot_ShowPocketDescription(beNDMWStatusMainSlot *self) {
         item = ((int *)((beNDMWItemBaseList *)self->_apuPocket)->_data)[index];
     }
     if (item != 0) {
-        text = ((int *)beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), TXT_2));
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(self->_messenger, font000_2);
-        beMessenger_AppendString(self->_messenger, text);
-        beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+        text = ((int *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject), TXT_2));
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, font000_2);
+        beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)text);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
         onOff = DISPON_2;
     } else {
         onOff = DISPOFF_2;
     }
-    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-    beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-    beMessenger_AppendString(self->_messenger, font000_2);
-    beMessenger_AppendString(self->_messenger, onOff);
-    beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+    beMessenger_AppendString((beMessenger *)self->_messenger, font000_2);
+    beMessenger_AppendString((beMessenger *)self->_messenger, onOff);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
 }
 
 void beNDMWStatusMainSlot_OpenPocketMenu(beNDMWStatusMainSlot *self) {
     int a;
 
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained((unsigned int)self->_subWindow, win.p);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)(unsigned int)self->_subWindow, (igObject *)win.p);
     win.p->_selectMax = 2;
-    beNDMWWindow_QueueText(win.p, STWINFONT29_3, font000_2, space, LEFT_3);
-    beNDMWWindow_QueueText(win.p, STWINFONT29_3, font001_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font000_2, space, LEFT_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font001_2, space, LEFT_3);
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
-    igSmartPointer<igBoolList> decide((igBoolList *)igBoolList_Create((void *)a));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
+    igSmartPointer<igBoolList> decide(igBoolList_Create((int)a));
     setDecideList(win, decide);
     append(decide, true);
     if (((int *)((beNDMWItemBaseList *)self->_apuPocket)->_data)[self->_pocketPos] != 0) {
         append(decide, true);
     } else {
         append(decide, false);
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(self->_messenger, font001_2);
-        beMessenger_DispatchSelected(self->_messenger, CANCELCOLOR_2);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, font001_2);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, CANCELCOLOR_2);
     }
 }
 
@@ -3010,10 +2960,10 @@ void beNDMWStatusMainSlot_OpenPocketFolder(beNDMWStatusMainSlot *self) {
     beNDMWStatusCtrlD0 *w;
 
     al = ((int)igObject_GetAllocator(self));
-    al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusCtrlD0> window(beNDMWStatusCtrlD0_Create(al));
-    beNDMWWindow_BindContext(window.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, window.p);
+    beNDMWWindow_BindContext((beNDMWWindow *)window.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)window.p);
     w = window.p;
     l = (igIntList *)w->_kindList;
     c = l->_count;
@@ -3049,7 +2999,7 @@ void beNDMWStatusMainSlot_ClearPocket(beNDMWStatusMainSlot *self) {
             i += 1;
         } while (i < ((beNDMWItemBaseList *)(self->_apuPocket))->_count);
     }
-    ObjectList_FillRetained((void *)(self->_apuPocket), 0);
+    ObjectList_FillRetained((igTDataList<igObject *> *)(void *)(self->_apuPocket), 0);
 }
 
 void beNDMWStatusSubSlot_PresentPanel(beNDMWStatusSubSlot *w, int open)
@@ -3074,29 +3024,29 @@ void beNDMWStatusSubSlot_PresentPanel(beNDMWStatusSubSlot *w, int open)
     int *nw2;
 
     if (open != 0) {
-        beNDMWWindow_PresentModelAtOrigin(w, i_stsoubi, 0, SQ_SUBOPEN, SQ_CLOSE_3);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)w, i_stsoubi, 0, SQ_SUBOPEN, SQ_CLOSE_3);
         return;
     }
-    beNDMWWindow_PlayQueuedModelClose();
+    beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)w);
     l = (igDataList *)w->_modelCloseInfoNameList;
     n = l->_count;
     for (i = 0; i < n; i++) {
         slot = &((int **)l->_data)[i];
-        if (((int *)g_stringPool)[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
-                pool = ((int)StringPool_Construct(pool));
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            ((int *)g_stringPool)[0] = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        nw = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
+        nw = (int *)StringPool_Intern(g_stringPool, 0);
         old = *slot;
         if (old != 0) {
             a1 = old - 2;
             v1 = old[-1] - 1;
             old[-1] = v1;
             if (v1 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+                StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
             }
         }
         *slot = nw;
@@ -3107,33 +3057,33 @@ void beNDMWStatusSubSlot_PresentPanel(beNDMWStatusSubSlot *w, int open)
     n2 = l2->_count;
     for (i2 = 0; i2 < n2; i2++) {
         slot2 = &((int **)l2->_data)[i2];
-        if (((int *)g_stringPool)[0] == 0) {
+        if (g_stringPool == 0) {
             pool2 = ((int)StringPool_Allocate(0x10));
             if (pool2 != 0) {
-                pool2 = ((int)StringPool_Construct(pool2));
+                pool2 = ((int)StringPool_Construct((StringPool *)pool2));
             }
-            ((int *)g_stringPool)[0] = pool2;
+            g_stringPool = (StringPool *)pool2;
         }
-        nw2 = (int *)StringPool_Intern(((int *)g_stringPool)[0], 0);
+        nw2 = (int *)StringPool_Intern(g_stringPool, 0);
         old2 = *slot2;
         if (old2 != 0) {
             a12 = old2 - 2;
             v12 = old2[-1] - 1;
             old2[-1] = v12;
             if (v12 == 0) {
-                StringChunk_ReleaseHeader(*a12, a12);
+                StringChunk_ReleaseHeader((StringChunk *)*a12, (StringTokenHeader *)a12);
             }
         }
         *slot2 = nw2;
     }
     l2->_count = 0;
-    beNDMWWindow_ClearQueuedText(w);
+    beNDMWWindow_ClearQueuedText((beNDMWWindow *)w);
 }
 
 void beNDMWStatusSubSlot_RefreshSlotList(beNDMWStatusSubSlot *self) {
     igVec3f b, a;
-    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x89);
-    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x2A);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x89);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x2A);
     int i = 0;
     if (0 < (*(igObjectList **)&self->_subSlot)->_count) {
         int item;
@@ -3149,25 +3099,25 @@ void beNDMWStatusSubSlot_RefreshSlotList(beNDMWStatusSubSlot *self) {
             } else {
                 int itemName;
                 name = DISPON_2;
-                itemName = beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), NAME_3);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, *row);
-                beMessenger_AppendString(self->_messenger, itemName);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
-                beNDMWItemBase_GetRevisionColor(&b, item);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT11);
-                beMessenger_AppendString(self->_messenger, *row);
+                itemName = (int)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject), NAME_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *row);
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)itemName);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
+                beNDMWItemBase_GetRevisionColor((float *)&b, (beNDMWItemBase *)item);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *row);
                 a = b;
-                beMessenger_AppendVec3(self->_messenger, (float *)&a);
-                beMessenger_DispatchSelected(self->_messenger, COLOR);
+                beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&a);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT11);
-            beMessenger_AppendString(self->_messenger, *row);
-            beMessenger_AppendString(self->_messenger, name);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *row);
+            beMessenger_AppendString((beMessenger *)self->_messenger, name);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
             i++;
             off += 4;
             row++;
@@ -3189,21 +3139,21 @@ void beNDMWStatusSubSlot_ShowSlotDescription(beNDMWStatusSubSlot *a) {
         item = *(int *)(items->_data + (slot * 4));
     }
     if (item != 0) {
-        text = (int *)(((int *)beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(a->_insight, g_beNDMWStatus_metaObject[0]), TXT_2)));
-        beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(a->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(a->_messenger, font000_2);
-        beMessenger_AppendString(a->_messenger, text);
-        beMessenger_DispatchSelected(a->_messenger, TEXTSET_3);
+        text = (int *)(((int *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)a->_insight, g_beNDMWStatus_metaObject), TXT_2)));
+        beMessenger_SelectGroup((beMessenger *)a->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)a->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)a->_messenger, font000_2);
+        beMessenger_AppendString((beMessenger *)a->_messenger, (const char *)text);
+        beMessenger_DispatchSelected((beMessenger *)a->_messenger, TEXTSET_3);
         onOff = (int *)(DISPON_2);
     } else {
         onOff = (int *)(DISPOFF_2);
     }
-    beMessenger_SelectGroup(a->_messenger, TEXTCTL_5);
-    beMessenger_AppendString(a->_messenger, STWINFONT29_3);
-    beMessenger_AppendString(a->_messenger, font000_2);
-    beMessenger_AppendString(a->_messenger, onOff);
-    beMessenger_DispatchSelected(a->_messenger, SWITCH_4);
+    beMessenger_SelectGroup((beMessenger *)a->_messenger, TEXTCTL_5);
+    beMessenger_AppendString((beMessenger *)a->_messenger, STWINFONT29_3);
+    beMessenger_AppendString((beMessenger *)a->_messenger, font000_2);
+    beMessenger_AppendString((beMessenger *)a->_messenger, (const char *)onOff);
+    beMessenger_DispatchSelected((beMessenger *)a->_messenger, SWITCH_4);
 }
 
 /* Resets the slot's state counters; st1 and st3 end up 1, st2 0 (the _st3 = 0 store is dead but
@@ -3228,16 +3178,16 @@ void beNDMWStatusSubSlot_RefreshPocket(beNDMWStatusSubSlot *self) {
         case 3: upper = font103; lower = font203; break;
         case 4: upper = font104; lower = font204; break;
         }
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT11);
-        beMessenger_AppendString(self->_messenger, upper);
-        beMessenger_AppendString(self->_messenger, off);
-        beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT11);
-        beMessenger_AppendString(self->_messenger, lower);
-        beMessenger_AppendString(self->_messenger, off);
-        beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+        beMessenger_AppendString((beMessenger *)self->_messenger, upper);
+        beMessenger_AppendString((beMessenger *)self->_messenger, off);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
+        beMessenger_AppendString((beMessenger *)self->_messenger, lower);
+        beMessenger_AppendString((beMessenger *)self->_messenger, off);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
     }
 }
 
@@ -3253,15 +3203,15 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
     igIntList *t;
 
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, win.p);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
     win.p->_selectMax = 3;
     win.p->_entCode = 0x78;
     a = ((int)igObject_GetAllocator(self));
-    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
-    igSmartPointer<igBoolList> flags((igBoolList *)igBoolList_Create((void *)a));
+    a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
+    igSmartPointer<igBoolList> flags(igBoolList_Create((int)a));
     BoolList_Append(flags.p, true);
     t = (igIntList *)self->_subSlot;
     fl0 = false;
@@ -3287,10 +3237,10 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
             } else {
                 s3 = CANCELCOLOR_2;
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-            beMessenger_AppendString(self->_messenger, *p);
-            beMessenger_DispatchSelected(self->_messenger, s3);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *p);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, s3);
             l0 = flags.p;
             i += 1;
             p += 1;
@@ -3318,12 +3268,12 @@ void beNDMWStatusSubSlot_OnSlotMenuDecided(beNDMWStatusSubSlot *self) {
         AsEquipPanel(self)->EquipSelected();
         self->_retCode = self->_kindListPos;
         AsEquipPanel(self)->RefreshSlotList();
-        beMessenger_SelectReceivers(self->_messenger, GAMERAM_9, 0, 0);
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_4);
-        beMessenger_SelectGroup(self->_messenger, SUBWND_2);
-        beMessenger_AppendInt(self->_messenger, self->_playerNo);
-        beMessenger_DispatchSelected(self->_messenger, UPDATE);
+        beMessenger_SelectReceivers((beMessenger *)self->_messenger, GAMERAM_9, 0, 0);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, RECALCPLAYER_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, SUBWND_2);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, UPDATE);
         self->_st0 = 0;
         self->_st3 = 0;
         self->_st2 = 0;
@@ -3344,14 +3294,14 @@ void beNDMWStatusSubSlot_OpenDeviceFolder(beNDMWStatusSubSlot *self) {
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
-        a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+        a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     }
     igSmartPointer<beNDMWStatusCtrlD0> win((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(a));
-    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained(self->_subWindow, win.p);
-    StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-    StringList_AppendRetained(win.p->_textCloseNameList, StringRef(InternString(font100_2)));
-    beNDMWWindow_RunMessageScript(win.p, txt_status_lua_2, 139);
+    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)));
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 139);
     s0 = (igDataList *)win.p->_kindList;
     s1 = s0->_count;
     if (s1 < s0->_capacity) {
@@ -3374,9 +3324,9 @@ int beNDMWStatusSubSlot_CanEquip(beNDMWStatusSubSlot *self, int entryIndex) {
     int playerLevel;
 
     entry = *(int *)(((beNDMWItemBaseList *)self->_deviceFolder)->_data + (entryIndex * 4));
-    status = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-    playerLevel = igProperty_GetRecord(self->_playerList, LEVEL_3)->_data;
-    return playerLevel >= beNDMWItemBase_GetRecordInt(entry, status, LVPOINT);
+    status = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
+    playerLevel = igProperty_GetRecord((igObject *)self->_playerList, LEVEL_3)->_data;
+    return playerLevel >= beNDMWItemBase_GetRecordInt((beNDMWItemBase *)entry, (beNDMWStatus *)status, LVPOINT);
 }
 
 /* Equipment assignment for the sub slot. beNDMWStatus_AssignEquipment (equip by shared item
@@ -3438,40 +3388,40 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
 
     switch (self->_st0) {
     case 0:
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
         if (self->_isBankFolder != 0) {
-            beNDMWWindow_RunMessageScript(self, txt_shop_lua, 0x517);
+            beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua, 0x517);
         } else {
-            beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x46);
+            beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x46);
         }
         i = 0;
         fp = &g_statusFontNames[0];
         do {
-            beNDMWWindow_QueueText(self, STWINFONT14_2, *fp, space, LEFT_3);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, *fp, space, LEFT_3);
             i += 1;
             fp += 1;
         } while (i < 12);
         i = 0;
         fp = &g_statusFontNames[0];
         do {
-            beNDMWWindow_QueueText(self, STWINFONT16, *fp, space, RIGHT_2);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT16, *fp, space, RIGHT_2);
             i += 1;
             fp += 1;
         } while (i < 12);
         if (self->_isBankFolder != 0) {
-            beNDMWWindow_QueueText(self, STWINFONT40, g_statusFontNames[0], space, RIGHT_2);
-            beNDMWWindow_QueueText(self, STWINFONT40, g_statusFontNames[1], space, RIGHT_2);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT40, g_statusFontNames[0], space, RIGHT_2);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT40, g_statusFontNames[1], space, RIGHT_2);
         } else {
-            beNDMWWindow_QueueText(self, STWINFONT23, g_statusFontNames[0], space, RIGHT_2);
-            beNDMWWindow_QueueText(self, STWINFONT23, g_statusFontNames[1], space, RIGHT_2);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT23, g_statusFontNames[0], space, RIGHT_2);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT23, g_statusFontNames[1], space, RIGHT_2);
         }
-        beNDMWWindow_QueueText(self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
         GET_ALLOC(alloc)
         {
-        igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
-        beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-        ObjectList_AppendRetained(self->_subWindow, win.p);
+        igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)alloc));
+        beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
         ((beNDMWWindowSelect *)win.p)->_selectMax = beNDMWStatusCtrlD0_UpdatePageCount(self);
         {
             igObject *dl = (igObject *)self->_decideList;
@@ -3485,7 +3435,7 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
         ((beNDMWWindowSelect *)win.p)->_startPoint = 0;
         }
         self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count;
-        beNDMWWindow_PresentModelAtOrigin(self, i_stfolder, 0, SQ_AWINONOPEN, SQ_CLOSE_3);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stfolder, 0, SQ_AWINONOPEN, SQ_CLOSE_3);
         vecB[0] = 85.0f;
         vecB[2] = 0.0f;
         vecB[1] = 25.0f;
@@ -3510,7 +3460,7 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
                         return;
                     }
                     mother = (beNDMWWindowSelect *)*(int *)((int)((igObjectList *)self->_subWindow)->_data);
-                    if (beNDMWWindowSelect_CanRequestFO2TOP(mother, self->_subWindow) != 0) {
+                    if (beNDMWWindowSelect_CanRequestFO2TOP(mother)) {
                         bool ready = false;
                         if (AsListCtrl(self)->PrevPage()) {
                             ready = true;
@@ -3558,18 +3508,18 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
             case 1:
                 GET_ALLOC(alloc)
                 {
-                igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(alloc));
-                beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, win.p);
-                beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-                beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-                rec = beMessenger_GetObject(self->_messenger, 0);
+                igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)alloc));
+                beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+                beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+                rec = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 if (self->_isBankFolder != 0) {
-                    beDataObjObjectList *folder = igProperty_GetRecordFolder(rec, BANKDEVICE_2);
+                    beDataObjObjectList *folder = igProperty_GetRecordFolder((igObject *)rec, BANKDEVICE_2);
                     list = (igObjectList *)folder->_data;
                 } else {
-                    beDataObjObjectList *folder = igProperty_GetRecordFolder(rec, DEVICEFOLDER_3);
+                    beDataObjObjectList *folder = igProperty_GetRecordFolder((igObject *)rec, DEVICEFOLDER_3);
                     list = (igObjectList *)folder->_data;
                 }
                 if (self->_cursor + self->_nowPage * 12 >= list->_count) {
@@ -3582,10 +3532,10 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
                     }
                 }
                 if (self->_nowPage == 0) {
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursorleft, 0, SQ_HIDE);
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursorleft, 0, SQ_HIDE);
                 }
                 if (list->_count <= (self->_nowPage + 1) * 12) {
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursorright, 0, SQ_HIDE);
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursorright, 0, SQ_HIDE);
                 }
                 ((beNDMWWindowSelect *)win.p)->_selectMax = beNDMWStatusCtrlD0_UpdatePageCount(self);
                 {
@@ -3609,9 +3559,9 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         i = 0;
         fp = &g_statusFontNames[0];
         self->_st0 = self->_st0 + 1;
@@ -3619,20 +3569,20 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
         self->_st2 = 0;
         self->_st1 = 0;
         do {
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-            beMessenger_AppendString(self->_messenger, *fp);
-            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_2);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT16);
-            beMessenger_AppendString(self->_messenger, *fp);
-            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_2);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *fp);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, DEFAULTCOLOR_2);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT16);
+            beMessenger_AppendString((beMessenger *)self->_messenger, *fp);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, DEFAULTCOLOR_2);
             i += 1;
             fp += 1;
         } while (i < 12);
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) {
             self->_isRun = 0;
         }
         break;
@@ -3658,19 +3608,19 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
     int base;
     beDataObjObjectList *t;
     beDataObjObjectList *t2;
-    beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-    o = beMessenger_GetObject(self->_messenger, 0);
+    beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+    beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+    o = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
     if (self->_isBankFolder != 0) {
-        t = igProperty_GetRecordFolder(o, BANKDEVICE_2);
+        t = igProperty_GetRecordFolder((igObject *)o, BANKDEVICE_2);
         folder = (igDataList *)t->_data;
     } else {
-        t2 = igProperty_GetRecordFolder(o, DEVICEFOLDER_3);
+        t2 = igProperty_GetRecordFolder((igObject *)o, DEVICEFOLDER_3);
         folder = (igDataList *)t2->_data;
     }
-    ctx = ((void *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]));
-    igSmartPointer<igStringObj> sp((igStringObj *)((beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]))->_globalStrObj);
+    ctx = ((void *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject));
+    igSmartPointer<igStringObj> sp((igStringObj *)((beSystem *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject))->_globalStrObj);
     /* matching construct: the text buffers are declared after the holder so they lie below it in the frame as retail. */
     char buf1[2];
     char buf2[2];
@@ -3685,82 +3635,82 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
             idx = self->_nowPage * 12 + i;
             if (idx < folder->_count) {
                 item = *(beNDMWItemBase **)(folder->_data + idx * 4);
-                s = ((char *)beNDMWItemBase_GetRecordString(item, ctx, NAME_3));
+                s = ((char *)beNDMWItemBase_GetRecordString(item, (beNDMWStatus *)ctx, NAME_3));
                 igStringObj_Set(sp, s);
                 if (item->_isEquip != 0) {
-                    igStringObj_Insert(sp, equippedMark, 0, strlen(equippedMark));
+                    igStringObj_Insert(sp, (char *)equippedMark, 0, strlen((const char *)equippedMark));
                 } else {
-                    igStringObj_Insert(sp, unequippedMark, 0, strlen(unequippedMark));
+                    igStringObj_Insert(sp, (char *)unequippedMark, 0, strlen((const char *)unequippedMark));
                 }
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                beMessenger_AppendString(self->_messenger, g_statusFontNames[i]);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[i]);
                 mm = self->_messenger;
                 nm2 = (char *)sp.p->_buffer;
-                if (nm2 == 0) nm = g_stringObjEmptyText[0]; else nm = nm2;
-                beMessenger_AppendString(mm, nm);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                beMessenger_AppendString(self->_messenger, g_statusFontNames[i]);
+                if (nm2 == 0) nm = g_stringObjEmptyText; else nm = nm2;
+                beMessenger_AppendString((beMessenger *)mm, nm);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[i]);
                 if (*(unsigned char *)(((igBoolList *)self->_decideList)->_data + i) != 0) {
                     m = self->_messenger;
-                    beNDMWItemBase_GetRevisionColor(vec, item);
-                    beMessenger_AppendVec3(m, (float *)vec);
-                    beMessenger_DispatchSelected(self->_messenger, COLOR);
+                    beNDMWItemBase_GetRevisionColor((float *)vec, item);
+                    beMessenger_AppendVec3((beMessenger *)m, (float *)vec);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
                 } else {
-                    beMessenger_DispatchSelected(self->_messenger, CANCELCOLOR_2);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, CANCELCOLOR_2);
                 }
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT16);
-                beMessenger_AppendString(self->_messenger, g_statusFontNames[i]);
-                beMessenger_AppendString(self->_messenger, space);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT16);
+                beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[i]);
+                beMessenger_AppendString((beMessenger *)self->_messenger, space);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                 tail = DISPON_2;
             } else {
                 tail = DISPOFF_2;
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-            beMessenger_AppendString(self->_messenger, g_statusFontNames[i]);
-            beMessenger_AppendString(self->_messenger, tail);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT16);
-            beMessenger_AppendString(self->_messenger, g_statusFontNames[i]);
-            beMessenger_AppendString(self->_messenger, tail);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[i]);
+            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)tail);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT16);
+            beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[i]);
+            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)tail);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
             i++;
         } while (i < 12);
         buf1[0] = self->_nowPage + 49;
         buf1[1] = 0;
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
         if (self->_isBankFolder != 0) {
-            beMessenger_AppendString(self->_messenger, STWINFONT40);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT40);
         } else {
-            beMessenger_AppendString(self->_messenger, STWINFONT23);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT23);
         }
-        beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-        beMessenger_AppendString(self->_messenger, buf1);
-        beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+        beMessenger_AppendString((beMessenger *)self->_messenger, buf1);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
         buf1[0] = self->_maxPage + 48;
         buf1[1] = 0;
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
         if (self->_isBankFolder != 0) {
-            beMessenger_AppendString(self->_messenger, STWINFONT40);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT40);
         } else {
-            beMessenger_AppendString(self->_messenger, STWINFONT23);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT23);
         }
-        beMessenger_AppendString(self->_messenger, g_statusFontNames[1]);
-        beMessenger_AppendString(self->_messenger, buf1);
-        beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[1]);
+        beMessenger_AppendString((beMessenger *)self->_messenger, buf1);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
     }
     if (refreshDescription != 0) {
         base = self->_nowPage * 12;
         idx = base + self->_retCode;
         if (idx < folder->_count) {
             item = *(beNDMWItemBase **)(folder->_data + idx * 4);
-            s = ((char *)beNDMWItemBase_GetRecordString(item, ctx, TXT_2));
+            s = ((char *)beNDMWItemBase_GetRecordString(item, (beNDMWStatus *)ctx, TXT_2));
             if (item->_kindNo == 0) {
                 if (item->_recNo != 0x114) {
                     buf2[1] = 0;
@@ -3770,7 +3720,7 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
                     i = r->_length;
                     igStringObj_Insert(r, buf2, i, strlen(buf2));
                     s2 = (char *)sp.p->_buffer;
-                    s = s2 == 0 ? g_stringObjEmptyText[0] : s2;
+                    s = s2 == 0 ? g_stringObjEmptyText : s2;
                 }
             } else if (item->_kindNo == 1 && item->_recNo != 0x1f) {
                 buf3[1] = 0;
@@ -3780,26 +3730,26 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
                 idx = r->_length;
                 igStringObj_Insert(r, buf3, idx, strlen(buf3));
                 s2 = (char *)sp.p->_buffer;
-                s = s2 == 0 ? g_stringObjEmptyText[0] : s2;
+                s = s2 == 0 ? g_stringObjEmptyText : s2;
             }
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-            beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+            beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
             if (s != 0) {
-                beMessenger_AppendString(self->_messenger, s);
+                beMessenger_AppendString((beMessenger *)self->_messenger, s);
             } else {
-                beMessenger_AppendString(self->_messenger, space);
+                beMessenger_AppendString((beMessenger *)self->_messenger, space);
             }
-            beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
             tail = DISPON_2;
         } else {
             tail = DISPOFF_2;
         }
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-        beMessenger_AppendString(self->_messenger, tail);
-        beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+        beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)tail);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
     }
 }
 
@@ -3816,15 +3766,15 @@ int beNDMWStatusCtrlD0_UpdatePageCount(beNDMWStatusCtrlD0 *self) {
     int shown;
     int t; int a; unsigned char b1; unsigned char b2; unsigned char w;
     beNDMWItemBase *rec;
-    beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-    obj = ((void *)beMessenger_GetObject(self->_messenger, 0));
+    beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+    beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+    obj = ((void *)beMessenger_GetObject((beMessenger *)self->_messenger, 0));
     if (self->_isBankFolder != 0) {
-        int tmp = igProperty_GetRecordFolder(obj, BANKDEVICE_2)->_data;
+        int tmp = igProperty_GetRecordFolder((igObject *)obj, BANKDEVICE_2)->_data;
         fold = (igObjectList *)tmp;
     } else {
-        int tmp = igProperty_GetRecordFolder(obj, DEVICEFOLDER_3)->_data;
+        int tmp = igProperty_GetRecordFolder((igObject *)obj, DEVICEFOLDER_3)->_data;
         fold = (igObjectList *)tmp;
     }
     if (fold->_count % 12 != 0) {
@@ -3849,9 +3799,9 @@ int beNDMWStatusCtrlD0_UpdatePageCount(beNDMWStatusCtrlD0 *self) {
                 t = *(int *)(((igDataList *)self->_kindList)->_data + k * 4);
                 if (t == 3) {
                     if (rec->_kindNo == 3) {
-                        a = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
-                        b1 = beNDMWItemBase_GetRecordBool(rec, a, WU);
-                        b2 = beNDMWItemBase_GetRecordBool(rec, a, BLUEAB);
+                        a = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
+                        b1 = beNDMWItemBase_GetRecordBool(rec, (beNDMWStatus *)a, WU);
+                        b2 = beNDMWItemBase_GetRecordBool(rec, (beNDMWStatus *)a, BLUEAB);
                         switch (self->_isAbType) {
                         default: w = 1; break;
                         case 0: w = b1; break;
@@ -3900,9 +3850,9 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
     case 0:
         ALLOC(alloc)
         {
-        igSmartPointer<beNDMWStatusTitle04> title((beNDMWStatusTitle04 *)beNDMWStatusTitle04_Create(alloc));
-        beNDMWWindow_BindContext(title.p, self, self->_insight, self->_playerNo, 0x3C);
-        ObjectList_AppendRetained(self->_subWindow, title.p);
+        igSmartPointer<beNDMWStatusTitle04> title((beNDMWStatusTitle04 *)beNDMWStatusTitle04_Create((int)alloc));
+        beNDMWWindow_BindContext((beNDMWWindow *)title.p, (igObject *)self, self->_insight, self->_playerNo, 0x3C);
+        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)title.p);
         }
         self->_folderMenu = 0;
         self->_st0 = self->_st0 + 1;
@@ -3919,18 +3869,18 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
             case 0:
                 ALLOC(alloc)
                 {
-                igSmartPointer<beNDMWStatusSelect01> menu((beNDMWStatusSelect01 *)beNDMWStatusSelect01_Create(alloc));
-                beNDMWWindow_BindContext(menu.p, self, self->_insight, self->_playerNo, 0x3D);
-                ObjectList_AppendRetained(self->_subWindow, menu.p);
+                igSmartPointer<beNDMWStatusSelect01> menu((beNDMWStatusSelect01 *)beNDMWStatusSelect01_Create((int)alloc));
+                beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, 0x3D);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)menu.p);
                 ((beNDMWStatusSelect01 *)menu.p)->_startPoint = self->_folderMenu;
-                beNDMWWindow_QueueText(menu.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+                beNDMWWindow_QueueText((beNDMWWindow *)menu.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
                 }
                 self->_nowProcKazu = ((igDataList *)self->_subWindow)->_count;
                 self->_st2 = self->_st2 + 1;
                 self->_st3 = 0;
             case 1:
                 if (self->_retCode != -1) {
-                    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, self->_retCode + 0x51);
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, self->_retCode + 0x51);
                 }
                 self->_st2 = self->_st2 + 1;
                 self->_st3 = 0;
@@ -3982,8 +3932,8 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
                 ALLOC(alloc)
                 {
                 igSmartPointer<beNDMWStatusCtrlD0> deviceList((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create((int)alloc));
-                beNDMWWindow_BindContext(deviceList.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, deviceList.p);
+                beNDMWWindow_BindContext((beNDMWWindow *)deviceList.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)deviceList.p);
                 ((beNDMWStatusCtrlD0 *)deviceList.p)->_isAutoClose = 0;
                 }
                 self->_nowProcKazu = ((igDataList *)self->_subWindow)->_count;
@@ -3991,7 +3941,7 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
                 self->_st3 = 0;
             case 1:
                 if (self->_st3 == 0) {
-                    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x2B);
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x2B);
                     self->_st3 = 1;
                 }
                 found = FolderHelpers::FindSub(self);
@@ -4010,9 +3960,9 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
                         MSG()
                         ALLOC(alloc)
                         {
-                        igSmartPointer<beNDMWStatusSubMenu> subMenu((beNDMWStatusSubMenu *)beNDMWStatusSubMenu_Create(alloc));
-                        beNDMWWindow_BindContext(subMenu.p, self, self->_insight, self->_playerNo, self->_retCode);
-                        ObjectList_AppendRetained(self->_subWindow, subMenu.p);
+                        igSmartPointer<beNDMWStatusSubMenu> subMenu((beNDMWStatusSubMenu *)beNDMWStatusSubMenu_Create((int)alloc));
+                        beNDMWWindow_BindContext((beNDMWWindow *)subMenu.p, (igObject *)self, self->_insight, self->_playerNo, self->_retCode);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)subMenu.p);
                         ((beNDMWStatusSubMenu *)subMenu.p)->_selectDevice = self->_retCode;
                         {
                             beNDMWStatusSubMenu *o = (beNDMWStatusSubMenu *)subMenu.p;
@@ -4034,11 +3984,11 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
                 if (((igDataList *)self->_subWindow)->_count != self->_nowProcKazu) {
                     self->_nowProcKazu = ((igDataList *)self->_subWindow)->_count;
                     self->_retCode = 0;
-                    beNDMWWindow_PlayQueuedModelClose(self);
+                    beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
                     CLEAR(self->_modelCloseInfoNameList)
                     ((igDataList *)self->_modelCloseRamNoList)->_count = 0;
                     CLEAR(self->_modelCloseSeqNameList)
-                    beNDMWWindow_ClearQueuedText(self);
+                    beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
                     found = FolderHelpers::FindSub(self);
                     if (found != 0) {
                         ((beNDMWWindow *)found)->_st2 = 1;
@@ -4082,21 +4032,21 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
                 case 2:
                     ALLOC(alloc)
                     { igObject *t = child.p; IG_OBJECT_RELEASE(t); }
-                    child.p = (beNDMWWindow *)beNDMWStatusCtrlFlag_Create(alloc);
+                    child.p = (beNDMWWindow *)beNDMWStatusCtrlFlag_Create((int)alloc);
                     break;
                 case 3:
                     ALLOC(alloc)
                     { igObject *t = child.p; IG_OBJECT_RELEASE(t); }
-                    child.p = (beNDMWWindow *)beNDMWStatusCtrlDisk_Create(alloc);
+                    child.p = (beNDMWWindow *)beNDMWStatusCtrlDisk_Create((int)alloc);
                     break;
                 case 4:
                     ALLOC(alloc)
                     { igObject *t = child.p; IG_OBJECT_RELEASE(t); }
-                    child.p = (beNDMWWindow *)beNDMWStatusCtrlBit_Create(alloc);
+                    child.p = (beNDMWWindow *)beNDMWStatusCtrlBit_Create((int)alloc);
                     break;
                 }
                 beNDMWWindow_BindContext(child.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, child.p);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)child.p);
                 }
                 self->_nowProcKazu = ((igDataList *)self->_subWindow)->_count;
                 self->_st2 = self->_st2 + 1;
@@ -4115,16 +4065,16 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) {
             self->_isRun = 0;
         }
         break;
@@ -4144,8 +4094,8 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
     char **p;
     switch (self->_st0) {
     case 0:
-        beMessenger_SendGroup(self->_messenger, GAMERAM_9, GETCOMMON_6);
-        lst = (PropertyRecordList *)igProperty_GetRecordArray(beMessenger_GetObject(self->_messenger, 0), FLAGFOLDER_2)->_data;
+        beMessenger_SendGroup((beMessenger *)self->_messenger, GAMERAM_9, GETCOMMON_6);
+        lst = (PropertyRecordList *)igProperty_GetRecordArray(beMessenger_GetObject((beMessenger *)self->_messenger, 0), FLAGFOLDER_2)->_data;
         s2 = 0;
         if (0 < lst->cnt) {
             do {
@@ -4162,29 +4112,29 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
                 s2 += 1;
             } while (s2 < lst->cnt);
         }
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
         src = g_statusFontNames[0];
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(src)));
-        beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x47);
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(src)));
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x47);
         k = 0;
         p = &g_statusFontNames[0];
         do {
-            beNDMWWindow_QueueText(self, STWINFONT14_2, *p, space, LEFT_3);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, *p, space, LEFT_3);
             k += 1;
             p += 1;
         } while (k < 12);
-        beNDMWWindow_QueueText(self, STWINFONT23, g_statusFontNames[0], space, RIGHT_2);
-        beNDMWWindow_QueueText(self, STWINFONT23, g_statusFontNames[1], space, RIGHT_2);
-        beNDMWWindow_QueueText(self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT23, g_statusFontNames[0], space, RIGHT_2);
+        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT23, g_statusFontNames[1], space, RIGHT_2);
+        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
         al = ((int)igObject_GetAllocator(self));
-        al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+        al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         {
         /* the list window is owned by the stack reference while it is bound, listed and set up; its
          * share is released at the block end */
-        igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((void *)al));
-        beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
+        igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+        beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
         /* matching construct: (unsigned) cast on the reference steers retail operand order */
-        ObjectList_AppendRetained((unsigned)self->_subWindow, win.p);
+        ObjectList_AppendRetained((igObjectList *)(unsigned)self->_subWindow, (igObject *)win.p);
         a = ((igIntList *)self->_impItems)->_count;
         if (a == 0) {
             win.p->_selectMax = 1;
@@ -4198,12 +4148,12 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
             t->_offsetPos[2] = 0.0f;
         }
         win.p->_startPoint = 0;
-        StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-        StringList_AppendRetained(win.p->_textCloseNameList, StringRef(InternString(font100_2)));
-        beNDMWWindow_RunMessageScript(win.p, txt_status_lua_2, 0x87);
+        StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+        StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)));
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x87);
         }
         self->_nowProcKazu = ((beNDMWWindowList *)(self->_subWindow))->_count;
-        beNDMWWindow_PresentModelAtOrigin(self, i_stfolder, 0, SQ_FLAGOPEN, SQ_CLOSE_3);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stfolder, 0, SQ_FLAGOPEN, SQ_CLOSE_3);
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;
         self->_st2 = 0;
@@ -4233,16 +4183,16 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) {
             self->_isRun = 0;
         }
         break;
@@ -4258,8 +4208,8 @@ void beNDMWStatusCtrlFlag_RefreshText(beNDMWStatusCtrlFlag *self, int refreshRow
     char **v4;
     char **w4;
     int v3;
-    beMessenger_SendNamed(self->_messenger, DATABASE_7, impItem_2, 0, GETDATABASE_7);
-    s0 = beMessenger_GetObject(self->_messenger, 0);
+    beMessenger_SendNamed((beMessenger *)self->_messenger, DATABASE_7, impItem_2, 0, GETDATABASE_7);
+    s0 = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
     if (refreshRows != 0) {
         v6 = 0;
         l = (igDataList *)self->_impItems;
@@ -4267,12 +4217,12 @@ void beNDMWStatusCtrlFlag_RefreshText(beNDMWStatusCtrlFlag *self, int refreshRow
             v3 = 0;
             v4 = g_statusFontNames;
             do {
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                beMessenger_AppendString(self->_messenger, *v4);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *v4);
                 s5 = self->_messenger;
-                beMessenger_AppendString(s5, beDataBase_GetRecordString(s0, *(int *)&((unsigned char *)((igDataList *)self->_impItems)->_data)[v3], NAME_3));
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                beMessenger_AppendString((beMessenger *)s5, beDataBase_GetRecordString((beDataBase *)s0, *(int *)&((unsigned char *)((igDataList *)self->_impItems)->_data)[v3], NAME_3));
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                 v6++;
                 v4++;
                 v3 += 4;
@@ -4282,23 +4232,23 @@ void beNDMWStatusCtrlFlag_RefreshText(beNDMWStatusCtrlFlag *self, int refreshRow
         if (w3 < 12) {
             w4 = &g_statusFontNames[w3];
             do {
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                beMessenger_AppendString(self->_messenger, *w4);
-                beMessenger_AppendString(self->_messenger, DISPOFF_2);
-                beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *w4);
+                beMessenger_AppendString((beMessenger *)self->_messenger, DISPOFF_2);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
                 w3++;
                 w4++;
             } while (w3 < 12);
         }
     }
     if (refreshDescription != 0 && ((igDataList *)self->_impItems)->_count > 0) {
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
         s5 = self->_messenger;
-        beMessenger_AppendString(s5, beDataBase_GetRecordString(s0, ((int *)((igDataList *)self->_impItems)->_data)[self->_retCode], TXT_2));
-        beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+        beMessenger_AppendString((beMessenger *)s5, beDataBase_GetRecordString((beDataBase *)s0, ((int *)((igDataList *)self->_impItems)->_data)[self->_retCode], TXT_2));
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
     }
 }
 
@@ -4318,16 +4268,16 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
         int i, j;
         if (self->_st1 == 0) self->_cursor = 0;
         MSG_SELECT_INT(self->_playerNo)
-        igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_3);
-        beNDMWWindow_PresentModelAtOrigin(self, i_stfolder, 0, SQ_AWINOFFOPEN, SQ_CLOSE_3);
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
-        beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x48);
+        igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stfolder, 0, SQ_AWINOFFOPEN, SQ_CLOSE_3);
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x48);
         for (i = 0; i < 12; i++)
-            beNDMWWindow_QueueText(self, STWINFONT14_2, g_statusFontNames[i], space, LEFT_3);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, g_statusFontNames[i], space, LEFT_3);
         for (j = 0; j < 12; j++)
-            beNDMWWindow_QueueText(self, STWINFONT15, g_statusFontNames[j], space, RIGHT_2);
-        beNDMWWindow_QueueText(self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+            beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT15, g_statusFontNames[j], space, RIGHT_2);
+        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
         NEXT_ST0()
     }
     case 1:
@@ -4336,17 +4286,17 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
             void *al;
             int cnt;
             GET_ALLOC(al)
-            { igSmartPointer<beNDMWStatusSelectE1> diskWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
-            beNDMWWindow_BindContext(diskWin.p, self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained(self->_subWindow, diskWin.p);
+            { igSmartPointer<beNDMWStatusSelectE1> diskWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+            beNDMWWindow_BindContext((beNDMWWindow *)diskWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+            ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)diskWin.p);
             MSG_SELECT_INT(self->_playerNo)
-            igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_3);
+            igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3);
             WSETI84(diskWin.p, 10)
             WSETPOS(diskWin.p, -121.0f, 128.0f, 0.0f)
             WSETI100(diskWin.p, self->_cursor)
-            StringList_AppendRetained(((beNDMWWindowSelect *)diskWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-            StringList_AppendRetained(((beNDMWWindowSelect *)diskWin.p)->_textCloseNameList, StringRef(InternString(font100_2)));
-            beNDMWWindow_RunMessageScript(diskWin.p, txt_status_lua_2, 0x2B);
+            StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)diskWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+            StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)diskWin.p)->_textCloseNameList, StringRef(InternString(font100_2)));
+            beNDMWWindow_RunMessageScript((beNDMWWindow *)diskWin.p, txt_status_lua_2, 0x2B);
             }
             cnt = ((igObjectList *)self->_subWindow)->_count;
             self->_nowProcKazu = cnt;
@@ -4382,23 +4332,23 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                 static const ModelNameTable models = {{SQ_OPEN00, SQ_OPEN01, SQ_OPEN02, SQ_OPEN03, SQ_OPEN04, SQ_OPEN05, SQ_OPEN06, SQ_OPEN07, SQ_OPEN08, SQ_OPEN09, SQ_OPEN10, SQ_OPEN11}};
                 tq = models;
                 vecA[0] = -121.0f; vecA[1] = 128.0f; vecA[2] = 0.0f;
-                beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, (const char *)tq.v[self->_cursor], (const char *)0, (float *)vecA);
+                beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, (const char *)tq.v[self->_cursor], (const char *)0, (float *)vecA);
                 GET_ALLOC(al)
-                { igSmartPointer<beNDMWStatusSelectE1> actionWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
-                beNDMWWindow_BindContext(actionWin.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, actionWin.p);
+                { igSmartPointer<beNDMWStatusSelectE1> actionWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+                beNDMWWindow_BindContext((beNDMWWindow *)actionWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)actionWin.p);
                 WSETI84(actionWin.p, 2)
                 WSETPOS(actionWin.p, 115.0f, 145.0f, 0.0f)
                 WSETI100(actionWin.p, 0)
-                beNDMWWindow_PresentModelAtOrigin(actionWin.p, i_stmenu02, 0, SQ_2LINEOPEN, SQ_CLOSE_3);
-                beNDMWWindow_QueueText(actionWin.p, STWINFONT26, g_statusFontNames[0], space, LEFT_3);
-                beNDMWWindow_QueueText(actionWin.p, STWINFONT26, g_statusFontNames[1], space, LEFT_3);
+                beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)actionWin.p, i_stmenu02, 0, SQ_2LINEOPEN, SQ_CLOSE_3);
+                beNDMWWindow_QueueText((beNDMWWindow *)actionWin.p, STWINFONT26, g_statusFontNames[0], space, LEFT_3);
+                beNDMWWindow_QueueText((beNDMWWindow *)actionWin.p, STWINFONT26, g_statusFontNames[1], space, LEFT_3);
                 }
                 SYNC_COUNT()
                 NEXT_ST2()
             }
             case 1:
-                beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x41);
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x41);
                 NEXT_ST2()
             case 2:
                 if (WIN_PENDING()) {
@@ -4420,16 +4370,16 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                 void *al;
                 int i;
                 GET_ALLOC(al)
-                { igSmartPointer<beNDMWStatusSelectE1> orderWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
-                beNDMWWindow_BindContext(orderWin.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, orderWin.p);
+                { igSmartPointer<beNDMWStatusSelectE1> orderWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+                beNDMWWindow_BindContext((beNDMWWindow *)orderWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)orderWin.p);
                 MSG_SELECT_INT(self->_playerNo)
-                igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_3);
+                igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3);
                 WSETI84(orderWin.p, 10)
                 WSETPOS(orderWin.p, -121.0f, 128.0f, 0.0f)
                 WSETI100(orderWin.p, self->_cursor)
                 GET_ALLOC(al)
-                igSmartPointer<igBoolList> decided((igBoolList *)igBoolList_Create(al));
+                igSmartPointer<igBoolList> decided(igBoolList_Create((int)al));
                 for (i = 0; i < 10; i++) {
                     if (i == self->_cursor) { BoolList_Append(decided.p, false); } else { BoolList_Append(decided.p, true); }
                 }
@@ -4453,11 +4403,11 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                     if (self->_retCode != -1) {
                         igObjectList *l;
                         MSG_SELECT_INT(self->_playerNo)
-                        l = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_3)->_data;
+                        l = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3)->_data;
                         SwapRef cursorDisk(((void **)l->_data)[self->_cursor]);
                         SwapRef targetDisk(((void **)l->_data)[self->_retCode]);
-                        beNDMWLoadIntf2_igObjectList_Set(l, self->_cursor, targetDisk.p);
-                        beNDMWLoadIntf2_igObjectList_Set(l, self->_retCode, cursorDisk.p);
+                        beNDMWLoadIntf2_igObjectList_Set((igDataList *)l, self->_cursor, (ObjectRefTarget *)targetDisk.p);
+                        beNDMWLoadIntf2_igObjectList_Set((igDataList *)l, self->_retCode, (ObjectRefTarget *)cursorDisk.p);
                     }
                     SEND_CLOSE();
                     RESET_ST1()
@@ -4473,16 +4423,16 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                 int i;
                 beNDMWItemDisk *item;
                 MSG_SELECT_INT(self->_playerNo)
-                item = (beNDMWItemDisk *)((int *)((igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_3)->_data)->_data)[self->_cursor];
+                item = (beNDMWItemDisk *)((int *)((igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3)->_data)->_data)[self->_cursor];
                 if (item->_kazu <= 0) {
                     GET_ALLOC(al)
-                    { igSmartPointer<beNDMWShopSelect00> emptyWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                    beNDMWWindow_BindContext(emptyWin.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, emptyWin.p);
+                    { igSmartPointer<beNDMWShopSelect00> emptyWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                    beNDMWWindow_BindContext((beNDMWWindow *)emptyWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)emptyWin.p);
                     NEXT_ST2()
-                    StringList_AppendRetained(((beNDMWWindowSelect *)emptyWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-                    StringList_AppendRetained(((beNDMWWindowSelect *)emptyWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
-                    beNDMWWindow_RunMessageScript(emptyWin.p, txt_status_lua_2, 0x8D);
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)emptyWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)emptyWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)emptyWin.p, txt_status_lua_2, 0x8D);
                     }
                 } else {
                     igObjectList *dk;
@@ -4494,31 +4444,31 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                     for (i = 0; i < 4; i++) {
                         int obj;
                         MSG_SELECT_INT(i)
-                        obj = beMessenger_GetObject(self->_messenger, 0);
-                        if (igProperty_GetRecordByte(obj, ISUSE_7)->_data != 0 && i != self->_playerNo) {
+                        obj = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+                        if (igProperty_GetRecordByte((igObject *)obj, ISUSE_7)->_data != 0 && i != self->_playerNo) {
                             LIST_ADD(self->_playerNoList, i)
                             {
-                            igObjectList *fl = (igObjectList *)igProperty_GetRecordFolder(obj, DISKFOLDER_3)->_data;
+                            igObjectList *fl = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, DISKFOLDER_3)->_data;
                             beNDMWItemDisk *found = 0;
                             int k;
                             for (k = 0; k < fl->_count; k++) {
                                 beNDMWItemDisk *e = ((beNDMWItemDisk **)fl->_data)[k];
                                 if (e->_recNo == item->_recNo) { found = e; break; }
                             }
-                            if (found != 0) ObjectList_AppendRetained(self->_diskList, found);
-                            else ObjectList_AppendRetained(self->_diskList, 0);
+                            if (found != 0) ObjectList_AppendRetained((igObjectList *)self->_diskList, (igObject *)found);
+                            else ObjectList_AppendRetained((igObjectList *)self->_diskList, 0);
                             }
                         }
                     }
                     if (((igObjectList *)self->_playerNoList)->_count <= 0) {
                         GET_ALLOC(al)
-                        { igSmartPointer<beNDMWShopSelect00> noPlayerWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                        beNDMWWindow_BindContext(noPlayerWin.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, noPlayerWin.p);
+                        { igSmartPointer<beNDMWShopSelect00> noPlayerWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                        beNDMWWindow_BindContext((beNDMWWindow *)noPlayerWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)noPlayerWin.p);
                         NEXT_ST2()
-                        StringList_AppendRetained(((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-                        StringList_AppendRetained(((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
-                        beNDMWWindow_RunMessageScript(noPlayerWin.p, txt_status_lua_2, 0x8E);
+                        StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+                        StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+                        beNDMWWindow_RunMessageScript((beNDMWWindow *)noPlayerWin.p, txt_status_lua_2, 0x8E);
                         }
                     } else {
                         self->_st1 = 6; self->_st3 = 0; self->_st2 = 0;
@@ -4544,9 +4494,9 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
             switch (self->_st2) {
             case 0:
                 SEND_CLOSE();
-                beNDMWWindow_PlayQueuedModelClose(self);
+                beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
                 CLOSE_LISTS()
-                beNDMWWindow_ClearQueuedText(self);
+                beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
             case 1:
                 NEXT_ST2()
                 return;
@@ -4557,25 +4507,25 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                 switch (((igObjectList *)self->_playerNoList)->_count) {
                 case 1:
                 default:
-                    beNDMWWindow_PresentModelAtOrigin(self, i_stmenu02, 0, SQ_1ITEMOPEN, SQ_CLOSE_3);
+                    beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_1ITEMOPEN, SQ_CLOSE_3);
                     break;
                 case 2:
-                    beNDMWWindow_PresentModelAtOrigin(self, i_stmenu02, 0, SQ_2ITEMOPEN, SQ_CLOSE_3);
+                    beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_2ITEMOPEN, SQ_CLOSE_3);
                     break;
                 case 3:
-                    beNDMWWindow_PresentModelAtOrigin(self, i_stmenu02, 0, SQ_3ITEMOPEN, SQ_CLOSE_3);
+                    beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_3ITEMOPEN, SQ_CLOSE_3);
                     break;
                 }
-                StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
-                StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(font000_2)));
-                StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
-                StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(font001_2)));
-                beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x4A);
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font000_2)));
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font001_2)));
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x4A);
                 MSG_SELECT_INT(self->_playerNo)
-                lsx = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_3)->_data;
-                beNDMWWindow_QueueText(self, STWINFONT14_2, font000_2, beNDMWItemBase_GetRecordString(item = (beNDMWItemBase *)((int *)lsx->_data)[self->_cursor], igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), NAME_3), LEFT_3);
-                beNDMWLoadIntf2_igObject_Retain(item);
-                beNDMWLoadIntf2_igObject_Release(self->_sendDisk);
+                lsx = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3)->_data;
+                beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, font000_2, (const char *)beNDMWItemBase_GetRecordString(item = (beNDMWItemBase *)((int *)lsx->_data)[self->_cursor], (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject), NAME_3), LEFT_3);
+                beNDMWLoadIntf2_igObject_Retain((ObjectRefTarget *)item);
+                beNDMWLoadIntf2_igObject_Release((igObject *)self->_sendDisk);
                 self->_sendDisk = (int)item;
                 static const CellNameRow playerCells = {{font001_2, font002_2, font003_2}};
                 names = playerCells;
@@ -4583,30 +4533,30 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                     int pno = ((int *)((igObjectList *)self->_playerNoList)->_data)[i];
                     igObjectList *l2;
                     MSG_SELECT_INT(pno)
-                    l2 = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), PLAYERNAME_3)->_data;
+                    l2 = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), PLAYERNAME_3)->_data;
                     if (l2->_count > 0) {
                         DeviceRef firstDevice((void *)*(int *)l2->_data, kRetainReference);
-                        beNDMWWindow_QueueObjectText(self, STWINFONT14_2, names.v[i], DeviceRef(firstDevice), LEFT_3);
+                        beNDMWWindow_QueueObjectText((beNDMWWindow *)self, STWINFONT14_2, names.v[i], (const igSmartPointer<igObject> &)DeviceRef(firstDevice), LEFT_3);
                     }
                     bufC[0] = ((beNDMWItemDisk *)((int *)((igObjectList *)self->_diskList)->_data)[i])->_kazu + 0x30;
                     bufC[1] = 0;
-                    beNDMWWindow_QueueText(self, STWINFONT15, names.v[i], bufC, CENTER_2);
+                    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT15, names.v[i], bufC, CENTER_2);
                 }
                 {
                     char bufA[2];
                     bufA[0] = ((beNDMWItemDisk *)self->_sendDisk)->_kazu + 0x30;
                     bufA[1] = 0;
-                    beNDMWWindow_QueueText(self, STWINFONT38, font000_2, bufA, CENTER_2);
+                    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT38, font000_2, bufA, CENTER_2);
                 }
-                beNDMWWindow_QueueText(self, STWINFONT38, font001_2, text_0, CENTER_2);
+                beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT38, font001_2, text_0, CENTER_2);
                 NEXT_ST2()
             }
             case 3: {
                 void *al;
                 GET_ALLOC(al)
-                { igSmartPointer<beNDMWStatusSelectE1> playerWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
-                beNDMWWindow_BindContext(playerWin.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, playerWin.p);
+                { igSmartPointer<beNDMWStatusSelectE1> playerWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+                beNDMWWindow_BindContext((beNDMWWindow *)playerWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)playerWin.p);
                 WSETPOS(playerWin.p, -121.0f, 109.0f, 0.0f)
                 WSETI84(playerWin.p, ((igObjectList *)self->_playerNoList)->_count)
                 WSETI100(playerWin.p, self->_receipt)
@@ -4628,15 +4578,15 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                     switch (self->_receipt) {
                     case 0:
                         vecB[0] = -121.0f; vecB[1] = 109.0f; vecB[2] = 0.0f;
-                        beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, SQ_OPEN00, (const char *)0, (float *)vecB);
+                        beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, SQ_OPEN00, (const char *)0, (float *)vecB);
                         break;
                     case 1:
                         vecC[0] = -121.0f; vecC[1] = 109.0f; vecC[2] = 0.0f;
-                        beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, SQ_OPEN01, (const char *)0, (float *)vecC);
+                        beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, SQ_OPEN01, (const char *)0, (float *)vecC);
                         break;
                     case 2:
                         vecD[0] = -121.0f; vecD[1] = 109.0f; vecD[2] = 0.0f;
-                        beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, SQ_OPEN02, (const char *)0, (float *)vecD);
+                        beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, SQ_OPEN02, (const char *)0, (float *)vecD);
                         break;
                     }
                     NEXT_ST2()
@@ -4647,12 +4597,12 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                 void *al;
                 int a1, v0;
                 GET_ALLOC(al)
-                { igSmartPointer<beNDMWShopSelect52> quantityWin((beNDMWShopSelect52 *)beNDMWShopSelect52_Create(al));
+                { igSmartPointer<beNDMWShopSelect52> quantityWin((beNDMWShopSelect52 *)beNDMWShopSelect52_Create((int)al));
                 a1 = ((beNDMWItemDisk *)self->_sendDisk)->_kazu;
                 v0 = 9 - ((beNDMWItemDisk *)((int *)((igObjectList *)self->_diskList)->_data)[self->_receipt])->_kazu;
                 self->_sendMax = (a1 < v0) ? a1 : v0;
-                beNDMWWindow_BindContext(quantityWin.p, self, self->_insight, self->_playerNo, self->_sendMax);
-                ObjectList_AppendRetained(self->_subWindow, quantityWin.p);
+                beNDMWWindow_BindContext((beNDMWWindow *)quantityWin.p, (igObject *)self, self->_insight, self->_playerNo, self->_sendMax);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)quantityWin.p);
                 WSETPOS(quantityWin.p, 68.0f, -3.0f, 0.0f)
                 }
                 SYNC_COUNT()
@@ -4689,10 +4639,10 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                         { unsigned q = sd->_kazu; sd->_kazu = q - rc; }
                         { unsigned q = tg->_kazu; tg->_kazu = rc + q; }
                         GET_ALLOC(al)
-                        { igSmartPointer<beNDMWShopSelect00> sentWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                        beNDMWWindow_BindContext(sentWin.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, sentWin.p);
-                        beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x84);
+                        { igSmartPointer<beNDMWShopSelect00> sentWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                        beNDMWWindow_BindContext((beNDMWWindow *)sentWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)sentWin.p);
+                        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x84);
                         }
                         SYNC_COUNT()
                         NEXT_ST2()
@@ -4712,12 +4662,12 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
             case 10: {
                 void *al;
                 GET_ALLOC(al)
-                { igSmartPointer<beNDMWShopSelect00> fullWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                beNDMWWindow_BindContext(fullWin.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, fullWin.p);
-                StringList_AppendRetained(((beNDMWWindowSelect *)fullWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-                StringList_AppendRetained(((beNDMWWindowSelect *)fullWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
-                beNDMWWindow_RunMessageScript(fullWin.p, txt_status_lua_2, 0x8F);
+                { igSmartPointer<beNDMWShopSelect00> fullWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                beNDMWWindow_BindContext((beNDMWWindow *)fullWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)fullWin.p);
+                StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)fullWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+                StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)fullWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)fullWin.p, txt_status_lua_2, 0x8F);
                 }
                 SYNC_COUNT()
                 NEXT_ST2()
@@ -4735,9 +4685,9 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
         case 7:
             switch (self->_st2) {
             case 0:
-                beNDMWWindow_PlayQueuedModelClose(self);
+                beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
                 CLOSE_LISTS()
-                beNDMWWindow_ClearQueuedText(self);
+                beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
                 NEXT_ST2()
             case 1:
                 self->_st0 = 0; self->_st3 = 0; self->_st2 = 0; self->_st1 = 0;
@@ -4748,13 +4698,13 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         NEXT_ST0()
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) {
             self->_isRun = 0;
         }
         break;
@@ -4779,21 +4729,21 @@ void StringRefList_ResetRange(igStringRefList *list, int first, int count) {
         offset = first * 4;
         do {
             slot = (void **)(list->_data + offset);
-            if (((int *)g_stringPool)[0] == 0) {
+            if (g_stringPool == 0) {
                 pool = ((int)StringPool_Allocate(0x10));
                 if (pool != 0) {
-                    pool = ((int)StringPool_Construct(pool));
+                    pool = ((int)StringPool_Construct((StringPool *)pool));
                 }
-                ((int *)g_stringPool)[0] = pool;
+                g_stringPool = (StringPool *)pool;
             }
-            empty = (void *)(((void *)StringPool_Intern(((int *)g_stringPool)[0], 0)));
+            empty = (void *)(((void *)StringPool_Intern(g_stringPool, 0)));
             held = (void *)(*slot);
             if (held != 0) {
                 header = (int *)((char *)held - 8);
                 refCount = *(int *)((char *)(held) - 4) - 1;
                 *(int *)((char *)(held) - 4) = refCount;
                 if (refCount == 0) {
-                    StringChunk_ReleaseHeader(*header, header);
+                    StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
                 }
             }
             index += 1;
@@ -4838,11 +4788,11 @@ void beNDMWStatusCtrlDisk_RefreshText(beNDMWStatusCtrlDisk *self, int refreshRow
     int v1;
     igObjectList *s6;
     char **s0;
-    beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-    s6 = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DISKFOLDER_3)->_data;
-    s7 = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+    beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+    beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+    s6 = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3)->_data;
+    s7 = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
     if (refreshRows != 0) {
         digit[1] = 0;
         i = 0;
@@ -4852,18 +4802,18 @@ void beNDMWStatusCtrlDisk_RefreshText(beNDMWStatusCtrlDisk *self, int refreshRow
             do {
                 it = *(beNDMWItemDisk **)((char *)s6->_data + off);
                 if (it != 0) {
-                    str = ((char *)beNDMWItemBase_GetRecordString(it, s7, NAME_3));
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                    beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                    beMessenger_AppendString(self->_messenger, *s0);
-                    beMessenger_AppendString(self->_messenger, str);
-                    beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                    str = ((char *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)it, (beNDMWStatus *)s7, NAME_3));
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, *s0);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, str);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                     digit[0] = it->_kazu + 0x30;
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                    beMessenger_AppendString(self->_messenger, STWINFONT15);
-                    beMessenger_AppendString(self->_messenger, *s0);
-                    beMessenger_AppendString(self->_messenger, digit);
-                    beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT15);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, *s0);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, digit);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                 }
                 i++;
                 off += 4;
@@ -4874,24 +4824,24 @@ void beNDMWStatusCtrlDisk_RefreshText(beNDMWStatusCtrlDisk *self, int refreshRow
     if (refreshDescription != 0) {
         v1 = self->_retCode;
         if (v1 != -1) {
-            str = ((char *)beNDMWItemBase_GetRecordString(((beNDMWItemDisk **)s6->_data)[v1], s7, TXT_2));
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-            beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-            beMessenger_AppendString(self->_messenger, str);
-            beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-            beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-            beMessenger_AppendString(self->_messenger, DISPON_2);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+            str = ((char *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)((beNDMWItemDisk **)s6->_data)[v1], (beNDMWStatus *)s7, TXT_2));
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+            beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+            beMessenger_AppendString((beMessenger *)self->_messenger, str);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+            beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+            beMessenger_AppendString((beMessenger *)self->_messenger, DISPON_2);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
             return;
         }
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-        beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-        beMessenger_AppendString(self->_messenger, DISPOFF_2);
-        beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+        beMessenger_AppendString((beMessenger *)self->_messenger, DISPOFF_2);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
     }
 }
 
@@ -4903,14 +4853,14 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
     igIntList *l4;
     switch (self->_st0) {
     case 0:
-        beMessenger_SendGroup(self->_messenger, GAMERAM_9, GETCOMMON_6);
-        igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), NINZU_4);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, GAMERAM_9, GETCOMMON_6);
+        igProperty_GetRecord(beMessenger_GetObject((beMessenger *)self->_messenger, 0), NINZU_4);
         i = 0;
         do {
-            beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-            beMessenger_AppendInt(self->_messenger, i);
-            beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-            if (igProperty_GetRecordByte(beMessenger_GetObject(self->_messenger, 0), ISUSE_7)->_data != 0 && i != self->_playerNo) {
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, i);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+            if (igProperty_GetRecordByte(beMessenger_GetObject((beMessenger *)self->_messenger, 0), ISUSE_7)->_data != 0 && i != self->_playerNo) {
                 l4 = (igIntList *)self->_playerNoList;
                 s1 = l4->_count;
                 if (s1 < l4->_capacity) {
@@ -4941,15 +4891,15 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
             switch (self->_st2) {
             case 0:
                 al = ((int)igObject_GetAllocator(self));
-                al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+                al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
                 {
-                    igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((void *)al));
-                    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((unsigned)self->_subWindow, win.p);
-                    StringList_AppendRetained(((beNDMWWindow *)win.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+                    igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)(unsigned)self->_subWindow, (igObject *)win.p);
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindow *)win.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
                     s2 = (int)g_statusFontNames[0];
-                    StringList_AppendRetained(((beNDMWWindow *)win.p)->_textCloseNameList, StringRef(InternString((const char *)s2)));
-                    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x58);
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindow *)win.p)->_textCloseNameList, StringRef(InternString((const char *)s2)));
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x58);
                 }
                 self->_nowProcKazu = ((beNDMWWindowList *)(self->_subWindow))->_count;
                 self->_st2 = self->_st2 + 1;
@@ -4969,11 +4919,11 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
             switch (self->_st2) {
             case 0:
                 al = ((int)igObject_GetAllocator(self));
-                al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+                al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
                 {
                     igSmartPointer<beNDMWStatusCtrlSendBit> win((beNDMWStatusCtrlSendBit *)beNDMWStatusCtrlSendBit_Create(al));
-                    beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((unsigned)self->_subWindow, win.p);
+                    beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)(unsigned)self->_subWindow, (igObject *)win.p);
                     {
                         igIntList *lst = (igIntList *)self->_playerNoList;
                         beNDMWStatusCtrlSendBit *w = win.p;
@@ -5004,16 +4954,16 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) {
             self->_isRun = 0;
         }
         break;
@@ -5037,14 +4987,14 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
     switch (p->_st0) {
     case 0:
         t = ((igIntList *)p->_playerNoList)->_count;
-        switch (t) { case 1: default: beNDMWWindow_PresentModelAtOrigin(p, i_stmenu02, 0, SQ_1BITOPEN, SQ_CLOSE_3); break; case 2: beNDMWWindow_PresentModelAtOrigin(p, i_stmenu02, 0, SQ_2BITOPEN, SQ_CLOSE_3); break; case 3: beNDMWWindow_PresentModelAtOrigin(p, i_stmenu02, 0, SQ_3BITOPEN, SQ_CLOSE_3); break; }
-        StringList_AppendRetained(p->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
-        StringList_AppendRetained(p->_textCloseNameList, StringRef(InternString(font000_2)));
-        StringList_AppendRetained(p->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
-        StringList_AppendRetained(p->_textCloseNameList, StringRef(InternString(font001_2)));
-        beNDMWWindow_RunMessageScript(p, txt_status_lua_2, 0x4C);
-        beNDMWWindow_QueueText(p, STWINFONT28, font000_2, space, CENTER_2);
-        beNDMWWindow_QueueText(p, STWINFONT27, font000_2, space, RIGHT_2);
+        switch (t) { case 1: default: beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)p, i_stmenu02, 0, SQ_1BITOPEN, SQ_CLOSE_3); break; case 2: beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)p, i_stmenu02, 0, SQ_2BITOPEN, SQ_CLOSE_3); break; case 3: beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)p, i_stmenu02, 0, SQ_3BITOPEN, SQ_CLOSE_3); break; }
+        StringList_AppendRetained((igStringRefList *)p->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
+        StringList_AppendRetained((igStringRefList *)p->_textCloseNameList, StringRef(InternString(font000_2)));
+        StringList_AppendRetained((igStringRefList *)p->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
+        StringList_AppendRetained((igStringRefList *)p->_textCloseNameList, StringRef(InternString(font001_2)));
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)p, txt_status_lua_2, 0x4C);
+        beNDMWWindow_QueueText((beNDMWWindow *)p, STWINFONT28, font000_2, space, CENTER_2);
+        beNDMWWindow_QueueText((beNDMWWindow *)p, STWINFONT27, font000_2, space, RIGHT_2);
         static const CellNameRow playerCells = {{font001_2, font002_2, font003_2}};
         tbl = cellNames.v;
         cellNames = playerCells;
@@ -5056,10 +5006,10 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                 SEL(GAMERAM_9);
                 API(n);
                 DSP(GETPLAYER_6);
-                n = beMessenger_GetObject(p->_messenger, 0);
-                beNDMWWindow_QueueText(p, STWINFONT14_2, *tbl, space, LEFT_3);
-                sprintf(bitsText, percent_d_3, igProperty_GetRecord(n, BIT_5)->_data);
-                beNDMWWindow_QueueText(p, STWINFONT27, *tbl, space, RIGHT_2);
+                n = (int)beMessenger_GetObject((beMessenger *)p->_messenger, 0);
+                beNDMWWindow_QueueText((beNDMWWindow *)p, STWINFONT14_2, *tbl, space, LEFT_3);
+                sprintf((char *)bitsText, percent_d_3, igProperty_GetRecord((igObject *)n, BIT_5)->_data);
+                beNDMWWindow_QueueText((beNDMWWindow *)p, STWINFONT27, *tbl, space, RIGHT_2);
                 k += 1;
                 i += 4;
                 tbl += 1;
@@ -5073,7 +5023,7 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
         case 0:
             k = 0;
             do {
-                sprintf(cellText, font_03d, k);
+                sprintf((char *)cellText, font_03d, k);
                 SEL(TEXTCTL_5);
                 APS(STWINFONT28);
                 APS(cellText);
@@ -5086,7 +5036,7 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
             SEL(TEXTCTL_5); APS(STWINFONT28); APS(font000_2); APS(text_0); DSP(TEXTSET_3);
             SEL(TEXTCTL_5); APS(STWINFONT28); APS(font000_2); APS(DISPON_2); DSP(SWITCH_4);
             SEL(GAMERAM_9); API(p->_playerNo); DSP(GETPLAYER_6);
-            sprintf(playerBitsText, percent_d_3, igProperty_GetRecord(beMessenger_GetObject(p->_messenger, 0), BIT_5)->_data);
+            sprintf((char *)playerBitsText, percent_d_3, igProperty_GetRecord(beMessenger_GetObject((beMessenger *)p->_messenger, 0), BIT_5)->_data);
             SEL(TEXTCTL_5); APS(STWINFONT27); APS(font000_2); APS(playerBitsText); DSP(TEXTSET_3);
             static const CellNameRow playerCells = {{font001_2, font002_2, font003_2}};
             tbl = cellNamesInRow.v;
@@ -5097,14 +5047,14 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                 do {
                     oe = *(int *)(((igIntList *)p->_playerNoList)->_data + i2);
                     SEL(GAMERAM_9); API(oe); DSP(GETPLAYER_6);
-                    n2 = beMessenger_GetObject(p->_messenger, 0);
+                    n2 = (int)beMessenger_GetObject((beMessenger *)p->_messenger, 0);
                     {
-                    DeviceRef r11C((void *)*(int *)(*(int *)(igProperty_GetRecordFolder(n2, PLAYERNAME_3)->_data + 16)));
+                    DeviceRef r11C((void *)*(int *)(*(int *)(igProperty_GetRecordFolder((igObject *)n2, PLAYERNAME_3)->_data + 16)));
                     if (r11C.p != 0) {
                         r11C.p->_refCount = r11C.p->_refCount + 1;
                     }
                     SEL(TEXTCTL_5); APS(STWINFONT14_2); APS(*tbl); APO(r11C.p); DSP(TEXTSET_3);
-                    sprintf(rowBitsText, percent_d_3, igProperty_GetRecord(n2, BIT_5)->_data);
+                    sprintf((char *)rowBitsText, percent_d_3, igProperty_GetRecord((igObject *)n2, BIT_5)->_data);
                     SEL(TEXTCTL_5); APS(STWINFONT27); APS(*tbl); APS(rowBitsText); DSP(TEXTSET_3);
                     }
                     k2 += 1;
@@ -5115,9 +5065,9 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
             al = (int)WindowAllocator(p);
             {
             float *q118;
-            igSmartPointer<beNDMWStatusSelectE1> r118((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((void *)al));
-            beNDMWWindow_BindContext(r118.p, p, p->_insight, p->_playerNo, 0);
-            ObjectList_AppendRetained(p->_subWindow, r118.p);
+            igSmartPointer<beNDMWStatusSelectE1> r118((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+            beNDMWWindow_BindContext((beNDMWWindow *)r118.p, (igObject *)p, p->_insight, p->_playerNo, 0);
+            ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)r118.p);
             q118 = (float *)((beNDMWStatusSelectE1 *)r118.p)->_offsetPos;
             q118[0] = -121.0f;
             q118[1] = 109.0f;
@@ -5140,33 +5090,33 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                 switch (p->_receipt) {
                 case 0:
                     cursorPos0[0] = 0xC2F20000; cursorPos0[1] = 0x42DA0000; cursorPos0[2] = 0;
-                    beNDMWWindow_PresentModel((beNDMWListCtrl *)p, i_stcursor04, 0, SQ_OPEN00, (const char *)0, (float *)cursorPos0);
+                    beNDMWWindow_PresentModel((beNDMWWindow *)p, i_stcursor04, 0, SQ_OPEN00, (const char *)0, (float *)cursorPos0);
                     break;
                 case 1:
                     cursorPos1[0] = 0xC2F20000; cursorPos1[1] = 0x42DA0000; cursorPos1[2] = 0;
-                    beNDMWWindow_PresentModel((beNDMWListCtrl *)p, i_stcursor04, 0, SQ_OPEN01, (const char *)0, (float *)cursorPos1);
+                    beNDMWWindow_PresentModel((beNDMWWindow *)p, i_stcursor04, 0, SQ_OPEN01, (const char *)0, (float *)cursorPos1);
                     break;
                 case 2:
                     cursorPos2[0] = 0xC2F20000; cursorPos2[1] = 0x42DA0000; cursorPos2[2] = 0;
-                    beNDMWWindow_PresentModel((beNDMWListCtrl *)p, i_stcursor04, 0, SQ_OPEN02, (const char *)0, (float *)cursorPos2);
+                    beNDMWWindow_PresentModel((beNDMWWindow *)p, i_stcursor04, 0, SQ_OPEN02, (const char *)0, (float *)cursorPos2);
                     break;
                 }
                 al = (int)WindowAllocator(p);
                 {
                 igSmartPointer<beNDMWShopSelect34> r114((beNDMWShopSelect34 *)beNDMWShopSelect34_Create(al));
-                beNDMWWindow_BindContext(r114.p, p, p->_insight, p->_playerNo, 3);
-                ObjectList_AppendRetained(p->_subWindow, r114.p);
-                beNDMWWindow_ShowPaddedDigits(r114.p, p->_editBit, 1, font_03d);
+                beNDMWWindow_BindContext((beNDMWWindow *)r114.p, (igObject *)p, p->_insight, p->_playerNo, 3);
+                ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)r114.p);
+                beNDMWWindow_ShowPaddedDigits((beNDMWWindow *)r114.p, p->_editBit, 1, font_03d);
                 }
                 p->_nowProcKazu = ((igObjectList *)p->_subWindow)->_count;
                 SEL(GAMERAM_9); API(p->_playerNo); DSP(GETPLAYER_6);
-                mx = igProperty_GetRecord(beMessenger_GetObject(p->_messenger, 0), BIT_5)->_data;
+                mx = igProperty_GetRecord(beMessenger_GetObject((beMessenger *)p->_messenger, 0), BIT_5)->_data;
                 if (mx >= 0x98967F) {
                     mx = 0x98967F;
                 }
                 o = ((int *)((igIntList *)p->_playerNoList)->_data)[p->_receipt];
                 SEL(GAMERAM_9); API(o); DSP(GETPLAYER_6);
-                b = 0x98967F - igProperty_GetRecord(beMessenger_GetObject(p->_messenger, 0), BIT_5)->_data;
+                b = 0x98967F - igProperty_GetRecord(beMessenger_GetObject((beMessenger *)p->_messenger, 0), BIT_5)->_data;
                 p->_editMax = (mx < b) ? mx : b;
                 p->_nowProcKazu = ((igObjectList *)p->_subWindow)->_count;
                 p->_st2 = p->_st2 + 1;
@@ -5180,9 +5130,9 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                 t = p->_retCode;
                 if (t != -1) {
                     if (p->_st3 == t) {
-                        beMessenger_SendNamed(p->_messenger, SELECTCTRL_2, i_stcursor03, p->_playerNo, ISSELECTNOW);
-                        if (beMessenger_GetBool(p->_messenger, 0) & 0xFF) {
-                            pad = ((int)bePadManager_GetPadForPlayer(p->_padManager, p->_playerNo));
+                        beMessenger_SendNamed((beMessenger *)p->_messenger, SELECTCTRL_2, i_stcursor03, p->_playerNo, ISSELECTNOW);
+                        if (beMessenger_GetBool((beMessenger *)p->_messenger, 0) != 0) {
+                            pad = ((int)bePadManager_GetPadForPlayer((bePadManager *)p->_padManager, p->_playerNo));
                             c3 = ((bePadData *)pad)->_trigger;
                             c2 = ((bePadData *)pad)->_repeat;
                             c0 = ((bePadData *)pad)->_lTrg | ((bePadData *)pad)->_lRpt;
@@ -5208,36 +5158,36 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                                 }
                                 c1 = p->_editBit;
                                 if (c1 != e) {
-                                    beNDMWWindow_ShowPaddedDigits(((int *)((igObjectList *)p->_subWindow)->_data)[0], c1, t, font_03d, e, dig);
+                                    beNDMWWindow_ShowPaddedDigits((beNDMWWindow *)((int *)((igObjectList *)p->_subWindow)->_data)[0], c1, t, font_03d);
                                     SEL(SOUND_4); APS(CURSOR_MOVE); DSP(PLAY_3);
                                     return;
                                 }
                             }
                         }
                     } else {
-                        beNDMWWindow_ShowPaddedDigits(((int *)((igObjectList *)sw)->_data)[0], p->_editBit, 7 - t, font_03d);
+                        beNDMWWindow_ShowPaddedDigits((beNDMWWindow *)((int *)((igObjectList *)sw)->_data)[0], p->_editBit, 7 - t, font_03d);
                         p->_st3 = p->_retCode;
                         return;
                     }
                 }
             } else {
                 if (p->_retCode == -1 || p->_editBit <= 0) {
-                    beMessenger_SendNamed(p->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
+                    beMessenger_SendNamed((beMessenger *)p->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
                     p->_st2 = 0;
                     p->_st3 = 0;
                     return;
                 }
                 SEL(TEXTCTL_5); APS(STWINFONT29_3); APS(font100_2); APS(DISPOFF_2); DSP(SWITCH_4);
                 SEL(GAMERAM_9); API(p->_playerNo); DSP(GETPLAYER_6);
-                n = beMessenger_GetObject(p->_messenger, 0);
-                t = igProperty_GetRecord(n, BIT_5)->_data - p->_editBit;
-                igProperty_GetRecord(n, BIT_5)->_data = t;
+                n = (int)beMessenger_GetObject((beMessenger *)p->_messenger, 0);
+                t = igProperty_GetRecord((igObject *)n, BIT_5)->_data - p->_editBit;
+                igProperty_GetRecord((igObject *)n, BIT_5)->_data = t;
                 o = ((int *)((igIntList *)p->_playerNoList)->_data)[p->_receipt];
                 SEL(GAMERAM_9); API(o); DSP(GETPLAYER_6);
-                n = beMessenger_GetObject(p->_messenger, 0);
-                mx = igProperty_GetRecord(n, BIT_5)->_data;
+                n = (int)beMessenger_GetObject((beMessenger *)p->_messenger, 0);
+                mx = igProperty_GetRecord((igObject *)n, BIT_5)->_data;
                 t = mx + p->_editBit;
-                igProperty_GetRecord(n, BIT_5)->_data = t;
+                igProperty_GetRecord((igObject *)n, BIT_5)->_data = t;
                 p->_st2 = p->_st2 + 1;
                 p->_st3 = 0;
                 return;
@@ -5246,10 +5196,10 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
         case 3:
             al = (int)WindowAllocator(p);
             {
-            igSmartPointer<beNDMWShopSelect00> r110((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((void *)al));
-            beNDMWWindow_BindContext(r110.p, p, p->_insight, p->_playerNo, 0);
-            ObjectList_AppendRetained(p->_subWindow, r110.p);
-            beNDMWWindow_RunMessageScript(p, txt_status_lua_2, 0x85);
+            igSmartPointer<beNDMWShopSelect00> r110((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+            beNDMWWindow_BindContext((beNDMWWindow *)r110.p, (igObject *)p, p->_insight, p->_playerNo, 0);
+            ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)r110.p);
+            beNDMWWindow_RunMessageScript((beNDMWWindow *)p, txt_status_lua_2, 0x85);
             }
             p->_nowProcKazu = ((igObjectList *)p->_subWindow)->_count;
             p->_st2 = p->_st2 + 1;
@@ -5259,7 +5209,7 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
             if (((igObjectList *)p->_subWindow)->_count != p->_nowProcKazu) {
                 SEL(TEXTCTL_5); APS(STWINFONT29_3); APS(font000_2); APS(DISPOFF_2); DSP(SWITCH_4);
                 SEL(SUBWND_2); API(p->_playerNo); DSP(UPDATE);
-                beMessenger_SendNamed(p->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
+                beMessenger_SendNamed((beMessenger *)p->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
                 p->_st2 = 0;
                 p->_st3 = 0;
                 return;
@@ -5268,20 +5218,20 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose();
-        beNDMWWindow_ClearQueuedText(p);
-        beNDMWWindow_RequestChildrenClose(p);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)p);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)p);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)p);
         k = 0;
         p->_st0 = p->_st0 + 1;
         p->_st3 = 0; p->_st2 = 0; p->_st1 = 0;
         do {
-            sprintf(clearCellText, font_03d, k);
+            sprintf((char *)clearCellText, font_03d, k);
             SEL(TEXTCTL_5); APS(STWINFONT28); APS(clearCellText); APS(DISPOFF_2); DSP(SWITCH_4);
             k += 1;
         } while (k < 7);
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete() != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)p) != 0) {
             p->_isRun = 0;
         }
         break;
@@ -5293,8 +5243,8 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
     int st0 = self->_st0;
     switch (st0) {
     case 0:
-        beNDMWWindow_PresentModelAtOrigin(self, i_sttitle, 0, SQ_OPEN_5, 0);
-        beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 90);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_sttitle, 0, SQ_OPEN_5, 0);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 90);
         self->_skillMenu = 0;
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;
@@ -5303,11 +5253,11 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
     case 1:
         switch (self->_st1) {
         case 0: {
-            igSmartPointer<beNDMWStatusSelect01> wr((beNDMWStatusSelect01 *)beNDMWStatusSelect01_Create(WindowAllocator(self)));
-            beNDMWWindow_BindContext((int)wr.p, self, self->_insight, self->_playerNo, 91);
-            ObjectList_AppendRetained(self->_subWindow, wr.p);
+            igSmartPointer<beNDMWStatusSelect01> wr((beNDMWStatusSelect01 *)beNDMWStatusSelect01_Create((int)WindowAllocator(self)));
+            beNDMWWindow_BindContext((beNDMWWindow *)(int)wr.p, (igObject *)self, self->_insight, self->_playerNo, 91);
+            ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)wr.p);
             wr.p->_startPoint = self->_skillMenu;
-            beNDMWWindow_QueueText(wr.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+            beNDMWWindow_QueueText((beNDMWWindow *)wr.p, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
             
             }
             self->_nowProcKazu = SW(self->_subWindow)->_count;
@@ -5316,7 +5266,7 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
             self->_st2 = 0;
         case 1:
             if (self->_retCode != -1)
-                beNDMWWindow_RunMessageScript(self, txt_status_lua_2, self->_retCode + 98);
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, self->_retCode + 98);
             self->_st1 = self->_st1 + 1;
             self->_st3 = 0;
             self->_st2 = 0;
@@ -5331,7 +5281,7 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
             } else
             switch (self->_retCode) {
             case 0:
-                beNDMWShinkaCtrl_Setup(self->_shinkaCtrl, self->_insight, self->_playerNo);
+                beNDMWShinkaCtrl_Setup((beNDMWShinkaCtrl *)self->_shinkaCtrl, self->_insight, self->_playerNo);
                 if (SW(((beNDMWShinkaCtrl *)self->_shinkaCtrl)->_list)->_count > 8)
                     self->_maxPage = 2;
                 else
@@ -5381,17 +5331,17 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                     model = SQ_WAZAOPEN;
                     break;
                 }
-                beNDMWWindow_PresentModelAtOrigin(self, i_stfolder, 0, model, SQ_CLOSE_3);
-                igSmartPointer<beNDMWStatusSelectE1> wr((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(WindowAllocator(self)));
-                beNDMWWindow_BindContext((int)wr.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, wr.p);
+                beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stfolder, 0, (const char *)model, SQ_CLOSE_3);
+                igSmartPointer<beNDMWStatusSelectE1> wr((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)WindowAllocator(self)));
+                beNDMWWindow_BindContext((beNDMWWindow *)(int)wr.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)wr.p);
                 { beNDMWStatusSelectE1 *t = wr.p; t->_offsetPos[0] = -121.0f;
                 t->_offsetPos[1] = 128.0f;
                 t->_offsetPos[2] = 0.0f; }
                 wr.p->_startPoint = 0;
-                StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
-                StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
-                beNDMWWindow_RunMessageScript(self, txt_status_lua_2, self->_skillMenu + 95);
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)));
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, self->_skillMenu + 95);
                 switch (self->_skillMenu) {
                 case 0: {
                     int n;
@@ -5399,15 +5349,15 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                     igObjectList *sl = SW(((beNDMWShinkaCtrl *)self->_shinkaCtrl)->_list);
                     if (self->_maxPage > 1) {
                         n = 8;
-                        beNDMWWindow_QueueText(self, STWINFONT24, g_statusFontNames[0], space, CENTER_2);
-                        beNDMWWindow_QueueText(self, STWINFONT24, g_statusFontNames[1], space, CENTER_2);
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT24, g_statusFontNames[0], space, CENTER_2);
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT24, g_statusFontNames[1], space, CENTER_2);
                     } else {
                         if (sl->_count == 0) n = 2; else n = sl->_count;
                     }
                     for (i = 0; i < n; i++) {
-                        beNDMWWindow_QueueText(self, STWINFONT14_2, g_statusFontNames[i], space, LEFT_3);
-                        beNDMWWindow_QueueText(self, STWINFONT42, g_statusFontNames[i], space, LEFT_3);
-                        beNDMWWindow_QueueText(self, STWINFONT18, g_statusFontNames[i], space, RIGHT_2);
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, g_statusFontNames[i], space, LEFT_3);
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT42, g_statusFontNames[i], space, LEFT_3);
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT18, g_statusFontNames[i], space, RIGHT_2);
                     }
                     beNDMWStatusCtrlSkill_RefreshText((beNDMWStatusCtrlSkill *)self, 1, 0);
                     wr.p->_selectMax = n;
@@ -5420,33 +5370,33 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                     int limit;
                     int i;
                     char buf[24];
-                    beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-                    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-                    obj = beMessenger_GetObject(self->_messenger, 0);
-                    recs = (igObjectList *)igProperty_GetRecordIntList(obj, SKILL_2)->_data;
-                    level = igProperty_GetRecord(obj, LEVEL_3)->_data;
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+                    beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+                    obj = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+                    recs = (igObjectList *)igProperty_GetRecordIntList((igObject *)obj, SKILL_2)->_data;
+                    level = igProperty_GetRecord((igObject *)obj, LEVEL_3)->_data;
                     limit = SkillLimitForLevel(level);
                     for (i = 0; i < recs->_count; i++) {
-                        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT14_2)));
-                        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_statusFontNames[i])));
+                        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT14_2)));
+                        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[i])));
                         sprintf(buf, percent_d_3, ((int *)recs->_data)[i]);
-                        beNDMWWindow_QueueText(self, STWINFONT18, g_statusFontNames[i], buf, RIGHT_2);
-                        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                        beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                        beMessenger_AppendString(self->_messenger, (void *)g_statusFontNames[i]);
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT18, g_statusFontNames[i], buf, RIGHT_2);
+                        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                        beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)(void *)g_statusFontNames[i]);
                         if (((int *)recs->_data)[i] >= limit) {
                             float col[3];
                             col[0] = 0.9f;
                             col[1] = 0.4f;
                             col[2] = 0.2f;
-                            beMessenger_AppendVec3(self->_messenger, (float *)col);
-                            beMessenger_DispatchSelected(self->_messenger, COLOR);
+                            beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)col);
+                            beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
                         } else {
-                            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_2);
+                            beMessenger_DispatchSelected((beMessenger *)self->_messenger, DEFAULTCOLOR_2);
                         }
                     }
-                    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 101);
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 101);
                     wr.p->_selectMax = recs->_count;
                     break;
                 }
@@ -5455,14 +5405,14 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                     int ctx;
                     int i;
                     int n;
-                    beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-                    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-                    recs = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), WAZALIST_2)->_data;
-                    ctx = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+                    beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+                    recs = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), WAZALIST_2)->_data;
+                    ctx = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                     for (i = 0; i < recs->_count; i++) {
-                        beNDMWWindow_QueueText(self, STWINFONT14_2, g_statusFontNames[i],
-                                     (void *)beNDMWItemBase_GetRecordString(((int *)recs->_data)[i], ctx, NAME_3),
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, g_statusFontNames[i],
+                                     (const char *)(void *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)((int *)recs->_data)[i], (beNDMWStatus *)ctx, NAME_3),
                                      LEFT_3);
                     }
                     n = *(unsigned *)&recs->_count;
@@ -5473,7 +5423,7 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                     break;
                 }
                 }
-                beNDMWWindow_QueueText(self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
+                beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
                 
                 }
                 self->_nowProcKazu = SW(self->_subWindow)->_count;
@@ -5499,7 +5449,7 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                         int i;
                         for (i = 0; i < SW(self->_subWindow)->_count; i++) {
                             found = ((int *)SWV(self->_subWindow)->_data)[i];
-                            if (found && igObject_IsKindOf(found, g_beNDMWStatusSelectE1_metaObject[0])) {
+                            if (found && igObject_IsKindOf((igObject *)found, g_beNDMWStatusSelectE1_metaObject)) {
                                 found = (int)(int *)found;
                             } else
                                 found = 0;
@@ -5508,7 +5458,7 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                         }
                         if (found) {
                             bool ok = false;
-                            if (beNDMWWindowSelect_CanRequestFO2TOP(found)) {
+                            if (beNDMWWindowSelect_CanRequestFO2TOP((beNDMWWindowSelect *)found)) {
                                 if (AsListCtrl(self)->PrevPage())
                                     ok = true;
                                 else if (AsListCtrl(self)->NextPage())
@@ -5540,17 +5490,17 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                     if (self->_skillMenu == 1) {
                         int i;
                         for (i = 0; i < 9; i++) {
-                            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                            beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                            beMessenger_AppendString(self->_messenger, (void *)g_statusFontNames[i]);
-                            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_2);
+                            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)(void *)g_statusFontNames[i]);
+                            beMessenger_DispatchSelected((beMessenger *)self->_messenger, DEFAULTCOLOR_2);
                         }
                     }
-                    beNDMWWindow_PlayQueuedModelClose(self);
+                    beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
                     ClearStringRefList(self->_modelCloseInfoNameList);
                     SW(self->_modelCloseRamNoList)->_count = 0;
                     ClearStringRefList(self->_modelCloseSeqNameList);
-                    beNDMWWindow_ClearQueuedText(self);
+                    beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
                     self->_retCode = self->_skillMenu;
                     self->_st1 = 0;
                     self->_st3 = 0;
@@ -5563,22 +5513,22 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;
-        beNDMWWindow_SendModelSequence(self, i_sttitle, 0, SQ_CLOSE_3);
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-        beMessenger_AppendString(self->_messenger, STWINFONT12);
-        beMessenger_AppendString(self->_messenger, (void *)g_statusFontNames[0]);
-        beMessenger_AppendString(self->_messenger, DISPOFF_2);
-        beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+        beNDMWWindow_SendModelSequence((beNDMWWindow *)self, i_sttitle, 0, SQ_CLOSE_3);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT12);
+        beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)(void *)g_statusFontNames[0]);
+        beMessenger_AppendString((beMessenger *)self->_messenger, DISPOFF_2);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self))
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self))
             self->_isRun = 0;
         break;
     }
@@ -5608,90 +5558,90 @@ void beNDMWStatusCtrlSkill_RefreshText(beNDMWStatusCtrlSkill *self, int refreshR
                     offs = index * 4;
                     item = ((beNDMWShinkaObject **)list->_data)[index];
                     name = item->_name;
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                    beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                    beMessenger_AppendString(self->_messenger, *font);
-                    beMessenger_AppendString(self->_messenger, (const char *)name);
-                    beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                    beMessenger_AppendString(self->_messenger, STWINFONT42);
-                    beMessenger_AppendString(self->_messenger, *font);
-                    beMessenger_AppendString(self->_messenger, Lv);
-                    beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)name);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT42);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, Lv);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                     sprintf(cost, percent_d_3, ((beNDMWShinkaObject **)list->_data)[index]->_level);
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                    beMessenger_AppendString(self->_messenger, STWINFONT18);
-                    beMessenger_AppendString(self->_messenger, *font);
-                    beMessenger_AppendString(self->_messenger, cost);
-                    beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT18);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, cost);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                     text = DISPON_2;
                 } else {
                     text = DISPOFF_2;
                 }
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                beMessenger_AppendString(self->_messenger, *font);
-                beMessenger_AppendString(self->_messenger, text);
-                beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT42);
-                beMessenger_AppendString(self->_messenger, *font);
-                beMessenger_AppendString(self->_messenger, text);
-                beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT18);
-                beMessenger_AppendString(self->_messenger, *font);
-                beMessenger_AppendString(self->_messenger, text);
-                beMessenger_DispatchSelected(self->_messenger, SWITCH_4);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+                beMessenger_AppendString((beMessenger *)self->_messenger, text);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT42);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+                beMessenger_AppendString((beMessenger *)self->_messenger, text);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT18);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+                beMessenger_AppendString((beMessenger *)self->_messenger, text);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4);
                 row++;
                 font++;
             } while (row < 8);
             if (self->_maxPage > 1) {
                 page[1] = 0;
                 pg = self->_nowPage; pg += 0x31; page[0] = pg;
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT24);
-                beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-                beMessenger_AppendString(self->_messenger, page);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT24);
+                beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+                beMessenger_AppendString((beMessenger *)self->_messenger, page);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                 pg2 = self->_maxPage; pg2 += 0x30; page[0] = pg2;
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT24);
-                beMessenger_AppendString(self->_messenger, g_statusFontNames[1]);
-                beMessenger_AppendString(self->_messenger, page);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT24);
+                beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[1]);
+                beMessenger_AppendString((beMessenger *)self->_messenger, page);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
             }
         }
         if (refreshText != 0) {
             switch (self->_skillMenu) {
             case 0:
-                beMessenger_SendNamed(self->_messenger, DATABASE_7, shinka_3, 0, GETDATABASE_7);
-                name = beMessenger_GetObject(self->_messenger, 0);
+                beMessenger_SendNamed((beMessenger *)self->_messenger, DATABASE_7, shinka_3, 0, GETDATABASE_7);
+                name = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 list = (igObjectList *)((beNDMWShinkaCtrl *)self->_shinkaCtrl)->_list;
                 index = self->_nowPage << 3; index += self->_retCode;
                 if (list->_count > 0 && index < list->_count) {
-                    text = (char *)beDataBase_GetRecordString(name, ((beNDMWShinkaObject **)list->_data)[index]->_id, EXPLANATION);
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                    beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-                    beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-                    beMessenger_AppendString(self->_messenger, text);
-                    beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                    text = (char *)beDataBase_GetRecordString((beDataBase *)name, ((beNDMWShinkaObject **)list->_data)[index]->_id, EXPLANATION);
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, text);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                 }
                 break;
             case 1:
-                beNDMWWindow_RunMessageScript(self, txt_status_lua_2, self->_retCode + 111);
+                beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, self->_retCode + 111);
                 break;
             case 2:
-                beMessenger_SelectGroup(self->_messenger, GAMERAM_9);
-                beMessenger_AppendInt(self->_messenger, self->_playerNo);
-                beMessenger_DispatchSelected(self->_messenger, GETPLAYER_6);
-                list = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), WAZALIST_2)->_data;
-                text = (char *)beNDMWItemBase_GetRecordString(((int *)list->_data)[self->_retCode], igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), TXT_2);
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                beMessenger_AppendString(self->_messenger, STWINFONT29_3);
-                beMessenger_AppendString(self->_messenger, g_statusFontNames[0]);
-                beMessenger_AppendString(self->_messenger, text);
-                beMessenger_DispatchSelected(self->_messenger, TEXTSET_3);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_9);
+                beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_6);
+                list = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), WAZALIST_2)->_data;
+                text = (char *)beNDMWItemBase_GetRecordString((beNDMWItemBase *)((int *)list->_data)[self->_retCode], (beNDMWStatus *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject), TXT_2);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3);
+                beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[0]);
+                beMessenger_AppendString((beMessenger *)self->_messenger, text);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
                 break;
             }
         }
@@ -5725,19 +5675,19 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
         tq = models;
 
         v0[0] = -121.0f; v0[1] = 128.0f; v0[2] = 0.0f;
-        beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, tq.v[self->_entCode % 12], SQ_CLOSE_3, (float *)v0);
-        beNDMWWindow_PresentModelAtOrigin(self, i_stmenu02, 0, SQ_3LINEOPEN, SQ_CLOSE_3);
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT26)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT26)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_statusFontNames[1])));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT26)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(g_statusFontNames[2])));
-        beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x43);
+        beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, tq.v[self->_entCode % 12], SQ_CLOSE_3, (float *)v0);
+        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_3LINEOPEN, SQ_CLOSE_3);
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT26)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT26)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[1])));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT26)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[2])));
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x43);
         GET_ALLOC(al)
-        { igSmartPointer<beNDMWStatusSelectE1> menuWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
-        beNDMWWindow_BindContext(menuWin.p, self, self->_insight, self->_playerNo, 0);
-        ObjectList_AppendRetained(self->_subWindow, menuWin.p);
+        { igSmartPointer<beNDMWStatusSelectE1> menuWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+        beNDMWWindow_BindContext((beNDMWWindow *)menuWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+        ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)menuWin.p);
         WSETI84(menuWin.p, 3)
         WSETPOS(menuWin.p, 115.0f, 145.0f, 0.0f)
         WSETI100(menuWin.p, 0)
@@ -5766,23 +5716,23 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                 beNDMWItemBase *item;
                 int ctx;
                 GET_ALLOC(al)
-                { igSmartPointer<beNDMWShopSelect00> messageWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                beNDMWWindow_BindContext(messageWin.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, messageWin.p);
-                StringList_AppendRetained(((beNDMWShopSelect00 *)messageWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-                StringList_AppendRetained(((beNDMWShopSelect00 *)messageWin.p)->_textCloseNameList, StringRef(InternString(font000_2)));
+                { igSmartPointer<beNDMWShopSelect00> messageWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                beNDMWWindow_BindContext((beNDMWWindow *)messageWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)messageWin.p);
+                StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)messageWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+                StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)messageWin.p)->_textCloseNameList, StringRef(InternString(font000_2)));
                 MSG_SELECT_INT(self->_playerNo)
-                rec = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_3);
+                rec = igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3);
                 item = (beNDMWItemBase *)((int *)((igObjectList *)rec->_data)->_data)[self->_selectDevice];
-                ctx = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                ctx = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                 if (item->_isEquip != 0) {
-                    beNDMWWindow_RunMessageScript(messageWin.p, txt_status_lua_2, 0x90);
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)messageWin.p, txt_status_lua_2, 0x90);
                     self->_st2 = 0xA; self->_st3 = 0;
-                } else if ((item->_kindNo == 0) == 1 && !(beNDMWItemBase_GetRecordBool(item, ctx, ISHAKAI) & 0xFF)) {
-                    beNDMWWindow_RunMessageScript(messageWin.p, txt_status_lua_2, 0x91);
+                } else if ((item->_kindNo == 0) == 1 && !(beNDMWItemBase_GetRecordBool(item, (beNDMWStatus *)ctx, ISHAKAI) & 0xFF)) {
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)messageWin.p, txt_status_lua_2, 0x91);
                     self->_st2 = 0xA; self->_st3 = 0;
                 } else {
-                    beNDMWWindow_RunMessageScript(messageWin.p, txt_status_lua_2, 0x4E);
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)messageWin.p, txt_status_lua_2, 0x4E);
                     NEXT_ST2()
                 }
                 }
@@ -5793,9 +5743,9 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                     void *al;
 
                     GET_ALLOC(al)
-                    { igSmartPointer<beNDMWStatusSelectE0> yesNoWin((beNDMWStatusSelectE0 *)beNDMWStatusSelectE0_Create(al));
-                    beNDMWWindow_BindContext(yesNoWin.p, self, self->_insight, self->_playerNo, 0x4F);
-                    ObjectList_AppendRetained(self->_subWindow, yesNoWin.p);
+                    { igSmartPointer<beNDMWStatusSelectE0> yesNoWin((beNDMWStatusSelectE0 *)beNDMWStatusSelectE0_Create((int)al));
+                    beNDMWWindow_BindContext((beNDMWWindow *)yesNoWin.p, (igObject *)self, self->_insight, self->_playerNo, 0x4F);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)yesNoWin.p);
                     WSETI84(yesNoWin.p, 2)
                     }
                     SYNC_COUNT()
@@ -5805,7 +5755,7 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                         if (self->_retCode == 0) {
                             beDataObjObjectList *rec;
                             MSG_SELECT_INT(self->_playerNo)
-                            rec = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_3);
+                            rec = igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3);
                             LIST_REMOVE(rec->_data, self->_selectDevice)
                         }
                     default:
@@ -5829,47 +5779,47 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
             void *al;
             int i, j, k;
             MSG_SELECT_INT(self->_playerNo)
-            obj = beMessenger_GetObject(self->_messenger, 0);
-            L = (igObjectList *)igProperty_GetRecordFolder(obj, DEVICEFOLDER_3)->_data;
+            obj = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+            L = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, DEVICEFOLDER_3)->_data;
             GET_ALLOC(al)
-            { ItemListRef keptItems(beNDMWItemBaseList_Create(al));
-            a7 = (igObjectList *)igProperty_GetRecordFolder(obj, POWERSOCKET_3)->_data;
-            a8 = (igObjectList *)igProperty_GetRecordFolder(obj, MAINSLOT_3)->_data;
-            aA = (igObjectList *)igProperty_GetRecordFolder(obj, SUBSLOT_3)->_data;
-            a5 = (igObjectList *)igProperty_GetRecordFolder(obj, POWERPOCKET_3)->_data;
-            a6 = (igObjectList *)igProperty_GetRecordFolder(obj, MAINPOCKET_3)->_data;
+            { ItemListRef keptItems(beNDMWItemBaseList_Create((int)al));
+            a7 = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, POWERSOCKET_3)->_data;
+            a8 = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, MAINSLOT_3)->_data;
+            aA = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, SUBSLOT_3)->_data;
+            a5 = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, POWERPOCKET_3)->_data;
+            a6 = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, MAINPOCKET_3)->_data;
             beNDMWStatusSubMenu_SortByRecordNo(self, ItemListRef(L));
             Helpers::AppendBoth(keptItems, a7, a5);
             Helpers::AppendBoth(keptItems, a8, a6);
             for (k = 0; k < aA->_count; k++) {
                 int *e = (int *)((int *)aA->_data)[k];
-                if (e != 0) ObjectList_AppendRetained(keptItems.p, e);
+                if (e != 0) ObjectList_AppendRetained((igObjectList *)keptItems.p, (igObject *)e);
             }
             for (i = 0; i < ((igObjectList *)keptItems.p)->_count; i++)
-                ObjectList_RemoveFirstRetained(L, ((int *)((igObjectList *)keptItems.p)->_data)[i], 0);
-            GET_ALLOC(al) ItemListRef kind0Items(beNDMWItemBaseList_Create(al));
-            GET_ALLOC(al) ItemListRef kind1Items(beNDMWItemBaseList_Create(al));
-            GET_ALLOC(al) ItemListRef kind2Items(beNDMWItemBaseList_Create(al));
-            GET_ALLOC(al) ItemListRef kind3Items(beNDMWItemBaseList_Create(al));
+                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)L, (igObject *)((int *)((igObjectList *)keptItems.p)->_data)[i], 0);
+            GET_ALLOC(al) ItemListRef kind0Items(beNDMWItemBaseList_Create((int)al));
+            GET_ALLOC(al) ItemListRef kind1Items(beNDMWItemBaseList_Create((int)al));
+            GET_ALLOC(al) ItemListRef kind2Items(beNDMWItemBaseList_Create((int)al));
+            GET_ALLOC(al) ItemListRef kind3Items(beNDMWItemBaseList_Create((int)al));
             if (L->_count > 0) do {
                 beNDMWItemBase *e = (beNDMWItemBase *)((int *)L->_data)[0];
                 int t = e->_kindNo;
-                if (t == 0) ObjectList_AppendRetained(kind0Items.p, e);
-                else if (t == 1) ObjectList_AppendRetained(kind1Items.p, e);
-                else if (t == 2) ObjectList_AppendRetained(kind2Items.p, e);
-                else if (t == 3) ObjectList_AppendRetained(kind3Items.p, e);
-                else igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                if (t == 0) ObjectList_AppendRetained((igObjectList *)kind0Items.p, (igObject *)e);
+                else if (t == 1) ObjectList_AppendRetained((igObjectList *)kind1Items.p, (igObject *)e);
+                else if (t == 2) ObjectList_AppendRetained((igObjectList *)kind2Items.p, (igObject *)e);
+                else if (t == 3) ObjectList_AppendRetained((igObjectList *)kind3Items.p, (igObject *)e);
+                else igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                 LIST_REMOVE(L, 0)
             } while (L->_count > 0);
             beNDMWStatusSubMenu_SortByRevision(self, ItemListRef((igObjectList *)kind0Items.p));
             beNDMWStatusSubMenu_SortByRevision(self, ItemListRef((igObjectList *)kind1Items.p));
             beNDMWStatusSubMenu_SortByRevision(self, ItemListRef((igObjectList *)kind2Items.p));
             beNDMWStatusSubMenu_SortByRecordNo(self, ItemListRef((igObjectList *)kind3Items.p));
-            while (((igObjectList *)keptItems.p)->_count > 0) { ObjectList_AppendRetained(L, ((int *)((igObjectList *)keptItems.p)->_data)[0]); LIST_REMOVE(keptItems.p, 0) }
-            while (((igObjectList *)kind0Items.p)->_count > 0) { ObjectList_AppendRetained(L, ((int *)((igObjectList *)kind0Items.p)->_data)[0]); LIST_REMOVE(kind0Items.p, 0) }
-            while (((igObjectList *)kind1Items.p)->_count > 0) { ObjectList_AppendRetained(L, ((int *)((igObjectList *)kind1Items.p)->_data)[0]); LIST_REMOVE(kind1Items.p, 0) }
-            while (((igObjectList *)kind2Items.p)->_count > 0) { ObjectList_AppendRetained(L, ((int *)((igObjectList *)kind2Items.p)->_data)[0]); LIST_REMOVE(kind2Items.p, 0) }
-            while (((igObjectList *)kind3Items.p)->_count > 0) { ObjectList_AppendRetained(L, ((int *)((igObjectList *)kind3Items.p)->_data)[0]); LIST_REMOVE(kind3Items.p, 0) }
+            while (((igObjectList *)keptItems.p)->_count > 0) { ObjectList_AppendRetained(L, (igObject *)((int *)((igObjectList *)keptItems.p)->_data)[0]); LIST_REMOVE(keptItems.p, 0) }
+            while (((igObjectList *)kind0Items.p)->_count > 0) { ObjectList_AppendRetained(L, (igObject *)((int *)((igObjectList *)kind0Items.p)->_data)[0]); LIST_REMOVE(kind0Items.p, 0) }
+            while (((igObjectList *)kind1Items.p)->_count > 0) { ObjectList_AppendRetained(L, (igObject *)((int *)((igObjectList *)kind1Items.p)->_data)[0]); LIST_REMOVE(kind1Items.p, 0) }
+            while (((igObjectList *)kind2Items.p)->_count > 0) { ObjectList_AppendRetained(L, (igObject *)((int *)((igObjectList *)kind2Items.p)->_data)[0]); LIST_REMOVE(kind2Items.p, 0) }
+            while (((igObjectList *)kind3Items.p)->_count > 0) { ObjectList_AppendRetained(L, (igObject *)((int *)((igObjectList *)kind3Items.p)->_data)[0]); LIST_REMOVE(kind3Items.p, 0) }
             }
             NEXT_ST0()
             return;
@@ -5885,12 +5835,12 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                 int ctx;
                 bool flag;
                 MSG_SELECT_INT(self->_playerNo)
-                rec = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_3);
+                rec = igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3);
                 item = (beNDMWItemBase *)((int *)((igObjectList *)rec->_data)->_data)[self->_selectDevice];
-                ctx = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                ctx = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                 for (i = 0; i < 4; i++) {
                     MSG_SELECT_INT(i)
-                    if (igProperty_GetRecordByte(beMessenger_GetObject(self->_messenger, 0), ISUSE_7)->_data != 0 && i != self->_playerNo) {
+                    if (igProperty_GetRecordByte(beMessenger_GetObject((beMessenger *)self->_messenger, 0), ISUSE_7)->_data != 0 && i != self->_playerNo) {
                         nN = ((igDataList *)(self->_playerNoList))->_count; lL = (igDataList *)(self->_playerNoList);
                         if (nN < lL->_capacity) lL->_count = ListCount(lL) + 1; else List_Resize(lL, nN + 1, 4);
                         ((int *)lL->_data)[nN] = i;
@@ -5900,7 +5850,7 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                 if (item->_isEquip != 0) {
                     flag = true;
                     self->_st3 = 0x92;
-                } else if (!(beNDMWItemBase_GetRecordBool(item, ctx, ISJYOUDO) & 0xFF)) {
+                } else if (!(beNDMWItemBase_GetRecordBool(item, (beNDMWStatus *)ctx, ISJYOUDO) & 0xFF)) {
                     flag = true;
                     self->_st3 = 0x93;
                 } else if (((igObjectList *)self->_playerNoList)->_count == 0) {
@@ -5911,10 +5861,10 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                     void *al;
 
                     GET_ALLOC(al)
-                    { igSmartPointer<beNDMWShopSelect00> refusalWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                    beNDMWWindow_BindContext(refusalWin.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, refusalWin.p);
-                    beNDMWWindow_RunMessageScript(refusalWin.p, txt_status_lua_2, self->_st3);
+                    { igSmartPointer<beNDMWShopSelect00> refusalWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                    beNDMWWindow_BindContext((beNDMWWindow *)refusalWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)refusalWin.p);
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)refusalWin.p, txt_status_lua_2, self->_st3);
                     SYNC_COUNT()
                     self->_st2 = 4;
                     self->_st3 = 0;
@@ -5927,56 +5877,56 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                         win->_st3 = 0;
                         win->_st2 = 0;
                         win->_st1 = 0;
-                        beNDMWWindow_SendModelSequence(self, i_stcursor04, 0, SQ_CLOSE_3);
+                        beNDMWWindow_SendModelSequence((beNDMWWindow *)self, i_stcursor04, 0, SQ_CLOSE_3);
                         NEXT_ST2()
                     } else {
                         NEXT_ST0()
                     }
-                    beNDMWWindow_ClearQueuedText(self);
+                    beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
                     return;
                 }
                 break;
             }
             case 1:
-                if (beNDMWWindow_PollCloseComplete(self->_deviceFolderList) != 0) {
+                if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self->_deviceFolderList) != 0) {
                     int cnt;
                     beDataObjObjectList *rec;
                     beNDMWItemBase *item;
                     int i;
                     beNDMWLoadIntf2_igObject_Retain(0);
-                    beNDMWLoadIntf2_igObject_Release(self->_deviceFolderList);
+                    beNDMWLoadIntf2_igObject_Release((igObject *)self->_deviceFolderList);
                     self->_deviceFolderList = 0;
                     cnt = ((igObjectList *)self->_playerNoList)->_count;
                     switch (cnt) {
                     case 1:
                     default:
-                        beNDMWWindow_PresentModelAtOrigin(self, i_stmenu02, 0, SQ_1CHIPOPEN, SQ_CLOSE_3);
+                        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_1CHIPOPEN, SQ_CLOSE_3);
                         break;
                     case 2:
-                        beNDMWWindow_PresentModelAtOrigin(self, i_stmenu02, 0, SQ_2CHIPOPEN, SQ_CLOSE_3);
+                        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_2CHIPOPEN, SQ_CLOSE_3);
                         break;
                     case 3:
-                        beNDMWWindow_PresentModelAtOrigin(self, i_stmenu02, 0, SQ_3CHIPOPEN, SQ_CLOSE_3);
+                        beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_3CHIPOPEN, SQ_CLOSE_3);
                         break;
                     }
-                    StringList_AppendRetained(self->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
-                    StringList_AppendRetained(self->_textCloseNameList, StringRef(InternString(font000_2)));
-                    beNDMWWindow_RunMessageScript(self, txt_status_lua_2, 0x49);
+                    StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT39)));
+                    StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font000_2)));
+                    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x49);
                     MSG_SELECT_INT(self->_playerNo)
-                    rec = igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_3);
+                    rec = igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3);
                     {
                         igObjectList *dl = (igObjectList *)rec->_data;
-                        int cx = igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]);
+                        int cx = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                         item = (beNDMWItemBase *)((int *)dl->_data)[self->_selectDevice];
-                        beNDMWWindow_QueueText(self, STWINFONT14_2, font000_2, beNDMWItemBase_GetRecordString(item, cx, NAME_3), LEFT_3);
+                        beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, font000_2, (const char *)beNDMWItemBase_GetRecordString(item, (beNDMWStatus *)cx, NAME_3), LEFT_3);
                     }
                     beNDMWItemBase_GetRevisionColor(vec, item);
-                    beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-                    beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-                    beMessenger_AppendString(self->_messenger, font000_2);
+                    beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+                    beMessenger_AppendString((beMessenger *)self->_messenger, font000_2);
                     vecb[0] = vec[0]; vecb[1] = vec[1]; vecb[2] = vec[2];
-                    beMessenger_AppendVec3(self->_messenger, vecb);
-                    beMessenger_DispatchSelected(self->_messenger, COLOR);
+                    beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)vecb);
+                    beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
                     static const CellNameRow playerCells = {{font001_2, font002_2, font003_2}};
                     names = playerCells;
                     for (i = 0; i < ((igObjectList *)self->_playerNoList)->_count; i++) {
@@ -5986,12 +5936,12 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                         igObjectList *lst;
                         int c;
                         MSG_SELECT_INT(pno)
-                        obj = beMessenger_GetObject(self->_messenger, 0);
-                        folder = (igObjectList *)igProperty_GetRecordFolder(obj, DEVICEFOLDER_3)->_data;
-                        lst = (igObjectList *)igProperty_GetRecordFolder(obj, PLAYERNAME_3)->_data;
+                        obj = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+                        folder = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, DEVICEFOLDER_3)->_data;
+                        lst = (igObjectList *)igProperty_GetRecordFolder((igObject *)obj, PLAYERNAME_3)->_data;
                         if (lst->_count > 0) {
                             DeviceRef firstDevice((void *)*(int *)lst->_data, kRetainReference);
-                            beNDMWWindow_QueueObjectText(self, STWINFONT14_2, names.v[i], DeviceRef(firstDevice), LEFT_3);
+                            beNDMWWindow_QueueObjectText((beNDMWWindow *)self, STWINFONT14_2, names.v[i], (const igSmartPointer<igObject> &)DeviceRef(firstDevice), LEFT_3);
                         }
                         c = folder->_count;
                         LIST_ADD(self->_playerDeviceCnt, c)
@@ -6004,9 +5954,9 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                 void *al;
 
                 GET_ALLOC(al)
-                { igSmartPointer<beNDMWStatusSelectE1> playerWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(al));
-                beNDMWWindow_BindContext(playerWin.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, playerWin.p);
+                { igSmartPointer<beNDMWStatusSelectE1> playerWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
+                beNDMWWindow_BindContext((beNDMWWindow *)playerWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)playerWin.p);
                 WSETPOS(playerWin.p, -121.0f, 109.0f, 0.0f)
                 WSETI84(playerWin.p, ((igObjectList *)self->_playerNoList)->_count)
                 WSETI100(playerWin.p, self->_receipt)
@@ -6023,46 +5973,46 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                         return;
                     }
                     GET_ALLOC(al)
-                    { igSmartPointer<beNDMWShopSelect00> resultWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(al));
-                    beNDMWWindow_BindContext(resultWin.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, resultWin.p);
+                    { igSmartPointer<beNDMWShopSelect00> resultWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
+                    beNDMWWindow_BindContext((beNDMWWindow *)resultWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)resultWin.p);
                     SYNC_COUNT()
                     NEXT_ST2()
                     self->_st3 = -1;
-                    StringList_AppendRetained(((beNDMWShopSelect00 *)resultWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
-                    StringList_AppendRetained(((beNDMWShopSelect00 *)resultWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
+                    StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)resultWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)));
+                    StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)resultWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])));
                     self->_receipt = self->_retCode;
                     if (((int *)((igObjectList *)self->_playerDeviceCnt)->_data)[self->_receipt] >= 0x24) {
-                        beNDMWWindow_RunMessageScript(resultWin.p, txt_status_lua_2, 0x95);
+                        beNDMWWindow_RunMessageScript((beNDMWWindow *)resultWin.p, txt_status_lua_2, 0x95);
                     } else {
                         beDataObjObjectList *rec;
                         igObjectList *l;
 
                         int idx, val;
-                        beNDMWWindow_RunMessageScript(resultWin.p, txt_status_lua_2, 0x83);
+                        beNDMWWindow_RunMessageScript((beNDMWWindow *)resultWin.p, txt_status_lua_2, 0x83);
                         MSG_SELECT_INT(self->_playerNo)
-                        l = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_3)->_data;
+                        l = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3)->_data;
                         MovedItemRef movedItem((void *)((int *)l->_data)[self->_selectDevice]);
                         idx = self->_selectDevice;
                         LIST_REMOVE(l, idx)
                         val = ((int *)((igObjectList *)self->_playerNoList)->_data)[self->_receipt];
                         MSG_SELECT_INT(val)
-                        ObjectList_AppendRetained(igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DEVICEFOLDER_3)->_data, movedItem.p);
+                        ObjectList_AppendRetained((igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3)->_data, movedItem.p);
                     }
                     switch (self->_retCode) {
                     case 0: {
                         vF[0] = -121.0f; vF[1] = 109.0f; vF[2] = 0.0f;
-                        beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, SQ_OPEN00, (const char *)0, (float *)vF);
+                        beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, SQ_OPEN00, (const char *)0, (float *)vF);
                         break;
                     }
                     case 1: {
                         v100[0] = -121.0f; v100[1] = 109.0f; v100[2] = 0.0f;
-                        beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, SQ_OPEN01, (const char *)0, (float *)v100);
+                        beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, SQ_OPEN01, (const char *)0, (float *)v100);
                         break;
                     }
                     case 2: {
                         v110[0] = -121.0f; v110[1] = 109.0f; v110[2] = 0.0f;
-                        beNDMWWindow_PresentModel((beNDMWListCtrl *)self, i_stcursor04, 0, SQ_OPEN02, (const char *)0, (float *)v110);
+                        beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, SQ_OPEN02, (const char *)0, (float *)v110);
                         break;
                     }
                     }
@@ -6073,7 +6023,7 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
             default:
                 if (WIN_PENDING()) {
                     int keep;
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
+                    beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3);
                     keep = self->_st3;
                     NEXT_ST0()
                     self->_st3 = keep;
@@ -6087,19 +6037,19 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
         }
         break;
     case 2:
-        beNDMWWindow_PlayQueuedModelClose(self);
-        beNDMWWindow_ClearQueuedText(self);
-        beNDMWWindow_RequestChildrenClose(self);
+        beNDMWWindow_PlayQueuedModelClose((beNDMWWindow *)self);
+        beNDMWWindow_ClearQueuedText((beNDMWWindow *)self);
+        beNDMWWindow_RequestChildrenClose((beNDMWWindow *)self);
         if (self->_st3 == -1) {
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_5);
-            beMessenger_AppendString(self->_messenger, STWINFONT14_2);
-            beMessenger_AppendString(self->_messenger, font000_2);
-            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_2);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, font000_2);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, DEFAULTCOLOR_2);
         }
         NEXT_ST0()
         return;
     case 3:
-        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+        if (beNDMWWindow_PollCloseComplete((beNDMWWindow *)self) != 0) {
             self->_isRun = 0;
         }
         break;
@@ -6110,7 +6060,7 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
 static inline void RemoveItemAt(igObjectList *l, int i)
 {
     ReleaseObject(((igObject **)l->_data)[i]);
-    List_RemoveWordAt(l, i);
+    List_RemoveWordAt((igDataList *)l, i);
     ((int *)l->_data)[l->_count] = 0;
 }
 
@@ -6130,7 +6080,7 @@ void beNDMWStatusSubMenu_SortByRevision(void *self, const ItemListRef &items)
     int c, j;
     int k;
     GET_ALLOC(al)
-    ItemListRef sorted(beNDMWItemBaseList_Create(al));
+    ItemListRef sorted(beNDMWItemBaseList_Create((int)al));
     /* matching construct: variant sweep — the list is re-read from the holder in each loop test, so its count loads on every pass */
     while ((l = (igObjectList *)items.p)->_count > 0) {
         best = ((beNDMWItemRevisionBase **)l->_data)[0];
@@ -6138,8 +6088,8 @@ void beNDMWStatusSubMenu_SortByRevision(void *self, const ItemListRef &items)
             t = ((beNDMWItemRevisionBase **)l->_data)[i];
             if (t->_revision > best->_revision) best = t;
         }
-        ObjectList_AppendRetained(sorted.p, best);
-        ObjectList_RemoveFirstRetained(items.p, (int)best, 0);
+        ObjectList_AppendRetained((igObjectList *)sorted.p, (igObject *)best);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)items.p, (igObject *)(int)best, 0);
     }
     n = l->_count;
     for (i2 = 0; i2 < n; i2++) ReleaseObject(((igObject **)l->_data)[i2]);
@@ -6147,13 +6097,13 @@ void beNDMWStatusSubMenu_SortByRevision(void *self, const ItemListRef &items)
     for (j = 0; j < c; j++) ((int *)l->_data)[j] = 0;
     l->_count = 0;
     while ((src = (igObjectList *)sorted.p)->_count > 0) {
-        ObjectList_AppendRetained(items.p, ((int *)src->_data)[0]);
+        ObjectList_AppendRetained((igObjectList *)items.p, (igObject *)((int *)src->_data)[0]);
         RemoveItemAt((igObjectList *)sorted.p, 0);
     }
     for (k = ((igObjectList *)items.p)->_count - 1; k > -1; k--) {
         beNDMWItemBase *e = ((beNDMWItemBase **)((igObjectList *)items.p)->_data)[k];
         if ((e->_kindNo == 0 && e->_recNo == 276) || (e->_kindNo == 1 && e->_recNo == 31) || (e->_kindNo == 2 && e->_recNo == 44)) {
-            ObjectList_AppendRetained(items.p, e);
+            ObjectList_AppendRetained((igObjectList *)items.p, (igObject *)e);
             RemoveItemAt((igObjectList *)items.p, k);
         }
     }
@@ -6172,7 +6122,7 @@ void beNDMWStatusSubMenu_SortByRecordNo(void *self, const ItemListRef &items)
     int n, i2;
     int c, j;
     GET_ALLOC(al)
-    ItemListRef sorted(beNDMWItemBaseList_Create(al));
+    ItemListRef sorted(beNDMWItemBaseList_Create((int)al));
     /* matching construct: variant sweep — the list is re-read from the holder in each loop test, so its count loads on every pass */
     while ((l = (igObjectList *)items.p)->_count > 0) {
         best = ((beNDMWItemBase **)l->_data)[0];
@@ -6180,8 +6130,8 @@ void beNDMWStatusSubMenu_SortByRecordNo(void *self, const ItemListRef &items)
             t = ((beNDMWItemBase **)l->_data)[i];
             if (t->_recNo < best->_recNo) best = t;
         }
-        ObjectList_AppendRetained(sorted.p, best);
-        ObjectList_RemoveFirstRetained(items.p, (int)best, 0);
+        ObjectList_AppendRetained((igObjectList *)sorted.p, (igObject *)best);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)items.p, (igObject *)(int)best, 0);
     }
     n = l->_count;
     for (i2 = 0; i2 < n; i2++) ReleaseObject(((igObject **)l->_data)[i2]);
@@ -6189,44 +6139,44 @@ void beNDMWStatusSubMenu_SortByRecordNo(void *self, const ItemListRef &items)
     for (j = 0; j < c; j++) ((int *)l->_data)[j] = 0;
     l->_count = 0;
     while ((src = (igObjectList *)sorted.p)->_count > 0) {
-        ObjectList_AppendRetained(items.p, ((int *)src->_data)[0]);
+        ObjectList_AppendRetained((igObjectList *)items.p, (igObject *)((int *)src->_data)[0]);
         RemoveItemAt((igObjectList *)sorted.p, 0);
     }
 }
 
 int beNDMWStatusSubMenu_GetMeta(void)
 {
-    return g_beNDMWStatusSubMenu_metaObject[0];
+    return (int)g_beNDMWStatusSubMenu_metaObject;
 }
 
 int beNDMWStatusCtrlSkill_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlSkill_metaObject[0];
+    return (int)g_beNDMWStatusCtrlSkill_metaObject;
 }
 
 int beNDMWStatusCtrlSendBit_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlSendBit_metaObject[0];
+    return (int)g_beNDMWStatusCtrlSendBit_metaObject;
 }
 
 int beNDMWStatusCtrlBit_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlBit_metaObject[0];
+    return (int)g_beNDMWStatusCtrlBit_metaObject;
 }
 
 int beNDMWStatusCtrlDisk_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlDisk_metaObject[0];
+    return (int)g_beNDMWStatusCtrlDisk_metaObject;
 }
 
 int beNDMWStatusCtrlFlag_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlFlag_metaObject[0];
+    return (int)g_beNDMWStatusCtrlFlag_metaObject;
 }
 
 int beNDMWStatusCtrlFolder_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlFolder_metaObject[0];
+    return (int)g_beNDMWStatusCtrlFolder_metaObject;
 }
 
 int beNDMWStatusCtrlD0_GetMeta(void)
@@ -6237,36 +6187,36 @@ int beNDMWStatusCtrlD0_GetMeta(void)
 /* Class meta-object handle getter */
 int beNDMWStatusSubSlot_GetMeta(void)
 {
-    return g_beNDMWStatusSubSlot_metaObject[0];
+    return (int)g_beNDMWStatusSubSlot_metaObject;
 }
 
 /* Class metaObject accessor */
 int beNDMWStatusMainSlot_GetMeta(void) {
-    return g_beNDMWStatusMainSlot_metaObject[0];
+    return (int)g_beNDMWStatusMainSlot_metaObject;
 }
 
 int beNDMWStatusPowerSocket_GetMeta(void)
 {
-    return g_beNDMWStatusPowerSocket_metaObject[0];
+    return (int)g_beNDMWStatusPowerSocket_metaObject;
 }
 
 int beNDMWStatusCtrlBaseEquip_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlBaseEquip_metaObject[0];
+    return (int)g_beNDMWStatusCtrlBaseEquip_metaObject;
 }
 
 int beNDMWStatusCtrlEquip_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlEquip_metaObject[0];
+    return (int)g_beNDMWStatusCtrlEquip_metaObject;
 }
 
 int beNDMWStatusCtrl00_GetMeta(void)
 {
-    return g_beNDMWStatusCtrl00_metaObject[0];
+    return (int)g_beNDMWStatusCtrl00_metaObject;
 }
 
 int beNDMWListCtrl_GetMeta(void)
 {
-    return g_beNDMWListCtrl_metaObject[0];
+    return (int)g_beNDMWListCtrl_metaObject;
 }
 

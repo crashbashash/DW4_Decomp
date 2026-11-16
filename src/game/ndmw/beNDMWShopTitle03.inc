@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWShopTitle03_metaObject;
 
 beNDMWShopTitle03 *beNDMWShopTitle03_Create(int allocator) {
     beNDMWShopTitle03_EnsureRegistered();
-    return (beNDMWShopTitle03 *)igMetaObject_CreateInstance(g_beNDMWShopTitle03_metaObject, allocator);
+    return (beNDMWShopTitle03 *)igMetaObject_CreateInstance(g_beNDMWShopTitle03_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopTitle03_GetMetaObject(void) {
@@ -26,7 +26,7 @@ int beNDMWShopTitle03_GetVTable(void) {
     obj._modelCloseRamNoList = 0;
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopTitle03_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopTitle03_vtable[0];
     beNDMWWindowTitle_Destroy((beNDMWWindowTitle *)&obj, 0);
     return vtable;
@@ -69,9 +69,9 @@ igSmartPointer<igObject> *beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct(igSm
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -82,9 +82,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWWindowList_Destruct(igSmartPointe
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -114,7 +114,7 @@ void beNDMWShopTitle03_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopTitle03_Register);
 }
 
-void *beNDMWShopTitle03_Register(void) {
+CallbackArray *beNDMWShopTitle03_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

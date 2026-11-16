@@ -9,12 +9,12 @@ igMetaField *g_beDemoManager_calledRemoveAllMetaField;
 
 beDemoManager *beDemoManager_CreateInstance(int allocator) {
     beDemoManager_EnsureRegistered();
-    return (beDemoManager *)igMetaObject_CreateInstance(*(int *)0x589790, allocator);
+    return (beDemoManager *)igMetaObject_CreateInstance(g_beDemoManager_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beDemoManager_GetOrCreateMetaObject(void) {
     if (g_beDemoManager_metaObject == 0) {
-        g_beDemoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beDemoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beDemoManager_metaObject;
 }
@@ -36,11 +36,11 @@ int beDemoManager_GetVTable(void) {
     obj._name = 0;
     obj._buildData = 0;
     obj._activeDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDemoManager_vtable[0];
     igSmartPointer_beDemoManagerWorkList_Destruct((igSmartPointer<igObject> *)&obj._activeDataList, (short)(-1));
     igSmartPointer_beDemoManagerWork_Destruct((igSmartPointer<igObject> *)&obj._buildData, -1);
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -77,7 +77,7 @@ void beDemoManager_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDemoManager_callbackList[] = { beMessenger_EnsureRegistered, beLua_EnsureRegistered, beDemoManagerWork_EnsureRegistered, beDemoManagerWorkList_EnsureRegistered, 0 };
 
-void *beDemoManager_Register(void) {
+CallbackArray *beDemoManager_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -142,9 +142,9 @@ void beDemoManager_InitFields(void) {
     void *lua;
     void *buildData;
     void *activeDataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDemoManager_metaObject;
+    meta = g_beDemoManager_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDemoManager_ctorTable, 7);
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base));

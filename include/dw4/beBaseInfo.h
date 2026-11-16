@@ -2,6 +2,7 @@
 #define DW4_BEBASEINFO_H
 
 struct beBaseInfo;
+struct CallbackArray;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -10,7 +11,7 @@ extern "C" {
 
 void *beBaseInfo_Destroy(struct beBaseInfo *self, short delete_storage);
 struct igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
-void *beBaseInfo_Register(void);
+struct CallbackArray *beBaseInfo_Register(void);
 
 #ifdef __cplusplus
 }

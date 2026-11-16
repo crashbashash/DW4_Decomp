@@ -1,11 +1,11 @@
 igAttrSet *igAttrSet_CreateInstance(int allocator) {
     igAttrSet_EnsureRegistered();
-    return (igAttrSet *)igMetaObject_CreateInstance((int)g_igAttrSet_metaObject, allocator);
+    return (igAttrSet *)igMetaObject_CreateInstance((igMetaObject *)g_igAttrSet_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igAttrSet_GetOrCreateMetaObject(void) {
     if (g_igAttrSet_metaObject == 0) {
-        g_igAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAttrSet_metaObject;
 }
@@ -22,17 +22,17 @@ int igAttrSet_GetVTable(void) {
     Obj_1a5e10 o;
     int r;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.w[1] = 0;
     o.w[2] = 0;
     o.w[3] = 0;
     o.w[6] = 0;
     o.vt = &g_igAttrSet_vtable[0];
     o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igAttrSet_vtable[0];
     igSmartPointer_igAttrList_Destruct(&o.s, -1);
-    igGroup_Destroy((struct T_195a90 *)&o, 0);
+    igGroup_Destroy((igGroup *)&o, 0);
     return r;
 }
 
@@ -43,9 +43,9 @@ void igAttrSet_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAttrSet_callbackList[] = { igAttrList_EnsureRegistered, 0 };
 
-void igAttrSet_Register(void) {
+CallbackArray *igAttrSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAttrSet_metaObject,
         igGroup_Register,
@@ -65,8 +65,8 @@ void thunk_igAttrSet_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAttrSet_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igAttrSet_fieldTable[] = {
     "_attributes",
@@ -87,10 +87,10 @@ void igAttrSet_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igAttrSet_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAttrSet_ctorTable, 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAttrList_GetOrCreateMetaObject();
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;

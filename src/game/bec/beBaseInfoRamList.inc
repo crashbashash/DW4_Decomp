@@ -2,7 +2,7 @@ igMetaObject *g_beBaseInfoRamList_metaObject;
 
 igMetaObject *beBaseInfoRamList_GetOrCreateMetaObject(void) {
     if (g_beBaseInfoRamList_metaObject == 0) {
-        g_beBaseInfoRamList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beBaseInfoRamList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beBaseInfoRamList_metaObject;
 }
@@ -26,7 +26,7 @@ int beBaseInfoRamList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beBaseInfoRamList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beBaseInfoRamList_EnsureRegistered(void)
@@ -36,14 +36,14 @@ void beBaseInfoRamList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beBaseInfoRamList_callbackList[] = { beBaseInfoRam_EnsureRegistered, 0 };
 
-void *beBaseInfoRamList_Register(void) {
+CallbackArray *beBaseInfoRamList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beBaseInfoRamList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beBaseInfoRamList_GetMetaObject,
+        (igMetaObjectCallback)beBaseInfoRamList_GetMetaObject,
         "beBaseInfoRamList",
         0x14, /* instance size */
         beBaseInfoRamList_GetVTable,

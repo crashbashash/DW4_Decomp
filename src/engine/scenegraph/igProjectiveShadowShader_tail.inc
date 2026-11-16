@@ -1,32 +1,32 @@
 void FUN_001d4180(void) {
-    DAT_005628d8[0] = igTextureBindAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_005627e8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_005627f0[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_005627f8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562800[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562808[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562810[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562818[0] = igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562820[0] = igLightingStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562838[0] = FUN_00139370(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562840[0] = FUN_00139370(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562848[0] = FUN_00139370(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562850[0] = FUN_001384a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_shadowTextureFunctionAttr0[0] = FUN_00131c60(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562870[0] = FUN_00131c60(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562828[0] = FUN_0013b490(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_00562830[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_005628d0[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    DAT_005627e0[0] = FUN_001341b0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_005628d8[0] = (int)igTextureBindAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627e8[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627f0[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627f8[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562800[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562808[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562810[0] = (int)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562818[0] = (int)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562820[0] = (int)igLightingStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562838[0] = FUN_00139370((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562840[0] = FUN_00139370((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562848[0] = FUN_00139370((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562850[0] = FUN_001384a0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_shadowTextureFunctionAttr0[0] = FUN_00131c60((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562870[0] = FUN_00131c60((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562828[0] = FUN_0013b490((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562830[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005628d0[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627e0[0] = FUN_001341b0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
 void Gap__Sg__igProjectiveShadowShader__vfunc_09(void **arg0, int arg1) {
     Gap__Sg__igNode__vfunc_09((void * *)arg0, arg1);
-    if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
+    if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         FUN_001d4180();
     }
 }
@@ -41,11 +41,11 @@ void igProjectiveShadowShader_ConfigureSharedAttrs(void) {
     ((ShadowSetupObj *)DAT_005628d8[0])->s23(0);
     {
         ShadowRef image;
-        image.p = igTextureAttr_CreateInstance(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
+        image.p = (ShadowSetupObj *)igTextureAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         ((ShadowSetupObj *)DAT_005628d8[0])->s31((int)image.p);
         ShadowRef texture;
-        texture.p = igImage_CreateInstance(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
-        igTextureAttr_SetImage(image.p, texture.p, 0);
+        texture.p = (ShadowSetupObj *)igImage_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+        igTextureAttr_SetImage((igTextureAttr *)image.p, (igImage *)texture.p, 0);
         texture.p->s26(1);
         texture.p->s27(1);
         texture.p->s28(5);
@@ -103,145 +103,145 @@ void FUN_001d5430(void) {
     t = ((R_1d5430 * *)DAT_005628d8)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_005628d8)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_005627e8)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_005627e8)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_005627f0)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_005627f0)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_005627f8)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_005627f8)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562800)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562800)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562808)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562808)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562810)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562810)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562818)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562818)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562820)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562820)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562838)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562838)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562840)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562840)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562850)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562850)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562858)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562858)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562860)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562860)[0] = 0;
     }
     t = ((R_1d5430 * *)g_shadowTextureFunctionAttr0)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)g_shadowTextureFunctionAttr0)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562870)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562870)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562878)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562878)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562880)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562880)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562828)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562828)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562830)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562830)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_005628d0)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_005628d0)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_005627e0)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_005627e0)[0] = 0;
     }
     t = ((R_1d5430 * *)DAT_00562848)[0];
     if (t != 0) {
         t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)t);
+        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)t);
         ((R_1d5430 * *)DAT_00562848)[0] = 0;
     }
 }
 
 void Gap__Sg__igProjectiveShadowShader__vfunc_10(void **arg0) {
-    if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
+    if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         FUN_001d5430();
     }
     FUN_001c5e20((T_1c5e20 *)arg0);
@@ -358,7 +358,7 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     igMatrix44f_Copy(arg4);
     igMatrix44f_Multiply(arg4, arg4, arg2);
     igMatrix44f_Multiply(arg4, arg4, arg3);
-    igMatrix44f_SetIdentity(&sp50[0]);
+    igMatrix44f_SetIdentity((float *)&sp50[0]);
     spA0[0] = 0x3F000000;
     spA0[2] = 0;
     spA0[1] = 0xBF000000;
@@ -366,7 +366,7 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     sp90[0] = 0x3F000000;
     sp90[2] = 0x3F800000;
     sp90[1] = 0x3F000000;
-    igMatrix44f_SetTranslation(&sp50[0], &sp90[0]);
+    igMatrix44f_SetTranslation((float *)&sp50[0], (float *)&sp90[0]);
     if (arg0->f208 != 0) {
         igMatrix44f_Multiply(&sp50[0], &sp50[0], g_projectiveShadowViewportMatrix.m);
     }
@@ -435,7 +435,7 @@ void Gap__Sg__igProjectiveShadowShader__vfunc_17(struct S_1d6240 *arg0) {
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         arg0->f64 = 0;
@@ -461,7 +461,7 @@ void FUN_001d6340(S0_1d6340 *arg0, S1_1d6340 *arg1) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f14 = (int)(arg1);

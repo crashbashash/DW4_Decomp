@@ -38,7 +38,7 @@ igMetaField *g_igSorter_printOutputStateMetaField;
 
 igMetaObject *FUN_00196c10(void) {
     if (g_igSorter_metaObject == 0) {
-        g_igSorter_metaObject = ((igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
+        g_igSorter_metaObject = ((igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
     return g_igSorter_metaObject;
 }
@@ -55,7 +55,7 @@ int igSorter_GetVTable(void) {
     union U_196c10 u;
     int temp_s5;
     char *p276, *p268, *p264, *p260, *p256, *p252, *p248, *p244, *p240;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igSorter_vtable[0];
     FUN_00197350((int *)&u.b[8]);
     FUN_00197340((int *)&u.b[16]);
@@ -91,7 +91,7 @@ int igSorter_GetVTable(void) {
     igSmartPointer_igIntList_Construct(p268);
     p276 = &u.b[116];
     FUN_001972f0((int *)p276);
-    temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&DAT_00528620[4];
     FUN_00197260((void **)p276, -1);
     igSmartPointer_igIntList_Destruct(p268, -1);
@@ -129,7 +129,7 @@ void **FUN_00196f60(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -147,7 +147,7 @@ void **FUN_00196fe0(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -165,7 +165,7 @@ void **FUN_00197060(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {
@@ -181,7 +181,7 @@ void **FUN_001970e0(struct Ref **self, short flag) {
         p = *self;
         if (p != 0) {
             p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((void *)p);
+            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
         }
         if (flag > 0) __dl__FPv(self);
     }
@@ -196,7 +196,7 @@ void **FUN_00197160(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -209,7 +209,7 @@ void **FUN_00197160(void **arg0, long long arg1) {
 O *igSmartPointer_igGeometry_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((void *)t); }
+        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         if (arg1 > 0) __dl__FPv(arg0);
     }
     return arg0;
@@ -222,7 +222,7 @@ void **FUN_00197260(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -287,9 +287,9 @@ void FUN_00197360(void)
 
 static igMetaObjectCallback g_igSorter_callbackList[] = { FUN_00138160, FUN_00197a10, igNonRefCountedAttrList_EnsureRegistered, FUN_001978a0, igIntList_EnsureRegistered, igDepthWriteStateAttr_EnsureRegistered, igCullFaceAttr_EnsureRegistered, FUN_00197cc0, igGeometry_EnsureRegistered, 0 };
 
-void igSorter_Register(void) {
+CallbackArray *igSorter_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSorter_metaObject,
         igObject_Register,
@@ -309,42 +309,42 @@ void thunk_igSorter_GetMetaObject(void) {
 }
 
 static FieldFactory g_igSorter_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igSorter_fieldTable[] = {
     "_dlist",
@@ -492,86 +492,86 @@ void igSorter_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igSorter_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSorter_ctorTable, 0x24);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
+    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)));
+    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00197930();
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)));
+    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0013ad40();
     ((igObjectRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)));
+    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001977c0();
     ((igObjectRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)));
+    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_001977c0();
     ((igObjectRefMetaField *)temp_s2_5)->_construct = 1;
-    temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)));
+    temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_001977c0();
     ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
-    temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7)));
+    temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2_7)->_construct = 1;
-    temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)));
+    temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2_8)->_construct = 1;
-    temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9)));
+    temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2_9)->_construct = 1;
-    temp_s2_10 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)));
+    temp_s2_10 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2_10)->_construct = 1;
-    temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = igIntList_GetOrCreateMetaObject();
+    temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_11)->_construct = 1;
-    temp_s2_12 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = igIntList_GetOrCreateMetaObject();
+    temp_s2_12 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)));
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_12)->_construct = 1;
-    temp_s2_13 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)));
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = igIntList_GetOrCreateMetaObject();
+    temp_s2_13 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)));
+    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_13)->_construct = 1;
-    temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE)));
+    temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE)));
     ((igObjectRefMetaField *)temp_s2_14)->_metaObject = FUN_001382a0();
     ((igObjectRefMetaField *)temp_s2_14)->_construct = 1;
-    temp_s2_15 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF)));
+    temp_s2_15 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF)));
     ((igObjectRefMetaField *)temp_s2_15)->_metaObject = FUN_001386d0();
     ((igObjectRefMetaField *)temp_s2_15)->_construct = 1;
-    temp_s2_16 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10)));
+    temp_s2_16 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10)));
     ((igObjectRefMetaField *)temp_s2_16)->_metaObject = FUN_001386d0();
     ((igObjectRefMetaField *)temp_s2_16)->_construct = 1;
-    temp_s2_17 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12)));
+    temp_s2_17 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)));
     ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)FUN_00197af0();
     ((igObjectRefMetaField *)temp_s2_17)->_construct = 1;
-    temp_s2_18 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x13)));
+    temp_s2_18 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x13)));
     ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)FUN_001977c0();
     ((igObjectRefMetaField *)temp_s2_18)->_construct = 1;
-    temp_s2_19 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14)));
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = igIntList_GetOrCreateMetaObject();
+    temp_s2_19 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14)));
+    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_19)->_construct = 1;
-    temp_s2_20 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15)));
+    temp_s2_20 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15)));
     ((igObjectRefMetaField *)temp_s2_20)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2_20)->_construct = 1;
-    temp_s2_21 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x16)));
+    temp_s2_21 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x16)));
     ((igObjectRefMetaField *)temp_s2_21)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2_21)->_construct = 1;
-    temp_s2_22 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x17)));
+    temp_s2_22 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x17)));
     ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)igGeometry_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_22)->_construct = 1;
-    temp_s2_23 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x18)));
-    ((igObjectRefMetaField *)temp_s2_23)->_metaObject = igIntList_GetOrCreateMetaObject();
+    temp_s2_23 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18)));
+    ((igObjectRefMetaField *)temp_s2_23)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_23)->_construct = 1;
-    temp_s2_24 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x19)));
-    ((igObjectRefMetaField *)temp_s2_24)->_metaObject = igIntList_GetOrCreateMetaObject();
+    temp_s2_24 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19)));
+    ((igObjectRefMetaField *)temp_s2_24)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_24)->_construct = 1;
-    temp_s2_25 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1D)));
+    temp_s2_25 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D)));
     ((igObjectRefMetaField *)temp_s2_25)->_metaObject = (int)FUN_00197af0();
-    temp_s2_26 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1F)));
+    temp_s2_26 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F)));
     ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)FUN_00197af0();
     ((igObjectRefMetaField *)temp_s2_26)->_refCounted = 0;
-    *(char *)((char *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x23))) + 38) = 0;
+    *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x23))) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSorter_fieldTable, g_igSorter_fieldHandles, g_igSorter_fieldOffsets, temp_s1);
 }
 

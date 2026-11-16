@@ -4,7 +4,7 @@ igMetaField *g_beNDMWShopCtrlA1_cardRamNoListMetaField;
 
 beNDMWShopCtrlA1 *beNDMWShopCtrlA1_Create(int allocator) {
     beNDMWShopCtrlA1_EnsureRegistered();
-    return (beNDMWShopCtrlA1 *)igMetaObject_CreateInstance(g_beNDMWShopCtrlA1_metaObject, allocator);
+    return (beNDMWShopCtrlA1 *)igMetaObject_CreateInstance(g_beNDMWShopCtrlA1_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWShopCtrlA1_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int beNDMWShopCtrlA1_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWShopCtrlA1_vtable[0];
     obj._cardInfoList = 0;
     obj._cardRamNoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlA1_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._cardRamNoList, -1);
     igSmartPointer_igStringRefList_Destruct(&obj._cardInfoList, -1);
@@ -42,7 +42,7 @@ void beNDMWShopCtrlA1_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlA1_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlA1_Register(void) {
+CallbackArray *beNDMWShopCtrlA1_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -91,7 +91,7 @@ void beNDMWShopCtrlA1_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWShopCtrlA1_ctorTable, 2);
     cardInfoList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)cardInfoList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)cardInfoList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)cardInfoList)->_construct = 1;
     cardRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)cardRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();

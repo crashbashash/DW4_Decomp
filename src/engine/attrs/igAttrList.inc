@@ -2,12 +2,12 @@ igMetaObject *g_igAttrList_metaObject;
 
 void FUN_0013aec0(int arg0) {
     igAttrList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F460, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F460, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igAttrList_GetOrCreateMetaObject(void) {
     if (g_igAttrList_metaObject == 0) {
-        g_igAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAttrList_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igAttrList_GetMetaObject(void)
 int igAttrList_GetVTable(void) {
     struct Obj_13afa0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAttrList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAttrList_EnsureRegistered(void)
@@ -35,9 +35,9 @@ void igAttrList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAttrList_callbackList[] = { FUN_0013b110, 0 };
 
-void igAttrList_Register(void) {
+CallbackArray *igAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAttrList_metaObject,
         igObjectList_Register,

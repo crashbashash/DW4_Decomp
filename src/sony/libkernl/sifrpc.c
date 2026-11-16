@@ -15,13 +15,6 @@
 /* sceSifCallRpc mode: the caller has already written its buffers back from the data cache */
 #define SIF_RPCM_NOWBDC 0x02
 
-typedef struct {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
-} sceSifDmaData;
-
 /* A packet of the client pool: the RPC header, then the request of whichever command it carries. */
 typedef struct {
     sceSifRpcPktHeader rpch;
@@ -32,13 +25,6 @@ typedef struct {
         char body[SIF_CMD_PACKET_SIZE - sizeof(sceSifRpcPktHeader)];
     } req;
 } sceSifRpcPacket;
-
-typedef unsigned int (*AlarmHandler)(int id, unsigned int scheduled, unsigned int actual, void *arg);
-
-int iSetTimerAlarm(unsigned long clock, AlarmHandler handler, void *arg);
-unsigned int sceSifSetDma(sceSifDmaData *transfers, int count);
-int sceSifGetReg(unsigned int reg);
-int sceSifSetReg(unsigned int reg, int value);
 
 static int _sceSifInitCheck = 0;
 static sceSifRpcPacket _packet_buffer[RPC_PACKETS] __attribute__((aligned(64)));
@@ -179,7 +165,7 @@ static void _request_end(sceSifRpcRendPkt *rend, sceSifRpcState *state)
     client->rpcd.paddr = 0;
 }
 
-static unsigned int _alarm_rdata(int id, unsigned int scheduled, unsigned int actual, void *arg)
+static int _alarm_rdata(int id, int scheduled, int actual, void *arg)
 {
     sceSifRpcRendPkt *rend = arg;
 
@@ -267,7 +253,7 @@ static sceSifServeData *_search_svdata(unsigned int sid, sceSifRpcState *state)
     return 0;
 }
 
-static unsigned int _alarm_bind(int id, unsigned int scheduled, unsigned int actual, void *arg)
+static int _alarm_bind(int id, int scheduled, int actual, void *arg)
 {
     return isceSifSendCmd(SIF_CMD_RPC_END, arg, SIF_CMD_PACKET_SIZE, 0, 0, 0) ? 0 : RETRY_CLOCK;
 }

@@ -3,26 +3,18 @@
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
 #include "dw4/igVertexArrayLock.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beWaterPlain.h"
+#include "dw4/beWaterPlainInfo.h"
+#include "dw4/igFrustCullTraversal.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igViewerSceneInfoManager.h"
 
 extern "C" {
-void *igInsightCore_FindManager(int insight, int metaObject);
 void igMatrix44f_PreMultiply(float *matrix, const float *by);
-int igFrustCullTraversal_ClassifyBox(const float *boxMin, const float *boxMax, const float *matrix);
 void Vec3f_CrossInPlace(float *a, float *b);
 float sqrtf(float);
 int igVertexArrayLock_Init(igVertexArrayLock *lock);
-void igMatrix44f_GetTranslation(const float *matrix, float *translation);
-void beMessenger_SendGroup(int messenger, const char *group, const char *message);
-int beMessenger_GetMatrixCount(int messenger);
-void beMessenger_GetMatrix(float *matrix, int messenger, int index);
-int beMessenger_GetVec3Count(int messenger);
-void beMessenger_GetVec3(float *vector, int messenger, int index);
-unsigned int beMessenger_ResolveEnumValue(int messenger, int enumeration, int value);
-void beMessenger_RegisterReceiver(int messenger, int receiver, char *name, int, int);
-int beWaterPlain_GetMessageEnum(void);
-extern int g_igViewerSceneInfoManager_metaObject[4];
-extern int g_beWaterPlainInfo_metaObject[4];
-extern int g_beWaterPlain_metaObject[4];
 extern char WATERPLAIN[];
 
 bool beWaterPlain_IsBoxVisible(beWaterPlain *self, const float *boxMin, const float *boxMax);
@@ -34,10 +26,10 @@ void beWaterPlain_Simulate(beWaterPlain *self, beWaterPlainInfoRam *ram);
 void beWaterPlain_Flatten(beWaterPlain *self, beWaterPlainInfoRam *ram);
 void beWaterPlain_Prepare(void);
 void beWaterPlain_UpdateRam(beWaterPlain *self, beWaterPlainInfoRam *ram);
-int beWaterPlain_GetInfoMeta(void);
+igMetaObject *beWaterPlain_GetInfoMeta(void);
 void beWaterPlain_OnAddRam(beWaterPlain *self, int receiver, char *, int, int);
 int beWaterPlain_OnMessage(beWaterPlain *self, beWaterPlainInfoRam *ram, beMessengerWork *work);
-int beWaterPlain_GetMeta(void);
+igMetaObject *beWaterPlain_GetMeta(void);
 }
 
 /* an igVec3fMetaField member, which reflected.h declares as float[3] */
@@ -55,7 +47,7 @@ static inline void igObjectListSet(igObject *object, igObjectList *list, int ind
 
 bool beWaterPlain_IsBoxVisible(beWaterPlain *self, const float *boxMin, const float *boxMax) {
     bool visible = false;
-    igViewerParameters *parameters = (igViewerParameters *)((igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]))->_parameters;
+    igViewerParameters *parameters = (igViewerParameters *)((igViewerSceneInfoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject))->_parameters;
     igMatrix44f viewProjection;
     float *m = (float *)&viewProjection;
     m[0] = parameters->_projectionMatrix[0];
@@ -237,12 +229,12 @@ void beWaterPlain_Simulate(beWaterPlain *self, beWaterPlainInfoRam *ram) {
         int count;
         switch (pass) {
         case 0:
-            beMessenger_SendGroup(self->_messenger, "PLAYER", "GETMATRIX");
-            count = beMessenger_GetMatrixCount(self->_messenger);
+            beMessenger_SendGroup((beMessenger *)self->_messenger, "PLAYER", "GETMATRIX");
+            count = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);
             break;
         case 1:
-            beMessenger_SendGroup(self->_messenger, "ENEMY", "GETMATRIX");
-            count = beMessenger_GetMatrixCount(self->_messenger);
+            beMessenger_SendGroup((beMessenger *)self->_messenger, "ENEMY", "GETMATRIX");
+            count = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);
             break;
         default:
             count = 0;
@@ -250,7 +242,7 @@ void beWaterPlain_Simulate(beWaterPlain *self, beWaterPlainInfoRam *ram) {
         for (int i = 0; i < count; i++) {
             float matrix[16];
             float point[3];
-            beMessenger_GetMatrix(matrix, self->_messenger, i);
+            beMessenger_GetMatrix(matrix, (beMessenger *)self->_messenger, i);
             igMatrix44f_GetTranslation(matrix, point);
             if (beWaterPlain_IsPointInWater(self, ram, point)) beWaterPlain_Splash(self, ram, heights, point, 1.0f);
         }
@@ -361,20 +353,20 @@ void beWaterPlain_UpdateRam(beWaterPlain *self, beWaterPlainInfoRam *ram) {
     }
 }
 
-int beWaterPlain_GetInfoMeta(void) {
-    return g_beWaterPlainInfo_metaObject[0];
+igMetaObject *beWaterPlain_GetInfoMeta(void) {
+    return g_beWaterPlainInfo_metaObject;
 }
 
 void beWaterPlain_OnAddRam(beWaterPlain *self, int receiver, char *, int, int) {
-    beMessenger_RegisterReceiver(self->_messenger, receiver, WATERPLAIN, 0, -1);
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)receiver, WATERPLAIN, 0, -1);
 }
 
 int beWaterPlain_OnMessage(beWaterPlain *self, beWaterPlainInfoRam *ram, beMessengerWork *work) {
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beWaterPlain_GetMessageEnum(), work->_message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beWaterPlain_GetMessageEnum(), (const char *)work->_message)) {
     case 0:
-        if (beMessenger_GetVec3Count(self->_messenger) > 0 && ram->_st0 == 1) {
+        if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) > 0 && ram->_st0 == 1) {
             float pos[3];
-            beMessenger_GetVec3(pos, self->_messenger, 0);
+            beMessenger_GetVec3(pos, (beMessenger *)self->_messenger, 0);
             if (beWaterPlain_IsPointInWater(self, ram, pos))
                 beWaterPlain_Splash(self, ram, heightGrid(ram, 0), pos, 1.0f);
         }
@@ -385,6 +377,6 @@ int beWaterPlain_OnMessage(beWaterPlain *self, beWaterPlainInfoRam *ram, beMesse
     return 1;
 }
 
-int beWaterPlain_GetMeta(void) {
-    return g_beWaterPlain_metaObject[0];
+igMetaObject *beWaterPlain_GetMeta(void) {
+    return g_beWaterPlain_metaObject;
 }

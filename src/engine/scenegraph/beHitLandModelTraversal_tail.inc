@@ -16,7 +16,7 @@ void Gap__Bec__beHitLandModelTraversal__vfunc_07(beHitLandModelTraversal *arg0, 
         if (temp_a0 != 0) {
             temp_a0->_refCount = temp_a0->_refCount - 1;
             if (((unsigned long long)(long long)temp_a0->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         arg0->_travProcs = (int)temp_s0;

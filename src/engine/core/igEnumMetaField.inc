@@ -130,7 +130,7 @@ void igEnumMetaField_CreateDefaultDescriptor(void) {
             o = g_igEnumMetaField_descriptor;
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
             count = *(int *)((char *)((void *)igMetaField_GetMetaFieldList()) + 12); /* Read as a whole word first; a direct `short = int - 1` store would be narrowed to an lh. */
             *(short *)((char *)g_igEnumMetaField_descriptor + 18) = count - 1;

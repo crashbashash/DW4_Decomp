@@ -24,7 +24,7 @@ int beSoundData_GetVTable(void) {
     nameSlot = (char **)&obj._name;
     *nameSlot = 0;
     obj._vtable = (int)&g_beSoundData_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -50,7 +50,7 @@ void beSoundData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSoundData_Register);
 }
 
-void *beSoundData_Register(void) {
+CallbackArray *beSoundData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -107,9 +107,9 @@ static int g_beSoundData_fieldOffsets[] = {
 
 void beSoundData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSoundData_metaObject;
+    meta = g_beSoundData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSoundData_ctorTable, 6);
     igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base)), -1);

@@ -21,21 +21,7 @@
 
 #define B_TYPE 3
 
-void _sceMpegWaitIpuIdle(_sceMpegDecoder *dec);
-void _ipuCommand(_sceMpegDecoder *dec, unsigned int cmd);
-unsigned int _ipuShowBits(_sceMpegDecoder *dec, int n);
-void _ipuFlushBits(_sceMpegDecoder *dec, int n);
-unsigned int _ipuGetBits(_sceMpegDecoder *dec, int n);
-void _sequenceHeader(_sceMpegDecoder *dec);
-void _unknownExtension(_sceMpegDecoder *dec);
-void _sequenceExtension(_sceMpegDecoder *dec);
-void _sequenceDisplayExtension(_sceMpegDecoder *dec);
-void _sequenceScalableExtension(_sceMpegDecoder *dec);
-void _pictureSpatialScalableExtension(_sceMpegDecoder *dec);
-void _pictureTemporalScalableExtension(_sceMpegDecoder *dec);
-
 void _extraBitInformation(_sceMpegDecoder *dec);
-void _extensionAndUserData(_sceMpegDecoder *dec);
 void _pictureHeader(_sceMpegDecoder *dec);
 void _groupOfPicturesHeader(_sceMpegDecoder *dec);
 void _temporalOrder(_sceMpegDecoder *dec, int temporal_reference);

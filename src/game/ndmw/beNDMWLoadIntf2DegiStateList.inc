@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWLoadIntf2DegiStateList_metaObject;
 
 igMetaObject *beNDMWLoadIntf2DegiStateList_GetOrCreateMetaObject(void) {
     if (g_beNDMWLoadIntf2DegiStateList_metaObject == 0) {
-        g_beNDMWLoadIntf2DegiStateList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWLoadIntf2DegiStateList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWLoadIntf2DegiStateList_metaObject;
 }
@@ -16,9 +16,9 @@ int beNDMWLoadIntf2DegiStateList_GetVTable(void) {
     int tmp[8];
     int off;
 
-    igObject_InitHeader(&tmp[0]);
+    igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&g_beNDMWLoadIntf2DegiStateList_vtable[0];
-    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
+    off = *(int *)((char *)(((int *)g_objectSystem)) + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -29,7 +29,7 @@ void beNDMWLoadIntf2DegiStateList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLoadIntf2DegiStateList_callbackList[] = { beNDMWLoadIntf2DegiState_EnsureRegistered, 0 };
 
-void *beNDMWLoadIntf2DegiStateList_Register(void) {
+CallbackArray *beNDMWLoadIntf2DegiStateList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

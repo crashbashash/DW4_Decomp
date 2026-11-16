@@ -8,7 +8,7 @@ igMetaObject *FUN_00451fb0(void) {
 
 igMetaObject *FUN_00451fc0(void) {
     if (g_igBasicColorChanger_metaObject == 0) {
-        g_igBasicColorChanger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBasicColorChanger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBasicColorChanger_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igBasicColorChanger_GetMetaObject(void)
 
 int igBasicColorChanger_GetVTable(void) {
     struct Obj_452060 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igBasicColorChanger_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void igBasicColorChanger_RunStaticInit(void)
@@ -33,9 +33,9 @@ void igBasicColorChanger_RunStaticInit(void)
     igMetaObject_RunStaticInit(igBasicColorChanger_Register);
 }
 
-void igBasicColorChanger_Register(void) {
+CallbackArray *igBasicColorChanger_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBasicColorChanger_metaObject,
         igColorChanger_Register,
@@ -59,8 +59,8 @@ igMetaObject *FUN_00452130(void) {
 }
 
 static FieldFactory g_igBasicColorChanger_ctorTable[] = {
-    FUN_00187560,
-    igVec4fMetaField_CreateInstance,
+    (FieldFactory)FUN_00187560,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
 };
 static const char *g_igBasicColorChanger_fieldTable[] = {
     "_colors",
@@ -80,10 +80,10 @@ void igBasicColorChanger_InitFields(void) {
     void *f;
     void *temp_s0;
     temp_s0 = (void *)g_igBasicColorChanger_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igBasicColorChanger_ctorTable, 2);
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBasicColorChanger_ctorTable, 2);
+    f = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
     *(int *)((char *)f + 52) = 4;
-    igMetaObject_NameFields(temp_s0, g_igBasicColorChanger_fieldTable, g_igBasicColorChanger_fieldHandles, g_igBasicColorChanger_fieldOffsets, temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBasicColorChanger_fieldTable, g_igBasicColorChanger_fieldHandles, g_igBasicColorChanger_fieldOffsets, temp_s1);
 }
 

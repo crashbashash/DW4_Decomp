@@ -22,9 +22,9 @@ void FUN_001479b0(igPsx2Controller *arg0) {
     arg0->_analogState = 1;
 }
 
-void Gap__igPsx2Controller__vfunc_11(int arg0) {
-    igObject_InitDefaults();
-    FUN_001479b0((igPsx2Controller *)arg0);
+void Gap__igPsx2Controller__vfunc_11(igPsx2Controller *self) {
+    igObject_InitDefaults((igObject *)self);
+    FUN_001479b0(self);
 }
 
 void Gap__igPsx2Controller__vfunc_12(void *arg0) {
@@ -33,9 +33,9 @@ void Gap__igPsx2Controller__vfunc_12(void *arg0) {
     scePadPortClose(*(int *)((char *)arg0 + 64), *(int *)((char *)arg0 + 60));
     temp_a0 = *(int *)((char *)arg0 + 72);
     if (temp_a0 != 0) {
-        Memory_FreeBuffer(temp_a0);
+        Memory_FreeBuffer((void *)temp_a0);
     }
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 void Gap__igPsx2Controller__vfunc_31(void *arg0, int arg1, float *arg2, float *arg3) {

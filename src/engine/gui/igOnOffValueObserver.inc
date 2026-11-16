@@ -11,9 +11,9 @@ igMetaObject *igOnOffValueObserver_GetMetaObject(void)
 
 int igOnOffValueObserver_GetVTable(void) {
     struct Obj_44ca40 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igOnOffValueObserver_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void igOnOffValueObserver_EnsureRegistered(void)
@@ -23,9 +23,9 @@ void igOnOffValueObserver_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igOnOffValueObserver_callbackList[] = { igRadioGroup_EnsureRegistered, 0 };
 
-void igOnOffValueObserver_Register(void) {
+CallbackArray *igOnOffValueObserver_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOnOffValueObserver_metaObject,
         igView_Register,
@@ -67,11 +67,11 @@ void igOnOffValueObserver_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igOnOffValueObserver_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igOnOffValueObserver_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igOnOffValueObserver_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044cdf0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_igOnOffValueObserver_fieldTable, g_igOnOffValueObserver_fieldHandles, g_igOnOffValueObserver_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igOnOffValueObserver_fieldTable, g_igOnOffValueObserver_fieldHandles, g_igOnOffValueObserver_fieldOffsets, temp_s2);
 }
 

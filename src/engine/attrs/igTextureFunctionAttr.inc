@@ -9,12 +9,12 @@ igMetaField *g_igTextureFunctionAttr_functionTypeMetaField;
 
 void FUN_00131c60(int arg0) {
     igTextureFunctionAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55ED00, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55ED00, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_00131ca0(void) {
     if (g_igTextureFunctionAttr_metaObject == 0) {
-        g_igTextureFunctionAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureFunctionAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureFunctionAttr_metaObject;
 }
@@ -29,9 +29,9 @@ igMetaObject *igTextureFunctionAttr_GetMetaObject(void)
 
 int igTextureFunctionAttr_GetVTable(void) {
     struct Obj_131d40 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureFunctionAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTextureFunctionAttr_EnsureRegistered(void)
@@ -39,9 +39,9 @@ void igTextureFunctionAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureFunctionAttr_Register);
 }
 
-void igTextureFunctionAttr_Register(void) {
+CallbackArray *igTextureFunctionAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureFunctionAttr_metaObject,
         igVisualAttribute_Register,
@@ -61,13 +61,13 @@ void thunk_igTextureFunctionAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureFunctionAttr_ctorTable[] = {
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igUnsignedCharMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igUnsignedCharMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igTextureFunctionAttr_fieldTable[] = {
     "_mode",

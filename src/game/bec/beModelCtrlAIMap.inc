@@ -31,7 +31,7 @@ int beModelCtrlAIMap_GetVTable(void) {
     obj._zoneD = 0;
     obj._targetType = 0;
     obj._targetMode = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlAIMap_vtable[0];
     igStringRef_Destruct(&obj._targetMode, -1);
     igStringRef_Destruct(&obj._targetType, -1);
@@ -63,7 +63,7 @@ void beModelCtrlAIMap_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlAIMap_callbackList[] = { beModelCtrlAIDataList_EnsureRegistered, 0 };
 
-void *beModelCtrlAIMap_Register(void) {
+CallbackArray *beModelCtrlAIMap_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -143,20 +143,20 @@ void beModelCtrlAIMap_InitFields(void) {
     int base;
 
     meta = (void *)g_beModelCtrlAIMap_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlAIMap_ctorTable, 0xA);
-    zoneA = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beModelCtrlAIMap_ctorTable, 0xA);
+    zoneA = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)zoneA)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)zoneA)->_construct = 1;
-    zoneB = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    zoneB = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
     ((igObjectRefMetaField *)zoneB)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)zoneB)->_construct = 1;
-    zoneC = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    zoneC = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
     ((igObjectRefMetaField *)zoneC)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)zoneC)->_construct = 1;
-    zoneD = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    zoneD = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igObjectRefMetaField *)zoneD)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)zoneD)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beModelCtrlAIMap_fieldTable, g_beModelCtrlAIMap_fieldHandles, g_beModelCtrlAIMap_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beModelCtrlAIMap_fieldTable, g_beModelCtrlAIMap_fieldHandles, g_beModelCtrlAIMap_fieldOffsets, base);
 }
 

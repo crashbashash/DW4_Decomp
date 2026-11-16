@@ -3,30 +3,24 @@
 #include "dw4/igCommonTraversalDispatchView.h"
 #include "dw4/igModelViewMatrixAttrDispatchView.h"
 #include "dw4/beResetNode.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beSeCtl.h"
+#include "dw4/beSeInfo.h"
+#include "dw4/beSound.h"
+#include "dw4/igAttrStackManager.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igModelViewMatrixAttr.h"
+#include "dw4/igObjectPool.h"
+#include "dw4/igTimeAttr.h"
+#include "dw4/igTraversal.h"
+#include <string.h>
 
 extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
-extern "C" void igMatrix44f_SetIdentity(float *);
 extern "C" void igMatrix44f_Copy(float *, float *);
-extern "C" void igMatrix44f_GetTranslation(float *, float *);
-extern "C" void igMatrix44f_SetTranslation(float *, float *);
-extern "C" void igModelViewMatrixAttr_CreateInstance(void);
-extern "C" void igTimeAttr_CreateInstance(void);
-extern "C" int igTraversal_RegisterFunction(int, igMetaObject *, void (*)(void));
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
-extern "C" int beSeCtl_GetInfoMeta(void);
+extern "C" igMetaObject *beSeCtl_GetInfoMeta(void);
 extern "C" void beSeCtl_UpdateRam(void);
-extern "C" int beSeCtl_GetMeta(void);
-extern "C" float __floatdisf(int);
-extern "C" int beMessenger_AppendFloat(int, float);
-extern "C" int beMessenger_AppendString(int, int);
-extern "C" int beMessenger_DispatchSelected(int, int *);
-extern "C" int beMessenger_SelectReceivers(int, int *, int, int);
-extern "C" int strcmp(int *, int);
-extern "C" void igObjectPool_Grow(igObjectPool *, void (*)(void));
-extern "C" void igAttrStackManager_MarkStackChanged(igAttrStackManager *, igAttrStack *, int);
-extern "C" int igTraversal_TraverseChildren(igCommonTraversal *, beResetNode *);
-extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
+extern "C" igMetaObject *beSeCtl_GetMeta(void);
 struct AttrStackOps {
     static inline igAttrStack *stackFor(igAttrStackManager *mgr, int index) {
         return ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[((int *)mgr->_attrStackIndexTable)[index]];
@@ -45,15 +39,12 @@ struct AttrList : igTDataList<igAttr *> {
 };
 extern "C" int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav);
 extern "C" int g_igCommonTraversal_travProcs[4];
-extern "C" int g_beSound_metaObject[4];
 extern "C" void beSeCtl_Prepare(beSeCtl *self);
 extern "C" char ACTION_BROADCAST_3[];
 extern "C" void beSeCtl_OnAddRam(beSeCtl * p0, int p1, char * p2, int p3, int p4);
-extern "C" int g_beSeInfo_metaObject[4];
-extern "C" int g_beSeCtl_metaObject[4];
-extern "C" int emptyString[4];
-extern "C" int MODELCTRL_13[4];
-extern "C" int SETSOUND[4];
+extern "C" char emptyString[];
+extern "C" char MODELCTRL_13[];
+extern "C" char SETSOUND[];
 extern "C" int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work);
 
 int beResetNode_TraverseCallback(void *node, void *traversal) {
@@ -67,7 +58,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
     igModelViewMatrixAttr *matAttr;
     igTimeAttr *timeAttr;
     igAttrStackManager *mgr = (igAttrStackManager *)trav->_attrStack;
-    igObjectList *mvStack = (igObjectList *)AttrStackOps::stackFor(mgr, g_igModelViewMatrixAttr_metaObject[0]->_id);
+    igObjectList *mvStack = (igObjectList *)AttrStackOps::stackFor(mgr, g_igModelViewMatrixAttr_metaObject->_id);
     igMatrix44f_SetIdentity(m);
     matAttr = 0;
     if (node->_isResetRotAndScale) {
@@ -77,7 +68,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         igMatrix44f_SetTranslation(m, t);
         igObjectPool *pool = (igObjectPool *)trav->_matrixPool;
         if (pool->_freeIndex >= pool->_count)
-            igObjectPool_Grow(pool, igModelViewMatrixAttr_CreateInstance);
+            igObjectPool_Grow(pool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
         matAttr = ((igModelViewMatrixAttr **)pool->_data)[pool->_freeIndex++];
         ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
     }
@@ -87,7 +78,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         igObjectPool *pool = (igObjectPool *)trav->_timePool;
         time = ((long long *)((igLongList *)trav->_timeStack)->_data)[0];
         if (pool->_freeIndex >= pool->_count)
-            igObjectPool_Grow(pool, igTimeAttr_CreateInstance);
+            igObjectPool_Grow(pool, (igObject *(*)(int))igTimeAttr_CreateInstance);
         timeAttr = ((igTimeAttr **)pool->_data)[pool->_freeIndex++];
         timeAttr->_time = time;
     }
@@ -106,7 +97,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         ((AttrList *)st)->append((igAttr *)matAttr);
         igAttrStackManager_MarkStackChanged(mgr, st, idx);
     }
-    int r = igTraversal_TraverseChildren(trav, node);
+    int r = igTraversal_TraverseChildren((igTraversal *)trav, (igNode *)node);
     if (node->_isResetRotAndScale) {
         /* pop matAttr: run the stack's pop procedure on the top attribute, then shrink */
         int idx = matAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[matAttr->_cachedAttrIndex];
@@ -138,23 +129,23 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
 }
 
 void beResetNode_RegisterTraversal(void) {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beResetNode_GetMetaObject(), (void (*)())beResetNode_TraverseCallback);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beResetNode_GetMetaObject(), (void *)beResetNode_TraverseCallback);
 }
 
 void beSeCtl_Prepare(beSeCtl *self) {
     if (self->_sndMng == 0) {
-        self->_sndMng = igInsightCore_FindManager(self->_insight, g_beSound_metaObject[0]);
+        self->_sndMng = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSound_metaObject);
     }
 }
 
 void beSeCtl_OnAddRam(beSeCtl * p0, int p1, char * p2, int p3, int p4)
 {
-    beMessenger_RegisterReceiver(p0->_messenger, p1, ACTION_BROADCAST_3, 0, -1);
+    beMessenger_RegisterReceiver((beMessenger *)p0->_messenger, (beBaseInfoRam *)p1, ACTION_BROADCAST_3, 0, -1);
 }
 
-int beSeCtl_GetInfoMeta(void)
+igMetaObject *beSeCtl_GetInfoMeta(void)
 {
-    return g_beSeInfo_metaObject[0];
+    return g_beSeInfo_metaObject;
 }
 
 void beSeCtl_UpdateRam(void)
@@ -166,7 +157,7 @@ int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work) 
     int modelName;
     beSeDataList *actions;
     int j;
-    int delay;
+    long long delay;
     beBaseInfoDataList *models;
     beSeInfo *info;
     beSeInfoData *model;
@@ -175,7 +166,7 @@ int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work) 
     int actionName;
     int ramNo;
     beSeData *action;
-    int *p;
+    const char *p;
 
     modelIndex = -1;
     actionName = work->_message;
@@ -188,8 +179,8 @@ int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work) 
         off = 0;
         do {
             model = (beSeInfoData *)*(int *)((char *)models->_data + off);
-            p = (int *)model->_name;
-            if (strcmp(p != 0 ? p : &emptyString[0], modelName) == 0) {
+            p = (const char *)model->_name;
+            if (strcmp(p != 0 ? p : emptyString, (const char *)modelName) == 0) {
                 modelIndex = i;
             }
             i += 1;
@@ -206,13 +197,13 @@ int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work) 
         off = 0;
         do {
             action = *(beSeData **)((char *)actions->_data + off);
-            p = (int *)action->_name;
-            if (strcmp(p != 0 ? p : &emptyString[0], actionName) == 0) {
+            p = (const char *)action->_name;
+            if (strcmp(p != 0 ? p : emptyString, (const char *)actionName) == 0) {
                 delay = action->_delay;
-                beMessenger_SelectReceivers(self->_messenger, &MODELCTRL_13[0], modelName, ramNo);
-                beMessenger_AppendString(self->_messenger, action->_sound);
-                beMessenger_AppendFloat(self->_messenger, __floatdisf(delay));
-                beMessenger_DispatchSelected(self->_messenger, &SETSOUND[0]);
+                beMessenger_SelectReceivers((beMessenger *)self->_messenger, (const char *)MODELCTRL_13, (const char *)modelName, ramNo);
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)action->_sound);
+                beMessenger_AppendFloat((beMessenger *)self->_messenger, (float)delay);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, (const char *)SETSOUND);
             }
             j += 1;
             off += 4;
@@ -221,7 +212,7 @@ int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work) 
     return 1;
 }
 
-int beSeCtl_GetMeta(void)
+igMetaObject *beSeCtl_GetMeta(void)
 {
-    return g_beSeCtl_metaObject[0];
+    return g_beSeCtl_metaObject;
 }

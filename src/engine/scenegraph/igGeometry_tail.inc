@@ -35,7 +35,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 2) {
-        if (igObject_IsKindOf(node, g_igGeometry_metaObject) != 0 || igObject_IsKindOf(node, ((void * *)DAT_00561ca0)[0]) != 0) {
+        if (igObject_IsKindOf(node, (igMetaObject *)g_igGeometry_metaObject) != 0 || igObject_IsKindOf(node, ((igMetaObject **)DAT_00561ca0)[0]) != 0) {
             bool hit;
             unsigned int i;
             HitSegmentList *segments;
@@ -96,7 +96,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 }
                 for (a = 0; a < attrCount; a++) {
                     HitAttr *attr = attrs->data[a];
-                    if (igObject_IsKindOf(attr, ((void * *)g_igGeometryAttr_metaObject)[0]) != 0 || igObject_IsKindOf(attr, ((void * *)DAT_0055f158)[0]) != 0) {
+                    if (igObject_IsKindOf(attr, (igMetaObject *)(((void *)g_igGeometryAttr_metaObject))) != 0 || igObject_IsKindOf(attr, ((igMetaObject **)DAT_0055f158)[0]) != 0) {
                         int *f = &pointReport.first;
                         int *g = &pointReport.second;
                         *f = -1;
@@ -157,7 +157,7 @@ int FUN_001cf990(A_1cf990 *arg0, B_1cf990 *arg1) {
         n = 0;
     }
     if (n == 0) return 0;
-    ObjectList_AppendRetained(arg0->f36, arg1);
+    ObjectList_AppendRetained((igObjectList *)arg0->f36, (igObject *)arg1);
     r = FUN_001ceab0((HitTraversal *)arg0, (HitNode *)arg1);
     if (r == 0) {
         r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
@@ -168,10 +168,10 @@ int FUN_001cf990(A_1cf990 *arg0, B_1cf990 *arg1) {
     if (o != 0) {
         o->f4 = o->f4 - 1;
         if (((unsigned long long) ((long long) o->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)o);
+            igObject_Destroy((igObject *)o);
         }
     }
-    List_RemoveWordAt(m, k);
+    List_RemoveWordAt((igDataList *)m, k);
     m->data[m->n] = 0;
     if (r == 2) return 2;
     return 0;
@@ -193,7 +193,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
         }
     }
     node->setContext(self->context());
-    ObjectList_AppendRetained(self->nodes, node);
+    ObjectList_AppendRetained((igObjectList *)self->nodes, (igObject *)node);
     result = FUN_001ceab0((HitTraversal *)self, (HitNode *)node);
     if (result == 0) {
         FUN_001e68e0(self->matrices, node->transform);
@@ -217,7 +217,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
                 igObject_Destroy(o);
             }
         }
-        List_RemoveWordAt(s, last);
+        List_RemoveWordAt((igDataList *)s, last);
         s->data[s->count] = 0;
     }
     return passStop(result);
@@ -242,7 +242,7 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
     int got;
     SceneTransformNode *child;
     self->setContext(context);
-    igMatrix44f_SetIdentity(&world);
+    igMatrix44f_SetIdentity((float *)&world);
     igMatrix44f_Multiply(&world, &self->local, parent);
     igMatrix44f_Multiply(self->block + DAT_00562bc8->offset, &self->bind, &world);
     count = 0;

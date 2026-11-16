@@ -4,7 +4,7 @@ igMetaField *g_igViewerLoadingFileMessage_filenameMetaField;
 
 igViewerLoadingFileMessage *igViewerLoadingFileMessage_Create(int allocator) {
     igViewerLoadingFileMessage_EnsureRegistered();
-    return (igViewerLoadingFileMessage *)igMetaObject_CreateInstance(g_igViewerLoadingFileMessage_metaObject, allocator);
+    return (igViewerLoadingFileMessage *)igMetaObject_CreateInstance(g_igViewerLoadingFileMessage_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void) {
@@ -21,10 +21,10 @@ int igViewerLoadingFileMessage_GetVTable(void) {
     int *a1;
     int v0;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igViewerLoadingFileMessage_vtable[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
     obj.vt = &g_igViewerLoadingFileMessage_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -33,7 +33,7 @@ int igViewerLoadingFileMessage_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -45,9 +45,9 @@ void igViewerLoadingFileMessage_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerLoadingFileMessage_Register);
 }
 
-void igViewerLoadingFileMessage_Register(void) {
+CallbackArray *igViewerLoadingFileMessage_Register(void) {
     ViewerLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerLoadingFileMessage_metaObject,
         igMessage_Register,
@@ -88,9 +88,9 @@ void igViewerLoadingFileMessage_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = g_igViewerLoadingFileMessage_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igViewerLoadingFileMessage_ctorTable, 2);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), "");
-    igMetaObject_NameFields(temp_s0, g_igViewerLoadingFileMessage_fieldTable, g_igViewerLoadingFileMessage_fieldHandles, g_igViewerLoadingFileMessage_fieldOffsets, temp_s1);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerLoadingFileMessage_ctorTable, 2);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), "");
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerLoadingFileMessage_fieldTable, g_igViewerLoadingFileMessage_fieldHandles, g_igViewerLoadingFileMessage_fieldOffsets, temp_s1);
 }
 

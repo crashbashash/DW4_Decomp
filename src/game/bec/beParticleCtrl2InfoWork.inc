@@ -4,12 +4,12 @@ igMetaField *g_beParticleCtrl2InfoWork_positionLockOffsetMetaField;
 
 beParticleCtrl2InfoWork *beParticleCtrl2InfoWork_Create(int allocator) {
     beParticleCtrl2InfoWork_EnsureRegistered();
-    return (beParticleCtrl2InfoWork *)igMetaObject_CreateInstance(*(int *)0x5884C8, allocator);
+    return (beParticleCtrl2InfoWork *)igMetaObject_CreateInstance(g_beParticleCtrl2InfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beParticleCtrl2InfoWork_GetOrCreateMetaObject(void) {
     if (g_beParticleCtrl2InfoWork_metaObject == 0) {
-        g_beParticleCtrl2InfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beParticleCtrl2InfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beParticleCtrl2InfoWork_metaObject;
 }
@@ -34,7 +34,7 @@ int beParticleCtrl2InfoWork_GetVTable(void) {
     obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
     positionLockNodeSlot = (igObject **)&obj._positionLockNode;
     *positionLockNodeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
     igObjectRef_Release(positionLockNodeSlot);
     return vtable;
@@ -47,7 +47,7 @@ void beParticleCtrl2InfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beParticleCtrl2InfoWork_callbackList[] = { beModelCtrlNode2_EnsureRegistered, 0 };
 
-void *beParticleCtrl2InfoWork_Register(void) {
+CallbackArray *beParticleCtrl2InfoWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -89,9 +89,9 @@ static int g_beParticleCtrl2InfoWork_fieldOffsets[] = {
 void beParticleCtrl2InfoWork_InitFields(void) {
     int base;
     void *positionLockNode;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beParticleCtrl2InfoWork_metaObject;
+    meta = g_beParticleCtrl2InfoWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beParticleCtrl2InfoWork_ctorTable, 2);
     positionLockNode = (void *)(igMetaObject_GetFieldAt(meta, base));

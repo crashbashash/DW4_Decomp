@@ -15,44 +15,44 @@ done:
 int igExternalImageEntry_GetVTable(void) {
     struct W_14f470 o;
     int r;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.f[1] = 0;
     o.f[6] = 0;
     o.f[7] = 0;
     o.f[9] = 0;
     o.vt = g_igExternalImageEntry_vtable;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = g_igExternalImageEntry_vtable;
     FUN_0014f580((W_14f580 *)&o, 0);
     return r;
 }
 
-void *igDirEntry_Destroy(struct S *arg0, short arg1) {
+igDirEntry *igDirEntry_Destroy(igDirEntry *self, short deleteFlag) {
     void *p;
     int *h;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &g_igDirEntry_vtable[0];
-        if (arg0 != 0) {
-            arg0->f0 = &g_igNamedObject_vtable[0];
-            if (&arg0->f8) {
-                p = arg0->f8;
+    if (self != 0) {
+        self->_vtable = (int)&g_igDirEntry_vtable[0];
+        if (self != 0) {
+            self->_vtable = (int)&g_igNamedObject_vtable[0];
+            if (&self->_name) {
+                p = (void *)self->_name;
                 if (p != 0) {
                     h = (int *)((char *)(p) - 8);
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader(*h, h);
+                        StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
                     }
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (deleteFlag > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 W_14f580 *FUN_0014f580(W_14f580 *t, short flag)
@@ -81,9 +81,9 @@ void igExternalImageEntry_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igExternalImageEntry_Register);
 }
 
-void igExternalImageEntry_Register(void) {
+CallbackArray *igExternalImageEntry_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igExternalImageEntry_metaObject,
         igExternalDirEntry_Register,
@@ -108,7 +108,7 @@ int FUN_0014f760(void) {
 
 igMetaObject *FUN_0014f770(void) {
     if (g_igDisableExt_metaObject == 0) {
-        g_igDisableExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igDisableExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igDisableExt_metaObject;
 }

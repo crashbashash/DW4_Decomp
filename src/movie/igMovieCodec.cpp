@@ -1,5 +1,5 @@
 
-extern "C" int g_igMovieCodec_metaObject[4];
+#include "dw4/igMovieCodec.h"
 extern "C" int igMovieCodec_IsReusable(void);
 extern "C" void igMovieCodec_Initialize(void);
 extern "C" int igMovieCodec_Open(void);
@@ -9,7 +9,7 @@ extern "C" int igMovieCodec_Pause(void);
 extern "C" int igMovieCodec_Update(void);
 extern "C" int igMovieCodec_InitializeDrawing(void);
 extern "C" int igMovieCodec_ReleaseDrawing(void);
-extern "C" int igMovieCodec_GetMeta(void);
+extern "C" igMetaObject *igMovieCodec_GetMeta(void);
 
 /* The igMovieCodec base class declares slots 21-29 as default bodies: every
  * one returns 0 (slot 22 returns nothing), and the concrete codec
@@ -51,8 +51,8 @@ int igMovieCodec_ReleaseDrawing(void) {
     return 0;
 }
 
-int igMovieCodec_GetMeta(void)
+igMetaObject *igMovieCodec_GetMeta(void)
 {
-    return g_igMovieCodec_metaObject[0];
+    return g_igMovieCodec_metaObject;
 }
 

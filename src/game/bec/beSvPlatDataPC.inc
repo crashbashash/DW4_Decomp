@@ -21,7 +21,7 @@ int beSvPlatDataPC_GetVTable(void) {
     *slotListSlot = 0;
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
     obj._vtable = (int)&g_beSvPlatDataPC_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
     igObjectRef_Release(slotListSlot);
     return vtable;
@@ -43,7 +43,7 @@ void beSvPlatDataPC_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvPlatDataPC_Register);
 }
 
-void *beSvPlatDataPC_Register(void) {
+CallbackArray *beSvPlatDataPC_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -2,12 +2,10 @@
 #include "dw4/igTDataList.h"
 #include "dw4/igCommonTraversalDispatchView.h"
 #include "dw4/beNodeAnim.h"
-extern "C" {
-void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index);
-int igTraversal_TraverseChildren(igCommonTraversal *traversal, beNodeAnim *node);
-void igObjectPool_Grow(igObjectPool *pool, void *create);
-void igTimeAttr_CreateInstance();
-}
+#include "dw4/igAttrStackManager.h"
+#include "dw4/igObjectPool.h"
+#include "dw4/igTimeAttr.h"
+#include "dw4/igTraversal.h"
 typedef void (*AttrPopProc)(void *attr, int data);
 /* The attribute list of one stack: count and storage of the pushed attributes. */
 typedef igTDataList<igAttr *> AttrList;
@@ -44,7 +42,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     time = beNodeAnim_UpdateTime(node, now);
     timePool = (igObjectPool *)traversal->_timePool;
     if (timePool->_freeIndex >= timePool->_count) {
-        igObjectPool_Grow(timePool, (void *)&igTimeAttr_CreateInstance);
+        igObjectPool_Grow(timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
     }
     slot = timePool->_freeIndex;
     timePool->_freeIndex = slot + 1;
@@ -64,7 +62,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     }
     ((AttrList *)stack)->set(count, &pushed);
     igAttrStackManager_MarkStackChanged(attrs, stack, index);
-    result = igTraversal_TraverseChildren(traversal, node);
+    result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
     popIndex = *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex];
     top = ((igAttrStack **)((igAttrStackList *)attrs->_attrStacks)->_data)[popIndex];
     last = top->_count - 1;

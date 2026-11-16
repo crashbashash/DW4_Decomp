@@ -12,7 +12,7 @@ igMetaObject *beCopyModelCtrl2_GetMetaObject(void)
 
 int beCopyModelCtrl2_GetVTable(void) {
     CopyModelCtrl2View copy;
-    return *(int *)((char *)&copy + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&copy + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beCopyModelCtrl2_EnsureRegistered(void)
@@ -22,12 +22,12 @@ void beCopyModelCtrl2_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCopyModelCtrl2_callbackList[] = { beModelCtrlNode2_EnsureRegistered, 0 };
 
-void *beCopyModelCtrl2_Register(void) {
+CallbackArray *beCopyModelCtrl2_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCopyModelCtrl2_metaObject,
-        igTransform_Register,
+        (igMetaObjectRegisterFunction)igTransform_Register,
         igTransform_GetPublishedMetaObject,
         beCopyModelCtrl2_GetMetaObjectFunction,
         "beCopyModelCtrl2",
@@ -60,9 +60,9 @@ static int g_beCopyModelCtrl2_fieldOffsets[] = {
 void beCopyModelCtrl2_InitFields(void) {
     int base;
     void *srcNode;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCopyModelCtrl2_metaObject;
+    meta = g_beCopyModelCtrl2_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCopyModelCtrl2_ctorTable, 1);
     srcNode = (void *)(igMetaObject_GetFieldAt(meta, base));

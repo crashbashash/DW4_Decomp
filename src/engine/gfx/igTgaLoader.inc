@@ -12,7 +12,7 @@ igMetaField *g_igTgaLoader_sbprMetaField;
 
 int FUN_00150060(int arg0) {
     FUN_00150200();
-    return igMetaObject_CreateInstance(g_igTgaLoader_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igTgaLoader_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igTgaLoader_GetMetaObject(void)
@@ -29,11 +29,11 @@ int igTgaLoader_GetVTable(void) {
     int *temp_a0;
     int temp_s0;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     ps = &o.ref;
     o.vt = &g_igTgaLoader_vtable[0];
     *ps = 0;
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igTgaLoader_vtable[0];
     if (ps != 0) {
         temp_a0 = *ps;
@@ -72,9 +72,9 @@ void FUN_00150200(void)
 
 static igMetaObjectCallback g_igTgaLoader_callbackList[] = { igFile_EnsureRegistered, 0 };
 
-void igTgaLoader_Register(void) {
+CallbackArray *igTgaLoader_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTgaLoader_metaObject,
         igImageLoader_Register,
@@ -98,16 +98,16 @@ igMetaObject *FUN_001502a0(void) {
 }
 
 static FieldFactory g_igTgaLoader_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTgaLoader_fieldTable[] = {
     "_file",

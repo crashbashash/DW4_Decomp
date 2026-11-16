@@ -2,7 +2,7 @@ igMetaObject *g_igVisualAttribute_metaObject;
 
 igMetaObject *FUN_00130310(void) {
     if (g_igVisualAttribute_metaObject == 0) {
-        g_igVisualAttribute_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igVisualAttribute_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igVisualAttribute_metaObject;
 }
@@ -20,9 +20,9 @@ void FUN_001303b0(void)
     igMetaObject_RunStaticInit(igVisualAttribute_Register);
 }
 
-void igVisualAttribute_Register(void) {
+CallbackArray *igVisualAttribute_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVisualAttribute_metaObject,
         igAttr_Register,

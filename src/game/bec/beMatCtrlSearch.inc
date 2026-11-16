@@ -7,7 +7,7 @@ igMetaField *g_beMatCtrlSearch_memberListMetaField;
 
 igMetaObject *beMatCtrlSearch_GetOrCreateMetaObject(void) {
     if (g_beMatCtrlSearch_metaObject == 0) {
-        g_beMatCtrlSearch_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMatCtrlSearch_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMatCtrlSearch_metaObject;
 }
@@ -29,7 +29,7 @@ int beMatCtrlSearch_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
     memberListSlot = (igObject **)&obj._memberList;
     *memberListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
     igObjectRef_Release(memberListSlot);
     return vtable;
@@ -42,7 +42,7 @@ void beMatCtrlSearch_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMatCtrlSearch_callbackList[] = { beMatCtrlSearchList_EnsureRegistered, 0 };
 
-void *beMatCtrlSearch_Register(void) {
+CallbackArray *beMatCtrlSearch_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -97,9 +97,9 @@ void beMatCtrlSearch_InitFields(void) {
     int base;
     void *memberList;
     void *parent;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMatCtrlSearch_metaObject;
+    meta = g_beMatCtrlSearch_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlSearch_ctorTable, 5);
     parent = (void *)(igMetaObject_GetFieldAt(meta, base + 3));

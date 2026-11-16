@@ -1,42 +1,32 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beMeterCtrl.h"
+#include "dw4/beMeterCtrlInfo.h"
+#include "dw4/igObject.h"
 
 extern "C" void beMeterCtrl_Prepare(void);
 extern "C" void beMeterCtrl_UpdateRam(beMeterCtrl *self, beBaseInfoRam *ram);
-extern "C" int beMeterCtrl_GetInfoMeta(void);
-extern "C" int beMeterCtrl_GetMeta(void);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int beMeterCtrl_GetMsgActionEnum(...);
-extern "C" int beMessenger_AppendFloat(int, float);
-extern "C" float beMessenger_GetFloat(int, int);
-extern "C" int beMessenger_GetInt(int, int);
-extern "C" void *beMessenger_GetObject(int, int);
-extern "C" int beMessenger_GetString(int, int);
-extern "C" int beMessenger_PopArgContext(int);
-extern "C" int beMessenger_PushArgContext(int);
-extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
-extern "C" int beMessenger_SendNamed(int, void *, int, int, void *);
-extern "C" int igObject_Destroy(...);
-extern "C" int g_beMeterCtrlInfo_metaObject[4];
-extern "C" int g_beMeterCtrl_metaObject[4];
+extern "C" igMetaObject *beMeterCtrl_GetInfoMeta(void);
+extern "C" igMetaObject *beMeterCtrl_GetMeta(void);
 extern "C" char METERCTRL_3[];
 extern "C" void beMeterCtrl_OnAddRam(beMeterCtrl * p0, int p1, char * p2);
-extern "C" int MODELCTRL_11[4];
-extern "C" int GETHP_2[4];
+extern "C" char MODELCTRL_11[];
+extern "C" char GETHP_2[];
 extern "C" int beMeterCtrl_OnMessageText(beMeterCtrl *self, beBaseInfoRam *ram, int message);
 
 void beMeterCtrl_Prepare(void)
 {
 }
 
-int beMeterCtrl_GetInfoMeta(void)
+igMetaObject *beMeterCtrl_GetInfoMeta(void)
 {
-    return g_beMeterCtrlInfo_metaObject[0];
+    return g_beMeterCtrlInfo_metaObject;
 }
 
 void beMeterCtrl_OnAddRam(beMeterCtrl * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, METERCTRL_3);
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)p0->_messenger, (beBaseInfoRam *)p1, METERCTRL_3);
 }
 
 static inline float RatioTime(const float maxValue)
@@ -166,51 +156,52 @@ int beMeterCtrl_OnMessageText(beMeterCtrl *self, beBaseInfoRam *ram, int message
     beMeterCtrlOneData *s1;
     igObjectList *l;
     float f0, f2, f3, v;
-    int s3, s0;
+    const char *s3;
+    int s0;
     igObject *o;
     l = (igObjectList *)((beMeterCtrlInfo *)ram->_parentInfo)->_oneDataList;
     s1 = ((beMeterCtrlOneData **)l->_data)[ram->_ramNo];
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beMeterCtrl_GetMsgActionEnum(l), message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beMeterCtrl_GetMsgActionEnum(), (const char *)message)) {
     case 0:
-        beMessenger_AppendFloat(self->_messenger, s1->_nowValueF);
+        beMessenger_AppendFloat((beMessenger *)self->_messenger, s1->_nowValueF);
         return 1;
     case 1:
-        f0 = beMessenger_GetFloat(self->_messenger, 0);
+        f0 = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
         s1->_nowValueF = f0;
         s1->_dspValueF = f0;
         s1->_isChange = 1;
         return 1;
     case 2:
-        v = beMessenger_GetFloat(self->_messenger, 0);
+        v = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
         v += s1->_nowValueF;
         if (v > s1->_maxValueF) v = s1->_maxValueF; else if (v < 0.0f) v = 0.0f;
         s1->_nowValueF = v;
         return 1;
     case 3:
-        beMessenger_AppendFloat(self->_messenger, s1->_nowValueF / s1->_maxValueF);
+        beMessenger_AppendFloat((beMessenger *)self->_messenger, s1->_nowValueF / s1->_maxValueF);
         return 1;
     case 4:
         if (s1->_hp == 0) {
-            SetNowPercent(s1, beMessenger_GetFloat(self->_messenger, 0));
+            SetNowPercent(s1, beMessenger_GetFloat((beMessenger *)self->_messenger, 0));
         }
         return 1;
     case 5:
         f2 = s1->_maxValueF;
-        v = beMessenger_GetFloat(self->_messenger, 0); v = (v * f2) / 100.0f;
+        v = beMessenger_GetFloat((beMessenger *)self->_messenger, 0); v = (v * f2) / 100.0f;
         v += s1->_nowValueF;
         if (v > s1->_maxValueF) v = s1->_maxValueF; else if (v < 0.0f) v = 0.0f;
         s1->_nowValueF = v;
         return 1;
     case 6:
-        s1->_maxValueF = beMessenger_GetFloat(self->_messenger, 0);
+        s1->_maxValueF = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
         beMeterCtrl_SetupMaxValue(self, s1);
         return 1;
     case 7:
-        s3 = beMessenger_GetString(self->_messenger, 0);
-        s0 = beMessenger_GetInt(self->_messenger, 0);
-        beMessenger_PushArgContext(self->_messenger);
-        beMessenger_SendNamed(self->_messenger, &MODELCTRL_11[0], s3, s0, &GETHP_2[0]);
-        o = (igObject *)beMessenger_GetObject(self->_messenger, 0);
+        s3 = beMessenger_GetString((beMessenger *)self->_messenger, 0);
+        s0 = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+        beMessenger_PushArgContext((beMessenger *)self->_messenger);
+        beMessenger_SendNamed((beMessenger *)self->_messenger, (const char *)MODELCTRL_11, s3, s0, (const char *)GETHP_2);
+        o = beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         if (o != 0) o->_refCount = o->_refCount + 1;
         {
             igObject *old = (igObject *)s1->_hp;
@@ -220,7 +211,7 @@ int beMeterCtrl_OnMessageText(beMeterCtrl *self, beBaseInfoRam *ram, int message
             }
         }
         s1->_hp = (int)o;
-        o = (igObject *)beMessenger_GetObject(self->_messenger, 1);
+        o = beMessenger_GetObject((beMessenger *)self->_messenger, 1);
         if (o != 0) o->_refCount = o->_refCount + 1;
         {
             igObject *old = (igObject *)s1->_mHp;
@@ -230,14 +221,14 @@ int beMeterCtrl_OnMessageText(beMeterCtrl *self, beBaseInfoRam *ram, int message
             }
         }
         s1->_mHp = (int)o;
-        beMessenger_PopArgContext(self->_messenger);
+        beMessenger_PopArgContext((beMessenger *)self->_messenger);
         return 1;
     default:
         return 0;
     }
 }
 
-int beMeterCtrl_GetMeta(void)
+igMetaObject *beMeterCtrl_GetMeta(void)
 {
-    return g_beMeterCtrl_metaObject[0];
+    return g_beMeterCtrl_metaObject;
 }

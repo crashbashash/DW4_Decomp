@@ -1,6 +1,7 @@
 #ifndef DW4_IGTRANSFORM_H
 #define DW4_IGTRANSFORM_H
 
+struct CallbackArray;
 struct igMetaObject;
 struct igTransform;
 
@@ -11,7 +12,7 @@ extern "C" {
 extern struct igMetaObject *g_igTransform_metaObject;
 struct igTransform *igTransform_CreateInstance(int allocator);
 struct igMetaObject *igTransform_GetOrCreateMetaObject(void);
-void igTransform_Register(void);
+struct CallbackArray *igTransform_Register(void);
 
 #ifdef __cplusplus
 }

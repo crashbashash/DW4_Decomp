@@ -3,7 +3,7 @@ igMetaField *g_beKeyboardReceiver_keyboardMetaField;
 
 igMetaObject *beKeyboardReceiver_GetOrCreateMetaObject(void) {
     if (g_beKeyboardReceiver_metaObject == 0) {
-        g_beKeyboardReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beKeyboardReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beKeyboardReceiver_metaObject;
 }
@@ -25,7 +25,7 @@ int beKeyboardReceiver_GetVTable(void) {
     obj._vtable = (int)&g_beKeyboardReceiver_vtable[0];
     keyboardSlot = (igObject **)&obj._keyboard;
     *keyboardSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beKeyboardReceiver_vtable[0];
     igObjectRef_Release(keyboardSlot);
     return vtable;
@@ -38,7 +38,7 @@ void beKeyboardReceiver_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beKeyboardReceiver_callbackList[] = { igBoolList_EnsureRegistered, 0 };
 
-void *beKeyboardReceiver_Register(void) {
+CallbackArray *beKeyboardReceiver_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -76,13 +76,13 @@ static int g_beKeyboardReceiver_fieldOffsets[] = {
 void beKeyboardReceiver_InitFields(void) {
     int base;
     void *keyboard;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beKeyboardReceiver_metaObject;
+    meta = g_beKeyboardReceiver_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beKeyboardReceiver_ctorTable, 1);
     keyboard = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)keyboard)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)keyboard)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)keyboard)->_construct = 1;
     igMetaObject_NameFields(meta, g_beKeyboardReceiver_fieldTable, g_beKeyboardReceiver_fieldHandles, g_beKeyboardReceiver_fieldOffsets, base);
 }

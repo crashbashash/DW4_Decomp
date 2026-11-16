@@ -1,5 +1,6 @@
 /* libdma: the EE DMA controller's channels and their environment (libdma.a's libdma.o). */
 
+#include "dw4/sony/libdma.h"
 #include "dw4/libkernl.h"
 
 typedef struct {

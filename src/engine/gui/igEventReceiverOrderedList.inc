@@ -2,7 +2,7 @@ igMetaObject *g_igEventReceiverOrderedList_metaObject;
 
 igMetaObject *FUN_00451050(void) {
     if (g_igEventReceiverOrderedList_metaObject == 0) {
-        g_igEventReceiverOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igEventReceiverOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igEventReceiverOrderedList_metaObject;
 }
@@ -18,13 +18,13 @@ igMetaObject *igEventReceiverOrderedList_GetMetaObject(void)
 int igEventReceiverOrderedList_GetVTable(void) {
     union U_4510f0 u;
     int t;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[20] = 0;
     u.vt = (int)&g_igEventReceiverOrderedList_vtable[0];
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igEventReceiverOrderedList_vtable[0];
     FUN_00451160((int **)u.b, 0);
     return t;
@@ -54,9 +54,9 @@ void igEventReceiverOrderedList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igEventReceiverOrderedList_callbackList[] = { igEventReceiver_EnsureRegistered, 0 };
 
-void igEventReceiverOrderedList_Register(void) {
+CallbackArray *igEventReceiverOrderedList_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEventReceiverOrderedList_metaObject,
         igDependencyOrderedList_Register,

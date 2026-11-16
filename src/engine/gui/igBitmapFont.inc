@@ -4,7 +4,7 @@ igMetaField *g_igBitmapFont_textureBindMetaField;
 
 igMetaObject *FUN_004524f0(void) {
     if (g_igBitmapFont_metaObject == 0) {
-        g_igBitmapFont_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBitmapFont_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBitmapFont_metaObject;
 }
@@ -20,17 +20,17 @@ igMetaObject *igBitmapFont_GetMetaObject(void)
 int igBitmapFont_GetVTable(void) {
     struct Obj_452590 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w2 = 0;
     obj.w5 = 0;
     obj.vt = &g_igBitmapFont_vtable[0];
     obj.w7 = 0;
     obj.w8 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igBitmapFont_vtable[0];
     FUN_0019aa10(&obj.w8, -1);
     igSmartPointer_igCharMetricsList_Destruct(&obj.w7, -1);
-    igFont_Destroy(&obj, 0);
+    igFont_Destroy((igFont *)&obj, 0);
     return t;
 }
 
@@ -41,9 +41,9 @@ void igBitmapFont_RunStaticInit(void)
 
 static igMetaObjectCallback g_igBitmapFont_callbackList[] = { igCharMetricsList_RunStaticInit, igTextureBindAttr_EnsureRegistered, 0 };
 
-void igBitmapFont_Register(void) {
+CallbackArray *igBitmapFont_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBitmapFont_metaObject,
         igFont_Register,
@@ -90,14 +90,14 @@ void igBitmapFont_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igBitmapFont_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igBitmapFont_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBitmapFont_ctorTable, 2);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00452790();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00132850();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igBitmapFont_fieldTable, g_igBitmapFont_fieldHandles, g_igBitmapFont_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBitmapFont_fieldTable, g_igBitmapFont_fieldHandles, g_igBitmapFont_fieldOffsets, temp_s2);
 }
 

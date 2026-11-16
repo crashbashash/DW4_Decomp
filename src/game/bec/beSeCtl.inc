@@ -3,12 +3,12 @@ igMetaField *g_beSeCtl_sndMngMetaField;
 
 beSeCtl *beSeCtl_CreateInstance(int allocator) {
     beSeCtl_EnsureRegistered();
-    return (beSeCtl *)igMetaObject_CreateInstance(*(int *)0x587FE8, allocator);
+    return (beSeCtl *)igMetaObject_CreateInstance(g_beSeCtl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSeCtl_GetOrCreateMetaObject(void) {
     if (g_beSeCtl_metaObject == 0) {
-        g_beSeCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSeCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSeCtl_metaObject;
 }
@@ -37,7 +37,7 @@ int beSeCtl_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beSeCtl_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -52,7 +52,7 @@ void beSeCtl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSeCtl_callbackList[] = { beSound_EnsureRegistered, 0 };
 
-void *beSeCtl_Register(void) {
+CallbackArray *beSeCtl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -90,9 +90,9 @@ static int g_beSeCtl_fieldOffsets[] = {
 void beSeCtl_InitFields(void) {
     int base;
     void *sndMng;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSeCtl_metaObject;
+    meta = g_beSeCtl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSeCtl_ctorTable, 1);
     sndMng = (void *)(igMetaObject_GetFieldAt(meta, base));

@@ -5,14 +5,15 @@ struct AllocatorValue;
 struct ObjectRefTarget;
 struct beNDMWLoadIntf2;
 struct igDataList;
+struct igMemoryPoolHandle;
 struct igMetaObject;
 struct igObject;
 
 extern "C" {
 extern igMetaObject *g_beNDMWLoadIntf2_metaObject;
-void Vec3f_Copy(void *destination, void *source);
+void Vec3f_Copy(void *destination, const void *source);
 beNDMWLoadIntf2 *beNDMWLoadIntf2_CreateInstance(int allocator);
-int beNDMWLoadIntf2_Memory_SelectAllocator(const int *selector, int ownAllocator);
+int beNDMWLoadIntf2_Memory_SelectAllocator(const igMemoryPoolHandle *selector, int ownAllocator);
 void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, const void *name);
 AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(int allocator);
 int beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(igDataList *list, int index);

@@ -25,7 +25,7 @@ igMetaField *g_igViewerStatisticsManager_mvmAttrCountMetaField;
 
 igMetaObject *FUN_004586a0(void) {
     if (g_igViewerStatisticsManager_metaObject == 0) {
-        g_igViewerStatisticsManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igViewerStatisticsManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igViewerStatisticsManager_metaObject;
 }

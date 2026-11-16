@@ -1,4 +1,4 @@
-void Gap__Attrs__igStencilFunctionAttr__vfunc_24(igStencilFunctionAttr *arg0, int arg1) {
+void Gap__Attrs__igStencilFunctionAttr__vfunc_24(igStencilFunctionAttr *arg0, igPsx2VisualContext *arg1) {
     Gap__Gfx__igPsx2VisualContext__vfunc_165(arg1, arg0->_stenFailOp, arg0->_stenPassZPassOp, arg0->_stenPassZFailOp);
     Gap__Gfx__igPsx2VisualContext__vfunc_161(arg1, arg0->_refVal);
     Gap__Gfx__igPsx2VisualContext__vfunc_163(arg1, arg0->_func);

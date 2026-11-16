@@ -7,7 +7,7 @@ igMetaField *g_beModelCtrlHITBOX_boxSizeMetaField;
 
 beModelCtrlHITBOX *beModelCtrlHITBOX_Create(int allocator) {
     beModelCtrlHITBOX_EnsureRegistered();
-    return (beModelCtrlHITBOX *)igMetaObject_CreateInstance(*(int *)0x588D20, allocator);
+    return (beModelCtrlHITBOX *)igMetaObject_CreateInstance(g_beModelCtrlHITBOX_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beModelCtrlHITBOX_GetMetaObject(void)
@@ -29,7 +29,7 @@ int beModelCtrlHITBOX_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlHITBOX_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -40,7 +40,7 @@ void beModelCtrlHITBOX_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlHITBOX_Register);
 }
 
-void *beModelCtrlHITBOX_Register(void) {
+CallbackArray *beModelCtrlHITBOX_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -93,9 +93,9 @@ static int g_beModelCtrlHITBOX_fieldOffsets[] = {
 
 void beModelCtrlHITBOX_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlHITBOX_metaObject;
+    meta = g_beModelCtrlHITBOX_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlHITBOX_ctorTable, 5);
     igMetaObject_NameFields(meta, g_beModelCtrlHITBOX_fieldTable, g_beModelCtrlHITBOX_fieldHandles, g_beModelCtrlHITBOX_fieldOffsets, base);

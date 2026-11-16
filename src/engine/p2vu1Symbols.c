@@ -1,8 +1,7 @@
 /* The VU1 microcode's symbol table: the linked-in text of `sym.ini`, `name;offset;` pairs naming each
  * program's entry and end in the microcode image. */
+#include <string.h>
 #include "dw4/p2vu1Symbols.h"
-int strlen(const char *s);
-int strcmp(const char *a, const char *b);
 int atoi(const char *s);
 
 extern char p2Vu1SymbolText[];
@@ -43,12 +42,12 @@ int p2FindVu1Symbol(const char *name) {
     do {
         entry = p2Vu1SymbolText + offset;
         if (strcmp(entry, name) == 0) {
-            offset = offset + (strlen(entry) + 1);
+            offset += strlen(entry) + 1;
             address = p2Vu1SymbolBase + atoi(p2Vu1SymbolText + offset);
             break;
         }
-        offset = offset + (strlen(entry) + 1);
-        offset = offset + (strlen(p2Vu1SymbolText + offset) + 1);
+        offset += strlen(entry) + 1;
+        offset += strlen(p2Vu1SymbolText + offset) + 1;
     } while (offset < p2Vu1SymbolTextLength);
     return address;
 }

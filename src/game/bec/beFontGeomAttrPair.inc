@@ -5,7 +5,7 @@ igMetaField *g_beFontGeomAttrPair_geomAttrsMetaField;
 
 beFontGeomAttrPair *beFontGeomAttrPair_Create(int allocator) {
     beFontGeomAttrPair_EnsureRegistered();
-    return (beFontGeomAttrPair *)igMetaObject_CreateInstance(*(int *)0x5896D8, allocator);
+    return (beFontGeomAttrPair *)igMetaObject_CreateInstance(g_beFontGeomAttrPair_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beFontGeomAttrPair_GetMetaObject(void) {
@@ -34,7 +34,7 @@ int beFontGeomAttrPair_GetVTable(void) {
     *panelSlot = 0;
     geomAttrsSlot = (igObject **)&obj._geomAttrs;
     *geomAttrsSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFontGeomAttrPair_vtable[0];
     igObjectRef_Release(geomAttrsSlot);
     igStringRef_Release(panelSlot);
@@ -49,7 +49,7 @@ void beFontGeomAttrPair_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beFontGeomAttrPair_callbackList[] = { igGeometryAttrList_EnsureRegistered, 0 };
 
-void *beFontGeomAttrPair_Register(void) {
+CallbackArray *beFontGeomAttrPair_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -95,13 +95,13 @@ static int g_beFontGeomAttrPair_fieldOffsets[] = {
 void beFontGeomAttrPair_InitFields(void) {
     int base;
     void *geomAttrs;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beFontGeomAttrPair_metaObject;
+    meta = g_beFontGeomAttrPair_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFontGeomAttrPair_ctorTable, 3);
     geomAttrs = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)geomAttrs)->_metaObject = igGeometryAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)geomAttrs)->_metaObject = (int)igGeometryAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)geomAttrs)->_construct = 1;
     igMetaObject_NameFields(meta, g_beFontGeomAttrPair_fieldTable, g_beFontGeomAttrPair_fieldHandles, g_beFontGeomAttrPair_fieldOffsets, base);
 }

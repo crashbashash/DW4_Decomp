@@ -31,7 +31,7 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
     S_ref *q1;
     S_ref *q2;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igCompressedAnimationSequenceQS_vtable[0];
     q2 = (S_ref *)&u.b[8];
     *(int *)q2 = 0;
@@ -39,14 +39,14 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igCompressedAnimationSequenceQS_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }
@@ -55,7 +55,7 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
         if (q1 != 0) {
             q1->f4 = (int)((int) (q1->f4 - 1));
             if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q1);
+                igObject_Destroy((igObject *)q1);
             }
         }
     }
@@ -64,7 +64,7 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
         if (q2 != 0) {
             q2->f4 = (int)((int) (q2->f4 - 1));
             if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q2);
+                igObject_Destroy((igObject *)q2);
             }
         }
     }
@@ -78,9 +78,9 @@ void igCompressedAnimationSequenceQS_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igCompressedAnimationSequenceQS_callbackList[] = { igUnsignedShortList_EnsureRegistered, 0 };
 
-void igCompressedAnimationSequenceQS_Register(void) {
+CallbackArray *igCompressedAnimationSequenceQS_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCompressedAnimationSequenceQS_metaObject,
         igAnimationSequence_Register,
@@ -100,18 +100,18 @@ void thunk_igCompressedAnimationSequenceQS_GetMetaObject(void) {
 }
 
 static FieldFactory g_igCompressedAnimationSequenceQS_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igUnsignedLongMetaField_Create,
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
-    igUnsignedCharMetaField_Create,
-    igUnsignedCharArrayMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igUnsignedLongMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igUnsignedCharMetaField_Create,
+    (FieldFactory)igUnsignedCharArrayMetaField_Create,
 };
 static const char *g_igCompressedAnimationSequenceQS_fieldTable[] = {
     "_compressedTranslationList",
@@ -195,7 +195,7 @@ void **FUN_001a2b40(void **arg0, short arg1) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((void *)r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (arg1 > 0) {
@@ -211,7 +211,7 @@ ObjectRefWord *FUN_001a2bc0(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }

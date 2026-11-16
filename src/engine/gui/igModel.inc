@@ -3,7 +3,7 @@ igMetaField *g_igModel_viewsMetaField;
 
 igMetaObject *FUN_0044d5d0(void) {
     if (g_igModel_metaObject == 0) {
-        g_igModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igModel_metaObject;
 }
@@ -20,10 +20,10 @@ int igModel_GetVTable(void) {
     struct Obj_44d670 obj;
     char *o;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igModel_vtable[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igModel_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -44,9 +44,9 @@ void igModel_RunStaticInit(void)
 
 static igMetaObjectCallback g_igModel_callbackList[] = { igNonRefCountedViewList_EnsureRegistered, 0 };
 
-void igModel_Register(void) {
+CallbackArray *igModel_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igModel_metaObject,
         igObject_Register,
@@ -84,11 +84,11 @@ void igModel_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igModel_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igModel_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igModel_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044b880();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igModel_fieldTable, g_igModel_fieldHandles, g_igModel_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igModel_fieldTable, g_igModel_fieldHandles, g_igModel_fieldOffsets, temp_s2);
 }
 

@@ -1,4 +1,7 @@
+#include <string.h>
+#include "dw4/p2core.h"
 #include "dw4/p2lighting.h"
+#include "dw4/renderState.h"
 
 /* p2DirtyFlags: the renderer state the next draw must send again. */
 enum {
@@ -10,15 +13,7 @@ enum {
     P2_NORMAL_ARRAYS = 0xE180
 };
 
-void *memcpy(void *dst, const void *src, unsigned int size);
 float sqrtf(float x);
-void p2DisableCapability(int capability);
-
-extern int p2DirtyFlags;
-extern unsigned int p2ProgramFlags[];
-extern int p2CurrentProgram;
-extern long long p2VertexArrayMask;
-extern int p2LightCalcPending;
 
 extern char p2LightingEnabled;
 extern char p2LightsNeedTransform;
@@ -35,13 +30,6 @@ extern int p2NormalArraySource;
 extern int p2NormalArrayMask;
 extern int p2LightSpecular;
 extern float p2LightMatrix[16];
-extern int p2LightingProgramBits;
-
-extern long long p2StatLightingSwitches;
-extern long long p2StatMaterialSets;
-extern long long p2StatLightingModeSets;
-extern long long p2StatLightSets;
-extern long long p2StatLightSwitches;
 
 void p2InitLighting(void) {
     int i;

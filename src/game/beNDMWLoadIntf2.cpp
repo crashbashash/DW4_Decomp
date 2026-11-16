@@ -6,34 +6,38 @@
 #include "dw4/beNDMWLoadIntf2SelSlot.h"
 #include "dw4/beNDMWLoadSavePlWork.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/StringPool.h"
+#include "dw4/be.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beDataBase.h"
+#include "dw4/beFont.h"
+#include "dw4/beLoadIntf2ComMdlData.h"
+#include "dw4/beLua.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWDegiData.h"
+#include "dw4/beNDMWLoadCtrl2.h"
+#include "dw4/beNDMWLoadCtrl2CommonIntf.h"
+#include "dw4/beNDMWLoadIntf2CtrlData.h"
+#include "dw4/beNDMWLoadIntf2DegiStateCtrl.h"
+#include "dw4/beNDMWLoadIntf2Diffselect.h"
+#include "dw4/beNDMWLoadIntf2Info.h"
+#include "dw4/beNDMWLoadIntf2MakeChr.h"
+#include "dw4/beNDMWLoadIntf2MesWin.h"
+#include "dw4/beNDMWLoadIntf2NameSel.h"
+#include "dw4/beNDMWLoadIntf2TextOrder.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beSystem.h"
+#include "dw4/beUnicodeObj.h"
+#include "dw4/igAnimationCombiner.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include <stdio.h>
+#include <string.h>
 
-extern "C" int beUnicodeObj_AllocateBuffer(...);
-extern "C" int sprintf(...);
-extern "C" int TextOrder_ConfigureFont(...);
-extern "C" int beNDMWLoadIntf2TextOrder_PublishIdLines(...);
-extern "C" int TextOrder_ConfigureUnicode(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int *beDataBase_GetRecordString(...);
-extern "C" int beMessenger_GetObject(...);
-extern "C" int beMessenger_SendNamed(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" int strcmp(...);
-extern "C" int TextOrder_ClearFont(...);
-extern "C" int TextOrder_PublishLineListOnly(...);
-extern "C" int beNDMWLoadIntf2MesWin__RequestMessage(...);
-extern "C" void *StringPool_Allocate(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" void *StringPool_Construct(...);
-extern "C" void * StringPool_Intern(...);
-extern "C" int beMessenger_AppendVec3(int, float *);
-extern "C" int beMessenger_DispatchSelected(int, const void *);
-extern "C" int beMessenger_SelectReceivers(int, const void *, int, int);
-extern "C" int beMessenger_AppendString(int, int);
-extern "C" int beMessenger_GetBool(int, int);
-extern "C" void igObject_Destroy(void *);
-extern "C" void *igProperty_FindByName(int list, int nameField, const void *name);
-extern "C" int beBaseInfoDataList_Create(int);
 /* An allocator handle returned by value. */
 struct AllocatorValue {
   int allocator;
@@ -43,26 +47,12 @@ struct AllocatorValue {
 extern "C" int beNDMWLoadIntf2__GetInfoMeta(void);
 extern "C" int beNDMWLoadIntf2__GetMeta(void);
 extern "C" void beNDMWLoadIntf2DegiState__RequestChange(beNDMWLoadIntf2DegiState *self, int kind, int dataNo);
-extern "C" beUnicodeObj * beUnicodeObj_Create(...);
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beNDMWLoadIntf2DegiState__DrawStatusText(beNDMWLoadIntf2DegiState *self);
 extern "C" void beNDMWLoadIntf2DegiState__ClearStatusText(beNDMWLoadIntf2DegiState *self);
-/* One row of the player-model table: the model name and the open and face sequences its face
- * window plays. */
-struct PlayerModelRow {
-    const char *model;
-    const char *openSequence;
-    const char *faceSequence;
-};
-extern "C" PlayerModelRow g_playerModelRow[16];
 
 
 
 
-extern "C" void *g_stringPool[4];
-extern "C" bePadData * bePadManager_GetPadForPlayer(...);
-extern "C" int beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(beNDMWLoadCtrl2CommonIntf *, int);
 extern "C" void beNDMWLoadIntf2Diffselect__Init(beNDMWLoadIntf2Diffselect *self, int kind, int plNo);
 extern "C" unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self, unsigned char usePad);
 extern "C" void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, unsigned char resetName);
@@ -145,23 +135,15 @@ float g_interfaceKindPositions[4][3] = {
 const char *g_starterSelectModelNames[4] = { "h_agumon", "h_vmon", "h_girumon", "h_dorumon" };
 const char *g_starterPlayerModelNames[4] = { "p_agumon", "p_vmon", "p_girumon", "p_dorumon" };
 }
-extern "C" beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int allocator);
-extern "C" int kIGMemoryPoolHandleUser1[4];
 /* Header in front of the text of an interned string: the owning chunk and the reference count. */
 struct StringTokenHeader {
     int owner;
     int refCount;
 };
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName);
-extern "C" int List_RemoveWordAt(beLoadIntf2ComMdlDataList *list, int index);
-extern "C" igObject *igInsightCore_FindManager(int, int);
-extern "C" int g_bePadManager_metaObject[4];
+extern "C" unsigned char beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName);
 extern "C" void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 extern "C" int beNDMWLoadIntf2_beNDMWDegiDataList_Get(igDataList *list, int index);
-extern "C" int g_beNDMWLoadIntf2Info_metaObject[4];
-extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, const void *);
 extern "C" void beNDMWLoadIntf2_OnAddRam(beNDMWLoadIntf2 *self, beBaseInfoRam *ram);
 
 /* The request a beNDMWLoadIntf2DegiState is carrying out (_st0). */
@@ -202,7 +184,7 @@ static inline void FindPlayerModel(beNDMWDegiData *data, int *index) {
     int row = 0;
     PlayerModelRow *entry = g_playerModelRow;
     do {
-        if (strcmp(entry->model, data->_dmkind) == 0) {
+        if (strcmp(entry->model, (const char *)data->_dmkind) == 0) {
             *index = row;
             break;
         }
@@ -223,8 +205,8 @@ static inline void NoteUseData(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *d
 /* Writes the record's name (the text after the leading marker unit of _dmNameUni, at most eight
  * characters) into status text slot nameSlot. */
 static inline void DrawName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int nameSlot) {
-    int allocator = igObject_GetAllocator(self);
-    igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
+    int allocator = (int)igObject_GetAllocator(self);
+    igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)));
     beUnicodeObj_AllocateBuffer(text.p, 8);
     unsigned short *dst = (unsigned short *)text.p->_buffer;
     const unsigned short *name = data->_dmNameUni;
@@ -237,32 +219,32 @@ static inline void DrawName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data
     for (; i < 8; i++) {
         dst[i] = 0;
     }
-    TextOrder_ConfigureUnicode(self->_textOrder, "CHRSELFONT03", self->_plNo, nameSlot, text.p, 0, 0);
+    TextOrder_ConfigureUnicode((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT03", self->_plNo, nameSlot, text.p, 0, 0);
 }
 
 /* Writes the database name of the record's Digimon kind into status text slot kindSlot. */
 static inline void DrawKindName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int kindSlot) {
     int modelIndex;
     int database;
-    beMessenger_SendNamed(self->_messenger, "DATABASE", "shinka", 0, "GETDATABASE");
-    database = beMessenger_GetObject(self->_messenger, 0);
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "DATABASE", "shinka", 0, "GETDATABASE");
+    database = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
     FindPlayerModel(data, &modelIndex);
-    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT04", self->_plNo, kindSlot, beDataBase_GetRecordString(database, modelIndex, "NAME"), 0, 0);
+    TextOrder_ConfigureFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT04", self->_plNo, kindSlot, beDataBase_GetRecordString((beDataBase *)database, modelIndex, "NAME"), 0, 0);
 }
 
 /* Writes the record's level, HP/max HP and MP/max MP as numbers into their status text slots. */
 static inline void DrawStats(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int levelSlot, int hpSlot, int maxHpSlot, int mpSlot, int maxMpSlot) {
     char number[32];
     sprintf(number, "%d", data->_lv);
-    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT04", self->_plNo, levelSlot, number, 1, 0);
+    TextOrder_ConfigureFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT04", self->_plNo, levelSlot, number, 1, 0);
     sprintf(number, "%d", data->_hp);
-    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, hpSlot, number, 2, 0);
+    TextOrder_ConfigureFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, hpSlot, number, 2, 0);
     sprintf(number, "%d", data->_maxHp);
-    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, maxHpSlot, number, 2, 0);
+    TextOrder_ConfigureFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, maxHpSlot, number, 2, 0);
     sprintf(number, "%d", data->_mp);
-    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, mpSlot, number, 2, 0);
+    TextOrder_ConfigureFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, mpSlot, number, 2, 0);
     sprintf(number, "%d", data->_maxMp);
-    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, maxMpSlot, number, 2, 0);
+    TextOrder_ConfigureFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, maxMpSlot, number, 2, 0);
 }
 
 /* Opens a window of the player's face/status model at the model controller's position. */
@@ -295,47 +277,8 @@ void beNDMWLoadIntf2DegiState__Init(beNDMWLoadIntf2DegiState *self, int plNo, in
 }
 
 #include "dw4/igVec3f.h"
-extern "C" int Vec3f_Set(void *, float, float, float);
-extern "C" int igDataList_GetCount(void *);
-extern "C" int beLua__RunNamedChunk(igObject *lua, const char *chunkName, const char *argument);
-extern "C" void *beNDMWDegiData_Create(int allocator);
-extern "C" void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *window);
-extern "C" void beNDMWLoadIntf2MesWin__RequestOpen(beNDMWLoadIntf2MesWin *window);
-extern "C" void beNDMWLoadIntf2MesWin__RequestClose(beNDMWLoadIntf2MesWin *window);
-extern "C" void beNDMWLoadIntf2MesWin__RequestQuestion(beNDMWLoadIntf2MesWin *window, int messageId, int cursor);
-extern "C" void beNDMWLoadIntf2MesWin__RequestPrompt(beNDMWLoadIntf2MesWin *window, int messageId);
-extern "C" void beNDMWLoadIntf2MesWin__Cancel(beNDMWLoadIntf2MesWin *window);
-extern "C" unsigned char beNDMWLoadIntf2MesWin__GetIsCtrl(beNDMWLoadIntf2MesWin *window);
-extern "C" int beNDMWLoadIntf2MesWin__GetCurPoint(beNDMWLoadIntf2MesWin *window);
-extern "C" void beNDMWLoadIntf2MesWin__RequestMesErase(beNDMWLoadIntf2MesWin *window);
-extern "C" void beNDMWLoadIntf2MesWin__RequestSystemMessage(beNDMWLoadIntf2MesWin *window, int messageId);
-extern "C" void beNDMWLoadIntf2MesWin__EndSystemMessage(beNDMWLoadIntf2MesWin *window);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2CommonIntf *common, int player, beNDMWLoadIntf2MesWin *window, int noticeId, int questionId, int cursor, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *common, int player, beNDMWLoadIntf2MesWin *window, int slot, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *common, int player, beNDMWLoadIntf2MesWin *window, int slot, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *common, int player, beNDMWLoadIntf2MesWin *window, int slot, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard(beNDMWLoadCtrl2CommonIntf *common, int player, beNDMWLoadIntf2MesWin *window, int slot, int depth);
-extern "C" void beNDMWLoadCtrl2CommonIntf__StartUtilFor(beNDMWLoadCtrl2CommonIntf *common, int player, int stage);
-extern "C" void beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(beNDMWLoadCtrl2CommonIntf *common, int player);
-extern "C" void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *data, int properties);
-extern "C" void beNDMWDegiData__StoreToProperties(beNDMWDegiData *data, int properties, igObject *font);
-extern "C" void List_Resize(void *list, int count, int elementSize);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" void beMessenger_AppendObject(int messenger, void *object);
-extern "C" int beMessenger_GetBoolCount(int messenger);
-extern "C" int beMessenger_SelectGroup(...);
-/* The property records igProperty_GetRecord/GetRecordByte return: the value follows a 12-byte
- * header. */
-struct IntProperty { char header[12]; int value; };
-struct BoolProperty { char header[12]; unsigned char value; };
-extern "C" IntProperty *igProperty_GetRecord(int object, const void *name);
-extern "C" BoolProperty *igProperty_GetRecordByte(int object, const void *name);
-extern "C" int g_propertyNameField[4];
-extern "C" int kIGMemoryPoolHandleUser0[4];
-extern "C" int g_bePadManager_metaObject[4];
-extern "C" int g_beLua_metaObject[4];
-extern "C" int g_beFont_metaObject[4];
-extern "C" int g_mdlEntity[4];
+/* kept local: igDataList_GetCount has no include/dw4 home (only BaseLibrary.h declares it). */
+extern "C" int igDataList_GetCount(int *p);
 /* Owning reference to a newly created data list, built from the allocator handle passed by value;
  * its out-of-line destructor releases it once beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign has taken its own reference. */
 class NewDataListRef {
@@ -348,7 +291,7 @@ public:
 struct FreshDataList {
   static ObjectRefTarget **Assign(void *slot, int allocator) {
     NewDataListRef created(
-        beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(kIGMemoryPoolHandleUser1, allocator)));
+        beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser1, allocator)));
     return beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign((ObjectRefTarget **)slot, (ObjectRefTarget **)&created);
   }
 };
@@ -465,23 +408,23 @@ static inline void ShowStarterName(beNDMWLoadIntf2 *self, beNDMWLoadIntf2TextOrd
   int row;
   int index;
   const PlayerModelRow *entry;
-  beMessenger_SendNamed(self->_messenger, "DATABASE", "shinka", 0, "GETDATABASE");
-  database = beMessenger_GetObject(self->_messenger, 0);
+  beMessenger_SendNamed((beMessenger *)self->_messenger, "DATABASE", "shinka", 0, "GETDATABASE");
+  database = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
   for (index = 0, entry = g_playerModelRow; index < 16; index++, entry++) {
     if (strcmp(entry->model, g_starterPlayerModelNames[creation->_chaSelDegi]) == 0) {
       row = index;
       break;
     }
   }
-  TextOrder_ConfigureFont(textOrder, "CHRSELFONT14", host->_ramNo, 0, beDataBase_GetRecordString(database, row, "NAME"), 1, 0);
+  TextOrder_ConfigureFont(textOrder, "CHRSELFONT14", host->_ramNo, 0, beDataBase_GetRecordString((beDataBase *)database, row, "NAME"), 1, 0);
 }
 /* Plays the exit of the starter's select-screen model if it is shown and running. */
 static inline void ExitStarterModel(beNDMWLoadIntf2 *self, beBaseInfoRam *host,
     beNDMWLoadIntf2CtrlData *control, beNDMWLoadIntf2MakeChr *creation) {
   if (control->_isNoSelMdl == 0) {
-    beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "ISRUN");
-    if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
-      beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "SQ_EXIT");
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "ISRUN");
+    if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == 1) {
+      beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "SQ_EXIT");
     }
   }
 }
@@ -491,9 +434,9 @@ static inline beNDMWLoadIntf2DegiState *FirstDegiState(beNDMWLoadIntf2DegiStateC
 }
 /* Sends a GAMERAM request about this player (the player number is its only argument). */
 static inline void RequestGameRam(beNDMWLoadIntf2 *self, beBaseInfoRam *host, const void *request) {
-  beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-  beMessenger_AppendInt(self->_messenger, host->_ramNo);
-  beMessenger_DispatchSelected(self->_messenger, request);
+  beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+  beMessenger_AppendInt((beMessenger *)self->_messenger, host->_ramNo);
+  beMessenger_DispatchSelected((beMessenger *)self->_messenger, (const char *)request);
 }
 /* Opens the first Digimon status entry on a kind and the player's data number. */
 static inline void OpenDegiState(beNDMWLoadIntf2DegiStateCtrl *status, int kind, int player) {
@@ -529,20 +472,20 @@ static inline beNDMWMcUtilCtrl *McUtil(beNDMWLoadCtrl2CommonIntf *common) {
 }
 /* The host player's pad, looked up through the insight's pad manager. */
 static inline bePadData *HostPad(beNDMWLoadIntf2 *self, beBaseInfoRam *host) {
-  igObject *manager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
-  return (bePadData *)bePadManager_GetPadForPlayer(manager, host->_ramNo);
+  igObject *manager = igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
+  return (bePadData *)bePadManager_GetPadForPlayer((bePadManager *)manager, host->_ramNo);
 }
 /* The object's own allocator when g_useOwnerAllocator is set, else the selected one. */
-static inline int SelectAllocator(const int *selector, int ownAllocator) {
+static inline int SelectAllocator(const igMemoryPoolHandle *selector, int ownAllocator) {
   if (g_useOwnerAllocator)
     return ownAllocator;
   else
-    return Memory_GetAllocatorBySelector(*selector);
+    return (int)Memory_GetAllocatorBySelector(*selector);
 }
 /* The first boolean reply of the last messenger request, or 0 when there is none. */
-static inline int FirstBoolReply(beNDMWLoadIntf2 *self) {
-  if (beMessenger_GetBoolCount(self->_messenger) > 0)
-    return beMessenger_GetBool(self->_messenger, 0);
+static inline unsigned char FirstBoolReply(beNDMWLoadIntf2 *self) {
+  if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) > 0)
+    return beMessenger_GetBool((beMessenger *)self->_messenger, 0);
   else
     return 0;
 }
@@ -566,7 +509,7 @@ static inline void CopyTypedName(unsigned short *destination, beNDMWLoadIntf2Nam
 }
 /* One named object of the player's working set (host->_dataList). */
 static inline void *FindWorkObject(beBaseInfoRam *host, const void *name) {
-  return beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&host->_dataList), g_propertyNameField[0], name);
+  return beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&host->_dataList), (int)g_propertyNameField, name);
 }
 /* The memory-card slot picked on the slot screen. */
 static inline beNDMWMcSlot *SelectedCardSlot(beNDMWLoadCtrl2CommonIntf *common, beNDMWLoadIntf2SelSlot *slots) {
@@ -586,7 +529,7 @@ static inline int AllEntriesReady(beNDMWLoadCtrl2CommonIntf *common) {
   int entryCount = 0;
   int readyCount = 0;
   int index;
-  for (index = 0; index < igDataList_GetCount(works); index++) {
+  for (index = 0; index < igDataList_GetCount((int *)works); index++) {
     if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
       entryCount += 1;
     }
@@ -602,7 +545,7 @@ static inline void EndInterface(beNDMWLoadCtrl2CommonIntf *common) {
   int index = 0;
   common->_intfStat = 3;
   works = (void *)common->_flagWork;
-  for (; index < igDataList_GetCount(works); index++) {
+  for (; index < igDataList_GetCount((int *)works); index++) {
     beNDMWLoadSavePlWork__SetIsCtrl((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index), 0);
   }
 }
@@ -648,47 +591,47 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
   /* matching construct: each lookup repeats the empty-reference check here; moving it into an
    * inline helper changes the exception cleanup emitted for FreshDataList::Assign's temporary. */
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   common = (beNDMWLoadCtrl2CommonIntf *)FindWorkObject(host, "COMMONINTF");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   control = (beNDMWLoadIntf2CtrlData *)FindWorkObject(host, "CTRL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   creation = (beNDMWLoadIntf2MakeChr *)FindWorkObject(host, "MAKECHR");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   models = (beNDMWLoadIntf2ComMdlCtrl *)FindWorkObject(host, "COMMDLCTRL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   messages = (beNDMWLoadIntf2MesWin *)FindWorkObject(host, "MESWIN");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   slots = (beNDMWLoadIntf2SelSlot *)FindWorkObject(host, "SELSLOT");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   nameEntry = (beNDMWLoadIntf2NameSel *)FindWorkObject(host, "NAMESEL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   textOrder = (beNDMWLoadIntf2TextOrder *)FindWorkObject(host, "TEXTORDER");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   status = (beNDMWLoadIntf2DegiStateCtrl *)FindWorkObject(host, "DEGISTATECTRL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   dataSelection = (beNDMWLoadIntf2DataSelIntf *)FindWorkObject(host, "DATASELINTF");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
   }
   difficulty = (beNDMWLoadIntf2Diffselect *)FindWorkObject(host, "DIFFSELECT");
   beNDMWLoadIntf2ComMdlCtrl__Poll(models);
@@ -702,7 +645,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
   moveLeft = 0;
   moveRight = 0;
   if (HostWork(common, host)->_isCtrl == 1) {
-    bePadData *pad = (bePadData *)bePadManager_GetPadForPlayer(self->_padManager, host->_ramNo);
+    bePadData *pad = (bePadData *)bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, host->_ramNo);
     padTrigger = pad->_trigger;
     padRepeat = pad->_repeat;
     int stickEdge = pad->_lTrg | pad->_lRpt;
@@ -768,15 +711,15 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         break;
       }
       case 1:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
           NextStep(control);
         }
         break;
       case 2: {
         RequestGameRam(self, host, "GETPLAYER");
-        int gamePlayer = beMessenger_GetObject(self->_messenger, 0);
+        int gamePlayer = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         /* ISUSE: the GAMERAM record already holds a character. */
-        if (igProperty_GetRecordByte(gamePlayer, "ISUSE")->value == 1) {
+        if (igProperty_GetRecordByte((igObject *)gamePlayer, "ISUSE")->_data == 1) {
           beNDMWDegiData__LoadFromProperties(PlayerDegiData(common, host), gamePlayer);
           NextStep(control);
         } else {
@@ -802,7 +745,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         break;
       }
       case 4:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
           control->_isRdyCancel = 0;
           EnterState(control, LOAD_SCREEN_START);
         }
@@ -830,7 +773,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         break;
       }
       case 1:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
           beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, TextId(host, 0x400), 0);
           NextStep(control);
         }
@@ -864,7 +807,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         break;
       }
       case 3:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
           if (control->_isEntry == 1) {
             EnterState(control, LOAD_SCREEN_NEW_OR_LOAD);
           } else {
@@ -899,8 +842,8 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
       }
       case 1:
         if ((control->_st2 == 0) &&
-            !(beNDMWLoadIntf2ComMdlCtrl__IsSequence((beNDMWSaveIntfComMdlCtrl *)models, host->_ramNo,
-            (const char *)"j_linewin02", (const char *)"SQ_OPEN") & 0xFF)) {
+            beNDMWLoadIntf2ComMdlCtrl__IsSequence((beNDMWSaveIntfComMdlCtrl *)models, host->_ramNo,
+            (const char *)"j_linewin02", (const char *)"SQ_OPEN") == 0) {
           beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, TextId(host, 0x401), 0);
           NextSubstep(control);
           int player = host->_ramNo;
@@ -910,7 +853,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             beNDMWLoadIntf2MesWin__RequestMessage(messages, (player << 0x10) | 0x524);
           }
         }
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
           NextStep(control);
         }
         break;
@@ -956,14 +899,14 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           }
           break;
         case 1:
-          if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
             RestartSubstep(control);
           }
           break;
         }
         break;
       case 3:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
           TextOrder_PublishLineListOnly(textOrder, TextId(host, 0x401));
           if (control->_newLoadSel == 0) {
             EnterState(control, LOAD_SCREEN_CHOOSE_DIGIMON);
@@ -973,7 +916,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         }
         break;
       case 4:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
           HostWork(common, host)->_isEntry = 0;
           control->_isEntry = 0;
           EnterState(control, LOAD_SCREEN_JOIN);
@@ -1009,24 +952,24 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         Vec3f_Copy(&faceWinPos, &models->_pos);
         beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_digifacewin",
             g_playerModelRow[creation->_chaSelDegi].openSequence, (float *)&faceWinPos, 1);
-        beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
+        beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
             host->_ramNo, "GENERATE");
-        beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
+        beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
             host->_ramNo, "ISRUN");
-        int modelRunning = FirstBoolReply(self);
-        if ((modelRunning & 0xFF) == 1) {
+        unsigned char modelRunning = FirstBoolReply(self);
+        if (modelRunning == 1) {
           Vec3f_Set(&previewPosition, 0.0f, 0.0f, 0.0f);
           Vec3f_Set(&previewRotation, 0.0f, 0.0f, 0.0f);
-          beMessenger_SelectReceivers(self->_messenger, "MODELCTRL",
-              (int)g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo);
+          beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL",
+              g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo);
           igVec3f positionArg;
           Vec3f_Copy(&positionArg, &previewPosition);
-          beMessenger_AppendVec3(self->_messenger, (float *)&positionArg);
+          beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&positionArg);
           igVec3f rotationArg;
           Vec3f_Copy(&rotationArg, &previewRotation);
-          beMessenger_AppendVec3(self->_messenger, (float *)&rotationArg);
-          beMessenger_DispatchSelected(self->_messenger, "MOVETRANS");
-          beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
+          beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&rotationArg);
+          beMessenger_DispatchSelected((beMessenger *)self->_messenger, "MOVETRANS");
+          beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
               host->_ramNo, "SQ_ENTR");
           control->_isNoSelMdl = 0;
         } else {
@@ -1037,8 +980,8 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         break;
       }
       case 1:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
-          beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_namewin02", host->_ramNo, "SQ_LINESL00");
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
+          beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", "j_namewin02", host->_ramNo, "SQ_LINESL00");
           NextStep(control);
         }
         break;
@@ -1073,10 +1016,10 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             NextSubstep(control);
           } else {
             unsigned char modelReady = 0;
-            beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL",
                 g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "ISRUN");
-            if (beMessenger_GetBoolCount(self->_messenger) > 0) {
-              modelReady = beMessenger_GetBool(self->_messenger, 0) & 0xFF;
+            if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) > 0) {
+              modelReady = beMessenger_GetBool((beMessenger *)self->_messenger, 0);
             } else if (control->_isNoSelMdl == 1) {
               modelReady = 1;
             }
@@ -1088,24 +1031,24 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
                 NextStep(control);
               }
             } else {
-              beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+              beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL",
                   g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, "GENERATE");
-              beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+              beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL",
                   g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, "ISRUN");
-              int modelRunning = FirstBoolReply(self);
-              if ((modelRunning & 0xFF) == 1) {
+              unsigned char modelRunning = FirstBoolReply(self);
+              if (modelRunning == 1) {
                 Vec3f_Set(&retryPosition, 0, 0, 0);
                 Vec3f_Set(&retryRotation, 0, 0, 0);
-                beMessenger_SelectReceivers(self->_messenger, "MODELCTRL",
-                    (int)g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo);
+                beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL",
+                    g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo);
                 igVec3f positionArg;
                 Vec3f_Copy(&positionArg, &retryPosition);
-                beMessenger_AppendVec3(self->_messenger, (float *)&positionArg);
+                beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&positionArg);
                 igVec3f rotationArg;
                 Vec3f_Copy(&rotationArg, &retryRotation);
-                beMessenger_AppendVec3(self->_messenger, (float *)&rotationArg);
-                beMessenger_DispatchSelected(self->_messenger, "MOVETRANS");
-                beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+                beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&rotationArg);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, "MOVETRANS");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL",
                     g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, "SQ_ENTR");
                 control->_isNoSelMdl = 0;
               } else {
@@ -1115,7 +1058,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           }
           break;
         case 1:
-          if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
             RestartSubstep(control);
           }
           break;
@@ -1137,7 +1080,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         NextStep(control);
         break;
       case 4:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
           NextStep(control);
         }
         break;
@@ -1151,7 +1094,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
         NextStep(control);
         break;
       case 6:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
           if (control->_isCansel == 1) {
             EnterState(control, LOAD_SCREEN_NEW_OR_LOAD);
           } else {
@@ -1364,7 +1307,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           break;
         case 1:
           if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) & 0xFF) == 1) {
-            int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
+            int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
             {
               DegiDataRef freshData(beNDMWDegiData_Create(allocator));
               beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -1391,25 +1334,25 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             if (control->_isRdyCancel == 1) {
               if (control->_isNewMake == 1) {
                 RequestGameRam(self, host, "GAMEDATAINIT");
-                int allocator = SelectAllocator(kIGMemoryPoolHandleUser0, igObject_GetAllocator(self));
+                int allocator = SelectAllocator(&kIGMemoryPoolHandleUser0, (int)igObject_GetAllocator(self));
                 beUnicodeObj *nameObject = beUnicodeObj_Create(allocator);
                 {
                   igSmartPointer<beUnicodeObj> nameRef(nameObject);
                   beUnicodeObj_AllocateBuffer(nameRef.p, 8);
                   CopyTypedName((unsigned short *)nameRef.p->_buffer, nameEntry);
-                  beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-                  beMessenger_AppendInt(self->_messenger, host->_ramNo);
-                  beMessenger_AppendString(self->_messenger, (int)g_playerModelRow[creation->_chaSelDegi].model);
-                  beMessenger_AppendObject(self->_messenger, nameRef.p);
-                  beMessenger_DispatchSelected(self->_messenger, "GAMESTART");
+                  beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+                  beMessenger_AppendInt((beMessenger *)self->_messenger, host->_ramNo);
+                  beMessenger_AppendString((beMessenger *)self->_messenger, g_playerModelRow[creation->_chaSelDegi].model);
+                  beMessenger_AppendObject((beMessenger *)self->_messenger, nameRef.p);
+                  beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GAMESTART");
                 }
                 RequestGameRam(self, host, "GETPLAYER");
-                int newPlayer = beMessenger_GetObject(self->_messenger, 0);
+                int newPlayer = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 /* Stamp the new character with the low word of the world
                  * clock as its UNIQUE property. */
                 long long worldTime = ((igInsightCore *)self->_insight)->_worldTime;
-                IntProperty *unique = igProperty_GetRecord(newPlayer, "UNIQUE");
-                unique->value = (int)worldTime;
+                beDataObjInt *unique = igProperty_GetRecord((igObject *)newPlayer, "UNIQUE");
+                unique->_data = (int)worldTime;
                 beNDMWDegiData__LoadFromProperties(PlayerDegiData(common, host), newPlayer);
               } else {
                 RequestGameRam(self, host, "GAMEDATAINIT");
@@ -1420,14 +1363,14 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
                   beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(common, host->_ramNo);
                 }
                 RequestGameRam(self, host, "GETPLAYER");
-                int loadedPlayer = beMessenger_GetObject(self->_messenger, 0);
-                igObject *font = igInsightCore_FindManager(self->_insight, g_beFont_metaObject[0]);
-                beNDMWDegiData__StoreToProperties(PlayerDegiData(common, host), loadedPlayer, font);
+                int loadedPlayer = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+                igObject *font = igInsightCore_FindManager((igInsightCore *)self->_insight, g_beFont_metaObject);
+                beNDMWDegiData__StoreToProperties(PlayerDegiData(common, host), (void *)loadedPlayer, (int)font);
                 int kindName = PlayerDegiData(common, host)->_dmkind;
-                beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-                beMessenger_AppendInt(self->_messenger, host->_ramNo);
-                beMessenger_AppendString(self->_messenger, kindName);
-                beMessenger_DispatchSelected(self->_messenger, "BASE2CURRENT");
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+                beMessenger_AppendInt((beMessenger *)self->_messenger, host->_ramNo);
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)kindName);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, "BASE2CURRENT");
                 RequestGameRam(self, host, "RECALCPLAYER");
               }
             }
@@ -1436,8 +1379,8 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             if ((host->_ramNo == 0) && (control->_isRdyCancel == 1)) {
               common->_difficultMode = 0;
               self->_difficultMax = 0;
-              g_mdlEntity[0] = 0;
-              beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), "hostLoad.lua", 0);
+              g_mdlEntity = 0;
+              beLua__RunNamedChunk((beLua *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject), "hostLoad.lua", 0);
               switch (self->_difficultMax) {
               case 0:
                 break;
@@ -1470,7 +1413,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           case 1:
             if ((beNDMWLoadIntf2Diffselect__Update(difficulty, HostWork(common, host)->_isCtrl) & 0xFF) == 1) {
               if (difficulty->_isCancel == 1) {
-                int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
+                int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 {
                   DegiDataRef freshData(beNDMWDegiData_Create(allocator));
                   beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -1487,7 +1430,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           }
           break;
         case 1:
-          if ((beNDMWLoadIntf2DegiState__Update(FirstDegiState(status)) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2DegiState__Update(FirstDegiState(status)) == 1) {
             HostWork(common, host)->_isRdy = 1;
             if (host->_ramNo == 0) {
               if (AllEntriesReady(common) == 1) {
@@ -1560,7 +1503,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           NextSubstep(control);
           break;
         case 1:
-          if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
             NextSubstep(control);
           }
           break;
@@ -1569,12 +1512,12 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           NextSubstep(control);
           break;
         case 3:
-          if ((beNDMWLoadIntf2DegiState__Update(FirstDegiState(status)) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2DegiState__Update(FirstDegiState(status)) == 1) {
             if (control->_isNewMake == 1) {
               EnterState(control, LOAD_SCREEN_NAME);
               beNDMWLoadIntf2NameSel__Init(nameEntry, 0);
             } else {
-              int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
+              int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
               {
                 DegiDataRef freshData(beNDMWDegiData_Create(allocator));
                 beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -1645,14 +1588,14 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           (const char *)"SQ_CLOSE", 1);
       break;
     case 1:
-      if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+      if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
         HostWork(common, host)->_isClose = 1;
         SetPlayerStep(WorkAt(common, host->_ramNo), 3);
       }
       break;
     case 2:
-      if (((beNDMWLoadIntf2DegiState__Update(FirstDegiState(status)) & 0xFF) == 1) &&
-          ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1)) {
+      if ((beNDMWLoadIntf2DegiState__Update(FirstDegiState(status)) == 1) &&
+          (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1)) {
         HostWork(common, host)->_isClose = 1;
         SetPlayerStep(WorkAt(common, host->_ramNo), 3);
       }
@@ -2077,7 +2020,7 @@ void beNDMWLoadIntf2DegiState__DrawStatusText(beNDMWLoadIntf2DegiState *self) {
             DrawKindName(self, data, 10);
             DrawStats(self, data, 0, 0, 10, 1, 11);
         } else {
-            beNDMWLoadIntf2TextOrder_PublishIdLines(self->_textOrder, (self->_plNo << 16) | 0x10, 0);
+            beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)self->_textOrder, (self->_plNo << 16) | 0x10, 0);
         }
     } else {
         beNDMWDegiData *data = ShownDegiData(self, common);
@@ -2086,34 +2029,34 @@ void beNDMWLoadIntf2DegiState__DrawStatusText(beNDMWLoadIntf2DegiState *self) {
             DrawKindName(self, data, 11);
             DrawStats(self, data, 1, 2, 12, 3, 13);
         } else {
-            beNDMWLoadIntf2TextOrder_PublishIdLines(self->_textOrder, (self->_plNo << 16) | 0x110, 0);
+            beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)self->_textOrder, (self->_plNo << 16) | 0x110, 0);
         }
     }
 }
 
 void beNDMWLoadIntf2DegiState__ClearStatusText(beNDMWLoadIntf2DegiState *self) {
     if (self->_dispPos == 0) {
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT03", self->_plNo, 0);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 0);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 10);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 0);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 10);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 1);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 11);
-        TextOrder_PublishLineListOnly(self->_textOrder, (self->_plNo << 16) | 0x10);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT03", self->_plNo, 0);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT04", self->_plNo, 0);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT04", self->_plNo, 10);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 0);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 10);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 1);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 11);
+        TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)self->_textOrder, (self->_plNo << 16) | 0x10);
         return;
     }
     if (self->_isUseData == 1) {
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT03", self->_plNo, 10);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 11);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 1);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 2);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 12);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 3);
-        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 13);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT03", self->_plNo, 10);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT04", self->_plNo, 11);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT04", self->_plNo, 1);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 2);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 12);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 3);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)self->_textOrder, "CHRSELFONT05", self->_plNo, 13);
         return;
     }
-    TextOrder_PublishLineListOnly(self->_textOrder, (self->_plNo << 16) | 0x110);
+    TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)self->_textOrder, (self->_plNo << 16) | 0x110);
 }
 
 /* Each request ends with _isEnd set and the state back to idle; Update returns _isEnd. */
@@ -2149,7 +2092,7 @@ unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self) {
             break;
         }
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl) & 0xFF) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl) == 1) {
                 beNDMWLoadIntf2DegiState__DrawStatusText(self);
                 self->_isEnd = 1;
                 EnterDegiState(self, DEGI_STATE_IDLE);
@@ -2209,7 +2152,7 @@ unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self) {
             NextDegiStep(self);
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl) & 0xFF) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty((beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl) == 1) {
                 self->_isEnd = 1;
                 EnterDegiState(self, DEGI_STATE_IDLE);
             }
@@ -2345,14 +2288,15 @@ static inline unsigned char IsDigimonFree(beNDMWLoadIntf2DataSelIntf *self, beND
 
 static inline void RequestPrompt(beNDMWLoadIntf2DataSelIntf *self, int mesWin, int mesKind, int message) {
     self->_mesKind = mesKind;
-    beNDMWLoadIntf2MesWin__RequestMessage(mesWin, PlayerTextId(self->_plNo, message));
+    beNDMWLoadIntf2MesWin__RequestMessage((beNDMWLoadIntf2MesWin *)mesWin, PlayerTextId(self->_plNo, message));
 }
 
-/* A text object for the selector's windows, from the selector's allocator. */
+/* A text object for the selector's windows, from the selector's allocator.
+ * matching construct: one expression and the handle's .value, not its conversion operator: every
+ * extra node here stops the save-area callers from inlining this and ShowSaveAreaName's other callees. */
 static inline beUnicodeObj *CreateUnicodeText(beNDMWLoadIntf2DataSelIntf *self) {
-    int allocator = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-    return beUnicodeObj_Create(allocator);
+    int allocator = (int)igObject_GetAllocator(self);
+    return beUnicodeObj_Create(g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1.value));
 }
 
 /* Fills `text` with the Digimon name of an area: the characters of _dmNameUni after its first, at
@@ -2381,7 +2325,7 @@ static inline void OpenSaveAreaWindow(beNDMWLoadIntf2DataSelIntf *self, beNDMWLo
 
 /* Shows the name line of one of the player's save areas: its Digimon's name, or the unused-area
  * line. */
-static inline void ShowSaveAreaName(beNDMWLoadIntf2DataSelIntf *self, int textOrder, int area, beNDMWDegiData *data) {
+static inline void ShowSaveAreaName(beNDMWLoadIntf2DataSelIntf *self, beNDMWLoadIntf2TextOrder *textOrder, int area, beNDMWDegiData *data) {
     if (data->_isUse == 1) {
         igSmartPointer<beUnicodeObj> name(CreateUnicodeText(self));
         SetAreaName(name, data);
@@ -2398,29 +2342,29 @@ static inline void CloseSaveAreaWindows(beNDMWLoadIntf2DataSelIntf *self, beNDMW
         beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareawin02", (const char *)"SQ_CLOSE", 1);
         beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareawin03", (const char *)"SQ_CLOSE", 1);
         beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareawin04", (const char *)"SQ_CLOSE", 1);
-        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 0);
-        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 1);
-        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 2);
-        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 3);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)textOrder, "CHRSELFONT08", self->_plNo, 0);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)textOrder, "CHRSELFONT08", self->_plNo, 1);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)textOrder, "CHRSELFONT08", self->_plNo, 2);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)textOrder, "CHRSELFONT08", self->_plNo, 3);
         self->_isSaveArea = 0;
     }
 }
 
 /* The string pool shared by every interned name, created on first use. */
 static inline void *SharedStringPool(void) {
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         void *pool = StringPool_Allocate(16);
         if (pool != 0) {
-            pool = StringPool_Construct(pool);
+            pool = StringPool_Construct((StringPool *)pool);
         }
-        g_stringPool[0] = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    return g_stringPool[0];
+    return g_stringPool;
 }
 
 /* The pooled copy of `text` (as the word a string field stores), holding one reference. */
 static inline int InternString(const char *text) {
-    return (int)StringPool_Intern(SharedStringPool(), text);
+    return (int)StringPool_Intern((StringPool *)SharedStringPool(), text);
 }
 
 /* Drops one reference on an interned string; its StringTokenHeader sits just before the text. */
@@ -2430,7 +2374,7 @@ static inline void ReleaseStringToken(int token) {
         int refCount = header->refCount - 1;
         header->refCount = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader(header->owner, header);
+            StringChunk_ReleaseHeader((StringChunk *)header->owner, header);
         }
     }
 }
@@ -2514,17 +2458,17 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelInt
         break;
     }
     case 1:
-        if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) & 0xFF) == 1 && (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) == 1 && beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
             int area;
             for (area = 0; area < kSaveAreaCount; area++) {
                 beNDMWDegiData *data = SaveAreaData(common, self->_plNo, area);
                 if (data->_isUse == 1) {
                     igSmartPointer<beUnicodeObj> name(CreateUnicodeText(self));
                     SetAreaName(name, data);
-                    TextOrder_ConfigureUnicode(textOrder, "CHRSELFONT08", self->_plNo, area, name.p, 1, 0);
+                    TextOrder_ConfigureUnicode((beNDMWLoadIntf2TextOrder *)textOrder, "CHRSELFONT08", self->_plNo, area, name.p, 1, 0);
                 } else {
                     data->_isUse = 0;
-                    beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, UnusedAreaTextId(self->_plNo, area), 0);
+                    beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, UnusedAreaTextId(self->_plNo, area), 0);
                 }
             }
             done = 1;
@@ -2558,7 +2502,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
     moveLeft = 0;
     moveRight = 0;
     if (PlayerWork(common, self->_plNo)->_isCtrl == 1) {
-        bePadData *pad = bePadManager_GetPadForPlayer(self->_padManager, self->_plNo);
+        bePadData *pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, self->_plNo);
         unsigned char pressedUp;
         int repeat;
         int stick;
@@ -2636,9 +2580,9 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
     }
     case kSelectWaitMove:
         if (self->_kind == kDataSelLoad) {
-            if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) & 0xFF) != 1) break;
+            if (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) != 1) break;
         }
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
             PlaySequence(models, self->_plNo, (const char *)"j_saveareacursorr", g_saveAreaLineSelectSeqs[self->_svDataSelPoint]);
             step = kSelectChoose;
         }
@@ -2649,7 +2593,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
         step = kSelectWaitConfirm;
         break;
     case kSelectWaitConfirm:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) step = kSelectDone;
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) step = kSelectDone;
         break;
     case kSelectCancel:
         beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareacursorr", (const char *)"SQ_CANCEL", 1);
@@ -2657,7 +2601,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
         step = kSelectWaitCancel;
         break;
     case kSelectWaitCancel:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) step = kSelectDone;
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) step = kSelectDone;
         break;
     case kSelectDone:
         done = 1;
@@ -2690,14 +2634,14 @@ unsigned char beNDMWLoadIntf2DataSelIntf__CloseAll(beNDMWLoadIntf2DataSelIntf *s
         break;
     case 1:
         if (self->_isUpStatWin == 1) {
-            if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) & 0xFF) != 1) break;
+            if (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) != 1) break;
             self->_isUpStatWin = 0;
         }
         if (self->_isDownStatWin == 1) {
-            if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) & 0xFF) != 1) break;
+            if (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) != 1) break;
             self->_isDownStatWin = 0;
         }
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
             done = 1;
             step++;
         }
@@ -2723,14 +2667,14 @@ unsigned char beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(beNDMWLoadIntf2Data
         step++;
         break;
     case 1:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
             step++;
             beNDMWLoadIntf2DegiState__RequestOpen(StatusWindowOf(statusCtrl, kLowerStatus), kStatusSaveArea, self->_svDataSelPoint);
             self->_isDownStatWin = 1;
         }
         break;
     case 2:
-        if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) == 1) {
             done = 1;
             step++;
         }
@@ -2756,7 +2700,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSel
         step++;
         break;
     case 1:
-        if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) & 0xFF) == 1) step++;
+        if (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) == 1) step++;
         break;
     case 2: {
         int area;
@@ -2768,10 +2712,10 @@ unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSel
         break;
     }
     case 3:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
             int area;
             for (area = 0; area < kSaveAreaCount; area++) {
-                ShowSaveAreaName(self, textOrder, area, SaveAreaData(common, self->_plNo, area));
+                ShowSaveAreaName(self, (beNDMWLoadIntf2TextOrder *)textOrder, area, SaveAreaData(common, self->_plNo, area));
             }
             step++;
         }
@@ -2798,7 +2742,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(beNDMWLoadIntf2Data
         self->_isUpStatWin = 0;
         break;
     case 1:
-        if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) & 0xFF) == 1 && (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) == 1 && beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kLowerStatus)) == 1) {
             step++;
         }
         break;
@@ -2836,11 +2780,11 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(beNDMWLoadIntf2DataSe
         break;
     }
     case 1:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1 && (beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1 && beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) == 1) {
             int area;
             step++;
             for (area = 0; area < kSaveAreaCount; area++) {
-                ShowSaveAreaName(self, textOrder, area, SaveAreaData(common, self->_plNo, area));
+                ShowSaveAreaName(self, (beNDMWLoadIntf2TextOrder *)textOrder, area, SaveAreaData(common, self->_plNo, area));
             }
         }
         break;
@@ -2872,10 +2816,10 @@ bool beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(beNDMWLoadIntf2DataSelIntf *self
         step++;
         break;
     case 1:
-        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
             step++;
-            if (self->_kind == kDataSelLoad) beNDMWLoadIntf2MesWin__RequestMessage(mesWin, PlayerTextId(self->_plNo, kMesLoadSelectArea));
-            else beNDMWLoadIntf2MesWin__RequestMessage(mesWin, PlayerTextId(self->_plNo, kMesSaveSelectArea));
+            if (self->_kind == kDataSelLoad) beNDMWLoadIntf2MesWin__RequestMessage((beNDMWLoadIntf2MesWin *)mesWin, PlayerTextId(self->_plNo, kMesLoadSelectArea));
+            else beNDMWLoadIntf2MesWin__RequestMessage((beNDMWLoadIntf2MesWin *)mesWin, PlayerTextId(self->_plNo, kMesSaveSelectArea));
         }
         break;
     case 2:
@@ -2901,7 +2845,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__CloseSaveArea(beNDMWLoadIntf2DataSelIn
         step++;
         break;
     case 1:
-        if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
+        if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
             done = 1;
             step++;
         }
@@ -2932,10 +2876,10 @@ int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *se
                 PlaySequence(models, player, g_saveAreaWindowNames[area], g_playerModelRow[row].faceSequence);
                 igSmartPointer<beUnicodeObj> name(CreateUnicodeText(self));
                 SetAreaName(name, data);
-                TextOrder_ConfigureUnicode(textOrder, "CHRSELFONT08", player, area, name.p, 1, 0);
+                TextOrder_ConfigureUnicode((beNDMWLoadIntf2TextOrder *)textOrder, "CHRSELFONT08", player, area, name.p, 1, 0);
             } else {
                 PlaySequence(models, player, g_saveAreaWindowNames[area], (const char *)"SQ_NOOPEN");
-                beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, UnusedAreaTextId(player, area), 0);
+                beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, UnusedAreaTextId(player, area), 0);
             }
         }
     }
@@ -3061,7 +3005,7 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
     up = 0;
     down = 0;
     if ((usePad & 0xff) == 1) {
-        bePadData *pad = bePadManager_GetPadForPlayer(self->_padManager, self->_plNo);
+        bePadData *pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, self->_plNo);
         trigger = pad->_trigger;
         repeat = pad->_repeat;
         stickEdge = pad->_lTrg | pad->_lRpt;
@@ -3088,12 +3032,12 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
             DiffselectNextStep(self);
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) & 0xff) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) == 1) {
                 switch (self->_kind) {
-                case kDiffselectTwoLines: beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, (self->_plNo << 16) | kDiffselectTwoLineText, 0); break;
-                case kDiffselectThreeLines: beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, (self->_plNo << 16) | kDiffselectThreeLineText, 0); break;
+                case kDiffselectTwoLines: beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, (self->_plNo << 16) | kDiffselectTwoLineText, 0); break;
+                case kDiffselectThreeLines: beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, (self->_plNo << 16) | kDiffselectThreeLineText, 0); break;
                 }
-                beNDMWLoadIntf2MesWin__RequestMessage(mesWin, (self->_plNo << 16) | kDiffselectPromptMessage);
+                beNDMWLoadIntf2MesWin__RequestMessage((beNDMWLoadIntf2MesWin *)mesWin, (self->_plNo << 16) | kDiffselectPromptMessage);
                 DiffselectNextPhase(self);
             }
             break;
@@ -3141,7 +3085,7 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
             }
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) & 0xff) == 1) { self->_st1 = 0; self->_st3 = 0; self->_st2 = 0; }
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) == 1) { self->_st1 = 0; self->_st3 = 0; self->_st2 = 0; }
             break;
         }
         break;
@@ -3150,14 +3094,14 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
         case 0:
             switch (self->_kind) {
             case kDiffselectTwoLines:
-                TextOrder_PublishLineListOnly(textOrder, (self->_plNo << 16) | kDiffselectTwoLineText);
+                TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)textOrder, (self->_plNo << 16) | kDiffselectTwoLineText);
                 if (self->_isCancel == 0) {
                     if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin02", (const char *)"SQ_LINEON00", 1);
                     else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin02", (const char *)"SQ_LINEON01", 1);
                 } else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin02", (const char *)"SQ_CANCEL", 1);
                 break;
             case kDiffselectThreeLines:
-                TextOrder_PublishLineListOnly(textOrder, (self->_plNo << 16) | kDiffselectThreeLineText);
+                TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)textOrder, (self->_plNo << 16) | kDiffselectThreeLineText);
                 if (self->_isCancel == 0) {
                     switch (self->_selectPoint) {
                     case 0: beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin03", (const char *)"SQ_LINEON00", 1); break;
@@ -3170,7 +3114,7 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
             DiffselectNextStep(self);
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xff) == 1) self->_isEnd = 1;
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) == 1) self->_isEnd = 1;
             break;
         }
         break;
@@ -3233,8 +3177,8 @@ void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, unsigned char
 /* A new text object for one letter of the name-entry fonts, from the owner's allocator when
  * g_useOwnerAllocator is set. */
 static inline beUnicodeObj *NameSelNewLetterText(beNDMWLoadIntf2NameSel *nameSel) {
-    int allocator = igObject_GetAllocator(nameSel);
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    int allocator = (int)igObject_GetAllocator(nameSel);
+    allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     return beUnicodeObj_Create(allocator);
 }
 
@@ -3244,7 +3188,7 @@ static inline void NameSelShowLetter(beNDMWLoadIntf2NameSel *nameSel, const void
     igSmartPointer<beUnicodeObj> text(NameSelNewLetterText(nameSel));
     beUnicodeObj_AllocateBuffer(text.p, 1);
     *(unsigned short *)text.p->_buffer = letters[index];
-    TextOrder_ConfigureUnicode(nameSel->_textOrder, font, nameSel->_ramNo, slot, text.p, 1, color);
+    TextOrder_ConfigureUnicode((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, (const char *)font, nameSel->_ramNo, slot, text.p, 1, color);
 }
 
 /* The row column: the first letter of the previous, current and next row (wrapping inside the
@@ -3253,9 +3197,9 @@ void beNDMWLoadIntf2NameSel__DrawRowLetters(beNDMWLoadIntf2NameSel *nameSel, int
     int row;
     switch (clear) {
     case 1:
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 0);
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 1);
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 2);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 0);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 1);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 2);
         return;
     case 0: {
         row = nameSel->_tatePoint - 1;
@@ -3279,11 +3223,11 @@ void beNDMWLoadIntf2NameSel__DrawColumnLetters(beNDMWLoadIntf2NameSel *nameSel, 
     int slot;
     switch (clear) {
     case 1:
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 0);
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 1);
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 2);
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 3);
-        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 4);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 0);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 1);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 2);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 3);
+        TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 4);
         return;
     case 0:
         firstColumn = nameSel->_yokoPoint;
@@ -3292,7 +3236,7 @@ void beNDMWLoadIntf2NameSel__DrawColumnLetters(beNDMWLoadIntf2NameSel *nameSel, 
             igSmartPointer<beUnicodeObj> text(NameSelNewLetterText(nameSel));
             beUnicodeObj_AllocateBuffer(text.p, 1);
             *(unsigned short *)text.p->_buffer = g_nameEntryLetterRows[nameSel->_tatePoint].letters[column];
-            TextOrder_ConfigureUnicode(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, slot, text.p, 1, 0);
+            TextOrder_ConfigureUnicode((beNDMWLoadIntf2TextOrder *)nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, slot, text.p, 1, 0);
         }
     }
 }
@@ -3306,12 +3250,12 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
     case kNameLangJapanese:
         switch (clear) {
         case 1:
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 0);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 1);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 2);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 3);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 4);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 5);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 0);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 1);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 2);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 3);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 4);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 5);
             return;
         case 0:
             japaneseSlot = 0;
@@ -3325,7 +3269,7 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
                 }
                 japaneseSlot++;
             } while (japaneseSlot < 6);
-            for (; japaneseSlot < 6; japaneseSlot++) TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, japaneseSlot);
+            for (; japaneseSlot < 6; japaneseSlot++) TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, japaneseSlot);
             return;
         }
         break;
@@ -3333,14 +3277,14 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
     default:
         switch (clear) {
         case 1:
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 0);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 1);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 2);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 3);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 4);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 5);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 6);
-            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 7);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 0);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 1);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 2);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 3);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 4);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 5);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 6);
+            TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 7);
             return;
         case 0:
             slot = 0;
@@ -3354,7 +3298,7 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
                 }
                 slot++;
             } while (slot < 8);
-            for (; slot < 8; slot++) TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, slot);
+            for (; slot < 8; slot++) TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, slot);
             break;
         }
         break;
@@ -3508,7 +3452,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
     if (sel->_isEnd == 1) return 1;
     trigger = 0; up = 0; down = 0; left = 0; right = 0;
     if ((usePad & 0xFF) == 1) {
-        pad = bePadManager_GetPadForPlayer(sel->_padManager, sel->_ramNo);
+        pad = bePadManager_GetPadForPlayer((bePadManager *)sel->_padManager, sel->_ramNo);
         trigger = pad->_trigger;
         repeat = pad->_repeat;
         stickEdge = pad->_lTrg | pad->_lRpt;
@@ -3540,7 +3484,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             NameSelNextStep(sel);
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) & 0xFF) == 1) NameSelNextStep(sel);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) == 1) NameSelNextStep(sel);
             break;
         case 2:
             if (sel->_nameCurPos >= sel->_nameMojiMax) sel->_nameCurPos = sel->_nameMojiMax - 1;
@@ -3548,7 +3492,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             NameSelNextStep(sel);
             break;
         case 3:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) & 0xFF) == 1) NameSelGoToPhase(sel, kNameSelTyping);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) == 1) NameSelGoToPhase(sel, kNameSelTyping);
             break;
         }
         break;
@@ -3660,10 +3604,10 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             }
             break;
         case kTypingAfterMove:
-            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) & 0xFF) NameSelGoToStep(sel, kTypingInput);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) != 0) NameSelGoToStep(sel, kTypingInput);
             break;
         case kTypingAfterErase:
-            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) & 0xFF) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) != 0) {
                 NameSelPlayCursorAt(sel, "SQ_NAMESL0%d", 0);
                 nameSel->t.letterState[sel->_nameCurPos] = kLetterChoosing;
                 beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 0);
@@ -3671,7 +3615,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             }
             break;
         case kTypingAfterEnter:
-            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) & 0xFF) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) != 0) {
                 if (sel->_nameCurPos >= sel->_nameMojiMax) {
                     sel->_nameCurPos = sel->_nameMojiMax - 1;
                     NameSelGoToPhase(sel, kNameSelFinishTyping);
@@ -3688,7 +3632,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             }
             break;
         case kTypingAfterStart:
-            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) & 0xFF) NameSelGoToPhase(sel, kNameSelFinishTyping);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) != 0) NameSelGoToPhase(sel, kNameSelFinishTyping);
             break;
         }
         break;
@@ -3699,7 +3643,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             NameSelNextStep(sel);
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) & 0xFF) == 1) NameSelGoToPhase(sel, kNameSelQuestion);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) == 1) NameSelGoToPhase(sel, kNameSelQuestion);
             break;
         }
         break;
@@ -3722,7 +3666,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             NameSelNextStep(sel);
             break;
         case kQuestionAcceptWait:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) & 0xFF) == 1) NameSelGoToPhase(sel, kNameSelShut);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) == 1) NameSelGoToPhase(sel, kNameSelShut);
             break;
         case kQuestionReject:
             NameSelRestoreCursor(nameSel);
@@ -3734,7 +3678,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             NameSelNextStep(sel);
             break;
         case kQuestionRejectWait:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) & 0xFF) == 1) NameSelGoToPhase(sel, kNameSelTyping);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) == 1) NameSelGoToPhase(sel, kNameSelTyping);
             break;
         }
         break;
@@ -3745,7 +3689,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             NameSelNextStep(sel);
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) & 0xFF) == 1) NameSelGoToPhase(sel, kNameSelShut);
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) == 1) NameSelGoToPhase(sel, kNameSelShut);
             break;
         }
         break;
@@ -3766,7 +3710,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             NameSelNextStep(sel);
             break;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) & 0xFF) == 1) sel->_isEnd = 1;
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(NameSelComMdl(sel)) == 1) sel->_isEnd = 1;
             break;
         }
         break;
@@ -3834,7 +3778,7 @@ static inline void OpenWindow(beNDMWLoadIntf2SelSlot *self, int perPlayer, int i
 
 /* Shows a card-present mark: opens its window, or replays the open sequence if it is already up. */
 static inline void ShowMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, const void *model, const void *sequence) {
-    if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model) == 0) {
+    if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model) == 0) {
         float pos[3];
         CopyModelPos(self, pos);
         beNDMWLoadIntf2ComMdlCtrl__StartAt(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model, (const char *)sequence, pos, 0);
@@ -3844,7 +3788,7 @@ static inline void ShowMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int ind
 }
 
 static inline void HideMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, const void *model) {
-    if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model) == 1) {
+    if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model) == 1) {
         beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model, (const char *)"SQ_CLOSE", 0);
     }
 }
@@ -3861,10 +3805,10 @@ static inline void ShowNoCardText(beNDMWLoadIntf2SelSlot *self, beNDMWLoadCtrl2C
     beNDMWMcSlotList *slots = McSlots(common);
     if (McSlotAt(slots, entries[self->_selPoint].mcSlot)->_isConnect != 1) {
         self->_mcStat = 0;
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD), 0);
     } else {
         self->_mcStat = 1;
-        TextOrder_PublishLineListOnly(textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD));
+        TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD));
     }
 }
 
@@ -3876,13 +3820,13 @@ static inline void RefreshNoCardText(beNDMWLoadIntf2SelSlot *self, beNDMWLoadCtr
         slots = McSlots(common);
         if (McSlotAt(slots, entries[self->_selPoint].mcSlot)->_isConnect == 1) {
             self->_mcStat = 1;
-            TextOrder_PublishLineListOnly(textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD));
+            TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD));
         }
     } else {
         slots = McSlots(common);
         if (McSlotAt(slots, entries[self->_selPoint].mcSlot)->_isConnect != 1) {
             self->_mcStat = 0;
-            beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD), 0);
+            beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD), 0);
         }
     }
 }
@@ -3891,10 +3835,10 @@ static inline void RefreshNoCardText(beNDMWLoadIntf2SelSlot *self, beNDMWLoadCtr
 static inline void ShowTwoSlotName(beNDMWLoadIntf2SelSlot *self, int textOrder) {
     switch (self->_selPoint) {
     case 0:
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1), 0);
         break;
     case 1:
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT2), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT2), 0);
         break;
     }
 }
@@ -3902,19 +3846,19 @@ static inline void ShowTwoSlotName(beNDMWLoadIntf2SelSlot *self, int textOrder) 
 static inline void ShowMultitapName(beNDMWLoadIntf2SelSlot *self, int textOrder) {
     switch (self->_selPoint) {
     case 0:
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1A), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1A), 0);
         break;
     case 1:
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1B), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1B), 0);
         break;
     case 2:
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1C), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1C), 0);
         break;
     case 3:
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1D), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1D), 0);
         break;
     case 4:
-        beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT2), 0);
+        beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT2), 0);
         break;
     }
 }
@@ -3983,7 +3927,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int sel
             NextStep(self);
             break;
         case 1:
-            if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
                 if (self->_mode == SLOT_LAYOUT_TWO_SLOTS) {
                     SlotCursorEntry *entries = g_slotModeSelectSeqs;
                     int entry;
@@ -4002,7 +3946,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int sel
                         }
                     }
                     textOrder = self->_textOrder;
-                    beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_TITLE), 0);
+                    beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_TITLE), 0);
                     ShowTwoSlotName(self, textOrder);
                     ShowNoCardText(self, common, entries, textOrder);
                     NextStep(self);
@@ -4033,7 +3977,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int sel
                         }
                     }
                     textOrder = self->_textOrder;
-                    beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, SlotTextId(self, SELSLOT_TEXT_TITLE), 0);
+                    beNDMWLoadIntf2TextOrder_PublishIdLines((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_TITLE), 0);
                     ShowMultitapName(self, textOrder);
                     ShowNoCardText(self, common, entries, textOrder);
                     NextStep(self);
@@ -4041,7 +3985,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int sel
             }
             break;
         case 2:
-            if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
                 self->_isOpen = 1;
                 NextState(self);
             }
@@ -4109,7 +4053,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
     left = 0;
     right = 0;
     if (usePad == 1) {
-        pad = bePadManager_GetPadForPlayer(self->_padManager, self->_ramNo);
+        pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, self->_ramNo);
         trigger = pad->_trigger;
         repeat = pad->_repeat;
         stick = pad->_lTrg | pad->_lRpt;
@@ -4249,7 +4193,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
             }
             break;
         case 1:
-            if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
                 int textOrder;
                 PlayCursor(self, entries[self->_selPoint].sequence, 0);
                 textOrder = self->_textOrder;
@@ -4263,7 +4207,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
             }
             break;
         case 2:
-            if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(ModelCtrl(self)) == 1) {
                 PlayCursor(self, entries[self->_selPoint].sequence, 0);
                 self->_isSelect = 1;
                 NextState(self);
@@ -4301,9 +4245,9 @@ static inline void CloseSlotWindows(beNDMWLoadIntf2SelSlot *self) {
     beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)"j_slotcursor", (const char *)"SQ_CLOSE", 1);
     beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)"j_memoryiconwin", (const char *)"SQ_CLOSE", 1);
     textOrder = self->_textOrder;
-    TextOrder_PublishLineListOnly(textOrder, SlotTextId(self, SELSLOT_TEXT_TITLE));
-    TextOrder_PublishLineListOnly(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1));
-    TextOrder_PublishLineListOnly(textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD));
+    TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_TITLE));
+    TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1));
+    TextOrder_PublishLineListOnly((beNDMWLoadIntf2TextOrder *)textOrder, SlotTextId(self, SELSLOT_TEXT_NO_CARD));
 }
 
 unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
@@ -4353,7 +4297,7 @@ unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
             NextStep(self);
             break;
         case 1:
-            if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(ModelCtrl(self)) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(ModelCtrl(self)) == 1) {
                 self->_isEnd = 1;
                 NextStep(self);
             }
@@ -4458,24 +4402,7 @@ void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int 
 #include "dw4/igobject_release.h"
 
 extern "C" {
-beNDMWLoadIntf2NameSel *beNDMWLoadIntf2NameSel_Create(int allocator);
-beNDMWLoadIntf2Diffselect *beNDMWLoadIntf2Diffselect_Create(int allocator);
-beNDMWLoadIntf2DegiStateCtrl *beNDMWLoadIntf2DegiStateCtrl_Create(int allocator);
-beNDMWLoadIntf2MakeChr *beNDMWLoadIntf2MakeChr_Create(int allocator);
-beNDMWLoadIntf2CtrlData *beNDMWLoadIntf2CtrlData_Create(int allocator);
-int LoadIntf2Message_GetMetaEnum(void);
-beNDMWLoadIntf2MesWin *beNDMWLoadIntf2MesWin_Create(int allocator);
-beNDMWLoadIntf2TextOrder *beNDMWLoadIntf2TextOrder_Create(int allocator);
-int beMessenger_AppendInt(...);
-int beMessenger_GetInt(...);
-int beMessenger_GetIntCount(...);
-unsigned int beMessenger_ResolveEnumValue(...);
-int beMessenger_SelectGroup(...);
-int beMessenger_SetInt(...);
 /* The model position of each interface kind (one per player). */
-extern int g_propertyNameField[4];
-extern int g_beSystem_metaObject[4];
-extern int g_beLua_metaObject[4];
 
 int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMessengerWork *message);
 }
@@ -4494,11 +4421,11 @@ enum LoadIntf2Message {
 
 /* The allocator for objects an owner creates: its own, or the default selector's. */
 static inline int OwnerAllocator(void *owner) {
-    int ownAllocator = igObject_GetAllocator(owner);
+    int ownAllocator = (int)igObject_GetAllocator((igObject *)owner);
     if (g_useOwnerAllocator != 0) {
         return ownAllocator;
     }
-    return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    return (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
 /* The model request at `index` of one of the controller's queues. */
@@ -4509,7 +4436,7 @@ static inline beLoadIntf2ComMdlData *QueuedRequest(int queue, int index) {
 /* Releases the request at `index` and removes it from the queue, clearing the vacated last slot. */
 static inline void DropQueuedRequest(beLoadIntf2ComMdlDataList *queue, int index) {
     igRelease(((igObject **)queue->_data)[index]);
-    List_RemoveWordAt(queue, index);
+    List_RemoveWordAt((igDataList *)queue, index);
     ((beLoadIntf2ComMdlData **)queue->_data)[queue->_count] = 0;
 }
 
@@ -4519,7 +4446,7 @@ static inline void ReleaseReference(ObjectRefTarget *object)
     if (object) {
         --object->references;
         if ((object->references & 0x7fffff) == 0)
-            igObject_Destroy((void *)object);
+            igObject_Destroy((igObject *)object);
     }
 }
 
@@ -4549,7 +4476,7 @@ struct ChildList {
     }
     static inline void *Find(beBaseInfoRam *ram, const void *name) {
         Ensure(ram);
-        return igProperty_FindByName(ram->_dataList, g_propertyNameField[0], name);
+        return (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, (const char *)name);
     }
 };
 
@@ -4563,8 +4490,8 @@ void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
     const char *sequenceToken;
     beLoadIntf2ComMdlData *request;
 
-    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, "GENERATE");
-    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, openSQ);
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo, "GENERATE");
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo, openSQ);
     if ((recordOpen & 0xFF) == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = ramNo;
@@ -4576,7 +4503,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         sequenceToken = (const char *)InternString(openSQ);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained(self->_openDataList, created.p);
+        ObjectList_AppendRetained((igObjectList *)self->_openDataList, (igObject *)created.p);
     }
 }
 
@@ -4588,13 +4515,13 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
     beLoadIntf2ComMdlData *request;
     igVec3f at;
 
-    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", (int)infoName, ramNo);
+    beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo);
     at.x = position[0];
     at.y = position[1];
     at.z = position[2];
-    beMessenger_AppendVec3(self->_messenger, (float *)&at);
-    beMessenger_DispatchSelected(self->_messenger, "GENERATE");
-    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, openSQ);
+    beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&at);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GENERATE");
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo, openSQ);
     if ((recordOpen & 0xFF) == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = ramNo;
@@ -4606,7 +4533,7 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
         sequenceToken = (const char *)InternString(openSQ);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained(self->_openDataList, created.p);
+        ObjectList_AppendRetained((igObjectList *)self->_openDataList, (igObject *)created.p);
     }
 }
 
@@ -4618,7 +4545,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
     const char *sequenceToken;
     beLoadIntf2ComMdlData *request;
 
-    beMessenger_SendNamed(self->_messenger, "MODELCTRL", modelName, slot, sequenceName);
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", (const char *)modelName, slot, (const char *)sequenceName);
     if ((wait & 0xFF) == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = slot;
@@ -4630,20 +4557,20 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
         sequenceToken = (const char *)InternString((const char *)sequenceName);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained(self->_openDataList, created.p);
+        ObjectList_AppendRetained((igObjectList *)self->_openDataList, (igObject *)created.p);
     }
 }
 
 /* Whether the model (infoName, ramNo) is playing the sequence `sqName` (the ISSEQNAME query). */
-int beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName) {
-    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", (int)infoName, ramNo);
-    beMessenger_AppendString(self->_messenger, (int)sqName);
-    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
-    return beMessenger_GetBool(self->_messenger, 0);
+unsigned char beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName) {
+    beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo);
+    beMessenger_AppendString((beMessenger *)self->_messenger, sqName);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ISSEQNAME");
+    return beMessenger_GetBool((beMessenger *)self->_messenger, 0);
 }
 
 /* True once every queued opening sequence has started. */
-int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self) {
+unsigned char beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self) {
     return ((beLoadIntf2ComMdlDataList *)self->_openDataList)->_count <= 0;
 }
 
@@ -4655,7 +4582,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
     const char *sequenceToken;
     beLoadIntf2ComMdlData *request;
 
-    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, openSequence);
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo, openSequence);
     if (trackClose == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = ramNo;
@@ -4667,18 +4594,18 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         sequenceToken = (const char *)InternString(openSequence);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained(self->_closeDataList, created.p);
+        ObjectList_AppendRetained((igObjectList *)self->_closeDataList, (igObject *)created.p);
     }
 }
 
 /* Whether the model (name, slot) is still running (the ISRUN query). */
-int beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const char *name) {
-    beMessenger_SendNamed(self->_messenger, "MODELCTRL", name, slot, "ISRUN");
-    return beMessenger_GetBool(self->_messenger, 0);
+unsigned char beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const char *name) {
+    beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", name, slot, "ISRUN");
+    return beMessenger_GetBool((beMessenger *)self->_messenger, 0);
 }
 
 /* True once every queued closing model has stopped. */
-int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self) {
+unsigned char beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self) {
     return ((beLoadIntf2ComMdlDataList *)self->_closeDataList)->_count <= 0;
 }
 
@@ -4697,7 +4624,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self) {
     if (openCount > 0) {
         for (openIndex = openCount - 1; openIndex >= 0; openIndex--) {
             opening = QueuedRequest(self->_openDataList, openIndex);
-            if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsSequence((beNDMWSaveIntfComMdlCtrl *)self, opening->_ramNo, (const char *)opening->_infoName, (const char *)opening->_openSQ) == 1) break;
+            if (beNDMWLoadIntf2ComMdlCtrl__IsSequence((beNDMWSaveIntfComMdlCtrl *)self, opening->_ramNo, (const char *)opening->_infoName, (const char *)opening->_openSQ) == 1) break;
             DropQueuedRequest((beLoadIntf2ComMdlDataList *)self->_openDataList, openIndex);
         }
     }
@@ -4705,7 +4632,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self) {
     if (closeCount > 0) {
         for (closeIndex = closeCount - 1; closeIndex >= 0; closeIndex--) {
             closing = QueuedRequest(self->_closeDataList, closeIndex);
-            if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning(self, closing->_ramNo, (const char *)closing->_infoName) == 1) break;
+            if (beNDMWLoadIntf2ComMdlCtrl__IsRunning(self, closing->_ramNo, (const char *)closing->_infoName) == 1) break;
             DropQueuedRequest((beLoadIntf2ComMdlDataList *)self->_closeDataList, closeIndex);
         }
     }
@@ -4717,7 +4644,7 @@ void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self) {
     igObject *previous;
 
     if (self->_padManager == 0) {
-        found = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+        found = igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
         if (found != 0) {
             found->_refCount = (int)found->_refCount + 1;
         }
@@ -4772,7 +4699,7 @@ void beNDMWLoadIntf2_igObjectList_Set(igDataList *list, int index, ObjectRefTarg
 }
 
 /* Copies a three-float vector. */
-void Vec3f_Copy(void *destination, void *source)
+void Vec3f_Copy(void *destination, const void *source)
 {
     float *to = (float *)destination;
     const float *from = (const float *)source;
@@ -4797,7 +4724,7 @@ int beNDMWLoadIntf2_igObjectList_Get(igDataList *list, int index)
 /* The child of `list` whose name field (`nameField`) is `name`. */
 void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, const void *name)
 {
-    return igProperty_FindByName(list, nameField, name);
+    return (void *)igProperty_FindByName((igObjectList *)list, (igMetaField *)nameField, (const char *)name);
 }
 
 int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(int *reference)
@@ -4824,12 +4751,12 @@ AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(int allocat
 }
 
 /* The owner's allocator when g_useOwnerAllocator is set, else the selector's. */
-int beNDMWLoadIntf2_Memory_SelectAllocator(const int *selector, int ownAllocator)
+int beNDMWLoadIntf2_Memory_SelectAllocator(const igMemoryPoolHandle *selector, int ownAllocator)
 {
     if (g_useOwnerAllocator)
         return ownAllocator;
     else
-        return Memory_GetAllocatorBySelector(*selector);
+        return (int)Memory_GetAllocatorBySelector(*selector);
 }
 
 int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(int *reference)
@@ -4839,13 +4766,13 @@ int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(int *reference)
 
 int beNDMWLoadIntf2__GetInfoMeta(void)
 {
-    return g_beNDMWLoadIntf2Info_metaObject[0];
+    return (int)g_beNDMWLoadIntf2Info_metaObject;
 }
 
 /* Registers the info record as a receiver of LOADINTF2_ALL and of LOADINTF2 for its ram number. */
 void beNDMWLoadIntf2_OnAddRam(beNDMWLoadIntf2 *self, beBaseInfoRam *ram) {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "LOADINTF2_ALL");
-    beMessenger_RegisterReceiver(self->_messenger, ram, "LOADINTF2", 0, ram->_ramNo);
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, ram, "LOADINTF2_ALL");
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, ram, "LOADINTF2", 0, ram->_ramNo);
 }
 
 /* Answers the messages sent to one player's load interface (`ram`, whose _ramNo is the player):
@@ -4858,15 +4785,15 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
     beNDMWLoadIntf2CtrlData *control;
     beNDMWLoadCtrl2CommonIntf *common;
 
-    command = beMessenger_ResolveEnumValue(self->_messenger, LoadIntf2Message_GetMetaEnum(), message->_message);
+    command = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, LoadIntf2Message_GetMetaEnum(), (const char *)message->_message);
     if (command == MSG_GENERATE) {
         if (ram->_dataList == 0) {
             igSmartPointer<beBaseInfoDataList> dataList((beBaseInfoDataList *)beBaseInfoDataList_Create(OwnerAllocator(self)));
             SetDataList(ram, dataList.p);
-            self->_system_ = (int)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+            self->_system_ = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
             {
                 igSmartPointer<beNDMWLoadIntf2CtrlData> ctrl(beNDMWLoadIntf2CtrlData_Create(OwnerAllocator(self)));
-                ObjectList_AppendRetained(ram->_dataList, ctrl.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)ctrl.p);
                 ctrl.p->_isRun = 1;
                 /* matching construct: hand search — each branch stores all three flags (player 1
                  * starts entered) */
@@ -4880,15 +4807,15 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                     ctrl.p->_isCtrl = 1;
                 }
             }
-            beMessenger_SendNamed(self->_messenger, "LOADCTRL2", 0, 0, "GETCOMMON");
-            ObjectList_AppendRetained(ram->_dataList, beMessenger_GetObject(self->_messenger, 0));
+            beMessenger_SendNamed((beMessenger *)self->_messenger, "LOADCTRL2", 0, 0, "GETCOMMON");
+            ObjectList_AppendRetained((igObjectList *)ram->_dataList, beMessenger_GetObject((beMessenger *)self->_messenger, 0));
             {
                 igSmartPointer<beNDMWLoadIntf2MakeChr> maker(beNDMWLoadIntf2MakeChr_Create(OwnerAllocator(self)));
-                ObjectList_AppendRetained(ram->_dataList, maker.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)maker.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2ComMdlCtrl> models(beNDMWLoadIntf2ComMdlCtrl_Create(OwnerAllocator(self)));
-                ObjectList_AppendRetained(ram->_dataList, models.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)models.p);
                 models.p->_messenger = self->_messenger;
                 {
                     /* matching construct: hand search — the controller read once into a local, and the
@@ -4909,19 +4836,19 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                 {
                     /* matching construct: hand search — the text order read once into a local */
                     beNDMWLoadIntf2TextOrder *order = text.p;
-                    order->_lua = (int)igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+                    order->_lua = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject);
                 }
-                ObjectList_AppendRetained(ram->_dataList, text.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)text.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2SelSlot> slots(beNDMWLoadIntf2SelSlot_Create(OwnerAllocator(self)));
                 slots.p->_ramNo = ram->_ramNo;
                 slots.p->_messenger = self->_messenger;
-                slots.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+                slots.p->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
                 slots.p->_comMdlCtrl = (int)ChildList::Find(ram, "COMMDLCTRL");
                 slots.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
                 slots.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
-                ObjectList_AppendRetained(ram->_dataList, slots.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)slots.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2NameSel> names(beNDMWLoadIntf2NameSel_Create(OwnerAllocator(self)));
@@ -4929,19 +4856,19 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                 void *textOrder;
                 names.p->_ramNo = ram->_ramNo;
                 names.p->_messenger = self->_messenger;
-                names.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+                names.p->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
                 comMdlCtrl = ChildList::Find(ram, "COMMDLCTRL");
                 textOrder = ChildList::Find(ram, "TEXTORDER");
                 names.p->_comMdlCtrl = (int)comMdlCtrl;
                 names.p->_textOrder = (int)textOrder;
-                ObjectList_AppendRetained(ram->_dataList, names.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)names.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2MesWin> window(beNDMWLoadIntf2MesWin_Create(OwnerAllocator(self)));
                 window.p->_ramNo = ram->_ramNo;
                 window.p->_messenger = self->_messenger;
-                window.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
-                ObjectList_AppendRetained(ram->_dataList, window.p);
+                window.p->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)window.p);
                 window.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
             }
             {
@@ -4953,7 +4880,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                     commonIntf = ChildList::Find(ram, "COMMONINTF");
                     textOrder = ChildList::Find(ram, "TEXTORDER");
                     beNDMWLoadIntf2DegiState__Init(upper.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, "COMMDLCTRL"), self->_messenger, 0);
-                    ObjectList_AppendRetained(status.p->_statDataList, upper.p);
+                    ObjectList_AppendRetained((igObjectList *)status.p->_statDataList, (igObject *)upper.p);
                 }
                 {
                     igSmartPointer<beNDMWLoadIntf2DegiState> lower(beNDMWLoadIntf2DegiState_Create(OwnerAllocator(self)));
@@ -4962,28 +4889,28 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                     commonIntf = ChildList::Find(ram, "COMMONINTF");
                     textOrder = ChildList::Find(ram, "TEXTORDER");
                     beNDMWLoadIntf2DegiState__Init(lower.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, "COMMDLCTRL"), self->_messenger, 1);
-                    ObjectList_AppendRetained(status.p->_statDataList, lower.p);
+                    ObjectList_AppendRetained((igObjectList *)status.p->_statDataList, (igObject *)lower.p);
                 }
-                ObjectList_AppendRetained(ram->_dataList, status.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)status.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2DataSelIntf> dataSel(beNDMWLoadIntf2DataSelIntf_Create(OwnerAllocator(self)));
-                dataSel.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+                dataSel.p->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
                 dataSel.p->_comMdlCtrl = (int)ChildList::Find(ram, "COMMDLCTRL");
                 dataSel.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
                 dataSel.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
                 dataSel.p->_mesWin = (int)ChildList::Find(ram, "MESWIN");
                 dataSel.p->_statDisp = (int)ChildList::Find(ram, "DEGISTATECTRL");
-                ObjectList_AppendRetained(ram->_dataList, dataSel.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)dataSel.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2Diffselect> difficulty(beNDMWLoadIntf2Diffselect_Create(OwnerAllocator(self)));
-                difficulty.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+                difficulty.p->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
                 difficulty.p->_comMdlCtrl = (int)ChildList::Find(ram, "COMMDLCTRL");
                 difficulty.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
                 difficulty.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
                 difficulty.p->_mesWin = (int)ChildList::Find(ram, "MESWIN");
-                ObjectList_AppendRetained(ram->_dataList, difficulty.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)difficulty.p);
             }
         }
         return 1;
@@ -4993,19 +4920,19 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
     ChildList::Find(ram, "MAKECHR"); /* looked up, not used */
     switch (command) {
     case MSG_ISENTRY:
-        if (beMessenger_GetIntCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, 0);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, 0);
         }
         if (control->_isEntry == 1) {
-            beMessenger_SetInt(self->_messenger, 0, beMessenger_GetInt(self->_messenger, 0) + 1);
+            beMessenger_SetInt((beMessenger *)self->_messenger, 0, beMessenger_GetInt((beMessenger *)self->_messenger, 0) + 1);
         }
         return 1;
     case MSG_ISRDY:
-        if (beMessenger_GetIntCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, 0);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, 0);
         }
         if (control->_isRdy == 1) {
-            beMessenger_SetInt(self->_messenger, 0, beMessenger_GetInt(self->_messenger, 0) + 1);
+            beMessenger_SetInt((beMessenger *)self->_messenger, 0, beMessenger_GetInt((beMessenger *)self->_messenger, 0) + 1);
         }
         return 1;
     case MSG_ONCTRL:
@@ -5017,16 +4944,16 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
     case MSG_SETSELECT_DATA:
         common = (beNDMWLoadCtrl2CommonIntf *)ChildList::Find(ram, "COMMONINTF");
         if (PlayerWork(common, ram->_ramNo)->_isRdy != 1) {
-            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-            beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-            beMessenger_DispatchSelected(self->_messenger, "GAMEREMOVE");
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+            beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GAMEREMOVE");
         }
         return 1;
     case MSG_SETDIFFICULTMAX:
-        if (beMessenger_GetIntCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, 0);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, 0);
         }
-        self->_difficultMax = beMessenger_GetInt(self->_messenger, 0);
+        self->_difficultMax = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
         return 1;
     default:
         return 0;

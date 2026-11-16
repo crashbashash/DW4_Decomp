@@ -3,7 +3,7 @@ int g_beSvStartApi_orderTypeStorage;
 
 beSvStartApi *beSvStartApi_Create(int allocator) {
     beSvStartApi_EnsureRegistered();
-    return (beSvStartApi *)igMetaObject_CreateInstance(*(int *)0x5881F0, allocator);
+    return (beSvStartApi *)igMetaObject_CreateInstance(g_beSvStartApi_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSvStartApi_GetMetaObject(void)
@@ -31,7 +31,7 @@ int beSvStartApi_GetVTable(void) {
     iconWorkSlot = (igObject **)&obj._iconWork;
     *iconWorkSlot = 0;
     obj._vtable = (int)&g_beSvStartApi_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSaveApi_vtable[0];
     igObjectRef_Release(iconWorkSlot);
     igObjectRef_Release(mountWorkSlot);
@@ -44,7 +44,7 @@ void beSvStartApi_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvStartApi_Register);
 }
 
-void *beSvStartApi_Register(void) {
+CallbackArray *beSvStartApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -68,17 +68,17 @@ void beSvStartApi_GetMetaObjectFunction(void)
 
 void beSvStartApi_InitFields(void) {
     int index;
-    void *meta;
+    igMetaObject *meta;
     void **found;
     igIntMetaField *clone;
 
-    meta = (void *)g_beSvStartApi_metaObject;
+    meta = g_beSvStartApi_metaObject;
     found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 0xA);
     clone->_externalEnumStorage = (int)(&g_beSvStartApi_orderTypeStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);

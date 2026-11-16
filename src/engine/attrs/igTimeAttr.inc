@@ -3,12 +3,12 @@ igMetaField *g_igTimeAttr_timeMetaField;
 
 igTimeAttr *igTimeAttr_CreateInstance(int allocator) {
     FUN_00131040();
-    return (igTimeAttr *)igMetaObject_CreateInstance(*(int *)0x55EC80, allocator);
+    return (igTimeAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55EC80, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *FUN_00130f60(void) {
     if (g_igTimeAttr_metaObject == 0) {
-        g_igTimeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTimeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTimeAttr_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igTimeAttr_GetMetaObject(void)
 
 int igTimeAttr_GetVTable(void) {
     union U_131000 u;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igTimeAttr_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void FUN_00131040(void)
@@ -33,9 +33,9 @@ void FUN_00131040(void)
     igMetaObject_RunStaticInit(igTimeAttr_Register);
 }
 
-void igTimeAttr_Register(void) {
+CallbackArray *igTimeAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTimeAttr_metaObject,
         igVisualAttribute_Register,
@@ -55,7 +55,7 @@ void thunk_igTimeAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTimeAttr_ctorTable[] = {
-    igLongMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
 };
 static const char *g_igTimeAttr_fieldTable[] = {
     "_time",

@@ -4,7 +4,7 @@ igMetaField *g_igViewportResizedMessage_sizeMetaField;
 
 int FUN_002332b0(int arg0) {
     FUN_00233380();
-    return igMetaObject_CreateInstance(*(int *)0x56DC10, arg0);
+    return (int)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x56DC10), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igViewportResizedMessage_GetMetaObject(void)
@@ -18,9 +18,9 @@ igMetaObject *igViewportResizedMessage_GetMetaObject(void)
 int igViewportResizedMessage_GetVTable(void) {
     struct Obj_233340 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igViewportResizedMessage_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_00233380(void)
@@ -28,9 +28,9 @@ void FUN_00233380(void)
     igMetaObject_RunStaticInit(igViewportResizedMessage_Register);
 }
 
-void igViewportResizedMessage_Register(void) {
+CallbackArray *igViewportResizedMessage_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewportResizedMessage_metaObject,
         igMessage_Register,
@@ -50,8 +50,8 @@ void thunk_igViewportResizedMessage_GetMetaObject(void) {
 }
 
 static FieldFactory g_igViewportResizedMessage_ctorTable[] = {
-    igVec2fMetaField_CreateInstance,
-    igVec2fMetaField_CreateInstance,
+    (FieldFactory)igVec2fMetaField_CreateInstance,
+    (FieldFactory)igVec2fMetaField_CreateInstance,
 };
 static const char *g_igViewportResizedMessage_fieldTable[] = {
     "_origin",
@@ -71,8 +71,8 @@ void igViewportResizedMessage_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igViewportResizedMessage_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igViewportResizedMessage_ctorTable, 2);
-    igMetaObject_NameFields(temp_s0, g_igViewportResizedMessage_fieldTable, g_igViewportResizedMessage_fieldHandles, g_igViewportResizedMessage_fieldOffsets, temp_s1);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewportResizedMessage_ctorTable, 2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewportResizedMessage_fieldTable, g_igViewportResizedMessage_fieldHandles, g_igViewportResizedMessage_fieldOffsets, temp_s1);
 }
 

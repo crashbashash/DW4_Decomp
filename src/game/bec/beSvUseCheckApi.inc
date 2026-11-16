@@ -2,7 +2,7 @@ igMetaObject *g_beSvUseCheckApi_metaObject;
 
 beSvUseCheckApi *beSvUseCheckApi_Create(int allocator) {
     beSvUseCheckApi_EnsureRegistered();
-    return (beSvUseCheckApi *)igMetaObject_CreateInstance(*(int *)0x588268, allocator);
+    return (beSvUseCheckApi *)igMetaObject_CreateInstance(g_beSvUseCheckApi_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beSvUseCheckApi_GetMetaObject(void) {
@@ -29,7 +29,7 @@ int beSvUseCheckApi_GetVTable(void) {
     iconWorkSlot = (igObject **)&obj._iconWork;
     *iconWorkSlot = 0;
     obj._vtable = (int)&g_beSvUseCheckApi_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSaveApi_vtable[0];
     igObjectRef_Release(iconWorkSlot);
     igObjectRef_Release(mountWorkSlot);
@@ -42,7 +42,7 @@ void beSvUseCheckApi_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvUseCheckApi_Register);
 }
 
-void *beSvUseCheckApi_Register(void) {
+CallbackArray *beSvUseCheckApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -276,7 +276,7 @@ void igObjectStringMap_Add(igObjectStringMap *self, int name, void *object) {
     igObject *held;
 
     *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)igObject_GetAllocator((igObject *)self))));
-    igNamedObject_SetName((igNamedObject *)entry, name);
+    igNamedObject_SetName((igNamedObject *)entry, (const char *)name);
     ObjectList_AppendRetained((igObjectList *)self->_names, (igObject *)entry);
     ObjectList_AppendRetained((igObjectList *)self->_data, (igObject *)object);
     held = entry;
@@ -299,7 +299,7 @@ int igObjectStringMap_GetObject(void *self, int name) {
 }
 
 int igObjectStringMap_GetIndexByName(igObjectStringMap *map, int name) {
-    igObject *field = ((igObject *)igProperty_FindByName((igObjectList *)map->_names, (igMetaField *)g_propertyNameField, name));
+    igObject *field = ((igObject *)igProperty_FindByName((igObjectList *)map->_names, (igMetaField *)g_propertyNameField, (const char *)name));
     if (field == 0) {
         return -1;
     }
@@ -338,7 +338,7 @@ void igObjectStringMap_Clear(igObjectStringMap *o) {
         igObject *p = ((igObject **)l->_data)[i];
         if (p) {
             p->_refCount = p->_refCount - 1;
-            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
+            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((igObject *)p);
         }
     }
     { int m = l->_count; for (i = 0; i < m; i++) ((igObject **)l->_data)[i] = 0; }
@@ -349,7 +349,7 @@ void igObjectStringMap_Clear(igObjectStringMap *o) {
         igObject *p = ((igObject **)l->_data)[i];
         if (p) {
             p->_refCount = p->_refCount - 1;
-            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
+            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((igObject *)p);
         }
     }
     { int m = l->_count; for (i = 0; i < m; i++) ((igObject **)l->_data)[i] = 0; }
@@ -472,7 +472,7 @@ void igReport_VPrintf(const char *format, int args) {
             printf((const char *)&percent_s[0], &buffer[0]);
         }
     } else if (g_reportEchoToStdout != 0) {
-        vprintf(format, args);
+        vprintf(format, (va_list)args);
     }
 }
 
@@ -524,7 +524,7 @@ void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location
     igPluginRepository *target;
     char *old;
     igSmartPointer<igPluginRepository> repository(((igPluginRepository *)igPluginRepository_Create(((int)igObject_GetAllocator((igObject *)helper)))));
-    igNamedObject_SetName((igNamedObject *)repository.p, name);
+    igNamedObject_SetName((igNamedObject *)repository.p, (const char *)name);
     target = repository.p;
     if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
@@ -573,7 +573,7 @@ void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, cons
     static const int alchemyRootLength = strlen(g_alchemyRootToken);
     static const int applicationRootLength = strlen(g_applicationRootToken);
     igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)igObject_GetAllocator((igObject *)self)));
-    igNamedObject_SetName((igNamedObject *)repository.get(), name);
+    igNamedObject_SetName((igNamedObject *)repository.get(), (const char *)name);
     if (strncmp(path, g_alchemyRootToken, alchemyRootLength) == 0) {
         setRepositoryLocation(repository, path, alchemyRootLength);
         repository.get()->_locationType = 1;

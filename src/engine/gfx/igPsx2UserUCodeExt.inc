@@ -10,7 +10,7 @@ void thunk_igPsx2UserUCodeExt_GetMetaObject(void) {
 
 igMetaObject *FUN_0014bc80(void) {
     if (g_igScissorExt_metaObject == 0) {
-        g_igScissorExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igScissorExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igScissorExt_metaObject;
 }

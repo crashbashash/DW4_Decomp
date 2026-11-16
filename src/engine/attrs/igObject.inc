@@ -46,5 +46,5 @@ struct R_1354b0 **igSmartPointer_igFloatList_Destruct(struct R_1354b0 **arg0, sh
     return arg0;
 }
 
-void *igObject_GetMetaObject_ParentAccessor(void){return (void *)g_igObject_metaObject[0];}
+igMetaObject *igObject_GetMetaObject_ParentAccessor(void){return g_igObject_metaObject[0];}
 

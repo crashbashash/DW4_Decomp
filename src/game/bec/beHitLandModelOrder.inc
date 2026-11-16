@@ -11,12 +11,12 @@ igMetaField *g_beHitLandModelOrder_hitdataListMetaField;
 
 beHitLandModelOrder *beHitLandModelOrder_Create(int allocator) {
     beHitLandModelOrder_EnsureRegistered();
-    return (beHitLandModelOrder *)igMetaObject_CreateInstance(*(int *)0x589390, allocator);
+    return (beHitLandModelOrder *)igMetaObject_CreateInstance(g_beHitLandModelOrder_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beHitLandModelOrder_GetOrCreateMetaObject(void) {
     if (g_beHitLandModelOrder_metaObject == 0) {
-        g_beHitLandModelOrder_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beHitLandModelOrder_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beHitLandModelOrder_metaObject;
 }
@@ -47,7 +47,7 @@ int beHitLandModelOrder_GetVTable(void) {
     *rayListSlot = 0;
     hitdataListSlot = (igObject **)&obj._hitdataList;
     *hitdataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beHitLandModelOrder_vtable[0];
     igObjectRef_Release(hitdataListSlot);
     igObjectRef_Release(rayListSlot);
@@ -62,7 +62,7 @@ void beHitLandModelOrder_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beHitLandModelOrder_callbackList[] = { igRayList_EnsureRegistered, beHitLandResultDataList_EnsureRegistered, 0 };
 
-void *beHitLandModelOrder_Register(void) {
+CallbackArray *beHitLandModelOrder_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -135,11 +135,11 @@ void beHitLandModelOrder_InitFields(void) {
     void *rayList;
     int base;
     void *hitdataList;
-    void *meta;
+    igMetaObject *meta;
     int rayMaxDefault[3];
     int rayMinDefault[3];
 
-    meta = (void *)g_beHitLandModelOrder_metaObject;
+    meta = g_beHitLandModelOrder_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandModelOrder_ctorTable, 9);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), "");
@@ -154,7 +154,7 @@ void beHitLandModelOrder_InitFields(void) {
     rayMinDefault[2] = 0;
     igVec3fMetaField_SetDefault(raymin, rayMinDefault);
     rayList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)rayList)->_metaObject = igRayList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)rayList)->_metaObject = (int)igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)rayList)->_construct = 1;
     hitdataList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)hitdataList)->_metaObject = (int)beHitLandResultDataList_GetOrCreateMetaObject();

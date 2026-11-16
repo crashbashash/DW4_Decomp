@@ -1,20 +1,5 @@
+#include "dw4/sony/sif.h"
 #include "dw4/libkernl.h"
-typedef struct sceSifRpcData {
-    void *paddr;
-    unsigned int pid;
-    int tid;
-    unsigned int mode;
-} sceSifRpcData;
-
-typedef struct sceSifClientData {
-    sceSifRpcData rpcd;
-    unsigned int command;
-    void *buff;
-    void *cbuff;
-    void (*end_function)(void *);
-    void *end_param;
-    void *serve;
-} sceSifClientData;
 
 /* mtapman.irx's RPC servers, one per call */
 #define MTAP_PORT_OPEN 0x80000901
@@ -25,11 +10,6 @@ typedef struct sceSifClientData {
 
 #define LIBMTAP_VERSION_MAJOR 3
 #define LIBMTAP_VERSION_MINOR 0
-
-void sceSifInitRpc(unsigned int mode);
-int sceSifBindRpc(sceSifClientData *client, unsigned int rpc_number, int mode);
-int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send, int ssize, void *receive,
-                 int rsize, void (*end_function)(void *), void *end_param);
 
 int sceMtapGetModVersion(void);
 

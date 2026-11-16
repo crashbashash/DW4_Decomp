@@ -21,7 +21,7 @@ int beNDMWStatusInfoRam_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWStatusInfoRam_vtable[0];
     workRef = &obj._work;
     *workRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusInfoRam_vtable[0];
     if (workRef != 0) {
         igRelease((igObject *)*workRef);
@@ -39,9 +39,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWStatusInfoWork_Destruct(igSmartPo
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -53,7 +53,7 @@ void beNDMWStatusInfoRam_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusInfoRam_callbackList[] = { beNDMWStatusInfoWork_EnsureRegistered, 0 };
 
-void *beNDMWStatusInfoRam_Register(void) {
+CallbackArray *beNDMWStatusInfoRam_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

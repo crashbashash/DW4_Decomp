@@ -3,7 +3,7 @@ igMetaField *g_igControllerManager_controllersMetaField;
 
 igMetaObject *FUN_00146660(void) {
     if (g_igControllerManager_metaObject == 0) {
-        g_igControllerManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igControllerManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igControllerManager_metaObject;
 }
@@ -23,9 +23,9 @@ void FUN_00146700(void)
 
 static igMetaObjectCallback g_igControllerManager_callbackList[] = { FUN_001463e0, 0 };
 
-void igControllerManager_Register(void) {
+CallbackArray *igControllerManager_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igControllerManager_metaObject,
         igEventProducer_Register,
@@ -63,12 +63,12 @@ void igControllerManager_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igControllerManager_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igControllerManager_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igControllerManager_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_00146300();
     *(char *)((char *)(temp_s1) + 52) = 1;
-    igMetaObject_NameFields(temp_s0, g_igControllerManager_fieldTable, g_igControllerManager_fieldHandles, g_igControllerManager_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igControllerManager_fieldTable, g_igControllerManager_fieldHandles, g_igControllerManager_fieldOffsets, temp_s2);
     *(int *)((char *)(g_igControllerManager_metaObject) + 60) = (int)(&thunk_igPsx2ControllerManager_GetMetaObject);
 }
 

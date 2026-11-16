@@ -10,12 +10,12 @@ igMetaField *g_beCameraMode_isFreezeMetaField;
 
 beCameraMode *beCameraMode_Create(int allocator) {
     beCameraMode_EnsureRegistered();
-    return (beCameraMode *)igMetaObject_CreateInstance(*(int *)0x589B90, allocator);
+    return (beCameraMode *)igMetaObject_CreateInstance(g_beCameraMode_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beCameraMode_GetOrCreateMetaObject(void) {
     if (g_beCameraMode_metaObject == 0) {
-        g_beCameraMode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCameraMode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCameraMode_metaObject;
 }
@@ -36,13 +36,13 @@ int beCameraMode_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_igViewMode_vtable[0];
-    igMatrix44f_SetIdentity((int *)obj._inverseMatrix);
+    igMatrix44f_SetIdentity(obj._inverseMatrix);
     obj._vtable = (int)&g_beCameraMode_vtable[0];
     cameraPathSlot = (igObject **)&obj._cameraPath;
     *cameraPathSlot = 0;
     cameraSlot = (igObject **)&obj._camera;
     *cameraSlot = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCameraMode_vtable[0];
     igObjectRef_Release(cameraSlot);
     igObjectRef_Release(cameraPathSlot);
@@ -56,7 +56,7 @@ void beCameraMode_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCameraMode_callbackList[] = { igGraphPath_EnsureRegistered, igCamera_EnsureRegistered, igInsightCore_EnsureRegistered, 0 };
 
-void *beCameraMode_Register(void) {
+CallbackArray *beCameraMode_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -78,8 +78,8 @@ void beCameraMode_GetMetaObjectFunction(void)
     beCameraMode_GetMetaObject();
 }
 
-int igViewMode_GetPublishedMetaObject(void) {
-    return g_igViewMode_metaObject[0];
+igMetaObject *igViewMode_GetPublishedMetaObject(void) {
+    return g_igViewMode_metaObject;
 }
 
 static FieldFactory g_beCameraMode_ctorTable[] = {
@@ -128,17 +128,17 @@ void beCameraMode_InitFields(void) {
     void *insight;
     void *camera;
     void *cameraPath;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCameraMode_metaObject;
+    meta = g_beCameraMode_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraMode_ctorTable, 8);
     cameraPath = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)cameraPath)->_metaObject = igGraphPath_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)cameraPath)->_metaObject = (int)igGraphPath_GetOrCreateMetaObject();
     camera = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)camera)->_metaObject = igCamera_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)camera)->_metaObject = (int)igCamera_GetOrCreateMetaObject();
     insight = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)insight)->_refCounted = 0;
     igMetaObject_NameFields(meta, g_beCameraMode_fieldTable, g_beCameraMode_fieldHandles, g_beCameraMode_fieldOffsets, base);
 }

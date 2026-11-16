@@ -1,38 +1,26 @@
 #include "dw4/reflected.h"
+#include "dw4/StringPool.h"
+#include "dw4/beCri.h"
+#include "dw4/beNDMWAfsSetup.h"
+#include "dw4/beNDMWAfsSetupInfo.h"
+#include "dw4/beNDMWAfsStageLoad.h"
+#include "dw4/beSystem.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igObject.h"
 
-extern "C" int beCri_ReleasePartitions(int);
 extern "C" void beNDMWAfsSetup_Activate(void);
 extern "C" void beNDMWAfsSetup_Deactivate(void);
 extern "C" void beNDMWAfsSetup_Start(void);
 extern "C" void beNDMWAfsSetup_Update(void);
 extern "C" int beNDMWAfsSetup_GetMeta(void);
-extern "C" void * igInsightCore_FindManager(...);
-extern "C" void *StringPool_Allocate(int);
-extern "C" void *StringPool_Construct(void *);
-extern "C" const char *StringPool_Intern(void *, const char *);
-extern "C" void StringChunk_ReleaseHeader(int, int *);
 extern "C" void beNDMWAfsStageLoad_Execute(void);
 extern "C" int beNDMWAfsStageLoad_GetMeta(void);
-extern "C" int g_beCri_metaObject[4];
-extern "C" int g_beNDMWAfsSetup_metaObject[4];
 extern "C" void beNDMWAfsSetup_Stop(beNDMWAfsSetup *self);
-extern "C" int igObject_IsKindOf(igObject *, int);
-extern "C" void igInsightCore_AddToScheduler(int, beNDMWAfsSetup *);
-extern "C" void beCri_SetupPartitions(beCri *, int, int);
-extern "C" void beCri_LoadPartition(beCri *, int, const char *, int);
-extern "C" void ObjectList_AppendRetained(int, igObject *);
-extern "C" void *g_stringPool[4];
-extern "C" int g_beNDMWAfsSetupInfo_metaObject[4];
-extern "C" int g_beCri_metaObject[4];
-extern "C" int g_beSystem_metaObject[4];
 extern "C" char emptyString[];
 extern "C" char text_stagis08_igb[];
 extern "C" int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info);
-extern "C" int igInsightCore_RemoveFromScheduler(int, beNDMWAfsSetup *);
-extern "C" int List_Reserve(igDataList *, int, int);
-extern "C" int igObject_Destroy(igObject *);
 extern "C" void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *self);
-extern "C" int g_beNDMWAfsStageLoad_metaObject[4];
 
 /* Empty virtual slot 21 */
 void beNDMWAfsSetup_Activate(void)
@@ -52,15 +40,15 @@ void beNDMWAfsSetup_Start(void)
 /* Finds the insight's beCri component (CRI sound middleware owner) and hands it to beCri_ReleasePartitions,
  * which tears down the global string/object lists. */
 void beNDMWAfsSetup_Stop(beNDMWAfsSetup *self) {
-    beCri_ReleasePartitions(((int)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0])));
+    beCri_ReleasePartitions((beCri *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beCri_metaObject));
 }
 
 int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info) {
-    if (igObject_IsKindOf(info, g_beNDMWAfsSetupInfo_metaObject[0])) {
-        beCri *cri = (beCri *)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0]);
+    if (igObject_IsKindOf(info, g_beNDMWAfsSetupInfo_metaObject)) {
+        beCri *cri = (beCri *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beCri_metaObject);
         if (cri == 0) return 0;
-        ObjectList_AppendRetained(self->_infoList, info);
-        igInsightCore_AddToScheduler(self->_insight, self);
+        ObjectList_AppendRetained((igObjectList *)self->_infoList, info);
+        igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
         beNDMWAfsSetupInfo *setup = (beNDMWAfsSetupInfo *)info;
         igObjectList *files = (igObjectList *)setup->_dataList;
         beCri_SetupPartitions(cri, files->_count, setup->_insideFiles);
@@ -70,19 +58,19 @@ int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info) {
             int count = data->_fileCount;
             beCri_LoadPartition(cri, i, data->_name ? (const char *)data->_name : emptyString, count);
         }
-        beSystem *system = (beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
-        if (g_stringPool[0] == 0) {
-            void *pool = StringPool_Allocate(16);
+        beSystem *system = (beSystem *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
+        if (g_stringPool == 0) {
+            StringPool *pool = (StringPool *)StringPool_Allocate(16);
             if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        const char *token = StringPool_Intern(g_stringPool[0], text_stagis08_igb);
+        const char *token = StringPool_Intern(g_stringPool, text_stagis08_igb);
         const char *old = (const char *)system->_nextStage;
         if (old != 0) {
             int *header = (int *)old - 2;
             int count = ((int *)old)[-1] - 1;
             ((int *)old)[-1] = count;
-            if (count == 0) StringChunk_ReleaseHeader(*header, header);
+            if (count == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
         }
         system->_nextStage = (int)token;
         system->_isStageLoop = 0;
@@ -118,7 +106,7 @@ void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *self) {
     if (!(0 < ((igDataList *)self->_infoList)->_count)) {
         List_Reserve((igDataList *)self->_infoList, 0, 4);
     }
-    igInsightCore_RemoveFromScheduler(self->_insight, self);
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 /* Empty virtual slot 27 */
@@ -132,10 +120,10 @@ void beNDMWAfsStageLoad_Execute(void)
 
 int beNDMWAfsStageLoad_GetMeta(void)
 {
-    return g_beNDMWAfsStageLoad_metaObject[0];
+    return (int)g_beNDMWAfsStageLoad_metaObject;
 }
 
 int beNDMWAfsSetup_GetMeta(void)
 {
-    return g_beNDMWAfsSetup_metaObject[0];
+    return (int)g_beNDMWAfsSetup_metaObject;
 }

@@ -31,7 +31,7 @@ void FUN_00180060(O_180060 *arg0) {
             v[0] = 0;
             v[1] = 0;
             v[2] = 0;
-            igMatrix44f_SetTranslation(s2, v);
+            igMatrix44f_SetTranslation((float *)s2, (float *)v);
             FUN_001903d0(s2);
         }
     }
@@ -83,7 +83,7 @@ BuildResource *s7;
             setMember(second, values);
             second.p->f16 = 3;
             second.p->f28 = 0x7734;
-            ObjectList_AppendRetained(s0, second.p);
+            ObjectList_AppendRetained((igObjectList *)s0, (igObject *)second.p);
             s2 = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 3, 0);
             s2->f20 = 0x7734;
         } else {
@@ -102,7 +102,7 @@ BuildResource *s7;
         setMember(first, values);
         first.p->f16 = 1;
         first.p->f28 = 0x7734;
-        ObjectList_AppendRetained(s0, first.p);
+        ObjectList_AppendRetained((igObjectList *)s0, (igObject *)first.p);
         s0o = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 1, 0);
         s0o->f20 = 0x7734;
     } else {

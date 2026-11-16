@@ -22,6 +22,8 @@ extern const char _ctype_[];
 #define iscntrl(c) ((_ctype_ + 1)[c] & _C)
 int tolower(int);
 int toupper(int);
+int _tolower(int);
+int _toupper(int);
 #ifdef __cplusplus
 }
 #endif

@@ -5,7 +5,7 @@ void beNDMWStatusSubSlot_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusSubSlot_Register);
 }
 
-void *beNDMWStatusSubSlot_Register(void) {
+CallbackArray *beNDMWStatusSubSlot_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

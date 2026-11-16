@@ -15,7 +15,7 @@ igMetaField *g_beSaveApi_iconWorkMetaField;
 
 igMetaObject *beSaveApi_GetOrCreateMetaObject(void) {
     if (g_beSaveApi_metaObject == 0) {
-        g_beSaveApi_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSaveApi_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSaveApi_metaObject;
 }
@@ -38,7 +38,7 @@ void beSaveApi_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSaveApi_callbackList[] = { beSaveMemoryObj_EnsureRegistered, 0 };
 
-void *beSaveApi_Register(void) {
+CallbackArray *beSaveApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -126,9 +126,9 @@ void beSaveApi_InitFields(void) {
     void *iconWork;
     void *mountWork;
     void *imageWork;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSaveApi_metaObject;
+    meta = g_beSaveApi_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSaveApi_ctorTable, 0xD);
     imageWork = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));

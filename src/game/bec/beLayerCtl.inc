@@ -4,12 +4,12 @@ igMetaField *g_beLayerCtl_layerSwtMetaField;
 
 beLayerCtl *beLayerCtl_CreateInstance(int allocator) {
     beLayerCtl_EnsureRegistered();
-    return (beLayerCtl *)igMetaObject_CreateInstance(*(int *)0x589298, allocator);
+    return (beLayerCtl *)igMetaObject_CreateInstance(g_beLayerCtl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beLayerCtl_GetOrCreateMetaObject(void) {
     if (g_beLayerCtl_metaObject == 0) {
-        g_beLayerCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beLayerCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beLayerCtl_metaObject;
 }
@@ -33,7 +33,7 @@ int beLayerCtl_GetVTable(void) {
     obj._vtable = (int)&g_beLayerCtl_vtable[0];
     layerSwtSlot = (int *)&obj._layerSwt;
     *layerSwtSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beLayerCtl_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)layerSwtSlot, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
@@ -47,7 +47,7 @@ void beLayerCtl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beLayerCtl_callbackList[] = { igSwitch_EnsureRegistered, 0 };
 
-void *beLayerCtl_Register(void) {
+CallbackArray *beLayerCtl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -89,13 +89,13 @@ static int g_beLayerCtl_fieldOffsets[] = {
 void beLayerCtl_InitFields(void) {
     int base;
     void *layerSwt;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beLayerCtl_metaObject;
+    meta = g_beLayerCtl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLayerCtl_ctorTable, 2);
     layerSwt = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)layerSwt)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)layerSwt)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beLayerCtl_fieldTable, g_beLayerCtl_fieldHandles, g_beLayerCtl_fieldOffsets, base);
 }
 

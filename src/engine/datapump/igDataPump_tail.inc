@@ -18,7 +18,7 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
         }
     }
     arg0->_destObj = (int)s0;
-    fld = (igMetaField *)igMetaObject_FindFieldByName((*arg1)->vX(), arg2);
+    fld = (igMetaField *)igMetaObject_FindFieldByName((igMetaObject *)((*arg1)->vX()), (const char *)arg2);
     if (fld != 0) {
         fld->_refCount = fld->_refCount + 1;
     }
@@ -31,40 +31,40 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
     }
     arg0->_destMeta = (int)fld;
     name = ((igMetaObject *)((igMetaField *)arg0->_destMeta)->_parentMetaObject)->_name;
-    if (g_stringPool[0] == 0) {
-        v = StringPool_Allocate(16);
+    if (g_stringPool == 0) {
+        v = (int)(StringPool_Allocate(16));
         if (v != 0) {
-            v = StringPool_Construct(v);
+            v = (int)(StringPool_Construct((StringPool *)v));
         }
-        g_stringPool[0] = v;
+        g_stringPool = (StringPool *)v;
     }
-    newv = StringPool_Intern(g_stringPool[0], name);
+    newv = (int)(StringPool_Intern(g_stringPool, (const char *)name));
     oldv = arg0->_destMetaClassName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
         int v0 = ((int *)oldv)[-1] - 1;
         ((int *)oldv)[-1] = v0;
         if (v0 == 0) {
-            StringChunk_ReleaseHeader(*a1, a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
         }
     }
     arg0->_destMetaClassName = newv;
     name = ((igMetaField *)arg0->_destMeta)->_fieldName;
-    if (g_stringPool[0] == 0) {
-        v = StringPool_Allocate(16);
+    if (g_stringPool == 0) {
+        v = (int)(StringPool_Allocate(16));
         if (v != 0) {
-            v = StringPool_Construct(v);
+            v = (int)(StringPool_Construct((StringPool *)v));
         }
-        g_stringPool[0] = v;
+        g_stringPool = (StringPool *)v;
     }
-    newv = StringPool_Intern(g_stringPool[0], name);
+    newv = (int)(StringPool_Intern(g_stringPool, (const char *)name));
     oldv = arg0->_destMetaFieldName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
         int v0 = ((int *)oldv)[-1] - 1;
         ((int *)oldv)[-1] = v0;
         if (v0 == 0) {
-            StringChunk_ReleaseHeader(*a1, a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
         }
     }
     arg0->_destMetaFieldName = newv;
@@ -90,14 +90,14 @@ void FUN_001e6410(S0 *arg0, void **arg1) {
 int FUN_001e6490(ValueBinding *binding, int selection) {
     igSmartPointer<Value> value(binding->source->value(), kRetainReference);
     int sinkType = binding->sink->type();
-    if (((igMetaObject_IsOfType(value->type(), sinkType) != 0) ^ 1) != 0) {
+    if (((igMetaObject_IsOfType((igMetaObject *)(value->type()), (igMetaObject *)sinkType) != 0) ^ 1) != 0) {
         return 0;
     }
     binding->source->select(selection);
     binding->sink->write(binding->key, (int)binding->source + value->offset);
     static FieldDesc *invarianceFunctionField;
     if (invarianceFunctionField == 0) {
-        invarianceFunctionField = (FieldDesc *)igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], "_invarianceFunction");
+        invarianceFunctionField = (FieldDesc *)igMetaObject_FindFieldByName(g_igMetaField_metaObject, "_invarianceFunction");
     }
     Notify notify = *(Notify *)((char *)binding->sink + invarianceFunctionField->offset);
     if (notify != 0) {
@@ -108,9 +108,9 @@ int FUN_001e6490(ValueBinding *binding, int selection) {
 
 void Gap__igDataPump__vfunc_17(igDataPump *pump) {
     igSmartPointer<igObject> meta;
-    meta = igObjectSystem_FindMetaByNameDefault(pump->_destMetaClassName);
+    meta = (igObject *)igObjectSystem_FindMetaByNameDefault((const char *)pump->_destMetaClassName);
     if (meta.get() != 0) {
-        igObject *field = igMetaObject_FindFieldByName(meta.get(), pump->_destMetaFieldName);
+        igObject *field = igMetaObject_FindFieldByName((igMetaObject *)(meta.get()), (const char *)pump->_destMetaFieldName);
         igObject *old;
         if (field != 0) {
             field->_refCount = field->_refCount + 1;
@@ -135,8 +135,8 @@ int FUN_001e6770(int *p)
     return *(int *)((char *)p + 20);
 }
 
-int FUN_001e6780(void *arg0) {
-    ObjectList_AppendRetained(*(int *)((char *)arg0 + 20));
+int FUN_001e6780(void *arg0, igObject *object) {
+    ObjectList_AppendRetained(*(igObjectList **)((char *)arg0 + 20), object);
     return 1;
 }
 
@@ -157,7 +157,7 @@ int FUN_001e6820(struct D *arg0, struct L_1e6820 *arg1) {
 
     n = arg1->count;
     for (i = 0; i < n; i++) {
-        ObjectList_AppendRetained(arg0->f8, arg1->items[i]);
+        ObjectList_AppendRetained((igObjectList *)arg0->f8, (igObject *)arg1->items[i]);
     }
     return 1;
 }

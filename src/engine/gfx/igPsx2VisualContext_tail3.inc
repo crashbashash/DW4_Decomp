@@ -139,7 +139,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_62(void *arg0) {
     return *(int *)((char *)(arg0) + 944);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct R_16d660 *arg0, int arg1, int arg2, int arg3, int arg4) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_74(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4) {
     int sp8C;
     int sp88;
     int *p;
@@ -148,38 +148,38 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct R_16d660 *arg0, int arg1, in
     int *tbl;
     struct Q_16d660 *q;
     int t;
-    if (arg0->f940 != 0) {
+    if (self->_pVertexArray != 0) {
         sp8C = 0;
         sp88 = 0;
-        s6 = FUN_00177010((igPsx2VisualContext *)arg0, &sp8C, &sp88, -1, -1);
-        FUN_0016cc60((char *)arg0);
-        p = (int *)(arg0->f948[2] + arg4 * 4);
+        s6 = FUN_00177010(self, &sp8C, &sp88, -1, -1);
+        FUN_0016cc60((char *)self);
+        p = (int *)(((int *)self->_pStripLengthArray)[2] + arg4 * 4);
         switch (arg1) {
         case 0:
             for (i = 0; i < arg2; i++) {
-                FUN_0016d910(arg0, *p, arg3, sp8C, sp88, p2DrawLineStrip, 0);
+                FUN_0016d910(self, *p, arg3, sp8C, sp88, p2DrawLineStrip, 0);
                 arg3 += *p;
                 p++;
             }
             break;
         case 2:
             for (i = 0; i < arg2; i++) {
-                FUN_0016d910(arg0, *p, arg3, sp8C, sp88, p2DrawTriangleFan, p2DrawIndexedTriangleFan);
+                FUN_0016d910(self, *p, arg3, sp8C, sp88, p2DrawTriangleFan, p2DrawIndexedTriangleFan);
                 arg3 += *p;
                 p++;
             }
             break;
         case 1:
             i = 0;
-            if (arg0->f944 != 0) {
+            if (self->_pIndexArray != 0) {
                 for (; i < arg2; i++) {
-                    FUN_0016d910(arg0, *p, arg3, sp8C, sp88, p2DrawTriangleStrip, p2DrawIndexedTriangleStrip);
+                    FUN_0016d910(self, *p, arg3, sp8C, sp88, p2DrawTriangleStrip, p2DrawIndexedTriangleStrip);
                     arg3 += *p;
                     p++;
                 }
             } else {
-                tbl = arg0->f940->f8;
-                t = arg0->f708 + 11; rec = (int *)tbl[t];
+                tbl = ((struct Q_16d660 *)self->_pVertexArray)->f8;
+                t = self->_texCoordIndex[0] + 11; rec = (int *)tbl[t];
                 s1 = 0;
                 if (rec != 0) {
                     s1 = (int *)((char *)rec + arg3 * 8);
@@ -188,24 +188,24 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct R_16d660 *arg0, int arg1, in
                 if (tbl[2] != 0) {
                     s0 = (int *)(tbl[2] + arg3 * 4);
                 }
-                FUN_0016db20(arg0, arg3);
+                FUN_0016db20(self, arg3);
                 t = arg3 * 12;
-                p2SetVertexArrays(sp8C + t, sp88 + t, s0, s1);
+                p2SetVertexArrays((float *)(sp8C + t), (float *)(sp88 + t), (unsigned int *)s0, (float *)s1);
                 p2DrawTriangleStrips(arg2, p);
             }
             break;
         }
-        FUN_0016cd10(arg0);
+        FUN_0016cd10(self);
         if (s6 == 1) {
-            q = arg0->f940;
+            q = (struct Q_16d660 *)self->_pVertexArray;
             FUN_0016e140(q, (int)p2GetVif1WaitSequence());
         }
-        q = arg0->f940;
+        q = (struct Q_16d660 *)self->_pVertexArray;
         if (q->f20 & 4) {
             q->f64 = p2GetVif1WaitSequence();
         }
     } else {
-        FUN_0017f080(arg0, arg1 + 0x2000);
+        FUN_0017f080(self, arg1 + 0x2000);
     }
 }
 

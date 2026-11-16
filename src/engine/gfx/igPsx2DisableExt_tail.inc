@@ -14,14 +14,14 @@ int igPsx2DisableExt_GetVTable(void) {
     int v0;
     char *p38;
     char *p40;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&DAT_00530a10[0];
     p38 = &u.b[8];
     *(int *)p38 = 0;
     p40 = &u.b[16];
     *(int *)p40 = 0;
     u.vt = (int)&g_igPsx2DisableExt_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&DAT_00530a10[0];
     if (p40 != 0) {
         v1 = *(int **)p40;
@@ -51,9 +51,9 @@ void FUN_00154040(void)
 
 static igMetaObjectCallback g_igPsx2DisableExt_callbackList[] = { FUN_001511a0, 0 };
 
-void igPsx2DisableExt_Register(void) {
+CallbackArray *igPsx2DisableExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2DisableExt_metaObject,
         igDisableExt_Register,
@@ -73,7 +73,7 @@ igMetaObject *FUN_001540d0(void) {
 }
 
 static FieldFactory g_igPsx2DisableExt_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igPsx2DisableExt_fieldTable[] = {
     "_context",

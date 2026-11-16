@@ -1,6 +1,6 @@
 /* Second copy of the slot 8 forwarder. */
-int Gap__Core__igObject__vfunc_08__001ce700()
+void Gap__Core__igObject__vfunc_08__001ce700(igObject *self)
 {
-    return Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct(self);
 }
 

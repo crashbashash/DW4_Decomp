@@ -11,96 +11,61 @@
 #include "dw4/beCopyTransform.h"
 #include "dw4/beCri.h"
 #include "dw4/beCriSfpData.h"
+#include "dw4/beCriAcxData.h"
+#include "dw4/beCriAudio.h"
+#include "dw4/beCriFxInfo.h"
+#include "dw4/beCriHandle.h"
+#include "dw4/beCriVolume.h"
+#include "dw4/beSystem.h"
+#include "dw4/igAdx.h"
+#include "dw4/igAdxAudio.h"
+#include "dw4/igAdxFile.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igMemory.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igMetaObject.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include "dw4/igObjectSystem.h"
+#include "dw4/igRegistry.h"
+#include "dw4/igStringObj.h"
+#include "dw4/igTraversal.h"
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
 
 extern "C" {
 /* scene graph */
-int igTraversal_TraverseChildren(igCommonTraversal *traversal, void *node);
-int igTraversal_RegisterFunction(int table, igMetaObject *meta, void (*function)());
-int igMatrix44f_SetIdentity(void *matrix);
 int igMatrix44f_Multiply(void *result, void *left, void *right);
 int igMatrix44f_Copy(void *to, void *from);
 extern int g_igCommonTraversal_travProcs[4];
-extern igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
+/* kept local: igTraversalView.h (S2) declares igModelViewMatrixAttr_CreateInstance differently from igModelViewMatrixAttr.h */
+extern igMetaObject *g_igModelViewMatrixAttr_metaObject;
 
 /* object system */
-void *Memory_GetAllocatorBySelector(int selector);
-void *igObject_GetAllocator(void *object);
-int igObject_IsKindOf(int object, int meta);
-int igNamedObject_SetName(...);
-int ObjectList_AppendRetained(...);
 int ObjectList_RemoveFirstRetained(...);
-int List_Reserve(...);
-int List_RemoveWordAt(igObjectList *list, int index);
-int Memory_FreeBuffer(...);
-int igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
 int igMemoryRefMetaField_SetAlignmentType(int field, const char *name);
 int igResource_AddAlignment(int context, const char *name, int alignment);
-void igInsightCore_AddToScheduler(int insight, beCri *component);
-int igInsightCore_RemoveFromScheduler(...);
-int igInsightCore_FindManager(int insight, int meta);
-int igRegistry_GetSectionIndex(int registry, const char *section, int create);
-int igRegistry_GetValueStringObj(int registry, int section, const char *key, igSmartPointer<igStringObj> *value, const char *fallback, int flags);
-igStringObj *igStringObj_Create(void *allocator);
-void igStringObj_Set(...);
-int igStringObj_StripDirectory(igNamedObject *);
-int igStringObj_ToLower(igNamedObject *);
-int strcmp(...);
-int strlen(...);
-extern int kIGMemoryPoolHandleUser1[4];
-extern int kIGMemoryPoolHandleUser0[4];
-extern unsigned char g_useOwnerAllocator;
 extern int g_globalContext[4];
-extern int g_igMemoryRefMetaField_metaObject[4];
-extern char *g_stringObjEmptyText[4];
 extern char emptyString[];
 
 /* the ADX library */
-void igAdx_SetModulePath(const char *path);
-void igAdx_SetHostRootPath(int);
-void igAdx_Initialize(int);
-int igAdx_ExecServer(...);
-int igAdx_SetPartitionCount(int count);
-int igAdx_SetInsideFiles(int files);
-int igAdx_LoadPartition(int partition, const char *path, int mode, int fileCount);
-void igAdx_AddPartitionName(int partition, const char *name);
-int igAdxAudio_GetStatus(int adxt);
-extern int g_adxMediaMode[4];
-extern int g_adxPartitionCount[4];
-extern unsigned char g_adxUseFileInfoCache;
-extern int g_igAdxFile_metaObject[4];
-extern igMetaObject *g_igFile_metaObject[4];
+extern igMetaObject *g_igFile_metaObject;
 
-/* the sound IOP module */
+/* the sound IOP module (kept local: dw4/cri/sndf.h is the C library's internal header, not C++-includable) */
+struct SndfBank;
+int SNDF_StartTransfer(unsigned int channel, struct SndfBank *bank);
+int SNDF_GetTransferStatus(unsigned int channel);
 int SNDF_SetPortSizes(void *sizes);
-int SNDF_StartTransfer(int port, int buffer);
 int SNDF_FreePort(int port);
-int SNDF_GetTransferStatus(...);
 void SNDF_SetMasterParam(int command, int value);
 int SNDF_SendControl(int channel, unsigned int command, int value);
 
 /* the voices */
-beCriHandle *beCriHandle_Create(void *allocator);
-int beCriAudio_Setup(int audio, int channels);
-int beCriAudio_Release(int audio);
-int beCriAudio_PlayFile(...);
-int beCriAudio_PlayMemory(beCriAudio *, void *, int);
-int beCriAudio_PlaySfp(beCriAudio *, int, int);
-int beCriAudio_Stop(beCriAudio *);
-int beCriAudio_SetVolume(...);
-int beCriAudio_GetStatus(...);
-int beCriAudio_Pause(...);
-int beCriAudio_IsPaused(...);
-int beCriAudio_Suspend(...);
-int beCriAudio_Resume(...);
-void beCriVolume_StartFade(beCriVolume *, int, float, float, float);
-int beCriVolume_StepAdxLevel(...);
-int beCriVolume_StepSndfLevel(...);
 
-extern int g_beSystem_metaObject[4];
-extern igMetaObject *g_beCriFxInfo_metaObject;
-extern igMetaObject *g_beCriAcxData_metaObject;
 
 }
 
@@ -117,7 +82,6 @@ int g_sfpTransferState[32];
 
 /* The registry the object system reads its ini settings into. */
 struct ObjectSystemView { char pad[56]; int registry; };
-extern "C" ObjectSystemView *g_objectSystem[4];
 
 extern "C" {
 int beCopyModelCtrl2_TraverseCallback(igCommonTraversal *traversal, beCopyModelCtrl2 *node);
@@ -151,9 +115,9 @@ static inline igObjectList *Banks(beCri *self) { return (igObjectList *)self->_l
 static inline beCriSfpData *BankAt(igObjectList *list, int i) { return ((beCriSfpData **)list->_data)[i]; }
 
 /* The allocator the controller's handles come from: its own, or the NDMW allocator. */
-static inline void *HandleAllocator(beCri *self) {
-    void *allocator = igObject_GetAllocator(self);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+static inline int HandleAllocator(beCri *self) {
+    int allocator = (int)igObject_GetAllocator(self);
+    return g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
 }
 
 /* Releases every object of a retained list and leaves it empty. */
@@ -176,7 +140,7 @@ static inline void ReleaseAll(igObjectList *list) {
 static inline void ReserveIfEmpty(igObjectList *list) {
     bool hasEntries = list->_count > 0;
     if (hasEntries == false) {
-        List_Reserve(list, 0, 4);
+        List_Reserve((igDataList *)list, 0, 4);
     }
 }
 
@@ -208,7 +172,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     int depth;
 
     attrs = (igAttrStackManager *)traversal->_attrStack;
-    attrId = g_igModelViewMatrixAttr_metaObject[0]->_id;
+    attrId = g_igModelViewMatrixAttr_metaObject->_id;
     stack = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[((int *)attrs->_attrStackIndexTable)[attrId]];
     igMatrix44f_Copy(node->_m, ((beModelCtrlNode2 *)node->_srcNode)->_m);
     time = ((beModelCtrlNode2 *)node->_srcNode)->_time;
@@ -239,7 +203,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     stack = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[timeIndex];
     ((igTDataList<igTimeAttr *> *)stack)->append(timeAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, timeIndex);
-    result = igTraversal_TraverseChildren(traversal, node);
+    result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
     PopAttr(attrs, *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex]);
     PopAttr(attrs, *matrixUnitID + ((int *)attrs->_attrStackIndexTable)[*matrixAttrIndex]);
     ((igCommonTraversalDispatchView *)traversal)->popTime();
@@ -250,7 +214,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
 }
 
 void beCopyModelCtrl2_RegisterTraversal(void) {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beCopyModelCtrl2_GetMetaObject(), (void (*)())beCopyModelCtrl2_TraverseCallback);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beCopyModelCtrl2_GetMetaObject(), (void *)beCopyModelCtrl2_TraverseCallback);
 }
 
 int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransform *node)
@@ -276,7 +240,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     int depth;
 
     attrs = (igAttrStackManager *)traversal->_attrStack;
-    attrId = g_igModelViewMatrixAttr_metaObject[0]->_id;
+    attrId = g_igModelViewMatrixAttr_metaObject->_id;
     matrices = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[((int *)attrs->_attrStackIndexTable)[attrId]];
     igMatrix44f_Copy(node->_m, ((igTransform *)node->_srcTransform)->_m);
     igMatrix44f_SetIdentity(modelView);
@@ -298,7 +262,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     stack = ((igAttrStack **)stack->_data)[index];
     ((igTDataList<igModelViewMatrixAttrDispatchView *> *)stack)->append(matrixAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, index);
-    result = igTraversal_TraverseChildren(traversal, node);
+    result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
     PopAttr(attrs, *unitID + ((int *)attrs->_attrStackIndexTable)[*attrIndex]);
     if (result == 2) {
         return 2;
@@ -307,7 +271,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
 }
 
 void beCopyTransform_RegisterTraversal(void) {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beCopyTransform_GetMetaObject(), (void (*)())beCopyTransform_TraverseCallback);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beCopyTransform_GetMetaObject(), (void *)beCopyTransform_TraverseCallback);
 }
 
 /* Attach: registers with the insight, reads the IOP module path from the BECRUNTIME ini section (else
@@ -316,63 +280,63 @@ void beCopyTransform_RegisterTraversal(void) {
 void beCri_Activate(beCri *self) {
     int section;
     int registry;
-    igInsightCore_AddToScheduler(self->_insight, self);
-    registry = g_objectSystem[0]->registry;
+    igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
+    registry = g_objectSystem->registry;
     if (registry == 0) return;
-    section = igRegistry_GetSectionIndex(registry, "BECRUNTIME", 0);
+    section = igRegistry_GetSectionIndex((igRegistry *)registry, "BECRUNTIME", 0);
     if (section == -1) return;
-    void *allocator = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-    igSmartPointer<igStringObj> path(igStringObj_Create(allocator));
-    if (igRegistry_GetValueStringObj(registry, section, "AdxModulePath", &path, "", 0) == 0) {
+    int allocator = (int)igObject_GetAllocator(self);
+    allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+    igSmartPointer<igStringObj> path((igStringObj *)igStringObj_Create(allocator));
+    if (igRegistry_GetValueStringObj((igRegistry *)registry, section, "AdxModulePath", (igStringObj **)&path, "", 0) == 0) {
         if (strcmp("9.31s281", "9.18") == 0)
             igStringObj_Set((igStringObj *)path, "C:/cri/ps2/iop/modules");
         else
             igStringObj_Set((igStringObj *)path, "C:/usr/local/cri/mwlib/iop/drv");
     }
     char *text = (char *)path->_buffer;
-    igAdx_SetModulePath(text == 0 ? g_stringObjEmptyText[0] : text);
+    igAdx_SetModulePath(text == 0 ? g_stringObjEmptyText : text);
     g_adxUseFileInfoCache = 1;
     igAdx_SetHostRootPath(0);
-    g_adxMediaMode[0] = 2;
+    g_adxMediaMode = 2;
     igAdx_Initialize(1);
-    igMetaObject *file = g_igFile_metaObject[0];
+    igMetaObject *file = g_igFile_metaObject;
     g_savedIgFileAbstractProxy = file->_abstractProxy;
     file->_abstractProxy = (int)beCri_AdxFileProxy;
 }
 
 /* igFile's abstract proxy while the controller is attached: files open as igAdxFile. */
 int beCri_AdxFileProxy(void) {
-    return g_igAdxFile_metaObject[0];
+    return (int)g_igAdxFile_metaObject;
 }
 
 /* Detach: restores igFile's proxy and leaves the insight. */
 void beCri_Deactivate(beCri *self) {
-    g_igFile_metaObject[0]->_abstractProxy = g_savedIgFileAbstractProxy;
-    igInsightCore_RemoveFromScheduler(self->_insight, self);
+    g_igFile_metaObject->_abstractProxy = g_savedIgFileAbstractProxy;
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 /* Start: finds the beSystem, creates the BGM and ambience stream handles (two-channel ADX) and the
  * effect handles, and clears the sound-bank port tables. */
 void beCri_Start(beCri *self) {
-    void *allocator;
+    int allocator;
     void *ambienceAllocator;
     beCriHandle *old;
     int i;
 
-    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    self->_system = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
     allocator = HandleAllocator(self);
     old = Bgm(self);
     igRelease(old);
     self->_hdBGM = (int)beCriHandle_Create(allocator);
-    beCriAudio_Setup(Bgm(self)->_audio, 2);
-    igNamedObject_SetName(self->_hdBGM, 0);
-    ambienceAllocator = HandleAllocator(self);
+    beCriAudio_Setup((beCriAudio *)Bgm(self)->_audio, 2);
+    igNamedObject_SetName((igNamedObject *)self->_hdBGM, 0);
+    ambienceAllocator = (void *)HandleAllocator(self);
     old = Env(self);
     igRelease(old);
-    self->_hdENV = (int)beCriHandle_Create(ambienceAllocator);
-    beCriAudio_Setup(Env(self)->_audio, 2);
-    igNamedObject_SetName(self->_hdENV, 0);
+    self->_hdENV = (int)beCriHandle_Create((int)ambienceAllocator);
+    beCriAudio_Setup((beCriAudio *)Env(self)->_audio, 2);
+    igNamedObject_SetName((igNamedObject *)self->_hdENV, 0);
     beCri_CreateEffectVoices(self);
     self->_pauseOnetime = 0;
     for (i = 0; i < 32; i++) {
@@ -385,8 +349,8 @@ void beCri_Start(beCri *self) {
 /* Stop: stops every handle and releases the voices. */
 void beCri_Stop(beCri *self) {
     beCri_StopGroup(self, 5);
-    beCriAudio_Release(Bgm(self)->_audio);
-    beCriAudio_Release(Env(self)->_audio);
+    beCriAudio_Release((beCriAudio *)Bgm(self)->_audio);
+    beCriAudio_Release((beCriAudio *)Env(self)->_audio);
     beCri_ReleaseEffectVoices(self);
 }
 
@@ -396,7 +360,7 @@ int beCri_AddInfo(beCri *self, igObjectDispatchView *info) {
 
     meta = g_beCriFxInfo_metaObject;
     if (meta == info->GetMeta()) {
-        ObjectList_AppendRetained(self->_infoList, info);
+        ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
         return 1;
     }
     return 0;
@@ -427,8 +391,8 @@ void beCri_Update(beCri *self) {
     igAdx_ExecServer(1);
     if (self->_execDvdErr > 0) {
         if (((beSystem *)self->_system)->_execDvdErr == 0) {
-            ObjectList_AppendRetained(Handles(self), self->_hdBGM);
-            ObjectList_AppendRetained(Handles(self), self->_hdENV);
+            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdBGM);
+            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdENV);
             for (i = 0; i < Handles(self)->_count; i++) {
                 t = HandleAt(Handles(self), i);
                 if (t->_playID != 0) beCriAudio_Resume((beCriAudio *)t->_audio);
@@ -439,8 +403,8 @@ void beCri_Update(beCri *self) {
         }
     } else {
         if (((beSystem *)self->_system)->_execDvdErr > 0) {
-            ObjectList_AppendRetained(Handles(self), self->_hdBGM);
-            ObjectList_AppendRetained(Handles(self), self->_hdENV);
+            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdBGM);
+            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdENV);
             for (j = 0; j < Handles(self)->_count; j++) {
                 t = HandleAt(Handles(self), j);
                 if (t->_playID != 0) beCriAudio_Suspend((beCriAudio *)t->_audio);
@@ -450,8 +414,8 @@ void beCri_Update(beCri *self) {
             self->_execDvdErr = 1;
             return;
         }
-        ObjectList_AppendRetained(Handles(self), self->_hdBGM);
-        ObjectList_AppendRetained(Handles(self), self->_hdENV);
+        ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdBGM);
+        ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdENV);
         for (k = 0; k < Handles(self)->_count; k++) {
             handle = ((beCriHandle **)Handles(self)->_data)[k];
             if (handle->_playID == 0) continue;
@@ -573,7 +537,7 @@ long long beCri_PlayStream(beCri *self, igObjectList *names, beSoundData *cue) {
         handle->_playID = playID;
         handle->_type = cue->_type;
         name = NameOf(cue->_name);
-        igNamedObject_SetName(handle, name);
+        igNamedObject_SetName((igNamedObject *)handle, name);
         return playID;
     }
     return 0;
@@ -627,14 +591,14 @@ long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue) {
         name = NameOf(((igNamedObject **)names->_data)[cue->_fnameIdx]->_name);
         igSmartPointer<igStringObj> bankName((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
         igStringObj_Set(bankName.p, name);
-        igStringObj_StripDirectory((igNamedObject *)bankName.p);
-        igStringObj_ToLower((igNamedObject *)bankName.p);
+        igStringObj_StripDirectory((int *)bankName.p);
+        igStringObj_ToLower((igStringObj *)bankName.p);
         found = -1;
         for (i = 0; i < Banks(self)->_count; i++) {
             bank = BankAt(Banks(self), i);
             name = NameOf(bank->_name);
             wanted = (char *)bankName.p->_buffer;
-            wanted = (wanted == 0) ? g_stringObjEmptyText[0] : wanted;
+            wanted = (wanted == 0) ? g_stringObjEmptyText : wanted;
             if (strcmp(wanted, name) == 0) { found = i; break; }
         }
         if (found == -1) {
@@ -688,7 +652,7 @@ long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue) {
         handle->_playID = playID;
         handle->_type = cue->_type;
         name = NameOf(cue->_name);
-        igNamedObject_SetName(handle, name);
+        igNamedObject_SetName((igNamedObject *)handle, name);
         handle->_priority = cue->_priority;
         return playID;
     }
@@ -715,7 +679,7 @@ void beCri_StopHandle(beCri *self, beCriHandle *handle) {
         beCriAudio_SetVolume(audio, -999);
     }
     beCriAudio_Stop(audio);
-    igNamedObject_SetName(handle, 0);
+    igNamedObject_SetName((igNamedObject *)handle, 0);
 }
 
 /* Stops the handle playing `playID`. */
@@ -776,16 +740,16 @@ void beCri_UnpauseByName(beCri *self, const char *name) {
     beCriHandle *handle;
 
     if (strcmp(NameOf(Bgm(self)->_name), name) == 0) {
-        beCriAudio_Pause(Bgm(self)->_audio, 0);
+        beCriAudio_Pause((beCriAudio *)Bgm(self)->_audio, 0);
     } else {
         if (strcmp(NameOf(Env(self)->_name), name) == 0) {
-            beCriAudio_Pause(Env(self)->_audio, 0);
+            beCriAudio_Pause((beCriAudio *)Env(self)->_audio, 0);
         } else {
             for (i = 0; i < Handles(self)->_count; i++) {
                 handle = HandleAt(Handles(self), i);
                 if (NameOf(handle->_name) != 0 && strlen(NameOf(handle->_name)) != 0
                     && strcmp(NameOf(handle->_name), name) == 0) {
-                    beCriAudio_Pause(handle->_audio, 0);
+                    beCriAudio_Pause((beCriAudio *)handle->_audio, 0);
                 }
             }
         }
@@ -836,11 +800,11 @@ void beCri_FadeByID(beCri *self, long long playID, float from, float to, float f
 /* beNDMWAfsSetup's partitions: their count and the inside-file list, then each partition's archive. */
 void beCri_SetupPartitions(beCri *self, int count, int insideFiles) {
     igAdx_SetPartitionCount(count);
-    igAdx_SetInsideFiles(insideFiles);
+    igAdx_SetInsideFiles((igAdxAfsFileList *)insideFiles);
 }
 
 void beCri_LoadPartition(beCri *self, int partition, const char *path, int fileCount) {
-    if ((partition < 0) || (partition >= g_adxPartitionCount[0])) {
+    if ((partition < 0) || (partition >= g_adxPartitionCount)) {
         return;
     }
     igAdx_LoadPartition(partition, path, 0, fileCount);
@@ -854,9 +818,9 @@ void beCri_ReleasePartitions(beCri *self)
 /* Appends an effect handle whose voice has `channels` (-1: a sound-bank voice). */
 static inline void AppendVoice(beCri *self, int channels) {
     igSmartPointer<beCriHandle> handle(beCriHandle_Create(HandleAllocator(self)));
-    beCriAudio_Setup(handle->_audio, channels);
-    igNamedObject_SetName((beCriHandle *)handle, 0);
-    ObjectList_AppendRetained(self->_hdSEs, (beCriHandle *)handle);
+    beCriAudio_Setup((beCriAudio *)handle->_audio, channels);
+    igNamedObject_SetName((igNamedObject *)handle.p, 0);
+    ObjectList_AppendRetained((igObjectList *)self->_hdSEs, (igObject *)handle);
 }
 
 /* The effect handles: 4 single-channel ADX voices, then 48 sound-bank voices. */
@@ -877,11 +841,11 @@ void beCri_ReleaseEffectVoices(beCri *self) {
     beCriHandle *first;
     beCri_StopGroup(self, 3);
     while (Handles(self)->_count > 0) {
-        beCriAudio_Release(HandleAt(Handles(self), 0)->_audio);
+        beCriAudio_Release((beCriAudio *)HandleAt(Handles(self), 0)->_audio);
         list = Handles(self);
         first = HandleAt(list, 0);
         igRelease(first);
-        List_RemoveWordAt(list, 0);
+        List_RemoveWordAt((igDataList *)list, 0);
         ((int *)list->_data)[list->_count] = 0; /* the slot the removal vacated */
     }
 }
@@ -920,7 +884,7 @@ int beCri_TransferSfp(beCri *self, beCriSfpData *bank) {
     if (SNDF_SetPortSizes(&g_sfpPortSizes) < 0) {
         return 0;
     }
-    if (SNDF_StartTransfer(port, bank->_dataBuffer) < 0) {
+    if (SNDF_StartTransfer((unsigned int)port, (SndfBank *)bank->_dataBuffer) < 0) {
         return 0;
     }
     g_sfpTransferState[port] = 1;
@@ -1015,7 +979,7 @@ bool beCri_IsTransferDone(beCri *self) {
                     return false;
                 case 2:
                     bank = *(beCriSfpData **)((char *)Banks(self)->_data + offset);
-                    Memory_FreeBuffer(bank->_dataBuffer);
+                    Memory_FreeBuffer((void *)bank->_dataBuffer);
                     bank->_dataBuffer = 0;
                     bank->_isTransfer = 1;
                     if (i < Banks(self)->_count - 1) {
@@ -1043,7 +1007,7 @@ bool beCri_IsTransferDone(beCri *self) {
 
 /* FXCTL: when `name` (NONE when null) names the first beCriFxInfo, its reverb level goes to the sound
  * IOP module, else the full level 127. */
-void beCri_SetFx(beCri *self, char *name) {
+void beCri_SetFx(beCri *self, const char *name) {
     igObjectList *infos = (igObjectList *)self->_infoList;
     beCriFxInfo *info;
     if (infos->_count > 0) {
@@ -1075,11 +1039,11 @@ unsigned char beCri_IsReady(beCri *self, const char *name) {
 
     if (strcmp(name, "ALL") == 0) {
         allReady = 1;
-        ObjectList_AppendRetained(self->_hdSEs, self->_hdBGM);
-        ObjectList_AppendRetained(self->_hdSEs, self->_hdENV);
+        ObjectList_AppendRetained((igObjectList *)self->_hdSEs, (igObject *)self->_hdBGM);
+        ObjectList_AppendRetained((igObjectList *)self->_hdSEs, (igObject *)self->_hdENV);
         for (i = 0; i < Handles(self)->_count; i++) {
             each = HandleAt(Handles(self), i);
-            if (each->_playID != 0 && ((beCriAudio *)each->_audio)->_audioType == 1 && igAdxAudio_GetStatus(((beCriAudio *)each->_audio)->_adxt) != 3) {
+            if (each->_playID != 0 && ((beCriAudio *)each->_audio)->_audioType == 1 && igAdxAudio_GetStatus((igAdxAudio *)((beCriAudio *)each->_audio)->_adxt) != 3) {
                 allReady = 0;
                 break;
             }
@@ -1090,15 +1054,15 @@ unsigned char beCri_IsReady(beCri *self, const char *name) {
     }
     ready = 1;
     if (NameOf(Bgm(self)->_name) != 0 && strcmp(NameOf(Bgm(self)->_name), name) == 0) {
-        if (igAdxAudio_GetStatus(((beCriAudio *)Bgm(self)->_audio)->_adxt) != 3) ready = 0;
+        if (igAdxAudio_GetStatus((igAdxAudio *)((beCriAudio *)Bgm(self)->_audio)->_adxt) != 3) ready = 0;
     } else if (NameOf(Env(self)->_name) != 0 && strcmp(NameOf(Env(self)->_name), name) == 0) {
-        if (igAdxAudio_GetStatus(((beCriAudio *)Env(self)->_audio)->_adxt) != 3) ready = 0;
+        if (igAdxAudio_GetStatus((igAdxAudio *)((beCriAudio *)Env(self)->_audio)->_adxt) != 3) ready = 0;
     } else {
         for (j = 0; j < Handles(self)->_count; j++) {
             handle = HandleAt(Handles(self), j);
             if (NameOf(handle->_name) != 0 && strlen(NameOf(handle->_name)) != 0
                 && strcmp(name, NameOf(handle->_name)) == 0 && handle->_playID != 0
-                && igAdxAudio_GetStatus(((beCriAudio *)handle->_audio)->_adxt) != 3) {
+                && igAdxAudio_GetStatus((igAdxAudio *)((beCriAudio *)handle->_audio)->_adxt) != 3) {
                 ready = 0;
                 break;
             }
@@ -1117,7 +1081,7 @@ void beCri_SetSndfVolume(beCri *self, int volume) {
 }
 
 static inline int AsMemoryRefField(int field) {
-    if (field != 0 && igObject_IsKindOf(field, g_igMemoryRefMetaField_metaObject[0]) != 0) {
+    if (field != 0 && igObject_IsKindOf((void *)field, g_igMemoryRefMetaField_metaObject) != 0) {
         return field;
     }
     return 0;
@@ -1129,7 +1093,7 @@ void beCriSfpData_SetupBufferAlignment(void) {
     int field;
 
     igResource_AddAlignment(g_globalContext[0], "sndfBuffer", 0x20);
-    field = igMetaObject_FindFieldByName(g_beCriSfpData_metaObject, "_dataBuffer");
+    field = (int)igMetaObject_FindFieldByName(g_beCriSfpData_metaObject, "_dataBuffer");
     field = AsMemoryRefField(field);
     igMemoryRefMetaField_SetAlignmentType(field, "sndfBuffer");
 }

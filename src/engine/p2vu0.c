@@ -2,6 +2,7 @@
  * whose C++ draft stays a function of its own, waits for it and counts the wait in
  * p2Vu0LockWaitTime). */
 #include "dw4/eekernel.h"
+#include "dw4/p2core.h"
 #include "dw4/p2vu0.h"
 
 #define P2_VU0_REQUESTS 64
@@ -19,7 +20,6 @@ typedef struct p2Vu0Lock {
     int owner;
 } p2Vu0Lock;
 
-extern int p2FirstOpen;
 p2Vu0Lock p2Vu0LockState;
 int p2Vu0LoadSema;
 p2Vu0Request *p2FreeVu0Requests;

@@ -3,7 +3,7 @@ igMetaField *g_igHotKeyEventReceiver_hotKeyListMetaField;
 
 igMetaObject *FUN_0044d840(void) {
     if (g_igHotKeyEventReceiver_metaObject == 0) {
-        g_igHotKeyEventReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igHotKeyEventReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igHotKeyEventReceiver_metaObject;
 }
@@ -21,11 +21,11 @@ int igHotKeyEventReceiver_GetVTable(void) {
     int temp_s0;
     char *ps;
     int *temp_a0;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igHotKeyEventReceiver_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igHotKeyEventReceiver_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
@@ -46,9 +46,9 @@ void igHotKeyEventReceiver_RunStaticInit(void)
 
 static igMetaObjectCallback g_igHotKeyEventReceiver_callbackList[] = { igHotKeyBindingList_RunStaticInit, 0 };
 
-void igHotKeyEventReceiver_Register(void) {
+CallbackArray *igHotKeyEventReceiver_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igHotKeyEventReceiver_metaObject,
         igEventReceiver_Register,
@@ -86,11 +86,11 @@ void igHotKeyEventReceiver_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igHotKeyEventReceiver_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igHotKeyEventReceiver_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igHotKeyEventReceiver_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044dab0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igHotKeyEventReceiver_fieldTable, g_igHotKeyEventReceiver_fieldHandles, g_igHotKeyEventReceiver_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igHotKeyEventReceiver_fieldTable, g_igHotKeyEventReceiver_fieldHandles, g_igHotKeyEventReceiver_fieldOffsets, temp_s2);
 }
 

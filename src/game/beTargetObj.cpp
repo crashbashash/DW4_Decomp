@@ -2,23 +2,16 @@
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
 #include "dw4/beTargetObj.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
 
-extern "C" void igInsightCore_AddToScheduler(int insight, beTargetObj *object);
-extern "C" void igInsightCore_RemoveFromScheduler(int insight, beTargetObj *object);
-extern "C" int igInsightCore_FindManager(int insight, igMetaObject *metaObject);
 extern "C" void Vec3f_TransformDirection(float *out, int *vector, float *matrix);
-extern "C" int List_Reserve(void *list, int count, int elementSize);
-extern "C" int List_Resize(void *list, int count, int elementSize);
 extern "C" void igMatrix44f_Copy(float *dst, float *src);
-extern "C" int beMessenger_GetInt(beMessenger *messenger, int index);
-extern "C" void beMessenger_GetMatrix(float *out, beMessenger *messenger, int index);
-extern "C" int beMessenger_GetMatrixCount(beMessenger *messenger);
-extern "C" void beMessenger_SendGroup(beMessenger *messenger, char *group, char *message);
 extern "C" float atan2f(float y, float x);
-extern "C" int strcmp(const char *a, const char *b);
-extern "C" igMetaObject *g_beMessenger_metaObject;
 extern "C" float g_vec3Zero[4];
 extern "C" int g_vec3ZAxis[4];
 
@@ -43,18 +36,18 @@ extern "C" float beTargetObj_GetOriginHeading(beTargetObj *self);
 
 extern "C" void beTargetObj_Activate(beTargetObj *self, int unused)
 {
-    igInsightCore_AddToScheduler(self->_insight, self);
+    igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 extern "C" void beTargetObj_Deactivate(beTargetObj *self, int unused)
 {
-    igInsightCore_RemoveFromScheduler(self->_insight, self);
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 
 extern "C" void beTargetObj_Start(beTargetObj *self)
 {
-    g_targetObj = (beTargetObj *)igInsightCore_FindManager(self->_insight, g_beTargetObj_metaObject);
-    g_targetMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject);
+    g_targetObj = (beTargetObj *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beTargetObj_metaObject);
+    g_targetMessenger = (beMessenger *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beMessenger_metaObject);
 }
 
 extern "C" void beTargetObj_Stop(void)
@@ -75,17 +68,17 @@ extern "C" void beTargetObj_RemoveAllInfo(beTargetObj *self)
     ((igVec3fList *)self->_playerPosList)->_count = 0;
     playerPositions = (igVec3fList *)self->_playerPosList;
     if (!(0 < playerPositions->_count)) {
-        List_Reserve(playerPositions, 0, sizeof(igVec3f));
+        List_Reserve((igDataList *)playerPositions, 0, sizeof(igVec3f));
     }
     ((igIntList *)self->_playerRamNoList)->_count = 0;
     playerRamNos = (igIntList *)self->_playerRamNoList;
     if (!(0 < playerRamNos->_count)) {
-        List_Reserve(playerRamNos, 0, sizeof(int));
+        List_Reserve((igDataList *)playerRamNos, 0, sizeof(int));
     }
     ((igVec3fList *)self->_enemyPosList)->_count = 0;
     enemyPositions = (igVec3fList *)self->_enemyPosList;
     if (!(0 < enemyPositions->_count)) {
-        List_Reserve(enemyPositions, 0, sizeof(igVec3f));
+        List_Reserve((igDataList *)enemyPositions, 0, sizeof(igVec3f));
     }
 }
 

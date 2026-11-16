@@ -3,51 +3,35 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/beSaveApiDispatchView.h"
 #include "dw4/igTDataList.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beSaveUtil.h"
+#include "dw4/beSaveUtilInfo.h"
+#include "dw4/beSvConnectCheck.h"
+#include "dw4/beSvEndApi.h"
+#include "dw4/beSvFileFindApi.h"
+#include "dw4/beSvFileMakeApi.h"
+#include "dw4/beSvFormatApi.h"
+#include "dw4/beSvGetFreeSizeApi.h"
+#include "dw4/beSvReadMediaApi.h"
+#include "dw4/beSvStartApi.h"
+#include "dw4/beSvUseCheckApi.h"
+#include "dw4/beSvWriteMediaApi.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
 
-extern "C" int beSvConnectCheck_PollMultitap(int, int);
-extern "C" int beSvConnectCheck_Poll(int);
-extern "C" int beSvConnectCheck_FillDeliver(int, int);
 extern "C" void __dl__FPv(...);
-extern "C" int beSaveUtil_GetInfoMeta(void);
-extern "C" int beSaveUtil_GetMeta(void);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int beSaveUtil_GetMessageEnum(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int beMessenger_AppendBool(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_AppendObject(...);
-extern "C" int beMessenger_GetBoolCount(...);
-extern "C" int beMessenger_GetInt(...);
-extern "C" int beMessenger_GetIntCount(...);
-extern "C" void *beMessenger_GetObject(...);
-extern "C" int beMessenger_GetObjectCount(...);
-extern "C" unsigned int beMessenger_ResolveEnumValue(...);
-extern "C" int igObject_GetAllocator(...);
+extern "C" igMetaObject *beSaveUtil_GetInfoMeta(void);
+extern "C" igMetaObject *beSaveUtil_GetMeta(void);
 extern "C" unsigned char beSaveUtil_StartApi(beSaveUtil *self, beSaveUtilInfoRam *info, beSaveApi *request);
 extern "C" void beSaveUtil_PollConnectCheck(beSaveUtil *self, beSaveUtilInfoRam *info);
 extern "C" void beSaveUtil_Prepare(beSaveUtil *self);
-extern "C" int g_beSaveUtilInfo_metaObject[4];
-extern "C" int g_beSaveUtil_metaObject[4];
 extern "C" char SAVEUTILITY_2[];
 extern "C" void beSaveUtil_OnAddRam(beSaveUtil * p0, int p1, char * p2);
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" beSvFileFindApi *beSvFileFindApi_Create(int allocator);
-extern "C" beSvUseCheckApi *beSvUseCheckApi_Create(int allocator);
-extern "C" beSvGetFreeSizeApi *beSvGetFreeSizeApi_Create(int allocator);
-extern "C" beSvFileMakeApi *beSvFileMakeApi_Create(int allocator);
-extern "C" beSvFormatApi *beSvFormatApi_Create(int allocator);
-extern "C" beSvWriteMediaApi *beSvWriteMediaApi_Create(int allocator);
-extern "C" beSvReadMediaApi *beSvReadMediaApi_Create(int allocator);
 extern "C" int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerWork *message);
 
-extern "C" beSvConnectCheck *beSvConnectCheck_Create(int allocator);
-extern "C" beSvEndApi *beSvEndApi_Create(int allocator);
-extern "C" beSvStartApi *beSvStartApi_Create(int allocator);
 extern "C" void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info);
-extern "C" unsigned char g_useOwnerAllocator;
 
-#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
+#define ALLOC(a, self) { int base_ = (int)igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 
 #define DELIVERY(info) ((beSvDeliver *)(info)->_deliver)
 #define API(self) ((beSaveApiDispatchView *)(self)->_api)
@@ -82,9 +66,9 @@ unsigned char beSaveUtil_StartApi(beSaveUtil *self, beSaveUtilInfoRam *info, beS
 }
 
 void beSaveUtil_PollConnectCheck(beSaveUtil *self, beSaveUtilInfoRam *info) {
-    beSvConnectCheck_PollMultitap(self->_connectCheck, info->_deliver);
-    beSvConnectCheck_Poll(self->_connectCheck);
-    beSvConnectCheck_FillDeliver(self->_connectCheck, info->_deliver);
+    beSvConnectCheck_PollMultitap(self->_connectCheck, (beSvDeliver *)info->_deliver);
+    beSvConnectCheck_Poll((beSvConnectCheckWork *)self->_connectCheck);
+    beSvConnectCheck_FillDeliver((int *)self->_connectCheck, (beSvDeliver *)info->_deliver);
 }
 
 void beSaveUtil_Prepare(beSaveUtil *self) {
@@ -254,27 +238,27 @@ void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info) {
 }
 
 
-int beSaveUtil_GetInfoMeta(void)
+igMetaObject *beSaveUtil_GetInfoMeta(void)
 {
-    return g_beSaveUtilInfo_metaObject[0];
+    return g_beSaveUtilInfo_metaObject;
 }
 
 void beSaveUtil_OnAddRam(beSaveUtil *self, int info, char *unused)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, SAVEUTILITY_2);
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)info, SAVEUTILITY_2);
 }
 
 #define NEW_REQUEST(r, T, create) ALLOC(a, self); igSmartPointer<T> r(create(a));
 #define TAKE_SLOT_ARGUMENT(self, info) \
     DELIVERY(info)->_targetConnect = -1; \
-    for (i = 0; i < beMessenger_GetIntCount((self)->_messenger); i++) { \
-        int v = beMessenger_GetInt((self)->_messenger, i); \
+    for (i = 0; i < beMessenger_GetIntCount((beMessenger *)(self)->_messenger); i++) { \
+        int v = beMessenger_GetInt((beMessenger *)(self)->_messenger, i); \
         switch (i) { case 0: DELIVERY(info)->_targetConnect = v; break; } \
     }
 int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerWork *message) {
     int a;
     int i;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beSaveUtil_GetMessageEnum(), message->_message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beSaveUtil_GetMessageEnum(), (const char *)message->_message)) {
     case 3: {
         NEW_REQUEST(request, beSvFileFindApi, beSvFileFindApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
@@ -296,8 +280,8 @@ int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerW
     case 2: {
         NEW_REQUEST(request, beSvFileMakeApi, beSvFileMakeApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
-        if (beMessenger_GetObjectCount(self->_messenger) != 0) {
-            DELIVERY(info)->_gameData = (int)beMessenger_GetObject(self->_messenger, 0);
+        if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) != 0) {
+            DELIVERY(info)->_gameData = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         }
         beSaveUtil_StartApi(self, info, (beSaveApi *)request.p);
         break;
@@ -311,8 +295,8 @@ int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerW
     case 7: {
         NEW_REQUEST(request, beSvWriteMediaApi, beSvWriteMediaApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
-        if (beMessenger_GetObjectCount(self->_messenger) != 0) {
-            DELIVERY(info)->_gameData = (int)beMessenger_GetObject(self->_messenger, 0);
+        if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) != 0) {
+            DELIVERY(info)->_gameData = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         }
         beSaveUtil_StartApi(self, info, (beSaveApi *)request.p);
         break;
@@ -320,15 +304,15 @@ int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerW
     case 6: {
         NEW_REQUEST(request, beSvReadMediaApi, beSvReadMediaApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
-        if (beMessenger_GetObjectCount(self->_messenger) != 0) {
-            DELIVERY(info)->_gameData = (int)beMessenger_GetObject(self->_messenger, 0);
+        if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) != 0) {
+            DELIVERY(info)->_gameData = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         }
         beSaveUtil_StartApi(self, info, (beSaveApi *)request.p);
         break;
     }
     case 9:
-        if (beMessenger_GetObjectCount(self->_messenger) == 0) {
-            beMessenger_AppendObject(self->_messenger, info->_deliver);
+        if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)info->_deliver);
         }
         break;
     case 0:
@@ -337,12 +321,12 @@ int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerW
         info->_st1 = 0; info->_st3 = 0; info->_st2 = 0;
         {
             beSvDeliver *deliver = DELIVERY(info);
-            if (beMessenger_GetIntCount(self->_messenger) != 0) {
-                deliver->_saveVer = beMessenger_GetInt(self->_messenger, 0);
+            if (beMessenger_GetIntCount((beMessenger *)self->_messenger) != 0) {
+                deliver->_saveVer = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
             }
         }
-        if (beMessenger_GetBoolCount(self->_messenger) == 0) {
-            beMessenger_AppendBool(self->_messenger, 1);
+        if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
         }
         break;
     case 1:
@@ -352,47 +336,47 @@ int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerW
         info->_st3 = 0; info->_st2 = 0;
         break;
     case 11:
-        if (beMessenger_GetBoolCount(self->_messenger) == 0) {
+        if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0) {
             if (DELIVERY(info)->_isEndOperat == 1) {
-                beMessenger_AppendBool(self->_messenger, 0);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
             } else {
-                beMessenger_AppendBool(self->_messenger, 1);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
             }
         }
         break;
     case 12:
-        if (beMessenger_GetIntCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, DELIVERY(info)->_result);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, DELIVERY(info)->_result);
         }
         break;
     case 13:
-        if (beMessenger_GetBoolCount(self->_messenger) == 0) {
+        if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0) {
             if (info->_isRdy == 1) {
-                beMessenger_AppendBool(self->_messenger, 1);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
             } else {
-                beMessenger_AppendBool(self->_messenger, 0);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
             }
         }
         break;
     case 14:
-        if (beMessenger_GetBoolCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, DELIVERY(info)->_memCapa);
-            beMessenger_AppendInt(self->_messenger, DELIVERY(info)->_fileCapa);
+        if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, DELIVERY(info)->_memCapa);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, DELIVERY(info)->_fileCapa);
             if (DELIVERY(info)->_isMemCapaOK == 1) {
-                beMessenger_AppendBool(self->_messenger, 1);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
             } else {
-                beMessenger_AppendBool(self->_messenger, 0);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
             }
             if (DELIVERY(info)->_isfileCapaOK == 1) {
-                beMessenger_AppendBool(self->_messenger, 1);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
             } else {
-                beMessenger_AppendBool(self->_messenger, 0);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
             }
         }
         break;
     case 15:
-        if (beMessenger_GetIntCount(self->_messenger) == 0) {
-            beMessenger_AppendInt(self->_messenger, DELIVERY(info)->_result);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
+            beMessenger_AppendInt((beMessenger *)self->_messenger, DELIVERY(info)->_result);
         }
         break;
     case 17:
@@ -408,7 +392,7 @@ int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, beMessengerW
 #undef API
 #undef DELIVERY
 
-int beSaveUtil_GetMeta(void)
+igMetaObject *beSaveUtil_GetMeta(void)
 {
-    return g_beSaveUtil_metaObject[0];
+    return g_beSaveUtil_metaObject;
 }

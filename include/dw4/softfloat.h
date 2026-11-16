@@ -15,6 +15,7 @@ double dpsub(double a, double b);
 double dpmul(double a, double b);
 double dpdiv(double a, double b);
 int dpcmp(double a, double b);
+double litodp(int value);
 
 /* The 64-bit routines; `long` is redefined by the Lua units, which call none of them. */
 #ifndef long

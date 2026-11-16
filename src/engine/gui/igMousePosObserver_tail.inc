@@ -17,14 +17,14 @@ static inline void setEvent(MousePosObserverView *self, const igSmartPointer<Obs
     model->ref = retained;
 }
 
-void Gap__Gui__igMousePosObserver__vfunc_13(MousePosObserverView *self) {
+void Gap__Gui__igMousePosObserver__vfunc_13(MousePosObserverView *self, int flags) {
     ObserverEventView *created;
     ObserverIntListView *list;
     int top;
-    Gap__Core__igObject__resetFields(self);
-    igSmartPointer<ObserverEventView> event(igProbe_Create(igObject_GetAllocator(self)));
+    Gap__Core__igObject__resetFields((igObject *)self, flags);
+    igSmartPointer<ObserverEventView> event((ObserverEventView *)igProbe_Create((int)(igObject_GetAllocator((igObject *)self))));
     created = event.get();
-    ObjectList_AppendRetained(created->a, self->f20);
+    ObjectList_AppendRetained((igObjectList *)created->a, (igObject *)self->f20);
     list = created->list;
     top = count_of(list);
     if (top < list->cap) {
@@ -100,8 +100,8 @@ void FUN_00455f50(Z *arg0, Y *arg1) {
     if (arg1->f20 <= arg0->f24) {
         arg0->f28 = 1;
         arg0->f24 = arg1->f20;
-        setPick(arg0, igSmartPointer<Obj_455f50>(igGraphPath_Create(igObject_GetAllocator(arg0))));
-        igGraphPath_SetNodes(arg0->f32, s1);
+        setPick(arg0, igSmartPointer<Obj_455f50>((Obj_455f50 *)igGraphPath_Create((int)(igObject_GetAllocator((igObject *)arg0)))));
+        igGraphPath_SetNodes((igGraphPath *)arg0->f32, (igNodeList *)s1);
     }
 }
 
@@ -114,7 +114,7 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
     if (b->_rootComponent != 0) {
         float x, y;
         igObject *t;
-        igIntersectTraversal_ResetStacks((void *)a->_intersectTraversal);
+        igIntersectTraversal_ResetStacks((igIntersectTraversal *)((void *)a->_intersectTraversal));
         x = ((float *)b->_mousePosition)[0];
         y = ((float *)b->_mousePosition)[1];
         v2[0] = x; v2[1] = y; v2[2] = -10.0f;

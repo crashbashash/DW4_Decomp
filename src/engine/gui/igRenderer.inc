@@ -16,9 +16,9 @@ void igRenderer_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igRenderer_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
-void igRenderer_Register(void) {
+CallbackArray *igRenderer_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igRenderer_metaObject,
         igObject_Register,
@@ -56,10 +56,10 @@ void igRenderer_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igRenderer_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igRenderer_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVisualContext_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_igRenderer_fieldTable, g_igRenderer_fieldHandles, g_igRenderer_fieldOffsets, temp_s2);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igRenderer_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igVisualContext_GetOrCreateMetaObject());
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igRenderer_fieldTable, g_igRenderer_fieldHandles, g_igRenderer_fieldOffsets, temp_s2);
 }
 

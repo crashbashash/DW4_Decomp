@@ -3,12 +3,12 @@ igMetaField *g_igLightingStateAttr_enabledMetaField;
 
 igLightingStateAttr *igLightingStateAttr_CreateInstance(int allocator) {
     igLightingStateAttr_EnsureRegistered();
-    return (igLightingStateAttr *)igMetaObject_CreateInstance(*(int *)0x55F048, allocator);
+    return (igLightingStateAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F048, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igLightingStateAttr_GetOrCreateMetaObject(void) {
     if (g_igLightingStateAttr_metaObject == 0) {
-        g_igLightingStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igLightingStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLightingStateAttr_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igLightingStateAttr_GetMetaObject(void)
 
 int igLightingStateAttr_GetVTable(void) {
     struct Obj_135f00 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igLightingStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igLightingStateAttr_EnsureRegistered(void)
@@ -33,9 +33,9 @@ void igLightingStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLightingStateAttr_Register);
 }
 
-void igLightingStateAttr_Register(void) {
+CallbackArray *igLightingStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLightingStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -55,7 +55,7 @@ void thunk_igLightingStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igLightingStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igLightingStateAttr_fieldTable[] = {
     "_enabled",

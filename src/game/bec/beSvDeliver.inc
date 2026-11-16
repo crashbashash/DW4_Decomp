@@ -20,7 +20,7 @@ igMetaField *g_beSvDeliver_platformDataMetaField;
 
 igMetaObject *beSvDeliver_GetOrCreateMetaObject(void) {
     if (g_beSvDeliver_metaObject == 0) {
-        g_beSvDeliver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSvDeliver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSvDeliver_metaObject;
 }
@@ -42,7 +42,7 @@ int beSvDeliver_GetVTable(void) {
     obj._formatList = 0;
     obj._totalSizeList = 0;
     obj._platformData = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvDeliver_vtable[0];
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)(&obj._platformData), (long long)(-1));
     igSmartPointer_igIntList_Destruct(&obj._totalSizeList, -1);
@@ -60,7 +60,7 @@ void beSvDeliver_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSvDeliver_callbackList[] = { igIntList_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, beSvPlatBaseData_EnsureRegistered, 0 };
 
-void *beSvDeliver_Register(void) {
+CallbackArray *beSvDeliver_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -172,27 +172,27 @@ void beSvDeliver_InitFields(void) {
     void *totalSizeList;
     void *gameData;
     void *platformData;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvDeliver_metaObject;
+    meta = g_beSvDeliver_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvDeliver_ctorTable, 0x12);
     actConnect = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)actConnect)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)actConnect)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)actConnect)->_construct = 1;
     igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 7), -1);
     igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 8), 0);
     freeSizeList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    ((igObjectRefMetaField *)freeSizeList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)freeSizeList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)freeSizeList)->_construct = 1;
     freeFileList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
-    ((igObjectRefMetaField *)freeFileList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)freeFileList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)freeFileList)->_construct = 1;
     formatList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
-    ((igObjectRefMetaField *)formatList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)formatList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)formatList)->_construct = 1;
     totalSizeList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
-    ((igObjectRefMetaField *)totalSizeList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)totalSizeList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)totalSizeList)->_construct = 1;
     gameData = (void *)(igMetaObject_GetFieldAt(meta, base + 0x10));
     ((igObjectRefMetaField *)gameData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();

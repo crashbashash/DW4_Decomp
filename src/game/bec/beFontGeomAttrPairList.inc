@@ -2,7 +2,7 @@ igMetaObject *g_beFontGeomAttrPairList_metaObject;
 
 igMetaObject *beFontGeomAttrPairList_GetOrCreateMetaObject(void) {
     if (g_beFontGeomAttrPairList_metaObject == 0) {
-        g_beFontGeomAttrPairList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beFontGeomAttrPairList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beFontGeomAttrPairList_metaObject;
 }
@@ -20,7 +20,7 @@ int beFontGeomAttrPairList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beFontGeomAttrPairList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beFontGeomAttrPairList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beFontGeomAttrPairList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beFontGeomAttrPairList_callbackList[] = { beFontGeomAttrPair_EnsureRegistered, 0 };
 
-void *beFontGeomAttrPairList_Register(void) {
+CallbackArray *beFontGeomAttrPairList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

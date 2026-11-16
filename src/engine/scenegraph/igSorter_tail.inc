@@ -162,7 +162,7 @@ void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2) {
     int v;
     int n;
     struct L_1dc400 *l;
-    e = ((igAttrStack **)((igAttrStackList *)arg2->_attrStacks)->_data)[((int *)arg2->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
+    e = ((igAttrStack **)((igAttrStackList *)arg2->_attrStacks)->_data)[((int *)arg2->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
     if (e->_count == 0) {
         v = 0;
     } else {
@@ -206,7 +206,7 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg0->f116 = temp_s0_2;

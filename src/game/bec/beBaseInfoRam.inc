@@ -11,7 +11,7 @@ igMetaField *g_beBaseInfoRam_dataListMetaField;
 
 igMetaObject *beBaseInfoRam_GetOrCreateMetaObject(void) {
     if (g_beBaseInfoRam_metaObject == 0) {
-        g_beBaseInfoRam_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beBaseInfoRam_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beBaseInfoRam_metaObject;
 }
@@ -33,7 +33,7 @@ int beBaseInfoRam_GetVTable(void) {
     dataListSlot = (igObject **)&obj._dataList;
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     *dataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     igObjectRef_Release(dataListSlot);
     return vtable;
@@ -46,7 +46,7 @@ void beBaseInfoRam_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beBaseInfoRam_callbackList[] = { beBaseInfo_EnsureRegistered, beBaseInfoManager_EnsureRegistered, beBaseInfoDataList_EnsureRegistered, 0 };
 
-void *beBaseInfoRam_Register(void) {
+CallbackArray *beBaseInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -118,9 +118,9 @@ void beBaseInfoRam_InitFields(void) {
     void *dataList;
     void *parentManager;
     void *parentInfo;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beBaseInfoRam_metaObject;
+    meta = g_beBaseInfoRam_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBaseInfoRam_ctorTable, 9);
     parentInfo = (void *)(igMetaObject_GetFieldAt(meta, base + 1));

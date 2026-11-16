@@ -26,7 +26,7 @@ int beShadow01Info_GetVTable(void) {
     obj._receiverNode = 0;
     obj._casterNode = 0;
     obj._projShadowShader = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beShadow01Info_vtable[0];
     igSmartPointer_igProjectiveShadowShader_Destruct((igSmartPointer<igObject> *)(&obj._projShadowShader), -1);
     igSmartPointer_igNode_Destruct(&obj._casterNode, -1);
@@ -55,7 +55,7 @@ void beShadow01Info_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beShadow01Info_callbackList[] = { igNode_EnsureRegistered, igProjectiveShadowShader_EnsureRegistered, 0 };
 
-void *beShadow01Info_Register(void) {
+CallbackArray *beShadow01Info_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -103,17 +103,17 @@ void beShadow01Info_InitFields(void) {
     void *receiverNode;
     void *casterNode;
     void *projShadowShader;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beShadow01Info_metaObject;
+    meta = g_beShadow01Info_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beShadow01Info_ctorTable, 3);
     receiverNode = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)receiverNode)->_metaObject = igNode_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)receiverNode)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     casterNode = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)casterNode)->_metaObject = igNode_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)casterNode)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     projShadowShader = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)projShadowShader)->_metaObject = igProjectiveShadowShader_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)projShadowShader)->_metaObject = (int)igProjectiveShadowShader_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beShadow01Info_fieldTable, g_beShadow01Info_fieldHandles, g_beShadow01Info_fieldOffsets, base);
 }
 

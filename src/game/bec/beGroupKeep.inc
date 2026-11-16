@@ -18,9 +18,9 @@ int beGroupKeep_GetVTable(void) {
     obj._parentList = 0;
     obj._childList = 0;
     obj._vtable = (int)&g_beGroupKeep_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beGroupKeep_vtable[0];
-    igGroup_Destroy(&obj, 0);
+    igGroup_Destroy((igGroup *)&obj, 0);
     return vtable;
 }
 
@@ -29,12 +29,12 @@ void beGroupKeep_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beGroupKeep_Register);
 }
 
-void *beGroupKeep_Register(void) {
+CallbackArray *beGroupKeep_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beGroupKeep_metaObject,
-        igGroup_Register,
+        (igMetaObjectRegisterFunction)igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beGroupKeep_GetMetaObjectFunction,
         "beGroupKeep",

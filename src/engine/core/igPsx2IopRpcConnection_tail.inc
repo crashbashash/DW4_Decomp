@@ -1,6 +1,6 @@
 /* Allocate the SIF client block and create the connection's semaphore, initially free. */
 void igPsx2IopRpcConnection_InitDefaults(igPsx2IopRpcConnectionView *self) {
-    self->_sifData = (SifClientData *)igObject_AllocateStorage((igObject *)self, sizeof(SifClientData));
+    self->_sifData = (sceSifClientData *)igObject_AllocateStorage((igObject *)self, sizeof(sceSifClientData));
     SemaParam param = {0, 1, 1, 0, 0, 0};
     self->_sema = CreateSema(&param);
 }
@@ -48,9 +48,9 @@ igResult igPsx2IopRpcConnection_Call(igPsx2IopRpcConnectionView *self, int funct
     }
     WaitSema(self->_sema);
     if ((receive == 0) && (wait == 0)) {
-        status = sceSifCallRpc(self->_sifData, function, 1, send, sendSize, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, self->_sema);
+        status = sceSifCallRpc(self->_sifData, function, 1, (void *)send, sendSize, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, (void *)self->_sema);
     } else {
-        status = sceSifCallRpc(self->_sifData, function, 0, send, sendSize, receive, receiveSize, 0, 0);
+        status = sceSifCallRpc(self->_sifData, function, 0, (void *)send, sendSize, (void *)receive, receiveSize, 0, 0);
         SignalSema(self->_sema);
     }
     if (status >= 0) {
@@ -79,7 +79,7 @@ igResult igPsx2IopRpcConnection_CallWithData(igPsx2IopRpcConnectionView *self, i
             status = sceSifCallRpc(self->_sifData, function, 2, self->_dataMemory, 0x10, 0, 0, 0, 0);
             SignalSema(self->_sema);
         } else {
-            status = sceSifCallRpc(self->_sifData, function, 3, self->_dataMemory, 0x10, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, self->_sema);
+            status = sceSifCallRpc(self->_sifData, function, 3, self->_dataMemory, 0x10, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, (void *)self->_sema);
         }
     } else {
         send = self->_dataMemory;
@@ -105,7 +105,7 @@ void igPsx2IopRpcConnection_CallNoData(int *result, igPsx2IopRpcConnectionView *
         callResult = sceSifCallRpc(self->_sifData, function, 2, 0, 0, 0, 0, 0, 0);
         SignalSema(self->_sema);
     } else {
-        callResult = sceSifCallRpc(self->_sifData, function, 3, 0, 0, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, self->_sema);
+        callResult = sceSifCallRpc(self->_sifData, function, 3, 0, 0, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, (void *)self->_sema);
     }
     if (callResult >= 0) {
         status = &g_resultSuccess.v;
@@ -115,7 +115,8 @@ void igPsx2IopRpcConnection_CallNoData(int *result, igPsx2IopRpcConnectionView *
     *result = *status;
 }
 
-void igPsx2IopRpcConnection_RpcEndCallback(int sema) {
-    iSignalSema(sema);
+/* The SIF end function of a call that does not wait: its parameter is the connection's semaphore. */
+void igPsx2IopRpcConnection_RpcEndCallback(void *sema) {
+    iSignalSema((int)sema);
 }
 

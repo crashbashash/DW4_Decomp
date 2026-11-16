@@ -39,7 +39,7 @@ int FUN_0014c920(void) {
 
 igMetaObject *FUN_0014c980(void) {
     if (g_igParticleArray_metaObject == 0) {
-        g_igParticleArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igParticleArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igParticleArray_metaObject;
 }
@@ -55,14 +55,14 @@ igMetaObject *igParticleArray_GetMetaObject(void)
 int igParticleArray_GetVTable(void) {
     struct Obj_14ca20 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igParticleArray_vtable[0];
     obj.w2 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
     obj.w12 = 0;
     obj.w17 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igParticleArray_vtable[0];
     FUN_00137260(&obj.w17, -1);
     FUN_0014cd10((ObjectRefWord *)&obj.w12, -1);
@@ -167,14 +167,14 @@ ObjectRefWord *FUN_0014cd10(ObjectRefWord *self,int delete_storage) {
 
 void FUN_0014cd90(void)
 {
-    igMetaObject_RunStaticInit(igParticleArray_Register);
+    igMetaObject_RunStaticInit((CallbackArray * (*)())igParticleArray_Register);
 }
 
 static igMetaObjectCallback g_igParticleArray_callbackList[] = { igParticleFormat_EnsureRegistered, igVertexArray_EnsureRegistered, igVisualContext_EnsureRegistered, FUN_0014c670, FUN_0014c0d0, 0 };
 
-void igParticleArray_Register(void) {
+CallbackArray *igParticleArray_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igParticleArray_metaObject,
         igObject_Register,
@@ -194,28 +194,28 @@ void thunk_igParticleArray_GetMetaObject(void) {
 }
 
 static FieldFactory g_igParticleArray_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igRawRefMetaField_Create,
-    igEnumMetaField_Create,
-    igFloatMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igParticleArray_fieldTable[] = {
     "_particleFormat",

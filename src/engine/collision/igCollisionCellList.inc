@@ -2,7 +2,7 @@ igMetaObject *g_igCollisionCellList_metaObject;
 
 igMetaObject *FUN_0023a570(void) {
     if (g_igCollisionCellList_metaObject == 0) {
-        g_igCollisionCellList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igCollisionCellList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igCollisionCellList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igCollisionCellList_GetMetaObject(void)
 int igCollisionCellList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igCollisionCellList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_0023a650(void)
@@ -30,9 +30,9 @@ void FUN_0023a650(void)
 
 static igMetaObjectCallback g_igCollisionCellList_callbackList[] = { FUN_0023a850, 0 };
 
-void igCollisionCellList_Register(void) {
+CallbackArray *igCollisionCellList_Register(void) {
     CollisionLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionCellList_metaObject,
         igObjectList_Register,

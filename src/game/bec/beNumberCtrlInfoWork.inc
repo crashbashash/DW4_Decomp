@@ -5,12 +5,12 @@ igMetaField *g_beNumberCtrlInfoWork_changeNumMetaField;
 
 beNumberCtrlInfoWork *beNumberCtrlInfoWork_Create(int allocator) {
     beNumberCtrlInfoWork_EnsureRegistered();
-    return (beNumberCtrlInfoWork *)igMetaObject_CreateInstance(*(int *)0x588630, allocator);
+    return (beNumberCtrlInfoWork *)igMetaObject_CreateInstance(g_beNumberCtrlInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNumberCtrlInfoWork_GetOrCreateMetaObject(void) {
     if (g_beNumberCtrlInfoWork_metaObject == 0) {
-        g_beNumberCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNumberCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNumberCtrlInfoWork_metaObject;
 }
@@ -28,7 +28,7 @@ int beNumberCtrlInfoWork_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beNumberCtrlInfoWork_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beNumberCtrlInfoWork_EnsureRegistered(void)
@@ -36,7 +36,7 @@ void beNumberCtrlInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNumberCtrlInfoWork_Register);
 }
 
-void *beNumberCtrlInfoWork_Register(void) {
+CallbackArray *beNumberCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -81,9 +81,9 @@ static int g_beNumberCtrlInfoWork_fieldOffsets[] = {
 
 void beNumberCtrlInfoWork_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beNumberCtrlInfoWork_metaObject;
+    meta = g_beNumberCtrlInfoWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNumberCtrlInfoWork_ctorTable, 3);
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base)), -1);

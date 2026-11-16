@@ -3,9 +3,9 @@ igMetaField *g_beMessengerGroup_infoNameListMetaField;
 igMetaField *g_beMessengerGroup_ramNoListMetaField;
 igMetaField *g_beMessengerGroup_ramListMetaField;
 
-beMessengerGroup *beMessengerGroup_Create(void *allocator) {
+beMessengerGroup *beMessengerGroup_Create(int allocator) {
     beMessengerGroup_EnsureRegistered();
-    return (beMessengerGroup *)igMetaObject_CreateInstance((void *)g_beMessengerGroup_metaObject,allocator);
+    return (beMessengerGroup *)igMetaObject_CreateInstance(g_beMessengerGroup_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beMessengerGroup_GetMetaObject(void) {
@@ -26,7 +26,7 @@ int beMessengerGroup_GetVTable(void) {
     obj._infoNameList = 0;
     obj._ramNoList = 0;
     obj._ramList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMessengerGroup_vtable[0];
     igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._ramList, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj._ramNoList, -1);
@@ -39,7 +39,7 @@ void beMessengerGroup_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerG
 
 static igMetaObjectCallback g_beMessengerGroup_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, beBaseInfoRamList_EnsureRegistered, 0 };
 
-void *beMessengerGroup_Register(void) {
+CallbackArray *beMessengerGroup_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -87,16 +87,16 @@ void beMessengerGroup_InitFields(void) {
     void *ramList;
     void *ramNoList;
     void *infoNameList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMessengerGroup_metaObject;
+    meta = g_beMessengerGroup_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMessengerGroup_ctorTable, 3);
     infoNameList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)infoNameList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)infoNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)infoNameList)->_construct = 1;
     ramNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)ramNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)ramNoList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)ramNoList)->_construct = 1;
     ramList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)ramList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();

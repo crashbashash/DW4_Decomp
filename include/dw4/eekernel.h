@@ -35,17 +35,26 @@ struct ThreadParam {
     int wakeupCount;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int CreateSema(struct SemaParam *param);
 int DeleteSema(int sema);
 int SignalSema(int sema);
 int iSignalSema(int sema);
 int WaitSema(int sema);
+int PollSema(int sema);
+int ReferSemaStatus(int sema, struct SemaParam *status);
 int iReferSemaStatus(int sema, struct SemaParam *status);
 int AddIntcHandler(int cause, int (*handler)(int cause), int next);
 int RemoveIntcHandler(int cause, int id);
+int RemoveDmacHandler(int channel, int id);
 int CreateThread(struct ThreadParam *param);
 int _StartThread(int thread, void *arg);
 void ExitDeleteThread(void);
+int TerminateThread(int thread);
+int DeleteThread(int thread);
 int GetThreadId(void);
 int ReferThreadStatus(int thread, struct ThreadParam *status);
 int iReferThreadStatus(int thread, struct ThreadParam *status);
@@ -55,5 +64,14 @@ int iWakeupThread(int thread);
 int SuspendThread(int thread);
 int ResumeThread(int thread);
 int ChangeThreadPriority(int thread, int priority);
+
+/* the linker's symbols: the small-data base the start-up code loads into $gp, and the end of the
+ * image, where the heap starts */
+extern char _gp[];
+extern char _end[];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

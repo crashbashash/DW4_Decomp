@@ -5,7 +5,7 @@ igMetaField *g_beLoadIntf2ComMdlData_infoNameMetaField;
 
 beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int allocator) {
     beLoadIntf2ComMdlData_EnsureRegistered();
-    return (beLoadIntf2ComMdlData *)igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject, allocator);
+    return (beLoadIntf2ComMdlData *)igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beLoadIntf2ComMdlData_GetReadyMetaObject(void) {
@@ -28,7 +28,7 @@ int beLoadIntf2ComMdlData_GetVTable(void) {
     *openSQRef = 0;
     infoNameRef = &obj._infoName;
     *infoNameRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beLoadIntf2ComMdlData_vtable[0];
     if (infoNameRef != 0) {
         releaseString((const char *)*infoNameRef);
@@ -44,7 +44,7 @@ void beLoadIntf2ComMdlData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLoadIntf2ComMdlData_Register);
 }
 
-void *beLoadIntf2ComMdlData_Register(void) {
+CallbackArray *beLoadIntf2ComMdlData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

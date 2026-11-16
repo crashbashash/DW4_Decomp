@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWDegiDataList_metaObject;
 
 igMetaObject *beNDMWDegiDataList_GetOrCreateMetaObject(void) {
     if (g_beNDMWDegiDataList_metaObject == 0) {
-        g_beNDMWDegiDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWDegiDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWDegiDataList_metaObject;
 }
@@ -23,7 +23,7 @@ int beNDMWDegiDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWDegiDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWDegiDataList_EnsureRegistered(void)
@@ -33,7 +33,7 @@ void beNDMWDegiDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWDegiDataList_callbackList[] = { beNDMWDegiData_RunStaticInit, 0 };
 
-void *beNDMWDegiDataList_Register(void) {
+CallbackArray *beNDMWDegiDataList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

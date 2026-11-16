@@ -21,7 +21,7 @@ int beMovieInfoData_GetVTable(void) {
     obj._parentLayer = 0;
     obj._callLuaName = 0;
     obj._sceneInfo = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMovieInfoData_vtable[0];
     igSmartPointer_igSceneInfo_Destruct(&obj._sceneInfo, -1);
     igStringRef_Destruct(&obj._callLuaName, -1);
@@ -37,7 +37,7 @@ void beMovieInfoData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMovieInfoData_callbackList[] = { igSceneInfo_EnsureRegistered, 0 };
 
-void *beMovieInfoData_Register(void) {
+CallbackArray *beMovieInfoData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -83,13 +83,13 @@ static int g_beMovieInfoData_fieldOffsets[] = {
 void beMovieInfoData_InitFields(void) {
     int base;
     void *sceneInfo;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMovieInfoData_metaObject;
+    meta = g_beMovieInfoData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMovieInfoData_ctorTable, 3);
     sceneInfo = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)sceneInfo)->_metaObject = igSceneInfo_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)sceneInfo)->_metaObject = (int)igSceneInfo_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beMovieInfoData_fieldTable, g_beMovieInfoData_fieldHandles, g_beMovieInfoData_fieldOffsets, base);
 }
 

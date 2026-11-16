@@ -22,6 +22,9 @@ typedef struct p2StateCacheEntry {
 extern "C" {
 #endif
 
+extern p2StateCacheEntry *p2StateCache[P2_STATE_CACHE_BUCKETS];
+extern p2StateCacheEntry *p2FreeStateCacheEntries;
+
 void p2InitStateCache(void);
 void p2InvalidateStateCache(void);
 

@@ -15,12 +15,12 @@ igMetaField *g_beCameraCtrl_isFirstMetaField;
 
 beCameraCtrl *beCameraCtrl_CreateInstance(int allocator) {
     beCameraCtrl_EnsureRegistered();
-    return (beCameraCtrl *)igMetaObject_CreateInstance(*(int *)0x589C90, allocator);
+    return (beCameraCtrl *)igMetaObject_CreateInstance(g_beCameraCtrl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beCameraCtrl_GetOrCreateMetaObject(void) {
     if (g_beCameraCtrl_metaObject == 0) {
-        g_beCameraCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCameraCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCameraCtrl_metaObject;
 }
@@ -35,7 +35,7 @@ void *beCameraCtrl_GetMetaObject(void) {
 
 int beCameraCtrl_GetVTable(void) {
     CameraCtrlView camera;
-    return *(int *)((char *)&camera + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&camera + *(int *)((char *)g_objectSystem + 916));
 }
 
 igSmartPointer<igObject> *igSmartPointer_beCameraMode_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
@@ -58,7 +58,7 @@ void beCameraCtrl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCameraCtrl_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, igViewerParameters_EnsureRegistered, beCameraMode_EnsureRegistered, 0 };
 
-void *beCameraCtrl_Register(void) {
+CallbackArray *beCameraCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -146,16 +146,16 @@ void beCameraCtrl_InitFields(void) {
     void *viewerMang;
     void *viewerPara;
     void *cameraMode;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCameraCtrl_metaObject;
+    meta = g_beCameraCtrl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraCtrl_ctorTable, 0xD);
     viewerMang = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)viewerMang)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerMang)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)viewerMang)->_refCounted = 0;
     viewerPara = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)viewerPara)->_metaObject = igViewerParameters_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerPara)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)viewerPara)->_refCounted = 0;
     cameraMode = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)cameraMode)->_metaObject = (int)beCameraMode_GetOrCreateMetaObject();

@@ -2,12 +2,12 @@ igMetaObject *g_beSvConnectCheck_metaObject;
 
 beSvConnectCheck *beSvConnectCheck_Create(int allocator) {
     beSvConnectCheck_EnsureRegistered();
-    return (beSvConnectCheck *)igMetaObject_CreateInstance(*(int *)0x5881D8, allocator);
+    return (beSvConnectCheck *)igMetaObject_CreateInstance(g_beSvConnectCheck_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSvConnectCheck_GetOrCreateMetaObject(void) {
     if (g_beSvConnectCheck_metaObject == 0) {
-        g_beSvConnectCheck_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSvConnectCheck_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSvConnectCheck_metaObject;
 }
@@ -36,7 +36,7 @@ int beSvConnectCheck_GetVTable(void) {
     iconWorkSlot = (igObject **)&obj._iconWork;
     *iconWorkSlot = 0;
     obj._vtable = (int)&g_beSvConnectCheck_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSaveApi_vtable[0];
     igObjectRef_Release(iconWorkSlot);
     igObjectRef_Release(mountWorkSlot);
@@ -75,7 +75,7 @@ void beSvConnectCheck_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvConnectCheck_Register);
 }
 
-void *beSvConnectCheck_Register(void) {
+CallbackArray *beSvConnectCheck_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

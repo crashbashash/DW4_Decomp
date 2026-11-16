@@ -3,7 +3,7 @@ igMetaField *g_igVisualContextAttrDefaultManager_visualContextMetaField;
 
 void FUN_00130020(int arg0) {
     FUN_001301c0();
-    igMetaObject_CreateInstance(*(int *)0x55EBC0, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EBC0, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVisualContextAttrDefaultManager_GetMetaObject(void)
@@ -19,11 +19,11 @@ int igVisualContextAttrDefaultManager_GetVTable(void) {
     int temp_s0;
     S_ref *p;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     p = (S_ref *)&u.b[8];
     u.vt = (int)&g_igVisualContextAttrDefaultManager_vtable[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igVisualContextAttrDefaultManager_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
@@ -62,9 +62,9 @@ void FUN_001301c0(void)
 
 static igMetaObjectCallback g_igVisualContextAttrDefaultManager_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
-void igVisualContextAttrDefaultManager_Register(void) {
+CallbackArray *igVisualContextAttrDefaultManager_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVisualContextAttrDefaultManager_metaObject,
         igAttrDefaultManager_Register,
@@ -88,7 +88,7 @@ igMetaObject *FUN_00130260(void) {
 }
 
 static FieldFactory g_igVisualContextAttrDefaultManager_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igVisualContextAttrDefaultManager_fieldTable[] = {
     "_visualContext",
@@ -109,7 +109,7 @@ void igVisualContextAttrDefaultManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igVisualContextAttrDefaultManager_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_persistent = 0;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 1;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 1;

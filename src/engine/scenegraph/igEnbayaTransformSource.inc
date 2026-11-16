@@ -16,18 +16,18 @@ int igEnbayaTransformSource_GetVTable(void) {
     int *temp_a0;
     int temp_s0;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     ps = &o.ref;
     o.vt = &g_igEnbayaTransformSource_vtable[0];
     *ps = 0;
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    temp_s0 = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igEnbayaTransformSource_vtable[0];
     if (ps != 0) {
         temp_a0 = *ps;
         if (temp_a0 != 0) {
             temp_a0[1] = temp_a0[1] - 1;
             if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
     }
@@ -41,9 +41,9 @@ void igEnbayaTransformSource_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igEnbayaTransformSource_callbackList[] = { igEnbayaAnimationSource_EnsureRegistered, 0 };
 
-void igEnbayaTransformSource_Register(void) {
+CallbackArray *igEnbayaTransformSource_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEnbayaTransformSource_metaObject,
         igTransformSource_Register,
@@ -63,8 +63,8 @@ void thunk_FUN_001a18b0(void) {
 }
 
 static FieldFactory g_igEnbayaTransformSource_ctorTable[] = {
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igEnbayaTransformSource_fieldTable[] = {
     "_trackId",
@@ -85,10 +85,10 @@ void igEnbayaTransformSource_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igEnbayaTransformSource_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEnbayaTransformSource_ctorTable, 2);
-    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
+    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)), -1);
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a2210();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEnbayaTransformSource_fieldTable, g_igEnbayaTransformSource_fieldHandles, g_igEnbayaTransformSource_fieldOffsets, temp_s2);
 }

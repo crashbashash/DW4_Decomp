@@ -15,7 +15,7 @@ igMetaField *g_igViewModel_selectedLengthMetaField;
 
 igMetaObject *FUN_0045d470(void) {
     if (g_igViewModel_metaObject == 0) {
-        g_igViewModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igViewModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igViewModel_metaObject;
 }
@@ -35,12 +35,12 @@ int igViewModel_GetVTable(void) {
     int *a1;
     int v0;
     char *p38;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     p38 = &u.b[8];
     *(int *)p38 = 0;
     u.vt = (int)&g_igViewModel_vtable[0];
-    igMatrix44f_SetIdentity(&u.b[12]);
-    r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
+    igMatrix44f_SetIdentity((float *)&u.b[12]);
+    r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
     u.vt = (int)&g_igModel_vtable[0];
     if (p38 != 0) {
         v1 = *(int **)p38;
@@ -59,9 +59,9 @@ void FUN_0045d5c0(void)
     igMetaObject_RunStaticInit(igViewModel_Register);
 }
 
-void igViewModel_Register(void) {
+CallbackArray *igViewModel_Register(void) {
     ViewerLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewModel_metaObject,
         igModel_Register,
@@ -81,18 +81,18 @@ void thunk_igViewModel_GetMetaObject(void) {
 }
 
 static FieldFactory g_igViewModel_ctorTable[] = {
-    igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
     igLongMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
 };
 static const char *g_igViewModel_fieldTable[] = {
@@ -153,30 +153,30 @@ void igViewModel_InitFields(void) {
     float v6[4];
 
     temp_s0 = g_igViewModel_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igViewModel_ctorTable, 0xD);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 45.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 1000.0f);
-    temp_a1 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewModel_ctorTable, 0xD);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2), 45.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4), 1000.0f);
+    temp_a1 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5);
     v1[0] = 0.0f; v1[1] = 0.0f; v1[2] = 0.0f;
     igVec3fMetaField_SetDefault(temp_a1, v1);
-    temp_a2 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6);
+    temp_a2 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6);
     v2[0] = 0.0f; v2[1] = 0.0f; v2[2] = 1.0f;
     igVec3fMetaField_SetDefault(temp_a2, v2);
-    temp_a3 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7);
+    temp_a3 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7);
     v3[0] = 0.0f; v3[1] = 1.0f; v3[2] = 0.0f;
     igVec3fMetaField_SetDefault(temp_a3, v3);
-    temp_a4 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8);
+    temp_a4 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8);
     v4[0] = 1.0f; v4[1] = 0.0f; v4[2] = 0.0f;
     igVec3fMetaField_SetDefault(temp_a4, v4);
-    temp_a5 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9);
+    temp_a5 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9);
     v5[0] = 0.0f; v5[1] = 1.0f; v5[2] = 0.0f;
     igVec3fMetaField_SetDefault(temp_a5, v5);
-    temp_a6 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB);
+    temp_a6 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB);
     v6[0] = 0.0f; v6[1] = 0.0f; v6[2] = 0.0f;
     igVec3fMetaField_SetDefault(temp_a6, v6);
-    igMetaObject_NameFields(temp_s0, g_igViewModel_fieldTable, g_igViewModel_fieldHandles, g_igViewModel_fieldOffsets, temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewModel_fieldTable, g_igViewModel_fieldHandles, g_igViewModel_fieldOffsets, temp_s1);
 }
 

@@ -14,6 +14,7 @@ extern struct igMetaObject *g_igObjectList_metaObject;
 struct CallbackArray *igObjectList_Register(void);
 struct igMetaObject *igObjectList_GetPublishedMetaObject(void);
 void igObjectList_EnsureRegistered(void);
+int igObjectList_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

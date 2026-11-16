@@ -3,25 +3,25 @@ static inline void release_164f50(igObjectSlotView *o)
     IG_OBJECT_RELEASE(o);
 }
 
-void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
+void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self, int flags)
 {
     igObjectSlotView *p;
     int arg;
 
-    Gap__Core__igObject__constructFields(self);
+    Gap__Core__igObject__constructFields((igObject *)self, flags);
 
     p = g_pool_00560760[0];
     if (p != 0) {
         self->pool24 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData[0]);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData[0]);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
+        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
             self->pool24 = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
             self->pool24 = p;
         }
     }
@@ -29,14 +29,14 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
     if (p != 0) {
         self->pool28 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex[0]);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex[0]);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
+        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
             self->pool28 = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
             self->pool28 = p;
         }
     }
@@ -44,21 +44,21 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
     if (p != 0) {
         self->pool32 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
         self->pool32 = p;
     }
     p = g_pool_00560778[0];
     if (p != 0) {
         self->pool36 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
+        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
             self->pool36 = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
             self->pool36 = p;
         }
     }
@@ -66,14 +66,14 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
     if (p != 0) {
         self->pool40 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage[0]);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
+        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
             self->pool40 = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
             self->pool40 = p;
         }
     }
@@ -81,14 +81,14 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
     if (p != 0) {
         self->pool44 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture[0]);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture[0]);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
+        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
             self->pool44 = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
             self->pool44 = p;
         }
     }
@@ -96,26 +96,26 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
     if (p != 0) {
         self->pool48 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
         self->pool48 = p;
     }
     p = g_pool_00560798[0];
     if (p != 0) {
         self->pool52 = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator(self);
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList[0]);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList[0]);
+        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
+        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
             self->pool52 = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator(self);
+            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
             self->pool52 = p;
         }
     }
 
-    self->capabilities56 = igTimer_Create(FUN_00165ce0((int *)self));
+    self->capabilities56 = (igObjectSlotView *)igTimer_Create(FUN_00165ce0((int *)self));
     self->capabilities56->vfunc_29();
 
     arg = FUN_00165d10((int *)self);
@@ -133,7 +133,7 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
     ManagerList *list;
     int count;
 
-    Gap__Core__igObject__userConstruct(self);
+    Gap__Core__igObject__userConstruct((igObject *)self);
     if (DAT_00560758 == 0) {
         DAT_00560758 = (igTDataList<VisualContextCapabilityManager *> *)FUN_00149ea0((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
     }
@@ -146,11 +146,11 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
         List_Resize(list, count + 1, 4);
     }
     list->_data[count] = self;
-    properties = ((PropertyRoot *)g_objectSystem[0])->properties;
+    properties = ((PropertyRoot *)g_objectSystem)->properties;
     showFrameRate = self->showFrameRate;
     commandLineFrame = self->commandLineFrame;
-    thunk_igRegistry_GetValueBool(properties, 4, "showFrameRate", &showFrameRate, showFrameRate, 1);
-    thunk_igRegistry_GetValueBool(properties, 4, "commandLineFrameRate", &commandLineFrame, commandLineFrame, 1);
+    thunk_igRegistry_GetValueBool((igRegistry *)properties, 4, "showFrameRate", &showFrameRate, showFrameRate, 1);
+    thunk_igRegistry_GetValueBool((igRegistry *)properties, 4, "commandLineFrameRate", &commandLineFrame, commandLineFrame, 1);
     self->showFrameRate = showFrameRate;
     self->commandLineFrame = commandLineFrame;
 }
@@ -167,7 +167,7 @@ void FUN_00165bb0(char *arg0) {
     K key(arg0);
     i = Finder::Find(((RefObj *)DAT_00560758), key);
     if (i >= 0) {
-        List_RemoveWordAt(((RefObj *)DAT_00560758), i);
+        List_RemoveWordAt((igDataList *)(((RefObj *)DAT_00560758)), i);
     }
     l = ((RefObj *)DAT_00560758);
     if (l->count == 0) {
@@ -177,7 +177,7 @@ void FUN_00165bb0(char *arg0) {
         }
         DAT_00560758 = 0;
     }
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 void FUN_00165cb0(void *arg0)
@@ -245,7 +245,7 @@ void FUN_00165d30(O_165d30 *arg0, unsigned int arg1, int arg2) {
         v[0] = 0;
         v[1] = 0;
         v[2] = 0;
-        igMatrix44f_SetTranslation(s1, v);
+        igMatrix44f_SetTranslation((float *)s1, (float *)v);
         FUN_001903d0(s1);
         s1 += 0x40;
     }
@@ -257,9 +257,9 @@ int FUN_00165e40(void *arg0) {
 }
 
 static inline Obj_165e50 *getAlloc(void *o) {
-    Obj_165e50 *a = (Obj_165e50 *)igObject_GetAllocator(o);
+    Obj_165e50 *a = (Obj_165e50 *)igObject_GetAllocator((igObject *)o);
     if (g_useOwnerAllocator != 0) return a;
-    return (Obj_165e50 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+    return (Obj_165e50 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
 }
 
 void *FUN_00165e50(Self *self, Obj_165e50 *src) {
@@ -328,7 +328,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
 
 void FUN_00166400(igVisualContext_166400 *ctx, int flags)
 {
-    void *settings = ((SystemConfig *)g_objectSystem[0])->settings;
+    void *settings = ((SystemConfig *)g_objectSystem)->settings;
     int shadingMode;
     int cullMode;
     int fillMode;
@@ -394,7 +394,7 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_249(1000.0f);
     }
     if (flags & 0x20) {
-        thunk_igRegistry_GetValueInt(settings, 4, "shadingMode", &shadingMode, 1, 1);
+        thunk_igRegistry_GetValueInt((igRegistry *)settings, 4, "shadingMode", &shadingMode, 1, 1);
         hot = -1;
         ctx->vfunc_67(&hot);
         colour.x = 0.0f; colour.y = 0.0f; colour.z = 0.0f; colour.w = 1.0f;
@@ -407,9 +407,9 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_225(shadingMode);
     }
     if (flags & 0x40) {
-        thunk_igRegistry_GetValueBool(settings, 4, "cullEnable", &cullEnable, 0, 1);
-        thunk_igRegistry_GetValueInt(settings, 4, "cullMode", &cullMode, 0, 1);
-        thunk_igRegistry_GetValueInt(settings, 4, "fillMode", &fillMode, 0, 1);
+        thunk_igRegistry_GetValueBool((igRegistry *)settings, 4, "cullEnable", &cullEnable, 0, 1);
+        thunk_igRegistry_GetValueInt((igRegistry *)settings, 4, "cullMode", &cullMode, 0, 1);
+        thunk_igRegistry_GetValueInt((igRegistry *)settings, 4, "fillMode", &fillMode, 0, 1);
         ctx->vfunc_215(0);
         ctx->vfunc_217(6);
         ctx->vfunc_219(0.0f);
@@ -434,8 +434,8 @@ void FUN_00166a60(void *arg0, char arg1) {
 void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
     C_166a70 *arg0 = (C_166a70 *)arg0_;
     float temp_f4;
-    int temp_s2;
-    int temp_s1;
+    double temp_s2;
+    double temp_s1;
 
     DAT_005607a0[0] += fparg0;
     DAT_005607a8[0] += fparg1;
@@ -497,7 +497,7 @@ igVisualContext *igVisualContext_FindFirst(void) {
     r = 0;
     if (((L_166d40 *)DAT_00560758) != 0) {
         for (i = 0; i < ((L_166d40 *)DAT_00560758)->count; i++) {
-            if (igObject_IsKindOf(((L_166d40 *)DAT_00560758)->items[i], g_igVisualContext_metaObject) != 0) {
+            if (igObject_IsKindOf((void *)(((L_166d40 *)DAT_00560758)->items[i]), g_igVisualContext_metaObject) != 0) {
                 r = ((L_166d40 *)DAT_00560758)->items[i];
                 break;
             }
@@ -511,12 +511,12 @@ static inline int countOf(const igIntList *list) { return list->_count; }
 void FUN_00166de0(int value)
 {
     int count;
-    void *registry = ((ShaderSetup *)g_objectSystem[0])->registry;
-    void *builder = ((ShaderSetup *)g_objectSystem[0])->builder;
+    void *registry = ((ShaderSetup *)g_objectSystem)->registry;
+    void *builder = ((ShaderSetup *)g_objectSystem)->builder;
     igSmartPointer<igIntList> list(igContextList_Create((void *)(FUN_00165ce0((int *)value))));
     bool found = false;
 
-    igRegistry_GetValueBool(registry, 4, "ignoreDriverDatabase", &found, 0, 1);
+    igRegistry_GetValueBool((igRegistry *)registry, 4, "ignoreDriverDatabase", (unsigned char *)&found, 0, 1);
     if (found) return;
     igIntList *l = list;
     count = l->_count;

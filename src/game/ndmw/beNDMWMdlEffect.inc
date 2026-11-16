@@ -2,12 +2,12 @@ igMetaObject *g_beNDMWMdlEffect_metaObject;
 
 beNDMWMdlEffect *beNDMWMdlEffect_CreateInstance(int allocator) {
     beNDMWMdlEffect_EnsureRegistered();
-    return (beNDMWMdlEffect *)igMetaObject_CreateInstance(g_beNDMWMdlEffect_metaObject, allocator);
+    return (beNDMWMdlEffect *)igMetaObject_CreateInstance(g_beNDMWMdlEffect_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMdlEffect_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlEffect_metaObject == 0) {
-        g_beNDMWMdlEffect_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMdlEffect_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMdlEffect_metaObject;
 }
@@ -28,7 +28,7 @@ int beNDMWMdlEffect_GetVTable(void) {
     obj._name = 0;
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlEffect_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMdlEffect_vtable[0];
     beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
     return vtable;
@@ -39,7 +39,7 @@ void beNDMWMdlEffect_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlEffect_Register);
 }
 
-void *beNDMWMdlEffect_Register(void) {
+CallbackArray *beNDMWMdlEffect_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -3,7 +3,7 @@ igMetaField *g_igGeometryMaskAttr_maskMetaField;
 
 void FUN_00137070(int arg0) {
     FUN_00137140();
-    igMetaObject_CreateInstance(*(int *)0x55F148, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F148, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igGeometryMaskAttr_GetMetaObject(void)
@@ -17,9 +17,9 @@ igMetaObject *igGeometryMaskAttr_GetMetaObject(void)
 int igGeometryMaskAttr_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igGeometryMaskAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00137140(void)
@@ -27,9 +27,9 @@ void FUN_00137140(void)
     igMetaObject_RunStaticInit(igGeometryMaskAttr_Register);
 }
 
-void igGeometryMaskAttr_Register(void) {
+CallbackArray *igGeometryMaskAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometryMaskAttr_metaObject,
         igVisualAttribute_Register,
@@ -49,7 +49,7 @@ void thunk_igGeometryMaskAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igGeometryMaskAttr_ctorTable[] = {
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igGeometryMaskAttr_fieldTable[] = {
     "_mask",

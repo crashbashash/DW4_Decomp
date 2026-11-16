@@ -13,7 +13,7 @@ int beUnicode_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beUnicode_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beUnicode_EnsureRegistered(void)
@@ -21,7 +21,7 @@ void beUnicode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beUnicode_Register);
 }
 
-void *beUnicode_Register(void) {
+CallbackArray *beUnicode_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

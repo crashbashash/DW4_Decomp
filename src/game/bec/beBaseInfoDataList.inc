@@ -2,12 +2,12 @@ igMetaObject *g_beBaseInfoDataList_metaObject;
 
 beBaseInfoDataList *beBaseInfoDataList_Create(int allocator) {
     beBaseInfoDataList_EnsureRegistered();
-    return (beBaseInfoDataList *)igMetaObject_CreateInstance(*(int *)0x589E00, allocator);
+    return (beBaseInfoDataList *)igMetaObject_CreateInstance(g_beBaseInfoDataList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beBaseInfoDataList_GetOrCreateMetaObject(void) {
     if (g_beBaseInfoDataList_metaObject == 0) {
-        g_beBaseInfoDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beBaseInfoDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beBaseInfoDataList_metaObject;
 }
@@ -31,7 +31,7 @@ int beBaseInfoDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beBaseInfoDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beBaseInfoDataList_EnsureRegistered(void)
@@ -41,7 +41,7 @@ void beBaseInfoDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beBaseInfoDataList_callbackList[] = { beBaseInfoData_EnsureRegistered, 0 };
 
-void *beBaseInfoDataList_Register(void) {
+CallbackArray *beBaseInfoDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

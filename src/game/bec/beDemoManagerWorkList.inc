@@ -2,7 +2,7 @@ igMetaObject *g_beDemoManagerWorkList_metaObject;
 
 igMetaObject *beDemoManagerWorkList_GetOrCreateMetaObject(void) {
     if (g_beDemoManagerWorkList_metaObject == 0) {
-        g_beDemoManagerWorkList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beDemoManagerWorkList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beDemoManagerWorkList_metaObject;
 }
@@ -20,7 +20,7 @@ int beDemoManagerWorkList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beDemoManagerWorkList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beDemoManagerWorkList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beDemoManagerWorkList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDemoManagerWorkList_callbackList[] = { beDemoManagerWork_EnsureRegistered, 0 };
 
-void *beDemoManagerWorkList_Register(void) {
+CallbackArray *beDemoManagerWorkList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

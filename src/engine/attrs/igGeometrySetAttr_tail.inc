@@ -3,23 +3,23 @@ bool FUN_0013e6e0(igGeometrySetAttr *arg0, int arg1) {
     int t;
     Item **p;
     Item **end;
-    t = Gap__Gfx__igPsx2VisualContext__vfunc_192(arg1);
+    t = Gap__Gfx__igPsx2VisualContext__vfunc_192((igPsx2VisualContext *)arg1);
     if (t < 0) {
         arg0->_renderListState = 0;
         return false;
     }
-    Gap__Gfx__igPsx2VisualContext__vfunc_194(arg1, t);
+    Gap__Gfx__igPsx2VisualContext__vfunc_194((igPsx2VisualContext *)arg1, t);
     ok = true;
     p = (Item **)((igGeometryAttrList *)arg0->_geometryAttrList)->_data;
     end = p + ((igGeometryAttrList *)arg0->_geometryAttrList)->_count;
     for (; p < end; p++) {
-        if (igObject_IsKindOf(*p, (int)g_igGeometryAttr_metaObject) == 0) {
+        if (igObject_IsKindOf(*p, (igMetaObject *)g_igGeometryAttr_metaObject) == 0) {
             ok = false;
             break;
         }
         (*p)->v22(arg1);
     }
-    if ((Gap__Gfx__igPsx2VisualContext__vfunc_195(arg1) & 0xFF) && ok) {
+    if ((Gap__Gfx__igPsx2VisualContext__vfunc_195((igPsx2VisualContext *)arg1) & 0xFF) && ok) {
         ((Self *)arg0)->v30(arg1);
         arg0->_renderListHandle = t;
         if (arg0->_renderListState == 2) {
@@ -30,7 +30,7 @@ bool FUN_0013e6e0(igGeometrySetAttr *arg0, int arg1) {
             }
         }
     } else {
-        Gap__Gfx__igPsx2VisualContext__vfunc_193(arg1, t);
+        Gap__Gfx__igPsx2VisualContext__vfunc_193((igPsx2VisualContext *)arg1, t);
         arg0->_renderListState = 0;
     }
     return ok;
@@ -61,7 +61,7 @@ void Gap__Attrs__igGeometrySetAttr__vfunc_24(T_13e8d0 *arg0, int arg1) {
             r = FUN_0013e6e0((igGeometrySetAttr *)arg0, arg1);
         }
         if (arg0->f16 >= 0 && arg0->f28 != 0) {
-            r = Gap__Gfx__igPsx2VisualContext__vfunc_196(arg1, arg0->f16);
+            r = Gap__Gfx__igPsx2VisualContext__vfunc_196((igPsx2VisualContext *)arg1, arg0->f16);
         }
     }
     if (r == 0 && arg0->f28 != 0) {
@@ -85,7 +85,7 @@ void Gap__Attrs__igGeometrySetAttr__vfunc_29(igGeometrySetAttr *arg0, int arg1) 
 
 void Gap__Attrs__igGeometrySetAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 void Gap__Attrs__igGeometrySetAttr__vfunc_28(A_13ea20 *arg0) {

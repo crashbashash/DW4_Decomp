@@ -4,7 +4,7 @@ void Gap__Sg__igLod__vfunc_31(igLod *self) {
     if (lastRange != 0) {
         lastRange->_refCount = lastRange->_refCount - 1;
         if (((unsigned long long) ((long long)(int) lastRange->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)lastRange);
+            igObject_Destroy((igObject *)lastRange);
         }
     }
     self->_lastRange = 0;

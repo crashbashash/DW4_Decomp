@@ -2,13 +2,13 @@ void Gap__Gui__igGuiSystemModel__vfunc_13(int arg0, int arg1) {
     int args[4];
     float vec[3];
 
-    Gap__Core__igObject__resetFields();
+    Gap__Core__igObject__resetFields((igObject *)arg0, arg1);
     if (arg1 != 0) {
-        igMatrix44f_SetIdentity(arg0 + 0x20);
+        igMatrix44f_SetIdentity((float *)(arg0 + 0x20));
         vec[0] = 0.375f;
         vec[2] = -0.5f;
         vec[1] = 0.375f;
-        igMatrix44f_SetTranslation(arg0 + 0x20, vec);
+        igMatrix44f_SetTranslation((float *)(arg0 + 0x20), (const float *)vec);
         args[0] = 2;
         args[1] = 0;
         args[2] = (int)g_igGuiSystemModel_viewMatrixMetaField;

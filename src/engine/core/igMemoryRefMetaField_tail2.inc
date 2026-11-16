@@ -36,7 +36,7 @@ int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
     if (f->_persistent == 0) return -1;
     p = *(int *)(off + f->_offset);
     if (p == 0) return -1;
-    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)((int)g_igMemoryRefMetaField_metaObject)) != 0) {
+    if (igObject_IsKindOf((igObject *)f->_memType, (igMetaObject *)((int)g_igMemoryRefMetaField_metaObject)) != 0) {
         n = Memory_GetBufferSize((void *)p) >> 2;
         s1 = igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
         for (s0 = 0; s0 < (int)n; s0++) {
@@ -45,7 +45,7 @@ int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
         }
         return s1;
     }
-    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
+    if (igObject_IsKindOf((igObject *)f->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
         s1 = igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, f->_refCounted);
         return s1;
     }
@@ -66,7 +66,7 @@ int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *self, int objectA, in
     int b;
     int i;
 
-    if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) == 0) {
+    if (igObject_IsKindOf((igObject *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) == 0) {
         return ((igMetaFieldView *)self)->IsAlikeShallow(objectA, objectB);
     }
     off = self->_offset;

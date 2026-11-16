@@ -3,7 +3,7 @@ void Gap__Sg__igAnimationCombiner__vfunc_17(CombinerView *c) {
     int result2;
     int bones;
     int i;
-    igObject_UserPostLoad(c);
+    igObject_UserPostLoad();
     bones = c->_animHierarchy->getBoneCount();
     for (i = 0; i < bones; i++) {
         BoneInfoRow *row = c->_boneInfoListList->_data[i];
@@ -31,7 +31,7 @@ void Gap__Sg__igAnimationCombiner__vfunc_17(CombinerView *c) {
             if (c->_boneMatrixArray == 0) {
                 float *m;
                 int k;
-                igMetaField_AllocateArray(&result1, g_igAnimationCombiner_boneMatrixArrayMetaField, c, boneCount, igObject_GetAllocator(c));
+                igMetaField_AllocateArray(&result1, g_igAnimationCombiner_boneMatrixArrayMetaField, c, boneCount, (int)igObject_GetAllocator((igObject *)c));
                 m = c->_boneMatrixArray;
                 for (k = 0; k < boneCount; k++) {
                     igMatrix44f_SetIdentity(m);
@@ -41,7 +41,7 @@ void Gap__Sg__igAnimationCombiner__vfunc_17(CombinerView *c) {
             if (blendCount != 0 && c->_blendMatrixArray == 0) {
                 float *m;
                 int k;
-                igMetaField_AllocateArray(&result2, g_igAnimationCombiner_blendMatrixArrayMetaField, c, blendCount, igObject_GetAllocator(c));
+                igMetaField_AllocateArray(&result2, g_igAnimationCombiner_blendMatrixArrayMetaField, c, blendCount, (int)igObject_GetAllocator((igObject *)c));
                 m = c->_blendMatrixArray;
                 for (k = 0; k < blendCount; k++) {
                     igMatrix44f_SetIdentity(m);
@@ -61,7 +61,7 @@ void FUN_001ad5c0(A_1ad5c0 *arg0, It *arg1, int arg2) {
     l = arg0->ll->data[arg2];
     n = l->count;
     if (n == 0) {
-        ObjectList_AppendRetained(l, arg1);
+        ObjectList_AppendRetained((igObjectList *)l, (igObject *)arg1);
         il = arg0->il;
         if (il->count != 0 && arg2 >= 0 && arg2 < il->count) {
             il->data[arg2] = 0;
@@ -76,7 +76,7 @@ void FUN_001ad5c0(A_1ad5c0 *arg0, It *arg1, int arg2) {
         i++;
     } while (i != n);
     if (i == n) {
-        ObjectList_AppendRetained(l, arg1);
+        ObjectList_AppendRetained((igObjectList *)l, (igObject *)arg1);
     } else {
         insertRetained(l, i, arg1);
         il2 = arg0->il;
@@ -162,7 +162,7 @@ int FUN_001ad860(igAnimationCombiner *arg0, igAnimationState *arg1) {
                         if (temp_a0_2 != 0) {
                             temp_a0_2->_refCount = (int)temp_a0_2->_refCount - 1;
                             if (((unsigned long long) ((long long) (int)temp_a0_2->_refCount << 0x29) >> 0x29) == 0) {
-                                igObject_Destroy((void *)temp_a0_2);
+                                igObject_Destroy((igObject *)temp_a0_2);
                             }
                         }
                         temp_s0->_cycleMatchTargetState = 0;
@@ -201,7 +201,7 @@ int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
     state->_new = 1;
     state->_base.slot21();
     state->_blendStartTime = 0;
-    ObjectList_AppendRetained(c->_animationStateList, state);
+    ObjectList_AppendRetained((igObjectList *)c->_animationStateList, (igObject *)state);
     state->_timeRequested = FUN_001acb10((igTimeView *)c);
     for (i = 0; i < bones; i++) {
         int t = binding->_boneMap[i];
@@ -322,7 +322,7 @@ int igAnimationCombiner_RemoveAllStates(igAnimationCombiner *combiner) {
                 igObject_Destroy(o);
             }
         }
-        List_RemoveWordAt(states, 0);
+        List_RemoveWordAt((igDataList *)states, 0);
         states->_data[states->_count] = 0;
     }
     for (k = 0; k < bones; k++) {
@@ -349,7 +349,7 @@ int igAnimationCombiner_RemoveAllStates(igAnimationCombiner *combiner) {
                     igObject_Destroy(o);
                 }
             }
-            List_RemoveWordAt(row, 0);
+            List_RemoveWordAt((igDataList *)row, 0);
             row->_data[row->_count] = 0;
         }
     }
@@ -440,7 +440,7 @@ int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state) {
                 clearBoneInfo(b);
                 FUN_001dcb80((ObjectPool *)((int)g_igAnimationCombinerBoneInfoPool_instance.p), (igObject *)b);
                 releaseWord((igPoolObject *)row->_data[j]);
-                List_RemoveWordAt(row, j);
+                List_RemoveWordAt((igDataList *)row, j);
                 row->_data[row->_count] = 0;
                 if (n - 1 > 0) {
                     bool set;
@@ -465,7 +465,7 @@ int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state) {
     found->reset();
     FUN_001dcb80((ObjectPool *)((int)g_igAnimationStatePool_instance.p), (igObject *)found);
     releaseWord(states->_data[si]);
-    List_RemoveWordAt(states, si);
+    List_RemoveWordAt((igDataList *)states, si);
     states->_data[states->_count] = 0;
     if (c->_animationStateList->_count == 1) {
         ((igAnimationState *)states->_data[0])->_combineMode = 0;
@@ -493,7 +493,7 @@ int igAnimationCombiner_AddAnimationBlend(igAnimationCombiner *combiner, igAnima
 void Gap__Sg__igAnimationCombiner__vfunc_10(void **arg0) {
     if (((DW4VC_92_0 *)(arg0))->vX() != 0) {
         igAnimationCombiner_RemoveAllStates((igAnimationCombiner *)arg0);
-        Gap__Core__igObject__userDestruct(arg0);
+        Gap__Core__igObject__userDestruct((igObject *)arg0);
     }
 }
 
@@ -543,7 +543,7 @@ int igAnimationCombiner_ResetToPose(igAnimationCombiner *combiner, igAnimationCo
     state->_new = 1;
     state->_base.slot21();
     state->_blendStartTime = 0;
-    ObjectList_AppendRetained(c->_animationStateList, state);
+    ObjectList_AppendRetained((igObjectList *)c->_animationStateList, (igObject *)state);
     for (i = 0; i < bones; i++) {
         CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)FUN_001a80b0);
         float *m;
@@ -556,7 +556,7 @@ int igAnimationCombiner_ResetToPose(igAnimationCombiner *combiner, igAnimationCo
         tz = m[14];
         ty = m[13];
         tx = m[12];
-        igMatrix44f_GetQuaternion(&q, m);
+        igMatrix44f_GetQuaternion((float *)&q, m);
         if (state != 0) {
             state->_base._refCount = state->_base._refCount + 1;
         }

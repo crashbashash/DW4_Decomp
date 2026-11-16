@@ -4,12 +4,12 @@ igMetaField *g_beSaveUtil_connectCheckMetaField;
 
 beSaveUtil *beSaveUtil_CreateInstance(int allocator) {
     beSaveUtil_EnsureRegistered();
-    return (beSaveUtil *)igMetaObject_CreateInstance(*(int *)0x588020, allocator);
+    return (beSaveUtil *)igMetaObject_CreateInstance(g_beSaveUtil_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSaveUtil_GetOrCreateMetaObject(void) {
     if (g_beSaveUtil_metaObject == 0) {
-        g_beSaveUtil_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSaveUtil_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSaveUtil_metaObject;
 }
@@ -32,7 +32,7 @@ int beSaveUtil_GetVTable(void) {
     obj._vtable = (int)&g_beSaveUtil_vtable[0];
     obj._api = 0;
     obj._connectCheck = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSaveUtil_vtable[0];
     igSmartPointer_beSvConnectCheck_Destruct((igSmartPointer<igObject> *)&obj._connectCheck, (short)(-1));
     igSmartPointer_beSaveApi_Destruct((igSmartPointer<igObject> *)&obj._api, -1);
@@ -73,7 +73,7 @@ void beSaveUtil_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSaveUtil_callbackList[] = { beSaveApi_EnsureRegistered, beSvConnectCheck_EnsureRegistered, 0 };
 
-void *beSaveUtil_Register(void) {
+CallbackArray *beSaveUtil_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -116,9 +116,9 @@ void beSaveUtil_InitFields(void) {
     int base;
     void *api;
     void *connectCheck;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSaveUtil_metaObject;
+    meta = g_beSaveUtil_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSaveUtil_ctorTable, 2);
     api = (void *)(igMetaObject_GetFieldAt(meta, base));

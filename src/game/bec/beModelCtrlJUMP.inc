@@ -18,7 +18,7 @@ int beModelCtrlJUMP_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlJUMP_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -29,7 +29,7 @@ void beModelCtrlJUMP_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlJUMP_Register);
 }
 
-void *beModelCtrlJUMP_Register(void) {
+CallbackArray *beModelCtrlJUMP_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

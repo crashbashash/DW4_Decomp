@@ -9,12 +9,12 @@ igMetaField *g_beNDMWStatusInfoWork_junkGiftMetaField;
 
 beNDMWStatusInfoWork *beNDMWStatusInfoWork_Create(int allocator) {
     beNDMWStatusInfoWork_EnsureRegistered();
-    return (beNDMWStatusInfoWork *)igMetaObject_CreateInstance(g_beNDMWStatusInfoWork_metaObject, allocator);
+    return (beNDMWStatusInfoWork *)igMetaObject_CreateInstance(g_beNDMWStatusInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWStatusInfoWork_GetOrCreateMetaObject(void) {
     if (g_beNDMWStatusInfoWork_metaObject == 0) {
-        g_beNDMWStatusInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWStatusInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWStatusInfoWork_metaObject;
 }
@@ -42,7 +42,7 @@ int beNDMWStatusInfoWork_GetVTable(void) {
     obj._armorSalesList = 0;
     obj._chipSalesList = 0;
     obj._junkSalesList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusInfoWork_vtable[0];
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._junkSalesList, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._chipSalesList, -1);
@@ -59,9 +59,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWItemBaseList_Destruct(igSmartPoin
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -73,7 +73,7 @@ void beNDMWStatusInfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusInfoWork_callbackList[] = { igIntList_EnsureRegistered, beNDMWItemBaseList_EnsureRegistered, 0 };
 
-void *beNDMWStatusInfoWork_Register(void) {
+CallbackArray *beNDMWStatusInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -145,24 +145,24 @@ void beNDMWStatusInfoWork_InitFields(void) {
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
     meta = (void *)g_beNDMWStatusInfoWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWStatusInfoWork_ctorTable, 7);
-    parameter = (void *)(igMetaObject_GetFieldAt(meta, base));
+    parameter = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)parameter)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)parameter)->_construct = 1;
-    preview = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    preview = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)preview)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)preview)->_construct = 1;
-    weaponSalesList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    weaponSalesList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)weaponSalesList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     ((igRefMetaField *)weaponSalesList)->_construct = 1;
-    armorSalesList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    armorSalesList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)armorSalesList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     ((igRefMetaField *)armorSalesList)->_construct = 1;
-    chipSalesList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    chipSalesList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)chipSalesList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     ((igRefMetaField *)chipSalesList)->_construct = 1;
-    junkSalesList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    junkSalesList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
     ((igObjectRefMetaField *)junkSalesList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     ((igRefMetaField *)junkSalesList)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWStatusInfoWork_fieldTable, g_beNDMWStatusInfoWork_fieldHandles, g_beNDMWStatusInfoWork_fieldOffsets, base);

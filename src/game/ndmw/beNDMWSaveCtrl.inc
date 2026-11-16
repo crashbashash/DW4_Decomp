@@ -3,12 +3,12 @@ igMetaField *g_beNDMWSaveCtrl_padManagerMetaField;
 
 beNDMWSaveCtrl *beNDMWSaveCtrl_CreateInstance(int allocator) {
     beNDMWSaveCtrl_EnsureRegistered();
-    return (beNDMWSaveCtrl *)igMetaObject_CreateInstance(g_beNDMWSaveCtrl_metaObject, allocator);
+    return (beNDMWSaveCtrl *)igMetaObject_CreateInstance(g_beNDMWSaveCtrl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWSaveCtrl_GetOrCreateMetaObject(void) {
     if (g_beNDMWSaveCtrl_metaObject == 0) {
-        g_beNDMWSaveCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWSaveCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWSaveCtrl_metaObject;
 }
@@ -32,10 +32,10 @@ int beNDMWSaveCtrl_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWSaveCtrl_vtable[0];
     padManagerRef = &obj._padManager;
     *padManagerRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWSaveCtrl_vtable[0];
     igSmartPointer_bePadManager_Destruct(padManagerRef, -1);
-    beBaseInfoManager_Destroy(&obj, 0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -46,7 +46,7 @@ void beNDMWSaveCtrl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWSaveCtrl_callbackList[] = { bePadManager_EnsureRegistered, 0 };
 
-void *beNDMWSaveCtrl_Register(void) {
+CallbackArray *beNDMWSaveCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -90,7 +90,7 @@ void beNDMWSaveCtrl_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWSaveCtrl_ctorTable, 1);
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beNDMWSaveCtrl_fieldTable, g_beNDMWSaveCtrl_fieldHandles, g_beNDMWSaveCtrl_fieldOffsets, base);
 }
 

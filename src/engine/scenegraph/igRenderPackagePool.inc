@@ -2,7 +2,7 @@ igMetaObject *g_igRenderPackagePool_metaObject;
 
 igMetaObject *FUN_00197930(void) {
     if (g_igRenderPackagePool_metaObject == 0) {
-        g_igRenderPackagePool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igRenderPackagePool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igRenderPackagePool_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igRenderPackagePool_GetMetaObject(void)
 int igRenderPackagePool_GetVTable(void) {
     struct Obj_1979d0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igRenderPackagePool_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00197a10(void)
@@ -30,9 +30,9 @@ void FUN_00197a10(void)
 
 static igMetaObjectCallback g_igRenderPackagePool_callbackList[] = { FUN_00197cc0, 0 };
 
-void igRenderPackagePool_Register(void) {
+CallbackArray *igRenderPackagePool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRenderPackagePool_metaObject,
         igObjectPool_Register,

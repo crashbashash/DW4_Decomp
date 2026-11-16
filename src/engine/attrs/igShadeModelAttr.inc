@@ -3,7 +3,7 @@ igMetaField *g_igShadeModelAttr_modeMetaField;
 
 igMetaObject *FUN_00133950(void) {
     if (g_igShadeModelAttr_metaObject == 0) {
-        g_igShadeModelAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igShadeModelAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igShadeModelAttr_metaObject;
 }
@@ -19,9 +19,9 @@ igMetaObject *igShadeModelAttr_GetMetaObject(void)
 int igShadeModelAttr_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igShadeModelAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igShadeModelAttr_EnsureRegistered(void)
@@ -29,9 +29,9 @@ void igShadeModelAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igShadeModelAttr_Register);
 }
 
-void igShadeModelAttr_Register(void) {
+CallbackArray *igShadeModelAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igShadeModelAttr_metaObject,
         igVisualAttribute_Register,
@@ -51,7 +51,7 @@ void thunk_igShadeModelAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igShadeModelAttr_ctorTable[] = {
-    igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igShadeModelAttr_fieldTable[] = {
     "_mode",

@@ -1,38 +1,28 @@
 #pragma push
 #pragma readonly_strings on
+#include <stdio.h>
+#include "dw4/libkernl.h"
+#include "dw4/p2core.h"
+#include "dw4/p2pool.h"
 #include "dw4/p2texture.h"
 #include "dw4/p2multipass.h"
+#include "dw4/dmaChannel.h"
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
-int DIntr();
-int EIntr();
-int p2GrowPool();
-int p2SubmitDmaPacket();
-int p2RegisterPredicateName();
-void textureDeferredPredicate(void);
-int textureLoadedPredicate();
-int p2DmaSequenceLastCompleted();
-int p2GetDisplayFlags();
-int FUN_001f76f0();
-int p2AddDmaPredicate();
-void FUN_001f74e0(void);
-void FUN_001f7500(void);
+void FUN_001f76f0(int count, int *regs);
+int FUN_001f74e0(long long t);
+void FUN_001f7500(void *finish);
 
 struct N_208210 *FUN_00208210(void);
 void FUN_00208f20(int arg0);
 void FUN_00209780(char arg0, unsigned char arg1, int arg2);
 int FUN_0020b7f0(struct N_20b7f0 *arg0);
-int p2ReserveDmaCompletions(); /* called with two arguments here; dmaChannel.c's definition takes one */
-int p2AddDmaCompletion();
 
-extern void *p2FreeTextures;
 extern void *DAT_0056c0d0;
 extern void *DAT_0056c0d8;
 extern void *DAT_0056c0e0[17];
 extern unsigned int DAT_0056c128;
-extern struct Ch_2097f0 *DAT_00568f08[4]; /* p2DmaCurrentPacket[P2_DMA_GIF]; declared as a scalar or [1] it adds 8 bytes to FUN_002097f0 */
 
-extern int p2BlockedSema;
 extern long long DAT_0056b020[4];
 extern long long DAT_0056c068;
 extern short DAT_00568e08[8];
@@ -41,9 +31,8 @@ extern short DAT_00568e12[8];
 extern short DAT_00568e1c[4];
 extern short DAT_00568e22[8];
 extern short DAT_00568e24[8];
-extern int p2FirstOpen[4];
-extern int text_textureLoadedPredicate[4];
-extern int text_textureDeferredPredicate[4];
+extern const char text_textureLoadedPredicate[];
+extern const char text_textureDeferredPredicate[];
 extern int DAT_0056c060[4];
 extern int DAT_0056c078[4];
 extern int DAT_004917b0[4];
@@ -87,8 +76,8 @@ struct N_208210 *FUN_00208210(void) {
     if (p2FreeTextures == 0) {
         p2GrowPool(0xA, &p2FreeTextures);
     }
-    o = p2FreeTextures;
-    p2FreeTextures = o->next;
+    o = (struct N_208210 *)p2FreeTextures;
+    p2FreeTextures = (struct p2TextureRecord *)o->next;
     o->lo = 0;
     o->q8 = 0;
     o->q0 = 0;
@@ -117,7 +106,7 @@ static void FUN_002082b0(O *arg0) {
     arg0->f0 = 0;
     arg0->f24 = p2FreeTextures;
     arg0->f28 = 0;
-    p2FreeTextures = arg0;
+    p2FreeTextures = (struct p2TextureRecord *)arg0;
 }
 
 struct B_2082f0 { char pad[24]; int f24; int f28; char pad2[24]; int f56; short s60; short s62; short f64; };
@@ -143,9 +132,9 @@ void FUN_002082f0(void) {
     temp_v0_2->f64 = DAT_0056c060[0] - temp_v0_2->f56;
     DAT_0056c0d8 = DAT_0056c0d0;
     DAT_0056c078[0] = temp_v0_2->f56;
-    if (p2FirstOpen[0] != 0) {
-        p2RegisterPredicateName(textureLoadedPredicate, &text_textureLoadedPredicate[0]);
-        p2RegisterPredicateName(textureDeferredPredicate, &text_textureDeferredPredicate[0]);
+    if (p2FirstOpen != 0) {
+        p2RegisterPredicateName(textureLoadedPredicate, text_textureLoadedPredicate);
+        p2RegisterPredicateName(textureDeferredPredicate, text_textureDeferredPredicate);
     }
     j = 0;
     do {
@@ -157,7 +146,8 @@ void FUN_002082f0(void) {
 
 typedef struct { char p0[8]; long long f8; char p1[54]; signed char f : 7; } S_208430;
 
-void FUN_00208430(S_208430 *arg0) {
+void FUN_00208430(void *arg) {
+    S_208430 *arg0 = arg;
     if (arg0->f == 4 && p2DmaSequenceLastCompleted(1, arg0->f8) != 0) {
         arg0->f = 5;
     }
@@ -169,8 +159,9 @@ typedef struct P2ModeState {
     unsigned char top : 1;
 } P2ModeState;
 
-void FUN_002084a0(P2ModeState *s)
+void FUN_002084a0(void *arg)
 {
+    P2ModeState *s = arg;
     const P2ModeState *view = s;
 
     if (view->mode == 2)
@@ -450,8 +441,6 @@ struct Tex_2097f0 { long long tag; char p8[40]; int addr; char p52[4]; int tbp; 
 void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     int p2DmaPacketQueued();
     int FUN_001f7e90();
-    void FUN_002084a0();
-    extern struct Ch_2097f0 *DAT_00568f38[4];
     extern int DAT_00569128[4];
     extern long long DAT_00569168[4];
     extern unsigned int DAT_00491730[];
@@ -461,7 +450,7 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     extern Img_2097f0 DAT_00491800;
     extern GifTag_2097f0 DAT_00491810;
     struct Tex_2097f0 *t;
-    struct Node_2097f0 *n;
+    p2DmaPredicate *n;
     QW_2097f0 *q;
     int fmt;
     int w;
@@ -474,23 +463,23 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     unsigned int qwc;
 
     DIntr();
-    if (p2DmaPacketQueued(2, DAT_00568f38[0]) != 0) {
-        seq = DAT_00568f08[0]->seq;
-        if (seq >= 0 && DAT_00568f38[0]->seq >= seq && DAT_00568f38[0]->cur < DAT_00568f38[0]->end) {
-            n = DAT_00568f08[0]->head;
-            DAT_00568f38[0]->busy = 0;
-            DAT_00568f08[0]->seq = -1;
+    if (p2DmaPacketQueued(2, p2DmaLastPacket[P2_DMA_GIF]) != 0) {
+        seq = p2DmaCurrentPacket[P2_DMA_GIF]->f8;
+        if (seq >= 0 && p2DmaLastPacket[P2_DMA_GIF]->f8 >= seq && p2DmaLastPacket[P2_DMA_GIF]->cursor < p2DmaLastPacket[P2_DMA_GIF]->limit) {
+            n = p2DmaCurrentPacket[P2_DMA_GIF]->predicates;
+            p2DmaLastPacket[P2_DMA_GIF]->ready = 0;
+            p2DmaCurrentPacket[P2_DMA_GIF]->f8 = -1;
             if (n != 0) {
-                DAT_00568f08[0]->head = 0;
-                DAT_00568f08[0]->tail = 0;
-                n->next = DAT_00568f38[0]->head;
-                if (DAT_00568f38[0]->head == 0) {
-                    DAT_00568f38[0]->tail = n;
+                p2DmaCurrentPacket[P2_DMA_GIF]->predicates = 0;
+                p2DmaCurrentPacket[P2_DMA_GIF]->lastPredicate = 0;
+                n->next = p2DmaLastPacket[P2_DMA_GIF]->predicates;
+                if (p2DmaLastPacket[P2_DMA_GIF]->predicates == 0) {
+                    p2DmaLastPacket[P2_DMA_GIF]->lastPredicate = n;
                 }
-                DAT_00568f38[0]->head = n;
+                p2DmaLastPacket[P2_DMA_GIF]->predicates = n;
             }
             DAT_00569128[0]++;
-            DAT_00568f08[0] = (struct Ch_2097f0 *)DAT_00568f38[0];
+            p2DmaCurrentPacket[P2_DMA_GIF] = p2DmaLastPacket[P2_DMA_GIF];
             DAT_00569168[0]--;
         }
     }
@@ -521,7 +510,7 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
             DAT_00491810.b.nloop = qwc;
             rows -= h;
             DAT_00491800.b.qwc = DAT_00491810.b.nloop;
-            q = (QW_2097f0 *)DAT_00568f08[0]->cur;
+            q = (QW_2097f0 *)p2DmaCurrentPacket[P2_DMA_GIF]->cursor;
             DAT_00491800.b.addr = addr;
             q->w[0] = DAT_004917f0.w[0];
             q->w[1] = DAT_004917f0.w[1];
@@ -536,17 +525,17 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
             q->w[2] = DAT_00491800.w[2];
             q->w[3] = DAT_00491800.w[3];
             q++;
-            DAT_00568f08[0]->cur = (unsigned int)q;
+            p2DmaCurrentPacket[P2_DMA_GIF]->cursor = (unsigned int)q;
             t = *list;
             fmt = t->format;
             w = t->width;
             addr += (DAT_00491770[fmt] * (w * h)) >> 1;
         }
-        t->tag = DAT_00568f08[0]->tag;
+        t->tag = p2DmaCurrentPacket[P2_DMA_GIF]->sequence;
         p2AddDmaCompletion(2, FUN_002084a0, *list);
         count--;
         list++;
-        if (count != 0 && DAT_00568f08[0]->cur > DAT_00568f08[0]->end) {
+        if (count != 0 && p2DmaCurrentPacket[P2_DMA_GIF]->cursor > p2DmaCurrentPacket[P2_DMA_GIF]->limit) {
             p2SubmitDmaPacket(2);
         }
     } while (count != 0);
@@ -1007,11 +996,10 @@ struct V_20b7f0 { long long f0; long long f8; };
 struct N_20b7f0 { long long f0; long long f8; char p16[8]; int f24; char p28[42]; char m:7; char hi:1; };
 int FUN_0020b7f0(struct N_20b7f0 *arg0) {
     int p2AddFinishFunc();
-    extern struct W_20b7f0 *DAT_00568f04[4];
     int r;
     long long t;
     int s0;
-    struct W_20b7f0 *p;
+    p2DmaPacket *p;
     long long *lp;
     r = -1;
     s0 = (int)FUN_0020b650((struct A_20b650 *)arg0, &r, 1, 0);
@@ -1022,20 +1010,20 @@ int FUN_0020b7f0(struct N_20b7f0 *arg0) {
         if (r >= 0) {
             if (DAT_0056c130[0] == 1) {
                 p2AddFinishFunc(FUN_001f7500, 0);
-                t = DAT_00568f04[0]->f0;
+                t = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
                 p2SubmitDmaPacket(1);
                 FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
                 p2AddDmaPredicate(2, FUN_001f74e0, t);
             } else {
-                p = DAT_00568f04[0];
-                if (p->f0 == t || p->f32 == p->f48) {
+                p = p2DmaCurrentPacket[P2_DMA_VIF1];
+                if (p->sequence == t || p->chain == p->cursor) {
                     p->b3 = 1;
                 }
-                p2SubmitDmaPacket(1, p);
+                p2SubmitDmaPacket(1);
                 FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
                 p2AddDmaPredicate(2, textureDeferredPredicate, t);
             }
-            lp = &((struct V_20b7f0 *)DAT_00568f08[0])->f8;
+            lp = &p2DmaCurrentPacket[P2_DMA_GIF]->f8;
             if (*lp < t) {
                 *lp = t;
             }
@@ -1071,14 +1059,12 @@ static inline int N_20b9d0_GetM(const N_20b9d0 *n) {
 }
 
 static inline void N_20b9d0_Set(N_20b9d0 *n) {
-    extern long long *DAT_00568f04[4];
     n->m = 4;
-    n->f8 = *DAT_00568f04[0];
+    n->f8 = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
     p2AddDmaCompletion(1, &FUN_00208430, n);
 }
 
 void FUN_0020b9d0(void *arg0) {
-    extern long long *DAT_00568f04[4];
     N_20b9d0 *n = (N_20b9d0 *)arg0;
     N_20b9d0 *var_s0;
     N_20b9d0 *c;
@@ -1088,13 +1074,13 @@ void FUN_0020b9d0(void *arg0) {
     var_s0 = n->f32;
     t = n->f71 + a1;
     if (n->f72 == 0) {
-        p2ReserveDmaCompletions(t, a1);
+        p2ReserveDmaCompletions(t);
         DIntr();
         N_20b9d0_Set(n);
         c = n->f36;
         if (c != 0) {
             c->m = 4;
-            n->f36->f8 = *DAT_00568f04[0];
+            n->f36->f8 = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
             p2AddDmaCompletion(1, &FUN_00208430, n->f36);
         }
         while (var_s0 != 0) {
@@ -1126,7 +1112,6 @@ typedef struct P2Texture {
     char p71[2];
     unsigned char f73;
 } P2Texture;
-int printf(const char *, ...);
 P2Texture *p2LoadTexture(void *image, int width, int height, int format, int deferred) {
     extern int DAT_0056c0c0[4];
     extern unsigned int DAT_00491730[];
@@ -1308,7 +1293,6 @@ typedef struct N_20c9f0 {
     char p71;
     char f72;
 } N_20c9f0;
-int p2WaitDmaSequence();
 void FUN_0020c9f0(N_20c9f0 *arg0) {
     N_20c9f0 *s0;
     N_20c9f0 *a1;

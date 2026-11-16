@@ -8,6 +8,8 @@
 #ifndef DW4_P2POOL_H
 #define DW4_P2POOL_H
 
+#include "dw4/p2dma.h"
+
 enum p2PoolType {
     P2_POOL_DMA_BUFFER_VIF0,
     P2_POOL_DMA_BUFFER_VIF1,
@@ -29,11 +31,17 @@ enum p2PoolType {
 extern "C" {
 #endif
 
+/* The packets of each DMA channel's ring, and the size of a packet of each channel. */
+extern int p2DmaPacketCount[P2_DMA_CHANNEL_COUNT];
+extern int p2DmaPacketSizeVif0;
+extern int p2DmaPacketSizeVif1;
+extern int p2DmaPacketSizeGif;
+
 void p2GrowPool(int type, void *freeList);
 void p2SetPoolSize(int type, int size);
 int p2GetPoolAllocated(unsigned int type);
 void p2FixDmaPacketPool(int channel);
-void p2FreePool(unsigned int type);
+void p2FreePool(unsigned int type, int unused);
 void p2ResetDmaPacketCount(int channel);
 
 #ifdef __cplusplus

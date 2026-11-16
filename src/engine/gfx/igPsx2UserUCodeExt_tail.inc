@@ -9,13 +9,13 @@ igMetaObject *igPsx2UserUCodeExt_GetMetaObject(void)
 int igPsx2UserUCodeExt_GetVTable(void) {
     struct Obj_152a80 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w2 = 0;
     obj.w4 = 0;
     obj.vt = &g_igPsx2UserUCodeExt_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igPsx2UserUCodeExt_vtable[0];
     FUN_00152c90((void **)&obj.w7, -1);
     FUN_00152c10((ObjectRefWord *)&obj.w6, -1);
@@ -99,9 +99,9 @@ void FUN_00152d10(void)
 
 static igMetaObjectCallback g_igPsx2UserUCodeExt_callbackList[] = { FUN_001511a0, igIntMetaField_EnsureRegistered, igRawRefMetaField_EnsureRegistered, 0 };
 
-void igPsx2UserUCodeExt_Register(void) {
+CallbackArray *igPsx2UserUCodeExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2UserUCodeExt_metaObject,
         igUserUCodeExt_Register,
@@ -121,10 +121,10 @@ igMetaObject *FUN_00152da0(void) {
 }
 
 static FieldFactory g_igPsx2UserUCodeExt_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igPsx2UserUCodeExt_fieldTable[] = {
     "_context",

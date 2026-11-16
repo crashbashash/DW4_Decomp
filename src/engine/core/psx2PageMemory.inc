@@ -1,11 +1,11 @@
-/* Deleting destructor. Sets the vtable to its own image, then calls __dl__FPv when the signed
- * low 16 bits of the delete flag are positive. __dl__FPv never returns (it ends in an endless
- * loop). */
+/* Deleting destructor. Sets the vtable to its own image, then calls operator delete when the
+ * signed low 16 bits of the delete flag are positive. operator delete never returns (it ends in an
+ * endless loop). */
 igObject *SystemAllocatorBase_Destruct(igObject *self, long long deleteFlags) {
     if (self != 0) {
         self->_vtable = (int)&g_vtable[0];
         if (((long long) (deleteFlags << 0x30) >> 0x30) > 0) {
-            __dl__FPv();
+            operator delete(self);
         }
     }
     return self;

@@ -5,10 +5,10 @@ void Gap__Attrs__igCopyRenderDestinationAttr__vfunc_24(S_13c940 *arg0, Q_13c940 
     switch (arg0->mode) {
     case 1:
         if (arg0->f24->f36 < 0) arg0->f24->touch(arg1);
-        Gap__Gfx__igPsx2VisualContext__vfunc_171(arg1, v, arg0->f24->f36, arg0->f28, arg0->f32, arg0->f44, arg0->f48, arg0->f36, (long long)arg0->f40);
+        Gap__Gfx__igPsx2VisualContext__vfunc_171((igPsx2VisualContext *)arg1, v, arg0->f24->f36, arg0->f28, arg0->f32, arg0->f44, arg0->f48, arg0->f36, (long long)arg0->f40);
         return;
     case 2:
-        Gap__Gfx__igPsx2VisualContext__vfunc_172(arg1, v, arg0->f20, arg0->f28, arg0->f32, arg0->f44, arg0->f48);
+        Gap__Gfx__igPsx2VisualContext__vfunc_172((igPsx2VisualContext *)arg1, v, arg0->f20, arg0->f28, arg0->f32, arg0->f44, arg0->f48);
         break;
     case 0:
         break;

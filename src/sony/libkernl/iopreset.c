@@ -1,5 +1,7 @@
 /* iopreset.c - resetting and rebooting the IOP over SIF. */
 
+#include "dw4/sony/sif.h"
+#include "dw4/sony/sifdev.h"
 #include "dw4/libkernl.h"
 
 /* SIF registers */
@@ -29,34 +31,19 @@ typedef struct {
     char arg[RESET_ARG_MAX];
 } __attribute__((aligned(8))) SifResetPacket;
 
-typedef struct {
-    void *data;
-    void *addr;
-    int size;
-    int mode;
-} sceSifDmaData;
-
-void sceSifExecNotifyHandler(int builtin, void *arg);
 void sceSifStopDma(void);
-unsigned int sceSifGetReg(unsigned int reg);
-void sceSifSetReg(unsigned int reg, unsigned int value);
-unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
-void sceSifWriteBackDCache(void *addr, int size);
-void sceResetttyinit(void);
-void sceSifInitRpc(unsigned int mode);
-void sceSifExitRpc(void);
 
 static SifResetPacket resetPacket __attribute__((aligned(64)));
 
 int sceSifResetIop(const char *arg, int mode)
 {
     sceSifDmaData dma;
-    void *dest;
+    unsigned int dest;
     int i;
     sceSifExecNotifyHandler(0, 0);
     sceSifExecNotifyHandler(1, 0);
     sceSifStopDma();
-    dest = (void *)sceSifGetReg(SIF_REG_MAINADDR);
+    dest = sceSifGetReg(SIF_REG_MAINADDR);
     resetPacket.mode = mode;
     for (i = 0; arg[i] != 0; i++) {
         resetPacket.arg[i] = arg[i];
@@ -66,7 +53,7 @@ int sceSifResetIop(const char *arg, int mode)
     resetPacket.psize = sizeof(SifResetPacket);
     resetPacket.size = i;
     resetPacket.cid = SIF_CMD_RESET;
-    dma.data = &resetPacket;
+    dma.data = (unsigned int)&resetPacket;
     dma.addr = dest;
     dma.size = sizeof(SifResetPacket);
     dma.mode = SIF_DMA_ERT | SIF_DMA_INT_O;

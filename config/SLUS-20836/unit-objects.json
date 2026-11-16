@@ -15006,7 +15006,7 @@
       "__dt__26igSmartPointer<9TextValue>Fv",
       "__dt__29igSmartPointer<11NamedObject>Fv",
       "__dt__29igSmartPointer<11ResizeEvent>Fv",
-      "__dt__30igSmartPointer<12igWindowView>Fv",
+      "__dt__25igSmartPointer<8igWindow>Fv",
       "__dt__31igSmartPointer<13MessageFilter>Fv",
       "__dt__36igSmartPointer<18InternedStringList>Fv",
       "__dt__37igSmartPointer<19igVisualContextView>Fv",
@@ -17569,7 +17569,7 @@
       "__dt__25igSmartPointer<8igFolder>Fv": "0x001ce350",
       "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0",
       "__dt__37igSmartPointer<19igTimerDispatchView>Fv": "0x00150a70",
-      "__dt__30igSmartPointer<12igPsx2Window>Fv": "0x00143350",
+      "__dt__25igSmartPointer<8igWindow>Fv": "0x00143350",
       "__dt__33igSmartPointer<15igStringRefList>Fv": "0x001c6460",
       "__dt__9StringRefFv": "0x00130720"
     },
@@ -47793,6 +47793,7 @@
       "0x0051fba8"
     ],
     "stripped": [
+      "__dt__25igSmartPointer<8igObject>Fv",
       "__dt__26igSmartPointer<9igFlyMode>Fv",
       "__dt__28igSmartPointer<10igPickMode>Fv",
       "__dt__30igSmartPointer<12igCameraMode>Fv",

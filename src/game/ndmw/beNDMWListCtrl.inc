@@ -16,7 +16,7 @@ void beNDMWListCtrl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWListCtrl_Register);
 }
 
-void *beNDMWListCtrl_Register(void) {
+CallbackArray *beNDMWListCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */

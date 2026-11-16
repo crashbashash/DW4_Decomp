@@ -9,12 +9,12 @@ igMetaField *g_igClut_isAlphaScaledMetaField;
 
 int FUN_0014fa50(int arg0) {
     igClut_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igClut_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igClut_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0014fa90(void) {
     if (g_igClut_metaObject == 0) {
-        g_igClut_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igClut_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igClut_metaObject;
 }
@@ -30,9 +30,9 @@ igMetaObject *igClut_GetMetaObject(void)
 int igClut_GetVTable(void) {
     struct Obj_14fb30 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igClut_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igClut_EnsureRegistered(void)
@@ -40,9 +40,9 @@ void igClut_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igClut_Register);
 }
 
-void igClut_Register(void) {
+CallbackArray *igClut_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igClut_metaObject,
         igObject_Register,
@@ -62,13 +62,13 @@ void thunk_igClut_GetMetaObject(void) {
 }
 
 static FieldFactory g_igClut_ctorTable[] = {
-    igEnumMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igClut_fieldTable[] = {
     "_fmt",

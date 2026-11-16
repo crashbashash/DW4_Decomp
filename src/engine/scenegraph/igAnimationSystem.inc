@@ -3,7 +3,7 @@ igMetaField *g_igAnimationSystem_animHierarchyMetaField;
 
 igMetaObject *FUN_001a6600(void) {
     if (g_igAnimationSystem_metaObject == 0) {
-        g_igAnimationSystem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAnimationSystem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAnimationSystem_metaObject;
 }
@@ -23,9 +23,9 @@ void FUN_001a66a0(void)
 
 static igMetaObjectCallback g_igAnimationSystem_callbackList[] = { FUN_001a71a0, 0 };
 
-void igAnimationSystem_Register(void) {
+CallbackArray *igAnimationSystem_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAnimationSystem_metaObject,
         igNamedObject_Register,
@@ -45,7 +45,7 @@ void thunk_igAnimationSystem_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAnimationSystem_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igAnimationSystem_fieldTable[] = {
     "_animHierarchy",
@@ -63,9 +63,9 @@ void igAnimationSystem_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igAnimationSystem_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationSystem_ctorTable, 1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a7100();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationSystem_fieldTable, g_igAnimationSystem_fieldHandles, g_igAnimationSystem_fieldOffsets, temp_s2);
 }

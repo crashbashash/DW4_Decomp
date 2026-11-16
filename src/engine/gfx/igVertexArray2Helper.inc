@@ -3,7 +3,7 @@ igMetaField *g_igVertexArray2Helper_vertexArrayMetaField;
 
 void FUN_0014a4d0(int arg0) {
     FUN_0014a640();
-    igMetaObject_CreateInstance(g_igVertexArray2Helper_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igVertexArray2Helper_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVertexArray2Helper_GetMetaObject(void)
@@ -18,11 +18,11 @@ int igVertexArray2Helper_GetVTable(void) {
     Obj_14a560 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.m8 = 0;
     obj.vt = &g_igVertexArray2Helper_vtable[0];
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igVertexArray2Helper_vtable[0];
     obj.rel12();
     obj.vt = &g_igNamedObject_vtable[0];
@@ -37,9 +37,9 @@ void FUN_0014a640(void)
 
 static igMetaObjectCallback g_igVertexArray2Helper_callbackList[] = { FUN_0014ab70, 0 };
 
-void igVertexArray2Helper_Register(void) {
+CallbackArray *igVertexArray2Helper_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexArray2Helper_metaObject,
         igNamedObject_Register,
@@ -59,11 +59,11 @@ void thunk_igVertexArray2Helper_GetMetaObject(void) {
 }
 
 int FUN_0014a6e0(void) {
-    return g_igNamedObject_metaObject[0];
+    return (int)g_igNamedObject_metaObject;
 }
 
 static FieldFactory g_igVertexArray2Helper_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igVertexArray2Helper_fieldTable[] = {
     "_vertexArray",

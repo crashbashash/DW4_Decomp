@@ -15,4 +15,14 @@ static inline char *dw4_cast_or_null(char *x, int *meta) {
     }
     return 0;
 }
+#ifdef __cplusplus
+struct igMetaObject;
+/* The same test against a metaobject variable, read inside the test as the retail code does. */
+static inline char *dw4_cast_or_null(char *x, struct igMetaObject **meta) {
+    if (x != 0 && FUN_00300cd0(x, *meta) != 0) {
+        return x;
+    }
+    return 0;
+}
+#endif
 #endif

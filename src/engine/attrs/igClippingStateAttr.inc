@@ -3,7 +3,7 @@ igMetaField *g_igClippingStateAttr_enabledMetaField;
 
 igMetaObject *FUN_00139170(void) {
     if (g_igClippingStateAttr_metaObject == 0) {
-        g_igClippingStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igClippingStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igClippingStateAttr_metaObject;
 }
@@ -19,9 +19,9 @@ igMetaObject *igClippingStateAttr_GetMetaObject(void)
 int igClippingStateAttr_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igClippingStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00139250(void)
@@ -29,9 +29,9 @@ void FUN_00139250(void)
     igMetaObject_RunStaticInit(igClippingStateAttr_Register);
 }
 
-void igClippingStateAttr_Register(void) {
+CallbackArray *igClippingStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igClippingStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -51,7 +51,7 @@ void thunk_igClippingStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igClippingStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igClippingStateAttr_fieldTable[] = {
     "_enabled",

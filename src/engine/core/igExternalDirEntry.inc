@@ -31,7 +31,7 @@ int igExternalDirEntry_GetVTable(void) {
     igStringRef_Destruct(&entry._externalFilePath, -1);
     igStringRef_Destruct(&entry._entryName, -1);
     igStringRef_Destruct(&entry._directoryName, -1);
-    igDirEntry_Destroy(&entry, 0);
+    igDirEntry_Destroy((igDirEntry *)&entry, 0);
     return vtable;
 }
 

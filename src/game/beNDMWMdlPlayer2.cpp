@@ -2,63 +2,53 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/listSet.h"
+#include "dw4/StringPool.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beBaseInfoManager.h"
+#include "dw4/beLua.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beModelCtrl.h"
+#include "dw4/beNDMWMdlPlayer2.h"
+#include "dw4/beNDMWMdlPlayer2InfoWork.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beTargetObj.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include <stdio.h>
+#include <string.h>
+#include "dw4/beDBManager.h"
 
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int beBaseInfoManager_Start(...);
 extern "C" int beNDMWMdlPlayer2_GetMeta(void);
-extern "C" int strcmp(const char *, const char *);
 extern "C" int beNDMWMdlPlayer2_IsKind(int dummy0, int kind);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int igObject_GetAllocator(...);
-extern "C" int beModelCtrl__OnGenerate(...);
-extern "C" int beMessenger_SendGroup(...);
-extern "C" int beMessenger_GetObject(...);
-extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int StringPool_Construct(...);
-extern "C" int StringPool_Intern(...);
-extern "C" int StringPool_Allocate(...);
-extern "C" int igMatrix44f_GetTranslation(...);
-extern "C" int bePadManager_GetPadForPlayer(int, int);
-extern "C" int beTargetObj_SelectTarget(int, const char *, const char *);
-extern "C" float beTargetObj_GetTargetDistanceSq(...);
-extern "C" int beLua__RunNamedChunk(int, int *, int);
-extern "C" int g_bePadManager_metaObject[4];
-extern "C" int g_beNDMWMdlPlayer2_metaObject[4];
 extern "C" void beNDMWMdlPlayer2_Start(beNDMWMdlPlayer2 *self);
 extern "C" char KIND_PLAYER2[];
 extern "C" char PLAYER2_2[];
 extern "C" void beNDMWMdlPlayer2_RegisterReceiver(beNDMWMdlPlayer2 * p0, int p1, char * p2);
-extern "C" igObject *beBaseInfoDataList_Create(int);
-extern "C" igObject *beNDMWMdlPlayer2InfoWork_Create(int);
-extern "C" beDataObjStringList *igProperty_GetRecordStringList(int record, const char *name);
-extern "C" beDataObjFloatList *igProperty_GetRecordFloatList(...);
-extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
 extern "C" char ONE_13[];
 extern "C" char GAMERAM_15[];
 extern "C" char GETCOMMON_7[];
 extern "C" char BKCHIPSTAGE[];
 extern "C" char BKCHIPPOS[];
-extern "C" int g_propertyNameField[4];
-extern "C" int g_stringPool[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 struct Str { static inline int *intern(int s) {
     int *ref;
     if (s == 0) {
         ref = 0;
     } else {
-        if (g_stringPool[0] == 0) {
-            int pool = StringPool_Allocate(16);
-            if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool[0] = pool;
+        if (g_stringPool == 0) {
+            int pool = (int)StringPool_Allocate(16);
+            if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
+            g_stringPool = (StringPool *)pool;
         }
-        ref = (int *)StringPool_Intern(g_stringPool[0], s);
+        ref = (int *)StringPool_Intern(g_stringPool, (const char *)s);
     }
     return ref;
 }
 static inline void release(int *q) {
-    if (q) { int *hd = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); }
+    if (q) { int *hd = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); }
 } };
 struct Vec3Float { float x, y, z; };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
@@ -77,7 +67,7 @@ class StringRef {
 public:
     int *p;
     StringRef(int *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
+    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
@@ -85,12 +75,12 @@ public:
 
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        int alloc = igObject_GetAllocator(ram);
+        int alloc = (int)igObject_GetAllocator(ram);
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
         /* matching construct: retained, released and stored by hand; through igSmartPointer::operator= this
@@ -118,8 +108,8 @@ extern "C" void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInf
  * (_padManager), found by its class metaObject; the same binding step as the other managers' slot
  * 23. */
 void beNDMWMdlPlayer2_Start(beNDMWMdlPlayer2 *self) {
-    beBaseInfoManager_Start();
-    self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+    beBaseInfoManager_Start((beBaseInfoManager *)self);
+    self->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
 }
 
 int beNDMWMdlPlayer2_IsKind(int dummy0, int kind) {
@@ -128,7 +118,7 @@ int beNDMWMdlPlayer2_IsKind(int dummy0, int kind) {
 
 void beNDMWMdlPlayer2_RegisterReceiver(beNDMWMdlPlayer2 * p0, int p1, char * p2)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, PLAYER2_2);
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)p0->_messenger, (beBaseInfoRam *)p1, PLAYER2_2);
 }
 
 void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
@@ -140,24 +130,24 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
     int *e;
     int s1;
     RamDataList::Ensure(ram);
-    r = igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_13);
+    r = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13);
     {
-        int alloc = igObject_GetAllocator(self);
+        int alloc = (int)igObject_GetAllocator(self);
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
         ValueRef value(beNDMWMdlPlayer2InfoWork_Create(a));
         (igSmartPointer<igObject> &)r->_work = value.p;
     }
-    beModelCtrl__OnGenerate(self, ram);
-    beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
+    beModelCtrl__OnGenerate((beModelCtrl *)self, ram);
+    beMessenger_SendGroup((beMessenger *)self->_messenger, GAMERAM_15, GETCOMMON_7);
     {
-        int o = beMessenger_GetObject(self->_messenger, 0);
-        s4 = igProperty_GetRecordStringList(o, BKCHIPSTAGE);
-        s3 = igProperty_GetRecordFloatList(o, BKCHIPPOS);
+        int o = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+        s4 = igProperty_GetRecordStringList((igObject *)o, BKCHIPSTAGE);
+        s3 = igProperty_GetRecordFloatList((igObject *)o, BKCHIPPOS);
     }
     beSystem *cfg = (beSystem *)self->_system;
     s2 = cfg->_stageName;
@@ -175,7 +165,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
             *e = (int)name.p;
         }
     }
-    igMatrix44f_GetTranslation((char *)r->_node + 32, &t);
+    igMatrix44f_GetTranslation((const float *)((char *)r->_node + 32), (float *)&t);
     {
         float *v = &t.x;
         igFloatList *l = (igFloatList *)s3->_data;
@@ -210,12 +200,12 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
     beNDMWMdlPlayer2InfoWork *q;
     float f;
     if (ram->_dataList == 0) {
-        int alloc = igObject_GetAllocator(ram);
+        int alloc = (int)igObject_GetAllocator(ram);
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
@@ -229,13 +219,13 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
         }
         ram->_dataList = (int)s0;
     }
-    prop = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_13);
+    prop = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13);
     q = (beNDMWMdlPlayer2InfoWork *)prop->_work;
     if (q->_timerCount < 10) {
         q->_timerCount = q->_timerCount + 1;
     }
-    bePadManager_GetPadForPlayer(self->_padManager, ram->_ramNo);
-    if (beTargetObj_SelectTarget(prop->_node + 32, PLAYER_8, NEAR_3) != 0) {
+    bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo);
+    if (beTargetObj_SelectTarget((float *)(prop->_node + 32), PLAYER_8, NEAR_3) != 0) {
         f = beTargetObj_GetTargetDistanceSq();
         if (q->_isPowerOn == 0) {
             if (f < 900.0f) {
@@ -247,31 +237,13 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
             ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, SQ_SWOF);
         }
     } else {
-        beLua__RunNamedChunk(self->_luaManager, text_end_g_000bcaps_lua, 0);
+        beLua__RunNamedChunk((beLua *)self->_luaManager, (const char *)text_end_g_000bcaps_lua, 0);
     }
 }
 
 
+/* kept local: the retained-string holder type is not shared yet (open item A7). */
 extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
-extern "C" beDataObjInt *igProperty_GetRecord(int record, const char *name);
-extern "C" beDataObjIntList *igProperty_GetRecordIntList(int record, const char *name);
-extern "C" beDataObjString *igProperty_GetRecordString(int record, const char *name);
-extern "C" void beMessenger_PrepareDelayedSelection(int messenger, const char *group, const char *name, int ramNo);
-extern "C" void beMessenger_AppendVec3(int messenger, float *value);
-extern "C" void beMessenger_AppendString(int messenger, const char *value);
-extern "C" void beMessenger_EnqueueSelected(int messenger, const char *message, int count);
-extern "C" void beMessenger_GetMatrix(float *out, int messenger, int index);
-extern "C" int beMessenger_GetInt(int messenger, int index);
-extern "C" void beMessenger_SendNamed(int messenger, const char *group, int name, int ramNo, const char *message);
-extern "C" int beMessenger_GetBoolCount(int messenger);
-extern "C" bool beMessenger_GetBool(int messenger, int index);
-extern "C" void beMessenger_SelectGroup(int messenger, const char *group);
-extern "C" void beMessenger_AppendInt(int messenger, int value);
-extern "C" void beMessenger_DispatchSelected(int messenger, const char *message);
-extern "C" void beMessenger_SelectReceivers(int messenger, const char *group, const char *name, int ramNo);
-extern "C" void beMessenger_AppendMatrix(int messenger, float *value);
-extern "C" void beMessenger_SendDelayedNamed(int messenger, const char *group, int name, int ramNo, const char *message, int delay);
-extern "C" int sprintf(char *out, const char *format, ...);
 extern "C" char GENERATE_15[];
 extern "C" char REMOVE_6[];
 extern "C" char GENESTAGE[];
@@ -317,10 +289,10 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
         if (ram->_isRun != 0)
             ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, REMOVE_6);
     } else if (strcmp(command, GENESTAGE) == 0) {
-        beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
-        int common = beMessenger_GetObject(self->_messenger, 0);
-        igStringRefList *stages = getData(igProperty_GetRecordStringList(common, BKCHIPSTAGE));
-        igFloatList *positions = (igFloatList *)igProperty_GetRecordFloatList(common, BKCHIPPOS)->_data;
+        beMessenger_SendGroup((beMessenger *)self->_messenger, GAMERAM_15, GETCOMMON_7);
+        int common = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+        igStringRefList *stages = getData(igProperty_GetRecordStringList((igObject *)common, BKCHIPSTAGE));
+        igFloatList *positions = (igFloatList *)igProperty_GetRecordFloatList((igObject *)common, BKCHIPPOS)->_data;
         int ramNo = getRamNo(ram);
         if (StringList_CopyRetained(stages, ramNo).p != 0
             && strcmp((const char *)((beSystem *)self->_system)->_stageName, (const char *)StringList_CopyRetained(stages, ramNo).p) == 0) {
@@ -329,74 +301,74 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
             float z = floatAt(positions, ramNo * 3 + 2);
             float pos[3];
             char sequence[16];
-            beMessenger_PrepareDelayedSelection(self->_messenger, MODELCTRL_22, g_000bcaps_2, getRamNo(ram));
+            beMessenger_PrepareDelayedSelection((beMessenger *)self->_messenger, MODELCTRL_22, g_000bcaps_2, getRamNo(ram));
             pos[0] = x;
             pos[1] = y;
             pos[2] = z;
-            beMessenger_AppendVec3(self->_messenger, pos);
+            beMessenger_AppendVec3((beMessenger *)self->_messenger, pos);
             sprintf(sequence, SQ_ENTR_dP, getRamNo(ram) + 1);
-            beMessenger_AppendString(self->_messenger, sequence);
-            beMessenger_EnqueueSelected(self->_messenger, GENERATE_15, 1);
+            beMessenger_AppendString((beMessenger *)self->_messenger, sequence);
+            beMessenger_EnqueueSelected((beMessenger *)self->_messenger, GENERATE_15, 1);
         }
         return 1;
     } else if (strcmp(command, RAISE_2) == 0) {
         RamDataList::Ensure(ram);
-        beNDMWMdlPlayer2InfoWork *work = (beNDMWMdlPlayer2InfoWork *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_13)->_work;
+        beNDMWMdlPlayer2InfoWork *work = (beNDMWMdlPlayer2InfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13))->_work;
         if (work->_timerCount < 10)
             return 1;
         float matrix[16];
-        beMessenger_GetMatrix(matrix, self->_messenger, 0);
-        int percent = beMessenger_GetInt(self->_messenger, 0);
-        int hp = beMessenger_GetInt(self->_messenger, 1);
+        beMessenger_GetMatrix(matrix, (beMessenger *)self->_messenger, 0);
+        int percent = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+        int hp = beMessenger_GetInt((beMessenger *)self->_messenger, 1);
         bool running = false;
-        beMessenger_SendNamed(self->_messenger, PLAYER_8, 0, getRamNo(ram), ISRUN_11);
-        int count = beMessenger_GetBoolCount(self->_messenger);
+        beMessenger_SendNamed((beMessenger *)self->_messenger, PLAYER_8, 0, getRamNo(ram), ISRUN_11);
+        int count = beMessenger_GetBoolCount((beMessenger *)self->_messenger);
         for (int i = 0; i < count; i++) {
-            if (beMessenger_GetBool(self->_messenger, i) == 1) {
+            if (beMessenger_GetBool((beMessenger *)self->_messenger, i) == 1) {
                 running = true;
                 break;
             }
         }
-        beMessenger_SelectGroup(self->_messenger, GAMERAM_15);
-        beMessenger_AppendInt(self->_messenger, getRamNo(ram));
-        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_15);
-        int player = beMessenger_GetObject(self->_messenger, 0);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_15);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, getRamNo(ram));
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_15);
+        int player = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         if (!running) {
-            igProperty_GetRecord(player, HP_7)->_data = hp;
-            const char *digimon = (const char *)igProperty_GetRecordString(player, DIGIMONNAME_4)->_data;
+            igProperty_GetRecord((igObject *)player, HP_7)->_data = hp;
+            const char *digimon = (const char *)igProperty_GetRecordString((igObject *)player, DIGIMONNAME_4)->_data;
             if (*digimon == 0) digimon = p_agumon;
-            beMessenger_SelectReceivers(self->_messenger, MODELCTRL_22, digimon, getRamNo(ram));
-            beMessenger_AppendMatrix(self->_messenger, matrix);
-            beMessenger_AppendString(self->_messenger, SQ_CMBK);
-            beMessenger_DispatchSelected(self->_messenger, GENERATE_15);
+            beMessenger_SelectReceivers((beMessenger *)self->_messenger, MODELCTRL_22, digimon, getRamNo(ram));
+            beMessenger_AppendMatrix((beMessenger *)self->_messenger, matrix);
+            beMessenger_AppendString((beMessenger *)self->_messenger, SQ_CMBK);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, GENERATE_15);
         }
-        beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
-        int common = beMessenger_GetObject(self->_messenger, 0);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, GAMERAM_15, GETCOMMON_7);
+        int common = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         int bitIndex = getRamNo(ram) * 2;
-        int *chipData = (int *)((igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data)->_data;
+        int *chipData = (int *)((igIntList *)igProperty_GetRecordIntList((igObject *)common, BKCHIPDATA_2)->_data)->_data;
         int bit = chipData[bitIndex];
-        bit += igProperty_GetRecord(player, BIT_8)->_data;
-        igProperty_GetRecord(player, BIT_8)->_data = bit;
+        bit += igProperty_GetRecord((igObject *)player, BIT_8)->_data;
+        igProperty_GetRecord((igObject *)player, BIT_8)->_data = bit;
         {
-            igIntList *chips = (igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data;
+            igIntList *chips = (igIntList *)igProperty_GetRecordIntList((igObject *)common, BKCHIPDATA_2)->_data;
             ListSet(chips, bitIndex, 0);
         }
-        const char *digimon = (const char *)igProperty_GetRecordString(player, DIGIMONNAME_4)->_data;
-        const char *chipName = (const char *)StringList_CopyRetained(getData(igProperty_GetRecordStringList(common, BKCHIPNAME_2)), getRamNo(ram)).p;
+        const char *digimon = (const char *)igProperty_GetRecordString((igObject *)player, DIGIMONNAME_4)->_data;
+        const char *chipName = (const char *)StringList_CopyRetained(getData(igProperty_GetRecordStringList((igObject *)common, BKCHIPNAME_2)), getRamNo(ram)).p;
         if (strcmp(digimon, chipName) == 0) {
             int expIndex = getRamNo(ram) * 2 + 1;
-            chipData = (int *)((igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data)->_data;
+            chipData = (int *)((igIntList *)igProperty_GetRecordIntList((igObject *)common, BKCHIPDATA_2)->_data)->_data;
             int chipExp = chipData[expIndex];
             int exp = (chipExp * percent) / 100;
-            exp += igProperty_GetRecord(player, EXP_3)->_data;
-            igProperty_GetRecord(player, EXP_3)->_data = exp;
-            igIntList *chips = (igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data;
+            exp += igProperty_GetRecord((igObject *)player, EXP_3)->_data;
+            igProperty_GetRecord((igObject *)player, EXP_3)->_data = exp;
+            igIntList *chips = (igIntList *)igProperty_GetRecordIntList((igObject *)common, BKCHIPDATA_2)->_data;
             ListSet(chips, expIndex, 0);
         }
-        beMessenger_SendDelayedNamed(self->_messenger, PLAYER2_2, 0, getRamNo(ram), SQ_EXIT_3, 0);
-        beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
-        common = beMessenger_GetObject(self->_messenger, 0);
-        setStringAt(getData(igProperty_GetRecordStringList(common, BKCHIPSTAGE)), getRamNo(ram), StringRef(0));
+        beMessenger_SendDelayedNamed((beMessenger *)self->_messenger, PLAYER2_2, 0, getRamNo(ram), SQ_EXIT_3, 0);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, GAMERAM_15, GETCOMMON_7);
+        common = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+        setStringAt(getData(igProperty_GetRecordStringList((igObject *)common, BKCHIPSTAGE)), getRamNo(ram), StringRef(0));
         return 1;
     }
     return 0;
@@ -404,5 +376,5 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
 
 int beNDMWMdlPlayer2_GetMeta(void)
 {
-    return g_beNDMWMdlPlayer2_metaObject[0];
+    return (int)g_beNDMWMdlPlayer2_metaObject;
 }

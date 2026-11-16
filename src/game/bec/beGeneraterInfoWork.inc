@@ -11,12 +11,12 @@ igMetaField *g_beGeneraterInfoWork_geneEnemyMHpMetaField;
 
 beGeneraterInfoWork *beGeneraterInfoWork_Create(int allocator) {
     beGeneraterInfoWork_EnsureRegistered();
-    return (beGeneraterInfoWork *)igMetaObject_CreateInstance(*(int *)0x589478, allocator);
+    return (beGeneraterInfoWork *)igMetaObject_CreateInstance(g_beGeneraterInfoWork_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beGeneraterInfoWork_GetOrCreateMetaObject(void) {
     if (g_beGeneraterInfoWork_metaObject == 0) {
-        g_beGeneraterInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beGeneraterInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beGeneraterInfoWork_metaObject;
 }
@@ -42,7 +42,7 @@ int beGeneraterInfoWork_GetVTable(void) {
     obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
     *enemyRamListSlot = 0;
     *geneEnemyNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
     igStringRef_Release(geneEnemyNameSlot);
     igObjectRef_Release(enemyRamListSlot);
@@ -56,7 +56,7 @@ void beGeneraterInfoWork_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beGeneraterInfoWork_callbackList[] = { beBaseInfoRamList_EnsureRegistered, 0 };
 
-void *beGeneraterInfoWork_Register(void) {
+CallbackArray *beGeneraterInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -126,9 +126,9 @@ static int g_beGeneraterInfoWork_fieldOffsets[] = {
 void beGeneraterInfoWork_InitFields(void) {
     int base;
     void *enemyRamList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beGeneraterInfoWork_metaObject;
+    meta = g_beGeneraterInfoWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beGeneraterInfoWork_ctorTable, 9);
     enemyRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));

@@ -1,9 +1,9 @@
 int g_igBlendFunctionAttr_blendEquationExt;
 void Gap__Attrs__igBlendFunctionAttr__vfunc_12(void **arg0) {
-    if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
+    if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         g_igBlendFunctionAttr_blendEquationExt = 0;
     }
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 igMetaObject *Gap__Attrs__igBlendFunctionAttr__vfunc_22(void) {

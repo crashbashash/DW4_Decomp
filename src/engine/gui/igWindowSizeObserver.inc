@@ -2,7 +2,7 @@ igMetaObject *g_igWindowSizeObserver_metaObject;
 
 int FUN_0044f0b0(int arg0) {
     igWindowSizeObserver_RunStaticInit();
-    return igMetaObject_CreateInstance((int)g_igWindowSizeObserver_metaObject, arg0);
+    return (int)(igMetaObject_CreateInstance(g_igWindowSizeObserver_metaObject, (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igWindowSizeObserver_GetMetaObject(void)
@@ -15,9 +15,9 @@ igMetaObject *igWindowSizeObserver_GetMetaObject(void)
 
 int igWindowSizeObserver_GetVTable(void) {
     struct O o;
-    igObject_InitHeader(&o.vt);
+    igObject_InitHeader((igObject *)&o.vt);
     o.vt = g_igWindowSizeObserver_vtable;
-    return *(int *)((char *)&o.vt + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o.vt + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void igWindowSizeObserver_RunStaticInit(void)
@@ -25,9 +25,9 @@ void igWindowSizeObserver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igWindowSizeObserver_Register);
 }
 
-void igWindowSizeObserver_Register(void) {
+CallbackArray *igWindowSizeObserver_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igWindowSizeObserver_metaObject,
         igView_Register,

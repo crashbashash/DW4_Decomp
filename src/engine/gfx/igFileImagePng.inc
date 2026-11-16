@@ -3,7 +3,7 @@ igMetaField *g_igFileImagePng_fileMetaField;
 
 int FUN_00150390(int arg0) {
     FUN_00150570();
-    return igMetaObject_CreateInstance(g_igFileImagePng_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igFileImagePng_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igFileImagePng_GetMetaObject(void)
@@ -19,13 +19,13 @@ int igFileImagePng_GetVTable(void) {
     int temp_s0;
     int *p;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     *(int *)&u.b[68] = 0;
     *(int *)&u.b[88] = 0;
     u.vt = (int)&g_igFileImagePng_vtable[0];
     p = (int *)&u.b[92];
     *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igFileImagePng_vtable[0];
     igSmartPointer_igFile_Destruct((void **)p, -1);
     FUN_00150490((S_150490 *)u.b, 0);
@@ -49,7 +49,7 @@ void *FUN_00150490(struct S_150490 *arg0, short arg1) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader(*h, h);
+                        StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
                     }
                 }
             }
@@ -78,9 +78,9 @@ void FUN_00150570(void)
 
 static igMetaObjectCallback g_igFileImagePng_callbackList[] = { igFile_EnsureRegistered, 0 };
 
-void igFileImagePng_Register(void) {
+CallbackArray *igFileImagePng_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFileImagePng_metaObject,
         igFileImage_Register,
@@ -104,7 +104,7 @@ igMetaObject *FUN_00150610(void) {
 }
 
 static FieldFactory g_igFileImagePng_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igFileImagePng_fieldTable[] = {
     "_file",

@@ -17,12 +17,12 @@ igMetaField *g_igTextureAttr_videoBufferMetaField;
 
 igTextureAttr *igTextureAttr_CreateInstance(int allocator) {
     igTextureAttr_EnsureRegistered();
-    return (igTextureAttr *)igMetaObject_CreateInstance(*(int *)0x55EDA0, allocator);
+    return (igTextureAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55EDA0, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igTextureAttr_GetOrCreateMetaObject(void) {
     if (g_igTextureAttr_metaObject == 0) {
-        g_igTextureAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureAttr_metaObject;
 }
@@ -45,7 +45,7 @@ int igTextureAttr_GetVTable(void) {
     char *p136;
     char *p128;
     char *p92;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igTextureAttr_vtable[0];
     p92 = &u.b[12];
     *(int *)p92 = 0;
@@ -54,7 +54,7 @@ int igTextureAttr_GetVTable(void) {
     p136 = &u.b[56];
     *(int *)p136 = 0;
     *(int *)&u.b[64] = 0;
-    temp_s = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igTextureAttr_vtable[0];
     FUN_00132130((Ref **)&u.b[64], -1);
     FUN_001321b0((void **)p136, -1);
@@ -70,9 +70,9 @@ void igTextureAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igTextureAttr_callbackList[] = { igImage_EnsureRegistered, igTextureUnloadAttr_EnsureRegistered, igImageMipMapList_EnsureRegistered, igVisualContext_EnsureRegistered, 0 };
 
-void igTextureAttr_Register(void) {
+CallbackArray *igTextureAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureAttr_metaObject,
         igVisualAttribute_Register,
@@ -92,21 +92,21 @@ void thunk_igTextureAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureAttr_ctorTable[] = {
-    igUnsignedIntMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igRawRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
 };
 static const char *g_igTextureAttr_fieldTable[] = {
     "_bColor",
@@ -206,7 +206,7 @@ void igTextureAttr_InitFields(void) {
     igEnumMetaField_SetDefaultValue(temp_v0_7, 0);
     *(void **)&((igEnumMetaField *)temp_v0_7)->_getMetaEnumFunction = (void *)FUN_001498c0;
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = igImage_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igImage_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00131160();
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB), 1);
@@ -214,7 +214,7 @@ void igTextureAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_00132ff0();
     ((igObjectRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igVisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_4)->_persistent = 0;
     ((igObjectRefMetaField *)temp_s2_4)->_deepCopyMethod = 1;
     ((igObjectRefMetaField *)temp_s2_4)->_shallowCopyMethod = 1;

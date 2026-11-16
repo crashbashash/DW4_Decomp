@@ -24,7 +24,7 @@ void beNDMWMcSlot_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMcSlot_Register);
 }
 
-void *beNDMWMcSlot_Register(void) {
+CallbackArray *beNDMWMcSlot_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */

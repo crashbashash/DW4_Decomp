@@ -25,7 +25,7 @@ int beSelectCtrlInfoRamData_GetVTable(void) {
     obj._vtable = (int)&g_beSelectCtrlInfoRamData_vtable[0];
     workSlot = (igObject **)&obj._work;
     *workSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSelectCtrlInfoRamData_vtable[0];
     igObjectRef_Release(workSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -53,7 +53,7 @@ void beSelectCtrlInfoRamData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSelectCtrlInfoRamData_callbackList[] = { beSelectCtrlInfoWork_EnsureRegistered, 0 };
 
-void *beSelectCtrlInfoRamData_Register(void) {
+CallbackArray *beSelectCtrlInfoRamData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -109,20 +109,20 @@ void beSelectCtrlInfoRamData_InitFields(void) {
     igStringMetaField *clone;
 
     meta = (void *)g_beSelectCtrlInfoRamData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSelectCtrlInfoRamData_ctorTable, 4);
-    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beSelectCtrlInfoRamData_ctorTable, 4);
+    found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "ONE");
     clone->_externalEnumStorage = (int)(&g_beSelectCtrlInfoRamData_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    work = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    work = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)work)->_metaObject = (int)beSelectCtrlInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(meta, g_beSelectCtrlInfoRamData_fieldTable, g_beSelectCtrlInfoRamData_fieldHandles, g_beSelectCtrlInfoRamData_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_beSelectCtrlInfoRamData_fieldTable, g_beSelectCtrlInfoRamData_fieldHandles, g_beSelectCtrlInfoRamData_fieldOffsets, base);
 }
 

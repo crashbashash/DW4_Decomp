@@ -2,7 +2,7 @@ igMetaObject *g_igVisualContextList_metaObject;
 
 int FUN_00149ea0(int arg0) {
     FUN_00149f70();
-    return igMetaObject_CreateInstance(g_igVisualContextList_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igVisualContextList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVisualContextList_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igVisualContextList_GetMetaObject(void)
 int igVisualContextList_GetVTable(void) {
     Obj_149f30 o;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igVisualContextList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00149f70(void)
@@ -28,9 +28,9 @@ void FUN_00149f70(void)
 
 static igMetaObjectCallback g_igVisualContextList_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
-void igVisualContextList_Register(void) {
+CallbackArray *igVisualContextList_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVisualContextList_metaObject,
         igNonRefCountedObjectList_Register,

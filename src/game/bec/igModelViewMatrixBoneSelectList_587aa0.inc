@@ -8,7 +8,7 @@ int igModelViewMatrixBoneSelectListBec_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_igModelViewMatrixBoneSelectListBec_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igModelViewMatrixBoneSelectListBec_EnsureRegistered(void)
@@ -18,7 +18,7 @@ void igModelViewMatrixBoneSelectListBec_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igModelViewMatrixBoneSelectListBec_callbackList[] = { igModelViewMatrixBoneSelect_EnsureRegistered, 0 };
 
-void *igModelViewMatrixBoneSelectListBec_Register(void) {
+CallbackArray *igModelViewMatrixBoneSelectListBec_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

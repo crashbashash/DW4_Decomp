@@ -3,12 +3,12 @@ igMetaField *g_igAudioContext_immediateModeMetaField;
 
 igAudioContext *igAudioContext_CreateInstance(int allocator) {
     igAudioContext_EnsureRegistered();
-    return (igAudioContext *)igMetaObject_CreateInstance((int)g_igAudioContext_metaObject, allocator);
+    return (igAudioContext *)igMetaObject_CreateInstance(g_igAudioContext_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igAudioContext_GetOrCreateMetaObject(void) {
     if (g_igAudioContext_metaObject == 0) {
-        g_igAudioContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAudioContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAudioContext_metaObject;
 }
@@ -26,9 +26,9 @@ void igAudioContext_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAudioContext_Register);
 }
 
-void igAudioContext_Register(void) {
+CallbackArray *igAudioContext_Register(void) {
     AudioLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAudioContext_metaObject,
         igObject_Register,
@@ -65,10 +65,10 @@ void igAudioContext_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)(g_igAudioContext_metaObject);
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igAudioContext_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, g_igAudioContext_fieldTable, g_igAudioContext_fieldHandles, g_igAudioContext_fieldOffsets, temp_s1);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAudioContext_ctorTable, 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), 1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAudioContext_fieldTable, g_igAudioContext_fieldHandles, g_igAudioContext_fieldOffsets, temp_s1);
     *(int *)((char *)(g_igAudioContext_metaObject) + 60) = (int)(thunk_FUN_00143150);
 }
 

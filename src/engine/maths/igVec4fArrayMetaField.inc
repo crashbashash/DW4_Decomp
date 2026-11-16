@@ -114,7 +114,7 @@ void FUN_001877c0(void) {
             o = g_igVec4fArrayMetaField_descriptor;
             o->f4 = o->f4 - 1;
             if ((o->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
             t = igMetaField_GetMetaFieldList()->_count - 1;
             g_igVec4fArrayMetaField_descriptor->f18 = t;

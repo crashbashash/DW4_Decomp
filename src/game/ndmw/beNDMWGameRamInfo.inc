@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWGameRamInfo_metaObject;
 
 beNDMWGameRamInfo *beNDMWGameRamInfo_Create(int allocator) {
     beNDMWGameRamInfo_EnsureRegistered();
-    return (beNDMWGameRamInfo *)igMetaObject_CreateInstance(g_beNDMWGameRamInfo_metaObject, allocator);
+    return (beNDMWGameRamInfo *)igMetaObject_CreateInstance(g_beNDMWGameRamInfo_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWGameRamInfo_ResolveMetaObject(void) {
@@ -22,9 +22,9 @@ int beNDMWGameRamInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     *(int **)&obj._vtable = &g_beNDMWGameRamInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWGameRamInfo_vtable[0];
-    beBaseInfo_Destroy(&obj, 0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, 0);
     return vtable;
 }
 
@@ -33,7 +33,7 @@ void beNDMWGameRamInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWGameRamInfo_Register);
 }
 
-void *beNDMWGameRamInfo_Register(void) {
+CallbackArray *beNDMWGameRamInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

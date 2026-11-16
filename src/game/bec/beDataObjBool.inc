@@ -3,7 +3,7 @@ igMetaField *g_beDataObjBool_dataMetaField;
 
 beDataObjBool *beDataObjBool_Create(int allocator) {
     beDataObjBool_EnsureRegistered();
-    return (beDataObjBool *)igMetaObject_CreateInstance(*(int *)0x589898, allocator);
+    return (beDataObjBool *)igMetaObject_CreateInstance(g_beDataObjBool_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beDataObjBool_GetMetaObject(void) {
@@ -24,7 +24,7 @@ int beDataObjBool_GetVTable(void) {
     nameSlot = (char **)&obj._name;
     *nameSlot = 0;
     obj._vtable = (int)&g_beDataObjBool_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return r;
@@ -35,7 +35,7 @@ void beDataObjBool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beDataObjBool_Register);
 }
 
-void *beDataObjBool_Register(void) {
+CallbackArray *beDataObjBool_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -72,9 +72,9 @@ static int g_beDataObjBool_fieldOffsets[] = {
 
 void beDataObjBool_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDataObjBool_metaObject;
+    meta = g_beDataObjBool_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDataObjBool_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beDataObjBool_fieldTable, g_beDataObjBool_fieldHandles, g_beDataObjBool_fieldOffsets, base);

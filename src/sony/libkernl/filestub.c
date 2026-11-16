@@ -279,7 +279,6 @@ int memcmp(const void *a, const void *b, unsigned int size);
 void *memcpy(void *dst, const void *src, unsigned int size);
 void *memset(void *dst, int value, unsigned int size);
 int sceFsInit(void);
-void sceSifInitRpc(unsigned int mode);
 void _sceFs_Rcv_Intr(sceSifCmdHdr *packet);
 void _sceFs_Poff_Intr(void *packet, void *harg);
 
@@ -296,8 +295,6 @@ typedef struct {
     char headData[64];
     char tailData[64];
 } FsReadReply;
-
-extern char __ps2_klibinfo__[];
 
 /* The table of calls made with SCE_NOWAIT whose reply fileio still owes (a free slot holds -1). The
  * reply handler frees slots from interrupt context while callers scan for free ones. */

@@ -14,7 +14,7 @@ igMetaField *g_igStatisticsItem_otherIdMetaField;
 
 igMetaObject *FUN_00458c50(void) {
     if (g_igStatisticsItem_metaObject == 0) {
-        g_igStatisticsItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igStatisticsItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igStatisticsItem_metaObject;
 }
@@ -33,14 +33,14 @@ done:
 int igStatisticsItem_GetVTable(void) {
     struct Obj_458cf0 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igStatisticsItem_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
     obj.vt = &g_igStatisticsItem_vtable[0];
     FUN_00458e40((ObjectRefWord *)&obj.w11, -1);
     FUN_00458dc0((void **)&obj.w10, -1);
@@ -87,9 +87,9 @@ void FUN_00458ec0(void)
 
 static igMetaObjectCallback g_igStatisticsItem_callbackList[] = { igGuiComponent_EnsureRegistered, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, FUN_004588e0, 0 };
 
-void igStatisticsItem_Register(void) {
+CallbackArray *igStatisticsItem_Register(void) {
     ViewerLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igStatisticsItem_metaObject,
         igView_Register,
@@ -176,24 +176,24 @@ void igStatisticsItem_InitFields(void) {
     int temp_s0;
 
     temp_s1 = g_igStatisticsItem_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igStatisticsItem_ctorTable, 0xC);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0), 0.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1), -1.0f);
-    temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    temp_s2->_metaObject = igGuiComponent_GetOrCreateMetaObject();
-    temp_s2_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igStatisticsItem_ctorTable, 0xC);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1), -1.0f);
+    temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
+    temp_s2->_metaObject = (int)(igGuiComponent_GetOrCreateMetaObject());
+    temp_s2_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
     temp_s2_2->_metaObject = FUN_004516e0();
-    temp_s2_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
+    temp_s2_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8));
     temp_s2_3->_metaObject = FUN_0044bce0();
     temp_s2_3->_construct = 1;
-    temp_s2_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
+    temp_s2_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9));
     temp_s2_4->_metaObject = (int)FUN_004586a0();
     temp_s2_4->_refCounted = 0;
-    temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
+    temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA));
     igEnumMetaField_SetDefaultValue(temp_v0, -1);
     temp_v0->_getMetaEnumFunction = (int)(&FUN_00149b60);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB), -1);
-    igMetaObject_NameFields(temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB), -1);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);
 }
 

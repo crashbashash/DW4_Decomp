@@ -2,12 +2,12 @@ igMetaObject *g_beWeaponAttachDataList_metaObject;
 
 beWeaponAttachDataList *beWeaponAttachDataList_Create(int allocator) {
     beWeaponAttachDataList_EnsureRegistered();
-    return (beWeaponAttachDataList *)igMetaObject_CreateInstance(*(int *)0x587A78, allocator);
+    return (beWeaponAttachDataList *)igMetaObject_CreateInstance(g_beWeaponAttachDataList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beWeaponAttachDataList_GetOrCreateMetaObject(void) {
     if (g_beWeaponAttachDataList_metaObject == 0) {
-        g_beWeaponAttachDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beWeaponAttachDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beWeaponAttachDataList_metaObject;
 }
@@ -26,7 +26,7 @@ int beWeaponAttachDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beWeaponAttachDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beWeaponAttachDataList_EnsureRegistered(void)
@@ -36,7 +36,7 @@ void beWeaponAttachDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beWeaponAttachDataList_callbackList[] = { beWeaponAttachData_EnsureRegistered, 0 };
 
-void *beWeaponAttachDataList_Register(void) {
+CallbackArray *beWeaponAttachDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

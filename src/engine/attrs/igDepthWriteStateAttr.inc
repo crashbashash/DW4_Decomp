@@ -3,7 +3,7 @@ igMetaField *g_igDepthWriteStateAttr_enabledMetaField;
 
 igMetaObject *FUN_001382a0(void) {
     if (g_igDepthWriteStateAttr_metaObject == 0) {
-        g_igDepthWriteStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igDepthWriteStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igDepthWriteStateAttr_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igDepthWriteStateAttr_GetMetaObject(void)
 
 int igDepthWriteStateAttr_GetVTable(void) {
     struct Obj_138340 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igDepthWriteStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igDepthWriteStateAttr_EnsureRegistered(void)
@@ -28,9 +28,9 @@ void igDepthWriteStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDepthWriteStateAttr_Register);
 }
 
-void igDepthWriteStateAttr_Register(void) {
+CallbackArray *igDepthWriteStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDepthWriteStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -50,7 +50,7 @@ void thunk_igDepthWriteStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igDepthWriteStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igDepthWriteStateAttr_fieldTable[] = {
     "_enabled",

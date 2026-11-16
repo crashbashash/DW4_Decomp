@@ -7,12 +7,12 @@ igMetaField *g_beModelCtrlInfoAI_hCountMetaField;
 
 beModelCtrlInfoAI *beModelCtrlInfoAI_Create(int allocator) {
     beModelCtrlInfoAI_EnsureRegistered();
-    return (beModelCtrlInfoAI *)igMetaObject_CreateInstance(*(int *)0x588AD0, allocator);
+    return (beModelCtrlInfoAI *)igMetaObject_CreateInstance(g_beModelCtrlInfoAI_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beModelCtrlInfoAI_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlInfoAI_metaObject == 0) {
-        g_beModelCtrlInfoAI_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beModelCtrlInfoAI_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beModelCtrlInfoAI_metaObject;
 }
@@ -34,7 +34,7 @@ int beModelCtrlInfoAI_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
     seqNameSlot = (char **)&obj._seqName;
     *seqNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
     igStringRef_Release(seqNameSlot);
     return vtable;
@@ -45,7 +45,7 @@ void beModelCtrlInfoAI_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoAI_Register);
 }
 
-void *beModelCtrlInfoAI_Register(void) {
+CallbackArray *beModelCtrlInfoAI_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -98,9 +98,9 @@ static int g_beModelCtrlInfoAI_fieldOffsets[] = {
 
 void beModelCtrlInfoAI_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlInfoAI_metaObject;
+    meta = g_beModelCtrlInfoAI_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoAI_ctorTable, 5);
     igMetaObject_NameFields(meta, g_beModelCtrlInfoAI_fieldTable, g_beModelCtrlInfoAI_fieldHandles, g_beModelCtrlInfoAI_fieldOffsets, base);

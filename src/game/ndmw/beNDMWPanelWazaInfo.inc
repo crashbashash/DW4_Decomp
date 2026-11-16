@@ -17,9 +17,9 @@ int beNDMWPanelWazaInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfo_vtable[0];
-    beBaseInfo_Destroy(&obj, 0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, 0);
     return vtable;
 }
 
@@ -28,7 +28,7 @@ void beNDMWPanelWazaInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWPanelWazaInfo_Register);
 }
 
-void *beNDMWPanelWazaInfo_Register(void) {
+CallbackArray *beNDMWPanelWazaInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

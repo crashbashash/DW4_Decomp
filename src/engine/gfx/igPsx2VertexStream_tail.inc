@@ -15,14 +15,14 @@ int igPsx2VertexStream_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_igVertexStream_vtable[0];
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
     u.vt = (int)&g_igPsx2VertexStream_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igVertexStream_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -41,7 +41,7 @@ int igPsx2VertexStream_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -53,9 +53,9 @@ void FUN_00152050(void)
     igMetaObject_RunStaticInit(igPsx2VertexStream_Register);
 }
 
-void igPsx2VertexStream_Register(void) {
+CallbackArray *igPsx2VertexStream_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2VertexStream_metaObject,
         igVertexStream_Register,
@@ -75,16 +75,16 @@ igMetaObject *FUN_001520e0(void) {
 }
 
 static FieldFactory g_igPsx2VertexStream_ctorTable[] = {
-    igBoolMetaField_Create,
-    igUnsignedLongMetaField_Create,
-    igUnsignedIntArrayMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igMemoryRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igUnsignedLongMetaField_Create,
+    (FieldFactory)igUnsignedIntArrayMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
 };
 static const char *g_igPsx2VertexStream_fieldTable[] = {
     "_scaleAlphaState",

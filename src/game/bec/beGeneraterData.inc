@@ -34,7 +34,7 @@ int beGeneraterData_GetVTable(void) {
     obj._fillModeStr = 0;
     obj._callLua = 0;
     obj._playerDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beGeneraterData_vtable[0];
     igSmartPointer_beGeneraterPlayerDataList_Destruct((igSmartPointer<igObject> *)&obj._playerDataList, (short)(-1));
     igStringRef_Destruct(&obj._callLua, -1);
@@ -67,7 +67,7 @@ void beGeneraterData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beGeneraterData_callbackList[] = { igVec3fList_EnsureRegistered, igFloatList_EnsureRegistered, beGeneraterPlayerDataList_EnsureRegistered, 0 };
 
-void *beGeneraterData_Register(void) {
+CallbackArray *beGeneraterData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -151,16 +151,16 @@ void beGeneraterData_InitFields(void) {
     void *genePosList;
     void *geneRotYRadianList;
     void *playerDataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beGeneraterData_metaObject;
+    meta = g_beGeneraterData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beGeneraterData_ctorTable, 0xC);
     genePosList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)genePosList)->_metaObject = igVec3fList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)genePosList)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)genePosList)->_construct = 1;
     geneRotYRadianList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)geneRotYRadianList)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)geneRotYRadianList)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)geneRotYRadianList)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 5), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);

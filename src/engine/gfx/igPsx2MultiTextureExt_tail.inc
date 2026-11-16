@@ -58,12 +58,12 @@ int igPsx2MultiTextureExt_GetVTable(void) {
     Obj_153740 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.r1 = 0;
     obj.vt = &DAT_00530a10[0];
     obj.r2 = 0;
     obj.vt = &g_igPsx2MultiTextureExt_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &DAT_00530a10[0];
     obj.rel(&obj.r2);
     obj.rel(&obj.r1);
@@ -77,9 +77,9 @@ void FUN_00153820(void)
 
 static igMetaObjectCallback g_igPsx2MultiTextureExt_callbackList[] = { FUN_001511a0, 0 };
 
-void igPsx2MultiTextureExt_Register(void) {
+CallbackArray *igPsx2MultiTextureExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2MultiTextureExt_metaObject,
         igMultiTextureExt_Register,
@@ -99,14 +99,14 @@ int FUN_001538b0(void) {
 }
 
 static FieldFactory g_igPsx2MultiTextureExt_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igEnumMetaField_Create,
-    igBoolMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igUnsignedCharMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igUnsignedCharMetaField_Create,
 };
 static const char *g_igPsx2MultiTextureExt_fieldTable[] = {
     "_context",
@@ -149,27 +149,27 @@ void igPsx2MultiTextureExt_InitFields(void) {
     int fieldStart;
 
     meta = g_igPsx2MultiTextureExt_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
+    fieldStart = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2MultiTextureExt_ctorTable, 8);
-    f = igMetaObject_GetFieldAt(meta, fieldStart);
+    f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart);
     ((igObjectRefMetaField *)f)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)f)->_refCounted = 0;
-    f = igMetaObject_GetFieldAt(meta, fieldStart + 1);
+    f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 1);
     igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_00153690);
-    f = igMetaObject_GetFieldAt(meta, fieldStart + 3);
+    f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 3);
     igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_00153630);
-    f = igMetaObject_GetFieldAt(meta, fieldStart + 4);
+    f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 4);
     igEnumMetaField_SetDefaultValue(f, g_igPsx2MultiTextureExt_blendBDefault);
     *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)FUN_00153630;
-    f = igMetaObject_GetFieldAt(meta, fieldStart + 5);
+    f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 5);
     igEnumMetaField_SetDefaultValue(f, g_igPsx2MultiTextureExt_blendCDefault);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_001535d0);
-    f = igMetaObject_GetFieldAt(meta, fieldStart + 6);
+    f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 6);
     igEnumMetaField_SetDefaultValue(f, g_igPsx2MultiTextureExt_blendDDefault);
     *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)FUN_00153630;
-    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 7), 0x80);
+    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 7), 0x80);
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2MultiTextureExt_fieldTable, g_igPsx2MultiTextureExt_fieldHandles, g_igPsx2MultiTextureExt_fieldOffsets, fieldStart);
 }
 

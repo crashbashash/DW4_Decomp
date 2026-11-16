@@ -3,12 +3,12 @@ igMetaField *g_be_stringRefListMetaField;
 
 be *be_CreateInstance(int allocator) {
     be_EnsureRegistered();
-    return (be *)igMetaObject_CreateInstance(*(int *)0x58A030, allocator);
+    return (be *)igMetaObject_CreateInstance(g_be_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *be_GetOrCreateMetaObject(void) {
     if (g_be_metaObject == 0) {
-        g_be_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_be_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_be_metaObject;
 }
@@ -33,7 +33,7 @@ int be_GetVTable(void) {
     obj._vtable = (int)&g_be_vtable[0];
     stringRefListSlot = (igObject **)&obj._stringRefList;
     *stringRefListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_be_vtable[0];
     igObjectRef_Release(stringRefListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -48,7 +48,7 @@ void be_EnsureRegistered(void)
 
 static igMetaObjectCallback g_be_callbackList[] = { igStringRefList_EnsureRegistered, 0 };
 
-void *be_Register(void) {
+CallbackArray *be_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,13 +86,13 @@ static int g_be_fieldOffsets[] = {
 void be_InitFields(void) {
     int base;
     void *stringRefList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_be_metaObject;
+    meta = g_be_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_be_ctorTable, 1);
     stringRefList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)stringRefList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)stringRefList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)stringRefList)->_construct = 1;
     igMetaObject_NameFields(meta, g_be_fieldTable, g_be_fieldHandles, g_be_fieldOffsets, base);
 }

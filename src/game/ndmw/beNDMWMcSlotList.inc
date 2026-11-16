@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWMcSlotList_metaObject;
 
 igMetaObject *beNDMWMcSlotList_GetOrCreateMetaObject(void) {
     if (g_beNDMWMcSlotList_metaObject == 0) {
-        g_beNDMWMcSlotList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMcSlotList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMcSlotList_metaObject;
 }
@@ -20,7 +20,7 @@ int beNDMWMcSlotList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWMcSlotList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWMcSlotList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beNDMWMcSlotList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWMcSlotList_callbackList[] = { beNDMWMcSlot_EnsureRegistered, 0 };
 
-void *beNDMWMcSlotList_Register(void) {
+CallbackArray *beNDMWMcSlotList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

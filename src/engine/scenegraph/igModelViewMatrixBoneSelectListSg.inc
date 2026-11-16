@@ -8,9 +8,9 @@ igMetaObject *igModelViewMatrixBoneSelectListSg_GetMetaObject(void)
 
 int igModelViewMatrixBoneSelectListSg_GetVTable(void) {
     union U u;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&DAT_0052aab0[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void igModelViewMatrixBoneSelectListSg_EnsureRegistered(void)
@@ -20,9 +20,9 @@ void igModelViewMatrixBoneSelectListSg_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igModelViewMatrixBoneSelectListSg_callbackList[] = { igModelViewMatrixBoneSelect_EnsureRegistered, 0 };
 
-void igModelViewMatrixBoneSelectListSg_Register(void) {
+CallbackArray *igModelViewMatrixBoneSelectListSg_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igModelViewMatrixBoneSelectListSg_metaObject,
         igObjectList_Register,

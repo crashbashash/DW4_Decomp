@@ -1,5 +1,5 @@
 int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height) {
-    igSmartPointer<ResizeEvent> event((ResizeEvent *)FUN_002332b0(igObject_GetAllocator()));
+    igSmartPointer<ResizeEvent> event((ResizeEvent *)FUN_002332b0((int)(igObject_GetAllocator((igObject *)self))));
     {
         ResizeEvent *e = event.get();
         e->origin[0] = DAT_004e0fa0[0];
@@ -16,7 +16,7 @@ int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int widt
 
 void igInsightCore_AddManager(igInsightCore *core, igObject *manager) {
     if (FUN_00236b70() == 0) {
-        igRendererOrderedList_Append(core->_managerList, manager, 0);
+        igRendererOrderedList_Append((igDependencyOrderedList *)core->_managerList, manager, 0);
         *(int *)((char *)(manager) + 12) = (int)(core);
         ((DW4VC_92_0 *)manager)->vX();
     }
@@ -48,10 +48,10 @@ void FUN_00236ca0(int self) {
     int meta;
     int count;
     int i;
-    count = igMetaObject_CountTree(meta = (int)igInsightPlugin_GetMetaObject());
+    count = igMetaObject_CountTree((igMetaObject *)(meta = (int)igInsightPlugin_GetMetaObject()));
     for (i = 0; i < count; i++) {
-        int type = igMetaObject_GetTreeNode(meta, i);
-        igSmartPointer<Instance> plugin(igMetaObject_CreateInstanceRef(type, igObject_GetAllocator(self)).get(), kRetainReference);
+        int type = (int)(igMetaObject_GetTreeNode((igMetaObject *)meta, i));
+        igSmartPointer<Instance> plugin(igMetaObject_CreateInstanceRef(type, (int)(igObject_GetAllocator((igObject *)self))).get(), kRetainReference);
         if (plugin.get()) {
             FUN_00236dd0((void *)self, (void **)plugin.get());
         }
@@ -59,7 +59,7 @@ void FUN_00236ca0(int self) {
 }
 
 void FUN_00236dd0(void *arg0, void **arg1) {
-    ObjectList_AppendRetained(*(int *)((char *)(arg0) + 104));
+    ObjectList_AppendRetained(*(igObjectList **)((char *)(arg0) + 104), (igObject *)arg1);
     ((DW4VC_92_1 *)(arg1))->vX((int)(arg0));
 }
 
@@ -80,13 +80,13 @@ void FUN_00236e80(A *arg0) {
 
 void igInsightCore_AddRenderer(igInsightCore *core, igObject *renderer) {
     FUN_00457ca0(renderer, core->_visualContext);
-    igRendererOrderedList_Append(core->_rendererList, renderer, 0);
+    igRendererOrderedList_Append((igDependencyOrderedList *)core->_rendererList, renderer, 0);
 }
 
 void igInsightCore_RemoveRenderer(igInsightCore *core, igObject *renderer) {
     int sp2C;
     igObjectList_RemoveRetained(&sp2C, core->_rendererList, renderer);
-    if (sp2C == g_resultSuccess[0]) {
+    if (sp2C == g_resultSuccess.v) {
         FUN_00457ca0(renderer, 0);
     }
 }

@@ -3,78 +3,52 @@
 #include "dw4/beModelCtrlDispatchView.h"
 #include "dw4/beNDMWItemBaseDispatchView.h"
 #include "dw4/igVisualContextDispatchView.h"
+#include "dw4/StringPool.h"
+#include "dw4/be.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beBaseInfoManager.h"
+#include "dw4/beBaseInfoRam.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beModelCtrl.h"
+#include "dw4/beNDMWItemAbilityChip.h"
+#include "dw4/beNDMWItemBlueArmor.h"
+#include "dw4/beNDMWItemDisk.h"
+#include "dw4/beNDMWItemImportant.h"
+#include "dw4/beNDMWItemInstant.h"
+#include "dw4/beNDMWItemWeapon.h"
+#include "dw4/beNDMWItemYellowArmor.h"
+#include "dw4/beNDMWMdlItem.h"
+#include "dw4/beNDMWMdlItemInfoWork.h"
+#include "dw4/beTargetObj.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMathConstants.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include "dw4/igViewerSceneInfoManager.h"
+#include <string.h>
+#include "dw4/beDBManager.h"
 #define HOLDER_BODY { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-#define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(sel[0]); }
+#define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(sel); }
 #define ALLOC(a, sel) ALLOC_OF(self, a, sel)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define STORE_REF(slot, fresh) { igObject *held2 = fresh; if (held2 != 0) held2->_refCount = held2->_refCount + 1; REL((igObject *)slot) slot = (int)held2; }
 
-extern "C" int beMessenger_AppendBool(...);
-extern "C" int beMessenger_AppendFloat(int, float);
-extern "C" int beMessenger_AppendString(...);
-extern "C" int beMessenger_AppendVec3(int, float *);
-extern "C" int beMessenger_EnqueueSelected(int, const void *, int);
-extern "C" int beMessenger_PrepareDelayedSelection(int, const void *, int, int);
-extern "C" int strcmp(...);
 extern "C" int beNDMWMdlItem_IsKind(int unused, int kind);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int beBaseInfoManager_Start(...);
 extern "C" int beNDMWMdlItem_GetMeta(void);
-extern "C" int beNDMWItemWeapon_SetRandom(...);
-extern "C" int beNDMWItemBlueArmor_SetRandom(...);
-extern "C" int beNDMWItemYellowArmor_SetRandom(...);
-extern "C" int beNDMWItemAbilityChip_Set(...);
-extern "C" int beNDMWItemDisk_Set(...);
-extern "C" int beNDMWItemInstant_Set(...);
-extern "C" int beNDMWItemImportant_Set(...);
-extern "C" int beModelCtrl__OnGenerate(...);
-extern "C" void * Memory_GetAllocatorBySelector(...);
-extern "C" int beMessenger_GetInt(...);
-extern "C" int beMessenger_GetIntCount(...);
-extern "C" int beMessenger_GetObject(...);
-extern "C" int beMessenger_PopArgContext(...);
-extern "C" int beMessenger_PushArgContext(...);
-extern "C" int beMessenger_SendGroup(...);
-extern "C" void * igObject_GetAllocator(...);
-extern "C" int beMessenger_SendNamed(...);
-extern "C" int beMessenger_SelectReceivers(...);
-extern "C" int beMessenger_AppendMatrix(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_GetBoolCount(...);
-extern "C" int beMessenger_GetBool(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beNDMWItemBase_IndexOfRecNo(...);
-extern "C" int ObjectList_AppendRetained(...);
+/* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
+extern "C" int beNDMWItemBase_IndexOfRecNo(igObjectList *items, int recNo);
 /* Per instant item (recNo 1..25): the pickup panel model and the sequence it plays. */
 struct ItemPickupSeq { const char *panel; const char *sequence; };
 extern "C" ItemPickupSeq g_itemPickupSeqs[25];
-extern "C" float g_vec3Zero[4];
 extern "C" void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo);
 extern "C" void beNDMWMdlItem_RegisterReceiver(beNDMWMdlItem *self, int info);
-extern "C" int g_beNDMWMdlItem_metaObject[4];
-extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" void beNDMWMdlItem_Start(beNDMWMdlItem *self);
 extern "C" void beNDMWMdlItem_Prepare(beNDMWMdlItem *self);
-/* An igProperty record: its value is the word at +12. */
-struct PropertyRecord { char header[12]; int value; };
-extern "C" igObject * beBaseInfoDataList_Create(...);
-extern "C" igObject *beNDMWMdlItemInfoWork_Create(...);
-extern "C" igObject *beNDMWItemDisk_Create(...);
-extern "C" igObject *beNDMWItemInstant_Create(...);
-extern "C" igObject *beNDMWItemImportant_Create(...);
-extern "C" igObject *beNDMWItemAbilityChip_Create(...);
-extern "C" igObject *beNDMWItemWeapon_Create(...);
-extern "C" igObject *beNDMWItemBlueArmor_Create(...);
-extern "C" igObject *beNDMWItemYellowArmor_Create(...);
-extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
-extern "C" PropertyRecord *igProperty_GetRecord(...);
+/* kept local: no include/dw4 home declares it yet. */
 extern "C" char emptyString[];
-extern "C" int g_propertyNameField[4];
-extern "C" int kIGMemoryPoolHandleUser0[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() HOLDER_BODY };
 struct Store {
     static inline void assign(int &slot, igObject *fresh) {
@@ -95,33 +69,17 @@ struct RefRelease { static inline void go(igObject *object) {
 } };
 extern "C" void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRam *ram);
-extern "C" PropertyRecord *igProperty_GetRecordFolder(...);
-extern "C" PropertyRecord *igProperty_GetRecordArray(...);
 extern "C" { unsigned char g_flagFolderSetValue = 1; }
 extern "C" void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram);
 extern "C" void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram);
-extern "C" int beTargetObj_SelectTarget(void *, const void *, const char *);
-extern "C" float beTargetObj_GetTargetDistanceSq(void);
-extern "C" int beTargetObj_GetTargetRamNo(void);
-extern "C" void *StringPool_Allocate(int);
-extern "C" void *StringPool_Construct(void *);
-extern "C" char *StringPool_Intern(void *, const void *);
-extern "C" void StringChunk_ReleaseHeader(int, int *);
-extern "C" void FloatingNumber_Spawn(int value, int style);
+/* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
 extern "C" char *beNDMWItemBase_GetRecordString(int item, beNDMWMdlItem *ctrl, const char *field);
 extern "C" void beNDMWItemBase_GetRevisionColor(float *color, int item);
-extern "C" int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *, const void *);
-extern "C" void beBaseInfoRam_RemoveTimer(beBaseInfoRam *, const void *);
-extern "C" void beBaseInfoRam_StartTimer(beBaseInfoRam *, const void *, int);
-extern "C" void igMatrix44f_GetTranslation(void *matrix, float *out);
+/* kept local: no include/dw4 home declares it yet. */
 extern "C" void igMatrix44f_Copy(float *matrix, void *source);
-extern "C" void igMatrix44f_SetIdentity(float *matrix);
 extern "C" void Vec3f_TransformProjective(float *out, float *v, float *m);
-extern "C" int beMessenger_GetMatrixCount(int);
-extern "C" void beMessenger_GetMatrix(float *out, int messenger, int index);
-extern "C" void *g_stringPool[4];
 extern "C" { beBaseInfoRam *g_mdlEntity; }
-extern "C" { void *g_mdlMatrix; }
+extern "C" { float *g_mdlMatrix; }
 #pragma push
 #pragma readonly_strings on
 
@@ -136,35 +94,35 @@ void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo
     float pos[4];
     int index;
 
-    beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", 0, playerNo);
+    beMessenger_PrepareDelayedSelection((beMessenger *)self->_messenger, "PLAYER", 0, playerNo);
     index = recNo - 1;
-    beMessenger_AppendString(self->_messenger, g_itemPickupSeqs[index].panel);
-    beMessenger_AppendString(self->_messenger, g_itemPickupSeqs[index].sequence);
-    beMessenger_AppendFloat(self->_messenger, 1.0f);
+    beMessenger_AppendString((beMessenger *)self->_messenger, g_itemPickupSeqs[index].panel);
+    beMessenger_AppendString((beMessenger *)self->_messenger, g_itemPickupSeqs[index].sequence);
+    beMessenger_AppendFloat((beMessenger *)self->_messenger, 1.0f);
     pos[0] = g_vec3Zero[0];
     pos[1] = g_vec3Zero[1];
     pos[2] = g_vec3Zero[2];
-    beMessenger_AppendVec3(self->_messenger, pos);
-    beMessenger_AppendBool(self->_messenger, 0);
-    beMessenger_AppendBool(self->_messenger, 1);
-    beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+    beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)pos);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
+    beMessenger_EnqueueSelected((beMessenger *)self->_messenger, "SETEFFECT", 1);
 }
 
 int beNDMWMdlItem_IsKind(int unused, int kind) {
-    return strcmp(kind, "KIND_ITEM") == 0;
+    return strcmp((const char *)kind, "KIND_ITEM") == 0;
 }
 
 void beNDMWMdlItem_RegisterReceiver(beNDMWMdlItem *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "DROPITEM");
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)info, "DROPITEM");
 }
 
 /* After the shared igObject slot 23 body, caches the viewer scene-info manager registered with the
  * insight core (_viewerSIManager), found by its class metaObject; the same binding step as the
  * other managers' slot 23. */
 void beNDMWMdlItem_Start(beNDMWMdlItem *self) {
-    beBaseInfoManager_Start();
-    self->_viewerSIManager = igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+    beBaseInfoManager_Start((beBaseInfoManager *)self);
+    self->_viewerSIManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
 }
 
 void beNDMWMdlItem_Prepare(beNDMWMdlItem *self) {
@@ -202,7 +160,7 @@ template <class Ref> static inline void storeItem(const igSmartPointer<beNDMWMdl
 
 void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info) {
     beBaseInfo *parent = (beBaseInfo *)info->_parentInfo;
-    void *alloc;
+    igMemoryPoolView *alloc;
     beModelCtrlInfoRamData *prop;
     igObject *held;
     char *name;
@@ -211,19 +169,19 @@ void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info) {
 
     if (info->_dataList == 0) {
         ALLOC_OF(info, alloc, kIGMemoryPoolHandleUser1)
-        Store::assign(info->_dataList, ObjectRef(beBaseInfoDataList_Create(alloc)).p);
+        Store::assign(info->_dataList, ObjectRef(beBaseInfoDataList_Create((int)alloc)).p);
     }
-    prop = igProperty_FindByName((void *)info->_dataList, g_propertyNameField[0], "ONE");
+    prop = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, "ONE");
     ALLOC(alloc, kIGMemoryPoolHandleUser1)
     {
-    igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)beNDMWMdlItemInfoWork_Create(alloc));
+    igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)beNDMWMdlItemInfoWork_Create((int)alloc));
     held = (igObject *)work.p;
     if (held != 0) held->_refCount = held->_refCount + 1;
     REL((igObject *)prop->_work)
     prop->_work = (int)held;
-    if (beMessenger_GetIntCount(self->_messenger) != 0) {
-        work.p->_recNo = beMessenger_GetInt(self->_messenger, 0);
-        work.p->_dbId = beMessenger_GetInt(self->_messenger, 1);
+    if (beMessenger_GetIntCount((beMessenger *)self->_messenger) != 0) {
+        work.p->_recNo = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+        work.p->_dbId = beMessenger_GetInt((beMessenger *)self->_messenger, 1);
     }
     i = 0;
     do {
@@ -246,28 +204,28 @@ void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info) {
     switch ((unsigned int)work.p->_dbId) {
     case 0: {
         ALLOC(alloc, kIGMemoryPoolHandleUser0)
-        igSmartPointer<beNDMWItemDisk> h((beNDMWItemDisk *)beNDMWItemDisk_Create(alloc));
+        igSmartPointer<beNDMWItemDisk> h((beNDMWItemDisk *)beNDMWItemDisk_Create((int)alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemDisk_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 1: {
         ALLOC(alloc, kIGMemoryPoolHandleUser0)
-        igSmartPointer<beNDMWItemInstant> h((beNDMWItemInstant *)beNDMWItemInstant_Create(alloc));
+        igSmartPointer<beNDMWItemInstant> h((beNDMWItemInstant *)beNDMWItemInstant_Create((int)alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemInstant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 2: {
         ALLOC(alloc, kIGMemoryPoolHandleUser0)
-        igSmartPointer<beNDMWItemImportant> h((beNDMWItemImportant *)beNDMWItemImportant_Create(alloc));
+        igSmartPointer<beNDMWItemImportant> h((beNDMWItemImportant *)beNDMWItemImportant_Create((int)alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemImportant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 6: {
         ALLOC(alloc, kIGMemoryPoolHandleUser0)
-        igSmartPointer<beNDMWItemAbilityChip> h((beNDMWItemAbilityChip *)beNDMWItemAbilityChip_Create(alloc));
+        igSmartPointer<beNDMWItemAbilityChip> h((beNDMWItemAbilityChip *)beNDMWItemAbilityChip_Create((int)alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemAbilityChip_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
@@ -275,37 +233,37 @@ void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info) {
     case 3:
     case 4:
     case 5:
-        beMessenger_PushArgContext(self->_messenger);
-        beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETPLAYER1");
-        roll = igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), "LEVEL")->value;
+        beMessenger_PushArgContext((beMessenger *)self->_messenger);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, "GAMERAM", "GETPLAYER1");
+        roll = igProperty_GetRecord(beMessenger_GetObject((beMessenger *)self->_messenger, 0), "LEVEL")->_data;
         switch ((unsigned int)work.p->_dbId) {
         case 3: {
             ALLOC(alloc, kIGMemoryPoolHandleUser0)
-            igSmartPointer<beNDMWItemWeapon> h((beNDMWItemWeapon *)beNDMWItemWeapon_Create(alloc));
-            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemWeapon_SetRandom(h.p, w->_recNo, self, roll); }
+            igSmartPointer<beNDMWItemWeapon> h((beNDMWItemWeapon *)beNDMWItemWeapon_Create((int)alloc));
+            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemWeapon_SetRandom(h.p, w->_recNo, (beNDMWStatus *)self, roll); }
             storeItem(work, h);
             break;
         }
         case 4: {
             ALLOC(alloc, kIGMemoryPoolHandleUser0)
-            igSmartPointer<beNDMWItemBlueArmor> h((beNDMWItemBlueArmor *)beNDMWItemBlueArmor_Create(alloc));
-            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemBlueArmor_SetRandom(h.p, w->_recNo, self, roll); }
+            igSmartPointer<beNDMWItemBlueArmor> h((beNDMWItemBlueArmor *)beNDMWItemBlueArmor_Create((int)alloc));
+            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemBlueArmor_SetRandom(h.p, w->_recNo, (beNDMWStatus *)self, roll); }
             storeItem(work, h);
             break;
         }
         case 5: {
             ALLOC(alloc, kIGMemoryPoolHandleUser0)
-            igSmartPointer<beNDMWItemYellowArmor> h((beNDMWItemYellowArmor *)beNDMWItemYellowArmor_Create(alloc));
-            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemYellowArmor_SetRandom(h.p, w->_recNo, self, roll); }
+            igSmartPointer<beNDMWItemYellowArmor> h((beNDMWItemYellowArmor *)beNDMWItemYellowArmor_Create((int)alloc));
+            { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemYellowArmor_SetRandom(h.p, w->_recNo, (beNDMWStatus *)self, roll); }
             storeItem(work, h);
             break;
         }
         }
-        beMessenger_PopArgContext(self->_messenger);
+        beMessenger_PopArgContext((beMessenger *)self->_messenger);
         break;
     }
     }
-    beModelCtrl__OnGenerate(self, info);
+    beModelCtrl__OnGenerate((beModelCtrl *)self, info);
 }
 
 /* Squared distance between two points. */
@@ -342,7 +300,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         }
         ObjectRef created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
@@ -352,16 +310,16 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
-    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
+    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     work = (beNDMWMdlItemInfoWork *)ramData->_work;
     if (((igObjectList *)self->_lockRamList)->_count == 0) {
         for (i = 0; i < 4; i++) {
-            ObjectList_AppendRetained(self->_lockRamList, 0);
+            ObjectList_AppendRetained((igObjectList *)self->_lockRamList, 0);
         }
     }
     isNear = 0;
     ramNo = 0;
-    if (beTargetObj_SelectTarget((char *)ramData->_node + 32, "PLAYER", "NEAR") != 0) {
+    if (beTargetObj_SelectTarget((float *)((char *)ramData->_node + 32), "PLAYER", "NEAR") != 0) {
         float distSq = beTargetObj_GetTargetDistanceSq();
         ramNo = beTargetObj_GetTargetRamNo();
         isNear = distSq < 64.0f;
@@ -372,25 +330,25 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             {
                 char *token;
                 int *old;
-                if (g_stringPool[0] == 0) {
+                if (g_stringPool == 0) {
                     void *pool = StringPool_Allocate(0x10);
-                    if (pool != 0) pool = StringPool_Construct(pool);
-                    g_stringPool[0] = pool;
+                    if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
+                    g_stringPool = (StringPool *)pool;
                 }
-                token = StringPool_Intern(g_stringPool[0], "SQ_DDMG");
+                token = StringPool_Intern(g_stringPool, "SQ_DDMG");
                 old = (int *)work->_keyEventName;
                 if (old != 0) {
                     int *header = old - 2;
                     int refs = old[-1] - 1;
                     old[-1] = refs;
-                    if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+                    if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
                 }
                 work->_keyEventName = (int)token;
             }
             switch (((beNDMWItemInstant *)work->_itemObject)->_recNo) {
             case 0:
                 g_mdlEntity = ram;
-                g_mdlMatrix = (char *)ramData->_node + 32;
+                g_mdlMatrix = (float *)((char *)ramData->_node + 32);
                 FloatingNumber_Spawn(((beNDMWItemInstant *)work->_itemObject)->_value, 4);
                 break;
             case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
@@ -406,40 +364,40 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         if (((igObject **)((igObjectList *)self->_lockRamList)->_data)[ramNo] == 0) {
             const char *font = g_itemNameFontNames[ramNo];
             char *name;
-            beMessenger_SelectGroup(self->_messenger, "TEXTCTL");
-            beMessenger_AppendString(self->_messenger, "ITNAMEFONT");
-            beMessenger_AppendString(self->_messenger, font);
-            beMessenger_AppendString(self->_messenger, "CENTER");
-            beMessenger_DispatchSelected(self->_messenger, "ALIGN");
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
+            beMessenger_AppendString((beMessenger *)self->_messenger, "ITNAMEFONT");
+            beMessenger_AppendString((beMessenger *)self->_messenger, font);
+            beMessenger_AppendString((beMessenger *)self->_messenger, "CENTER");
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ALIGN");
             name = beNDMWItemBase_GetRecordString(work->_itemObject, self, "NAME");
-            beMessenger_SelectGroup(self->_messenger, "TEXTCTL");
-            beMessenger_AppendString(self->_messenger, "ITNAMEFONT");
-            beMessenger_AppendString(self->_messenger, font);
-            beMessenger_AppendString(self->_messenger, name);
-            beMessenger_DispatchSelected(self->_messenger, "TEXTSET");
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
+            beMessenger_AppendString((beMessenger *)self->_messenger, "ITNAMEFONT");
+            beMessenger_AppendString((beMessenger *)self->_messenger, font);
+            beMessenger_AppendString((beMessenger *)self->_messenger, name);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "TEXTSET");
             work->_isColorLight = 0;
             beBaseInfoRam_RemoveTimer(ram, "COLOR");
-            beMessenger_SelectGroup(self->_messenger, "TEXTCTL");
-            beMessenger_AppendString(self->_messenger, "ITNAMEFONT");
-            beMessenger_AppendString(self->_messenger, font);
-            beMessenger_AppendString(self->_messenger, "SET");
-            beMessenger_DispatchSelected(self->_messenger, "SWITCH");
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
+            beMessenger_AppendString((beMessenger *)self->_messenger, "ITNAMEFONT");
+            beMessenger_AppendString((beMessenger *)self->_messenger, font);
+            beMessenger_AppendString((beMessenger *)self->_messenger, "SET");
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "SWITCH");
             work->_isDispName = 1;
             {
                 char *token;
                 int *old;
-                if (g_stringPool[0] == 0) {
+                if (g_stringPool == 0) {
                     void *pool = StringPool_Allocate(0x10);
-                    if (pool != 0) pool = StringPool_Construct(pool);
-                    g_stringPool[0] = pool;
+                    if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
+                    g_stringPool = (StringPool *)pool;
                 }
-                token = StringPool_Intern(g_stringPool[0], font);
+                token = StringPool_Intern(g_stringPool, font);
                 old = (int *)work->_fontType;
                 if (old != 0) {
                     int *header = old - 2;
                     int refs = old[-1] - 1;
                     old[-1] = refs;
-                    if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+                    if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
                 }
                 work->_fontType = (int)token;
             }
@@ -468,20 +426,20 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             } else {
                 work->_isColorLight = 1;
             }
-            beMessenger_SelectGroup(self->_messenger, "TEXTCTL");
-            beMessenger_AppendString(self->_messenger, "ITNAMEFONT");
-            beMessenger_AppendString(self->_messenger, work->_fontType);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
+            beMessenger_AppendString((beMessenger *)self->_messenger, "ITNAMEFONT");
+            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)work->_fontType);
             rgb[0] = color[0];
             rgb[1] = color[1];
             rgb[2] = color[2];
-            beMessenger_AppendVec3(self->_messenger, rgb);
-            beMessenger_DispatchSelected(self->_messenger, "COLOR");
+            beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)rgb);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "COLOR");
             beBaseInfoRam_StartTimer(ram, "COLOR", 500000000);
         }
-        igMatrix44f_GetTranslation((char *)ramData->_node + 32, itemPos);
-        beMessenger_SendNamed(self->_messenger, "PLAYER", 0, work->_dispPlayerRamNo, "GETMATRIX");
-        if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
-            beMessenger_GetMatrix(playerMatrix, self->_messenger, 0);
+        igMatrix44f_GetTranslation((const float *)((char *)ramData->_node + 32), itemPos);
+        beMessenger_SendNamed((beMessenger *)self->_messenger, "PLAYER", 0, work->_dispPlayerRamNo, "GETMATRIX");
+        if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
+            beMessenger_GetMatrix(playerMatrix, (beMessenger *)self->_messenger, 0);
             igMatrix44f_GetTranslation(playerMatrix, playerPos);
             distSq = DistanceSq(itemPos, playerPos);
         } else {
@@ -496,7 +454,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             igMatrix44f_Copy(view, params->_viewMatrix);
             params = (igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters;
             igMatrix44f_Copy(projection, params->_projectionMatrix);
-            igMatrix44f_GetTranslation((char *)ramData->_node + 32, pos);
+            igMatrix44f_GetTranslation((const float *)((char *)ramData->_node + 32), pos);
             pos[1] += 10.0f;
             Vec3f_TransformProjective(eye, pos, view);
             Vec3f_TransformProjective(pos, eye, projection);
@@ -508,14 +466,14 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             screenX /= 100.0f;
             screenY /= 100.0f;
             screenX -= 0.7f;
-            beMessenger_SelectGroup(self->_messenger, "TEXTCTL");
-            beMessenger_AppendString(self->_messenger, "ITNAMEFONT");
-            beMessenger_AppendString(self->_messenger, work->_fontType);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
+            beMessenger_AppendString((beMessenger *)self->_messenger, "ITNAMEFONT");
+            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)work->_fontType);
             label[0] = screenX;
             label[1] = screenY;
             label[2] = -5.0f;
-            beMessenger_AppendVec3(self->_messenger, label);
-            beMessenger_DispatchSelected(self->_messenger, "SETPOSITION");
+            beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)label);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "SETPOSITION");
         } else {
             ((beModelCtrlDispatchView *)self)->OnErase(ram);
             ram->_st0 = 0;
@@ -539,7 +497,7 @@ void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         }
         ObjectRef created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
@@ -549,7 +507,7 @@ void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
-    record = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
+    record = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     work = (beNDMWMdlItemInfoWork *)record->_work;
     if (work->_isDispName != 0) {
         work->_isDispName = 0;
@@ -562,11 +520,11 @@ void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             *(igObject **)((char *)locks->_data + off) = 0;
         }
         work->_dispPlayerRamNo = -1;
-        beMessenger_SelectGroup(self->_messenger, "TEXTCTL");
-        beMessenger_AppendString(self->_messenger, "ITNAMEFONT");
-        beMessenger_AppendString(self->_messenger, work->_fontType);
-        beMessenger_AppendString(self->_messenger, "CLR");
-        beMessenger_DispatchSelected(self->_messenger, "SWITCH");
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
+        beMessenger_AppendString((beMessenger *)self->_messenger, "ITNAMEFONT");
+        beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)work->_fontType);
+        beMessenger_AppendString((beMessenger *)self->_messenger, "CLR");
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, "SWITCH");
     }
 }
 
@@ -585,11 +543,11 @@ static inline void adoptDataList(beBaseInfoRam *ram, igObject *created) {
 void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         void *a = igObject_GetAllocator(ram);
-        void *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        igObject *created = (igObject *)((void *)beBaseInfoDataList_Create(al));
+        void *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        igObject *created = (igObject *)((void *)beBaseInfoDataList_Create((int)al));
         adoptDataList(ram, created);
     }
-    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ("ONE")));
+    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ("ONE")));
     if (strcmp((const char *)((beModelCtrlInfoWork *)one->_work)->_seqCodeName, "SQ_EXIT") == 0)
         ((beModelCtrlDispatchView *)self)->OnErase(ram);
 }
@@ -606,7 +564,7 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
-            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+            a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         }
         ObjectRef ref(beBaseInfoDataList_Create(a));
         dataList = ref.p;
@@ -616,29 +574,29 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)dataList;
     }
-    work = (beNDMWMdlItemInfoWork *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE")->_work;
-    if (beMessenger_GetBoolCount(self->_messenger) == 0 && work->_isNamed != 0 && work->_isDispName != 0) {
-        playerNo = beMessenger_GetInt(self->_messenger, 0);
+    work = (beNDMWMdlItemInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
+    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0 && work->_isNamed != 0 && work->_isDispName != 0) {
+        playerNo = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
         if (playerNo == work->_dispPlayerRamNo) {
             canTake = true;
-            beMessenger_PushArgContext(self->_messenger);
-            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
-            beMessenger_AppendInt(self->_messenger, playerNo);
-            beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
-            player = beMessenger_GetObject(self->_messenger, 0);
+            beMessenger_PushArgContext((beMessenger *)self->_messenger);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
+            beMessenger_AppendInt((beMessenger *)self->_messenger, playerNo);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETPLAYER");
+            player = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
             unsigned t1 = work->_kind - 3;
             switch (t1) {
             case 0:
             case 1:
             case 6:
-                if (((igObjectList *)igProperty_GetRecordFolder(player, "DEVICEFOLDER")->value)->_count >= 36) {
+                if (((igObjectList *)igProperty_GetRecordFolder((igObject *)player, "DEVICEFOLDER")->_data)->_count >= 36) {
                     canTake = false;
                 }
                 break;
             case 2:
             case 3:
             case 5: {
-                igObjectList *l = (igObjectList *)igProperty_GetRecordFolder(player, "DISKFOLDER")->value;
+                igObjectList *l = (igObjectList *)igProperty_GetRecordFolder((igObject *)player, "DISKFOLDER")->_data;
                 if (((beNDMWItemDisk **)l->_data)[beNDMWItemBase_IndexOfRecNo(l, work->_recNo)]->_kazu >= 9) {
                     canTake = false;
                 }
@@ -646,18 +604,18 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
             }
             }
             if (canTake) {
-                igObjectList *a2 = (igObjectList *)igProperty_GetRecordFolder(player, "DEVICEFOLDER")->value;
+                igObjectList *a2 = (igObjectList *)igProperty_GetRecordFolder((igObject *)player, "DEVICEFOLDER")->_data;
                 unsigned t2 = work->_kind - 3;
             switch (t2) {
                 case 0:
                 case 1:
                 case 6:
-                    ObjectList_AppendRetained(a2, work->_itemObject);
+                    ObjectList_AppendRetained(a2, (igObject *)work->_itemObject);
                     break;
                 case 2:
                 case 3:
                 case 5: {
-                    igObjectList *l = (igObjectList *)igProperty_GetRecordFolder(player, "DISKFOLDER")->value;
+                    igObjectList *l = (igObjectList *)igProperty_GetRecordFolder((igObject *)player, "DISKFOLDER")->_data;
                     beNDMWItemDisk *it = ((beNDMWItemDisk **)l->_data)[beNDMWItemBase_IndexOfRecNo(l, work->_recNo)];
                     int v = it->_kazu;
                     if (v != 9) {
@@ -666,10 +624,10 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
                     break;
                 }
                 case 4: {
-                    beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
-                    int o = beMessenger_GetObject(self->_messenger, 0);
+                    beMessenger_SendGroup((beMessenger *)self->_messenger, "GAMERAM", "GETCOMMON");
+                    int o = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                     int idx = work->_recNo;
-                    igUnsignedCharList *ar = (igUnsignedCharList *)igProperty_GetRecordArray(o, "FLAGFOLDER")->value;
+                    igUnsignedCharList *ar = (igUnsignedCharList *)igProperty_GetRecordArray((igObject *)o, "FLAGFOLDER")->_data;
                     int n = ar->_count;
                     if (n != 0 && idx >= 0 && idx < n) {
                         *(unsigned char *)(idx + (int)ar->_data) = g_flagFolderSetValue;
@@ -680,12 +638,12 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
                 int ramNo = ram->_ramNo;
                 beNDMWGameRamInfo *info = (beNDMWGameRamInfo *)ram->_parentInfo;
                 int *name = info->_name ? (int *)info->_name : ((int *)emptyString);
-                beMessenger_SendNamed(self->_messenger, ((int *)"DROPITEM"), name, ramNo, "SQ_DDMG");
+                beMessenger_SendNamed((beMessenger *)self->_messenger, (const char *)((int *)"DROPITEM"), (const char *)name, ramNo, "SQ_DDMG");
                 ((beModelCtrlDispatchView *)self)->OnErase((beBaseInfoRam *)ram);
             }
-            beMessenger_PopArgContext(self->_messenger);
+            beMessenger_PopArgContext((beMessenger *)self->_messenger);
             if (canTake) {
-                beMessenger_AppendBool(self->_messenger, 1);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
             }
         }
     }
@@ -693,7 +651,7 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
 
 int beNDMWMdlItem_GetMeta(void)
 {
-    return g_beNDMWMdlItem_metaObject[0];
+    return (int)g_beNDMWMdlItem_metaObject;
 }
 
 #pragma pop

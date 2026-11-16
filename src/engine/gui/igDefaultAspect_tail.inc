@@ -3,7 +3,7 @@ void Gap__Gui__igDefaultAspect__vfunc_25(igDefaultAspect *arg0) {
     void *l;
 
     for (i = 0; l = (void *)arg0->_elementList, i < *(int *)((char *)l + 8); i++) {
-        igGroup_AppendChild(arg0->_node, *(int *)((char *)((*(int *)(*(int *)((char *)l + 16) + (i * 4)))) + 16));
+        igGroup_AppendChild((igGroup *)arg0->_node, (igNode *)(*(int *)((char *)((*(int *)(*(int *)((char *)l + 16) + (i * 4)))) + 16)));
     }
     FUN_004540d0((S_4540d0 *)arg0);
     igDefaultAspect_UpdateMinimumSize(arg0);
@@ -60,7 +60,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
         var_s0 -= 1;
     }
     temp_v1 = arg0->f8;
-    temp_v1->f16 = g_vec3Zero[0];
+    temp_v1->f16 = g_vec3Zero.x;
     temp_v1->f20 = DAT_004e105c[0];
     temp_v1->f24 = DAT_004e1060[0];
     sp30[0] = 2;

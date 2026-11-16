@@ -21,7 +21,7 @@ int beFontInfo_GetVTable(void) {
     obj._vtable = (int)&g_beFontInfo_vtable[0];
     unicodeListSlot = (char *)&obj._unicodeList;
     *(int *)unicodeListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFontInfo_vtable[0];
     igSmartPointer_beUnicodeObjList_Destruct((igSmartPointer<igObject> *)unicodeListSlot, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -48,7 +48,7 @@ void beFontInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beFontInfo_callbackList[] = { beUnicodeObjList_EnsureRegistered, 0 };
 
-void *beFontInfo_Register(void) {
+CallbackArray *beFontInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,9 +86,9 @@ static int g_beFontInfo_fieldOffsets[] = {
 void beFontInfo_InitFields(void) {
     int base;
     void *unicodeList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beFontInfo_metaObject;
+    meta = g_beFontInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFontInfo_ctorTable, 1);
     unicodeList = (void *)(igMetaObject_GetFieldAt(meta, base));

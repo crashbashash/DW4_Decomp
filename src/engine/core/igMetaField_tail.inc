@@ -4,7 +4,7 @@ void igMetaField_AllocateArray(int *outStatus,igMemoryRefMetaField *field,void *
     void *data=allocator->AllocateAligned(bytes,alignment);
     if(!data){*outStatus=g_resultFailure.v;return;}
     /* Reference-typed elements start zeroed; other element types keep the allocator's contents. */
-    if(igObject_IsKindOf((void *)field->_memType, (igMetaObject *)((int)g_igRefMetaField_metaObject)))memset(data,0,bytes);
+    if(igObject_IsKindOf((igObject *)field->_memType, (igMetaObject *)((int)g_igRefMetaField_metaObject)))memset(data,0,bytes);
     *(void **)((char *)object+field->_offset)=data;
     *outStatus=g_resultSuccess.v;
 }

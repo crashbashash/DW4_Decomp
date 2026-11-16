@@ -6,7 +6,7 @@ igMetaField *g_igNode_handleMetaField;
 
 igMetaObject *igNode_GetOrCreateMetaObject(void) {
     if (g_igNode_metaObject == 0) {
-        g_igNode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igNode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igNode_metaObject;
 }
@@ -29,7 +29,7 @@ int igNode_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q2 = &u.b[8];
     *(int *)q2 = 0;
     u.vt = (int)&g_igNode_vtable[0];
@@ -37,14 +37,14 @@ int igNode_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igNode_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }
@@ -53,7 +53,7 @@ int igNode_GetVTable(void) {
         if (q1 != 0) {
             q1->f4 = (int)((int) (q1->f4 - 1));
             if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q1);
+                igObject_Destroy((igObject *)q1);
             }
         }
     }
@@ -65,7 +65,7 @@ int igNode_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -79,9 +79,9 @@ void igNode_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igNode_callbackList[] = { FUN_00186b20, igNonRefCountedNodeList_EnsureRegistered, 0 };
 
-void igNode_Register(void) {
+CallbackArray *igNode_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igNode_metaObject,
         igNamedObject_Register,
@@ -101,10 +101,10 @@ void thunk_igNode_GetMetaObject(void) {
 }
 
 static FieldFactory g_igNode_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igNode_fieldTable[] = {
     "_bound",
@@ -133,11 +133,11 @@ void igNode_InitFields(void) {
     void *temp_s1;
 
     temp_s1 = (void *)g_igNode_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igNode_ctorTable, 4);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
+    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00186a80();
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
+    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0019c8c0();
     ((igObjectRefMetaField *)temp_s2_2)->_resetMethod = 3;
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
@@ -145,7 +145,7 @@ void igNode_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_deepCopyMethod = 4;
     ((igObjectRefMetaField *)temp_s2_2)->_shallowCopyMethod = 4;
     ((igObjectRefMetaField *)temp_s2_2)->_constructCopyMethod = 4;
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
+    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     igIntMetaField_SetDefault(temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igNode_fieldTable, g_igNode_fieldHandles, g_igNode_fieldOffsets, temp_s0);
@@ -155,7 +155,7 @@ void **FUN_0019d0a0(void **arg0, long long arg1) {
     struct Rc *a;
     if (arg0 != 0) {
         a = (struct Rc *)*arg0;
-        if (a != 0) { a->rc = a->rc - 1; if ((a->rc & 0x7FFFFF) == 0) { igObject_Destroy((void *)a); } }
+        if (a != 0) { a->rc = a->rc - 1; if ((a->rc & 0x7FFFFF) == 0) { igObject_Destroy((igObject *)a); } }
         if ((short)arg1 > 0) {
             __dl__FPv(arg0);
         }
@@ -163,32 +163,32 @@ void **FUN_0019d0a0(void **arg0, long long arg1) {
     return arg0;
 }
 
-void *igGeometry_Destroy(struct S_19d120 *arg0, short arg1) {
+igGeometry *igGeometry_Destroy(igGeometry *self, short deleteFlag) {
     void *p;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &g_igGeometry_vtable[0];
-        if (&arg0->f28) {
-            p = arg0->f28;
+    if (self != 0) {
+        self->_vtable = (int)&g_igGeometry_vtable[0];
+        if (&self->_renderList) {
+            p = (void *)self->_renderList;
             if (p != 0) {
                 rc = *(int *)((char *)(p) + 4) - 1;
                 *(int *)((char *)(p) + 4) = rc;
                 if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((void *)p);
+                    igObject_Destroy((igObject *)p);
                 }
             }
         }
-        if (arg0 != 0) {
-            arg0->f0 = &g_igAttrSet_vtable[0];
-            igSmartPointer_igAttrList_Destruct((char *)arg0 + 0x20, -1);
-            igGroup_Destroy((struct T_195a90 *)arg0, 0);
+        if (self != 0) {
+            self->_vtable = (int)&g_igAttrSet_vtable[0];
+            igSmartPointer_igAttrList_Destruct(&self->_attributes, -1);
+            igGroup_Destroy((igGroup *)self, 0);
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (deleteFlag > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 igMetaObject *g_igGeometry_metaObject;
@@ -213,7 +213,7 @@ void **igSmartPointer_igIntListList_Destruct(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -227,7 +227,7 @@ igMetaObject *g_igModelViewMatrixBoneSelectListSg_metaObject;
 
 igMetaObject *FUN_0019d280(void) {
     if (g_igModelViewMatrixBoneSelectListSg_metaObject == 0) {
-        g_igModelViewMatrixBoneSelectListSg_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igModelViewMatrixBoneSelectListSg_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igModelViewMatrixBoneSelectListSg_metaObject;
 }

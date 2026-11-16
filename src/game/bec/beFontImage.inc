@@ -15,7 +15,7 @@ int beFontImage_GetVTable(void) {
     obj._charMetricsList = 0;
     obj._textureBind = 0;
     obj._vtable = (int)&g_beFontImage_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFontImage_vtable[0];
     igBitmapFont_Destroy((igBitmapFont *)&obj, (short)0);
     return vtable;
@@ -76,7 +76,7 @@ void beFontImage_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFontImage_Register);
 }
 
-void *beFontImage_Register(void) {
+CallbackArray *beFontImage_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -98,8 +98,8 @@ void beFontImage_GetMetaObjectFunction(void)
     beFontImage_GetMetaObject();
 }
 
-int igBitmapFont_GetPublishedMetaObject(void) {
-    return g_igBitmapFont_metaObject[0];
+igMetaObject *igBitmapFont_GetPublishedMetaObject(void) {
+    return g_igBitmapFont_metaObject;
 }
 
 igMetaEnum *g_beFontImage_alignMetaEnum;

@@ -21,7 +21,7 @@ igSmartPointer<MessageFilter> FUN_002379e0(FilterDispatcher *self, igObject *tar
         filter.release();
         filter.p = (MessageFilter *)FUN_00231b40((int)allocator);
         filter->_target = target;
-        ObjectList_AppendRetained(self->_filters, filter.get());
+        ObjectList_AppendRetained((igObjectList *)self->_filters, (igObject *)(filter.get()));
     }
     return filter;
 }

@@ -2,7 +2,7 @@ igMetaObject *g_igMessageDispatcher_metaObject;
 
 igMetaObject *FUN_002320b0(void) {
     if (g_igMessageDispatcher_metaObject == 0) {
-        g_igMessageDispatcher_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igMessageDispatcher_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMessageDispatcher_metaObject;
 }
@@ -20,9 +20,9 @@ void FUN_00232150(void)
     igMetaObject_RunStaticInit(igMessageDispatcher_Register);
 }
 
-void igMessageDispatcher_Register(void) {
+CallbackArray *igMessageDispatcher_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igMessageDispatcher_metaObject,
         igObject_Register,
@@ -31,7 +31,7 @@ void igMessageDispatcher_Register(void) {
         "igMessageDispatcher",
         8, /* instance size */
         0,
-        &igMessageDispatcher_SetAbstractProxy_002321e0[0], /* post-init hook */
+        igMessageDispatcher_SetAbstractProxy_002321e0, /* post-init hook */
         0, /* extra callback item */
         0 /* callback list */
     );

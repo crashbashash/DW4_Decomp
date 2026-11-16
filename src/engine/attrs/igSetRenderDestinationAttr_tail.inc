@@ -16,14 +16,14 @@ static inline void setDestination(Attr *self, const igSmartPointer<Destination> 
 
 void Gap__Attrs__igSetRenderDestinationAttr__vfunc_26(Attr *self, int value) {
     if (self->f12 == 0) {
-        setDestination(self, igSmartPointer<Destination>((Destination *)FUN_001341b0(igObject_GetAllocator())));
+        setDestination(self, igSmartPointer<Destination>((Destination *)FUN_001341b0((int)igObject_GetAllocator((igObject *)self))));
     }
     ((Renderable *)self->f12)->vX(value);
 }
 
 void Gap__Attrs__igSetRenderDestinationAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 void Gap__Attrs__igSetRenderDestinationAttr__vfunc_28(igSetRenderDestinationAttr *self) {

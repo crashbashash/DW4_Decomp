@@ -11,9 +11,9 @@ igMetaObject *igFloatObject_GetMetaObject(void)
 
 int igFloatObject_GetVTable(void) {
     struct Obj_1e5010 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igFloatObject_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_001e5050(void)
@@ -21,9 +21,9 @@ void FUN_001e5050(void)
     igMetaObject_RunStaticInit(igFloatObject_Register);
 }
 
-void igFloatObject_Register(void) {
+CallbackArray *igFloatObject_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFloatObject_metaObject,
         igObject_Register,
@@ -60,8 +60,8 @@ void igFloatObject_InitFields(void) {
     igMetaObject *meta;
 
     meta = g_igFloatObject_metaObject;
-    firstField = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igFloatObject_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_igFloatObject_fieldTable, g_igFloatObject_fieldHandles, g_igFloatObject_fieldOffsets, firstField);
+    firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igFloatObject_ctorTable, 1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igFloatObject_fieldTable, g_igFloatObject_fieldHandles, g_igFloatObject_fieldOffsets, firstField);
 }
 

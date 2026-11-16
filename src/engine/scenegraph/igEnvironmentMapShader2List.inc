@@ -2,7 +2,7 @@ igMetaObject *g_igEnvironmentMapShader2List_metaObject;
 
 igMetaObject *FUN_001a13e0(void) {
     if (g_igEnvironmentMapShader2List_metaObject == 0) {
-        g_igEnvironmentMapShader2List_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igEnvironmentMapShader2List_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igEnvironmentMapShader2List_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igEnvironmentMapShader2List_GetMetaObject(void)
 int igEnvironmentMapShader2List_GetVTable(void) {
     struct Obj_1a1480 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igEnvironmentMapShader2List_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_001a14c0(void)
@@ -30,9 +30,9 @@ void FUN_001a14c0(void)
 
 static igMetaObjectCallback g_igEnvironmentMapShader2List_callbackList[] = { FUN_001a15a0, 0 };
 
-void igEnvironmentMapShader2List_Register(void) {
+CallbackArray *igEnvironmentMapShader2List_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEnvironmentMapShader2List_metaObject,
         igObjectList_Register,

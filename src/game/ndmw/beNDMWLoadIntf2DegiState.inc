@@ -18,7 +18,7 @@ igMetaField *g_beNDMWLoadIntf2DegiState_st3MetaField;
 
 beNDMWLoadIntf2DegiState *beNDMWLoadIntf2DegiState_Create(int allocator) {
     beNDMWLoadIntf2DegiState_EnsureRegistered();
-    return (beNDMWLoadIntf2DegiState *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiState_metaObject, allocator);
+    return (beNDMWLoadIntf2DegiState *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiState_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWLoadIntf2DegiState_ResolveMetaObject(void) {
@@ -34,7 +34,7 @@ int beNDMWLoadIntf2DegiState_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2DegiState_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWLoadIntf2DegiState_EnsureRegistered(void)
@@ -44,7 +44,7 @@ void beNDMWLoadIntf2DegiState_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLoadIntf2DegiState_callbackList[] = { beNDMWLoadIntf2ComMdlCtrl_EnsureRegistered, beNDMWLoadIntf2TextOrder_EnsureRegistered, beNDMWLoadCtrl2CommonIntf_EnsureRegistered, beMessenger_EnsureRegistered, 0 };
 
-void *beNDMWLoadIntf2DegiState_Register(void) {
+CallbackArray *beNDMWLoadIntf2DegiState_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -160,7 +160,7 @@ void beNDMWLoadIntf2DegiState_InitFields(void) {
     ((igObjectRefMetaField *)commonIntf)->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)commonIntf)->_refCounted = 0;
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     igMetaObject_NameFields(meta, g_beNDMWLoadIntf2DegiState_fieldTable, g_beNDMWLoadIntf2DegiState_fieldHandles, g_beNDMWLoadIntf2DegiState_fieldOffsets, base);
 }

@@ -23,12 +23,12 @@ igMetaField *g_igImage_pNameStringMetaField;
 
 igImage *igImage_CreateInstance(int allocator) {
     igImage_EnsureRegistered();
-    return (igImage *)igMetaObject_CreateInstance(g_igImage_metaObject, allocator);
+    return (igImage *)igMetaObject_CreateInstance(g_igImage_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igImage_GetOrCreateMetaObject(void) {
     if (g_igImage_metaObject == 0) {
-        g_igImage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igImage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igImage_metaObject;
 }
@@ -48,9 +48,9 @@ void igImage_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igImage_callbackList[] = { igClut_EnsureRegistered, 0 };
 
-void igImage_Register(void) {
+CallbackArray *igImage_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igImage_metaObject,
         igObject_Register,
@@ -70,27 +70,27 @@ void thunk_igImage_GetMetaObject(void) {
 }
 
 static FieldFactory g_igImage_ctorTable[] = {
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igBoolMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igStringMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igStringMetaField_Create,
 };
 static const char *g_igImage_fieldTable[] = {
     "_px",

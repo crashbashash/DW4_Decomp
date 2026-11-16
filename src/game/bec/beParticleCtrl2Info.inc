@@ -23,7 +23,7 @@ int beParticleCtrl2Info_GetVTable(void) {
     obj._vtable = (int)&g_beParticleCtrl2Info_vtable[0];
     obj._mainSwitch = 0;
     obj._subSwitch = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beParticleCtrl2Info_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._subSwitch, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._mainSwitch, -1);
@@ -38,7 +38,7 @@ void beParticleCtrl2Info_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beParticleCtrl2Info_callbackList[] = { igSwitch_EnsureRegistered, 0 };
 
-void *beParticleCtrl2Info_Register(void) {
+CallbackArray *beParticleCtrl2Info_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -89,15 +89,15 @@ void beParticleCtrl2Info_InitFields(void) {
     int base;
     void *subSwitch;
     void *mainSwitch;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beParticleCtrl2Info_metaObject;
+    meta = g_beParticleCtrl2Info_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beParticleCtrl2Info_ctorTable, 4);
     mainSwitch = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)mainSwitch)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)mainSwitch)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     subSwitch = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)subSwitch)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)subSwitch)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beParticleCtrl2Info_fieldTable, g_beParticleCtrl2Info_fieldHandles, g_beParticleCtrl2Info_fieldOffsets, base);
 }
 

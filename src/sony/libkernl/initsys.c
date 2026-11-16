@@ -13,15 +13,6 @@
 
 #define TIMER_CLOCK_BUSCLK_256 2
 
-int InitThread(void);
-void InitTLBFunctions(void);
-void InitExecPS2(void);
-void InitAlarm(void);
-int InitTimer(int clock);
-int StartTimerSystemTime(void);
-void sceSifInitRebootNotify(void);
-
-extern int __sce_sema_id;
 extern int __sce_eh_sema_id;
 extern int *_SyscallEntry;
 extern SyscallEntry SysEntry_initsys[2];

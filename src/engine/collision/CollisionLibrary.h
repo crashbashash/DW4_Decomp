@@ -5,18 +5,14 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/ClassRegistration.h"
 
-extern "C" void igMetaObject_RunStaticInit(...);
-typedef void (*igMetaObjectCallback)();
-typedef igMetaField *(*FieldFactory)(void *);
-extern "C" void igMetaObject_CreateFields(igMetaObject *meta, FieldFactory *factories, int count);
-extern "C" void igMetaObject_NameFields(igMetaObject *meta, const char **names, igMetaField ***handles, int *offsets, int start);
-extern "C" igMetaField *igBoolMetaField_Create(void *);
-extern "C" igMetaField *igFloatMetaField_Create(void *);
-extern "C" igMetaField *igIntMetaField_Create(void *);
-extern "C" igMetaField *igObjectRefMetaField_Create(void *);
-extern "C" igMetaField *igStringMetaField_Create(void *);
+#include "dw4/igMetaObject.h"
+class igMemoryPoolView;
+extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
 extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);
-extern "C" void igMetaObject_EnsureRegistered(void);
 extern "C" void FUN_00187f30(void);
 struct Rc;
 extern "C" unsigned char g_CollisionLibrary_registered;
@@ -24,73 +20,64 @@ extern "C" void CollisionLibrary_MarkRegistered(void);
 extern "C" igMetaObject *g_igCreateCollisionDatabase_metaObject;
 extern "C" igMetaObject *igCreateCollisionDatabase_GetMetaObject(void);
 struct W { int *vt; int f[19]; };
-extern "C" int igObject_InitHeader(...);
+#include "dw4/igObject.h"
 extern "C" int igSmartPointer_igMetaObject_Destruct(...);
 extern "C" int FUN_00225790(...);
 extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igCreateCollisionDatabase_vtable[4];
-extern "C" void * g_objectSystem[4];
+#include "dw4/igObjectSystem.h"
 extern "C" int igCreateCollisionDatabase_GetVTable(void);
 extern "C" int __dl__FPv(void *);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O { S_temp_a0 *m; };
 extern "C" O *FUN_00239530(O *arg0, short arg1);
 extern "C" void FUN_002395b0(void);
-extern "C" char igOptBase_GetPublishedMetaObject[];
-extern "C" char igOptBase_Register[];
-extern "C" int igMetaObject_RegisterClass(...);
-extern "C" void igCreateCollisionDatabase_Register(void);
+extern "C" igMetaObject *igOptBase_GetPublishedMetaObject(void);
+extern "C" CallbackArray *igOptBase_Register(void);
+extern "C" CallbackArray *igCreateCollisionDatabase_Register(void);
 extern "C" void thunk_igCreateCollisionDatabase_GetMetaObject(void);
-extern "C" int igMetaObject_GetOrCreateMetaObject(...);
 extern "C" int igIntMetaField_SetDefault(...);
 extern "C" int igObjectRefMetaField_SetDefault(...);
 extern "C" int igStringMetaField_SetDefaultText(...);
-extern "C" void *igMetaObject_GetFieldAt(...);
-extern "C" int igMetaObject_GetFieldCount(...);
 extern "C" void igCreateCollisionDatabase_InitFields(void);
-extern "C" int igMetaObject_CreateInstance(int, int);
 extern "C" Rc *FUN_002397a0(int arg0);
 extern "C" igMetaObject *g_igCollisionInfo_metaObject;
 extern "C" igMetaObject *igCollisionInfo_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
-extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int g_igNamedObject_vtable[4];
+#include "dw4/StringPool.h"
+#include "dw4/igNamedObject.h"
 extern "C" int g_igCollisionInfo_vtable[4];
 union U { int vt; char b[32]; };
 extern "C" int igCollisionInfo_GetVTable(void);
 extern "C" void FUN_00239910(void);
-extern "C" char igInfo_GetPublishedMetaObject[];
-extern "C" char igInfo_Register[];
-extern "C" void igCollisionInfo_Register(void);
+#include "dw4/igInfo.h"
+extern "C" CallbackArray *igInfo_Register(void);
+extern "C" CallbackArray *igCollisionInfo_Register(void);
 extern "C" void thunk_igCollisionInfo_GetMetaObject(void);
 extern "C" void igCollisionInfo_InitFields(void);
-extern "C" igMetaObject *igMetaObject_Create(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
+#include "dw4/igMemoryPoolContext.h"
 extern "C" igMetaObject *g_igCollisionGroupList_metaObject;
-extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *FUN_00239a40(void);
 extern "C" igMetaObject *igCollisionGroupList_GetMetaObject(void);
 struct Obj { int *vt; char pad[28]; };
 extern "C" int g_igCollisionGroupList_vtable[4];
 extern "C" int igCollisionGroupList_GetVTable(void);
 extern "C" void FUN_00239b20(void);
-extern "C" char igObjectList_GetPublishedMetaObject[];
-extern "C" char igObjectList_Register[];
-extern "C" void igCollisionGroupList_Register(void);
+#include "dw4/igObjectList.h"
+extern "C" CallbackArray *igCollisionGroupList_Register(void);
 extern "C" void thunk_igCollisionGroupList_GetMetaObject(void);
 extern "C" igMetaObject *g_igCollisionGroup_metaObject;
 extern "C" igMetaObject *igCollisionGroup_GetMetaObject(void);
 extern "C" int igSmartPointer_igTransform_Destruct(...);
-extern "C" int igGroup_Destroy(...);
 extern "C" int g_igCollisionGroup_vtable[4];
 union U_239c00 { int vt; char b[96]; };
 extern "C" int igCollisionGroup_GetVTable(void);
 extern "C" void FUN_00239c80(void);
-extern "C" char igGroup_GetPublishedMetaObject[];
-extern "C" char igGroup_Register[];
-extern "C" void igCollisionGroup_Register(void);
+extern "C" igMetaObject *igGroup_GetPublishedMetaObject(void);
+#include "dw4/igGroup.h"
+extern "C" CallbackArray *igCollisionGroup_Register(void);
 extern "C" void thunk_igCollisionGroup_GetMetaObject(void);
-extern "C" int igTransform_GetOrCreateMetaObject(...);
+#include "dw4/igTransform.h"
 extern "C" void igCollisionGroup_InitFields(void);
 extern "C" igMetaObject *g_igCollisionGridHelper_metaObject;
 extern "C" igMetaObject *igCollisionGridHelper_GetMetaObject(void);
@@ -98,9 +85,7 @@ union U_239e00 { int vt; int w[4]; void *p[4]; char b[16]; };
 extern "C" int g_igCollisionGridHelper_vtable[4];
 extern "C" int igCollisionGridHelper_GetVTable(void);
 extern "C" void FUN_00239ee0(void);
-extern "C" char igObject_GetMetaObject_ParentAccessor[];
-extern "C" char igObject_Register[];
-extern "C" void igCollisionGridHelper_Register(void);
+extern "C" CallbackArray *igCollisionGridHelper_Register(void);
 extern "C" void thunk_igCollisionGridHelper_GetMetaObject(void);
 extern "C" void igCollisionGridHelper_InitFields(void);
 extern "C" void FUN_0023a040(int arg0);
@@ -114,7 +99,7 @@ extern "C" int igCollisionGrid_GetVTable(void);
 extern "C" void **FUN_0023a240(void **arg0, long long arg1);
 extern "C" void **FUN_0023a2c0(void **arg0, short arg1);
 extern "C" void FUN_0023a340(void);
-extern "C" void igCollisionGrid_Register(void);
+extern "C" CallbackArray *igCollisionGrid_Register(void);
 extern "C" void thunk_igCollisionGrid_GetMetaObject(void);
 extern "C" int igAABox_GetOrCreateMetaObject(...);
 extern "C" void igCollisionGrid_InitFields(void);
@@ -124,7 +109,7 @@ extern "C" igMetaObject *igCollisionCellList_GetMetaObject(void);
 extern "C" int g_igCollisionCellList_vtable[4];
 extern "C" int igCollisionCellList_GetVTable(void);
 extern "C" void FUN_0023a650(void);
-extern "C" void igCollisionCellList_Register(void);
+extern "C" CallbackArray *igCollisionCellList_Register(void);
 extern "C" void thunk_igCollisionCellList_GetMetaObject(void);
 extern "C" igCollisionCell *FUN_0023a6e0(int arg0);
 extern "C" igMetaObject *g_igCollisionCell_metaObject;
@@ -158,7 +143,7 @@ struct Obj_23a770 {
 };
 extern "C" int igCollisionCell_GetVTable(void);
 extern "C" void FUN_0023a850(void);
-extern "C" void igCollisionCell_Register(void);
+extern "C" CallbackArray *igCollisionCell_Register(void);
 extern "C" void thunk_igCollisionCell_GetMetaObject(void);
 extern "C" void igCollisionCell_InitFields(void);
 extern "C" void FUN_0023a9d0(int arg0);
@@ -168,7 +153,7 @@ extern "C" int g_igBoundingSphereMaker_vtable[4];
 union U_23aa60 { int vt; char b[16]; };
 extern "C" int igBoundingSphereMaker_GetVTable(void);
 extern "C" void FUN_0023aaf0(void);
-extern "C" void igBoundingSphereMaker_Register(void);
+extern "C" CallbackArray *igBoundingSphereMaker_Register(void);
 extern "C" void thunk_igBoundingSphereMaker_GetMetaObject(void);
 extern "C" int FUN_00187e50(...);
 extern "C" void igBoundingSphereMaker_InitFields(void);
@@ -176,10 +161,7 @@ extern "C" int FUN_0018d630(...);
 extern "C" void FUN_0023b110(void *arg0, void *arg1);
 extern "C" int FUN_0018de10(...);
 extern "C" int FUN_0023ac20(...);
-extern "C" int igObject_IsKindOf(...);
-extern "C" int g_igTransform_metaObject[4];
-extern "C" int g_igGroup_metaObject[4];
-extern "C" int g_igGeometry_metaObject[4];
+#include "dw4/igNode.h"
 typedef struct S1 { char pad4[4]; int f4; } S1;
 struct Ls { char p[8]; unsigned int n; char q[4]; struct Q **a; };
 struct Q { char p[28]; struct Ls *f28; };
@@ -219,7 +201,7 @@ extern "C" igSmartPointer<igObject> FUN_0023b270(ObjectSlotOwner *owner, int val
 struct RefCounted { int pad; int _refCount; };
 struct RetainedList { int pad0[2]; void *_words; int pad1[2]; int _count;
 };
-extern "C" int List_InsertWords(void *list, int at, int n, void *from);
+#include "dw4/igDataLists.h"
 extern "C" void FUN_0023b3b0(RetainedList *list, RefCounted *object);
 extern "C" void FUN_00301ee0(int, int);
 extern "C" void FUN_0023b410(int *arg0, int arg1, int arg2, int arg3);

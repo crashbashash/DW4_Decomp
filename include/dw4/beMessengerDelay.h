@@ -7,7 +7,7 @@ struct beMessengerDelay;
 extern "C" {
 #endif
 
-struct beMessengerDelay *beMessengerDelay_Create(void *allocator);
+struct beMessengerDelay *beMessengerDelay_Create(int allocator);
 
 #ifdef __cplusplus
 }

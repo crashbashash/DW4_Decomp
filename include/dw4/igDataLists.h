@@ -26,7 +26,7 @@ int List_BinarySearchWords(struct igDataList *list, int key, int (*compare)(int,
 int List_LowerBound(struct igDataList *list, void *key, int (*compare)(int *, void *));
 /* Retains `object` (reference count +1) and appends it. */
 int ObjectList_AppendRetained(struct igObjectList *list, struct igObject *object);
-int igProperty_FindByName(struct igObjectList *list, struct igMetaField *field, int name);
+int igProperty_FindByName(struct igObjectList *list, struct igMetaField *field, const char *name);
 struct CallbackArray *igDataList_Register(void);
 struct igMetaObject *igDataList_GetPublishedMetaObject(void);
 

@@ -14,7 +14,7 @@ igMetaField *g_beDataBase_stringDataMetaField;
 
 igMetaObject *beDataBase_GetOrCreateMetaObject(void) {
     if (g_beDataBase_metaObject == 0) {
-        g_beDataBase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beDataBase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beDataBase_metaObject;
 }
@@ -45,7 +45,7 @@ int beDataBase_GetVTable(void) {
     obj._boolData = 0;
     obj._stringOffsetList = 0;
     obj._stringData = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDataBase_vtable[0];
     igSmartPointer_igNamedObjectList_Destruct(&obj._stringData, -1);
     igSmartPointer_igNamedObjectList_Destruct(&obj._stringOffsetList, -1);
@@ -69,7 +69,7 @@ void beDataBase_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDataBase_callbackList[] = { igNamedObjectList_EnsureRegistered, igCharList_EnsureRegistered, igShortList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, igBoolList_EnsureRegistered, 0 };
 
-void *beDataBase_Register(void) {
+CallbackArray *beDataBase_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -162,46 +162,46 @@ void beDataBase_InitFields(void) {
     void *floatOffsetList;
     void *floatData;
     void *boolOffsetList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDataBase_metaObject;
+    meta = g_beDataBase_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDataBase_ctorTable, 0xC);
     charOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)charOffsetList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)charOffsetList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)charOffsetList)->_construct = 1;
     charData = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)charData)->_metaObject = igCharList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)charData)->_metaObject = (int)igCharList_GetOrCreateMetaObject();
     ((igRefMetaField *)charData)->_construct = 1;
     shortOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)shortOffsetList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)shortOffsetList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)shortOffsetList)->_construct = 1;
     shortData = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)shortData)->_metaObject = igShortList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)shortData)->_metaObject = (int)igShortList_GetOrCreateMetaObject();
     ((igRefMetaField *)shortData)->_construct = 1;
     intOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)intOffsetList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)intOffsetList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)intOffsetList)->_construct = 1;
     intData = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)intData)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)intData)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)intData)->_construct = 1;
     floatOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)floatOffsetList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)floatOffsetList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)floatOffsetList)->_construct = 1;
     floatData = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)floatData)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)floatData)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)floatData)->_construct = 1;
     boolOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)boolOffsetList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)boolOffsetList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)boolOffsetList)->_construct = 1;
     boolData = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
-    ((igObjectRefMetaField *)boolData)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)boolData)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)boolData)->_construct = 1;
     stringOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
-    ((igObjectRefMetaField *)stringOffsetList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)stringOffsetList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)stringOffsetList)->_construct = 1;
     stringData = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
-    ((igObjectRefMetaField *)stringData)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)stringData)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)stringData)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDataBase_fieldTable, g_beDataBase_fieldHandles, g_beDataBase_fieldOffsets, base);
 }

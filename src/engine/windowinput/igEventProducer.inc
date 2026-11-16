@@ -13,9 +13,9 @@ void FUN_00146270(void)
     igMetaObject_RunStaticInit(igEventProducer_Register);
 }
 
-void igEventProducer_Register(void) {
+CallbackArray *igEventProducer_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igEventProducer_metaObject,
         igObject_Register,
@@ -34,7 +34,7 @@ void thunk_igEventProducer_GetMetaObject(void) {
     igEventProducer_GetMetaObject();
 }
 
-int FUN_001462f0(void) {
-    return g_igNonRefCountedObjectStack_metaObject[0];
+igMetaObject *FUN_001462f0(void) {
+    return g_igNonRefCountedObjectStack_metaObject;
 }
 

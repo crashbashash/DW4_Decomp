@@ -18,7 +18,7 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_27(A_17ff60 *arg0) {
     int temp_a0_2;
 
     if ((arg0->f16 != 0) && (arg0->vX() != 0)) {
-        p2ReleaseDisplayList(arg0->f128);
+        p2ReleaseDisplayList((p2DisplayList *)arg0->f128);
         arg0->f12 = 0;
     } else {
         if (arg0->f40 != 0) {
@@ -29,12 +29,12 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_27(A_17ff60 *arg0) {
     arg0->f128 = 0;
     temp_a0 = arg0->f132;
     if (temp_a0 != 0) {
-        Memory_FreeBuffer(temp_a0);
+        Memory_FreeBuffer((void *)temp_a0);
         arg0->f132 = 0;
     }
     temp_a0_2 = arg0->f136;
     if (temp_a0_2 != 0) {
-        Memory_FreeBuffer(temp_a0_2);
+        Memory_FreeBuffer((void *)temp_a0_2);
         arg0->f136 = 0;
     }
     Gap__Gfx__igVertexStream__vfunc_27((igVertexStream *)arg0);

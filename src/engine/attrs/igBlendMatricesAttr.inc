@@ -5,7 +5,7 @@ igMetaField *g_igBlendMatricesAttr_matrixCacheCapacityMetaField;
 
 void FUN_00139c10(int arg0) {
     FUN_00139ce0();
-    igMetaObject_CreateInstance(*(int *)0x55F388, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F388, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igBlendMatricesAttr_GetMetaObject(void)
@@ -19,9 +19,9 @@ igMetaObject *igBlendMatricesAttr_GetMetaObject(void)
 int igBlendMatricesAttr_GetVTable(void) {
     struct Obj_139ca0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igBlendMatricesAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00139ce0(void)
@@ -29,9 +29,9 @@ void FUN_00139ce0(void)
     igMetaObject_RunStaticInit(igBlendMatricesAttr_Register);
 }
 
-void igBlendMatricesAttr_Register(void) {
+CallbackArray *igBlendMatricesAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendMatricesAttr_metaObject,
         igVisualAttribute_Register,
@@ -51,9 +51,9 @@ void thunk_igBlendMatricesAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igBlendMatricesAttr_ctorTable[] = {
-    igMemoryRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igBlendMatricesAttr_fieldTable[] = {
     "_matrixCache",

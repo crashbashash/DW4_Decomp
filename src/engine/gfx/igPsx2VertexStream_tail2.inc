@@ -1,4 +1,4 @@
-static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf(o, g_igMemoryRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMemoryRefMetaField_metaObject) != 0) { return o; } return 0; }
 
 void FUN_0017f5a0(void) {
     int var_s0;
@@ -16,9 +16,9 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_15(S0_17f630 *arg0) {
     if (arg0->f10 != 0) {
         temp_a0 = arg0->f80;
         if ((temp_a0 != 0) && ((temp_a1 = arg0->f18, (temp_a1 == 3)) || (temp_a1 == 2)) && (arg0->f84 == 0)) {
-            arg0->f84 = igObject_MallocAligned(arg0, p2GetDisplayListSize(temp_a0, temp_a1), 0x10);
-            p2CopyDisplayListData(arg0->f80, arg0->f84);
-            arg0->f88 = p2CopyDisplayList(arg0->f80);
+            arg0->f84 = (int)igObject_MallocAligned((igObject *)arg0, p2GetDisplayListSize((p2DisplayList *)temp_a0), 0x10);
+            p2CopyDisplayListData((p2DisplayList *)arg0->f80, (char *)arg0->f84);
+            arg0->f88 = (int)p2CopyDisplayList((p2DisplayList *)arg0->f80);
         }
     }
 }
@@ -27,8 +27,8 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_17(S0_17f6c0 *arg0) {
     igObject_UserPostLoad();
     if ((arg0->f84 != 0) && (arg0->f88 != 0)) {
         arg0->f10 = 1;
-        arg0->f80 = p2RebaseDisplayList(arg0->f84, arg0->f88);
-        arg0->fC = p2GetDisplayListData(arg0->f80);
+        arg0->f80 = (int)p2RebaseDisplayList(arg0->f84, (p2DisplayList *)arg0->f88);
+        arg0->fC = p2GetDisplayListData((p2DisplayList *)arg0->f80);
     }
 }
 

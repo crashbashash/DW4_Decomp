@@ -1,3 +1,5 @@
+#include "dw4/sony/libgraph.h"
+
 typedef int quadword __attribute__((mode(TI)));
 
 #define VIF1_FBRST (*(volatile unsigned int *)0x10003c10)

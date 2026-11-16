@@ -4,12 +4,12 @@ igMetaField *g_igTexGenMatrixAttr_unitIDMetaField;
 
 void FUN_00133160(int arg0) {
     FUN_00133290();
-    igMetaObject_CreateInstance(*(int *)0x55EE28, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EE28, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_001331a0(void) {
     if (g_igTexGenMatrixAttr_metaObject == 0) {
-        g_igTexGenMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTexGenMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTexGenMatrixAttr_metaObject;
 }
@@ -28,10 +28,10 @@ done:
 
 int igTexGenMatrixAttr_GetVTable(void) {
     union U_133240 u;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igTexGenMatrixAttr_vtable[0];
-    igMatrix44f_SetIdentity(&u.b[12]);
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igMatrix44f_SetIdentity((float *)&u.b[12]);
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void FUN_00133290(void)
@@ -39,9 +39,9 @@ void FUN_00133290(void)
     igMetaObject_RunStaticInit(igTexGenMatrixAttr_Register);
 }
 
-void igTexGenMatrixAttr_Register(void) {
+CallbackArray *igTexGenMatrixAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTexGenMatrixAttr_metaObject,
         igVisualAttribute_Register,
@@ -61,8 +61,8 @@ void thunk_igTexGenMatrixAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTexGenMatrixAttr_ctorTable[] = {
-    igMatrix44fMetaField_CreateInstance,
-    igIntMetaField_Create,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTexGenMatrixAttr_fieldTable[] = {
     "m",
@@ -108,7 +108,7 @@ void igTexGenMatrixAttr_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
     FUN_0018c640(temp_s1, &o1);
     fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     fld->f48 = (int)FUN_001404f0;

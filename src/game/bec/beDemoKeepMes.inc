@@ -9,7 +9,7 @@ igMetaField *g_beDemoKeepMes_mesParamMetaField;
 
 beDemoKeepMes *beDemoKeepMes_CreateInstance(int allocator) {
     beDemoKeepMes_EnsureRegistered();
-    return (beDemoKeepMes *)igMetaObject_CreateInstance(*(int *)0x5897F8, allocator);
+    return (beDemoKeepMes *)igMetaObject_CreateInstance(g_beDemoKeepMes_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beDemoKeepMes_GetMetaObject(void) {
@@ -30,7 +30,7 @@ int beDemoKeepMes_GetVTable(void) {
     obj._infoName = 0;
     obj._message = 0;
     obj._mesParam = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDemoKeepMes_vtable[0];
     igStringRef_Destruct(&obj._mesParam, -1);
     igStringRef_Destruct(&obj._message, -1);
@@ -44,7 +44,7 @@ void beDemoKeepMes_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beDemoKeepMes_Register);
 }
 
-void *beDemoKeepMes_Register(void) {
+CallbackArray *beDemoKeepMes_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -105,9 +105,9 @@ static int g_beDemoKeepMes_fieldOffsets[] = {
 
 void beDemoKeepMes_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDemoKeepMes_metaObject;
+    meta = g_beDemoKeepMes_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDemoKeepMes_ctorTable, 7);
     igMetaObject_NameFields(meta, g_beDemoKeepMes_fieldTable, g_beDemoKeepMes_fieldHandles, g_beDemoKeepMes_fieldOffsets, base);

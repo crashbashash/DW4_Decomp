@@ -172,7 +172,7 @@ void igStringMetaField_CreateDefaultDescriptor(void) {
             o = g_igStringMetaField_descriptor;
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
             *(short *)((char *)g_igStringMetaField_descriptor + 18) = *(int *)((char *)((void *)igMetaField_GetMetaFieldList()) + 12) - 1;
             igMetaField_FinalizeDescriptor((igMetaField *)g_igStringMetaField_descriptor);

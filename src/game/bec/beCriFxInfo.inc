@@ -28,7 +28,7 @@ int beCriFxInfo_GetVTable(void) {
     *targetSlot = 0;
     xbFxParamSlot = &obj._xbFxParam;
     *xbFxParamSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCriFxInfo_vtable[0];
     igSmartPointer_beCriFxXbData_Destruct((igSmartPointer<igObject> *)xbFxParamSlot, -1);
     igStringRef_Destruct(targetSlot, -1);
@@ -56,7 +56,7 @@ void beCriFxInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCriFxInfo_callbackList[] = { beCriFxXbData_EnsureRegistered, 0 };
 
-void *beCriFxInfo_Register(void) {
+CallbackArray *beCriFxInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -106,9 +106,9 @@ static int g_beCriFxInfo_fieldOffsets[] = {
 void beCriFxInfo_InitFields(void) {
     int base;
     void *xbFxParam;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCriFxInfo_metaObject;
+    meta = g_beCriFxInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCriFxInfo_ctorTable, 4);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), 0);

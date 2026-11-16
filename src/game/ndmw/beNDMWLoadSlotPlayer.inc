@@ -5,12 +5,12 @@ igMetaField *g_beNDMWLoadSlotPlayer_accessPlListMetaField;
 
 beNDMWLoadSlotPlayer *beNDMWLoadSlotPlayer_Create(int allocator) {
     beNDMWLoadSlotPlayer_EnsureRegistered();
-    return (beNDMWLoadSlotPlayer *)igMetaObject_CreateInstance(g_beNDMWLoadSlotPlayer_metaObject, allocator);
+    return (beNDMWLoadSlotPlayer *)igMetaObject_CreateInstance(g_beNDMWLoadSlotPlayer_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWLoadSlotPlayer_GetOrCreateMetaObject(void) {
     if (g_beNDMWLoadSlotPlayer_metaObject == 0) {
-        g_beNDMWLoadSlotPlayer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWLoadSlotPlayer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWLoadSlotPlayer_metaObject;
 }
@@ -31,7 +31,7 @@ int beNDMWLoadSlotPlayer_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayer_vtable[0];
     obj._saveDataList = 0;
     obj._accessPlList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayer_vtable[0];
     if (&obj._accessPlList != 0) {
         igRelease((igObject *)obj._accessPlList);
@@ -49,7 +49,7 @@ void beNDMWLoadSlotPlayer_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLoadSlotPlayer_callbackList[] = { beNDMWDegiDataList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWLoadSlotPlayer_Register(void) {
+CallbackArray *beNDMWLoadSlotPlayer_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -3,7 +3,7 @@ igMetaField *g_beNDMWShopCtrlDeviceSell_decideListMetaField;
 
 beNDMWShopCtrlDeviceSell *beNDMWShopCtrlDeviceSell_Create(int allocator) {
     beNDMWShopCtrlDeviceSell_EnsureRegistered();
-    return (beNDMWShopCtrlDeviceSell *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDeviceSell_metaObject, allocator);
+    return (beNDMWShopCtrlDeviceSell *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDeviceSell_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopCtrlDeviceSell_GetMetaObject(void) {
@@ -28,7 +28,7 @@ int beNDMWShopCtrlDeviceSell_GetVTable(void) {
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDeviceSell_vtable[0];
     obj._decideList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDeviceSell_vtable[0];
     igSmartPointer_igBoolList_Destruct(&obj._decideList, -1);
     beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
@@ -42,7 +42,7 @@ void beNDMWShopCtrlDeviceSell_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlDeviceSell_callbackList[] = { igBoolList_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlDeviceSell_Register(void) {
+CallbackArray *beNDMWShopCtrlDeviceSell_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,7 +86,7 @@ void beNDMWShopCtrlDeviceSell_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWShopCtrlDeviceSell_ctorTable, 1);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)decideList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)decideList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopCtrlDeviceSell_fieldTable, g_beNDMWShopCtrlDeviceSell_fieldHandles, g_beNDMWShopCtrlDeviceSell_fieldOffsets, base);
 }

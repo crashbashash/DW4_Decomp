@@ -20,20 +20,20 @@ int igAnimationTrack_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_igAnimationTrack_vtable[0];
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igAnimationTrack_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }
@@ -45,7 +45,7 @@ int igAnimationTrack_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -59,9 +59,9 @@ void igAnimationTrack_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAnimationTrack_callbackList[] = { FUN_00194e70, 0 };
 
-void igAnimationTrack_Register(void) {
+CallbackArray *igAnimationTrack_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationTrack_metaObject,
         igNamedObject_Register,
@@ -81,9 +81,9 @@ void thunk_igAnimationTrack_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAnimationTrack_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igVec4fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
 };
 static const char *g_igAnimationTrack_fieldTable[] = {
     "_source",
@@ -107,9 +107,9 @@ void igAnimationTrack_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igAnimationTrack_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationTrack_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00194dd0();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationTrack_fieldTable, g_igAnimationTrack_fieldHandles, g_igAnimationTrack_fieldOffsets, temp_s2);
 }

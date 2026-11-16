@@ -28,7 +28,7 @@ void beNDMWStatusCtrlBaseEquip_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWStatusCtrlBaseEquip_callbackList[] = { beDataObjList_EnsureRegistered, beNDMWItemBaseList_EnsureRegistered, 0 };
 
-void *beNDMWStatusCtrlBaseEquip_Register(void) {
+CallbackArray *beNDMWStatusCtrlBaseEquip_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -115,7 +115,7 @@ void beNDMWStatusCtrlBaseEquip_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlBaseEquip_ctorTable, 0xA);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 1);
     playerList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)playerList)->_metaObject = beDataObjList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerList)->_metaObject = (int)beDataObjList_GetOrCreateMetaObject();
     powerSocket = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)powerSocket)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     mainSlot = (void *)(igMetaObject_GetFieldAt(meta, base + 5));

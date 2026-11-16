@@ -1,4 +1,4 @@
-void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
+void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0, int flags) {
     void *sp5C;
     int var_a0;
     int temp_s2;
@@ -9,10 +9,10 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
     int sp54;
     int var_v0;
 
-    Gap__Core__igObject__resetFields();
-    temp_s2 = *(int *)((char *)(g_objectSystem[0]) + 56);
-    var_v0 = igObject_GetAllocator(arg0);
-    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
+    temp_s2 = *(int *)((char *)g_objectSystem + 56);
+    var_v0 = (int)igObject_GetAllocator((igObject *)arg0);
+    var_v0 = (int)(g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     sp5C = (void *)(igStringObj_Create(var_v0));
     temp_s0 = igRegistry_GetNumValuesInSection(temp_s2, 7);
     var_s1 = 0;
@@ -20,12 +20,12 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
         if (igRegistry_GetKeyName(temp_s2, 7, var_s1, &sp5C) != 0) {
             sp58 = 0;
             var_a2 = *(int *)((char *)(sp5C) + 8);
-            var_a2 = (var_a2 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a2;
-            if (igRegistry_GetValueInt(temp_s2, 7, var_a2, &sp58, 0, 0) != 0) {
+            var_a2 = (var_a2 == 0) ? ((int)g_stringObjEmptyText) : var_a2;
+            if (igRegistry_GetValueInt((igRegistry *)temp_s2, 7, (char *)var_a2, &sp58, 0, 0)) {
                 sp54 = 0;
                 var_a0 = *(int *)((char *)(sp5C) + 8);
-                var_a0 = (var_a0 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a0;
-                if ((sscanf(var_a0, "enbayaContextPool%d", &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
+                var_a0 = (var_a0 == 0) ? ((int)g_stringObjEmptyText) : var_a0;
+                if ((sscanf((char *)var_a0, "enbayaContextPool%d", &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
                     FUN_001c1a80((T_1c1a80 *)arg0, sp54, sp58);
                 }
             }
@@ -36,7 +36,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
     if (var_v0 != 0) {
         *(int *)((char *)(var_v0) + 4) = (int)((int) (*(int *)((char *)(var_v0) + 4) - 1));
         if (((unsigned long long) ((long long) *(int *)((char *)(var_v0) + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)var_v0);
+            igObject_Destroy((igObject *)var_v0);
         }
     }
 }
@@ -60,11 +60,11 @@ void Gap__Sg__igEnbayaContextPool__vfunc_04(Obj_1c1450 *arg0) {
         m = inner->count;
         for (j = 0; j < m; j++) {
             x = (void *)inner->data[j];
-            al = ((Alloc *)igObject_GetAllocator(arg0));
+            al = ((Alloc *)igObject_GetAllocator((igObject *)arg0));
             al->vX(x);
         }
     }
-    Gap__Core__igObject__destructFields(arg0);
+    Gap__Core__igObject__destructFields((igObject *)arg0);
 }
 
 int FUN_001c1560(T_1c1560 *arg0, int arg1) {
@@ -111,8 +111,8 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
     n0 = l0->_count;
     if (findIndex(l0, n0, boneCount, i) == -1) {
         PoolListHolder list;
-        list.p = igPointerList_Create(igObject_GetAllocator(o));
-        ObjectList_AppendRetained(o->_poolList, list.p);
+        list.p = igPointerList_Create((int)igObject_GetAllocator((igObject *)o));
+        ObjectList_AppendRetained((igObjectList *)o->_poolList, (igObject *)list.p);
         l1 = o->_boneCountList;
         n1 = l1->_count;
         if (n1 < l1->_capacity) {
@@ -133,7 +133,7 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
             if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)held);
+                igObject_Destroy((igObject *)held);
             }
         }
     }

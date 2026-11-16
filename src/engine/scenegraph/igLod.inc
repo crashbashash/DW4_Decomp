@@ -20,7 +20,7 @@ int igLod_GetVTable(void) {
     int *p16;
     int r;
     int *p17;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.f[1] = 0;
     o.f[2] = 0;
     o.f[3] = 0;
@@ -31,12 +31,12 @@ int igLod_GetVTable(void) {
     p17 = &o.f[8];
     *p17 = 0;
     o.f[15] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igLod_vtable[0];
     igSmartPointer_igFloatList_Destruct(&o.f[15], -1);
     igSmartPointer_igNode_Destruct((ObjectRefWord *)p17, -1);
     igSmartPointer_igFloatList_Destruct(p16, -1);
-    igGroup_Destroy((struct T_195a90 *)&o, 0);
+    igGroup_Destroy((igGroup *)&o, 0);
     return r;
 }
 
@@ -47,9 +47,9 @@ void igLod_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igLod_callbackList[] = { igFloatList_EnsureRegistered, igNode_EnsureRegistered, 0 };
 
-void igLod_Register(void) {
+CallbackArray *igLod_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLod_metaObject,
         igGroup_Register,
@@ -69,13 +69,13 @@ void thunk_igLod_GetMetaObject(void) {
 }
 
 static FieldFactory g_igLod_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igLod_fieldTable[] = {
     "_rangeList",
@@ -118,32 +118,32 @@ void igLod_InitFields(void) {
     void *temp_v0_3;
 
     temp_s1 = (void *)g_igLod_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igLod_ctorTable, 7);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     ((igMetaField *)temp_s2)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2)->_shallowCopyMethod = 2;
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
+    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)));
+    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
     igIntMetaField_SetDefault(temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
-    temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
+    temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     igFloatMetaField_SetDefault(temp_v0_2, 0.0f);
     ((igFloatMetaField *)temp_v0_2)->_persistent = 0;
-    temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
+    temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)));
     igFloatMetaField_SetDefault(temp_v0_3, 0.0f);
     ((igFloatMetaField *)temp_v0_3)->_persistent = 0;
-    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)));
+    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
     sp40[0] = 0;
     sp40[1] = 0;
     sp40[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0, sp40);
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6)));
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igLod_fieldTable, g_igLod_fieldHandles, g_igLod_fieldOffsets, temp_s0);
 }
 

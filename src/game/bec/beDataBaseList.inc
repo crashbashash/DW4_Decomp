@@ -13,7 +13,7 @@ int beDataBaseList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beDataBaseList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beDataBaseList_EnsureRegistered(void)
@@ -23,7 +23,7 @@ void beDataBaseList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDataBaseList_callbackList[] = { beDataBase_EnsureRegistered, 0 };
 
-void *beDataBaseList_Register(void) {
+CallbackArray *beDataBaseList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

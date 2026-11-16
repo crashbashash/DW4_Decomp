@@ -322,15 +322,15 @@ void FUN_0016fdb0(unsigned char *dst, unsigned char *src, int count) {
     int i; for (i = 0; i < count; i += 2) { *dst++ = (src[0] & 0xF0) | ((src[1] & 0xF0u) >> 4); src += 2; }
 }
 
-void FUN_0016fe00(int arg0, int arg1) {
-    if (arg0 != arg1) {
-        memmove();
+void FUN_0016fe00(void *dst, const void *src, unsigned int size) {
+    if (dst != src) {
+        memmove(dst, src, size);
     }
 }
 
-void FUN_0016fe20(int arg0, int arg1) {
-    if (arg0 != arg1) {
-        memmove();
+void FUN_0016fe20(void *dst, const void *src, unsigned int size) {
+    if (dst != src) {
+        memmove(dst, src, size);
     }
 }
 

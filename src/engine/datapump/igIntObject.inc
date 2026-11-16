@@ -11,9 +11,9 @@ igMetaObject *igIntObject_GetMetaObject(void)
 
 int igIntObject_GetVTable(void) {
     struct Obj_1e4e80 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igIntObject_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_001e4ec0(void)
@@ -21,9 +21,9 @@ void FUN_001e4ec0(void)
     igMetaObject_RunStaticInit(igIntObject_Register);
 }
 
-void igIntObject_Register(void) {
+CallbackArray *igIntObject_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igIntObject_metaObject,
         igObject_Register,
@@ -60,8 +60,8 @@ void igIntObject_InitFields(void) {
     igMetaObject *meta;
 
     meta = g_igIntObject_metaObject;
-    firstField = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igIntObject_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_igIntObject_fieldTable, g_igIntObject_fieldHandles, g_igIntObject_fieldOffsets, firstField);
+    firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igIntObject_ctorTable, 1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igIntObject_fieldTable, g_igIntObject_fieldHandles, g_igIntObject_fieldOffsets, firstField);
 }
 

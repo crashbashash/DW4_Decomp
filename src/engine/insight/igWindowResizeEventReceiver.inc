@@ -3,7 +3,7 @@ igMetaField *g_igWindowResizeEventReceiver_insightCoreMetaField;
 
 igMetaObject *FUN_00233080(void) {
     if (g_igWindowResizeEventReceiver_metaObject == 0) {
-        g_igWindowResizeEventReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igWindowResizeEventReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igWindowResizeEventReceiver_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igWindowResizeEventReceiver_GetMetaObject(void)
 
 int igWindowResizeEventReceiver_GetVTable(void) {
     struct Obj_233120 o;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igWindowResizeEventReceiver_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_00233160(void)
@@ -30,9 +30,9 @@ void FUN_00233160(void)
 
 static igMetaObjectCallback g_igWindowResizeEventReceiver_callbackList[] = { igInsightCore_EnsureRegistered, 0 };
 
-void igWindowResizeEventReceiver_Register(void) {
+CallbackArray *igWindowResizeEventReceiver_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igWindowResizeEventReceiver_metaObject,
         igEventReceiver_Register,
@@ -51,8 +51,8 @@ void thunk_igWindowResizeEventReceiver_GetMetaObject(void) {
     igWindowResizeEventReceiver_GetMetaObject();
 }
 
-int FUN_00233200(void) {
-    return g_igEventReceiver_metaObject[0];
+igMetaObject *FUN_00233200(void) {
+    return g_igEventReceiver_metaObject;
 }
 
 static FieldFactory g_igWindowResizeEventReceiver_ctorTable[] = {
@@ -74,11 +74,11 @@ void igWindowResizeEventReceiver_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igWindowResizeEventReceiver_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igWindowResizeEventReceiver_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igWindowResizeEventReceiver_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_igWindowResizeEventReceiver_fieldTable, g_igWindowResizeEventReceiver_fieldHandles, g_igWindowResizeEventReceiver_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igWindowResizeEventReceiver_fieldTable, g_igWindowResizeEventReceiver_fieldHandles, g_igWindowResizeEventReceiver_fieldOffsets, temp_s2);
 }
 

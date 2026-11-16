@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWStatusMainSlot_metaObject;
 
 beNDMWStatusMainSlot *beNDMWStatusMainSlot_Create(int allocator) {
     beNDMWStatusMainSlot_EnsureRegistered();
-    return (beNDMWStatusMainSlot *)igMetaObject_CreateInstance(g_beNDMWStatusMainSlot_metaObject, allocator);
+    return (beNDMWStatusMainSlot *)igMetaObject_CreateInstance(g_beNDMWStatusMainSlot_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWStatusMainSlot_GetMetaObject(void) {
@@ -19,7 +19,7 @@ int beNDMWStatusMainSlot_GetVTable(void) {
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
     *(int **)&obj._vtable = &g_beNDMWStatusMainSlot_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusMainSlot_vtable[0];
     beNDMWStatusCtrlBaseEquip_Destroy((beNDMWStatusCtrlBaseEquip *)&obj, 0);
     return vtable;
@@ -30,7 +30,7 @@ void beNDMWStatusMainSlot_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusMainSlot_Register);
 }
 
-void *beNDMWStatusMainSlot_Register(void) {
+CallbackArray *beNDMWStatusMainSlot_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

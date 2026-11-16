@@ -27,7 +27,7 @@ int beGeneraterPlayerData_GetVTable(void) {
     *itemDataListSlot = 0;
     itemLastDataListSlot = (igObject **)&obj._itemLastDataList;
     *itemLastDataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beGeneraterPlayerData_vtable[0];
     igObjectRef_Release(itemLastDataListSlot);
     igObjectRef_Release(itemDataListSlot);
@@ -41,7 +41,7 @@ void beGeneraterPlayerData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beGeneraterPlayerData_callbackList[] = { beGeneraterItemDataList_EnsureRegistered, 0 };
 
-void *beGeneraterPlayerData_Register(void) {
+CallbackArray *beGeneraterPlayerData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -92,9 +92,9 @@ void beGeneraterPlayerData_InitFields(void) {
     int base;
     void *itemLastDataList;
     void *itemDataList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beGeneraterPlayerData_metaObject;
+    meta = g_beGeneraterPlayerData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beGeneraterPlayerData_ctorTable, 4);
     itemDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));

@@ -2,6 +2,7 @@
 #define DW4_BEBASEINFORAM_H
 
 struct beBaseInfoRam;
+struct CallbackArray;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -14,7 +15,7 @@ struct igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 float beBaseInfoRam_GetTimerFrameDelta(struct beBaseInfoRam *self, const char *name);
 int beBaseInfoRam_HasTimer(struct beBaseInfoRam *self, const char *name);
 int beBaseInfoRam_IsTimerExpired(struct beBaseInfoRam *self, const char *name);
-void *beBaseInfoRam_Register(void);
+struct CallbackArray *beBaseInfoRam_Register(void);
 void beBaseInfoRam_RemoveAllTimers(struct beBaseInfoRam *self);
 void beBaseInfoRam_RemoveTimer(struct beBaseInfoRam *self, const char *name);
 void beBaseInfoRam_SetAllTimerScales(struct beBaseInfoRam *self, float scale);

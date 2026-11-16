@@ -2,7 +2,7 @@ igMetaObject *g_igGeometryList_metaObject;
 
 igMetaObject *igGeometryList_GetOrCreateMetaObject(void) {
     if (g_igGeometryList_metaObject == 0) {
-        g_igGeometryList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGeometryList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGeometryList_metaObject;
 }
@@ -17,9 +17,9 @@ igMetaObject *igGeometryList_GetMetaObject(void)
 
 int igGeometryList_GetVTable(void) {
     union U u;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igGeometryList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void igGeometryList_EnsureRegistered(void)
@@ -29,9 +29,9 @@ void igGeometryList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igGeometryList_callbackList[] = { igGeometry_EnsureRegistered, 0 };
 
-void igGeometryList_Register(void) {
+CallbackArray *igGeometryList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometryList_metaObject,
         igObjectList_Register,

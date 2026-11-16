@@ -38,7 +38,7 @@ int igDefaultAspectElement_GetVTable(void) {
     void **q4c;
     void **q48;
     void **q50;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q48 = &u.p[2];
     q4c = &u.p[3];
     q50 = &u.p[4];
@@ -46,7 +46,7 @@ int igDefaultAspectElement_GetVTable(void) {
     *q48 = 0;
     *q4c = 0;
     *q50 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.w[0] = (int)(&g_igDefaultAspectElement_vtable[0]);
     if (q50 != 0) {
         a = (struct Rc *)*q50;
@@ -85,9 +85,9 @@ void igDefaultAspectElement_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igDefaultAspectElement_callbackList[] = { igGeometryElement_EnsureRegistered, igColorChanger_RunStaticInit, igTransform_EnsureRegistered, 0 };
 
-void igDefaultAspectElement_Register(void) {
+CallbackArray *igDefaultAspectElement_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDefaultAspectElement_metaObject,
         igObject_Register,
@@ -148,18 +148,18 @@ void igDefaultAspectElement_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igDefaultAspectElement_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igDefaultAspectElement_ctorTable, 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igDefaultAspectElement_ctorTable, 6);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_004505b0();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_004521d0();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    *(int *)((char *)(temp_s1_3) + 56) = igTransform_GetOrCreateMetaObject();
+    temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
+    *(int *)((char *)(temp_s1_3) + 56) = (int)igTransform_GetOrCreateMetaObject();
     *(unsigned char *)((char *)(temp_s1_3) + 52) = 1;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
+    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(int *)((char *)(temp_v0) + 52) = (int)(FUN_00451ac0);
-    igMetaObject_NameFields(temp_s0, g_igDefaultAspectElement_fieldTable, g_igDefaultAspectElement_fieldHandles, g_igDefaultAspectElement_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igDefaultAspectElement_fieldTable, g_igDefaultAspectElement_fieldHandles, g_igDefaultAspectElement_fieldOffsets, temp_s2);
 }
 

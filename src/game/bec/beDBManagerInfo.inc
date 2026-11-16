@@ -20,7 +20,7 @@ int beDBManagerInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beDBManagerInfo_vtable[0];
     obj._dataBase = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDBManagerInfo_vtable[0];
     igSmartPointer_beDataBase_Destruct((igSmartPointer<igObject> *)&obj._dataBase, (long long)(-1));
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -47,7 +47,7 @@ void beDBManagerInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDBManagerInfo_callbackList[] = { beDataBase_EnsureRegistered, 0 };
 
-void *beDBManagerInfo_Register(void) {
+CallbackArray *beDBManagerInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -85,9 +85,9 @@ static int g_beDBManagerInfo_fieldOffsets[] = {
 void beDBManagerInfo_InitFields(void) {
     int base;
     void *dataBase;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDBManagerInfo_metaObject;
+    meta = g_beDBManagerInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDBManagerInfo_ctorTable, 1);
     dataBase = (void *)(igMetaObject_GetFieldAt(meta, base));

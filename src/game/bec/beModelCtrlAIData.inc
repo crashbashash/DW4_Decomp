@@ -21,7 +21,7 @@ int beModelCtrlAIData_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlAIData_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -32,7 +32,7 @@ void beModelCtrlAIData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlAIData_Register);
 }
 
-void *beModelCtrlAIData_Register(void) {
+CallbackArray *beModelCtrlAIData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -77,9 +77,9 @@ static int g_beModelCtrlAIData_fieldOffsets[] = {
 
 void beModelCtrlAIData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlAIData_metaObject;
+    meta = g_beModelCtrlAIData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlAIData_ctorTable, 3);
     igMetaObject_NameFields(meta, g_beModelCtrlAIData_fieldTable, g_beModelCtrlAIData_fieldHandles, g_beModelCtrlAIData_fieldOffsets, base);

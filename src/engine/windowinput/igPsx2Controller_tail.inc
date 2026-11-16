@@ -42,7 +42,7 @@ igMetaField *g_igPsx2Controller_userResetAnalogOnlyMetaField;
 
 int FUN_00147090(int arg0) {
     FUN_001471b0();
-    return igMetaObject_CreateInstance((int)g_igPsx2Controller_metaObject, arg0);
+    return (int)(igMetaObject_CreateInstance(g_igPsx2Controller_metaObject, (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igPsx2Controller_GetMetaObject(void)
@@ -59,11 +59,11 @@ int igPsx2Controller_GetVTable(void) {
     int temp_s0;
     void *temp_a0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q8 = &u.p[8];
     u.w[0] = (int)(&g_igPsx2Controller_vtable[0]);
     *q8 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.w[0] = (int)(&g_igPsx2Controller_vtable[0]);
     if (q8 != 0) {
         temp_a0 = *q8;
@@ -84,9 +84,9 @@ void FUN_001471b0(void)
 
 static igMetaObjectCallback g_igPsx2Controller_callbackList[] = { FUN_00145de0, 0 };
 
-void igPsx2Controller_Register(void) {
+CallbackArray *igPsx2Controller_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2Controller_metaObject,
         igController_Register,
@@ -218,28 +218,28 @@ void igPsx2Controller_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igPsx2Controller_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igPsx2Controller_ctorTable, 0x18);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 0x10);
-    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 2);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPsx2Controller_ctorTable, 0x18);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3), 0x10);
+    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4), 2);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
     *(int *)((char *)(temp_s2) + 56) = (int)FUN_00145d40();
-    { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6); q->f52 = 2; }
-    { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7); q->f52 = 2; }
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
+    { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6); q->f52 = 2; }
+    { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7); q->f52 = 2; }
+    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
     igEnumMetaField_SetDefaultValue(temp_v0, 1);
     *(int *)((char *)(temp_v0) + 52) = (int)(&igMetaEnum_GetEmpty);
-    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC), 0xFFFF);
-    { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE); q->f52 = 2; }
-    { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF); q->f52 = 2; }
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12), 1);
-    temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14));
+    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC), 0xFFFF);
+    { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE); q->f52 = 2; }
+    { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF); q->f52 = 2; }
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12), 1);
+    temp_v0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14));
     igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
     *(int *)((char *)(temp_v0_2) + 52) = (int)(&FUN_00147030);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15), 1);
-    igMetaObject_NameFields(temp_s0, g_igPsx2Controller_fieldTable, g_igPsx2Controller_fieldHandles, g_igPsx2Controller_fieldOffsets, temp_s1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15), 1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2Controller_fieldTable, g_igPsx2Controller_fieldHandles, g_igPsx2Controller_fieldOffsets, temp_s1);
 }
 
 int FUN_00147430(void *arg0, int arg1) {

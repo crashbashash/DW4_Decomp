@@ -1,9 +1,28 @@
 #include "dw4/reflected.h"
+#include "dw4/igVec3f.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igVertexArrayLock.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/beFont.h"
 #include "dw4/beUnicodeObj.h"
+#include "dw4/StringPool.h"
+#include "dw4/beBaseInfoManager.h"
+#include "dw4/beFontGeomAttrPair.h"
+#include "dw4/beFontImage.h"
+#include "dw4/beFontInfo.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igColorAttr.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igGeometryAttr.h"
+#include "dw4/igGroup.h"
+#include "dw4/igMemory.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/igPlanarShadowShader.h"
+#include "dw4/igStringObj.h"
+#include "dw4/igSwitch.h"
+#include "dw4/igVertexArray.h"
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
 
@@ -66,12 +85,8 @@ public:
 };
 
 struct igColor4f { float r; float g; float b; float a; };
-/* Alchemy's three-float vector, with the members beFont_AlignLines uses. */
-struct igVec3f {
-    float x, y, z;
-    igVec3f(float x_, float y_, float z_) { x = x_; y = y_; z = z_; }
-    igVec3f &operator+=(const igVec3f &other) { x += other.x; y += other.y; z += other.z; return *this; }
-};
+/* Adds `shift` to `vector` in place (Alchemy's igVec3f::operator+=). */
+static inline igVec3f &addVec3(igVec3f &vector, const igVec3f &shift) { vector.x += shift.x; vector.y += shift.y; vector.z += shift.z; return vector; }
 
 /* One row of the Shift-JIS to UTF-16 table; a row of 0xffff ends it. */
 struct SjisUnicodePair { unsigned short unicode; unsigned short sjis; };
@@ -83,10 +98,10 @@ struct FloatListView { char header[8]; int count; int capacity; float *data; int
 union FloatBits { float f; struct { unsigned char b0, b1, b2; unsigned char high : 7; unsigned char sign : 1; } bits; };
 
 extern "C" {
-void beFont_Start(void);
+void beFont_Start(beFont *self);
 void beFont_Stop(beFont *self);
 void beFont_OnAddRam(beFont *self, int receiver);
-int beFont_GetInfoMeta(void);
+igMetaObject *beFont_GetInfoMeta(void);
 void beFont_UpdateRam(void);
 int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work);
 int beFont_FindFontIndex(beFont *self, int name);
@@ -102,55 +117,12 @@ igMetaObject *beFont_GetMeta(void);
 void beUnicodeObj_userDestruct(beUnicodeObj *self);
 igMetaObject *beUnicodeObj_GetMeta(void);
 
-void beBaseInfoManager_Start(void);
-int beBaseInfoManager_Stop(beFont *);
-int Gap__Core__igObject__userDestruct(beUnicodeObj *);
-void *igObject_GetAllocator(...);
-void *Memory_GetAllocatorBySelector(...);
-int igObject_IsKindOf(void *, igMetaObject *);
-int List_Reserve(int, int, int);
-void List_Resize(void *, int, int);
-void List_RemoveWordAt(void *, int);
 void ObjectList_AppendRetainedList(void *, void *);
-void ObjectList_AppendRetained(void *, void *);
-int StringPool_Allocate(int);
-int StringPool_Construct(int);
-int StringPool_Intern(...);
-void StringChunk_ReleaseHeader(...);
 int igStringObj_Clear(...);
-int igStringObj_Insert(igStringObj *, char *, int, int);
-void igStringObj_Set(void *, char *);
-int beMessenger_RegisterReceiver(int, int, char *, int, int);
-int beMessenger_ResolveEnumValue(int, igMetaEnum *, int);
-void beMessenger_SelectGroup(int, char *);
-void beMessenger_AppendString(int, char *);
-void beMessenger_DispatchSelected(int, char *);
-int beMessenger_GetBoolCount(int);
-int beMessenger_GetStringCount(int);
-int beMessenger_GetIntCount(int);
-int beMessenger_GetObjectCount(int);
-int beMessenger_GetInt(int, int);
-void *beMessenger_GetObject(int, int);
-int beMessenger_GetString(int, int);
-void beMessenger_GetVec3(void *, int, int);
-beFontGeomAttrPair *beFontGeomAttrPair_Create(void *);
-igGeometryAttr *igGeometryAttr_Create(void *);
-igVertexArrayView *igVertexArray_Create(...);
 int igVertexArrayLock_Init(igVertexArrayLock *);
-int beFontImage_CountTriangles(int, int);
-int beFontImage_CountTrianglesWide(int, int);
-void igSwitch_EnableChild(void *, int);
-void igSwitch_DisableChild(void *, int);
 void Color4f_Unpack(void *, int, int);
 void igMatrix44f_SetTranslation(void *, void *);
-unsigned int Memory_GetBufferSize(...);
-int Memory_FreeBufferWithAllocator(int, int);
-int Memory_AllocateAlignedWithAllocator(unsigned int, int, int);
-int memset(int, int, unsigned int);
-int strlen(const char *);
-int strcmp(...);
 
-extern const char *g_stringObjEmptyText[4];
 SjisUnicodeTable g_sjisToUnicodeTable = {{
     {0x0020, 0x0020}, {0x3000, 0x8140}, {0x0030, 0x0030}, {0x0031, 0x0031},
     {0x0032, 0x0032}, {0x0033, 0x0033}, {0x0034, 0x0034}, {0x0035, 0x0035},
@@ -261,20 +233,12 @@ SjisUnicodeTable g_sjisToUnicodeTable = {{
     {0xffff, 0xffff},
 }};
 extern int emptyString[4];
-extern int g_stringPool[4];
-extern int kIGMemoryPoolHandleUser1[4];
-extern unsigned char g_useOwnerAllocator;
-extern int g_beFontInfo_metaObject[4];
-extern igMetaObject *g_beFontImage_metaObject[4];
-extern igMetaObject *g_igColorAttr_metaObject[4];
-extern igMetaObject *g_igGroup_metaObject[4];
-extern igMetaObject *g_igAttrSet_metaObject[4];
 }
 
 static inline igNodeView *nodeAt(igObjectList *list, int index) { return ((igNodeView **)list->_data)[index]; }
 static inline int countOf(igObjectList *list) { if (list != 0) return list->_count; return 0; }
 static inline igNodeView *asAttrSet(igNodeView *node) {
-    if (node != 0 && igObject_IsKindOf(node, g_igAttrSet_metaObject[0]) != 0) return node; else return 0;
+    if (node != 0 && igObject_IsKindOf(node, g_igAttrSet_metaObject) != 0) return node; else return 0;
 }
 
 /* Marks the load as failed, so the font ignores every later message. */
@@ -287,14 +251,14 @@ static inline void abandonLoad(beBaseInfoRam *ram) {
 
 /* The interned copy of `text` in the global string pool, creating the pool on first use. */
 static inline int internString(int text) {
-    if (g_stringPool[0] == 0) {
-        int pool = StringPool_Allocate(0x10);
+    if (g_stringPool == 0) {
+        int pool = (int)StringPool_Allocate(0x10);
         if (pool != 0) {
-            pool = StringPool_Construct(pool);
+            pool = (int)(StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    return StringPool_Intern(g_stringPool[0], text);
+    return (int)(StringPool_Intern(g_stringPool, (const char *)text));
 }
 
 /* Drops one reference to an interned string (its count is the word before the text). */
@@ -304,7 +268,7 @@ static inline void releaseString(int text) {
         int refs = *(int *)(text - 4) - 1;
         *(int *)(text - 4) = refs;
         if (refs == 0) {
-            StringChunk_ReleaseHeader(*header, header);
+            StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
         }
     }
 }
@@ -320,11 +284,10 @@ static inline void releaseString(int text) {
     pair->field = interned_; \
 }
 
-/* Tail call to the base-class slot 23 (igObject::vfunc_23). The receiver stays in the argument
- * register, which is why the declaration takes no parameters. */
-void beFont_Start(void)
+/* Tail call to the base-class slot 23 (igObject::vfunc_23). */
+void beFont_Start(beFont *self)
 {
-    beBaseInfoManager_Start();
+    beBaseInfoManager_Start((beBaseInfoManager *)self);
 }
 
 void beFont_Stop(beFont *self) {
@@ -346,14 +309,14 @@ void beFont_Stop(beFont *self) {
         ((igObject **)fonts->_data)[j] = 0;
     }
     fonts->_count = 0;
-    beBaseInfoManager_Stop(self);
+    beBaseInfoManager_Stop((beBaseInfoManager *)self);
 }
 
 /* Registers `receiver` with the font's messenger under the "TEXTCTL" group string, with a null
  * text argument and -1 as the last argument. */
 void beFont_OnAddRam(beFont *self, int receiver)
 {
-    beMessenger_RegisterReceiver(self->_messenger, receiver, "TEXTCTL", 0, -1);
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)receiver, "TEXTCTL", 0, -1);
 }
 
 static inline int count(const beFontGeomAttrPairList *list) { return list->_count; }
@@ -383,15 +346,15 @@ void beFont_Prepare(beFont *self) {
         }
         pairs->_count = 0;
         if (!(0 < ((beFontGeomAttrPairList *)self->_gaPairList)->_count)) {
-            List_Reserve(self->_gaPairList, 0, 4);
+            List_Reserve((igDataList *)self->_gaPairList, 0, 4);
         }
     }
     igStringObj_Clear(self->_convertData);
 }
 
-int beFont_GetInfoMeta(void)
+igMetaObject *beFont_GetInfoMeta(void)
 {
-    return g_beFontInfo_metaObject[0];
+    return g_beFontInfo_metaObject;
 }
 
 void beFont_UpdateRam(void)
@@ -426,25 +389,25 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
 
     if (((beFontImageList *)self->_fonts)->_count <= 0) { result = 1; goto end; }
     info = (beFontInfo *)ram->_parentInfo;
-    message = beMessenger_ResolveEnumValue(self->_messenger, beFont_GetMessageEnum(), work->_message);
+    message = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beFont_GetMessageEnum(), (const char *)work->_message);
     state = ram->_st0;
     switch (state) {
     case kFontStateInitialize:
         switch (message) { case kFontMessageInitialize:
         {
         if (((beFontImageList *)self->_fonts)->_count <= 0) { abandonLoad(ram); result = 1; goto end; }
-        beMessenger_SelectGroup(self->_messenger, "LAYERCTL");
-        beMessenger_AppendString(self->_messenger, "FONT");
-        beMessenger_DispatchSelected(self->_messenger, "GETLAYERNODE");
-        if (beMessenger_GetBoolCount(self->_messenger) <= 0) { abandonLoad(ram); result = 1; goto end; }
-        group = (igNodeView *)beMessenger_GetObject(self->_messenger, 0);
-        if (g_igGroup_metaObject[0] != group->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, "LAYERCTL");
+        beMessenger_AppendString((beMessenger *)self->_messenger, "FONT");
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETLAYERNODE");
+        if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) <= 0) { abandonLoad(ram); result = 1; goto end; }
+        group = (igNodeView *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+        if (g_igGroup_metaObject != group->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
         list = group->_childList;
         childCount = 0;
         if (list != 0) childCount = list->_count;
         if (childCount <= 0) { abandonLoad(ram); result = 1; goto end; }
         pair = (beFontGeomAttrPair *)nodeAt(list, 0);
-        if (g_igAttrSet_metaObject[0] != ((igNodeView *)pair)->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
+        if (g_igAttrSet_metaObject != ((igNodeView *)pair)->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
         if (pair) pair->_refCount = pair->_refCount + 1;
         {
             igNodeView *old = (igNodeView *)self->_root;
@@ -464,15 +427,15 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                 {
                     void *allocator = igObject_GetAllocator(self);
                     void *creator;
-                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-                    igSmartPointer<beFontGeomAttrPair> newPair(beFontGeomAttrPair_Create(creator));
+                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+                    igSmartPointer<beFontGeomAttrPair> newPair(beFontGeomAttrPair_Create((int)creator));
                     SET_POOLED_STRING(newPair.p, _category, category->_name)
                     SET_POOLED_STRING(newPair.p, _panel, panel->_name)
                     allocator = igObject_GetAllocator(self);
-                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-                    igSmartPointer<igGeometryAttr> geometry(igGeometryAttr_Create(creator));
-                    ObjectList_AppendRetained((void *)newPair.p->_geomAttrs, geometry.p);
-                    ObjectList_AppendRetained((void *)self->_gaPairList, newPair.p);
+                    if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+                    igSmartPointer<igGeometryAttr> geometry(igGeometryAttr_Create((int)creator));
+                    ObjectList_AppendRetained((igObjectList *)newPair.p->_geomAttrs, (igObject *)geometry.p);
+                    ObjectList_AppendRetained((igObjectList *)self->_gaPairList, (igObject *)newPair.p);
                 }
                 j++;
             }
@@ -496,22 +459,22 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
     case kFontStateReady:
         switch (message) {
         case kFontMessageTextSet: {
-            int dataName = beMessenger_GetString(self->_messenger, 0);
-            int setName = beMessenger_GetString(self->_messenger, 1);
+            int dataName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
+            int setName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
             igSmartPointer<igObject> text((igObject *)0, kRetainReference);
             igSmartPointer<igStringObj> scratch((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
-            if (beMessenger_GetStringCount(self->_messenger) > 2) {
-                if (beMessenger_GetString(self->_messenger, 2) != 0) { igStringObj *target = scratch.p; igStringObj_Set(target, (char *)beMessenger_GetString(self->_messenger, 2)); }
+            if (beMessenger_GetStringCount((beMessenger *)self->_messenger) > 2) {
+                if (beMessenger_GetString((beMessenger *)self->_messenger, 2) != 0) { igStringObj *target = scratch.p; igStringObj_Set(target, beMessenger_GetString((beMessenger *)self->_messenger, 2)); }
                 else igStringObj_Set(scratch.p, "\202\251\202\347\202\301\202\333");
                 text = scratch;
-            } else if (beMessenger_GetIntCount(self->_messenger) > 0) {
-                int k = beMessenger_GetInt(self->_messenger, 0);
+            } else if (beMessenger_GetIntCount((beMessenger *)self->_messenger) > 0) {
+                int k = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
                 igObjectList *unicodeList = (igObjectList *)info->_unicodeList;
                 if (unicodeList != 0 && k < unicodeList->_count) {
                     text = ((igObject **)unicodeList->_data)[k];
                 }
-            } else if (beMessenger_GetObjectCount(self->_messenger) > 0) {
-                igNodeView *object = (igNodeView *)beMessenger_GetObject(self->_messenger, 0);
+            } else if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) > 0) {
+                igNodeView *object = (igNodeView *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 object->GetMeta();
                 if (g_beUnicodeObj_metaObject == object->GetMeta()) {
                     text = (igObject *)object;
@@ -532,10 +495,10 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             return 1;
         }
         case kFontMessageAlign: {
-            int dataName = beMessenger_GetString(self->_messenger, 0);
-            int setName = beMessenger_GetString(self->_messenger, 1);
-            int align = beMessenger_GetString(self->_messenger, 2);
-            align = beMessenger_ResolveEnumValue(self->_messenger, beFont_GetAlignEnum(), align);
+            int dataName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
+            int setName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
+            int align = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 2));
+            align = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beFont_GetAlignEnum(), (const char *)align);
             index = beFont_FindFirstLayoutEntry(self, ram, dataName, setName);
             if (index != -1) {
                 do {
@@ -546,15 +509,15 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             { result = 1; goto end; }
         }
         case kFontMessageSwitch: {
-            int dataName = beMessenger_GetString(self->_messenger, 0);
-            int setName = beMessenger_GetString(self->_messenger, 1);
+            int dataName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
+            int setName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
             igObjectList *dataList;
             igNodeView *layerSwitch;
             igBitMask *categoryMask;
             int k;
-            if (beMessenger_GetStringCount(self->_messenger) > 2) {
-                bitCount = beMessenger_GetString(self->_messenger, 2);
-                switch (beMessenger_ResolveEnumValue(self->_messenger, beFont_GetSwitchEnum(), bitCount)) {
+            if (beMessenger_GetStringCount((beMessenger *)self->_messenger) > 2) {
+                bitCount = (unsigned int)(beMessenger_GetString((beMessenger *)self->_messenger, 2));
+                switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beFont_GetSwitchEnum(), (const char *)bitCount)) {
                 case 1:
                     visible = 1;
                     break;
@@ -562,8 +525,8 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     visible = 0;
                     break;
                 }
-            } else if (beMessenger_GetIntCount(self->_messenger) > 0) {
-                visible = beMessenger_GetInt(self->_messenger, 0);
+            } else if (beMessenger_GetIntCount((beMessenger *)self->_messenger) > 0) {
+                visible = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
             }
             dataList = (igObjectList *)info->_dataList;
             index = beFont_FindFirstLayoutEntry(self, ram, dataName, setName);
@@ -573,10 +536,10 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     int categoryBit = data->_cbitNo;
                     int panelBit = data->_tbitNo;
                     igNodeView *rootSwitch = nodeAt(((igNodeView *)self->_root)->_childList, 0);
-                    if (visible != 0) igSwitch_EnableChild(rootSwitch, categoryBit);
+                    if (visible != 0) igSwitch_EnableChild((igSwitch *)rootSwitch, categoryBit);
                     {
                         igNodeView *panelSwitch = nodeAt(nodeAt(rootSwitch->_childList, categoryBit)->_childList, 0);
-                        if (visible != 0) igSwitch_EnableChild(panelSwitch, panelBit); else igSwitch_DisableChild(panelSwitch, panelBit);
+                        if (visible != 0) igSwitch_EnableChild((igSwitch *)panelSwitch, panelBit); else igSwitch_DisableChild((igSwitch *)panelSwitch, panelBit);
                     }
                     index = beFont_FindNextLayoutEntry(self, ram);
                 } while (index != -1);
@@ -593,7 +556,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     for (bit = 0; bit < bitCount; bit++) {
                         if ((1 << (bit & 31)) & ((int *)panelMask->_data)[bit >> 5]) anyPanel = 1;
                     }
-                    if (!anyPanel) igSwitch_DisableChild(layerSwitch, k);
+                    if (!anyPanel) igSwitch_DisableChild((igSwitch *)layerSwitch, k);
                 } else {
                     unsigned char anyPanel = 0;
                     unsigned int bit;
@@ -601,17 +564,17 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     for (bit = 0; bit < bitCount; bit++) {
                         if ((1 << (bit & 31)) & ((int *)panelMask->_data)[bit >> 5]) anyPanel = 1;
                     }
-                    if (anyPanel) igSwitch_EnableChild(layerSwitch, k);
+                    if (anyPanel) igSwitch_EnableChild((igSwitch *)layerSwitch, k);
                 }
                 k++;
             }
             { result = 1; goto end; }
         }
         case kFontMessageSetPosition: {
-            int dataName = beMessenger_GetString(self->_messenger, 0);
-            int setName = beMessenger_GetString(self->_messenger, 1);
+            int dataName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
+            int setName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
             igColor4f position;
-            beMessenger_GetVec3(&position, self->_messenger, 0);
+            beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
             index = beFont_FindFirstLayoutEntry(self, ram, dataName, setName);
             if (index != -1) {
                 do {
@@ -625,8 +588,8 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         case kFontMessageColor:
         case kFontMessageDefaultColor:
         case kFontMessageCancelColor: {
-            int dataName = beMessenger_GetString(self->_messenger, 0);
-            int setName = beMessenger_GetString(self->_messenger, 1);
+            int dataName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
+            int setName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
             float red;
             float green;
             float blue;
@@ -636,7 +599,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             } else if (message == kFontMessageCancelColor) {
                 blue = green = red = 0.5f;
             } else {
-                beMessenger_GetVec3(&requested, self->_messenger, 0);
+                beMessenger_GetVec3((float *)&requested, (beMessenger *)self->_messenger, 0);
                 red = requested.r;
                 green = requested.g;
                 blue = requested.b;
@@ -651,7 +614,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     if (0 < attributes->_count) {
                         do {
                         attribute = ((igNodeView **)attributes->_data)[a];
-                        if (g_igColorAttr_metaObject[0] == attribute->GetMeta()) {
+                        if (g_igColorAttr_metaObject == attribute->GetMeta()) {
                             igColor4f color;
                             Color4f_Unpack(&color, 1, ((igColorAttr *)attribute)->_colorPacked);
                             color.r = red;
@@ -668,11 +631,11 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             { result = 1; goto end; }
         }
         case kFontMessageReplaceUnknown: {
-            if (beMessenger_GetObjectCount(self->_messenger) <= 0) { result = 1; goto end; }
-            if (beMessenger_GetIntCount(self->_messenger) <= 0) { result = 1; goto end; }
+            if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) <= 0) { result = 1; goto end; }
+            if (beMessenger_GetIntCount((beMessenger *)self->_messenger) <= 0) { result = 1; goto end; }
             {
-                beUnicodeObj *text = (beUnicodeObj *)beMessenger_GetObject(self->_messenger, 0);
-                int replacement = beMessenger_GetInt(self->_messenger, 0);
+                beUnicodeObj *text = (beUnicodeObj *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+                int replacement = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
                 beFontImageDispatchView *font = ((beFontImageDispatchView **)((beFontImageList *)self->_fonts)->_data)[0];
                 unsigned short *p = (unsigned short *)text->_buffer;
                 unsigned int length = Memory_GetBufferSize(p) >> 1;
@@ -709,9 +672,9 @@ void beFont_AddFontImages(beFont *self, igNamedObjectInfo *info) {
     int i;
     for (i = 0; i < objectCount(named->getObjects()); i++) {
         igNodeView *object = objectAt(named->objects, i);
-        igMetaObject *fontImageMeta = g_beFontImage_metaObject[0];
+        igMetaObject *fontImageMeta = g_beFontImage_metaObject;
         if (fontImageMeta == object->GetMeta()) {
-            ObjectList_AppendRetained((void *)self->_fonts, object);
+            ObjectList_AppendRetained((igObjectList *)self->_fonts, (igObject *)object);
         }
     }
 }
@@ -769,7 +732,7 @@ igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *t
         }
     }
     allocator = ((int)igObject_GetAllocator(self));
-    allocator = g_useOwnerAllocator ? allocator : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+    allocator = g_useOwnerAllocator ? allocator : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beUnicodeObj> result(beUnicodeObj_Create(allocator));
     beUnicodeObj_AllocateBuffer(result.p, length);
     unsigned short *out = (unsigned short *)result.p->_buffer;
@@ -825,7 +788,7 @@ int beFont_FindFontIndex(beFont *self, int name) {
         do {
             fontName = (int *)(((beFontImage **)((beFontImageList *)self->_fonts)->_data)[i])->_name;
             fontName = fontName ? fontName : &emptyString[0];
-            if (strcmp(name, fontName) == 0) {
+            if (strcmp((const char *)name, (const char *)fontName) == 0) {
                 return i;
             }
             i += 1;
@@ -846,7 +809,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     if (strcmp((const char *)meta->_name, "igStringObj") == 0) {
         const char *buffer = (const char *)((igStringObj *)text)->_buffer;
         const char *sjis;
-        if (buffer == 0) sjis = g_stringObjEmptyText[0]; else sjis = buffer;
+        if (buffer == 0) sjis = g_stringObjEmptyText; else sjis = buffer;
         igSmartPointer<beUnicodeObj> converted(beFont_ConvertToUnicode(self, sjis));
         unicode = converted;
     } else if (strcmp((const char *)meta->_name, "beUnicodeObj") == 0) {
@@ -897,7 +860,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     if (entry->_align == 1 || entry->_align == 2) beFont_AlignLines(self, characters, entry, &positions);
     vertices->unlock(&texCoords, 0);
     vertices->unlock(&positions, 0);
-    ObjectList_AppendRetained((void *)pair->_geomAttrs, spare);
+    ObjectList_AppendRetained((igObjectList *)pair->_geomAttrs, (igObject *)spare);
     igObjectList *targetAttributes = target->_attributes;
     if (geometry != 0) ++geometry->_refCount;
     igGeometryAttr *old = (igGeometryAttr *)((int *)targetAttributes->_data)[0];
@@ -907,7 +870,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     igObjectList *pairGeometry = (igObjectList *)pair->_geomAttrs;
     igGeometryAttr *taken = (igGeometryAttr *)((int *)pairGeometry->_data)[0];
     igRelease(taken);
-    List_RemoveWordAt(pairGeometry, 0);
+    List_RemoveWordAt((igDataList *)pairGeometry, 0);
     ((int *)pairGeometry->_data)[pairGeometry->_count] = 0;
 }
 
@@ -924,7 +887,7 @@ void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontI
         held->_refCount = held->_refCount + 1;
     }
     allocator = igObject_GetAllocator(self);
-    allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     held = vertices.p;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;
@@ -932,7 +895,7 @@ void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontI
             igObject_Destroy(held);
         }
     }
-    vertices.p = (igVertexArray *)igVertexArray_Create(allocator);
+    vertices.p = (igVertexArray *)igVertexArray_Create((int)allocator);
     format = ((beFontImage **)((beFontImageList *)self->_fonts)->_data)[fontIndex]->_vertexFlags;
     format = format & ~4u;
     ((igVertexArrayView *)vertices.p)->configure(format, vertexCount, 0, 0);
@@ -957,10 +920,10 @@ void beFont_PrepareGeometry(beFont *self, igGeometryAttr *geometry, int text, in
     unsigned vertexCount;
     igVertexArray *held;
     if (wide != 0) {
-        triangles = beFontImage_CountTrianglesWide(((int *)((igObjectList *)self->_fonts)->_data)[self->_fontIdx], text);
+        triangles = beFontImage_CountTrianglesWide((beFontImage *)(((int *)((igObjectList *)self->_fonts)->_data)[self->_fontIdx]), (const unsigned short *)text);
         vertexCount = (triangles + 2) * 3;
     } else {
-        triangles = beFontImage_CountTriangles(((int *)((igObjectList *)self->_fonts)->_data)[self->_fontIdx], text);
+        triangles = beFontImage_CountTriangles((beFontImage *)(((int *)((igObjectList *)self->_fonts)->_data)[self->_fontIdx]), (const char *)text);
         vertexCount = triangles * 3;
     }
     ((igGeometryAttrDispatchView *)geometry)->configure(3, triangles, 0);
@@ -1092,7 +1055,7 @@ void beFont_AlignLines(beFont *self, int text, beFontInfoData *entry, igVertexAr
         while (vertexIndex < end) {
             for (i = vertexIndex; i < vertexIndex + 6; i++) {
                 vertex = (igVec3f *)(base + positions->stride * i);
-                *vertex += shift;
+                addVec3(*vertex, shift);
             }
             vertexIndex += 6;
         }
@@ -1190,9 +1153,9 @@ int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram) {
 
 void beUnicodeObj_userDestruct(beUnicodeObj *self) {
     if (self->_buffer != 0) {
-        Memory_FreeBufferWithAllocator(self->_buffer, ((int)igObject_GetAllocator()));
+        Memory_FreeBufferWithAllocator((void *)self->_buffer, igObject_GetAllocator((igObject *)self));
     }
-    Gap__Core__igObject__userDestruct(self);
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
 /* Makes the buffer hold `length` UTF-16 characters and a terminator, and clears it. */
@@ -1200,14 +1163,14 @@ void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length) {
     unsigned int need;
     if (self->_buffer != 0) {
         need = (length + 1) * 2;
-        if (Memory_GetBufferSize(self->_buffer) < need) {
-            Memory_FreeBufferWithAllocator(self->_buffer, ((int)igObject_GetAllocator(self)));
-            self->_buffer = Memory_AllocateAlignedWithAllocator(need, 0x10, ((int)igObject_GetAllocator(self)));
+        if (Memory_GetBufferSize((void *)self->_buffer) < need) {
+            Memory_FreeBufferWithAllocator((void *)self->_buffer, igObject_GetAllocator((igObject *)self));
+            self->_buffer = (int)Memory_AllocateAlignedWithAllocator(need, 0x10, igObject_GetAllocator((igObject *)self));
         }
     } else {
-        self->_buffer = Memory_AllocateAlignedWithAllocator((length + 1) * 2, 0x10, ((int)igObject_GetAllocator(self)));
+        self->_buffer = (int)Memory_AllocateAlignedWithAllocator((length + 1) * 2, 0x10, igObject_GetAllocator((igObject *)self));
     }
-    memset(self->_buffer, 0, Memory_GetBufferSize(self->_buffer));
+    memset((void *)self->_buffer, 0, Memory_GetBufferSize((void *)self->_buffer));
 }
 
 igMetaObject *beUnicodeObj_GetMeta(void)

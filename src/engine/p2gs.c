@@ -1,9 +1,13 @@
+#include <stdio.h>
 #include "dw4/p2dma.h"
+#include "dw4/p2core.h"
+#include "dw4/p2draw.h"
 #include "dw4/p2gs.h"
-int p2GetTextureBase();
-extern long long p2FrameTimeMin[4];
+#include "dw4/p2lighting.h"
+#include "dw4/p2swap.h"
+#include "dw4/p2timer.h"
+#include "dw4/dmaChannel.h"
 extern long long DAT_00562cc0[4];
-extern long long p2StatFourWeightBlendVertices[4];
 extern int DAT_005690ac[4];
 extern int DAT_005690b0[4];
 extern long long DAT_00569148[4];
@@ -16,8 +20,6 @@ extern long long DAT_00569178[4];
 extern long long DAT_00569180[4];
 extern long long DAT_00569188[4];
 extern long long DAT_00569248[4];
-extern long long p2VertexCount[4];
-extern long long p2PrimitiveCount[4];
 extern long long DAT_00569260[4];
 extern long long DAT_00569268[4];
 extern long long DAT_00569270[4];
@@ -27,11 +29,6 @@ extern long long DAT_00569288[4];
 extern long long DAT_00569290[4];
 extern long long DAT_00569298[4];
 extern long long DAT_005692a0[4];
-extern long long p2StatLightingSwitches[4];
-extern long long p2StatMaterialSets[4];
-extern long long p2StatLightingModeSets[4];
-extern long long p2StatLightSets[4];
-extern long long p2StatLightSwitches[4];
 extern long long DAT_0056b5a8[4];
 extern long long DAT_0056b5b0[4];
 extern long long DAT_0056b5b8[4];
@@ -43,33 +40,17 @@ extern long long DAT_0056b5e0[4];
 extern long long DAT_0056b5e8[4];
 extern long long DAT_0056b5f0[4];
 extern long long DAT_0056bfa0[4];
-extern long long p2FramesTimed[4];
-extern long long p2FrameTimeTotal[4];
-extern long long p2FrameTimeMax[4];
 extern long long DAT_0056c068[4];
 extern long long DAT_0056c070[4];
 extern int DAT_0056c150[4];
 extern int DAT_0056c154[4];
 extern int DAT_0056c158[4];
-extern int p2DmaWaitTime;
-extern int p2SwapWaitTime[4];
-extern int p2FinishWaitTime[4];
 extern int DAT_0056c168[4];
-extern int p2SleepTime[4];
-typedef struct GsPacketBuffer { char pad0[40]; unsigned int *end; unsigned int pad44; unsigned int *cursor; } GsPacketBuffer;
-extern GsPacketBuffer *DAT_00568f04;
-extern GsPacketBuffer *DAT_00568f08;
 extern unsigned int DAT_00490f50, DAT_00490f54, DAT_00490f58, DAT_00490f5c, DAT_00490f60, DAT_00490f68, DAT_00490f70;
 extern unsigned int DAT_00569328;
-extern int p2DisplayListMode;
-void p2GrowDisplayList(void);
-void p2SubmitDmaPacket(int arg);
-int printf();
-long long p2readGSPrivRegister();
-extern int DAT_004e5110[4];
+extern const char DAT_004e5110[];
 extern long long DAT_0056ae38[4];
 void FUN_001f76f0(int count, int *regs);
-unsigned short p2GetVuProgramAddress(int);
 void FUN_001f7e90(int count, int *regs, int flush);
 int FUN_001f78d0();
 typedef union DmaTag {
@@ -127,14 +108,12 @@ typedef union GifQuad {
     unsigned __int128 q;
 } GifQuad;
 
-extern int p2CurrentProgram;
 extern int DAT_0056ae40;
 extern VifCode DAT_0056aeb8;
 extern DmaTag DAT_00490f90;
 extern GifQuad DAT_00490f80;
 extern VifQuad DAT_0056aea0;
 extern VifQuad DAT_0056aeb0;
-extern unsigned long long *p2CurrentGsRegisters;
 extern unsigned char DAT_0056ae50[];
 
 extern char text_p2readGSPrivRegister[];
@@ -171,14 +150,13 @@ enum GsPrivRegister {
 #define GS_BUSDIR   (*(long long *)0x12001040)
 #define GS_SIGLBLID (*(long long *)0x12001080)
 extern int DAT_00491278[4];
-extern int p2DirtyFlags[4];
 
 void FUN_001f6f50(void *arg0) {
     int sp2C;
     int temp_a1;
 
-    *(long long *)((char *)arg0 + 0) = p2VertexCount[0];
-    *(long long *)((char *)arg0 + 8) = p2PrimitiveCount[0];
+    *(long long *)((char *)arg0 + 0) = p2VertexCount;
+    *(long long *)((char *)arg0 + 8) = p2PrimitiveCount;
     *(long long *)((char *)arg0 + 384) = DAT_00569260[0];
     *(long long *)((char *)arg0 + 392) = DAT_00569268[0];
     *(long long *)((char *)arg0 + 16) = DAT_0056c068[0];
@@ -188,7 +166,7 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 200) = DAT_005690ac[0];
     *(long long *)((char *)arg0 + 208) = DAT_005690b0[0];
     *(long long *)((char *)arg0 + 32) = (sp2C - DAT_0056c070[0]);
-    *(long long *)((char *)arg0 + 40) = p2FramesTimed[0];
+    *(long long *)((char *)arg0 + 40) = p2FramesTimed;
     *(long long *)((char *)arg0 + 48) = DAT_0056bfa0[0];
     *(long long *)((char *)arg0 + 56) = DAT_0056b5a8[0];
     *(long long *)((char *)arg0 + 64) = DAT_0056b5b0[0];
@@ -200,11 +178,11 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 112) = DAT_0056b5e0[0];
     *(long long *)((char *)arg0 + 120) = DAT_0056b5e8[0];
     *(long long *)((char *)arg0 + 128) = DAT_0056b5f0[0];
-    *(long long *)((char *)arg0 + 136) = p2StatLightingSwitches[0];
-    *(long long *)((char *)arg0 + 144) = p2StatMaterialSets[0];
-    *(long long *)((char *)arg0 + 152) = p2StatLightingModeSets[0];
-    *(long long *)((char *)arg0 + 160) = p2StatLightSets[0];
-    *(long long *)((char *)arg0 + 168) = p2StatLightSwitches[0];
+    *(long long *)((char *)arg0 + 136) = p2StatLightingSwitches;
+    *(long long *)((char *)arg0 + 144) = p2StatMaterialSets;
+    *(long long *)((char *)arg0 + 152) = p2StatLightingModeSets;
+    *(long long *)((char *)arg0 + 160) = p2StatLightSets;
+    *(long long *)((char *)arg0 + 168) = p2StatLightSwitches;
     *(long long *)((char *)arg0 + 176) = DAT_00569298[0];
     *(long long *)((char *)arg0 + 184) = DAT_005692a0[0];
     *(long long *)((char *)arg0 + 192) = DAT_00562cc0[0];
@@ -217,26 +195,26 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 264) = DAT_00569178[0];
     *(long long *)((char *)arg0 + 272) = DAT_00569180[0];
     *(long long *)((char *)arg0 + 280) = DAT_00569188[0];
-    *(long long *)((char *)arg0 + 288) = p2FrameTimeTotal[0];
-    *(long long *)((char *)arg0 + 296) = p2FrameTimeMin[0];
-    *(long long *)((char *)arg0 + 304) = p2FrameTimeMax[0];
+    *(long long *)((char *)arg0 + 288) = p2FrameTimeTotal;
+    *(long long *)((char *)arg0 + 296) = p2FrameTimeMin;
+    *(long long *)((char *)arg0 + 304) = p2FrameTimeMax;
     *(long long *)((char *)arg0 + 312) = DAT_0056c150[0];
     *(long long *)((char *)arg0 + 320) = DAT_0056c154[0];
     *(long long *)((char *)arg0 + 328) = DAT_0056c158[0];
     *(long long *)((char *)arg0 + 336) = p2DmaWaitTime;
-    *(long long *)((char *)arg0 + 344) = p2SwapWaitTime[0];
-    *(long long *)((char *)arg0 + 352) = p2FinishWaitTime[0];
+    *(long long *)((char *)arg0 + 344) = p2SwapWaitTime;
+    *(long long *)((char *)arg0 + 352) = p2FinishWaitTime;
     *(long long *)((char *)arg0 + 360) = DAT_0056c168[0];
-    *(long long *)((char *)arg0 + 368) = p2SleepTime[0];
+    *(long long *)((char *)arg0 + 368) = p2SleepTime;
     *(long long *)((char *)arg0 + 400) = DAT_00569270[0];
     *(long long *)((char *)arg0 + 408) = DAT_00569278[0];
     *(long long *)((char *)arg0 + 416) = DAT_00569280[0];
     *(long long *)((char *)arg0 + 424) = DAT_00569288[0];
-    *(long long *)((char *)arg0 + 432) = p2StatFourWeightBlendVertices[0];
+    *(long long *)((char *)arg0 + 432) = p2StatFourWeightBlendVertices;
     *(long long *)((char *)arg0 + 440) = DAT_00569290[0];
     *(long long *)((char *)arg0 + 448) = DAT_00569248[0];
-    p2FrameTimeMin[0] = 0xFFFFFFFFLL;
-    p2FrameTimeMax[0] = 0;
+    p2FrameTimeMin = 0xFFFFFFFFLL;
+    p2FrameTimeMax = 0;
 }
 
 /* The VIF1 chain p2SetColour sends: a DMA cnt tag over one quadword whose two VIF slots idle,
@@ -257,7 +235,6 @@ typedef struct p2ColourPacket {
 
 extern p2ColourPacket p2ColourPacketTemplate;
 extern unsigned int p2ColourNop;
-extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
 
 /* Sends the current colour, packed RGBA, to VU1 data memory. */
 void p2SetColour(unsigned int colour) {
@@ -297,7 +274,7 @@ int FUN_001f7360(void)
 }
 
 void FUN_001f7370(float value) {
-    unsigned int *p = DAT_00568f04->cursor;
+    unsigned int *p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
     p[0] = DAT_00490f50;
     p[1] = DAT_00490f54;
     p[2] = DAT_00490f58;
@@ -310,8 +287,8 @@ void FUN_001f7370(float value) {
     ((float *)p)[9] = value;
     p[10] = DAT_00569328;
     p[11] = DAT_00569328;
-    DAT_00568f04->cursor = p + 12;
-    if (DAT_00568f04->cursor >= DAT_00568f04->end) {
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 12);
+    if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
         if (p2DisplayListMode != 0) {
             p2GrowDisplayList();
         } else {
@@ -331,7 +308,7 @@ void FUN_001f7490(void) {
     temp_v0 = p2readGSPrivRegister(0x40);
     a = (temp_v0 >> 0x18) & 0xFF;
     b = (temp_v0 >> 0x10) & 0xFF;
-    printf(&DAT_004e5110[0], a, b);
+    printf(DAT_004e5110, a, b);
 }
 
 int FUN_001f74e0(long long t)
@@ -376,7 +353,6 @@ typedef struct {
 extern tGS_CSR DAT_0056ada0;
 extern long long DAT_0056ade0;
 extern int DAT_0056ae90;
-extern int p2DisplayClosing;
 extern int DAT_0056ae30;
 extern int DAT_0056ae28;
 
@@ -429,7 +405,7 @@ void FUN_001f76f0(int count, int *regs) {
             GsRegWrite ad;
 
             n = count < 16 ? count : 16;
-            p = (unsigned __int128 *)DAT_00568f04->cursor;
+            p = (unsigned __int128 *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
             r = regs;
             DAT_00490f80.f.nreg = n;
             DAT_00490f90.f.qwc = n + 3;
@@ -443,14 +419,14 @@ void FUN_001f76f0(int count, int *regs) {
             p++;
             for (i = 0; i < n; i++) {
                 int reg = *r++;
-                ad.f.data = p2CurrentGsRegisters[reg];
+                ad.f.data = ((unsigned long long *)p2CurrentGsRegisters)[reg];
                 ad.f.addr = DAT_0056ae50[reg];
                 *p = ad.q;
                 p++;
             }
             *p = DAT_0056aeb0.q;
-            DAT_00568f04->cursor = (unsigned int *)(p + 1);
-            if (DAT_00568f04->cursor >= DAT_00568f04->end) {
+            p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 1);
+            if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
                 if (p2DisplayListMode != 0) {
                     p2GrowDisplayList();
                 } else {
@@ -477,16 +453,16 @@ extern unsigned int DAT_0056aec8;
 
 
 void FUN_001f7db0(unsigned int addr, int unused, int flush) {
-    unsigned int *p = DAT_00568f08->cursor;
+    unsigned int *p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_GIF]->cursor;
     DAT_00491040.f.addr = addr & 0x7FFFFFFF;
     p[0] = DAT_00491040.w[0];
     p[1] = DAT_00491040.w[1];
     p[2] = DAT_00491040.w[2];
     p[3] = DAT_00491040.w[3];
-    DAT_00568f08->cursor = p + 4;
+    p2DmaCurrentPacket[P2_DMA_GIF]->cursor = (unsigned int)(p + 4);
     if (flush != 0) {
         p2SubmitDmaPacket(2);
-    } else if (DAT_00568f08->cursor >= DAT_00568f08->end) {
+    } else if (p2DmaCurrentPacket[P2_DMA_GIF]->cursor >= p2DmaCurrentPacket[P2_DMA_GIF]->limit) {
         if (p2DisplayListMode != 0) {
             p2GrowDisplayList();
         } else {
@@ -659,6 +635,6 @@ int FUN_001f8740(void)
 
 void FUN_001f8750(int arg0) {
     DAT_00491278[0] = arg0;
-    p2DirtyFlags[0] |= 0x84;
-    p2StatLightingModeSets[0] += 1;
+    p2DirtyFlags |= 0x84;
+    p2StatLightingModeSets += 1;
 }

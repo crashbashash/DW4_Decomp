@@ -614,7 +614,7 @@ igResult igIGBFile_AddInfoListEntry(void *self) {
 
 int igIGBFile_WriteFile(igIGBFileView *self, const char *fileName) {
     int *pp; igObject *t; igObject *t2; igObject *a; igObject *b;
-    igRegistry_GetValueBool((int)g_objectSystem->configRegistry, 2, (const char *)"forceWriteMemoryPoolInfoFromMetaState", (char *)&self->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
+    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2, (const char *)"forceWriteMemoryPoolInfoFromMetaState", &self->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
     igResult openResult = igIGBFile_OpenForWrite(self, fileName);
     pp = (int *)((int)&openResult + 0);
     if (*pp == g_resultFailure.v) return 0;
@@ -1015,7 +1015,7 @@ igResult igIGBFile_SetupBasePath(igIGBFileView *self) {
 }
 
 void igIGBFile_RegisterBlindObjectsConfig(void) {
-    igRegistry_GetValueBool((int)g_objectSystem->configRegistry, 2, (const char *)"blindObjects", (char *)&g_igIGBFile_blindObjects, 0, 0);
+    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2, (const char *)"blindObjects", (unsigned char *)&g_igIGBFile_blindObjects, 0, 0);
 }
 
 igResult igIGBFile_ReadNextChunk(igIGBFileView *self) {
@@ -1038,7 +1038,7 @@ igResult igIGBFile_ReadNextChunk(igIGBFileView *self) {
 }
 
 static inline IgbReadEntry *castToKind(IgbReadEntry *object) {
-    if (object != 0 && igObject_IsKindOf((void *)object, (igMetaObject *)g_igDirEntry_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf((igObject *)object, (igMetaObject *)g_igDirEntry_metaObject) != 0) {
         return object;
     }
     return 0;
@@ -1768,7 +1768,7 @@ void igIGBFile_ReadFilePostProcess(int *result, igIGBFileView *self) {
     }
 }
 
-static inline igIGBFileView *castInfo(igIGBFileView *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) { return o; } return 0; }
+static inline igIGBFileView *castInfo(igIGBFileView *o) { if (o != 0 && igObject_IsKindOf((igObject *)o, (igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) { return o; } return 0; }
 
 /* Checks each external file, then this file's own post-read step. */
 igResult igIGBFile_ReadFilePostProcessAll(igIGBFileView *self) {

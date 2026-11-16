@@ -4,7 +4,7 @@ igMetaField *g_beXboxImage24k_dataMetaField;
 
 igMetaObject *beXboxImage24k_GetOrCreateMetaObject(void) {
     if (g_beXboxImage24k_metaObject == 0) {
-        g_beXboxImage24k_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beXboxImage24k_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beXboxImage24k_metaObject;
 }
@@ -25,7 +25,7 @@ int beXboxImage24k_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beXboxImage24k_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beXboxImage24k_EnsureRegistered(void)
@@ -33,7 +33,7 @@ void beXboxImage24k_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beXboxImage24k_Register);
 }
 
-void *beXboxImage24k_Register(void) {
+CallbackArray *beXboxImage24k_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -75,9 +75,9 @@ static int g_beXboxImage24k_fieldOffsets[] = {
 void beXboxImage24k_InitFields(void) {
     int base;
     void *data;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beXboxImage24k_metaObject;
+    meta = g_beXboxImage24k_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beXboxImage24k_ctorTable, 2);
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));

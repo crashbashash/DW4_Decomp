@@ -2,7 +2,7 @@ igMetaObject *g_igDataPumpInterface_metaObject;
 
 igMetaObject *FUN_001e5530(void) {
     if (g_igDataPumpInterface_metaObject == 0) {
-        g_igDataPumpInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igDataPumpInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igDataPumpInterface_metaObject;
 }
@@ -20,9 +20,9 @@ void FUN_001e55d0(void)
     igMetaObject_RunStaticInit(igDataPumpInterface_Register);
 }
 
-void igDataPumpInterface_Register(void) {
+CallbackArray *igDataPumpInterface_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igDataPumpInterface_metaObject,
         igObject_Register,

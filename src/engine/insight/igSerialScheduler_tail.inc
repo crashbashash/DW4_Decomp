@@ -32,7 +32,7 @@ void Gap__Insight__igSerialScheduler__vfunc_23(igSerialScheduler *scheduler) {
 }
 
 void Gap__Insight__igSerialScheduler__vfunc_24(void *arg0, int arg1) {
-    igRendererOrderedList_Append(*(int *)((char *)(arg0) + 8), arg1, 1);
+    igRendererOrderedList_Append((igDependencyOrderedList *)(*(int *)((char *)(arg0) + 8)), (igObject *)arg1, 1);
 }
 
 void Gap__Insight__igSerialScheduler__vfunc_25(Obj_238020 *arg0, int arg1) {
@@ -76,7 +76,7 @@ SharedViewerOptions *ViewerOptions_Construct(SharedViewerOptions *arg0) {
     *(char *)((char *)(arg0) + 68) = 1;
     *(float *)((char *)(arg0) + 72) = (float) 0.100000001f;
     *(int *)((char *)(arg0) + 76) = 0x447A0000;
-    *(float *)((char *)(arg0) + 80) = (float) g_vec3Zero[0];
+    *(float *)((char *)(arg0) + 80) = g_vec3Zero.x;
     *(float *)((char *)(arg0) + 84) = (float) DAT_004e105c[0];
     *(float *)((char *)(arg0) + 88) = (float) DAT_004e1060[0];
     *(char *)((char *)(arg0) + 92) = 1;
@@ -92,7 +92,7 @@ SharedViewerOptions *ViewerOptions_Construct(SharedViewerOptions *arg0) {
     *(int *)((char *)(arg0) + 120) = 0x3F800000;
     *(int *)((char *)(arg0) + 124) = 0x3F800000;
     *(int *)((char *)(arg0) + 128) = 0x3F800000;
-    *(float *)((char *)(arg0) + 132) = (float) g_vec4Zero[0];
+    *(float *)((char *)(arg0) + 132) = g_vec4Zero.x;
     *(float *)((char *)(arg0) + 136) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 140) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 144) = (float) DAT_004e117c[0];
@@ -136,60 +136,60 @@ SharedViewerOptions *ViewerOptions_Construct(SharedViewerOptions *arg0) {
 /* Matching construct: `group` is declared apart from `props` so the property set lands in the first saved register. */
 void FUN_002382e0(ViewerOptions_2382e0 *opt, int, int, int, int, int, int, int) {
   int group;
-  int props = ((PropertySet *)g_objectSystem[0])->props;
-  group = igRegistry_GetSectionIndex(props, "INSIGHT", 0);
+  int props = ((PropertySet *)g_objectSystem)->props;
+  group = igRegistry_GetSectionIndex((igRegistry *)props, (char *)("INSIGHT"), 0);
   if (group < 0) {
-    group = igRegistry_GetSectionIndex(props, "Viewer", 0);
+    group = igRegistry_GetSectionIndex((igRegistry *)props, (char *)("Viewer"), 0);
     if (group < 0) return;
   }
-  { const char *key = "extraCommandLine"; if (key) thunk_igRegistry_GetValueString(props, group, key, &opt->extraCommandLine, opt->extraCommandLine, 0); }
-  { const char *key = "showBBox"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->showBBox, opt->showBBox, 0); }
-  { const char *key = "showNormals"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->showNormals, opt->showNormals, 0); }
+  { const char *key = "extraCommandLine"; if (key) thunk_igRegistry_GetValueString((igRegistry *)props, group, key, &opt->extraCommandLine, opt->extraCommandLine, 0); }
+  { const char *key = "showBBox"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->showBBox, opt->showBBox, 0); }
+  { const char *key = "showNormals"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->showNormals, opt->showNormals, 0); }
   { const char *key = "normalsColor"; if (key) FUN_001e71f0(props, group, key, &opt->normalsColor, &opt->normalsColor, 0); }
   { const char *key = "invalidStoredNormalsColor"; if (key) FUN_001e71f0(props, group, key, &opt->invalidStoredNormalsColor, &opt->invalidStoredNormalsColor, 0); }
   { const char *key = "scaledNormalsColor"; if (key) FUN_001e71f0(props, group, key, &opt->scaledNormalsColor, &opt->scaledNormalsColor, 0); }
-  { const char *key = "invalidNormalsPrecision"; if (key) thunk_igRegistry_GetValueFloat(props, group, key, &opt->invalidNormalsPrecision, 0, opt->invalidNormalsPrecision); }
-  { const char *key = "autoSelectCamera"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->autoSelectCamera, opt->autoSelectCamera, 0); }
-  { const char *key = "horizontalFieldOfView"; if (key) thunk_igRegistry_GetValueFloat(props, group, key, &opt->horizontalFieldOfView, 0, opt->horizontalFieldOfView); }
-  { const char *key = "autoPlanes"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->autoPlanes, opt->autoPlanes, 0); }
-  { const char *key = "defaultNearPlane"; if (key) thunk_igRegistry_GetValueFloat(props, group, key, &opt->defaultNearPlane, 0, opt->defaultNearPlane); }
-  { const char *key = "defaultFarPlane"; if (key) thunk_igRegistry_GetValueFloat(props, group, key, &opt->defaultFarPlane, 0, opt->defaultFarPlane); }
+  { const char *key = "invalidNormalsPrecision"; if (key) thunk_igRegistry_GetValueFloat((igRegistry *)props, group, key, &opt->invalidNormalsPrecision, 0, opt->invalidNormalsPrecision); }
+  { const char *key = "autoSelectCamera"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->autoSelectCamera, opt->autoSelectCamera, 0); }
+  { const char *key = "horizontalFieldOfView"; if (key) thunk_igRegistry_GetValueFloat((igRegistry *)props, group, key, &opt->horizontalFieldOfView, 0, opt->horizontalFieldOfView); }
+  { const char *key = "autoPlanes"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->autoPlanes, opt->autoPlanes, 0); }
+  { const char *key = "defaultNearPlane"; if (key) thunk_igRegistry_GetValueFloat((igRegistry *)props, group, key, &opt->defaultNearPlane, 0, opt->defaultNearPlane); }
+  { const char *key = "defaultFarPlane"; if (key) thunk_igRegistry_GetValueFloat((igRegistry *)props, group, key, &opt->defaultFarPlane, 0, opt->defaultFarPlane); }
   { const char *key = "upVector"; if (key) FUN_001e70a0(props, group, key, &opt->upVector, &opt->upVector, 0); }
-  { const char *key = "autoSceneLights"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->autoSceneLights, opt->autoSceneLights, 0); }
-  { const char *key = "autoHeadLight"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->autoHeadLight, opt->autoHeadLight, 0); }
-  { const char *key = "useSceneLights"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->useSceneLights, opt->useSceneLights, 0); }
-  { const char *key = "useHeadLight"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->useHeadLight, opt->useHeadLight, 0); }
-  { const char *key = "useHeadLightSpecular"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->useHeadLightSpecular, opt->useHeadLightSpecular, 0); }
+  { const char *key = "autoSceneLights"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->autoSceneLights, opt->autoSceneLights, 0); }
+  { const char *key = "autoHeadLight"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->autoHeadLight, opt->autoHeadLight, 0); }
+  { const char *key = "useSceneLights"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->useSceneLights, opt->useSceneLights, 0); }
+  { const char *key = "useHeadLight"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->useHeadLight, opt->useHeadLight, 0); }
+  { const char *key = "useHeadLightSpecular"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->useHeadLightSpecular, opt->useHeadLightSpecular, 0); }
   { const char *key = "headLightDiffuse"; if (key) FUN_001e71f0(props, group, key, &opt->headLightDiffuse, &opt->headLightDiffuse, 0); }
   { const char *key = "headLightSpecular"; if (key) FUN_001e71f0(props, group, key, &opt->headLightSpecular, &opt->headLightSpecular, 0); }
   { const char *key = "headLightAmbient"; if (key) FUN_001e71f0(props, group, key, &opt->headLightAmbient, &opt->headLightAmbient, 0); }
   { const char *key = "clearColor"; if (key) FUN_001e71f0(props, group, key, &opt->clearColor, &opt->clearColor, 0); }
-  { const char *key = "wireframeMode"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->wireframeMode, opt->wireframeMode, 0); }
-  { const char *key = "forceWireframe"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->forceWireframe, opt->forceWireframe, 0); }
-  { const char *key = "backFaceCullingMode"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->backFaceCullingMode, opt->backFaceCullingMode, 0); }
-  { const char *key = "forceBackFaceCulling"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->forceBackFaceCulling, opt->forceBackFaceCulling, 0); }
-  { const char *key = "alphaTest"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->alphaTest, opt->alphaTest, 0); }
-  { const char *key = "forceAlphaTest"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->forceAlphaTest, opt->forceAlphaTest, 0); }
-  { const char *key = "alphaTestReference"; if (key) thunk_igRegistry_GetValueFloat(props, group, key, &opt->alphaTestReference, 0, opt->alphaTestReference); }
-  { const char *key = "maxFrameRate"; if (key) thunk_igRegistry_GetValueFloat(props, group, key, &opt->maxFrameRate, 0, opt->maxFrameRate); }
-  { const char *key = "optimizeTextures"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->optimizeTextures, opt->optimizeTextures, 0); }
-  { const char *key = "halfBuffer"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->halfBuffer, opt->halfBuffer, 0); }
-  { const char *key = "palVideoMode"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->palVideoMode, opt->palVideoMode, 0); }
-  { const char *key = "width"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->width, opt->width, 0); }
-  { const char *key = "height"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->height, opt->height, 0); }
-  { const char *key = "swapInterval"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->swapInterval, opt->swapInterval, 0); }
-  { const char *key = "colorBits"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->colorBits, opt->colorBits, 0); }
-  { const char *key = "alphaBits"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->alphaBits, opt->alphaBits, 0); }
-  { const char *key = "depthBits"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->depthBits, opt->depthBits, 0); }
-  { const char *key = "stencilBits"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->stencilBits, opt->stencilBits, 0); }
-  { const char *key = "reportVideoFormat"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->reportVideoFormat, opt->reportVideoFormat, 0); }
-  { const char *key = "showLogo"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->showLogo, opt->showLogo, 0); }
-  { const char *key = "showUI"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->showUI, opt->showUI, 0); }
-  { const char *key = "enableMayaControls"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->enableMayaControls, opt->enableMayaControls, 0); }
-  { const char *key = "benchmark"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->benchmark, opt->benchmark, 0); }
-  { const char *key = "benchmarkSkipFrames"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->benchmarkSkipFrames, opt->benchmarkSkipFrames, 0); }
-  { const char *key = "benchmarkFrames"; if (key) thunk_igRegistry_GetValueInt(props, group, key, &opt->benchmarkFrames, opt->benchmarkFrames, 0); }
-  { const char *key = "columnStatistics"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->columnStatistics, opt->columnStatistics, 0); }
-  { const char *key = "allocateVisualContextInScratchPad"; if (key) thunk_igRegistry_GetValueBool(props, group, key, &opt->allocateVisualContextInScratchPad, opt->allocateVisualContextInScratchPad, 0); }
+  { const char *key = "wireframeMode"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->wireframeMode, opt->wireframeMode, 0); }
+  { const char *key = "forceWireframe"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->forceWireframe, opt->forceWireframe, 0); }
+  { const char *key = "backFaceCullingMode"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->backFaceCullingMode, opt->backFaceCullingMode, 0); }
+  { const char *key = "forceBackFaceCulling"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->forceBackFaceCulling, opt->forceBackFaceCulling, 0); }
+  { const char *key = "alphaTest"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->alphaTest, opt->alphaTest, 0); }
+  { const char *key = "forceAlphaTest"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->forceAlphaTest, opt->forceAlphaTest, 0); }
+  { const char *key = "alphaTestReference"; if (key) thunk_igRegistry_GetValueFloat((igRegistry *)props, group, key, &opt->alphaTestReference, 0, opt->alphaTestReference); }
+  { const char *key = "maxFrameRate"; if (key) thunk_igRegistry_GetValueFloat((igRegistry *)props, group, key, &opt->maxFrameRate, 0, opt->maxFrameRate); }
+  { const char *key = "optimizeTextures"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->optimizeTextures, opt->optimizeTextures, 0); }
+  { const char *key = "halfBuffer"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->halfBuffer, opt->halfBuffer, 0); }
+  { const char *key = "palVideoMode"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->palVideoMode, opt->palVideoMode, 0); }
+  { const char *key = "width"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->width, opt->width, 0); }
+  { const char *key = "height"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->height, opt->height, 0); }
+  { const char *key = "swapInterval"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->swapInterval, opt->swapInterval, 0); }
+  { const char *key = "colorBits"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->colorBits, opt->colorBits, 0); }
+  { const char *key = "alphaBits"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->alphaBits, opt->alphaBits, 0); }
+  { const char *key = "depthBits"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->depthBits, opt->depthBits, 0); }
+  { const char *key = "stencilBits"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->stencilBits, opt->stencilBits, 0); }
+  { const char *key = "reportVideoFormat"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->reportVideoFormat, opt->reportVideoFormat, 0); }
+  { const char *key = "showLogo"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->showLogo, opt->showLogo, 0); }
+  { const char *key = "showUI"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->showUI, opt->showUI, 0); }
+  { const char *key = "enableMayaControls"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->enableMayaControls, opt->enableMayaControls, 0); }
+  { const char *key = "benchmark"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->benchmark, opt->benchmark, 0); }
+  { const char *key = "benchmarkSkipFrames"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->benchmarkSkipFrames, opt->benchmarkSkipFrames, 0); }
+  { const char *key = "benchmarkFrames"; if (key) thunk_igRegistry_GetValueInt((igRegistry *)props, group, key, &opt->benchmarkFrames, opt->benchmarkFrames, 0); }
+  { const char *key = "columnStatistics"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->columnStatistics, opt->columnStatistics, 0); }
+  { const char *key = "allocateVisualContextInScratchPad"; if (key) thunk_igRegistry_GetValueBool((igRegistry *)props, group, key, &opt->allocateVisualContextInScratchPad, opt->allocateVisualContextInScratchPad, 0); }
 }
 

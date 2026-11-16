@@ -36,9 +36,9 @@ void FUN_001a15a0(void)
 
 static igMetaObjectCallback g_igEnvironmentMapShader2_callbackList[] = { FUN_00132420, igTextureBindAttr_EnsureRegistered, igTextureAttr_EnsureRegistered, igAttrListList_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igTextureCoordSourceAttr_EnsureRegistered, igTextureFunctionAttr_EnsureRegistered, igBlendStateAttr_EnsureRegistered, 0 };
 
-void igEnvironmentMapShader2_Register(void) {
+CallbackArray *igEnvironmentMapShader2_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igEnvironmentMapShader2_metaObject,
         igGroup_Register,
@@ -58,27 +58,27 @@ void thunk_igEnvironmentMapShader2_GetMetaObject(void) {
 }
 
 static FieldFactory g_igEnvironmentMapShader2_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igEnvironmentMapShader2_fieldTable[] = {
     "_envMapTexture",
@@ -169,51 +169,51 @@ void igEnvironmentMapShader2_InitFields(void) {
     void *temp_s1;
 
     temp_s1 = (void *)(g_igEnvironmentMapShader2_metaObject);
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igEnvironmentMapShader2_ctorTable, 0x15);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
+    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00131fe0();
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
+    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00132850();
-    igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)), 1.0f);
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igTextureAttr_GetOrCreateMetaObject();
-    ((igMetaField *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7))))->_persistent = 0;
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8)));
+    igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)), 1.0f);
+    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
+    ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7))))->_persistent = 0;
+    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0013abd0();
     ((igObjectRefMetaField *)temp_s2_4)->_construct = 1;
     ((igMetaField *)temp_s2_4)->_persistent = 0;
-    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9)));
+    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0013abd0();
     ((igObjectRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
-    ((igMetaField *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA))))->_persistent = 0;
-    ((igMetaField *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB))))->_persistent = 0;
-    temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC)));
+    ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA))))->_persistent = 0;
+    ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB))))->_persistent = 0;
+    temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xC)));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00132850();
     ((igMetaField *)temp_s2_6)->_persistent = 0;
-    temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xD)));
+    temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xD)));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_001325e0();
     ((igMetaField *)temp_s2_7)->_persistent = 0;
-    temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xE)));
+    temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xE)));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_00131ca0();
     ((igMetaField *)temp_s2_8)->_persistent = 0;
-    temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xF)));
+    temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xF)));
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_001325e0();
     ((igMetaField *)temp_s2_9)->_persistent = 0;
-    temp_s2_10 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x10)));
+    temp_s2_10 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x10)));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_00131ca0();
     ((igMetaField *)temp_s2_10)->_persistent = 0;
-    temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11)));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = igBlendStateAttr_GetOrCreateMetaObject();
+    temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x11)));
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igBlendStateAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_11)->_persistent = 0;
-    temp_s2_12 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x12)));
+    temp_s2_12 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x12)));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = FUN_00132850();
     ((igMetaField *)temp_s2_12)->_persistent = 0;
-    temp_s2_13 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x13)));
+    temp_s2_13 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x13)));
     ((igObjectRefMetaField *)temp_s2_13)->_metaObject = FUN_001325e0();
     ((igMetaField *)temp_s2_13)->_persistent = 0;
-    temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x14)));
+    temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x14)));
     ((igObjectRefMetaField *)temp_s2_14)->_metaObject = FUN_00131ca0();
     ((igMetaField *)temp_s2_14)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igEnvironmentMapShader2_fieldTable, g_igEnvironmentMapShader2_fieldHandles, g_igEnvironmentMapShader2_fieldOffsets, temp_s0);

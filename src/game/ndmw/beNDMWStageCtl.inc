@@ -3,12 +3,12 @@ igMetaField *g_beNDMWStageCtl_resetTrgTimeMetaField;
 
 beNDMWStageCtl *beNDMWStageCtl_CreateInstance(int allocator) {
     beNDMWStageCtl_EnsureRegistered();
-    return (beNDMWStageCtl *)igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, allocator);
+    return (beNDMWStageCtl *)igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWStageCtl_GetOrCreateMetaObject(void) {
     if (g_beNDMWStageCtl_metaObject == 0) {
-        g_beNDMWStageCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWStageCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWStageCtl_metaObject;
 }
@@ -30,7 +30,7 @@ int beNDMWStageCtl_GetVTable(void) {
     obj._name = 0;
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWStageCtl_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
     if (&obj._infoList != 0) {
         igRelease((igObject *)obj._infoList);
@@ -47,7 +47,7 @@ void beNDMWStageCtl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStageCtl_Register);
 }
 
-void *beNDMWStageCtl_Register(void) {
+CallbackArray *beNDMWStageCtl_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -47,7 +47,7 @@ void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {
     c = count_of_1dca40(arg0);
     n = arg0->f24 + c;
     ObjectList_ResizeRetained(arg0, n);
-    alloc = igObject_GetAllocator(arg0);
+    alloc = (int)igObject_GetAllocator((igObject *)arg0);
     i = arg0->f20;
     for (; i < n; i++) {
         o = arg1(alloc);
@@ -59,7 +59,7 @@ void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {
         if (old != 0) {
             old->references = old->references - 1;
             if (((unsigned long long)((long long)old->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)old);
+                igObject_Destroy((igObject *)old);
             }
         }
         if (arg0->count != 0 && i >= 0 && i < arg0->count) {
@@ -67,7 +67,7 @@ void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {
         }
         o->references = o->references - 1;
         if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)o);
+            igObject_Destroy((igObject *)o);
         }
     }
 }

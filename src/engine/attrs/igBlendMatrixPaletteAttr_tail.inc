@@ -1,4 +1,4 @@
-void Gap__Attrs__igBlendMatrixPaletteAttr__vfunc_24(struct S_13c520 *arg0, int arg1) {
+void Gap__Attrs__igBlendMatrixPaletteAttr__vfunc_24(struct S_13c520 *arg0, igPsx2VisualContext *arg1) {
     Gap__Gfx__igPsx2VisualContext__vfunc_197(arg1, arg0->b, arg0->a);
 }
 

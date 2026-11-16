@@ -40,7 +40,7 @@ int igPlanarShadowShader_GetVTable(void) {
     FUN_0019c330((int *)&u.b[96]);
     FUN_0019ac10((int *)&u.b[100]);
     FUN_0019c320((int *)&u.b[104]);
-    temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&D_005289f0[0];
     FUN_0019c2a0((ObjectRefWord *)&u.b[104], -1);
     igSmartPointer_igColorAttr_Destruct((O *)&u.b[100], -1);
@@ -67,14 +67,14 @@ void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
                 rc = *(int *)((char *)(p) + 4) - 1;
                 *(int *)((char *)(p) + 4) = rc;
                 if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((void *)p);
+                    igObject_Destroy((igObject *)p);
                 }
             }
         }
         if (arg0 != 0) {
             arg0->f0 = &g_igGroup_vtable[0];
             igSmartPointer_igNodeList_Destruct((void * *)((char *)arg0 + 0x1C), -1);
-            igNode_Destroy((struct T_195970 *)arg0, 0);
+            igNode_Destroy((igNode *)arg0, 0);
         }
         if (arg1 > 0) {
             Memory_FreeBufferAliasC(arg0);
@@ -89,7 +89,7 @@ ObjectRefWord *FUN_0019c1a0(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
@@ -103,7 +103,7 @@ void **igSmartPointer_igGeometryList_Destruct(void **arg0, short arg1) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((void *)r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (arg1 > 0) {
@@ -119,7 +119,7 @@ ObjectRefWord *FUN_0019c2a0(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
@@ -164,7 +164,7 @@ int *FUN_0019c370(int *p)
 
 void *FUN_0019c380(void *arg0) {
     igAttrSet *self = (igAttrSet *)arg0;
-    igObject_InitHeader();
+    igObject_InitHeader((igObject *)arg0);
     self->_vtable = (int)(&g_igNamedObject_vtable[0]);
     self->_name = 0;
     self->_vtable = (int)(&g_igNode_vtable[0]);
@@ -184,9 +184,9 @@ void FUN_0019c3f0(void)
 
 static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { igLightList_EnsureRegistered, FUN_00135620, igGeometryList_EnsureRegistered, igAttrList_EnsureRegistered, FUN_00186b20, igColorAttr_EnsureRegistered, FUN_00133510, 0 };
 
-void igPlanarShadowShader_Register(void) {
+CallbackArray *igPlanarShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPlanarShadowShader_metaObject,
         igAttrSet_Register,
@@ -214,19 +214,19 @@ igMetaObject *FUN_0019c490(void) {
 }
 
 static FieldFactory g_igPlanarShadowShader_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igVec4fMetaField_CreateInstance,
-    igVec4fMetaField_CreateInstance,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igPlanarShadowShader_fieldTable[] = {
     "_lights",
@@ -292,43 +292,43 @@ void igPlanarShadowShader_InitFields(void) {
     V4 spB;
 
     temp_s0 = (void *)g_igPlanarShadowShader_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPlanarShadowShader_ctorTable, 0xD);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
+    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001365e0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
+    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00135540();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)));
+    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
     spA.x = 0; spA.y = 1.0f; spA.z = 0; spA.w = 0;
     igVec4fMetaField_SetDefault(temp_a0, &spA);
-    temp_a0_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)));
+    temp_a0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
     spB.x = 0; spB.w = 1.0f; spB.y = 0; spB.z = 0;
     igVec4fMetaField_SetDefault(temp_a0_2, &spB);
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)));
+    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00135540();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_persistent = 0;
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7)));
+    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igGeometryList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     ((igMetaField *)temp_s2_4)->_persistent = 0;
-    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igAttrList_GetOrCreateMetaObject();
+    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)));
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
-    temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9)));
+    temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00186a80();
     ((igMetaField *)temp_s2_6)->_persistent = 0;
-    temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)));
+    temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00186a80();
     ((igMetaField *)temp_s2_7)->_persistent = 0;
-    temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igColorAttr_GetOrCreateMetaObject();
+    temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igColorAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     ((igMetaField *)temp_s2_8)->_persistent = 0;
-    temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)));
+    temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)));
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_00133430();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     ((igMetaField *)temp_s2_9)->_persistent = 0;

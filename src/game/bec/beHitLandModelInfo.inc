@@ -21,7 +21,7 @@ int beHitLandModelInfo_GetVTable(void) {
     obj._nameList = 0;
     obj._switchgraph = 0;
     obj._checkSwitch = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beHitLandModelInfo_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._checkSwitch, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switchgraph, -1);
@@ -37,7 +37,7 @@ void beHitLandModelInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beHitLandModelInfo_callbackList[] = { igSwitch_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
-void *beHitLandModelInfo_Register(void) {
+CallbackArray *beHitLandModelInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -89,17 +89,17 @@ void beHitLandModelInfo_InitFields(void) {
     void *nameList;
     void *checkSwitch;
     void *switchgraph;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beHitLandModelInfo_metaObject;
+    meta = g_beHitLandModelInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandModelInfo_ctorTable, 4);
     switchgraph = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchgraph)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchgraph)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     checkSwitch = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)checkSwitch)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)checkSwitch)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     nameList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)nameList)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)nameList)->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beHitLandModelInfo_fieldTable, g_beHitLandModelInfo_fieldHandles, g_beHitLandModelInfo_fieldOffsets, base);
 }
 

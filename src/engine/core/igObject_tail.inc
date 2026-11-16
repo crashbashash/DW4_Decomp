@@ -56,7 +56,7 @@ void igMemoryDictionary_SetCurrent(void *dictionary) {
             ((igMemoryDictionaryView *)current)->Clear();
             ((igObject *)current)->_refCount = (int)((int) (((igObject *)current)->_refCount - 1));
             if (((unsigned long long) ((long long) (int) ((igObject *)current)->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(current);
+                igObject_Destroy((igObject *)current);
             }
         }
         (*(void * *)&g_memoryDictionary) = (void *)(dictionary);
@@ -82,7 +82,7 @@ igResult Memory_RegisterAllocation(int address, igMemoryPoolView *pool) {
     int dictionarySize;
     if (g_memoryDictionary == 0) {
         dictionarySize = 0x1000;
-        igRegistry_GetValueInt((int)g_objectSystem->configRegistry, 2,"memoryDictionarySize", &dictionarySize, 0x1000, 0);
+        igRegistry_GetValueInt(g_objectSystem->configRegistry, 2,"memoryDictionarySize", &dictionarySize, 0x1000, 0);
         g_memoryDictionary = (igMemoryDictionaryView *)igMemoryDictionary_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
         g_memoryDictionary->SetCapacity(dictionarySize);
         g_memoryDictionary->InitEntries();

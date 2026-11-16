@@ -4,6 +4,24 @@
 #include "dw4/beSaveApiDispatchView.h"
 #include "dw4/beSaveDataDeliver.h"
 #include "dw4/beSvConnectCheck.h"
+#include "dw4/beSaveApi.h"
+#include "dw4/beSaveMemoryObj.h"
+#include "dw4/beSvEndApi.h"
+#include "dw4/beSvFileFindApi.h"
+#include "dw4/beSvFileMakeApi.h"
+#include "dw4/beSvFormatApi.h"
+#include "dw4/beSvGetFreeSizeApi.h"
+#include "dw4/beSvReadMediaApi.h"
+#include "dw4/beSvStartApi.h"
+#include "dw4/beSvUseCheckApi.h"
+#include "dw4/beSvWriteMediaApi.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igMemory.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igMetaObject.h"
+#include "dw4/igObject.h"
+#include <stdio.h>
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
 
@@ -75,18 +93,10 @@ enum { SV_MC_REQUEST_ISSUED = 1, SV_MC_REQUEST_DONE = 2 };
 
 struct CardSlot { int port; int slot; };
 
-extern "C" int Memory_AllocateBufferDirect(int, int);
-extern "C" int Memory_GetAllocatorBySelector(int);
-extern "C" int igObject_GetAllocator(...);
-extern "C" int Memory_FreeBufferWithAllocator(int, int);
-extern "C" int memset(void *, int, int);
-extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
-extern "C" int igMetaObject_CountInstances(...);
 extern "C" void beSaveMemoryObj_userDestruct(beSaveMemoryObj *self);
-extern "C" int beSaveMemoryObj_GetMeta(void);
+extern "C" igMetaObject *beSaveMemoryObj_GetMeta(void);
 extern "C" int sceMcFormat(int, int);
 extern "C" int sceMcGetInfo(...);
-extern "C" int sprintf(char *, const char *, ...);
 extern "C" int sceMcOpen(int, int, char *, int);
 extern "C" int sceMcClose(int);
 extern "C" int sceMcSeek(int, int, int);
@@ -105,40 +115,35 @@ extern "C" void beSvConnectCheck_Start(void);
 extern "C" int beSvConnectCheck_Update(void);
 extern "C" void beSvConnectCheck_Report(void);
 extern "C" igMetaObject *beSvConnectCheck_GetMeta(void);
-extern "C" int Gap__Core__igObject__userConstruct(...);
 extern "C" void beSvConnectCheck_userConstruct(igObjectDispatchView *self);
-extern "C" int beSaveApi_GetMeta(void);
-extern "C" void Gap__Core__igObject__userDestruct(...);
-extern "C" void beSvConnectCheck_userDestruct(void);
-extern "C" int beSvEndApi_GetMeta(void);
+extern "C" igMetaObject *beSaveApi_GetMeta(void);
+extern "C" void beSvConnectCheck_userDestruct(beSvConnectCheck *self);
+extern "C" igMetaObject *beSvEndApi_GetMeta(void);
 extern "C" void beSvEndApi_userConstruct(igObjectDispatchView *self);
-extern "C" void beSvEndApi_userDestruct(void);
-extern "C" int beSvStartApi_GetMeta(void);
+extern "C" void beSvEndApi_userDestruct(beSvEndApi *self);
+extern "C" igMetaObject *beSvStartApi_GetMeta(void);
 extern "C" void beSvStartApi_userConstruct(igObjectDispatchView *self);
-extern "C" void beSvStartApi_userDestruct(void);
-extern "C" int beSvGetFreeSizeApi_GetMeta(void);
+extern "C" void beSvStartApi_userDestruct(beSvStartApi *self);
+extern "C" igMetaObject *beSvGetFreeSizeApi_GetMeta(void);
 extern "C" void beSvGetFreeSizeApi_userConstruct(igObjectDispatchView *self);
-extern "C" void beSvGetFreeSizeApi_userDestruct(void);
-extern "C" int beSvWriteMediaApi_GetMeta(void);
+extern "C" void beSvGetFreeSizeApi_userDestruct(beSvGetFreeSizeApi *self);
+extern "C" igMetaObject *beSvWriteMediaApi_GetMeta(void);
 extern "C" void beSvWriteMediaApi_userConstruct(igObjectDispatchView *self);
-extern "C" int beSvReadMediaApi_GetMeta(void);
+extern "C" igMetaObject *beSvReadMediaApi_GetMeta(void);
 extern "C" void beSvReadMediaApi_userConstruct(igObjectDispatchView *self);
-extern "C" int beSvUseCheckApi_GetMeta(void);
-extern "C" void beSvUseCheckApi_userDestruct(void);
+extern "C" igMetaObject *beSvUseCheckApi_GetMeta(void);
+extern "C" void beSvUseCheckApi_userDestruct(beSvUseCheckApi *self);
 extern "C" void beSaveApi_userConstruct(igObjectDispatchView *self);
-extern "C" int beSvFormatApi_GetMeta(void);
-extern "C" void beSvFormatApi_userDestruct(void);
-extern "C" int beSvFileFindApi_GetMeta(void);
-extern "C" void beSvFileFindApi_userDestruct(void);
-extern "C" int beSvFileMakeApi_GetMeta(void);
+extern "C" igMetaObject *beSvFormatApi_GetMeta(void);
+extern "C" void beSvFormatApi_userDestruct(beSvFormatApi *self);
+extern "C" igMetaObject *beSvFileFindApi_GetMeta(void);
+extern "C" void beSvFileFindApi_userDestruct(beSvFileFindApi *self);
+extern "C" igMetaObject *beSvFileMakeApi_GetMeta(void);
 extern "C" void beSvFileMakeApi_userConstruct(igObjectDispatchView *self);
-extern "C" void beSaveApi_userDestruct(void);
+extern "C" void beSaveApi_userDestruct(beSaveApi *self);
 extern "C" void beSaveMemoryObj_userConstruct(igObjectDispatchView *self);
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment);
 extern "C" void beSaveMemoryObj_Free(beSaveMemoryObj *self);
-extern "C" int g_beSaveMemoryObj_metaObject[4];
 extern "C" void beSvFileMakeApi_Report(beSvFileMakeApi *self, beSvDeliver *deliver);
 extern "C" unsigned char g_svCardBusy;
 extern "C" void beSvFileFindApi_Start(beSvApiWork *self, beSvDeliver *deliver);
@@ -203,22 +208,9 @@ extern "C" int g_svSlotPresent[8];
 extern "C" int g_svMultitapPollCount[1];
 extern "C" int g_svMultitapPollSuspended[1];
 extern "C" int g_svSlotAbsent[1];
-extern "C" int g_beSaveApi_metaObject[4];
-extern "C" int g_beSvEndApi_metaObject[4];
-extern "C" int g_beSvStartApi_metaObject[4];
-extern "C" int g_beSvGetFreeSizeApi_metaObject[4];
-extern "C" int g_beSvWriteMediaApi_metaObject[4];
 extern "C" void beSvWriteMediaApi_userDestruct(beSvWriteMediaApi *self);
-extern "C" int g_beSvReadMediaApi_metaObject[4];
 extern "C" void beSvReadMediaApi_userDestruct(beSvReadMediaApi *self);
-extern "C" int g_beSvUseCheckApi_metaObject[4];
-extern "C" int g_beSvFormatApi_metaObject[4];
-extern "C" int g_beSvFileFindApi_metaObject[4];
-extern "C" int g_beSvFileMakeApi_metaObject[4];
 extern "C" void beSvFileMakeApi_userDestruct(beSvFileMakeApi *self);
-extern "C" beSaveMemoryObj *beSaveMemoryObj_CreateInstance(int allocator);
-extern "C" void *memcpy(void *, const void *, unsigned int);
-extern "C" void ObjectList_AppendRetained(int list, igObject *item);
 
 /* The PS2 icon.sys record (libmc's sceMcIconSys) the save writes next to the data. */
 struct sceMcIconSys {
@@ -297,10 +289,8 @@ struct beSvFileFindApiWork : igObject {
 
 extern "C" int sceMcMkdir(int, int, char *);
 extern "C" int sceMcDelete(int, int, char *);
-extern "C" char *strcpy(char *, const char *);
 extern "C" int beSvFileMakeApi_Update(beSvFileMakeApiWork *self);
 extern "C" int sceMcGetDir(int, int, char *, unsigned int, int, sceMcTblGetDir *);
-extern "C" int strcmp(const char *, const char *);
 extern "C" sceMcTblGetDir g_svDirEntries[8];
 extern "C" int beSvFileFindApi_Update(beSvFileFindApiWork *self);
 
@@ -340,22 +330,22 @@ void beSaveDataDeliver_AllocateData(beSaveDataDeliver *deliver, int size) {
     int own;
     int allocator;
     deliver->_size = size;
-    own = igObject_GetAllocator(deliver);
+    own = (int)igObject_GetAllocator(deliver);
     if (g_useOwnerAllocator != 0) {
         allocator = own;
     } else {
-        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     }
-    deliver->_data = Memory_AllocateBufferDirect(size, allocator);
+    deliver->_data = (int)(Memory_AllocateBufferDirect(size, (igMemoryPoolView *)allocator));
 }
 
 void beSaveDataDeliver_FreeData(beSaveDataDeliver *deliver) {
     int allocator;
 
     if (deliver->_data != 0) {
-        allocator = igObject_GetAllocator(deliver);
-        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        Memory_FreeBufferWithAllocator(deliver->_data, allocator);
+        allocator = (int)igObject_GetAllocator(deliver);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        Memory_FreeBufferWithAllocator((void *)deliver->_data, (igMemoryPoolView *)allocator);
     }
     deliver->_data = 0;
     deliver->_size = 0;
@@ -365,24 +355,24 @@ void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment) {
     int own, allocator;
 
     if (alignment == 0) {
-        own = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        self->_mem = Memory_AllocateBufferDirect(size, allocator);
+        own = (int)igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        self->_mem = (int)(Memory_AllocateBufferDirect(size, (igMemoryPoolView *)allocator));
     } else {
-        own = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        self->_mem = Memory_AllocateAlignedWithAllocator(size, alignment & 0xFFFF, allocator);
+        own = (int)igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        self->_mem = (int)(Memory_AllocateAlignedWithAllocator(size, alignment & 0xFFFF, (igMemoryPoolView *)allocator));
     }
     memset((void *)self->_mem, 0, size);
 }
 
 void beSaveMemoryObj_Free(beSaveMemoryObj *self) {
-    int allocator;
+    igMemoryPoolView *allocator;
 
     if (self->_mem != 0) {
-        allocator = igObject_GetAllocator();
-        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        Memory_FreeBufferWithAllocator(self->_mem, allocator);
+        allocator = igObject_GetAllocator((igObject *)self);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        Memory_FreeBufferWithAllocator((void *)self->_mem, allocator);
     }
     self->_mem = 0;
 }
@@ -393,9 +383,9 @@ void beSaveMemoryObj_userDestruct(beSaveMemoryObj *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-int beSaveMemoryObj_GetMeta(void)
+igMetaObject *beSaveMemoryObj_GetMeta(void)
 {
-    return g_beSaveMemoryObj_metaObject[0];
+    return g_beSaveMemoryObj_metaObject;
 }
 
 extern "C" int beSaveApi_Checksum(beSvApiWork *self, int *data, int size);
@@ -428,8 +418,8 @@ void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver) {
     self->_connect = deliver->_targetConnect;
     self->_isEnd = 0;
     self->_result = 1;
-    own = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    own = (int)igObject_GetAllocator(self);
+    allocator = g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     old = self->_saveWork;
     IG_OBJECT_RELEASE(old);
     self->_saveWork = beSaveMemoryObj_CreateInstance(allocator);
@@ -1578,11 +1568,11 @@ void beSvReadMediaApi_Start(beSvReadMediaApiWork *self, beSvDeliver *deliver) {
     self->_result = 1;
     g_svPlatformData[0] = (beSvPlatDataPS2 *)deliver->_platformData;
     for (i = 0; i < 2; i++) {
-        own = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        own = (int)igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<beSaveMemoryObj> buffer(beSaveMemoryObj_CreateInstance(allocator));
         beSaveMemoryObj_Allocate(buffer, platform->_dataSize, 0);
-        ObjectList_AppendRetained(self->_loadWorkList, buffer);
+        ObjectList_AppendRetained((igObjectList *)self->_loadWorkList, buffer);
     }
     self->_phase = 0;
     self->_st3 = 0;
@@ -1866,8 +1856,8 @@ void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver) 
     self->_result = 1;
     g_svPlatformData[0] = (beSvPlatDataPS2 *)deliver->_platformData;
     self->_imagePass = 0;
-    own = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    own = (int)(igObject_GetAllocator((igObject *)self));
+    allocator = g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     old = self->_saveWork;
     IG_OBJECT_RELEASE(old);
     self->_saveWork = beSaveMemoryObj_CreateInstance(allocator);
@@ -2555,76 +2545,76 @@ igMetaObject *beSvConnectCheck_GetMeta(void)
 }
 
 void beSvConnectCheck_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
 
-int beSaveApi_GetMeta(void)
+igMetaObject *beSaveApi_GetMeta(void)
 {
-    return g_beSaveApi_metaObject[0];
+    return g_beSaveApi_metaObject;
 }
 
-void beSvConnectCheck_userDestruct(void)
+void beSvConnectCheck_userDestruct(beSvConnectCheck *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
-int beSvEndApi_GetMeta(void)
+igMetaObject *beSvEndApi_GetMeta(void)
 {
-    return g_beSvEndApi_metaObject[0];
+    return g_beSvEndApi_metaObject;
 }
 
 void beSvEndApi_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
 
-void beSvEndApi_userDestruct(void)
+void beSvEndApi_userDestruct(beSvEndApi *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
-int beSvStartApi_GetMeta(void)
+igMetaObject *beSvStartApi_GetMeta(void)
 {
-    return g_beSvStartApi_metaObject[0];
+    return g_beSvStartApi_metaObject;
 }
 
 void beSvStartApi_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
 
-void beSvStartApi_userDestruct(void)
+void beSvStartApi_userDestruct(beSvStartApi *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
-int beSvGetFreeSizeApi_GetMeta(void)
+igMetaObject *beSvGetFreeSizeApi_GetMeta(void)
 {
-    return g_beSvGetFreeSizeApi_metaObject[0];
+    return g_beSvGetFreeSizeApi_metaObject;
 }
 
 void beSvGetFreeSizeApi_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
 
-void beSvGetFreeSizeApi_userDestruct(void)
+void beSvGetFreeSizeApi_userDestruct(beSvGetFreeSizeApi *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
-int beSvWriteMediaApi_GetMeta(void)
+igMetaObject *beSvWriteMediaApi_GetMeta(void)
 {
-    return g_beSvWriteMediaApi_metaObject[0];
+    return g_beSvWriteMediaApi_metaObject;
 }
 
 void beSvWriteMediaApi_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
@@ -2640,13 +2630,13 @@ void beSvWriteMediaApi_userDestruct(beSvWriteMediaApi *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-int beSvReadMediaApi_GetMeta(void)
+igMetaObject *beSvReadMediaApi_GetMeta(void)
 {
-    return g_beSvReadMediaApi_metaObject[0];
+    return g_beSvReadMediaApi_metaObject;
 }
 
 void beSvReadMediaApi_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
@@ -2675,48 +2665,48 @@ void beSvReadMediaApi_userDestruct(beSvReadMediaApi *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-int beSvUseCheckApi_GetMeta(void)
+igMetaObject *beSvUseCheckApi_GetMeta(void)
 {
-    return g_beSvUseCheckApi_metaObject[0];
+    return g_beSvUseCheckApi_metaObject;
 }
 
-void beSvUseCheckApi_userDestruct(void)
+void beSvUseCheckApi_userDestruct(beSvUseCheckApi *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
 void beSaveApi_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
 
-int beSvFormatApi_GetMeta(void)
+igMetaObject *beSvFormatApi_GetMeta(void)
 {
-    return g_beSvFormatApi_metaObject[0];
+    return g_beSvFormatApi_metaObject;
 }
 
-void beSvFormatApi_userDestruct(void)
+void beSvFormatApi_userDestruct(beSvFormatApi *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
-int beSvFileFindApi_GetMeta(void)
+igMetaObject *beSvFileFindApi_GetMeta(void)
 {
-    return g_beSvFileFindApi_metaObject[0];
+    return g_beSvFileFindApi_metaObject;
 }
 
-void beSvFileFindApi_userDestruct(void)
+void beSvFileFindApi_userDestruct(beSvFileFindApi *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
-int beSvFileMakeApi_GetMeta(void)
+igMetaObject *beSvFileMakeApi_GetMeta(void)
 {
-    return g_beSvFileMakeApi_metaObject[0];
+    return g_beSvFileMakeApi_metaObject;
 }
 
 void beSvFileMakeApi_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
@@ -2732,13 +2722,13 @@ void beSvFileMakeApi_userDestruct(beSvFileMakeApi *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-void beSaveApi_userDestruct(void)
+void beSaveApi_userDestruct(beSaveApi *self)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)self);
 }
 
 void beSaveMemoryObj_userConstruct(igObjectDispatchView *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)self);
     igMetaObject_CountInstances(self->GetMeta(), 1);
 }
 

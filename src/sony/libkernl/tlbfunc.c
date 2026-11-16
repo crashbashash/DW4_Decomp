@@ -39,7 +39,6 @@ void _kExitTLBHandler(void);
 void _kDebugException(void);
 int GetMemorySize(void);
 int _InitTLB(void);
-void Exit(int status);
 
 static int kCopy(int *dst, int *src, unsigned int size);
 static int InitTLB32MB(void);

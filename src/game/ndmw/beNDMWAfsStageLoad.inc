@@ -23,7 +23,7 @@ int beNDMWAfsStageLoad_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWAfsStageLoad_vtable[0];
     stageRef = &obj._stage;
     *stageRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWAfsStageLoad_vtable[0];
     if (stageRef != 0) {
         igRelease((igObject *)*stageRef);
@@ -38,7 +38,7 @@ void beNDMWAfsStageLoad_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWAfsStageLoad_callbackList[] = { igInsightCore_EnsureRegistered, igNamedObject_EnsureRegistered, 0 };
 
-void *beNDMWAfsStageLoad_Register(void) {
+CallbackArray *beNDMWAfsStageLoad_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -60,8 +60,8 @@ void beNDMWAfsStageLoad_GetMetaObject(void)
     beNDMWAfsStageLoad_ResolveMetaObject();
 }
 
-int igAction_GetPublishedMetaObject(void) {
-    return g_igAction_metaObject[0];
+igMetaObject *igAction_GetPublishedMetaObject(void) {
+    return g_igAction_metaObject;
 }
 
 static FieldFactory g_beNDMWAfsStageLoad_ctorTable[] = {
@@ -91,10 +91,10 @@ void beNDMWAfsStageLoad_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWAfsStageLoad_ctorTable, 2);
     insight = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)insight)->_refCounted = 0;
     stage = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)stage)->_metaObject = igNamedObject_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)stage)->_metaObject = (int)igNamedObject_GetOrCreateMetaObject();
     ((igRefMetaField *)stage)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWAfsStageLoad_fieldTable, g_beNDMWAfsStageLoad_fieldHandles, g_beNDMWAfsStageLoad_fieldOffsets, base);
 }

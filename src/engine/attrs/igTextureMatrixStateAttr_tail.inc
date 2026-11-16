@@ -2,7 +2,7 @@ void FUN_00141620(void *arg0) {
     *(short *)((char *)(arg0) + 10) = (short) *(int *)((char *)(arg0) + 16);
 }
 
-void Gap__Attrs__igTextureMatrixStateAttr__vfunc_24(S_141630 *arg0, int arg1) {
+void Gap__Attrs__igTextureMatrixStateAttr__vfunc_24(S_141630 *arg0, igPsx2VisualContext *arg1) {
     Gap__Gfx__igPsx2VisualContext__vfunc_209(arg1, arg0->f16, arg0->b);
 }
 

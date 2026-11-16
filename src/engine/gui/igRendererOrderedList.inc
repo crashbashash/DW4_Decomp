@@ -2,12 +2,12 @@ igMetaObject *g_igRendererOrderedList_metaObject;
 
 igRendererOrderedList *igRendererOrderedList_CreateInstance(int allocator) {
     igRendererOrderedList_EnsureRegistered();
-    return (igRendererOrderedList *)igMetaObject_CreateInstance((int)g_igRendererOrderedList_metaObject, allocator);
+    return (igRendererOrderedList *)igMetaObject_CreateInstance(g_igRendererOrderedList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igRendererOrderedList_GetOrCreateMetaObject(void) {
     if (g_igRendererOrderedList_metaObject == 0) {
-        g_igRendererOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igRendererOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igRendererOrderedList_metaObject;
 }
@@ -24,13 +24,13 @@ int igRendererOrderedList_GetVTable(void) {
     struct Obj_44c570 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w[1] = 0;
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.vt = &g_igRendererOrderedList_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igRendererOrderedList_vtable[0];
     FUN_0044c5e0((int **)&obj, 0);
     return r;
@@ -60,9 +60,9 @@ void igRendererOrderedList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igRendererOrderedList_callbackList[] = { igRenderer_EnsureRegistered, 0 };
 
-void igRendererOrderedList_Register(void) {
+CallbackArray *igRendererOrderedList_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRendererOrderedList_metaObject,
         igDependencyOrderedList_Register,

@@ -17,9 +17,9 @@ int beNDMWLogoInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     *(int **)&obj._vtable = &g_beNDMWLogoInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWLogoInfo_vtable[0];
-    beBaseInfo_Destroy(&obj, 0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, 0);
     return vtable;
 }
 
@@ -28,7 +28,7 @@ void beNDMWLogoInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWLogoInfo_Register);
 }
 
-void *beNDMWLogoInfo_Register(void) {
+CallbackArray *beNDMWLogoInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

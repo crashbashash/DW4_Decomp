@@ -3,12 +3,12 @@ igMetaField *g_beStaticInfoCtl_staticInfoListMetaField;
 
 beStaticInfoCtl *beStaticInfoCtl_CreateInstance(int allocator) {
     beStaticInfoCtl_EnsureRegistered();
-    return (beStaticInfoCtl *)igMetaObject_CreateInstance(*(int *)0x587E10, allocator);
+    return (beStaticInfoCtl *)igMetaObject_CreateInstance(g_beStaticInfoCtl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beStaticInfoCtl_GetOrCreateMetaObject(void) {
     if (g_beStaticInfoCtl_metaObject == 0) {
-        g_beStaticInfoCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beStaticInfoCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beStaticInfoCtl_metaObject;
 }
@@ -30,7 +30,7 @@ int beStaticInfoCtl_GetVTable(void) {
     obj._infoList = 0;
     obj._vtable = (int)&g_beStaticInfoCtl_vtable[0];
     obj._staticInfoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beStaticInfoCtl_vtable[0];
     igSmartPointer_beBaseInfoList_Destruct((igSmartPointer<igObject> *)&obj._staticInfoList, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
@@ -44,7 +44,7 @@ void beStaticInfoCtl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beStaticInfoCtl_callbackList[] = { beBaseInfoList_EnsureRegistered, 0 };
 
-void *beStaticInfoCtl_Register(void) {
+CallbackArray *beStaticInfoCtl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -82,9 +82,9 @@ static int g_beStaticInfoCtl_fieldOffsets[] = {
 void beStaticInfoCtl_InitFields(void) {
     int base;
     void *staticInfoList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beStaticInfoCtl_metaObject;
+    meta = g_beStaticInfoCtl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beStaticInfoCtl_ctorTable, 1);
     staticInfoList = (void *)(igMetaObject_GetFieldAt(meta, base));

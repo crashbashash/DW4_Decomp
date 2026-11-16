@@ -3,7 +3,7 @@ igMetaField *g_beDataObjFloatList_dataMetaField;
 
 beDataObjFloatList *beDataObjFloatList_Create(int allocator) {
     beDataObjFloatList_EnsureRegistered();
-    return (beDataObjFloatList *)igMetaObject_CreateInstance(*(int *)0x589848, allocator);
+    return (beDataObjFloatList *)igMetaObject_CreateInstance(g_beDataObjFloatList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beDataObjFloatList_GetMetaObject(void) {
@@ -26,7 +26,7 @@ int beDataObjFloatList_GetVTable(void) {
     obj._vtable = (int)&g_beDataObjFloatList_vtable[0];
     dataSlot = (igObject **)&obj._data;
     *dataSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDataObjFloatList_vtable[0];
     igObjectRef_Release(dataSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -41,7 +41,7 @@ void beDataObjFloatList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDataObjFloatList_callbackList[] = { igFloatList_EnsureRegistered, 0 };
 
-void *beDataObjFloatList_Register(void) {
+CallbackArray *beDataObjFloatList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -79,13 +79,13 @@ static int g_beDataObjFloatList_fieldOffsets[] = {
 void beDataObjFloatList_InitFields(void) {
     int base;
     void *data;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDataObjFloatList_metaObject;
+    meta = g_beDataObjFloatList_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDataObjFloatList_ctorTable, 1);
     data = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)data)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)data)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)data)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDataObjFloatList_fieldTable, g_beDataObjFloatList_fieldHandles, g_beDataObjFloatList_fieldOffsets, base);
 }

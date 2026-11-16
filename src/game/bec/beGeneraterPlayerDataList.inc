@@ -2,7 +2,7 @@ igMetaObject *g_beGeneraterPlayerDataList_metaObject;
 
 igMetaObject *beGeneraterPlayerDataList_GetOrCreateMetaObject(void) {
     if (g_beGeneraterPlayerDataList_metaObject == 0) {
-        g_beGeneraterPlayerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beGeneraterPlayerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beGeneraterPlayerDataList_metaObject;
 }
@@ -20,7 +20,7 @@ int beGeneraterPlayerDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beGeneraterPlayerDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beGeneraterPlayerDataList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beGeneraterPlayerDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beGeneraterPlayerDataList_callbackList[] = { beGeneraterPlayerData_EnsureRegistered, 0 };
 
-void *beGeneraterPlayerDataList_Register(void) {
+CallbackArray *beGeneraterPlayerDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

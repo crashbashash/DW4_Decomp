@@ -1,8 +1,8 @@
 igMetaObject *g_igPsx2AudioSourceList_metaObject;
 
-void *FUN_001435c0(int arg0) {
+void *FUN_001435c0(igMemoryPoolView *pool) {
     FUN_00143690();
-    return (void *)igMetaObject_CreateInstance((int)g_igPsx2AudioSourceList_metaObject, arg0);
+    return (void *)igMetaObject_CreateInstance(g_igPsx2AudioSourceList_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPsx2AudioSourceList_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igPsx2AudioSourceList_GetMetaObject(void)
 int igPsx2AudioSourceList_GetVTable(void) {
     struct SourceListProbe obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igPsx2AudioSourceList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void FUN_00143690(void)
@@ -26,9 +26,9 @@ void FUN_00143690(void)
     igMetaObject_RunStaticInit(igPsx2AudioSourceList_Register);
 }
 
-void igPsx2AudioSourceList_Register(void) {
+CallbackArray *igPsx2AudioSourceList_Register(void) {
     AudioLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2AudioSourceList_metaObject,
         igDataList_Register,
@@ -47,5 +47,5 @@ void thunk_igPsx2AudioSourceList_GetMetaObject(void) {
     igPsx2AudioSourceList_GetMetaObject();
 }
 
-int igDataList_GetPublishedMetaObject(void){return g_igDataList_metaObject[0];}
+igMetaObject *igDataList_GetPublishedMetaObject(void){return g_igDataList_metaObject;}
 

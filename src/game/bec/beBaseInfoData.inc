@@ -14,7 +14,7 @@ void beBaseInfoData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beBaseInfoData_Register);
 }
 
-void *beBaseInfoData_Register(void) {
+CallbackArray *beBaseInfoData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -51,9 +51,9 @@ static int g_beBaseInfoData_fieldOffsets[] = {
 
 void beBaseInfoData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beBaseInfoData_metaObject;
+    meta = g_beBaseInfoData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBaseInfoData_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beBaseInfoData_fieldTable, g_beBaseInfoData_fieldHandles, g_beBaseInfoData_fieldOffsets, base);

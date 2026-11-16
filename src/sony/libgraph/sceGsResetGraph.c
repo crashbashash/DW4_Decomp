@@ -1,22 +1,14 @@
+#include "dw4/sony/libgraph.h"
+#include "dw4/eekernel.h"
 #include "dw4/libkernl.h"
-typedef struct {
-    short inter;
-    short omode;
-    short ffmode;
-    unsigned short version;
-    int vsync_set;
-    int vsync_id;
-} GsGParam;
 
 #define GS_CSR (*(volatile unsigned long long *)0x12001000)
 #define GS_CSR_RESET 0x200
 #define GS_CSR_FLUSH 0x100
 #define INTC_VBLANK_START 2
 
-int RemoveIntcHandler(int cause, int id);
 int GsPutIMR(unsigned long long imr);
 void SetGsCrt(short interlace, short omode, short ffmode);
-GsGParam *sceGsGetGParam(void);
 
 static char __ps2_libinfo__[16] = "PsIIlibgraph2800";
 

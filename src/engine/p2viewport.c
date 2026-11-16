@@ -13,8 +13,6 @@ typedef struct p2ViewportRect {
     float farZ;
 } p2ViewportRect;
 
-void p2SetViewport(int x, int y, int width, int height, float nearZ, float farZ);
-
 extern p2ViewportRect p2Viewport;
 extern float p2ViewportScale;
 extern int p2DepthBias;

@@ -1,5 +1,5 @@
 void Gap__Gui__igGuiComponentController__vfunc_23(igGuiComponentController *self, int model) {
-    igObject_IsKindOf(model, igGuiComponentModel_GetMetaObject());
+    igObject_IsKindOf((igObject *)model, igGuiComponentModel_GetMetaObject());
 }
 
 void Gap__Gui__igGuiComponentController__vfunc_24(igGuiComponentController *arg0, void *arg1) {

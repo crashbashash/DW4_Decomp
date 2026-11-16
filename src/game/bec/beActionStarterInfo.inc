@@ -19,7 +19,7 @@ int beActionStarterInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beActionStarterInfo_vtable[0];
     obj._modelList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beActionStarterInfo_vtable[0];
     igSmartPointer_beAsTargetModelDataList_Destruct((igSmartPointer<igObject> *)&obj._modelList, (short)(-1));
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
@@ -46,7 +46,7 @@ void beActionStarterInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beActionStarterInfo_callbackList[] = { beAsTargetModelDataList_EnsureRegistered, 0 };
 
-void *beActionStarterInfo_Register(void) {
+CallbackArray *beActionStarterInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,9 +84,9 @@ static int g_beActionStarterInfo_fieldOffsets[] = {
 void beActionStarterInfo_InitFields(void) {
     int base;
     void *modelList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beActionStarterInfo_metaObject;
+    meta = g_beActionStarterInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beActionStarterInfo_ctorTable, 1);
     modelList = (void *)(igMetaObject_GetFieldAt(meta, base));

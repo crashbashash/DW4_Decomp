@@ -6,12 +6,12 @@ igMetaField *g_beNDMWTitle2_selectMetaField;
 
 beNDMWTitle2 *beNDMWTitle2_CreateInstance(int allocator) {
     beNDMWTitle2_EnsureRegistered();
-    return (beNDMWTitle2 *)igMetaObject_CreateInstance(g_beNDMWTitle2_metaObject, allocator);
+    return (beNDMWTitle2 *)igMetaObject_CreateInstance(g_beNDMWTitle2_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWTitle2_GetOrCreateMetaObject(void) {
     if (g_beNDMWTitle2_metaObject == 0) {
-        g_beNDMWTitle2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWTitle2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWTitle2_metaObject;
 }
@@ -37,11 +37,11 @@ int beNDMWTitle2_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWTitle2_vtable[0];
     obj._padManager = 0;
     obj._mcUtilCtrl = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWTitle2_vtable[0];
     igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
     igSmartPointer_bePadManager_Destruct(&obj._padManager, -1);
-    beBaseInfoManager_Destroy(&obj, 0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -51,9 +51,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMcUtilCtrl_Destruct(igSmartPointe
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -65,7 +65,7 @@ void beNDMWTitle2_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWTitle2_callbackList[] = { bePadManager_EnsureRegistered, beNDMWMcUtilCtrl_EnsureRegistered, 0 };
 
-void *beNDMWTitle2_Register(void) {
+CallbackArray *beNDMWTitle2_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -122,7 +122,7 @@ void beNDMWTitle2_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWTitle2_ctorTable, 4);
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     mcUtilCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)mcUtilCtrl)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beNDMWTitle2_fieldTable, g_beNDMWTitle2_fieldHandles, g_beNDMWTitle2_fieldOffsets, base);

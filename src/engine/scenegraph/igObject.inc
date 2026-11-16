@@ -10,11 +10,11 @@ void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2) {
     s3 = (igVec3fList *)igVertexArray2__FindVertexData(sp7C, 1, 0);
     if (sp7C != 0) {
         sp7C->_refCount = sp7C->_refCount - 1;
-        if (((unsigned long long)(long long)(int)sp7C->_refCount & 0x7fffffULL) == 0) igObject_Destroy((void *)sp7C);
+        if (((unsigned long long)(long long)(int)sp7C->_refCount & 0x7fffffULL) == 0) igObject_Destroy((igObject *)sp7C);
     }
     if (s3 != 0) {
         s3 = (igVec3fList *)((igVertexData *)s3)->_data;
-        if (s3 != 0 && igObject_IsKindOf(s3, g_igVec3fList_metaObject[0]) != 0) {
+        if (s3 != 0 && igObject_IsKindOf(s3, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
             s3 = (igVec3fList *)s3;
         } else {
             s3 = 0;
@@ -46,7 +46,7 @@ void FUN_001b23b0(int *arg0, int *arg1) {
 int FUN_001b23e0(int arg0, Y *arg1) {
     V3_1b23e0 sp40;
     V3_1b23e0 sp30;
-    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance(igObject_GetAllocator())));
+    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance(igObject_GetAllocator((igObject *)arg0))));
     FUN_001b1fa0(arg1, &sp40, &sp30);
     created.get()->a = sp40;
     created.get()->b = sp30;
@@ -55,7 +55,7 @@ int FUN_001b23e0(int arg0, Y *arg1) {
 }
 
 int FUN_001b24d0(int arg0, int arg1) {
-    igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance(igObject_GetAllocator())));
+    igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance(igObject_GetAllocator((igObject *)arg0))));
     BoundsObject *array;
     V3_1b24d0 min;
     V3_1b24d0 max;
@@ -64,7 +64,7 @@ int FUN_001b24d0(int arg0, int arg1) {
     bounds.get()->max = max;
     igVolume_ExtendBy(arg0, bounds.get());
     FUN_001b23b0((int *)&array, (int *)arg1);
-    int missing = igVertexArray2__FindVertexData(array, 5, 0);
+    int missing = (int)igVertexArray2__FindVertexData((igVertexArray2 *)array, 5, 0);
     if (array != 0) {
         array->_refCount = array->_refCount - 1;
         if ((array->_refCount & 0x7FFFFF) == 0) {
@@ -85,7 +85,7 @@ bool igGeometry_ExtendBound(int arg0, void *arg1) {
     n = l->count;
     for (i = 0; i < n; i++) {
         e = l->data[i];
-        if (igObject_IsKindOf(e, g_igGeometryAttr_metaObject[0]) != 0) {
+        if (igObject_IsKindOf(e, g_igGeometryAttr_metaObject) != 0) {
             if (FUN_001b23e0(arg0, (Y *)e) == 0) {
                 ok = false;
             }

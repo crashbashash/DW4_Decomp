@@ -3,7 +3,7 @@ igMetaField *g_igPolygonModeAttr_modeMetaField;
 
 igMetaObject *FUN_00134940(void) {
     if (g_igPolygonModeAttr_metaObject == 0) {
-        g_igPolygonModeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igPolygonModeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igPolygonModeAttr_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igPolygonModeAttr_GetMetaObject(void)
 
 int igPolygonModeAttr_GetVTable(void) {
     struct Obj obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igPolygonModeAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00134a20(void)
@@ -28,9 +28,9 @@ void FUN_00134a20(void)
     igMetaObject_RunStaticInit(igPolygonModeAttr_Register);
 }
 
-void igPolygonModeAttr_Register(void) {
+CallbackArray *igPolygonModeAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPolygonModeAttr_metaObject,
         igVisualAttribute_Register,
@@ -50,7 +50,7 @@ void thunk_igPolygonModeAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igPolygonModeAttr_ctorTable[] = {
-    igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igPolygonModeAttr_fieldTable[] = {
     "_mode",

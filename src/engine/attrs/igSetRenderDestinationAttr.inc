@@ -3,7 +3,7 @@ igMetaField *g_igSetRenderDestinationAttr_pRDAttrMetaField;
 
 igMetaObject *FUN_00133b70(void) {
     if (g_igSetRenderDestinationAttr_metaObject == 0) {
-        g_igSetRenderDestinationAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igSetRenderDestinationAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igSetRenderDestinationAttr_metaObject;
 }
@@ -22,11 +22,11 @@ int igSetRenderDestinationAttr_GetVTable(void) {
     int temp_s0;
     void *temp_a0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q3 = &u.p[3];
     u.w[0] = (int)(&g_igSetRenderDestinationAttr_vtable[0]);
     *q3 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.w[0] = (int)(&g_igSetRenderDestinationAttr_vtable[0]);
     if (q3 != 0) {
         temp_a0 = *q3;
@@ -60,9 +60,9 @@ void igSetRenderDestinationAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igSetRenderDestinationAttr_callbackList[] = { igRenderDestinationAttr_EnsureRegistered, 0 };
 
-void igSetRenderDestinationAttr_Register(void) {
+CallbackArray *igSetRenderDestinationAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSetRenderDestinationAttr_metaObject,
         igVisualAttribute_Register,
@@ -82,7 +82,7 @@ void thunk_igSetRenderDestinationAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igSetRenderDestinationAttr_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igSetRenderDestinationAttr_fieldTable[] = {
     "_pRDAttr",

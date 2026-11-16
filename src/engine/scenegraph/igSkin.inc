@@ -4,7 +4,7 @@ igMetaField *g_igSkin_boundMetaField;
 
 igMetaObject *FUN_00197fd0(void) {
     if (g_igSkin_metaObject == 0) {
-        g_igSkin_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igSkin_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igSkin_metaObject;
 }
@@ -27,7 +27,7 @@ int igSkin_GetVTable(void) {
     int tc1;
     
     
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&g_igSkin_vtable[0]);
@@ -35,14 +35,14 @@ int igSkin_GetVTable(void) {
     *(int *)q2 = 0;
     q3 = (S_ref *)&u.b[16];
     *(int *)q3 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s2 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.w[0] = (int)(&g_igSkin_vtable[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
         if (q3 != 0) {
             q3->f4 = (int)((int) (q3->f4 - 1));
             if (((unsigned long long) ((long long) q3->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q3);
+                igObject_Destroy((igObject *)q3);
             }
         }
     }
@@ -51,7 +51,7 @@ int igSkin_GetVTable(void) {
         if (q2 != 0) {
             q2->f4 = (int)((int) (q2->f4 - 1));
             if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)q2);
+                igObject_Destroy((igObject *)q2);
             }
         }
     }
@@ -63,7 +63,7 @@ int igSkin_GetVTable(void) {
             tc1 = tv1[-1] - 1;
             tv1[-1] = tc1;
             if (tc1 == 0) {
-                StringChunk_ReleaseHeader(*ta1, ta1);
+                StringChunk_ReleaseHeader((StringChunk *)*ta1, (StringTokenHeader *)ta1);
             }
         }
     }
@@ -78,7 +78,7 @@ void **igSmartPointer_igAABox_Destruct(void **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
             if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {
@@ -94,7 +94,7 @@ ObjectRefWord *igSmartPointer_igNode_Destruct(ObjectRefWord *self,int delete_sto
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
@@ -108,9 +108,9 @@ void igSkin_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igSkin_callbackList[] = { igNode_EnsureRegistered, igAABox_EnsureRegistered, 0 };
 
-void igSkin_Register(void) {
+CallbackArray *igSkin_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSkin_metaObject,
         igNamedObject_Register,
@@ -130,8 +130,8 @@ void thunk_igSkin_GetMetaObject(void) {
 }
 
 static FieldFactory g_igSkin_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igSkin_fieldTable[] = {
     "_skinnedGraph",
@@ -153,12 +153,12 @@ void igSkin_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igSkin_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkin_ctorTable, 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNode_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igAABox_GetOrCreateMetaObject();
+    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkin_fieldTable, g_igSkin_fieldHandles, g_igSkin_fieldOffsets, temp_s2);
 }
 

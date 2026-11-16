@@ -1,5 +1,20 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/StringPool.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beMessenger.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beSelectCtrl.h"
+#include "dw4/beSelectCtrlInfo.h"
+#include "dw4/beSelectCtrlInfoWork.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMathConstants.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include <stdio.h>
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
 
@@ -38,24 +53,24 @@ enum PadBits {
 };
 
 #define RELEASE(type, object) { type *released = (type *)(object); if (released != 0) { released->_refCount = (int)released->_refCount - 1; if ((released->_refCount & 0x7FFFFF) == 0) igObject_Destroy(released); } }
-#define PICK_ALLOCATOR(allocator, owner) { allocator = igObject_GetAllocator(owner); allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
+#define PICK_ALLOCATOR(allocator, owner) { allocator = (int)igObject_GetAllocator(owner); allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define INFO_NAME (info->_name ? info->_name : (int)emptyString)
-#define SELECT_MODEL() { int ramNo = ram->_ramNo; beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", INFO_NAME, ramNo); }
-#define SEND_MODEL(sequence) { int ramNo = ram->_ramNo; beMessenger_SendNamed(self->_messenger, "MODELCTRL", INFO_NAME, ramNo, sequence); }
-#define SEND_SAVED_SEQUENCE() { int sequence = work->_svSeqName; int ramNo = ram->_ramNo; beMessenger_SendNamed(self->_messenger, "MODELCTRL", INFO_NAME, ramNo, sequence); }
+#define SELECT_MODEL() { int ramNo = ram->_ramNo; beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", (const char *)INFO_NAME, ramNo); }
+#define SEND_MODEL(sequence) { int ramNo = ram->_ramNo; beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", (const char *)INFO_NAME, ramNo, (const char *)sequence); }
+#define SEND_SAVED_SEQUENCE() { int sequence = work->_svSeqName; int ramNo = ram->_ramNo; beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", (const char *)INFO_NAME, ramNo, (const char *)sequence); }
 /* Asks the model whether it still plays the named sequence; the reply is the first bool. */
 #define ASK_PLAYING(sequence) \
     SELECT_MODEL() \
-    beMessenger_AppendString(self->_messenger, sequence); \
-    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
+    beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)sequence); \
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ISSEQNAME");
 #define PLAY_CURSOR_NG() \
-    beMessenger_SelectGroup(self->_messenger, "SOUND"); \
-    beMessenger_AppendString(self->_messenger, "CURSOR_NG"); \
-    beMessenger_DispatchSelected(self->_messenger, "PLAY");
-#define ENSURE_STRING_POOL() if (g_stringPool[0] == 0) { \
-        value = StringPool_Allocate(0x10); \
-        if (value != 0) value = StringPool_Construct(value); \
-        g_stringPool[0] = value; \
+    beMessenger_SelectGroup((beMessenger *)self->_messenger, "SOUND"); \
+    beMessenger_AppendString((beMessenger *)self->_messenger, "CURSOR_NG"); \
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, "PLAY");
+#define ENSURE_STRING_POOL() if (g_stringPool == 0) { \
+        value = (int)StringPool_Allocate(0x10); \
+        if (value != 0) value = (int)StringPool_Construct((StringPool *)value); \
+        g_stringPool = (StringPool *)value; \
     }
 /* Drops the work's share of its saved sequence name (the reference count is the word before the text). */
 #define RELEASE_SAVED_SEQUENCE(header) { \
@@ -64,12 +79,12 @@ enum PadBits {
             header = oldName - 2; \
             value = oldName[-1] - 1; \
             oldName[-1] = value; \
-            if (value == 0) StringChunk_ReleaseHeader(*header, header); \
+            if (value == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header); \
         } \
     }
 #define SAVE_SEQUENCE(text) { \
         ENSURE_STRING_POOL() \
-        name = StringPool_Intern(g_stringPool[0], text); \
+        name = (int *)StringPool_Intern(g_stringPool, text); \
         RELEASE_SAVED_SEQUENCE(header) \
         work->_svSeqName = (int)name; \
     }
@@ -87,7 +102,7 @@ enum PadBits {
         i = 0; \
         if (0 < count) { \
             do { \
-                flag = beMessenger_GetBool(self->_messenger, i) & 0xFF; \
+                flag = beMessenger_GetBool((beMessenger *)self->_messenger, i); \
                 list = (igBoolList *)decide.p; \
                 slot = list->_count; \
                 if (slot < list->_capacity) { \
@@ -101,54 +116,13 @@ enum PadBits {
         } \
     }
 
-extern "C" int igInsightCore_FindManager(int insight, int metaObject);
-extern "C" int beSelectCtrl_GetInfoMeta(void);
-extern "C" int beSelectCtrl_GetMeta(void);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, const char *);
-extern "C" int sprintf(...);
-extern "C" int StringPool_Allocate(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int StringPool_Construct(...);
-extern "C" int *StringPool_Intern(...);
-extern "C" int beMessenger_AppendString(...);
-extern "C" int beMessenger_AppendVec3(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_GetBool(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_SelectReceivers(...);
-extern "C" int beMessenger_SendNamed(...);
-extern "C" bePadData *bePadManager_GetPadForPlayer(...);
-extern "C" int igObject_GetAllocator(...);
+extern "C" igMetaObject *beSelectCtrl_GetInfoMeta(void);
+extern "C" igMetaObject *beSelectCtrl_GetMeta(void);
 extern "C" int igBoolList_Create(int);
-extern "C" int beSelectCtrlInfoWork_Create(int);
-extern "C" int beSelectCtrl_GetMessageEnum(...);
-extern "C" int beMessenger_AppendBool(int, int);
-extern "C" int beMessenger_AppendInt(int, int);
-extern "C" int beMessenger_GetBoolCount(int);
-extern "C" int beMessenger_GetInt(int, int);
-extern "C" int beMessenger_GetIntCount(int);
-extern "C" int beMessenger_GetString(int, int);
-extern "C" int beMessenger_GetStringCount(int);
-extern "C" int beMessenger_GetVec3(float *, int, int);
-extern "C" int beMessenger_GetVec3Count(int);
-extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
-extern "C" int strcmp(int, const char *);
-extern "C" int List_Resize(igBoolList *, int, int);
-extern "C" igObject *beBaseInfoDataList_Create(...);
-extern "C" beSelectCtrlInfoRamData *igProperty_FindByName(...);
 extern "C" void beSelectCtrl_Prepare(beSelectCtrl *self);
 extern "C" void beSelectCtrl_OnAddRam(beSelectCtrl *self, int info);
 extern "C" void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram);
 extern "C" int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int message);
-extern "C" int g_beSelectCtrlInfo_metaObject[4];
-extern "C" int g_beSelectCtrl_metaObject[4];
-extern "C" int g_bePadManager_metaObject[4];
-extern "C" int g_propertyNameField[4];
-extern "C" int g_stringPool[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" float g_vec3Zero[3];
 extern "C" char emptyString[];
 
 /* Owning stack reference to the work created by GENERATE, released on scope exit. */
@@ -180,18 +154,18 @@ struct DataList {
 void beSelectCtrl_Prepare(beSelectCtrl *self)
 {
     if (self->_padManager == 0) {
-        self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+        self->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
     }
 }
 
-int beSelectCtrl_GetInfoMeta(void)
+igMetaObject *beSelectCtrl_GetInfoMeta(void)
 {
-    return g_beSelectCtrlInfo_metaObject[0];
+    return g_beSelectCtrlInfo_metaObject;
 }
 
 void beSelectCtrl_OnAddRam(beSelectCtrl *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "SELECTCTRL");
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)info, "SELECTCTRL");
 }
 
 static inline int waitOf(const beBaseInfoRam *ram) { return ram->_st2; }
@@ -226,17 +200,17 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
         igObject *created;
-        allocator = igObject_GetAllocator(ram);
-        allocator = g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        allocator = (int)igObject_GetAllocator(ram);
+        allocator = g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocator));
         created = list.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         RELEASE(igObject, ram->_dataList)
         ram->_dataList = (int)created;
     }
-    data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
+    data = (beSelectCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     work = (beSelectCtrlInfoWork *)data->_work;
-    pad = bePadManager_GetPadForPlayer(self->_padManager, ram->_ramNo);
+    pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo);
     state = ram->_st0;
     pressed = pad->_trigger;
     stick = pad->_lStk;
@@ -249,14 +223,14 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
             offset[0] = work->_offsetPos[0];
             offset[1] = work->_offsetPos[1];
             offset[2] = work->_offsetPos[2];
-            beMessenger_AppendVec3(self->_messenger, offset);
-            beMessenger_AppendString(self->_messenger, "SQ_OPEN");
-            beMessenger_DispatchSelected(self->_messenger, "GENERATE");
+            beMessenger_AppendVec3((beMessenger *)self->_messenger, offset);
+            beMessenger_AppendString((beMessenger *)self->_messenger, "SQ_OPEN");
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GENERATE");
             NEXT_STEP(ram)
             return;
         case 1:
             ASK_PLAYING("SQ_OPEN")
-            if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
+            if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) != 1) {
                 sprintf(slideText, "SQ_LINESL%02d", data->_selectNo);
                 SEND_MODEL(slideText)
                 NEXT_STATE(ram)
@@ -303,7 +277,7 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
                     break;
                 default:
                     ASK_PLAYING(work->_svSeqName)
-                    if (beMessenger_GetBool(self->_messenger, 0) == 0) ram->_st3 = 0;
+                    if (!beMessenger_GetBool((beMessenger *)self->_messenger, 0)) ram->_st3 = 0;
                 }
             }
             if (pressed & PAD_CIRCLE) {
@@ -336,7 +310,7 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
             break;
         case 1:
             ASK_PLAYING(work->_svSeqName)
-            if (beMessenger_GetBool(self->_messenger, 0) == 0) {
+            if (!beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
                 NEXT_STATE(ram)
                 return;
             }
@@ -359,7 +333,7 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
             if (data->_selectNo != -1) name = (int *)"SQ_CLOSE";
             else name = (int *)"SQ_CANCEL";
             ENSURE_STRING_POOL()
-            header = StringPool_Intern(g_stringPool[0], name);
+            header = (int *)StringPool_Intern(g_stringPool, (const char *)name);
             {
                 int *closeHeader;
                 RELEASE_SAVED_SEQUENCE(closeHeader)
@@ -370,7 +344,7 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
             return;
         case 1:
             ASK_PLAYING(work->_svSeqName)
-            if (beMessenger_GetBool(self->_messenger, 0) == 0) {
+            if (!beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
                 NEXT_STATE(ram)
                 return;
             }
@@ -385,7 +359,7 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
             return;
         case 1:
             ASK_PLAYING("SQ_FO2TOP")
-            if (beMessenger_GetBool(self->_messenger, 0) == 0) {
+            if (!beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
                 ENTER_STATE(ram, STATE_SELECT)
                 return;
             }
@@ -420,15 +394,15 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
         PICK_ALLOCATOR(allocator, ram)
         DataList::create(ram, allocator);
     }
-    data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
+    data = (beSelectCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     work = (beSelectCtrlInfoWork *)data->_work;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beSelectCtrl_GetMessageEnum(), message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beSelectCtrl_GetMessageEnum(), (const char *)message)) {
     case MESSAGE_GENERATE:
         ram->_isRun = 1;
         ENTER_STATE(ram, STATE_OPEN)
         PICK_ALLOCATOR(allocator, self)
         {
-            WorkRef newWork((beSelectCtrlInfoWork *)beSelectCtrlInfoWork_Create(allocator));
+            WorkRef newWork(beSelectCtrlInfoWork_Create(allocator));
             held = (igObject *)newWork.p;
             if (held != 0) held->_refCount = (int)held->_refCount + 1;
             RELEASE(igObject, data->_work)
@@ -436,30 +410,30 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
             created = newWork.p;
         }
         data->_selectNo = 0;
-        if (beMessenger_GetIntCount(self->_messenger) != 0) {
-            created->_selectMax = beMessenger_GetInt(self->_messenger, 0);
-            if (beMessenger_GetIntCount(self->_messenger) == 2) {
-                data->_selectNo = beMessenger_GetInt(self->_messenger, 1);
+        if (beMessenger_GetIntCount((beMessenger *)self->_messenger) != 0) {
+            created->_selectMax = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+            if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 2) {
+                data->_selectNo = beMessenger_GetInt((beMessenger *)self->_messenger, 1);
             }
         } else {
             created->_selectMax = data->_maxSelect;
         }
-        if (beMessenger_GetVec3Count(self->_messenger) != 0) {
-            beMessenger_GetVec3(offset, self->_messenger, 0);
+        if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) != 0) {
+            beMessenger_GetVec3(offset, (beMessenger *)self->_messenger, 0);
             created->_offsetPos[0] = offset[0];
             created->_offsetPos[1] = offset[1];
             created->_offsetPos[2] = offset[2];
         } else {
-            created->_offsetPos[0] = g_vec3Zero[0];
-            created->_offsetPos[1] = g_vec3Zero[1];
-            created->_offsetPos[2] = g_vec3Zero[2];
+            created->_offsetPos[0] = g_vec3Zero.x;
+            created->_offsetPos[1] = g_vec3Zero.y;
+            created->_offsetPos[2] = g_vec3Zero.z;
         }
-        if (beMessenger_GetStringCount(self->_messenger) != 0) {
-            if (strcmp(beMessenger_GetString(self->_messenger, 0), "NOCANCEL") == 0) {
+        if (beMessenger_GetStringCount((beMessenger *)self->_messenger) != 0) {
+            if (strcmp(beMessenger_GetString((beMessenger *)self->_messenger, 0), "NOCANCEL") == 0) {
                 created->_isCancel = 0;
             }
         }
-        count = beMessenger_GetBoolCount(self->_messenger);
+        count = beMessenger_GetBoolCount((beMessenger *)self->_messenger);
         if (count != 0 && count == created->_selectMax) {
             READ_DECIDE_LIST(created, count, i, flag, list, slot)
         }
@@ -467,45 +441,45 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
     case MESSAGE_ISSELECTNOW:
         if (ram->_isRun != 0) {
             if (ram->_st0 == STATE_CLOSE || ram->_st0 == STATE_END) {
-                beMessenger_AppendBool(self->_messenger, 0);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
             } else {
-                beMessenger_AppendBool(self->_messenger, 1);
+                beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
             }
         } else {
-            beMessenger_AppendBool(self->_messenger, 0);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         }
         return 1;
     case MESSAGE_ISEND:
         if (ram->_isRun != 0) {
-            beMessenger_AppendBool(self->_messenger, 0);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         } else {
-            beMessenger_AppendBool(self->_messenger, 1);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
         }
         return 1;
     case MESSAGE_GETSELECT:
-        beMessenger_AppendInt(self->_messenger, data->_selectNo);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, data->_selectNo);
         return 1;
     case MESSAGE_ISFO2TOP:
         if (ram->_st0 == STATE_SELECT && ram->_st1 == 0) {
-            beMessenger_AppendBool(self->_messenger, 0);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         } else {
-            beMessenger_AppendBool(self->_messenger, 1);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
         }
         return 1;
     case MESSAGE_FO2TOP:
         if (ram->_st0 == STATE_SELECT && ram->_st1 == 0) {
             data->_selectNo = 0;
-            if (beMessenger_GetIntCount(self->_messenger) > 0) {
-                work->_selectMax = beMessenger_GetInt(self->_messenger, 0);
-                count = beMessenger_GetBoolCount(self->_messenger);
+            if (beMessenger_GetIntCount((beMessenger *)self->_messenger) > 0) {
+                work->_selectMax = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+                count = beMessenger_GetBoolCount((beMessenger *)self->_messenger);
                 if (count != 0 && count == work->_selectMax) {
                     READ_DECIDE_LIST(work, count, j, flag2, list2, slot2)
                 }
             }
             ENTER_STATE(ram, STATE_FO2TOP)
-            beMessenger_AppendBool(self->_messenger, 1);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 1);
         } else {
-            beMessenger_AppendBool(self->_messenger, 0);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         }
         return 1;
     case MESSAGE_REMOVE:
@@ -516,9 +490,9 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
     }
 }
 
-int beSelectCtrl_GetMeta(void)
+igMetaObject *beSelectCtrl_GetMeta(void)
 {
-    return g_beSelectCtrl_metaObject[0];
+    return g_beSelectCtrl_metaObject;
 }
 
 #pragma pop

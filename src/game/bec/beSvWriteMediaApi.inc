@@ -4,7 +4,7 @@ igMetaField *g_beSvWriteMediaApi_saveWorkMetaField;
 
 beSvWriteMediaApi *beSvWriteMediaApi_Create(int allocator) {
     beSvWriteMediaApi_EnsureRegistered();
-    return (beSvWriteMediaApi *)igMetaObject_CreateInstance(*(int *)0x588220, allocator);
+    return (beSvWriteMediaApi *)igMetaObject_CreateInstance(g_beSvWriteMediaApi_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSvWriteMediaApi_GetMetaObject(void) {
@@ -29,7 +29,7 @@ int beSvWriteMediaApi_GetVTable(void) {
     obj._vtable = (int)&g_beSvWriteMediaApi_vtable[0];
     obj._nowGamedata = 0;
     obj._saveWork = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvWriteMediaApi_vtable[0];
     igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)&obj._saveWork, (short)(-1));
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)&obj._nowGamedata, (long long)(-1));
@@ -57,7 +57,7 @@ void beSvWriteMediaApi_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSvWriteMediaApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveMemoryObj_EnsureRegistered, 0 };
 
-void *beSvWriteMediaApi_Register(void) {
+CallbackArray *beSvWriteMediaApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -100,9 +100,9 @@ void beSvWriteMediaApi_InitFields(void) {
     int base;
     void *nowGamedata;
     void *saveWork;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvWriteMediaApi_metaObject;
+    meta = g_beSvWriteMediaApi_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvWriteMediaApi_ctorTable, 2);
     nowGamedata = (void *)(igMetaObject_GetFieldAt(meta, base));

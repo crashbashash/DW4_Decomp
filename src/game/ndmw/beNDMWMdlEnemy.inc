@@ -2,12 +2,12 @@ igMetaObject *g_beNDMWMdlEnemy_metaObject;
 
 beNDMWMdlEnemy *beNDMWMdlEnemy_CreateInstance(int allocator) {
     beNDMWMdlEnemy_EnsureRegistered();
-    return (beNDMWMdlEnemy *)igMetaObject_CreateInstance(g_beNDMWMdlEnemy_metaObject, allocator);
+    return (beNDMWMdlEnemy *)igMetaObject_CreateInstance(g_beNDMWMdlEnemy_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMdlEnemy_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlEnemy_metaObject == 0) {
-        g_beNDMWMdlEnemy_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMdlEnemy_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMdlEnemy_metaObject;
 }
@@ -25,7 +25,7 @@ int beNDMWMdlEnemy_GetVTable(void) {
     obj._name = 0;
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlEnemy_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMdlEnemy_vtable[0];
     beNDMWMdlPEBase_Destroy((beNDMWMdlPEBase *)&obj, 0);
     return vtable;
@@ -36,7 +36,7 @@ void beNDMWMdlEnemy_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlEnemy_Register);
 }
 
-void *beNDMWMdlEnemy_Register(void) {
+CallbackArray *beNDMWMdlEnemy_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

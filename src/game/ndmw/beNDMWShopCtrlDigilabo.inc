@@ -9,7 +9,7 @@ igMetaField *g_beNDMWShopCtrlDigilabo_isDemoRunMetaField;
 
 beNDMWShopCtrlDigilabo *beNDMWShopCtrlDigilabo_Create(int allocator) {
     beNDMWShopCtrlDigilabo_EnsureRegistered();
-    return (beNDMWShopCtrlDigilabo *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDigilabo_metaObject, allocator);
+    return (beNDMWShopCtrlDigilabo *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDigilabo_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWShopCtrlDigilabo_GetMetaObject(void) {
@@ -36,7 +36,7 @@ int beNDMWShopCtrlDigilabo_GetVTable(void) {
     obj._playerNoList = 0;
     obj._digimonNoList = 0;
     obj._wpuNoListList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDigilabo_vtable[0];
     igSmartPointer_igIntListList_Destruct(&obj._wpuNoListList, -1);
     igSmartPointer_igIntList_Destruct(&obj._digimonNoList, -1);
@@ -52,7 +52,7 @@ void beNDMWShopCtrlDigilabo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlDigilabo_callbackList[] = { igIntList_EnsureRegistered, igIntListList_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlDigilabo_Register(void) {
+CallbackArray *beNDMWShopCtrlDigilabo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -128,7 +128,7 @@ void beNDMWShopCtrlDigilabo_InitFields(void) {
     ((igObjectRefMetaField *)digimonNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)digimonNoList)->_construct = 1;
     wpuNoListList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)wpuNoListList)->_metaObject = igIntListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)wpuNoListList)->_metaObject = (int)igIntListList_GetOrCreateMetaObject();
     ((igRefMetaField *)wpuNoListList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopCtrlDigilabo_fieldTable, g_beNDMWShopCtrlDigilabo_fieldHandles, g_beNDMWShopCtrlDigilabo_fieldOffsets, base);
 }

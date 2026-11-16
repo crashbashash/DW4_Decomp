@@ -6,7 +6,7 @@ igMetaField *g_beNDMWPanelObjectStat_playerWorkMetaField;
 
 igMetaObject *beNDMWPanelObjectStat_GetOrCreateMetaObject(void) {
     if (g_beNDMWPanelObjectStat_metaObject == 0) {
-        g_beNDMWPanelObjectStat_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWPanelObjectStat_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWPanelObjectStat_metaObject;
 }
@@ -32,7 +32,7 @@ int beNDMWPanelObjectStat_GetVTable(void) {
     obj._listFolder = 0;
     obj._listColor = 0;
     obj._playerWork = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWPanelObjectStat_vtable[0];
     igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct((igSmartPointer<igObject> *)&obj._playerWork, -1);
     igSmartPointer_igIntList_Destruct(&obj._listColor, -1);
@@ -67,7 +67,7 @@ void beNDMWPanelObjectStat_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWPanelObjectStat_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, beNDMWMdlPlayerInfoWork_EnsureRegistered, 0 };
 
-void *beNDMWPanelObjectStat_Register(void) {
+CallbackArray *beNDMWPanelObjectStat_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -130,17 +130,17 @@ void beNDMWPanelObjectStat_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectStat_ctorTable, 3);
     inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
-    pageIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedPage);
+    pageIndex = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)inheritedPage);
     pageField = (igIntMetaField *)((igObjectDispatchView *)inheritedPage)->CloneViaMetadata(1);
-    igIntMetaField_SetDefault(pageField, 2);
+    igIntMetaField_SetDefault((igMetaField *)pageField, 2);
     pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectStat_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);
+    igMetaObject_FinalizeAndReplaceField(meta, pageIndex, (igMetaField *)pageField);
     pageField->_refCount = pageField->_refCount - 1;
     if (((unsigned long long)(long long)pageField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(pageField);
     }
     listFolder = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
-    listFolder->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    listFolder->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     listFolder->_construct = 1;
     listColor = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 1));
     listColor->_metaObject = igIntList_GetOrCreateMetaObject();

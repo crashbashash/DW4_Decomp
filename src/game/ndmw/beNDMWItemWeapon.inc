@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWItemWeapon_metaObject;
 
 beNDMWItemWeapon *beNDMWItemWeapon_Create(int allocator) {
     beNDMWItemWeapon_EnsureRegistered();
-    return (beNDMWItemWeapon *)igMetaObject_CreateInstance(g_beNDMWItemWeapon_metaObject, allocator);
+    return (beNDMWItemWeapon *)igMetaObject_CreateInstance(g_beNDMWItemWeapon_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWItemWeapon_GetReadyMetaObject(void) {
@@ -21,7 +21,7 @@ int beNDMWItemWeapon_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWItemWeapon_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWItemWeapon_EnsureRegistered(void)
@@ -29,7 +29,7 @@ void beNDMWItemWeapon_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWItemWeapon_Register);
 }
 
-void *beNDMWItemWeapon_Register(void) {
+CallbackArray *beNDMWItemWeapon_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

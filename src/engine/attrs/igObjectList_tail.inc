@@ -3,7 +3,7 @@ void igObjectList_TrimCapacity(igObjectList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve(self, count, 4);
+        List_Reserve((igDataList *)self, count, 4);
     }
 }
 

@@ -4,7 +4,7 @@ igMetaField *g_igViewerDataPumpManager_dataPumpManagerMetaField;
 
 void FUN_0045be30(int arg0) {
     FUN_0045bfa0();
-    igMetaObject_CreateInstance(g_igViewerDataPumpManager_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igViewerDataPumpManager_metaObject, (igMemoryPoolView *)arg0);
 }
 
 void *igViewerDataPumpManager_GetMetaObject(void) {
@@ -26,13 +26,13 @@ int igViewerDataPumpManager_GetVTable(void) {
     void *temp_a0;
     void *temp_v1;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q2 = &u.p[2];
     *q2 = 0;
     u.w[0] = (int)(&g_igViewerDataPumpManager_vtable[0]);
     q4 = (S_ref *)&u.p[4];
     *(int *)q4 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
     u.w[0] = (int)(&g_igViewerDataPumpManager_vtable[0]);
     if (q4 != 0) {
         q4 = *(S_ref **)q4;
@@ -51,7 +51,7 @@ int igViewerDataPumpManager_GetVTable(void) {
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
             *(int *)((char *)(temp_v1) - 4) = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -65,9 +65,9 @@ void FUN_0045bfa0(void)
 
 static igMetaObjectCallback g_igViewerDataPumpManager_callbackList[] = { FUN_001e5280, 0 };
 
-void igViewerDataPumpManager_Register(void) {
+CallbackArray *igViewerDataPumpManager_Register(void) {
     ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerDataPumpManager_metaObject,
         igInfoManager_Register,
@@ -76,7 +76,7 @@ void igViewerDataPumpManager_Register(void) {
         "igViewerDataPumpManager",
         0x14, /* instance size */
         igViewerDataPumpManager_GetVTable,
-        &igViewerDataPumpManager_InitFields_0045c040[0],                              /* field adder: InitFields, registers the reflected fields */
+        igViewerDataPumpManager_InitFields_0045c040,                              /* field adder: InitFields, registers the reflected fields */
         0, /* extra callback item */
         g_igViewerDataPumpManager_callbackList /* callback list */
     );
@@ -108,21 +108,21 @@ void FUN_0045c040(void) {
     void *temp_v0_2;
 
     temp_s1 = g_igViewerDataPumpManager_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igViewerDataPumpManager_ctorTable, 1);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igViewerDataPumpManager_ctorTable, 1);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     igStringMetaField_SetDefaultText(temp_v0_2, "Viewer data pump manager");
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igViewerDataPumpManager_nameMetaField);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_v0_2) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy(temp_v0_2);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
+    temp_s0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2));
     *(int *)((char *)(temp_s0) + 56) = FUN_001e5150();
     *(char *)((char *)(temp_s0) + 52) = 1;
-    igMetaObject_NameFields(temp_s1, g_igViewerDataPumpManager_fieldTable, g_igViewerDataPumpManager_fieldHandles, g_igViewerDataPumpManager_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igViewerDataPumpManager_fieldTable, g_igViewerDataPumpManager_fieldHandles, g_igViewerDataPumpManager_fieldOffsets, temp_s2);
 }
 

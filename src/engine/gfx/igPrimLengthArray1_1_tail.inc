@@ -15,11 +15,11 @@ void *igVertexArrayLock_Init(void *arg0) {
     return arg0;
 }
 
-void FUN_0015df80(S0_15df80 *arg0) {
+void FUN_0015df80(S0_15df80 *arg0, int flags) {
     S_temp_a0 *temp_a0;
     S_temp_v0 *temp_v0;
-    Gap__Core__igObject__resetFields();
-    temp_v0 = (S_temp_v0 *)((void *)(igObject_GetAllocator(arg0)));
+    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
+    temp_v0 = (S_temp_v0 *)((void *)(igObject_GetAllocator((igObject *)arg0)));
     if (temp_v0 != 0) {
         temp_v0->f4 = (int)((int) (temp_v0->f4 + 1));
     }
@@ -47,15 +47,15 @@ void FUN_0015e050(struct S_arg0_15e050 *arg0) {
 
     temp_a0 = arg0->f8;
     if (temp_a0 != 0) {
-        temp_v0 = Memory_GetBufferSize(temp_a0);
+        temp_v0 = Memory_GetBufferSize((void *)temp_a0);
         temp_s0 = 0x50 - temp_v0;
         if (temp_s0 > 0) {
-            arg0->f8 = igObject_Reallocate(arg0, arg0->f8, 0x50);
-            memset(arg0->f8 + temp_v0, 0, temp_s0);
+            arg0->f8 = (int)igObject_Reallocate((igObject *)arg0, (void *)arg0->f8, 0x50);
+            memset((void *)(arg0->f8 + temp_v0), 0, temp_s0);
         }
     }
     if (arg0->f24 == 0) {
-        temp_v0_2 = (struct S_temp_v0_2 *)(igObject_GetAllocator(arg0));
+        temp_v0_2 = (struct S_temp_v0_2 *)(igObject_GetAllocator((igObject *)arg0));
         if (temp_v0_2 != 0) {
             temp_v0_2->f4 = (int)((int) (temp_v0_2->f4 + 1));
         }
@@ -209,7 +209,7 @@ int FUN_0015e4e0(VA_15e4e0 *arg0) {
     s2 = 0;
     s1 = arg0->v23();
     if (arg0->f24 == 0) {
-        v0 = (igObject *)igObject_GetAllocator(arg0);
+        v0 = (igObject *)igObject_GetAllocator((igObject *)arg0);
         if (v0 != 0) v0->_refCount = v0->_refCount + 1;
         {
             igObject *a = (igObject *)arg0->f24;
@@ -286,19 +286,19 @@ VertexFormatInfo *info;
 int **q;
 int off;
 info = o->getInfo();
-if (info->flags & 1) { p = &o->arr; a = (*p)[0]; if (a != 0) { Memory_FreeBuffer(a); (*p)[0] = 0; } }
-if (info->flags & 2) { p = &o->arr; a = (*p)[1]; if (a != 0) { Memory_FreeBuffer(a); (*p)[1] = 0; } }
-if (info->flags & 4) { p = &o->arr; a = (*p)[2]; if (a != 0) { Memory_FreeBuffer(a); (*p)[2] = 0; } }
+if (info->flags & 1) { p = &o->arr; a = (*p)[0]; if (a != 0) { Memory_FreeBuffer((void *)a); (*p)[0] = 0; } }
+if (info->flags & 2) { p = &o->arr; a = (*p)[1]; if (a != 0) { Memory_FreeBuffer((void *)a); (*p)[1] = 0; } }
+if (info->flags & 4) { p = &o->arr; a = (*p)[2]; if (a != 0) { Memory_FreeBuffer((void *)a); (*p)[2] = 0; } }
 
-    if (o->f32 != 0) { Memory_FreeBuffer(o->f32); o->f32 = 0; }
-    if (o->f36 != 0) { Memory_FreeBuffer(o->f36); o->f36 = 0; }
+    if (o->f32 != 0) { Memory_FreeBuffer((void *)o->f32); o->f32 = 0; }
+    if (o->f36 != 0) { Memory_FreeBuffer((void *)o->f36); o->f36 = 0; }
     i = 0;
     goto test;
 top:
     off = (i + 11) * 4;
     q = &o->arr;
     b = *(int *)((char *)*q + off);
-    if (b != 0) { Memory_FreeBuffer(b); *(int *)((char *)*q + off) = 0; }
+    if (b != 0) { Memory_FreeBuffer((void *)b); *(int *)((char *)*q + off) = 0; }
     i++;
 test:
     if (i < (unsigned char)((info->flags & 0xF0000) >> 16)) goto top;
@@ -403,7 +403,7 @@ float FUN_0015ece0(void *arg0, int arg1) {
 }
 
 int FUN_0015ed00(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4) {
-    igSmartPointer<V_15ed00> resized((V_15ed00 *)FUN_0014b680(igObject_GetAllocator()));
+    igSmartPointer<V_15ed00> resized((V_15ed00 *)FUN_0014b680((int)igObject_GetAllocator((igObject *)arg0)));
     unsigned int n;
     int sp88;
     int r;
@@ -420,7 +420,7 @@ int FUN_0015ed00(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4
     resized.p->v17((int)g_igVertexArray1_1_metaObject);
     arg0->v17((int)g_igVertexArray1_1_metaObject);
     FUN_0015e7b0((VertexBufferOwner *)arg0);
-    Memory_FreeBuffer(arg0->f8);
+    Memory_FreeBuffer((void *)arg0->f8);
     arg0->f12 = arg2;
     arg0->f8 = resized.p->f8;
     arg0->f32 = resized.p->f32;
@@ -532,17 +532,17 @@ void FUN_0015f180(void *arg0) {
 
     temp_a0 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 64);
     if (temp_a0 != 0) {
-        Memory_FreeBuffer(temp_a0);
+        Memory_FreeBuffer((void *)temp_a0);
         *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 64) = 0;
     }
     temp_a0_2 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 60);
     if (temp_a0_2 != 0) {
-        Memory_FreeBuffer(temp_a0_2);
+        Memory_FreeBuffer((void *)temp_a0_2);
         *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 60) = 0;
     }
     temp_a0_3 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 76);
     if (temp_a0_3 != 0) {
-        Memory_FreeBuffer(temp_a0_3);
+        Memory_FreeBuffer((void *)temp_a0_3);
         *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 76) = 0;
     }
 }
@@ -580,12 +580,12 @@ void FUN_0015f2f0(void *arg0) {
 
     temp_a0 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 68);
     if (temp_a0 != 0) {
-        Memory_FreeBuffer(temp_a0);
+        Memory_FreeBuffer((void *)temp_a0);
         *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 68) = 0;
     }
     temp_a0_2 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 72);
     if (temp_a0_2 != 0) {
-        Memory_FreeBuffer(temp_a0_2);
+        Memory_FreeBuffer((void *)temp_a0_2);
         *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 72) = 0;
     }
 }

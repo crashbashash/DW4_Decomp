@@ -48,7 +48,7 @@ void *libBecRuntimePlugin_GetMetaObject(void) {
 
 int libBecRuntimePlugin_GetVTable(void) {
     BecRuntimePluginView plugin;
-    return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem + 916));
 }
 
 igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
@@ -793,7 +793,7 @@ igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2_Construct(igSmartPointe
 }
 
 igObject *igInsightPlugin_Construct(igObject *self) {
-    igObject_InitHeader();
+    igObject_InitHeader(self);
     self->_vtable = (int)&g_igInsightPlugin_vtable[0];
     return self;
 }
@@ -805,7 +805,7 @@ void libBecRuntimePlugin_EnsureRegistered(void)
 
 static igMetaObjectCallback g_libBecRuntimePlugin_callbackList[] = { beParticleCtrl2_EnsureRegistered, beLua_EnsureRegistered, beMatCtrl_EnsureRegistered, beSelectCtrl_EnsureRegistered, beWaterPlain_EnsureRegistered, beAction2_EnsureRegistered, beMeterCtrl_EnsureRegistered, beTargetObj_EnsureRegistered, beWeapon_EnsureRegistered, beCameraCtrl_EnsureRegistered, bePoint01_EnsureRegistered, beBkColor_EnsureRegistered, beChangePosTransform_EnsureRegistered, beShadow01_EnsureRegistered, beGenerater_EnsureRegistered, beHitLandModel_EnsureRegistered, beHitLandDeliv_EnsureRegistered, beSound_EnsureRegistered, beSeCtl_EnsureRegistered, beActionStarter_EnsureRegistered, beLayerCtl_EnsureRegistered, beFont_EnsureRegistered, beSwitchCtrl_EnsureRegistered, beLightCtrl_EnsureRegistered, beNumberCtrl_EnsureRegistered, beStaticInfoCtl_EnsureRegistered, beMovie_EnsureRegistered, beDBManager_EnsureRegistered, beSaveUtil_EnsureRegistered, beTextureCtrl_EnsureRegistered, beSystem_EnsureRegistered, beMessenger_EnsureRegistered, beFileListInfoManager_EnsureRegistered, bePadManager_EnsureRegistered, beCri_EnsureRegistered, be_EnsureRegistered, beDemoManager_EnsureRegistered, beTimer_EnsureRegistered, beMemory_EnsureRegistered, 0 };
 
-void *libBecRuntimePlugin_Register(void) {
+CallbackArray *libBecRuntimePlugin_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -1036,86 +1036,86 @@ void libBecRuntimePlugin_InitFields(void) {
     int base;
 
     meta = (void *)g_libBecRuntimePlugin_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_libBecRuntimePlugin_ctorTable, 0x27);
-    particleCtrl2 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_libBecRuntimePlugin_ctorTable, 0x27);
+    particleCtrl2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)particleCtrl2)->_metaObject = (int)beParticleCtrl2_GetOrCreateMetaObject();
-    luaManager = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    luaManager = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)luaManager)->_metaObject = (int)beLua_GetOrCreateMetaObject();
-    matCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    matCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)matCtrl)->_metaObject = (int)beMatCtrl_GetOrCreateMetaObject();
-    selectCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    selectCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)selectCtrl)->_metaObject = (int)beSelectCtrl_GetOrCreateMetaObject();
-    waterPlain = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    waterPlain = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)waterPlain)->_metaObject = (int)beWaterPlain_GetOrCreateMetaObject();
-    action2 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    action2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
     ((igObjectRefMetaField *)action2)->_metaObject = (int)beAction2_GetOrCreateMetaObject();
-    meterCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    meterCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
     ((igObjectRefMetaField *)meterCtrl)->_metaObject = (int)beMeterCtrl_GetOrCreateMetaObject();
-    targetObj = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    targetObj = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igObjectRefMetaField *)targetObj)->_metaObject = (int)beTargetObj_GetOrCreateMetaObject();
-    weapon = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    weapon = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8));
     ((igObjectRefMetaField *)weapon)->_metaObject = (int)beWeapon_GetOrCreateMetaObject();
-    cameraCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    cameraCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));
     ((igObjectRefMetaField *)cameraCtrl)->_metaObject = (int)beCameraCtrl_GetOrCreateMetaObject();
-    point01 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
+    point01 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA));
     ((igObjectRefMetaField *)point01)->_metaObject = (int)bePoint01_GetOrCreateMetaObject();
-    bkColor = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
+    bkColor = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB));
     ((igObjectRefMetaField *)bkColor)->_metaObject = (int)beBkColor_GetOrCreateMetaObject();
-    cpTransform = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    cpTransform = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC));
     ((igObjectRefMetaField *)cpTransform)->_metaObject = (int)beChangePosTransform_GetOrCreateMetaObject();
-    shadow01 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
+    shadow01 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xD));
     ((igObjectRefMetaField *)shadow01)->_metaObject = (int)beShadow01_GetOrCreateMetaObject();
-    generater = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
+    generater = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xE));
     ((igObjectRefMetaField *)generater)->_metaObject = (int)beGenerater_GetOrCreateMetaObject();
-    hitLandModel = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
+    hitLandModel = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xF));
     ((igObjectRefMetaField *)hitLandModel)->_metaObject = (int)beHitLandModel_GetOrCreateMetaObject();
-    hitLandDeliv = (void *)(igMetaObject_GetFieldAt(meta, base + 0x10));
+    hitLandDeliv = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x10));
     ((igObjectRefMetaField *)hitLandDeliv)->_metaObject = (int)beHitLandDeliv_GetOrCreateMetaObject();
-    sound = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
+    sound = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x11));
     ((igObjectRefMetaField *)sound)->_metaObject = (int)beSound_GetOrCreateMetaObject();
-    seCtl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x12));
+    seCtl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x12));
     ((igObjectRefMetaField *)seCtl)->_metaObject = (int)beSeCtl_GetOrCreateMetaObject();
-    actionStarter = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
+    actionStarter = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x13));
     ((igObjectRefMetaField *)actionStarter)->_metaObject = (int)beActionStarter_GetOrCreateMetaObject();
-    layerCtl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x14));
+    layerCtl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x14));
     ((igObjectRefMetaField *)layerCtl)->_metaObject = (int)beLayerCtl_GetOrCreateMetaObject();
-    font = (void *)(igMetaObject_GetFieldAt(meta, base + 0x15));
+    font = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x15));
     ((igObjectRefMetaField *)font)->_metaObject = (int)beFont_GetOrCreateMetaObject();
-    switchCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x16));
+    switchCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x16));
     ((igObjectRefMetaField *)switchCtrl)->_metaObject = (int)beSwitchCtrl_GetOrCreateMetaObject();
-    lightCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x17));
+    lightCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x17));
     ((igObjectRefMetaField *)lightCtrl)->_metaObject = (int)beLightCtrl_GetOrCreateMetaObject();
-    numberCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x18));
+    numberCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x18));
     ((igObjectRefMetaField *)numberCtrl)->_metaObject = (int)beNumberCtrl_GetOrCreateMetaObject();
-    staticInfoCtl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x19));
+    staticInfoCtl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x19));
     ((igObjectRefMetaField *)staticInfoCtl)->_metaObject = (int)beStaticInfoCtl_GetOrCreateMetaObject();
-    movie = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1A));
+    movie = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1A));
     ((igObjectRefMetaField *)movie)->_metaObject = (int)beMovie_GetOrCreateMetaObject();
-    dbManager = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1B));
+    dbManager = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1B));
     ((igObjectRefMetaField *)dbManager)->_metaObject = (int)beDBManager_GetOrCreateMetaObject();
-    saveUtil = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1C));
+    saveUtil = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1C));
     ((igObjectRefMetaField *)saveUtil)->_metaObject = (int)beSaveUtil_GetOrCreateMetaObject();
-    textureCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1D));
+    textureCtrl = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1D));
     ((igObjectRefMetaField *)textureCtrl)->_metaObject = (int)beTextureCtrl_GetOrCreateMetaObject();
-    system = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1E));
+    system = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1E));
     ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
-    messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1F));
+    messenger = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1F));
     ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
-    fileList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x20));
+    fileList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x20));
     ((igObjectRefMetaField *)fileList)->_metaObject = (int)beFileListInfoManager_GetOrCreateMetaObject();
-    padManager = (void *)(igMetaObject_GetFieldAt(meta, base + 0x21));
+    padManager = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x21));
     ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
-    cri = (void *)(igMetaObject_GetFieldAt(meta, base + 0x22));
+    cri = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x22));
     ((igObjectRefMetaField *)cri)->_metaObject = (int)beCri_GetOrCreateMetaObject();
-    luaInterface = (void *)(igMetaObject_GetFieldAt(meta, base + 0x23));
+    luaInterface = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x23));
     ((igObjectRefMetaField *)luaInterface)->_metaObject = (int)be_GetOrCreateMetaObject();
-    demoManager = (void *)(igMetaObject_GetFieldAt(meta, base + 0x24));
+    demoManager = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x24));
     ((igObjectRefMetaField *)demoManager)->_metaObject = (int)beDemoManager_GetOrCreateMetaObject();
-    timer = (void *)(igMetaObject_GetFieldAt(meta, base + 0x25));
+    timer = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x25));
     ((igObjectRefMetaField *)timer)->_metaObject = (int)beTimer_GetOrCreateMetaObject();
-    memory = (void *)(igMetaObject_GetFieldAt(meta, base + 0x26));
+    memory = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x26));
     ((igObjectRefMetaField *)memory)->_metaObject = (int)beMemory_GetOrCreateMetaObject();
-    igMetaObject_NameFields(meta, g_libBecRuntimePlugin_fieldTable, g_libBecRuntimePlugin_fieldHandles, g_libBecRuntimePlugin_fieldOffsets, base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_libBecRuntimePlugin_fieldTable, g_libBecRuntimePlugin_fieldHandles, g_libBecRuntimePlugin_fieldOffsets, base);
 }
 

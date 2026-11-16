@@ -4,12 +4,12 @@ igMetaField *g_beTextureCtrl_workMetaField;
 
 beTextureCtrl *beTextureCtrl_CreateInstance(int allocator) {
     beTextureCtrl_EnsureRegistered();
-    return (beTextureCtrl *)igMetaObject_CreateInstance(*(int *)0x587CB8, allocator);
+    return (beTextureCtrl *)igMetaObject_CreateInstance(g_beTextureCtrl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beTextureCtrl_GetOrCreateMetaObject(void) {
     if (g_beTextureCtrl_metaObject == 0) {
-        g_beTextureCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beTextureCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beTextureCtrl_metaObject;
 }
@@ -31,7 +31,7 @@ int beTextureCtrl_GetVTable(void) {
     obj._infoList = 0;
     obj._vtable = (int)&g_beTextureCtrl_vtable[0];
     obj._work = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beTextureCtrl_vtable[0];
     igSmartPointer_beTextureCtrlWork_Destruct((igSmartPointer<igObject> *)&obj._work, (short)(-1));
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
@@ -58,7 +58,7 @@ void beTextureCtrl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beTextureCtrl_callbackList[] = { beTextureCtrlWork_EnsureRegistered, 0 };
 
-void *beTextureCtrl_Register(void) {
+CallbackArray *beTextureCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -100,9 +100,9 @@ static int g_beTextureCtrl_fieldOffsets[] = {
 void beTextureCtrl_InitFields(void) {
     int base;
     void *work;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beTextureCtrl_metaObject;
+    meta = g_beTextureCtrl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTextureCtrl_ctorTable, 2);
     work = (void *)(igMetaObject_GetFieldAt(meta, base + 1));

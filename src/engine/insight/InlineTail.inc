@@ -104,8 +104,8 @@ igMetaObject *Gap__Insight__igViewportResizedMessage__vfunc_22(void) {
     return g_igViewportResizedMessage_metaObject;
 }
 
-int Gap__Gui__igEventReceiver__vfunc_22(void) {
-    return g_igEventReceiver_metaObject[0];
+igMetaObject *Gap__Gui__igEventReceiver__vfunc_22(void) {
+    return g_igEventReceiver_metaObject;
 }
 
 /* Slot 30, empty override returning 0. */
@@ -137,8 +137,8 @@ int Gap__Insight__igMessage__vfunc_22(void) {
     return (int)g_igMessage_metaObject;
 }
 
-int FUN_00238cf0(void) {
-    return g_igRenderer_metaObject[0];
+igMetaObject *FUN_00238cf0(void) {
+    return g_igRenderer_metaObject;
 }
 
 igMetaObject *Gap__Insight__igInsightPluginList__vfunc_24(void) {

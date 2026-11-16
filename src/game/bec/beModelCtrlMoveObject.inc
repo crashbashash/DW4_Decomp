@@ -11,7 +11,7 @@ igMetaField *g_beModelCtrlMoveObject_stopFrameMetaField;
 
 beModelCtrlMoveObject *beModelCtrlMoveObject_Create(int allocator) {
     beModelCtrlMoveObject_EnsureRegistered();
-    return (beModelCtrlMoveObject *)igMetaObject_CreateInstance(*(int *)0x588B48, allocator);
+    return (beModelCtrlMoveObject *)igMetaObject_CreateInstance(g_beModelCtrlMoveObject_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beModelCtrlMoveObject_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int beModelCtrlMoveObject_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beModelCtrlMoveObject_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beModelCtrlMoveObject_EnsureRegistered(void)
@@ -35,7 +35,7 @@ void beModelCtrlMoveObject_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlMoveObject_Register);
 }
 
-void *beModelCtrlMoveObject_Register(void) {
+CallbackArray *beModelCtrlMoveObject_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -104,9 +104,9 @@ static int g_beModelCtrlMoveObject_fieldOffsets[] = {
 
 void beModelCtrlMoveObject_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlMoveObject_metaObject;
+    meta = g_beModelCtrlMoveObject_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlMoveObject_ctorTable, 9);
     igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 1))), 0.0f);

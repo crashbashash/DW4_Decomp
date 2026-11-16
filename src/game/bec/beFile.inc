@@ -13,7 +13,7 @@ int beFile_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beFile_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beFile_EnsureRegistered(void)
@@ -21,7 +21,7 @@ void beFile_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFile_Register);
 }
 
-void *beFile_Register(void) {
+CallbackArray *beFile_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

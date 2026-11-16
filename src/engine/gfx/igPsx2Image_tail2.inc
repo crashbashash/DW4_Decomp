@@ -15,8 +15,8 @@ void Gap__Gfx__igPsx2Image__vfunc_20(void *arg0) {
     FUN_0015a600((T_15a600 *)arg0);
 }
 
-void Gap__Gfx__igPsx2Image__vfunc_11(void) {
-    igObject_InitDefaults();
+void Gap__Gfx__igPsx2Image__vfunc_11(igObject *self) {
+    igObject_InitDefaults(self);
 }
 
 void thunk_FUN_001592c0__0016e390(LongListStorageView *self) {
@@ -131,15 +131,15 @@ int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
   int s;
   s = FUN_0015ad50((char *)arg1);
   if (s != 0) {
-    if (strcmp(s, ".tga") != 0) {
-      if (strcmp(s, ".TGA") == 0) goto block_4;
+    if (strcmp((char *)s, ".tga") != 0) {
+      if (strcmp((char *)s, ".TGA") == 0) goto block_4;
       goto block_22;
     }
 block_4:
     {
-      igSmartPointer<O0> name((O0 *)igStringObj_Create(igObject_GetAllocator(arg0)));
-      igStringObj_Set(name.p, arg1);
-      LoaderRef loader((O1 *)FUN_00150060(igObject_GetAllocator(arg0)));
+      igSmartPointer<O0> name((O0 *)igStringObj_Create((int)igObject_GetAllocator((igObject *)arg0)));
+      igStringObj_Set((igStringObj *)((int)name.p), (char *)arg1);
+      LoaderRef loader((O1 *)FUN_00150060((int)igObject_GetAllocator((igObject *)arg0)));
       var_s0 = loader.p->v21(name.p, arg0) & 0xFF;
       FUN_00156340((S0_156340 *)arg0, (void **)&PathText(arg1).text);
     }
@@ -147,11 +147,11 @@ block_4:
   }
 block_22:
   if (s != 0) {
-    if (strcmp(s, ".png") != 0) {
-      if (strcmp(s, ".PNG") == 0) goto block_26;
+    if (strcmp((char *)s, ".png") != 0) {
+      if (strcmp((char *)s, ".PNG") == 0) goto block_26;
     } else {
 block_26:
-      ReaderRef reader((O2 *)FUN_00150390(igObject_GetAllocator(arg0)));
+      ReaderRef reader((O2 *)FUN_00150390((int)igObject_GetAllocator((igObject *)arg0)));
       var_s0 = reader.p->v31(arg1) & 0xFF;
       if (var_s0 != 0) {
         arg0->v21(reader.p, 1);
@@ -179,7 +179,7 @@ int Gap__Gfx__igPsx2Image__vfunc_40(Img_16e8f0 *p, Strm *s) {
     p->f84 = 0;
     s->Read(&b, 4, 1);
     s->Read(&b, 4, 1);
-    p->f52 = igObject_MallocAligned(p, p->f48, 0x80);
+    p->f52 = (int)igObject_MallocAligned((igObject *)p, p->f48, 0x80);
     p->f60 = 1;
     s->Read((void *)p->f52, 1, p->f48);
     s->d24();
@@ -190,7 +190,7 @@ int Gap__Gfx__igPsx2Image__vfunc_40(Img_16e8f0 *p, Strm *s) {
 }
 
 int Gap__Gfx__igPsx2Image__vfunc_41(igPsx2Image *image, Stream *stream) {
-    igSmartPointer<ConvertedImage> converted((ConvertedImage *)igImage_CreateInstance(igObject_GetAllocator(image)));
+    igSmartPointer<ConvertedImage> converted((ConvertedImage *)igImage_CreateInstance((int)igObject_GetAllocator(image)));
     int word;
     int masks;
     converted->convert(image, 1);
@@ -230,7 +230,7 @@ int Gap__Gfx__igPsx2Image__vfunc_44(Img_16ece0 *arg0, Strm_16ece0 *arg1) {
     arg1->v25((char *)arg0 + 8, 4, 1);
     arg1->v25((char *)arg0 + 12, 4, 1);
     arg0->f20 = 1;
-    arg0->f52 = igObject_MallocAligned(arg0, arg0->f48, 0x80);
+    arg0->f52 = (int)igObject_MallocAligned((igObject *)arg0, arg0->f48, 0x80);
     arg0->f60 = 1;
     arg1->v25((void *)arg0->f52, 1, arg0->f48);
     arg1->v24();
@@ -263,6 +263,6 @@ void Gap__Gfx__igPsx2Image__vfunc_37(ImageBuffer *arg0, int arg1, int arg2, int 
     ((DW4VC_116_1 *)(((char *)(arg0) + 0)))->vX((int)(arg5));
     ((DW4VC_128_1 *)(((char *)(arg0) + 0)))->vX((int)(arg3));
     ((DW4VC_124_0 *)(((char *)(arg0) + 0)))->vX();
-    memcpy(arg0->data, arg1, imageSize(arg0));
+    memcpy((void *)arg0->data, (void *)arg1, imageSize(arg0));
 }
 

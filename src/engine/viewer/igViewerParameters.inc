@@ -41,7 +41,7 @@ igMetaField *g_igViewerParameters_cursorPositionMetaField;
 
 igMetaObject *igViewerParameters_GetOrCreateMetaObject(void) {
     if (g_igViewerParameters_metaObject == 0) {
-        g_igViewerParameters_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igViewerParameters_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igViewerParameters_metaObject;
 }
@@ -56,17 +56,17 @@ int igViewerParameters_GetVTable(void) {
     int temp_s1;
     int pi = (int)u.b;
     char *p;
-    igObject_InitHeader(pi);
+    igObject_InitHeader((igObject *)pi);
     *(int *)&u.b[8] = 0;
     u.vt = (int)&g_igViewerParameters_vtable[0];
     p = &u.b[12];
     *(int *)p = 0;
-    igMatrix44f_SetIdentity(&u.b[44]);
-    igMatrix44f_SetIdentity(pi + 108);
+    igMatrix44f_SetIdentity((float *)&u.b[44]);
+    igMatrix44f_SetIdentity((float *)(pi + 108));
     *(int *)(pi + 204) = 0;
     *(int *)(pi + 220) = 0;
     *(int *)(pi + 240) = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
     u.vt = (int)&DAT_00542090[4];
     FUN_001d6560(&u.b[240], -1);
     FUN_0019b1f0(&u.b[220], -1);
@@ -83,9 +83,9 @@ void igViewerParameters_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igViewerParameters_callbackList[] = { igGroup_EnsureRegistered, igBitMask_EnsureRegistered, igGraphPathList_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
 
-void igViewerParameters_Register(void) {
+CallbackArray *igViewerParameters_Register(void) {
     ViewerLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerParameters_metaObject,
         igModel_Register,
@@ -106,13 +106,13 @@ void thunk_igViewerParameters_GetMetaObject(void) {
 
 static FieldFactory g_igViewerParameters_ctorTable[] = {
     igObjectRefMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    igMatrix44fMetaField_CreateInstance,
-    igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
     igLongMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
@@ -143,7 +143,7 @@ static FieldFactory g_igViewerParameters_ctorTable[] = {
     igIntMetaField_Create,
     igIntMetaField_Create,
     igFloatMetaField_Create,
-    igVec2fMetaField_CreateInstance,
+    (FieldFactory)igVec2fMetaField_CreateInstance,
 };
 static const char *g_igViewerParameters_fieldTable[] = {
     "_scene",
@@ -282,41 +282,41 @@ void igViewerParameters_InitFields(void) {
     int sp48[2];
 
     temp_s0 = g_igViewerParameters_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igViewerParameters_ctorTable, 0x27);
-    temp_s2 = (struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
-    temp_s2->f56 = igGroup_GetOrCreateMetaObject();
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerParameters_ctorTable, 0x27);
+    temp_s2 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
+    temp_s2->f56 = (int)(igGroup_GetOrCreateMetaObject());
     temp_s2->f52 = 1;
-    temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
+    temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     sp50[0] = 0;
     sp50[1] = 0x3F800000;
     sp50[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0, sp50);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 45.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5), 1000.0f);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC), 0);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10), 1);
-    temp_s2_2 = (struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x18);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3), 45.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5), 1000.0f);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC), 0);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10), 1);
+    temp_s2_2 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18);
     temp_s2_2->f56 = FUN_001a4d90();
     temp_s2_2->f52 = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x19), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1A), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1D), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1E), 4);
-    temp_s2_3 = (struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1F);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1A), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E), 4);
+    temp_s2_3 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F);
     temp_s2_3->f56 = FUN_0019f4c0();
     temp_s2_3->f52 = 1;
-    temp_s2_4 = (struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x22);
-    temp_s2_4->f56 = igGraphPath_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x23), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x24), 2);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x25), 1.0f);
-    temp_a0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x26));
+    temp_s2_4 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22);
+    temp_s2_4->f56 = (int)(igGraphPath_GetOrCreateMetaObject());
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x23), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x24), 2);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x25), 1.0f);
+    temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x26));
     sp48[0] = 0;
     sp48[1] = 0;
     igVec2fMetaField_SetDefault(temp_a0_2, sp48);
-    igMetaObject_NameFields(temp_s0, g_igViewerParameters_fieldTable, g_igViewerParameters_fieldHandles, g_igViewerParameters_fieldOffsets, temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerParameters_fieldTable, g_igViewerParameters_fieldHandles, g_igViewerParameters_fieldOffsets, temp_s1);
 }
 

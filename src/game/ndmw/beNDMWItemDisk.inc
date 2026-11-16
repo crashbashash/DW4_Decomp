@@ -3,12 +3,12 @@ igMetaField *g_beNDMWItemDisk_kazuMetaField;
 
 beNDMWItemDisk *beNDMWItemDisk_Create(int allocator) {
     beNDMWItemDisk_EnsureRegistered();
-    return (beNDMWItemDisk *)igMetaObject_CreateInstance(g_beNDMWItemDisk_metaObject, allocator);
+    return (beNDMWItemDisk *)igMetaObject_CreateInstance(g_beNDMWItemDisk_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWItemDisk_GetOrCreateMetaObject(void) {
     if (g_beNDMWItemDisk_metaObject == 0) {
-        g_beNDMWItemDisk_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWItemDisk_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWItemDisk_metaObject;
 }
@@ -26,7 +26,7 @@ int beNDMWItemDisk_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWItemDisk_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWItemDisk_EnsureRegistered(void)
@@ -34,7 +34,7 @@ void beNDMWItemDisk_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWItemDisk_Register);
 }
 
-void *beNDMWItemDisk_Register(void) {
+CallbackArray *beNDMWItemDisk_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

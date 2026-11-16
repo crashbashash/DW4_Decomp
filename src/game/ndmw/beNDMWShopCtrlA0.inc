@@ -4,7 +4,7 @@ igMetaField *g_beNDMWShopCtrlA0_playerNoListMetaField;
 
 beNDMWShopCtrlA0 *beNDMWShopCtrlA0_Create(int allocator) {
     beNDMWShopCtrlA0_EnsureRegistered();
-    return (beNDMWShopCtrlA0 *)igMetaObject_CreateInstance(g_beNDMWShopCtrlA0_metaObject, allocator);
+    return (beNDMWShopCtrlA0 *)igMetaObject_CreateInstance(g_beNDMWShopCtrlA0_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopCtrlA0_GetMetaObject(void) {
@@ -30,7 +30,7 @@ int beNDMWShopCtrlA0_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWShopCtrlA0_vtable[0];
     obj._account = 0;
     obj._playerNoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlA0_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
     igSmartPointer_beNDMWStatusTitle03_Destruct((igSmartPointer<igObject> *)&obj._account, -1);
@@ -44,9 +44,9 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWStatusTitle03_Destruct(igSmartPoi
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -58,7 +58,7 @@ void beNDMWShopCtrlA0_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlA0_callbackList[] = { beNDMWStatusTitle03_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlA0_Register(void) {
+CallbackArray *beNDMWShopCtrlA0_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -403,7 +403,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
         {
             igContextExtInfoList *o = (igContextExtInfoList *)self->_pExtList;
             --o->_refCount;
-            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)((igObject *)o));
+            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)((igObject *)o));
         }
         ((igObjectDispatchView *)self)->GetMeta();
         meta = igObjectSystem_FindMetaByNameDefault("igContextExt");
@@ -443,7 +443,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             igRelease(((igObject **)infoList->_data)[i]);
             if (infoList->_count != 0 && i >= 0 && i < infoList->_count) ((igContextExtInfo **)infoList->_data)[i] = info;
             --info->_refCount;
-            if ((info->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)((igObject *)info));
+            if ((info->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)((igObject *)info));
         }
     }
 }
@@ -524,7 +524,7 @@ void *igContext_GetExtension(igVisualContext *self, int name) {
 int igContext_FindExtensionInstance(igContext *self, int meta) {
     int i;
     for (i = 0; i < ((igObjectList *)self->_pExtInstances)->_count; i++) {
-        if (igObject_IsKindOf((void *)((int *)((igObjectList *)self->_pExtInstances)->_data)[i], (igMetaObject *)meta) != 0) {
+        if (igObject_IsKindOf((igObject *)((int *)((igObjectList *)self->_pExtInstances)->_data)[i], (igMetaObject *)meta) != 0) {
             return ((int *)((igObjectList *)self->_pExtInstances)->_data)[i];
         }
     }

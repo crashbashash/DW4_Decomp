@@ -3,7 +3,7 @@ igMetaField *g_beDataObjStringList_dataMetaField;
 
 beDataObjStringList *beDataObjStringList_Create(int allocator) {
     beDataObjStringList_EnsureRegistered();
-    return (beDataObjStringList *)igMetaObject_CreateInstance(*(int *)0x589868, allocator);
+    return (beDataObjStringList *)igMetaObject_CreateInstance(g_beDataObjStringList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beDataObjStringList_GetMetaObject(void) {
@@ -29,7 +29,7 @@ int beDataObjStringList_GetVTable(void) {
     obj._vtable = (int)&g_beDataObjStringList_vtable[0];
     dataSlot = (igObject **)&obj._data;
     *dataSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDataObjStringList_vtable[0];
     igObjectRef_Release(dataSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -44,7 +44,7 @@ void beDataObjStringList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beDataObjStringList_callbackList[] = { igStringRefList_EnsureRegistered, 0 };
 
-void *beDataObjStringList_Register(void) {
+CallbackArray *beDataObjStringList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -82,13 +82,13 @@ static int g_beDataObjStringList_fieldOffsets[] = {
 void beDataObjStringList_InitFields(void) {
     int base;
     void *data;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beDataObjStringList_metaObject;
+    meta = g_beDataObjStringList_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDataObjStringList_ctorTable, 1);
     data = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)data)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)data)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)data)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDataObjStringList_fieldTable, g_beDataObjStringList_fieldHandles, g_beDataObjStringList_fieldOffsets, base);
 }

@@ -113,7 +113,7 @@ int *FUN_001a3d80(void *p)
 }
 
 void *FUN_001a3d90(igTraversal *arg0) {
-    igObject_InitHeader();
+    igObject_InitHeader((igObject *)arg0);
     *(int *)((char *)(arg0) + 0) = (int)(&g_igTraversal_vtable[0]);
     arg0->_travProcs = 0;
     return arg0;

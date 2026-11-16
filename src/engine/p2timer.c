@@ -1,4 +1,5 @@
 #include "dw4/eekernel.h"
+#include "dw4/libkernl.h"
 #define __extension__
 #include "dw4/newlib_reent.h"
 #include "dw4/p2timer.h"
@@ -53,9 +54,6 @@ typedef union p2TimerCount {
     unsigned short value;
 } p2TimerCount;
 
-int DisableIntc(int cause);
-int EnableIntc(int cause);
-int iSignalSema(int sema);
 int fprintf(struct __sFILE *stream, const char *format, ...);
 void p2StartTimers(void);
 int p2Timer1Handler(int cause);

@@ -14,7 +14,7 @@ igMetaField *g_beCriFxXbData_flHFReferenceMetaField;
 
 igMetaObject *beCriFxXbData_GetOrCreateMetaObject(void) {
     if (g_beCriFxXbData_metaObject == 0) {
-        g_beCriFxXbData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCriFxXbData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCriFxXbData_metaObject;
 }
@@ -32,7 +32,7 @@ int beCriFxXbData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beCriFxXbData_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beCriFxXbData_EnsureRegistered(void)
@@ -40,7 +40,7 @@ void beCriFxXbData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCriFxXbData_Register);
 }
 
-void *beCriFxXbData_Register(void) {
+CallbackArray *beCriFxXbData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -121,9 +121,9 @@ static int g_beCriFxXbData_fieldOffsets[] = {
 
 void beCriFxXbData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCriFxXbData_metaObject;
+    meta = g_beCriFxXbData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCriFxXbData_ctorTable, 0xC);
     igMetaObject_NameFields(meta, g_beCriFxXbData_fieldTable, g_beCriFxXbData_fieldHandles, g_beCriFxXbData_fieldOffsets, base);

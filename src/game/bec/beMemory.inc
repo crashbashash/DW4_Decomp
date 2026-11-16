@@ -7,7 +7,7 @@ igMetaField *g_beMemory_updateCountMetaField;
 
 igMetaObject *beMemory_GetOrCreateMetaObject(void) {
     if (g_beMemory_metaObject == 0) {
-        g_beMemory_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMemory_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMemory_metaObject;
 }
@@ -30,7 +30,7 @@ int beMemory_GetVTable(void) {
     nameSlot = (char **)&obj._name;
     *nameSlot = 0;
     obj._vtable = (int)&g_beMemory_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;
@@ -43,7 +43,7 @@ void beMemory_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMemory_callbackList[] = { beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, 0 };
 
-void *beMemory_Register(void) {
+CallbackArray *beMemory_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -98,9 +98,9 @@ void beMemory_InitFields(void) {
     int base;
     void *padManager;
     void *messenger;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMemory_metaObject;
+    meta = g_beMemory_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMemory_ctorTable, 5);
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base));

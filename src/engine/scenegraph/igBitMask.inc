@@ -3,7 +3,7 @@ igMetaField *g_igBitMask_bitCountMetaField;
 
 igMetaObject *FUN_001a4d90(void) {
     if (g_igBitMask_metaObject == 0) {
-        g_igBitMask_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBitMask_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBitMask_metaObject;
 }
@@ -19,9 +19,9 @@ igMetaObject *igBitMask_GetMetaObject(void)
 int igBitMask_GetVTable(void) {
     struct Obj_1a4e30 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igBitMask_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igBitMask_EnsureRegistered(void)
@@ -29,9 +29,9 @@ void igBitMask_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBitMask_Register);
 }
 
-void igBitMask_Register(void) {
+CallbackArray *igBitMask_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBitMask_metaObject,
         igUnsignedIntList_Register,
@@ -55,7 +55,7 @@ int FUN_001a4f00(void) {
 }
 
 static FieldFactory g_igBitMask_ctorTable[] = {
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igBitMask_fieldTable[] = {
     "_bitCount",
@@ -72,7 +72,7 @@ void igBitMask_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igBitMask_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBitMask_ctorTable, 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBitMask_fieldTable, g_igBitMask_fieldHandles, g_igBitMask_fieldOffsets, temp_s1);
 }

@@ -23,7 +23,7 @@ int beAction2JOINTSET_GetVTable(void) {
     obj._vtable = (int)&g_beAction2JOINTSET_vtable[0];
     loopModeSlot = (char **)&obj._loopMode;
     *loopModeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beAction2JOINTSET_vtable[0];
     igStringRef_Release(loopModeSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -36,7 +36,7 @@ void beAction2JOINTSET_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beAction2JOINTSET_Register);
 }
 
-void *beAction2JOINTSET_Register(void) {
+CallbackArray *beAction2JOINTSET_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -81,9 +81,9 @@ static int g_beAction2JOINTSET_fieldOffsets[] = {
 
 void beAction2JOINTSET_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beAction2JOINTSET_metaObject;
+    meta = g_beAction2JOINTSET_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beAction2JOINTSET_ctorTable, 3);
     igMetaObject_NameFields(meta, g_beAction2JOINTSET_fieldTable, g_beAction2JOINTSET_fieldHandles, g_beAction2JOINTSET_fieldOffsets, base);

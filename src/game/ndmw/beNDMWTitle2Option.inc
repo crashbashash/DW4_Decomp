@@ -13,7 +13,7 @@ igMetaField *g_beNDMWTitle2Option_dispCountryConfMetaField;
 
 beNDMWTitle2Option *beNDMWTitle2Option_Create(int allocator) {
     beNDMWTitle2Option_EnsureRegistered();
-    return (beNDMWTitle2Option *)igMetaObject_CreateInstance(g_beNDMWTitle2Option_metaObject, allocator);
+    return (beNDMWTitle2Option *)igMetaObject_CreateInstance(g_beNDMWTitle2Option_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWTitle2Option_GetMetaObject(void) {
@@ -37,7 +37,7 @@ int beNDMWTitle2Option_GetVTable(void) {
     nameRef = &obj._name;
     *nameRef = 0;
     *(int **)&obj._vtable = &g_beNDMWTitle2Option_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);
@@ -52,7 +52,7 @@ void beNDMWTitle2Option_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWTitle2Option_callbackList[] = { beMessenger_EnsureRegistered, 0 };
 
-void *beNDMWTitle2Option_Register(void) {
+CallbackArray *beNDMWTitle2Option_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -134,20 +134,20 @@ void beNDMWTitle2Option_InitFields(void) {
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
     meta = (void *)(g_beNDMWTitle2Option_metaObject);
-    base = igMetaObject_GetFieldCount(meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWTitle2Option_ctorTable, 0xA);
-    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
-    nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
+    inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex((char *)((igMetaObject *)meta)->_metaFields, (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText(nameField, "OPTION");
+    igStringMetaField_SetDefaultText((igMetaField *)nameField, "OPTION");
     nameField->_externalEnumStorage = (int)(&g_beNDMWTitle2Option_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;
     if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(nameField);
     }
-    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    messenger = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWTitle2Option_fieldTable, g_beNDMWTitle2Option_fieldHandles, g_beNDMWTitle2Option_fieldOffsets, base);
 }

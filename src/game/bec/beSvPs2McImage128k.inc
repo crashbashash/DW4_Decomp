@@ -15,7 +15,7 @@ int beSvPs2McImage128k_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beSvPs2McImage128k_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beSvPs2McImage128k_EnsureRegistered(void)
@@ -23,7 +23,7 @@ void beSvPs2McImage128k_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvPs2McImage128k_Register);
 }
 
-void *beSvPs2McImage128k_Register(void) {
+CallbackArray *beSvPs2McImage128k_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -65,9 +65,9 @@ static int g_beSvPs2McImage128k_fieldOffsets[] = {
 void beSvPs2McImage128k_InitFields(void) {
     int base;
     void *data;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvPs2McImage128k_metaObject;
+    meta = g_beSvPs2McImage128k_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvPs2McImage128k_ctorTable, 2);
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));

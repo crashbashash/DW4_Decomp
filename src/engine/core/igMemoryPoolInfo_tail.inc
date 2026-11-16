@@ -15,7 +15,7 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
         if (defaults == -1) {
             return g_resultFailure;
         }
-        if (igRegistry_GetValueStringObj((int)ini, defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, &value.p,
+        if (igRegistry_GetValueStringObj(ini, defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, &value.p,
                          (const char *)"", 0) == 0) {
             return g_resultFailure;
         }
@@ -59,23 +59,23 @@ void igMemoryPoolInfo_UserRegistryLoad(int *result, int *info, int ini, int sect
     if (ini == 0) {
         *result = g_resultFailure.v;
     } else {
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoNameKey, (int **)(&info[2]), (char *)info[2], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoHandleKey, (int **)(&info[5]), (char *)info[5], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoAliasedToKey, (int **)(&info[6]), (char *)info[6], 0);
-        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoSizeKey, &info[7], info[7], 0);
-        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoMaxSizeKey, &info[8], info[8], 0);
-        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoAddressKey, &info[9], info[9], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoClassKey, (int **)(&info[10]), (char *)info[10], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoArenaTypeKey, (int **)(&info[11]), (char *)info[11], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoSourceKey, (int **)(&info[12]), (char *)info[12], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoScopeKey, (int **)(&info[13]), (char *)info[13], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoDebugOptionsKey, (int **)(&info[14]), (char *)info[14], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoReleaseOptionsKey, (int **)(&info[15]), (char *)info[15], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoDebugCheckingKey, (int **)(&info[16]), (char *)info[16], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoReleaseCheckingKey, (int **)(&info[17]), (char *)info[17], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoDebugMessagesKey, (int **)(&info[18]), (char *)info[18], 0);
-        igRegistry_GetValueString(ini, section, g_memoryPoolInfoReleaseMessagesKey, (int **)(&info[19]), (char *)info[19], 0);
-        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoEventTrackerCapacityKey, &info[20], info[20], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoNameKey, (char **)&info[2], (char *)info[2], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoHandleKey, (char **)&info[5], (char *)info[5], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoAliasedToKey, (char **)&info[6], (char *)info[6], 0);
+        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoSizeKey, &info[7], info[7], 0);
+        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoMaxSizeKey, &info[8], info[8], 0);
+        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoAddressKey, &info[9], info[9], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoClassKey, (char **)&info[10], (char *)info[10], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoArenaTypeKey, (char **)&info[11], (char *)info[11], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoSourceKey, (char **)&info[12], (char *)info[12], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoScopeKey, (char **)&info[13], (char *)info[13], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoDebugOptionsKey, (char **)&info[14], (char *)info[14], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoReleaseOptionsKey, (char **)&info[15], (char *)info[15], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoDebugCheckingKey, (char **)&info[16], (char *)info[16], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoReleaseCheckingKey, (char **)&info[17], (char *)info[17], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoDebugMessagesKey, (char **)&info[18], (char *)info[18], 0);
+        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoReleaseMessagesKey, (char **)&info[19], (char *)info[19], 0);
+        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoEventTrackerCapacityKey, &info[20], info[20], 0);
         *result = g_resultSuccess.v;
     }
 }

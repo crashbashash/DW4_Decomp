@@ -7,12 +7,12 @@ igMetaField *g_bePadManager_isPadDisableMetaField;
 
 bePadManager *bePadManager_CreateInstance(int allocator) {
     bePadManager_EnsureRegistered();
-    return (bePadManager *)igMetaObject_CreateInstance(*(int *)0x588518, allocator);
+    return (bePadManager *)igMetaObject_CreateInstance(g_bePadManager_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *bePadManager_GetOrCreateMetaObject(void) {
     if (g_bePadManager_metaObject == 0) {
-        g_bePadManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_bePadManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_bePadManager_metaObject;
 }
@@ -35,12 +35,12 @@ int bePadManager_GetVTable(void) {
     obj._system = 0;
     obj._padList = 0;
     obj._kbReceiver = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_bePadManager_vtable[0];
     igSmartPointer_beKeyboardReceiver_Destruct((igSmartPointer<igObject> *)&obj._kbReceiver, (short)(-1));
     igSmartPointer_bePadDataList_Destruct((igSmartPointer<igObject> *)&obj._padList, -1);
     igSmartPointer_beSystem_Destruct((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)&obj._system)), (short)(-1));
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -77,7 +77,7 @@ void bePadManager_EnsureRegistered(void)
 
 static igMetaObjectCallback g_bePadManager_callbackList[] = { beSystem_EnsureRegistered, bePadDataList_EnsureRegistered, beKeyboardReceiver_EnsureRegistered, 0 };
 
-void *bePadManager_Register(void) {
+CallbackArray *bePadManager_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -133,9 +133,9 @@ void bePadManager_InitFields(void) {
     void *system;
     void *padList;
     void *kbReceiver;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_bePadManager_metaObject;
+    meta = g_bePadManager_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_bePadManager_ctorTable, 5);
     system = (void *)(igMetaObject_GetFieldAt(meta, base));

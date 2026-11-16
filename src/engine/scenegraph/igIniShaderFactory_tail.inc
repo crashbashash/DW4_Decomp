@@ -18,21 +18,21 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
             }
         }
         arg0->f32 = 0;
-        if (g_stringPool[0] == 0) {
-            v = StringPool_Allocate(16);
+        if (g_stringPool == 0) {
+            v = (int)StringPool_Allocate(16);
             if (v != 0) {
-                v = StringPool_Construct(v);
+                v = (int)StringPool_Construct((StringPool *)v);
             }
-            g_stringPool[0] = v;
+            g_stringPool = (StringPool *)v;
         }
-        s = StringPool_Intern(g_stringPool[0], 0);
+        s = (int)StringPool_Intern(g_stringPool, 0);
         old = arg0->f36;
         if (old != 0) {
             hd = (int *)(old - 8);
             v = *(int *)(old - 4) - 1;
             *(int *)(old - 4) = v;
             if (v == 0) {
-                StringChunk_ReleaseHeader(*hd, hd);
+                StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
             }
         }
         arg0->f36 = s;
@@ -64,7 +64,7 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
 #define REL_OBJ(o) { Obj_1c66c0 *t_ = (o); if (t_ != 0) { t_->u.w = t_->u.w - 1; if (t_->u.b.cnt == 0) igObject_Destroy(t_); } }
 #define RET_OBJ(o) { Obj_1c66c0 *t_ = (o); if (t_ != 0) t_->u.w = t_->u.w + 1; }
 #define REL_TMP(o) { if (o != 0) { o->u.w = o->u.w - 1; if (o->u.b.cnt == 0) igObject_Destroy(o); } }
-#define REL_STR(s) { char *t_ = (s); if (t_ != 0) { int *hd_ = (int *)t_ - 2; int c_ = ((int *)t_)[-1] - 1; ((int *)t_)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader(*hd_, hd_); } }
+#define REL_STR(s) { char *t_ = (s); if (t_ != 0) { int *hd_ = (int *)t_ - 2; int c_ = ((int *)t_)[-1] - 1; ((int *)t_)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader((StringChunk *)*hd_, (StringTokenHeader *)hd_); } }
 #define REL_ALL() { REL_OBJ(sp40.p) REL_OBJ(sp44.p) REL_STR(sp48) REL_STR(sp4C) }
 int FUN_001c66c0(Node *self, int force)
 {
@@ -89,23 +89,23 @@ int FUN_001c66c0(Node *self, int force)
     }
     REL_OBJ(self->f32)
     self->f32 = 0;
-    if (g_stringPool[0] == 0) {
-        int pool = StringPool_Allocate(16);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool[0] = pool;
+    if (g_stringPool == 0) {
+        int pool = (int)StringPool_Allocate(16);
+        if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
+        g_stringPool = (StringPool *)pool;
     }
-    s = ((char *)StringPool_Intern(g_stringPool[0], 0));
+    s = ((char *)StringPool_Intern(g_stringPool, 0));
     REL_STR(self->f36)
     self->f36 = s;
     self->f40 = -1;
-    idx = igRegistry_GetSectionIndex(self->f28, (char *)"Interface", 0);
+    idx = igRegistry_GetSectionIndex((igRegistry *)self->f28, (char *)"Interface", 0);
     if (idx < 0) {
         return 0;
     }
     sp4C = 0;
     sp48 = 0;
     {
-        unsigned char found = igRegistry_GetValueString(self->f28, idx, "fileName", &sp4C, "", 0);
+        unsigned char found = igRegistry_GetValueString((igRegistry *)self->f28, idx, "fileName", &sp4C, "", 0);
         sp44.p = 0;
         RET_OBJ(sp44.p)
         sp40.p = 0;
@@ -117,7 +117,7 @@ int FUN_001c66c0(Node *self, int force)
             sp4C = self->f24;
         }
     }
-    if (!(igRegistry_GetValueString(self->f28, idx, "section", &sp48, "", 0) & 0xFF)) {
+    if (!(igRegistry_GetValueString((igRegistry *)self->f28, idx, "section", &sp48, "", 0) & 0xFF)) {
         REL_ALL()
         return 0;
     }
@@ -144,9 +144,9 @@ int FUN_001c66c0(Node *self, int force)
     {
         Obj_1c66c0 *o40 = sp40.p;
         a = sp44.p->f8;
-        if (a == 0) a = g_stringObjEmptyText[0];
+        if (a == 0) a = g_stringObjEmptyText;
         b = o40->f8;
-        if (b == 0) b = g_stringObjEmptyText[0];
+        if (b == 0) b = g_stringObjEmptyText;
     }
     if (igStrcasecmp(a, b) == 0) {
         Obj_1c66c0 *par = self->f28;
@@ -167,7 +167,7 @@ int FUN_001c66c0(Node *self, int force)
             return 0;
         }
     }
-    self->f40 = igRegistry_GetSectionIndex(self->f32, sp48, 0);
+    self->f40 = igRegistry_GetSectionIndex((igRegistry *)self->f32, sp48, 0);
     if (self->f40 == -1) {
         REL_OBJ(self->f32)
         self->f32 = 0;
@@ -192,12 +192,12 @@ IniStrRef FUN_001c6fa0(IniSectionNode *node) {
     if (FUN_001c6520((O_1c6520 *)node, 0) == 0) {
         return IniStrRef(0);
     }
-    index = igRegistry_GetSectionIndex(node->_parent, "configuration", 0);
+    index = igRegistry_GetSectionIndex((igRegistry *)node->_parent, "configuration", 0);
     if (index == -1) {
         return IniStrRef(0);
     }
     IniStrRef text(0);
-    if (igRegistry_GetValueString(node->_parent, index, "fileName", &text.p, "", 0) == 0) {
+    if ((unsigned char)igRegistry_GetValueString((igRegistry *)node->_parent, index, "fileName", &text.p, "", 0) == 0) {
         return IniStrRef(0);
     }
     return text;
@@ -208,7 +208,7 @@ igSmartPointer<ShaderObject> Gap__Sg__igIniShaderFactory__vfunc_24(Factory *self
     if (FUN_001c66c0((Node *)self, 0) == 0) {
         return igSmartPointer<ShaderObject>(0, kRetainReference);
     }
-    if (!igRegistry_GetValueStringObj(self->f32, self->f40, name, &shader.p, "", 0)) {
+    if (!igRegistry_GetValueStringObj((igRegistry *)self->f32, self->f40, name, (igStringObj **)&shader.p, "", 0)) {
         return igSmartPointer<ShaderObject>(0, kRetainReference);
     }
     return shader;
@@ -220,14 +220,14 @@ ObjectRefWord *FUN_001c7600(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
     return self;
 }
 
-void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, int arg1, void **arg2) {
+void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, void *object, char **arg2) {
     int *temp_a1;
     int temp_v1;
     void **temp_s0;
@@ -235,7 +235,7 @@ void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, int arg1, vo
     void *temp_a0_2;
 
     temp_a0 = (void *)(*arg2);
-    temp_s0 = (void **)(arg1 + arg0->_offset);
+    temp_s0 = (void **)((char *)object + arg0->_offset);
     if (temp_a0 != 0) {
         *(int *)((char *)(temp_a0) - 4) = (int)((int) (*(int *)((char *)(temp_a0) - 4) + 1));
     }
@@ -245,13 +245,13 @@ void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, int arg1, vo
         temp_v1 = *(int *)((char *)(temp_a0_2) - 4) - 1;
         *(int *)((char *)(temp_a0_2) - 4) = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
         }
     }
     *temp_s0 = *arg2;
 }
 
-void StringList_AppendRetained(igStringRefList *arg0, const IniStrRef &value) {
+void StringList_AppendRetained(igStringRefList *arg0, char *const *value) {
     int *temp_a1_2;
     int temp_s0;
     int temp_v1;
@@ -261,7 +261,7 @@ void StringList_AppendRetained(igStringRefList *arg0, const IniStrRef &value) {
 
     temp_s0 = arg0->_count;
     StringList_Resize(arg0, temp_s0 + 1);
-    temp_a1 = (void *)value.p;
+    temp_a1 = (void *)*value;
     temp_s0_2 = (void **)(arg0->_data + (temp_s0 * 4));
     if (temp_a1 != 0) {
         *(int *)((char *)(temp_a1) - 4) = (int)((int) (*(int *)((char *)(temp_a1) - 4) + 1));
@@ -272,10 +272,10 @@ void StringList_AppendRetained(igStringRefList *arg0, const IniStrRef &value) {
         temp_v1 = *(int *)((char *)(temp_a0) - 4) - 1;
         *(int *)((char *)(temp_a0) - 4) = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader(*temp_a1_2, temp_a1_2);
+            StringChunk_ReleaseHeader((StringChunk *)*temp_a1_2, (StringTokenHeader *)temp_a1_2);
         }
     }
-    *temp_s0_2 = value.p;
+    *temp_s0_2 = *value;
 }
 
 int FUN_001ca6b0(int *p, int)
@@ -291,12 +291,12 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     char *field;
     void *info;
     unsigned char cached;
-    section = igRegistry_GetSectionIndex(self->ini, name, 0);
+    section = igRegistry_GetSectionIndex((igRegistry *)self->ini, name, 0);
     if (section == -1) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     IniStrRef text(0);
-    if (igRegistry_GetValueString(self->ini, section, "type", &text.p, "", 0) == 0) {
+    if ((unsigned char)igRegistry_GetValueString((igRegistry *)self->ini, section, "type", &text.p, "", 0) == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     meta = FUN_002fe460(text.p);
@@ -307,7 +307,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     if (object.p == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    igSmartPointer<ShaderNameList> names(igStringRefList_Create(((void *)igObject_GetAllocator(self))));
+    igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
     igRegistry_GetValueStringList(self->ini, section, "fields", names.p, 0);
     count = names.p->count;
     for (i = 0; i < count; i++) {
@@ -324,7 +324,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     {
         bool initial = !(bool)flag;
         cached = initial;
-        igRegistry_GetValueBool(self->ini, section, "const", &cached, initial, 0);
+        igRegistry_GetValueBool((igRegistry *)self->ini, section, "const", &cached, initial, 0);
     }
     if (cached != 0) {
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
@@ -346,12 +346,12 @@ void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *
         void *item = itemAt(items, i);
         RetainedString name = StringList_CopyRetained((igStringRefList *)names, i);
         int index;
-        index = igStringRefList_IndexOf((struct L_1cafc0 *)lookup, name, 0);
+        index = igStringRefList_IndexOf((igStringRefList *)lookup, IniStrRef(name).ref(), 0);
         if (index != -1) {
             RetainedString fieldName = StringList_CopyRetained((igStringRefList *)fieldNames, index);
             IniFieldView *field;
-            field = asObjectRefField((IniFieldView *)igMetaObject_FindFieldByName(target->getMeta(), fieldName.p));
-            if (field != 0 && igObject_IsKindOf(item, field->refMeta) != 0) {
+            field = asObjectRefField((IniFieldView *)igMetaObject_FindFieldByName((igMetaObject *)(target->getMeta()), fieldName.p));
+            if (field != 0 && igObject_IsKindOf(item, (igMetaObject *)field->refMeta) != 0) {
                 igObjectRefMetaField_Assign(field, target, item);
             }
             releaseString(fieldName.p);

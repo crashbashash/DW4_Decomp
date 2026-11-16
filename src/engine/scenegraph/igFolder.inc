@@ -15,7 +15,7 @@ int FUN_001ce400(IniStringObject **out, char *path) {
         retain_1ce400(*out);
         return;
     }
-    void *allocator = g_useOwnerAllocator != 0 ? ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0])) : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]));
+    void *allocator = g_useOwnerAllocator != 0 ? ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent)) : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     igSmartPointer<IniFileObject> file(((IniFileObject *)igFile_Create(allocator)));
     StringObjectRef result(0);
     int opened;
@@ -23,14 +23,14 @@ int FUN_001ce400(IniStringObject **out, char *path) {
         IniStringRef name = resolver->resolve(path);
         char *text = name.p->text;
         IniFileObject *opener = file.p;
-        text = (text == 0) ? g_stringObjEmptyText[0] : text;
+        text = (text == 0) ? g_stringObjEmptyText : text;
         opened = opener->open(text, "r");
     }
     if (opened != 0) {
-        void *stringAllocator = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString[0]));
+        void *stringAllocator = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
         release_1ce400(result.p);
-        result.p = ((IniStringObject *)igStringObj_Create(stringAllocator));
-        igStringObj_Set(result.p, file->handle);
+        result.p = ((IniStringObject *)igStringObj_Create((int)stringAllocator));
+        igStringObj_Set((igStringObj *)result.p, (char *)file->handle);
         file->close();
     }
     *out = result.p;

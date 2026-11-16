@@ -2,9 +2,8 @@
  * makes the second load of the lock semaphore, and C++ breaks p2InitVu0's struct copy. */
 extern "C" {
 #include "dw4/eekernel.h"
+#include "dw4/p2core.h"
 #include "dw4/p2timer.h"
-
-extern int p2BlockedSema;
 }
 
 /* The VU0 lock: its semaphore and the tag of the code holding it. */

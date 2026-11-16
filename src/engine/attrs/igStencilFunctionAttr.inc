@@ -9,7 +9,7 @@ igMetaField *g_igStencilFunctionAttr_stenPassZFailOpMetaField;
 
 void FUN_00133610(int arg0) {
     FUN_001336e0();
-    igMetaObject_CreateInstance(*(int *)0x55EE50, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EE50, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igStencilFunctionAttr_GetMetaObject(void)
@@ -22,9 +22,9 @@ igMetaObject *igStencilFunctionAttr_GetMetaObject(void)
 
 int igStencilFunctionAttr_GetVTable(void) {
     struct Obj_1336a0 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igStencilFunctionAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_001336e0(void)
@@ -32,9 +32,9 @@ void FUN_001336e0(void)
     igMetaObject_RunStaticInit(igStencilFunctionAttr_Register);
 }
 
-void igStencilFunctionAttr_Register(void) {
+CallbackArray *igStencilFunctionAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igStencilFunctionAttr_metaObject,
         igVisualAttribute_Register,
@@ -54,13 +54,13 @@ void thunk_igStencilFunctionAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igStencilFunctionAttr_ctorTable[] = {
-    igUnsignedIntMetaField_Create,
-    igEnumMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igStencilFunctionAttr_fieldTable[] = {
     "_refVal",
@@ -98,20 +98,20 @@ void igStencilFunctionAttr_InitFields(void) {
     void *temp_v0;
 
     temp_s1 = (void *)g_igStencilFunctionAttr_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_ctorTable, 7);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
+    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
     igEnumMetaField_SetDefaultValue(temp_v0, g_igStencilFunctionAttr_funcDefault);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_00149500;
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2), -1);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), -1);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), -1);
+    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
+    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
+    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_fieldTable, g_igStencilFunctionAttr_fieldHandles, g_igStencilFunctionAttr_fieldOffsets, temp_s0);

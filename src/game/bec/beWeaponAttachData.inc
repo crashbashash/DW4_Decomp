@@ -4,7 +4,7 @@ igMetaField *g_beWeaponAttachData_appearanceListListMetaField;
 
 beWeaponAttachData *beWeaponAttachData_Create(int allocator) {
     beWeaponAttachData_EnsureRegistered();
-    return (beWeaponAttachData *)igMetaObject_CreateInstance(*(int *)0x587A80, allocator);
+    return (beWeaponAttachData *)igMetaObject_CreateInstance(g_beWeaponAttachData_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beWeaponAttachData_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int beWeaponAttachData_GetVTable(void) {
     *boneSelectListSlot = 0;
     appearanceListListSlot = (igObject **)&obj._appearanceListList;
     *appearanceListListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beWeaponAttachData_vtable[0];
     igObjectRef_Release(appearanceListListSlot);
     igObjectRef_Release(boneSelectListSlot);
@@ -41,7 +41,7 @@ void beWeaponAttachData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beWeaponAttachData_callbackList[] = { igModelViewMatrixBoneSelectListBec_EnsureRegistered, igAppearanceListList_EnsureRegistered, 0 };
 
-void *beWeaponAttachData_Register(void) {
+CallbackArray *beWeaponAttachData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,9 +84,9 @@ void beWeaponAttachData_InitFields(void) {
     int base;
     void *appearanceListList;
     void *boneSelectList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beWeaponAttachData_metaObject;
+    meta = g_beWeaponAttachData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beWeaponAttachData_ctorTable, 2);
     boneSelectList = (void *)(igMetaObject_GetFieldAt(meta, base));

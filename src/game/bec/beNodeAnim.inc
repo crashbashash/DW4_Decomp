@@ -28,9 +28,9 @@ int beNodeAnim_GetVTable(void) {
     obj._parentList = 0;
     obj._childList = 0;
     obj._vtable = (int)&g_beNodeAnim_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beNodeAnim_vtable[0];
-    igGroup_Destroy(&obj, 0);
+    igGroup_Destroy((igGroup *)&obj, 0);
     return vtable;
 }
 
@@ -39,12 +39,12 @@ void beNodeAnim_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNodeAnim_Register);
 }
 
-void *beNodeAnim_Register(void) {
+CallbackArray *beNodeAnim_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNodeAnim_metaObject,
-        igGroup_Register,
+        (igMetaObjectRegisterFunction)igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beNodeAnim_GetMetaObject,
         "beNodeAnim",
@@ -112,9 +112,9 @@ static int g_beNodeAnim_fieldOffsets[] = {
 
 void beNodeAnim_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beNodeAnim_metaObject;
+    meta = g_beNodeAnim_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNodeAnim_ctorTable, 0xA);
     igLongMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), 0x13DE4355);

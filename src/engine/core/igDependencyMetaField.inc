@@ -91,7 +91,7 @@ void igDependencyMetaField_CreateDefaultDescriptor(void) {
                 void *held = (void *)g_igDependencyMetaField_descriptor;
                 ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
                 if (((unsigned long long) ((long long) (int) ((igObject *)held)->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(held);
+                    igObject_Destroy((igObject *)held);
                 }
             }
             ((igMetaField *)g_igDependencyMetaField_descriptor)->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
@@ -159,7 +159,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)beforeField);
     ((igObject *)beforeField)->_refCount = (int)((int) (((igObject *)beforeField)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)beforeField)->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(beforeField);
+        igObject_Destroy((igObject *)beforeField);
     }
     afterField = (void *)(((void *)igRawRefMetaField_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
     if ("_after" == 0) {
@@ -189,7 +189,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)afterField);
     ((igObject *)afterField)->_refCount = (int)((int) (((igObject *)afterField)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)afterField)->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(afterField);
+        igObject_Destroy((igObject *)afterField);
     }
 }
 

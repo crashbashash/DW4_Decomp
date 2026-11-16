@@ -13,9 +13,9 @@ void FUN_00232780(void)
     igMetaObject_RunStaticInit(igInsightPlugin_Register);
 }
 
-void igInsightPlugin_Register(void) {
+CallbackArray *igInsightPlugin_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igInsightPlugin_metaObject,
         igObject_Register,

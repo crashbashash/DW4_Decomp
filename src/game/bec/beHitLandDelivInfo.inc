@@ -17,7 +17,7 @@ int beHitLandDelivInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     obj._vtable = (int)&g_beHitLandDelivInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beHitLandDelivInfo_vtable[0];
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
@@ -28,7 +28,7 @@ void beHitLandDelivInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandDelivInfo_Register);
 }
 
-void *beHitLandDelivInfo_Register(void) {
+CallbackArray *beHitLandDelivInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

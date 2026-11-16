@@ -5,7 +5,7 @@ igMetaField *g_beNDMWItemBase_isEquipMetaField;
 
 igMetaObject *beNDMWItemBase_GetOrCreateMetaObject(void) {
     if (g_beNDMWItemBase_metaObject == 0) {
-        g_beNDMWItemBase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWItemBase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWItemBase_metaObject;
 }
@@ -23,7 +23,7 @@ void beNDMWItemBase_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWItemBase_Register);
 }
 
-void *beNDMWItemBase_Register(void) {
+CallbackArray *beNDMWItemBase_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */

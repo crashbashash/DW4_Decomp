@@ -5,7 +5,7 @@ igMetaField *g_beNDMWPanelObjectWaza_listColorMetaField;
 
 igMetaObject *beNDMWPanelObjectWaza_GetOrCreateMetaObject(void) {
     if (g_beNDMWPanelObjectWaza_metaObject == 0) {
-        g_beNDMWPanelObjectWaza_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWPanelObjectWaza_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWPanelObjectWaza_metaObject;
 }
@@ -32,7 +32,7 @@ int beNDMWPanelObjectWaza_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWPanelObjectWaza_vtable[0];
     obj._listFolder = 0;
     obj._listColor = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWPanelObjectWaza_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._listColor, -1);
     igSmartPointer_igObjectList_Destruct(&obj._listFolder, -1);
@@ -47,7 +47,7 @@ void beNDMWPanelObjectWaza_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWPanelObjectWaza_callbackList[] = { igObjectList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWPanelObjectWaza_Register(void) {
+CallbackArray *beNDMWPanelObjectWaza_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -98,22 +98,22 @@ void beNDMWPanelObjectWaza_InitFields(void) {
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
     meta = (void *)(g_beNDMWPanelObjectWaza_metaObject);
-    base = igMetaObject_GetFieldCount(meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectWaza_ctorTable, 2);
-    inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
-    pageIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedPage);
+    inheritedPage = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_page"));
+    pageIndex = ObjectPointerList_FindIndex((char *)((igMetaObject *)meta)->_metaFields, (int)inheritedPage);
     pageField = (igIntMetaField *)((igObjectDispatchView *)inheritedPage)->CloneViaMetadata(1);
-    igIntMetaField_SetDefault(pageField, 0);
+    igIntMetaField_SetDefault((igMetaField *)pageField, 0);
     pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectWaza_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, pageIndex, (igMetaField *)pageField);
     pageField->_refCount = pageField->_refCount - 1;
     if (((unsigned long long)(long long)pageField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(pageField);
     }
-    listFolder = (void *)(igMetaObject_GetFieldAt(meta, base));
+    listFolder = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)listFolder)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)listFolder)->_construct = 1;
-    listColor = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    listColor = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)listColor)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)listColor)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWPanelObjectWaza_fieldTable, g_beNDMWPanelObjectWaza_fieldHandles, g_beNDMWPanelObjectWaza_fieldOffsets, base);

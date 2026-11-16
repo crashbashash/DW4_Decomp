@@ -6,58 +6,53 @@
 #include "dw4/igAdxFile.h"
 #pragma push
 #pragma readonly_strings on
-extern "C" int igObject_GetAllocator(...);
-extern "C" int Memory_AllocateAlignedWithAllocator(...);
+#include "dw4/igObject.h"
+#include "dw4/igMemory.h"
 extern "C" int ADXT_Create(int, int, int);
 extern "C" int ADXT_StartMemIdx(int, int, int);
 extern "C" int ADXT_StartAfs(int, short, short);
 extern "C" int ADXT_StartFname(int, const char *);
-extern "C" int ADXT_Stop(int);
+extern "C" {
+#include "dw4/cri/adxt.h"
+}
 extern "C" int ADXT_Pause(int, int);
 extern "C" int ADXT_GetStatPause(int);
 extern "C" int ADXT_Destroy(...);
-extern "C" int Memory_FreeBufferWithAllocator(...);
 extern "C" int ADXT_SetOutVol(int, int);
 extern "C" int ADXT_GetOutVol(int);
-extern "C" int ADXT_GetStat(int);
-extern "C" igStringObj *igStringObj_Create(int);
+#include "dw4/igStringObj.h"
 extern "C" int Memory_GetAllocatorByName(...);
-extern "C" int DisableIntc(int);
+#include "dw4/libkernl.h"
 extern "C" int ADXM_ShutdownThrd(...);
 extern "C" int SNDF_Finish(...);
 extern "C" int mwPlyFinishSfdFx(...);
-extern "C" int RemoveIntcHandler(int, int);
-extern "C" void Gap__Core__igObject__constructFields(void);
-extern "C" void Gap__igAdx__constructFields(void);
-extern "C" int memset(...);
-extern "C" int Gap__Core__igObject__resetFields(...);
-extern "C" void Gap__igAdx__resetFields(void);
-extern "C" int Gap__Core__igObject__userConstruct(...);
-extern "C" int igMetaObject_CountInstances(...);
+#include "dw4/eekernel.h"
+extern "C" void Gap__igAdx__constructFields(igObject *self, int flags);
+extern "C" void Gap__igAdx__resetFields(igObject *self, int flags);
+#include "dw4/igMetaObject.h"
 extern "C" void Gap__igAdx__userConstruct(igObject *self);
 extern "C" int Gap__igAdx__getMeta(void);
 extern "C" void Gap__igAdx__destructFields(void);
-extern "C" int Gap__Core__igObject__userDestruct(...);
 extern "C" void Gap__igAdx__userDestruct(igObject *self);
 extern "C" void igAdx_ErrorCallback(void);
-extern "C" int strcpy(...);
-extern "C" int AddIntcHandler(int, int (*)(), int);
+#include <string.h>
 extern "C" int ADXM_ExecVint(void);
-extern "C" int EnableIntc(int);
-extern "C" int sceSifInitRpc(int);
+extern "C" {
+#include "dw4/sony/sif.h"
+}
 extern "C" int sceSifInitIopHeap(...);
 extern "C" int sceCdInit(int);
 extern "C" int sceCdMmode(int);
 extern "C" int sceSdRemoteInit(...);
-extern "C" int sceSdRemote(...);
-extern "C" int sprintf(...);
+/* Kept here: its only declaration is in cri/sndf.h, whose own libc and SIF prototypes conflict with the Sony homes. */
+extern "C" int sceSdRemote(int arg, int command, ...);
+#include <stdio.h>
 extern "C" int ADXPS2_SetupDvdFs(int);
 extern "C" int ADXPS2_LoadFcacheDvd(AdxFcachePrm *);
 extern "C" int ADXPS2_SetupHostFs(AdxHstFsPrm *);
 extern "C" int ADXPS2_LoadFcacheHost(AdxFcachePrm *);
 extern "C" int ADXPS2_SetupMemFs(int);
 extern "C" int igPsx2_LoadIopModule(...);
-extern "C" int strcmp(...);
 extern "C" int igAdx_SetupIop(void);
 extern "C" int igAdx_SetupOptional(void);
 extern "C" int ADXT_Init(...);
@@ -67,17 +62,10 @@ extern "C" int SNDF_Start(...);
 extern "C" void ADXM_ExecVsyncFrame(void);
 extern "C" int ADXM_ExecMain(...);
 extern "C" int SNDF_ExecServer(...);
-extern "C" void *igStringRefList_Create(int);
-extern "C" int StringPool_Allocate(int);
-extern "C" int List_Reserve(void *, int, int);
-extern "C" int StringChunk_ReleaseHeader(int, int *);
-extern "C" int StringPool_Construct(int);
-extern "C" char *StringPool_Intern(int, const char *);
+#include "dw4/igDataLists.h"
+#include "dw4/StringPool.h"
 extern "C" void ADXF_LoadPartitionNw(int stream, const char *name, int mode, void *buffer);
 extern "C" int ADXF_GetPtStatEx(int stream);
-extern "C" unsigned int strlen(const char *);
-extern "C" char *strncpy(char *, const char *, unsigned int);
-extern "C" int strcat(char *, const char *);
 extern "C" void __dl__FPv(void *);
 extern "C" int igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char *name, int maxChannels, int type,
                                                    int maxStreams, int maxFrequency);
@@ -95,15 +83,14 @@ unsigned char g_adxIopReady;
 char g_adxUnusedFlag;
 }
 extern "C" int SNDF_Init(int *config);
-extern "C" char g_igPsx2_resetIopServices;
-extern "C" int g_stringPool[4];
+#include "dw4/igPsx2File.h"
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     char *p;
     StringRef(char *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
+    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
     operator char *() const { return p; }
 };
 extern "C" int StringList_AppendRetained(void *, StringRef *);
@@ -117,14 +104,9 @@ public:
     virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22();
     virtual WaitResult sleep(int microseconds);
 };
-struct ThreadList { char pad[16]; AdxThread **data; };
-struct ThreadManager { char pad[8]; ThreadList *threads; };
-extern "C" ThreadManager *g_threadManager[4];
-extern "C" void igStringObj_Set(igStringObj *string, const char *text);
-extern "C" void igStringObj_ToLower(igStringObj *string);
+#include "dw4/igThread.h"
 extern "C" void igStringObj_ToInt(igStringObj *string, int *value);
-extern "C" void igNamedObject_SetName(igAdxAfsFile *object, const char *name);
-extern "C" char *g_stringObjEmptyText[4];
+#include "dw4/igNamedObject.h"
 extern "C" int emptyString[4];
 extern "C" void igAdxAfsFile_GetPath(igAdxAfsFile *file, char *path);
 /* The scratch string, the per-partition file names and the AFS files, each released when the program exits. */
@@ -151,7 +133,7 @@ int igAdxAudio_Initialize(igAdxAudio *audio, int maxChannels, int type, int maxS
         sectors = ((audio->_iMaxStreams + 1) * samples + 0x800) / 0x800;
         streamSize = (sectors << 11) + 0x24;
         { int decodeSize = audio->_iMaxChannels * 0x40C0; audio->_iWorkSize = decodeSize + streamSize + 0x40; }
-        audio->_pWorkArea = Memory_AllocateAlignedWithAllocator(audio->_iWorkSize, 16, igObject_GetAllocator(audio));
+        audio->_pWorkArea = (int)Memory_AllocateAlignedWithAllocator(audio->_iWorkSize, 16, igObject_GetAllocator(audio));
         if (audio->_pWorkArea == 0) return 0;
         audio->_bIsInitialized = 1;
     }
@@ -228,7 +210,7 @@ void igAdxAudio_Stop(igAdxAudio *audio) {
 
     adxt = audio->_adxt;
     if (adxt != 0) {
-        ADXT_Stop(adxt);
+        ADXT_Stop((AdxtObj *)adxt);
     }
 }
 
@@ -254,7 +236,7 @@ void igAdxAudio_Shutdown(igAdxAudio *audio) {
         ADXT_Destroy(audio->_adxt);
     }
     if (audio->_pWorkArea != 0) {
-        Memory_FreeBufferWithAllocator(audio->_pWorkArea, igObject_GetAllocator(audio));
+        Memory_FreeBufferWithAllocator((void *)audio->_pWorkArea, igObject_GetAllocator(audio));
     }
 }
 
@@ -284,7 +266,7 @@ int igAdxAudio_GetStatus(igAdxAudio *audio) {
     if (adxt == 0) {
         return -1;
     }
-    return ADXT_GetStat(adxt);
+    return ADXT_GetStat((AdxtObj *)adxt);
 }
 
 void igAdx_CreateScratchString(void) {
@@ -299,7 +281,7 @@ void igAdx_CreateScratchString(void) {
             igObject_Destroy(old);
         }
     }
-    g_adxScratchString.p = igStringObj_Create(allocator);
+    g_adxScratchString.p = (igStringObj *)(igStringObj_Create(allocator));
 }
 
 void igAdx_Shutdown(void) {
@@ -329,24 +311,24 @@ void igAdx_Shutdown(void) {
     RemoveIntcHandler(2, g_adxVblankHandlerId);
     allocator = Memory_GetAllocatorByName("User0");
     if (g_adxHostFileCache.buf != 0) {
-        Memory_FreeBufferWithAllocator(g_adxHostFileCache.buf, allocator);
+        Memory_FreeBufferWithAllocator((void *)g_adxHostFileCache.buf, (igMemoryPoolView *)allocator);
         g_adxHostFileCache.buf = 0;
     }
     if (g_adxDvdFileCache.buf != 0) {
-        Memory_FreeBufferWithAllocator(g_adxDvdFileCache.buf, allocator);
+        Memory_FreeBufferWithAllocator((void *)g_adxDvdFileCache.buf, (igMemoryPoolView *)allocator);
         g_adxDvdFileCache.buf = 0;
     }
     ADXM_ShutdownThrd();
 }
 
-void Gap__igAdx__constructFields(void)
+void Gap__igAdx__constructFields(igObject *self, int flags)
 {
-    Gap__Core__igObject__constructFields();
+    Gap__Core__igObject__constructFields(self, flags);
 }
 
-void Gap__igAdx__resetFields(void) {
+void Gap__igAdx__resetFields(igObject *self, int flags) {
     igAdxAfsFileList *files;
-    Gap__Core__igObject__resetFields();
+    Gap__Core__igObject__resetFields(self, flags);
     g_adxVblankHandlerId = 0;
     g_adxIopReady = 0;
     g_adxUnusedFlag = 0;
@@ -360,7 +342,7 @@ void Gap__igAdx__resetFields(void) {
 }
 
 void Gap__igAdx__userConstruct(igObject *self) {
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct(self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
 }
 
@@ -462,7 +444,7 @@ int igAdx_SetupIop(void) {
         g_adxHostFileCache.flist = "cdvd.fic";
         g_adxHostFileCache.fnamelen = 0x20;
         g_adxHostFileCache.bufsize = ((g_adxHostFileCache.fnamelen + 1) * 0xD) + 0x68;
-        g_adxHostFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxHostFileCache.bufsize, 0x10, allocator);
+        g_adxHostFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxHostFileCache.bufsize, 0x10, (igMemoryPoolView *)allocator);
         ADXPS2_LoadFcacheHost(&g_adxHostFileCache);
     }
     if (g_adxMediaMode != 0) {
@@ -472,12 +454,12 @@ int igAdx_SetupIop(void) {
             g_adxDvdFileCache.flist = "cdvd.fic";
             g_adxDvdFileCache.fnamelen = 0x20;
             g_adxDvdFileCache.bufsize = ((g_adxDvdFileCache.fnamelen + 1) * 0xD) + 0x68;
-            g_adxDvdFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxDvdFileCache.bufsize, 0x10, allocator);
+            g_adxDvdFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxDvdFileCache.bufsize, 0x10, (igMemoryPoolView *)allocator);
             ADXPS2_LoadFcacheDvd(&g_adxDvdFileCache);
         }
     }
     DisableIntc(2);
-    g_adxVblankHandlerId = AddIntcHandler(2, &ADXM_ExecVint, 0);
+    g_adxVblankHandlerId = AddIntcHandler(2, (int (*)(int))&ADXM_ExecVint, 0);
     EnableIntc(2);
     g_adxIopReady = 1;
     return 1;
@@ -532,18 +514,18 @@ void igAdx_SetPartitionCount(int count) {
                 do {
                     buffer = *(int *)((int)g_adxPartitionBuffers + freeOffset);
                     if (buffer != 0) {
-                        Memory_FreeBufferWithAllocator(buffer, allocator);
+                        Memory_FreeBufferWithAllocator((void *)buffer, (igMemoryPoolView *)allocator);
                     }
                     freed += 1;
                     freeOffset += 4;
                 } while (freed < g_adxPartitionCount);
             }
         }
-        Memory_FreeBufferWithAllocator(g_adxPartitionBuffers, allocator);
+        Memory_FreeBufferWithAllocator((void *)g_adxPartitionBuffers, (igMemoryPoolView *)allocator);
     }
     g_adxPartitionCount = count;
     if (count > 0) {
-        g_adxPartitionBuffers = (void **)Memory_AllocateAlignedWithAllocator(count * 4, 0x10, allocator);
+        g_adxPartitionBuffers = (void **)Memory_AllocateAlignedWithAllocator(count * 4, 0x10, (igMemoryPoolView *)allocator);
         cleared = 0;
         if (0 < g_adxPartitionCount) {
             clearOffset = 0;
@@ -572,12 +554,12 @@ void igAdx_AddPartitionName(int partition, const char *name) {
         if (name == 0) {
             interned = 0;
         } else {
-            if (g_stringPool[0] == 0) {
-                pool = StringPool_Allocate(16);
-                if (pool != 0) pool = StringPool_Construct(pool);
-                g_stringPool[0] = pool;
+            if (g_stringPool == 0) {
+                pool = (int)StringPool_Allocate(16);
+                if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
+                g_stringPool = (StringPool *)pool;
             }
-            interned = StringPool_Intern(g_stringPool[0], name);
+            interned = StringPool_Intern(g_stringPool, name);
         }
         {
             StringRef token(interned);
@@ -596,18 +578,18 @@ void igAdx_AddPartitionName(int partition, const char *name) {
         if (0 < n) {
             do {
                 slot = &((int **)names->_data)[i];
-                if (g_stringPool[0] == 0) {
-                    pool = StringPool_Allocate(16);
-                    if (pool != 0) pool = StringPool_Construct(pool);
-                    g_stringPool[0] = pool;
+                if (g_stringPool == 0) {
+                    pool = (int)StringPool_Allocate(16);
+                    if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
+                    g_stringPool = (StringPool *)pool;
                 }
-                blank = (int *)StringPool_Intern(g_stringPool[0], 0);
+                blank = (int *)StringPool_Intern(g_stringPool, 0);
                 old = *slot;
                 if (old != 0) {
                     int *header = old - 2;
                     pool = old[-1] - 1;
                     old[-1] = pool;
-                    if (pool == 0) StringChunk_ReleaseHeader(*header, header);
+                    if (pool == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
                 }
                 i++;
                 *slot = blank;
@@ -615,7 +597,7 @@ void igAdx_AddPartitionName(int partition, const char *name) {
         }
         names->_count = 0;
         empty = g_adxPartitionNames.p->_count > 0;
-        if (empty == 0) List_Reserve(g_adxPartitionNames.p, 0, 4);
+        if (empty == 0) List_Reserve((igDataList *)g_adxPartitionNames.p, 0, 4);
         g_adxPartitionNames.clear();
         {
             igAdxAfsFileList *files = g_adxAfsFileList.p;
@@ -631,7 +613,7 @@ void igAdx_AddPartitionName(int partition, const char *name) {
                 for (j = 0; j < m; j++) ((igAdxAfsFile **)files->_data)[j] = 0;
                 files->_count = 0;
                 empty = g_adxAfsFileList.p->_count > 0;
-                if (empty == 0) List_Reserve(g_adxAfsFileList.p, 0, 4);
+                if (empty == 0) List_Reserve((igDataList *)g_adxAfsFileList.p, 0, 4);
                 g_adxAfsFileList.clear();
             }
         }
@@ -664,7 +646,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
     if (!g_adxIopReady) return 0;
     size = ((length + 1) * 2 + 282) & ~3;
     if (size > 0) {
-        g_adxPartitionBuffers[stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((void *)Memory_GetAllocatorByName(((char *)"User0")))));
+        g_adxPartitionBuffers[stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((igMemoryPoolView *)Memory_GetAllocatorByName(((char *)"User0")))));
     }
     igAdx_AddPartitionName(stream, (char *)path);
     name = StringList_CopyRetained((int)g_adxPartitionNames.p, stream).p;
@@ -681,7 +663,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
             igAdx_ExecServer(0);
             break;
         }
-        g_threadManager[0]->threads->data[0]->sleep(3333333);
+        ((AdxThread *)g_threadManager->_threadList->_data[0])->sleep(3333333);
     } while (waiting);
     return 1;
 }
@@ -716,7 +698,7 @@ int igAdx_FindAfsFile(const char *name) {
                 igStringObj_Set(g_adxScratchString.p, digits);
                 igStringObj_ToInt(g_adxScratchString.p, &fileNumber);
                 entry = afsFileAt(g_adxAfsFileList.p, 0);
-                igNamedObject_SetName(entry, name);
+                igNamedObject_SetName((igNamedObject *)entry, name);
                 entry->_ptNumber = partition;
                 entry->_fileNumber = fileNumber;
                 return 0;
@@ -728,7 +710,7 @@ int igAdx_FindAfsFile(const char *name) {
         for (k = 1; k < n; k++) {
             igAdxAfsFile_GetPath(afsFileAt(g_adxAfsFileList.p, k), path);
             const char *text = (const char *)g_adxScratchString.p->_buffer;
-            text = (text == 0) ? g_stringObjEmptyText[0] : text;
+            text = (text == 0) ? g_stringObjEmptyText : text;
             if (strcmp(text, path) == 0) {
                 return k;
             }

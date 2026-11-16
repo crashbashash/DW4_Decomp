@@ -28,12 +28,12 @@ igMetaField *g_beSystem_isSResetEnableMetaField;
 
 beSystem *beSystem_CreateInstance(int allocator) {
     beSystem_EnsureRegistered();
-    return (beSystem *)igMetaObject_CreateInstance(*(int *)0x587D08, allocator);
+    return (beSystem *)igMetaObject_CreateInstance(g_beSystem_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSystem_GetOrCreateMetaObject(void) {
     if (g_beSystem_metaObject == 0) {
-        g_beSystem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSystem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSystem_metaObject;
 }
@@ -64,7 +64,7 @@ int beSystem_GetVTable(void) {
     obj._globalStrObj = 0;
     obj._discErrInfos = 0;
     obj._viewerScene = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSystem_vtable[0];
     igSmartPointer_igGroup_Destruct(&obj._viewerScene, -1);
     igSmartPointer_igInfoList_Destruct(&obj._discErrInfos, -1);
@@ -74,7 +74,7 @@ int beSystem_GetVTable(void) {
     igStringRef_Destruct(&obj._stageName, -1);
     igSmartPointer_igStringRefList_Destruct(&obj._readFileList, -1);
     igSmartPointer_igRandomNumber_Destruct((igSmartPointer<igObject> *)&obj._random, (short)(-1));
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -98,7 +98,7 @@ void beSystem_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSystem_callbackList[] = { igRandomNumber_EnsureRegistered, igStringRefList_EnsureRegistered, igDirectory_EnsureRegistered, igStringObj_EnsureRegistered, igInfoList_EnsureRegistered, igGroup_EnsureRegistered, 0 };
 
-void *beSystem_Register(void) {
+CallbackArray *beSystem_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -241,30 +241,30 @@ void beSystem_InitFields(void) {
     void *discErrInfos;
     void *viewerScene;
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSystem_metaObject;
+    meta = g_beSystem_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSystem_ctorTable, 0x1A);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 3), 1.0f);
     random = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)random)->_metaObject = igRandomNumber_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)random)->_metaObject = (int)igRandomNumber_GetOrCreateMetaObject();
     ((igRefMetaField *)random)->_construct = 1;
     readFileList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)readFileList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)readFileList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)readFileList)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0xB), 1);
     bootDirectory = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    ((igObjectRefMetaField *)bootDirectory)->_metaObject = igDirectory_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)bootDirectory)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
     globalStrObj = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
-    ((igObjectRefMetaField *)globalStrObj)->_metaObject = igStringObj_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)globalStrObj)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)globalStrObj)->_construct = 1;
     discErrInfos = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
-    ((igObjectRefMetaField *)discErrInfos)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)discErrInfos)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)discErrInfos)->_construct = 1;
     viewerScene = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
-    ((igObjectRefMetaField *)viewerScene)->_metaObject = igGroup_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerScene)->_metaObject = (int)igGroup_GetOrCreateMetaObject();
     ((igRefMetaField *)viewerScene)->_construct = 1;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x15), 1);
     igMetaObject_NameFields(meta, g_beSystem_fieldTable, g_beSystem_fieldHandles, g_beSystem_fieldOffsets, base);

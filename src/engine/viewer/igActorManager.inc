@@ -12,7 +12,7 @@ igMetaField *g_igActorManager_referencesMetaField;
 
 void FUN_0045e230(int arg0) {
     FUN_0045e4a0();
-    igMetaObject_CreateInstance(g_igActorManager_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igActorManager_metaObject, (igMemoryPoolView *)arg0);
 }
 
 void *igActorManager_GetMetaObject(void) {
@@ -26,7 +26,7 @@ void *igActorManager_GetMetaObject(void) {
 int igActorManager_GetVTable(void) {
     struct Obj_45e2c0 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w2 = 0;
     obj.vt = &g_igActorManager_vtable[0];
     obj.w4 = 0;
@@ -39,7 +39,7 @@ int igActorManager_GetVTable(void) {
     obj.w11 = 0;
     obj.w12 = 0;
     obj.w13 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
     obj.vt = &g_igActorManager_vtable[0];
     igSmartPointer_igObjectList_Destruct(&obj.w13, -1);
     FUN_004584f0(&obj.w12, -1);
@@ -51,7 +51,7 @@ int igActorManager_GetVTable(void) {
     igSmartPointer_igActorList_Destruct(&obj.w6, -1);
     igSmartPointer_igNodeList_Destruct(&obj.w5, -1);
     igSmartPointer_igAppearanceList_Destruct(&obj.w4, -1);
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return t;
 }
 
@@ -71,9 +71,9 @@ void FUN_0045e4a0(void)
 
 static igMetaObjectCallback g_igActorManager_callbackList[] = { igAppearanceList_EnsureRegistered, igNodeList_EnsureRegistered, igActorList_EnsureRegistered, FUN_0045e830, igPointerList_EnsureRegistered, igMetaObjectList_EnsureRegistered, igViewportAttr_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
-void igActorManager_Register(void) {
+CallbackArray *igActorManager_Register(void) {
     ViewerLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActorManager_metaObject,
         igInfoManager_Register,
@@ -156,37 +156,37 @@ void igActorManager_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = g_igActorManager_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igActorManager_ctorTable, 0xA);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = igAppearanceList_GetOrCreateMetaObject();
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igActorManager_ctorTable, 0xA);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)(igAppearanceList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igNodeList_GetOrCreateMetaObject();
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)(igNodeList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igActorList_GetOrCreateMetaObject();
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(igActorList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
+    temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0045e6f0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
+    temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igPointerList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igMetaObjectList_GetOrCreateMetaObject();
+    temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(igMetaObjectList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
+    temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00130440();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7));
+    temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_00130440();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8));
+    temp_s2_9 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8));
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
-    temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
+    temp_s2_10 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igActorManager_fieldTable, g_igActorManager_fieldHandles, g_igActorManager_fieldOffsets, temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igActorManager_fieldTable, g_igActorManager_fieldHandles, g_igActorManager_fieldOffsets, temp_s1);
 }
 

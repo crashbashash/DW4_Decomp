@@ -50,7 +50,7 @@ igMetaField *g_igProjectiveShadowShader_useShadowFactorMetaField;
 
 igMetaObject *igProjectiveShadowShader_GetOrCreateMetaObject(void) {
     if (g_igProjectiveShadowShader_metaObject == 0) {
-        g_igProjectiveShadowShader_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igProjectiveShadowShader_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igProjectiveShadowShader_metaObject;
 }
@@ -125,7 +125,7 @@ int igProjectiveShadowShader_GetVTable(void) {
     FUN_0019b7e0((int *)p388);
     p392 = (char *)&s + 232;
     FUN_0019b7e0((int *)p392);
-    r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&s + *(int *)((char *)g_objectSystem + 916));
     s.vt = &g_igProjectiveShadowShader_vtable[0];
     FUN_001321b0(p392, -1);
     FUN_001321b0(p388, -1);
@@ -154,7 +154,7 @@ int igProjectiveShadowShader_GetVTable(void) {
     FUN_001380e0((char *)&s + 84, -1);
     igSmartPointer_igNodeList_Destruct((void * *)((char *)&s + 64), -1);
     igSmartPointer_igNodeList_Destruct((void * *)((char *)&s + 60), -1);
-    igGroup_Destroy((struct T_195a90 *)&s, 0);
+    igGroup_Destroy((igGroup *)&s, 0);
     return r;
 }
 
@@ -177,9 +177,9 @@ void igProjectiveShadowShader_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igProjectiveShadowShader_callbackList[] = { igNodeList_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igModelViewMatrixAttr_EnsureRegistered, igProjectionMatrixAttr_EnsureRegistered, igGeometry_EnsureRegistered, FUN_001378f0, igColorAttr_EnsureRegistered, igTextureMatrixAttr_EnsureRegistered, igRenderDestinationAttr_EnsureRegistered, igSetRenderDestinationAttr_EnsureRegistered, igTextureAttr_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igCopyRenderDestinationAttr_EnsureRegistered, igImage_EnsureRegistered, igViewportAttr_EnsureRegistered, igLightAttr_EnsureRegistered, igTextureUnloadAttr_EnsureRegistered, 0 };
 
-void igProjectiveShadowShader_Register(void) {
+CallbackArray *igProjectiveShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igProjectiveShadowShader_metaObject,
         igGroup_Register,
@@ -199,54 +199,54 @@ void thunk_igProjectiveShadowShader_GetMetaObject(void) {
 }
 
 static FieldFactory g_igProjectiveShadowShader_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igFloatMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igFloatMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igProjectiveShadowShader_fieldTable[] = {
     "_lightPos",
@@ -410,137 +410,137 @@ void igProjectiveShadowShader_InitFields(void) {
     struct Fld_19b8a0 *temp_v0;
 
     temp_s0 = (void *)g_igProjectiveShadowShader_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igProjectiveShadowShader_ctorTable, 0x30);
-    temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1));
+    temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
     v1[0] = 0; v1[1] = 4.0f; v1[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0, v1);
-    temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
+    temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     v2[0] = 0; v2[1] = -1.0f; v2[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0, v2);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 30.0f);
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)), 30.0f);
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     temp_s2->f56 = (int)igNodeList_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
     temp_s2->f56 = (int)igNodeList_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), 0.300000012f);
-    igIntMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), 0x80);
-    igIntMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7)), 0x80);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)), 0.5f);
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)), 0.300000012f);
+    igIntMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)), 0x80);
+    igIntMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)), 0x80);
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)), 0.5f);
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
     temp_s2->f56 = FUN_0013ad40();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA));
     temp_s2->f56 = FUN_001356f0();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB));
     temp_s2->f56 = FUN_001346d0();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC));
     temp_s2->f56 = FUN_001356f0();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD));
     temp_s2->f56 = FUN_001346d0();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_v0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE));
+    temp_v0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE));
     igIntMetaField_SetDefault(temp_v0, 0);
     temp_v0->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF));
     temp_s2->f56 = (int)igGeometry_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10));
     temp_s2->f56 = FUN_00137850();
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11));
-    temp_s2->f56 = igColorAttr_GetOrCreateMetaObject();
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11));
+    temp_s2->f56 = (int)igColorAttr_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12)), 1);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x13)), 0.100000001f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14)), 1000.0f);
-    temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15));
+    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)), 1);
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x13)), 0.100000001f);
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14)), 1000.0f);
+    temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15));
     v3[0] = 1.0f; v3[1] = 0; v3[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0, v3);
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x16));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x16));
     temp_s2->f56 = FUN_00131800();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x17)), 1);
-    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x18)), 1);
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x19));
+    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x17)), 1);
+    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18)), 1);
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19));
     temp_s2->f56 = FUN_001341f0();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1A));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1A));
     temp_s2->f56 = FUN_00133b70();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1B));
-    temp_s2->f56 = igTextureAttr_GetOrCreateMetaObject();
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1B));
+    temp_s2->f56 = (int)igTextureAttr_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1C));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1C));
     temp_s2->f56 = FUN_00132850();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1D));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D));
     temp_s2->f56 = FUN_001341f0();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1E));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E));
     temp_s2->f56 = FUN_00133b70();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1F));
-    temp_s2->f56 = igTextureAttr_GetOrCreateMetaObject();
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F));
+    temp_s2->f56 = (int)igTextureAttr_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x20));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x20));
     temp_s2->f56 = FUN_00132850();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x21));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x21));
     temp_s2->f56 = FUN_00138950();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x22));
-    temp_s2->f56 = igImage_GetOrCreateMetaObject();
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22));
+    temp_s2->f56 = (int)igImage_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x23));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x23));
     temp_s2->f56 = FUN_00130440();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x24));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x24));
     temp_s2->f56 = FUN_00130440();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x25));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x25));
     temp_s2->f56 = FUN_00136750();
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x26));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x26));
     temp_s2->f56 = FUN_00132850();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x28)), 5.0f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x29)), -5.0f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2A)), 5.0f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2B)), -5.0f);
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2C));
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x28)), 5.0f);
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x29)), -5.0f);
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2A)), 5.0f);
+    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2B)), -5.0f);
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2C));
     temp_s2->f56 = FUN_00131160();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2D));
+    temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2D));
     temp_s2->f56 = FUN_00131160();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    temp_v0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2F));
+    temp_v0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2F));
     igBoolMetaField_SetDefaultValue(temp_v0, 1);
     temp_v0->f38 = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igProjectiveShadowShader_fieldTable, g_igProjectiveShadowShader_fieldHandles, g_igProjectiveShadowShader_fieldOffsets, temp_s1);

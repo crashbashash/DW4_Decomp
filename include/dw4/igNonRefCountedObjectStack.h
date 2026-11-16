@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igNonRefCountedObjectStack_metaObject;
-void igNonRefCountedObjectStack_Register(void);
+struct CallbackArray *igNonRefCountedObjectStack_Register(void);
 
 #ifdef __cplusplus
 }

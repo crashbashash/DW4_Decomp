@@ -2,6 +2,8 @@
 #ifndef DW4_SONY_LIBMPEG_H
 #define DW4_SONY_LIBMPEG_H
 
+#include "dw4/sony/libipu.h"
+
 typedef struct sceMpeg {
     int width;
     int height;
@@ -144,7 +146,7 @@ typedef struct _sceMpegDecoder {
     _sceMpegCallbackSlot callbacks[sceMpegCbNum];
     char *spare_buffer;                    /* 96: 2048 bytes sceMpegCreate allocates, read by nothing */
     int spare;
-    unsigned int ipu_dma_env[9];           /* 104: the IPU DMA state sceIpuStopDMA saves */
+    sceIpuDmaEnv ipu_dma_env;              /* 104: the IPU DMA state sceIpuStopDMA saves */
     int has_pts_gap;                       /* 140 */
     long pts_gap;
     int last_pts;
@@ -240,5 +242,47 @@ void _outputFrame(_sceMpegDecoder *dec, _sceMpegPicture *picture, int frameNo);
 void _outputFieldPair(_sceMpegDecoder *dec, _sceMpegPicture *top, _sceMpegPicture *bottom, int frameNo);
 void _flushLastPicture(_sceMpegDecoder *dec);
 char *_sceMpegAlalcAlloc(_sceMpegDecoder *dec, _sceMpegAlalc *alalc, int size, unsigned int align);
+void _sceMpegAlalcFree(_sceMpegAlalc *alalc);
+
+/* mpc.c: the IPU command and bit-stream access, the picture data loop */
+void _ipuSetMpeg1(int mpeg1);
+void _ipuCommand(_sceMpegDecoder *dec, unsigned int cmd);
+void _sceMpegWaitIpuIdle(_sceMpegDecoder *dec);
+unsigned int _ipuShowBits(_sceMpegDecoder *dec, int n);
+void _ipuFlushBits(_sceMpegDecoder *dec, int n);
+unsigned int _ipuGetBits(_sceMpegDecoder *dec, int n);
+int _pictureData(_sceMpegDecoder *dec);
+
+/* csc.c: reference-image DMA, scratchpad clearing and colour-space conversion */
+void _dmaRefImage(_sceMpegDecoder *dec);
+void _sprClear(unsigned int addr, int size);
+void _cscStoreImage(_sceMpegDecoder *dec, _sceMpegPicture *picture);
+
+/* ext.c: start codes, headers and extensions */
+void _nextStartCode(_sceMpegDecoder *dec);
+int _sliceHeader(_sceMpegDecoder *dec);
+int _sceMpegNextHeader(_sceMpegDecoder *dec);
+void _extensionAndUserData(_sceMpegDecoder *dec);
+
+/* sequence.c: the sequence header and the extensions ext.c dispatches to */
+void _sequenceHeader(_sceMpegDecoder *dec);
+void _unknownExtension(_sceMpegDecoder *dec);
+void _sequenceExtension(_sceMpegDecoder *dec);
+void _sequenceDisplayExtension(_sceMpegDecoder *dec);
+void _sequenceScalableExtension(_sceMpegDecoder *dec);
+void _pictureSpatialScalableExtension(_sceMpegDecoder *dec);
+void _pictureTemporalScalableExtension(_sceMpegDecoder *dec);
+
+/* picture.c: one picture decoded, the reference images updated, frames output */
+int _decPicture(_sceMpegDecoder *dec);
+int _updateRefImage(_sceMpegDecoder *dec, int second);
+void _sceMpegOutputFrame(_sceMpegDecoder *dec, int count, int output);
+
+/* sendipu.c */
+void _sendDataToIPU(_sceMpegDecoder *dec, unsigned char *data, int size);
+
+/* defhandler.c: the callbacks a stream starts with for sceMpegCbStopDMA and sceMpegCbRestartDMA */
+int _sceMpegDefaultStopDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData);
+int _sceMpegDefaultRestartDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData);
 
 #endif

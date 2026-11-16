@@ -1,7 +1,7 @@
 void Gap__Attrs__igLightAttr__vfunc_24(igLightAttr *self, igObject *context) {
     if (self->_lightId == -1) {
         igObject *old;
-        self->_lightId = Gap__Gfx__igPsx2VisualContext__vfunc_77(context, self->_lightType);
+        self->_lightId = Gap__Gfx__igPsx2VisualContext__vfunc_77((igPsx2VisualContext *)context, self->_lightType);
         if (context) {
             context->_refCount++;
         }
@@ -16,16 +16,16 @@ void Gap__Attrs__igLightAttr__vfunc_24(igLightAttr *self, igObject *context) {
         self->_changed = 1;
     }
     if (!self->_cacheable || self->_changed) {
-        Gap__Gfx__igPsx2VisualContext__vfunc_84(context, self->_lightId, self->_ambient);
-        Gap__Gfx__igPsx2VisualContext__vfunc_82(context, self->_lightId, self->_diffuse);
+        Gap__Gfx__igPsx2VisualContext__vfunc_84((igPsx2VisualContext *)context, self->_lightId, self->_ambient);
+        Gap__Gfx__igPsx2VisualContext__vfunc_82((igPsx2VisualContext *)context, self->_lightId, self->_diffuse);
         Gap__Gfx__igPsx2VisualContext__vfunc_86(context, self->_lightId, self->_specular);
         switch (self->_lightType) {
         case 1:
             Gap__Gfx__igPsx2VisualContext__vfunc_96(context, self->_lightId, self->_attenuation);
             break;
         case 2:
-            Gap__Gfx__igPsx2VisualContext__vfunc_92(context, self->_lightId, self->_cutoff);
-            Gap__Gfx__igPsx2VisualContext__vfunc_94(context, self->_lightId, self->_falloff);
+            Gap__Gfx__igPsx2VisualContext__vfunc_92((igPsx2VisualContext *)context, self->_lightId, self->_cutoff);
+            Gap__Gfx__igPsx2VisualContext__vfunc_94((igPsx2VisualContext *)context, self->_lightId, self->_falloff);
             Gap__Gfx__igPsx2VisualContext__vfunc_96(context, self->_lightId, self->_attenuation);
             break;
         }
@@ -36,11 +36,11 @@ void Gap__Attrs__igLightAttr__vfunc_24(igLightAttr *self, igObject *context) {
         Gap__Gfx__igPsx2VisualContext__vfunc_90(context, self->_lightId, self->_direction);
         break;
     case 1:
-        Gap__Gfx__igPsx2VisualContext__vfunc_88(context, self->_lightId, self->_position);
+        Gap__Gfx__igPsx2VisualContext__vfunc_88((igPsx2VisualContext *)context, self->_lightId, self->_position);
         break;
     case 2:
         Gap__Gfx__igPsx2VisualContext__vfunc_90(context, self->_lightId, self->_direction);
-        Gap__Gfx__igPsx2VisualContext__vfunc_88(context, self->_lightId, self->_position);
+        Gap__Gfx__igPsx2VisualContext__vfunc_88((igPsx2VisualContext *)context, self->_lightId, self->_position);
         break;
     }
 }
@@ -71,7 +71,7 @@ void Gap__Attrs__igLightAttr__vfunc_28(A_13ece0 *arg0) {
 
 void Gap__Attrs__igLightAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 /* Reset a light attribute to its unassigned state: no hardware light id (-1), flagged changed and

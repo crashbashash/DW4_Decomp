@@ -3,7 +3,7 @@ igMetaField *g_beNDMWMcSlotXbox_mNameMetaField;
 
 beNDMWMcSlotXbox *beNDMWMcSlotXbox_Create(int allocator) {
     beNDMWMcSlotXbox_EnsureRegistered();
-    return (beNDMWMcSlotXbox *)igMetaObject_CreateInstance(g_beNDMWMcSlotXbox_metaObject, allocator);
+    return (beNDMWMcSlotXbox *)igMetaObject_CreateInstance(g_beNDMWMcSlotXbox_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMcSlotXbox_GetReadyMetaObject(void)
@@ -22,7 +22,7 @@ int beNDMWMcSlotXbox_GetVTable(void) {
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWMcSlotXbox_vtable[0];
     obj._mName = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMcSlotXbox_vtable[0];
     if (&obj._mName != 0) {
         releaseString((const char *)obj._mName);
@@ -35,7 +35,7 @@ void beNDMWMcSlotXbox_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMcSlotXbox_Register);
 }
 
-void *beNDMWMcSlotXbox_Register(void) {
+CallbackArray *beNDMWMcSlotXbox_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

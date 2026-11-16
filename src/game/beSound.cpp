@@ -5,6 +5,17 @@
  * docs/engine/sound-format.md. */
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/StringPool.h"
+#include "dw4/beCri.h"
+#include "dw4/beMessenger.h"
+#include "dw4/bePlaySE.h"
+#include "dw4/beSound.h"
+#include "dw4/beSoundInfo.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
 
@@ -38,74 +49,24 @@ enum CriDataType { CRI_DATA_ADX = 0, CRI_DATA_SFP = 1 };
 #define PLAY_RETRY_DELAY 0xB
 
 extern "C" {
-int igInsightCore_FindManager(int insight, int meta);
-void *Memory_GetAllocatorBySelector(int selector);
-void *igObject_GetAllocator(void *object);
-int List_Reserve(igObjectList *list, int count, int elementSize);
-int List_RemoveWordAt(igObjectList *list, int index);
-int ObjectList_AppendRetained(igObjectList *list, igObject *object);
-int StringPool_Allocate(int size);
-int StringPool_Construct(int pool);
-char *StringPool_Intern(int pool, const char *text);
-int StringChunk_ReleaseHeader(int chunk, int *header);
-int strcmp(const char *left, const char *right);
-igStringRefList *igStringRefList_Create(void *allocator);
+/* kept local: igStringObj.h types Set's object and text as int, and the int conversions move
+ * OnMessage's spilled reload (3784 vs 3792 B); the home is an open S1 retype */
 void igStringObj_Set(igStringObj *string, const char *text);
 void igStringObj_ToLower(igStringObj *string);
 void igStringObj_KeepExtension(igStringObj *string);
 void igStringObj_StripDirectory(igStringObj *string);
 int igStringObj_Erase(igStringObj *string, unsigned int position, unsigned int length);
-int beSound_GetMessageEnum(void);
-bePlaySE *bePlaySE_CreateInstance(void *allocator);
 
-void beMessenger_RegisterReceiver(int messenger, void *receiver, const char *name, const char *text, int value);
-void beMessenger_SendGroup(int messenger, const char *group, const char *message);
-int beMessenger_GetObjectCount(int messenger);
-igObjectList *beMessenger_GetObject(int messenger, int index);
-unsigned int beMessenger_ResolveEnumValue(int messenger, int metaEnum, int name);
-void beMessenger_PrepareDelayedGroup(int messenger, const char *group);
-void beMessenger_EnqueueSelected(int messenger, const char *message, long long delay);
-void beMessenger_AppendBool(int messenger, int value);
-void beMessenger_AppendInt(int messenger, int value);
-void beMessenger_AppendLong(int messenger, long long value);
-void beMessenger_AppendString(int messenger, const char *text);
-float beMessenger_GetFloat(int messenger, int index);
-int beMessenger_GetFloatCount(int messenger);
-int beMessenger_GetInt(int messenger, int index);
-long long beMessenger_GetLong(int messenger, int index);
-int beMessenger_GetLongCount(int messenger);
-char *beMessenger_GetString(int messenger, int index);
-int beMessenger_GetStringCount(int messenger);
 
-long long beCri_PlayStream(beCri *self, igObjectList *names, beSoundData *cue);
-long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue);
-void beCri_StopByID(beCri *self, long long playID);
-void beCri_StopGroup(beCri *self, int group);
-void beCri_UnpauseByName(beCri *self, const char *name);
-void beCri_FadeByName(beCri *self, char *name, float from, float to, float frames);
-void beCri_FadeByID(beCri *self, long long playID, float from, float to, float frames);
-void beCri_SetFreezeAudible(beCri *self, int audible);
-void beCri_SetFx(beCri *self, char *name);
-void beCri_SetSndfVolume(beCri *self, int volume);
-bool beCri_StartSfpTransfers(beCri *self);
-int beCri_FreeSfpData(beCri *self, int includeFirst);
-bool beCri_IsTransferDone(beCri *self);
-unsigned char beCri_IsReady(beCri *self, const char *name);
 
 void beSound_Prepare(beSound *self);
 void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram);
-int beSound_GetInfoMeta(void);
+igMetaObject *beSound_GetInfoMeta(void);
 void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram);
 int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *message);
-int beSound_FindData(beSound *self, beBaseInfoRam *ram, char *name);
-int beSound_GetMeta(void);
+int beSound_FindData(beSound *self, beBaseInfoRam *ram, const char *name);
+igMetaObject *beSound_GetMeta(void);
 
-extern int g_beCri_metaObject[4];
-extern int g_beSoundInfo_metaObject[4];
-extern int g_beSound_metaObject[4];
-extern int g_stringPool[4];
-extern int kIGMemoryPoolHandleUser1[4];
-extern unsigned char g_useOwnerAllocator;
 extern char *g_stringObjEmptyText[];
 extern char emptyString[];
 }
@@ -136,24 +97,24 @@ static inline void ReleaseString(char *text) {
         int *header = (int *)text - 2;
         int count = ((int *)text)[-1] - 1;
         ((int *)text)[-1] = count;
-        if (count == 0) StringChunk_ReleaseHeader(*header, header);
+        if (count == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
     }
 }
 
 /* The allocator for an object the owner creates: its own, or the default one. */
 static inline void *AllocatorFor(void *owner) {
-    void *allocator = igObject_GetAllocator(owner);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    void *allocator = igObject_GetAllocator((igObject *)owner);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
 /* The pooled copy of `text`, creating the string pool on first use. */
 static inline char *InternString(char *text) {
-    if (g_stringPool[0] == 0) {
-        int pool = StringPool_Allocate(0x10);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool[0] = pool;
+    if (g_stringPool == 0) {
+        int pool = (int)StringPool_Allocate(0x10);
+        if (pool != 0) pool = (int)(StringPool_Construct((StringPool *)pool));
+        g_stringPool = (StringPool *)pool;
     }
-    return StringPool_Intern(g_stringPool[0], text);
+    return StringPool_Intern(g_stringPool, text);
 }
 
 /* Stores the pooled copy of `text` in a string field, dropping the field's previous string. */
@@ -208,7 +169,7 @@ static inline void ReleaseAll(igObjectList *list) {
 static inline void ReserveIfEmpty(igObjectList *list) {
     bool hasEntries = list->_count > 0;
     if (hasEntries == false) {
-        List_Reserve(list, 0, 4);
+        List_Reserve((igDataList *)list, 0, 4);
     }
 }
 
@@ -223,7 +184,7 @@ typedef igSmartPointer<PlaySEList> PlaySEListRef;
 
 void beSound_Prepare(beSound *self) {
     if (self->_cri == 0) {
-        igObject *cri = (igObject *)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0]);
+        igObject *cri = (igObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beCri_metaObject);
         if (cri != 0) {
             cri->_refCount = cri->_refCount + 1;
         }
@@ -236,7 +197,7 @@ void beSound_Prepare(beSound *self) {
 
 void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram) {
     beSoundInfo *info;
-    beMessenger_RegisterReceiver(self->_messenger, ram, "SOUND", 0, -1);
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, ram, "SOUND", 0, -1);
     info = (beSoundInfo *)ram->_parentInfo;
     ((beCri *)self->_cri)->_baseVolume = info->_baseVolume;
     beCri_SetSndfVolume((beCri *)self->_cri, info->_sndfVolume);
@@ -250,9 +211,9 @@ void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram) {
     }
 }
 
-int beSound_GetInfoMeta(void)
+igMetaObject *beSound_GetInfoMeta(void)
 {
-    return g_beSoundInfo_metaObject[0];
+    return g_beSoundInfo_metaObject;
 }
 
 void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram) {
@@ -262,9 +223,9 @@ void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram) {
     int infoIndex;
     switch (ram->_st0) {
     case STATE_START:
-        beMessenger_SendGroup(self->_messenger, "STATICINFO", "GETINFOLIST");
-        if (beMessenger_GetObjectCount(self->_messenger) <= 0) break;
-        infos = beMessenger_GetObject(self->_messenger, 0);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, "STATICINFO", "GETINFOLIST");
+        if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) <= 0) break;
+        infos = (igObjectList *)(beMessenger_GetObject((beMessenger *)self->_messenger, 0));
         infoIndex = 0;
         if (0 < infos->_count) do {
             info = ((beBaseInfo **)infos->_data)[infoIndex];
@@ -279,7 +240,7 @@ void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram) {
             ReleaseAll((igObjectList *)info->_dataList);
             ReserveIfEmpty((igObjectList *)info->_dataList);
             igRelease(((igObject **)infos->_data)[infoIndex]);
-            List_RemoveWordAt(infos, infoIndex);
+            List_RemoveWordAt((igDataList *)infos, infoIndex);
             ((igObject **)infos->_data)[infos->_count] = 0;
         } while (infoIndex < infos->_count);
         beCri_SetFx((beCri *)self->_cri, "REVERB");
@@ -328,32 +289,32 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     long long now;
 
     info = (beSoundInfo *)ram->_parentInfo;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beSound_GetMessageEnum(), message->_message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beSound_GetMessageEnum(), (const char *)message->_message)) {
     case MESSAGE_STOP:
-        if (beMessenger_GetLongCount(self->_messenger) == 0) return 0;
-        beCri_StopByID((beCri *)self->_cri, beMessenger_GetLong(self->_messenger, 0));
+        if (beMessenger_GetLongCount((beMessenger *)self->_messenger) == 0) return 0;
+        beCri_StopByID((beCri *)self->_cri, beMessenger_GetLong((beMessenger *)self->_messenger, 0));
         break;
     case MESSAGE_PLAYatPAUSE:
         ((beCri *)self->_cri)->_pauseOnetime = 1;
     case MESSAGE_PLAY:
-        if ((index = beSound_FindData(self, ram, beMessenger_GetString(self->_messenger, 0))) == -1) return 0;
+        if ((index = beSound_FindData(self, ram, beMessenger_GetString((beMessenger *)self->_messenger, 0))) == -1) return 0;
         data = ((beSoundData **)((igObjectList *)info->_dataList)->_data)[index];
         switch (data->_type) {
         case SOUND_BGM:
             if (self->_currentBGM != 0 && strcmp(NameOf(data->_name), (char *)self->_currentBGM) == 0) return 1;
             if (beCri_PlayStream((beCri *)self->_cri, (igObjectList *)info->_fnameList, data) == 0) {
-                beMessenger_PrepareDelayedGroup(self->_messenger, "SOUND");
-                beMessenger_AppendString(self->_messenger, NameOf(data->_name));
-                beMessenger_EnqueueSelected(self->_messenger, "PLAY", PLAY_RETRY_DELAY);
+                beMessenger_PrepareDelayedGroup((beMessenger *)self->_messenger, "SOUND");
+                beMessenger_AppendString((beMessenger *)self->_messenger, NameOf(data->_name));
+                beMessenger_EnqueueSelected((beMessenger *)self->_messenger, "PLAY", PLAY_RETRY_DELAY);
             } else {
                 SetString(&self->_currentBGM, NameOf(data->_name));
             }
             break;
         case SOUND_ENV:
             if (beCri_PlayStream((beCri *)self->_cri, (igObjectList *)info->_fnameList, data) == 0) {
-                beMessenger_PrepareDelayedGroup(self->_messenger, "SOUND");
-                beMessenger_AppendString(self->_messenger, NameOf(data->_name));
-                beMessenger_EnqueueSelected(self->_messenger, "PLAY", PLAY_RETRY_DELAY);
+                beMessenger_PrepareDelayedGroup((beMessenger *)self->_messenger, "SOUND");
+                beMessenger_AppendString((beMessenger *)self->_messenger, NameOf(data->_name));
+                beMessenger_EnqueueSelected((beMessenger *)self->_messenger, "PLAY", PLAY_RETRY_DELAY);
             }
             break;
         default:
@@ -361,17 +322,17 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
             for (int i = 0; i < ((PlaySEListRef &)self->_playSEs)->getCount(); i++) {
                 bePlaySE *playSE = ((PlaySEListRef &)self->_playSEs)->get(i);
                 if (playSE->_id == index && playSE->_time > now) {
-                    beMessenger_AppendInt(self->_messenger, 0);
-                    beMessenger_AppendLong(self->_messenger, 0);
+                    beMessenger_AppendInt((beMessenger *)self->_messenger, 0);
+                    beMessenger_AppendLong((beMessenger *)self->_messenger, 0);
                     return 1;
                 }
             }
             handle = beCri_PlayEffect((beCri *)self->_cri, (igObjectList *)info->_fnameList, data);
-            beMessenger_AppendInt(self->_messenger, data->_type);
-            beMessenger_AppendLong(self->_messenger, handle);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, data->_type);
+            beMessenger_AppendLong((beMessenger *)self->_messenger, handle);
             if (handle > 0) {
                 allocator = AllocatorFor(self);
-                igSmartPointer<bePlaySE> row(bePlaySE_CreateInstance(allocator));
+                igSmartPointer<bePlaySE> row(bePlaySE_CreateInstance((int)allocator));
                 row->_id = index;
                 row->_time = now + EFFECT_REPEAT_HOLD;
                 ObjectList_AppendRetained((igObjectList *)self->_playSEs, row.p);
@@ -381,22 +342,22 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         break;
     case MESSAGE_PAUSEOFF:
         cri = (beCri *)self->_cri;
-        beCri_UnpauseByName(cri, beMessenger_GetString(self->_messenger, 0));
+        beCri_UnpauseByName(cri, beMessenger_GetString((beMessenger *)self->_messenger, 0));
         break;
     case MESSAGE_VOLUMECTL:
-        direction = beMessenger_GetString(self->_messenger, 0);
-        if (beMessenger_GetLongCount(self->_messenger) > 0) {
+        direction = (char *)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
+        if (beMessenger_GetLongCount((beMessenger *)self->_messenger) > 0) {
             if (strcmp(direction, "UP") == 0) {
                 cri = (beCri *)self->_cri;
-                beCri_FadeByID(cri, beMessenger_GetLong(self->_messenger, 0), 0.0f, 1.0f, VOLUMECTL_FADE_FRAMES);
+                beCri_FadeByID(cri, beMessenger_GetLong((beMessenger *)self->_messenger, 0), 0.0f, 1.0f, VOLUMECTL_FADE_FRAMES);
             } else if (strcmp(direction, "DOWN") == 0) {
                 cri = (beCri *)self->_cri;
-                beCri_FadeByID(cri, beMessenger_GetLong(self->_messenger, 0), 1.0f, 0.0f, VOLUMECTL_FADE_FRAMES);
+                beCri_FadeByID(cri, beMessenger_GetLong((beMessenger *)self->_messenger, 0), 1.0f, 0.0f, VOLUMECTL_FADE_FRAMES);
             }
             break;
         }
-        if (beMessenger_GetStringCount(self->_messenger) <= 1) break;
-        name = beMessenger_GetString(self->_messenger, 1);
+        if (beMessenger_GetStringCount((beMessenger *)self->_messenger) <= 1) break;
+        name = (char *)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
         if (strcmp(direction, "UP") == 0) {
             beCri_FadeByName((beCri *)self->_cri, name, 0.0f, 1.0f, VOLUMECTL_FADE_FRAMES);
         } else if (strcmp(direction, "DOWN") == 0) {
@@ -407,12 +368,12 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         }
         break;
     case MESSAGE_VOLUMECTL2:
-        if (beMessenger_GetStringCount(self->_messenger) <= 0) return 0;
-        if (beMessenger_GetFloatCount(self->_messenger) < 3) return 0;
-        name = beMessenger_GetString(self->_messenger, 0);
-        from = beMessenger_GetFloat(self->_messenger, 0);
-        to = beMessenger_GetFloat(self->_messenger, 1);
-        frames = beMessenger_GetFloat(self->_messenger, 2);
+        if (beMessenger_GetStringCount((beMessenger *)self->_messenger) <= 0) return 0;
+        if (beMessenger_GetFloatCount((beMessenger *)self->_messenger) < 3) return 0;
+        name = (char *)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
+        from = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
+        to = beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
+        frames = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);
         span = Abs(from - to); /* retail computes the size of the change and never uses it */
         beCri_FadeByName((beCri *)self->_cri, name, from, to, frames);
         break;
@@ -427,32 +388,33 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         beCri_StopGroup((beCri *)self->_cri, CRI_GROUP_EFFECTS);
         break;
     case MESSAGE_FXCTL:
-        beCri_SetFx((beCri *)self->_cri, beMessenger_GetString(self->_messenger, 0));
+        beCri_SetFx((beCri *)self->_cri, beMessenger_GetString((beMessenger *)self->_messenger, 0));
         break;
     case MESSAGE_GETWORDLIST:
         dataList = (igObjectList *)info->_dataList;
         dataCount = dataList->_count;
         for (dataIndex = 0; dataIndex < dataCount; dataIndex++) {
-            beMessenger_AppendString(self->_messenger, NameOf(((beSoundData **)dataList->_data)[dataIndex]->_name));
+            beMessenger_AppendString((beMessenger *)self->_messenger, NameOf(((beSoundData **)dataList->_data)[dataIndex]->_name));
         }
         break;
     case MESSAGE_ISREADY:
     case MESSAGE_ISALLREADY:
-        if (beMessenger_GetStringCount(self->_messenger) <= 0) {
+        if (beMessenger_GetStringCount((beMessenger *)self->_messenger) <= 0) {
             name = "ALL";
         } else {
-            name = beMessenger_GetString(self->_messenger, 0);
+            name = (char *)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
         }
-        beMessenger_AppendBool(self->_messenger, beCri_IsReady((beCri *)self->_cri, name));
+        /* matching construct: retail widens the one-byte answer (andi) before passing it on */
+        beMessenger_AppendBool((beMessenger *)self->_messenger, (int)beCri_IsReady((beCri *)self->_cri, name));
         break;
     case MESSAGE_ISBGMREADY:
-        beMessenger_AppendBool(self->_messenger, beCri_IsReady((beCri *)self->_cri, HandleName(((beCri *)self->_cri)->_hdBGM)));
+        beMessenger_AppendBool((beMessenger *)self->_messenger, (int)beCri_IsReady((beCri *)self->_cri, HandleName(((beCri *)self->_cri)->_hdBGM)));
         break;
     case MESSAGE_ISENVREADY:
-        beMessenger_AppendBool(self->_messenger, beCri_IsReady((beCri *)self->_cri, HandleName(((beCri *)self->_cri)->_hdENV)));
+        beMessenger_AppendBool((beMessenger *)self->_messenger, (int)beCri_IsReady((beCri *)self->_cri, HandleName(((beCri *)self->_cri)->_hdENV)));
         break;
     case MESSAGE_SNDFVOLUME:
-        beCri_SetSndfVolume((beCri *)self->_cri, beMessenger_GetInt(self->_messenger, 0));
+        beCri_SetSndfVolume((beCri *)self->_cri, beMessenger_GetInt((beMessenger *)self->_messenger, 0));
         break;
     case MESSAGE_ONFREEZE:
         beCri_SetFreezeAudible((beCri *)self->_cri, 0);
@@ -462,13 +424,13 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         break;
     case MESSAGE_MAKEBINLIST:
         if (info->_dataType == 0) return 0;
-        beMessenger_SendGroup(self->_messenger, "STATICINFO", "GETINFOLIST");
-        if (beMessenger_GetObjectCount(self->_messenger) <= 0) return 0;
-        infos = beMessenger_GetObject(self->_messenger, 0);
+        beMessenger_SendGroup((beMessenger *)self->_messenger, "STATICINFO", "GETINFOLIST");
+        if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) <= 0) return 0;
+        infos = (igObjectList *)(beMessenger_GetObject((beMessenger *)self->_messenger, 0));
         fileNames = (igObjectList *)info->_fnameList;
         allocator = AllocatorFor(self);
         {
-            NameListRef banks(igStringRefList_Create(allocator));
+            NameListRef banks(igStringRefList_Create((int)allocator));
             GlobalStrRef scratch((igStringObj *)((beSystem *)self->_system)->_globalStrObj);
             for (fileIndex = 0; fileIndex < fileNames->_count; fileIndex++) {
                 igStringObj_Set(scratch.p, NameOf(((igNamedObject **)fileNames->_data)[fileIndex]->_name));
@@ -519,7 +481,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         beCri_StartSfpTransfers((beCri *)self->_cri);
         break;
     case MESSAGE_ISDONETRANS:
-        beMessenger_AppendBool(self->_messenger, beCri_IsTransferDone((beCri *)self->_cri));
+        beMessenger_AppendBool((beMessenger *)self->_messenger, (int)beCri_IsTransferDone((beCri *)self->_cri));
         break;
     case MESSAGE_FREESFPDATA:
         if (((beCri *)self->_cri)->_dataType == CRI_DATA_SFP) {
@@ -532,7 +494,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     return 1;
 }
 
-int beSound_FindData(beSound *self, beBaseInfoRam *ram, char *name) {
+int beSound_FindData(beSound *self, beBaseInfoRam *ram, const char *name) {
     int i;
     igObjectList *list;
     int count;
@@ -547,9 +509,9 @@ int beSound_FindData(beSound *self, beBaseInfoRam *ram, char *name) {
     return -1;
 }
 
-int beSound_GetMeta(void)
+igMetaObject *beSound_GetMeta(void)
 {
-    return g_beSound_metaObject[0];
+    return g_beSound_metaObject;
 }
 
 #pragma pop

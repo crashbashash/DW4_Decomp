@@ -2,7 +2,7 @@ int Gap__Gfx__igPsx2ParticleArray__vfunc_28(igPsx2ParticleArray *self, float tim
     void *context;
 
     if (!self->_hardwareSupport) {
-        return igParticleArray_Update((PA *)self, num, offset, status, time);
+        return igParticleArray_Update((igParticleArray *)self, num, offset, status, time);
     }
     self->_currentTime = time;
     if (!(time <= self->_particleLifeEnd + self->_particleLifetimeEndOffset)) {
@@ -147,7 +147,7 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_19(PA_1765f0 *arg0) {
     unsigned i;
     char *d;
     if (arg0->flag != 0) {
-        buf = ((AL *)igObject_GetAllocator(arg0))->vX(arg0->stride * arg0->n);
+        buf = ((AL *)igObject_GetAllocator((igObject *)arg0))->vX(arg0->stride * arg0->n);
         for (i = 0; i < arg0->n; i++) {
             e = ((PV *)arg0)->vX(i);
             d = buf + i * arg0->stride;
@@ -182,7 +182,7 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_12(igPsx2ParticleArray *self) {
                 p2WaitDmaSequence(1, sequence);
             }
         }
-        Memory_FreeBuffer(self->_ps2ParticleFormat);
+        Memory_FreeBuffer((void *)self->_ps2ParticleFormat);
     }
     Gap__Bec__ParticleArray__vfunc_10((ParticleArray *)self);
 }

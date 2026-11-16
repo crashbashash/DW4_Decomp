@@ -42,11 +42,11 @@ void **igSmartPointer_igMedia_Destruct(void **self, short deleteFlag) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (deleteFlag > 0) {
-            __dl__FPv(self);
+            operator delete(self);
         }
     }
     return self;

@@ -1,13 +1,13 @@
 int FUN_0019a6e0(int arg0) {
     igTraversalFunctionList_EnsureRegistered();
-    return igMetaObject_CreateInstance((int)g_igTraversalFunctionList_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igTraversalFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *g_igTraversalFunctionList_metaObject;
 
 igMetaObject *FUN_0019a720(void) {
     if (g_igTraversalFunctionList_metaObject == 0) {
-        g_igTraversalFunctionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTraversalFunctionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTraversalFunctionList_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igTraversalFunctionList_GetMetaObject(void)
 int igTraversalFunctionList_GetVTable(void) {
     struct Obj_19a7c0 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTraversalFunctionList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTraversalFunctionList_EnsureRegistered(void)
@@ -33,9 +33,9 @@ void igTraversalFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTraversalFunctionList_Register);
 }
 
-void igTraversalFunctionList_Register(void) {
+CallbackArray *igTraversalFunctionList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTraversalFunctionList_metaObject,
         igDataList_Register,
@@ -60,7 +60,7 @@ ObjectRefWord *FUN_0019a890(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
@@ -75,7 +75,7 @@ void **FUN_0019a910(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -93,7 +93,7 @@ void **FUN_0019a990(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {
@@ -124,7 +124,7 @@ void **FUN_0019aa90(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -149,7 +149,7 @@ ObjectRefWord *FUN_0019ab90(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
     }
@@ -240,7 +240,7 @@ int FUN_0019ace0(int a0)
 }
 
 void *FUN_0019acf0(igGroup *arg0) {
-    igObject_InitHeader();
+    igObject_InitHeader((igObject *)arg0);
     arg0->_vtable = (int)(&g_igNamedObject_vtable[0]);
     arg0->_name = 0;
     arg0->_vtable = (int)(&g_igNode_vtable[0]);

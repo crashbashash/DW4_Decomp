@@ -2,7 +2,7 @@ igMetaObject *g_igBlendMatricesAttrPool_metaObject;
 
 igMetaObject *FUN_001999f0(void) {
     if (g_igBlendMatricesAttrPool_metaObject == 0) {
-        g_igBlendMatricesAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBlendMatricesAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBlendMatricesAttrPool_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igBlendMatricesAttrPool_GetMetaObject(void)
 int igBlendMatricesAttrPool_GetVTable(void) {
     struct Obj_199a90 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igBlendMatricesAttrPool_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00199ad0(void)
@@ -30,9 +30,9 @@ void FUN_00199ad0(void)
 
 static igMetaObjectCallback g_igBlendMatricesAttrPool_callbackList[] = { FUN_00139ce0, 0 };
 
-void igBlendMatricesAttrPool_Register(void) {
+CallbackArray *igBlendMatricesAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendMatricesAttrPool_metaObject,
         igObjectPool_Register,

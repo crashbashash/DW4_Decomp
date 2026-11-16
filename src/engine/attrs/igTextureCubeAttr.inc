@@ -24,7 +24,7 @@ igMetaEnum *FUN_00131f80(void) {
 
 igMetaObject *FUN_00131fe0(void) {
     if (g_igTextureCubeAttr_metaObject == 0) {
-        g_igTextureCubeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureCubeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureCubeAttr_metaObject;
 }
@@ -41,14 +41,14 @@ int igTextureCubeAttr_GetVTable(void) {
     struct W o;
     int r;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igTextureCubeAttr_vtable[0];
     o.f[2] = 0;
     o.f[11] = 0;
     o.f[13] = 0;
     o.f[15] = 0;
     __construct_array(&o.f[17], &FUN_00132410, &igSmartPointer_igImage_Destruct, 4, 6);
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igTextureCubeAttr_vtable[0];
     __destroy_arr(&o.f[17], &igSmartPointer_igImage_Destruct, 4, 6);
     FUN_00132230((S_132230 *)&o, 0);
@@ -156,9 +156,9 @@ void FUN_00132420(void)
 
 static igMetaObjectCallback g_igTextureCubeAttr_callbackList[] = { igImage_EnsureRegistered, 0 };
 
-void igTextureCubeAttr_Register(void) {
+CallbackArray *igTextureCubeAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureCubeAttr_metaObject,
         igTextureAttr_Register,
@@ -182,9 +182,9 @@ igMetaObject *FUN_001324c0(void) {
 }
 
 static FieldFactory g_igTextureCubeAttr_ctorTable[] = {
-    igObjectRefArrayMetaField_Create,
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefArrayMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTextureCubeAttr_fieldTable[] = {
     "_cubeImage",
@@ -212,7 +212,7 @@ void igTextureCubeAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igTextureCubeAttr_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igImage_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igImage_GetOrCreateMetaObject();
     ((igObjectRefArrayMetaField *)temp_s1)->_num = 6;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);

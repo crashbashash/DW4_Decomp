@@ -1,6 +1,6 @@
 extern "C" {
 int __dl__FPv(void **);
-int igObject_Destroy(char *);
+#include "dw4/igObject.h"
 
 void **FUN_004583f0(void **arg0, long long arg1) {
     char *o;

@@ -1,5 +1,5 @@
-void Gap__Gfx__igTgaLoader__vfunc_12(void) {
-    igObject_ReleaseDefaults();
+void Gap__Gfx__igTgaLoader__vfunc_12(igObject *self) {
+    igObject_ReleaseDefaults(self);
 }
 
 int FUN_001682e0(S_1682e0 *arg0, int arg1) {
@@ -18,11 +18,11 @@ int FUN_001682e0(S_1682e0 *arg0, int arg1) {
         }
         arg0->f8 = 0;
     }
-    igObject_FreeMemory(arg0, arg0->f12);
+    igObject_FreeMemory((igObject *)arg0, (void *)arg0->f12);
     arg0->f12 = 0;
-    igObject_FreeMemory(arg0, arg0->f16);
+    igObject_FreeMemory((igObject *)arg0, (void *)arg0->f16);
     arg0->f16 = 0;
-    igObject_FreeMemory(arg0, arg0->f20);
+    igObject_FreeMemory((igObject *)arg0, (void *)arg0->f20);
     arg0->f20 = 0;
     arg0->f24 = 0;
     arg0->f28 = 0;
@@ -155,26 +155,26 @@ void FUN_001690d0(Arg0d0 *arg0) {
     int *s3;
     Buf860 *b;
     sp5C = 4;
-    thunk_igRegistry_GetValueInt(*(int *)((char *)(g_objectSystem[0]) + 56), 4, "IG_GFX_VC_RD_ARRAY_SIZE", &sp5C, 4, 0);
-    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, FUN_00165d10((int *)arg0));
+    thunk_igRegistry_GetValueInt((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_RD_ARRAY_SIZE", &sp5C, 4, 0);
+    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)FUN_00165d10((int *)arg0));
     if (p != 0) {
         n = sp5C;
         p->f8 = 0;
-        if (g_stringPool[0] == 0) {
-            v = StringPool_Allocate(16);
+        if (g_stringPool == 0) {
+            v = (int)StringPool_Allocate(16);
             if (v != 0) {
-                v = StringPool_Construct(v);
+                v = (int)StringPool_Construct((StringPool *)v);
             }
-            g_stringPool[0] = v;
+            g_stringPool = (StringPool *)v;
         }
-        s3 = (int *)StringPool_Intern(g_stringPool[0], "IG_GFX_VC_RD_ARRAY_SIZE");
+        s3 = (int *)StringPool_Intern(g_stringPool, "IG_GFX_VC_RD_ARRAY_SIZE");
         old = p->f8;
         if (old != 0) {
             int *a1 = old - 2;
             int v0 = old[-1] - 1;
             old[-1] = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+                StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
             }
         }
         p->f8 = s3;

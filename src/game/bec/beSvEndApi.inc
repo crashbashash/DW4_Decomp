@@ -3,7 +3,7 @@ int g_beSvEndApi_orderTypeStorage;
 
 beSvEndApi *beSvEndApi_Create(int allocator) {
     beSvEndApi_EnsureRegistered();
-    return (beSvEndApi *)igMetaObject_CreateInstance(*(int *)0x5881E0, allocator);
+    return (beSvEndApi *)igMetaObject_CreateInstance(g_beSvEndApi_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beSvEndApi_GetMetaObject(void) {
@@ -30,7 +30,7 @@ int beSvEndApi_GetVTable(void) {
     iconWorkSlot = (igObject **)&obj._iconWork;
     *iconWorkSlot = 0;
     obj._vtable = (int)&g_beSvEndApi_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSaveApi_vtable[0];
     igObjectRef_Release(iconWorkSlot);
     igObjectRef_Release(mountWorkSlot);
@@ -43,7 +43,7 @@ void beSvEndApi_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvEndApi_Register);
 }
 
-void *beSvEndApi_Register(void) {
+CallbackArray *beSvEndApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -68,16 +68,16 @@ void beSvEndApi_GetMetaObjectFunction(void)
 void beSvEndApi_InitFields(void) {
     int index;
     void **found;
-    void *meta;
+    igMetaObject *meta;
     igIntMetaField *clone;
 
-    meta = (void *)g_beSvEndApi_metaObject;
+    meta = g_beSvEndApi_metaObject;
     found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 0xB);
     clone->_externalEnumStorage = (int)(&g_beSvEndApi_orderTypeStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);

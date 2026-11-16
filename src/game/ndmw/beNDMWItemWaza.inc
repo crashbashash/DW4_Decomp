@@ -3,7 +3,7 @@ igMetaField *g_beNDMWItemWaza_baseNoMetaField;
 
 beNDMWItemWaza *beNDMWItemWaza_Create(int allocator) {
     beNDMWItemWaza_EnsureRegistered();
-    return (beNDMWItemWaza *)igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, allocator);
+    return (beNDMWItemWaza *)igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void) {
@@ -17,9 +17,9 @@ igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void) {
 int beNDMWItemWaza_GetVTable(void) {
     int obj[8];
 
-    igObject_InitHeader(obj);
+    igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_beNDMWItemWaza_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)(char *)g_objectSystem + 916));
 }
 
 void beNDMWItemWaza_EnsureRegistered(void)
@@ -27,7 +27,7 @@ void beNDMWItemWaza_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWItemWaza_Register);
 }
 
-void *beNDMWItemWaza_Register(void) {
+CallbackArray *beNDMWItemWaza_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -5,10 +5,10 @@ int Gap__Gfx__igPrimLengthArray1_1__vfunc_23(P_167240 *arg0, int arg1, int arg2)
     arg0->fc = arg1;
     temp_s0 = arg0->fc * 4;
     if (temp_s0 != 0) {
-        arg0->f8 = igObject_Reallocate(arg0, arg0->f8, temp_s0);
+        arg0->f8 = (int)igObject_Reallocate((igObject *)arg0, (void *)arg0->f8, temp_s0);
     } else {
         if (arg0->f8 != 0) {
-            igObject_FreeMemory(arg0, arg0->f8);
+            igObject_FreeMemory((igObject *)arg0, (void *)arg0->f8);
         }
         arg0->f8 = 0;
     }
@@ -37,12 +37,12 @@ void Gap__Gfx__igPrimLengthArray1_1__vfunc_25(void) {
 
 }
 
-void FUN_00167310(void) {
-    igObject_AllocateStorage(DAT_00560840);
+void *FUN_00167310(void *png, int size) {
+    return igObject_AllocateStorage((igObject *)DAT_00560840, size);
 }
 
-void FUN_00167320(void) {
-    igObject_FreeMemory(DAT_00560840);
+void FUN_00167320(void *png, void *storage) {
+    igObject_FreeMemory((igObject *)DAT_00560840, storage);
 }
 
 void FUN_00167330(int dummy0, int arg1, int arg2) {

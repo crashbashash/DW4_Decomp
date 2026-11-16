@@ -1,7 +1,13 @@
 #ifndef DW4_IGWINDOW_H
 #define DW4_IGWINDOW_H
 
+#ifdef __cplusplus
+#include "dw4/reflected.h"
+/* Alchemy's window class (igPsx2Window is this build's platform window). */
+struct igWindow : public igObject {};
+#else
 struct igWindow;
+#endif
 
 #ifdef __cplusplus
 extern "C" {

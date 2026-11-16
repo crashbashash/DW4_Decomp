@@ -10,7 +10,7 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void beModelCtrlSubCom_AddEffect(struct beModelCtrlSubCom *self, const char *modelName, const char *seqName, float *offset, float *rotation, char isSeqDead, char isPositionLock, float startFrame);
+void beModelCtrlSubCom_AddEffect(struct beModelCtrlSubCom *self, const char *modelName, const char *seqName, float *offset, float *rotation, unsigned char isSeqDead, unsigned char isPositionLock, float startFrame);
 void beModelCtrlSubCom_AddHitBox(struct beModelCtrlSubCom *self, struct beModelCtrlHITBOX *hitBox);
 void beModelCtrlSubCom_AddSound(struct beModelCtrlSubCom *self, const char *sndName, float startFrame);
 void beModelCtrlSubCom_StopAll(struct beModelCtrlSubCom *self, struct beBaseInfoRam *ram);

@@ -22,7 +22,7 @@ int beOptInfo_GetVTable(void) {
     obj._vtable = (int)&g_beOptInfo_vtable[0];
     obj._libOpt = 0;
     obj._libAsm = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beOptInfo_vtable[0];
     igStringRef_Destruct(&obj._libAsm, -1);
     igStringRef_Destruct(&obj._libOpt, -1);
@@ -35,7 +35,7 @@ void beOptInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beOptInfo_Register);
 }
 
-void *beOptInfo_Register(void) {
+CallbackArray *beOptInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,9 +84,9 @@ static int g_beOptInfo_fieldOffsets[] = {
 
 void beOptInfo_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beOptInfo_metaObject;
+    meta = g_beOptInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beOptInfo_ctorTable, 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base + 2)), 0);

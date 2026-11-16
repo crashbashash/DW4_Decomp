@@ -26,7 +26,7 @@ int FUN_0014b330(void) {
 
 int FUN_0014b390(int arg0) {
     FUN_0014b500();
-    return igMetaObject_CreateInstance(g_igVertexData_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance(g_igVertexData_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVertexData_GetMetaObject(void)
@@ -46,13 +46,13 @@ int igVertexData_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_igVertexData_vtable[0];
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igVertexData_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -71,7 +71,7 @@ int igVertexData_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -85,9 +85,9 @@ void FUN_0014b500(void)
 
 static igMetaObjectCallback g_igVertexData_callbackList[] = { igDataList_EnsureRegistered, 0 };
 
-void igVertexData_Register(void) {
+CallbackArray *igVertexData_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexData_metaObject,
         igNamedObject_Register,
@@ -107,12 +107,12 @@ void thunk_igVertexData_GetMetaObject(void) {
 }
 
 static FieldFactory g_igVertexData_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igEnumMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igVertexData_fieldTable[] = {
     "_data",

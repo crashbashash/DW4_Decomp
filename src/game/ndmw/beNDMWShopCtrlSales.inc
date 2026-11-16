@@ -4,7 +4,7 @@ igMetaField *g_beNDMWShopCtrlSales_decideListMetaField;
 
 beNDMWShopCtrlSales *beNDMWShopCtrlSales_Create(int allocator) {
     beNDMWShopCtrlSales_EnsureRegistered();
-    return (beNDMWShopCtrlSales *)igMetaObject_CreateInstance(g_beNDMWShopCtrlSales_metaObject, allocator);
+    return (beNDMWShopCtrlSales *)igMetaObject_CreateInstance(g_beNDMWShopCtrlSales_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopCtrlSales_GetMetaObject(void) {
@@ -30,7 +30,7 @@ int beNDMWShopCtrlSales_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWShopCtrlSales_vtable[0];
     obj._salesItemList = 0;
     obj._decideList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlSales_vtable[0];
     igSmartPointer_igBoolList_Destruct(&obj._decideList, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._salesItemList, -1);
@@ -45,7 +45,7 @@ void beNDMWShopCtrlSales_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopCtrlSales_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, igBoolList_EnsureRegistered, 0 };
 
-void *beNDMWShopCtrlSales_Register(void) {
+CallbackArray *beNDMWShopCtrlSales_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -96,7 +96,7 @@ void beNDMWShopCtrlSales_InitFields(void) {
     salesItemList = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)salesItemList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)decideList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)decideList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopCtrlSales_fieldTable, g_beNDMWShopCtrlSales_fieldHandles, g_beNDMWShopCtrlSales_fieldOffsets, base);
 }

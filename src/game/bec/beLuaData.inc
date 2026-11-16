@@ -24,7 +24,7 @@ int beLuaData_GetVTable(void) {
     obj._vtable = (int)&g_beLuaData_vtable[0];
     dataObjectSlot = (igObject **)&obj._dataObject;
     *dataObjectSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beLuaData_vtable[0];
     igObjectRef_Release(dataObjectSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -39,7 +39,7 @@ void beLuaData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beLuaData_callbackList[] = { beLuaDataObject_EnsureRegistered, 0 };
 
-void *beLuaData_Register(void) {
+CallbackArray *beLuaData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -77,9 +77,9 @@ static int g_beLuaData_fieldOffsets[] = {
 void beLuaData_InitFields(void) {
     int base;
     void *dataObject;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beLuaData_metaObject;
+    meta = g_beLuaData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLuaData_ctorTable, 1);
     dataObject = (void *)(igMetaObject_GetFieldAt(meta, base));

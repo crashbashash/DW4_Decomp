@@ -13,12 +13,12 @@ igMetaField *g_beNDMWLogo_errTypeMetaField;
 
 beNDMWLogo *beNDMWLogo_CreateInstance(int allocator) {
     beNDMWLogo_EnsureRegistered();
-    return (beNDMWLogo *)igMetaObject_CreateInstance(g_beNDMWLogo_metaObject, allocator);
+    return (beNDMWLogo *)igMetaObject_CreateInstance(g_beNDMWLogo_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWLogo_GetOrCreateMetaObject(void) {
     if (g_beNDMWLogo_metaObject == 0) {
-        g_beNDMWLogo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWLogo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWLogo_metaObject;
 }
@@ -40,10 +40,10 @@ int beNDMWLogo_GetVTable(void) {
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWLogo_vtable[0];
     obj._mcUtilCtrl = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWLogo_vtable[0];
     igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
-    beBaseInfoManager_Destroy(&obj, 0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -54,7 +54,7 @@ void beNDMWLogo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLogo_callbackList[] = { bePadManager_EnsureRegistered, beSystem_EnsureRegistered, beNDMWMcUtilCtrl_EnsureRegistered, 0 };
 
-void *beNDMWLogo_Register(void) {
+CallbackArray *beNDMWLogo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -140,10 +140,10 @@ void beNDMWLogo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWLogo_ctorTable, 0xB);
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;
     system = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)system)->_metaObject = beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)system)->_refCounted = 0;
     mcUtilCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)mcUtilCtrl)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();

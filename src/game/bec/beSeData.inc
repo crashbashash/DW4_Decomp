@@ -18,7 +18,7 @@ int beSeData_GetVTable(void) {
     obj._name = 0;
     obj._vtable = (int)&g_beSeData_vtable[0];
     obj._sound = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSeData_vtable[0];
     obj.relSound();
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -31,7 +31,7 @@ void beSeData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSeData_Register);
 }
 
-void *beSeData_Register(void) {
+CallbackArray *beSeData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -72,9 +72,9 @@ static int g_beSeData_fieldOffsets[] = {
 
 void beSeData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSeData_metaObject;
+    meta = g_beSeData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSeData_ctorTable, 2);
     igMetaObject_NameFields(meta, g_beSeData_fieldTable, g_beSeData_fieldHandles, g_beSeData_fieldOffsets, base);

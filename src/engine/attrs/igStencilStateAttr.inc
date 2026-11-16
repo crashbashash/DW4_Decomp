@@ -3,7 +3,7 @@ igMetaField *g_igStencilStateAttr_enabledMetaField;
 
 igMetaObject *FUN_00133430(void) {
     if (g_igStencilStateAttr_metaObject == 0) {
-        g_igStencilStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igStencilStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igStencilStateAttr_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igStencilStateAttr_GetMetaObject(void)
 
 int igStencilStateAttr_GetVTable(void) {
     struct Obj_1334d0 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igStencilStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00133510(void)
@@ -28,9 +28,9 @@ void FUN_00133510(void)
     igMetaObject_RunStaticInit(igStencilStateAttr_Register);
 }
 
-void igStencilStateAttr_Register(void) {
+CallbackArray *igStencilStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igStencilStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -50,7 +50,7 @@ void thunk_igStencilStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igStencilStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igStencilStateAttr_fieldTable[] = {
     "_enabled",

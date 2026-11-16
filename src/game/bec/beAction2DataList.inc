@@ -2,7 +2,7 @@ igMetaObject *g_beAction2DataList_metaObject;
 
 igMetaObject *beAction2DataList_GetOrCreateMetaObject(void) {
     if (g_beAction2DataList_metaObject == 0) {
-        g_beAction2DataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beAction2DataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beAction2DataList_metaObject;
 }
@@ -20,7 +20,7 @@ int beAction2DataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beAction2DataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beAction2DataList_EnsureRegistered(void)
@@ -30,7 +30,7 @@ void beAction2DataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beAction2DataList_callbackList[] = { beAction2Data_EnsureRegistered, 0 };
 
-void *beAction2DataList_Register(void) {
+CallbackArray *beAction2DataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

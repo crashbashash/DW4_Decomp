@@ -4,32 +4,30 @@
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/StringPool.h"
+#include "dw4/beHitLandModel.h"
+#include "dw4/beHitLandModelInfo.h"
+#include "dw4/beHitLandModelOrder.h"
+#include "dw4/beHitLandModelTraversal.h"
+#include "dw4/beHitLandResultData.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igIntersectTraversal.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/igProbe.h"
+#include "dw4/igSwitch.h"
+#include <string.h>
 
-extern "C" int beHitLandModel_GetInfoMeta(void);
+extern "C" igMetaObject *beHitLandModel_GetInfoMeta(void);
 extern "C" void beHitLandModel_UpdateRam(void);
-extern "C" int beHitLandModel_GetMeta(void);
-extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
+extern "C" igMetaObject *beHitLandModel_GetMeta(void);
 extern "C" void beHitLandModel_UpdateBound(beHitLandModel *self, float *bound, float *value, int isMin);
 extern "C" bool beHitLandModel_BoundsOverlapXZ(beHitLandModel *self, float *boundMax, float *rayMax, float *boundMin, float *rayMin);
 extern "C" void Vec3f_TransformDirection(float *, float *, void *);
-extern "C" void *StringPool_Allocate(int);
-extern "C" void *StringPool_Construct(void *);
-extern "C" const char *StringPool_Intern(void *, const char *);
-extern "C" void StringChunk_ReleaseHeader(int, int *);
-extern "C" void ObjectList_AppendRetained(...);
-extern "C" void * Memory_GetAllocatorBySelector(...);
-extern "C" void * igObject_GetAllocator(...);
 extern "C" int igRay_SetFromPoints(int, int, int);
-extern "C" int beHitLandModelOrder_GetMeta(void);
+extern "C" igMetaObject *beHitLandModelOrder_GetMeta(void);
 extern "C" int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, beMessengerWork *work);
-extern "C" igObject *beHitLandModelOrder_Create(int allocator);
-extern "C" igObject *beHitLandModelTraversal_Create(int allocator);
-extern "C" igObject *igProbe_Create(int allocator);
-extern "C" igMetaEnum *beHitLandModel_GetMessageEnum(void);
-extern "C" unsigned int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *messages, int message);
-extern "C" void igSwitch_EnableChild(int switchNode, int child);
-extern "C" void igSwitch_DisableChild(int switchNode, int child);
-extern "C" int strcmp(const char *a, const char *b);
 extern "C" void beHitLandModel_CheckWall(beHitLandModel *self);
 extern "C" void beHitLandModel_CheckWallFull(beHitLandModel *self);
 static void beHitLandModel_FindLand(beHitLandModel *self);
@@ -38,14 +36,8 @@ extern "C" igMetaObject *g_igNamedObjectList_metaObject[4];
 extern "C" char *g_stringObjEmptyText;
 extern "C" int emptyString[4];
 extern "C" void beHitLandModel_Prepare(beHitLandModel *self);
-extern "C" int g_beHitLandModelInfo_metaObject[4];
-extern "C" int g_beHitLandModel_metaObject[4];
 extern "C" char HITLANDMODEL[];
 extern "C" void beHitLandModel_OnAddRam(beHitLandModel *self, int info, char *, int, int);
-extern "C" beHitLandResultData *beHitLandResultData_Create(void *);
-extern "C" void *g_stringPool[4];
-extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" unsigned char g_useOwnerAllocator;
 /* The intersect traversal's hit as the hit callback hands it over: the distance along the ray, the
  * hit point and the face normal (in the matrix's space until the order transforms it). */
 struct HitRecord {
@@ -67,30 +59,12 @@ extern "C" int beHitLandModel_HitProc(beHitLandModelTraversal *traversal, int un
 extern "C" igObject *igRay_CreateInstance(int);
 extern "C" void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2);
 extern "C" void beHitLandModelOrder_Reset(beHitLandModelOrder *order);
-extern "C" int g_beHitLandModelOrder_metaObject[4];
-extern "C" int beMessenger_GetIntCount(int messenger);
-extern "C" int beMessenger_GetInt(int messenger, int index);
 extern "C" float sqrtf(float);
 extern "C" float acosf(float);
 extern "C" float cosf(float);
-extern "C" int beMessenger_GetBoolCount(int messenger);
-extern "C" int beMessenger_GetVec3Count(int messenger);
-extern "C" int beMessenger_GetFloatCount(int messenger);
-extern "C" void beMessenger_GetVec3(igVec3f *out, int messenger, int index);
-extern "C" float beMessenger_GetFloat(int messenger, int index);
-extern "C" void beMessenger_ClearInt(int messenger);
-extern "C" void beMessenger_ClearBool(int messenger);
-extern "C" void beMessenger_ClearVec3(int messenger);
-extern "C" void beMessenger_AppendInt(int messenger, int value);
-extern "C" void beMessenger_AppendString(int messenger, int text);
-extern "C" void beMessenger_AppendBool(int messenger, unsigned char value);
-extern "C" void beMessenger_AppendVec3(int messenger, igVec3f value);
 extern "C" void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order);
 extern "C" void ObjectList_ResizeRetained(int list, int count);
-extern "C" void List_Resize(void *list, int count, int elementSize);
-extern "C" void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal);
 extern "C" void igMatrix44f_Copy(float *to, const float *from);
-extern "C" void igMatrix44f_GetTranslation(const float *matrix, float *translation);
 
 /* beHitLandModelOrder's virtual methods by vtable slot (slot 21 is beHitLandModelOrder_AddRay). */
 class beHitLandModelOrderMethods {
@@ -140,14 +114,14 @@ void beHitLandModel_Prepare(beHitLandModel *self) {
     igMatrix44f_MakeEulerRotation(self->_mat90, 0.0f, 1.5707964f, 0.0f);
 }
 
-int beHitLandModel_GetInfoMeta(void)
+igMetaObject *beHitLandModel_GetInfoMeta(void)
 {
-    return g_beHitLandModelInfo_metaObject[0];
+    return g_beHitLandModelInfo_metaObject;
 }
 
 void beHitLandModel_OnAddRam(beHitLandModel *self, int info, char *, int, int)
 {
-    beMessenger_RegisterReceiver(self->_messenger, info, HITLANDMODEL, 0, -1);
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)info, HITLANDMODEL, 0, -1);
 }
 
 void beHitLandModel_UpdateRam(void)
@@ -187,41 +161,41 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
     }
     if (self->_order == 0) {
         int allocator = (int)igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *old = (igObject *)self->_order;
         IG_OBJECT_RELEASE(old);
         self->_order = (int)beHitLandModelOrder_Create(allocator);
     }
     if (self->_hitTraversal == 0) {
         int allocator = (int)igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *old = (igObject *)self->_hitTraversal;
         IG_OBJECT_RELEASE(old);
         self->_hitTraversal = (int)beHitLandModelTraversal_Create(allocator);
     }
     if (self->_probe == 0) {
         int allocator = (int)igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *old = (igObject *)self->_probe;
         IG_OBJECT_RELEASE(old);
         self->_probe = (int)igProbe_Create(allocator);
     }
     info = (beHitLandModelInfo *)ram->_parentInfo;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beHitLandModel_GetMessageEnum(), work->_message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beHitLandModel_GetMessageEnum(), (const char *)work->_message)) {
     case MESSAGE_CHECKWALL:
         if (self->_isHitWall) {
             beHitLandModel_CheckWall(self);
         } else {
-            beMessenger_ClearBool(self->_messenger);
-            beMessenger_AppendBool(self->_messenger, 0);
+            beMessenger_ClearBool((beMessenger *)self->_messenger);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         }
         break;
     case MESSAGE_CHECKWALLFULL:
         if (self->_isHitWall) {
             beHitLandModel_CheckWallFull(self);
         } else {
-            beMessenger_ClearBool(self->_messenger);
-            beMessenger_AppendBool(self->_messenger, 0);
+            beMessenger_ClearBool((beMessenger *)self->_messenger);
+            beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         }
         break;
     case MESSAGE_CHECKLAND:
@@ -236,7 +210,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (CompareStringObj((const char *)work->_infoName, ((igStringObj **)names->_data)[i]) == 0) {
-                        igSwitch_EnableChild(info->_checkSwitch, i);
+                        igSwitch_EnableChild((igSwitch *)info->_checkSwitch, i);
                         break;
                     }
                 }
@@ -246,7 +220,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (strcmp((const char *)work->_infoName, NamedObjectName(((igNamedObject **)names->_data)[i])) == 0) {
-                        igSwitch_EnableChild(info->_checkSwitch, i);
+                        igSwitch_EnableChild((igSwitch *)info->_checkSwitch, i);
                         break;
                     }
                 }
@@ -261,7 +235,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (CompareStringObj((const char *)work->_infoName, ((igStringObj **)names->_data)[i]) == 0) {
-                        igSwitch_DisableChild(info->_checkSwitch, i);
+                        igSwitch_DisableChild((igSwitch *)info->_checkSwitch, i);
                         break;
                     }
                 }
@@ -271,7 +245,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (strcmp((const char *)work->_infoName, NamedObjectName(((igNamedObject **)names->_data)[i])) == 0) {
-                        igSwitch_DisableChild(info->_checkSwitch, i);
+                        igSwitch_DisableChild((igSwitch *)info->_checkSwitch, i);
                         break;
                     }
                 }
@@ -279,8 +253,8 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
         }
         break;
     default:
-        beMessenger_ClearBool(self->_messenger);
-        beMessenger_AppendBool(self->_messenger, 0);
+        beMessenger_ClearBool((beMessenger *)self->_messenger);
+        beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
         return 0;
     }
     return 1;
@@ -354,18 +328,18 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
     bool hit;
     bool wallAhead;
 
-    if (beMessenger_GetBoolCount(self->_messenger) != 0) return;
-    if (beMessenger_GetVec3Count(self->_messenger) == 0) return;
-    if (beMessenger_GetFloatCount(self->_messenger) == 0) return;
-    if (beMessenger_GetIntCount(self->_messenger) == 0) return;
-    beMessenger_GetVec3(&position, self->_messenger, 0);
-    beMessenger_GetVec3(&direction, self->_messenger, 1);
-    radius = beMessenger_GetFloat(self->_messenger, 0);
-    beMessenger_GetFloat(self->_messenger, 1);
-    height = beMessenger_GetFloat(self->_messenger, 2);
-    kind = beMessenger_GetInt(self->_messenger, 0);
-    skipPreCheck = beMessenger_GetInt(self->_messenger, 1);
-    beMessenger_ClearInt(self->_messenger);
+    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) != 0) return;
+    if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 0) return;
+    if (beMessenger_GetFloatCount((beMessenger *)self->_messenger) == 0) return;
+    if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) return;
+    beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
+    beMessenger_GetVec3((float *)&direction, (beMessenger *)self->_messenger, 1);
+    radius = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
+    beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
+    height = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);
+    kind = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+    skipPreCheck = beMessenger_GetInt((beMessenger *)self->_messenger, 1);
+    beMessenger_ClearInt((beMessenger *)self->_messenger);
     hit = false;
     reach = 1.42f * radius;
     wallAhead = false;
@@ -489,8 +463,8 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
                 MoveAlong(position, -(probeLength - nearest), direction);
                 beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(best);
                 const char *name = (const char *)result->_infoName;
-                beMessenger_AppendInt(self->_messenger, result->_ramNo);
-                beMessenger_AppendString(self->_messenger, (int)name);
+                beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)name);
                 hit = true;
             }
         }
@@ -531,16 +505,16 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
                 MoveAlong(position, push, wall->normal);
                 beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(nearest);
                 const char *name = (const char *)result->_infoName;
-                beMessenger_AppendInt(self->_messenger, result->_ramNo);
-                beMessenger_AppendString(self->_messenger, (int)name);
+                beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)name);
                 hit = true;
             }
         }
     }
-    beMessenger_ClearBool(self->_messenger);
-    beMessenger_ClearVec3(self->_messenger);
-    beMessenger_AppendVec3(self->_messenger, position);
-    beMessenger_AppendBool(self->_messenger, hit);
+    beMessenger_ClearBool((beMessenger *)self->_messenger);
+    beMessenger_ClearVec3((beMessenger *)self->_messenger);
+    beMessenger_AppendVec3((beMessenger *)self->_messenger, position);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, hit);
 }
 
 /* Casts eight horizontal rays 45 degrees apart, 3.5 radii long, from the messenger's position (2.15
@@ -554,17 +528,17 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
     int kind;
     bool hit;
 
-    if (beMessenger_GetBoolCount(self->_messenger) != 0) return;
-    if (beMessenger_GetVec3Count(self->_messenger) == 0) return;
-    if (beMessenger_GetFloatCount(self->_messenger) == 0) return;
-    if (beMessenger_GetIntCount(self->_messenger) == 0) return;
-    beMessenger_GetVec3(&position, self->_messenger, 0);
-    radius = beMessenger_GetFloat(self->_messenger, 0);
-    beMessenger_GetFloat(self->_messenger, 1);
-    height = beMessenger_GetFloat(self->_messenger, 2);
-    kind = beMessenger_GetInt(self->_messenger, 0);
-    beMessenger_GetInt(self->_messenger, 1);
-    beMessenger_ClearInt(self->_messenger);
+    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) != 0) return;
+    if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 0) return;
+    if (beMessenger_GetFloatCount((beMessenger *)self->_messenger) == 0) return;
+    if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) return;
+    beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
+    radius = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
+    beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
+    height = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);
+    kind = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
+    beMessenger_GetInt((beMessenger *)self->_messenger, 1);
+    beMessenger_ClearInt((beMessenger *)self->_messenger);
     hit = false;
     {
         float reach = 3.5f * radius;
@@ -604,8 +578,8 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             MoveAlong(position, push, wall->normal);
             beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(nearest);
             const char *name = (const char *)result->_infoName;
-            beMessenger_AppendInt(self->_messenger, result->_ramNo);
-            beMessenger_AppendString(self->_messenger, (int)name);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
+            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)name);
             hit = true;
         }
     }
@@ -647,15 +621,15 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             MoveAlong(position, push, wall->normal);
             beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(nearest);
             const char *name = (const char *)result->_infoName;
-            beMessenger_AppendInt(self->_messenger, result->_ramNo);
-            beMessenger_AppendString(self->_messenger, (int)name);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
+            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)name);
             hit = true;
         }
     }
-    beMessenger_ClearBool(self->_messenger);
-    beMessenger_ClearVec3(self->_messenger);
-    beMessenger_AppendVec3(self->_messenger, position);
-    beMessenger_AppendBool(self->_messenger, hit);
+    beMessenger_ClearBool((beMessenger *)self->_messenger);
+    beMessenger_ClearVec3((beMessenger *)self->_messenger);
+    beMessenger_AppendVec3((beMessenger *)self->_messenger, position);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, hit);
 }
 
 /* Height of the landing point of the order's index-th hit. */
@@ -685,13 +659,13 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
     beHitLandModelOrder *order;
     int count;
 
-    if (beMessenger_GetBoolCount(self->_messenger) != 0) return;
-    if (beMessenger_GetVec3Count(self->_messenger) == 0) return;
-    if (beMessenger_GetFloatCount(self->_messenger) == 0) return;
-    beMessenger_GetVec3(&position, self->_messenger, 0);
-    radius = beMessenger_GetFloat(self->_messenger, 0);
-    up = beMessenger_GetFloat(self->_messenger, 1);
-    down = beMessenger_GetFloat(self->_messenger, 2);
+    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) != 0) return;
+    if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 0) return;
+    if (beMessenger_GetFloatCount((beMessenger *)self->_messenger) == 0) return;
+    beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
+    radius = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
+    up = beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
+    down = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);
     inWindow = false;
     grounded = false;
     beHitLandModelOrder_Reset((beHitLandModelOrder *)self->_order);
@@ -788,22 +762,22 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
             grounded = false;
         }
         position.y = bestHeight;
-        beMessenger_ClearInt(self->_messenger);
+        beMessenger_ClearInt((beMessenger *)self->_messenger);
         result = ((HitResultListRef &)order->_hitdataList)->get(best);
         name = (const char *)result->_infoName;
-        beMessenger_AppendInt(self->_messenger, result->_ramNo);
-        beMessenger_AppendString(self->_messenger, (int)name);
+        beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
+        beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)name);
         found = true;
     } else {
         position.y = -1.0f;
         found = false;
     }
-    beMessenger_ClearBool(self->_messenger);
-    beMessenger_ClearVec3(self->_messenger);
-    beMessenger_AppendBool(self->_messenger, inWindow);
-    beMessenger_AppendBool(self->_messenger, grounded);
-    beMessenger_AppendBool(self->_messenger, found);
-    beMessenger_AppendVec3(self->_messenger, position);
+    beMessenger_ClearBool((beMessenger *)self->_messenger);
+    beMessenger_ClearVec3((beMessenger *)self->_messenger);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, inWindow);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, grounded);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, found);
+    beMessenger_AppendVec3((beMessenger *)self->_messenger, position);
 }
 
 void beHitLandModel_UpdateBound(beHitLandModel *self, float *bound, float *value, int isMin) {
@@ -869,7 +843,7 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
         ((IntList *)probe->_intersectFaceType)->setCount(0);
         for (int i = 0; i < rayCount; i++) {
             igProbe *target = (igProbe *)self->_probe;
-            ObjectList_AppendRetained(target->_rays, ((igRay **)((igObjectList *)order->_rayList)->_data)[i]);
+            ObjectList_AppendRetained((igObjectList *)target->_rays, (igObject *)(((igRay **)((igObjectList *)order->_rayList)->_data)[i]));
             /* matching construct: register-allocator tracer — n declared before faces gives faces s1 and n s2 */
             int n;
             IntList *faces = (IntList *)target->_intersectFaceType;
@@ -913,18 +887,18 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
             const char *name = info->_name ? (const char *)info->_name : (const char *)emptyString;
             const char *token;
             const char *old;
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 void *pool = StringPool_Allocate(16);
-                if (pool != 0) pool = StringPool_Construct(pool);
-                g_stringPool[0] = pool;
+                if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
+                g_stringPool = (StringPool *)pool;
             }
-            token = StringPool_Intern(g_stringPool[0], name);
+            token = StringPool_Intern(g_stringPool, name);
             old = (const char *)order->_infoName;
             if (old != 0) {
                 int *header = (int *)old - 2;
                 int count = ((int *)old)[-1] - 1;
                 ((int *)old)[-1] = count;
-                if (count == 0) StringChunk_ReleaseHeader(*header, header);
+                if (count == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
             }
             order->_infoName = (int)token;
             int kind = info->_kind;
@@ -980,26 +954,26 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
     const char *old;
     if (self->_hitdataCount >= ((igObjectList *)self->_hitdataList)->_count) {
         void *alloc = igObject_GetAllocator(self);
-        alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create(alloc));
-        ObjectList_AppendRetained(self->_hitdataList, (beHitLandResultData *)created);
+        alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+        igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create((int)alloc));
+        ObjectList_AppendRetained((igObjectList *)self->_hitdataList, (igObject *)created);
     }
     Vec3f_TransformDirection(&hit->normal.x, &hit->normal.x, hit->matrix);
     ((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit = *hit;
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         void *pool = StringPool_Allocate(16);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool[0] = pool;
+        if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
+        g_stringPool = (StringPool *)pool;
     }
-    token = StringPool_Intern(g_stringPool[0], name);
+    token = StringPool_Intern(g_stringPool, name);
     old = (const char *)result->_infoName;
     if (old != 0) {
         int *header = (int *)old - 2;
         int count = ((int *)old)[-1] - 1;
         ((int *)old)[-1] = count;
-        if (count == 0) StringChunk_ReleaseHeader(*header, header);
+        if (count == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
     }
     result->_infoName = (int)token;
     ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount]->_ramNo = self->_ramNo;
@@ -1034,9 +1008,9 @@ HitRecord &HitRecord::operator=(const HitRecord &other) {
 void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2) {
     if (self->_rayCount >= ((igRayList *)self->_rayList)->_count) {
         int a = ((int)igObject_GetAllocator(self));
-        igSmartPointer<igObject> ray(igRay_CreateInstance(g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]))));
+        igSmartPointer<igObject> ray(igRay_CreateInstance(g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         /* matching construct: the (void *)(long) cast fixes the argument evaluation order of the append */
-        ObjectList_AppendRetained((void *)(long)self->_rayList, ray.p);
+        ObjectList_AppendRetained((igObjectList *)((void *)(long)self->_rayList), ray.p);
     }
     igRay_SetFromPoints(((int *)((igRayList *)self->_rayList)->_data)[self->_rayCount], a1, a2);
     self->_rayCount = self->_rayCount + 1;
@@ -1048,13 +1022,13 @@ void beHitLandModelOrder_Reset(beHitLandModelOrder *order) {
     order->_hitdataCount = 0;
 }
 
-int beHitLandModelOrder_GetMeta(void)
+igMetaObject *beHitLandModelOrder_GetMeta(void)
 {
-    return g_beHitLandModelOrder_metaObject[0];
+    return g_beHitLandModelOrder_metaObject;
 }
 
-int beHitLandModel_GetMeta(void)
+igMetaObject *beHitLandModel_GetMeta(void)
 {
-    return g_beHitLandModel_metaObject[0];
+    return g_beHitLandModel_metaObject;
 }
 

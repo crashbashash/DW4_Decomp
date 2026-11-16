@@ -3,7 +3,7 @@ igMetaField *g_igPixelPipelineModeAttr_pipelineModeMetaField;
 
 void FUN_00134b60(int arg0) {
     FUN_00134c30();
-    igMetaObject_CreateInstance(*(int *)0x55EF70, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EF70, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igPixelPipelineModeAttr_GetMetaObject(void)
@@ -17,9 +17,9 @@ igMetaObject *igPixelPipelineModeAttr_GetMetaObject(void)
 int igPixelPipelineModeAttr_GetVTable(void) {
     union U_134bf0 u;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&g_igPixelPipelineModeAttr_vtable[0]);
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void FUN_00134c30(void)
@@ -27,9 +27,9 @@ void FUN_00134c30(void)
     igMetaObject_RunStaticInit(igPixelPipelineModeAttr_Register);
 }
 
-void igPixelPipelineModeAttr_Register(void) {
+CallbackArray *igPixelPipelineModeAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPixelPipelineModeAttr_metaObject,
         igVisualAttribute_Register,
@@ -49,7 +49,7 @@ void thunk_igPixelPipelineModeAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igPixelPipelineModeAttr_ctorTable[] = {
-    igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igPixelPipelineModeAttr_fieldTable[] = {
     "_pipelineMode",

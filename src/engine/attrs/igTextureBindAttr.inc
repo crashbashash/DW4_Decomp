@@ -4,12 +4,12 @@ igMetaField *g_igTextureBindAttr_unitIDMetaField;
 
 igTextureBindAttr *igTextureBindAttr_CreateInstance(int allocator) {
     igTextureBindAttr_EnsureRegistered();
-    return (igTextureBindAttr *)igMetaObject_CreateInstance(*(int *)0x55ED88, allocator);
+    return (igTextureBindAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55ED88, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *FUN_00132850(void) {
     if (g_igTextureBindAttr_metaObject == 0) {
-        g_igTextureBindAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureBindAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureBindAttr_metaObject;
 }
@@ -30,10 +30,10 @@ int igTextureBindAttr_GetVTable(void) {
     struct Obj_1328f0 obj;
     char *o;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureBindAttr_vtable[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igTextureBindAttr_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -67,9 +67,9 @@ void igTextureBindAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igTextureBindAttr_callbackList[] = { igTextureAttr_EnsureRegistered, 0 };
 
-void igTextureBindAttr_Register(void) {
+CallbackArray *igTextureBindAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureBindAttr_metaObject,
         igVisualAttribute_Register,
@@ -89,8 +89,8 @@ void thunk_igTextureBindAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureBindAttr_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTextureBindAttr_fieldTable[] = {
     "_texture",

@@ -3,7 +3,7 @@ void Gap__Gfx__igPsx2UserUCodeExt__vfunc_29(O_17cef0 *arg0, M_17cef0 *arg1) {
     R_17cef0 *temp_a0;
 
     arg0->m = arg1;
-    temp_v0 = (R_17cef0 *)igMetaObject_FindFieldByName(arg0->m->meta(), "_pDLists");
+    temp_v0 = (R_17cef0 *)igMetaObject_FindFieldByName((igMetaObject *)(arg0->m->meta()), "_pDLists");
     if (temp_v0 != 0) {
         temp_v0->refs = temp_v0->refs + 1;
     }
@@ -15,7 +15,7 @@ void Gap__Gfx__igPsx2UserUCodeExt__vfunc_29(O_17cef0 *arg0, M_17cef0 *arg1) {
         }
     }
     arg0->a = temp_v0;
-    temp_v0 = (R_17cef0 *)igMetaObject_FindFieldByName(arg0->m->meta(), "_currentDListHandle");
+    temp_v0 = (R_17cef0 *)igMetaObject_FindFieldByName((igMetaObject *)(arg0->m->meta()), "_currentDListHandle");
     if (temp_v0 != 0) {
         temp_v0->refs = temp_v0->refs + 1;
     }

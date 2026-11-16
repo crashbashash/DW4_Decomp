@@ -9,7 +9,7 @@ igMetaField *g_igVertexBlendMatrixListAttr_currentMatrixCountMetaField;
 
 void FUN_00130930(int arg0) {
     FUN_00130a70();
-    igMetaObject_CreateInstance(*(int *)0x55EC28, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EC28, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVertexBlendMatrixListAttr_GetMetaObject(void)
@@ -25,13 +25,13 @@ int igVertexBlendMatrixListAttr_GetVTable(void) {
     int temp_s0;
     S_ref *q0;
     int pi = (int)u.b;
-    igObject_InitHeader(pi);
+    igObject_InitHeader((igObject *)pi);
     u.vt = (int)&g_igVertexBlendMatrixListAttr_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    igMatrix44f_SetIdentity(&u.b[28]);
-    igMatrix44f_SetIdentity(pi + 92);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igMatrix44f_SetIdentity((float *)&u.b[28]);
+    igMatrix44f_SetIdentity((float *)(pi + 92));
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&DAT_00522630[4];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -52,9 +52,9 @@ void FUN_00130a70(void)
 
 static igMetaObjectCallback g_igVertexBlendMatrixListAttr_callbackList[] = { FUN_001e4bc0, 0 };
 
-void igVertexBlendMatrixListAttr_Register(void) {
+CallbackArray *igVertexBlendMatrixListAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexBlendMatrixListAttr_metaObject,
         igVisualAttribute_Register,
@@ -74,13 +74,13 @@ void thunk_igVertexBlendMatrixListAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igVertexBlendMatrixListAttr_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igMatrix44fMetaField_CreateInstance,
-    igMatrix44fMetaField_CreateInstance,
-    igRawRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igVertexBlendMatrixListAttr_fieldTable[] = {
     "_matrixList",

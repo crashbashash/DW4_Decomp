@@ -13,9 +13,9 @@ void FUN_0014da90(void)
     igMetaObject_RunStaticInit(igImageLoader_Register);
 }
 
-void igImageLoader_Register(void) {
+CallbackArray *igImageLoader_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igImageLoader_metaObject,
         igImageUtils_Register,

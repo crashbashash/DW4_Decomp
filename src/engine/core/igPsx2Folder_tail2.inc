@@ -1,6 +1,6 @@
 igSmartPointer<igObject> igPsx2Folder_ListEntries(igPsx2Folder *self) {
     FolderEntryWide entry;
-    int handle = sceDopen(self->_folderName);
+    int handle = sceDopen((const char *)self->_folderName);
     if (handle < 0) {
         /* The empty result is built with the retaining constructor: retail stores the 0 into the
          * result and re-reads it for the reference-count test. */
@@ -57,7 +57,7 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
         } else {
             key ="intrinsicModulePath";
         }
-        if (igRegistry_GetValueStringObj(*(int *)&g_objectSystem->configRegistry, 2, key, (igStringObj **)&path, (const char *)"", 0) != 0) {
+        if (igRegistry_GetValueStringObj(g_objectSystem->configRegistry, 2, key, (igStringObj **)&path, (const char *)"", 0) != 0) {
             igPsx2Folder_TrimPath((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
             dir = (dir == 0) ? g_stringObjEmptyText : dir;
@@ -153,7 +153,7 @@ void FUN_0032d070(void)
 int g_igPsx2_sifCmdBufferCount = 5;
 unsigned char g_igPsx2_resetIopServices = 1;
 const char *g_igPsx2_iopImagePath;
-int g_igPsx2_loadFileModule;
+char *g_igPsx2_loadFileModule;
 
 void igPsx2_RebootIop(void) {
     int n;
@@ -190,7 +190,7 @@ void igPsx2_RebootIop(void) {
         }
         sceSifInitCmd();
         n = g_igPsx2_sifCmdBufferCount;
-        sceSifSetCmdBuffer(((int)Memory_SystemAllocate(n * 12)), n);
+        sceSifSetCmdBuffer((sceSifCmdData *)Memory_SystemAllocate(n * 12), n);
     }
 }
 
@@ -230,7 +230,7 @@ static inline int fileAllocator(void) {
 
 void igPsx2_SetupOutputFiles(void) {
     unsigned char enabled;
-    igRegistry_GetValueBool((int)g_objectSystem->configRegistry, 2, (const char *)"useOutputFilesForAtmon", (char *)&enabled, 1, 0);
+    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2, (const char *)"useOutputFilesForAtmon", &enabled, 1, 0);
     if (enabled != 0) {
         igReport_SetOutputFile(0);
         igReport_SetErrorFile(0);

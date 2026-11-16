@@ -3,7 +3,7 @@ SharedViewerOptions *g_sharedViewerOptions;
 
 igMetaObject *FUN_00233a40(void) {
     if (g_igFlushRenderer_metaObject == 0) {
-        g_igFlushRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igFlushRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igFlushRenderer_metaObject;
 }
@@ -28,12 +28,12 @@ int igFlushRenderer_GetVTable(void) {
     S_ref *q1;
 
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&g_igRenderer_vtable[0]);
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&g_igFlushRenderer_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.w[0] = (int)(&g_igRenderer_vtable[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
@@ -52,9 +52,9 @@ void FUN_00233b80(void)
     igMetaObject_RunStaticInit(igFlushRenderer_Register);
 }
 
-void igFlushRenderer_Register(void) {
+CallbackArray *igFlushRenderer_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFlushRenderer_metaObject,
         igRenderer_Register,
@@ -141,9 +141,9 @@ void FUN_00233c10(const char *programName)
     {
         const char *optionName = "--up-vector";
         if (optionName) {
-            defaultUpVector[0] = g_vec3Zero[0];
-            defaultUpVector[1] = g_vec3Zero[1];
-            defaultUpVector[2] = g_vec3Zero[2];
+            defaultUpVector[0] = g_vec3Zero.x;
+            defaultUpVector[1] = g_vec3Zero.y;
+            defaultUpVector[2] = g_vec3Zero.z;
             FUN_00234350(optionName, "sets the default up vector (<0,0,0> means use scene up vector)", defaultUpVector);
         }
     }
@@ -175,10 +175,10 @@ void FUN_00233c10(const char *programName)
     {
         const char *optionName = "--head-light-ambient";
         if (optionName) {
-            defaultHeadLightAmbient[0] = g_vec4Zero[0];
-            defaultHeadLightAmbient[1] = g_vec4Zero[1];
-            defaultHeadLightAmbient[2] = g_vec4Zero[2];
-            defaultHeadLightAmbient[3] = g_vec4Zero[3];
+            defaultHeadLightAmbient[0] = g_vec4Zero.x;
+            defaultHeadLightAmbient[1] = g_vec4Zero.y;
+            defaultHeadLightAmbient[2] = g_vec4Zero.z;
+            defaultHeadLightAmbient[3] = g_vec4Zero.w;
             FUN_002343d0(optionName, "sets the ambient color for the head light", defaultHeadLightAmbient);
         }
     }
@@ -242,8 +242,8 @@ void FUN_00234300(const char *arg0, const char *arg1, float arg2) {
 
 void FUN_00234350(const char *arg0, const char *arg1, float *arg2) {
     /* matching construct: variant search — declaration order of the locals; b52 gives the last-declared local s0 */
-    int temp_s1;
-    int temp_s0;
+    double temp_s1;
+    double temp_s0;
 
     temp_s1 = fptodp(arg2[0]);
     temp_s0 = fptodp(arg2[1]);
@@ -252,9 +252,9 @@ void FUN_00234350(const char *arg0, const char *arg1, float *arg2) {
 
 void FUN_002343d0(const char *arg0, const char *arg1, float *arg2) {
     /* matching construct: variant search — declaration order of the locals; b52 gives the last-declared local s0 */
-    int temp_s2;
-    int temp_s1;
-    int temp_s0;
+    double temp_s2;
+    double temp_s1;
+    double temp_s0;
     temp_s2 = fptodp(*(float *)((char *)(arg2) + 0));
     temp_s1 = fptodp(*(float *)((char *)(arg2) + 4));
     temp_s0 = fptodp(*(float *)((char *)(arg2) + 12));
@@ -269,13 +269,13 @@ int FUN_00234470(igStringRefList *arg0, int *arg1, const char *arg2) {
 
     if (arg2 != 0) {
         StringList_CopyRetained(&sp3C, arg0, *arg1);
-        temp_s1 = strcmp(sp3C, arg2) == 0;
+        temp_s1 = strcmp((const char *)sp3C, arg2) == 0;
         if (sp3C != 0) {
             temp_a1 = (int *)((char *)sp3C - 8);
             temp_v0 = *(int *)((char *)(sp3C) - 4) - 1;
             *(int *)((char *)(sp3C) - 4) = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (StringTokenHeader *)temp_a1);
             }
         }
         if (temp_s1 != 0) {
@@ -296,11 +296,11 @@ int FUN_00234510(igStringRefList *a0, int *a1, const char *a2, int *arg3) {
     return 0;
 }
 
-int FUN_00234560(igStringRefList *arg0, int *arg1, const char *arg2, long long *arg3) {
+int FUN_00234560(igStringRefList *arg0, int *arg1, const char *arg2, double *arg3) {
     void *sp2C;
 
     if (FUN_002345b0(arg0, arg1, arg2, &sp2C) != 0) {
-        *arg3 = atof(sp2C);
+        *arg3 = atof((const char *)sp2C);
         return 1;
     }
     return 0;
@@ -313,13 +313,13 @@ int FUN_002345b0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3
     int v1;
     if (arg2 != 0) {
         StringList_CopyRetained(&sp5C, arg0, *arg1);
-        eq = strcmp(sp5C, arg2) == 0;
+        eq = strcmp((const char *)sp5C, arg2) == 0;
         if (sp5C != 0) {
             int *a1 = (int *)((char *)sp5C - 8);
             int v0 = *(int *)((char *)sp5C - 4) - 1;
             *(int *)((char *)sp5C - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
         if (eq != 0) {
@@ -333,7 +333,7 @@ int FUN_002345b0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3
                     int v0 = *(int *)((char *)sp58 - 4) - 1;
                     *(int *)((char *)sp58 - 4) = v0;
                     if (v0 == 0) {
-                        StringChunk_ReleaseHeader(*a1, a1);
+                        StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
                     }
                 }
                 v1 = *arg1;
@@ -357,21 +357,21 @@ int FUN_002346c0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3
     sp3C = 0;
     if (FUN_002345b0(arg0, arg1, arg2, &sp3C) != 0) {
         str = (int)sp3C;
-        if (g_stringPool[0] == 0) {
-            var_v0 = StringPool_Allocate(0x10);
+        if (g_stringPool == 0) {
+            var_v0 = (int)(StringPool_Allocate(0x10));
             if (var_v0 != 0) {
-                var_v0 = StringPool_Construct(var_v0);
+                var_v0 = (int)(StringPool_Construct((StringPool *)var_v0));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool = (StringPool *)var_v0;
         }
-        temp_s1 = (void *)(StringPool_Intern(g_stringPool[0], str));
+        temp_s1 = (void *)(StringPool_Intern(g_stringPool, (const char *)str));
         temp_v1 = (void *)(*arg3);
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
             *(int *)((char *)(temp_v1) - 4) = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (StringTokenHeader *)temp_a1);
             }
         }
         *arg3 = temp_s1;
@@ -386,9 +386,9 @@ int FUN_00234770(igStringRefList *arg0, int *arg1, const char *arg2, unsigned ch
         return 0;
     }
     *arg3 = 0;
-    if (strcmp(sp2C, "on") == 0) {
+    if (strcmp((const char *)sp2C, "on") == 0) {
         *arg3 = 1;
-    } else if (strcmp(sp2C, "true") == 0) {
+    } else if (strcmp((const char *)sp2C, "true") == 0) {
         *arg3 = 1;
     }
     return 1;
@@ -400,7 +400,7 @@ int thunk_FUN_00234510(igStringRefList *args, int *index, const char *name, int 
 }
 
 int FUN_00234810(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3) {
-    long long sp28;
+    double sp28;
 
     if (FUN_00234560(arg0, arg1, arg2, &sp28) != 0) {
         *arg3 = dptofp(sp28);
@@ -428,9 +428,9 @@ int FUN_002348b0(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3
 
 static inline int renderAllocator(void) {
     if (g_useOwnerAllocator) {
-        return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
+        return (int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     }
-    return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+    return (int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
 }
 
 struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
@@ -455,9 +455,9 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->b68 = 1;
     s->f72 = 0.1f;
     s->f76 = 1000.0f;
-    s->f80[0] = g_vec3Zero[0];
-    s->f80[1] = g_vec3Zero[1];
-    s->f80[2] = g_vec3Zero[2];
+    s->f80[0] = g_vec3Zero.x;
+    s->f80[1] = g_vec3Zero.y;
+    s->f80[2] = g_vec3Zero.z;
     s->b92 = 1;
     s->b93 = 0;
     s->b94 = 0;
@@ -471,10 +471,10 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->f100[5] = 1.0f;
     s->f100[6] = 1.0f;
     s->f100[7] = 1.0f;
-    s->f132[0] = g_vec4Zero[0];
-    s->f132[1] = g_vec4Zero[1];
-    s->f132[2] = g_vec4Zero[2];
-    s->f132[3] = g_vec4Zero[3];
+    s->f132[0] = g_vec4Zero.x;
+    s->f132[1] = g_vec4Zero.y;
+    s->f132[2] = g_vec4Zero.z;
+    s->f132[3] = g_vec4Zero.w;
     s->f148 = 0.2f;
     s->f152 = 0.2f;
     s->f156 = 0.2f;
@@ -556,7 +556,7 @@ void *FUN_00234b90(struct App *arg0, short arg1) {
                 rc = *(int *)((char *)(q) - 4) - 1;
                 *(int *)((char *)(q) - 4) = rc;
                 if (rc == 0) {
-                    StringChunk_ReleaseHeader(*h, h);
+                    StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                 }
             }
         }
@@ -585,7 +585,7 @@ static inline void releaseSharedOptions(void) {
                         rc = *(int *)((char *)(p) - 4) - 1;
                         *(int *)((char *)(p) - 4) = rc;
                         if (rc == 0) {
-                            StringChunk_ReleaseHeader(*h, h);
+                            StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                         }
                     }
                 }
@@ -596,7 +596,7 @@ static inline void releaseSharedOptions(void) {
                         rc = *(int *)((char *)(p) - 4) - 1;
                         *(int *)((char *)(p) - 4) = rc;
                         if (rc == 0) {
-                            StringChunk_ReleaseHeader(*h, h);
+                            StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                         }
                     }
                 }
@@ -615,11 +615,11 @@ void ViewerOptions_ParseCommandLine(App *self, int count, char **names) {
     int allocator;
     int i;
     if (g_useOwnerAllocator != 0) {
-        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
+        allocator = (int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     } else {
-        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+        allocator = (int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     }
-    igSmartPointer<InternedStringList> list(igStringRefList_Create(allocator));
+    igSmartPointer<InternedStringList> list((InternedStringList *)igStringRefList_Create(allocator));
     for (i = 0; i < count; i++) {
         int text = (int)names[i];
         StringRef name(text);
@@ -859,48 +859,48 @@ void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self)
 }
 
 static inline int internedPool(void) {
-    if (g_stringPool[0] == 0) {
-        int v = StringPool_Allocate(0x10);
-        if (v != 0) { v = StringPool_Construct(v); }
-        g_stringPool[0] = v;
+    if (g_stringPool == 0) {
+        int v = (int)(StringPool_Allocate(0x10));
+        if (v != 0) { v = (int)StringPool_Construct((StringPool *)v); }
+        g_stringPool = (StringPool *)v;
     }
-    return g_stringPool[0];
+    return (int)g_stringPool;
 }
 
 void FUN_00236140(void) {
-    igSmartPointer<NamedObject> r(igFolder_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+    igSmartPointer<NamedObject> r((NamedObject *)igFolder_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
     NamedObject *s0 = r.get();
-    int *s1 = (int *)StringPool_Intern(internedPool(), "plugins");
+    int *s1 = (int *)StringPool_Intern((StringPool *)(internedPool()), "plugins");
     int *old = (int *)s0->name;
     if (old != 0) {
         int *hdr = old - 2;
         int c = old[-1] - 1;
         old[-1] = c;
         if (c == 0) {
-            StringChunk_ReleaseHeader(*hdr, hdr);
+            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
         }
     }
     s0->name = (int)s1;
     igFolder_SetFolderName(r.get(), "insight");
-    igPluginHelper_AddRepository(((G *)g_objectSystem[0])->f76, "Insight", r->name, 1);
+    igPluginHelper_AddRepository(((G *)g_objectSystem)->f76, "Insight", r->name, 1);
 }
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {
     if (value < 0) {
-        igStringObj_Set(text.p, "default");
+        igStringObj_Set((igStringObj *)text.p, "default");
     } else {
-        igStringObj_SetInt(text.p, value, "%d");
+        igStringObj_SetInt((int)text.p, value, "%d");
     }
 }
 
 static inline const char *textOf(const TextValue *value) {
     const char *s = value->text;
-    s = (s == 0) ? g_stringObjEmptyText[0] : s;
+    s = (s == 0) ? g_stringObjEmptyText : s;
     return s;
 }
 
 FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options) {
-    igSmartPointer<TextValue> text(igStringObj_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString[0])));
+    igSmartPointer<TextValue> text((TextValue *)igStringObj_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString))));
     FrameBufferFormat format;
     format.enabled = 1;
     format.width = options->width;
@@ -938,7 +938,7 @@ unsigned char g_displayErrorIgnored;
  * scratchpad allocator when the options ask for it) set to the NTSC or PAL video mode, with a
  * frame buffer of the requested format and the options' clear colour. A window that cannot be
  * created ends the program. */
-igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
+igSmartPointer<igWindow> Viewer_CreateDisplay(int allocator) {
     int windowAllocator;
     int frameBuffer;
     ViewerOptions_2382e0 *options;
@@ -947,7 +947,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     int colorBits;
     int alphaBits;
     int depthBits;
-    if (allocator == 0) allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
+    if (allocator == 0) allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
     windowAllocator = allocator;
     if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *shared = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
@@ -956,7 +956,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     }
     g_sharedViewerOptions->useCount++;
     options = (ViewerOptions_2382e0 *)g_sharedViewerOptions;
-    igSmartPointer<igWindowView> window(igWindow_CreateInstance(windowAllocator));
+    igSmartPointer<igWindow> window(igWindow_CreateInstance(windowAllocator));
     if (window.p == 0) {
         if (g_displayErrorIgnored == 0) {
             int answer = igReportError("Failed to create display. Aborting\n");
@@ -966,14 +966,14 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     }
     if (options->allocateVisualContextInScratchPad != 0) {
         int scratchpad;
-        if (g_useOwnerAllocator != 0) scratchpad = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
-        else scratchpad = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleFast[0]);
+        if (g_useOwnerAllocator != 0) scratchpad = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
+        else scratchpad = (int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleFast));
         contextAllocator = scratchpad;
         if (scratchpad == 0) contextAllocator = windowAllocator;
     } else {
         contextAllocator = windowAllocator;
     }
-    igSmartPointer<igVisualContextView> visualContext(igVisualContext_CreateInstance(contextAllocator));
+    igSmartPointer<igVisualContextView> visualContext((igVisualContextView *)igVisualContext_CreateInstance(contextAllocator));
     VideoMode mode;
     mode.pal = 0;
     mode.interlace = 0;
@@ -995,9 +995,9 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     visualContext->setVideoMode(&mode);
     FrameBufferFormat requested = ViewerOptions_GetRequestedFormat(options);
     frameBuffer = visualContext->addFrameBuffer(&requested);
-    window->setVisualContext(visualContext);
-    if (window->open("", options->width, options->height) == 0) {
-        return igSmartPointer<igWindowView>(0, kRetainReference);
+    ((igWindowView *)window.p)->setVisualContext(visualContext);
+    if (((igWindowView *)window.p)->open("", options->width, options->height) == 0) {
+        return igSmartPointer<igWindow>(0, kRetainReference);
     }
     if (options->reportVideoFormat != 0) {
         context = visualContext.p;
@@ -1006,7 +1006,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
         depthBits = context->getDepthBits(frameBuffer);
         printf("Actual format: color=%d, alpha=%d, depth=%d, stencil=%d\n", colorBits, alphaBits, depthBits, context->getStencilBits(frameBuffer));
     }
-    fflush(_impure_ptr->_stdout);
+    fflush(stdout);
     visualContext->setClearColor(&options->clearColor);
     visualContext->setCapability0(1);
     releaseSharedOptions();

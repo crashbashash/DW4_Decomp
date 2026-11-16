@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWItemImportant_metaObject;
 
 beNDMWItemImportant *beNDMWItemImportant_Create(int allocator) {
     beNDMWItemImportant_EnsureRegistered();
-    return (beNDMWItemImportant *)igMetaObject_CreateInstance(g_beNDMWItemImportant_metaObject, allocator);
+    return (beNDMWItemImportant *)igMetaObject_CreateInstance(g_beNDMWItemImportant_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWItemImportant_GetReadyMetaObject(void) {
@@ -21,7 +21,7 @@ int beNDMWItemImportant_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWItemImportant_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void beNDMWItemImportant_EnsureRegistered(void)
@@ -29,7 +29,7 @@ void beNDMWItemImportant_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWItemImportant_Register);
 }
 
-void *beNDMWItemImportant_Register(void) {
+CallbackArray *beNDMWItemImportant_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

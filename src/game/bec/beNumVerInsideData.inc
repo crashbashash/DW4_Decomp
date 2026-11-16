@@ -4,7 +4,7 @@ igMetaField *g_beNumVerInsideData_kindMetaField;
 
 int beNumVerInsideData_Create(int allocator) {
     beNumVerInsideData_EnsureRegistered();
-    return igMetaObject_CreateInstance(*(int *)0x5886B0, allocator);
+    return (int)igMetaObject_CreateInstance(g_beNumVerInsideData_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNumVerInsideData_GetMetaObject(void) {
@@ -23,7 +23,7 @@ int beNumVerInsideData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beNumVerInsideData_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beNumVerInsideData_EnsureRegistered(void)
@@ -31,7 +31,7 @@ void beNumVerInsideData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNumVerInsideData_Register);
 }
 
-void *beNumVerInsideData_Register(void) {
+CallbackArray *beNumVerInsideData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -72,9 +72,9 @@ static int g_beNumVerInsideData_fieldOffsets[] = {
 
 void beNumVerInsideData_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beNumVerInsideData_metaObject;
+    meta = g_beNumVerInsideData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNumVerInsideData_ctorTable, 2);
     igMetaObject_NameFields(meta, g_beNumVerInsideData_fieldTable, g_beNumVerInsideData_fieldHandles, g_beNumVerInsideData_fieldOffsets, base);

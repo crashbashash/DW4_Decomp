@@ -2,12 +2,12 @@ igMetaObject *g_igWindow_metaObject;
 
 igWindow *igWindow_CreateInstance(int allocator) {
     FUN_00145de0();
-    return (igWindow *)igMetaObject_CreateInstance((int)g_igWindow_metaObject, allocator);
+    return (igWindow *)igMetaObject_CreateInstance(g_igWindow_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *FUN_00145d40(void) {
     if (g_igWindow_metaObject == 0) {
-        g_igWindow_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igWindow_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igWindow_metaObject;
 }
@@ -25,9 +25,9 @@ void FUN_00145de0(void)
     igMetaObject_RunStaticInit(igWindow_Register);
 }
 
-void igWindow_Register(void) {
+CallbackArray *igWindow_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igWindow_metaObject,
         igEventProducer_Register,

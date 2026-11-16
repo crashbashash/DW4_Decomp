@@ -6,7 +6,7 @@ igMetaField *g_igGuiSystemRenderer_displayListAttrMetaField;
 
 igMetaObject *FUN_0044e6b0(void) {
     if (g_igGuiSystemRenderer_metaObject == 0) {
-        g_igGuiSystemRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGuiSystemRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGuiSystemRenderer_metaObject;
 }
@@ -22,14 +22,14 @@ igMetaObject *igGuiSystemRenderer_GetMetaObject(void)
 int igGuiSystemRenderer_GetVTable(void) {
     struct Obj_44e750 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w2 = 0;
     obj.vt = &g_igGuiSystemRenderer_vtable[0];
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igGuiSystemRenderer_vtable[0];
     FUN_00197160(&obj.w6, -1);
     FUN_001d9870(&obj.w5, -1);
@@ -46,9 +46,9 @@ void igGuiSystemRenderer_RunStaticInit(void)
 
 static igMetaObjectCallback g_igGuiSystemRenderer_callbackList[] = { igNode_EnsureRegistered, igGuiSystemModel_RunStaticInit, igCommonTraversal_EnsureRegistered, FUN_00138160, 0 };
 
-void igGuiSystemRenderer_Register(void) {
+CallbackArray *igGuiSystemRenderer_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGuiSystemRenderer_metaObject,
         igRenderer_Register,
@@ -101,17 +101,17 @@ void igGuiSystemRenderer_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igGuiSystemRenderer_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igGuiSystemRenderer_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNode_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGuiSystemRenderer_ctorTable, 4);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igNode_GetOrCreateMetaObject());
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0044f210();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
+    temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_001a38e0();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
+    temp_s1_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_00137fb0();
-    igMetaObject_NameFields(temp_s0, g_igGuiSystemRenderer_fieldTable, g_igGuiSystemRenderer_fieldHandles, g_igGuiSystemRenderer_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiSystemRenderer_fieldTable, g_igGuiSystemRenderer_fieldHandles, g_igGuiSystemRenderer_fieldOffsets, temp_s2);
 }
 

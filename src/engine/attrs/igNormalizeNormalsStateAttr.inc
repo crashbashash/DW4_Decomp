@@ -3,7 +3,7 @@ igMetaField *g_igNormalizeNormalsStateAttr_enabledMetaField;
 
 igMetaObject *FUN_00134fb0(void) {
     if (g_igNormalizeNormalsStateAttr_metaObject == 0) {
-        g_igNormalizeNormalsStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igNormalizeNormalsStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igNormalizeNormalsStateAttr_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igNormalizeNormalsStateAttr_GetMetaObject(void)
 
 int igNormalizeNormalsStateAttr_GetVTable(void) {
     struct Obj obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igNormalizeNormalsStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igNormalizeNormalsStateAttr_EnsureRegistered(void)
@@ -28,9 +28,9 @@ void igNormalizeNormalsStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igNormalizeNormalsStateAttr_Register);
 }
 
-void igNormalizeNormalsStateAttr_Register(void) {
+CallbackArray *igNormalizeNormalsStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igNormalizeNormalsStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -50,7 +50,7 @@ void thunk_igNormalizeNormalsStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igNormalizeNormalsStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igNormalizeNormalsStateAttr_fieldTable[] = {
     "_enabled",

@@ -2,7 +2,7 @@ igMetaObject *g_igGeometryAttrList_metaObject;
 
 igMetaObject *igGeometryAttrList_GetOrCreateMetaObject(void) {
     if (g_igGeometryAttrList_metaObject == 0) {
-        g_igGeometryAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGeometryAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGeometryAttrList_metaObject;
 }
@@ -17,9 +17,9 @@ igMetaObject *igGeometryAttrList_GetMetaObject(void)
 
 int igGeometryAttrList_GetVTable(void) {
     int obj[8];
-    igObject_InitHeader(obj);
+    igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igGeometryAttrList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igGeometryAttrList_EnsureRegistered(void)
@@ -29,9 +29,9 @@ void igGeometryAttrList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igGeometryAttrList_callbackList[] = { FUN_001378f0, 0 };
 
-void igGeometryAttrList_Register(void) {
+CallbackArray *igGeometryAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometryAttrList_metaObject,
         igObjectList_Register,

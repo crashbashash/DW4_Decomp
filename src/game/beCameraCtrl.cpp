@@ -1,14 +1,36 @@
 #include "dw4/reflected.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/beTime.h"
+#include "dw4/StringPool.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beBaseInfoRam.h"
+#include "dw4/beCameraBoxData.h"
+#include "dw4/beCameraCtrl.h"
+#include "dw4/beCameraCtrlInfo.h"
+#include "dw4/beCameraCtrlInfoRamShake.h"
+#include "dw4/beCameraDemoData.h"
+#include "dw4/beCameraMode.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igBitMask.h"
+#include "dw4/igCamera.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igGraphPath.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include "dw4/igViewManager.h"
+#include "dw4/igViewerSceneInfoManager.h"
+#include <string.h>
 #pragma push
 #pragma readonly_strings on
-#define SELECT_ALLOCATOR(var, owner) { var = igObject_GetAllocator(owner); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
+#define SELECT_ALLOCATOR(var, owner) { var = (int)igObject_GetAllocator((igObject *)owner); var = g_useOwnerAllocator ? var : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (q); if (o_ != 0) { o_->_refCount = o_->_refCount - 1; if (((unsigned long long)((long long)(int)o_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o_); } } }
 #define OBJECT_LIST(handle) ((igObjectList *)(handle))
 #define TRANSFORM_AT(list, i) ((igTransform *)((int *)OBJECT_LIST(list)->_data)[i])
 #define NAME_OR_EMPTY(n) ((n) != 0 ? (n) : emptyString)
-#define ENSURE_DATA_LIST(ram) if ((ram)->_dataList == 0) { void *alloc; SELECT_ALLOCATOR(alloc, ram) DataList::Install(ram, DataListRef(beBaseInfoDataList_Create(alloc))); }
+#define ENSURE_DATA_LIST(ram) if ((ram)->_dataList == 0) { int alloc; SELECT_ALLOCATOR(alloc, ram) DataList::Install(ram, DataListRef(beBaseInfoDataList_Create(alloc))); }
 
 /* The messages a beCameraCtrl answers, in the order of its message enum (beCameraCtrl_GetMessageEnum). */
 enum beCameraCtrlMessage {
@@ -30,8 +52,8 @@ enum beCameraCtrlMessage {
 };
 
 extern "C" {
-int beCameraCtrl_GetInfoMeta(void);
-int beCameraCtrl_GetMeta(void);
+igMetaObject *beCameraCtrl_GetInfoMeta(void);
+igMetaObject *beCameraCtrl_GetMeta(void);
 void beCameraCtrl_OnAddRam(beCameraCtrl *self, int ram, char *unused);
 void beCameraCtrl_UpdateRam(beCameraCtrl *self, beBaseInfoRam *ram);
 void beCameraCtrl_Prepare(beCameraCtrl *self);
@@ -43,68 +65,12 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram);
 void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram);
 void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path);
 
-void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-int beMessenger_SendGroup(...);
-int beMessenger_GetMatrixCount(...);
-int beMessenger_GetMatrix(...);
-int beMessenger_AppendString(...);
-int beMessenger_AppendVec3(...);
-int beMessenger_GetBool(...);
-int beMessenger_GetBoolCount(...);
-float beMessenger_GetFloat(...);
-char *beMessenger_GetString(...);
-int beMessenger_ResizeBool(...);
-unsigned int beMessenger_ResolveEnumValue(...);
-int beMessenger_SetBool(...);
-int beCameraCtrl_GetMessageEnum(...);
-void *beCameraMode_Create(...);
-void *beCameraCtrlInfoRamShake_Create(...);
-void *beBaseInfoDataList_Create(...);
-unsigned char beBaseInfoRam_HasTimer(...);
-int beBaseInfoRam_StartTimer(...);
-float beBaseInfoRam_GetTimerFrameDelta(void *, char *);
-int beBaseInfoRam_IsTimerExpired(...);
-int beBaseInfoRam_RemoveTimer(...);
-void igViewerSceneInfoManager_ResetOperationMode(int);
-int igViewerSceneInfoManager_DebugZoomOut(...);
-int igViewManager_SetViewMode(...);
-void *igInsightCore_FindManager(...);
-int igInsightCore_AddToScheduler(int, beCameraCtrl *);
-int igInsightCore_RemoveFromScheduler(int, beCameraCtrl *);
-int igObject_Destroy(...);
-void *igObject_GetAllocator(...);
-int igObject_IsKindOf(igObject *, int);
-void *Memory_GetAllocatorBySelector(...);
-void *igProperty_FindByName(...);
-int ObjectList_AppendRetained(...);
 int ObjectList_RemoveFirstRetained(...);
-igObject *igGraphPath_GetTail(igObject *);
-int igBitMask_SetAll(...);
-int igBitMask_ClearAll(...);
 int igAABox_GetCorner(void *, int, float *);
-int igMatrix44f_GetTranslation(void *, float *);
-int igMatrix44f_SetTranslation(void *, void *);
 int igMatrix44f_Copy(void *, void *);
-int igMatrix44f_GetQuaternion(float *, void *);
-int igMatrix44f_SetQuaternion(void *, float *);
 void *Vec3_Lerp(float *, float, float *, float *);
 void *Quaternion_Lerp(float *, float, float *, float *);
-int StringPool_Allocate(...);
-int StringPool_Construct(...);
-char *StringPool_Intern(...);
-int StringChunk_ReleaseHeader(...);
-int strcmp(...);
 
-extern int g_beCameraCtrlInfo_metaObject[4];
-extern int g_beCameraCtrl_metaObject[4];
-extern igMetaObject *g_beCameraBoxData_metaObject;
-extern igMetaObject *g_beCameraDemoData_metaObject;
-extern int g_igCamera_metaObject[16];
-extern int g_igViewerSceneInfoManager_metaObject[4];
-extern int g_propertyNameField[4];
-extern int kIGMemoryPoolHandleUser1[4];
-extern int g_stringPool[4];
-extern unsigned char g_useOwnerAllocator;
 extern char emptyString[];
 /* per shake step: the eye and interest offsets along x and y, indexed by the move code digit */
 float g_cameraShakeOffsetX[12] = {0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f};
@@ -134,7 +100,7 @@ struct DataList {
      * SHAKE message are written out as blocks; that orders the three holder stack slots as retail has them. */
     static inline void Ensure(void *owner, beBaseInfoRam *ram) {
         if (ram->_dataList == 0) {
-            void *alloc;
+            int alloc;
             SELECT_ALLOCATOR(alloc, owner)
             DataListRef created(beBaseInfoDataList_Create(alloc));
             igObject *r = created.p;
@@ -145,14 +111,14 @@ struct DataList {
     }
 };
 
-int beCameraCtrl_GetInfoMeta(void)
+igMetaObject *beCameraCtrl_GetInfoMeta(void)
 {
-    return g_beCameraCtrlInfo_metaObject[0];
+    return g_beCameraCtrlInfo_metaObject;
 }
 
 void beCameraCtrl_OnAddRam(beCameraCtrl *self, int ram, char *unused)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "CAMERA");
+    beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, "CAMERA");
 }
 
 void beCameraCtrl_Prepare(beCameraCtrl *self) {
@@ -161,7 +127,7 @@ void beCameraCtrl_Prepare(beCameraCtrl *self) {
     self->_cameraNow = 0;
     self->_cameraOld = 0;
     if (self->_viewerMang != 0) {
-        igViewerSceneInfoManager_ResetOperationMode(self->_viewerMang);
+        igViewerSceneInfoManager_ResetOperationMode((igViewerSceneInfoManager *)self->_viewerMang);
     }
     mode = (igObject *)self->_cameraMode;
     if (mode != 0) {
@@ -208,7 +174,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
     int n;
     int i;
     bool moved;
-    void *alloc;
+    int alloc;
     int camera;
 
     box = (beCameraBoxData *)((beCameraCtrlInfo *)ram->_parentInfo)->_data;
@@ -229,12 +195,12 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
-    beMessenger_SendGroup(self->_messenger, "PLAYER", "GETMATRIX");
-    if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
-        n = beMessenger_GetMatrixCount(self->_messenger);
+    beMessenger_SendGroup((beMessenger *)self->_messenger, "PLAYER", "GETMATRIX");
+    if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
+        n = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);
         for (i = 0; i < n; i++) {
-            beMessenger_GetMatrix(matrix, self->_messenger, i);
-            igMatrix44f_GetTranslation(matrix, pos);
+            beMessenger_GetMatrix(matrix, (beMessenger *)self->_messenger, i);
+            igMatrix44f_GetTranslation((const float *)matrix, pos);
             x += pos[0];
             y += pos[1];
             z += pos[2];
@@ -268,7 +234,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "SHK");
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "SHK");
                 if (shake != 0) {
                     if (shake->_isFirst != 0) {
                         shake->_isFirst = 0;
@@ -317,7 +283,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     igMatrix44f_Copy(self->_intMatrix, TRANSFORM_AT(box->_intPosList, 0)->_m);
                     self->_cameraNowFrame = 0.0f;
                     if (self->_viewerMang == 0) {
-                        igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+                        igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
                         self->_viewerPara = viewer->_parameters;
                         self->_viewerMang = (int)viewer;
                     }
@@ -337,7 +303,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     mode->_isEnd = 0;
                     mode->_nowTimeL = 0;
                     mode->_svWorldTimeL = 0;
-                    igViewManager_SetViewMode(((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager, mode);
+                    igViewManager_SetViewMode((igViewManager *)((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager, (igViewMode *)mode);
                 }
             }
         }
@@ -391,7 +357,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "SHK");
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "SHK");
                 if (shake != 0) {
                     float *matrix44;
                     int k = 0;
@@ -442,13 +408,13 @@ void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
     switch (ram->_st0) {
     case 0: {
         if (self->_viewerMang == 0) {
-            igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+            igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
             self->_viewerPara = viewer->_parameters;
             self->_viewerMang = (int)viewer;
         }
         beCameraMode *mode = (beCameraMode *)self->_cameraMode;
         if (mode == 0) {
-            void *alloc;
+            int alloc;
             SELECT_ALLOCATOR(alloc, self)
             CameraModeRef created(beCameraMode_Create(alloc));
             igObject *r = created.p;
@@ -464,7 +430,7 @@ void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         mode->_isEnd = 0;
         mode->_nowTimeL = 0;
         mode->_svWorldTimeL = 0;
-        igViewManager_SetViewMode(((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager, mode);
+        igViewManager_SetViewMode((igViewManager *)((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager, (igViewMode *)mode);
         ram->_st0 = ram->_st0 + 1;
         ram->_st3 = 0;
         ram->_st2 = 0;
@@ -478,8 +444,8 @@ void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
 
 void beCameraCtrl_UpdateRam(beCameraCtrl *self, beBaseInfoRam *ram) {
     if (self->_isFirst != 0) {
-        igInsightCore_RemoveFromScheduler(self->_insight, self);
-        igInsightCore_AddToScheduler(self->_insight, self);
+        igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
+        igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
         self->_isFirst = 0;
     }
     if (ram->_isRun != 0) {
@@ -498,10 +464,10 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
     char *moveCode;
     beCameraCtrlInfoRamShake *shake;
 
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beCameraCtrl_GetMessageEnum(), message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beCameraCtrl_GetMessageEnum(), (const char *)message)) {
     case MSG_GETDEMONAME:
         if (beCameraCtrl_IsDemoCamera(self, info) != 0) {
-            beMessenger_AppendString(self->_messenger, NAME_OR_EMPTY((char *)info->_name));
+            beMessenger_AppendString((beMessenger *)self->_messenger, NAME_OR_EMPTY((char *)info->_name));
         }
         return 1;
     case MSG_SETBOXCAMERA:
@@ -516,7 +482,7 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
         }
         return 1;
     case MSG_SETDEMOCAMERA:
-        wanted = beMessenger_GetString(self->_messenger, 0);
+        wanted = (char *)beMessenger_GetString((beMessenger *)self->_messenger, 0);
         if (beCameraCtrl_IsBoxCamera(self, info) != 0) {
             beCameraCtrl *owner = (beCameraCtrl *)ram->_parentManager;
             bool found = false;
@@ -555,20 +521,20 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
         }
         return 1;
     case MSG_ISDEMOCAMERA:
-        if (beMessenger_GetBoolCount(self->_messenger) <= 0) {
-            beMessenger_ResizeBool(self->_messenger, 1);
-            beMessenger_SetBool(self->_messenger, 0, 0);
-        } else if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
+        if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) <= 0) {
+            beMessenger_ResizeBool((beMessenger *)self->_messenger, 1);
+            beMessenger_SetBool((beMessenger *)self->_messenger, 0, 0);
+        } else if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == 1) {
             return 1;
         }
         if (ram->_isRun == 1 && beCameraCtrl_IsDemoCamera(self, info) != 0) {
             switch (ram->_st0) {
             case 0:
-                beMessenger_SetBool(self->_messenger, 0, 1);
+                beMessenger_SetBool((beMessenger *)self->_messenger, 0, 1);
                 break;
             case 1:
                 if (((beCameraMode *)self->_cameraMode)->_isEnd == 0) {
-                    beMessenger_SetBool(self->_messenger, 0, 1);
+                    beMessenger_SetBool((beMessenger *)self->_messenger, 0, 1);
                 }
                 break;
             }
@@ -578,16 +544,16 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
         pos[0] = self->_avgPos[0];
         pos[1] = self->_avgPos[1];
         pos[2] = self->_avgPos[2];
-        beMessenger_AppendVec3(self->_messenger, pos);
+        beMessenger_AppendVec3((beMessenger *)self->_messenger, pos);
         return 1;
     case MSG_SHOWPOLYGON:
         if (beCameraCtrl_IsBoxCamera(self, info) != 0) {
-            igBitMask_SetAll(((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask);
+            igBitMask_SetAll((igBitMask *)((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask);
         }
         return 1;
     case MSG_HIDEPOLYGON:
         if (beCameraCtrl_IsBoxCamera(self, info) != 0) {
-            igBitMask_ClearAll(((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask);
+            igBitMask_ClearAll((igBitMask *)((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask);
         }
         return 1;
     case MSG_ENABLE:
@@ -603,7 +569,7 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
     case MSG_SHAKE:
         if (beCameraCtrl_IsBoxCamera(self, info) != 0) {
             if (ram->_dataList == 0) {
-                void *alloc;
+                int alloc;
                 SELECT_ALLOCATOR(alloc, self)
                 DataListRef created(beBaseInfoDataList_Create(alloc));
                 igObject *r = created.p;
@@ -612,34 +578,34 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
                 ram->_dataList = (int)r;
             }
             DataList::Ensure(ram, ram);
-            shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], "SHK");
+            shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "SHK");
             if (shake == 0) {
-                void *alloc;
+                int alloc;
                 SELECT_ALLOCATOR(alloc, self)
                 ShakeRef created(beCameraCtrlInfoRamShake_Create(alloc));
-                ObjectList_AppendRetained((void *)ram->_dataList, (void *)created.p);
+                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)created.p);
                 shake = (beCameraCtrlInfoRamShake *)created.p;
             }
-            moveCode = beMessenger_GetString(self->_messenger, 0);
-            if (g_stringPool[0] == 0) {
-                int pool = StringPool_Allocate(0x10);
+            moveCode = (char *)beMessenger_GetString((beMessenger *)self->_messenger, 0);
+            if (g_stringPool == 0) {
+                StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
                 if (pool != 0) pool = StringPool_Construct(pool);
-                g_stringPool[0] = pool;
+                g_stringPool = pool;
             }
             {
-                char *interned = StringPool_Intern(g_stringPool[0], moveCode);
+                char *interned = StringPool_Intern(g_stringPool, moveCode);
                 char *old = (char *)shake->_moveCode;
                 if (old != 0) {
                     int *header = (int *)old - 2;
                     int refs = ((int *)old)[-1] - 1;
                     ((int *)old)[-1] = refs;
-                    if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+                    if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
                 }
                 shake->_moveCode = (int)interned;
             }
-            shake->_value = beMessenger_GetFloat(self->_messenger, 0);
-            shake->_oneTime = beMessenger_GetFloat(self->_messenger, 1);
-            shake->_endTime = beMessenger_GetFloat(self->_messenger, 2);
+            shake->_value = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
+            shake->_oneTime = beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
+            shake->_endTime = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);
             shake->_movePoint = 0;
             beBaseInfoRam_StartTimer(ram, "SHAKEALL", FramesToTime(shake->_endTime));
             beBaseInfoRam_RemoveTimer(ram, "SHAKEONE");
@@ -667,7 +633,7 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
         if (beCameraCtrl_IsBoxCamera(self, info) != 0) {
             beCameraCtrl_EnableDebugZoom(self, ram, 1);
             if (self->_debugZoom == 1.0f) {
-                int viewer = ((int)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]));
+                igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
                 int k = 0;
                 do {
                     igViewerSceneInfoManager_DebugZoomOut(viewer);
@@ -693,12 +659,12 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
     }
 }
 
-int beCameraCtrl_GetMeta(void)
+igMetaObject *beCameraCtrl_GetMeta(void)
 {
-    return g_beCameraCtrl_metaObject[0];
+    return g_beCameraCtrl_metaObject;
 }
 
-static inline igObject *AsCamera(igObject *o) { if (o != 0 && igObject_IsKindOf(o, g_igCamera_metaObject[0]) != 0) { return o; } return 0; }
+static inline igObject *AsCamera(igObject *o) { if (o != 0 && igObject_IsKindOf(o, g_igCamera_metaObject) != 0) { return o; } return 0; }
 
 void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path) {
     igObject *camera;
@@ -715,7 +681,7 @@ void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path) {
             }
         }
         mode->_cameraPath = (int)path;
-        camera = igGraphPath_GetTail(path);
+        camera = igGraphPath_GetTail((igGraphPath *)path);
         camera = AsCamera(camera);
         if (camera != 0) {
             camera->_refCount = camera->_refCount + 1;

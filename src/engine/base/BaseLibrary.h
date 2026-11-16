@@ -17,13 +17,53 @@
 #include "dw4/igDataLists.h"
 #include "dw4/igStringObj.h"
 #include "dw4/igMemory.h"
+#include "dw4/igBoolList.h"
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igCharMetaField.h"
+#include "dw4/igCompoundMetaField.h"
+#include "dw4/igDirectory.h"
+#include "dw4/igDoubleMetaField.h"
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIGBFile.h"
+#include "dw4/igInfo.h"
+#include "dw4/igInfoList.h"
+#include "dw4/igIntList.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igLongMetaField.h"
+#include "dw4/igMatrix44fMetaField.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igMetaObjectList.h"
+#include "dw4/igMetaObjectListList.h"
+#include "dw4/igObjectListList.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igRawRefMetaField.h"
+#include "dw4/igRegistry.h"
+#include "dw4/igShortMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igStringRefList.h"
+#include "dw4/igStringRefListList.h"
+#include "dw4/igUnsignedCharMetaField.h"
+#include "dw4/igUnsignedIntMetaField.h"
+#include "dw4/igUnsignedLongMetaField.h"
+#include "dw4/igUnsignedShortMetaField.h"
+#include "dw4/igVec2fMetaField.h"
+#include "dw4/igVec3fMetaField.h"
+#include "dw4/igVec4fMetaField.h"
+#include "dw4/igVec4ucMetaField.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igTransform.h"
+#include "dw4/igSceneInfo.h"
+#include "dw4/igAnimationDatabase.h"
+#include "dw4/igSegment.h"
+#include "dw4/ClassRegistration.h"
+#include <stdio.h>
 
 typedef void (*igMetaObjectCallback)();
 
 extern int DAT_0052bea0[4];
 extern igMetaObject *g_igCompoundList_metaObject;
 extern int g_igCompoundList_vtable[4];
-extern igMetaObject *g_igDoubleMetaField_metaObject;
 extern igMetaObject *g_igOptBase_metaObject;
 extern igMetaObject *g_igOptInterface_metaObject;
 extern int g_igOptInterface_vtable[4];
@@ -69,62 +109,20 @@ extern int g_igItemDataBaseList_vtable[4];
 extern char igCompoundList_GetPublishedMetaObject[];
 extern igMetaObject *g_igItemDataBaseField_metaObject;
 extern int g_igItemDataBaseField_vtable[4];
-extern int g_igCompoundMetaField_vtable[4];
-extern int g_igMetaField_vtable[4];
-extern char igCompoundMetaField_GetPublishedMetaObject[];
-extern char igCompoundMetaField_Register[];
 extern igMetaObject *g_igItemBase_metaObject;
 extern int g_igInterface_vtable[4];
 extern igMetaObject *g_igFileInfoList_metaObject;
 extern int g_igFileInfoList_vtable[4];
 extern igMetaObject *g_igFileInfo_metaObject;
 extern int g_igFileInfo_vtable[4];
-extern char igNamedObject_GetPublishedMetaObject[];
-extern igMetaObject *g_igGroup_metaObject[4];
-extern igMetaObject *g_igActor_metaObject[4];
-extern int g_igTransform_metaObject[4];
-extern igMetaObject *g_igInfo_metaObject[4];
-extern int g_igSceneInfo_metaObject[4];
-extern int g_igAnimationDatabase_metaObject[4];
-extern int g_igMetaObject_metaObject[4];
 extern char emptyString[];
-extern int g_igVec4ucMetaField_metaObject[4];
-extern int g_igVec4fMetaField_metaObject[4];
 extern int DAT_00560f60[4];
 extern int DAT_00560f68[4];
-extern int g_igVec3fMetaField_metaObject[4];
 extern int DAT_00560f80[4];
-extern int g_igVec2fMetaField_metaObject[4];
 extern int DAT_00560f98[4];
-extern int g_igMatrix44fMetaField_metaObject[4];
 extern int DAT_00561010[4];
-extern int g_igUnsignedShortMetaField_metaObject[4];
-extern int g_igUnsignedLongMetaField_metaObject[4];
-extern int g_igUnsignedIntMetaField_metaObject[4];
-extern int g_igUnsignedCharMetaField_metaObject[4];
-extern int g_igStringMetaField_metaObject[4];
-extern int g_igShortMetaField_metaObject[4];
-extern int g_igRawRefMetaField_metaObject[4];
-extern int g_igObjectRefMetaField_metaObject[4];
-extern int g_igMemoryRefMetaField_metaObject[4];
-extern int g_igLongMetaField_metaObject[4];
-extern int g_igIntMetaField_metaObject[4];
-extern int g_igFloatMetaField_metaObject[4];
-extern int g_igEnumMetaField_metaObject[4];
-extern int g_igCharMetaField_metaObject[4];
-extern int g_igBoolMetaField_metaObject[4];
 
 extern "C" {
-void igNonRefCountedNodeList_EnsureRegistered(void);
-void igIGBFile_EnsureRegistered(void);
-void igDirectory_EnsureRegistered(void);
-void igStringRefListList_EnsureRegistered(void);
-void igMetaObjectListList_EnsureRegistered(void);
-void igIntList_EnsureRegistered(void);
-void igObjectListList_EnsureRegistered(void);
-void igBoolList_EnsureRegistered(void);
-void igRegistry_EnsureRegistered(void);
-void igInfoList_EnsureRegistered(void);
 igMetaField *igIntMetaField_Create(void *);
 igMetaField *igMemoryRefMetaField_Create(void *);
 igMetaField *igStringMetaField_Create(void *);
@@ -134,40 +132,21 @@ int igUnsignedCharMetaField_GetDefaultDescriptor(...);
 int igSmartPointer_igMetaObjectList_Destruct(...);
 int igSmartPointer_igInfoList_Destruct(...);
 void igStringRef_Destruct(...);
-int __dl__FPv(...);
-int igInfoList_GetOrCreateMetaObject(...);
-int igMetaObjectList_GetOrCreateMetaObject(...);
 int igStringMetaField_SetDefaultText(...);
-int igRegistry_GetOrCreateMetaObject(...);
-int igStringRefList_GetOrCreateMetaObject(...);
-int igObjectListList_GetOrCreateMetaObject(...);
-int igBoolList_GetOrCreateMetaObject(...);
 int igSmartPointer_igObjectList_Destruct(...);
-int igObjectList_GetOrCreateMetaObject(...);
 int FUN_0019c8c0(...);
-int igIntList_GetOrCreateMetaObject(...);
-int igStringRefListList_GetOrCreateMetaObject(...);
-int igMetaObjectListList_GetOrCreateMetaObject(...);
 int ObjectPointerList_FindIndex(...);
 int MetaRefList_AppendRetained(...);
-void igStringRefList_EnsureRegistered(void);
-void igMetaObjectList_EnsureRegistered(void);
 igMetaField *igObjectRefMetaField_Create(void *);
 int igNamedObject_Destroy(...);
 int igSmartPointer_igDirectory_Destruct(...);
-int igIGBFile_GetOrCreateMetaObject(...);
-int igDirectory_GetOrCreateMetaObject(...);
 int Memory_GetDefaultHandleAllocator(...);
 int FUN_002fdef0(void *meta, void *field);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
-int igMatrix44f_SetIdentity(...);
 int igMatrix44f_Multiply(...);
 int igMatrix44f_Copy(...);
 igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(int);
-int fflush(...);
-int vprintf(...);
-igMetaObject *igSegment_GetMetaObject(void);
 void *igInfoList_Create(int arg0);
 int FUN_001d6340(...);
 int FUN_0022c150(...);
@@ -205,7 +184,7 @@ struct Obj_6 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -216,7 +195,7 @@ struct Obj_6 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -251,14 +230,14 @@ template <class T> struct igSmartPointer_2 {
         T *q = p;
         if (q != 0) {
             q->refs = q->refs - 1;
-            if ((q->refs & 0x7fffff) == 0) igObject_Destroy(q);
+            if ((q->refs & 0x7fffff) == 0) igObject_Destroy((igObject *)q);
         }
     }
     void operator=(T *n) {
         T *q = p;
         if (q != 0) {
             q->refs = q->refs - 1;
-            if ((q->refs & 0x7fffff) == 0) igObject_Destroy(q);
+            if ((q->refs & 0x7fffff) == 0) igObject_Destroy((igObject *)q);
         }
         p = n;
     }
@@ -362,7 +341,7 @@ struct RT { int word0; int references;
     static void rel(RT *o) {
         if (o) {
             --o->references;
-            if (((unsigned long long)(long long)o->references & 0x7fffffULL) == 0) igObject_Destroy(o);
+            if (((unsigned long long)(long long)o->references & 0x7fffffULL) == 0) igObject_Destroy((igObject *)o);
         }
     }
 };
@@ -393,7 +372,7 @@ typedef struct Q { char pad[8]; int f8; } Q;
 struct O_2 {
     char pad[8]; int f8;
     static inline O_2 *Cast(O_2 *p) {
-        if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igMatrix44fMetaField_metaObject[0]) != 0) {
+        if (p != 0 && igObject_IsKindOf((igObject *)p, g_igMatrix44fMetaField_metaObject) != 0) {
             return p;
         }
         return 0;
@@ -403,7 +382,7 @@ struct M { char pad[8]; int f8; };
 struct S_a { char pad0[8]; int f8; };
 struct K { 
   S_a *Cast(void *p) {
-    if (p != 0 && igObject_IsKindOf(p, g_igDoubleMetaField_metaObject) != 0) { return (S_a *)p; }
+    if (p != 0 && igObject_IsKindOf((igObject *)p, g_igDoubleMetaField_metaObject) != 0) { return (S_a *)p; }
     return 0;
   }
 };
@@ -636,8 +615,8 @@ void Gap__igListenerInterface__vfunc_13(igInterface *arg0, int flags);
 int Gap__igListenerBase__vfunc_28(void);
 int Gap__igListenerBase__vfunc_27(void);
 int Gap__igLockInterface__vfunc_27(int self, int mode);
-int Gap__igLogInterface__vfunc_24(void *d0, int arg1);
-int Gap__igLogInterface__vfunc_27(void *arg0, int arg1, int arg2);
+int Gap__igLogInterface__vfunc_24(void *d0, FILE *stream);
+int Gap__igLogInterface__vfunc_27(void *arg0, const char *format, va_list args);
 igMetaObject *Gap__Core__igInfo__vfunc_22(void);
 void Gap__igMessageInterface__vfunc_13(igMessageInterface *self, int flags);
 void FUN_0022b470(int arg0, int arg1);
@@ -648,7 +627,7 @@ bool FUN_0022b910(Own *arg0, V *arg1);
 bool FUN_0022bac0(void *arg0, void *arg1);
 void thunk_igObject_InitDefaults__0022bbc0(igObject *self);
 void Gap__igOptInterface__vfunc_13(void *arg0, int flags);
-int Gap__Core__igMetaObject__vfunc_22(void);
+igMetaObject *Gap__Core__igMetaObject__vfunc_22(void);
 void FUN_0022bc10(int *arg0, int arg1, int arg2, int arg3, int arg4);
 int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3);
 igMetaObject *Gap__igOptInterface__vfunc_22(void);
@@ -735,22 +714,22 @@ static inline void storeHeld(Lst *list, int index, const igSmartPointer<T_5> &va
     }
     it->held = held;
 }
-static inline void * cast0(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igVec4ucMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_2(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igUnsignedShortMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_3(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igUnsignedIntMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_4(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igStringMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igVec4ucMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_2(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igUnsignedShortMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_3(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igUnsignedIntMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_4(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igStringMetaField_metaObject) != 0) { return o; } return 0; }
 static inline int *castToType(int *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igShortMetaField_metaObject[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igShortMetaField_metaObject) != 0) {
         return object;
     }
     return 0;
 }
-static inline void * cast0_5(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igRawRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_6(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_7(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igMemoryRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_8(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igFloatMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_9(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igCharMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_10(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igBoolMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_5(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igRawRefMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_6(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igObjectRefMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_7(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igMemoryRefMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_8(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igFloatMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_9(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igCharMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_10(void * o) { if (o != 0 && igObject_IsKindOf((igObject *)o, g_igBoolMetaField_metaObject) != 0) { return o; } return 0; }
 static inline int f8_of(const S_6 *list) { return list->f8; }
 
 #endif

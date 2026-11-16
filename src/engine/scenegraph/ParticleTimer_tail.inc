@@ -7,7 +7,7 @@ void Gap__Bec__ParticleTimer__vfunc_35(ParticleTimer *arg0, RefCountedHeader *ar
     if (temp_a0 != 0) {
         temp_a0->references = (int)((int) (temp_a0->references - 1));
         if (((unsigned long long) ((long long) temp_a0->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->_attributes = (int)(arg1);
@@ -45,7 +45,7 @@ void FUN_001d9ac0(struct A_1d9ac0 *arg0, int arg1, int arg2) {
     int n2;
     int j;
 
-    ObjectList_AppendRetained(arg0->b->list);
+    ObjectList_AppendRetained((igObjectList *)arg0->b->list, (igObject *)arg1);
     FUN_001db720(arg0, arg0->b, arg2);
     l = arg0->b->list;
     n1 = l->cnt;
@@ -54,7 +54,7 @@ void FUN_001d9ac0(struct A_1d9ac0 *arg0, int arg1, int arg2) {
         if (p) {
             p->refs -= 1;
             if (0 == ((unsigned long long)((long long)p->refs << 0x29) >> 0x29)) {
-                igObject_Destroy((void *)p);
+                igObject_Destroy((igObject *)p);
             }
         }
     }

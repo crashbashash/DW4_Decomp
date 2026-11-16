@@ -28,7 +28,7 @@ static inline unsigned wrapT(const TextureAttr *a) { return a->wrapT; }
 int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator *allocator) {
     char text[8204];
     if (allocator == 0) {
-        allocator = (Allocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0]);
+        allocator = (Allocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault);
     }
     igSmartPointer<Image> image((Image *)igTextureAttr_GetImage((igTextureAttr *)attr, 0), kRetainReference);
     const char *name = "NO_IMAGE";
@@ -39,7 +39,7 @@ int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator
     }
     sprintf(text, "%s %d %d %d %d %d %d %d %d", name, attr->bColor, magFilter(attr), minFilter(attr), wrapS(attr), wrapT(attr), (long long)attr->mipmapMode, (long long)attr->source, (long long)attr->paging);
     int copy = allocator->allocate(strlen(text) + 1);
-    strcpy(copy, text);
+    strcpy((char *)copy, text);
     return copy;
 }
 
@@ -56,7 +56,7 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
     const char *var_a1;
     const char *var_s1;
 
-    if (sscanf(arg1, "%s %d %d %d %d %d %d %d %d", sp50, &sp206C, &sp2068, &sp2064, &sp2060, &sp205C, &sp2058, &sp2054, &sp2050) != 9) {
+    if (sscanf((const char *)arg1, "%s %d %d %d %d %d %d %d %d", sp50, &sp206C, &sp2068, &sp2064, &sp2060, &sp205C, &sp2058, &sp2054, &sp2050) != 9) {
         return 0;
     }
     var_s1 = "NO_IMAGE";
@@ -141,7 +141,7 @@ igImage *igTextureAttr_GetImage(igTextureAttr *self, int level) {
 
 void Gap__Attrs__igTextureAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults(arg0);
+    igObject_ReleaseDefaults((igObject *)arg0);
 }
 
 void Gap__Attrs__igTextureAttr__vfunc_28(S_140c70 *arg0) {

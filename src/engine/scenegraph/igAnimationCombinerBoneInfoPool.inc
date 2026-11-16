@@ -2,7 +2,7 @@ igMetaObject *g_igAnimationCombinerBoneInfoPool_metaObject;
 
 igAnimationCombinerBoneInfoPool *igAnimationCombinerBoneInfoPool_Create(int allocator) {
     igAnimationCombinerBoneInfoPool_RunStaticInit();
-    return (igAnimationCombinerBoneInfoPool *)igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfoPool_metaObject, allocator);
+    return (igAnimationCombinerBoneInfoPool *)igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfoPool_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igAnimationCombinerBoneInfoPool_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igAnimationCombinerBoneInfoPool_GetMetaObject(void)
 int igAnimationCombinerBoneInfoPool_GetVTable(void) {
     struct Obj_1a7d50 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAnimationCombinerBoneInfoPool_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAnimationCombinerBoneInfoPool_RunStaticInit(void)
@@ -28,9 +28,9 @@ void igAnimationCombinerBoneInfoPool_RunStaticInit(void)
 
 static igMetaObjectCallback g_igAnimationCombinerBoneInfoPool_callbackList[] = { FUN_001a8220, 0 };
 
-void igAnimationCombinerBoneInfoPool_Register(void) {
+CallbackArray *igAnimationCombinerBoneInfoPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationCombinerBoneInfoPool_metaObject,
         igObjectPool_Register,

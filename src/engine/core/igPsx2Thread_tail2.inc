@@ -32,7 +32,7 @@ void igPsx2Thread_Join(int *result, void *self, igPsx2ThreadView *thread) {
     *result = g_resultSuccess.v;
 }
 
-void igPsx2Thread_Sleep(int *result, int self, int nanoseconds) {
+void igPsx2Thread_Sleep(int *result, int self, unsigned long long nanoseconds) {
     if (g_igPsx2LongTimer_initialized != 0) {
         p2SleepMilliseconds((int)__udivdi3(nanoseconds, 0xF4240));
         *result = g_resultSuccess.v;
@@ -217,7 +217,7 @@ void igPsx2Thread_Start(int *out, igPsx2ThreadView *thread) {
     param.stack = (void *)thread->_stack;
     param.stackSize = thread->_stackSize;
     param.initPriority = thread->_priority / 2;
-    param.gpReg = (void *)&_gp[0];
+    param.gpReg = _gp;
     g_threadManager->AddThread(thread);
     thread->_threadID = CreateThread(&param);
     if (thread->_threadID < 0) {

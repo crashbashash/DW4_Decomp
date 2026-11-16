@@ -24,7 +24,7 @@ int beMatCtrlInfoRam_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrlInfoRam_vtable[0];
     workSlot = (igObject **)&obj._work;
     *workSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMatCtrlInfoRam_vtable[0];
     igObjectRef_Release(workSlot);
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
@@ -52,7 +52,7 @@ void beMatCtrlInfoRam_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMatCtrlInfoRam_callbackList[] = { beMatCtrlInfoWork_EnsureRegistered, 0 };
 
-void *beMatCtrlInfoRam_Register(void) {
+CallbackArray *beMatCtrlInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -90,9 +90,9 @@ static int g_beMatCtrlInfoRam_fieldOffsets[] = {
 void beMatCtrlInfoRam_InitFields(void) {
     int base;
     void *work;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMatCtrlInfoRam_metaObject;
+    meta = g_beMatCtrlInfoRam_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlInfoRam_ctorTable, 1);
     work = (void *)(igMetaObject_GetFieldAt(meta, base));

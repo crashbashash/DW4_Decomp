@@ -118,15 +118,15 @@ int FUN_00453830(beFontImage *arg0, int arg1) {
 }
 
 void Gap__Bec__beFontImage__vfunc_11(FontImage *self, int enable) {
-    Gap__Core__igObject__resetFields(self);
+    Gap__Core__igObject__resetFields((igObject *)self, enable);
     if (enable != 0) {
-        ObjectList_AppendRetained((unsigned)self->layers, (void *)self->base);
-        igSmartPointer<FillLayer> first((FillLayer *)igBlendStateAttr_CreateInstance(igObject_GetAllocator(self)));
+        ObjectList_AppendRetained((igObjectList *)((unsigned)self->layers), (igObject *)((void *)self->base));
+        igSmartPointer<FillLayer> first((FillLayer *)igBlendStateAttr_CreateInstance((int)(igObject_GetAllocator((igObject *)self))));
         first.get()->setEnabled(1);
-        ObjectList_AppendRetained((unsigned)self->layers, first.get());
-        igSmartPointer<OutlineLayer> second((OutlineLayer *)igTextureStateAttr_CreateInstance(igObject_GetAllocator(self)));
+        ObjectList_AppendRetained((igObjectList *)((unsigned)self->layers), (igObject *)(first.get()));
+        igSmartPointer<OutlineLayer> second((OutlineLayer *)igTextureStateAttr_CreateInstance((int)(igObject_GetAllocator((igObject *)self))));
         second.get()->setEnabled(1);
-        ObjectList_AppendRetained((unsigned)self->layers, second.get());
+        ObjectList_AppendRetained((igObjectList *)((unsigned)self->layers), (igObject *)(second.get()));
         self->state = 0x10001;
     }
 }
@@ -146,7 +146,7 @@ void FUN_00453990(struct FontLayers_453990 *self, int index, struct FontLayerIte
     r.p = item;
     list = self->list;
     if (r.p != 0) r.p->refCount = r.p->refCount + 1;
-    List_InsertWords(list, index, 1, &r);
+    List_InsertWords((igDataList *)list, index, 1, &r);
     msg[0] = 3;
     msg[1] = 0;
     msg[2] = DAT_0058c618[0];

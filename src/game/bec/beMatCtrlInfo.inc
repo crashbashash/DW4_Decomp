@@ -23,7 +23,7 @@ int beMatCtrlInfo_GetVTable(void) {
     obj._switchgraph = 0;
     obj._dataList_ = 0;
     obj._search = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMatCtrlInfo_vtable[0];
     igSmartPointer_beMatCtrlSearchList_Destruct((igSmartPointer<igObject> *)(&obj._search), (short)(-1));
     igSmartPointer_beMatCtrlDataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), (long long)(-1));
@@ -65,7 +65,7 @@ void beMatCtrlInfo_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMatCtrlInfo_callbackList[] = { igSwitch_EnsureRegistered, beMatCtrlDataList_EnsureRegistered, beMatCtrlSearchList_EnsureRegistered, 0 };
 
-void *beMatCtrlInfo_Register(void) {
+CallbackArray *beMatCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -113,13 +113,13 @@ void beMatCtrlInfo_InitFields(void) {
     void *switchgraph;
     void *dataList;
     void *search;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMatCtrlInfo_metaObject;
+    meta = g_beMatCtrlInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlInfo_ctorTable, 3);
     switchgraph = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchgraph)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchgraph)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)beMatCtrlDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataList)->_construct = 1;

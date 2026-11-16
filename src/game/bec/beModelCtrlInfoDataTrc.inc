@@ -4,7 +4,7 @@ igMetaField *g_beModelCtrlInfoDataTrc_recorderNodeMetaField;
 
 igMetaObject *beModelCtrlInfoDataTrc_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlInfoDataTrc_metaObject == 0) {
-        g_beModelCtrlInfoDataTrc_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beModelCtrlInfoDataTrc_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beModelCtrlInfoDataTrc_metaObject;
 }
@@ -29,7 +29,7 @@ int beModelCtrlInfoDataTrc_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoDataTrc_vtable[0];
     recorderNodeSlot = (igObject **)&obj._recorderNode;
     *recorderNodeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlInfoDataTrc_vtable[0];
     igObjectRef_Release(recorderNodeSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -44,7 +44,7 @@ void beModelCtrlInfoDataTrc_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlInfoDataTrc_callbackList[] = { igTransformRecorder_EnsureRegistered, 0 };
 
-void *beModelCtrlInfoDataTrc_Register(void) {
+CallbackArray *beModelCtrlInfoDataTrc_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -84,7 +84,7 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
     int index;
     void **found;
     void *recorderNode;
-    void *meta;
+    igMetaObject *meta;
     igStringMetaField *clone;
 
     meta = (igMetaObject *)(((void * *)&g_beModelCtrlInfoDataTrc_metaObject)[0]);
@@ -95,13 +95,13 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "TRC");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataTrc_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
     recorderNode = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)recorderNode)->_metaObject = igTransformRecorder_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)recorderNode)->_metaObject = (int)igTransformRecorder_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beModelCtrlInfoDataTrc_fieldTable, g_beModelCtrlInfoDataTrc_fieldHandles, g_beModelCtrlInfoDataTrc_fieldOffsets, base);
 }
 

@@ -13,17 +13,17 @@ int igLightStateSet_GetVTable(void) {
     struct Obj_19d960 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w[1] = 0;
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[6] = 0;
     obj.vt = &g_igLightStateSet_vtable[0];
     obj.w[7] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igLightStateSet_vtable[0];
     FUN_0019d9e0((void * *)&obj.w[7], -1);
-    igGroup_Destroy((struct T_195a90 *)&obj, 0);
+    igGroup_Destroy((igGroup *)&obj, 0);
     return r;
 }
 
@@ -35,7 +35,7 @@ void **FUN_0019d9e0(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {
@@ -52,9 +52,9 @@ void igLightStateSet_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igLightStateSet_callbackList[] = { igLightStateAttrList_EnsureRegistered, 0 };
 
-void igLightStateSet_Register(void) {
+CallbackArray *igLightStateSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLightStateSet_metaObject,
         igGroup_Register,
@@ -74,7 +74,7 @@ void thunk_igLightStateSet_GetMetaObject(void) {
 }
 
 static FieldFactory g_igLightStateSet_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igLightStateSet_fieldTable[] = {
     "_lightEnables",
@@ -92,9 +92,9 @@ void igLightStateSet_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igLightStateSet_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igLightStateSet_ctorTable, 1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00136040();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;

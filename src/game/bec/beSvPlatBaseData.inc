@@ -6,7 +6,7 @@ igMetaField *g_beSvPlatBaseData_memNeedMetaField;
 
 igMetaObject *beSvPlatBaseData_GetOrCreateMetaObject(void) {
     if (g_beSvPlatBaseData_metaObject == 0) {
-        g_beSvPlatBaseData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSvPlatBaseData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSvPlatBaseData_metaObject;
 }
@@ -28,7 +28,7 @@ int beSvPlatBaseData_GetVTable(void) {
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
     slotListSlot = (igObject **)&obj._slotList;
     *slotListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
     igObjectRef_Release(slotListSlot);
     return vtable;
@@ -41,7 +41,7 @@ void beSvPlatBaseData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSvPlatBaseData_callbackList[] = { beSvSlotDataList_EnsureRegistered, 0 };
 
-void *beSvPlatBaseData_Register(void) {
+CallbackArray *beSvPlatBaseData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -91,9 +91,9 @@ static int g_beSvPlatBaseData_fieldOffsets[] = {
 void beSvPlatBaseData_InitFields(void) {
     int base;
     void *slotList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvPlatBaseData_metaObject;
+    meta = g_beSvPlatBaseData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvPlatBaseData_ctorTable, 4);
     slotList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));

@@ -1,17 +1,16 @@
 #include "dw4/reflected.h"
+#include "dw4/igTraversal.h"
 #include "dw4/beLoadingNode.h"
 #include "dw4/beNodeAnim.h"
 #include "dw4/bePadData.h"
+#include "dw4/igObject.h"
+#include "dw4/softfloat.h"
 
 typedef void (*TraversalFunction)(void);
 
 extern "C" {
-long long __fixsfdi(float);
 float sqrtf(float);
 float atan2f(float, float);
-int igTraversal_RegisterFunction(int functionList, void *meta, TraversalFunction function);
-void Gap__Core__igObject__userConstruct(void *self);
-void Gap__Core__igObject__userDestruct(void);
 extern int g_igCommonTraversal_travProcs[4];
 
 void bePadData_StickDirections(bePadData *pad, int *directions, float *stick);
@@ -79,8 +78,8 @@ extern "C" long long beNodeAnim_UpdateTime(beNodeAnim *node, long long now)
 
 extern "C" void beNodeAnim_RegisterTraversalFunction(void)
 {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beNodeAnim_ResolveMetaObject(),
-                                 (TraversalFunction)beNodeAnim_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], (igMetaObject *)beNodeAnim_ResolveMetaObject(),
+                                 (void *)beNodeAnim_TraversalFunction);
 }
 
 extern "C" int beLoadingNode_TraversalFunction(igCommonTraversal *trav, beNodeAnim *node)
@@ -100,13 +99,13 @@ extern "C" int beLoadingNode_IsPastPlayLimit(beLoadingNode *node)
 
 extern "C" void beLoadingNode_RegisterTraversalFunction(void)
 {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beLoadingNode_ResolveMetaObject(),
-                                 (TraversalFunction)beLoadingNode_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], (igMetaObject *)beLoadingNode_ResolveMetaObject(),
+                                 (void *)beLoadingNode_TraversalFunction);
 }
 
 extern "C" void bePadData_userConstruct(bePadData *pad)
 {
-    Gap__Core__igObject__userConstruct(pad);
+    Gap__Core__igObject__userConstruct((igObject *)pad);
     /* the dead zone is the length of the vector (0.4, 0) */
     pad->_enaLen = 0.4f;
     float x = pad->_enaLen;
@@ -121,9 +120,9 @@ extern "C" void bePadData_userConstruct(bePadData *pad)
     pad->_rptime = 0; pad->_last = 0; pad->_repeat = 0; pad->_trigger = 0; pad->_button = 0;
 }
 
-extern "C" void bePadData_userDestruct(void)
+extern "C" void bePadData_userDestruct(bePadData *pad)
 {
-    Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct((igObject *)pad);
 }
 
 /* Button edges and auto-repeat: the first repeat after _1sttime frames, then every _2ndtime. */

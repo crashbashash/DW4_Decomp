@@ -2,7 +2,16 @@
 #define DW4_BEDBMANAGER_H
 
 struct beDBManager;
+struct beDataObjInt;
+struct beDataObjStringList;
+struct beDataObjString;
+struct beDataObjIntList;
+struct beDataObjObjectList;
+struct beDataObjFloatList;
+struct beDataObjBool;
+struct beDataObjBoolList;
 struct igMetaEnum;
+struct igObject;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -11,14 +20,14 @@ extern "C" {
 
 struct beDBManager *beDBManager_CreateInstance(int allocator);
 struct igMetaEnum *beDBManager_GetMsgActionEnum(void);
-int igProperty_GetRecord(int container, char *key, int unused);
-int igProperty_GetRecordArray(int container, char *key, int unused);
-int igProperty_GetRecordByte(int container, char *key, int unused);
-void igProperty_GetRecordFloatList(int p0, char *p1, int p2);
-int igProperty_GetRecordFolder(int container, char *key, int unused);
-void igProperty_GetRecordIntList(int p0, char *p1, int p2);
-void igProperty_GetRecordString(int p0, char *p1, int p2);
-void igProperty_GetRecordStringList(int p0, char *p1, int p2);
+struct beDataObjInt *igProperty_GetRecord(struct igObject *container, const char *key);
+struct beDataObjBoolList *igProperty_GetRecordArray(struct igObject *container, const char *key);
+struct beDataObjBool *igProperty_GetRecordByte(struct igObject *container, const char *key);
+struct beDataObjFloatList *igProperty_GetRecordFloatList(struct igObject *container, const char *key);
+struct beDataObjObjectList *igProperty_GetRecordFolder(struct igObject *container, const char *key);
+struct beDataObjIntList *igProperty_GetRecordIntList(struct igObject *container, const char *key);
+struct beDataObjString *igProperty_GetRecordString(struct igObject *container, const char *key);
+struct beDataObjStringList *igProperty_GetRecordStringList(struct igObject *container, const char *key);
 
 extern struct igMetaObject *g_beDBManager_metaObject;
 

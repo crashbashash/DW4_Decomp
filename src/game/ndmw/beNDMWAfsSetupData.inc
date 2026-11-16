@@ -19,7 +19,7 @@ int beNDMWAfsSetupData_GetVTable(void) {
     *nameRef = 0;
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     *(int **)&obj._vtable = &g_beNDMWAfsSetupData_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);
@@ -32,7 +32,7 @@ void beNDMWAfsSetupData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWAfsSetupData_Register);
 }
 
-void *beNDMWAfsSetupData_Register(void) {
+CallbackArray *beNDMWAfsSetupData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

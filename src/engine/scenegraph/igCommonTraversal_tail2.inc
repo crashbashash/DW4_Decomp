@@ -34,7 +34,7 @@ int FUN_001b3ad0(igCommonTraversal *arg0, int arg1) {
     unsigned w2;
 
     p = (igAttrStackManager *)arg0->_attrStack;
-    a0 = ((igAttrStack **)((igAttrStackList *)p->_attrStacks)->_data)[((int *)p->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
+    a0 = ((igAttrStack **)((igAttrStackList *)p->_attrStacks)->_data)[((int *)p->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
     k = a0->_count;
     km = k - 1;
     if (k == 0) {
@@ -182,7 +182,7 @@ int FUN_001b4130(struct O4130 *arg0) {
         return 0;
     }
     if (arg0->f160 == 0) {
-        temp_v0 = ((struct Rc_1b2fa0 *)igTextureAttr_GetImage(arg0->f32->f12, 0));
+        temp_v0 = ((struct Rc_1b2fa0 *)igTextureAttr_GetImage((igTextureAttr *)arg0->f32->f12, 0));
         if (temp_v0 != 0) {
             temp_v0->rc = temp_v0->rc + 1;
         }
@@ -190,7 +190,7 @@ int FUN_001b4130(struct O4130 *arg0) {
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         arg0->f160 = temp_v0;
@@ -228,19 +228,19 @@ void FUN_001b42c0(TravFlattenView *self, int root) {
     int saved[32];
     TravFunctionTable *table = ((TravFunctionTable *)g_igCommonTraversal_travProcs[0]);
     int meta = (int)g_igGeometry_metaObject;
-    int n = igMetaObject_CountTree(meta);
+    int n = igMetaObject_CountTree((igMetaObject *)meta);
     int i;
     for (i = 0; i < n; i++) {
-        TravObject *m = ((TravObject *)igMetaObject_GetTreeNode(meta, i));
+        TravObject *m = ((TravObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i));
         saved[i] = table->_data[m->_id];
-        igTraversal_RegisterFunction((struct L_1e06c0 *)table, (struct X_1e06c0 *)m, (void *)((void *)FUN_001b3ad0));
+        igTraversal_RegisterFunction((igTraversalFunctionList *)table, (igMetaObject *)m, (void *)((void *)FUN_001b3ad0));
     }
     DAT_005625f0 = self;
     clearRetained(self->_a);
     clearRetained(self->_b);
     igTraversal_TraverseChildren((igTraversal *)root, (igNode *)self);
     for (i = 0; i < n; i++) {
-        igTraversal_RegisterFunction((struct L_1e06c0 *)table, (struct X_1e06c0 *)(((TravObject *)igMetaObject_GetTreeNode(meta, i))), (void *)((void *)saved[i]));
+        igTraversal_RegisterFunction((igTraversalFunctionList *)table, (igMetaObject *)(((TravObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i))), (void *)((void *)saved[i]));
     }
 }
 
@@ -258,7 +258,7 @@ int FUN_001b4bb0(igCommonTraversal *arg0, int arg1) {
     int v;
 
     b = (igAttrStackManager *)arg0->_attrStack;
-    l = ((igAttrStack **)((igAttrStackList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
+    l = ((igAttrStack **)((igAttrStackList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
     if (l->_count == 0) {
         v = 0;
     } else {
@@ -274,7 +274,7 @@ void FUN_001b68b0(int arg0) {
 
 void FUN_001b68c0(void *self, void *meta) {
     FUN_001e02f0((int)(self), (int)(meta));
-    if (igMetaObject_IsOfType(meta, ((int)igNode_GetMetaObject())) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
         NodeProcTable t = DAT_0048d8f0;
         int i;
         t.e[0].meta = (int)g_igActor_metaObject;
@@ -313,8 +313,8 @@ void FUN_001b68c0(void *self, void *meta) {
         t.e[33].meta = DAT_005612e0;
         for (i = 0; i < 34; i++) {
             NodeProcEntry *e = &t.e[i];
-            if (e->meta != 0 && igMetaObject_IsOfType(meta, e->meta) != 0) {
-                igTraversal_RegisterFunction((struct L_1e06c0 *)self, (struct X_1e06c0 *)meta, (void *)e->proc);
+            if (e->meta != 0 && igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)e->meta) != 0) {
+                igTraversal_RegisterFunction((igTraversalFunctionList *)self, (igMetaObject *)meta, (void *)e->proc);
                 return;
             }
         }
@@ -335,7 +335,7 @@ void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
         if (a0 != 0) {
             --a0->_refCount;
             if (((unsigned long long)(long long)a0->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy((void *)a0);
+                igObject_Destroy((igObject *)a0);
             }
         }
         arg0->_travProcs = (int)s0;
@@ -345,7 +345,7 @@ void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
 }
 
 void FUN_001b6be0(void) {
-    *(int *)0x562640 = FUN_0019a6e0(Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562640 = FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
     FUN_0013b110();
     igTextureBindAttr_EnsureRegistered();
     igModelViewMatrixAttr_EnsureRegistered();
@@ -362,7 +362,7 @@ void FUN_001b6c50(void) {
     if (temp_a0 != 0) {
         *(int *)((char *)temp_a0 + 4) = (int) (*(int *)((char *)temp_a0 + 4) - 1);
         if (((unsigned long long) ((long long) *(int *)((char *)temp_a0 + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
 }

@@ -7,12 +7,12 @@ igMetaField *g_beCriHandle_priorityMetaField;
 
 beCriHandle *beCriHandle_Create(int allocator) {
     beCriHandle_EnsureRegistered();
-    return (beCriHandle *)igMetaObject_CreateInstance(*(int *)0x5899C8, allocator);
+    return (beCriHandle *)igMetaObject_CreateInstance(g_beCriHandle_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beCriHandle_GetOrCreateMetaObject(void) {
     if (g_beCriHandle_metaObject == 0) {
-        g_beCriHandle_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beCriHandle_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beCriHandle_metaObject;
 }
@@ -40,7 +40,7 @@ int beCriHandle_GetVTable(void) {
     *audioSlot = 0;
     volumeSlot = (igObject **)&obj._volume;
     *volumeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCriHandle_vtable[0];
     igObjectRef_Release(volumeSlot);
     igObjectRef_Release(audioSlot);
@@ -56,7 +56,7 @@ void beCriHandle_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beCriHandle_callbackList[] = { beCriAudio_EnsureRegistered, beCriVolume_EnsureRegistered, 0 };
 
-void *beCriHandle_Register(void) {
+CallbackArray *beCriHandle_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -111,9 +111,9 @@ void beCriHandle_InitFields(void) {
     int base;
     void *volume;
     void *audio;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beCriHandle_metaObject;
+    meta = g_beCriHandle_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCriHandle_ctorTable, 5);
     audio = (void *)(igMetaObject_GetFieldAt(meta, base));

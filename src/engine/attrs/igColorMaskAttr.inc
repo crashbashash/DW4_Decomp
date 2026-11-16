@@ -7,7 +7,7 @@ igMetaField *g_igColorMaskAttr_unusedMetaField;
 
 void FUN_00138cb0(int arg0) {
     igColorMaskAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F2B0, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F2B0, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igColorMaskAttr_GetMetaObject(void)
@@ -21,9 +21,9 @@ igMetaObject *igColorMaskAttr_GetMetaObject(void)
 int igColorMaskAttr_GetVTable(void) {
     struct Obj_138d40 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igColorMaskAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igColorMaskAttr_EnsureRegistered(void)
@@ -31,9 +31,9 @@ void igColorMaskAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igColorMaskAttr_Register);
 }
 
-void igColorMaskAttr_Register(void) {
+CallbackArray *igColorMaskAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igColorMaskAttr_metaObject,
         igVisualAttribute_Register,
@@ -53,11 +53,11 @@ void thunk_igColorMaskAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igColorMaskAttr_ctorTable[] = {
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igUnsignedIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igColorMaskAttr_fieldTable[] = {
     "_red",

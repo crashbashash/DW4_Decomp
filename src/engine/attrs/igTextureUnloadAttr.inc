@@ -4,7 +4,7 @@ igMetaField *g_igTextureUnloadAttr_unitIDMetaField;
 
 igMetaObject *FUN_00131160(void) {
     if (g_igTextureUnloadAttr_metaObject == 0) {
-        g_igTextureUnloadAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igTextureUnloadAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTextureUnloadAttr_metaObject;
 }
@@ -24,9 +24,9 @@ done:
 int igTextureUnloadAttr_GetVTable(void) {
     struct Obj_131200 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureUnloadAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTextureUnloadAttr_EnsureRegistered(void)
@@ -36,9 +36,9 @@ void igTextureUnloadAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igTextureUnloadAttr_callbackList[] = { igTextureAttr_EnsureRegistered, 0 };
 
-void igTextureUnloadAttr_Register(void) {
+CallbackArray *igTextureUnloadAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureUnloadAttr_metaObject,
         igVisualAttribute_Register,
@@ -58,8 +58,8 @@ void thunk_igTextureUnloadAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureUnloadAttr_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTextureUnloadAttr_fieldTable[] = {
     "_texture",

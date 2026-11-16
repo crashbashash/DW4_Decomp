@@ -11,12 +11,12 @@ igMetaField *g_beMatCtrl_luaMetaField;
 
 beMatCtrl *beMatCtrl_CreateInstance(int allocator) {
     beMatCtrl_EnsureRegistered();
-    return (beMatCtrl *)igMetaObject_CreateInstance(*(int *)0x589160, allocator);
+    return (beMatCtrl *)igMetaObject_CreateInstance(g_beMatCtrl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beMatCtrl_GetOrCreateMetaObject(void) {
     if (g_beMatCtrl_metaObject == 0) {
-        g_beMatCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beMatCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beMatCtrl_metaObject;
 }
@@ -39,7 +39,7 @@ int beMatCtrl_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrl_vtable[0];
     obj._wkMatOnList = 0;
     obj._wkMatOldOnList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMatCtrl_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._wkMatOldOnList, -1);
     igSmartPointer_igIntList_Destruct(&obj._wkMatOnList, -1);
@@ -54,7 +54,7 @@ void beMatCtrl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMatCtrl_callbackList[] = { igIntList_EnsureRegistered, beLua_EnsureRegistered, 0 };
 
-void *beMatCtrl_Register(void) {
+CallbackArray *beMatCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -135,9 +135,9 @@ void beMatCtrl_InitFields(void) {
     wkPlExist = (igBoolArrayMetaField *)igMetaObject_GetFieldAt(meta, base + 4);
     wkPlExist->_num = 4;
     wkMatOnList = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
-    wkMatOnList->_metaObject = igIntList_GetOrCreateMetaObject();
+    wkMatOnList->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     wkMatOldOnList = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
-    wkMatOldOnList->_metaObject = igIntList_GetOrCreateMetaObject();
+    wkMatOldOnList->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     lua = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 8);
     lua->_metaObject = (int)beLua_GetOrCreateMetaObject();
     lua->_refCounted = 0;

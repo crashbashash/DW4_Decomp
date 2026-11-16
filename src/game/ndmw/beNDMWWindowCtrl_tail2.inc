@@ -4,7 +4,7 @@ igMetaEnum *g_beNDMWWindowCtrl_messageMetaEnum;
 
 igMetaObject *beNDMWWindowCtrl_GetOrCreateMetaObject(void) {
     if (g_beNDMWWindowCtrl_metaObject == 0) {
-        g_beNDMWWindowCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWWindowCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWWindowCtrl_metaObject;
 }
@@ -22,7 +22,7 @@ void beNDMWWindowCtrl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWWindowCtrl_Register);
 }
 
-void *beNDMWWindowCtrl_Register(void) {
+CallbackArray *beNDMWWindowCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */

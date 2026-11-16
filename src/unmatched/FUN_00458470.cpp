@@ -1,5 +1,5 @@
 extern "C" int __dl__FPv(void *);
-extern "C" int igObject_Destroy(void *);
+#include "dw4/igObject.h"
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O { S_temp_a0 *m; };
 extern "C" O *FUN_00458470(O *arg0, short arg1) {

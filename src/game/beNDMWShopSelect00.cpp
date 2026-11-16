@@ -2,27 +2,23 @@
 #include "dw4/beNDMWShopCtrlEditBit.h"
 #include "dw4/beNDMWWindow.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/StringPool.h"
+#include "dw4/beDataBase.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beNDMWShopSelect00.h"
+#include "dw4/beNDMWShopSelect01.h"
+#include "dw4/beNDMWShopSelect02.h"
+#include "dw4/beNDMWShopSelect03.h"
+#include "dw4/beNDMWShopSelect11.h"
+#include "dw4/beNDMWShopSelect34.h"
+#include "dw4/beNDMWShopSelect52.h"
+#include "dw4/beNDMWShopSelectA0.h"
+#include "dw4/beNDMWShopSelectB0.h"
+#include <stdio.h>
+#include <string.h>
+#include "dw4/beDBManager.h"
 
-extern "C" void *StringPool_Allocate(int size);
-extern "C" void *StringPool_Construct(void *pool);
-extern "C" char *StringPool_Intern(void *pool, const char *text);
-extern "C" int StringChunk_ReleaseHeader(int chunk, int *header);
-extern "C" void *g_stringPool[4];
-extern "C" int beMessenger_AppendBool(int messenger, int value);
-extern "C" int beMessenger_AppendInt(int messenger, int value);
-extern "C" int beMessenger_AppendString(int messenger, const char *text);
-extern "C" void beMessenger_AppendVec3(int messenger, float *vec);
-extern "C" int beMessenger_DispatchSelected(int messenger, const char *message);
-extern "C" int beMessenger_SelectGroup(int messenger, const char *group);
-extern "C" int beMessenger_GetObject(int messenger, int index);
-extern "C" void sprintf(char *out, const char *format, ...);
-extern "C" int strlen(const char *text);
 
-typedef struct PropertyRecord {
-    char pad[12];
-    int value;
-} PropertyRecord;
-extern "C" PropertyRecord *igProperty_GetRecord(int object, const char *name);
 
 extern "C" char STWINFONT13_3[];
 extern "C" char STWINFONT14_3[];
@@ -94,15 +90,6 @@ extern "C" const StatNameTable g_shopStatValueFonts;
 typedef struct DecideFontPair { const char *fonts[2]; } DecideFontPair;
 extern "C" const DecideFontPair g_shopDecideFlagFonts;
 
-extern "C" int g_beNDMWShopSelectB0_metaObject[4];
-extern "C" int g_beNDMWShopSelectA0_metaObject[4];
-extern "C" int g_beNDMWShopSelect52_metaObject[4];
-extern "C" int g_beNDMWShopSelect34_metaObject[4];
-extern "C" int g_beNDMWShopSelect11_metaObject[4];
-extern "C" int g_beNDMWShopSelect03_metaObject[4];
-extern "C" int g_beNDMWShopSelect02_metaObject[4];
-extern "C" int g_beNDMWShopSelect01_metaObject[4];
-extern "C" int g_beNDMWShopSelect00_metaObject[4];
 
 extern "C" void beNDMWShopSelect00_Setup(beNDMWShopSelect00 *self);
 extern "C" void beNDMWShopSelect01_Setup(beNDMWShopSelect01 *self);
@@ -127,10 +114,6 @@ extern "C" char text_shinka[];
 extern "C" char GETDATABASE_12[];
 extern "C" char DIGIMONNO_7[];
 extern "C" char NAME_7[];
-extern "C" int igProperty_GetRecordByte(int object, const char *name);
-extern "C" PropertyRecord *igProperty_GetRecordFolder(int object, const char *name);
-extern "C" int beMessenger_SendNamed(int messenger, const char *group, const char *name, int ramNo, const char *message);
-extern "C" const char *beDataBase_GetRecordString(int database, int record, const char *key);
 /* Font slots of the four party rows of ShopSelect02. */
 typedef struct PlayerFontTable { const char *fonts[4]; } __attribute__((aligned(16))) PlayerFontTable;
 extern "C" const PlayerFontTable g_shopPlayerNameFonts;
@@ -146,12 +129,12 @@ extern "C" int beNDMWShopSelect00_GetMeta(void);
 
 /* The pooled-string singleton, created on first use. */
 static inline void *StringPool_Get(void) {
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         void *pool = StringPool_Allocate(0x10);
-        if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool[0] = pool;
+        if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
+        g_stringPool = (StringPool *)pool;
     }
-    return g_stringPool[0];
+    return g_stringPool;
 }
 
 /* Drops one share of a pooled string token (reference count at token[-1], chunk header at token[-2]). */
@@ -160,7 +143,7 @@ static inline void StringToken_Release(char *token) {
         int *header = (int *)token - 2;
         int refs = ((int *)token)[-1] - 1;
         ((int *)token)[-1] = refs;
-        if (refs == 0) StringChunk_ReleaseHeader(*header, header);
+        if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
     }
 }
 
@@ -173,6 +156,7 @@ public:
     StringRef(char *s, int retain) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { StringToken_Release(p); }
 };
+/* kept local: the retained-string holder type is not shared yet (open item A7). */
 extern "C" int StringList_AppendRetained(int list, const StringRef &token);
 
 /* Appends a pooled copy of `text` to a window string list; a null text appends a null token. */
@@ -181,7 +165,7 @@ extern "C" int StringList_AppendRetained(int list, const StringRef &token);
     if ((text) == 0) { \
         token = 0; \
     } else { \
-        token = StringPool_Intern(StringPool_Get(), (text)); \
+        token = StringPool_Intern((StringPool *)StringPool_Get(), (text)); \
     } \
     StringRef held(token); \
     StringList_AppendRetained(list, held); }
@@ -192,14 +176,14 @@ static inline char *StringPool_InternText(const char *text) {
     if (text == 0) {
         token = 0;
     } else {
-        token = StringPool_Intern(StringPool_Get(), text);
+        token = StringPool_Intern((StringPool *)StringPool_Get(), text);
     }
     return token;
 }
 
 /* Interns `name` as the window's SELECTCTRL receiver name, dropping the previous one. */
 #define SET_INFO_NAME(self, name) { \
-    char *fresh = StringPool_Intern(StringPool_Get(), (name)); \
+    char *fresh = StringPool_Intern((StringPool *)StringPool_Get(), (name)); \
     StringToken_Release((char *)(self)->_infoName); \
     (self)->_infoName = (int)fresh; }
 
@@ -259,19 +243,19 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self) {
         igIntList *players = (igIntList *)self->_playerNoList;
         for (int i = 0; i < players->_count; i++) {
             int playerNo = ((int *)players->_data)[i];
-            beMessenger_SelectGroup(self->_messenger, GAMERAM_10);
-            beMessenger_AppendInt(self->_messenger, playerNo);
-            beMessenger_DispatchSelected(self->_messenger, GETPLAYER_7);
-            int player = beMessenger_GetObject(self->_messenger, 0);
-            igProperty_GetRecordByte(player, ISUSE_10);
-            igObjectList *names = (igObjectList *)igProperty_GetRecordFolder(player, PLAYERNAME_5)->value;
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_10);
+            beMessenger_AppendInt((beMessenger *)self->_messenger, playerNo);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_7);
+            int player = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
+            igProperty_GetRecordByte((igObject *)player, ISUSE_10);
+            igObjectList *names = (igObjectList *)igProperty_GetRecordFolder((igObject *)player, PLAYERNAME_5)->_data;
             if (names->_count > 0) {
                 igSmartPointer<igObject> name(*(igObject **)names->_data, kRetainReference);
                 beNDMWWindow_QueueObjectText((beNDMWWindow *)self, TALKFONT01_2, fonts.fonts[i], igSmartPointer<igObject>(name), LEFT_5);
             }
-            beMessenger_SendNamed(self->_messenger, DATABASE_13, text_shinka, 0, GETDATABASE_12);
+            beMessenger_SendNamed((beMessenger *)self->_messenger, DATABASE_13, text_shinka, 0, GETDATABASE_12);
             beNDMWWindow_QueueText((beNDMWWindow *)self, TALKFONT04, fonts.fonts[i],
-                beDataBase_GetRecordString(beMessenger_GetObject(self->_messenger, 0), igProperty_GetRecord(player, DIGIMONNO_7)->value, NAME_7),
+                beDataBase_GetRecordString((beDataBase *)beMessenger_GetObject((beMessenger *)self->_messenger, 0), igProperty_GetRecord((igObject *)player, DIGIMONNO_7)->_data, NAME_7),
                 LEFT_5);
             players = (igIntList *)self->_playerNoList;
         }
@@ -369,10 +353,10 @@ void beNDMWShopSelect11_Setup(beNDMWShopSelect11 *self) {
     beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font005_2, space_3, RIGHT_4);
     beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font006_2, space_3, RIGHT_4);
     beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_4, font000_4, space_3, LEFT_5);
-    beMessenger_SelectGroup(self->_messenger, GAMERAM_10);
-    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_AppendBool(self->_messenger, 0);
-    beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_6);
+    beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_10);
+    beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+    beMessenger_AppendBool((beMessenger *)self->_messenger, 0);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, RECALCPLAYER_6);
     beNDMWShopSelect11_RefreshStatCosts(self);
     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode + 0x482);
     SET_INFO_NAME(self, i_stcursor01_2)
@@ -398,10 +382,10 @@ void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self) {
     int *cap;
     const char **font;
 
-    beMessenger_SelectGroup(self->_messenger, GAMERAM_10);
-    beMessenger_AppendInt(self->_messenger, self->_playerNo);
-    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_7);
-    player = beMessenger_GetObject(self->_messenger, 0);
+    beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_10);
+    beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
+    beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_7);
+    player = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
     properties = g_shopStatPropertyNames;
     caps = g_shopStatCaps;
     fonts = g_shopStatValueFonts;
@@ -410,7 +394,7 @@ void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self) {
     font = fonts.names;
     i = 0;
     do {
-        value = igProperty_GetRecord(player, *property)->value;
+        value = igProperty_GetRecord((igObject *)player, *property)->_data;
         {
             int rest = (value - 45) % 5;
             int cost = (value - 45 - rest) / 5 + (rest ? 1 : 0);
@@ -420,22 +404,22 @@ void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self) {
             else
                 sprintf(text, percent_d_6, cost);
         }
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-        beMessenger_AppendString(self->_messenger, STWINFONT19);
-        beMessenger_AppendString(self->_messenger, *font);
-        beMessenger_AppendString(self->_messenger, text);
-        beMessenger_DispatchSelected(self->_messenger, TEXTSET_4);
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-        beMessenger_AppendString(self->_messenger, STWINFONT14_3);
-        beMessenger_AppendString(self->_messenger, *font);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT19);
+        beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+        beMessenger_AppendString((beMessenger *)self->_messenger, text);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_4);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_3);
+        beMessenger_AppendString((beMessenger *)self->_messenger, *font);
         if (value >= *cap) {
             color[0] = 0.9f;
             color[1] = 0.4f;
             color[2] = 0.2f;
-            beMessenger_AppendVec3(self->_messenger, color);
-            beMessenger_DispatchSelected(self->_messenger, COLOR_2);
+            beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)color);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR_2);
         } else {
-            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_4);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, DEFAULTCOLOR_4);
         }
         i++; property++; cap++; font++;
     } while (i < 7);
@@ -449,31 +433,31 @@ void beNDMWShopSelect34_Setup(beNDMWShopSelect34 *self) {
         switch (self->_entCode) {
         case 3:
             sprintf(slot, font_03d_3, i);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, STWINFONT28_2);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, CENTER_3);
-            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT28_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, ALIGN_4);
             break;
         default:
             sprintf(slot, font_03d_3, i);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, CENTER_3);
-            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, ALIGN_4);
             sprintf(slot, font01_d_2, i);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, CENTER_3);
-            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, ALIGN_4);
             sprintf(slot, font02_d_2, i);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, CENTER_3);
-            beMessenger_DispatchSelected(self->_messenger, ALIGN_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, CENTER_3);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, ALIGN_4);
             break;
         }
         i++;
@@ -523,11 +507,11 @@ void beNDMWShopCtrlEditBit_ShowValueDigits(beNDMWShopCtrlEditBit *self, int mode
     i = 0;
     do {
         sprintf(slot, slotFormat, i);
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-        beMessenger_AppendString(self->_messenger, STWINFONT25_2);
-        beMessenger_AppendString(self->_messenger, slot);
-        beMessenger_AppendString(self->_messenger, DISPOFF_3);
-        beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT25_2);
+        beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+        beMessenger_AppendString((beMessenger *)self->_messenger, DISPOFF_3);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_5);
         i += 1;
     } while (i < 7);
     sprintf(digits, percent_d_6, value);
@@ -538,16 +522,16 @@ void beNDMWShopCtrlEditBit_ShowValueDigits(beNDMWShopCtrlEditBit *self, int mode
         do {
             sprintf(slot, slotFormat, pos);
             digit[0] = digits[(length - 1) - pos];
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, digit);
-            beMessenger_DispatchSelected(self->_messenger, TEXTSET_4);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, STWINFONT25_2);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, DISPON_4);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, digit);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT25_2);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, DISPON_4);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_5);
             pos -= 1;
         } while (pos > -1);
     }
@@ -570,11 +554,11 @@ void beNDMWWindow_ShowPaddedDigits(beNDMWWindow *self, int value, unsigned int d
     i = 0;
     do {
         sprintf(slot, slotFormat, i);
-        beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-        beMessenger_AppendString(self->_messenger, type);
-        beMessenger_AppendString(self->_messenger, slot);
-        beMessenger_AppendString(self->_messenger, DISPOFF_3);
-        beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
+        beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+        beMessenger_AppendString((beMessenger *)self->_messenger, type);
+        beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+        beMessenger_AppendString((beMessenger *)self->_messenger, DISPOFF_3);
+        beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_5);
         i++;
     } while (i < 7);
     switch (digits) {
@@ -595,16 +579,16 @@ void beNDMWWindow_ShowPaddedDigits(beNDMWWindow *self, int value, unsigned int d
         do {
             sprintf(slot, slotFormat, i);
             digit[0] = text[(length - 1) - i];
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, type);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, digit);
-            beMessenger_DispatchSelected(self->_messenger, TEXTSET_4);
-            beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-            beMessenger_AppendString(self->_messenger, type);
-            beMessenger_AppendString(self->_messenger, slot);
-            beMessenger_AppendString(self->_messenger, DISPON_4);
-            beMessenger_DispatchSelected(self->_messenger, SWITCH_5);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, type);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, digit);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_4);
+            beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+            beMessenger_AppendString((beMessenger *)self->_messenger, type);
+            beMessenger_AppendString((beMessenger *)self->_messenger, slot);
+            beMessenger_AppendString((beMessenger *)self->_messenger, DISPON_4);
+            beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_5);
             i--;
         } while (i > -1);
     }
@@ -660,10 +644,10 @@ void beNDMWShopSelectB0_Setup(beNDMWShopSelectB0 *self) {
                 } else {
                     color = CANCELCOLOR_3;
                 }
-                beMessenger_SelectGroup(self->_messenger, TEXTCTL_6);
-                beMessenger_AppendString(self->_messenger, STWINFONT29_4);
-                beMessenger_AppendString(self->_messenger, *font);
-                beMessenger_DispatchSelected(self->_messenger, color);
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_6);
+                beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_4);
+                beMessenger_AppendString((beMessenger *)self->_messenger, *font);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, color);
                 i++;
                 font++;
             } while (i < ((igDataList *)self->_decideList)->_count);
@@ -679,37 +663,37 @@ void beNDMWShopSelectB0_Setup(beNDMWShopSelectB0 *self) {
 }
 
 int beNDMWShopSelectB0_GetMeta(void) {
-    return g_beNDMWShopSelectB0_metaObject[0];
+    return (int)g_beNDMWShopSelectB0_metaObject;
 }
 
 int beNDMWShopSelectA0_GetMeta(void) {
-    return g_beNDMWShopSelectA0_metaObject[0];
+    return (int)g_beNDMWShopSelectA0_metaObject;
 }
 
 int beNDMWShopSelect52_GetMeta(void) {
-    return g_beNDMWShopSelect52_metaObject[0];
+    return (int)g_beNDMWShopSelect52_metaObject;
 }
 
 int beNDMWShopSelect34_GetMeta(void) {
-    return g_beNDMWShopSelect34_metaObject[0];
+    return (int)g_beNDMWShopSelect34_metaObject;
 }
 
 int beNDMWShopSelect11_GetMeta(void) {
-    return g_beNDMWShopSelect11_metaObject[0];
+    return (int)g_beNDMWShopSelect11_metaObject;
 }
 
 int beNDMWShopSelect03_GetMeta(void) {
-    return g_beNDMWShopSelect03_metaObject[0];
+    return (int)g_beNDMWShopSelect03_metaObject;
 }
 
 int beNDMWShopSelect02_GetMeta(void) {
-    return g_beNDMWShopSelect02_metaObject[0];
+    return (int)g_beNDMWShopSelect02_metaObject;
 }
 
 int beNDMWShopSelect01_GetMeta(void) {
-    return g_beNDMWShopSelect01_metaObject[0];
+    return (int)g_beNDMWShopSelect01_metaObject;
 }
 
 int beNDMWShopSelect00_GetMeta(void) {
-    return g_beNDMWShopSelect00_metaObject[0];
+    return (int)g_beNDMWShopSelect00_metaObject;
 }

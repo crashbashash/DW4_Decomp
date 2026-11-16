@@ -2,12 +2,12 @@ igMetaObject *g_beNDMWMdlEBullet_metaObject;
 
 beNDMWMdlEBullet *beNDMWMdlEBullet_CreateInstance(int allocator) {
     beNDMWMdlEBullet_EnsureRegistered();
-    return (beNDMWMdlEBullet *)igMetaObject_CreateInstance(g_beNDMWMdlEBullet_metaObject, allocator);
+    return (beNDMWMdlEBullet *)igMetaObject_CreateInstance(g_beNDMWMdlEBullet_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMdlEBullet_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlEBullet_metaObject == 0) {
-        g_beNDMWMdlEBullet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMdlEBullet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMdlEBullet_metaObject;
 }
@@ -31,7 +31,7 @@ int beNDMWMdlEBullet_GetVTable(void) {
     obj._name = 0;
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlEBullet_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMdlEBullet_vtable[0];
     beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
     return vtable;
@@ -42,7 +42,7 @@ void beNDMWMdlEBullet_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlEBullet_Register);
 }
 
-void *beNDMWMdlEBullet_Register(void) {
+CallbackArray *beNDMWMdlEBullet_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

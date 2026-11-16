@@ -3,7 +3,7 @@ void FUN_001c4590(int arg0) {
 }
 
 void FUN_001c45a0(void) {
-    *(int *)0x562760 = FUN_0019a6e0(Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562760 = FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
 void FUN_001c45d0(void) {
@@ -37,7 +37,7 @@ void Gap__Sg__igFrustCullTraversal__vfunc_09(O_1c4650 *arg0, int arg1) {
         if (a0 != 0) {
             a0->references = a0->references - 1;
             if (((unsigned long long)(long long)a0->references & 0x7fffffULL) == 0) {
-                igObject_Destroy((void *)a0);
+                igObject_Destroy((igObject *)a0);
             }
         }
         arg0->ref = s0;
@@ -48,11 +48,11 @@ void Gap__Sg__igFrustCullTraversal__vfunc_09(O_1c4650 *arg0, int arg1) {
 
 void FUN_001c4700(int arg0, int arg1) {
     FUN_001b68c0((void *)arg0, (void *)arg1);
-    if (igMetaObject_IsOfType(arg1, ((int)igNode_GetMetaObject())) != 0) {
-        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001c5030);
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
+        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001c5030);
     }
-    if (igMetaObject_IsOfType(arg1, ((int)igPlanarShadowShader_GetMetaObject())) != 0) {
-        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001c5130);
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igPlanarShadowShader_GetMetaObject()))) != 0) {
+        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001c5130);
     }
 }
 
@@ -69,8 +69,8 @@ void FUN_001c47a0(void *arg0, int arg1, int arg2) {
 int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
     CullAttrState *st;
     /* matching construct: permuter — st assigned inside the first lookup, so the second reloads its fields */
-    float *world = currentEntry_1c4ac0(stackOf_1c4ac0(st = o->_state, ((CullMeta * *)g_igModelViewMatrixAttr_metaObject)[0]))->_matrix;
-    float *view = currentEntry_1c4ac0(stackOf_1c4ac0(st, g_igProjectionMatrixAttr_metaObject[0]))->_matrix;
+    float *world = currentEntry_1c4ac0(stackOf_1c4ac0(st = o->_state, ((CullMeta *)g_igModelViewMatrixAttr_metaObject)))->_matrix;
+    float *view = currentEntry_1c4ac0(stackOf_1c4ac0(st, (CullMeta *)g_igProjectionMatrixAttr_metaObject))->_matrix;
     int same = o->_lastWorld == world;
     if (same) {
         same = o->_lastView == view;

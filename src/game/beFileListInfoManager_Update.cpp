@@ -1,73 +1,52 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igObjectDispatchView.h"
-extern "C" int sprintf(...);
-extern "C" int strlen(...);
-extern "C" int igGroup_AppendChild(...);
-extern "C" int igInsightCore_FindManager(...);
-extern "C" int igInsightCore_AddInfo(...);
-extern "C" int StringPool_Allocate(...);
-extern "C" int igObject_IsKindOf(...);
+#include "dw4/StringPool.h"
+#include "dw4/beFileListInfoManager.h"
+#include "dw4/beLoadingNode.h"
+#include "dw4/beLua.h"
+#include "dw4/beMessenger.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igGroup.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igObject.h"
+#include "dw4/igSceneInfo.h"
+#include "dw4/igStringObj.h"
+#include <stdio.h>
+#include <string.h>
 extern "C" int igResource_StartAsyncLoading(...);
 extern "C" int igResource_StopAsyncLoading(...);
 extern "C" int igResource_LoadDirectory(...);
 extern "C" int igResource_IsDirectoryLoaded(...);
 extern "C" int igResource_UnloadDirectory(...);
-extern "C" int igStringObj_Set(...);
-extern "C" int igStringObj_Insert(...);
-extern "C" int igStringObj_Erase(...);
-extern "C" int beFileListInfoManager_LoadNextFile(...);
-extern "C" int beFileListInfoManager_AddReadInfos(...);
-extern "C" int beLua__RunNamedChunk(...);
-extern "C" int beLua_ResetLuaState(...);
-extern "C" int beLoadingNode_Lock(...);
-extern "C" int beLoadingNode_IsPastPlayLimit(...);
-extern "C" int List_RemoveWordAt(...);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" void StringChunk_ReleaseHeader(int, void *);
-extern "C" int StringPool_Construct(...);
-extern "C" int StringPool_Intern(...);
-extern "C" int beMessenger_AppendString(...);
-extern "C" int beMessenger_DispatchSelected(...);
-extern "C" int beMessenger_GetBool(...);
-extern "C" int beMessenger_GetBoolCount(...);
-extern "C" int beMessenger_GetObject(...);
-extern "C" int beMessenger_GetObjectCount(...);
-extern "C" int beMessenger_SelectGroup(...);
-extern "C" int beMessenger_SendGroup(...);
-extern int g_stringObjEmptyText[4];
-extern int emptyString[4];
-extern int text_notDefined[4];
-extern int text_ld[4];
-extern int text_igb_3[4];
-extern int text_loadingUSA[4];
-extern int text_BecText_igb[4];
-extern int text_common_sbiallse_igb[4];
-extern int SOUND_11[4];
-extern int SEARCH_2[4];
-extern int MAKEBINLIST[4];
-extern int ISDONETRANS[4];
-extern int text_s_lua_2[4];
-extern int text_func_lua[4];
-extern int text_boot_lua[4];
-extern int LAYERCTL_6[4];
-extern int ORDER[4];
-extern int LOADING[4];
-extern int SET_3[4];
-extern int SWITCH_11[4];
-extern int GETLAYERNODE_2[4];
-extern int TEXTCTL_11[4];
-extern int INITIALIZE[4];
-extern int text_start_lua[4];
-extern int text_first_lua[4];
-extern int text_stagIS08[4];
-extern int text_stagIS09[4];
-extern int text_stagIS10[4];
-extern int text_stagIS12[4];
-extern igMetaObject *g_igSceneInfo_metaObject;
+extern char emptyString[];
+extern char text_notDefined[];
+extern char text_ld[];
+extern char text_igb_3[];
+extern char text_loadingUSA[];
+extern char text_BecText_igb[];
+extern char text_common_sbiallse_igb[];
+extern char SOUND_11[];
+extern char SEARCH_2[];
+extern char MAKEBINLIST[];
+extern char ISDONETRANS[];
+extern char text_s_lua_2[];
+extern char text_func_lua[];
+extern char text_boot_lua[];
+extern char LAYERCTL_6[];
+extern char ORDER[];
+extern char LOADING[];
+extern char SET_3[];
+extern char SWITCH_11[];
+extern char GETLAYERNODE_2[];
+extern char TEXTCTL_11[];
+extern char INITIALIZE[];
+extern char text_start_lua[];
+extern char text_first_lua[];
+extern char text_stagIS08[];
+extern char text_stagIS09[];
+extern char text_stagIS10[];
+extern char text_stagIS12[];
 extern int g_globalContext[4];
-extern int g_stringPool[4];
-extern int g_beLoadingNode_metaObject[4];
-extern int g_beLua_metaObject[4];
 
 /* Retained interned-string share. The stage-name object share (cases 0 and 1) and the interned
  * file-name shares (cases 1, 102, 9) are RAII locals. The copy constructor takes the extra share
@@ -76,22 +55,22 @@ struct StringRef {
     char *p;
     StringRef(char *s) : p(s) {}
     StringRef(const StringRef &o) : p(o.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
-    ~StringRef() { char *s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
+    ~StringRef() { char *s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); } }
 };
 /* Retained share of the stage-name string object. */
 
 extern "C" int StringList_AppendRetained(void *, const StringRef &);
 
 static inline unsigned int igStringObj_Length(const igStringObj *s) { return s->_length; }
-static inline const char *igStringObj_Text(const igStringObj *s) { return (char *)s->_buffer == 0 ? (char *)g_stringObjEmptyText[0] : (char *)s->_buffer; }
-#define EMPTY ((int *)&emptyString[0])
+static inline const char *igStringObj_Text(const igStringObj *s) { return (char *)s->_buffer == 0 ? (char *)g_stringObjEmptyText : (char *)s->_buffer; }
+#define EMPTY ((int *)emptyString)
 #define REL_STR(p) { \
     int *q = (int *)(p); \
     if (q != 0) { \
         int *h = q - 2; \
         int r = q[-1] - 1; \
         q[-1] = r; \
-        if (r == 0) StringChunk_ReleaseHeader(*h, h); \
+        if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); \
     } }
 #define REL_OBJ(o) { \
     int *q = (int *)(o); \
@@ -100,10 +79,10 @@ static inline const char *igStringObj_Text(const igStringObj *s) { return (char 
         if (((unsigned long long)((long long)(int)((igObject *)q)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(q); \
     } }
 #define POOL() { \
-    if (g_stringPool[0] == 0) { \
-        int pv = StringPool_Allocate(0x10); \
+    if (g_stringPool == 0) { \
+        StringPool *pv = (StringPool *)StringPool_Allocate(0x10); \
         if (pv != 0) { pv = StringPool_Construct(pv); } \
-        g_stringPool[0] = pv; \
+        g_stringPool = pv; \
     } }
 #define CLEAR(T, src) { \
     T *l = (T *)(src); \
@@ -157,7 +136,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 s1 = s1 ? s1 : EMPTY;
                 s0 = (beSystem *)self->_system;
                 POOL()
-                nw = (int *)StringPool_Intern(g_stringPool[0], s1);
+                nw = (int *)StringPool_Intern(g_stringPool, (const char *)s1);
                 old = (int *)s0->_stageName;
                 REL_STR(old)
                 s0->_stageName = (int)nw;
@@ -166,7 +145,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 int *nw;
                 s0 = (beSystem *)self->_system;
                 POOL()
-                nw = (int *)StringPool_Intern(g_stringPool[0], &text_notDefined[0]);
+                nw = (int *)StringPool_Intern(g_stringPool, text_notDefined);
                 old = (int *)s0->_stageName;
                 REL_STR(old)
                 s0->_stageName = (int)nw;
@@ -174,18 +153,18 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             igResource_StartAsyncLoading(g_globalContext[0]);
             {
             igSmartPointer<igStringObj> stageObj((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
-            igStringObj_Set(stageObj.p, ((beSystem *)self->_system)->_stageName);
+            igStringObj_Set(stageObj.p, (const char *)((beSystem *)self->_system)->_stageName);
             igStringObj_Erase(stageObj.p, 0, 2);
-            t0 = (int *)stageObj.p; igStringObj_Insert(t0, &text_ld[0], 0, strlen(&text_ld[0]));
-            { int *ta = (int *)stageObj.p; int xa = ta[3]; igStringObj_Insert(ta, &text_igb_3[0], xa, strlen(&text_igb_3[0])); }
-            t0 = (int *)stageObj.p; igStringObj_Insert(t0, &text_loadingUSA[0], 0, strlen(&text_loadingUSA[0]));
+            t0 = (int *)stageObj.p; igStringObj_Insert((igStringObj *)t0, text_ld, 0, strlen(text_ld));
+            { int *ta = (int *)stageObj.p; int xa = ta[3]; igStringObj_Insert((igStringObj *)ta, text_igb_3, (unsigned int)xa, strlen(text_igb_3)); }
+            t0 = (int *)stageObj.p; igStringObj_Insert((igStringObj *)t0, text_loadingUSA, 0, strlen(text_loadingUSA));
             {
                 int a1 = ((int *)stageObj.p)[2];
                 int r;
                 int a2;
-                if (a1 == 0) { a2 = g_stringObjEmptyText[0]; } else { a2 = a1; }
+                if (a1 == 0) { a2 = (int)g_stringObjEmptyText; } else { a2 = a1; }
                 r = igResource_LoadDirectory(g_globalContext[0], a2);
-                ObjectList_AppendRetained(self->_dirList, r);
+                ObjectList_AppendRetained((igObjectList *)self->_dirList, (igObject *)r);
             }
             }
             self->_proc = 1;
@@ -206,22 +185,22 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             }
             s4 = (igObjectList *)s1[7];
             for (k = 0; k < s4->_count; k++) {
-                igInsightCore_AddInfo(self->_insight, ((int *)s4->_data)[k]);
+                igInsightCore_AddInfo((igInsightCore *)self->_insight, (igObject *)((int *)s4->_data)[k]);
             }
             igResource_UnloadDirectory(g_globalContext[0], s1[5]);
             CLEAR(igDirectoryList, self->_dirList)
             s5 = (igObjectList *)((beFileListInfo **)((igInfoList *)self->_infoList)->_data)[0]->_fnames;
             if (self->_isReadOnetime == 0) {
                 int *v;
-                if ((char *)&text_BecText_igb[0] == 0) { v = 0; } else {
+                if ((char *)text_BecText_igb == 0) { v = 0; } else {
                     POOL()
-                    v = (int *)StringPool_Intern(g_stringPool[0], &text_BecText_igb[0]);
+                    v = (int *)StringPool_Intern(g_stringPool, text_BecText_igb);
                 }
                 StringRef firstName((char *)v);
                 StringList_AppendRetained((void *)self->_fnames, StringRef(firstName));
-                if ((char *)&text_common_sbiallse_igb[0] == 0) { v = 0; } else {
+                if ((char *)text_common_sbiallse_igb == 0) { v = 0; } else {
                     POOL()
-                    v = (int *)StringPool_Intern(g_stringPool[0], &text_common_sbiallse_igb[0]);
+                    v = (int *)StringPool_Intern(g_stringPool, text_common_sbiallse_igb);
                 }
                 StringRef secondName((char *)v);
                 StringList_AppendRetained((void *)self->_fnames, StringRef(secondName));
@@ -240,7 +219,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     s4n = s4n ? s4n : EMPTY;
                     if (s4n == 0) { tmp = 0; } else {
                         POOL()
-                        tmp = (int *)StringPool_Intern(g_stringPool[0], s4n);
+                        tmp = (int *)StringPool_Intern(g_stringPool, (const char *)s4n);
                     }
                     {
                     StringRef entryName((char *)tmp);
@@ -259,7 +238,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                             found = 1;
                             REL_OBJ(o)
                         }
-                        List_RemoveWordAt(s5, i);
+                        List_RemoveWordAt((igDataList *)s5, i);
                         i -= 1;
                         ((int *)s5->_data)[s5->_count] = 0;
                     } }
@@ -274,7 +253,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             igStringRefList *s6;
             int n;
             int k;
-            if (beFileListInfoManager_LoadNextFile(self, self->_fnames) == 0) {
+            if (beFileListInfoManager_LoadNextFile(self, (igStringRefList *)self->_fnames) == 0) {
                 break;
             }
             beFileListInfoManager_AddReadInfos(self);
@@ -292,7 +271,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 do {
                     slot = (int **)((char *)s6->_data + off);
                     POOL()
-                    nw = (int *)StringPool_Intern(g_stringPool[0], 0);
+                    nw = (int *)StringPool_Intern(g_stringPool, 0);
                     old = *slot;
                     REL_STR(old)
                     k += 1;
@@ -301,18 +280,18 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 } while (k < n);
             }
             s6->_count = 0;
-            beMessenger_SendGroup(self->_messenger, &SOUND_11[0], &SEARCH_2[0]);
-            if (beMessenger_GetBool(self->_messenger, 0) != 0) {
+            beMessenger_SendGroup((beMessenger *)self->_messenger, SOUND_11, SEARCH_2);
+            if (beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
                 self->_proc = 0x65;
-                beMessenger_SendGroup(self->_messenger, &SOUND_11[0], &MAKEBINLIST[0]);
+                beMessenger_SendGroup((beMessenger *)self->_messenger, SOUND_11, MAKEBINLIST);
                 break;
             }
             self->_proc = 0x66;
             break;
         }
         case 101:
-            beMessenger_SendGroup(self->_messenger, &SOUND_11[0], &ISDONETRANS[0]);
-            if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
+            beMessenger_SendGroup((beMessenger *)self->_messenger, SOUND_11, ISDONETRANS);
+            if (beMessenger_GetBool((beMessenger *)self->_messenger, 0) == 1) {
                 self->_proc = 0x66;
                 break;
             }
@@ -330,7 +309,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     s4n = s4n ? s4n : EMPTY;
                     if (s4n == 0) { tmp = 0; } else {
                         POOL()
-                        tmp = (int *)StringPool_Intern(g_stringPool[0], s4n);
+                        tmp = (int *)StringPool_Intern(g_stringPool, (const char *)s4n);
                     }
                     {
                     StringRef entryName((char *)tmp);
@@ -343,19 +322,19 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             break;
         }
         case 2:
-            if (beFileListInfoManager_LoadNextFile(self, self->_fnames) != 0) {
+            if (beFileListInfoManager_LoadNextFile(self, (igStringRefList *)self->_fnames) != 0) {
                 self->_loaded = 0;
                 self->_proc = 3;
                 break;
             }
             break;
         case 3: {
-            int s0 = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+            int s0 = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject);
             if (s0 != 0) {
-                sprintf(bootScriptPath, &text_s_lua_2[0], ((beSystem *)self->_system)->_stageName);
-                beLua_ResetLuaState(s0);
-                beLua__RunNamedChunk(s0, &text_func_lua[0], bootScriptPath);
-                beLua__RunNamedChunk(s0, &text_boot_lua[0], bootScriptPath);
+                sprintf((char *)bootScriptPath, text_s_lua_2, ((beSystem *)self->_system)->_stageName);
+                beLua_ResetLuaState((beLua *)s0);
+                beLua__RunNamedChunk((beLua *)s0, text_func_lua, (const char *)bootScriptPath);
+                beLua__RunNamedChunk((beLua *)s0, text_boot_lua, (const char *)bootScriptPath);
             }
             self->_proc = 4;
             break;
@@ -375,27 +354,27 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             li = (int)lst;
             if (cnt > 0) {
                 igInfoList *il = (igInfoList *)li; int *ob = *(int **)il->_data;
-                if (ob != 0 && igObject_IsKindOf(ob, g_beLoadingNode_metaObject[0]) != 0) { s1 = (int)ob; } else { s1 = 0; }
-                if (s1 != 0) { s3 = beLoadingNode_IsPastPlayLimit(s1) & 0xFF; } else { s3 = 1; }
+                if (ob != 0 && igObject_IsKindOf(ob, g_beLoadingNode_metaObject) != 0) { s1 = (int)ob; } else { s1 = 0; }
+                if (s1 != 0) { s3 = beLoadingNode_IsPastPlayLimit((beLoadingNode *)s1) & 0xFF; } else { s3 = 1; }
             } else {
                 s3 = 1;
             }
-            v1 = beFileListInfoManager_LoadNextFile(self, s0) & 0xFF;
+            v1 = beFileListInfoManager_LoadNextFile(self, (igStringRefList *)s0) & 0xFF;
             if (s3 && v1) {
                 self->_loaded = 0;
                 self->_proc = 0x14;
                 if (s1 != 0) {
-                    beLoadingNode_Lock(s1);
+                    beLoadingNode_Lock((beLoadingNode *)s1);
                 }
                 while (((igInfoList *)self->_importantInfoList)->_count > 0) {
                     igInfoList *l;
                     int *o;
                     l = (igInfoList *)self->_importantInfoList;
-                    ObjectList_AppendRetained(self->_readInfoList, *(int *)l->_data);
+                    ObjectList_AppendRetained((igObjectList *)self->_readInfoList, (igObject *)*(int *)l->_data);
                     l = (igInfoList *)self->_importantInfoList;
                     o = *(int **)l->_data;
                     REL_OBJ(o)
-                    List_RemoveWordAt(l, 0);
+                    List_RemoveWordAt((igDataList *)l, 0);
                     ((int *)l->_data)[l->_count] = 0;
                 }
                 igResource_StopAsyncLoading(g_globalContext[0]);
@@ -419,12 +398,12 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
         case 6: {
             int i;
             igInfoList *il;
-            beMessenger_SendGroup(self->_messenger, &LAYERCTL_6[0], &ORDER[0]);
-            if (beMessenger_GetBoolCount(self->_messenger) > 0) {
-                beMessenger_SelectGroup(self->_messenger, &LAYERCTL_6[0]);
-                beMessenger_AppendString(self->_messenger, &LOADING[0]);
-                beMessenger_AppendString(self->_messenger, &SET_3[0]);
-                beMessenger_DispatchSelected(self->_messenger, &SWITCH_11[0]);
+            beMessenger_SendGroup((beMessenger *)self->_messenger, LAYERCTL_6, ORDER);
+            if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) > 0) {
+                beMessenger_SelectGroup((beMessenger *)self->_messenger, LAYERCTL_6);
+                beMessenger_AppendString((beMessenger *)self->_messenger, LOADING);
+                beMessenger_AppendString((beMessenger *)self->_messenger, SET_3);
+                beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_11);
                 if (((igInfoList *)self->_infoList)->_count > 1) {
                     for (i = 1; i < ((igInfoList *)self->_infoList)->_count; i++) {
                         int *obj;
@@ -435,13 +414,13 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                         s4 = ((int **)((igInfoList *)self->_infoList)->_data)[i];
                         if (sceneInfoMeta == ((igObjectDispatchView *)s4)->GetMeta()) {
                             obj = (int *)s4[5];
-                            beMessenger_SelectGroup(self->_messenger, &LAYERCTL_6[0]);
+                            beMessenger_SelectGroup((beMessenger *)self->_messenger, LAYERCTL_6);
                             nm = (int *)obj[2];
                             nm = nm ? nm : EMPTY;
-                            beMessenger_AppendString(self->_messenger, nm);
-                            beMessenger_DispatchSelected(self->_messenger, &GETLAYERNODE_2[0]);
-                            if (beMessenger_GetObjectCount(self->_messenger) > 0) {
-                                igGroup_AppendChild(beMessenger_GetObject(self->_messenger, 0), obj);
+                            beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)nm);
+                            beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETLAYERNODE_2);
+                            if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) > 0) {
+                                igGroup_AppendChild((igGroup *)beMessenger_GetObject((beMessenger *)self->_messenger, 0), (igNode *)obj);
                             }
                         }
                     }
@@ -452,11 +431,11 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
         }
         case 7: {
             int s0;
-            beMessenger_SendGroup(self->_messenger, &TEXTCTL_11[0], &INITIALIZE[0]);
-            s0 = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+            beMessenger_SendGroup((beMessenger *)self->_messenger, TEXTCTL_11, INITIALIZE);
+            s0 = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject);
             if (s0 != 0) {
-                sprintf(startScriptPath, &text_s_lua_2[0], ((beSystem *)self->_system)->_stageName);
-                beLua__RunNamedChunk(s0, &text_start_lua[0], startScriptPath);
+                sprintf((char *)startScriptPath, text_s_lua_2, ((beSystem *)self->_system)->_stageName);
+                beLua__RunNamedChunk((beLua *)s0, text_start_lua, (const char *)startScriptPath);
             }
             self->_proc = 8;
             break;
@@ -466,38 +445,38 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             self->_proc = 9;
             break;
         case 9: {
-            int s0 = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
+            int s0 = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject);
             int *nm;
             int *rv;
             if (s0 != 0) {
-                sprintf(firstScriptPath, &text_s_lua_2[0], ((beSystem *)self->_system)->_stageName);
-                beLua__RunNamedChunk(s0, &text_first_lua[0], firstScriptPath);
+                sprintf((char *)firstScriptPath, text_s_lua_2, ((beSystem *)self->_system)->_stageName);
+                beLua__RunNamedChunk((beLua *)s0, text_first_lua, (const char *)firstScriptPath);
             }
             self->_proc = -1;
-            if ((char *)&text_stagIS08[0] == 0) { rv = 0; } else {
+            if ((char *)text_stagIS08 == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(g_stringPool[0], &text_stagIS08[0]);
+                rv = (int *)StringPool_Intern(g_stringPool, text_stagIS08);
             }
             StringRef resetName0((char *)rv);
-            if ((char *)&text_stagIS09[0] == 0) { rv = 0; } else {
+            if ((char *)text_stagIS09 == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(g_stringPool[0], &text_stagIS09[0]);
+                rv = (int *)StringPool_Intern(g_stringPool, text_stagIS09);
             }
             StringRef resetName1((char *)rv);
-            if ((char *)&text_stagIS10[0] == 0) { rv = 0; } else {
+            if ((char *)text_stagIS10 == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(g_stringPool[0], &text_stagIS10[0]);
+                rv = (int *)StringPool_Intern(g_stringPool, text_stagIS10);
             }
             StringRef resetName2((char *)rv);
-            if ((char *)&text_stagIS12[0] == 0) { rv = 0; } else {
+            if ((char *)text_stagIS12 == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(g_stringPool[0], &text_stagIS12[0]);
+                rv = (int *)StringPool_Intern(g_stringPool, text_stagIS12);
             }
             StringRef resetName3((char *)rv);
             nm = (int *)((beSystem *)self->_system)->_stageName;
             if (nm == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(g_stringPool[0], nm);
+                rv = (int *)StringPool_Intern(g_stringPool, (const char *)nm);
             }
             StringRef curName((char *)rv);
             {

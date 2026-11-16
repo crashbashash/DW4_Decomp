@@ -2,20 +2,16 @@
 #include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/igobject_release.h"
 #include "dw4/beBaseInfoManager.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beSystem.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igObject.h"
 
 extern "C" void beBaseInfoManager_Activate(void);
 extern "C" void beBaseInfoManager_Deactivate(void);
-extern "C" int igInsightCore_FindManager(...);
-extern "C" int igInsightCore_AddToScheduler(...);
-extern "C" int ObjectList_AppendRetained(...);
 extern "C" void beBaseInfoManager_OnAddRam(void);
-extern "C" int igInsightCore_RemoveFromScheduler(...);
-extern "C" int List_Reserve(...);
-extern "C" int igObject_Destroy(...);
-extern "C" int beSystem_IsRunning(...);
 extern "C" igMetaObject *beBaseInfoManager_GetMeta(void);
-extern "C" int g_beSystem_metaObject[4];
-extern "C" int g_beMessenger_metaObject[4];
 extern "C" void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *self);
 extern "C" void beBaseInfoManager_Update(beBaseInfoManager *self);
 
@@ -30,8 +26,8 @@ void beBaseInfoManager_Deactivate(void)
 
 void beBaseInfoManager_Start(beBaseInfoManager *self) {
     ((beBaseInfoManagerDispatchView *)self)->Prepare();
-    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
-    self->_messenger = igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
+    self->_system = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject));
+    self->_messenger = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_beMessenger_metaObject));
 }
 
 /* Slot 24 default: empty. */
@@ -45,7 +41,7 @@ int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info) {
     if (infoMeta == ((igObjectDispatchView *)info)->GetMeta()) {
         int count;
         int i;
-        ObjectList_AppendRetained(self->_infoList, info);
+        ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
         manager->OnAddInfo(info);
         count = ((beBaseInfoRamList *)info->_ramList)->_count;
         for (i = 0; i < count; i++) {
@@ -59,7 +55,7 @@ int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info) {
             ram->_ramNo = i;
             manager->OnAddRam(ram);
         }
-        igInsightCore_AddToScheduler(self->_insight, self);
+        igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
         self->_isUpdateRun = 1;
         return 1;
     }
@@ -109,9 +105,9 @@ void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *self) {
     infosForRelease = (beBaseInfoList *)self->_infoList;
     int ok = infosForRelease->_count > 0;
     if (ok == 0) {
-        List_Reserve(infosForRelease, 0, 4);
+        List_Reserve((igDataList *)infosForRelease, 0, 4);
     }
-    igInsightCore_RemoveFromScheduler(self->_insight, self);
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
     self->_isUpdateRun = 0;
 }
 
@@ -121,7 +117,7 @@ void beBaseInfoManager_Update(beBaseInfoManager *self) {
     int ramCount;
     int ramIndex;
     beBaseInfoRamList *rams;
-    if (beSystem_IsRunning(self->_system) != 0 && self->_isUpdateRun != 0 && ((beSystem *)self->_system)->_isFrameSkip == 0) {
+    if (beSystem_IsRunning((beSystem *)self->_system) != 0 && self->_isUpdateRun != 0 && ((beSystem *)self->_system)->_isFrameSkip == 0) {
         infoCount = ((beBaseInfoList *)self->_infoList)->_count;
         for (infoIndex = 0; infoIndex < infoCount; infoIndex++) {
             rams = (beBaseInfoRamList *)((beBaseInfo **)((beBaseInfoList *)self->_infoList)->_data)[infoIndex]->_ramList;

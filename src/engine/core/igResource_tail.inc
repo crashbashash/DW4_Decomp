@@ -275,13 +275,13 @@ void igResource_RemoveIGBFiles(igResource *self) {
     igObject *o;
     for (i = ((igTDataList<igObject *> *)self->_directoryList)->_count - 1; i >= 0; i--) {
         off = i * 4;
-        if (igObject_IsKindOf((void *)(*(igObject **)((char *)((igTDataList<igObject *> *)self->_directoryList)->_data + off)), (igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) {
+        if (igObject_IsKindOf((igObject *)(*(igObject **)((char *)((igTDataList<igObject *> *)self->_directoryList)->_data + off)), (igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) {
             l = (igTDataList<igObject *> *)self->_directoryList;
             o = *(igObject **)((char *)l->_data + off);
             if (o != 0) {
                 o->_refCount = o->_refCount - 1;
                 if ((o->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy((void *)o);
+                    igObject_Destroy((igObject *)o);
                 }
             }
             List_RemoveWordAt((igDataList *)l, i);
@@ -306,7 +306,7 @@ int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const
     }
     found = 0;
     for (i = 0; i < (unsigned int)igDirectory_GetInfoCount(directory.get()); i++) {
-        if (igObject_IsKindOf((void *)igDirectory_GetInfo(directory.get(), i), (igMetaObject *)meta.get()) != 0) {
+        if (igObject_IsKindOf((igObject *)igDirectory_GetInfo(directory.get(), i), (igMetaObject *)meta.get()) != 0) {
             if (found++ == wanted) {
                 return igDirectory_GetInfo(directory.get(), i);
             }
@@ -316,7 +316,7 @@ int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const
 }
 
 static inline igObjectDirEntryView *AsObjectDirEntry(void *p) {
-    if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) { return (igObjectDirEntryView *)p; }
+    if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) { return (igObjectDirEntryView *)p; }
     return 0;
 }
 
@@ -338,7 +338,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
             count = directory->_count;
             for (i = 0; i < count; i++) {
                 entry = AsObjectDirEntry(igDirectory_GetEntry((int *)directory, i));
-                if (entry != 0 && igObject_IsKindOf((void *)entry->_ref, fromMeta) != 0) {
+                if (entry != 0 && igObject_IsKindOf((igObject *)entry->_ref, fromMeta) != 0) {
                     if (toMeta == 0) return;
                     igSmartPointer<igObject> source((igObject *)entry->_ref, kRetainReference);
                     igSmartPointer<igObject> target((igObject *)igMetaObject_CreateInstanceDefault(toMeta), kRetainReference);
@@ -379,7 +379,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
         nodeMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igNode");
         if (nodeMeta != 0) {
             root = ((void *)igDirectory_GetObjectByName(directory, (int)"root"));
-            if (root != 0 && igObject_IsKindOf(root, (igMetaObject *)nodeMeta) != 0) {
+            if (root != 0 && igObject_IsKindOf((igObject *)root, (igMetaObject *)nodeMeta) != 0) {
                 infoMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igSceneInfo");
                 if (infoMeta != 0) {
                     igObject *t;

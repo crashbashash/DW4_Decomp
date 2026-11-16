@@ -1,5 +1,5 @@
 void FUN_001ce710(void) {
-    *(int *)0x562790 = FUN_0019a6e0(Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562790 = FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
 void FUN_001ce740(void) {
@@ -16,29 +16,29 @@ void FUN_001ce740(void) {
 
 void FUN_001ce790(int arg0, int arg1) {
     FUN_001e02f0(arg0, arg1);
-    if (igMetaObject_IsOfType(arg1, ((int)igNode_GetMetaObject())) != 0) {
-        if (igMetaObject_IsOfType(arg1, ((int)igGeometry_GetMetaObject())) != 0) {
-            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cfc70);
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
+        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGeometry_GetMetaObject()))) != 0) {
+            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001cfc70);
             return;
         }
-        if (igMetaObject_IsOfType(arg1, ((int)igTransform_GetMetaObject())) != 0) {
-            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cfaa0);
+        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igTransform_GetMetaObject()))) != 0) {
+            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001cfaa0);
             return;
         }
-        if (igMetaObject_IsOfType(arg1, ((int)igGroup_GetMetaObject())) != 0) {
-            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001cf990);
+        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGroup_GetMetaObject()))) != 0) {
+            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001cf990);
             return;
         }
-        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)((int *)FUN_001cf980));
+        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)((int *)FUN_001cf980));
     }
 }
 
-void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0) {
+void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0, int flags) {
     igObject *sp3C;
     igObject *s0;
     igObject *old;
 
-    Gap__Core__igObject__resetFields();
+    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     FUN_0018f760(&sp3C, igObject_GetAllocator(arg0));
     s0 = sp3C;
     if (s0 != 0) {
@@ -48,14 +48,14 @@ void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0) 
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
         if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)old);
+            igObject_Destroy((igObject *)old);
         }
     }
     arg0->_volumes = (int)s0;
     if (sp3C != 0) {
         sp3C->_refCount = sp3C->_refCount - 1;
         if ((sp3C->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)sp3C);
+            igObject_Destroy((igObject *)sp3C);
         }
     }
     igIntersectTraversal_ResetStacks((igIntersectTraversal *)arg0);
@@ -78,7 +78,7 @@ void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal) {
     } else {
         List_Resize(m, idx + 1, 64);
     }
-    igMatrix44f_Copy(m->data + idx, g_matrix44Identity);
+    igMatrix44f_Copy(m->data + idx, &g_matrix44Identity);
     o = self->objs;
     n = o->n;
     for (i = 0; i < n; i++) {

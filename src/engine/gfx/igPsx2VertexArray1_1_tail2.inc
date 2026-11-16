@@ -4,7 +4,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_12(igPsx2VertexArray1_1 *self) {
     }
     if (self->_vdata != 0) {
         FUN_0015e7b0((VertexBufferOwner *)self);
-        igObject_FreeMemory(self, self->_vdata);
+        igObject_FreeMemory((igObject *)self, (void *)self->_vdata);
         self->_vdata = 0;
         self->_numVerts = 0;
     }
@@ -27,7 +27,7 @@ int Gap__Gfx__igPsx2VertexArray1_1__vfunc_24(S_17d0c0 *arg0, int *arg1, int arg2
     arg0->f1c = *arg1;
     arg0->f10 = 0;
     arg0->f14 = arg3;
-    a = (VC_17d0c0 *)igObject_GetAllocator();
+    a = (VC_17d0c0 *)igObject_GetAllocator((igObject *)arg0);
     arg0->f8 = a->vX(0x14, 4);
     total += 0x50;
     total += FUN_0015e4e0((VA_15e4e0 *)arg0);
@@ -42,7 +42,7 @@ void FUN_0017d170(V_17d170 *arg0) {
     if ((unsigned char)((*flags & 0xF0) >> 4) > 0) {
         Obj_17d170 *o;
         int a;
-        a = igObject_GetAllocator(arg0);
+        a = (int)igObject_GetAllocator((igObject *)arg0);
         o = arg0->f56;
         if (o != 0) {
             o->refs = o->refs - 1;
@@ -51,7 +51,7 @@ void FUN_0017d170(V_17d170 *arg0) {
             }
         }
         arg0->f56 = (Obj_17d170 *)FUN_001527c0(a);
-        a = igObject_GetAllocator(arg0);
+        a = (int)igObject_GetAllocator((igObject *)arg0);
         o = arg0->f48;
         if (o != 0) {
             o->refs = o->refs - 1;
@@ -61,7 +61,7 @@ void FUN_0017d170(V_17d170 *arg0) {
         }
         arg0->f48 = igPointerList_Create(a);
         if (*flags & 2) {
-            a = igObject_GetAllocator(arg0);
+            a = (int)igObject_GetAllocator((igObject *)arg0);
             o = arg0->f52;
             if (o != 0) {
                 o->refs = o->refs - 1;
@@ -89,14 +89,14 @@ void FUN_0017d2b0(struct O_17d2b0 *arg0) {
     var_s0 = 0;
     if (arg0->f48 != 0) {
         while (var_s0 < arg0->f48->n) {
-            Memory_FreeBuffer(arg0->f48->items[var_s0]);
+            Memory_FreeBuffer((void *)arg0->f48->items[var_s0]);
             var_s0 += 1;
         }
     }
     var_s0 = 0;
     if (arg0->f52 != 0) {
         while (var_s0 < arg0->f52->n) {
-            Memory_FreeBuffer(arg0->f52->items[var_s0]);
+            Memory_FreeBuffer((void *)arg0->f52->items[var_s0]);
             var_s0 += 1;
         }
     }
@@ -252,7 +252,7 @@ int Gap__Gfx__igPsx2VertexArray1_1__vfunc_52(igPsx2VertexArray1_1 *self, int ind
 
 void Gap__Gfx__igPsx2VertexArray1_1__vfunc_57(VertexArrayView_17d910 *arg0, int arg1, float x) {
     float t = fmodf(x, 6.2831855f);
-    if (_dpflt(fptodp(t), 0) != 0) {
+    if (_dpflt(fptodp(t), 0.0) != 0) {
         t += 6.2831855f;
     }
     if (!(x < 0.0f) && x <= 1.5707964f) {

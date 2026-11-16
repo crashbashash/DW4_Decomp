@@ -25,7 +25,7 @@ int beModelCtrlMOVERL_GetVTable(void) {
     *modelNameSlot = 0;
     boneNameSlot = (char **)&obj._boneName;
     *boneNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlMOVERL_vtable[0];
     igStringRef_Release(boneNameSlot);
     igStringRef_Release(modelNameSlot);
@@ -39,7 +39,7 @@ void beModelCtrlMOVERL_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlMOVERL_Register);
 }
 
-void *beModelCtrlMOVERL_Register(void) {
+CallbackArray *beModelCtrlMOVERL_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -80,9 +80,9 @@ static int g_beModelCtrlMOVERL_fieldOffsets[] = {
 
 void beModelCtrlMOVERL_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlMOVERL_metaObject;
+    meta = g_beModelCtrlMOVERL_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlMOVERL_ctorTable, 2);
     igMetaObject_NameFields(meta, g_beModelCtrlMOVERL_fieldTable, g_beModelCtrlMOVERL_fieldHandles, g_beModelCtrlMOVERL_fieldOffsets, base);

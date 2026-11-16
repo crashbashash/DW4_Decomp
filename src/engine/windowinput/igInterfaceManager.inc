@@ -16,9 +16,9 @@ void FUN_00145f60(void)
 
 static igMetaObjectCallback g_igInterfaceManager_callbackList[] = { FUN_00146190, 0 };
 
-void igInterfaceManager_Register(void) {
+CallbackArray *igInterfaceManager_Register(void) {
     WindowInputLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igInterfaceManager_metaObject,
         igObject_Register,
@@ -56,12 +56,12 @@ void igInterfaceManager_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igInterfaceManager_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igInterfaceManager_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igInterfaceManager_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001460b0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igInterfaceManager_fieldTable, g_igInterfaceManager_fieldHandles, g_igInterfaceManager_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igInterfaceManager_fieldTable, g_igInterfaceManager_fieldHandles, g_igInterfaceManager_fieldOffsets, temp_s2);
     *(int *)((char *)(g_igInterfaceManager_metaObject) + 60) = (int)(thunk_FUN_00146470);
 }
 

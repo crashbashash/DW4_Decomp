@@ -61,11 +61,11 @@ void igObject_UserDeepCopy(void)
 }
 
 /* Slot 7 default: empty. */
-void Gap__Core__igObject__userConstruct(void)
+void Gap__Core__igObject__userConstruct(igObject *self)
 {
 }
 
-void Gap__Core__igObject__userDestruct(void)
+void Gap__Core__igObject__userDestruct(igObject *self)
 {
 }
 
@@ -568,7 +568,7 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
         field = (igMetaFieldView *)igMetaObject_GetFieldAt(meta, i);
         if (i < limit) {
             field->ConstructValue((int)object);
-            if (igObject_IsKindOf(field, (igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) {
+            if (igObject_IsKindOf((igObject *)field, (igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) {
                 igMetaField_Reset((igMetaField *)field, object);
             }
         } else {

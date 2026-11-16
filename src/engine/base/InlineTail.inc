@@ -10,11 +10,11 @@ void **FUN_00229460(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -98,7 +98,7 @@ S_2 *FUN_00229710(S_2 *arg0) {
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(p);
+            igObject_Destroy((igObject *)p);
         }
     }
     arg0->a = 0;
@@ -106,7 +106,7 @@ S_2 *FUN_00229710(S_2 *arg0) {
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(p);
+            igObject_Destroy((igObject *)p);
         }
     }
     arg0->b = 0;
@@ -114,7 +114,7 @@ S_2 *FUN_00229710(S_2 *arg0) {
     if (p != 0) {
         p->refs = p->refs - 1;
         if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(p);
+            igObject_Destroy((igObject *)p);
         }
     }
     arg0->c = 0;
@@ -275,7 +275,7 @@ void FUN_0022a8d0(S0 *arg0, S1 *arg1) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f8 = (int)(arg1);
@@ -310,7 +310,7 @@ void FUN_0022a9e0(S0 *arg0, S1 *arg1) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f8 = (int)(arg1);
@@ -365,7 +365,7 @@ int FUN_0022ab90(int arg0, int arg1, int arg2) {
     int var_s0;
     int r;
     var_s0 = FUN_0022aac0((T_4 *)arg0, arg1);
-    if (igObject_IsKindOf((void *)var_s0, (igMetaObject *)arg2) != 0) { r = var_s0; } else { var_s0 = FUN_0022ac70(arg0, arg2); r = var_s0; } return r;
+    if (igObject_IsKindOf((igObject *)var_s0, (igMetaObject *)arg2) != 0) { r = var_s0; } else { var_s0 = FUN_0022ac70(arg0, arg2); r = var_s0; } return r;
 }
 
 int FUN_0022ac00(void *arg0) {
@@ -393,7 +393,7 @@ int FUN_0022ac70(int arg0, int arg1) {
 
     v = FUN_0022ad00((GraphIterator *)arg0);
     while (FUN_0022ac60((void *)arg0) != 0) {
-        if (v != 0 && igObject_IsKindOf((void *)v, (igMetaObject *)arg1) != 0) {
+        if (v != 0 && igObject_IsKindOf((igObject *)v, (igMetaObject *)arg1) != 0) {
             return v;
         }
         v = FUN_0022ad00((GraphIterator *)arg0);
@@ -403,7 +403,7 @@ int FUN_0022ac70(int arg0, int arg1) {
 
 
 void FUN_0022b0a0(int arg0, int *arg1) {
-    int sp60[16];
+    float sp60[16];
     unsigned int n, i;
     int *o;
     struct TransformObjectList *l;
@@ -411,7 +411,7 @@ void FUN_0022b0a0(int arg0, int *arg1) {
     n = *(int *)(arg1[3] + 8);
     for (i = 0; i < n; i++) {
         o = ((struct TransformObjectList *)arg1[3])->data[i];
-        if (igObject_IsKindOf(o, (igMetaObject *)g_igTransform_metaObject[0]) != 0) {
+        if (igObject_IsKindOf((igObject *)o, g_igTransform_metaObject) != 0) {
             igMatrix44f_Multiply(sp60, (int)o + 0x20, sp60);
         }
     }
@@ -454,22 +454,22 @@ int Gap__igLockInterface__vfunc_27(int self, int mode) {
     return 0;
 }
 
-int Gap__igLogInterface__vfunc_24(void *d0, int arg1) {
-    return fflush(arg1) == 0;
+int Gap__igLogInterface__vfunc_24(void *d0, FILE *stream) {
+    return fflush(stream) == 0;
 }
 
-int Gap__igLogInterface__vfunc_27(void *arg0, int arg1, int arg2) {
+int Gap__igLogInterface__vfunc_27(void *arg0, const char *format, va_list args) {
     int var_v0;
 
     var_v0 = -1;
     if (*(unsigned char *)((char *)(arg0) + 32) != 0) {
-        var_v0 = vprintf(arg1, arg2);
+        var_v0 = vprintf(format, args);
     }
     return var_v0;
 }
 
 igMetaObject *Gap__Core__igInfo__vfunc_22(void) {
-    return g_igInfo_metaObject[0];
+    return g_igInfo_metaObject;
 }
 
 /* IgMessageInterface slot 13: run the base-class hook (Gap::Core::igObject::vfunc_11, a bare
@@ -497,7 +497,7 @@ extern "C" int igOptimizer_CheckGraph(B_2 *log, int root) {
     FUN_0022aac0((T_4 *)it.get(), root);
     int node = FUN_0022ac00(it.get());
     for (; FUN_0022ac60(it.get()) != 0; FUN_0022ac40(it.get())) {
-        if (igObject_IsKindOf((void *)node, igSegment_GetMetaObject()) != 0) {
+        if (igObject_IsKindOf((igObject *)node, igSegment_GetMetaObject()) != 0) {
             log->put("The optimization doesn't support igSegment\n");
             return 0;
         }
@@ -564,21 +564,21 @@ extern "C" bool igOptPass_ApplyToObjects(OptPass *self) {
 }
 
 bool FUN_0022b820(int arg0, int arg1) {
-    if (igObject_IsKindOf((void *)arg1, (igMetaObject *)g_igSceneInfo_metaObject[0]) != 0) {
+    if (igObject_IsKindOf((igObject *)arg1, g_igSceneInfo_metaObject) != 0) {
         return FUN_0022bac0((void *)arg1, (void *)arg0);
     }
-    if (igObject_IsKindOf((void *)arg1, (igMetaObject *)g_igAnimationDatabase_metaObject[0]) != 0) {
+    if (igObject_IsKindOf((igObject *)arg1, g_igAnimationDatabase_metaObject) != 0) {
         return FUN_0022b910((Own *)arg1, (V *)arg0);
     }
     return 0;
 }
 
 void FUN_0022b8a0(void **arg0, void *arg1) {
-    if (igObject_IsKindOf(arg1, (igMetaObject *)g_igSceneInfo_metaObject[0]) != 0) {
+    if (igObject_IsKindOf((igObject *)arg1, g_igSceneInfo_metaObject) != 0) {
         ((DW4VC_132_1 *)(arg0))->vX((int)(*(int *)((char *)(arg1) + 20)));
         return;
     }
-    igObject_IsKindOf(arg1, (igMetaObject *)g_igAnimationDatabase_metaObject[0]);
+    igObject_IsKindOf((igObject *)arg1, g_igAnimationDatabase_metaObject);
 }
 
 extern "C" bool FUN_0022b910(Own *arg0, V *arg1) {
@@ -627,8 +627,8 @@ void Gap__igOptInterface__vfunc_13(void *arg0, int flags) {
     *(int *)((char *)(arg0) + 8) = (int)(arg0);
 }
 
-int Gap__Core__igMetaObject__vfunc_22(void) {
-    return g_igMetaObject_metaObject[0];
+igMetaObject *Gap__Core__igMetaObject__vfunc_22(void) {
+    return g_igMetaObject_metaObject;
 }
 
 void FUN_0022bc10(int *arg0, int arg1, int arg2, int arg3, int arg4) {
@@ -705,11 +705,11 @@ extern "C" int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3) {
     for (; i < n; i++) {
         e = l->arr[i];
         nm = e->name;
-        igStringObj_Set((int)buffer.p, (int)nm);
+        igStringObj_Set((igStringObj *)buffer.p, nm);
         if (FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0) != 0) {
             found = 1;
         } else if (*nm == 0x5f) {
-            igStringObj_Set((int)buffer.p, (int)(e->name + 1));
+            igStringObj_Set((igStringObj *)buffer.p, e->name + 1);
             if (0 != FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0)) found = 1;
         }
     }
@@ -914,8 +914,8 @@ int FUN_0022ce90(char *arg0, int arg1, char *arg2, int arg3, int arg4) {
     char *temp_a0;
     char *temp_v1;
 
-    arg0 = dw4_cast_or_null(arg0, g_igVec4fMetaField_metaObject);
-    arg2 = dw4_cast_or_null(arg2, g_igVec4fMetaField_metaObject);
+    arg0 = dw4_cast_or_null(arg0, &g_igVec4fMetaField_metaObject);
+    arg2 = dw4_cast_or_null(arg2, &g_igVec4fMetaField_metaObject);
     if ((arg0 != 0) && (arg2 != 0)) {
         temp_a0 = (char *)(arg1 + ((igVec4fMetaField *)arg0)->_offset);
         temp_v1 = (char *)(arg3 + ((igVec4fMetaField *)arg2)->_offset);
@@ -935,12 +935,12 @@ int FUN_0022cf70(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf(arg0, (igMetaObject *)DAT_00560f60[0]) != 0)) {
+    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00560f60[0]) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf(arg2, (igMetaObject *)DAT_00560f60[0]) != 0)) {
+    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00560f60[0]) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -963,12 +963,12 @@ int FUN_0022d050(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf(arg0, (igMetaObject *)DAT_00560f68[0]) != 0)) {
+    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00560f68[0]) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf(arg2, (igMetaObject *)DAT_00560f68[0]) != 0)) {
+    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00560f68[0]) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -990,12 +990,12 @@ int FUN_0022d120(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf(arg0, (igMetaObject *)g_igVec3fMetaField_metaObject[0]) != 0)) {
+    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, g_igVec3fMetaField_metaObject) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf(arg2, (igMetaObject *)g_igVec3fMetaField_metaObject[0]) != 0)) {
+    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, g_igVec3fMetaField_metaObject) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1033,8 +1033,8 @@ int FUN_0022d2c0(char *arg0, int arg1, char *arg2, int arg3, int arg4) {
     char *temp_a0;
     char *temp_v1;
 
-    arg0 = dw4_cast_or_null(arg0, g_igVec2fMetaField_metaObject);
-    arg2 = dw4_cast_or_null(arg2, g_igVec2fMetaField_metaObject);
+    arg0 = dw4_cast_or_null(arg0, &g_igVec2fMetaField_metaObject);
+    arg2 = dw4_cast_or_null(arg2, &g_igVec2fMetaField_metaObject);
     if ((arg0 != 0) && (arg2 != 0)) {
         temp_a0 = (char *)(arg1 + ((igVec2fMetaField *)arg0)->_offset);
         temp_v1 = (char *)(arg3 + ((igVec2fMetaField *)arg2)->_offset);
@@ -1052,12 +1052,12 @@ int FUN_0022d390(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf(arg0, (igMetaObject *)DAT_00560f98[0]) != 0)) {
+    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00560f98[0]) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf(arg2, (igMetaObject *)DAT_00560f98[0]) != 0)) {
+    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00560f98[0]) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1085,12 +1085,12 @@ extern "C" int FUN_0022d460(O_2 *arg0, int arg1, O_2 *arg2, int arg3, int arg4) 
 int FUN_0022d520(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     void *r0;
     void *r2;
-    if (arg0 != 0 && igObject_IsKindOf(arg0, (igMetaObject *)DAT_00561010[0]) != 0) {
+    if (arg0 != 0 && igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00561010[0]) != 0) {
         r0 = arg0;
     } else {
         r0 = 0;
     }
-    if (arg2 != 0 && igObject_IsKindOf(arg2, (igMetaObject *)DAT_00561010[0]) != 0) {
+    if (arg2 != 0 && igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00561010[0]) != 0) {
         r2 = arg2;
     } else {
         r2 = 0;
@@ -1120,12 +1120,12 @@ int FUN_0022d6a0(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf(arg0, (igMetaObject *)g_igUnsignedLongMetaField_metaObject[0]) != 0)) {
+    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, g_igUnsignedLongMetaField_metaObject) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf(arg2, (igMetaObject *)g_igUnsignedLongMetaField_metaObject[0]) != 0)) {
+    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, g_igUnsignedLongMetaField_metaObject) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1154,12 +1154,12 @@ int FUN_0022d760(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
 int FUN_0022d820(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     void *r0;
     void *r2;
-    if (arg0 != 0 && igObject_IsKindOf(arg0, (igMetaObject *)g_igUnsignedCharMetaField_metaObject[0]) != 0) {
+    if (arg0 != 0 && igObject_IsKindOf((igObject *)arg0, g_igUnsignedCharMetaField_metaObject) != 0) {
         r0 = arg0;
     } else {
         r0 = 0;
     }
-    if (arg2 != 0 && igObject_IsKindOf(arg2, (igMetaObject *)g_igUnsignedCharMetaField_metaObject[0]) != 0) {
+    if (arg2 != 0 && igObject_IsKindOf((igObject *)arg2, g_igUnsignedCharMetaField_metaObject) != 0) {
         r2 = arg2;
     } else {
         r2 = 0;
@@ -1254,8 +1254,8 @@ int FUN_0022dce0(char *arg0, int arg1, char *arg2, int arg3, int arg4) {
     char *temp_a0;
     char *temp_v1;
 
-    arg0 = dw4_cast_or_null(arg0, g_igLongMetaField_metaObject);
-    arg2 = dw4_cast_or_null(arg2, g_igLongMetaField_metaObject);
+    arg0 = dw4_cast_or_null(arg0, &g_igLongMetaField_metaObject);
+    arg2 = dw4_cast_or_null(arg2, &g_igLongMetaField_metaObject);
     if ((arg0 != 0) && (arg2 != 0)) {
         temp_a0 = (char *)(arg1 + *(int *)(arg0 + 8));
         temp_v1 = (char *)(arg3 + *(int *)(arg2 + 8));
@@ -1269,12 +1269,12 @@ int FUN_0022dda0(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf(arg0, (igMetaObject *)g_igIntMetaField_metaObject[0]) != 0)) {
+    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, g_igIntMetaField_metaObject) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf(arg2, (igMetaObject *)g_igIntMetaField_metaObject[0]) != 0)) {
+    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, g_igIntMetaField_metaObject) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1302,12 +1302,12 @@ int FUN_0022df20(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     int r;
     void *a;
     void *b;
-    if (arg0 != 0 && igObject_IsKindOf(arg0, (igMetaObject *)g_igEnumMetaField_metaObject[0]) != 0) {
+    if (arg0 != 0 && igObject_IsKindOf((igObject *)arg0, g_igEnumMetaField_metaObject) != 0) {
         a = arg0;
     } else {
         a = 0;
     }
-    if (arg2 != 0 && igObject_IsKindOf(arg2, (igMetaObject *)g_igEnumMetaField_metaObject[0]) != 0) {
+    if (arg2 != 0 && igObject_IsKindOf((igObject *)arg2, g_igEnumMetaField_metaObject) != 0) {
         b = arg2;
     } else {
         b = 0;

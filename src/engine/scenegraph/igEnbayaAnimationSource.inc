@@ -24,7 +24,7 @@ igMetaField *g_igEnbayaAnimationSource_lastUpdateTimeMetaField;
 
 igMetaObject *FUN_001a2210(void) {
     if (g_igEnbayaAnimationSource_metaObject == 0) {
-        g_igEnbayaAnimationSource_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igEnbayaAnimationSource_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igEnbayaAnimationSource_metaObject;
 }
@@ -40,9 +40,9 @@ igMetaObject *igEnbayaAnimationSource_GetMetaObject(void)
 int igEnbayaAnimationSource_GetVTable(void) {
     union U_1a22b0 u;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&g_igEnbayaAnimationSource_vtable[0]);
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void igEnbayaAnimationSource_EnsureRegistered(void)
@@ -50,9 +50,9 @@ void igEnbayaAnimationSource_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEnbayaAnimationSource_Register);
 }
 
-void igEnbayaAnimationSource_Register(void) {
+CallbackArray *igEnbayaAnimationSource_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEnbayaAnimationSource_metaObject,
         igObject_Register,
@@ -72,12 +72,12 @@ void thunk_igEnbayaAnimationSource_GetMetaObject(void) {
 }
 
 static FieldFactory g_igEnbayaAnimationSource_ctorTable[] = {
-    igMemoryRefMetaField_Create,
-    igUnsignedCharArrayMetaField_Create,
-    igUnsignedCharMetaField_Create,
-    igEnumMetaField_Create,
-    igFloatMetaField_Create,
-    igLongMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedCharArrayMetaField_Create,
+    (FieldFactory)igUnsignedCharMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
 };
 static const char *g_igEnbayaAnimationSource_fieldTable[] = {
     "_enbayaAnimationStream",
@@ -113,26 +113,26 @@ void igEnbayaAnimationSource_InitFields(void) {
     void *temp_s1;
     int temp_s0;
     temp_s1 = (void *)g_igEnbayaAnimationSource_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igEnbayaAnimationSource_ctorTable, 6);
-    temp_s2 = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0);
+    temp_s2 = (igMemoryRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0);
     temp_s2->_memType = igCharMetaField_GetDefaultDescriptor();
     temp_s2->_destruct = 1;
     temp_s2->_releaseOnCopy = 1;
     temp_s2->_releaseOnReset = 1;
-    tf = (igUnsignedCharArrayMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1);
+    tf = (igUnsignedCharArrayMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1);
     tf->_num = 3;
-    igUnsignedCharMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)), 3);
-    tf2 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3);
+    igUnsignedCharMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)), 3);
+    tf2 = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3);
     tf2->_getMetaEnumFunction = (int)FUN_001a21b0;
-    temp_v0 = (igFloatMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4);
+    temp_v0 = (igFloatMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4);
     igFloatMetaField_SetDefault(temp_v0, -1.0f);
     temp_v0->_persistent = 0;
-    temp_v0_2 = (igLongMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5);
+    temp_v0_2 = (igLongMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5);
     igLongMetaField_SetDefault(temp_v0_2, -1);
     temp_v0_2->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igEnbayaAnimationSource_fieldTable, g_igEnbayaAnimationSource_fieldHandles, g_igEnbayaAnimationSource_fieldOffsets, temp_s0);
-    igMetaObject_AddExitCallback(FUN_001a24e0);
+    igMetaObject_AddExitCallback((int)FUN_001a24e0);
 }
 
 void FUN_001a24d0(void) {

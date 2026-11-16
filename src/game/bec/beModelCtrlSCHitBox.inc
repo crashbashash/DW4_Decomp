@@ -8,7 +8,7 @@ igMetaField *g_beModelCtrlSCHitBox_isPositionLockMetaField;
 
 beModelCtrlSCHitBox *beModelCtrlSCHitBox_Create(int allocator) {
     beModelCtrlSCHitBox_EnsureRegistered();
-    return (beModelCtrlSCHitBox *)igMetaObject_CreateInstance(*(int *)0x5887C8, allocator);
+    return (beModelCtrlSCHitBox *)igMetaObject_CreateInstance(g_beModelCtrlSCHitBox_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beModelCtrlSCHitBox_GetMetaObject(void) {
@@ -21,7 +21,7 @@ int beModelCtrlSCHitBox_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beModelCtrlSCHitBox_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beModelCtrlSCHitBox_EnsureRegistered(void)
@@ -29,7 +29,7 @@ void beModelCtrlSCHitBox_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlSCHitBox_Register);
 }
 
-void *beModelCtrlSCHitBox_Register(void) {
+CallbackArray *beModelCtrlSCHitBox_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,9 +86,9 @@ static int g_beModelCtrlSCHitBox_fieldOffsets[] = {
 
 void beModelCtrlSCHitBox_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlSCHitBox_metaObject;
+    meta = g_beModelCtrlSCHitBox_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlSCHitBox_ctorTable, 6);
     igMetaObject_NameFields(meta, g_beModelCtrlSCHitBox_fieldTable, g_beModelCtrlSCHitBox_fieldHandles, g_beModelCtrlSCHitBox_fieldOffsets, base);

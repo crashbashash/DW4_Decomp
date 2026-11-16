@@ -1,8 +1,10 @@
 #include "dw4/p2core.h"
 #include "dw4/p2dma.h"
+#include "dw4/dmaChannel.h"
 #include "dw4/p2pool.h"
 #include "dw4/p2swap.h"
 #include "dw4/p2stateCache.h"
+#include "dw4/p2texture.h"
 
 #define P2_HEAP_TEMPORARY 9
 #define P2_HEAP_DRIVER 25
@@ -22,11 +24,6 @@ typedef struct p2TextureRecord {
 
 void *Memory_AllocateAligned16(int size, int pool);
 void Memory_FreeToSelector(void *memory, int pool);
-
-extern int p2DmaPacketCount[P2_DMA_CHANNEL_COUNT];
-extern int p2DmaPacketSizeVif0;
-extern int p2DmaPacketSizeVif1;
-extern int p2DmaPacketSizeGif;
 
 /* records per block, by kind */
 extern int p2ImageBlockSize;
@@ -52,15 +49,6 @@ extern int p2DmaPacketsAllocated[P2_DMA_CHANNEL_COUNT];
 /* a channel whose packets come from one block only, and whether it has had it */
 extern int p2DmaPoolFixedVif1;
 extern int p2DmaPoolFixedGif;
-
-extern p2ImageRecord *p2ImagePool;
-extern p2TextureRecord *p2FreeTextures;
-extern p2DisplayList *p2DisplayListPool;
-extern p2DmaPredicate *p2DmaPredicatePool;
-extern p2DmaCompletion *p2DmaCompletionPool;
-extern p2FinishFunc *p2FreeFinishFuncs;
-extern p2StateCacheEntry *p2StateCache[P2_STATE_CACHE_BUCKETS];
-extern p2StateCacheEntry *p2FreeStateCacheEntries;
 
 void p2ResetDmaPacketCount(int channel) {
     switch (channel) {
@@ -172,8 +160,8 @@ void p2FixDmaPacketPool(int channel) {
 }
 
 /* Releases every block of a kind. The block allocations are gathered first, from the first record of
- * each block on the free lists, into a temporary array. */
-void p2FreePool(unsigned int type) {
+ * each block on the free lists, into a temporary array. The callers pass 0 for `unused`; nothing reads it. */
+void p2FreePool(unsigned int type, int unused) {
     switch (type) {
     case P2_POOL_STATE_CACHE: {
         p2StateCacheEntry *entry;
@@ -253,7 +241,7 @@ void p2FreePool(unsigned int type) {
         int count;
         int i;
 
-        image = p2ImagePool;
+        image = (p2ImageRecord *)p2ImagePool;
         blocks = Memory_AllocateAligned16(p2ImageRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {

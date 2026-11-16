@@ -3,12 +3,12 @@ igMetaField *g_igFieldSynchronizer_viewsMetaField;
 
 void FUN_004509c0(int arg0) {
     igFieldSynchronizer_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igFieldSynchronizer_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igFieldSynchronizer_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_00450a00(void) {
     if (g_igFieldSynchronizer_metaObject == 0) {
-        g_igFieldSynchronizer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igFieldSynchronizer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igFieldSynchronizer_metaObject;
 }
@@ -25,10 +25,10 @@ int igFieldSynchronizer_GetVTable(void) {
     struct Obj_450aa0 o;
     struct R *t;
     int r;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igFieldSynchronizer_vtable[0];
     o.p = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
     o.vt = &g_igFieldSynchronizer_vtable[0];
     if (&o.p != 0) {
         t = o.p;
@@ -49,9 +49,9 @@ void igFieldSynchronizer_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igFieldSynchronizer_callbackList[] = { igFieldChangeViewList_EnsureRegistered, 0 };
 
-void igFieldSynchronizer_Register(void) {
+CallbackArray *igFieldSynchronizer_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFieldSynchronizer_metaObject,
         igObject_Register,
@@ -89,11 +89,11 @@ void igFieldSynchronizer_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igFieldSynchronizer_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igFieldSynchronizer_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igFieldSynchronizer_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00450c70();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igFieldSynchronizer_fieldTable, g_igFieldSynchronizer_fieldHandles, g_igFieldSynchronizer_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFieldSynchronizer_fieldTable, g_igFieldSynchronizer_fieldHandles, g_igFieldSynchronizer_fieldOffsets, temp_s2);
 }
 

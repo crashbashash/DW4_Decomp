@@ -57,7 +57,6 @@ igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int si
 }
 
 const char *g_callStackFormat;
-extern "C" char *strrchr(const char *, int);
 extern "C" igResult igCallStackTracer_FormatLocation(igCallStackTracerView *self, int addr, char *function, int offset, char *path, int line,
                                                            const char *format, char *output, int outputSize);
 

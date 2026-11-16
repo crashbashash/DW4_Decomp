@@ -21,7 +21,7 @@ int beActionStarterInfoRam_GetVTable(void) {
     *dataListSlot = 0;
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     obj._vtable = (int)&g_beActionStarterInfoRam_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     igObjectRef_Release(dataListSlot);
     return vtable;
@@ -32,7 +32,7 @@ void beActionStarterInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beActionStarterInfoRam_Register);
 }
 
-void *beActionStarterInfoRam_Register(void) {
+CallbackArray *beActionStarterInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

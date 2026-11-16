@@ -23,7 +23,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
             old->refs = old->refs - 1;
             if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
         }
-        sp3C = (Rc *)FUN_0014bff0(igObject_GetAllocator(arg0));
+        sp3C = (Rc *)FUN_0014bff0(igObject_GetAllocator((igObject *)arg0));
         s0 = *(Rc **)&sp3C;
         if (s0 != 0) s0->refs = s0->refs + 1;
         old = arg0->f48;
@@ -79,7 +79,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_24(igGeometryAttr1_5 *self, void *cont
             break;
         default:
             Gap__Gfx__igPsx2VisualContext__vfunc_63(context, lengths);
-            Gap__Gfx__igPsx2VisualContext__vfunc_74(context, stripType, numPrims, offset, 0);
+            Gap__Gfx__igPsx2VisualContext__vfunc_74((igPsx2VisualContext *)context, stripType, numPrims, offset, 0);
         }
         if (lengths != 0) Gap__Gfx__igPsx2VisualContext__vfunc_63(context, 0);
     } else {
@@ -110,7 +110,7 @@ int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T_13d460 *arg0, int arg1, unsigned a
     int t = arg0->f20;
     if ((unsigned)(t - 4) <= 1U || t == 2) {
         if (arg0->f48 == 0) {
-            arg0->setBuffer(igSmartPointer<R_13d460>((R_13d460 *)FUN_0014bff0(igObject_GetAllocator(arg0))));
+            arg0->setBuffer(igSmartPointer<R_13d460>((R_13d460 *)FUN_0014bff0(igObject_GetAllocator((igObject *)arg0))));
         }
         if (((R_13d460 *)arg0->f48)->cap < arg2) {
             arg0->f48->v92(arg2, 0x20, 0);
@@ -124,7 +124,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_40(S_13de80 *arg0, int arg1, int arg2)
     Rc *s0;
     Rc *old;
     if (arg0->f48 == 0) {
-        sp5C = (Rc *)FUN_0014bff0(igObject_GetAllocator());
+        sp5C = (Rc *)FUN_0014bff0(igObject_GetAllocator((igObject *)arg0));
         s0 = *(Rc **)&sp5C;
         if (s0 != 0) s0->refs = s0->refs + 1;
         old = arg0->f48;
@@ -266,7 +266,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_17(O_13e230 *arg0) {
     }
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_37(int *arg0, A_13e440 *arg1, B *arg2) {
+void Gap__Attrs__igGeometryAttr1_5__vfunc_37(igResult *arg0, A_13e440 *arg1, B *arg2) {
     unsigned n;
     unsigned i;
     VertexFormat fl;
@@ -274,7 +274,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_37(int *arg0, A_13e440 *arg1, B *arg2)
     o = arg1->f12;
     n = arg2->f8;
     if (o->f12 < n) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure;
     } else {
         fl = *o->v100();
         if (!fl.has()) {
@@ -286,18 +286,18 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_37(int *arg0, A_13e440 *arg1, B *arg2)
             o = arg1->f12;
             o->v152(i, arg2->f16 + i * 12);
         }
-        *arg0 = g_resultSuccess[0];
+        *arg0 = g_resultSuccess;
     }
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_38(int *arg0, A_13e550 *arg1, R_13e550 *arg2) {
+void Gap__Attrs__igGeometryAttr1_5__vfunc_38(igResult *arg0, A_13e550 *arg1, R_13e550 *arg2) {
     VertexFormat_13e550 sp6C;
     unsigned int s0;
     unsigned int s1;
     B_13e550 *b = arg1->buf;
     s1 = arg2->cnt;
     if (b->f12 < s1) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure;
         return;
     }
     sp6C = *b->v100();
@@ -309,6 +309,6 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_38(int *arg0, A_13e550 *arg1, R_13e550
         ;
     }
     { int i = s0; for (; i < s1; i++) { b = arg1->buf; b->v140(i, arg2->arr + i * 3); } }
-    *arg0 = g_resultSuccess[0];
+    *arg0 = g_resultSuccess;
 }
 

@@ -1,23 +1,19 @@
 #include "dw4/reflected.h"
 
-extern "C" int igInsightCore_AddManager(int insight, igMovieManager *manager);
-extern "C" igMovieManager *igMovieManager_CreateInstance(int allocator);
-extern "C" int Memory_GetAllocatorBySelector(int selector);
-extern "C" int igObject_Destroy(igObject *object);
-extern "C" int igObject_GetAllocator(igMoviePlugin *object);
-extern "C" int kIGMemoryPoolHandleUser0[4];
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void igMoviePlugin_Attach(igMoviePlugin *self, int insight);
-extern "C" int igInsightCore_RemoveManager(int insight, int manager);
-extern "C" void igMoviePlugin_Detach(igMoviePlugin *self, int insight);
-extern "C" int g_igMoviePlugin_metaObject[4];
-extern "C" int igMoviePlugin_GetMeta(void);
+#include "dw4/igInsightCore.h"
+#include "dw4/igMovieManager.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+extern "C" void igMoviePlugin_Attach(igMoviePlugin *self, igInsightCore *insight);
+extern "C" void igMoviePlugin_Detach(igMoviePlugin *self, igInsightCore *insight);
+#include "dw4/igMoviePlugin.h"
+extern "C" igMetaObject *igMoviePlugin_GetMeta(void);
 
-void igMoviePlugin_Attach(igMoviePlugin *self, int insight) {
+void igMoviePlugin_Attach(igMoviePlugin *self, igInsightCore *insight) {
     int allocator;
     igMovieManager *old;
-    allocator = igObject_GetAllocator(self);
-    allocator = g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+    allocator = (int)igObject_GetAllocator(self);
+    allocator = g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     old = (igMovieManager *)self->_movieManager;
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
@@ -30,12 +26,12 @@ void igMoviePlugin_Attach(igMoviePlugin *self, int insight) {
     igInsightCore_AddManager(insight, (igMovieManager *)self->_movieManager);
 }
 
-void igMoviePlugin_Detach(igMoviePlugin *self, int insight) {
-    igInsightCore_RemoveManager(insight, self->_movieManager);
+void igMoviePlugin_Detach(igMoviePlugin *self, igInsightCore *insight) {
+    igInsightCore_RemoveManager(insight, (igObject *)self->_movieManager);
 }
 
-int igMoviePlugin_GetMeta(void)
+igMetaObject *igMoviePlugin_GetMeta(void)
 {
-    return g_igMoviePlugin_metaObject[0];
+    return g_igMoviePlugin_metaObject;
 }
 

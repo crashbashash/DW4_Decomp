@@ -14,23 +14,23 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
     if (strcmp(arg1, var_a1) == 0) {
         return arg0;
     }
-    var_s0 = ((R_1aea60 *)igProperty_FindByName(arg0->f20, g_propertyNameField[0], arg1));
+    var_s0 = ((R_1aea60 *)igProperty_FindByName((igObjectList *)arg0->f20, g_propertyNameField, arg1));
     if (var_s0 == 0) {
-        var_s0 = ((R_1aea60 *)igProperty_FindByName(arg0->f28, g_propertyNameField[0], arg1));
+        var_s0 = ((R_1aea60 *)igProperty_FindByName((igObjectList *)arg0->f28, g_propertyNameField, arg1));
     }
     if (var_s0 == 0) {
-        var_s0 = ((R_1aea60 *)igProperty_FindByName(arg0->f24, g_propertyNameField[0], arg1));
+        var_s0 = ((R_1aea60 *)igProperty_FindByName((igObjectList *)arg0->f24, g_propertyNameField, arg1));
     }
     if (var_s0 == 0) {
-        var_s0 = ((R_1aea60 *)igProperty_FindByName(arg0->f32, g_propertyNameField[0], arg1));
+        var_s0 = ((R_1aea60 *)igProperty_FindByName((igObjectList *)arg0->f32, g_propertyNameField, arg1));
     }
     if (var_s0 == 0) {
-        var_s0 = ((R_1aea60 *)igProperty_FindByName(arg0->f36, g_propertyNameField[0], arg1));
+        var_s0 = ((R_1aea60 *)igProperty_FindByName((igObjectList *)arg0->f36, g_propertyNameField, arg1));
     }
     if (strncmp(arg1, "__TS__", strlen("__TS__")) == 0) {
         if (DAT_00562560[0] == 0) {
             var_s1 = ((R_1aea60 *)igMetaObject_FindFieldByName(g_igAnimation_metaObject, "_trackList"));
-            if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igObjectRefMetaField_metaObject[0]) != 0)) {
+            if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igObjectRefMetaField_metaObject) != 0)) {
                 var_s1 = (R_1aea60 *)var_s1;
             } else {
                 var_s1 = 0;
@@ -38,7 +38,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
             DAT_00562560[0] = (int *)var_s1;
         }
         sscanf(arg1 + strlen("__TS__"), "%s %d", sp50, &sp106C);
-        igSmartPointer<R_1aea60> record(((R_1aea60 *)igProperty_FindByName(arg0->f24, g_propertyNameField[0], sp50)), kRetainReference);
+        igSmartPointer<R_1aea60> record(((R_1aea60 *)igProperty_FindByName((igObjectList *)arg0->f24, g_propertyNameField, sp50)), kRetainReference);
         if (record.get() != 0) {
             var_s1 = *(R_1aea60 **)((char *)record.get() + DAT_00562560[0][2]);
             if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igAnimationTrackList_metaObject) != 0)) {

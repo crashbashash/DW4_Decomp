@@ -39,13 +39,13 @@ int beLOA_GetVTable(void) {
     blendFunctionAttrSlot = &obj._blendFunctionAttr;
     *blendFunctionAttrSlot = 0;
     obj._colorAttr = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beLOA_vtable[0];
     igSmartPointer_igColorAttr_Destruct(&obj._colorAttr, -1);
     igSmartPointer_igBlendFunctionAttr_Destruct(blendFunctionAttrSlot, -1);
     igSmartPointer_igBlendStateAttr_Destruct(blendStateAttrSlot, -1);
     igSmartPointer_igAttrList_Destruct(overrideAttrListSlot, -1);
-    igGroup_Destroy(&obj, 0);
+    igGroup_Destroy((igGroup *)&obj, 0);
     return vtable;
 }
 
@@ -56,12 +56,12 @@ void beLOA_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beLOA_callbackList[] = { igAttrList_EnsureRegistered, igBlendStateAttr_EnsureRegistered, igBlendFunctionAttr_EnsureRegistered, igColorAttr_EnsureRegistered, 0 };
 
-void *beLOA_Register(void) {
+CallbackArray *beLOA_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLOA_metaObject,
-        igGroup_Register,
+        (igMetaObjectRegisterFunction)igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beLOA_GetMetaObjectFunction,
         "beLOA",
@@ -135,9 +135,9 @@ void beLOA_InitFields(void) {
     void *blendStateAttr;
     void *blendFunctionAttr;
     void *colorAttr;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beLOA_metaObject;
+    meta = g_beLOA_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLOA_ctorTable, 0xA);
     color = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
@@ -147,16 +147,16 @@ void beLOA_InitFields(void) {
     colorDefault[3] = 0x3F800000;
     igVec4fMetaField_SetDefault(color, colorDefault);
     overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)overrideAttrList)->_metaObject = igAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)overrideAttrList)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)overrideAttrList)->_construct = 1;
     blendStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = igBlendStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = (int)igBlendStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)blendStateAttr)->_construct = 1;
     blendFunctionAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)blendFunctionAttr)->_metaObject = igBlendFunctionAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)blendFunctionAttr)->_metaObject = (int)igBlendFunctionAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)blendFunctionAttr)->_construct = 1;
     colorAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
-    ((igObjectRefMetaField *)colorAttr)->_metaObject = igColorAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)colorAttr)->_metaObject = (int)igColorAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)colorAttr)->_construct = 1;
     igMetaObject_NameFields(meta, g_beLOA_fieldTable, g_beLOA_fieldHandles, g_beLOA_fieldOffsets, base);
 }

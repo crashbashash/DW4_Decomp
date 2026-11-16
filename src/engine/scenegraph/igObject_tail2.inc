@@ -5,9 +5,9 @@ bool FUN_001d08d0(Self *arg0, int arg1) {
     int j;
     if (arg0->f48 == 0) {
         n = arg0->f44->f20;
-        setFloats(arg0->f48, igSmartPointer<igFloatList>((igFloatList *)igFloatList_Create(((void *)igObject_GetAllocator(arg0)))));
-        setFloats(arg0->f52, igSmartPointer<igFloatList>((igFloatList *)igFloatList_Create(((void *)igObject_GetAllocator(arg0)))));
-        setBytes(arg0->f56, igSmartPointer<igUnsignedCharList>((igUnsignedCharList *)igUnsignedCharList_Create(((void *)igObject_GetAllocator(arg0)))));
+        setFloats(arg0->f48, igSmartPointer<igFloatList>((igFloatList *)igFloatList_Create(((void *)igObject_GetAllocator((igObject *)arg0)))));
+        setFloats(arg0->f52, igSmartPointer<igFloatList>((igFloatList *)igFloatList_Create(((void *)igObject_GetAllocator((igObject *)arg0)))));
+        setBytes(arg0->f56, igSmartPointer<igUnsignedCharList>((igUnsignedCharList *)igUnsignedCharList_Create(((void *)igObject_GetAllocator((igObject *)arg0)))));
         { igFloatList *l = arg0->f48; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize((void *)l, n, 4); } }
         { igFloatList *l = arg0->f52; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize((void *)l, n, 4); } }
         { igUnsignedCharList *l = arg0->f56; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize((void *)l, n, 1); } }
@@ -326,12 +326,12 @@ int Gap__Core__igObject__vfunc_32(ObjectListOwner *self, igObject *object) {
         int index = (list = self->_list)->find(object);
         int result;
         if (index >= 0) {
-            List_RemoveWordAt(list, index);
-            result = g_resultSuccess[0];
+            List_RemoveWordAt((igDataList *)list, index);
+            result = g_resultSuccess.v;
         } else {
-            result = g_resultFailure[0];
+            result = g_resultFailure.v;
         }
-        return result == g_resultSuccess[0];
+        return result == g_resultSuccess.v;
     }
     return 0;
 }

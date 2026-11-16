@@ -1,4 +1,4 @@
-void igNamedObject_SetName(igNamedObject *self, int name) {
+void igNamedObject_SetName(igNamedObject *self, const char *name) {
     int *header;
     int references;
     int pool;
@@ -11,7 +11,7 @@ void igNamedObject_SetName(igNamedObject *self, int name) {
         }
         g_stringPool = (StringPool *)pool;
     }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name)));
+    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, name)));
     previous = (char *)self->_name;
     if (previous != 0) {
         header = (int *)(previous - 8);

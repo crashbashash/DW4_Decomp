@@ -13,7 +13,7 @@ int beMeterCtrlInfoList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beMeterCtrlInfoList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beMeterCtrlInfoList_EnsureRegistered(void)
@@ -23,7 +23,7 @@ void beMeterCtrlInfoList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMeterCtrlInfoList_callbackList[] = { beMeterCtrlInfo_EnsureRegistered, 0 };
 
-void *beMeterCtrlInfoList_Register(void) {
+CallbackArray *beMeterCtrlInfoList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

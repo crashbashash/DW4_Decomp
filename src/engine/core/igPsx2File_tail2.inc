@@ -209,7 +209,7 @@ int igPsx2File_Read(igPsx2FileView *self, int buffer, int size, int count) {
     }
     base = self->Tell();
     if (self->_isBinary == 1) {
-        r = sceRead(self->_fileHandle, buffer, count * size);
+        r = sceRead(self->_fileHandle, (void *)buffer, count * size);
         count = r / size;
         q = count * size;
         if (r != q) {
@@ -237,7 +237,7 @@ int igPsx2File_Write(igPsx2FileView *self, int buffer, int size, int count) {
         if (self->_openMode == 6) {
             sceLseek(self->_fileHandle, 0, 2);
         }
-        return sceWrite(self->_fileHandle, buffer, count * size) / size;
+        return sceWrite(self->_fileHandle, (const void *)buffer, count * size) / size;
     }
     bytes = size * count;
     if (self->_openMode == 2) {
@@ -532,9 +532,9 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
     char c;
     igSmartPointer<igStringObj> text(((igStringObj *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)))));
     if (prefix == 0) {
-        igStringObj_Set((int)(text.get()), (int)path);
+        igStringObj_Set(text.get(), path);
     } else if (*prefix == 0x63) {
-        igStringObj_Set((int)(text.get()), (int)prefix);
+        igStringObj_Set(text.get(), prefix);
         c = *path;
         if (c != 0x5C && c != 0x2F) {
             appendText(text,"\\");
@@ -551,7 +551,7 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
             }
         }
     } else {
-        igStringObj_Set((int)(text.get()), (int)prefix);
+        igStringObj_Set(text.get(), prefix);
         appendText(text, path);
     }
     chars = (char *)text.get()->_buffer;
@@ -566,7 +566,7 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
 igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
     FolderEntry entry;
     FolderFileStat stat;
-    int handle = sceDopen(self->_folderName);
+    int handle = sceDopen((const char *)self->_folderName);
     if (handle < 0) {
         return igSmartPointer<igObject>(0, kRetainReference);
     }
@@ -595,7 +595,7 @@ igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
 igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
     FolderEntry entry;
     FolderFileStat stat;
-    int handle = sceDopen(self->_folderName);
+    int handle = sceDopen((const char *)self->_folderName);
     if (handle < 0) {
         return igSmartPointer<igObject>(0, kRetainReference);
     }

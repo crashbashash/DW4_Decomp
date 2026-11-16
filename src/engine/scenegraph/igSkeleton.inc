@@ -21,20 +21,20 @@ int igSkeleton_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     ps = (int *)&u.b[8];
     *ps = 0;
     u.vt = (int)&g_igSkeleton_vtable[0];
     pr = (int *)&u.b[16];
     *pr = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s1 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igSkeleton_vtable[0];
     if (pr != 0) {
         o = (char *)*pr;
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -46,7 +46,7 @@ int igSkeleton_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -60,9 +60,9 @@ void igSkeleton_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igSkeleton_callbackList[] = { igSkeletonBoneInfoList_EnsureRegistered, 0 };
 
-void igSkeleton_Register(void) {
+CallbackArray *igSkeleton_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSkeleton_metaObject,
         igAnimationHierarchy_Register,
@@ -89,9 +89,9 @@ igMetaObject *FUN_00198720(void) {
 }
 
 static FieldFactory g_igSkeleton_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igSkeleton_fieldTable[] = {
     "_boneInfoList",
@@ -116,12 +116,12 @@ void igSkeleton_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igSkeleton_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkeleton_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001987f0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
+    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igMemoryRefMetaField *)temp_s1_2)->_memType = FUN_001888e0();
     ((igRefMetaField *)temp_s1_2)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnCopy = 1;

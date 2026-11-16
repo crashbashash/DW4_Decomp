@@ -9,7 +9,7 @@ extern "C" {
 
 extern struct igMetaObject *g_igBitmapFont_metaObject;
 void igBitmapFont_RunStaticInit(void);
-void igBitmapFont_Register(void);
+struct CallbackArray *igBitmapFont_Register(void);
 
 #ifdef __cplusplus
 }

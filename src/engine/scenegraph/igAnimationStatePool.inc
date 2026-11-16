@@ -2,7 +2,7 @@ igMetaObject *g_igAnimationStatePool_metaObject;
 
 igAnimationStatePool *igAnimationStatePool_Create(int allocator) {
     igAnimationStatePool_RunStaticInit();
-    return (igAnimationStatePool *)igMetaObject_CreateInstance(g_igAnimationStatePool_metaObject, allocator);
+    return (igAnimationStatePool *)igMetaObject_CreateInstance(g_igAnimationStatePool_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igAnimationStatePool_GetMetaObject(void)
@@ -15,9 +15,9 @@ igMetaObject *igAnimationStatePool_GetMetaObject(void)
 
 int igAnimationStatePool_GetVTable(void) {
     union U u;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igAnimationStatePool_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void igAnimationStatePool_RunStaticInit(void)
@@ -27,9 +27,9 @@ void igAnimationStatePool_RunStaticInit(void)
 
 static igMetaObjectCallback g_igAnimationStatePool_callbackList[] = { FUN_001a6dc0, 0 };
 
-void igAnimationStatePool_Register(void) {
+CallbackArray *igAnimationStatePool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationStatePool_metaObject,
         igObjectPool_Register,

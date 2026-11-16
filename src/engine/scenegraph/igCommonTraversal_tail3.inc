@@ -64,7 +64,7 @@ void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
     if (temp_a0 != 0) {
         temp_a0->refs = temp_a0->refs - 1;
         if (((unsigned long long)((long long)temp_a0->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f32 = arg2;
@@ -75,11 +75,11 @@ void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
     if (temp_a0_2 != 0) {
         temp_a0_2->refs = temp_a0_2->refs - 1;
         if (((unsigned long long)((long long)temp_a0_2->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0_2);
+            igObject_Destroy((igObject *)temp_a0_2);
         }
     }
     arg0->f36 = arg1;
-    FUN_001b0000((T_1b0000 *)arg0->f52, g_igAttr_metaObject[0], (Obj_1b0000 *)arg0->f36, (Obj_1b0000 *)arg0->f32);
+    FUN_001b0000((T_1b0000 *)arg0->f52, g_igAttr_metaObject, (Obj_1b0000 *)arg0->f36, (Obj_1b0000 *)arg0->f32);
 }
 
 void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
@@ -92,16 +92,16 @@ void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
     arg0->f60 = arg1;
     var_s1 = 0;
     if (arg1 == 0) {
-        a = ((void *)igObject_GetAllocator(arg0));
+        a = ((void *)igObject_GetAllocator((igObject *)arg0));
         release(arg0->f36);
         arg0->f36 = FUN_00137ab0(a);
-        a = ((void *)igObject_GetAllocator(arg0));
+        a = ((void *)igObject_GetAllocator((igObject *)arg0));
         release(arg0->f32);
         arg0->f32 = FUN_0014f2c0(a);
         var_s1 = 1;
     } else {
         if (arg0->f36 == 0) {
-            igSmartPointer<R_1b7010> created(FUN_00130020(((void *)igObject_GetAllocator(arg0))));
+            igSmartPointer<R_1b7010> created(FUN_00130020(((void *)igObject_GetAllocator((igObject *)arg0))));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);
@@ -113,7 +113,7 @@ void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
             var_s1 = 1;
         }
         if (arg0->f32 == 0) {
-            igSmartPointer<R_1b7010> created(FUN_00149c30(((void *)igObject_GetAllocator(arg0))));
+            igSmartPointer<R_1b7010> created(FUN_00149c30(((void *)igObject_GetAllocator((igObject *)arg0))));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);
@@ -146,7 +146,7 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
 }
 
 void FUN_001b73d0(struct S_1b73d0 *arg0) {
-    FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int *)g_igModelViewMatrixAttr_metaObject)[0]);
+    FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int)g_igModelViewMatrixAttr_metaObject));
 }
 
 void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
@@ -177,7 +177,7 @@ void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
     unit = attr->_cachedUnitID + m->_firstUnit[unit];
     list = (AttrSlotList *)((AttrStackListView *)list)->_data[unit];
     list->append(attr);
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)m, (struct B_1b1490 *)list, unit);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (igAttrStack *)list, unit);
     Gap__Sg__igTraversal__vfunc_23((void *)t, root);
 }
 
@@ -213,7 +213,7 @@ void Gap__Sg__igCommonTraversal__vfunc_24(igCommonTraversal *t, int arg1) {
         e->fn(v, m->arg);
     }
     e->count = e->count - 1;
-    igAttrStackManager_MarkStackChanged((struct A_1b1490 *)m, (struct B_1b1490 *)e, idx);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (igAttrStack *)e, idx);
     Gap__Sg__igTraversal__vfunc_24(t, arg1);
 }
 
@@ -230,13 +230,13 @@ int FUN_001b7740(void **arg0, void **arg1) {
 
     var_a0 = *(int *)((char *)((*arg0)) + 8);
     if (var_a0 == 0) {
-        var_a0 = ((int *)g_stringObjEmptyText)[0];
+        var_a0 = ((int)g_stringObjEmptyText);
     }
     var_a1 = *(int *)((char *)((*arg1)) + 8);
     if (var_a1 == 0) {
-        var_a1 = ((int *)g_stringObjEmptyText)[0];
+        var_a1 = ((int)g_stringObjEmptyText);
     }
-    return strcmp(var_a0, var_a1);
+    return strcmp((char *)var_a0, (char *)var_a1);
 }
 
 void FUN_001b7770(igCommonTraversal *self, int name, int value) {
@@ -249,34 +249,34 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     igObject *str;
     igObject *stack;
     int pos;
-    int al = igObject_GetAllocator(self);
-    al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+    int al = (int)igObject_GetAllocator(self);
+    al = (int)(g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     str = ((igObject *)igStringObj_Create(al));
-    igStringObj_Set(str, name);
-    igStringObj_ToLower(str);
+    igStringObj_Set((igStringObj *)str, (char *)name);
+    igStringObj_ToLower((igStringObj *)str);
     { int first = self->_segmentOverrideNames; searchKey = str;
-    index = List_BinarySearchWords(first, &searchKey, (void *)FUN_001b7740); }
+    index = List_BinarySearchWords((igDataList *)first, (int)&searchKey, (int (*)(int, int))FUN_001b7740); }
     if (index < 0) {
         names = self->_segmentOverrideNames;
         insertKey.set(str);
-        pos = List_LowerBound(names, &insertKey, (void *)FUN_001b7740);
-        List_InsertWords(names, pos, 1, &insertKey);
-        stack = ((igObject *)FUN_0019cba0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+        pos = List_LowerBound((igDataList *)names, &insertKey, (int (*)(int *, void *))((void *)FUN_001b7740));
+        List_InsertWords((igDataList *)names, pos, 1, &insertKey);
+        stack = ((igObject *)FUN_0019cba0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         newStackRef.p = stack;
         stacks = self->_segmentOverrideStacks;
         newStackRef.retain();
-        List_InsertWords(stacks, pos, 1, &newStackRef);
+        List_InsertWords((igDataList *)stacks, pos, 1, &newStackRef);
         stack->_refCount = stack->_refCount - 1;
         if (((unsigned long long)((long long)(int)stack->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)stack);
+            igObject_Destroy((igObject *)stack);
         }
     } else {
         stack = ((igObject **)((igObjectList *)self->_segmentOverrideStacks)->_data)[index];
     }
-    ObjectList_AppendRetained(stack, value);
+    ObjectList_AppendRetained((igObjectList *)stack, (igObject *)value);
     str->_refCount = str->_refCount - 1;
     if (((unsigned long long)((long long)(int)str->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((void *)str);
+        igObject_Destroy((igObject *)str);
     }
 }
 
@@ -307,7 +307,7 @@ int FUN_001b7af0(void *arg0, int arg1) {
     int temp_v0_2;
     void *temp_v0;
 
-    if ((arg1 == 0) || (strlen(arg1) == 0)) {
+    if ((arg1 == 0) || (strlen((char *)arg1) == 0)) {
         return 0;
     }
     temp_v0_2 = igStringObjList_BinarySearch(*(int *)((char *)(arg0) + 260), arg1, &strcasecmp);
@@ -379,7 +379,7 @@ int FUN_001b7d70(void *arg0, void *arg1) {
     sp30.y = *(float *)((char *)(arg1) + 80);
     sp30.z = *(float *)((char *)(arg1) + 84);
     temp_a1 = (void *)(*(int *)((char *)(arg0) + 52));
-    temp_a0 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a1) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a1) + 68) + (*(int *)((char *)(((void * *)g_igModelViewMatrixAttr_metaObject)[0]) + 8) * 4)) * 4)));
+    temp_a0 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a1) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a1) + 68) + (*(int *)((char *)(((void *)g_igModelViewMatrixAttr_metaObject)) + 8) * 4)) * 4)));
     temp_v0 = *(int *)((char *)(temp_a0) + 24);
     if (temp_v0 >= 0) {
         var_v0 = *(int *)(*(int *)((char *)(temp_a0) + 16) + (temp_v0 * 4));
@@ -435,7 +435,7 @@ static inline void pushMatrixAttr(igAttrStackManager *manager, MatrixAttrView *a
         List_Resize(stack, n + 1, 4);
     }
     stack->set(n, &pushed);
-    igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
 }
 static inline void setTransformMvm(TransformView *transform, MatrixAttrView *attr) {
     if (attr != 0) {
@@ -463,7 +463,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
     manager = traversal->_attrStack;
     switch (target) {
     case 0:
-        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]]);
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]]);
         if (top != 0) {
             parent = top->_m;
         }
@@ -478,7 +478,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         return attr->_m;
     case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
         unit = target - 9;
-        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[unit + ((int *)manager->_attrStackIndexTable)[g_igTextureMatrixAttr_metaObject[0]->_id]]);
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[unit + ((int *)manager->_attrStackIndexTable)[g_igTextureMatrixAttr_metaObject->_id]]);
         if (top != 0) {
             parent = top->_m;
         }
@@ -496,7 +496,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         return (float *)((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset);
     default:
         blendIndex = target - 1;
-        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[blendIndex + ((int *)manager->_attrStackIndexTable)[g_igVertexBlendMatrixAttr_metaObject[0]->_id]]);
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[blendIndex + ((int *)manager->_attrStackIndexTable)[g_igVertexBlendMatrixAttr_metaObject->_id]]);
         if (top != 0) {
             parent = (float *)((char *)top + g_igVertexBlendMatrixAttr_mField[0]->_offset);
         }
@@ -528,15 +528,15 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
     unit = 0;
     switch (target) {
     case 0:
-        meta = g_igModelViewMatrixAttr_metaObject[0];
+        meta = g_igModelViewMatrixAttr_metaObject;
         break;
     case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
-        meta = g_igTextureMatrixAttr_metaObject[0];
+        meta = g_igTextureMatrixAttr_metaObject;
         unit = target - 9;
         break;
     default:
         unit = target - 1;
-        meta = g_igVertexBlendMatrixAttr_metaObject[0];
+        meta = g_igVertexBlendMatrixAttr_metaObject;
         break;
     }
     slot = unit + ((int *)manager->_attrStackIndexTable)[meta->_id];
@@ -552,7 +552,7 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
         }
     }
     stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged((A_1b1490 *)manager, (B_1b1490 *)stack, slot);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
     if (result == 2) {
         return 2;
     }

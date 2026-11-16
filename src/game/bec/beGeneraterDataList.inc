@@ -2,7 +2,7 @@ igMetaObject *g_beGeneraterDataList_metaObject;
 
 igMetaObject *beGeneraterDataList_GetOrCreateMetaObject(void) {
     if (g_beGeneraterDataList_metaObject == 0) {
-        g_beGeneraterDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beGeneraterDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beGeneraterDataList_metaObject;
 }
@@ -17,7 +17,7 @@ int beGeneraterDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beGeneraterDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beGeneraterDataList_EnsureRegistered(void)
@@ -27,7 +27,7 @@ void beGeneraterDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beGeneraterDataList_callbackList[] = { beGeneraterData_EnsureRegistered, 0 };
 
-void *beGeneraterDataList_Register(void) {
+CallbackArray *beGeneraterDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -7,7 +7,7 @@ igMetaField *g_igIndexArray_memPoolMetaField;
 
 igMetaObject *FUN_0014d7f0(void) {
     if (g_igIndexArray_metaObject == 0) {
-        g_igIndexArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igIndexArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igIndexArray_metaObject;
 }
@@ -27,9 +27,9 @@ void igIndexArray_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igIndexArray_callbackList[] = { igMemoryPool_EnsureRegistered, 0 };
 
-void igIndexArray_Register(void) {
+CallbackArray *igIndexArray_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igIndexArray_metaObject,
         igObject_Register,
@@ -49,11 +49,11 @@ void thunk_igIndexArray_GetMetaObject(void) {
 }
 
 static FieldFactory g_igIndexArray_ctorTable[] = {
-    igMemoryRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igEnumMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igIndexArray_fieldTable[] = {
     "_indexData",

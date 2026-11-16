@@ -11,7 +11,7 @@ int igTransformSequence_ExtendBound(AABoxFields *arg0, TransformInputView *arg1)
         n = arg1->count();
         char sp50[64];
         for (i = 0; i < n; i++) {
-            igMatrix44f_SetIdentity(sp50);
+            igMatrix44f_SetIdentity((float *)sp50);
             arg1->get(i, sp50);
             igAABox_Transform(arg0, sp50);
             igVolume_ExtendBy(b.o, arg0);
@@ -80,7 +80,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
                     unsigned char sequenced = igTransformSequence_ExtendBound((AABoxFields *)box.get(), (TransformInputView *)input);
                     if (igObject_IsKindOf(node, g_unlinkedTransformClass_metaObject) != 0) {
                         /* the parent test is made and its answer discarded: a sequenced child never caches */
-                        if (parentHandle != 0 && igObject_IsKindOf(parentHandle, g_unlinkedTransformClass_metaObject) != 0) {
+                        if (parentHandle != 0 && igObject_IsKindOf((void *)parentHandle, g_unlinkedTransformClass_metaObject) != 0) {
                         }
                         sequenced = 0;
                     }
@@ -130,7 +130,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
 int FUN_001b2ed0(int arg0, int arg1) {
     int temp_v0;
 
-    temp_v0 = (int)igAABox_CreateInstance(((void *)igObject_GetAllocator((void *)arg1)));
+    temp_v0 = (int)igAABox_CreateInstance(((void *)igObject_GetAllocator((igObject *)arg1)));
     FUN_001b2f30((struct O_1b2750 *)arg0, arg1, (struct B_1b2750 *)temp_v0);
     return temp_v0;
 }

@@ -1,6 +1,6 @@
 igMetaObject *FUN_00152e80(void) {
     if (g_igPsx2ScissorExt_metaObject == 0) {
-        g_igPsx2ScissorExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igPsx2ScissorExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igPsx2ScissorExt_metaObject;
 }
@@ -20,14 +20,14 @@ int igPsx2ScissorExt_GetVTable(void) {
     char *q2;
     igObject *a;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&DAT_00530a10[0];
     q1 = &u.b[8];
     *(int *)q1 = 0;
     q2 = &u.b[16];
     *(int *)q2 = 0;
     u.vt = (int)&g_igPsx2ScissorExt_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&DAT_00530a10[0];
     if (q2 != 0) {
         a = *(igObject **)q2;
@@ -57,9 +57,9 @@ void FUN_00153000(void)
 
 static igMetaObjectCallback g_igPsx2ScissorExt_callbackList[] = { FUN_001511a0, 0 };
 
-void igPsx2ScissorExt_Register(void) {
+CallbackArray *igPsx2ScissorExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2ScissorExt_metaObject,
         igScissorExt_Register,
@@ -79,12 +79,12 @@ igMetaObject *FUN_00153090(void) {
 }
 
 static FieldFactory g_igPsx2ScissorExt_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igPsx2ScissorExt_fieldTable[] = {
     "_context",

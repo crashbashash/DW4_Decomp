@@ -11,8 +11,8 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
 
     if (vc->_bVertexBlendingEnabled) {
         if (arg3 > -1) {
-            levels = p2GetDisplayListBlendWeightCount(arg3);
-            limit = p2GetDisplayListBlendMatrixCount(arg3);
+            levels = p2GetDisplayListBlendWeightCount((p2DisplayList *)arg3);
+            limit = p2GetDisplayListBlendMatrixCount((p2DisplayList *)arg3);
             if (levels != 0) {
                 enabled = true;
                 if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !g_igPsx2DisableExt_ext10Enabled
@@ -29,8 +29,8 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
                 enabled = true;
                 if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !g_igPsx2DisableExt_ext10Enabled) {
                     result = 2;
-                    p2SetBlendIndexArray(va->f36);
-                    p2SetBlendWeightArray(va->f32);
+                    p2SetBlendIndexArray((void *)va->f36);
+                    p2SetBlendWeightArray((void *)va->f32);
                 } else {
                     result = 1;
                     if (vc->_currentDListHandle >= 0) {
@@ -182,8 +182,8 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
         if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !g_igPsx2DisableExt_ext10Enabled && limit >= vc->_blendMatricesCount) {
             result = 2;
             if (!prebuilt) {
-                p2SetBlendIndexArray(matrices);
-                p2SetBlendWeightArray(texture);
+                p2SetBlendIndexArray((void *)matrices);
+                p2SetBlendWeightArray((void *)texture);
             }
         } else {
             result = 1;
@@ -620,32 +620,32 @@ void FUN_00179e00(StatContext *arg0) {
     int a1;
     Ref_1778e0 sp6C((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
     Ref_1778e0 sp68((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
-    s3 = ((G_1778e0 *)g_objectSystem[0])->f56;
+    s3 = ((G_1778e0 *)g_objectSystem)->f56;
     s2 = 0;
-    igStringObj_Set((O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
-    igStringObj_SetInt(sp68, 0, "%d");
+    igStringObj_Set((igStringObj *)(O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
+    igStringObj_SetInt((int)(O_1778e0 *)sp68, 0, "%d");
     { int y = sp68->f12; int x = sp6C->f12;
     a1 = sp68->f8;
-    if (a1 == 0) a1 = g_stringObjEmptyText[0];
-    igStringObj_Insert(sp6C, a1, x, y); }
-    while ((idx = igRegistry_GetSectionIndex(s3, sp6C->f8 == 0 ? g_stringObjEmptyText[0] : sp6C->f8, 0)) != -1) {
+    if (a1 == 0) a1 = (int)g_stringObjEmptyText;
+    igStringObj_Insert((igStringObj *)(O_1778e0 *)sp6C, (char *)a1, x, y); }
+    while ((idx = igRegistry_GetSectionIndex((igRegistry *)s3, (char *)(sp6C->f8 == 0 ? (int)g_stringObjEmptyText : sp6C->f8), 0)) != -1) {
         n = (StatNode *)((StatAllocator *)FUN_00165d00((int *)arg0))->v52(960);
         if (n == 0) break;
         n->f16 = 1;
         n->f0 = s2;
-        thunk_igRegistry_GetValueInt(s3, idx, "numCapture", &n->f4, 1, 0);
-        thunk_igRegistry_GetValueInt(s3, idx, "startCapture", &n->f8, -1 - n->f4, 0);
+        thunk_igRegistry_GetValueInt((igRegistry *)s3, idx, "numCapture", &n->f4, 1, 0);
+        thunk_igRegistry_GetValueInt((igRegistry *)s3, idx, "startCapture", &n->f8, -1 - n->f4, 0);
         n->f12 = (O_1778e0 *)((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
-        thunk_igRegistry_GetValueStringObj(s3, idx, "stringCapture", &n->f12, "", 0);
+        thunk_igRegistry_GetValueStringObj((igRegistry *)s3, idx, "stringCapture", (igStringObj **)&n->f12, "", 0);
         s2 += 1;
         n->f952 = arg0->f1552;
         arg0->f1552 = n;
-        igStringObj_SetInt(sp68, s2, "%d");
-        igStringObj_Set((O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
+        igStringObj_SetInt((int)(O_1778e0 *)sp68, s2, "%d");
+        igStringObj_Set((igStringObj *)(O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
         { int y = sp68->f12; int x = sp6C->f12;
         a1 = sp68->f8;
-        if (a1 == 0) a1 = g_stringObjEmptyText[0];
-        igStringObj_Insert(sp6C, a1, x, y); }
+        if (a1 == 0) a1 = (int)g_stringObjEmptyText;
+        igStringObj_Insert((igStringObj *)(O_1778e0 *)sp6C, (char *)a1, x, y); }
     }
 }
 
@@ -755,8 +755,8 @@ void FUN_0017a300(Self_17a070 *self) {
     T *o;
     int i;
     sp5C = 0x40;
-    thunk_igRegistry_GetValueInt(*(int *)((char *)g_objectSystem[0] + 56), 4, "IG_GFX_VC_TEXTURE_ARRAY_SIZE", &sp5C, 0x40, 0);
-    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, FUN_00165d10((int *)self));
+    thunk_igRegistry_GetValueInt((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_TEXTURE_ARRAY_SIZE", &sp5C, 0x40, 0);
+    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)FUN_00165d10((int *)self));
     if (r != 0) {
         bi = (int)r;
         b = (Buf_17a070 *)bi;
@@ -766,18 +766,18 @@ void FUN_0017a300(Self_17a070 *self) {
         int *old;
         int *tok;
         b->f8 = 0;
-        if (g_stringPool[0] == 0) {
-            int pool = StringPool_Allocate(0x10);
-            if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool[0] = pool;
+        if (g_stringPool == 0) {
+            int pool = (int)StringPool_Allocate(0x10);
+            if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
+            g_stringPool = (StringPool *)pool;
         }
-        tok = (int *)StringPool_Intern(g_stringPool[0], "IG_GFX_VC_TEXTURE_ARRAY_SIZE");
+        tok = (int *)StringPool_Intern(g_stringPool, "IG_GFX_VC_TEXTURE_ARRAY_SIZE");
         old = (int *)b->f8;
         if (old != 0) {
             int *h = old - 2;
             int c = old[-1] - 1;
             old[-1] = c;
-            if (c == 0) StringChunk_ReleaseHeader(*h, h);
+            if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
         }
         b->f8 = (int)tok;
         if (n == 0) n = 1;
@@ -824,9 +824,9 @@ void FUN_0017a7e0(S0_17a070 *arg0) {
 
     FUN_0017a870(arg0, 0);
     p2GetDisplaySize(&sp2C, &sp28, &sp24, &sp20);
-    *(int *)((char *)(arg0) + 1524) = p2LoadTexture(0, sp2C, sp28, sp24, 1);
-    *(int *)((char *)(arg0) + 1528) = p2LoadTexture(0, sp2C, sp28, sp24, 2);
-    *(int *)((char *)(arg0) + 1532) = p2LoadTexture(0, sp2C, sp28, sp20, 3);
+    *(int *)((char *)(arg0) + 1524) = (int)p2LoadTexture(0, sp2C, sp28, sp24, 1);
+    *(int *)((char *)(arg0) + 1528) = (int)p2LoadTexture(0, sp2C, sp28, sp24, 2);
+    *(int *)((char *)(arg0) + 1532) = (int)p2LoadTexture(0, sp2C, sp28, sp20, 3);
 }
 
 void FUN_0017a870(S0_17a070 *arg0, int arg1) {
@@ -877,15 +877,15 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int arg
     } else {
         j = 0;
     }
-    p2CurrentProgram[0] = n;
-    p2CurrentGsRegisters[0] = &p2GsRegisterSets[j];
+    p2CurrentProgram = n;
+    p2CurrentGsRegisters = &p2GsRegisterSets[j];
     if (arg2 != 0) {
-        p2EnableCapability(1, n);
+        p2EnableCapability(1);
     } else {
-        p2DisableCapability(1, n);
+        p2DisableCapability(1);
     }
-    p2CurrentProgram[0] = 0;
-    p2CurrentGsRegisters[0] = p2GsRegisterSets;
+    p2CurrentProgram = 0;
+    p2CurrentGsRegisters = p2GsRegisterSets;
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_118(int arg0, int arg1) { int i = (arg1 < 15 ? arg1 : 15); return *(unsigned char *)(i + arg0 + 564); }
@@ -1015,7 +1015,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_128(igPsx2VisualContextSlots_17a070 *s
     self->vfunc_125(value, 0);
 }
 
-bool Gap__Gfx__igPsx2VisualContext__vfunc_127(TexContext *context, int index, int stage)
+unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_127(igPsx2VisualContext *self, int index, int stage)
 {
     bool result;
     bool clutDirty;
@@ -1030,7 +1030,7 @@ bool Gap__Gfx__igPsx2VisualContext__vfunc_127(TexContext *context, int index, in
         FUN_0020c880(stage);
         return false;
     }
-    entry = &context->texList->data[index];
+    entry = &((TexList *)self->_pTexList)->data[index];
     result = true;
     clutDirty = false;
     clut = 0;
@@ -1042,14 +1042,14 @@ bool Gap__Gfx__igPsx2VisualContext__vfunc_127(TexContext *context, int index, in
         return true;
     }
     if (entry->buffers[0] == 0) {
-        FUN_0017b5f0(context, entry);
+        FUN_0017b5f0((TexContext *)self, entry);
     }
     if (entry->clut >= 0 || entry->altClut >= 0) {
         if (entry->clut >= 0) {
-            clut = &context->clutList->data[entry->clut];
+            clut = &((ClutList *)self->_pClutList)->data[entry->clut];
             clutIndex = entry->clut;
         } else if (entry->altClut >= 0) {
-            clut = &context->clutList->data[entry->altClut];
+            clut = &((ClutList *)self->_pClutList)->data[entry->altClut];
             clutIndex = entry->altClut;
         }
         if (clut->data->dirty) {
@@ -1064,15 +1064,15 @@ bool Gap__Gfx__igPsx2VisualContext__vfunc_127(TexContext *context, int index, in
     if (isTarget && entry->reload) {
         reload = true;
     }
-    if (context->currentTex != index || entry->stage != stage || clutDirty || reload) {
+    if (self->_currentTex != index || entry->stage != stage || clutDirty || reload) {
         if (reload) {
             entry->reload = false;
             FUN_0020c840(entry->buffers[0], entry->image->pixels);
         }
-        FUN_0017b400(context, entry, stage, clut, clutIndex);
+        FUN_0017b400((TexContext *)self, entry, stage, clut, clutIndex);
         entry->stage = stage;
-        context->currentTex = index;
-        result = FUN_0020bb20(entry->buffers, stage, (unsigned char)!context->texPageEnable) != 0;
+        self->_currentTex = index;
+        result = FUN_0020bb20(entry->buffers, stage, (unsigned char)!self->_texPageEnable) != 0;
     }
     return result;
 }
@@ -1088,7 +1088,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
     } else {
         format = DAT_0048ac40[entry->format];
     }
-    entry->buffers[0] = p2LoadTexture(entry->image ? entry->image->pixels : 0, entry->width, entry->height, format, 0);
+    entry->buffers[0] = (int)p2LoadTexture((void *)(entry->image ? entry->image->pixels : 0), entry->width, entry->height, format, 0);
     level++;
     count = entry->mipCount;
     if (count != 0) {
@@ -1109,7 +1109,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
                 } else {
                     mipFormat = DAT_0048ac40[entry->format];
                 }
-                entry->buffers[level] = p2LoadTexture(mip->pixels, mip->width, mip->height, mipFormat, 0);
+                entry->buffers[level] = (int)p2LoadTexture((void *)mip->pixels, mip->width, mip->height, mipFormat, 0);
                 FUN_0020c7b0(entry->buffers[0], entry->buffers[level]);
                 level++;
                 width >>= 1;
@@ -1136,7 +1136,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
                     mipFormat = DAT_0048ac40[entry->format];
                 }
                 mip = entry->mipImages[i];
-                entry->buffers[level] = p2LoadTexture(mip->pixels, mip->width, mip->height, mipFormat, 0);
+                entry->buffers[level] = (int)p2LoadTexture((void *)mip->pixels, mip->width, mip->height, mipFormat, 0);
                 FUN_0020c7b0(entry->buffers[0], entry->buffers[level]);
                 level++;
             }
@@ -1176,7 +1176,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_130(igPsx2VisualContext *self, int ind
     } else if (slot->buffers != 0) {
         for (i = 0; i < 8; i++) {
             if (slot->buffers[i] != 0) {
-                p2WaitDmaSequence(2, FUN_0020b270(slot->buffers[i]));
+                p2WaitDmaSequence(2, FUN_0020b270((long long *)slot->buffers[i]));
                 FUN_0020c9f0(slot->buffers[i]);
                 slot->buffers[i] = 0;
             }
@@ -1327,10 +1327,10 @@ void FUN_0017c710(int arg0, int arg1, int arg2) {
     *(char *)(arg1 + arg0 + 540) = arg2;
     if (arg1 == 0) {
         if (arg2 != 0) {
-            p2EnableCapability(0x1A, arg1);
+            p2EnableCapability(0x1A);
             return;
         }
-        p2DisableCapability(0x1A, arg1);
+        p2DisableCapability(0x1A);
     }
 }
 
@@ -1349,9 +1349,9 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_148(igPsx2VisualContext *self, int arg
     }
     arg0->slot[arg1] = arg2;
     a3 = arg1 > 1 ? arg1 - 1 : 0;
-p2CurrentProgram[0] = arg1; p2CurrentGsRegisters[0] = &p2GsRegisterSets[a3]; FUN_00208f70(DAT_0048acf0[arg2]);
-    p2CurrentProgram[0] = 0;
-    p2CurrentGsRegisters[0] = p2GsRegisterSets;
+p2CurrentProgram = arg1; p2CurrentGsRegisters = &p2GsRegisterSets[a3]; FUN_00208f70(DAT_0048acf0[arg2]);
+    p2CurrentProgram = 0;
+    p2CurrentGsRegisters = p2GsRegisterSets;
 }
 
 void FUN_0017c880(igPsx2VisualContext *arg0, int arg1, unsigned char arg2) {
@@ -1378,12 +1378,12 @@ void FUN_0017c8a0(igPsx2VisualContext *context, int stage, int function, unsigne
     } else {
         j = 0;
     }
-    p2CurrentProgram[0] = n;
-    p2CurrentGsRegisters[0] = &p2GsRegisterSets[j];
+    p2CurrentProgram = n;
+    p2CurrentGsRegisters = &p2GsRegisterSets[j];
     context->_bTextureColorComponent = colorComponent;
     FUN_00209090(DAT_0048acf0[function], colorComponent);
-    p2CurrentProgram[0] = 0;
-    p2CurrentGsRegisters[0] = p2GsRegisterSets;
+    p2CurrentProgram = 0;
+    p2CurrentGsRegisters = p2GsRegisterSets;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_149(int arg0, int a1) {
@@ -1409,8 +1409,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_150(igPsx2VisualContext *self, int n, 
     } else {
         i = 0;
     }
-    p2CurrentProgram[0] = n;
-    p2CurrentGsRegisters[0] = &p2GsRegisterSets[i];
+    p2CurrentProgram = n;
+    p2CurrentGsRegisters = &p2GsRegisterSets[i];
     switch (x) {
     case 0:
         p2DisableCapability(10);
@@ -1432,8 +1432,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_150(igPsx2VisualContext *self, int n, 
         FUN_00208170(2);
         break;
     }
-    p2CurrentProgram[0] = 0;
-    p2CurrentGsRegisters[0] = &p2GsRegisterSets[0];
+    p2CurrentProgram = 0;
+    p2CurrentGsRegisters = &p2GsRegisterSets[0];
 }
 
 /* The base is kept in its own local rather than written back into the parameter; otherwise the add

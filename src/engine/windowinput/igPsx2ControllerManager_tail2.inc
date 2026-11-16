@@ -24,12 +24,12 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         if (g_useOwnerAllocator != 0) {
             al = base;
         } else {
-            al = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+            al = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
         }
-        sp8C = (PropertyText *)igStringObj_Create(al);
-        if (igRegistry_GetValueStringObj(g_objectSystem[0]->f56, 3, "supportMultitap", &sp8C, "", 0) != 0) {
+        sp8C = (PropertyText *)igStringObj_Create((int)al);
+        if (igRegistry_GetValueStringObj(*(igRegistry **)((char *)g_objectSystem + 56), 3, "supportMultitap", (igStringObj **)&sp8C, "", 0) != 0) {
             s0 = sp8C->chars;
-            s0 = (s0 == 0) ? g_stringObjEmptyText[0] : s0;
+            s0 = (s0 == 0) ? g_stringObjEmptyText : s0;
             if (strcmp(s0, "ALL") == 0) {
                 v1 = 0xFFFF;
                 arg0->_multitap = v1;
@@ -66,11 +66,11 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                 if (g_useOwnerAllocator != 0) {
                     al2 = (Al *)base;
                 } else {
-                    al2 = (Al *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
+                    al2 = (Al *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
                 }
                 mem = al2->vX(0x100, 0x40);
                 if (scePadPortOpen(s3, s1, mem) != 1) {
-                    Memory_FreeBuffer(mem);
+                    Memory_FreeBuffer((void *)mem);
                 } else {
                     igSmartPointer<igPsx2Controller> controller((igPsx2Controller *)FUN_00147090((int)igObject_GetAllocator(arg0)));
                     controller.get()->_port = s3;
@@ -78,7 +78,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                     ((Pd *)controller.get())->vX((s3 | (s1 * 2)) & 0xFFFF);
                     controller.get()->_dmaBuffer = mem;
                     ((Pe *)controller.get())->vX(arg1);
-                    ObjectList_AppendRetained((int)(igObject *)arg0->_controllers, (int)controller.get());
+                    ObjectList_AppendRetained((igObjectList *)((int)(igObject *)arg0->_controllers), (igObject *)((int)controller.get()));
                 }
             }
             s3 += 1;

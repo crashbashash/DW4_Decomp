@@ -14,11 +14,11 @@ int igFilterMessageDispatcher_GetVTable(void) {
     igFilterMessageDispatcher obj;
     igObject *o;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
     obj._defaultFilters = 0;
     obj._filters = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
     if (&obj._filters != 0) {
         o = (igObject *)obj._filters;
@@ -48,9 +48,9 @@ void FUN_00231f40(void)
 
 static igMetaObjectCallback g_igFilterMessageDispatcher_callbackList[] = { FUN_00231ab0, 0 };
 
-void igFilterMessageDispatcher_Register(void) {
+CallbackArray *igFilterMessageDispatcher_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFilterMessageDispatcher_metaObject,
         igMessageDispatcher_Register,
@@ -97,14 +97,14 @@ void igFilterMessageDispatcher_InitFields(void) {
     igMetaObject *temp_s0;
 
     temp_s0 = g_igFilterMessageDispatcher_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igFilterMessageDispatcher_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igFilterMessageDispatcher_ctorTable, 2);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002319d0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_002319d0();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igFilterMessageDispatcher_fieldTable, g_igFilterMessageDispatcher_fieldHandles, g_igFilterMessageDispatcher_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFilterMessageDispatcher_fieldTable, g_igFilterMessageDispatcher_fieldHandles, g_igFilterMessageDispatcher_fieldOffsets, temp_s2);
 }
 

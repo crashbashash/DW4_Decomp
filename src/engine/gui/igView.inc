@@ -16,9 +16,9 @@ void igView_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igView_callbackList[] = { igModel_RunStaticInit, 0 };
 
-void igView_Register(void) {
+CallbackArray *igView_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igView_metaObject,
         igObject_Register,
@@ -56,11 +56,11 @@ void igView_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igView_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igView_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igView_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044d5d0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_igView_fieldTable, g_igView_fieldHandles, g_igView_fieldOffsets, temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igView_fieldTable, g_igView_fieldHandles, g_igView_fieldOffsets, temp_s2);
 }
 

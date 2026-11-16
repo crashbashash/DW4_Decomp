@@ -25,7 +25,7 @@ int beModelCtrlInfoDataHit_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoDataHit_vtable[0];
     hitBulletAABoxListSlot = (igObject **)&obj._hitBulletAABoxList;
     *hitBulletAABoxListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlInfoDataHit_vtable[0];
     igObjectRef_Release(hitBulletAABoxListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -40,7 +40,7 @@ void beModelCtrlInfoDataHit_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlInfoDataHit_callbackList[] = { igAABoxList_EnsureRegistered, 0 };
 
-void *beModelCtrlInfoDataHit_Register(void) {
+CallbackArray *beModelCtrlInfoDataHit_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -96,20 +96,20 @@ void beModelCtrlInfoDataHit_InitFields(void) {
     igStringMetaField *clone;
 
     meta = (void *)g_beModelCtrlInfoDataHit_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataHit_ctorTable, 4);
-    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beModelCtrlInfoDataHit_ctorTable, 4);
+    found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "HIT");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataHit_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    hitBulletAABoxList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)hitBulletAABoxList)->_metaObject = igAABoxList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(meta, g_beModelCtrlInfoDataHit_fieldTable, g_beModelCtrlInfoDataHit_fieldHandles, g_beModelCtrlInfoDataHit_fieldOffsets, base);
+    hitBulletAABoxList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
+    ((igObjectRefMetaField *)hitBulletAABoxList)->_metaObject = (int)igAABoxList_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_beModelCtrlInfoDataHit_fieldTable, g_beModelCtrlInfoDataHit_fieldHandles, g_beModelCtrlInfoDataHit_fieldOffsets, base);
 }
 

@@ -21,7 +21,7 @@ int beMatCtrlData_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrlData_vtable[0];
     chkBoxSlot = (igObject **)&obj._chkBox;
     *chkBoxSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMatCtrlData_vtable[0];
     igObjectRef_Release(chkBoxSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -36,7 +36,7 @@ void beMatCtrlData_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beMatCtrlData_callbackList[] = { igAABox_EnsureRegistered, 0 };
 
-void *beMatCtrlData_Register(void) {
+CallbackArray *beMatCtrlData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -74,13 +74,13 @@ static int g_beMatCtrlData_fieldOffsets[] = {
 void beMatCtrlData_InitFields(void) {
     int base;
     void *chkBox;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beMatCtrlData_metaObject;
+    meta = g_beMatCtrlData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlData_ctorTable, 1);
     chkBox = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)chkBox)->_metaObject = igAABox_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)chkBox)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beMatCtrlData_fieldTable, g_beMatCtrlData_fieldHandles, g_beMatCtrlData_fieldOffsets, base);
 }
 

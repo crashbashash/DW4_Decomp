@@ -22,7 +22,7 @@ int beModelCtrlLUACALL_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlLUACALL_vtable[0];
     modeNameSlot = (char **)&obj._modeName;
     *modeNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlLUACALL_vtable[0];
     igStringRef_Release(modeNameSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -35,7 +35,7 @@ void beModelCtrlLUACALL_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlLUACALL_Register);
 }
 
-void *beModelCtrlLUACALL_Register(void) {
+CallbackArray *beModelCtrlLUACALL_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -72,9 +72,9 @@ static int g_beModelCtrlLUACALL_fieldOffsets[] = {
 
 void beModelCtrlLUACALL_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlLUACALL_metaObject;
+    meta = g_beModelCtrlLUACALL_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlLUACALL_ctorTable, 1);
     igMetaObject_NameFields(meta, g_beModelCtrlLUACALL_fieldTable, g_beModelCtrlLUACALL_fieldHandles, g_beModelCtrlLUACALL_fieldOffsets, base);

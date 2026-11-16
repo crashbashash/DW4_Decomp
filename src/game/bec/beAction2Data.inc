@@ -3,7 +3,7 @@ igMetaField *g_beAction2Data_comListMetaField;
 
 igMetaObject *beAction2Data_GetOrCreateMetaObject(void) {
     if (g_beAction2Data_metaObject == 0) {
-        g_beAction2Data_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beAction2Data_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beAction2Data_metaObject;
 }
@@ -28,7 +28,7 @@ int beAction2Data_GetVTable(void) {
     obj._vtable = (int)&g_beAction2Data_vtable[0];
     comListSlot = (igObject **)&obj._comList;
     *comListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beAction2Data_vtable[0];
     igObjectRef_Release(comListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -43,7 +43,7 @@ void beAction2Data_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beAction2Data_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
 
-void *beAction2Data_Register(void) {
+CallbackArray *beAction2Data_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -81,13 +81,13 @@ static int g_beAction2Data_fieldOffsets[] = {
 void beAction2Data_InitFields(void) {
     int base;
     void *comList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beAction2Data_metaObject;
+    meta = g_beAction2Data_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beAction2Data_ctorTable, 1);
     comList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)comList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)comList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)comList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beAction2Data_fieldTable, g_beAction2Data_fieldHandles, g_beAction2Data_fieldOffsets, base);
 }

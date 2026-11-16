@@ -141,7 +141,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
         }
     }
     bool useFileIO = true;
-    igRegistry_GetValueBool((int)self->configRegistry, 2,"useFileIO", (char *)&useFileIO, 1, 0);
+    igRegistry_GetValueBool(self->configRegistry, 2,"useFileIO", (unsigned char *)&useFileIO, 1, 0);
     if (useFileIO) {
         igSmartPointer<igObject> media((igObject *)igPsx2Media_Create((int)ownerOrSystemPool()));
         if (((igPsx2Media *)media.p)->_initialized == 1) {
@@ -172,11 +172,11 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     ((igResourceView *)self->resource)->addDirectory(directory);
     igDirectory_AddLoadedRef((igDirectoryView *)directory.p);
     igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
-    igNamedObject_SetName((igNamedObject *)metaFieldInfo.p, (int)"metafield info");
+    igNamedObject_SetName((igNamedObject *)metaFieldInfo.p, "metafield info");
     igDirectory_AddInfo(directory.p, metaFieldInfo.p);
-    igRegistry_GetValueBool((int)self->configRegistry, 2,"failOnDllVersionMismatch", (char *)&self->reportHeaderVersionMismatch, 1, 0);
-    igRegistry_GetValueBool((int)self->configRegistry, 2,"warnOnDllDateMismatch", (char *)&self->warnOnDllDateMismatch, 1, 0);
-    igRegistry_GetValueInt((int)self->configRegistry, 2,"resourceTempMemoryPoolSize", (int *)&self->resourceTempPoolSize, 0, 0);
+    igRegistry_GetValueBool(self->configRegistry, 2,"failOnDllVersionMismatch", &self->reportHeaderVersionMismatch, 1, 0);
+    igRegistry_GetValueBool(self->configRegistry, 2,"warnOnDllDateMismatch", &self->warnOnDllDateMismatch, 1, 0);
+    igRegistry_GetValueInt(self->configRegistry, 2,"resourceTempMemoryPoolSize", (int *)&self->resourceTempPoolSize, 0, 0);
     if (g_currentMemoryContext != 0) {
         g_currentMemoryContext->Initialize();
     }
@@ -195,7 +195,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
         self->resourceTempPool->Activate();
         setTemporaryMemoryPool(self->resource, (igObject *)self->resourceTempPool);
     }
-    igRegistry_GetValueInt((int)self->configRegistry, 2,"stringPoolStatisticsLevel", &self->stringPoolStatisticsLevel, 0, 0);
+    igRegistry_GetValueInt(self->configRegistry, 2,"stringPoolStatisticsLevel", &self->stringPoolStatisticsLevel, 0, 0);
     igAdxFile_LoadSearchFilePath();
     g_igIGBFile_loadTimer = (igLongTimerView *)igTimer_Create((int)self->systemPool);
     g_igIGBFile_loadTimer->Start();

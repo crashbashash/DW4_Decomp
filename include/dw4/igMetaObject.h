@@ -55,6 +55,7 @@ int igMetaObject_CountTree(igMetaObject *self);
 void igMetaObject_AddExitCallback(int callback);
 void igMetaObject_AddRegistrationCallback(int callback);
 int igObjectSystem_FindMetaByNameDefault(const char *name);
+extern struct igMetaObject *g_igMetaObject_metaObject;
 }
 
 #endif

@@ -10,14 +10,26 @@
  * display sets up the GS, the VU program table and the pools; closing it takes them down again.
  * A display list records the VIF1 data of a run of draws into chained heap blocks, which a later
  * frame calls with a DMA call tag instead of building the data again. */
+#include <stdio.h>
+#include <string.h>
+#include "dw4/eekernel.h"
+#include "dw4/libkernl.h"
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
+#include "dw4/dmaChannel.h"
+#include "dw4/p2draw.h"
+#include "dw4/p2gs.h"
+#include "dw4/p2lighting.h"
+#include "dw4/p2pool.h"
+#include "dw4/p2stateCache.h"
+#include "dw4/p2swap.h"
+#include "dw4/p2timer.h"
+#include "dw4/p2vu1Symbols.h"
 
 #pragma push
 #pragma readonly_strings on
 
 #define P2_CAPABILITY_COUNT 28
-#define P2_VU_PROGRAM_COUNT 384
 #define P2_COMPONENT_COUNT 5
 #define P2_DISPLAY_LIST_BLOCK_SIZE 0x8000
 #define P2_DISPLAY_LIST_RESERVE 0x1400
@@ -38,8 +50,6 @@ enum {
     P2_PRIM_SPRITE = 6,
     P2_ZTST_ALWAYS = 1,
     P2_GS_REG_TEX0_2 = 0x07,
-    P2_POOL_IMAGE = 3,
-    P2_POOL_DISPLAY_LIST = 0xD,
     P2_HEAP_VU = 6,
     P2_HEAP_DISPLAY_LIST = 0xB,
     P2_PSM_CT32 = 0,
@@ -116,22 +126,6 @@ enum p2Component {
     P2_COMPONENT_SPRITE_SIZE
 };
 
-/* A VU program: the microcode the symbol table names, where it sits in VU memory once loaded. */
-typedef struct p2VuProgram {
-    long long key;                /* which variant of a program this is */
-    int size;
-    int state;
-    int index;
-    unsigned int code;            /* the microcode in the VU1 symbol image */
-    struct p2VuProgram *alias;
-    int reserved;
-    int address;
-    int listValue;                /* the program list's value beside key and flags; nothing reads it */
-    unsigned int flags;           /* P2_VU_PROGRAM_*; the slot in the high half */
-    char *name;
-    int reservedWords[4];
-} p2VuProgram;
-
 /* An image the renderer created for the visual context: a texture node of the image pool. */
 typedef struct p2Texture {
     char pad0[44];
@@ -178,43 +172,19 @@ typedef struct p2BlendEquation {
     unsigned short fix : 8;
 } p2BlendEquation;
 
-int memcpy();
-int memset();
-int printf();
-int strcmp();
-int strcpy();
-int strlen();
 int DeleteThread();
 int RemoveDmacHandler();
-int RemoveIntcHandler();
 int TerminateThread();
-int DisableIntc();
-int DisableDmac();
-int FUN_001f76f0();
+void FUN_001f76f0(int count, int *regs);
 int FUN_00202300();
 int FUN_00203500();
-int p2GrowPool();
-int p2FreePool();
-int p2InvalidateStateCache();
-int p2BuildDisplayPacket();
-int p2NewFinishSequence();
-int p2WaitFinishSequence();
 int FUN_00208200();
-int p2ShutdownTimer();
-int p2OpenVu1Symbols();
-int p2CloseVu1Symbols();
 int Memory_AllocateAligned16();
 int Memory_FreeToSelector();
 char *Memory_ReallocateAligned16(unsigned int data, int size, int heap);
 p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags);
 void p2UploadTex0Context2(void);
-void p2SendGsRegister(int reg);
-void p2EnableLighting(void);
-void p2DisableLighting(void);
 void p2CopyContext1ToContext2(void);
-void p2SubmitDmaPacket(int channel);
-void p2WaitDmaSequence(int channel, long long sequence);
-void p2ShutdownDmaChannels(void);
 
 void p2SetCapability(int capability, int on);
 void p2UploadFog(void);
@@ -226,12 +196,8 @@ void p2SoftwareBlendWeights(int count, int weights, float *out);
 void p2DrawClearSprites(int width, int height, int depth);
 int p2LoadVuProgram(int program);
 void p2ParseVuProgramList(const char *list);
-int p2GetDisplayFlags(void);
-void p2GrowDisplayList(void);
 p2DisplayList *p2AllocDisplayList(void);
 void p2FreeDisplayListBlock(p2DisplayList *list);
-
-extern int p2CurrentPrimitive;
 
 extern char p2DepthTestEnabled[P2_PROGRAM_COUNT];
 extern char p2DepthFunction[P2_PROGRAM_COUNT];
@@ -256,7 +222,6 @@ extern const float *p2BlendMatrices;
 extern const void *p2BlendWeights;
 extern const unsigned char *p2BlendIndices;
 extern int p2BlendIndexStride;
-extern long long p2StatFourWeightBlendVertices;
 extern int p2BlendWeightCount;
 extern int p2BlendWeightLimit;
 extern int p2BlendMatrixBase;
@@ -270,34 +235,21 @@ extern int p2ClearPass;
 extern int p2ClearRegisters[8];
 
 extern int p2ImagePoolSize;
-extern p2Image *p2ImagePool;
 extern int p2VuMemoryUsed[2];
 extern int p2VuMemorySize[2];
-extern p2VuProgram p2VuPrograms[P2_VU_PROGRAM_COUNT];
 extern int p2VuProgramLast;
 extern char p2VuProgramList[];
 extern int p2VuMicrocode;
 extern p2ComponentLayout p2ComponentLayouts[P2_COMPONENT_COUNT];
-extern int p2VertexFormat;
-extern int p2DrawPipeline;
-extern int p2ConstantColour;
-extern long long p2VertexCount;
-extern long long p2PrimitiveCount;
 
-extern int p2FirstOpen;
 extern int p2WatchdogEnabled;
 extern int p2DisplayFrameCount;
-extern int p2DisplayClosing;
 extern int p2RequestedFrameMode;
 extern int p2GsIntcHandlerId;
 extern int p2VblankStartIntcHandlerId;
 extern int p2Vif1IntcHandlerId;
 extern int p2WatchdogThread;
-extern int p2DmaHandlerIds[P2_DMA_CHANNEL_COUNT];
 
-extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
-extern int p2DisplayListMode;
-extern p2DisplayList *p2DisplayListPool;
 extern p2DmaPacket *p2SavedVif1Packet;
 extern p2DmaPacket p2DisplayListPacket;
 extern p2DisplayList *p2RecordingBlock;
@@ -610,7 +562,7 @@ void p2SetBlendEquation(int a, int b, int c, int d, int fix) {
     }
 }
 
-void p2SetFrameBufferAlpha(int on) {
+void p2SetFrameBufferAlpha(unsigned char on) {
     int value;
     long long dirty;
 
@@ -633,7 +585,7 @@ void p2SetFrameBufferAlpha(int on) {
     }
 }
 
-void p2SetPixelAlphaBlend(int on) {
+void p2SetPixelAlphaBlend(unsigned char on) {
     p2CurrentGsRegisters->pabe.field.on = on;
     p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
     p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_PABE);
@@ -712,7 +664,8 @@ void p2UploadFog(void) {
 }
 
 /* Linear fog (mode 0) runs from 255 at start to 0 at end; modes 1 and 2 take the density. */
-void p2SetFog(int mode, float start, float end, float density) {
+void p2SetFog(int mode, int unused, float start, float end, float density, float unused0, float unused1,
+              float unused2) {
     float scale;
 
     if (p2FogMode != mode) {
@@ -1069,7 +1022,7 @@ void p2SoftwareBlendOneWeight(int count, float *out) {
     }
 }
 
-int p2SoftwareBlend(int count, int weights, float *out) {
+int p2SoftwareBlend(int count, int weights, float *out, int matrixCount) {
     if (weights == 4) {
         p2StatFourWeightBlendVertices += count;
     }
@@ -1303,7 +1256,7 @@ void p2InitVuPrograms(const char *programList, const char *symbolTable) {
             p2VuProgramList[i] = '\n';
         }
     }
-    if (programList != 0 && p2OpenVu1Symbols(symbolTable, &p2VuMicrocode) != 0) {
+    if (programList != 0 && p2OpenVu1Symbols(symbolTable, (int)&p2VuMicrocode) != 0) {
         p2ParseVuProgramList(programList);
         p2CloseVu1Symbols();
         FUN_00202300();
@@ -1751,19 +1704,19 @@ void p2CloseDisplay(void) {
         p2FreeVuProgramNames();
         FUN_00203500();
         p2ShutdownDmaChannels();
-        p2FreePool(3, 0);
-        p2FreePool(9, 0);
-        p2FreePool(0xA, 0);
-        p2FreePool(7, 0);
-        p2FreePool(8, 0);
-        p2FreePool(0xB, 0);
-        p2FreePool(0xD, 0);
-        p2FreePool(0, 0);
-        p2FreePool(1, 0);
-        p2FreePool(2, 0);
-        p2FreePool(4, 0);
-        p2FreePool(5, 0);
-        p2FreePool(6, 0);
+        p2FreePool(P2_POOL_IMAGE, 0);
+        p2FreePool(P2_POOL_FINISH, 0);
+        p2FreePool(P2_POOL_TEXTURE, 0);
+        p2FreePool(P2_POOL_DMA_PREDICATE, 0);
+        p2FreePool(P2_POOL_DMA_COMPLETION, 0);
+        p2FreePool(P2_POOL_STATE_CACHE, 0);
+        p2FreePool(P2_POOL_DISPLAY_LIST, 0);
+        p2FreePool(P2_POOL_DMA_BUFFER_VIF0, 0);
+        p2FreePool(P2_POOL_DMA_BUFFER_VIF1, 0);
+        p2FreePool(P2_POOL_DMA_BUFFER_GIF, 0);
+        p2FreePool(P2_POOL_DMA_BUFFER_VIF0_SIZE, 0);
+        p2FreePool(P2_POOL_DMA_BUFFER_VIF1_SIZE, 0);
+        p2FreePool(P2_POOL_DMA_BUFFER_GIF_SIZE, 0);
     }
 }
 
@@ -1903,11 +1856,11 @@ void p2GrowDisplayList(void) {
     previous->end = (unsigned int)(p + 4);
 }
 
-short p2GetDisplayListBlendWeightCount(p2DisplayList *list) {
+int p2GetDisplayListBlendWeightCount(p2DisplayList *list) {
     return list->blendWeightCount;
 }
 
-short p2GetDisplayListBlendMatrixCount(p2DisplayList *list) {
+int p2GetDisplayListBlendMatrixCount(p2DisplayList *list) {
     return list->blendMatrixCount;
 }
 
@@ -1989,13 +1942,13 @@ int p2CopyDisplayListData(p2DisplayList *list, char *dest) {
     unsigned int data;
     block = list;
     size = block->end - (data = block->data);
-    memcpy(dest, data, size);
+    memcpy(dest, (void *)data, size);
     dest += size;
     while ((block = block->next) != 0) {
         dest -= 0x10;
         size -= 0x10;
         blockSize = block->end - (data = block->data);
-        memcpy(dest, data, blockSize);
+        memcpy(dest, (void *)data, blockSize);
         dest += blockSize;
         size += blockSize;
     }

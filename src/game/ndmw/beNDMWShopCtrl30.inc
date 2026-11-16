@@ -3,7 +3,7 @@ igMetaField *g_beNDMWShopCtrl30_bankMenuMetaField;
 
 beNDMWShopCtrl30 *beNDMWShopCtrl30_Create(int allocator) {
     beNDMWShopCtrl30_EnsureRegistered();
-    return (beNDMWShopCtrl30 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl30_metaObject, allocator);
+    return (beNDMWShopCtrl30 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl30_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beNDMWShopCtrl30_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int beNDMWShopCtrl30_GetVTable(void) {
     obj._modelCloseRamNoList = 0;
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopCtrl30_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrl30_vtable[0];
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
@@ -38,7 +38,7 @@ void beNDMWShopCtrl30_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrl30_Register);
 }
 
-void *beNDMWShopCtrl30_Register(void) {
+CallbackArray *beNDMWShopCtrl30_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

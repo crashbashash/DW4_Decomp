@@ -19,7 +19,7 @@ int igEnbayaAnimationState_GetVTable(void) {
     char *p58;
     char *p48;
     char *pB8;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igAnimationState_vtable[0];
     p48 = &u.b[8];
     *(int *)p48 = 0;
@@ -28,14 +28,14 @@ int igEnbayaAnimationState_GetVTable(void) {
     pB8 = &u.b[120];
     *(int *)pB8 = 0;
     u.vt = (int)&g_igEnbayaAnimationState_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    r = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igAnimationState_vtable[0];
     if (pB8 != 0) {
         v1 = *(int **)pB8;
         if (v1 != 0) {
             v1[1] = v1[1] - 1;
             if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)v1);
+                igObject_Destroy((igObject *)v1);
             }
         }
     }
@@ -44,7 +44,7 @@ int igEnbayaAnimationState_GetVTable(void) {
         if (v1 != 0) {
             v1[1] = v1[1] - 1;
             if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)v1);
+                igObject_Destroy((igObject *)v1);
             }
         }
     }
@@ -53,7 +53,7 @@ int igEnbayaAnimationState_GetVTable(void) {
         if (v1 != 0) {
             v1[1] = v1[1] - 1;
             if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)v1);
+                igObject_Destroy((igObject *)v1);
             }
         }
     }
@@ -65,9 +65,9 @@ void igEnbayaAnimationState_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEnbayaAnimationState_Register);
 }
 
-void igEnbayaAnimationState_Register(void) {
+CallbackArray *igEnbayaAnimationState_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEnbayaAnimationState_metaObject,
         igAnimationState_Register,
@@ -119,8 +119,8 @@ igMetaObject *FUN_001a20d0(void) {
 }
 
 static FieldFactory g_igEnbayaAnimationState_ctorTable[] = {
-    igRawRefMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igEnbayaAnimationState_fieldTable[] = {
     "_context",
@@ -140,12 +140,12 @@ void igEnbayaAnimationState_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igEnbayaAnimationState_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEnbayaAnimationState_ctorTable, 2);
-    *(char *)((char *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1))) + 38) = 0;
-    igBoolMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), 1);
+    *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1))) + 38) = 0;
+    igBoolMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)), 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEnbayaAnimationState_fieldTable, g_igEnbayaAnimationState_fieldHandles, g_igEnbayaAnimationState_fieldOffsets, temp_s1);
-    igMetaObject_AddExitCallback(FUN_001a21a0);
+    igMetaObject_AddExitCallback((int)FUN_001a21a0);
 }
 
 void FUN_001a2190(void) {

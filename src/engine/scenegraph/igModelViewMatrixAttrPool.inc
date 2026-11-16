@@ -2,7 +2,7 @@ igMetaObject *g_igModelViewMatrixAttrPool_metaObject;
 
 igMetaObject *FUN_0019a400(void) {
     if (g_igModelViewMatrixAttrPool_metaObject == 0) {
-        g_igModelViewMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igModelViewMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igModelViewMatrixAttrPool_metaObject;
 }
@@ -17,9 +17,9 @@ igMetaObject *igModelViewMatrixAttrPool_GetMetaObject(void)
 
 int igModelViewMatrixAttrPool_GetVTable(void) {
     int obj[8];
-    igObject_InitHeader(obj);
+    igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igModelViewMatrixAttrPool_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_0019a4e0(void)
@@ -29,9 +29,9 @@ void FUN_0019a4e0(void)
 
 static igMetaObjectCallback g_igModelViewMatrixAttrPool_callbackList[] = { igModelViewMatrixAttr_EnsureRegistered, 0 };
 
-void igModelViewMatrixAttrPool_Register(void) {
+CallbackArray *igModelViewMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igModelViewMatrixAttrPool_metaObject,
         igObjectPool_Register,

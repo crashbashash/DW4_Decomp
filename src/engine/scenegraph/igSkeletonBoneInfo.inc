@@ -18,12 +18,12 @@ int igSkeletonBoneInfo_GetVTable(void) {
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
     u.vt = (int)&g_igSkeletonBoneInfo_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
@@ -32,7 +32,7 @@ int igSkeletonBoneInfo_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
             }
         }
     }
@@ -44,9 +44,9 @@ void igSkeletonBoneInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igSkeletonBoneInfo_Register);
 }
 
-void igSkeletonBoneInfo_Register(void) {
+CallbackArray *igSkeletonBoneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSkeletonBoneInfo_metaObject,
         igNamedObject_Register,
@@ -66,9 +66,9 @@ void thunk_FUN_00198960(void) {
 }
 
 static FieldFactory g_igSkeletonBoneInfo_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igSkeletonBoneInfo_fieldTable[] = {
     "_parentIdx",
@@ -91,9 +91,9 @@ void igSkeletonBoneInfo_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igSkeletonBoneInfo_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkeletonBoneInfo_ctorTable, 3);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), -1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkeletonBoneInfo_fieldTable, g_igSkeletonBoneInfo_fieldHandles, g_igSkeletonBoneInfo_fieldOffsets, temp_s1);
 }
 

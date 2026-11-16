@@ -1,6 +1,6 @@
 int FUN_001a51d0(int arg0) {
     FUN_001a52a0();
-    return igMetaObject_CreateInstance((int)g_igNonRefCountedAttrStackManagerList_metaObject, arg0);
+    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igNonRefCountedAttrStackManagerList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *g_igNonRefCountedAttrStackManagerList_metaObject;
@@ -16,9 +16,9 @@ igMetaObject *igNonRefCountedAttrStackManagerList_GetMetaObject(void)
 int igNonRefCountedAttrStackManagerList_GetVTable(void) {
     struct Obj_1a5260 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igNonRefCountedAttrStackManagerList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_001a52a0(void)
@@ -28,9 +28,9 @@ void FUN_001a52a0(void)
 
 static igMetaObjectCallback g_igNonRefCountedAttrStackManagerList_callbackList[] = { FUN_001a5640, 0 };
 
-void igNonRefCountedAttrStackManagerList_Register(void) {
+CallbackArray *igNonRefCountedAttrStackManagerList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igNonRefCountedAttrStackManagerList_metaObject,
         igNonRefCountedObjectList_Register,

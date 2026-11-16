@@ -3,25 +3,21 @@
 extern "C" {
 
 class W { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(int, int, int, int, float, float); };
-struct R { int w0; int rc; };
-R *igInsightCore_FindManager(...);
-int igObject_Destroy(...);
-extern int g_igViewerSceneInfoManager_metaObject[4];
+#include "dw4/igInsightCore.h"
+#include "dw4/igObject.h"
+#include "dw4/igViewerSceneInfoManager.h"
 void igActorManager_Start(igActorManager *arg0);
 
-int igInsightCore_AddToScheduler(...);
 
-void igInsightCore_RemoveFromScheduler(int, int);
 
 typedef struct L { char pad[8]; int n; int p; int *arr; } L;
 typedef struct A { char pad[24]; L *f24; } A;
-int igObject_IsKindOf(A *, int);
 struct ActorListOwner;
 void FUN_00467030(struct ActorListOwner *arg0, int arg1);
-int igActorInfo_GetMetaObject(void);
+#include "dw4/igActorInfo.h"
 #define F24 (*(L **)&arg1->f24)
 
-int ObjectList_AppendRetained(...);
+#include "dw4/igDataLists.h"
 
 struct ActorList { char pad[8]; int n; int p12; int *arr; };
 struct ActorListOwner { char pad[24]; struct ActorList *f24; };
@@ -42,20 +38,20 @@ static inline int indexOf(struct ActorList *list, const int *value) {
     return -1;
 }
 
-extern int g_igActorManager_metaObject[4];
+#include "dw4/igActorManager.h"
 
 void igActorManager_Start(igActorManager *arg0) {
-    R *temp_v0;
-    R *temp_a0;
+    igObject *temp_v0;
+    igObject *temp_a0;
 
-    temp_v0 = igInsightCore_FindManager(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+    temp_v0 = igInsightCore_FindManager((igInsightCore *)arg0->_insight, g_igViewerSceneInfoManager_metaObject);
     if (temp_v0 != 0) {
-        temp_v0->rc = temp_v0->rc + 1;
+        temp_v0->_refCount = temp_v0->_refCount + 1;
     }
-    temp_a0 = (R *)arg0->_vsim;
+    temp_a0 = (igObject *)arg0->_vsim;
     if (temp_a0 != 0) {
-        temp_a0->rc = temp_a0->rc - 1;
-        if ((temp_a0->rc & 0x7FFFFF) == 0) {
+        temp_a0->_refCount = temp_a0->_refCount - 1;
+        if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(temp_a0);
         }
     }
@@ -68,12 +64,12 @@ void igActorManager_Stop(void) {
 
 }
 
-void igActorManager_Activate(int arg0) {
-    igInsightCore_AddToScheduler(*(int *)(arg0 + 12), arg0);
+void igActorManager_Activate(igActorManager *self) {
+    igInsightCore_AddToScheduler((igInsightCore *)self->_insight, self);
 }
 
-void igActorManager_Deactivate(int arg0) {
-    igInsightCore_RemoveFromScheduler(*(int *)((char *)(arg0) + 12), arg0);
+void igActorManager_Deactivate(igActorManager *self) {
+    igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, self);
 }
 
 /* Releases every actor the manager holds and leaves the actor list empty. */
@@ -122,7 +118,7 @@ void FUN_00467030(struct ActorListOwner *arg0, int arg1) {
     /* matching construct: retail keeps the value in a stack slot */
     int value = arg1;
     if (indexOf(list, (const int *)&value) < 0) {
-        ObjectList_AppendRetained(arg0->f24, arg1);
+        ObjectList_AppendRetained((igObjectList *)arg0->f24, (igObject *)arg1);
     }
 }
 
@@ -130,8 +126,8 @@ void igActorManager_Update(void) {
 
 }
 
-int Gap__Viewer__igActorManager__vfunc_22(void) {
-    return g_igActorManager_metaObject[0];
+igMetaObject *Gap__Viewer__igActorManager__vfunc_22(void) {
+    return g_igActorManager_metaObject;
 }
 
 }

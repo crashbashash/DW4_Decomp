@@ -10,7 +10,7 @@ void beNDMWShopJunk_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWShopJunk_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, 0 };
 
-void *beNDMWShopJunk_Register(void) {
+CallbackArray *beNDMWShopJunk_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -2,7 +2,7 @@ igMetaObject *g_beWaterMoveDataList_metaObject;
 
 igMetaObject *beWaterMoveDataList_GetOrCreateMetaObject(void) {
     if (g_beWaterMoveDataList_metaObject == 0) {
-        g_beWaterMoveDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beWaterMoveDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beWaterMoveDataList_metaObject;
 }
@@ -23,7 +23,7 @@ int beWaterMoveDataList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beWaterMoveDataList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beWaterMoveDataList_EnsureRegistered(void)
@@ -33,7 +33,7 @@ void beWaterMoveDataList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beWaterMoveDataList_callbackList[] = { beWaterMoveData_EnsureRegistered, 0 };
 
-void *beWaterMoveDataList_Register(void) {
+CallbackArray *beWaterMoveDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

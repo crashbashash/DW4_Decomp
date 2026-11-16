@@ -6,12 +6,12 @@ igMetaField *g_beModelCtrlInfoRideOn_oldMatrixMetaField;
 
 beModelCtrlInfoRideOn *beModelCtrlInfoRideOn_Create(int allocator) {
     beModelCtrlInfoRideOn_EnsureRegistered();
-    return (beModelCtrlInfoRideOn *)igMetaObject_CreateInstance(*(int *)0x588AA8, allocator);
+    return (beModelCtrlInfoRideOn *)igMetaObject_CreateInstance(g_beModelCtrlInfoRideOn_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beModelCtrlInfoRideOn_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlInfoRideOn_metaObject == 0) {
-        g_beModelCtrlInfoRideOn_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beModelCtrlInfoRideOn_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beModelCtrlInfoRideOn_metaObject;
 }
@@ -26,7 +26,7 @@ void *beModelCtrlInfoRideOn_GetMetaObject(void) {
 
 int beModelCtrlInfoRideOn_GetVTable(void) {
     RideOnView info;
-    return *(int *)((char *)&info + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)&info + *(int *)((char *)g_objectSystem + 916));
 }
 
 void beModelCtrlInfoRideOn_EnsureRegistered(void)
@@ -36,7 +36,7 @@ void beModelCtrlInfoRideOn_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beModelCtrlInfoRideOn_callbackList[] = { beModelCtrlNode2_EnsureRegistered, 0 };
 
-void *beModelCtrlInfoRideOn_Register(void) {
+CallbackArray *beModelCtrlInfoRideOn_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -86,9 +86,9 @@ static int g_beModelCtrlInfoRideOn_fieldOffsets[] = {
 void beModelCtrlInfoRideOn_InitFields(void) {
     int base;
     void *modelNode;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beModelCtrlInfoRideOn_metaObject;
+    meta = g_beModelCtrlInfoRideOn_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoRideOn_ctorTable, 4);
     modelNode = (void *)(igMetaObject_GetFieldAt(meta, base + 2));

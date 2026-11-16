@@ -6,12 +6,12 @@ igMetaField *g_beNDMWAfsSetup_subMenuHolderMetaField;
 
 beNDMWAfsSetup *beNDMWAfsSetup_CreateInstance(int allocator) {
     beNDMWAfsSetup_EnsureRegistered();
-    return (beNDMWAfsSetup *)igMetaObject_CreateInstance(g_beNDMWAfsSetup_metaObject, allocator);
+    return (beNDMWAfsSetup *)igMetaObject_CreateInstance(g_beNDMWAfsSetup_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void) {
     if (g_beNDMWAfsSetup_metaObject == 0) {
-        g_beNDMWAfsSetup_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWAfsSetup_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWAfsSetup_metaObject;
 }
@@ -35,13 +35,13 @@ int beNDMWAfsSetup_GetVTable(void) {
     obj._customMenu = 0;
     obj._subMenu = 0;
     obj._subMenuHolder = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWAfsSetup_vtable[0];
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&obj._subMenuHolder, -1);
     GameMain_igSmartPointer_igObject_Destruct(&obj._subMenu, -1);
     GameMain_igSmartPointer_igObject_Destruct(&obj._customMenu, -1);
     igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -51,9 +51,9 @@ igSmartPointer<igObject> *igSmartPointer_igGuiComponent_Destruct(igSmartPointer<
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -65,7 +65,7 @@ void beNDMWAfsSetup_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWAfsSetup_callbackList[] = { igInfoList_EnsureRegistered, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, 0 };
 
-void *beNDMWAfsSetup_Register(void) {
+CallbackArray *beNDMWAfsSetup_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -124,14 +124,14 @@ void beNDMWAfsSetup_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWAfsSetup_ctorTable, 4);
     infoList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)infoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)infoList)->_construct = 1;
     customMenu = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)customMenu)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)customMenu)->_metaObject = (int)igBoxComponent_GetOrCreateMetaObject();
     subMenu = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)subMenu)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)subMenu)->_metaObject = (int)igBoxComponent_GetOrCreateMetaObject();
     subMenuHolder = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)subMenuHolder)->_metaObject = igGuiComponent_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)subMenuHolder)->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beNDMWAfsSetup_fieldTable, g_beNDMWAfsSetup_fieldHandles, g_beNDMWAfsSetup_fieldOffsets, base);
 }
 

@@ -24,55 +24,30 @@
 #include "dw4/igViewerSceneInfoManagerController.h"
 #include "dw4/igViewerStatisticsManager.h"
 
-typedef void (*igMetaObjectCallback)();
-typedef igMetaField *(*FieldFactory)(void *);
 
 extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);
 extern "C" igMetaField *igVec2fMetaField_CreateInstance(void *);
 extern "C" igMetaField *igMatrix44fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igBoolMetaField_Create(void *);
-extern "C" igMetaField *igEnumMetaField_Create(void *);
-extern "C" igMetaField *igFloatMetaField_Create(void *);
-extern "C" igMetaField *igIntMetaField_Create(void *);
-extern "C" igMetaField *igLongMetaField_Create(void *);
-extern "C" igMetaField *igObjectRefMetaField_Create(void *);
-extern "C" igMetaField *igStringMetaField_Create(void *);
-extern "C" igMetaField *igStructMetaField_Create(void *);
-extern "C" void igViewportAttr_EnsureRegistered(void);
-extern "C" void igShadeModelAttr_EnsureRegistered(void);
+class igMemoryPoolView;
+extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igEnumMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igLongMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
+extern "C" igMetaField *igStructMetaField_Create(igMemoryPoolView *pool);
+#include "dw4/ClassRegistration.h"
 extern "C" void FUN_00134a20(void);
-extern "C" void igModelViewMatrixAttr_EnsureRegistered(void);
-extern "C" void igLightingStateAttr_EnsureRegistered(void);
-extern "C" void igLightStateAttrList_EnsureRegistered(void);
-extern "C" void igLightStateAttr_EnsureRegistered(void);
-extern "C" void igLightList_EnsureRegistered(void);
-extern "C" void igLightAttr_EnsureRegistered(void);
 extern "C" void FUN_001378f0(void);
 extern "C" void FUN_00138160(void);
-extern "C" void igCullFaceAttr_EnsureRegistered(void);
-extern "C" void igColorAttr_EnsureRegistered(void);
-extern "C" void igTextureList_EnsureRegistered(void);
-extern "C" void igGeometryAttrList_EnsureRegistered(void);
-extern "C" void igAttrList_EnsureRegistered(void);
-extern "C" void igAlphaStateAttr_EnsureRegistered(void);
+#include "dw4/igGeometryAttrList.h"
 extern "C" void FUN_00145de0(void);
-extern "C" void igVisualContext_EnsureRegistered(void);
+#include "dw4/igVisualContext.h"
 extern "C" void FUN_0014f810(void);
 extern "C" void igRay_EnsureRegistered(void);
-extern "C" void igTransform_EnsureRegistered(void);
 extern "C" void FUN_0019c7b0(void);
-extern "C" void igNodeList_EnsureRegistered(void);
-extern "C" void igLightSet_EnsureRegistered(void);
 extern "C" void FUN_0019e440(void);
-extern "C" void igGroup_EnsureRegistered(void);
-extern "C" void igGraphPathList_EnsureRegistered(void);
-extern "C" void igGraphPath_EnsureRegistered(void);
-extern "C" void igCommonTraversal_EnsureRegistered(void);
-extern "C" void igCamera_EnsureRegistered(void);
-extern "C" void igBitMask_EnsureRegistered(void);
-extern "C" void igAttrSet_EnsureRegistered(void);
-extern "C" void igAppearanceList_EnsureRegistered(void);
-extern "C" void igActorList_EnsureRegistered(void);
 extern "C" void FUN_001e5280(void);
 extern "C" void FUN_00233b80(void);
 extern "C" void FUN_004588e0(void);
@@ -88,31 +63,30 @@ extern "C" void FUN_0045d5c0(void);
 extern "C" void FUN_0045d9f0(void);
 extern "C" void FUN_0045e050(void);
 extern "C" void FUN_0045e830(void);
-extern "C" void igBasicColorChanger_RunStaticInit(void);
-extern "C" void igBitmapFont_RunStaticInit(void);
-extern "C" void igBoxComponent_RunStaticInit(void);
-extern "C" void igDefaultAspect_EnsureRegistered(void);
-extern "C" void igGuiComponentList_EnsureRegistered(void);
-extern "C" void igGuiComponent_EnsureRegistered(void);
-extern "C" void igGuiSystem_RunStaticInit(void);
-extern "C" void igHotKeyEventReceiver_RunStaticInit(void);
+#include "dw4/igBasicColorChanger.h"
+#include "dw4/igBitmapFont.h"
+#include "dw4/igBoxComponent.h"
+#include "dw4/igDefaultAspect.h"
+#include "dw4/igGuiComponentList.h"
+#include "dw4/igGuiComponent.h"
+#include "dw4/igGuiSystem.h"
+#include "dw4/igHotKeyEventReceiver.h"
 extern "C" void igMetaFieldList_EnsureRegistered(void);
-extern "C" void igMetaObjectList_EnsureRegistered(void);
-extern "C" void igMouseCursor_RunStaticInit(void);
-extern "C" void igObjectList_EnsureRegistered(void);
-extern "C" void igOnOffColorChanger_RunStaticInit(void);
+#include "dw4/igMetaObjectList.h"
+#include "dw4/igMouseCursor.h"
+#include "dw4/igObjectList.h"
+#include "dw4/igOnOffColorChanger.h"
 extern "C" void igPointerList_EnsureRegistered(void);
-extern "C" void igRadioGroup_EnsureRegistered(void);
-extern "C" void igStringObj_EnsureRegistered(void);
-extern "C" void igTextElement_EnsureRegistered(void);
+#include "dw4/igRadioGroup.h"
+#include "dw4/igStringObj.h"
+#include "dw4/igTextElement.h"
 
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" igMetaObject *igMetaObject_Create(...);
-extern "C" int kIGMemoryPoolHandleMetaData[4];
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igMetaObject.h"
 extern "C" igMetaObject *FUN_004586a0(void);
 extern "C" void *igViewerStatisticsManager_GetMetaObject(void);
 struct Obj { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; };
-extern "C" int igObject_InitHeader(...);
+#include "dw4/igObject.h"
 extern "C" int igSmartPointer_igVisualContext_Destruct(...);
 extern "C" int igSmartPointer_igMetaObjectList_Destruct(...);
 extern "C" int igSmartPointer_igStringObj_Destruct(...);
@@ -120,37 +94,24 @@ extern "C" int igSmartPointer_igMetaFieldList_Destruct(...);
 extern "C" int GameMain_igSmartPointer_igObject_Destruct(...);
 extern "C" int FUN_004583f0(...);
 extern "C" int g_igViewerStatisticsManager_vtable[4];
-extern "C" char *g_objectSystem[4];
+#include "dw4/igObjectSystem.h"
 extern "C" int igViewerStatisticsManager_GetVTable(void);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" int igObject_Destroy(...);
 extern "C" int __dl__FPv(...);
 extern "C" ObjectRefWord *FUN_00458860(ObjectRefWord *self,int delete_storage);
-extern "C" char igObject_GetMetaObject_ParentAccessor[];
-extern "C" char igObject_Register[];
-extern "C" int igMetaObject_RegisterClass(...);
 extern "C" void ViewerLibrary_MarkRegistered(void);
-extern "C" void igViewerStatisticsManager_Register(void);
+extern "C" CallbackArray *igViewerStatisticsManager_Register(void);
 extern "C" void thunk_igViewerStatisticsManager_GetMetaObject(void);
-extern "C" int igVisualContext_GetOrCreateMetaObject(...);
 extern "C" int igStringObj_GetOrCreateMetaObject(...);
 extern "C" int igMetaFieldList_GetOrCreateMetaObject(...);
-extern "C" int igMetaObjectList_GetOrCreateMetaObject(...);
-extern "C" int igBoxComponent_GetOrCreateMetaObject(...);
-extern "C" void igMetaObject_CreateFields(void *meta, FieldFactory *factories, int count);
-extern "C" void *igMetaObject_GetFieldAt(...);
-extern "C" int igMetaObject_GetFieldCount(...);
-extern "C" void igMetaObject_NameFields(void *meta, const char **names, igMetaField ***handles, int *offsets, int start);
 extern "C" void igViewerStatisticsManager_InitFields(void);
 extern "C" igMetaObject *FUN_00458ae0(void);
 extern "C" void *igStatisticsItemList_GetMetaObject(void);
 struct Obj_458b80 { int *vt; char pad[28]; };
 extern "C" int g_igStatisticsItemList_vtable[4];
 extern "C" int igStatisticsItemList_GetVTable(void);
-extern "C" char igObjectList_GetPublishedMetaObject[];
-extern "C" char igObjectList_Register[];
-extern "C" void igStatisticsItemList_Register(void);
+extern "C" CallbackArray *igStatisticsItemList_Register(void);
 extern "C" void thunk_igStatisticsItemList_GetMetaObject(void);
 extern "C" igMetaObject *FUN_00458c50(void);
 extern "C" void *igStatisticsItem_GetMetaObject(void);
@@ -161,32 +122,29 @@ extern "C" int g_igStatisticsItem_vtable[4];
 extern "C" int igStatisticsItem_GetVTable(void);
 extern "C" void **FUN_00458dc0(void **arg0, short arg1);
 extern "C" ObjectRefWord *FUN_00458e40(ObjectRefWord *self,int delete_storage);
-extern "C" char igView_Register[];
-extern "C" char igView_GetPublishedMetaObject[];
-extern "C" void igStatisticsItem_Register(void);
+#include "dw4/igView.h"
+extern "C" igMetaObject *igView_GetPublishedMetaObject(void);
+extern "C" CallbackArray *igStatisticsItem_Register(void);
 extern "C" void thunk_igStatisticsItem_GetMetaObject(void);
 extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" int igFloatMetaField_SetDefault(void *, float);
 extern "C" int igIntMetaField_SetDefault(...);
 extern "C" int FUN_0044bce0(void);
-extern "C" int igGuiComponent_GetOrCreateMetaObject(...);
 extern "C" int FUN_004516e0(void);
 extern "C" int FUN_00149b60(void);
 extern "C" void igStatisticsItem_InitFields(void);
-extern "C" int igMetaObject_CreateInstance(igMetaObject *, int);
 extern "C" void *igViewerAction_GetMetaObject(void);
 extern "C" int g_igViewerAction_vtable[4];
 extern "C" int igViewerAction_GetVTable(void);
 extern "C" void FUN_00459190(void);
-extern "C" char igAction_GetPublishedMetaObject[];
-extern "C" char igAction_Register[];
-extern "C" void igViewerAction_Register(void);
+#include "dw4/igAction.h"
+extern "C" CallbackArray *igViewerAction_Register(void);
 extern "C" void thunk_igViewerAction_GetMetaObject(void);
 extern "C" void igViewerAction_InitFields(void);
 extern "C" int igSmartPointer_igTextureList_Destruct(...);
-extern "C" int igTextureList_GetOrCreateMetaObject(...);
+#include "dw4/igTextureList.h"
 extern "C" int igSmartPointer_igObjectList_Destruct(...);
-extern "C" int igInfoManager_Destroy(...);
+#include "dw4/igInfoManager.h"
 extern "C" int FUN_00233a40(...);
 extern "C" int igSmartPointer_igObjectList_Construct(...);
 extern "C" int FUN_0044c1c0(...);
@@ -203,13 +161,8 @@ extern "C" int FUN_00458620(...);
 extern "C" int FUN_00458630(...);
 extern "C" int ObjectPointerList_FindIndex(...);
 extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
-extern "C" int igMetaObject_FinalizeAndReplaceField(...);
-extern "C" void **igMetaObject_FindFieldByName(...);
-extern "C" void igMetaObject_RunStaticInit(...);
-extern "C" int igObjectList_GetOrCreateMetaObject(...);
 extern "C" int igStringMetaField_SetDefaultText(...);
-extern "C" char igInfoManager_GetPublishedMetaObject[];
-extern "C" char igInfoManager_Register[];
+extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" int text_name_3[4];
 extern "C" int text_Viewer_scene_manager[4];
 extern "C" int g_igViewerSceneInfoManager_vtable[4];
@@ -249,18 +202,18 @@ extern "C" int *FUN_00459e00(int *p);
 extern "C" int *FUN_00459e10(int *p);
 extern "C" int *FUN_00459e20(int *p);
 extern "C" int *FUN_00459e30(int *p);
-extern "C" void igViewerSceneInfoManager_Register(void);
+extern "C" CallbackArray *igViewerSceneInfoManager_Register(void);
 extern "C" void thunk_igViewerSceneInfoManager_GetMetaObject(void);
 extern "C" void FUN_00459ee0(void);
 typedef struct { int *vt; int w[2]; char *s; } Obj_45a450;
-extern "C" int StringChunk_ReleaseHeader(...);
+#include "dw4/StringPool.h"
 extern "C" int g_igViewerModeChangeMessage_vtable[4];
-extern "C" char igMessage_GetPublishedMetaObject[];
-extern "C" char igMessage_Register[];
+extern "C" igMetaObject *igMessage_GetPublishedMetaObject(void);
+#include "dw4/igMessage.h"
 extern "C" igMetaObject *FUN_0045a450(void);
 extern "C" igMetaObject *igViewerModeChangeMessage_GetMetaObject(void);
 extern "C" int igViewerModeChangeMessage_GetVTable(void);
-extern "C" void igViewerModeChangeMessage_Register(void);
+extern "C" CallbackArray *igViewerModeChangeMessage_Register(void);
 extern "C" void thunk_igViewerModeChangeMessage_GetMetaObject(void);
 extern "C" void igViewerModeChangeMessage_InitFields(void);
 struct Obj_45a680 { int *vt; char pad[8]; char *m; };
@@ -269,7 +222,7 @@ extern "C" int DAT_0051eef0[4];
 extern "C" igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void);
 extern "C" int igViewerLoadingFileMessage_GetVTable(void);
 extern "C" void igViewerLoadingFileMessage_EnsureRegistered(void);
-extern "C" void igViewerLoadingFileMessage_Register(void);
+extern "C" CallbackArray *igViewerLoadingFileMessage_Register(void);
 extern "C" void thunk_igViewerLoadingFileMessage_GetMetaObject(void);
 extern "C" void igViewerLoadingFileMessage_InitFields(void);
 struct Obj_45a8c0 { int *vt; char pad[28]; };
@@ -277,13 +230,13 @@ extern "C" int g_igViewerSceneInfoManagerController_vtable[4];
 extern "C" igMetaObject *FUN_0045a8c0(void);
 extern "C" void *igViewerSceneInfoManagerController_GetMetaObject(void);
 extern "C" int igViewerSceneInfoManagerController_GetVTable(void);
-extern "C" void igViewerSceneInfoManagerController_Register(void);
+extern "C" CallbackArray *igViewerSceneInfoManagerController_Register(void);
 extern "C" void thunk_igViewerSceneInfoManagerController_GetMetaObject(void);
 extern "C" void igViewerSceneInfoManagerController_InitFields(void);
 union U_45aaf0 { int vt; int *pv; char b[96]; };
 extern "C" int FUN_00133950(void);
 extern "C" int FUN_00134940(void);
-extern "C" int igLightingStateAttr_GetOrCreateMetaObject(void);
+#include "dw4/igLightingStateAttr.h"
 extern "C" int FUN_00136040(void);
 extern "C" int FUN_001361f0(void);
 extern "C" int FUN_00136370(...);
@@ -293,7 +246,7 @@ extern "C" int FUN_00137fb0(void);
 extern "C" int FUN_001386d0(void);
 extern "C" int FUN_0013b2b0(void);
 extern "C" int FUN_0014f770(void);
-extern "C" int igTransform_GetOrCreateMetaObject(void);
+#include "dw4/igTransform.h"
 extern "C" int FUN_00197060(...);
 extern "C" int FUN_00197160(...);
 extern "C" int FUN_00197300(...);
@@ -305,7 +258,7 @@ extern "C" int FUN_0019c6a0(void);
 extern "C" int FUN_0019d9e0(...);
 extern "C" int FUN_0019dbb0(void);
 extern "C" int FUN_001a38e0(void);
-extern "C" int igAttrSet_GetOrCreateMetaObject(void);
+#include "dw4/igAttrSet.h"
 extern "C" int igSmartPointer_igTransform_Destruct(...);
 extern "C" int FUN_001d3090(...);
 extern "C" int igSmartPointer_igAttrSet_Destruct(...);
@@ -316,8 +269,8 @@ extern "C" int igSmartPointer_igLightingStateAttr_Destruct(...);
 extern "C" int FUN_00239280(...);
 extern "C" int g_igRenderer_vtable[4];
 extern "C" int g_igViewerRenderer_vtable[4];
-extern "C" char igRenderer_GetPublishedMetaObject[];
-extern "C" char igRenderer_Register[];
+extern "C" igMetaObject *igRenderer_GetPublishedMetaObject(void);
+#include "dw4/igRenderer.h"
 extern "C" igMetaObject *FUN_0045aaf0(void);
 extern "C" igMetaObject *igViewerRenderer_GetMetaObject(void);
 extern "C" int igViewerRenderer_GetVTable(void);
@@ -338,12 +291,12 @@ extern "C" int *FUN_0045b060(int *p);
 extern "C" int *FUN_0045b070(int *p);
 extern "C" int *FUN_0045b080(int *p);
 extern "C" void *FUN_0045b090(void *arg0);
-extern "C" void igViewerRenderer_Register(void);
+extern "C" CallbackArray *igViewerRenderer_Register(void);
 extern "C" void thunk_igViewerRenderer_GetMetaObject(void);
 extern "C" void igViewerRenderer_InitFields(void);
 struct SigViewerParameters_GetMetaObject { char pad[36]; unsigned int flags; int ok() { return (flags & 4) != 0; } };
 extern "C" SigViewerParameters_GetMetaObject *igViewerParameters_GetMetaObject(void);
-extern "C" int igMatrix44f_SetIdentity(...);
+#include "dw4/igMatrix44f.h"
 extern "C" int FUN_00196a50(...);
 extern "C" int FUN_0019b1f0(...);
 extern "C" int FUN_001d6560(...);
@@ -353,16 +306,16 @@ extern "C" int g_igViewerParameters_vtable[4];
 extern "C" int DAT_00542090[8];
 union U_45b4c0 { int vt; char b[272]; };
 extern "C" int igViewerParameters_GetVTable(void);
-extern "C" char igModel_GetPublishedMetaObject[];
-extern "C" char igModel_Register[];
-extern "C" void igViewerParameters_Register(void);
+extern "C" igMetaObject *igModel_GetPublishedMetaObject(void);
+#include "dw4/igModel.h"
+extern "C" CallbackArray *igViewerParameters_Register(void);
 extern "C" void thunk_igViewerParameters_GetMetaObject(void);
 struct Fld { char p0[52]; char f52; char p53[3]; int f56; };
 extern "C" int igVec2fMetaField_SetDefault(...);
 extern "C" int igVec3fMetaField_SetDefault(...);
-extern "C" int igGroup_GetOrCreateMetaObject(void);
+#include "dw4/igGroup.h"
 extern "C" int FUN_0019f4c0(void);
-extern "C" int igGraphPath_GetOrCreateMetaObject(void);
+#include "dw4/igGraphPath.h"
 extern "C" int FUN_001a4d90(void);
 extern "C" int igBoolMetaField_SetDefaultValue(...);
 extern "C" void igViewerParameters_InitFields(void);
@@ -374,7 +327,7 @@ extern "C" int igViewerGuiFactory_GetVTable(void);
 extern "C" void **FUN_0045ba90(void **arg0, short arg1);
 extern "C" void **FUN_0045bb10(struct Ref **self, short flag);
 extern "C" void **FUN_0045bb90(void **arg0, long long arg1);
-extern "C" void igViewerGuiFactory_Register(void);
+extern "C" CallbackArray *igViewerGuiFactory_Register(void);
 extern "C" void thunk_igViewerGuiFactory_GetMetaObject(void);
 extern "C" int FUN_00451e40(void);
 extern "C" int FUN_00451fc0(void);
@@ -384,12 +337,12 @@ extern "C" void FUN_0045be30(int arg0);
 extern "C" void *igViewerDataPumpManager_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U_45bec0 { int vt; int w[8]; void *p[8]; char b[32]; };
-extern "C" int g_igNamedObject_vtable[4];
+#include "dw4/igNamedObject.h"
 extern "C" int g_igViewerDataPumpManager_vtable[4];
 extern "C" int igViewerDataPumpManager_GetVTable(void);
 extern "C" void FUN_0045bfa0(void);
-extern "C" int igViewerDataPumpManager_InitFields_0045c040[4];
-extern "C" void igViewerDataPumpManager_Register(void);
+extern "C" void igViewerDataPumpManager_InitFields_0045c040(void);
+extern "C" CallbackArray *igViewerDataPumpManager_Register(void);
 extern "C" void thunk_igViewerDataPumpManager_GetMetaObject(void);
 extern "C" int FUN_001e5150(...);
 extern "C" int text_Viewer_data_pump_manager[4];
@@ -403,7 +356,7 @@ extern "C" int g_igPickMode_vtable[4];
 extern "C" int g_igViewMode_vtable[4];
 extern "C" int igPickMode_GetVTable(void);
 extern "C" void FUN_0045c330(void);
-extern "C" void igPickMode_Register(void);
+extern "C" CallbackArray *igPickMode_Register(void);
 extern "C" void thunk_igPickMode_GetMetaObject(void);
 extern "C" int FUN_00188260(void);
 extern "C" int FUN_0019dfd0(void);
@@ -416,7 +369,7 @@ extern "C" int g_igRotateMode_vtable[4];
 union U_45c630 { int vt; char b[160]; };
 extern "C" int igRotateMode_GetVTable(void);
 extern "C" void FUN_0045c680(void);
-extern "C" void igRotateMode_Register(void);
+extern "C" CallbackArray *igRotateMode_Register(void);
 extern "C" void thunk_igRotateMode_GetMetaObject(void);
 extern "C" void igRotateMode_InitFields(void);
 extern "C" igMetaObject *igFlyMode_GetMetaObject(void);
@@ -424,7 +377,7 @@ struct Obj_45c970 { int *vt; char p4[8]; int sub[4]; char pad[108]; int *ref; ch
 extern "C" int g_igFlyMode_vtable[4];
 extern "C" int igFlyMode_GetVTable(void);
 extern "C" void FUN_0045ca20(void);
-extern "C" void igFlyMode_Register(void);
+extern "C" CallbackArray *igFlyMode_Register(void);
 extern "C" void thunk_igFlyMode_GetMetaObject(void);
 struct V2 { int x; int y; };
 struct V3 { int x; int y; int z; };
@@ -435,9 +388,9 @@ extern "C" int g_igCameraMode_vtable[4];
 union U_45ccd0 { int vt; int w[21]; char b[84]; };
 extern "C" int igCameraMode_GetVTable(void);
 extern "C" void FUN_0045cdc0(void);
-extern "C" void igCameraMode_Register(void);
+extern "C" CallbackArray *igCameraMode_Register(void);
 extern "C" void thunk_igCameraMode_GetMetaObject(void);
-extern "C" int igCamera_GetOrCreateMetaObject(void);
+#include "dw4/igCamera.h"
 extern "C" void igCameraMode_InitFields(void);
 extern "C" igMetaObject *FUN_0045cf10(void);
 extern "C" void *igViewMode_GetMetaObject(void);
@@ -451,9 +404,9 @@ extern "C" int g_igViewManager_vtable[4];
 extern "C" int DAT_00542680[8];
 union U_45d1a0 { int vt; int w[21]; char b[84]; };
 extern "C" int igViewManager_GetVTable(void);
-extern "C" char igEventReceiver_GetPublishedMetaObject[];
-extern "C" char igEventReceiver_Register[];
-extern "C" void igViewManager_Register(void);
+extern "C" igMetaObject *igEventReceiver_GetPublishedMetaObject(void);
+#include "dw4/igEventReceiver.h"
+extern "C" CallbackArray *igViewManager_Register(void);
 extern "C" void thunk_igViewManager_GetMetaObject(void);
 extern "C" void igViewManager_InitFields(void);
 extern "C" igMetaObject *FUN_0045d470(void);
@@ -462,7 +415,7 @@ extern "C" int g_igModel_vtable[4];
 extern "C" int g_igViewModel_vtable[4];
 union U_45d510 { int vt; char b[176]; };
 extern "C" int igViewModel_GetVTable(void);
-extern "C" void igViewModel_Register(void);
+extern "C" CallbackArray *igViewModel_Register(void);
 extern "C" void thunk_igViewModel_GetMetaObject(void);
 extern "C" void igViewModel_InitFields(void);
 extern "C" igMetaObject *FUN_0045d830(void);
@@ -474,12 +427,11 @@ extern "C" int FUN_00142d10(...);
 extern "C" int igSmartPointer_igColorAttr_Destruct(...);
 extern "C" int g_igNormalsRenderer_vtable[4];
 extern "C" int igNormalsRenderer_GetVTable(void);
-extern "C" void igNormalsRenderer_Register(void);
+extern "C" CallbackArray *igNormalsRenderer_Register(void);
 extern "C" void thunk_igNormalsRenderer_GetMetaObject(void);
 extern "C" int FUN_001356f0(void);
-extern "C" int igColorAttr_GetOrCreateMetaObject(void);
-extern "C" int igGeometryAttrList_GetOrCreateMetaObject(...);
-extern "C" int igAttrList_GetOrCreateMetaObject(void);
+#include "dw4/igColorAttr.h"
+#include "dw4/igAttrList.h"
 extern "C" void igNormalsRenderer_InitFields(void);
 extern "C" void FUN_0045dbe0(int arg0);
 struct SigLogoRenderer_GetMetaObject { char pad[36]; unsigned int flags; int ok() { return (flags & 4) != 0; } };
@@ -489,7 +441,7 @@ extern "C" int FUN_001353b0(...);
 extern "C" int g_igLogoRenderer_vtable[4];
 extern "C" int igLogoRenderer_GetVTable(void);
 extern "C" void FUN_0045dd20(void);
-extern "C" void igLogoRenderer_Register(void);
+extern "C" CallbackArray *igLogoRenderer_Register(void);
 extern "C" void thunk_igLogoRenderer_GetMetaObject(void);
 extern "C" int FUN_00137850(void);
 extern "C" void igLogoRenderer_InitFields(void);
@@ -498,7 +450,7 @@ extern "C" igMetaObject *igBoundingBoxRenderer_GetMetaObject(void);
 struct Obj_45df30 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 extern "C" int g_igBoundingBoxRenderer_vtable[4];
 extern "C" int igBoundingBoxRenderer_GetVTable(void);
-extern "C" void igBoundingBoxRenderer_Register(void);
+extern "C" CallbackArray *igBoundingBoxRenderer_Register(void);
 extern "C" void thunk_igBoundingBoxRenderer_GetMetaObject(void);
 extern "C" void igBoundingBoxRenderer_InitFields(void);
 extern "C" void FUN_0045e230(int arg0);
@@ -514,12 +466,12 @@ extern "C" int g_igActorManager_vtable[4];
 extern "C" int igActorManager_GetVTable(void);
 extern "C" O *FUN_0045e420(O *arg0, short arg1);
 extern "C" void FUN_0045e4a0(void);
-extern "C" void igActorManager_Register(void);
+extern "C" CallbackArray *igActorManager_Register(void);
 extern "C" void thunk_igActorManager_GetMetaObject(void);
 extern "C" int FUN_00130440(...);
-extern "C" int igNodeList_GetOrCreateMetaObject(...);
-extern "C" int igAppearanceList_GetOrCreateMetaObject(...);
-extern "C" int igActorList_GetOrCreateMetaObject(...);
+#include "dw4/igNodeList.h"
+#include "dw4/igAppearanceList.h"
+#include "dw4/igActorList.h"
 extern "C" int igPointerList_GetOrCreateMetaObject(...);
 extern "C" void igActorManager_InitFields(void);
 extern "C" igMetaObject *FUN_0045e6f0(void);
@@ -527,7 +479,7 @@ extern "C" void *igActorManagerParams_GetMetaObject(void);
 extern "C" int g_igActorManagerParams_vtable[4];
 union U_45e790 { int vt; char b[16]; };
 extern "C" int igActorManagerParams_GetVTable(void);
-extern "C" void igActorManagerParams_Register(void);
+extern "C" CallbackArray *igActorManagerParams_Register(void);
 extern "C" void thunk_igActorManagerParams_GetMetaObject(void);
 extern "C" void igActorManagerParams_InitFields(void);
 extern "C" igMetaObject *Gap__Viewer__igActorManagerParams__vfunc_22(void);

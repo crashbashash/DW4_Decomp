@@ -2,6 +2,8 @@
  * modules, loads EE ELF files, and reads and writes IOP memory words. Every call binds the server
  * first and sends one 512-byte request, which the reply overwrites. */
 #include "dw4/sony/sif.h"
+#include "dw4/sony/sifdev.h"
+#include "dw4/libkernl.h"
 
 #define LF_SERVER 0x80000006
 
@@ -72,7 +74,6 @@ void *memcpy(void *dst, const void *src, unsigned int size);
 void *memset(void *dst, int value, unsigned int size);
 char *strncpy(char *dst, const char *src, unsigned int size);
 
-extern char __ps2_klibinfo__[];
 /* negative until the server is bound */
 static int _bind_check = -1;
 /* the version text that matches any */

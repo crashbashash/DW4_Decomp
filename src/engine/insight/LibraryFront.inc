@@ -29,8 +29,8 @@ void *FUN_00230f70(struct S *arg0, short arg1) {
     return arg0;
 }
 
-int FUN_00231010(void) {
-    return g_igRenderer_metaObject[0];
+igMetaObject *FUN_00231010(void) {
+    return g_igRenderer_metaObject;
 }
 
 igMetaObject *FUN_00231020(void) {
@@ -53,7 +53,7 @@ void *igInfoManager_Destroy(igInfoManager *manager, short flags) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader(*h, h);
+                        StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                     }
                 }
             }

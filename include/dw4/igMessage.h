@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void igMessage_Register(void);
+struct CallbackArray *igMessage_Register(void);
 
 #ifdef __cplusplus
 }

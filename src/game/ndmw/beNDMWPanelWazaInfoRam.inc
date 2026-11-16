@@ -24,7 +24,7 @@ int beNDMWPanelWazaInfoRam_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoRam_vtable[0];
     workRef = &obj._work;
     *workRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoRam_vtable[0];
     if (workRef != 0) {
         igRelease((igObject *)*workRef);
@@ -42,9 +42,9 @@ igSmartPointer<igObject> *beNDMWPanelWazaInfoRam_igSmartPointer_igObject_Destruc
         if (object) {
             --object->_refCount;
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)object);
+                igObject_Destroy((igObject *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -56,7 +56,7 @@ void beNDMWPanelWazaInfoRam_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWPanelWazaInfoRam_callbackList[] = { beNDMWPanelWazaInfoWork_EnsureRegistered, 0 };
 
-void *beNDMWPanelWazaInfoRam_Register(void) {
+CallbackArray *beNDMWPanelWazaInfoRam_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

@@ -3,7 +3,7 @@ igMetaField *g_beFileChkObj_fdMetaField;
 
 beFileChkObj *beFileChkObj_Create(int allocator) {
     beFileChkObj_EnsureRegistered();
-    return (beFileChkObj *)igMetaObject_CreateInstance(*(int *)0x589780, allocator);
+    return (beFileChkObj *)igMetaObject_CreateInstance(g_beFileChkObj_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *beFileChkObj_GetMetaObject(void) {
@@ -23,7 +23,7 @@ int beFileChkObj_GetVTable(void) {
     obj._vtable = (int)&g_beFileChkObj_vtable[0];
     fdSlot = (igObject **)&obj._fd;
     *fdSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFileChkObj_vtable[0];
     igObjectRef_Release(fdSlot);
     return vtable;
@@ -36,7 +36,7 @@ void beFileChkObj_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beFileChkObj_callbackList[] = { igFile_EnsureRegistered, 0 };
 
-void *beFileChkObj_Register(void) {
+CallbackArray *beFileChkObj_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -74,13 +74,13 @@ static int g_beFileChkObj_fieldOffsets[] = {
 void beFileChkObj_InitFields(void) {
     int base;
     void *fd;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beFileChkObj_metaObject;
+    meta = g_beFileChkObj_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFileChkObj_ctorTable, 1);
     fd = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)fd)->_metaObject = igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)fd)->_metaObject = (int)igFile_GetOrCreateMetaObject();
     ((igRefMetaField *)fd)->_construct = 1;
     igMetaObject_NameFields(meta, g_beFileChkObj_fieldTable, g_beFileChkObj_fieldHandles, g_beFileChkObj_fieldOffsets, base);
 }

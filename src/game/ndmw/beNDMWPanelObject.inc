@@ -33,7 +33,7 @@ void beNDMWPanelObject_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWPanelObject_callbackList[] = { beBaseInfoManager_EnsureRegistered, beMessenger_EnsureRegistered, beDataObjList_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void *beNDMWPanelObject_Register(void) {
+CallbackArray *beNDMWPanelObject_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
@@ -141,16 +141,16 @@ void beNDMWPanelObject_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWPanelObject_ctorTable, 0x10);
     manager = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)manager)->_metaObject = beBaseInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)manager)->_metaObject = (int)beBaseInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)manager)->_refCounted = 0;
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 6), 2);
     playerDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)playerDataList)->_metaObject = beDataObjList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerDataList)->_metaObject = (int)beDataObjList_GetOrCreateMetaObject();
     textSetList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    ((igObjectRefMetaField *)textSetList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)textSetList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     textColorList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
     ((igObjectRefMetaField *)textColorList)->_metaObject = igIntList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beNDMWPanelObject_fieldTable, g_beNDMWPanelObject_fieldHandles, g_beNDMWPanelObject_fieldOffsets, base);

@@ -18,10 +18,13 @@ char *strpbrk(const char *, const char *);
 size_t strcspn(const char *, const char *);
 void *memmove(void *, const void *, size_t);
 char *strcat(char *, const char *);
+char *strncat(char *, const char *, size_t);
+char *strrchr(const char *, int);
 int strncmp(const char *, const char *, size_t);
 char *strstr(const char *, const char *);
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
+char *strlwr(char *);
 #ifdef __cplusplus
 }
 #endif

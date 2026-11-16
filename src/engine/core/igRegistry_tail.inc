@@ -96,7 +96,7 @@ int igRegistry_GetSectionIndex(igRegistry *self, char *name, int create) {
     }
     if (create != 0) {
         igSmartPointer<igStringObj> section((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
-        igStringObj_Set((int)section.get(), (int)name);
+        igStringObj_Set(section.get(), name);
         ObjectList_AppendRetained((igObjectList *)self->_additionalSectionNames, section.get());
         return n + 11;
     }
@@ -136,12 +136,12 @@ bool igRegistry_GetKeyName(int registry, int section, int index, igStringObj **k
     return found;
 }
 
-bool igRegistry_GetValueInt(int registry, int section, const char *key, int *out, int defaultValue, int create) {
+bool igRegistry_GetValueInt(igRegistry *registry, int section, const char *key, int *out, int defaultValue, int create) {
     bool found;
     void *value;
 
     found = false;
-    value = ((void *)igRegistry_FindValue((igRegistry *)registry, section, key, 0));
+    value = ((void *)igRegistry_FindValue(registry, section, key, 0));
     if ((value != 0) && (igStringObj_ToInt((void *)((igRegistryValue *)value)->_value, (int)out) != 0)) {
         found = true;
     }
@@ -154,25 +154,25 @@ bool igRegistry_GetValueInt(int registry, int section, const char *key, int *out
     return found;
 }
 
-bool igRegistry_GetValueFloat(int registry, int section, const char *key, float *out, int create, float defaultValue) {
+bool igRegistry_GetValueFloat(igRegistry *registry, int section, const char *key, float *out, int create, float defaultValue) {
     bool found;
     void *value;
 
     found = false;
-    value = (void *)(((void *)igRegistry_FindValue((igRegistry *)registry, section, key, 0)));
+    value = (void *)(((void *)igRegistry_FindValue(registry, section, key, 0)));
     if ((value != 0) && (igStringObj_ToFloat((void *)((igRegistryValue *)value)->_value, (int)out) != 0)) {
         found = true;
     }
     if (!found) {
         *out = defaultValue;
         if (create != 0) {
-            igRegistry_SetValueFloat(registry, section, key, defaultValue);
+            igRegistry_SetValueFloat((int)registry, section, key, defaultValue);
         }
     }
     return found;
 }
 
-int igRegistry_GetValueStringObj(int registry, int section, const char *key, igStringObj **out, const char *defaultValue, int create) {
+int igRegistry_GetValueStringObj(igRegistry *registry, int section, const char *key, igStringObj **out, const char *defaultValue, int create) {
     igRegistryValue *node;
     igStringObj *string;
     igStringObj *old;
@@ -186,12 +186,12 @@ int igRegistry_GetValueStringObj(int registry, int section, const char *key, igS
         if (old) {
             --old->_refCount;
             if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)old);
+                igObject_Destroy((igObject *)old);
         }
         *out = string;
     } else {
         igSmartPointer<igStringObj> created((igStringObj *)igStringObj_Create(((int)igObject_GetAllocator((igObject *)registry))));
-        igStringObj_Set((int)created.p, (int)defaultValue);
+        igStringObj_Set(created.p, defaultValue);
         string = created.p;
         if (string) {
             ++string->_refCount;
@@ -200,7 +200,7 @@ int igRegistry_GetValueStringObj(int registry, int section, const char *key, igS
         if (old) {
             --old->_refCount;
             if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((void *)old);
+                igObject_Destroy((igObject *)old);
         }
         *out = string;
         if (create != 0) {
@@ -240,14 +240,14 @@ static inline void assignInterned(int **slot, char *s) {
     *slot = v;
 }
 
-int igRegistry_GetValueString(int registry, int section, const char *key, int **out, char *def, int create) {
+int igRegistry_GetValueString(igRegistry *registry, int section, const char *key, char **out, char *def, int create) {
     igRegistryValue *value;
 
-    value = igRegistry_FindValue((igRegistry *)registry, section, key, 0);
+    value = igRegistry_FindValue(registry, section, key, 0);
     if (value != 0) {
-        assignInterned(out, valueText((igStringObj *)value->_value));
+        assignInterned((int **)out, valueText((igStringObj *)value->_value));
     } else {
-        assignInterned(out, def);
+        assignInterned((int **)out, def);
         if (create != 0) {
             igRegistry_SetValueString((void *)registry, section, key, (const char *)def);
         }
@@ -319,7 +319,7 @@ int igRegistry_GetValueStringList(void *self, int section, const char *key, igSt
         *(igStringObj **)&a = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
         for (i = 0; i < list->_count; i++) {
             StringList_CopyRetained(&r1, list, i);
-            igStringObj_Set((int)a, (int)r1);
+            igStringObj_Set(a, (const char *)r1);
             releaseRef(r1);
             igStringObj_Trim(a);
             *(int **)&tmp = intern(listValueText(a));
@@ -338,7 +338,7 @@ int igRegistry_GetValueStringList(void *self, int section, const char *key, igSt
         n = list->_count;
         if (n != 0) {
             StringList_CopyRetained(&r2, list, 0);
-            igStringObj_Set((int)b, (int)r2);
+            igStringObj_Set(b, (const char *)r2);
             releaseRef(r2);
         }
         for (j = 1; j < n; j++) {
@@ -362,16 +362,16 @@ int igRegistry_GetValueStringList(void *self, int section, const char *key, igSt
 
 /* Read a boolean value; when it is missing or unreadable, `defaultValue` is returned through `value`
  * and, with `create`, written into the registry. */
-unsigned char igRegistry_GetValueBool(int registry, int section, const char *name, char *value, int defaultValue, int create) {
+unsigned char igRegistry_GetValueBool(igRegistry *registry, int section, const char *name, unsigned char *value, int defaultValue, int create) {
     unsigned char found = 0;
-    igRegistryValue *entry = igRegistry_FindValue((igRegistry *)registry, section, name, 0);
-    if (entry != 0 && igStringObj_ParseBool((igStringObj *)entry->_value, value)) {
+    igRegistryValue *entry = igRegistry_FindValue(registry, section, name, 0);
+    if (entry != 0 && igStringObj_ParseBool((igStringObj *)entry->_value, (char *)value)) {
         found = 1;
     }
     if (!found) {
         *value = defaultValue;
         if (create != 0) {
-            igRegistry_SetValueBool(registry, section, name, defaultValue);
+            igRegistry_SetValueBool((int)registry, section, name, defaultValue);
         }
     }
     return found;
@@ -545,7 +545,7 @@ int igRegistry_SetValueInt(void *registry, int section, const char *key, int num
     void *value;
     value = (void *)((void *)igRegistry_FindValue((igRegistry *)registry, section, key, 1));
     if (value == 0) return 0;
-    igStringObj_SetInt(((igRegistryValue *)value)->_value, number, (int)&percent_d_7[0]);
+    igStringObj_SetInt(((igRegistryValue *)value)->_value, number, (const char *)percent_d_7);
     return 1;
 }
 
@@ -561,7 +561,7 @@ int igRegistry_SetValueFloat(int a0, int a1, const char *a2, float x) {
 int igRegistry_SetValueString(void *registry, int section, const char *key, const char *value) {
     igRegistryValue *entry = igRegistry_FindValue((igRegistry *)registry, section, key, 1);
     if (entry == 0) return 0;
-    igStringObj_Set(entry->_value, (int)value);
+    igStringObj_Set((igStringObj *)entry->_value, value);
     return 1;
 }
 
@@ -647,10 +647,10 @@ void igRegistry_ParseFile(igRegistry *self, igFileView *file, int overwrite) {
     }
     config = g_objectSystem->configRegistry;
     showQueries = self->_showQueries;
-    igRegistry_GetValueBool((int)config, 2,"showRegistryQueries", (char *)&showQueries, showQueries, 0);
+    igRegistry_GetValueBool(config, 2,"showRegistryQueries", &showQueries, showQueries, 0);
     self->_showQueries = showQueries;
     if (self->_showQueries != 0 && config == self) {
-        igRegistry_GetValueBool((int)config, 2,"showRegistryQueries", (char *)&showQueries, showQueries, 0);
+        igRegistry_GetValueBool(config, 2,"showRegistryQueries", &showQueries, showQueries, 0);
     }
 }
 
@@ -752,7 +752,7 @@ igRegistryValue *igRegistry_FindValue(igRegistry *self, int section, const char 
         }
         if (values->_count != 0 && freeSlot >= 0 && freeSlot < values->_count) ((igRegistryValue **)values->_data)[freeSlot] = (igRegistryValue *)self;
         r.p->_section = section;
-        igStringObj_Set((int)(((igStringObj *)r.p->_valueName)), (int)key);
+        igStringObj_Set((igStringObj *)r.p->_valueName, key);
         return r;
     }
     return 0;
@@ -788,7 +788,7 @@ void igRegistry_ProcessInclude(igRegistry *self, igFileView *file, char *line, i
         igSmartPointer<igRegistry> include((igRegistry *)igRegistry_Create((int)igObject_GetAllocator((igObject *)self)));
         found = 0;
         igSmartPointer<igStringObj> directory((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
-        igStringObj_Set((int)directory.get(), (int)file->_fileName);
+        igStringObj_Set(directory.get(), file->_fileName);
         igStringObj_RemovePathFilename(directory.get());
         if (directory.get()->_length != 0) {
             igRegistry *target = include.get();
@@ -908,9 +908,9 @@ void igReport_ReadSettings(void) {
     g_reportSettingsLoaded = 1;
     igRegistry *config = g_objectSystem->configRegistry;
     if (config != 0) {
-        igRegistry_GetValueBool((int)config, 2,"assertOnErrors", (char *)&g_reportAssertOnErrors, 1, 0);
+        igRegistry_GetValueBool(config, 2,"assertOnErrors", &g_reportAssertOnErrors, 1, 0);
         igStringObj *name = (igStringObj *)igStringObj_Create(allocator());
-        if (igRegistry_GetValueStringObj((int)config, 2,"defaultReportLevel", &name, (char *)"", 0) != 0) {
+        if (igRegistry_GetValueStringObj(config, 2,"defaultReportLevel", &name, (char *)"", 0) != 0) {
             char *t = levelText(name);
             if (strcmp(t,"kDetail") == 0) {
                 g_reportLevel = 6;
@@ -938,7 +938,7 @@ igSmartPointer<igObject> igResource_GetDirectory(void *directory, int name) {
     if (strcmp((const char *)name, "igImageDirectory") == 0) {
         return igSmartPointer<igObject>((igObject *)igResource_GetImageDirectory((igResource *)directory), kRetainReference);
     }
-    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((igObjectList *)((igResource *)directory)->_directoryList, (igMetaField *)g_igDirectory_nameField, name), kRetainReference);
+    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((igObjectList *)((igResource *)directory)->_directoryList, (igMetaField *)g_igDirectory_nameField, (const char *)name), kRetainReference);
 }
 
 int igResource_AddDirectory(int *p, int directory)
@@ -976,7 +976,7 @@ void igResource_AddAlignment(igResource *self, int name, int value) {
         setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
     }
     igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
-    igStringObj_Set((int)entry.p, name);
+    igStringObj_Set(entry.p, (const char *)name);
     ObjectList_AppendRetained((igObjectList *)self->_alignmentStrings, (igObject *)entry.p);
     igTDataList<int> *values = (igTDataList<int> *)self->_alignmentValues;
     int top = values->count();

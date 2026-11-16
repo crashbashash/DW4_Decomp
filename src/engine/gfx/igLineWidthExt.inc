@@ -21,9 +21,9 @@ void FUN_0014d6d0(void)
     igMetaObject_RunStaticInit(igLineWidthExt_Register);
 }
 
-void igLineWidthExt_Register(void) {
+CallbackArray *igLineWidthExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igLineWidthExt_metaObject,
         igContextExt_Register,
@@ -43,7 +43,7 @@ void thunk_FUN_0014d680(void) {
 }
 
 static FieldFactory g_igLineWidthExt_ctorTable[] = {
-    igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
 };
 static const char *g_igLineWidthExt_fieldTable[] = {
     "_fWidth",

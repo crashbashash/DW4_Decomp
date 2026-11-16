@@ -3,7 +3,7 @@ igMetaField *g_igBlendEquationExt_equationMetaField;
 
 igMetaObject *FUN_0014fe60(void) {
     if (g_igBlendEquationExt_metaObject == 0) {
-        g_igBlendEquationExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igBlendEquationExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBlendEquationExt_metaObject;
 }
@@ -21,9 +21,9 @@ void FUN_0014ff00(void)
     igMetaObject_RunStaticInit(igBlendEquationExt_Register);
 }
 
-void igBlendEquationExt_Register(void) {
+CallbackArray *igBlendEquationExt_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igBlendEquationExt_metaObject,
         igContextExt_Register,
@@ -43,7 +43,7 @@ void thunk_igBlendEquationExt_GetMetaObject(void) {
 }
 
 static FieldFactory g_igBlendEquationExt_ctorTable[] = {
-    igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igBlendEquationExt_fieldTable[] = {
     "_equation",

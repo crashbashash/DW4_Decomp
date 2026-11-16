@@ -55,6 +55,13 @@ typedef struct p2Material {
 extern "C" {
 #endif
 
+/* Statistics: how often each lighting state was set or switched. */
+extern long long p2StatLightSets;
+extern long long p2StatLightSwitches;
+extern long long p2StatLightingModeSets;
+extern long long p2StatLightingSwitches;
+extern long long p2StatMaterialSets;
+
 void p2InitLighting(void);
 void p2EnableLight(int slot);
 void p2DisableLight(int slot);

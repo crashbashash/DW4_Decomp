@@ -1,2 +1,2 @@
-int igObjectList_GetPublishedMetaObject(void){return (int)g_igObjectList_metaObject[0];}
+igMetaObject *igObjectList_GetPublishedMetaObject(void){return g_igObjectList_metaObject;}
 

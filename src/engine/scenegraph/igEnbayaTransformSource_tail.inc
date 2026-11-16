@@ -49,7 +49,7 @@ void FUN_001c1c60(T_1c1c60 *arg0) {
         if (r != 0) {
             r->rc = r->rc - 1;
             if ((r->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)r);
+                igObject_Destroy((igObject *)r);
             }
         }
     }
@@ -65,7 +65,7 @@ void FUN_001c1c60(T_1c1c60 *arg0) {
         if (r != 0) {
             r->rc = r->rc - 1;
             if ((r->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((void *)r);
+                igObject_Destroy((igObject *)r);
             }
         }
     }
@@ -74,7 +74,7 @@ void FUN_001c1c60(T_1c1c60 *arg0) {
         l->data[i] = 0;
     }
     l->count = 0;
-    if (igMetaObject_CountInstances(arg0->vA(), 1) == 0) {
+    if (igMetaObject_CountInstances((igMetaObject *)(arg0->vA()), 1) == 0) {
         arg0->vB();
     }
     FUN_001c5e20((T_1c5e20 *)arg0);
@@ -88,20 +88,20 @@ void FUN_001c1e10(void) {
     int temp_s0;
 
     if (((void * * *)DAT_00562730)[0] == 0) {
-        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(1));
         ((DW4VC_100_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(0));
     }
     if (((void * * *)DAT_00562738)[0] == 0) {
-        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562738)[0]))->vX((int)(1));
     }
     if (DAT_00562740[0] == 0) {
-        DAT_00562740[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]))));
+        DAT_00562740[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_00562740[0]))->vX((int)(0));
     }
     if (g_igAlphaStateAttr_instance.p == 0) {
-        temp_s0 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
+        temp_s0 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_igAlphaStateAttr_instance.release();
         g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)FUN_0013b270(temp_s0);
         ((DW4VC_128_1 *)g_igAlphaStateAttr_instance.p)->vX(0);
@@ -113,19 +113,19 @@ void FUN_001c1f90(int) {
     p = ((S_ref * *)DAT_00562730)[0];
     if (p != 0) {
         p->f4 = p->f4 - 1;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)p);
+        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
         ((S_ref * *)DAT_00562730)[0] = 0;
     }
     p = ((S_ref * *)DAT_00562738)[0];
     if (p != 0) {
         p->f4 = p->f4 - 1;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)p);
+        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
         ((S_ref * *)DAT_00562738)[0] = 0;
     }
     p = ((S_ref * *)DAT_00562740)[0];
     if (p != 0) {
         p->f4 = p->f4 - 1;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((void *)p);
+        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
         ((S_ref * *)DAT_00562740)[0] = 0;
     }
     g_igAlphaStateAttr_instance.clear();
@@ -134,26 +134,26 @@ void FUN_001c1f90(int) {
 void FUN_001c20b0(Controller *self) {
   unsigned char flag;
   Obj_1c20b0 *s1;
-  int props = ((PropertySet * *)g_objectSystem)[0]->props;
+  int props = ((PropertySet *)g_objectSystem)->props;
   flag = 1;
-  thunk_igRegistry_GetValueBool(props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
+  thunk_igRegistry_GetValueBool((igRegistry *)props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
   self->enabled = flag;
-  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(self)))));
+  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)self)))));
   self->f76->setValue(self->a32);
   self->f76->configure(0);
-  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator(self)))));
+  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator((igObject *)self)))));
   self->f80->setKind(2);
   self->f80->configure(0);
-  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60(igObject_GetAllocator(self)))));
+  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60((int)igObject_GetAllocator((igObject *)self)))));
   self->f84->field12 = 2;
   self->f84->configure(0);
   if (self->p36 != 0) {
     self->p36->configure(0);
-    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator(self)))));
+    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator((igObject *)self)))));
     self->f88->setKind(0);
     self->f88->configure(0);
     self->f88->setValue(self->a40);
-    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60(igObject_GetAllocator(self)))));
+    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60((int)igObject_GetAllocator((igObject *)self)))));
     self->f92->field12 = 1;
     self->f92->configure(0);
     if (self->flag48) {
@@ -165,19 +165,19 @@ void FUN_001c20b0(Controller *self) {
     }
   }
   if (self->a52 != 0) {
-    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(self)))));
+    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)self)))));
     self->f100->setValue(self->a52);
     self->f100->configure(0);
     s1 = self->f88;
     if (s1 != 0 && self->a56 == self->a40) {
       assign(self->f104, s1);
     } else {
-      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator(self)))));
+      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator((igObject *)self)))));
       self->f104->setKind(0);
       self->f104->configure(0);
       self->f104->setValue(self->a56);
     }
-    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60(igObject_GetAllocator(self)))));
+    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60((int)igObject_GetAllocator((igObject *)self)))));
     self->f108->field12 = 0;
     self->f108->configure(0);
   }
@@ -197,7 +197,7 @@ void FUN_001c2880(S_1c2880 *arg0) {
         p = l->data[i];
         if (p != 0) {
             p->refs = p->refs - 1;
-            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)p);
+            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
         }
     }
     n2 = l->count;
@@ -211,7 +211,7 @@ void FUN_001c2880(S_1c2880 *arg0) {
         p = l->data[i];
         if (p != 0) {
             p->refs = p->refs - 1;
-            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)p);
+            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
         }
     }
     n2 = l->count;
@@ -223,55 +223,55 @@ void FUN_001c2880(S_1c2880 *arg0) {
     q = arg0->f76;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f76 = 0;
     q = arg0->f80;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f80 = 0;
     q = arg0->f84;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f84 = 0;
     q = arg0->f88;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f88 = 0;
     q = arg0->f92;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f92 = 0;
     q = arg0->f96;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f96 = 0;
     q = arg0->f100;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f100 = 0;
     q = arg0->f104;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f104 = 0;
     q = arg0->f108;
     if (q != 0) {
         q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((void *)q);
+        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
     }
     arg0->f108 = 0;
 }
@@ -317,7 +317,7 @@ void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1) {
     }
     arg0->f32 = (E_1c2eb0 *)arg1;
     arg0->f32->f96 = 0;
-    bool b = igTextureAttr_GetImage(arg0->f32, 0) != 0;
+    bool b = igTextureAttr_GetImage((igTextureAttr *)arg0->f32, 0) != 0;
     if (!b) {
         FUN_001c31e0(arg0->f32);
     }
@@ -397,24 +397,24 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
     arg0->b(arg1);
     arg0->f60 = 1;
     if (arg0->f32 != 0) {
-        o = ((Obj_1c3090 *)FUN_0013aec0(igObject_GetAllocator(arg0)));
-        ObjectList_AppendRetained(arg0->f64, o);
-        ObjectList_AppendRetained(arg0->f68, o);
+        o = ((Obj_1c3090 *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+        ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)o);
+        ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)o);
         o->refs = o->refs - 1;
         if ((o->refs & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)o);
+            igObject_Destroy((igObject *)o);
         }
         arg0->f32->f96 = 2;
-        if ((igTextureAttr_GetImage(arg0->f32, 0) != 0) == 0) {
+        if ((igTextureAttr_GetImage((igTextureAttr *)arg0->f32, 0) != 0) == 0) {
             FUN_001c31e0(arg0->f32);
             if (arg0->f73 != 0) {
                 FUN_00141190(arg0->f32, 1);
             }
         }
-        ObjectList_AppendRetained(o, arg0->f80);
-        ObjectList_AppendRetained(o, ((int *)DAT_00562730)[0]);
-        ObjectList_AppendRetained(o, arg0->f76);
-        ObjectList_AppendRetained(o, arg0->f84);
+        ObjectList_AppendRetained((igObjectList *)o, (igObject *)arg0->f80);
+        ObjectList_AppendRetained((igObjectList *)o, (igObject *)(((int *)DAT_00562730)[0]));
+        ObjectList_AppendRetained((igObjectList *)o, (igObject *)arg0->f76);
+        ObjectList_AppendRetained((igObjectList *)o, (igObject *)arg0->f84);
     }
 }
 
@@ -436,9 +436,9 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
     float acc[4];
     total = bpp * (width * height);
     if (g_useOwnerAllocator != 0) {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     } else {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     }
     mask = a->alloc(width * height);
     memset(mask, 0, width * height);
@@ -521,9 +521,9 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
         }
     }
     if (g_useOwnerAllocator != 0) {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     } else {
-        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]));
+        a = ((SphereMapAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     }
     a->release(mask);
 }

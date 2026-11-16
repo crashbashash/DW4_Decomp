@@ -13,9 +13,9 @@ void FUN_00231950(void)
     igMetaObject_RunStaticInit(igMessageReceiver_Register);
 }
 
-void igMessageReceiver_Register(void) {
+CallbackArray *igMessageReceiver_Register(void) {
     InsightLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igMessageReceiver_metaObject,
         igObject_Register,

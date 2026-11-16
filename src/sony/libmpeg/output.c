@@ -3,7 +3,6 @@
 
 int sprintf(char *buf, const char *format, ...);
 long __muldi3(long a, long b);
-void _cscStoreImage(_sceMpegDecoder *dec, _sceMpegPicture *picture);
 
 /* The fields a frame is shown for, by its repeat_first_field and top_field_first flags. */
 static unsigned int _fieldCounts[16] = {2, 0, 2, 0, 2, 3, 2, 3, 0, 0, 0, 0, 2, 4, 0, 6};

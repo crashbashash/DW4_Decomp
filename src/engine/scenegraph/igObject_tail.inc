@@ -1,5 +1,5 @@
-int Gap__Core__igObject__vfunc_08()
+void Gap__Core__igObject__vfunc_08(igObject *self)
 {
-    return Gap__Core__igObject__userDestruct();
+    Gap__Core__igObject__userDestruct(self);
 }
 

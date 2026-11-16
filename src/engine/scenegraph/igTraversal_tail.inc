@@ -3,12 +3,12 @@ void FUN_001e02e0(int arg0) {
 }
 
 void FUN_001e02f0(int arg0, int arg1) {
-    if (igMetaObject_IsOfType(arg1, ((int)igNode_GetMetaObject())) != 0) {
-        if (igMetaObject_IsOfType(arg1, ((int)igGroup_GetMetaObject())) != 0) {
-            igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&igTraversal_TraverseChildren);
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
+        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGroup_GetMetaObject()))) != 0) {
+            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igTraversal_TraverseChildren);
             return;
         }
-        igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)((int *)FUN_001e0790));
+        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)((int *)FUN_001e0790));
     }
 }
 
@@ -16,7 +16,7 @@ void Gap__Sg__igTraversal__vfunc_09(A_1e0380 *arg0, int arg1) {
     T_1e0380 *temp_a0;
     T_1e0380 *temp_s0;
 
-    Gap__Core__igObject__userConstruct();
+    Gap__Core__igObject__userConstruct((igObject *)arg0);
     if (arg1 == 0) {
         temp_s0 = DAT_00562a38[0];
         if (temp_s0 != 0) {
@@ -26,7 +26,7 @@ void Gap__Sg__igTraversal__vfunc_09(A_1e0380 *arg0, int arg1) {
         if (temp_a0 != 0) {
             temp_a0->refs = temp_a0->refs - 1;
             if (((unsigned long long) ((long long) temp_a0->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((void *)temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         arg0->f1c = temp_s0;
@@ -36,8 +36,8 @@ void Gap__Sg__igTraversal__vfunc_09(A_1e0380 *arg0, int arg1) {
 unsigned char g_useScratchPadForTraversal;
 
 void FUN_001e0410(void) {
-    ((int *)DAT_00562a38)[0] = FUN_0019a6e0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    igRegistry_GetValueBool(*(int *)((char *)g_objectSystem[0] + 56), 7, "useScratchPadForTraversal", &g_useScratchPadForTraversal, g_useScratchPadForTraversal, 1);
+    ((int *)DAT_00562a38)[0] = FUN_0019a6e0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "useScratchPadForTraversal", &g_useScratchPadForTraversal, g_useScratchPadForTraversal, 1);
 }
 
 void FUN_001e0470(void) {
@@ -88,28 +88,28 @@ void Gap__Sg__igTraversal__vfunc_24(void *, int)
 {
 }
 
-void igTraversal_RegisterFunction(struct L_1e06c0 *arg0, struct X_1e06c0 *arg1, void *arg2) {
+void igTraversal_RegisterFunction(igTraversalFunctionList *table, igMetaObject *meta, void *function) {
     int a1;
     int v1;
     int s2;
 
-    if (igMetaObject_IsOfType(arg1, g_igNode_metaObject) != 0) {
-        s2 = arg1->f8;
+    if (igMetaObject_IsOfType(meta, g_igNode_metaObject) != 0) {
+        s2 = meta->_id;
         if (s2 < 0) {
-            s2 = arg0->n;
-            arg1->f8 = s2;
+            s2 = table->_count;
+            meta->_id = s2;
         }
         a1 = s2 + 1;
-        if (s2 >= arg0->n && a1 >= 0) {
-            if (a1 <= arg0->cap) {
-                arg0->n = a1;
+        if (s2 >= table->_count && a1 >= 0) {
+            if (a1 <= table->_capacity) {
+                table->_count = a1;
             } else {
-                List_Resize((void *)arg0, a1, 4);
+                List_Resize((void *)table, a1, 4);
             }
         }
-        v1 = arg0->n;
+        v1 = table->_count;
         if (v1 != 0 && s2 >= 0 && s2 < v1) {
-            arg0->arr[s2] = arg2;
+            ((void **)table->_data)[s2] = function;
         }
     }
 }

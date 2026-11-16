@@ -18,7 +18,7 @@ igMetaField *g_igLightAttr_cacheableMetaField;
 
 igMetaObject *FUN_00136750(void) {
     if (g_igLightAttr_metaObject == 0) {
-        g_igLightAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igLightAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLightAttr_metaObject;
 }
@@ -36,11 +36,11 @@ int igLightAttr_GetVTable(void) {
     int temp_s0;
     char *ps;
     int *temp_a0;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igLightAttr_vtable[0];
     ps = &u.b[140];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igLightAttr_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
@@ -61,9 +61,9 @@ void igLightAttr_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igLightAttr_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
-void igLightAttr_Register(void) {
+CallbackArray *igLightAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLightAttr_metaObject,
         igVisualAttribute_Register,
@@ -83,22 +83,22 @@ void thunk_igLightAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igLightAttr_ctorTable[] = {
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec4fMetaField_CreateInstance,
-    igVec4fMetaField_CreateInstance,
-    igVec4fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igFloatMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igLightAttr_fieldTable[] = {
     "_lightType",
@@ -222,7 +222,7 @@ void igLightAttr_InitFields(void) {
     vd[0] = 0; vd[2] = -1.0f; vd[1] = 0;
     igVec3fMetaField_SetDefault(temp_s2, vd);
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD);
-    temp_s2->f56 = igVisualContext_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)igVisualContext_GetOrCreateMetaObject();
     temp_s2->f38 = 0;
     temp_s2->f40 = 1;
     temp_s2->f39 = 1;

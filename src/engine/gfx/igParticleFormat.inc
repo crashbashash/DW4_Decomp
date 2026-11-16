@@ -12,12 +12,12 @@ igMetaField *g_igParticleFormat_lifetimeMetaField;
 
 void FUN_0014d070(int arg0) {
     igParticleFormat_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igParticleFormat_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igParticleFormat_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0014d0b0(void) {
     if (g_igParticleFormat_metaObject == 0) {
-        g_igParticleFormat_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igParticleFormat_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igParticleFormat_metaObject;
 }
@@ -32,9 +32,9 @@ igMetaObject *igParticleFormat_GetMetaObject(void)
 
 int igParticleFormat_GetVTable(void) {
     struct Obj_14d150 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igParticleFormat_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igParticleFormat_EnsureRegistered(void)
@@ -42,9 +42,9 @@ void igParticleFormat_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igParticleFormat_Register);
 }
 
-void igParticleFormat_Register(void) {
+CallbackArray *igParticleFormat_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igParticleFormat_metaObject,
         igObject_Register,
@@ -64,16 +64,16 @@ void thunk_igParticleFormat_GetMetaObject(void) {
 }
 
 static FieldFactory g_igParticleFormat_ctorTable[] = {
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 static const char *g_igParticleFormat_fieldTable[] = {
     "_position",

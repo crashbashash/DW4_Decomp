@@ -1,17 +1,16 @@
 #include "dw4/reflected.h"
 #include "dw4/beBaseInfoManagerDispatchView.h"
+#include "dw4/beBaseInfoManager.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beStaticInfo.h"
+#include "dw4/beStaticInfoCtl.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igObject.h"
 
-extern "C" int beBaseInfoManager_Stop(...);
-extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int beStaticInfoCtl_GetInfoMeta(void);
+extern "C" igMetaObject *beStaticInfoCtl_GetInfoMeta(void);
 extern "C" void beStaticInfoCtl_UpdateRam(void);
-extern "C" int beStaticInfoCtl_GetMeta(void);
-extern "C" int ObjectList_AppendRetained(...);
-extern "C" int beMessenger_RegisterReceiver(...);
-extern "C" int beStaticInfoCtl_GetMessageEnum(...);
-extern "C" int beMessenger_AppendObject(int, int);
-extern "C" int beMessenger_ResolveEnumValue(int, int, int);
-extern "C" void igObject_Destroy(igObject *);
+extern "C" igMetaObject *beStaticInfoCtl_GetMeta(void);
 /* matching construct: the inlined refcount release is a static member so the compiler expands it as retail does */
 struct ReleaseRefInline { static inline void go(igObject *object) {
     if (object) {
@@ -21,10 +20,7 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
     }
 } };
 extern "C" void beStaticInfoCtl_Stop(beStaticInfoCtl *self);
-extern "C" int g_beMessenger_metaObject[4];
 extern "C" void beStaticInfoCtl_Prepare(beStaticInfoCtl *self);
-extern "C" int g_beStaticInfoCtl_metaObject[4];
-extern "C" int g_beStaticInfo_metaObject[4];
 extern "C" int emptyString[4];
 extern "C" int STATICINFO_2[4];
 extern "C" void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram);
@@ -66,18 +62,18 @@ void beStaticInfoCtl_Stop(beStaticInfoCtl *self) {
         }
     }
     infos->_count = 0;
-    beBaseInfoManager_Stop(self);
+    beBaseInfoManager_Stop((beBaseInfoManager *)self);
 }
 
 void beStaticInfoCtl_Prepare(beStaticInfoCtl *self) {
     if (self->_messenger == 0) {
-        self->_messenger = igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
+        self->_messenger = (int)(igInsightCore_FindManager((igInsightCore *)self->_insight, g_beMessenger_metaObject));
     }
 }
 
-int beStaticInfoCtl_GetInfoMeta(void)
+igMetaObject *beStaticInfoCtl_GetInfoMeta(void)
 {
-    return g_beStaticInfo_metaObject[0];
+    return g_beStaticInfo_metaObject;
 }
 
 void beStaticInfoCtl_UpdateRam(void)
@@ -99,14 +95,14 @@ void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram) {
     name = (int *)info->_name;
     ramNo = ram->_ramNo;
     name = name != 0 ? name : &emptyString[0];
-    beMessenger_RegisterReceiver(messenger, ram, &STATICINFO_2[0], name, ramNo);
-    ObjectList_AppendRetained(self->_staticInfoList, info);
+    beMessenger_RegisterReceiver((beMessenger *)messenger, ram, (const char *)&STATICINFO_2[0], (const char *)name, ramNo);
+    ObjectList_AppendRetained((igObjectList *)self->_staticInfoList, (igObject *)info);
 }
 
 int beStaticInfoCtl_OnMessage(beStaticInfoCtl *self, beBaseInfoRam *ram, beMessengerWork *work) {
-    switch (beMessenger_ResolveEnumValue(self->_messenger, beStaticInfoCtl_GetMessageEnum(), work->_message)) {
+    switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beStaticInfoCtl_GetMessageEnum(), (const char *)work->_message)) {
     case 0:
-        beMessenger_AppendObject(self->_messenger, self->_staticInfoList);
+        beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)self->_staticInfoList);
         goto one;
     default:
         return 0;
@@ -115,7 +111,7 @@ one:
     return 1;
 }
 
-int beStaticInfoCtl_GetMeta(void)
+igMetaObject *beStaticInfoCtl_GetMeta(void)
 {
-    return g_beStaticInfoCtl_metaObject[0];
+    return g_beStaticInfoCtl_metaObject;
 }

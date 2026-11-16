@@ -20,6 +20,7 @@ int printf(const char *, ...);
 int sscanf(const char *, const char *, ...);
 int vsnprintf(char *, size_t, const char *, va_list);
 int vfprintf(FILE *, const char *, va_list);
+int vprintf(const char *, va_list);
 int sprintf(char *, const char *, ...);
 int vsprintf(char *, const char *, va_list);
 int fputs(const char *, FILE *);

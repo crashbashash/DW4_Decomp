@@ -39,7 +39,7 @@ int beNDMWLoadIntf2ChrDataSel_GetVTable(void) {
     nameRef = &obj._name;
     *nameRef = 0;
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2ChrDataSel_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);
@@ -54,7 +54,7 @@ void beNDMWLoadIntf2ChrDataSel_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWLoadIntf2ChrDataSel_callbackList[] = { beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWLoadIntf2ComMdlCtrl_EnsureRegistered, beNDMWLoadCtrl2CommonIntf_EnsureRegistered, 0 };
 
-void *beNDMWLoadIntf2ChrDataSel_Register(void) {
+CallbackArray *beNDMWLoadIntf2ChrDataSel_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -166,20 +166,20 @@ void beNDMWLoadIntf2ChrDataSel_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2ChrDataSel_ctorTable, 0x10);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
-    nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
+    nameIndex = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText(nameField, "CHRDATASEL");
+    igStringMetaField_SetDefaultText((igMetaField *)nameField, "CHRDATASEL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2ChrDataSel_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;
     if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(nameField);
     }
     messenger = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
-    messenger->_metaObject = beMessenger_GetOrCreateMetaObject();
+    messenger->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     messenger->_refCounted = 0;
     padManager = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 1));
-    padManager->_metaObject = bePadManager_GetOrCreateMetaObject();
+    padManager->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     padManager->_refCounted = 0;
     comMdlCtrl = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 2));
     comMdlCtrl->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();

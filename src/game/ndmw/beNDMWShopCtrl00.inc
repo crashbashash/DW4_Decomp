@@ -4,7 +4,7 @@ igMetaObject *g_beNDMWShopCtrl00_metaObject;
  * (possibly just published) metadata. */
 beNDMWShopCtrl00 *beNDMWShopCtrl00_Create(int allocator) {
     beNDMWShopCtrl00_EnsureRegistered();
-    return (beNDMWShopCtrl00 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl00_metaObject, allocator);
+    return (beNDMWShopCtrl00 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl00_metaObject, (igMemoryPoolView *)allocator);
 }
 
 /* Lazy accessor. A null handle, or one whose _validity word lacks bit 4, runs the registrar; the
@@ -29,7 +29,7 @@ int beNDMWShopCtrl00_GetVTable(void) {
     o._modelCloseRamNoList = 0;
     o._modelCloseSeqNameList = 0;
     o._vtable = (int)&g_beNDMWShopCtrl00_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
     o._vtable = (int)&g_beNDMWShopCtrl00_vtable[0];
     beNDMWWindowCtrl_Destroy(&o, (long long)0);
     return r;
@@ -37,14 +37,14 @@ int beNDMWShopCtrl00_GetVTable(void) {
 
 void beNDMWShopCtrl00_EnsureRegistered(){igMetaObject_RunStaticInit(beNDMWShopCtrl00_Register);}
 
-void *beNDMWShopCtrl00_Register(void) {
+CallbackArray *beNDMWShopCtrl00_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWShopCtrl00_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWShopCtrl00_GetMetaObject,
+        (igMetaObjectCallback)beNDMWShopCtrl00_GetMetaObject,
         "beNDMWShopCtrl00",
         0x54, /* instance size */
         beNDMWShopCtrl00_GetVTable,

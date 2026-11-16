@@ -14,12 +14,12 @@ igMetaField *g_beFileListInfoManager_procMetaField;
 
 beFileListInfoManager *beFileListInfoManager_CreateInstance(int allocator) {
     beFileListInfoManager_EnsureRegistered();
-    return (beFileListInfoManager *)igMetaObject_CreateInstance(*(int *)0x5896F8, allocator);
+    return (beFileListInfoManager *)igMetaObject_CreateInstance(g_beFileListInfoManager_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beFileListInfoManager_GetOrCreateMetaObject(void) {
     if (g_beFileListInfoManager_metaObject == 0) {
-        g_beFileListInfoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beFileListInfoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beFileListInfoManager_metaObject;
 }
@@ -44,14 +44,14 @@ int beFileListInfoManager_GetVTable(void) {
     obj._dirList = 0;
     obj._readInfoList = 0;
     obj._importantInfoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFileListInfoManager_vtable[0];
     igSmartPointer_igInfoList_Destruct(&obj._importantInfoList, -1);
     igSmartPointer_igInfoList_Destruct(&obj._readInfoList, -1);
     igSmartPointer_igDirectoryList_Destruct(&obj._dirList, -1);
     igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
     igSmartPointer_igStringRefList_Destruct(&obj._fnames, -1);
-    igInfoManager_Destroy(&obj, 0);
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
@@ -62,7 +62,7 @@ void beFileListInfoManager_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beFileListInfoManager_callbackList[] = { beSystem_EnsureRegistered, beMessenger_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igStringRefList_EnsureRegistered, igInfoList_EnsureRegistered, igDirectoryList_EnsureRegistered, 0 };
 
-void *beFileListInfoManager_Register(void) {
+CallbackArray *beFileListInfoManager_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -151,9 +151,9 @@ void beFileListInfoManager_InitFields(void) {
     void *dirList;
     void *readInfoList;
     void *importantInfoList;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beFileListInfoManager_metaObject;
+    meta = g_beFileListInfoManager_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFileListInfoManager_ctorTable, 0xC);
     system = (void *)(igMetaObject_GetFieldAt(meta, base));
@@ -163,23 +163,23 @@ void beFileListInfoManager_InitFields(void) {
     ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     sceneInfoManager = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)sceneInfoManager)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)sceneInfoManager)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)sceneInfoManager)->_refCounted = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), -1);
     fnames = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)fnames)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)fnames)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)fnames)->_construct = 1;
     infoList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)infoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)infoList)->_construct = 1;
     dirList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)dirList)->_metaObject = igDirectoryList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dirList)->_metaObject = (int)igDirectoryList_GetOrCreateMetaObject();
     ((igRefMetaField *)dirList)->_construct = 1;
     readInfoList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)readInfoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)readInfoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)readInfoList)->_construct = 1;
     importantInfoList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
-    ((igObjectRefMetaField *)importantInfoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)importantInfoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)importantInfoList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beFileListInfoManager_fieldTable, g_beFileListInfoManager_fieldHandles, g_beFileListInfoManager_fieldOffsets, base);
 }

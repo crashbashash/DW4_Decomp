@@ -7,7 +7,7 @@ igMetaField *g_beNDMWLoadIntf2MakeChr_mojiSelPointMetaField;
 
 beNDMWLoadIntf2MakeChr *beNDMWLoadIntf2MakeChr_Create(int allocator) {
     beNDMWLoadIntf2MakeChr_EnsureRegistered();
-    return (beNDMWLoadIntf2MakeChr *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2MakeChr_metaObject, allocator);
+    return (beNDMWLoadIntf2MakeChr *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2MakeChr_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2MakeChr_ResolveMetaObject(void)
@@ -32,7 +32,7 @@ int beNDMWLoadIntf2MakeChr_GetVTable(void) {
     *nameRef = 0;
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2MakeChr_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);
@@ -45,7 +45,7 @@ void beNDMWLoadIntf2MakeChr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWLoadIntf2MakeChr_Register);
 }
 
-void *beNDMWLoadIntf2MakeChr_Register(void) {
+CallbackArray *beNDMWLoadIntf2MakeChr_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -105,11 +105,11 @@ void beNDMWLoadIntf2MakeChr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2MakeChr_ctorTable, 4);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
-    nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
+    nameIndex = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText(nameField, "MAKECHR");
+    igStringMetaField_SetDefaultText((igMetaField *)nameField, "MAKECHR");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2MakeChr_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;
     if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(nameField);

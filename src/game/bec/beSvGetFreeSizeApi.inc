@@ -5,7 +5,7 @@ igMetaField *g_beSvGetFreeSizeApi_fileCapaMetaField;
 
 beSvGetFreeSizeApi *beSvGetFreeSizeApi_Create(int allocator) {
     beSvGetFreeSizeApi_EnsureRegistered();
-    return (beSvGetFreeSizeApi *)igMetaObject_CreateInstance(*(int *)0x588200, allocator);
+    return (beSvGetFreeSizeApi *)igMetaObject_CreateInstance(g_beSvGetFreeSizeApi_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSvGetFreeSizeApi_GetMetaObject(void) {
@@ -32,7 +32,7 @@ int beSvGetFreeSizeApi_GetVTable(void) {
     iconWorkSlot = (igObject **)&obj._iconWork;
     *iconWorkSlot = 0;
     obj._vtable = (int)&g_beSvGetFreeSizeApi_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSaveApi_vtable[0];
     igObjectRef_Release(iconWorkSlot);
     igObjectRef_Release(mountWorkSlot);
@@ -45,7 +45,7 @@ void beSvGetFreeSizeApi_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvGetFreeSizeApi_Register);
 }
 
-void *beSvGetFreeSizeApi_Register(void) {
+CallbackArray *beSvGetFreeSizeApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -90,9 +90,9 @@ static int g_beSvGetFreeSizeApi_fieldOffsets[] = {
 
 void beSvGetFreeSizeApi_InitFields(void) {
     int base;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSvGetFreeSizeApi_metaObject;
+    meta = g_beSvGetFreeSizeApi_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvGetFreeSizeApi_ctorTable, 3);
     igMetaObject_NameFields(meta, g_beSvGetFreeSizeApi_fieldTable, g_beSvGetFreeSizeApi_fieldHandles, g_beSvGetFreeSizeApi_fieldOffsets, base);

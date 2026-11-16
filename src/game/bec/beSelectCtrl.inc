@@ -4,12 +4,12 @@ igMetaField *g_beSelectCtrl_isEnableCtrlMetaField;
 
 beSelectCtrl *beSelectCtrl_CreateInstance(int allocator) {
     beSelectCtrl_EnsureRegistered();
-    return (beSelectCtrl *)igMetaObject_CreateInstance(*(int *)0x587F98, allocator);
+    return (beSelectCtrl *)igMetaObject_CreateInstance(g_beSelectCtrl_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beSelectCtrl_GetOrCreateMetaObject(void) {
     if (g_beSelectCtrl_metaObject == 0) {
-        g_beSelectCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beSelectCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beSelectCtrl_metaObject;
 }
@@ -35,7 +35,7 @@ int beSelectCtrl_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beSelectCtrl_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
@@ -50,7 +50,7 @@ void beSelectCtrl_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beSelectCtrl_callbackList[] = { bePadManager_EnsureRegistered, 0 };
 
-void *beSelectCtrl_Register(void) {
+CallbackArray *beSelectCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -92,9 +92,9 @@ static int g_beSelectCtrl_fieldOffsets[] = {
 void beSelectCtrl_InitFields(void) {
     int base;
     void *padManager;
-    void *meta;
+    igMetaObject *meta;
 
-    meta = (void *)g_beSelectCtrl_metaObject;
+    meta = g_beSelectCtrl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSelectCtrl_ctorTable, 2);
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base));

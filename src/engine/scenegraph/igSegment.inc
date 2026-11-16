@@ -11,15 +11,15 @@ igMetaObject *igSegment_GetMetaObject(void)
 int igSegment_GetVTable(void) {
     struct Obj_19ada0 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w7 = 0;
     obj.vt = &g_igSegment_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igSegment_vtable[0];
-    igGroup_Destroy((struct T_195a90 *)&obj, 0);
+    igGroup_Destroy((igGroup *)&obj, 0);
     return t;
 }
 
@@ -28,9 +28,9 @@ void FUN_0019ae10(void)
     igMetaObject_RunStaticInit(igSegment_Register);
 }
 
-void igSegment_Register(void) {
+CallbackArray *igSegment_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSegment_metaObject,
         igGroup_Register,

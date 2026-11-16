@@ -1,4 +1,4 @@
-void Gap__Attrs__igTextureCoordSourceAttr__vfunc_24(S_140f90* p, int q) { Gap__Gfx__igPsx2VisualContext__vfunc_150(q, p->c, p->a, p->b); }
+void Gap__Attrs__igTextureCoordSourceAttr__vfunc_24(S_140f90* p, igPsx2VisualContext *q) { Gap__Gfx__igPsx2VisualContext__vfunc_150(q, p->c, p->a, p->b); }
 
 void Gap__Attrs__igTextureCoordSourceAttr__vfunc_31(igTextureCoordSourceAttrView *self, igVisualContextView *context)
 {

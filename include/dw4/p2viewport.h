@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+void p2SetViewport(int x, int y, int width, int height, float nearZ, float farZ);
 void p2SetDepthBias(int bias);
 
 #ifdef __cplusplus

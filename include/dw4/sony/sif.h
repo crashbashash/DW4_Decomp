@@ -62,6 +62,14 @@ typedef struct {
 typedef void *(*sceSifRpcFunc)(unsigned int fno, void *data, int size);
 typedef void (*sceSifEndFunc)(void *param);
 
+/* One SIF DMA transfer to the IOP: source, IOP destination, byte count and the SIF_DMA_* attributes. */
+typedef struct {
+    unsigned int data;
+    unsigned int addr;
+    unsigned int size;
+    unsigned int mode;
+} sceSifDmaData;
+
 struct _sif_serve_data;
 struct _sif_queue_data;
 
@@ -214,6 +222,12 @@ void sceSifRemoveCmdHandler(unsigned int cid);
 unsigned int sceSifSendCmd(unsigned int cid, void *packet, int size, void *src, void *dest, int len);
 unsigned int isceSifSendCmd(unsigned int cid, void *packet, int size, void *src, void *dest, int len);
 void sceSifWriteBackDCache(void *ptr, int size);
+
+/* the kernel's SIF DMA and register calls */
+unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
+int sceSifDmaStat(unsigned int id);
+unsigned int sceSifGetReg(unsigned int reg);
+int sceSifSetReg(unsigned int reg, unsigned int value);
 
 void sceSifInitRpc(unsigned int mode);
 void sceSifExitRpc(void);

@@ -1,41 +1,36 @@
 #include "dw4/reflected.h"
-
-extern "C" int igObject_Destroy(igObject *object);
-extern "C" int igObject_GetAllocator(igObject *object);
-extern "C" int Memory_GetAllocatorBySelector(int selector);
-extern "C" void igInsightCore_AddManager(igInsightCore *core, int manager);
-extern "C" void igInsightCore_RemoveManager(igInsightCore *core, int manager);
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int kIGMemoryPoolHandleUser0[4];
-extern "C" int g_libNdmwRuntimePlugin_metaObject[4];
-extern "C" int beNDMWAfsSetup_CreateInstance(int allocator);
-extern "C" int beNDMWStageCtl_CreateInstance(int allocator);
-extern "C" int beNDMWPanelWaza_CreateInstance(int allocator);
-extern "C" int beNDMWLogo_CreateInstance(int allocator);
-extern "C" int beNDMWTitle2_CreateInstance(int allocator);
-extern "C" int beNDMWLoadCtrl2_CreateInstance(int allocator);
-extern "C" int beNDMWLoadIntf2_CreateInstance(int allocator);
-extern "C" int beNDMWSaveCtrl_CreateInstance(int allocator);
-extern "C" int beNDMWSaveIntf_CreateInstance(int allocator);
-extern "C" int beNDMWGameRam_CreateInstance(int allocator);
-extern "C" int beNDMWStatus_CreateInstance(int allocator);
-extern "C" int beNDMWMdlPlayer_CreateInstance(int allocator);
-extern "C" int beNDMWMdlPlayer2_CreateInstance(int allocator);
-extern "C" int beNDMWMdlPBullet_CreateInstance(int allocator);
-extern "C" int beNDMWMdlEnemy_CreateInstance(int allocator);
-extern "C" int beNDMWMdlEBullet_CreateInstance(int allocator);
-extern "C" int beNDMWMdlObject_CreateInstance(int allocator);
-extern "C" int beNDMWMdlItem_CreateInstance(int allocator);
-extern "C" int beNDMWMdlEffect_CreateInstance(int allocator);
-extern "C" int beNDMWMdlMapBase_CreateInstance(int allocator);
-extern "C" int beNDMWMdlMapCursor_CreateInstance(int allocator);
+#include "dw4/beNDMWAfsSetup.h"
+#include "dw4/beNDMWGameRam.h"
+#include "dw4/beNDMWLoadCtrl2.h"
+#include "dw4/beNDMWLoadIntf2.h"
+#include "dw4/beNDMWLogo.h"
+#include "dw4/beNDMWMdlEBullet.h"
+#include "dw4/beNDMWMdlEffect.h"
+#include "dw4/beNDMWMdlEnemy.h"
+#include "dw4/beNDMWMdlItem.h"
+#include "dw4/beNDMWMdlMapBase.h"
+#include "dw4/beNDMWMdlMapCursor.h"
+#include "dw4/beNDMWMdlObject.h"
+#include "dw4/beNDMWMdlPBullet.h"
+#include "dw4/beNDMWMdlPlayer.h"
+#include "dw4/beNDMWMdlPlayer2.h"
+#include "dw4/beNDMWPanelWaza.h"
+#include "dw4/beNDMWSaveCtrl.h"
+#include "dw4/beNDMWSaveIntf.h"
+#include "dw4/beNDMWStageCtl.h"
+#include "dw4/beNDMWStatus.h"
+#include "dw4/beNDMWTitle2.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igObject.h"
+#include "dw4/libNdmwRuntimePlugin.h"
 
 /* vfunc_21 replaces every manager with a fresh instance, released through the refcount in the low
  * 23 bits of _refCount and allocated from the plugin's own allocator when g_useOwnerAllocator is set,
  * then adds each manager that exists to the core. vfunc_22 removes them again. */
-static inline int PluginAllocator(libNdmwRuntimePlugin *plugin) {
-    int allocator = igObject_GetAllocator(plugin);
-    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+static inline igMemoryPoolView *PluginAllocator(libNdmwRuntimePlugin *plugin) {
+    igMemoryPoolView *allocator = igObject_GetAllocator(plugin);
+    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
 }
 
 static inline void ReleaseRef(int field) {
@@ -50,17 +45,17 @@ static inline void ReleaseRef(int field) {
 
 static inline void AddManager(igInsightCore *core, int manager) {
     if (manager != 0) {
-        igInsightCore_AddManager(core, manager);
+        igInsightCore_AddManager(core, (igObject *)manager);
     }
 }
 
 static inline void RemoveManager(igInsightCore *core, int manager) {
     if (manager != 0) {
-        igInsightCore_RemoveManager(core, manager);
+        igInsightCore_RemoveManager(core, (igObject *)manager);
     }
 }
 
-#define REPLACE_MANAGER(field, create) { int allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = create(allocator); }
+#define REPLACE_MANAGER(field, create) { igMemoryPoolView *allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = (int)create((int)allocator); }
 
 extern "C" void libNdmwRuntimePlugin_Attach(libNdmwRuntimePlugin *plugin, igInsightCore *core) {
     REPLACE_MANAGER(_afsSetup, beNDMWAfsSetup_CreateInstance)
@@ -135,5 +130,5 @@ extern "C" void libNdmwRuntimePlugin_Detach(libNdmwRuntimePlugin *plugin, igInsi
 }
 
 extern "C" int libNdmwRuntimePlugin_GetMeta(void) {
-    return g_libNdmwRuntimePlugin_metaObject[0];
+    return (int)g_libNdmwRuntimePlugin_metaObject;
 }

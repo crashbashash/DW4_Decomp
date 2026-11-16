@@ -17,6 +17,14 @@ typedef struct p2FinishFunc {
 extern "C" {
 #endif
 
+extern p2FinishFunc *p2FreeFinishFuncs;
+/* Frame timing: frames timed, their total time and the longest and shortest frame. */
+extern long long p2FramesTimed;
+extern long long p2FrameTimeTotal;
+extern unsigned long long p2FrameTimeMax;
+extern unsigned long long p2FrameTimeMin;
+
+void p2BuildDisplayPacket(void);
 void p2EndFrame(void);
 void p2FinishHandler(void);
 void p2FlushVif1Packet(void);

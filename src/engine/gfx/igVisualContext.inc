@@ -30,12 +30,12 @@ igMetaField *g_igVisualContext_listMemoryPoolMetaField;
 
 igVisualContext *igVisualContext_CreateInstance(int allocator) {
     igVisualContext_EnsureRegistered();
-    return (igVisualContext *)igMetaObject_CreateInstance(g_igVisualContext_metaObject, allocator);
+    return (igVisualContext *)igMetaObject_CreateInstance(g_igVisualContext_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igVisualContext_GetOrCreateMetaObject(void) {
     if (g_igVisualContext_metaObject == 0) {
-        g_igVisualContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igVisualContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igVisualContext_metaObject;
 }
@@ -55,9 +55,9 @@ void igVisualContext_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igVisualContext_callbackList[] = { igTimer_EnsureRegistered, FUN_0014ab70, FUN_0014ef20, FUN_0014ea50, igMemoryPool_EnsureRegistered, 0 };
 
-void igVisualContext_Register(void) {
+CallbackArray *igVisualContext_Register(void) {
     FUN_00149bc0();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVisualContext_metaObject,
         igContext_Register,
@@ -81,34 +81,34 @@ int FUN_0014a170(void) {
 }
 
 static FieldFactory g_igVisualContext_ctorTable[] = {
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igIntMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-    igRawRefMetaField_Create,
-    igUnsignedIntMetaField_Create,
-    igLongMetaField_Create,
-    igEnumMetaField_Create,
-    igMatrix44fMetaField_CreateInstance,
-    igMatrix44fMetaField_CreateInstance,
-    igBoolMetaField_Create,
-    igObjectRefArrayMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igLongMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefArrayMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igVisualContext_fieldTable[] = {
     "_contextIndex",

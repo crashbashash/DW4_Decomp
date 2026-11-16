@@ -7,31 +7,29 @@
 #include "dw4/igCommonTraversalDispatchView.h"
 #include "dw4/igVisualContextDispatchView.h"
 #include "dw4/ParticleTimer.h"
+#include "dw4/ParticleArray.h"
+#include "dw4/igAttrStackManager.h"
+#include "dw4/igFrustCullTraversal.h"
+#include "dw4/igNode.h"
+#include "dw4/igObject.h"
+#include "dw4/igObjectPool.h"
+#include "dw4/igParticleArray.h"
+#include "dw4/igTimeAttr.h"
+#include "dw4/igTraversal.h"
+#include "dw4/igVertexArray.h"
+#include "dw4/igVisualContext.h"
+#include <math.h>
 
 #pragma push
 #pragma readonly_strings on
 
-extern "C" double fmod(double, double);
-extern "C" int igObject_IsKindOf(igObject *object, igMetaObject *meta);
-extern "C" int igObject_GetAllocator(void *object);
-extern "C" int igTraversal_RegisterFunction(int table, igMetaObject *meta, int (*function)(igObject *, igObject *));
-extern "C" void Gap__Sg__igNode__resetFields(void);
 extern "C" int igCommonTraversal_TraverseGeometry(igCommonTraversal *traversal, ParticleTimer *timer);
-extern "C" void igObjectPool_Grow(igTimeAttrPool *pool, igObject *(*create)(int));
-extern "C" igObject *igTimeAttr_CreateInstance(int allocator);
-extern "C" void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index);
-extern "C" void Gap__Gfx__igParticleArray__resetFields(void);
-extern "C" int igParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int offset, int *status, float time);
-extern "C" igObject *igVisualContext_FindFirst(void);
-extern "C" igObject *igVertexArray_Create(int allocator);
 extern "C" void igVertexArrayLock_Init(igVertexArrayLock *lock);
-extern "C" igMetaObject *g_igCommonTraversal_metaObject;
-extern "C" igMetaObject *g_ParticleArray_metaObject;
 extern "C" int g_igCommonTraversal_travProcs;
 
 extern "C" {
 int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node);
-void ParticleTimer_resetFields(void);
+void ParticleTimer_resetFields(ParticleTimer *self, int flags);
 int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal);
 void ParticleArray_resetFields(ParticleArray *self);
 int ParticleArray_UsesBaseUpdate(ParticleArray *self);
@@ -167,12 +165,12 @@ int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node) {
 }
 
 void ParticleTimer_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs, ParticleTimer_GetMetaObject(), ParticleTimer_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, ParticleTimer_GetMetaObject(), (void *)ParticleTimer_TraversalFunction);
 }
 
-void ParticleTimer_resetFields(void)
+void ParticleTimer_resetFields(ParticleTimer *self, int flags)
 {
-    Gap__Sg__igNode__resetFields();
+    Gap__Sg__igNode__resetFields((igNode *)self, flags);
 }
 
 int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
@@ -207,7 +205,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     pool = (igTimeAttrPool *)traversal->_timePool;
     stacks = (igAttrStackManager *)traversal->_attrStack;
     if (pool->_freeIndex >= pool->_count) {
-        igObjectPool_Grow(pool, igTimeAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igTimeAttr_CreateInstance);
     }
     index = pool->_freeIndex;
     pool->_freeIndex = index + 1;
@@ -239,7 +237,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
 }
 
 void ParticleArray_resetFields(ParticleArray *self) {
-    Gap__Gfx__igParticleArray__resetFields();
+    Gap__Gfx__igParticleArray__resetFields((igParticleArray *)self);
     if (self->_particleDataSize == 0) {
         self->_particleDataSize = sizeof(Particle);
     }
@@ -265,7 +263,7 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
     }
     self->_currentTime -= start;
     if (((igParticleArrayDispatchView *)self)->usesBaseUpdate()) {
-        return igParticleArray_Update(self, num, offset, status, self->_currentTime);
+        return igParticleArray_Update((igParticleArray *)self, num, offset, status, self->_currentTime);
     }
     if (self->_context == 0) {
         createContext(self);
@@ -285,10 +283,10 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
         assignReference(self->_pointSpriteInterface, ((igVisualContextDispatchView *)self->_context)->GetExtension("igPointSpriteExt"));
     }
     if (self->_vertexArray1 == 0) {
-        int allocator = igObject_GetAllocator(self);
+        int allocator = (int)igObject_GetAllocator(self);
         igRelease((igObject *)self->_vertexArray1);
         self->_vertexArray1 = (int)igVertexArray_Create(allocator);
-        allocator = igObject_GetAllocator(self);
+        allocator = (int)igObject_GetAllocator(self);
         igRelease((igObject *)self->_vertexArray2);
         self->_vertexArray2 = (int)igVertexArray_Create(allocator);
         igVertexFormat format;

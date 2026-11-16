@@ -4,7 +4,7 @@ igMetaField *g_igTextureMatrixStateAttr_unitIDMetaField;
 
 void FUN_001315d0(int arg0) {
     igTextureMatrixStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55ECC0, arg0);
+    igMetaObject_CreateInstance(*(igMetaObject * *)0x55ECC0, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igTextureMatrixStateAttr_GetMetaObject(void)
@@ -22,9 +22,9 @@ done:
 int igTextureMatrixStateAttr_GetVTable(void) {
     struct Obj_131660 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureMatrixStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTextureMatrixStateAttr_EnsureRegistered(void)
@@ -32,9 +32,9 @@ void igTextureMatrixStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureMatrixStateAttr_Register);
 }
 
-void igTextureMatrixStateAttr_Register(void) {
+CallbackArray *igTextureMatrixStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureMatrixStateAttr_metaObject,
         igVisualAttribute_Register,
@@ -54,8 +54,8 @@ void thunk_igTextureMatrixStateAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureMatrixStateAttr_ctorTable[] = {
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igTextureMatrixStateAttr_fieldTable[] = {
     "_enabled",

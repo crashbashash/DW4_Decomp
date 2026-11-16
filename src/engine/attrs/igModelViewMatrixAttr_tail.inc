@@ -1,5 +1,5 @@
-void Gap__Attrs__igModelViewMatrixAttr__vfunc_24(char * arg0, int arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_203(arg1, 1, (arg0 + 12));
+void Gap__Attrs__igModelViewMatrixAttr__vfunc_24(char * arg0, igPsx2VisualContext *arg1) {
+    Gap__Gfx__igPsx2VisualContext__vfunc_203(arg1, 1, (char *)(arg0 + 12));
 }
 
 void FUN_0013f670(void) {
@@ -9,7 +9,7 @@ void FUN_0013f670(void) {
 igModelViewMatrixAttr *FUN_0013f680(void) {
     int allocator;
     if (g_igModelViewMatrixAttr_instance == 0) {
-        if (g_useOwnerAllocator != 0) { int owner = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]); allocator = owner; } else { int fallback = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute[0]); allocator = fallback; }
+        if (g_useOwnerAllocator != 0) { int owner = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent); allocator = owner; } else { int fallback = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute); allocator = fallback; }
         g_igModelViewMatrixAttr_instance.release();
         g_igModelViewMatrixAttr_instance.p = (igModelViewMatrixAttr *)igModelViewMatrixAttr_CreateInstance(allocator);
     }

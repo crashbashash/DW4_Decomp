@@ -2,7 +2,7 @@ igMetaObject *g_igMatrixObjectList_metaObject;
 
 igMetaObject *FUN_001e4ae0(void) {
     if (g_igMatrixObjectList_metaObject == 0) {
-        g_igMatrixObjectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igMatrixObjectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMatrixObjectList_metaObject;
 }
@@ -17,9 +17,9 @@ igMetaObject *igMatrixObjectList_GetMetaObject(void)
 
 int igMatrixObjectList_GetVTable(void) {
     int obj[8];
-    igObject_InitHeader(obj);
+    igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igMatrixObjectList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_001e4bc0(void)
@@ -29,9 +29,9 @@ void FUN_001e4bc0(void)
 
 static igMetaObjectCallback g_igMatrixObjectList_callbackList[] = { FUN_001e4d30, 0 };
 
-void igMatrixObjectList_Register(void) {
+CallbackArray *igMatrixObjectList_Register(void) {
     DataPumpLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMatrixObjectList_metaObject,
         igObjectList_Register,

@@ -1,11 +1,11 @@
 igGroup *igGroup_CreateInstance(int allocator) {
     igGroup_EnsureRegistered();
-    return (igGroup *)igMetaObject_CreateInstance((int)g_igGroup_metaObject, allocator);
+    return (igGroup *)igMetaObject_CreateInstance((igMetaObject *)g_igGroup_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igGroup_GetOrCreateMetaObject(void) {
     if (g_igGroup_metaObject == 0) {
-        g_igGroup_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGroup_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGroup_metaObject;
 }
@@ -22,29 +22,29 @@ int igGroup_GetVTable(void) {
     struct Obj_19f2b0 obj;
     int temp_s0;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.f8 = 0;
     obj.fC = 0;
     obj.f10 = 0;
     obj.vt = (&g_igGroup_vtable[0]);
     obj.f1C = 0;
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = (&g_igGroup_vtable[0]);
     igSmartPointer_igNodeList_Destruct((void * *)&obj.f1C, -1);
-    igNode_Destroy((struct T_195970 *)&obj, 0);
+    igNode_Destroy((igNode *)&obj, 0);
     return temp_s0;
 }
 
 void igGroup_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit(igGroup_Register);
+    igMetaObject_RunStaticInit((CallbackArray * (*)())igGroup_Register);
 }
 
 static igMetaObjectCallback g_igGroup_callbackList[] = { igNodeList_EnsureRegistered, 0 };
 
-void igGroup_Register(void) {
+CallbackArray *igGroup_Register(void) {
     SceneGraphLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGroup_metaObject,
         igNode_Register,
@@ -64,7 +64,7 @@ void thunk_igGroup_GetMetaObject(void) {
 }
 
 static FieldFactory g_igGroup_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igGroup_fieldTable[] = {
     "_childList",
@@ -82,9 +82,9 @@ void igGroup_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igGroup_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGroup_ctorTable, 1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
+    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_resetMethod = 3;
     ((igRefMetaField *)temp_s1)->_construct = 1;

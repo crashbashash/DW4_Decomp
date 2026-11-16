@@ -5,7 +5,7 @@ igMetaField *g_igAttrPool_attributeListMetaField;
 
 int FUN_0013a640(int arg0) {
     igAttrPool_EnsureRegistered();
-    return igMetaObject_CreateInstance(*(int *)0x55F428, arg0);
+    return (int)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F428, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igAttrPool_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igAttrPool_GetVTable(void) {
     S_ref *q1;
     S_ref *q2;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igAttrPool_vtable[0];
     q2 = (S_ref *)&u.b[8];
     *(int *)q2 = 0;
@@ -31,7 +31,7 @@ int igAttrPool_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igAttrPool_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -101,9 +101,9 @@ void igAttrPool_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAttrPool_callbackList[] = { igMetaObjectList_EnsureRegistered, igAttrListList_EnsureRegistered, 0 };
 
-void igAttrPool_Register(void) {
+CallbackArray *igAttrPool_Register(void) {
     AttrsLibrary_MarkRegistered();  /* Set-once latch: writes a gp-relative byte flag only if it is clear. */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAttrPool_metaObject,
         igObject_Register,
@@ -123,9 +123,9 @@ void thunk_igAttrPool_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAttrPool_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igAttrPool_fieldTable[] = {
     "_metaList",
@@ -154,10 +154,10 @@ void igAttrPool_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igAttrPool_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igMetaObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0013abd0();

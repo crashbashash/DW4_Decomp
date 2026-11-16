@@ -4,12 +4,12 @@ igMetaField *g_beNDMWMdlItem_lockRamListMetaField;
 
 beNDMWMdlItem *beNDMWMdlItem_CreateInstance(int allocator) {
     beNDMWMdlItem_EnsureRegistered();
-    return (beNDMWMdlItem *)igMetaObject_CreateInstance(g_beNDMWMdlItem_metaObject, allocator);
+    return (beNDMWMdlItem *)igMetaObject_CreateInstance(g_beNDMWMdlItem_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *beNDMWMdlItem_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlItem_metaObject == 0) {
-        g_beNDMWMdlItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_beNDMWMdlItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_beNDMWMdlItem_metaObject;
 }
@@ -31,7 +31,7 @@ int beNDMWMdlItem_GetVTable(void) {
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlItem_vtable[0];
     obj._lockRamList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWMdlItem_vtable[0];
     igSmartPointer_igObjectList_Destruct(&obj._lockRamList, -1);
     beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
@@ -45,7 +45,7 @@ void beNDMWMdlItem_EnsureRegistered(void)
 
 static igMetaObjectCallback g_beNDMWMdlItem_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
-void *beNDMWMdlItem_Register(void) {
+CallbackArray *beNDMWMdlItem_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
@@ -94,7 +94,7 @@ void beNDMWMdlItem_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWMdlItem_ctorTable, 2);
     viewerSIManager = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)viewerSIManager)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerSIManager)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)viewerSIManager)->_refCounted = 0;
     lockRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)lockRamList)->_metaObject = igObjectList_GetOrCreateMetaObject();

@@ -2,7 +2,7 @@ igMetaObject *g_igGuiComponentList_metaObject;
 
 igMetaObject *FUN_0044fdd0(void) {
     if (g_igGuiComponentList_metaObject == 0) {
-        g_igGuiComponentList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igGuiComponentList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igGuiComponentList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igGuiComponentList_GetMetaObject(void)
 int igGuiComponentList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igGuiComponentList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
 }
 
 void igGuiComponentList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igGuiComponentList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igGuiComponentList_callbackList[] = { igGuiComponent_EnsureRegistered, 0 };
 
-void igGuiComponentList_Register(void) {
+CallbackArray *igGuiComponentList_Register(void) {
     GuiLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGuiComponentList_metaObject,
         igObjectList_Register,
