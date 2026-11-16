@@ -5,9 +5,9 @@ igMetaField *g_beModelCtrlHITBOX_lengthMetaField;
 igMetaField *g_beModelCtrlHITBOX_offsetMetaField;
 igMetaField *g_beModelCtrlHITBOX_boxSizeMetaField;
 
-void beModelCtrlHITBOX_Create(int allocator) {
+beModelCtrlHITBOX *beModelCtrlHITBOX_Create(int allocator) {
     beModelCtrlHITBOX_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588D20, allocator);
+    return (beModelCtrlHITBOX *)igMetaObject_CreateInstance(*(int *)0x588D20, allocator);
 }
 
 igMetaObject *beModelCtrlHITBOX_GetMetaObject(void)

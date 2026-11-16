@@ -41,7 +41,6 @@ extern unsigned char g_useOwnerAllocator;
 extern void *g_stringPool[4];
 extern igMetaObject *g_beMessenger_metaObject[4];
 extern igMetaObject *g_beLua_metaObject[4];
-extern igMetaObject *g_beDemoManager_metaObject[4];
 extern int g_mdlEntity[4];
 }
 
@@ -352,5 +351,5 @@ void beDemoManager_Update(beDemoManager *self) {
 
 igMetaObject *beDemoManager_GetMetaObject_Virtual(void)
 {
-    return g_beDemoManager_metaObject[0];
+    return g_beDemoManager_metaObject;
 }

@@ -1,8 +1,8 @@
 igMetaObject *g_beSvUseCheckApi_metaObject;
 
-void beSvUseCheckApi_Create(int allocator) {
+beSvUseCheckApi *beSvUseCheckApi_Create(int allocator) {
     beSvUseCheckApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588268, allocator);
+    return (beSvUseCheckApi *)igMetaObject_CreateInstance(*(int *)0x588268, allocator);
 }
 
 void *beSvUseCheckApi_GetMetaObject(void) {

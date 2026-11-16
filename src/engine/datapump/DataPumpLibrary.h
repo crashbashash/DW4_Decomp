@@ -3,6 +3,10 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igDataPumpInfo.h"
+#include "dw4/igMersenneTwisterRandomNumber.h"
+#include "dw4/igNonRefCountedObjectStack.h"
+#include "dw4/igRandomNumber.h"
 
 typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(void *);
@@ -47,9 +51,7 @@ extern "C" int igMetaObject_FinalizeAndReplaceField(...);
 extern "C" igObject *igMetaObject_FindFieldByName(...);
 class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual int vX(int); };
 extern "C" void FUN_001e4180(void);
-extern "C" igMetaObject *igRandomNumber_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igRandomNumber_GetMetaObject(void);
-extern "C" void igRandomNumber_EnsureRegistered(void);
 extern "C" char igObject_GetMetaObject_ParentAccessor[];
 extern "C" char igObject_Register[];
 extern "C" int igRandomNumber_InitFields_001e4370[4];
@@ -62,7 +64,6 @@ extern "C" int g_igNonRefCountedObjectStack_vtable[4];
 extern "C" int igNonRefCountedObjectStack_GetVTable(void);
 extern "C" void FUN_001e4430(void);
 extern "C" int igNonRefCountedObjectStack_InitFields_001e44c0[4];
-extern "C" void igNonRefCountedObjectStack_Register(void);
 extern "C" void thunk_igNonRefCountedObjectStack_GetMetaObject(void);
 extern "C" int igObjectRefMetaField_GetDefaultDescriptor(...);
 extern "C" void FUN_001e44c0(void);
@@ -288,7 +289,6 @@ class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2
 extern "C" void Gap__igMersenneTwisterRandomNumber__vfunc_13(void **arg0);
 extern "C" int sscanf(...);
 extern "C" int FUN_0018be80(...);
-extern "C" int Vec3f_FromString(int arg0, int *arg1, const char *format);
 extern "C" int FUN_001e6d80(int arg0, int *arg1, const char *format);
 typedef struct FormattedObject : public igObject { int f8; } FormattedObject;
 typedef struct Vector3f { float x, y, z; } Vector3f;

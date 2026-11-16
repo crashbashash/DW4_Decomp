@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWMcSlotGC_metaObject;
 igMetaField *g_beNDMWMcSlotGC_fileKazMetaField;
 igMetaField *g_beNDMWMcSlotGC_detailMetaField;
 
-void beNDMWMcSlotGC_Create(int allocator) {
+beNDMWMcSlotGC *beNDMWMcSlotGC_Create(int allocator) {
     beNDMWMcSlotGC_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMcSlotGC_metaObject, allocator);
+    return (beNDMWMcSlotGC *)igMetaObject_CreateInstance(g_beNDMWMcSlotGC_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMcSlotGC_GetReadyMetaObject(void) {

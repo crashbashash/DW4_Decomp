@@ -1,9 +1,9 @@
 igMetaObject *g_beStaticInfoCtl_metaObject;
 igMetaField *g_beStaticInfoCtl_staticInfoListMetaField;
 
-void beStaticInfoCtl_CreateInstance(int allocator) {
+beStaticInfoCtl *beStaticInfoCtl_CreateInstance(int allocator) {
     beStaticInfoCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587E10, allocator);
+    return (beStaticInfoCtl *)igMetaObject_CreateInstance(*(int *)0x587E10, allocator);
 }
 
 igMetaObject *beStaticInfoCtl_GetOrCreateMetaObject(void) {

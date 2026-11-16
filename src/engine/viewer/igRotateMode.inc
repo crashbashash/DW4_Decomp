@@ -30,9 +30,9 @@ igMetaEnum *FUN_0045c540(void) {
     return g_igRotateMode_CONSTRAINT_AXISMetaEnum;
 }
 
-void igRotateMode_Create(int arg0) {
+igRotateMode *igRotateMode_Create(int allocator) {
     FUN_0045c680();
-    igMetaObject_CreateInstance(g_igRotateMode_metaObject, arg0);
+    return (igRotateMode *)igMetaObject_CreateInstance(g_igRotateMode_metaObject, allocator);
 }
 
 void *igRotateMode_GetMetaObject(void) {

@@ -1,12 +1,12 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igObjectDispatchView.h"
+#include "dw4/beLOA.h"
+#include "dw4/beLua.h"
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
 extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);
-extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
-extern "C" int beLOA_GetMetaObject(...);
-extern "C" void beLOA_RegisterTraversalFunction(void);
+extern "C" int igTraversal_RegisterFunction(int, igMetaObject *, void (*)(void));
 extern "C" int sprintf(char *, const char *, ...);
 extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
@@ -20,7 +20,7 @@ extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_Destroy(...);
 extern "C" void beLua_Stop(void);
 extern "C" void beLua_Update(void);
-extern "C" int beLua_GetMeta(void);
+extern "C" igMetaObject *beLua_GetMeta(void);
 extern "C" int igObject_IsKindOf(int, int);
 extern "C" int ObjectList_AppendRetained(int, int);
 extern "C" int g_igCommonTraversal_travProcs[4];
@@ -53,17 +53,14 @@ public:
     LuaStrRef() : value(0) {}
     ~LuaStrRef() { char *o = value; if (o) { int *hd = (int *)o - 2; int r = *(int *)(o - 4) - 1; *(int *)(o - 4) = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 };
-extern "C" int beLua__RunNamedChunk(beLua *self, const char *name, const char *given);
 extern "C" igObject *beLuaState_Create(int);
 extern "C" int igObject_GetAllocator(beLua *);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void beLua_ResetLuaState(beLua *self);
 extern "C" void beLua_Activate(beLua *self, int unusedArg);
 extern "C" void beLua_Deactivate(beLua *self, int unusedArg);
 extern "C" int g_beSystem_metaObject[4];
 extern "C" void beLua_Start(beLua *self);
-extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beLuaInfo_metaObject[4];
 extern "C" int beLua_AddInfo(beLua *self, int info);
 extern "C" void beLua_RemoveAllInfo(beLua *self);
@@ -362,8 +359,8 @@ void beLua_Update(void)
 {
 }
 
-int beLua_GetMeta(void)
+igMetaObject *beLua_GetMeta(void)
 {
-    return g_beLua_metaObject[0];
+    return g_beLua_metaObject;
 }
 

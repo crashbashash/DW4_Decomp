@@ -2,9 +2,9 @@ igMetaObject *g_beSaveUtil_metaObject;
 igMetaField *g_beSaveUtil_apiMetaField;
 igMetaField *g_beSaveUtil_connectCheckMetaField;
 
-void beSaveUtil_CreateInstance(int allocator) {
+beSaveUtil *beSaveUtil_CreateInstance(int allocator) {
     beSaveUtil_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588020, allocator);
+    return (beSaveUtil *)igMetaObject_CreateInstance(*(int *)0x588020, allocator);
 }
 
 igMetaObject *beSaveUtil_GetOrCreateMetaObject(void) {

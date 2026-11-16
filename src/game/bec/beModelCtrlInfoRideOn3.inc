@@ -6,9 +6,9 @@ igMetaField *g_beModelCtrlInfoRideOn3_maxSpeedMetaField;
 igMetaField *g_beModelCtrlInfoRideOn3_minKyoriMetaField;
 igMetaField *g_beModelCtrlInfoRideOn3_maxKyoriMetaField;
 
-void beModelCtrlInfoRideOn3_Create(int allocator) {
+beModelCtrlInfoRideOn3 *beModelCtrlInfoRideOn3_Create(int allocator) {
     beModelCtrlInfoRideOn3_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588A58, allocator);
+    return (beModelCtrlInfoRideOn3 *)igMetaObject_CreateInstance(*(int *)0x588A58, allocator);
 }
 
 void *beModelCtrlInfoRideOn3_GetMetaObject(void) {

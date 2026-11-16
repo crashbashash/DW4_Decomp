@@ -1,6 +1,6 @@
-void igProbe_Create(int arg0) {
+igProbe *igProbe_Create(int allocator) {
     igProbe_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igProbe_metaObject, arg0);
+    return (igProbe *)igMetaObject_CreateInstance((int)g_igProbe_metaObject, allocator);
 }
 
 igMetaObject *g_igProbe_metaObject;

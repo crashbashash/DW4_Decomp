@@ -50,9 +50,9 @@ igMetaField *g_beModelCtrlInfoWork_hitParentRamNoMetaField;
 igMetaField *g_beModelCtrlInfoWork_subCommandMetaField;
 igMetaField *g_beModelCtrlInfoWork_baseAABoxMetaField;
 
-void beModelCtrlInfoWork_Create(int allocator) {
+beModelCtrlInfoWork *beModelCtrlInfoWork_Create(int allocator) {
     beModelCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588888, allocator);
+    return (beModelCtrlInfoWork *)igMetaObject_CreateInstance(*(int *)0x588888, allocator);
 }
 
 igMetaObject *beModelCtrlInfoWork_GetOrCreateMetaObject(void) {

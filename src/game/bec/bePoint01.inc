@@ -1,9 +1,9 @@
 igMetaObject *g_bePoint01_metaObject;
 igMetaField *g_bePoint01_pointNoMetaField;
 
-void bePoint01_CreateInstance(int allocator) {
+bePoint01 *bePoint01_CreateInstance(int allocator) {
     bePoint01_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588498, allocator);
+    return (bePoint01 *)igMetaObject_CreateInstance(*(int *)0x588498, allocator);
 }
 
 igMetaObject *bePoint01_GetOrCreateMetaObject(void) {

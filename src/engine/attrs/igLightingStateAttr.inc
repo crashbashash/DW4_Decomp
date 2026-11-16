@@ -1,9 +1,9 @@
 igMetaObject *g_igLightingStateAttr_metaObject;
 igMetaField *g_igLightingStateAttr_enabledMetaField;
 
-void igLightingStateAttr_CreateInstance(int arg0) {
+igLightingStateAttr *igLightingStateAttr_CreateInstance(int allocator) {
     igLightingStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F048, arg0);
+    return (igLightingStateAttr *)igMetaObject_CreateInstance(*(int *)0x55F048, allocator);
 }
 
 igMetaObject *igLightingStateAttr_GetOrCreateMetaObject(void) {

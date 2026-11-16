@@ -160,7 +160,7 @@ int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
         LB *lb = arg0->l72;
         int b = a + ((G_1b8de0 * *)DAT_00561918)[0]->f8;
         V128_1b8de0 *o;
-        if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
+        if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
         o = lb->data[lb->count++];
         o->vY(b);
         FUN_001b1030((igAttrStackManager *)s4, (igAttr *)o);
@@ -194,7 +194,7 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
         FUN_001b1aa0(arg1, sp80, ((char *)g_matrix44Identity), s0);
     }
     lb = arg0->l72;
-    if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
+    if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
     o = lb->data[lb->count++];
     if (o != 0) o->refs++;
     old = arg1->f60;
@@ -205,7 +205,7 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
     arg1->f60 = o;
     igMatrix44f_Multiply((char *)o + 12, sp80, arg0->v100);
     FUN_001b1030((igAttrStackManager *)arg0->x, (igAttr *)o);
-    r = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
+    r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     FUN_001b1100((struct A_1b1100 *)arg0->x, (struct B_1b1100 *)o);
     if (r == 2) return 2;
     return 0;
@@ -250,7 +250,7 @@ int igCommonTraversal_TraverseOverrideAttrSet(igCommonTraversal *self, igOverrid
         FUN_001b0440(self->_attrStack, self->_flushedAttrs);
         List_AppendWords(*(int *)((char *)((igSorter *)self->_sorter)->_dlist + 12), ((igObjectList *)self->_flushedAttrs)->_count, ((igObjectList *)self->_flushedAttrs)->_data);
     }
-    result = igTraversal_TraverseChildren((int)self, (S_1e07a0 *)set);
+    result = igTraversal_TraverseChildren((igTraversal *)self, (igNode *)set);
     if (p != 0) {
         begin = (igAttr **)attrs->_data;
         for (p--; p >= begin; p--) {
@@ -313,7 +313,7 @@ int igCommonTraversal_TraverseAttrSet(igCommonTraversal *self, igAttrSet *set) {
         FUN_001b0440(self->_attrStack, self->_flushedAttrs);
         List_AppendWords(*(int *)((char *)((igSorter *)self->_sorter)->_dlist + 12), ((igObjectList *)self->_flushedAttrs)->_count, ((igObjectList *)self->_flushedAttrs)->_data);
     }
-    result = igTraversal_TraverseChildren((int)self, (S_1e07a0 *)set);
+    result = igTraversal_TraverseChildren((igTraversal *)self, (igNode *)set);
     if (p != 0) {
         begin = (igAttr **)attrs->_data;
         for (p--; p >= begin; p--) {
@@ -379,11 +379,11 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
         }
         switch (g->_mode) {
         case 0:
-            igTraversal_TraverseNode((S_1e04c0 *)o, (V_1e04c0 *)(g->_children->_data[i % nChild]));
+            igTraversal_TraverseNode((igTraversal *)o, (igNode *)(g->_children->_data[i % nChild]));
             break;
         case 1:
             for (j = 0; j < nChild; j++) {
-                igTraversal_TraverseNode((S_1e04c0 *)o, (V_1e04c0 *)g->_children->_data[j]);
+                igTraversal_TraverseNode((igTraversal *)o, (igNode *)g->_children->_data[j]);
             }
             break;
         }
@@ -456,7 +456,7 @@ int FUN_001b9f00(igCompileTraversal *arg0, igAttrSet *arg1) {
     if (temp_v0 == 4 || temp_v0 == 1) {
         return 0;
     }
-    if (igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1) == 2) {
+    if (igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1) == 2) {
         return 2;
     }
     return 0;
@@ -470,9 +470,9 @@ int FUN_001b9fc0(struct A_1b9fc0 *arg0, struct B_1b9fc0 *arg1) {
     for (s1 = 0; s1 < s0; s1++) {
         FUN_001b06f0(arg0->f52, arg1->f32->data[s1], 0);
     }
-    igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
+    igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     for (s0 = s0 - 1; s0 >= 0; s0--) {
-        igAttrStackManager_PopLightStateAttr((igAttrStackManager *)arg0->f52, (LightStateAttrView *)arg1->f32->data[s0], 0);
+        igAttrStackManager_PopLightStateAttr((igAttrStackManager *)arg0->f52, (igLightStateAttr *)arg1->f32->data[s0], 0);
     }
     return 0;
 }
@@ -491,7 +491,7 @@ int FUN_001ba080(CullTraversalView *o, CullNodeView *node) {
     Vec3f_TransformProjective(&out, &center, currentEntry_1ba080(stack)->_matrix);
     child = ((int)FUN_001d0520((RangeLookup *)node, out.x * out.x + out.y * out.y + out.z * out.z));
     if (child != 0) {
-        if (igTraversal_TraverseNode((S_1e04c0 *)o, (V_1e04c0 *)child) == 2) return 2;
+        if (igTraversal_TraverseNode((igTraversal *)o, (igNode *)child) == 2) return 2;
         return 0;
     }
     return 0;
@@ -501,7 +501,7 @@ int FUN_001ba1a0(int a0, int arg1) {
     S_1ba1a0 *arg0 = (S_1ba1a0 *)a0;
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
     FUN_001b3ff0((void *)arg1, (int)arg0);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)arg0->f52, (struct B_1b13d0 *)arg0->f232);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
     return 0;
 }
 
@@ -601,7 +601,7 @@ int FUN_001ba880(igCommonTraversal *arg0, VC1 *arg1) {
         }
     }
     arg1->vX(v + 0xC);
-    if (igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1) == 2) {
+    if (igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1) == 2) {
         return 2;
     }
     return 0;

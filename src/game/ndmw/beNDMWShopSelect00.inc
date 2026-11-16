@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopSelect00_metaObject;
 igMetaField *g_beNDMWShopSelect00_panelNameMetaField;
 
-void beNDMWShopSelect00_Create(int allocator) {
+beNDMWShopSelect00 *beNDMWShopSelect00_Create(int allocator) {
     beNDMWShopSelect00_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopSelect00_metaObject, allocator);
+    return (beNDMWShopSelect00 *)igMetaObject_CreateInstance(g_beNDMWShopSelect00_metaObject, allocator);
 }
 
 void *beNDMWShopSelect00_GetMetaObject(void) {

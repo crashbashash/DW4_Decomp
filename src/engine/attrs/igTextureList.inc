@@ -1,8 +1,8 @@
 igMetaObject *g_igTextureList_metaObject;
 
-void igTextureList_CreateInstance(int arg0) {
+igTextureList *igTextureList_CreateInstance(int allocator) {
     igTextureList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F418, arg0);
+    return (igTextureList *)igMetaObject_CreateInstance(*(int *)0x55F418, allocator);
 }
 
 igMetaObject *igTextureList_GetOrCreateMetaObject(void) {

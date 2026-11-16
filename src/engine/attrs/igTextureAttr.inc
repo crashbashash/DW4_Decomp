@@ -15,9 +15,9 @@ igMetaField *g_igTextureAttr_imageMipMapsMetaField;
 igMetaField *g_igTextureAttr_vcMetaField;
 igMetaField *g_igTextureAttr_videoBufferMetaField;
 
-void igTextureAttr_CreateInstance(int arg0) {
+igTextureAttr *igTextureAttr_CreateInstance(int allocator) {
     igTextureAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55EDA0, arg0);
+    return (igTextureAttr *)igMetaObject_CreateInstance(*(int *)0x55EDA0, allocator);
 }
 
 igMetaObject *igTextureAttr_GetOrCreateMetaObject(void) {

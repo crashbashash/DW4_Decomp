@@ -7,9 +7,9 @@ igMetaField *g_beDemoKeepMes_ramNoMetaField;
 igMetaField *g_beDemoKeepMes_messageMetaField;
 igMetaField *g_beDemoKeepMes_mesParamMetaField;
 
-void beDemoKeepMes_CreateInstance(int allocator) {
+beDemoKeepMes *beDemoKeepMes_CreateInstance(int allocator) {
     beDemoKeepMes_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5897F8, allocator);
+    return (beDemoKeepMes *)igMetaObject_CreateInstance(*(int *)0x5897F8, allocator);
 }
 
 igMetaObject *beDemoKeepMes_GetMetaObject(void) {

@@ -2,9 +2,9 @@ igMetaObject *g_beGenerater_metaObject;
 igMetaField *g_beGenerater_luaManagerMetaField;
 igMetaField *g_beGenerater_isPerfectDropMetaField;
 
-void beGenerater_CreateInstance(int allocator) {
+beGenerater *beGenerater_CreateInstance(int allocator) {
     beGenerater_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5895D0, allocator);
+    return (beGenerater *)igMetaObject_CreateInstance(*(int *)0x5895D0, allocator);
 }
 
 igMetaObject *beGenerater_GetOrCreateMetaObject(void) {

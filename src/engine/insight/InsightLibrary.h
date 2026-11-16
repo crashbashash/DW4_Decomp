@@ -6,6 +6,13 @@
 #include "dw4/igobject_release.h"
 #include "dw4/fun_00235370_refs.h"
 #include "dw4/ViewerOptions.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igInfoManager.h"
+#include "dw4/igInsightPlugin.h"
+#include "dw4/igMessage.h"
+#include "dw4/igMessageDefaultReceiver.h"
+#include "dw4/igMessenger.h"
+#include "dw4/igViewportResizedMessage.h"
 #define ReleaseObject(obj) do { igObject *held = (obj); IG_OBJECT_RELEASE(held); } while (0)
 #define OPTION_BOOL(name, help, value)  { const char *optionName = name; if (optionName) FUN_002342b0(optionName, help, value); }
 #define OPTION_INT(name, help, value)   { const char *optionName = name; if (optionName) FUN_002342e0(optionName, help, value); }
@@ -43,7 +50,6 @@ extern "C" igMetaObject *FUN_00231020(void);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int g_igInfoManager_vtable[4];
 extern "C" int g_igNamedObject_vtable[4];
-extern "C" void *igInfoManager_Destroy(struct S *arg0, short arg1);
 extern "C" igMetaObject *g_igInfoManager_metaObject;
 extern "C" igMetaObject *FUN_002310d0(void);
 extern "C" igMetaObject *g_igSerialScheduler_metaObject;
@@ -113,7 +119,6 @@ extern "C" int g_igMessage_vtable[4];
 struct Obj_2316c0 { int *vt; int b; };
 extern "C" int igMessage_GetVTable(void);
 extern "C" void FUN_00231700(void);
-extern "C" void igMessage_Register(void);
 extern "C" void thunk_igMessage_GetMetaObject(void);
 extern "C" igMetaObject *g_igMessageReceiverList_metaObject;
 extern "C" igMetaObject *FUN_00231790(void);
@@ -171,7 +176,6 @@ extern "C" int igMessageDispatcher_SetAbstractProxy_002321e0[4];
 extern "C" void igMessageDispatcher_Register(void);
 extern "C" void thunk_igMessageDispatcher_GetMetaObject(void);
 extern "C" void FUN_002321e0(void);
-extern "C" void igMessageDefaultReceiver_CreateInstance(int arg0);
 extern "C" igMetaObject *g_igMessageDefaultReceiver_metaObject;
 extern "C" igMetaObject *igMessageDefaultReceiver_GetMetaObject(void);
 extern "C" int g_igMessageDefaultReceiver_vtable[4];
@@ -200,14 +204,10 @@ extern "C" int igInsightPluginList_GetVTable(void);
 extern "C" void FUN_002326a0(void);
 extern "C" void igInsightPluginList_Register(void);
 extern "C" void thunk_igInsightPluginList_GetMetaObject(void);
-extern "C" igMetaObject *g_igInsightPlugin_metaObject;
 extern "C" igMetaObject *igInsightPlugin_GetMetaObject(void);
 extern "C" void FUN_00232780(void);
-extern "C" void igInsightPlugin_Register(void);
 extern "C" void thunk_igInsightPlugin_GetMetaObject(void);
-extern "C" void igInsightCore_CreateInstance(int arg0);
 extern "C" igMetaObject *g_igInsightCore_metaObject;
-extern "C" igMetaObject *igInsightCore_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igInsightCore_GetMetaObject(void);
 struct Obj_2328e0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; int w24; int w25; int w26; int w27; };
 extern "C" int igSmartPointer_igVisualContext_Destruct(...);
@@ -230,7 +230,6 @@ extern "C" void **FUN_00232c60(void **arg0, short arg1);
 extern "C" ObjectRefWord *FUN_00232ce0(ObjectRefWord *self,int delete_storage);
 struct R { int vt; unsigned int rc; };
 extern "C" struct R **FUN_00232d60(struct R **arg0, short arg1);
-extern "C" void igInsightCore_EnsureRegistered(void);
 extern "C" void igInsightCore_Register(void);
 extern "C" void thunk_igInsightCore_GetMetaObject(void);
 extern "C" int FUN_00145d40(...);
@@ -258,7 +257,6 @@ extern "C" int FUN_00233200(void);
 extern "C" void igWindowResizeEventReceiver_InitFields(void);
 extern "C" int FUN_002332b0(int arg0);
 extern "C" igMetaObject *g_igViewportResizedMessage_metaObject;
-extern "C" igMetaObject *igViewportResizedMessage_GetMetaObject(void);
 struct Obj_233340 { int *vt; char pad[28]; };
 extern "C" int g_igViewportResizedMessage_vtable[4];
 extern "C" int igViewportResizedMessage_GetVTable(void);
@@ -300,7 +298,6 @@ extern "C" igMetaObject *igInfoManager_GetMetaObject(void);
 extern "C" void FUN_00233910(void);
 extern "C" char igNamedObject_GetPublishedMetaObject[];
 extern "C" char igNamedObject_Register[];
-extern "C" void igInfoManager_Register(void);
 extern "C" void thunk_igInfoManager_GetMetaObject(void);
 extern "C" void igInfoManager_InitFields(void);
 extern "C" igMetaObject *g_igFlushRenderer_metaObject;
@@ -723,18 +720,11 @@ extern "C" int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *sel
 extern "C" int FUN_00236b70(...);
 extern "C" int igRendererOrderedList_Append(...);
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
-extern "C" void igInsightCore_AddManager(void *arg0, void *arg1);
 extern "C" int igObjectList_RemoveRetained(...);
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
-extern "C" void igInsightCore_RemoveManager(void *arg0, void *arg1);
-struct S12 { char pad[12]; void *f12; };
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
-extern "C" void igInsightCore_AddToScheduler(S12 *arg0, int arg1);
-struct S236;
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
-struct S236 { int a, b, c; void *p; };
-extern "C" void igInsightCore_RemoveFromScheduler(S236 *arg0, int arg1);
 struct Instance : public igObject { };
 extern "C" int igMetaObject_CountTree(int);
 extern "C" int igMetaObject_GetTreeNode(int, int);
@@ -749,21 +739,13 @@ typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
 typedef struct A { char pad104[104]; L *f68; } A;
 extern "C" void FUN_00236e80(A *arg0);
 extern "C" int FUN_00457ca0(...);
-extern "C" void igInsightCore_AddRenderer(void *arg0, int arg1);
 extern "C" int g_resultSuccess[4];
-typedef struct Obj_236f30 { char pad[28]; int f28; } Obj_236f30;
-extern "C" void igInsightCore_RemoveRenderer(Obj_236f30 *arg0, int arg1);
-struct Obj_236f80 { virtual int a0(); virtual int a1(); virtual int a2(); virtual int a3(); virtual int a4(); virtual int a5(); virtual int a6(); virtual int a7(); virtual int a8(); virtual int a9(); virtual int a10(); virtual int a11(); virtual int a12(); virtual int a13(); virtual int a14(); virtual int a15(); virtual int a16(); virtual int a17(); virtual int a18(); virtual int a19(); virtual int v20(); };
-struct List { int pad[2]; unsigned int count; int pad2; Obj_236f80 **arr; };
-struct Mid { int pad[2]; List *list; };
-struct Self { int pad[2]; Mid *mid; };
-extern "C" Obj_236f80 *igInsightCore_FindManager(Self *arg0, int arg1);
+/* An info manager: its virtual slot 20 returns its meta object. */
+struct InfoManagerView { virtual int a0(); virtual int a1(); virtual int a2(); virtual int a3(); virtual int a4(); virtual int a5(); virtual int a6(); virtual int a7(); virtual int a8(); virtual int a9(); virtual int a10(); virtual int a11(); virtual int a12(); virtual int a13(); virtual int a14(); virtual int a15(); virtual int a16(); virtual int a17(); virtual int a18(); virtual int a19(); virtual igMetaObject *getMeta(); };
 extern "C" int FUN_00237010(void);
-extern "C" int igInsightCore_AddRendererOrder(int *p);
 /* Dummy class with 25 virtual slots before vX, so that vX is the manager's
  * vtable slot 27 (matching construct: gives the retail `lw t9,108(t9)` call). */
 class DW4VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int); };
-extern "C" void igInsightCore_AddInfo(igInsightCore *self, int info);
 extern "C" int List_Reserve(...);
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset 112 */
 class VC112 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(); };
@@ -885,7 +867,7 @@ public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
     virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void vfunc_21();
+    virtual void vfunc_21(igObject *receiver, igMetaObject *messageType);
     virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
     virtual void vfunc_26(void *message);
 };
@@ -893,7 +875,6 @@ struct igMessageDispatcherOwnerView {
     char _pad0[8];
     igFilterMessageDispatcherView *f8;
 };
-extern "C" void igMessenger_AddReceiver(igMessageDispatcherOwnerView *self);
 extern "C" void FUN_00237ea0(igMessageDispatcherOwnerView *self, void *message);
 class SchedulerManager {
 public:

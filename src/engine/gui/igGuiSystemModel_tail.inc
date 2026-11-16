@@ -12,7 +12,7 @@ void Gap__Gui__igGuiSystemModel__vfunc_13(int arg0, int arg1) {
         args[0] = 2;
         args[1] = 0;
         args[2] = (int)g_igGuiSystemModel_viewMatrixMetaField;
-        igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)args);
+        igModel_NotifyViews((igModel *)arg0, (ModelChange *)args);
     }
 }
 

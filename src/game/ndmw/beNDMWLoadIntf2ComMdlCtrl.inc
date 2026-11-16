@@ -5,9 +5,9 @@ igMetaField *g_beNDMWLoadIntf2ComMdlCtrl_openDataListMetaField;
 igMetaField *g_beNDMWLoadIntf2ComMdlCtrl_closeDataListMetaField;
 igMetaField *g_beNDMWLoadIntf2ComMdlCtrl_posMetaField;
 
-void beNDMWLoadIntf2ComMdlCtrl_Create(int allocator) {
+beNDMWLoadIntf2ComMdlCtrl *beNDMWLoadIntf2ComMdlCtrl_Create(int allocator) {
     beNDMWLoadIntf2ComMdlCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2ComMdlCtrl_metaObject, allocator);
+    return (beNDMWLoadIntf2ComMdlCtrl *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2ComMdlCtrl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject(void) {

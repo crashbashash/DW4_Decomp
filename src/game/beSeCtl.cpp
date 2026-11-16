@@ -2,6 +2,7 @@
 #include "dw4/igTDataList.h"
 #include "dw4/igCommonTraversalDispatchView.h"
 #include "dw4/igModelViewMatrixAttrDispatchView.h"
+#include "dw4/beResetNode.h"
 
 extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
 extern "C" void igMatrix44f_SetIdentity(float *);
@@ -10,9 +11,7 @@ extern "C" void igMatrix44f_GetTranslation(float *, float *);
 extern "C" void igMatrix44f_SetTranslation(float *, float *);
 extern "C" void igModelViewMatrixAttr_CreateInstance(void);
 extern "C" void igTimeAttr_CreateInstance(void);
-extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
-extern "C" int beResetNode_GetMetaObject(...);
-extern "C" void beResetNode_RegisterTraversal(void);
+extern "C" int igTraversal_RegisterFunction(int, igMetaObject *, void (*)(void));
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
 extern "C" int beSeCtl_GetInfoMeta(void);

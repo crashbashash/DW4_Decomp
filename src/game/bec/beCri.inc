@@ -12,9 +12,9 @@ igMetaField *g_beCri_sndfVolumeMetaField;
 igMetaField *g_beCri_pauseOnetimeMetaField;
 igMetaField *g_beCri_dataTypeMetaField;
 
-void beCri_CreateInstance(int allocator) {
+beCri *beCri_CreateInstance(int allocator) {
     beCri_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589AD8, allocator);
+    return (beCri *)igMetaObject_CreateInstance(*(int *)0x589AD8, allocator);
 }
 
 igMetaObject *beCri_GetOrCreateMetaObject(void) {

@@ -1,8 +1,8 @@
 igMetaObject *g_beSwitchCtrl_metaObject;
 
-void beSwitchCtrl_CreateInstance(int allocator) {
+beSwitchCtrl *beSwitchCtrl_CreateInstance(int allocator) {
     beSwitchCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587DF8, allocator);
+    return (beSwitchCtrl *)igMetaObject_CreateInstance(*(int *)0x587DF8, allocator);
 }
 
 igMetaObject *beSwitchCtrl_GetOrCreateMetaObject(void) {

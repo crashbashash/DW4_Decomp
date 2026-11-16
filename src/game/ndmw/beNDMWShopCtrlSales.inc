@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWShopCtrlSales_metaObject;
 igMetaField *g_beNDMWShopCtrlSales_salesItemListMetaField;
 igMetaField *g_beNDMWShopCtrlSales_decideListMetaField;
 
-void beNDMWShopCtrlSales_Create(int allocator) {
+beNDMWShopCtrlSales *beNDMWShopCtrlSales_Create(int allocator) {
     beNDMWShopCtrlSales_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlSales_metaObject, allocator);
+    return (beNDMWShopCtrlSales *)igMetaObject_CreateInstance(g_beNDMWShopCtrlSales_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlSales_GetMetaObject(void) {

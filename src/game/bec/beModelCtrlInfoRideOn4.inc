@@ -6,9 +6,9 @@ igMetaField *g_beModelCtrlInfoRideOn4_scalarMetaField;
 igMetaField *g_beModelCtrlInfoRideOn4_limitterMetaField;
 igMetaField *g_beModelCtrlInfoRideOn4_isFirstMetaField;
 
-void beModelCtrlInfoRideOn4_Create(int allocator) {
+beModelCtrlInfoRideOn4 *beModelCtrlInfoRideOn4_Create(int allocator) {
     beModelCtrlInfoRideOn4_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588A20, allocator);
+    return (beModelCtrlInfoRideOn4 *)igMetaObject_CreateInstance(*(int *)0x588A20, allocator);
 }
 
 void *beModelCtrlInfoRideOn4_GetMetaObject(void) {

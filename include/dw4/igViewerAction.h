@@ -1,0 +1,18 @@
+#ifndef DW4_IGVIEWERACTION_H
+#define DW4_IGVIEWERACTION_H
+
+struct igMetaObject;
+struct igViewerAction;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern struct igMetaObject *g_igViewerAction_metaObject;
+struct igViewerAction *igViewerAction_Create(int allocator);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

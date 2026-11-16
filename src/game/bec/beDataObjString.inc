@@ -1,9 +1,9 @@
 igMetaObject *g_beDataObjString_metaObject;
 igMetaField *g_beDataObjString_dataMetaField;
 
-void beDataObjString_Create(int allocator) {
+beDataObjString *beDataObjString_Create(int allocator) {
     beDataObjString_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589878, allocator);
+    return (beDataObjString *)igMetaObject_CreateInstance(*(int *)0x589878, allocator);
 }
 
 void *beDataObjString_GetMetaObject(void) {

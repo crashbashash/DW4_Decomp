@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWShopCtrlA0_metaObject;
 igMetaField *g_beNDMWShopCtrlA0_accountMetaField;
 igMetaField *g_beNDMWShopCtrlA0_playerNoListMetaField;
 
-void beNDMWShopCtrlA0_Create(int allocator) {
+beNDMWShopCtrlA0 *beNDMWShopCtrlA0_Create(int allocator) {
     beNDMWShopCtrlA0_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlA0_metaObject, allocator);
+    return (beNDMWShopCtrlA0 *)igMetaObject_CreateInstance(g_beNDMWShopCtrlA0_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlA0_GetMetaObject(void) {

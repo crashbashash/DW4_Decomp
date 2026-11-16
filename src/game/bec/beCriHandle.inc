@@ -5,9 +5,9 @@ igMetaField *g_beCriHandle_playIDMetaField;
 igMetaField *g_beCriHandle_typeMetaField;
 igMetaField *g_beCriHandle_priorityMetaField;
 
-void beCriHandle_Create(int allocator) {
+beCriHandle *beCriHandle_Create(int allocator) {
     beCriHandle_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5899C8, allocator);
+    return (beCriHandle *)igMetaObject_CreateInstance(*(int *)0x5899C8, allocator);
 }
 
 igMetaObject *beCriHandle_GetOrCreateMetaObject(void) {

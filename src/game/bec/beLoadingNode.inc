@@ -2,7 +2,7 @@ igMetaObject *g_beLoadingNode_metaObject;
 igMetaField *g_beLoadingNode_lockTimeMetaField;
 igMetaField *g_beLoadingNode_playLimitTimeMetaField;
 
-void *beLoadingNode_ResolveMetaObject(void) {
+igMetaObject *beLoadingNode_ResolveMetaObject(void) {
     igMetaObject *g = g_beLoadingNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beLoadingNode_EnsureRegistered();

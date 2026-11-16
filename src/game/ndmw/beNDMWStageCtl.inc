@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWStageCtl_metaObject;
 igMetaField *g_beNDMWStageCtl_resetTrgTimeMetaField;
 
-void beNDMWStageCtl_CreateInstance(int allocator) {
+beNDMWStageCtl *beNDMWStageCtl_CreateInstance(int allocator) {
     beNDMWStageCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, allocator);
+    return (beNDMWStageCtl *)igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStageCtl_GetOrCreateMetaObject(void) {

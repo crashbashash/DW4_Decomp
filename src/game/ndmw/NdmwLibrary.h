@@ -4,6 +4,147 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/ClassRegistration.h"
+#include "dw4/beLoadIntf2ComMdlData.h"
+#include "dw4/beNDMWAfsSetup.h"
+#include "dw4/beNDMWAfsSetupInfo.h"
+#include "dw4/beNDMWAfsStageLoad.h"
+#include "dw4/beNDMWDegiData.h"
+#include "dw4/beNDMWGameRam.h"
+#include "dw4/beNDMWGameRamInfo.h"
+#include "dw4/beNDMWGameRamInfoRam.h"
+#include "dw4/beNDMWItemAbilityChip.h"
+#include "dw4/beNDMWItemBaseList.h"
+#include "dw4/beNDMWItemBlueArmor.h"
+#include "dw4/beNDMWItemDisk.h"
+#include "dw4/beNDMWItemImportant.h"
+#include "dw4/beNDMWItemInstant.h"
+#include "dw4/beNDMWItemWaza.h"
+#include "dw4/beNDMWItemWeapon.h"
+#include "dw4/beNDMWItemYellowArmor.h"
+#include "dw4/beNDMWListCtrl.h"
+#include "dw4/beNDMWLoadCtrl2.h"
+#include "dw4/beNDMWLoadCtrl2CommonIntf.h"
+#include "dw4/beNDMWLoadCtrl2CtrlData.h"
+#include "dw4/beNDMWLoadCtrl2Info.h"
+#include "dw4/beNDMWLoadIntf2.h"
+#include "dw4/beNDMWLoadIntf2ComMdlCtrl.h"
+#include "dw4/beNDMWLoadIntf2CtrlData.h"
+#include "dw4/beNDMWLoadIntf2DataSelIntf.h"
+#include "dw4/beNDMWLoadIntf2DegiState.h"
+#include "dw4/beNDMWLoadIntf2DegiStateCtrl.h"
+#include "dw4/beNDMWLoadIntf2Diffselect.h"
+#include "dw4/beNDMWLoadIntf2Info.h"
+#include "dw4/beNDMWLoadIntf2MakeChr.h"
+#include "dw4/beNDMWLoadIntf2MesWin.h"
+#include "dw4/beNDMWLoadIntf2NameSel.h"
+#include "dw4/beNDMWLoadIntf2SelSlot.h"
+#include "dw4/beNDMWLoadIntf2TextOrder.h"
+#include "dw4/beNDMWLoadSavePlWork.h"
+#include "dw4/beNDMWLoadSlotPlayer.h"
+#include "dw4/beNDMWLogo.h"
+#include "dw4/beNDMWLogoCtrlData.h"
+#include "dw4/beNDMWLogoInfo.h"
+#include "dw4/beNDMWMcSlotGC.h"
+#include "dw4/beNDMWMcSlotPS2.h"
+#include "dw4/beNDMWMcSlotXbox.h"
+#include "dw4/beNDMWMcUtilCtrl.h"
+#include "dw4/beNDMWMdlEBullet.h"
+#include "dw4/beNDMWMdlEffect.h"
+#include "dw4/beNDMWMdlEnemy.h"
+#include "dw4/beNDMWMdlEnemyInfoWork.h"
+#include "dw4/beNDMWMdlItem.h"
+#include "dw4/beNDMWMdlItemInfoWork.h"
+#include "dw4/beNDMWMdlMapBase.h"
+#include "dw4/beNDMWMdlMapCursor.h"
+#include "dw4/beNDMWMdlObject.h"
+#include "dw4/beNDMWMdlPBullet.h"
+#include "dw4/beNDMWMdlPEBase.h"
+#include "dw4/beNDMWMdlPEBaseInfoWork.h"
+#include "dw4/beNDMWMdlPlayer.h"
+#include "dw4/beNDMWMdlPlayer2.h"
+#include "dw4/beNDMWMdlPlayer2InfoWork.h"
+#include "dw4/beNDMWMdlPlayerInfoWork.h"
+#include "dw4/beNDMWPanelObject.h"
+#include "dw4/beNDMWPanelObjectItem.h"
+#include "dw4/beNDMWPanelObjectStat.h"
+#include "dw4/beNDMWPanelObjectWaza.h"
+#include "dw4/beNDMWPanelWaza.h"
+#include "dw4/beNDMWPanelWazaInfo.h"
+#include "dw4/beNDMWPanelWazaInfoWork.h"
+#include "dw4/beNDMWSaveCtrl.h"
+#include "dw4/beNDMWSaveCtrlCtrlData.h"
+#include "dw4/beNDMWSaveCtrlInfo.h"
+#include "dw4/beNDMWSaveIntf.h"
+#include "dw4/beNDMWSaveIntfCtrlData.h"
+#include "dw4/beNDMWSaveIntfInfo.h"
+#include "dw4/beNDMWShinkaObject.h"
+#include "dw4/beNDMWShopCtrl00.h"
+#include "dw4/beNDMWShopCtrl10.h"
+#include "dw4/beNDMWShopCtrl30.h"
+#include "dw4/beNDMWShopCtrl40.h"
+#include "dw4/beNDMWShopCtrl50.h"
+#include "dw4/beNDMWShopCtrlA0.h"
+#include "dw4/beNDMWShopCtrlA1.h"
+#include "dw4/beNDMWShopCtrlA2.h"
+#include "dw4/beNDMWShopCtrlDeviceSell.h"
+#include "dw4/beNDMWShopCtrlDigilabo.h"
+#include "dw4/beNDMWShopCtrlDiskSell.h"
+#include "dw4/beNDMWShopCtrlEditBit.h"
+#include "dw4/beNDMWShopCtrlEvolve.h"
+#include "dw4/beNDMWShopCtrlSales.h"
+#include "dw4/beNDMWShopCtrlSell.h"
+#include "dw4/beNDMWShopCtrlXdataChip.h"
+#include "dw4/beNDMWShopDevice.h"
+#include "dw4/beNDMWShopJunk.h"
+#include "dw4/beNDMWShopSelect00.h"
+#include "dw4/beNDMWShopSelect01.h"
+#include "dw4/beNDMWShopSelect02.h"
+#include "dw4/beNDMWShopSelect03.h"
+#include "dw4/beNDMWShopSelect11.h"
+#include "dw4/beNDMWShopSelect34.h"
+#include "dw4/beNDMWShopSelect52.h"
+#include "dw4/beNDMWShopSelectA0.h"
+#include "dw4/beNDMWShopSelectB0.h"
+#include "dw4/beNDMWShopTitle00.h"
+#include "dw4/beNDMWShopTitle01.h"
+#include "dw4/beNDMWShopTitle03.h"
+#include "dw4/beNDMWStageCtl.h"
+#include "dw4/beNDMWStageCtlInfo.h"
+#include "dw4/beNDMWStatus.h"
+#include "dw4/beNDMWStatusCtrl00.h"
+#include "dw4/beNDMWStatusCtrlBaseEquip.h"
+#include "dw4/beNDMWStatusCtrlBit.h"
+#include "dw4/beNDMWStatusCtrlD0.h"
+#include "dw4/beNDMWStatusCtrlDisk.h"
+#include "dw4/beNDMWStatusCtrlEquip.h"
+#include "dw4/beNDMWStatusCtrlFlag.h"
+#include "dw4/beNDMWStatusCtrlFolder.h"
+#include "dw4/beNDMWStatusCtrlSendBit.h"
+#include "dw4/beNDMWStatusCtrlSkill.h"
+#include "dw4/beNDMWStatusInfo.h"
+#include "dw4/beNDMWStatusInfoWork.h"
+#include "dw4/beNDMWStatusMainSlot.h"
+#include "dw4/beNDMWStatusPowerSocket.h"
+#include "dw4/beNDMWStatusSelect00.h"
+#include "dw4/beNDMWStatusSelect01.h"
+#include "dw4/beNDMWStatusSelectE0.h"
+#include "dw4/beNDMWStatusSelectE1.h"
+#include "dw4/beNDMWStatusSubMenu.h"
+#include "dw4/beNDMWStatusSubSlot.h"
+#include "dw4/beNDMWStatusTitle00.h"
+#include "dw4/beNDMWStatusTitle01.h"
+#include "dw4/beNDMWStatusTitle02.h"
+#include "dw4/beNDMWStatusTitle03.h"
+#include "dw4/beNDMWStatusTitle04.h"
+#include "dw4/beNDMWTitle2.h"
+#include "dw4/beNDMWTitle2CtrlData.h"
+#include "dw4/beNDMWTitle2Info.h"
+#include "dw4/beNDMWTitle2Option.h"
+#include "dw4/beNDMWWindowCtrl.h"
+#include "dw4/beNDMWWindowList.h"
+#include "dw4/beNDMWWindowSelect.h"
+#include "dw4/beNDMWWindowTitle.h"
+#include "dw4/libNdmwRuntimePlugin.h"
 extern "C" int StringChunk_ReleaseHeader(...);
 /* Header stored in front of every interned string token. */
 struct StringTokenHeader { int owner; int refCount; };
@@ -158,7 +299,6 @@ extern "C" void *igObjectList_Register(void);
 extern "C" void *beNDMWWindowList_Register(void);
 extern "C" void beNDMWWindowList_GetMetaObjectFunction(void);
 extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
-extern "C" igMetaEnum *SubWnd_GetMetaEnum(void);
 extern "C" igMetaObject *beNDMWWindow_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWWindow_GetMetaObject(void);
 extern "C" void beNDMWWindow_EnsureRegistered(void);
@@ -180,7 +320,6 @@ extern "C" void *beBaseInfo_Register(void);
 extern "C" void *beNDMWTitle2Info_Register(void);
 extern "C" void beNDMWTitle2Info_GetMetaObjectFunction(void);
 extern "C" int igMetaObject_CreateInstance(...);
-extern "C" void beNDMWTitle2Option_Create(int allocator);
 extern "C" void *beNDMWTitle2Option_GetMetaObject(void);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int beNDMWTitle2Option_GetVTable(void);
@@ -193,15 +332,12 @@ extern "C" int igMetaObject_FinalizeAndReplaceField(...);
 extern "C" void **igMetaObject_FindFieldByName(...);
 extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" void beNDMWTitle2Option_InitFields(void);
-extern "C" void beNDMWTitle2CtrlData_Create(int allocator);
 extern "C" void *beNDMWTitle2CtrlData_GetMetaObject(void);
 extern "C" int beNDMWTitle2CtrlData_GetVTable(void);
 extern "C" void beNDMWTitle2CtrlData_EnsureRegistered(void);
 extern "C" void *beNDMWTitle2CtrlData_Register(void);
 extern "C" void beNDMWTitle2CtrlData_GetMetaObjectFunction(void);
 extern "C" void beNDMWTitle2CtrlData_InitFields(void);
-extern "C" igMetaEnum *beNDMWTitle2CtrlData_GetMessageEnum(void);
-extern "C" void beNDMWTitle2_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWTitle2_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWTitle2_GetMetaObject(void);
 extern "C" int igSmartPointer_bePadManager_Destruct(...);
@@ -212,7 +348,6 @@ extern "C" void *beBaseInfoManager_Register(void);
 extern "C" void *beNDMWTitle2_Register(void);
 extern "C" void beNDMWTitle2_GetMetaObjectFunction(void);
 extern "C" void beNDMWTitle2_InitFields(void);
-extern "C" void beNDMWShopTitle03_Create(int allocator);
 extern "C" void *beNDMWShopTitle03_GetMetaObject(void);
 extern "C" int beNDMWShopTitle03_GetVTable(void);
 extern "C" int Memory_FreeBufferAliasC(...);
@@ -225,42 +360,35 @@ extern "C" void beNDMWShopTitle03_EnsureRegistered(void);
 extern "C" void *beNDMWShopTitle03_Register(void);
 extern "C" void beNDMWShopTitle03_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beNDMWWindowTitle_GetPublishedMetaObject(void);
-extern "C" void beNDMWShopTitle01_Create(int allocator);
 extern "C" void *beNDMWShopTitle01_GetMetaObject(void);
 extern "C" int beNDMWShopTitle01_GetVTable(void);
 extern "C" void beNDMWShopTitle01_EnsureRegistered(void);
 extern "C" void *beNDMWShopTitle01_Register(void);
 extern "C" void beNDMWShopTitle01_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopTitle00_Create(int allocator);
 extern "C" void *beNDMWShopTitle00_GetMetaObject(void);
 extern "C" int beNDMWShopTitle00_GetVTable(void);
 extern "C" void beNDMWShopTitle00_EnsureRegistered(void);
 extern "C" void *beNDMWShopTitle00_Register(void);
 extern "C" void beNDMWShopTitle00_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusTitle04_Create(int allocator);
 extern "C" void *beNDMWStatusTitle04_GetMetaObject(void);
 extern "C" int beNDMWStatusTitle04_GetVTable(void);
 extern "C" void beNDMWStatusTitle04_EnsureRegistered(void);
 extern "C" void *beNDMWStatusTitle04_Register(void);
 extern "C" void beNDMWStatusTitle04_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusTitle03_Create(int allocator);
 extern "C" igMetaObject *beNDMWStatusTitle03_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWStatusTitle03_GetMetaObject(void);
 extern "C" int beNDMWStatusTitle03_GetVTable(void);
 extern "C" void beNDMWStatusTitle03_EnsureRegistered(void);
 extern "C" void *beNDMWStatusTitle03_Register(void);
 extern "C" void beNDMWStatusTitle03_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusTitle02_Create(int allocator);
 extern "C" int beNDMWStatusTitle02_GetVTable(void);
 extern "C" void beNDMWStatusTitle02_EnsureRegistered(void);
 extern "C" void *beNDMWStatusTitle02_Register(void);
 extern "C" void beNDMWStatusTitle02_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusTitle01_Create(int allocator);
 extern "C" int beNDMWStatusTitle01_GetVTable(void);
 extern "C" void beNDMWStatusTitle01_EnsureRegistered(void);
 extern "C" void *beNDMWStatusTitle01_Register(void);
 extern "C" void beNDMWStatusTitle01_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusTitle00_Create(int allocator);
 extern "C" int beNDMWStatusTitle00_GetVTable(void);
 extern "C" void beNDMWStatusTitle00_EnsureRegistered(void);
 extern "C" void *beNDMWStatusTitle00_Register(void);
@@ -269,57 +397,48 @@ extern "C" void beNDMWWindowTitle_EnsureRegistered(void);
 extern "C" void *beNDMWWindowTitle_Register(void);
 extern "C" void beNDMWWindowTitle_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beNDMWWindow_GetPublishedMetaObject(void);
-extern "C" void beNDMWShopSelectB0_Create(int allocator);
 extern "C" void *beNDMWShopSelectB0_GetMetaObject(void);
 extern "C" int beNDMWShopSelectB0_GetVTable(void);
 extern "C" void beNDMWShopSelectB0_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelectB0_Register(void);
 extern "C" void beNDMWShopSelectB0_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beNDMWWindowSelect_GetPublishedMetaObject(void);
-extern "C" void beNDMWShopSelectA0_Create(int allocator);
 extern "C" void *beNDMWShopSelectA0_GetMetaObject(void);
 extern "C" int beNDMWShopSelectA0_GetVTable(void);
 extern "C" void beNDMWShopSelectA0_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelectA0_Register(void);
 extern "C" void beNDMWShopSelectA0_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopSelect52_Create(int allocator);
 extern "C" void *beNDMWShopSelect52_GetMetaObject(void);
 extern "C" int beNDMWShopSelect52_GetVTable(void);
 extern "C" void beNDMWShopSelect52_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelect52_Register(void);
 extern "C" void beNDMWShopSelect52_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopSelect34_Create(int allocator);
 extern "C" void *beNDMWShopSelect34_GetMetaObject(void);
 extern "C" int beNDMWShopSelect34_GetVTable(void);
 extern "C" void beNDMWShopSelect34_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelect34_Register(void);
 extern "C" void beNDMWShopSelect34_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopSelect11_Create(int allocator);
 extern "C" void *beNDMWShopSelect11_GetMetaObject(void);
 extern "C" int beNDMWShopSelect11_GetVTable(void);
 extern "C" void beNDMWShopSelect11_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelect11_Register(void);
 extern "C" void beNDMWShopSelect11_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopSelect03_Create(int allocator);
 extern "C" void *beNDMWShopSelect03_GetMetaObject(void);
 extern "C" int beNDMWShopSelect03_GetVTable(void);
 extern "C" void beNDMWShopSelect03_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelect03_Register(void);
 extern "C" void beNDMWShopSelect03_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopSelect02_Create(int allocator);
 extern "C" void *beNDMWShopSelect02_GetMetaObject(void);
 extern "C" int beNDMWShopSelect02_GetVTable(void);
 extern "C" void beNDMWShopSelect02_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelect02_Register(void);
 extern "C" void beNDMWShopSelect02_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopSelect02_InitFields(void);
-extern "C" void beNDMWShopSelect01_Create(int allocator);
 extern "C" void *beNDMWShopSelect01_GetMetaObject(void);
 extern "C" int beNDMWShopSelect01_GetVTable(void);
 extern "C" void beNDMWShopSelect01_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelect01_Register(void);
 extern "C" void beNDMWShopSelect01_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopSelect00_Create(int allocator);
 extern "C" void *beNDMWShopSelect00_GetMetaObject(void);
 extern "C" int igStringRef_Destruct(...);
 extern "C" int beNDMWShopSelect00_GetVTable(void);
@@ -327,23 +446,19 @@ extern "C" void beNDMWShopSelect00_EnsureRegistered(void);
 extern "C" void *beNDMWShopSelect00_Register(void);
 extern "C" void beNDMWShopSelect00_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopSelect00_InitFields(void);
-extern "C" void beNDMWStatusSelectE1_Create(int allocator);
 extern "C" void *beNDMWStatusSelectE1_GetMetaObject(void);
 extern "C" int beNDMWStatusSelectE1_GetVTable(void);
 extern "C" void beNDMWStatusSelectE1_EnsureRegistered(void);
 extern "C" void *beNDMWStatusSelectE1_Register(void);
 extern "C" void beNDMWStatusSelectE1_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusSelectE0_Create(int allocator);
 extern "C" int beNDMWStatusSelectE0_GetVTable(void);
 extern "C" void beNDMWStatusSelectE0_EnsureRegistered(void);
 extern "C" void *beNDMWStatusSelectE0_Register(void);
 extern "C" void beNDMWStatusSelectE0_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusSelect01_Create(int allocator);
 extern "C" int beNDMWStatusSelect01_GetVTable(void);
 extern "C" void beNDMWStatusSelect01_EnsureRegistered(void);
 extern "C" void *beNDMWStatusSelect01_Register(void);
 extern "C" void beNDMWStatusSelect01_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusSelect00_Create(int allocator);
 extern "C" int beNDMWStatusSelect00_GetVTable(void);
 extern "C" void beNDMWStatusSelect00_EnsureRegistered(void);
 extern "C" void *beNDMWStatusSelect00_Register(void);
@@ -365,7 +480,6 @@ extern "C" void *beBaseInfoRam_Register(void);
 extern "C" void *beNDMWStatusInfoRam_Register(void);
 extern "C" void beNDMWStatusInfoRam_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusInfoRam_InitFields(void);
-extern "C" void beNDMWStatusInfoWork_Create(int allocator);
 extern "C" igMetaObject *beNDMWStatusInfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWStatusInfoWork_GetMetaObject(void);
 extern "C" int beNDMWStatusInfoWork_GetVTable(void);
@@ -374,16 +488,13 @@ extern "C" void beNDMWStatusInfoWork_EnsureRegistered(void);
 extern "C" void *beNDMWStatusInfoWork_Register(void);
 extern "C" void beNDMWStatusInfoWork_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusInfoWork_InitFields(void);
-extern "C" void beNDMWShopJunk_Create(int allocator);
 extern "C" void *beNDMWShopJunk_GetMetaObject(void);
 extern "C" int beNDMWShopJunk_GetVTable(void);
 extern "C" void beNDMWShopJunk_EnsureRegistered(void);
 extern "C" void *beNDMWShopJunk_Register(void);
 extern "C" void beNDMWShopJunk_GetMetaObjectFunction(void);
-extern "C" void *beNDMWShopCtrl00_Create(void *allocator);
 extern "C" void beNDMWShopCtrl00_EnsureRegistered();
 extern "C" void beNDMWShopJunk_InitFields(void);
-extern "C" void beNDMWShopDevice_Create(int allocator);
 extern "C" void *beNDMWShopDevice_GetMetaObject(void);
 extern "C" int beNDMWShopDevice_GetVTable(void);
 extern "C" beNDMWListCtrl *beNDMWListCtrl_Destroy(beNDMWListCtrl *self, short flags);
@@ -392,14 +503,12 @@ extern "C" void *beNDMWShopDevice_Register(void);
 extern "C" void beNDMWShopDevice_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beNDMWListCtrl_GetPublishedMetaObject(void);
 extern "C" void beNDMWShopDevice_InitFields(void);
-extern "C" void beNDMWShopCtrlXdataChip_Create(int allocator);
 extern "C" void *beNDMWShopCtrlXdataChip_GetMetaObject(void);
 extern "C" int beNDMWShopCtrlXdataChip_GetVTable(void);
 extern "C" void beNDMWShopCtrlXdataChip_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlXdataChip_Register(void);
 extern "C" void beNDMWShopCtrlXdataChip_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlXdataChip_InitFields(void);
-extern "C" void beNDMWShopCtrlSales_Create(int allocator);
 extern "C" void *beNDMWShopCtrlSales_GetMetaObject(void);
 extern "C" int igSmartPointer_igBoolList_Destruct(...);
 extern "C" int beNDMWShopCtrlSales_GetVTable(void);
@@ -407,33 +516,28 @@ extern "C" void beNDMWShopCtrlSales_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlSales_Register(void);
 extern "C" void beNDMWShopCtrlSales_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlSales_InitFields(void);
-extern "C" void beNDMWShopCtrlDiskSell_Create(int allocator);
 extern "C" void *beNDMWShopCtrlDiskSell_GetMetaObject(void);
 extern "C" int beNDMWShopCtrlDiskSell_GetVTable(void);
 extern "C" void beNDMWShopCtrlDiskSell_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlDiskSell_Register(void);
 extern "C" void beNDMWShopCtrlDiskSell_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlDiskSell_InitFields(void);
-extern "C" void beNDMWShopCtrlDeviceSell_Create(int allocator);
 extern "C" void *beNDMWShopCtrlDeviceSell_GetMetaObject(void);
 extern "C" int beNDMWShopCtrlDeviceSell_GetVTable(void);
 extern "C" void beNDMWShopCtrlDeviceSell_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlDeviceSell_Register(void);
 extern "C" void beNDMWShopCtrlDeviceSell_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlDeviceSell_InitFields(void);
-extern "C" void beNDMWShopCtrlSell_Create(int allocator);
 extern "C" void *beNDMWShopCtrlSell_GetMetaObject(void);
 extern "C" int beNDMWShopCtrlSell_GetVTable(void);
 extern "C" void beNDMWShopCtrlSell_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlSell_Register(void);
 extern "C" void beNDMWShopCtrlSell_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopCtrlEditBit_Create(int allocator);
 extern "C" int beNDMWShopCtrlEditBit_GetVTable(void);
 extern "C" void beNDMWShopCtrlEditBit_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlEditBit_Register(void);
 extern "C" void beNDMWShopCtrlEditBit_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlEditBit_InitFields(void);
-extern "C" void beNDMWShopCtrlDigilabo_Create(int allocator);
 extern "C" int igSmartPointer_igIntListList_Destruct(int *, int);
 extern "C" int beNDMWShopCtrlDigilabo_GetVTable(void);
 extern "C" void beNDMWShopCtrlDigilabo_EnsureRegistered(void);
@@ -441,53 +545,45 @@ extern "C" void *beNDMWShopCtrlDigilabo_Register(void);
 extern "C" void beNDMWShopCtrlDigilabo_GetMetaObjectFunction(void);
 extern "C" int igIntListList_GetOrCreateMetaObject(void);
 extern "C" void beNDMWShopCtrlDigilabo_InitFields(void);
-extern "C" void beNDMWShopCtrlA2_Create(int allocator);
 extern "C" int beNDMWShopCtrlA2_GetVTable(void);
 extern "C" void beNDMWShopCtrlA2_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlA2_Register(void);
 extern "C" void beNDMWShopCtrlA2_GetMetaObjectFunction(void);
-extern "C" void beNDMWShopCtrlA1_Create(int allocator);
 extern "C" int beNDMWShopCtrlA1_GetVTable(void);
 extern "C" void beNDMWShopCtrlA1_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlA1_Register(void);
 extern "C" void beNDMWShopCtrlA1_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlA1_InitFields(void);
-extern "C" void beNDMWShopCtrlA0_Create(int allocator);
 extern "C" void *beNDMWShopCtrlA0_GetMetaObject(void);
 extern "C" int beNDMWShopCtrlA0_GetVTable(void);
 extern "C" void beNDMWShopCtrlA0_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlA0_Register(void);
 extern "C" void beNDMWShopCtrlA0_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlA0_InitFields(void);
-extern "C" void beNDMWShopCtrl50_Create(int allocator);
 extern "C" void *beNDMWShopCtrl50_GetMetaObject(void);
 extern "C" int beNDMWShopCtrl50_GetVTable(void);
 extern "C" void beNDMWShopCtrl50_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrl50_Register(void);
 extern "C" void beNDMWShopCtrl50_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrl50_InitFields(void);
-extern "C" void beNDMWShopCtrl40_Create(int allocator);
 extern "C" void *beNDMWShopCtrl40_GetMetaObject(void);
 extern "C" int beNDMWShopCtrl40_GetVTable(void);
 extern "C" void beNDMWShopCtrl40_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrl40_Register(void);
 extern "C" void beNDMWShopCtrl40_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrl40_InitFields(void);
-extern "C" void beNDMWShopCtrl30_Create(int allocator);
 extern "C" void *beNDMWShopCtrl30_GetMetaObject(void);
 extern "C" int beNDMWShopCtrl30_GetVTable(void);
 extern "C" void beNDMWShopCtrl30_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrl30_Register(void);
 extern "C" void beNDMWShopCtrl30_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrl30_InitFields(void);
-extern "C" void beNDMWShopCtrlEvolve_Create(int allocator);
 extern "C" void *beNDMWShopCtrlEvolve_GetMetaObject(void);
 extern "C" int beNDMWShopCtrlEvolve_GetVTable(void);
 extern "C" void beNDMWShopCtrlEvolve_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrlEvolve_Register(void);
 extern "C" void beNDMWShopCtrlEvolve_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlEvolve_InitFields(void);
-extern "C" void beNDMWShopCtrl10_Create(int allocator);
 extern "C" void *beNDMWShopCtrl10_GetMetaObject(void);
 extern "C" int beNDMWShopCtrl10_GetVTable(void);
 extern "C" void beNDMWShopCtrl10_EnsureRegistered(void);
@@ -496,7 +592,6 @@ extern "C" void beNDMWShopCtrl10_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrl10_InitFields(void);
 extern "C" int beNDMWShopCtrl00_GetVTable(void);
 extern "C" void *beNDMWShopCtrl00_Register(void);
-extern "C" void beNDMWStatusSubMenu_Create(int allocator);
 extern "C" void *beNDMWStatusSubMenu_GetMetaObject(void);
 extern "C" int beNDMWStatusSubMenu_GetVTable(void);
 extern "C" igSmartPointer<igObject> *beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage);
@@ -504,59 +599,50 @@ extern "C" void beNDMWStatusSubMenu_EnsureRegistered(void);
 extern "C" void *beNDMWStatusSubMenu_Register(void);
 extern "C" void beNDMWStatusSubMenu_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusSubMenu_InitFields(void);
-extern "C" void beNDMWStatusCtrlSkill_Create(int allocator);
 extern "C" void *beNDMWStatusCtrlSkill_GetMetaObject(void);
 extern "C" int beNDMWStatusCtrlSkill_GetVTable(void);
 extern "C" void beNDMWStatusCtrlSkill_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlSkill_Register(void);
 extern "C" void beNDMWStatusCtrlSkill_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlSkill_InitFields(void);
-extern "C" void beNDMWStatusCtrlSendBit_Create(int allocator);
 extern "C" void *beNDMWStatusCtrlSendBit_GetMetaObject(void);
 extern "C" int beNDMWStatusCtrlSendBit_GetVTable(void);
 extern "C" void beNDMWStatusCtrlSendBit_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlSendBit_Register(void);
 extern "C" void beNDMWStatusCtrlSendBit_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlSendBit_InitFields(void);
-extern "C" void beNDMWStatusCtrlBit_Create(int allocator);
 extern "C" void *beNDMWStatusCtrlBit_GetMetaObject(void);
 extern "C" int beNDMWStatusCtrlBit_GetVTable(void);
 extern "C" void beNDMWStatusCtrlBit_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlBit_Register(void);
 extern "C" void beNDMWStatusCtrlBit_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlBit_InitFields(void);
-extern "C" void beNDMWStatusCtrlDisk_Create(int allocator);
 extern "C" int beNDMWStatusCtrlDisk_GetVTable(void);
 extern "C" void beNDMWStatusCtrlDisk_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlDisk_Register(void);
 extern "C" void beNDMWStatusCtrlDisk_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlDisk_InitFields(void);
-extern "C" void beNDMWStatusCtrlFlag_Create(int allocator);
 extern "C" int beNDMWStatusCtrlFlag_GetVTable(void);
 extern "C" void beNDMWStatusCtrlFlag_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlFlag_Register(void);
 extern "C" void beNDMWStatusCtrlFlag_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlFlag_InitFields(void);
-extern "C" void beNDMWStatusCtrlFolder_Create(int allocator);
 extern "C" int beNDMWStatusCtrlFolder_GetVTable(void);
 extern "C" void beNDMWStatusCtrlFolder_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlFolder_Register(void);
 extern "C" void beNDMWStatusCtrlFolder_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlFolder_InitFields(void);
-extern "C" void beNDMWStatusSubSlot_Create(int allocator);
 extern "C" int beNDMWStatusSubSlot_GetVTable(void);
 extern "C" igSmartPointer<igObject> *beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" void beNDMWStatusSubSlot_EnsureRegistered(void);
 extern "C" void *beNDMWStatusSubSlot_Register(void);
 extern "C" void beNDMWStatusSubSlot_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject(void);
-extern "C" void beNDMWStatusMainSlot_Create(int allocator);
 extern "C" void *beNDMWStatusMainSlot_GetMetaObject(void);
 extern "C" int beNDMWStatusMainSlot_GetVTable(void);
 extern "C" void beNDMWStatusMainSlot_EnsureRegistered(void);
 extern "C" void *beNDMWStatusMainSlot_Register(void);
 extern "C" void beNDMWStatusMainSlot_GetMetaObjectFunction(void);
-extern "C" void beNDMWStatusPowerSocket_Create(int allocator);
 extern "C" void *beNDMWStatusPowerSocket_GetMetaObject(void);
 extern "C" int beNDMWStatusPowerSocket_GetVTable(void);
 extern "C" void beNDMWStatusPowerSocket_EnsureRegistered(void);
@@ -569,21 +655,18 @@ extern "C" void beNDMWStatusCtrlBaseEquip_GetMetaObjectFunction(void);
 extern "C" int igIntMetaField_SetDefault(...);
 extern "C" int beDataObjList_GetOrCreateMetaObject(void);
 extern "C" void beNDMWStatusCtrlBaseEquip_InitFields(void);
-extern "C" void beNDMWStatusCtrlEquip_Create(int allocator);
 extern "C" void *beNDMWStatusCtrlEquip_GetMetaObject(void);
 extern "C" int beNDMWStatusCtrlEquip_GetVTable(void);
 extern "C" void beNDMWStatusCtrlEquip_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlEquip_Register(void);
 extern "C" void beNDMWStatusCtrlEquip_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlEquip_InitFields(void);
-extern "C" void beNDMWStatusCtrlD0_Create(int allocator);
 extern "C" void *beNDMWStatusCtrlD0_GetMetaObject(void);
 extern "C" int beNDMWStatusCtrlD0_GetVTable(void);
 extern "C" void beNDMWStatusCtrlD0_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlD0_Register(void);
 extern "C" void beNDMWStatusCtrlD0_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlD0_InitFields(void);
-extern "C" void beNDMWStatusCtrl00_Create(int allocator);
 extern "C" void *beNDMWStatusCtrl00_GetMetaObject(void);
 extern "C" int beNDMWStatusCtrl00_GetVTable(void);
 extern "C" void beNDMWStatusCtrl00_EnsureRegistered(void);
@@ -601,8 +684,6 @@ extern "C" void beNDMWWindowCtrl_EnsureRegistered(void);
 extern "C" void *beNDMWWindowCtrl_Register(void);
 extern "C" void beNDMWWindowCtrl_GetMetaObjectFunction(void);
 extern "C" void beNDMWWindowCtrl_InitFields(void);
-extern "C" igMetaEnum *StatusMessage_GetMetaEnum(void);
-extern "C" void beNDMWStatus_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWStatus_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWStatus_GetMetaObject(void);
 extern "C" int beNDMWStatus_GetVTable(void);
@@ -619,8 +700,6 @@ extern "C" int beNDMWStageCtlInfo_GetVTable(void);
 extern "C" void beNDMWStageCtlInfo_EnsureRegistered(void);
 extern "C" void *beNDMWStageCtlInfo_Register(void);
 extern "C" void beNDMWStageCtlInfo_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *beNDMWStageCtlInfo_GetMessageEnum(void);
-extern "C" void beNDMWStageCtl_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWStageCtl_GetOrCreateMetaObject(void);
 extern "C" int beNDMWStageCtl_GetVTable(void);
 extern "C" void beNDMWStageCtl_EnsureRegistered(void);
@@ -649,15 +728,12 @@ extern "C" void beSaveIntfComMdlData_EnsureRegistered(void);
 extern "C" void *beSaveIntfComMdlData_Register(void);
 extern "C" void beSaveIntfComMdlData_GetMetaObjectFunction(void);
 extern "C" void beSaveIntfComMdlData_InitFields(void);
-extern "C" void beNDMWSaveIntfCtrlData_Create(int allocator);
 extern "C" void *beNDMWSaveIntfCtrlData_GetMetaObject(void);
 extern "C" int beNDMWSaveIntfCtrlData_GetVTable(void);
 extern "C" void beNDMWSaveIntfCtrlData_EnsureRegistered(void);
 extern "C" void *beNDMWSaveIntfCtrlData_Register(void);
 extern "C" void beNDMWSaveIntfCtrlData_GetMetaObjectFunction(void);
 extern "C" void beNDMWSaveIntfCtrlData_InitFields(void);
-extern "C" igMetaEnum *beNDMWSaveIntf_GetMessageEnum(void);
-extern "C" void beNDMWSaveIntf_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWSaveIntf_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWSaveIntf_GetMetaObject(void);
 extern "C" int beNDMWSaveIntf_GetVTable(void);
@@ -671,15 +747,12 @@ extern "C" int beNDMWSaveCtrlInfo_GetVTable(void);
 extern "C" void beNDMWSaveCtrlInfo_EnsureRegistered(void);
 extern "C" void *beNDMWSaveCtrlInfo_Register(void);
 extern "C" void beNDMWSaveCtrlInfo_GetMetaObjectFunction(void);
-extern "C" void beNDMWSaveCtrlCtrlData_Create(int allocator);
 extern "C" void *beNDMWSaveCtrlCtrlData_GetMetaObject(void);
 extern "C" int beNDMWSaveCtrlCtrlData_GetVTable(void);
 extern "C" void beNDMWSaveCtrlCtrlData_EnsureRegistered(void);
 extern "C" void *beNDMWSaveCtrlCtrlData_Register(void);
 extern "C" void beNDMWSaveCtrlCtrlData_GetMetaObjectFunction(void);
 extern "C" void beNDMWSaveCtrlCtrlData_InitFields(void);
-extern "C" igMetaEnum *SaveCtrlMessage_GetMetaEnum(void);
-extern "C" void beNDMWSaveCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWSaveCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWSaveCtrl_ResolveMetaObject(void);
 extern "C" int beNDMWSaveCtrl_GetVTable(void);
@@ -698,7 +771,6 @@ extern "C" void beNDMWPanelWazaInfoRam_EnsureRegistered(void);
 extern "C" void *beNDMWPanelWazaInfoRam_Register(void);
 extern "C" void beNDMWPanelWazaInfoRam_GetMetaObject(void);
 extern "C" void beNDMWPanelWazaInfoRam_InitFields(void);
-extern "C" void beNDMWPanelWazaInfoWork_Create(int allocator);
 extern "C" igMetaObject *beNDMWPanelWazaInfoWork_GetOrCreateMetaObject(void);
 extern "C" int beNDMWPanelWazaInfoWork_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWPanelObjectItem_Destruct(igSmartPointer<igObject> *self,int delete_storage);
@@ -733,8 +805,6 @@ extern "C" void *beNDMWPanelObject_Register(void);
 extern "C" void beNDMWPanelObject_GetMetaObject(void);
 extern "C" int beBaseInfoManager_GetOrCreateMetaObject(void);
 extern "C" void beNDMWPanelObject_InitFields(void);
-extern "C" igMetaEnum *beNDMWPanelObject_GetMessageEnum(void);
-extern "C" void beNDMWPanelWaza_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWPanelWaza_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWPanelWaza_ResolveMetaObject(void);
 extern "C" int beNDMWPanelWaza_GetVTable(void);
@@ -742,7 +812,6 @@ extern "C" void beNDMWPanelWaza_EnsureRegistered(void);
 extern "C" void *beNDMWPanelWaza_Register(void);
 extern "C" void beNDMWPanelWaza_GetMetaObject(void);
 extern "C" void beNDMWPanelWaza_InitFields(void);
-extern "C" void beNDMWMdlPlayer2_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlPlayer2_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMdlPlayer2_ResolveMetaObject(void);
 extern "C" int beNDMWMdlPlayer2_GetVTable(void);
@@ -752,7 +821,6 @@ extern "C" void *beNDMWMdlPlayer2_Register(void);
 extern "C" void beNDMWMdlPlayer2_GetMetaObject(void);
 extern "C" int beModelCtrl_GetPublishedMetaObject(void);
 extern "C" void beNDMWMdlPlayer2_InitFields(void);
-extern "C" void beNDMWMdlPlayer2InfoWork_Create(int allocator);
 extern "C" void *beNDMWMdlPlayer2InfoWork_ResolveMetaObject(void);
 extern "C" int beNDMWMdlPlayer2InfoWork_GetVTable(void);
 extern "C" void beNDMWMdlPlayer2InfoWork_EnsureRegistered(void);
@@ -761,8 +829,6 @@ extern "C" void *beNDMWMdlPlayer2InfoWork_Register(void);
 extern "C" void beNDMWMdlPlayer2InfoWork_GetMetaObject(void);
 extern "C" int beModelCtrlInfoWork_GetPublishedMetaObject(void);
 extern "C" void beNDMWMdlPlayer2InfoWork_InitFields(void);
-extern "C" igMetaEnum *PanelCloseSeqList_GetMetaEnum(void);
-extern "C" void beNDMWMdlPlayer_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlPlayer_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMdlPlayer_ResolveMetaObject(void);
 extern "C" int beNDMWMdlPlayer_GetVTable(void);
@@ -772,7 +838,6 @@ extern "C" void beNDMWMdlPlayer_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWMdlPEBase_GetPublishedMetaObject(void);
 extern "C" int igViewerSceneInfoManager_GetOrCreateMetaObject(void);
 extern "C" void beNDMWMdlPlayer_InitFields(void);
-extern "C" void beNDMWMdlPlayerInfoWork_Create(int allocator);
 extern "C" igMetaObject *beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject(void);
 extern "C" int beNDMWMdlPlayerInfoWork_GetVTable(void);
 extern "C" void igSmartPointer_igFloatList_Destruct(void *, int);
@@ -792,9 +857,6 @@ extern "C" void *beNDMWMdlPlayerInfoWork_Register(void);
 extern "C" void beNDMWMdlPlayerInfoWork_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWMdlPEBaseInfoWork_GetPublishedMetaObject(void);
 extern "C" void beNDMWMdlPlayerInfoWork_InitFields(void);
-extern "C" igMetaEnum *DamageSeq_GetMetaEnum(void);
-extern "C" igMetaEnum *StatusName_GetMetaEnum(void);
-extern "C" igMetaEnum *MsgAction_GetMetaEnum(void);
 extern "C" void *beNDMWMdlPEBase_ResolveMetaObject(void);
 extern "C" void beNDMWMdlPEBase_EnsureRegistered(void);
 extern "C" void *beNDMWMdlPEBase_Register(void);
@@ -806,41 +868,35 @@ extern "C" void beNDMWMdlPEBaseInfoWork_EnsureRegistered(void);
 extern "C" void *beNDMWMdlPEBaseInfoWork_Register(void);
 extern "C" void beNDMWMdlPEBaseInfoWork_GetMetaObject(void);
 extern "C" void beNDMWMdlPEBaseInfoWork_InitFields(void);
-extern "C" void beNDMWMdlPBullet_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlPBullet_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMdlPBullet_GetReadyMetaObject(void);
 extern "C" int beNDMWMdlPBullet_GetVTable(void);
 extern "C" void beNDMWMdlPBullet_EnsureRegistered(void);
 extern "C" void *beNDMWMdlPBullet_Register(void);
 extern "C" void beNDMWMdlPBullet_GetMetaObject(void);
-extern "C" void beNDMWMdlObject_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlObject_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMdlObject_GetReadyMetaObject(void);
 extern "C" int beNDMWMdlObject_GetVTable(void);
 extern "C" void beNDMWMdlObject_EnsureRegistered(void);
 extern "C" void *beNDMWMdlObject_Register(void);
 extern "C" void beNDMWMdlObject_GetMetaObject(void);
-extern "C" void beNDMWMdlMapCursor_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlMapCursor_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMdlMapCursor_GetReadyMetaObject(void);
 extern "C" int beNDMWMdlMapCursor_GetVTable(void);
 extern "C" void beNDMWMdlMapCursor_EnsureRegistered(void);
 extern "C" void *beNDMWMdlMapCursor_Register(void);
 extern "C" void beNDMWMdlMapCursor_GetMetaObject(void);
-extern "C" void beNDMWMdlMapBase_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlMapBase_GetOrCreateMetaObject(void);
 extern "C" int beNDMWMdlMapBase_GetVTable(void);
 extern "C" void beNDMWMdlMapBase_EnsureRegistered(void);
 extern "C" void *beNDMWMdlMapBase_Register(void);
 extern "C" void beNDMWMdlMapBase_GetMetaObject(void);
-extern "C" void beNDMWMdlItem_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlItem_GetOrCreateMetaObject(void);
 extern "C" int beNDMWMdlItem_GetVTable(void);
 extern "C" void beNDMWMdlItem_EnsureRegistered(void);
 extern "C" void *beNDMWMdlItem_Register(void);
 extern "C" void beNDMWMdlItem_GetMetaObject(void);
 extern "C" void beNDMWMdlItem_InitFields(void);
-extern "C" void beNDMWMdlItemInfoWork_Create(int allocator);
 extern "C" int beNDMWMdlItemInfoWork_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWItemBase_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWItemBase_Construct(igSmartPointer<igObject> *self);
@@ -848,26 +904,22 @@ extern "C" void beNDMWMdlItemInfoWork_EnsureRegistered(void);
 extern "C" void *beNDMWMdlItemInfoWork_Register(void);
 extern "C" void beNDMWMdlItemInfoWork_GetMetaObject(void);
 extern "C" void beNDMWMdlItemInfoWork_InitFields(void);
-extern "C" void beNDMWMdlEnemy_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlEnemy_GetOrCreateMetaObject(void);
 extern "C" int beNDMWMdlEnemy_GetVTable(void);
 extern "C" void beNDMWMdlEnemy_EnsureRegistered(void);
 extern "C" void *beNDMWMdlEnemy_Register(void);
 extern "C" void beNDMWMdlEnemy_GetMetaObject(void);
-extern "C" void beNDMWMdlEnemyInfoWork_Create(int allocator);
 extern "C" void *beNDMWMdlEnemyInfoWork_GetReadyMetaObject(void);
 extern "C" int beNDMWMdlEnemyInfoWork_GetVTable(void);
 extern "C" void beNDMWMdlEnemyInfoWork_EnsureRegistered(void);
 extern "C" void *beNDMWMdlEnemyInfoWork_Register(void);
 extern "C" void beNDMWMdlEnemyInfoWork_GetMetaObject(void);
-extern "C" void beNDMWMdlEffect_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlEffect_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMdlEffect_GetReadyMetaObject(void);
 extern "C" int beNDMWMdlEffect_GetVTable(void);
 extern "C" void beNDMWMdlEffect_EnsureRegistered(void);
 extern "C" void *beNDMWMdlEffect_Register(void);
 extern "C" void beNDMWMdlEffect_GetMetaObject(void);
-extern "C" void beNDMWMdlEBullet_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWMdlEBullet_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMdlEBullet_GetReadyMetaObject(void);
 extern "C" int beNDMWMdlEBullet_GetVTable(void);
@@ -879,15 +931,12 @@ extern "C" int beNDMWLogoInfo_GetVTable(void);
 extern "C" void beNDMWLogoInfo_EnsureRegistered(void);
 extern "C" void *beNDMWLogoInfo_Register(void);
 extern "C" void beNDMWLogoInfo_GetMetaObject(void);
-extern "C" void beNDMWLogoCtrlData_Create(int allocator);
 extern "C" void *beNDMWLogoCtrlData_GetReadyMetaObject(void);
 extern "C" int beNDMWLogoCtrlData_GetVTable(void);
 extern "C" void beNDMWLogoCtrlData_EnsureRegistered(void);
 extern "C" void *beNDMWLogoCtrlData_Register(void);
 extern "C" void beNDMWLogoCtrlData_GetMetaObject(void);
 extern "C" void beNDMWLogoCtrlData_InitFields(void);
-extern "C" igMetaEnum *beNDMWLogoCtrlData_GetMessageEnum(void);
-extern "C" void beNDMWLogo_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWLogo_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWLogo_GetReadyMetaObject(void);
 extern "C" int beNDMWLogo_GetVTable(void);
@@ -900,7 +949,6 @@ extern "C" int beNDMWLoadIntf2Info_GetVTable(void);
 extern "C" void beNDMWLoadIntf2Info_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2Info_Register(void);
 extern "C" void beNDMWLoadIntf2Info_GetMetaObject(void);
-extern "C" void beNDMWLoadIntf2NameSel_Create(int allocator);
 extern "C" void *beNDMWLoadIntf2NameSel_GetReadyMetaObject(void);
 extern "C" int beNDMWLoadIntf2NameSel_GetVTable(void);
 extern "C" void beNDMWLoadIntf2NameSel_EnsureRegistered(void);
@@ -912,25 +960,21 @@ extern "C" void beNDMWLoadIntf2ChrDataSel_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2ChrDataSel_Register(void);
 extern "C" void beNDMWLoadIntf2ChrDataSel_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2ChrDataSel_InitFields(void);
-extern "C" void beNDMWLoadIntf2SelSlot_Create(int allocator);
 extern "C" int beNDMWLoadIntf2SelSlot_GetVTable(void);
 extern "C" void beNDMWLoadIntf2SelSlot_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2SelSlot_Register(void);
 extern "C" void beNDMWLoadIntf2SelSlot_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2SelSlot_InitFields(void);
-extern "C" void beNDMWLoadIntf2Diffselect_Create(int allocator);
 extern "C" int beNDMWLoadIntf2Diffselect_GetVTable(void);
 extern "C" void beNDMWLoadIntf2Diffselect_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2Diffselect_Register(void);
 extern "C" void beNDMWLoadIntf2Diffselect_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2Diffselect_InitFields(void);
-extern "C" void beNDMWLoadIntf2DataSelIntf_Create(int allocator);
 extern "C" int beNDMWLoadIntf2DataSelIntf_GetVTable(void);
 extern "C" void beNDMWLoadIntf2DataSelIntf_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2DataSelIntf_Register(void);
 extern "C" void beNDMWLoadIntf2DataSelIntf_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2DataSelIntf_InitFields(void);
-extern "C" void beNDMWLoadIntf2DegiStateCtrl_Create(int allocator);
 extern "C" igMetaObject *beNDMWLoadIntf2DegiStateCtrl_GetOrCreateMetaObject(void);
 extern "C" int beNDMWLoadIntf2DegiStateCtrl_GetVTable(void);
 extern "C" void beNDMWLoadIntf2DegiStateCtrl_EnsureRegistered(void);
@@ -942,28 +986,23 @@ extern "C" int beNDMWLoadIntf2DegiStateList_GetVTable(void);
 extern "C" void beNDMWLoadIntf2DegiStateList_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2DegiStateList_Register(void);
 extern "C" void beNDMWLoadIntf2DegiStateList_GetMetaObject(void);
-extern "C" void beNDMWLoadIntf2DegiState_Create(int allocator);
 extern "C" void *beNDMWLoadIntf2DegiState_ResolveMetaObject(void);
 extern "C" int beNDMWLoadIntf2DegiState_GetVTable(void);
 extern "C" void beNDMWLoadIntf2DegiState_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2DegiState_Register(void);
 extern "C" void beNDMWLoadIntf2DegiState_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2DegiState_InitFields(void);
-extern "C" void beNDMWLoadIntf2MakeChr_Create(int allocator);
 extern "C" int beNDMWLoadIntf2MakeChr_GetVTable(void);
 extern "C" void beNDMWLoadIntf2MakeChr_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2MakeChr_Register(void);
 extern "C" void beNDMWLoadIntf2MakeChr_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2MakeChr_InitFields(void);
-extern "C" void beNDMWLoadIntf2CtrlData_Create(int allocator);
 extern "C" void *beNDMWLoadIntf2CtrlData_ResolveMetaObject(void);
 extern "C" int beNDMWLoadIntf2CtrlData_GetVTable(void);
 extern "C" void beNDMWLoadIntf2CtrlData_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2CtrlData_Register(void);
 extern "C" void beNDMWLoadIntf2CtrlData_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2CtrlData_InitFields(void);
-extern "C" igMetaEnum *LoadIntf2Message_GetMetaEnum(void);
-extern "C" void beNDMWLoadIntf2_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWLoadIntf2_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWLoadIntf2_ResolveMetaObject(void);
 extern "C" int beNDMWLoadIntf2_GetVTable(void);
@@ -976,7 +1015,6 @@ extern "C" void beNDMWLoadCtrl2Info_EnsureRegistered(void);
 extern "C" void *beNDMWLoadCtrl2Info_Register(void);
 extern "C" void beNDMWLoadCtrl2Info_GetMetaObject(void);
 extern "C" void beNDMWLoadCtrl2Info_InitFields(void);
-extern "C" void beNDMWLoadCtrl2CommonIntf_Create(int allocator);
 extern "C" igMetaObject *beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject(void);
 extern "C" int beNDMWLoadCtrl2CommonIntf_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWDegiDataList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
@@ -986,7 +1024,6 @@ extern "C" void *beNDMWLoadCtrl2CommonIntf_Register(void);
 extern "C" void beNDMWLoadCtrl2CommonIntf_GetMetaObject(void);
 extern "C" int beBaseInfoRam_GetOrCreateMetaObject(...);
 extern "C" void beNDMWLoadCtrl2CommonIntf_InitFields(void);
-extern "C" void beNDMWMcUtilCtrl_Create(int allocator);
 extern "C" igMetaObject *beNDMWMcUtilCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWMcUtilCtrl_ResolveMetaObject(void);
 extern "C" int beNDMWMcUtilCtrl_GetVTable(void);
@@ -1001,7 +1038,6 @@ extern "C" int beNDMWLoadSavePlWorkList_GetVTable(void);
 extern "C" void beNDMWLoadSavePlWorkList_EnsureRegistered(void);
 extern "C" void *beNDMWLoadSavePlWorkList_Register(void);
 extern "C" void beNDMWLoadSavePlWorkList_GetMetaObject(void);
-extern "C" void beNDMWLoadSavePlWork_Create(int allocator);
 extern "C" void *beNDMWLoadSavePlWork_ResolveMetaObject(void);
 extern "C" int beNDMWLoadSavePlWork_GetVTable(void);
 extern "C" void beNDMWLoadSavePlWork_EnsureRegistered(void);
@@ -1014,20 +1050,17 @@ extern "C" int beNDMWMcSlotList_GetVTable(void);
 extern "C" void beNDMWMcSlotList_EnsureRegistered(void);
 extern "C" void *beNDMWMcSlotList_Register(void);
 extern "C" void beNDMWMcSlotList_GetMetaObject(void);
-extern "C" void beNDMWMcSlotXbox_Create(int allocator);
 extern "C" int beNDMWMcSlotXbox_GetVTable(void);
 extern "C" void beNDMWMcSlotXbox_EnsureRegistered(void);
 extern "C" void *beNDMWMcSlotXbox_Register(void);
 extern "C" void beNDMWMcSlotXbox_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWMcSlot_GetPublishedMetaObject(void);
 extern "C" void beNDMWMcSlotXbox_InitFields(void);
-extern "C" void beNDMWMcSlotGC_Create(int allocator);
 extern "C" int beNDMWMcSlotGC_GetVTable(void);
 extern "C" void beNDMWMcSlotGC_EnsureRegistered(void);
 extern "C" void *beNDMWMcSlotGC_Register(void);
 extern "C" void beNDMWMcSlotGC_GetMetaObject(void);
 extern "C" void beNDMWMcSlotGC_InitFields(void);
-extern "C" void beNDMWMcSlotPS2_Create(int allocator);
 extern "C" int beNDMWMcSlotPS2_GetVTable(void);
 extern "C" void beNDMWMcSlotPS2_EnsureRegistered(void);
 extern "C" void *beNDMWMcSlotPS2_Register(void);
@@ -1043,7 +1076,6 @@ extern "C" int beNDMWLoadSlotPlayerList_GetVTable(void);
 extern "C" void beNDMWLoadSlotPlayerList_EnsureRegistered(void);
 extern "C" void *beNDMWLoadSlotPlayerList_Register(void);
 extern "C" void beNDMWLoadSlotPlayerList_GetMetaObject(void);
-extern "C" void beNDMWLoadSlotPlayer_Create(int allocator);
 extern "C" igMetaObject *beNDMWLoadSlotPlayer_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWLoadSlotPlayer_GetReadyMetaObject(void);
 extern "C" int beNDMWLoadSlotPlayer_GetVTable(void);
@@ -1057,7 +1089,6 @@ extern "C" int beNDMWDegiDataList_GetVTable(void);
 extern "C" void beNDMWDegiDataList_EnsureRegistered(void);
 extern "C" void *beNDMWDegiDataList_Register(void);
 extern "C" void beNDMWDegiDataList_GetMetaObject(void);
-extern "C" void beNDMWDegiData_Create(int allocator);
 extern "C" void *beNDMWDegiData_GetReadyMetaObject(void);
 extern "C" int beNDMWDegiData_GetVTable(void);
 extern "C" void beNDMWDegiData_RunStaticInit(void);
@@ -1065,7 +1096,6 @@ extern "C" void *beNDMWDegiData_Register(void);
 extern "C" void beNDMWDegiData_GetMetaObject(void);
 extern "C" int igCharMetaField_GetDefaultDescriptor(void);
 extern "C" void beNDMWDegiData_InitFields(void);
-extern "C" void beNDMWLoadIntf2MesWin_Create(int allocator);
 extern "C" igMetaObject *beNDMWLoadIntf2MesWin_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWLoadIntf2MesWin_GetReadyMetaObject(void);
 extern "C" int beNDMWLoadIntf2MesWin_GetVTable(void);
@@ -1073,7 +1103,6 @@ extern "C" void beNDMWLoadIntf2MesWin_EnsureRegistered(void);
 extern "C" void *beNDMWLoadIntf2MesWin_Register(void);
 extern "C" void beNDMWLoadIntf2MesWin_GetMetaObject(void);
 extern "C" void beNDMWLoadIntf2MesWin_InitFields(void);
-extern "C" void beNDMWLoadIntf2ComMdlCtrl_Create(int allocator);
 extern "C" igMetaObject *beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWLoadIntf2ComMdlCtrl_GetReadyMetaObject(void);
 extern "C" int beNDMWLoadIntf2ComMdlCtrl_GetVTable(void);
@@ -1087,14 +1116,12 @@ extern "C" int beLoadIntf2ComMdlDataList_GetVTable(void);
 extern "C" void beLoadIntf2ComMdlDataList_EnsureRegistered(void);
 extern "C" void *beLoadIntf2ComMdlDataList_Register(void);
 extern "C" void beLoadIntf2ComMdlDataList_GetMetaObject(void);
-extern "C" void beLoadIntf2ComMdlData__Create(int allocator);
 extern "C" void *beLoadIntf2ComMdlData_GetReadyMetaObject(void);
 extern "C" int beLoadIntf2ComMdlData_GetVTable(void);
 extern "C" void beLoadIntf2ComMdlData_EnsureRegistered(void);
 extern "C" void *beLoadIntf2ComMdlData_Register(void);
 extern "C" void beLoadIntf2ComMdlData_GetMetaObject(void);
 extern "C" void beLoadIntf2ComMdlData_InitFields(void);
-extern "C" void beNDMWLoadIntf2TextOrder_Create(int allocator);
 extern "C" igMetaObject *beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWLoadIntf2TextOrder_GetReadyMetaObject(void);
 extern "C" int beNDMWLoadIntf2TextOrder_GetVTable(void);
@@ -1103,40 +1130,33 @@ extern "C" void *beNDMWLoadIntf2TextOrder_Register(void);
 extern "C" void beNDMWLoadIntf2TextOrder_GetMetaObject(void);
 extern "C" int beLua_GetOrCreateMetaObject(...);
 extern "C" void beNDMWLoadIntf2TextOrder_InitFields(void);
-extern "C" void beNDMWLoadCtrl2CtrlData_Create(int allocator);
 extern "C" void *beNDMWLoadCtrl2CtrlData_GetReadyMetaObject(void);
 extern "C" int beNDMWLoadCtrl2CtrlData_GetVTable(void);
 extern "C" void beNDMWLoadCtrl2CtrlData_EnsureRegistered(void);
 extern "C" void *beNDMWLoadCtrl2CtrlData_Register(void);
 extern "C" void beNDMWLoadCtrl2CtrlData_GetMetaObject(void);
 extern "C" void beNDMWLoadCtrl2CtrlData_InitFields(void);
-extern "C" igMetaEnum *LoadCtrl2Message_GetMetaEnum(void);
-extern "C" void beNDMWLoadCtrl2_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWLoadCtrl2_GetOrCreateMetaObject(void);
 extern "C" int beNDMWLoadCtrl2_GetVTable(void);
 extern "C" void beNDMWLoadCtrl2_EnsureRegistered(void);
 extern "C" void *beNDMWLoadCtrl2_Register(void);
 extern "C" void beNDMWLoadCtrl2_GetMetaObject(void);
 extern "C" void beNDMWLoadCtrl2_InitFields(void);
-extern "C" void beNDMWItemWaza_Create(int allocator);
 extern "C" int beNDMWItemWaza_GetVTable(void);
 extern "C" void beNDMWItemWaza_EnsureRegistered(void);
 extern "C" void *beNDMWItemWaza_Register(void);
 extern "C" void beNDMWItemWaza_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWItemBase_GetPublishedMetaObject(void);
 extern "C" void beNDMWItemWaza_InitFields(void);
-extern "C" void beNDMWItemImportant_Create(int allocator);
 extern "C" int beNDMWItemImportant_GetVTable(void);
 extern "C" void beNDMWItemImportant_EnsureRegistered(void);
 extern "C" void *beNDMWItemImportant_Register(void);
 extern "C" void beNDMWItemImportant_GetMetaObject(void);
-extern "C" void beNDMWItemInstant_Create(int allocator);
 extern "C" int beNDMWItemInstant_GetVTable(void);
 extern "C" void beNDMWItemInstant_EnsureRegistered(void);
 extern "C" void *beNDMWItemInstant_Register(void);
 extern "C" void beNDMWItemInstant_GetMetaObject(void);
 extern "C" void beNDMWItemInstant_InitFields(void);
-extern "C" void beNDMWItemDisk_Create(int allocator);
 extern "C" igMetaObject *beNDMWItemDisk_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWItemDisk_GetReadyMetaObject(void);
 extern "C" int beNDMWItemDisk_GetVTable(void);
@@ -1144,27 +1164,23 @@ extern "C" void beNDMWItemDisk_EnsureRegistered(void);
 extern "C" void *beNDMWItemDisk_Register(void);
 extern "C" void beNDMWItemDisk_GetMetaObject(void);
 extern "C" void beNDMWItemDisk_InitFields(void);
-extern "C" void beNDMWItemAbilityChip_Create(int allocator);
 extern "C" void *beNDMWItemAbilityChip_GetReadyMetaObject(void);
 extern "C" int beNDMWItemAbilityChip_GetVTable(void);
 extern "C" void beNDMWItemAbilityChip_EnsureRegistered(void);
 extern "C" void *beNDMWItemAbilityChip_Register(void);
 extern "C" void beNDMWItemAbilityChip_GetMetaObject(void);
-extern "C" void beNDMWItemYellowArmor_Create(int allocator);
 extern "C" void *beNDMWItemYellowArmor_GetReadyMetaObject(void);
 extern "C" int beNDMWItemYellowArmor_GetVTable(void);
 extern "C" void beNDMWItemYellowArmor_EnsureRegistered(void);
 extern "C" void *beNDMWItemYellowArmor_Register(void);
 extern "C" void beNDMWItemYellowArmor_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWItemRevisionBase_GetPublishedMetaObject(void);
-extern "C" void beNDMWItemBlueArmor_Create(int allocator);
 extern "C" void *beNDMWItemBlueArmor_GetReadyMetaObject(void);
 extern "C" int beNDMWItemBlueArmor_GetVTable(void);
 extern "C" void beNDMWItemBlueArmor_EnsureRegistered(void);
 extern "C" void *beNDMWItemBlueArmor_Register(void);
 extern "C" void beNDMWItemBlueArmor_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWItemRevisionPocketBase_GetPublishedMetaObject(void);
-extern "C" void beNDMWItemWeapon_Create(int allocator);
 extern "C" void *beNDMWItemWeapon_GetReadyMetaObject(void);
 extern "C" int beNDMWItemWeapon_GetVTable(void);
 extern "C" void beNDMWItemWeapon_EnsureRegistered(void);
@@ -1180,7 +1196,6 @@ extern "C" void beNDMWItemRevisionBase_EnsureRegistered(void);
 extern "C" void *beNDMWItemRevisionBase_Register(void);
 extern "C" void beNDMWItemRevisionBase_GetMetaObject(void);
 extern "C" void beNDMWItemRevisionBase_InitFields(void);
-extern "C" void beNDMWItemBaseList_Create(int allocator);
 extern "C" igMetaObject *beNDMWItemBaseList_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWItemBaseList_GetReadyMetaObject(void);
 extern "C" int beNDMWItemBaseList_GetVTable(void);
@@ -1206,13 +1221,11 @@ extern "C" int beNDMWShinkaObjectList_GetVTable(void);
 extern "C" void beNDMWShinkaObjectList_EnsureRegistered(void);
 extern "C" void *beNDMWShinkaObjectList_Register(void);
 extern "C" void beNDMWShinkaObjectList_GetMetaObject(void);
-extern "C" void beNDMWShinkaObject_CreateInstance(int allocator);
 extern "C" int beNDMWShinkaObject_GetVTable(void);
 extern "C" void beNDMWShinkaObject_EnsureRegistered(void);
 extern "C" void *beNDMWShinkaObject_Register(void);
 extern "C" void beNDMWShinkaObject_GetMetaObject(void);
 extern "C" void beNDMWShinkaObject_InitFields(void);
-extern "C" void beNDMWGameRam_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWGameRam_GetOrCreateMetaObject(void);
 extern "C" int igSmartPointer_beDataBase_Destruct(int *, int);
 extern "C" int beNDMWGameRam_GetVTable(void);
@@ -1222,12 +1235,10 @@ extern "C" void *beNDMWGameRam_Register(void);
 extern "C" void beNDMWGameRam_GetMetaObject(void);
 extern "C" int beDataObjListList_GetOrCreateMetaObject(void);
 extern "C" void beNDMWGameRam_InitFields(void);
-extern "C" void beNDMWGameRamInfoRam_Create(int allocator);
 extern "C" int beNDMWGameRamInfoRam_GetVTable(void);
 extern "C" void beNDMWGameRamInfoRam_EnsureRegistered(void);
 extern "C" void *beNDMWGameRamInfoRam_Register(void);
 extern "C" void beNDMWGameRamInfoRam_GetMetaObject(void);
-extern "C" void beNDMWGameRamInfo_Create(int allocator);
 extern "C" void *beNDMWGameRamInfo_ResolveMetaObject(void);
 extern "C" int beNDMWGameRamInfo_GetVTable(void);
 extern "C" void beNDMWGameRamInfo_EnsureRegistered(void);
@@ -1263,7 +1274,6 @@ extern "C" void beNDMWAfsStageLoad_GetMetaObject(void);
 extern "C" int igAction_GetPublishedMetaObject(void);
 extern "C" int igNamedObject_GetOrCreateMetaObject(void);
 extern "C" void beNDMWAfsStageLoad_InitFields(void);
-extern "C" void beNDMWAfsSetup_CreateInstance(int allocator);
 extern "C" igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWAfsSetup_ResolveMetaObject(void);
 extern "C" int igSmartPointer_igInfoList_Destruct(void *, int);
@@ -1375,7 +1385,6 @@ extern "C" igMetaObject *beNDMWTitle2Option_GetMeta(void);
 extern "C" igMetaObject *beNDMWTitle2Info_GetMeta(void);
 extern "C" igMetaObject *beNDMWWindowList_GetMeta(void);
 extern "C" igMetaObject *beNDMWWindowList_GetElementMeta(void);
-extern "C" igMetaObject *g_libNdmwRuntimePlugin_metaObject;
 extern "C" igMetaObject *libNdmwRuntimePlugin_GetMetaObject(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWPanelWaza_Destruct(igSmartPointer<igObject> *self,int delete_storage);
@@ -1400,7 +1409,6 @@ extern "C" igMetaObject_3b1ce0 * igObjectList_GetPublishedMetaObject(...);
 extern "C" igMetaObject *g_beNDMWWindow_metaObject;
 struct igMetaObject_3b1e90;
 extern "C" igMetaObject_3b1e90 * igObject_GetMetaObject_ParentAccessor(...);
-extern "C" igMetaObject *g_beNDMWTitle2Info_metaObject;
 extern "C" int g_beNDMWTitle2Info_vtable[4];
 struct igMetaObject_3b21c0;
 extern "C" igMetaObject_3b21c0 * beBaseInfo_GetPublishedMetaObject(...);
@@ -1411,69 +1419,44 @@ struct igMetaObject_3b2390;
 extern "C" igMetaObject_3b2390 * beBaseInfoData_GetPublishedMetaObject(...);
 extern "C" igMetaObject *g_beNDMWTitle2CtrlData_metaObject;
 extern "C" int g_beNDMWTitle2CtrlData_vtable[4];
-extern "C" igMetaObject *g_beNDMWTitle2_metaObject;
 extern "C" int g_beNDMWTitle2_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWMcUtilCtrl_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 struct igMetaObject_3b2ab0;
 extern "C" igMetaObject_3b2ab0 * beBaseInfoManager_GetPublishedMetaObject(...);
-extern "C" igMetaObject *g_beNDMWShopTitle03_metaObject;
 extern "C" int g_beNDMWShopTitle03_vtable[4];
 extern "C" int g_beNDMWWindow_vtable[4];
 extern "C" void *beNDMWWindow_Destroy(beNDMWWindowCtrl *self, short flags);
 extern "C" int g_beNDMWWindowTitle_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopTitle01_metaObject;
 extern "C" int g_beNDMWShopTitle01_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopTitle00_metaObject;
 extern "C" int g_beNDMWShopTitle00_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusTitle04_metaObject;
 extern "C" int g_beNDMWStatusTitle04_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusTitle03_metaObject;
 extern "C" int g_beNDMWStatusTitle03_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusTitle02_metaObject;
 extern "C" igMetaObject *beNDMWStatusTitle02_GetMetaObject(void);
 extern "C" int g_beNDMWStatusTitle02_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusTitle01_metaObject;
 extern "C" igMetaObject *beNDMWStatusTitle01_GetMetaObject(void);
 extern "C" int g_beNDMWStatusTitle01_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusTitle00_metaObject;
 extern "C" igMetaObject *beNDMWStatusTitle00_GetMetaObject(void);
 extern "C" int g_beNDMWStatusTitle00_vtable[4];
-extern "C" igMetaObject *g_beNDMWWindowTitle_metaObject;
 extern "C" igMetaObject *beNDMWWindowTitle_GetMetaObject(void);
-extern "C" igMetaObject *g_beNDMWShopSelectB0_metaObject;
 extern "C" int g_beNDMWShopSelectB0_vtable[4];
 extern "C" int g_beNDMWWindowSelect_vtable[4];
 extern "C" void *beNDMWWindowSelect_Destroy(beNDMWWindowSelect *self, short flags);
-extern "C" igMetaObject *g_beNDMWShopSelectA0_metaObject;
 extern "C" int g_beNDMWShopSelectA0_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopSelect52_metaObject;
 extern "C" int g_beNDMWShopSelect52_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopSelect34_metaObject;
 extern "C" int g_beNDMWShopSelect34_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopSelect11_metaObject;
 extern "C" int g_beNDMWShopSelect11_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopSelect03_metaObject;
 extern "C" int g_beNDMWShopSelect03_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopSelect02_metaObject;
 extern "C" int g_beNDMWShopSelect02_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopSelect01_metaObject;
 extern "C" int g_beNDMWShopSelect01_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopSelect00_metaObject;
 extern "C" int g_beNDMWShopSelect00_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusSelectE1_metaObject;
 extern "C" int g_beNDMWStatusSelectE1_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusSelectE0_metaObject;
 extern "C" igMetaObject *beNDMWStatusSelectE0_GetMetaObject(void);
 extern "C" int g_beNDMWStatusSelectE0_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusSelect01_metaObject;
 extern "C" igMetaObject *beNDMWStatusSelect01_GetMetaObject(void);
 extern "C" int g_beNDMWStatusSelect01_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusSelect00_metaObject;
 extern "C" igMetaObject *beNDMWStatusSelect00_GetMetaObject(void);
 extern "C" int g_beNDMWStatusSelect00_vtable[4];
-extern "C" igMetaObject *g_beNDMWWindowSelect_metaObject;
 extern "C" igMetaObject *beNDMWWindowSelect_GetMetaObject(void);
-extern "C" igMetaObject *g_beNDMWStatusInfo_metaObject;
 extern "C" int g_beNDMWStatusInfo_vtable[4];
 extern "C" igMetaObject *g_beNDMWStatusInfoRam_metaObject;
 extern "C" int g_beBaseInfoRam_vtable[4];
@@ -1483,7 +1466,6 @@ struct igMetaObject_3b5d90;
 extern "C" igMetaObject_3b5d90 * beBaseInfoRam_GetPublishedMetaObject(...);
 extern "C" igMetaObject *g_beNDMWStatusInfoWork_metaObject;
 extern "C" int g_beNDMWStatusInfoWork_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopJunk_metaObject;
 extern "C" int g_beNDMWShopJunk_vtable[4];
 extern "C" int g_beNDMWWindowCtrl_vtable[4];
 extern "C" int g_beNDMWWindow_vtable[4];
@@ -1493,101 +1475,65 @@ extern "C" beNDMWWindowCtrl *beNDMWWindowCtrl_Destroy(beNDMWWindowCtrl *self, lo
  * registered lazily and the instance comes from igMetaObject_CreateInstance, not a C++
  * constructor. */
 
-extern "C" igMetaObject *g_beNDMWShopCtrl00_metaObject;
 extern "C" igMetaObject *g_beNDMWWindowCtrl_metaObject;
 extern "C" igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject();
 extern "C" igMetaObject *beNDMWShopCtrl00_ResolveMetaObject();
 extern "C" igMetaObject *beNDMWShopCtrl00_GetMetaObject();
-extern "C" igMetaObject *g_beNDMWShopDevice_metaObject;
 extern "C" int g_beNDMWShopDevice_vtable[4];
 extern "C" int g_beNDMWWindowCtrl_vtable[4];
 extern "C" int g_beNDMWListCtrl_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlXdataChip_metaObject;
 extern "C" int g_beNDMWShopCtrlXdataChip_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlSales_metaObject;
 extern "C" int g_beNDMWShopCtrlSales_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlDiskSell_metaObject;
 extern "C" int g_beNDMWShopCtrlDiskSell_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlDeviceSell_metaObject;
 extern "C" int g_beNDMWShopCtrlDeviceSell_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlSell_metaObject;
 extern "C" int g_beNDMWShopCtrlSell_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlEditBit_metaObject;
 extern "C" igMetaObject *beNDMWShopCtrlEditBit_GetMetaObject(void);
 extern "C" int g_beNDMWShopCtrlEditBit_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlDigilabo_metaObject;
 extern "C" igMetaObject *beNDMWShopCtrlDigilabo_GetMetaObject(void);
 extern "C" int g_beNDMWShopCtrlDigilabo_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlA2_metaObject;
 extern "C" igMetaObject *beNDMWShopCtrlA2_GetMetaObject(void);
 extern "C" int g_beNDMWShopCtrlA2_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlA1_metaObject;
 extern "C" igMetaObject *beNDMWShopCtrlA1_GetMetaObject(void);
 extern "C" int g_beNDMWShopCtrlA1_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlA0_metaObject;
 extern "C" int g_beNDMWShopCtrlA0_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWStatusTitle03_Destruct(igSmartPointer<igObject> *self,int delete_storage);
-extern "C" igMetaObject *g_beNDMWShopCtrl50_metaObject;
 extern "C" int g_beNDMWShopCtrl50_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrl40_metaObject;
 extern "C" int g_beNDMWShopCtrl40_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrl30_metaObject;
 extern "C" int g_beNDMWShopCtrl30_vtable[4];
-extern "C" igMetaObject *g_beNDMWShopCtrlEvolve_metaObject;
 extern "C" int g_beNDMWShopCtrlEvolve_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWShinkaCtrl_Destruct(igSmartPointer<igObject> *self,int delete_storage);
-extern "C" igMetaObject *g_beNDMWShopCtrl10_metaObject;
 extern "C" int g_beNDMWShopCtrl10_vtable[4];
 extern "C" int g_beNDMWShopCtrl00_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusSubMenu_metaObject;
 extern "C" int g_beNDMWStatusSubMenu_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrlSkill_metaObject;
 extern "C" int g_beNDMWStatusCtrlSkill_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrlSendBit_metaObject;
 extern "C" int g_beNDMWStatusCtrlSendBit_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrlBit_metaObject;
 extern "C" int g_beNDMWStatusCtrlBit_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrlDisk_metaObject;
 extern "C" igMetaObject *beNDMWStatusCtrlDisk_GetMetaObject(void);
 extern "C" int g_beNDMWStatusCtrlDisk_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWItemDisk_Destruct(igSmartPointer<igObject> *self,int delete_storage);
-extern "C" igMetaObject *g_beNDMWStatusCtrlFlag_metaObject;
 extern "C" igMetaObject *beNDMWStatusCtrlFlag_GetMetaObject(void);
 extern "C" int g_beNDMWStatusCtrlFlag_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrlFolder_metaObject;
 extern "C" igMetaObject *beNDMWStatusCtrlFolder_GetMetaObject(void);
 extern "C" int g_beNDMWStatusCtrlFolder_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusSubSlot_metaObject;
 extern "C" igMetaObject *beNDMWStatusSubSlot_GetMetaObject(void);
 extern "C" int g_beNDMWStatusSubSlot_vtable[4];
 extern "C" int g_beNDMWStatusCtrlBaseEquip_vtable[4];
 extern "C" void *beNDMWStatusCtrlBaseEquip_Destroy(beNDMWStatusCtrlBaseEquip *self, short flags);
 extern "C" int g_beNDMWStatusCtrlBaseEquip_vtable[4];
 extern "C" void *beNDMWStatusCtrlBaseEquip_Construct(beNDMWStatusCtrlBaseEquip *self);
-extern "C" igMetaObject *g_beNDMWStatusMainSlot_metaObject;
 extern "C" int g_beNDMWStatusMainSlot_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusPowerSocket_metaObject;
 extern "C" int g_beNDMWStatusPowerSocket_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrlBaseEquip_metaObject;
-extern "C" igMetaObject *g_beNDMWStatusCtrlEquip_metaObject;
 extern "C" int g_beNDMWStatusCtrlEquip_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrlD0_metaObject;
 extern "C" int g_beNDMWStatusCtrlD0_vtable[4];
-extern "C" igMetaObject *g_beNDMWStatusCtrl00_metaObject;
 extern "C" int g_beNDMWStatusCtrl00_vtable[4];
-extern "C" igMetaObject *g_beNDMWListCtrl_metaObject;
-extern "C" igMetaObject *g_beNDMWStatus_metaObject;
 extern "C" int g_beNDMWStatus_vtable[4];
 extern "C" igMetaObject *g_beNDMWStageCtlInfoRam_metaObject;
 extern "C" int g_beNDMWStageCtlInfoRam_vtable[4];
-extern "C" igMetaObject *g_beNDMWStageCtlInfo_metaObject;
 extern "C" igMetaObject *beNDMWStageCtlInfo_GetMetaObject(void);
 extern "C" int g_beNDMWStageCtlInfo_vtable[4];
-extern "C" igMetaObject *g_beNDMWStageCtl_metaObject;
 extern "C" igMetaObject *beNDMWStageCtl_GetMetaObject(void);
 extern "C" int g_beNDMWStageCtl_vtable[4];
 extern "C" int g_beBaseInfoManager_vtable[4];
-extern "C" igMetaObject *g_beNDMWSaveIntfInfo_metaObject;
 extern "C" igMetaObject *beNDMWSaveIntfInfo_GetMetaObject(void);
 extern "C" int g_beNDMWSaveIntfInfo_vtable[4];
 extern "C" igMetaObject *g_beNDMWSaveIntfComMdlCtrl_metaObject;
@@ -1600,15 +1546,11 @@ extern "C" igMetaObject *g_beSaveIntfComMdlData_metaObject;
 extern "C" int g_beSaveIntfComMdlData_vtable[4];
 extern "C" igMetaObject *g_beNDMWSaveIntfCtrlData_metaObject;
 extern "C" int g_beNDMWSaveIntfCtrlData_vtable[4];
-extern "C" igMetaObject *g_beNDMWSaveIntf_metaObject;
 extern "C" int g_beNDMWSaveIntf_vtable[4];
-extern "C" igMetaObject *g_beNDMWSaveCtrlInfo_metaObject;
 extern "C" int g_beNDMWSaveCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beNDMWSaveCtrlCtrlData_metaObject;
 extern "C" int g_beNDMWSaveCtrlCtrlData_vtable[4];
-extern "C" igMetaObject *g_beNDMWSaveCtrl_metaObject;
 extern "C" int g_beNDMWSaveCtrl_vtable[4];
-extern "C" igMetaObject *g_beNDMWPanelWazaInfo_metaObject;
 extern "C" int g_beNDMWPanelWazaInfo_vtable[4];
 extern "C" igMetaObject *g_beNDMWPanelWazaInfoRam_metaObject;
 typedef struct WazaInfoRamRefHeader { char pad4[4]; int f4; } WazaInfoRamRefHeader;
@@ -1619,22 +1561,17 @@ extern "C" igMetaObject *beNDMWPanelWazaInfoWork_ResolveMetaObject(void);
 extern "C" int g_beNDMWPanelWazaInfoWork_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWPanelObjectWaza_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct(igSmartPointer<igObject> *self,int delete_storage);
-extern "C" igMetaObject *g_beNDMWPanelObjectStat_metaObject;
 extern "C" igMetaObject *beNDMWPanelObjectStat_ResolveMetaObject(void);
 extern "C" int g_beNDMWPanelObjectStat_vtable[4];
 extern "C" int g_beNDMWPanelObject_vtable[4];
 extern "C" beNDMWPanelObject *beNDMWPanelObject_Destroy(beNDMWPanelObject *self, short flags);
 extern "C" igMetaObject *g_beNDMWPanelObject_metaObject;
-extern "C" igMetaObject *g_beNDMWPanelObjectItem_metaObject;
 extern "C" igMetaObject *beNDMWPanelObjectItem_ResolveMetaObject(void);
 extern "C" int g_beNDMWPanelObjectItem_vtable[4];
-extern "C" igMetaObject *g_beNDMWPanelObjectWaza_metaObject;
 extern "C" igMetaObject *beNDMWPanelObjectWaza_ResolveMetaObject(void);
 extern "C" int g_beNDMWPanelObjectWaza_vtable[4];
 extern "C" igMetaObject *beNDMWPanelObject_ResolveMetaObject(void);
-extern "C" igMetaObject *g_beNDMWPanelWaza_metaObject;
 extern "C" int g_beNDMWPanelWaza_vtable[4];
-extern "C" igMetaObject *g_beNDMWMdlPlayer2_metaObject;
 extern "C" int g_beNDMWMdlPlayer2_vtable[4];
 extern "C" int g_igInfoManager_vtable[4];
 extern "C" int g_beModelCtrl_vtable[4];
@@ -1646,7 +1583,6 @@ extern "C" int g_beNDMWMdlPlayer2InfoWork_vtable[4];
 extern "C" int g_beModelCtrlInfoWork_vtable[4];
 extern "C" void *beModelCtrlInfoWork_Construct(beModelCtrlInfoWork *self);
 extern "C" int g_beModelCtrlInfoWork_metaObject[4];
-extern "C" igMetaObject *g_beNDMWMdlPlayer_metaObject;
 extern "C" int g_beNDMWMdlPlayer_vtable[4];
 extern "C" int g_beNDMWMdlPEBase_vtable[4];
 extern "C" beNDMWMdlPEBase *beNDMWMdlPEBase_Destroy(beNDMWMdlPEBase *self, short flags);
@@ -1761,8 +1697,6 @@ struct PlayerInfoWorkView : PEBaseInfoWorkView, VtableInstall {
 extern "C" int g_beModelCtrlInfoWork_vtable[4];
 extern "C" int g_beNDMWMdlPEBaseInfoWork_vtable[4];
 extern "C" beNDMWMdlPEBaseInfoWork *beNDMWMdlPEBaseInfoWork_Destroy(beNDMWMdlPEBaseInfoWork *self, short flags);
-extern "C" igMetaObject *g_beNDMWMdlPEBase_metaObject;
-extern "C" igMetaObject *g_beNDMWMdlPEBaseInfoWork_metaObject;
 /* A 12-byte list member. */
 struct PEBaseListField { int *p[3]; PEBaseListField() throw(); ~PEBaseListField(); };
 /* The beModelCtrlInfoWork base. */
@@ -1781,16 +1715,11 @@ struct PEBaseInfoWorkObj : InfoBase, VtableInstall_3c0640 {
     PEBaseInfoWorkObj() : VtableInstall_3c0640(&vtable) { }
     ~PEBaseInfoWorkObj() { vtable = g_beNDMWMdlPEBaseInfoWork_vtable; }
 };
-extern "C" igMetaObject *g_beNDMWMdlPBullet_metaObject;
 extern "C" int g_beNDMWMdlPBullet_vtable[4];
-extern "C" igMetaObject *g_beNDMWMdlObject_metaObject;
 extern "C" int g_beNDMWMdlObject_vtable[4];
-extern "C" igMetaObject *g_beNDMWMdlMapCursor_metaObject;
 extern "C" int g_beNDMWMdlMapCursor_vtable[4];
-extern "C" igMetaObject *g_beNDMWMdlMapBase_metaObject;
 extern "C" igMetaObject *beNDMWMdlMapBase_GetReadyMetaObject(void);
 extern "C" int g_beNDMWMdlMapBase_vtable[4];
-extern "C" igMetaObject *g_beNDMWMdlItem_metaObject;
 extern "C" igMetaObject *beNDMWMdlItem_GetReadyMetaObject(void);
 extern "C" int g_beNDMWMdlItem_vtable[4];
 extern "C" igMetaObject *g_beNDMWMdlItemInfoWork_metaObject;
@@ -1809,23 +1738,17 @@ struct ItemInfoWork : InfoBase, VtableInstall_3c1480 {
     ItemInfoWork() : VtableInstall_3c1480(&vtable) { }
     ~ItemInfoWork() { vtable = g_beNDMWMdlItemInfoWork_vtable; }
 };
-extern "C" igMetaObject *g_beNDMWMdlEnemy_metaObject;
 extern "C" igMetaObject *beNDMWMdlEnemy_GetReadyMetaObject(void);
 extern "C" int g_beNDMWMdlEnemy_vtable[4];
 extern "C" igMetaObject *g_beNDMWMdlEnemyInfoWork_metaObject;
 extern "C" int beNDMWMdlPEBaseInfoWork_Construct(beNDMWMdlPEBaseInfoWork *);
 extern "C" int g_beNDMWMdlEnemyInfoWork_vtable[4];
-extern "C" igMetaObject *g_beNDMWMdlEffect_metaObject;
 extern "C" int g_beNDMWMdlEffect_vtable[4];
-extern "C" igMetaObject *g_beNDMWMdlEBullet_metaObject;
 extern "C" int g_beNDMWMdlEBullet_vtable[4];
-extern "C" igMetaObject *g_beNDMWLogoInfo_metaObject;
 extern "C" int g_beNDMWLogoInfo_vtable[4];
 extern "C" igMetaObject *g_beNDMWLogoCtrlData_metaObject;
 extern "C" int g_beNDMWLogoCtrlData_vtable[4];
-extern "C" igMetaObject *g_beNDMWLogo_metaObject;
 extern "C" int g_beNDMWLogo_vtable[4];
-extern "C" igMetaObject *g_beNDMWLoadIntf2Info_metaObject;
 extern "C" int g_beNDMWLoadIntf2Info_vtable[4];
 extern "C" igMetaObject *g_beNDMWLoadIntf2NameSel_metaObject;
 extern "C" int g_beNDMWLoadIntf2NameSel_vtable[4];
@@ -1854,9 +1777,7 @@ extern "C" igMetaObject *beNDMWLoadIntf2MakeChr_ResolveMetaObject(void);
 extern "C" int g_beNDMWLoadIntf2MakeChr_vtable[4];
 extern "C" igMetaObject *g_beNDMWLoadIntf2CtrlData_metaObject;
 extern "C" int g_beNDMWLoadIntf2CtrlData_vtable[4];
-extern "C" igMetaObject *g_beNDMWLoadIntf2_metaObject;
 extern "C" int g_beNDMWLoadIntf2_vtable[4];
-extern "C" igMetaObject *g_beNDMWLoadCtrl2Info_metaObject;
 extern "C" igMetaObject *beNDMWLoadCtrl2Info_ResolveMetaObject(void);
 extern "C" int g_beNDMWLoadCtrl2Info_vtable[4];
 extern "C" igMetaObject *g_beNDMWLoadCtrl2CommonIntf_metaObject;
@@ -1903,27 +1824,18 @@ extern "C" igMetaObject *g_beNDMWLoadIntf2TextOrder_metaObject;
 extern "C" int g_beNDMWLoadIntf2TextOrder_vtable[4];
 extern "C" igMetaObject *g_beNDMWLoadCtrl2CtrlData_metaObject;
 extern "C" int g_beNDMWLoadCtrl2CtrlData_vtable[4];
-extern "C" igMetaObject *g_beNDMWLoadCtrl2_metaObject;
 extern "C" igMetaObject *beNDMWLoadCtrl2_GetReadyMetaObject(void);
 extern "C" int g_beNDMWLoadCtrl2_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemWaza_metaObject;
 extern "C" igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void);
 extern "C" int g_beNDMWItemWaza_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemImportant_metaObject;
 extern "C" igMetaObject *beNDMWItemImportant_GetReadyMetaObject(void);
 extern "C" int g_beNDMWItemImportant_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemInstant_metaObject;
 extern "C" igMetaObject *beNDMWItemInstant_GetReadyMetaObject(void);
 extern "C" int g_beNDMWItemInstant_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemDisk_metaObject;
 extern "C" int g_beNDMWItemDisk_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemAbilityChip_metaObject;
 extern "C" int g_beNDMWItemAbilityChip_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemYellowArmor_metaObject;
 extern "C" int g_beNDMWItemYellowArmor_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemBlueArmor_metaObject;
 extern "C" int g_beNDMWItemBlueArmor_vtable[4];
-extern "C" igMetaObject *g_beNDMWItemWeapon_metaObject;
 extern "C" int g_beNDMWItemWeapon_vtable[4];
 extern "C" igMetaObject *g_beNDMWItemRevisionPocketBase_metaObject;
 extern "C" igMetaObject *g_beNDMWItemRevisionBase_metaObject;
@@ -1940,9 +1852,6 @@ extern "C" igMetaObject *beNDMWShinkaObject_ResolveMetaObject(void);
 extern "C" int g_beNDMWShinkaObject_vtable[4];
 /* Cached FightCom metadata enum: 22 command names built once and cached. */
 
-extern "C" igMetaEnum *FightCom_GetMetaEnum(void);
-extern "C" igMetaEnum *GameRamMessage_GetMetaEnum(void);
-extern "C" igMetaObject *g_beNDMWGameRam_metaObject;
 extern "C" igMetaObject *beNDMWGameRam_ResolveMetaObject(void);
 extern "C" int g_beNDMWGameRam_vtable[4];
 extern "C" igMetaObject *g_beNDMWGameRamInfoRam_metaObject;
@@ -1950,7 +1859,6 @@ extern "C" igMetaObject *beNDMWGameRamInfoRam_ResolveMetaObject(void);
 extern "C" int g_beNDMWGameRamInfoRam_vtable[4];
 extern "C" igMetaObject *g_beNDMWGameRamInfo_metaObject;
 extern "C" int g_beNDMWGameRamInfo_vtable[4];
-extern "C" igMetaObject *g_beNDMWAfsSetupInfo_metaObject;
 extern "C" int igInfo_Destroy(igInfo *, int);
 extern "C" int g_beNDMWAfsSetupInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetupDataList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
@@ -1963,11 +1871,9 @@ extern "C" igMetaObject *g_beNDMWAfsSetupData_metaObject;
 extern "C" int g_beNDMWAfsSetupData_vtable[4];
 struct igMetaObject_3caa90;
 extern "C" igMetaObject_3caa90 *igNamedObject_GetPublishedMetaObject(void);
-extern "C" igMetaObject *g_beNDMWAfsStageLoad_metaObject;
 extern "C" igMetaObject *beNDMWAfsStageLoad_ResolveMetaObject(void);
 extern "C" int g_beNDMWAfsStageLoad_vtable[4];
 extern "C" int g_igAction_metaObject[4];
-extern "C" igMetaObject *g_beNDMWAfsSetup_metaObject;
 extern "C" int g_beNDMWAfsSetup_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igGuiComponent_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 struct igMetaObject_3cb040;
@@ -2006,14 +1912,9 @@ extern "C" void beNDMWPanelWazaInfoWork_TrimCapacity(beNDMWPanelWazaInfoWork *se
 extern "C" void beNDMWPanelObjectStat_TrimCapacity(beNDMWPanelObjectStat *self);
 extern "C" void beNDMWPanelObjectItem_TrimCapacity(beNDMWPanelObjectItem *self);
 extern "C" void beNDMWPanelObjectWaza_TrimCapacity(beNDMWPanelObjectWaza *self);
-extern "C" void beNDMWPanelWazaInfoWork_igIntList_SetAll(igIntList *list, int *value);
-extern "C" int beNDMWPanelWazaInfoWork_GetTextColorList(beNDMWPanelWazaInfoWork *p);
-extern "C" void beNDMWPanelWazaInfoWork_igStringRefList_SetAll(igDataList *list, char **token);
-extern "C" int beNDMWPanelWazaInfoWork_GetTextSetList(beNDMWPanelWazaInfoWork *p);
 extern "C" int GAMERAM_3[4];
 extern "C" int GETCOMMON_2[4];
 extern "C" int CAMERAMODE_2[4];
 extern "C" int LIGHTMODE_2[4];
-extern "C" unsigned char g_commonSettingsValid;
 
 #endif

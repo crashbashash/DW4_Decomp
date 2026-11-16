@@ -3,9 +3,9 @@ igMetaField *g_beNDMWSaveIntf_padManagerMetaField;
 igMetaField *g_beNDMWSaveIntf_systemMetaField;
 igMetaField *g_beNDMWSaveIntf_kindHardMetaField;
 
-void beNDMWSaveIntf_CreateInstance(int allocator) {
+beNDMWSaveIntf *beNDMWSaveIntf_CreateInstance(int allocator) {
     beNDMWSaveIntf_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWSaveIntf_metaObject, allocator);
+    return (beNDMWSaveIntf *)igMetaObject_CreateInstance(g_beNDMWSaveIntf_metaObject, allocator);
 }
 
 igMetaObject *beNDMWSaveIntf_GetOrCreateMetaObject(void) {

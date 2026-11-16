@@ -1,6 +1,6 @@
-void igAttrSet_CreateInstance(int arg0) {
+igAttrSet *igAttrSet_CreateInstance(int allocator) {
     igAttrSet_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igAttrSet_metaObject, arg0);
+    return (igAttrSet *)igMetaObject_CreateInstance((int)g_igAttrSet_metaObject, allocator);
 }
 
 igMetaObject *igAttrSet_GetOrCreateMetaObject(void) {

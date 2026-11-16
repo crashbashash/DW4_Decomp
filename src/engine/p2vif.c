@@ -1,5 +1,6 @@
 /* What the VIF1 row and mask registers hold, so a draw writes STROW or STMASK only when its values
  * differ. p2InitVifRegisters loads both at start-up. */
+#include "dw4/p2vif.h"
 
 extern float p2VifRowScale;
 extern int p2VifMask;

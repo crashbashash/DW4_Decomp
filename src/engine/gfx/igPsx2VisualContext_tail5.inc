@@ -857,7 +857,8 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_142(void) {
     return 0;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_117(struct TextureStateView117 *arg0, int arg1, int arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int arg1, int arg2) {
+    struct TextureStateView117 *arg0 = (struct TextureStateView117 *)self;
     int n;
     int j;
     if (arg1 < 15) {
@@ -1150,7 +1151,8 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_129(void *arg0) {
     return *(int *)((char *)(arg0) + 336);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_130(UCodeContextView *context, int index) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_130(igPsx2VisualContext *self, int index) {
+    UCodeContextView *context = (UCodeContextView *)self;
     UCodeSlot *slot = &context->slots->_data[index];
     int i;
 
@@ -1336,7 +1338,8 @@ unsigned char FUN_0017c790(int arg0, int arg1) {
     return *(int *)((char *)((arg1 + arg0)) + 540);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_148(VisualContextSlots *arg0, int arg1, int arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_148(igPsx2VisualContext *self, int arg1, int arg2) {
+    VisualContextSlots *arg0 = (VisualContextSlots *)self;
     int a3;
     arg1 = arg1 < 15 ? arg1 : 15;
     if (arg1 < 8) {
@@ -1387,7 +1390,8 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_149(int arg0, int a1) {
  int i = a1 < 15 ? a1 : 15; int off = i * 4; int *p = (int *)(off + (int)arg0); return p[145];
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_150(struct TextureStageView150 *p, int n, int x, int y) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_150(igPsx2VisualContext *self, int n, int x, int y) {
+    struct TextureStageView150 *p = (struct TextureStageView150 *)self;
     int i;
     n = n < 15 ? n : 15;
     if (n < 8) {

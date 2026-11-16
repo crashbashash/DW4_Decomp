@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igFileDispatchView.h"
+#include "dw4/beFileChkObj.h"
+#include "dw4/beFileListInfoManager.h"
 #define CLEAR(T, src) { \
     T *l = (T *)(src); \
     int n = l->_count; \
@@ -21,7 +23,7 @@
     l->_count = 0; }
 
 extern "C" void beFileListInfoManager_Stop(void);
-extern "C" int beFileListInfoManager_GetMeta(void);
+extern "C" igMetaObject *beFileListInfoManager_GetMeta(void);
 extern "C" void * igInsightCore_FindManager(...);
 extern "C" void List_InsertWords(void *, int, int, void *);
 extern "C" int StringPool_Allocate(int);
@@ -29,7 +31,6 @@ extern "C" int List_Reserve(void *, int, int);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
-extern "C" int beFileChkObj_FileExists(beFileChkObj *checker, const char *fileName);
 extern "C" void igInsightCore_AddToScheduler(int, beFileListInfoManager *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, beFileListInfoManager *);
 extern "C" void beFileListInfoManager_Activate(beFileListInfoManager *self, int unusedArg);
@@ -38,7 +39,6 @@ extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" void beFileListInfoManager_Start(beFileListInfoManager *self);
-extern "C" int g_beFileListInfoManager_metaObject[4];
 extern "C" void beFont_AddFontImages(void *, igObject *);
 extern "C" void ObjectList_AppendRetained(igObjectList *, igObject *);
 extern "C" igMetaObject *g_igNamedObjectInfo_metaObject;
@@ -49,7 +49,6 @@ extern "C" int g_stringPool[4];
 extern "C" int igObject_Destroy(igObject *);
 extern "C" void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self);
 extern "C" int igInsightCore_AddInfo(int, igObject *);
-extern "C" int beFileListInfoManager_AddReadInfos(beFileListInfoManager *self);
 extern "C" int igObject_IsKindOf(igObject *object, igMetaObject *meta);
 extern "C" int igResource_IsDirectoryLoaded(int resource, igDirectory *directory);
 extern "C" void igResource_UnloadDirectory(int resource, int name);
@@ -64,7 +63,6 @@ extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" char emptyString[];
 extern "C" char ROOTATTR_2[];
-extern "C" int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefList *fileNames);
 
 /* A pooled string held by reference: the count sits at p[-1], the chunk header at p[-2]. */
 struct StringRef {
@@ -398,8 +396,8 @@ int beFileListInfoManager_AddReadInfos(beFileListInfoManager *self) {
     return 1;
 }
 
-int beFileListInfoManager_GetMeta(void)
+igMetaObject *beFileListInfoManager_GetMeta(void)
 {
-    return g_beFileListInfoManager_metaObject[0];
+    return g_beFileListInfoManager_metaObject;
 }
 

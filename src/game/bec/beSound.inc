@@ -3,9 +3,9 @@ igMetaField *g_beSound_criMetaField;
 igMetaField *g_beSound_currentBGMMetaField;
 igMetaField *g_beSound_playSEsMetaField;
 
-void beSound_CreateInstance(int allocator) {
+beSound *beSound_CreateInstance(int allocator) {
     beSound_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587EA8, allocator);
+    return (beSound *)igMetaObject_CreateInstance(*(int *)0x587EA8, allocator);
 }
 
 igMetaObject *beSound_GetOrCreateMetaObject(void) {

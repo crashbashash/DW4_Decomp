@@ -2,9 +2,9 @@ igMetaObject *g_igCameraMode_metaObject;
 igMetaField *g_igCameraMode_cameraPathMetaField;
 igMetaField *g_igCameraMode_cameraMetaField;
 
-void igCameraMode_Create(int arg0) {
+igCameraMode *igCameraMode_Create(int allocator) {
     FUN_0045cdc0();
-    igMetaObject_CreateInstance(g_igCameraMode_metaObject, arg0);
+    return (igCameraMode *)igMetaObject_CreateInstance(g_igCameraMode_metaObject, allocator);
 }
 
 igMetaObject *igCameraMode_GetMetaObject(void) {

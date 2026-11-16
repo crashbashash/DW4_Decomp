@@ -11,9 +11,9 @@ igMetaEnum *g_beNDMWMdlPlayerInfoWork_damageSeqMetaEnum;
 igMetaEnum *g_beNDMWMdlPlayerInfoWork_statusNameMetaEnum;
 igMetaEnum *g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum;
 
-void beNDMWMdlPlayerInfoWork_Create(int allocator) {
+beNDMWMdlPlayerInfoWork *beNDMWMdlPlayerInfoWork_Create(int allocator) {
     beNDMWMdlPlayerInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlPlayerInfoWork_metaObject, allocator);
+    return (beNDMWMdlPlayerInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlPlayerInfoWork_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject(void) {

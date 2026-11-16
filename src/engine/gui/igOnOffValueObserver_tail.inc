@@ -19,7 +19,7 @@ void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1) {
             sp[0] = 2;
             sp[1] = 0;
             sp[2] = (int)g_igOnOffModel_valueMetaField;
-            igModel_NotifyViews((S_4578c0 *)arg0->t, (S_4578c0 *)sp);
+            igModel_NotifyViews((igModel *)arg0->t, (ModelChange *)sp);
         }
     }
 }

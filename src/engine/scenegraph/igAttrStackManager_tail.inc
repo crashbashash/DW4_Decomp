@@ -328,7 +328,8 @@ void FUN_001b0450(A_1b0450 *arg0, Rc_1b0450 *arg1) {
     arg0->f8 = 0;
 }
 
-void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, LightStateAttrView *attr, int isOverride) {
+void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightStateAttr *lightState, int isOverride) {
+    LightStateAttrView *attr = (LightStateAttrView *)lightState;
     igLightAttr *key;
     int slot;
     AttrObjectStack *stack;
@@ -522,7 +523,9 @@ void igAttrStackManager_PushOverrideAttr(igAttrStackManager *self, igAttr *attr)
     igAttrStackManager_MarkStackChanged((struct A_1b1490 *)self, (struct B_1b1490 *)stack, slot);
 }
 
-void igAttrStackManager_PopOverrideAttr(struct A_1b13d0 *arg0, struct B_1b13d0 *arg1) {
+void igAttrStackManager_PopOverrideAttr(igAttrStackManager *manager, igAttr *attr) {
+    struct A_1b13d0 *arg0 = (struct A_1b13d0 *)manager;
+    struct B_1b13d0 *arg1 = (struct B_1b13d0 *)attr;
     int (*temp_a2)(int, int);
     int temp_s1;
     struct Q_1b13d0 *temp_s0;
@@ -573,7 +576,8 @@ void igAttrStackManager_MarkStackChanged(struct A_1b1490 *arg0, struct B_1b1490 
     arg0->f8 = 1;
 }
 
-void igBitMask_SetAll(igDataList *arg0) {
+void igBitMask_SetAll(igBitMask *mask) {
+    igDataList *arg0 = (igDataList *)mask;
     unsigned int temp_a2;
     int *temp_a0;
 
@@ -636,7 +640,8 @@ void igBitMask_SetAll(igDataList *arg0) {
     }
 }
 
-void igBitMask_ClearAll(igDataList *arg0) {
+void igBitMask_ClearAll(igBitMask *mask) {
+    igDataList *arg0 = (igDataList *)mask;
     unsigned int temp_a2;
     int *temp_a0;
 
@@ -698,7 +703,7 @@ void igBitMask_ClearAll(igDataList *arg0) {
     }
 }
 
-void igBitMask_SetBitCount(void *arg, unsigned int bits) {
+void igBitMask_SetBitCount(igBitMask *arg, unsigned int bits) {
     igBitMaskWords *m;
     unsigned int old;
     int partial;

@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWMdlEnemy_metaObject;
 
-void beNDMWMdlEnemy_CreateInstance(int allocator) {
+beNDMWMdlEnemy *beNDMWMdlEnemy_CreateInstance(int allocator) {
     beNDMWMdlEnemy_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlEnemy_metaObject, allocator);
+    return (beNDMWMdlEnemy *)igMetaObject_CreateInstance(g_beNDMWMdlEnemy_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlEnemy_GetOrCreateMetaObject(void) {

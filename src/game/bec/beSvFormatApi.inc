@@ -1,8 +1,8 @@
 igMetaObject *g_beSvFormatApi_metaObject;
 
-void beSvFormatApi_Create(int allocator) {
+beSvFormatApi *beSvFormatApi_Create(int allocator) {
     beSvFormatApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588270, allocator);
+    return (beSvFormatApi *)igMetaObject_CreateInstance(*(int *)0x588270, allocator);
 }
 
 void *beSvFormatApi_GetMetaObject(void) {

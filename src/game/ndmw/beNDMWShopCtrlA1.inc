@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWShopCtrlA1_metaObject;
 igMetaField *g_beNDMWShopCtrlA1_cardInfoListMetaField;
 igMetaField *g_beNDMWShopCtrlA1_cardRamNoListMetaField;
 
-void beNDMWShopCtrlA1_Create(int allocator) {
+beNDMWShopCtrlA1 *beNDMWShopCtrlA1_Create(int allocator) {
     beNDMWShopCtrlA1_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlA1_metaObject, allocator);
+    return (beNDMWShopCtrlA1 *)igMetaObject_CreateInstance(g_beNDMWShopCtrlA1_metaObject, allocator);
 }
 
 igMetaObject *beNDMWShopCtrlA1_GetMetaObject(void) {

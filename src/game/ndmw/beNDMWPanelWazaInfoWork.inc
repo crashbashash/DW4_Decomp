@@ -11,9 +11,9 @@ igMetaField *g_beNDMWPanelWazaInfoWork_playerWorkMetaField;
 igMetaField *g_beNDMWPanelWazaInfoWork_textSetListMetaField;
 igMetaField *g_beNDMWPanelWazaInfoWork_textColorListMetaField;
 
-void beNDMWPanelWazaInfoWork_Create(int allocator) {
+beNDMWPanelWazaInfoWork *beNDMWPanelWazaInfoWork_Create(int allocator) {
     beNDMWPanelWazaInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWPanelWazaInfoWork_metaObject, allocator);
+    return (beNDMWPanelWazaInfoWork *)igMetaObject_CreateInstance(g_beNDMWPanelWazaInfoWork_metaObject, allocator);
 }
 
 igMetaObject *beNDMWPanelWazaInfoWork_GetOrCreateMetaObject(void) {

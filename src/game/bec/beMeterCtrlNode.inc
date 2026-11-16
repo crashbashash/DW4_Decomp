@@ -10,7 +10,7 @@ igMetaObject *beMeterCtrlNode_GetOrCreateMetaObject(void) {
     return g_beMeterCtrlNode_metaObject;
 }
 
-void *beMeterCtrlNode_ResolveMetaObject(void) {
+igMetaObject *beMeterCtrlNode_ResolveMetaObject(void) {
     igMetaObject *g = g_beMeterCtrlNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beMeterCtrlNode_EnsureRegistered();

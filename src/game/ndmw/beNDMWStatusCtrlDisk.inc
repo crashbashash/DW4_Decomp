@@ -6,9 +6,9 @@ igMetaField *g_beNDMWStatusCtrlDisk_diskListMetaField;
 igMetaField *g_beNDMWStatusCtrlDisk_sendDiskMetaField;
 igMetaField *g_beNDMWStatusCtrlDisk_sendMaxMetaField;
 
-void beNDMWStatusCtrlDisk_Create(int allocator) {
+beNDMWStatusCtrlDisk *beNDMWStatusCtrlDisk_Create(int allocator) {
     beNDMWStatusCtrlDisk_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlDisk_metaObject, allocator);
+    return (beNDMWStatusCtrlDisk *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlDisk_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusCtrlDisk_GetMetaObject(void)

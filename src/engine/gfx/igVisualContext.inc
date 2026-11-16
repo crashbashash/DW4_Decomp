@@ -28,9 +28,9 @@ igMetaField *g_igVisualContext_textureMemoryPoolMetaField;
 igMetaField *g_igVisualContext_statisticsMemoryPoolMetaField;
 igMetaField *g_igVisualContext_listMemoryPoolMetaField;
 
-void igVisualContext_CreateInstance(int arg0) {
+igVisualContext *igVisualContext_CreateInstance(int allocator) {
     igVisualContext_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igVisualContext_metaObject, arg0);
+    return (igVisualContext *)igMetaObject_CreateInstance(g_igVisualContext_metaObject, allocator);
 }
 
 igMetaObject *igVisualContext_GetOrCreateMetaObject(void) {

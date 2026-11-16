@@ -5,9 +5,9 @@ igMetaField *g_beNDMWShopCtrlDiskSell_maxSellMetaField;
 igMetaField *g_beNDMWShopCtrlDiskSell_kazuMetaField;
 igMetaField *g_beNDMWShopCtrlDiskSell_tankaMetaField;
 
-void beNDMWShopCtrlDiskSell_Create(int allocator) {
+beNDMWShopCtrlDiskSell *beNDMWShopCtrlDiskSell_Create(int allocator) {
     beNDMWShopCtrlDiskSell_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, allocator);
+    return (beNDMWShopCtrlDiskSell *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlDiskSell_GetMetaObject(void) {

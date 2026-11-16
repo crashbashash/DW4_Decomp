@@ -13,18 +13,18 @@ void Gap__Gui__igTextElement__vfunc_24(O_457e10 *arg0) {
     }
 }
 
-void igView_SetModel(S0_457e90 *arg0, int arg1) {
-    int temp_a0;
-    int temp_a0_2;
+void igView_SetModel(igView *view, igModel *model) {
+    int old;
+    int current;
 
-    temp_a0 = arg0->f8;
-    if (temp_a0 != 0) {
-        FUN_004577f0((igModel *)temp_a0, (OV *)arg0);
+    old = view->_model;
+    if (old != 0) {
+        FUN_004577f0((igModel *)old, (OV *)view);
     }
-    arg0->f8 = arg1;
-    temp_a0_2 = arg0->f8;
-    if (temp_a0_2 != 0) {
-        FUN_004576d0((igContext *)temp_a0_2, (ContextHandler *)arg0);
+    view->_model = (int)model;
+    current = view->_model;
+    if (current != 0) {
+        FUN_004576d0((igContext *)current, (ContextHandler *)view);
     }
 }
 

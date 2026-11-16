@@ -2,9 +2,9 @@ igMetaObject *g_igMessageDefaultReceiver_metaObject;
 igMetaField *g_igMessageDefaultReceiver_msgHandlerMetaField;
 igMetaField *g_igMessageDefaultReceiver_msgHandlerFuncMetaField;
 
-void igMessageDefaultReceiver_CreateInstance(int arg0) {
+igMessageDefaultReceiver *igMessageDefaultReceiver_CreateInstance(int allocator) {
     FUN_00232320();
-    igMetaObject_CreateInstance(*(int *)0x56DB30, arg0);
+    return (igMessageDefaultReceiver *)igMetaObject_CreateInstance(*(int *)0x56DB30, allocator);
 }
 
 igMetaObject *igMessageDefaultReceiver_GetMetaObject(void)

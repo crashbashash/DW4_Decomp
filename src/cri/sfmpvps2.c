@@ -531,13 +531,13 @@ int viBufAddDMA(SfdIpuStream *stream) {
     stream->restBytes %= 2048;
     if (readN > 0) {
         last = (stream->f12 + stream->queuedSct - 1 + stream->sectors) % stream->sectors;
-        scTag2((long long *)(stream->uncached + last), (char *)stream->base + 2048 * last, 3, 128);
+        scTag2((long long *)(stream->uncached + last), (int)((char *)stream->base + 2048 * last), 3, 128);
         isNewData = 1;
     }
     index = readStart;
     for (i = 0; i < readN; i++) {
         id = (i == readN - 1) ? 0 : 3;
-        scTag2((long long *)(stream->uncached + index), (char *)stream->base + 2048 * index, id, 128);
+        scTag2((long long *)(stream->uncached + index), (int)((char *)stream->base + 2048 * index), id, 128);
         index = (index + 1) % stream->sectors;
     }
     stream->queuedSct += readN;

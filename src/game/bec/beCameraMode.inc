@@ -8,9 +8,9 @@ igMetaField *g_beCameraMode_timeLengthMetaField;
 igMetaField *g_beCameraMode_isEndMetaField;
 igMetaField *g_beCameraMode_isFreezeMetaField;
 
-void beCameraMode_Create(int allocator) {
+beCameraMode *beCameraMode_Create(int allocator) {
     beCameraMode_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589B90, allocator);
+    return (beCameraMode *)igMetaObject_CreateInstance(*(int *)0x589B90, allocator);
 }
 
 igMetaObject *beCameraMode_GetOrCreateMetaObject(void) {

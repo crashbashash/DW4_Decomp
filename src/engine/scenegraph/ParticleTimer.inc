@@ -212,7 +212,7 @@ void igGraphPath_SetNodes(Obj_1c5790 *arg0, int arg1) {
 
 void FUN_001c5870(void *arg0, int arg1) {
     int idx, tbl;
-    tbl = *(int *)(*(int *)((char *)((void *)igGraphPath_GetTail(arg0)) + 28) + 16);
+    tbl = *(int *)(*(int *)((char *)((void *)igGraphPath_GetTail((igGraphPath *)arg0)) + 28) + 16);
     idx = arg1 * 4;
     ObjectList_AppendRetained(*(int *)((char *)(arg0) + 8), *(int *)(tbl + idx));
 }
@@ -240,11 +240,9 @@ int FUN_001c58c0(T_1c58c0 *arg0) {
     return 0;
 }
 
-int igGraphPath_GetTail(void *arg0) {
-    void *temp_v0;
-
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 8));
-    return *(int *)(*(int *)((char *)(temp_v0) + 16) + ((*(int *)((char *)(temp_v0) + 8) - 1) * 4));
+igNode *igGraphPath_GetTail(igGraphPath *path) {
+    igNodeList *nodes = (igNodeList *)path->_path;
+    return *(igNode **)(nodes->_data + (nodes->_count - 1) * 4);
 }
 
 int FUN_001c59b0(void *self) {

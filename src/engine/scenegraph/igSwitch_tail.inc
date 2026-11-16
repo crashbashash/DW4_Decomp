@@ -12,11 +12,12 @@ int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2) {
     } else {
         var_a1 = 0;
     }
-    igBitMask_SetBitCount((void *)a0v, var_a1);
+    igBitMask_SetBitCount((igBitMask *)a0v, var_a1);
     return temp_s0;
 }
 
-Obj_1c5eb0 *igSwitch_RemoveChildAt(S_1dc940 *arg0, int arg1) {
+igNode *igSwitch_RemoveChildAt(igSwitch *sw, int arg1) {
+    S_1dc940 *arg0 = (S_1dc940 *)sw;
     Obj_1c5eb0 *removed;
     int var_a1;
 
@@ -28,12 +29,14 @@ Obj_1c5eb0 *igSwitch_RemoveChildAt(S_1dc940 *arg0, int arg1) {
         } else {
             var_a1 = 0;
         }
-        igBitMask_SetBitCount((void *)a0v, var_a1);
+        igBitMask_SetBitCount((igBitMask *)a0v, var_a1);
     }
-    return removed;
+    return (igNode *)removed;
 }
 
-void igObjectPool_Grow(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int)) {
+void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {
+    List_1dca40 *arg0 = (List_1dca40 *)pool;
+    Obj_1dca40 *(*arg1)(int) = (Obj_1dca40 *(*)(int))create;
     int n;
     int alloc;
     int i;

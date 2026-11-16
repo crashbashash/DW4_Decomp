@@ -2,9 +2,9 @@ igMetaObject *g_igViewerAction_metaObject;
 igMetaField *g_igViewerAction_refMetaField;
 igMetaField *g_igViewerAction_functionMetaField;
 
-void igViewerAction_Create(int arg0) {
+igViewerAction *igViewerAction_Create(int allocator) {
     FUN_00459190();
-    igMetaObject_CreateInstance(g_igViewerAction_metaObject, arg0);
+    return (igViewerAction *)igMetaObject_CreateInstance(g_igViewerAction_metaObject, allocator);
 }
 
 void *igViewerAction_GetMetaObject(void) {

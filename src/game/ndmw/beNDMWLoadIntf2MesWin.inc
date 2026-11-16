@@ -19,9 +19,9 @@ igMetaField *g_beNDMWLoadIntf2MesWin_mesNoMetaField;
 igMetaField *g_beNDMWLoadIntf2MesWin_sysMesNoMetaField;
 igMetaField *g_beNDMWLoadIntf2MesWin_sysStatMetaField;
 
-void beNDMWLoadIntf2MesWin_Create(int allocator) {
+beNDMWLoadIntf2MesWin *beNDMWLoadIntf2MesWin_Create(int allocator) {
     beNDMWLoadIntf2MesWin_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2MesWin_metaObject, allocator);
+    return (beNDMWLoadIntf2MesWin *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2MesWin_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2MesWin_GetOrCreateMetaObject(void) {

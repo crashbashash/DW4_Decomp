@@ -1,9 +1,9 @@
 igMetaObject *g_be_metaObject;
 igMetaField *g_be_stringRefListMetaField;
 
-void be_CreateInstance(int allocator) {
+be *be_CreateInstance(int allocator) {
     be_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x58A030, allocator);
+    return (be *)igMetaObject_CreateInstance(*(int *)0x58A030, allocator);
 }
 
 igMetaObject *be_GetOrCreateMetaObject(void) {

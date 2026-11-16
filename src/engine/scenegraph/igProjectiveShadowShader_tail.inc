@@ -261,7 +261,7 @@ int FUN_001d5a70(P *arg0, Q_1d5a70 *arg1) {
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w156);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w192);
     FUN_001d9ac0((struct A_1d9ac0 *)arg1->w68, DAT_00562840[0], s0);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w192);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w192);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005627f8[0]);
     FUN_001b1030((igAttrStackManager *)s0, (igAttr *)arg0->w88);
     FUN_001b1030((igAttrStackManager *)s0, (igAttr *)arg0->w92);
@@ -270,17 +270,17 @@ int FUN_001d5a70(P *arg0, Q_1d5a70 *arg1) {
     }
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w196);
     FUN_001d5ef0((struct S60 *)arg0, (int)arg1);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w196);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w196);
     if (arg0->b237 != 0) {
-        igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)((int)arg0->o116));
+        igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)((int)arg0->o116));
     }
     FUN_001b1100((struct A_1b1100 *)s0, (struct B_1b1100 *)arg0->w92);
     FUN_001b1100((struct A_1b1100 *)s0, (struct B_1b1100 *)arg0->w88);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005627f8[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w156);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)arg0->w152);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562850[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562820[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005627f8[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w156);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w152);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562850[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562820[0]);
     FUN_001dc610(arg1->w68);
     return arg0->w164;
 }
@@ -306,16 +306,16 @@ void FUN_001d5c40(A0_1d5c40 *arg0, A1_1d5c40 *arg1) {
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562800[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005628d0[0]);
     FUN_001d5e60((struct A_1d5e60 *)arg0, (int)arg1);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_005628d0[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562800[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562810[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562878[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)arg0->f90);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)g_shadowTextureFunctionAttr0[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_00562858[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)temp_s1);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)DAT_005627e8[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s0, (struct B_1b13d0 *)arg1->fe8);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005628d0[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562800[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562810[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562878[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f90);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)g_shadowTextureFunctionAttr0[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562858[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)temp_s1);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005627e8[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg1->fe8);
     FUN_001d5e00((void *)arg0, (S1_1d5e00 *)arg1);
     FUN_001dc610(arg1->f44);
 }
@@ -336,7 +336,7 @@ void FUN_001d5e60(struct A_1d5e60 *arg0, int arg1) {
         n = 0;
     }
     for (i = 0; i < n; i++) {
-        igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f28->data[i]);
+        igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)arg0->f28->data[i]);
     }
 }
 
@@ -346,7 +346,7 @@ void FUN_001d5ef0(struct S60 *arg0, int arg1) {
 
     n = arg0->f60->count;
     for (i = 0; i < n; i++) {
-        igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f60->data[i]);
+        igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)arg0->f60->data[i]);
     }
 }
 
@@ -429,7 +429,7 @@ void Gap__Sg__igProjectiveShadowShader__vfunc_17(struct S_1d6240 *arg0) {
     if (temp_v1 != 0) {
         temp_s1 = temp_v1->cnt;
         for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-            igGroup_AppendChild((void *)arg0, arg0->f64->data[var_s0]);
+            igGroup_AppendChild((igGroup *)arg0, (igNode *)arg0->f64->data[var_s0]);
         }
         temp_a0 = (struct R_1d6240 *)arg0->f64;
         if (temp_a0 != 0) {

@@ -1,9 +1,9 @@
 igMetaObject *g_beSeCtl_metaObject;
 igMetaField *g_beSeCtl_sndMngMetaField;
 
-void beSeCtl_CreateInstance(int allocator) {
+beSeCtl *beSeCtl_CreateInstance(int allocator) {
     beSeCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587FE8, allocator);
+    return (beSeCtl *)igMetaObject_CreateInstance(*(int *)0x587FE8, allocator);
 }
 
 igMetaObject *beSeCtl_GetOrCreateMetaObject(void) {

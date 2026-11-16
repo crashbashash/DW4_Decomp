@@ -2,6 +2,8 @@
 #include "dw4/igobject_release.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/beSaveApiDispatchView.h"
+#include "dw4/beSaveDataDeliver.h"
+#include "dw4/beSvConnectCheck.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -76,7 +78,6 @@ struct CardSlot { int port; int slot; };
 extern "C" int Memory_AllocateBufferDirect(int, int);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" int igObject_GetAllocator(...);
-extern "C" void beSaveDataDeliver_AllocateData(beSaveDataDeliver *deliver, int size);
 extern "C" int Memory_FreeBufferWithAllocator(int, int);
 extern "C" int memset(void *, int, int);
 extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
@@ -100,11 +101,10 @@ extern "C" int sceMtapPortClose(int);
 extern "C" int sceMcSync(...);
 extern "C" int beSvConnectCheck_ProbeSlot(int check, int slot);
 extern "C" int beSvConnectCheck_ProbeSlots(int check, int onlyPresent);
-extern "C" void beSvConnectCheck_PollMultitap(int check, beSvDeliver *deliver);
 extern "C" void beSvConnectCheck_Start(void);
 extern "C" int beSvConnectCheck_Update(void);
 extern "C" void beSvConnectCheck_Report(void);
-extern "C" int beSvConnectCheck_GetMeta(void);
+extern "C" igMetaObject *beSvConnectCheck_GetMeta(void);
 extern "C" int Gap__Core__igObject__userConstruct(...);
 extern "C" void beSvConnectCheck_userConstruct(igObjectDispatchView *self);
 extern "C" int beSaveApi_GetMeta(void);
@@ -136,7 +136,6 @@ extern "C" void beSaveApi_userDestruct(void);
 extern "C" void beSaveMemoryObj_userConstruct(igObjectDispatchView *self);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void beSaveDataDeliver_FreeData(beSaveDataDeliver *deliver);
 extern "C" void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment);
 extern "C" void beSaveMemoryObj_Free(beSaveMemoryObj *self);
 extern "C" int g_beSaveMemoryObj_metaObject[4];
@@ -203,10 +202,7 @@ extern "C" void beSvEndApi_Report(beSvEndApi *self, beSvDeliver *deliver);
 extern "C" int g_svSlotPresent[8];
 extern "C" int g_svMultitapPollCount[1];
 extern "C" int g_svMultitapPollSuspended[1];
-extern "C" void beSvConnectCheck_Poll(beSvConnectCheckWork *check);
 extern "C" int g_svSlotAbsent[1];
-extern "C" int beSvConnectCheck_FillDeliver(int *slotWords, beSvDeliver *deliver);
-extern "C" int g_beSvConnectCheck_metaObject[4];
 extern "C" int g_beSaveApi_metaObject[4];
 extern "C" int g_beSvEndApi_metaObject[4];
 extern "C" int g_beSvStartApi_metaObject[4];
@@ -2553,9 +2549,9 @@ void beSvConnectCheck_Report(void)
 {
 }
 
-int beSvConnectCheck_GetMeta(void)
+igMetaObject *beSvConnectCheck_GetMeta(void)
 {
-    return g_beSvConnectCheck_metaObject[0];
+    return g_beSvConnectCheck_metaObject;
 }
 
 void beSvConnectCheck_userConstruct(igObjectDispatchView *self) {

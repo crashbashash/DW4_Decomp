@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWMcSlotXbox_metaObject;
 igMetaField *g_beNDMWMcSlotXbox_mNameMetaField;
 
-void beNDMWMcSlotXbox_Create(int allocator) {
+beNDMWMcSlotXbox *beNDMWMcSlotXbox_Create(int allocator) {
     beNDMWMcSlotXbox_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMcSlotXbox_metaObject, allocator);
+    return (beNDMWMcSlotXbox *)igMetaObject_CreateInstance(g_beNDMWMcSlotXbox_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMcSlotXbox_GetReadyMetaObject(void)

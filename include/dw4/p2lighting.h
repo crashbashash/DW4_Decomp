@@ -51,6 +51,10 @@ typedef struct p2Material {
     float color[4];
 } p2Material;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void p2InitLighting(void);
 void p2EnableLight(int slot);
 void p2DisableLight(int slot);
@@ -63,5 +67,9 @@ void p2SetLightingMode(int mode);
 void p2WriteDirectionalLights(float rows[][4]);
 float p2AdjointMatrix(const float *m, float *adjoint);
 void p2InvertMatrix(const float *m, float *inverse);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -2,9 +2,9 @@ igMetaObject *g_beWeaponAttachData_metaObject;
 igMetaField *g_beWeaponAttachData_boneSelectListMetaField;
 igMetaField *g_beWeaponAttachData_appearanceListListMetaField;
 
-void beWeaponAttachData_Create(int allocator) {
+beWeaponAttachData *beWeaponAttachData_Create(int allocator) {
     beWeaponAttachData_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587A80, allocator);
+    return (beWeaponAttachData *)igMetaObject_CreateInstance(*(int *)0x587A80, allocator);
 }
 
 igMetaObject *beWeaponAttachData_GetMetaObject(void) {

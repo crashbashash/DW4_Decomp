@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopDevice_metaObject;
 igMetaField *g_beNDMWShopDevice_salesListMetaField;
 
-void beNDMWShopDevice_Create(int allocator) {
+beNDMWShopDevice *beNDMWShopDevice_Create(int allocator) {
     beNDMWShopDevice_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopDevice_metaObject, allocator);
+    return (beNDMWShopDevice *)igMetaObject_CreateInstance(g_beNDMWShopDevice_metaObject, allocator);
 }
 
 void *beNDMWShopDevice_GetMetaObject(void) {

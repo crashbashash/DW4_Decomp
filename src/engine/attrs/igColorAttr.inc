@@ -2,9 +2,9 @@ igMetaObject *g_igColorAttr_metaObject;
 igMetaField *g_igColorAttr_colorMetaField;
 igMetaField *g_igColorAttr_colorPackedMetaField;
 
-void igColorAttr_CreateInstance(int arg0) {
+igColorAttr *igColorAttr_CreateInstance(int allocator) {
     igColorAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F2E0, arg0);
+    return (igColorAttr *)igMetaObject_CreateInstance(*(int *)0x55F2E0, allocator);
 }
 
 igMetaObject *igColorAttr_GetOrCreateMetaObject(void) {

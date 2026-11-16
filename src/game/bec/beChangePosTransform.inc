@@ -1,9 +1,9 @@
 igMetaObject *g_beChangePosTransform_metaObject;
 igMetaField *g_beChangePosTransform_oldPosMetaField;
 
-void beChangePosTransform_CreateInstance(int allocator) {
+beChangePosTransform *beChangePosTransform_CreateInstance(int allocator) {
     beChangePosTransform_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589B80, allocator);
+    return (beChangePosTransform *)igMetaObject_CreateInstance(*(int *)0x589B80, allocator);
 }
 
 igMetaObject *beChangePosTransform_GetOrCreateMetaObject(void) {

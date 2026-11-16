@@ -8,9 +8,9 @@ igMetaField *g_beMessenger_pushPopCountMetaField;
 igMetaField *g_beMessenger_freezeTimeMetaField;
 igMetaField *g_beMessenger_isMemoryAssignMetaField;
 
-void beMessenger_CreateInstance(int allocator) {
+beMessenger *beMessenger_CreateInstance(int allocator) {
     beMessenger_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588F38, allocator);
+    return (beMessenger *)igMetaObject_CreateInstance(*(int *)0x588F38, allocator);
 }
 
 igMetaObject *beMessenger_GetOrCreateMetaObject(void) {

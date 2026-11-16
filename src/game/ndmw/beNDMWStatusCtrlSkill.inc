@@ -3,9 +3,9 @@ igMetaField *g_beNDMWStatusCtrlSkill_skillMenuMetaField;
 igMetaField *g_beNDMWStatusCtrlSkill_shinkaCtrlMetaField;
 igMetaField *g_beNDMWStatusCtrlSkill_skillListMetaField;
 
-void beNDMWStatusCtrlSkill_Create(int allocator) {
+beNDMWStatusCtrlSkill *beNDMWStatusCtrlSkill_Create(int allocator) {
     beNDMWStatusCtrlSkill_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlSkill_metaObject, allocator);
+    return (beNDMWStatusCtrlSkill *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlSkill_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrlSkill_GetMetaObject(void) {

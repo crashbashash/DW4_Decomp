@@ -9,9 +9,9 @@ igMetaField *g_beModelCtrlMoveObject_isSeqStopMetaField;
 igMetaField *g_beModelCtrlMoveObject_stopValueMetaField;
 igMetaField *g_beModelCtrlMoveObject_stopFrameMetaField;
 
-void beModelCtrlMoveObject_Create(int allocator) {
+beModelCtrlMoveObject *beModelCtrlMoveObject_Create(int allocator) {
     beModelCtrlMoveObject_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588B48, allocator);
+    return (beModelCtrlMoveObject *)igMetaObject_CreateInstance(*(int *)0x588B48, allocator);
 }
 
 igMetaObject *beModelCtrlMoveObject_GetMetaObject(void) {

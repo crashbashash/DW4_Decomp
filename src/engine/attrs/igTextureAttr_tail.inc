@@ -30,7 +30,7 @@ int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator
     if (allocator == 0) {
         allocator = (Allocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0]);
     }
-    igSmartPointer<Image> image((Image *)igTextureAttr_GetImage(attr, 0), kRetainReference);
+    igSmartPointer<Image> image((Image *)igTextureAttr_GetImage((igTextureAttr *)attr, 0), kRetainReference);
     const char *name = "NO_IMAGE";
     if (image.p != 0) {
         if (image.p->name != 0) {
@@ -61,9 +61,9 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
     }
     var_s1 = "NO_IMAGE";
     var_a1 = "NO_IMAGE";
-    if (igTextureAttr_GetImage(arg0, 0) != 0) {
-        if (((T_140740 *)igTextureAttr_GetImage(arg0, 0))->f88 != 0) {
-            var_s1 = (FUN_001405a0((char *)((T_140740 *)igTextureAttr_GetImage(arg0, 0))->f88));
+    if (igTextureAttr_GetImage((igTextureAttr *)arg0, 0) != 0) {
+        if (((T_140740 *)igTextureAttr_GetImage((igTextureAttr *)arg0, 0))->f88 != 0) {
+            var_s1 = (FUN_001405a0((char *)((T_140740 *)igTextureAttr_GetImage((igTextureAttr *)arg0, 0))->f88));
         }
         var_a1 = var_s1;
     }
@@ -88,16 +88,17 @@ void Gap__Attrs__igTextureAttr__vfunc_17(S0 *arg0) {
     FUN_0013b820(arg0);
 }
 
-void igTextureAttr_SetImage(T_140ad0 *arg0, int *arg1, int arg2) {
+void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
+    T_140ad0 *arg0 = (T_140ad0 *)self;
     L_140ad0 *s1;
     int s0;
     int n;
     int *a0;
     int v1;
     int *a0b;
-    if (arg2 == 0) {
-        if (arg1 != 0) {
-            arg1[1] = arg1[1] + 1;
+    if (level == 0) {
+        if (image != 0) {
+            image->_refCount = image->_refCount + 1;
         }
         a0 = arg0->f48;
         if (a0 != 0) {
@@ -106,17 +107,17 @@ void igTextureAttr_SetImage(T_140ad0 *arg0, int *arg1, int arg2) {
                 igObject_Destroy(a0);
             }
         }
-        arg0->f48 = arg1;
+        arg0->f48 = (int *)image;
         return;
     }
     if (arg0->f64->n == 0) {
         ObjectList_ResizeRetained(arg0->f64, arg0->f60 - 1);
     }
     s1 = arg0->f64;
-    if (arg1 != 0) {
-        arg1[1] = arg1[1] + 1;
+    if (image != 0) {
+        image->_refCount = image->_refCount + 1;
     }
-    s0 = arg2 * 4;
+    s0 = level * 4;
     a0b = *(int **)((char *)s1->d + s0 - 4);
     if (a0b != 0) {
         a0b[1] = a0b[1] - 1;
@@ -125,17 +126,17 @@ void igTextureAttr_SetImage(T_140ad0 *arg0, int *arg1, int arg2) {
         }
     }
     n = s1->n;
-    v1 = arg2 - 1;
+    v1 = level - 1;
     if (n != 0 && v1 >= 0 && v1 < n) {
-        *(int **)(s0 + (int)s1->d - 4) = arg1;
+        *(int **)(s0 + (int)s1->d - 4) = (int *)image;
     }
 }
 
-int igTextureAttr_GetImage(void *arg0, int arg1) {
-    if (arg1 == 0) {
-        return *(int *)((char *)(arg0) + 48);
+igImage *igTextureAttr_GetImage(igTextureAttr *self, int level) {
+    if (level == 0) {
+        return (igImage *)self->_image;
     }
-    return *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 64)) + 16) + (arg1 * 4))) - 4);
+    return ((igImage **)((igImageMipMapList *)self->_imageMipMaps)->_data)[level - 1];
 }
 
 void Gap__Attrs__igTextureAttr__vfunc_12(void **arg0) {

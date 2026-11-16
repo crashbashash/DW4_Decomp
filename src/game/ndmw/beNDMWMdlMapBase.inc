@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWMdlMapBase_metaObject;
 
-void beNDMWMdlMapBase_CreateInstance(int allocator) {
+beNDMWMdlMapBase *beNDMWMdlMapBase_CreateInstance(int allocator) {
     beNDMWMdlMapBase_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlMapBase_metaObject, allocator);
+    return (beNDMWMdlMapBase *)igMetaObject_CreateInstance(g_beNDMWMdlMapBase_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlMapBase_GetOrCreateMetaObject(void) {

@@ -139,7 +139,7 @@ int FUN_001d9740(void *arg0, int arg1) {
     temp_v1 = *(int *)((char *)arg0 + 12);
     var_v0 = 0;
     if (temp_v1 != 0) {
-        var_v0 = igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)temp_v1);
+        var_v0 = igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)temp_v1);
     }
     return var_v0;
 }

@@ -76,7 +76,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         m[0] = 2;
         m[1] = 0;
         m[2] = (int)g_igGuiSystemModel_pushedComponentMetaField;
-        igModel_NotifyViews((S_4578c0 *)model, (S_4578c0 *)m);
+        igModel_NotifyViews((igModel *)model, (ModelChange *)m);
     } else if (msg->handled == 0) {
         int result;
         igMatrix44f_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
@@ -154,6 +154,6 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
     sp[0] = 2;
     sp[1] = (int)a;
     sp[2] = (int)g_igGuiSystemModel_componentUnderMouseMetaField;
-    igModel_NotifyViews((S_4578c0 *)b, (S_4578c0 *)sp);
+    igModel_NotifyViews((igModel *)b, (ModelChange *)sp);
 }
 

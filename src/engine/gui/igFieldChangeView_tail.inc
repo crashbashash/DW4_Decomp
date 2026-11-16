@@ -17,7 +17,7 @@ void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2) {
     sp[0] = 2;
     sp[2] = b;
     sp[1] = (int)arg0;
-    igModel_NotifyViews((S_4578c0 *)arg0->a, (S_4578c0 *)sp);
+    igModel_NotifyViews((igModel *)arg0->a, (ModelChange *)sp);
 }
 
 void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
@@ -39,7 +39,7 @@ void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
         }
     }
     t->f16 = (int)arg2;
-    igView_SetModel((S0_457e90 *)sp4C.p, arg1);
+    igView_SetModel((igView *)sp4C.p, (igModel *)arg1);
 }
 
 void FUN_004552e0(int *arg0, int *arg1) {
@@ -54,24 +54,24 @@ void FUN_004552e0(int *arg0, int *arg1) {
     }
 }
 
-int beFontImage_CountTriangles(VC_455370 *arg0, char *arg1) {
+int beFontImage_CountTriangles(beFontImage *image, const char *text) {
     int s = 0;
-    char *p = arg1;
+    const char *p = text;
     while (*p != 0) {
-        s += arg0->vX(*p);
+        s += ((VC_455370 *)image)->vX(*p);
         p++;
     }
     return s;
 }
 
-int beFontImage_CountTrianglesWide(void **arg0, unsigned short *arg1) {
+int beFontImage_CountTrianglesWide(beFontImage *image, const unsigned short *text) {
     int sum;
-    unsigned short *p;
+    const unsigned short *p;
     int c;
-    p = arg1;
+    p = text;
     sum = 0;
     while ((c = *p) != 0) {
-        sum += ((VC100 *)arg0)->vX(c);
+        sum += ((VC100 *)image)->vX(c);
         p += 1;
     }
     return sum;

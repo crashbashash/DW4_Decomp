@@ -194,6 +194,15 @@ int mwply_GetLogItemTypeThree(MwsfdPly *ply, int slot);
 int mwply_GetLogHdrInfo(MwsfdPly *ply, int slot);
 int mwply_GetLogCompoMode(MwsfdPly *ply, int slot);
 int mwply_GetCurPicCompoMode(MwsfdPly *ply);
+void mwply_SetPicInf(MwsfdPly *ply, MwsfdSfdPicHdr *hdr);
+void mwply_UpdatePicUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm);
+void mwply_ApplyItemType3(MwsfdPly *ply);
+int mwply_IsCurPicItemTypeThree(MwsfdPly *ply);
+int mwPlyIsNextFrmReady(MwsfdPly *ply);
+int mwl_convBufFmtFromSFD(unsigned int ptype);
+int mwl_convPtypeFromSFD(unsigned int ptype);
+struct MwsfdPicStat;
+int mwsffrm_DecideFrmType(MwsfdPly *ply, struct MwsfdPicStat *pic);
 
 void mwPlySetFrmSync(MwsfdPly *ply, int frmSync)
 {

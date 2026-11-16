@@ -19,6 +19,7 @@ enum p2Primitive {
 
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
+#include "dw4/p2draw.h"
 
 /* Bits of a program's p2ProgramFlags entry, as shifts. */
 enum p2ProgramFlagBit {
@@ -83,7 +84,6 @@ enum {
 
 typedef void (*p2VertexSubmit)(unsigned int count, int first);
 
-int p2UploadComponentScales(void);
 int FUN_001fffb0(void);
 int FUN_00200980(void);
 int p2LayoutVuBuffers(void);

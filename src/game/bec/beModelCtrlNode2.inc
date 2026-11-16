@@ -4,9 +4,9 @@ igMetaField *g_beModelCtrlNode2_timeScaleMetaField;
 igMetaField *g_beModelCtrlNode2_timeBiasMetaField;
 igMetaField *g_beModelCtrlNode2_overrideAttrListMetaField;
 
-void beModelCtrlNode2_Create(int allocator) {
+beModelCtrlNode2 *beModelCtrlNode2_Create(int allocator) {
     beModelCtrlNode2_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588860, allocator);
+    return (beModelCtrlNode2 *)igMetaObject_CreateInstance(*(int *)0x588860, allocator);
 }
 
 igMetaObject *beModelCtrlNode2_GetOrCreateMetaObject(void) {
@@ -16,7 +16,7 @@ igMetaObject *beModelCtrlNode2_GetOrCreateMetaObject(void) {
     return g_beModelCtrlNode2_metaObject;
 }
 
-void *beModelCtrlNode2_ResolveMetaObject(void) {
+igMetaObject *beModelCtrlNode2_ResolveMetaObject(void) {
     bool ok;
     if (g_beModelCtrlNode2_metaObject == 0) goto make;
     ok = !!(g_beModelCtrlNode2_metaObject->_validity & 4);

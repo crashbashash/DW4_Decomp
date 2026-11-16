@@ -2,9 +2,9 @@ igMetaObject *g_beSelectCtrl_metaObject;
 igMetaField *g_beSelectCtrl_padManagerMetaField;
 igMetaField *g_beSelectCtrl_isEnableCtrlMetaField;
 
-void beSelectCtrl_CreateInstance(int allocator) {
+beSelectCtrl *beSelectCtrl_CreateInstance(int allocator) {
     beSelectCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587F98, allocator);
+    return (beSelectCtrl *)igMetaObject_CreateInstance(*(int *)0x587F98, allocator);
 }
 
 igMetaObject *beSelectCtrl_GetOrCreateMetaObject(void) {

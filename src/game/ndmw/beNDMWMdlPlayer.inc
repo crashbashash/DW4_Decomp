@@ -3,9 +3,9 @@ igMetaField *g_beNDMWMdlPlayer_viewerSIManagerMetaField;
 igMetaField *g_beNDMWMdlPlayer_padManagerMetaField;
 igMetaField *g_beNDMWMdlPlayer_gameRamMetaField;
 
-void beNDMWMdlPlayer_CreateInstance(int allocator) {
+beNDMWMdlPlayer *beNDMWMdlPlayer_CreateInstance(int allocator) {
     beNDMWMdlPlayer_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlPlayer_metaObject, allocator);
+    return (beNDMWMdlPlayer *)igMetaObject_CreateInstance(g_beNDMWMdlPlayer_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlPlayer_GetOrCreateMetaObject(void) {

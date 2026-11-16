@@ -1,8 +1,8 @@
 igMetaObject *g_beDataObjList_metaObject;
 
-void beDataObjList_Create(int allocator) {
+beDataObjList *beDataObjList_Create(int allocator) {
     beDataObjList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589840, allocator);
+    return (beDataObjList *)igMetaObject_CreateInstance(*(int *)0x589840, allocator);
 }
 
 igMetaObject *beDataObjList_GetOrCreateMetaObject(void) {

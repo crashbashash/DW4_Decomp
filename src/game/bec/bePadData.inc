@@ -22,9 +22,9 @@ igMetaField *g_bePadData_adAngleMetaField;
 igMetaField *g_bePadData_1sttimeMetaField;
 igMetaField *g_bePadData_2ndtimeMetaField;
 
-void bePadData_Create(int allocator) {
+bePadData *bePadData_Create(int allocator) {
     bePadData_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588550, allocator);
+    return (bePadData *)igMetaObject_CreateInstance(*(int *)0x588550, allocator);
 }
 
 void *bePadData_GetMetaObject(void) {

@@ -1,8 +1,8 @@
 igMetaObject *g_igWindow_metaObject;
 
-void igWindow_CreateInstance(int arg0) {
+igWindow *igWindow_CreateInstance(int allocator) {
     FUN_00145de0();
-    igMetaObject_CreateInstance((int)g_igWindow_metaObject, arg0);
+    return (igWindow *)igMetaObject_CreateInstance((int)g_igWindow_metaObject, allocator);
 }
 
 igMetaObject *FUN_00145d40(void) {

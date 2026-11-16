@@ -1,13 +1,12 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igCommonTraversalDispatchView.h"
+#include "dw4/beNodeAnim.h"
 extern "C" {
 void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index);
 int igTraversal_TraverseChildren(igCommonTraversal *traversal, beNodeAnim *node);
 void igObjectPool_Grow(igObjectPool *pool, void *create);
 void igTimeAttr_CreateInstance();
-void beNodeAnim_SetTime(beNodeAnim *node, long long startTime, long long now);
-long long beNodeAnim_UpdateTime(beNodeAnim *node, long long now);
 }
 typedef void (*AttrPopProc)(void *attr, int data);
 /* The attribute list of one stack: count and storage of the pushed attributes. */

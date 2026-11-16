@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWPanelWaza_metaObject;
 igMetaField *g_beNDMWPanelWaza_padManagerMetaField;
 
-void beNDMWPanelWaza_CreateInstance(int allocator) {
+beNDMWPanelWaza *beNDMWPanelWaza_CreateInstance(int allocator) {
     beNDMWPanelWaza_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWPanelWaza_metaObject, allocator);
+    return (beNDMWPanelWaza *)igMetaObject_CreateInstance(g_beNDMWPanelWaza_metaObject, allocator);
 }
 
 igMetaObject *beNDMWPanelWaza_GetOrCreateMetaObject(void) {

@@ -2,9 +2,9 @@ igMetaObject *g_beTextureCtrl_metaObject;
 igMetaField *g_beTextureCtrl_isFirstTimeMetaField;
 igMetaField *g_beTextureCtrl_workMetaField;
 
-void beTextureCtrl_CreateInstance(int allocator) {
+beTextureCtrl *beTextureCtrl_CreateInstance(int allocator) {
     beTextureCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587CB8, allocator);
+    return (beTextureCtrl *)igMetaObject_CreateInstance(*(int *)0x587CB8, allocator);
 }
 
 igMetaObject *beTextureCtrl_GetOrCreateMetaObject(void) {

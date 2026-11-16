@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrlXdataChip_metaObject;
 igMetaField *g_beNDMWShopCtrlXdataChip_itemBaseListMetaField;
 
-void beNDMWShopCtrlXdataChip_Create(int allocator) {
+beNDMWShopCtrlXdataChip *beNDMWShopCtrlXdataChip_Create(int allocator) {
     beNDMWShopCtrlXdataChip_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlXdataChip_metaObject, allocator);
+    return (beNDMWShopCtrlXdataChip *)igMetaObject_CreateInstance(g_beNDMWShopCtrlXdataChip_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlXdataChip_GetMetaObject(void) {

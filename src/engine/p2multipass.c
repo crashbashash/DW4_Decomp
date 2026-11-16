@@ -3,6 +3,7 @@
  * capabilities are read per pass. p2SetPassCount sets how many passes there are. */
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
+#include "dw4/p2multipass.h"
 
 /* GS TEX0.TFX, p2TextureFunction */
 enum {
@@ -510,8 +511,6 @@ int p2LayoutParticleFormat(p2ParticleFormat *format) {
 
 
 extern int DAT_0056b458;
-unsigned short p2GetVuProgramAddress(int);
-
 
 
 

@@ -1,4 +1,10 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWDegiData.h"
+#include "dw4/beNDMWLoadCtrl2.h"
+#include "dw4/beNDMWLoadCtrl2CommonIntf.h"
+#include "dw4/beNDMWLoadIntf2MesWin.h"
+#include "dw4/beNDMWLoadIntf2TextOrder.h"
+#include "dw4/beNDMWMcUtilCtrl.h"
 #define PLW(common, i) (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)(common)->_flagWork)->_data)[i])
 #define MCU(common) ((beNDMWMcUtilCtrl *)(common)->_mcUtilCtrl)
 #define MCSLOT(common, i) (((beNDMWMcSlot **)((beNDMWMcSlotList *)MCU(common)->_slot)->_data)[i])
@@ -35,7 +41,6 @@ extern "C" unsigned char beBaseInfoRam_IsTimerExpired(int, const char *);
 extern "C" int igInsightCore_FindManager(...);
 extern "C" int beFont_ConvertToUnicode(...);
 extern "C" void *beNDMWLoadSlotPlayer_Create(...);
-extern "C" void * beNDMWDegiData_Create(...);
 extern "C" int List_Resize(void *, int, int);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" void igObject_Destroy(void *);
@@ -65,13 +70,8 @@ extern "C" int beMessenger_GetIntCount(...);
 extern "C" int beMessenger_ResolveEnumValue(...);
 extern "C" void TextOrder_Configure(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font, const char *text, int align, int color);
 extern "C" void TextOrder_PublishLine(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font);
-extern "C" void TextOrder_ConfigureFont(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex, const char *text, int align, int color);
-extern "C" void TextOrder_ClearFont(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex);
-extern "C" void TextOrder_PublishLineListOnly(beNDMWLoadIntf2TextOrder *order, int messageId);
-extern "C" void TextOrder_ConfigureUnicode(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex, int unicodeText, int align, int color);
 extern "C" int g_mdlEntity[4];
 extern "C" int g_txtCallNo[4];
-extern "C" void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *order, int messageId, int withFollowUp);
 /* One text line of a load-screen message: the text-control line it fills and the font it uses. */
 struct LoadMessageLine { const char *line; int player; int fontIndex; };
 /* A load-screen message: its id (group in bits 12-15), the text call number the txt_ script plays,
@@ -512,23 +512,7 @@ const char *g_loadFontNames[4][20] = {
 };
 }
 extern "C" bePadData *bePadManager_GetPadForPlayer(...);
-extern "C" void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win);
 extern "C" unsigned char beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence);
-extern "C" void beNDMWLoadIntf2MesWin__RequestOpen(beNDMWLoadIntf2MesWin *win);
-extern "C" void beNDMWLoadIntf2MesWin__RequestClose(beNDMWLoadIntf2MesWin *win);
-extern "C" void beNDMWLoadIntf2MesWin__RequestMessage(beNDMWLoadIntf2MesWin *win, int messageNo);
-extern "C" void beNDMWLoadIntf2MesWin__RequestQuestion(beNDMWLoadIntf2MesWin *win, int messageNo, int cursor);
-extern "C" void beNDMWLoadIntf2MesWin__RequestPrompt(beNDMWLoadIntf2MesWin *win, int messageNo);
-extern "C" void beNDMWLoadIntf2MesWin__Cancel(beNDMWLoadIntf2MesWin *win);
-extern "C" unsigned char beNDMWLoadIntf2MesWin__GetIsCtrl(beNDMWLoadIntf2MesWin *win);
-extern "C" int beNDMWLoadIntf2MesWin__GetCurPoint(beNDMWLoadIntf2MesWin *win);
-extern "C" void beNDMWLoadIntf2MesWin__RequestMesErase(beNDMWLoadIntf2MesWin *win);
-extern "C" void beNDMWLoadIntf2MesWin__RequestSystemMessage(beNDMWLoadIntf2MesWin *win, int messageNo);
-extern "C" void beNDMWLoadIntf2MesWin__EndSystemMessage(beNDMWLoadIntf2MesWin *win);
-extern "C" void beNDMWLoadCtrl2CommonIntf__UpdateCutConnect(beNDMWLoadCtrl2CommonIntf *intf);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int promptNo, int questionNo, int cursor, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beFont_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -551,12 +535,6 @@ public:
     DegiDataRef(igObject *o) : p(o) {}
     ~DegiDataRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)o); } }
 };
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, int player, int mesWin, int slot, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int saveIndex, int depth);
-extern "C" int beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
-extern "C" void beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(beNDMWLoadCtrl2CommonIntf *intf, int player);
-extern "C" void beNDMWLoadCtrl2CommonIntf__StartUtilFor(beNDMWLoadCtrl2CommonIntf *intf, int player, int state);
-extern "C" void beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(beNDMWLoadCtrl2CommonIntf *intf, int player);
 extern "C" int g_stringPool[4];
 /* A Digimon's save block: the data block of a beNDMWDegiData, one record per property of the
  * save. playerName[0] is 0xFFFF once the name has been converted to unicode. */
@@ -609,7 +587,6 @@ extern "C" PropObjListRecord * igProperty_GetRecordFolder(...);
 extern "C" PropByteListRecord * igProperty_GetRecordArray(...);
 extern "C" PropStringRecord * igProperty_GetRecordString(...);
 extern "C" PropIntListRecord * igProperty_GetRecordIntList(...);
-extern "C" void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *degi, int props);
 
 static inline int listCount(const igObjectList *l) { return l->_count; }
 struct RefCounted { int vtable; int refCount; };
@@ -650,7 +627,6 @@ extern "C" beUnicodeObj *beUnicodeObj_Create(int);
 extern "C" void beUnicodeObj_AllocateBuffer(beUnicodeObj *, int);
 extern "C" ItemRef beNDMWDegiData__CreateItem(void *owner, int id);
 extern "C" int kIGMemoryPoolHandleUser0[4];
-extern "C" void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int font);
 extern "C" void beNDMWLoadSlotPlayer__WriteToBuffer(beNDMWLoadSlotPlayer *slotPlayer, int buffer, int replaceIndex, beNDMWDegiData *replacement);
 extern "C" void beNDMWLoadSlotPlayer__ReadFromBuffer(beNDMWLoadSlotPlayer *slotPlayer, int buffer);
 extern "C" igObject *beNDMWMcSlotXbox_Create(int);
@@ -664,16 +640,8 @@ public:
     SlotRef(igObject *o) : p(o) {}
     ~SlotRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)o); } }
 };
-extern "C" void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard);
-extern "C" void beNDMWMcUtilCtrl__Generate(beNDMWMcUtilCtrl *util);
-extern "C" unsigned char beNDMWMcUtilCtrl__CheckReady(beNDMWMcUtilCtrl *util);
-extern "C" void beNDMWMcUtilCtrl__Remove(beNDMWMcUtilCtrl *util);
-extern "C" bool beNDMWMcUtilCtrl__IsRemoved(beNDMWMcUtilCtrl *util);
-extern "C" void beNDMWMcUtilCtrl__Request(beNDMWMcUtilCtrl *util, int kind, int slot);
 extern "C" beSvDeliver * beMessenger_GetObject(...);
-extern "C" void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util);
 extern "C" int g_beNDMWLoadCtrl2Info_metaObject[4];
-extern "C" int g_beNDMWLoadCtrl2_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWLoadCtrl2_Prepare(beNDMWLoadCtrl2 *self);
 extern "C" void beNDMWLoadCtrl2_OnAddRam(beNDMWLoadCtrl2 *self, int info);
@@ -681,7 +649,6 @@ extern "C" int g_propertyNameField[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram);
 extern "C" igObject *beNDMWLoadCtrl2CtrlData_Create(int);
-extern "C" igObject *beNDMWLoadCtrl2CommonIntf_Create(int);
 extern "C" igObject *beNDMWLoadSavePlWork_Create(int);
 extern "C" int g_beSystem_metaObject[4];
 /* Owning stack references while the controller list is wired up; each releases its object on scope
@@ -1297,13 +1264,6 @@ int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *in
     return result;
 }
 
-/* One row of the player-model table: the model name and the open and face sequences its face
- * window plays. */
-struct PlayerModelRow {
-    const char *model;
-    const char *openSequence;
-    const char *faceSequence;
-};
 extern "C" {
 PlayerModelRow g_playerModelRow[17] = {
     {"p_agumon", "SQ_agumonOPEN", "SQ_p_agumon"},
@@ -1409,7 +1369,7 @@ int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *int
 
 static inline int countOf(const igIntList *list) { return list->_count; }
 
-int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, int player, int mesWin, int slot, int depth) {
+int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth) {
     int result;
     int state;
     void *alloc;
@@ -1446,7 +1406,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, in
                 SlotPlayerRef slotPlayer((igObject *)beNDMWLoadSlotPlayer_Create(alloc));
                 for (i = 0; i < 4; i++) {
                     ALLOC(alloc, intf);
-                    DegiDataRef degi((igObject *)beNDMWDegiData_Create(alloc));
+                    DegiDataRef degi((igObject *)beNDMWDegiData_Create((int)alloc));
                     ObjectList_AppendRetained(SLOT_PLAYER(slotPlayer.p)->_saveDataList, degi.p);
                 }
                 beNDMWLoadSlotPlayer__ReadFromBuffer((beNDMWLoadSlotPlayer *)slotPlayer.p, (int)(((beSaveDataDeliver *)MCU(intf)->_svData)->_data));
@@ -2818,7 +2778,7 @@ int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseI
 
 int beNDMWLoadCtrl2__GetMeta(void)
 {
-    return g_beNDMWLoadCtrl2_metaObject[0];
+    return (int)g_beNDMWLoadCtrl2_metaObject;
 }
 
 #pragma pop

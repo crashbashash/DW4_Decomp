@@ -2,9 +2,9 @@ igMetaObject *g_beMovie_metaObject;
 igMetaField *g_beMovie_movieMetaField;
 igMetaField *g_beMovie_playingNameMetaField;
 
-void beMovie_CreateInstance(int allocator) {
+beMovie *beMovie_CreateInstance(int allocator) {
     beMovie_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588788, allocator);
+    return (beMovie *)igMetaObject_CreateInstance(*(int *)0x588788, allocator);
 }
 
 igMetaObject *beMovie_GetOrCreateMetaObject(void) {

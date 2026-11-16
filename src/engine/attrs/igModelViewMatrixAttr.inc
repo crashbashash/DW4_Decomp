@@ -1,9 +1,9 @@
 igMetaObject *g_igModelViewMatrixAttr_metaObject;
 igMetaField *g_igModelViewMatrixAttr_mMetaField;
 
-int igModelViewMatrixAttr_CreateInstance(int arg0) {
+igModelViewMatrixAttr *igModelViewMatrixAttr_CreateInstance(int allocator) {
     igModelViewMatrixAttr_EnsureRegistered();
-    return igMetaObject_CreateInstance(*(int *)0x55EFE8, arg0);
+    return (igModelViewMatrixAttr *)igMetaObject_CreateInstance(*(int *)0x55EFE8, allocator);
 }
 
 igMetaObject *FUN_001356f0(void) {

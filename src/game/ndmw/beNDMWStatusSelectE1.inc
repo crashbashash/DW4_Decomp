@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWStatusSelectE1_metaObject;
 
-void beNDMWStatusSelectE1_Create(int allocator) {
+beNDMWStatusSelectE1 *beNDMWStatusSelectE1_Create(int allocator) {
     beNDMWStatusSelectE1_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusSelectE1_metaObject, allocator);
+    return (beNDMWStatusSelectE1 *)igMetaObject_CreateInstance(g_beNDMWStatusSelectE1_metaObject, allocator);
 }
 
 void *beNDMWStatusSelectE1_GetMetaObject(void) {

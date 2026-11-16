@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWItemWaza_metaObject;
 igMetaField *g_beNDMWItemWaza_baseNoMetaField;
 
-void beNDMWItemWaza_Create(int allocator) {
+beNDMWItemWaza *beNDMWItemWaza_Create(int allocator) {
     beNDMWItemWaza_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, allocator);
+    return (beNDMWItemWaza *)igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void) {

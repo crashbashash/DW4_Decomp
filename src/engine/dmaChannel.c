@@ -1,4 +1,5 @@
 #include "dw4/p2dma.h"
+#include "dw4/dmaChannel.h"
 #define D_CTRL ((unsigned int *)0x1000e000)
 #define D0_CHCR ((unsigned int *)0x10008000)
 #define D0_QWC ((unsigned int *)0x10008020)

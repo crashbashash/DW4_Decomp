@@ -5,9 +5,9 @@ igMetaField *g_beTimer_luaManagerMetaField;
 igMetaField *g_beTimer_dataListMetaField;
 igMetaField *g_beTimer_oldWorldTimeMetaField;
 
-void beTimer_CreateInstance(int allocator) {
+beTimer *beTimer_CreateInstance(int allocator) {
     beTimer_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587C18, allocator);
+    return (beTimer *)igMetaObject_CreateInstance(*(int *)0x587C18, allocator);
 }
 
 igMetaObject *beTimer_GetOrCreateMetaObject(void) {

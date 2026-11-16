@@ -2,9 +2,9 @@ igMetaObject *g_beHitLandResultData_metaObject;
 igMetaField *g_beHitLandResultData_infoNameMetaField;
 igMetaField *g_beHitLandResultData_ramNoMetaField;
 
-void beHitLandResultData_Create(int allocator) {
+beHitLandResultData *beHitLandResultData_Create(int allocator) {
     beHitLandResultData_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5893E8, allocator);
+    return (beHitLandResultData *)igMetaObject_CreateInstance(*(int *)0x5893E8, allocator);
 }
 
 void *beHitLandResultData_GetMetaObject(void) {

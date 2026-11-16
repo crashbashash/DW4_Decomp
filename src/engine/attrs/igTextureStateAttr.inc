@@ -2,9 +2,9 @@ igMetaObject *g_igTextureStateAttr_metaObject;
 igMetaField *g_igTextureStateAttr_enabledMetaField;
 igMetaField *g_igTextureStateAttr_unitIDMetaField;
 
-void igTextureStateAttr_CreateInstance(int arg0) {
+igTextureStateAttr *igTextureStateAttr_CreateInstance(int allocator) {
     igTextureStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55ECA8, arg0);
+    return (igTextureStateAttr *)igMetaObject_CreateInstance(*(int *)0x55ECA8, allocator);
 }
 
 igMetaObject *igTextureStateAttr_GetOrCreateMetaObject(void) {

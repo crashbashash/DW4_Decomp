@@ -5,9 +5,9 @@ igMetaField *g_beNDMWShopCtrl50_diskCntMetaField;
 igMetaField *g_beNDMWShopCtrl50_kazuMetaField;
 igMetaField *g_beNDMWShopCtrl50_tankaMetaField;
 
-void beNDMWShopCtrl50_Create(int allocator) {
+beNDMWShopCtrl50 *beNDMWShopCtrl50_Create(int allocator) {
     beNDMWShopCtrl50_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrl50_metaObject, allocator);
+    return (beNDMWShopCtrl50 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl50_metaObject, allocator);
 }
 
 void *beNDMWShopCtrl50_GetMetaObject(void) {

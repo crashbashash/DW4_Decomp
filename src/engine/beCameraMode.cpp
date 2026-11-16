@@ -2,6 +2,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igMath.h"
 #include "dw4/igCameraDispatchView.h"
+#include "dw4/igCameraMode.h"
 
 extern "C" {
 
@@ -37,7 +38,6 @@ extern int g_igCamera_metaObject[4];
 extern int g_igPickMode_metaObject[4];
 extern int g_igRotateMode_metaObject[4];
 extern int g_igFlyMode_metaObject[4];
-extern int g_igCameraMode_metaObject[4];
 extern int g_igViewMode_metaObject[4];
 
 /* igViewModel's field handles, which a change notification names. */
@@ -752,7 +752,7 @@ int igFlyMode_GetMeta(void) {
 }
 
 int igCameraMode_GetMeta(void) {
-    return g_igCameraMode_metaObject[0];
+    return (int)g_igCameraMode_metaObject;
 }
 
 int igViewMode_GetMeta(void) {

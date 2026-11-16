@@ -10,9 +10,9 @@ igMetaField *g_beNDMWTitle2CtrlData_st2MetaField;
 igMetaField *g_beNDMWTitle2CtrlData_st3MetaField;
 igMetaEnum *g_beNDMWTitle2CtrlData_messageMetaEnum;
 
-void beNDMWTitle2CtrlData_Create(int allocator) {
+beNDMWTitle2CtrlData *beNDMWTitle2CtrlData_Create(int allocator) {
     beNDMWTitle2CtrlData_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWTitle2CtrlData_metaObject, allocator);
+    return (beNDMWTitle2CtrlData *)igMetaObject_CreateInstance(g_beNDMWTitle2CtrlData_metaObject, allocator);
 }
 
 void *beNDMWTitle2CtrlData_GetMetaObject(void) {

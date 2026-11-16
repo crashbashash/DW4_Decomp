@@ -4,9 +4,9 @@ igMetaField *g_beNDMWAfsSetup_customMenuMetaField;
 igMetaField *g_beNDMWAfsSetup_subMenuMetaField;
 igMetaField *g_beNDMWAfsSetup_subMenuHolderMetaField;
 
-void beNDMWAfsSetup_CreateInstance(int allocator) {
+beNDMWAfsSetup *beNDMWAfsSetup_CreateInstance(int allocator) {
     beNDMWAfsSetup_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWAfsSetup_metaObject, allocator);
+    return (beNDMWAfsSetup *)igMetaObject_CreateInstance(g_beNDMWAfsSetup_metaObject, allocator);
 }
 
 igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void) {

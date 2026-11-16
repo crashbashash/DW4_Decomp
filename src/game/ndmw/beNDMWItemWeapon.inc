@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWItemWeapon_metaObject;
 
-void beNDMWItemWeapon_Create(int allocator) {
+beNDMWItemWeapon *beNDMWItemWeapon_Create(int allocator) {
     beNDMWItemWeapon_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemWeapon_metaObject, allocator);
+    return (beNDMWItemWeapon *)igMetaObject_CreateInstance(g_beNDMWItemWeapon_metaObject, allocator);
 }
 
 void *beNDMWItemWeapon_GetReadyMetaObject(void) {

@@ -5,9 +5,9 @@ igMetaField *g_beNDMWMdlPlayer2InfoWork_bitMetaField;
 igMetaField *g_beNDMWMdlPlayer2InfoWork_expMetaField;
 igMetaEnum *g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum;
 
-void beNDMWMdlPlayer2InfoWork_Create(int allocator) {
+beNDMWMdlPlayer2InfoWork *beNDMWMdlPlayer2InfoWork_Create(int allocator) {
     beNDMWMdlPlayer2InfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, allocator);
+    return (beNDMWMdlPlayer2InfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, allocator);
 }
 
 void *beNDMWMdlPlayer2InfoWork_ResolveMetaObject(void) {

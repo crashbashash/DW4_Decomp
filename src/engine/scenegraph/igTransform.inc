@@ -1,6 +1,6 @@
-void igTransform_CreateInstance(int arg0) {
+igTransform *igTransform_CreateInstance(int allocator) {
     igTransform_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igTransform_metaObject, arg0);
+    return (igTransform *)igMetaObject_CreateInstance((int)g_igTransform_metaObject, allocator);
 }
 
 igMetaObject *g_igTransform_metaObject;

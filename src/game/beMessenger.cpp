@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/listSet.h"
+#include "dw4/beMessenger.h"
 
 class StringRef;
 
@@ -14,9 +15,9 @@ void beMessengerDelay_Clear(beMessengerDelay *);
 void *beMessengerArgData_Create(void *);
 void *beMessengerWork_Create(void *);
 int ObjectList_ResizeRetained(void *, int);
-int strcpy(int *, int);
+int strcpy(int *, const char *);
 int strcmp(...);
-int igMetaEnum_GetValueByName(int *, int, int, int *);
+int igMetaEnum_GetValueByName(int *, igMetaEnum *, const char *, int *);
 void *igProperty_FindByName(void *, int, ...);
 void *igObject_GetAllocator(void *);
 void *Memory_GetAllocatorBySelector(int);
@@ -47,7 +48,6 @@ extern int g_resolveEnumLastName[4];
 extern int g_resolveEnumLastValue[4];
 extern int emptyString[4];
 extern char SEARCH[], FIND_SPACE_3[];
-extern int g_beMessenger_metaObject[4];
 
 void beMessenger_Activate(beMessenger *, int);
 void beMessenger_Deactivate(beMessenger *, int);
@@ -56,57 +56,8 @@ void beMessenger_Stop(void);
 int beMessenger_AddInfo(beMessenger *self);
 void beMessenger_RemoveAllInfo(beMessenger *);
 void beMessenger_Update(beMessenger *self);
-void beMessenger_SetFreezeTime(beMessenger *self, int frozen);
-int beMessenger_ResolveEnumValue(beMessenger *self, int metaEnum, int name);
-void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *name, const char *text, int value);
-void beMessenger_RegisterReceiverFromInfo(int messenger, beBaseInfoRam *ram, int name);
-void beMessenger_SelectReceivers(beMessenger *self, char *category, char *name, int id);
-void beMessenger_DispatchSelected(beMessenger *self, int name);
 void beMessenger_SelectGroupRam(void *, const char *, int);
-void beMessenger_SelectGroup(void *, const char *);
-void beMessenger_SendNamed(void *, const char *, const char *, int, const char *);
-void beMessenger_SendRam(void *, const char *, int, const char *);
-void beMessenger_SendGroup(void *, const char *, const char *);
-void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, const char *name, int number);
-void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long delay);
-void beMessenger_SendDelayedNamed(void *, const char *, const char *, int, const char *, long long);
-void beMessenger_SendDelayedGroup(void *, const char *, const char *, long long);
-void beMessenger_PrepareDelayedGroup(void *, const char *);
-void beMessenger_PushArgContext(beMessenger *self);
-void beMessenger_PopArgContext(beMessenger *self);
-void beMessenger_SetRunCheck(beMessenger *self, char enabled);
-int beMessenger_GetBoolCount(beMessenger *self);
-void beMessenger_ResizeBool(beMessenger *self, int count);
-void beMessenger_AppendBool(beMessenger *self, char value);
-void beMessenger_ClearBool(beMessenger *self);
-void beMessenger_SetBool(beMessenger *self, int index, char value);
-unsigned char beMessenger_GetBool(beMessenger *self, int index);
-int beMessenger_GetIntCount(beMessenger *self);
-void beMessenger_AppendInt(beMessenger *self, int value);
-void beMessenger_ClearInt(beMessenger *self);
-void beMessenger_SetInt(beMessenger *self, int index, int value);
-int beMessenger_GetInt(beMessenger *self, int index);
-int beMessenger_GetFloatCount(beMessenger *self);
-void beMessenger_AppendFloat(beMessenger *self, float value);
-float beMessenger_GetFloat(beMessenger *self, int index);
-int beMessenger_GetLongCount(beMessenger *self);
-void beMessenger_AppendLong(beMessenger *self, long long value);
-long long beMessenger_GetLong(beMessenger *self, int index);
-int beMessenger_GetVec3Count(beMessenger *self);
-void beMessenger_AppendVec3(beMessenger *self, float *value);
-void beMessenger_ClearVec3(beMessenger *self);
-void beMessenger_GetVec3(float *out, beMessenger *self, int index);
-int beMessenger_GetMatrixCount(beMessenger *self);
-void beMessenger_AppendMatrix(beMessenger *self, void *value);
-void beMessenger_GetMatrix(void *out, beMessenger *self, int index);
-int beMessenger_GetObjectCount(beMessenger *self);
-void beMessenger_AppendObject(beMessenger *self, int object);
-void beMessenger_ClearObjects(beMessenger *self);
-int beMessenger_GetObject(beMessenger *self, int index);
-int beMessenger_GetStringCount(beMessenger *self);
-void beMessenger_AppendString(beMessenger *self, const char *text);
-int beMessenger_GetString(beMessenger *self, int index);
-int beMessenger_GetMeta(void);
+igMetaObject *beMessenger_GetMeta(void);
 }
 
 static inline int countOf(const igIntList *l) { return l->_count; }
@@ -538,7 +489,7 @@ void beMessenger_Update(beMessenger *self)
                         DelayRef::assign((igObject **)&self->_argData, (igObject *)row->_argData);
                         RowOps::SetArg(row.get(), saved.get());
                     }
-                    beMessenger_DispatchSelected(self, row->_message);
+                    beMessenger_DispatchSelected(self, (const char *)row->_message);
                     beMessengerDelay_Clear(row.p);
                     stack = (igObjectList *)self->_delayStack;
                     DelayRef::release(((igObject **)stack->_data)[0]);
@@ -570,15 +521,15 @@ void beMessenger_SetFreezeTime(beMessenger *self, int frozen) {
     self->_freezeTime = 0;
 }
 
-int beMessenger_ResolveEnumValue(beMessenger *self, int metaEnum, int name) {
+int beMessenger_ResolveEnumValue(beMessenger *self, igMetaEnum *metaEnum, const char *name) {
     int value;
     int found;
-    if ((g_resolveEnumLastMetaEnum[0] == metaEnum) && (strcmp(&g_resolveEnumLastName[0], name) == 0)) {
+    if ((g_resolveEnumLastMetaEnum[0] == (int)metaEnum) && (strcmp(&g_resolveEnumLastName[0], name) == 0)) {
         return g_resolveEnumLastValue[0];
     }
     igMetaEnum_GetValueByName(&found, metaEnum, name, &value);
     if (*(int *)(unsigned)&found == g_resultSuccess[0]) {
-        g_resolveEnumLastMetaEnum[0] = metaEnum;
+        g_resolveEnumLastMetaEnum[0] = (int)metaEnum;
         strcpy(&g_resolveEnumLastName[0], name);
         g_resolveEnumLastValue[0] = value;
         return value;
@@ -601,7 +552,7 @@ struct Str { static inline const char *intern(const char *text) {
     return token;
 } };
 
-void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *name, const char *text, int value)
+void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const char *name, const char *text, int value)
 {
     void *allocator;
     igIntList *l;
@@ -631,12 +582,12 @@ void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *nam
 
 /* C++ keeps the call a real jal (C turns a trailing call into a tail jump); the ternary gives the
  * empty-then / branch-over shape. */
-void beMessenger_RegisterReceiverFromInfo(int messenger, beBaseInfoRam *ram, int name) {
+void beMessenger_RegisterReceiverFromInfo(beMessenger *self, beBaseInfoRam *ram, const char *group) {
     beBaseInfo *info = (beBaseInfo *)ram->_parentInfo;
     int *recv = (int *)info->_name;
     int t = ram->_ramNo;
     recv = recv != 0 ? recv : &emptyString[0];
-    beMessenger_RegisterReceiver((beMessenger *)messenger, ram, (const char *)name, (const char *)recv, t);
+    beMessenger_RegisterReceiver(self, ram, group, (const char *)recv, t);
 }
 
 /* The lists are igObjectList (_count +8, _capacity +12, _data +16); the data
@@ -649,12 +600,12 @@ static inline int countOf(const List *l) { return l->_count; }
  * and this access path does not either. */
 struct WorkOps {
 static inline char *InfoName2(Work *w) { return (char *)((Work *)w)->_infoName; }
-static inline char *Intern(char *text) {
+static inline char *Intern(const char *text) {
     POOL();
     return (char *)StringPool_Intern(g_stringPool[0], text);
 }
-static inline void SetGroupName(Work *w, char *c) { char *s; s = Intern(c); char *o = (char *)w->_groupName; STR_RELEASE(o); w->_groupName = (int)s; }
-static inline void SetInfoName(Work *w, char *n) { char *s; s = Intern(n); char *o = (char *)w->_infoName; STR_RELEASE(o); w->_infoName = (int)s; }
+static inline void SetGroupName(Work *w, const char *c) { char *s; s = Intern(c); char *o = (char *)w->_groupName; STR_RELEASE(o); w->_groupName = (int)s; }
+static inline void SetInfoName(Work *w, const char *n) { char *s; s = Intern(n); char *o = (char *)w->_infoName; STR_RELEASE(o); w->_infoName = (int)s; }
 };
 
 typedef beMessengerGroup Group;
@@ -682,7 +633,7 @@ struct RefTmp {
 
 #define IW ((Work *)item.p)
 
-void beMessenger_SelectReceivers(Messenger *self, char *category, char *name, int id) {
+void beMessenger_SelectReceivers(beMessenger *self, const char *category, const char *name, int id) {
     /* Declaration order matters for retail's register assignment. */
     int k;
     unsigned char found;
@@ -844,7 +795,7 @@ public:
     }
 };
 
-void beMessenger_DispatchSelected(beMessenger *self, int name)
+void beMessenger_DispatchSelected(beMessenger *self, const char *name)
 {
     int n;
     void *alloc;
@@ -928,17 +879,17 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
                 if (!(sid == -1 || have == -1 || have == sid)) continue;
             }
             r = (MsgReceiver *)obj->_parentManager;
-            if (!(r->Check(obj, work) & 0xff)) r->Send(obj, name);
+            if (!(r->Check(obj, work) & 0xff)) r->Send(obj, (int)name);
             if (work->_ramNo == -2) break;
         }
     }
 }
 
-void beMessenger_SelectGroupRam(void *self,const char *category,int id){beMessenger_SelectReceivers((beMessenger *)self,(char *)category,0,id);}
-void beMessenger_SelectGroup(void *self,const char *category){beMessenger_SelectReceivers((beMessenger *)self,(char *)category,0,-1);}
-void beMessenger_SendNamed(void *self,const char *category,const char *name,int id,const char *key){beMessenger_SelectReceivers((beMessenger *)self,(char *)category,(char *)name,id);beMessenger_DispatchSelected((beMessenger *)self,(int)key);}
-void beMessenger_SendRam(void *self,const char *category,int id,const char *key){beMessenger_SelectGroupRam(self,category,id);beMessenger_DispatchSelected((beMessenger *)self,(int)key);}
-void beMessenger_SendGroup(void *self,const char *category,const char *key){beMessenger_SelectGroup(self,category);beMessenger_DispatchSelected((beMessenger *)self,(int)key);}
+void beMessenger_SelectGroupRam(void *self,const char *category,int id){beMessenger_SelectReceivers((beMessenger *)self,category,0,id);}
+void beMessenger_SelectGroup(beMessenger *self,const char *category){beMessenger_SelectReceivers(self,category,0,-1);}
+void beMessenger_SendNamed(beMessenger *self,const char *category,const char *name,int id,const char *key){beMessenger_SelectReceivers(self,category,name,id);beMessenger_DispatchSelected(self,key);}
+void beMessenger_SendRam(beMessenger *self,const char *category,int id,const char *key){beMessenger_SelectGroupRam(self,category,id);beMessenger_DispatchSelected(self,key);}
+void beMessenger_SendGroup(beMessenger *self,const char *category,const char *key){beMessenger_SelectGroup(self,category);beMessenger_DispatchSelected(self,key);}
 
 #define SET_STRING(field, text) { \
     beMessengerDelay *r = (beMessengerDelay *)row.p; \
@@ -1042,9 +993,9 @@ void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long 
     List_InsertWords((void *)st, i, 1, (void *)&tmp.value);
 }
 
-void beMessenger_SendDelayedNamed(void *self,const char *group,const char *name,int id,const char *message,long long delay){beMessenger_PrepareDelayedSelection((beMessenger *)self,group,name,id);beMessenger_EnqueueSelected((beMessenger *)self,message,delay);}
-void beMessenger_SendDelayedGroup(void *self,const char *group,const char *message,long long delay){beMessenger_PrepareDelayedSelection((beMessenger *)self,group,0,-1);beMessenger_EnqueueSelected((beMessenger *)self,message,delay);}
-void beMessenger_PrepareDelayedGroup(void *self,const char *group){beMessenger_PrepareDelayedSelection((beMessenger *)self,group,0,-1);}
+void beMessenger_SendDelayedNamed(beMessenger *self,const char *group,const char *name,int id,const char *message,long long delay){beMessenger_PrepareDelayedSelection(self,group,name,id);beMessenger_EnqueueSelected(self,message,delay);}
+void beMessenger_SendDelayedGroup(beMessenger *self,const char *group,const char *message,long long delay){beMessenger_PrepareDelayedSelection(self,group,0,-1);beMessenger_EnqueueSelected(self,message,delay);}
+void beMessenger_PrepareDelayedGroup(beMessenger *self,const char *group){beMessenger_PrepareDelayedSelection(self,group,0,-1);}
 
 static inline void insertWords(igObjectList *l, int at, int n, RefObj **src) {
     int i;
@@ -1107,7 +1058,7 @@ void beMessenger_PopArgContext(beMessenger *self) {
     --self->_pushPopCount;
 }
 
-void beMessenger_SetRunCheck(beMessenger *self, char enabled) {
+void beMessenger_SetRunCheck(beMessenger *self, unsigned char enabled) {
     beMessengerArgData *args = (beMessengerArgData *)self->_argData;
     args->_isRunCheck = enabled;
 }
@@ -1130,7 +1081,7 @@ void beMessenger_ResizeBool(beMessenger *self, int count) {
     }
 }
 
-void beMessenger_AppendBool(beMessenger *self, char value)
+void beMessenger_AppendBool(beMessenger *self, unsigned char value)
 {
     int index;
     igCharList *list;
@@ -1150,7 +1101,7 @@ void beMessenger_ClearBool(beMessenger *self) {
     list->_count = 0;
 }
 
-void beMessenger_SetBool(beMessenger *self, int index, char value) {
+void beMessenger_SetBool(beMessenger *self, int index, unsigned char value) {
     igBoolList *l = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
     int n = l->_count;
     if (n != 0 && index >= 0 && index < n) {
@@ -1331,7 +1282,7 @@ int beMessenger_GetObjectCount(beMessenger *self) {
     return list->_count;
 }
 
-void beMessenger_AppendObject(beMessenger *self, int object)
+void beMessenger_AppendObject(beMessenger *self, igObject *object)
 {
     ObjectList_AppendRetained(((beMessengerArgData *)self->_argData)->_objectList, object);
 }
@@ -1364,10 +1315,10 @@ void beMessenger_ClearObjects(beMessenger *self) {
     l->_count = 0;
 }
 
-int beMessenger_GetObject(beMessenger *self, int index) {
+igObject *beMessenger_GetObject(beMessenger *self, int index) {
     beMessengerArgData *args = (beMessengerArgData *)self->_argData;
     igObjectList *list = (igObjectList *)args->_objectList;
-    return *(int *)(list->_data + (index * 4));
+    return *(igObject **)(list->_data + (index * 4));
 }
 
 int beMessenger_GetStringCount(beMessenger *self) {
@@ -1407,7 +1358,7 @@ typedef struct StringTokenHeader {
 
 /* Return the string token at index. The list copy is retained and released again here, so the
  * result is borrowed from the list. */
-int beMessenger_GetString(beMessenger *self, int index)
+const char *beMessenger_GetString(beMessenger *self, int index)
 {
     int slot;
     int token;
@@ -1423,10 +1374,10 @@ int beMessenger_GetString(beMessenger *self, int index)
         if (!refCount)
             StringChunk_ReleaseHeader(header->owner, header);
     }
-    return token;
+    return (const char *)token;
 }
 
-int beMessenger_GetMeta(void)
+igMetaObject *beMessenger_GetMeta(void)
 {
-    return g_beMessenger_metaObject[0];
+    return g_beMessenger_metaObject;
 }

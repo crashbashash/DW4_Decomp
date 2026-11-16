@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrlDeviceSell_metaObject;
 igMetaField *g_beNDMWShopCtrlDeviceSell_decideListMetaField;
 
-void beNDMWShopCtrlDeviceSell_Create(int allocator) {
+beNDMWShopCtrlDeviceSell *beNDMWShopCtrlDeviceSell_Create(int allocator) {
     beNDMWShopCtrlDeviceSell_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlDeviceSell_metaObject, allocator);
+    return (beNDMWShopCtrlDeviceSell *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDeviceSell_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlDeviceSell_GetMetaObject(void) {

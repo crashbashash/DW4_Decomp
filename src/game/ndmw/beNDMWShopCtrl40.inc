@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrl40_metaObject;
 igMetaField *g_beNDMWShopCtrl40_selectCursorMetaField;
 
-void beNDMWShopCtrl40_Create(int allocator) {
+beNDMWShopCtrl40 *beNDMWShopCtrl40_Create(int allocator) {
     beNDMWShopCtrl40_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrl40_metaObject, allocator);
+    return (beNDMWShopCtrl40 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl40_metaObject, allocator);
 }
 
 void *beNDMWShopCtrl40_GetMetaObject(void) {

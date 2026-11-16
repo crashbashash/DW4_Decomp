@@ -14,9 +14,9 @@ igMetaField *g_beNDMWLoadSavePlWork_sysStat2MetaField;
 igMetaField *g_beNDMWLoadSavePlWork_sysStat3MetaField;
 igMetaField *g_beNDMWLoadSavePlWork_sysCount0MetaField;
 
-void beNDMWLoadSavePlWork_Create(int allocator) {
+beNDMWLoadSavePlWork *beNDMWLoadSavePlWork_Create(int allocator) {
     beNDMWLoadSavePlWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadSavePlWork_metaObject, allocator);
+    return (beNDMWLoadSavePlWork *)igMetaObject_CreateInstance(g_beNDMWLoadSavePlWork_metaObject, allocator);
 }
 
 void *beNDMWLoadSavePlWork_ResolveMetaObject(void) {

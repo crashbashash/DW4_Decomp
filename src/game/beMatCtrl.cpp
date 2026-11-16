@@ -7,6 +7,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/listSet.h"
 #include "dw4/igTDataList.h"
+#include "dw4/beMatCtrl.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -41,25 +42,17 @@ typedef igSmartPointer<beMatCtrlInfoWork> WorkRef;
 extern "C" {
 int igInsightCore_FindManager(int insight, int meta);
 void beMessenger_RegisterReceiver(int messenger, void *receiver, const char *name, const char *text, int value);
-unsigned int beMessenger_ResolveEnumValue(int messenger, int metaEnum, int name);
-int beMatCtrl_GetMessageEnum(void);
+unsigned int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *metaEnum, int name);
 void igSwitch_EnableAllChildren(int switchgraph);
 void igSwitch_DisableAllChildren(int switchgraph);
 int igAABox_IntersectPoint(igAABox *box, const float *point);
 
-bool beMatCtrl_IsPlayer(beMatCtrl *self);
-bool beMatCtrl_IsAllPlayer(beMatCtrl *self);
-int beMatCtrl_GetPlayerNo(beMatCtrl *self);
-bool beMatCtrl_IsRidePlayer(beMatCtrl *self, int player);
-bool beMatCtrl_IsRideOffPlayer(beMatCtrl *self, int player);
-void beMatCtrl_SetRun(beMatCtrl *self, bool run);
-int beMatCtrl_GetPlayerMatStat(beMatCtrl *self, int player);
 void beMatCtrl_Prepare(beMatCtrl *self);
 int beMatCtrl_GetInfoMeta(void);
 void beMatCtrl_OnAddRam(beMatCtrl *self, beMatCtrlInfoRam *ram);
 void beMatCtrl_MarkContacts(beMatCtrl *self, igIntList *masks, beMatCtrlSearchList *nodes, int player, float *point, beMatCtrlDataList *materials);
 int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork *message);
-int beMatCtrl_GetMeta(void);
+igMetaObject *beMatCtrl_GetMeta(void);
 void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram);
 void *igObject_GetAllocator(void *object);
 void *Memory_GetAllocatorBySelector(int selector);
@@ -76,7 +69,6 @@ int beLua__RunNamedChunk(int lua, const char *chunk, int given);
 
 extern int g_beLua_metaObject[4];
 extern int g_beMatCtrlInfo_metaObject[4];
-extern int g_beMatCtrl_metaObject[4];
 extern const char MATCTRL[];
 extern const char emptyString[];
 extern int kIGMemoryPoolHandleUser1[4];
@@ -428,7 +420,7 @@ int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork 
     return 1;
 }
 
-int beMatCtrl_GetMeta(void) {
-    return g_beMatCtrl_metaObject[0];
+igMetaObject *beMatCtrl_GetMeta(void) {
+    return g_beMatCtrl_metaObject;
 }
 #pragma pop

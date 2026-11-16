@@ -39,7 +39,7 @@ void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self) {
     msg[0] = 2;
     msg[1] = 0;
     msg[2] = (int)g_igGuiComponentModel_sizeMetaField;
-    igModel_NotifyViews((S_4578c0 *)self->_model, (S_4578c0 *)msg);
+    igModel_NotifyViews((igModel *)self->_model, (ModelChange *)msg);
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
@@ -66,7 +66,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
     sp30[0] = 2;
     sp30[1] = 0;
     sp30[2] = (int)g_igGuiComponentModel_sizeMetaField;
-    igModel_NotifyViews((S_4578c0 *)arg0->f8, (S_4578c0 *)&sp30[0]);
+    igModel_NotifyViews((igModel *)arg0->f8, (ModelChange *)&sp30[0]);
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_27(void *arg0, struct S_454050 *arg1) {
@@ -120,23 +120,23 @@ void FUN_004541f0(int *arg0, int *arg1) {
     ((C28 *)arg0)->vX(arg1, sp3C, sp38);
 }
 
-void igEventDispatcher_AddReceiver(void *arg0, int arg1) {
-    igRendererOrderedList_Append(*(int *)((char *)(arg0) + 12), arg1, 0);
+void igEventDispatcher_AddReceiver(igEventDispatcher *dispatcher, igObject *receiver) {
+    igRendererOrderedList_Append((igDependencyOrderedList *)dispatcher->_receivers, receiver, 0);
 }
 
-void igEventDispatcher_RemoveReceiver(Obj_4542a0 *arg0, int arg1) {
+void igEventDispatcher_RemoveReceiver(igEventDispatcher *dispatcher, igObject *receiver) {
     int sp1C;
-    igObjectList_RemoveRetained(&sp1C, arg0->f12, arg1);
+    igObjectList_RemoveRetained(&sp1C, dispatcher->_receivers, receiver);
 }
 
-int igEventDispatcher_AddReceiverOrder(int *p)
+void igEventDispatcher_AddReceiverOrder(igEventDispatcher *dispatcher, igObject *first, igObject *second)
 {
-    return igDependencyOrderedList_AddDependency(*(int *)((char *)p + 12));
+    igDependencyOrderedList_AddDependency(dispatcher->_receivers, first, second);
 }
 
-void igEventDispatcher_RemoveReceiverOrder(S0 *arg0, int arg1, int arg2) {
+void igEventDispatcher_RemoveReceiverOrder(igEventDispatcher *dispatcher, igObject *first, igObject *second) {
     int sp1C;
 
-    igDependencyOrderedList_RemoveDependency(&sp1C, arg0->fC, arg1, arg2);
+    igDependencyOrderedList_RemoveDependency(&sp1C, dispatcher->_receivers, first, second);
 }
 

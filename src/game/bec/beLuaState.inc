@@ -1,9 +1,9 @@
 igMetaObject *g_beLuaState_metaObject;
 igMetaField *g_beLuaState_lpMetaField;
 
-void beLuaState_Create(int allocator) {
+beLuaState *beLuaState_Create(int allocator) {
     beLuaState_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5891B0, allocator);
+    return (beLuaState *)igMetaObject_CreateInstance(*(int *)0x5891B0, allocator);
 }
 
 igMetaObject *beLuaState_GetOrCreateMetaObject(void) {

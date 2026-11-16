@@ -174,7 +174,7 @@ int igTransform_CompileChildrenAndPopMatrix(float *matrix, igTransform *self, ig
     int target;
     manager = (igAttrStackManager *)traversal->_attrStack;
     target = self->_target;
-    result = igTraversal_TraverseChildren((int)traversal, (S_1e07a0 *)self);
+    result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     if (target == 0) {
         FUN_001b11b0((A_1b11b0 *)manager, (B_1b11b0 *)g_igModelViewMatrixAttr_metaObject[0]);
     } else {
@@ -268,7 +268,7 @@ int FUN_001bce40(A_1bce40 *arg0, int *arg1) {
         igObject_Destroy((void *)temp_v0);
     }
     FUN_001b1030((igAttrStackManager *)temp_s0, (igAttr *)temp_s2);
-    temp_s1 = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
+    temp_s1 = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     FUN_001b1100((struct A_1b1100 *)temp_s0, (struct B_1b1100 *)temp_s2);
     if (temp_s1 == 2) {
         return 2;
@@ -309,7 +309,7 @@ int FUN_001bd0e0(int arg0, void *arg1) {
     if (*(int *)((char *)(*(int *)((char *)(arg1) + 32)) + 8) > 0) {
         ((DW4VC_124_0 *)(((char *)(arg1) + 0)))->vX();
     }
-    if (igTraversal_TraverseChildren(arg0, (S_1e07a0 *)arg1) == 2) {
+    if (igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1) == 2) {
         return 2;
     }
     return 0;

@@ -17,6 +17,7 @@ struct ModelChange {
 extern "C" {
 #endif
 
+void igModel_Register(void);
 void igModel_NotifyViews(struct igModel *model, struct ModelChange *change);
 
 #ifdef __cplusplus

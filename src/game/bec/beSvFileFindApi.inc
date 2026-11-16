@@ -1,8 +1,8 @@
 igMetaObject *g_beSvFileFindApi_metaObject;
 
-void beSvFileFindApi_Create(int allocator) {
+beSvFileFindApi *beSvFileFindApi_Create(int allocator) {
     beSvFileFindApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588278, allocator);
+    return (beSvFileFindApi *)igMetaObject_CreateInstance(*(int *)0x588278, allocator);
 }
 
 void *beSvFileFindApi_GetMetaObject(void) {

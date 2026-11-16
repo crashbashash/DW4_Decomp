@@ -1,4 +1,7 @@
 #include "dw4/reflected.h"
+#include "dw4/beLoadingNode.h"
+#include "dw4/beNodeAnim.h"
+#include "dw4/bePadData.h"
 
 typedef void (*TraversalFunction)(void);
 
@@ -6,16 +9,11 @@ extern "C" {
 long long __fixsfdi(float);
 float sqrtf(float);
 float atan2f(float, float);
-void *beNodeAnim_ResolveMetaObject(void);
-void *beLoadingNode_ResolveMetaObject(void);
 int igTraversal_RegisterFunction(int functionList, void *meta, TraversalFunction function);
 void Gap__Core__igObject__userConstruct(void *self);
 void Gap__Core__igObject__userDestruct(void);
 extern int g_igCommonTraversal_travProcs[4];
-extern int g_bePadData_metaObject[4];
 
-int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *trav);
-void beNodeAnim_SetTime(beNodeAnim *node, long long time, long long now);
 void bePadData_StickDirections(bePadData *pad, int *directions, float *stick);
 }
 
@@ -233,7 +231,7 @@ extern "C" void bePadData_StickDirections(bePadData *pad, int *directions, float
     }
 }
 
-extern "C" int bePadData_GetMeta(void)
+extern "C" igMetaObject *bePadData_GetMeta(void)
 {
-    return g_bePadData_metaObject[0];
+    return g_bePadData_metaObject;
 }

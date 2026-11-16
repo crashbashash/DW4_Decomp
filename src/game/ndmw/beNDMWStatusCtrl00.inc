@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWStatusCtrl00_metaObject;
 igMetaField *g_beNDMWStatusCtrl00_statusMenuMetaField;
 
-void beNDMWStatusCtrl00_Create(int allocator) {
+beNDMWStatusCtrl00 *beNDMWStatusCtrl00_Create(int allocator) {
     beNDMWStatusCtrl00_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrl00_metaObject, allocator);
+    return (beNDMWStatusCtrl00 *)igMetaObject_CreateInstance(g_beNDMWStatusCtrl00_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrl00_GetMetaObject(void) {

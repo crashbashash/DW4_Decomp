@@ -5,6 +5,7 @@
 #include "dw4/eekernel.h"
 #include "dw4/p2dma.h"
 #include "dw4/p2timer.h"
+#include "dw4/p2watchdog.h"
 
 #pragma push
 #pragma readonly_strings on

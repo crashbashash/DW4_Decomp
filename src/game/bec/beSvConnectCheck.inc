@@ -1,8 +1,8 @@
 igMetaObject *g_beSvConnectCheck_metaObject;
 
-void beSvConnectCheck_Create(int allocator) {
+beSvConnectCheck *beSvConnectCheck_Create(int allocator) {
     beSvConnectCheck_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5881D8, allocator);
+    return (beSvConnectCheck *)igMetaObject_CreateInstance(*(int *)0x5881D8, allocator);
 }
 
 igMetaObject *beSvConnectCheck_GetOrCreateMetaObject(void) {

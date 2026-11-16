@@ -13,4 +13,22 @@ typedef struct p2FinishFunc {
     int arg;
 } p2FinishFunc;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void p2EndFrame(void);
+void p2FinishHandler(void);
+void p2FlushVif1Packet(void);
+void p2GsSignalHandler(void);
+int p2NewFinishSequence(int signal);
+void p2SetSingleFrameLatency(void);
+void p2SwapBuffers(void);
+void p2WaitFinishSequence(unsigned int sequence);
+int swapbuffersDrawPredicate(long long buffer);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

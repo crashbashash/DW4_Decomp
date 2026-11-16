@@ -1,6 +1,9 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
 #include "dw4/cri/adxfs.h"
+#include "dw4/igAdx.h"
+#include "dw4/igAdxAudio.h"
+#include "dw4/igAdxFile.h"
 #pragma push
 #pragma readonly_strings on
 extern "C" int igObject_GetAllocator(...);
@@ -10,28 +13,20 @@ extern "C" int ADXT_StartMemIdx(int, int, int);
 extern "C" int ADXT_StartAfs(int, short, short);
 extern "C" int ADXT_StartFname(int, const char *);
 extern "C" int ADXT_Stop(int);
-extern "C" void igAdxAudio_Stop(igAdxAudio *audio);
 extern "C" int ADXT_Pause(int, int);
-extern "C" void igAdxAudio_Pause(igAdxAudio *audio, int pause);
 extern "C" int ADXT_GetStatPause(int);
-extern "C" int igAdxAudio_GetPauseState(igAdxAudio *audio);
 extern "C" int ADXT_Destroy(...);
 extern "C" int Memory_FreeBufferWithAllocator(...);
 extern "C" int ADXT_SetOutVol(int, int);
-extern "C" void igAdxAudio_SetOutVolume(igAdxAudio *audio, int volume);
 extern "C" int ADXT_GetOutVol(int);
-extern "C" int igAdxAudio_GetOutVolume(igAdxAudio *audio);
 extern "C" int ADXT_GetStat(int);
-extern "C" int igAdxAudio_GetStatus(igAdxAudio *audio);
 extern "C" igStringObj *igStringObj_Create(int);
 extern "C" int Memory_GetAllocatorByName(...);
-extern "C" void igAdx_CreateScratchString(void);
 extern "C" int DisableIntc(int);
 extern "C" int ADXM_ShutdownThrd(...);
 extern "C" int SNDF_Finish(...);
 extern "C" int mwPlyFinishSfdFx(...);
 extern "C" int RemoveIntcHandler(int, int);
-extern "C" void igAdx_Shutdown(void);
 extern "C" void Gap__Core__igObject__constructFields(void);
 extern "C" void Gap__igAdx__constructFields(void);
 extern "C" int memset(...);
@@ -46,8 +41,6 @@ extern "C" int Gap__Core__igObject__userDestruct(...);
 extern "C" void Gap__igAdx__userDestruct(igObject *self);
 extern "C" void igAdx_ErrorCallback(void);
 extern "C" int strcpy(...);
-extern "C" void igAdx_SetModulePath(int path);
-extern "C" void igAdx_SetHostRootPath(int path);
 extern "C" int AddIntcHandler(int, int (*)(), int);
 extern "C" int ADXM_ExecVint(void);
 extern "C" int EnableIntc(int);
@@ -71,38 +64,23 @@ extern "C" int ADXT_Init(...);
 extern "C" int ADXM_SetCbErr(void (*)(void), int);
 extern "C" int ADXM_SetupThrd(int);
 extern "C" int SNDF_Start(...);
-extern "C" int igAdx_Initialize(int setupOptional);
 extern "C" void ADXM_ExecVsyncFrame(void);
-extern "C" void igAdx_ExecVsync(void);
 extern "C" int ADXM_ExecMain(...);
 extern "C" int SNDF_ExecServer(...);
-extern "C" void igAdx_ExecServer(int);
 extern "C" void *igStringRefList_Create(int);
-extern "C" void igAdx_SetPartitionCount(int count);
 extern "C" int StringPool_Allocate(int);
 extern "C" int List_Reserve(void *, int, int);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
-extern "C" char *StringPool_Intern(int, char *);
-extern "C" void igAdx_AddPartitionName(int partition, char *name);
+extern "C" char *StringPool_Intern(int, const char *);
 extern "C" void ADXF_LoadPartitionNw(int stream, const char *name, int mode, void *buffer);
 extern "C" int ADXF_GetPtStatEx(int stream);
-extern "C" int igAdx_LoadPartition(int stream, const char *path, int mode, int length);
 extern "C" unsigned int strlen(const char *);
 extern "C" char *strncpy(char *, const char *, unsigned int);
-extern "C" int igAdx_FindAfsFile(const char *name);
 extern "C" int strcat(char *, const char *);
 extern "C" void __dl__FPv(void *);
-extern "C" void igAdxFile_StaticInitialize(void);
-extern "C" void igAdxFile_StaticFinalize(void);
-extern "C" int igAdxAudio_Initialize(igAdxAudio *audio, int maxChannels, int type, int maxStreams, int maxFrequency);
-extern "C" int igAdxAudio_CreateHandle(igAdxAudio *audio, int maxChannels, int type, int maxStreams, int maxFrequency,
-                                       int initialize);
-extern "C" int igAdxAudio_StartMemory(igAdxAudio *audio, int data, int size);
 extern "C" int igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char *name, int maxChannels, int type,
                                                    int maxStreams, int maxFrequency);
-extern "C" int igAdxAudio_StartFile(igAdxAudio *audio, const char *name);
-extern "C" void igAdxAudio_Shutdown(igAdxAudio *audio);
 /* The CRI file-system parameters igAdx_SetupIop hands ADXPS2: the host root and the two file-info caches. */
 extern "C" {
 AdxHstFsPrm g_adxHostFsParams;
@@ -116,7 +94,6 @@ char g_adxUseFileInfoCache;
 unsigned char g_adxIopReady;
 char g_adxUnusedFlag;
 }
-extern "C" int g_igAdx_metaObject[4];
 extern "C" int SNDF_Init(int *config);
 extern "C" char g_igPsx2_resetIopServices;
 extern "C" int g_stringPool[4];
@@ -130,7 +107,6 @@ public:
     operator char *() const { return p; }
 };
 extern "C" int StringList_AppendRetained(void *, StringRef *);
-extern "C" void igAdx_SetInsideFiles(igAdxAfsFileList *files);
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 struct WaitResult { int code; };
 class AdxThread {
@@ -201,7 +177,7 @@ int igAdxAudio_CreateHandle(igAdxAudio *audio, int maxChannels, int type, int ma
     return audio->_adxt;
 }
 
-int igAdxAudio_StartMemory(igAdxAudio *audio, int data, int size) {
+int igAdxAudio_StartMemory(igAdxAudio *audio, void *data, int size) {
     if (audio->_adxt == 0) {
         audio->_adxt = igAdxAudio_CreateHandle(audio, audio->_iMaxChannels, audio->_iType, audio->_iMaxStreams,
                                                audio->_iMaxFrequency, 0);
@@ -209,7 +185,7 @@ int igAdxAudio_StartMemory(igAdxAudio *audio, int data, int size) {
             return 0;
         }
     }
-    ADXT_StartMemIdx(audio->_adxt, data, size);
+    ADXT_StartMemIdx(audio->_adxt, (int)data, size);
     return 1;
 }
 
@@ -390,7 +366,7 @@ void Gap__igAdx__userConstruct(igObject *self) {
 
 int Gap__igAdx__getMeta(void)
 {
-    return g_igAdx_metaObject[0];
+    return (int)g_igAdx_metaObject;
 }
 
 void Gap__igAdx__destructFields(void)
@@ -406,7 +382,7 @@ void igAdx_ErrorCallback(void) {
 
 }
 
-void igAdx_SetModulePath(int path) {
+void igAdx_SetModulePath(const char *path) {
     if (path != 0) {
         strcpy(&g_adxModulePath[0], path);
         return;
@@ -414,7 +390,7 @@ void igAdx_SetModulePath(int path) {
     memset(&g_adxModulePath[0], 0, 0x100);
 }
 
-void igAdx_SetHostRootPath(int path) {
+void igAdx_SetHostRootPath(const char *path) {
     if (path != 0) {
         strcpy(&g_adxHostRootPath[0], path);
         return;
@@ -588,7 +564,7 @@ void igAdx_SetPartitionCount(int count) {
     }
 }
 
-void igAdx_AddPartitionName(int partition, char *name) {
+void igAdx_AddPartitionName(int partition, const char *name) {
     int pool;
     int empty;
     if (name != 0) {

@@ -17,9 +17,9 @@ igMetaField *g_beNDMWSaveIntfCtrlData_st2MetaField;
 igMetaField *g_beNDMWSaveIntfCtrlData_st3MetaField;
 igMetaEnum *g_beNDMWSaveIntfCtrlData_messageMetaEnum;
 
-void beNDMWSaveIntfCtrlData_Create(int allocator) {
+beNDMWSaveIntfCtrlData *beNDMWSaveIntfCtrlData_Create(int allocator) {
     beNDMWSaveIntfCtrlData_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWSaveIntfCtrlData_metaObject, allocator);
+    return (beNDMWSaveIntfCtrlData *)igMetaObject_CreateInstance(g_beNDMWSaveIntfCtrlData_metaObject, allocator);
 }
 
 void *beNDMWSaveIntfCtrlData_GetMetaObject(void) {

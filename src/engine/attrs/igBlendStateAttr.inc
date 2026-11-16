@@ -1,9 +1,9 @@
 igMetaObject *g_igBlendStateAttr_metaObject;
 igMetaField *g_igBlendStateAttr_enabledMetaField;
 
-void igBlendStateAttr_CreateInstance(int arg0) {
+igBlendStateAttr *igBlendStateAttr_CreateInstance(int allocator) {
     igBlendStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55F348, arg0);
+    return (igBlendStateAttr *)igMetaObject_CreateInstance(*(int *)0x55F348, allocator);
 }
 
 igMetaObject *igBlendStateAttr_GetOrCreateMetaObject(void) {

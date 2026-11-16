@@ -71,7 +71,7 @@ int Gap__Gui__igGuiSystem__vfunc_24(A_457100 *arg0, float fparg0, float fparg1) 
     s.a = 2;
     s.b = 0;
     s.c = g_igGuiSystemModelMousePositionField[0];
-    igModel_NotifyViews((S_4578c0 *)arg0->fc, (S_4578c0 *)&s);
+    igModel_NotifyViews((igModel *)arg0->fc, (ModelChange *)&s);
     return arg0->fc->fb0 != 0;
 }
 
@@ -83,7 +83,7 @@ int Gap__Gui__igGuiSystem__vfunc_32(int *self, int x, int y) {
     p.a = 2;
     p.b = 0;
     p.c = (int)g_igGuiSystemModel_windowSizeMetaField;
-    igModel_NotifyViews((S_4578c0 *)((void *)self[3]), (S_4578c0 *)&p);
+    igModel_NotifyViews((igModel *)((void *)self[3]), (ModelChange *)&p);
     return 0;
 }
 
@@ -94,7 +94,7 @@ int Gap__Gui__igGuiSystem__vfunc_34(igGuiSystem *arg0) {
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = (int)g_igGuiSystemModel_windowCloseRequestedMetaField;
-    igModel_NotifyViews((S_4578c0 *)arg0->_model, (S_4578c0 *)buf);
+    igModel_NotifyViews((igModel *)arg0->_model, (ModelChange *)buf);
     return 1;
 }
 
@@ -113,7 +113,7 @@ int Gap__Gui__igGuiSystem__vfunc_25(struct P_457220 *arg0, int arg1, char arg2) 
     sp[0] = 2;
     sp[1] = 0;
     sp[2] = (int)g_igGuiSystemModel_mousePressedMetaField;
-    igModel_NotifyViews((S_4578c0 *)arg0->o, (S_4578c0 *)&sp[0]);
+    igModel_NotifyViews((igModel *)arg0->o, (ModelChange *)&sp[0]);
     return arg0->o->fac != 0;
 }
 
@@ -175,12 +175,12 @@ int Gap__Gui__igGuiSystem__vfunc_26(void) {
     return 0;
 }
 
-void igHotKeyEventReceiver_AddKey(int arg0, int arg1, int arg2) {
-    igHotKeyEventReceiver_AddBinding((AttrEntryOwner *)arg0, arg1, 32, (igObject *)arg2);
+void igHotKeyEventReceiver_AddKey(igHotKeyEventReceiver *receiver, int key, igObject *action) {
+    igHotKeyEventReceiver_AddBinding(receiver, key, 32, action);
 }
 
-void igHotKeyEventReceiver_AddButton(int arg0, int arg1, int arg2) {
-    igHotKeyEventReceiver_AddBinding((AttrEntryOwner *)arg0, 0, arg1, (igObject *)arg2);
+void igHotKeyEventReceiver_AddButton(igHotKeyEventReceiver *receiver, int button, igObject *action) {
+    igHotKeyEventReceiver_AddBinding(receiver, 0, button, action);
 }
 
 static inline void assign(igObject **slot, igObject *value) {
@@ -198,23 +198,23 @@ static inline void assign(igObject **slot, igObject *value) {
     *slot = value;
 }
 
-void igHotKeyEventReceiver_AddBinding(AttrEntryOwner *owner, int a, int b, igObject *value) {
-    igSmartPointer<Entry> entry((Entry *)FUN_0044dc20(igObject_GetAllocator(owner)));
-    entry->a = a;
-    entry->b = b;
-    assign(&entry->value, value);
-    ObjectList_AppendRetained(owner->entries, entry.get());
+void igHotKeyEventReceiver_AddBinding(igHotKeyEventReceiver *receiver, int key, int button, igObject *action) {
+    igSmartPointer<Entry> entry((Entry *)FUN_0044dc20(igObject_GetAllocator(receiver)));
+    entry->a = key;
+    entry->b = button;
+    assign(&entry->value, action);
+    ObjectList_AppendRetained(receiver->_hotKeyList, entry.get());
 }
 
-void igHotKeyEventReceiver_RemoveBinding(T_4574f0 *arg0, int arg1) {
+void igHotKeyEventReceiver_RemoveBinding(igHotKeyEventReceiver *receiver, int button) {
     E_4574f0 *temp_a0;
     int var_s1;
     LST *temp_s0;
 
-    for (var_s1 = arg0->f8->f8 - 1; var_s1 >= 0; var_s1 -= 1) {
-        temp_s0 = arg0->f8;
+    for (var_s1 = ((LST *)receiver->_hotKeyList)->f8 - 1; var_s1 >= 0; var_s1 -= 1) {
+        temp_s0 = (LST *)receiver->_hotKeyList;
         temp_a0 = temp_s0->f16[var_s1];
-        if (temp_a0->f12 == arg1) {
+        if (temp_a0->f12 == button) {
             if (temp_a0->f8 == 0) {
                 if (temp_a0 != 0) {
                     temp_a0->f4 = temp_a0->f4 - 1;

@@ -4,9 +4,9 @@ igMetaField *g_beModelCtrlInfoRideOn_modelRamNoMetaField;
 igMetaField *g_beModelCtrlInfoRideOn_modelNodeMetaField;
 igMetaField *g_beModelCtrlInfoRideOn_oldMatrixMetaField;
 
-void beModelCtrlInfoRideOn_Create(int allocator) {
+beModelCtrlInfoRideOn *beModelCtrlInfoRideOn_Create(int allocator) {
     beModelCtrlInfoRideOn_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588AA8, allocator);
+    return (beModelCtrlInfoRideOn *)igMetaObject_CreateInstance(*(int *)0x588AA8, allocator);
 }
 
 igMetaObject *beModelCtrlInfoRideOn_GetOrCreateMetaObject(void) {

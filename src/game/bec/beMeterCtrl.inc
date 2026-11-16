@@ -1,8 +1,8 @@
 igMetaObject *g_beMeterCtrl_metaObject;
 
-void beMeterCtrl_CreateInstance(int allocator) {
+beMeterCtrl *beMeterCtrl_CreateInstance(int allocator) {
     beMeterCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588F30, allocator);
+    return (beMeterCtrl *)igMetaObject_CreateInstance(*(int *)0x588F30, allocator);
 }
 
 igMetaObject *beMeterCtrl_GetOrCreateMetaObject(void) {

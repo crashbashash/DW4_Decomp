@@ -1,8 +1,8 @@
 igMetaObject *g_beWeaponAttachDataList_metaObject;
 
-void beWeaponAttachDataList_Create(int allocator) {
+beWeaponAttachDataList *beWeaponAttachDataList_Create(int allocator) {
     beWeaponAttachDataList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587A78, allocator);
+    return (beWeaponAttachDataList *)igMetaObject_CreateInstance(*(int *)0x587A78, allocator);
 }
 
 igMetaObject *beWeaponAttachDataList_GetOrCreateMetaObject(void) {

@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWItemAbilityChip_metaObject;
 
-void beNDMWItemAbilityChip_Create(int allocator) {
+beNDMWItemAbilityChip *beNDMWItemAbilityChip_Create(int allocator) {
     beNDMWItemAbilityChip_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemAbilityChip_metaObject, allocator);
+    return (beNDMWItemAbilityChip *)igMetaObject_CreateInstance(g_beNDMWItemAbilityChip_metaObject, allocator);
 }
 
 void *beNDMWItemAbilityChip_GetReadyMetaObject(void) {

@@ -26,9 +26,9 @@ igMetaField *g_beSystem_isResetLastMetaField;
 igMetaField *g_beSystem_isResetReleaseMetaField;
 igMetaField *g_beSystem_isSResetEnableMetaField;
 
-void beSystem_CreateInstance(int allocator) {
+beSystem *beSystem_CreateInstance(int allocator) {
     beSystem_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587D08, allocator);
+    return (beSystem *)igMetaObject_CreateInstance(*(int *)0x587D08, allocator);
 }
 
 igMetaObject *beSystem_GetOrCreateMetaObject(void) {

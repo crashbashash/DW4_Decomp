@@ -40,13 +40,13 @@ void FUN_004577f0(igModel *arg0, OV *arg1) {
     }
 }
 
-void igModel_NotifyViews(S_4578c0 *arg0, S_4578c0 *arg1) {
-    int var_s0;
-    VC_4578c0 *o;
-    for (var_s0 = 0; var_s0 < arg0->f8->n; var_s0++) {
-        o = arg0->f8->arr[var_s0];
-        if (o != 0 && o != arg1->f4) {
-            o->vX(arg1);
+void igModel_NotifyViews(igModel *model, ModelChange *change) {
+    int i;
+    ModelViewDispatch *view;
+    for (i = 0; i < ((igObjectList *)model->_views)->_count; i++) {
+        view = ((ModelViewDispatch **)((igObjectList *)model->_views)->_data)[i];
+        if (view != 0 && view != change->source) {
+            view->onModelChange(change);
         }
     }
 }
@@ -60,7 +60,7 @@ void Gap__Gui__igModel__vfunc_10(struct O_457950 *arg0) {
     for (i = 0; i < n; i++) {
         p = arg0->l->arr[i];
         if (p != 0) {
-            igView_SetModel((S0_457e90 *)p, 0);
+            igView_SetModel((igView *)p, 0);
         }
     }
 }

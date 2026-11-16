@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrlEvolve_metaObject;
 igMetaField *g_beNDMWShopCtrlEvolve_shinkaCtrlMetaField;
 
-void beNDMWShopCtrlEvolve_Create(int allocator) {
+beNDMWShopCtrlEvolve *beNDMWShopCtrlEvolve_Create(int allocator) {
     beNDMWShopCtrlEvolve_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlEvolve_metaObject, allocator);
+    return (beNDMWShopCtrlEvolve *)igMetaObject_CreateInstance(g_beNDMWShopCtrlEvolve_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlEvolve_GetMetaObject(void) {

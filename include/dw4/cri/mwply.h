@@ -2,6 +2,8 @@
 #ifndef DW4_CRI_MWPLY_H
 #define DW4_CRI_MWPLY_H
 
+#include "dw4/cri/sfdsj.h"
+
 typedef struct MwsfdPly MwsfdPly;
 
 /* the player's function table (mwply_vtbl); CRI's mwPly* calls on a handle go through it */
@@ -19,7 +21,7 @@ typedef struct MwsfdPlyVtbl {
     int (*getOutVol)(MwsfdPly *ply);                          /* 48: mwSfdGetOutVol */
     void (*setOutPan)(MwsfdPly *ply, int channel, int pan);   /* 52: mwSfdSetOutPan */
     int (*getOutPan)(MwsfdPly *ply, int channel);             /* 56: mwSfdGetOutPan */
-    void (*setSj)(MwsfdPly *ply, struct SfdSj *sj);           /* 60: mwSfdStartSj; given the input SJ before a file start */
+    void (*setSj)(MwsfdPly *ply, SfdSj *sj);                  /* 60: mwSfdStartSj; given the input SJ before a file start */
     void (*startMem)(MwsfdPly *ply, char *buf, int size);     /* 64: mwSfdStartMem */
 } MwsfdPlyVtbl;
 
@@ -125,7 +127,7 @@ typedef struct MwsfdSst {
     int created;            /* 0: 1 once MWSST_Create succeeded */
     char *work;             /* 4 */
     int workSize;           /* 8 */
-    struct SfdSj *sj;       /* 12: SJRBF over work */
+    SfdSj *sj;              /* 12: SJRBF over work */
     int stmNo;              /* 16: video stream number; SFD_SetStmObject id = 0xC0 + stmNo */
     int extHn;              /* 20: handle from the callback table's create */
 } MwsfdSst;
@@ -185,8 +187,8 @@ struct MwsfdPly {
     void *stmDir;                   /* 452 */
     int stmOfst;                    /* 456 */
     int stmNsct;                    /* 460 */
-    struct SfdSj *sj;               /* 464: the SJ the SFD reads from */
-    struct SfdSj *defSj;            /* 468: the player's own input SJ, mwPlyGetInputSj */
+    SfdSj *sj;                      /* 464: the SJ the SFD reads from */
+    SfdSj *defSj;                   /* 468: the player's own input SJ, mwPlyGetInputSj */
     char *inputBuf;                 /* 472: the input ring buffer */
     int inputBufSize;               /* 476 */
     int inputXSize;                 /* 480 */
@@ -194,7 +196,7 @@ struct MwsfdPly {
     int src488;                     /* 488 */
     int src492;                     /* 492 */
     int src496;                     /* 496 */
-    struct SfdSj *memSj;            /* 500: the SJ made over mwSfdStartMem's buffer */
+    SfdSj *memSj;                   /* 500: the SJ made over mwSfdStartMem's buffer */
     char *memBuf;                   /* 504 */
     int memSize;                    /* 508 */
     MwsfdMemPool pool;              /* 512 */

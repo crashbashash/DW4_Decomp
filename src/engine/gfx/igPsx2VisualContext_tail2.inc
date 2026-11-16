@@ -138,21 +138,21 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_48(V_1690d0 *arg0, int arg1) {
     arg0->vX(1);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_49(VC49 *self, int bufferIndex, int *textureIndex) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_49(igPsx2VisualContext *context, int bufferIndex, int *textureIndex) {
     int index;
     int format;
     bool create;
     Tex49 *tex;
     int colorFormat;
     Buf49 *buf;
-    buf = &self->bufList->records[bufferIndex];
+    buf = &((VC49 *)context)->bufList->records[bufferIndex];
     tex = 0;
     index = *textureIndex;
     create = false;
     if (index == -1) {
         create = true;
     } else {
-        tex = &self->texList->records[index];
+        tex = &((VC49 *)context)->texList->records[index];
         if (*tex->handle == 0) {
             create = true;
         }
@@ -181,12 +181,12 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_49(VC49 *self, int bufferIndex, int *t
             break;
         }
         if (index == -1) {
-            *textureIndex = FUN_0017aa20((TexContext *)self, buf->width, buf->height, format, 3, 0, 1);
+            *textureIndex = FUN_0017aa20((TexContext *)((VC49 *)context), buf->width, buf->height, format, 3, 0, 1);
             buf->texIndex = *textureIndex;
-            tex = &self->texList->records[*textureIndex];
+            tex = &((VC49 *)context)->texList->records[*textureIndex];
         }
         if (buf->colorTex != 0) {
-            self->releaseTexture(buf->texIndex);
+            ((VC49 *)context)->releaseTexture(buf->texIndex);
         }
         if (buf->depthFormat > 0) {
             int depthFormat;
@@ -210,20 +210,20 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_49(VC49 *self, int bufferIndex, int *t
             tex->depthHandle = buf->depthTex;
             tex->state = 2;
         } else {
-            self->freeTexture(*textureIndex);
+            ((VC49 *)context)->freeTexture(*textureIndex);
             *textureIndex = -1;
             return;
         }
     }
     FUN_0020ad60(buf->colorTex, buf->depthTex);
-    self->currentBuf = bufferIndex;
-    p2SetViewport(0, 0, buf->width, buf->height, 1.0f - self->near, 1.0f - self->far);
-    FUN_0016a520((O520 *)self);
+    ((VC49 *)context)->currentBuf = bufferIndex;
+    p2SetViewport(0, 0, buf->width, buf->height, 1.0f - ((VC49 *)context)->near, 1.0f - ((VC49 *)context)->far);
+    FUN_0016a520((O520 *)((VC49 *)context));
     if (buf->depthFormat <= 0) {
-        self->setDepth(0);
+        ((VC49 *)context)->setDepth(0);
         return;
     }
-    self->setDepth(1);
+    ((VC49 *)context)->setDepth(1);
 }
 
 /* Read the first two fields of VRAM buffer record `bufferIndex` (0x30-byte records at _pBufList +
@@ -247,8 +247,8 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_52(igPsx2VisualContext *self, int buffe
     return 1;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_50(int *p)
-{
+int Gap__Gfx__igPsx2VisualContext__vfunc_50(igPsx2VisualContext *self) {
+    int *p = (int *)self;
     return *(int *)((char *)p + 872);
 }
 
@@ -268,7 +268,7 @@ void FUN_00169be0(void *d0, int arg1) {
     p2SetClearWidth(0);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_176(void *arg0, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_176(igPsx2VisualContext *self, int arg1) {
     int var_a0;
 
     var_a0 = 0;
@@ -278,7 +278,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_176(void *arg0, int arg1) {
     if (arg1 & 2) {
         var_a0 |= 2;
     }
-    p2Clear(var_a0, *(int *)((char *)(arg0) + 896), *(int *)((char *)(arg0) + 900));
+    p2Clear(var_a0, *(int *)((char *)(self) + 896), *(int *)((char *)(self) + 900));
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_171(igPsx2VisualContext *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) {
@@ -315,8 +315,8 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_171(igPsx2VisualContext *arg0, int arg1
     return 1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_172(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
-    FUN_00169e40((VisualContextTextures *)arg0, arg1, (TextureImage *)arg2, (void *)arg3, arg4, arg5, arg6, 0);
+void Gap__Gfx__igPsx2VisualContext__vfunc_172(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+    FUN_00169e40((VisualContextTextures *)self, arg1, (TextureImage *)arg2, (void *)arg3, arg4, arg5, arg6, 0);
 }
 
 /* matching construct: a small sweep of spellings */
@@ -398,7 +398,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_177(igPsx2VisualContext *self, float *
         + (((unsigned int)(255.0f * self->_clearColor[2]) << 16) + ((unsigned int)(255.0f * self->_clearColor[0]) + green));
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_178(int *a, unsigned int x) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_178(igPsx2VisualContext *self, unsigned int x) {
+    int *a = (int *)self;
     a[224] = (x & 0xffffff) | (((x >> 1) & 0x7f000000) + (x & 0x01000000));
 }
 
@@ -415,7 +416,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_179(Obj179 *arg0, void *arg1) {
     Color4f_Unpack(arg1, 1, arg0->f896);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_181(S181 *arg0, float fparg0) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_181(igPsx2VisualContext *self, float fparg0) {
+    S181 *arg0 = (S181 *)self;
     arg0->f892 = fparg0;
     if (arg0->f1280 & 4) {
         arg0->f900 = (unsigned)(2.1474836e9f * arg0->f892);
@@ -428,9 +430,8 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_182(void *arg0) {
     return *(float *)((char *)arg0 + 892);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_183(int a0, int a1)
-{
-    *(int *)((char *)a0 + 904) = a1;
+void Gap__Gfx__igPsx2VisualContext__vfunc_183(igPsx2VisualContext *self, int a1) {
+    *(int *)((char *)self + 904) = a1;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_184(void *arg0) {
@@ -954,7 +955,8 @@ void FUN_0016c650(igPsx2VisualContext *arg0, int arg1) {
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_192(O192 *arg0) {
+int Gap__Gfx__igPsx2VisualContext__vfunc_192(igPsx2VisualContext *self) {
+    O192 *arg0 = (O192 *)self;
     int a1;
     T192 *s1 = arg0->f960;
     int s0;
@@ -1025,21 +1027,21 @@ done:
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_194(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 964) = arg1;
-    if (*(int *)((char *)(arg0) + 72) < 0x10) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_194(igPsx2VisualContext *self, int arg1) {
+    *(int *)((char *)(self) + 964) = arg1;
+    if (*(int *)((char *)(self) + 72) < 0x10) {
         p2SetBlendMatrices(0, 0x10);
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_195(void *arg0) {
+int Gap__Gfx__igPsx2VisualContext__vfunc_195(igPsx2VisualContext *self) {
     int temp_a1;
-    temp_a1 = *(int *)((char *)(arg0) + 72);
+    temp_a1 = *(int *)((char *)(self) + 72);
     if (temp_a1 > 0) {
-        p2SetBlendMatrices(*(int *)((char *)(arg0) + 84), temp_a1);
+        p2SetBlendMatrices(*(int *)((char *)(self) + 84), temp_a1);
     }
-    *(int *)((char *)(arg0) + 964) = -1;
-    return *(unsigned char *)((char *)(arg0) + 968) == 0;
+    *(int *)((char *)(self) + 964) = -1;
+    return *(unsigned char *)((char *)(self) + 968) == 0;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1) {
@@ -1110,11 +1112,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_27(int dummy0, int arg1) {
     igDriverDatabase_SetCurrentProperty(arg1, 5, "1.0");
 }
 
-void igPsx2VisualContext_CallDmaChain(int arg0, int arg1, int arg2, int arg3) {
-    FUN_001f7db0(arg1, arg2, arg3);
+void igPsx2VisualContext_CallDmaChain(igPsx2VisualContext *self, void *packet, int size, int flush) {
+    FUN_001f7db0(packet, size, flush);
 }
 
-void igPsx2VisualContext_IsDisplayingFirstBuffer(void) {
-    swapbuffersDrawPredicate(1);
+int igPsx2VisualContext_IsDisplayingFirstBuffer(igPsx2VisualContext *self) {
+    return swapbuffersDrawPredicate(1);
 }
 

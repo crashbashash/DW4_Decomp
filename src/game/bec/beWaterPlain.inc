@@ -1,8 +1,8 @@
 igMetaObject *g_beWaterPlain_metaObject;
 
-void beWaterPlain_CreateInstance(int allocator) {
+beWaterPlain *beWaterPlain_CreateInstance(int allocator) {
     beWaterPlain_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587BF8, allocator);
+    return (beWaterPlain *)igMetaObject_CreateInstance(*(int *)0x587BF8, allocator);
 }
 
 igMetaObject *beWaterPlain_GetOrCreateMetaObject(void) {

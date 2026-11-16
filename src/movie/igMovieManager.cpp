@@ -6,6 +6,7 @@
 #include "dw4/igTextureBindAttrDispatchView.h"
 #include "dw4/igTransformDispatchView.h"
 #include "dw4/igMovieManagerDispatchView.h"
+#include "dw4/igMovieInfo.h"
 
 /* igMovieInfo::_type: an ADX audio stream, which plays without a scene. */
 enum { kMovieTypeAdx = 2 };
@@ -168,7 +169,6 @@ public:
 };
 
 extern "C" {
-int igMovieInfo_GetTiling(igMovieInfo *movie, int *tileWidth, int *tileHeight, int *tilesAcross, int *tilesDown);
 void igMovieManager_Activate(void);
 void igMovieManager_Deactivate(igMovieManager *self);
 void igMovieManager_InitializeDrawing(igMovieManager *self, igSmartPointer<igObject> visualContext);
@@ -237,7 +237,6 @@ extern int kIGMemoryPoolHandleUser1[];
 extern int g_igMovieManager_metaObject[];
 extern int g_igMovieRenderer_metaObject[];
 extern int g_igMovieCodec_metaObject[];
-extern int g_igMovieInfo_metaObject[];
 extern int g_igSceneInfo_metaObject[];
 extern int g_igAttrSet_metaObject[];
 extern int g_igTextureBindAttr_metaObject[];
@@ -404,7 +403,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
     int i;
     igMovieInfo *movie;
     int allocator;
-    if (object != 0 && igObject_IsKindOf(object, g_igMovieInfo_metaObject[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, (int)g_igMovieInfo_metaObject) != 0) {
         movie = (igMovieInfo *)object;
     } else {
         movie = 0;
@@ -531,7 +530,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
 int igMovieManager_StopMovie(igMovieManager *self, void *object) {
     int index;
     igMovieInfo *movie;
-    if (object != 0 && igObject_IsKindOf(object, g_igMovieInfo_metaObject[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, (int)g_igMovieInfo_metaObject) != 0) {
         movie = (igMovieInfo *)object;
     } else {
         movie = 0;

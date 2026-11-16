@@ -1,9 +1,9 @@
 igMetaObject *g_beSaveMemoryObj_metaObject;
 igMetaField *g_beSaveMemoryObj_memMetaField;
 
-void beSaveMemoryObj_CreateInstance(int allocator) {
+beSaveMemoryObj *beSaveMemoryObj_CreateInstance(int allocator) {
     beSaveMemoryObj_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5883A0, allocator);
+    return (beSaveMemoryObj *)igMetaObject_CreateInstance(*(int *)0x5883A0, allocator);
 }
 
 igMetaObject *beSaveMemoryObj_GetOrCreateMetaObject(void) {

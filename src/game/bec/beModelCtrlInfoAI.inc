@@ -5,9 +5,9 @@ igMetaField *g_beModelCtrlInfoAI_worldPosMetaField;
 igMetaField *g_beModelCtrlInfoAI_hStatusMetaField;
 igMetaField *g_beModelCtrlInfoAI_hCountMetaField;
 
-void beModelCtrlInfoAI_Create(int allocator) {
+beModelCtrlInfoAI *beModelCtrlInfoAI_Create(int allocator) {
     beModelCtrlInfoAI_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588AD0, allocator);
+    return (beModelCtrlInfoAI *)igMetaObject_CreateInstance(*(int *)0x588AD0, allocator);
 }
 
 igMetaObject *beModelCtrlInfoAI_GetOrCreateMetaObject(void) {

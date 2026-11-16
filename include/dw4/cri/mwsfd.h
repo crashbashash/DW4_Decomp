@@ -39,5 +39,6 @@ typedef struct MwsfdWork {
 } MwsfdWork;
 
 MwsfdWork *mwsflib_GetVersionStr(void);
+void MWSFSVR_SetMwsfdSvrFlg(int lock);
 
 #endif

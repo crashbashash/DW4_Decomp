@@ -15,12 +15,12 @@
   "compile.bytes": 0,
   "compile.functions": 0,
   "decl.header_conflicts": {
-   "reason": "decl.header_conflicts +5 (928 -> 933): the GameMain pilot's new include/dw4 homes give sceClose, sceRead, sceWrite, g_threadManager, igInsightCore_FindManager and igModel_NotifyViews their real types while loose copies remain in library headers the declaration slices have not reached yet (one older conflict left)",
-   "value": 933
+   "reason": "decl.header_conflicts +5 (928 -> 933): the GameMain pilot's new include/dw4 homes give sceClose, sceRead, sceWrite, g_threadManager, igInsightCore_FindManager and igModel_NotifyViews their real types while loose copies remain in library headers the declaration slices have not reached yet (one older conflict left) decl.header_conflicts 933 -> 1008 (+75): declaration phase A gave the render, app, bec and ndmw slices' symbols real-typed homes in include/dw4; the loose copies those homes now disagree with sit in other libraries' headers (mostly p2 functions in GfxLibrary.h, NDMW/Core copies of bec symbols) and phase B removes them",
+   "value": 1008
   },
-  "decl.local_externs": 7935,
-  "decl.type_conflicts": 5131,
-  "decl.varargs": 2448,
+  "decl.local_externs": 7828,
+  "decl.type_conflicts": 4999,
+  "decl.varargs": 2434,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
   "fun_dat_refs": 1417,
@@ -43,7 +43,7 @@
    "reason": "profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile",
    "value": 3
   },
-  "raw_casts.reflected": 294,
+  "raw_casts.reflected": 266,
   "struct.a": 10,
   "struct.b": 0,
   "struct.c": 28,

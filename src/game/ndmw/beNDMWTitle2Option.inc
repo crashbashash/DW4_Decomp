@@ -11,9 +11,9 @@ igMetaField *g_beNDMWTitle2Option_dispComConfMetaField;
 igMetaField *g_beNDMWTitle2Option_dispLightConfMetaField;
 igMetaField *g_beNDMWTitle2Option_dispCountryConfMetaField;
 
-void beNDMWTitle2Option_Create(int allocator) {
+beNDMWTitle2Option *beNDMWTitle2Option_Create(int allocator) {
     beNDMWTitle2Option_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWTitle2Option_metaObject, allocator);
+    return (beNDMWTitle2Option *)igMetaObject_CreateInstance(g_beNDMWTitle2Option_metaObject, allocator);
 }
 
 void *beNDMWTitle2Option_GetMetaObject(void) {

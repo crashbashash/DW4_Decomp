@@ -1,8 +1,8 @@
 igMetaObject *g_beLightCtrl_metaObject;
 
-void beLightCtrl_CreateInstance(int allocator) {
+beLightCtrl *beLightCtrl_CreateInstance(int allocator) {
     beLightCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589258, allocator);
+    return (beLightCtrl *)igMetaObject_CreateInstance(*(int *)0x589258, allocator);
 }
 
 igMetaObject *beLightCtrl_GetOrCreateMetaObject(void) {

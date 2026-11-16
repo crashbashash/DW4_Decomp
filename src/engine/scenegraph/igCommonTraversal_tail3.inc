@@ -135,7 +135,7 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
     int idx;
     V128 *e;
     if (l->count >= l->cap) {
-        igObjectPool_Grow((List_1dca40 *)l, (Obj_1dca40 * (*)(int))&igModelViewMatrixAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)l, (igObject *(*)(int))&igModelViewMatrixAttr_CreateInstance);
     }
     idx = l->count;
     l->count = idx + 1;
@@ -330,7 +330,7 @@ int FUN_001b7b90(void *t, void *arg) {
     for (i = 0; i < count; i++) {
         int m = 1 << (i & 31);
         if (m & ((int *)mask->_data)[(unsigned int)i >> 5]) {
-            r = igTraversal_TraverseNode((S_1e04c0 *)t, (V_1e04c0 *)(((int *)n->_childList->_data)[i]));
+            r = igTraversal_TraverseNode((igTraversal *)t, (igNode *)(((int *)n->_childList->_data)[i]));
             if (r == 1) break;
             if (r == 2) return 2;
         }
@@ -524,7 +524,7 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
     void (*pop)(igObject *, int);
     manager = (igAttrStackManager *)traversal->_attrStack;
     target = self->_target;
-    result = igTraversal_TraverseChildren((int)traversal, (S_1e07a0 *)self);
+    result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     unit = 0;
     switch (target) {
     case 0:

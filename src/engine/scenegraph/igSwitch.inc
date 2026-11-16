@@ -1,6 +1,6 @@
-void igSwitch_CreateInstance(int arg0) {
+igSwitch *igSwitch_CreateInstance(int allocator) {
     igSwitch_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igSwitch_metaObject, arg0);
+    return (igSwitch *)igMetaObject_CreateInstance((int)g_igSwitch_metaObject, allocator);
 }
 
 igMetaObject *g_igSwitch_metaObject;

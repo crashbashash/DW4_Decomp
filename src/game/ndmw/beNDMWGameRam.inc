@@ -125,9 +125,9 @@ igMetaEnum *GameRamMessage_GetMetaEnum(void) {
     return g_GameRamMessage_metaEnum;
 }
 
-void beNDMWGameRam_CreateInstance(int allocator) {
+beNDMWGameRam *beNDMWGameRam_CreateInstance(int allocator) {
     beNDMWGameRam_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWGameRam_metaObject, allocator);
+    return (beNDMWGameRam *)igMetaObject_CreateInstance(g_beNDMWGameRam_metaObject, allocator);
 }
 
 igMetaObject *beNDMWGameRam_GetOrCreateMetaObject(void) {

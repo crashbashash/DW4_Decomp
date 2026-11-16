@@ -1,9 +1,9 @@
 igMetaObject *g_beBkColor_metaObject;
 igMetaField *g_beBkColor_isClearMetaField;
 
-void beBkColor_CreateInstance(int allocator) {
+beBkColor *beBkColor_CreateInstance(int allocator) {
     beBkColor_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589D10, allocator);
+    return (beBkColor *)igMetaObject_CreateInstance(*(int *)0x589D10, allocator);
 }
 
 igMetaObject *beBkColor_GetOrCreateMetaObject(void) {

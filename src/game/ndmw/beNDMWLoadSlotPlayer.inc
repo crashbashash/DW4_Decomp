@@ -3,9 +3,9 @@ igMetaField *g_beNDMWLoadSlotPlayer_connectNOMetaField;
 igMetaField *g_beNDMWLoadSlotPlayer_saveDataListMetaField;
 igMetaField *g_beNDMWLoadSlotPlayer_accessPlListMetaField;
 
-void beNDMWLoadSlotPlayer_Create(int allocator) {
+beNDMWLoadSlotPlayer *beNDMWLoadSlotPlayer_Create(int allocator) {
     beNDMWLoadSlotPlayer_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadSlotPlayer_metaObject, allocator);
+    return (beNDMWLoadSlotPlayer *)igMetaObject_CreateInstance(g_beNDMWLoadSlotPlayer_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadSlotPlayer_GetOrCreateMetaObject(void) {

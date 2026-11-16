@@ -7,7 +7,7 @@ void Gap__Gui__igWindowSizeObserver__vfunc_24(void *arg0, int *arg1) {
         sp30[0] = 2;
         sp30[1] = (int)arg0;
         sp30[2] = (int)g_igGuiSystemModel_projectionMatrixMetaField;
-        igModel_NotifyViews((S_4578c0 *)temp_s0, (S_4578c0 *)sp30);
+        igModel_NotifyViews((igModel *)temp_s0, (ModelChange *)sp30);
     }
 }
 

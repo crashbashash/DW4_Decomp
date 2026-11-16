@@ -490,7 +490,7 @@ void FUN_00166c90(void **arg0, int arg1, int arg2, int arg3) {
     }
 }
 
-int igVisualContext_FindFirst(void) {
+igVisualContext *igVisualContext_FindFirst(void) {
     int r;
     int i;
 
@@ -503,7 +503,7 @@ int igVisualContext_FindFirst(void) {
             }
         }
     }
-    return r;
+    return (igVisualContext *)r;
 }
 
 static inline int countOf(const igIntList *list) { return list->_count; }

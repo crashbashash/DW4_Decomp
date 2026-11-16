@@ -2,9 +2,9 @@ igMetaObject *g_igTextureBindAttr_metaObject;
 igMetaField *g_igTextureBindAttr_textureMetaField;
 igMetaField *g_igTextureBindAttr_unitIDMetaField;
 
-void igTextureBindAttr_CreateInstance(int arg0) {
+igTextureBindAttr *igTextureBindAttr_CreateInstance(int allocator) {
     igTextureBindAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x55ED88, arg0);
+    return (igTextureBindAttr *)igMetaObject_CreateInstance(*(int *)0x55ED88, allocator);
 }
 
 igMetaObject *FUN_00132850(void) {

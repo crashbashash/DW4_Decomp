@@ -151,10 +151,10 @@ void FUN_00453990(struct FontLayers_453990 *self, int index, struct FontLayerIte
     msg[1] = 0;
     msg[2] = DAT_0058c618[0];
     msg[3] = index;
-    igModel_NotifyViews((S_4578c0 *)self, (S_4578c0 *)msg);
+    igModel_NotifyViews((igModel *)self, (ModelChange *)msg);
 }
 
-void igGuiComponent_AppendChild(void *arg0, int arg1) {
-    FUN_00453980(*(int *)((char *)arg0 + 16), arg1);
+void igGuiComponent_AppendChild(igGuiComponent *parent, igGuiComponent *child) {
+    FUN_00453980(parent->_model, (int)child);
 }
 

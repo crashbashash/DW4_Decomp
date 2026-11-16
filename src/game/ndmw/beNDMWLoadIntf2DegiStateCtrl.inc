@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWLoadIntf2DegiStateCtrl_metaObject;
 int g_beNDMWLoadIntf2DegiStateCtrl_nameExternalEnumStorage;
 igMetaField *g_beNDMWLoadIntf2DegiStateCtrl_statDataListMetaField;
 
-void beNDMWLoadIntf2DegiStateCtrl_Create(int allocator) {
+beNDMWLoadIntf2DegiStateCtrl *beNDMWLoadIntf2DegiStateCtrl_Create(int allocator) {
     beNDMWLoadIntf2DegiStateCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiStateCtrl_metaObject, allocator);
+    return (beNDMWLoadIntf2DegiStateCtrl *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiStateCtrl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2DegiStateCtrl_GetOrCreateMetaObject(void) {

@@ -3,7 +3,10 @@ igMetaField *g_beMessengerGroup_infoNameListMetaField;
 igMetaField *g_beMessengerGroup_ramNoListMetaField;
 igMetaField *g_beMessengerGroup_ramListMetaField;
 
-void *beMessengerGroup_Create(void *allocator){beMessengerGroup_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerGroup_metaObject,allocator));}
+beMessengerGroup *beMessengerGroup_Create(void *allocator) {
+    beMessengerGroup_EnsureRegistered();
+    return (beMessengerGroup *)igMetaObject_CreateInstance((void *)g_beMessengerGroup_metaObject,allocator);
+}
 
 void *beMessengerGroup_GetMetaObject(void) {
     igMetaObject *g = g_beMessengerGroup_metaObject;

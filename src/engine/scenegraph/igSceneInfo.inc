@@ -1,6 +1,6 @@
-void igSceneInfo_CreateInstance(int arg0) {
+igSceneInfo *igSceneInfo_CreateInstance(int allocator) {
     igSceneInfo_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igSceneInfo_metaObject, arg0);
+    return (igSceneInfo *)igMetaObject_CreateInstance((int)g_igSceneInfo_metaObject, allocator);
 }
 
 igMetaObject *g_igSceneInfo_metaObject;

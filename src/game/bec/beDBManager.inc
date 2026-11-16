@@ -1,8 +1,8 @@
 igMetaObject *g_beDBManager_metaObject;
 
-void beDBManager_CreateInstance(int allocator) {
+beDBManager *beDBManager_CreateInstance(int allocator) {
     beDBManager_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589958, allocator);
+    return (beDBManager *)igMetaObject_CreateInstance(*(int *)0x589958, allocator);
 }
 
 igMetaObject *beDBManager_GetOrCreateMetaObject(void) {

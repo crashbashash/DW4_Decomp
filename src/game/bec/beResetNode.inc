@@ -2,7 +2,7 @@ igMetaObject *g_beResetNode_metaObject;
 igMetaField *g_beResetNode_isResetTimeMetaField;
 igMetaField *g_beResetNode_isResetRotAndScaleMetaField;
 
-void *beResetNode_GetMetaObject(void) {
+igMetaObject *beResetNode_GetMetaObject(void) {
     igMetaObject *g = g_beResetNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beResetNode_EnsureRegistered();

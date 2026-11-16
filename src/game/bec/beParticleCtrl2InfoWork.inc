@@ -2,9 +2,9 @@ igMetaObject *g_beParticleCtrl2InfoWork_metaObject;
 igMetaField *g_beParticleCtrl2InfoWork_positionLockNodeMetaField;
 igMetaField *g_beParticleCtrl2InfoWork_positionLockOffsetMetaField;
 
-void beParticleCtrl2InfoWork_Create(int allocator) {
+beParticleCtrl2InfoWork *beParticleCtrl2InfoWork_Create(int allocator) {
     beParticleCtrl2InfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5884C8, allocator);
+    return (beParticleCtrl2InfoWork *)igMetaObject_CreateInstance(*(int *)0x5884C8, allocator);
 }
 
 igMetaObject *beParticleCtrl2InfoWork_GetOrCreateMetaObject(void) {

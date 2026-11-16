@@ -1,9 +1,9 @@
 igMetaObject *g_beFileChkObj_metaObject;
 igMetaField *g_beFileChkObj_fdMetaField;
 
-void beFileChkObj_Create(int allocator) {
+beFileChkObj *beFileChkObj_Create(int allocator) {
     beFileChkObj_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589780, allocator);
+    return (beFileChkObj *)igMetaObject_CreateInstance(*(int *)0x589780, allocator);
 }
 
 void *beFileChkObj_GetMetaObject(void) {

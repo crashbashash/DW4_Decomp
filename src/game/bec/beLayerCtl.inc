@@ -2,9 +2,9 @@ igMetaObject *g_beLayerCtl_metaObject;
 igMetaField *g_beLayerCtl_isOrderedMetaField;
 igMetaField *g_beLayerCtl_layerSwtMetaField;
 
-void beLayerCtl_CreateInstance(int allocator) {
+beLayerCtl *beLayerCtl_CreateInstance(int allocator) {
     beLayerCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589298, allocator);
+    return (beLayerCtl *)igMetaObject_CreateInstance(*(int *)0x589298, allocator);
 }
 
 igMetaObject *beLayerCtl_GetOrCreateMetaObject(void) {

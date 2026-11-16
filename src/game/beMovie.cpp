@@ -2,6 +2,9 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igMovieManagerDispatchView.h"
+#include "dw4/beBaseInfoRam.h"
+#include "dw4/beCriAudio.h"
+#include "dw4/beCriVolume.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -15,7 +18,7 @@ extern "C" int igAdxAudio_Initialize(igAdxAudio *audio, int maxChannels, int typ
 extern "C" int igAdxAudio_CreateHandle(igAdxAudio *audio, int maxChannels, int type, int maxStreams, int maxFrequency,
                                        int initialize);
 extern "C" int igAdxAudio_StartMemory(igAdxAudio *audio, int data, int size);
-extern "C" int igAdxAudio_StartFile(igAdxAudio *audio, int name);
+extern "C" int igAdxAudio_StartFile(igAdxAudio *audio, const char *name);
 extern "C" int igAdxAudio_Stop(igAdxAudio *audio);
 extern "C" void igAdxAudio_Pause(igAdxAudio *audio, int pause);
 extern "C" int igAdxAudio_GetPauseState(igAdxAudio *audio);
@@ -88,32 +91,10 @@ enum SndfSeqCommand { kSeqSet = 1, kSeqPlay = 2, kSeqStop = 3, kSeqVolume = 4, k
 /* An ADX level in 0.1 dB that means silence, and "no level saved" in _errVolume. */
 enum { kSilentVolume = -999 };
 
-extern "C" int beCriAudio_Setup(beCriAudio *self, int channels);
-extern "C" void beCriAudio_Release(beCriAudio *self);
-extern "C" int beCriAudio_PlayFile(beCriAudio *self, int name);
-extern "C" int beCriAudio_PlayMemory(beCriAudio *self, int data, int size);
-extern "C" int beCriAudio_PlaySfp(beCriAudio *self, int requestId, long long sequence);
-extern "C" void beCriAudio_Stop(beCriAudio *self);
-extern "C" void beCriAudio_SetVolume(beCriAudio *self, int volume);
-extern "C" int beCriAudio_GetStatus(beCriAudio *self);
-extern "C" void beCriAudio_Pause(beCriAudio *self, unsigned char pause);
-extern "C" int beCriAudio_IsPaused(beCriAudio *self);
-extern "C" void beCriAudio_Suspend(beCriAudio *self, int);
-extern "C" void beCriAudio_Resume(beCriAudio *self);
 extern "C" void beCriAudio_ReportError(beCriAudio *self, int code, char *where);
-extern "C" int beCriVolume_StartFade(beCriVolume *self, int baseVolume, float from, float to, float frames);
 extern "C" float beCriVolume_StepFade(beCriVolume *self);
-extern "C" int beCriVolume_StepAdxLevel(beCriVolume *self, int baseVolume);
-extern "C" int beCriVolume_StepSndfLevel(beCriVolume *self);
-extern "C" void beBaseInfoRam_StartTimer(beBaseInfoRam *self, int name, long long endTime);
-extern "C" int beBaseInfoRam_HasTimer(beBaseInfoRam *self, int name);
-extern "C" int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, int name);
-extern "C" long long beBaseInfoRam_GetTimerElapsed(beBaseInfoRam *self, int name);
-extern "C" float beBaseInfoRam_GetTimerFrameDelta(beBaseInfoRam *self, int name);
+extern "C" long long beBaseInfoRam_GetTimerElapsed(beBaseInfoRam *self, const char *name);
 extern "C" void beBaseInfoRam_SetTimerScale(beBaseInfoRam *self, int name, float scale);
-extern "C" void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *self, float scale);
-extern "C" void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, char *name);
-extern "C" void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self);
 extern "C" void beMovie_Prepare(beMovie *self);
 extern "C" void beMovie_OnAddRam(beMovie *self, int receiver, char *, int, int);
 extern "C" int beMovie_GetInfoMeta(void);
@@ -162,7 +143,7 @@ void beCriAudio_Release(beCriAudio *self) {
     self->_adxt = 0;
 }
 
-int beCriAudio_PlayFile(beCriAudio *self, int name) {
+int beCriAudio_PlayFile(beCriAudio *self, const char *name) {
     unsigned char ready = 0;
     igAdxAudio *adxt = adxOf(self);
     if (adxt != 0) {
@@ -175,14 +156,14 @@ int beCriAudio_PlayFile(beCriAudio *self, int name) {
     return 0;
 }
 
-int beCriAudio_PlayMemory(beCriAudio *self, int data, int size) {
+int beCriAudio_PlayMemory(beCriAudio *self, void *data, int size) {
     bool ready = false;
     igAdxAudio *adxt = (igAdxAudio *)self->_adxt;
     if (adxt != 0) {
         if (self->_audioType == kAudioAdxMemory) ready = true;
     }
     if (ready) {
-        int started = igAdxAudio_StartMemory(adxt, data, size);
+        int started = igAdxAudio_StartMemory(adxt, (int)data, size);
         return started;
     }
     return 0;
@@ -498,7 +479,7 @@ static inline long long worldTimeOf(beBaseInfoRam *ram) {
     return ((igInsightCore *)((beBaseInfoManager *)ram->_parentManager)->_insight)->_worldTime;
 }
 
-void beBaseInfoRam_StartTimer(beBaseInfoRam *self, int name, long long endTime) {
+void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long endTime) {
     beBaseInfoRamTimer *timer;
     long long now;
     unsigned ticks;
@@ -529,12 +510,12 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, int name, long long endTime) 
     timer->_endTime = endTime;
 }
 
-int beBaseInfoRam_HasTimer(beBaseInfoRam *self, int name) {
+int beBaseInfoRam_HasTimer(beBaseInfoRam *self, const char *name) {
     ensureTimerList(self);
     return igProperty_FindByName(self->_dataList, g_propertyNameField[0], name) != 0;
 }
 
-int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, int name) {
+int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     long long endTime;
     ensureTimerList(self);
@@ -546,7 +527,7 @@ int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, int name) {
     return endTime < beBaseInfoRam_GetTimerElapsed(self, name);
 }
 
-long long beBaseInfoRam_GetTimerElapsed(beBaseInfoRam *self, int name) {
+long long beBaseInfoRam_GetTimerElapsed(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     ensureTimerList(self);
     timer = igProperty_FindByName(self->_dataList, g_propertyNameField[0], name);
@@ -559,7 +540,7 @@ long long beBaseInfoRam_GetTimerElapsed(beBaseInfoRam *self, int name) {
 
 /* Frames (1/60 s) the timer advanced since the previous world frame, at most 3; computed once per
  * world frame. */
-float beBaseInfoRam_GetTimerFrameDelta(beBaseInfoRam *self, int name) {
+float beBaseInfoRam_GetTimerFrameDelta(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     long long now;
     long long time;
@@ -629,7 +610,7 @@ void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *self, float scale) {
     }
 }
 
-void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, char *name) {
+void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, const char *name) {
     igTDataList<igObject *> *list;
     int index;
     igObject *found;

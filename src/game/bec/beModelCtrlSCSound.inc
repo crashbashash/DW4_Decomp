@@ -2,9 +2,9 @@ igMetaObject *g_beModelCtrlSCSound_metaObject;
 igMetaField *g_beModelCtrlSCSound_sndNameMetaField;
 igMetaField *g_beModelCtrlSCSound_sndHandleMetaField;
 
-void beModelCtrlSCSound_Create(int allocator) {
+beModelCtrlSCSound *beModelCtrlSCSound_Create(int allocator) {
     beModelCtrlSCSound_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5887B0, allocator);
+    return (beModelCtrlSCSound *)igMetaObject_CreateInstance(*(int *)0x5887B0, allocator);
 }
 
 igMetaObject *beModelCtrlSCSound_GetMetaObject(void) {

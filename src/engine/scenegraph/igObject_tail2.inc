@@ -252,7 +252,7 @@ void FUN_001d1da0(MorphLevelState *self, float t) {
                 }
                 *walk = x;
             }
-            igBitMask_ClearAll((igDataList *)self->changed);
+            igBitMask_ClearAll((igBitMask *)self->changed);
             self->shownLevel = self->level;
         }
         self->indices->unlock(indices, 0, 0, -1);

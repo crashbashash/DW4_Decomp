@@ -2,9 +2,9 @@ igMetaObject *g_beTextureCtrlWork_metaObject;
 igMetaField *g_beTextureCtrlWork_textureListMetaField;
 igMetaField *g_beTextureCtrlWork_attributeListMetaField;
 
-void beTextureCtrlWork_Create(int allocator) {
+beTextureCtrlWork *beTextureCtrlWork_Create(int allocator) {
     beTextureCtrlWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587CD0, allocator);
+    return (beTextureCtrlWork *)igMetaObject_CreateInstance(*(int *)0x587CD0, allocator);
 }
 
 igMetaObject *beTextureCtrlWork_GetOrCreateMetaObject(void) {

@@ -5,9 +5,9 @@ igMetaField *g_beSelectCtrlInfoWork_isCancelMetaField;
 igMetaField *g_beSelectCtrlInfoWork_svSeqNameMetaField;
 igMetaField *g_beSelectCtrlInfoWork_decideListMetaField;
 
-void beSelectCtrlInfoWork_Create(int allocator) {
+beSelectCtrlInfoWork *beSelectCtrlInfoWork_Create(int allocator) {
     beSelectCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587F60, allocator);
+    return (beSelectCtrlInfoWork *)igMetaObject_CreateInstance(*(int *)0x587F60, allocator);
 }
 
 igMetaObject *beSelectCtrlInfoWork_GetOrCreateMetaObject(void) {

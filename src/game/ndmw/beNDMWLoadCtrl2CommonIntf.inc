@@ -15,9 +15,9 @@ igMetaField *g_beNDMWLoadCtrl2CommonIntf_difficultModeMetaField;
 igMetaField *g_beNDMWLoadCtrl2CommonIntf_isTitleMetaField;
 igMetaField *g_beNDMWLoadCtrl2CommonIntf_utilUsePlNoMetaField;
 
-void beNDMWLoadCtrl2CommonIntf_Create(int allocator) {
+beNDMWLoadCtrl2CommonIntf *beNDMWLoadCtrl2CommonIntf_Create(int allocator) {
     beNDMWLoadCtrl2CommonIntf_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadCtrl2CommonIntf_metaObject, allocator);
+    return (beNDMWLoadCtrl2CommonIntf *)igMetaObject_CreateInstance(g_beNDMWLoadCtrl2CommonIntf_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject(void) {

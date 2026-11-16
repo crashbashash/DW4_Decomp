@@ -9,6 +9,10 @@
 #ifndef DW4_P2TIMER_H
 #define DW4_P2TIMER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void p2InitTimer(void);
 void p2ShutdownTimer(void);
 void p2ReadClock(long long *time);
@@ -21,5 +25,9 @@ extern int p2SwapWaitTime;
 extern int p2FinishWaitTime;
 extern int p2SleepTime;
 extern int p2Vu0LockWaitTime;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -4,9 +4,9 @@ igMetaField *g_beNDMWTitle2_mcUtilCtrlMetaField;
 igMetaField *g_beNDMWTitle2_isMakeFileOKMetaField;
 igMetaField *g_beNDMWTitle2_selectMetaField;
 
-void beNDMWTitle2_CreateInstance(int allocator) {
+beNDMWTitle2 *beNDMWTitle2_CreateInstance(int allocator) {
     beNDMWTitle2_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWTitle2_metaObject, allocator);
+    return (beNDMWTitle2 *)igMetaObject_CreateInstance(g_beNDMWTitle2_metaObject, allocator);
 }
 
 igMetaObject *beNDMWTitle2_GetOrCreateMetaObject(void) {

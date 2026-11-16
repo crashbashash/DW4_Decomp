@@ -1,9 +1,9 @@
 igMetaObject *g_beHitLandModelTraversal_metaObject;
 igMetaField *g_beHitLandModelTraversal_orderMetaField;
 
-void beHitLandModelTraversal_Create(int allocator) {
+beHitLandModelTraversal *beHitLandModelTraversal_Create(int allocator) {
     beHitLandModelTraversal_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589380, allocator);
+    return (beHitLandModelTraversal *)igMetaObject_CreateInstance(*(int *)0x589380, allocator);
 }
 
 igMetaObject *beHitLandModelTraversal_GetOrCreateMetaObject(void) {

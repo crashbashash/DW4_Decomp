@@ -10,7 +10,10 @@ igMetaField *g_beMessengerArgData_matrix44fListMetaField;
 igMetaField *g_beMessengerArgData_objectListMetaField;
 igMetaField *g_beMessengerArgData_stringListMetaField;
 
-void *beMessengerArgData_Create(void *allocator){beMessengerArgData_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerArgData_metaObject,allocator));}
+beMessengerArgData *beMessengerArgData_Create(void *allocator) {
+    beMessengerArgData_EnsureRegistered();
+    return (beMessengerArgData *)igMetaObject_CreateInstance((void *)g_beMessengerArgData_metaObject,allocator);
+}
 
 igMetaObject *beMessengerArgData_GetOrCreateMetaObject(void) {
     if (g_beMessengerArgData_metaObject == 0) {

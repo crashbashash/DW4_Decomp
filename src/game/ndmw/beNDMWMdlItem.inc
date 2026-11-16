@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWMdlItem_metaObject;
 igMetaField *g_beNDMWMdlItem_viewerSIManagerMetaField;
 igMetaField *g_beNDMWMdlItem_lockRamListMetaField;
 
-void beNDMWMdlItem_CreateInstance(int allocator) {
+beNDMWMdlItem *beNDMWMdlItem_CreateInstance(int allocator) {
     beNDMWMdlItem_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlItem_metaObject, allocator);
+    return (beNDMWMdlItem *)igMetaObject_CreateInstance(g_beNDMWMdlItem_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlItem_GetOrCreateMetaObject(void) {

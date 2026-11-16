@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beSystem.h"
 
 /* Header in front of every interned string token: owning chunk, then a full 32-bit reference
  * count. */
@@ -33,7 +34,6 @@ extern int kIGMemoryPoolHandleUser0[4];
 extern int kIGMemoryPoolHandleUser1[4];
 extern int kIGMemoryPoolHandleTemporary[4];
 extern unsigned char g_useOwnerAllocator;
-extern int g_beSystem_metaObject[4];
 extern int ndmw_igb[4];
 
 void beSystem_Activate(beSystem *self, int unusedArg);
@@ -43,8 +43,7 @@ void beSystem_Stop(void);
 int beSystem_AddInfo(void);
 void beSystem_RemoveAllInfo(beSystem *self);
 void beSystem_Update(beSystem *self);
-int beSystem_IsRunning(beSystem *self);
-int beSystem_GetMetaObject_Virtual(void);
+igMetaObject *beSystem_GetMetaObject_Virtual(void);
 }
 
 /* Hands the system to the insight scheduler unless it already holds it. */
@@ -289,7 +288,7 @@ int beSystem_IsRunning(beSystem *self)
     return (self->_isActive & !self->_isFirstTime) != 0;
 }
 
-int beSystem_GetMetaObject_Virtual(void)
+igMetaObject *beSystem_GetMetaObject_Virtual(void)
 {
-    return g_beSystem_metaObject[0];
+    return g_beSystem_metaObject;
 }

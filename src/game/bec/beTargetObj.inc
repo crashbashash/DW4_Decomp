@@ -3,9 +3,9 @@ igMetaField *g_beTargetObj_playerPosListMetaField;
 igMetaField *g_beTargetObj_playerRamNoListMetaField;
 igMetaField *g_beTargetObj_enemyPosListMetaField;
 
-void beTargetObj_CreateInstance(int allocator) {
+beTargetObj *beTargetObj_CreateInstance(int allocator) {
     beTargetObj_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587CE8, allocator);
+    return (beTargetObj *)igMetaObject_CreateInstance(*(int *)0x587CE8, allocator);
 }
 
 igMetaObject *beTargetObj_GetOrCreateMetaObject(void) {

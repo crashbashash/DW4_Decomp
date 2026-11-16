@@ -1,9 +1,9 @@
 igMetaObject *g_beSvEndApi_metaObject;
 int g_beSvEndApi_orderTypeStorage;
 
-void beSvEndApi_Create(int allocator) {
+beSvEndApi *beSvEndApi_Create(int allocator) {
     beSvEndApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5881E0, allocator);
+    return (beSvEndApi *)igMetaObject_CreateInstance(*(int *)0x5881E0, allocator);
 }
 
 void *beSvEndApi_GetMetaObject(void) {

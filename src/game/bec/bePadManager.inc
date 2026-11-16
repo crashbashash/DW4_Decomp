@@ -5,9 +5,9 @@ igMetaField *g_bePadManager_kbReceiverMetaField;
 igMetaField *g_bePadManager_is1pAllDeviceMetaField;
 igMetaField *g_bePadManager_isPadDisableMetaField;
 
-void bePadManager_CreateInstance(int allocator) {
+bePadManager *bePadManager_CreateInstance(int allocator) {
     bePadManager_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588518, allocator);
+    return (bePadManager *)igMetaObject_CreateInstance(*(int *)0x588518, allocator);
 }
 
 igMetaObject *bePadManager_GetOrCreateMetaObject(void) {

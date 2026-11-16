@@ -18,7 +18,15 @@ typedef struct p2StateCacheEntry {
     char f660[12];
 } p2StateCacheEntry;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void p2InitStateCache(void);
 void p2InvalidateStateCache(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

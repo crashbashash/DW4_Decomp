@@ -1,9 +1,9 @@
 igMetaObject *g_beWeapon_metaObject;
 igMetaField *g_beWeapon_attachDataListMetaField;
 
-void beWeapon_CreateInstance(int allocator) {
+beWeapon *beWeapon_CreateInstance(int allocator) {
     beWeapon_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587A68, allocator);
+    return (beWeapon *)igMetaObject_CreateInstance(*(int *)0x587A68, allocator);
 }
 
 igMetaObject *beWeapon_GetOrCreateMetaObject(void) {

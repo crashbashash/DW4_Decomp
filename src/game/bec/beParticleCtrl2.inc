@@ -1,8 +1,8 @@
 igMetaObject *g_beParticleCtrl2_metaObject;
 
-void beParticleCtrl2_CreateInstance(int allocator) {
+beParticleCtrl2 *beParticleCtrl2_CreateInstance(int allocator) {
     beParticleCtrl2_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588510, allocator);
+    return (beParticleCtrl2 *)igMetaObject_CreateInstance(*(int *)0x588510, allocator);
 }
 
 igMetaObject *beParticleCtrl2_GetOrCreateMetaObject(void) {

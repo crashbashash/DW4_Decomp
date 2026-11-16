@@ -1,4 +1,5 @@
-void Gap__Gfx__igPsx2VisualContext__vfunc_197(struct S_180030 *arg0, int arg1, int arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_197(igPsx2VisualContext *self, int arg1, int arg2) {
+    struct S_180030 *arg0 = (struct S_180030 *)self;
     arg0->f72 = arg1;
     arg0->f84 = arg2;
     arg0->f1424 = 1;

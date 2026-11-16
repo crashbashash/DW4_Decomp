@@ -17,9 +17,9 @@ igMetaField *g_beNDMWLoadIntf2Diffselect_st1MetaField;
 igMetaField *g_beNDMWLoadIntf2Diffselect_st2MetaField;
 igMetaField *g_beNDMWLoadIntf2Diffselect_st3MetaField;
 
-void beNDMWLoadIntf2Diffselect_Create(int allocator) {
+beNDMWLoadIntf2Diffselect *beNDMWLoadIntf2Diffselect_Create(int allocator) {
     beNDMWLoadIntf2Diffselect_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2Diffselect_metaObject, allocator);
+    return (beNDMWLoadIntf2Diffselect *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2Diffselect_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2Diffselect_ResolveMetaObject(void)

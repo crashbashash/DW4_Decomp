@@ -11,9 +11,9 @@ igMetaField *g_beNDMWLogo_selectMetaField;
 igMetaField *g_beNDMWLogo_errTargetMetaField;
 igMetaField *g_beNDMWLogo_errTypeMetaField;
 
-void beNDMWLogo_CreateInstance(int allocator) {
+beNDMWLogo *beNDMWLogo_CreateInstance(int allocator) {
     beNDMWLogo_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLogo_metaObject, allocator);
+    return (beNDMWLogo *)igMetaObject_CreateInstance(g_beNDMWLogo_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLogo_GetOrCreateMetaObject(void) {

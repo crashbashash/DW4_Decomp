@@ -2,9 +2,9 @@ igMetaObject *g_beSvFileMakeApi_metaObject;
 igMetaField *g_beSvFileMakeApi_earlyGamedataMetaField;
 igMetaField *g_beSvFileMakeApi_saveWorkMetaField;
 
-void beSvFileMakeApi_Create(int allocator) {
+beSvFileMakeApi *beSvFileMakeApi_Create(int allocator) {
     beSvFileMakeApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588280, allocator);
+    return (beSvFileMakeApi *)igMetaObject_CreateInstance(*(int *)0x588280, allocator);
 }
 
 void *beSvFileMakeApi_GetMetaObject(void) {

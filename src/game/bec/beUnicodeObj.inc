@@ -1,9 +1,9 @@
 igMetaObject *g_beUnicodeObj_metaObject;
 igMetaField *g_beUnicodeObj_bufferMetaField;
 
-void beUnicodeObj_Create(int allocator) {
+beUnicodeObj *beUnicodeObj_Create(int allocator) {
     beUnicodeObj_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589640, allocator);
+    return (beUnicodeObj *)igMetaObject_CreateInstance(*(int *)0x589640, allocator);
 }
 
 igMetaObject *beUnicodeObj_GetMetaObject(void) {

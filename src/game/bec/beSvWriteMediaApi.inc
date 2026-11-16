@@ -2,9 +2,9 @@ igMetaObject *g_beSvWriteMediaApi_metaObject;
 igMetaField *g_beSvWriteMediaApi_nowGamedataMetaField;
 igMetaField *g_beSvWriteMediaApi_saveWorkMetaField;
 
-void beSvWriteMediaApi_Create(int allocator) {
+beSvWriteMediaApi *beSvWriteMediaApi_Create(int allocator) {
     beSvWriteMediaApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588220, allocator);
+    return (beSvWriteMediaApi *)igMetaObject_CreateInstance(*(int *)0x588220, allocator);
 }
 
 igMetaObject *beSvWriteMediaApi_GetMetaObject(void) {

@@ -19,9 +19,9 @@ igMetaField *g_beNDMWShinkaObject_blastMetaField;
 igMetaField *g_beNDMWShinkaObject_healMetaField;
 igMetaField *g_beNDMWShinkaObject_forceMetaField;
 
-void beNDMWShinkaObject_CreateInstance(int allocator) {
+beNDMWShinkaObject *beNDMWShinkaObject_CreateInstance(int allocator) {
     beNDMWShinkaObject_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShinkaObject_metaObject, allocator);
+    return (beNDMWShinkaObject *)igMetaObject_CreateInstance(g_beNDMWShinkaObject_metaObject, allocator);
 }
 
 igMetaObject *beNDMWShinkaObject_ResolveMetaObject(void) {

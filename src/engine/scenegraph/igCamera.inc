@@ -1,6 +1,6 @@
-void igCamera_CreateInstance(int arg0) {
+igCamera *igCamera_CreateInstance(int allocator) {
     igCamera_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igCamera_metaObject, arg0);
+    return (igCamera *)igMetaObject_CreateInstance((int)g_igCamera_metaObject, allocator);
 }
 
 igMetaObject *g_igCamera_metaObject;

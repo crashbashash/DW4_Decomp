@@ -4,9 +4,9 @@ igMetaField *g_beNDMWStatusCtrlSendBit_editMaxMetaField;
 igMetaField *g_beNDMWStatusCtrlSendBit_playerNoListMetaField;
 igMetaField *g_beNDMWStatusCtrlSendBit_receiptMetaField;
 
-void beNDMWStatusCtrlSendBit_Create(int allocator) {
+beNDMWStatusCtrlSendBit *beNDMWStatusCtrlSendBit_Create(int allocator) {
     beNDMWStatusCtrlSendBit_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlSendBit_metaObject, allocator);
+    return (beNDMWStatusCtrlSendBit *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlSendBit_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrlSendBit_GetMetaObject(void) {

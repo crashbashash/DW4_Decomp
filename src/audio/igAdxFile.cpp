@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igObjectDispatchView.h"
+#include "dw4/igAdxFile.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -61,7 +62,6 @@ int memcpy(char *, char *, int);
 
 extern int g_resultSuccess[4];
 extern int g_resultFailure[4];
-extern int g_igAdxFile_metaObject[4];
 extern unsigned char g_adxIopReady;
 unsigned char g_igAdxFile_ignoreReadModeWarning;
 unsigned char g_igAdxFile_ignoreWriteWarning;
@@ -123,7 +123,7 @@ void igAdxFile_userConstruct(igAdxFile *self)
 
 int igAdxFile_GetMeta(void)
 {
-    return g_igAdxFile_metaObject[0];
+    return (int)g_igAdxFile_metaObject;
 }
 
 void igAdxFile_destructFields(igAdxFile *self)

@@ -7,6 +7,187 @@
 #include "dw4/igTransformDispatchView.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/beSystem.h"
+#include "dw4/be.h"
+#include "dw4/beAction2.h"
+#include "dw4/beAction2FADESET.h"
+#include "dw4/beAction2FLASHSET.h"
+#include "dw4/beAction2Info.h"
+#include "dw4/beAction2InfoWork.h"
+#include "dw4/beAction2JOINTSET.h"
+#include "dw4/beAction2MOTIONSET.h"
+#include "dw4/beAction2WAITCHECK.h"
+#include "dw4/beActionStarter.h"
+#include "dw4/beActionStarterData2.h"
+#include "dw4/beActionStarterInfo.h"
+#include "dw4/beBaseInfo.h"
+#include "dw4/beBaseInfoData.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beBaseInfoManager.h"
+#include "dw4/beBaseInfoRam.h"
+#include "dw4/beBaseInfoRamTimer.h"
+#include "dw4/beBkColor.h"
+#include "dw4/beBkColorInfo.h"
+#include "dw4/beCameraBoxData.h"
+#include "dw4/beCameraCtrl.h"
+#include "dw4/beCameraCtrlInfo.h"
+#include "dw4/beCameraCtrlInfoRamShake.h"
+#include "dw4/beCameraDemoData.h"
+#include "dw4/beCameraMode.h"
+#include "dw4/beChangePosTransform.h"
+#include "dw4/beChangePosTransformInfo.h"
+#include "dw4/beCopyModelCtrl2.h"
+#include "dw4/beCopyTransform.h"
+#include "dw4/beCri.h"
+#include "dw4/beCriAcxData.h"
+#include "dw4/beCriFxInfo.h"
+#include "dw4/beCriHandle.h"
+#include "dw4/beCriSfpData.h"
+#include "dw4/beCriSndf.h"
+#include "dw4/beDataBase.h"
+#include "dw4/beDataObjBool.h"
+#include "dw4/beDataObjBoolList.h"
+#include "dw4/beDataObjFloatList.h"
+#include "dw4/beDataObjInt.h"
+#include "dw4/beDataObjIntList.h"
+#include "dw4/beDataObjList.h"
+#include "dw4/beDataObjListList.h"
+#include "dw4/beDataObjObjectList.h"
+#include "dw4/beDataObjString.h"
+#include "dw4/beDataObjStringList.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beDBManagerInfo.h"
+#include "dw4/beDemoKeepMes.h"
+#include "dw4/beDemoManager.h"
+#include "dw4/beDemoManagerWork.h"
+#include "dw4/beFileChkObj.h"
+#include "dw4/beFileListInfo.h"
+#include "dw4/beFileListInfoManager.h"
+#include "dw4/beFont.h"
+#include "dw4/beFontGeomAttrPair.h"
+#include "dw4/beFontInfo.h"
+#include "dw4/beGenerater.h"
+#include "dw4/beGeneraterInfo.h"
+#include "dw4/beGeneraterInfoWork.h"
+#include "dw4/beHitLandDeliv.h"
+#include "dw4/beHitLandDelivInfo.h"
+#include "dw4/beHitLandModel.h"
+#include "dw4/beHitLandModelInfo.h"
+#include "dw4/beHitLandModelOrder.h"
+#include "dw4/beHitLandModelTraversal.h"
+#include "dw4/beHitLandResultData.h"
+#include "dw4/beKeyboardReceiver.h"
+#include "dw4/beLayerCtl.h"
+#include "dw4/beLayerInfo.h"
+#include "dw4/beLightCtrl.h"
+#include "dw4/beLightCtrlInfo.h"
+#include "dw4/beLOA.h"
+#include "dw4/beLoadingNode.h"
+#include "dw4/beLua.h"
+#include "dw4/beLuaInfo.h"
+#include "dw4/beLuaState.h"
+#include "dw4/beMatCtrl.h"
+#include "dw4/beMatCtrlInfo.h"
+#include "dw4/beMatCtrlInfoWork.h"
+#include "dw4/beMemory.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beMessengerArgData.h"
+#include "dw4/beMessengerDelay.h"
+#include "dw4/beMessengerGroup.h"
+#include "dw4/beMessengerWork.h"
+#include "dw4/beMeterCtrl.h"
+#include "dw4/beMeterCtrlInfo.h"
+#include "dw4/beMeterCtrlNode.h"
+#include "dw4/beModelCtrl.h"
+#include "dw4/beModelCtrlACTION.h"
+#include "dw4/beModelCtrlAIMAP.h"
+#include "dw4/beModelCtrlCTRL.h"
+#include "dw4/beModelCtrlHITBOX.h"
+#include "dw4/beModelCtrlInfo.h"
+#include "dw4/beModelCtrlInfoAI.h"
+#include "dw4/beModelCtrlInfoHitBody.h"
+#include "dw4/beModelCtrlInfoRideOn.h"
+#include "dw4/beModelCtrlInfoRideOn2.h"
+#include "dw4/beModelCtrlInfoRideOn3.h"
+#include "dw4/beModelCtrlInfoRideOn4.h"
+#include "dw4/beModelCtrlInfoWork.h"
+#include "dw4/beModelCtrlJUMP.h"
+#include "dw4/beModelCtrlLABEL.h"
+#include "dw4/beModelCtrlLABELCTRL.h"
+#include "dw4/beModelCtrlLUACALL.h"
+#include "dw4/beModelCtrlMOVE.h"
+#include "dw4/beModelCtrlMOVEEX.h"
+#include "dw4/beModelCtrlMoveObject.h"
+#include "dw4/beModelCtrlMOVERL.h"
+#include "dw4/beModelCtrlMSGBOX.h"
+#include "dw4/beModelCtrlMUTEKI.h"
+#include "dw4/beModelCtrlNode2.h"
+#include "dw4/beModelCtrlPDMOVE.h"
+#include "dw4/beModelCtrlSCEffect.h"
+#include "dw4/beModelCtrlSCHitBox.h"
+#include "dw4/beModelCtrlSCSound.h"
+#include "dw4/beModelCtrlWCHECK.h"
+#include "dw4/beMovie.h"
+#include "dw4/beMovieInfo.h"
+#include "dw4/beMovieInfoData.h"
+#include "dw4/beNodeAnim.h"
+#include "dw4/beNumberCtrl.h"
+#include "dw4/beNumberCtrlInfo.h"
+#include "dw4/beNumberCtrlInfoWork.h"
+#include "dw4/bePadData.h"
+#include "dw4/bePadManager.h"
+#include "dw4/beParticleCtrl2.h"
+#include "dw4/beParticleCtrl2Info.h"
+#include "dw4/beParticleCtrl2InfoWork.h"
+#include "dw4/bePlaySE.h"
+#include "dw4/bePoint01.h"
+#include "dw4/bePoint01Info.h"
+#include "dw4/beResetNode.h"
+#include "dw4/beSaveApi.h"
+#include "dw4/beSaveDataDeliver.h"
+#include "dw4/beSaveMemoryObj.h"
+#include "dw4/beSaveUtil.h"
+#include "dw4/beSaveUtilInfo.h"
+#include "dw4/beSeCtl.h"
+#include "dw4/beSeInfo.h"
+#include "dw4/beSelectCtrl.h"
+#include "dw4/beSelectCtrlInfo.h"
+#include "dw4/beSelectCtrlInfoWork.h"
+#include "dw4/beShadow01.h"
+#include "dw4/beShadow01Info.h"
+#include "dw4/beSound.h"
+#include "dw4/beSoundInfo.h"
+#include "dw4/beStaticInfo.h"
+#include "dw4/beStaticInfoCtl.h"
+#include "dw4/beSvConnectCheck.h"
+#include "dw4/beSvEndApi.h"
+#include "dw4/beSvFileFindApi.h"
+#include "dw4/beSvFileMakeApi.h"
+#include "dw4/beSvFormatApi.h"
+#include "dw4/beSvGetFreeSizeApi.h"
+#include "dw4/beSvReadMediaApi.h"
+#include "dw4/beSvStartApi.h"
+#include "dw4/beSvUseCheckApi.h"
+#include "dw4/beSvWriteMediaApi.h"
+#include "dw4/beSwitchCtrl.h"
+#include "dw4/beSwitchCtrlInfo.h"
+#include "dw4/beTargetObj.h"
+#include "dw4/beTextureCtrl.h"
+#include "dw4/beTextureCtrlInfo.h"
+#include "dw4/beTextureCtrlWork.h"
+#include "dw4/beTimer.h"
+#include "dw4/beUnicodeObj.h"
+#include "dw4/beWaterPlain.h"
+#include "dw4/beWaterPlainInfo.h"
+#include "dw4/beWeapon.h"
+#include "dw4/beWeaponAttachData.h"
+#include "dw4/beWeaponAttachDataList.h"
+#include "dw4/beWeaponInfo.h"
+#include "dw4/beWeaponSeqData.h"
+#include "dw4/igFont.h"
+#include "dw4/libBecRuntimePlugin.h"
+#include "dw4/ParticleArray.h"
+#include "dw4/ParticleInfo.h"
+#include "dw4/ParticleTimer.h"
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #define RELEASE_OBJ(o) { \
     if (o) { \
@@ -150,7 +331,6 @@ extern "C" int Memory_FreeBufferAliasC(...);
 extern "C" void beWeaponInfoRam_EnsureRegistered(void);
 extern "C" void *beWeaponInfoRam_Register(void);
 extern "C" void beWeaponInfoRam_GetMetaObjectFunction(void);
-extern "C" igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 extern "C" void *beWeaponInfo_GetMetaObject(void);
 extern "C" int igSmartPointer_igNodeList_Destruct(...);
 extern "C" int igSmartPointer_igNamedObjectList_Destruct(...);
@@ -184,7 +364,6 @@ static inline void igStringRef_Release(char **slot) {
 extern "C" void beWeaponInfo_EnsureRegistered(void);
 extern "C" void *beWeaponInfo_Register(void);
 extern "C" void beWeaponInfo_GetMetaObjectFunction(void);
-extern "C" igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 extern "C" int igNodeList_GetOrCreateMetaObject(void);
 extern "C" int igNamedObjectList_GetOrCreateMetaObject(...);
 extern "C" void beWeaponInfo_InitFields(void);
@@ -205,9 +384,7 @@ extern "C" void *beWeaponSeqData_Register(void);
 extern "C" void beWeaponSeqData_GetMetaObjectFunction(void);
 extern "C" void beWeaponSeqData_InitFields(void);
 extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
-extern "C" igMetaEnum *beWeaponSeqData_GetMsgActionEnum(void);
 extern "C" int igMetaObject_CreateInstance(...);
-extern "C" void beWeapon_CreateInstance(int allocator);
 extern "C" igMetaObject *beWeapon_GetOrCreateMetaObject(void);
 extern "C" void *beWeapon_GetMetaObject(void);
 extern "C" int beWeapon_GetVTable(void);
@@ -216,15 +393,12 @@ extern "C" igSmartPointer<igObject> *beBaseInfoManager_igSmartPointer_igObject_D
 extern "C" void beWeapon_EnsureRegistered(void);
 extern "C" void *beWeapon_Register(void);
 extern "C" void beWeapon_GetMetaObjectFunction(void);
-extern "C" igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 extern "C" void beWeapon_InitFields(void);
-extern "C" void beWeaponAttachDataList_Create(int allocator);
 extern "C" igMetaObject *beWeaponAttachDataList_GetOrCreateMetaObject(void);
 extern "C" int beWeaponAttachDataList_GetVTable(void);
 extern "C" void beWeaponAttachDataList_EnsureRegistered(void);
 extern "C" void *beWeaponAttachDataList_Register(void);
 extern "C" void beWeaponAttachDataList_GetMetaObjectFunction(void);
-extern "C" void beWeaponAttachData_Create(int allocator);
 extern "C" int beWeaponAttachData_GetVTable(void);
 extern "C" void beWeaponAttachData_EnsureRegistered(void);
 extern "C" void *igObject_Register(void);
@@ -280,8 +454,6 @@ extern "C" int beWaterPlainInfo_GetVTable(void);
 extern "C" void beWaterPlainInfo_EnsureRegistered(void);
 extern "C" void *beWaterPlainInfo_Register(void);
 extern "C" void beWaterPlainInfo_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *beWaterPlain_GetMessageEnum(void);
-extern "C" void beWaterPlain_CreateInstance(int allocator);
 extern "C" igMetaObject *beWaterPlain_GetOrCreateMetaObject(void);
 extern "C" void *beWaterPlain_GetMetaObject(void);
 extern "C" int beWaterPlain_GetVTable(void);
@@ -301,7 +473,6 @@ extern "C" void *beTransformSync_Register(void);
 extern "C" void beTransformSync_GetMetaObjectFunction(void);
 extern "C" int igTransformList_GetOrCreateMetaObject(void);
 extern "C" void beTransformSync_InitFields(void);
-extern "C" void beTimer_CreateInstance(int allocator);
 extern "C" igMetaObject *beTimer_GetOrCreateMetaObject(void);
 extern "C" void *beTimer_GetMetaObject(void);
 extern "C" int beTimer_GetVTable(void);
@@ -344,7 +515,6 @@ extern "C" void *beTextureCtrlData_Register(void);
 extern "C" void beTextureCtrlData_GetMetaObjectFunction(void);
 extern "C" int igTextureAttr_GetOrCreateMetaObject(void);
 extern "C" void beTextureCtrlData_InitFields(void);
-extern "C" void beTextureCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beTextureCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beTextureCtrl_GetMetaObject(void);
 extern "C" int beTextureCtrl_GetVTable(void);
@@ -353,7 +523,6 @@ extern "C" void beTextureCtrl_EnsureRegistered(void);
 extern "C" void *beTextureCtrl_Register(void);
 extern "C" void beTextureCtrl_GetMetaObjectFunction(void);
 extern "C" void beTextureCtrl_InitFields(void);
-extern "C" void beTextureCtrlWork_Create(int allocator);
 extern "C" igMetaObject *beTextureCtrlWork_GetOrCreateMetaObject(void);
 extern "C" void *beTextureCtrlWork_GetMetaObject(void);
 extern "C" int beTextureCtrlWork_GetVTable(void);
@@ -361,7 +530,6 @@ extern "C" void beTextureCtrlWork_EnsureRegistered(void);
 extern "C" void *beTextureCtrlWork_Register(void);
 extern "C" void beTextureCtrlWork_GetMetaObjectFunction(void);
 extern "C" void beTextureCtrlWork_InitFields(void);
-extern "C" void beTargetObj_CreateInstance(int allocator);
 extern "C" igMetaObject *beTargetObj_GetOrCreateMetaObject(void);
 extern "C" void *beTargetObj_GetMetaObject(void);
 extern "C" int igSmartPointer_igVec3fList_Destruct(int *, int);
@@ -371,8 +539,6 @@ extern "C" void beTargetObj_EnsureRegistered(void);
 extern "C" void *beTargetObj_Register(void);
 extern "C" void beTargetObj_GetMetaObjectFunction(void);
 extern "C" void beTargetObj_InitFields(void);
-extern "C" void beSystem_CreateInstance(int allocator);
-extern "C" igMetaObject *beSystem_GetOrCreateMetaObject(void);
 extern "C" void *beSystem_GetMetaObject(void);
 extern "C" int igSmartPointer_igStringObj_Destruct(int *, int);
 extern "C" int igSmartPointer_igStringRefList_Destruct(int *, int);
@@ -382,7 +548,6 @@ extern "C" int igSmartPointer_igGroup_Destruct(int *, int);
 extern "C" int igStringRef_Destruct(...);
 extern "C" int beSystem_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igRandomNumber_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" void beSystem_EnsureRegistered(void);
 extern "C" void *beSystem_Register(void);
 extern "C" void beSystem_GetMetaObjectFunction(void);
 extern "C" int igGroup_GetOrCreateMetaObject(void);
@@ -401,16 +566,12 @@ extern "C" void *beSwitchCtrlInfo_Register(void);
 extern "C" void beSwitchCtrlInfo_GetMetaObjectFunction(void);
 extern "C" int igSwitch_GetOrCreateMetaObject(void);
 extern "C" void beSwitchCtrlInfo_InitFields(void);
-extern "C" igMetaEnum *beSwitchCtrl_GetMessageEnum(void);
-extern "C" void beSwitchCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beSwitchCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beSwitchCtrl_GetMetaObject(void);
 extern "C" int beSwitchCtrl_GetVTable(void);
 extern "C" void beSwitchCtrl_EnsureRegistered(void);
 extern "C" void *beSwitchCtrl_Register(void);
 extern "C" void beSwitchCtrl_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *beStaticInfoCtl_GetMessageEnum(void);
-extern "C" void beStaticInfoCtl_CreateInstance(int allocator);
 extern "C" igMetaObject *beStaticInfoCtl_GetOrCreateMetaObject(void);
 extern "C" void *beStaticInfoCtl_GetMetaObject(void);
 extern "C" int beStaticInfoCtl_GetVTable(void);
@@ -427,7 +588,6 @@ extern "C" void *beBinDataObject_GetMetaObject(void);
 extern "C" void beBinDataObject_EnsureRegistered(void);
 extern "C" void *beBinDataObject_Register(void);
 extern "C" void beBinDataObject_GetMetaObjectFunction(void);
-extern "C" igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 extern "C" int igCharMetaField_GetDefaultDescriptor(...);
 extern "C" void beBinDataObject_InitFields(void);
 extern "C" int beSoundInfo_GetVTable(void);
@@ -442,8 +602,6 @@ extern "C" void beSoundData_GetMetaObjectFunction(void);
 extern "C" int igIntMetaField_SetDefault(...);
 extern "C" int igShortMetaField_SetDefault(int, int);
 extern "C" void beSoundData_InitFields(void);
-extern "C" igMetaEnum *beSound_GetMessageEnum(void);
-extern "C" void beSound_CreateInstance(int allocator);
 extern "C" igMetaObject *beSound_GetOrCreateMetaObject(void);
 extern "C" int beSound_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_bePlaySEList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
@@ -456,7 +614,6 @@ extern "C" int bePlaySEList_GetVTable(void);
 extern "C" void bePlaySEList_EnsureRegistered(void);
 extern "C" void *bePlaySEList_Register(void);
 extern "C" void bePlaySEList_GetMetaObjectFunction(void);
-extern "C" void bePlaySE_CreateInstance(int allocator);
 extern "C" void *bePlaySE_GetMetaObject(void);
 extern "C" int bePlaySE_GetVTable(void);
 extern "C" void bePlaySE_EnsureRegistered(void);
@@ -478,7 +635,6 @@ extern "C" void beShadow01Info_GetMetaObjectFunction(void);
 extern "C" int igProjectiveShadowShader_GetOrCreateMetaObject(void);
 extern "C" int igNode_GetOrCreateMetaObject(void);
 extern "C" void beShadow01Info_InitFields(void);
-extern "C" void beShadow01_CreateInstance(int allocator);
 extern "C" igMetaObject *beShadow01_GetOrCreateMetaObject(void);
 extern "C" void *beShadow01_GetMetaObject(void);
 extern "C" int beShadow01_GetVTable(void);
@@ -500,7 +656,6 @@ extern "C" int ObjectPointerList_FindIndex(...);
 extern "C" int igMetaObject_FinalizeAndReplaceField(...);
 extern "C" void **igMetaObject_FindFieldByName(...);
 extern "C" void beSelectCtrlInfoRamData_InitFields(void);
-extern "C" void beSelectCtrlInfoWork_Create(int allocator);
 extern "C" igMetaObject *beSelectCtrlInfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beSelectCtrlInfoWork_GetMetaObject(void);
 extern "C" int beSelectCtrlInfoWork_GetVTable(void);
@@ -509,8 +664,6 @@ extern "C" void *beSelectCtrlInfoWork_Register(void);
 extern "C" void beSelectCtrlInfoWork_GetMetaObjectFunction(void);
 extern "C" int igBoolList_GetOrCreateMetaObject(void);
 extern "C" void beSelectCtrlInfoWork_InitFields(void);
-extern "C" igMetaEnum *beSelectCtrl_GetMessageEnum(void);
-extern "C" void beSelectCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beSelectCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beSelectCtrl_GetMetaObject(void);
 extern "C" int beSelectCtrl_GetVTable(void);
@@ -539,7 +692,6 @@ extern "C" void beSeData_EnsureRegistered(void);
 extern "C" void *beSeData_Register(void);
 extern "C" void beSeData_GetMetaObjectFunction(void);
 extern "C" void beSeData_InitFields(void);
-extern "C" void beSeCtl_CreateInstance(int allocator);
 extern "C" igMetaObject *beSeCtl_GetOrCreateMetaObject(void);
 extern "C" int beSeCtl_GetVTable(void);
 extern "C" void beSeCtl_EnsureRegistered(void);
@@ -556,8 +708,6 @@ extern "C" int beSaveUtilInfo_GetVTable(void);
 extern "C" void beSaveUtilInfo_EnsureRegistered(void);
 extern "C" void *beSaveUtilInfo_Register(void);
 extern "C" void beSaveUtilInfo_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *beSaveUtil_GetMessageEnum(void);
-extern "C" void beSaveUtil_CreateInstance(int allocator);
 extern "C" igMetaObject *beSaveUtil_GetOrCreateMetaObject(void);
 extern "C" void *beSaveUtil_GetMetaObject(void);
 extern "C" int beSaveUtil_GetVTable(void);
@@ -606,7 +756,6 @@ extern "C" void beSvPlatDataGC_EnsureRegistered(void);
 extern "C" void *beSvPlatDataGC_Register(void);
 extern "C" void beSvPlatDataGC_GetMetaObjectFunction(void);
 extern "C" void beSvPlatDataGC_InitFields(void);
-extern "C" void beSvConnectCheck_Create(int allocator);
 extern "C" igMetaObject *beSvConnectCheck_GetOrCreateMetaObject(void);
 extern "C" void *beSvConnectCheck_GetMetaObject(void);
 extern "C" int beSvConnectCheck_GetVTable(void);
@@ -614,57 +763,48 @@ extern "C" void beSvConnectCheck_EnsureRegistered(void);
 extern "C" void *beSvConnectCheck_Register(void);
 extern "C" void beSvConnectCheck_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beSaveApi_GetPublishedMetaObject(void);
-extern "C" void beSvEndApi_Create(int allocator);
 extern "C" void *beSvEndApi_GetMetaObject(void);
 extern "C" int beSvEndApi_GetVTable(void);
 extern "C" void beSvEndApi_EnsureRegistered(void);
 extern "C" void *beSvEndApi_Register(void);
 extern "C" void beSvEndApi_GetMetaObjectFunction(void);
 extern "C" void beSvEndApi_InitFields(void);
-extern "C" void beSvStartApi_Create(int allocator);
 extern "C" int beSvStartApi_GetVTable(void);
 extern "C" void beSvStartApi_EnsureRegistered(void);
 extern "C" void *beSvStartApi_Register(void);
 extern "C" void beSvStartApi_GetMetaObjectFunction(void);
 extern "C" void beSvStartApi_InitFields(void);
-extern "C" void beSvGetFreeSizeApi_Create(int allocator);
 extern "C" int beSvGetFreeSizeApi_GetVTable(void);
 extern "C" void beSvGetFreeSizeApi_EnsureRegistered(void);
 extern "C" void *beSvGetFreeSizeApi_Register(void);
 extern "C" void beSvGetFreeSizeApi_GetMetaObjectFunction(void);
 extern "C" void beSvGetFreeSizeApi_InitFields(void);
-extern "C" void beSvWriteMediaApi_Create(int allocator);
 extern "C" int beSvWriteMediaApi_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beSvPlatBaseData_Destruct(igSmartPointer<igObject> *self, long long delete_storage);
 extern "C" void beSvWriteMediaApi_EnsureRegistered(void);
 extern "C" void *beSvWriteMediaApi_Register(void);
 extern "C" void beSvWriteMediaApi_GetMetaObjectFunction(void);
 extern "C" void beSvWriteMediaApi_InitFields(void);
-extern "C" void beSvReadMediaApi_Create(int allocator);
 extern "C" int beSvReadMediaApi_GetVTable(void);
 extern "C" void beSvReadMediaApi_EnsureRegistered(void);
 extern "C" void *beSvReadMediaApi_Register(void);
 extern "C" void beSvReadMediaApi_GetMetaObjectFunction(void);
 extern "C" void beSvReadMediaApi_InitFields(void);
-extern "C" void beSvUseCheckApi_Create(int allocator);
 extern "C" void *beSvUseCheckApi_GetMetaObject(void);
 extern "C" int beSvUseCheckApi_GetVTable(void);
 extern "C" void beSvUseCheckApi_EnsureRegistered(void);
 extern "C" void *beSvUseCheckApi_Register(void);
 extern "C" void beSvUseCheckApi_GetMetaObjectFunction(void);
-extern "C" void beSvFormatApi_Create(int allocator);
 extern "C" void *beSvFormatApi_GetMetaObject(void);
 extern "C" int beSvFormatApi_GetVTable(void);
 extern "C" void beSvFormatApi_EnsureRegistered(void);
 extern "C" void *beSvFormatApi_Register(void);
 extern "C" void beSvFormatApi_GetMetaObjectFunction(void);
-extern "C" void beSvFileFindApi_Create(int allocator);
 extern "C" void *beSvFileFindApi_GetMetaObject(void);
 extern "C" int beSvFileFindApi_GetVTable(void);
 extern "C" void beSvFileFindApi_EnsureRegistered(void);
 extern "C" void *beSvFileFindApi_Register(void);
 extern "C" void beSvFileFindApi_GetMetaObjectFunction(void);
-extern "C" void beSvFileMakeApi_Create(int allocator);
 extern "C" void *beSvFileMakeApi_GetMetaObject(void);
 extern "C" int beSvFileMakeApi_GetVTable(void);
 extern "C" void beSvFileMakeApi_EnsureRegistered(void);
@@ -711,16 +851,13 @@ extern "C" void beSvSlotData_EnsureRegistered(void);
 extern "C" void *beSvSlotData_Register(void);
 extern "C" void beSvSlotData_GetMetaObjectFunction(void);
 extern "C" void beSvSlotData_InitFields(void);
-extern "C" void beSaveMemoryObj_CreateInstance(int allocator);
 extern "C" igMetaObject *beSaveMemoryObj_GetOrCreateMetaObject(void);
 extern "C" int beSaveMemoryObj_GetVTable(void);
 extern "C" void beSaveMemoryObj_EnsureRegistered(void);
 extern "C" void *beSaveMemoryObj_Register(void);
 extern "C" void beSaveMemoryObj_GetMetaObjectFunction(void);
 extern "C" void beSaveMemoryObj_InitFields(void);
-extern "C" igMetaObject *beSaveDataDeliver_GetOrCreateMetaObject(void);
 extern "C" int beSaveDataDeliver_GetVTable(void);
-extern "C" void beSaveDataDeliver_EnsureRegistered(void);
 extern "C" void *beSaveDataDeliver_Register(void);
 extern "C" void beSaveDataDeliver_GetMetaObjectFunction(void);
 extern "C" void beSaveDataDeliver_InitFields(void);
@@ -731,7 +868,6 @@ extern "C" void *beSvDeliver_Register(void);
 extern "C" void beSvDeliver_GetMetaObjectFunction(void);
 extern "C" int igCharMetaField_SetDefaultValue(void *, int);
 extern "C" void beSvDeliver_InitFields(void);
-extern "C" void *beResetNode_GetMetaObject(void);
 extern "C" int igGroup_Destroy(...);
 extern "C" int beResetNode_GetVTable(void);
 extern "C" void beResetNode_EnsureRegistered(void);
@@ -739,7 +875,6 @@ extern "C" void *igGroup_Register(void);
 extern "C" void *beResetNode_Register(void);
 extern "C" void beResetNode_GetMetaObjectFunction(void);
 extern "C" void beResetNode_InitFields(void);
-extern "C" void beResetNode_RegisterTraversal(void);
 extern "C" void beResetNode_StaticInitCallback(void);
 extern "C" void *bePoint01Info_GetMetaObject(void);
 extern "C" int bePoint01Info_GetVTable(void);
@@ -747,8 +882,6 @@ extern "C" void bePoint01Info_EnsureRegistered(void);
 extern "C" void *bePoint01Info_Register(void);
 extern "C" void bePoint01Info_GetMetaObjectFunction(void);
 extern "C" void bePoint01Info_InitFields(void);
-extern "C" igMetaEnum *bePoint01_GetMsgActionEnum(void);
-extern "C" void bePoint01_CreateInstance(int allocator);
 extern "C" igMetaObject *bePoint01_GetOrCreateMetaObject(void);
 extern "C" void *bePoint01_GetMetaObject(void);
 extern "C" int bePoint01_GetVTable(void);
@@ -765,7 +898,6 @@ extern "C" void *beParticleCtrl2InfoRam_Register(void);
 extern "C" void beParticleCtrl2InfoRam_GetMetaObjectFunction(void);
 extern "C" int igTransform_GetOrCreateMetaObject(void);
 extern "C" void beParticleCtrl2InfoRam_InitFields(void);
-extern "C" void beParticleCtrl2InfoWork_Create(int allocator);
 extern "C" igMetaObject *beParticleCtrl2InfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beParticleCtrl2InfoWork_GetMetaObject(void);
 extern "C" int beParticleCtrl2InfoWork_GetVTable(void);
@@ -780,19 +912,14 @@ extern "C" void beParticleCtrl2Info_EnsureRegistered(void);
 extern "C" void *beParticleCtrl2Info_Register(void);
 extern "C" void beParticleCtrl2Info_GetMetaObjectFunction(void);
 extern "C" void beParticleCtrl2Info_InitFields(void);
-extern "C" igMetaEnum *beParticleCtrl2_GetMessageEnum(void);
-extern "C" void beParticleCtrl2_CreateInstance(int allocator);
 extern "C" igMetaObject *beParticleCtrl2_GetOrCreateMetaObject(void);
 extern "C" void *beParticleCtrl2_GetMetaObject(void);
 extern "C" int beParticleCtrl2_GetVTable(void);
 extern "C" void beParticleCtrl2_EnsureRegistered(void);
 extern "C" void *beParticleCtrl2_Register(void);
 extern "C" void beParticleCtrl2_GetMetaObjectFunction(void);
-extern "C" void bePadManager_CreateInstance(int allocator);
-extern "C" igMetaObject *bePadManager_GetOrCreateMetaObject(void);
 extern "C" void *bePadManager_GetMetaObject(void);
 extern "C" int bePadManager_GetVTable(void);
-extern "C" void bePadManager_EnsureRegistered(void);
 extern "C" void *bePadManager_Register(void);
 extern "C" void bePadManager_GetMetaObjectFunction(void);
 extern "C" void bePadManager_InitFields(void);
@@ -802,7 +929,6 @@ extern "C" int bePadDataList_GetVTable(void);
 extern "C" void bePadDataList_EnsureRegistered(void);
 extern "C" void *bePadDataList_Register(void);
 extern "C" void bePadDataList_GetMetaObjectFunction(void);
-extern "C" void bePadData_Create(int allocator);
 extern "C" void *bePadData_GetMetaObject(void);
 extern "C" int bePadData_GetVTable(void);
 extern "C" void bePadData_EnsureRegistered(void);
@@ -817,7 +943,6 @@ extern "C" void *igInfo_Register(void);
 extern "C" void *beOptInfo_Register(void);
 extern "C" void beOptInfo_GetMetaObjectFunction(void);
 extern "C" void beOptInfo_InitFields(void);
-extern "C" void beNumberCtrlInfoWork_Create(int allocator);
 extern "C" igMetaObject *beNumberCtrlInfoWork_GetOrCreateMetaObject(void);
 extern "C" int beNumberCtrlInfoWork_GetVTable(void);
 extern "C" void beNumberCtrlInfoWork_EnsureRegistered(void);
@@ -867,15 +992,12 @@ extern "C" int beNumberCtrlInfo_GetVTable(void);
 extern "C" void beNumberCtrlInfo_EnsureRegistered(void);
 extern "C" void *beNumberCtrlInfo_Register(void);
 extern "C" void beNumberCtrlInfo_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *beNumberCtrl_GetMessageEnum(void);
-extern "C" void beNumberCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beNumberCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beNumberCtrl_GetMetaObject(void);
 extern "C" int beNumberCtrl_GetVTable(void);
 extern "C" void beNumberCtrl_EnsureRegistered(void);
 extern "C" void *beNumberCtrl_Register(void);
 extern "C" void beNumberCtrl_GetMetaObjectFunction(void);
-extern "C" void *beLoadingNode_ResolveMetaObject(void);
 extern "C" int beLoadingNode_GetVTable(void);
 extern "C" int igNode_Destroy(int **, int);
 extern "C" beNodeAnim *beNodeAnim_Destroy(beNodeAnim *self, long long delete_storage);
@@ -884,16 +1006,13 @@ extern "C" void *beLoadingNode_Register(void);
 extern "C" void beLoadingNode_GetMetaObject(void);
 extern "C" igMetaObject *beNodeAnim_GetPublishedMetaObject(void);
 extern "C" void beLoadingNode_InitFields(void);
-extern "C" void beLoadingNode_RegisterTraversalFunction(void);
 extern "C" void beLoadingNode_StaticInitCallback(void);
-extern "C" void *beNodeAnim_ResolveMetaObject(void);
 extern "C" int beNodeAnim_GetVTable(void);
 extern "C" void beNodeAnim_EnsureRegistered(void);
 extern "C" void *beNodeAnim_Register(void);
 extern "C" void beNodeAnim_GetMetaObject(void);
 extern "C" int igLongMetaField_SetDefault(...);
 extern "C" void beNodeAnim_InitFields(void);
-extern "C" void beNodeAnim_RegisterTraversalFunction(void);
 extern "C" void beNodeAnim_StaticInitCallback(void);
 extern "C" void *beMovieInfo_GetMetaObject(void);
 extern "C" int beMovieInfo_GetVTable(void);
@@ -908,8 +1027,6 @@ extern "C" void *beMovieInfoData_Register(void);
 extern "C" void beMovieInfoData_GetMetaObjectFunction(void);
 extern "C" int igSceneInfo_GetOrCreateMetaObject(void);
 extern "C" void beMovieInfoData_InitFields(void);
-extern "C" igMetaEnum *beMovie_GetMessageEnum(void);
-extern "C" void beMovie_CreateInstance(int allocator);
 extern "C" igMetaObject *beMovie_GetOrCreateMetaObject(void);
 extern "C" int igSmartPointer_igMovieManager_Destruct(int *, int);
 extern "C" int beMovie_GetVTable(void);
@@ -924,20 +1041,17 @@ extern "C" void beModelCtrlSubCom_EnsureRegistered(void);
 extern "C" void *beModelCtrlSubCom_Register(void);
 extern "C" void beModelCtrlSubCom_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlSubCom_InitFields(void);
-extern "C" void beModelCtrlSCSound_Create(int allocator);
 extern "C" int beModelCtrlSCSound_GetVTable(void);
 extern "C" void beModelCtrlSCSound_EnsureRegistered(void);
 extern "C" void *beModelCtrlSCSound_Register(void);
 extern "C" void beModelCtrlSCSound_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beModelCtrlSubComBase_GetPublishedMetaObject(void);
 extern "C" void beModelCtrlSCSound_InitFields(void);
-extern "C" void beModelCtrlSCHitBox_Create(int allocator);
 extern "C" int beModelCtrlSCHitBox_GetVTable(void);
 extern "C" void beModelCtrlSCHitBox_EnsureRegistered(void);
 extern "C" void *beModelCtrlSCHitBox_Register(void);
 extern "C" void beModelCtrlSCHitBox_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlSCHitBox_InitFields(void);
-extern "C" void beModelCtrlSCEffect_Create(int allocator);
 extern "C" void *beModelCtrlSCEffect_GetMetaObject(void);
 extern "C" int beModelCtrlSCEffect_GetVTable(void);
 extern "C" void beModelCtrlSCEffect_EnsureRegistered(void);
@@ -949,18 +1063,14 @@ extern "C" void beModelCtrlSubComBase_EnsureRegistered(void);
 extern "C" void *beModelCtrlSubComBase_Register(void);
 extern "C" void beModelCtrlSubComBase_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlSubComBase_InitFields(void);
-extern "C" void beModelCtrlNode2_Create(int allocator);
 extern "C" igMetaObject *beModelCtrlNode2_GetOrCreateMetaObject(void);
-extern "C" void *beModelCtrlNode2_ResolveMetaObject(void);
 extern "C" int beModelCtrlNode2_GetVTable(void);
 extern "C" void beModelCtrlNode2_EnsureRegistered(void);
 extern "C" void *beModelCtrlNode2_Register(void);
 extern "C" void beModelCtrlNode2_GetMetaObject(void);
 extern "C" int igAttrList_GetOrCreateMetaObject(void);
 extern "C" void beModelCtrlNode2_InitFields(void);
-extern "C" void beModelCtrlNode2_RegisterTraversalFunction(void);
 extern "C" void beModelCtrlNode2_StaticInitCallback(void);
-extern "C" void beModelCtrlInfoWork_Create(int allocator);
 extern "C" igMetaObject *beModelCtrlInfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beModelCtrlInfoWork_GetMetaObject(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Destruct(igSmartPointer<igObject> *self, short delete_storage);
@@ -979,11 +1089,9 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Construct(ig
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Construct(igSmartPointer<igObject> *self);
 extern "C" void beModelCtrlInfoWork_EnsureRegistered(void);
 extern "C" int beModelCtrlInfoWork_GetVTable(void);
-extern "C" void *beModelCtrlInfoWork_Register(void);
 extern "C" void beModelCtrlInfoWork_GetMetaObjectFunction(void);
 extern "C" int igAABox_GetOrCreateMetaObject(void);
 extern "C" void beModelCtrlInfoWork_InitFields(void);
-extern "C" void beModelCtrlInfoRideOn4_Create(int allocator);
 extern "C" void *beModelCtrlInfoRideOn4_GetMetaObject(void);
 extern "C" int beModelCtrlInfoRideOn4_GetVTable(void);
 extern "C" void beModelCtrlInfoRideOn4_EnsureRegistered(void);
@@ -991,21 +1099,18 @@ extern "C" void *beModelCtrlInfoRideOn4_Register(void);
 extern "C" void beModelCtrlInfoRideOn4_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beModelCtrlInfoRideOn_GetPublishedMetaObject(void);
 extern "C" void beModelCtrlInfoRideOn4_InitFields(void);
-extern "C" void beModelCtrlInfoRideOn3_Create(int allocator);
 extern "C" void *beModelCtrlInfoRideOn3_GetMetaObject(void);
 extern "C" int beModelCtrlInfoRideOn3_GetVTable(void);
 extern "C" void beModelCtrlInfoRideOn3_EnsureRegistered(void);
 extern "C" void *beModelCtrlInfoRideOn3_Register(void);
 extern "C" void beModelCtrlInfoRideOn3_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlInfoRideOn3_InitFields(void);
-extern "C" void beModelCtrlInfoRideOn2_Create(int allocator);
 extern "C" void *beModelCtrlInfoRideOn2_GetMetaObject(void);
 extern "C" int beModelCtrlInfoRideOn2_GetVTable(void);
 extern "C" void beModelCtrlInfoRideOn2_EnsureRegistered(void);
 extern "C" void *beModelCtrlInfoRideOn2_Register(void);
 extern "C" void beModelCtrlInfoRideOn2_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlInfoRideOn2_InitFields(void);
-extern "C" void beModelCtrlInfoRideOn_Create(int allocator);
 extern "C" igMetaObject *beModelCtrlInfoRideOn_GetOrCreateMetaObject(void);
 extern "C" void *beModelCtrlInfoRideOn_GetMetaObject(void);
 extern "C" int beModelCtrlInfoRideOn_GetVTable(void);
@@ -1013,7 +1118,6 @@ extern "C" void beModelCtrlInfoRideOn_EnsureRegistered(void);
 extern "C" void *beModelCtrlInfoRideOn_Register(void);
 extern "C" void beModelCtrlInfoRideOn_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlInfoRideOn_InitFields(void);
-extern "C" void beModelCtrlInfoAI_Create(int allocator);
 extern "C" igMetaObject *beModelCtrlInfoAI_GetOrCreateMetaObject(void);
 extern "C" void *beModelCtrlInfoAI_GetMetaObject(void);
 extern "C" int beModelCtrlInfoAI_GetVTable(void);
@@ -1021,7 +1125,6 @@ extern "C" void beModelCtrlInfoAI_EnsureRegistered(void);
 extern "C" void *beModelCtrlInfoAI_Register(void);
 extern "C" void beModelCtrlInfoAI_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlInfoAI_InitFields(void);
-extern "C" void beModelCtrlInfoHitBody_Create(int allocator);
 extern "C" igMetaObject *beModelCtrlInfoHitBody_GetOrCreateMetaObject(void);
 extern "C" void *beModelCtrlInfoHitBody_GetMetaObject(void);
 extern "C" int beModelCtrlInfoHitBody_GetVTable(void);
@@ -1035,7 +1138,6 @@ extern "C" int beModelCtrlMoveObjectList_GetVTable(void);
 extern "C" void beModelCtrlMoveObjectList_EnsureRegistered(void);
 extern "C" void *beModelCtrlMoveObjectList_Register(void);
 extern "C" void beModelCtrlMoveObjectList_GetMetaObjectFunction(void);
-extern "C" void beModelCtrlMoveObject_Create(int allocator);
 extern "C" int beModelCtrlMoveObject_GetVTable(void);
 extern "C" void beModelCtrlMoveObject_EnsureRegistered(void);
 extern "C" void *beModelCtrlMoveObject_Register(void);
@@ -1113,7 +1215,6 @@ extern "C" void beModelCtrlAIData_EnsureRegistered(void);
 extern "C" void *beModelCtrlAIData_Register(void);
 extern "C" void beModelCtrlAIData_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlAIData_InitFields(void);
-extern "C" void beModelCtrlHITBOX_Create(int allocator);
 extern "C" int beModelCtrlHITBOX_GetVTable(void);
 extern "C" void beModelCtrlHITBOX_EnsureRegistered(void);
 extern "C" void *beModelCtrlHITBOX_Register(void);
@@ -1202,13 +1303,10 @@ extern "C" void beModelCtrlData_EnsureRegistered(void);
 extern "C" void *beModelCtrlData_Register(void);
 extern "C" void beModelCtrlData_GetMetaObjectFunction(void);
 extern "C" void beModelCtrlData_InitFields(void);
-extern "C" igMetaEnum *beModelCtrl_GetMessageEnum(void);
 extern "C" void beModelCtrl_EnsureRegistered(void);
-extern "C" void *beModelCtrl_Register(void);
 extern "C" void beModelCtrl_GetMetaObjectFunction(void);
 extern "C" void beModelCtrl_InitFields(void);
 extern "C" igMetaObject *beMeterCtrlNode_GetOrCreateMetaObject(void);
-extern "C" void *beMeterCtrlNode_ResolveMetaObject(void);
 extern "C" int igSmartPointer_igLongList_Destruct(int *, int);
 extern "C" int beMeterCtrlNode_GetVTable(void);
 extern "C" void beMeterCtrlNode_EnsureRegistered(void);
@@ -1216,7 +1314,6 @@ extern "C" void *beMeterCtrlNode_Register(void);
 extern "C" void beMeterCtrlNode_GetMetaObject(void);
 extern "C" int igLongList_GetOrCreateMetaObject(void);
 extern "C" void beMeterCtrlNode_InitFields(void);
-extern "C" void beMeterCtrlNode_RegisterTraversalFunction(void);
 extern "C" void beMeterCtrlNode_StaticInitCallback(void);
 extern "C" void *beMeterCtrlInfoList_GetMetaObject(void);
 extern "C" int beMeterCtrlInfoList_GetVTable(void);
@@ -1236,16 +1333,12 @@ extern "C" void beMeterCtrlOneData_EnsureRegistered(void);
 extern "C" void *beMeterCtrlOneData_Register(void);
 extern "C" void beMeterCtrlOneData_GetMetaObjectFunction(void);
 extern "C" void beMeterCtrlOneData_InitFields(void);
-extern "C" igMetaEnum *beMeterCtrl_GetMsgActionEnum(void);
-extern "C" void beMeterCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beMeterCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beMeterCtrl_GetMetaObject(void);
 extern "C" int beMeterCtrl_GetVTable(void);
 extern "C" void beMeterCtrl_EnsureRegistered(void);
 extern "C" void *beMeterCtrl_Register(void);
 extern "C" void beMeterCtrl_GetMetaObjectFunction(void);
-extern "C" void beMessenger_CreateInstance(int allocator);
-extern "C" igMetaObject *beMessenger_GetOrCreateMetaObject(void);
 extern "C" void *beMessenger_GetMetaObject(void);
 extern "C" int beMessenger_GetVTable(void);
 extern "C" void List_RemoveWordAt(void *, int);
@@ -1256,7 +1349,6 @@ extern "C" const char *StringPool_Intern(void *, const char *);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMessengerGroupList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMessengerWorkList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMessengerArgDataList_Destruct(igSmartPointer<igObject> *self, long long delete_storage);
-extern "C" void beMessenger_EnsureRegistered(void);
 extern "C" void *beMessenger_Register(void);
 extern "C" void beMessenger_GetMetaObjectFunction(void);
 extern "C" void beMessenger_InitFields(void);
@@ -1266,13 +1358,9 @@ extern "C" int beMessengerWorkList_GetVTable(void);
 extern "C" void beMessengerWorkList_EnsureRegistered(void);
 extern "C" void *beMessengerWorkList_Register(void);
 extern "C" void beMessengerWorkList_GetMetaObjectFunction(void);
-extern "C" void *beMessengerWork_Create(void *allocator);
 extern "C" void beMessengerWork_EnsureRegistered();
-extern "C" void *beMessengerGroup_Create(void *allocator);
 extern "C" void beMessengerGroup_EnsureRegistered();
-extern "C" void *beMessengerDelay_Create(void *allocator);
 extern "C" void beMessengerDelay_EnsureRegistered();
-extern "C" void *beMessengerArgData_Create(void *allocator);
 extern "C" void beMessengerArgData_EnsureRegistered();
 extern "C" void *beMessengerWork_GetMetaObject(void);
 extern "C" int beMessengerWork_GetVTable(void);
@@ -1319,7 +1407,6 @@ extern "C" void beMemory_EnsureRegistered(void);
 extern "C" void *beMemory_Register(void);
 extern "C" void beMemory_GetMetaObjectFunction(void);
 extern "C" void beMemory_InitFields(void);
-extern "C" void beMatCtrlInfoWork_Create(int allocator);
 extern "C" igMetaObject *beMatCtrlInfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beMatCtrlInfoWork_GetMetaObject(void);
 extern "C" int beMatCtrlInfoWork_GetVTable(void);
@@ -1367,8 +1454,6 @@ extern "C" void beMatCtrlData_EnsureRegistered(void);
 extern "C" void *beMatCtrlData_Register(void);
 extern "C" void beMatCtrlData_GetMetaObjectFunction(void);
 extern "C" void beMatCtrlData_InitFields(void);
-extern "C" igMetaEnum *beMatCtrl_GetMessageEnum(void);
-extern "C" void beMatCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beMatCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beMatCtrl_GetMetaObject(void);
 extern "C" int beMatCtrl_GetVTable(void);
@@ -1376,7 +1461,6 @@ extern "C" void beMatCtrl_EnsureRegistered(void);
 extern "C" void *beMatCtrl_Register(void);
 extern "C" void beMatCtrl_GetMetaObjectFunction(void);
 extern "C" void beMatCtrl_InitFields(void);
-extern "C" void beLuaState_Create(int allocator);
 extern "C" igMetaObject *beLuaState_GetOrCreateMetaObject(void);
 extern "C" void *beLuaState_GetMetaObject(void);
 extern "C" int beLuaState_GetVTable(void);
@@ -1412,12 +1496,9 @@ extern "C" void beLuaDataObject_EnsureRegistered(void);
 extern "C" void *beLuaDataObject_Register(void);
 extern "C" void beLuaDataObject_GetMetaObjectFunction(void);
 extern "C" void beLuaDataObject_InitFields(void);
-extern "C" void beLua_CreateInstance(int allocator);
-extern "C" igMetaObject *beLua_GetOrCreateMetaObject(void);
 extern "C" void *beLua_GetMetaObject(void);
 extern "C" int beLua_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beLuaState_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" void beLua_EnsureRegistered(void);
 extern "C" void *beLua_Register(void);
 extern "C" void beLua_GetMetaObjectFunction(void);
 extern "C" int igLuaGlue_GetOrCreateMetaObject(void);
@@ -1434,8 +1515,6 @@ extern "C" void beLightCtrlInfo_EnsureRegistered(void);
 extern "C" void *beLightCtrlInfo_Register(void);
 extern "C" void beLightCtrlInfo_GetMetaObjectFunction(void);
 extern "C" void beLightCtrlInfo_InitFields(void);
-extern "C" igMetaEnum *beLightCtrl_GetMsgActionEnum(void);
-extern "C" void beLightCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beLightCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beLightCtrl_GetMetaObject(void);
 extern "C" int beLightCtrl_GetVTable(void);
@@ -1464,9 +1543,6 @@ extern "C" int beLayerGroup_GetVTable(void);
 extern "C" void beLayerGroup_EnsureRegistered(void);
 extern "C" void *beLayerGroup_Register(void);
 extern "C" void beLayerGroup_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *beLayerCtl_GetSwtCtlEnum(void);
-extern "C" igMetaEnum *beLayerCtl_GetMessageEnum(void);
-extern "C" void beLayerCtl_CreateInstance(int allocator);
 extern "C" igMetaObject *beLayerCtl_GetOrCreateMetaObject(void);
 extern "C" void *beLayerCtl_GetMetaObject(void);
 extern "C" int beLayerCtl_GetVTable(void);
@@ -1487,7 +1563,6 @@ extern "C" int igBlendStateAttr_GetOrCreateMetaObject(void);
 extern "C" int igBlendFunctionAttr_GetOrCreateMetaObject(void);
 extern "C" int igVec4fMetaField_SetDefault(void *, int *);
 extern "C" void beLOA_InitFields(void);
-extern "C" void beLOA_RegisterTraversalFunction(void);
 extern "C" void beLOA_StaticInitCallback(void);
 extern "C" igMetaObject *beKeyboardReceiver_GetOrCreateMetaObject(void);
 extern "C" int beKeyboardReceiver_GetVTable(void);
@@ -1505,8 +1580,6 @@ extern "C" void beHitLandModelInfo_EnsureRegistered(void);
 extern "C" void *beHitLandModelInfo_Register(void);
 extern "C" void beHitLandModelInfo_GetMetaObjectFunction(void);
 extern "C" void beHitLandModelInfo_InitFields(void);
-extern "C" igMetaEnum *beHitLandModel_GetMessageEnum(void);
-extern "C" void beHitLandModel_CreateInstance(int allocator);
 extern "C" igMetaObject *beHitLandModel_GetOrCreateMetaObject(void);
 extern "C" void *beHitLandModel_GetMetaObject(void);
 extern "C" int beHitLandModel_GetVTable(void);
@@ -1517,7 +1590,6 @@ extern "C" void *beHitLandModel_Register(void);
 extern "C" void beHitLandModel_GetMetaObjectFunction(void);
 extern "C" int igProbe_GetOrCreateMetaObject(void);
 extern "C" void beHitLandModel_InitFields(void);
-extern "C" void beHitLandModelTraversal_Create(int allocator);
 extern "C" igMetaObject *beHitLandModelTraversal_GetOrCreateMetaObject(void);
 extern "C" void *beHitLandModelTraversal_GetMetaObject(void);
 extern "C" int igIntersectTraversal_Destroy(igIntersectTraversal *, int);
@@ -1528,7 +1600,6 @@ extern "C" void *beHitLandModelTraversal_Register(void);
 extern "C" void beHitLandModelTraversal_GetMetaObjectFunction(void);
 extern "C" int igIntersectTraversal_GetPublishedMetaObject(void);
 extern "C" void beHitLandModelTraversal_InitFields(void);
-extern "C" void beHitLandModelOrder_Create(int allocator);
 extern "C" igMetaObject *beHitLandModelOrder_GetOrCreateMetaObject(void);
 extern "C" void *beHitLandModelOrder_GetMetaObject(void);
 extern "C" int beHitLandModelOrder_GetVTable(void);
@@ -1544,7 +1615,6 @@ extern "C" int beHitLandResultDataList_GetVTable(void);
 extern "C" void beHitLandResultDataList_EnsureRegistered(void);
 extern "C" void *beHitLandResultDataList_Register(void);
 extern "C" void beHitLandResultDataList_GetMetaObjectFunction(void);
-extern "C" void beHitLandResultData_Create(int allocator);
 extern "C" void *beHitLandResultData_GetMetaObject(void);
 extern "C" int beHitLandResultData_GetVTable(void);
 extern "C" void beHitLandResultData_EnsureRegistered(void);
@@ -1562,8 +1632,6 @@ extern "C" int beHitLandDelivInfo_GetVTable(void);
 extern "C" void beHitLandDelivInfo_EnsureRegistered(void);
 extern "C" void *beHitLandDelivInfo_Register(void);
 extern "C" void beHitLandDelivInfo_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *beHitLandDelivInfo_GetMessageEnum(void);
-extern "C" void beHitLandDeliv_CreateInstance(int allocator);
 extern "C" igMetaObject *beHitLandDeliv_GetOrCreateMetaObject(void);
 extern "C" void *beHitLandDeliv_GetMetaObject(void);
 extern "C" int beHitLandDeliv_GetVTable(void);
@@ -1581,7 +1649,6 @@ extern "C" int beGroupKeep_GetVTable(void);
 extern "C" void beGroupKeep_EnsureRegistered(void);
 extern "C" void *beGroupKeep_Register(void);
 extern "C" void beGroupKeep_GetMetaObjectFunction(void);
-extern "C" void beGeneraterInfoWork_Create(int allocator);
 extern "C" igMetaObject *beGeneraterInfoWork_GetOrCreateMetaObject(void);
 extern "C" int beGeneraterInfoWork_GetVTable(void);
 extern "C" void beGeneraterInfoWork_EnsureRegistered(void);
@@ -1646,8 +1713,6 @@ extern "C" void beGeneraterItemDataOne_EnsureRegistered(void);
 extern "C" void *beGeneraterItemDataOne_Register(void);
 extern "C" void beGeneraterItemDataOne_GetMetaObjectFunction(void);
 extern "C" void beGeneraterItemDataOne_InitFields(void);
-extern "C" igMetaEnum *beGenerater_GetMsgActionEnum(void);
-extern "C" void beGenerater_CreateInstance(int allocator);
 extern "C" igMetaObject *beGenerater_GetOrCreateMetaObject(void);
 extern "C" void *beGenerater_GetMetaObject(void);
 extern "C" int beGenerater_GetVTable(void);
@@ -1673,7 +1738,6 @@ extern "C" int beUnicodeObjList_GetVTable(void);
 extern "C" void beUnicodeObjList_EnsureRegistered(void);
 extern "C" void *beUnicodeObjList_Register(void);
 extern "C" void beUnicodeObjList_GetMetaObjectFunction(void);
-extern "C" void beUnicodeObj_Create(int allocator);
 extern "C" int beUnicodeObj_GetVTable(void);
 extern "C" void beUnicodeObj_EnsureRegistered(void);
 extern "C" void *beUnicodeObj_Register(void);
@@ -1692,10 +1756,6 @@ extern "C" void *igBitmapFont_Register(void);
 extern "C" void *beFontImage_Register(void);
 extern "C" void beFontImage_GetMetaObjectFunction(void);
 extern "C" int igBitmapFont_GetPublishedMetaObject(void);
-extern "C" igMetaEnum *beFont_GetAlignEnum(void);
-extern "C" igMetaEnum *beFont_GetSwitchEnum(void);
-extern "C" igMetaEnum *beFont_GetMessageEnum(void);
-extern "C" void beFont_CreateInstance(int allocator);
 extern "C" igMetaObject *beFont_GetOrCreateMetaObject(void);
 extern "C" void *beFont_GetMetaObject(void);
 extern "C" int beFont_GetVTable(void);
@@ -1710,7 +1770,6 @@ extern "C" int beFontGeomAttrPairList_GetVTable(void);
 extern "C" void beFontGeomAttrPairList_EnsureRegistered(void);
 extern "C" void *beFontGeomAttrPairList_Register(void);
 extern "C" void beFontGeomAttrPairList_GetMetaObjectFunction(void);
-extern "C" void beFontGeomAttrPair_Create(int allocator);
 extern "C" void *beFontGeomAttrPair_GetMetaObject(void);
 extern "C" int beFontGeomAttrPair_GetVTable(void);
 extern "C" void beFontGeomAttrPair_EnsureRegistered(void);
@@ -1718,7 +1777,6 @@ extern "C" void *beFontGeomAttrPair_Register(void);
 extern "C" void beFontGeomAttrPair_GetMetaObjectFunction(void);
 extern "C" int igGeometryAttrList_GetOrCreateMetaObject(void);
 extern "C" void beFontGeomAttrPair_InitFields(void);
-extern "C" void beFileListInfoManager_CreateInstance(int allocator);
 extern "C" igMetaObject *beFileListInfoManager_GetOrCreateMetaObject(void);
 extern "C" void *beFileListInfoManager_GetMetaObject(void);
 extern "C" int igSmartPointer_igDirectoryList_Destruct(int *, int);
@@ -1740,7 +1798,6 @@ extern "C" int beFile_GetVTable(void);
 extern "C" void beFile_EnsureRegistered(void);
 extern "C" void *beFile_Register(void);
 extern "C" void beFile_GetMetaObjectFunction(void);
-extern "C" void beFileChkObj_Create(int allocator);
 extern "C" void *beFileChkObj_GetMetaObject(void);
 extern "C" int beFileChkObj_GetVTable(void);
 extern "C" void beFileChkObj_EnsureRegistered(void);
@@ -1748,7 +1805,6 @@ extern "C" void *beFileChkObj_Register(void);
 extern "C" void beFileChkObj_GetMetaObjectFunction(void);
 extern "C" int igFile_GetOrCreateMetaObject(void);
 extern "C" void beFileChkObj_InitFields(void);
-extern "C" void beDemoManager_CreateInstance(int allocator);
 extern "C" igMetaObject *beDemoManager_GetOrCreateMetaObject(void);
 extern "C" void *beDemoManager_GetMetaObject(void);
 extern "C" int beDemoManager_GetVTable(void);
@@ -1762,7 +1818,6 @@ extern "C" int beDemoManagerWorkList_GetVTable(void);
 extern "C" void beDemoManagerWorkList_EnsureRegistered(void);
 extern "C" void *beDemoManagerWorkList_Register(void);
 extern "C" void beDemoManagerWorkList_GetMetaObjectFunction(void);
-extern "C" void beDemoManagerWork_CreateInstance(int allocator);
 extern "C" igMetaObject *beDemoManagerWork_GetOrCreateMetaObject(void);
 extern "C" void *beDemoManagerWork_GetMetaObject(void);
 extern "C" int beDemoManagerWork_GetVTable(void);
@@ -1775,74 +1830,59 @@ extern "C" int beDemoKeepMesList_GetVTable(void);
 extern "C" void beDemoKeepMesList_EnsureRegistered(void);
 extern "C" void *beDemoKeepMesList_Register(void);
 extern "C" void beDemoKeepMesList_GetMetaObjectFunction(void);
-extern "C" void beDemoKeepMes_CreateInstance(int allocator);
 extern "C" int beDemoKeepMes_GetVTable(void);
 extern "C" void beDemoKeepMes_EnsureRegistered(void);
 extern "C" void *beDemoKeepMes_Register(void);
 extern "C" void beDemoKeepMes_GetMetaObjectFunction(void);
 extern "C" void beDemoKeepMes_InitFields(void);
-extern "C" void beDataObjListList_Create(int allocator);
-extern "C" igMetaObject *beDataObjListList_GetOrCreateMetaObject(void);
 extern "C" int beDataObjListList_GetVTable(void);
-extern "C" void beDataObjListList_EnsureRegistered(void);
 extern "C" void *beDataObjListList_Register(void);
 extern "C" void beDataObjListList_GetMetaObjectFunction(void);
-extern "C" void beDataObjList_Create(int allocator);
-extern "C" igMetaObject *beDataObjList_GetOrCreateMetaObject(void);
 extern "C" int beDataObjList_GetVTable(void);
-extern "C" void beDataObjList_EnsureRegistered(void);
 extern "C" void *beDataObjList_Register(void);
 extern "C" void beDataObjList_GetMetaObjectFunction(void);
-extern "C" void beDataObjFloatList_Create(int allocator);
 extern "C" void *beDataObjFloatList_GetMetaObject(void);
 extern "C" int beDataObjFloatList_GetVTable(void);
 extern "C" void beDataObjFloatList_EnsureRegistered(void);
 extern "C" void *beDataObjFloatList_Register(void);
 extern "C" void beDataObjFloatList_GetMetaObjectFunction(void);
 extern "C" void beDataObjFloatList_InitFields(void);
-extern "C" void beDataObjObjectList_Create(int allocator);
 extern "C" void *beDataObjObjectList_GetMetaObject(void);
 extern "C" int beDataObjObjectList_GetVTable(void);
 extern "C" void beDataObjObjectList_EnsureRegistered(void);
 extern "C" void *beDataObjObjectList_Register(void);
 extern "C" void beDataObjObjectList_GetMetaObjectFunction(void);
 extern "C" void beDataObjObjectList_InitFields(void);
-extern "C" void beDataObjStringList_Create(int allocator);
 extern "C" void *beDataObjStringList_GetMetaObject(void);
 extern "C" int beDataObjStringList_GetVTable(void);
 extern "C" void beDataObjStringList_EnsureRegistered(void);
 extern "C" void *beDataObjStringList_Register(void);
 extern "C" void beDataObjStringList_GetMetaObjectFunction(void);
 extern "C" void beDataObjStringList_InitFields(void);
-extern "C" void beDataObjString_Create(int allocator);
 extern "C" void *beDataObjString_GetMetaObject(void);
 extern "C" int beDataObjString_GetVTable(void);
 extern "C" void beDataObjString_EnsureRegistered(void);
 extern "C" void *beDataObjString_Register(void);
 extern "C" void beDataObjString_GetMetaObjectFunction(void);
 extern "C" void beDataObjString_InitFields(void);
-extern "C" void beDataObjBoolList_Create(int allocator);
 extern "C" void *beDataObjBoolList_GetMetaObject(void);
 extern "C" int beDataObjBoolList_GetVTable(void);
 extern "C" void beDataObjBoolList_EnsureRegistered(void);
 extern "C" void *beDataObjBoolList_Register(void);
 extern "C" void beDataObjBoolList_GetMetaObjectFunction(void);
 extern "C" void beDataObjBoolList_InitFields(void);
-extern "C" void beDataObjBool_Create(int allocator);
 extern "C" void *beDataObjBool_GetMetaObject(void);
 extern "C" int beDataObjBool_GetVTable(void);
 extern "C" void beDataObjBool_EnsureRegistered(void);
 extern "C" void *beDataObjBool_Register(void);
 extern "C" void beDataObjBool_GetMetaObjectFunction(void);
 extern "C" void beDataObjBool_InitFields(void);
-extern "C" void beDataObjIntList_Create(int allocator);
 extern "C" void *beDataObjIntList_GetMetaObject(void);
 extern "C" int beDataObjIntList_GetVTable(void);
 extern "C" void beDataObjIntList_EnsureRegistered(void);
 extern "C" void *beDataObjIntList_Register(void);
 extern "C" void beDataObjIntList_GetMetaObjectFunction(void);
 extern "C" void beDataObjIntList_InitFields(void);
-extern "C" void beDataObjInt_Create(int allocator);
 extern "C" igMetaObject *beDataObjInt_GetOrCreateMetaObject(void);
 extern "C" void *beDataObjInt_GetMetaObject(void);
 extern "C" int beDataObjInt_GetVTable(void);
@@ -1855,12 +1895,10 @@ extern "C" int beDataBaseList_GetVTable(void);
 extern "C" void beDataBaseList_EnsureRegistered(void);
 extern "C" void *beDataBaseList_Register(void);
 extern "C" void beDataBaseList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *beDataBase_GetOrCreateMetaObject(void);
 extern "C" void *beDataBase_GetMetaObject(void);
 extern "C" int igSmartPointer_igShortList_Destruct(int *, int);
 extern "C" int igSmartPointer_igCharList_Destruct(int *, int);
 extern "C" int beDataBase_GetVTable(void);
-extern "C" void beDataBase_EnsureRegistered(void);
 extern "C" void *beDataBase_Register(void);
 extern "C" void beDataBase_GetMetaObjectFunction(void);
 extern "C" int igShortList_GetOrCreateMetaObject(void);
@@ -1872,8 +1910,6 @@ extern "C" void beDBManagerInfo_EnsureRegistered(void);
 extern "C" void *beDBManagerInfo_Register(void);
 extern "C" void beDBManagerInfo_GetMetaObjectFunction(void);
 extern "C" void beDBManagerInfo_InitFields(void);
-extern "C" igMetaEnum *beDBManager_GetMsgActionEnum(void);
-extern "C" void beDBManager_CreateInstance(int allocator);
 extern "C" igMetaObject *beDBManager_GetOrCreateMetaObject(void);
 extern "C" int beDBManager_GetVTable(void);
 extern "C" void beDBManager_EnsureRegistered(void);
@@ -1891,7 +1927,6 @@ extern "C" void *beCriSfpData_Register(void);
 extern "C" void beCriSfpData_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beBinDataObject_GetPublishedMetaObject(void);
 extern "C" void beCriSfpData_InitFields(void);
-extern "C" void beCriSfpData_SetupBufferAlignment(void);
 extern "C" void beCriSfpData_StaticInitCallback(void);
 extern "C" igMetaObject *beCriHandleList_GetOrCreateMetaObject(void);
 extern "C" void *beCriHandleList_GetMetaObject(void);
@@ -1899,7 +1934,6 @@ extern "C" int beCriHandleList_GetVTable(void);
 extern "C" void beCriHandleList_EnsureRegistered(void);
 extern "C" void *beCriHandleList_Register(void);
 extern "C" void beCriHandleList_GetMetaObjectFunction(void);
-extern "C" void beCriHandle_Create(int allocator);
 extern "C" igMetaObject *beCriHandle_GetOrCreateMetaObject(void);
 extern "C" void *beCriHandle_GetMetaObject(void);
 extern "C" int beCriHandle_GetVTable(void);
@@ -1929,7 +1963,6 @@ extern "C" void *beCriAudio_Register(void);
 extern "C" void beCriAudio_GetMetaObjectFunction(void);
 extern "C" int igAdxAudio_GetOrCreateMetaObject(void);
 extern "C" void beCriAudio_InitFields(void);
-extern "C" void beCriSndf_Create(int allocator);
 extern "C" igMetaObject *beCriSndf_GetOrCreateMetaObject(void);
 extern "C" void *beCriSndf_GetMetaObject(void);
 extern "C" int beCriSndf_GetVTable(void);
@@ -1942,7 +1975,6 @@ extern "C" int beCriAcxData_GetVTable(void);
 extern "C" void beCriAcxData_EnsureRegistered(void);
 extern "C" void *beCriAcxData_Register(void);
 extern "C" void beCriAcxData_GetMetaObjectFunction(void);
-extern "C" void beCri_CreateInstance(int allocator);
 extern "C" igMetaObject *beCri_GetOrCreateMetaObject(void);
 extern "C" void *beCri_GetMetaObject(void);
 extern "C" int beCri_GetVTable(void);
@@ -1956,20 +1988,17 @@ extern "C" int beCountry_GetVTable(void);
 extern "C" void beCountry_EnsureRegistered(void);
 extern "C" void *beCountry_Register(void);
 extern "C" void beCountry_GetMetaObjectFunction(void);
-extern "C" void *beCopyTransform_GetMetaObject(void);
 extern "C" int beCopyTransform_GetVTable(void);
 extern "C" void beCopyTransform_EnsureRegistered(void);
 extern "C" void *beCopyTransform_Register(void);
 extern "C" void beCopyTransform_GetMetaObjectFunction(void);
 extern "C" void beCopyTransform_InitFields(void);
-extern "C" void beCopyTransform_RegisterTraversal(void);
 extern "C" void beCopyTransform_StaticInitCallback(void);
 extern "C" int beCopyModelCtrl2_GetVTable(void);
 extern "C" void beCopyModelCtrl2_EnsureRegistered(void);
 extern "C" void *beCopyModelCtrl2_Register(void);
 extern "C" void beCopyModelCtrl2_GetMetaObjectFunction(void);
 extern "C" void beCopyModelCtrl2_InitFields(void);
-extern "C" void beCopyModelCtrl2_RegisterTraversal(void);
 extern "C" void beCopyModelCtrl2_StaticInitCallback(void);
 extern "C" int beChangePosTransformInfoRam_GetVTable(void);
 extern "C" void beChangePosTransformInfoRam_EnsureRegistered(void);
@@ -1980,14 +2009,12 @@ extern "C" int beChangePosTransformInfo_GetVTable(void);
 extern "C" void beChangePosTransformInfo_EnsureRegistered(void);
 extern "C" void *beChangePosTransformInfo_Register(void);
 extern "C" void beChangePosTransformInfo_GetMetaObjectFunction(void);
-extern "C" void beChangePosTransform_CreateInstance(int allocator);
 extern "C" igMetaObject *beChangePosTransform_GetOrCreateMetaObject(void);
 extern "C" int beChangePosTransform_GetVTable(void);
 extern "C" void beChangePosTransform_EnsureRegistered(void);
 extern "C" void *beChangePosTransform_Register(void);
 extern "C" void beChangePosTransform_GetMetaObjectFunction(void);
 extern "C" void beChangePosTransform_InitFields(void);
-extern "C" void beCameraMode_Create(int allocator);
 extern "C" igMetaObject *beCameraMode_GetOrCreateMetaObject(void);
 extern "C" void *beCameraMode_GetMetaObject(void);
 extern "C" int igMatrix44f_SetIdentity(int *);
@@ -2022,15 +2049,12 @@ extern "C" void *beCameraBoxData_Register(void);
 extern "C" void beCameraBoxData_GetMetaObjectFunction(void);
 extern "C" int igGeometryList_GetOrCreateMetaObject(void);
 extern "C" void beCameraBoxData_InitFields(void);
-extern "C" void beCameraCtrlInfoRamShake_Create(int allocator);
 extern "C" void *beCameraCtrlInfoRamShake_GetMetaObject(void);
 extern "C" int beCameraCtrlInfoRamShake_GetVTable(void);
 extern "C" void beCameraCtrlInfoRamShake_EnsureRegistered(void);
 extern "C" void *beCameraCtrlInfoRamShake_Register(void);
 extern "C" void beCameraCtrlInfoRamShake_GetMetaObjectFunction(void);
 extern "C" void beCameraCtrlInfoRamShake_InitFields(void);
-extern "C" igMetaEnum *beCameraCtrl_GetMessageEnum(void);
-extern "C" void beCameraCtrl_CreateInstance(int allocator);
 extern "C" igMetaObject *beCameraCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beCameraCtrl_GetMetaObject(void);
 extern "C" int beCameraCtrl_GetVTable(void);
@@ -2046,7 +2070,6 @@ extern "C" void beBkColorInfo_EnsureRegistered(void);
 extern "C" void *beBkColorInfo_Register(void);
 extern "C" void beBkColorInfo_GetMetaObjectFunction(void);
 extern "C" void beBkColorInfo_InitFields(void);
-extern "C" void beBkColor_CreateInstance(int allocator);
 extern "C" igMetaObject *beBkColor_GetOrCreateMetaObject(void);
 extern "C" void *beBkColor_GetMetaObject(void);
 extern "C" int beBkColor_GetVTable(void);
@@ -2060,14 +2083,10 @@ extern "C" int beBaseInfoRamList_GetVTable(void);
 extern "C" void beBaseInfoRamList_EnsureRegistered(void);
 extern "C" void *beBaseInfoRamList_Register(void);
 extern "C" void *beBaseInfoRamList_GetMetaObject(void);
-extern "C" igMetaObject *beBaseInfoRam_GetOrCreateMetaObject(void);
 extern "C" void *beBaseInfoRam_GetMetaObject(void);
 extern "C" int beBaseInfoRam_GetVTable(void);
-extern "C" void beBaseInfoRam_EnsureRegistered(void);
-extern "C" void *beBaseInfoRam_Register(void);
 extern "C" void beBaseInfoRam_GetMetaObjectFunction(void);
 extern "C" void beBaseInfoRam_InitFields(void);
-extern "C" void beBaseInfoRamTimer_Create(int allocator);
 extern "C" void *beBaseInfoRamTimer_GetMetaObject(void);
 extern "C" int beBaseInfoRamTimer_GetVTable(void);
 extern "C" void beBaseInfoRamTimer_EnsureRegistered(void);
@@ -2078,9 +2097,6 @@ extern "C" int beBaseInfoManagerList_GetVTable(void);
 extern "C" void beBaseInfoManagerList_EnsureRegistered(void);
 extern "C" void *beBaseInfoManagerList_Register(void);
 extern "C" void beBaseInfoManagerList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *beBaseInfoManager_GetOrCreateMetaObject(void);
-extern "C" void beBaseInfoManager_EnsureRegistered(void);
-extern "C" void *beBaseInfoManager_Register(void);
 extern "C" void beBaseInfoManager_GetMetaObjectFunction(void);
 extern "C" void beBaseInfoManager_InitFields(void);
 extern "C" igMetaObject *beBaseInfoList_GetOrCreateMetaObject(void);
@@ -2090,10 +2106,8 @@ extern "C" void *beBaseInfoList_Register(void);
 extern "C" void beBaseInfoList_GetMetaObjectFunction(void);
 extern "C" igMetaObject *beBaseInfo_GetOrCreateMetaObject(void);
 extern "C" void beBaseInfo_EnsureRegistered(void);
-extern "C" void *beBaseInfo_Register(void);
 extern "C" void beBaseInfo_GetMetaObjectFunction(void);
 extern "C" void beBaseInfo_InitFields(void);
-extern "C" void beBaseInfoDataList_Create(int allocator);
 extern "C" igMetaObject *beBaseInfoDataList_GetOrCreateMetaObject(void);
 extern "C" void *beBaseInfoDataList_GetMetaObject(void);
 extern "C" int beBaseInfoDataList_GetVTable(void);
@@ -2102,7 +2116,6 @@ extern "C" void *beBaseInfoDataList_Register(void);
 extern "C" void beBaseInfoDataList_GetMetaObjectFunction(void);
 extern "C" void *beBaseInfoData_GetMetaObject(void);
 extern "C" void beBaseInfoData_EnsureRegistered(void);
-extern "C" void *beBaseInfoData_Register(void);
 extern "C" void beBaseInfoData_GetMetaObjectFunction(void);
 extern "C" void beBaseInfoData_InitFields(void);
 extern "C" void *beActionStarterInfoRam_GetMetaObject(void);
@@ -2147,14 +2160,12 @@ extern "C" void beActionStarterData_EnsureRegistered(void);
 extern "C" void *beActionStarterData_Register(void);
 extern "C" void beActionStarterData_GetMetaObjectFunction(void);
 extern "C" void beActionStarterData_InitFields(void);
-extern "C" void beActionStarter_CreateInstance(int allocator);
 extern "C" igMetaObject *beActionStarter_GetOrCreateMetaObject(void);
 extern "C" void *beActionStarter_GetMetaObject(void);
 extern "C" int beActionStarter_GetVTable(void);
 extern "C" void beActionStarter_EnsureRegistered(void);
 extern "C" void *beActionStarter_Register(void);
 extern "C" void beActionStarter_GetMetaObjectFunction(void);
-extern "C" void beAction2InfoWork_CreateInstance(int allocator);
 extern "C" igMetaObject *beAction2InfoWork_GetOrCreateMetaObject(void);
 extern "C" int igSmartPointer_igTextureStateAttr_Destruct(char *, int);
 extern "C" int igSmartPointer_igLightingStateAttr_Destruct(int *, int);
@@ -2229,19 +2240,15 @@ extern "C" void beAction2Data_EnsureRegistered(void);
 extern "C" void *beAction2Data_Register(void);
 extern "C" void beAction2Data_GetMetaObjectFunction(void);
 extern "C" void beAction2Data_InitFields(void);
-extern "C" igMetaEnum *beAction2_GetMessageEnum(void);
-extern "C" void beAction2_CreateInstance(int allocator);
 extern "C" igMetaObject *beAction2_GetOrCreateMetaObject(void);
 extern "C" void *beAction2_GetMetaObject(void);
 extern "C" int beAction2_GetVTable(void);
 extern "C" void beAction2_EnsureRegistered(void);
 extern "C" void *beAction2_Register(void);
 extern "C" void beAction2_GetMetaObjectFunction(void);
-extern "C" void be_CreateInstance(int allocator);
 extern "C" igMetaObject *be_GetOrCreateMetaObject(void);
 extern "C" void *be_GetMetaObject(void);
 extern "C" int be_GetVTable(void);
-extern "C" void be_EnsureRegistered(void);
 extern "C" void *be_Register(void);
 extern "C" void be_GetMetaObjectFunction(void);
 extern "C" void be_InitFields(void);
@@ -2259,7 +2266,6 @@ extern "C" void *igGeometry_Register(void);
 extern "C" void *ParticleTimer_Register(void);
 extern "C" void ParticleTimer_GetMetaObjectFunction(void);
 extern "C" void ParticleTimer_InitFields(void);
-extern "C" void ParticleTimer_RegisterTraversalFunction(void);
 extern "C" void ParticleTimer_StaticInitCallback(void);
 extern "C" igMetaEnum *ParticleInfo_GetParticleTimeTypeMetaEnum(void);
 extern "C" igMetaEnum *ParticleInfo_GetParticleAlphaFunctionMetaEnum(void);
@@ -2277,7 +2283,6 @@ extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void ParticleInfo_InitFields(void);
 extern "C" int memset(int, int, int);
 extern "C" int Gap__Core__igObject__resetFields(...);
-extern "C" igMetaObject *ParticleInfo_GetMeta(void);
 extern "C" igMetaObject *beAction2Data_GetMeta(void);
 extern "C" igMetaObject *beAction2DataList_GetMeta(void);
 extern "C" igMetaObject *beAction2DataList_GetElementMeta(void);
@@ -2360,7 +2365,7 @@ extern "C" igMetaObject *beFontGeomAttrPair_GetMeta(void);
 extern "C" igMetaObject *beFontGeomAttrPairList_GetMeta(void);
 extern "C" igMetaObject *beFontGeomAttrPairList_GetElementMeta(void);
 extern "C" igMetaObject *beFontImage_GetMeta(void);
-extern "C" int igFont_GetMeta(void);
+extern "C" igMetaObject *igFont_GetMeta(void);
 extern "C" igMetaObject *beFontImageList_GetMeta(void);
 extern "C" igMetaObject *beFontImageList_GetElementMeta(void);
 extern "C" igMetaObject *beUnicodeObjList_GetMeta(void);
@@ -2579,7 +2584,6 @@ extern "C" igMetaObject *beBaseInfo_GetMeta(void);
 extern "C" igMetaObject *beWeaponInfoRam_GetMeta(void);
 extern "C" igMetaObject *beBaseInfoRam_GetMeta(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMessengerArgData_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igMetaObject *g_libBecRuntimePlugin_metaObject;
 /* Deleting destructor; the deletion flag is a signed short. */
 extern "C" igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMatCtrl_Destruct(igSmartPointer<igObject> *self, int delete_storage);
@@ -2607,17 +2611,14 @@ struct igMetaObject_33e370;
 extern "C" igMetaObject_33e370 *igInsightPlugin_GetPublishedMetaObject(void);
 extern "C" igMetaObject *g_beWeaponInfoRam_metaObject;
 extern "C" int g_beWeaponInfoRam_vtable[4];
-extern "C" int g_beBaseInfoRam_vtable[4];
 extern "C" void * g_objectSystem[4];
 extern "C" void *beBaseInfoRam_Destroy(beBaseInfoRam *self, long long delete_storage);
 extern "C" igSmartPointer<igObject> *beWeaponInfoRam_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igMetaObject *g_beWeaponInfo_metaObject;
 extern "C" int g_beWeaponInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beBaseInfoRamList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" int g_igNamedObject_vtable[4];
 extern "C" int g_igInfo_vtable[4];
 extern "C" int g_beBaseInfo_vtable[4];
-extern "C" void *beBaseInfo_Destroy(beBaseInfo *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beWeaponSeqDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *g_beWeaponSeqDataList_metaObject;
@@ -2628,11 +2629,8 @@ extern "C" igMetaObject *g_beWeaponSeqData_metaObject;
 extern "C" int g_beWeaponSeqData_vtable[4];
 struct igMetaObject_33f2b0;
 extern "C" igMetaObject_33f2b0 * igNamedObject_GetPublishedMetaObject(...);
-extern "C" igMetaObject *g_beWeapon_metaObject;
 extern "C" int g_beWeapon_vtable[4];
 extern "C" int g_igInfoManager_vtable[4];
-extern "C" int g_beBaseInfoManager_vtable[4];
-extern "C" beBaseInfoManager *beBaseInfoManager_Destroy(beBaseInfoManager *self, short delete_storage);
 extern "C" igMetaObject *g_beWeaponAttachDataList_metaObject;
 extern "C" igMetaObject *beWeaponAttachDataList_GetMetaObject(void);
 extern "C" int g_beWeaponAttachDataList_vtable[4];
@@ -2656,9 +2654,7 @@ extern "C" igMetaObject *g_beWaterMoveDataList_metaObject;
 extern "C" int g_beWaterMoveDataList_vtable[4];
 extern "C" igMetaObject *g_beWaterMoveData_metaObject;
 extern "C" int g_beWaterMoveData_vtable[4];
-extern "C" igMetaObject *g_beWaterPlainInfo_metaObject;
 extern "C" int g_beWaterPlainInfo_vtable[4];
-extern "C" igMetaObject *g_beWaterPlain_metaObject;
 extern "C" int g_beWaterPlain_vtable[4];
 extern "C" igMetaObject *g_beUnicode_metaObject;
 extern "C" int g_beUnicode_vtable[4];
@@ -2778,7 +2774,6 @@ struct TransformSyncView : igTransformView, TransformSyncVtable {
 extern "C" igSmartPointer<igObject> *igSmartPointer_igTransformList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 struct igMetaObject_341200;
 extern "C" igMetaObject_341200 * igTransform_GetPublishedMetaObject(...);
-extern "C" igMetaObject *g_beTimer_metaObject;
 extern "C" int g_beTimer_vtable[4];
 struct igMetaObject_341520;
 extern "C" igMetaObject_341520 * igInfoManager_GetPublishedMetaObject(...);
@@ -2790,7 +2785,6 @@ extern "C" int g_beTimerData_vtable[4];
 extern "C" igMetaObject *g_beTextureCtrlInfoList_metaObject;
 extern "C" igMetaObject *beTextureCtrlInfoList_GetMetaObject(void);
 extern "C" int g_beTextureCtrlInfoList_vtable[4];
-extern "C" igMetaObject *g_beTextureCtrlInfo_metaObject;
 extern "C" igMetaObject *beTextureCtrlInfo_GetMetaObject(void);
 extern "C" int g_beTextureCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beTextureCtrlAttr_metaObject;
@@ -2798,32 +2792,23 @@ extern "C" igMetaObject *beTextureCtrlAttr_GetMetaObject(void);
 extern "C" int g_beTextureCtrlAttr_vtable[4];
 extern "C" igMetaObject *g_beTextureCtrlData_metaObject;
 extern "C" int g_beTextureCtrlData_vtable[4];
-extern "C" igMetaObject *g_beTextureCtrl_metaObject;
 extern "C" int g_beTextureCtrl_vtable[4];
 extern "C" igMetaObject *g_beTextureCtrlWork_metaObject;
 extern "C" int g_beTextureCtrlWork_vtable[4];
-extern "C" igMetaObject *g_beTargetObj_metaObject;
 extern "C" int g_beTargetObj_vtable[4];
 extern "C" int g_beSystem_vtable[4];
-extern "C" igMetaObject *g_beSwitchCtrlInfo_metaObject;
 extern "C" int g_beSwitchCtrlInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igSwitch_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igMetaObject *g_beSwitchCtrl_metaObject;
 extern "C" int g_beSwitchCtrl_vtable[4];
-extern "C" igMetaObject *g_beStaticInfoCtl_metaObject;
 extern "C" int g_beStaticInfoCtl_vtable[4];
-extern "C" igMetaObject *g_beStaticInfo_metaObject;
 extern "C" int g_beStaticInfo_vtable[4];
 extern "C" igMetaObject *g_beBinDataObject_metaObject;
-extern "C" igMetaObject *g_beSoundInfo_metaObject;
 extern "C" igMetaObject *beSoundInfo_GetMetaObject(void);
 extern "C" int g_beSoundInfo_vtable[4];
 extern "C" igMetaObject *g_beSoundData_metaObject;
 extern "C" igMetaObject *beSoundData_GetMetaObject(void);
 extern "C" int g_beSoundData_vtable[4];
 extern "C" int g_beBaseInfoData_vtable[4];
-extern "C" beBaseInfoData *beBaseInfoData_Destroy(beBaseInfoData *self, short delete_storage);
-extern "C" igMetaObject *g_beSound_metaObject;
 extern "C" igMetaObject *beSound_GetMetaObject(void);
 extern "C" int g_beSound_vtable[4];
 extern "C" igMetaObject *g_bePlaySEList_metaObject;
@@ -2834,22 +2819,17 @@ extern "C" int g_bePlaySE_vtable[4];
 extern "C" igMetaObject *g_beShadow01InfoList_metaObject;
 /* Stack object, vtable slot read through the object plus a runtime offset. */
 extern "C" int g_beShadow01InfoList_vtable[4];
-extern "C" igMetaObject *g_beShadow01Info_metaObject;
 extern "C" int g_beShadow01Info_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igProjectiveShadowShader_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igMetaObject *g_beShadow01_metaObject;
 extern "C" int g_beShadow01_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beShadow01InfoList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igMetaObject *g_beSelectCtrlInfo_metaObject;
 extern "C" int g_beSelectCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beSelectCtrlInfoRamData_metaObject;
 extern "C" int g_beSelectCtrlInfoRamData_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beSelectCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_beSelectCtrlInfoWork_metaObject;
 extern "C" int g_beSelectCtrlInfoWork_vtable[4];
-extern "C" igMetaObject *g_beSelectCtrl_metaObject;
 extern "C" int g_beSelectCtrl_vtable[4];
-extern "C" igMetaObject *g_beSeInfo_metaObject;
 extern "C" int g_beSeInfo_vtable[4];
 extern "C" igMetaObject *g_beSeInfoData_metaObject;
 extern "C" int g_beSeInfoData_vtable[4];
@@ -2890,15 +2870,12 @@ struct SeDataLocal : beSeData {
         }
     }
 };
-extern "C" igMetaObject *g_beSeCtl_metaObject;
 extern "C" igMetaObject *beSeCtl_GetMetaObject(void);
 extern "C" int g_beSeCtl_vtable[4];
 extern "C" igMetaObject *g_beSaveUtilInfoRam_metaObject;
 extern "C" igMetaObject *beSaveUtilInfoRam_GetMetaObject(void);
 extern "C" int g_beSaveUtilInfoRam_vtable[4];
-extern "C" igMetaObject *g_beSaveUtilInfo_metaObject;
 extern "C" int g_beSaveUtilInfo_vtable[4];
-extern "C" igMetaObject *g_beSaveUtil_metaObject;
 extern "C" int g_beSaveUtil_vtable[4];
 extern "C" igMetaObject *g_beSvPlatDataPC_metaObject;
 extern "C" int g_beSvPlatDataPC_vtable[4];
@@ -2914,34 +2891,23 @@ extern "C" igMetaObject *g_beSvPs2McImage128k_metaObject;
 extern "C" int g_beSvPs2McImage128k_vtable[4];
 extern "C" igMetaObject *g_beSvPlatDataGC_metaObject;
 extern "C" int g_beSvPlatDataGC_vtable[4];
-extern "C" igMetaObject *g_beSvConnectCheck_metaObject;
 extern "C" int g_beSvConnectCheck_vtable[4];
 extern "C" int g_beSaveApi_vtable[4];
 extern "C" void *beSaveApi_Destroy(beSaveApi *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beSaveMemoryObj_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igMetaObject *g_beSaveApi_metaObject;
-extern "C" igMetaObject *g_beSvEndApi_metaObject;
 extern "C" int g_beSvEndApi_vtable[4];
-extern "C" igMetaObject *g_beSvStartApi_metaObject;
 extern "C" igMetaObject *beSvStartApi_GetMetaObject(void);
 extern "C" int g_beSvStartApi_vtable[4];
-extern "C" igMetaObject *g_beSvGetFreeSizeApi_metaObject;
 extern "C" igMetaObject *beSvGetFreeSizeApi_GetMetaObject(void);
 extern "C" int g_beSvGetFreeSizeApi_vtable[4];
-extern "C" igMetaObject *g_beSvWriteMediaApi_metaObject;
 extern "C" igMetaObject *beSvWriteMediaApi_GetMetaObject(void);
 extern "C" int g_beSvWriteMediaApi_vtable[4];
-extern "C" igMetaObject *g_beSvReadMediaApi_metaObject;
 extern "C" igMetaObject *beSvReadMediaApi_GetMetaObject(void);
 extern "C" int g_beSvReadMediaApi_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beSaveDataDeliver_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igMetaObject *g_beSvUseCheckApi_metaObject;
 extern "C" int g_beSvUseCheckApi_vtable[4];
-extern "C" igMetaObject *g_beSvFormatApi_metaObject;
 extern "C" int g_beSvFormatApi_vtable[4];
-extern "C" igMetaObject *g_beSvFileFindApi_metaObject;
 extern "C" int g_beSvFileFindApi_vtable[4];
-extern "C" igMetaObject *g_beSvFileMakeApi_metaObject;
 extern "C" int g_beSvFileMakeApi_vtable[4];
 extern "C" igMetaObject *g_beSvPlatBaseData_metaObject;
 extern "C" igMetaObject *g_beSvSlotDataList_metaObject;
@@ -2954,7 +2920,6 @@ extern "C" igMetaObject *g_beSvSlotXbox_metaObject;
 extern "C" int g_beSvSlotXbox_vtable[4];
 extern "C" igMetaObject *g_beSvSlotData_metaObject;
 extern "C" igMetaObject *beSvSlotData_GetMetaObject(void);
-extern "C" igMetaObject *g_beSaveMemoryObj_metaObject;
 extern "C" igMetaObject *beSaveMemoryObj_GetMetaObject(void);
 extern "C" int g_beSaveMemoryObj_vtable[4];
 extern "C" igMetaObject *g_beSaveDataDeliver_metaObject;
@@ -2967,27 +2932,21 @@ extern "C" igMetaObject *g_beResetNode_metaObject;
 extern "C" int g_beResetNode_vtable[4];
 struct igMetaObject_34b580;
 extern "C" igMetaObject_34b580 * igGroup_GetPublishedMetaObject(...);
-extern "C" igMetaObject *g_bePoint01Info_metaObject;
 extern "C" int g_bePoint01Info_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beGroupKeepList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igMetaObject *g_bePoint01_metaObject;
 extern "C" int g_bePoint01_vtable[4];
 extern "C" igMetaObject *g_beParticleCtrl2InfoRam_metaObject;
 extern "C" int g_beParticleCtrl2InfoRam_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2InfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_beParticleCtrl2InfoWork_metaObject;
 extern "C" int g_beParticleCtrl2InfoWork_vtable[4];
-extern "C" igMetaObject *g_beParticleCtrl2Info_metaObject;
 extern "C" int g_beParticleCtrl2Info_vtable[4];
-extern "C" igMetaObject *g_beParticleCtrl2_metaObject;
 extern "C" int g_beParticleCtrl2_vtable[4];
-extern "C" igMetaObject *g_bePadManager_metaObject;
 extern "C" int g_bePadManager_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_bePadDataList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beKeyboardReceiver_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igMetaObject *g_bePadDataList_metaObject;
 extern "C" int g_bePadDataList_vtable[4];
-extern "C" igMetaObject *g_bePadData_metaObject;
 extern "C" int g_bePadData_vtable[4];
 extern "C" igMetaObject *g_beOptInfo_metaObject;
 extern "C" igMetaObject *beOptInfo_GetMetaObject(void);
@@ -3011,32 +2970,23 @@ extern "C" igMetaObject *g_beNumVerInsideData_metaObject;
 extern "C" int g_beNumVerInsideData_vtable[4];
 extern "C" igMetaObject *g_beNumberCtrlInfoList_metaObject;
 extern "C" int g_beNumberCtrlInfoList_vtable[4];
-extern "C" igMetaObject *g_beNumberCtrlInfo_metaObject;
 extern "C" int g_beNumberCtrlInfo_vtable[4];
-extern "C" igMetaObject *g_beNumberCtrl_metaObject;
 extern "C" int g_beNumberCtrl_vtable[4];
-extern "C" igMetaObject *g_beLoadingNode_metaObject;
 extern "C" int g_beLoadingNode_vtable[4];
 extern "C" int g_igGroup_vtable[4];
 extern "C" int g_beNodeAnim_vtable[4];
 extern "C" igMetaObject *g_beNodeAnim_metaObject;
-extern "C" igMetaObject *g_beMovieInfo_metaObject;
 extern "C" int g_beMovieInfo_vtable[4];
-extern "C" igMetaObject *g_beMovieInfoData_metaObject;
 extern "C" int g_beMovieInfoData_vtable[4];
-extern "C" igMetaObject *g_beMovie_metaObject;
 extern "C" igMetaObject *beMovie_GetMetaObject(void);
 extern "C" int g_beMovie_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlSubCom_metaObject;
 extern "C" igMetaObject *beModelCtrlSubCom_GetMetaObject(void);
 extern "C" int g_beModelCtrlSubCom_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlSCSound_metaObject;
 extern "C" igMetaObject *beModelCtrlSCSound_GetMetaObject(void);
 extern "C" int g_beModelCtrlSCSound_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlSCHitBox_metaObject;
 extern "C" igMetaObject *beModelCtrlSCHitBox_GetMetaObject(void);
 extern "C" int g_beModelCtrlSCHitBox_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlSCEffect_metaObject;
 extern "C" int g_beModelCtrlSCEffect_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlSubComBase_metaObject;
 extern "C" igMetaObject *g_beModelCtrlNode2_metaObject;
@@ -3053,8 +3003,6 @@ struct ModelCtrlNode2View : igTransformView, ModelCtrlNode2Vtable {
     ModelCtrlNode2View() : ModelCtrlNode2Vtable(&vtable) { }
     ~ModelCtrlNode2View() { vtable = g_beModelCtrlNode2_vtable; }
 };
-extern "C" igMetaObject *g_beModelCtrlInfoWork_metaObject;
-extern "C" int g_beModelCtrlInfoWork_vtable[4];
 /* The members of beModelCtrlInfoWork whose constructors and destructors are called out of line, one
  * class per member type. */
 /* An igStringMetaField member. */
@@ -3134,12 +3082,10 @@ struct ModelCtrlInfoWorkView : igObjectView, ModelCtrlInfoWorkVtable {
     ModelCtrlInfoWorkView() : ModelCtrlInfoWorkVtable(&vtable) { }
     ~ModelCtrlInfoWorkView() { vtable = g_beModelCtrlInfoWork_vtable; }
 };
-extern "C" void *beModelCtrlInfoWork_Destroy(beModelCtrlInfoWork *self, long long delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoDataTrc_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igMetaObject *g_beModelCtrlInfoRideOn4_metaObject;
 extern "C" int g_beModelCtrlInfoRideOn_vtable[4];
 extern "C" int g_beModelCtrlInfoRideOn4_vtable[4];
 struct ModelNameField {
@@ -3184,7 +3130,6 @@ struct RideOn4View : RideOnView, RideOn4Vtable {
     RideOn4View() : RideOn4Vtable(&vtable) { }
     ~RideOn4View() { vtable = g_beModelCtrlInfoRideOn4_vtable; }
 };
-extern "C" igMetaObject *g_beModelCtrlInfoRideOn3_metaObject;
 extern "C" int g_beModelCtrlInfoRideOn3_vtable[4];
 struct RideOn3Vtable { RideOn3Vtable(int **slot) { *slot = g_beModelCtrlInfoRideOn3_vtable; } };
 struct RideOn3View : RideOnView, RideOn3Vtable {
@@ -3194,7 +3139,6 @@ struct RideOn3View : RideOnView, RideOn3Vtable {
     RideOn3View() : RideOn3Vtable(&vtable) { }
     ~RideOn3View() { vtable = g_beModelCtrlInfoRideOn3_vtable; }
 };
-extern "C" igMetaObject *g_beModelCtrlInfoRideOn2_metaObject;
 extern "C" int g_beModelCtrlInfoRideOn2_vtable[4];
 struct RideOn2Vtable { RideOn2Vtable(int **slot) { *slot = g_beModelCtrlInfoRideOn2_vtable; } };
 struct RideOn2View : RideOnView, RideOn2Vtable {
@@ -3216,7 +3160,6 @@ extern "C" int g_beModelCtrlMoveObject_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlInfoList_metaObject;
 extern "C" igMetaObject *beModelCtrlInfoList_GetMetaObject(void);
 extern "C" int g_beModelCtrlInfoList_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlInfo_metaObject;
 extern "C" igMetaObject *beModelCtrlInfo_GetMetaObject(void);
 extern "C" int g_beModelCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlInfoRamData_metaObject;
@@ -3241,39 +3184,24 @@ extern "C" igMetaObject *g_beModelCtrlAIDataList_metaObject;
 extern "C" int g_beModelCtrlAIDataList_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlAIData_metaObject;
 extern "C" int g_beModelCtrlAIData_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlHITBOX_metaObject;
 extern "C" igMetaObject *beModelCtrlHITBOX_GetMetaObject(void);
 extern "C" int g_beModelCtrlHITBOX_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlMUTEKI_metaObject;
 extern "C" igMetaObject *beModelCtrlMUTEKI_GetMetaObject(void);
 extern "C" int g_beModelCtrlMUTEKI_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlAIMAP_metaObject;
 extern "C" igMetaObject *beModelCtrlAIMAP_GetMetaObject(void);
 extern "C" int g_beModelCtrlAIMAP_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlWCHECK_metaObject;
 extern "C" igMetaObject *beModelCtrlWCHECK_GetMetaObject(void);
 extern "C" int g_beModelCtrlWCHECK_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlPDMOVE_metaObject;
 extern "C" int g_beModelCtrlPDMOVE_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlMOVERL_metaObject;
 extern "C" int g_beModelCtrlMOVERL_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlMOVEEX_metaObject;
 extern "C" int g_beModelCtrlMOVEEX_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlMOVE_metaObject;
 extern "C" int g_beModelCtrlMOVE_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlMSGBOX_metaObject;
 extern "C" int g_beModelCtrlMSGBOX_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlCTRL_metaObject;
 extern "C" int g_beModelCtrlCTRL_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlJUMP_metaObject;
 extern "C" int g_beModelCtrlJUMP_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlACTION_metaObject;
 extern "C" int g_beModelCtrlACTION_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlLABELCTRL_metaObject;
 extern "C" int g_beModelCtrlLABELCTRL_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlLABEL_metaObject;
 extern "C" int g_beModelCtrlLABEL_vtable[4];
-extern "C" igMetaObject *g_beModelCtrlLUACALL_metaObject;
 extern "C" igMetaObject *beModelCtrlLUACALL_GetMetaObject(void);
 extern "C" int g_beModelCtrlLUACALL_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlDataList_metaObject;
@@ -3282,19 +3210,15 @@ extern "C" int g_beModelCtrlDataList_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlData_metaObject;
 extern "C" igMetaObject *beModelCtrlData_GetMetaObject(void);
 extern "C" int g_beModelCtrlData_vtable[4];
-extern "C" igMetaObject *g_beModelCtrl_metaObject;
 extern "C" igMetaObject *beModelCtrl_GetMetaObject(void);
 extern "C" igMetaObject *g_beMeterCtrlNode_metaObject;
 extern "C" int g_beMeterCtrlNode_vtable[4];
 extern "C" igMetaObject *g_beMeterCtrlInfoList_metaObject;
 extern "C" int g_beMeterCtrlInfoList_vtable[4];
-extern "C" igMetaObject *g_beMeterCtrlInfo_metaObject;
 extern "C" int g_beMeterCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beMeterCtrlOneData_metaObject;
 extern "C" int g_beMeterCtrlOneData_vtable[4];
-extern "C" igMetaObject *g_beMeterCtrl_metaObject;
 extern "C" int g_beMeterCtrl_vtable[4];
-extern "C" igMetaObject *g_beMessenger_metaObject;
 extern "C" int g_beMessenger_vtable[4];
 extern "C" void *g_stringPool[4];
 /* The insight object's clock (+80, 64 bits). */
@@ -3383,14 +3307,12 @@ extern "C" int g_beMessengerArgDataList_vtable[4];
 extern "C" igMetaObject *g_beMessengerArgData_metaObject;
 extern "C" igMetaObject *beMessengerArgData_GetMetaObject(void);
 extern "C" int g_beMessengerArgData_vtable[4];
-extern "C" igMetaObject *g_beMemory_metaObject;
 extern "C" int g_beMemory_vtable[4];
 extern "C" igMetaObject *g_beMatCtrlInfoWork_metaObject;
 extern "C" int g_beMatCtrlInfoWork_vtable[4];
 extern "C" igMetaObject *g_beMatCtrlInfoRam_metaObject;
 extern "C" int g_beMatCtrlInfoRam_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMatCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igMetaObject *g_beMatCtrlInfo_metaObject;
 extern "C" int g_beMatCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beMatCtrlSearchList_metaObject;
 extern "C" int g_beMatCtrlSearchList_vtable[4];
@@ -3400,13 +3322,10 @@ extern "C" igMetaObject *g_beMatCtrlDataList_metaObject;
 extern "C" int g_beMatCtrlDataList_vtable[4];
 extern "C" igMetaObject *g_beMatCtrlData_metaObject;
 extern "C" int g_beMatCtrlData_vtable[4];
-extern "C" igMetaObject *g_beMatCtrl_metaObject;
 extern "C" int g_beMatCtrl_vtable[4];
-extern "C" igMetaObject *g_beLuaState_metaObject;
 extern "C" int g_beLuaState_vtable[4];
 extern "C" int g_igLuaState_vtable[4];
 extern "C" int g_igLuaState_metaObject[4];
-extern "C" igMetaObject *g_beLuaInfo_metaObject;
 extern "C" igMetaObject *beLuaInfo_GetMetaObject(void);
 extern "C" int g_beLuaInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beLuaDataList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
@@ -3422,31 +3341,24 @@ extern "C" igMetaObject *beLuaDataObjectist_GetMetaObject(void);
 extern "C" int g_beLuaDataObjectist_vtable[4];
 extern "C" igMetaObject *g_beLuaDataObject_metaObject;
 extern "C" int g_beLuaDataObject_vtable[4];
-extern "C" igMetaObject *g_beLua_metaObject;
 extern "C" int g_beLua_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igLuaGlue_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_igLightSetList_metaObject;
 extern "C" int g_igLightSetList_vtable[4];
-extern "C" igMetaObject *g_beLightCtrlInfo_metaObject;
 extern "C" int g_beLightCtrlInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igLightSetList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igMetaObject *g_beLightCtrl_metaObject;
 extern "C" int g_beLightCtrl_vtable[4];
 extern "C" igMetaObject *g_beLayerInfoRam_metaObject;
 extern "C" int g_beLayerInfoRam_vtable[4];
-extern "C" igMetaObject *g_beLayerInfo_metaObject;
 extern "C" int g_beLayerInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beLayerGroupList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_beLayerGroupList_metaObject;
 extern "C" int g_beLayerGroupList_vtable[4];
 extern "C" igMetaObject *g_beLayerGroup_metaObject;
 extern "C" int g_beLayerGroup_vtable[4];
-extern "C" igMetaObject *g_beLayerCtl_metaObject;
 extern "C" int g_beLayerCtl_vtable[4];
 extern "C" igMetaObject *g_beLOA_metaObject;
-extern "C" igMetaObject *beLOA_GetMetaObject(void);
 extern "C" int g_beLOA_vtable[4];
-extern "C" igMetaObject *g_beKeyboardReceiver_metaObject;
 extern "C" igMetaObject *beKeyboardReceiver_GetMetaObject(void);
 extern "C" int g_beKeyboardReceiver_vtable[4];
 struct igMetaObject_35d1c0;
@@ -3454,10 +3366,8 @@ extern "C" igMetaObject_35d1c0 *igEventReceiver_GetPublishedMetaObject(void);
 extern "C" igMetaObject *g_beHitLandModelInfoRam_metaObject;
 extern "C" igMetaObject *beHitLandModelInfoRam_GetMetaObject(void);
 extern "C" int g_beHitLandModelInfoRam_vtable[4];
-extern "C" igMetaObject *g_beHitLandModelInfo_metaObject;
 extern "C" igMetaObject *beHitLandModelInfo_GetMetaObject(void);
 extern "C" int g_beHitLandModelInfo_vtable[4];
-extern "C" igMetaObject *g_beHitLandModel_metaObject;
 extern "C" int g_beHitLandModel_vtable[4];
 struct HitLandOrderField { int *p; HitLandOrderField() { p = 0; } ~HitLandOrderField(); };
 struct HitTraversalField { int *p; HitTraversalField() { p = 0; } ~HitTraversalField(); };
@@ -3478,10 +3388,8 @@ struct HitLandModelView : ControllerBaseView, HitLandModelVtable {
     HitLandModelView() : HitLandModelVtable(&vtable) { }
     ~HitLandModelView() { vtable = g_beHitLandModel_vtable; }
 };
-extern "C" igMetaObject *g_beHitLandModelTraversal_metaObject;
 extern "C" int g_beHitLandModelTraversal_vtable[4];
 extern "C" int g_igIntersectTraversal_metaObject[4];
-extern "C" igMetaObject *g_beHitLandModelOrder_metaObject;
 extern "C" int g_beHitLandModelOrder_vtable[4];
 extern "C" igMetaObject *g_beHitLandResultDataList_metaObject;
 extern "C" int g_beHitLandResultDataList_vtable[4];
@@ -3489,9 +3397,7 @@ extern "C" igMetaObject *g_beHitLandResultData_metaObject;
 extern "C" int g_beHitLandResultData_vtable[4];
 extern "C" igMetaObject *g_beHitLandDelivInfoRam_metaObject;
 extern "C" int g_beHitLandDelivInfoRam_vtable[4];
-extern "C" igMetaObject *g_beHitLandDelivInfo_metaObject;
 extern "C" int g_beHitLandDelivInfo_vtable[4];
-extern "C" igMetaObject *g_beHitLandDeliv_metaObject;
 extern "C" int g_beHitLandDeliv_vtable[4];
 extern "C" igMetaObject *g_beGroupKeepList_metaObject;
 extern "C" int g_beGroupKeepList_vtable[4];
@@ -3504,7 +3410,6 @@ extern "C" igMetaObject *g_beGeneraterInfoRam_metaObject;
 extern "C" igMetaObject *beGeneraterInfoRam_GetMetaObject(void);
 extern "C" int g_beGeneraterInfoRam_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beGeneraterInfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igMetaObject *g_beGeneraterInfo_metaObject;
 extern "C" igMetaObject *beGeneraterInfo_GetMetaObject(void);
 extern "C" int g_beGeneraterInfo_vtable[4];
 extern "C" igMetaObject *g_beGeneraterDataList_metaObject;
@@ -3525,9 +3430,7 @@ extern "C" igMetaObject *g_beGeneraterItemDataOneList_metaObject;
 extern "C" int g_beGeneraterItemDataOneList_vtable[4];
 extern "C" igMetaObject *g_beGeneraterItemDataOne_metaObject;
 extern "C" int g_beGeneraterItemDataOne_vtable[4];
-extern "C" igMetaObject *g_beGenerater_metaObject;
 extern "C" int g_beGenerater_vtable[4];
-extern "C" igMetaObject *g_beFontInfo_metaObject;
 extern "C" int g_beFontInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beUnicodeObjList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_beFontInfoData_metaObject;
@@ -3535,7 +3438,6 @@ extern "C" int g_beFontInfoData_vtable[4];
 extern "C" igMetaObject *g_beUnicodeObjList_metaObject;
 extern "C" igMetaObject *beUnicodeObjList_GetMetaObject(void);
 extern "C" int g_beUnicodeObjList_vtable[4];
-extern "C" igMetaObject *g_beUnicodeObj_metaObject;
 extern "C" igMetaObject *beUnicodeObj_GetMetaObject(void);
 extern "C" int g_beUnicodeObj_vtable[4];
 extern "C" igMetaObject *g_beFontImageList_metaObject;
@@ -3545,26 +3447,21 @@ extern "C" igMetaObject *g_beFontImage_metaObject;
 extern "C" igMetaObject *beFontImage_GetMetaObject(void);
 extern "C" int g_beFontImage_vtable[4];
 extern "C" int g_igFont_vtable[4];
-extern "C" igFont *igFont_Destroy(igFont *self, short delete_storage);
 extern "C" int g_igBitmapFont_vtable[4];
 extern "C" igBitmapFont *igBitmapFont_Destroy(igBitmapFont *self, short delete_storage);
 extern "C" int g_igBitmapFont_metaObject[4];
-extern "C" igMetaObject *g_beFont_metaObject;
 extern "C" int g_beFont_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beFontImageList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_beFontGeomAttrPairList_metaObject;
 extern "C" int g_beFontGeomAttrPairList_vtable[4];
 extern "C" igMetaObject *g_beFontGeomAttrPair_metaObject;
 extern "C" int g_beFontGeomAttrPair_vtable[4];
-extern "C" igMetaObject *g_beFileListInfoManager_metaObject;
 extern "C" int g_beFileListInfoManager_vtable[4];
-extern "C" igMetaObject *g_beFileListInfo_metaObject;
 extern "C" int g_beFileListInfo_vtable[4];
 extern "C" igMetaObject *g_beFile_metaObject;
 extern "C" int g_beFile_vtable[4];
 extern "C" igMetaObject *g_beFileChkObj_metaObject;
 extern "C" int g_beFileChkObj_vtable[4];
-extern "C" igMetaObject *g_beDemoManager_metaObject;
 extern "C" int g_beDemoManager_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDemoManagerWork_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDemoManagerWorkList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
@@ -3582,7 +3479,6 @@ extern "C" igMetaObject *g_beDataObjListList_metaObject;
 extern "C" igMetaObject *beDataObjListList_GetMetaObject(void);
 /* Stack object, vtable slot read through the object plus a runtime offset. */
 extern "C" int g_beDataObjListList_vtable[4];
-extern "C" igMetaObject *g_beDataObjList_metaObject;
 extern "C" igMetaObject *beDataObjList_GetMetaObject(void);
 extern "C" int g_beDataObjList_vtable[4];
 extern "C" igMetaObject *g_beDataObjFloatList_metaObject;
@@ -3605,23 +3501,19 @@ extern "C" igMetaObject *g_beDataBaseList_metaObject;
 extern "C" int g_beDataBaseList_vtable[4];
 extern "C" igMetaObject *g_beDataBase_metaObject;
 extern "C" int g_beDataBase_vtable[4];
-extern "C" igMetaObject *g_beDBManagerInfo_metaObject;
 extern "C" igMetaObject *beDBManagerInfo_GetMetaObject(void);
 extern "C" int g_beDBManagerInfo_vtable[4];
-extern "C" igMetaObject *g_beDBManager_metaObject;
 extern "C" igMetaObject *beDBManager_GetMetaObject(void);
 extern "C" int g_beDBManager_vtable[4];
 extern "C" igMetaObject *g_beCriVolume_metaObject;
 extern "C" igMetaObject *beCriVolume_GetMetaObject(void);
 extern "C" int g_beCriVolume_vtable[4];
-extern "C" igMetaObject *g_beCriSfpData_metaObject;
 extern "C" igMetaObject *beCriSfpData_GetMetaObject(void);
 extern "C" int g_beCriSfpData_vtable[4];
 extern "C" igMetaObject *g_beCriHandleList_metaObject;
 extern "C" int g_beCriHandleList_vtable[4];
 extern "C" igMetaObject *g_beCriHandle_metaObject;
 extern "C" int g_beCriHandle_vtable[4];
-extern "C" igMetaObject *g_beCriFxInfo_metaObject;
 extern "C" int g_beCriFxInfo_vtable[4];
 extern "C" igMetaObject *g_beCriFxXbData_metaObject;
 extern "C" int g_beCriFxXbData_vtable[4];
@@ -3629,9 +3521,7 @@ extern "C" igMetaObject *g_beCriAudio_metaObject;
 extern "C" int g_beCriAudio_vtable[4];
 extern "C" igMetaObject *g_beCriSndf_metaObject;
 extern "C" int g_beCriSndf_vtable[4];
-extern "C" igMetaObject *g_beCriAcxData_metaObject;
 extern "C" int g_beCriAcxData_vtable[4];
-extern "C" igMetaObject *g_beCri_metaObject;
 extern "C" int g_beCri_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beCriHandleList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igMetaObject *g_beCountry_metaObject;
@@ -3647,7 +3537,6 @@ struct CopyTransformView : igTransformView, CopyTransformVtable {
     ~CopyTransformView() { vtable = g_beCopyTransform_vtable; }
 };
 extern "C" igMetaObject *g_beCopyModelCtrl2_metaObject;
-extern "C" igMetaObject *beCopyModelCtrl2_GetMetaObject(void);
 extern "C" int g_beCopyModelCtrl2_vtable[4];
 /* _srcNode (igObjectRefMetaField). */
 struct SrcNodeField { int *p; SrcNodeField() { p = 0; } ~SrcNodeField(); };
@@ -3660,26 +3549,19 @@ struct CopyModelCtrl2View : igTransformView, CopyModelCtrl2Vtable {
 extern "C" igMetaObject *g_beChangePosTransformInfoRam_metaObject;
 extern "C" igMetaObject *beChangePosTransformInfoRam_GetMetaObject(void);
 extern "C" int g_beChangePosTransformInfoRam_vtable[4];
-extern "C" igMetaObject *g_beChangePosTransformInfo_metaObject;
 extern "C" igMetaObject *beChangePosTransformInfo_GetMetaObject(void);
 extern "C" int g_beChangePosTransformInfo_vtable[4];
-extern "C" igMetaObject *g_beChangePosTransform_metaObject;
 extern "C" igMetaObject *beChangePosTransform_GetMetaObject(void);
 extern "C" int g_beChangePosTransform_vtable[4];
-extern "C" igMetaObject *g_beCameraMode_metaObject;
 extern "C" int g_beCameraMode_vtable[4];
 extern "C" int g_igViewMode_vtable[4];
 extern "C" int g_igViewMode_metaObject[4];
-extern "C" igMetaObject *g_beCameraCtrlInfo_metaObject;
 extern "C" int g_beCameraCtrlInfo_vtable[4];
 extern "C" int g_igObject_metaObject[4];
-extern "C" igMetaObject *g_beCameraDemoData_metaObject;
 extern "C" int g_beCameraDemoData_vtable[4];
-extern "C" igMetaObject *g_beCameraBoxData_metaObject;
 extern "C" int g_beCameraBoxData_vtable[4];
 extern "C" igMetaObject *g_beCameraCtrlInfoRamShake_metaObject;
 extern "C" int g_beCameraCtrlInfoRamShake_vtable[4];
-extern "C" igMetaObject *g_beCameraCtrl_metaObject;
 extern "C" int g_beCameraCtrl_vtable[4];
 /* _cameraMode (igObjectRefMetaField). */
 struct CameraModeField { int *p; CameraModeField() { p = 0; } ~CameraModeField(); };
@@ -3700,19 +3582,15 @@ struct CameraCtrlView : ControllerBaseView, CameraCtrlVtable {
     CameraCtrlView() : CameraCtrlVtable(&vtable) { }
     ~CameraCtrlView() { vtable = g_beCameraCtrl_vtable; }
 };
-extern "C" igMetaObject *g_beBkColorInfo_metaObject;
 extern "C" int g_beBkColorInfo_vtable[4];
-extern "C" igMetaObject *g_beBkColor_metaObject;
 extern "C" int g_beBkColor_vtable[4];
 extern "C" igMetaObject *g_beBaseInfoRamList_metaObject;
 extern "C" int g_beBaseInfoRamList_vtable[4];
 extern "C" igMetaObject *g_beBaseInfoRam_metaObject;
-extern "C" igMetaObject *g_beBaseInfoRamTimer_metaObject;
 extern "C" int g_beBaseInfoRamTimer_vtable[4];
 extern "C" igMetaObject *g_beBaseInfoManagerList_metaObject;
 extern "C" igMetaObject *beBaseInfoManagerList_GetMetaObject(void);
 extern "C" int g_beBaseInfoManagerList_vtable[4];
-extern "C" igMetaObject *g_beBaseInfoManager_metaObject;
 extern "C" igMetaObject *beBaseInfoManager_GetMetaObject(void);
 extern "C" igMetaObject *g_beBaseInfoList_metaObject;
 extern "C" igMetaObject *beBaseInfoList_GetMetaObject(void);
@@ -3724,20 +3602,17 @@ extern "C" int g_beBaseInfoDataList_vtable[4];
 extern "C" igMetaObject *g_beBaseInfoData_metaObject;
 extern "C" igMetaObject *g_beActionStarterInfoRam_metaObject;
 extern "C" int g_beActionStarterInfoRam_vtable[4];
-extern "C" igMetaObject *g_beActionStarterInfo_metaObject;
 extern "C" int g_beActionStarterInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beAsTargetModelDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igMetaObject *g_beAsTargetModelDataList_metaObject;
 extern "C" int g_beAsTargetModelDataList_vtable[4];
 extern "C" igMetaObject *g_beAsTargetModelData_metaObject;
 extern "C" int g_beAsTargetModelData_vtable[4];
-extern "C" igMetaObject *g_beActionStarterData2_metaObject;
 extern "C" int g_beActionStarterData2_vtable[4];
 extern "C" int g_beActionStarterData_vtable[4];
 extern "C" igMetaObject *g_beActionStarterDataList_metaObject;
 extern "C" int g_beActionStarterDataList_vtable[4];
 extern "C" igMetaObject *g_beActionStarterData_metaObject;
-extern "C" igMetaObject *g_beActionStarter_metaObject;
 extern "C" int g_beActionStarter_vtable[4];
 extern "C" igMetaObject *g_beAction2InfoWork_metaObject;
 extern "C" igMetaObject *beAction2InfoWork_GetMetaObject(void);
@@ -3748,69 +3623,36 @@ extern "C" int g_beAction2InfoRam_vtable[4];
 extern "C" igMetaObject *g_beAction2InfoList_metaObject;
 extern "C" igMetaObject *beAction2InfoList_GetMetaObject(void);
 extern "C" int g_beAction2InfoList_vtable[4];
-extern "C" igMetaObject *g_beAction2Info_metaObject;
 extern "C" igMetaObject *beAction2Info_GetMetaObject(void);
 extern "C" int g_beAction2Info_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beAction2DataList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igMetaObject *g_beAction2FLASHSET_metaObject;
 extern "C" int g_beAction2FLASHSET_vtable[4];
-extern "C" igMetaObject *g_beAction2WAITCHECK_metaObject;
 extern "C" int g_beAction2WAITCHECK_vtable[4];
-extern "C" igMetaObject *g_beAction2FADESET_metaObject;
 extern "C" int g_beAction2FADESET_vtable[4];
-extern "C" igMetaObject *g_beAction2JOINTSET_metaObject;
 extern "C" int g_beAction2JOINTSET_vtable[4];
-extern "C" igMetaObject *g_beAction2MOTIONSET_metaObject;
 extern "C" int g_beAction2MOTIONSET_vtable[4];
 extern "C" igMetaObject *g_beAction2DataList_metaObject;
 extern "C" int g_beAction2DataList_vtable[4];
 extern "C" igMetaObject *g_beAction2Data_metaObject;
 extern "C" int g_beAction2Data_vtable[4];
-extern "C" igMetaObject *g_beAction2_metaObject;
 extern "C" int g_beAction2_vtable[4];
-extern "C" igMetaObject *g_be_metaObject;
 extern "C" int g_be_vtable[4];
-extern "C" igMetaObject *g_ParticleArray_metaObject;
 extern "C" int igParticleArray_Destroy(igParticleArray *, int);
 extern "C" int g_ParticleArray_vtable[4];
 struct igMetaObject_36e3d0;
 extern "C" igMetaObject_36e3d0 *igParticleArray_GetPublishedMetaObject(void);
-extern "C" igMetaObject *g_ParticleTimer_metaObject;
-extern "C" igMetaObject *ParticleTimer_GetMetaObject(void);
 extern "C" int igGeometry_Destroy(igGeometry *, int);
 extern "C" int g_ParticleTimer_vtable[4];
 struct igMetaObject_36e6f0;
 extern "C" igMetaObject_36e6f0 *igGeometry_GetPublishedMetaObject(void);
-extern "C" igMetaObject *g_ParticleInfo_metaObject;
 extern "C" igMetaObject *ParticleInfo_GetMetaObject(void);
 extern "C" int igSceneInfo_Destroy(igSceneInfo *, int);
 extern "C" int g_ParticleInfo_vtable[4];
 extern "C" int g_igSceneInfo_metaObject[4];
-extern "C" void ParticleInfo_resetFields(ParticleInfo *self, int clearControls);
 extern "C" void beBinDataObject_userDestruct(beBinDataObject *self);
 // clang-format off
-/* beDataBase record lookup and row count, 0x003a93a0..0x003a9708. A beDataBase is a table of
- * records (rows). Its cells are split by type into six data lists (char, short, int, float, bool,
- * string); each data list is paired with an "offset list" that names the table's columns for that
- * type. A cell of record R and column C is stored row-major at index (columnCount * R + C) of the
- * matching data list (the Junk Shop table is 9 rows x 36 columns; the enemy
- * table keys MODEL, HPMAX, ... by column name). The lists are reached through the reflected
- * object-reference fields and viewed here as the igDataList count/data prefix. */
-
-
-/* Index returned by beDataBase_FindRecordValueIndex when the key has no column. */
-
-
-struct igProperty;
-typedef igTDataList<igProperty *> ColumnList;
 extern "C" int g_propertyNameField[4];
 extern "C" char emptyString[];
-extern "C" int beDataBase_FindRecordValueIndex(beDataBase *, int, const char *, ColumnList *);
-extern "C" long long beDataBase_GetRecordInt(beDataBase *, int, const char *);
-extern "C" unsigned long long beDataBase_GetRecordBool(beDataBase *, int, const char *);
-extern "C" char *beDataBase_GetRecordString(beDataBase *, int, const char *);
-extern "C" int beDataBase_GetRecordCount(beDataBase *);
-extern "C" int g_igFont_metaObject[4];
 extern "C" int g_igLightSet_metaObject[4];
 extern "C" void beLuaDataObject_userDestruct(beLuaDataObject *self);
 extern "C" unsigned char g_useOwnerAllocator;

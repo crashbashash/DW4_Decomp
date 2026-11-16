@@ -1,8 +1,8 @@
 int Gap__Gui__igOnOffColorChanger__vfunc_23(int arg0, OnOffColorState *s) { int n; bool t, f; if (!s->enabled) return arg0 + 0x48; t = s->on; n = 0; if (t) n += 1; f = s->hilite && t; if (s->current ^ f) n += 2; return arg0 + n * 0x10 + 8; }
 
-void igOnOffColorChanger_SetColor(igBasicColorChanger *arg0, int arg1, int arg2, int arg3, void *arg4)
+void igOnOffColorChanger_SetColor(igBasicColorChanger *changer, int highlighted, int on, int disabled, const igVec4f *color)
 {
-    igBasicColorChanger_SetColor(arg0, arg1, arg2, arg3, arg4);
+    igBasicColorChanger_SetColor(changer, highlighted, on, disabled, color);
 }
 
 igVec3f FUN_00453b90(A *a) {

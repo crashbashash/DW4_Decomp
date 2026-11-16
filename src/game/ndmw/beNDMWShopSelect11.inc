@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWShopSelect11_metaObject;
 
-void beNDMWShopSelect11_Create(int allocator) {
+beNDMWShopSelect11 *beNDMWShopSelect11_Create(int allocator) {
     beNDMWShopSelect11_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopSelect11_metaObject, allocator);
+    return (beNDMWShopSelect11 *)igMetaObject_CreateInstance(g_beNDMWShopSelect11_metaObject, allocator);
 }
 
 void *beNDMWShopSelect11_GetMetaObject(void) {

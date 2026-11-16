@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWMdlEnemyInfoWork_metaObject;
 
-void beNDMWMdlEnemyInfoWork_Create(int allocator) {
+beNDMWMdlEnemyInfoWork *beNDMWMdlEnemyInfoWork_Create(int allocator) {
     beNDMWMdlEnemyInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlEnemyInfoWork_metaObject, allocator);
+    return (beNDMWMdlEnemyInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlEnemyInfoWork_metaObject, allocator);
 }
 
 void *beNDMWMdlEnemyInfoWork_GetReadyMetaObject(void) {

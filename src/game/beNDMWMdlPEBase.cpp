@@ -1,4 +1,7 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWMdlPEBase.h"
+#include "dw4/beNDMWMdlPEBaseInfoWork.h"
+#include "dw4/beNDMWShinkaCtrl.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/igTDataList.h"
@@ -55,26 +58,20 @@ extern "C" int DamageSeq_GetMetaEnum(...);
 extern "C" int StatusName_GetMetaEnum(...);
 extern "C" int MsgAction_GetMetaEnum(void);
 
-extern "C" void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *self, int insight, int playerNo);
 extern "C" void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self);
 extern "C" void beNDMWShinkaObject_Load(beNDMWShinkaObject *self, beNDMWGameRam *gameRam, int playerNo, int form);
 extern "C" int beNDMWMdlPEBase_ShowStatusIcon(beNDMWMdlPEBase *self, beBaseInfoRam *ram, const char *iconName, int iconRamNo, int slot, bool restart);
 extern "C" void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
 extern "C" void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
 extern "C" void beNDMWMdlPEBase_RecalcPlayer(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
 extern "C" int beNDMWMdlPEBase_OnPreMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message);
 extern "C" void beNDMWMdlPEBaseInfoWork__Destroy(beNDMWMdlPEBaseInfoWork *self);
-extern "C" int beNDMWMdlPEBaseInfoWork_IsPoisoned(beNDMWMdlPEBaseInfoWork *self);
-extern "C" void beNDMWMdlPEBaseInfoWork_CurePoison(beNDMWMdlPEBaseInfoWork *self, beBaseInfoRam *ram);
 extern "C" int beNDMWMdlPEBaseInfoWork__GetMeta(void);
 extern "C" int beNDMWMdlPEBase__GetMeta(void);
 
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" int g_beNDMWGameRam_metaObject[4];
-extern "C" int g_beNDMWMdlPEBaseInfoWork_metaObject[4];
-extern "C" int g_beNDMWMdlPEBase_metaObject[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_stringPool[4];
@@ -992,12 +989,12 @@ void beNDMWMdlPEBaseInfoWork_CurePoison(beNDMWMdlPEBaseInfoWork *self, beBaseInf
 
 int beNDMWMdlPEBaseInfoWork__GetMeta(void)
 {
-    return g_beNDMWMdlPEBaseInfoWork_metaObject[0];
+    return (int)g_beNDMWMdlPEBaseInfoWork_metaObject;
 }
 
 int beNDMWMdlPEBase__GetMeta(void)
 {
-    return g_beNDMWMdlPEBase_metaObject[0];
+    return (int)g_beNDMWMdlPEBase_metaObject;
 }
 
 #pragma pop

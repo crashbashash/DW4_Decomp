@@ -6,7 +6,10 @@ igMetaField *g_beMessengerWork_messageMetaField;
 igMetaField *g_beMessengerWork_findRamNoListMetaField;
 igMetaField *g_beMessengerWork_findRamListMetaField;
 
-void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject,allocator));}
+beMessengerWork *beMessengerWork_Create(void *allocator) {
+    beMessengerWork_EnsureRegistered();
+    return (beMessengerWork *)igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject,allocator);
+}
 
 void *beMessengerWork_GetMetaObject(void) {
     igMetaObject *g = g_beMessengerWork_metaObject;

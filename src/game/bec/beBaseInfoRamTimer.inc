@@ -6,9 +6,9 @@ igMetaField *g_beBaseInfoRamTimer_svWorldTimeMetaField;
 igMetaField *g_beBaseInfoRamTimer_svBeforTimeMetaField;
 igMetaField *g_beBaseInfoRamTimer_keikaFrameMetaField;
 
-void beBaseInfoRamTimer_Create(int allocator) {
+beBaseInfoRamTimer *beBaseInfoRamTimer_Create(int allocator) {
     beBaseInfoRamTimer_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589D78, allocator);
+    return (beBaseInfoRamTimer *)igMetaObject_CreateInstance(*(int *)0x589D78, allocator);
 }
 
 void *beBaseInfoRamTimer_GetMetaObject(void) {

@@ -133,6 +133,7 @@ extern int (*adxm_old_cbf)(int arg);
 extern volatile int adxt_vsync_cnt;
 int SVM_ExecSvrVint();
 int ADXPS2_ExecVint(int arg);
+void ADXPS2_WakeupMainThrd(void);
 void ADXM_SetupThrd(AdxmThreadPrm *tprm);
 void adxm_ShutdownMwIdleThrd(void);
 void adxm_ShutdownVsyncThrd(void);

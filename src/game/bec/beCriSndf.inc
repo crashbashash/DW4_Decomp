@@ -3,9 +3,9 @@ igMetaField *g_beCriSndf_reqMetaField;
 igMetaField *g_beCriSndf_seqMetaField;
 igMetaField *g_beCriSndf_isPlayingMetaField;
 
-void beCriSndf_Create(int allocator) {
+beCriSndf *beCriSndf_Create(int allocator) {
     beCriSndf_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589AB0, allocator);
+    return (beCriSndf *)igMetaObject_CreateInstance(*(int *)0x589AB0, allocator);
 }
 
 igMetaObject *beCriSndf_GetOrCreateMetaObject(void) {

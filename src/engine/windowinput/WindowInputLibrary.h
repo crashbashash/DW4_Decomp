@@ -3,6 +3,8 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igInterfaceManager.h"
+#include "dw4/igWindow.h"
 
 struct Rt;
 struct Fld;
@@ -27,7 +29,6 @@ extern "C" void igVisualContext_EnsureRegistered(void);
 extern "C" unsigned char g_WindowInputLibrary_registered;
 extern "C" void WindowInputLibrary_MarkRegistered(void);
 extern "C" int igMetaObject_CreateInstance(int, int);
-extern "C" void igWindow_CreateInstance(int arg0);
 extern "C" igMetaObject *igMetaObject_Create(...);
 extern "C" void *Memory_GetAllocatorBySelector(...);
 extern "C" igMetaObject *g_igWindow_metaObject;
@@ -49,7 +50,6 @@ extern "C" igMetaObject *igInterfaceManager_GetMetaObject(void);
 extern "C" void FUN_00145f60(void);
 extern "C" char igObject_GetMetaObject_ParentAccessor[];
 extern "C" char igObject_Register[];
-extern "C" void igInterfaceManager_Register(void);
 extern "C" void thunk_igInterfaceManager_GetMetaObject(void);
 extern "C" struct Fld *igMetaObject_GetFieldAt(...);
 extern "C" int igMetaObject_GetFieldCount(...);

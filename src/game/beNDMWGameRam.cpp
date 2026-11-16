@@ -1,5 +1,6 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
+#include "dw4/beNDMWGameRam.h"
 #include "dw4/listSet.h"
 #include "dw4/igRandomNumberDispatchView.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
@@ -98,7 +99,6 @@ extern "C" int beNDMWGameRam_igSmartPointer_beDataBase_Get(int *p);
 extern "C" int beNDMWGameRam_igSmartPointer_igIntList_Get(int *p);
 extern "C" int beNDMWGameRam_igSmartPointer_igBoolList_Get(int *p);
 extern "C" void List_RemoveWordAt(void *list, int index);
-extern "C" void beNDMWGameRam_igObjectList_Remove(void *list, int index);
 /* What the allocator helpers return by value: a class with a copy constructor, so it comes back through a hidden return slot. */ struct AllocatorValue { int v; AllocatorValue(int value):v(value) {} AllocatorValue(const AllocatorValue &o):v(o.v) {} };
 extern "C" AllocatorValue beNDMWGameRam_beNDMWItemAbilityChip_MakeAllocatorValue(int value);
 extern "C" AllocatorValue beNDMWGameRam_beNDMWItemYellowArmor_MakeAllocatorValue(int value);
@@ -342,7 +342,6 @@ public:
     ~RamRef() { beNDMWGameRamInfoRam *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" int beNDMWGameRam_AddInfo(beNDMWGameRam *self);
-extern "C" int g_beNDMWGameRam_metaObject[4];
 extern "C" int GETDATABASE_3[4];
 extern "C" int shinka_2[4];
 extern "C" int DATABASE_3[4];
@@ -384,8 +383,6 @@ extern "C" int g_beFont_metaObject[4];
 extern "C" void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *modelName, StringRef name);
 extern "C" void beNDMWGameRam_JoinPlayerWithUnicodeName(beNDMWGameRam *self, int index, void *modelName, RecoveryRef<0> name);
 extern "C" void beNDMWGameRam_LeavePlayer(beNDMWGameRam *self, int index);
-extern "C" int beNDMWGameRam_ChangeHp(beNDMWGameRam *self, int player_index, int delta, int absolute);
-extern "C" void beNDMWGameRam_ChangeMp(beNDMWGameRam *self, int player_index, int delta);
 /* The flat field is const: its read is created before the *out reload so the register colouring puts
  * the field in a0 and the running total in v1. */
 struct BonusItem { char pad[20]; const int flat; };
@@ -415,7 +412,6 @@ struct StatHelpers {
         return (Ref *)g->_dBShinka;
     }
 };
-extern "C" int beNDMWGameRam_CalcMaxPoints(beNDMWGameRam *self, int index, int species, int isHp);
 struct AttributeHelpers {
     static inline void release_ref(igObject *object)
     {
@@ -438,7 +434,6 @@ struct AttributeHelpers {
         return (igObject *)g->_dBShinka;
     }
 };
-extern "C" int beNDMWGameRam_CalcAttribute(beNDMWGameRam *self, int index, int species, int attribute);
 /* Recomputes one player's derived stats; `apply` says whether the equipment, chip and skill
  * modifiers are applied on top of the database/UPDATA/DOWNDATA base values. "MHP"/MMP are clamped to
  * 99999 and the attributes and element resistances to 1..9999. The player pointer and the
@@ -1995,8 +1990,6 @@ int beNDMWLoadIntf2_igIntList_GetData(...);
 int beNDMWLoadIntf2_Memory_SelectAllocator(...);
 void igMatrix44f_Copy(...);
 void igMatrix44f_SetIdentity(...);
-void *FightCom_GetMetaEnum(...);
-void *GameRamMessage_GetMetaEnum(...);
 void *beNDMWItemAbilityChip_Create(...);
 void *beNDMWItemYellowArmor_Create(...);
 void *beNDMWItemBlueArmor_Create(...);
@@ -5133,7 +5126,7 @@ int beNDMWGameRam_igStringRef_Get(int *p)
 
 int beNDMWGameRam_GetMeta(void)
 {
-    return g_beNDMWGameRam_metaObject[0];
+    return (int)g_beNDMWGameRam_metaObject;
 }
 
 int beNDMWGameRam_GetInfoMeta(void) {

@@ -1,6 +1,8 @@
 /* The title windows of the status screens: the shared beNDMWWindowTitle update, and the model and
  * text setup of beNDMWStatusTitle00..04 (background, Digimon face, account and title plates). */
 #include "dw4/reflected.h"
+#include "dw4/beNDMWStatusTitle01.h"
+#include "dw4/beNDMWStatusTitle03.h"
 #include "dw4/beNDMWWindowSetupDispatchView.h"
 
 extern "C" void beNDMWWindow_ClearQueuedText(beNDMWWindow *self);
@@ -134,8 +136,6 @@ extern "C" void beNDMWStatusTitle00_Setup(beNDMWStatusTitle00 *self) {
     beNDMWWindow_PresentModelAtOrigin(self, "i_bgclear", 0, "SQ_OPEN", "SQ_CLOSE");
 }
 
-extern "C" void beNDMWStatusTitle01_ShowStatusLayout(beNDMWStatusTitle01 *self);
-extern "C" void beNDMWStatusTitle01_ShowShopLayout(beNDMWStatusTitle01 *self);
 
 /* Player title setup: queues the twelve STWINFONT06 layout texts (font030..font039, font060,
  * font061) for closing, fills the STWINFONT02/04/06 header and value texts with a blank, runs
@@ -332,17 +332,15 @@ extern "C" void beNDMWStatusTitle04_Setup(beNDMWStatusTitle04 *self) {
 }
 
 extern "C" int g_beNDMWStatusTitle04_metaObject[4];
-extern "C" int g_beNDMWStatusTitle03_metaObject[4];
 extern "C" int g_beNDMWStatusTitle02_metaObject[4];
-extern "C" int g_beNDMWStatusTitle01_metaObject[4];
 extern "C" int g_beNDMWStatusTitle00_metaObject[4];
 extern "C" int g_beNDMWWindowTitle_metaObject[4];
 
 /* vfunc_20 of each title class returns its class meta object. */
 extern "C" int beNDMWStatusTitle04_GetMeta(void) { return g_beNDMWStatusTitle04_metaObject[0]; }
-extern "C" int beNDMWStatusTitle03_GetMeta(void) { return g_beNDMWStatusTitle03_metaObject[0]; }
+extern "C" int beNDMWStatusTitle03_GetMeta(void) { return (int)g_beNDMWStatusTitle03_metaObject; }
 extern "C" int beNDMWStatusTitle02_GetMeta(void) { return g_beNDMWStatusTitle02_metaObject[0]; }
-extern "C" int beNDMWStatusTitle01_GetMeta(void) { return g_beNDMWStatusTitle01_metaObject[0]; }
+extern "C" int beNDMWStatusTitle01_GetMeta(void) { return (int)g_beNDMWStatusTitle01_metaObject; }
 extern "C" int beNDMWStatusTitle00_GetMeta(void) { return g_beNDMWStatusTitle00_metaObject[0]; }
 extern "C" int beNDMWWindowTitle_GetMeta(void) { return g_beNDMWWindowTitle_metaObject[0]; }
 

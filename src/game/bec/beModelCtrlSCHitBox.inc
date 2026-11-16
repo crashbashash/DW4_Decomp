@@ -6,9 +6,9 @@ igMetaField *g_beModelCtrlSCHitBox_offsetMetaField;
 igMetaField *g_beModelCtrlSCHitBox_boxSizeMetaField;
 igMetaField *g_beModelCtrlSCHitBox_isPositionLockMetaField;
 
-void beModelCtrlSCHitBox_Create(int allocator) {
+beModelCtrlSCHitBox *beModelCtrlSCHitBox_Create(int allocator) {
     beModelCtrlSCHitBox_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5887C8, allocator);
+    return (beModelCtrlSCHitBox *)igMetaObject_CreateInstance(*(int *)0x5887C8, allocator);
 }
 
 igMetaObject *beModelCtrlSCHitBox_GetMetaObject(void) {

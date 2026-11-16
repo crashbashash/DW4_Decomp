@@ -9,6 +9,9 @@
 #include "dw4/igLodDispatchView.h"
 #include "dw4/beTime.h"
 #include "dw4/listSet.h"
+#include "dw4/beMeterCtrlNode.h"
+#include "dw4/beModelCtrl.h"
+#include "dw4/beModelCtrlInfoWork.h"
 #define SELECT_ALLOCATOR(var, arg) { int base_ = igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
@@ -57,10 +60,7 @@ public:
 };
 /* The matrix of a transform node held as a plain reference field. */
 static inline float *NodeMatrix(int node) { return ((igTransform *)node)->_m; }
-extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
-extern "C" int beMeterCtrlNode_ResolveMetaObject(...);
-extern "C" void beMeterCtrlNode_RegisterTraversalFunction(void);
-extern "C" void beModelCtrl_DrawDebugHitBox(void);
+extern "C" int igTraversal_RegisterFunction(int, igMetaObject *, void (*)(void));
 extern "C" int thunk_igAABox_Transform(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
@@ -112,7 +112,6 @@ extern "C" float atan2f(float, float);
 extern "C" int Vec3f_TransformDirection(...);
 extern "C" void * StringPool_Intern(...);
 extern "C" int beMessenger_GetObjectCount(...);
-extern "C" void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, const char *seqName, const char *labelName);
 extern "C" int sprintf(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int beBaseInfoRam_RemoveTimer(...);
@@ -135,9 +134,6 @@ extern "C" int igAABox_Transform(...);
 extern "C" bool igAABox_IntersectBox(void *, int);
 extern "C" void igMatrix44f_PreRotateAxisAngle(void *, void *, float);
 extern "C" int igMatrix44f_SetEulerRotation(void *, float, float, float);
-extern "C" void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram);
-extern "C" void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram);
-extern "C" int beModelCtrl_GetMessageEnum(void);
 extern "C" void beModelCtrlSubCom_AddSound(int, const char *, float);
 extern "C" void beMessenger_AppendBool(int, unsigned char);
 extern "C" void beMessenger_AppendInt(int, int);
@@ -149,10 +145,10 @@ extern "C" const char * beMessenger_GetString(...);
 extern "C" int beMessenger_GetVec3Count(int);
 extern "C" void beMessenger_PopArgContext(int);
 extern "C" void beMessenger_PushArgContext(int);
-extern "C" unsigned beMessenger_ResolveEnumValue(int, int, const char *);
+extern "C" unsigned beMessenger_ResolveEnumValue(int, igMetaEnum *, const char *);
 extern "C" int beModelCtrlInfoRideOn4_GetMeta(void);
 extern "C" int beModelCtrlInfoRideOn3_GetMeta(void);
-extern "C" int beModelCtrl_GetMeta(void);
+extern "C" igMetaObject *beModelCtrl_GetMeta(void);
 extern "C" int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *data);
 extern "C" int beMeterCtrlNode_TraversalFunction(igCommonTraversal *traversal, void *node);
 extern "C" int g_igCommonTraversal_travProcs[4];
@@ -321,7 +317,6 @@ extern "C" int g_bltShootRamNo[4];
 extern "C" int g_hitterRecNo[4];
 extern "C" char g_mdlDmgTurn[16];
 extern "C" int g_mdlCallName[4];
-extern "C" void beModelCtrl_CallLua(beModelCtrl *self, beBaseInfoRam *ram, const char *function, const char *callName, const char *infoName, int bulletKind, int bulletBoxNo, const char *hitterName, int hitterRamNo, int hitterRecNo);
 extern "C" char BHit_2[];
 extern "C" int beModelCtrl_RunLuaCall(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlLUACALL *command);
 extern "C" char aim[];
@@ -362,7 +357,6 @@ extern "C" igMetaObject *g_beModelCtrlAIMAP_metaObject;
 extern "C" igMetaObject *g_beModelCtrlMSGBOX_metaObject;
 extern "C" igMetaObject *g_beModelCtrlLABEL_metaObject;
 extern "C" igMetaObject *g_beModelCtrlJUMP_metaObject;
-extern "C" void beModelCtrl_RunCommands(beModelCtrl *self, beModelCtrlInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
 
 extern "C" void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work, int force);
 extern "C" char SQ_NONE[];
@@ -431,7 +425,6 @@ struct DataList {
 extern "C" int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char *message);
 extern "C" int g_beModelCtrlInfoRideOn4_metaObject[4];
 extern "C" int g_beModelCtrlInfoRideOn3_metaObject[4];
-extern "C" int g_beModelCtrl_metaObject[4];
 
 extern "C" int igTraversal_TraverseChildren(igCommonTraversal *traversal, void *node);
 extern "C" int igTraversal_TraverseNode(igCommonTraversal *traversal, void *node);
@@ -3337,7 +3330,7 @@ int beModelCtrlInfoRideOn2_GetMeta(void)
     return g_beModelCtrlInfoRideOn2_metaObject[0];
 }
 
-int beModelCtrl_GetMeta(void)
+igMetaObject *beModelCtrl_GetMeta(void)
 {
-    return g_beModelCtrl_metaObject[0];
+    return g_beModelCtrl_metaObject;
 }

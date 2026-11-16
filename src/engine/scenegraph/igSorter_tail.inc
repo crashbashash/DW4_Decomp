@@ -193,7 +193,7 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
         arg0->f114 = arg2;
         temp_s0 = arg0->f16;
         if (temp_s0->f20 >= temp_s0->f8) {
-            igObjectPool_Grow((List_1dca40 *)temp_s0, (Obj_1dca40 * (*)(int))&FUN_00197ab0);
+            igObjectPool_Grow((igObjectPool *)temp_s0, (igObject *(*)(int))&FUN_00197ab0);
         }
         temp_a0 = temp_s0->f20;
         temp_s0->f20 = temp_a0 + 1;
@@ -219,7 +219,7 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
     }
 }
 
-void igSwitch_EnableChild(void *arg0, unsigned int arg1) {
+void igSwitch_EnableChild(igSwitch *arg0, unsigned int arg1) {
     int *temp_a1;
     int temp_a2_2;
     unsigned int temp_a3;
@@ -236,12 +236,11 @@ void igSwitch_EnableChild(void *arg0, unsigned int arg1) {
     }
 }
 
-void igSwitch_EnableAllChildren(int *p)
-{
-    igBitMask_SetAll((igDataList *)(*(int *)((char *)p + 32)));
+void igSwitch_EnableAllChildren(igSwitch *sw) {
+    igBitMask_SetAll((igBitMask *)sw->_childMask);
 }
 
-void igSwitch_DisableChild(void *arg0, unsigned int arg1) {
+void igSwitch_DisableChild(igSwitch *arg0, unsigned int arg1) {
     int *temp_a1;
     int temp_a2_2;
     unsigned int temp_a3;
@@ -258,26 +257,25 @@ void igSwitch_DisableChild(void *arg0, unsigned int arg1) {
     }
 }
 
-void igSwitch_DisableAllChildren(int *p)
-{
-    igBitMask_ClearAll((igDataList *)(*(int *)((char *)p + 32)));
+void igSwitch_DisableAllChildren(igSwitch *sw) {
+    igBitMask_ClearAll((igBitMask *)sw->_childMask);
 }
 
-int igSwitch_AppendChild(void *arg0, int arg1) {
+int igSwitch_AppendChild(igSwitch *sw, igNode *child) {
     int temp_s0;
     int var_a1;
     int a0v;
     void *temp_v0;
 
-    temp_s0 = igGroup_AppendChild((void *)arg0, arg1);
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 28));
-    a0v = *(int *)((char *)(arg0) + 32);
+    temp_s0 = igGroup_AppendChild((igGroup *)sw, child);
+    temp_v0 = (void *)(*(int *)((char *)(sw) + 28));
+    a0v = *(int *)((char *)(sw) + 32);
     if (temp_v0 != 0) {
         var_a1 = *(int *)((char *)(temp_v0) + 8);
     } else {
         var_a1 = 0;
     }
-    igBitMask_SetBitCount((void *)a0v, var_a1);
+    igBitMask_SetBitCount((igBitMask *)a0v, var_a1);
     return temp_s0;
 }
 

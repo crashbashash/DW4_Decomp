@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWGameRamInfo_metaObject;
 
-void beNDMWGameRamInfo_Create(int allocator) {
+beNDMWGameRamInfo *beNDMWGameRamInfo_Create(int allocator) {
     beNDMWGameRamInfo_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWGameRamInfo_metaObject, allocator);
+    return (beNDMWGameRamInfo *)igMetaObject_CreateInstance(g_beNDMWGameRamInfo_metaObject, allocator);
 }
 
 void *beNDMWGameRamInfo_ResolveMetaObject(void) {

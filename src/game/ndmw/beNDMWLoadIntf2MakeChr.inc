@@ -5,9 +5,9 @@ igMetaField *g_beNDMWLoadIntf2MakeChr_degiNameMetaField;
 igMetaField *g_beNDMWLoadIntf2MakeChr_nameCurMetaField;
 igMetaField *g_beNDMWLoadIntf2MakeChr_mojiSelPointMetaField;
 
-void beNDMWLoadIntf2MakeChr_Create(int allocator) {
+beNDMWLoadIntf2MakeChr *beNDMWLoadIntf2MakeChr_Create(int allocator) {
     beNDMWLoadIntf2MakeChr_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2MakeChr_metaObject, allocator);
+    return (beNDMWLoadIntf2MakeChr *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2MakeChr_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2MakeChr_ResolveMetaObject(void)

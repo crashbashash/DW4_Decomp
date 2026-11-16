@@ -1,6 +1,6 @@
-int igGraphPath_Create(int arg0) {
+igGraphPath *igGraphPath_Create(int allocator) {
     igGraphPath_EnsureRegistered();
-    return igMetaObject_CreateInstance((int)g_igGraphPath_metaObject, arg0);
+    return (igGraphPath *)igMetaObject_CreateInstance((int)g_igGraphPath_metaObject, allocator);
 }
 
 igMetaObject *g_igGraphPath_metaObject;

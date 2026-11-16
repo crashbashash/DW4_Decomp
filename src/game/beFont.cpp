@@ -2,6 +2,8 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igVertexArrayLock.h"
 #include "dw4/igObjectDispatchView.h"
+#include "dw4/beFont.h"
+#include "dw4/beUnicodeObj.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -84,12 +86,9 @@ extern "C" {
 void beFont_Start(void);
 void beFont_Stop(beFont *self);
 void beFont_OnAddRam(beFont *self, int receiver);
-void beFont_Prepare(beFont *self);
 int beFont_GetInfoMeta(void);
 void beFont_UpdateRam(void);
 int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work);
-void beFont_AddFontImages(beFont *self, igNamedObjectInfo *info);
-igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *text);
 int beFont_FindFontIndex(beFont *self, int name);
 void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int index);
 void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontIndex, int vertexCount);
@@ -99,9 +98,8 @@ void beFont_AlignLines(beFont *self, int text, beFontInfoData *entry, igVertexAr
 void beFont_LockVertexArray(beFont *self, igVertexArrayView *vertices, igVertexArrayLock *positions, igVertexArrayLock *texCoords);
 int beFont_FindFirstLayoutEntry(beFont *self, beBaseInfoRam *ram, int dataName, int setName);
 int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram);
-int beFont_GetMeta(void);
+igMetaObject *beFont_GetMeta(void);
 void beUnicodeObj_userDestruct(beUnicodeObj *self);
-void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length);
 igMetaObject *beUnicodeObj_GetMeta(void);
 
 void beBaseInfoManager_Start(void);
@@ -123,7 +121,7 @@ int igStringObj_Clear(...);
 int igStringObj_Insert(igStringObj *, char *, int, int);
 void igStringObj_Set(void *, char *);
 int beMessenger_RegisterReceiver(int, int, char *, int, int);
-int beMessenger_ResolveEnumValue(int, int, int);
+int beMessenger_ResolveEnumValue(int, igMetaEnum *, int);
 void beMessenger_SelectGroup(int, char *);
 void beMessenger_AppendString(int, char *);
 void beMessenger_DispatchSelected(int, char *);
@@ -135,14 +133,10 @@ int beMessenger_GetInt(int, int);
 void *beMessenger_GetObject(int, int);
 int beMessenger_GetString(int, int);
 void beMessenger_GetVec3(void *, int, int);
-int beFont_GetMessageEnum(...);
-int beFont_GetAlignEnum(...);
-int beFont_GetSwitchEnum(...);
 beFontGeomAttrPair *beFontGeomAttrPair_Create(void *);
 igGeometryAttr *igGeometryAttr_Create(void *);
 igVertexArrayView *igVertexArray_Create(...);
 int igVertexArrayLock_Init(igVertexArrayLock *);
-beUnicodeObj *beUnicodeObj_Create(int);
 int beFontImage_CountTriangles(int, int);
 int beFontImage_CountTrianglesWide(int, int);
 void igSwitch_EnableChild(void *, int);
@@ -270,10 +264,8 @@ extern int emptyString[4];
 extern int g_stringPool[4];
 extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
-extern int g_beFont_metaObject[4];
 extern int g_beFontInfo_metaObject[4];
 extern igMetaObject *g_beFontImage_metaObject[4];
-extern igMetaObject *g_beUnicodeObj_metaObject[4];
 extern igMetaObject *g_igColorAttr_metaObject[4];
 extern igMetaObject *g_igGroup_metaObject[4];
 extern igMetaObject *g_igAttrSet_metaObject[4];
@@ -521,7 +513,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             } else if (beMessenger_GetObjectCount(self->_messenger) > 0) {
                 igNodeView *object = (igNodeView *)beMessenger_GetObject(self->_messenger, 0);
                 object->GetMeta();
-                if (g_beUnicodeObj_metaObject[0] == object->GetMeta()) {
+                if (g_beUnicodeObj_metaObject == object->GetMeta()) {
                     text = (igObject *)object;
                 } else {
                     igStringObj_Set(scratch.p, "\202\251\202\347\202\301\202\333");
@@ -1220,12 +1212,12 @@ void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length) {
 
 igMetaObject *beUnicodeObj_GetMeta(void)
 {
-    return g_beUnicodeObj_metaObject[0];
+    return g_beUnicodeObj_metaObject;
 }
 
-int beFont_GetMeta(void)
+igMetaObject *beFont_GetMeta(void)
 {
-    return g_beFont_metaObject[0];
+    return g_beFont_metaObject;
 }
 
 #pragma pop

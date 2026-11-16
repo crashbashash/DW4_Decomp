@@ -9,9 +9,9 @@ igMetaField *g_beGeneraterInfoWork_geneEnemyNameMetaField;
 igMetaField *g_beGeneraterInfoWork_geneEnemyRecNoMetaField;
 igMetaField *g_beGeneraterInfoWork_geneEnemyMHpMetaField;
 
-void beGeneraterInfoWork_Create(int allocator) {
+beGeneraterInfoWork *beGeneraterInfoWork_Create(int allocator) {
     beGeneraterInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589478, allocator);
+    return (beGeneraterInfoWork *)igMetaObject_CreateInstance(*(int *)0x589478, allocator);
 }
 
 igMetaObject *beGeneraterInfoWork_GetOrCreateMetaObject(void) {

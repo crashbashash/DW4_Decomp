@@ -3,9 +3,9 @@ igMetaField *g_beNumberCtrlInfoWork_dispNumMetaField;
 igMetaField *g_beNumberCtrlInfoWork_realNumMetaField;
 igMetaField *g_beNumberCtrlInfoWork_changeNumMetaField;
 
-void beNumberCtrlInfoWork_Create(int allocator) {
+beNumberCtrlInfoWork *beNumberCtrlInfoWork_Create(int allocator) {
     beNumberCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588630, allocator);
+    return (beNumberCtrlInfoWork *)igMetaObject_CreateInstance(*(int *)0x588630, allocator);
 }
 
 igMetaObject *beNumberCtrlInfoWork_GetOrCreateMetaObject(void) {

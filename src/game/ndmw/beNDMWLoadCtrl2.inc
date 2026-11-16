@@ -3,9 +3,9 @@ igMetaField *g_beNDMWLoadCtrl2_padManagerMetaField;
 igMetaField *g_beNDMWLoadCtrl2_cameraModeMetaField;
 igMetaField *g_beNDMWLoadCtrl2_lightModeMetaField;
 
-void beNDMWLoadCtrl2_CreateInstance(int allocator) {
+beNDMWLoadCtrl2 *beNDMWLoadCtrl2_CreateInstance(int allocator) {
     beNDMWLoadCtrl2_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadCtrl2_metaObject, allocator);
+    return (beNDMWLoadCtrl2 *)igMetaObject_CreateInstance(g_beNDMWLoadCtrl2_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadCtrl2_GetOrCreateMetaObject(void) {

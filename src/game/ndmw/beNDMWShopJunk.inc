@@ -1,6 +1,6 @@
-void beNDMWShopJunk_Create(int allocator) {
+beNDMWShopJunk *beNDMWShopJunk_Create(int allocator) {
     beNDMWShopJunk_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopJunk_metaObject, allocator);
+    return (beNDMWShopJunk *)igMetaObject_CreateInstance(g_beNDMWShopJunk_metaObject, allocator);
 }
 
 void *beNDMWShopJunk_GetMetaObject(void) {

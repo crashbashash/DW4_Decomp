@@ -1,4 +1,14 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWItemAbilityChip.h"
+#include "dw4/beNDMWItemBase.h"
+#include "dw4/beNDMWItemBlueArmor.h"
+#include "dw4/beNDMWItemDisk.h"
+#include "dw4/beNDMWItemImportant.h"
+#include "dw4/beNDMWItemInstant.h"
+#include "dw4/beNDMWItemRevisionPocketBase.h"
+#include "dw4/beNDMWItemWaza.h"
+#include "dw4/beNDMWItemWeapon.h"
+#include "dw4/beNDMWItemYellowArmor.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igRandomNumberDispatchView.h"
 
@@ -61,14 +71,6 @@ extern "C" char *beDataBase_GetRecordString(beDataBase *, int, const char *);
 
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beNDMWGameRam_metaObject[4];
-extern "C" int g_beNDMWItemWeapon_metaObject[4];
-extern "C" int g_beNDMWItemBlueArmor_metaObject[4];
-extern "C" int g_beNDMWItemYellowArmor_metaObject[4];
-extern "C" int g_beNDMWItemAbilityChip_metaObject[4];
-extern "C" int g_beNDMWItemDisk_metaObject[4];
-extern "C" int g_beNDMWItemInstant_metaObject[4];
-extern "C" int g_beNDMWItemImportant_metaObject[4];
-extern "C" int g_beNDMWItemWaza_metaObject[4];
 
 /* Dispatch-only ABI projection of an item: MW's two-word vtable prefix plus 21 slots puts the
  * database selector (vfunc_21) at 92. */
@@ -103,45 +105,28 @@ static inline igRandomNumberDispatchView *systemRandom(int system) {
 }
 
 extern "C" beDataBase *beNDMWItemBase_RequestDataBase(beNDMWItemBase *self, beNDMWStatus *status, const char *name);
-extern "C" int beNDMWItemBase_GetRecordInt(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
-extern "C" unsigned long long beNDMWItemBase_GetRecordBool(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
-extern "C" char *beNDMWItemBase_GetRecordString(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
-extern "C" igVec3f beNDMWItemBase_GetRevisionColor(beNDMWItemBase *item);
-extern "C" int beNDMWItemRevisionPocketBase_GetPrice(beNDMWItemRevisionPocketBase *self, beNDMWStatus *status, const char *priceKey);
-extern "C" int beNDMWItemBase_IndexOfRecNo(igObjectList *items, int recNo);
 extern "C" void beNDMWItemRevisionBase_RollRevision(beNDMWItemRevisionBase *self, beNDMWStatus *status, unsigned int level);
 extern "C" void beNDMWItemRevisionPocketBase_RollPocket(beNDMWItemRevisionPocketBase *self, beNDMWStatus *status, int level);
 extern "C" beDataBase *beNDMWItemWeapon_GetDataBase(beNDMWItemWeapon *self, beNDMWStatus *status);
-extern "C" void beNDMWItemWeapon_Set(beNDMWItemWeapon *self, int recNo, int pocket, int revision);
-extern "C" void beNDMWItemWeapon_SetRandom(beNDMWItemWeapon *self, int recNo, beNDMWStatus *status, int level);
 extern "C" int beNDMWItemWeapon_Pack(beNDMWItemWeapon *self);
 extern "C" void beNDMWItemWeapon_Unpack(beNDMWItemWeapon *self, int packed);
 extern "C" beDataBase *beNDMWItemBlueArmor_GetDataBase(beNDMWItemBlueArmor *self, beNDMWStatus *status);
-extern "C" void beNDMWItemBlueArmor_Set(beNDMWItemBlueArmor *self, int recNo, int pocket, int revision);
-extern "C" void beNDMWItemBlueArmor_SetRandom(beNDMWItemBlueArmor *self, int recNo, beNDMWStatus *status, int level);
 extern "C" int beNDMWItemBlueArmor_Pack(beNDMWItemBlueArmor *self);
 extern "C" void beNDMWItemBlueArmor_Unpack(beNDMWItemBlueArmor *self, int packed);
 extern "C" beDataBase *beNDMWItemYellowArmor_GetDataBase(beNDMWItemYellowArmor *self, beNDMWStatus *status);
-extern "C" void beNDMWItemYellowArmor_Set(beNDMWItemYellowArmor *self, int recNo, int revision);
-extern "C" void beNDMWItemYellowArmor_SetRandom(beNDMWItemYellowArmor *self, int recNo, beNDMWStatus *status, int level);
 extern "C" int beNDMWItemYellowArmor_Pack(beNDMWItemYellowArmor *self);
 extern "C" void beNDMWItemYellowArmor_Unpack(beNDMWItemYellowArmor *self, int packed);
 extern "C" beDataBase *beNDMWItemAbilityChip_GetDataBase(beNDMWItemAbilityChip *self, beNDMWStatus *status);
-extern "C" void beNDMWItemAbilityChip_Set(beNDMWItemAbilityChip *self, int recNo);
 extern "C" int beNDMWItemAbilityChip_Pack(beNDMWItemAbilityChip *self);
 extern "C" void beNDMWItemAbilityChip_Unpack(beNDMWItemAbilityChip *self, int packed);
 extern "C" beDataBase *beNDMWItemDisk_GetDataBase(beNDMWItemDisk *self, beNDMWStatus *status);
-extern "C" void beNDMWItemDisk_Set(beNDMWItemDisk *self, int recNo);
 extern "C" int beNDMWItemDisk_Pack(beNDMWItemDisk *self);
 extern "C" void beNDMWItemDisk_Unpack(beNDMWItemDisk *self, int packed);
 extern "C" int beNDMWItemDisk_Use(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerNo);
 extern "C" beDataBase *beNDMWItemInstant_GetDataBase(beNDMWItemInstant *self, beNDMWStatus *status);
-extern "C" void beNDMWItemInstant_Set(beNDMWItemInstant *self, int recNo);
 extern "C" int beNDMWItemInstant_Use(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int playerNo);
 extern "C" beDataBase *beNDMWItemImportant_GetDataBase(beNDMWItemImportant *self, beNDMWStatus *status);
-extern "C" void beNDMWItemImportant_Set(beNDMWItemImportant *self, int recNo);
 extern "C" beDataBase *beNDMWItemWaza_GetDataBase(beNDMWItemWaza *self, beNDMWStatus *status);
-extern "C" void beNDMWItemWaza_Set(beNDMWItemWaza *self, int recNo, int baseNo);
 extern "C" int beNDMWItemWaza_GetMeta(void);
 extern "C" int beNDMWItemImportant_GetMeta(void);
 extern "C" int beNDMWItemInstant_GetMeta(void);
@@ -656,42 +641,42 @@ void beNDMWItemWaza_Set(beNDMWItemWaza *self, int recNo, int baseNo) {
 
 int beNDMWItemWaza_GetMeta(void)
 {
-    return g_beNDMWItemWaza_metaObject[0];
+    return (int)g_beNDMWItemWaza_metaObject;
 }
 
 int beNDMWItemImportant_GetMeta(void)
 {
-    return g_beNDMWItemImportant_metaObject[0];
+    return (int)g_beNDMWItemImportant_metaObject;
 }
 
 int beNDMWItemInstant_GetMeta(void)
 {
-    return g_beNDMWItemInstant_metaObject[0];
+    return (int)g_beNDMWItemInstant_metaObject;
 }
 
 int beNDMWItemDisk_GetMeta(void)
 {
-    return g_beNDMWItemDisk_metaObject[0];
+    return (int)g_beNDMWItemDisk_metaObject;
 }
 
 int beNDMWItemAbilityChip_GetMeta(void)
 {
-    return g_beNDMWItemAbilityChip_metaObject[0];
+    return (int)g_beNDMWItemAbilityChip_metaObject;
 }
 
 int beNDMWItemYellowArmor_GetMeta(void)
 {
-    return g_beNDMWItemYellowArmor_metaObject[0];
+    return (int)g_beNDMWItemYellowArmor_metaObject;
 }
 
 int beNDMWItemBlueArmor_GetMeta(void)
 {
-    return g_beNDMWItemBlueArmor_metaObject[0];
+    return (int)g_beNDMWItemBlueArmor_metaObject;
 }
 
 int beNDMWItemWeapon_GetMeta(void)
 {
-    return g_beNDMWItemWeapon_metaObject[0];
+    return (int)g_beNDMWItemWeapon_metaObject;
 }
 
 #pragma pop

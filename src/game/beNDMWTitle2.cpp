@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWTitle2.h"
 #define ALLOC(dst, obj)                                                                            \
     {                                                                                              \
         int alloc = igObject_GetAllocator(obj);                                                    \
@@ -63,9 +64,8 @@ extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" { char g_commonSettingsValid; }
+extern "C" { unsigned char g_commonSettingsValid; }
 extern "C" int g_beNDMWTitle2Info_metaObject[4];
-extern "C" int g_beNDMWTitle2_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWTitle2_Prepare(beNDMWTitle2 *self);
 /* Outer state, CTRL._st0. */
@@ -127,7 +127,7 @@ void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger) {
     int commonSettings;
 
     self->_messenger = messenger;
-    if ((*(unsigned char *)&g_commonSettingsValid) == 1) {
+    if (g_commonSettingsValid == 1) {
         beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
         commonSettings = beMessenger_GetObject(self->_messenger, 0);
         self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, "CAMERAMODE")) + 12));
@@ -1107,7 +1107,7 @@ int beNDMWTitle2_OnMessage(beNDMWTitle2 *self, beBaseInfoRam *ram, beMessengerWo
 
 int beNDMWTitle2_GetMeta(void)
 {
-    return g_beNDMWTitle2_metaObject[0];
+    return (int)g_beNDMWTitle2_metaObject;
 }
 
 #pragma pop

@@ -37,17 +37,17 @@ igMetaObject *FUN_00231020(void) {
     return g_igMessage_metaObject;
 }
 
-void *igInfoManager_Destroy(struct S *arg0, short arg1) {
+void *igInfoManager_Destroy(igInfoManager *manager, short flags) {
     void *p;
     int *h;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &g_igInfoManager_vtable[0];
-        if (arg0 != 0) {
-            arg0->f0 = &g_igNamedObject_vtable[0];
-            if (&arg0->f8) {
-                p = arg0->f8;
+    if (manager != 0) {
+        manager->_vtable = (int)g_igInfoManager_vtable;
+        if (manager != 0) {
+            manager->_vtable = (int)g_igNamedObject_vtable;
+            if (&manager->_name) {
+                p = (void *)manager->_name;
                 if (p != 0) {
                     h = (int *)((char *)(p) - 8);
                     rc = *(int *)((char *)(p) - 4) - 1;
@@ -58,11 +58,11 @@ void *igInfoManager_Destroy(struct S *arg0, short arg1) {
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(manager);
         }
     }
-    return arg0;
+    return manager;
 }
 
 igMetaObject *FUN_002310d0(void) {

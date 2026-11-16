@@ -146,27 +146,27 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
                 s5 = (int *)nd->_default;
             }
             pool = (igObjectPool *)arg1->_projectionMatrixPool;
-            if (pool->_freeIndex >= pool->_count) igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)&FUN_00134690));
+            if (pool->_freeIndex >= pool->_count) igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))((void *)&FUN_00134690));
             o = (char *)((int *)pool->_data)[pool->_freeIndex++];
             igMatrix44f_Multiply(o + 12, sp70, (char *)s5 + 12);
             FUN_001b1030((igAttrStackManager *)s1, (igAttr *)o);
-            igTraversal_TraverseChildren((int)arg1, (S_1e07a0 *)arg0);
+            igTraversal_TraverseChildren((igTraversal *)arg1, (igNode *)arg0);
             FUN_001b1100((struct A_1b1100 *)s1, (struct B_1b1100 *)o);
         }
     }
     if (arg0->_shadowUseBlend != 0) {
-        igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_00562798)[0]);
+        igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_00562798)[0]);
     } else {
-        igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627a0)[0]);
+        igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627a0)[0]);
     }
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627d8)[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627d0)[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)arg0->_stencilState);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627c0)[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627c8)[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)arg0->_shadowColorAttr);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627b8)[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627b0)[0]);
-    igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s1, (struct B_1b13d0 *)((int *)DAT_005627a8)[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627d8)[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627d0)[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)arg0->_stencilState);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627c0)[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627c8)[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)arg0->_shadowColorAttr);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627b8)[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627b0)[0]);
+    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627a8)[0]);
 }
 

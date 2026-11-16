@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWItemDisk_metaObject;
 igMetaField *g_beNDMWItemDisk_kazuMetaField;
 
-void beNDMWItemDisk_Create(int allocator) {
+beNDMWItemDisk *beNDMWItemDisk_Create(int allocator) {
     beNDMWItemDisk_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemDisk_metaObject, allocator);
+    return (beNDMWItemDisk *)igMetaObject_CreateInstance(g_beNDMWItemDisk_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemDisk_GetOrCreateMetaObject(void) {

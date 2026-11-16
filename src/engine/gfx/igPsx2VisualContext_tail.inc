@@ -1171,11 +1171,11 @@ void igPsx2VisualContext_InitFields(void) {
     temp_v0_31 = igMetaObject_GetFieldAt(meta, fieldStart + 0x89);
     igEnumMetaField_SetDefaultValue(temp_v0_31, 0);
     ((igMetaField *)temp_v0_31)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_31)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
+    *(igMetaEnum *(**)())&((igEnumMetaField *)temp_v0_31)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     temp_v0_32 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8A);
     igEnumMetaField_SetDefaultValue(temp_v0_32, 0);
     ((igMetaField *)temp_v0_32)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_32)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
+    *(igMetaEnum *(**)())&((igEnumMetaField *)temp_v0_32)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     temp_v0_33 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8B);
     igEnumMetaField_SetDefaultValue(temp_v0_33, 0);
     ((igMetaField *)temp_v0_33)->_persistent = 0;

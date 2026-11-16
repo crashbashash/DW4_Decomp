@@ -1,10 +1,10 @@
 #include "dw4/reflected.h"
 #include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/igobject_release.h"
+#include "dw4/beBaseInfoManager.h"
 
 extern "C" void beBaseInfoManager_Activate(void);
 extern "C" void beBaseInfoManager_Deactivate(void);
-extern "C" void beBaseInfoManager_Stop(void);
 extern "C" int igInsightCore_FindManager(...);
 extern "C" int igInsightCore_AddToScheduler(...);
 extern "C" int ObjectList_AppendRetained(...);
@@ -13,14 +13,11 @@ extern "C" int igInsightCore_RemoveFromScheduler(...);
 extern "C" int List_Reserve(...);
 extern "C" int igObject_Destroy(...);
 extern "C" int beSystem_IsRunning(...);
-extern "C" int beBaseInfoManager_GetMeta(void);
+extern "C" igMetaObject *beBaseInfoManager_GetMeta(void);
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
-extern "C" void beBaseInfoManager_Start(beBaseInfoManager *self);
-extern "C" int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info);
 extern "C" void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *self);
 extern "C" void beBaseInfoManager_Update(beBaseInfoManager *self);
-extern "C" int g_beBaseInfoManager_metaObject[4];
 
 void beBaseInfoManager_Activate(void)
 {
@@ -38,7 +35,7 @@ void beBaseInfoManager_Start(beBaseInfoManager *self) {
 }
 
 /* Slot 24 default: empty. */
-void beBaseInfoManager_Stop(void)
+void beBaseInfoManager_Stop(beBaseInfoManager *self)
 {
 }
 
@@ -136,8 +133,8 @@ void beBaseInfoManager_Update(beBaseInfoManager *self) {
     }
 }
 
-int beBaseInfoManager_GetMeta(void)
+igMetaObject *beBaseInfoManager_GetMeta(void)
 {
-    return g_beBaseInfoManager_metaObject[0];
+    return g_beBaseInfoManager_metaObject;
 }
 

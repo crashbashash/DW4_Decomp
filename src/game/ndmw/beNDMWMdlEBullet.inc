@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWMdlEBullet_metaObject;
 
-void beNDMWMdlEBullet_CreateInstance(int allocator) {
+beNDMWMdlEBullet *beNDMWMdlEBullet_CreateInstance(int allocator) {
     beNDMWMdlEBullet_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlEBullet_metaObject, allocator);
+    return (beNDMWMdlEBullet *)igMetaObject_CreateInstance(g_beNDMWMdlEBullet_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlEBullet_GetOrCreateMetaObject(void) {

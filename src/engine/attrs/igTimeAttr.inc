@@ -1,9 +1,9 @@
 igMetaObject *g_igTimeAttr_metaObject;
 igMetaField *g_igTimeAttr_timeMetaField;
 
-void igTimeAttr_CreateInstance(int arg0) {
+igTimeAttr *igTimeAttr_CreateInstance(int allocator) {
     FUN_00131040();
-    igMetaObject_CreateInstance(*(int *)0x55EC80, arg0);
+    return (igTimeAttr *)igMetaObject_CreateInstance(*(int *)0x55EC80, allocator);
 }
 
 igMetaObject *FUN_00130f60(void) {

@@ -5,9 +5,9 @@ igMetaField *g_beNDMWStatusSubMenu_receiptMetaField;
 igMetaField *g_beNDMWStatusSubMenu_playerNoListMetaField;
 igMetaField *g_beNDMWStatusSubMenu_playerDeviceCntMetaField;
 
-void beNDMWStatusSubMenu_Create(int allocator) {
+beNDMWStatusSubMenu *beNDMWStatusSubMenu_Create(int allocator) {
     beNDMWStatusSubMenu_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, allocator);
+    return (beNDMWStatusSubMenu *)igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, allocator);
 }
 
 void *beNDMWStatusSubMenu_GetMetaObject(void) {

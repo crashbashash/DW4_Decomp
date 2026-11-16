@@ -2,8 +2,8 @@ int Gap__Sg__igNode__vfunc_22(void) {
     return ((int)g_igNode_metaObject);
 }
 
-void igGraphPath_GetTransform(int arg0, int arg1, int arg2) {
-    FUN_001c59f0((OO *)arg0, FUN_001c59e0((void *)arg0), arg1, arg2);
+void igGraphPath_GetTransform(igGraphPath *path, igMatrix44f *matrix, int time) {
+    FUN_001c59f0((OO *)path, FUN_001c59e0(path), (int)matrix, time);
 }
 
 void FUN_001c5b80(SgLinkNode *o) {
@@ -57,17 +57,17 @@ guardHave:
     goto doneHave;
 }
 
-int igGroup_AppendChild(void *arg0, int arg1) {
+int igGroup_AppendChild(igGroup *group, igNode *child) {
     int var_s0;
     void *temp_v0;
 
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 28));
+    temp_v0 = (void *)(*(int *)((char *)(group) + 28));
     if (temp_v0 != 0) {
         var_s0 = *(int *)((char *)(temp_v0) + 8);
     } else {
         var_s0 = 0;
     }
-    if (((DW4VC_140_2 *)(((char *)(arg0) + 0)))->vX((int)(var_s0), (int)(arg1)) != 0) {
+    if (((DW4VC_140_2 *)(((char *)(group) + 0)))->vX((int)(var_s0), (int)(child)) != 0) {
         return var_s0 + 1;
     }
     return -1;
@@ -126,7 +126,9 @@ Ref_1c5eb0 igGroup_RemoveChildAt(S_1c5eb0 *host, int idx) {
     return Ref_1c5eb0(0);
 }
 
-unsigned int igGroup_RemoveChild(S_1c5eb0 *host, Obj_1c5eb0 *child) {
+unsigned int igGroup_RemoveChild(igGroup *group, igNode *node) {
+    S_1c5eb0 *host = (S_1c5eb0 *)group;
+    Obj_1c5eb0 *child = (Obj_1c5eb0 *)node;
     List_1c5eb0 *l;
     unsigned int n;
     unsigned int i;

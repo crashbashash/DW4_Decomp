@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWShopCtrlEditBit_metaObject;
 igMetaField *g_beNDMWShopCtrlEditBit_editBitMetaField;
 igMetaField *g_beNDMWShopCtrlEditBit_editMaxMetaField;
 
-void beNDMWShopCtrlEditBit_Create(int allocator) {
+beNDMWShopCtrlEditBit *beNDMWShopCtrlEditBit_Create(int allocator) {
     beNDMWShopCtrlEditBit_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlEditBit_metaObject, allocator);
+    return (beNDMWShopCtrlEditBit *)igMetaObject_CreateInstance(g_beNDMWShopCtrlEditBit_metaObject, allocator);
 }
 
 igMetaObject *beNDMWShopCtrlEditBit_GetMetaObject(void)

@@ -1,7 +1,7 @@
 igMetaObject *g_beCopyTransform_metaObject;
 igMetaField *g_beCopyTransform_srcTransformMetaField;
 
-void *beCopyTransform_GetMetaObject(void) {
+igMetaObject *beCopyTransform_GetMetaObject(void) {
     igMetaObject *g = g_beCopyTransform_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beCopyTransform_EnsureRegistered();

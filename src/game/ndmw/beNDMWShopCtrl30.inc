@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrl30_metaObject;
 igMetaField *g_beNDMWShopCtrl30_bankMenuMetaField;
 
-void beNDMWShopCtrl30_Create(int allocator) {
+beNDMWShopCtrl30 *beNDMWShopCtrl30_Create(int allocator) {
     beNDMWShopCtrl30_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrl30_metaObject, allocator);
+    return (beNDMWShopCtrl30 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl30_metaObject, allocator);
 }
 
 void *beNDMWShopCtrl30_GetMetaObject(void) {

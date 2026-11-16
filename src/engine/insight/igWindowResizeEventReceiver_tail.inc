@@ -14,33 +14,33 @@ int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int widt
     return 0;
 }
 
-void igInsightCore_AddManager(void *arg0, void *arg1) {
+void igInsightCore_AddManager(igInsightCore *core, igObject *manager) {
     if (FUN_00236b70() == 0) {
-        igRendererOrderedList_Append(*(int *)((char *)(arg0) + 8), arg1, 0);
-        *(int *)((char *)(arg1) + 12) = (int)(arg0);
-        ((DW4VC_92_0 *)(((char *)(arg1) + 0)))->vX();
+        igRendererOrderedList_Append(core->_managerList, manager, 0);
+        *(int *)((char *)(manager) + 12) = (int)(core);
+        ((DW4VC_92_0 *)manager)->vX();
     }
 }
 
-void igInsightCore_RemoveManager(void *arg0, void *arg1) {
+void igInsightCore_RemoveManager(igInsightCore *core, igObject *manager) {
     int sp3C;
 
     if (FUN_00236b70() != 0) {
-        ((DW4VC_96_0 *)(((char *)(arg1) + 0)))->vX();
-        *(int *)((char *)(arg1) + 12) = 0;
-        igObjectList_RemoveRetained(&sp3C, *(int *)((char *)(arg0) + 8), arg1);
+        ((DW4VC_96_0 *)manager)->vX();
+        *(int *)((char *)(manager) + 12) = 0;
+        igObjectList_RemoveRetained(&sp3C, core->_managerList, manager);
     }
 }
 
-void igInsightCore_AddToScheduler(S12 *arg0, int arg1) {
-    if (((DW4VC_104_0 *)(arg0->f12))->vX() == 0) {
-        ((DW4VC_96_1 *)(arg0->f12))->vX(arg1);
+void igInsightCore_AddToScheduler(igInsightCore *core, igObject *object) {
+    if (((DW4VC_104_0 *)core->_scheduler)->vX() == 0) {
+        ((DW4VC_96_1 *)core->_scheduler)->vX((int)object);
     }
 }
 
-void igInsightCore_RemoveFromScheduler(S236 *arg0, int arg1) {
-    if (((DW4VC_104_0 *)arg0->p)->vX() != 0) {
-        ((DW4VC_100_1 *)arg0->p)->vX((int)(arg1));
+void igInsightCore_RemoveFromScheduler(igInsightCore *core, igObject *object) {
+    if (((DW4VC_104_0 *)core->_scheduler)->vX() != 0) {
+        ((DW4VC_100_1 *)core->_scheduler)->vX((int)object);
     }
 }
 
@@ -78,24 +78,24 @@ void FUN_00236e80(A *arg0) {
     }
 }
 
-void igInsightCore_AddRenderer(void *arg0, int arg1) {
-    FUN_00457ca0(arg1, *(int *)((char *)arg0 + 24));
-    igRendererOrderedList_Append(*(int *)((char *)arg0 + 28), arg1, 0);
+void igInsightCore_AddRenderer(igInsightCore *core, igObject *renderer) {
+    FUN_00457ca0(renderer, core->_visualContext);
+    igRendererOrderedList_Append(core->_rendererList, renderer, 0);
 }
 
-void igInsightCore_RemoveRenderer(Obj_236f30 *arg0, int arg1) {
+void igInsightCore_RemoveRenderer(igInsightCore *core, igObject *renderer) {
     int sp2C;
-    igObjectList_RemoveRetained(&sp2C, arg0->f28, arg1);
+    igObjectList_RemoveRetained(&sp2C, core->_rendererList, renderer);
     if (sp2C == g_resultSuccess[0]) {
-        FUN_00457ca0(arg1, 0);
+        FUN_00457ca0(renderer, 0);
     }
 }
 
-Obj_236f80 *igInsightCore_FindManager(Self *arg0, int arg1) {
+igObject *igInsightCore_FindManager(igInsightCore *core, igMetaObject *kind) {
     unsigned int i;
-    for (i = 0; i < arg0->mid->list->count; i++) {
-        Obj_236f80 *o = arg0->mid->list->arr[i];
-        int r = o->v20(); if (r == arg1) return o;
+    for (i = 0; i < (unsigned int)((igObjectList *)((igInfoManagerOrderedList *)core->_managerList)->_objectList)->_count; i++) {
+        InfoManagerView *manager = ((InfoManagerView **)((igObjectList *)((igInfoManagerOrderedList *)core->_managerList)->_objectList)->_data)[i];
+        if (manager->getMeta() == kind) return (igObject *)manager;
     }
     return 0;
 }
@@ -104,8 +104,8 @@ int FUN_00237010(void) {
     return (int)g_igInfoManager_metaObject;
 }
 
-int igInsightCore_AddRendererOrder(int *p)
+void igInsightCore_AddRendererOrder(igInsightCore *core, igObject *first, igObject *second)
 {
-    return igDependencyOrderedList_AddDependency(*(int *)((char *)p + 28));
+    igDependencyOrderedList_AddDependency(core->_rendererList, first, second);
 }
 

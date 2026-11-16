@@ -5,9 +5,9 @@ igMetaField *g_beSvReadMediaApi_oneSvDataSizeMetaField;
 igMetaField *g_beSvReadMediaApi_lodeDataMetaField;
 igMetaField *g_beSvReadMediaApi_loadWorkListMetaField;
 
-void beSvReadMediaApi_Create(int allocator) {
+beSvReadMediaApi *beSvReadMediaApi_Create(int allocator) {
     beSvReadMediaApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588238, allocator);
+    return (beSvReadMediaApi *)igMetaObject_CreateInstance(*(int *)0x588238, allocator);
 }
 
 igMetaObject *beSvReadMediaApi_GetMetaObject(void) {

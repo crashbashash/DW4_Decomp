@@ -7,9 +7,9 @@ igMetaField *g_beModelCtrlSCEffect_rotationMetaField;
 igMetaField *g_beModelCtrlSCEffect_isSeqDeadMetaField;
 igMetaField *g_beModelCtrlSCEffect_isPositionLockMetaField;
 
-void beModelCtrlSCEffect_Create(int allocator) {
+beModelCtrlSCEffect *beModelCtrlSCEffect_Create(int allocator) {
     beModelCtrlSCEffect_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588800, allocator);
+    return (beModelCtrlSCEffect *)igMetaObject_CreateInstance(*(int *)0x588800, allocator);
 }
 
 void *beModelCtrlSCEffect_GetMetaObject(void) {

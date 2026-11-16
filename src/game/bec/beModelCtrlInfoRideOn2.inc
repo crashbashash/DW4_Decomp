@@ -2,9 +2,9 @@ igMetaObject *g_beModelCtrlInfoRideOn2_metaObject;
 int g_beModelCtrlInfoRideOn2_modelRamNoStorage;
 igMetaField *g_beModelCtrlInfoRideOn2_vectorMetaField;
 
-void beModelCtrlInfoRideOn2_Create(int allocator) {
+beModelCtrlInfoRideOn2 *beModelCtrlInfoRideOn2_Create(int allocator) {
     beModelCtrlInfoRideOn2_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588A90, allocator);
+    return (beModelCtrlInfoRideOn2 *)igMetaObject_CreateInstance(*(int *)0x588A90, allocator);
 }
 
 void *beModelCtrlInfoRideOn2_GetMetaObject(void) {

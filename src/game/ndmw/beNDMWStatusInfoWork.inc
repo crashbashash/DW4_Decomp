@@ -7,9 +7,9 @@ igMetaField *g_beNDMWStatusInfoWork_chipSalesListMetaField;
 igMetaField *g_beNDMWStatusInfoWork_junkSalesListMetaField;
 igMetaField *g_beNDMWStatusInfoWork_junkGiftMetaField;
 
-void beNDMWStatusInfoWork_Create(int allocator) {
+beNDMWStatusInfoWork *beNDMWStatusInfoWork_Create(int allocator) {
     beNDMWStatusInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusInfoWork_metaObject, allocator);
+    return (beNDMWStatusInfoWork *)igMetaObject_CreateInstance(g_beNDMWStatusInfoWork_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusInfoWork_GetOrCreateMetaObject(void) {

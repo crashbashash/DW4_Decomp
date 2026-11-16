@@ -7,9 +7,9 @@ igMetaField *g_beNDMWShopCtrlDigilabo_isWeaponChangeMetaField;
 igMetaField *g_beNDMWShopCtrlDigilabo_topMenuMetaField;
 igMetaField *g_beNDMWShopCtrlDigilabo_isDemoRunMetaField;
 
-void beNDMWShopCtrlDigilabo_Create(int allocator) {
+beNDMWShopCtrlDigilabo *beNDMWShopCtrlDigilabo_Create(int allocator) {
     beNDMWShopCtrlDigilabo_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlDigilabo_metaObject, allocator);
+    return (beNDMWShopCtrlDigilabo *)igMetaObject_CreateInstance(g_beNDMWShopCtrlDigilabo_metaObject, allocator);
 }
 
 igMetaObject *beNDMWShopCtrlDigilabo_GetMetaObject(void) {

@@ -4,9 +4,9 @@ igMetaField *g_beLua_infoListMetaField;
 igMetaField *g_beLua_luaStateMetaField;
 igMetaField *g_beLua_luaGlueMetaField;
 
-void beLua_CreateInstance(int allocator) {
+beLua *beLua_CreateInstance(int allocator) {
     beLua_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589208, allocator);
+    return (beLua *)igMetaObject_CreateInstance(*(int *)0x589208, allocator);
 }
 
 igMetaObject *beLua_GetOrCreateMetaObject(void) {

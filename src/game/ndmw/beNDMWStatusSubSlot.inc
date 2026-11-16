@@ -1,6 +1,6 @@
-void beNDMWStatusSubSlot_Create(int allocator) {
+beNDMWStatusSubSlot *beNDMWStatusSubSlot_Create(int allocator) {
     beNDMWStatusSubSlot_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, allocator);
+    return (beNDMWStatusSubSlot *)igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusSubSlot_GetMetaObject(void) {

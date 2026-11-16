@@ -1,6 +1,6 @@
-void igModelViewMatrixBoneSelect_CreateInstance(int arg0) {
+igModelViewMatrixBoneSelect *igModelViewMatrixBoneSelect_CreateInstance(int allocator) {
     igModelViewMatrixBoneSelect_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igModelViewMatrixBoneSelect_metaObject, arg0);
+    return (igModelViewMatrixBoneSelect *)igMetaObject_CreateInstance((int)g_igModelViewMatrixBoneSelect_metaObject, allocator);
 }
 
 igMetaObject *g_igModelViewMatrixBoneSelect_metaObject;

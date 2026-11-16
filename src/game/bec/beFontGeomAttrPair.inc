@@ -3,9 +3,9 @@ igMetaField *g_beFontGeomAttrPair_categoryMetaField;
 igMetaField *g_beFontGeomAttrPair_panelMetaField;
 igMetaField *g_beFontGeomAttrPair_geomAttrsMetaField;
 
-void beFontGeomAttrPair_Create(int allocator) {
+beFontGeomAttrPair *beFontGeomAttrPair_Create(int allocator) {
     beFontGeomAttrPair_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5896D8, allocator);
+    return (beFontGeomAttrPair *)igMetaObject_CreateInstance(*(int *)0x5896D8, allocator);
 }
 
 void *beFontGeomAttrPair_GetMetaObject(void) {

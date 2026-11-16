@@ -1,8 +1,8 @@
 igMetaObject *g_beHitLandDeliv_metaObject;
 
-void beHitLandDeliv_CreateInstance(int allocator) {
+beHitLandDeliv *beHitLandDeliv_CreateInstance(int allocator) {
     beHitLandDeliv_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589460, allocator);
+    return (beHitLandDeliv *)igMetaObject_CreateInstance(*(int *)0x589460, allocator);
 }
 
 igMetaObject *beHitLandDeliv_GetOrCreateMetaObject(void) {

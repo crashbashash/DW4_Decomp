@@ -1,9 +1,9 @@
 igMetaObject *g_beDataObjBoolList_metaObject;
 igMetaField *g_beDataObjBoolList_dataMetaField;
 
-void beDataObjBoolList_Create(int allocator) {
+beDataObjBoolList *beDataObjBoolList_Create(int allocator) {
     beDataObjBoolList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589888, allocator);
+    return (beDataObjBoolList *)igMetaObject_CreateInstance(*(int *)0x589888, allocator);
 }
 
 void *beDataObjBoolList_GetMetaObject(void) {

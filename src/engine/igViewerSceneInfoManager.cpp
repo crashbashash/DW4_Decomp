@@ -2,6 +2,7 @@
 #include "dw4/igobject_release.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/DisableFeature.h"
+#include "dw4/igViewerSceneInfoManager.h"
 
 
 extern "C" {
@@ -315,7 +316,6 @@ struct ViewerActionBinding : igObject { ActionTarget *target; ActionFunction fun
 
 extern int g_igViewerAction_metaObject[4];
 
-extern int g_igViewerSceneInfoManager_metaObject[4];
 
 extern int g_igViewerSceneInfoManagerController_metaObject[4];
 
@@ -1155,7 +1155,7 @@ int Gap__Viewer__igViewerAction__vfunc_22(void) {
 }
 
 int Gap__Viewer__igViewerSceneInfoManager__vfunc_22(void) {
-    return g_igViewerSceneInfoManager_metaObject[0];
+    return (int)g_igViewerSceneInfoManager_metaObject;
 }
 
 int Gap__Viewer__igViewerSceneInfoManagerController__vfunc_22(void) {

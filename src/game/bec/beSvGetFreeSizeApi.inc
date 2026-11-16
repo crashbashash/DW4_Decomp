@@ -3,9 +3,9 @@ igMetaField *g_beSvGetFreeSizeApi_memNeedMetaField;
 igMetaField *g_beSvGetFreeSizeApi_memCapaMetaField;
 igMetaField *g_beSvGetFreeSizeApi_fileCapaMetaField;
 
-void beSvGetFreeSizeApi_Create(int allocator) {
+beSvGetFreeSizeApi *beSvGetFreeSizeApi_Create(int allocator) {
     beSvGetFreeSizeApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588200, allocator);
+    return (beSvGetFreeSizeApi *)igMetaObject_CreateInstance(*(int *)0x588200, allocator);
 }
 
 igMetaObject *beSvGetFreeSizeApi_GetMetaObject(void) {

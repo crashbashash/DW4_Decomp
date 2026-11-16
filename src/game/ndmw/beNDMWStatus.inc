@@ -3,9 +3,9 @@ igMetaField *g_beNDMWStatus_windowProMetaField;
 igMetaField *g_beNDMWStatus_whoGenerateMetaField;
 igMetaField *g_beNDMWStatus_subWndNoMetaField;
 
-void beNDMWStatus_CreateInstance(int allocator) {
+beNDMWStatus *beNDMWStatus_CreateInstance(int allocator) {
     beNDMWStatus_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatus_metaObject, allocator);
+    return (beNDMWStatus *)igMetaObject_CreateInstance(g_beNDMWStatus_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatus_GetOrCreateMetaObject(void) {

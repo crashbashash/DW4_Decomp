@@ -12,9 +12,9 @@ igMetaField *g_beFileListInfoManager_importantInfoListMetaField;
 igMetaField *g_beFileListInfoManager_loadedMetaField;
 igMetaField *g_beFileListInfoManager_procMetaField;
 
-void beFileListInfoManager_CreateInstance(int allocator) {
+beFileListInfoManager *beFileListInfoManager_CreateInstance(int allocator) {
     beFileListInfoManager_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5896F8, allocator);
+    return (beFileListInfoManager *)igMetaObject_CreateInstance(*(int *)0x5896F8, allocator);
 }
 
 igMetaObject *beFileListInfoManager_GetOrCreateMetaObject(void) {

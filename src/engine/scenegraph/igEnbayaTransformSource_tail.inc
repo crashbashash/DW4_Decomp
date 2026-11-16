@@ -284,7 +284,7 @@ void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t) {
     self->prepare(t);
     n = self->_pushLists->_count;
     if (n == 0) {
-        igTraversal_TraverseChildren((int)t, (S_1e07a0 *)self);
+        igTraversal_TraverseChildren((igTraversal *)t, (igNode *)self);
         return;
     }
     if (self->_useContext) FUN_001dc500(t->_context, self->_unit, 0);
@@ -293,7 +293,7 @@ void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t) {
         int m = p->_count;
         int j;
         for (j = 0; j < m; j++) pushEnvAttr(s, p->_data[j]);
-        igTraversal_TraverseChildren((int)t, (S_1e07a0 *)self);
+        igTraversal_TraverseChildren((igTraversal *)t, (igNode *)self);
         {
             EnvAttrList *q = self->_popLists->_data[i];
             for (j = q->_count - 1; j >= 0; j--) popEnvAttr(s, q->_data[j]);

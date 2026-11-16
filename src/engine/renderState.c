@@ -1,5 +1,6 @@
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
+#include "dw4/renderState.h"
 extern int FUN_001f8b50();
 extern int FUN_001fffb0();
 extern int FUN_00200980();
@@ -9,7 +10,6 @@ extern int p2DisplayListMode;
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
 extern int p2VuPrograms[16];
 int p2GetVuProgramAddress();
-int p2FindVuProgramVariants(long long, int *, int);
 int p2FindVuProgramByBitCount();
 void *FUN_00203000();
 extern int DAT_0056ae40[4];

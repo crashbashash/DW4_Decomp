@@ -13,7 +13,8 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_65(VisualContextView *arg0, void *colo
     p2SetColour(arg0->f3bc);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_66(VisualContextView *arg0, unsigned int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_66(igPsx2VisualContext *self, unsigned int arg1) {
+    VisualContextView *arg0 = (VisualContextView *)self;
     unsigned int hi;
     unsigned int lo;
     int c;
@@ -54,8 +55,8 @@ unsigned int Gap__Gfx__igPsx2VisualContext__vfunc_68(void *arg0) {
     return (t & 0xFFFFFF) | (a + (((t & 0xFF000000) - a) * 2));
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_69(void *arg0, int *arg1) {
-    *(int *)((char *)arg0 + 952) = (int) *arg1;
+void Gap__Gfx__igPsx2VisualContext__vfunc_69(igPsx2VisualContext *self, int *arg1) {
+    *(int *)((char *)self + 952) = (int) *arg1;
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_70(int *arg0, void *arg1)

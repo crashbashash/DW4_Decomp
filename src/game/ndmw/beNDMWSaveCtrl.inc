@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWSaveCtrl_metaObject;
 igMetaField *g_beNDMWSaveCtrl_padManagerMetaField;
 
-void beNDMWSaveCtrl_CreateInstance(int allocator) {
+beNDMWSaveCtrl *beNDMWSaveCtrl_CreateInstance(int allocator) {
     beNDMWSaveCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWSaveCtrl_metaObject, allocator);
+    return (beNDMWSaveCtrl *)igMetaObject_CreateInstance(g_beNDMWSaveCtrl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWSaveCtrl_GetOrCreateMetaObject(void) {

@@ -359,6 +359,14 @@ typedef struct p2DisplayState {
     int renderTarget;                   /* -1 while drawing to the display buffer */
 } p2DisplayState;
 
+struct p2Clut;
+struct p2Image;
+struct p2Texture;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int p2DirtyFlags;
 extern unsigned int p2ProgramFlags[P2_PROGRAM_COUNT];
 extern int p2CurrentProgram;
@@ -368,5 +376,61 @@ extern long long p2GsDirtyRegisters;
 extern int p2ExtraPassCount;
 extern p2DisplayState p2Display;
 extern int p2DisplayFlags;
+
+p2DisplayList *p2BeginDisplayList(int mode);
+void p2Clear(int mask, unsigned int colour, int depth);
+void p2CloseDisplay(void);
+p2DisplayList *p2CopyDisplayList(p2DisplayList *list);
+int p2CopyDisplayListData(p2DisplayList *list, char *dest);
+struct p2Image *p2CreateImage(int format, int order, int layout, void *pixels);
+void p2DisableCapability(int capability);
+void p2EnableCapability(int capability);
+void p2EndDisplayList(void);
+int p2FindVuProgramByBitCount(int bitCount, int first);
+int p2FindVuProgramVariants(long long key, int *variants, int bit);
+void p2FreeImage(struct p2Image *image);
+int p2GetComponentFixedScale(int component, int *scale);
+int p2GetComponentSize(int component);
+int p2GetDisplayFlags(void);
+short p2GetDisplayListBlendMatrixCount(p2DisplayList *list);
+short p2GetDisplayListBlendWeightCount(p2DisplayList *list);
+unsigned int p2GetDisplayListData(p2DisplayList *list);
+int p2GetDisplayListSize(p2DisplayList *list);
+void p2GetDisplaySize(int *width, int *height, int *framePsm, int *depthPsm);
+struct p2Texture *p2GetImageTexture(struct p2Image *image);
+void p2GetTextureBase(int *base);
+int p2GetVuProgramAddress(int program);
+char *p2GetVuProgramName(int program);
+void p2GrowDisplayList(void);
+int p2IsCapabilityEnabled(int capability);
+int p2IsVuProgramLoaded(int program);
+int p2LoadVuPrograms(int *programs, int *extraPrograms, int count, int extraCount);
+p2DisplayList *p2RebaseDisplayList(unsigned int data, p2DisplayList *list);
+void p2ReleaseDisplayList(p2DisplayList *list);
+void p2SetAlphaTest(int method, int reference, int fail);
+void p2SetBlendEquation(int a, int b, int c, int d, int fix);
+void p2SetBlendIndexArray(const void *indices);
+void p2SetBlendMatrices(int base, int count);
+void p2SetBlendWeightArray(const void *weights);
+void p2SetBlendWeightCount(int count, int limit);
+void p2SetClearWidth(int width);
+void p2SetClut(struct p2Clut *clut);
+int p2SetColorScaler(int state, const float *value);
+void p2SetColourClamp(int on);
+void p2SetColourMask(int r, int g, int b, int a);
+void p2SetComponentLayout(int component, int isSigned, int integerBits, int fractionBits);
+void p2SetDepthFunction(int function, int writeDisabled);
+void p2SetDestinationAlphaMode(int mode);
+void p2SetDitherMatrix(long long matrix);
+void p2SetFog(int mode, float start, float end, float density);
+void p2SetFogColour(float r, float g, float b);
+void p2SetFrameBufferAlpha(int on);
+void p2SetPixelAlphaBlend(int on);
+void p2SetScissor(int x, int y, int width, int height);
+void p2UploadComponentScales(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

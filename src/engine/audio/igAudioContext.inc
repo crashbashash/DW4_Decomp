@@ -1,9 +1,9 @@
 igMetaObject *g_igAudioContext_metaObject;
 igMetaField *g_igAudioContext_immediateModeMetaField;
 
-void igAudioContext_CreateInstance(int arg0) {
+igAudioContext *igAudioContext_CreateInstance(int allocator) {
     igAudioContext_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igAudioContext_metaObject, arg0);
+    return (igAudioContext *)igMetaObject_CreateInstance((int)g_igAudioContext_metaObject, allocator);
 }
 
 igMetaObject *igAudioContext_GetOrCreateMetaObject(void) {

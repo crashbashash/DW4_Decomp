@@ -7,9 +7,9 @@ igMetaField *g_beModelCtrlInfoHitBody_AABoxMinListMetaField;
 igMetaField *g_beModelCtrlInfoHitBody_AABoxMaxListMetaField;
 igMetaField *g_beModelCtrlInfoHitBody_AABoxListMetaField;
 
-void beModelCtrlInfoHitBody_Create(int allocator) {
+beModelCtrlInfoHitBody *beModelCtrlInfoHitBody_Create(int allocator) {
     beModelCtrlInfoHitBody_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588B00, allocator);
+    return (beModelCtrlInfoHitBody *)igMetaObject_CreateInstance(*(int *)0x588B00, allocator);
 }
 
 igMetaObject *beModelCtrlInfoHitBody_GetOrCreateMetaObject(void) {

@@ -4,9 +4,9 @@ igMetaField *g_igVertexArray_numVertsMetaField;
 igMetaField *g_igVertexArray_vtypeMetaField;
 igMetaField *g_igVertexArray_usageFlagsMetaField;
 
-int igVertexArray_Create(int arg0) {
+igVertexArray *igVertexArray_Create(int allocator) {
     igVertexArray_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igVertexArray_metaObject, arg0);
+    return (igVertexArray *)igMetaObject_CreateInstance(g_igVertexArray_metaObject, allocator);
 }
 
 igMetaObject *igVertexArray_GetOrCreateMetaObject(void) {

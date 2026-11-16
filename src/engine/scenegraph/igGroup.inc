@@ -1,6 +1,6 @@
-void igGroup_CreateInstance(int arg0) {
+igGroup *igGroup_CreateInstance(int allocator) {
     igGroup_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igGroup_metaObject, arg0);
+    return (igGroup *)igMetaObject_CreateInstance((int)g_igGroup_metaObject, allocator);
 }
 
 igMetaObject *igGroup_GetOrCreateMetaObject(void) {

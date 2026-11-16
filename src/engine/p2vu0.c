@@ -2,6 +2,7 @@
  * whose C++ draft stays a function of its own, waits for it and counts the wait in
  * p2Vu0LockWaitTime). */
 #include "dw4/eekernel.h"
+#include "dw4/p2vu0.h"
 
 #define P2_VU0_REQUESTS 64
 

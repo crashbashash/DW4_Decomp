@@ -12,9 +12,9 @@ igMetaField *g_igPickMode_hitPathMetaField;
 igMetaField *g_igPickMode_inverseProjectionMatrixMetaField;
 igMetaField *g_igPickMode_joystickTMetaField;
 
-void igPickMode_Create(int arg0) {
+igPickMode *igPickMode_Create(int allocator) {
     FUN_0045c330();
-    igMetaObject_CreateInstance(g_igPickMode_metaObject, arg0);
+    return (igPickMode *)igMetaObject_CreateInstance(g_igPickMode_metaObject, allocator);
 }
 
 void *igPickMode_GetMetaObject(void) {

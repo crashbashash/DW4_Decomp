@@ -114,7 +114,7 @@ int FUN_001c5160(S0_1c5160 *arg0, float fparg0) {
     if (fparg0 < arg0->f556 && !(fparg0 < 1.0f)) { arg0->f552 = fparg0; DAT_0048da28[0] = 1.0f / fparg0; return 1; } return 0;
 }
 
-void igFrustCullTraversal_ClassifyBox(int arg0, int arg1, int arg2) {
-    FUN_001c47f0(arg2, arg0, arg1);
+int igFrustCullTraversal_ClassifyBox(const float *boxMin, const float *boxMax, const float *matrix) {
+    return FUN_001c47f0(matrix, boxMin, boxMax);
 }
 

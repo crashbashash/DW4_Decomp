@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWStatusCtrlBit_metaObject;
 igMetaField *g_beNDMWStatusCtrlBit_playerNoListMetaField;
 
-void beNDMWStatusCtrlBit_Create(int allocator) {
+beNDMWStatusCtrlBit *beNDMWStatusCtrlBit_Create(int allocator) {
     beNDMWStatusCtrlBit_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlBit_metaObject, allocator);
+    return (beNDMWStatusCtrlBit *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlBit_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrlBit_GetMetaObject(void) {

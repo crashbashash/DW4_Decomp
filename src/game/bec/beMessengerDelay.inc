@@ -7,7 +7,10 @@ igMetaField *g_beMessengerDelay_ramNoMetaField;
 igMetaField *g_beMessengerDelay_messageMetaField;
 igMetaField *g_beMessengerDelay_argDataMetaField;
 
-void *beMessengerDelay_Create(void *allocator){beMessengerDelay_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerDelay_metaObject,allocator));}
+beMessengerDelay *beMessengerDelay_Create(void *allocator) {
+    beMessengerDelay_EnsureRegistered();
+    return (beMessengerDelay *)igMetaObject_CreateInstance((void *)g_beMessengerDelay_metaObject,allocator);
+}
 
 igMetaObject *beMessengerDelay_GetMetaObject(void) {
     igMetaObject *g = g_beMessengerDelay_metaObject;

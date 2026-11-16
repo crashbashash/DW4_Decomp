@@ -7,6 +7,10 @@
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTraversalView.h"
+#include "dw4/beCopyModelCtrl2.h"
+#include "dw4/beCopyTransform.h"
+#include "dw4/beCri.h"
+#include "dw4/beCriSfpData.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -17,8 +21,6 @@ int igTraversal_RegisterFunction(int table, igMetaObject *meta, void (*function)
 int igMatrix44f_SetIdentity(void *matrix);
 int igMatrix44f_Multiply(void *result, void *left, void *right);
 int igMatrix44f_Copy(void *to, void *from);
-igMetaObject *beCopyModelCtrl2_GetMetaObject(void);
-igMetaObject *beCopyTransform_GetMetaObject(void);
 extern int g_igCommonTraversal_travProcs[4];
 extern igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 
@@ -96,10 +98,8 @@ void beCriVolume_StartFade(beCriVolume *, int, float, float, float);
 int beCriVolume_StepAdxLevel(...);
 int beCriVolume_StepSndfLevel(...);
 
-extern int g_beCri_metaObject[4];
 extern int g_beSystem_metaObject[4];
 extern igMetaObject *g_beCriFxInfo_metaObject;
-extern igMetaObject *g_beCriSfpData_metaObject;
 extern igMetaObject *g_beCriAcxData_metaObject;
 
 }
@@ -122,10 +122,8 @@ extern "C" ObjectSystemView *g_objectSystem[4];
 extern "C" {
 int beCopyModelCtrl2_TraverseCallback(igCommonTraversal *traversal, beCopyModelCtrl2 *node);
 int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *traversal);
-void beCopyModelCtrl2_RegisterTraversal(void);
 int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransform *node);
 int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal);
-void beCopyTransform_RegisterTraversal(void);
 void beCri_Activate(beCri *self);
 int beCri_AdxFileProxy(void);
 void beCri_Deactivate(beCri *self);
@@ -135,29 +133,11 @@ int beCri_AddInfo(beCri *self, igObjectDispatchView *info);
 void beCri_RemoveAllInfo(beCri *self);
 void beCri_Update(beCri *self);
 int beCri_AcquireVoice(beCri *self, unsigned char kind, short priority);
-long long beCri_PlayStream(beCri *self, igObjectList *names, beSoundData *cue);
-long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue);
 void beCri_StopHandle(beCri *self, beCriHandle *handle);
-void beCri_StopByID(beCri *self, long long playID);
-void beCri_StopGroup(beCri *self, int group);
-void beCri_UnpauseByName(beCri *self, const char *name);
-void beCri_FadeByName(beCri *self, char *name, float from, float to, float frames);
-void beCri_FadeByID(beCri *self, long long playID, float from, float to, float frames);
-void beCri_SetupPartitions(beCri *self, int count, int insideFiles);
-void beCri_LoadPartition(beCri *self, int partition, const char *path, int fileCount);
-void beCri_ReleasePartitions(beCri *self);
 void beCri_CreateEffectVoices(beCri *self);
 void beCri_ReleaseEffectVoices(beCri *self);
-void beCri_SetFreezeAudible(beCri *self, int audible);
 int beCri_TransferSfp(beCri *self, beCriSfpData *bank);
-bool beCri_StartSfpTransfers(beCri *self);
-int beCri_FreeSfpData(beCri *self, int includeFirst);
-bool beCri_IsTransferDone(beCri *self);
-void beCri_SetFx(beCri *self, char *name);
-unsigned char beCri_IsReady(beCri *self, const char *name);
-void beCri_SetSndfVolume(beCri *self, int volume);
-void beCriSfpData_SetupBufferAlignment(void);
-int beCri_GetMeta(void);
+igMetaObject *beCri_GetMeta(void);
 }
 
 /* A name field read as text: a null name reads as "". */
@@ -1154,9 +1134,9 @@ void beCriSfpData_SetupBufferAlignment(void) {
     igMemoryRefMetaField_SetAlignmentType(field, "sndfBuffer");
 }
 
-int beCri_GetMeta(void)
+igMetaObject *beCri_GetMeta(void)
 {
-    return g_beCri_metaObject[0];
+    return g_beCri_metaObject;
 }
 
 #pragma pop

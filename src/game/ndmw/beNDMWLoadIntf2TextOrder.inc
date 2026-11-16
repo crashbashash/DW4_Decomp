@@ -3,9 +3,9 @@ int g_beNDMWLoadIntf2TextOrder_nameExternalEnumStorage;
 igMetaField *g_beNDMWLoadIntf2TextOrder_messengerMetaField;
 igMetaField *g_beNDMWLoadIntf2TextOrder_luaMetaField;
 
-void beNDMWLoadIntf2TextOrder_Create(int allocator) {
+beNDMWLoadIntf2TextOrder *beNDMWLoadIntf2TextOrder_Create(int allocator) {
     beNDMWLoadIntf2TextOrder_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2TextOrder_metaObject, allocator);
+    return (beNDMWLoadIntf2TextOrder *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2TextOrder_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject(void) {

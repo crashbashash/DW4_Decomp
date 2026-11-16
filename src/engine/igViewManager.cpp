@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/ViewerSetup.h"
+#include "dw4/igViewManager.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -52,8 +53,6 @@ public:
     virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3(); virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7(); virtual void slot8(); virtual void slot9(); virtual void slot10(); virtual void slot11(); virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15(); virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19(); virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23(); virtual void slot24(); virtual void slot25(); virtual void slot26(); virtual void slot27();
     virtual void setSeconds(float seconds);
 };
-struct ViewerViewManager { int _vtable; unsigned int _refCount; ViewerClock *clock; };
-void igViewManager_SetFrameTime(ViewerViewManager *manager, long long frameTime);
 
 int igModel_NotifyViews(...);
 
@@ -103,7 +102,6 @@ typedef struct ViewModelEvent {
     int data;
 } ViewModelEvent;
 extern int DAT_0058cd40;
-extern int g_igViewManager_metaObject[4];
 int igReport_Info(...);
 void igMatrix44f_SetIdentity(float *);
 int igMatrix44f_Invert(int *, float *, float *);
@@ -254,7 +252,9 @@ int ViewerSetup_ClearInfos(ViewerSetup *setup)
     return FUN_002370c0((int)setup->core.p);
 }
 
-void igViewManager_SetViewMode(S2 *arg0, R *arg1) {
+void igViewManager_SetViewMode(igViewManager *manager, igViewMode *mode) {
+    S2 *arg0 = (S2 *)manager;
+    R *arg1 = (R *)mode;
     R *temp_a0;
     R *temp_a0_2;
 
@@ -278,26 +278,26 @@ void igViewManager_SetViewMode(S2 *arg0, R *arg1) {
     }
 }
 
-void igViewManager_SetFrameTime(ViewerViewManager *manager, long long frameTime) {
-    int units = frameTime / 0x40000; manager->clock->setSeconds(262144.0f * (1e-9f * units));
+void igViewManager_SetFrameTime(igViewManager *manager, long long frameTime) {
+    int units = frameTime / 0x40000; ((ViewerClock *)manager->_viewMode)->setSeconds(262144.0f * (1e-9f * units));
 }
 
 void igViewMode_Update(void) {
 
 }
 
-void igViewManager_SetSceneUpVector(void *arg0, void *arg1) {
+void igViewManager_SetSceneUpVector(igViewManager *manager, const float *upVector) {
     int buf[3];
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 12));
-    *(float *)((char *)(temp_v1) + 140) = *(float *)((char *)(arg1) + 0);
-    *(float *)((char *)(temp_v1) + 144) = *(float *)((char *)(arg1) + 4);
-    *(float *)((char *)(temp_v1) + 148) = *(float *)((char *)(arg1) + 8);
+    temp_v1 = (void *)manager->_viewModel;
+    *(float *)((char *)(temp_v1) + 140) = upVector[0];
+    *(float *)((char *)(temp_v1) + 144) = upVector[1];
+    *(float *)((char *)(temp_v1) + 148) = upVector[2];
     buf[0] = 2;
     buf[1] = 0;
     buf[2] = DAT_0058cd80[0];
-    igModel_NotifyViews(*(int *)((char *)(arg0) + 12), buf);
+    igModel_NotifyViews(manager->_viewModel, buf);
 }
 
 int igViewManager_OnKeyEvent(void *arg0) {
@@ -308,7 +308,8 @@ int igViewManager_OnKeyEvent(void *arg0) {
     return 1;
 }
 
-void igViewManager_ApplyOptions(Arg *arg0, int arg1) {
+void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
+    Arg *arg0 = (Arg *)manager;
     int sp60[3];
     float sp6C;
     Rec r1;
@@ -319,7 +320,7 @@ void igViewManager_ApplyOptions(Arg *arg0, int arg1) {
     void *p;
     int *h;
     int rc;
-    FUN_00464170(arg1, sp60, &sp6C, 1, -1);
+    FUN_00464170(scene, sp60, &sp6C, 1, -1);
     if (g_sharedViewerOptions[0] == 0) {
         f = (Frame *)__nw__FUi(240);
         if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
@@ -477,7 +478,7 @@ void igViewManager_PrintViewMatrix(igViewManager *self) {
 void Gap__Viewer__igViewManager__vfunc_13(int *a) { igView_SetModel(a[2], a[3]); }
 
 int Gap__Viewer__igViewManager__vfunc_22(void) {
-    return g_igViewManager_metaObject[0];
+    return (int)g_igViewManager_metaObject;
 }
 
 }

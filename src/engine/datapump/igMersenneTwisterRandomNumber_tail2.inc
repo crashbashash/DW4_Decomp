@@ -33,11 +33,11 @@ unsigned int FUN_001e6bc0(igMersenneTwisterRandomNumber *self) {
     return y;
 }
 
-int Vec3f_FromString(int arg0, int *arg1, const char *format) {
+int Vec3f_FromString(const char *text, float *vector, const char *format) {
     if (format != 0) {
-        return sscanf(arg0, format, arg1, arg1 + 1, arg1 + 2) == 3;
+        return sscanf(text, format, vector, vector + 1, vector + 2) == 3;
     }
-    return FUN_0018be80(arg0, arg1, 3, 4, 1) != 0;
+    return FUN_0018be80(text, vector, 3, 4, 1) != 0;
 }
 
 int FUN_001e6d80(int arg0, int *arg1, const char *format) {
@@ -147,7 +147,7 @@ int FUN_001e70a0(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     sp6C = (void *)(0);
     FUN_001e6de0((int *)&sp68, (Vector3f *)arg4, "<%f,%f,%f>");
     if (igRegistry_GetValueString(arg0, arg1, arg2, &sp6C, sp68, arg5) != 0) {
-        temp_s0 = Vec3f_FromString((int)sp6C, (int *)arg3, " < %f , %f , %f > ") & 0xFF;
+        temp_s0 = Vec3f_FromString((const char *)sp6C, (float *)arg3, " < %f , %f , %f > ") & 0xFF;
         if (sp68 != 0) {
             temp_a1 = (int *)((char *)sp68 - 8);
             temp_v0 = *(int *)((char *)(sp68) - 4) - 1;

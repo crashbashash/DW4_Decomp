@@ -2,8 +2,9 @@ igMetaObject *g_beNDMWShopCtrl00_metaObject;
 
 /* Factory used by the SUBWND lifecycle; registers on demand, then creates the instance from the
  * (possibly just published) metadata. */
-void *beNDMWShopCtrl00_Create(void *allocator){
-    beNDMWShopCtrl00_EnsureRegistered();return ((void *)igMetaObject_CreateInstance(g_beNDMWShopCtrl00_metaObject,allocator));
+beNDMWShopCtrl00 *beNDMWShopCtrl00_Create(int allocator) {
+    beNDMWShopCtrl00_EnsureRegistered();
+    return (beNDMWShopCtrl00 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl00_metaObject, allocator);
 }
 
 /* Lazy accessor. A null handle, or one whose _validity word lacks bit 4, runs the registrar; the

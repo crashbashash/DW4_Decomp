@@ -2,9 +2,9 @@ igMetaObject *g_bePlaySE_metaObject;
 igMetaField *g_bePlaySE_idMetaField;
 igMetaField *g_bePlaySE_timeMetaField;
 
-void bePlaySE_CreateInstance(int allocator) {
+bePlaySE *bePlaySE_CreateInstance(int allocator) {
     bePlaySE_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587ED0, allocator);
+    return (bePlaySE *)igMetaObject_CreateInstance(*(int *)0x587ED0, allocator);
 }
 
 void *bePlaySE_GetMetaObject(void) {

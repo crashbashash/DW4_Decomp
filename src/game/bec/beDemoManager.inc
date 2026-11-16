@@ -7,9 +7,9 @@ igMetaField *g_beDemoManager_turningOKMetaField;
 igMetaField *g_beDemoManager_disableRemoveAllMetaField;
 igMetaField *g_beDemoManager_calledRemoveAllMetaField;
 
-void beDemoManager_CreateInstance(int allocator) {
+beDemoManager *beDemoManager_CreateInstance(int allocator) {
     beDemoManager_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589790, allocator);
+    return (beDemoManager *)igMetaObject_CreateInstance(*(int *)0x589790, allocator);
 }
 
 igMetaObject *beDemoManager_GetOrCreateMetaObject(void) {

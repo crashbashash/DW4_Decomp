@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWStatusCtrlD0.h"
 #define STICK_UP 1
 #define STICK_RIGHT 2
 #define STICK_DOWN 4
@@ -24,7 +25,7 @@
 #define PUSHB(LP, B) { int n_; igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); n_ = l_->_count; if (n_ < l_->_capacity) { l_->_count = n_ + 1; } else { List_Resize(l_, n_ + 1, 1); } ((unsigned char *)l_->_data)[n_] = (B); }
 #define SETB(LP, IDX, B) { igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); if (l_->_count != 0 && (IDX) >= 0 && (IDX) < l_->_count) { ((unsigned char *)l_->_data)[(IDX)] = (B); } }
 #define SWV(h) ((igObjectList *)*(int *)&(h))
-#define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && igObject_IsKindOf((W), g_beNDMWStatusCtrlD0_metaObject[0])) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
+#define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && igObject_IsKindOf((W), g_beNDMWStatusCtrlD0_metaObject)) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
 #define SETSLOT(L, IDX, V_) { Obj *v_ = (V_); Obj *old_; if (v_ != 0) { v_->_refCount = v_->_refCount + 1; } old_ = ((Obj **)(L)->_data)[(IDX)]; if (old_ != 0) { --old_->_refCount; if (((unsigned long long)(long long)(int)old_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old_); } if ((L)->_count != 0 && (IDX) >= 0 && (IDX) < (L)->_count) { ((Obj **)(L)->_data)[(IDX)] = v_; } }
 /* matching construct: cxx_sweep — the item is read inside its retain test */
 #define SET_ITEM(IDX, ITEM) { Obj *v; int r = (IDX); igObjectList *l = (igObjectList *)p->_powerSocket; \
@@ -252,7 +253,6 @@ extern "C" char POWERSOCKETNAME_3[];
 extern "C" char PLAYERARMS_2[];
 extern "C" char GENERATE_7[];
 extern "C" char ONPREVIEW[];
-extern "C" int g_beNDMWStatusCtrlD0_metaObject[4];
 extern "C" void *g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -374,7 +374,6 @@ extern "C" char CANCELCOLOR_2[];
 extern "C" void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self);
 extern "C" void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocket *self);
 
-extern "C" beNDMWStatusCtrlD0 * beNDMWStatusCtrlD0_Create(...);
 extern "C" void beNDMWStatusPowerSocket_OpenDeviceFolder(beNDMWStatusPowerSocket *self);
 
 typedef struct PropertyRecordTable { char p16[16]; int *data; } PropertyRecordTable;
@@ -449,13 +448,12 @@ extern "C" char BANKDEVICE_2[];
 extern "C" void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self);
 extern "C" int equippedMark[4];
 extern "C" int unequippedMark[4];
-extern "C" void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, int refreshDescription);
 extern "C" char WU[];
 extern "C" char BLUEAB[];
 extern "C" int beNDMWStatusCtrlD0_UpdatePageCount(beNDMWStatusCtrlD0 *self);
 /* matching construct: inline type-checked cast; its early return gives the retail empty-arm branch. */
 struct FolderHelpers {
-static beNDMWStatusCtrlD0 *CastTo(beNDMWStatusCtrlD0 *p) { if (p != 0) { if (igObject_IsKindOf(p, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) { return p; } } return 0; }
+static beNDMWStatusCtrlD0 *CastTo(beNDMWStatusCtrlD0 *p) { if (p != 0) { if (igObject_IsKindOf(p, g_beNDMWStatusCtrlD0_metaObject) != 0) { return p; } } return 0; }
 static beNDMWStatusCtrlD0 *FindSub(beNDMWStatusCtrlFolder *w) { beNDMWStatusCtrlD0 *f = 0; int fi = 0; if (0 < ((igDataList *)w->_subWindow)->_count) { L:  f = CastTo(((beNDMWStatusCtrlD0 **)(*(igDataList **)&w->_subWindow)->_data)[fi]); if (f == 0) { fi++; if (fi < (*(igDataList **)&w->_subWindow)->_count) goto L; } } return f; }
 };
 extern "C" void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self);
@@ -666,7 +664,6 @@ extern "C" int g_beNDMWStatusCtrlBit_metaObject[4];
 extern "C" int g_beNDMWStatusCtrlDisk_metaObject[4];
 extern "C" int g_beNDMWStatusCtrlFlag_metaObject[4];
 extern "C" int g_beNDMWStatusCtrlFolder_metaObject[4];
-extern "C" int g_beNDMWStatusCtrlD0_metaObject[4];
 extern "C" int g_beNDMWStatusPowerSocket_metaObject[4];
 extern "C" int g_beNDMWStatusCtrlBaseEquip_metaObject[4];
 extern "C" int g_beNDMWStatusCtrlEquip_metaObject[4];
@@ -1812,7 +1809,7 @@ static inline igObjectList *SubWindows(const beNDMWStatusCtrlBaseEquip &window) 
 /* The object as a device-folder list window, or null for any other kind of window. */
 static inline beNDMWStatusCtrlD0 *AsStatusCtrlD0(void *object)
 {
-    if (object != 0 && igObject_IsKindOf(object, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) return (beNDMWStatusCtrlD0 *)object;
+    if (object != 0 && igObject_IsKindOf(object, g_beNDMWStatusCtrlD0_metaObject) != 0) return (beNDMWStatusCtrlD0 *)object;
     return 0;
 }
 
@@ -3983,7 +3980,7 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
             case 0:
                 ALLOC(alloc)
                 {
-                igSmartPointer<beNDMWStatusCtrlD0> deviceList((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(alloc));
+                igSmartPointer<beNDMWStatusCtrlD0> deviceList((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create((int)alloc));
                 beNDMWWindow_BindContext(deviceList.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, deviceList.p);
                 ((beNDMWStatusCtrlD0 *)deviceList.p)->_isAutoClose = 0;
@@ -6233,7 +6230,7 @@ int beNDMWStatusCtrlFolder_GetMeta(void)
 
 int beNDMWStatusCtrlD0_GetMeta(void)
 {
-    return g_beNDMWStatusCtrlD0_metaObject[0];
+    return (int)g_beNDMWStatusCtrlD0_metaObject;
 }
 
 /* Class meta-object handle getter */

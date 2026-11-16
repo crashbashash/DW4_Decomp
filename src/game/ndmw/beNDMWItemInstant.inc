@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWItemInstant_metaObject;
 igMetaField *g_beNDMWItemInstant_valueMetaField;
 
-void beNDMWItemInstant_Create(int allocator) {
+beNDMWItemInstant *beNDMWItemInstant_Create(int allocator) {
     beNDMWItemInstant_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemInstant_metaObject, allocator);
+    return (beNDMWItemInstant *)igMetaObject_CreateInstance(g_beNDMWItemInstant_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemInstant_GetReadyMetaObject(void) {

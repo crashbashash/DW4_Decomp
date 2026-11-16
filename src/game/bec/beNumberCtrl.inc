@@ -1,8 +1,8 @@
 igMetaObject *g_beNumberCtrl_metaObject;
 
-void beNumberCtrl_CreateInstance(int allocator) {
+beNumberCtrl *beNumberCtrl_CreateInstance(int allocator) {
     beNumberCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5886E0, allocator);
+    return (beNumberCtrl *)igMetaObject_CreateInstance(*(int *)0x5886E0, allocator);
 }
 
 igMetaObject *beNumberCtrl_GetOrCreateMetaObject(void) {

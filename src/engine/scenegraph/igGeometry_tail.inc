@@ -160,7 +160,7 @@ int FUN_001cf990(A_1cf990 *arg0, B_1cf990 *arg1) {
     ObjectList_AppendRetained(arg0->f36, arg1);
     r = FUN_001ceab0((HitTraversal *)arg0, (HitNode *)arg1);
     if (r == 0) {
-        r = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
+        r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     }
     m = arg0->f36;
     k = m->n - 1;
@@ -188,7 +188,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
             int meta = (int)g_igNode_metaObject;
             int got = node->getMeta();
             if (got != meta) {
-                return passStop(igTraversal_TraverseChildren((int)(self), (S_1e07a0 *)node));
+                return passStop(igTraversal_TraverseChildren((igTraversal *)(self), (igNode *)node));
             }
         }
     }
@@ -197,7 +197,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
     result = FUN_001ceab0((HitTraversal *)self, (HitNode *)node);
     if (result == 0) {
         FUN_001e68e0(self->matrices, node->transform);
-        result = igTraversal_TraverseChildren((int)(self), (S_1e07a0 *)node);
+        result = igTraversal_TraverseChildren((igTraversal *)(self), (igNode *)node);
         {
             MatrixStack *s = self->matrices;
             TraversalMatrix m;
@@ -258,13 +258,13 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
         } else {
             pool = renderer->pool;
             if (!(pool->used < pool->capacity)) {
-                igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)igModelViewMatrixAttr_CreateInstance));
+                igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))((void *)igModelViewMatrixAttr_CreateInstance));
             }
             item = pool->data[pool->used++];
             item->setMatrix(&world);
             state = renderer->state;
             FUN_001b1030((igAttrStackManager *)state, (igAttr *)item);
-            igTraversal_TraverseNode((S_1e04c0 *)renderer, (V_1e04c0 *)child);
+            igTraversal_TraverseNode((igTraversal *)renderer, (igNode *)child);
             FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)item);
         }
     }

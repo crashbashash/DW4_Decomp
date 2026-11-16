@@ -1,4 +1,10 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWLoadIntf2.h"
+#include "dw4/beNDMWLoadIntf2ComMdlCtrl.h"
+#include "dw4/beNDMWLoadIntf2DataSelIntf.h"
+#include "dw4/beNDMWLoadIntf2DegiState.h"
+#include "dw4/beNDMWLoadIntf2SelSlot.h"
+#include "dw4/beNDMWLoadSavePlWork.h"
 #include "dw4/igSmartPointer.h"
 
 extern "C" int beUnicodeObj_AllocateBuffer(...);
@@ -26,10 +32,7 @@ extern "C" int beMessenger_SelectReceivers(int, const void *, int, int);
 extern "C" int beMessenger_AppendString(int, int);
 extern "C" int beMessenger_GetBool(int, int);
 extern "C" void igObject_Destroy(void *);
-extern "C" void Vec3f_Copy(void *destination, void *source);
 extern "C" void *igProperty_FindByName(int list, int nameField, const void *name);
-extern "C" void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, const void *name);
-extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(int *reference);
 extern "C" int beBaseInfoDataList_Create(int);
 /* An allocator handle returned by value. */
 struct AllocatorValue {
@@ -37,16 +40,9 @@ struct AllocatorValue {
   AllocatorValue(int value) : allocator(value) {}
   AllocatorValue(const AllocatorValue &o) : allocator(o.allocator) {}
 };
-extern "C" AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(int allocator);
-extern "C" int beNDMWLoadIntf2_Memory_SelectAllocator(const int *selector, int ownAllocator);
-extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(int *reference);
 extern "C" int beNDMWLoadIntf2__GetInfoMeta(void);
 extern "C" int beNDMWLoadIntf2__GetMeta(void);
-extern "C" void beNDMWLoadIntf2DegiState__Init(beNDMWLoadIntf2DegiState *self, int plNo, int commonIntf, int textOrder, int comMdlCtrl, int messenger, int dispPos);
-extern "C" void beNDMWLoadIntf2DegiState__RequestOpen(beNDMWLoadIntf2DegiState *self, int kind, int dataNo);
 extern "C" void beNDMWLoadIntf2DegiState__RequestChange(beNDMWLoadIntf2DegiState *self, int kind, int dataNo);
-extern "C" void beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2DegiState *self, int closeKind);
-extern "C" void beNDMWLoadIntf2DegiState__RequestConfirmClose(beNDMWLoadIntf2DegiState *self);
 extern "C" beUnicodeObj * beUnicodeObj_Create(...);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -60,10 +56,6 @@ struct PlayerModelRow {
     const char *faceSequence;
 };
 extern "C" PlayerModelRow g_playerModelRow[16];
-extern "C" unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self);
-extern "C" void beNDMWLoadIntf2DataSelIntf__Init(beNDMWLoadIntf2DataSelIntf *self, int player, int kind);
-extern "C" void beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
 
 
 
@@ -71,15 +63,6 @@ extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf
 extern "C" void *g_stringPool[4];
 extern "C" bePadData * bePadManager_GetPadForPlayer(...);
 extern "C" int beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(beNDMWLoadCtrl2CommonIntf *, int);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseAll(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" bool beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *self, int level);
 extern "C" void beNDMWLoadIntf2Diffselect__Init(beNDMWLoadIntf2Diffselect *self, int kind, int plNo);
 extern "C" unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self, unsigned char usePad);
 extern "C" void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, unsigned char resetName);
@@ -108,8 +91,6 @@ union NameSelRam { beNDMWLoadIntf2NameSel n; NameSelWork t; };
 extern "C" void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear);
 extern "C" void beNDMWLoadIntf2NameSel__SetAnswer(beNDMWLoadIntf2NameSel *nameSel, char isNameOK);
 extern "C" int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad);
-extern "C" void beNDMWLoadIntf2SelSlot__Reset(beNDMWLoadIntf2SelSlot *self);
-extern "C" void beNDMWLoadIntf2SelSlot__Init(beNDMWLoadIntf2SelSlot *self);
 /* One entry of the slot screen: the slot-cursor sequence that points at it (SQ_SELECT..) and its
  * index in beNDMWMcUtilCtrl::_slot. g_slotMarkSelectSeqs lists the multitap layout (ports 1A-1D,
  * then slot 2), g_slotModeSelectSeqs the two-slot layout. */
@@ -164,11 +145,6 @@ float g_interfaceKindPositions[4][3] = {
 const char *g_starterSelectModelNames[4] = { "h_agumon", "h_vmon", "h_girumon", "h_dorumon" };
 const char *g_starterPlayerModelNames[4] = { "p_agumon", "p_vmon", "p_girumon", "p_dorumon" };
 }
-extern "C" unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int selPoint);
-extern "C" unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *self, unsigned char usePad, unsigned char checkDone);
-extern "C" void beNDMWLoadIntf2SelSlot__PublishCursor(beNDMWLoadIntf2SelSlot *self);
-extern "C" unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self);
-extern "C" void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int lostEntry);
 extern "C" beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int allocator);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 /* Header in front of the text of an interned string: the owning chunk and the reference count. */
@@ -176,32 +152,14 @@ struct StringTokenHeader {
     int owner;
     int refCount;
 };
-extern "C" void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSQ, int recordOpen);
-extern "C" void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSQ, float *position, int recordOpen);
-extern "C" void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const void *modelName, const void *sequenceName, int wait);
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self);
-extern "C" void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSequence, unsigned char trackClose);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const char *name);
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self);
 extern "C" int List_RemoveWordAt(beLoadIntf2ComMdlDataList *list, int index);
-extern "C" void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self);
 extern "C" igObject *igInsightCore_FindManager(int, int);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
-extern "C" int beNDMWLoadIntf2_igIntList_GetData(igDataList *list);
-extern "C" void beNDMWLoadSavePlWork__SetIsCtrl(beNDMWLoadSavePlWork *work, int isCtrl);
-extern "C" unsigned char beNDMWLoadSavePlWork__GetIsRdy(beNDMWLoadSavePlWork *work);
-extern "C" unsigned char beNDMWLoadSavePlWork__GetIsEntry(beNDMWLoadSavePlWork *work);
-extern "C" void beNDMWLoadIntf2_igObject_Retain(ObjectRefTarget *object);
 extern "C" int beNDMWLoadIntf2_beNDMWDegiDataList_Get(igDataList *list, int index);
-extern "C" void beNDMWLoadIntf2_igObjectList_Set(igDataList *list, int index, ObjectRefTarget *replacement);
-extern "C" int beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(igDataList *list, int index);
-extern "C" int beNDMWLoadIntf2_igObjectList_Get(igDataList *list, int index);
-extern "C" ObjectRefTarget **beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(ObjectRefTarget **destination,ObjectRefTarget **source);
 extern "C" int g_beNDMWLoadIntf2Info_metaObject[4];
-extern "C" int g_beNDMWLoadIntf2_metaObject[4];
 extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, const void *);
 extern "C" void beNDMWLoadIntf2_OnAddRam(beNDMWLoadIntf2 *self, beBaseInfoRam *ram);
@@ -4501,16 +4459,12 @@ void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int 
 
 extern "C" {
 beNDMWLoadIntf2NameSel *beNDMWLoadIntf2NameSel_Create(int allocator);
-beNDMWLoadIntf2SelSlot *beNDMWLoadIntf2SelSlot_Create(int allocator);
 beNDMWLoadIntf2Diffselect *beNDMWLoadIntf2Diffselect_Create(int allocator);
-beNDMWLoadIntf2DataSelIntf *beNDMWLoadIntf2DataSelIntf_Create(int allocator);
 beNDMWLoadIntf2DegiStateCtrl *beNDMWLoadIntf2DegiStateCtrl_Create(int allocator);
-beNDMWLoadIntf2DegiState *beNDMWLoadIntf2DegiState_Create(int allocator);
 beNDMWLoadIntf2MakeChr *beNDMWLoadIntf2MakeChr_Create(int allocator);
 beNDMWLoadIntf2CtrlData *beNDMWLoadIntf2CtrlData_Create(int allocator);
 int LoadIntf2Message_GetMetaEnum(void);
 beNDMWLoadIntf2MesWin *beNDMWLoadIntf2MesWin_Create(int allocator);
-beNDMWLoadIntf2ComMdlCtrl *beNDMWLoadIntf2ComMdlCtrl_Create(int allocator);
 beNDMWLoadIntf2TextOrder *beNDMWLoadIntf2TextOrder_Create(int allocator);
 int beMessenger_AppendInt(...);
 int beMessenger_GetInt(...);
@@ -5081,7 +5035,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
 
 int beNDMWLoadIntf2__GetMeta(void)
 {
-    return g_beNDMWLoadIntf2_metaObject[0];
+    return (int)g_beNDMWLoadIntf2_metaObject;
 }
 
 #pragma pop

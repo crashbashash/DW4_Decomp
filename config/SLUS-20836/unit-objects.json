@@ -14986,7 +14986,7 @@
       "g_igInfoManager_metaObject": "0x0056dc38",
       "g_igInfoManager_insightMetaField": "0x0056dc40",
       "g_igFlushRenderer_metaObject": "0x0056dc48",
-      "g_viewerOptions": "0x0056dc50",
+      "g_sharedViewerOptions": "0x0056dc50",
       "g_igDependencyOrderedList_metaObject": "0x00586738",
       "g_objectSystem": "0x00586dc8",
       "g_stringPool": "0x00586f20",

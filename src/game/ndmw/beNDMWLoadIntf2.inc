@@ -4,9 +4,9 @@ igMetaField *g_beNDMWLoadIntf2_systemMetaField;
 igMetaField *g_beNDMWLoadIntf2_kindHardMetaField;
 igMetaField *g_beNDMWLoadIntf2_difficultMaxMetaField;
 
-void beNDMWLoadIntf2_CreateInstance(int allocator) {
+beNDMWLoadIntf2 *beNDMWLoadIntf2_CreateInstance(int allocator) {
     beNDMWLoadIntf2_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2_metaObject, allocator);
+    return (beNDMWLoadIntf2 *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2_GetOrCreateMetaObject(void) {

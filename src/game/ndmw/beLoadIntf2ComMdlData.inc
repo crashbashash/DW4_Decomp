@@ -3,9 +3,9 @@ igMetaField *g_beLoadIntf2ComMdlData_ramNoMetaField;
 igMetaField *g_beLoadIntf2ComMdlData_openSQMetaField;
 igMetaField *g_beLoadIntf2ComMdlData_infoNameMetaField;
 
-void beLoadIntf2ComMdlData__Create(int allocator) {
+beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int allocator) {
     beLoadIntf2ComMdlData_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject, allocator);
+    return (beLoadIntf2ComMdlData *)igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject, allocator);
 }
 
 void *beLoadIntf2ComMdlData_GetReadyMetaObject(void) {

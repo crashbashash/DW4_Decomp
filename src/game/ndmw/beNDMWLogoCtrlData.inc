@@ -6,9 +6,9 @@ igMetaField *g_beNDMWLogoCtrlData_st2MetaField;
 igMetaField *g_beNDMWLogoCtrlData_st3MetaField;
 igMetaEnum *g_beNDMWLogoCtrlData_messageMetaEnum;
 
-void beNDMWLogoCtrlData_Create(int allocator) {
+beNDMWLogoCtrlData *beNDMWLogoCtrlData_Create(int allocator) {
     beNDMWLogoCtrlData_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLogoCtrlData_metaObject, allocator);
+    return (beNDMWLogoCtrlData *)igMetaObject_CreateInstance(g_beNDMWLogoCtrlData_metaObject, allocator);
 }
 
 void *beNDMWLogoCtrlData_GetReadyMetaObject(void) {

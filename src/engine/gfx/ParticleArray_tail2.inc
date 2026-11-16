@@ -1,7 +1,7 @@
 void Gap__Bec__ParticleArray__vfunc_15(void *arg0) {
     int temp_v0;
 
-    temp_v0 = igVisualContext_FindFirst();
+    temp_v0 = (int)igVisualContext_FindFirst();
     if (temp_v0 != 0) {
         ((DW4VC_92_5 *)(((char *)(arg0) + 0)))->vX((int)(((ParticleArray *)arg0)->_particleFormat), (int)(*(int *)((char *)(arg0) + 12)), (int)(temp_v0), ((ParticleArray *)arg0)->_particleLifeStart, ((ParticleArray *)arg0)->_particleLifeEnd);
     }

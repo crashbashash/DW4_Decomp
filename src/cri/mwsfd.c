@@ -51,7 +51,6 @@ char *SFD_GetSceErrMessage(void *sfd);
 int mwPlySfdInit(int arg);
 void MWSFSVM_Init(void);
 void MWSFSVM_Error(const char *message, ...);
-void MWSFSVR_SetMwsfdSvrFlg(int value);
 void LSC_Finish(void);
 void ADXT_Finish(void);
 void SJMEM_Finish(void);

@@ -1437,7 +1437,7 @@ int p2FindVuProgram(const char *name) {
 }
 
 /* Lists the variants of a program by their slot, returning how many there are. */
-int p2FindVuProgramVariants(long long key, int *variants) {
+int p2FindVuProgramVariants(long long key, int *variants, int bit) {
     int i;
     int count = 0;
 

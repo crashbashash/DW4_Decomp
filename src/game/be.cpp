@@ -8,6 +8,7 @@
 #include "dw4/beDemoManager.h"
 #include "dw4/listSet.h"
 #include "dw4/ClassRegistration.h"
+#include "dw4/be.h"
 
 
 /* The C runtime and the Alchemy memory services this file uses. */
@@ -130,7 +131,6 @@ int SYSgetCountry(void);
 int SYSgetTarget(void);
 int SYSgetIsPackOnly(void);
 unsigned int SYSgetRandom(unsigned int range);
-void SYSsetGateStage(const char *stageName, int stageNo);
 const char *SYSgetGateStageName(void);
 int SYSgetGateStageNo(void);
 unsigned char SYSctlDeviceFolder(const char *command, int index, const char *itemDb, int itemId, int extra0, int extra1);
@@ -146,7 +146,6 @@ int SYSctlPlayer(const char *property, const char *command, int playerIndex, int
 void CFLclear(void);
 void CFLsetName(const char *name);
 const char *CFLgetFolderName(void);
-void Lua_sd_OptionalArg(const char *args);
 void sd_29(const char *group, const char *infoName, int ramNo, const char *message, const char *args);
 void sd_30(const char *group, const char *infoName, int ramNo, const char *message);
 void sd_31(const char *group, const char *infoName, int ramNo, const char *message, const char *args, long long delay);
@@ -190,7 +189,6 @@ unsigned char MDLisLive(const char *infoName, int ramNo);
 int MDLgetBulletKind(void);
 const char *MDLgetBulletName(void);
 int MDLgetBulletBoxNo(void);
-void FloatingNumber_Spawn(int value, int style);
 void MDLdspDamage(int damage);
 void MDLdspDamageP(int damage);
 void MDLdspExp(int exp);
@@ -237,7 +235,6 @@ int BLPcalcKoukaMagic(void);
 void LISsetDifficultMax(int maxDifficulty);
 
 /* Other files. */
-void be_EnsureRegistered(void);
 int igInsightCore_FindManager(int insight, igMetaObject *meta);
 void *StringPool_Allocate(int size);
 void *StringPool_Construct(void *pool);
@@ -298,33 +295,13 @@ extern beMessenger *g_beMessenger;
 extern beMatCtrl *g_matCtrl;
 extern beDemoManager *g_beDemoManager;
 extern be *g_be;
-extern igMetaObject *g_be_metaObject[4];
 extern igMetaObject *g_beSystem_metaObject[4];
 extern igMetaObject *g_beMessenger_metaObject[4];
 extern igMetaObject *g_beMatCtrl_metaObject[4];
-extern igMetaObject *g_beDemoManager_metaObject[4];
 extern void *g_stringPool[4];
 extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_propertyNameField[4];
-
-/* The model the running MDL / BLT / BLP script is about, cached by beModelCtrl before it calls
- * the script, and the hitter of the bullet that struck it. */
-extern beBaseInfoRam *g_mdlEntity;
-extern int g_mdlRamNo;
-extern float *g_mdlMatrix;
-extern int g_mdlMaxHp;
-extern int g_mdlHp;
-extern int g_mdlRecNo;
-extern const char *g_mdlInfoName;
-extern int g_mdlBulletKind;
-extern int g_mdlBulletBoxNo;
-extern const char *g_hitterInfoName;
-extern int g_bltShootRamNo;
-extern int g_hitterRecNo;
-extern const char *g_mdlCallName;
-extern float *g_mdlWorldPosTarget;
-extern int g_txtCallNo;
 
 /* The last FIGHTCALC damage reply: damage, attribute index and rank flag. */
 extern int g_damageResult;
@@ -334,7 +311,6 @@ extern int g_damageFlag;
 /* The Lua class tables `be` hands the binding. */
 
 extern const float g_vec3ZAxis[4];
-extern unsigned char g_mdlDmgTurn[4];
 
 /* Result strings the string getters return. */
 extern char g_mdlPosStrBuffer[64];
@@ -806,7 +782,7 @@ void be_Start(be *self) {
     g_beSystem = (beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
     g_beMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
     g_matCtrl = (beMatCtrl *)igInsightCore_FindManager(self->_insight, g_beMatCtrl_metaObject[0]);
-    demoManager = igInsightCore_FindManager(self->_insight, g_beDemoManager_metaObject[0]);
+    demoManager = igInsightCore_FindManager(self->_insight, g_beDemoManager_metaObject);
     g_be = self;
     g_beDemoManager = (beDemoManager *)demoManager;
 }
@@ -2121,5 +2097,5 @@ void LISsetDifficultMax(int maxDifficulty) {
 
 int be_GetMetaObject_Virtual(void)
 {
-    return (int)g_be_metaObject[0];
+    return (int)g_be_metaObject;
 }

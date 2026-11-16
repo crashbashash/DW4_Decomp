@@ -1,4 +1,5 @@
 #include "dw4/p2dma.h"
+#include "dw4/p2gs.h"
 int p2GetTextureBase();
 extern long long p2FrameTimeMin[4];
 extern long long DAT_00562cc0[4];

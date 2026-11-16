@@ -1,23 +1,16 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
+#include "dw4/beDataBase.h"
+#include "dw4/beDBManager.h"
 
 extern "C" int igProperty_FindByName(...);
-extern "C" int igProperty_GetRecord(int container, char *key, int unused);
-extern "C" int igProperty_GetRecordByte(int container, char *key, int unused);
-extern "C" int igProperty_GetRecordArray(int container, char *key, int unused);
-extern "C" int igProperty_GetRecordFolder(int container, char *key, int unused);
-extern "C" void igProperty_GetRecordIntList(int p0, char * p1, int p2);
-extern "C" void igProperty_GetRecordString(int p0, char * p1, int p2);
-extern "C" void igProperty_GetRecordStringList(int p0, char * p1, int p2);
-extern "C" void igProperty_GetRecordFloatList(int p0, char * p1, int p2);
 extern "C" void beDBManager_Prepare(void);
 extern "C" int beDBManager_GetInfoMeta(void);
-extern "C" int beDBManager_GetMeta(void);
+extern "C" igMetaObject *beDBManager_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, void *);
-extern "C" int beDBManager_GetMsgActionEnum(...);
 extern "C" int beMessenger_AppendObject(int, int);
-extern "C" int beMessenger_ResolveEnumValue(int messenger, int values, const char *name);
+extern "C" int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *values, const char *name);
 extern "C" int g_propertyNameField[4];
 // clang-format off
 /* beDataBase record lookup and row count, 0x003a93a0..0x003a9708. A beDataBase is a table of
@@ -36,12 +29,7 @@ struct igProperty;
 typedef igTDataList<igProperty *> ColumnList;
 extern "C" char emptyString[];
 extern "C" int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *key, ColumnList *columns);
-extern "C" long long beDataBase_GetRecordInt(beDataBase *self, int record, const char *key);
-extern "C" unsigned long long beDataBase_GetRecordBool(beDataBase *self, int record, const char *key);
-extern "C" char *beDataBase_GetRecordString(beDataBase *self, int record, const char *key);
-extern "C" int beDataBase_GetRecordCount(beDataBase *self);
 extern "C" int g_beDBManagerInfo_metaObject[4];
-extern "C" int g_beDBManager_metaObject[4];
 extern "C" char DATABASE_9[];
 extern "C" void beDBManager_OnAddRam(beDBManager *p0, int p1, char *p2);
 extern "C" void beDBManager_UpdateRam(beDBManager *p0, int p1);
@@ -208,7 +196,7 @@ int beDBManager_OnMessageText(beDBManager *self, beBaseInfoRam *ram, const char 
     return result;
 }
 
-int beDBManager_GetMeta(void)
+igMetaObject *beDBManager_GetMeta(void)
 {
-    return g_beDBManager_metaObject[0];
+    return g_beDBManager_metaObject;
 }

@@ -10,7 +10,7 @@ igMetaField *g_beNodeAnim_timeBiasMetaField;
 igMetaField *g_beNodeAnim_beforeTimeMetaField;
 igMetaField *g_beNodeAnim_playTimeMetaField;
 
-void *beNodeAnim_ResolveMetaObject(void) {
+igMetaObject *beNodeAnim_ResolveMetaObject(void) {
     igMetaObject *g = g_beNodeAnim_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beNodeAnim_EnsureRegistered();

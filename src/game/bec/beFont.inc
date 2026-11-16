@@ -10,9 +10,9 @@ igMetaField *g_beFont_condition00MetaField;
 igMetaField *g_beFont_condition01MetaField;
 igMetaField *g_beFont_historyMetaField;
 
-void beFont_CreateInstance(int allocator) {
+beFont *beFont_CreateInstance(int allocator) {
     beFont_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589678, allocator);
+    return (beFont *)igMetaObject_CreateInstance(*(int *)0x589678, allocator);
 }
 
 igMetaObject *beFont_GetOrCreateMetaObject(void) {

@@ -9,9 +9,9 @@ igMetaField *g_beCameraCtrlInfoRamShake_oneTimeMetaField;
 igMetaField *g_beCameraCtrlInfoRamShake_endTimeMetaField;
 igMetaField *g_beCameraCtrlInfoRamShake_movePointMetaField;
 
-void beCameraCtrlInfoRamShake_Create(int allocator) {
+beCameraCtrlInfoRamShake *beCameraCtrlInfoRamShake_Create(int allocator) {
     beCameraCtrlInfoRamShake_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589C38, allocator);
+    return (beCameraCtrlInfoRamShake *)igMetaObject_CreateInstance(*(int *)0x589C38, allocator);
 }
 
 void *beCameraCtrlInfoRamShake_GetMetaObject(void) {

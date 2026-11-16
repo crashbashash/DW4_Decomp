@@ -1,5 +1,5 @@
 igMetaObject *g_igFlushRenderer_metaObject;
-SharedViewerOptions *g_viewerOptions;
+SharedViewerOptions *g_sharedViewerOptions;
 
 igMetaObject *FUN_00233a40(void) {
     if (g_igFlushRenderer_metaObject == 0) {
@@ -508,15 +508,15 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->b229 = 0;
     s->f232 = igIntList_Create(renderAllocator());
     s->f236 = igStringRefList_Create(renderAllocator());
-    if (g_viewerOptions == 0) {
+    if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *shared = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (shared) {
             shared = ViewerOptions_Construct(shared);
         }
-        g_viewerOptions = shared;
+        g_sharedViewerOptions = shared;
     }
-    g_viewerOptions->useCount++;
-    s->shared = g_viewerOptions;
+    g_sharedViewerOptions->useCount++;
+    s->shared = g_sharedViewerOptions;
     FUN_00234ee0(s, s->shared->extraCommandLine);
     return s;
 }
@@ -574,9 +574,9 @@ static inline void releaseSharedOptions(void) {
     int *h;
     int rc;
 
-    if (g_viewerOptions != 0) {
-        if (--g_viewerOptions->useCount <= 0) {
-            f = g_viewerOptions;
+    if (g_sharedViewerOptions != 0) {
+        if (--g_sharedViewerOptions->useCount <= 0) {
+            f = g_sharedViewerOptions;
             if (f != 0) {
                 if (&f->internedString) {
                     p = (void *)f->internedString;
@@ -602,7 +602,7 @@ static inline void releaseSharedOptions(void) {
                 }
                 __dl__FPv(f);
             }
-            g_viewerOptions = 0;
+            g_sharedViewerOptions = 0;
         }
     }
 }
@@ -949,13 +949,13 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     int depthBits;
     if (allocator == 0) allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
     windowAllocator = allocator;
-    if (g_viewerOptions == 0) {
+    if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *shared = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (shared != 0) shared = ViewerOptions_Construct(shared);
-        g_viewerOptions = shared;
+        g_sharedViewerOptions = shared;
     }
-    g_viewerOptions->useCount++;
-    options = (ViewerOptions_2382e0 *)g_viewerOptions;
+    g_sharedViewerOptions->useCount++;
+    options = (ViewerOptions_2382e0 *)g_sharedViewerOptions;
     igSmartPointer<igWindowView> window(igWindow_CreateInstance(windowAllocator));
     if (window.p == 0) {
         if (g_displayErrorIgnored == 0) {

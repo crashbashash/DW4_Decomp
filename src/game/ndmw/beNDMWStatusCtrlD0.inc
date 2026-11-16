@@ -8,9 +8,9 @@ igMetaField *g_beNDMWStatusCtrlD0_isUnknownDisableMetaField;
 igMetaField *g_beNDMWStatusCtrlD0_isAutoCloseMetaField;
 igMetaField *g_beNDMWStatusCtrlD0_decideListMetaField;
 
-void beNDMWStatusCtrlD0_Create(int allocator) {
+beNDMWStatusCtrlD0 *beNDMWStatusCtrlD0_Create(int allocator) {
     beNDMWStatusCtrlD0_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlD0_metaObject, allocator);
+    return (beNDMWStatusCtrlD0 *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlD0_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrlD0_GetMetaObject(void) {

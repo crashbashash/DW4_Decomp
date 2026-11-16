@@ -3,6 +3,8 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTraversalView.h"
 #include "dw4/igObjectDispatchView.h"
+#include "dw4/beModelCtrlNode2.h"
+#include "dw4/beModelCtrlSubCom.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -15,8 +17,7 @@ int igMatrix44f_Multiply(...);
 int igAttrStackManager_PushOverrideAttr(...);
 int igAttrStackManager_PopOverrideAttr(...);
 int igTraversal_TraverseChildren(...);
-int igTraversal_RegisterFunction(int, int, TraversalFunction);
-int beModelCtrlNode2_ResolveMetaObject(...);
+int igTraversal_RegisterFunction(int, igMetaObject *, TraversalFunction);
 int beModelCtrl_DrawDebugHitBox(...);
 int beModelCtrl_CallLua(...);
 int Memory_GetAllocatorBySelector(...);
@@ -67,9 +68,7 @@ float g_hitBoxDebugColors[12];
 char g_hitBoxDebugColorsReady;
 
 int beModelCtrlNode2_TraversalFunction(igCommonTraversal *trav, beModelCtrlNode2 *node);
-long long beModelCtrlNode2_LocalTime(beModelCtrlNode2 *node, long long now);
 int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav);
-void beModelCtrlNode2_RegisterTraversalFunction(void);
 int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram);
 int beModelCtrlSCHitBox_Update(beModelCtrlSCHitBox *self, beBaseInfoRam *ram, int frames);
 int beModelCtrlSCEffect_Start(beModelCtrlSCEffect *self, beBaseInfoRam *ram);
@@ -77,12 +76,6 @@ void beModelCtrlSCEffect_Stop(beModelCtrlSCEffect *self, beBaseInfoRam *ram);
 int beModelCtrlSCSound_Start(beModelCtrlSCSound *self, beBaseInfoRam *ram);
 void beModelCtrlSCSound_Stop(beModelCtrlSCSound *self, beBaseInfoRam *ram);
 unsigned char beModelCtrlSubComBase_Advance(beModelCtrlSubComBase *self, beBaseInfoRam *ram);
-void beModelCtrlSubCom_Update(beModelCtrlSubCom *self, beBaseInfoRam *ram);
-void beModelCtrlSubCom_StopAll(beModelCtrlSubCom *self, beBaseInfoRam *ram);
-void beModelCtrlSubCom_StopType(beModelCtrlSubCom *self, beBaseInfoRam *ram, igMetaObject *metaObject);
-void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, int modelName, int seqName, float *offset, float *rotation, char isSeqDead, char isPositionLock, float startFrame);
-void beModelCtrlSubCom_AddHitBox(beModelCtrlSubCom *self, beModelCtrlHITBOX *hitBox);
-void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float startFrame);
 igMetaObject *beModelCtrlSCSound_GetMeta(void);
 igMetaObject *beModelCtrlSCEffect_GetMeta(void);
 igMetaObject *beModelCtrlSCHitBox_GetMeta(void);
@@ -567,16 +560,16 @@ static inline void setInternedString(int *field, int text) {
 }
 
 /* Appends an effect sub-command with interned model and sequence names. */
-void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, int modelName, int seqName, float *offset, float *rotation, char isSeqDead, char isPositionLock, float startFrame) {
+void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName, const char *seqName, float *offset, float *rotation, char isSeqDead, char isPositionLock, float startFrame) {
     int own;
     beModelCtrlSCEffect *record;
     own = igObject_GetAllocator(self);
     igSmartPointer<beModelCtrlSCEffect> effect(beModelCtrlSCEffect_Create(g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0])));
     record = effect.p;
-    setInternedString(&record->_modelName, modelName);
+    setInternedString(&record->_modelName, (int)modelName);
     effect.p->_geneRamNo = -1;
     record = effect.p;
-    setInternedString(&record->_seqName, seqName);
+    setInternedString(&record->_seqName, (int)seqName);
     effect.p->_startFrame = startFrame;
     record = effect.p;
     record->_offset[0] = offset[0];
@@ -652,11 +645,11 @@ void beModelCtrlSubCom_AddHitBox(beModelCtrlSubCom *self, beModelCtrlHITBOX *hit
 }
 
 /* Appends a sound sub-command with an interned sound name. */
-void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float startFrame) {
+void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, const char *sndName, float startFrame) {
     int *header;
     int refs;
     int allocator;
-    int name;
+    const char *name;
     int pool;
     int *old;
     beModelCtrlSCSound *sound;
@@ -673,7 +666,7 @@ void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float star
         }
         g_stringPool[0] = pool;
     }
-    name = (int)StringPool_Intern(g_stringPool[0], name);
+    name = (const char *)StringPool_Intern(g_stringPool[0], name);
     old = (int *)sound->_sndName;
     if (old != 0) {
         header = old - 2;
@@ -683,7 +676,7 @@ void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float star
             StringChunk_ReleaseHeader(*header, header);
         }
     }
-    sound->_sndName = name;
+    sound->_sndName = (int)name;
     command.p->_startFrame = startFrame;
     ObjectList_AppendRetained(self->_comList, command.p);
 }

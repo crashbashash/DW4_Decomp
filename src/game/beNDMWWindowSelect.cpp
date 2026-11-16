@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWWindowSelect.h"
 #include "dw4/beNDMWWindowSetupDispatchView.h"
 
 extern "C" int beMessenger_AppendBool(int messenger, int value);
@@ -45,7 +46,6 @@ extern "C" int g_beNDMWStatusSelectE1_metaObject[4];
 extern "C" int g_beNDMWStatusSelectE0_metaObject[4];
 extern "C" int g_beNDMWStatusSelect01_metaObject[4];
 extern "C" int g_beNDMWStatusSelect00_metaObject[4];
-extern "C" int g_beNDMWWindowSelect_metaObject[4];
 
 /* The pooled-string singleton, created on first use. */
 static inline void *StringPool_Get(void) {
@@ -96,7 +96,6 @@ extern "C" int beNDMWWindow_PresentModelAtOrigin(void *self, const char *model, 
 extern "C" int beNDMWWindow_RunMessageScript(void *self, const char *script, int entCode);
 extern "C" int beNDMWWindow_QueueText(void *self, const char *type, const char *name, const char *text, const char *align);
 extern "C" void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *self);
-extern "C" bool beNDMWWindowSelect_CanRequestFO2TOP(beNDMWWindowSelect *self);
 extern "C" void beNDMWStatusSelect00_Setup(beNDMWStatusSelect00 *self);
 extern "C" void beNDMWStatusSelect01_Setup(beNDMWStatusSelect01 *self);
 extern "C" void beNDMWStatusSelectE0_Setup(beNDMWStatusSelectE0 *self);
@@ -301,7 +300,7 @@ int beNDMWStatusSelect00_GetMeta(void)
 
 int beNDMWWindowSelect_GetMeta(void)
 {
-    return g_beNDMWWindowSelect_metaObject[0];
+    return (int)g_beNDMWWindowSelect_metaObject;
 }
 
 #pragma pop

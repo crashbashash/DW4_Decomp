@@ -1,8 +1,8 @@
 igMetaObject *g_beActionStarter_metaObject;
 
-void beActionStarter_CreateInstance(int allocator) {
+beActionStarter *beActionStarter_CreateInstance(int allocator) {
     beActionStarter_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589E90, allocator);
+    return (beActionStarter *)igMetaObject_CreateInstance(*(int *)0x589E90, allocator);
 }
 
 igMetaObject *beActionStarter_GetOrCreateMetaObject(void) {

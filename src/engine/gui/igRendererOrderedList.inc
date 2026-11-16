@@ -1,8 +1,8 @@
 igMetaObject *g_igRendererOrderedList_metaObject;
 
-void igRendererOrderedList_CreateInstance(int arg0) {
+igRendererOrderedList *igRendererOrderedList_CreateInstance(int allocator) {
     igRendererOrderedList_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igRendererOrderedList_metaObject, arg0);
+    return (igRendererOrderedList *)igMetaObject_CreateInstance((int)g_igRendererOrderedList_metaObject, allocator);
 }
 
 igMetaObject *igRendererOrderedList_GetOrCreateMetaObject(void) {

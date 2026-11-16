@@ -16,7 +16,7 @@ int FUN_001baa10(RecorderTraversalView *o, TransformRecorderVisitor *v) {
     pool = o->_frames;
     state = o->_state;
     if (!(pool->_used < pool->_capacity)) {
-        igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))igTimeAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igTimeAttr_CreateInstance);
     }
     i = pool->_used;
     pool->_used = i + 1;
@@ -25,7 +25,7 @@ int FUN_001baa10(RecorderTraversalView *o, TransformRecorderVisitor *v) {
     o->begin(t);
     frame->_time = t;
     FUN_001b1030((igAttrStackManager *)state, (igAttr *)frame);
-    r = igTraversal_TraverseChildren((int)(o), (S_1e07a0 *)v);
+    r = igTraversal_TraverseChildren((igTraversal *)(o), (igNode *)v);
     FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)frame);
     o->end();
     if (r == 2) {
@@ -41,7 +41,7 @@ int FUN_001bab30(int a0, void **arg1) {
     int temp_s0_2;
 
     if ((((DW4VC_148_0 *)(arg1))->vX() != 0) && (((DW4VC_152_1 *)(arg1))->vX((int)(*(int *)((char *)(arg0) + 32))) == 0)) {
-        return igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
+        return igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     }
     ((DW4VC_156_1 *)(arg1))->vX((int)(arg0));
     temp_s1 = ((DW4VC_172_0 *)(arg1))->vX() & 0xFF;
@@ -80,7 +80,7 @@ int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1) {
     int off;
     BaseTable *a;
     if (pool->idx >= pool->cap) {
-        igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))igModelViewMatrixAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
     }
     idx = pool->idx;
     pool->idx = idx + 1;
@@ -102,7 +102,7 @@ int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1) {
     igMatrix44f_Multiply(buf, base + (off << 6), base);
     obj->v(buf);
     FUN_001b1030((igAttrStackManager *)x, (igAttr *)obj);
-    r = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
+    r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int *)g_igModelViewMatrixAttr_metaObject)[0]);
     if (r == 2) {
         return 2;
@@ -124,7 +124,7 @@ int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
     pool = o->_frames;
     state = o->_state;
     if (!(pool->_used < pool->_capacity)) {
-        igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))FUN_00139c10);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))FUN_00139c10);
     }
     slot = pool->_used;
     pool->_used = slot + 1;
@@ -170,12 +170,12 @@ int FUN_001bafb0(int arg0, struct S_1bafb0 *arg1) {
         var_a1_2 = arg1->f8;
         var_a1_2 = var_a1_2 ? var_a1_2 : &emptyString[0];
         FUN_001b7770((igCommonTraversal *)arg0, (int)var_a1_2, 0);
-        var_s0 = igTraversal_TraverseNode((S_1e04c0 *)arg0, (V_1e04c0 *)temp_v0);
+        var_s0 = igTraversal_TraverseNode((igTraversal *)arg0, (igNode *)temp_v0);
         var_a1_3 = arg1->f8;
         var_a1_3 = var_a1_3 ? var_a1_3 : &emptyString[0];
         FUN_001b7920((igCommonTraversal *)arg0, (int)var_a1_3);
     } else {
-        var_s0 = igTraversal_TraverseChildren(arg0, (S_1e07a0 *)arg1);
+        var_s0 = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     }
     return var_s0;
 }
@@ -190,6 +190,6 @@ int FUN_001bb090(S_1e04c0 *self, KeyTrackView *track) {
     if (found.p == 0) {
         return 0;
     }
-    return igTraversal_TraverseNode(self, (V_1e04c0 *)found.p);
+    return igTraversal_TraverseNode((igTraversal *)self, (igNode *)found.p);
 }
 

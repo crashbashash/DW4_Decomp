@@ -2,9 +2,9 @@ igMetaObject *g_beDemoManagerWork_metaObject;
 igMetaField *g_beDemoManagerWork_advancecMetaField;
 igMetaField *g_beDemoManagerWork_keepMesListMetaField;
 
-void beDemoManagerWork_CreateInstance(int allocator) {
+beDemoManagerWork *beDemoManagerWork_CreateInstance(int allocator) {
     beDemoManagerWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5897D8, allocator);
+    return (beDemoManagerWork *)igMetaObject_CreateInstance(*(int *)0x5897D8, allocator);
 }
 
 igMetaObject *beDemoManagerWork_GetOrCreateMetaObject(void) {

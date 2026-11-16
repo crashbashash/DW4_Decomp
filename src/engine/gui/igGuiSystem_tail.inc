@@ -18,16 +18,16 @@ void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self) {
     int allocator = igObject_GetAllocator(self);
     first.release();
     first.p = (R_456780 *)FUN_0044f0b0(allocator);
-    igView_SetModel((S0_457e90 *)(first.get()), self->f12);
+    igView_SetModel((igView *)(first.get()), (igModel *)self->f12);
     ObjectList_AppendRetained(self->f16, first.get());
     igSmartPointer<R_456780> second((R_456780 *)FUN_0044ecb0(igObject_GetAllocator(self)));
     second.get()->wc = (int)self;
-    igView_SetModel((S0_457e90 *)(second.get()), self->f12);
+    igView_SetModel((igView *)(second.get()), (igModel *)self->f12);
     ObjectList_AppendRetained(self->f16, second.get());
     allocator = igObject_GetAllocator(self);
     first.release();
     first.p = (R_456780 *)FUN_0044e990(allocator);
-    igView_SetModel((S0_457e90 *)(first.get()), self->f12);
+    igView_SetModel((igView *)(first.get()), (igModel *)self->f12);
     ObjectList_AppendRetained(self->f16, first.get());
     igGroup_AppendChild(self->f20, self->f28);
     R_456780 *value = self->f20;
@@ -38,11 +38,11 @@ void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self) {
     set(x->f16, value);
 }
 
-void igGuiSystem_SetMouseCursorVisible(O_4569c0 *arg0, int arg1) {
+void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, int visible) {
     T_4569c0 *temp_a0;
-    arg0->f32 = arg1;
-    if (arg1 != 0) {
-        temp_a0 = arg0->m->t;
+    gui->_mouseCursorVisible = visible;
+    if (visible != 0) {
+        temp_a0 = ((M_4569c0 *)gui->_mouseCursor)->t;
         temp_a0->f24 = 1.0f;
         temp_a0->f28 = 1.0f;
         temp_a0->f32 = 1.0f;
@@ -50,7 +50,7 @@ void igGuiSystem_SetMouseCursorVisible(O_4569c0 *arg0, int arg1) {
         temp_a0->vX();
         return;
     }
-    temp_a0 = arg0->m->t;
+    temp_a0 = ((M_4569c0 *)gui->_mouseCursor)->t;
     temp_a0->f24 = g_vec4Zero[0];
     temp_a0->f28 = DAT_004e1174[0];
     temp_a0->f32 = DAT_004e1178[0];
@@ -58,7 +58,9 @@ void igGuiSystem_SetMouseCursorVisible(O_4569c0 *arg0, int arg1) {
     temp_a0->vX();
 }
 
-void igGuiSystem_SetMouseCursor(A_456a60 *arg0, R_456a60 *arg1) {
+void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
+    A_456a60 *arg0 = (A_456a60 *)gui;
+    R_456a60 *arg1 = (R_456a60 *)cursor;
     Rc_456a60 *sp4C;
     V3 sp30;
     int var_v0;
@@ -96,11 +98,11 @@ void igGuiSystem_SetMouseCursor(A_456a60 *arg0, R_456a60 *arg1) {
     if (arg1 != 0) {
         igGroup_AppendChild(arg0->f28, arg1->f8->f8);
     }
-    igGuiSystem_SetMouseCursorVisible((O_4569c0 *)arg0, arg0->f32);
+    igGuiSystem_SetMouseCursorVisible(gui, arg0->f32);
     sp30.a = 2;
     sp30.b = 0;
     sp30.c = g_igGuiSystemModelMousePositionField[0];
-    igModel_NotifyViews((S_4578c0 *)arg0->f12, (S_4578c0 *)&sp30);
+    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)&sp30);
 }
 
 void FUN_00456b80(int *arg0, float *arg1) {
@@ -141,10 +143,12 @@ void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1) {
     sp30[0] = 2;
     sp30[1] = 0;
     sp30[2] = (int)g_igGuiSystemModel_focusedComponentMetaField;
-    igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp30);
+    igModel_NotifyViews((igModel *)arg0, (ModelChange *)sp30);
 }
 
-void igGuiSystem_SetRootComponent(W *arg0, T_456cc0 *arg1) {
+void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
+    W *arg0 = (W *)gui;
+    T_456cc0 *arg1 = (T_456cc0 *)root;
     T_456cc0 *sp5C; int sp40[4]; T_456cc0 **p; T_456cc0 *old; int v; LL *l;
     if (arg0->f12->f164 != 0) { arg0->f12->f164->f8 = 0; }
     p = &arg0->f12->f164;
@@ -158,7 +162,7 @@ void igGuiSystem_SetRootComponent(W *arg0, T_456cc0 *arg1) {
     sp40[0] = 2;
     sp40[1] = 0;
     sp40[2] = (int)g_igGuiSystemModel_rootComponentMetaField;
-    igModel_NotifyViews((S_4578c0 *)arg0->f12, (S_4578c0 *)sp40);
+    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp40);
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }
     if (v > 1) {

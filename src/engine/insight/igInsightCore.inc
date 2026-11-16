@@ -19,9 +19,9 @@ igMetaField *g_igInsightCore_traversalTimeMetaField;
 igMetaField *g_igInsightCore_outputTimeMetaField;
 igMetaField *g_igInsightCore_pluginsMetaField;
 
-void igInsightCore_CreateInstance(int arg0) {
+igInsightCore *igInsightCore_CreateInstance(int allocator) {
     igInsightCore_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x56DB60, arg0);
+    return (igInsightCore *)igMetaObject_CreateInstance(*(int *)0x56DB60, allocator);
 }
 
 igMetaObject *igInsightCore_GetOrCreateMetaObject(void) {

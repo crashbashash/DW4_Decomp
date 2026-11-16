@@ -11,9 +11,9 @@ igMetaField *g_igFlyMode_mousePosMetaField;
 igMetaField *g_igFlyMode_lastAimMetaField;
 igMetaField *g_igFlyMode_lastAimValidMetaField;
 
-void igFlyMode_Create(int arg0) {
+igFlyMode *igFlyMode_Create(int allocator) {
     FUN_0045ca20();
-    igMetaObject_CreateInstance(g_igFlyMode_metaObject, arg0);
+    return (igFlyMode *)igMetaObject_CreateInstance(g_igFlyMode_metaObject, allocator);
 }
 
 igMetaObject *igFlyMode_GetMetaObject(void) {

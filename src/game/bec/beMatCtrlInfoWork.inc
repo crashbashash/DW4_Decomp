@@ -2,9 +2,9 @@ igMetaObject *g_beMatCtrlInfoWork_metaObject;
 igMetaField *g_beMatCtrlInfoWork_runFlagListMetaField;
 igMetaField *g_beMatCtrlInfoWork_matOnPlListsMetaField;
 
-void beMatCtrlInfoWork_Create(int allocator) {
+beMatCtrlInfoWork *beMatCtrlInfoWork_Create(int allocator) {
     beMatCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5890C0, allocator);
+    return (beMatCtrlInfoWork *)igMetaObject_CreateInstance(*(int *)0x5890C0, allocator);
 }
 
 igMetaObject *beMatCtrlInfoWork_GetOrCreateMetaObject(void) {

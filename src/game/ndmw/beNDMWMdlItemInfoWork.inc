@@ -8,9 +8,9 @@ igMetaField *g_beNDMWMdlItemInfoWork_isDispNameMetaField;
 igMetaField *g_beNDMWMdlItemInfoWork_fontTypeMetaField;
 igMetaField *g_beNDMWMdlItemInfoWork_isColorLightMetaField;
 
-void beNDMWMdlItemInfoWork_Create(int allocator) {
+beNDMWMdlItemInfoWork *beNDMWMdlItemInfoWork_Create(int allocator) {
     beNDMWMdlItemInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlItemInfoWork_metaObject, allocator);
+    return (beNDMWMdlItemInfoWork *)igMetaObject_CreateInstance(g_beNDMWMdlItemInfoWork_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlItemInfoWork_GetReadyMetaObject(void) {

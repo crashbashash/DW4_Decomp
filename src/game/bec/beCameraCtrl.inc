@@ -13,9 +13,9 @@ igMetaField *g_beCameraCtrl_intMatrixMetaField;
 igMetaField *g_beCameraCtrl_debugZoomMetaField;
 igMetaField *g_beCameraCtrl_isFirstMetaField;
 
-void beCameraCtrl_CreateInstance(int allocator) {
+beCameraCtrl *beCameraCtrl_CreateInstance(int allocator) {
     beCameraCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589C90, allocator);
+    return (beCameraCtrl *)igMetaObject_CreateInstance(*(int *)0x589C90, allocator);
 }
 
 igMetaObject *beCameraCtrl_GetOrCreateMetaObject(void) {

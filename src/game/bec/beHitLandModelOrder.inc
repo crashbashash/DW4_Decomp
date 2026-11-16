@@ -9,9 +9,9 @@ igMetaField *g_beHitLandModelOrder_rayListMetaField;
 igMetaField *g_beHitLandModelOrder_hitdataCountMetaField;
 igMetaField *g_beHitLandModelOrder_hitdataListMetaField;
 
-void beHitLandModelOrder_Create(int allocator) {
+beHitLandModelOrder *beHitLandModelOrder_Create(int allocator) {
     beHitLandModelOrder_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589390, allocator);
+    return (beHitLandModelOrder *)igMetaObject_CreateInstance(*(int *)0x589390, allocator);
 }
 
 igMetaObject *beHitLandModelOrder_GetOrCreateMetaObject(void) {

@@ -1,12 +1,13 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/beTargetObj.h"
 #pragma push
 #pragma readonly_strings on
 
 extern "C" void igInsightCore_AddToScheduler(int insight, beTargetObj *object);
 extern "C" void igInsightCore_RemoveFromScheduler(int insight, beTargetObj *object);
-extern "C" int igInsightCore_FindManager(int insight, int metaObject);
+extern "C" int igInsightCore_FindManager(int insight, igMetaObject *metaObject);
 extern "C" void Vec3f_TransformDirection(float *out, int *vector, float *matrix);
 extern "C" int List_Reserve(void *list, int count, int elementSize);
 extern "C" int List_Resize(void *list, int count, int elementSize);
@@ -18,8 +19,7 @@ extern "C" int beMessenger_GetMatrixCount(beMessenger *messenger);
 extern "C" void beMessenger_SendGroup(beMessenger *messenger, char *group, char *message);
 extern "C" float atan2f(float y, float x);
 extern "C" int strcmp(const char *a, const char *b);
-extern "C" int g_beTargetObj_metaObject[4];
-extern "C" int g_beMessenger_metaObject[4];
+extern "C" igMetaObject *g_beMessenger_metaObject;
 extern "C" float g_vec3Zero[4];
 extern "C" int g_vec3ZAxis[4];
 
@@ -54,8 +54,8 @@ extern "C" void beTargetObj_Deactivate(beTargetObj *self, int unused)
 
 extern "C" void beTargetObj_Start(beTargetObj *self)
 {
-    g_targetObj = (beTargetObj *)igInsightCore_FindManager(self->_insight, g_beTargetObj_metaObject[0]);
-    g_targetMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
+    g_targetObj = (beTargetObj *)igInsightCore_FindManager(self->_insight, g_beTargetObj_metaObject);
+    g_targetMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject);
 }
 
 extern "C" void beTargetObj_Stop(void)
@@ -401,9 +401,9 @@ extern "C" int beTargetObj_GetTargetRamNo(void)
     return g_targetRamNo;
 }
 
-extern "C" int beTargetObj_GetMeta(void)
+extern "C" igMetaObject *beTargetObj_GetMeta(void)
 {
-    return g_beTargetObj_metaObject[0];
+    return g_beTargetObj_metaObject;
 }
 
 #pragma pop

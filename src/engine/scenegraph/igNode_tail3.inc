@@ -19,14 +19,14 @@ void FUN_001d3410(NodeSlots *o, void *with) {
         NodeParentListView *l = c->_parents;
         NodeSlots *self = o;
         c->replaceChild(findParent(l, (int *)&self), with);
-        igGroup_RemoveChild((S_1c5eb0 *)c, (Obj_1c5eb0 *)o);
+        igGroup_RemoveChild((igGroup *)c, (igNode *)o);
         i--;
     }
-    igGroup_AppendChild(with, (int)(o));
+    igGroup_AppendChild((igGroup *)with, (igNode *)o);
     release_1d3410((int *)&held);
 }
 
-void Gap__Sg__igNode__resetFields(void *arg0) {
+void Gap__Sg__igNode__resetFields(igNode *arg0) {
     Gap__Core__igObject__resetFields();
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }

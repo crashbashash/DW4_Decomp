@@ -1,5 +1,6 @@
 /* The VU1 microcode's symbol table: the linked-in text of `sym.ini`, `name;offset;` pairs naming each
  * program's entry and end in the microcode image. */
+#include "dw4/p2vu1Symbols.h"
 int strlen(const char *s);
 int strcmp(const char *a, const char *b);
 int atoi(const char *s);

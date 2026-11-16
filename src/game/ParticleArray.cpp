@@ -6,6 +6,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igCommonTraversalDispatchView.h"
 #include "dw4/igVisualContextDispatchView.h"
+#include "dw4/ParticleTimer.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -14,7 +15,6 @@ extern "C" double fmod(double, double);
 extern "C" int igObject_IsKindOf(igObject *object, igMetaObject *meta);
 extern "C" int igObject_GetAllocator(void *object);
 extern "C" int igTraversal_RegisterFunction(int table, igMetaObject *meta, int (*function)(igObject *, igObject *));
-extern "C" igMetaObject *ParticleTimer_GetMetaObject(void);
 extern "C" void Gap__Sg__igNode__resetFields(void);
 extern "C" int igCommonTraversal_TraverseGeometry(igCommonTraversal *traversal, ParticleTimer *timer);
 extern "C" void igObjectPool_Grow(igTimeAttrPool *pool, igObject *(*create)(int));
@@ -27,12 +27,10 @@ extern "C" igObject *igVertexArray_Create(int allocator);
 extern "C" void igVertexArrayLock_Init(igVertexArrayLock *lock);
 extern "C" igMetaObject *g_igCommonTraversal_metaObject;
 extern "C" igMetaObject *g_ParticleArray_metaObject;
-extern "C" igMetaObject *g_ParticleTimer_metaObject;
 extern "C" int g_igCommonTraversal_travProcs;
 
 extern "C" {
 int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node);
-void ParticleTimer_RegisterTraversalFunction(void);
 void ParticleTimer_resetFields(void);
 int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal);
 void ParticleArray_resetFields(ParticleArray *self);

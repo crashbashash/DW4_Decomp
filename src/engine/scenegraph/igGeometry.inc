@@ -1,6 +1,6 @@
-void igGeometry_CreateInstance(int arg0) {
+igGeometry *igGeometry_CreateInstance(int allocator) {
     igGeometry_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igGeometry_metaObject, arg0);
+    return (igGeometry *)igMetaObject_CreateInstance((int)g_igGeometry_metaObject, allocator);
 }
 
 igMetaObject *igGeometry_GetOrCreateMetaObject(void) {

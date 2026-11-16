@@ -3,6 +3,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igControllerDispatchView.h"
+#include "dw4/bePadManager.h"
 
 extern "C" void igInsightCore_AddToScheduler(int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
@@ -19,7 +20,7 @@ extern "C" int igEventDispatcher_RemoveReceiver(int, int);
 extern "C" int igEventDispatcher_RemoveReceiverOrder(int, int, int);
 extern "C" int bePadManager_AddInfo(void);
 extern "C" void bePadManager_RemoveAllInfo(void);
-extern "C" int bePadManager_GetMeta(void);
+extern "C" igMetaObject *bePadManager_GetMeta(void);
 extern "C" int bePadData_UpdateButtons(...);
 extern "C" void bePadManager_Activate(bePadManager *self, int unusedArg);
 extern "C" void bePadManager_Deactivate(bePadManager *self, int unusedArg);
@@ -29,11 +30,9 @@ extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void bePadManager_Start(bePadManager *self);
 extern "C" void bePadManager_Stop(bePadManager *self);
-extern "C" int g_bePadManager_metaObject[4];
 extern "C" int bePadData_UpdateLeftStick(bePadData *, igVec2f *);
 extern "C" int bePadData_UpdateRightStick(bePadData *, igVec2f *);
 extern "C" void bePadManager_Update(bePadManager *self);
-extern "C" int bePadManager_GetPadForPlayer(bePadManager *self, int player);
 
 /* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
@@ -154,17 +153,17 @@ void bePadManager_Update(bePadManager *self) {
 }
 
 /* _padList is a bePadDataList whose backing array (_data) holds the pad record pointers */
-int bePadManager_GetPadForPlayer(bePadManager *self, int player) {
+bePadData *bePadManager_GetPadForPlayer(bePadManager *self, int player) {
     if (self->_isPadDisable != 0) {
-        return *(int *)(((bePadDataList *)self->_padList)->_data + 16);
+        return *(bePadData **)(((bePadDataList *)self->_padList)->_data + 16);
     }
     if (player < 4) {
-        return *(int *)(((bePadDataList *)self->_padList)->_data + (player * 4));
+        return *(bePadData **)(((bePadDataList *)self->_padList)->_data + (player * 4));
     }
-    return *(int *)(((bePadDataList *)self->_padList)->_data + 16);
+    return *(bePadData **)(((bePadDataList *)self->_padList)->_data + 16);
 }
 
-int bePadManager_GetMeta(void)
+igMetaObject *bePadManager_GetMeta(void)
 {
-    return g_bePadManager_metaObject[0];
+    return g_bePadManager_metaObject;
 }

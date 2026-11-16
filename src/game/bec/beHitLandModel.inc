@@ -5,9 +5,9 @@ igMetaField *g_beHitLandModel_probeMetaField;
 igMetaField *g_beHitLandModel_isHitWallMetaField;
 igMetaField *g_beHitLandModel_mat90MetaField;
 
-void beHitLandModel_CreateInstance(int allocator) {
+beHitLandModel *beHitLandModel_CreateInstance(int allocator) {
     beHitLandModel_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589350, allocator);
+    return (beHitLandModel *)igMetaObject_CreateInstance(*(int *)0x589350, allocator);
 }
 
 igMetaObject *beHitLandModel_GetOrCreateMetaObject(void) {

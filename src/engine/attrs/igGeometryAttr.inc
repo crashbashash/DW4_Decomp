@@ -9,9 +9,9 @@ igMetaField *g_igGeometryAttr_handleMetaField;
 igMetaField *g_igGeometryAttr_dPdsMetaField;
 igMetaField *g_igGeometryAttr_dPdtMetaField;
 
-void igGeometryAttr_Create(int arg0) {
+igGeometryAttr *igGeometryAttr_Create(int allocator) {
     FUN_001378f0();
-    igMetaObject_CreateInstance(*(int *)0x55F170, arg0);
+    return (igGeometryAttr *)igMetaObject_CreateInstance(*(int *)0x55F170, allocator);
 }
 
 igMetaObject *FUN_00137850(void) {

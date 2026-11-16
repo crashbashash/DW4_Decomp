@@ -24,9 +24,9 @@ igMetaField *g_beNDMWLoadIntf2DataSelIntf_st1MetaField;
 igMetaField *g_beNDMWLoadIntf2DataSelIntf_st2MetaField;
 igMetaField *g_beNDMWLoadIntf2DataSelIntf_st3MetaField;
 
-void beNDMWLoadIntf2DataSelIntf_Create(int allocator) {
+beNDMWLoadIntf2DataSelIntf *beNDMWLoadIntf2DataSelIntf_Create(int allocator) {
     beNDMWLoadIntf2DataSelIntf_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2DataSelIntf_metaObject, allocator);
+    return (beNDMWLoadIntf2DataSelIntf *)igMetaObject_CreateInstance(g_beNDMWLoadIntf2DataSelIntf_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2DataSelIntf_ResolveMetaObject(void) {

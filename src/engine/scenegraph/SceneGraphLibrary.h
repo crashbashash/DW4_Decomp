@@ -8,6 +8,44 @@
 #include "dw4/igobject_release.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/AnimationPools.h"
+#include "dw4/igActor.h"
+#include "dw4/igActorInfo.h"
+#include "dw4/igActorList.h"
+#include "dw4/igAnimationDatabase.h"
+#include "dw4/igAppearanceList.h"
+#include "dw4/igAttrSet.h"
+#include "dw4/igCamera.h"
+#include "dw4/igEnbayaTransformSource.h"
+#include "dw4/igFrustCullTraversal.h"
+#include "dw4/igGeometry.h"
+#include "dw4/igGeometryList.h"
+#include "dw4/igGraphPath.h"
+#include "dw4/igGroup.h"
+#include "dw4/igIntersectTraversal.h"
+#include "dw4/igLightSet.h"
+#include "dw4/igLightStateSet.h"
+#include "dw4/igLod.h"
+#include "dw4/igModelViewMatrixBoneSelect.h"
+#include "dw4/igNode.h"
+#include "dw4/igNodeList.h"
+#include "dw4/igPlanarShadowShader.h"
+#include "dw4/igProbe.h"
+#include "dw4/igProjectiveShadowShader.h"
+#include "dw4/igSceneInfo.h"
+#include "dw4/igSegment.h"
+#include "dw4/igSwitch.h"
+#include "dw4/igTransform.h"
+#include "dw4/igTransformList.h"
+#include "dw4/igTransformRecorder.h"
+#include "dw4/igAnimationCombiner.h"
+#include "dw4/igAnimationState.h"
+#include "dw4/igAppearance.h"
+#include "dw4/igAttrStackManager.h"
+#include "dw4/igBitMask.h"
+#include "dw4/igEnbayaAnimationSource.h"
+#include "dw4/igObjectPool.h"
+#include "dw4/igTransformSource.h"
+#include "dw4/igTraversal.h"
 
 class ForwardTarget { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int vX(void *); };
 struct TraversalNodeView { char pad[24]; int _id; };
@@ -68,7 +106,6 @@ extern "C" igMetaField *igUnsignedCharArrayMetaField_Create(void *);
 extern "C" igMetaField *igUnsignedCharMetaField_Create(void *);
 extern "C" igMetaField *igUnsignedIntMetaField_Create(void *);
 extern "C" igMetaField *igUnsignedLongMetaField_Create(void *);
-extern igMetaObject *g_igActor_metaObject;
 extern igMetaObject *g_igActorInfo_metaObject;
 extern igMetaObject *g_igActorList_metaObject;
 extern igMetaObject *g_igAnimation_metaObject;
@@ -80,7 +117,6 @@ extern igMetaObject *g_igAnimationCombinerBoneInfoList_metaObject;
 extern igMetaObject *g_igAnimationCombinerBoneInfoListList_metaObject;
 extern igMetaObject *g_igAnimationCombinerBoneInfoPool_metaObject;
 extern igMetaObject *g_igAnimationCombinerList_metaObject;
-extern igMetaObject *g_igAnimationDatabase_metaObject;
 extern igMetaObject *g_igAnimationHierarchy_metaObject;
 extern igMetaObject *g_igAnimationList_metaObject;
 extern igMetaObject *g_igAnimationModifier_metaObject;
@@ -98,8 +134,6 @@ extern igMetaObject *g_igAnimationTransitionParams_metaObject;
 extern igMetaObject *g_igAnimationTransitionPoint_metaObject;
 extern igMetaObject *g_igAnimationTransitionPointList_metaObject;
 extern igMetaObject *g_igAppearance_metaObject;
-extern igMetaObject *g_igAppearanceList_metaObject;
-extern igMetaObject *g_igAttrSet_metaObject;
 extern igMetaObject *g_igAttrStack_metaObject;
 extern igMetaObject *g_igAttrStackList_metaObject;
 extern igMetaObject *g_igAttrStackManager_metaObject;
@@ -109,8 +143,6 @@ extern igMetaObject *g_igBlendListRecord_metaObject;
 extern igMetaObject *g_igBlendMatricesAttrPool_metaObject;
 extern igMetaObject *g_igBlendMatrixSelect_metaObject;
 extern igMetaObject *g_igBoundingBoxesMaker_metaObject;
-extern igMetaObject *g_igCamera_metaObject;
-extern igMetaObject *g_igCommonTraversal_metaObject;
 extern igMetaObject *g_igCompileTraversal_metaObject;
 extern igMetaObject *g_igCompiledTransform_metaObject;
 extern igMetaObject *g_igCompiledTransformList_metaObject;
@@ -119,22 +151,15 @@ extern igMetaObject *g_igCompressedTransformSequence1_5Data_metaObject;
 extern igMetaObject *g_igEnbayaAnimationSource_metaObject;
 extern igMetaObject *g_igEnbayaAnimationState_metaObject;
 extern igMetaObject *g_igEnbayaContextPool_metaObject;
-extern igMetaObject *g_igEnbayaTransformSource_metaObject;
 extern igMetaObject *g_igEnvironmentMapShader2_metaObject;
 extern igMetaObject *g_igEnvironmentMapShader2List_metaObject;
 extern igMetaObject *g_igFrustCullTraversal_metaObject;
-extern igMetaObject *g_igGeometry_metaObject;
 extern igMetaObject *g_igGeometryList_metaObject;
 extern igMetaObject *g_igGraphPath_metaObject;
 extern igMetaObject *g_igGraphPathList_metaObject;
-extern igMetaObject *g_igGroup_metaObject;
 extern igMetaObject *g_igIniShaderFactory_metaObject;
 extern igMetaObject *g_igInterpretedShaderData_metaObject;
-extern igMetaObject *g_igIntersectTraversal_metaObject;
-extern igMetaObject *g_igLightSet_metaObject;
 extern igMetaObject *g_igLightStateAttrPool_metaObject;
-extern igMetaObject *g_igLightStateSet_metaObject;
-extern igMetaObject *g_igLod_metaObject;
 extern igMetaObject *g_igMatrixObjectPool_metaObject;
 extern igMetaObject *g_igModelViewMatrixAttrPool_metaObject;
 extern igMetaObject *g_igModelViewMatrixBoneSelect_metaObject;
@@ -155,7 +180,6 @@ extern igMetaObject *g_igPsx2EnvironmentMapShader_metaObject;
 extern igMetaObject *g_igRenderPackage_metaObject;
 extern igMetaObject *g_igRenderPackageList_metaObject;
 extern igMetaObject *g_igRenderPackagePool_metaObject;
-extern igMetaObject *g_igSceneInfo_metaObject;
 extern igMetaObject *g_igSegment_metaObject;
 extern igMetaObject *g_igShaderData_metaObject;
 extern igMetaObject *g_igShaderFactory_metaObject;
@@ -172,7 +196,6 @@ extern igMetaObject *g_igSorter_metaObject;
 extern igMetaObject *g_igSwitch_metaObject;
 extern igMetaObject *g_igTextureMatrixAttrPool_metaObject;
 extern igMetaObject *g_igTimeAttrPool_metaObject;
-extern igMetaObject *g_igTransform_metaObject;
 extern igMetaObject *g_igTransformList_metaObject;
 extern igMetaObject *g_igTransformRecorder_metaObject;
 extern igMetaObject *g_igTransformSequence_metaObject;
@@ -2789,7 +2812,6 @@ struct S_1d32f0;
 class V_1d32f0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int c(); virtual S_1d32f0 *g(int); };
 struct S_1d32f0 : V_1d32f0 { char p[16]; int f20; };
 class DW4VC_120_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual int vX(); };
-extern "C" unsigned int igGroup_RemoveChild(S_1c5eb0 *host, Obj_1c5eb0 *child);
 struct NodeParentListView { int _vtable; unsigned int _refCount; int _count; int _capacity; void **_data; };
 class NodeSlots {
 public:
@@ -3816,7 +3838,6 @@ extern "C" void igTransformSequence_Register(void);
 extern "C" void thunk_igTransformSequence_GetMetaObject(void);
 extern "C" igMetaObject *FUN_00195610(void);
 extern "C" void igTransformSequence_InitFields(void);
-extern "C" igMetaObject *igTransformRecorder_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igTransformRecorder_GetMetaObject(void);
 extern "C" int igTransformRecorder_GetVTable(void);
 extern "C" void **igSmartPointer_igNodeList_Destruct(void **arg0, short arg1);
@@ -3831,7 +3852,6 @@ extern "C" int igNonRefCountedTransformList_GetVTable(void);
 extern "C" void FUN_00195de0(void);
 extern "C" void igNonRefCountedTransformList_Register(void);
 extern "C" void thunk_igNonRefCountedTransformList_GetMetaObject(void);
-extern "C" igMetaObject *igTransformList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igTransformList_GetMetaObject(void);
 extern "C" int igTransformList_GetVTable(void);
 extern "C" void igTransformList_Register(void);
@@ -3842,14 +3862,11 @@ extern "C" int igTransformStack_GetVTable(void);
 extern "C" void FUN_001960c0(void);
 extern "C" void igTransformStack_Register(void);
 extern "C" void thunk_igTransformStack_GetMetaObject(void);
-extern "C" void igTransform_CreateInstance(int arg0);
-extern "C" igMetaObject *igTransform_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igTransform_GetMetaObject(void);
 extern "C" int igTransform_GetVTable(void);
 extern "C" void *FUN_001962d0(struct S_1962d0 *arg0, short arg1);
 extern "C" ObjectRefWord *FUN_001963d0(ObjectRefWord *self,int delete_storage);
 extern "C" void **FUN_00196450(void **arg0, short arg1);
-extern "C" void igTransform_Register(void);
 extern "C" void thunk_igTransform_GetMetaObject(void);
 extern "C" void igTransform_InitFields(void);
 extern "C" ObjectRefWord *FUN_001966b0(ObjectRefWord *self,int delete_storage);
@@ -3859,8 +3876,6 @@ extern "C" void FUN_001967c0(void);
 extern "C" void igObjectPool_Register(void);
 extern "C" void thunk_igObjectPool_GetMetaObject(void);
 extern "C" void igObjectPool_InitFields(void);
-extern "C" void igSwitch_CreateInstance(int arg0);
-extern "C" igMetaObject *igSwitch_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igSwitch_GetMetaObject(void);
 extern "C" int igSwitch_GetVTable(void);
 extern "C" struct R **FUN_00196a50(struct R **arg0, short arg1);
@@ -4063,21 +4078,14 @@ extern "C" int *FUN_0019acc0(int *p);
 extern "C" int *FUN_0019acd0(int *p);
 extern "C" int FUN_0019ace0(int a0);
 extern "C" void *FUN_0019acf0(igGroup *arg0);
-extern "C" igMetaObject *igSegment_GetMetaObject(void);
 extern "C" int igSegment_GetVTable(void);
 extern "C" void FUN_0019ae10(void);
 extern "C" void igSegment_Register(void);
 extern "C" void thunk_igSegment_GetMetaObject(void);
-extern "C" void igSceneInfo_CreateInstance(int arg0);
-extern "C" igMetaObject *igSceneInfo_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igSceneInfo_GetMetaObject(void);
 extern "C" int igSceneInfo_GetVTable(void);
-extern "C" void *igSceneInfo_Destroy(igSceneInfo *arg0, short arg1);
 extern "C" void **FUN_0019b1f0(void **arg0, short arg1);
-extern "C" void igSceneInfo_Register(void);
 extern "C" void thunk_igSceneInfo_GetMetaObject(void);
 extern "C" void igSceneInfo_InitFields(void);
-extern "C" igMetaObject *igProjectiveShadowShader_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igProjectiveShadowShader_GetMetaObject(void);
 extern "C" int igProjectiveShadowShader_GetVTable(void);
 extern "C" int *FUN_0019b7e0(int *p);
@@ -4122,15 +4130,12 @@ extern "C" void FUN_0019cb10(void);
 extern "C" void igNodeListList_Register(void);
 extern "C" void thunk_igNodeListList_GetMetaObject(void);
 extern "C" int FUN_0019cba0(int arg0);
-extern "C" igMetaObject *igNodeList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igNodeList_GetMetaObject(void);
 extern "C" int igNodeList_GetVTable(void);
 extern "C" void igNodeList_Register(void);
 extern "C" void thunk_igNodeList_GetMetaObject(void);
-extern "C" igMetaObject *igNode_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igNode_GetMetaObject(void);
 extern "C" int igNode_GetVTable(void);
-extern "C" void igNode_EnsureRegistered(void);
 extern "C" void igNode_Register(void);
 extern "C" void thunk_igNode_GetMetaObject(void);
 extern "C" void igNode_InitFields(void);
@@ -4144,7 +4149,6 @@ extern "C" igMetaObject *igModelViewMatrixBoneSelectListSg_GetMetaObject(void);
 extern "C" int igModelViewMatrixBoneSelectListSg_GetVTable(void);
 extern "C" void igModelViewMatrixBoneSelectListSg_Register(void);
 extern "C" void thunk_igModelViewMatrixBoneSelectListSg_GetMetaObject(void);
-extern "C" void igModelViewMatrixBoneSelect_CreateInstance(int arg0);
 extern "C" igMetaObject *igModelViewMatrixBoneSelect_GetMetaObject(void);
 extern "C" int igModelViewMatrixBoneSelect_GetVTable(void);
 extern "C" void igModelViewMatrixBoneSelect_Register(void);
@@ -4180,17 +4184,13 @@ extern "C" O_19e150 *igIntersectTraversal_Destroy(O_19e150 *arg0, short arg1);
 extern "C" void **FUN_0019e340(void **arg0, short arg1);
 extern "C" void **FUN_0019e3c0(void **arg0, short arg1);
 extern "C" void FUN_0019e440(void);
-extern "C" void igIntersectTraversal_Register(void);
 extern "C" void thunk_igIntersectTraversal_GetMetaObject(void);
 extern "C" igMetaObject *FUN_0019e4e0(void);
 extern "C" void igIntersectTraversal_InitFields(void);
 extern "C" void FUN_0019e640(void);
 extern "C" void thunk_FUN_001ce740(void);
-extern "C" void igProbe_Create(int arg0);
-extern "C" igMetaObject *igProbe_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igProbe_GetMetaObject(void);
 extern "C" int igProbe_GetVTable(void);
-extern "C" void igProbe_EnsureRegistered(void);
 extern "C" void igProbe_Register(void);
 extern "C" void thunk_igProbe_GetMetaObject(void);
 extern "C" void igProbe_InitFields(void);
@@ -4211,11 +4211,8 @@ extern "C" void igIniShaderFactory_Register(void);
 extern "C" void thunk_igIniShaderFactory_GetMetaObject(void);
 extern "C" igMetaObject *FUN_0019f050(void);
 extern "C" void igIniShaderFactory_InitFields(void);
-extern "C" void igGroup_CreateInstance(int arg0);
-extern "C" igMetaObject *igGroup_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGroup_GetMetaObject(void);
 extern "C" int igGroup_GetVTable(void);
-extern "C" void igGroup_Register(void);
 extern "C" void thunk_igGroup_GetMetaObject(void);
 extern "C" void igGroup_InitFields(void);
 extern "C" int FUN_0019f480(int arg0);
@@ -4224,23 +4221,17 @@ extern "C" igMetaObject *igGraphPathList_GetMetaObject(void);
 extern "C" int igGraphPathList_GetVTable(void);
 extern "C" void igGraphPathList_Register(void);
 extern "C" void thunk_igGraphPathList_GetMetaObject(void);
-extern "C" int igGraphPath_Create(int arg0);
-extern "C" igMetaObject *igGraphPath_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGraphPath_GetMetaObject(void);
 extern "C" int igGraphPath_GetVTable(void);
 extern "C" void igGraphPath_Register(void);
 extern "C" void thunk_igGraphPath_GetMetaObject(void);
 extern "C" void igGraphPath_InitFields(void);
-extern "C" igMetaObject *igGeometryList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGeometryList_GetMetaObject(void);
 extern "C" int igGeometryList_GetVTable(void);
 extern "C" void igGeometryList_Register(void);
 extern "C" void thunk_igGeometryList_GetMetaObject(void);
-extern "C" void igGeometry_CreateInstance(int arg0);
-extern "C" igMetaObject *igGeometry_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGeometry_GetMetaObject(void);
 extern "C" int igGeometry_GetVTable(void);
-extern "C" void igGeometry_Register(void);
 extern "C" void thunk_igGeometry_GetMetaObject(void);
 extern "C" void FUN_0019fca0(void);
 extern "C" void thunk_FUN_001c51d0(void);
@@ -4397,8 +4388,6 @@ extern "C" void igCommonTraversal_InitFields(void);
 extern "C" void FUN_001a44d0(void);
 extern "C" void thunk_FUN_001b6c50(void);
 extern "C" int *igSmartPointer_igMetaObjectList_Construct(int *p);
-extern "C" void igCamera_CreateInstance(int arg0);
-extern "C" igMetaObject *igCamera_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igCamera_GetMetaObject(void);
 extern "C" int igCamera_GetVTable(void);
 extern "C" void igCamera_Register(void);
@@ -4459,14 +4448,11 @@ extern "C" void FUN_001a5b90(void);
 extern "C" void igAttrStack_Register(void);
 extern "C" void thunk_igAttrStack_GetMetaObject(void);
 extern "C" void igAttrStack_InitFields(void);
-extern "C" void igAttrSet_CreateInstance(int arg0);
-extern "C" igMetaObject *igAttrSet_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igAttrSet_GetMetaObject(void);
 extern "C" int igAttrSet_GetVTable(void);
 extern "C" void igAttrSet_Register(void);
 extern "C" void thunk_igAttrSet_GetMetaObject(void);
 extern "C" void igAttrSet_InitFields(void);
-extern "C" igMetaObject *igAppearanceList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igAppearanceList_GetMetaObject(void);
 extern "C" int igAppearanceList_GetVTable(void);
 extern "C" void igAppearanceList_Register(void);
@@ -4529,7 +4515,6 @@ extern "C" void FUN_001a7600(void);
 extern "C" void igAnimationModifier_Register(void);
 extern "C" void thunk_igAnimationModifier_GetMetaObject(void);
 extern "C" void igAnimationModifier_InitFields(void);
-extern "C" igMetaObject *igAnimationDatabase_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igAnimationDatabase_GetMetaObject(void);
 extern "C" int igAnimationDatabase_GetVTable(void);
 extern "C" ObjectRefWord *FUN_001a7900(ObjectRefWord *self,int delete_storage);
@@ -4638,7 +4623,6 @@ extern "C" int igAnimationTrack_GetVTable(void);
 extern "C" void igAnimationTrack_Register(void);
 extern "C" void thunk_igAnimationTrack_GetMetaObject(void);
 extern "C" void igAnimationTrack_InitFields(void);
-extern "C" igMetaObject *igActorInfo_GetMetaObject(void);
 extern "C" int igActorInfo_GetVTable(void);
 extern "C" void **FUN_001aa290(void **arg0, long long arg1);
 extern "C" void **igSmartPointer_igActorList_Destruct(void **arg0, int arg1);
@@ -4647,7 +4631,6 @@ extern "C" void FUN_001aa410(void);
 extern "C" void igActorInfo_Register(void);
 extern "C" void thunk_igActorInfo_GetMetaObject(void);
 extern "C" void igActorInfo_InitFields(void);
-extern "C" igMetaObject *igActorList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igActorList_GetMetaObject(void);
 extern "C" int igActorList_GetVTable(void);
 extern "C" void igActorList_Register(void);
@@ -4704,28 +4687,20 @@ extern "C" void FUN_001ad5c0(A_1ad5c0 *arg0, It *arg1, int arg2);
 extern "C" void FUN_001ad770(igAnimationCombiner *a);
 extern "C" int FUN_001ad860(igAnimationCombiner *arg0, igAnimationState *arg1);
 extern "C" int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone, CombinerBinding *binding);
-extern "C" int igAnimationCombiner_RemoveAllStates(CombinerResetView *c);
-extern "C" void Vec3f_Set(void *arg0, float fparg0, float fparg1, float fparg2);
 extern "C" void FUN_001ae1b0(void *arg0, float fparg0, float fparg1, float fparg2, float fparg3);
 extern "C" void **FUN_001ae1d0(void **arg0, void *arg1);
 extern "C" void **FUN_001ae250(void **arg0, igObject *arg1);
 extern "C" int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state);
-extern "C" int igAnimationCombiner_AddAnimationBlend(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone, long long arg7, float fparg0, float fparg1, long long arg_sp0);
 extern "C" void Gap__Sg__igAnimationCombiner__vfunc_10(void **arg0);
 extern "C" int Gap__Sg__igAnimationCombiner__vfunc_23(void *arg0);
-extern "C" void igAnimationCombiner_AddAnimation(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status);
-extern "C" int igAnimationCombiner_ResetToPose(CombinerStateView_1ae780 *c, CombinerStateView_1ae780 *from);
 extern "C" void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1);
 extern "C" int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDbRecord *object);
 extern "C" int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject *obj);
-extern "C" void igAnimationState_UpdateLocalTime(igAnimationState *s, long long t);
 extern "C" void Gap__Sg__igAnimationState__vfunc_23(void);
 extern "C" void Gap__Sg__igAnimationState__vfunc_24(void);
 extern "C" void Gap__Sg__igAnimationState__vfunc_25(void);
 extern "C" void Gap__Sg__igAnimationState__vfunc_26(void);
 extern "C" int FUN_001af620(igAppearanceView *a, void *t);
-extern "C" int igAppearance_AttachGraph(int *p);
-extern "C" int igAppearance_DetachGraph(void *arg0, int arg1);
 extern "C" void Gap__Sg__igAttrSet__vfunc_31(S_1af7e0 *arg0);
 extern "C" void FUN_001af860(igAttrStack *arg0);
 extern "C" void Gap__Sg__igAttrStackManager__vfunc_23(struct O_1af890 *arg0);
@@ -4743,12 +4718,7 @@ extern "C" void FUN_001b1030(igAttrStackManager *self, igAttr *attr);
 extern "C" void FUN_001b1100(struct A_1b1100 *arg0, struct B_1b1100 *arg1);
 extern "C" void FUN_001b11b0(struct A_1b11b0 *arg0, struct B_1b11b0 *arg1);
 extern "C" void FUN_001b1250(struct A_1b1250 *arg0, struct B_1b1250 *arg1, int arg2);
-extern "C" void igAttrStackManager_PushOverrideAttr(igAttrStackManager *self, igAttr *attr);
-extern "C" void igAttrStackManager_PopOverrideAttr(struct A_1b13d0 *arg0, struct B_1b13d0 *arg1);
 extern "C" void igAttrStackManager_MarkStackChanged(struct A_1b1490 *arg0, struct B_1b1490 *arg1, int arg2);
-extern "C" void igBitMask_SetAll(igDataList *arg0);
-extern "C" void igBitMask_ClearAll(igDataList *arg0);
-extern "C" void igBitMask_SetBitCount(void *arg, unsigned int bits);
 extern "C" void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2);
 extern "C" void FUN_001b23b0(int *arg0, int *arg1);
 extern "C" int FUN_001b23e0(int arg0, Y *arg1);
@@ -4982,7 +4952,6 @@ extern "C" void Gap__Sg__igFrustCullTraversal__vfunc_24(igCommonTraversal *self,
 extern "C" void FUN_001c47a0(void *arg0, int arg1, int arg2);
 extern "C" int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b);
 extern "C" int FUN_001c5160(S0_1c5160 *arg0, float fparg0);
-extern "C" void igFrustCullTraversal_ClassifyBox(int arg0, int arg1, int arg2);
 extern "C" void FUN_001c51d0(void);
 extern "C" void Gap__Bec__ParticleTimer__vfunc_15(ParticleTimer *arg0);
 extern "C" void Gap__Bec__ParticleTimer__vfunc_27(ParticleTimer *arg0, int arg1);
@@ -4995,14 +4964,11 @@ extern "C" void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1);
 extern "C" void igGraphPath_SetNodes(Obj_1c5790 *arg0, int arg1);
 extern "C" void FUN_001c5870(void *arg0, int arg1);
 extern "C" int FUN_001c58c0(T_1c58c0 *arg0);
-extern "C" int igGraphPath_GetTail(void *arg0);
 extern "C" int FUN_001c59b0(void *self);
 extern "C" int FUN_001c59e0(void *arg0);
 extern "C" void FUN_001c59f0(OO *arg0, int arg1, int arg2, int arg3);
 extern "C" int Gap__Sg__igNode__vfunc_22(void);
-extern "C" void igGraphPath_GetTransform(int arg0, int arg1, int arg2);
 extern "C" void FUN_001c5b80(SgLinkNode *o);
-extern "C" int igGroup_AppendChild(void *arg0, int arg1);
 extern "C" int FUN_001c5d70(T_1c5d70 *self, int a1, O_1c5d70 *a2);
 extern "C" void FUN_001c5e20(T_1c5e20 *arg0);
 extern "C" Ref_1c5eb0 igGroup_RemoveChildAt(S_1c5eb0 *host, int idx);
@@ -5115,7 +5081,6 @@ extern "C" void FUN_001ce710(void);
 extern "C" void FUN_001ce740(void);
 extern "C" void FUN_001ce790(int arg0, int arg1);
 extern "C" void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0);
-extern "C" void igIntersectTraversal_ResetStacks(TraversalMatrixState *self);
 extern "C" void Gap__Bec__beHitLandModelTraversal__vfunc_21(void *self, int arg1);
 extern "C" void Gap__Bec__beHitLandModelTraversal__vfunc_22(void *self, int arg1);
 extern "C" int FUN_001ceab0(HitTraversal *self, HitNode *node);
@@ -5152,7 +5117,6 @@ extern "C" void FUN_001d32f0(S_1d32f0 *arg0, int arg1);
 extern "C" void Gap__Sg__igNode__vfunc_09(void **arg0, int arg1);
 extern "C" int FUN_001d3400(void);
 extern "C" void FUN_001d3410(NodeSlots *o, void *with);
-extern "C" void Gap__Sg__igNode__resetFields(void *arg0);
 extern "C" void Gap__Sg__igNode__vfunc_17(void *arg0);
 extern "C" void **igSmartPointer_igInfoList_Destruct(struct Ref **self, short flag);
 extern "C" void **igSmartPointer_igSceneInfo_Destruct(void **arg0, long long arg1);
@@ -5165,7 +5129,6 @@ extern "C" void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1
 extern "C" void FUN_001d4180(void);
 extern "C" void Gap__Sg__igProjectiveShadowShader__vfunc_09(void **arg0, int arg1);
 extern "C" igMetaObject *Gap__Sg__igProjectiveShadowShader__vfunc_22(void);
-extern "C" void igProjectiveShadowShader_ConfigureSharedAttrs(void);
 extern "C" void FUN_001d5430(void);
 extern "C" void Gap__Sg__igProjectiveShadowShader__vfunc_10(void **arg0);
 extern "C" int FUN_001d5a70(P *arg0, Q_1d5a70 *arg1);
@@ -5182,8 +5145,6 @@ extern "C" void FUN_001d6340(S0_1d6340 *arg0, S1_1d6340 *arg1);
 extern "C" int Gap__Bec__ParticleInfo__vfunc_22(ParticleInfo *self, int name);
 extern "C" void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path);
 extern "C" ObjectRefWord *FUN_001d6560(ObjectRefWord *self,int delete_storage);
-extern "C" void igSceneInfo_CollectCameras(O_1d65e0 *self);
-extern "C" void igSceneInfo_ComputeAnimationRange(ChildOwner *self);
 extern "C" void FUN_001d6790(OO_1d6790 *arg0, AA *arg1);
 extern "C" int FUN_001d68e0(void);
 extern "C" int FUN_001d68f0(void);
@@ -5239,14 +5200,7 @@ extern "C" void FUN_001db500(A_1db500 *arg0);
 extern "C" void Gap__Sg__igSorter__vfunc_24(Sorter *arg0);
 extern "C" void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2);
 extern "C" void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2);
-extern "C" void igSwitch_EnableChild(void *arg0, unsigned int arg1);
-extern "C" void igSwitch_EnableAllChildren(int *p);
-extern "C" void igSwitch_DisableChild(void *arg0, unsigned int arg1);
-extern "C" void igSwitch_DisableAllChildren(int *p);
-extern "C" int igSwitch_AppendChild(void *arg0, int arg1);
 extern "C" int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2);
-extern "C" Obj_1c5eb0 *igSwitch_RemoveChildAt(S_1dc940 *arg0, int arg1);
-extern "C" void igObjectPool_Grow(List_1dca40 *arg0, Obj_1dca40 *(*arg1)(int));
 extern "C" void FUN_001dcb80(ObjectPool *pool, igObject *object);
 extern "C" int FUN_001dcc80(KeyTrackView *o, double t);
 extern "C" int FUN_001dce70(struct S_1dce70 *arg0, double arg1);
@@ -5262,7 +5216,6 @@ extern "C" void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]);
 extern "C" void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2);
 extern "C" int FUN_001dd370(void *arg0);
 extern "C" void FUN_001dd3e0(void *arg0, int arg1);
-extern "C" int UnsignedDivMod64_Cached(long long arg0, long long arg1, long long *arg2);
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_66(VC_1dd570 *arg0);
 extern "C" int Gap__Sg__igTransformSequence1_5__vfunc_45(igTransformSequence1_5 *self, int index);
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_62(void *arg0, long long arg1);
@@ -5288,11 +5241,9 @@ extern "C" void FUN_001e02f0(int arg0, int arg1);
 extern "C" void Gap__Sg__igTraversal__vfunc_09(A_1e0380 *arg0, int arg1);
 extern "C" void FUN_001e0410(void);
 extern "C" void FUN_001e0470(void);
-extern "C" int igTraversal_TraverseNode(S_1e04c0 *arg0, V_1e04c0 *arg1);
 extern "C" void Gap__Sg__igTraversal__vfunc_23(void *, int);
 extern "C" void Gap__Sg__igTraversal__vfunc_24(void *, int);
 extern "C" void igTraversal_RegisterFunction(struct L_1e06c0 *arg0, struct X_1e06c0 *arg1, void *arg2);
-extern "C" int igTraversal_TraverseChildren(int arg0, S_1e07a0 *arg1);
 extern "C" void thunk_FUN_001c1c50(void **self, int flag);
 extern "C" void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_10(void **arg0);
 extern "C" int Gap__Sg__igPsx2EnvironmentMapShader__vfunc_22(void);
@@ -5534,7 +5485,7 @@ static inline void clearBoneInfo(CombinerBoneInfo *b) {
     FUN_001ae250((void * *)&b->_animationState, 0);
     FUN_001ae1d0((void * *)&b->_transformSource, 0);
     FUN_001ae1b0(b->_q, 0.0f, 0.0f, 0.0f, 0.0f);
-    Vec3f_Set(b->_t, 0.0f, 0.0f, 0.0f);
+    Vec3f_Set((igVec3f *)b->_t, 0.0f, 0.0f, 0.0f);
     b->_priority = 0;
     b->_useTranslation = 0;
     b->_lastKeyframe = 1;
@@ -5543,7 +5494,7 @@ static inline void clearBoneInfo(CombinerBoneInfo *b) {
 static inline igPoolObject *poolTake(CombinerPool *pool, void *ctor) {
     int i;
     if (pool->_used >= pool->_capacity) {
-        igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))ctor);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))ctor);
     }
     i = pool->_used;
     pool->_used = i + 1;
@@ -6046,7 +5997,7 @@ static inline igObject *topAttr(AttrObjectStack *stack) {
 static inline igObject *takePooled(igObjectPool *pool, void *create) {
     int i;
     if (pool->_freeIndex >= pool->_count) {
-        igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))create);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))create);
     }
     i = pool->_freeIndex;
     pool->_freeIndex = i + 1;
@@ -6123,7 +6074,6 @@ public:
     igObjectPool *_blendMatrixPool;
     igObjectPool *_texMatPool;
 };
-extern "C" void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, LightStateAttrView *attr, int isOverride);
 extern "C" int igAttrStackManager_IsLightEnabled(igAttrStackManager *self, igLightAttr *light);
 extern "C" float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversal);
 extern "C" int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, igCommonTraversal *traversal);

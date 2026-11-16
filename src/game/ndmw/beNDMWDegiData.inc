@@ -13,9 +13,9 @@ igMetaField *g_beNDMWDegiData_maxMpMetaField;
 igMetaField *g_beNDMWDegiData_dataSizeMetaField;
 igMetaField *g_beNDMWDegiData_dataMetaField;
 
-void beNDMWDegiData_Create(int allocator) {
+beNDMWDegiData *beNDMWDegiData_Create(int allocator) {
     beNDMWDegiData_RunStaticInit();
-    igMetaObject_CreateInstance(g_beNDMWDegiData_metaObject, allocator);
+    return (beNDMWDegiData *)igMetaObject_CreateInstance(g_beNDMWDegiData_metaObject, allocator);
 }
 
 void *beNDMWDegiData_GetReadyMetaObject(void) {

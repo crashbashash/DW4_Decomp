@@ -1,11 +1,11 @@
-void igInsightCore_AddInfo(igInsightCore *self, int info) {
+void igInsightCore_AddInfo(igInsightCore *self, igObject *info) {
     unsigned int index;
     igObjectList *managers;
 
     for (index = 0; managers = (igObjectList *)((igSerialScheduler *)self->_managerList)->_managerList, index < (unsigned int)managers->_count; index++) {
         int byteOffset = index * 4;
         DW4VC *manager = (DW4VC *)*(int *)(managers->_data + byteOffset);
-        if (manager->vX(info) != 0) {
+        if (manager->vX((int)info) != 0) {
             break;
         }
     }

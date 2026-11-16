@@ -343,9 +343,9 @@ igMetaObject *beFontImage_GetMeta(void)
     return g_beFontImage_metaObject;
 }
 
-int igFont_GetMeta(void)
+igMetaObject *igFont_GetMeta(void)
 {
-    return g_igFont_metaObject[0];
+    return g_igFont_metaObject;
 }
 
 igMetaObject *beFontImageList_GetMeta(void)

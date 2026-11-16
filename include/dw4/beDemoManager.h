@@ -22,6 +22,9 @@ void beDemoManager_Case(beDemoManager *self, int ramNo);
 void beDemoManager_SetLua(beDemoManager *self, const char *chunk);
 void beDemoManager_MsgBox(beDemoManager *self, const char *text, int ramNo);
 void beDemoManager_Run(beDemoManager *self);
+beDemoManager *beDemoManager_CreateInstance(int allocator);
+
+extern igMetaObject *g_beDemoManager_metaObject;
 }
 
 #endif

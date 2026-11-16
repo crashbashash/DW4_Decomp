@@ -1,9 +1,9 @@
 igMetaObject *g_beSvStartApi_metaObject;
 int g_beSvStartApi_orderTypeStorage;
 
-void beSvStartApi_Create(int allocator) {
+beSvStartApi *beSvStartApi_Create(int allocator) {
     beSvStartApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5881F0, allocator);
+    return (beSvStartApi *)igMetaObject_CreateInstance(*(int *)0x5881F0, allocator);
 }
 
 igMetaObject *beSvStartApi_GetMetaObject(void)

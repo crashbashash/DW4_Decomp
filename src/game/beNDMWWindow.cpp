@@ -1,4 +1,6 @@
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
+#include "dw4/beNDMWWindow.h"
 #include "dw4/beNDMWWindowDispatchView.h"
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
@@ -24,18 +26,15 @@ extern "C" int beMessenger_AppendString(...);
 extern "C" int beMessenger_DispatchSelected(int, const void *);
 extern "C" int beMessenger_SelectReceivers(...);
 extern "C" int sprintf(char *, const char *, int);
-extern "C" void beNDMWWindow_QueueNumberText(beNDMWWindow *self, const char *textType, const char *textName, int number, const char *align);
 extern "C" int beMessenger_AppendObject(int, int);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_IsKindOf(int, int);
 extern "C" int beLua__RunNamedChunk(int, int, int);
-extern "C" void beNDMWWindow_RunMessageScript(beNDMWWindow *self, int chunk, int callNo);
 extern "C" int StringList_CopyRetained(...);
 extern "C" int List_Resize(void *, int, int);
 extern "C" int beMessenger_AppendVec3(int, float *);
 extern "C" int beMessenger_GetBool(int, int);
 extern "C" int beMessenger_SendNamed(...);
-extern "C" int igObject_Destroy(...);
 extern "C" void List_RemoveWordAt(void *, int);
 extern "C" void *g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
@@ -47,8 +46,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
-extern "C" void beNDMWWindow_QueueText(beNDMWWindow *self, const char *textType, const char *textName, const char *text, const char *align);
-extern "C" void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, const char *textName, int *textObject, const char *align);
 extern "C" int g_beLua_metaObject[4];
 extern "C" { int g_txtCallNo[4]; }
 extern "C" void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName);
@@ -70,19 +67,10 @@ struct Clr { static inline void ClearList(igStringRefList *l) {
     }
     l->_count = 0;
 } };
-extern "C" void beNDMWWindow_ClearQueuedText(beNDMWWindow *self);
-extern "C" void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, const char *sequence, const char *close, float *position);
 extern "C" const float g_vec3Zero[4];
-extern "C" void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self,const char *model,int id,const char *sequence,const char *close);
-extern "C" void beNDMWWindow_SendModelSequence(beNDMWWindow *self,int model,int id,int sequence);
-extern "C" void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w);
 extern "C" int beMessenger_GetBoolCount(int);
-extern "C" int beNDMWWindow_PollCloseComplete(beNDMWWindow *self);
-extern "C" void beNDMWWindow_RequestChildrenClose(beNDMWWindow *self);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
-extern "C" void beNDMWWindow_BindContext(beNDMWWindow *self, igObject *mother, int insight, int playerNo, int entCode);
-extern "C" void beNDMWWindow_UpdateTree(beNDMWWindow *w);
 
 #pragma push
 #pragma readonly_strings on
@@ -113,7 +101,7 @@ void beNDMWWindow_QueueNumberText(beNDMWWindow *self, const char *textType, cons
     beNDMWWindow_QueueText(self, textType, textName, text, align);
 }
 
-void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, const char *textName, int *textObject, const char *align) {
+void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, const char *textName, const igSmartPointer<igObject> &textObject, const char *align) {
     beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
@@ -122,7 +110,7 @@ void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, cons
     beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
-    beMessenger_AppendObject(self->_messenger, *textObject);
+    beMessenger_AppendObject(self->_messenger, (int)textObject.p);
     beMessenger_DispatchSelected(self->_messenger, "TEXTSET");
     beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
@@ -140,10 +128,10 @@ static inline int castToLuaManager(int object) {
     return 0;
 }
 
-void beNDMWWindow_RunMessageScript(beNDMWWindow *self, int chunk, int callNo) {
+void beNDMWWindow_RunMessageScript(beNDMWWindow *self, const char *chunk, int callNo) {
     int manager = castToLuaManager(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]));
     g_txtCallNo[0] = callNo;
-    beLua__RunNamedChunk(manager, chunk, 0);
+    beLua__RunNamedChunk(manager, (int)chunk, 0);
 }
 
 void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName) {
@@ -213,7 +201,7 @@ void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self, const char *model, in
     beNDMWWindow_PresentModel(self, model, id, sequence, close, origin);
 }
 
-void beNDMWWindow_SendModelSequence(beNDMWWindow *self, int model, int id, int sequence) {
+void beNDMWWindow_SendModelSequence(beNDMWWindow *self, const char *model, int id, const char *sequence) {
     beMessenger_SendNamed(self->_messenger, "MODELCTRL", model, id, sequence);
 }
 
@@ -236,7 +224,7 @@ void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w) {
             StringList_CopyRetained(&b, w->_modelCloseSeqNameList, i);
             t = (int)b;
             STR_RELEASE(t);
-            beNDMWWindow_SendModelSequence(w, s, m, t);
+            beNDMWWindow_SendModelSequence(w, (const char *)s, m, (const char *)t);
             i++;
             off += 4;
         } while (i < n);

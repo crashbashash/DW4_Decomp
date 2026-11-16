@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWShopCtrl10_metaObject;
 igMetaField *g_beNDMWShopCtrl10_xdataMenuMetaField;
 igMetaField *g_beNDMWShopCtrl10_parameterMetaField;
 
-void beNDMWShopCtrl10_Create(int allocator) {
+beNDMWShopCtrl10 *beNDMWShopCtrl10_Create(int allocator) {
     beNDMWShopCtrl10_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrl10_metaObject, allocator);
+    return (beNDMWShopCtrl10 *)igMetaObject_CreateInstance(g_beNDMWShopCtrl10_metaObject, allocator);
 }
 
 void *beNDMWShopCtrl10_GetMetaObject(void) {

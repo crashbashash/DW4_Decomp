@@ -2,9 +2,9 @@ igMetaObject *g_beShadow01_metaObject;
 igMetaField *g_beShadow01_svInfoListMetaField;
 igMetaField *g_beShadow01_savePosMetaField;
 
-void beShadow01_CreateInstance(int allocator) {
+beShadow01 *beShadow01_CreateInstance(int allocator) {
     beShadow01_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587F10, allocator);
+    return (beShadow01 *)igMetaObject_CreateInstance(*(int *)0x587F10, allocator);
 }
 
 igMetaObject *beShadow01_GetOrCreateMetaObject(void) {

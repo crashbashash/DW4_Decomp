@@ -294,7 +294,8 @@ int FUN_001adec0(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
     return result;
 }
 
-int igAnimationCombiner_RemoveAllStates(CombinerResetView *c) {
+int igAnimationCombiner_RemoveAllStates(igAnimationCombiner *combiner) {
+    CombinerResetView *c = (CombinerResetView *)combiner;
     PoolObjectList *states;
     int k;
     int count;
@@ -335,7 +336,7 @@ int igAnimationCombiner_RemoveAllStates(CombinerResetView *c) {
             FUN_001ae250((void * *)&b->_animationState, 0);
             FUN_001ae1d0((void * *)&b->_transformSource, 0);
             FUN_001ae1b0(b->_q, 0.0f, 0.0f, 0.0f, 0.0f);
-            Vec3f_Set(b->_t, 0.0f, 0.0f, 0.0f);
+            Vec3f_Set((igVec3f *)b->_t, 0.0f, 0.0f, 0.0f);
             b->_priority = 0;
             b->_useTranslation = 0;
             b->_lastKeyframe = 1;
@@ -355,7 +356,7 @@ int igAnimationCombiner_RemoveAllStates(CombinerResetView *c) {
     return 1;
 }
 
-void Vec3f_Set(void *arg0, float fparg0, float fparg1, float fparg2) {
+void Vec3f_Set(igVec3f *arg0, float fparg0, float fparg1, float fparg2) {
     *(float *)((char *)(arg0) + 0) = fparg0;
     *(float *)((char *)(arg0) + 4) = fparg1;
     *(float *)((char *)(arg0) + 8) = fparg2;
@@ -472,7 +473,9 @@ int FUN_001ae2d0(CombinerStateView *c, igPoolObject *state) {
     return 1;
 }
 
-int igAnimationCombiner_AddAnimationBlend(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status, int *priorities, bool perBone, long long arg7, float fparg0, float fparg1, long long arg_sp0) {
+int igAnimationCombiner_AddAnimationBlend(igAnimationCombiner *combiner, igAnimation *animation, int combineMode, int transitionMode, int status, int *priorities, bool perBone, long long arg7, float fparg0, float fparg1, long long arg_sp0) {
+    CombinerBlendView *c = (CombinerBlendView *)combiner;
+    CombinerAnimation *anim = (CombinerAnimation *)animation;
     struct L_1ae660 *l;
     struct E_1ae660 *e;
     int r;
@@ -489,7 +492,7 @@ int igAnimationCombiner_AddAnimationBlend(CombinerBlendView *c, CombinerAnimatio
 
 void Gap__Sg__igAnimationCombiner__vfunc_10(void **arg0) {
     if (((DW4VC_92_0 *)(arg0))->vX() != 0) {
-        igAnimationCombiner_RemoveAllStates((CombinerResetView *)arg0);
+        igAnimationCombiner_RemoveAllStates((igAnimationCombiner *)arg0);
         Gap__Core__igObject__userDestruct(arg0);
     }
 }
@@ -498,14 +501,18 @@ int Gap__Sg__igAnimationCombiner__vfunc_23(void *arg0) {
     return *(int *)((char *)(arg0) + 64) != 0;
 }
 
-void igAnimationCombiner_AddAnimation(CombinerBlendView *c, CombinerAnimation *anim, int combineMode, int transitionMode, int status) {
+void igAnimationCombiner_AddAnimation(igAnimationCombiner *combiner, igAnimation *animation, int combineMode, int transitionMode, int status) {
+    CombinerBlendView *c = (CombinerBlendView *)combiner;
+    CombinerAnimation *anim = (CombinerAnimation *)animation;
     int priority;
 
     priority = anim->_priority;
     FUN_001adec0(c, anim, combineMode, transitionMode, status, &priority, 0);
 }
 
-int igAnimationCombiner_ResetToPose(CombinerStateView_1ae780 *c, CombinerStateView_1ae780 *from) {
+int igAnimationCombiner_ResetToPose(igAnimationCombiner *combiner, igAnimationCombiner *source) {
+    CombinerStateView_1ae780 *c = (CombinerStateView_1ae780 *)combiner;
+    CombinerStateView_1ae780 *from = (CombinerStateView_1ae780 *)source;
     CombinerStateView_1ae780 *src;
     int need;
     int bones;
@@ -520,7 +527,7 @@ int igAnimationCombiner_ResetToPose(CombinerStateView_1ae780 *c, CombinerStateVi
     if (need > src->_animHierarchy->reset()) {
         return 0;
     }
-    igAnimationCombiner_RemoveAllStates((CombinerResetView *)c);
+    igAnimationCombiner_RemoveAllStates((igAnimationCombiner *)c);
     c->_cacheValid = 0;
     bones = c->_animHierarchy->reset();
     state = (CombinerNewState *)poolTake(((CombinerPool *)g_igAnimationStatePool_instance.p), (void *)FUN_001a6bb0);

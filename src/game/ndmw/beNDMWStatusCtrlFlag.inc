@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWStatusCtrlFlag_metaObject;
 igMetaField *g_beNDMWStatusCtrlFlag_impItemsMetaField;
 
-void beNDMWStatusCtrlFlag_Create(int allocator) {
+beNDMWStatusCtrlFlag *beNDMWStatusCtrlFlag_Create(int allocator) {
     beNDMWStatusCtrlFlag_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlFlag_metaObject, allocator);
+    return (beNDMWStatusCtrlFlag *)igMetaObject_CreateInstance(g_beNDMWStatusCtrlFlag_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusCtrlFlag_GetMetaObject(void) {

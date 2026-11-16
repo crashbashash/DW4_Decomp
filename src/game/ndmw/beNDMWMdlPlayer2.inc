@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWMdlPlayer2_metaObject;
 igMetaField *g_beNDMWMdlPlayer2_padManagerMetaField;
 
-void beNDMWMdlPlayer2_CreateInstance(int allocator) {
+beNDMWMdlPlayer2 *beNDMWMdlPlayer2_CreateInstance(int allocator) {
     beNDMWMdlPlayer2_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2_metaObject, allocator);
+    return (beNDMWMdlPlayer2 *)igMetaObject_CreateInstance(g_beNDMWMdlPlayer2_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlPlayer2_GetOrCreateMetaObject(void) {

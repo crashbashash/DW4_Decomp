@@ -9,9 +9,9 @@ igMetaField *g_beMatCtrl_wkMatOldOnListMetaField;
 igMetaField *g_beMatCtrl_isLuaCallDispMetaField;
 igMetaField *g_beMatCtrl_luaMetaField;
 
-void beMatCtrl_CreateInstance(int allocator) {
+beMatCtrl *beMatCtrl_CreateInstance(int allocator) {
     beMatCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589160, allocator);
+    return (beMatCtrl *)igMetaObject_CreateInstance(*(int *)0x589160, allocator);
 }
 
 igMetaObject *beMatCtrl_GetOrCreateMetaObject(void) {

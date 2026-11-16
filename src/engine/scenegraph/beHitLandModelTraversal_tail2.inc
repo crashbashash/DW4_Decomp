@@ -58,10 +58,11 @@ void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0) 
             igObject_Destroy((void *)sp3C);
         }
     }
-    igIntersectTraversal_ResetStacks((TraversalMatrixState *)arg0);
+    igIntersectTraversal_ResetStacks((igIntersectTraversal *)arg0);
 }
 
-void igIntersectTraversal_ResetStacks(TraversalMatrixState *self) {
+void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal) {
+    TraversalMatrixState *self = (TraversalMatrixState *)traversal;
     ReleasableList *o;
     int cnt;
     int idx;

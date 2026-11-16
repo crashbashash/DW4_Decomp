@@ -25,10 +25,19 @@ enum p2PoolType {
     P2_POOL_DISPLAY_LIST
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void p2GrowPool(int type, void *freeList);
 void p2SetPoolSize(int type, int size);
 int p2GetPoolAllocated(unsigned int type);
 void p2FixDmaPacketPool(int channel);
 void p2FreePool(unsigned int type);
+void p2ResetDmaPacketCount(int channel);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

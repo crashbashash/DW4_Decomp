@@ -21,9 +21,9 @@ igMetaField *g_beAction2InfoWork_blendStateAttrMetaField;
 igMetaField *g_beAction2InfoWork_textureStateAttrMetaField;
 igMetaField *g_beAction2InfoWork_lightingStateAttrMetaField;
 
-void beAction2InfoWork_CreateInstance(int allocator) {
+beAction2InfoWork *beAction2InfoWork_CreateInstance(int allocator) {
     beAction2InfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589E98, allocator);
+    return (beAction2InfoWork *)igMetaObject_CreateInstance(*(int *)0x589E98, allocator);
 }
 
 igMetaObject *beAction2InfoWork_GetOrCreateMetaObject(void) {

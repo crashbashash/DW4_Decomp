@@ -1,4 +1,6 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWShopCtrlEditBit.h"
+#include "dw4/beNDMWWindow.h"
 #include "dw4/igSmartPointer.h"
 
 extern "C" void *StringPool_Allocate(int size);
@@ -6,9 +8,6 @@ extern "C" void *StringPool_Construct(void *pool);
 extern "C" char *StringPool_Intern(void *pool, const char *text);
 extern "C" int StringChunk_ReleaseHeader(int chunk, int *header);
 extern "C" void *g_stringPool[4];
-extern "C" int beNDMWWindow_RunMessageScript(void *self, const char *script, int entCode);
-extern "C" int beNDMWWindow_PresentModelAtOrigin(void *self, const char *model, int id, const char *sequence, const char *close);
-extern "C" int beNDMWWindow_QueueText(void *self, const char *type, const char *name, const char *text, const char *align);
 extern "C" int beMessenger_AppendBool(int messenger, int value);
 extern "C" int beMessenger_AppendInt(int messenger, int value);
 extern "C" int beMessenger_AppendString(int messenger, const char *text);
@@ -112,8 +111,6 @@ extern "C" void beNDMWShopSelect03_Setup(beNDMWShopSelect03 *self);
 extern "C" void beNDMWShopSelect11_Setup(beNDMWShopSelect11 *self);
 extern "C" void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self);
 extern "C" void beNDMWShopSelect34_Setup(beNDMWShopSelect34 *self);
-extern "C" void beNDMWShopCtrlEditBit_ShowValueDigits(beNDMWShopCtrlEditBit *self, int mode, int value);
-extern "C" void beNDMWWindow_ShowPaddedDigits(beNDMWWindow *self, int value, unsigned int digits, const char *slotFormat);
 extern "C" void beNDMWShopSelect52_Setup(beNDMWShopSelect52 *self);
 extern "C" void beNDMWShopSelectA0_Setup(beNDMWShopSelectA0 *self);
 extern "C" void beNDMWShopSelectB0_Setup(beNDMWShopSelectB0 *self);
@@ -134,7 +131,6 @@ extern "C" int igProperty_GetRecordByte(int object, const char *name);
 extern "C" PropertyRecord *igProperty_GetRecordFolder(int object, const char *name);
 extern "C" int beMessenger_SendNamed(int messenger, const char *group, const char *name, int ramNo, const char *message);
 extern "C" const char *beDataBase_GetRecordString(int database, int record, const char *key);
-extern "C" void beNDMWWindow_QueueObjectText(void *self, const char *type, const char *name, const igSmartPointer<igObject> &object, const char *align);
 /* Font slots of the four party rows of ShopSelect02. */
 typedef struct PlayerFontTable { const char *fonts[4]; } __attribute__((aligned(16))) PlayerFontTable;
 extern "C" const PlayerFontTable g_shopPlayerNameFonts;
@@ -216,7 +212,7 @@ void beNDMWShopSelect00_Setup(beNDMWShopSelect00 *self) {
             StringRef held((char *)self->_panelName, 1);
             StringList_AppendRetained(self->_textCloseNameList, held);
         }
-        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode);
     }
     SET_INFO_NAME(self, i_stmessky)
     self->_selectMax = 1;
@@ -235,7 +231,7 @@ void beNDMWShopSelect01_Setup(beNDMWShopSelect01 *self) {
         INTERN_APPEND(self->_textCloseNameList, font000_4)
         INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
         INTERN_APPEND(self->_textCloseNameList, font001_4)
-        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode);
         self->_selectMax = 2;
         break;
     case 0x47E: case 0x546: case 0x60E: case 0x672: case 0x6D6: case 0x73A: case 0x79E:
@@ -245,7 +241,7 @@ void beNDMWShopSelect01_Setup(beNDMWShopSelect01 *self) {
         INTERN_APPEND(self->_textCloseNameList, font001_4)
         INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
         INTERN_APPEND(self->_textCloseNameList, font002_3)
-        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode);
         self->_selectMax = 3;
         break;
     }
@@ -271,10 +267,10 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self) {
             igObjectList *names = (igObjectList *)igProperty_GetRecordFolder(player, PLAYERNAME_5)->value;
             if (names->_count > 0) {
                 igSmartPointer<igObject> name(*(igObject **)names->_data, kRetainReference);
-                beNDMWWindow_QueueObjectText(self, TALKFONT01_2, fonts.fonts[i], igSmartPointer<igObject>(name), LEFT_5);
+                beNDMWWindow_QueueObjectText((beNDMWWindow *)self, TALKFONT01_2, fonts.fonts[i], igSmartPointer<igObject>(name), LEFT_5);
             }
             beMessenger_SendNamed(self->_messenger, DATABASE_13, text_shinka, 0, GETDATABASE_12);
-            beNDMWWindow_QueueText(self, TALKFONT04, fonts.fonts[i],
+            beNDMWWindow_QueueText((beNDMWWindow *)self, TALKFONT04, fonts.fonts[i],
                 beDataBase_GetRecordString(beMessenger_GetObject(self->_messenger, 0), igProperty_GetRecord(player, DIGIMONNO_7)->value, NAME_7),
                 LEFT_5);
             players = (igIntList *)self->_playerNoList;
@@ -287,7 +283,7 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self) {
         StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)));
         StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
         StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
-        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode);
         self->_selectMax = 2;
         break;
     case 2: case 3: case 4:
@@ -300,7 +296,7 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self) {
         StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)));
         StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
         StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font04)));
-        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 2030);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 2030);
         break;
     case 1:
         self->_selectMax = 3;
@@ -310,7 +306,7 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self) {
         StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
         StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
         StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)));
-        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 2034);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 2034);
         break;
     }
     SET_INFO_NAME(self, text_i_messcr)
@@ -329,7 +325,7 @@ void beNDMWShopSelect03_Setup(beNDMWShopSelect03 *self) {
     if (self->_entCode > 0) {
         INTERN_APPEND(self->_textCloseTypeList, TALKFONT01_2)
         INTERN_APPEND(self->_textCloseNameList, font00)
-        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode);
     }
     SET_INFO_NAME(self, i_messky)
     self->_selectMax = 1;
@@ -341,15 +337,15 @@ void beNDMWShopSelect03_Setup(beNDMWShopSelect03 *self) {
 }
 
 void beNDMWShopSelect11_Setup(beNDMWShopSelect11 *self) {
-    beNDMWWindow_PresentModelAtOrigin(self, j_shwin_2, 0, SQ_XDATASTATUSOPEN, SQ_CLOSE_8);
+    beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, j_shwin_2, 0, SQ_XDATASTATUSOPEN, SQ_CLOSE_8);
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
     INTERN_APPEND(self->_textCloseNameList, font100_4)
-    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x481);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 0x481);
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT13_3)
     INTERN_APPEND(self->_textCloseNameList, font000_4)
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT35_2)
     INTERN_APPEND(self->_textCloseNameList, font001_4)
-    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x44D);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 0x44D);
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
     INTERN_APPEND(self->_textCloseNameList, font000_4)
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
@@ -364,21 +360,21 @@ void beNDMWShopSelect11_Setup(beNDMWShopSelect11 *self) {
     INTERN_APPEND(self->_textCloseNameList, font005_2)
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT14_3)
     INTERN_APPEND(self->_textCloseNameList, font006_2)
-    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x44F);
-    beNDMWWindow_QueueText(self, STWINFONT19, font000_4, space_3, RIGHT_4);
-    beNDMWWindow_QueueText(self, STWINFONT19, font001_4, space_3, RIGHT_4);
-    beNDMWWindow_QueueText(self, STWINFONT19, font002_3, space_3, RIGHT_4);
-    beNDMWWindow_QueueText(self, STWINFONT19, font003_3, space_3, RIGHT_4);
-    beNDMWWindow_QueueText(self, STWINFONT19, font004_2, space_3, RIGHT_4);
-    beNDMWWindow_QueueText(self, STWINFONT19, font005_2, space_3, RIGHT_4);
-    beNDMWWindow_QueueText(self, STWINFONT19, font006_2, space_3, RIGHT_4);
-    beNDMWWindow_QueueText(self, STWINFONT29_4, font000_4, space_3, LEFT_5);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 0x44F);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font000_4, space_3, RIGHT_4);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font001_4, space_3, RIGHT_4);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font002_3, space_3, RIGHT_4);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font003_3, space_3, RIGHT_4);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font004_2, space_3, RIGHT_4);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font005_2, space_3, RIGHT_4);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT19, font006_2, space_3, RIGHT_4);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_4, font000_4, space_3, LEFT_5);
     beMessenger_SelectGroup(self->_messenger, GAMERAM_10);
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
     beMessenger_AppendBool(self->_messenger, 0);
     beMessenger_DispatchSelected(self->_messenger, RECALCPLAYER_6);
     beNDMWShopSelect11_RefreshStatCosts(self);
-    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode + 0x482);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode + 0x482);
     SET_INFO_NAME(self, i_stcursor01_2)
     self->_selectMax = 7;
     self->_offsetPos[0] = -121.0f;
@@ -622,14 +618,14 @@ void beNDMWShopSelect52_Setup(beNDMWShopSelect52 *self) {
 }
 
 void beNDMWShopSelectA0_Setup(beNDMWShopSelectA0 *self) {
-    beNDMWWindow_PresentModelAtOrigin(self, j_shcardwin_2, 0, SQ_OPEN_7, SQ_CLOSE_8);
+    beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, j_shcardwin_2, 0, SQ_OPEN_7, SQ_CLOSE_8);
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT34)
     INTERN_APPEND(self->_textCloseNameList, font000_4)
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT34)
     INTERN_APPEND(self->_textCloseNameList, font001_4)
-    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x7D1);
-    beNDMWWindow_QueueText(self, STWINFONT33_2, font000_4, space_3, CENTER_3);
-    beNDMWWindow_QueueText(self, STWINFONT33_2, font001_4, space_3, CENTER_3);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 0x7D1);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT33_2, font000_4, space_3, CENTER_3);
+    beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT33_2, font001_4, space_3, CENTER_3);
     SET_INFO_NAME(self, j_shcardcursor)
     self->_selectMax = 9;
     self->_offsetPos[0] = 0;
@@ -649,7 +645,7 @@ void beNDMWShopSelectB0_Setup(beNDMWShopSelectB0 *self) {
     INTERN_APPEND(self->_textCloseNameList, font000_4)
     INTERN_APPEND(self->_textCloseTypeList, STWINFONT29_4)
     INTERN_APPEND(self->_textCloseNameList, font001_4)
-    beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 0x625);
+    beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 0x625);
     if (self->_decideList != 0) {
         int i;
         const char **font;
