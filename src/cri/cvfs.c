@@ -131,7 +131,7 @@ void cvFsFinish(void)
     }
     for (i = 0; i < CVFS_MAX_HANDLES; i++) {
         if (cvfs_handles[i].vtbl != 0) {
-            ((void (*)(int))cvfs_handles[i].vtbl->close)(cvfs_handles[i].fd);
+            cvfs_handles[i].vtbl->close(cvfs_handles[i].fd);
         }
         cvfs_handles[i].vtbl = 0;
         cvfs_handles[i].fd = 0;
@@ -143,7 +143,7 @@ void cvFsFinish(void)
     cvfs_defdev[0] = 0;
 }
 
-void cvFsAddDev(char *devname, CvFsVtbl *(*get_if)(void))
+void cvFsAddDev(char *devname, CvFsVtbl *(*get_if)(void), void *prm)
 {
     extern char *volatile cvfs_build;
     CvFsVtbl *vtbl;
@@ -164,7 +164,7 @@ void cvFsAddDev(char *devname, CvFsVtbl *(*get_if)(void))
         return;
     }
     if (vtbl->entry_err_func != 0) {
-        ((void (*)(CvFsErrFn, void *))vtbl->entry_err_func)(cvFsCallUsrErrFn, 0);
+        vtbl->entry_err_func(cvFsCallUsrErrFn, 0);
     }
 }
 
@@ -329,7 +329,7 @@ CvFsHandle *cvFsOpen(const char *path, void *atr, int rw)
         return 0;
     }
     if (vtbl->open != 0) {
-        hdl->fd = ((int (*)(const char *, void *, int))vtbl->open)(fname, atr, rw);
+        hdl->fd = vtbl->open(fname, atr, rw);
     } else {
         releaseCvFsHn(hdl);
         cvFsError(cvFsOpen_5_vtbl_error);
@@ -413,7 +413,7 @@ void cvFsClose(CvFsHandle *hdl)
         return;
     }
     if (hdl->vtbl->close != 0) {
-        ((void (*)(int))hdl->vtbl->close)(hdl->fd);
+        hdl->vtbl->close(hdl->fd);
         releaseCvFsHn(hdl);
         return;
     }
@@ -429,7 +429,7 @@ int cvFsTell(CvFsHandle *hdl)
         return 0;
     }
     if (hdl->vtbl->tell != 0) {
-        pos = ((int (*)(int))hdl->vtbl->tell)(hdl->fd);
+        pos = hdl->vtbl->tell(hdl->fd);
     } else {
         pos = 0;
         cvFsError(cvFsTell_2_vtbl_error);
@@ -446,7 +446,7 @@ int cvFsSeek(CvFsHandle *hdl, int offset, int origin)
         return 0;
     }
     if (hdl->vtbl->seek != 0) {
-        pos = ((int (*)(int, int, int))hdl->vtbl->seek)(hdl->fd, offset, origin);
+        pos = hdl->vtbl->seek(hdl->fd, offset, origin);
     } else {
         pos = 0;
         cvFsError(cvFsSeek_2_vtbl_error);
@@ -463,7 +463,7 @@ int cvFsReqRd(CvFsHandle *hdl, int nsct, void *buf)
         return 0;
     }
     if (hdl->vtbl->req_rd != 0) {
-        nreq = ((int (*)(int, int, void *))hdl->vtbl->req_rd)(hdl->fd, nsct, buf);
+        nreq = hdl->vtbl->req_rd(hdl->fd, nsct, buf);
     } else {
         nreq = 0;
         cvFsError(cvFsReqRd_2_vtbl_error);
@@ -480,7 +480,7 @@ int cvFsReqWr(CvFsHandle *hdl, int nsct, void *buf)
         return 0;
     }
     if (hdl->vtbl->req_wr != 0) {
-        nreq = ((int (*)(int, int, void *))hdl->vtbl->req_wr)(hdl->fd, nsct, buf);
+        nreq = hdl->vtbl->req_wr(hdl->fd, nsct, buf);
     } else {
         cvFsError(cvFsReqWr_2_vtbl_error);
     }
@@ -494,7 +494,7 @@ void cvFsStopTr(CvFsHandle *hdl)
         return;
     }
     if (hdl->vtbl->stop_tr != 0) {
-        ((void (*)(int))hdl->vtbl->stop_tr)(hdl->fd);
+        hdl->vtbl->stop_tr(hdl->fd);
         return;
     }
     cvFsError(cvFsStopTr_2_vtbl_error);
@@ -506,7 +506,7 @@ void cvFsExecServer(void)
 
     for (i = 0; i < CVFS_MAX_DEVICES; i++) {
         if (cvfs_devices[i].vtbl != 0 && cvfs_devices[i].vtbl->exec_server != 0) {
-            ((void (*)(void))cvfs_devices[i].vtbl->exec_server)();
+            cvfs_devices[i].vtbl->exec_server();
         }
     }
 }
@@ -520,7 +520,7 @@ int cvFsGetStat(CvFsHandle *hdl)
         return CVFS_STAT_ERROR;
     }
     if (hdl->vtbl->get_stat != 0) {
-        stat = ((int (*)(int))hdl->vtbl->get_stat)(hdl->fd);
+        stat = hdl->vtbl->get_stat(hdl->fd);
     } else {
         cvFsError(cvFsGetStat_2_vtbl_error);
     }
@@ -549,7 +549,7 @@ int cvFsGetFileSize(const char *path)
         cvFsError(cvFsGetFileSize_3_device_not_found);
     }
     if (vtbl->get_file_size != 0) {
-        size = ((int (*)(const char *))vtbl->get_file_size)(fname);
+        size = vtbl->get_file_size(fname);
     } else {
         cvFsError(cvFsGetFileSize_4_vtbl_error);
         return 0;
@@ -579,7 +579,7 @@ int cvFsGetFileSizeEx(const char *path, int arg)
         cvFsError(cvFsGetFileSizeEx_3_device_not_found);
     }
     if (vtbl->get_file_size_ex != 0) {
-        size = ((int (*)(const char *, int))vtbl->get_file_size_ex)(fname, arg);
+        size = vtbl->get_file_size_ex(fname, arg);
     } else {
         cvFsError(cvFsGetFileSizeEx_4_vtbl_error);
         return 0;
@@ -597,7 +597,7 @@ int cvFsGetFileSizeByHndl(CvFsHandle *hdl)
     }
     size = 0x7FFFFFFF;
     if (hdl->vtbl->opt_fn1 != 0) {
-        size = ((int (*)(int, int, int, int))hdl->vtbl->opt_fn1)(hdl->fd, CVFS_OPT_FILE_SIZE_BY_HNDL, 0, 0);
+        size = hdl->vtbl->opt_fn1(hdl->fd, CVFS_OPT_FILE_SIZE_BY_HNDL, 0, 0);
     }
     return size;
 }
@@ -630,7 +630,7 @@ int cvFsGetFreeSize(const char *devname)
             vtbl = cvfs_devices[i].vtbl;
             if (vtbl != 0) {
                 if (vtbl->get_free_size != 0) {
-                    size = ((int (*)(void))vtbl->get_free_size)();
+                    size = vtbl->get_free_size();
                 }
             } else {
                 cvFsError(cvFsGetFreeSize_6_vtbl_error);
@@ -650,7 +650,7 @@ int cvFsGetSctLen(CvFsHandle *hdl)
         return 0;
     }
     if (hdl->vtbl->get_sct_len != 0) {
-        len = ((int (*)(int))hdl->vtbl->get_sct_len)(hdl->fd);
+        len = hdl->vtbl->get_sct_len(hdl->fd);
     } else {
         cvFsError(cvFsGetSctLen_2_vtbl_error);
     }
@@ -664,7 +664,7 @@ void cvFsSetSctLen(CvFsHandle *hdl, int len)
         return;
     }
     if (hdl->vtbl->set_sct_len != 0) {
-        ((void (*)(int, int))hdl->vtbl->set_sct_len)(hdl->fd, len);
+        hdl->vtbl->set_sct_len(hdl->fd, len);
         return;
     }
     cvFsError(cvFsSetSctLen_4_vtbl_error);
@@ -679,7 +679,7 @@ int cvFsGetNumTr(CvFsHandle *hdl)
         return 0;
     }
     if (hdl->vtbl->get_num_tr != 0) {
-        ntr = ((int (*)(int))hdl->vtbl->get_num_tr)(hdl->fd);
+        ntr = hdl->vtbl->get_num_tr(hdl->fd);
     } else {
         cvFsError(cvFsGetNumTr_2_vtbl_error);
     }
@@ -708,7 +708,7 @@ int cvFsChangeDir(const char *path)
         cvFsError(cvFsChangeDir_3_device_not_found);
     }
     if (vtbl->change_dir != 0) {
-        result = ((int (*)(const char *))vtbl->change_dir)(fname);
+        result = vtbl->change_dir(fname);
     } else {
         cvFsError(cvFsChangeDir_4_vtbl_error);
         return -1;
@@ -733,7 +733,7 @@ int cvFsIsExistFile(const char *path)
         cvFsError(cvFsIsExistFile_3_device_not_found);
     }
     if (vtbl->is_exist_file != 0) {
-        return ((int (*)(const char *))vtbl->is_exist_file)(fname);
+        return vtbl->is_exist_file(fname);
     }
     cvFsError(cvFsIsExistFile_4_vtbl_error);
     return 0;
@@ -741,7 +741,7 @@ int cvFsIsExistFile(const char *path)
 
 int cvFsGetNumFiles(const char *devname)
 {
-    CvFsVolumeArg arg;
+    CvFsOptPrm arg;
     CvFsVtbl *vtbl;
     unsigned int len;
     int nfile;
@@ -756,13 +756,13 @@ int cvFsGetNumFiles(const char *devname)
         vtbl = cvfs_devices[i].vtbl;
         if (isNeedDevName(devname) != 0) {
             if (vtbl != 0 && vtbl->opt_fn1 != 0) {
-                arg.volume = (int)devname;
-                nfile = ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_GET_NUM_FILES, 0, 0);
+                arg.prm[1] = (void *)devname;
+                nfile = vtbl->opt_fn1(&arg, CVFS_OPT_GET_NUM_FILES, 0, 0);
                 break;
             }
         } else {
             if (vtbl != 0 && vtbl->get_num_files != 0) {
-                nfile = ((int (*)(void))vtbl->get_num_files)();
+                nfile = vtbl->get_num_files();
                 break;
             }
         }
@@ -789,7 +789,7 @@ int cvFsLoadDirInfo(const char *path, void *work, int nfile)
     addDevName(devname, fname);
     vtbl = getDevice(devname);
     if (vtbl != 0 && vtbl->load_dir_info != 0) {
-        nload = ((int (*)(const char *, void *, int))vtbl->load_dir_info)(path, work, nfile);
+        nload = vtbl->load_dir_info(path, work, nfile);
     }
     return nload;
 }
@@ -799,7 +799,7 @@ int cvFsGetMaxByteRate(CvFsHandle *hdl)
     if (hdl == 0) {
         cvFsError(cvFsGetMaxByteRate_1_handle_error);
     } else if (hdl->vtbl->get_max_byte_rate != 0) {
-        return ((int (*)(int))hdl->vtbl->get_max_byte_rate)(hdl->fd);
+        return hdl->vtbl->get_max_byte_rate(hdl->fd);
     } else {
         cvFsError(cvFsGetMaxByteRate_2_vtbl_error);
     }
@@ -829,7 +829,7 @@ int cvFsMakeDir(const char *path)
         cvFsError(cvFsMakeDir_3_device_not_found);
     }
     if (vtbl->make_dir != 0) {
-        result = ((int (*)(const char *))vtbl->make_dir)(fname);
+        result = vtbl->make_dir(fname);
     } else {
         cvFsError(cvFsMakeDir_4_vtbl_error);
         return -1;
@@ -859,7 +859,7 @@ int cvFsRemoveDir(const char *path)
         cvFsError(cvFsRemoveDir_3_device_not_found);
     }
     if (vtbl->remove_dir != 0) {
-        result = ((int (*)(const char *))vtbl->remove_dir)(fname);
+        result = vtbl->remove_dir(fname);
     } else {
         cvFsError(cvFsRemoveDir_4_vtbl_error);
         return -1;
@@ -889,7 +889,7 @@ int cvFsDeleteFile(const char *path)
         cvFsError(cvFsDeleteFile_3_device_not_found);
     }
     if (vtbl->delete_file != 0) {
-        result = ((int (*)(const char *))vtbl->delete_file)(fname);
+        result = vtbl->delete_file(fname);
     } else {
         cvFsError(cvFsDeleteFile_4_vtbl_error);
         return -1;
@@ -934,7 +934,7 @@ int cvFsOptFn1(CvFsHandle *hdl, int code, int arg)
         return 0;
     }
     if (hdl->vtbl->opt_fn1 != 0) {
-        result = ((int (*)(int, int, int))hdl->vtbl->opt_fn1)(hdl->fd, code, arg);
+        result = hdl->vtbl->opt_fn1(hdl->fd, code, arg);
     } else {
         cvFsError(cvFsOptFn1_2_vtbl_error);
     }
@@ -950,7 +950,7 @@ int cvFsOptFn2(CvFsHandle *hdl, int code, int arg)
         return 0;
     }
     if (hdl->vtbl->opt_fn2 != 0) {
-        result = ((int (*)(int, int, int))hdl->vtbl->opt_fn2)(hdl->fd, code, arg);
+        result = hdl->vtbl->opt_fn2(hdl->fd, code, arg);
     } else {
         cvFsError(cvFsOptFn2_2_vtbl_error);
     }
@@ -959,7 +959,7 @@ int cvFsOptFn2(CvFsHandle *hdl, int code, int arg)
 
 int cvFsSetCurVolume(const char *devname, void *image)
 {
-    CvFsVolumeArg arg;
+    CvFsOptPrm arg;
     CvFsVtbl *vtbl;
 
     if (devname == 0) {
@@ -976,9 +976,9 @@ int cvFsSetCurVolume(const char *devname, void *image)
         return -1;
     }
     memset(&arg, 0, sizeof(arg));
-    arg.image = (int)image;
+    arg.prm[0] = image;
     if (vtbl->opt_fn1 != 0) {
-        return ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_SET_CUR_VOLUME, 0, 0);
+        return vtbl->opt_fn1(&arg, CVFS_OPT_SET_CUR_VOLUME, 0, 0);
     }
     return -1;
 }
@@ -990,7 +990,7 @@ int FUN_00270f68(void)
 
 int cvFsAddVolumeEx(const char *devname, const char *volume, void *image, int option)
 {
-    CvFsVolumeArg arg;
+    CvFsOptPrm arg;
     CvFsVtbl *vtbl;
 
     if (devname == 0) {
@@ -1011,18 +1011,18 @@ int cvFsAddVolumeEx(const char *devname, const char *volume, void *image, int op
         return -1;
     }
     memset(&arg, 0, sizeof(arg));
-    arg.image = (int)image;
-    arg.volume = (int)volume;
-    arg.option = option;
+    arg.prm[0] = image;
+    arg.prm[1] = (void *)volume;
+    arg.prm[2] = (void *)option;
     if (vtbl->opt_fn1 != 0) {
-        return ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_ADD_VOLUME, 0, 0);
+        return vtbl->opt_fn1(&arg, CVFS_OPT_ADD_VOLUME, 0, 0);
     }
     return -1;
 }
 
 int cvFsDelVolume(const char *devname, const char *volume)
 {
-    CvFsVolumeArg arg;
+    CvFsOptPrm arg;
     CvFsVtbl *vtbl;
 
     if (devname == 0) {
@@ -1039,16 +1039,16 @@ int cvFsDelVolume(const char *devname, const char *volume)
         return -1;
     }
     memset(&arg, 0, sizeof(arg));
-    arg.volume = (int)volume;
+    arg.prm[1] = (void *)volume;
     if (vtbl->opt_fn1 != 0) {
-        return ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_DEL_VOLUME, 0, 0);
+        return vtbl->opt_fn1(&arg, CVFS_OPT_DEL_VOLUME, 0, 0);
     }
     return -1;
 }
 
 int cvFsGetVolumeInfo(const char *devname, const char *volume, void *info)
 {
-    CvFsVolumeArg arg;
+    CvFsOptPrm arg;
     CvFsVtbl *vtbl;
 
     if (devname == 0) {
@@ -1065,17 +1065,17 @@ int cvFsGetVolumeInfo(const char *devname, const char *volume, void *info)
         return -1;
     }
     memset(&arg, 0, sizeof(arg));
-    arg.volume = (int)volume;
-    arg.option = (int)info;
+    arg.prm[1] = (void *)volume;
+    arg.prm[2] = info;
     if (vtbl->opt_fn1 != 0) {
-        return ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_GET_VOLUME_INFO, 0, 0);
+        return vtbl->opt_fn1(&arg, CVFS_OPT_GET_VOLUME_INFO, 0, 0);
     }
     return -1;
 }
 
 void cvFsSetDefVol(const char *devname, const char *volume)
 {
-    CvFsVolumeArg arg;
+    CvFsOptPrm arg;
     CvFsVtbl *vtbl;
 
     if (devname == 0) {
@@ -1092,9 +1092,9 @@ void cvFsSetDefVol(const char *devname, const char *volume)
         return;
     }
     memset(&arg, 0, sizeof(arg));
-    arg.volume = (int)volume;
+    arg.prm[1] = (void *)volume;
     if (vtbl->opt_fn1 != 0) {
-        ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_SET_DEF_VOL, 0, 0);
+        vtbl->opt_fn1(&arg, CVFS_OPT_SET_DEF_VOL, 0, 0);
     }
 }
 
@@ -1107,7 +1107,7 @@ int isNeedDevName(const char *devname)
         return 0;
     }
     if (vtbl->opt_fn1 != 0) {
-        return ((int (*)(int, int, int, int))vtbl->opt_fn1)(0, CVFS_OPT_IS_FULL_PATH, 0, 0);
+        return vtbl->opt_fn1(0, CVFS_OPT_IS_FULL_PATH, 0, 0);
     }
     return 0;
 }
@@ -1137,8 +1137,8 @@ long long cvFsGetNumTr64(CvFsHandle *hdl)
         return 0;
     }
     if (hdl->vtbl->opt_fn1 != 0) {
-        ntr = ((long long)((int (*)(int, int, int, int))hdl->vtbl->opt_fn1)(hdl->fd, CVFS_OPT_NUM_TR64_HIGH, 0, 0) << 32)
-            + (unsigned int)((int (*)(int, int, int, int))hdl->vtbl->opt_fn1)(hdl->fd, CVFS_OPT_NUM_TR64_LOW, 0, 0);
+        ntr = ((long long)hdl->vtbl->opt_fn1(hdl->fd, CVFS_OPT_NUM_TR64_HIGH, 0, 0) << 32)
+            + (unsigned int)hdl->vtbl->opt_fn1(hdl->fd, CVFS_OPT_NUM_TR64_LOW, 0, 0);
     }
     return ntr;
 }
@@ -1154,9 +1154,9 @@ long long cvFsGetFileSize64(const char *path)
     getDevName(devname, fname, path);
     vtbl = variousProc(devname, fname, path);
     if (vtbl->opt_fn1 != 0) {
-        high = ((int (*)(const char *, int, char *, int))vtbl->opt_fn1)(path, CVFS_OPT_FILE_SIZE64_HIGH, fname, 0);
+        high = vtbl->opt_fn1(path, CVFS_OPT_FILE_SIZE64_HIGH, fname, 0);
         size = ((long long)high << 32)
-             + (unsigned int)((int (*)(const char *, int, char *, int))vtbl->opt_fn1)(path, CVFS_OPT_FILE_SIZE64_LOW, fname, 0);
+             + (unsigned int)vtbl->opt_fn1(path, CVFS_OPT_FILE_SIZE64_LOW, fname, 0);
     }
     return size;
 }
@@ -1177,9 +1177,9 @@ long long cvFsGetFileSizeEx64(const char *path, int arg)
     getDevName(devname, fname, path);
     size = 0;
     if (vtbl->opt_fn1 != 0) {
-        high = ((int (*)(const char *, int, char *, int))vtbl->opt_fn1)(path, CVFS_OPT_FILE_SIZE_EX64_HIGH, fname, arg);
+        high = vtbl->opt_fn1(path, CVFS_OPT_FILE_SIZE_EX64_HIGH, fname, arg);
         size = ((long long)high << 32)
-             + (unsigned int)((int (*)(const char *, int, char *, int))vtbl->opt_fn1)(path, CVFS_OPT_FILE_SIZE_EX64_LOW, fname, arg);
+             + (unsigned int)vtbl->opt_fn1(path, CVFS_OPT_FILE_SIZE_EX64_LOW, fname, arg);
     }
     return size;
 }
@@ -1193,7 +1193,7 @@ int cvFsGetFsys64Info(CvFsHandle *hdl)
         return 0;
     }
     if (hdl->vtbl->opt_fn1 != 0) {
-        result = ((int (*)(int, int, int, int))hdl->vtbl->opt_fn1)(hdl->fd, CVFS_OPT_FSYS64_INFO, 0, 0);
+        result = hdl->vtbl->opt_fn1(hdl->fd, CVFS_OPT_FSYS64_INFO, 0, 0);
     }
     return result;
 }

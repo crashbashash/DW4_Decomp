@@ -181,7 +181,7 @@ int igStringTable_Find(igStringTableView *self, unsigned int string) {
             if (off == -1) {
                 return -1;
             }
-            if (strcmp(self->_strings->_data + off, string) == 0) {
+            if (strcmp(self->_strings->_data + off, (const char *)string) == 0) {
                 return off;
             }
             idx += 1;
@@ -197,7 +197,7 @@ int igStringTable_Find(igStringTableView *self, unsigned int string) {
     s = self->_strings->_data;
     end = s + self->_strings->_count;
     while (s < end) {
-        if (strcmp(string, s) == 0) {
+        if (strcmp((const char *)string, s) == 0) {
             return s - self->_strings->_data;
         }
         s += strlen(s) + 1;
@@ -276,7 +276,7 @@ void igStringTable_SetHashing(igStringTableView *self, int enable) {
     igStringTable_SetHashCapacity((int)self, enable);
     if (enable != 0) {
         if (self->_hashIndex == 0) {
-            alloc = ((int)igObject_GetAllocator((int)self));
+            alloc = ((int)igObject_GetAllocator((igObject *)self));
             old = self->_hashIndex;
             if (old != 0) {
                 --old->_refCount;

@@ -78,7 +78,7 @@ igThread *igThread_Create(int allocator) {
 
 igMetaObject *igThread_GetOrCreateMetaObject(void) {
     if (g_igThread_metaObject == 0) {
-        g_igThread_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igThread_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igThread_metaObject;
 }
@@ -93,15 +93,15 @@ igMetaObject *igThread_GetMetaObject(void)
 
 void igThread_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igThread_Register);
+    igMetaObject_RunStaticInit(igThread_Register);
 }
 
-void igThread_Register(void) {
+CallbackArray *igThread_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igThread_metaObject,
-        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        igNamedObject_Register,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igThread_GetMetaObjectFunction,
         "igThread",

@@ -21,18 +21,18 @@ igMetaObject *igThreadManager_GetMetaObject(void)
 
 void igThreadManager_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igThreadManager_Register);
+    igMetaObject_RunStaticInit(igThreadManager_Register);
 }
 
 static igMetaObjectCallback g_igThreadManager_callbackList[] = { igNonRefCountedThreadList_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
 
-void igThreadManager_Register(void) {
+CallbackArray *igThreadManager_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igThreadManager_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igThreadManager_GetMetaObjectFunction,
         "igThreadManager",
         0x10,

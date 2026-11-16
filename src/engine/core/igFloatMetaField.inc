@@ -23,7 +23,7 @@ int igFloatMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&o);
     o._vtable = (int)&g_igFloatMetaField_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o._vtable = (int)&g_igMetaField_vtable[0];
     if (&o._fieldName != 0) {
         text = (char *)o._fieldName;
@@ -32,7 +32,7 @@ int igFloatMetaField_GetVTable(void) {
             count = *(int *)((char *)(text) - 4) - 1;
             *(int *)((char *)(text) - 4) = count;
             if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -41,18 +41,18 @@ int igFloatMetaField_GetVTable(void) {
 
 void igFloatMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igFloatMetaField_Register);
+    igMetaObject_RunStaticInit(igFloatMetaField_Register);
 }
 
 static igMetaObjectCallback g_igFloatMetaField_callbackList[] = { igFloatMetaField_CreateDefaultDescriptor, 0 };
 
-void igFloatMetaField_Register(void) {
+CallbackArray *igFloatMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igFloatMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igMetaField_Register,
-        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
         igFloatMetaField_GetMetaObjectFunction,
         "igFloatMetaField",
         0x34,
@@ -72,7 +72,7 @@ void igFloatMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;
 
     if (g_igFloatMetaField_descriptor == 0) {
-        g_igFloatMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igFloatMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igFloatMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

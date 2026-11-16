@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
 extern double floor(double);
 extern double scalbn(double, int);

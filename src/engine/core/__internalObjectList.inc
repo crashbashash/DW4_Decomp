@@ -4,7 +4,7 @@ int g___internalObjectList_dataDescriptorCell;
 void **InternalObjectList_Create(int allocator) {
     void **list;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         __internalObjectList_EnsureRegistered();
         list = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g___internalObjectList_metaObject), (igMemoryPoolView *)allocator)));
     } else {
@@ -21,7 +21,7 @@ void **InternalObjectList_Create(int allocator) {
 int __internalObjectList_Clone(int source, int copyMode) {
     int clone;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         __internalObjectList_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)source, copyMode);
     }
@@ -34,7 +34,7 @@ int __internalObjectList_Clone(int source, int copyMode) {
 
 igMetaObject *__internalObjectList_GetOrCreateMetaObject(void) {
     if (g___internalObjectList_metaObject == 0) {
-        g___internalObjectList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g___internalObjectList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g___internalObjectList_metaObject;
 }
@@ -50,19 +50,19 @@ igMetaObject *__internalObjectList_GetMetaObject(void)
 int __internalObjectList_GetVTable(void) {
     int o[4];
     InternalObjectList_Init((__internalObjectList *)o);
-    return *(int *)((char *)o + *(int *)((char *)(*(int * *)&g_objectSystem) + 916));
+    return *(int *)((char *)o + g_objectSystem->vtableProbeOffset);
 }
 
 void __internalObjectList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())__internalObjectList_Register);
+    igMetaObject_RunStaticInit(__internalObjectList_Register);
 }
 
-void __internalObjectList_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *__internalObjectList_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g___internalObjectList_metaObject,
-        (igMetaObjectRegisterFunction)__internalNonRefCountedObjectList_Register,
+        __internalNonRefCountedObjectList_Register,
         __internalNonRefCountedObjectList_GetPublishedMetaObject,
         __internalObjectList_GetMetaObjectFunction,
         "__internalObjectList",

@@ -25,7 +25,7 @@ int igShortArrayMetaField_GetVTable(void) {
 
     igShortMetaField_Init((int **)&field);
     field._vtable = (int)&g_igShortArrayMetaField_vtable[0];
-    vtable = *(int *)((char *)&field + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&field + g_objectSystem->vtableProbeOffset);
     field._vtable = (int)&g_igMetaField_vtable[0];
     ps = (char *)&field._fieldName;
     if (ps != 0) {
@@ -35,7 +35,7 @@ int igShortArrayMetaField_GetVTable(void) {
             refCount = chars[-1] - 1;
             chars[-1] = refCount;
             if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -44,17 +44,17 @@ int igShortArrayMetaField_GetVTable(void) {
 
 void igShortArrayMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igShortArrayMetaField_Register);
+    igMetaObject_RunStaticInit(igShortArrayMetaField_Register);
 }
 
 static igMetaObjectCallback g_igShortArrayMetaField_callbackList[] = { igShortArrayMetaField_CreateDefaultDescriptor, 0 };
 
-void igShortArrayMetaField_Register(void) {
+CallbackArray *igShortArrayMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igShortArrayMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igShortMetaField_Register,
+        igShortMetaField_Register,
         igShortMetaField_GetPublishedMetaObject,
         igShortArrayMetaField_GetMetaObjectFunction,
         "igShortArrayMetaField",
@@ -104,7 +104,7 @@ void igShortArrayMetaField_CreateDefaultDescriptor(void) {
     igShortArrayMetaField *p;
 
     if (g_igShortArrayMetaField_descriptor == 0) {
-        g_igShortArrayMetaField_descriptor = ((igShortArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igShortArrayMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igShortArrayMetaField_descriptor = ((igShortArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igShortArrayMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         created = g_igShortArrayMetaField_descriptor;
         if (created != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)created);

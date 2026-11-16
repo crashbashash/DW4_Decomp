@@ -1,4 +1,5 @@
 #include "dw4/cri/sfdsj.h"
+#include "dw4/cri/mcp.h"
 
 typedef struct SfdAdxHn SfdAdxHn;
 
@@ -136,7 +137,6 @@ int ADXT_IsEndcode();
 int ADXT_InsertSilence();
 SfdSj *SJRBF_Create();
 int SJ_SplitChunk();
-void MEM_Copy();
 int UTY_MemsetDword();
 int UTY_MulDiv();
 int SFBUF_RingGetRead();

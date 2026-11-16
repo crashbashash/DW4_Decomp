@@ -3,7 +3,7 @@ igMetaField *g_igMessageInterface_messagesMetaField;
 
 igMetaObject *FUN_002260d0(void) {
     if (g_igMessageInterface_metaObject == 0) {
-        g_igMessageInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igMessageInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMessageInterface_metaObject;
 }
@@ -20,10 +20,10 @@ int igMessageInterface_GetVTable(void) {
     struct W o;
     int r;
     struct Ref *p;
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = g_igMessageInterface_vtable;
     *(int *)((char *)&o + 32) = 0;
-    r = *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = g_igMessageInterface_vtable;
     if (&*(int *)((char *)&o + 32) != 0) { p = *(struct Ref **)((char *)&o + 32); if (p != 0) { p->u.w = p->u.w - 1; if (p->u.b.cnt == 0) igObject_Destroy(p); } }
     return r;
@@ -31,25 +31,25 @@ int igMessageInterface_GetVTable(void) {
 
 void FUN_00226200(void)
 {
-    igMetaObject_RunStaticInit(igMessageInterface_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igMessageInterface_Register);
 }
 
 static igMetaObjectCallback g_igMessageInterface_callbackList[] = { FUN_00226420, 0 };
 
-void igMessageInterface_Register(void) {
+CallbackArray *igMessageInterface_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMessageInterface_metaObject,
-        igInterface_Register,
-        igInterface_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igInterface_Register,
+        (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
         thunk_igMessageInterface_GetMetaObject,
         "igMessageInterface",
         0x24, /* instance size */
         igMessageInterface_GetVTable,
         &igMessageInterface_InitFields,
         0, /* extra callback item */
-        g_igMessageInterface_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igMessageInterface_callbackList /* callback list */
     );
 }
 
@@ -58,7 +58,7 @@ void thunk_igMessageInterface_GetMetaObject(void) {
 }
 
 static FieldFactory g_igMessageInterface_ctorTable[] = {
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igMessageInterface_fieldTable[] = {
     "_messages",

@@ -1,4 +1,5 @@
 #include "dw4/cri/m2v.h"
+#include "dw4/cri/mpv.h"
 
 /* MPEG-2 extension_data() parser of the CRI movie decoder: reads one
  * extension_start_code_identifier and its payload from the video elementary stream (ISO/IEC
@@ -122,11 +123,10 @@ void FUN_00285a68(Mpeg2Ctx *hn, void **buf, int *size)
 
 int M2VLIB_CheckHn(void *hn);
 int M2VERR_SetCode(void *hn, int code);
-struct SjObj;
-int m2vhdec_ParseSj(Mpeg2Ctx *hn, struct SjObj *sj);
+int m2vhdec_ParseSj(Mpeg2Ctx *hn, SfdSj *sj);
 void m2vhdec_SetPicAtr(Mpeg2Ctx *hn);
 
-int M2V_DecodePicAtr(Mpeg2Ctx *hn, struct SjObj *sj)
+int M2V_DecodePicAtr(Mpeg2Ctx *hn, SfdSj *sj)
 {
     int err;
 
@@ -187,18 +187,7 @@ void m2vhdec_SetPicAtr(Mpeg2Ctx *hn)
     a->matrix_coefficients = h->matrix_coefficients;
 }
 
-typedef struct { char *data; int len; } Chunk;
-typedef struct SjObj SjObj;
-typedef struct {
-    char pad0[24];
-    void (*getChunk)(SjObj *sj, int id, int n, Chunk *ck);
-    void (*ungetChunk)(SjObj *sj, int id, Chunk *ck);
-    void (*putChunk)(SjObj *sj, int id, Chunk *ck);
-} SjVtbl;
-struct SjObj { SjVtbl *vt; };
-
-int MPV_GoNextDelimSj(SjObj *sj);
-void SJ_SplitChunk(Chunk *src, int n, Chunk *head, Chunk *tail);
+void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 char *parseShc(Mpeg2Ctx *ctx, char *buf);
 char *FUN_00286838(Mpeg2Ctx *ctx, char *buf);
 char *FUN_00286958(Mpeg2Ctx *ctx, char *buf);
@@ -206,11 +195,11 @@ char *parseEsc(Mpeg2Ctx *ctx, char *buf);
 char *parseGsc(Mpeg2Ctx *ctx, char *buf);
 char *parsePsc(Mpeg2Ctx *ctx, char *buf);
 
-int m2vhdec_ParseSj(Mpeg2Ctx *ctx, SjObj *sj)
+int m2vhdec_ParseSj(Mpeg2Ctx *ctx, SfdSj *sj)
 {
     Mpeg2Ext *h = &ctx->ext;
-    Chunk ck;
-    Chunk rest;
+    SfdSjChunk ck;
+    SfdSjChunk rest;
     int code;
     int saved;
     int ret = 0;
@@ -221,7 +210,7 @@ int m2vhdec_ParseSj(Mpeg2Ctx *ctx, SjObj *sj)
     h->expected_ext_id = 0;
     h->error_count = 0;
     while ((code = MPV_GoNextDelimSj(sj)) != 0) {
-        sj->vt->getChunk(sj, 1, 0x7FFFFFFF, &ck);
+        sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, &ck);
         end = 0;
         switch (code) {
         case 64:
@@ -244,12 +233,12 @@ int m2vhdec_ParseSj(Mpeg2Ctx *ctx, SjObj *sj)
             break;
         }
         if (end == 0) {
-            sj->vt->ungetChunk(sj, 1, &ck);
+            sj->vtbl->ungetChunk(sj, 1, &ck);
             break;
         }
         SJ_SplitChunk(&ck, end - ck.data, &ck, &rest);
-        sj->vt->putChunk(sj, 0, &ck);
-        sj->vt->ungetChunk(sj, 1, &rest);
+        sj->vtbl->putChunk(sj, 0, &ck);
+        sj->vtbl->ungetChunk(sj, 1, &rest);
         if (h->error_count != 0) {
             ret = -2;
             break;
@@ -468,18 +457,18 @@ extern char D_004f28a8[];
 void FUN_00286b70(Mpeg2Ctx *ctx, char *src, int n)
 {
     int idx = ctx->ext.header_level;
-    SjObj *sj = ctx->usrsj[idx].sj;
-    Chunk ck;
-    Chunk ck2;
+    SfdSj *sj = ctx->usrsj[idx].sj;
+    SfdSjChunk ck;
+    SfdSjChunk ck2;
 
     if (sj != 0) {
-        sj->vt->getChunk(sj, 0, n, &ck);
+        sj->vtbl->getChunk(sj, 0, n, &ck);
         memcpy(ck.data, src, ck.len);
-        sj->vt->putChunk(sj, 1, &ck);
+        sj->vtbl->putChunk(sj, 1, &ck);
         if (ck.len < n) {
-            sj->vt->getChunk(sj, 0, n - ck.len, &ck2);
+            sj->vtbl->getChunk(sj, 0, n - ck.len, &ck2);
             memcpy(ck2.data, src + ck.len, ck2.len);
-            sj->vt->putChunk(sj, 1, &ck2);
+            sj->vtbl->putChunk(sj, 1, &ck2);
         }
         if (ctx->usrsj[idx].cb != 0) {
             ctx->usrsj[idx].cb(ctx->usrsj[idx].cbArg, idx);

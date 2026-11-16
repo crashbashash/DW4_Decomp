@@ -2,7 +2,7 @@ igMetaObject *g_igIsEmptyFunctionList_metaObject;
 
 OpTable *FUN_00188a80(int arg0) {
     igIsEmptyFunctionList_EnsureRegistered();
-    return (OpTable *)igMetaObject_CreateInstance((int)g_igIsEmptyFunctionList_metaObject, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((igMetaObject *)g_igIsEmptyFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igIsEmptyFunctionList_GetMetaObject(void)
@@ -15,9 +15,9 @@ igMetaObject *igIsEmptyFunctionList_GetMetaObject(void)
 
 int igIsEmptyFunctionList_GetVTable(void) {
     union U3 u;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igIsEmptyFunctionList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void igIsEmptyFunctionList_EnsureRegistered(void)
@@ -25,9 +25,9 @@ void igIsEmptyFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igIsEmptyFunctionList_Register);
 }
 
-void igIsEmptyFunctionList_Register(void) {
+CallbackArray *igIsEmptyFunctionList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igIsEmptyFunctionList_metaObject,
         igDataList_Register,

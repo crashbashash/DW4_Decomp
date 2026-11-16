@@ -1,3 +1,4 @@
+#include "dw4/libkernl.h"
 typedef struct {
     short inter;
     short omode;
@@ -12,7 +13,6 @@ typedef struct {
 #define GS_CSR_FLUSH 0x100
 #define INTC_VBLANK_START 2
 
-int DisableIntc(int cause);
 int RemoveIntcHandler(int cause, int id);
 int GsPutIMR(unsigned long long imr);
 void SetGsCrt(short interlace, short omode, short ffmode);

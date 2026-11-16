@@ -1,4 +1,5 @@
 #include "dw4/dp_bit.h"
+#include "dw4/softfloat.h"
 
 #define MAX_SI_INT ((SItype)((unsigned)(~0) >> 1))
 #define MAX_USI_INT ((USItype)~0)

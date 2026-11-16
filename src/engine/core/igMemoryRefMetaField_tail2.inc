@@ -156,7 +156,7 @@ void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, int name) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
     previous = (char *)self->_poolName;
@@ -165,7 +165,7 @@ void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, int name) {
         references = *(int *)(previous - 4) - 1;
         *(int *)(previous - 4) = references;
         if (references == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     self->_poolName = (int)interned;

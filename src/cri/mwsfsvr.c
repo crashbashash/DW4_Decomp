@@ -49,6 +49,7 @@ void MWSFCRE_SetSupplySj(MwsfdPly *ply);
 int mwPlySfdStart(MwsfdPly *ply);
 void mwSfdPause(MwsfdPly *ply, int sw);
 void mwPlyChkSupply(MwsfdPly *ply);
+int mwPlyExecSvrHndl(MwsfdPly *ply);
 void mwsfsfx_SetCompoMode(MwsfdPly *ply);
 int MWSFLSC_IsFsStatErr(struct LscObj *lsc);
 int LSC_GetNumStm(struct LscObj *lsc);

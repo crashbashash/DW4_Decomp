@@ -7,7 +7,7 @@ void * igSemaphore_Create(int pool) {
 
 igMetaObject *igSemaphore_GetOrCreateMetaObject(void) {
     if (g_igSemaphore_metaObject == 0) {
-        g_igSemaphore_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igSemaphore_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igSemaphore_metaObject;
 }
@@ -22,15 +22,15 @@ igMetaObject *igSemaphore_GetMetaObject(void)
 
 void igSemaphore_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igSemaphore_Register);
+    igMetaObject_RunStaticInit(igSemaphore_Register);
 }
 
-void igSemaphore_Register(void) {
+CallbackArray *igSemaphore_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igSemaphore_metaObject,
-        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        igNamedObject_Register,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igSemaphore_GetMetaObjectFunction,
         "igSemaphore",

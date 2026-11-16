@@ -1,5 +1,6 @@
 /* libmpeg mpc: macroblock decoding (slices, macroblock modes, motion vectors) and the IPU bit reader. */
 #include "dw4/sony/libmpeg.h"
+#include "dw4/libkernl.h"
 
 #define IPU_CMD (*(volatile unsigned int *)0x10002000)
 #define IPU_CMD64 (*(volatile long long *)0x10002000)
@@ -129,8 +130,6 @@ static int _invalidatesBits[10] = {1, 1, 0, 0, 0, 1, 1, 1, 1, 1};
         }                                                                                \
     }
 
-int DIntr(void);
-int EIntr(void);
 
 /* Places the decoded macroblock: starts motion compensation for a predicted one and points its buffer at
    its spot in the picture being decoded. */

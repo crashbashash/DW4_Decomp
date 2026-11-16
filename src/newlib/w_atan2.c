@@ -1,4 +1,4 @@
-double __ieee754_atan2(double y, double x);
+#include "dw4/newlib_math.h"
 
 double atan2(double y, double x)
 {

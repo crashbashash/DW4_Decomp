@@ -1,4 +1,4 @@
-float __ieee754_acosf(float x);
+#include "dw4/newlib_math.h"
 
 float acosf(float x)
 {

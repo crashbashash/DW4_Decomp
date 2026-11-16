@@ -53,7 +53,7 @@ int igDirEntry_GetVTable(void) {
     *(int *)ps = 0;
     entry._vtable = (int)&g_igNamedObject_vtable[0];
     entry._vtable = (int)&g_igDirEntry_vtable[0];
-    vtable = *(int *)((char *)&entry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         chars = *(int **)ps;
@@ -62,7 +62,7 @@ int igDirEntry_GetVTable(void) {
             refCount = chars[-1] - 1;
             chars[-1] = refCount;
             if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -71,15 +71,15 @@ int igDirEntry_GetVTable(void) {
 
 void igDirEntry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDirEntry_Register);
+    igMetaObject_RunStaticInit(igDirEntry_Register);
 }
 
-void igDirEntry_Register(void) {
+CallbackArray *igDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igDirEntry_metaObject,
-        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        igNamedObject_Register,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igDirEntry_GetMetaObjectFunction,
         "igDirEntry",

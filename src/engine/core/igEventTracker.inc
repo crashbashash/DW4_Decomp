@@ -40,7 +40,7 @@ void * igEventTracker_Create(int allocator) {
 
 igMetaObject *igEventTracker_GetOrCreateMetaObject(void) {
     if (g_igEventTracker_metaObject == 0) {
-        g_igEventTracker_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igEventTracker_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igEventTracker_metaObject;
 }
@@ -74,7 +74,7 @@ int igEventTracker_GetVTable(void) {
     tracker._eventRecords = 0;
     tracker._hashIndex = 0;
     tracker._callStackTracer = 0;
-    t = *(int *)((char *)&tracker + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&tracker + g_objectSystem->vtableProbeOffset);
     tracker._vtable = (int)&g_igEventTracker_vtable[0];
     igSmartPointer_igCallStackTracer_Destruct((igSmartPointer<igObject> *)&tracker._callStackTracer, -1);
     igSmartPointer_igIntListNoClean_Destruct((void **)&tracker._hashIndex, -1);
@@ -93,18 +93,18 @@ int igEventTracker_GetVTable(void) {
 
 void igEventTracker_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igEventTracker_Register);
+    igMetaObject_RunStaticInit(igEventTracker_Register);
 }
 
 static igMetaObjectCallback g_igEventTracker_callbackList[] = { igStringTable_EnsureRegistered, igCallStackTable_EnsureRegistered, igLocationTable_EnsureRegistered, igCharListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, igCallStackTracer_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
 
-void igEventTracker_Register(void) {
+CallbackArray *igEventTracker_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igEventTracker_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igEventTracker_GetMetaObjectFunction,
         "igEventTracker",
         0x2530,

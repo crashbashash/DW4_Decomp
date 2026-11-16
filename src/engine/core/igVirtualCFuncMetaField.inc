@@ -9,7 +9,7 @@ igMetaObject *igVirtualCFuncMetaField_GetMetaObject(void)
     return g_igVirtualCFuncMetaField_metaObject;
 }
 
-unsigned char *g_objectSystem;
+ObjectSystemView *g_objectSystem;
 
 int igVirtualCFuncMetaField_GetVTable(void) {
     igVirtualCFuncMetaField f;
@@ -19,7 +19,7 @@ int igVirtualCFuncMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&f);
     f._vtable = (int)&g_igVirtualCFuncMetaField_vtable[0];
-    vtable = *(int *)((char *)&f + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
     f._vtable = (int)&g_igMetaField_vtable[0];
     if (&f._fieldName != 0) {
         if (((int *)f._fieldName) != 0) {
@@ -27,7 +27,7 @@ int igVirtualCFuncMetaField_GetVTable(void) {
             references = ((int *)f._fieldName)[-1] - 1;
             ((int *)f._fieldName)[-1] = references;
             if (references == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -36,18 +36,18 @@ int igVirtualCFuncMetaField_GetVTable(void) {
 
 void igVirtualCFuncMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igVirtualCFuncMetaField_Register);
+    igMetaObject_RunStaticInit(igVirtualCFuncMetaField_Register);
 }
 
 static igMetaObjectCallback g_igVirtualCFuncMetaField_callbackList[] = { igVirtualCFuncMetaField_CreateDefaultDescriptor, 0 };
 
-void igVirtualCFuncMetaField_Register(void) {
+CallbackArray *igVirtualCFuncMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igVirtualCFuncMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igMetaField_Register,
-        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
         igVirtualCFuncMetaField_GetMetaObjectFunction,
         "igVirtualCFuncMetaField",
         0x34,
@@ -67,7 +67,7 @@ void igVirtualCFuncMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;
 
     if (g_igVirtualCFuncMetaField_descriptor == 0) {
-        g_igVirtualCFuncMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igVirtualCFuncMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igVirtualCFuncMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igVirtualCFuncMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igVirtualCFuncMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

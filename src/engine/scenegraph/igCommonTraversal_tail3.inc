@@ -224,7 +224,7 @@ void Gap__Sg__igCommonTraversal__vfunc_33(void *arg0) {
     *(int *)((char *)(temp_a0) + 8) = (int)((int) (*(int *)((char *)(temp_a0) + 8) - 1));
 }
 
-void FUN_001b7740(void **arg0, void **arg1) {
+int FUN_001b7740(void **arg0, void **arg1) {
     int var_a0;
     int var_a1;
 
@@ -236,7 +236,7 @@ void FUN_001b7740(void **arg0, void **arg1) {
     if (var_a1 == 0) {
         var_a1 = ((int *)g_stringObjEmptyText)[0];
     }
-    strcmp(var_a0, var_a1);
+    return strcmp(var_a0, var_a1);
 }
 
 void FUN_001b7770(igCommonTraversal *self, int name, int value) {
@@ -255,11 +255,11 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     igStringObj_Set(str, name);
     igStringObj_ToLower(str);
     { int first = self->_segmentOverrideNames; searchKey = str;
-    index = List_BinarySearchWords(first, &searchKey, FUN_001b7740); }
+    index = List_BinarySearchWords(first, &searchKey, (void *)FUN_001b7740); }
     if (index < 0) {
         names = self->_segmentOverrideNames;
         insertKey.set(str);
-        pos = List_LowerBound(names, &insertKey, FUN_001b7740);
+        pos = List_LowerBound(names, &insertKey, (void *)FUN_001b7740);
         List_InsertWords(names, pos, 1, &insertKey);
         stack = ((igObject *)FUN_0019cba0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         newStackRef.p = stack;

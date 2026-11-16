@@ -28,7 +28,7 @@ void ***igAdxFile_GetSearchPathHolder(void) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
         nw = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
         old = (char *)*cell;
@@ -37,7 +37,7 @@ void ***igAdxFile_GetSearchPathHolder(void) {
             c = *(int *)((char *)old - 4) - 1;
             *(int *)((char *)old - 4) = c;
             if (c == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
+                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
             }
         }
         *cell = nw;
@@ -57,7 +57,7 @@ void igFile_SetFileName(int *self, const char *name) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, name)));
     previous = (void *)self[3];
@@ -66,7 +66,7 @@ void igFile_SetFileName(int *self, const char *name) {
         refCount = *(int *)((char *)(previous) - 4) - 1;
         *(int *)((char *)(previous) - 4) = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     self[3] = (int)interned;
@@ -131,7 +131,7 @@ void igAdxFile_SetBasePath(int path) {
                     oldRefCount = *(int *)((char *)(oldText) - 4) - 1;
                     *(int *)((char *)(oldText) - 4) = oldRefCount;
                     if (oldRefCount == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (int)oldHeader);
+                        StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (StringTokenHeader *)oldHeader);
                     }
                 }
             }
@@ -144,7 +144,7 @@ void igAdxFile_SetBasePath(int path) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
         interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)path)));
         previous = (void *)(*slot);
@@ -153,7 +153,7 @@ void igAdxFile_SetBasePath(int path) {
             refCount = *(int *)((char *)(previous) - 4) - 1;
             *(int *)((char *)(previous) - 4) = refCount;
             if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
         *slot = interned;
@@ -166,7 +166,7 @@ void igFile_ReadAsync(igFileView *self, int buffer, int size, int (*callback)(in
 
 void igAdxFile_LoadSearchFilePath(void) {
     const char *searchPathKey = (const char *)g_searchFilePathDefault;
-    int registry = (int)(*(ObjectSystemView * *)&g_objectSystem)->configRegistry;
+    int registry = (int)g_objectSystem->configRegistry;
     igStringObj *text;
     int path;
     if (registry != 0) {
@@ -237,16 +237,16 @@ int igFile_SetCompleteFilename(igFileView *self, int path) {
         if (obj != 0) {
             obj = ((int)StringPool_Construct((StringPool *)obj));
         }
-        g_stringPool = obj;
+        g_stringPool = (StringPool *)obj;
     }
-    s0 = StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
+    s0 = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
     a0 = (int *)self->_completeFilename;
     if (a0 != 0) {
         hdr = a0 - 2;
         v = a0[-1] - 1;
         a0[-1] = v;
         if (v == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
+            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
         }
     }
     self->_completeFilename = (char *)s0;

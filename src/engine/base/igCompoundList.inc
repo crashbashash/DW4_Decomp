@@ -14,19 +14,19 @@ igMetaObject *igCompoundList_GetMetaObject(void)
 int igCompoundList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igCompoundList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00225900(void)
 {
-    igMetaObject_RunStaticInit(igCompoundList_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igCompoundList_Register);
 }
 
-void igCompoundList_Register(void) {
+CallbackArray *igCompoundList_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCompoundList_metaObject,
         igObject_Register,
@@ -46,9 +46,9 @@ void thunk_igCompoundList_GetMetaObject(void) {
 }
 
 static FieldFactory g_igCompoundList_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igMemoryRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
 };
 static const char *g_igCompoundList_fieldTable[] = {
     "_count",

@@ -2,7 +2,7 @@ igMetaObject *g_igExtendByFunctionList_metaObject;
 
 OpTable *FUN_001896e0(int arg0) {
     igExtendByFunctionList_EnsureRegistered();
-    return (OpTable *)igMetaObject_CreateInstance((int)g_igExtendByFunctionList_metaObject, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((igMetaObject *)g_igExtendByFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igExtendByFunctionList_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igExtendByFunctionList_GetMetaObject(void)
 int igExtendByFunctionList_GetVTable(void) {
     Obj8 o;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igExtendByFunctionList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igExtendByFunctionList_EnsureRegistered(void)
@@ -26,9 +26,9 @@ void igExtendByFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igExtendByFunctionList_Register);
 }
 
-void igExtendByFunctionList_Register(void) {
+CallbackArray *igExtendByFunctionList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igExtendByFunctionList_metaObject,
         igDataList_Register,

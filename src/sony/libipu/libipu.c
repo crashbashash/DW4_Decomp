@@ -1,3 +1,4 @@
+#include "dw4/libkernl.h"
 typedef struct sceIpuDmaEnv {
     unsigned int d4madr;
     unsigned int d4tadr;
@@ -28,8 +29,6 @@ typedef struct sceIpuDmaEnv {
 #define IPU_CTRL_BUSY 0x80000000
 #define IPU_CTRL_IFC_FP_MASK 0xf0
 
-int DIntr(void);
-int EIntr(void);
 
 static void setD3_CHCR(unsigned int chcr)
 {

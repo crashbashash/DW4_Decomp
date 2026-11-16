@@ -20,7 +20,7 @@ int igProgramFile_GetVTable(void) {
     *(int **)&obj._vtable = &g_igProgramFile_vtable[0];
     obj._fileName = 0;
     obj._file = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_igProgramFile_vtable[0];
     if (&obj._file != 0) {
         o = (char *)obj._file;
@@ -38,7 +38,7 @@ int igProgramFile_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -47,18 +47,18 @@ int igProgramFile_GetVTable(void) {
 
 void igProgramFile_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igProgramFile_Register);
+    igMetaObject_RunStaticInit(igProgramFile_Register);
 }
 
 static igMetaObjectCallback g_igProgramFile_callbackList[] = { igFile_EnsureRegistered, 0 };
 
-void igProgramFile_Register(void) {
+CallbackArray *igProgramFile_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igProgramFile_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igProgramFile_GetMetaObjectFunction,
         "igProgramFile",
         0x10,

@@ -5,8 +5,6 @@
 int MPVLIB_CheckHn(MpvHn *mpv);
 SfdSj *SJMEM_Create(void *buf, int size);
 char *MPV_SearchDelim(char *buf, int len, int mask);
-int MPV_GoNextDelimSj(SfdSj *sj);
-int MPV_MoveChunk(SfdSj *sj, int id, int n);
 
 void mpv_ResetErr(MpvErrObj *err);
 

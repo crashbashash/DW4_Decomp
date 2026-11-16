@@ -6,7 +6,7 @@ igMetaField *g_igCallStackTable_hashIndexMetaField;
 
 igMetaObject *igCallStackTable_GetOrCreateMetaObject(void) {
     if (g_igCallStackTable_metaObject == 0) {
-        g_igCallStackTable_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igCallStackTable_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igCallStackTable_metaObject;
 }
@@ -31,7 +31,7 @@ int igCallStackTable_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (igObject *)&table._hashIndex;
     *(int *)q0 = 0;
-    vtable = *(int *)((char *)&table + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&table + g_objectSystem->vtableProbeOffset);
     table._vtable = (int)&g_igCallStackTable_vtable[0];
     if (q0 != 0) {
         q0 = *(igObject **)q0;
@@ -56,18 +56,18 @@ int igCallStackTable_GetVTable(void) {
 
 void igCallStackTable_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igCallStackTable_Register);
+    igMetaObject_RunStaticInit(igCallStackTable_Register);
 }
 
 static igMetaObjectCallback g_igCallStackTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, 0 };
 
-void igCallStackTable_Register(void) {
+CallbackArray *igCallStackTable_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igCallStackTable_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igCallStackTable_GetMetaObjectFunction,
         "igCallStackTable",
         0x18,

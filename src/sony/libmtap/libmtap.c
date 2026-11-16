@@ -1,3 +1,4 @@
+#include "dw4/libkernl.h"
 typedef struct sceSifRpcData {
     void *paddr;
     unsigned int pid;
@@ -29,7 +30,6 @@ void sceSifInitRpc(unsigned int mode);
 int sceSifBindRpc(sceSifClientData *client, unsigned int rpc_number, int mode);
 int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send, int ssize, void *receive,
                  int rsize, void (*end_function)(void *), void *end_param);
-void scePrintf(const char *format, ...);
 
 int sceMtapGetModVersion(void);
 

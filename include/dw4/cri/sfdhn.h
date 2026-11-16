@@ -241,4 +241,11 @@ typedef struct SfdHandle {
     SfdWork *work;           /* 13864 */
 } SfdHandle;
 
+void SFHDS_Init(void);
+void SFHDS_Finish(void);
+int SFHDS_SetHdr(SfdHandle *hn, int type, unsigned char *p, int size, int *set);
+int SFHDS_IsSfdHeader(unsigned char *p, int size);
+void SFHDS_ReprocessHdr(SfdHandle *hn);
+void SFHDS_ProcessHdr(SfdHdrInf *hdr);
+
 #endif

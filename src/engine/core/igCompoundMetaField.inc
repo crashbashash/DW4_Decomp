@@ -12,18 +12,18 @@ igMetaObject *igCompoundMetaField_GetMetaObject(void)
 
 void igCompoundMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igCompoundMetaField_Register);
+    igMetaObject_RunStaticInit(igCompoundMetaField_Register);
 }
 
 static igMetaObjectCallback g_igCompoundMetaField_callbackList[] = { igMetaFieldList_EnsureRegistered, igCompoundMetaField_CreateDefaultDescriptor, 0 };
 
-void igCompoundMetaField_Register(void) {
+CallbackArray *igCompoundMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igCompoundMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igMetaField_Register,
-        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
         igCompoundMetaField_GetMetaObjectFunction,
         "igCompoundMetaField",
         0x38,
@@ -72,7 +72,7 @@ void igCompoundMetaField_CreateDefaultDescriptor(void) {
     int t;
 
     if (g_igCompoundMetaField_descriptor == 0) {
-        g_igCompoundMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igCompoundMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igCompoundMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igCompoundMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igCompoundMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

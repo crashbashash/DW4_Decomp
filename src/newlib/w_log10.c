@@ -1,4 +1,4 @@
-double __ieee754_log10(double x);
+#include "dw4/newlib_math.h"
 
 double log10(double x)
 {

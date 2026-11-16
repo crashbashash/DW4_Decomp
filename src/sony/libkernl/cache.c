@@ -2,6 +2,8 @@
  * of 64 lines of 64 bytes; each walk reads every line's tag (TagLo, COP0 $28) and writes back or
  * invalidates the lines whose address falls in [start, end]. */
 
+#include "dw4/libkernl.h"
+
 typedef unsigned int u_int;
 
 #define DCACHE_WAY_SIZE 4096
@@ -10,8 +12,6 @@ typedef unsigned int u_int;
 #define DCACHE_TAG_MASK 0xfffff000
 #define STATUS_EIE 0x10000
 
-int DIntr(void);
-int EIntr(void);
 
 /* write back and invalidate */
 void _sceSDC(u_int start, u_int end)
@@ -33,19 +33,19 @@ void _sceSDC(u_int start, u_int end)
     }
 }
 
-void SyncDCache(u_int start, u_int end)
+void SyncDCache(void *start, void *end)
 {
     u_int stat;
     __asm__ volatile("mfc0 %0, $12" : "=r"(stat));
     stat &= STATUS_EIE;
     if (stat) DIntr();
-    _sceSDC(start & DCACHE_LINE_MASK, end & DCACHE_LINE_MASK);
+    _sceSDC((u_int)start & DCACHE_LINE_MASK, (u_int)end & DCACHE_LINE_MASK);
     if (stat) EIntr();
 }
 
-void iSyncDCache(u_int start, u_int end)
+void iSyncDCache(void *start, void *end)
 {
-    _sceSDC(start & DCACHE_LINE_MASK, end & DCACHE_LINE_MASK);
+    _sceSDC((u_int)start & DCACHE_LINE_MASK, (u_int)end & DCACHE_LINE_MASK);
 }
 
 /* invalidate without write-back */
@@ -68,17 +68,17 @@ void _sceIDC(u_int start, u_int end)
     }
 }
 
-void InvalidDCache(u_int start, u_int end)
+void InvalidDCache(void *start, void *end)
 {
     u_int stat;
     __asm__ volatile("mfc0 %0, $12" : "=r"(stat));
     stat &= STATUS_EIE;
     if (stat) DIntr();
-    _sceIDC(start & DCACHE_LINE_MASK, end & DCACHE_LINE_MASK);
+    _sceIDC((u_int)start & DCACHE_LINE_MASK, (u_int)end & DCACHE_LINE_MASK);
     if (stat) EIntr();
 }
 
 void iInvalidDCache(u_int start, u_int end)
 {
-    _sceIDC(start & DCACHE_LINE_MASK, end & DCACHE_LINE_MASK);
+    _sceIDC((u_int)start & DCACHE_LINE_MASK, (u_int)end & DCACHE_LINE_MASK);
 }

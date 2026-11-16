@@ -6,7 +6,7 @@ igMetaField *g_igListenerInterface_typesListenerMetaField;
 
 igMetaObject *FUN_00226c60(void) {
     if (g_igListenerInterface_metaObject == 0) {
-        g_igListenerInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igListenerInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igListenerInterface_metaObject;
 }
@@ -22,13 +22,13 @@ igMetaObject *igListenerInterface_GetMetaObject(void)
 int igListenerInterface_GetVTable(void) {
     struct Obj_5 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igListenerInterface_vtable[0];
     obj.w8 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igListenerInterface_vtable[0];
     FUN_00226db0((T_2 **)&obj.w11, -1);
     igSmartPointer_igMetaObjectList_Destruct(&obj.w10, -1);
@@ -56,25 +56,25 @@ struct T_2 **FUN_00226db0(struct T_2 **arg0, short arg1) {
 
 void FUN_00226e30(void)
 {
-    igMetaObject_RunStaticInit(igListenerInterface_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igListenerInterface_Register);
 }
 
 static igMetaObjectCallback g_igListenerInterface_callbackList[] = { igObjectList_EnsureRegistered, FUN_002270b0, igMetaObjectList_EnsureRegistered, 0 };
 
-void igListenerInterface_Register(void) {
+CallbackArray *igListenerInterface_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igListenerInterface_metaObject,
-        igInterface_Register,
-        igInterface_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igInterface_Register,
+        (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
         thunk_igListenerInterface_GetMetaObject,
         "igListenerInterface",
         0x30, /* instance size */
         igListenerInterface_GetVTable,
         &igListenerInterface_InitFields,
         0, /* extra callback item */
-        g_igListenerInterface_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igListenerInterface_callbackList /* callback list */
     );
 }
 
@@ -83,10 +83,10 @@ void thunk_igListenerInterface_GetMetaObject(void) {
 }
 
 static FieldFactory g_igListenerInterface_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igListenerInterface_fieldTable[] = {
     "_instances",

@@ -6,7 +6,7 @@ igMetaField *g_igFileInfo_cachedFileMetaField;
 
 igMetaObject *FUN_00228e60(void) {
     if (g_igFileInfo_metaObject == 0) {
-        g_igFileInfo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igFileInfo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igFileInfo_metaObject;
 }
@@ -23,14 +23,14 @@ int igFileInfo_GetVTable(void) {
     struct Obj_8 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.w[1] = 0;
     obj.vt = &g_igFileInfo_vtable[0];
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.w[5] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igFileInfo_vtable[0];
     FUN_00229040((R **)&obj.w[5], -1);
     FUN_00228fc0((ObjectRefWord *)&obj.w[4], -1);
@@ -74,25 +74,25 @@ struct R **FUN_00229040(struct R **arg0, short arg1) {
 
 void FUN_002290c0(void)
 {
-    igMetaObject_RunStaticInit(igFileInfo_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igFileInfo_Register);
 }
 
 static igMetaObjectCallback g_igFileInfo_callbackList[] = { igDirectory_EnsureRegistered, igInfoList_EnsureRegistered, FUN_00228dd0, igIGBFile_EnsureRegistered, 0 };
 
-void igFileInfo_Register(void) {
+CallbackArray *igFileInfo_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFileInfo_metaObject,
         igNamedObject_Register,
-        igNamedObject_GetPublishedMetaObject,
+        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         thunk_igFileInfo_GetMetaObject,
         "igFileInfo",
         0x1C, /* instance size */
         igFileInfo_GetVTable,
         &igFileInfo_InitFields,
         0, /* extra callback item */
-        g_igFileInfo_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igFileInfo_callbackList /* callback list */
     );
 }
 
@@ -101,10 +101,10 @@ void thunk_igFileInfo_GetMetaObject(void) {
 }
 
 static FieldFactory g_igFileInfo_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igFileInfo_fieldTable[] = {
     "_externalEntryList",

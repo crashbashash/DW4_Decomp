@@ -50,11 +50,11 @@ static void (*htci_err_func)(void *context, const char *message, void *detail) =
 static void *htci_err_obj = 0;
 static int htci_lock = 0;
 static CvFsVtbl htci_vtbl = {
-    (int)htCiExecServer, (int)htCiEntryErrFunc, (int)htCiGetFileSize, 0,
-    (int)htCiOpen, (int)htCiClose, (int)htCiSeek, (int)htCiTell,
-    (int)htCiReqRd, 0, (int)htCiStopTr, (int)htCiGetStat,
-    (int)htCiGetSctLen, 0, (int)htCiGetNumTr, 0,
-    (int)htCiIsExistFileOnHost, 0, 0, 0, 0, 0, 0, 0, (int)htCiOptFn1, 0
+    htCiExecServer, (CvFsEntryErrFuncFn)htCiEntryErrFunc, htCiGetFileSize, 0,
+    (CvFsOpenFn)htCiOpen, (CvFsFdFn)htCiClose, (CvFsSeekFn)htCiSeek, (CvFsFdIntFn)htCiTell,
+    (CvFsXferFn)htCiReqRd, 0, (CvFsFdFn)htCiStopTr, (CvFsFdIntFn)htCiGetStat,
+    (CvFsFdIntFn)htCiGetSctLen, 0, (CvFsFdIntFn)htCiGetNumTr, 0,
+    htCiIsExistFileOnHost, 0, 0, 0, 0, 0, 0, 0, htCiOptFn1, 0
 };
 static HtCiFile htci_files[13] = {0};
 static char htci_path[304] = {0};

@@ -1,5 +1,6 @@
 #include "dw4/cri/sfdhn.h"
 #include "dw4/cri/mps.h"
+#include "dw4/cri/mcp.h"
 
 enum {
     SFD_COND_DEMUX_SPLIT = 59,
@@ -46,7 +47,6 @@ int SFCON_IsEndcodeSkip(SfdHandle *hn);
 int SFCON_IsSystemEndcodeSkip(SfdHandle *hn);
 int SFSET_GetCond(SfdHandle *hn, int index);
 void SFSET_SetCond(SfdHandle *hn, int index, int value);
-void MEM_Copy(char *dst, char *src, unsigned int n);
 int SFBUF_RingGetWrite(SfdHandle *hn, int ch, SfdBufStat *stat);
 int SFBUF_RingGetRead(SfdHandle *hn, int ch, SfdBufStat *stat);
 int SFBUF_RingAddWrite(SfdHandle *hn, int ch, int len, int tail);
@@ -63,8 +63,6 @@ int sftrn_GetFlagA(SfdHandle *hn, int flag);
 int sfring_IsFull(SfdHandle *hn, int ch);
 int sfring_PutItem(SfdHandle *hn, int ch, SfmpsPts *item, int *full);
 void sfmpvps2_StopIpu(SfdHandle *hn, int value);
-int SFHDS_SetHdr(SfdHandle *hn, int kind, unsigned char *data, int len, int *found);
-void SFHDS_ReprocessHdr(SfdHandle *hn);
 
 int sfmps_ChkFatal(void);
 int sfmps_ExecServerSub(SfdHandle *hn);

@@ -5,6 +5,7 @@
 #define DW4_SONY_LIBCDVD_H
 
 #include "dw4/sony/sif.h"
+#include "dw4/libkernl.h"
 
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
 #define UNCACHED_WORD(p) (*(int *)UNCACHED(p))
@@ -101,7 +102,6 @@ extern int _sceCd_scmdsdata[258];
 extern int _sceCd_rcmdrdata[64];
 extern sceSifClientData _sceCd_cd_scmd;
 
-void scePrintf(const char *fmt, ...);
 
 int sceCdSync(int mode);
 int sceCdSyncS(int mode);

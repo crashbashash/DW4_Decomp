@@ -1,8 +1,6 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
-extern int __ieee754_rem_pio2(double, double *);
-extern double __kernel_cos(double, double);
-extern double __kernel_sin(double, double, int);
 
 double sin(double x)
 {

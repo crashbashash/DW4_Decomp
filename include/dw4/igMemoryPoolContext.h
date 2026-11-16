@@ -1,6 +1,8 @@
 #ifndef DW4_IGMEMORYPOOLCONTEXT_H
 #define DW4_IGMEMORYPOOLCONTEXT_H
 
+class igMemoryPoolView;
+
 /* The allocator selector of each memory context, in the order of g_memoryContextNames: the program
  * constructs every one at start-up. */
 struct igMemoryPoolHandle {
@@ -62,8 +64,8 @@ extern int g_metaDataPoolPreSize;
 extern int g_stringPoolPreSize;
 extern unsigned char g_useOwnerAllocator;
 
-void *Memory_GetAllocatorBySelector(int selector);
-void *Memory_GetCurrentAllocator(void);
+igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
+igMemoryPoolView *Memory_GetCurrentAllocator(void);
 void *Memory_SystemAllocate(unsigned int size);
 }
 

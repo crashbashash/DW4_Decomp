@@ -26,7 +26,7 @@ int igPluginHelper_GetVTable(void) {
     helper._repositoryList = 0;
     helper._libraryLoader = 0;
     helper._loadedPlugins = 0;
-    vtable = *(int *)((char *)&helper + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&helper + g_objectSystem->vtableProbeOffset);
     helper._vtable = (int)&g_igPluginHelper_vtable[0];
     igSmartPointer_igLibraryList_Destruct((igSmartPointer<igObject> *)(&helper._loadedPlugins), -1);
     igSmartPointer_igLibraryLoader_Destruct((void **)(&helper._libraryLoader), (short)(-1));
@@ -86,18 +86,18 @@ igSmartPointer<igObject> *igSmartPointer_igLibraryList_Destruct(igSmartPointer<i
 
 void igPluginHelper_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPluginHelper_Register);
+    igMetaObject_RunStaticInit(igPluginHelper_Register);
 }
 
 static igMetaObjectCallback g_igPluginHelper_callbackList[] = { igPluginRepositoryList_EnsureRegistered, igLibraryLoader_EnsureRegistered, igLibraryList_EnsureRegistered, 0 };
 
-void igPluginHelper_Register(void) {
+CallbackArray *igPluginHelper_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPluginHelper_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igPluginHelper_GetMetaObjectFunction,
         "igPluginHelper",
         0x18,

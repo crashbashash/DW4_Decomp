@@ -20,7 +20,7 @@ static inline void setLock(igEventTrackerView *self, igSemaphoreView *pool) {
 void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open) {
     if (open != 0) {
         if (self->_lock == 0) {
-            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)igSemaphore_Create(((int)igObject_GetAllocator((int)self)))));
+            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)igSemaphore_Create(((int)igObject_GetAllocator((igObject *)self)))));
             created.get()->Create();
             setLock(self, created.get());
         }
@@ -53,7 +53,7 @@ void igEventTracker_SetEventTag(igEventTrackerView *tracker, int tag) {
     }
     tracker->_flags = tracker->_flags | 2;
     if (tag != 0) {
-        strncpy(tracker->_eventTag, tag, 0xFF);
+        strncpy(tracker->_eventTag, (const char *)tag, 0xFF);
     } else {
         tracker->_eventTag[0] = 0;
     }
@@ -72,7 +72,7 @@ void igEventTracker_SetEventClassName(igEventTrackerView *tracker, int className
     }
     tracker->_flags = tracker->_flags | 2;
     if (className != 0) {
-        strncpy(tracker->_eventClassName, className, 0xFF);
+        strncpy(tracker->_eventClassName, (const char *)className, 0xFF);
     } else {
         tracker->_eventClassName[0] = 0;
     }
@@ -873,7 +873,7 @@ void igEventTracker_GetStatisticsByName(igEventTrackerView *self, int first, int
     for (;;) {
         int c = self->ReadEvent(offset, &ev).get();
         if (c != g_resultSuccess.v) break;
-        if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, key) == 0) {
+        if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, (const char *)key) == 0) {
             switch (ev.type) {
             case 6:
                 *allocations += 1;
@@ -1776,8 +1776,8 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
         self->ResolveAllCallStackSymbols();
     }
     {
-    igSmartPointer<igIGBFileView> file(((igIGBFileView *)igIGBFile_Create((int)(((igObject *)igObject_GetAllocator((int)self))))));
-    a = ((igObject *)igObject_GetAllocator((int)self));
+    igSmartPointer<igIGBFileView> file(((igIGBFileView *)igIGBFile_Create((int)(((igObject *)igObject_GetAllocator((igObject *)self))))));
+    a = ((igObject *)igObject_GetAllocator((igObject *)self));
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_temporaryMemoryPool;
@@ -1786,7 +1786,7 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
     }
     o->_temporaryMemoryPool = (igMemoryPoolView *)a;
-    a = ((igObject *)igObject_GetAllocator((int)self));
+    a = ((igObject *)igObject_GetAllocator((igObject *)self));
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_objectMemoryPool;
@@ -1795,7 +1795,7 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
     }
     o->_objectMemoryPool = (igMemoryPoolView *)a;
-    a = ((igObject *)igObject_GetAllocator((int)self));
+    a = ((igObject *)igObject_GetAllocator((igObject *)self));
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_dataMemoryPool;
@@ -1861,11 +1861,11 @@ void Gap__Core__igEventTracker__resetFields(igEventTrackerView *self) {
     self->_eventTag[255] = 0;
     self->_eventClassName[0] = 0;
     self->_eventClassName[255] = 0;
-    if ((*(ObjectSystemView * *)&g_objectSystem) != 0) {
-        self->_eventTypeFilterFlags = (*(ObjectSystemView * *)&g_objectSystem)->eventTrackerEventTypeFilter;
-        self->_markerTypeFilterFlags = (*(ObjectSystemView * *)&g_objectSystem)->eventTrackerMarkerTypeFilter;
-        self->_notificationTypeFilterFlags = (*(ObjectSystemView * *)&g_objectSystem)->eventTrackerNotificationTypeFilter;
-        self->_notificationCodeFilterFlags = (*(ObjectSystemView * *)&g_objectSystem)->eventTrackerNotificationCodeFilter;
+    if (g_objectSystem != 0) {
+        self->_eventTypeFilterFlags = g_objectSystem->eventTrackerEventTypeFilter;
+        self->_markerTypeFilterFlags = g_objectSystem->eventTrackerMarkerTypeFilter;
+        self->_notificationTypeFilterFlags = g_objectSystem->eventTrackerNotificationTypeFilter;
+        self->_notificationCodeFilterFlags = g_objectSystem->eventTrackerNotificationCodeFilter;
     }
     igStringTable_SetCapacity(self->_names, 0x1000);
     igStringTable_SetHashCapacity(self->_names, 0x100);
@@ -1942,7 +1942,7 @@ void *igEventTracker_DestructEvent(void *record, long long deleteFlag) {
 }
 
 void igEventTracker_ClearEvent(int record) {
-    memset(record, 0, 148);
+    memset((void *)record, 0, 148);
 }
 
 int igEventTracker_FindFreeEventDataSlot(void *record) {

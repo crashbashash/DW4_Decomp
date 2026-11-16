@@ -4,7 +4,7 @@ int igUnsignedCharMetaField_ValueFromString(void *self, char *value, int text) {
 
     consumed = 0;
     parsed = 0;
-    sscanf(text, "%u%n", &parsed, &consumed);
+    sscanf((const char *)text, "%u%n", &parsed, &consumed);
     *value = (char) parsed;
     return consumed;
 }
@@ -13,7 +13,7 @@ void igUnsignedCharMetaField_ValueToString(int *result, int self, unsigned char 
     int text[256];
     int pool;
     int interned;
-    sprintf(text, &percent_u[0], *value);
+    sprintf((char *)text, (const char *)&percent_u[0], *value);
     if (text == 0) {
         interned = 0;
     } else {
@@ -22,9 +22,9 @@ void igUnsignedCharMetaField_ValueToString(int *result, int self, unsigned char 
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
     }
     *result = interned;
 }

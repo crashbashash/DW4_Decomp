@@ -18,7 +18,7 @@ int igMetaFieldInfo_GetVTable(void) {
     *(int *)ps = 0;
     info._vtable = (int)&g_igNamedObject_vtable[0];
     info._vtable = (int)&g_igMetaFieldInfo_vtable[0];
-    s0 = *(int *)((char *)&info + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    s0 = *(int *)((char *)&info + g_objectSystem->vtableProbeOffset);
     info._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -27,7 +27,7 @@ int igMetaFieldInfo_GetVTable(void) {
             v0 = v1[-1] - 1;
             v1[-1] = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -36,15 +36,15 @@ int igMetaFieldInfo_GetVTable(void) {
 
 void igMetaFieldInfo_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMetaFieldInfo_Register);
+    igMetaObject_RunStaticInit(igMetaFieldInfo_Register);
 }
 
-void igMetaFieldInfo_Register(void) {
+CallbackArray *igMetaFieldInfo_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMetaFieldInfo_metaObject,
-        (igMetaObjectRegisterFunction)igInfo_Register,
+        igInfo_Register,
         (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMetaFieldInfo_GetMetaObjectFunction,
         "igMetaFieldInfo",

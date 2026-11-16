@@ -22,7 +22,7 @@ int igDependencyOrderedList_GetVTable(void) {
     list._dependencies = 0;
     list._order = 0;
     list._checkPoints = 0;
-    t = *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
     list._vtable = (int)&g_igDependencyOrderedList_vtable[0];
     igSmartPointer_igStringRefList_Destruct(&list._checkPoints, -1);
     igSmartPointer_igPointerList_Destruct(&list._order, -1);
@@ -33,18 +33,18 @@ int igDependencyOrderedList_GetVTable(void) {
 
 void igDependencyOrderedList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDependencyOrderedList_Register);
+    igMetaObject_RunStaticInit(igDependencyOrderedList_Register);
 }
 
 static igMetaObjectCallback g_igDependencyOrderedList_callbackList[] = { igObjectList_EnsureRegistered, igDependencyList_EnsureRegistered, igPointerList_EnsureRegistered, igStringRefList_EnsureRegistered, 0 };
 
-void igDependencyOrderedList_Register(void) {
+CallbackArray *igDependencyOrderedList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igDependencyOrderedList_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igDependencyOrderedList_GetMetaObjectFunction,
         "igDependencyOrderedList",
         0x1C,

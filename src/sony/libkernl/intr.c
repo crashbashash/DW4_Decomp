@@ -2,13 +2,13 @@
  * around the kernel call, the i- versions are for handlers, which already run masked. Each ends
  * with a sync so the mask write is done before the caller goes on. */
 
+#include "dw4/libkernl.h"
+
 typedef unsigned int u_int;
 
 #define STATUS_EIE 0x10000
 #define STATUS_IE 0x1
 
-int DIntr(void);
-int EIntr(void);
 int _EnableIntc(int cause);
 int _DisableIntc(int cause);
 int _EnableDmac(int channel);

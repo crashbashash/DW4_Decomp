@@ -1,12 +1,9 @@
 #include "dw4/sony/libmpeg.h"
+#include "dw4/libkernl.h"
 
-int DIntr(void);
-int EIntr(void);
 void _ipuCommand(_sceMpegDecoder *dec, unsigned int command);
 int AddDmacHandler2(int channel, int (*handler)(int, void *), int next, void *arg);
 int RemoveDmacHandler(int channel, int id);
-int EnableDmac(int channel);
-int DisableDmac(int channel);
 void _doCSC2(_sceMpegDecoder *dec, unsigned int addr, int count);
 
 /* The progress of a colour-space conversion the channel-3 handler feeds in 1023-macroblock chunks. */

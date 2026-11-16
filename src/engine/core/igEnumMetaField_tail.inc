@@ -4,11 +4,11 @@ int igEnumMetaField_ValueFromString(igEnumMetaField *self, int *value, int text)
     int scanned;
 
     consumed = 0;
-    scanned = sscanf(text, "%d%n", value, &consumed);
+    scanned = sscanf((const char *)text, "%d%n", value, &consumed);
     if (((scanned == 0) || (scanned == -1)) && (text != 0)) {
         if (g_resultSuccess == igMetaEnum_GetValueByName((igMetaEnum *)(((int (*)())self->_getMetaEnumFunction)()), (const char *)text, &named)) {
             *value = named;
-            consumed = strlen(text);
+            consumed = strlen((const char *)text);
         }
     }
     return consumed;

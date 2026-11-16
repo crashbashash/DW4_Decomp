@@ -29,7 +29,7 @@ int igExternalInfoEntry_GetVTable(void) {
     q = &entry._infoName;
     *p = 0;
     *q = 0;
-    vtable = *(int *)((char *)&entry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)&g_igExternalInfoEntry_vtable[0];
     igStringRef_Destruct(q, -1);
     igStringRef_Destruct(p, -1);
@@ -39,15 +39,15 @@ int igExternalInfoEntry_GetVTable(void) {
 
 void igExternalInfoEntry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igExternalInfoEntry_Register);
+    igMetaObject_RunStaticInit(igExternalInfoEntry_Register);
 }
 
-void igExternalInfoEntry_Register(void) {
+CallbackArray *igExternalInfoEntry_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igExternalInfoEntry_metaObject,
-        (igMetaObjectRegisterFunction)igDirEntry_Register,
+        igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igExternalInfoEntry_GetMetaObjectFunction,
         "igExternalInfoEntry",

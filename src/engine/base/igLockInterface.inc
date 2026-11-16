@@ -5,7 +5,7 @@ igMetaField *g_igLockInterface_objectCacheListsMetaField;
 
 igMetaObject *FUN_002267c0(void) {
     if (g_igLockInterface_metaObject == 0) {
-        g_igLockInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igLockInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLockInterface_metaObject;
 }
@@ -25,7 +25,7 @@ int igLockInterface_GetVTable(void) {
     S_ref *q1;
     S_ref *q2;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igLockInterface_vtable[0];
     q2 = (S_ref *)&u.b[32];
     *(int *)q2 = 0;
@@ -33,7 +33,7 @@ int igLockInterface_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[40];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igLockInterface_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
@@ -76,25 +76,25 @@ extern "C" O *igSmartPointer_igBoolList_Destruct(O *arg0, short arg1) {
 
 void FUN_00226a10(void)
 {
-    igMetaObject_RunStaticInit(igLockInterface_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igLockInterface_Register);
 }
 
 static igMetaObjectCallback g_igLockInterface_callbackList[] = { igStringRefList_EnsureRegistered, igBoolList_EnsureRegistered, igObjectListList_EnsureRegistered, 0 };
 
-void igLockInterface_Register(void) {
+CallbackArray *igLockInterface_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLockInterface_metaObject,
-        igInterface_Register,
-        igInterface_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igInterface_Register,
+        (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
         thunk_igLockInterface_GetMetaObject,
         "igLockInterface",
         0x2C, /* instance size */
         igLockInterface_GetVTable,
         &igLockInterface_InitFields,
         0, /* extra callback item */
-        g_igLockInterface_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igLockInterface_callbackList /* callback list */
     );
 }
 
@@ -103,9 +103,9 @@ void thunk_igLockInterface_GetMetaObject(void) {
 }
 
 static FieldFactory g_igLockInterface_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igLockInterface_fieldTable[] = {
     "_objectCacheNames",

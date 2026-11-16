@@ -75,7 +75,7 @@ void * igIGBFile_Create(int pool) {
 
 int igIGBFile_GetOrCreateMetaObject(void) {
     if ((int)g_igIGBFile_metaObject == 0) {
-        g_igIGBFile_metaObject = (igMetaObject *)(int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igIGBFile_metaObject = (igMetaObject *)(int)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return (int)g_igIGBFile_metaObject;
 }
@@ -106,7 +106,7 @@ int igIGBFile_GetVTable(void) {
     igSmartPointer_igMemoryPool_Construct(&file._dataMemoryPool);
     igSmartPointer_igMemoryPool_Construct(&file._objectMemoryPool);
     igSmartPointer_igIntList_Construct(&file._memoryPoolHandles);
-    vtable = *(int *)((char *)&file + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&file + g_objectSystem->vtableProbeOffset);
     file._vtable = (int)(&g_igInfo_vtable[28]); /* matching construct: igIGBFile's vtable address (it follows igInfo's 28 words) spelled through another symbol, so it is rematerialised rather than reused */
     igSmartPointer_igIntList_Destruct(&file._memoryPoolHandles, -1);
     igSmartPointer_igMemoryPool_Destruct(&file._objectMemoryPool, -1);
@@ -147,7 +147,7 @@ igDirectory *igDirectory_Destroy(igDirectory *p, short n) {
         ((igSmartPointer<igObject> *)&p->_infoList)->~igSmartPointer();
         ((igSmartPointer<igObject> *)&p->_externalDirectoryList)->~igSmartPointer();
         ((igStringRef *)&p->_name)->~igStringRef();
-        if (n > 0) Memory_FreeBufferAliasC((int)p);
+        if (n > 0) Memory_FreeBufferAliasC(p);
     }
     return p;
 }
@@ -201,17 +201,17 @@ void *igDirectory_Construct(igIGBFile *self) {
 
 void igIGBFile_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igIGBFile_Register);
+    igMetaObject_RunStaticInit(igIGBFile_Register);
 }
 
 static igMetaObjectCallback g_igIGBFile_callbackList[] = { igFile_EnsureRegistered, igMetaFieldList_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaField_EnsureRegistered, igIntList_EnsureRegistered, igMemoryPool_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
-void igIGBFile_Register(void) {
+CallbackArray *igIGBFile_Register(void) {
     CoreLibrary_MarkRegistered();  /* First-use initializer: sets a gp byte flag, then runs five one-time init calls. */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igIGBFile_metaObject,
-        (igMetaObjectRegisterFunction)igDirectory_Register,
+        igDirectory_Register,
         igDirectory_GetPublishedMetaObject,
         igIGBFile_GetMetaObjectFunction,
         "igIGBFile",

@@ -2,7 +2,7 @@ igMetaObject *g_igExtendByRayFunctionList_metaObject;
 
 OpTable *FUN_001892c0(int arg0) {
     igExtendByRayFunctionList_EnsureRegistered();
-    return (OpTable *)igMetaObject_CreateInstance((int)g_igExtendByRayFunctionList_metaObject, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((igMetaObject *)g_igExtendByRayFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igExtendByRayFunctionList_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igExtendByRayFunctionList_GetMetaObject(void)
 int igExtendByRayFunctionList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igExtendByRayFunctionList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igExtendByRayFunctionList_EnsureRegistered(void)
@@ -26,9 +26,9 @@ void igExtendByRayFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igExtendByRayFunctionList_Register);
 }
 
-void igExtendByRayFunctionList_Register(void) {
+CallbackArray *igExtendByRayFunctionList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igExtendByRayFunctionList_metaObject,
         igDataList_Register,

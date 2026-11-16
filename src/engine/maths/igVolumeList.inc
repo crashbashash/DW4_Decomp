@@ -2,12 +2,12 @@ igMetaObject *g_igVolumeList_metaObject;
 
 InstanceNode *FUN_00186c00(int arg0) {
     FUN_00186d20();
-    return (InstanceNode *)igMetaObject_CreateInstance((int)g_igVolumeList_metaObject, arg0);
+    return (InstanceNode *)igMetaObject_CreateInstance((igMetaObject *)g_igVolumeList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_00186c40(void) {
     if (g_igVolumeList_metaObject == 0) {
-        g_igVolumeList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igVolumeList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igVolumeList_metaObject;
 }
@@ -23,9 +23,9 @@ igMetaObject *igVolumeList_GetMetaObject(void)
 int igVolumeList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igVolumeList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00186d20(void)
@@ -35,9 +35,9 @@ void FUN_00186d20(void)
 
 static igMetaObjectCallback g_igVolumeList_callbackList[] = { FUN_00186b20, 0 };
 
-void igVolumeList_Register(void) {
+CallbackArray *igVolumeList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVolumeList_metaObject,
         igObjectList_Register,

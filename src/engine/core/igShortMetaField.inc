@@ -4,7 +4,7 @@ void *g_igShortMetaField_descriptor;
 void **igShortMetaField_Create(int pool) {
     void **instance;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igShortMetaField_EnsureRegistered();
         instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igShortMetaField_metaObject, (igMemoryPoolView *)pool)));
     } else {
@@ -21,7 +21,7 @@ void **igShortMetaField_Create(int pool) {
 int igShortMetaField_Clone(int source, int pool) {
     int p;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igShortMetaField_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)source, pool);
     }
@@ -47,7 +47,7 @@ int igShortMetaField_GetVTable(void) {
     int v0;
     int t;
     igShortMetaField_Init((int **)&obj);
-    t = *(int *)((char *)&obj + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_igMetaField_vtable[0];
     if (&obj._fieldName != 0) {
         o = (char *)obj._fieldName;
@@ -56,7 +56,7 @@ int igShortMetaField_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -65,17 +65,17 @@ int igShortMetaField_GetVTable(void) {
 
 void igShortMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igShortMetaField_Register);
+    igMetaObject_RunStaticInit(igShortMetaField_Register);
 }
 
 static igMetaObjectCallback g_igShortMetaField_callbackList[] = { igShortMetaField_CreateDefaultDescriptor, 0 };
 
-void igShortMetaField_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igShortMetaField_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g_igShortMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igMetaField_Register,
-        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
         igShortMetaField_GetMetaObjectFunction,
         "igShortMetaField",
         0x34,
@@ -95,7 +95,7 @@ void igShortMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;
 
     if (g_igShortMetaField_descriptor == 0) {
-        g_igShortMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igShortMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igShortMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igShortMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igShortMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

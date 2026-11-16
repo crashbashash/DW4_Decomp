@@ -11,21 +11,21 @@ igMetaObject *igListenerList_GetMetaObject(void)
 int igListenerList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igListenerList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_002271d0(void)
 {
-    igMetaObject_RunStaticInit(igListenerList_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igListenerList_Register);
 }
 
 static igMetaObjectCallback g_igListenerList_callbackList[] = { FUN_002272f0, 0 };
 
-void igListenerList_Register(void) {
+CallbackArray *igListenerList_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igListenerList_metaObject,
         igObjectList_Register,

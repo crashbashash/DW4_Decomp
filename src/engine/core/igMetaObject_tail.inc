@@ -64,13 +64,13 @@ igMetaObject *igMetaObject_Init(igMetaObject *meta){
     meta->_vTablePointer=0;
     if(g_stringPool==0){
         pool=((int)StringPool_Allocate(16));if(pool)pool=((int)StringPool_Construct((StringPool *)pool));
-        g_stringPool=pool;
+        g_stringPool=(StringPool *)pool;
     }
     emptyToken=(void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
     /* Drop the old pool-name token: owner chunk at -8, reference count at -4. */
     oldName=meta->_poolName;
     if(oldName){oldHeader=(int *)(oldName-8);refCount=*(int *)(oldName-4)-1;*(int *)(oldName-4)=refCount;
-        if(!refCount)StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (int)oldHeader);
+        if(!refCount)StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (StringTokenHeader *)oldHeader);
     }
     meta->_poolName=(int)emptyToken;return meta;
 }
@@ -103,8 +103,8 @@ void igMetaObject_ReleaseLists(igMetaObject *meta){
 
 void *igMetaObject_CreateInstanceDefault(void *meta){return (void *)igMetaObject_CreateInstance((igMetaObject *)meta,((igMemoryPoolView *)Memory_GetDefaultAllocator()));}
 
-int igMetaObject_CreateInstance(igMetaObject *self, igMemoryPoolView *pool) {
-    int instance;
+igObject *igMetaObject_CreateInstance(igMetaObject *self, igMemoryPoolView *pool) {
+    char *instance;
     int headerSize;
     char *poolName;
     igMemoryPoolView *allocator;
@@ -134,12 +134,12 @@ use_fallback:
         }
     }
     headerSize = self->_runTimeSize;
-    instance = (int)allocator->Allocate(headerSize + self->_sizeofSize);
+    instance = (char *)allocator->Allocate(headerSize + self->_sizeofSize);
     instance = instance + headerSize;
     if (instance != 0) {
         igObject_Construct((igObjectDispatchView *)instance, (char *)self);
     }
-    return instance;
+    return (igObject *)instance;
 }
 
 int igMetaObject_CreateInstanceWithPool(igMetaObject *self, igMemoryPoolView *pool) {
@@ -226,16 +226,16 @@ void igMetaObject_SetName(igMetaObject *meta, int name) {
         if (pool) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    internedName = StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
+    internedName = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     oldName = meta->_name;
     if (oldName) {
         oldHeader = (int *)(oldName - 8);
         refCount = *(int *)(oldName - 4) - 1;
         *(int *)(oldName - 4) = refCount;
         if (!refCount) {
-            StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (int)oldHeader);
+            StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (StringTokenHeader *)oldHeader);
         }
     }
     meta->_name = internedName;
@@ -261,12 +261,12 @@ int FUN_002fdef0(int a0, int a1)
 }
 
 /* The item array is read at +8 of the field list object. */
-int igMetaObject_GetFieldAt(igMetaObject *self, int index) {
-    return *(int *)(*(int *)((char *)(self->_metaFields) + 8) + (index * 4));
+igMetaField *igMetaObject_GetFieldAt(igMetaObject *self, int index) {
+    return *(igMetaField **)(*(int *)((char *)(self->_metaFields) + 8) + (index * 4));
 }
 
-void *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name) {
-    return ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), g_fieldNameMember, name);
+igMetaField *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name) {
+    return (igMetaField *)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), g_fieldNameMember, name);
 }
 
 void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int count){
@@ -406,7 +406,7 @@ int igMetaObject_CountTree(igMetaObject *self) {
     return count;
 }
 
-int igObjectSystem_FindMetaByNameDefault(const char *name){return igObjectSystem_FindMetaByName((ObjectSystemView *)((*(void * *)&g_objectSystem)), name);}
+int igObjectSystem_FindMetaByNameDefault(const char *name){return igObjectSystem_FindMetaByName(g_objectSystem, name);}
 
 /* Read from the field list's `_capacity` slot (+12), not `_count` (+8). */
 int igMetaObject_GetFieldCount(igMetaObject *self) {
@@ -418,7 +418,7 @@ void igMetaObject_AddExitCallback(int callback) {
 }
 
 void igMetaObject_AddRegistrationCallback(int callback) {
-    igObjectSystem_AddRegistrationCallback((ObjectSystemView *)((*(void * *)&g_objectSystem)), (int (*)(int))callback);
+    igObjectSystem_AddRegistrationCallback(g_objectSystem, (int (*)(int))callback);
 }
 
 void igMetaObject_AddField(igMetaObject *self, void *object) {
@@ -504,7 +504,7 @@ igResult igMetaObject_CopyVTable(igMetaObject *s, igMemoryPoolView *a) {
     p = base;
     while (!*p) p++;
     while (*p != 0) p++;
-    int n = (char *)p - (char *)base;
+    unsigned int n = (char *)p - (char *)base;
     int *nb = (int *)a->Allocate(n);
     if (nb == 0) return g_resultFailure;
     memcpy(nb, (int *)s->_vTablePointer, n);
@@ -518,10 +518,10 @@ int igMetaObject_GetPoolName(int *object)
     return self->_poolName;
 }
 
-void igMetaObject_RunStaticInit(StaticInitCallbacks *(*initialize)()){
-    StaticInitCallbacks *list=initialize();
+void igMetaObject_RunStaticInit(igMetaObjectRegisterFunction registerClass){
+    CallbackArray *list=registerClass();
     int count; int i;
-    if(list){count=list->count;for(i=0;i<count;i++)list->functions[i]();igArray_Destruct((CallbackArray *)list, 1);}
+    if(list){count=list->count;for(i=0;i<count;i++)((igMetaObjectCallback *)list->data)[i]();igArray_Destruct(list, 1);}
 }
 
 /* The registration state bits of _validity: 1 the parent is registered, 2 the class is set up, 4 the
@@ -536,7 +536,7 @@ CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObje
     igMetaObjectGetVTableFunction getVTable, igMetaObjectCallback initFields,
     igMetaObjectCallback staticInitCallback, igMetaObjectCallback *callbacks)
 {
-    int pool = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData);
+    igMemoryPoolView *pool = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData);
     igMetaObject *meta;
     CallbackArray *list;
     bool firstRegistration;
@@ -546,7 +546,7 @@ CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObje
         if (className != 0) {
             strcat(name, className);
         }
-        *metaObject = (igMetaObject *)igMetaObject_Create(pool);
+        *metaObject = igMetaObject_Create(pool);
     }
     meta = *metaObject;
     list = 0;
@@ -575,10 +575,10 @@ CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObje
                 igMetaObject_AssignTypeId(meta);
                 meta->_refCount = meta->_refCount - 1;
                 if ((meta->_refCount & 0x7FFFFF) == 0) igObject_Destroy(meta);
-                ObjectSystemView *system = (*(ObjectSystemView * *)&g_objectSystem);
+                ObjectSystemView *system = g_objectSystem;
                 if (system->copyVTables != 0 && system->fastPool != 0 && system->vtableClassNames != 0 &&
                     igStringTable_Find(system->vtableClassNames, (unsigned int)className) != -1) {
-                    igMetaObject_CopyVTable(meta, (*(ObjectSystemView * *)&g_objectSystem)->fastPool);
+                    igMetaObject_CopyVTable(meta, g_objectSystem->fastPool);
                 }
             }
             igMetaObject_FinalizeFieldLayout(meta);

@@ -354,7 +354,7 @@ void igMatrix44f_InvertOrthonormal(int *r, float *o, float *m) {
     o[12] = -(m[12] * o[0] + m[13] * o[4] + m[14] * o[8]);
     o[13] = -(m[12] * o[1] + m[13] * o[5] + m[14] * o[9]);
     o[14] = -(m[12] * o[2] + m[13] * o[6] + m[14] * o[10]);
-    *r = g_resultSuccess[0];
+    *r = g_resultSuccess.v;
 }
 
 /* The sign bit is cleared through a byte bit-field union. */
@@ -368,7 +368,7 @@ void igMatrix44f_Invert(int *arg0, float *arg1, int arg2) {
     u.f = len;
     u.b.sign = 0;
     if (u.f < 1.1754944e-38f) {
-        *arg0 = g_resultFailure[0];
+        *arg0 = g_resultFailure.v;
     } else {
         float inv = 1.0f / len;
         i = 0;
@@ -383,7 +383,7 @@ void igMatrix44f_Invert(int *arg0, float *arg1, int arg2) {
             } while (j < 4);
             i++;
         } while (i < 4);
-        *arg0 = g_resultSuccess[0];
+        *arg0 = g_resultSuccess.v;
     }
 }
 

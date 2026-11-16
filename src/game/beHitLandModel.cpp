@@ -5,7 +5,6 @@
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
 
-extern "C" int igMatrix44f_MakeEulerRotation(void *, float, float, float);
 extern "C" int beHitLandModel_GetInfoMeta(void);
 extern "C" void beHitLandModel_UpdateRam(void);
 extern "C" int beHitLandModel_GetMeta(void);

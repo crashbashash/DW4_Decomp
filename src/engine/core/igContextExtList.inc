@@ -2,7 +2,7 @@ igMetaObject *g_igContextExtList_metaObject;
 
 igMetaObject *igContextExtList_GetOrCreateMetaObject(void) {
     if (g_igContextExtList_metaObject == 0) {
-        g_igContextExtList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igContextExtList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igContextExtList_metaObject;
 }
@@ -20,23 +20,23 @@ int igContextExtList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igContextExtList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igContextExtList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContextExtList_Register);
+    igMetaObject_RunStaticInit(igContextExtList_Register);
 }
 
 static igMetaObjectCallback g_igContextExtList_callbackList[] = { igContextExt_EnsureRegistered, 0 };
 
-void igContextExtList_Register(void) {
+CallbackArray *igContextExtList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igContextExtList_metaObject,
-        (igMetaObjectRegisterFunction)igObjectList_Register,
-        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
+        igObjectList_Register,
+        igObjectList_GetPublishedMetaObject,
         igContextExtList_GetMetaObjectFunction,
         "igContextExtList",
         0x14,

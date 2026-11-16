@@ -26,7 +26,7 @@ int igMemoryPoolContextInfo_GetVTable(void) {
     info._name = 0;
     *(int **)&info._vtable = &g_igMemoryPoolContextInfo_vtable[0];
     info._memoryPoolInfos = 0;
-    t = *(int *)((char *)&info + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&info + g_objectSystem->vtableProbeOffset);
     info._vtable = (int)&g_igMemoryPoolContextInfo_vtable[0];
     if (&info._memoryPoolInfos != 0) {
         r = (igObject *)info._memoryPoolInfos;
@@ -45,7 +45,7 @@ int igMemoryPoolContextInfo_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -54,17 +54,17 @@ int igMemoryPoolContextInfo_GetVTable(void) {
 
 void igMemoryPoolContextInfo_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryPoolContextInfo_Register);
+    igMetaObject_RunStaticInit(igMemoryPoolContextInfo_Register);
 }
 
 static igMetaObjectCallback g_igMemoryPoolContextInfo_callbackList[] = { igMemoryPoolInfoList_EnsureRegistered, 0 };
 
-void igMemoryPoolContextInfo_Register(void) {
+CallbackArray *igMemoryPoolContextInfo_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMemoryPoolContextInfo_metaObject,
-        (igMetaObjectRegisterFunction)igInfo_Register,
+        igInfo_Register,
         (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMemoryPoolContextInfo_GetMetaObjectFunction,
         "igMemoryPoolContextInfo",

@@ -5,20 +5,27 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/typecast.h"
 #include "dw4/igTDataList.h"
+#include "dw4/igMetaObject.h"
+#include "dw4/igObject.h"
+#include "dw4/igObjectSystem.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igResult.h"
+#include "dw4/StringPool.h"
+#include "dw4/igMetaField.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObjectList.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igStringObj.h"
+#include "dw4/igMemory.h"
 
 typedef void (*igMetaObjectCallback)();
-typedef igMetaField *(*FieldFactory)(void *);
 
 extern int DAT_0052bea0[4];
 extern igMetaObject *g_igCompoundList_metaObject;
 extern int g_igCompoundList_vtable[4];
-extern char *g_objectSystem[4];
-extern void *g_igDoubleMetaField_metaObject[4];
-extern char igObject_GetMetaObject_ParentAccessor[];
-extern char igObject_Register[];
+extern igMetaObject *g_igDoubleMetaField_metaObject;
 extern igMetaObject *g_igOptBase_metaObject;
 extern igMetaObject *g_igOptInterface_metaObject;
-extern int kIGMemoryPoolHandleMetaData[4];
 extern int g_igOptInterface_vtable[4];
 extern char igInterface_GetPublishedMetaObject[];
 extern igMetaObject *g_igInterface_metaObject;
@@ -30,8 +37,6 @@ extern igMetaObject *g_igMessageInterface_metaObject;
 extern int g_igMessageInterface_vtable[4];
 extern igMetaObject *g_igMessageList_metaObject;
 extern int g_igMessageList_vtable[4];
-extern char igObjectList_GetPublishedMetaObject[];
-extern char igObjectList_Register[];
 extern igMetaObject *g_igMessageBase_metaObject;
 extern int g_igMessageBase_vtable[4];
 extern igMetaObject *g_igInterfaced_metaObject;
@@ -68,7 +73,6 @@ extern int g_igCompoundMetaField_vtable[4];
 extern int g_igMetaField_vtable[4];
 extern char igCompoundMetaField_GetPublishedMetaObject[];
 extern char igCompoundMetaField_Register[];
-extern int g_stringPool[4];
 extern igMetaObject *g_igItemBase_metaObject;
 extern int g_igInterface_vtable[4];
 extern igMetaObject *g_igFileInfoList_metaObject;
@@ -76,7 +80,6 @@ extern int g_igFileInfoList_vtable[4];
 extern igMetaObject *g_igFileInfo_metaObject;
 extern int g_igFileInfo_vtable[4];
 extern char igNamedObject_GetPublishedMetaObject[];
-extern char igNamedObject_Register[];
 extern igMetaObject *g_igGroup_metaObject[4];
 extern igMetaObject *g_igActor_metaObject[4];
 extern int g_igTransform_metaObject[4];
@@ -84,7 +87,6 @@ extern igMetaObject *g_igInfo_metaObject[4];
 extern int g_igSceneInfo_metaObject[4];
 extern int g_igAnimationDatabase_metaObject[4];
 extern int g_igMetaObject_metaObject[4];
-extern int g_resultSuccess[4];
 extern char emptyString[];
 extern int g_igVec4ucMetaField_metaObject[4];
 extern int g_igVec4fMetaField_metaObject[4];
@@ -119,7 +121,6 @@ void igDirectory_EnsureRegistered(void);
 void igStringRefListList_EnsureRegistered(void);
 void igMetaObjectListList_EnsureRegistered(void);
 void igIntList_EnsureRegistered(void);
-void igObjectList_EnsureRegistered(void);
 void igObjectListList_EnsureRegistered(void);
 void igBoolList_EnsureRegistered(void);
 void igRegistry_EnsureRegistered(void);
@@ -129,17 +130,7 @@ igMetaField *igMemoryRefMetaField_Create(void *);
 igMetaField *igStringMetaField_Create(void *);
 igMetaField *igBoolMetaField_Create(void *);
 igMetaField *igUnsignedIntMetaField_Create(void *);
-void igMetaObject_RunStaticInit(...);
-int Memory_FreeBufferAliasC(...);
-int igObject_InitHeader(...);
-int igMetaObject_RegisterClass(...);
 int igUnsignedCharMetaField_GetDefaultDescriptor(...);
-void igMetaObject_CreateFields(igMetaObject *meta, FieldFactory *factories, int count);
-void * igMetaObject_GetFieldAt(...);
-int igMetaObject_GetFieldCount(...);
-void igMetaObject_NameFields(igMetaObject *meta, const char **names, igMetaField ***handles, int *offsets, int start);
-igMetaObject *igMetaObject_Create(...);
-void *Memory_GetAllocatorBySelector(...);
 int igSmartPointer_igMetaObjectList_Destruct(...);
 int igSmartPointer_igInfoList_Destruct(...);
 void igStringRef_Destruct(...);
@@ -148,50 +139,28 @@ int igInfoList_GetOrCreateMetaObject(...);
 int igMetaObjectList_GetOrCreateMetaObject(...);
 int igStringMetaField_SetDefaultText(...);
 int igRegistry_GetOrCreateMetaObject(...);
-int StringChunk_ReleaseHeader(...);
 int igStringRefList_GetOrCreateMetaObject(...);
 int igObjectListList_GetOrCreateMetaObject(...);
 int igBoolList_GetOrCreateMetaObject(...);
 int igSmartPointer_igObjectList_Destruct(...);
 int igObjectList_GetOrCreateMetaObject(...);
-void *igMetaObject_CreateInstance(...);
 int FUN_0019c8c0(...);
 int igIntList_GetOrCreateMetaObject(...);
-int igMetaObject_GetOrCreateMetaObject(...);
 int igStringRefListList_GetOrCreateMetaObject(...);
 int igMetaObjectListList_GetOrCreateMetaObject(...);
-int igMetaObject_AddExitCallback(...);
 int ObjectPointerList_FindIndex(...);
-int igMetaObject_FinalizeAndReplaceField(...);
-void ** igMetaObject_FindFieldByName(...);
-int igMetaField_Init(...);
-void * igMetaField_GetMetaFieldList(...);
 int MetaRefList_AppendRetained(...);
-int igMetaField_FinalizeDescriptor(...);
 void igStringRefList_EnsureRegistered(void);
 void igMetaObjectList_EnsureRegistered(void);
-int StringPool_Allocate(...);
-int ObjectList_AppendRetained(...);
-int StringPool_Construct(...);
-void * StringPool_Intern(...);
-int igMetaField_SetFieldName(...);
-void igMetaObject_EnsureRegistered(void);
 igMetaField *igObjectRefMetaField_Create(void *);
 int igNamedObject_Destroy(...);
 int igSmartPointer_igDirectory_Destruct(...);
 int igIGBFile_GetOrCreateMetaObject(...);
 int igDirectory_GetOrCreateMetaObject(...);
 int Memory_GetDefaultHandleAllocator(...);
-int Gap__Core__igObject__resetFields(...);
-int igMetaObject_IsOfType(void *meta, void *base);
 int FUN_002fdef0(void *meta, void *field);
-int List_InsertWords(...);
-int igMetaObject_GetTreeNode(...);
-int igMetaObject_CountTree(...);
-int igObject_IsKindOf(...);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
-int List_RemoveWordAt(void *list, int index);
 int igMatrix44f_SetIdentity(...);
 int igMatrix44f_Multiply(...);
 int igMatrix44f_Copy(...);
@@ -201,15 +170,10 @@ int vprintf(...);
 igMetaObject *igSegment_GetMetaObject(void);
 void *igInfoList_Create(int arg0);
 int FUN_001d6340(...);
-int igObject_InitDefaults(...);
 int FUN_0022c150(...);
-int igObject_ReleaseDefaults(...);
 int FUN_00190330(...);
 int igStringMetaField_AssignRetainedToken(...);
 int igObjectRefMetaField_Assign(...);
-int igObject_Reallocate(...);
-int igObject_FreeMemory(...);
-int Gap__Core__igObject__destructFields(...);
 }
 
 struct S {
@@ -303,7 +267,7 @@ struct S_3 {
     igSmartPointer_2<Obj_9> a; igSmartPointer_2<Obj_9> b; igSmartPointer_2<Obj_9> c;
 };
 struct R_3 { int a, b, c, d; };
-struct RecoveryString { void *p; ~RecoveryString() { if (p != 0) { int *t = (int *)((char *)p - 8); int v = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = v; if (v == 0) StringChunk_ReleaseHeader(*t, t); } } };
+struct RecoveryString { void *p; ~RecoveryString() { if (p != 0) { int *t = (int *)((char *)p - 8); int v = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = v; if (v == 0) StringChunk_ReleaseHeader((StringChunk *)*t, (StringTokenHeader *)t); } } };
 class Obj_10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual R_3 vf(RecoveryString *, int); };
 struct L { char p[8]; int n; };
 struct UIntList { char pad[8]; int count; int cap; unsigned int *data; };
@@ -324,7 +288,7 @@ struct StringRef {
         if (s != 0) {
             int *header = (int *)(s - 8);
             if (--header[1] == 0) {
-                StringChunk_ReleaseHeader(header[0], header);
+                StringChunk_ReleaseHeader((StringChunk *)header[0], (StringTokenHeader *)header);
             }
         }
     }
@@ -338,7 +302,7 @@ struct StringRef_2 {
             int *header = p - 2;
             int count = p[-1] - 1;
             p[-1] = count;
-            if (count == 0) { StringChunk_ReleaseHeader(*header, header); }
+            if (count == 0) { StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header); }
         }
     }
 };
@@ -420,7 +384,7 @@ struct RecoveryString_2 {
             int *t = (int *)((char *)q - 8);
             int v = t[1] - 1;
             t[1] = v;
-            if (v == 0) StringChunk_ReleaseHeader(*t, t);
+            if (v == 0) StringChunk_ReleaseHeader((StringChunk *)*t, (StringTokenHeader *)t);
         }
     }
 };
@@ -429,7 +393,7 @@ typedef struct Q { char pad[8]; int f8; } Q;
 struct O_2 {
     char pad[8]; int f8;
     static inline O_2 *Cast(O_2 *p) {
-        if (p != 0 && igObject_IsKindOf(p, g_igMatrix44fMetaField_metaObject[0]) != 0) {
+        if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igMatrix44fMetaField_metaObject[0]) != 0) {
             return p;
         }
         return 0;
@@ -439,7 +403,7 @@ struct M { char pad[8]; int f8; };
 struct S_a { char pad0[8]; int f8; };
 struct K { 
   S_a *Cast(void *p) {
-    if (p != 0 && igObject_IsKindOf(p, g_igDoubleMetaField_metaObject[0]) != 0) { return (S_a *)p; }
+    if (p != 0 && igObject_IsKindOf(p, g_igDoubleMetaField_metaObject) != 0) { return (S_a *)p; }
     return 0;
   }
 };
@@ -447,14 +411,12 @@ typedef struct S_5 { char pad8[8]; int f8; int fC; int f10; } S_5;
 typedef struct S_6 { char pad8[8]; int f8; int fC; unsigned int f10; } S_6;
 
 extern "C" {
-Rc_2 * igStringObj_Create(...);
-int igStringObj_Set(Rc_2 *, char *);
 void BaseLibrary_MarkRegistered(void);
 void *FUN_00225790(struct S *arg0, short arg1);
 igMetaObject *igCompoundList_GetMetaObject(void);
 int igCompoundList_GetVTable(void);
 void FUN_00225900(void);
-void igCompoundList_Register(void);
+CallbackArray *igCompoundList_Register(void);
 void thunk_igCompoundList_GetMetaObject(void);
 void igCompoundList_InitFields(void);
 igMetaObject *FUN_00225a30(void);
@@ -463,7 +425,7 @@ igMetaObject *igOptInterface_GetMetaObject(void);
 int igOptInterface_GetVTable(void);
 void **FUN_00225b90(void **arg0, long long arg1);
 void FUN_00225c10(void);
-void igOptInterface_Register(void);
+CallbackArray *igOptInterface_Register(void);
 void thunk_igOptInterface_GetMetaObject(void);
 igMetaObject *FUN_00225cb0(void);
 void igOptInterface_InitFields(void);
@@ -471,11 +433,11 @@ igMetaObject *FUN_00225dc0(void);
 igMetaObject *igOptConfiguration_GetMetaObject(void);
 int igOptConfiguration_GetVTable(void);
 void FUN_00225ea0(void);
-void igOptConfiguration_Register(void);
+CallbackArray *igOptConfiguration_Register(void);
 void thunk_igOptConfiguration_GetMetaObject(void);
 igMetaObject *igOptBase_GetMetaObject(void);
 void FUN_00225f80(void);
-void igOptBase_Register(void);
+CallbackArray *igOptBase_Register(void);
 void thunk_igOptBase_GetMetaObject(void);
 igMetaObject *FUN_00226010(void);
 void igOptBase_InitFields(void);
@@ -483,26 +445,26 @@ igMetaObject *FUN_002260d0(void);
 igMetaObject *igMessageInterface_GetMetaObject(void);
 int igMessageInterface_GetVTable(void);
 void FUN_00226200(void);
-void igMessageInterface_Register(void);
+CallbackArray *igMessageInterface_Register(void);
 void thunk_igMessageInterface_GetMetaObject(void);
 void igMessageInterface_InitFields(void);
 igMetaObject *FUN_00226340(void);
 igMetaObject *igMessageList_GetMetaObject(void);
 int igMessageList_GetVTable(void);
 void FUN_00226420(void);
-void igMessageList_Register(void);
+CallbackArray *igMessageList_Register(void);
 void thunk_igMessageList_GetMetaObject(void);
 igMetaObject *igMessageBase_GetMetaObject(void);
 int igMessageBase_GetVTable(void);
 void FUN_00226540(void);
-void igMessageBase_Register(void);
+CallbackArray *igMessageBase_Register(void);
 void thunk_igMessageBase_GetMetaObject(void);
 igMetaObject *FUN_002265d0(void);
 igMetaObject *FUN_002265e0(void);
 igMetaObject *igLogInterface_GetMetaObject(void);
 int igLogInterface_GetVTable(void);
 void FUN_002266c0(void);
-void igLogInterface_Register(void);
+CallbackArray *igLogInterface_Register(void);
 void thunk_igLogInterface_GetMetaObject(void);
 void igLogInterface_InitFields(void);
 igMetaObject *FUN_002267c0(void);
@@ -510,40 +472,40 @@ igMetaObject *igLockInterface_GetMetaObject(void);
 int igLockInterface_GetVTable(void);
 O *igSmartPointer_igBoolList_Destruct(O *arg0, short arg1);
 void FUN_00226a10(void);
-void igLockInterface_Register(void);
+CallbackArray *igLockInterface_Register(void);
 void thunk_igLockInterface_GetMetaObject(void);
 void igLockInterface_InitFields(void);
 igMetaObject *igLockBase_GetMetaObject(void);
 void FUN_00226be0(void);
-void igLockBase_Register(void);
+CallbackArray *igLockBase_Register(void);
 void thunk_igLockBase_GetMetaObject(void);
 igMetaObject *FUN_00226c60(void);
 igMetaObject *igListenerInterface_GetMetaObject(void);
 int igListenerInterface_GetVTable(void);
 struct T_2 **FUN_00226db0(struct T_2 **arg0, short arg1);
 void FUN_00226e30(void);
-void igListenerInterface_Register(void);
+CallbackArray *igListenerInterface_Register(void);
 void thunk_igListenerInterface_GetMetaObject(void);
 void igListenerInterface_InitFields(void);
 igMetaObject *FUN_00226fd0(void);
 igMetaObject *igListenerListList_GetMetaObject(void);
 int igListenerListList_GetVTable(void);
 void FUN_002270b0(void);
-void igListenerListList_Register(void);
+CallbackArray *igListenerListList_Register(void);
 void thunk_igListenerListList_GetMetaObject(void);
 igMetaObject *igListenerList_GetMetaObject(void);
 int igListenerList_GetVTable(void);
 void FUN_002271d0(void);
-void igListenerList_Register(void);
+CallbackArray *igListenerList_Register(void);
 void thunk_igListenerList_GetMetaObject(void);
 igMetaObject *igListenerBase_GetMetaObject(void);
 int igListenerBase_GetVTable(void);
 void FUN_002272f0(void);
-void igListenerBase_Register(void);
+CallbackArray *igListenerBase_Register(void);
 void thunk_igListenerBase_GetMetaObject(void);
 igMetaObject *igIterator_GetMetaObject(void);
 void FUN_002273d0(void);
-void igIterator_Register(void);
+CallbackArray *igIterator_Register(void);
 void thunk_igIterator_GetMetaObject(void);
 igMetaObject *FUN_00227450(void);
 void *FUN_00227460(int arg0);
@@ -551,21 +513,21 @@ igMetaObject *FUN_002274a0(void);
 igMetaObject *igIterateGraph_GetMetaObject(void);
 int igIterateGraph_GetVTable(void);
 void FUN_00227620(void);
-void igIterateGraph_Register(void);
+CallbackArray *igIterateGraph_Register(void);
 void thunk_igIterateGraph_GetMetaObject(void);
 void igIterateGraph_InitFields(void);
 void *FUN_00227780(int arg0);
 igMetaObject *igIterateField_GetMetaObject(void);
 int igIterateField_GetVTable(void);
 void FUN_002278a0(void);
-void igIterateField_Register(void);
+CallbackArray *igIterateField_Register(void);
 void thunk_igIterateField_GetMetaObject(void);
 void igIterateField_InitFields(void);
 void *FUN_002279d0(int arg0);
 igMetaObject *igIterateDerived_GetMetaObject(void);
 int igIterateDerived_GetVTable(void);
 void FUN_00227af0(void);
-void igIterateDerived_Register(void);
+CallbackArray *igIterateDerived_Register(void);
 void thunk_igIterateDerived_GetMetaObject(void);
 void igIterateDerived_InitFields(void);
 igMetaObject *FUN_00227c20(void);
@@ -575,7 +537,7 @@ void **FUN_00227d70(void **arg0, short arg1);
 ObjectRefWord *FUN_00227df0(ObjectRefWord *self,int delete_storage);
 void **igSmartPointer_igStringRefListList_Destruct(void **arg0, short arg1);
 void FUN_00227ef0(void);
-void igItemInterface_Register(void);
+CallbackArray *igItemInterface_Register(void);
 void thunk_igItemInterface_GetMetaObject(void);
 void igItemInterface_InitFields(void);
 void FUN_002280a0(void);
@@ -583,14 +545,14 @@ igMetaObject *FUN_002280b0(void);
 igMetaObject *igItemDataBaseList_GetMetaObject(void);
 int igItemDataBaseList_GetVTable(void);
 void FUN_00228190(void);
-void igItemDataBaseList_Register(void);
+CallbackArray *igItemDataBaseList_Register(void);
 void thunk_igItemDataBaseList_GetMetaObject(void);
 igMetaObject *FUN_00228220(void);
 void igItemDataBaseList_InitFields(void);
 igMetaObject *igItemDataBaseField_GetMetaObject(void);
 int igItemDataBaseField_GetVTable(void);
 void FUN_00228410(void);
-void igItemDataBaseField_Register(void);
+CallbackArray *igItemDataBaseField_Register(void);
 void thunk_igItemDataBaseField_GetMetaObject(void);
 void FUN_002284a0(void);
 int FUN_00228570(void);
@@ -599,23 +561,23 @@ void Gap__igItemDataBaseField__vfunc_11(void *arg0);
 void FUN_002285d0(int arg0);
 igMetaObject *igItemBase_GetMetaObject(void);
 void FUN_00228950(void);
-void igItemBase_Register(void);
+CallbackArray *igItemBase_Register(void);
 void thunk_igItemBase_GetMetaObject(void);
 igMetaObject *igInterfaced_GetMetaObject(void);
 void FUN_00228a20(void);
-void igInterfaced_Register(void);
+CallbackArray *igInterfaced_Register(void);
 void thunk_igInterfaced_GetMetaObject(void);
 void igInterfaced_InitFields(void);
 igMetaObject *igInterface_GetMetaObject(void);
 int igInterface_GetVTable(void);
 void FUN_00228c60(void);
-void igInterface_Register(void);
+CallbackArray *igInterface_Register(void);
 void thunk_igInterface_GetMetaObject(void);
 igMetaObject *FUN_00228cf0(void);
 igMetaObject *igFileInfoList_GetMetaObject(void);
 int igFileInfoList_GetVTable(void);
 void FUN_00228dd0(void);
-void igFileInfoList_Register(void);
+CallbackArray *igFileInfoList_Register(void);
 void thunk_igFileInfoList_GetMetaObject(void);
 igMetaObject *FUN_00228e60(void);
 igMetaObject *igFileInfo_GetMetaObject(void);
@@ -623,14 +585,14 @@ int igFileInfo_GetVTable(void);
 ObjectRefWord *FUN_00228fc0(ObjectRefWord *self,int delete_storage);
 struct R **FUN_00229040(struct R **arg0, short arg1);
 void FUN_002290c0(void);
-void igFileInfo_Register(void);
+CallbackArray *igFileInfo_Register(void);
 void thunk_igFileInfo_GetMetaObject(void);
 void igFileInfo_InitFields(void);
 int *FUN_00229260(int *p);
 int *igStringRef_Construct(int *p);
 igMetaObject *igBase_GetMetaObject(void);
 void FUN_002292d0(void);
-void igBase_Register(void);
+CallbackArray *igBase_Register(void);
 void thunk_igBase_GetMetaObject(void);
 void **igSmartPointer_igGroup_Destruct(void **arg0, short arg1);
 void **FUN_002293d0(void **arg0, int arg1);
@@ -646,7 +608,7 @@ int FUN_00229700(int a0, int a1);
 S_2 *FUN_00229710(S_2 *arg0);
 S_3 *FUN_002297f0(S_3 *s, short flag);
 void FUN_00229980(void);
-void Gap__igItemInterface__vfunc_13(igInterface *arg0);
+void Gap__igItemInterface__vfunc_13(igInterface *arg0, int flags);
 R_3 Gap__igItemInterface__vfunc_28(Obj_10 *arg1, void *arg2, int arg3);
 int FUN_00229e20(struct L *arg0, int *arg1);
 int FUN_00229f70(int *arg0, int *arg1);
@@ -670,22 +632,22 @@ int FUN_0022ac40(void *it);
 int FUN_0022ac60(void *arg0);
 int FUN_0022ac70(int arg0, int arg1);
 void FUN_0022b0a0(int arg0, int *arg1);
-void Gap__igListenerInterface__vfunc_13(igInterface *arg0);
+void Gap__igListenerInterface__vfunc_13(igInterface *arg0, int flags);
 int Gap__igListenerBase__vfunc_28(void);
 int Gap__igListenerBase__vfunc_27(void);
 int Gap__igLockInterface__vfunc_27(int self, int mode);
 int Gap__igLogInterface__vfunc_24(void *d0, int arg1);
 int Gap__igLogInterface__vfunc_27(void *arg0, int arg1, int arg2);
 igMetaObject *Gap__Core__igInfo__vfunc_22(void);
-void Gap__igMessageInterface__vfunc_13(igMessageInterface *self);
+void Gap__igMessageInterface__vfunc_13(igMessageInterface *self, int flags);
 void FUN_0022b470(int arg0, int arg1);
 void FUN_0022b610(B_2 *log, int root);
 bool FUN_0022b820(int arg0, int arg1);
 void FUN_0022b8a0(void **arg0, void *arg1);
 bool FUN_0022b910(Own *arg0, V *arg1);
 bool FUN_0022bac0(void *arg0, void *arg1);
-void thunk_igObject_InitDefaults__0022bbc0(void);
-void Gap__igOptInterface__vfunc_13(void *arg0);
+void thunk_igObject_InitDefaults__0022bbc0(igObject *self);
+void Gap__igOptInterface__vfunc_13(void *arg0, int flags);
 int Gap__Core__igMetaObject__vfunc_22(void);
 void FUN_0022bc10(int *arg0, int arg1, int arg2, int arg3, int arg4);
 int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3);
@@ -695,7 +657,7 @@ void Gap__igOptInterface__vfunc_28(void);
 void Gap__igOptInterface__vfunc_30(void);
 void Gap__igOptInterface__vfunc_31(void);
 void Gap__igOptInterface__vfunc_32(int *arg0);
-void Gap__igOptInterface__vfunc_12(void);
+void Gap__igOptInterface__vfunc_12(igObject *self);
 igMetaObject *FUN_0022ca10(void);
 igMetaObject *Gap__igMessageInterface__vfunc_22(void);
 igMetaObject *Gap__igLogInterface__vfunc_22(void);
@@ -773,22 +735,22 @@ static inline void storeHeld(Lst *list, int index, const igSmartPointer<T_5> &va
     }
     it->held = held;
 }
-static inline void * cast0(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igVec4ucMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_2(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igUnsignedShortMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_3(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igUnsignedIntMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_4(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igStringMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igVec4ucMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_2(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igUnsignedShortMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_3(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igUnsignedIntMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_4(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igStringMetaField_metaObject[0]) != 0) { return o; } return 0; }
 static inline int *castToType(int *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igShortMetaField_metaObject[0]) != 0) {
+    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igShortMetaField_metaObject[0]) != 0) {
         return object;
     }
     return 0;
 }
-static inline void * cast0_5(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igRawRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_6(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igObjectRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_7(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igMemoryRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_8(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igFloatMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_9(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igCharMetaField_metaObject[0]) != 0) { return o; } return 0; }
-static inline void * cast0_10(void * o) { if (o != 0 && igObject_IsKindOf(o, g_igBoolMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_5(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igRawRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_6(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_7(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igMemoryRefMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_8(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igFloatMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_9(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igCharMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline void * cast0_10(void * o) { if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igBoolMetaField_metaObject[0]) != 0) { return o; } return 0; }
 static inline int f8_of(const S_6 *list) { return list->f8; }
 
 #endif

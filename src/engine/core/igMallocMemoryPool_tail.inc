@@ -39,7 +39,7 @@ igResult igMallocMemoryPool_EnableAllocationLock(igMallocMemoryPoolView *self, u
         self->_allocationLock.clear();
     } else if (enable == 1) {
         if (self->_allocationLock.p != 0) return igResult(g_resultSuccess.v);
-        igSmartPointer<igSemaphoreView> semaphore((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        igSmartPointer<igSemaphoreView> semaphore((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
         created = semaphore.p->Create();
         self->_allocationLock = semaphore;
     }
@@ -325,7 +325,7 @@ void igMallocMemoryPool_GangFree(igMallocMemoryPoolView *self, unsigned int size
 }
 
 void Gap__Core__igMallocMemoryPool__resetFields(igMallocMemoryPool *self, int extra1) {
-    Gap__Core__igObject__resetFields((int)self, extra1);
+    Gap__Core__igObject__resetFields((igObject *)self, extra1);
     self->_poolOptionFlags = (int) g_igMallocMemoryPool_defaultPoolOptionFlags;
 }
 
@@ -679,7 +679,7 @@ void igMallocMemoryPool_PrintStatistics(igMallocMemoryPool *self, char *title) {
         igReport_Printf("%s:\n");
         igReport_Flush();
     }
-    if (((struct Ctx { char p[36]; int on; } * *)&g_objectSystem)[0]->on != 0) {
+    if (g_objectSystem->metaEnumList != 0) {
         name = igMetaEnum_GetValueName(buf, 64, self->_messageLevel, igMallocMemoryPool_GetMessageLevelMetaEnum());
     } else {
         name = ((char *)"");
@@ -708,7 +708,7 @@ int igMallocMemoryPool_GetEventTracker(void *pool) {
 
 void igMallocMemoryPool_SetEventTracker(igMallocMemoryPool *self, igObject *tracker) {
     igObject *old;
-    if ((tracker == 0) || (((void *)igObject_GetAllocator((int)tracker)) != self)) {
+    if ((tracker == 0) || (((void *)igObject_GetAllocator((igObject *)tracker)) != self)) {
         if (tracker != 0) {
             tracker->_refCount = tracker->_refCount + 1;
         }
@@ -728,7 +728,7 @@ void igMallocMemoryPool_Dump(void *self, int unused1, int unused2, int unused3, 
     igMallocMemoryPool_Lock(self);
     message = "The method dump() has no meaning for an igMallocMemoryPool\n";
     if (fileName != 0) {
-        igSmartPointer<igFileView> file((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        igSmartPointer<igFileView> file((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
         if (file.p->Open((const char *)fileName, (const char *)"w") == 0) {
             if (((igMallocMemoryPool *)self)->_messageLevel >= 2) {
                 igReport_Warning("igMallocMemoryPool::dump() Could not open file (%s) for output\n", fileName);

@@ -2,7 +2,7 @@ int igVirtualCFuncMetaField_ValueFromString(int self, int value, int text) {
     int consumed;
 
     consumed = 0;
-    sscanf(text, "0x%08x%n", value, &consumed);
+    sscanf((const char *)text, "0x%08x%n", value, &consumed);
     return consumed;
 }
 
@@ -11,7 +11,7 @@ void igVirtualCFuncMetaField_ValueToString(int *out, int self, int *value) {
     int pool;
     int interned;
 
-    sprintf(text, &text_0x_08x[0], *value);
+    sprintf(text, (const char *)&text_0x_08x[0], *value);
     if (text == 0) {
         interned = 0;
     } else {
@@ -20,9 +20,9 @@ void igVirtualCFuncMetaField_ValueToString(int *out, int self, int *value) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
     }
     *out = interned;
 }
@@ -34,7 +34,7 @@ int igVirtualCFuncMetaField_GetSize(void) {
 void igVirtualCFuncMetaField_SetToDefault(void *field, int object) {
  if (object != 0) {
 int offset = *(int *)((igMetaField *)field)->_default;
- int vtable = *(int *)(object + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+ int vtable = *(int *)(object + g_objectSystem->vtableProbeOffset);
  ((igMetaFieldView *)field)->SetValue(object, vtable + offset);
 }
 }
@@ -42,7 +42,7 @@ int offset = *(int *)((igMetaField *)field)->_default;
 void igVirtualCFuncMetaField_CopyDefaultToValue(int *field, int object) {
     if (object != 0) {
         int *defaultOffset = (int *)((igMetaField *)field)->_default;
-        int vtable = *(int *)(object + *(int *)((char *)(*(void * *)&g_objectSystem) + 916));
+        int vtable = *(int *)(object + g_objectSystem->vtableProbeOffset);
         ((igMetaFieldView *)field)->SetValue(object, vtable + *defaultOffset);
     }
 }

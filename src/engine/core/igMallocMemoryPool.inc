@@ -22,7 +22,7 @@ void igMallocMemoryPool_InitDefaults(int extra0) {
 
 void *igMallocMemoryPool_Clone(void *self, void *src) {
     void *o;
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igMallocMemoryPool_EnsureRegistered();
         return ((void *)igObject_CloneViaMetadata((void **)self, (int)src));
     }
@@ -63,7 +63,7 @@ int igMallocMemoryPool_GetVTable(void) {
     igObject *q0;
     igObject *q1;
     igMallocMemoryPool_Initialize(&pool);
-    vtable = *(int *)((char *)&pool + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&pool + g_objectSystem->vtableProbeOffset);
     pool._vtable = (int)&g_igMallocMemoryPool_vtable[0];
     q0 = (igObject *)&pool._eventTracker;
     if (q0 != 0) {
@@ -91,16 +91,16 @@ int igMallocMemoryPool_GetVTable(void) {
 
 void igMallocMemoryPool_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMallocMemoryPool_Register);
+    igMetaObject_RunStaticInit(igMallocMemoryPool_Register);
 }
 
 static igMetaObjectCallback g_igMallocMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
 
-void igMallocMemoryPool_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igMallocMemoryPool_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g_igMallocMemoryPool_metaObject,
-        (igMetaObjectRegisterFunction)igMemoryPool_Register,
+        igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igMallocMemoryPool_GetMetaObjectFunction,
         "igMallocMemoryPool",

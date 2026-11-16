@@ -2,6 +2,7 @@
    into the caller's buffer, and the callbacks; with the work-area allocator and the decode loop. */
 #include "dw4/sony/libmpeg.h"
 #include "dw4/eekernel_gp.h"
+#include "dw4/libkernl.h"
 
 /* The DMA controller's suspend bit (D_ENABLEW), a channel's start bit (Dn_CHCR), the IPU's reset bit (IPU_CTRL). */
 #define D_ENABLE_SUSPEND 0x10000
@@ -15,9 +16,6 @@
 
 #define SPR 0x70000000
 
-int DIntr(void);
-int EIntr(void);
-void scePrintf(const char *format, ...);
 void *memset(void *dst, int value, unsigned int size);
 void sceIpuInit(void);
 void sceIpuSync(int mode, int timeout);

@@ -4,7 +4,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igDataPumpInfo.h"
-#include "dw4/igMersenneTwisterRandomNumber.h"
+#include "dw4/igVec3f.h"
 #include "dw4/igNonRefCountedObjectStack.h"
 #include "dw4/igRandomNumber.h"
 

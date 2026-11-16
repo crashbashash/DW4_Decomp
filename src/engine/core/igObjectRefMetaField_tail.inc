@@ -1,10 +1,10 @@
 void igObjectRefMetaField_ReleaseDefaults(int self) {
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)self, 0);
-    igObject_ReleaseDefaults(self);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 
 void igObjectRefMetaField_InitDefaults(void **self) {
-    igObject_InitDefaults((int)self);
+    igObject_InitDefaults((igObject *)self);
     ((igMetaFieldView *)self)->SetDefault(0);
 }
 
@@ -57,8 +57,8 @@ void igObjectRefMetaField_ConstructValue(igObjectRefMetaField *field,void *objec
     void *allocator;
     if(!field->_construct)return;
     const char *name=(const char *)field->_poolName;
-    if(name&&*name){allocator=Memory_GetAllocatorByName((int)name);if(!allocator)allocator=((void *)igObject_GetAllocator((int)object));}
-    else allocator=((void *)igObject_GetAllocator((int)object));
+    if(name&&*name){allocator=Memory_GetAllocatorByName((int)name);if(!allocator)allocator=((void *)igObject_GetAllocator((igObject *)object));}
+    else allocator=((void *)igObject_GetAllocator((igObject *)object));
     igObject *child=(igObject *)igMetaObject_CreateInstance((igMetaObject *)((void *)field->_metaObject), (igMemoryPoolView *)allocator);
     igObjectRefMetaField_Assign(field,object,child);
     if((field->_refCounted||field->_destruct)&&child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}
@@ -275,7 +275,7 @@ void igObjectStringMap_Add(igObjectStringMap *self, int name, void *object) {
     igObject *entry;
     igObject *held;
 
-    *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)igObject_GetAllocator((int)self))));
+    *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)igObject_GetAllocator((igObject *)self))));
     igNamedObject_SetName((igNamedObject *)entry, name);
     ObjectList_AppendRetained((igObjectList *)self->_names, (igObject *)entry);
     ObjectList_AppendRetained((igObjectList *)self->_data, (igObject *)object);
@@ -462,14 +462,14 @@ void igReport_VPrintf(const char *format, int args) {
     int length;
 
     if ((g_reportOutputFile != 0) && (g_reportOutputEnabled != 0)) {
-        length = vsnprintf(&buffer[0], 0x1000, format, args);
+        length = vsnprintf(&buffer[0], 0x1000, format, (char *)args);
         if ((length < 0) || (length >= 0x1000)) {
             buffer[4095] = 0;
             length = 0x1000;
         }
         g_reportOutputFile->Write(&buffer[0], length, 1);
         if (g_reportEchoToStdout != 0) {
-            printf(&percent_s[0], &buffer[0]);
+            printf((const char *)&percent_s[0], &buffer[0]);
         }
     } else if (g_reportEchoToStdout != 0) {
         vprintf(format, args);
@@ -490,17 +490,17 @@ int igReport_VErrorPrintf(int format, int args) {
     int length;
 
     if ((g_reportErrorFile != 0) && (g_reportErrorOutputEnabled != 0)) {
-        length = vsnprintf(buf, 0x1000, format, args);
+        length = vsnprintf(buf, 0x1000, (const char *)format, (char *)args);
         if ((length < 0) || (length >= 0x1000)) {
             buf[4095] = 0;
             length = 0x1000;
         }
         g_reportErrorFile->Write(buf, length, 1);
         if (g_reportEchoToStderr != 0) {
-            fprintf(_impure_ptr->_stderr, &percent_s[0], buf);
+            fprintf(_impure_ptr->_stderr, (const char *)&percent_s[0], buf);
         }
     } else if (g_reportEchoToStderr != 0) {
-        vfprintf(_impure_ptr->_stderr, format, args);
+        vfprintf(_impure_ptr->_stderr, (const char *)format, (va_list)args);
     }
 }
 
@@ -523,7 +523,7 @@ void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location
     char *text;
     igPluginRepository *target;
     char *old;
-    igSmartPointer<igPluginRepository> repository(((igPluginRepository *)igPluginRepository_Create(((int)igObject_GetAllocator((int)helper)))));
+    igSmartPointer<igPluginRepository> repository(((igPluginRepository *)igPluginRepository_Create(((int)igObject_GetAllocator((igObject *)helper)))));
     igNamedObject_SetName((igNamedObject *)repository.p, name);
     target = repository.p;
     if (g_stringPool == 0) {
@@ -531,7 +531,7 @@ void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     text = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)location));
     old = (char *)target->_location;
@@ -540,7 +540,7 @@ void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location
         int count = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     target->_location = (int)text;
@@ -572,7 +572,7 @@ const char *g_applicationRootToken = "$(ApplicationRoot)";
 void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, const char *path) {
     static const int alchemyRootLength = strlen(g_alchemyRootToken);
     static const int applicationRootLength = strlen(g_applicationRootToken);
-    igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)igObject_GetAllocator((int)self)));
+    igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)igObject_GetAllocator((igObject *)self)));
     igNamedObject_SetName((igNamedObject *)repository.get(), name);
     if (strncmp(path, g_alchemyRootToken, alchemyRootLength) == 0) {
         setRepositoryLocation(repository, path, alchemyRootLength);
@@ -597,16 +597,16 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, in
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)((char *)(path + skip)));
+    interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)((char *)(path + skip)));
     old = repository->_location;
     if (old != 0) {
         header = (int *)(old - 8);
         left = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = left;
         if (left == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     repository->_location = interned;
@@ -622,16 +622,16 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, ch
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)location);
+    interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)location);
     old = repository->_location;
     if (old != 0) {
         header = (int *)(old - 8);
         left = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = left;
         if (left == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     repository->_location = interned;

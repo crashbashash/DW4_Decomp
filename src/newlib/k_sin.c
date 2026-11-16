@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
 #define half 5.00000000000000000000e-01
 #define S1 -1.66666666666666324348e-01

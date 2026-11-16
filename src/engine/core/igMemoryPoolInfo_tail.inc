@@ -5,7 +5,7 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
     int index = -1;
     int defaults;
     if (ini == 0) {
-        ini = ((ObjectSystemView *)g_objectSystem)->configRegistry;
+        ini = g_objectSystem->configRegistry;
     }
     if (ini == 0) {
         return g_resultFailure;
@@ -54,7 +54,7 @@ char *g_memoryPoolInfoEventTrackerCapacityKey = "EventTrackerCapacity";
 void igMemoryPoolInfo_UserRegistryLoad(int *result, int *info, int ini, int section) {
     
     if (ini == 0) {
-        ini = (int)(*(ObjectSystemView * *)&g_objectSystem)->configRegistry;
+        ini = (int)g_objectSystem->configRegistry;
     }
     if (ini == 0) {
         *result = g_resultFailure.v;

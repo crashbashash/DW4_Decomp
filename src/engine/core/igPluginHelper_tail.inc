@@ -22,7 +22,7 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
     char *string;
     char *text;
     igTDataList<char *> *held;
-    ini = ((*(ObjectSystemView * *)&g_objectSystem))->configRegistry;
+    ini = g_objectSystem->configRegistry;
     section = igRegistry_GetSectionIndex((igRegistry *)ini,"PLUGINS", 1);
     if (section >= 0) {
         n = ((unsigned int)igRegistry_GetNumValuesInSection((int)ini, section));
@@ -31,7 +31,7 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
             if (!igRegistry_GetKeyName((int)ini, section, i, &key)) {
                 dropKey(key);
             } else {
-                *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
+                *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
                 held = values;
                 if (igRegistry_GetValueStringList(ini, section, keyText(key), (igStringRefList *)held, 0) == 0) {
                     dropValues(values);
@@ -87,7 +87,7 @@ int igPluginHelper_ThreadLoop(Args *args) {
 
 void **igQueue_StartServiceThread(void *queue, int function, unsigned stackSize) {
     void **a; Args *args;
-    a = (void **)(((void **)igObject_GetAllocator((int)queue)));
+    a = (void **)(((void **)igObject_GetAllocator((igObject *)queue)));
     args = (Args *)((igMemoryPoolView *)a)->Allocate(8);
     args->fn = (igResult (*)(int))function;
     args->queue = (igStandardQueueView *)queue;

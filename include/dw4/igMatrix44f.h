@@ -7,6 +7,12 @@ extern "C" {
 void igMatrix44f_SetIdentity(float *matrix);
 void igMatrix44f_FromRows(float *matrix, const igVec4f *row0, const igVec4f *row1, const igVec4f *row2,
                   const igVec4f *row3);
+/* The matrices are 16 floats, row-major, translation in elements 12-14. */
+void igMatrix44f_GetTranslation(const float *matrix, float *vector);
+void igMatrix44f_MakeEulerRotation(void *matrix, float x, float y, float z);
+void igMatrix44f_SetEulerRotation(float *m, float x, float y, float z);
+void igMatrix44f_SetQuaternion(float *m, float *q);
+void igMatrix44f_GetQuaternion(float *q, float *m);
 }
 
 /* Alchemy's 4x4 float matrix. Its constructors are the library's out-of-line identity and

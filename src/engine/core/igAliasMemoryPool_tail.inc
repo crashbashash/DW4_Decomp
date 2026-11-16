@@ -99,7 +99,7 @@ igResult igAliasMemoryPool_EnableAllocationLock(igAliasMemoryPool *pool, int ena
         if (pool->_allocationLock != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)pool)))));
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)pool)))));
         created.get()->Create();
         setLock(pool, created.get());
     }
@@ -238,7 +238,7 @@ int igAliasMemoryPool_Callocate(igAliasMemoryPool *self, int count, int size) {
     block = ((igAliasMemoryPoolView *)self)->ManageAllocation(0, total, self->_alignment);
     if (block != 0) {
         if (total != 0) {
-            memset(block, 0, total);
+            memset((void *)block, 0, total);
         }
     }
     return block;
@@ -252,7 +252,7 @@ int igAliasMemoryPool_CallocateAligned(igAliasMemoryPool *self, int count, int s
     block = ((igAliasMemoryPoolView *)self)->ManageAllocation(0, total, alignment);
     if (block != 0) {
         if (total != 0) {
-            memset(block, 0, total);
+            memset((void *)block, 0, total);
         }
     }
     return block;
@@ -391,7 +391,7 @@ void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int
     igAliasMemoryPool_Lock(self);
     g = "The method dump() has no meaning for an igAliasMemoryPool\n";
     if (t0 != 0) {
-        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
         if (r.p->Open((const char *)t0, (const char *)"w") == 0) {
             igAliasMemoryPool_Unlock(self);
             return;
@@ -561,7 +561,7 @@ void igObjectSystem_Acquire(int headerVersion) {
         const_cast<igResult &>(g_resultSuccess).v = 0;
         const_cast<igResult &>(g_resultFailure).v = 1;
         igPsx2_InitializeIop();
-        system = igObjectSystem_OperatorNew(0x3A0);
+        system = (int)igObjectSystem_OperatorNew(0x3A0);
         if (system != 0) {
             system = ((int)igObjectSystem_Construct((ObjectSystemView *)system));
         }
@@ -574,7 +574,7 @@ void igObjectSystem_Acquire(int headerVersion) {
         igResource_EnsureRegistered();
         probe = (int *)(&DAT_00530d80[0]);
         FUN_002d1690((int)&probe);
-        igObjectSystem_Initialize((*(ObjectSystemView * *)&g_objectSystem));
+        igObjectSystem_Initialize(g_objectSystem);
     }
     igObjectSystem_CheckHeaderVersion((void *)((*(int *)&g_objectSystem)), headerVersion);
 }
@@ -585,13 +585,13 @@ void igObjectSystem_Release(void) {
     int *h;
     int rc;
 
-    if ((*(ObjectSystemView * *)&g_objectSystem)->preExitDone == 0) {
-        igObjectSystem_PreExit((ObjectSystemView *)((*(void * *)&g_objectSystem)));
+    if (g_objectSystem->preExitDone == 0) {
+        igObjectSystem_PreExit(g_objectSystem);
     }
     if (--g_objectSystemRefCount == 0) {
-        igObjectSystem_Finalize((*(ObjectSystemView * *)&g_objectSystem));
-        igObjectSystem_Shutdown((ObjectSystemView *)((*(void * *)&g_objectSystem)));
-        core = (*(ObjectSystemView * *)&g_objectSystem);
+        igObjectSystem_Finalize(g_objectSystem);
+        igObjectSystem_Shutdown(g_objectSystem);
+        core = g_objectSystem;
         if (core != 0) {
             if (&core->basePath.p) {
                 p = core->basePath.p;
@@ -600,7 +600,7 @@ void igObjectSystem_Release(void) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
+                        StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                     }
                 }
             }
@@ -611,11 +611,11 @@ void igObjectSystem_Release(void) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
+                        StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                     }
                 }
             }
-            igObjectSystem_OperatorDelete((int)core);
+            igObjectSystem_OperatorDelete(core);
         }
         (*(void * *)&g_objectSystem) = 0;
     }

@@ -17,6 +17,8 @@ int rand(void);
 void srand(unsigned int);
 double strtod(const char *, char **);
 unsigned long strtoul(const char *, char **, int);
+char *getenv(const char *);
+void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
 #ifdef __cplusplus
 }
 #endif

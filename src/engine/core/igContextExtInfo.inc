@@ -31,7 +31,7 @@ int igContextExtInfo_GetVTable(void) {
     *(int *)metaSlot = 0;
     nameSlot = &info._pName;
     *(int *)nameSlot = 0;
-    vtable = *(int *)((char *)&info + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&info + g_objectSystem->vtableProbeOffset);
     info._vtable = (int)&g_igContextExtInfo_vtable[0];
     if (nameSlot != 0) {
         text = *(int **)nameSlot;
@@ -40,7 +40,7 @@ int igContextExtInfo_GetVTable(void) {
             count = text[-1] - 1;
             text[-1] = count;
             if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -58,18 +58,18 @@ int igContextExtInfo_GetVTable(void) {
 
 void igContextExtInfo_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContextExtInfo_Register);
+    igMetaObject_RunStaticInit(igContextExtInfo_Register);
 }
 
 static igMetaObjectCallback g_igContextExtInfo_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
 
-void igContextExtInfo_Register(void) {
+CallbackArray *igContextExtInfo_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igContextExtInfo_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igContextExtInfo_GetMetaObjectFunction,
         "igContextExtInfo",
         0x14,

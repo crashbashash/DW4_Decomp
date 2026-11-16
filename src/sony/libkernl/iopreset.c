@@ -1,5 +1,7 @@
 /* iopreset.c - resetting and rebooting the IOP over SIF. */
 
+#include "dw4/libkernl.h"
+
 /* SIF registers */
 #define SIF_REG_MAINADDR 0x80000000
 #define SIF_REG_MSFLAG 0x80000002
@@ -41,7 +43,6 @@ void sceSifSetReg(unsigned int reg, unsigned int value);
 unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
 void sceSifWriteBackDCache(void *addr, int size);
 void sceResetttyinit(void);
-void scePrintf(const char *fmt, ...);
 void sceSifInitRpc(unsigned int mode);
 void sceSifExitRpc(void);
 

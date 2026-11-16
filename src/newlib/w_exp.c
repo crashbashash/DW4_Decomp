@@ -1,4 +1,4 @@
-double __ieee754_exp(double x);
+#include "dw4/newlib_math.h"
 
 double exp(double x)
 {

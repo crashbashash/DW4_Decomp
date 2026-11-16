@@ -47,7 +47,7 @@ int igMemoryPoolInfo_GetVTable(void) {
     info._releaseChecking = 0;
     info._debugMessages = 0;
     info._releaseMessages = 0;
-    t = *(int *)((char *)&info + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&info + g_objectSystem->vtableProbeOffset);
     info._vtable = (int)&g_igMemoryPoolInfo_vtable[0];
     igStringRef_Destruct(&info._releaseMessages, -1);
     igStringRef_Destruct(&info._debugMessages, -1);
@@ -67,15 +67,15 @@ int igMemoryPoolInfo_GetVTable(void) {
 
 void igMemoryPoolInfo_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryPoolInfo_Register);
+    igMetaObject_RunStaticInit(igMemoryPoolInfo_Register);
 }
 
-void igMemoryPoolInfo_Register(void) {
+CallbackArray *igMemoryPoolInfo_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMemoryPoolInfo_metaObject,
-        (igMetaObjectRegisterFunction)igInfo_Register,
+        igInfo_Register,
         (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMemoryPoolInfo_GetMetaObjectFunction,
         "igMemoryPoolInfo",

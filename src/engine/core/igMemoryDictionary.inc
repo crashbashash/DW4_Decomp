@@ -27,7 +27,7 @@ int igMemoryDictionary_GetVTable(void) {
     dictionary._vtable = (int)&g_igMemoryDictionary_vtable[0];
     pr = (int **)&dictionary._memoryEntries;
     *pr = 0;
-    vtable = *(int *)((char *)&dictionary + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&dictionary + g_objectSystem->vtableProbeOffset);
     dictionary._vtable = (int)&g_igMemoryDictionary_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {
@@ -43,18 +43,18 @@ int igMemoryDictionary_GetVTable(void) {
 
 void igMemoryDictionary_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryDictionary_Register);
+    igMetaObject_RunStaticInit(igMemoryDictionary_Register);
 }
 
 static igMetaObjectCallback g_igMemoryDictionary_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, 0 };
 
-void igMemoryDictionary_Register(void) {
+CallbackArray *igMemoryDictionary_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMemoryDictionary_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igMemoryDictionary_GetMetaObjectFunction,
         "igMemoryDictionary",
         0x18,

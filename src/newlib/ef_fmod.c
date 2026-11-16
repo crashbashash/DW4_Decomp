@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
 static const float one = 1.0, Zero[] = {0.0, -0.0,};
 

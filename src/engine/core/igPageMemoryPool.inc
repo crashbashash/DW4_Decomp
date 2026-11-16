@@ -1,7 +1,7 @@
 int igPageMemoryPool_Clone(int source, int copyMode) {
     int clone;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igPageMemoryPool_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)source, copyMode);
     }
@@ -42,7 +42,7 @@ int igPageMemoryPool_GetVTable(void) {
     igObject *q0;
     igObject *q1;
     igPageMemoryPool_Initialize(&pool);
-    result = *(int *)((char *)&pool + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    result = *(int *)((char *)&pool + g_objectSystem->vtableProbeOffset);
     pool._vtable = (int)&g_igPageMemoryPool_vtable[0];
     q0 = (igObject *)&pool._eventTracker;
     if (q0 != 0) {
@@ -70,16 +70,16 @@ int igPageMemoryPool_GetVTable(void) {
 
 void igPageMemoryPool_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPageMemoryPool_Register);
+    igMetaObject_RunStaticInit(igPageMemoryPool_Register);
 }
 
 static igMetaObjectCallback g_igPageMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
 
-void igPageMemoryPool_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igPageMemoryPool_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g_igPageMemoryPool_metaObject,
-        (igMetaObjectRegisterFunction)igMemoryPool_Register,
+        igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igPageMemoryPool_GetMetaObjectFunction,
         "igPageMemoryPool",

@@ -1,7 +1,7 @@
 void **__internalNonRefCountedObjectList_Create(int pool) {
     void **list;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         __internalNonRefCountedObjectList_EnsureRegistered();
         list = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g___internalNonRefCountedObjectList_metaObject, (igMemoryPoolView *)pool)));
     } else {
@@ -18,7 +18,7 @@ void **__internalNonRefCountedObjectList_Create(int pool) {
 int __internalNonRefCountedObjectList_Clone(int source, int copyMode) {
     int copy;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         __internalNonRefCountedObjectList_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)source, copyMode);
     }
@@ -31,7 +31,7 @@ int __internalNonRefCountedObjectList_Clone(int source, int copyMode) {
 
 igMetaObject *__internalNonRefCountedObjectList_GetOrCreateMetaObject(void) {
     if (g___internalNonRefCountedObjectList_metaObject == 0) {
-        g___internalNonRefCountedObjectList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g___internalNonRefCountedObjectList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g___internalNonRefCountedObjectList_metaObject;
 }
@@ -48,20 +48,20 @@ int __internalNonRefCountedObjectList_GetVTable(void) {
     int o[4];
 
     ObjectPointerList_Init((__internalNonRefCountedObjectList *)o);
-    return *(int *)((char *)o + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)o + g_objectSystem->vtableProbeOffset);
 }
 
 void __internalNonRefCountedObjectList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())__internalNonRefCountedObjectList_Register);
+    igMetaObject_RunStaticInit(__internalNonRefCountedObjectList_Register);
 }
 
-void __internalNonRefCountedObjectList_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *__internalNonRefCountedObjectList_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g___internalNonRefCountedObjectList_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         __internalNonRefCountedObjectList_GetMetaObjectFunction,
         "__internalNonRefCountedObjectList",
         0x10,

@@ -11,9 +11,9 @@ void igMemoryPool_SetPoolIndex(void) {
  * index << 1 | 1); 0 when the object system is inactive.  An absent allocator
  * is not rejected, it encodes the -1 from IndexOf. */
 int igAllocator_EncodeIndex(igMemoryPoolView *allocator){
-    if(*g_objectSystem&&!allocator->IsSecondaryAllocator())return (unsigned)igMemoryPoolInfoList_IndexOf(g_primaryAllocatorList,allocator)<<1;
+    if(g_objectSystem->active&&!allocator->IsSecondaryAllocator())return (unsigned)igMemoryPoolInfoList_IndexOf(g_primaryAllocatorList,allocator)<<1;
     unsigned char result=0;
-    if(*g_objectSystem)return ((unsigned)igMemoryPoolInfoList_IndexOf(g_secondaryAllocatorList,allocator)<<1)|1;
+    if(g_objectSystem->active)return ((unsigned)igMemoryPoolInfoList_IndexOf(g_secondaryAllocatorList,allocator)<<1)|1;
     return result;
 }
 

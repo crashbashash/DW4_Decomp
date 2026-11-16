@@ -26,7 +26,7 @@ int igMemoryFile_GetVTable(void) {
     file._fileName = 0;
     file._completeFilename = 0;
     file._vtable = (int)(&g_igMemoryFile_vtable[0]);
-    vtable = *(int *)((char *)&file + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&file + g_objectSystem->vtableProbeOffset);
     file._vtable = (int)(&g_igMemoryFile_vtable[0]);
     igFile_Destroy((igFile *)&file, 0);
     return vtable;
@@ -46,7 +46,7 @@ void *igFile_Destroy(igFile *self, short deleteFlag) {
                 rc = *(int *)((char *)(p) - 4) - 1;
                 *(int *)((char *)(p) - 4) = rc;
                 if (rc == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
+                    StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                 }
             }
         }
@@ -57,7 +57,7 @@ void *igFile_Destroy(igFile *self, short deleteFlag) {
                 rc = *(int *)((char *)(p) - 4) - 1;
                 *(int *)((char *)(p) - 4) = rc;
                 if (rc == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
+                    StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                 }
             }
         }
@@ -70,13 +70,13 @@ void *igFile_Destroy(igFile *self, short deleteFlag) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
+                        StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                     }
                 }
             }
         }
         if (deleteFlag > 0) {
-            Memory_FreeBufferAliasC((int)self);
+            Memory_FreeBufferAliasC(self);
         }
     }
     return self;
@@ -84,15 +84,15 @@ void *igFile_Destroy(igFile *self, short deleteFlag) {
 
 void igMemoryFile_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryFile_Register);
+    igMetaObject_RunStaticInit(igMemoryFile_Register);
 }
 
-void igMemoryFile_Register(void) {
+CallbackArray *igMemoryFile_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMemoryFile_metaObject,
-        (igMetaObjectRegisterFunction)igFile_Register,
+        igFile_Register,
         igFile_GetPublishedMetaObject,
         igMemoryFile_GetMetaObjectFunction,
         "igMemoryFile",

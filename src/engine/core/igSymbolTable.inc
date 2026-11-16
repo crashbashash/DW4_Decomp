@@ -33,7 +33,7 @@ int igSymbolTable_GetVTable(void) {
     table._hashIndex = 0;
     table._symbolNames = 0;
     table._sourceFileNames = 0;
-    vtable = *(int *)((char *)&table + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&table + g_objectSystem->vtableProbeOffset);
     table._vtable = (int)(&g_igSymbolTable_vtable[0]);
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&table._sourceFileNames, -1);
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&table._symbolNames, -1);
@@ -87,18 +87,18 @@ igSmartPointer<igObject> *igSmartPointer_igStringTable_Destruct(igSmartPointer<i
 
 void igSymbolTable_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igSymbolTable_Register);
+    igMetaObject_RunStaticInit(igSymbolTable_Register);
 }
 
 static igMetaObjectCallback g_igSymbolTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, igStringTable_EnsureRegistered, 0 };
 
-void igSymbolTable_Register(void) {
+CallbackArray *igSymbolTable_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igSymbolTable_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igSymbolTable_GetMetaObjectFunction,
         "igSymbolTable",
         0x2C,

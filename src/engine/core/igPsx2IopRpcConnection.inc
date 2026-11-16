@@ -10,7 +10,7 @@ void igPsx2IopRpcConnection_Create(int pool) {
 
 igMetaObject *igPsx2IopRpcConnection_GetOrCreateMetaObject(void) {
     if (g_igPsx2IopRpcConnection_metaObject == 0) {
-        g_igPsx2IopRpcConnection_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igPsx2IopRpcConnection_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igPsx2IopRpcConnection_metaObject;
 }
@@ -27,21 +27,21 @@ int igPsx2IopRpcConnection_GetVTable(void) {
     igPsx2IopRpcConnection connection;
     igObject_InitHeader((igObject *)&connection);
     connection._vtable = (int)&g_igPsx2IopRpcConnection_vtable[0];
-    return *(int *)((char *)&connection + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&connection + g_objectSystem->vtableProbeOffset);
 }
 
 void igPsx2IopRpcConnection_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2IopRpcConnection_Register);
+    igMetaObject_RunStaticInit(igPsx2IopRpcConnection_Register);
 }
 
-void igPsx2IopRpcConnection_Register(void) {
+CallbackArray *igPsx2IopRpcConnection_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2IopRpcConnection_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igPsx2IopRpcConnection_GetMetaObjectFunction,
         "igPsx2IopRpcConnection",
         0x14,

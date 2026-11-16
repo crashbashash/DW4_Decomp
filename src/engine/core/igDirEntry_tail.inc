@@ -67,7 +67,7 @@ void igDirEntry_CreateRef(void) {
 }
 
 void igDirEntry_InitDefaults(int self) {
-    igObject_InitDefaults(self);
+    igObject_InitDefaults((igObject *)self);
     igNamedObject_SetName((igNamedObject *)self, 0);
 }
 

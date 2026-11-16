@@ -11,16 +11,16 @@ igMetaObject *igLibrary_GetMetaObject(void)
 
 void igLibrary_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLibrary_Register);
+    igMetaObject_RunStaticInit(igLibrary_Register);
 }
 
-void igLibrary_Register(void) {
+CallbackArray *igLibrary_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igLibrary_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igLibrary_GetMetaObjectFunction,
         "igLibrary",
         0xC,

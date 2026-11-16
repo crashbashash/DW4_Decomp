@@ -1,4 +1,4 @@
-float __ieee754_fmodf(float x, float y);
+#include "dw4/newlib_math.h"
 
 float fmodf(float x, float y)
 {

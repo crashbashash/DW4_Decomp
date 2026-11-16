@@ -101,7 +101,7 @@ ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_23(void *self, int srcFormat, in
     case 0xA:
         return flag ? (void (*)())FUN_0016f780 : (void (*)())FUN_0016f9b0;
     case 0x9:
-        return (void (*)())(flag ? FUN_0016f7f0 : FUN_0016fae0);
+        return flag ? (void (*)())FUN_0016f7f0 : (void (*)())FUN_0016fae0;
     case 0x10001:
         return (void (*)())(flag ? FUN_0015ab90 : FUN_0015aaf0);
     default:

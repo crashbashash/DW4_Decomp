@@ -4,7 +4,7 @@ igMetaField *g_igIterateDerived_currentMetaField;
 
 void *FUN_002279d0(int arg0) {
     FUN_00227af0();
-    return igMetaObject_CreateInstance(g_igIterateDerived_metaObject, arg0);
+    return igMetaObject_CreateInstance(g_igIterateDerived_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igIterateDerived_GetMetaObject(void)
@@ -21,11 +21,11 @@ int igIterateDerived_GetVTable(void) {
     int temp_s0;
     int *o;
 
-    igObject_InitHeader(&f);
+    igObject_InitHeader((igObject *)&f);
     f.vt = &g_igIterateDerived_vtable[0];
     pr = &f.ref;
     *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
+    temp_s0 = *(int *)((char *)&f + *(int *)((char *)g_objectSystem + 916));
     f.vt = &g_igIterateDerived_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {
@@ -41,25 +41,25 @@ int igIterateDerived_GetVTable(void) {
 
 void FUN_00227af0(void)
 {
-    igMetaObject_RunStaticInit(igIterateDerived_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igIterateDerived_Register);
 }
 
 static igMetaObjectCallback g_igIterateDerived_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
 
-void igIterateDerived_Register(void) {
+CallbackArray *igIterateDerived_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igIterateDerived_metaObject,
-        igIterator_Register,
-        igIterator_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igIterator_Register,
+        (igMetaObjectGetFunction)igIterator_GetPublishedMetaObject,
         thunk_igIterateDerived_GetMetaObject,
         "igIterateDerived",
         0x10, /* instance size */
         igIterateDerived_GetVTable,
         &igIterateDerived_InitFields,
         0, /* extra callback item */
-        g_igIterateDerived_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igIterateDerived_callbackList /* callback list */
     );
 }
 
@@ -68,8 +68,8 @@ void thunk_igIterateDerived_GetMetaObject(void) {
 }
 
 static FieldFactory g_igIterateDerived_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igIterateDerived_fieldTable[] = {
     "_iterated",
@@ -93,7 +93,7 @@ void igIterateDerived_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igIterateDerived_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaObject_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_igIterateDerived_fieldTable, g_igIterateDerived_fieldHandles, g_igIterateDerived_fieldOffsets, temp_s2);
 }
 

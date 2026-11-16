@@ -5,9 +5,9 @@ static inline int getStringPool(void) {
         if (p != 0) {
             p = ((int)StringPool_Construct((StringPool *)p));
         }
-        g_stringPool = p;
+        g_stringPool = (StringPool *)p;
     }
-    return g_stringPool;
+    return (int)g_stringPool;
 }
 
 void igStringRefList_ReleaseDefaults(void *self0) {
@@ -31,13 +31,13 @@ void igStringRefList_ReleaseDefaults(void *self0) {
             rc = old[-1] - 1;
             old[-1] = rc;
             if (rc == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+                StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
             }
         }
         *slot = (char *)interned;
     }
     self->_count = 0;
-    igObject_ReleaseDefaults((int)self);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 
 void StringList_Resize(igTDataList<char *> *list, int count) {
@@ -62,7 +62,7 @@ void StringList_Resize(igTDataList<char *> *list, int count) {
                 if (pool != 0) {
                     pool = ((int)StringPool_Construct((StringPool *)pool));
                 }
-                g_stringPool = pool;
+                g_stringPool = (StringPool *)pool;
             }
             nw = (int *)((int *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0));
             old = (int *)*slot;
@@ -71,7 +71,7 @@ void StringList_Resize(igTDataList<char *> *list, int count) {
                 v1 = old[-1] - 1;
                 old[-1] = v1;
                 if (v1 == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                    StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
                 }
             }
             *slot = (char *)nw;

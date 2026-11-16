@@ -29,7 +29,7 @@ int igSystemMallocTriggerAddress;
 int SystemAllocatorBase_Allocate(void *self, int size) {
     int block;
 
-    block = malloc(size);
+    block = (int)malloc(size);
     if (block == igSystemMallocTriggerAddress) {
         igReport_Printf("igSystemMallocTriggerAddress 0x%08x hit.\n", igSystemMallocTriggerAddress);
         igReport_Flush();
@@ -40,7 +40,7 @@ int SystemAllocatorBase_Allocate(void *self, int size) {
 int SystemAllocatorBase_Memalign(int self, int size) {
     int block;
 
-    block = malloc(size);
+    block = (int)malloc(size);
     if (block == igSystemMallocTriggerAddress) {
         igReport_Printf("igSystemMallocTriggerAddress 0x%08x hit.\n", igSystemMallocTriggerAddress);
         igReport_Flush();
@@ -53,7 +53,7 @@ void SystemAllocatorBase_Callocate(int unused, int a, int b) {
 }
 
 void SystemAllocatorBase_Reallocate(int self, int block, int size) {
-    realloc(block, size);
+    realloc((void *)block, size);
 }
 
 int SystemAllocatorBase_DuplicateString(SystemAllocator *self, int *string) {
@@ -64,15 +64,15 @@ int SystemAllocatorBase_DuplicateString(SystemAllocator *self, int *string) {
     if (text == 0) {
         text = (int *)("");
     }
-    copy = (int)self->Allocate(strlen(text) + 1);
+    copy = (int)self->Allocate(strlen((const char *)text) + 1);
     if (copy != 0) {
-        strcpy(copy, text);
+        strcpy((char *)copy, (const char *)text);
     }
     return copy;
 }
 
 void SystemAllocatorBase_Free(int a0, int a1) {
-    free(a1, a1);
+    free((void *)a1);
 }
 
 void SystemAllocatorBase_AllocateSized(SystemAllocator *self, unsigned int size)
@@ -102,7 +102,7 @@ int SystemAllocatorBase_ReallocateSized(SystemAllocator *self, int block, unsign
     if (moved == -1) {
         return 0;
     }
-    memcpy(moved, block, oldSize);
+    memcpy((void *)moved, (void *)block, oldSize);
     releaseResult = self->FreeRange(block, oldSize);
     return moved;
 }
@@ -272,7 +272,7 @@ igResult SystemAllocatorBase_SetPageState(SystemAllocator *self, int state, unsi
         unsigned int lo, hi;
         if (table == 0) {
             table = (int)self->AllocateTable(0x1000);
-            memset(table, 0, 0x1000);
+            memset((void *)table, 0, 0x1000);
             *slot = table;
         }
         if (startPage < page) lo = 0; else lo = lo0;

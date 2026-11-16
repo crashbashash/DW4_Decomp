@@ -238,7 +238,6 @@ int mpvhdec_DecEscSj(MpvHn *mpv, SfdSj *sj, int type) {
     return 0;
 }
 
-int MPV_GoNextDelimSj(SfdSj *sj);
 int mpv_ScanUsrTags(MpvHn *mpv, char *buf, int size);
 int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len);
 extern void *memcpy(void *dst, const void *src, unsigned int n);
@@ -395,8 +394,6 @@ int MPV_GoNextDelimSj(SfdSj *sj) {
     }
     return kind;
 }
-
-int MPV_MoveChunk(SfdSj *sj, int id, int n);
 
 /* Skips to the next start code in mask; a pending skip request drops one picture first. Returns 0, or
  * -2 / -3 when none is found. */

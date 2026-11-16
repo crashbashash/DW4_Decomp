@@ -22,7 +22,7 @@ int igUnsignedCharMetaField_GetVTable(void) {
     int t;
     igMetaField_Init((igMetaField *)&obj);
     obj._vtable = (int)&g_igUnsignedCharMetaField_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_igMetaField_vtable[0];
     if (&obj._fieldName != 0) {
         o = (char *)obj._fieldName;
@@ -31,7 +31,7 @@ int igUnsignedCharMetaField_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -40,18 +40,18 @@ int igUnsignedCharMetaField_GetVTable(void) {
 
 void igUnsignedCharMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igUnsignedCharMetaField_Register);
+    igMetaObject_RunStaticInit(igUnsignedCharMetaField_Register);
 }
 
 static igMetaObjectCallback g_igUnsignedCharMetaField_callbackList[] = { igUnsignedCharMetaField_CreateDefaultDescriptor, 0 };
 
-void igUnsignedCharMetaField_Register(void) {
+CallbackArray *igUnsignedCharMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igUnsignedCharMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igMetaField_Register,
-        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
         igUnsignedCharMetaField_GetMetaObjectFunction,
         "igUnsignedCharMetaField",
         0x34,
@@ -71,7 +71,7 @@ void igUnsignedCharMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;
 
     if (g_igUnsignedCharMetaField_descriptor == 0) {
-        g_igUnsignedCharMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedCharMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igUnsignedCharMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedCharMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igUnsignedCharMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

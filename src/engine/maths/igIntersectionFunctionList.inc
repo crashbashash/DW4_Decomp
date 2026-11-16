@@ -2,7 +2,7 @@ igMetaObject *g_igIntersectionFunctionList_metaObject;
 
 OpTable *FUN_00189840(int arg0) {
     igIntersectionFunctionList_EnsureRegistered();
-    return (OpTable *)igMetaObject_CreateInstance((int)g_igIntersectionFunctionList_metaObject, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((igMetaObject *)g_igIntersectionFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igIntersectionFunctionList_GetMetaObject(void)
@@ -15,9 +15,9 @@ igMetaObject *igIntersectionFunctionList_GetMetaObject(void)
 
 int igIntersectionFunctionList_GetVTable(void) {
     int obj[8];
-    igObject_InitHeader(obj);
+    igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igIntersectionFunctionList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igIntersectionFunctionList_EnsureRegistered(void)
@@ -25,9 +25,9 @@ void igIntersectionFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igIntersectionFunctionList_Register);
 }
 
-void igIntersectionFunctionList_Register(void) {
+CallbackArray *igIntersectionFunctionList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igIntersectionFunctionList_metaObject,
         igDataList_Register,

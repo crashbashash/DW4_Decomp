@@ -11,23 +11,23 @@ igMetaObject *igMessageBase_GetMetaObject(void)
 int igMessageBase_GetVTable(void) {
     Obj_4 o;
 
-    igObject_InitHeader(&o);
+    igObject_InitHeader((igObject *)&o);
     o.vt = &g_igMessageBase_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00226540(void)
 {
-    igMetaObject_RunStaticInit(igMessageBase_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igMessageBase_Register);
 }
 
-void igMessageBase_Register(void) {
+CallbackArray *igMessageBase_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMessageBase_metaObject,
-        igBase_Register,
-        igBase_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igBase_Register,
+        (igMetaObjectGetFunction)igBase_GetPublishedMetaObject,
         thunk_igMessageBase_GetMetaObject,
         "igMessageBase",
         0x20, /* instance size */

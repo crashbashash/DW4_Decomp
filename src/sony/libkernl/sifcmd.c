@@ -2,6 +2,7 @@
  * commands are dispatched through, the software registers, and sending commands over SIF0/SIF1. */
 #include "dw4/sony/sif.h"
 #include "dw4/eekernel_gp.h"
+#include "dw4/libkernl.h"
 
 #define DMAC_SIF0 5
 
@@ -37,12 +38,7 @@ typedef struct {
 
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
 
-int DIntr(void);
-int EIntr(void);
-void FlushCache(int operation);
 int AddDmacHandler(int channel, int (*handler)(int), int next);
-int EnableDmac(int channel);
-int DisableDmac(int channel);
 int RemoveDmacHandler(int channel, int id);
 unsigned int sceSifGetReg(unsigned int reg);
 int sceSifSetReg(unsigned int reg, unsigned int value);

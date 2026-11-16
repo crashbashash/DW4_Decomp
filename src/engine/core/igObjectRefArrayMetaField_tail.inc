@@ -51,10 +51,10 @@ void igObjectRefArrayMetaField_ConstructValue(igObjectRefArrayMetaField *self, i
         if ((poolName != 0) && (*poolName != 0)) {
             allocator = ((int)Memory_GetAllocatorByName((int)poolName));
             if (allocator == 0) {
-                allocator = ((int)igObject_GetAllocator(object));
+                allocator = ((int)igObject_GetAllocator((igObject *)object));
             }
         } else {
-            allocator = ((int)igObject_GetAllocator(object));
+            allocator = ((int)igObject_GetAllocator((igObject *)object));
         }
         for (i = 0; i < self->_num; i++) {
             element = ((igObject *)igMetaObject_CreateInstance((igMetaObject *)self->_metaObject, (igMemoryPoolView *)allocator));

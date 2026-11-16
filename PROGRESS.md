@@ -35,19 +35,19 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**7,791** of the 20,316 matched functions are readable: **911,172** code bytes, **26.2 %** of the code.
+**8,187** of the 20,316 matched functions are readable: **1,028,764** code bytes, **29.6 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,716 | 520,504 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 4,260 | 693,028 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,207 | 303,276 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,208 | 303,752 |
 | it sits in its class or module file, not `src/unmatched/` | 11 | 668 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 1,996 | 459,088 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,149 | 388,052 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,695 | 331,824 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,742 | 334,056 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 544 | 135,260 |
-| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 9,185 | 2,066,356 |
+| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 8,595 | 1,929,848 |
 
 ## Debt
 
@@ -83,7 +83,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.c` | 28 | 28 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 26 | 26 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 266 | 266 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 1,417 | 1,417 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 1,406 | 1,406 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
 | `unapproved.functions` | 7 | 7 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
@@ -93,10 +93,10 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `profile_split.units` | 3 | 3 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build); increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `profile_split.bytes` | 19,492 | 19,492 | 0 | bytes of those; increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `opt_pragma.statements` | 0 | 0 | 0 | optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source |
-| `decl.local_externs` | 7,828 | 7,828 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
-| `decl.varargs` | 2,434 | 2,434 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
-| `decl.type_conflicts` | 4,999 | 4,999 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
-| `decl.header_conflicts` | 1,008 | 1,008 | 0 | symbols declared in two or more headers that disagree on the type; increase recorded: decl.header_conflicts +5 (928 -> 933): the GameMain pilot's new include/dw4 homes give sceClose, sceRead, sceWrite, g_threadManager, igInsightCore_FindManager and igModel_NotifyViews their real types while loose copies remain in library headers the declaration slices have not reached yet (one older conflict left) decl.header_conflicts 933 -> 1008 (+75): declaration phase A gave the render, app, bec and ndmw slices' symbols real-typed homes in include/dw4; the loose copies those homes now disagree with sit in other libraries' headers (mostly p2 functions in GfxLibrary.h, NDMW/Core copies of bec symbols) and phase B removes them |
+| `decl.local_externs` | 7,553 | 7,553 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
+| `decl.varargs` | 2,354 | 2,354 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
+| `decl.type_conflicts` | 4,979 | 4,979 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
+| `decl.header_conflicts` | 1,006 | 1,006 | 0 | symbols declared in two or more headers that disagree on the type |
 
 ## The data half
 
@@ -194,7 +194,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 31,669 of 69,326 (45.68 %) |
+| field accesses using a **recovered** type (not an offset cast) | 31,668 of 69,567 (45.52 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

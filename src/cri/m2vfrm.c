@@ -1,9 +1,9 @@
+#include "dw4/cri/mpv.h"
+
 int M2VLIB_CheckHn(void *hn);
 int M2VERR_SetCode(void *hn, int code);
-int MPV_GoNextDelimSj(void *sj);
-int MPV_MoveChunk(void *sj, int id, int nbyte);
 
-void M2V_SkipFrm(void *hn, void *sj)
+void M2V_SkipFrm(void *hn, SfdSj *sj)
 {
     int err;
     int code;

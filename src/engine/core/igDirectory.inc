@@ -5,7 +5,7 @@ void * igDirectory_Create(int allocator) {
 
 igMetaObject *igDirectory_GetOrCreateMetaObject(void) {
     if (g_igDirectory_metaObject == 0) {
-        g_igDirectory_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igDirectory_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igDirectory_metaObject;
 }
@@ -42,7 +42,7 @@ int igDirectory_GetVTable(void) {
     p188 = (char *)&dir._metaFieldPerObjectIndices;
     *(int *)p188 = 0;
     dir._loadingSemaphore = 0;
-    vtable = *(int *)((char *)&dir + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&dir + g_objectSystem->vtableProbeOffset);
     dir._vtable = (int)&g_igDirectory_vtable[0];
     igSmartPointer_igSemaphore_Destruct((igObject **)&dir._loadingSemaphore, -1);
     igSmartPointer_igShortListList_Destruct((igSmartPointer<igObject> *)p188, -1);
@@ -56,18 +56,18 @@ int igDirectory_GetVTable(void) {
 
 void igDirectory_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDirectory_Register);
+    igMetaObject_RunStaticInit(igDirectory_Register);
 }
 
 static igMetaObjectCallback g_igDirectory_callbackList[] = { igDirEntry_EnsureRegistered, igDirectoryList_EnsureRegistered, igInfoList_EnsureRegistered, igResource_EnsureRegistered, igShortListList_EnsureRegistered, igPointerList_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
 
-void igDirectory_Register(void) {
+CallbackArray *igDirectory_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igDirectory_metaObject,
-        (igMetaObjectRegisterFunction)igObjectList_Register,
-        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
+        igObjectList_Register,
+        igObjectList_GetPublishedMetaObject,
         igDirectory_GetMetaObjectFunction,
         "igDirectory",
         0x48,

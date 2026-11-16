@@ -5,18 +5,19 @@
  * then the reference count; the last release hands the header back to its chunk. */
 struct StringPool;
 struct StringChunk;
+struct StringTokenHeader;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* The shared pool, created on first use. */
-extern int g_stringPool;
+extern struct StringPool *g_stringPool;
 
 void *StringPool_Allocate(int size);
 struct StringPool *StringPool_Construct(struct StringPool *pool);
-int StringPool_Intern(struct StringPool *pool, const char *name);
-void StringChunk_ReleaseHeader(struct StringChunk *self, int header);
+char *StringPool_Intern(struct StringPool *pool, const char *name);
+void StringChunk_ReleaseHeader(struct StringChunk *self, struct StringTokenHeader *header);
 
 #ifdef __cplusplus
 }

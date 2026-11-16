@@ -12,25 +12,25 @@ igMetaObject *igOptBase_GetMetaObject(void)
 
 void FUN_00225f80(void)
 {
-    igMetaObject_RunStaticInit(igOptBase_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igOptBase_Register);
 }
 
 static igMetaObjectCallback g_igOptBase_callbackList[] = { igRegistry_EnsureRegistered, FUN_00225ea0, 0 };
 
-void igOptBase_Register(void) {
+CallbackArray *igOptBase_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igOptBase_metaObject,
-        igBase_Register,
-        igBase_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igBase_Register,
+        (igMetaObjectGetFunction)igBase_GetPublishedMetaObject,
         thunk_igOptBase_GetMetaObject,
         "igOptBase",
         0x28, /* instance size */
         0,
         &igOptBase_InitFields,
         0, /* extra callback item */
-        g_igOptBase_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igOptBase_callbackList /* callback list */
     );
 }
 
@@ -43,8 +43,8 @@ igMetaObject *FUN_00226010(void) {
 }
 
 static FieldFactory g_igOptBase_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igOptBase_fieldTable[] = {
     "_registry",

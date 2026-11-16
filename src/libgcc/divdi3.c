@@ -1,5 +1,6 @@
 #define __clz_tab __clz_tab_divdi3
 #include "dw4/libgcc_longlong.h"
+#include "dw4/softfloat.h"
 
 long long __divdi3(long long u, long long v)
 {

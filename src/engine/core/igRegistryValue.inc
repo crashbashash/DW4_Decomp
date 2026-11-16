@@ -28,7 +28,7 @@ int igRegistryValue_GetVTable(void) {
     *valueRef = 0;
     valueName = &value._valueName;
     *valueName = 0;
-    r = *(int *)((char *)&value + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&value + g_objectSystem->vtableProbeOffset);
     value._vtable = (int)&g_igRegistryValue_vtable[0];
     ReleaseObjectField(valueName);
     ReleaseObjectField(valueRef);
@@ -37,18 +37,18 @@ int igRegistryValue_GetVTable(void) {
 
 void igRegistryValue_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igRegistryValue_Register);
+    igMetaObject_RunStaticInit(igRegistryValue_Register);
 }
 
 static igMetaObjectCallback g_igRegistryValue_callbackList[] = { igStringObj_EnsureRegistered, 0 };
 
-void igRegistryValue_Register(void) {
+CallbackArray *igRegistryValue_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igRegistryValue_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igRegistryValue_GetMetaObjectFunction,
         "igRegistryValue",
         0x14,

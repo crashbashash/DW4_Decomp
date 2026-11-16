@@ -1,4 +1,4 @@
-double __ieee754_fmod(double x, double y);
+#include "dw4/newlib_math.h"
 
 double fmod(double x, double y)
 {

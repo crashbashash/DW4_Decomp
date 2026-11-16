@@ -9,7 +9,7 @@ void igArenaMemoryPool_PrintStatistics(igArenaMemoryPoolView *self, char *title)
     char *flags;
     int named;
     igMemoryPool_PrintStatistics((igMemoryPool *)self, title);
-    named = ((ObjectSystemView *)g_objectSystem)->metaEnumList != 0;
+    named = g_objectSystem->metaEnumList != 0;
     messageLevel = named ? igMetaEnum_GetValueName(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)"";
     heapCheck = named ? igMetaEnum_GetValueName(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)"";
     flags = named ? igMetaEnum_GetNamesByMask(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)"";
@@ -621,8 +621,10 @@ bad:
         return g_resultFailure;
     }
     if (inUse == 0) {
-        igResult removed;
-        igArenaMemoryPool_RemoveFreeChunksInRange((int *)&removed, self, (unsigned int)cur, (unsigned int)end);
+        {
+            igResult removed;
+            igArenaMemoryPool_RemoveFreeChunksInRange((int *)&removed, self, (unsigned int)cur, (unsigned int)end);
+        }
 reset:
         if (top >= cur && top < end) {
             ArenaState *state = self->_arenaState;
@@ -1500,7 +1502,7 @@ igResult igArenaMemoryPool_Configure(igArenaMemoryPool *pool, igMemoryPoolInfo *
         if (strstr(options, ((char *)"SystemMemoryExhausted"))) flags |= 0x80;
         if (strstr(options,"PreSizeReached")) flags |= 0x40;
         if (strstr(options, ((char *)"MaxSizeReached"))) flags |= 0x20;
-        if (pool == (igArenaMemoryPool *)(*(ObjectSystemView * *)&g_objectSystem)->bootstrapPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
+        if (pool == (igArenaMemoryPool *)g_objectSystem->bootstrapPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
             flags ^= 1;
         }
         igArenaMemoryPool_SetPoolOptionFlags(pool, flags);
@@ -1558,7 +1560,7 @@ void igArenaMemoryPool_Reset(igArenaMemoryPool *self) {
         self->_systemAllocated = 0;
         arenaState = self->_arenaState;
         if (arenaState != 0) {
-            memset(arenaState, 0, 0x814);
+            memset((void *)arenaState, 0, 0x814);
         }
     } else {
         ((igMemoryPoolView *)self)->Trim(1);
@@ -1642,7 +1644,7 @@ void igArenaMemoryPool_EnableAllocationLock(int *ret, igArenaMemoryPool *p, int 
         }
     } else if ((unsigned char)flag == 1) {
         if (p->_allocationLock != 0) { *ret = g_resultSuccess.v; return; }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)p)))));
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)p)))));
         created->Create();
         igSemaphoreView *t = created.p;
         if (t) t->_refCount = t->_refCount + 1;
@@ -1850,7 +1852,7 @@ int igArenaMemoryPool_CallocateAligned(igArenaMemoryPoolView *t, int n, int m, u
         if (total != 0) {
             int f = t->_poolOptionFlags;
             if (((f & 2) ? 1 : 0) || !((f & 4) ? 1 : 0)) {
-                memset(p, 0, total);
+                memset((void *)p, 0, total);
             }
         }
     }
@@ -2345,7 +2347,7 @@ int igArenaMemoryPool_GetEventTracker(igArenaMemoryPool *self) {
 
 void igArenaMemoryPool_SetEventTracker(igArenaMemoryPool *self, igObject *tracker) {
     igObject *previous;
-    if (tracker == 0 || (igArenaMemoryPool *)((void *)igObject_GetAllocator((int)tracker)) != self) {
+    if (tracker == 0 || (igArenaMemoryPool *)((void *)igObject_GetAllocator((igObject *)tracker)) != self) {
         if (tracker != 0) {
             tracker->_refCount++;
         }
@@ -2464,16 +2466,16 @@ void Gap__Core__igArenaMemoryPool__constructFields(igArenaMemoryPoolView *self, 
         self->_arenaState->highestAddress = 0;
     }
     g_igArenaMemoryPool_liveCount += 1;
-    Gap__Core__igObject__constructFields((int)self, flags);
+    Gap__Core__igObject__constructFields((igObject *)self, flags);
 }
 
 void Gap__Core__igArenaMemoryPool__destructFields(igArenaMemoryPool *self) {
     ((igMemoryPoolView *)self)->Shutdown();
-    Gap__Core__igObject__destructFields((int)self);
+    Gap__Core__igObject__destructFields((igObject *)self);
 }
 
 void Gap__Core__igArenaMemoryPool__resetFields(igArenaMemoryPool *self, int extra1) {
-    Gap__Core__igObject__resetFields((int)self, extra1);
+    Gap__Core__igObject__resetFields((igObject *)self, extra1);
     self->_poolOptionFlags = (int) g_igArenaMemoryPool_defaultPoolOptionFlags;
 }
 

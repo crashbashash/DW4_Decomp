@@ -34,7 +34,7 @@ int igMetaEnum_GetVTable(void) {
     *q48 = 0;
     *q4c = 0;
     *q50 = 0;
-    t = *(int *)((char *)&metaEnum + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&metaEnum + g_objectSystem->vtableProbeOffset);
     metaEnum._vtable = (int)&g_igMetaEnum_vtable[0];
     if (q50 != 0) {
         a = (igObject *)*q50;
@@ -61,7 +61,7 @@ int igMetaEnum_GetVTable(void) {
             v0 = *(int *)(c - 4) - 1;
             *(int *)(c - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -70,18 +70,18 @@ int igMetaEnum_GetVTable(void) {
 
 void igMetaEnum_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMetaEnum_Register);
+    igMetaObject_RunStaticInit(igMetaEnum_Register);
 }
 
 static igMetaObjectCallback g_igMetaEnum_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void igMetaEnum_Register(void) {
+CallbackArray *igMetaEnum_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMetaEnum_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igMetaEnum_GetMetaObjectFunction,
         "igMetaEnum",
         0x14,

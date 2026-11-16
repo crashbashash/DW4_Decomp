@@ -1,8 +1,6 @@
 #include "dw4/sony/libmpeg.h"
+#include "dw4/libkernl.h"
 
-int FlushCache(int mode);
-int DIntr(void);
-int EIntr(void);
 
 #define D4_CHCR (*(volatile unsigned int *)0x1000B400)
 #define D4_QWC (*(volatile unsigned int *)0x1000B420)

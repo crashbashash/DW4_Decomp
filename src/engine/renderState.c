@@ -1,6 +1,7 @@
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
 #include "dw4/renderState.h"
+int *FUN_00202f60(int *arg0, long long arg1);
 extern int FUN_001f8b50();
 extern int FUN_001fffb0();
 extern int FUN_00200980();
@@ -645,8 +646,7 @@ void p2SendVuBufferLayout(void) {
 int p2VariantsFirstSetup = 1;
 
 void FUN_00202300(void) {
-    void *FUN_00202f60(void *, long long);
-    int FUN_00202fa0(long long);
+    int FUN_00202fa0(long long); /* load-bearing: the caller loads a 64-bit argument (ld) and reads an int result; the definition takes int and returns long long */
     int *temp_v0;
     int *temp_v0_10;
     int *temp_v0_11;

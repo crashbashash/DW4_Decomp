@@ -3,6 +3,7 @@
 #include "dw4/sony/sif.h"
 #include "dw4/eekernel.h"
 #include "dw4/eekernel_gp.h"
+#include "dw4/libkernl.h"
 
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
 #define RPC_PACKETS 32
@@ -34,8 +35,6 @@ typedef struct {
 
 typedef unsigned int (*AlarmHandler)(int id, unsigned int scheduled, unsigned int actual, void *arg);
 
-int DIntr(void);
-int EIntr(void);
 int iSetTimerAlarm(unsigned long clock, AlarmHandler handler, void *arg);
 unsigned int sceSifSetDma(sceSifDmaData *transfers, int count);
 int sceSifGetReg(unsigned int reg);

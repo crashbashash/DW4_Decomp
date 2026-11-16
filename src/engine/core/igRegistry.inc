@@ -12,7 +12,7 @@ void * igRegistry_Create(int pool) {
 
 igMetaObject *igRegistry_GetOrCreateMetaObject(void) {
     if (g_igRegistry_metaObject == 0) {
-        g_igRegistry_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igRegistry_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igRegistry_metaObject;
 }
@@ -40,7 +40,7 @@ int igRegistry_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (igObject *)&registry._additionalSectionNames;
     *(int *)q0 = 0;
-    vtable = *(int *)((char *)&registry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&registry + g_objectSystem->vtableProbeOffset);
     registry._vtable = (int)&g_igRegistry_vtable[0];
     if (q0 != 0) {
         q0 = *(igObject **)q0;
@@ -74,18 +74,18 @@ int igRegistry_GetVTable(void) {
 
 void igRegistry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igRegistry_Register);
+    igMetaObject_RunStaticInit(igRegistry_Register);
 }
 
 static igMetaObjectCallback g_igRegistry_callbackList[] = { igRegistryValueList_EnsureRegistered, igFile_EnsureRegistered, igStringObjList_EnsureRegistered, 0 };
 
-void igRegistry_Register(void) {
+CallbackArray *igRegistry_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igRegistry_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igRegistry_GetMetaObjectFunction,
         "igRegistry",
         0x18,

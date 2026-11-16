@@ -24,7 +24,7 @@ int igDoubleMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&field);
     field._vtable = (int)&g_igDoubleMetaField_vtable[0];
-    vtable = *(int *)((char *)&field + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&field + g_objectSystem->vtableProbeOffset);
     field._vtable = (int)&g_igMetaField_vtable[0];
     name = (char *)&field._fieldName;
     if (name != 0) {
@@ -34,7 +34,7 @@ int igDoubleMetaField_GetVTable(void) {
             references = text[-1] - 1;
             text[-1] = references;
             if (references == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -43,18 +43,18 @@ int igDoubleMetaField_GetVTable(void) {
 
 void igDoubleMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDoubleMetaField_Register);
+    igMetaObject_RunStaticInit(igDoubleMetaField_Register);
 }
 
 static igMetaObjectCallback g_igDoubleMetaField_callbackList[] = { igDoubleMetaField_CreateDefaultDescriptor, 0 };
 
-void igDoubleMetaField_Register(void) {
+CallbackArray *igDoubleMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igDoubleMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igMetaField_Register,
-        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
         igDoubleMetaField_GetMetaObjectFunction,
         "igDoubleMetaField",
         0x34,
@@ -74,7 +74,7 @@ void igDoubleMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;
 
     if (g_igDoubleMetaField_descriptor == 0) {
-        g_igDoubleMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igDoubleMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igDoubleMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igDoubleMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igDoubleMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

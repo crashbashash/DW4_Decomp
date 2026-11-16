@@ -1,4 +1,4 @@
-float __ieee754_atan2f(float y, float x);
+#include "dw4/newlib_math.h"
 
 float atan2f(float y, float x)
 {

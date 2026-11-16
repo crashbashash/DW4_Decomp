@@ -1,5 +1,5 @@
 void igRegistry_InitDefaults(void *self) {
-    igObject_InitDefaults((int)self);
+    igObject_InitDefaults((igObject *)self);
     ObjectList_ResizeRetained((igTDataList<igObject *> *)((igRegistry *)self)->_valueTable, 0x100);
 }
 
@@ -22,13 +22,13 @@ bool igRegistry_Load(igRegistry *self, char *name, char *dir) {
             dir = ((char *)igObjectSystem_GetRootPath((int *)(((*(void * *)&g_objectSystem)))));
         }
         if (dir != 0 && strlen(dir) != 0) {
-            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
+            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((igObject *)self))));
             folder.p->setFolderName(dir);
             found = openPath(self, folder.p->GetFullPath(held.p));
         }
     }
     if (found == 0) {
-        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
+        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((igObject *)self))));
         folder.p->setFolderName(((char *)igObjectSystem_GetBasePath((int *)(((*(void * *)&g_objectSystem))))));
         found = openPath(self, folder.p->GetFullPath(held.p));
     }
@@ -95,7 +95,7 @@ int igRegistry_GetSectionIndex(igRegistry *self, char *name, int create) {
         }
     }
     if (create != 0) {
-        igSmartPointer<igStringObj> section((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((int)self)));
+        igSmartPointer<igStringObj> section((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
         igStringObj_Set((int)section.get(), (int)name);
         ObjectList_AppendRetained((igObjectList *)self->_additionalSectionNames, section.get());
         return n + 11;
@@ -190,7 +190,7 @@ int igRegistry_GetValueStringObj(int registry, int section, const char *key, igS
         }
         *out = string;
     } else {
-        igSmartPointer<igStringObj> created((igStringObj *)igStringObj_Create(((int)igObject_GetAllocator(registry))));
+        igSmartPointer<igStringObj> created((igStringObj *)igStringObj_Create(((int)igObject_GetAllocator((igObject *)registry))));
         igStringObj_Set((int)created.p, (int)defaultValue);
         string = created.p;
         if (string) {
@@ -217,9 +217,9 @@ static inline int valueStringPool(void) {
         if (p != 0) {
             p = ((int)StringPool_Construct((StringPool *)p));
         }
-        g_stringPool = p;
+        g_stringPool = (StringPool *)p;
     }
-    return g_stringPool;
+    return (int)g_stringPool;
 }
 
 static inline char *valueText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return g_stringObjEmptyText; } return t; }
@@ -234,7 +234,7 @@ static inline void assignInterned(int **slot, char *s) {
         rc = old[-1] - 1;
         old[-1] = rc;
         if (rc == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+            StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
         }
     }
     *slot = v;
@@ -262,9 +262,9 @@ static inline int listStringPool(void) {
         if (p != 0) {
             p = ((int)StringPool_Construct((StringPool *)p));
         }
-        g_stringPool = p;
+        g_stringPool = (StringPool *)p;
     }
-    return g_stringPool;
+    return (int)g_stringPool;
 }
 
 static inline char *listValueText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return g_stringObjEmptyText; } return t; }
@@ -284,7 +284,7 @@ static inline void releaseRef(int *old) {
         rc = old[-1] - 1;
         old[-1] = rc;
         if (rc == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+            StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
         }
     }
 }
@@ -316,7 +316,7 @@ int igRegistry_GetValueStringList(void *self, int section, const char *key, igSt
     p = igRegistry_FindValue((igRegistry *)self, section, key, 0);
     if (p != 0) {
         igStringObj_Split((igStringObj *)p->_value, 0x2C, (igTDataList<char *> *)list);
-        *(igStringObj **)&a = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+        *(igStringObj **)&a = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
         for (i = 0; i < list->_count; i++) {
             StringList_CopyRetained(&r1, list, i);
             igStringObj_Set((int)a, (int)r1);
@@ -334,7 +334,7 @@ int igRegistry_GetValueStringList(void *self, int section, const char *key, igSt
             }
         }
     } else if (create != 0) {
-        *(igStringObj **)&b = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+        *(igStringObj **)&b = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
         n = list->_count;
         if (n != 0) {
             StringList_CopyRetained(&r2, list, 0);
@@ -411,7 +411,7 @@ bool igRegistry_ParseEnumFlags(char *text, int *value, int metaEnum, char *forma
         if (strncmp(text,"0x", 2) == 0) {
             if (sscanf(text,"0x%x", value) == 1) return 1;
         } else {
-            if (sscanf(text, percent_d_7, value) == 1) return 1;
+            if (sscanf(text, (const char *)percent_d_7, value) == 1) return 1;
         }
     } else {
         while (*s && s < end) {
@@ -475,7 +475,7 @@ int igRegistry_ParseEnumValue(char *text, int *value, igMetaEnum *metaEnum, char
             if (sscanf(text,"0x%x", value) == 1) {
                 return 1;
             }
-        } else if (sscanf(text, percent_d_7, value) == 1) {
+        } else if (sscanf(text, (const char *)percent_d_7, value) == 1) {
             return 1;
         }
     } else {
@@ -645,7 +645,7 @@ void igRegistry_ParseFile(igRegistry *self, igFileView *file, int overwrite) {
         }
         igRegistry_SetValueString(self, section, key, value);
     }
-    config = ((ObjectSystemView *)g_objectSystem)->configRegistry;
+    config = g_objectSystem->configRegistry;
     showQueries = self->_showQueries;
     igRegistry_GetValueBool((int)config, 2,"showRegistryQueries", (char *)&showQueries, showQueries, 0);
     self->_showQueries = showQueries;
@@ -713,7 +713,7 @@ igRegistryValue *igRegistry_FindValue(igRegistry *self, int section, const char 
             int name;
             if (self->_valueNameCaseSensitive != 0) {
                 name = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? (*(int *)&g_stringObjEmptyText) : ((igStringObj *)r.p->_valueName)->_buffer;
-                if (strcmp(name, key) == 0) {
+                if (strcmp((const char *)name, key) == 0) {
                     return r;
                 }
             } else {
@@ -735,7 +735,7 @@ igRegistryValue *igRegistry_FindValue(igRegistry *self, int section, const char 
             freeSlot = ((igRegistryValueList *)self->_valueTable)->_count;
             ObjectList_ResizeRetained((igTDataList<igObject *> *)(((igRegistryValueList *)self->_valueTable)), freeSlot * 2);
         }
-        entry = ((int)igObject_GetAllocator((int)self));
+        entry = ((int)igObject_GetAllocator((igObject *)self));
         old = r.p;
         if (old != 0) {
             old->_refCount = old->_refCount - 1;
@@ -785,9 +785,9 @@ void igRegistry_ProcessInclude(igRegistry *self, igFileView *file, char *line, i
     if ((open == '"' && close != '"') || (open == '<' && close != '>')) return;
     if (g_registryIncludeDepth < 12) {
         g_registryIncludeDepth += 1;
-        igSmartPointer<igRegistry> include((igRegistry *)igRegistry_Create((int)igObject_GetAllocator((int)self)));
+        igSmartPointer<igRegistry> include((igRegistry *)igRegistry_Create((int)igObject_GetAllocator((igObject *)self)));
         found = 0;
-        igSmartPointer<igStringObj> directory((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((int)self)));
+        igSmartPointer<igStringObj> directory((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
         igStringObj_Set((int)directory.get(), (int)file->_fileName);
         igStringObj_RemovePathFilename(directory.get());
         if (directory.get()->_length != 0) {
@@ -879,7 +879,7 @@ int igReport_VReport(int level, const char *format, int args) {
     if (g_reportHandler == 0) {
         return 0;
     }
-    length = vsnprintf(buf, 0x1000, format, args);
+    length = vsnprintf(buf, 0x1000, format, (char *)args);
     if ((length < 0) || (length >= 0x1000)) {
         buf[0xFFF] = 0;
     }
@@ -906,7 +906,7 @@ char g_reportSettingsLoaded;
 
 void igReport_ReadSettings(void) {
     g_reportSettingsLoaded = 1;
-    igRegistry *config = ((ObjectSystemView *)g_objectSystem)->configRegistry;
+    igRegistry *config = g_objectSystem->configRegistry;
     if (config != 0) {
         igRegistry_GetValueBool((int)config, 2,"assertOnErrors", (char *)&g_reportAssertOnErrors, 1, 0);
         igStringObj *name = (igStringObj *)igStringObj_Create(allocator());
@@ -935,7 +935,7 @@ void igReport_RestoreDefaults(void) {
 }
 
 igSmartPointer<igObject> igResource_GetDirectory(void *directory, int name) {
-    if (strcmp(name, "igImageDirectory") == 0) {
+    if (strcmp((const char *)name, "igImageDirectory") == 0) {
         return igSmartPointer<igObject>((igObject *)igResource_GetImageDirectory((igResource *)directory), kRetainReference);
     }
     return igSmartPointer<igObject>((igObject *)igProperty_FindByName((igObjectList *)((igResource *)directory)->_directoryList, (igMetaField *)g_igDirectory_nameField, name), kRetainReference);
@@ -972,10 +972,10 @@ static inline void setValues(igResource *self, const igSmartPointer<igObject> &v
 
 void igResource_AddAlignment(igResource *self, int name, int value) {
     if (self->_alignmentStrings == 0) {
-        setNames(self, igSmartPointer<igObject>((igObject *)igStringObjList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
-        setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
+        setNames(self, igSmartPointer<igObject>((igObject *)igStringObjList_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
+        setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
     }
-    igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+    igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
     igStringObj_Set((int)entry.p, name);
     ObjectList_AppendRetained((igObjectList *)self->_alignmentStrings, (igObject *)entry.p);
     igTDataList<int> *values = (igTDataList<int> *)self->_alignmentValues;
@@ -1007,23 +1007,23 @@ igDirectory *igResource_GetImageDirectory(igResource *self) {
         int s2;
         igDirectory *s0;
         int old;
-        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)igDirectory_Create((int)igObject_GetAllocator((int)self)))));
+        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)igDirectory_Create((int)igObject_GetAllocator((igObject *)self)))));
         s0 = (igDirectory *)self->_imageDirectory;
         if (0 == g_stringPool) {
             v = ((int)StringPool_Allocate(16));
             if (v != 0) {
                 v = ((int)StringPool_Construct((StringPool *)v));
             }
-            g_stringPool = v;
+            g_stringPool = (StringPool *)v;
         }
-        s2 = StringPool_Intern((StringPool *)g_stringPool, (const char *)(((char *)"igImageDirectory")));
+        s2 = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)(((char *)"igImageDirectory")));
         old = s0->_name;
         if (old != 0) {
             hd = (int *)(old - 8);
             v = *(int *)(old - 4) - 1;
             *(int *)(old - 4) = v;
             if (v == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+                StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
             }
         }
         s0->_name = s2;

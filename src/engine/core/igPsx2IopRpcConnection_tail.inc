@@ -1,6 +1,6 @@
 /* Allocate the SIF client block and create the connection's semaphore, initially free. */
 void igPsx2IopRpcConnection_InitDefaults(igPsx2IopRpcConnectionView *self) {
-    self->_sifData = (SifClientData *)igObject_AllocateStorage((int)self, sizeof(SifClientData));
+    self->_sifData = (SifClientData *)igObject_AllocateStorage((igObject *)self, sizeof(SifClientData));
     SemaParam param = {0, 1, 1, 0, 0, 0};
     self->_sema = CreateSema(&param);
 }
@@ -8,9 +8,9 @@ void igPsx2IopRpcConnection_InitDefaults(igPsx2IopRpcConnectionView *self) {
 void igPsx2IopRpcConnection_ReleaseDefaults(igPsx2IopRpcConnectionView *self) {
     if (self->_dataMemory != 0) {
         WaitSema(self->_sema);
-        igObject_FreeMemory((int)self, (int)self->_dataMemory);
+        igObject_FreeMemory((igObject *)self, (void *)self->_dataMemory);
     }
-    igObject_FreeMemory((int)self, (int)self->_sifData);
+    igObject_FreeMemory((igObject *)self, (void *)self->_sifData);
     DeleteSema(self->_sema);
 }
 
@@ -21,7 +21,7 @@ igResult igPsx2IopRpcConnection_Bind(igPsx2IopRpcConnectionView *self, int serve
             return g_resultFailure;
         }
         if (self->_sifData->serve != 0) {
-            self->_dataMemory = (char *)igObject_MallocAligned((int)self, 0x20, 0x10);
+            self->_dataMemory = (char *)igObject_MallocAligned((igObject *)self, 0x20, 0x10);
             return g_resultSuccess;
         }
     }

@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
 static const double
 one	= 1.0,

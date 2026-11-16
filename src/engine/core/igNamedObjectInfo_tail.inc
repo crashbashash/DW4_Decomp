@@ -21,7 +21,7 @@ igNamedObject *igNamedObjectInfo_GetFieldValueByName(igNamedObjectInfo *self, co
     }
     for (i = 0; i < ((igNamedObjectListRef &)self->_objects)->count(); i++) {
         igNamedObject *named = ((igNamedObjectListRef &)self->_objects)->get(i);
-        if (strcmp(named->_name != 0 ? (int *)named->_name : emptyString, name) == 0) {
+        if (strcmp((const char *)(named->_name != 0 ? (int *)named->_name : emptyString), name) == 0) {
             return ((igNamedObjectListRef &)self->_objects)->get(i);
         }
     }

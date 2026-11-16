@@ -4,12 +4,12 @@ int igRefMetaField_GetSize(void) {
 
 void igRefMetaField_ZeroValue(igMetaField *field,void *object) {
     int destination=(int)object+field->_offset;
-    memset(destination,0,((igMetaFieldView *)field)->GetSize() & 0xffff);
+    memset((void *)destination,0,((igMetaFieldView *)field)->GetSize() & 0xffff);
 }
 
 void igRefMetaField_ClearValue(igMetaField *field,void *object) {
     int destination=(int)object+field->_offset;
-    memset(destination,0,((igMetaFieldView *)field)->GetSize() & 0xffff);
+    memset((void *)destination,0,((igMetaFieldView *)field)->GetSize() & 0xffff);
 }
 
 int igRefMetaField_ReadRawFieldMem(void *self, int destination, int *source, int directory, int swap) {
@@ -101,7 +101,7 @@ int igRefMetaField_ArrayToString(igStringRef *out, void *owner, int *refs, int c
     if (prefix == 0) prefix = &g_igRefMetaField_defaultArrayPrefix;
     if (width == -1) width = strlen(prefix) + 5;
     sprintf(itemFormat,"%%-%ds", width);
-    a = ((igMemoryPoolView *)igObject_GetAllocator((int)owner));
+    a = ((igMemoryPoolView *)igObject_GetAllocator((igObject *)owner));
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     buf = (char *)a->Allocate(count * (strlen(itemFormat) + 0x80));
     w = buf;
@@ -130,7 +130,7 @@ block12:
         }
     }
     igStringRef text(buf);
-    a = ((igMemoryPoolView *)igObject_GetAllocator((int)owner));
+    a = ((igMemoryPoolView *)igObject_GetAllocator((igObject *)owner));
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     a->Free(buf);
     char *src = text.p;
@@ -149,7 +149,7 @@ int igRefMetaField_ArrayFromString(int self, int str, int *out, int n, igDirecto
         s = ((int)igRefMetaField_SkipPastChar((char *)s, (char)0x7b));
         if (list != 0) {
             s = ((int)igRefMetaField_SkipPastChar((char *)s, (char)0x5b));
-            if (sscanf(s, &percent_d_7[0], &idx) == 0) idx = -1;
+            if (sscanf((const char *)s, (const char *)&percent_d_7[0], &idx) == 0) idx = -1;
             if (idx >= 0 && idx < list->_count) {
                 e = ((igDirEntry *)igDirectory_GetEntry((int *)list, idx));
                 if (e != 0) o[i] = e->_ref;

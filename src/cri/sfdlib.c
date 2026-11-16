@@ -1,4 +1,5 @@
 #include "dw4/cri/sfdhn.h"
+#include "dw4/cri/mcp.h"
 
 #define SFD_HN_SIZE 14072
 
@@ -33,7 +34,6 @@ extern SfdLibInf sfd_lib;
 extern int sfd_cond_defaults[100];
 extern SfdHandle *sfd_cur_hn;
 
-void MEM_Copy(char *dst, char *src, unsigned int n);
 void UTY_MemsetDword(int *dst, int value, unsigned int count);
 void SJRBF_Init(void);
 void SJRBF_Finish(void);
@@ -47,8 +47,6 @@ int SFTRN_Init(void *dst, void *src);
 int SFTRN_Finish(void *modules);
 int SFD_Destroy(SfdHandle *hn);
 void sfmpvps2_Init(void);
-void SFHDS_Init(void);
-void SFHDS_Finish(void);
 
 long sfd_InitLib(SfdInitPrm *prm);
 void sfd_ClearSvrCnt(SfdLibInf *lib);

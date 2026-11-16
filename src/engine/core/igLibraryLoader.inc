@@ -2,7 +2,7 @@ igMetaObject *g_igLibraryLoader_metaObject;
 
 igMetaObject *igLibraryLoader_GetOrCreateMetaObject(void) {
     if (g_igLibraryLoader_metaObject == 0) {
-        g_igLibraryLoader_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igLibraryLoader_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLibraryLoader_metaObject;
 }
@@ -17,16 +17,16 @@ igMetaObject *igLibraryLoader_GetMetaObject(void)
 
 void igLibraryLoader_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLibraryLoader_Register);
+    igMetaObject_RunStaticInit(igLibraryLoader_Register);
 }
 
-void igLibraryLoader_Register(void) {
+CallbackArray *igLibraryLoader_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igLibraryLoader_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igLibraryLoader_GetMetaObjectFunction,
         "igLibraryLoader",
         8,

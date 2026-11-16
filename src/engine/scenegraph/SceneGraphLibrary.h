@@ -4760,7 +4760,7 @@ extern "C" void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, in
 extern "C" void Gap__Sg__igCommonTraversal__vfunc_32(void *arg0, long long arg1);
 extern "C" void Gap__Sg__igCommonTraversal__vfunc_24(igCommonTraversal *t, int arg1);
 extern "C" void Gap__Sg__igCommonTraversal__vfunc_33(void *arg0);
-extern "C" void FUN_001b7740(void **arg0, void **arg1);
+extern "C" int FUN_001b7740(void **arg0, void **arg1);
 extern "C" void FUN_001b7770(igCommonTraversal *self, int name, int value);
 extern "C" igObject *FUN_001b7920(igCommonTraversal *self, int name);
 extern "C" int FUN_001b7af0(void *arg0, int arg1);

@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
+#include "dw4/igSmartPointer.h"
 #include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igSkeletonDispatchView.h"
@@ -104,7 +105,6 @@ int beBaseInfoRam_SetAllTimerScales(beAction2InfoRam *ram, float scale);
 int beBaseInfoRam_RemoveAllTimers(beAction2InfoRam *ram);
 int ObjectList_RemoveFirstRetained(int *result, int list, int object, int start);
 int ObjectList_AppendRetained(int list, igObject *object);
-int igObject_Destroy(void *object);
 int igObject_GetAllocator(void *object);
 int igObject_IsKindOf(void *object, int meta);
 int Memory_GetAllocatorBySelector(int selector);

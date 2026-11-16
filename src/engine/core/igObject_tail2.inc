@@ -12,7 +12,7 @@ igObject *igObject_CopyConstructHeader(igObject *self, igObject *source) {
         igObject_InitHeader(self);
     }
     ((igRefCountWord *)&self->_refCount)->bytes.flag = ((igRefCountWord *)&source->_refCount)->bytes.flag;
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         ((igRefCountWord *)&self->_refCount)->bytes.poolIndex = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(self))))));
     }
     return self;
@@ -25,7 +25,7 @@ igObject *igObject_ConstructHeader(igObject *self) {
     if (self != 0) {
         igObject_InitHeader((igObject *)self);
     }
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         owner = (void **)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(self))));
         if (owner != 0) {
             ((igRefCountWord *)&self->_refCount)->bytes.poolIndex = ((igMemoryPoolView *)(owner))->GetPoolIndex();
@@ -46,12 +46,12 @@ int igObject_Destruct(int extra0)
 }
 
 /* Slot 1 default: empty. */
-void Gap__Core__igObject__constructFields(int extra0, int extra1)
+void Gap__Core__igObject__constructFields(igObject *self, int flags)
 {
 }
 
 /* Slot 2 default: empty. */
-void Gap__Core__igObject__destructFields(int extra0)
+void Gap__Core__igObject__destructFields(igObject *self)
 {
 }
 
@@ -87,17 +87,17 @@ int igObject_UserIsAlikeShallow(void)
 }
 
 /* Slot 11 default: empty. */
-void Gap__Core__igObject__resetFields(int extra0, int extra1)
+void Gap__Core__igObject__resetFields(igObject *self, int flags)
 {
 }
 
 /* Slot 9 default: empty. */
-void igObject_InitDefaults(int extra0)
+void igObject_InitDefaults(igObject *self)
 {
 }
 
 /* Slot 10 default: empty. */
-void igObject_ReleaseDefaults(int extra0)
+void igObject_ReleaseDefaults(igObject *self)
 {
 }
 
@@ -139,7 +139,7 @@ void igObject_UserMakeConcrete(void)
 void igObject_Construct(igObjectDispatchView *object, char *meta) {
     igMemoryPoolView *a;
     igMetaObject *l;
-    *(int *)((char *)object + *(int *)((char *)g_objectSystem + 916)) = ((igMetaObject *)meta)->_vTablePointer;
+    *(int *)((char *)object + g_objectSystem->vtableProbeOffset) = ((igMetaObject *)meta)->_vTablePointer;
     ((igRefCountWord *)&object->_refCount)->word = 0;
     ((igRefCountWord *)&object->_refCount)->bits.count = 1;
     ((igRefCountWord *)&object->_refCount)->bytes.flag = 0;
@@ -166,7 +166,7 @@ void igObject_Construct(igObjectDispatchView *object, char *meta) {
 void igObject_ConstructPooled(igObject *object, char *meta) {
     igMemoryPoolView *g;
 
-    *(int *)((char *)object + *(int *)((char *)(g_objectSystem) + 916)) = ((igMetaObject *)meta)->_vTablePointer;
+    *(int *)((char *)object + g_objectSystem->vtableProbeOffset) = ((igMetaObject *)meta)->_vTablePointer;
     ((igRefCountWord *)&object->_refCount)->pooled.count = 1;
     ((igRefCountWord *)&object->_refCount)->pooled.flag = 0 & 1;
     g = (igMemoryPoolView *)Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(object)));
@@ -201,12 +201,12 @@ void igObject_RegisterInstance(void **object, void *meta) {
 /* Class-registration "extra callbacks" factory for igObject (passed to igMetaObject_RegisterClass
  * by igObject_Register): allocate a 12-byte callback array from the metadata allocator selector
  * and construct it empty. Returns the array, or 0 when the allocation fails. */
-int igObject_CreateEmptyInitCallbacks(void) {
-    int callbacks;
+CallbackArray *igObject_CreateEmptyInitCallbacks(void) {
+    CallbackArray *callbacks;
 
-    callbacks = ((int)Memory_AllocateBufferDirect(0xC, (igMemoryPoolView *)((igMemoryPool *)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+    callbacks = (CallbackArray *)Memory_AllocateBufferDirect(0xC, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     if (callbacks != 0) {
-        callbacks = ((int)igArray_Construct((CallbackArray *)callbacks));
+        callbacks = igArray_Construct(callbacks);
     }
     return callbacks;
 }
@@ -217,16 +217,16 @@ int igObject_GetVTable(void) {
     int o[2];
 
     igObject_InitHeader((igObject *)o);
-    return *(int *)((char *)o + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)o + g_objectSystem->vtableProbeOffset);
 }
 
-void igObject_EnsureRegistered(void){igMetaObject_RunStaticInit((StaticInitCallbacks *(*)())igObject_Register);}
+void igObject_EnsureRegistered(void){igMetaObject_RunStaticInit(igObject_Register);}
 
-void *igObject_Register(void) {
+CallbackArray *igObject_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igObject_metaObject,
-        (igMetaObjectRegisterFunction)igObject_CreateEmptyInitCallbacks,
+        igObject_CreateEmptyInitCallbacks,
         (igMetaObjectGetFunction)igObject_GetNoParentMetaObject,
         (igMetaObjectCallback)igObject_GetMetaObject,
         "igObject",
@@ -268,7 +268,7 @@ void igObject_InitFields(void) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
         interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_refCount")));
     }
@@ -279,7 +279,7 @@ void igObject_InitFields(void) {
         count = *(int *)((char *)(refCountName) - 4) - 1;
         *(int *)((char *)(refCountName) - 4) = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     refCountField->_persistent = 0;
@@ -300,7 +300,7 @@ void igObject_InitFields(void) {
             if (pool2 != 0) {
                 pool2 = ((int)StringPool_Construct((StringPool *)pool2));
             }
-            g_stringPool = pool2;
+            g_stringPool = (StringPool *)pool2;
         }
         interned2 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_memPoolIndex")));
     }
@@ -311,7 +311,7 @@ void igObject_InitFields(void) {
         count2 = *(int *)((char *)(poolIndexName) - 4) - 1;
         *(int *)((char *)(poolIndexName) - 4) = count2;
         if (count2 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header2), (int)header2);
+            StringChunk_ReleaseHeader((StringChunk *)(*header2), (StringTokenHeader *)header2);
         }
     }
     poolIndexField->_persistent = 0;
@@ -341,15 +341,15 @@ char *igObject_AllocateRawStorage(int size, int prefix_size, igMemoryPoolView *r
 
 void *igObject_AllocateRawStorageDefault(int size,int prefix){return igObject_AllocateRawStorage(size,prefix,0);}
 
-int Memory_FreeBufferAliasC(int extra0)
+int Memory_FreeBufferAliasC(void *block)
 {
-    return Memory_FreeBuffer((void *)extra0);
+    return Memory_FreeBuffer(block);
 }
 
 void igObject_Destroy(void *input) {
     if (g_objectSystem) {
         igObjectDispatchView *object = (igObjectDispatchView *)input;
-        if (!*g_objectSystem) {
+        if (!g_objectSystem->active) {
             object->userDestruct();
             object->ReleaseDefaults();
             object->Destruct();
@@ -373,7 +373,7 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 
 void igObject_ZeroFields(igObjectDispatchView *object) {
     igMetaObject *meta = object->GetMeta();
-    if (((meta != 0) && isValid(meta)) || (*(unsigned char *)((char *)(g_objectSystem) + 20) == 0) || (*(unsigned char *)((char *)(g_objectSystem) + 0) != 0)) {
+    if (((meta != 0) && isValid(meta)) || (g_objectSystem->started == 0) || (g_objectSystem->active != 0)) {
         __internalObjectList *fields = (__internalObjectList *)meta->_metaFields;
         int first = ((__internalObjectList *)g_igObject_metaObject->_metaFields)->_count;
         int count = fields->_count;
@@ -600,8 +600,8 @@ void igObject_Print(void **object, int depth, int indent) {
     igReport_Printf("%s0x%x (type %s)\n", indent, object, ((igObjectDispatchView *)object)->GetMeta()->_name);
     igReport_Flush();
     if (depth != 0) {
-        prefix = igObject_AllocateStorage((int)object, (strlen(indent) + 2) * 4);
-        sprintf(prefix, "\t%s", indent);
+        prefix = (int)igObject_AllocateStorage((igObject *)object, (strlen((const char *)indent) + 2) * 4);
+        sprintf((char *)prefix, "\t%s", indent);
         ((igObjectDispatchView *)object)->TrimCapacity();
         count = fields->_count;
         i = ((__internalObjectList *)g_igObject_metaObject->_metaFields)->_count;
@@ -614,7 +614,7 @@ void igObject_Print(void **object, int depth, int indent) {
         }
         igReport_Printf("%s}\n", indent);
         igReport_Flush();
-        igObject_FreeMemory((int)object, prefix);
+        igObject_FreeMemory((igObject *)object, (void *)prefix);
     }
 }
 
@@ -744,7 +744,7 @@ int igObject_CloneViaMetadata(void **source, int copyMode) {
     int copy;
 
     metaObject = (int)((igObjectDispatchView *)(source))->GetMeta();
-    copy = igMetaObject_CreateInstance((igMetaObject *)metaObject, (igMemoryPoolView *)(igObject_GetAllocator((int)source)));
+    copy = (int)igMetaObject_CreateInstance((igMetaObject *)metaObject, (igMemoryPoolView *)(igObject_GetAllocator((igObject *)source)));
     igObject_Copy(copy, (int)source, copyMode);
     return copy;
 }
@@ -765,44 +765,44 @@ void *igObject_GetAllocationBase(void *self) {
 /* Object storage dispatch: every helper re-selects the allocator from the object header
  * (igObject_GetAllocator) and calls one slot of that allocator's vtable, forwarding its arguments
  * unchanged. */
-int igObject_AllocateStorage(int object, int size) {
+void *igObject_AllocateStorage(igObject *object, int size) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
-    return (int)allocator->Allocate(size);
+    return allocator->Allocate(size);
 }
 
-int igObject_MallocAligned(int object, int size, unsigned short alignment) {
+void *igObject_MallocAligned(igObject *object, int size, unsigned short alignment) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
-    return (int)allocator->AllocateAligned(size, alignment);
+    return allocator->AllocateAligned(size, alignment);
 }
 
-int igObject_Callocate(int object, int size, int option) {
+void *igObject_Callocate(igObject *object, int count, int size) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
-    return (int)allocator->Callocate(size, option);
+    return allocator->Callocate(count, size);
 }
 
-int igObject_Reallocate(int object, int storage, int size) {
+void *igObject_Reallocate(igObject *object, void *storage, int size) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
-    return (int)allocator->Reallocate((void *)storage, size);
+    return allocator->Reallocate(storage, size);
 }
 
-int igObject_ReallocateAligned(int object, int storage, int size, unsigned short alignment) {
+void *igObject_ReallocateAligned(igObject *object, void *storage, int size, unsigned short alignment) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
-    return (int)allocator->ReallocateAligned((void *)storage, size, alignment);
+    return allocator->ReallocateAligned(storage, size, alignment);
 }
 
 /* A null storage pointer returns without touching the allocator */
 void igObject_FreeStorage(int object, int storage) {
     if (storage != 0) {
-        igMemoryPoolView *allocator = igObject_GetAllocator(object);
+        igMemoryPoolView *allocator = igObject_GetAllocator((igObject *)object);
         allocator->Free((void *)storage);
     }
 }
 
 /* Same instruction body as igObject_FreeStorage. */
-void igObject_FreeMemory(int object, int storage) {
+void igObject_FreeMemory(igObject *object, void *storage) {
     if (storage != 0) {
         igMemoryPoolView *allocator = igObject_GetAllocator(object);
-        allocator->Free((void *)storage);
+        allocator->Free(storage);
     }
 }
 
@@ -812,13 +812,13 @@ void igObject_FreeMemory(int object, int storage) {
 char *igObject_DuplicateString(void *self, const char *string) {
     char *copy;
 
-    copy = (char *)igObject_AllocateStorage((int)self, strlen(string) + 1);
+    copy = (char *)igObject_AllocateStorage((igObject *)self, strlen(string) + 1);
     strcpy(copy, string);
     return copy;
 }
 
-igMemoryPoolView *igObject_GetAllocator(int object) {
-    return ((igMemoryPoolView *)igAllocator_ResolveEncodedIndex(((igRefCountWord *)&((igObject *)object)->_refCount)->bytes.poolIndex));
+igMemoryPoolView *igObject_GetAllocator(igObject *object) {
+    return ((igMemoryPoolView *)igAllocator_ResolveEncodedIndex(((igRefCountWord *)&object->_refCount)->bytes.poolIndex));
 }
 
 igSmartPointer<igObject> igObject_Clone(igObjectDispatchView *source, int copyMode) {

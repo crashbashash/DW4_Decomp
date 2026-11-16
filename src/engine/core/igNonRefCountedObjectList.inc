@@ -14,21 +14,21 @@ int igNonRefCountedObjectList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igNonRefCountedObjectList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igNonRefCountedObjectList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igNonRefCountedObjectList_Register);
+    igMetaObject_RunStaticInit(igNonRefCountedObjectList_Register);
 }
 
-void igNonRefCountedObjectList_Register(void) {
+CallbackArray *igNonRefCountedObjectList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igNonRefCountedObjectList_metaObject,
-        (igMetaObjectRegisterFunction)igDataList_Register,
-        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
+        igDataList_Register,
+        igDataList_GetPublishedMetaObject,
         igNonRefCountedObjectList_GetMetaObjectFunction,
         "igNonRefCountedObjectList",
         0x14,

@@ -6,7 +6,7 @@ igSmartPointer<igObject> igPsx2Folder_ListEntries(igPsx2Folder *self) {
          * result and re-reads it for the reference-count test. */
         return igSmartPointer<igObject>(0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
     while (sceDread(handle, &entry) != 0) {
         igStringRef text(entry.bytes + 64);
         StringList_AppendRetained(list.p, &text);
@@ -57,7 +57,7 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
         } else {
             key ="intrinsicModulePath";
         }
-        if (igRegistry_GetValueStringObj(*(int *)(g_objectSystem + 56), 2, key, (igStringObj **)&path, (const char *)"", 0) != 0) {
+        if (igRegistry_GetValueStringObj(*(int *)&g_objectSystem->configRegistry, 2, key, (igStringObj **)&path, (const char *)"", 0) != 0) {
             igPsx2Folder_TrimPath((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
             dir = (dir == 0) ? g_stringObjEmptyText : dir;
@@ -205,9 +205,9 @@ static inline int internPool(void) {
         if (a != 0) {
             a = ((int)StringPool_Construct((StringPool *)a));
         }
-        g_stringPool = a;
+        g_stringPool = (StringPool *)a;
     }
-    return g_stringPool;
+    return (int)g_stringPool;
 }
 
 static inline void setName(igPsx2FileView *object, int name) {
@@ -217,7 +217,7 @@ static inline void setName(igPsx2FileView *object, int name) {
         int count = ((int *)object->_prefix)[-1] - 1;
         ((int *)object->_prefix)[-1] = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     object->_prefix = (char *)interned;
@@ -230,7 +230,7 @@ static inline int fileAllocator(void) {
 
 void igPsx2_SetupOutputFiles(void) {
     unsigned char enabled;
-    igRegistry_GetValueBool(*(int *)(g_objectSystem + 56), 2, (const char *)"useOutputFilesForAtmon", (char *)&enabled, 1, 0);
+    igRegistry_GetValueBool((int)g_objectSystem->configRegistry, 2, (const char *)"useOutputFilesForAtmon", (char *)&enabled, 1, 0);
     if (enabled != 0) {
         igReport_SetOutputFile(0);
         igReport_SetErrorFile(0);
@@ -260,7 +260,7 @@ igResult igPsx2_SetAtfilePrefix(const char *text) {
         } while (*cursor != 0x2C);
         length = (cursor - text) + 1;
         g_igPsx2_atfilePrefix = ((int)Memory_SystemAllocate(length + 1));
-        strncpy(g_igPsx2_atfilePrefix, text, length);
+        strncpy((char *)g_igPsx2_atfilePrefix, text, length);
         *(char *)(g_igPsx2_atfilePrefix + length) = 0;
         g_igPsx2File_defaultPrefix = g_igPsx2_atfilePrefix;
         igPsx2Media_SetDevicePrefix(g_igPsx2_atfilePrefix);

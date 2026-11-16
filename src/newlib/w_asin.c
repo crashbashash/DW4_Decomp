@@ -1,4 +1,4 @@
-double __ieee754_asin(double x);
+#include "dw4/newlib_math.h"
 
 double asin(double x)
 {

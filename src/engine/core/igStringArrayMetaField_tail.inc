@@ -46,16 +46,16 @@ void igStringArrayMetaField_DestructValue(igStringArrayMetaField *self, int obje
                 if (pool != 0) {
                     pool = ((int)StringPool_Construct((StringPool *)pool));
                 }
-                g_stringPool = pool;
+                g_stringPool = (StringPool *)pool;
             }
-            empty = StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
+            empty = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
             previous = *slot;
             if (previous != 0) {
                 header = (int *)(previous - 8);
                 references = *(int *)(previous - 4) - 1;
                 *(int *)(previous - 4) = references;
                 if (references == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                    StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
                 }
             }
             *slot = empty;

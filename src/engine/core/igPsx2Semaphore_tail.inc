@@ -24,7 +24,7 @@ int igPsx2Semaphore_GetVTable(void) {
     *q = 0;
     semaphore._vtable = (int)&g_igNamedObject_vtable[0];
     semaphore._vtable = (int)&g_igPsx2Semaphore_vtable[0];
-    vtable = *(int *)((char *)&semaphore + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&semaphore + g_objectSystem->vtableProbeOffset);
     semaphore._vtable = (int)&g_igNamedObject_vtable[0];
     if (q != 0) {
         chars = *q;
@@ -33,7 +33,7 @@ int igPsx2Semaphore_GetVTable(void) {
             refCount = *(int *)((char *)(chars) - 4) - 1;
             *(int *)((char *)(chars) - 4) = refCount;
             if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -42,15 +42,15 @@ int igPsx2Semaphore_GetVTable(void) {
 
 void igPsx2Semaphore_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2Semaphore_Register);
+    igMetaObject_RunStaticInit(igPsx2Semaphore_Register);
 }
 
-void igPsx2Semaphore_Register(void) {
+CallbackArray *igPsx2Semaphore_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2Semaphore_metaObject,
-        (igMetaObjectRegisterFunction)igSemaphore_Register,
+        igSemaphore_Register,
         igSemaphore_GetPublishedMetaObject,
         igPsx2Semaphore_GetMetaObjectFunction,
         "igPsx2Semaphore",

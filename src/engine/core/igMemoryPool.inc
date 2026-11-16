@@ -16,7 +16,7 @@ igMetaField *g_igMemoryPool_updateGlobalStatisticsMetaField;
 
 igMetaObject *igMemoryPool_GetOrCreateMetaObject(void) {
     if (g_igMemoryPool_metaObject == 0) {
-        g_igMemoryPool_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igMemoryPool_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMemoryPool_metaObject;
 }
@@ -31,15 +31,15 @@ igMetaObject *igMemoryPool_GetMetaObject(void)
 
 void igMemoryPool_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryPool_Register);
+    igMetaObject_RunStaticInit(igMemoryPool_Register);
 }
 
-void igMemoryPool_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igMemoryPool_Register(void) {
+    return igMetaObject_RegisterClass(
         1,
         &g_igMemoryPool_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igMemoryPool_GetMetaObjectFunction,
         "igMemoryPool",
         0x70,

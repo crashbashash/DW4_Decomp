@@ -8,7 +8,7 @@ void * igPointerList_Create(int allocator) {
 
 igMetaObject *igPointerList_GetOrCreateMetaObject(void) {
     if (g_igPointerList_metaObject == 0) {
-        g_igPointerList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igPointerList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igPointerList_metaObject;
 }
@@ -26,21 +26,21 @@ int igPointerList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igPointerList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igPointerList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPointerList_Register);
+    igMetaObject_RunStaticInit(igPointerList_Register);
 }
 
-void igPointerList_Register(void) {
+CallbackArray *igPointerList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPointerList_metaObject,
-        (igMetaObjectRegisterFunction)igDataList_Register,
-        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
+        igDataList_Register,
+        igDataList_GetPublishedMetaObject,
         igPointerList_GetMetaObjectFunction,
         "igPointerList",
         0x14,

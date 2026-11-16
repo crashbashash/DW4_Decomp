@@ -21,11 +21,11 @@ void igPageMemoryPool_Destruct(int extra0) {
 }
 
 void Gap__Core__igPageMemoryPool__constructFields(int extra0, int extra1) {
-    Gap__Core__igObject__constructFields(extra0, extra1);
+    Gap__Core__igObject__constructFields((igObject *)extra0, extra1);
 }
 
 void Gap__Core__igPageMemoryPool__destructFields(igPageMemoryPoolView *self) {
-    igMemoryPoolView *alloc = (igMemoryPoolView *)((void *)igObject_GetAllocator((int)self));
+    igMemoryPoolView *alloc = (igMemoryPoolView *)((void *)igObject_GetAllocator((igObject *)self));
     int i;
     for (i = 0; i < 32; i++) {
         if (self->pageTables[i] != 0) {
@@ -33,14 +33,14 @@ void Gap__Core__igPageMemoryPool__destructFields(igPageMemoryPoolView *self) {
             self->pageTables[i] = 0;
         }
     }
-    Gap__Core__igObject__destructFields((int)self);
+    Gap__Core__igObject__destructFields((igObject *)self);
 }
 
 /* Initialise the pool: run the igObject base step (an empty stub), take the default
  * `_poolOptionFlags` from a global word (6 in the retail image) and clear the page tables that
  * follow the reflected fields. */
 void Gap__Core__igPageMemoryPool__resetFields(igPageMemoryPool *self, int extra1) {
-    Gap__Core__igObject__resetFields((int)self, extra1);
+    Gap__Core__igObject__resetFields((igObject *)self, extra1);
     self->_poolOptionFlags = g_igPageMemoryPool_defaultPoolOptionFlags;
     memset(((igPageMemoryPoolView *)self)->pageTables, 0, sizeof(((igPageMemoryPoolView *)self)->pageTables));
 }
@@ -108,7 +108,7 @@ void igPageMemoryPool_Reset(igPageMemoryPoolView *self) {
     unsigned **table;
     unsigned *pages;
     self->ResetStatistics();
-    alloc = (igMemoryPoolView *)igObject_GetAllocator((int)self);
+    alloc = (igMemoryPoolView *)igObject_GetAllocator((igObject *)self);
     i = 0;
     do {
         table = &self->pageTables[i];
@@ -195,7 +195,7 @@ igResult igPageMemoryPool_EnableAllocationLock(igPageMemoryPoolView *self, int e
         if (self->allocationLock.p != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
         created.p->Create();
         self->allocationLock = created;
     }
@@ -400,7 +400,7 @@ int igPageMemoryPool_GetEventTracker(igPageMemoryPool *self) {
 
 void igPageMemoryPool_SetEventTracker(igPageMemoryPool *self, igObject *tracker) {
     igObject *o;
-    if (tracker == 0 || (void *)igObject_GetAllocator((int)tracker) != self) {
+    if (tracker == 0 || (void *)igObject_GetAllocator((igObject *)tracker) != self) {
         if (tracker != 0) {
             tracker->_refCount++;
         }
@@ -624,7 +624,7 @@ void igPageMemoryPool_MarkPages(igPageMemoryPoolView *self, unsigned int a, int 
         pg = (a & 0x7ffffff) >> 12;
         idx = pg >> 4;
         bit = 1 << ((pg & 0xF) * 2);
-        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((int)self)))->Callocate(0x800, 4); self->pageTables[a >> 27] = t; }
+        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((igObject *)self)))->Callocate(0x800, 4); self->pageTables[a >> 27] = t; }
         if (set != 0) t[idx] |= bit; else t[idx] &= ~bit;
     }
     if (n > 0) n -= 1;
@@ -640,7 +640,7 @@ void igPageMemoryPool_MarkPages(igPageMemoryPoolView *self, unsigned int a, int 
         pg = (a & 0x7ffffff) >> 12;
         idx = pg >> 4;
         bit = 2 << ((pg & 0xF) * 2);
-        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((int)self)))->Callocate(0x800, 4); *slot = t; }
+        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((igObject *)self)))->Callocate(0x800, 4); *slot = t; }
         if (set != 0) t[idx] |= bit; else t[idx] &= ~bit;
     }
 }

@@ -23,7 +23,7 @@ int igDependencyMetaField_GetVTable(void) {
     fieldList = (igObject *)&field._fieldList;
     *(int *)fieldList = 0;
     field._vtable = (int)&g_igDependencyMetaField_vtable[0];
-    result = *(int *)((char *)&field + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    result = *(int *)((char *)&field + g_objectSystem->vtableProbeOffset);
     field._vtable = (int)&g_igCompoundMetaField_vtable[0];
     if (fieldList != 0) {
         fieldList = *(igObject **)fieldList;
@@ -43,7 +43,7 @@ int igDependencyMetaField_GetVTable(void) {
             refs = name[-1] - 1;
             name[-1] = refs;
             if (refs == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -52,17 +52,17 @@ int igDependencyMetaField_GetVTable(void) {
 
 void igDependencyMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDependencyMetaField_Register);
+    igMetaObject_RunStaticInit(igDependencyMetaField_Register);
 }
 
 static igMetaObjectCallback g_igDependencyMetaField_callbackList[] = { igDependencyMetaField_CreateDefaultDescriptor, 0 };
 
-void igDependencyMetaField_Register(void) {
+CallbackArray *igDependencyMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igDependencyMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igCompoundMetaField_Register,
+        igCompoundMetaField_Register,
         (igMetaObjectGetFunction)igCompoundMetaField_GetPublishedMetaObject,
         igDependencyMetaField_GetMetaObjectFunction,
         "igDependencyMetaField",
@@ -83,7 +83,7 @@ void igDependencyMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;
 
     if (g_igDependencyMetaField_descriptor == 0) {
-        g_igDependencyMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igDependencyMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igDependencyMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igDependencyMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igDependencyMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
@@ -115,7 +115,7 @@ void igDependencyMetaField_InitDefaults(void *self) {
     igDependencyMetaField_AddSubFields(((igCompoundMetaField *)self)->_fieldList);
 }
 
-int g_stringPool;
+StringPool *g_stringPool;
 
 void igDependencyMetaField_AddSubFields(int fieldList) {
     void *beforeName;
@@ -140,7 +140,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
             if (beforePool != 0) {
                 beforePool = ((int)StringPool_Construct((StringPool *)beforePool));
             }
-            g_stringPool = beforePool;
+            g_stringPool = (StringPool *)beforePool;
         }
         beforeText = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_before")));
     }
@@ -151,7 +151,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
         beforeRefs = *(int *)((char *)(beforeName) - 4) - 1;
         *(int *)((char *)(beforeName) - 4) = beforeRefs;
         if (beforeRefs == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*beforeHeader), (int)beforeHeader);
+            StringChunk_ReleaseHeader((StringChunk *)(*beforeHeader), (StringTokenHeader *)beforeHeader);
         }
     }
     ((igMetaField *)beforeField)->_offset = 0;
@@ -170,7 +170,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
             if (afterPool != 0) {
                 afterPool = ((int)StringPool_Construct((StringPool *)afterPool));
             }
-            g_stringPool = afterPool;
+            g_stringPool = (StringPool *)afterPool;
         }
         afterText = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_after")));
     }
@@ -181,7 +181,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
         afterRefs = *(int *)((char *)(afterName) - 4) - 1;
         *(int *)((char *)(afterName) - 4) = afterRefs;
         if (afterRefs == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*afterHeader), (int)afterHeader);
+            StringChunk_ReleaseHeader((StringChunk *)(*afterHeader), (StringTokenHeader *)afterHeader);
         }
     }
     ((igMetaField *)afterField)->_offset = 4;

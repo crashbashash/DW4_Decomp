@@ -18,9 +18,9 @@ done:
 int igPlane_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igPlane_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00188520(void)
@@ -28,13 +28,13 @@ void FUN_00188520(void)
     igMetaObject_RunStaticInit(igPlane_Register);
 }
 
-void igPlane_Register(void) {
+CallbackArray *igPlane_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPlane_metaObject,
         igVolume_Register,
-        igVolume_GetPublishedMetaObject,
+        (igMetaObjectGetFunction)igVolume_GetPublishedMetaObject,
         thunk_igPlane_GetMetaObject,
         "igPlane",
         0x1C, /* instance size */
@@ -50,9 +50,9 @@ void thunk_igPlane_GetMetaObject(void) {
 }
 
 static FieldFactory g_igPlane_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
-    igFloatMetaField_Create,
-    igEnumMetaField_Create,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igFloatMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
 };
 
 static const char *g_igPlane_fieldTable[] = {

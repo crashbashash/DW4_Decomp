@@ -2224,7 +2224,7 @@ void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocket *self) {
 
     entry = self->_retCode;
     switch (entry) {
-    case 0:
+    case 0: {
         /* matching construct: cast from the 4-byte _mother reference to its window type */
         beNDMWWindow *mother = (beNDMWWindow *)self->_mother;
         switch (mother->_entCode) {
@@ -2240,6 +2240,7 @@ void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocket *self) {
             break;
         }
         break;
+    }
     case 1:
         self->_st1 = 2;
         self->_st3 = 0;

@@ -1,4 +1,4 @@
-float __ieee754_sqrtf(float x);
+#include "dw4/newlib_math.h"
 
 float sqrtf(float x)
 {

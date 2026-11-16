@@ -27,7 +27,7 @@ int igMemoryFileEntry_GetVTable(void) {
     *(int *)ps = 0;
     entry._vtable = (int)&g_igNamedObject_vtable[0];
     entry._vtable = (int)&g_igMemoryFileEntry_vtable[0];
-    s0 = *(int *)((char *)&entry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    s0 = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -36,7 +36,7 @@ int igMemoryFileEntry_GetVTable(void) {
             v0 = v1[-1] - 1;
             v1[-1] = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -45,15 +45,15 @@ int igMemoryFileEntry_GetVTable(void) {
 
 void igMemoryFileEntry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryFileEntry_Register);
+    igMetaObject_RunStaticInit(igMemoryFileEntry_Register);
 }
 
-void igMemoryFileEntry_Register(void) {
+CallbackArray *igMemoryFileEntry_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMemoryFileEntry_metaObject,
-        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        igNamedObject_Register,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igMemoryFileEntry_GetMetaObjectFunction,
         "igMemoryFileEntry",

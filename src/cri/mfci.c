@@ -44,10 +44,10 @@ static char *volatile mfci_build = "\nMFCI/PS2EE Ver.1.09 Build:Oct  6 2004 11:4
 static void (*mfci_err_func)(void *context, const char *message, void *detail) = 0;
 static void *mfci_err_obj = 0;
 static CvFsVtbl mfci_vtbl = {
-    (int)mfCiExecServer, (int)mfCiEntryErrFunc, (int)mfCiGetFileSize, 0,
-    (int)mfCiOpen, (int)mfCiClose, (int)mfCiSeek, (int)mfCiTell,
-    (int)mfCiReqRd, 0, (int)mfCiStopTr, (int)mfCiGetStat,
-    (int)mfCiGetSctLen, (int)mfCiSetSctLen, (int)mfCiGetNumTr, 0,
+    mfCiExecServer, (CvFsEntryErrFuncFn)mfCiEntryErrFunc, (CvFsPathFn)mfCiGetFileSize, 0,
+    (CvFsOpenFn)mfCiOpen, (CvFsFdFn)mfCiClose, (CvFsSeekFn)mfCiSeek, (CvFsFdIntFn)mfCiTell,
+    (CvFsXferFn)mfCiReqRd, 0, (CvFsFdFn)mfCiStopTr, (CvFsFdIntFn)mfCiGetStat,
+    (CvFsFdIntFn)mfCiGetSctLen, (CvFsSetSctLenFn)mfCiSetSctLen, (CvFsFdIntFn)mfCiGetNumTr, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 static MfCiFile mfci_files[40] = {0};

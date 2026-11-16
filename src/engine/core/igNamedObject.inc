@@ -8,7 +8,7 @@ void * igNamedObject_Create(int pool) {
 
 igMetaObject *igNamedObject_GetOrCreateMetaObject(void) {
     if (g_igNamedObject_metaObject == 0) {
-        g_igNamedObject_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igNamedObject_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igNamedObject_metaObject;
 }
@@ -33,7 +33,7 @@ int igNamedObject_GetVTable(void) {
     ps = &object._name;
     object._vtable = (int)&g_igNamedObject_vtable[0];
     *ps = 0;
-    vtable = *(int *)((char *)&object + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&object + g_objectSystem->vtableProbeOffset);
     object._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         chars = (int *)*ps;
@@ -42,7 +42,7 @@ int igNamedObject_GetVTable(void) {
             refCount = chars[-1] - 1;
             chars[-1] = refCount;
             if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -51,16 +51,16 @@ int igNamedObject_GetVTable(void) {
 
 void igNamedObject_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igNamedObject_Register);
+    igMetaObject_RunStaticInit(igNamedObject_Register);
 }
 
-void igNamedObject_Register(void) {
+CallbackArray *igNamedObject_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igNamedObject_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igNamedObject_GetMetaObjectFunction,
         "igNamedObject",
         0xC,

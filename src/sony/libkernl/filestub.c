@@ -3,6 +3,7 @@
 #include "dw4/eekernel.h"
 #include "dw4/sony/sif.h"
 #include "dw4/sony/sifdev.h"
+#include "dw4/libkernl.h"
 
 #define FS_MAX_IOB 32
 #define FS_PATH_MAX 1024
@@ -274,8 +275,6 @@ typedef struct {
     char bytes[324];
 } FsDirentBlock;
 
-int DIntr(void);
-int EIntr(void);
 int memcmp(const void *a, const void *b, unsigned int size);
 void *memcpy(void *dst, const void *src, unsigned int size);
 void *memset(void *dst, int value, unsigned int size);

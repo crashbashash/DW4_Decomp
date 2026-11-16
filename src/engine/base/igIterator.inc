@@ -10,12 +10,12 @@ igMetaObject *igIterator_GetMetaObject(void)
 
 void FUN_002273d0(void)
 {
-    igMetaObject_RunStaticInit(igIterator_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igIterator_Register);
 }
 
-void igIterator_Register(void) {
+CallbackArray *igIterator_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igIterator_metaObject,
         igObject_Register,

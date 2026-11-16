@@ -24,7 +24,7 @@ void *igResource_Create(int pool) {
 
 igMetaObject *igResource_GetOrCreateMetaObject(void) {
     if (g_igResource_metaObject == 0) {
-        g_igResource_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igResource_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igResource_metaObject;
 }
@@ -53,7 +53,7 @@ int igResource_GetVTable(void) {
     resource._temporaryMemoryPool = 0;
     resource._dataMemoryPool = 0;
     resource._objectMemoryPool = 0;
-    t = *(int *)((char *)&resource + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&resource + g_objectSystem->vtableProbeOffset);
     resource._vtable = (int)&g_igResource_vtable[0];
     igSmartPointer_igMemoryPool_Destruct(&resource._objectMemoryPool, -1);
     igSmartPointer_igMemoryPool_Destruct(&resource._dataMemoryPool, -1);
@@ -98,18 +98,18 @@ igQueue **igSmartPointer_igQueue_Destruct(igQueue **self, short deleteFlag) {
 
 void igResource_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igResource_Register);
+    igMetaObject_RunStaticInit(igResource_Register);
 }
 
 static igMetaObjectCallback g_igResource_callbackList[] = { igDirectory_EnsureRegistered, igDirectoryList_EnsureRegistered, igQueue_EnsureRegistered, igThread_EnsureRegistered, igStringObjList_EnsureRegistered, igIntList_EnsureRegistered, igMemoryPool_EnsureRegistered, 0 };
 
-void igResource_Register(void) {
+CallbackArray *igResource_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igResource_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igResource_GetMetaObjectFunction,
         "igResource",
         0x4C,

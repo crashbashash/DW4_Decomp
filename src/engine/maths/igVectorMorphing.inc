@@ -17,9 +17,9 @@ end:
 
 int igVectorMorphing_GetVTable(void) {
     struct Obj2 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igVectorMorphing_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00186e40(void)
@@ -27,14 +27,14 @@ void FUN_00186e40(void)
     igMetaObject_RunStaticInit(igVectorMorphing_Register);
 }
 
-void igVectorMorphing_Register(void) {
+CallbackArray *igVectorMorphing_Register(void) {
     FUN_00186a40();  /* Set-once guard (gp-relative byte flag) that chains to sibling registrars. */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVectorMorphing_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igVectorMorphing_GetMetaObject_00186ec0,
+        (igMetaObjectCallback)thunk_igVectorMorphing_GetMetaObject_00186ec0,
         "igVectorMorphing",
         8, /* instance size */
         igVectorMorphing_GetVTable,

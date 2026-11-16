@@ -14,7 +14,7 @@ int *igCallStackTracer_CaptureCallStack(int *stack) {
 
 int igCallStackTracer_HasSymbols(void) {
     igSymbolTableView *symbols;
-    symbols = (igSymbolTableView *)(*(ObjectSystemView * *)&g_objectSystem)->symbolTable;
+    symbols = (igSymbolTableView *)g_objectSystem->symbolTable;
     if (symbols != 0) {
         if (symbols->GetSymbolCount() != 0) {
             return 1;
@@ -34,7 +34,7 @@ void igCallStackTracer_FormatAddress(igResult *result, igCallStackTracerView *se
 }
 
 igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
-    igSymbolTableView *symbols = (igSymbolTableView *)(*(ObjectSystemView * *)&g_objectSystem)->symbolTable;
+    igSymbolTableView *symbols = (igSymbolTableView *)g_objectSystem->symbolTable;
     if (symbols != 0 && symbols->GetSymbolCount() != 0) {
         int base = 0;
         int other = 0;

@@ -89,16 +89,16 @@ void *igMemoryPool_AllocateFromSystem(igMemoryPoolView *self, unsigned int size)
 int igMemoryPool_StrDup(void **pool, int string) {
     int copy;
 
-    copy = (int)((igMemoryPoolView *)pool)->Allocate(strlen(string) + 1);
-    strcpy(copy, string);
+    copy = (int)((igMemoryPoolView *)pool)->Allocate(strlen((const char *)string) + 1);
+    strcpy((char *)copy, (const char *)string);
     return copy;
 }
 
 int igMemoryPool_StrDupAligned(void **pool, int string, unsigned short alignment) {
     int copy;
 
-    copy = (int)((igMemoryPoolView *)pool)->AllocateAligned(strlen(string) + 1, alignment);
-    strcpy(copy, string);
+    copy = (int)((igMemoryPoolView *)pool)->AllocateAligned(strlen((const char *)string) + 1, alignment);
+    strcpy((char *)copy, (const char *)string);
     return copy;
 }
 

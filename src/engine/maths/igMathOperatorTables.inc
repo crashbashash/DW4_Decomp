@@ -12,18 +12,18 @@ OpTable *g_isEmptyFunctionList;
 OpTable *g_getCenterFunctionList;
 
 void FUN_0018ec40(void) {
-    g_rayIntersectionFunctionList = FUN_00189420(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_extendByRayFunctionList = FUN_001892c0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_containsRayFunctionList = FUN_00189160(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_extendByVecFunctionList = FUN_00189000(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_containsVecFunctionList = FUN_00188ea0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_emptyFunctionList = FUN_00188be0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_isEmptyFunctionList = FUN_00188a80(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_transformFunctionList = FUN_00188d40(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_getCenterFunctionList = FUN_00188920(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_intersectionFunctionList = FUN_00189840(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_extendByFunctionList = FUN_001896e0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
-    g_containsFunctionList = FUN_00189580(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    g_rayIntersectionFunctionList = FUN_00189420((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_extendByRayFunctionList = FUN_001892c0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_containsRayFunctionList = FUN_00189160((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_extendByVecFunctionList = FUN_00189000((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_containsVecFunctionList = FUN_00188ea0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_emptyFunctionList = FUN_00188be0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_isEmptyFunctionList = FUN_00188a80((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_transformFunctionList = FUN_00188d40((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_getCenterFunctionList = FUN_00188920((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_intersectionFunctionList = FUN_00189840((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_extendByFunctionList = FUN_001896e0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_containsFunctionList = FUN_00189580((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
 void FUN_0018edb0(int meta) {
@@ -31,7 +31,7 @@ void FUN_0018edb0(int meta) {
     unsigned n;
     unsigned i;
     unsigned j;
-    if (igMetaObject_IsOfType(meta, root) == 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)root) == 0) {
         return;
     }
     if (root == meta) {

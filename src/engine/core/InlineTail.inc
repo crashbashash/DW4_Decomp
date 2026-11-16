@@ -24,7 +24,7 @@ void igPsx2File_InitDefaults(igPsx2File *self) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)prefix)));
     old = (int *)self->_prefix;
@@ -33,7 +33,7 @@ void igPsx2File_InitDefaults(igPsx2File *self) {
         count = old[-1] - 1;
         old[-1] = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     self->_prefix = (int)interned;

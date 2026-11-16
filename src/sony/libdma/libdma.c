@@ -1,5 +1,7 @@
 /* libdma: the EE DMA controller's channels and their environment (libdma.a's libdma.o). */
 
+#include "dw4/libkernl.h"
+
 typedef struct {
     unsigned int DIR : 1;
     unsigned int p0 : 1;
@@ -59,9 +61,6 @@ typedef struct {
 #define D_ENABLE_CPND 0x10000
 #define DMA_CHANNELS 10
 
-void scePrintf(const char *fmt, ...);
-int DIntr(void);
-int EIntr(void);
 unsigned int sceDmaPause(sceDmaChan *d);
 int sceDmaPutEnv(sceDmaEnv *env);
 

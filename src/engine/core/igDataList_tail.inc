@@ -5,18 +5,18 @@ int igDataList_GetElementSize(void) {
 void List_Reserve(igDataList *list, int capacity, int elementSize) {
     int allocResult;
     if (capacity == 0) {
-        igObject_FreeMemory((int)list, list->_data);
+        igObject_FreeMemory((igObject *)list, (void *)list->_data);
         list->_data = 0;
     } else {
         int oldData = list->_data;
         igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->GetMeta(), g_igDataList_dataField->_internalIndex);
         unsigned elementCount = (unsigned)(capacity * elementSize) / (unsigned)(((igMetaFieldView *)field->_memType)->GetSize() & 0xFFFF);
-        igMetaField_AllocateArray(&allocResult, field, (void *)list, elementCount, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)list))));
+        igMetaField_AllocateArray(&allocResult, field, (void *)list, elementCount, (igMemoryPoolView *)(((int)igObject_GetAllocator((igObject *)list))));
         if (oldData != 0) {
             int oldCapacity = list->_capacity;
             int copyCount = (oldCapacity < capacity) ? oldCapacity : capacity;
-            memcpy(list->_data, oldData, copyCount * elementSize);
-            igObject_FreeMemory((int)list, oldData);
+            memcpy((void *)list->_data, (void *)oldData, copyCount * elementSize);
+            igObject_FreeMemory((igObject *)list, (void *)oldData);
         }
     }
     list->_capacity = capacity;
@@ -52,9 +52,9 @@ extern "C" void List_InsertBytes(igDataList *list, int index, int count, int src
         dst = at + count;
         tail = oldCount - index;
         if (tail != 0) {
-            memmove(dst, at, tail * stride);
+            memmove((void *)dst, (void *)at, tail * stride);
         }
-        memcpy(at, src, count);
+        memcpy((void *)at, (void *)src, count);
     }
 }
 
@@ -65,13 +65,13 @@ void List_AppendBytes(igDataList *l, int cnt, int src, int sz) {
         old = l->_count;
         nn = old + cnt;
         if (nn <= l->_capacity) { l->_count = nn; } else { List_Resize((void *)l, nn, sz); }
-        memcpy(l->_data + old * sz, src, cnt * sz);
+        memcpy((void *)(l->_data + old * sz), (void *)src, cnt * sz);
     }
 }
 
 void List_RemoveAt(igDataList *l, int i, int sz) {
     int n = l->_count; int d;
- if (n <= 0 || i < 0 || i >= n) return; if (i != n - 1) { d = l->_data + i * sz; memmove(d, d + sz, sz * (n - (i + 1)), n); } l->_count = l->_count - 1;
+ if (n <= 0 || i < 0 || i >= n) return; if (i != n - 1) { d = l->_data + i * sz; memmove((void *)d, (void *)(d + sz), sz * (n - (i + 1))); } l->_count = l->_count - 1;
 }
 
 int List_BinarySearch(igDataList *list, int key, int (*compare)(int, int), int elementSize) {

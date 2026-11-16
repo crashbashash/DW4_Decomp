@@ -18,22 +18,22 @@ int igContextList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igContextList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igContextList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContextList_Register);
+    igMetaObject_RunStaticInit(igContextList_Register);
 }
 
 static igMetaObjectCallback g_igContextList_callbackList[] = { igContext_EnsureRegistered, 0 };
 
-void igContextList_Register(void) {
+CallbackArray *igContextList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igContextList_metaObject,
-        (igMetaObjectRegisterFunction)igNonRefCountedObjectList_Register,
+        igNonRefCountedObjectList_Register,
         (igMetaObjectGetFunction)igNonRefCountedObjectList_GetPublishedMetaObject,
         igContextList_GetMetaObjectFunction,
         "igContextList",

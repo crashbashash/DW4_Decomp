@@ -13,20 +13,20 @@ int igPsx2LongTimer_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&timer);
     timer._vtable = (int)&g_igPsx2LongTimer_vtable[0];
-    return *(int *)((char *)&timer + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&timer + g_objectSystem->vtableProbeOffset);
 }
 
 void igPsx2LongTimer_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2LongTimer_Register);
+    igMetaObject_RunStaticInit(igPsx2LongTimer_Register);
 }
 
-void igPsx2LongTimer_Register(void) {
+CallbackArray *igPsx2LongTimer_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2LongTimer_metaObject,
-        (igMetaObjectRegisterFunction)igLongTimer_Register,
+        igLongTimer_Register,
         (igMetaObjectGetFunction)igLongTimer_GetPublishedMetaObject,
         igPsx2LongTimer_GetMetaObjectFunction,
         "igPsx2LongTimer",

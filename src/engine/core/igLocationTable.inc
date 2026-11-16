@@ -8,7 +8,7 @@ igMetaField *g_igLocationTable_sourceFileNamesMetaField;
 
 igMetaObject *igLocationTable_GetOrCreateMetaObject(void) {
     if (g_igLocationTable_metaObject == 0) {
-        g_igLocationTable_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igLocationTable_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLocationTable_metaObject;
 }
@@ -36,7 +36,7 @@ int igLocationTable_GetVTable(void) {
     p18 = &o._symbolNames;
     *p18 = 0;
     o._sourceFileNames = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o._vtable = (int)&g_igLocationTable_vtable[0];
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&o._sourceFileNames, -1);
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)p18, -1);
@@ -47,18 +47,18 @@ int igLocationTable_GetVTable(void) {
 
 void igLocationTable_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLocationTable_Register);
+    igMetaObject_RunStaticInit(igLocationTable_Register);
 }
 
 static igMetaObjectCallback g_igLocationTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, igStringTable_EnsureRegistered, 0 };
 
-void igLocationTable_Register(void) {
+CallbackArray *igLocationTable_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igLocationTable_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igLocationTable_GetMetaObjectFunction,
         "igLocationTable",
         0x20,

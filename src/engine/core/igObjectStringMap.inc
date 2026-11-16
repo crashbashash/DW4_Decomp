@@ -4,7 +4,7 @@ igMetaField *g_igObjectStringMap_dataMetaField;
 
 igMetaObject *igObjectStringMap_GetOrCreateMetaObject(void) {
     if (g_igObjectStringMap_metaObject == 0) {
-        g_igObjectStringMap_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igObjectStringMap_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igObjectStringMap_metaObject;
 }
@@ -32,7 +32,7 @@ int igObjectStringMap_GetVTable(void) {
     *namesSlot = 0;
     dataSlot = &map._data;
     *dataSlot = 0;
-    vtable = *(int *)((char *)&map + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&map + g_objectSystem->vtableProbeOffset);
     map._vtable = (int)&g_igObjectStringMap_vtable[0];
     if (dataSlot != 0) {
         object = (igObject *)*dataSlot;
@@ -57,18 +57,18 @@ int igObjectStringMap_GetVTable(void) {
 
 void igObjectStringMap_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igObjectStringMap_Register);
+    igMetaObject_RunStaticInit(igObjectStringMap_Register);
 }
 
 static igMetaObjectCallback g_igObjectStringMap_callbackList[] = { igNamedObjectList_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
-void igObjectStringMap_Register(void) {
+CallbackArray *igObjectStringMap_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igObjectStringMap_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igObjectStringMap_GetMetaObjectFunction,
         "igObjectStringMap",
         0x10,

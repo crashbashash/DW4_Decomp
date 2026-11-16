@@ -43,9 +43,9 @@ void Gap__Core__igPsx2Media__constructFields(igPsx2MediaView *self, int extra1) 
     int buffer;
     MediaHandlePool *pool;
 
-    Gap__Core__igObject__constructFields((int)self, extra1);
-    self->_headAndTailBuffer = (char *)igObject_MallocAligned((int)self, 0x80, 0x40);
-    self->_commandBuffer = (MediaIoRequest *)igObject_MallocAligned((int)self, 0x90, 0x10);
+    Gap__Core__igObject__constructFields((igObject *)self, extra1);
+    self->_headAndTailBuffer = (char *)igObject_MallocAligned((igObject *)self, 0x80, 0x40);
+    self->_commandBuffer = (MediaIoRequest *)igObject_MallocAligned((igObject *)self, 0x90, 0x10);
     buffer = (int)self->_headAndTailBuffer;
     SyncDCache(buffer, buffer + 0x80);
     pool = ((MediaHandlePool *)Memory_AllocateDefaultBuffer(0x10));
@@ -73,7 +73,7 @@ void Gap__Core__igPsx2Media__destructFields(igPsx2MediaView *self) {
     }
     self->_handlePool = 0;
     ((int *)&g_igPsx2Media_rpcBuffer)[0] = 0;
-    Gap__Core__igObject__destructFields((int)self);
+    Gap__Core__igObject__destructFields((igObject *)self);
 }
 
 void Gap__Core__igPsx2Media__userConstruct(int self) {
@@ -87,7 +87,7 @@ const char *g_igPsx2Media_devicePrefix;
 /* Loads the sound and igFileIO IOP modules, binds the file RPC server, hooks the SIF completion
  * handler and picks the host or cdrom device prefix. */
 void Gap__Core__igPsx2Media__resetFields(igPsx2MediaView *self, int extra1) {
-    Gap__Core__igObject__resetFields((int)self, extra1);
+    Gap__Core__igObject__resetFields((igObject *)self, extra1);
     if (igPsx2_LoadIopModule((char *)"libsd.irx", 1, 0, 0) != g_resultSuccess) {
         return;
     }
@@ -114,7 +114,7 @@ void Gap__Core__igPsx2Media__resetFields(igPsx2MediaView *self, int extra1) {
 }
 
 void igPsx2Media_SetDevicePrefix(int prefix) {
-    if (strncasecmp(prefix, "cdrom", 5) == 0) {
+    if (strncasecmp((const char *)prefix, "cdrom", 5) == 0) {
         g_igPsx2Media_prefixIsCdrom = 1;
     } else {
         g_igPsx2Media_prefixIsCdrom = 0;
@@ -240,7 +240,7 @@ void igPsx2Media_MakeDevicePath(igPsx2MediaView *self, int index, char **path) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            (g_stringPool) = pool;
+            g_stringPool = (StringPool *)pool;
         }
         interned = ((char *)StringPool_Intern((StringPool *)((g_stringPool)), (const char *)text));
         if (row->name != 0) {
@@ -248,7 +248,7 @@ void igPsx2Media_MakeDevicePath(igPsx2MediaView *self, int index, char **path) {
             int r = ((int *)row->name)[-1] - 1;
             ((int *)row->name)[-1] = r;
             if (r == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
+                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
             }
         }
         row->name = interned;
@@ -283,7 +283,7 @@ void igPsx2Media_Open(int *result, igPsx2MediaView *media, int slot, int **name,
         n = nameRef[-1] - 1;
         nameRef[-1] = n;
         if (n == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)*header, (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
         }
     }
     handle->mode = mode;
@@ -351,7 +351,7 @@ int igPsx2Media_Write(igPsx2MediaView *self, int slot, char *data, int size) {
     reply = &request->kind;
     if ((int)data & 0x3F) {
         if (self->_writeBuffer == 0) {
-            self->_writeBuffer = (char *)igObject_MallocAligned((int)self, 0x8000, 0x40);
+            self->_writeBuffer = (char *)igObject_MallocAligned((igObject *)self, 0x8000, 0x40);
         }
         row = slot * 3 * 4;
         left = size;

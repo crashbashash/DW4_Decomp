@@ -2,7 +2,7 @@ igMetaObject *g_igOptConfiguration_metaObject;
 
 igMetaObject *FUN_00225dc0(void) {
     if (g_igOptConfiguration_metaObject == 0) {
-        g_igOptConfiguration_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igOptConfiguration_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igOptConfiguration_metaObject;
 }
@@ -17,19 +17,19 @@ igMetaObject *igOptConfiguration_GetMetaObject(void)
 
 int igOptConfiguration_GetVTable(void) {
     struct Obj_3 obj;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igOptConfiguration_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00225ea0(void)
 {
-    igMetaObject_RunStaticInit(igOptConfiguration_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igOptConfiguration_Register);
 }
 
-void igOptConfiguration_Register(void) {
+CallbackArray *igOptConfiguration_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOptConfiguration_metaObject,
         igObject_Register,

@@ -1,6 +1,6 @@
 #include "dw4/sony/libmpeg.h"
+#include "dw4/libkernl.h"
 
-void scePrintf(const char *format, ...);
 int sprintf(char *buf, const char *format, ...);
 
 void _ErrMessage(char *message) {

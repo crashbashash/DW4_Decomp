@@ -9,7 +9,7 @@ igMetaField *g_igMemoryDirEntry_memoryPoolHandleMetaField;
 
 int igMemoryDirEntry_Create(int allocator) {
     igMemoryDirEntry_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igMemoryDirEntry_metaObject, (igMemoryPoolView *)allocator);
+    return (int)igMetaObject_CreateInstance(g_igMemoryDirEntry_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igMemoryDirEntry_GetMetaObject(void)
@@ -33,7 +33,7 @@ int igMemoryDirEntry_GetVTable(void) {
     nameSlot = (char *)&entry._name;
     *(int *)nameSlot = 0;
     entry._vtable = (int)(&g_igMemoryDirEntry_vtable[0]);
-    vtable = *(int *)((char *)&entry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)(&g_igNamedObject_vtable[0]);
     if (nameSlot != 0) {
         text = *(int **)nameSlot;
@@ -42,7 +42,7 @@ int igMemoryDirEntry_GetVTable(void) {
             count = text[-1] - 1;
             text[-1] = count;
             if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -51,17 +51,17 @@ int igMemoryDirEntry_GetVTable(void) {
 
 void igMemoryDirEntry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryDirEntry_Register);
+    igMetaObject_RunStaticInit(igMemoryDirEntry_Register);
 }
 
 static igMetaObjectCallback g_igMemoryDirEntry_callbackList[] = { igMetaField_EnsureRegistered, 0 };
 
-void igMemoryDirEntry_Register(void) {
+CallbackArray *igMemoryDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMemoryDirEntry_metaObject,
-        (igMetaObjectRegisterFunction)igDirEntry_Register,
+        igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igMemoryDirEntry_GetMetaObjectFunction,
         "igMemoryDirEntry",

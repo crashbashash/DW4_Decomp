@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
 #define one ((float)1.0)
 #define tiny ((float)1.0e-30)

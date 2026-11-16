@@ -9,7 +9,7 @@ void igNamedObject_SetName(igNamedObject *self, int name) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name)));
     previous = (char *)self->_name;
@@ -18,7 +18,7 @@ void igNamedObject_SetName(igNamedObject *self, int name) {
         references = *(int *)((char *)previous - 4) - 1;
         *(int *)((char *)previous - 4) = references;
         if (references == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     self->_name = (int)interned;

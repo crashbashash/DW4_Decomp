@@ -3,7 +3,7 @@ int g_igVec3fMetaField_descriptor;
 
 igMetaField *igVec3fMetaField_CreateInstance(void *arg0) {
     igVec3fMetaField_EnsureRegistered();
-    return (igMetaField *)igMetaObject_CreateInstance((int)g_igVec3fMetaField_metaObject, (int)arg0);
+    return (igMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igVec3fMetaField_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVec3fMetaField_GetMetaObject(void)
@@ -20,9 +20,9 @@ int igVec3fMetaField_GetVTable(void) {
     int *a1;
     int v0;
     int t;
-    igMetaField_Init(&obj);
+    igMetaField_Init((igMetaField *)&obj);
     obj.vt = &g_igVec3fMetaField_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igMetaField_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
@@ -31,7 +31,7 @@ int igVec3fMetaField_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+                StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
             }
         }
     }
@@ -45,9 +45,9 @@ void igVec3fMetaField_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igVec3fMetaField_callbackList[] = { FUN_00187a40, 0 };
 
-void igVec3fMetaField_Register(void) {
+CallbackArray *igVec3fMetaField_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVec3fMetaField_metaObject,
         igMetaField_Register,
@@ -58,7 +58,7 @@ void igVec3fMetaField_Register(void) {
         igVec3fMetaField_GetVTable,
         0,
         0, /* extra callback item */
-        g_igVec3fMetaField_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igVec3fMetaField_callbackList /* callback list */
     );
 }
 
@@ -70,7 +70,7 @@ void FUN_00187a40(void) {
     void *temp_s0;
 
     if (g_igVec3fMetaField_descriptor == 0) {
-        g_igVec3fMetaField_descriptor = (int)(igMetaObject_CreateInstance(g_igVec3fMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
+        g_igVec3fMetaField_descriptor = (int)(igMetaObject_CreateInstance(g_igVec3fMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         temp_s0 = (void *)(g_igVec3fMetaField_descriptor);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), temp_s0);
@@ -82,7 +82,7 @@ void FUN_00187a40(void) {
                 }
             }
             *(short *)((char *)(g_igVec3fMetaField_descriptor) + 18) = (short) (*(int *)((char *)(igMetaField_GetMetaFieldList()) + 12) - 1);
-            igMetaField_FinalizeDescriptor(g_igVec3fMetaField_descriptor);
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igVec3fMetaField_descriptor);
         }
     }
 }

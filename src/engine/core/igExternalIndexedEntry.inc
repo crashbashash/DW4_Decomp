@@ -23,7 +23,7 @@ int igExternalIndexedEntry_GetVTable(void) {
     entry._vtable = (int)(&g_igExternalIndexedEntry_vtable[0]);
     entry._entryType = 0;
     entry._objectType = 0;
-    vtable = *(int *)((char *)&entry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)(&g_igExternalIndexedEntry_vtable[0]);
     igSmartPointer_igMetaObject_Destruct(&entry._objectType, -1);
     igSmartPointer_igMetaObject_Destruct(&entry._entryType, -1);
@@ -33,17 +33,17 @@ int igExternalIndexedEntry_GetVTable(void) {
 
 void igExternalIndexedEntry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igExternalIndexedEntry_Register);
+    igMetaObject_RunStaticInit(igExternalIndexedEntry_Register);
 }
 
 static igMetaObjectCallback g_igExternalIndexedEntry_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
 
-void igExternalIndexedEntry_Register(void) {
+CallbackArray *igExternalIndexedEntry_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igExternalIndexedEntry_metaObject,
-        (igMetaObjectRegisterFunction)igDirEntry_Register,
+        igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igExternalIndexedEntry_GetMetaObjectFunction,
         "igExternalIndexedEntry",

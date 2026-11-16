@@ -1,3 +1,4 @@
+#include "dw4/libkernl.h"
 typedef int quadword __attribute__((mode(TI)));
 
 
@@ -16,8 +17,6 @@ typedef int quadword __attribute__((mode(TI)));
 #define IPU_CMD_SETVQ 0x60000000
 #define IPU_CMD_FDEC 0x90000000
 
-int DIntr(void);
-int EIntr(void);
 
 static char __ps2_libinfo__[16] = "PsIIlibipu  2800";
 

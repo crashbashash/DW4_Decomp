@@ -15,7 +15,7 @@ void ADXT_StartFname(void *adxt, const char *fname);
 void ADXT_EntryFname(void *adxt, const char *fname);
 void *ADXF_Open(const char *fname, void *dir);
 
-struct CvFsVtbl *dvCiGetInterface(void);
+CvFsVtbl *dvCiGetInterface(void);
 
 /* the build string in two parts, read so it is linked */
 extern volatile char adxrt_build[16];

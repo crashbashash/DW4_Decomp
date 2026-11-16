@@ -8,7 +8,7 @@ void * igQueue_Create(int pool) {
 
 igMetaObject *igQueue_GetOrCreateMetaObject(void) {
     if (g_igQueue_metaObject == 0) {
-        g_igQueue_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igQueue_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igQueue_metaObject;
 }
@@ -23,18 +23,18 @@ igMetaObject *igQueue_GetMetaObject(void)
 
 void igQueue_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igQueue_Register);
+    igMetaObject_RunStaticInit(igQueue_Register);
 }
 
 static igMetaObjectCallback g_igQueue_callbackList[] = { igThreadList_EnsureRegistered, 0 };
 
-void igQueue_Register(void) {
+CallbackArray *igQueue_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igQueue_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igQueue_GetMetaObjectFunction,
         "igQueue",
         0xC,

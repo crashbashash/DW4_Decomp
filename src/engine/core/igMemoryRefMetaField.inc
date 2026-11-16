@@ -14,7 +14,7 @@ igMetaField *g_igMemoryRefMetaField_poolNameMetaField;
 void **igMemoryRefMetaField_Create(int pool) {
     void **instance;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igMemoryRefMetaField_EnsureRegistered();
         instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), (igMemoryPoolView *)pool)));
     } else {
@@ -31,7 +31,7 @@ void **igMemoryRefMetaField_Create(int pool) {
 igMemoryRefMetaField *igMemoryRefMetaField_Clone(igMemoryRefMetaField *source, int copyMode) {
     igMemoryRefMetaField *clone;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igMemoryRefMetaField_EnsureRegistered();
         return (igMemoryRefMetaField *)igObject_CloneViaMetadata((void **)source, copyMode);
     }
@@ -55,7 +55,7 @@ int igMemoryRefMetaField_GetVTable(void) {
     int vtable;
 
     igMemoryRefMetaField_Init((igMemoryRefMetaField *)&prototype);
-    vtable = *(int *)((char *)&prototype + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&prototype + g_objectSystem->vtableProbeOffset);
     prototype._vtable = (int)&g_igMemoryRefMetaField_vtable[0];
     igStringRef_Destruct((char *)&prototype._poolName, -1);
     igSmartPointer_igMetaField_Destruct((char *)&prototype._memTypeRef, -1);
@@ -76,7 +76,7 @@ void *igMemoryRefMetaField_Destroy(igMemoryRefMetaField *self, long long flags) 
                 v0 = *(int *)(p - 4) - 1;
                 *(int *)(p - 4) = v0;
                 if (v0 == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                    StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
                 }
             }
         }
@@ -100,14 +100,14 @@ void *igMemoryRefMetaField_Destroy(igMemoryRefMetaField *self, long long flags) 
                         v0 = *(int *)(p - 4) - 1;
                         *(int *)(p - 4) = v0;
                         if (v0 == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                            StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
                         }
                     }
                 }
             }
         }
         if ((short)flags > 0) {
-            Memory_FreeBufferAliasC((int)self);
+            Memory_FreeBufferAliasC(self);
         }
     }
     return self;
@@ -129,13 +129,13 @@ void *igRefMetaField_Destroy(igRefMetaField *self, short flags) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
+                        StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
                     }
                 }
             }
         }
         if (flags > 0) {
-            Memory_FreeBufferAliasC((int)self);
+            Memory_FreeBufferAliasC(self);
         }
     }
     return self;
@@ -143,16 +143,16 @@ void *igRefMetaField_Destroy(igRefMetaField *self, short flags) {
 
 void igMemoryRefMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryRefMetaField_Register);
+    igMetaObject_RunStaticInit(igMemoryRefMetaField_Register);
 }
 
 static igMetaObjectCallback g_igMemoryRefMetaField_callbackList[] = { igMetaField_EnsureRegistered, igMemoryRefMetaField_CreateDefaultDescriptor, 0 };
 
-void igMemoryRefMetaField_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igMemoryRefMetaField_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g_igMemoryRefMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igRefMetaField_Register,
+        igRefMetaField_Register,
         igRefMetaField_GetPublishedMetaObject,
         igMemoryRefMetaField_GetMetaObjectFunction,
         "igMemoryRefMetaField",
@@ -256,7 +256,7 @@ void igMemoryRefMetaField_CreateDefaultDescriptor(void) {
     igMemoryRefMetaField *p;
 
     if (g_igMemoryRefMetaField_descriptor == 0) {
-        g_igMemoryRefMetaField_descriptor = ((igMemoryRefMetaField *)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igMemoryRefMetaField_descriptor = ((igMemoryRefMetaField *)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         descriptor = g_igMemoryRefMetaField_descriptor;
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

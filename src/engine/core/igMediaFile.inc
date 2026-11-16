@@ -28,7 +28,7 @@ int igMediaFile_GetVTable(void) {
     file._vtable = (int)&g_igMediaFile_vtable[0];
     ps = (char *)&file._media;
     *(int *)ps = 0;
-    vtable = *(int *)((char *)&file + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&file + g_objectSystem->vtableProbeOffset);
     file._vtable = (int)&g_igMediaFile_vtable[0];
     igSmartPointer_igMedia_Destruct((void **)ps, -1);
     igFile_Destroy((igFile *)&file, 0);
@@ -54,17 +54,17 @@ void **igSmartPointer_igMedia_Destruct(void **self, short deleteFlag) {
 
 void igMediaFile_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMediaFile_Register);
+    igMetaObject_RunStaticInit(igMediaFile_Register);
 }
 
 static igMetaObjectCallback g_igMediaFile_callbackList[] = { igMedia_EnsureRegistered, 0 };
 
-void igMediaFile_Register(void) {
+CallbackArray *igMediaFile_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igMediaFile_metaObject,
-        (igMetaObjectRegisterFunction)igFile_Register,
+        igFile_Register,
         igFile_GetPublishedMetaObject,
         igMediaFile_GetMetaObjectFunction,
         "igMediaFile",

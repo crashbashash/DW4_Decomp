@@ -13,20 +13,20 @@ int igPsx2ThreadManager_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&manager);
     manager._vtable = (int)&g_igPsx2ThreadManager_vtable[0];
-    return *(int *)((char *)&manager + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&manager + g_objectSystem->vtableProbeOffset);
 }
 
 void igPsx2ThreadManager_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2ThreadManager_Register);
+    igMetaObject_RunStaticInit(igPsx2ThreadManager_Register);
 }
 
-void igPsx2ThreadManager_Register(void) {
+CallbackArray *igPsx2ThreadManager_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2ThreadManager_metaObject,
-        (igMetaObjectRegisterFunction)igThreadManager_Register,
+        igThreadManager_Register,
         (igMetaObjectGetFunction)igThreadManager_GetPublishedMetaObject,
         igPsx2ThreadManager_GetMetaObjectFunction,
         "igPsx2ThreadManager",

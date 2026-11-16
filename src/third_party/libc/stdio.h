@@ -16,6 +16,10 @@ extern struct _reent *_impure_ptr;
 #define stderr (_impure_ptr->_stderr)
 #define BUFSIZ 1024
 int fprintf(FILE *, const char *, ...);
+int printf(const char *, ...);
+int sscanf(const char *, const char *, ...);
+int vsnprintf(char *, size_t, const char *, va_list);
+int vfprintf(FILE *, const char *, va_list);
 int sprintf(char *, const char *, ...);
 int vsprintf(char *, const char *, va_list);
 int fputs(const char *, FILE *);

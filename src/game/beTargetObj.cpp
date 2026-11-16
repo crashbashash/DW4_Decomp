@@ -11,7 +11,6 @@ extern "C" int igInsightCore_FindManager(int insight, igMetaObject *metaObject);
 extern "C" void Vec3f_TransformDirection(float *out, int *vector, float *matrix);
 extern "C" int List_Reserve(void *list, int count, int elementSize);
 extern "C" int List_Resize(void *list, int count, int elementSize);
-extern "C" void igMatrix44f_GetTranslation(float *matrix, float *out);
 extern "C" void igMatrix44f_Copy(float *dst, float *src);
 extern "C" int beMessenger_GetInt(beMessenger *messenger, int index);
 extern "C" void beMessenger_GetMatrix(float *out, beMessenger *messenger, int index);

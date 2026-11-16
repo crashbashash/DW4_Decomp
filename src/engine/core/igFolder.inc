@@ -26,7 +26,7 @@ int igFolder_GetVTable(void) {
     nameSlot = (void **)&folder._folderName;
     folder._vtable = (int)(&g_igFolder_vtable[0]);
     *nameSlot = 0;
-    vtable = *(int *)((char *)&folder + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&folder + g_objectSystem->vtableProbeOffset);
     folder._vtable = (int)(&g_igFolder_vtable[0]);
     if (nameSlot != 0) {
         text = *nameSlot;
@@ -35,7 +35,7 @@ int igFolder_GetVTable(void) {
             refCount = *(int *)((char *)(text) - 4) - 1;
             *(int *)((char *)(text) - 4) = refCount;
             if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -44,16 +44,16 @@ int igFolder_GetVTable(void) {
 
 void igFolder_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igFolder_Register);
+    igMetaObject_RunStaticInit(igFolder_Register);
 }
 
-void igFolder_Register(void) {
+CallbackArray *igFolder_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igFolder_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igFolder_GetMetaObjectFunction,
         "igFolder",
         0xC,

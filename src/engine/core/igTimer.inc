@@ -7,7 +7,7 @@ igTimer *igTimer_Create(int allocator) {
 
 igMetaObject *igTimer_GetOrCreateMetaObject(void) {
     if (g_igTimer_metaObject == 0) {
-        g_igTimer_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igTimer_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igTimer_metaObject;
 }
@@ -22,16 +22,16 @@ igMetaObject *igTimer_GetMetaObject(void)
 
 void igTimer_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igTimer_Register);
+    igMetaObject_RunStaticInit(igTimer_Register);
 }
 
-void igTimer_Register(void) {
+CallbackArray *igTimer_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igTimer_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igTimer_GetMetaObjectFunction,
         "igTimer",
         8,

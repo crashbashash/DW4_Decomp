@@ -29,35 +29,54 @@ enum CvFsOptCode {
     CVFS_OPT_FILE_SIZE_BY_HNDL = 300
 };
 
-/* A device's interface table. Each slot holds a function address as an int; a caller casts the
- * slot to the function type it calls. */
+typedef void (*CvFsErrFn)(void *obj, const char *msg, int code);
+
+/* The slot types of a device's interface table. A device file handle travels as an int (CvFsHandle.fd);
+ * a device whose functions take its own handle or callback type converts them to these types. */
+typedef void (*CvFsEntryErrFuncFn)(CvFsErrFn func, void *obj);
+typedef int (*CvFsPathFn)(const char *path);
+typedef int (*CvFsGetFreeSizeFn)(void);
+typedef int (*CvFsOpenFn)(const char *fname, void *atr, int rw);
+typedef void (*CvFsFdFn)(int fd);
+typedef int (*CvFsFdIntFn)(int fd);
+typedef int (*CvFsSeekFn)(int fd, int offset, int origin);
+typedef int (*CvFsXferFn)(int fd, int nsct, void *buf);
+typedef void (*CvFsSetSctLenFn)(int fd, int len);
+typedef int (*CvFsGetNumFilesFn)(void);
+typedef int (*CvFsLoadDirInfoFn)(const char *path, void *work, int nfile);
+typedef int (*CvFsGetFileSizeExFn)(const char *path, int arg);
+typedef int (*CvFsOptFn2)(int fd, int code, int arg);
+
+/* A device's interface table. */
 typedef struct CvFsVtbl {
-    int exec_server;
-    int entry_err_func;
-    int get_file_size;
-    int get_free_size;
-    int open;
-    int close;
-    int seek;
-    int tell;
-    int req_rd;
-    int req_wr;
-    int stop_tr;
-    int get_stat;
-    int get_sct_len;
-    int set_sct_len;
-    int get_num_tr;
-    int change_dir;
-    int is_exist_file;
-    int get_num_files;
-    int load_dir_info;
-    int get_max_byte_rate;
-    int make_dir;
-    int remove_dir;
-    int delete_file;
-    int get_file_size_ex;
-    int opt_fn1;
-    int opt_fn2;
+    void (*exec_server)(void);
+    CvFsEntryErrFuncFn entry_err_func;
+    CvFsPathFn get_file_size;
+    CvFsGetFreeSizeFn get_free_size;
+    CvFsOpenFn open;
+    CvFsFdFn close;
+    CvFsSeekFn seek;
+    CvFsFdIntFn tell;
+    CvFsXferFn req_rd;
+    CvFsXferFn req_wr;
+    CvFsFdFn stop_tr;
+    CvFsFdIntFn get_stat;
+    CvFsFdIntFn get_sct_len;
+    CvFsSetSctLenFn set_sct_len;
+    CvFsFdIntFn get_num_tr;
+    CvFsPathFn change_dir;
+    CvFsPathFn is_exist_file;
+    CvFsGetNumFilesFn get_num_files;
+    CvFsLoadDirInfoFn load_dir_info;
+    CvFsFdIntFn get_max_byte_rate;
+    CvFsPathFn make_dir;
+    CvFsPathFn remove_dir;
+    CvFsPathFn delete_file;
+    CvFsGetFileSizeExFn get_file_size_ex;
+    /* The request entry: its first argument is a handle, a CvFsOptPrm or a path depending on the
+     * code, so it has no prototype (as in CRI's SDK). */
+    int (*opt_fn1)();
+    CvFsOptFn2 opt_fn2;
 } CvFsVtbl;
 
 typedef struct CvFsHandle {
@@ -70,16 +89,11 @@ typedef struct CvFsDevice {
     char name[CVFS_DEV_NAME_SIZE];
 } CvFsDevice;
 
-/* The block the volume requests pass to opt_fn1. Its fields are ints like the vtbl slots; a caller
- * casts the pointer it stores. */
-typedef struct CvFsVolumeArg {
-    int image;
-    int volume;
-    int option;
-    int pad12[2];
-} CvFsVolumeArg;
-
-typedef void (*CvFsErrFn)(void *obj, const char *msg, int code);
+/* The block the volume requests pass to opt_fn1 (CRI's CVS_FS_OPTPRM): image handle, volume name,
+ * option. */
+typedef struct CvFsOptPrm {
+    void *prm[5];
+} CvFsOptPrm;
 
 extern CvFsErrFn cvfs_errfn;
 extern void *cvfs_errobj;
@@ -93,7 +107,7 @@ void cvFsCallUsrErrFn(void *obj, const char *msg, int code);
 void cvFsError(const char *msg);
 void cvFsInit(void);
 void cvFsFinish(void);
-void cvFsAddDev(char *devname, CvFsVtbl *(*get_if)(void));
+void cvFsAddDev(char *devname, CvFsVtbl *(*get_if)(void), void *prm);
 CvFsVtbl *addDevice(char *devname, CvFsVtbl *(*get_if)(void));
 CvFsVtbl *getDevice(const char *devname);
 void toUpperStr(char *str);

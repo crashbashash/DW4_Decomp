@@ -93,7 +93,7 @@ void igLocationTable_GetLocationByIndex(int *result, igLocationTableView *self, 
             *address = record->address;
             if (name != 0) {
                 if ((text = ((int)igStringTable_GetString((int *)self->_symbolNames, record->name))) != 0) {
-                    strncpy(name, text, nameSize);
+                    strncpy(name, (const char *)text, nameSize);
                 } else {
                     *name = 0;
                 }
@@ -101,7 +101,7 @@ void igLocationTable_GetLocationByIndex(int *result, igLocationTableView *self, 
             *offset = record->offset;
             if (file != 0) {
                 if ((text = ((int)igStringTable_GetString((int *)self->_sourceFileNames, record->file))) != 0) {
-                    strncpy(file, text, fileSize);
+                    strncpy(file, (const char *)text, fileSize);
                 } else {
                     *file = 0;
                 }

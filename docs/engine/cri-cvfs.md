@@ -5,7 +5,8 @@ and the other CRI libraries open, read and query files only through its API; a d
 driver, the host file system, a volume image) registers a table of entry points under a name, and every
 cvFs call looks the device up by the name prefix of a path (`dev:file`) or uses the default device.
 The source is `src/cri/cvfs.c` with the shared types in `include/dw4/cri/cvfs.h`. It builds with Sony
-EE GCC 2.96 at `-O2 -G0` like the rest of the CRI blocks, as one whole file ([sd-prologue](sd-prologue.md)).
+EE GCC 2.96 at `-O2 -G0` like the rest of the CRI blocks, as one whole file ([sd-prologue](sd-prologue.md)),
+but without strict aliasing ([below](#argument-block-and-aliasing)).
 
 ## Extent
 
@@ -47,19 +48,32 @@ second argument is a code (`CvFsOptCode`): 1–6 for the volume requests (`cvFsS
 `cvFsAddVolumeEx`, `cvFsDelVolume`, `cvFsGetNumFiles`, `cvFsGetVolumeInfo`, `cvFsSetDefVol`), 100 to ask
 whether the device takes full `dev:file` paths, 200–205 for the 64-bit sizes and track counts, 299 and 300.
 
-## Integer-typed slots
+## Argument block and aliasing
 
-Every vtbl slot is declared `int` and cast to its function type at the call, and the block the volume
-requests pass to `opt_fn1` (`CvFsVolumeArg`) holds its image handle and volume name as `int` too. This is
-how the original declared them, as far as the code can show, and it decides the instructions: GCC's
-alias analysis treats an `int` store and a pointer load as independent, so with pointer-typed slots the
-first scheduling pass moves the slot load above the store into the argument block, the live ranges change,
-and two values swap saved registers. Retail keeps the load after the store (or reloads the slot after it),
-which happens only when both accesses are `int`.
+The slots are function pointers. `opt_fn1` has no prototype, because its first argument is a handle, an
+argument block or a path depending on the code. The volume requests pass it a `CvFsOptPrm`,
+`{ void *prm[5]; }`: image handle in `prm[0]`, volume name in `prm[1]`, option in `prm[2]`. Both
+types come from the debugging information (stabs) in `cri_cvfs.o`, the cvFs object in CRI's SDK
+archive `libadxe.a` (outside this repository):
+- they declare `CVS_FS_OPTPRM` as a 20-byte struct holding `prm`, an array of five `void *`;
+- they declare `OptFn1` (and `OptFn2`) as a pointer to a function returning `Sint32`;
+- they declare the local `optprm` of that type in `cvFsGetNumFiles`, `cvFsSetCurVolume` and
+  `cvFsGetVolumeInfo`.
 
-The owner approved this typing on the condition that it describes the types rather than one call site: one
-declaration, used by every function that touches the table or the block, with every one of them matching
-and none needing the pointer form. That holds for every function of the module that has source.
+With that source, six functions match only when the unit is compiled with `-fno-strict-aliasing`:
+`cvFsGetNumFiles`, `cvFsSetCurVolume`, `cvFsAddVolumeEx`, `cvFsDelVolume`, `cvFsGetVolumeInfo` and
+`cvFsSetDefVol`. Retail keeps the load of the `opt_fn1` slot after the stores into the block (or reloads the
+slot after them). Under GCC's type-based alias analysis a `void *` store and a function-pointer load are
+independent, so the first scheduling pass moves the load above the store. The live ranges then change and
+two values swap saved registers. Holding the block as `int`s, or reading the slot through a union, also
+reproduces retail, but only as stand-ins for the declared types.
+
+The flag belongs to this unit (`cri_cvfs` in `units.tsv`), not to CRI as a whole. With
+`-fno-strict-aliasing` on every CRI unit, 56 still match, `cvfs`, `dvci`, `htci` and `mfci` among them, but
+about 50 others stop matching (`adxt`, `adxb`, `sfx`, the `sj*` units, `mpv`, `sfmps` and more). The SDK
+builds cvfs in its own folder (`…/adx/src/cvfs/mkps2/eegcc/`), separate from adxt's and the other
+libraries'. That CRI chose compiler flags per library is an inference from this; no compiler command line
+was found in the SDK objects.
 
 ## Open questions
 
@@ -73,8 +87,8 @@ and none needing the pointer form. That holds for every function of the module t
   `isExistDevName`, `isFullPathDev`, `makeFullPath`, `cvFsIsExistDev`.
 - A device that answers 1 to code 100 gets its file names rewritten as `dev:file`, and `cvFsGetNumFiles`
   then uses code 4. Whether this marks a volume device is unknown.
-- The third argument of the error callback (`cvFsError` passes 0), the meaning of `CvFsVolumeArg`'s `option`
-  field (a flag for `cvFsAddVolumeEx`, an information pointer for `cvFsGetVolumeInfo`), and why the default
+- The third argument of the error callback (`cvFsError` passes 0), the meaning of `CvFsOptPrm`'s third
+  entry (a flag for `cvFsAddVolumeEx`, an information pointer for `cvFsGetVolumeInfo`), and why the default
   device name is cleared over 9 bytes while device names take 12 are unknown.
 - Retail behaviour the source keeps: `cvFsIsExistFile` reads the vtbl after reporting "device not found";
   `cvFsGetDevName` returns the entry past the table when no device matches; `cvFsGetFileSizeEx64` looks the

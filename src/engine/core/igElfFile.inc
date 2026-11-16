@@ -40,7 +40,7 @@ int igElfFile_GetVTable(void) {
     q2 = (igObject *)&elf._file;
     *(int *)q2 = 0;
     elf._vtable = (int)&g_igElfFile_vtable[0];
-    r = *(int *)((char *)&elf + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&elf + g_objectSystem->vtableProbeOffset);
     elf._vtable = (int)&g_igProgramFile_vtable[0];
     if (q2 != 0) {
         q2 = *(igObject **)q2;
@@ -58,7 +58,7 @@ int igElfFile_GetVTable(void) {
             tc1 = tv1[-1] - 1;
             tv1[-1] = tc1;
             if (tc1 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*ta1), (int)ta1);
+                StringChunk_ReleaseHeader((StringChunk *)(*ta1), (StringTokenHeader *)ta1);
             }
         }
     }
@@ -67,15 +67,15 @@ int igElfFile_GetVTable(void) {
 
 void igElfFile_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igElfFile_Register);
+    igMetaObject_RunStaticInit(igElfFile_Register);
 }
 
-void igElfFile_Register(void) {
+CallbackArray *igElfFile_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igElfFile_metaObject,
-        (igMetaObjectRegisterFunction)igProgramFile_Register,
+        igProgramFile_Register,
         (igMetaObjectGetFunction)igProgramFile_GetPublishedMetaObject,
         igElfFile_GetMetaObjectFunction,
         "igElfFile",

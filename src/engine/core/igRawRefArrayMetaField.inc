@@ -18,7 +18,7 @@ int igRawRefArrayMetaField_GetVTable(void) {
 
     igRawRefMetaField_Init((int **)&f);
     f._vtable = (int)&g_igRawRefArrayMetaField_vtable[0];
-    result = *(int *)((char *)&f + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    result = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
     f._vtable = (int)&g_igMetaField_vtable[0];
     if (&f._fieldName != 0) {
         if (((int *)f._fieldName) != 0) {
@@ -26,7 +26,7 @@ int igRawRefArrayMetaField_GetVTable(void) {
             refs = ((int *)f._fieldName)[-1] - 1;
             ((int *)f._fieldName)[-1] = refs;
             if (refs == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -35,17 +35,17 @@ int igRawRefArrayMetaField_GetVTable(void) {
 
 void igRawRefArrayMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igRawRefArrayMetaField_Register);
+    igMetaObject_RunStaticInit(igRawRefArrayMetaField_Register);
 }
 
 static igMetaObjectCallback g_igRawRefArrayMetaField_callbackList[] = { igRawRefArrayMetaField_CreateDefaultDescriptor, 0 };
 
-void igRawRefArrayMetaField_Register(void) {
+CallbackArray *igRawRefArrayMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igRawRefArrayMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igRawRefMetaField_Register,
+        igRawRefMetaField_Register,
         igRawRefMetaField_GetPublishedMetaObject,
         igRawRefArrayMetaField_GetMetaObjectFunction,
         "igRawRefArrayMetaField",
@@ -95,7 +95,7 @@ void igRawRefArrayMetaField_CreateDefaultDescriptor(void) {
     igRawRefArrayMetaField *p;
 
     if (g_igRawRefArrayMetaField_descriptor == 0) {
-        g_igRawRefArrayMetaField_descriptor = ((igRawRefArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igRawRefArrayMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igRawRefArrayMetaField_descriptor = ((igRawRefArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igRawRefArrayMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         descriptor = g_igRawRefArrayMetaField_descriptor;
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);

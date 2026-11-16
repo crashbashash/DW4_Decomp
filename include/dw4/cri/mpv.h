@@ -161,4 +161,7 @@ typedef struct MpvBuildInf {
 
 extern MpvErrObj mpv_err_global;  /* 0x4bccb8: the error object when no handle is given */
 
+int MPV_GoNextDelimSj(SfdSj *sj);
+int MPV_MoveChunk(SfdSj *sj, int id, int n);
+
 #endif

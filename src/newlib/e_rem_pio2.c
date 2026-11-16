@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
-extern int __kernel_rem_pio2(double *, double *, int, int, int, const __int32_t *);
 extern double fabs(double);
 static const __int32_t two_over_pi[] = {
 0xA2F983, 0x6E4E44, 0x1529FC, 0x2757D1, 0xF534DD, 0xC0DB62, 

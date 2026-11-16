@@ -235,20 +235,20 @@
     "value": 0
    },
    "decl.header_conflicts": {
-    "reason": "decl.header_conflicts +5 (928 -> 933): the GameMain pilot's new include/dw4 homes give sceClose, sceRead, sceWrite, g_threadManager, igInsightCore_FindManager and igModel_NotifyViews their real types while loose copies remain in library headers the declaration slices have not reached yet (one older conflict left) decl.header_conflicts 933 -> 1008 (+75): declaration phase A gave the render, app, bec and ndmw slices' symbols real-typed homes in include/dw4; the loose copies those homes now disagree with sit in other libraries' headers (mostly p2 functions in GfxLibrary.h, NDMW/Core copies of bec symbols) and phase B removes them",
-    "value": 1008
+    "reason": null,
+    "value": 1006
    },
    "decl.local_externs": {
     "reason": null,
-    "value": 7828
+    "value": 7553
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 4999
+    "value": 4979
    },
    "decl.varargs": {
     "reason": null,
-    "value": 2434
+    "value": 2354
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 1417
+    "value": 1406
    },
    "inline_asm.other": {
     "reason": null,
@@ -362,13 +362,13 @@
    "code_only.other.functions": 0,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "decl.header_conflicts": 1008,
-   "decl.local_externs": 7828,
-   "decl.type_conflicts": 4999,
-   "decl.varargs": 2434,
+   "decl.header_conflicts": 1006,
+   "decl.local_externs": 7553,
+   "decl.type_conflicts": 4979,
+   "decl.varargs": 2354,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 1417,
+   "fun_dat_refs": 1406,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -492,19 +492,19 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 911172,
+  "bytes": 1028764,
   "failing": {
    "addresses": {
     "bytes": 693028,
     "functions": 4260
    },
    "declarations": {
-    "bytes": 2066356,
-    "functions": 9185
+    "bytes": 1929848,
+    "functions": 8595
    },
    "fields": {
-    "bytes": 331824,
-    "functions": 1695
+    "bytes": 334056,
+    "functions": 1742
    },
    "idioms": {
     "bytes": 388052,
@@ -523,15 +523,15 @@
     "functions": 1996
    },
    "types": {
-    "bytes": 303276,
-    "functions": 1207
+    "bytes": 303752,
+    "functions": 1208
    },
    "virtuals": {
     "bytes": 135260,
     "functions": 544
    }
   },
-  "functions": 7791,
+  "functions": 8187,
   "matched_functions": 20316
  },
  "regions": [
@@ -666,11 +666,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 4024,
-  "pct": 45.68,
-  "recovered": 31669,
-  "synthetic": 5777,
-  "total": 69326,
+  "offset_casts": 4013,
+  "pct": 45.52,
+  "recovered": 31668,
+  "synthetic": 5771,
+  "total": 69567,
   "typeable": 266,
   "typeable_pct": 0.38
  }

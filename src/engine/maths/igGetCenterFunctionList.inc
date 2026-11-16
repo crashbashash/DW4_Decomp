@@ -2,7 +2,7 @@ igMetaObject *g_igGetCenterFunctionList_metaObject;
 
 OpTable *FUN_00188920(int arg0) {
     igGetCenterFunctionList_EnsureRegistered();
-    return (OpTable *)igMetaObject_CreateInstance((int)g_igGetCenterFunctionList_metaObject, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((igMetaObject *)g_igGetCenterFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igGetCenterFunctionList_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igGetCenterFunctionList_GetMetaObject(void)
 int igGetCenterFunctionList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igGetCenterFunctionList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igGetCenterFunctionList_EnsureRegistered(void)
@@ -26,9 +26,9 @@ void igGetCenterFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGetCenterFunctionList_Register);
 }
 
-void igGetCenterFunctionList_Register(void) {
+CallbackArray *igGetCenterFunctionList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGetCenterFunctionList_metaObject,
         igDataList_Register,

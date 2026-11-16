@@ -19,21 +19,21 @@ int igUnsignedCharList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igUnsignedCharList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igUnsignedCharList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igUnsignedCharList_Register);
+    igMetaObject_RunStaticInit(igUnsignedCharList_Register);
 }
 
-void igUnsignedCharList_Register(void) {
+CallbackArray *igUnsignedCharList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igUnsignedCharList_metaObject,
-        (igMetaObjectRegisterFunction)igDataList_Register,
-        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
+        igDataList_Register,
+        igDataList_GetPublishedMetaObject,
         igUnsignedCharList_GetMetaObjectFunction,
         "igUnsignedCharList",
         0x14,

@@ -2,7 +2,7 @@ igMetaObject *g_igContainsVecFunctionList_metaObject;
 
 OpTable *FUN_00188ea0(int arg0) {
     igContainsVecFunctionList_EnsureRegistered();
-    return (OpTable *)igMetaObject_CreateInstance((int)g_igContainsVecFunctionList_metaObject, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((igMetaObject *)g_igContainsVecFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igContainsVecFunctionList_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igContainsVecFunctionList_GetMetaObject(void)
 int igContainsVecFunctionList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igContainsVecFunctionList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igContainsVecFunctionList_EnsureRegistered(void)
@@ -26,9 +26,9 @@ void igContainsVecFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igContainsVecFunctionList_Register);
 }
 
-void igContainsVecFunctionList_Register(void) {
+CallbackArray *igContainsVecFunctionList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igContainsVecFunctionList_metaObject,
         igDataList_Register,

@@ -1,5 +1,6 @@
 #include "dw4/cri/sfdhn.h"
 #include "dw4/cri/sfh.h"
+#include "dw4/cri/mcp.h"
 
 typedef int (*SfhGetFn)(SfhHn *sfh, int *value);
 typedef int (*SfhGetStmFn)(SfhHn *sfh, unsigned char id, int *value);
@@ -49,13 +50,11 @@ int SFH_AnlyFtrGopM(SfhHn *sfh, unsigned char id, int *value);
 
 int sfhds_IsPrvate2PketStart(unsigned char *p);
 int SFSET_GetCond(SfdHandle *hn, int id);
-void MEM_Copy(char *dst, char *src, unsigned int n);
 int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size);
 int sfhds_ReadLong(unsigned char *p);
 void sfhds_SetHdrSeek(SfdHandle *hn);
 void sfhds_CopyFhd(SfdHdrInf *dst, SfdHdrInf *src);
 SfdHdrInf *sfhds_GetHd(SfdHandle *hn);
-void SFHDS_ProcessHdr(SfdHdrInf *hdr);
 void sfhds_DoProcessHdr(SfhHn *sfh, SfdHdrInf *hdr);
 void sfhds_AnlyHead(SfhHn *sfh, SfdHdrInf *hdr);
 void sfhds_AnlySys(SfhHn *sfh, SfdHdrMux *mux);

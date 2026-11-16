@@ -10,7 +10,7 @@ igMetaField *g_igPsx2File_prefixMetaField;
 
 int igPsx2File_Create(int allocator) {
     igPsx2File_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igPsx2File_metaObject, (igMemoryPoolView *)allocator);
+    return (int)igMetaObject_CreateInstance(g_igPsx2File_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igPsx2File_GetMetaObject(void)
@@ -31,7 +31,7 @@ int igPsx2File_GetVTable(void) {
     f._completeFilename = 0;
     f._vtable = (int)&g_igPsx2File_vtable[0];
     f._prefix = 0;
-    vtable = *(int *)((char *)&f + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
     f._vtable = (int)&g_igPsx2File_vtable[0];
     igStringRef_Destruct(&f._prefix, -1);
     igFile_Destroy((igFile *)&f, (short)0);
@@ -40,15 +40,15 @@ int igPsx2File_GetVTable(void) {
 
 void igPsx2File_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2File_Register);
+    igMetaObject_RunStaticInit(igPsx2File_Register);
 }
 
-void igPsx2File_Register(void) {
+CallbackArray *igPsx2File_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2File_metaObject,
-        (igMetaObjectRegisterFunction)igFile_Register,
+        igFile_Register,
         igFile_GetPublishedMetaObject,
         igPsx2File_GetMetaObjectFunction,
         "igPsx2File",

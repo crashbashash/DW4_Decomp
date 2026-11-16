@@ -4,12 +4,12 @@ igMetaField *g_igAABox_maxMetaField;
 
 void igAABox_CreateInstance(int arg0) {
     igAABox_EnsureRegistered();
-    igMetaObject_CreateInstance((int)g_igAABox_metaObject, arg0);
+    igMetaObject_CreateInstance((igMetaObject *)g_igAABox_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igAABox_GetOrCreateMetaObject(void) {
     if (g_igAABox_metaObject == 0) {
-        g_igAABox_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAABox_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAABox_metaObject;
 }
@@ -25,9 +25,9 @@ igMetaObject *igAABox_GetMetaObject(void)
 int igAABox_GetVTable(void) {
     int tmp[8];
     int off;
-    igObject_InitHeader(&tmp[0]);
+    igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&g_igAABox_vtable[0];
-    off = *(int *)((char *)(g_objectSystem[0]) + 916);
+    off = *(int *)((char *)g_objectSystem + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -36,13 +36,13 @@ void igAABox_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAABox_Register);
 }
 
-void igAABox_Register(void) {
+CallbackArray *igAABox_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAABox_metaObject,
         igVolume_Register,
-        igVolume_GetPublishedMetaObject,
+        (igMetaObjectGetFunction)igVolume_GetPublishedMetaObject,
         thunk_igAABox_GetMetaObject,
         "igAABox",
         0x20, /* instance size */
@@ -58,8 +58,8 @@ void thunk_igAABox_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAABox_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)igVec3fMetaField_CreateInstance,
 };
 
 static const char *g_igAABox_fieldTable[] = {
@@ -86,19 +86,19 @@ void igAABox_InitFields(void) {
     void *temp_s0;
 
     temp_s0 = (void *)g_igAABox_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igAABox_ctorTable, 2);
-    temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);
+    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, (FieldFactory *)g_igAABox_ctorTable, 2);
+    temp_a0 = (int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
     va[0] = 3.402823466e+38f;
     va[1] = 3.402823466e+38f;
     va[2] = 3.402823466e+38f;
     igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0, va);
-    temp_a0_2 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
+    temp_a0_2 = (int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1);
     vb[0] = -3.402823466e+38f;
     vb[1] = -3.402823466e+38f;
     vb[2] = -3.402823466e+38f;
     igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0_2, vb);
-    igMetaObject_NameFields(temp_s0, g_igAABox_fieldTable, g_igAABox_fieldHandles, g_igAABox_fieldOffsets, temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)g_igAABox_fieldTable, (igMetaField ***)g_igAABox_fieldHandles, (int *)g_igAABox_fieldOffsets, temp_s1);
 }
 
 void thunk_FUN_0018a8f0(void) {

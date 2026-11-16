@@ -53,7 +53,7 @@ int igDriverDatabase_GetVTable(void) {
     db._databaseFile = 0;
     db._databaseFileName = 0;
     db._rawDatabase = 0;
-    r = *(int *)((char *)&db + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&db + g_objectSystem->vtableProbeOffset);
     db._vtable = (int)&g_igDriverDatabase_vtable[0];
     igSmartPointer_igStringObj_Destruct(&db._rawDatabase, -1);
     igSmartPointer_igStringObj_Destruct(&db._databaseFileName, -1);
@@ -67,18 +67,18 @@ int igDriverDatabase_GetVTable(void) {
 
 void igDriverDatabase_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDriverDatabase_Register);
+    igMetaObject_RunStaticInit(igDriverDatabase_Register);
 }
 
 static igMetaObjectCallback g_igDriverDatabase_callbackList[] = { igStringObjList_EnsureRegistered, igStringRefListList_EnsureRegistered, igRegistry_EnsureRegistered, igFile_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
 
-void igDriverDatabase_Register(void) {
+CallbackArray *igDriverDatabase_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igDriverDatabase_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igDriverDatabase_GetMetaObjectFunction,
         "igDriverDatabase",
         0x38,

@@ -153,7 +153,7 @@ int StringTable_SearchRetained(StringTable *table, int string, int *outString, u
         if (table->count >= mid) {
             e = table->entries[mid - 1];
             s = (int)e + 8;
-            r = strcmp(string, s);
+            r = strcmp((const char *)string, (const char *)s);
             if (r == 0) {
                 e->refCount = e->refCount + 1;
                 *outString = s;
@@ -284,9 +284,9 @@ int StringChunk_AllocateToken(StringChunk *head, int size, StringChunk **chunkOu
 /* Give a string's block back to its chunk. `header` is the block start; the NUL-terminated text
  * lives at header + 8, so the block is 8 header bytes + strlen + NUL. If the chunk becomes empty
  * its owner is told so it can drop the chunk. */
-void StringChunk_ReleaseHeader(StringChunk *self, int header) {
-    StringTable_RemoveHeader(self->table, header);
-    StringChunk_ReturnBlock(self, (char *)header, strlen(header + 8) + 9);
+void StringChunk_ReleaseHeader(StringChunk *self, StringTokenHeader *header) {
+    StringTable_RemoveHeader(self->table, (int)header);
+    StringChunk_ReturnBlock(self, (char *)header, strlen((char *)header + 8) + 9);
     if (self->isEmpty != 0) {
         StringTable_NotifyEmptyChunk(self->table, self);
     }

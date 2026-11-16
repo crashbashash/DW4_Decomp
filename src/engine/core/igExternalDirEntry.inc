@@ -26,7 +26,7 @@ int igExternalDirEntry_GetVTable(void) {
     entry._directoryName = 0;
     entry._entryName = 0;
     entry._externalFilePath = 0;
-    vtable = *(int *)((char *)&entry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)&g_igExternalDirEntry_vtable[0];
     igStringRef_Destruct(&entry._externalFilePath, -1);
     igStringRef_Destruct(&entry._entryName, -1);
@@ -37,17 +37,17 @@ int igExternalDirEntry_GetVTable(void) {
 
 void igExternalDirEntry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igExternalDirEntry_Register);
+    igMetaObject_RunStaticInit(igExternalDirEntry_Register);
 }
 
 static igMetaObjectCallback g_igExternalDirEntry_callbackList[] = { igObject_EnsureRegistered, 0 };
 
-void igExternalDirEntry_Register(void) {
+CallbackArray *igExternalDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igExternalDirEntry_metaObject,
-        (igMetaObjectRegisterFunction)igDirEntry_Register,
+        igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igExternalDirEntry_GetMetaObjectFunction,
         "igExternalDirEntry",

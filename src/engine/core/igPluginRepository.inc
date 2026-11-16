@@ -19,7 +19,7 @@ igMetaField *g_igPluginRepository_locationTypeMetaField;
 
 int igPluginRepository_Create(int pool) {
     igPluginRepository_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igPluginRepository_metaObject, (igMemoryPoolView *)pool);
+    return (int)igMetaObject_CreateInstance(g_igPluginRepository_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPluginRepository_GetMetaObject(void)
@@ -45,7 +45,7 @@ int igPluginRepository_GetVTable(void) {
     repository._vtable = (int)&g_igPluginRepository_vtable[0];
     location = &repository._location;
     *(int *)location = 0;
-    vtable = *(int *)((char *)&repository + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&repository + g_objectSystem->vtableProbeOffset);
     repository._vtable = (int)&g_igPluginRepository_vtable[0];
     if (location != 0) {
         text = *(int **)location;
@@ -54,7 +54,7 @@ int igPluginRepository_GetVTable(void) {
             references = text[-1] - 1;
             text[-1] = references;
             if (references == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -66,7 +66,7 @@ int igPluginRepository_GetVTable(void) {
             references = text[-1] - 1;
             text[-1] = references;
             if (references == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -75,15 +75,15 @@ int igPluginRepository_GetVTable(void) {
 
 void igPluginRepository_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPluginRepository_Register);
+    igMetaObject_RunStaticInit(igPluginRepository_Register);
 }
 
-void igPluginRepository_Register(void) {
+CallbackArray *igPluginRepository_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPluginRepository_metaObject,
-        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        igNamedObject_Register,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igPluginRepository_GetMetaObjectFunction,
         "igPluginRepository",

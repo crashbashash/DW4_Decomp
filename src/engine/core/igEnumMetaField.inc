@@ -5,7 +5,7 @@ igMetaField *g_igEnumMetaField_getMetaEnumFunctionMetaField;
 void **igEnumMetaField_Create(int pool) {
     void **field;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igEnumMetaField_EnsureRegistered();
         field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igEnumMetaField_metaObject, (igMemoryPoolView *)pool)));
     } else {
@@ -22,7 +22,7 @@ void **igEnumMetaField_Create(int pool) {
 int igEnumMetaField_Clone(int source, int pool) {
     int copy;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igEnumMetaField_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)source, pool);
     }
@@ -49,7 +49,7 @@ int igEnumMetaField_GetVTable(void) {
     void *chars;
 
     igEnumMetaField_Init((int **)&o);
-    vtable = *(int *)((char *)&o + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o._vtable = (int)&g_igMetaField_vtable[0];
     if (&o._fieldName != 0) {
         chars = (void *)((char *)o._fieldName);
@@ -58,7 +58,7 @@ int igEnumMetaField_GetVTable(void) {
             refCount = *(int *)((char *)(chars) - 4) - 1;
             *(int *)((char *)(chars) - 4) = refCount;
             if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
     }
@@ -67,17 +67,17 @@ int igEnumMetaField_GetVTable(void) {
 
 void igEnumMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igEnumMetaField_Register);
+    igMetaObject_RunStaticInit(igEnumMetaField_Register);
 }
 
 static igMetaObjectCallback g_igEnumMetaField_callbackList[] = { igEnumMetaField_CreateDefaultDescriptor, 0 };
 
-void igEnumMetaField_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igEnumMetaField_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g_igEnumMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igMetaField_Register,
-        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
         igEnumMetaField_GetMetaObjectFunction,
         "igEnumMetaField",
         0x38,
@@ -123,7 +123,7 @@ void igEnumMetaField_CreateDefaultDescriptor(void) {
     int count;
 
     if (g_igEnumMetaField_descriptor == 0) {
-        g_igEnumMetaField_descriptor = ((int *)igMetaObject_CreateInstance((igMetaObject *)g_igEnumMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igEnumMetaField_descriptor = ((int *)igMetaObject_CreateInstance((igMetaObject *)g_igEnumMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         s0 = g_igEnumMetaField_descriptor;
         if (s0 != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)s0);

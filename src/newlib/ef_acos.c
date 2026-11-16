@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
-extern float __ieee754_sqrtf(float);
 #define one ((float)1.0000000000e+00)
 #define pi ((float)3.1415925026e+00)
 #define pio2_hi ((float)1.5707962513e+00)

@@ -1,4 +1,4 @@
-float __ieee754_asinf(float x);
+#include "dw4/newlib_math.h"
 
 float asinf(float x)
 {

@@ -1,7 +1,7 @@
 void List_RemoveWordAt(igDataList *l, int i) {
     int n = l->_count; int d;
     if (n <= 0 || i < 0 || i >= n) return;
-    if (i != n - 1) { d = l->_data + i * 4; memmove(d, d + 4, 4 * (n - (i + 1))); }
+    if (i != n - 1) { d = l->_data + i * 4; memmove((void *)d, (void *)(d + 4), 4 * (n - (i + 1))); }
     l->_count = l->_count - 1; }
 
 int List_BinarySearchWords(igDataList *list, int key, int (*compare)(int, int)) {
@@ -114,7 +114,7 @@ void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *self, in
 }
 
 void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
-    igSmartPointer<igObjectList> copy(((igObjectList *)igObjectList_Create(((int)igObject_GetAllocator((int)owner)))));
+    igSmartPointer<igObjectList> copy(((igObjectList *)igObjectList_Create(((int)igObject_GetAllocator((igObject *)owner)))));
     ObjectList_AppendRetainedList((igTDataList<igObject *> *)copy.p, owner->_objectList);
     igTDataList<igObject *> *children = owner->_objectList;
     int count = children->_count;
@@ -219,7 +219,7 @@ void igDependencyOrderedList_AddCheckPoint(void *self, int name) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
         interned = (void *)(StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
     }
@@ -230,7 +230,7 @@ void igDependencyOrderedList_AddCheckPoint(void *self, int name) {
         references = *(int *)((char *)(checkPoint) - 4) - 1;
         *(int *)((char *)(checkPoint) - 4) = references;
         if (references == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
 }

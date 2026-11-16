@@ -49,7 +49,7 @@ void igDirectory_SetName(igDirectoryView *self, int name) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = (int *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     oldName = (int *)self->_name;
@@ -58,7 +58,7 @@ void igDirectory_SetName(igDirectoryView *self, int name) {
         refs = oldName[-1] - 1;
         oldName[-1] = refs;
         if (refs == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     self->_name = (int)interned;

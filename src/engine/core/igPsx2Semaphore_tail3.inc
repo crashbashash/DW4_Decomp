@@ -15,6 +15,6 @@ void igPsx2Semaphore_ReleaseDefaults(igSemaphoreView *self) {
     if (self->IsCreated() != 0) {
         destroyed = self->Destroy();
     }
-    igObject_ReleaseDefaults((int)self);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 

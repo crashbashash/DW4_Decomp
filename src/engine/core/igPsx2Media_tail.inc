@@ -35,7 +35,7 @@ int igPsx2Media_GetVTable(void) {
     *(int *)sema = 0;
     conversionString = (igObject *)&media._conversionString;
     *(int *)conversionString = 0;
-    result = *(int *)((char *)&media + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    result = *(int *)((char *)&media + g_objectSystem->vtableProbeOffset);
     media._vtable = (int)(&g_igPsx2Media_vtable[0]);
     if (conversionString != 0) {
         conversionString = *(igObject **)conversionString;
@@ -69,17 +69,17 @@ int igPsx2Media_GetVTable(void) {
 
 void igPsx2Media_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2Media_Register);
+    igMetaObject_RunStaticInit(igPsx2Media_Register);
 }
 
 static igMetaObjectCallback g_igPsx2Media_callbackList[] = { igPsx2IopRpcConnection_EnsureRegistered, igSemaphore_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
 
-void igPsx2Media_Register(void) {
+CallbackArray *igPsx2Media_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2Media_metaObject,
-        (igMetaObjectRegisterFunction)igMedia_Register,
+        igMedia_Register,
         igMedia_GetPublishedMetaObject,
         igPsx2Media_GetMetaObjectFunction,
         "igPsx2Media",

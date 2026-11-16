@@ -20,7 +20,7 @@ igMetaField *g_igMetaField_invarianceFunctionMetaField;
 
 igMetaObject *igMetaField_GetOrCreateMetaObject(void) {
     if (g_igMetaField_metaObject == 0) {
-        g_igMetaField_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igMetaField_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMetaField_metaObject;
 }
@@ -35,17 +35,17 @@ igMetaObject *igMetaField_GetMetaObject(void)
 
 void igMetaField_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMetaField_Register);
+    igMetaObject_RunStaticInit(igMetaField_Register);
 }
 
 static igMetaObjectCallback g_igMetaField_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
 
-void igMetaField_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igMetaField_Register(void) {
+    return igMetaObject_RegisterClass(
         1,
         &g_igMetaField_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igMetaField_GetMetaObjectFunction,
         "igMetaField",
         0x34,

@@ -8,7 +8,7 @@ igTDataList<short> *igShortList_Create(igMemoryPoolView *pool) {
 
 igMetaObject *igShortList_GetOrCreateMetaObject(void) {
     if (g_igShortList_metaObject == 0) {
-        g_igShortList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igShortList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igShortList_metaObject;
 }
@@ -26,21 +26,21 @@ int igShortList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igShortList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igShortList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igShortList_Register);
+    igMetaObject_RunStaticInit(igShortList_Register);
 }
 
-void igShortList_Register(void) {
+CallbackArray *igShortList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igShortList_metaObject,
-        (igMetaObjectRegisterFunction)igDataList_Register,
-        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
+        igDataList_Register,
+        igDataList_GetPublishedMetaObject,
         igShortList_GetMetaObjectFunction,
         "igShortList",
         0x14,

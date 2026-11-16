@@ -8,14 +8,14 @@ void igPsx2Thread_InitDefaults(igPsx2ThreadView *self) {
     igResult result;
     igSemaphoreView *done;
 
-    self->_stack = igObject_MallocAligned((int)self, self->_stackSize, self->GetStackAlignment() & 0xFFFF);
+    self->_stack = (int)igObject_MallocAligned((igObject *)self, self->_stackSize, self->GetStackAlignment());
     done = self->_threadDoneSema;
     result = done->SetInitialCount(0);
 }
 
 void igPsx2Thread_AdoptCurrentThread(igPsx2Thread *self) {
     self->_threadID = GetThreadId();
-    igObject_FreeMemory((int)self, self->_stack);
+    igObject_FreeMemory((igObject *)self, (void *)self->_stack);
     self->_stack = 0;
 }
 

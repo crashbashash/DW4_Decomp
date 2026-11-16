@@ -9,7 +9,7 @@ igMetaField *g_igObjectDirEntry_memoryPoolHandleMetaField;
 
 int igObjectDirEntry_Create(int allocator) {
     igObjectDirEntry_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igObjectDirEntry_metaObject, (igMemoryPoolView *)allocator);
+    return (int)igMetaObject_CreateInstance(g_igObjectDirEntry_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igObjectDirEntry_GetMetaObject(void)
@@ -29,7 +29,7 @@ int igObjectDirEntry_GetVTable(void) {
     o._vtable = (int)&g_igObjectDirEntry_vtable[0];
     o._typeMeta = 0;
     o._typeMetaName = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o._vtable = (int)&g_igObjectDirEntry_vtable[0];
     igStringRef_Destruct(&o._typeMetaName, -1);
     igSmartPointer_igMetaObject_Destruct(&o._typeMeta, -1);
@@ -39,17 +39,17 @@ int igObjectDirEntry_GetVTable(void) {
 
 void igObjectDirEntry_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igObjectDirEntry_Register);
+    igMetaObject_RunStaticInit(igObjectDirEntry_Register);
 }
 
 static igMetaObjectCallback g_igObjectDirEntry_callbackList[] = { igMetaObject_EnsureRegistered, igObject_EnsureRegistered, 0 };
 
-void igObjectDirEntry_Register(void) {
+CallbackArray *igObjectDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igObjectDirEntry_metaObject,
-        (igMetaObjectRegisterFunction)igDirEntry_Register,
+        igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igObjectDirEntry_GetMetaObjectFunction,
         "igObjectDirEntry",

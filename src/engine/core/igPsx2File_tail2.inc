@@ -108,7 +108,7 @@ void igPsx2File_Close(igPsx2FileView *self) {
         sceClose(self->_fileHandle);
         self->_fileHandle = -1;
         if (self->_fBuf != 0) {
-            igObject_FreeMemory((int)self, (int)self->_fBuf);
+            igObject_FreeMemory((igObject *)self, (void *)self->_fBuf);
         }
         self->_fBuf = 0;
         self->_bufSize = 0;
@@ -129,42 +129,42 @@ void **igPsx2File_OpenFile(void **self, const char *fileName, int modeText) {
     int opened;
 
     igFile_SetFileName((int *)self, fileName);
-    if (strcmp(modeText, "r") == 0) {
+    if (strcmp((const char *)modeText, "r") == 0) {
         readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         opened = readResult.v;
         goto block_21;
     }
-    if (strcmp(modeText, (int *)"rb") == 0) {
+    if (strcmp((const char *)modeText, "rb") == 0) {
         readBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(4));
         opened = readBinaryResult.v;
         goto block_21;
     }
-    if (strcmp(modeText, (int *)((char *)"w")) == 0) {
+    if (strcmp((const char *)modeText, (const char *)(int *)((char *)"w")) == 0) {
         writeResult = ((igFileView *)(self))->OpenWithMode((int)(1));
         opened = writeResult.v;
         goto block_21;
     }
-    if (strcmp(modeText, (int *)((char *)"wb")) == 0) {
+    if (strcmp((const char *)modeText, (const char *)(int *)((char *)"wb")) == 0) {
         writeBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(5));
         opened = writeBinaryResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)"r+") == 0) || (strcmp(modeText, "w+") == 0)) {
+    if ((strcmp((const char *)modeText, "r+") == 0) || (strcmp((const char *)modeText, "w+") == 0)) {
         readWriteResult = ((igFileView *)(self))->OpenWithMode((int)(3));
         opened = readWriteResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)"r+b") == 0) || (strcmp(modeText, "w+b") == 0)) {
+    if ((strcmp((const char *)modeText, "r+b") == 0) || (strcmp((const char *)modeText, "w+b") == 0)) {
         readWriteBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(7));
         opened = readWriteBinaryResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)"a") == 0) || (strcmp(modeText, "a+") == 0)) {
+    if ((strcmp((const char *)modeText, "a") == 0) || (strcmp((const char *)modeText, "a+") == 0)) {
         appendResult = ((igFileView *)(self))->OpenWithMode((int)(2));
         opened = appendResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)"ab") == 0) || (strcmp(modeText, "a+b") == 0)) {
+    if ((strcmp((const char *)modeText, "ab") == 0) || (strcmp((const char *)modeText, "a+b") == 0)) {
         appendBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(6));
         opened = appendBinaryResult.v;
         goto block_21;
@@ -188,9 +188,9 @@ void igPsx2File_GrowBuffer(igPsx2FileView *self, int size) {
             n = size * 2;
         }
         if (self->_fBuf != 0) {
-            self->_fBuf = (unsigned char *)igObject_Reallocate((int)self, (int)self->_fBuf, n);
+            self->_fBuf = (unsigned char *)igObject_Reallocate((igObject *)self, (void *)self->_fBuf, n);
         } else {
-            self->_fBuf = (unsigned char *)igObject_AllocateStorage((int)self, n);
+            self->_fBuf = (unsigned char *)igObject_AllocateStorage((igObject *)self, n);
         }
         self->_bufSize = n;
     }
@@ -224,7 +224,7 @@ int igPsx2File_Read(igPsx2FileView *self, int buffer, int size, int count) {
         count = (lim - a1) / size;
         bytes = count * size;
     }
-    memcpy(buffer, self->_fBuf + a1, bytes);
+    memcpy((void *)buffer, self->_fBuf + a1, bytes);
     self->_bufPos = self->_bufPos + bytes;
     return count;
 }
@@ -244,7 +244,7 @@ int igPsx2File_Write(igPsx2FileView *self, int buffer, int size, int count) {
         self->_bufPos = self->_fileSize;
     }
     igPsx2File_GrowBuffer(self, self->_bufPos + bytes);
-    memcpy(self->_fBuf + self->_bufPos, buffer, bytes);
+    memcpy(self->_fBuf + self->_bufPos, (void *)buffer, bytes);
     self->_bufPos = self->_bufPos + bytes;
     return bytes / size;
 }
@@ -312,14 +312,14 @@ int igPsx2File_Scanf(igPsx2FileView *self, const char *format, ...) {
         strcat(piece, "%n");
         if (state == 1) {
             int consumed = 0;
-            sscanf(self->_fBuf + self->_bufPos, piece, &consumed);
+            sscanf((const char *)(self->_fBuf + self->_bufPos), piece, &consumed);
             self->_bufPos += consumed;
         } else {
             void *target;
             args += 8;
             target = *(void **)(args - 8);
             int consumed = 0;
-            int matched = sscanf(self->_fBuf + self->_bufPos, piece, target, &consumed);
+            int matched = sscanf((const char *)(self->_fBuf + self->_bufPos), piece, target, &consumed);
             if (matched == -1) {
                 break;
             }
@@ -341,7 +341,7 @@ int igPsx2File_Printf(igPsx2FileView *self, int format, ...) {
     }
     n = __builtin_args_info(2);
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    len = vsprintf(buf, format, (char *)__builtin_next_arg(format) - off);
+    len = vsprintf(buf, (const char *)format, (char *)__builtin_next_arg(format) - off);
     cur = self->_bufPos + len;
     if (cur >= self->_fileSize) {
         igPsx2File_GrowBuffer(self, cur);
@@ -570,8 +570,8 @@ igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
     if (handle < 0) {
         return igSmartPointer<igObject>(0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
-    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
@@ -599,8 +599,8 @@ igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
     if (handle < 0) {
         return igSmartPointer<igObject>(0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
-    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */

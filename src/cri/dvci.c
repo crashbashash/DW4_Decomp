@@ -66,11 +66,11 @@ static void *dvci_err_obj = 0;
 static int dvci_layer = 0;
 static int dvci_lock = 0;
 static CvFsVtbl dvci_vtbl = {
-    (int)dvCiExecServer, (int)dvCiEntryErrFunc, (int)dvCiGetFileSize, 0,
-    (int)dvCiOpen, (int)dvCiClose, (int)dvCiSeek, (int)dvCiTell,
-    (int)dvCiReqRd, 0, (int)dvCiStopTr, (int)dvCiGetStat,
-    (int)dvCiGetSctLen, 0, (int)dvCiGetNumTr, 0,
-    (int)dvCiIsExistFileOnDisc, 0, 0, 0, 0, 0, 0, 0, (int)dvCiOptFn1, 0
+    dvCiExecServer, (CvFsEntryErrFuncFn)dvCiEntryErrFunc, dvCiGetFileSize, 0,
+    (CvFsOpenFn)dvCiOpen, (CvFsFdFn)dvCiClose, (CvFsSeekFn)dvCiSeek, (CvFsFdIntFn)dvCiTell,
+    (CvFsXferFn)dvCiReqRd, 0, (CvFsFdFn)dvCiStopTr, (CvFsFdIntFn)dvCiGetStat,
+    (CvFsFdIntFn)dvCiGetSctLen, 0, (CvFsFdIntFn)dvCiGetNumTr, 0,
+    dvCiIsExistFileOnDisc, 0, 0, 0, 0, 0, 0, 0, dvCiOptFn1, 0
 };
 static DvCiFile dvci_files[40] = {0};
 static char dvci_path[304] = {0};

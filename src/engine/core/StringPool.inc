@@ -46,7 +46,7 @@ void StringPool_DestroyChunks(StringPool *pool) {
     }
 }
 
-int StringPool_Intern(StringPool *pool, const char *name)
+char *StringPool_Intern(StringPool *pool, const char *name)
 {
     int token;
     StringChunk *chunk;
@@ -64,7 +64,7 @@ int StringPool_Intern(StringPool *pool, const char *name)
         memcpy((void *)copy, name, size);
         StringTable_Register(pool->table, (StringTokenHeader *)token, chunk, copy);
     }
-    return copy;
+    return (char *)copy;
 }
 
 void * StringPool_Allocate(int size) {

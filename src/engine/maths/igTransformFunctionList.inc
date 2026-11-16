@@ -2,7 +2,7 @@ igMetaObject *g_igTransformFunctionList_metaObject;
 
 OpTable *FUN_00188d40(int arg0) {
     igTransformFunctionList_EnsureRegistered();
-    return (OpTable *)igMetaObject_CreateInstance((int)g_igTransformFunctionList_metaObject, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((igMetaObject *)g_igTransformFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igTransformFunctionList_GetMetaObject(void)
@@ -16,9 +16,9 @@ igMetaObject *igTransformFunctionList_GetMetaObject(void)
 int igTransformFunctionList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTransformFunctionList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igTransformFunctionList_EnsureRegistered(void)
@@ -26,9 +26,9 @@ void igTransformFunctionList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTransformFunctionList_Register);
 }
 
-void igTransformFunctionList_Register(void) {
+CallbackArray *igTransformFunctionList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTransformFunctionList_metaObject,
         igDataList_Register,

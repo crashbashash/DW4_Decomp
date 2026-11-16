@@ -2,7 +2,7 @@ igMetaObject *g_igFloatListList_metaObject;
 
 igMetaObject *igFloatListList_GetOrCreateMetaObject(void) {
     if (g_igFloatListList_metaObject == 0) {
-        g_igFloatListList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igFloatListList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igFloatListList_metaObject;
 }
@@ -20,23 +20,23 @@ int igFloatListList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igFloatListList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igFloatListList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igFloatListList_Register);
+    igMetaObject_RunStaticInit(igFloatListList_Register);
 }
 
 static igMetaObjectCallback g_igFloatListList_callbackList[] = { igFloatList_EnsureRegistered, 0 };
 
-void igFloatListList_Register(void) {
+CallbackArray *igFloatListList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igFloatListList_metaObject,
-        (igMetaObjectRegisterFunction)igObjectList_Register,
-        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
+        igObjectList_Register,
+        igObjectList_GetPublishedMetaObject,
         igFloatListList_GetMetaObjectFunction,
         "igFloatListList",
         0x14,

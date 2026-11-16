@@ -2,7 +2,7 @@ int igUnsignedShortMetaField_ValueFromString(int self, int value, int text) {
     int consumed;
 
     consumed = 0;
-    sscanf(text, "%hd%n", value, &consumed);
+    sscanf((const char *)text, "%hd%n", value, &consumed);
     return consumed;
 }
 
@@ -20,9 +20,9 @@ void igUnsignedShortMetaField_ValueToString(int *out, int self, unsigned short *
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
     }
     *out = interned;
 }

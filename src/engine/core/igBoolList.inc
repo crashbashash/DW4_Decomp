@@ -8,7 +8,7 @@ void igBoolList_Create(int pool) {
 
 igMetaObject *igBoolList_GetOrCreateMetaObject(void) {
     if (g_igBoolList_metaObject == 0) {
-        g_igBoolList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igBoolList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igBoolList_metaObject;
 }
@@ -26,21 +26,21 @@ int igBoolList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igBoolList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
 }
 
 void igBoolList_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igBoolList_Register);
+    igMetaObject_RunStaticInit(igBoolList_Register);
 }
 
-void igBoolList_Register(void) {
+CallbackArray *igBoolList_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igBoolList_metaObject,
-        (igMetaObjectRegisterFunction)igDataList_Register,
-        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
+        igDataList_Register,
+        igDataList_GetPublishedMetaObject,
         igBoolList_GetMetaObjectFunction,
         "igBoolList",
         0x14,

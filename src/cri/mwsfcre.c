@@ -151,6 +151,7 @@ int mwsfcre_CheckCprm(MwsfdCreInf *cprm);
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm);
 void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm);
 int mwsfcre_MallocCompoWork(MwsfdPly *ply);
+int mwsfcre_ConvBufFmtFromMwsfd(int format);
 void mwSfdDestroy(MwsfdPly *ply);
 
 void *memset(void *s, int c, unsigned int n);

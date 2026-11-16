@@ -1,7 +1,7 @@
 int g_resourceLoaderStackSize = 0x100000;
 
 void igResource_StartAsyncLoading(igResourceView *self) {
-    self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)igQueue_Create((int)igObject_GetAllocator((int)self))).get();
+    self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)igQueue_Create((int)igObject_GetAllocator((igObject *)self))).get();
     self->_loadQueue->Create();
     self->_loadThread = (igPsx2ThreadView *)igQueue_StartServiceThread(self->_loadQueue, (int)&igResource_AsyncLoadThreadProc, g_resourceLoaderStackSize);
     self->_loadThread->SetPriority(255);
@@ -59,11 +59,11 @@ void igResource_ReleaseDefaults(igResource *self) {
         }
     }
     self->_alignmentValues = 0;
-    igObject_ReleaseDefaults((int)self);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 
 /* The pool the resource assigns to its files: the configured one, else the resource's own allocator. */
-#define RESOURCE_POOL(self, pool) ((self)->pool != 0 ? (igObject *)(self)->pool : (igObject *)igObject_GetAllocator((int)(self)))
+#define RESOURCE_POOL(self, pool) ((self)->pool != 0 ? (igObject *)(self)->pool : (igObject *)igObject_GetAllocator((igObject *)(self)))
 
 /* Returns the directory named `path`, else creates its IGB file (configured like the resource's
  * files, in the resource's pools) and reads it synchronously through the search paths. */
@@ -105,15 +105,15 @@ void *igResource_GetOrLoadDirectory(igResource *self, int path) {
     if (g_stringPool == 0) {
         v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-        g_stringPool = v;
+        g_stringPool = (StringPool *)v;
     }
-    v = StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
+    v = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
     old = (int *)o->_name;
     if (old != 0) {
         int *hd = old - 2;
         int c = old[-1] - 1;
         old[-1] = c;
-        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
     }
     o->_name = v;
     file.p->_managingResource = (int)self;
@@ -158,15 +158,15 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     if (g_stringPool == 0) {
         v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-        g_stringPool = v;
+        g_stringPool = (StringPool *)v;
     }
-    v = StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
+    v = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
     old = (int *)o->_name;
     if (old != 0) {
         hd = old - 2;
         c = old[-1] - 1;
         old[-1] = c;
-        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
     }
     o->_name = v;
     file.p->_managingResource = (int)self;
@@ -186,12 +186,12 @@ igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileVie
     int r;
     if (file == 0) return 0;
     r = 0;
-    if (self->_relativeFilePath != 0 && strlen(self->_relativeFilePath) != 0) {
+    if (self->_relativeFilePath != 0 && strlen((const char *)self->_relativeFilePath) != 0) {
         sprintf(buf, "%s/%s", self->_relativeFilePath, file->_name);
         r = file->ReadFile(buf) > 0;
     }
     if (r == 0) {
-        if (self->_absoluteFilePath != 0 && strlen(self->_absoluteFilePath) != 0) {
+        if (self->_absoluteFilePath != 0 && strlen((const char *)self->_absoluteFilePath) != 0) {
             sprintf(buf, "%s/%s", self->_absoluteFilePath, file->_name);
             r = file->ReadFile(buf) > 0;
         }

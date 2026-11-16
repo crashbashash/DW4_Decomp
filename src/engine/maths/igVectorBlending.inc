@@ -15,9 +15,9 @@ done:
 int igVectorBlending_GetVTable(void) {
     struct Obj3 obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igVectorBlending_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00186f70(void)
@@ -25,14 +25,14 @@ void FUN_00186f70(void)
     igMetaObject_RunStaticInit(igVectorBlending_Register);
 }
 
-void igVectorBlending_Register(void) {
+CallbackArray *igVectorBlending_Register(void) {
     FUN_00186a40();  /* Set-once guard (gp-relative byte flag) that chains to sibling registrars. */
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVectorBlending_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igVectorBlending_GetMetaObject_00186ff0,
+        (igMetaObjectCallback)thunk_igVectorBlending_GetMetaObject_00186ff0,
         "igVectorBlending",
         8, /* instance size */
         igVectorBlending_GetVTable,

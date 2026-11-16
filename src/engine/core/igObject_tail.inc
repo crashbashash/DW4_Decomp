@@ -4,12 +4,12 @@ int igMemoryPool_Destruct(int extra0)
 }
 
 void * igObject_OperatorNew(int a0, int a1, int extra2) {
-    return (void *)(malloc((char *)a1 + a0, a1));
+    return malloc(a1 + a0);
 }
 
-int igObject_OperatorDelete(int extra0)
+void igObject_OperatorDelete(void *block)
 {
-    return free();
+    free(block);
 }
 
 int (*g_outOfMemoryHandler)();
@@ -82,7 +82,7 @@ igResult Memory_RegisterAllocation(int address, igMemoryPoolView *pool) {
     int dictionarySize;
     if (g_memoryDictionary == 0) {
         dictionarySize = 0x1000;
-        igRegistry_GetValueInt((int)((ObjectSystemView *)g_objectSystem)->configRegistry, 2,"memoryDictionarySize", &dictionarySize, 0x1000, 0);
+        igRegistry_GetValueInt((int)g_objectSystem->configRegistry, 2,"memoryDictionarySize", &dictionarySize, 0x1000, 0);
         g_memoryDictionary = (igMemoryDictionaryView *)igMemoryDictionary_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
         g_memoryDictionary->SetCapacity(dictionarySize);
         g_memoryDictionary->InitEntries();

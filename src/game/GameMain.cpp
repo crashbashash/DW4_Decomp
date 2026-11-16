@@ -71,7 +71,7 @@ static inline void ReleaseStringRef(int string) {
         int count = ((int *)string)[-1] - 1;
         ((int *)string)[-1] = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)*header, (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
         }
     }
 }
@@ -157,7 +157,7 @@ struct StringRef {
     StringRef() {}
     StringRef(int s) : p((int *)s) {}
     static inline void Release(int *x) {
-        if (x != 0) { int *hd = x - 2; int c = x[-1] - 1; x[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (int)hd); }
+        if (x != 0) { int *hd = x - 2; int c = x[-1] - 1; x[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); }
     }
     ~StringRef() { Release(p); }
 };
@@ -486,11 +486,11 @@ extern "C" igResult igPsx2Thread_SetStackSize(igPsx2ThreadView *self, unsigned i
         if (self->_userStack == 0) {
             int stack = self->_stack;
             if (stack != 0) {
-                igObject_FreeMemory((int)self, stack);
+                igObject_FreeMemory((igObject *)self, (void *)stack);
             }
         }
         self->_userStack = 0;
-        self->_stack = igObject_MallocAligned((int)self, self->_stackSize, self->GetStackAlignment());
+        self->_stack = (int)igObject_MallocAligned((igObject *)self, self->_stackSize, self->GetStackAlignment());
         return g_resultSuccess;
     }
     return g_resultFailure;
@@ -548,9 +548,9 @@ void GameMain_ReplaceSceneFile(Blk *app, int text, int fullReload) {
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            g_stringPool = (int)pool;
+            g_stringPool = pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
+        interned = (int)StringPool_Intern(g_stringPool, (const char *)text);
     }
     {
         StringRef name(interned);
@@ -586,7 +586,7 @@ static inline int *internString(const char *s) {
     if (g_stringPool == 0) {
         StringPool *pool = (StringPool *)StringPool_Allocate(16);
         if (pool != 0) pool = StringPool_Construct(pool);
-        g_stringPool = (int)pool;
+        g_stringPool = pool;
     }
     return (int *)StringPool_Intern((StringPool *)g_stringPool, s);
 }
@@ -649,10 +649,10 @@ void GameMain_RunGame(Blk *app) {
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            g_stringPool = (int)pool;
+            g_stringPool = pool;
         }
         {
-            nextStage = StringPool_Intern((StringPool *)g_stringPool, "ndmw.igb");
+            nextStage = (int)StringPool_Intern(g_stringPool, "ndmw.igb");
             ReleaseStringRef(system->_nextStage);
             system->_nextStage = nextStage;
         }
@@ -778,7 +778,7 @@ void GameMain_ListIgbFiles(Blk *app) {
                 if (g_stringPool == 0) {
                     StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
                     if (pool != 0) pool = StringPool_Construct(pool);
-                    g_stringPool = (int)pool;
+                    g_stringPool = pool;
                 }
                 interned = (int *)StringPool_Intern((StringPool *)g_stringPool, buf);
                 StringRef::Release(name.p);

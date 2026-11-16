@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
-extern int __kernel_rem_pio2f(float *, float *, int, int, int, const __int32_t *);
 extern float fabsf(float);
 static const __int32_t two_over_pi[] = {
 0xA2, 0xF9, 0x83, 0x6E, 0x4E, 0x44, 0x15, 0x29, 0xFC,

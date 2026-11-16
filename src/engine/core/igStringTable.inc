@@ -11,7 +11,7 @@ void *igStringTable_Create(int pool) {
 
 igMetaObject *igStringTable_GetOrCreateMetaObject(void) {
     if (g_igStringTable_metaObject == 0) {
-        g_igStringTable_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igStringTable_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igStringTable_metaObject;
 }
@@ -36,7 +36,7 @@ int igStringTable_GetVTable(void) {
     *strings = 0;
     hashIndex = &table._hashIndex;
     *hashIndex = 0;
-    r = *(int *)((char *)&table + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&table + g_objectSystem->vtableProbeOffset);
     table._vtable = (int)&g_igStringTable_vtable[0];
     ReleaseObjectField(hashIndex);
     ReleaseObjectField(strings);
@@ -63,18 +63,18 @@ igObject **igSmartPointer_igCharListNoClean_Destruct(igObject **self, short flag
 
 void igStringTable_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igStringTable_Register);
+    igMetaObject_RunStaticInit(igStringTable_Register);
 }
 
 static igMetaObjectCallback g_igStringTable_callbackList[] = { igCharListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, 0 };
 
-void igStringTable_Register(void) {
+CallbackArray *igStringTable_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igStringTable_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igStringTable_GetMetaObjectFunction,
         "igStringTable",
         0x18,

@@ -16,7 +16,7 @@ igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *valu
             if (retained) {
                 header = (int *)(retained - 8);
                 if (--*(int *)(retained - 4) == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                    StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
                 }
             }
             if (match) {
@@ -87,9 +87,9 @@ static inline int enumStringPool(void) {
     if ((g_stringPool) == 0) {
         int p = ((int)StringPool_Allocate(0x10));
         if (p != 0) { p = ((int)StringPool_Construct((StringPool *)p)); }
-        (g_stringPool) = p;
+        g_stringPool = (StringPool *)p;
     }
-    return (g_stringPool);
+    return (int)g_stringPool;
 }
 
 static inline void dropEnumNames(igTDataList<char *> *o) {

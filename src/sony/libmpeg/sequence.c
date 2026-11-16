@@ -1,7 +1,6 @@
 #include "dw4/sony/libmpeg.h"
+#include "dw4/libkernl.h"
 
-int DIntr(void);
-int EIntr(void);
 void _ipuSetMpeg1(int mpeg1);
 void _ipuCommand(_sceMpegDecoder *dec, unsigned int command);
 void _sceMpegWaitIpuIdle(_sceMpegDecoder *dec);

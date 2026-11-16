@@ -6,7 +6,7 @@ igMetaField *g_igOptInterface_disabledInfosMetaField;
 
 igMetaObject *FUN_00225a40(void) {
     if (g_igOptInterface_metaObject == 0) {
-        g_igOptInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igOptInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igOptInterface_metaObject;
 }
@@ -22,13 +22,13 @@ igMetaObject *igOptInterface_GetMetaObject(void)
 int igOptInterface_GetVTable(void) {
     struct Obj_2 obj;
     int t;
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igOptInterface_vtable[0];
     obj.w8 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igOptInterface_vtable[0];
     igSmartPointer_igInfoList_Destruct(&obj.w11, -1);
     FUN_00225b90((void **)&obj.w10, -1);
@@ -57,25 +57,25 @@ void **FUN_00225b90(void **arg0, long long arg1) {
 
 void FUN_00225c10(void)
 {
-    igMetaObject_RunStaticInit(igOptInterface_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igOptInterface_Register);
 }
 
 static igMetaObjectCallback g_igOptInterface_callbackList[] = { igMetaObjectList_EnsureRegistered, FUN_002290c0, igInfoList_EnsureRegistered, 0 };
 
-void igOptInterface_Register(void) {
+CallbackArray *igOptInterface_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOptInterface_metaObject,
-        igInterface_Register,
-        igInterface_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igInterface_Register,
+        (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
         thunk_igOptInterface_GetMetaObject,
         "igOptInterface",
         0x30, /* instance size */
         igOptInterface_GetVTable,
         &igOptInterface_InitFields,
         0, /* extra callback item */
-        g_igOptInterface_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igOptInterface_callbackList /* callback list */
     );
 }
 
@@ -88,10 +88,10 @@ igMetaObject *FUN_00225cb0(void) {
 }
 
 static FieldFactory g_igOptInterface_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igStringMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igOptInterface_fieldTable[] = {
     "_optimizationList",

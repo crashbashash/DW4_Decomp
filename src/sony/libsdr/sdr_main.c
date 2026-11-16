@@ -1,5 +1,6 @@
 #include "dw4/eekernel_gp.h"
 #include "dw4/sony/sif.h"
+#include "dw4/libkernl.h"
 
 typedef struct sceSifDmaData {
     unsigned int data;
@@ -34,8 +35,6 @@ typedef struct {
 
 unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
 int sceSifDmaStat(unsigned int id);
-void scePrintf(const char *format, ...);
-void FlushCache(int mode);
 
 /* the IOP interrupt callbacks and their gp: libsdr's callback-thread file owns them */
 extern void *_sce_sdr_transIntr0Hdr, *_sce_sdr_transIntr1Hdr, *_sce_sdr_spu2IntrHdr;

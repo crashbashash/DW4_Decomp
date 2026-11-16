@@ -2,7 +2,7 @@ igMetaObject *g_igAABoxList_metaObject;
 
 igMetaObject *igAABoxList_GetOrCreateMetaObject(void) {
     if (g_igAABoxList_metaObject == 0) {
-        g_igAABoxList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igAABoxList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igAABoxList_metaObject;
 }
@@ -18,9 +18,9 @@ igMetaObject *igAABoxList_GetMetaObject(void)
 int igAABoxList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igAABoxList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void igAABoxList_EnsureRegistered(void)
@@ -30,9 +30,9 @@ void igAABoxList_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igAABoxList_callbackList[] = { igAABox_EnsureRegistered, 0 };
 
-void igAABoxList_Register(void) {
+CallbackArray *igAABoxList_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAABoxList_metaObject,
         igObjectList_Register,

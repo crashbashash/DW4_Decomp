@@ -17,7 +17,7 @@ int g_igPageMemoryPool_messageLevelMetaEnum;
 
 igAliasMemoryPoolView *igAliasMemoryPool_Create(void *allocator) {
     igAliasMemoryPoolView *pool;
-    if (*g_objectSystem) {
+    if (g_objectSystem->active) {
         igAliasMemoryPool_EnsureRegistered();
         pool=((igAliasMemoryPoolView *)igMetaObject_CreateInstance((igMetaObject *)((void *)g_igAliasMemoryPool_metaObject), (igMemoryPoolView *)allocator));
     } else {
@@ -31,7 +31,7 @@ igAliasMemoryPoolView *igAliasMemoryPool_Create(void *allocator) {
 
 void *igAliasMemoryPool_Clone(int source, int flags) {
     void *copy;
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igAliasMemoryPool_EnsureRegistered();
         return (void *)igObject_CloneViaMetadata((void **)source, flags);
     }
@@ -62,7 +62,7 @@ int igAliasMemoryPool_GetVTable(void) {
     igObject *aliasedSlot;
 
     igAliasMemoryPool_Initialize(&pool);
-    vtable = *(int *)((char *)&pool + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&pool + g_objectSystem->vtableProbeOffset);
     pool._vtable = (int)&g_igAliasMemoryPool_vtable[0];
     aliasedSlot = (igObject *)&pool._aliasedMemoryPool;
     if (aliasedSlot != 0) {
@@ -99,16 +99,16 @@ int igAliasMemoryPool_GetVTable(void) {
 
 void igAliasMemoryPool_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igAliasMemoryPool_Register);
+    igMetaObject_RunStaticInit(igAliasMemoryPool_Register);
 }
 
 static igMetaObjectCallback g_igAliasMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, igMemoryPool_EnsureRegistered, 0 };
 
-void igAliasMemoryPool_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igAliasMemoryPool_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g_igAliasMemoryPool_metaObject,
-        (igMetaObjectRegisterFunction)igMemoryPool_Register,
+        igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igAliasMemoryPool_GetMetaObjectFunction,
         "igAliasMemoryPool",

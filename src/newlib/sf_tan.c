@@ -1,7 +1,6 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
-extern int __ieee754_rem_pio2f(float, float *);
-extern float __kernel_tanf(float, float, int);
 
 float tanf(float x)
 {

@@ -10,16 +10,16 @@ igMetaObject *igLockBase_GetMetaObject(void)
 
 void FUN_00226be0(void)
 {
-    igMetaObject_RunStaticInit(igLockBase_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igLockBase_Register);
 }
 
-void igLockBase_Register(void) {
+CallbackArray *igLockBase_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igLockBase_metaObject,
-        igInterfaced_Register,
-        igInterfaced_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igInterfaced_Register,
+        (igMetaObjectGetFunction)igInterfaced_GetPublishedMetaObject,
         thunk_igLockBase_GetMetaObject,
         "igLockBase",
         0x20, /* instance size */

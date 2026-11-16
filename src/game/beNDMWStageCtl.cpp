@@ -60,7 +60,7 @@ void beNDMWStageCtl_UpdateRam(beNDMWStageCtl *self, beNDMWStageCtlInfoRam *ram) 
     bePadData *pad;
     bool ok;
     switch (ram->_st0) {
-    case 0:
+    case 0: {
         if (((beSystem *)self->_system)->_isSResetEnable == 0) return;
         pad = bePadManager_GetPadForPlayer(((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0])), 0);
         int a = pad->_trigger;
@@ -70,6 +70,7 @@ void beNDMWStageCtl_UpdateRam(beNDMWStageCtl *self, beNDMWStageCtlInfoRam *ram) 
         ram->_st0 = ram->_st0 + 1;
         ram->_st3 = 0; ram->_st2 = 0; ram->_st1 = 0;
         return;
+    }
     case 1:
         if (((beSystem *)self->_system)->_isSResetEnable == 0) {
             ram->_st0 = 0;

@@ -2,6 +2,7 @@
  * the heap grows up to EndOfHeap, files are unsupported. VSync waits on the INTC's vblank bit. */
 
 #include "dw4/eekernel_intr.h"
+#include "dw4/libkernl.h"
 
 /* newlib's struct stat with the EE's 64-bit long */
 struct stat {
@@ -36,8 +37,6 @@ struct stat {
 #define STDOUT 1
 #define STDERR 2
 
-int DIntr(void);
-int EIntr(void);
 void SetVSyncFlag(int *flag, unsigned long *time);
 void *EndOfHeap(void);
 int sceTtyInit(void);

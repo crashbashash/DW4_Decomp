@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
-extern float __ieee754_logf(float);
 static const float
 two25      =  3.3554432000e+07, 
 ivln10     =  4.3429449201e-01, 

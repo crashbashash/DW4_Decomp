@@ -58,9 +58,9 @@ void igIGBFile_SetDefaultName(int *self) {
     void *name;
 
     name = (void *)(self[5]);
-    if ((!name) || (strcmp(name, "") == 0)) {
+    if ((!name) || (strcmp((const char *)name, "") == 0)) {
         fileName = ((int *)self[26])[3];
-        i = strlen(fileName) - 1;
+        i = strlen((const char *)fileName) - 1;
         while (i > 0 && 0x2F != (c = *(char *)((fileName + i) - 1)) && c != 0x5C) {
             i = i - 1;
         }
@@ -78,7 +78,7 @@ void igIGBFile_SetDefaultName(int *self) {
             count = *(int *)((char *)(oldName) - 4) - 1;
             *(int *)((char *)(oldName) - 4) = count;
             if (!count) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
             }
         }
         self[5] = (int)(baseName);
@@ -137,7 +137,7 @@ igResult igIGBFile_BuildMemoryPoolNameBuffer(igIGBFileView *o) {
     o->_memoryPoolNameBufferSize = 8;
     i = 0;
     do {
-        a = strlen(Memory_GetPoolNameByIndex(i)) + 1;
+        a = strlen((const char *)Memory_GetPoolNameByIndex(i)) + 1;
         i++;
         o->_memoryPoolNameBufferSize = o->_memoryPoolNameBufferSize + a;
     } while (i < 46);
@@ -149,8 +149,8 @@ igResult igIGBFile_BuildMemoryPoolNameBuffer(igIGBFileView *o) {
     p += 8;
     do {
         s = Memory_GetPoolNameByIndex(j);
-        n = strlen(s) + 1;
-        memcpy(p, s, n);
+        n = strlen((const char *)s) + 1;
+        memcpy(p, (void *)s, n);
         j++;
         p += n;
     } while (j < 46);
@@ -312,14 +312,14 @@ igResult igIGBFile_BuildMetaFieldBuffer(igIGBFileView *self) {
     self->_metaFieldCount = igMetaField_GetMetaFieldList()->_count;
     self->_metaFieldBufferSize = self->_metaFieldCount * 12;
     for (i = 0; i < self->_metaFieldCount; i++) {
-        self->_metaFieldBufferSize = self->_metaFieldBufferSize + (strlen(registeredMetaField(igMetaField_GetMetaFieldList(), i)->GetMeta()->_name) + 1);
+        self->_metaFieldBufferSize = self->_metaFieldBufferSize + (strlen((const char *)registeredMetaField(igMetaField_GetMetaFieldList(), i)->GetMeta()->_name) + 1);
     }
     self->_mfBuf = (char *)self->_temporaryMemoryPool->AllocateAligned(self->_metaFieldBufferSize, 16);
     s5 = 0;
     s4 = (int *)self->_mfBuf;
     for (i = 0; i < self->_metaFieldCount; i++) {
         p = registeredMetaField(igMetaField_GetMetaFieldList(), i);
-        s4[s5] = strlen(p->GetMeta()->_name) + 1;
+        s4[s5] = strlen((const char *)p->GetMeta()->_name) + 1;
         s5++;
         s4[s5] = p->GetMeta()->_majorVersion;
         s5++;
@@ -328,7 +328,7 @@ igResult igIGBFile_BuildMetaFieldBuffer(igIGBFileView *self) {
     }
     s2 = self->_mfBuf + self->_metaFieldCount * 12;
     for (j = 0; j < self->_metaFieldCount; j++) {
-        strcpy(s2, registeredMetaField(igMetaField_GetMetaFieldList(), j)->GetMeta()->_name);
+        strcpy(s2, (const char *)registeredMetaField(igMetaField_GetMetaFieldList(), j)->GetMeta()->_name);
         s2 += *(int *)(self->_mfBuf + j * 12);
     }
     if (self->_endianSwap != 0) self->imf->SwapBytes(self->_mfBuf, self->_metaFieldCount * 3);
@@ -383,7 +383,7 @@ igResult igIGBFile_BuildExternalDirectoryBuffer(igIGBFileView *self) {
         total = (n + 3) * 4;
         self->_externalDirectoryBufferSize = total;
         for (i = 0; i < n; i++) {
-            self->_externalDirectoryBufferSize = self->_externalDirectoryBufferSize + (strlen(self->_externalDirectoryList->_data[i]->_name) + 1);
+            self->_externalDirectoryBufferSize = self->_externalDirectoryBufferSize + (strlen((const char *)self->_externalDirectoryList->_data[i]->_name) + 1);
         }
         self->_externalDirectoryBuffer = (int *)self->_temporaryMemoryPool->AllocateAligned(self->_externalDirectoryBufferSize, 16);
         self->_externalDirectoryBuffer[0] = self->_externalDirectoryBufferSize;
@@ -391,11 +391,11 @@ igResult igIGBFile_BuildExternalDirectoryBuffer(igIGBFileView *self) {
         self->_externalDirectoryBuffer[2] = n;
         q = self->_externalDirectoryBuffer + 3;
         for (i = 0; i < n; i++) {
-            q[i] = strlen(self->_externalDirectoryList->_data[i]->_name) + 1;
+            q[i] = strlen((const char *)self->_externalDirectoryList->_data[i]->_name) + 1;
         }
         p = (char *)self->_externalDirectoryBuffer + total;
         for (k = 0; k < n; k++) {
-            strcpy(p, self->_externalDirectoryList->_data[k]->_name);
+            strcpy(p, (const char *)self->_externalDirectoryList->_data[k]->_name);
             p += strlen(p) + 1;
         }
         if (self->_endianSwap != 0) {
@@ -614,7 +614,7 @@ igResult igIGBFile_AddInfoListEntry(void *self) {
 
 int igIGBFile_WriteFile(igIGBFileView *self, const char *fileName) {
     int *pp; igObject *t; igObject *t2; igObject *a; igObject *b;
-    igRegistry_GetValueBool((int)(*(ObjectSystemView * *)&g_objectSystem)->configRegistry, 2, (const char *)"forceWriteMemoryPoolInfoFromMetaState", (char *)&self->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
+    igRegistry_GetValueBool((int)g_objectSystem->configRegistry, 2, (const char *)"forceWriteMemoryPoolInfoFromMetaState", (char *)&self->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
     igResult openResult = igIGBFile_OpenForWrite(self, fileName);
     pp = (int *)((int)&openResult + 0);
     if (*pp == g_resultFailure.v) return 0;
@@ -917,7 +917,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
             }
             slot = igMetaObject_GetPersistentFieldCount((int)parent);
             inherited = igMetaObject_GetFieldCount(parent) - slot;
-            blind = (igMetaObject *)igMetaObject_Create((int)Memory_GetDefaultAllocator());
+            blind = (igMetaObject *)igMetaObject_Create((igMemoryPoolView *)Memory_GetDefaultAllocator());
             igMetaObject_SetName(blind, (int)name);
             igMetaObject_InheritFromBase(blind, parent);
             ObjectList_AppendRetained(file->_metaObjectListInFile, (igObject *)blind);
@@ -1015,7 +1015,7 @@ igResult igIGBFile_SetupBasePath(igIGBFileView *self) {
 }
 
 void igIGBFile_RegisterBlindObjectsConfig(void) {
-    igRegistry_GetValueBool((int)(*(ObjectSystemView * *)&g_objectSystem)->configRegistry, 2, (const char *)"blindObjects", (char *)&g_igIGBFile_blindObjects, 0, 0);
+    igRegistry_GetValueBool((int)g_objectSystem->configRegistry, 2, (const char *)"blindObjects", (char *)&g_igIGBFile_blindObjects, 0, 0);
 }
 
 igResult igIGBFile_ReadNextChunk(igIGBFileView *self) {
@@ -1327,7 +1327,7 @@ igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
         int j;
         for (j = 0; j < count; j++) {
             t = registeredMetaField(table, j);
-            if (strcmp(t->GetMeta()->_name, name) == 0) { found = true; break; }
+            if (strcmp((const char *)t->GetMeta()->_name, name) == 0) { found = true; break; }
         }
         if (!found) { t = 0; } else { t->GetMeta(); }
         ObjectList_AppendRetained(self->_metaFieldListInFile, (igObject *)t);
@@ -1516,7 +1516,7 @@ void Gap__Core__igIGBFile__destructFields(igIGBFileView *self) {
     }
     RELEASE_REF(self->_refList);
     self->_refList = 0;
-    Gap__Core__igObject__destructFields((int)self);
+    Gap__Core__igObject__destructFields((igObject *)self);
 }
 
 igResult igIGBFile_ReadInfoList(igIGBFileView *self) {
@@ -1557,7 +1557,7 @@ static inline void setPooled(char **dst, char *src) {
         StringTokenHeader *h = (StringTokenHeader *)(old - 8);
         int n = h->refCount - 1;
         h->refCount = n;
-        if (n == 0) { StringChunk_ReleaseHeader((StringChunk *)h->owner, (int)h); }
+        if (n == 0) { StringChunk_ReleaseHeader((StringChunk *)h->owner, (StringTokenHeader *)h); }
     }
     *dst = v;
 }

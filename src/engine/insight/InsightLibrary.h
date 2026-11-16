@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
 #include "dw4/fun_00235370_refs.h"
 #include "dw4/ViewerOptions.h"
@@ -473,7 +474,6 @@ extern "C" long long atof(...);
 extern "C" int exit(int status);
 extern "C" int fptodp(float);
 extern "C" float dptofp(long long);
-extern "C" int Vec3f_FromString(...);
 extern "C" int FUN_001e6d80(...);
 extern "C" void *igIntList_Create(int allocator);
 extern "C" InternedStringList *igStringRefList_Create(int allocator);

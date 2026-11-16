@@ -10,16 +10,16 @@ igMetaObject *igItemBase_GetMetaObject(void)
 
 void FUN_00228950(void)
 {
-    igMetaObject_RunStaticInit(igItemBase_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igItemBase_Register);
 }
 
-void igItemBase_Register(void) {
+CallbackArray *igItemBase_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igItemBase_metaObject,
-        igBase_Register,
-        igBase_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igBase_Register,
+        (igMetaObjectGetFunction)igBase_GetPublishedMetaObject,
         thunk_igItemBase_GetMetaObject,
         "igItemBase",
         0x20, /* instance size */

@@ -29,7 +29,7 @@ int igStandardQueue_GetVTable(void) {
     p2 = &queue._removeLock;
     *p2 = 0;
     queue._queueSema = 0;
-    vtable = *(int *)((char *)&queue + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&queue + g_objectSystem->vtableProbeOffset);
     queue._vtable = (int)&g_igStandardQueue_vtable[0];
     igSmartPointer_igSemaphore_Destruct((igObject **)&queue._queueSema, -1);
     igSmartPointer_igSemaphore_Destruct((igObject **)p2, -1);
@@ -55,7 +55,7 @@ void *igQueue_Destroy(igQueue *self, short flags) {
             }
         }
         if (flags > 0) {
-            Memory_FreeBufferAliasC((int)self);
+            Memory_FreeBufferAliasC(self);
         }
     }
     return self;
@@ -63,17 +63,17 @@ void *igQueue_Destroy(igQueue *self, short flags) {
 
 void igStandardQueue_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igStandardQueue_Register);
+    igMetaObject_RunStaticInit(igStandardQueue_Register);
 }
 
 static igMetaObjectCallback g_igStandardQueue_callbackList[] = { igSemaphore_EnsureRegistered, 0 };
 
-void igStandardQueue_Register(void) {
+CallbackArray *igStandardQueue_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igStandardQueue_metaObject,
-        (igMetaObjectRegisterFunction)igQueue_Register,
+        igQueue_Register,
         igQueue_GetPublishedMetaObject,
         igStandardQueue_GetMetaObjectFunction,
         "igStandardQueue",

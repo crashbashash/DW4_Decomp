@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
 static const float ln2_hi = 6.9313812256e-01F,
                    ln2_lo = 9.0580006145e-06F,

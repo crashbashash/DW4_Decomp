@@ -108,7 +108,7 @@ in `src/`), **runtime** (the Metrowerks runtime files only).
 | `unsigned_char on` | Verified: plain `char` loads with `lbu` | owner, counted |
 | `enumsalwaysint off` | Verified: an enum takes the smallest type that holds its values (a 1-byte `.sbss` object instead of 4-byte `.bss`) | owner, counted |
 | `cats off` | Verified: the object loses its `.mwcats` section, no code change | owner, counted |
-| `cplusplus on` … `cplusplus reset` | Compiles a region of a `.c` file as C++ (classes, `extern "C"`); used in `src/engine/p2texture.c` | free |
+| `cplusplus on` … `cplusplus reset` | Compiles a region of a `.c` file as C++ (classes, `extern "C"`); no file uses it now: `src/engine/p2texture.c`'s two regions became plain C (typedef structs and `static inline` helpers) with identical bytes | free |
 | `exception_terminate`, `exception_magic` | Markers of Metrowerks' own exception handler; in `src/runtime/ExceptionHandler.cpp` | runtime |
 | `push`, `pop` | See above | free |
 

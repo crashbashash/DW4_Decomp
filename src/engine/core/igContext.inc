@@ -13,18 +13,18 @@ igMetaObject *igContext_GetMetaObject(void)
 
 void igContext_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContext_Register);
+    igMetaObject_RunStaticInit(igContext_Register);
 }
 
 static igMetaObjectCallback g_igContext_callbackList[] = { igContextExtInfoList_EnsureRegistered, igContextExtList_EnsureRegistered, 0 };
 
-void igContext_Register(void) {
+CallbackArray *igContext_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igContext_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igContext_GetMetaObjectFunction,
         "igContext",
         0x14,

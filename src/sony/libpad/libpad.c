@@ -1,3 +1,4 @@
+#include "dw4/libkernl.h"
 typedef struct sceSifRpcData {
     void *paddr;
     unsigned int pid;
@@ -109,10 +110,6 @@ int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send
                   int rsize, void (*end_function)(void *), void *end_param);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
-void scePrintf(const char *format, ...);
-void SyncDCache(void *start, void *end);
-int DIntr(void);
-int EIntr(void);
 void *memcpy(void *dst, const void *src, unsigned int n);
 void *memset(void *dst, int value, unsigned int n);
 char *strcpy(char *dst, const char *src);

@@ -4,7 +4,7 @@ igMetaField *g_igIterateField_currentMetaField;
 
 void *FUN_00227780(int arg0) {
     FUN_002278a0();
-    return igMetaObject_CreateInstance(g_igIterateField_metaObject, arg0);
+    return igMetaObject_CreateInstance(g_igIterateField_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igIterateField_GetMetaObject(void)
@@ -22,11 +22,11 @@ int igIterateField_GetVTable(void) {
     int *p;
     int *q;
     int v;
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igIterateField_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    t = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igIterateField_vtable[0];
     if (ps != 0) {
         p = *(int **)ps;
@@ -43,25 +43,25 @@ int igIterateField_GetVTable(void) {
 
 void FUN_002278a0(void)
 {
-    igMetaObject_RunStaticInit(igIterateField_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igIterateField_Register);
 }
 
 static igMetaObjectCallback g_igIterateField_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
 
-void igIterateField_Register(void) {
+CallbackArray *igIterateField_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igIterateField_metaObject,
-        igIterator_Register,
-        igIterator_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igIterator_Register,
+        (igMetaObjectGetFunction)igIterator_GetPublishedMetaObject,
         thunk_igIterateField_GetMetaObject,
         "igIterateField",
         0x10, /* instance size */
         igIterateField_GetVTable,
         &igIterateField_InitFields,
         0, /* extra callback item */
-        g_igIterateField_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igIterateField_callbackList /* callback list */
     );
 }
 
@@ -70,8 +70,8 @@ void thunk_igIterateField_GetMetaObject(void) {
 }
 
 static FieldFactory g_igIterateField_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
 };
 static const char *g_igIterateField_fieldTable[] = {
     "_iterated",
@@ -95,7 +95,7 @@ void igIterateField_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igIterateField_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaObject_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_igIterateField_fieldTable, g_igIterateField_fieldHandles, g_igIterateField_fieldOffsets, temp_s2);
 }
 

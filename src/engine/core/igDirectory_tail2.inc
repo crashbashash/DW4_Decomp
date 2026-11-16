@@ -27,7 +27,7 @@ void igDirectory_ReleaseDefaults(igDirectoryView *self) {
             info->_directory = 0;
         }
     }
-    igObject_ReleaseDefaults((int)self);
+    igObject_ReleaseDefaults((igObject *)self);
     if (self->_loadingSemaphore != 0 && self->_loadingSemaphore->IsCreated() != 0) {
         destroyed = self->_loadingSemaphore->Destroy();
     }
@@ -334,7 +334,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
             }
         }
     }
-    igSmartPointer<igDirEntryView> record(((igDirEntryView *)igObjectDirEntry_Create((int)(((void *)igObject_GetAllocator((int)self))))));
+    igSmartPointer<igDirEntryView> record(((igDirEntryView *)igObjectDirEntry_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());
     if (name != 0) {
@@ -350,7 +350,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
             pool = Memory_GetAllocatorByName((int)(((char *)igMetaObject_GetPoolName((int *)info))));
         }
         if (pool == 0) {
-            pool = ((void *)igObject_GetAllocator((int)obj));
+            pool = ((void *)igObject_GetAllocator((igObject *)obj));
         }
         if (pool != 0) {
             mode = ((MemoryContext *)Memory_GetCurrentContextAlias())->IndexOfAllocator(pool);
@@ -377,7 +377,7 @@ int igDirectory_AddMemoryRef(igDirectoryView *self, int field, int memory, int m
         if (index < self->_count) { int r = igDirectory_GetObject(self, index); if (r == memory) return -1; }
     }
     if (memType == 0) memType = igCharMetaField_GetDefaultDescriptor();
-    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)igMemoryDirEntry_Create((int)igObject_GetAllocator((int)self))));
+    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)igMemoryDirEntry_Create((int)igObject_GetAllocator((igObject *)self))));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());
     if (name) igNamedObject_SetName((igNamedObject *)(record.get()), name);
@@ -415,7 +415,7 @@ int igDirectory_AddRawRef(igDirectoryView *list, int key, int name, int val) {
             if (f == key) return -1;
         }
     }
-    igSmartPointer<igDirEntryView> entry((igDirEntryView *)igDirEntry_Create((int)(((void *)igObject_GetAllocator((int)list)))));
+    igSmartPointer<igDirEntryView> entry((igDirEntryView *)igDirEntry_Create((int)(((void *)igObject_GetAllocator((igObject *)list)))));
     igNamedObject_SetName((igNamedObject *)(entry.get()), name);
     entry.get()->_resolveMethod = val;
     entry.get()->_refType = 2;

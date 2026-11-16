@@ -11,7 +11,7 @@ void FUN_00186a40(void) {
 
 igMetaObject *FUN_00186a80(void) {
     if (g_igVolume_metaObject == 0) {
-        g_igVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igVolume_metaObject;
 }
@@ -33,9 +33,9 @@ void FUN_00186b20(void)
  * so no vtable getter; instance size 8). FUN_00186a40 is the set-once latch (a gp byte flag guards
  * a few shared one-time registrations); FUN_00186bc0 is igVolume's own extra callback item
  * (RegisterClass's stack argument 2). */
-void igVolume_Register(void) {
+CallbackArray *igVolume_Register(void) {
     FUN_00186a40();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVolume_metaObject,
         igObject_Register,                     /* base class registrar (igObject) */
@@ -44,7 +44,7 @@ void igVolume_Register(void) {
         "igVolume",
         8, /* instance size */
         0,
-        &igVolume_InitFields_00186bb0[0],      /* field adder (class InitFields) */
+        (igMetaObjectCallback)&igVolume_InitFields_00186bb0[0],      /* field adder (class InitFields) */
         FUN_00186bc0, /* extra callback item */
         0 /* callback list */
     );
@@ -55,12 +55,12 @@ void thunk_igVolume_GetMetaObject(void) {
 }
 
 void FUN_00186bb0(void) {
-    igMetaObject_AddExitCallback(&thunk_FUN_0018f4a0);
+    igMetaObject_AddExitCallback((int)&thunk_FUN_0018f4a0);
 }
 
 void FUN_00186bc0(void) {
     FUN_0018ec40();
-    igMetaObject_AddRegistrationCallback(&FUN_0018edb0);
+    igMetaObject_AddRegistrationCallback((int)&FUN_0018edb0);
 }
 
 void thunk_FUN_0018f4a0(void) {

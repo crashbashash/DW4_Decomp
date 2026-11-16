@@ -1,4 +1,4 @@
-double __ieee754_acos(double x);
+#include "dw4/newlib_math.h"
 
 double acos(double x)
 {

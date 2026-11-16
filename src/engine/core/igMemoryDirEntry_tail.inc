@@ -60,7 +60,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
                 s1->WriteRawFieldMem(src + j * esz, dst + j * esz, (int)file, file->_endianSwap);
             }
         } else {
-            memcpy(s8 + s3, src, s0);
+            memcpy((void *)(s8 + s3), (void *)src, s0);
         }
         src += s0;
         s3 = (s3 + s0) % s4;
@@ -172,7 +172,7 @@ void igMemoryDirEntry_ReadMemory(igMemoryDirEntry *self, igIGBFile *file) {
         }
         s0 = s8 - s6;
         s0 = s0 < s1 ? s0 : s1;
-        memcpy(s7, base + s3, s0);
+        memcpy(s7, (void *)(base + s3), s0);
         s7 += s0;
         s1 -= s0;
         s6 += s0;

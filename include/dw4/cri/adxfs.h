@@ -2,6 +2,8 @@
 #ifndef DW4_CRI_ADXFS_H
 #define DW4_CRI_ADXFS_H
 
+#include "dw4/cri/cvfs.h"
+
 /* Disc file system: the root folder and the sceCd read mode. */
 typedef struct AdxDvdFsPrm {
     const char *rootdir;
@@ -27,12 +29,7 @@ typedef struct AdxFcachePrm {
     int bufsize;
 } AdxFcachePrm;
 
-typedef void *(*AdxFsGetIfFn)(void);
-
-void cvFsAddDev(char *devname, AdxFsGetIfFn get_if, void *prm);
-void cvFsSetDefDev(char *devname);
-void cvFsEntryErrFunc(void (*func)(void *obj, const char *msg, int code), void *obj);
 void ADXERR_CallErrFunc1(const char *msg);
-struct CvFsVtbl *mfCiGetInterface(void);
+CvFsVtbl *mfCiGetInterface(void);
 
 #endif

@@ -1,7 +1,6 @@
 #include "dw4/sony/libmpeg.h"
+#include "dw4/libkernl.h"
 
-int DIntr(void);
-int EIntr(void);
 int sprintf(char *buf, const char *format, ...);
 long __muldi3(long a, long b);
 void _cscStoreImage(_sceMpegDecoder *dec, _sceMpegPicture *picture);

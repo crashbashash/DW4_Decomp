@@ -129,7 +129,7 @@ int igProperty_FindByName(igObjectList *list, igMetaField *field, int name) {
     for (i = 0; i < count; i++) {
         item = ((int *)list->_data)[i];
         text = *(int *)(item + field->_offset);
-        if ((text != 0) && (strcmp(text, name) == 0)) {
+        if ((text != 0) && (strcmp((const char *)text, (const char *)name) == 0)) {
             return item;
         }
     }

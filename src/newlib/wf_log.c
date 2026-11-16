@@ -1,4 +1,4 @@
-float __ieee754_logf(float x);
+#include "dw4/newlib_math.h"
 
 float logf(float x)
 {

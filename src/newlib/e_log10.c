@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
-extern double __ieee754_log(double);
 static const double two54 = 1.80143985094819840000e+16,
                     ivln10 = 4.34294481903251816668e-01,
                     log10_2hi = 3.01029995663611771306e-01,

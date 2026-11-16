@@ -21,7 +21,7 @@ igMetaField *g_igArenaMemoryPool_smallestChunkSizeMetaField;
 void **igArenaMemoryPool_Create(int allocator) {
     void **pool;
 
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igArenaMemoryPool_EnsureRegistered();
         pool = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igArenaMemoryPool_metaObject, (igMemoryPoolView *)allocator)));
     } else {
@@ -37,7 +37,7 @@ void **igArenaMemoryPool_Create(int allocator) {
 
 int igArenaMemoryPool_Clone(int source, int copyMode) {
     int copy;
-    if (*g_objectSystem != 0) {
+    if (g_objectSystem->active != 0) {
         igArenaMemoryPool_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)source, copyMode);
     }
@@ -67,7 +67,7 @@ int igArenaMemoryPool_GetVTable(void) {
     igObject *r;
 
     igArenaMemoryPool_Initialize(&pool);
-    vtable = *(int *)((char *)&pool + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    vtable = *(int *)((char *)&pool + g_objectSystem->vtableProbeOffset);
     pool._vtable = (int)&g_igArenaMemoryPool_vtable[0];
     p = (igObject *)&pool._eventTracker;
     if (p != 0) {
@@ -94,16 +94,16 @@ int igArenaMemoryPool_GetVTable(void) {
 
 void igArenaMemoryPool_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igArenaMemoryPool_Register);
+    igMetaObject_RunStaticInit(igArenaMemoryPool_Register);
 }
 
 static igMetaObjectCallback g_igArenaMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
 
-void igArenaMemoryPool_Register(void) {
-    igMetaObject_RegisterClass(
+CallbackArray *igArenaMemoryPool_Register(void) {
+    return igMetaObject_RegisterClass(
         0,
         &g_igArenaMemoryPool_metaObject,
-        (igMetaObjectRegisterFunction)igMemoryPool_Register,
+        igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igArenaMemoryPool_GetMetaObjectFunction,
         "igArenaMemoryPool",

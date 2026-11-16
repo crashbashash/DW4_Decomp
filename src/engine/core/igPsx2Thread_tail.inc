@@ -27,7 +27,7 @@ int igPsx2Thread_GetVTable(void) {
     thread._vtable = (int)&g_igPsx2Thread_vtable[0];
     p1 = (igObject *)&thread._threadDoneSema;
     *(int *)p1 = 0;
-    t = *(int *)((char *)&thread + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    t = *(int *)((char *)&thread + g_objectSystem->vtableProbeOffset);
     thread._vtable = (int)&g_igPsx2Thread_vtable[0];
     if (p1 != 0) {
         p1 = *(igObject **)p1;
@@ -46,7 +46,7 @@ int igPsx2Thread_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
             }
         }
     }
@@ -55,17 +55,17 @@ int igPsx2Thread_GetVTable(void) {
 
 void igPsx2Thread_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2Thread_Register);
+    igMetaObject_RunStaticInit(igPsx2Thread_Register);
 }
 
 static igMetaObjectCallback g_igPsx2Thread_callbackList[] = { igSemaphore_EnsureRegistered, 0 };
 
-void igPsx2Thread_Register(void) {
+CallbackArray *igPsx2Thread_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2Thread_metaObject,
-        (igMetaObjectRegisterFunction)igThread_Register,
+        igThread_Register,
         igThread_GetPublishedMetaObject,
         igPsx2Thread_GetMetaObjectFunction,
         "igPsx2Thread",

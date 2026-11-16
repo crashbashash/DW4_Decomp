@@ -10,16 +10,16 @@ igMetaObject *igBase_GetMetaObject(void)
 
 void FUN_002292d0(void)
 {
-    igMetaObject_RunStaticInit(igBase_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igBase_Register);
 }
 
-void igBase_Register(void) {
+CallbackArray *igBase_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igBase_metaObject,
-        igInterfaced_Register,
-        igInterfaced_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igInterfaced_Register,
+        (igMetaObjectGetFunction)igInterfaced_GetPublishedMetaObject,
         thunk_igBase_GetMetaObject,
         "igBase",
         0x20, /* instance size */

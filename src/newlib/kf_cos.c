@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_math.h"
 
 #define one ((float)1.0000000000e+00)
 #define C1 ((float)4.1666667908e-02)

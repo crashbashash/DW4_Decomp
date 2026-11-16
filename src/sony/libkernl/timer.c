@@ -83,8 +83,6 @@ void *memset(void *dst, int value, unsigned int size);
 int _sceTimerAlarmInit(void);
 int AddIntcHandler2(int cause, int (*handler)(int), int next, void *arg);
 int RemoveIntcHandler(int cause, int id);
-int EnableIntc(int cause);
-int DisableIntc(int cause);
 void SetT2(unsigned int addr, unsigned int value);
 int cbTimerHandler(int cause, void *arg, void *addr);
 

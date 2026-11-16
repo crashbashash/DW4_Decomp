@@ -1,15 +1,13 @@
 #pragma push
 #pragma readonly_strings on
 #include "dw4/p2texture.h"
+#include "dw4/p2multipass.h"
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 int DIntr();
 int EIntr();
 int p2GrowPool();
 int p2SubmitDmaPacket();
-void p2SetClut(void *clut);
-int p2UploadTex0Context2();
-int p2GetTextureBase();
 int p2RegisterPredicateName();
 void textureDeferredPredicate(void);
 int textureLoadedPredicate();
@@ -20,10 +18,22 @@ int p2AddDmaPredicate();
 void FUN_001f74e0(void);
 void FUN_001f7500(void);
 
+struct N_208210 *FUN_00208210(void);
+void FUN_00208f20(int arg0);
+void FUN_00209780(char arg0, unsigned char arg1, int arg2);
+int FUN_0020b7f0(struct N_20b7f0 *arg0);
+int p2ReserveDmaCompletions(); /* called with two arguments here; dmaChannel.c's definition takes one */
+int p2AddDmaCompletion();
+
+extern void *p2FreeTextures;
+extern void *DAT_0056c0d0;
+extern void *DAT_0056c0d8;
+extern void *DAT_0056c0e0[17];
+extern unsigned int DAT_0056c128;
+extern struct Ch_2097f0 *DAT_00568f08[4]; /* p2DmaCurrentPacket[P2_DMA_GIF]; declared as a scalar or [1] it adds 8 bytes to FUN_002097f0 */
+
 extern int p2BlockedSema;
 extern long long DAT_0056b020[4];
-extern int p2TextureCombineMode[4];
-extern int p2ProgramFlags[4];
 extern long long DAT_0056c068;
 extern short DAT_00568e08[8];
 extern short DAT_00568e0a[8];
@@ -48,19 +58,17 @@ extern long long DAT_0056c148[4];
 extern int DAT_0056c130[4];
 
 void FUN_00208170(int arg0) {
-    extern int p2DirtyFlags[4];
-    extern int p2CurrentProgram[4];
     int idx;
     long long v;
     int bits;
     long long b64;
 
-    idx = p2CurrentProgram[0] * 4;
+    idx = p2CurrentProgram * 4;
     *(int *)((char *)p2TextureCombineMode + idx) = arg0;
     v = DAT_0056b020[0] & ~((long long)0xF << idx);
     DAT_0056b020[0] = v;
     bits = ((arg0 * 2) | ((*(unsigned int *)((char *)p2ProgramFlags + idx) >> 0xA) & 1)) & 0xF;
-    p2DirtyFlags[0] |= 0x111;
+    p2DirtyFlags |= 0x111;
     b64 = bits;
     DAT_0056b020[0] = v | (b64 << idx);
 }
@@ -75,13 +83,12 @@ struct N_208210 {
     char lo:7; char flag:1; char f71; char f72;
 };
 struct N_208210 *FUN_00208210(void) {
-    extern struct N_208210 *p2FreeTextures[4];
     struct N_208210 *o;
-    if (p2FreeTextures[0] == 0) {
-        p2GrowPool(0xA, &p2FreeTextures[0]);
+    if (p2FreeTextures == 0) {
+        p2GrowPool(0xA, &p2FreeTextures);
     }
-    o = p2FreeTextures[0];
-    p2FreeTextures[0] = o->next;
+    o = p2FreeTextures;
+    p2FreeTextures = o->next;
     o->lo = 0;
     o->q8 = 0;
     o->q0 = 0;
@@ -105,45 +112,36 @@ typedef struct O {
     unsigned char hi : 1;
 } O;
 static void FUN_002082b0(O *arg0) {
-    extern void * p2FreeTextures[4];
     arg0->lo = 0;
     arg0->f8 = 0;
     arg0->f0 = 0;
-    arg0->f24 = p2FreeTextures[0];
+    arg0->f24 = p2FreeTextures;
     arg0->f28 = 0;
-    p2FreeTextures[0] = arg0;
+    p2FreeTextures = arg0;
 }
 
 struct B_2082f0 { char pad[24]; int f24; int f28; char pad2[24]; int f56; short s60; short s62; short f64; };
 void FUN_002082f0(void) {
-    struct B_2082f0 *FUN_00208210();
-    int FUN_00209780();
-    extern int p2TextureFunction[16];
-    extern int p2FreeTextures[4];
-    extern struct B_2082f0 * DAT_0056c0d0[4];
-    extern struct B_2082f0 * DAT_0056c0d8[4];
-    extern int DAT_0056c0e0[17];
-    extern int DAT_0056c128[4];
     unsigned int i;
     unsigned int j;
     struct B_2082f0 *temp_v0_2;
 
     i = 0;
-    p2FreeTextures[0] = 0;
+    p2FreeTextures = 0;
     DAT_0056c060[0] = 0x4000;
     do {
         DAT_0056c0e0[i] = 0;
         i += 1;
     } while (i < 0x11U);
-    DAT_0056c128[0] = 0;
-    p2GrowPool(0xA, &p2FreeTextures[0]);
-    temp_v0_2 = FUN_00208210();
-    DAT_0056c0d0[0] = temp_v0_2;
+    DAT_0056c128 = 0;
+    p2GrowPool(0xA, &p2FreeTextures);
+    temp_v0_2 = (struct B_2082f0 *)FUN_00208210();
+    DAT_0056c0d0 = temp_v0_2;
     temp_v0_2->f24 = 0;
-    DAT_0056c0d0[0]->f28 = 0;
+    ((struct B_2082f0 *)DAT_0056c0d0)->f28 = 0;
     p2GetTextureBase(&temp_v0_2->f56);
     temp_v0_2->f64 = DAT_0056c060[0] - temp_v0_2->f56;
-    DAT_0056c0d8[0] = DAT_0056c0d0[0];
+    DAT_0056c0d8 = DAT_0056c0d0;
     DAT_0056c078[0] = temp_v0_2->f56;
     if (p2FirstOpen[0] != 0) {
         p2RegisterPredicateName(textureLoadedPredicate, &text_textureLoadedPredicate[0]);
@@ -213,18 +211,13 @@ typedef struct Texture {
 } Texture;
 
 void FUN_002084e0(Texture *texture) {
-    extern int p2CurrentProgram;
-    extern GsSyncState *p2CurrentGsRegisters;
-    extern int p2DirtyFlags;
-    extern long long p2GsDirtyRegisters;
-    void p2UploadTex0Context2(void);
     if (texture == 0) return;
     if (texture->clut != 0) {
         p2SetClut(texture->clut);
         return;
     }
     DAT_0056c068++;
-    p2CurrentGsRegisters->textureFunction = texture->function;
+    ((GsSyncState *)p2CurrentGsRegisters)->textureFunction = texture->function;
     if (texture->bufferMode != 0) {
         if (texture->bufferMode == 1) {
             texture->address = DAT_00568e12[0] ? 0 : DAT_00568e1c[0];
@@ -238,19 +231,19 @@ void FUN_002084e0(Texture *texture) {
         texture->address = texture->address << 5;
     }
     if (p2CurrentProgram == 0) {
-        p2CurrentGsRegisters->tex0_1.tbp0 = texture->address;
-        p2CurrentGsRegisters->tex0_1.tbw = texture->tex0.tbw;
-        p2CurrentGsRegisters->tex0_1.psm = texture->tex0.psm;
-        p2CurrentGsRegisters->tex0_1.tw = texture->tex0.tw;
-        p2CurrentGsRegisters->tex0_1.th = texture->tex0.th;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.tbp0 = texture->address;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.tbw = texture->tex0.tbw;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.psm = texture->tex0.psm;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.tw = texture->tex0.tw;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.th = texture->tex0.th;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x48000040LL;
     } else {
-        p2CurrentGsRegisters->tex0_2.tbp0 = texture->address;
-        p2CurrentGsRegisters->tex0_2.tbw = texture->tex0.tbw;
-        p2CurrentGsRegisters->tex0_2.psm = texture->tex0.psm;
-        p2CurrentGsRegisters->tex0_2.tw = texture->tex0.tw;
-        p2CurrentGsRegisters->tex0_2.th = texture->tex0.th;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.tbp0 = texture->address;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.tbw = texture->tex0.tbw;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.psm = texture->tex0.psm;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.tw = texture->tex0.tw;
+        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.th = texture->tex0.th;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x48000080LL;
         if (p2CurrentProgram == 1 && texture->bufferMode == 0) p2UploadTex0Context2();
@@ -267,98 +260,82 @@ void FUN_00208f20(int arg0) {
 
 typedef struct P_208f70 { char pad[52]; unsigned char b0:3; unsigned char mode:2; unsigned char b5:3; char pad2[7]; unsigned char c0:3; unsigned char cmode:2; unsigned char c5:3; } P_208f70;
 void FUN_00208f70(int arg0) {
-    int FUN_00208f20();
-    extern long long p2GsDirtyRegisters[4];
-    extern int p2DirtyFlags[4];
-    extern int p2CurrentProgram[4];
-    extern P_208f70 *p2CurrentGsRegisters[4];
-    extern int p2TextureFunction[4];
     int temp_a2;
     long long temp_a1;
 
-    FUN_00208f20();
-    if (p2CurrentProgram[0] == 0) {
-        p2TextureFunction[p2CurrentProgram[0]] = arg0;
-        p2CurrentGsRegisters[0]->mode = arg0;
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x40;
+    FUN_00208f20(arg0);
+    if (p2CurrentProgram == 0) {
+        p2TextureFunction[p2CurrentProgram] = arg0;
+        ((P_208f70 *)p2CurrentGsRegisters)->mode = arg0;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x40;
     } else {
-        p2TextureFunction[p2CurrentProgram[0]] = arg0;
-        p2CurrentGsRegisters[0]->cmode = arg0;
-        temp_a2 = p2DirtyFlags[0] | 0x40;
-        temp_a1 = p2GsDirtyRegisters[0] | 0x80;
-        p2DirtyFlags[0] = temp_a2;
-        p2GsDirtyRegisters[0] = temp_a1;
-        if (p2CurrentProgram[0] == 1) {
+        p2TextureFunction[p2CurrentProgram] = arg0;
+        ((P_208f70 *)p2CurrentGsRegisters)->cmode = arg0;
+        temp_a2 = p2DirtyFlags | 0x40;
+        temp_a1 = p2GsDirtyRegisters | 0x80;
+        p2DirtyFlags = temp_a2;
+        p2GsDirtyRegisters = temp_a1;
+        if (p2CurrentProgram == 1) {
             p2UploadTex0Context2();
         }
     }
-    p2DirtyFlags[0] |= 0x11;
+    p2DirtyFlags |= 0x11;
 }
 
 typedef struct Obj_209090 { char pad[52]; unsigned char a52 : 2; unsigned char b52 : 1; unsigned char c52 : 2; unsigned char r52 : 3; char pad2[7]; unsigned char a60 : 2; unsigned char b60 : 1; unsigned char c60 : 2; unsigned char r60 : 3; } Obj_209090;
 void FUN_00209090(int arg0, int arg1) {
-    int FUN_00208f20();
-    extern long long p2GsDirtyRegisters[4];
-    extern int p2DirtyFlags[4];
-    extern int p2CurrentProgram[4];
-    extern Obj_209090 *p2CurrentGsRegisters[4];
-    extern int p2TextureFunction[4];
-    FUN_00208f20();
-    if (p2CurrentProgram[0] == 0) {
-        *(int *)((char *)p2TextureFunction + p2CurrentProgram[0] * 4) = arg0;
-        p2CurrentGsRegisters[0]->c52 = arg0;
-        p2CurrentGsRegisters[0]->b52 = arg1;
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x40;
+    FUN_00208f20(arg0);
+    if (p2CurrentProgram == 0) {
+        *(int *)((char *)p2TextureFunction + p2CurrentProgram * 4) = arg0;
+        ((Obj_209090 *)p2CurrentGsRegisters)->c52 = arg0;
+        ((Obj_209090 *)p2CurrentGsRegisters)->b52 = arg1;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x40;
     } else {
-        *(int *)((char *)p2TextureFunction + p2CurrentProgram[0] * 4) = arg0;
-        p2CurrentGsRegisters[0]->c60 = arg0;
-        p2CurrentGsRegisters[0]->b60 = arg1;
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x80;
-        if (p2CurrentProgram[0] == 1) {
+        *(int *)((char *)p2TextureFunction + p2CurrentProgram * 4) = arg0;
+        ((Obj_209090 *)p2CurrentGsRegisters)->c60 = arg0;
+        ((Obj_209090 *)p2CurrentGsRegisters)->b60 = arg1;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x80;
+        if (p2CurrentProgram == 1) {
             p2UploadTex0Context2();
         }
     }
-    p2DirtyFlags[0] |= 0x11;
+    p2DirtyFlags |= 0x11;
 }
 
 typedef struct R { unsigned char a : 2; unsigned char b : 2; unsigned short c : 10; unsigned long long d : 10; unsigned long long e : 10; unsigned short f : 10; } R;
 typedef struct P_209210 { char pad[52]; unsigned char x0 : 2; unsigned char fl : 1; unsigned char r : 5; char pad2[7]; unsigned char y0 : 2; unsigned char fl2 : 1; unsigned char r2 : 5; char pad3[3]; R r64; R r72; } P_209210;
 void FUN_00209210(int arg0, int arg1, int arg2, long long arg3, long long arg4, int arg5, int arg6) {
-    extern long long p2GsDirtyRegisters[4];
-    extern int p2DirtyFlags[4];
-    extern int p2CurrentProgram[4];
-    extern P_209210 *p2CurrentGsRegisters[4];
     int temp_a2;
     R *q;
     long long temp_a1;
-    if (p2CurrentProgram[0] == 0) {
-        p2CurrentGsRegisters[0]->fl = arg6;
-        p2CurrentGsRegisters[0]->r64.a = arg0;
-        p2CurrentGsRegisters[0]->r64.b = arg1;
-        p2CurrentGsRegisters[0]->r64.c = arg2;
-        q = &p2CurrentGsRegisters[0]->r64;
+    if (p2CurrentProgram == 0) {
+        ((P_209210 *)p2CurrentGsRegisters)->fl = arg6;
+        ((P_209210 *)p2CurrentGsRegisters)->r64.a = arg0;
+        ((P_209210 *)p2CurrentGsRegisters)->r64.b = arg1;
+        ((P_209210 *)p2CurrentGsRegisters)->r64.c = arg2;
+        q = &((P_209210 *)p2CurrentGsRegisters)->r64;
         q->d = (int)arg3;
         q->e = (int)arg4;
         q->f = arg5;
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x140;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x140;
     } else {
-        p2CurrentGsRegisters[0]->fl2 = arg6;
-        p2CurrentGsRegisters[0]->r72.a = arg0;
-        p2CurrentGsRegisters[0]->r72.b = arg1;
-        p2CurrentGsRegisters[0]->r72.c = arg2;
-        q = &p2CurrentGsRegisters[0]->r72;
+        ((P_209210 *)p2CurrentGsRegisters)->fl2 = arg6;
+        ((P_209210 *)p2CurrentGsRegisters)->r72.a = arg0;
+        ((P_209210 *)p2CurrentGsRegisters)->r72.b = arg1;
+        ((P_209210 *)p2CurrentGsRegisters)->r72.c = arg2;
+        q = &((P_209210 *)p2CurrentGsRegisters)->r72;
         q->d = (int)arg3;
         q->e = (int)arg4;
         q->f = arg5;
-        temp_a2 = p2DirtyFlags[0] | 0x40;
-        temp_a1 = p2GsDirtyRegisters[0] | 0x280;
-        p2DirtyFlags[0] = temp_a2;
-        p2GsDirtyRegisters[0] = temp_a1;
-        if (p2CurrentProgram[0] == 1) {
+        temp_a2 = p2DirtyFlags | 0x40;
+        temp_a1 = p2GsDirtyRegisters | 0x280;
+        p2DirtyFlags = temp_a2;
+        p2GsDirtyRegisters = temp_a1;
+        if (p2CurrentProgram == 1) {
             p2UploadTex0Context2();
         }
     }
@@ -373,26 +350,22 @@ typedef struct B_2094c0 {
 } B_2094c0;
 typedef struct P_2094c0 { char pad[104]; B_2094c0 b104; char pad2[6]; B_2094c0 b112; } P_2094c0;
 void FUN_002094c0(int arg0, int arg1) {
-    extern long long p2GsDirtyRegisters[4];
-    extern int p2CurrentProgram[4];
-    extern P_2094c0 *p2CurrentGsRegisters[4];
-    extern int p2DirtyFlags[4];
-    if (p2CurrentProgram[0] == 0) {
-        p2CurrentGsRegisters[0]->b104.f = arg0;
-        p2CurrentGsRegisters[0]->b104.c = arg1;
-        if (p2CurrentGsRegisters[0]->b104.c == 1 || p2CurrentGsRegisters[0]->b104.c == 0) {
-            p2CurrentGsRegisters[0]->b104.m = 0;
+    if (p2CurrentProgram == 0) {
+        ((P_2094c0 *)p2CurrentGsRegisters)->b104.f = arg0;
+        ((P_2094c0 *)p2CurrentGsRegisters)->b104.c = arg1;
+        if (((P_2094c0 *)p2CurrentGsRegisters)->b104.c == 1 || ((P_2094c0 *)p2CurrentGsRegisters)->b104.c == 0) {
+            ((P_2094c0 *)p2CurrentGsRegisters)->b104.m = 0;
         }
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x2000;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x2000;
     } else {
-        p2CurrentGsRegisters[0]->b112.f = arg0;
-        p2CurrentGsRegisters[0]->b112.c = arg1;
-        if (p2CurrentGsRegisters[0]->b112.c == 1 || p2CurrentGsRegisters[0]->b112.c == 0) {
-            p2CurrentGsRegisters[0]->b112.m = 0;
+        ((P_2094c0 *)p2CurrentGsRegisters)->b112.f = arg0;
+        ((P_2094c0 *)p2CurrentGsRegisters)->b112.c = arg1;
+        if (((P_2094c0 *)p2CurrentGsRegisters)->b112.c == 1 || ((P_2094c0 *)p2CurrentGsRegisters)->b112.c == 0) {
+            ((P_2094c0 *)p2CurrentGsRegisters)->b112.m = 0;
         }
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x4000;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x4000;
     }
 }
 
@@ -411,22 +384,18 @@ typedef struct Obj_209650 {
     unsigned short d116 : 12; unsigned short r116 : 4;
 } Obj_209650;
 void FUN_00209650(int arg0, int arg1, int arg2) {
-    extern long long p2GsDirtyRegisters[4];
-    extern int p2DirtyFlags[4];
-    extern int p2CurrentProgram[4];
-    extern Obj_209650 *p2CurrentGsRegisters[4];
-    if (p2CurrentProgram[0] == 0) {
-        p2CurrentGsRegisters[0]->a104 = arg0;
-        p2CurrentGsRegisters[0]->c106 = arg1;
-        p2CurrentGsRegisters[0]->d108 = arg2;
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x2000;
+    if (p2CurrentProgram == 0) {
+        ((Obj_209650 *)p2CurrentGsRegisters)->a104 = arg0;
+        ((Obj_209650 *)p2CurrentGsRegisters)->c106 = arg1;
+        ((Obj_209650 *)p2CurrentGsRegisters)->d108 = arg2;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x2000;
     } else {
-        p2CurrentGsRegisters[0]->a112 = arg0;
-        p2CurrentGsRegisters[0]->c114 = arg1;
-        p2CurrentGsRegisters[0]->d116 = arg2;
-        p2DirtyFlags[0] |= 0x40;
-        p2GsDirtyRegisters[0] |= 0x4000;
+        ((Obj_209650 *)p2CurrentGsRegisters)->a112 = arg0;
+        ((Obj_209650 *)p2CurrentGsRegisters)->c114 = arg1;
+        ((Obj_209650 *)p2CurrentGsRegisters)->d116 = arg2;
+        p2DirtyFlags |= 0x40;
+        p2GsDirtyRegisters |= 0x4000;
     }
 }
 
@@ -444,15 +413,12 @@ struct S_209780 {
     char p2[2];
     char f220;
 };
-void FUN_00209780(char arg0, char arg1, int arg2) {
-    extern long long p2GsDirtyRegisters[4];
-    extern int p2DirtyFlags[4];
-    extern struct S_209780 * p2CurrentGsRegisters[4];
-    p2CurrentGsRegisters[0]->f216 = arg0;
-    p2CurrentGsRegisters[0]->f220 = arg1;
-    p2CurrentGsRegisters[0]->b7 = arg2;
-    p2DirtyFlags[0] |= 0x40;
-    p2GsDirtyRegisters[0] |= 0x08000000;
+void FUN_00209780(char arg0, unsigned char arg1, int arg2) {
+    ((struct S_209780 *)p2CurrentGsRegisters)->f216 = arg0;
+    ((struct S_209780 *)p2CurrentGsRegisters)->f220 = arg1;
+    ((struct S_209780 *)p2CurrentGsRegisters)->b7 = arg2;
+    p2DirtyFlags |= 0x40;
+    p2GsDirtyRegisters |= 0x08000000;
 }
 
 struct G_20a590 {
@@ -484,10 +450,7 @@ struct Tex_2097f0 { long long tag; char p8[40]; int addr; char p52[4]; int tbp; 
 void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     int p2DmaPacketQueued();
     int FUN_001f7e90();
-    int p2AddDmaCompletion();
     void FUN_002084a0();
-    extern struct G_20a590 *p2CurrentGsRegisters[4];
-    extern struct Ch_2097f0 *DAT_00568f08[4];
     extern struct Ch_2097f0 *DAT_00568f38[4];
     extern int DAT_00569128[4];
     extern long long DAT_00569168[4];
@@ -527,16 +490,16 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
                 DAT_00568f38[0]->head = n;
             }
             DAT_00569128[0]++;
-            DAT_00568f08[0] = DAT_00568f38[0];
+            DAT_00568f08[0] = (struct Ch_2097f0 *)DAT_00568f38[0];
             DAT_00569168[0]--;
         }
     }
     EIntr();
     do {
-        p2CurrentGsRegisters[0]->x391 = DAT_004917b0[(*list)->format];
-        p2CurrentGsRegisters[0]->x390 = ((*list)->width + 63) / 64;
-        p2CurrentGsRegisters[0]->x400 = (*list)->width;
-        p2CurrentGsRegisters[0]->x408 = 0;
+        ((struct G_20a590 *)p2CurrentGsRegisters)->x391 = DAT_004917b0[(*list)->format];
+        ((struct G_20a590 *)p2CurrentGsRegisters)->x390 = ((*list)->width + 63) / 64;
+        ((struct G_20a590 *)p2CurrentGsRegisters)->x400 = (*list)->width;
+        ((struct G_20a590 *)p2CurrentGsRegisters)->x408 = 0;
         t = *list;
         fmt = t->format;
         w = t->width;
@@ -548,10 +511,10 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
             h = rows < max ? rows : max;
             /* matching construct: permuter — qwc computed before the transfer-register stores */
             qwc = (DAT_00491730[fmt] * (w * h) + 31) >> 5;
-            p2CurrentGsRegisters[0]->x388 = t->tbp;
-            p2CurrentGsRegisters[0]->x396 = 0;
-            p2CurrentGsRegisters[0]->x398 = y;
-            p2CurrentGsRegisters[0]->x404 = h;
+            ((struct G_20a590 *)p2CurrentGsRegisters)->x388 = t->tbp;
+            ((struct G_20a590 *)p2CurrentGsRegisters)->x396 = 0;
+            ((struct G_20a590 *)p2CurrentGsRegisters)->x398 = y;
+            ((struct G_20a590 *)p2CurrentGsRegisters)->x404 = h;
             FUN_001f7e90(4, DAT_00491820, 0);
             /* matching construct: statement-order search — y += h placed before the GIF tag NLOOP store */
             y += h;
@@ -598,8 +561,6 @@ int FUN_00209cc0(int a) {
 
 struct A0_20a590 { char p0[56]; int f56; unsigned short f60; char p1[4]; unsigned short f66; char p2[2]; signed char f70:7; char p3; char f72; };
 void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
-    int FUN_0020b7f0();
-    extern struct G_20a590 *p2CurrentGsRegisters[4];
     int sp0;
     int s0;
     int v;
@@ -608,12 +569,12 @@ void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4
     short m;
     int pr;
     int t;
-    sp0 = p2CurrentGsRegisters[0]->x355;
+    sp0 = ((struct G_20a590 *)p2CurrentGsRegisters)->x355;
     s0 = (p2GetDisplayFlags() & 2) != 0;
     arg0->f72 = 1;
     switch (arg0->f70) {
     case 1:
-        if (FUN_0020b7f0(arg0) == 0) return;
+        if (FUN_0020b7f0((struct N_20b7f0 *)arg0) == 0) return;
         arg0->f70 = 3;
         break;
     case 4:
@@ -622,32 +583,30 @@ void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4
         arg0->f70 = 3;
         break;
     }
-    p2CurrentGsRegisters[0]->x391 = DAT_004917b0[arg0->f66];
-    p2CurrentGsRegisters[0]->x388 = arg0->f56;
-    p2CurrentGsRegisters[0]->x390 = (arg0->f60 + 63) / 64;
-    p2CurrentGsRegisters[0]->x387 = sp0;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x391 = DAT_004917b0[arg0->f66];
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x388 = arg0->f56;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x390 = (arg0->f60 + 63) / 64;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x387 = sp0;
     if (arg7 != 0) {
-        p2CurrentGsRegisters[0]->x384 = p2CurrentGsRegisters[0]->x368 << 5;
+        ((struct G_20a590 *)p2CurrentGsRegisters)->x384 = ((struct G_20a590 *)p2CurrentGsRegisters)->x368 << 5;
     } else {
-        p2CurrentGsRegisters[0]->x384 = (DAT_00568e12[0] != 0 && !s0) ? (DAT_00568e08[0] * DAT_00568e0a[0]) / 64 : 0;
+        ((struct G_20a590 *)p2CurrentGsRegisters)->x384 = (DAT_00568e12[0] != 0 && !s0) ? (DAT_00568e08[0] * DAT_00568e0a[0]) / 64 : 0;
     }
     if (s0 != 0) u = DAT_00568e22[0]; else u = DAT_00568e08[0];
-    p2CurrentGsRegisters[0]->x386 = u / 64;
-    p2CurrentGsRegisters[0]->x396 = arg3;
-    p2CurrentGsRegisters[0]->x398 = arg4;
-    p2CurrentGsRegisters[0]->x392 = arg1;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x386 = u / 64;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x396 = arg3;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x398 = arg4;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x392 = arg1;
     if (s0 != 0) m = DAT_00568e24[0]; else m = DAT_00568e0a[0];
-    p2CurrentGsRegisters[0]->x394 = m - (arg6 + arg2);
-    p2CurrentGsRegisters[0]->x399 = 0;
-    p2CurrentGsRegisters[0]->x400 = arg5;
-    p2CurrentGsRegisters[0]->x404 = arg6;
-    p2CurrentGsRegisters[0]->x408 = 2;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x394 = m - (arg6 + arg2);
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x399 = 0;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x400 = arg5;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x404 = arg6;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x408 = 2;
     FUN_001f76f0(4, &DAT_00491860[0]);
 }
 
 void FUN_0020a990(void *srcTexture, int srcX, int srcY, void *dstTexture, int dstX, int dstY, int width, int height) {
-    extern struct G_20a590 *p2CurrentGsRegisters[4];
-    int FUN_0020b7f0();
     extern int DAT_00491870[4];
     int xdir;
     int ydir;
@@ -660,7 +619,7 @@ void FUN_0020a990(void *srcTexture, int srcX, int srcY, void *dstTexture, int ds
     dst->f72 = 1;
     switch (dst->f70) {
     case 1:
-        if (FUN_0020b7f0(dst) == 0) return;
+        if (FUN_0020b7f0((struct N_20b7f0 *)dst) == 0) return;
         dst->f70 = 3;
         break;
     case 4:
@@ -672,7 +631,7 @@ void FUN_0020a990(void *srcTexture, int srcX, int srcY, void *dstTexture, int ds
     src->f72 = 1;
     switch (src->f70) {
     case 1:
-        if (FUN_0020b7f0(src) == 0) return;
+        if (FUN_0020b7f0((struct N_20b7f0 *)src) == 0) return;
         src->f70 = 3;
         break;
     case 4:
@@ -681,20 +640,20 @@ void FUN_0020a990(void *srcTexture, int srcX, int srcY, void *dstTexture, int ds
         src->f70 = 3;
         break;
     }
-    p2CurrentGsRegisters[0]->x387 = DAT_004917b0[src->f66];
-    p2CurrentGsRegisters[0]->x384 = src->f56;
-    p2CurrentGsRegisters[0]->x386 = (src->f60 + 63) / 64;
-    p2CurrentGsRegisters[0]->x391 = DAT_004917b0[dst->f66];
-    p2CurrentGsRegisters[0]->x388 = dst->f56;
-    p2CurrentGsRegisters[0]->x390 = (dst->f60 + 63) / 64;
-    p2CurrentGsRegisters[0]->x396 = dstX;
-    p2CurrentGsRegisters[0]->x398 = dstY;
-    p2CurrentGsRegisters[0]->x392 = srcX;
-    p2CurrentGsRegisters[0]->x394 = srcY;
-    p2CurrentGsRegisters[0]->x399 = (xdir << 1) + ydir;
-    p2CurrentGsRegisters[0]->x400 = width;
-    p2CurrentGsRegisters[0]->x404 = height;
-    p2CurrentGsRegisters[0]->x408 = 2;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x387 = DAT_004917b0[src->f66];
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x384 = src->f56;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x386 = (src->f60 + 63) / 64;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x391 = DAT_004917b0[dst->f66];
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x388 = dst->f56;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x390 = (dst->f60 + 63) / 64;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x396 = dstX;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x398 = dstY;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x392 = srcX;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x394 = srcY;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x399 = (xdir << 1) + ydir;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x400 = width;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x404 = height;
+    ((struct G_20a590 *)p2CurrentGsRegisters)->x408 = 2;
     FUN_001f76f0(4, &DAT_00491870[0]);
 }
 
@@ -727,23 +686,20 @@ typedef struct RT_20ad60 {
     long long q376;
 } RT_20ad60;
 int FUN_0020ad60(T_20ad60 *color, T_20ad60 *depth) {
-    int FUN_0020b7f0();
-    extern int p2CurrentProgram[4];
-    extern RT_20ad60 *p2CurrentGsRegisters[4];
     extern int DAT_00491880[4];
     extern int DAT_00491890[4];
     int s0;
     RT_20ad60 *p;
 
-    s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram[0]] >> 0x17) & 1;
+    s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram] >> 0x17) & 1;
     color->f72 = 1;
     switch (color->f70) {
     case 1:
-        if (FUN_0020b7f0(color) == 0) return 0;
+        if (FUN_0020b7f0((struct N_20b7f0 *)color) == 0) return 0;
         color->f70 = 3;
         if (depth != 0) {
             depth->f72 = 1;
-            if (FUN_0020b7f0(depth) == 0) return 0;
+            if (FUN_0020b7f0((struct N_20b7f0 *)depth) == 0) return 0;
             depth->f70 = 3;
         }
         break;
@@ -755,32 +711,32 @@ int FUN_0020ad60(T_20ad60 *color, T_20ad60 *depth) {
     default:
         return 0;
     }
-    p2CurrentGsRegisters[0]->u136.h.a = (0x800 - (color->f60 >> 1)) * 0x10;
-    p2CurrentGsRegisters[0]->u136.h.b = (0x800 - (color->f62 >> 1)) * 0x10;
+    ((RT_20ad60 *)p2CurrentGsRegisters)->u136.h.a = (0x800 - (color->f60 >> 1)) * 0x10;
+    ((RT_20ad60 *)p2CurrentGsRegisters)->u136.h.b = (0x800 - (color->f62 >> 1)) * 0x10;
     if (DAT_00568e28[0] == -1) {
         DAT_00568e28[0] = (int)color;
-        DAT_0056c138[0] = p2CurrentGsRegisters[0]->u352.i;
-        DAT_0056c140[0] = p2CurrentGsRegisters[0]->u368.i;
-        DAT_0056c148[0] = p2CurrentGsRegisters[0]->u176.q;
+        DAT_0056c138[0] = ((RT_20ad60 *)p2CurrentGsRegisters)->u352.i;
+        DAT_0056c140[0] = ((RT_20ad60 *)p2CurrentGsRegisters)->u368.i;
+        DAT_0056c148[0] = ((RT_20ad60 *)p2CurrentGsRegisters)->u176.q;
     }
     if (depth != 0) {
         DAT_00568e30[0] = (int)depth;
-        p2CurrentGsRegisters[0]->u368.z.zbp = ((depth->f56 << 9) / 8) / 2048;
+        ((RT_20ad60 *)p2CurrentGsRegisters)->u368.z.zbp = ((depth->f56 << 9) / 8) / 2048;
         if (depth->f66 == 12 && color->f66 == 3) {
             depth->f66 = 11;
             color->f66 = 2;
             color->psm18 = DAT_004917b0[2];
         }
-        p2CurrentGsRegisters[0]->u368.z.zpsm = DAT_004917b0[depth->f66] & 0xF;
+        ((RT_20ad60 *)p2CurrentGsRegisters)->u368.z.zpsm = DAT_004917b0[depth->f66] & 0xF;
     } else {
         DAT_00568e30[0] = -1;
     }
-    p2CurrentGsRegisters[0]->u352.f.fbp = ((color->f56 << 9) / 8) / 2048;
-    p2CurrentGsRegisters[0]->u352.f.fbw = (unsigned int)color->f60 >> 6;
-    p2CurrentGsRegisters[0]->u352.f.psm = DAT_004917b0[color->f66];
-    p2CurrentGsRegisters[0]->u176.b.x = 0;
+    ((RT_20ad60 *)p2CurrentGsRegisters)->u352.f.fbp = ((color->f56 << 9) / 8) / 2048;
+    ((RT_20ad60 *)p2CurrentGsRegisters)->u352.f.fbw = (unsigned int)color->f60 >> 6;
+    ((RT_20ad60 *)p2CurrentGsRegisters)->u352.f.psm = DAT_004917b0[color->f66];
+    ((RT_20ad60 *)p2CurrentGsRegisters)->u176.b.x = 0;
     if (s0 != 0) {
-        p = p2CurrentGsRegisters[0];
+        p = (RT_20ad60 *)p2CurrentGsRegisters;
         p->q360 = p->u352.q;
         p->q144 = p->u136.q;
         p->q376 = p->u368.q;
@@ -795,26 +751,24 @@ typedef struct S_20b110 {
     char p152[24]; long long q176; char p184[168]; union { long long q; int i; } u352; long long q360; union { long long q; int i; } u368; long long q376;
 } S_20b110;
 void FUN_0020b110(void) {
-    extern int p2CurrentProgram[4];
-    extern S_20b110 *p2CurrentGsRegisters[4];
     short v;
     int a1;
     int s0;
     S_20b110 *p;
 
-    s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram[0]] >> 0x17) & 1;
+    s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram] >> 0x17) & 1;
     a1 = (p2GetDisplayFlags() & 2) != 0;
     if (DAT_00568e28[0] != -1) {
-        p2CurrentGsRegisters[0]->u352.i = DAT_0056c138[0];
-        p2CurrentGsRegisters[0]->u368.i = DAT_0056c140[0];
-        p = p2CurrentGsRegisters[0];
+        ((S_20b110 *)p2CurrentGsRegisters)->u352.i = DAT_0056c138[0];
+        ((S_20b110 *)p2CurrentGsRegisters)->u368.i = DAT_0056c140[0];
+        p = (S_20b110 *)p2CurrentGsRegisters;
         p->q176 = DAT_0056c148[0];
         if (a1 != 0) v = DAT_00568e22[0]; else v = DAT_00568e08[0];
         p->u136.h.a = (0x800 - (v >> 1)) * 0x10;
         if (a1 != 0) v = DAT_00568e24[0]; else v = DAT_00568e0a[0];
-        p2CurrentGsRegisters[0]->u136.h.b = (0x800 - (v >> 1)) * 0x10;
+        ((S_20b110 *)p2CurrentGsRegisters)->u136.h.b = (0x800 - (v >> 1)) * 0x10;
         if (s0 != 0) {
-            p = p2CurrentGsRegisters[0];
+            p = (S_20b110 *)p2CurrentGsRegisters;
             p->q360 = p->u352.q;
             p->q144 = p->u136.q;
             p->q376 = p->u368.q;
@@ -846,8 +800,6 @@ typedef struct N_20b280 {
 } N_20b280;
 
 void FUN_0020b280(N_20b280 *arg0, N_20b280 *arg1, int arg2) {
-    struct N_20b280 *FUN_00208210();
-    extern N_20b280 *DAT_0056c0d0[4];
     long long var_s5;
     unsigned short a0;
     int x;
@@ -870,7 +822,7 @@ void FUN_0020b280(N_20b280 *arg0, N_20b280 *arg1, int arg2) {
                 s4->f64 += ((arg2 - arg1->f56) & 0xFFFF);
             }
         } else {
-            v0 = FUN_00208210();
+            v0 = (N_20b280 *)FUN_00208210();
             v0->f56 = arg1->f56;
             v0->f24 = arg1;
             v0->f28 = arg1->f28;
@@ -878,7 +830,7 @@ void FUN_0020b280(N_20b280 *arg0, N_20b280 *arg1, int arg2) {
             if (s4 != 0) {
                 s4->f24 = v0;
             } else {
-                DAT_0056c0d0[0] = v0;
+                DAT_0056c0d0 = v0;
             }
             if (s3 != 0) {
                 v0->f64 = arg1->f64;
@@ -942,7 +894,7 @@ void FUN_0020b280(N_20b280 *arg0, N_20b280 *arg1, int arg2) {
             s3n->f64 += ((a0b - x) & 0xFFFF);
             s3n->f56 = arg2 + arg0->f64;
         } else {
-            v0 = FUN_00208210();
+            v0 = (N_20b280 *)FUN_00208210();
             v0->f56 = arg2 + arg0->f64;
             { int d = var_s4 - arg0->f64; v0->f64 = d; }
             v0->f24 = s3n;
@@ -962,8 +914,8 @@ void FUN_0020b280(N_20b280 *arg0, N_20b280 *arg1, int arg2) {
     if (arg1->f24 != 0) {
         arg1->f24->f28 = arg0;
     }
-    if (DAT_0056c0d0[0] == arg1) {
-        DAT_0056c0d0[0] = arg0;
+    if (DAT_0056c0d0 == arg1) {
+        DAT_0056c0d0 = arg0;
     }
     old = arg1->m;
     arg1->f24 = 0;
@@ -1000,8 +952,6 @@ typedef struct A_20b650 {
 } A_20b650;
 
 N_20b650 *FUN_0020b650(A_20b650 *arg0, int *arg1, int arg2, long long *arg3) {
-    extern N_20b650 *DAT_0056c0d0[4];
-    extern N_20b650 *DAT_0056c0d8[4];
     N_20b650 *sent;
     N_20b650 *v;
     int pass;
@@ -1013,7 +963,7 @@ N_20b650 *FUN_0020b650(A_20b650 *arg0, int *arg1, int arg2, long long *arg3) {
     int base;
 
     sent = 0;
-    v = DAT_0056c0d8[0];
+    v = DAT_0056c0d8;
     best = 0;
     pass = 0;
     while (pass < 2) {
@@ -1043,8 +993,8 @@ N_20b650 *FUN_0020b650(A_20b650 *arg0, int *arg1, int arg2, long long *arg3) {
             break;
         }
         pass++;
-        v = DAT_0056c0d0[0];
-        sent = DAT_0056c0d8[0];
+        v = DAT_0056c0d0;
+        sent = DAT_0056c0d8;
     }
     if (arg3 != 0) {
         *arg3 = best;
@@ -1055,31 +1005,26 @@ N_20b650 *FUN_0020b650(A_20b650 *arg0, int *arg1, int arg2, long long *arg3) {
 struct W_20b7f0 { long long f0; char p8[24]; int f32; char p36[12]; int f48; char p52[12]; unsigned char b0:3; unsigned char b3:1; unsigned char b4:4; };
 struct V_20b7f0 { long long f0; long long f8; };
 struct N_20b7f0 { long long f0; long long f8; char p16[8]; int f24; char p28[42]; char m:7; char hi:1; };
-unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
+int FUN_0020b7f0(struct N_20b7f0 *arg0) {
     int p2AddFinishFunc();
-    int FUN_0020b280();
-    int FUN_0020b650();
     extern struct W_20b7f0 *DAT_00568f04[4];
-    extern struct V_20b7f0 *DAT_00568f08[4];
-    extern int DAT_0056c0d0[4];
-    extern int DAT_0056c0d8[4];
     int r;
     long long t;
     int s0;
     struct W_20b7f0 *p;
     long long *lp;
     r = -1;
-    s0 = FUN_0020b650(arg0, &r, 1, 0);
+    s0 = (int)FUN_0020b650((struct A_20b650 *)arg0, &r, 1, 0);
     if (r >= 0) {
-        FUN_0020b280(arg0, s0, r);
+        FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
     } else {
-        s0 = FUN_0020b650(arg0, &r, 0, &t);
+        s0 = (int)FUN_0020b650((struct A_20b650 *)arg0, &r, 0, &t);
         if (r >= 0) {
             if (DAT_0056c130[0] == 1) {
                 p2AddFinishFunc(FUN_001f7500, 0);
                 t = DAT_00568f04[0]->f0;
                 p2SubmitDmaPacket(1);
-                FUN_0020b280(arg0, s0, r);
+                FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
                 p2AddDmaPredicate(2, FUN_001f74e0, t);
             } else {
                 p = DAT_00568f04[0];
@@ -1087,10 +1032,10 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
                     p->b3 = 1;
                 }
                 p2SubmitDmaPacket(1, p);
-                FUN_0020b280(arg0, s0, r);
+                FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
                 p2AddDmaPredicate(2, textureDeferredPredicate, t);
             }
-            lp = &DAT_00568f08[0]->f8;
+            lp = &((struct V_20b7f0 *)DAT_00568f08[0])->f8;
             if (*lp < t) {
                 *lp = t;
             }
@@ -1100,52 +1045,52 @@ unsigned char FUN_0020b7f0(struct N_20b7f0 *arg0) {
         arg0->m = 2;
         arg0->f0 = 0;
         arg0->f8 = 0;
-        DAT_0056c0d8[0] = arg0->f24;
-        if (DAT_0056c0d8[0] == 0) {
-            DAT_0056c0d8[0] = DAT_0056c0d0[0];
+        DAT_0056c0d8 = (void *)arg0->f24;
+        if (DAT_0056c0d8 == 0) {
+            DAT_0056c0d8 = DAT_0056c0d0;
         }
     }
-    return (~r == 0) ^ 1;
+    return (unsigned char)((~r == 0) ^ 1);
 }
 
-#pragma cplusplus on
-extern "C" {
-int p2ReserveDmaCompletions(...);
-int p2AddDmaCompletion(...);
-void FUN_0020b9d0(void *arg0);
-}
-struct N_20b9d0 {
+typedef struct N_20b9d0 {
     char pad0[8];
     long long f8;
     char pad1[16];
-    N_20b9d0 *f32;
-    N_20b9d0 *f36;
+    struct N_20b9d0 *f32;
+    struct N_20b9d0 *f36;
     char pad2[30];
     char m : 7;
     char hi : 1;
     char f71;
     char f72;
-    int getM() const { return m; }
-    void Set() {
-        extern long long * DAT_00568f04[4];
-        m = 4;
-        f8 = *DAT_00568f04[0];
-        p2AddDmaCompletion(1, &FUN_00208430, this);
-    }
-};
+} N_20b9d0;
+
+static inline int N_20b9d0_GetM(const N_20b9d0 *n) {
+    return n->m;
+}
+
+static inline void N_20b9d0_Set(N_20b9d0 *n) {
+    extern long long *DAT_00568f04[4];
+    n->m = 4;
+    n->f8 = *DAT_00568f04[0];
+    p2AddDmaCompletion(1, &FUN_00208430, n);
+}
+
 void FUN_0020b9d0(void *arg0) {
-    extern long long * DAT_00568f04[4];
+    extern long long *DAT_00568f04[4];
     N_20b9d0 *n = (N_20b9d0 *)arg0;
     N_20b9d0 *var_s0;
     N_20b9d0 *c;
     int a1;
+    int t;
     a1 = (n->f36 != 0) + 1;
     var_s0 = n->f32;
-    int t = n->f71 + a1;
+    t = n->f71 + a1;
     if (n->f72 == 0) {
         p2ReserveDmaCompletions(t, a1);
         DIntr();
-        n->Set();
+        N_20b9d0_Set(n);
         c = n->f36;
         if (c != 0) {
             c->m = 4;
@@ -1153,15 +1098,14 @@ void FUN_0020b9d0(void *arg0) {
             p2AddDmaCompletion(1, &FUN_00208430, n->f36);
         }
         while (var_s0 != 0) {
-            if (var_s0->getM() != 1) {
-                var_s0->Set();
+            if (N_20b9d0_GetM(var_s0) != 1) {
+                N_20b9d0_Set(var_s0);
             }
             var_s0 = var_s0->f32;
         }
         EIntr();
     }
 }
-#pragma cplusplus reset
 
 typedef struct P2Texture {
     long long f0;
@@ -1184,14 +1128,13 @@ typedef struct P2Texture {
 } P2Texture;
 int printf(const char *, ...);
 P2Texture *p2LoadTexture(void *image, int width, int height, int format, int deferred) {
-    P2Texture *FUN_00208210();
     extern int DAT_0056c0c0[4];
     extern unsigned int DAT_00491730[];
     P2Texture *t;
     int w;
     int h;
 
-    t = FUN_00208210();
+    t = (P2Texture *)FUN_00208210();
     if (t == 0) {
         DAT_0056c0c0[0]++;
         return 0;
@@ -1283,23 +1226,30 @@ void FUN_0020c7f0(int a0, int a1)
     *(int *)((char *)a0 + 36) = a1;
 }
 
-#pragma cplusplus on
-struct StreamSlotState { char pad0[48]; int value; char pad1[18]; signed char state : 7; unsigned char flag : 1;
-    int getState() const { return state; }
-};
-extern "C" void FUN_0020c800(StreamSlotState *s) {
-    if (s->getState() != 1) {
+typedef struct StreamSlotState {
+    char pad0[48];
+    int value;
+    char pad1[18];
+    signed char state : 7;
+    unsigned char flag : 1;
+} StreamSlotState;
+
+static inline int StreamSlotState_GetState(const StreamSlotState *s) {
+    return s->state;
+}
+
+void FUN_0020c800(StreamSlotState *s) {
+    if (StreamSlotState_GetState(s) != 1) {
         s->state = 6;
     }
 }
 
-extern "C" void FUN_0020c840(StreamSlotState *s, int value) {
-    if (s->getState() != 1) {
+void FUN_0020c840(StreamSlotState *s, int value) {
+    if (StreamSlotState_GetState(s) != 1) {
         s->state = 6;
     }
     s->value = value;
 }
-#pragma cplusplus reset
 
 void FUN_0020c880(int arg0) {
     if (arg0 > 0) {
@@ -1310,9 +1260,6 @@ void FUN_0020c880(int arg0) {
 struct B_20c8b0 { volatile signed char m : 7; unsigned char x : 1; };
 struct S_20c8b0 { char pad0[70]; volatile signed char f70 : 7; unsigned char x : 1; char f71; char f72; };
 void FUN_0020c8b0(struct S_20c8b0 *arg0) {
-    int FUN_0020b9d0();
-    extern struct S_20c8b0 *DAT_0056c0e0[17];
-    extern unsigned int DAT_0056c128[4];
     int s1;
     unsigned int s0;
     struct S_20c8b0 *o;
@@ -1320,8 +1267,8 @@ void FUN_0020c8b0(struct S_20c8b0 *arg0) {
     if (arg0->f72 != 0) {
         arg0->f72 = 0;
         FUN_0020b9d0(arg0);
-        DAT_0056c128[0] &= ~1;
-        s0 = DAT_0056c128[0];
+        DAT_0056c128 &= ~1;
+        s0 = DAT_0056c128;
         s1 = 0;
         while (s0 != 0) {
             s0 = s0 >> 1;
@@ -1333,7 +1280,7 @@ void FUN_0020c8b0(struct S_20c8b0 *arg0) {
                 }
             }
         }
-        DAT_0056c128[0] = 0;
+        DAT_0056c128 = 0;
     }
 }
 
@@ -1363,9 +1310,6 @@ typedef struct N_20c9f0 {
 } N_20c9f0;
 int p2WaitDmaSequence();
 void FUN_0020c9f0(N_20c9f0 *arg0) {
-    extern N_20c9f0 *DAT_0056c0d0[4];
-    extern N_20c9f0 *DAT_0056c0d8[4];
-    extern N_20c9f0 *DAT_0056c0e0[17];
     N_20c9f0 *s0;
     N_20c9f0 *a1;
     N_20c9f0 *p;
@@ -1393,8 +1337,8 @@ void FUN_0020c9f0(N_20c9f0 *arg0) {
         if (arg0->f24 != 0) {
             arg0->f24->f28 = s0;
         }
-        if (DAT_0056c0d8[0] != 0 && DAT_0056c0d8[0] == arg0) {
-            DAT_0056c0d8[0] = DAT_0056c0d8[0]->f24;
+        if (DAT_0056c0d8 != 0 && DAT_0056c0d8 == arg0) {
+            DAT_0056c0d8 = ((N_20c9f0 *)DAT_0056c0d8)->f24;
         }
         FUN_002082b0((O *)arg0);
     }
@@ -1406,11 +1350,11 @@ void FUN_0020c9f0(N_20c9f0 *arg0) {
         if (s0->f28 != 0) {
             s0->f28->f24 = s0->f24;
         }
-        if (s0 == DAT_0056c0d0[0]) {
-            DAT_0056c0d0[0] = s0->f24;
+        if (s0 == DAT_0056c0d0) {
+            DAT_0056c0d0 = s0->f24;
         }
-        if (DAT_0056c0d8[0] != 0 && DAT_0056c0d8[0] == s0) {
-            DAT_0056c0d8[0] = DAT_0056c0d8[0]->f24;
+        if (DAT_0056c0d8 != 0 && DAT_0056c0d8 == s0) {
+            DAT_0056c0d8 = ((N_20c9f0 *)DAT_0056c0d8)->f24;
         }
         FUN_002082b0((O *)s0);
         s0 = 0;

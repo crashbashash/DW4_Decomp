@@ -1,5 +1,6 @@
 #include "dw4/cri/sfdhn.h"
 #include "dw4/cri/mps.h"
+#include "dw4/cri/mcp.h"
 
 /* What the start of a stream says it is: which handlers would play it and the movie's parameters. */
 typedef struct SfdAnaInf {
@@ -54,8 +55,6 @@ unsigned char *MPV_SearchDelim(unsigned char *buf, int size, int mask);
 void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
 int SFADXT_IsHeader(unsigned char *p, int size, int *hdrSize);
-int SFHDS_IsSfdHeader(unsigned char *p, int size);
-void SFHDS_ProcessHdr(SfdHdrInf *hdr);
 
 int sfcre_AnalyCreInf(unsigned char *buf, int size, SfdAnaInf *inf);
 void sfcre_SetDflCreInf(SfdAnaInf *inf);

@@ -12,20 +12,20 @@ int igPsx2CallStackTracer_GetVTable(void) {
     int obj[8];
     igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igPsx2CallStackTracer_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)(*(void * *)&g_objectSystem) + 916));
+    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igPsx2CallStackTracer_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2CallStackTracer_Register);
+    igMetaObject_RunStaticInit(igPsx2CallStackTracer_Register);
 }
 
-void igPsx2CallStackTracer_Register(void) {
+CallbackArray *igPsx2CallStackTracer_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igPsx2CallStackTracer_metaObject,
-        (igMetaObjectRegisterFunction)igCallStackTracer_Register,
+        igCallStackTracer_Register,
         igCallStackTracer_GetPublishedMetaObject,
         igPsx2CallStackTracer_GetMetaObjectFunction,
         "igPsx2CallStackTracer",

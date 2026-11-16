@@ -9,16 +9,16 @@ void igExternalDirEntry_ReadFile(igExternalDirEntryView *self, void *file) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    path = StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
+    path = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
     old = self->_externalFilePath;
     if (old != 0) {
         hd = (int *)(old - 8);
         pool = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = pool;
         if (pool == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+            StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
         }
     }
     self->_externalFilePath = path;
@@ -43,7 +43,7 @@ void igExternalDirEntry_SetDirectoryName(igExternalDirEntry *self, int name) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name)));
     old = (int *)self->_directoryName;
@@ -52,7 +52,7 @@ void igExternalDirEntry_SetDirectoryName(igExternalDirEntry *self, int name) {
         refCount = old[-1] - 1;
         old[-1] = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     self->_directoryName = (int)interned;
@@ -74,7 +74,7 @@ void igExternalDirEntry_SetRef(igDirEntry *self, igObject *ref) {
 }
 
 int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *self, int loadFunction) {
-    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create(((int)igObject_GetAllocator((int)self)))));
+    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create(((int)igObject_GetAllocator((igObject *)self)))));
     char *s1;
     int len;
     int c;
@@ -83,15 +83,15 @@ int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *self, int loadFu
     stream.get()->ReadFile((char *)self->_directoryName);
     if (stream.get()->_count == 0) {
         s1 = (char *)self->_directoryName;
-        len = strlen(self->_externalFilePath);
+        len = strlen((const char *)self->_externalFilePath);
         len = len + strlen(s1);
         c = strlen("/");
-        buf = (char *)igObject_AllocateStorage((int)self, c + len + 1);
-        strcpy(buf, self->_externalFilePath);
+        buf = (char *)igObject_AllocateStorage((igObject *)self, c + len + 1);
+        strcpy(buf, (const char *)self->_externalFilePath);
         strcat(buf, "/");
-        strcat(buf, self->_directoryName);
+        strcat(buf, (const char *)self->_directoryName);
         stream.get()->ReadFile(buf);
-        igObject_FreeMemory((int)self, (int)buf);
+        igObject_FreeMemory((igObject *)self, (void *)buf);
     }
     self->SetRef(igDirectory_GetRefByName((int)(stream.get()), self->_entryName));
     if (self->_ref == 0) {
@@ -113,10 +113,10 @@ static inline void dropCreationReference(igVirtualObject *object) {
  * then calls `loadFunction`; a resolved entry is cloned into the directory so later lookups find it. */
 int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFunction) {
     igMemoryPoolView *pool;
-    igResource *resource = ((ObjectSystemView *)g_objectSystem)->resource;
+    igResource *resource = g_objectSystem->resource;
     igSmartPointer<igObject> directory = igResource_GetDirectory(resource, self->_directoryName);
     if (directory.get() == 0) {
-        pool = igObject_GetAllocator((int)self);
+        pool = igObject_GetAllocator((igObject *)self);
         directory.release();
         directory.p = (igObject *)igDirectory_Create((int)pool);
         igDirectory_SetName((igDirectoryView *)directory.get(), self->_directoryName);
@@ -146,6 +146,6 @@ void igExternalDirEntry_InitDefaults(igDirEntry *self) {
 
 void igExternalDirEntry_ReleaseDefaults(void **self) {
     ((igDirEntryView *)(self))->SetRef((int)(0));
-    igObject_ReleaseDefaults((int)self);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 

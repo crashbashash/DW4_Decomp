@@ -31,4 +31,7 @@ struct igVec3f {
     }
 };
 
+/* Parses three floats from `text`, by `format` when given; nonzero on success. */
+extern "C" int Vec3f_FromString(const char *text, float *vector, const char *format);
+
 #endif

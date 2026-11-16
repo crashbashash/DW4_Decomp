@@ -38,7 +38,7 @@ void * igFile_Create(int allocator) {
 
 igMetaObject *igFile_GetOrCreateMetaObject(void) {
     if (g_igFile_metaObject == 0) {
-        g_igFile_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igFile_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igFile_metaObject;
 }
@@ -53,15 +53,15 @@ igMetaObject *igFile_GetMetaObject(void)
 
 void igFile_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igFile_Register);
+    igMetaObject_RunStaticInit(igFile_Register);
 }
 
-void igFile_Register(void) {
+CallbackArray *igFile_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igFile_metaObject,
-        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        igNamedObject_Register,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igFile_GetMetaObjectFunction,
         "igFile",

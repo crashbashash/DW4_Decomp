@@ -19,7 +19,6 @@ typedef char *va_list;
 #define PAD_MAX 31
 
 int kputs(char *s);
-void kprintf(const char *format, ...);
 
 static void serialPutchar(int c);
 

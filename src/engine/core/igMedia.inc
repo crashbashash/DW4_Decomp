@@ -2,7 +2,7 @@ igMetaObject *g_igMedia_metaObject;
 
 igMetaObject *igMedia_GetOrCreateMetaObject(void) {
     if (g_igMedia_metaObject == 0) {
-        g_igMedia_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+        g_igMedia_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igMedia_metaObject;
 }
@@ -17,16 +17,16 @@ igMetaObject *igMedia_GetMetaObject(void)
 
 void igMedia_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMedia_Register);
+    igMetaObject_RunStaticInit(igMedia_Register);
 }
 
-void igMedia_Register(void) {
+CallbackArray *igMedia_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igMedia_metaObject,
-        (igMetaObjectRegisterFunction)igObject_Register,
-        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
         igMedia_GetMetaObjectFunction,
         "igMedia",
         8,

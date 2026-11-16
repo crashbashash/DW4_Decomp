@@ -11,7 +11,7 @@ void igProgramFile_Reset(igProgramFile *self) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     name = (char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
     oldName = (char *)self->_fileName;
@@ -20,7 +20,7 @@ void igProgramFile_Reset(igProgramFile *self) {
         count = *(int *)(oldName - 4) - 1;
         *(int *)(oldName - 4) = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     self->_fileName = (int)name;
@@ -49,20 +49,20 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
         if (pool != 0) {
             pool = (int)StringPool_Construct((StringPool *)pool);
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
-    name = StringPool_Intern((StringPool *)g_stringPool, path);
+    name = (int)StringPool_Intern((StringPool *)g_stringPool, path);
     old = (int *)file->path;
     if (old != 0) {
         header = old - 2;
         refs = old[-1] - 1;
         old[-1] = refs;
         if (refs == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)*header, (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
         }
     }
     file->path = (const char *)name;
-    allocator = (int)igObject_GetAllocator((int)self);
+    allocator = (int)igObject_GetAllocator((igObject *)self);
     stream = file->stream;
     if (stream != 0) {
         stream->_refCount = stream->_refCount - 1;
@@ -97,7 +97,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
         return;
     }
     if (*dest == 0) {
-        *dest = (void *)igObject_AllocateStorage((int)self, size);
+        *dest = (void *)igObject_AllocateStorage((igObject *)self, size);
         if (*dest == 0) {
             igReport_Printf("Error allocating buffer size 0x%x in: %s\n", size, self->path);
             igReport_Flush();

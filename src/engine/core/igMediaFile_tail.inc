@@ -119,7 +119,7 @@ void igMediaFile_Close(igMediaFileView *self) {
         REL(media)
         self->_media = 0;
         self->_fileHandle = -1;
-        igObject_FreeMemory((int)self, (int)self->_fBuf);
+        igObject_FreeMemory((igObject *)self, (void *)self->_fBuf);
         self->_fBuf = 0;
         self->_bufSize = 0;
         self->_bufPos = 0;
@@ -139,42 +139,42 @@ void **igMediaFile_OpenFile(void **self, const char *fileName, int mode) {
     int status;
 
     igFile_SetFileName((int *)self, fileName);
-    if (strcmp(mode, "r") == 0) {
+    if (strcmp((const char *)mode, "r") == 0) {
         readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         status = readResult.v;
         goto opened;
     }
-    if (strcmp(mode, (int *)"rb") == 0) {
+    if (strcmp((const char *)mode, "rb") == 0) {
         readBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(4));
         status = readBinaryResult.v;
         goto opened;
     }
-    if (strcmp(mode, (int *)((char *)"w")) == 0) {
+    if (strcmp((const char *)mode, "w") == 0) {
         writeResult = ((igFileView *)(self))->OpenWithMode((int)(1));
         status = writeResult.v;
         goto opened;
     }
-    if (strcmp(mode, (int *)((char *)"wb")) == 0) {
+    if (strcmp((const char *)mode, "wb") == 0) {
         writeBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(5));
         status = writeBinaryResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)"r+") == 0) || (strcmp(mode, "w+") == 0)) {
+    if ((strcmp((const char *)mode, "r+") == 0) || (strcmp((const char *)mode, "w+") == 0)) {
         updateResult = ((igFileView *)(self))->OpenWithMode((int)(3));
         status = updateResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)"r+b") == 0) || (strcmp(mode, "w+b") == 0)) {
+    if ((strcmp((const char *)mode, "r+b") == 0) || (strcmp((const char *)mode, "w+b") == 0)) {
         updateBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(7));
         status = updateBinaryResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)"a") == 0) || (strcmp(mode, "a+") == 0)) {
+    if ((strcmp((const char *)mode, "a") == 0) || (strcmp((const char *)mode, "a+") == 0)) {
         appendResult = ((igFileView *)(self))->OpenWithMode((int)(2));
         status = appendResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)"ab") == 0) || (strcmp(mode, "a+b") == 0)) {
+    if ((strcmp((const char *)mode, "ab") == 0) || (strcmp((const char *)mode, "a+b") == 0)) {
         appendBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(6));
         status = appendBinaryResult.v;
         goto opened;
@@ -200,9 +200,9 @@ void igMediaFile_SetFileSize(igMediaFileView *self, int size) {
         }
         buffer = (int)self->_fBuf;
         if (buffer != 0) {
-            storage = igObject_Reallocate((int)self, buffer, capacity);
+            storage = (int)igObject_Reallocate((igObject *)self, (void *)buffer, capacity);
         } else {
-            storage = igObject_AllocateStorage((int)self, capacity);
+            storage = (int)igObject_AllocateStorage((igObject *)self, capacity);
         }
         self->_fBuf = (unsigned char *)storage;
         self->_bufSize = capacity;
@@ -234,7 +234,7 @@ int igMediaFile_Read(igMediaFileView *self, int buffer, int size, int count) {
         cnt = (self->_fileSize - self->_bufPos) / size;
         bytes = cnt * size;
     }
-    memcpy(buffer, self->_fBuf + self->_bufPos, bytes, self->_bufPos);
+    memcpy((void *)buffer, self->_fBuf + self->_bufPos, bytes);
     self->_bufPos = self->_bufPos + bytes;
     return cnt;
 }
@@ -268,7 +268,7 @@ int igMediaFile_Write(igMediaFileView *self, int buffer, int size, int count) {
         self->_bufPos = self->_fileSize;
     }
     igMediaFile_SetFileSize(self, self->_bufPos + bytes);
-    memcpy(self->_fBuf + self->_bufPos, buffer, bytes);
+    memcpy(self->_fBuf + self->_bufPos, (void *)buffer, bytes);
     self->_bufPos = self->_bufPos + bytes;
     return bytes / size;
 }
@@ -345,14 +345,14 @@ int igMediaFile_Scanf(igMediaFileView *self, const char *format, ...) {
         strcat(piece, "%n");
         if (state == 1) {
             int consumed = 0;
-            sscanf(self->_fBuf + self->_bufPos, piece, &consumed);
+            sscanf((const char *)self->_fBuf + self->_bufPos, piece, &consumed);
             self->_bufPos += consumed;
         } else {
             void *target;
             args += 8;
             target = *(void **)(args - 8);
             int consumed = 0;
-            int matched = sscanf(self->_fBuf + self->_bufPos, piece, target, &consumed);
+            int matched = sscanf((const char *)self->_fBuf + self->_bufPos, piece, target, &consumed);
             if (matched == -1) {
                 break;
             }
@@ -378,7 +378,7 @@ int igMediaFile_Printf(igMediaFileView *self, int fmt, ...) {
     } else {
         off = (8 - n) * 8;
     }
-    len = vsprintf(buf, fmt, (char *)__builtin_next_arg(fmt) - off);
+    len = vsprintf(buf, (const char *)fmt, (char *)__builtin_next_arg(fmt) - off);
     pos = self->_bufPos + len;
     if (pos >= self->_fileSize) {
         igMediaFile_SetFileSize(self, pos);
@@ -460,12 +460,12 @@ int igMediaFile_PutString(igMediaFileView *self, int string) {
     if (self->_isBinary != 0) {
         return -1;
     }
-    length = strlen(string);
+    length = strlen((const char *)string);
     end = self->_bufPos + length;
     if (end >= self->_fileSize) {
         igMediaFile_SetFileSize(self, end);
     }
-    memcpy(self->_fBuf + self->_bufPos, string, length);
+    memcpy(self->_fBuf + self->_bufPos, (void *)string, length);
     self->_bufPos = self->_bufPos + length;
     return length;
 }

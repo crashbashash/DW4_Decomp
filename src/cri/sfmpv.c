@@ -25,6 +25,8 @@ extern void *memset(void *dst, int value, unsigned int size);
 extern void *memcpy(void *dst, const void *src, unsigned int size);
 int SJRBF_GetFlowCnt(int sj, int id, int mode);
 int UTY_CmpTime(int id, int arg, int a, int b);
+/* matching construct: MEM_Copy (mcp.h, void) is declared returning int here; with the void
+ * prototype sfmpv_SetMpvHd allocates its registers differently from retail. */
 int MEM_Copy(void *dst, void *src, int n);
 void UTY_MemsetDword(void *dst, int value, int size);
 int MPV_CheckDelim();

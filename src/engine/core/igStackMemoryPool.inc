@@ -33,7 +33,7 @@ int igStackMemoryPool_GetVTable(void) {
     igMemoryPool_Initialize((int **)&pool);
     pool._vtable = (int)&g_igStackMemoryPool_vtable[0];
     pool._eventTracker = 0;
-    r = *(int *)((char *)&pool + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
+    r = *(int *)((char *)&pool + g_objectSystem->vtableProbeOffset);
     pool._vtable = (int)&g_igStackMemoryPool_vtable[0];
     tracker = (igObject **)&pool._eventTracker;
     if (tracker) {
@@ -49,17 +49,17 @@ int igStackMemoryPool_GetVTable(void) {
 
 void igStackMemoryPool_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igStackMemoryPool_Register);
+    igMetaObject_RunStaticInit(igStackMemoryPool_Register);
 }
 
 static igMetaObjectCallback g_igStackMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, 0 };
 
-void igStackMemoryPool_Register(void) {
+CallbackArray *igStackMemoryPool_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0,
         &g_igStackMemoryPool_metaObject,
-        (igMetaObjectRegisterFunction)igMemoryPool_Register,
+        igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igStackMemoryPool_GetMetaObjectFunction,
         "igStackMemoryPool",

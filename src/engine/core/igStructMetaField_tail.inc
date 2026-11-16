@@ -3,7 +3,7 @@ unsigned short igStructMetaField_GetSize(void *self) {
 }
 
 void igStructMetaField_ValueFromString(int self, int value, int text) {
-    strlen(text);
+    strlen((const char *)text);
 }
 
 void igStructMetaField_ValueToString(int *result, void *self) {
@@ -20,9 +20,9 @@ void igStructMetaField_ValueToString(int *result, void *self) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     }
     *result = interned;
 }

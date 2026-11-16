@@ -14,11 +14,11 @@ void igStandardQueue_ReleaseDefaults(igStandardQueueView *self) {
 }
 
 void igStandardQueue_Create(igStandardQueue *self) {
-    self->_data = igObject_AllocateStorage((int)self, self->_capacity * 4);
+    self->_data = (int)igObject_AllocateStorage((igObject *)self, self->_capacity * 4);
 }
 
 void igStandardQueue_Destroy(igStandardQueue *self) {
-    igObject_FreeMemory((int)self, self->_data);
+    igObject_FreeMemory((igObject *)self, (void *)self->_data);
     self->_data = 0;
 }
 
@@ -88,17 +88,17 @@ void igStandardQueue_Resize(igStandardQueueView *queue, int capacity) {
     unsigned a2;
     unsigned v0;
     if (capacity != queue->_capacity) {
-        s0 = igObject_AllocateStorage((int)queue, capacity * 4);
+        s0 = (int)igObject_AllocateStorage((igObject *)queue, capacity * 4);
         a2 = queue->_removeElement;
         v0 = queue->_insertElement;
         if (a2 < v0) {
-            memmove(s0, (int)(queue->_data + a2), (v0 - a2) * 4);
+            memmove((void *)s0, (void *)(int)(queue->_data + a2), (v0 - a2) * 4);
         } else {
             s3 = (queue->_capacity - a2) * 4;
-            memmove(s0, (int)(queue->_data + a2), s3);
-            memmove(s0 + s3, (int)queue->_data, queue->_insertElement * 4);
+            memmove((void *)s0, (void *)(int)(queue->_data + a2), s3);
+            memmove((void *)(s0 + s3), (void *)(int)queue->_data, queue->_insertElement * 4);
         }
-        igObject_FreeMemory((int)queue, (int)queue->_data);
+        igObject_FreeMemory((igObject *)queue, (void *)queue->_data);
         queue->_data = (int *)s0;
         queue->_insertElement = queue->GetCount();
         queue->_removeElement = 0;

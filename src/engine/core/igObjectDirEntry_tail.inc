@@ -2,7 +2,7 @@
  * so calling it with 0 releases the held object; the igObject default then runs. */
 void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self) {
     ((igDirEntryView *)self)->SetRef(0);
-    igObject_ReleaseDefaults((int)self);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 
 static inline const char *entryNameOf(const igObjectDirEntry *entry) {

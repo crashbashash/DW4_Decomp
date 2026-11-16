@@ -18,15 +18,15 @@ done:
 
 void igLongTimer_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLongTimer_Register);
+    igMetaObject_RunStaticInit(igLongTimer_Register);
 }
 
-void igLongTimer_Register(void) {
+CallbackArray *igLongTimer_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igLongTimer_metaObject,
-        (igMetaObjectRegisterFunction)igTimer_Register,
+        igTimer_Register,
         igTimer_GetPublishedMetaObject,
         igLongTimer_GetMetaObjectFunction,
         "igLongTimer",

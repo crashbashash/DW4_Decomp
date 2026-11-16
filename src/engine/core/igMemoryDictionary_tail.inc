@@ -225,7 +225,7 @@ int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, in
     int i;
     self->_capacity = capacity;
     self->_cachedIndex = 0;
-    allocator = ((int)igObject_GetAllocator((int)self));
+    allocator = ((int)igObject_GetAllocator((igObject *)self));
     table = self->_memoryEntries;
     if (table != 0) {
         table->_refCount = table->_refCount - 1;

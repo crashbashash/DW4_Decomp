@@ -2,7 +2,7 @@ igMetaObject *g_igListenerListList_metaObject;
 
 igMetaObject *FUN_00226fd0(void) {
     if (g_igListenerListList_metaObject == 0) {
-        g_igListenerListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igListenerListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igListenerListList_metaObject;
 }
@@ -18,21 +18,21 @@ igMetaObject *igListenerListList_GetMetaObject(void)
 int igListenerListList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igListenerListList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_002270b0(void)
 {
-    igMetaObject_RunStaticInit(igListenerListList_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igListenerListList_Register);
 }
 
 static igMetaObjectCallback g_igListenerListList_callbackList[] = { FUN_002271d0, 0 };
 
-void igListenerListList_Register(void) {
+CallbackArray *igListenerListList_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igListenerListList_metaObject,
         igObjectList_Register,

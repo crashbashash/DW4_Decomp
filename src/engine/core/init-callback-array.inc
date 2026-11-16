@@ -183,7 +183,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     if (self->resourceTempPoolSize != 0) {
         self->resourceTempPool = (igMemoryPoolView *)igStackMemoryPool_Create(0);
         int memory = (int)Memory_AllocateDefaultBuffer(self->resourceTempPoolSize);
-        memset(memory, 0, self->resourceTempPoolSize);
+        memset((void *)memory, 0, self->resourceTempPoolSize);
         self->resourceTempPool->SetRawMemory(memory, self->resourceTempPoolSize, 1);
         self->resourceTempPool->SetSize(self->resourceTempPool->GetMaxSize());
         if (self->useGlobalEventTracker && self->saveEventTrackerOnExit) {
@@ -391,7 +391,7 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
     if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(16));
         if (pool != 0) pool = ((int)StringPool_Construct((StringPool *)pool));
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     StringPool_Destroy((StringPool *)g_stringPool, 1);
     self->started = 0;
@@ -507,7 +507,7 @@ void igObjectSystem_SetSystemPoolEventTrackerFileName(char *a, char *b) {
 
 void igObjectSystem_SetSymbolsFileName(void *self, int fileName) {
     if (fileName != 0) {
-        strncpy(((ObjectSystemView *)self)->symbolsFileName, fileName, 0x7F);
+        strncpy(((ObjectSystemView *)self)->symbolsFileName, (const char *)fileName, 0x7F);
         ((ObjectSystemView *)self)->symbolsFileName[127] = 0;
         return;
     }
@@ -528,19 +528,19 @@ int igArray_Append(CallbackArray *array,int item){
     if(array->count==capacity){
         if(capacity==0)array->capacity=4;
         else array->capacity*=((capacity*3)/2);
-        if(array->data==0)array->data=(int *)(Memory_AllocateBufferDirect((unsigned int)(array->capacity*4), (igMemoryPoolView *)((*(ObjectSystemView * *)&g_objectSystem)->systemPool)));
+        if(array->data==0)array->data=(int *)(Memory_AllocateBufferDirect((unsigned int)(array->capacity*4), (igMemoryPoolView *)(g_objectSystem->systemPool)));
         else array->data=(int *)(Memory_ReallocateBuffer(array->data, (unsigned int)(array->capacity*4)));
     }
     array->data[array->count++]=item;
 }
 
-int igObjectSystem_OperatorNew(int extra0)
+void *igObjectSystem_OperatorNew(unsigned int size)
 {
-    return malloc();
+    return malloc(size);
 }
 
-int igObjectSystem_OperatorDelete(int extra0)
+void igObjectSystem_OperatorDelete(void *block)
 {
-    return free();
+    free(block);
 }
 

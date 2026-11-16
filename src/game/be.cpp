@@ -4,6 +4,7 @@
 #include "dw4/lua.h"
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igVec3f.h"
 #include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/beDemoManager.h"
 #include "dw4/listSet.h"
@@ -283,7 +284,6 @@ void igMatrix44f_Copy(float *matrix, const float *source);
 void igMatrix44f_GetTranslation(const float *matrix, float *vector);
 void igMatrix44f_TranslateLocal(float *matrix, const float *offset);
 void Vec3f_TransformDirection(float *out, const float *vector, const float *matrix);
-int Vec3f_FromString(const char *text, float *vector, const char *format);
 void igStringObj_Set(igStringObj *string, const char *text);
 void igStringObj_ToFloat(igStringObj *string, float *value);
 void igStringObj_Erase(igStringObj *string, unsigned int position, unsigned int length);

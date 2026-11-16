@@ -2,7 +2,7 @@ igMetaObject *g_igItemDataBaseList_metaObject;
 
 igMetaObject *FUN_002280b0(void) {
     if (g_igItemDataBaseList_metaObject == 0) {
-        g_igItemDataBaseList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igItemDataBaseList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igItemDataBaseList_metaObject;
 }
@@ -18,23 +18,23 @@ igMetaObject *igItemDataBaseList_GetMetaObject(void)
 int igItemDataBaseList_GetVTable(void) {
     struct Obj obj;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igItemDataBaseList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
 }
 
 void FUN_00228190(void)
 {
-    igMetaObject_RunStaticInit(igItemDataBaseList_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igItemDataBaseList_Register);
 }
 
-void igItemDataBaseList_Register(void) {
+CallbackArray *igItemDataBaseList_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igItemDataBaseList_metaObject,
-        igCompoundList_Register,
-        igCompoundList_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igCompoundList_Register,
+        (igMetaObjectGetFunction)igCompoundList_GetPublishedMetaObject,
         thunk_igItemDataBaseList_GetMetaObject,
         "igItemDataBaseList",
         0x14, /* instance size */
@@ -67,7 +67,7 @@ void igItemDataBaseList_InitFields(void) {
     temp_s0->f60 = FUN_00228570();
     temp_s0->f56 = 0;
     temp_s0->f28 = (int)(&externalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_s0);
+    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, (igMetaField *)temp_s0);
     temp_s0->f4 = temp_s0->f4 - 1;
     if (((unsigned long long) ((long long) temp_s0->f4 << 0x29) >> 0x29) == 0) {
         igObject_Destroy(temp_s0);

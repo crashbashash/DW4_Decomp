@@ -1,13 +1,13 @@
 #include "dw4/reflected.h"
 
-int FUN_001e68a0(...);
-int igInsightCore_AddToScheduler(...);
-int igObject_IsKindOf(...);
+int FUN_001e68a0(int, int);
+int igInsightCore_AddToScheduler(int, void *);
+int igObject_IsKindOf(int, int);
 
 extern int g_igDataPumpInfo_metaObject[4];
 
-int igInsightCore_RemoveFromScheduler(...);
-int igObject_Destroy(...);
+int igInsightCore_RemoveFromScheduler(int, void *);
+int igObject_Destroy(void *);
 
 void FUN_001e67a0(int, long long);
 

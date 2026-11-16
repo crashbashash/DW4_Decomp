@@ -7,7 +7,7 @@ igMetaField *igMetaField_FindByName(int self, char *qualifiedName) {
         if (separator != 0) {
             fieldName = separator + strlen(g_metaFieldScopeSeparator);
             i = 0;
-            list = (__internalObjectList *)(*(ObjectSystemView * *)&g_objectSystem)->metaRegistry;
+            list = (__internalObjectList *)g_objectSystem->metaRegistry;
             n = list->_count;
             goto test;
 body:

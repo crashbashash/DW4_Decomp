@@ -3,7 +3,7 @@ igMetaField *g_igLogInterface_verboseMetaField;
 
 igMetaObject *FUN_002265e0(void) {
     if (g_igLogInterface_metaObject == 0) {
-        g_igLogInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igLogInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLogInterface_metaObject;
 }
@@ -19,23 +19,23 @@ igMetaObject *igLogInterface_GetMetaObject(void)
 int igLogInterface_GetVTable(void) {
     union U_2 u;
 
-    igObject_InitHeader(u.b);
+    igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&g_igLogInterface_vtable[0]);
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
 }
 
 void FUN_002266c0(void)
 {
-    igMetaObject_RunStaticInit(igLogInterface_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igLogInterface_Register);
 }
 
-void igLogInterface_Register(void) {
+CallbackArray *igLogInterface_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLogInterface_metaObject,
-        igInterface_Register,
-        igInterface_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igInterface_Register,
+        (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
         thunk_igLogInterface_GetMetaObject,
         "igLogInterface",
         0x24, /* instance size */
@@ -51,7 +51,7 @@ void thunk_igLogInterface_GetMetaObject(void) {
 }
 
 static FieldFactory g_igLogInterface_ctorTable[] = {
-    igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igLogInterface_fieldTable[] = {
     "_verbose",

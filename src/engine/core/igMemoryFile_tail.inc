@@ -1,7 +1,7 @@
 void igMemoryFile_AddMemoryFileEntry(int name, int buffer, int size) {
     igMemoryFile_EnsureRegistered();
     if (buffer != 0) {
-        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator((*(int *)&g_memoryFileEntries)))));
+        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator((*(igObject **)&g_memoryFileEntries)))));
         igNamedObject_SetName((igNamedObject *)entry.p, name);
         entry->_size = size;
         entry->_buffer = buffer;
@@ -71,9 +71,9 @@ void igMemoryFile_Close(igMemoryFileView *self) {
 igFileView *igMemoryFile_OpenFile(igFileView *self, const char *fileName, int mode) {
     int ok;
     igFile_SetFileName((int *)self, fileName);
-    if (strcmp(mode, "r") == 0) {
+    if (strcmp((const char *)mode, "r") == 0) {
         ok = self->OpenWithMode(0) == g_resultSuccess;
-    } else if (strcmp(mode, &((int *)"rb")[0]) == 0) {
+    } else if (strcmp((const char *)mode, (const char *)&((int *)"rb")[0]) == 0) {
         ok = self->OpenWithMode(4) == g_resultSuccess;
     } else {
         return 0;

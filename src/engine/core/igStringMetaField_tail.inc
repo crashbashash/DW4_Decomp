@@ -1,11 +1,11 @@
 void igStringMetaField_ReleaseDefaults(int self) {
     igStringMetaField_SetDefaultText((int *)self, 0);
-    igObject_ReleaseDefaults(self);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 
 /* Post-construction defaults; same two steps. */
 void igStringMetaField_InitDefaults(void **self) {
-    igObject_InitDefaults((int)self);
+    igObject_InitDefaults((igObject *)self);
     ((igMetaFieldView *)self)->SetDefault(0);
 }
 
@@ -23,7 +23,7 @@ void igStringMetaField_ValueFromString(int self, int objectBase, int text) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text)));
     previous = (void *)(*slot);
@@ -32,11 +32,11 @@ void igStringMetaField_ValueFromString(int self, int objectBase, int text) {
         refCount = *(int *)((char *)(previous) - 4) - 1;
         *(int *)((char *)(previous) - 4) = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     *slot = interned;
-    strlen(text);
+    strlen((const char *)text);
 }
 
 /* Interns the text behind *textCell (null stays null), stores the token via
@@ -59,7 +59,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
         interned = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text));
     }
@@ -70,7 +70,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
         count = header->refCount - 1;
         header->refCount = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)header->owner, (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)header->owner, (StringTokenHeader *)header);
         }
     }
 }
@@ -107,7 +107,7 @@ void igStringMetaField_SetDefaultText(int *self, int text) {
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool = pool;
+        g_stringPool = (StringPool *)pool;
     }
     interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text)));
     previous = (void *)(*slot);
@@ -116,7 +116,7 @@ void igStringMetaField_SetDefaultText(int *self, int text) {
         refCount = *(int *)((char *)(previous) - 4) - 1;
         *(int *)((char *)(previous) - 4) = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
     *slot = interned;
@@ -134,7 +134,7 @@ int igStringMetaField_GetRawFieldMemSize(igStringMetaField *self, int object) {
     text = *(int *)(object + self->_offset);
     size += 4;
     if (text != 0) {
-        len = strlen(text) + 1;
+        len = strlen((const char *)text) + 1;
         size += (len + 3) & ~3;
     }
     return size;
@@ -142,7 +142,7 @@ int igStringMetaField_GetRawFieldMemSize(igStringMetaField *self, int object) {
 
 /* The pool a temporary buffer for a field of `owner` comes from. */
 static inline igMemoryPoolView *temporaryPool(void *owner) {
-    igMemoryPoolView *pool = igObject_GetAllocator((int)owner);
+    igMemoryPoolView *pool = igObject_GetAllocator((igObject *)owner);
     return g_useOwnerAllocator != 0 ? pool : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
 }
 
@@ -229,7 +229,7 @@ void igStringMetaField_ResetValue(int *self, int object) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
         interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)defaultText));
     }
@@ -240,7 +240,7 @@ void igStringMetaField_ResetValue(int *self, int object) {
         refCount = header[1] - 1;
         header[1] = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
 }
@@ -260,7 +260,7 @@ void igStringMetaField_CopyValue(igStringMetaField *self, int destination, int s
         refCount = *(int *)((char *)(token) - 4) - 1;
         *(int *)((char *)(token) - 4) = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
 }
@@ -279,7 +279,7 @@ void igStringMetaField_ShallowCopy(igStringArrayMetaField *self, int destination
         refCount = *(int *)((char *)(token) - 4) - 1;
         *(int *)((char *)(token) - 4) = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
 }
@@ -300,7 +300,7 @@ int igStringMetaField_Compare(igStringArrayMetaField *self, int objectA, int obj
     if (tokenB == 0) {
         return 1;
     }
-    return strcmp(tokenA, tokenB);
+    return strcmp((const char *)tokenA, (const char *)tokenB);
 }
 
 void igStringMetaField_ConstructValue(void) {
@@ -321,7 +321,7 @@ void igStringMetaField_DestructValue(igStringMetaField *self, int object) {
             count = header->refCount - 1;
             header->refCount = count;
             if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)header->owner, (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)header->owner, (StringTokenHeader *)header);
             }
         }
     }
@@ -393,19 +393,19 @@ void igStringObj_SetN(igStringObj *self, int text, int length) {
         self->_buffer = 0;
         self->_length = 0;
     } else {
-        self->_buffer = (int)igObject_AllocateStorage((int)self, length + 1);
-        memcpy((char *)self->_buffer, text, length);
+        self->_buffer = (int)igObject_AllocateStorage((igObject *)self, length + 1);
+        memcpy((char *)self->_buffer, (void *)text, length);
         *(char *)(self->_buffer + length) = 0;
         self->_length = length;
     }
     if (previous != 0) {
-        igObject_FreeMemory((int)self, (int)previous);
+        igObject_FreeMemory((igObject *)self, (void *)previous);
     }
 }
 
 void igStringObj_Set(int self, int text) {
     if (text != 0) {
-        igStringObj_SetN((igStringObj *)self, text, strlen(text));
+        igStringObj_SetN((igStringObj *)self, text, strlen((const char *)text));
         return;
     }
     igStringObj_Clear((igStringObj *)self);
@@ -416,7 +416,7 @@ int igStringObj_Clear(igStringObj *self) {
 
     buffer = self->_buffer;
     if (buffer != 0) {
-        igObject_FreeMemory((int)self, buffer);
+        igObject_FreeMemory((igObject *)self, (void *)buffer);
     }
     self->_buffer = 0;
     self->_length = 0;
@@ -430,7 +430,7 @@ void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsign
         igStringObj_SetN(self, (int)insert, (int)n);
     } else {
     total = n + self->_length;
-    buf = (char *)igObject_AllocateStorage((int)self, total + 1);
+    buf = (char *)igObject_AllocateStorage((igObject *)self, total + 1);
     if (at >= self->_length) {
         memcpy(buf, (char *)self->_buffer, self->_length);
         memcpy(buf + self->_length, insert, n);
@@ -444,7 +444,7 @@ void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsign
         memcpy(buf + (at + n), (char *)self->_buffer + at, (self->_length - at) + 1);
     }
     if (self->_buffer != 0) {
-        igObject_FreeMemory((int)self, self->_buffer);
+        igObject_FreeMemory((igObject *)self, (void *)self->_buffer);
     }
     self->_buffer = (int)buf;
     self->_length = total;
@@ -468,7 +468,7 @@ int igStringObj_ToInt(void *object, int value) {
     if (text == 0) {
         text = (*(int *)&g_stringObjEmptyText);
     }
-    return sscanf(text, " %i ", value) == 1;
+    return sscanf((const char *)text, " %i ", value) == 1;
 }
 
 int igStringObj_ToFloat(void *object, int value) {
@@ -479,7 +479,7 @@ int igStringObj_ToFloat(void *object, int value) {
     if (text == 0) {
         text = (*(int *)&g_stringObjEmptyText);
     }
-    return sscanf(text, " %f ", value) == 1;
+    return sscanf((const char *)text, " %f ", value) == 1;
 }
 
 bool igStringObj_ParseBool(igStringObj *o, char *out) {
@@ -534,7 +534,7 @@ int igStringObj_VFormat(int self, int format, int args) {
     int buffer[512];
     int length;
 
-    length = vsprintf(buffer);
+    length = vsprintf((char *)buffer, (const char *)format, (va_list)args);
     if (length > 0x7FF) {
         length = -1;
     } else {
@@ -659,7 +659,7 @@ int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     if (pos > self->_length - 1 || (end = pos + len) > self->_length) {
         return 0;
     }
-    *(igStringObj **)&tmp = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+    *(igStringObj **)&tmp = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
     igStringObj_Set((int)tmp, (int)((char *)self->_buffer + end));
     igStringObj_Insert((igStringObj *)tmp, (char *)self->_buffer, 0, pos);
     igStringObj_Set((int)self, (int)(igStringObj_Text(tmp)));
@@ -680,7 +680,7 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
         if (g_stringPool == 0) {
             int v = ((int)StringPool_Allocate(0x10));
             if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-            g_stringPool = v;
+            g_stringPool = (StringPool *)v;
         }
         void *ni = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0));
         releaseString((const char *)*slot);
@@ -700,7 +700,7 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
                 if (g_stringPool == 0) {
                     int v = ((int)StringPool_Allocate(0x10));
                     if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-                    g_stringPool = v;
+                    g_stringPool = (StringPool *)v;
                 }
                 s = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)p));
             }

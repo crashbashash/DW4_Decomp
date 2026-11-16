@@ -2,7 +2,7 @@ int igIntMetaField_ValueFromString(int self, int value, int text) {
     int consumed;
 
     consumed = 0;
-    sscanf(text, "%d%n", value, &consumed);
+    sscanf((const char *)text, "%d%n", value, &consumed);
     return consumed;
 }
 
@@ -11,7 +11,7 @@ void igIntMetaField_ValueToString(int *result, int self, int *value) {
     int pool;
     int interned;
 
-    sprintf(&buffer[0], &percent_d_7[0], *value);
+    sprintf((char *)&buffer[0], (const char *)&percent_d_7[0], *value);
     if (&buffer[0] == 0) {
         interned = 0;
     } else {
@@ -20,9 +20,9 @@ void igIntMetaField_ValueToString(int *result, int self, int *value) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)&buffer[0]);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)&buffer[0]);
     }
     *result = interned;
 }

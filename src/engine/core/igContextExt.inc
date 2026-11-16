@@ -10,15 +10,15 @@ igMetaObject *igContextExt_GetMetaObject(void)
 
 void igContextExt_EnsureRegistered(void)
 {
-    igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContextExt_Register);
+    igMetaObject_RunStaticInit(igContextExt_Register);
 }
 
-void igContextExt_Register(void) {
+CallbackArray *igContextExt_Register(void) {
     CoreLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         1,
         &g_igContextExt_metaObject,
-        (igMetaObjectRegisterFunction)igContext_Register,
+        igContext_Register,
         (igMetaObjectGetFunction)igContext_GetPublishedMetaObject,
         igContextExt_GetMetaObjectFunction,
         "igContextExt",

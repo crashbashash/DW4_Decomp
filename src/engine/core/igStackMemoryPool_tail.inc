@@ -256,7 +256,7 @@ int igStackMemoryPool_Reallocate(void **self, int memory, unsigned int size) {
             oldSize = ((igMemoryPoolView *)self)->GetAllocationSize((void *)memory);
             copySize = (oldSize < size) ? oldSize : size;
             if (result != 0) {
-                memcpy(result, memory, copySize);
+                memcpy((void *)result, (void *)memory, copySize);
             }
         }
         ((igMemoryPoolView *)self)->Free((void *)memory);
@@ -279,7 +279,7 @@ int igStackMemoryPool_ReallocateAligned(void **self, int memory, unsigned int si
             oldSize = ((igMemoryPoolView *)self)->GetAllocationSize((void *)memory);
             copySize = (oldSize < size) ? oldSize : size;
             if (result != 0) {
-                memcpy(result, memory, copySize);
+                memcpy((void *)result, (void *)memory, copySize);
             }
         }
         ((igMemoryPoolView *)self)->Free((void *)memory);
@@ -502,7 +502,7 @@ int igStackMemoryPool_GetEventTracker(igStackMemoryPool *self) {
 
 void igStackMemoryPool_SetEventTracker(igStackMemoryPool *self, igObject *tracker) {
     igObject *old;
-    if ((tracker == 0) || (((void *)igObject_GetAllocator((int)tracker)) != self)) {
+    if ((tracker == 0) || (((void *)igObject_GetAllocator((igObject *)tracker)) != self)) {
         if (tracker != 0) {
             tracker->_refCount = (int)((int) (tracker->_refCount + 1));
         }

@@ -23,7 +23,7 @@ char *igMetaEnum_GetNamesByMask(char *buffer, int size, int mask, int metaEnum) 
                 refs = name[-1] - 1;
                 name[-1] = refs;
                 if (refs == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
+                    StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
                 }
             }
             written++;
@@ -39,14 +39,14 @@ char *igMetaEnum_GetValueName(char *buffer, int size, int value, int metaEnum) {
     int refs;
 
     igMetaEnum_GetNameByValue((int *)&name, (const igMetaEnum *)metaEnum, value);
-    strncpy(buffer, name, size - 1);
+    strncpy(buffer, (const char *)name, size - 1);
     *(buffer + size - 1) = 0;
     if (name != 0) {
         hdr = name - 2;
         refs = name[-1] - 1;
         name[-1] = refs;
         if (refs == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
+            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
         }
     }
     return buffer;

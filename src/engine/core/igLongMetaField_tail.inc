@@ -2,7 +2,7 @@ int igLongMetaField_ValueFromString(int self, int unused, int string) {
     int consumed;
 
     consumed = 0;
-    sscanf(string, "%ld%n", unused, &consumed);
+    sscanf((const char *)string, "%ld%n", unused, &consumed);
     return consumed;
 }
 
@@ -11,7 +11,7 @@ void igLongMetaField_ValueToString(int *out, int self, long long *value) {
     int pool;
     int interned;
 
-    sprintf(&text[0], "%ld", *value);
+    sprintf((char *)&text[0], "%ld", *value);
     if (&text[0] == 0) {
         interned = 0;
     } else {
@@ -20,9 +20,9 @@ void igLongMetaField_ValueToString(int *out, int self, long long *value) {
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool = pool;
+            g_stringPool = (StringPool *)pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)&text[0]);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)&text[0]);
     }
     *out = interned;
 }

@@ -29,10 +29,10 @@ void igMemoryRefMetaField_ConstructValue(igMemoryRefMetaField *self, int object)
         if ((poolName != 0) && (*poolName != 0)) {
             allocator = ((int)Memory_GetAllocatorByName((int)poolName));
             if (allocator == 0) {
-                allocator = ((int)igObject_GetAllocator(object));
+                allocator = ((int)igObject_GetAllocator((igObject *)object));
             }
         } else {
-            allocator = ((int)igObject_GetAllocator(object));
+            allocator = ((int)igObject_GetAllocator((igObject *)object));
         }
         igMetaField_AllocateArray(&status, self, (void *)object, elementCount, (igMemoryPoolView *)allocator);
     }

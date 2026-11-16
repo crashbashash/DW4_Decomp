@@ -5,12 +5,12 @@ igMetaField *g_igIterateGraph_actorSkinIterationStateMetaField;
 
 void *FUN_00227460(int arg0) {
     FUN_00227620();
-    return igMetaObject_CreateInstance(g_igIterateGraph_metaObject, arg0);
+    return igMetaObject_CreateInstance(g_igIterateGraph_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_002274a0(void) {
     if (g_igIterateGraph_metaObject == 0) {
-        g_igIterateGraph_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igIterateGraph_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igIterateGraph_metaObject;
 }
@@ -27,11 +27,11 @@ extern "C" int igIterateGraph_GetVTable(void) {
     Obj_6 obj;
     int r;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igIterateGraph_vtable[0];
     obj.m12 = 0;
     obj.m16 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igIterateGraph_vtable[0];
     obj.rel16();
     obj.rel12();
@@ -40,25 +40,25 @@ extern "C" int igIterateGraph_GetVTable(void) {
 
 void FUN_00227620(void)
 {
-    igMetaObject_RunStaticInit(igIterateGraph_Register);
+    igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igIterateGraph_Register);
 }
 
 static igMetaObjectCallback g_igIterateGraph_callbackList[] = { igNonRefCountedNodeList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
-void igIterateGraph_Register(void) {
+CallbackArray *igIterateGraph_Register(void) {
     BaseLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igIterateGraph_metaObject,
-        igIterator_Register,
-        igIterator_GetPublishedMetaObject,
+        (igMetaObjectRegisterFunction)igIterator_Register,
+        (igMetaObjectGetFunction)igIterator_GetPublishedMetaObject,
         thunk_igIterateGraph_GetMetaObject,
         "igIterateGraph",
         0x14, /* instance size */
         igIterateGraph_GetVTable,
         &igIterateGraph_InitFields,
         0, /* extra callback item */
-        g_igIterateGraph_callbackList /* callback list */
+        (igMetaObjectCallback *)g_igIterateGraph_callbackList /* callback list */
     );
 }
 
@@ -67,9 +67,9 @@ void thunk_igIterateGraph_GetMetaObject(void) {
 }
 
 static FieldFactory g_igIterateGraph_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igIterateGraph_fieldTable[] = {
     "_currentPath",
