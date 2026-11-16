@@ -424,7 +424,36 @@ void SFBUF_RingAddRead(SfdBufHn *h, int index, int len) {
     sfbuf_RingAddSub(h, index, len, 1);
 }
 
-int sfbuf_RingAddSub(SfdBufHn *h, int index, int len, int id);
+int sfbuf_RingAddSub(SfdBufHn *h, int index, int len, int id) {
+    SfdBufEnt *ents = h->ent;
+    SfdBufEnt *ent = &ents[index];
+    SfdBufBody *body = &ent->body;
+    SfdSj *sj = body->inf.sj;
+    int ret = 0;
+    int moved;
+    int rest;
+    if (len == 0)
+        return 0;
+    if (ent->valid == 0 || sj == 0)
+        return 0;
+    moved = sfbuf_MoveChunk(sj, id, len);
+    if (moved < len) {
+        rest = len - moved;
+        if (sfbuf_MoveChunk(sj, id, rest) < rest)
+            ret = sfd_ReportError(h, 0xFF00040B);
+    }
+    if (id == 1) {
+        if (index == id)
+            sfbuf_ResetConti(body);
+        if (body->f36 >= 0)
+            body->f36 += len;
+    } else {
+        if (body->f32 >= 0)
+            body->f32 += len;
+    }
+    h->dirty = 1;
+    return ret;
+}
 
 void sfbuf_ResetConti(SfdBufBody *body) {
     SfdBufCur *cur = &body->cur;

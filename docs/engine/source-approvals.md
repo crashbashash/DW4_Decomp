@@ -596,6 +596,8 @@ although SDK 3.0.3 `eekernel.h` writes `EI()` as `__asm__ volatile("ei")`, by th
   the 64-bit read of IPU_TOP, which the header declares as 32 bits. A cast to the wider type, which that read needs,
   drops the qualifier and matches retail. The 64-bit IPU_CMD reads in the function at `0x106660` and the function at `0x1067e8` keep the
   qualifier, which retail needs; the header has no macro for that read.
+* `viBufReset`, `viBufAddDMA` and `viBufRestartDMA` (CRI's copy of Sony's `vibuf.c` in sfmpvps2.c) rest on the same rule as
+  `viBufDelete` and `viBufStopDMA`: standing owner rule, hardware register access.
 * The serial port registers and the interrupt status register I_STAT at `0x1000F000` are absent from the header and
   identified from the open-source ps2sdk.
 * `sceSifInitCmd` clears and acknowledges the SIF0 interrupt through `eeregs.h`'s `D_STAT` and starts the channel

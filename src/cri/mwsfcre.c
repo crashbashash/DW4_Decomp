@@ -370,7 +370,43 @@ int mwsfcre_MallocRfb(MwsfdPly *ply, MwsfdCreInf *cprm, MwsfdFrmBufs *bufs) {
 
 /* The pool of frame buffers for the decoder, the number of frames and the size of each held by the
  * creation parameters; the caller's table is used when one was registered. */
-int mwsfcre_MallocTab(MwsfdPly *ply, MwsfdCreInf *cprm, void **frm);
+int mwsfcre_MallocTab(MwsfdPly *ply, MwsfdCreInf *cprm, void **frm) {
+    int ret = 0;
+    int width = cprm->maxWidth;
+    int height = cprm->maxHeight;
+    int mbWidth;
+    int mbHeight;
+    int fmt;
+    int nfrm;
+    int size;
+    int i;
+
+    nfrm = cprm->nfrmPoolWk;
+    fmt = mwsfcre_ConvBufFmtFromMwsfd(cprm->bufFmt);
+    mbWidth = width / 16;
+    mbHeight = height / 16;
+    size = (fmt == 2 ? mbWidth * mbHeight * 1024 : mbWidth * mbHeight * 384) + 64;
+    if (mpv_frm_buf_num != 0) {
+        if (mpv_frm_buf_num < nfrm + 2 || mpv_frm_buf_size < size) {
+            ret = -1;
+        } else {
+            for (i = 0; i < nfrm; i++) {
+                frm[i] = mpv_frm_buf_table[i + 2];
+                if (frm[i] == 0) {
+                    ret = -1;
+                }
+            }
+        }
+    } else {
+        for (i = 0; i < nfrm; i++) {
+            frm[i] = MWSFD_Malloc(ply, size);
+            if (frm[i] == 0) {
+                ret = -1;
+            }
+        }
+    }
+    return ret;
+}
 
 /* whether an output format is used as decoded (2 and 3 are converted) */
 int mwsfcre_IsOutFmtDirect(unsigned int format) {
@@ -688,7 +724,17 @@ int mwsfcre_DecideFtypeByHdrInf(SfdHdrInf *inf) {
 }
 
 /* a stream the library can play: not audio alone, and with video and audio only the sample rates it mixes */
-int mwsfdcre_IsPlayableByHdrInf(MwsfdHdrInf *hdr);
+int mwsfdcre_IsPlayableByHdrInf(MwsfdHdrInf *hdr) {
+    if (hdr->type == 0) return 0;
+    if (hdr->type == 2) return 0;
+    if (hdr->type == 1) {
+        switch (hdr->audioFreq) {
+        case 0: case 6000: case 12000: case 24000: case 48000: break;
+        default: return 0;
+        }
+    }
+    return 1;
+}
 
 void mwPlySetMallocFn(void *(*mallocFn)(void *obj, int size), void (*freeFn)(void *obj, void *ptr),
                          void *obj) {

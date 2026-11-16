@@ -7429,7 +7429,7 @@
 004ed800	77	.rodata	0025d300	match
 004ed850	5	.rodata	0025e668	match
 004ed858	13	.rodata	0025ed50	match
-004ed878	7	.rodata	0025f300	match
+004ed878	72	.rodata	0025f300	match
 004ed8c0	2	.rodata	00260750	match
 004ed8c8	1788	.rodata	00260a40	match
 004edfc8	182	.rodata	00262a30	match
@@ -7457,6 +7457,7 @@
 004f2720	32	.rodata	0027ede0	match
 004f2740	16	.rodata	0027ede0	match
 004f2750	64	.rodata	0027ede0	match
+004f28d0	40	.rodata	00285988	match
 004f2c80	24	.rodata	002918c0	match
 004f32b0	36	.rodata	00293730	match
 004f3688	814	.rodata	00295358	match

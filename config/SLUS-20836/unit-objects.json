@@ -17802,6 +17802,9 @@
       "ADX_DecodeInfoAinf": "0x0025fb18",
       "ADX_DecodeFooter": "0x0025fd38",
       "ADX_CalcHdrInfoLen": "0x0025fd98",
+      "ADX_DecodeMono4": "0x0025fdf0",
+      "ADX_DecodeSte4AsMono": "0x0025ffd0",
+      "ADX_DecodeSte4AsSte": "0x00260398",
       "ADX_DecodeSte4": "0x002606e0"
     },
     "data": {
@@ -18281,6 +18284,7 @@
       "pflt_set_rsig_q": "0x00268008",
       "adxsje_get_pcm_data": "0x00268018",
       "adxsje_calc_rsig": "0x00268188",
+      "adxsje_set_rsig": "0x002683e8",
       "adxsje_encode_blk": "0x00268670",
       "FUN_00268830": "0x00268830",
       "adxsje_encode_data": "0x00268960",
@@ -18533,6 +18537,7 @@
       "ADXT_EntryDecFunc": "0x0026d220",
       "ADXT_IsHeader": "0x0026d250",
       "ADXT_IsEndcode": "0x0026d2e8",
+      "ADXT_InsertSilence": "0x0026d328",
       "ADXT_SetOutputMono": "0x0026d4d0",
       "ADXT_SetKeyString": "0x0026d588",
       "ADXT_SetDefKeyString": "0x0026d5b8",
@@ -19745,9 +19750,32 @@
       "SNDF_GetTransferStatus": "0x00281cf8",
       "FUN_00281d80": "0x00281d80",
       "SNDF_ExecServer": "0x00282038",
-      "sndf_SendMessage": "0x002823f0",
+      "SNDF_StartTransfer": "0x00281078"
+    },
+    "data": {
+      "DAT_004bb100": "0x004bb100",
+      "DAT_004bb104": "0x004bb104",
+      "DAT_004bb108": "0x004bb108",
+      "sndf_version": "0x004bb10c",
+      "DAT_004bb110": "0x004bb110",
+      "sndf_ctx": "0x004bb114",
+      "DAT_00570c00": "0x00570c00",
+      "DAT_00570d00": "0x00570d00",
+      "DAT_00571700": "0x00571700",
+      "DAT_00571740": "0x00571740",
+      "DAT_00571750": "0x00571750",
+      "DAT_00571778": "0x00571778",
+      "DAT_005717a0": "0x005717a0",
+      "sndf_status": "0x005717c0",
+      "DAT_00572a00": "0x00572a00"
+    }
+  },
+  "0x002823f0": {
+    "whole_file": true,
+    "emitted": {
       "FUN_00282490": "0x00282490",
       "FUN_00282538": "0x00282538",
+      "SNDF_SendControl": "0x002825e0",
       "FUN_002827a0": "0x002827a0",
       "SNDF_SetMasterParam": "0x002829f0",
       "FUN_00282ab8": "0x00282ab8",
@@ -19759,22 +19787,7 @@
       "FUN_00282f70": "0x00282f70"
     },
     "data": {
-      "DAT_004bb100": "0x004bb100",
-      "DAT_004bb104": "0x004bb104",
-      "DAT_004bb108": "0x004bb108",
-      "sndf_version": "0x004bb10c",
-      "DAT_004bb110": "0x004bb110",
-      "sndf_ctx": "0x004bb114",
-      "DAT_004bb118": "0x004bb118",
-      "DAT_00570c00": "0x00570c00",
-      "DAT_00570d00": "0x00570d00",
-      "DAT_00571700": "0x00571700",
-      "DAT_00571740": "0x00571740",
-      "DAT_00571750": "0x00571750",
-      "DAT_00571778": "0x00571778",
-      "DAT_005717a0": "0x005717a0",
-      "sndf_status": "0x005717c0",
-      "DAT_00572a00": "0x00572a00"
+      "DAT_004bb118": "0x004bb118"
     }
   },
   "0x00283018": {
@@ -19816,6 +19829,136 @@
       "DAT_00573ea8": "0x00573ea8"
     }
   },
+  "0x00285118": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {}
+  },
+  "0x00285160": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00285170": "0x00285170",
+      "FUN_002851a0": "0x002851a0",
+      "mpvhook_Init": "0x002851d0",
+      "mpvhook_Finish": "0x002851f8",
+      "mpvhook_Create": "0x00285220",
+      "mpvhook_Destroy": "0x00285250",
+      "FUN_00285278": "0x00285278",
+      "mpvhook_SetCond": "0x002852a0",
+      "FUN_002852c8": "0x002852c8",
+      "FUN_002852f0": "0x002852f0",
+      "FUN_00285318": "0x00285318",
+      "FUN_00285340": "0x00285340",
+      "mpvhook_SetBufEnt": "0x00285368",
+      "mpvhook_SetSize": "0x00285390",
+      "mpvhook_SetFlagPtr": "0x002853b8",
+      "mpvhook_Start": "0x002853e0",
+      "mpvhook_GetPicInf": "0x00285410",
+      "mpvhook_GetInf": "0x00285438",
+      "mpvhook_GetRate": "0x00285460",
+      "mpvhook_GetDispSize": "0x00285488"
+    },
+    "data": {}
+  },
+  "0x002854b0": {
+    "whole_file": true,
+    "emitted": {
+      "M2VERR_InitErrInf": "0x002854d0",
+      "M2V_SetErrFunc": "0x002854e8",
+      "M2V_GetErrInf": "0x00285558",
+      "M2VERR_SetCode": "0x002855d8",
+      "m2verr_SetCodeSub": "0x00285628"
+    },
+    "data": {
+      "m2verrinf": "0x004bcc50"
+    }
+  },
+  "0x00285660": {
+    "whole_file": true,
+    "emitted": {
+      "M2V_DecodeFrm": "0x00285718"
+    },
+    "data": {}
+  },
+  "0x00285720": {
+    "whole_file": true,
+    "emitted": {
+      "M2V_GetBitRate": "0x00285820",
+      "M2V_GetVbvBufSiz": "0x00285880",
+      "M2V_GetLinkFlg": "0x00285910"
+    },
+    "data": {}
+  },
+  "0x00285988": {
+    "whole_file": true,
+    "emitted": {
+      "M2VHDEC_InitHn": "0x002859b8",
+      "FUN_00285a30": "0x00285a30",
+      "FUN_00285a58": "0x00285a58",
+      "FUN_00285a68": "0x00285a68",
+      "M2V_DecodePicAtr": "0x00285a90",
+      "m2vhdec_ParseSj": "0x00285c78",
+      "resetQuantiserMatrix": "0x00285e90",
+      "calcHvSize": "0x00285e98",
+      "calcNumberOfFrameCentreOffsets": "0x00285f48",
+      "calcPictureCodingExt": "0x00285f98",
+      "calcDarSar": "0x00286008",
+      "parseShc": "0x00286010",
+      "FUN_00286838": "0x00286838",
+      "FUN_00286958": "0x00286958",
+      "FUN_00286b70": "0x00286b70",
+      "FUN_00286ce8": "0x00286ce8",
+      "parseEsc": "0x00286d28",
+      "parseGsc": "0x00289d08",
+      "parsePsc": "0x0028a260"
+    },
+    "data": {
+      "@rodata": "0x004f28d0",
+      "tbl_dc_dct_pred_reset": "0x004f28b0",
+      "tbl_intra_dc_mult": "0x004f28c0"
+    }
+  },
+  "0x0028a958": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {}
+  },
+  "0x0028ab00": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0028ab10": "0x0028ab10",
+      "m2vlib_InitObjTbl": "0x0028ac50",
+      "m2vlib_InitWork": "0x0028ac98",
+      "m2vlib_InitPicAtr": "0x0028ad38",
+      "M2V_Finish": "0x0028ade8",
+      "M2V_Create": "0x0028adf0",
+      "m2vlib_SearchFreeHn": "0x0028ae28",
+      "m2vlib_InitHn": "0x0028ae78",
+      "M2V_Destroy": "0x0028af38",
+      "M2V_MbCbFn": "0x0028af88",
+      "M2V_SetCond": "0x0028af90",
+      "m2vlib_SetCondAll": "0x0028b040",
+      "M2VLIB_CheckHn": "0x0028b098"
+    },
+    "data": {
+      "M2VLIB_version_str": "0x004f28f8",
+      "m2vlib_libwork": "0x00573eb8",
+      "m2vlib_m2vobj": "0x00573f00"
+    }
+  },
+  "0x0028b0c0": {
+    "whole_file": true,
+    "emitted": {
+      "MEM_Copy4": "0x0028b0d8",
+      "MEM_Copy8": "0x0028b0f0",
+      "MEM_Copy32": "0x0028b108",
+      "MEM_CopySq": "0x0028b120",
+      "MEM_CopySq4": "0x0028b138",
+      "MEM_CopySq8": "0x0028b150",
+      "MEM_CopySq32": "0x0028b168"
+    },
+    "data": {}
+  },
   "0x0028b180": {
     "whole_file": true,
     "emitted": {
@@ -19836,6 +19979,9 @@
       "MPS_DecodeChunk": "0x0028b750",
       "mpsdmx_Decode": "0x0028b7f8",
       "mpsdmx_DecodeUnit": "0x0028b918",
+      "mpsdmx_ParsePack": "0x0028ba20",
+      "mpsdmx_ParseSysHd": "0x0028be88",
+      "mpsdmx_ParsePes": "0x0028c6f8",
       "MPS_GetStartCodeKind": "0x0028d360",
       "MPS_IsMpeg1": "0x0028d3d0",
       "mpsdmx_SearchStartCode": "0x0028d430",
@@ -19924,6 +20070,7 @@
       "mpvhdec_GetCurDelim": "0x0028f2f0",
       "MPV_DecodePicAtr": "0x0028f360",
       "mpvhdec_GetCodec": "0x0028f400",
+      "mpv_DecPicHdr": "0x0028fdd0",
       "mpvhdec_DecEscSj": "0x00290370",
       "mpvhdec_DecUdscSj": "0x00290430",
       "mpvhdec_AnalyUd": "0x00290520",
@@ -20007,6 +20154,7 @@
       "mwPlyCalcWorkCprmSfd": "0x00291c80",
       "MPV_SetFrameBuffers": "0x00291ce0",
       "mwsfcre_MallocRfb": "0x00291e00",
+      "mwsfcre_MallocTab": "0x00291f10",
       "mwsfcre_IsOutFmtDirect": "0x00292790",
       "mwPlySetSysPicUsrBuf": "0x002927c8",
       "mwsfcre_AttachPicUsrBuf": "0x002927f8",
@@ -20023,6 +20171,7 @@
       "mwsfd_SetOption": "0x00293220",
       "mwPlyGetHdrInf": "0x00293230",
       "mwsfcre_DecideFtypeByHdrInf": "0x002933f8",
+      "mwsfdcre_IsPlayableByHdrInf": "0x00293448",
       "mwPlySetMallocFn": "0x002934c0",
       "MWSFD_Malloc": "0x00293508",
       "mwsfcre_OrgMalloc": "0x002935a8",
@@ -20065,6 +20214,7 @@
     "emitted": {
       "mwPlyGetFrmSync": "0x00293788",
       "MWSFD_GetFrmSync": "0x002937d8",
+      "mwPlyGetCurFrm": "0x002937e0",
       "mwply_UpdateUsrLen": "0x00293958",
       "mwply_ApplyItemType3": "0x002939a8",
       "mwply_SetFrmInf": "0x00293a20",
@@ -20119,7 +20269,8 @@
       "E409171_mwPlyGetNumRemainFrm_inv_hn": "0x004f32d8",
       "mwl_convPtypeFromSFD_Invalid_Ptype": "0x004f3150",
       "mwl_convPtypeToSFD_Invalid_Ptype": "0x004f31b0",
-      "E201301_mwply_SetFrmInf_GetFps_failed": "0x004f3130"
+      "E201301_mwply_SetFrmInf_GetFps_failed": "0x004f3130",
+      "E1122614_mwPlyGetCurFrm_inv_hn": "0x004f3100"
     }
   },
   "0x00294a20": {
@@ -20746,6 +20897,7 @@
       "sfbuf_GetStat": "0x0029ddb0",
       "SFBUF_RingAddWrite": "0x0029de58",
       "SFBUF_RingAddRead": "0x0029de70",
+      "sfbuf_RingAddSub": "0x0029de88",
       "sfbuf_ResetConti": "0x0029dfd8",
       "sfbuf_PeekChunk": "0x0029e068",
       "sfbuf_MoveChunk": "0x0029e160",
@@ -20788,7 +20940,8 @@
       "SFCON_IsVideoEndcodeSkip": "0x0029edb0",
       "SFCON_UpdateConcatTime": "0x0029edf8",
       "SFCON_WriteTotSmplQue": "0x0029ee80",
-      "SFCON_ReadTotSmplQue": "0x0029ef38"
+      "SFCON_ReadTotSmplQue": "0x0029ef38",
+      "SFD_GetTimePerFile": "0x0029f008"
     },
     "data": {}
   },
@@ -20943,12 +21096,14 @@
       "sfmps_SetOutEnd": "0x002a21d8",
       "sfmps_GetTermDst": "0x002a2248",
       "sfmps_Concat": "0x002a22b8",
+      "sfmps_ChkEnd": "0x002a22d0",
       "sfmps_IsEffectiveEndcode": "0x002a2418",
       "sfmps_ChkInEnd": "0x002a2468",
       "sfmps_ProcPrep": "0x002a24d0",
       "sfmps_ChkPrepFlg": "0x002a2528",
       "sfmps_GetPrepDst": "0x002a25b0",
       "sfmps_SetPrepDst": "0x002a2620",
+      "sfmps_IsPrepEnd": "0x002a2680",
       "sfmps_AdjustAvPlay": "0x002a26e0",
       "sfmps_GetStmNum": "0x002a27d8",
       "sfmps_SetMvInf": "0x002a2888",
@@ -20973,8 +21128,7 @@
       "sfmps_SetCustomPketLen": "0x002a2e28",
       "sfmps_ReprocessHdr": "0x002a2e30",
       "sfmps_GetHd": "0x002a2ed0",
-      "SFMPS_GetConcatCnt": "0x002a2f20",
-      "sfmps_ChkEnd": "0x002a22d0"
+      "SFMPS_GetConcatCnt": "0x002a2f20"
     },
     "data": {
       "sfmps_audio_fn": "0x004beb1c",
@@ -21123,9 +21277,14 @@
       "FUN_002a8ba0": "0x002a8ba0",
       "setD4_CHCR": "0x002a8c08",
       "scTag2": "0x002a8c70",
+      "viBufCreate": "0x002a8c98",
+      "viBufReset": "0x002a8d10",
+      "viBufBeginPut": "0x002a8e50",
       "viBufEndPut": "0x002a8f40",
       "viBufUnput": "0x002a8f90",
+      "viBufAddDMA": "0x002a9010",
       "viBufStopDMA": "0x002a9210",
+      "viBufRestartDMA": "0x002a9310",
       "viBufDelete": "0x002a9628",
       "viBufFlush": "0x002a9680",
       "SFD_SetSceMpeg": "0x002a96d0",
@@ -21146,11 +21305,11 @@
       "sfmpvps2_StopIpu": "0x002a9d70",
       "copy2area": "0x002a9dc8",
       "SFMPVP_GetFrameCount": "0x002aa040",
+      "FUN_002aa050": "0x002aa050",
       "sfmpvp_ConsumePsc": "0x002aa268",
       "SFMPVP_IsPscEnough": "0x002aa280",
       "FUN_002aa2d8": "0x002aa2d8",
-      "SFMPVP_GetSizeSceMpegHn": "0x002aa2e8",
-      "FUN_002aa050": "0x002aa050"
+      "SFMPVP_GetSizeSceMpegHn": "0x002aa2e8"
     },
     "data": {
       "sfmpvp_scempeg_useflag": "0x004beb10",
@@ -21591,6 +21750,28 @@
     },
     "data": {
       "sfxa_lib": "0x004beb58"
+    }
+  },
+  "0x002b31d8": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_002b3300": "0x002b3300",
+      "sfxcnv_MakeTable": "0x002b3318",
+      "FUN_002b3490": "0x002b3490",
+      "FUN_002b3510": "0x002b3510",
+      "FUN_002b3530": "0x002b3530",
+      "FUN_002b3548": "0x002b3548",
+      "FUN_002b3600": "0x002b3600",
+      "FUN_002b3620": "0x002b3620",
+      "FUN_002b3640": "0x002b3640",
+      "FUN_002b3660": "0x002b3660",
+      "FUN_002b3678": "0x002b3678",
+      "SFX_MakeTblZ16": "0x002b3690",
+      "SFX_MakeTblZ32": "0x002b3708",
+      "SFXINF_GetStmInf": "0x002b3780"
+    },
+    "data": {
+      "@rodata": "0x004f5420"
     }
   },
   "0x002b3788": {
@@ -47781,27 +47962,5 @@
       "sceSdRemoteCallbackQuit"
     ],
     "source": "sony/libsdr/sdr_cb.c"
-  },
-  "0x002b31d8": {
-    "whole_file": true,
-    "emitted": {
-      "FUN_002b3300": "0x002b3300",
-      "sfxcnv_MakeTable": "0x002b3318",
-      "FUN_002b3490": "0x002b3490",
-      "FUN_002b3510": "0x002b3510",
-      "FUN_002b3530": "0x002b3530",
-      "FUN_002b3548": "0x002b3548",
-      "FUN_002b3600": "0x002b3600",
-      "FUN_002b3620": "0x002b3620",
-      "FUN_002b3640": "0x002b3640",
-      "FUN_002b3660": "0x002b3660",
-      "FUN_002b3678": "0x002b3678",
-      "SFX_MakeTblZ16": "0x002b3690",
-      "SFX_MakeTblZ32": "0x002b3708",
-      "SFXINF_GetStmInf": "0x002b3780"
-    },
-    "data": {
-      "@rodata": "0x004f5420"
-    }
   }
 }

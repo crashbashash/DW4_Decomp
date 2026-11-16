@@ -165,7 +165,7 @@ void SFD_CalcYccPlane(int a, int b, int c, SfdPlanes *planes);
 void SFD_GetNextPicUsr(void *sfd, char **addr, int *size);
 int SFD_GetNumRemainFrm(void *sfd);
 int SFD_IsNextFrmReady(void *sfd);
-int SFD_RelFrm(void *sfd, int frm);
+int SFD_RelFrm(void *sfd, void *frm);
 void SFD_SetCond(void *sfd, int id, void *value);
 SfdHdrHn *SFH_Create(char *buf, unsigned int size);
 void SFH_Destroy(SfdHdrHn *hdr);
@@ -220,7 +220,51 @@ int MWSFD_GetFrmSync(MwsfdPly *ply)
 
 /* hands out the current frame in out, catching up first when the sync is off (frmSync 0): frames
  * past the pool size that are already waiting are released and counted as skipped */
-void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrm *out);
+void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrm *out)
+{
+    void *sfd;
+    void *frm;
+    int i;
+    int skip;
+
+    if (MWSFD_IsEnableHndl(ply) == 0) {
+        MWSFSVM_Error(E1122614_mwPlyGetCurFrm_inv_hn);
+        out->f0 = 0;
+        return;
+    }
+    sfd = mwPlyGetSfdHn(ply);
+    SFD_GetFrm(sfd, &frm);
+    if (frm != 0) {
+        if (ply->frmSync == 0) {
+            i = 0;
+            skip = ply->cre.nfrmPoolWk;
+            do {
+                if (i >= skip)
+                    break;
+                i++;
+                if (mwPlyIsNextFrmReady(ply) != 1)
+                    break;
+                SFD_RelFrm(sfd, frm);
+                ply->numSkipDisp++;
+                SFD_GetFrm(sfd, &frm);
+            } while (1);
+        }
+        if (frm != 0) {
+            ply->limit++;
+            ply->curFrm = frm;
+            mwply_SetPicInf(ply, frm);
+            mwply_SetFrmInf(ply, frm, out);
+            mwply_UpdatePicUsrData(ply, frm);
+            mwply_UpdateUsrLen(ply, out);
+            mwply_ApplyItemType3(ply);
+            out->frmType = mwsffrm_DecideFrmType(ply, frm);
+            ply->logPos = out->usrLen;
+            FUN_00297ee8(ply, mwply_GetCurPicCompoMode(ply));
+            return;
+        }
+    }
+    out->f0 = 0;
+}
 
 /* takes the frame's user data length, letting mwsfsfx_UpdateAddInf act first when it grows */
 void mwply_UpdateUsrLen(MwsfdPly *ply, MwsfdFrm *frm)
@@ -552,7 +596,7 @@ void mwPlyRelCurFrm(MwsfdPly *ply)
 {
     int limit;
     int count;
-    int frm;
+    void *frm;
     void *sfd;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {

@@ -130,7 +130,7 @@ extern int DAT_004beb34;
 extern int DAT_004beb38;
 extern int DAT_004bea90;
 
-int FUN_00285118();
+int UTY_CmpTime();
 int UTY_MulDiv(int value, int scale, int divisor);
 int FUN_002916f8(int value);
 int sfd_ReportError();
@@ -515,7 +515,7 @@ int SFD_SetUsrIsSkipFn(SfdHn *hn, int value)
 
 void SFD_CmpTime(void)
 {
-    FUN_00285118();
+    UTY_CmpTime();
 }
 
 int SFD_SetUsrTimeFn(SfdHn *hn, SfdTimeFn fn)
@@ -890,7 +890,7 @@ int SFTIM_IsVideoTerm(SfdHn *hn)
         return 0;
     }
     FUN_002ae968(hn, &first, &second);
-    return FUN_00285118(base + frames * 2000 / 59940, frames, first, second) != 0;
+    return UTY_CmpTime(base + frames * 2000 / 59940, frames, first, second) != 0;
 }
 
 void SFTIM_SetSpeed(SfdHn *hn, int value)

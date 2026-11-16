@@ -46,7 +46,7 @@ int SFCON_IsEndcodeSkip(SfdHandle *hn);
 int SFCON_IsSystemEndcodeSkip(SfdHandle *hn);
 int SFSET_GetCond(SfdHandle *hn, int index);
 void SFSET_SetCond(SfdHandle *hn, int index, int value);
-void M2VMC_MacroBlock(char *dst, char *src, unsigned int n);
+void MEM_Copy(char *dst, char *src, unsigned int n);
 int SFBUF_RingGetWrite(SfdHandle *hn, int ch, SfdBufStat *stat);
 int SFBUF_RingGetRead(SfdHandle *hn, int ch, SfdBufStat *stat);
 int SFBUF_RingAddWrite(SfdHandle *hn, int ch, int len, int tail);
@@ -384,7 +384,7 @@ int sfmps_ExecCopySj(SfdSj *sj, unsigned char *data, int len) {
     SfdSjChunk ck;
 
     sj->vtbl->getChunk(sj, 0, len, &ck);
-    M2VMC_MacroBlock(ck.data, (char *)data, ck.len);
+    MEM_Copy(ck.data, (char *)data, ck.len);
     sj->vtbl->putChunk(sj, 1, &ck);
     return ck.len;
 }
@@ -440,10 +440,10 @@ int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts) {
         }
     }
     if (len0 >= len) {
-        M2VMC_MacroBlock(addr0, (char *)data, len);
+        MEM_Copy(addr0, (char *)data, len);
     } else {
-        M2VMC_MacroBlock(addr0, (char *)data, len0);
-        M2VMC_MacroBlock(addr1, (char *)data + len0, len - len0);
+        MEM_Copy(addr0, (char *)data, len0);
+        MEM_Copy(addr1, (char *)data + len0, len - len0);
     }
     ret = SFBUF_RingAddWrite(hn, ch, len, tail);
     if (ret == 0) {
@@ -708,7 +708,7 @@ void sfmps_SetMpsRaw(SfdHandle *hn, MpsHn *mps, unsigned char *data, int len) {
     } else {
         return;
     }
-    M2VMC_MacroBlock(dst, (char *)data, n);
+    MEM_Copy(dst, (char *)data, n);
 }
 
 void sfmps_AddTotals(SfdHandle *hn, int bytes, int packs) {
@@ -869,4 +869,16 @@ SfdPicRec *sfmps_GetHd(SfdHandle *hn) {
 
 int SFMPS_GetConcatCnt(SfdHandle *hn) {
     return hn->mps.prm->nPics;
+}
+int sfmps_IsPrepEnd(SfdHandle *hn, int ch) {
+    int *cond = hn->cond;
+    SfdChanInf *in = sfmps_GetSupSj(hn);
+    int size = hn->f8;
+    int need = cond[22];
+    int prep;
+    if (size <= 0) size = in->size;
+    if (size <= 0) size = need;
+    prep = (size < need) ? size : need;
+    if (SFBUF_GetWTot(hn, 0) >= prep) return 1;
+    return 0;
 }

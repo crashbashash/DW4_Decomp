@@ -158,6 +158,67 @@ int mpvhdec_GetCodec(MpvHn *mpv, SfdSjChunk *buf) {
     return mpv->strmType;
 }
 
+/* The picture header: temporal reference, coding type, VBV delay and the motion vector ranges of a P or B
+ * picture; the extra picture bytes are skipped. -3 when the header runs past the chunk. */
+int mpv_DecPicHdr(MpvHn *mpv, SfdSj *sj) {
+    MpvPicInf *inf = &mpv->picInf;
+    SfdSjChunk *ck = &mpv->chunk;
+    SfdSjChunk rest;
+    unsigned int cur, nxt;
+    unsigned int val;
+    int bit;
+    char *rp;
+    int type;
+    int rSize;
+    MpvMotionRange *range;
+    char *q;
+    char *end;
+
+    mpv->usrDatLevel = 3;
+    sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
+    BITS_INIT(ck->data, cur, nxt, bit, rp);
+    BITS_GET32(val, cur, nxt, bit, rp);
+    BITS_GET(inf->temporalReference, 10, cur, nxt, bit, rp);
+    BITS_GET(val, 3, cur, nxt, bit, rp);
+    inf->pictureCodingType = val;
+    BITS_GET(mpv->vbvDelay, 16, cur, nxt, bit, rp);
+    type = inf->pictureCodingType;
+    if (type == 2 || type == 3) {
+        range = &mpv->fwd;
+        BITS_GET1(range->fullPel, cur, nxt, bit, rp);
+        BITS_GET(rSize, 3, cur, nxt, bit, rp);
+        range->rSize = --rSize;
+        range->shift = 27 - rSize;
+        range->f = 1 << rSize;
+    }
+    if (type == 3) {
+        range = &mpv->bwd;
+        BITS_GET1(range->fullPel, cur, nxt, bit, rp);
+        BITS_GET(rSize, 3, cur, nxt, bit, rp);
+        range->rSize = --rSize;
+        range->shift = 27 - rSize;
+        range->f = 1 << rSize;
+    }
+    mpv->f724 = mpv->f732;
+    for (;;) {
+        val = cur >> 31;
+        if (val == 0) {
+            BITS_SKIP(1, cur, nxt, bit, rp);
+            break;
+        }
+        BITS_SKIP(9, cur, nxt, bit, rp);
+        q = rp + ((bit + 7) >> 3) - 8;
+        if (mpv->chunk.len <= q - mpv->chunk.data) {
+            return -3;
+        }
+    }
+    end = rp + ((bit + 7) >> 3) - 8;
+    SJ_SplitChunk(ck, end - mpv->chunk.data, ck, &rest);
+    sj->vtbl->putChunk(sj, 0, ck);
+    sj->vtbl->ungetChunk(sj, 1, &rest);
+    return 0;
+}
+
 /* the extension data after a header is skipped */
 int mpvhdec_DecEscSj(MpvHn *mpv, SfdSj *sj, int type) {
     SfdSjChunk *ck = &mpv->chunk;

@@ -33,7 +33,7 @@ extern SfdLibInf sfd_lib;
 extern int sfd_cond_defaults[100];
 extern SfdHandle *sfd_cur_hn;
 
-void M2VMC_MacroBlock(char *dst, char *src, unsigned int n);
+void MEM_Copy(char *dst, char *src, unsigned int n);
 void UTY_MemsetDword(int *dst, int value, unsigned int count);
 void SJRBF_Init(void);
 void SJRBF_Finish(void);
@@ -99,7 +99,7 @@ long sfd_InitLib(SfdInitPrm *prm) {
     int i;
 
     UTY_MemsetDword((int *)lib, 0, sizeof(SfdLibInf) / 4);
-    M2VMC_MacroBlock((char *)lib->cond, (char *)sfd_cond_defaults, sizeof(lib->cond));
+    MEM_Copy((char *)lib->cond, (char *)sfd_cond_defaults, sizeof(lib->cond));
     lib->prm = *prm;
     lib->sysStat = 0;
     sfd_InitErr(&lib->err);

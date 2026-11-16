@@ -147,7 +147,7 @@ struct MwsfdPly {
     signed char pause;              /* 118: the pause switch, re-applied on start */
     char pad119;
     int nEntry;                     /* 120: files entered by mwPlyEntryFname, cleared by mwSfdStop */
-    int curFrm;                     /* 124: the frame held by mwPlyGetCurFrm */
+    void *curFrm;                   /* 124: the frame held by mwPlyGetCurFrm */
     int limit;                      /* 128 */
     int count;                      /* 132 */
     int numSkipDisp;                /* 136 */

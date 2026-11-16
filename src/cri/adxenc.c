@@ -556,6 +556,54 @@ int adxsje_calc_rsig(AdxEnc *e, int ch)
     return 0;
 }
 
+/* Quantizes channel ch's block: the filter residuals, scaled to 16 bits, become 4-bit nibbles (4681 = 32768 / 7 per
+ * step, rounded half away from zero) packed big-end first into e->data[ch]; recon gets the dequantized samples. */
+void adxsje_set_rsig(AdxEnc *e, int ch)
+{
+    int j = 0;
+    AdxEncFilter *f;
+    short *resid;
+    short *norm;
+    short *recon;
+    unsigned char *data;
+    int per;
+    int byte;
+    int level;
+    int i;
+    int nib;
+
+    resid = e->resid[ch];
+    norm = e->norm[ch];
+    recon = e->recon[ch];
+    data = (unsigned char *)e->data[ch];
+    per = 8 / e->f84;
+    f = e->flt[ch];
+    byte = -1;
+    for (i = 0; i < e->blklen; i++) {
+        resid[i] = pflt_get_rsig(f, i);
+        level = resid[i] * f->rscale;
+        level = (level > 32767) ? 32767 : ((level < -32768) ? -32768 : level);
+        norm[i] = level;
+        if (norm[i] < 0) {
+            level = (level - 2340) / 4681;
+        } else {
+            level = (level + 2340) / 4681;
+        }
+        nib = level >= 7 ? 7 : (level < -8 ? -8 : level);
+        level = nib * f->scale * f->rscale;
+        level = (level > 32767) ? 32767 : ((level < -32768) ? -32768 : level);
+        recon[i] = level;
+        if (i % per == 0) {
+            byte++;
+            data[byte] = 0;
+            j = 1;
+        }
+        nib = ((nib << (8 - e->f84)) & 0xff) >> (8 - e->f84);
+        data[byte] |= nib << ((per - j) * e->f84);
+        j++;
+    }
+}
+
 int adxsje_encode_blk(AdxEnc *e)
 {
     short *bufs[2];

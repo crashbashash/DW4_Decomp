@@ -186,21 +186,6 @@ typedef struct SfdMpvFrameBufs {
     int w[16];
 } SfdMpvFrameBufs;
 
-typedef struct SfdIpuCtl {
-    int enabled;
-    int f4;
-    int f8;
-    int f12;
-    char f16;
-    char f17;
-    char f18;
-    char f19;
-    int endRequest; /* 20 */
-    int endSent;    /* 24 */
-    int stopped;
-    int value;
-} SfdIpuCtl;
-
 typedef struct SfdMpegCtx {
     int f0;
     int f4;
@@ -215,23 +200,29 @@ typedef struct SfdIpuEntry {
     int f20;
 } SfdIpuEntry;
 
+/* One DMA tag quadword of the IPU input chain. */
+typedef struct SfdDmaTag {
+    long tag;
+    long pad;
+} SfdDmaTag;
+
 typedef struct SfdIpuStream {
-    int base;
-    unsigned int uncached;
+    void *base;
+    SfdDmaTag *uncached;
     int sectors;
     int f12;
     int queuedSct;
     int restBytes;
     int bytes;
-    int r28;
-    int r32;
-    int r36;
-    int r40;
-    int r44;
-    int r48;
-    int r52;
-    int r56;
-    int r60;
+    unsigned int r28;
+    unsigned int r32;
+    unsigned int r36;
+    unsigned int r40;
+    unsigned int r44;
+    unsigned int r48;
+    unsigned int r52;
+    unsigned int r56;
+    unsigned int r60;
     int sema;
     int f68;
     long f72;
@@ -245,6 +236,27 @@ typedef struct SfdIpuEvent {
     int f0;
     int f4;
 } SfdIpuEvent;
+
+/* The sceMpeg/IPU decoder's work (SDK sfd_mpvp.c), inside the video work. */
+typedef struct SfdIpuCtl {
+    int enabled;
+    int f4;
+    int f8;
+    int f12;
+    char f16;
+    char f17;
+    char f18;
+    char f19;
+    int endRequest; /* 20 */
+    int endSent;    /* 24 */
+    int stopped;
+    int value;
+    int pad36;
+    SfdMpegCtx mpeg;     /* 40 */
+    SfdIpuStream stream; /* 112 */
+    SfdIpuEvent event;   /* 208 */
+} SfdIpuCtl;
+
 
 typedef struct SfdPicTrack {
     int number;
@@ -288,10 +300,6 @@ typedef struct SfdMpv {
     int pad4252;
     long f4256;
     SfdIpuCtl ipu;
-    int pad4300;
-    SfdMpegCtx mpeg;
-    SfdIpuStream stream;
-    SfdIpuEvent event;
 } SfdMpv;
 
 typedef struct SfdPicWait {

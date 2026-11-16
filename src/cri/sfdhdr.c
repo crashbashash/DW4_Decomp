@@ -49,7 +49,7 @@ int SFH_AnlyFtrGopM(SfhHn *sfh, unsigned char id, int *value);
 
 int sfhds_IsPrvate2PketStart(unsigned char *p);
 int SFSET_GetCond(SfdHandle *hn, int id);
-void M2VMC_MacroBlock(char *dst, char *src, unsigned int n);
+void MEM_Copy(char *dst, char *src, unsigned int n);
 int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size);
 int sfhds_ReadLong(unsigned char *p);
 void sfhds_SetHdrSeek(SfdHandle *hn);
@@ -152,7 +152,7 @@ int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size) {
         return 0;
     }
     len = size > 2048 ? 2048 : size;
-    M2VMC_MacroBlock(hn->hdr.data, (char *)data, len);
+    MEM_Copy(hn->hdr.data, (char *)data, len);
     hdr->size = len;
     SFHDS_ProcessHdr(hdr);
     sfhds_SetMvInf(hn);

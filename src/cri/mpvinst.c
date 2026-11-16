@@ -1,8 +1,9 @@
+/* Points the MPEG-2 video decoder hooks (mpvhook.c) at the M2V entry points and marks them installed. */
 void M2V_SetErrFunc();
 void M2V_GetErrInf();
 void M2V_SkipFrm();
 void M2V_DecodeFrm();
-void FUN_00285720();
+void M2V_GetPicAtr();
 void M2V_GetBitRate();
 void M2V_GetVbvBufSiz();
 void M2V_GetLinkFlg();
@@ -56,7 +57,7 @@ void mpv_InstallHooks(void) {
     DAT_004bcc30 = FUN_00285a58;
     DAT_004bcc34 = FUN_00285a68;
     DAT_004bcc38 = M2V_DecodePicAtr;
-    DAT_004bcc3c = FUN_00285720;
+    DAT_004bcc3c = M2V_GetPicAtr;
     DAT_004bcc40 = M2V_GetBitRate;
     DAT_004bcc44 = M2V_GetVbvBufSiz;
     DAT_004bcc48 = M2V_GetLinkFlg;

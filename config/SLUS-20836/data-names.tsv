@@ -3672,6 +3672,7 @@
 0x004f3070	E2053001_MWSFD_Malloc_cnt_over	string-literal
 0x004f30a0	E1122629_mwPlySetFrmSync_inv_hn	recovered-global
 0x004f30d0	E2010801_mwPlyGetFrmSync_inv_hn	recovered-global
+0x004f3100	E1122614_mwPlyGetCurFrm_inv_hn	recovered-global
 0x004f3130	E201301_mwply_SetFrmInf_GetFps_failed	string-literal
 0x004f3150	mwl_convPtypeFromSFD_Invalid_Ptype	recovered-global
 0x004f3178	E301271_mwsffrm_DecideFrmType_Invalid_Pstruct	recovered-global

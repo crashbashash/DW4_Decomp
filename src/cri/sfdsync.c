@@ -12,6 +12,8 @@ void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
 int SFSET_GetCond(SfdHandle *hn, int index);
 void SFSET_SetCond(SfdHandle *hn, int index, int value);
+int SFTIM_GetTimeSub(SfdHandle *hn, int *time, int *unit);
+int UTY_MulDiv(int a, int b, int c);
 
 int SFD_SetConcatPlay(SfdHandle *hn) {
     if (SFLIB_CheckHn(hn) != 0) {
@@ -91,3 +93,46 @@ int SFCON_ReadTotSmplQue(SfdHandle *hn, int *pts, int *last) {
     return ok;
 }
 
+
+int SFD_GetTimePerFile(SfdHandle *hn, int *time, int *unit, int *pos) {
+    char guard[16];
+    int rate;
+    int ret;
+    int elapsed;
+    int i;
+    int n;
+    SfdTimView *tim;
+
+    if (SFLIB_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF000162);
+    }
+    rate = hn->tim.rate;
+    tim = &hn->tim;
+    *pos = 0;
+    ret = SFTIM_GetTimeSub(hn, time, unit);
+    elapsed = 0;
+    if (tim->tally.total == 0) {
+        return ret;
+    }
+    if (*unit == 1) {
+        return ret;
+    }
+    {
+        sfd_Lock(guard);
+        n = tim->tally.count;
+        for (i = 0; i < 32; i++) {
+            elapsed = UTY_MulDiv(tim->tally.history[n % 32], *unit, rate);
+            if (*time >= elapsed) {
+                break;
+            }
+            n--;
+        }
+        *pos = n;
+        *time = *time - elapsed;
+        if (*time < 0) {
+            *time = 0;
+        }
+        sfd_Unlock(guard);
+    }
+    return ret;
+}

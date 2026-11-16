@@ -232,7 +232,7 @@ void sfcre_AnalySfh(unsigned char *buf, int size, SfdAnaInf *inf) {
 void sfcre_ProcessHdr(unsigned char *p, int size, SfdHdrInf *hdr) {
     int n = size < 2049 ? size : 2048;
 
-    M2VMC_MacroBlock(hdr->data, p, n);
+    MEM_Copy(hdr->data, p, n);
     hdr->size = n;
     SFHDS_ProcessHdr(hdr);
 }

@@ -1277,6 +1277,42 @@ int ADXT_IsEndcode(unsigned char *buf, int len, int *ftrlen)
 }
 
 /* Mono output centres every channel and drops the balance; the handles' settings are reapplied. */
+int ADXT_InsertSilence(AdxtObj *adxt, int nch, int nsmpl)
+{
+    SfdSj *sj;
+    SfdSjChunk ck;
+    SfdSjChunk rest;
+    int flen;
+    int total;
+    int done;
+    int n;
+    int nblk;
+
+    sj = adxt->sji;
+    if (sj == 0) {
+        return 0;
+    }
+    nblk = nsmpl / 32;
+    flen = nch * 18;
+    total = nblk * flen;
+    done = 0;
+    sj->vtbl->getChunk(sj, 0, total, &ck);
+    n = ck.len / flen * flen;
+    memset(ck.data, 0, n);
+    SJ_SplitChunk(&ck, n, &ck, &rest);
+    sj->vtbl->putChunk(sj, 1, &ck);
+    sj->vtbl->ungetChunk(sj, 0, &rest);
+    done += n;
+    sj->vtbl->getChunk(sj, 0, total - done, &ck);
+    n = ck.len / flen * flen;
+    memset(ck.data, 0, n);
+    SJ_SplitChunk(&ck, n, &ck, &rest);
+    sj->vtbl->putChunk(sj, 1, &ck);
+    sj->vtbl->ungetChunk(sj, 0, &rest);
+    done += n;
+    return done / flen * 32;
+}
+
 void ADXT_SetOutputMono(int flag)
 {
     AdxtObj *adxt;

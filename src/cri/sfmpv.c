@@ -15,8 +15,8 @@ extern int DAT_004f5060[];
 extern void *memset(void *dst, int value, unsigned int size);
 extern void *memcpy(void *dst, const void *src, unsigned int size);
 int SJRBF_GetFlowCnt(int sj, int id, int mode);
-int FUN_00285118(int id, int arg, int a, int b);
-int M2VMC_MacroBlock(void *dst, void *src, int n);
+int UTY_CmpTime(int id, int arg, int a, int b);
+int MEM_Copy(void *dst, void *src, int n);
 void UTY_MemsetDword(void *dst, int value, int size);
 int MPV_CheckDelim();
 int MPV_EntryErrFunc(void *handle, void (*callback)(SfdPlayer *, int), SfdPlayer *player);
@@ -808,7 +808,7 @@ void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk)
         len = 512;
     timer = &player->timer;
     user->size = len;
-    M2VMC_MacroBlock(user->data, chunk->addr, len);
+    MEM_Copy(user->data, chunk->addr, len);
     if (pts == 0x3FFFF) {
         picture->pts = 0;
         picture->hasPts = 0;
@@ -914,7 +914,7 @@ int sfmpv_IsSeekSkip(SfdPlayer *player) {
     if (f280->done != 0) {
         return 0;
     }
-    return FUN_00285118(link->id, link->arg, cur->a, cur->b) == 0;
+    return UTY_CmpTime(link->id, link->arg, cur->a, cur->b) == 0;
 }
 
 int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind) {

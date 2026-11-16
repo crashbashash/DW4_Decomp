@@ -236,12 +236,18 @@
 0x0027e0d0	0x0027ede0	cri_svm	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0027ede0	0x00280810	engine_enbaya	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
 0x00280810	0x00280b94	engine_igLuaState	b52	-O4,s -sdatathreshold 2 -RTTI off -Iinclude	off	-	whole file
-0x00280d20	0x00283014	cri_sndf	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x00283018	0x00284f2c	cri_cft	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x00285118	0x00285a54	cri-sofdec_285118	ee-gcc	-O2 -G0 -Iinclude	off	-	cri-sofdec block 0x280b98-0x2b5848 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x285118-0x285a30; `sd` prologues (Sony EE GCC); exceptions off: none of 31 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
-0x00285a58	0x00285e8c	cri-sofdec_285a58	ee-gcc	-O2 -G0 -Iinclude	off	-	cri-sofdec block 0x280b98-0x2b5848 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 2 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
-0x00285e90	0x0028b0d4	cri-sofdec_285e90	ee-gcc	-O2 -G0	off	-	cri-sofdec block 0x280b98-0x2b5848 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x285e90-0x28b0d4; `sd` prologues (Sony EE GCC); exceptions off: none of 14 non-leaf functions has a retail index record; 23 asm bodies not scored; ee-gcc -O2 -G0 reproduces 3/3 members; ee-gcc -O2 -G0 -Iinclude 3/3
-0x0028b0d8	0x0028b17c	cri-sofdec_28b0d8	ee-gcc	-O2 -G0 -Iinclude	off	-	cri-sofdec block 0x280b98-0x2b5848 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 7 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
+0x00280d20	0x002823ec	cri_sndf	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x002823f0	0x00283014	cri_sndfcmd	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00283018	0x00285114	cri_cft	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00285118	0x0028515c	cri_cmptime	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00285160	0x002854ac	cri_mpvhook	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x002854b0	0x0028565c	cri_m2verr	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00285660	0x0028571c	cri_m2vfrm	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00285720	0x00285984	cri_m2vget	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00285988	0x0028a954	cri_m2vhdec	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x0028a958	0x0028aafc	cri_mpvinst	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x0028ab00	0x0028b0bc	cri_m2vlib	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x0028b0c0	0x0028b17c	cri_mcpnot	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0028b180	0x0028b608	cri_mpsutl	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0028b608	0x0028d4a8	cri_mpsdmx	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0028d4a8	0x0028dc78	cri_mps	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file

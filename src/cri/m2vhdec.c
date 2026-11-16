@@ -1,0 +1,748 @@
+#include "dw4/cri/m2v.h"
+
+/* MPEG-2 extension_data() parser of the CRI movie decoder: reads one
+ * extension_start_code_identifier and its payload from the video elementary stream (ISO/IEC
+ * 13818-2 section 6.2.2.x) into the decoder's header state, using an inlined MSB-first bit reader.
+ * The identifiers are 1 sequence_extension, 2 sequence_display_extension, 3
+ * quant_matrix_extension, 4 copyright_extension, 5 sequence_scalable_extension, 7
+ * picture_display_extension, 8 picture_coding_extension, 9 picture_spatial_scalable_extension, 10
+ * picture_temporal_scalable_extension (6 is not defined by the standard and counts as an error).
+ * Bit reader state: p is the next byte to fetch (word aligned after the first fetch), acc a 32-bit
+ * window with the next unread bit at bit 31, nxt the following 32 bits already fetched, cnt the
+ * number of bits of the window consumed since the last refill. The macros are plain brace blocks
+ * on purpose: a do { } while (0) wrapper changes the instruction scheduling. */
+#define READ_WORD(w) \
+    { \
+        (w) = *p++; \
+        (w) <<= 8; (w) |= *p++ & 255; \
+        (w) <<= 8; (w) |= *p++ & 255; \
+        (w) <<= 8; (w) |= *p++ & 255; \
+    }
+
+/* Read n (1..31) bits into dst. */
+#define GET_BITS(dst, n) \
+    { \
+        if (cnt >= 32 - (n)) { \
+            cnt -= 32 - (n); \
+            if (cnt != 0) { \
+                acc |= nxt >> ((n) - cnt); \
+                (dst) = acc >> (32 - (n)); \
+                acc = nxt << cnt; \
+            } else { \
+                (dst) = acc >> (32 - (n)); \
+                acc = nxt; \
+            } \
+            READ_WORD(nxt); \
+        } else { \
+            (dst) = acc >> (32 - (n)); \
+            acc <<= (n); \
+            cnt += (n); \
+        } \
+    }
+
+/* Skip one 64 x 8 bit quantiser matrix. */
+#define SKIP_MATRIX() \
+    { \
+        int i; \
+        for (i = 0; i < 64; i++) { \
+            cnt += 8; \
+            if (cnt >= 32) { \
+                cnt -= 32; \
+                acc = nxt << cnt; \
+                READ_WORD(nxt); \
+            } else { \
+                acc <<= 8; \
+            } \
+        } \
+    }
+
+
+void *memset(void *dst, int c, unsigned int n);
+
+void M2VHDEC_Init(void)
+{
+    int i;
+
+    for (i = 0; i < 64; i++) {
+    }
+}
+
+/* Clears the header state (1304 bytes at +352) and sets its non-zero defaults. */
+void M2VHDEC_InitHn(Mpeg2Ctx *hn)
+{
+    Mpeg2Ext *h = &hn->ext;
+
+    memset(h, 0, 1304);
+    h->chroma_format = 1;
+    h->colour_description = 0;
+    h->colour_primaries = 0xFF;
+    h->transfer_characteristics = 0xFF;
+    h->matrix_coefficients = 0xFF;
+    h->broken_link = 1;
+    h->f1136[0] = 0;
+    h->f1136[1] = 0;
+    h->f1136[2] = 0;
+    h->f1136[3] = 0;
+    h->f1136[4] = 0;
+    h->header_level = 0;
+    h->f1164 = 0;
+    h->field_968 = 0;
+    h->closed_gop = 0;
+    h->field_1292 = 0;
+}
+
+void FUN_00285a30(Mpeg2Ctx *hn, int no, void *sj, void (*cb)(int arg, int index), int cbArg)
+{
+    M2vUsrSj *usr = &hn->usrsj[no];
+
+    usr->sj = sj;
+    usr->cb = cb;
+    usr->cbArg = cbArg;
+}
+
+void FUN_00285a58(Mpeg2Ctx *hn, void *buf, int size)
+{
+    M2vPicUsr *usr = &hn->picusr;
+
+    usr->buf = buf;
+    usr->size = size;
+}
+
+void FUN_00285a68(Mpeg2Ctx *hn, void **buf, int *size)
+{
+    M2vPicUsr *usr = &hn->picusr;
+
+    if (buf != 0) {
+        *buf = usr->buf;
+    }
+    if (size != 0) {
+        *size = usr->len;
+    }
+}
+
+int M2VLIB_CheckHn(void *hn);
+int M2VERR_SetCode(void *hn, int code);
+struct SjObj;
+int m2vhdec_ParseSj(Mpeg2Ctx *hn, struct SjObj *sj);
+void FUN_00285b10(Mpeg2Ctx *hn);
+
+int M2V_DecodePicAtr(Mpeg2Ctx *hn, struct SjObj *sj)
+{
+    int err;
+
+    if (M2VLIB_CheckHn(hn) != 0) {
+        return M2VERR_SetCode(0, 0xFF03020C);
+    }
+    err = m2vhdec_ParseSj(hn, sj);
+    if (err == 0) {
+        FUN_00285b10(hn);
+    }
+    return err;
+}
+
+typedef struct { char *data; int len; } Chunk;
+typedef struct SjObj SjObj;
+typedef struct {
+    char pad0[24];
+    void (*getChunk)(SjObj *sj, int id, int n, Chunk *ck);
+    void (*ungetChunk)(SjObj *sj, int id, Chunk *ck);
+    void (*putChunk)(SjObj *sj, int id, Chunk *ck);
+} SjVtbl;
+struct SjObj { SjVtbl *vt; };
+
+int MPV_GoNextDelimSj(SjObj *sj);
+void SJ_SplitChunk(Chunk *src, int n, Chunk *head, Chunk *tail);
+char *parseShc(Mpeg2Ctx *ctx, char *buf);
+char *FUN_00286838(Mpeg2Ctx *ctx, char *buf);
+char *FUN_00286958(Mpeg2Ctx *ctx, char *buf);
+char *parseEsc(Mpeg2Ctx *ctx, char *buf);
+char *parseGsc(Mpeg2Ctx *ctx, char *buf);
+char *parsePsc(Mpeg2Ctx *ctx, char *buf);
+
+int m2vhdec_ParseSj(Mpeg2Ctx *ctx, SjObj *sj)
+{
+    Mpeg2Ext *h = &ctx->ext;
+    Chunk ck;
+    Chunk rest;
+    int code;
+    int saved;
+    int ret = 0;
+    char *end;
+
+    h->ext_state = 0;
+    saved = h->error_count;
+    h->expected_ext_id = 0;
+    h->error_count = 0;
+    while ((code = MPV_GoNextDelimSj(sj)) != 0) {
+        sj->vt->getChunk(sj, 1, 0x7FFFFFFF, &ck);
+        end = 0;
+        switch (code) {
+        case 64:
+            end = parseShc(ctx, ck.data);
+            break;
+        case 128:
+            end = FUN_00286838(ctx, ck.data);
+            break;
+        case 32:
+            end = FUN_00286958(ctx, ck.data);
+            break;
+        case 16:
+            end = parseEsc(ctx, ck.data);
+            break;
+        case 8:
+            end = parseGsc(ctx, ck.data);
+            break;
+        case 4:
+            end = parsePsc(ctx, ck.data);
+            break;
+        }
+        if (end == 0) {
+            sj->vt->ungetChunk(sj, 1, &ck);
+            break;
+        }
+        SJ_SplitChunk(&ck, end - ck.data, &ck, &rest);
+        sj->vt->putChunk(sj, 0, &ck);
+        sj->vt->ungetChunk(sj, 1, &rest);
+        if (h->error_count != 0) {
+            ret = -2;
+            break;
+        }
+    }
+    h->error_count += saved;
+    return ret;
+}
+
+void resetQuantiserMatrix(Mpeg2Ext *h)
+{
+}
+
+void calcHvSize(Mpeg2Ext *h)
+{
+    int width = (h->horizontal_size_extension << 12) | h->horizontal_size_value;
+    int height = (h->vertical_size_extension << 12) | h->vertical_size_value;
+
+    h->mb_width = (unsigned int)(width + 15) >> 4;
+    h->horizontal_size = width;
+    h->vertical_size = height;
+    if (h->progressive_sequence == 1) {
+        h->mb_height = (unsigned int)(height + 15) >> 4;
+    } else if (h->picture_structure == 3) {
+        h->mb_height = ((unsigned int)(height + 31) >> 5) * 2;
+    } else {
+        h->mb_height = (unsigned int)(height + 31) >> 5;
+    }
+    h->padded_width = h->mb_width * 16;
+    h->padded_height = h->mb_height * 16;
+    h->half_width = h->padded_width >> 1;
+    h->half_height = h->padded_height >> 1;
+}
+
+void calcNumberOfFrameCentreOffsets(Mpeg2Ext *h)
+{
+    if (h->progressive_sequence == 1 || h->picture_structure == 1 || h->picture_structure == 2) {
+        h->number_of_frame_centre_offsets = 1;
+    } else if (h->repeat_first_field == 1) {
+        h->number_of_frame_centre_offsets = 3;
+    } else {
+        h->number_of_frame_centre_offsets = 2;
+    }
+}
+
+void calcPictureCodingExt(Mpeg2Ext *h)
+{
+    if (h->picture_structure == 3) {
+        h->field_968 = 0;
+        h->field_964 = 0;
+    } else {
+        h->field_964 = h->field_968 % 2;
+        h->field_968++;
+    }
+    h->dc_dct_pred_reset = tbl_dc_dct_pred_reset[h->intra_dc_precision];
+    h->intra_dc_mult = tbl_intra_dc_mult[h->intra_dc_precision];
+}
+
+void calcDarSar(Mpeg2Ext *h)
+{
+}
+
+char *parseShc(Mpeg2Ctx *ctx, char *buf)
+{
+    Mpeg2Ext *h = &ctx->ext;
+    char *p;
+    int cnt;
+    unsigned int acc, nxt;
+
+    h->header_level = 1;
+    h->shc_count++;
+    if ((h->ext_state != 0 && h->ext_state != 64) || h->expected_ext_id != 0) {
+        h->error_count++;
+    }
+    resetQuantiserMatrix(h);
+    p = (char *)((unsigned int)buf & ~3);
+    cnt = (buf - p) << 3;
+    READ_WORD(acc);
+    READ_WORD(nxt);
+    acc <<= cnt;
+    if (cnt != 0) {
+        h->sequence_header_code = acc | (nxt >> (32 - cnt));
+        acc = nxt << cnt;
+    } else {
+        h->sequence_header_code = acc;
+        acc = nxt;
+    }
+    READ_WORD(nxt);
+    GET_BITS(h->horizontal_size_value, 12);
+    GET_BITS(h->vertical_size_value, 12);
+    GET_BITS(h->aspect_ratio_information, 4);
+    GET_BITS(h->frame_rate_code, 4);
+    GET_BITS(h->bit_rate_value, 18);
+    GET_BITS(h->marker_bit, 1);
+    GET_BITS(h->vbv_buffer_size_value, 10);
+    GET_BITS(h->constrained_parameters_flag, 1);
+    GET_BITS(h->load_intra_quantiser_matrix, 1);
+    if (h->load_intra_quantiser_matrix)
+        SKIP_MATRIX();
+    GET_BITS(h->load_non_intra_quantiser_matrix, 1);
+    if (h->load_non_intra_quantiser_matrix)
+        SKIP_MATRIX();
+    calcHvSize(h);
+    calcDarSar(h);
+    if (h->horizontal_size == 0) {
+        h->error_count++;
+    }
+    if (h->horizontal_size & 15) {
+        h->warning_count++;
+    }
+    if (h->vertical_size == 0) {
+        h->error_count++;
+    }
+    if (h->vertical_size & 15) {
+        h->warning_count++;
+    }
+    if (h->aspect_ratio_information < 1 || h->aspect_ratio_information > 4) {
+        h->error_count++;
+    }
+    if (h->frame_rate_code < 1 || h->frame_rate_code > 8) {
+        h->error_count++;
+    }
+    if (h->marker_bit == 0) {
+        h->error_count++;
+    }
+    if (h->constrained_parameters_flag != 0) {
+        h->error_count++;
+    }
+    h->ext_state = 16;
+    h->expected_ext_id = 1;
+    return buf + ((cnt + (p - buf) * 8 - 57) / 8);
+}
+
+char *FUN_00286838(Mpeg2Ctx *ctx, char *buf)
+{
+    Mpeg2Ext *h = &ctx->ext;
+    char *p;
+    int cnt;
+    unsigned int acc, nxt;
+
+    h->header_level = 1;
+    h->sec_count++;
+    if ((h->ext_state != 0 && h->ext_state != 128) || h->expected_ext_id != 0) {
+        h->error_count++;
+    }
+    p = (char *)((unsigned int)buf & ~3);
+    cnt = (buf - p) << 3;
+    READ_WORD(acc);
+    READ_WORD(nxt);
+    acc <<= cnt;
+    if (cnt != 0) {
+        h->sec_start_code = acc | (nxt >> (32 - cnt));
+        acc = nxt << cnt;
+    } else {
+        h->sec_start_code = acc;
+        acc = nxt;
+    }
+    READ_WORD(nxt);
+    h->ext_state = 0;
+    h->expected_ext_id = 0;
+    return buf + ((cnt + (p - buf) * 8 - 57) / 8);
+}
+
+void FUN_00286b70(Mpeg2Ctx *ctx, char *src, int n);
+
+char *FUN_00286958(Mpeg2Ctx *ctx, char *buf)
+{
+    Mpeg2Ext *h = &ctx->ext;
+    char *p;
+    int cnt;
+    unsigned int acc, nxt, v;
+    int n;
+
+    h->udsc_count++;
+    if ((h->ext_state != 0 && h->ext_state != 32) || h->expected_ext_id != 0) {
+        h->error_count++;
+    }
+    p = (char *)((unsigned int)buf & ~3);
+    cnt = (buf - p) << 3;
+    READ_WORD(acc);
+    READ_WORD(nxt);
+    acc <<= cnt;
+    if (cnt != 0) {
+        h->udsc_start_code = acc | (nxt >> (32 - cnt));
+        acc = nxt << cnt;
+    } else {
+        h->udsc_start_code = acc;
+        acc = nxt;
+    }
+    READ_WORD(nxt);
+    for (n = 0; n <= 0xFFFFF; n++) {
+        v = acc >> 8;
+        acc <<= 8;
+        if (cnt > 8) {
+            v |= nxt >> (40 - cnt);
+        }
+        if (v == 1) break;
+        cnt += 8;
+        if (cnt >= 32) {
+            cnt -= 32;
+            acc = nxt << cnt;
+            READ_WORD(nxt);
+        }
+    }
+    FUN_00286b70(ctx, buf, n + 4);
+    return buf + ((cnt + (p - buf) * 8 - 57) / 8);
+}
+
+void FUN_00286ce8(Mpeg2Ctx *ctx, void *src, int len);
+void *memcpy();
+extern char D_004f28a8[];
+
+/* Hands n bytes of header data to the user stream the current header level selects, in up to two
+ * chunks, and runs its callback; with level 3 and a picture user buffer set, the bytes (behind an 8 byte
+ * marker when one was recorded) are copied there as well. */
+void FUN_00286b70(Mpeg2Ctx *ctx, char *src, int n)
+{
+    int idx = ctx->ext.header_level;
+    SjObj *sj = ctx->usrsj[idx].sj;
+    Chunk ck;
+    Chunk ck2;
+
+    if (sj != 0) {
+        sj->vt->getChunk(sj, 0, n, &ck);
+        memcpy(ck.data, src, ck.len);
+        sj->vt->putChunk(sj, 1, &ck);
+        if (ck.len < n) {
+            sj->vt->getChunk(sj, 0, n - ck.len, &ck2);
+            memcpy(ck2.data, src + ck.len, ck2.len);
+            sj->vt->putChunk(sj, 1, &ck2);
+        }
+        if (ctx->usrsj[idx].cb != 0) {
+            ctx->usrsj[idx].cb(ctx->usrsj[idx].cbArg, idx);
+        }
+    }
+    if (idx == 3 && ctx->picusr.buf != 0) {
+        if (ctx->ext.field_964 != 0) {
+            FUN_00286ce8(ctx, D_004f28a8, 8);
+        }
+        FUN_00286ce8(ctx, src, n);
+    }
+}
+
+/* Appends len bytes to the picture user buffer, as many as still fit. */
+void FUN_00286ce8(Mpeg2Ctx *ctx, void *src, int len)
+{
+    M2vPicUsr *b = &ctx->picusr;
+    int n = b->size - b->len;
+    char *dst = (char *)b->buf + b->len;
+
+    if (len < n) {
+        n = len;
+    }
+    b->len += n;
+    memcpy(dst, src, n);
+}
+
+char *parseEsc(Mpeg2Ctx *ctx, char *buf)
+{
+    Mpeg2Ext *h = &ctx->ext;
+    char *p = (char *)((unsigned int)buf & ~3);
+    int cnt = (buf - p) << 3;
+    unsigned int acc, nxt;
+    int i;
+
+    h->call_count++;
+    READ_WORD(acc);
+    READ_WORD(nxt);
+    acc <<= cnt;
+    if (cnt != 0) {
+        h->start_code = acc | (nxt >> (32 - cnt));
+        acc = nxt << cnt;
+    } else {
+        h->start_code = acc;
+        acc = nxt;
+    }
+    READ_WORD(nxt);
+    GET_BITS(h->extension_id, 4);
+
+    if ((h->ext_state != 0 && h->ext_state != 16) || (h->expected_ext_id != 0 && h->expected_ext_id != h->extension_id)) {
+        h->error_count++;
+    }
+    if (h->header_level != 1 && (h->extension_id == 1 || h->extension_id == 2 || h->extension_id == 5)) {
+        h->error_count++;
+    } else if (h->header_level != 3) {
+        if (h->extension_id == 3)
+            h->error_count++;
+        else if (h->extension_id == 4)
+            h->error_count++;
+        else if (h->extension_id == 7)
+            h->error_count++;
+        else if (h->extension_id == 8)
+            h->error_count++;
+        else if (h->extension_id == 9)
+            h->error_count++;
+        else if (h->extension_id == 10)
+            h->error_count++;
+    }
+
+    switch (h->extension_id) {
+    case 1:
+        GET_BITS(h->profile_and_level_indication, 8);
+        GET_BITS(h->progressive_sequence, 1);
+        GET_BITS(h->chroma_format, 2);
+        GET_BITS(h->horizontal_size_extension, 2);
+        GET_BITS(h->vertical_size_extension, 2);
+        GET_BITS(h->bit_rate_extension, 12);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->vbv_buffer_size_extension, 8);
+        GET_BITS(h->low_delay, 1);
+        GET_BITS(h->frame_rate_extension_n, 2);
+        GET_BITS(h->frame_rate_extension_d, 5);
+        if (h->chroma_format != 1) {
+            h->error_count++;
+            h->chroma_format = 1;
+        }
+        h->blocks_per_macroblock = D_004f2890[h->chroma_format];
+        calcHvSize(h);
+        h->bit_rate = (h->bit_rate_extension << 18) | h->bit_rate_value;
+        h->vbv_buffer_size = (h->vbv_buffer_size_extension << 10) | h->vbv_buffer_size_value;
+        break;
+    case 2:
+        GET_BITS(h->video_format, 3);
+        GET_BITS(h->colour_description, 1);
+        if (h->colour_description) {
+            GET_BITS(h->colour_primaries, 8);
+            GET_BITS(h->transfer_characteristics, 8);
+            GET_BITS(h->matrix_coefficients, 8);
+        }
+        GET_BITS(h->display_horizontal_size, 14);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->display_vertical_size, 14);
+        break;
+    case 3:
+        GET_BITS(h->load_intra_quantiser_matrix, 1);
+        if (h->load_intra_quantiser_matrix)
+            SKIP_MATRIX();
+        GET_BITS(h->load_non_intra_quantiser_matrix, 1);
+        if (h->load_non_intra_quantiser_matrix)
+            SKIP_MATRIX();
+        GET_BITS(h->load_chroma_intra_quantiser_matrix, 1);
+        if (h->load_chroma_intra_quantiser_matrix)
+            SKIP_MATRIX();
+        GET_BITS(h->load_chroma_non_intra_quantiser_matrix, 1);
+        if (h->load_chroma_non_intra_quantiser_matrix)
+            SKIP_MATRIX();
+        calcDarSar(h);
+        break;
+    case 4:
+        GET_BITS(h->copyright_flag, 1);
+        GET_BITS(h->copyright_identifier, 8);
+        GET_BITS(h->original_or_copy, 1);
+        GET_BITS(h->copyright_reserved, 7);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->copyright_number_1, 20);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->copyright_number_2, 22);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->copyright_number_3, 22);
+        break;
+    case 5:
+        h->scalable_seen = 1;
+        GET_BITS(h->scalable_mode, 2);
+        GET_BITS(h->layer_id, 4);
+        if (h->scalable_mode == 1) {
+            GET_BITS(h->lower_layer_prediction_horizontal_size, 14);
+            GET_BITS(h->marker_bit, 1);
+            GET_BITS(h->lower_layer_prediction_vertical_size, 14);
+            GET_BITS(h->horizontal_subsampling_factor_m, 5);
+            GET_BITS(h->horizontal_subsampling_factor_n, 5);
+            GET_BITS(h->vertical_subsampling_factor_m, 5);
+            GET_BITS(h->vertical_subsampling_factor_n, 5);
+        } else if (h->scalable_mode == 3) {
+            GET_BITS(h->picture_mux_enable, 1);
+            if (h->picture_mux_enable)
+                GET_BITS(h->mux_to_progressive_sequence, 1);
+            GET_BITS(h->picture_mux_order, 3);
+            GET_BITS(h->picture_mux_factor, 3);
+        }
+        break;
+    case 7:
+        calcNumberOfFrameCentreOffsets(h);
+        for (i = 0; i < h->number_of_frame_centre_offsets; i++) {
+            GET_BITS(h->frame_centre_horizontal_offset[i], 16);
+            GET_BITS(h->marker_bit, 1);
+            GET_BITS(h->frame_centre_vertical_offset[i], 16);
+            GET_BITS(h->marker_bit, 1);
+        }
+        break;
+    case 8:
+        GET_BITS(h->f_code00, 4);
+        GET_BITS(h->f_code01, 4);
+        GET_BITS(h->f_code10, 4);
+        GET_BITS(h->f_code11, 4);
+        GET_BITS(h->intra_dc_precision, 2);
+        GET_BITS(h->picture_structure, 2);
+        GET_BITS(h->top_field_first, 1);
+        GET_BITS(h->frame_pred_frame_dct, 1);
+        GET_BITS(h->concealment_motion_vectors, 1);
+        GET_BITS(h->q_scale_type, 1);
+        GET_BITS(h->intra_vlc_format, 1);
+        GET_BITS(h->alternate_scan, 1);
+        GET_BITS(h->repeat_first_field, 1);
+        GET_BITS(h->chroma_420_type, 1);
+        GET_BITS(h->progressive_frame, 1);
+        GET_BITS(h->composite_display_flag, 1);
+        if (h->composite_display_flag) {
+            GET_BITS(h->v_axis, 1);
+            GET_BITS(h->field_sequence, 3);
+            GET_BITS(h->sub_carrier, 1);
+            GET_BITS(h->burst_amplitude, 7);
+            GET_BITS(h->sub_carrier_phase, 8);
+        }
+        calcHvSize(h);
+        calcPictureCodingExt(h);
+        if (h->field_964 == 0)
+            ctx->picusr.len = 0;
+        break;
+    case 9:
+        h->spatial_scalable_seen = 1;
+        GET_BITS(h->lower_layer_temporal_reference, 10);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->lower_layer_horizontal_offset, 15);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->lower_layer_vertical_offset, 15);
+        GET_BITS(h->spatial_temporal_weight_code_table_index, 2);
+        GET_BITS(h->lower_layer_progressive_frame, 1);
+        GET_BITS(h->lower_layer_deinterlaced_field_select, 1);
+        break;
+    case 10:
+        GET_BITS(h->reference_select_code, 2);
+        GET_BITS(h->forward_temporal_reference, 10);
+        GET_BITS(h->marker_bit, 1);
+        GET_BITS(h->backward_temporal_reference, 10);
+        break;
+    default:
+        h->error_count++;
+        break;
+    }
+    h->ext_state = 0;
+    h->expected_ext_id = 0;
+    return buf + ((cnt + (p - buf) * 8 - 57) / 8);
+}
+
+char *parseGsc(Mpeg2Ctx *ctx, char *buf)
+{
+    Mpeg2Ext *h = &ctx->ext;
+    char *p;
+    int cnt;
+    unsigned int acc, nxt;
+
+    h->header_level = 2;
+    h->gsc_count++;
+    if ((h->ext_state != 0 && h->ext_state != 8) || h->expected_ext_id != 0) {
+        h->error_count++;
+    }
+    p = (char *)((unsigned int)buf & ~3);
+    cnt = (buf - p) << 3;
+    READ_WORD(acc);
+    READ_WORD(nxt);
+    acc <<= cnt;
+    if (cnt != 0) {
+        h->group_start_code = acc | (nxt >> (32 - cnt));
+        acc = nxt << cnt;
+    } else {
+        h->group_start_code = acc;
+        acc = nxt;
+    }
+    READ_WORD(nxt);
+    GET_BITS(h->drop_frame_flag, 1);
+    GET_BITS(h->time_code_hours, 5);
+    GET_BITS(h->time_code_minutes, 6);
+    GET_BITS(h->marker_bit, 1);
+    GET_BITS(h->time_code_seconds, 6);
+    GET_BITS(h->time_code_pictures, 6);
+    GET_BITS(h->closed_gop, 1);
+    GET_BITS(h->broken_link, 1);
+    return buf + ((cnt + (p - buf) * 8 - 57) / 8);
+}
+
+char *parsePsc(Mpeg2Ctx *ctx, char *buf)
+{
+    Mpeg2Ext *h = &ctx->ext;
+    char *p;
+    int cnt;
+    unsigned int acc, nxt;
+
+    h->header_level = 3;
+    h->psc_count++;
+    if ((h->ext_state != 0 && h->ext_state != 4) || h->expected_ext_id != 0) {
+        h->error_count++;
+    }
+    p = (char *)((unsigned int)buf & ~3);
+    cnt = (buf - p) << 3;
+    READ_WORD(acc);
+    READ_WORD(nxt);
+    acc <<= cnt;
+    if (cnt != 0) {
+        h->picture_start_code = acc | (nxt >> (32 - cnt));
+        acc = nxt << cnt;
+    } else {
+        h->picture_start_code = acc;
+        acc = nxt;
+    }
+    READ_WORD(nxt);
+    GET_BITS(h->temporal_reference, 10);
+    GET_BITS(h->picture_coding_type, 3);
+    GET_BITS(h->vbv_delay, 16);
+    if (h->picture_coding_type < 1 || h->picture_coding_type > 3) {
+        h->error_count++;
+    }
+    if (h->picture_coding_type == 2 || h->picture_coding_type == 3) {
+        GET_BITS(h->full_pel_forward_vector, 1);
+        GET_BITS(h->forward_f_code, 3);
+        if (h->full_pel_forward_vector != 0) {
+            h->error_count++;
+        }
+        if (h->forward_f_code != 7) {
+            h->error_count++;
+        }
+    }
+    if (h->picture_coding_type == 3) {
+        GET_BITS(h->full_pel_backward_vector, 1);
+        GET_BITS(h->backward_f_code, 3);
+        if (h->full_pel_backward_vector != 0) {
+            h->error_count++;
+        }
+        if (h->backward_f_code != 7) {
+            h->error_count++;
+        }
+    }
+    for (;;) {
+        GET_BITS(h->extra_bit_picture, 1);
+        if (h->extra_bit_picture == 0) {
+            break;
+        }
+        GET_BITS(h->extra_information_picture, 8);
+    }
+    h->picture_count[h->picture_coding_type]++;
+    h->ext_state = 16;
+    h->expected_ext_id = 8;
+    return buf + ((cnt + (p - buf) * 8 - 57) / 8);
+}

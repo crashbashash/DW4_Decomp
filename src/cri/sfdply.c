@@ -43,9 +43,9 @@ int FUN_002ae968(SfdPly *h, int *pos, int *len);
 int SFTIM_GetTimeSub(SfdPly *h, int *pos, int *len);
 int SFTIM_IsStagnant(SfdPly *h);
 int SFD_CmpTime(int a, int b, int c, int d);
-int FUN_00285118(int a, int b, int c, int d);
+int UTY_CmpTime(int a, int b, int c, int d);
 void UTY_MemsetDword(void *dst, int value, int n);
-void M2VMC_MacroBlock(void *dst, void *src, int n);
+void MEM_Copy(void *dst, void *src, int n);
 void SFHDS_InitFhd(void *blk);
 void SFHDS_FinishFhd(void *blk);
 void sfd_ClearErr(SfdErrBlk *err);
@@ -598,7 +598,7 @@ int sfply_IsEtime(SfdPly *h) {
     if (first < 0) {
         return 0;
     }
-    return FUN_00285118(first, second, request, value) == 0;
+    return UTY_CmpTime(first, second, request, value) == 0;
 }
 
 int sfply_IsEtrg(SfdPly *h) {

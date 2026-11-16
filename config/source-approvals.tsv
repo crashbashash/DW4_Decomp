@@ -44,6 +44,9 @@ volatile	StopTimerSystemTime	1	#sony-hardware-registers
 volatile	FUN_002a8ba0	3	#sony-hardware-registers
 volatile	setD4_CHCR	3	#sony-hardware-registers
 volatile	viBufDelete	3	#sony-hardware-registers
+volatile	viBufReset	3	#sony-hardware-registers
+volatile	viBufAddDMA	2	#sony-hardware-registers
+volatile	viBufRestartDMA	4	#sony-hardware-registers
 volatile	sceIpuStopDMA	9	#sony-hardware-registers
 volatile	sceIpuRestartDMA	7	#sony-hardware-registers
 volatile	sceIpuSync	1	#sony-hardware-registers

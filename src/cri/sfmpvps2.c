@@ -57,7 +57,7 @@ void sceMpegGetPictureAbort(SfdMpegCtx *mpeg);
 
 extern char sfmpv_seqend_codes[16];
 
-int viBufCreate(SfdIpuStream *stream, int base, unsigned int address, int sectors, SfdIpuEntry *entries, int entryCount);
+int viBufCreate(SfdIpuStream *stream, void *base, void *address, int sectors, SfdIpuEntry *entries, int entryCount);
 int viBufReset(SfdIpuStream *stream);
 void scTag2(long long *arg0, long long arg1, long long arg2, long long arg3);
 void viBufBeginPut(SfdIpuStream *stream, char **first, int *firstSize, char **second, int *secondSize);
@@ -74,10 +74,10 @@ void sfmpvp_SaveMpvp(SfdPlayer *player);
 int copy2area(char *buf, int size, char *dst, int cap, char *src, int pos, char *data, int len);
 
 int getFIFOindex(SfdIpuStream *stream, int position) {
-    if (position == ((stream->sectors * 16 + stream->uncached + 16) & 0x0FFFFFFF)) {
+    if (position == ((stream->sectors * 16 + (unsigned int)stream->uncached + 16) & 0x0FFFFFFF)) {
         return 0;
     }
-    return (position - stream->base) / 2048;
+    return (position - (int)stream->base) / 2048;
 }
 
 void FUN_002a8ba0(unsigned int chcr) {
@@ -172,7 +172,7 @@ void SFMPVP_Init(void) {
 
 void SFMPVP_GetViBufInf(SfdPlayer *player, int *bytes, int *position, int *start, int *end) {
     SfdMpv *mpv = player->streams.mpv;
-    SfdIpuStream *stream = &mpv->stream;
+    SfdIpuStream *stream = &mpv->ipu.stream;
     *bytes = stream->bytes;
     *start = stream->f12 << 11;
     *position = (((stream->f12 + stream->queuedSct) << 11) + stream->restBytes) % stream->bytes;
@@ -181,7 +181,7 @@ void SFMPVP_GetViBufInf(SfdPlayer *player, int *bytes, int *position, int *start
 
 int SFD_GetSceErrMessage(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    return mpv->event.f4;
+    return mpv->ipu.event.f4;
 }
 
 int mpegError(void *unused, void *record, SfdPlayer *player) {
@@ -189,7 +189,7 @@ int mpegError(void *unused, void *record, SfdPlayer *player) {
     DAT_00585678 = 1;
     __builtin_memcpy(DAT_00585680, record, 8);
     mpv = player->streams.mpv;
-    __builtin_memcpy(&mpv->event, record, 8);
+    __builtin_memcpy(&mpv->ipu.event, record, 8);
     sfd_ReportError(player, 0xFF000F40);
     return 1;
 }
@@ -209,9 +209,9 @@ int sfmpvp_PutVibuf(SfdIpuStream *stream, char *src, int pos) {
 int sfmpvps2_ExecIpu(int unused0, int unused1, SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
     SfdIpuCtl *ctl = &mpv->ipu;
-    SfdIpuStream *stream = &mpv->stream;
+    SfdIpuStream *stream = &mpv->ipu.stream;
     if (ctl->endSent == 1) {
-        sceMpegGetPictureAbort(&mpv->mpeg);
+        sceMpegGetPictureAbort(&mpv->ipu.mpeg);
         return 1;
     }
     viBufAddDMA(stream);
@@ -226,13 +226,13 @@ int sfmpvps2_ExecIpu(int unused0, int unused1, SfdPlayer *player) {
 
 int mpegStopDMA(int unused0, int unused1, SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    viBufStopDMA(&mpv->stream);
+    viBufStopDMA(&mpv->ipu.stream);
     return 1;
 }
 
 int mpegRestartDMA(int unused0, int unused1, SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    viBufRestartDMA(&mpv->stream);
+    viBufRestartDMA(&mpv->ipu.stream);
     return 1;
 }
 
@@ -241,9 +241,9 @@ void FUN_002a9bc8(SfdPlayer *player)
     SfdMpv *mpv;
     if (SFMPVP_IsSceMpegUsed(player)) {
         mpv = player->streams.mpv;
-        viBufDelete(&mpv->stream);
+        viBufDelete(&mpv->ipu.stream);
         if (SFPLY_GetResetFlg() != 1) {
-            sceMpegDelete(&mpv->mpeg);
+            sceMpegDelete(&mpv->ipu.mpeg);
         } else {
             sceMpegReset();
             sfmpvp_SaveMpvp(player);
@@ -253,12 +253,12 @@ void FUN_002a9bc8(SfdPlayer *player)
 
 void sfmpvp_SaveMpvp(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    UTY_MemcpyByte(&sfmpvp_bkup_buf, &mpv->mpeg, 0x48);
+    UTY_MemcpyByte(&sfmpvp_bkup_buf, &mpv->ipu.mpeg, 0x48);
 }
 
 void sfmpvp_RestoreMpvp(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    UTY_MemcpyByte(&mpv->mpeg, &sfmpvp_bkup_buf, 0x48);
+    UTY_MemcpyByte(&mpv->ipu.mpeg, &sfmpvp_bkup_buf, 0x48);
 }
 
 int SFMPVP_Put(SfdPlayer *player, char *src, int pos) {
@@ -267,7 +267,7 @@ int SFMPVP_Put(SfdPlayer *player, char *src, int pos) {
         return pos;
     }
     mpv = player->streams.mpv;
-    return sfmpvp_PutVibuf(&mpv->stream, src, pos);
+    return sfmpvp_PutVibuf(&mpv->ipu.stream, src, pos);
 }
 
 int SFMPVP_Unput(SfdPlayer *player, int count) {
@@ -276,14 +276,14 @@ int SFMPVP_Unput(SfdPlayer *player, int count) {
         return count;
     }
     mpv = player->streams.mpv;
-    return viBufUnput(&mpv->stream, count);
+    return viBufUnput(&mpv->ipu.stream, count);
 }
 
 void sfmpvps2_StopIpu(SfdPlayer *player, int value) {
     SfdMpv *mpv = player->streams.mpv;
     SfdIpuCtl *ctl = &mpv->ipu;
     if (ctl->stopped != 1) {
-        viBufFlush(&mpv->stream);
+        viBufFlush(&mpv->ipu.stream);
         ctl->stopped = 1;
         ctl->value = value;
     }
@@ -317,7 +317,7 @@ int copy2area(char *buf, int size, char *dst, int cap, char *src, int pos, char 
 
 int SFMPVP_GetFrameCount(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    return mpv->mpeg.f8;
+    return mpv->ipu.mpeg.f8;
 }
 
 void FUN_002aa050(SfdPlayer *player, unsigned char *data, int size) {
@@ -402,9 +402,185 @@ int SFMPVP_IsPscEnough(SfdPlayer *player) {
 
 SfdMpegCtx *FUN_002aa2d8(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
-    return &mpv->mpeg;
+    return &mpv->ipu.mpeg;
 }
 
 int SFMPVP_GetSizeSceMpegHn(void) {
     return 72;
+}
+int viBufCreate(SfdIpuStream *stream, void *base, void *address, int sectors, SfdIpuEntry *entries, int entryCount) {
+    struct SemaParam param;
+
+    stream->base = base;
+    stream->uncached = (SfdDmaTag *)UNCACHED((unsigned int)address);
+    stream->sectors = sectors;
+    stream->bytes = sectors * 2048;
+    stream->entries = entries;
+    stream->entryCount = entryCount;
+    param.initCount = 1;
+    param.maxCount = 1;
+    stream->sema = CreateSema(&param);
+    viBufReset(stream);
+    stream->f72 = 0;
+    return 1;
+}
+int viBufReset(SfdIpuStream *stream) {
+    int i;
+
+    stream->f12 = 0;
+    stream->queuedSct = 0;
+    stream->restBytes = 0;
+    stream->f68 = 1;
+    stream->f88 = 0;
+    stream->f92 = 0;
+    for (i = 0; i < stream->entryCount; i++) {
+        stream->entries[i].f0 = -1;
+        stream->entries[i].f8 = -1;
+        stream->entries[i].f16 = 0;
+        stream->entries[i].f20 = 0;
+    }
+    for (i = 0; i < stream->sectors; i++) {
+        scTag2((long long *)(stream->uncached + i), PHYSICAL(i * 2048 + (unsigned int)stream->base), 3, 128);
+    }
+    scTag2((long long *)(stream->uncached + i), PHYSICAL((unsigned int)stream->uncached), 2, 0);
+    *D4_QWC = 0;
+    *D4_MADR = PHYSICAL((unsigned int)stream->base);
+    *D4_TADR = PHYSICAL((unsigned int)stream->uncached);
+    setD4_CHCR(5);
+    return 1;
+}
+void viBufBeginPut(SfdIpuStream *stream, char **first, int *firstSize, char **second, int *secondSize) {
+    int es;
+    int en;
+    int fs;
+    int fn;
+
+    WaitSema(stream->sema);
+    fs = (stream->f12 + stream->queuedSct) * 2048;
+    fn = (stream->sectors - 2 - stream->queuedSct) * 2048;
+    es = (fs + stream->restBytes) % stream->bytes;
+    en = fn - stream->restBytes;
+    if (stream->bytes - es >= en) {
+        *first = (char *)stream->base + es;
+        *firstSize = en;
+        *second = 0;
+        *secondSize = 0;
+    } else {
+        *first = (char *)stream->base + es;
+        *firstSize = stream->bytes - es;
+        *second = (char *)stream->base;
+        *secondSize = en - (stream->bytes - es);
+    }
+    SignalSema(stream->sema);
+}
+int viBufAddDMA(SfdIpuStream *stream) {
+    int i;
+    int index;
+    int id;
+    int last;
+    unsigned int d4chcr;
+    int isNewData = 0;
+    int consume;
+    int readStart;
+    int readN;
+
+    WaitSema(stream->sema);
+    if (!stream->f68) {
+        SignalSema(stream->sema);
+        return 0;
+    }
+    setD4_CHCR(5);
+    d4chcr = *D4_CHCR;
+    index = getFIFOindex(stream, *D4_MADR);
+    consume = (index + stream->sectors - stream->f12) % stream->sectors;
+    stream->f12 = (stream->f12 + consume) % stream->sectors;
+    stream->queuedSct -= consume;
+    readStart = (stream->f12 + stream->queuedSct) % stream->sectors;
+    readN = stream->restBytes / 2048;
+    stream->restBytes %= 2048;
+    if (readN > 0) {
+        last = (stream->f12 + stream->queuedSct - 1 + stream->sectors) % stream->sectors;
+        scTag2((long long *)(stream->uncached + last), (char *)stream->base + 2048 * last, 3, 128);
+        isNewData = 1;
+    }
+    index = readStart;
+    for (i = 0; i < readN; i++) {
+        id = (i == readN - 1) ? 0 : 3;
+        scTag2((long long *)(stream->uncached + index), (char *)stream->base + 2048 * index, id, 128);
+        index = (index + 1) % stream->sectors;
+    }
+    stream->queuedSct += readN;
+    if (stream->queuedSct) {
+        if (isNewData) {
+            d4chcr = (d4chcr & 0x0FFFFFFF) | (3 << 28);
+        }
+        setD4_CHCR(d4chcr | 0x100);
+    }
+    SignalSema(stream->sema);
+    return 1;
+}
+int viBufRestartDMA(SfdIpuStream *stream) {
+    int bp;
+    int fp;
+    int ifc;
+    unsigned int madr;
+    unsigned int qwc;
+    unsigned int tadr;
+    unsigned int chcr;
+    int index;
+    int indexNext;
+    int id;
+
+    WaitSema(stream->sema);
+    bp = stream->r56 & 0x7F;
+    fp = (stream->r56 >> 16) & 0x3;
+    ifc = (stream->r56 >> 8) & 0xF;
+    madr = stream->r28 - ((fp + ifc) << 4);
+    qwc = stream->r36 + (fp + ifc);
+    tadr = stream->r32;
+    chcr = stream->r40 | 0x100;
+    if (madr < (unsigned int)stream->base) {
+        qwc = ((unsigned int)stream->base - madr) >> 4;
+        madr += (unsigned int)(stream->sectors * 2048);
+        tadr = PHYSICAL((unsigned int)stream->uncached);
+        id = (stream->r28 == (unsigned int)stream->base
+              || stream->r28 == (unsigned int)stream->base + 2048 * stream->sectors) ? 0 : 3;
+        chcr = (stream->r40 & 0x0FFFFFFF) | (id << 28) | 0x100;
+        if (!(0 <= (0 + stream->sectors - stream->f12) % stream->sectors
+              && (0 + stream->sectors - stream->f12) % stream->sectors < stream->queuedSct)) {
+            stream->f12 = stream->sectors - 1;
+            stream->queuedSct++;
+        }
+    } else if ((index = getFIFOindex(stream, stream->r28)) != (indexNext = getFIFOindex(stream, madr))) {
+        tadr = PHYSICAL(index * 16 + (unsigned int)stream->uncached);
+        qwc = ((unsigned int)stream->base + 2048 * index - madr) >> 4;
+        id = ((unsigned int)stream->base + (stream->r28 - (unsigned int)stream->base) % (2048 * stream->sectors)
+              == (unsigned int)stream->base + 2048 * ((stream->f12 + stream->queuedSct) % stream->sectors)) ? 0 : 3;
+        chcr = (stream->r40 & 0x0FFFFFFF) | (id << 28) | 0x100;
+        if (!(0 <= (indexNext + stream->sectors - stream->f12) % stream->sectors
+              && (indexNext + stream->sectors - stream->f12) % stream->sectors < stream->queuedSct)) {
+            stream->f12 = indexNext;
+            stream->queuedSct++;
+        }
+    }
+    if (stream->r44 != 0 && stream->r48 != 0) {
+        REG(0x1000B010) = stream->r44;
+        REG(0x1000B020) = stream->r48;
+        FUN_002a8ba0(stream->r52 | 0x100);
+    }
+    while (REG(0x10002010) < 0) {
+    }
+    REG(0x10002000) = bp;
+    while (REG(0x10002010) < 0) {
+    }
+    *D4_MADR = madr;
+    *D4_TADR = tadr;
+    *D4_QWC = qwc;
+    if (stream->queuedSct != 0) {
+        setD4_CHCR(chcr);
+    }
+    REG(0x10002010) = stream->r60;
+    stream->f68 = 1;
+    SignalSema(stream->sema);
+    return 1;
 }

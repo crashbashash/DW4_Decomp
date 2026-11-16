@@ -136,7 +136,7 @@ int ADXT_IsEndcode();
 int ADXT_InsertSilence();
 SfdSj *SJRBF_Create();
 int SJ_SplitChunk();
-void M2VMC_MacroBlock();
+void MEM_Copy();
 int UTY_MemsetDword();
 int UTY_MulDiv();
 int SFBUF_RingGetRead();
@@ -393,7 +393,7 @@ void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out) {
         n = max;
     if (n > 0x19000)
         n = 0x19000;
-    M2VMC_MacroBlock(ck.data, dst, n);
+    MEM_Copy(ck.data, dst, n);
     sfadxt_PutDataChunk(sj, n, &ck);
     ctx->total += n;
     *out = n;

@@ -440,6 +440,7 @@
 0x283138	CFT_Ycc420plnToZ32	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
 0x283140	CFT_Ycc420mbToZ32	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
 0x283148	CFT_Argb8888mbToZ32	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x285118	UTY_CmpTime	medium	sdk:libmwsfde.a/cmptime.o B
 0x2854b0	M2VERR_Init	high	sdk:libmwsfde.a/m2v_err.o A (3s - -)
 0x2854d0	M2VERR_InitErrInf	high	sdk:libmwsfde.a/m2v_err.o A (3s - -)
 0x2854e8	M2V_SetErrFunc	medium	sdk:libmwsfde.a/m2v_err.o B
@@ -448,20 +449,28 @@
 0x285628	m2verr_SetCodeSub	high	sdk:libmwsfde.a/m2v_err.o A (3s - -)
 0x285660	M2V_SkipFrm	medium	sdk:libmwsfde.a/m2v_frm.o B
 0x285718	M2V_DecodeFrm	high	sdk:libmwsfde.a/m2v_frm.o A (3s - -)
+0x285720	M2V_GetPicAtr	medium	sdk:libmwsfde.a/m2v_get.o B
 0x285820	M2V_GetBitRate	medium	sdk:libmwsfde.a/m2v_get.o B
 0x285880	M2V_GetVbvBufSiz	medium	sdk:libmwsfde.a/m2v_get.o B
 0x285910	M2V_GetLinkFlg	medium	sdk:libmwsfde.a/m2v_get.o B
+0x285988	M2VHDEC_Init	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x2859b8	M2VHDEC_InitHn	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x285a90	M2V_DecodePicAtr	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x285c78	m2vhdec_ParseSj	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x285e90	resetQuantiserMatrix	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x285e98	calcHvSize	medium	sdk:libmwsfde.a/m2v_hdec.o C by order and size
 0x285f48	calcNumberOfFrameCentreOffsets	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x285f98	calcPictureCodingExt	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x286008	calcDarSar	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x286010	parseShc	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x286d28	parseEsc	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x289d08	parseGsc	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x28a260	parsePsc	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x28ab00	M2V_GetVersionStr	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
 0x28abc0	M2V_Init	medium	sdk:libmwsfde.a/m2v_lib.o C by order and size
 0x28ac50	m2vlib_InitObjTbl	medium	sdk:libmwsfde.a/m2v_lib.o B
 0x28ac98	m2vlib_InitWork	medium	sdk:libmwsfde.a/m2v_lib.o B
+0x28ad38	m2vlib_InitPicAtr	medium	sdk:libmwsfde.a/m2v_lib.o B
 0x28ade8	M2V_Finish	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
 0x28adf0	M2V_Create	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
 0x28ae28	m2vlib_SearchFreeHn	medium	sdk:libmwsfde.a/m2v_lib.o B
@@ -471,7 +480,14 @@
 0x28af90	M2V_SetCond	medium	sdk:libmwsfde.a/m2v_lib.o B
 0x28b040	m2vlib_SetCondAll	medium	sdk:libmwsfde.a/m2v_lib.o B
 0x28b098	M2VLIB_CheckHn	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
-0x28b0c0	M2VMC_MacroBlock	high	sdk:libmwsfde.a/m2v_mc.o A (3s - -)
+0x28b0c0	MEM_Copy	medium	sdk:libmwsfde.a/mcp_not.o B
+0x28b0d8	MEM_Copy4	medium	sdk:libmwsfde.a/mcp_not.o B
+0x28b0f0	MEM_Copy8	medium	sdk:libmwsfde.a/mcp_not.o B
+0x28b108	MEM_Copy32	medium	sdk:libmwsfde.a/mcp_not.o B
+0x28b120	MEM_CopySq	medium	sdk:libmwsfde.a/mcp_not.o B
+0x28b138	MEM_CopySq4	medium	sdk:libmwsfde.a/mcp_not.o B
+0x28b150	MEM_CopySq8	medium	sdk:libmwsfde.a/mcp_not.o B
+0x28b168	MEM_CopySq32	medium	sdk:libmwsfde.a/mcp_not.o B
 0x28b180	UTY_MemcpyByte	high	sdk:libmwsfde.a/memcpyb.o A (3s - -)
 0x28b350	UTY_MemcpyDword	high	sdk:libmwsfde.a/memcpyd.o A (3s - -)
 0x28b460	UTY_MemsetByte	high	sdk:libmwsfde.a/memsetb.o A (3s - -)
