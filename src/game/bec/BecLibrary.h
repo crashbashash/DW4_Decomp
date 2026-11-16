@@ -212,7 +212,7 @@ extern "C" void *beWeaponSeqData_Register(void);
 extern "C" void beWeaponSeqData_GetMetaObjectFunction(void);
 extern "C" void beWeaponSeqData_InitFields(void);
 extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
-extern "C" igMetaEnum *FUN_0033f3b0(void);
+extern "C" igMetaEnum *beWeaponSeqData_GetMsgActionEnum(void);
 extern "C" int igMetaObject_CreateInstance(...);
 extern "C" void beWeapon_CreateInstance(int arg0);
 extern "C" igMetaObject *beWeapon_GetOrCreateMetaObject(void);
@@ -874,7 +874,7 @@ extern "C" int beNumberCtrlInfo_GetVTable(void);
 extern "C" void beNumberCtrlInfo_EnsureRegistered(void);
 extern "C" void *beNumberCtrlInfo_Register(void);
 extern "C" void beNumberCtrlInfo_GetMetaObjectFunction(void);
-extern "C" igMetaEnum *FUN_0034e300(void);
+extern "C" igMetaEnum *beNumberCtrl_GetMessageEnum(void);
 extern "C" void beNumberCtrl_CreateInstance(int arg0);
 extern "C" igMetaObject *beNumberCtrl_GetOrCreateMetaObject(void);
 extern "C" void *beNumberCtrl_GetMetaObject(void);
@@ -3838,7 +3838,7 @@ struct Obj_359810 {
         }
     }
 };
-extern "C" O *FUN_00359900(O *arg0, short arg1);
+extern "C" O *igSmartPointer_beMatCtrlInfoWork_Destruct(O *arg0, short arg1);
 extern "C" igMetaObject *g_beMatCtrlInfo_metaObject;
 struct Obj_359b20 { int *vt; int w[11]; };
 extern "C" int g_beMatCtrlInfo_vtable[4];

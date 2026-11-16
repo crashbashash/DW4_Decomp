@@ -1,6 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
+#pragma push
+#pragma readonly_strings on
 
 extern "C" int igObject_GetAllocator(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
@@ -35,7 +37,23 @@ extern "C" void beMessenger_RegisterReceiver(int messenger, int receiver, char *
 extern "C" bePadData *bePadManager_GetPadForPlayer(int padManager, int player);
 extern "C" int igObject_IsKindOf(void *object, int metaObject);
 extern "C" int beLua__RunNamedChunk(int lua, int name, int);
-extern "C" int strcmp(int *, int *);
+extern "C" int strcmp(const char *, const char *);
+extern "C" int beMovie_GetMessageEnum(void);
+extern "C" unsigned int beMessenger_ResolveEnumValue(int messenger, int enumeration, int name);
+extern "C" int beMessenger_GetString(int messenger, int index);
+extern "C" void beMessenger_SelectGroup(int messenger, char *group);
+extern "C" void beMessenger_AppendString(int messenger, int text);
+extern "C" void beMessenger_DispatchSelected(int messenger, char *message);
+extern "C" int beMessenger_GetBoolCount(int messenger);
+extern "C" void *beMessenger_GetObject(int messenger, int index);
+extern "C" igMovieInfo *igMovieInfo_Create(int allocator);
+extern "C" void igInsightCore_AddInfo(int insight, void *info);
+extern "C" void igGroup_AppendChild(void *group, void *child);
+extern "C" void igGroup_RemoveChild(void *group, void *child);
+extern "C" int g_igGroup_metaObject[4];
+extern "C" int g_igAttrSet_metaObject[4];
+extern "C" int g_igViewerSceneInfoManager_metaObject[4];
+extern "C" int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work);
 extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
@@ -458,12 +476,16 @@ struct TimerHolder {
     ~TimerHolder() { igRelease(p); }
 };
 
+/* The allocator new members come from: the owner's own, or the user pool. */
+static inline int allocatorFor(void *owner) {
+    int allocator = igObject_GetAllocator(owner);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+}
+
 /* Creates the ram's timer list on first use. */
 static inline void ensureTimerList(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        int allocator = igObject_GetAllocator(ram);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocator));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocatorFor(ram)));
         igObject *list = created.p;
         if (list != 0) list->_refCount = list->_refCount + 1;
         igRelease((igObject *)ram->_dataList);
@@ -484,14 +506,10 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, int name, long long endTime) 
     ensureTimerList(self);
     timer = igProperty_FindByName(self->_dataList, g_propertyNameField[0], name);
     if (timer == 0) {
-        int allocator = igObject_GetAllocator(self);
-        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        TimerHolder created(beBaseInfoRamTimer_Create(allocator));
+        TimerHolder created(beBaseInfoRamTimer_Create(allocatorFor(self)));
         igNamedObject_SetName(created.p, name);
         if (self->_dataList == 0) {
-            int listAllocator = igObject_GetAllocator(self);
-            listAllocator = g_useOwnerAllocator ? listAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-            igSmartPointer<igObject> list(beBaseInfoDataList_Create(listAllocator));
+            igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocatorFor(self)));
             igObject *retained = list.p;
             if (retained != 0) retained->_refCount = retained->_refCount + 1;
             igRelease((igObject *)self->_dataList);
@@ -719,6 +737,39 @@ enum MovieSkipButton { kButtonStart = 0x0008, kButtonCross = 0x4000 };
 
 struct StringHeader { int owner; int refCount; };
 
+/* The game's string pool, created on first use. */
+static inline int stringPool(void) {
+    if (g_stringPool[0] == 0) {
+        int pool = StringPool_Allocate(16);
+        if (pool) pool = StringPool_Construct(pool);
+        g_stringPool[0] = pool;
+    }
+    return g_stringPool[0];
+}
+
+static inline void releaseString(int string) {
+    if (string != 0) {
+        StringHeader *header = (StringHeader *)string - 1;
+        int refs = header->refCount - 1;
+        header->refCount = refs;
+        if (refs == 0) StringChunk_ReleaseHeader(header->owner, header);
+    }
+}
+
+/* Points a string field of the movie at the pooled copy of `text`, releasing the string it held. */
+static inline void setMovieString(const igSmartPointer<igMovieInfo> &movie, int igMovieInfo::*field, const char *text) {
+    /* matching construct: register-allocator tracer — the movie pointer, numbered after the token, colours first and takes s1 */
+    int interned;
+    igMovieInfo *info = movie.p;
+    interned = StringPool_Intern(stringPool(), (int)text);
+    releaseString(info->*field);
+    info->*field = interned;
+}
+
+static inline const char *nameOf(const beMovieInfoData *data) {
+    return data->_name != 0 ? (const char *)data->_name : (const char *)emptyString;
+}
+
 /* While a movie plays: Start or Cross stops it, and once it has finished the Lua chunk its
  * beMovieInfoData names runs and the playing name is cleared. */
 void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram) {
@@ -731,11 +782,8 @@ void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram) {
     int i;
     igObject *entry;
     beMovieInfoData *data;
-    int *name;
-    int *playing;
+    const char *name;
     int empty;
-    StringHeader *header;
-    int refs;
     if (self->_playingName != 0) {
         pad = bePadManager_GetPadForPlayer((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]), 0);
         pressed = pad->_trigger;
@@ -756,43 +804,83 @@ void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram) {
                 if (entry != 0 && igObject_IsKindOf(entry, g_beMovieInfoData_metaObject[0]) != 0) data = (beMovieInfoData *)entry;
                 else data = 0;
                 if (data == 0) return;
-                name = (int *)data->_name;
-                name = name != 0 ? name : emptyString;
-                if (strcmp((int *)self->_playingName, name) == 0) {
+                name = nameOf(data);
+                if (strcmp((const char *)self->_playingName, name) == 0) {
                     beLua__RunNamedChunk(lua, data->_callLuaName, 0);
                     break;
                 }
             }
-            if (g_stringPool[0] == 0) {
-                empty = StringPool_Allocate(16);
-                if (empty) empty = StringPool_Construct(empty);
-                g_stringPool[0] = empty;
-            }
-            empty = StringPool_Intern(g_stringPool[0], 0);
-            playing = (int *)self->_playingName;
-            if (playing) {
-                header = (StringHeader *)playing - 1;
-                refs = header->refCount - 1;
-                header->refCount = refs;
-                if (refs == 0) StringChunk_ReleaseHeader(header->owner, header);
-            }
+            empty = StringPool_Intern(stringPool(), 0);
+            releaseString(self->_playingName);
             self->_playingName = empty;
         }
     }
 }
 
-/* A holder of one object reference; its deleting destructor is emitted after the controller. */
-struct MovieObjectRef {
-    igObject *object;
-    ~MovieObjectRef();
-};
-
-MovieObjectRef::~MovieObjectRef() {
-    igObject *held = object;
-    if (held) { held->_refCount -= 1; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); }
+/* A message to the movie controller: names a movie of its beMovieInfo and has it played in a layer. */
+int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work) {
+    beMovieInfo *info = (beMovieInfo *)ram->_parentInfo;
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beMovie_GetMessageEnum(), work->_message)) {
+    case 1: {
+        int movieName = beMessenger_GetString(self->_messenger, 0);
+        if (self->_playingName != 0) return 1;
+        beBaseInfoDataList *list = (beBaseInfoDataList *)info->_dataList;
+        for (int i = 0; i < list->_count; i++) {
+            igObject *entry = ((igObject **)list->_data)[i];
+            beMovieInfoData *data;
+            if (entry != 0 && igObject_IsKindOf(entry, g_beMovieInfoData_metaObject[0]) != 0) data = (beMovieInfoData *)entry;
+            else data = 0;
+            if (data == 0) return 1;
+            if (strcmp((const char *)movieName, nameOf(data)) != 0) continue;
+            if (self->_movie != 0) {
+                igSmartPointer<igMovieInfo> movie(igMovieInfo_Create(allocatorFor(self)));
+                igNamedObject_SetName(movie.p, "Movie Player");
+                setMovieString(movie, &igMovieInfo::_codecType, "igCriMovieCodec");
+                setMovieString(movie, &igMovieInfo::_path, nameOf(data));
+                igInsightCore_AddInfo(self->_insight, movie.p);
+                beMessenger_SelectGroup(self->_messenger, "LAYERCTL");
+                beMessenger_AppendString(self->_messenger, data->_parentLayer);
+                beMessenger_DispatchSelected(self->_messenger, "GETLAYERNODE");
+                if (beMessenger_GetBoolCount(self->_messenger) <= 0) return 1;
+                igObject *object = (igObject *)beMessenger_GetObject(self->_messenger, 0);
+                igGroup *layer;
+                if (object != 0 && igObject_IsKindOf(object, g_igGroup_metaObject[0]) != 0) layer = (igGroup *)object;
+                else layer = 0;
+                if (layer == 0) return 1;
+                igObject *child = ((igObject **)((igObjectList *)layer->_childList)->_data)[0];
+                igAttrSet *layerNode;
+                if (child != 0 && igObject_IsKindOf(child, g_igAttrSet_metaObject[0]) != 0) layerNode = (igAttrSet *)child;
+                else layerNode = 0;
+                if (layerNode == 0) return 1;
+                if (movie.p->_sceneInfo == 0) return 1;
+                igObject *graph = (igObject *)((igSceneInfo *)movie.p->_sceneInfo)->_sceneGraph;
+                igAttrSet *scene;
+                if (graph != 0 && igObject_IsKindOf(graph, g_igAttrSet_metaObject[0]) != 0) scene = (igAttrSet *)graph;
+                else scene = 0;
+                if (scene == 0) return 1;
+                igGroup_AppendChild(layerNode, scene);
+                igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+                igGroup_RemoveChild((void *)((igViewerParameters *)viewer->_parameters)->_scene, scene);
+            }
+            int playing = StringPool_Intern(stringPool(), (int)nameOf(data));
+            releaseString(self->_playingName);
+            self->_playingName = playing;
+            break;
+        }
+        break;
+    }
+    case 0:
+    case 2:
+    case 3:
+        break;
+    default:
+        return 0;
+    }
+    return 1;
 }
 
 int beMovie_GetMeta(void)
 {
     return g_beMovie_metaObject[0];
 }
+#pragma pop

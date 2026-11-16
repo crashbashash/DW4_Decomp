@@ -4250,7 +4250,7 @@
 0019d360	FUN_0019d360	match	-
 0019d370	igModelViewMatrixBoneSelectList_561880_Register	match	-
 0019d3e0	thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject	match	-
-0019d3f0	FUN_0019d3f0	match	-
+0019d3f0	igModelViewMatrixBoneSelect_CreateInstance	match	-
 0019d430	igModelViewMatrixBoneSelect_GetMetaObject	match	-
 0019d480	igModelViewMatrixBoneSelect_GetVTable	match	-
 0019d4f0	igModelViewMatrixBoneSelect_EnsureRegistered	match	-
@@ -14075,7 +14075,7 @@
 0033f2b0	beWeaponSeqData_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f320	beWeaponSeqData_GetMetaObjectFunction	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f340	beWeaponSeqData_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0033f3b0	FUN_0033f3b0	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0033f3b0	beWeaponSeqData_GetMsgActionEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f410	beWeapon_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f450	beWeapon_GetOrCreateMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f4a0	beWeapon_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -14725,7 +14725,7 @@
 0034e250	beNumberCtrlInfo_EnsureRegistered	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e270	beNumberCtrlInfo_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e2e0	beNumberCtrlInfo_GetMetaObjectFunction	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0034e300	FUN_0034e300	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0034e300	beNumberCtrl_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e360	beNumberCtrl_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e3a0	beNumberCtrl_GetOrCreateMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0034e3f0	beNumberCtrl_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -15191,7 +15191,7 @@
 00359700	beMatCtrlInfoWork_InitFields	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003597c0	beMatCtrlInfoRam_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00359810	beMatCtrlInfoRam_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00359900	FUN_00359900	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+00359900	igSmartPointer_beMatCtrlInfoWork_Destruct	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00359980	beMatCtrlInfoRam_EnsureRegistered	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 003599a0	beMatCtrlInfoRam_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00359a20	beMatCtrlInfoRam_GetMetaObjectFunction	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -16725,6 +16725,8 @@
 003844a0	beGenerater_Prepare	match	-
 003844e0	beGenerater_GetInfoMeta	match	-
 003844f0	beGenerater_OnAddRam	match	-
+00384800	beGenerater_DropItemsForDead	match	-
+003853c0	beGenerater_OnMessageText	match	-
 00385820	beGenerater_GetMeta	match	-
 00385830	beHitLandDeliv_Prepare	match	-
 00385840	beHitLandDeliv_GetInfoMeta	match	-
@@ -16732,14 +16734,18 @@
 00385880	beHitLandDeliv_UpdateRam	match	-
 00385890	beHitLandDeliv_OnMessageText	match	-
 00386020	beHitLandDeliv_GetMeta	match	-
-00386030	FUN_00386030	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00386030	beHitLandModel_HitProc	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00386060	beHitLandModel_Prepare	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00386180	beHitLandModel_GetInfoMeta	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00386190	beHitLandModel_OnAddRam	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 003861c0	beHitLandModel_UpdateRam	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003861d0	beHitLandModel_OnMessage	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00386780	beHitLandModel_CheckWall	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003876b0	beHitLandModel_CheckWallFull	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00388010	beHitLandModel_FindLand	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00388590	FUN_00388590	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003885e0	FUN_003885e0	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00388590	beHitLandModel_UpdateBound	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003885e0	beHitLandModel_BoundsOverlapXZ	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00388640	beHitLandModel_TraceOrder	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00388c30	beHitLandModelOrder_AddHitResult	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00388de0	igSmartPointer_beHitLandResultData_Destruct	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00388e60	FUN_00388e60	match	DEFERRED duplicate 0x19e3c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
@@ -16777,21 +16783,22 @@
 0038abf0	beLuaState_igSmartPointer_igObject_Destruct	match	-
 0038ac70	beLuaState_RunBuffer	match	-
 0038ac90	beLuaState_GetMeta	match	-
-0038aca0	beMatCtrl_IsPlayer	match	-
-0038acd0	beMatCtrl_IsAllPlayer	match	-
-0038ad40	beMatCtrl_GetPlayerNo	match	-
-0038add0	beMatCtrl_IsRidePlayer	match	-
-0038ae30	beMatCtrl_IsRideOffPlayer	match	-
-0038ae90	beMatCtrl_SetRun	match	-
-0038aea0	beMatCtrl_GetPlayerMatStat	match	-
-0038af70	beMatCtrl_Prepare	match	-
-0038b040	beMatCtrl_GetInfoMeta	match	-
-0038b050	beMatCtrl_OnAddRam	match	-
-0038b080	beMatCtrl_MarkContacts	match	-
-0038bdf0	beMatCtrl_OnMessage	match	-
-0038bed0	beMatCtrl_GetMeta	match	-
+0038aca0	beMatCtrl_IsPlayer	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038acd0	beMatCtrl_IsAllPlayer	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038ad40	beMatCtrl_GetPlayerNo	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038add0	beMatCtrl_IsRidePlayer	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038ae30	beMatCtrl_IsRideOffPlayer	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038ae90	beMatCtrl_SetRun	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038aea0	beMatCtrl_GetPlayerMatStat	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038af70	beMatCtrl_Prepare	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038b040	beMatCtrl_GetInfoMeta	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038b050	beMatCtrl_OnAddRam	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038b080	beMatCtrl_MarkContacts	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038b1f0	beMatCtrl_UpdateRam	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038bdf0	beMatCtrl_OnMessage	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0038bed0	beMatCtrl_GetMeta	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0038bee0	beMessenger_InitializeMemory	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038c390	beMessenger_igSmartPointer_igObject_Destruct	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+0038c390	igSmartPointer_beMessengerDelay_Destruct	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038c410	FUN_0038c410	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038c490	beMessenger_ResetMemory	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038ca40	beMessengerArgData_Clear	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
@@ -16802,6 +16809,7 @@
 0038d040	beMessenger_Stop	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038d050	beMessenger_AddInfo	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038d080	beMessenger_RemoveAllInfo	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+0038d0a0	beMessenger_Update	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038d470	beMessenger_SetFreezeTime	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038d4a0	beMessenger_ResolveEnumValue	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 0038d560	beMessenger_RegisterReceiver	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
@@ -16871,6 +16879,7 @@
 00390e80	beModelCtrl_OnAddRam	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00390f70	beModelCtrl_RegisterReceiver	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00390f80	beModelCtrl_UpdateMapAI	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
+003915a0	beModelCtrl_UpdateHomingAI	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00391a10	beModelCtrl_RunCtrl	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00391b40	beModelCtrl_UpdateControl	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00391cf0	beModelCtrl_UpdateKeyCtrl	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
@@ -16973,6 +16982,7 @@
 0039b810	bePadManager_GetPadForPlayer	match	-
 0039b870	bePadManager_GetMeta	match	-
 0039b880	beParticleCtrl2_Prepare	match	-
+0039b9b0	beParticleCtrl2_UpdateRam	match	-
 0039bbf0	beParticleCtrl2_GetInfoMeta	match	-
 0039bc00	beParticleCtrl2_OnAddRam	match	-
 0039bca0	beParticleCtrl2_OnMessage	match	-
@@ -17041,12 +17051,13 @@
 003a1690	beWaterPlain_OnAddRam	match	DEFERRED duplicate 0x1354b0 __dt__29igSmartPointer<11igFloatList>Fv 128B (compared under the profile of its retail unit)
 003a16c0	beWaterPlain_OnMessage	match	DEFERRED duplicate 0x1354b0 __dt__29igSmartPointer<11igFloatList>Fv 128B (compared under the profile of its retail unit)
 003a17b0	beWaterPlain_GetMeta	match	DEFERRED duplicate 0x1354b0 __dt__29igSmartPointer<11igFloatList>Fv 128B (compared under the profile of its retail unit)
-003a17c0	beWeapon_Prepare	match	-
-003a1820	beWeapon_GetInfoMeta	match	-
-003a1830	beWeapon_OnAddRam	match	-
-003a19d0	FUN_003a19d0	match	-
-003a1a50	beWeapon_UpdateRam	match	-
-003a2120	beWeapon_GetMeta	match	-
+003a17c0	beWeapon_Prepare	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1820	beWeapon_GetInfoMeta	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1830	beWeapon_OnAddRam	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a19d0	FUN_003a19d0	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1a50	beWeapon_UpdateRam	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1a60	beWeapon_OnMessageText	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a2120	beWeapon_GetMeta	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
 003a2130	libBecRuntimePlugin_Attach	match	-
 003a3470	libBecRuntimePlugin_Detach	match	-
 003a3840	libBecRuntimePlugin_GetMeta	match	-
@@ -17060,7 +17071,9 @@
 003a4920	ParticleTimer_GetMeta	match	-
 003a4930	beNumberCtrl_Prepare	match	-
 003a4940	beNumberCtrl_GetInfoMeta	match	-
-003a4e40	FUN_003a4e40	match	-
+003a4950	beNumberCtrl_UpdateRam	match	-
+003a4b20	beNumberCtrl_DisplayNumber	match	-
+003a4e40	beNumberCtrl_CalcChangeNum	match	-
 003a4ef0	beNumberCtrl_OnAddRam	match	-
 003a4f40	beNumberCtrl_OnMessage	match	-
 003a5290	beNumberCtrl_GetMeta	match	-
@@ -17133,7 +17146,8 @@
 003a8910	beMovie_OnAddRam	match	-
 003a8940	beMovie_GetInfoMeta	match	-
 003a8950	beMovie_UpdateRam	match	-
-003a9190	FUN_003a9190	match	-
+003a8b80	beMovie_OnMessage	match	-
+003a9190	igSmartPointer_igMovieInfo_Destruct	match	-
 003a9210	beMovie_GetMeta	match	-
 003a9220	igProperty_GetRecord	match	-
 003a9250	igProperty_GetRecordIntList	match	-
@@ -17160,9 +17174,12 @@
 003a9990	beSaveMemoryObj_Free	match	-
 003a99f0	beSaveMemoryObj_userDestruct	match	-
 003a9a40	beSaveMemoryObj_GetMeta	match	-
+003a9a50	beSaveApi_Checksum	match	-
 003a9b10	beSvFileMakeApi_Start	match	-
+003a9c40	beSvFileMakeApi_Update	match	-
 003ab550	beSvFileMakeApi_Report	match	-
 003ab570	beSvFileFindApi_Start	match	-
+003ab5d0	beSvFileFindApi_Update	match	-
 003abb30	beSvFileFindApi_Report	match	-
 003abb50	beSvFormatApi_Start	match	-
 003abb80	beSvFormatApi_Update	match	-
@@ -17170,6 +17187,8 @@
 003abd50	beSvUseCheckApi_Start	match	-
 003abd80	beSvUseCheckApi_Update	match	-
 003abfa0	beSvUseCheckApi_Report	match	-
+003abfc0	beSvReadMediaApi_Start	match	-
+003ac130	beSvReadMediaApi_Update	match	-
 003ac910	beSvReadMediaApi_Report	match	-
 003ac930	beSvWriteMediaApi_Start	match	-
 003aca70	beSvWriteMediaApi_Update	match	-
@@ -17223,10 +17242,11 @@
 003ae620	beSaveApi_userDestruct	match	-
 003ae640	beSaveMemoryObj_userConstruct	match	-
 003ae680	FUN_003ae680	match	-
-003ae770	FUN_003ae770	match	-
+003ae770	beSaveUtil_PollConnectCheck	match	-
 003ae7c0	beSaveUtil_Prepare	match	-
-003af010	FUN_003af010	match	-
-003af090	FUN_003af090	match	-
+003ae870	beSaveUtil_UpdateRam	match	-
+003af010	igSmartPointer_beSvEndApi_Destruct	match	-
+003af090	igSmartPointer_beSvStartApi_Destruct	match	-
 003af110	beSaveUtil_GetInfoMeta	match	-
 003af120	beSaveUtil_OnAddRam	match	-
 003af150	beSaveUtil_OnMessage	match	-
@@ -17835,7 +17855,7 @@
 003bd1f0	beNDMWSaveCtrlCtrlData_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bd260	beNDMWSaveCtrlCtrlData_GetMetaObjectFunction	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bd280	beNDMWSaveCtrlCtrlData_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003bd390	FUN_003bd390	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003bd390	SaveCtrlMessage_GetMetaEnum	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bd3f0	beNDMWSaveCtrl_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bd430	beNDMWSaveCtrl_GetOrCreateMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003bd480	beNDMWSaveCtrl_ResolveMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -18044,7 +18064,7 @@
 003c2140	beNDMWLogoCtrlData_Register	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c21b0	beNDMWLogoCtrlData_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c21d0	beNDMWLogoCtrlData_InitFields	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
-003c22e0	FUN_003c22e0	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
+003c22e0	beNDMWLogoCtrlData_GetMessageEnum	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c2340	beNDMWLogo_CreateInstance	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c2380	beNDMWLogo_GetOrCreateMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
 003c23d0	beNDMWLogo_GetReadyMetaObject	match	DEFERRED duplicate 0x130720 __dt__16StringRef_3cbb60Fv 120B (compared under the profile of its retail unit)
@@ -18869,12 +18889,13 @@
 00407050	ObjectRef_Get_00407050	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 00407060	beNDMWGameRam_GetMeta	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 00407070	beNDMWGameRam_GetInfoMeta	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
-00407080	beNDMWSaveCtrl_Prepare	match	-
-00407a60	beNDMWSaveCtrl_GetInfoMeta	match	-
-00407a70	beNDMWSaveCtrl_OnAddRam	match	-
-00407aa0	beNDMWSaveCtrl_OnMessage	match	-
-00408070	FUN_00408070	match	-
-004080f0	beNDMWSaveCtrl_GetMeta	match	-
+00407080	beNDMWSaveCtrl_Prepare	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00407120	beNDMWSaveCtrl_UpdateRam	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00407a60	beNDMWSaveCtrl_GetInfoMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00407a70	beNDMWSaveCtrl_OnAddRam	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00407aa0	beNDMWSaveCtrl_OnMessage	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00408070	FUN_00408070	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+004080f0	beNDMWSaveCtrl_GetMeta	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00408100	beNDMWSaveIntf_Prepare	match	-
 004081a0	beNDMWSaveIntf_UpdateRam	match	-
 0040c180	NewDataListRef_Construct_0040c180	match	-
@@ -19218,9 +19239,10 @@
 00448fb0	beNDMWItemBlueArmor_GetMeta	match	-
 00448fc0	beNDMWItemWeapon_GetMeta	match	-
 00448fd0	beNDMWLogo_Prepare	match	-
-0044a7f0	FUN_0044a7f0	match	-
-0044a870	FUN_0044a870	match	-
-0044a8d0	FUN_0044a8d0	match	-
+00449030	beNDMWLogo_UpdateRam	match	-
+0044a7f0	igSmartPointer_beNDMWLogoCtrlData_Destruct	match	-
+0044a870	beNDMWLogo_RunMessageScript	match	-
+0044a8d0	beNDMWLogo_ClearMessageText	match	-
 0044abb0	beNDMWLogo_GetInfoMeta	match	-
 0044abc0	beNDMWLogo_OnAddRam	match	-
 0044abf0	beNDMWLogo_OnMessage	match	-

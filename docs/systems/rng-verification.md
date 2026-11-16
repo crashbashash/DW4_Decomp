@@ -138,7 +138,7 @@ roll-shaped modulus:
 
 | site | modulus | site | modulus |
 |---|---|---|---|
-| `0x3849AC` (`FUN_00384800`, item drop) | `%10000` | `0x429EA0` | `%10000` |
+| `0x3849AC` (`beGenerater_DropItemsForDead`, item drop) | `%10000` | `0x429EA0` | `%10000` |
 | `0x39BDB0` | `%6144` | `0x4480C8` | `%6000` |
 | `0x4481B0` | `%620` | `0x42F288` | `%1000` |
 | `0x4489A8` | `%10` | `0x39129C` | `& 0xf` |
@@ -200,7 +200,7 @@ Strict scan for the RNG-chain idiom (`lw rX,16(obj)` … `lw rY,48(rX)` …
 
 | function / site | operation |
 |---|---|
-| `FUN_00384800` `0x3849AC` | `genrand()%10000`: item-drop roll |
+| `beGenerater_DropItemsForDead` `0x3849AC` | `genrand()%10000`: item-drop roll |
 | `beNDMWShopCtrl40_Update` `0x429EA0` | `%10000 <= t`: probability check |
 | `FUN_0039BCA0` `0x39BDB0` | `%6144 / 1000.0`: random float ≤ 6.144 |
 | `FUN_003764C0` `0x376594` | `%range`: random duration/timing |

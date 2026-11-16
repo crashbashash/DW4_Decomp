@@ -4343,7 +4343,7 @@
 0019d360 00000c FUN_0019d360
 0019d370 00006c igModelViewMatrixBoneSelectList_561880_Register
 0019d3e0 000008 thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject
-0019d3f0 000034 FUN_0019d3f0
+0019d3f0 000034 igModelViewMatrixBoneSelect_CreateInstance
 0019d430 000048 igModelViewMatrixBoneSelect_GetMetaObject
 0019d480 000068 igModelViewMatrixBoneSelect_GetVTable
 0019d4f0 00000c igModelViewMatrixBoneSelect_EnsureRegistered
@@ -14408,7 +14408,7 @@
 0033f2b0 00006c beWeaponSeqData_Register
 0033f320 00001c beWeaponSeqData_GetMetaObjectFunction
 0033f340 000070 beWeaponSeqData_InitFields
-0033f3b0 000054 FUN_0033f3b0
+0033f3b0 000054 beWeaponSeqData_GetMsgActionEnum
 0033f410 000034 beWeapon_CreateInstance
 0033f450 000044 beWeapon_GetOrCreateMetaObject
 0033f4a0 00004c beWeapon_GetMetaObject
@@ -15058,7 +15058,7 @@
 0034e250 000020 beNumberCtrlInfo_EnsureRegistered
 0034e270 000064 beNumberCtrlInfo_Register
 0034e2e0 00001c beNumberCtrlInfo_GetMetaObjectFunction
-0034e300 000054 FUN_0034e300
+0034e300 000054 beNumberCtrl_GetMessageEnum
 0034e360 000034 beNumberCtrl_CreateInstance
 0034e3a0 000044 beNumberCtrl_GetOrCreateMetaObject
 0034e3f0 00004c beNumberCtrl_GetMetaObject
@@ -15524,7 +15524,7 @@
 00359700 0000b8 beMatCtrlInfoWork_InitFields
 003597c0 00004c beMatCtrlInfoRam_GetMetaObject
 00359810 0000e8 beMatCtrlInfoRam_GetVTable
-00359900 000080 FUN_00359900
+00359900 000080 igSmartPointer_beMatCtrlInfoWork_Destruct
 00359980 000020 beMatCtrlInfoRam_EnsureRegistered
 003599a0 000074 beMatCtrlInfoRam_Register
 00359a20 00001c beMatCtrlInfoRam_GetMetaObjectFunction
@@ -17058,8 +17058,8 @@
 003844a0 000040 beGenerater_Prepare
 003844e0 00000c beGenerater_GetInfoMeta
 003844f0 000044 beGenerater_OnAddRam
-00384540 0002bc FUN_00384540
-00384800 000440 FUN_00384800
+00384540 0002bc beGenerater_SpawnEnemies
+00384800 000440 beGenerater_DropItemsForDead
 00384c40 000778 beGenerater_UpdateRam
 003853c0 000458 beGenerater_OnMessageText
 00385820 00000c beGenerater_GetMeta
@@ -17069,17 +17069,17 @@
 00385880 000008 beHitLandDeliv_UpdateRam
 00385890 000790 beHitLandDeliv_OnMessageText
 00386020 00000c beHitLandDeliv_GetMeta
-00386030 00002c FUN_00386030
+00386030 00002c beHitLandModel_HitProc
 00386060 00011c beHitLandModel_Prepare
 00386180 00000c beHitLandModel_GetInfoMeta
 00386190 00002c beHitLandModel_OnAddRam
 003861c0 000008 beHitLandModel_UpdateRam
 003861d0 0005a4 beHitLandModel_OnMessage
-00386780 000f24 FUN_00386780
-003876b0 000954 FUN_003876b0
+00386780 000f24 beHitLandModel_CheckWall
+003876b0 000954 beHitLandModel_CheckWallFull
 00388010 00057c beHitLandModel_FindLand
-00388590 000048 FUN_00388590
-003885e0 000060 FUN_003885e0
+00388590 000048 beHitLandModel_UpdateBound
+003885e0 000060 beHitLandModel_BoundsOverlapXZ
 00388640 0005f0 beHitLandModel_TraceOrder
 00388c30 0001a8 beHitLandModelOrder_AddHitResult
 00388de0 000080 igSmartPointer_beHitLandResultData_Destruct
@@ -17133,7 +17133,7 @@
 0038bdf0 0000dc beMatCtrl_OnMessage
 0038bed0 00000c beMatCtrl_GetMeta
 0038bee0 0004ac beMessenger_InitializeMemory
-0038c390 000080 beMessenger_igSmartPointer_igObject_Destruct
+0038c390 000080 igSmartPointer_beMessengerDelay_Destruct
 0038c410 000080 FUN_0038c410
 0038c490 0005ac beMessenger_ResetMemory
 0038ca40 000430 beMessengerArgData_Clear
@@ -17412,8 +17412,8 @@
 003a4930 000008 beNumberCtrl_Prepare
 003a4940 00000c beNumberCtrl_GetInfoMeta
 003a4950 0001c4 beNumberCtrl_UpdateRam
-003a4b20 000314 FUN_003a4b20
-003a4e40 0000b0 FUN_003a4e40
+003a4b20 000314 beNumberCtrl_DisplayNumber
+003a4e40 0000b0 beNumberCtrl_CalcChangeNum
 003a4ef0 000044 beNumberCtrl_OnAddRam
 003a4f40 00034c beNumberCtrl_OnMessage
 003a5290 00000c beNumberCtrl_GetMeta
@@ -17487,7 +17487,7 @@
 003a8940 00000c beMovie_GetInfoMeta
 003a8950 00022c beMovie_UpdateRam
 003a8b80 000604 beMovie_OnMessage
-003a9190 000080 FUN_003a9190
+003a9190 000080 igSmartPointer_igMovieInfo_Destruct
 003a9210 00000c beMovie_GetMeta
 003a9220 000024 igProperty_GetRecord
 003a9250 000024 igProperty_GetRecordIntList
@@ -17514,7 +17514,7 @@
 003a9990 00005c beSaveMemoryObj_Free
 003a99f0 000048 beSaveMemoryObj_userDestruct
 003a9a40 00000c beSaveMemoryObj_GetMeta
-003a9a50 0000c0 Gap__Bec__beSaveApi__vfunc_24 Gap::Bec::beSaveApi::vfunc_24
+003a9a50 0000c0 beSaveApi_Checksum
 003a9b10 000124 beSvFileMakeApi_Start
 003a9c40 001904 beSvFileMakeApi_Update
 003ab550 000014 beSvFileMakeApi_Report
@@ -17582,11 +17582,11 @@
 003ae620 00001c beSaveApi_userDestruct
 003ae640 000040 beSaveMemoryObj_userConstruct
 003ae680 0000f0 FUN_003ae680
-003ae770 00004c FUN_003ae770
+003ae770 00004c beSaveUtil_PollConnectCheck
 003ae7c0 0000b0 beSaveUtil_Prepare
 003ae870 000798 beSaveUtil_UpdateRam
-003af010 000080 FUN_003af010
-003af090 000080 FUN_003af090
+003af010 000080 igSmartPointer_beSvEndApi_Destruct
+003af090 000080 igSmartPointer_beSvStartApi_Destruct
 003af110 00000c beSaveUtil_GetInfoMeta
 003af120 000024 beSaveUtil_OnAddRam
 003af150 000998 beSaveUtil_OnMessage
@@ -18195,7 +18195,7 @@
 003bd1f0 00006c beNDMWSaveCtrlCtrlData_Register
 003bd260 00001c beNDMWSaveCtrlCtrlData_GetMetaObjectFunction
 003bd280 000110 beNDMWSaveCtrlCtrlData_InitFields
-003bd390 000054 FUN_003bd390
+003bd390 000054 SaveCtrlMessage_GetMetaEnum
 003bd3f0 000034 beNDMWSaveCtrl_CreateInstance
 003bd430 000044 beNDMWSaveCtrl_GetOrCreateMetaObject
 003bd480 00004c beNDMWSaveCtrl_ResolveMetaObject
@@ -18404,7 +18404,7 @@
 003c2140 00006c beNDMWLogoCtrlData_Register
 003c21b0 00001c beNDMWLogoCtrlData_GetMetaObject
 003c21d0 000110 beNDMWLogoCtrlData_InitFields
-003c22e0 000054 FUN_003c22e0
+003c22e0 000054 beNDMWLogoCtrlData_GetMessageEnum
 003c2340 000034 beNDMWLogo_CreateInstance
 003c2380 000044 beNDMWLogo_GetOrCreateMetaObject
 003c23d0 00004c beNDMWLogo_GetReadyMetaObject
@@ -19580,9 +19580,9 @@
 00448fc0 00000c beNDMWItemWeapon_GetMeta
 00448fd0 000060 beNDMWLogo_Prepare
 00449030 0017bc beNDMWLogo_UpdateRam
-0044a7f0 000080 FUN_0044a7f0
-0044a870 000054 FUN_0044a870
-0044a8d0 0002e0 FUN_0044a8d0
+0044a7f0 000080 igSmartPointer_beNDMWLogoCtrlData_Destruct
+0044a870 000054 beNDMWLogo_RunMessageScript
+0044a8d0 0002e0 beNDMWLogo_ClearMessageText
 0044abb0 00000c beNDMWLogo_GetInfoMeta
 0044abc0 000024 beNDMWLogo_OnAddRam
 0044abf0 00005c beNDMWLogo_OnMessage

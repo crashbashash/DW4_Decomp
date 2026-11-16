@@ -21,6 +21,13 @@ class Alignment(unittest.TestCase):
         self.assertNotEqual(ra.shape("bnez", "s1,0x40", True), ra.shape("bnez", "s2,0x40", True))
 
 
+class WordReport(unittest.TestCase):
+    def test_one_or_two_spaces_before_ours(self):
+        # the function report prints two spaces, the emitted-unit report one
+        report = "  [  0] retail 27bdff90  ours 27bdff90\n  [  1] retail 0c0f08b8 ours 0c000000\n"
+        self.assertEqual(ra.parse_words(report), ([0x27bdff90, 0x0c000000], [0x27bdff90, 0x0c0f08b8]))
+
+
 class Edits(unittest.TestCase):
     def test_merge_keeps_the_lower_id(self):
         adj = {2: [], 16: [], 32: [33], 33: [32], 34: []}

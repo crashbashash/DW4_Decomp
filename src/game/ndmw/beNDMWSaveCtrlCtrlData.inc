@@ -153,7 +153,7 @@ static int g_beNDMWSaveCtrlCtrlData_messageValues[] = {
     3,
 };
 
-igMetaEnum *FUN_003bd390(void) {
+igMetaEnum *SaveCtrlMessage_GetMetaEnum(void) {
     if (g_beNDMWSaveCtrlCtrlData_messageMetaEnum == 0) {
         g_beNDMWSaveCtrlCtrlData_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWSaveCtrlCtrlData_messageNames, g_beNDMWSaveCtrlCtrlData_messageValues, 4);
     }

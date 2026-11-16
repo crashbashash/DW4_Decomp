@@ -8402,7 +8402,7 @@
       "FUN_0019d360": "0x0019d360",
       "igModelViewMatrixBoneSelectList_561880_Register": "0x0019d370",
       "thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject": "0x0019d3e0",
-      "FUN_0019d3f0": "0x0019d3f0",
+      "igModelViewMatrixBoneSelect_CreateInstance": "0x0019d3f0",
       "igModelViewMatrixBoneSelect_GetMetaObject": "0x0019d430",
       "igModelViewMatrixBoneSelect_GetVTable": "0x0019d480",
       "igModelViewMatrixBoneSelect_EnsureRegistered": "0x0019d4f0",
@@ -29051,7 +29051,7 @@
       "beWeaponSeqData_Register": "0x0033f2b0",
       "beWeaponSeqData_GetMetaObjectFunction": "0x0033f320",
       "beWeaponSeqData_InitFields": "0x0033f340",
-      "FUN_0033f3b0": "0x0033f3b0",
+      "beWeaponSeqData_GetMsgActionEnum": "0x0033f3b0",
       "beWeapon_CreateInstance": "0x0033f410",
       "beWeapon_GetOrCreateMetaObject": "0x0033f450",
       "beWeapon_GetMetaObject": "0x0033f4a0",
@@ -29699,7 +29699,7 @@
       "beNumberCtrlInfo_EnsureRegistered": "0x0034e250",
       "beNumberCtrlInfo_Register": "0x0034e270",
       "beNumberCtrlInfo_GetMetaObjectFunction": "0x0034e2e0",
-      "FUN_0034e300": "0x0034e300",
+      "beNumberCtrl_GetMessageEnum": "0x0034e300",
       "beNumberCtrl_CreateInstance": "0x0034e360",
       "beNumberCtrl_GetOrCreateMetaObject": "0x0034e3a0",
       "beNumberCtrl_GetMetaObject": "0x0034e3f0",
@@ -30154,7 +30154,7 @@
       "beMatCtrlInfoWork_InitFields": "0x00359700",
       "beMatCtrlInfoRam_GetMetaObject": "0x003597c0",
       "beMatCtrlInfoRam_GetVTable": "0x00359810",
-      "FUN_00359900": "0x00359900",
+      "igSmartPointer_beMatCtrlInfoWork_Destruct": "0x00359900",
       "beMatCtrlInfoRam_EnsureRegistered": "0x00359980",
       "beMatCtrlInfoRam_Register": "0x003599a0",
       "beMatCtrlInfoRam_GetMetaObjectFunction": "0x00359a20",
@@ -36406,6 +36406,8 @@
     "emitted": {
       "beGenerater_GetInfoMeta": "0x003844e0",
       "beGenerater_OnAddRam": "0x003844f0",
+      "beGenerater_DropItemsForDead": "0x00384800",
+      "beGenerater_OnMessageText": "0x003853c0",
       "beGenerater_GetMeta": "0x00385820"
     },
     "data": {
@@ -36414,10 +36416,33 @@
       "DAT_00589208": "0x00589208",
       "g_beGeneraterInfo_metaObject": "0x005894d8",
       "g_beGenerater_metaObject": "0x005895d0",
-      "g_beLua_metaObject": "0x00589208"
+      "g_beLua_metaObject": "0x00589208",
+      "g_itemDropCategories": "0x004c8f30",
+      "g_mdlEntity": "0x0058a1e0"
     },
     "symbol": "beGenerater_Prepare",
-    "anon": []
+    "anon": [
+      "0x0050e860",
+      "0x0050e870",
+      "0x0050e880",
+      "0x0050e888",
+      "0x0050e910",
+      "0x0050e920",
+      "0x0050e928",
+      "0x0050e938",
+      "0x0050e948",
+      "0x0050e958",
+      "0x0050e968",
+      "0x0050e970",
+      "0x0050e978",
+      "0x0050e988",
+      "0x0050e990",
+      "0x0050e998",
+      "0x0050e9a8",
+      "0x0050e9b0",
+      "0x0050e9c0",
+      "0x0050e9d0"
+    ]
   },
   "0x00385830": {
     "whole_file": true,
@@ -36448,9 +36473,13 @@
       "beHitLandModel_GetInfoMeta": "0x00386180",
       "beHitLandModel_OnAddRam": "0x00386190",
       "beHitLandModel_UpdateRam": "0x003861c0",
+      "beHitLandModel_OnMessage": "0x003861d0",
+      "beHitLandModel_CheckWall": "0x00386780",
+      "beHitLandModel_CheckWallFull": "0x003876b0",
       "beHitLandModel_FindLand__FP14beHitLandModel": "0x00388010",
-      "FUN_00388590": "0x00388590",
-      "FUN_003885e0": "0x003885e0",
+      "beHitLandModel_UpdateBound": "0x00388590",
+      "beHitLandModel_BoundsOverlapXZ": "0x003885e0",
+      "beHitLandModel_TraceOrder": "0x00388640",
       "beHitLandModelOrder_AddHitResult": "0x00388c30",
       "__dt__37igSmartPointer<19beHitLandResultData>Fv": "0x00388de0",
       "FUN_00388e60": "0x00388e60",
@@ -36461,9 +36490,13 @@
     },
     "data": {
       "HITLANDMODEL": "0x0050eae0",
+      "emptyString": "0x004e0858",
       "g_beHitLandModelInfo_metaObject": "0x00589320",
       "g_beHitLandModelOrder_metaObject": "0x00589390",
       "g_beHitLandModel_metaObject": "0x00589350",
+      "g_igNamedObjectList_metaObject": "0x00585bd0",
+      "g_igStringObjList_metaObject": "0x005858e8",
+      "g_stringObjEmptyText": "0x004c22f0",
       "kIGMemoryPoolHandleUser1": "0x00587110",
       "g_stringPool": "0x00586f20",
       "g_useOwnerAllocator": "0x00554c14"
@@ -36471,7 +36504,7 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0019e3c0"
     },
-    "symbol": "FUN_00386030"
+    "symbol": "beHitLandModel_HitProc"
   },
   "0x00389020": {
     "whole_file": true,
@@ -36585,24 +36618,43 @@
       "beMatCtrl_GetInfoMeta": "0x0038b040",
       "beMatCtrl_OnAddRam": "0x0038b050",
       "beMatCtrl_MarkContacts": "0x0038b080",
+      "beMatCtrl_UpdateRam": "0x0038b1f0",
       "beMatCtrl_OnMessage": "0x0038bdf0",
       "beMatCtrl_GetMeta": "0x0038bed0"
     },
     "data": {
-      "g_beLua_metaObject": "0x00589208",
       "MATCTRL": "0x0050ed58",
+      "emptyString": "0x004e0858",
+      "g_beLua_metaObject": "0x00589208",
       "g_beMatCtrlInfo_metaObject": "0x005890e8",
-      "g_beMatCtrl_metaObject": "0x00589160"
+      "g_beMatCtrl_metaObject": "0x00589160",
+      "g_mdlEntity": "0x0058a1e0",
+      "g_useOwnerAllocator": "0x00554c14",
+      "kIGMemoryPoolHandleUser1": "0x00587110"
     },
     "anon": [
-      "0x0050eda0"
+      "0x004c8f70",
+      "0x004c8f78",
+      "0x004c8f80",
+      "0x0050ed60",
+      "0x0050ed68",
+      "0x0050ed78",
+      "0x0050ed80",
+      "0x0050ed88",
+      "0x0050ed90",
+      "0x0050eda0",
+      "0x005549d0"
     ],
+    "duplicates": {
+      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0",
+      "__dt__35igSmartPointer<17beMatCtrlInfoWork>Fv": "0x00359900"
+    },
     "symbol": "beMatCtrl_IsPlayer"
   },
   "0x0038bee0": {
     "whole_file": true,
     "emitted": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0038c390",
+      "__dt__34igSmartPointer<16beMessengerDelay>Fv": "0x0038c390",
       "__dt__7WorkRefFv": "0x0038c410",
       "beMessenger_ResetMemory": "0x0038c490",
       "beMessengerArgData_Clear": "0x0038ca40",
@@ -36613,6 +36665,7 @@
       "beMessenger_Stop": "0x0038d040",
       "beMessenger_AddInfo": "0x0038d050",
       "beMessenger_RemoveAllInfo": "0x0038d080",
+      "beMessenger_Update": "0x0038d0a0",
       "beMessenger_SetFreezeTime": "0x0038d470",
       "beMessenger_ResolveEnumValue": "0x0038d4a0",
       "beMessenger_RegisterReceiver": "0x0038d560",
@@ -36726,6 +36779,7 @@
       "beModelCtrl_OnAddRam": "0x00390e80",
       "beModelCtrl_RegisterReceiver": "0x00390f70",
       "beModelCtrl_UpdateMapAI": "0x00390f80",
+      "beModelCtrl_UpdateHomingAI": "0x003915a0",
       "beModelCtrl_RunCtrl": "0x00391a10",
       "beModelCtrl_UpdateControl": "0x00391b40",
       "beModelCtrl_UpdateKeyCtrl": "0x00391cf0",
@@ -36798,6 +36852,7 @@
       "DAT_00561288": "0x00561288",
       "DAT_00562640": "0x00562640",
       "D_004c8fa0": "0x004c8fa0",
+      "ENEMY_4": "0x0050efa0",
       "FHit": "0x0050f078",
       "Fall": "0x0050f0f0",
       "GETBONEMATRIX": "0x0050f1c8",
@@ -36818,6 +36873,7 @@
       "JOINT": "0x0050f0f8",
       "Jump": "0x0050f0e8",
       "KEIKATIMER": "0x0050f0b8",
+      "KIND_EBULLET_2": "0x0050ef90",
       "Landing": "0x0050f140",
       "MODELCTRL_7": "0x0050ef18",
       "Move": "0x0050f0d0",
@@ -37051,6 +37107,7 @@
   "0x0039b880": {
     "whole_file": true,
     "emitted": {
+      "beParticleCtrl2_UpdateRam": "0x0039b9b0",
       "beParticleCtrl2_GetInfoMeta": "0x0039bbf0",
       "beParticleCtrl2_OnAddRam": "0x0039bc00",
       "beParticleCtrl2_OnMessage": "0x0039bca0",
@@ -37326,19 +37383,30 @@
       "beWeapon_OnAddRam": "0x003a1830",
       "__dt__9ObjectRefFv": "0x003a19d0",
       "beWeapon_UpdateRam": "0x003a1a50",
+      "beWeapon_OnMessageText": "0x003a1a60",
       "beWeapon_GetMeta": "0x003a2120"
     },
     "data": {
-      "DAT_0050fbf0": "0x0050fbf0",
       "kIGMemoryPoolHandleUser1": "0x00587110",
       "g_useOwnerAllocator": "0x00554c14",
       "g_beWeaponInfo_metaObject": "0x00587a28",
       "g_beWeapon_metaObject": "0x00587a68"
     },
     "duplicates": {
+      "__dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv": "0x001d9770",
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033f6d0"
     },
-    "symbol": "beWeapon_Prepare"
+    "symbol": "beWeapon_Prepare",
+    "anon": [
+      "0x0050fbf0",
+      "0x0050fc00",
+      "0x0050fc08",
+      "0x0050fc10",
+      "0x0050fc20",
+      "0x0050fc30",
+      "0x0050fc48",
+      "0x0050fc58"
+    ]
   },
   "0x003a2130": {
     "whole_file": true,
@@ -37379,10 +37447,12 @@
     "whole_file": true,
     "emitted": {
       "beNumberCtrl_GetInfoMeta": "0x003a4940",
-      "FUN_003a4e40": "0x003a4e40",
+      "beNumberCtrl_CalcChangeNum": "0x003a4e40",
       "beNumberCtrl_OnAddRam": "0x003a4ef0",
       "beNumberCtrl_OnMessage": "0x003a4f40",
-      "beNumberCtrl_GetMeta": "0x003a5290"
+      "beNumberCtrl_GetMeta": "0x003a5290",
+      "beNumberCtrl_UpdateRam": "0x003a4950",
+      "beNumberCtrl_DisplayNumber": "0x003a4b20"
     },
     "data": {
       "DAT_004e0858": "0x004e0858",
@@ -37393,18 +37463,11 @@
       "g_beNumberCtrl_metaObject": "0x005886e0"
     },
     "duplicates": {
-      "__dt__3RefFv": "0x0034d6c0"
-    },
-    "symbol": "beNumberCtrl_Prepare"
-  },
-  "0x003a4950": {
-    "duplicates": {
       "__dt__38igSmartPointer<20beNumberCtrlInfoWork>Fv": "0x0034d6c0"
     },
-    "exceptions": {
-      "index": "0x0054f464",
-      "table": "0x00543e00",
-      "table_size": "0x000010"
+    "symbol": "beNumberCtrl_Prepare",
+    "externals": {
+      "beNumberCtrl_GetMessageEnum": "0x0034e300"
     }
   },
   "0x003a52a0": {
@@ -37541,8 +37604,9 @@
       "beMovie_OnAddRam": "0x003a8910",
       "beMovie_GetInfoMeta": "0x003a8940",
       "beMovie_UpdateRam": "0x003a8950",
-      "__dt__14MovieObjectRefFv": "0x003a9190",
-      "beMovie_GetMeta": "0x003a9210"
+      "__dt__29igSmartPointer<11igMovieInfo>Fv": "0x003a9190",
+      "beMovie_GetMeta": "0x003a9210",
+      "beMovie_OnMessage": "0x003a8b80"
     },
     "data": {
       "g_fadeInCurve": "0x004c8fc0",
@@ -37579,15 +37643,26 @@
       "g_beLua_metaObject": "0x00589208",
       "g_beBaseInfoRamTimer_metaObject": "0x00589d78",
       "g_propertyNameField": "0x00585be0",
-      "g_stringPool": "0x00586f20"
+      "g_stringPool": "0x00586f20",
+      "g_igGroup_metaObject": "0x005619f8",
+      "g_igAttrSet_metaObject": "0x00562078",
+      "g_igViewerSceneInfoManager_metaObject": "0x0058c790"
     },
     "anon": [
-      "0x005101e0"
+      "0x005101e0",
+      "0x00510208",
+      "0x00510220",
+      "0x00510230",
+      "0x00510240"
     ],
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
-    "symbol": "beCriAudio_Setup"
+    "symbol": "beCriAudio_Setup",
+    "externals": {
+      "beMovie_GetMessageEnum": "0x0034eed0",
+      "igMovieInfo_Create": "0x00336200"
+    }
   },
   "0x003a9220": {
     "whole_file": true,
@@ -37628,9 +37703,12 @@
       "beSaveMemoryObj_Free": "0x003a9990",
       "beSaveMemoryObj_userDestruct": "0x003a99f0",
       "beSaveMemoryObj_GetMeta": "0x003a9a40",
+      "beSaveApi_Checksum": "0x003a9a50",
       "beSvFileMakeApi_Start": "0x003a9b10",
+      "beSvFileMakeApi_Update": "0x003a9c40",
       "beSvFileMakeApi_Report": "0x003ab550",
       "beSvFileFindApi_Start": "0x003ab570",
+      "beSvFileFindApi_Update": "0x003ab5d0",
       "beSvFileFindApi_Report": "0x003abb30",
       "beSvFormatApi_Start": "0x003abb50",
       "beSvFormatApi_Update": "0x003abb80",
@@ -37638,6 +37716,8 @@
       "beSvUseCheckApi_Start": "0x003abd50",
       "beSvUseCheckApi_Update": "0x003abd80",
       "beSvUseCheckApi_Report": "0x003abfa0",
+      "beSvReadMediaApi_Start": "0x003abfc0",
+      "beSvReadMediaApi_Update": "0x003ac130",
       "beSvReadMediaApi_Report": "0x003ac910",
       "beSvWriteMediaApi_Start": "0x003ac930",
       "beSvWriteMediaApi_Update": "0x003aca70",
@@ -37704,6 +37784,7 @@
       "g_beSvStartApi_metaObject": "0x005881f0",
       "g_beSvUseCheckApi_metaObject": "0x00588268",
       "g_beSvWriteMediaApi_metaObject": "0x00588220",
+      "g_svDirEntries": "0x0058a640",
       "kIGMemoryPoolHandleUser1": "0x00587110",
       "g_svCardBusy": "0x00554e60",
       "g_svCardSlots": "0x004c91b0",
@@ -37721,34 +37802,36 @@
       "g_svSaveVersion": "0x0058a608",
       "g_svSlotAbsent": "0x004c91f0",
       "g_svSlotPresent": "0x0058a810",
-      "g_useOwnerAllocator": "0x00554c14",
-      "mcman_irx": "0x00510428",
-      "mcserv_irx": "0x00510438",
-      "slash_percent_s_slash_percent_s": "0x00510310"
+      "g_useOwnerAllocator": "0x00554c14"
     },
     "anon": [
+      "0x00510300",
+      "0x00510308",
+      "0x00510310",
+      "0x00510318",
+      "0x00510330",
+      "0x00510360",
+      "0x00510380",
+      "0x005103b8",
+      "0x005103d0",
       "0x005103f0",
-      "0x00510410"
+      "0x00510410",
+      "0x00510428",
+      "0x00510438"
     ],
-    "symbol": "beSaveDataDeliver_AllocateData"
-  },
-  "0x003abfc0": {
+    "symbol": "beSaveDataDeliver_AllocateData",
     "duplicates": {
       "__dt__33igSmartPointer<15beSaveMemoryObj>Fv": "0x003484b0"
-    },
-    "exceptions": {
-      "index": "0x0054f830",
-      "table": "0x00543f1c",
-      "table_size": "0x000010"
     }
   },
   "0x003ae680": {
     "whole_file": true,
     "emitted": {
-      "FUN_003ae770": "0x003ae770",
+      "beSaveUtil_PollConnectCheck": "0x003ae770",
       "beSaveUtil_Prepare": "0x003ae7c0",
-      "FUN_003af010": "0x003af010",
-      "FUN_003af090": "0x003af090",
+      "beSaveUtil_UpdateRam": "0x003ae870",
+      "__dt__28igSmartPointer<10beSvEndApi>Fv": "0x003af010",
+      "__dt__30igSmartPointer<12beSvStartApi>Fv": "0x003af090",
       "beSaveUtil_GetInfoMeta": "0x003af110",
       "beSaveUtil_OnAddRam": "0x003af120",
       "beSaveUtil_OnMessage": "0x003af150",
@@ -37769,6 +37852,11 @@
       "g_beSaveUtil_metaObject": "0x00588020"
     },
     "anon": [
+      "0x004c91f8",
+      "0x004c9200",
+      "0x004c9208",
+      "0x004c9210",
+      "0x004c9218",
       "0x00510750"
     ],
     "symbol": "FUN_003ae680"
@@ -38388,7 +38476,7 @@
       "beNDMWSaveCtrlCtrlData_Register": "0x003bd1f0",
       "beNDMWSaveCtrlCtrlData_GetMetaObjectFunction": "0x003bd260",
       "beNDMWSaveCtrlCtrlData_InitFields": "0x003bd280",
-      "FUN_003bd390": "0x003bd390",
+      "SaveCtrlMessage_GetMetaEnum": "0x003bd390",
       "beNDMWSaveCtrl_CreateInstance": "0x003bd3f0",
       "beNDMWSaveCtrl_GetOrCreateMetaObject": "0x003bd430",
       "beNDMWSaveCtrl_ResolveMetaObject": "0x003bd480",
@@ -38597,7 +38685,7 @@
       "beNDMWLogoCtrlData_Register": "0x003c2140",
       "beNDMWLogoCtrlData_GetMetaObject": "0x003c21b0",
       "beNDMWLogoCtrlData_InitFields": "0x003c21d0",
-      "FUN_003c22e0": "0x003c22e0",
+      "beNDMWLogoCtrlData_GetMessageEnum": "0x003c22e0",
       "beNDMWLogo_CreateInstance": "0x003c2340",
       "beNDMWLogo_GetOrCreateMetaObject": "0x003c2380",
       "beNDMWLogo_GetReadyMetaObject": "0x003c23d0",
@@ -43313,6 +43401,7 @@
   "0x00407080": {
     "whole_file": true,
     "emitted": {
+      "beNDMWSaveCtrl_UpdateRam": "0x00407120",
       "beNDMWSaveCtrl_GetInfoMeta": "0x00407a60",
       "beNDMWSaveCtrl_OnAddRam": "0x00407a70",
       "beNDMWSaveCtrl_OnMessage": "0x00407aa0",
@@ -43320,9 +43409,6 @@
       "beNDMWSaveCtrl_GetMeta": "0x004080f0"
     },
     "data": {
-      "DAT_005194c0": "0x005194c0",
-      "DAT_005194e0": "0x005194e0",
-      "DAT_005194e8": "0x005194e8",
       "DAT_00585be0": "0x00585be0",
       "kIGMemoryPoolHandleUser1": "0x00587110",
       "DAT_00587d08": "0x00587d08",
@@ -43338,10 +43424,36 @@
       "__dt__11DegiDataRefFv": "0x003e9010",
       "__dt__11FlagWorkRefFv": "0x003f2bc0",
       "__dt__13CommonIntfRefFv": "0x003f2c40",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0",
+      "__dt__9StringRefFv": "0x00130720"
     },
     "symbol": "beNDMWSaveCtrl_Prepare",
-    "anon": []
+    "anon": [
+      "0x005194c0",
+      "0x005194d0",
+      "0x005194e0",
+      "0x005194e8",
+      "0x005194f8",
+      "0x00519508",
+      "0x00519518",
+      "0x00519520",
+      "0x00519530",
+      "0x00519540",
+      "0x00519550",
+      "0x00519560",
+      "0x00519570",
+      "0x00519578",
+      "0x00519588",
+      "0x00519590",
+      "0x005195a0",
+      "0x005195b0",
+      "0x005195b8",
+      "0x005195c8",
+      "0x005195d8",
+      "0x005195e8",
+      "0x005195f8",
+      "0x00519608"
+    ]
   },
   "0x00408100": {
     "whole_file": true,
@@ -44905,43 +45017,66 @@
   "0x00448fd0": {
     "whole_file": true,
     "emitted": {
-      "FUN_0044a7f0": "0x0044a7f0",
-      "FUN_0044a870": "0x0044a870",
-      "FUN_0044a8d0": "0x0044a8d0",
+      "beNDMWLogo_UpdateRam": "0x00449030",
+      "__dt__36igSmartPointer<18beNDMWLogoCtrlData>Fv": "0x0044a7f0",
+      "beNDMWLogo_RunMessageScript": "0x0044a870",
+      "beNDMWLogo_ClearMessageText": "0x0044a8d0",
       "beNDMWLogo_GetInfoMeta": "0x0044abb0",
       "beNDMWLogo_OnAddRam": "0x0044abc0",
       "beNDMWLogo_OnMessage": "0x0044abf0",
       "beNDMWLogo_GetMeta": "0x0044ac50"
     },
     "data": {
-      "DAT_0051dac0": "0x0051dac0",
-      "DAT_0051dad0": "0x0051dad0",
-      "DAT_0051dad8": "0x0051dad8",
-      "DAT_0051dae8": "0x0051dae8",
-      "DAT_0051daf0": "0x0051daf0",
-      "DAT_0051daf8": "0x0051daf8",
-      "DAT_0051db00": "0x0051db00",
-      "DAT_0051db08": "0x0051db08",
-      "DAT_0051db10": "0x0051db10",
-      "DAT_0051db20": "0x0051db20",
-      "DAT_0051db28": "0x0051db28",
-      "DAT_0051db30": "0x0051db30",
-      "DAT_00587d08": "0x00587d08",
-      "DAT_00588518": "0x00588518",
-      "DAT_00589208": "0x00589208",
-      "DAT_0058a1e0": "0x0058a1e0",
-      "DAT_0058a220": "0x0058a220",
-      "LOGO": "0x0051db38",
       "g_beNDMWLogoInfo_metaObject": "0x0058b528",
       "g_beNDMWLogo_metaObject": "0x0058b570",
       "g_beSystem_metaObject": "0x00587d08",
       "g_bePadManager_metaObject": "0x00588518",
       "g_beLua_metaObject": "0x00589208",
       "g_mdlEntity": "0x0058a1e0",
-      "g_txtCallNo": "0x0058a220"
+      "g_propertyNameField": "0x00585be0",
+      "g_txtCallNo": "0x0058a220",
+      "g_useOwnerAllocator": "0x00554c14",
+      "kIGMemoryPoolHandleUser1": "0x00587110"
     },
     "symbol": "beNDMWLogo_Prepare",
-    "anon": []
+    "anon": [
+      "0x0051d9b0",
+      "0x0051d9b8",
+      "0x0051d9c8",
+      "0x0051d9d8",
+      "0x0051d9e8",
+      "0x0051d9f0",
+      "0x0051da00",
+      "0x0051da10",
+      "0x0051da18",
+      "0x0051da28",
+      "0x0051da38",
+      "0x0051da48",
+      "0x0051da50",
+      "0x0051da60",
+      "0x0051da70",
+      "0x0051da80",
+      "0x0051da90",
+      "0x0051dac0",
+      "0x0051dad0",
+      "0x0051dad8",
+      "0x0051dae8",
+      "0x0051daf0",
+      "0x0051daf8",
+      "0x0051db00",
+      "0x0051db08",
+      "0x0051db10",
+      "0x0051db20",
+      "0x0051db28",
+      "0x0051db30",
+      "0x0051db38"
+    ],
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
   },
   "0x0044ac60": {
     "whole_file": true,

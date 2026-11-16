@@ -1,5 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
+#include "dw4/igSmartPointer.h"
+#pragma push
+#pragma readonly_strings on
 
 /* The registered fields every save request shares, with the retry counter each one keeps in the
  * word the metadata leaves unlisted at +60. */
@@ -54,8 +57,12 @@ enum SceMcFuncNo {
     SCE_MC_FUNC_OPEN = 2,
     SCE_MC_FUNC_CLOSE = 3,
     SCE_MC_FUNC_SEEK = 4,
+    SCE_MC_FUNC_READ = 5,
     SCE_MC_FUNC_WRITE = 6,
     SCE_MC_FUNC_FLUSH = 10,
+    SCE_MC_FUNC_MKDIR = 11,
+    SCE_MC_FUNC_GET_DIR = 13,
+    SCE_MC_FUNC_DELETE = 15,
     SCE_MC_FUNC_FORMAT = 16
 };
 
@@ -91,6 +98,7 @@ extern "C" int sprintf(char *, const char *, ...);
 extern "C" int sceMcOpen(int, int, char *, int);
 extern "C" int sceMcClose(int);
 extern "C" int sceMcSeek(int, int, int);
+extern "C" int sceMcRead(int, int, int);
 extern "C" int sceMcWrite(int, int, int);
 extern "C" int sceMcFlush(int);
 extern "C" int sceMcInit(...);
@@ -122,7 +130,6 @@ extern "C" void beSvGetFreeSizeApi_userConstruct(igObjectVirtuals *self);
 extern "C" void beSvGetFreeSizeApi_userDestruct(void);
 extern "C" int beSvWriteMediaApi_GetMeta(void);
 extern "C" void beSvWriteMediaApi_userConstruct(igObjectVirtuals *self);
-extern "C" int igObject_Destroy(...);
 extern "C" int beSvReadMediaApi_GetMeta(void);
 extern "C" void beSvReadMediaApi_userConstruct(igObjectVirtuals *self);
 extern "C" int beSvUseCheckApi_GetMeta(void);
@@ -185,7 +192,6 @@ typedef struct beSvWriteMediaApiWork {
 } beSvWriteMediaApiWork;
 extern "C" beSvPlatDataPS2 *g_svPlatformData[1];
 extern "C" CardSlot g_svCardSlots[8];
-extern "C" char slash_percent_s_slash_percent_s[];
 extern "C" int g_svSaveFd[1];
 extern "C" int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self);
 extern "C" void beSvWriteMediaApi_Report(beSvWriteMediaApi *self, beSvDeliver *deliver);
@@ -193,8 +199,6 @@ extern "C" void beSvGetFreeSizeApi_Start(beSvApiWork *self, beSvDeliver *deliver
 extern "C" unsigned char beSvGetFreeSizeApi_Update(beSvGetFreeSizeApiWork *self);
 extern "C" void beSvGetFreeSizeApi_Report(beSvGetFreeSizeApiWork *self, beSvDeliver *deliver);
 extern "C" int g_svConnectMax[1];
-extern "C" char mcman_irx[];
-extern "C" char mcserv_irx[];
 extern "C" int g_svSaveVersion[1];
 extern "C" char g_svMultitapState;
 extern "C" unsigned char g_svMcModulesLoaded;
@@ -235,16 +239,122 @@ public:
     virtual void start(beSvDeliver *deliver);
     virtual int poll();
     virtual void report(beSvDeliver *deliver);
-    virtual int checksum(int *data, unsigned int size);
+    virtual int checksum(int *data, int size);
 };
 
-/* beSvFileMakeApi with its save buffer typed and the unlisted word at +72. */
-struct beSvFileMakeApiWork : beSvApiWork {
+/* The PS2 icon.sys record (libmc's sceMcIconSys) the save writes next to the data. */
+struct sceMcIconSys {
+    unsigned char Head[4];
+    unsigned short rsv1;
+    unsigned short OffsLF;
+    unsigned int rsv2;
+    unsigned int TransRate;
+    int BgColor[4][4];
+    float LightDir[3][4];
+    float LightColor[3][4];
+    float Ambient[4];
+    char TitleName[68];
+    char FnameView[64];
+    char FnameCopy[64];
+    char FnameDel[64];
+    unsigned char zero2[512];
+};
+
+/* beSvFileMakeApi with the unlisted words after its registered fields: the retry counter at +60,
+ * the directory listing count and file index at +76 and +80, and the icon.sys record at +84. */
+struct beSvFileMakeApiWork : igObject {
+    int _dummyCount;
+    int _orderType;
+    unsigned char _isConAllChk;
+    int _connect;
+    int _result;
+    unsigned char _isEnd;
+    int _phase;             /* _st0 */
+    int _step;              /* _st1 */
+    int getPhase() const { return _phase; }
+    int getStep() const { return _step; }
+    int _st2;
+    int _st3;
+    int _imageWork;
+    int _mountWork;
+    int _iconWork;
+    int _retryCount;
     int _earlyGamedata;
     beSaveMemoryObj *_saveWork;
-    int _makeStep;
+    int _imagePass;
+    int _entryCount;
+    int _fileIndex;
+    sceMcIconSys _iconSys;
 };
 
+
+/* libmc directory record sceMcGetDir fills: 32 bytes of dates, size and attributes, then the entry name. */
+struct sceMcTblGetDir {
+    unsigned char header[32];
+    char EntryName[32];
+};
+
+/* beSvFileFindApi with the retry counter at +60 and the file being looked for at +68, which the
+ * registered metadata does not list: 0 icon.sys, 1..3 the icon files, 4 the save file. */
+struct beSvFileFindApiWork : igObject {
+    int _dummyCount;
+    int _orderType;
+    unsigned char _isConAllChk;
+    int _connect;
+    int _result;
+    unsigned char _isEnd;
+    int _phase;             /* _st0 */
+    int _step;              /* _st1 */
+    int getPhase() const { return _phase; }
+    int getStep() const { return _step; }
+    int _st2;
+    int _st3;
+    int _imageWork;
+    int _mountWork;
+    int _iconWork;
+    int _retryCount;
+    int _unused64;
+    int _stage;
+};
+
+extern "C" int sceMcMkdir(int, int, char *);
+extern "C" int sceMcDelete(int, int, char *);
+extern "C" char *strcpy(char *, const char *);
+extern "C" int beSvFileMakeApi_Update(beSvFileMakeApiWork *self);
+extern "C" int sceMcGetDir(int, int, char *, unsigned int, int, sceMcTblGetDir *);
+extern "C" int strcmp(const char *, const char *);
+extern "C" sceMcTblGetDir g_svDirEntries[8];
+extern "C" int beSvFileFindApi_Update(beSvFileFindApiWork *self);
+
+/* beSvReadMediaApi with the retry counter at +60 and the buffer pass at +84, which the registered
+ * metadata does not list. */
+struct beSvReadMediaApiWork : igObject {
+    int _dummyCount;
+    int _orderType;
+    unsigned char _isConAllChk;
+    int _connect;
+    int _result;
+    unsigned char _isEnd;
+    int _phase;             /* _st0 */
+    int _step;              /* _st1 */
+    int getPhase() const { return _phase; }
+    int getStep() const { return _step; }
+    int _st2;
+    int _st3;
+    int _imageWork;
+    int _mountWork;
+    int _iconWork;
+    int _retryCount;
+    int _gameData;
+    int _outputGamedata;
+    int _oneSvDataSize;
+    igObject *_lodeData;
+    int _loadWorkList;
+    int _readPass;
+};
+
+extern "C" void beSvReadMediaApi_Start(beSvReadMediaApiWork *self, beSvDeliver *deliver);
+extern "C" int beSvReadMediaApi_Update(beSvReadMediaApiWork *self);
 extern "C" void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver);
 extern "C" void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver);
 
@@ -310,6 +420,20 @@ int beSaveMemoryObj_GetMeta(void)
     return g_beSaveMemoryObj_metaObject[0];
 }
 
+extern "C" int beSaveApi_Checksum(beSvApiWork *self, int *data, int size);
+
+/* Sums the words that follow the leading checksum word. */
+int beSaveApi_Checksum(beSvApiWork *self, int *data, int size) {
+    int sum = 0;
+    size = size - sizeof(int);
+    int count = size / sizeof(int);
+    data++;
+    for (int i = 0; i < count; i++) {
+        sum += *data++;
+    }
+    return sum;
+}
+
 /* Starts a save: builds the save image in a new beSaveMemoryObj of the platform's data size: the checksum word,
  * the save version, then the game data. */
 void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver) {
@@ -339,8 +463,768 @@ void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver) {
     gameData = (beSaveDataDeliver *)deliver->_gameData;
     memcpy(field, (void *)gameData->_data, gameData->_size);
     image[0] = ((beSaveApiVirtuals *)self)->checksum(image, platform->_dataSize);
-    self->_makeStep = 0;
+    self->_imagePass = 0;
     g_svCardBusy = 1;
+}
+
+#define SV_NEXT_STEP(self)  ((self)->_step = (self)->getStep() + 1, (self)->_st3 = 0, (self)->_st2 = 0)
+#define SV_FIRST_STEP(self) ((self)->_st3 = 0, (self)->_st2 = 0, (self)->_step = 0)
+#define SV_RETRY_STEP(self) ((self)->_step = 1, (self)->_st3 = 0, (self)->_st2 = 0)
+/* True while a failed request may be issued again: three attempts in all.
+ * matching construct: variant trials — the test is a flag compared with 1 (`== TRUE`); a plain `< 3` branches on the compare */
+#define SV_MAY_RETRY(self)  (((self)->_retryCount < 3) == 1)
+#define SV_NEXT_SUB(self)      ((self)->_st2 = (self)->_st2 + 1, (self)->_st3 = 0)
+#define SV_RETRY_SUB(self, n)  ((self)->_st2 = (n), (self)->_st3 = 0)
+#define SV_FINISH(self, code)  ((self)->_result = (code), (self)->_isEnd = 1)
+
+static inline beSvPs2McImage128k *platformImage(beSvPlatDataPS2 *platform, int index) {
+    return ((beSvPs2McImage128k **)((igObjectList *)platform->_image)->_data)[index];
+}
+
+
+/* Steps to the next icon file; false once every icon has been written. */
+static inline int moreIcons(beSvFileMakeApiWork *self, int count) {
+    int next = self->_fileIndex + 1;
+    self->_fileIndex = next;
+    return next < count;
+}
+
+/* Memory-card save-creation state machine, polled once per frame. _phase selects the phase, _step
+ * the step inside it, _st2 the sub-step of a step that issues two requests. Every request is issued,
+ * then polled for its result and retried up to three times; a failure past that ends the machine with
+ * _result = 3 (card unusable) or 12. Phases: 0 makes the save directory and deletes what a previous
+ * save left in it, 1-4 create each icon file (open, write, close), 5-7 the save file (open, write both
+ * passes, close), 8-11 icon.sys (open, build the record, write, close), 12 lists the directory to
+ * confirm it (_result = 2). */
+int beSvFileMakeApi_Update(beSvFileMakeApiWork *self) {
+    beSvPlatDataPS2 *platform;
+    int i;
+    int res;
+
+    if (self->_isEnd != 0) {
+        return 1;
+    }
+    if (g_svConnectCheckPending == 1) {
+        return 0;
+    }
+    platform = g_svPlatformData[0];
+    switch (self->getPhase()) {
+    case 0:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            switch (self->_st2) {
+            case 0: {
+                char path[256];
+                sprintf(path, "/%s", platform->_dirName);
+                if (sceMcMkdir(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path) >= 0) {
+                    g_svMcRequestState[SCE_MC_FUNC_MKDIR] = SV_MC_REQUEST_ISSUED;
+                    SV_NEXT_SUB(self);
+                }
+                break;
+            }
+            case 1:
+                if (g_svMcRequestState[SCE_MC_FUNC_MKDIR] == SV_MC_REQUEST_ISSUED) {
+                    return 0;
+                }
+                res = g_svMcRequestResult[SCE_MC_FUNC_MKDIR];
+                if (res >= 0) {
+                    self->_retryCount = 0;
+                    self->_phase = self->_phase + 1;
+                    SV_FIRST_STEP(self);
+                } else {
+                    self->_retryCount = self->_retryCount + 1;
+                    if (SV_MAY_RETRY(self)) {
+                        SV_RETRY_SUB(self, 0);
+                    } else {
+                        switch (res) {
+                        case -4:
+                            SV_NEXT_STEP(self);
+                            break;
+                        case -2:
+                        case -3:
+                        case -5:
+                            SV_FINISH(self, 3);
+                            break;
+                        default:
+                            SV_FINISH(self, 12);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            break;
+        case 2:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 3:
+            switch (self->_st2) {
+            case 0: {
+                char path[256];
+                sprintf(path, "/%s/*", platform->_dirName);
+                if (sceMcGetDir(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 0, 7, g_svDirEntries) >= 0) {
+                    g_svMcRequestState[SCE_MC_FUNC_GET_DIR] = SV_MC_REQUEST_ISSUED;
+                    SV_NEXT_SUB(self);
+                }
+                break;
+            }
+            case 1:
+                if (g_svMcRequestState[SCE_MC_FUNC_GET_DIR] == SV_MC_REQUEST_ISSUED) {
+                    return 0;
+                }
+                res = g_svMcRequestResult[SCE_MC_FUNC_GET_DIR];
+                if (res >= 0) {
+                    self->_entryCount = res;
+                    if (self->_entryCount > 2) {    /* more than "." and ".." */
+                        SV_NEXT_STEP(self);
+                    } else {
+                        self->_phase = self->_phase + 1;
+                        SV_FIRST_STEP(self);
+                    }
+                } else {
+                    self->_retryCount = self->_retryCount + 1;
+                    if (SV_MAY_RETRY(self)) {
+                        SV_RETRY_SUB(self, 0);
+                    } else {
+                        switch (res) {
+                        case -2:
+                        case -4:
+                        case -5:
+                        case -6:
+                            SV_FINISH(self, 3);
+                            break;
+                        default:
+                            SV_FINISH(self, 12);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            break;
+        case 4:
+            self->_fileIndex = 2;
+            SV_NEXT_STEP(self);
+            /* fall through */
+        case 5:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 6:
+            switch (self->_st2) {
+            case 0: {
+                char path[256];
+                sprintf(path, "/%s/%s", platform->_dirName, g_svDirEntries[self->_fileIndex].EntryName);
+                if (sceMcDelete(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path) >= 0) {
+                    g_svMcRequestState[SCE_MC_FUNC_DELETE] = SV_MC_REQUEST_ISSUED;
+                    SV_NEXT_SUB(self);
+                }
+                break;
+            }
+            case 1:
+                if (g_svMcRequestState[SCE_MC_FUNC_DELETE] == SV_MC_REQUEST_ISSUED) {
+                    return 0;
+                }
+                res = g_svMcRequestResult[SCE_MC_FUNC_DELETE];
+                if (res >= 0) {
+                    if (++self->_fileIndex < self->_entryCount) {
+                        self->_step = self->getStep() - 1;
+                        self->_st3 = 0;
+                        self->_st2 = 0;
+                    } else {
+                        self->_phase = 1;
+                        SV_FIRST_STEP(self);
+                    }
+                } else {
+                    self->_retryCount = self->_retryCount + 1;
+                    if (SV_MAY_RETRY(self)) {
+                        SV_RETRY_SUB(self, 0);
+                    } else {
+                        switch (res) {
+                        case 0:
+                        case -2:
+                        case -4:
+                        case -5:
+                        case -6:
+                            SV_FINISH(self, 3);
+                            break;
+                        default:
+                            SV_FINISH(self, 12);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case 1:
+        self->_fileIndex = 0;
+        self->_phase = self->_phase + 1;
+        SV_FIRST_STEP(self);
+        /* fall through */
+    case 2:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1: {
+            char path[256];
+            const char *name;
+            switch (self->_fileIndex) {
+            default:
+                name = (const char *)platform->_fnameIcon0;
+                break;
+            case 1:
+                name = (const char *)platform->_fnameIcon1;
+                break;
+            case 2:
+                name = (const char *)platform->_fnameIcon2;
+                break;
+            }
+            sprintf(path, "/%s/%s", platform->_dirName, name);
+            if (sceMcOpen(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 514) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_OPEN] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        }
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_OPEN] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_OPEN];
+            if (res >= 0) {
+                g_svSaveFd[0] = res;
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+                self->_retryCount = 0;
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                    case -7:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 3:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcWrite(g_svSaveFd[0], platformImage(platform, self->_fileIndex)->_data, platformImage(platform, self->_fileIndex)->_dataSize) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_WRITE] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_WRITE];
+            if (res >= 0) {
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                    case -7:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 4:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcClose(g_svSaveFd[0]) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_CLOSE] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_CLOSE] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_CLOSE];
+            if (res >= 0) {
+                if (!moreIcons(self, platform->_iconCount)) {
+                    self->_phase = self->_phase + 1;
+                    SV_FIRST_STEP(self);
+                } else {
+                    self->_phase = 2;
+                    SV_FIRST_STEP(self);
+                }
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case 0:
+                    case -2:
+                    case -4:
+                    case -5:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 5:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1: {
+            char path[256];
+            sprintf(path, "/%s/%s", platform->_dirName, platform->_dirName);
+            if (sceMcOpen(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 514) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_OPEN] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        }
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_OPEN] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_OPEN];
+            if (res >= 0) {
+                g_svSaveFd[0] = res;
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                    case -7:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 6:
+        switch (self->_step) {
+        case 0:
+            switch (self->_st2) {
+            case 0:
+                self->_retryCount = 0;
+                SV_NEXT_SUB(self);
+                break;
+            case 1:
+                if (sceMcSeek(g_svSaveFd[0], platform->_dataOffSet[self->_imagePass], 0) >= 0) {
+                    g_svMcRequestState[SCE_MC_FUNC_SEEK] = SV_MC_REQUEST_ISSUED;
+                    SV_NEXT_SUB(self);
+                }
+                break;
+            case 2:
+                if (g_svMcRequestState[SCE_MC_FUNC_SEEK] == SV_MC_REQUEST_ISSUED) {
+                    return 0;
+                }
+                res = g_svMcRequestResult[SCE_MC_FUNC_SEEK];
+                if (res >= 0) {
+                    SV_NEXT_STEP(self);
+                } else {
+                    self->_retryCount = self->_retryCount + 1;
+                    if (SV_MAY_RETRY(self)) {
+                        SV_RETRY_SUB(self, 1);
+                    } else {
+                        switch (res) {
+                        case -2:
+                        case -4:
+                        case -5:
+                            SV_FINISH(self, 3);
+                            break;
+                        default:
+                            SV_FINISH(self, 12);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            break;
+        case 1:
+            switch (self->_st2) {
+            case 0:
+                self->_retryCount = 0;
+                SV_NEXT_SUB(self);
+                break;
+            case 1:
+                if (sceMcWrite(g_svSaveFd[0], self->_saveWork->_mem, platform->_dataSize) >= 0) {
+                    g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
+                    SV_NEXT_SUB(self);
+                }
+                break;
+            case 2:
+                if (g_svMcRequestState[SCE_MC_FUNC_WRITE] == SV_MC_REQUEST_ISSUED) {
+                    return 0;
+                }
+                res = g_svMcRequestResult[SCE_MC_FUNC_WRITE];
+                if (res >= 0) {
+                    if (self->_imagePass == 0) {
+                        self->_imagePass = 1;
+                        self->_step = 0;
+                        self->_st3 = 0;
+                        self->_st2 = 0;
+                    } else {
+                        self->_phase = self->_phase + 1;
+                        SV_FIRST_STEP(self);
+                    }
+                } else {
+                    self->_retryCount = self->_retryCount + 1;
+                    if (SV_MAY_RETRY(self)) {
+                        SV_RETRY_SUB(self, 1);
+                    } else {
+                        switch (res) {
+                        case -2:
+                        case -4:
+                        case -5:
+                        case -8:
+                            SV_FINISH(self, 3);
+                            break;
+                        default:
+                            SV_FINISH(self, 12);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case 7:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcClose(g_svSaveFd[0]) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_CLOSE] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_CLOSE] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_CLOSE];
+            if (res >= 0) {
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -4:
+                    case -5:
+                    case -8:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 8:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1: {
+            char path[256];
+            sprintf(path, "/%s/icon.sys", platform->_dirName);
+            if (sceMcOpen(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 514) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_OPEN] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        }
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_OPEN] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_OPEN];
+            if (res >= 0) {
+                g_svSaveFd[0] = res;
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                    case -7:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 9:
+        self->_iconSys.Head[0] = 'P';
+        self->_iconSys.Head[1] = 'S';
+        self->_iconSys.Head[2] = '2';
+        self->_iconSys.Head[3] = 'D';
+        self->_iconSys.rsv1 = 0;
+        self->_iconSys.OffsLF = platform->_offsLF;
+        self->_iconSys.rsv2 = 0;
+        self->_iconSys.TransRate = platform->_transRate;
+        for (i = 0; i < 4; i++) {
+            self->_iconSys.BgColor[0][i] = platform->_bgColor0[i];
+        }
+        for (i = 0; i < 4; i++) {
+            self->_iconSys.BgColor[1][i] = platform->_bgColor1[i];
+        }
+        for (i = 0; i < 4; i++) {
+            self->_iconSys.BgColor[2][i] = platform->_bgColor2[i];
+        }
+        for (i = 0; i < 4; i++) {
+            self->_iconSys.BgColor[3][i] = platform->_bgColor3[i];
+        }
+        for (i = 0; i < 3; i++) {
+            self->_iconSys.LightDir[0][i] = platform->_lightDir0[i];
+        }
+        for (i = 0; i < 3; i++) {
+            self->_iconSys.LightDir[1][i] = platform->_lightDir1[i];
+        }
+        for (i = 0; i < 3; i++) {
+            self->_iconSys.LightDir[2][i] = platform->_lightDir2[i];
+        }
+        for (i = 0; i < 3; i++) {
+            self->_iconSys.LightColor[0][i] = platform->_lightColor0[i];
+        }
+        for (i = 0; i < 3; i++) {
+            self->_iconSys.LightColor[1][i] = platform->_lightColor1[i];
+        }
+        for (i = 0; i < 3; i++) {
+            self->_iconSys.LightColor[2][i] = platform->_lightColor2[i];
+        }
+        for (i = 0; i < 3; i++) {
+            self->_iconSys.Ambient[i] = platform->_ambient[i];
+        }
+        strcpy(self->_iconSys.TitleName, (const char *)platform->_title);
+        strcpy(self->_iconSys.FnameView, (const char *)platform->_fnameIcon0);
+        strcpy(self->_iconSys.FnameCopy, (const char *)platform->_fnameIcon1);
+        strcpy(self->_iconSys.FnameDel, (const char *)platform->_fnameIcon2);
+        memset(self->_iconSys.zero2, 0, sizeof(self->_iconSys.zero2));
+        self->_phase = self->_phase + 1;
+        SV_FIRST_STEP(self);
+        /* fall through */
+    case 10:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcWrite(g_svSaveFd[0], (int)&self->_iconSys, sizeof(sceMcIconSys)) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_WRITE] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_WRITE];
+            if (res >= 0) {
+                char buffer[256];
+                /* Shift-JIS "Icon Sys he no kakikomi %d baito": "wrote %d bytes to icon.sys" */
+                sprintf(buffer, "Icon Sys \x82\xd6\x82\xcc\x8f\x91\x82\xab\x8d\x9e\x82\xdd %d \x83o\x83" "C\x83g\n", res);
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                    case -8:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 11:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcClose(g_svSaveFd[0]) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_CLOSE] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_CLOSE] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_CLOSE];
+            if (res >= 0) {
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -4:
+                    case -5:
+                    case -8:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 12:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1: {
+            char path[256];
+            sprintf(path, "/%s/*", platform->_dirName);
+            if (sceMcGetDir(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 0, 7, g_svDirEntries) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_GET_DIR] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        }
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_GET_DIR] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_GET_DIR];
+            if (res >= 0) {
+                SV_FINISH(self, 2);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -4:
+                    case -5:
+                    case -6:
+                        SV_FINISH(self, 3);
+                        break;
+                    default:
+                        SV_FINISH(self, 12);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    }
+    if (self->_isEnd != 0) {
+        beSaveMemoryObj_Free(self->_saveWork);
+        g_svCardBusy = 0;
+    }
+    return self->_isEnd;
 }
 
 void beSvFileMakeApi_Report(beSvFileMakeApi *self, beSvDeliver *deliver) {
@@ -368,6 +1252,158 @@ void beSvFileFindApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
     self->_st1 = 0;
     g_svCardBusy = 1;
     self->_retryCount = 0;
+}
+
+/* Looks for the save on the card in slot _connect: lists the save directory and checks that icon.sys,
+ * the icon files and the save file are all in it, one listing per file (_stage). A listing that fails
+ * three times ends the search with _result = 4 (not found) for the codes below, or 12 otherwise; a
+ * missing file is _result = 4, the save file present is _result = 2. When every card is being searched
+ * (_isConAllChk) a miss restarts the search on the next slot (up to 2, or 5 with a multitap). */
+int beSvFileFindApi_Update(beSvFileFindApiWork *self) {
+    char path[256];
+    beSvPlatDataPS2 *platform;
+    int res;
+    unsigned char found;
+    int i;
+
+    if (self->_isEnd != 0) {
+        return 1;
+    }
+    if (g_svConnectCheckPending == 1) {
+        return 0;
+    }
+    platform = g_svPlatformData[0];
+    switch (self->getPhase()) {
+    case 0:
+        self->_stage = 0;
+        self->_phase = self->_phase + 1;
+        SV_FIRST_STEP(self);
+        /* fall through */
+    case 1:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            switch (self->_stage) {
+            default:
+                sprintf(path, "/%s/icon.sys", platform->_dirName);
+                break;
+            case 1:
+                sprintf(path, "/%s/%s", platform->_dirName, platform->_fnameIcon0);
+                break;
+            case 2:
+                sprintf(path, "/%s/%s", platform->_dirName, platform->_fnameIcon1);
+                break;
+            case 3:
+                sprintf(path, "/%s/%s", platform->_dirName, platform->_fnameIcon2);
+                break;
+            case 4:
+                sprintf(path, "/%s/%s", platform->_dirName, platform->_dirName);
+                break;
+            }
+            if (sceMcGetDir(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 0, 7, g_svDirEntries) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_GET_DIR] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_GET_DIR] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_GET_DIR];
+            if (res >= 0) {
+                if (res < 8) {
+                    found = 0;
+                    for (i = 0; i < res; i++) {
+                        switch (self->_stage) {
+                        case 0:
+                            if (strcmp("icon.sys", g_svDirEntries[i].EntryName) == 0) {
+                                self->_stage = 1;
+                                SV_RETRY_STEP(self);
+                                found = 1;
+                            }
+                            break;
+                        case 1:
+                            if (strcmp((const char *)platform->_fnameIcon0, g_svDirEntries[i].EntryName) == 0) {
+                                if (platform->_iconCount >= 3) {
+                                    self->_stage = 2;
+                                    SV_RETRY_STEP(self);
+                                } else {
+                                    self->_stage = 4;
+                                    SV_RETRY_STEP(self);
+                                }
+                                found = 1;
+                            }
+                            break;
+                        case 2:
+                            if (strcmp((const char *)platform->_fnameIcon1, g_svDirEntries[i].EntryName) == 0) {
+                                self->_stage = 3;
+                                found = 1;
+                                SV_RETRY_STEP(self);
+                            }
+                            break;
+                        case 3:
+                            if (strcmp((const char *)platform->_fnameIcon2, g_svDirEntries[i].EntryName) == 0) {
+                                self->_stage = 4;
+                                found = 1;
+                                SV_RETRY_STEP(self);
+                            }
+                            break;
+                        case 4:
+                            if (strcmp((const char *)platform->_dirName, g_svDirEntries[i].EntryName) == 0) {
+                                self->_result = 2;
+                                found = 1;
+                                self->_isEnd = 1;
+                            }
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        self->_result = 4;
+                        self->_isEnd = 1;
+                    }
+                }
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -6:
+                    case -4:
+                        self->_result = 4;
+                        self->_isEnd = 1;
+                        break;
+                    case -5:
+                    default:
+                        self->_result = 12;
+                        self->_isEnd = 1;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    }
+    if (self->_isConAllChk != 0 && self->_isEnd != 0 && self->_result != 2) {
+        int connectMax = g_svMultitapState == 1 ? 5 : 2;
+        self->_connect = self->_connect + 1;
+        if (self->_connect < connectMax) {
+            self->_isEnd = 0;
+            self->_result = 1;
+            self->_phase = 0;
+            self->_st3 = 0;
+            self->_st2 = 0;
+            self->_step = 0;
+        }
+    }
+    if (self->_isEnd != 0) {
+        g_svCardBusy = 0;
+    }
+    return self->_isEnd;
 }
 
 void beSvFileFindApi_Report(beSvFileFindApi *self, beSvDeliver *deliver) {
@@ -541,6 +1577,295 @@ void beSvUseCheckApi_Report(beSvUseCheckApi *self, beSvDeliver *deliver) {
     deliver->_isEndOperat = 1;
 }
 
+/* Starts a read: keeps the game data to fill and queues two save-sized buffers for the passes. */
+void beSvReadMediaApi_Start(beSvReadMediaApiWork *self, beSvDeliver *deliver) {
+    beSvPlatDataPS2 *platform;
+    igObject *gameData;
+    igObject *old;
+    int i;
+    int own;
+    int allocator;
+
+    platform = (beSvPlatDataPS2 *)deliver->_platformData;
+    self->_connect = deliver->_targetConnect;
+    gameData = (igObject *)deliver->_gameData;
+    if (gameData != 0) {
+        gameData->_refCount = gameData->_refCount + 1;
+    }
+    old = self->_lodeData;
+    IG_OBJECT_RELEASE(old);
+    self->_lodeData = gameData;
+    self->_gameData = deliver->_gameData;
+    self->_isEnd = 0;
+    self->_result = 1;
+    g_svPlatformData[0] = (beSvPlatDataPS2 *)deliver->_platformData;
+    for (i = 0; i < 2; i++) {
+        own = igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        igSmartPointer<beSaveMemoryObj> buffer(beSaveMemoryObj_CreateInstance(allocator));
+        beSaveMemoryObj_Allocate(buffer, platform->_dataSize, 0);
+        ObjectList_AppendRetained(self->_loadWorkList, buffer);
+    }
+    self->_phase = 0;
+    self->_st3 = 0;
+    self->_st2 = 0;
+    self->_step = 0;
+    g_svCardBusy = 1;
+    self->_retryCount = 0;
+}
+
+static inline beSaveMemoryObj *loadBuffer(beSvReadMediaApiWork *self, int index) {
+    return ((beSaveMemoryObj **)((igObjectList *)self->_loadWorkList)->_data)[index];
+}
+
+/* Memory-card read state machine, the mirror of beSvWriteMediaApi's: phase 0 opens the save file
+ * read-only, 1 resets the pass, 2 seeks to the pass's data offset, 3 reads the save-sized buffer,
+ * 4 closes, and 5 checks both copies against their checksum and copies the first intact one into
+ * the game data (_result = 2; 8 when neither is intact). A request that fails three times ends the
+ * machine with _result = 4 (no save file) or 3 (card unusable) for the codes listed per phase, or
+ * 12 for any other. */
+int beSvReadMediaApi_Update(beSvReadMediaApiWork *self) {
+    char path[256];
+    int res;
+    beSvPlatDataPS2 *platform;
+
+    if (self->_isEnd != 0) {
+        return 1;
+    }
+    if (g_svConnectCheckPending == 1) {
+        return 0;
+    }
+    platform = g_svPlatformData[0];
+    switch (self->getPhase()) {
+    case 0:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            sprintf(path, "/%s/%s", platform->_dirName, platform->_dirName);
+            if (sceMcOpen(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 1) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_OPEN] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_OPEN] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_OPEN];
+            if (res >= 0) {
+                g_svSaveFd[0] = res;
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                    case -7:
+                        self->_result = 4;
+                        self->_isEnd = 1;
+                        break;
+                    default:
+                        self->_result = 12;
+                        self->_isEnd = 1;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 1:
+        self->_readPass = 0;
+        self->_phase = self->_phase + 1;
+        SV_FIRST_STEP(self);
+        /* fall through */
+    case 2:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcSeek(g_svSaveFd[0], platform->_dataOffSet[self->_readPass], 0) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_SEEK] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_SEEK] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_SEEK];
+            if (res >= 0) {
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -4:
+                    case -5:
+                        self->_result = 3;
+                        self->_isEnd = 1;
+                        break;
+                    default:
+                        self->_result = 12;
+                        self->_isEnd = 1;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 3:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcRead(g_svSaveFd[0], loadBuffer(self, self->_readPass)->_mem, platform->_dataSize) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_READ] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_READ] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_READ];
+            if (res >= 0) {
+                if (self->_readPass == 0) {
+                    self->_readPass = 1;
+                    self->_phase = 2;
+                    SV_FIRST_STEP(self);
+                } else {
+                    self->_phase = self->_phase + 1;
+                    SV_FIRST_STEP(self);
+                }
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                        self->_result = 3;
+                        self->_isEnd = 1;
+                        break;
+                    default:
+                        self->_result = 12;
+                        self->_isEnd = 1;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 4:
+        switch (self->_step) {
+        case 0:
+            self->_retryCount = 0;
+            SV_NEXT_STEP(self);
+            break;
+        case 1:
+            if (sceMcClose(g_svSaveFd[0]) >= 0) {
+                g_svMcRequestState[SCE_MC_FUNC_CLOSE] = SV_MC_REQUEST_ISSUED;
+                SV_NEXT_STEP(self);
+            }
+            break;
+        case 2:
+            if (g_svMcRequestState[SCE_MC_FUNC_CLOSE] == SV_MC_REQUEST_ISSUED) {
+                return 0;
+            }
+            res = g_svMcRequestResult[SCE_MC_FUNC_CLOSE];
+            if (res >= 0) {
+                self->_phase = self->_phase + 1;
+                SV_FIRST_STEP(self);
+            } else {
+                self->_retryCount = self->_retryCount + 1;
+                if (SV_MAY_RETRY(self)) {
+                    SV_RETRY_STEP(self);
+                } else {
+                    switch (res) {
+                    case -2:
+                    case -4:
+                    case -5:
+                    case -8:
+                        self->_result = 3;
+                        self->_isEnd = 1;
+                        break;
+                    default:
+                        self->_result = 12;
+                        self->_isEnd = 1;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case 5: {
+        int stored;
+        int i;
+        int *image;
+        bool intact;
+        beSaveDataDeliver *gameData;
+        int j;
+        intact = false;
+        for (i = 0; i < 2; i++) {
+            int actual;
+            image = (int *)loadBuffer(self, i)->_mem;
+            stored = image[0];
+            image[1] = g_svSaveVersion[0];
+            actual = ((beSaveApiVirtuals *)self)->checksum(image, platform->_dataSize);
+            if (actual == stored) {
+                gameData = (beSaveDataDeliver *)self->_gameData;
+                image++;    /* past the checksum */
+                image++;    /* past the save version */
+                memcpy((void *)gameData->_data, image, gameData->_size);
+                self->_result = 2;
+                intact = true;
+                break;
+            }
+        }
+        for (j = 0; j < 2; j++) {
+            ((beSaveApiVirtuals *)self)->checksum((int *)loadBuffer(self, j)->_mem, platform->_dataSize);
+        }
+        if (!intact) {
+            self->_result = 8;
+        }
+        self->_isEnd = 1;
+        break;
+    }
+    }
+    if (self->_isEnd != 0) {
+        int i;
+        for (i = 0; i < 2; i++) {
+            beSaveMemoryObj_Free(loadBuffer(self, i));
+        }
+        g_svCardBusy = 0;
+    }
+    return self->_isEnd;
+}
+
 void beSvReadMediaApi_Report(beSvReadMediaApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
@@ -584,9 +1909,6 @@ void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver) 
     self->_retryCount = 0;
 }
 
-#define SV_NEXT_STEP(self)  ((self)->_step = (self)->getStep() + 1, (self)->_st3 = 0, (self)->_st2 = 0)
-#define SV_FIRST_STEP(self) ((self)->_st3 = 0, (self)->_st2 = 0, (self)->_step = 0)
-#define SV_RETRY_STEP(self) ((self)->_step = 1, (self)->_st3 = 0, (self)->_st2 = 0)
 /* Memory-card write state machine, polled once per frame by the save-data pipeline. _phase (_st0)
  * selects the phase and _step (_st1) the step inside it. Every phase runs three steps: 0 clears
  * the retry counter, 1 issues one asynchronous memory-card request and raises its in-flight flag,
@@ -599,7 +1921,6 @@ void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver) 
 int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
 {
     char path[256];
-    int ok;
     int res;
     beSvPlatDataPS2 *platform;
 
@@ -618,7 +1939,7 @@ int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
             SV_NEXT_STEP(self);
             break;
         case 1:
-            sprintf(path, slash_percent_s_slash_percent_s, platform->_dirName, platform->_dirName);
+            sprintf(path, "/%s/%s", platform->_dirName, platform->_dirName);
             if (sceMcOpen(g_svCardSlots[self->_connect].port, g_svCardSlots[self->_connect].slot, path, 3) >= 0) {
                 g_svMcRequestState[SCE_MC_FUNC_OPEN] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
@@ -635,7 +1956,7 @@ int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
                 SV_FIRST_STEP(self);
             } else {
                 self->_retryCount = self->_retryCount + 1;
-                ok = self->_retryCount < 3; if (ok == 1) {
+                if (SV_MAY_RETRY(self)) {
                     SV_RETRY_STEP(self);
                 } else {
                     switch (res) {
@@ -684,7 +2005,7 @@ int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
                 SV_FIRST_STEP(self);
             } else {
                 self->_retryCount = self->_retryCount + 1;
-                ok = self->_retryCount < 3; if (ok == 1) {
+                if (SV_MAY_RETRY(self)) {
                     SV_RETRY_STEP(self);
                 } else {
                     switch (res) {
@@ -725,7 +2046,7 @@ int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
                 SV_NEXT_STEP(self);
             } else {
                 self->_retryCount = self->_retryCount + 1;
-                ok = self->_retryCount < 3; if (ok == 1) {
+                if (SV_MAY_RETRY(self)) {
                     SV_RETRY_STEP(self);
                 } else {
                     switch (res) {
@@ -770,7 +2091,7 @@ int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
                 }
             } else {
                 self->_retryCount = self->_retryCount + 1;
-                ok = self->_retryCount < 3; if (ok == 1) {
+                if (SV_MAY_RETRY(self)) {
                     SV_RETRY_STEP(self);
                 } else switch (res) {
                 case -2:
@@ -810,7 +2131,7 @@ int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
                 SV_FIRST_STEP(self);
             } else {
                 self->_retryCount = self->_retryCount + 1;
-                ok = self->_retryCount < 3; if (ok == 1) {
+                if (SV_MAY_RETRY(self)) {
                     SV_RETRY_STEP(self);
                 } else {
                     switch (res) {
@@ -985,8 +2306,8 @@ void beSvStartApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
 
     self->_isEnd = 0;
     if (g_svMcModulesLoaded == 0) {
-        igPsx2_LoadIopModule(&mcmanId, mcman_irx, 1, 0, 0);
-        igPsx2_LoadIopModule(&mcservId, mcserv_irx, 1, 0, 0);
+        igPsx2_LoadIopModule(&mcmanId, "mcman.irx", 1, 0, 0);
+        igPsx2_LoadIopModule(&mcservId, "mcserv.irx", 1, 0, 0);
         sceMcInit();
         g_svMcModulesLoaded = 1;
     }
@@ -1442,3 +2763,5 @@ void beSaveMemoryObj_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
+
+#pragma pop

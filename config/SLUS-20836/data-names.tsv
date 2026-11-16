@@ -2638,6 +2638,7 @@
 0x004c5aa0	pq5	string-literal
 0x004c7040	text_096	string-literal
 0x004c7100	pA6	string-literal
+0x004c8f30	g_itemDropCategories	recovered-global
 0x004c8fc0	g_fadeInCurve	recovered-global
 0x004c90b0	g_fadeOutCurve	recovered-global
 0x004c91a0	g_svConnectMax	recovered-global
@@ -4765,6 +4766,8 @@
 0x0050ef78	WPOS	string-literal
 0x0050ef80	PLAYER_3	string-literal
 0x0050ef88	SQ_WALK	string-literal
+0x0050ef90	KIND_EBULLET_2	string-literal
+0x0050efa0	ENEMY_4	string-literal
 0x0050efa8	onWalk	string-literal
 0x0050efb0	toWalk	string-literal
 0x0050efb8	toWait	string-literal
@@ -4876,7 +4879,6 @@
 0x0050fab0	SWITCHCTRL	string-literal
 0x0050fb10	ndmw_igb	string-literal
 0x0050fb88	WATERPLAIN	string-literal
-0x0050fbf0	PLAYERARMS_3	string-literal
 0x0050feb0	NUMBERCTRL_4	string-literal
 0x0050ff10	NOPADDATA	string-literal
 0x0050ff68	STATICINFO_2	string-literal
@@ -4898,9 +4900,6 @@
 0x005101b0	getStatus_SNDF_SEQ_GETSTATUS	string-literal
 0x00510200	MOVIE	string-literal
 0x005102a0	DATABASE_9	string-literal
-0x00510310	slash_percent_s_slash_percent_s	string-literal
-0x00510428	mcman_irx	string-literal
-0x00510438	mcserv_irx	string-literal
 0x00510738	SAVEUTILITY_2	string-literal
 0x00510838	LIGHTCTRL	string-literal
 0x005108f0	libNdmwRuntimePlugin_className	class-name
@@ -5813,9 +5812,6 @@
 0x00519498	GETDATABASE_6	string-literal
 0x005194a8	eneatk	string-literal
 0x005194b0	DATABASE_6	string-literal
-0x005194c0	SAVECTRL_2	string-literal
-0x005194e0	CTRL_6	string-literal
-0x005194e8	COMMONINTF_5	string-literal
 0x00519670	CTRL_3	string-literal
 0x00519678	COMMDLCTRL_3	string-literal
 0x00519688	MESWIN_2	string-literal
@@ -6465,19 +6461,6 @@
 0x0051d690	RECALCPLAYER_2	string-literal
 0x0051d768	impItem	string-literal
 0x0051d770	pcTech	string-literal
-0x0051dac0	text_txt_Tar_lua	string-literal
-0x0051dad0	TEXTCTL_11	string-literal
-0x0051dad8	TALKFONT01_3	string-literal
-0x0051dae8	text_font00	string-literal
-0x0051daf0	CLR_7	string-literal
-0x0051daf8	SWITCH_11	string-literal
-0x0051db00	text_font01_2	string-literal
-0x0051db08	text_font02_2	string-literal
-0x0051db10	TALKFONT06	string-literal
-0x0051db20	text_font03_2	string-literal
-0x0051db28	text_font04_2	string-literal
-0x0051db30	text_font05	string-literal
-0x0051db38	LOGO	string-literal
 0x0051db90	KIND_MAPBASE	string-literal
 0x0051dba0	MAPBASE	string-literal
 0x0051dba8	ONE_16	string-literal
@@ -7841,6 +7824,7 @@
 0x005878c0	g_criMovieUploadPacket	recovered-global
 0x0058a600	g_svPlatformData	recovered-global
 0x0058a608	g_svSaveVersion	recovered-global
+0x0058a640	g_svDirEntries	recovered-global
 0x0058a800	g_svMultitapPollCount	recovered-global
 0x0058a808	g_svSaveFd	recovered-global
 0x0058a810	g_svSlotPresent	recovered-global

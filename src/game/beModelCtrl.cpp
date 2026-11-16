@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
+#include "dw4/beTime.h"
 #define SELECT_ALLOCATOR(var, arg) { int base_ = igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
@@ -265,9 +266,13 @@ extern "C" char onFall[];
 extern "C" char noFall[];
 extern "C" int beModelCtrl_RunCtrl(beModelCtrl *self, beModelCtrlInfoWork *work, beModelCtrlCTRL *command);
 
-extern "C" void beModelCtrl_UpdateHomingAI(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlInfoDataAIH *homing);
+extern "C" void beModelCtrl_UpdateHomingAI(beModelCtrl *self, beModelCtrlInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlInfoDataAIH *homing);
 extern "C" char AIM[];
 extern "C" char AIH[];
+extern "C" char KIND_EBULLET_2[];
+extern "C" char ENEMY_4[];
+extern "C" Vec3 *beTargetObj_GetOrigin(void);
+extern "C" Vec3 *beTargetObj_GetTargetPosition(void);
 extern "C" void beModelCtrl_UpdateControl(beModelCtrl *self, beBaseInfoRam *ram);
 extern "C" char ACTION_2[];
 extern "C" int beModelCtrl_RunAction(beModelCtrl *self, beModelCtrlInfo *info, beBaseInfoRam *ram, beModelCtrlACTION *command);
@@ -722,7 +727,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
             }
         }
         seqName.p = token;
-        value = zone->_time; value = value; beBaseInfoRam_StartTimer(ram, AITIMER, __fixsfdi((1e9f * value) / 60.0f));
+        beBaseInfoRam_StartTimer(ram, AITIMER, FramesToTime(zone->_time));
     } else {
         text = (char *)ai->_seqName;
         if (g_stringPool[0] == 0) {
@@ -783,6 +788,93 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
         }
     }
     ai->_seqName = (int)token;
+}
+
+/* The length of `frames` 60 Hz frames in the insight clock's nanoseconds. */
+
+/* Turns the model towards the target while its homing timers run: pitch from the height difference
+ * and the distance, yaw from the horizontal offset. */
+void beModelCtrl_UpdateHomingAI(beModelCtrl *self, beModelCtrlInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlInfoDataAIH *homing) {
+    beModelCtrlInfoRamData *ramData;
+    Vec3 *origin;
+    int allocator;
+    unsigned char turnX;
+    Vec3 *target;
+    unsigned char turnY;
+    beModelCtrlInfoAI *ai;
+    float distanceSq;
+    float originX, originY, originZ;
+    float targetX, targetY, targetZ;
+    if (ram->_dataList == 0) {
+        allocator = igObject_GetAllocator(ram);
+        allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        DataListInstall::make(ram, allocator);
+    }
+    ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_3));
+    ai = (beModelCtrlInfoAI *)work->_aI;
+    turnX = 1;
+    turnY = 0;
+    switch (ai->_hStatus) {
+    case 0:
+        beBaseInfoRam_StartTimer(ram, AITIMER, FramesToTime(homing->_firstFrame));
+        ai->_hStatus = 1;
+    case 1:
+        if ((beBaseInfoRam_IsTimerExpired(ram, AITIMER) & 0xff) != 0) {
+            turnY = 1;
+            ai->_hStatus = 2;
+        }
+        break;
+    case 2:
+        beBaseInfoRam_StartTimer(ram, AITIMER, FramesToTime(homing->_secondFrame));
+        ai->_hStatus = 3;
+    case 3:
+        if ((beBaseInfoRam_IsTimerExpired(ram, AITIMER) & 0xff) != 0) {
+            turnY = 1;
+            ai->_hStatus = 2;
+        }
+        break;
+    case 4:
+        turnX = 0;
+        break;
+    }
+    if ((turnX && homing->_isXHoming) || (turnY && homing->_isYHoming)) {
+        if (turnY) {
+            ai->_hCount = ai->_hCount + 1;
+            if (homing->_limitCount <= ai->_hCount) {
+                ai->_hStatus = 4;
+            }
+        }
+        if (strcmp((char *)info->_kindString, KIND_EBULLET_2) == 0) {
+            if ((beTargetObj_SelectTarget((char *)ramData->_node + 32, PLAYER_3, NEAR) & 0xff) == 0) {
+                return;
+            }
+        } else {
+            if ((beTargetObj_SelectTarget((char *)ramData->_node + 32, ENEMY_4, NEAR) & 0xff) == 0) {
+                return;
+            }
+        }
+        distanceSq = beTargetObj_GetTargetDistanceSq();
+        if (distanceSq <= homing->_areaSquare) {
+            origin = beTargetObj_GetOrigin();
+            originX = origin->x;
+            originY = origin->y;
+            originZ = origin->z;
+            target = beTargetObj_GetTargetPosition();
+            targetX = target->x;
+            targetY = target->y;
+            targetZ = target->z;
+            if (turnX && homing->_isXHoming) {
+                work->_directionLimiter[0] = homing->_limitRotX;
+                work->_targetDirection[0] = -atan2f(targetY + work->_aIHOffsetY - originY, sqrtf(distanceSq));
+            }
+            if (turnY && homing->_isYHoming) {
+                work->_directionLimiter[1] = homing->_limitRotY;
+                work->_targetDirection[1] = atan2f(targetX - originX, targetZ - originZ);
+            }
+            beModelCtrl_UpdateDirection(self, (beBaseInfo *)info, ram, work, 0);
+            work->_targetDirection[1] = work->_direction[1];
+        }
+    }
 }
 
 int beModelCtrl_RunCtrl(beModelCtrl *self, beModelCtrlInfoWork *work, beModelCtrlCTRL *command) {
@@ -846,7 +938,7 @@ void beModelCtrl_UpdateControl(beModelCtrl *self, beBaseInfoRam *ram) {
     } else {
         property = (beBaseInfoData *)igProperty_FindByName(info->_dataList, g_propertyNameField[0], AIH);
         if (property != 0) {
-            beModelCtrl_UpdateHomingAI(self, info, ram, (beModelCtrlInfoWork *)work, (beModelCtrlInfoDataAIH *)property);
+            beModelCtrl_UpdateHomingAI(self, (beModelCtrlInfo *)info, ram, (beModelCtrlInfoWork *)work, (beModelCtrlInfoDataAIH *)property);
         }
     }
 }

@@ -4,7 +4,8 @@
 Lua MAT wrappers supply the helper roles; construction of global 0x58a1c8 with
 the beMatCtrl handle 0x589160 and reflected fields supply receiver identity.
 The controller's virtual slots take the names their sibling controllers use
-(GetMeta, RegisterReceiver, GetInfoMeta, Update, Prepare, OnMessage); the
+(GetMeta, GetInfoMeta, Prepare, OnMessage); slots 29 and 31 (OnAddRam, UpdateRam)
+are named by the slot families in names/GamePropagated.tsv. The
 message enum getter builds the MATCTRL "Message" enum, and the recursive search
 sets player bits in the per-material masks.
 See docs/engine/material-contact.md.
@@ -20,9 +21,7 @@ ROWS = [
     (0x38aea0, "beMatCtrl_GetPlayerMatStat"),
     (0x38af70, "beMatCtrl_Prepare"),
     (0x38b040, "beMatCtrl_GetInfoMeta"),
-    (0x38b050, "beMatCtrl_RegisterReceiver"),
     (0x38b080, "beMatCtrl_MarkContacts"),
-    (0x38b1f0, "beMatCtrl_Update"),
     (0x38bdf0, "beMatCtrl_OnMessage"),
     (0x38bed0, "beMatCtrl_GetMeta"),
 ]

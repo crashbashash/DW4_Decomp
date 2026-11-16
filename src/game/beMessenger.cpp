@@ -56,6 +56,7 @@ void beMessenger_Start(void);
 void beMessenger_Stop(void);
 int beMessenger_AddInfo(beMessenger *arg0);
 void beMessenger_RemoveAllInfo(beMessenger *);
+void beMessenger_Update(beMessenger *self);
 void beMessenger_SetFreezeTime(beMessenger *arg0, int arg1);
 int beMessenger_ResolveEnumValue(beMessenger *self, int arg1, int arg2);
 void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *name, const char *text, int value);
@@ -192,7 +193,7 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
     int n = l->_count;
     if (n != 0 && i >= 0 && i < n) ((igObject **)l->_data)[i] = cur;
 }
-#define GROUP(field, CNT, factory, Ref) { \
+#define GROUP(field, CNT, factory, Ref, T) { \
     igObjectList *list = (igObjectList *)arg0->field; \
     if (list->_count < (CNT) + 1) List_Reserve(list, CNT, 4); \
     ObjectList_ResizeRetained((void *)arg0->field, CNT); \
@@ -200,7 +201,7 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
     for (i = 0; i < (CNT); i += 1) { \
         void *alloc; \
         ALLOC(alloc) \
-        Ref slot((igObject *)factory(alloc)); \
+        Ref slot((T *)factory(alloc)); \
         storeAt(arg0->field, i, slot); \
     } }
 
@@ -216,9 +217,9 @@ void beMessenger_InitializeMemory(beMessenger *arg0)
         RELEASE_REF((igObject *)arg0->_argData)
         arg0->_argData = (int)cur0;
     }
-    GROUP(_workStack, 0x40, beMessengerWork_Create, WorkRef)
-    GROUP(_delayStack, 0x20, beMessengerDelay_Create, igSmartPointer<igObject>)
-    GROUP(_pushPopStack, 4, beMessengerArgData_Create, ObjectRef)
+    GROUP(_workStack, 0x40, beMessengerWork_Create, WorkRef, igObject)
+    GROUP(_delayStack, 0x20, beMessengerDelay_Create, igSmartPointer<beMessengerDelay>, beMessengerDelay)
+    GROUP(_pushPopStack, 4, beMessengerArgData_Create, ObjectRef, igObject)
     arg0->_pushPopCount = 0;
     arg0->_isMemoryAssign = 1;
 }
@@ -463,6 +464,103 @@ int beMessenger_AddInfo(beMessenger *arg0) {
 void beMessenger_RemoveAllInfo(beMessenger *self)
 {
     beMessenger_ResetMemory(self);
+}
+
+/* The insight object's clock (+80, 64 bits). */
+struct Insight {
+    static long long Get(igInsightCore *i) { return i->_worldTime; }
+};
+
+#define RELEASE_OBJ(o) { \
+    if (o) { \
+        --(o)->_refCount; \
+        if (((unsigned long long)(long long)(o)->_refCount & 0x7fffffULL) == 0) \
+            igObject_Destroy(o); \
+    } }
+
+struct RowOps {
+    static void SetArg(beMessengerDelay *r, igObject *in) {
+        igObject *old;
+        if (in) ++in->_refCount;
+        old = (igObject *)r->_argData;
+        RELEASE_OBJ(old)
+        r->_argData = (int)in;
+    }
+};
+
+/* Reference stored through a pointer (the messenger's own argument slot) and the temporary handed
+ * to the list insert. Its constructor reads its stored word back through a laundered pointer, fetches
+ * the delay-stack handle between that read and the null test, and increments the count through that
+ * pointer. */
+struct DelayRef {
+    igObject * value;
+    DelayRef(igObject *p, beMessenger *m, int &out) : value(p) {
+        DelayRef *s = (DelayRef *)(int)this;
+        igObject *v = s->value;
+        out = m->_delayStack;
+        if (v) ++s->value->_refCount;
+    }
+    static void release(igObject *o) { RELEASE_OBJ(o) }
+    static void assign(igObject **dest, igObject *incoming) {
+        igObject *outgoing;
+        if (incoming) ++incoming->_refCount;
+        outgoing = *dest;
+        release(outgoing);
+        *dest = incoming;
+    }
+};
+
+static inline beMessengerDelay *DelayAt(beMessenger *self, int index)
+{
+    return ((beMessengerDelay **)((igObjectList *)self->_delayStack)->_data)[index];
+}
+
+static inline long long SendTimeOf(const beMessengerDelay *delay) { return delay->_sendTime; }
+
+/* Sends the queued messages whose time has come, oldest first, and moves each sent row to the back of the
+ * queue; while the clock is frozen it moves every queued time forward by the time spent frozen instead. */
+void beMessenger_Update(beMessenger *self)
+{
+    if (self->_isMemoryAssign != 0) {
+        igObjectList *stack = (igObjectList *)self->_delayStack;
+        int count = stack->_count;
+        if (count != 0) {
+            if (self->_freezeTime == 0) {
+                long long now = Insight::Get((igInsightCore *)self->_insight);
+                int i;
+                for (i = 0; i < count; i++) {
+                    igSmartPointer<beMessengerDelay> row(DelayAt(self, 0), kRetainReference);
+                    if (!row->_isUse) break;
+                    if (now < SendTimeOf(row)) break;
+                    beMessenger_SelectReceivers(self, (char *)row->_groupName, (char *)row->_infoName, row->_ramNo);
+                    {
+                        ObjectRef saved(0);
+                        saved = (igObject *)self->_argData;
+                        DelayRef::assign((igObject **)&self->_argData, (igObject *)row->_argData);
+                        RowOps::SetArg(row.get(), saved.get());
+                    }
+                    beMessenger_DispatchSelected(self, row->_message);
+                    beMessengerDelay_Clear(row.p);
+                    stack = (igObjectList *)self->_delayStack;
+                    DelayRef::release(((igObject **)stack->_data)[0]);
+                    List_RemoveWordAt(stack, 0);
+                    ((igObject **)stack->_data)[stack->_count] = 0;
+                    ObjectList_AppendRetained((void *)self->_delayStack, row.p);
+                }
+            } else {
+                long long now = Insight::Get((igInsightCore *)self->_insight);
+                long long elapsed = now - self->_freezeTime;
+                int i;
+                for (i = 0; i < count; i++) {
+                    beMessengerDelay *delay = DelayAt(self, i);
+                    if (!delay->_isUse) break;
+                    delay->_sendTime = elapsed + SendTimeOf(delay);
+                }
+                self->_freezeTime = now;
+            }
+            beMessengerArgData_Clear((beMessengerArgData *)self->_argData);
+        }
+    }
 }
 
 void beMessenger_SetFreezeTime(beMessenger *arg0, int arg1) {
@@ -871,69 +969,19 @@ void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, c
         beMessengerArgData_Clear((beMessengerArgData *)self->_argData);
     stack = (beMessengerDelayList *)self->_delayStack;
     last = stack->_count - 1;
-    igSmartPointer<igObject> row(((igObject **)stack->_data)[last]);
+    igSmartPointer<beMessengerDelay> row(((beMessengerDelay **)stack->_data)[last]);
     RETAIN_REF(row.p)
-    if (((beMessengerDelay *)row.p)->_isUse) {
+    if (row->_isUse) {
         allocator = igObject_GetAllocator(self);
         allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         RELEASE_REF(row.p)
-        row.p = (igObject *)beMessengerDelay_Create(allocator);
+        row.p = (beMessengerDelay *)beMessengerDelay_Create(allocator);
         ObjectList_AppendRetained((void *)self->_delayStack, row.p);
     }
     SET_STRING(_groupName, group)
     SET_STRING(_infoName, name)
-    ((beMessengerDelay *)row.p)->_ramNo = number;
+    row->_ramNo = number;
 }
-
-/* The insight object's clock (+80, 64 bits). */
-struct Insight {
-    static long long Get(igInsightCore *i) { return i->_worldTime; }
-};
-
-/* Loop helpers: the list base and the element access are separate calls. */
-struct ListOps {
-    static igObject **Data(igObjectList *l) { return (igObject **)l->_data; }
-    static igObject *At(igObject **b, int k) { return b[k]; }
-};
-
-#define RELEASE_OBJ(o) { \
-    if (o) { \
-        --(o)->_refCount; \
-        if (((unsigned long long)(long long)(o)->_refCount & 0x7fffffULL) == 0) \
-            igObject_Destroy(o); \
-    } }
-
-struct RowOps {
-    static void SetArg(beMessengerDelay *r, igObject *in) {
-        igObject *old;
-        if (in) ++in->_refCount;
-        old = (igObject *)r->_argData;
-        RELEASE_OBJ(old)
-        r->_argData = (int)in;
-    }
-};
-
-/* Reference stored through a pointer (the messenger's own argument slot) and the temporary handed
- * to the list insert. Its constructor reads its stored word back through a laundered pointer, fetches
- * the delay-stack handle between that read and the null test, and increments the count through that
- * pointer. */
-struct DelayRef {
-    igObject * value;
-    DelayRef(igObject *p, beMessenger *m, int &out) : value(p) {
-        DelayRef *s = (DelayRef *)(int)this;
-        igObject *v = s->value;
-        out = m->_delayStack;
-        if (v) ++s->value->_refCount;
-    }
-    static void release(igObject *o) { RELEASE_OBJ(o) }
-    static void assign(igObject **dest, igObject *incoming) {
-        igObject *outgoing;
-        if (incoming) ++incoming->_refCount;
-        outgoing = *dest;
-        release(outgoing);
-        *dest = incoming;
-    }
-};
 
 void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long delay)
 {
@@ -944,23 +992,21 @@ void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long 
 
     stack = (igObjectList *)self->_delayStack;
     idx = stack->_count - 1;
-    igSmartPointer<igObject> row(((igObject **)stack->_data)[idx], kRetainReference);
+    igSmartPointer<beMessengerDelay> row(((beMessengerDelay **)stack->_data)[idx], kRetainReference);
     {
         long long now = Insight::Get((igInsightCore *)self->_insight);
-        ((beMessengerDelay *)row.p)->_sendTime = now + delay * 16666666;
+        row->_sendTime = now + delay * 16666666;
     }
 
     {
         ObjectRef saved(0);
         saved = (igObject *)self->_argData;
-        beMessengerDelay *r = (beMessengerDelay *)row.p;
-        DelayRef::assign((igObject **)&self->_argData, (igObject *)r->_argData);
-        r = (beMessengerDelay *)row.p;
-        RowOps::SetArg(r, saved.p);
+        DelayRef::assign((igObject **)&self->_argData, (igObject *)row->_argData);
+        RowOps::SetArg(row.get(), saved.get());
     }
 
     {
-        beMessengerDelay *r = (beMessengerDelay *)row.p;
+        beMessengerDelay *r = row.p;
         if (g_stringPool[0] == 0) {
             void *pool = StringPool_Allocate(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
@@ -974,7 +1020,7 @@ void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long 
         }
         r->_message = (int)token;
     }
-    ((beMessengerDelay *)row.p)->_isUse = 1;
+    row->_isUse = 1;
 
     stack = (igObjectList *)self->_delayStack;
     last = stack->_count - 1;

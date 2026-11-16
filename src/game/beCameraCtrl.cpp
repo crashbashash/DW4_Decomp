@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/beTime.h"
 #pragma push
 #pragma readonly_strings on
 #define SELECT_ALLOCATOR(var, owner) { var = igObject_GetAllocator(owner); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
@@ -118,8 +119,6 @@ float g_cameraShakeOffsetY[12] = {0.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f, -1.0f, 0
 
 /* Read-only parameters are const. b52 binds an inlined function's const parameter to its argument before the
  * body, so the field is loaded ahead of the body's other operands; a plain parameter is folded into the body. */
-/* frames at 60 per second -> timer nanoseconds */
-static inline long long FramesToTime(const float frames) { return (long long)(1e9f * frames / 60.0f); }
 /* moves one coordinate by a shake step: the step's table direction times the shake's value */
 static inline void AddShakeOffset(float *coord, const float *direction, const float value) { *coord += *direction * value; }
 

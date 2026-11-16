@@ -1,4 +1,9 @@
 #include "dw4/reflected.h"
+#include "dw4/igVec3f.h"
+#include "dw4/igobject_release.h"
+#include "dw4/igSmartPointer.h"
+#pragma push
+#pragma readonly_strings on
 
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int beGenerater_GetInfoMeta(void);
@@ -11,8 +16,114 @@ extern "C" int g_beGeneraterInfo_metaObject[4];
 extern "C" int g_beGenerater_metaObject[4];
 extern "C" int emptyString[4];
 extern "C" int GENERATER[4];
+extern "C" int Memory_GetAllocatorBySelector(int selector);
+extern "C" int igObject_GetAllocator(void *object);
+extern "C" beGeneraterInfoWork *beGeneraterInfoWork_Create(int allocator);
+extern "C" void *StringPool_Allocate(int size);
+extern "C" void *StringPool_Construct(void *pool);
+extern "C" char *StringPool_Intern(void *pool, const char *text);
+extern "C" void StringChunk_ReleaseHeader(int owner, int *header);
+extern "C" int beDataBase_GetRecordInt(beDataBase *self, int record, const char *key);
+extern "C" int beBaseInfoRam_HasTimer(beGeneraterInfoRam *ram, const char *name);
+extern "C" int beBaseInfoRam_StartTimer(beGeneraterInfoRam *ram, const char *name, long long duration);
+extern "C" int beBaseInfoRam_IsTimerExpired(beGeneraterInfoRam *ram, const char *name);
+extern "C" int beBaseInfoRam_RemoveTimer(beGeneraterInfoRam *ram, const char *name);
+extern "C" int igMatrix44f_SetIdentity(float *matrix);
+extern "C" void igMatrix44f_SetTranslation(float *matrix, igVec3f *translation);
+extern "C" int beTargetObj_SelectTarget(float *matrix, const char *group, const char *kind);
+extern "C" float beTargetObj_GetTargetDistanceSq(void);
+extern "C" long long __fixsfdi(float value);
+extern "C" int beLua__RunNamedChunk(int lua, const char *chunk, int arg);
+extern "C" int g_mdlEntity[4];
+extern "C" int kIGMemoryPoolHandleUser1[4];
+extern "C" unsigned char g_useOwnerAllocator;
+extern "C" int g_stringPool[4];
+extern "C" void beGenerater_UpdateRam(beGenerater *self, beBaseInfoRam *ram);
+extern "C" void beMessenger_GetMatrix(float *out, int messenger, int index);
+extern "C" void beMessenger_SendGroup(int messenger, const char *group, const char *message);
+extern "C" int beMessenger_GetMatrixCount(int messenger);
+extern "C" void igMatrix44f_GetTranslation(float *matrix, igVec3f *out);
+extern "C" beDataObjInt *igProperty_GetRecord(igObject *record, const char *name);
+extern "C" char *beDataBase_GetRecordString(beDataBase *self, int record, const char *key);
+extern "C" int List_RemoveWordAt(void *list, int index);
+extern "C" char *g_itemDropCategories[];
+extern "C" void beGenerater_DropItemsForDead(beGenerater *self, beBaseInfoRam *ram, bool lastWave);
+extern "C" void igObject_Destroy(void *object);
+extern "C" igMetaEnum *FUN_00360b10(void);
+extern "C" int beGenerater_OnMessageText(beGenerater *self, beBaseInfoRam *ram, int message);
+extern "C" int beMessenger_GetStringCount(int messenger);
+extern "C" const char *beMessenger_GetString(int messenger, int index);
+extern "C" int beMessenger_GetInt(int messenger, int index);
+extern "C" unsigned int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *messages, int message);
+extern "C" void beMessenger_PushArgContext(int messenger);
+extern "C" void beMessenger_PopArgContext(int messenger);
+extern "C" void List_Reserve(void *list, int capacity, int itemSize);
+extern "C" int strcmp(const char *a, const char *b);
+extern "C" void beMessenger_SendNamed(int messenger, const char *group, const char *infoName, int ramNo, const char *message);
+extern "C" int beMessenger_GetObjectCount(int messenger);
+extern "C" igObject *beMessenger_GetObject(int messenger, int index);
+extern "C" void ObjectList_AppendRetained(int list, void *object);
+extern "C" void beMessenger_SelectReceivers(int messenger, const char *group, const char *infoName, int ramNo);
+extern "C" void beMessenger_AppendVec3(int messenger, igVec3f value);
+extern "C" void beMessenger_AppendString(int messenger, const char *text);
+extern "C" void beMessenger_AppendInt(int messenger, int value);
+extern "C" void beMessenger_DispatchSelected(int messenger, const char *message);
+extern "C" int beGenerater_SpawnEnemies(beGenerater *self, beBaseInfoRam *ram, int count);
 /* arg1 message record: +8 is the first argument, +12 a pointer whose +8 word is the optional name. */
 typedef struct MessageArgsView { char pad8[8]; int f8; int *f12; } MessageArgsView;
+
+/* The system's random number source; genrand is slot 22. */
+class RandomNumberDispatch {
+  public:
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void sgenrand(unsigned int seed);
+    virtual unsigned int genrand();
+};
+
+/* An object list with the list's inline accessors. */
+template <class T> struct ObjectListOf : igObjectList {
+    T *get(int index) const { return ((T **)_data)[index]; }
+};
+typedef igSmartPointer<ObjectListOf<beGeneraterItemDataOne> > DropListRef;
+typedef igSmartPointer<ObjectListOf<beBaseInfoRam> > EnemyRamListRef;
+
+/* The generator data the ram plays: its entry in the parent info's data list. */
+static inline beGeneraterData *dataOf(beGeneraterInfoRam *geneRam)
+{
+    return (beGeneraterData *)((int *)((igObjectList *)((beGeneraterInfo *)geneRam->_parentInfo)->_dataList_)->_data)[geneRam->_ramNo];
+}
+
+/* A list of 12-byte positions. */
+struct Vec3fList : igObjectList {
+    igVec3f *at(int index) const { return &((igVec3f *)_data)[index]; }
+};
+static inline igVec3f Offset(igVec3f point, const float *by)
+{
+    return igVec3f(point.x + by[0], point.y + by[1], point.z + by[2]);
+}
+struct FloatList : igObjectList {
+    float at(int index) const { return ((float *)_data)[index]; }
+};
 
 void beGenerater_Prepare(beGenerater *arg0) {
     if (arg0->_luaManager == 0) {
@@ -34,8 +145,287 @@ void beGenerater_OnAddRam(void *a0, void *a1) {
     beMessenger_RegisterReceiver(arg0->_messenger, a1, &GENERATER[0], v ? v : &emptyString[0], f8);
 }
 
+/* Where the generator puts its next enemy: the spawn point itself, or the point taken from the data's position. */
+static inline igVec3f spawnPosition(beGeneraterData *data, int point)
+{
+    if (data->_genePosIsGlobal) {
+        return *((Vec3fList *)data->_genePosList)->at(point);
+    }
+    return Offset(*((Vec3fList *)data->_genePosList)->at(point), data->_pos);
+}
+
+/* Rolls the item drop of every enemy that has died since the last call and removes it from the live list. */
+void beGenerater_DropItemsForDead(beGenerater *self, beBaseInfoRam *ram, bool lastWave)
+{
+    beGeneraterInfoRam *geneRam = (beGeneraterInfoRam *)ram;
+    beGeneraterInfoWork *work = (beGeneraterInfoWork *)geneRam->_work;
+    bool dropped;
+    int k;
+    int count = ((EnemyRamListRef &)work->_enemyRamList)->_count;
+    for (int index = 0; index < count; index++) {
+        if (((EnemyRamListRef &)work->_enemyRamList)->get(index)->_isRun == 0) {
+            beBaseInfoRam *enemyRam = ((EnemyRamListRef &)work->_enemyRamList)->get(index);
+            beGeneraterData *data = dataOf(geneRam);
+            beMessenger_SendNamed(self->_messenger, "MODELCTRL", (const char *)work->_geneEnemyName, enemyRam->_ramNo, "GETMATRIX_ALL");
+            float matrix[16];
+            beMessenger_GetMatrix(matrix, self->_messenger, 0);
+            igVec3f position;
+            igMatrix44f_GetTranslation(matrix, &position);
+            beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
+            int difficulty = igProperty_GetRecord(beMessenger_GetObject(self->_messenger, 0), "DIFFICULTY")->_data;
+            int playerIndex = work->_playerCount - 1;
+            beGeneraterPlayerData *playerData = (beGeneraterPlayerData *)((int *)((igObjectList *)data->_playerDataList)->_data)[playerIndex];
+            beGeneraterItemData *items;
+            if (lastWave && count == 1) {
+                items = (beGeneraterItemData *)((int *)((igObjectList *)playerData->_itemLastDataList)->_data)[difficulty];
+            } else {
+                items = (beGeneraterItemData *)((int *)((igObjectList *)playerData->_itemDataList)->_data)[difficulty];
+            }
+            int dropCount = ((igObjectList *)items->_dataList)->_count;
+            if (dropCount != 0) {
+                do {
+                    dropped = false;
+                    unsigned int roll = ((RandomNumberDispatch *)((beSystem *)self->_system)->_random)->genrand() % 10000;
+                    for (int i = 0; i < dropCount; i++) {
+                        beGeneraterItemDataOne *drop = ((DropListRef &)items->_dataList)->get(i);
+                        roll -= drop->_rate;
+                        if ((int)roll <= 0) {
+                            const char *category = drop->_name ? (const char *)drop->_name : (const char *)emptyString;
+                            int itemId = drop->_id;
+                            beMessenger_SendNamed(self->_messenger, "DATABASE", category, 0, "GETDATABASE");
+                            beDataBase *database = (beDataBase *)beMessenger_GetObject(self->_messenger, 0);
+                            for (k = 0;; k += 2) {
+                                const char *entry = g_itemDropCategories[k];
+                                if (entry == 0) {
+                                    break;
+                                }
+                                if (strcmp(entry, category) == 0) {
+                                    const char *model = g_itemDropCategories[k + 1] ? g_itemDropCategories[k + 1] : beDataBase_GetRecordString(database, itemId, "MODEL");
+                                    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", model, -2);
+                                    beMessenger_AppendVec3(self->_messenger, position);
+                                    beMessenger_AppendInt(self->_messenger, itemId);
+                                    beMessenger_AppendInt(self->_messenger, k / 2);
+                                    beMessenger_DispatchSelected(self->_messenger, "GENERATE");
+                                    dropped = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                } while (!dropped && self->_isPerfectDrop);
+            }
+            ObjectListOf<beBaseInfoRam> *enemies = ((EnemyRamListRef &)work->_enemyRamList).get();
+            igObject *removed = (igObject *)enemies->get(index);
+            IG_OBJECT_RELEASE(removed);
+            List_RemoveWordAt(enemies, index);
+            ((int *)enemies->_data)[enemies->_count] = 0;
+            count--;
+            index--;
+        }
+    }
+}
+
+/* Drops the list's share of every object it holds and empties it. */
+static inline void removeAll(igObjectList *list)
+{
+    int count = list->_count;
+    int i;
+    for (i = 0; i < count; i++) {
+        ((igObject **)list->_data)[i] = 0;
+    }
+    list->_count = 0;
+}
+
+static inline void releaseAll(igObjectList *list)
+{
+    int count = list->_count;
+    int i;
+    for (i = 0; i < count; i++) {
+        igObject *object = ((igObject **)list->_data)[i];
+        IG_OBJECT_RELEASE(object);
+    }
+    removeAll(list);
+}
+
+/* Resizes the list's storage to `capacity` items, unless it holds more than that. */
+static inline void setCapacity(igObjectList *list, int capacity)
+{
+    if (capacity >= list->_count) {
+        List_Reserve(list, capacity, 4);
+    }
+}
+
+/* The messages a beGenerater answers, in the order of its message enum. */
+enum beGeneraterMessage {
+    MSG_START,
+    MSG_STOP,
+    MSG_STOPREVERS,
+    MSG_RESET,
+    MSG_RESTART,
+    MSG_PERFECTDROP,
+    MSG_ONFREEZE,
+    MSG_OFFREEZE,
+};
+
+int beGenerater_OnMessageText(beGenerater *self, beBaseInfoRam *ram, int message)
+{
+    beGeneraterInfoRam *geneRam = (beGeneraterInfoRam *)ram;
+    beGeneraterInfoWork *work = (beGeneraterInfoWork *)geneRam->_work;
+    beGeneraterData *data = dataOf(geneRam);
+    if (beMessenger_GetStringCount(self->_messenger) != 0) {
+        const char *name = data->_name ? (const char *)data->_name : (const char *)emptyString;
+        if (strcmp(beMessenger_GetString(self->_messenger, 0), name) != 0) {
+            return 1;
+        }
+    }
+    switch (beMessenger_ResolveEnumValue(self->_messenger, FUN_00360b10(), message)) {
+    case MSG_STOP:
+        if (work != 0) {
+            work->_isFreeze = 1;
+        }
+        break;
+    case MSG_START:
+        if (work == 0) {
+            if (geneRam->_st0 == 0) {
+                geneRam->_isRun = 1;
+            }
+        } else {
+            work->_isFreeze = 0;
+        }
+        break;
+    case MSG_ONFREEZE:
+        if (work != 0) {
+            work->_isSystemFreeze = 1;
+        }
+        break;
+    case MSG_OFFREEZE:
+        if (work != 0) {
+            work->_isSystemFreeze = 0;
+        }
+        break;
+    case MSG_STOPREVERS:
+        if (work != 0) {
+            work->_isFreeze = 1;
+            igObjectList *enemies = (igObjectList *)work->_enemyRamList;
+            int count = enemies->_count;
+            for (int i = 0; i < count; i++) {
+                beMessenger_PushArgContext(self->_messenger);
+                beBaseInfoRam *enemyRam = ((beBaseInfoRam **)((igObjectList *)work->_enemyRamList)->_data)[i];
+                int ramNo = enemyRam->_ramNo;
+                const char *parentName = (const char *)((beGeneraterInfo *)enemyRam->_parentInfo)->_name;
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", parentName ? parentName : (const char *)emptyString, ramNo, "SQ_ERAS");
+                beMessenger_PopArgContext(self->_messenger);
+            }
+            releaseAll((igObjectList *)work->_enemyRamList);
+            setCapacity((igObjectList *)work->_enemyRamList, 0);
+            /* matching construct: hand search — the unsigned cast puts count first in the add */
+            work->_nokoriKazu = (unsigned)count + work->_nokoriKazu;
+            if (work->_nokoriKazu != 0 && geneRam->_st1 == 3) {
+                geneRam->_st1 = 2;
+                geneRam->_st3 = 0;
+                geneRam->_st2 = 0;
+            }
+        }
+        break;
+    case MSG_RESET: {
+        geneRam->_isRun = 0;
+        igObject *held = (igObject *)geneRam->_work;
+        IG_OBJECT_RELEASE(held);
+        geneRam->_work = 0;
+        geneRam->_st0 = 0;
+        geneRam->_st3 = 0;
+        geneRam->_st2 = 0;
+        geneRam->_st1 = 0;
+        break;
+    }
+    case MSG_RESTART: {
+        geneRam->_isRun = 1;
+        igObject *held = (igObject *)geneRam->_work;
+        IG_OBJECT_RELEASE(held);
+        geneRam->_work = 0;
+        geneRam->_st1 = 0;
+        geneRam->_st3 = 0;
+        geneRam->_st2 = 0;
+        break;
+    }
+    case MSG_PERFECTDROP:
+        if (beMessenger_GetInt(self->_messenger, 0) == 0) {
+            self->_isPerfectDrop = 0;
+        } else {
+            self->_isPerfectDrop = 1;
+        }
+        break;
+    }
+    return 1;
+}
+
+/* The game's string pool, created on first use. */
+static inline void *stringPool(void)
+{
+    if (g_stringPool[0] == 0) {
+        void *pool = StringPool_Allocate(16);
+        if (pool != 0) {
+            pool = StringPool_Construct(pool);
+        }
+        g_stringPool[0] = (int)pool;
+    }
+    return (void *)g_stringPool[0];
+}
+
+/* A pooled string keeps its chunk owner and reference count in the two words before its text. */
+static inline void releaseString(char *text)
+{
+    if (text != 0) {
+        int *header = (int *)(text - 8);
+        int count = header[1] - 1;
+        header[1] = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader(header[0], header);
+        }
+    }
+}
+
+/* Points the work's enemy name at the pooled copy of `name`, releasing the string it held. */
+static inline void setGeneEnemyName(beGeneraterInfoWork *work, const char *name)
+{
+    char *token = StringPool_Intern(stringPool(), name);
+    releaseString((char *)work->_geneEnemyName);
+    work->_geneEnemyName = (int)token;
+}
+
+/* The allocator an object's new members come from: its own, or the default one. */
+static inline int allocatorFor(void *object)
+{
+    int allocator = igObject_GetAllocator(object);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+}
+
+/* Frames at 60 per second, as timer nanoseconds. */
+static inline long long framesToTime(const float frames)
+{
+    return (long long)(1e9f * frames / 60.0f);
+}
+
+/* Spawns `count` enemies and counts them off the generator's remainder; true when none are left. */
+static inline bool spawnRemaining(beGenerater *self, beBaseInfoRam *ram, beGeneraterInfoWork *work, int count)
+{
+    work->_nokoriKazu -= beGenerater_SpawnEnemies(self, ram, count);
+    return work->_nokoriKazu <= 0;
+}
+
+/* Moves the generator on to its next state. */
+static inline void nextState(beGeneraterInfoRam *geneRam)
+{
+    geneRam->_st1 = geneRam->_st1 + 1;
+    geneRam->_st3 = 0;
+    geneRam->_st2 = 0;
+}
+
+
 int beGenerater_GetMeta(void)
 {
     return g_beGenerater_metaObject[0];
 }
 
+#pragma pop

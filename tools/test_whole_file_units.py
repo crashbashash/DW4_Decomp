@@ -331,8 +331,8 @@ class CxxRows(unittest.TestCase):
 class ExceptionsOn(unittest.TestCase):
     """A recovered MWCC C++ file with exceptions on, checked against retail: each member's record
     and table are kept, and a destructor the retail linker kept from another file is a duplicate."""
-    OWNER = 0x3a17c0
-    SOURCE = Path(verify.ROOT) / "src/game/beWeapon.cpp"
+    OWNER = 0x39b880
+    SOURCE = Path(verify.ROOT) / "src/game/beParticleCtrl2.cpp"
 
     def setUp(self):
         self.elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"

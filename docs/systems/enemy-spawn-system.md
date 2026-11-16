@@ -128,7 +128,7 @@ spawned on entering radar range of the row-5 points.
 - The runtime instance tracks the current point (`_genePoint`) and remaining
   count (`_nokoriKazu`).
 
-At spawn time **`FUN_00384540`** reads the position from
+At spawn time **`beGenerater_SpawnEnemies`** reads the position from
 `_genePosList[_genePoint]` (entry `+0x1c`, count at `+0x08`, data at `+0x10`; 12-byte
 xyz triples) and the facing from `_geneRotYRadianList[_genePoint]` (entry `+0x20`),
 converts the rotation to degrees (`× 57.29578`) and pushes both into the model's
@@ -209,8 +209,8 @@ Lua sd("GENERATER",…,"START","GENE-xx")
        └─ beGenerater_UpdateRam             per-frame state machine (state @ +0x1c)
             ├─ start modes: 'd' direct / 'r' radar (range vs +0x30) / 't' timer ('BOOT_TIMER')
             ├─ fill modes : 't' timer ('GENE_TIMER') / 'a' add / 'w' wipeout
-            ├─ FUN_00384800        drop pass for the dead
-            └─ FUN_00384540        spawn: position + facing + the MODELCTRL command
+            ├─ beGenerater_DropItemsForDead        drop pass for the dead
+            └─ beGenerater_SpawnEnemies        spawn: position + facing + the MODELCTRL command
                  └─ beNDMWMdlEnemy_OnGenerate   enemy model GENERATE
                       message ints: row → _recNo, HPMAX → _mHp and _hp
                       DATABASE 'enemy' GETDATABASE → row RARITY
@@ -249,11 +249,11 @@ the generator finishes). Four states:
 | state | meaning | does | advances when |
 |---|---|---|---|
 | 0 | **start condition** | `d` direct → fire now; `r` radar → fire when the player is within `_startData` (a squared distance); `t` timer → arm `BOOT_TIMER` with `_startData` and fire on expiry | the condition holds |
-| 1 | **first wave** | spawn up to `_geneMaxCount` (`FUN_00384540` returns how many landed) and set `_nokoriKazu = _geneCount − spawned` | always → 2, or → 3 if `_nokoriKazu < 1` |
+| 1 | **first wave** | spawn up to `_geneMaxCount` (`beGenerater_SpawnEnemies` returns how many landed) and set `_nokoriKazu = _geneCount − spawned` | always → 2, or → 3 if `_nokoriKazu < 1` |
 | 2 | **maintain** | run the drop pass for the dead, then the fill mode (§3) | `_nokoriKazu < 1` → 3 |
 | 3 | **finish** | drop pass with `param = 1`, which selects `_itemLastDataList` (`+0x14`) instead of `_itemDataList` (`+0x10`) | the live list is empty → call `_callLua` (`+0x3c`), clear the active flag, release the state object, reset to 0 |
 
-`FUN_00384540` is the spawn (not the drop pass): it reads
+`beGenerater_SpawnEnemies` is the spawn (not the drop pass): it reads
 `_genePosList[_genePoint]` (the cursor wrapping modulo the list's count) and
 `_geneRotYRadianList[_genePoint]`, adds `_pos` when `_genePosIsGlobal == 0`, converts
 the facing `× 57.29578` to degrees, stamps the `MODELCTRL` command sequence

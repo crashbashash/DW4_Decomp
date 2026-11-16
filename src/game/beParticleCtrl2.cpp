@@ -2,6 +2,9 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" void igSwitch_DisableAllChildren(int);
+extern "C" void igSwitch_EnableChild(void *, unsigned int);
+extern "C" void igSwitch_DisableChild(void *, unsigned int);
+extern "C" void igMatrix44f_Copy(void *, void *);
 extern "C" void igObject_Destroy(void *);
 extern "C" int beParticleCtrl2_GetInfoMeta(void);
 extern "C" int beParticleCtrl2_GetMeta(void);
@@ -24,6 +27,7 @@ extern "C" int beMessenger_GetVec3Count(int);
 extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, void *);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int igObject_GetAllocator(...);
+extern "C" void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram);
 extern "C" void beParticleCtrl2_Prepare(beParticleCtrl2 *arg0);
 extern "C" int g_beParticleCtrl2Info_metaObject[4];
 extern "C" int g_beParticleCtrl2_metaObject[4];
@@ -81,8 +85,8 @@ struct Clk {
     virtual void d21();
     virtual unsigned int t();
 };
-/* matching construct: dummy virtual slots so put() dispatches through retail vtable slot 35 (_transform) */
-struct Mtx {
+/* matching construct: dummy virtual slots so setMatrix() dispatches through igTransform's vtable slot 35 */
+struct igTransformSlots {
     virtual void d0();
     virtual void d1();
     virtual void d2();
@@ -118,7 +122,7 @@ struct Mtx {
     virtual void d32();
     virtual void d33();
     virtual void d34();
-    virtual void put(void *);
+    virtual void setMatrix(void *matrix);
 };
 extern "C" int beParticleCtrl2_OnMessage(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2);
 
@@ -163,6 +167,75 @@ void beParticleCtrl2_Prepare(beParticleCtrl2 *arg0) {
             i++;
             o1 += 4;
         } while (i < n1);
+    }
+}
+
+/* beParticleCtrl2InfoRam::_st0: a ram shows its switch children, runs until its end time and then hides them. */
+enum ParticleState { PARTICLE_START, PARTICLE_RUN, PARTICLE_STOP };
+
+static inline ParticleTimer *TimerOf(beParticleCtrl2InfoRam *ram) {
+    return (ParticleTimer *)ram->_particleTimer;
+}
+
+static inline int StateOf(const beParticleCtrl2InfoRam *ram) {
+    return ram->_st0;
+}
+
+static inline void AdvanceState(beParticleCtrl2InfoRam *ram) {
+    ram->_st0 = ram->_st0 + 1;
+    ram->_st3 = 0;
+    ram->_st2 = 0;
+    ram->_st1 = 0;
+}
+
+/* Follows the lock node's position, then steps the ram through its start, run and stop states. */
+void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram) {
+    beParticleCtrl2Info *info = (beParticleCtrl2Info *)ram->_parentInfo;
+    if (ram->_isRun != 0) {
+        beParticleCtrl2InfoWork *work = (beParticleCtrl2InfoWork *)ram->_work;
+        if (work != 0) {
+            float matrix[16];
+            igMatrix44f_SetIdentity(matrix);
+            igMatrix44f_Copy(matrix, ((igTransform *)work->_positionLockNode)->_m);
+            igMatrix44f_TranslateLocal(matrix, work->_positionLockOffset);
+            ((igTransformSlots *)ram->_transform)->setMatrix(matrix);
+        }
+        switch (StateOf(ram)) {
+        case PARTICLE_START:
+            igSwitch_EnableChild((void *)info->_mainSwitch, 0);
+            igSwitch_EnableChild((void *)info->_subSwitch, ram->_ramNo);
+            TimerOf(ram)->_time = -1;
+            TimerOf(ram)->_timeRunning = 1;
+            ((igParticleAttr **)((igAttrList *)TimerOf(ram)->_attributes)->_data)[0]->_bUseCurrentTime = 1;
+            AdvanceState(ram);
+            break;
+        case PARTICLE_RUN:
+            if (((igInsightCore *)self->_insight)->_worldTime - TimerOf(ram)->_timeBias < info->_endTimeLong) {
+                break;
+            }
+            AdvanceState(ram);
+        case PARTICLE_STOP: {
+            TimerOf(ram)->_timeRunning = 0;
+            igSwitch_DisableChild((void *)info->_subSwitch, ram->_ramNo);
+            ram->_isRun = 0;
+            igRelease((igObject *)ram->_work);
+            ram->_work = 0;
+            igObjectList *children = (igObjectList *)((igSwitch *)info->_subSwitch)->_childList;
+            int count = children != 0 ? children->_count : 0;
+            igBitMask *shown = (igBitMask *)((igSwitch *)info->_subSwitch)->_childMask;
+            unsigned char anyShown = 0;
+            for (int i = 0; i < count; i++) {
+                if (((1 << (i & 31)) & ((unsigned *)shown->_data)[(unsigned)i >> 5]) != 0) {
+                    anyShown = 1;
+                    break;
+                }
+            }
+            if (anyShown == 0) {
+                igSwitch_DisableChild((void *)info->_mainSwitch, 0);
+            }
+            break;
+        }
+        }
     }
 }
 
@@ -256,11 +329,11 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg
             if (f20 != 0.0f) {
                 FUN_00191670(spB0, g_vec3ZAxis, f20);
             }
-            ((Mtx *)arg1->_transform)->put(spB0);
+            ((igTransformSlots *)arg1->_transform)->setMatrix(spB0);
         } else {
             int sp70[16];
             igMatrix44f_SetIdentity(sp70);
-            ((Mtx *)arg1->_transform)->put(sp70);
+            ((igTransformSlots *)arg1->_transform)->setMatrix(sp70);
         }
         arg1->_isRun = 1;
         arg1->_st0 = 0;

@@ -61,7 +61,7 @@ static int g_beNumberCtrlInfo_messageValues[] = {
     0, 1, 2, 3,
 };
 
-igMetaEnum *FUN_0034e300(void) {
+igMetaEnum *beNumberCtrl_GetMessageEnum(void) {
     if (g_beNumberCtrlInfo_messageMetaEnum == 0) {
         g_beNumberCtrlInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beNumberCtrlInfo_messageNames, g_beNumberCtrlInfo_messageValues, 4);
     }

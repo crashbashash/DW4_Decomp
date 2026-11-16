@@ -135,7 +135,7 @@ static int g_beNDMWLogoCtrlData_messageValues[] = {
     0,
 };
 
-igMetaEnum *FUN_003c22e0(void) {
+igMetaEnum *beNDMWLogoCtrlData_GetMessageEnum(void) {
     if (g_beNDMWLogoCtrlData_messageMetaEnum == 0) {
         g_beNDMWLogoCtrlData_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWLogoCtrlData_messageNames, g_beNDMWLogoCtrlData_messageValues, 1);
     }

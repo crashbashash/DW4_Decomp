@@ -1,4 +1,4 @@
-void FUN_0019d3f0(int arg0) {
+void igModelViewMatrixBoneSelect_CreateInstance(int arg0) {
     igModelViewMatrixBoneSelect_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igModelViewMatrixBoneSelect_metaObject, arg0);
 }

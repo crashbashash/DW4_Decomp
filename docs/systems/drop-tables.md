@@ -11,7 +11,7 @@ and the tables are read out of the RAM of a save state.
 
 | Path | Who rolls the table | Used by |
 |---|---|---|
-| **Generator drop** | `FUN_00384800`, called from the `beGenerater` update (`0x384ed0`, `0x385140`, `0x385300`) | `GENE-*` enemies, and the `GBOX-*` / `GBRL-*` / `GWCS-*` prop generators |
+| **Generator drop** | `beGenerater_DropItemsForDead`, called from the `beGenerater` update (`0x384ed0`, `0x385140`, `0x385300`) | `GENE-*` enemies, and the `GBOX-*` / `GBRL-*` / `GWCS-*` prop generators |
 | Lua-placed props | no generator exists, so nothing rolls | props placed by `MODELCTRL … GENERATE` (e.g. the practice stage's rocks/bushes) |
 
 So a breakable's drop table lives on whatever *generator* spawned it. The
@@ -45,7 +45,7 @@ beGeneraterData                       (vtable 0x535EB0)
 * `beGenerater` also carries an `_isPerfectDrop` field (`0x5050b8` is its reflection name
   string, not the flag; see §5) and a `PERFECTDROP` method.
 
-### The roll (`FUN_00384800`)
+### The roll (`beGenerater_DropItemsForDead`)
 
 ```c
 r = RNG() % 10000;
@@ -110,7 +110,7 @@ generator holds an explicit pointer into it.** There is no name lookup, no
 inheritance and no fallback:
 
 * The reference is a raw pointer on the generator itself: `beGeneraterData +0x40`
-  → `beGeneraterPlayerData` → `+0x10`/`+0x14`. `FUN_00384800`'s caller loads it and
+  → `beGeneraterPlayerData` → `+0x10`/`+0x14`. `beGenerater_DropItemsForDead`'s caller loads it and
   rolls; nothing anywhere resolves a list *by name*.
 * **There is no "zone default" to fall back to.** A generator whose list is empty
   drops nothing. Verified live: zeroing every weight in the active
@@ -333,7 +333,7 @@ The live split of the three lists is 11 / 25 / 21 = 57 references.
 | `conItem` | 2 | 0 | 50 (0.50 %) | HP Disk γ |
 | `insItem` | 2 | 0 | 50 (0.50 %) | x-data |
 
-**The "last enemy" list is inert here.** `FUN_00384800`'s caller picks
+**The "last enemy" list is inert here.** `beGenerater_DropItemsForDead`'s caller picks
 `_itemLastDataList` (+0x14) instead of `_itemDataList` (+0x10) when the generator is
 down to its final enemy (`0x384948: bne v0,v1` then `lw v0,20(a0)` vs `lw v0,16(a0)`).
 **All 24 spawners in `stagGF01` have the two lists byte-identical**, so the rule never

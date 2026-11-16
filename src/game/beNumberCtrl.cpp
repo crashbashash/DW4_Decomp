@@ -1,45 +1,47 @@
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
+#include "dw4/igVertexArrayLock.h"
 
 extern "C" void beNumberCtrl_Prepare(void);
 extern "C" int beNumberCtrl_GetInfoMeta(void);
+extern "C" void beNumberCtrl_UpdateRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram);
+extern "C" void beNumberCtrl_DisplayNumber(beNumberCtrl *self, beNumberCtrlInfoRam *ram, int number, int reserved);
+extern "C" int beNumberCtrl_CalcChangeNum(beNumberCtrl *self, int difference);
+extern "C" void beNumberCtrl_OnAddRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram);
+extern "C" int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMessengerWork *work);
 extern "C" int beNumberCtrl_GetMeta(void);
-extern "C" int FUN_003a4e40(void *arg0, int arg1);
-extern "C" void *beNumberCtrlInfoWork_Create(...);
-extern "C" int FUN_0034e300(...);
-extern "C" int FUN_003a4b20(...);
-extern "C" int Memory_GetAllocatorBySelector(...);
-extern "C" int beMessenger_AppendInt(...);
-extern "C" int beMessenger_GetInt(...);
-extern "C" int beMessenger_GetIntCount(...);
-extern "C" int beMessenger_ResolveEnumValue(...);
-extern "C" void igObject_Destroy(void *);
-extern "C" int igObject_GetAllocator(...);
+extern "C" beNumberCtrlInfoWork *beNumberCtrlInfoWork_Create(int allocator);
+extern "C" int beNumberCtrl_GetMessageEnum(void);
+extern "C" int igVertexArrayLock_Init(igVertexArrayLock *lock);
+extern "C" int igObject_GetAllocator(void *object);
+extern "C" int Memory_GetAllocatorBySelector(int selector);
+extern "C" int beMessenger_ResolveEnumValue(int messenger, int enumeration, int name);
+extern "C" int beMessenger_RegisterReceiver(int messenger, void *receiver, char *group, int *name, int ramNo);
+extern "C" int beMessenger_AppendInt(int messenger, int value);
+extern "C" int beMessenger_GetIntCount(int messenger);
+extern "C" int beMessenger_GetInt(int messenger, int index);
 extern "C" int g_beNumberCtrlInfo_metaObject[4];
 extern "C" int g_beNumberCtrl_metaObject[4];
-struct UnidentifiedNameHolder { char pad8[8]; int f8; };
-struct UnidentifiedReceiverObject { char pad8[8]; int f8; UnidentifiedNameHolder *f12; };
-extern "C" int beMessenger_RegisterReceiver(int, UnidentifiedReceiverObject *, void *, int *, int);
-extern "C" int emptyString[4];
-extern "C" int NUMBERCTRL_4[4];
-extern "C" void beNumberCtrl_OnAddRam(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1);
-/* igObject header (vtable, reference count); the count at +4 is not a reflected field */
-/* unreflected message argument: only the command word at +20 is read */
-struct MessageCommandArg { char p0[20]; int command; };
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-/* matching construct: stack smart pointer whose destructor releases the object, reproduces the retail cleanup path */
-struct Ref {
-    igObject *p;
-    Ref(void *x) { p = (igObject *)x; }
-    ~Ref() {
-        igObject *q = p;
-        if (q != 0) {
-            q->_refCount = q->_refCount - 1;
-            if (((unsigned long long)(long long)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q);
-        }
-    }
-};
-extern "C" int beNumberCtrl_OnMessage(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2);
+extern "C" int emptyString[4];
+extern "C" char NUMBERCTRL_4[];
+
+/* The messages a beNumberCtrl answers, in the order of its message enum. */
+enum NumberCtrlMessage { kGetValue = 0, kSetValue = 1, kSetValueDirect = 2, kAddValue = 3 };
+
+/* The allocator new members come from: the owner's own, or the user pool. */
+static inline int allocatorFor(void *owner) {
+    int allocator = igObject_GetAllocator(owner);
+    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+}
+
+/* Makes `work` the ram's counter record, retaining it and releasing the one it held. */
+static inline void setWork(beNumberCtrlInfoRam *ram, igObject *work) {
+    if (work != 0) work->_refCount = work->_refCount + 1;
+    igRelease((igObject *)ram->_work);
+    ram->_work = (int)work;
+}
 
 void beNumberCtrl_Prepare(void)
 {
@@ -50,101 +52,187 @@ int beNumberCtrl_GetInfoMeta(void)
     return g_beNumberCtrlInfo_metaObject[0];
 }
 
-int FUN_003a4e40(void *arg0, int arg1) {
-    int v = 0;
-    if (arg1 > 0) {
-        v = arg1 / 128 + 1;
-        if (v >= 100) {
-            v = 99;
+/* Counts the displayed number toward the real one by the change step, one step a frame. */
+void beNumberCtrl_UpdateRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram) {
+    switch (ram->_st0) {
+    case 0:
+    default:
+        if (ram->_work == 0) {
+            igSmartPointer<beNumberCtrlInfoWork> created(beNumberCtrlInfoWork_Create(allocatorFor(self)));
+            setWork(ram, (igObject *)created.p);
         }
-        if (v % 10 == 0) {
-            v++;
+        ram->_st0 = ram->_st0 + 1;
+        ram->_st3 = 0;
+        ram->_st2 = 0;
+        ram->_st1 = 0;
+    case 1: {
+        int next;
+        beNumberCtrlInfoWork *work = (beNumberCtrlInfoWork *)ram->_work;
+        if (work->_dispNum != work->_realNum) {
+            next = work->_dispNum + work->_changeNum;
+            if (work->_changeNum > 0) {
+                if (work->_realNum < next) next = work->_realNum;
+            } else if (work->_changeNum < 0) {
+                if (next < work->_realNum) next = work->_realNum;
+            } else {
+                next = work->_realNum;
+            }
+            beNumberCtrl_DisplayNumber(self, ram, next, 0);
+            work->_dispNum = next;
         }
-    } else if (arg1 < 0) {
-        v = arg1 / 128 - 1;
-        if (v < -99) {
-            v = -99;
+        break;
+    }
+    case 2:
+        break;
+    case 3:
+        break;
+    }
+}
+
+/* The digit lists as the classes hold them, with their inline accessors. */
+struct NumVerInsideDataList : beNumVerInsideDataList {
+    int getCount() const { return _count; }
+    beNumVerInsideData *get(int index) const { return ((beNumVerInsideData **)_data)[index]; }
+};
+struct NumVerDataList : beNumVerDataList {
+    int getCount() const { return _count; }
+    beNumVerData *get(int index) const { return ((beNumVerData **)_data)[index]; }
+};
+
+static inline NumVerDataList *Digits(const beNumberCtrlInfoRam &ram) { return (NumVerDataList *)ram._numList; }
+static inline NumVerInsideDataList *Corners(beNumVerData *digit) { return (NumVerInsideDataList *)digit->_verDataList; }
+
+static inline float LeftEdge(int digit, const float width) { return (float)digit * width; }
+
+/* The vertex array of the number's geometry: the first attribute's. */
+static inline igVertexArray *VertexArray(const beNumberCtrlInfoRam *ram) {
+    igGeometryAttr *geometryAttr = ((igGeometryAttr **)((igObjectList *)((igGeometry *)ram->_geometry)->_attributes)->_data)[0];
+    return (igVertexArray *)geometryAttr->_vertexArray;
+}
+
+/* Shows `number`: each digit takes its decimal digit, lowest first (leading zeros 0 or blank by
+ * _mode, a negative number all of them), and each digit's six corners take the texture coordinates
+ * of its cell in the digit strip. */
+void beNumberCtrl_DisplayNumber(beNumberCtrl *self, beNumberCtrlInfoRam *ram, int number, int reserved) {
+    if (number >= 0) {
+        /* matching construct: register-allocator tracer — declared ahead of the loop index, the digit takes t2 and the index t1 */
+        int digit;
+        for (int i = 0; i < Digits(*ram)->getCount(); i++) {
+            if (number != 0 || i == 0) digit = number % 10;
+            else if (ram->_mode == 0) digit = 0;
+            else digit = -1;
+            Digits(*ram)->get(i)->_disp = digit;
+            number = number / 10;
         }
-        if (v % 10 == 0) {
-            v--;
+    } else {
+        for (int i = 0; i < Digits(*ram)->getCount(); i++) {
+            if (ram->_mode == 0) Digits(*ram)->get(i)->_disp = 0;
+            else Digits(*ram)->get(i)->_disp = -1;
         }
     }
-    return v;
+    igVertexArray *array = VertexArray(ram);
+    igVertexArrayLock texCoords;
+    igVertexArrayLock_Init(&texCoords);
+    texCoords.firstVertex = 0;
+    texCoords.component = 3;
+    texCoords.componentIndex = 0;
+    texCoords.count = array->_numVerts;
+    ((igVertexArrayView *)array)->lock(&texCoords, 0);
+    int stride = texCoords.getStride();
+    for (int i = 0; i < Digits(*ram)->getCount(); i++) {
+        for (int k = 0; k < 6; k++) {
+            beNumVerData *digit = Digits(*ram)->get(i);
+            beNumVerInsideData *corner = Corners(digit)->get(k);
+            float *uv = (float *)(texCoords.getData() + stride * corner->_index);
+            if (digit->_disp >= 0) {
+                switch (corner->_kind) {
+                case 0:
+                    uv[0] = LeftEdge(digit->_disp, ram->_offsetNext);
+                    uv[1] = 0.0f;
+                    break;
+                case 1:
+                    uv[0] = ram->_offsetNext + LeftEdge(digit->_disp, ram->_offsetNext);
+                    uv[1] = 0.0f;
+                    break;
+                case 2:
+                    uv[0] = LeftEdge(digit->_disp, ram->_offsetNext);
+                    uv[1] = 1.0f;
+                    break;
+                case 3:
+                    uv[0] = ram->_offsetNext + LeftEdge(digit->_disp, ram->_offsetNext);
+                    uv[1] = 1.0f;
+                    break;
+                }
+            } else {
+                uv[0] = 0.0f;
+                uv[1] = 0.0f;
+            }
+        }
+    }
+    ((igVertexArrayView *)array)->unlock(&texCoords, 0);
 }
 
-void beNumberCtrl_OnAddRam(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1) {
-    int *var_a3;
-    int t = arg1->f8;
-    var_a3 = (int *)(((UnidentifiedNameHolder *)arg1->f12)->f8);
-    var_a3 = var_a3 != 0 ? var_a3 : &emptyString[0];
-    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &NUMBERCTRL_4[0], var_a3, t);
+/* The step a frame for closing `difference`: one per 128 plus one, at most 99, never a multiple
+ * of ten so the lowest digit keeps turning. */
+int beNumberCtrl_CalcChangeNum(beNumberCtrl *self, int difference) {
+    int step = 0;
+    if (difference > 0) {
+        step = difference / 128 + 1;
+        if (step >= 100) step = 99;
+        if (step % 10 == 0) step++;
+    } else if (difference < 0) {
+        step = difference / 128 - 1;
+        if (step < -99) step = -99;
+        if (step % 10 == 0) step--;
+    }
+    return step;
 }
 
-int beNumberCtrl_OnMessage(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2) {
-    int s3;
-    int var;
-    beNumberCtrlInfoWork *s0;
-    s3 = arg2->command;
-    beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0034e300(), s3);
-    s0 = (beNumberCtrlInfoWork *)arg1->_work;
-    switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0034e300(), s3)) {
-    case 0:
-        if (s0 != 0) {
-            beMessenger_AppendInt(arg0->_messenger, s0->_realNum);
-        }
+/* Registers the ram with the messenger under NUMBERCTRL, by its info's name and its ram number. */
+void beNumberCtrl_OnAddRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram) {
+    int ramNo = ram->_ramNo;
+    int *name = (int *)((beNumberCtrlInfo *)ram->_parentInfo)->_name;
+    name = name != 0 ? name : emptyString;
+    beMessenger_RegisterReceiver(self->_messenger, ram, NUMBERCTRL_4, name, ramNo);
+}
+
+/* GETVALUE answers the real number; SETVALUE shows a number at once, ADDVALUE adds to the real
+ * number and has the display count toward it. */
+int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMessengerWork *work) {
+    int value = work->_message;
+    beMessenger_ResolveEnumValue(self->_messenger, beNumberCtrl_GetMessageEnum(), value);
+    beNumberCtrlInfoWork *counter = (beNumberCtrlInfoWork *)ram->_work;
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beNumberCtrl_GetMessageEnum(), value)) {
+    case kGetValue:
+        if (counter != 0) beMessenger_AppendInt(self->_messenger, counter->_realNum);
         return 1;
-    case 1:
-        if (s0 == 0) {
-            igObject *o;
-            int var;
-            var = igObject_GetAllocator(arg0);
-            var = g_useOwnerAllocator != 0 ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-            Ref r((igObject *)beNumberCtrlInfoWork_Create(var));
-            s0 = (beNumberCtrlInfoWork *)r.p;
-            if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;
-            o = ((igObject *)arg1->_work);
-            if (o != 0) {
-                o->_refCount = o->_refCount - 1;
-                if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o);
-            }
-            arg1->_work = (int)s0;
-            s0 = (beNumberCtrlInfoWork *)r.p;
+    case kSetValue:
+        if (counter == 0) {
+            igSmartPointer<beNumberCtrlInfoWork> created(beNumberCtrlInfoWork_Create(allocatorFor(self)));
+            setWork(ram, (igObject *)created.p);
+            counter = created.p;
         }
-        if (beMessenger_GetIntCount(arg0->_messenger) == 0) return 1;
-        s3 = beMessenger_GetInt(arg0->_messenger, 0);
-        if (s3 < 0) s3 = 0;
-        if (arg1->_maxValue < s3) s3 = arg1->_maxValue;
-        FUN_003a4b20(arg0, arg1, s3, 0);
-        s0->_dispNum = s3;
-        s0->_realNum = s3;
-        s0->_changeNum = 0;
+        if (beMessenger_GetIntCount(self->_messenger) == 0) return 1;
+        value = beMessenger_GetInt(self->_messenger, 0);
+        if (value < 0) value = 0;
+        if (ram->_maxValue < value) value = ram->_maxValue;
+        beNumberCtrl_DisplayNumber(self, ram, value, 0);
+        counter->_dispNum = value;
+        counter->_realNum = value;
+        counter->_changeNum = 0;
         return 1;
-    case 3:
-        if (s0 == 0) {
-            igObject *o;
-            int var;
-            var = igObject_GetAllocator(arg0);
-            var = g_useOwnerAllocator != 0 ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-            Ref r((igObject *)beNumberCtrlInfoWork_Create(var));
-            s0 = (beNumberCtrlInfoWork *)r.p;
-            if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;
-            o = ((igObject *)arg1->_work);
-            if (o != 0) {
-                o->_refCount = o->_refCount - 1;
-                if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o);
-            }
-            arg1->_work = (int)s0;
-            s0 = (beNumberCtrlInfoWork *)r.p;
+    case kAddValue:
+        if (counter == 0) {
+            igSmartPointer<beNumberCtrlInfoWork> created(beNumberCtrlInfoWork_Create(allocatorFor(self)));
+            setWork(ram, (igObject *)created.p);
+            counter = created.p;
         }
-        if (beMessenger_GetIntCount(arg0->_messenger) == 0) return 1;
-        s3 = s0->_realNum;
-        s0->_realNum = s3 + beMessenger_GetInt(arg0->_messenger, 0);
-        if (s0->_realNum < 0) s0->_realNum = 0;
-        {
-            int v1 = arg1->_maxValue;
-            if (v1 < s0->_realNum) s0->_realNum = v1;
-        }
-        s0->_changeNum = FUN_003a4e40(arg0, s0->_realNum - s0->_dispNum);
+        if (beMessenger_GetIntCount(self->_messenger) == 0) return 1;
+        value = counter->_realNum;
+        counter->_realNum = value + beMessenger_GetInt(self->_messenger, 0);
+        if (counter->_realNum < 0) counter->_realNum = 0;
+        if (ram->_maxValue < counter->_realNum) counter->_realNum = ram->_maxValue;
+        counter->_changeNum = beNumberCtrl_CalcChangeNum(self, counter->_realNum - counter->_dispNum);
         return 1;
     default:
         return 0;

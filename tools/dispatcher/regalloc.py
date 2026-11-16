@@ -129,7 +129,7 @@ def match_instructions(asm_o, asm_r):
 
 def parse_words(report):
     ours, retail = [], []
-    for m in re.finditer(r"\[\s*(\d+)\] retail ([0-9a-f]{8})  ours ([0-9a-f]{8})", report):
+    for m in re.finditer(r"\[\s*(\d+)\] retail ([0-9a-f]{8})\s+ours ([0-9a-f]{8})", report):
         retail.append(int(m.group(2), 16))
         ours.append(int(m.group(3), 16))
     return ours, retail

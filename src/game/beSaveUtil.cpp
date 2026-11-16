@@ -1,11 +1,12 @@
 #include "dw4/reflected.h"
+#include "dw4/igobject_release.h"
+#include "dw4/igSmartPointer.h"
+#include "dw4/igTDataList.h"
 
-extern "C" int igObject_Destroy(...);
 extern "C" int beSvConnectCheck_PollMultitap(int, int);
 extern "C" int beSvConnectCheck_Poll(int);
 extern "C" int beSvConnectCheck_FillDeliver(int, int);
 extern "C" void __dl__FPv(...);
-extern "C" void **FUN_003af090(void **arg0, short arg1);
 extern "C" int beSaveUtil_GetInfoMeta(void);
 extern "C" int beSaveUtil_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
@@ -35,12 +36,11 @@ class A { public: char pad[32]; R *obj; };
 extern "C" unsigned char FUN_003ae680(A *arg0, B *arg1, R *arg2);
 typedef struct S0 { char pad36[36]; int f24; } S0;
 typedef struct S1 { char pad48[48]; int f30; } S1;
-extern "C" void FUN_003ae770(S0 *arg0, S1 *arg1);
+extern "C" void beSaveUtil_PollConnectCheck(S0 *arg0, S1 *arg1);
 extern "C" void beSaveUtil_Prepare(beSaveUtil *arg0);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" ObjectRefWord *FUN_003af010(ObjectRefWord *self,int delete_storage);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 extern "C" int g_beSaveUtilInfo_metaObject[4];
 extern "C" int g_beSaveUtil_metaObject[4];
@@ -77,6 +77,27 @@ struct Deliver {
 };
 extern "C" int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, MsgArg *msg);
 
+extern "C" beSvConnectCheck *beSvConnectCheck_Create(int allocator);
+extern "C" beSvEndApi *beSvEndApi_Create(int allocator);
+extern "C" beSvStartApi *beSvStartApi_Create(int allocator);
+extern "C" void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info);
+extern "C" unsigned char g_useOwnerAllocator;
+
+/* The request slots a beSaveApi object answers after getMetaObject (slot 20). */
+class beSaveApiVirtuals {
+public:
+    virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
+    virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
+    virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
+    virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
+    virtual void slot20();
+    virtual void start(beSvDeliver *deliver);
+    virtual int poll();
+    virtual void report(beSvDeliver *deliver);
+};
+#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
+
 unsigned char FUN_003ae680(A *arg0, B *arg1, R *arg2) {
     unsigned char var_v0;
     R *temp_a0;
@@ -111,7 +132,7 @@ unsigned char FUN_003ae680(A *arg0, B *arg1, R *arg2) {
     return var_v0;
 }
 
-void FUN_003ae770(S0 *arg0, S1 *arg1) {
+void beSaveUtil_PollConnectCheck(S0 *arg0, S1 *arg1) {
     beSvConnectCheck_PollMultitap(arg0->f24, arg1->f30);
     beSvConnectCheck_Poll(arg0->f24);
     beSvConnectCheck_FillDeliver(arg0->f24, arg1->f30);
@@ -143,36 +164,160 @@ void beSaveUtil_Prepare(beSaveUtil *arg0) {
     }
 }
 
-ObjectRefWord *FUN_003af010(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+/* The deliver's per-slot int lists (connected slots, free size, free files, format state, total size). */
+struct SlotList : igTDataList<int> {
+    void clear() {
+        if (_count > 0) {
+            _count = 0;
         }
-        if((short)delete_storage>0) __dl__FPv(self);
     }
-    return self;
-}
+    void append(const int &value) {
+        int n = count();
+        if (n < _capacity) {
+            _count = _count + 1;
+        } else {
+            List_Resize(this, n + 1, sizeof(int));
+        }
+        _data[n] = value;
+    }
+};
 
-void **FUN_003af090(void **arg0, short arg1) {
-    S_temp_a0 *temp_a0;
+#define DELIVERY(info) ((beSvDeliver *)(info)->_deliver)
+#define API(self) ((beSaveApiVirtuals *)(self)->_api)
 
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+/* Steps one save request through its life: _st1 0 starts the card session (the connect-check object
+ * and the slot lists are made, then a start request is issued), 1 serves requests (polling the
+ * cards, one request at a time) and 2 ends the session with an end request; _st2 is the sub-step
+ * of a request, issued at 0 and polled at 1. _st0 3 is idle once the session has ended. */
+void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info) {
+    int allocator;
+    int i;
+    SlotList *list;
+    igObject *old;
+    switch (info->_st0) {
+    case 0:
+        break;
+    case 1:
+        switch (info->_st1) {
+        case 0:
+            switch (info->_st2) {
+            case 0:
+                if (self->_connectCheck == 0) {
+                    ALLOC(allocator, self)
+                    old = (igObject *)self->_connectCheck;
+                    IG_OBJECT_RELEASE(old);
+                    self->_connectCheck = (int)beSvConnectCheck_Create(allocator);
+                }
+                /* matching construct: register trace — one `list` re-pointed at each deliver list: the appends'
+                 * lists are its later lifetimes, numbered after the append's count, so they take s3 and the count s4 */
+                list = (SlotList *)DELIVERY(info)->_actConnect;
+                list->clear();
+                list = (SlotList *)DELIVERY(info)->_freeSizeList;
+                list->clear();
+                list = (SlotList *)DELIVERY(info)->_freeFileList;
+                list->clear();
+                list = (SlotList *)DELIVERY(info)->_formatList;
+                list->clear();
+                list = (SlotList *)DELIVERY(info)->_totalSizeList;
+                list->clear();
+                /* The test reads the deliver through the reference field's `operator->() const`, a temporary of its
+                 * own that is not shared with the body's plain read of the field. */
+                for (i = 0; i < ((beSvPlatBaseData *)((igSmartPointer<beSvDeliver> &)info->_deliver)->_platformData)->_connectMax; i++) {
+                    list = (SlotList *)DELIVERY(info)->_actConnect;
+                    list->append(0);
+                    list = (SlotList *)DELIVERY(info)->_freeSizeList;
+                    list->append(0);
+                    list = (SlotList *)DELIVERY(info)->_freeFileList;
+                    list->append(0);
+                    list = (SlotList *)DELIVERY(info)->_formatList;
+                    list->append(0);
+                    list = (SlotList *)DELIVERY(info)->_totalSizeList;
+                    list->append(0);
+                }
+                {
+                    ALLOC(allocator, self)
+                    igSmartPointer<beSvStartApi> request(beSvStartApi_Create(allocator));
+                    ((beSaveApiVirtuals *)request.p)->start(DELIVERY(info));
+                    *(igSmartPointer<igObject> *)&self->_api = (igObject *)request.p;
+                    info->_st2 = info->_st2 + 1;
+                    info->_st3 = 0;
+                }
+                break;
+            case 1:
+                if (API(self)->poll() != 0) {
+                    *(igSmartPointer<igObject> *)&self->_api = 0;
+                    info->_isRdy = 1;
+                    info->_st1 = 1;
+                    info->_st3 = 0;
+                    info->_st2 = 0;
+                }
+                break;
             }
+            break;
+        case 1:
+            beSaveUtil_PollConnectCheck((S0 *)self, (S1 *)info);
+            switch (info->_st2) {
+            case 0:
+                break;
+            case 1:
+                if (self->_api == 0) {
+                    info->_st2 = 0;
+                    info->_st3 = 0;
+                } else if (API(self)->poll() != 0) {
+                    API(self)->report(DELIVERY(info));
+                    info->_st2 = 0;
+                    info->_st3 = 0;
+                    *(igSmartPointer<igObject> *)&self->_api = 0;
+                }
+                break;
+            }
+            break;
+        case 2:
+            switch (info->_st2) {
+            case 0: {
+                ALLOC(allocator, self)
+                igSmartPointer<beSvEndApi> request(beSvEndApi_Create(allocator));
+                ((beSaveApiVirtuals *)request.p)->start(DELIVERY(info));
+                *(igSmartPointer<igObject> *)&self->_api = (igObject *)request.p;
+                info->_st2 = info->_st2 + 1;
+                info->_st3 = 0;
+                break;
+            }
+            case 1:
+                if (API(self)->poll() != 0) {
+                    *(igSmartPointer<igObject> *)&self->_api = 0;
+                    info->_st0 = 2;
+                    info->_st3 = 0;
+                    info->_st2 = 0;
+                    info->_st1 = 0;
+                }
+                break;
+            }
+            break;
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        break;
+    case 2:
+        list = (SlotList *)DELIVERY(info)->_actConnect;
+        list->clear();
+        list = (SlotList *)DELIVERY(info)->_freeSizeList;
+        list->clear();
+        list = (SlotList *)DELIVERY(info)->_freeFileList;
+        list->clear();
+        list = (SlotList *)DELIVERY(info)->_formatList;
+        list->clear();
+        info->_isRdy = 0;
+        info->_st0 = 3;
+        info->_st3 = 0;
+        info->_st2 = 0;
+        info->_st1 = 0;
+        break;
+    case 3:
+        break;
     }
-    return arg0;
 }
+
+#undef API
+#undef DELIVERY
 
 int beSaveUtil_GetInfoMeta(void)
 {
@@ -185,7 +330,6 @@ void beSaveUtil_OnAddRam(beSaveUtil * p0, int p1, char * p2)
 }
 
 #define DELIVER(r) ((Deliver *)(r)->_deliver)
-#define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
 #define NEW_REQUEST(r, kind, create) ALLOC(a, self); RP<kind> r((RC *)create(a));
 #define TAKE_SLOT_ARGUMENT(self, info) \
     DELIVER(info)->slot = -1; \
@@ -327,7 +471,6 @@ int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, MsgArg *msg)
 
 #undef TAKE_SLOT_ARGUMENT
 #undef NEW_REQUEST
-#undef ALLOC
 #undef DELIVER
 
 int beSaveUtil_GetMeta(void)

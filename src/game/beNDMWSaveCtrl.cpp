@@ -1,42 +1,64 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#define ALLOC(dst, obj) { int alloc = igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
 
-extern "C" int beNDMWSaveCtrl_GetInfoMeta(void);
-extern "C" int beNDMWSaveCtrl_GetMeta(void);
-extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
+#pragma push
+#pragma readonly_strings on
+
+#define OWNER_ALLOCATOR(dst, obj) { int alloc = igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
+/* The per-player work records of the common interface, and its memory-card utility. */
+#define PLW(common, i) (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)(common)->_flagWork)->_data)[i])
+#define MCU(common) ((beNDMWMcUtilCtrl *)(common)->_mcUtilCtrl)
+
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" int FUN_003bd390(...);
-extern "C" int beNDMWMcUtilCtrl__Init(...);
-extern "C" int ObjectList_AppendRetained(int, int);
-extern "C" int beMessenger_AppendObject(...);
-extern "C" int beMessenger_GetObjectCount(...);
-extern "C" int beMessenger_ResolveEnumValue(...);
 extern "C" int igProperty_FindByName(...);
-extern "C" igObject * igInsightCore_FindManager(...);
-extern "C" int g_bePadManager_metaObject[4];
-extern "C" void beNDMWSaveCtrl_Prepare(beNDMWSaveCtrl *arg0);
-extern "C" int g_beNDMWSaveCtrlInfo_metaObject[4];
-extern "C" int g_beNDMWSaveCtrl_metaObject[4];
-extern "C" char SAVECTRL_2[];
-extern "C" void beNDMWSaveCtrl_OnAddRam(beNDMWSaveCtrl *p0, int p1, char *p2);
+extern "C" igObject *igInsightCore_FindManager(...);
+extern "C" int ObjectList_AppendRetained(int, int);
+extern "C" void StringChunk_ReleaseHeader(void *, void *);
+extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, const char *);
+extern "C" int beMessenger_ResolveEnumValue(...);
+extern "C" int beMessenger_GetObjectCount(...);
+extern "C" int beMessenger_AppendObject(...);
+extern "C" void beMessenger_SendNamed(int, const char *, const char *, int, const char *);
+extern "C" void beMessenger_SendGroup(int, const char *, const char *);
+extern "C" void beMessenger_SelectReceivers(int, const char *, const char *, int);
+extern "C" void beMessenger_SelectGroup(int, const char *);
+extern "C" void beMessenger_AppendString(int, const char *);
+extern "C" void beMessenger_AppendInt(int, int);
+extern "C" void beMessenger_DispatchSelected(int, const char *);
+extern "C" unsigned char beMessenger_GetBool(int, int);
+extern "C" igObject *beMessenger_GetObject(int, int);
+extern "C" beDataObjStringList *igProperty_GetRecordStringList(igObject *, const char *);
+extern "C" beDataObjInt *igProperty_GetRecord(igObject *, const char *);
 extern "C" igObject *beBaseInfoDataList_Create(int);
+extern "C" int SaveCtrlMessage_GetMetaEnum(...);
 extern "C" igObject *beNDMWSaveCtrlCtrlData_Create(int);
 extern "C" igObject *beNDMWLoadCtrl2CommonIntf_Create(int);
 extern "C" igObject *beNDMWLoadSavePlWork_Create(int);
 extern "C" igObject *beNDMWDegiData_Create(int);
-extern "C" int CTRL_6[4];
-extern "C" int COMMONINTF_5[4];
+extern "C" int beNDMWMcUtilCtrl__Init(...);
+extern "C" void beNDMWMcUtilCtrl__Generate(beNDMWMcUtilCtrl *util);
+extern "C" unsigned char beNDMWMcUtilCtrl__CheckReady(beNDMWMcUtilCtrl *util);
+extern "C" void beNDMWMcUtilCtrl__Remove(beNDMWMcUtilCtrl *util);
+extern "C" bool beNDMWMcUtilCtrl__IsRemoved(beNDMWMcUtilCtrl *util);
+extern "C" void beNDMWLoadCtrl2CommonIntf__UpdateCutConnect(beNDMWLoadCtrl2CommonIntf *intf);
+extern "C" int g_bePadManager_metaObject[4];
+extern "C" int g_beSystem_metaObject[4];
+extern "C" int g_beNDMWSaveCtrlInfo_metaObject[4];
+extern "C" int g_beNDMWSaveCtrl_metaObject[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
-extern "C" int g_beSystem_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
-/* The incoming message: its +20 word is the enum name. */
-struct A2 { char p[20]; int f20; };
+
+extern "C" void beNDMWSaveCtrl_Prepare(beNDMWSaveCtrl *self);
+extern "C" void beNDMWSaveCtrl_UpdateRam(beNDMWSaveCtrl *self, beBaseInfoRam *ram);
+extern "C" int beNDMWSaveCtrl_GetInfoMeta(void);
+extern "C" void beNDMWSaveCtrl_OnAddRam(beNDMWSaveCtrl *self, int info);
+extern "C" int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInfo *info);
+extern "C" int beNDMWSaveCtrl_GetMeta(void);
+
 /* Owning stack references while the controller list is wired up; each releases its object on scope
  * exit. */
-
 class SaveCtrlDataRef {
 public:
     igObject *p;
@@ -61,37 +83,278 @@ public:
     FlagWorkRef(igObject *o) : p(o) {}
     ~FlagWorkRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]);
+ * releases the token on scope exit. */
+class StringRef {
+public:
+    char *p;
+    StringRef(char *s) : p(s) {}
+    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((void *)*h, h); } }
+};
+
 /* Releases an object reference, used for the old list during the list install. */
-struct Rel { static inline void go(igObject *object) {
+struct ReleaseRef { static inline void Apply(igObject *object) {
     if (object) {
         --object->_refCount;
         if ((object->_refCount & 0x7fffff) == 0)
             igObject_Destroy(object);
     }
 } };
-extern "C" int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2);
 
-void beNDMWSaveCtrl_Prepare(beNDMWSaveCtrl *arg0) {
-    igObject *temp_a0;
-    igObject *temp_v0;
-
-    if (arg0->_padManager == 0) {
-        temp_v0 = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
-        if (temp_v0 != 0) {
-            temp_v0->_refCount = temp_v0->_refCount + 1;
-            ;
+/* Drops one reference to a pooled string token. */
+static inline void releaseString(char *text) {
+    if (text != 0) {
+        int *header = (int *)(text - 8);
+        int count = header[1] - 1;
+        header[1] = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader((void *)header[0], header);
         }
-        temp_a0 = (igObject *)arg0->_padManager;
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = temp_a0->_refCount - 1;
-            if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-                ;
+    }
+}
+
+/* A ram without a data list gets a fresh beBaseInfoDataList from the owner's or the user pool. */
+static inline void ensureDataList(beBaseInfoRam *ram) {
+    if (ram->_dataList == 0) {
+        int a;
+        OWNER_ALLOCATOR(a, ram);
+        igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
+        igObject *t = list.p;
+        if (t != 0) t->_refCount++;
+        ReleaseRef::Apply((igObject *)ram->_dataList);
+        ram->_dataList = (int)t;
+    }
+}
+
+static inline int st1(const beNDMWSaveCtrlCtrlData *data) { return data->_st1; }
+
+void beNDMWSaveCtrl_Prepare(beNDMWSaveCtrl *self) {
+    igObject *found;
+    igObject *previous;
+
+    if (self->_padManager == 0) {
+        found = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+        if (found != 0) {
+            found->_refCount = found->_refCount + 1;
+        }
+        previous = (igObject *)self->_padManager;
+        if (previous != 0) {
+            previous->_refCount = previous->_refCount - 1;
+            if ((previous->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(previous);
             }
         }
-        arg0->_padManager = (int)temp_v0;
-        ;
+        self->_padManager = (int)found;
     }
+}
+
+/* Steps the save controller: asks for the controller list while the ram has none, then runs the ctrl
+ * data through its states. _st0 1 starts the memory-card utility and waits for it, 2 runs the save
+ * screen (the model controller's sequences, the save interfaces, their closing and the hand-off of the
+ * player data to GAMERAM) and 3 removes the utility again and sends the game on to the next stage. */
+void beNDMWSaveCtrl_UpdateRam(beNDMWSaveCtrl *self, beBaseInfoRam *ram) {
+    beNDMWSaveCtrlCtrlData *ctrl;
+    beNDMWLoadCtrl2CommonIntf *common;
+    int i;
+    int playerCount;
+    unsigned char allClosed;
+    int j;
+    beNDMWLoadSavePlWorkList *flagWork;
+    int k;
+    int readyCount;
+    int m;
+    beNDMWLoadSavePlWorkList *flagList;
+    igObject *gameCommon;
+
+    if (ram->_dataList == 0) {
+        beMessenger_SendNamed(self->_messenger, "SAVECTRL", 0, -1, "GENERATE");
+        return;
+    }
+    ensureDataList(ram);
+    ctrl = (beNDMWSaveCtrlCtrlData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "CTRL");
+    ensureDataList(ram);
+    common = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
+    switch (ctrl->_st0) {
+    case 0:
+        break;
+    case 1:
+        switch (ctrl->_st1) {
+        case 0:
+            beNDMWMcUtilCtrl__Generate(MCU(common));
+            ctrl->_st1 = ctrl->_st1 + 1;
+            ctrl->_st3 = 0;
+            ctrl->_st2 = 0;
+            break;
+        case 1:
+            if (beNDMWMcUtilCtrl__CheckReady(MCU(common)) == 1) {
+                ctrl->_st0 = 2;
+                ctrl->_st3 = 0;
+                ctrl->_st2 = 0;
+                ctrl->_st1 = 0;
+            }
+            break;
+        }
+        break;
+    case 2:
+        switch (st1(ctrl)) {
+        case 0:
+            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "GENERATE");
+            beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "SQ_OPEN");
+            ctrl->_st1 = ctrl->_st1 + 1;
+            ctrl->_st3 = 0;
+            ctrl->_st2 = 0;
+            break;
+        case 1:
+            beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", "j_chrselback", 0);
+            beMessenger_AppendString(self->_messenger, "SQ_OPEN");
+            beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
+            if (beMessenger_GetBool(self->_messenger, 0) == 0) {
+                ctrl->_st1 = ctrl->_st1 + 1;
+                ctrl->_st3 = 0;
+                ctrl->_st2 = 0;
+            }
+            break;
+        case 2:
+            beMessenger_SendNamed(self->_messenger, "SAVEINTF_ALL", 0, -1, "GENERATE");
+            ctrl->_st1 = ctrl->_st1 + 1;
+            ctrl->_st3 = 0;
+            ctrl->_st2 = 0;
+            break;
+        case 3:
+            switch (common->_intfStat) {
+            case 0:
+                beNDMWLoadCtrl2CommonIntf__UpdateCutConnect(common);
+                break;
+            case 2:
+                break;
+            case 3:
+                ctrl->_st1 = ctrl->_st1 + 1;
+                ctrl->_st3 = 0;
+                ctrl->_st2 = 0;
+                break;
+            }
+            break;
+        case 4:
+            switch (ctrl->_st2) {
+            case 0:
+                i = 0;
+                do {
+                    beNDMWLoadSavePlWork *work;
+                    PLW(common, i)->_isClose = 0;
+                    work = PLW(common, i);
+                    i++;
+                    work->_sysStat0 = 2;
+                    work->_sysStat3 = 0;
+                    work->_sysStat2 = 0;
+                    work->_sysStat1 = 0;
+                } while (i < 4);
+                ctrl->_st2 = ctrl->_st2 + 1;
+                ctrl->_st3 = 0;
+                break;
+            case 1:
+                allClosed = 1;
+                j = 0;
+                flagWork = (beNDMWLoadSavePlWorkList *)common->_flagWork;
+                do {
+                    if (((beNDMWLoadSavePlWork **)flagWork->_data)[j]->_isClose != 1) { allClosed = 0; break; }
+                    j++;
+                    flagWork = (beNDMWLoadSavePlWorkList *)common->_flagWork;
+                } while (j < 4);
+                if (allClosed == 1) {
+                    ctrl->_st2 = ctrl->_st2 + 1;
+                    ctrl->_st3 = 0;
+                }
+                break;
+            case 2:
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0, "GENERATE");
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0, "SQ_BLOUT30");
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "SQ_CLOSE");
+                ctrl->_st2 = ctrl->_st2 + 1;
+                ctrl->_st3 = 0;
+                break;
+            case 3:
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "ISRUN");
+                if (beMessenger_GetBool(self->_messenger, 0) == 0) {
+                    ctrl->_st2 = ctrl->_st2 + 1;
+                    ctrl->_st3 = 0;
+                }
+                break;
+            case 4:
+                /* The players who did not join lose their stage chip; the rest are counted into NINZU. */
+                beMessenger_SendNamed(self->_messenger, "SAVEINTF_ALL", 0, -1, "SETSELECT_DATA");
+                beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
+                gameCommon = beMessenger_GetObject(self->_messenger, 0);
+                playerCount = 0;
+                for (k = 0; k < 4; k++) {
+                    if (PLW(common, k)->_isRdy == 1) {
+                        playerCount++;
+                    } else {
+                        StringRef none(0);
+                        igStringRefList *stages = (igStringRefList *)igProperty_GetRecordStringList(gameCommon, "BKCHIPSTAGE")->_data;
+                        int count = stages->_count;
+                        if (count != 0 && k >= 0 && k < count) {
+                            char **slot = (char **)stages->_data + k;
+                            if (none.p != 0) ((int *)none.p)[-1] = ((int *)none.p)[-1] + 1;
+                            releaseString(*slot);
+                            *slot = none.p;
+                        }
+                    }
+                }
+                igProperty_GetRecord(gameCommon, "NINZU")->_data = playerCount;
+                ctrl->_st0 = 3;
+                ctrl->_st3 = 0;
+                ctrl->_st2 = 0;
+                ctrl->_st1 = 0;
+                break;
+            }
+            break;
+        }
+        break;
+    case 3:
+        switch (ctrl->_st1) {
+        case 0:
+            beNDMWMcUtilCtrl__Remove(MCU(common));
+            ctrl->_st1 = ctrl->_st1 + 1;
+            ctrl->_st3 = 0;
+            ctrl->_st2 = 0;
+            break;
+        case 1:
+            if (beNDMWMcUtilCtrl__IsRemoved(MCU(common)) == 1) {
+                /* matching construct: hand search — the count loop's list load is the out-of-line block
+                 * after the return, as retail lays it out */
+                readyCount = 0;
+                m = 0;
+                goto count_start;
+            count_body:
+                if (((beNDMWLoadSavePlWork **)flagList->_data)[m]->_isRdy == 1) readyCount++;
+                m++;
+            count_test:
+                if (m < 4) goto count_body;
+                if (readyCount <= 0) {
+                    beMessenger_SelectGroup(self->_messenger, "STAGECTL");
+                    beMessenger_AppendString(self->_messenger, "stagis10");
+                    beMessenger_DispatchSelected(self->_messenger, "NEXTSTAGE");
+                } else {
+                    beMessenger_SelectReceivers(self->_messenger, "PLAYERPOINT", 0, -1);
+                    beMessenger_AppendInt(self->_messenger, 2);
+                    beMessenger_DispatchSelected(self->_messenger, "SETGENERATEPOS");
+                    beMessenger_SelectGroup(self->_messenger, "STAGECTL");
+                    beMessenger_AppendString(self->_messenger, "stagML12");
+                    beMessenger_DispatchSelected(self->_messenger, "NEXTSTAGE");
+                }
+                ctrl->_st0 = ctrl->_st0 + 1;
+                ctrl->_st3 = 0;
+                ctrl->_st2 = 0;
+                ctrl->_st1 = 0;
+            }
+            break;
+        }
+        break;
+    }
+    return;
+count_start:
+    flagList = (beNDMWLoadSavePlWorkList *)common->_flagWork;
+    goto count_test;
 }
 
 int beNDMWSaveCtrl_GetInfoMeta(void)
@@ -99,49 +362,52 @@ int beNDMWSaveCtrl_GetInfoMeta(void)
     return g_beNDMWSaveCtrlInfo_metaObject[0];
 }
 
-void beNDMWSaveCtrl_OnAddRam(beNDMWSaveCtrl *p0, int p1, char *p2)
+/* Registers the save controller with its messenger as the SAVECTRL receiver. */
+void beNDMWSaveCtrl_OnAddRam(beNDMWSaveCtrl *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, SAVECTRL_2);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "SAVECTRL");
 }
 
-int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2) {
-    int e;
+/* Handles a message to the save controller: 0 builds the controller list (the ctrl data at state 1 and
+ * the common interface with four players' data and work records), 3 hands the common interface back. */
+int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInfo *info) {
+    int message;
     int i;
-    e = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003bd390(), arg2->f20);
-    if (e == 0) {
-        if (arg1->_dataList == 0) {
+    message = beMessenger_ResolveEnumValue(self->_messenger, SaveCtrlMessage_GetMetaEnum(), info->_dataList);
+    if (message == 0) {
+        if (ram->_dataList == 0) {
             int a;
-            ALLOC(a, arg0);
+            OWNER_ALLOCATOR(a, self);
             {
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
             igObject *t = list.p;
             if (t != 0) t->_refCount++;
-            Rel::go((igObject *)arg1->_dataList);
-            arg1->_dataList = (int)t;
-            ALLOC(a, arg0);
+            ReleaseRef::Apply((igObject *)ram->_dataList);
+            ram->_dataList = (int)t;
+            OWNER_ALLOCATOR(a, self);
             {
             SaveCtrlDataRef ctrl(beNDMWSaveCtrlCtrlData_Create(a));
-            ObjectList_AppendRetained((int)(igObject *)arg1->_dataList, (int)ctrl.p);
+            ObjectList_AppendRetained((int)(igObject *)ram->_dataList, (int)ctrl.p);
             beNDMWSaveCtrlCtrlData *o = (beNDMWSaveCtrlCtrlData *)ctrl.p;
             o->_st0 = 1;
             o->_st3 = 0;
             o->_st2 = 0;
             o->_st1 = 0;
             }
-            ALLOC(a, arg0);
+            OWNER_ALLOCATOR(a, self);
             {
             CommonIntfRef common(beNDMWLoadCtrl2CommonIntf_Create(a));
-            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = ((int)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]));
-            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_inforam = (int)arg1;
-            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_insight = arg0->_insight;
+            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_system = ((int)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]));
+            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_inforam = (int)ram;
+            ((beNDMWLoadCtrl2CommonIntf *)common.p)->_insight = self->_insight;
             i = 0;
             do {
-                ALLOC(a, arg0);
+                OWNER_ALLOCATOR(a, self);
                 {
                 DegiDataRef degi(beNDMWDegiData_Create(a));
                 ObjectList_AppendRetained(((beNDMWLoadCtrl2CommonIntf *)common.p)->_gameUseData, (int)degi.p);
                 }
-                ALLOC(a, arg0);
+                OWNER_ALLOCATOR(a, self);
                 {
                 FlagWorkRef flag(beNDMWLoadSavePlWork_Create(a));
                 ObjectList_AppendRetained(((beNDMWLoadCtrl2CommonIntf *)common.p)->_flagWork, (int)flag.p);
@@ -149,46 +415,25 @@ int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2
                 i++;
             } while (i < 4);
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_kindHard = 0;
-            beNDMWMcUtilCtrl__Init(((beNDMWLoadCtrl2CommonIntf *)common.p)->_mcUtilCtrl, arg0->_messenger, 0);
-            ObjectList_AppendRetained(arg1->_dataList, (int)common.p);
+            beNDMWMcUtilCtrl__Init(((beNDMWLoadCtrl2CommonIntf *)common.p)->_mcUtilCtrl, self->_messenger, 0);
+            ObjectList_AppendRetained(ram->_dataList, (int)common.p);
             }
             }
         }
         return 1;
     }
-    igObject *p = (igObject *)arg1->_dataList;
-    if (p == 0) return 1;
-    if (p == 0) {
-        int a;
-        ALLOC(a, arg1);
-        {
-        igSmartPointer<igObject> fresh(beBaseInfoDataList_Create(a));
-        igObject *t = fresh.p;
-        if (t != 0) t->_refCount++;
-        Rel::go((igObject *)arg1->_dataList);
-        arg1->_dataList = (int)t;
-        }
-    }
-    igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &CTRL_6[0]);
-    switch (e) {
+    if (ram->_dataList == 0) return 1;
+    ensureDataList(ram);
+    igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "CTRL");
+    switch (message) {
     case 1:
         return 1;
     case 2:
         return 1;
     case 3:
-        if (beMessenger_GetObjectCount(arg0->_messenger) == 0) {
-            if (arg1->_dataList == 0) {
-                int a;
-                ALLOC(a, arg1);
-                {
-                igSmartPointer<igObject> fresh(beBaseInfoDataList_Create(a));
-                igObject *t = fresh.p;
-                if (t != 0) t->_refCount++;
-                Rel::go((igObject *)arg1->_dataList);
-                arg1->_dataList = (int)t;
-                }
-            }
-            beMessenger_AppendObject(arg0->_messenger, igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &COMMONINTF_5[0]));
+        if (beMessenger_GetObjectCount(self->_messenger) == 0) {
+            ensureDataList(ram);
+            beMessenger_AppendObject(self->_messenger, igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF"));
         }
         return 1;
     default:
@@ -201,3 +446,4 @@ int beNDMWSaveCtrl_GetMeta(void)
     return g_beNDMWSaveCtrl_metaObject[0];
 }
 
+#pragma pop

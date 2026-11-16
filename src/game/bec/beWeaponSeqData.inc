@@ -83,7 +83,7 @@ static int g_beWeaponSeqData_msgActionValues[] = {
     0, 1, 2,
 };
 
-igMetaEnum *FUN_0033f3b0(void) {
+igMetaEnum *beWeaponSeqData_GetMsgActionEnum(void) {
     if (g_beWeaponSeqData_msgActionMetaEnum == 0) {
         g_beWeaponSeqData_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beWeaponSeqData_msgActionNames, g_beWeaponSeqData_msgActionValues, 3);
     }

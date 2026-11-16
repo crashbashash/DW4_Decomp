@@ -4198,7 +4198,7 @@ extern "C" int igModelViewMatrixBoneSelectList_561880_GetVTable(void);
 extern "C" void FUN_0019d360(void);
 extern "C" void igModelViewMatrixBoneSelectList_561880_Register(void);
 extern "C" void thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject(void);
-extern "C" void FUN_0019d3f0(int arg0);
+extern "C" void igModelViewMatrixBoneSelect_CreateInstance(int arg0);
 extern "C" igMetaObject *igModelViewMatrixBoneSelect_GetMetaObject(void);
 extern "C" int igModelViewMatrixBoneSelect_GetVTable(void);
 extern "C" void igModelViewMatrixBoneSelect_EnsureRegistered(void);
