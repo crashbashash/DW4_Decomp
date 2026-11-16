@@ -218,7 +218,7 @@ The lobby terminal sequence 7 resolves to waveform 7.
 The resident-effect arm of `beSound_OnMessage` samples the signed world clock (`igInsightCore::_worldTime`). It
 suppresses an SE when its resolved sound index matches a `_playSEs` row and `now < deadline`. A positive playback
 handle adds a row with `deadline = now + 0x02faf07e` (**49,999,998 ns**). Equal time permits playback; unrelated
-sounds do not block one another. Expired rows are dropped separately, by `beSound_Update`.
+sounds do not block one another. Expired rows are dropped separately, by `beSound_UpdateRam`.
 
 Stream types 1/2 follow the stream player `beCri_PlayStream`, adding
 `beSoundInfo._baseVolume` to signed `beSoundData._volume`. Volume routes through
@@ -323,10 +323,10 @@ streamed tracks in all 8,855 cue records, except three type 3 ADX effects that c
 
 `src/game/beSound.cpp` holds the controller that answers the `SOUND` messages. Its slots: slot 32
 (`beSound_Prepare`) takes the insight's `beCri` manager into `_cri` when it is not set and empties `_playSEs`;
-slot 29 (`beSound_RegisterReceiver`) registers the ram as receiver `SOUND`, copies the info's `_baseVolume` into
+slot 29 (`beSound_OnAddRam`) registers the ram as receiver `SOUND`, copies the info's `_baseVolume` into
 the controller and its `_sndfVolume` through `beCri_SetSndfVolume`, defaults the info's `_dataType` to `acx` and
 sets `beCri::_dataType` 0 for `acx` (every cue streams from the AFS archives) or 1 (sound banks); slot 31
-(`beSound_Update`) asks `STATICINFO` for `GETINFOLIST` on its first run, drops every static info except `_common`
+(`beSound_UpdateRam`) asks `STATICINFO` for `GETINFOLIST` on its first run, drops every static info except `_common`
 (emptying its data list), sends `FXCTL REVERB`, and from then on drops the play rows whose deadline has passed;
 slot 34 is `beSound_OnMessage`; `beSound_FindData` returns the index of a cue in the info's data list by name, or -1;
 slots 30 and 20 return the info and controller meta objects.
@@ -342,7 +342,7 @@ builds pass two besides the receiver, and the PS2 body never reads `a3`. `VOLUME
 discards it.
 
 **The play rows.** `_playSEs` is an object reference field, which the controller holds as a smart pointer. Both walks
-of the list, the PLAY search of `beSound_OnMessage` and the expiry of `beSound_Update`, are indexed `for` loops that
+of the list, the PLAY search of `beSound_OnMessage` and the expiry of `beSound_UpdateRam`, are indexed `for` loops that
 call the list's inline `const` accessors through that pointer:
 `for (i = 0; i < _playSEs->getCount(); i++) { row = _playSEs->get(i); ... }`. The one source gives the loop of each
 build:

@@ -4,8 +4,8 @@ igMetaField *g_beCriSfpData_tblSizeMetaField;
 igMetaField *g_beCriSfpData_pcmSizeMetaField;
 igMetaField *g_beCriSfpData_isTransferMetaField;
 
-igMetaObject *FUN_00366540(void) {
-    if (g_beCriSfpData_metaObject == 0 || !isValid(g_beCriSfpData_metaObject)) FUN_00366620();
+igMetaObject *beCriSfpData_GetMetaObject(void) {
+    if (g_beCriSfpData_metaObject == 0 || !isValid(g_beCriSfpData_metaObject)) beCriSfpData_EnsureRegistered();
     return g_beCriSfpData_metaObject;
 }
 
@@ -21,7 +21,7 @@ int beCriSfpData_GetVTable(void) {
     u.vt = (int)&g_igNamedObject_vtable[0];
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00535030[0];
+    u.vt = (int)&g_beCriSfpData_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {
@@ -38,7 +38,7 @@ int beCriSfpData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00366620(void)
+void beCriSfpData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCriSfpData_Register);
 }
@@ -50,7 +50,7 @@ void *beCriSfpData_Register(void) {
         &g_beCriSfpData_metaObject,
         beBinDataObject_Register,
         beBinDataObject_GetPublishedMetaObject,
-        beCriSfpData_GetMetaObject,
+        beCriSfpData_GetMetaObjectFunction,
         "beCriSfpData",
         0x28, /* instance size */
         beCriSfpData_GetVTable,
@@ -60,12 +60,12 @@ void *beCriSfpData_Register(void) {
     );
 }
 
-void beCriSfpData_GetMetaObject(void)
+void beCriSfpData_GetMetaObjectFunction(void)
 {
-    FUN_00366540();
+    beCriSfpData_GetMetaObject();
 }
 
-igMetaObject *FUN_003666e0(void) {
+igMetaObject *beBinDataObject_GetPublishedMetaObject(void) {
     return g_beBinDataObject_metaObject;
 }
 

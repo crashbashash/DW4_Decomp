@@ -27,14 +27,14 @@ int igIntersectTraversal_GetVTable(void) {
     int t;
     igObject_InitHeader(&obj);
     obj.w[6] = 0;
-    obj.vt = &DAT_00528cf0[0];
+    obj.vt = &g_igIntersectTraversal_vtable[0];
     obj.w[7] = 0;
     obj.w[8] = 0;
     obj.w[9] = 0;
     obj.w[12] = 0;
     obj.w[13] = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00528cf0[0];
+    obj.vt = &g_igIntersectTraversal_vtable[0];
     FUN_0019e3c0((void * *)&obj.w[13], -1);
     FUN_0018fa00(&obj.w[12], -1);
     FUN_0019e340((void * *)&obj.w[9], -1);
@@ -46,7 +46,7 @@ int igIntersectTraversal_GetVTable(void) {
 
 O_19e150 *FUN_0019e150(O_19e150 *arg0, short arg1) {
     if (arg0) {
-        arg0->vt = &DAT_00528cf0[0];
+        arg0->vt = &g_igIntersectTraversal_vtable[0];
         if (&arg0->m56) {
             S1 *t = arg0->m56;
             if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
@@ -68,7 +68,7 @@ O_19e150 *FUN_0019e150(O_19e150 *arg0, short arg1) {
             if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
         }
         if (arg0) {
-            arg0->vt = &DAT_00528250[0];
+            arg0->vt = &g_igTraversal_vtable[0];
             if (&arg0->m28) {
                 S1 *t = arg0->m28;
                 if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
@@ -120,7 +120,7 @@ void FUN_0019e440(void)
     igMetaObject_RunStaticInit(igIntersectTraversal_Register);
 }
 
-static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { FUN_001e4820, FUN_0019ccc0, FUN_0019e890, FUN_00186d20, FUN_00188340, 0 };
+static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { FUN_001e4820, igNodeList_EnsureRegistered, igProbe_EnsureRegistered, FUN_00186d20, FUN_00188340, 0 };
 
 void igIntersectTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -200,10 +200,10 @@ void igIntersectTraversal_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001e4740();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0019cbe0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0019e6c0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igProbe_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)), 5);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt(temp_s1, 4 + temp_s0))))->_persistent = 0;

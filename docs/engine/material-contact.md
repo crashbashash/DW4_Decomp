@@ -42,9 +42,9 @@ then use the dry run and `--apply --check` naming workflow.
 | `0x0038aea0` | `beMatCtrl_GetPlayerMatStat` | query helper | `src/game/beMatCtrl.cpp` |
 | `0x0038af70` | `beMatCtrl_Prepare` | Lua owner lookup, mask lists dropped | `src/game/beMatCtrl.cpp` |
 | `0x0038b040` | `beMatCtrl_GetInfoMeta` | metadata getter | `src/game/beMatCtrl.cpp` |
-| `0x0038b050` | `beMatCtrl_RegisterReceiver` | receiver registration (44 bytes) | `src/game/beMatCtrl.cpp` |
+| `0x0038b050` | `beMatCtrl_OnAddRam` | receiver registration (44 bytes) | `src/game/beMatCtrl.cpp` |
 | `0x0038b080` | `beMatCtrl_MarkContacts` | recursive contact search | `src/game/beMatCtrl.cpp` |
-| `0x0038b1f0` | `beMatCtrl_Update` | per-instance update (3,064 bytes) | `asm/` |
+| `0x0038b1f0` | `beMatCtrl_UpdateRam` | per-instance update (3,064 bytes) | `asm/` |
 | `0x0038bdf0` | `beMatCtrl_OnMessage` | message dispatch (220 bytes) | `src/game/beMatCtrl.cpp` |
 | `0x0038bed0` | `beMatCtrl_GetMeta` | metadata getter | `src/game/beMatCtrl.cpp` |
 | `0x0018b630` | `igAABox_IntersectPoint` | box membership | `src/engine/maths/igAABox.inc` |
@@ -110,7 +110,7 @@ closure's totals are stated there.
 insight core and stores it at +36, then for each published mask list clears its count, releases
 it and nulls the field.
 
-`beMatCtrl_RegisterReceiver` (`0x38b050`) registers the incoming RAM as a receiver under
+`beMatCtrl_OnAddRam` (`0x38b050`) registers the incoming RAM as a receiver under
 `MATCTRL`, with null text and index -1. The RAM arrives in a1 and is a parameter of the method: a
 draft that omits it shifts every later argument register.
 

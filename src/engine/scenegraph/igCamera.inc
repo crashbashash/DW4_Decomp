@@ -1,5 +1,5 @@
-void FUN_001a4520(int arg0) {
-    FUN_001a4670();
+void igCamera_CreateInstance(int arg0) {
+    igCamera_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igCamera_metaObject, arg0);
 }
 
@@ -12,7 +12,7 @@ igMetaField *g_igCamera_deadfield1MetaField;
 igMetaField *g_igCamera_deadfield2MetaField;
 igMetaField *g_igCamera_deadfield3MetaField;
 
-igMetaObject *FUN_001a4560(void) {
+igMetaObject *igCamera_GetOrCreateMetaObject(void) {
     if (g_igCamera_metaObject == 0) {
         g_igCamera_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -23,7 +23,7 @@ igMetaObject *igCamera_GetMetaObject(void)
 {
     igMetaObject *g = g_igCamera_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a4670();
+        igCamera_EnsureRegistered();
     return g_igCamera_metaObject;
 }
 
@@ -35,14 +35,14 @@ int igCamera_GetVTable(void) {
     o.w[1] = 0;
     o.w[2] = 0;
     o.w[3] = 0;
-    o.vt = &DAT_0052a500[0];
+    o.vt = &g_igCamera_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_0052a500[0];
+    o.vt = &g_igCamera_vtable[0];
     FUN_00195970((struct T_195970 *)&o, 0);
     return r;
 }
 
-void FUN_001a4670(void)
+void igCamera_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCamera_Register);
 }

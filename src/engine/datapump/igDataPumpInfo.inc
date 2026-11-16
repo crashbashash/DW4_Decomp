@@ -27,10 +27,10 @@ int igDataPumpInfo_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.r1 = 0;
-    obj.vt = &DAT_0052ba10[0];
+    obj.vt = &g_igDataPumpInfo_vtable[0];
     obj.r4 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052ba10[0];
+    obj.vt = &g_igDataPumpInfo_vtable[0];
     obj.rel4();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.rel1();

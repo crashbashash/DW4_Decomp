@@ -29,7 +29,7 @@ int igNormalsRenderer_GetVTable(void) {
     int t;
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_005422a0[0];
+    obj.vt = &g_igNormalsRenderer_vtable[0];
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
@@ -38,7 +38,7 @@ int igNormalsRenderer_GetVTable(void) {
     obj.w8 = 0;
     obj.w10 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    obj.vt = &DAT_005422a0[0];
+    obj.vt = &g_igNormalsRenderer_vtable[0];
     FUN_001d6560(&obj.w10, -1);
     FUN_00136e10(&obj.w8, -1);
     FUN_0019ab10(&obj.w7, -1);
@@ -55,7 +55,7 @@ void FUN_0045d9f0(void)
     igMetaObject_RunStaticInit(igNormalsRenderer_Register);
 }
 
-static igMetaObjectCallback g_igNormalsRenderer_callbackList[] = { FUN_0045b590, FUN_0013afe0, FUN_001357e0, FUN_00139000, FUN_0013a5b0, FUN_0019f7a0, 0 };
+static igMetaObjectCallback g_igNormalsRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, igAttrList_EnsureRegistered, igModelViewMatrixAttr_EnsureRegistered, igColorAttr_EnsureRegistered, igGeometryAttrList_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
 
 void igNormalsRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -138,24 +138,24 @@ void igNormalsRenderer_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igNormalsRenderer_ctorTable, 9);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0013af00();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0013af00();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_001356f0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00138f20();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igColorAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_0013a4d0();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igGeometryAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_0019f670();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igGraphPath_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_igNormalsRenderer_fieldTable, g_igNormalsRenderer_fieldHandles, g_igNormalsRenderer_fieldOffsets, temp_s0);
 }
 

@@ -34,6 +34,8 @@ import os
 import struct
 import sys
 
+from seed_names_reflection import class_prefixes  # noqa: E402  (one rule for a class name registered twice)
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CLASSES = os.path.join(ROOT, "data", "reflection.json")
 SYMBOLS = os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt")
@@ -140,16 +142,12 @@ def main():
         i = bisect.bisect_left(starts, va)
         return rows[i] if i < len(rows) and rows[i][0] == va else None
 
-    counts = {}
-    for c in classes.values():
-        counts[c["class"]] = counts.get(c["class"], 0) + 1
+    prefixes = class_prefixes(classes)
 
     out, gap = [], 0
     for handle in sorted(classes, key=lambda h: toint(h)):
         c = classes[handle]
-        name = c["class"]
-        if counts[name] > 1:
-            name = "%s_%s" % (name, handle[2:].lower())
+        name = prefixes[handle]
         mod = nsmap.get(c["class"], "engine")
         regs, _stack = ns["resolve_call"](img, toint(c["register_site"]))
         # t0 -> +0x54 _getMetaObjectFunction; t3 -> +0x5c _vTablePointer

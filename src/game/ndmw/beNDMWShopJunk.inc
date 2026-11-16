@@ -1,12 +1,12 @@
 void beNDMWShopJunk_Create(int arg0) {
-    FUN_003b64f0();
+    beNDMWShopJunk_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopJunk_metaObject, arg0);
 }
 
-void *FUN_003b6350(void) {
+void *beNDMWShopJunk_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWShopJunk_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003b64f0();
+        beNDMWShopJunk_EnsureRegistered();
     }
     return g_beNDMWShopJunk_metaObject;
 }
@@ -23,11 +23,11 @@ int beNDMWShopJunk_GetVTable(void) {
     obj.f44 = 0;
     obj.f48 = 0;
     obj.f4C = 0;
-    obj.vt = (&DAT_0053fcd0[0]);
+    obj.vt = (&g_beNDMWShopJunk_vtable[0]);
     obj.f5C = 0;
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_0053fcd0[0]);
-    FUN_003b6090((void **)&obj.f5C, (long long)(-1));
+    obj.vt = (&g_beNDMWShopJunk_vtable[0]);
+    igSmartPointer_beNDMWItemBaseList_Destruct((void **)&obj.f5C, (long long)(-1));
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return temp_s0;
 }

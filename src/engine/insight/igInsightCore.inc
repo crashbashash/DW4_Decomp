@@ -20,11 +20,11 @@ igMetaField *g_igInsightCore_outputTimeMetaField;
 igMetaField *g_igInsightCore_pluginsMetaField;
 
 void FUN_00232800(int arg0) {
-    FUN_00232de0();
+    igInsightCore_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x56DB60, arg0);
 }
 
-igMetaObject *FUN_00232840(void) {
+igMetaObject *igInsightCore_GetOrCreateMetaObject(void) {
     if (g_igInsightCore_metaObject == 0) {
         g_igInsightCore_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -35,7 +35,7 @@ igMetaObject *igInsightCore_GetMetaObject(void)
 {
     igMetaObject *g = g_igInsightCore_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00232de0();
+        igInsightCore_EnsureRegistered();
     return g_igInsightCore_metaObject;
 }
 
@@ -43,7 +43,7 @@ int igInsightCore_GetVTable(void) {
     struct Obj_2328e0 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c990[0];
+    obj.vt = &g_igInsightCore_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
@@ -57,7 +57,7 @@ int igInsightCore_GetVTable(void) {
     obj.w12 = 0;
     obj.w26 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052c990[0];
+    obj.vt = &g_igInsightCore_vtable[0];
     FUN_00232d60((struct R **)&obj.w26, -1);
     FUN_00150a70(&obj.w12, -1);
     FUN_00232ce0((ObjectRefWord *)&obj.w11, -1);
@@ -174,12 +174,12 @@ struct R **FUN_00232d60(struct R **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00232de0(void)
+void igInsightCore_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igInsightCore_Register);
 }
 
-static igMetaObjectCallback g_igInsightCore_callbackList[] = { FUN_002336b0, FUN_00232510, igInfoList_EnsureRegistered, FUN_00145de0, FUN_0014a0e0, igRendererOrderedList_EnsureRegistered, igEventDispatcher_EnsureRegistered, FUN_00233160, FUN_00231530, igClearRenderer_EnsureRegistered, igTimer_EnsureRegistered, FUN_002326a0, 0 };
+static igMetaObjectCallback g_igInsightCore_callbackList[] = { FUN_002336b0, FUN_00232510, igInfoList_EnsureRegistered, FUN_00145de0, igVisualContext_EnsureRegistered, igRendererOrderedList_EnsureRegistered, igEventDispatcher_EnsureRegistered, FUN_00233160, FUN_00231530, igClearRenderer_EnsureRegistered, igTimer_EnsureRegistered, FUN_002326a0, 0 };
 
 void igInsightCore_Register(void) {
     InsightLibrary_MarkRegistered();
@@ -318,9 +318,9 @@ void igInsightCore_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_00145d40();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igVisualContext_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_0044c4d0();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igRendererOrderedList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_004513b0();

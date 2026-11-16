@@ -27,10 +27,10 @@ igMetaField *g_beWaterPlainInfoRam_defaultYMetaField;
 igMetaField *g_beWaterPlainInfoRam_updateTimeMetaField;
 igMetaField *g_beWaterPlainInfoRam_waterMoveMetaField;
 
-void *FUN_00340090(void) {
+void *beWaterPlainInfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beWaterPlainInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003402c0();
+        beWaterPlainInfoRam_EnsureRegistered();
     }
     return g_beWaterPlainInfoRam_metaObject;
 }
@@ -41,14 +41,14 @@ int beWaterPlainInfoRam_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w10 = 0;
-    obj.vt = &DAT_00539a70[0];
+    obj.vt = &g_beWaterPlainInfoRam_vtable[0];
     obj.w21 = 0;
     obj.w22 = 0;
     obj.w23 = 0;
     obj.w38 = 0;
     obj.w44 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00539a70[0];
+    obj.vt = &g_beWaterPlainInfoRam_vtable[0];
     FUN_00340240((void **)&obj.w44, (long long)(-1));
     FUN_003401c0((struct Ref **)&obj.w38, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj.w23, -1);
@@ -89,12 +89,12 @@ void **FUN_00340240(void **arg0, long long arg1) {
     return arg0;
 }
 
-void FUN_003402c0(void)
+void beWaterPlainInfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWaterPlainInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { FUN_0014ba20, igFloatList_EnsureRegistered, igIntList_EnsureRegistered, igFloatListList_EnsureRegistered, FUN_003405c0, 0 };
+static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { igVertexArray_EnsureRegistered, igFloatList_EnsureRegistered, igIntList_EnsureRegistered, igFloatListList_EnsureRegistered, beWaterMove_EnsureRegistered, 0 };
 
 void *beWaterPlainInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -103,7 +103,7 @@ void *beWaterPlainInfoRam_Register(void) {
         &g_beWaterPlainInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beWaterPlainInfoRam_GetMetaObject,
+        beWaterPlainInfoRam_GetMetaObjectFunction,
         "beWaterPlainInfoRam",
         0xb8, /* instance size */
         beWaterPlainInfoRam_GetVTable,
@@ -113,9 +113,9 @@ void *beWaterPlainInfoRam_Register(void) {
     );
 }
 
-void beWaterPlainInfoRam_GetMetaObject(void)
+void beWaterPlainInfoRam_GetMetaObjectFunction(void)
 {
-    FUN_00340090();
+    beWaterPlainInfoRam_GetMetaObject();
 }
 
 static FieldFactory g_beWaterPlainInfoRam_ctorTable[] = {
@@ -248,7 +248,7 @@ void beWaterPlainInfoRam_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_beWaterPlainInfoRam_ctorTable, 0x1B);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0014b980();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igVertexArray_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
@@ -259,7 +259,7 @@ void beWaterPlainInfoRam_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igFloatListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1A));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_00340490();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)beWaterMove_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_beWaterPlainInfoRam_fieldTable, g_beWaterPlainInfoRam_fieldHandles, g_beWaterPlainInfoRam_fieldOffsets, temp_s0);
 }
 

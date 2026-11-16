@@ -27,7 +27,7 @@ igMetaObject *igBlendMatrixPaletteAttr_GetMetaObject(void)
 int igBlendMatrixPaletteAttr_GetVTable(void) {
     union U_139a70 u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00524110[0];
+    u.vt = (int)&g_igBlendMatrixPaletteAttr_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 

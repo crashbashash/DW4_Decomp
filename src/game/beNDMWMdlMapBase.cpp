@@ -2,10 +2,10 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int strcmp(int, int *);
-extern "C" int Gap__Bec__beNDMWMdlMapBase__vfunc_35(int dummy0, int arg1);
+extern "C" int beNDMWMdlMapBase_IsKind(int dummy0, int arg1);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int StringPool_Allocate(...);
-extern "C" void *FUN_00350020(...);
+extern "C" void *beModelCtrlInfoWork_Create(...);
 extern "C" void * beBaseInfoDataList_Create(...);
 extern "C" int beModelCtrl__OnGenerate(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
@@ -22,10 +22,10 @@ extern "C" int beMessenger_GetMatrixCount(...);
 extern "C" int beMessenger_GetMatrix(...);
 extern "C" int igMatrix44f_GetTranslation(...);
 extern "C" int igMatrix44f_SetTranslation(...);
-extern "C" int Gap__Bec__beNDMWMdlMapBase__vfunc_20(void);
+extern "C" int beNDMWMdlMapBase_GetMeta(void);
 extern "C" int KIND_MAPBASE[4];
 extern "C" char MAPBASE[];
-extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * p2);
+extern "C" void beNDMWMdlMapBase_RegisterReceiver(beNDMWMdlMapBase * p0, int p1, char * p2);
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
@@ -52,7 +52,7 @@ struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPo
 }
 static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); setDataList(ram, list); }
 };
-extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlMapBase_OnGenerate(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1);
 struct PropertyRecord { char p[16]; int f16; };
 extern "C" int PLAYER_10[4];
 extern "C" int GETMATRIX_8[4];
@@ -64,22 +64,22 @@ extern "C" float DAT_004e1060[4];
 
 struct Vec3Float { float x, y, z; };
 struct RamInfoArg { char p0[40]; igObject *m40; };
-extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *arg1);
+extern "C" void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *arg0, RamInfoArg *arg1);
 extern "C" int g_beNDMWMdlMapBase_metaObject[4];
 
 #pragma push
 #pragma readonly_strings on
 
-int Gap__Bec__beNDMWMdlMapBase__vfunc_35(int dummy0, int arg1) {
+int beNDMWMdlMapBase_IsKind(int dummy0, int arg1) {
     return strcmp(arg1, &KIND_MAPBASE[0]) == 0;
 }
 
-void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * p2)
+void beNDMWMdlMapBase_RegisterReceiver(beNDMWMdlMapBase * p0, int p1, char * p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, MAPBASE);
 }
 
-void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlMapBase_OnGenerate(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
         int al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
@@ -92,7 +92,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam 
     {
         int a2 = igObject_GetAllocator(arg0);
         int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        InfoWorkRef w((igObject *)FUN_00350020(al2));
+        InfoWorkRef w((igObject *)beModelCtrlInfoWork_Create(al2));
         igObject *t2 = w.p;
         if (t2 != 0) t2->_refCount = t2->_refCount + 1;
         Rel::go(s3->f20);
@@ -121,7 +121,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam 
     beModelCtrl__OnGenerate(arg0, arg1);
 }
 
-void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *arg1) {
+void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *arg0, RamInfoArg *arg1) {
     PropertyRecord *r;
     int m[16];
     Vec3Float sum;
@@ -179,7 +179,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
     igMatrix44f_SetTranslation(r->f16 + 32, &sum);
 }
 
-int Gap__Bec__beNDMWMdlMapBase__vfunc_20(void)
+int beNDMWMdlMapBase_GetMeta(void)
 {
     return g_beNDMWMdlMapBase_metaObject[0];
 }

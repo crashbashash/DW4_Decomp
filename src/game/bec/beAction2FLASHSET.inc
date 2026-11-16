@@ -1,9 +1,9 @@
 igMetaObject *g_beAction2FLASHSET_metaObject;
 
-void *FUN_0036ce10(void) {
+void *beAction2FLASHSET_GetMetaObject(void) {
     igMetaObject *g = g_beAction2FLASHSET_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036cef0();
+        beAction2FLASHSET_EnsureRegistered();
     }
     return g_beAction2FLASHSET_metaObject;
 }
@@ -20,7 +20,7 @@ int beAction2FLASHSET_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00534210[0];
+    u.vt = (int)&g_beAction2FLASHSET_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -37,7 +37,7 @@ int beAction2FLASHSET_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0036cef0(void)
+void beAction2FLASHSET_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAction2FLASHSET_Register);
 }
@@ -49,7 +49,7 @@ void *beAction2FLASHSET_Register(void) {
         &g_beAction2FLASHSET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beAction2FLASHSET_GetMetaObject,
+        beAction2FLASHSET_GetMetaObjectFunction,
         "beAction2FLASHSET",
         0xc, /* instance size */
         beAction2FLASHSET_GetVTable,
@@ -59,8 +59,8 @@ void *beAction2FLASHSET_Register(void) {
     );
 }
 
-void beAction2FLASHSET_GetMetaObject(void)
+void beAction2FLASHSET_GetMetaObjectFunction(void)
 {
-    FUN_0036ce10();
+    beAction2FLASHSET_GetMetaObject();
 }
 

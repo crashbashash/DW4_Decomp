@@ -35,10 +35,10 @@ int igVisualContextCapabilityManager_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00525de0[0];
+    obj.vt = &g_igVisualContextCapabilityManager_vtable[0];
     obj.ref = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00525de0[0];
+    obj.vt = &g_igVisualContextCapabilityManager_vtable[0];
     obj.release();
     return r;
 }
@@ -48,7 +48,7 @@ void FUN_00149d50(void)
     igMetaObject_RunStaticInit(igVisualContextCapabilityManager_Register);
 }
 
-static igMetaObjectCallback g_igVisualContextCapabilityManager_callbackList[] = { FUN_0014a0e0, 0 };
+static igMetaObjectCallback g_igVisualContextCapabilityManager_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 void igVisualContextCapabilityManager_Register(void) {
     FUN_00149bc0();
@@ -97,7 +97,7 @@ void igVisualContextCapabilityManager_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVisualContextCapabilityManager_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_persistent = 0;
     igMetaObject_NameFields(meta, g_igVisualContextCapabilityManager_fieldTable, g_igVisualContextCapabilityManager_fieldHandles, g_igVisualContextCapabilityManager_fieldOffsets, fieldStart);
 }

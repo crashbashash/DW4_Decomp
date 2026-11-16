@@ -1,10 +1,10 @@
 igMetaObject *g_beModelCtrlLABELCTRL_metaObject;
 igMetaField *g_beModelCtrlLABELCTRL_seqNameMetaField;
 
-void *FUN_00356080(void) {
+void *beModelCtrlLABELCTRL_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlLABELCTRL_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003561a0();
+        beModelCtrlLABELCTRL_EnsureRegistered();
     }
     return g_beModelCtrlLABELCTRL_metaObject;
 }
@@ -21,11 +21,11 @@ int beModelCtrlLABELCTRL_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00537350[0];
+    u.vt = (int)&g_beModelCtrlLABELCTRL_vtable[0];
     q0 = &u.b[12];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00537350[0];
+    u.vt = (int)&g_beModelCtrlLABELCTRL_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {
@@ -52,7 +52,7 @@ int beModelCtrlLABELCTRL_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003561a0(void)
+void beModelCtrlLABELCTRL_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlLABELCTRL_Register);
 }
@@ -64,7 +64,7 @@ void *beModelCtrlLABELCTRL_Register(void) {
         &g_beModelCtrlLABELCTRL_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlLABELCTRL_GetMetaObject,
+        beModelCtrlLABELCTRL_GetMetaObjectFunction,
         "beModelCtrlLABELCTRL",
         0x10, /* instance size */
         beModelCtrlLABELCTRL_GetVTable,
@@ -74,9 +74,9 @@ void *beModelCtrlLABELCTRL_Register(void) {
     );
 }
 
-void beModelCtrlLABELCTRL_GetMetaObject(void)
+void beModelCtrlLABELCTRL_GetMetaObjectFunction(void)
 {
-    FUN_00356080();
+    beModelCtrlLABELCTRL_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlLABELCTRL_ctorTable[] = {

@@ -32,7 +32,7 @@ inside a switch, and `SwitchEnd` closes it.
 `_advancec` and plays entries until a wait (kinds 1 and 2) holds; the held entry is sent again on the
 next update. A demo whose `_advancec` reaches the end of its list is released and removed.
 
-`beDemoManager_Reset` releases every active demo and the build data. While an update is playing
+`beDemoManager_RemoveAllInfo` releases every active demo and the build data. While an update is playing
 (`_disableRemoveAll`), it only records the request in `_calledRemoveAll`, and the update calls it once it
 has finished.
 

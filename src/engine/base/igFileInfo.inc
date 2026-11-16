@@ -25,13 +25,13 @@ int igFileInfo_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w[1] = 0;
-    obj.vt = &DAT_0052c170[0];
+    obj.vt = &g_igFileInfo_vtable[0];
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.w[5] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052c170[0];
+    obj.vt = &g_igFileInfo_vtable[0];
     FUN_00229040((R **)&obj.w[5], -1);
     FUN_00228fc0((ObjectRefWord *)&obj.w[4], -1);
     igSmartPointer_igInfoList_Destruct(&obj.w[3], -1);

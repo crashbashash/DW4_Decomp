@@ -1,11 +1,11 @@
 igMetaObject *g_beChangePosTransformInfoRam_metaObject;
 igMetaField *g_beChangePosTransformInfoRam_transformMetaField;
 
-igMetaObject *FUN_00368310(void) {
+igMetaObject *beChangePosTransformInfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beChangePosTransformInfoRam_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_00368450();
+        beChangePosTransformInfoRam_EnsureRegistered();
     return g_beChangePosTransformInfoRam_metaObject;
 }
 
@@ -15,22 +15,22 @@ int beChangePosTransformInfoRam_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.m40 = 0;
-    obj.vt = &DAT_00534b70[0];
+    obj.vt = &g_beChangePosTransformInfoRam_vtable[0];
     obj.m44 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00534b70[0];
+    obj.vt = &g_beChangePosTransformInfoRam_vtable[0];
     obj.rel44();
-    obj.vt = &DAT_00539e90[0];
+    obj.vt = &g_beBaseInfoRam_vtable[0];
     obj.rel40();
     return r;
 }
 
-void FUN_00368450(void)
+void beChangePosTransformInfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beChangePosTransformInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beChangePosTransformInfoRam_callbackList[] = { FUN_001964d0, 0 };
+static igMetaObjectCallback g_beChangePosTransformInfoRam_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
 void *beChangePosTransformInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -39,7 +39,7 @@ void *beChangePosTransformInfoRam_Register(void) {
         &g_beChangePosTransformInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beChangePosTransformInfoRam_GetMetaObject,
+        beChangePosTransformInfoRam_GetMetaObjectFunction,
         "beChangePosTransformInfoRam",
         0x30, /* instance size */
         beChangePosTransformInfoRam_GetVTable,
@@ -49,9 +49,9 @@ void *beChangePosTransformInfoRam_Register(void) {
     );
 }
 
-void beChangePosTransformInfoRam_GetMetaObject(void)
+void beChangePosTransformInfoRam_GetMetaObjectFunction(void)
 {
-    FUN_00368310();
+    beChangePosTransformInfoRam_GetMetaObject();
 }
 
 static FieldFactory g_beChangePosTransformInfoRam_ctorTable[] = {
@@ -76,7 +76,7 @@ void beChangePosTransformInfoRam_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beChangePosTransformInfoRam_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransform_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beChangePosTransformInfoRam_fieldTable, g_beChangePosTransformInfoRam_fieldHandles, g_beChangePosTransformInfoRam_fieldOffsets, temp_s2);
 }
 

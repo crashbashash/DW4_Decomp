@@ -25,7 +25,7 @@ int beBaseInfoRamList_GetVTable(void) {
     union U_36a140 u;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00534890[0];
+    u.vt = (int)&g_beBaseInfoRamList_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
@@ -34,7 +34,7 @@ void beBaseInfoRamList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beBaseInfoRamList_Register);
 }
 
-static igMetaObjectCallback g_beBaseInfoRamList_callbackList[] = { FUN_0036a360, 0 };
+static igMetaObjectCallback g_beBaseInfoRamList_callbackList[] = { beBaseInfoRam_EnsureRegistered, 0 };
 
 void *beBaseInfoRamList_Register(void) {
     BecLibrary_MarkRegistered();

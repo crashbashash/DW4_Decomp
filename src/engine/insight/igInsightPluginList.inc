@@ -19,7 +19,7 @@ int igInsightPluginList_GetVTable(void) {
     struct Obj_232660 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052cd70[0];
+    obj.vt = &g_igInsightPluginList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

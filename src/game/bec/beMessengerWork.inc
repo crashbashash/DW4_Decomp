@@ -8,7 +8,7 @@ igMetaField *g_beMessengerWork_findRamListMetaField;
 
 void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject,allocator));}
 
-void *FUN_003580b0(void) {
+void *beMessengerWork_GetMetaObject(void) {
     igMetaObject *g = g_beMessengerWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beMessengerWork_EnsureRegistered();
@@ -21,14 +21,14 @@ int beMessengerWork_GetVTable(void) {
     int t;
 
     igObject_InitHeader(&obj);
-    obj._vtable = (int)&DAT_00536f10[0];
+    obj._vtable = (int)&g_beMessengerWork_vtable[0];
     obj._groupName = 0;
     obj._infoName = 0;
     obj._message = 0;
     obj._findRamNoList = 0;
     obj._findRamList = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj._vtable = (int)&DAT_00536f10[0];
+    obj._vtable = (int)&g_beMessengerWork_vtable[0];
     FUN_0033ec00((igObject **)&obj._findRamList, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj._findRamNoList, -1);
     igStringRef_Destruct(&obj._message, -1);
@@ -48,7 +48,7 @@ void *beMessengerWork_Register(void) {
         &g_beMessengerWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beMessengerWork_GetMetaObject,
+        beMessengerWork_GetMetaObjectFunction,
         "beMessengerWork",
         0x20, /* instance size */
         beMessengerWork_GetVTable,
@@ -58,9 +58,9 @@ void *beMessengerWork_Register(void) {
     );
 }
 
-void beMessengerWork_GetMetaObject(void)
+void beMessengerWork_GetMetaObjectFunction(void)
 {
-    FUN_003580b0();
+    beMessengerWork_GetMetaObject();
 }
 
 static FieldFactory g_beMessengerWork_ctorTable[] = {

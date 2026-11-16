@@ -190,7 +190,7 @@ int Gap__Gfx__igPsx2Image__vfunc_40(Img_16e8f0 *p, Strm *s) {
 }
 
 int Gap__Gfx__igPsx2Image__vfunc_41(igPsx2Image *image, Stream *stream) {
-    igSmartPointer<ConvertedImage> converted((ConvertedImage *)FUN_0014df70(igObject_GetAllocator(image)));
+    igSmartPointer<ConvertedImage> converted((ConvertedImage *)igImage_CreateInstance(igObject_GetAllocator(image)));
     int word;
     int masks;
     converted->convert(image, 1);

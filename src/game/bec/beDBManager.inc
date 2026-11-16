@@ -1,22 +1,22 @@
 igMetaObject *g_beDBManager_metaObject;
 
 void beDBManager_CreateInstance(int arg0) {
-    FUN_00366290();
+    beDBManager_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589958, arg0);
 }
 
-igMetaObject *FUN_00366110(void) {
+igMetaObject *beDBManager_GetOrCreateMetaObject(void) {
     if (g_beDBManager_metaObject == 0) {
         g_beDBManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDBManager_metaObject;
 }
 
-igMetaObject *FUN_00366160(void) {
+igMetaObject *beDBManager_GetMetaObject(void) {
     igMetaObject *g = g_beDBManager_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_00366290();
+        beDBManager_EnsureRegistered();
     return g_beDBManager_metaObject;
 }
 
@@ -32,12 +32,12 @@ int beDBManager_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_0053bb70[0];
+    u.vt = (int)&g_beDBManager_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -62,7 +62,7 @@ int beDBManager_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00366290(void)
+void beDBManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDBManager_Register);
 }
@@ -74,7 +74,7 @@ void *beDBManager_Register(void) {
         &g_beDBManager_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beDBManager_GetMetaObject,
+        beDBManager_GetMetaObjectFunction,
         "beDBManager",
         0x20, /* instance size */
         beDBManager_GetVTable,
@@ -84,8 +84,8 @@ void *beDBManager_Register(void) {
     );
 }
 
-void beDBManager_GetMetaObject(void)
+void beDBManager_GetMetaObjectFunction(void)
 {
-    FUN_00366160();
+    beDBManager_GetMetaObject();
 }
 

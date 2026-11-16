@@ -2,7 +2,7 @@ igMetaObject *igCommonTraversal_GetMetaObject(void)
 {
     igMetaObject *g = g_igCommonTraversal_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a3dd0();
+        igCommonTraversal_EnsureRegistered();
     return g_igCommonTraversal_metaObject;
 }
 
@@ -10,7 +10,7 @@ int igCommonTraversal_GetVTable(void) {
     struct O_1a38e0 o; int t; int *p; int *q4; int *q3; int *q2; int *q1; int *q0; int *q6; int *q7; int *q8;
     p = (int*)&o;
     FUN_001a3d90((igTraversal *)p);
-    o.vt = (int)&DAT_005293c0[0];
+    o.vt = (int)&g_igCommonTraversal_vtable[0];
     FUN_001a3d80((char*)&o + 32);
     FUN_001a3d70((char*)&o + 36);
     FUN_001a3d60((char*)&o + 52);

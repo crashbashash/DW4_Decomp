@@ -8,21 +8,21 @@ igMetaField *g_beDemoManager_disableRemoveAllMetaField;
 igMetaField *g_beDemoManager_calledRemoveAllMetaField;
 
 void beDemoManager_CreateInstance(int arg0) {
-    FUN_00363480();
+    beDemoManager_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589790, arg0);
 }
 
-igMetaObject *FUN_00363250(void) {
+igMetaObject *beDemoManager_GetOrCreateMetaObject(void) {
     if (g_beDemoManager_metaObject == 0) {
         g_beDemoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDemoManager_metaObject;
 }
 
-void *FUN_003632a0(void) {
+void *beDemoManager_GetMetaObject(void) {
     igMetaObject *g = g_beDemoManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00363480();
+        beDemoManager_EnsureRegistered();
     }
     return g_beDemoManager_metaObject;
 }
@@ -31,12 +31,12 @@ int beDemoManager_GetVTable(void) {
     struct Obj_3632f0 o;
     int r;
     igObject_InitHeader(&o);
-    o.vt = &DAT_0053a460[0];
+    o.vt = &g_beDemoManager_vtable[0];
     o.f8 = 0;
     o.f24 = 0;
     o.f28 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_0053a460[0];
+    o.vt = &g_beDemoManager_vtable[0];
     FUN_00363400((struct R **)&o.f28, (short)(-1));
     FUN_00363380((ObjectRefWord *)&o.f24, -1);
     FUN_00231030(&o, 0);
@@ -74,12 +74,12 @@ struct R **FUN_00363400(struct R **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00363480(void)
+void beDemoManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDemoManager_Register);
 }
 
-static igMetaObjectCallback g_beDemoManager_callbackList[] = { FUN_00357d10, FUN_0035b9c0, FUN_00363930, FUN_00363710, 0 };
+static igMetaObjectCallback g_beDemoManager_callbackList[] = { beMessenger_EnsureRegistered, beLua_EnsureRegistered, beDemoManagerWork_EnsureRegistered, beDemoManagerWorkList_EnsureRegistered, 0 };
 
 void *beDemoManager_Register(void) {
     BecLibrary_MarkRegistered();
@@ -88,7 +88,7 @@ void *beDemoManager_Register(void) {
         &g_beDemoManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        beDemoManager_GetMetaObject,
+        beDemoManager_GetMetaObjectFunction,
         "beDemoManager",
         0x24, /* instance size */
         beDemoManager_GetVTable,
@@ -98,9 +98,9 @@ void *beDemoManager_Register(void) {
     );
 }
 
-void beDemoManager_GetMetaObject(void)
+void beDemoManager_GetMetaObjectFunction(void)
 {
-    FUN_003632a0();
+    beDemoManager_GetMetaObject();
 }
 
 static FieldFactory g_beDemoManager_ctorTable[] = {
@@ -152,15 +152,15 @@ void beDemoManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beDemoManager_ctorTable, 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00357910();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0035b770();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beLua_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_00363800();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beDemoManagerWork_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_00363630();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)beDemoManagerWorkList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beDemoManager_fieldTable, g_beDemoManager_fieldHandles, g_beDemoManager_fieldOffsets, temp_s2);
 }

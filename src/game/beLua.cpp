@@ -3,7 +3,7 @@
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
 extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
-extern "C" int FUN_0035cd40(...);
+extern "C" int beLOA_GetMetaObject(...);
 extern "C" void FUN_00389fb0(void);
 extern "C" int sprintf(char *, const char *, ...);
 extern "C" int StringPool_Allocate(int);
@@ -16,9 +16,9 @@ extern "C" void igInsightCore_AddToScheduler(int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_Destroy(...);
-extern "C" void Gap__Bec__beLua__vfunc_24(void);
-extern "C" void Gap__Bec__beLua__vfunc_27(void);
-extern "C" int Gap__Bec__beLua__vfunc_20(void);
+extern "C" void beLua_Stop(void);
+extern "C" void beLua_Update(void);
+extern "C" int beLua_GetMeta(void);
 extern "C" int igObject_IsKindOf(int, int);
 extern "C" int ObjectList_AppendRetained(int, int);
 extern "C" int DAT_00562640[4];
@@ -71,23 +71,23 @@ public:
     ~LuaStrRef() { char *o = value; if (o) { int *hd = (int *)o - 2; int r = *(int *)(o - 4) - 1; *(int *)(o - 4) = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 };
 extern "C" int beLua__RunNamedChunk(beLua *self, const char *name, const char *given);
-extern "C" igObject *FUN_0035aa20(int);
+extern "C" igObject *beLuaState_Create(int);
 extern "C" int igObject_GetAllocator(beLua *);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void FUN_0038a2d0(beLua *arg0);
-extern "C" void Gap__Bec__beLua__vfunc_21(beLua *self, int unusedArg);
-extern "C" void Gap__Bec__beLua__vfunc_22(beLua *self, int unusedArg);
+extern "C" void beLua_Activate(beLua *self, int unusedArg);
+extern "C" void beLua_Deactivate(beLua *self, int unusedArg);
 /* reference-counted engine object header: refcount word at +4 */
 typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;
 extern "C" int g_beSystem_metaObject[4];
-extern "C" void Gap__Bec__beLua__vfunc_23(beLua *arg0);
+extern "C" void beLua_Start(beLua *arg0);
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beLuaInfo_metaObject[4];
-extern "C" int Gap__Bec__beLua__vfunc_25(beLua *arg0, int arg1);
+extern "C" int beLua_AddInfo(beLua *arg0, int arg1);
 /* Reference count at +4 of an igObject. */
 typedef struct RefCountedObject { char pad[4]; int f4; } RefCountedObject;
-extern "C" void Gap__Bec__beLua__vfunc_26(beLua *arg0);
+extern "C" void beLua_RemoveAllInfo(beLua *arg0);
 
 int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node) {
     return beLOA_Traverse(node, traversal);
@@ -229,7 +229,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
 }
 
 void FUN_00389fb0(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0035cd40(), (void (*)())beLOA_TraversalFunction);
+    igTraversal_RegisterFunction(DAT_00562640[0], beLOA_GetMetaObject(), (void (*)())beLOA_TraversalFunction);
 }
 
 int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
@@ -317,14 +317,14 @@ void FUN_0038a2d0(beLua *arg0) {
             igObject_Destroy(temp_a0);
         }
     }
-    arg0->_luaState = (int)FUN_0035aa20(var_v0);
+    arg0->_luaState = (int)beLuaState_Create(var_v0);
 }
 
 /* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
  * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
  * unused. */
-void Gap__Bec__beLua__vfunc_21(beLua *self, int unusedArg)
+void beLua_Activate(beLua *self, int unusedArg)
 {
     igInsightCore_AddToScheduler(self->_insight, (char *)self);
 }
@@ -332,12 +332,12 @@ void Gap__Bec__beLua__vfunc_21(beLua *self, int unusedArg)
 /* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
  * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
  * is unused. */
-void Gap__Bec__beLua__vfunc_22(beLua *self, int unusedArg)
+void beLua_Deactivate(beLua *self, int unusedArg)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
 }
 
-void Gap__Bec__beLua__vfunc_23(beLua *arg0) {
+void beLua_Start(beLua *arg0) {
     RefCountedHeader *temp_a0;
     arg0->_system = igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
     temp_a0 = (RefCountedHeader *)(arg0->_luaState);
@@ -350,11 +350,11 @@ void Gap__Bec__beLua__vfunc_23(beLua *arg0) {
     arg0->_luaState = 0;
 }
 
-void Gap__Bec__beLua__vfunc_24(void)
+void beLua_Stop(void)
 {
 }
 
-int Gap__Bec__beLua__vfunc_25(beLua *arg0, int arg1) {
+int beLua_AddInfo(beLua *arg0, int arg1) {
     if (igObject_IsKindOf(arg1, g_beLuaInfo_metaObject[0]) != 0) {
         ObjectList_AppendRetained(arg0->_infoList, arg1);
         return 1;
@@ -362,7 +362,7 @@ int Gap__Bec__beLua__vfunc_25(beLua *arg0, int arg1) {
     return 0;
 }
 
-void Gap__Bec__beLua__vfunc_26(beLua *arg0) {
+void beLua_RemoveAllInfo(beLua *arg0) {
     igInfoList *temp_s3;
     int temp_s2;
     int i;
@@ -394,11 +394,11 @@ void Gap__Bec__beLua__vfunc_26(beLua *arg0) {
     arg0->_luaState = 0;
 }
 
-void Gap__Bec__beLua__vfunc_27(void)
+void beLua_Update(void)
 {
 }
 
-int Gap__Bec__beLua__vfunc_20(void)
+int beLua_GetMeta(void)
 {
     return g_beLua_metaObject[0];
 }

@@ -1,9 +1,9 @@
 igMetaObject *g_beLayerGroup_metaObject;
 
-void *FUN_0035c850(void) {
+void *beLayerGroup_GetMetaObject(void) {
     igMetaObject *g = g_beLayerGroup_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035c930();
+        beLayerGroup_EnsureRegistered();
     }
     return g_beLayerGroup_metaObject;
 }
@@ -20,7 +20,7 @@ int beLayerGroup_GetVTable(void) {
     u.vt = (int)&g_igNamedObject_vtable[0];
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00536540[0];
+    u.vt = (int)&g_beLayerGroup_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {
@@ -37,7 +37,7 @@ int beLayerGroup_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0035c930(void)
+void beLayerGroup_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLayerGroup_Register);
 }
@@ -49,7 +49,7 @@ void *beLayerGroup_Register(void) {
         &g_beLayerGroup_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beLayerGroup_GetMetaObject,
+        beLayerGroup_GetMetaObjectFunction,
         "beLayerGroup",
         0xc, /* instance size */
         beLayerGroup_GetVTable,
@@ -59,9 +59,9 @@ void *beLayerGroup_Register(void) {
     );
 }
 
-void beLayerGroup_GetMetaObject(void)
+void beLayerGroup_GetMetaObjectFunction(void)
 {
-    FUN_0035c850();
+    beLayerGroup_GetMetaObject();
 }
 
 igMetaEnum *g_beLayerGroup_swtCtlMetaEnum;

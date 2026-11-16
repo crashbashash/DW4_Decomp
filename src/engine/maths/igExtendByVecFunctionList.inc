@@ -1,7 +1,7 @@
 igMetaObject *g_igExtendByVecFunctionList_metaObject;
 
 OpTable *FUN_00189000(int arg0) {
-    FUN_001890d0();
+    igExtendByVecFunctionList_EnsureRegistered();
     return (OpTable *)igMetaObject_CreateInstance((int)g_igExtendByVecFunctionList_metaObject, arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igExtendByVecFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igExtendByVecFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001890d0();
+        igExtendByVecFunctionList_EnsureRegistered();
     return g_igExtendByVecFunctionList_metaObject;
 }
 
@@ -17,11 +17,11 @@ int igExtendByVecFunctionList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527c70[0];
+    obj.vt = &g_igExtendByVecFunctionList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001890d0(void)
+void igExtendByVecFunctionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igExtendByVecFunctionList_Register);
 }

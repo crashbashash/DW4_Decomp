@@ -904,17 +904,147 @@ def _function_texts(path):
     return out, whole, " ".join(globals_ + [whole[at:]]), placeholders
 
 
+# ---- a compiler-emitted function is judged by the member definition its compiler name points at ------
+_EMITTED_NAMES = {}
+_SYMBOL_ADDRESS = {}
+_HEADER_TEXTS = {}
+_INCLUDE_RE = re.compile(r'^[ \t]*#[ \t]*include[ \t]+"([^"]+)"', re.M)
+
+
+def demangle_member(mangled):
+    """(class, member) of an MWCC compiler name, the class's template arguments dropped: `__dt__9ObjRef<5>Fv`
+    -> ('ObjRef', '~ObjRef'), `__ct__14NewDataListRefFRC14AllocatorValue` -> ('NewDataListRef',
+    'NewDataListRef'), `release__9StringRefFPPc` -> ('StringRef', 'release'), `igRelease__FP8igObject` ->
+    (None, 'igRelease'); None for a plain symbol."""
+    m = re.match(r"(__dt|__ct|[A-Za-z_]\w*?)__(F|Q\d|\d+)", mangled)
+    if not m:
+        return None
+    member, at = m.group(1), m.start(2)
+    if mangled[at] == "F":
+        return None if member in ("__dt", "__ct") else (None, member)
+    parts = []
+    count = int(mangled[at + 1]) if mangled[at] == "Q" else 1
+    at += 2 if mangled[at] == "Q" else 0
+    for _ in range(count):
+        n = re.match(r"\d+", mangled[at:])
+        if not n:
+            return None
+        start = at + len(n.group(0))
+        parts.append(mangled[start:start + int(n.group(0))])
+        at = start + int(n.group(0))
+    cls = parts[-1].split("<")[0]
+    return cls, {"__dt": "~" + cls, "__ct": cls}.get(member, member)
+
+
+def _emitted_names(va):
+    """The compiler names whole-file rows give the function at `va`: the emitting unit's first."""
+    if not _EMITTED_NAMES:
+        rows = json.load(open(os.path.join(ROOT, "config", "SLUS-20836", "unit-objects.json")))
+        for key in ("emitted", "duplicates"):
+            for row in rows.values():
+                for name, address in (row.get(key) or {}).items():
+                    if isinstance(address, str):
+                        _EMITTED_NAMES.setdefault(int(address, 16), []).append(name)
+    return _EMITTED_NAMES.get(va, [])
+
+
+def _symbol_address(name):
+    if not _SYMBOL_ADDRESS:
+        _SYMBOL_ADDRESS.update((n, va) for va, _size, n in load_symbols())
+    return _SYMBOL_ADDRESS.get(name)
+
+
+def _header_texts(path, raw, seen):
+    """[(path, comment-and-string-blanked text)] of the headers `raw` includes, recursively."""
+    from typed_coverage import strip_comments_and_strings
+    out = []
+    for inc in _INCLUDE_RE.findall(raw):
+        for base in (os.path.dirname(path), os.path.join(ROOT, "include"), ROOT):
+            full = os.path.normpath(os.path.join(base, inc))
+            if os.path.isfile(full):
+                break
+        else:
+            continue
+        if full in seen:
+            continue
+        seen.add(full)
+        if full not in _HEADER_TEXTS:
+            text = open(full, errors="replace").read()
+            _HEADER_TEXTS[full] = (text, strip_comments_and_strings(text))
+        out.append((full, _HEADER_TEXTS[full][1]))
+        out.extend(_header_texts(full, _HEADER_TEXTS[full][0], seen))
+    return out
+
+
+def _block_end(text, brace):
+    depth = 0
+    for i in range(brace, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+    return len(text)
+
+
+def _member_definitions(text, cls, member):
+    """The definitions of `cls::member` in `text`: inside the class body, or written out of it; with no
+    class, the free function's."""
+    found = []
+    name = re.escape(member).replace(r"\~", r"~\s*")
+    head = r"(?<![\w~])%s\s*\([^;{}()]*(?:\([^;{}()]*\)[^;{}()]*)*\)\s*(?:const\s*)?(?::[^;{}]*)?\{" % name
+    if cls:
+        for m in re.finditer(r"\b(?:struct|class)\s+%s\b[^;{]*\{" % re.escape(cls), text):
+            body = text[m.end() - 1:_block_end(text, m.end() - 1)]
+            found += [body[d.start():_block_end(body, d.end() - 1)] for d in re.finditer(head, body)]
+        out_of_class = r"\b%s\s*(?:<[^<>{};]*>)?\s*::\s*%s" % (re.escape(cls), head)
+        found += [text[d.start():_block_end(text, d.end() - 1)] for d in re.finditer(out_of_class, text)]
+    else:
+        found += [text[d.start():_block_end(text, d.end() - 1)] for d in re.finditer(r"\b" + head, text)
+                  if not re.search(r"(?:::|\.|->)\s*$", text[max(0, d.start() - 4):d.start()])]
+    return found
+
+
+def emitted_member_text(name, path, whole):
+    """The source a compiler-emitted function compiles from, or None: it has no definition under its
+    symbol, so its unit-objects.json compiler name (`__dt__25igSmartPointer<8igObject>Fv`) points at the
+    member that defines it, found in the file as the compiler sees it or in a header it includes."""
+    va = _symbol_address(name)
+    for mangled in _emitted_names(va) if va is not None else ():
+        member = demangle_member(mangled)
+        if member is None:
+            continue
+        found = _member_definitions(whole, *member)
+        if not found:
+            for _header, text in _header_texts(path, srctext.read(path, errors="replace"), set()):
+                found = _member_definitions(text, *member)
+                if found:
+                    break
+        if found:
+            return "\n".join(found)
+    return None
+
+
 def readable_failures(name, path, cache):
     """The READABLE_CHECKS keys `name` fails; an empty list means the function is readable.
     Stock library source under src/third_party/ is its authors' own text (never edited here), so it
-    is readable as it stands: its identifiers (`arg1`, `var_or_func`) are not decompiler leftovers."""
+    is readable as it stands: its identifiers (`arg1`, `var_or_func`) are not decompiler leftovers.
+    A compiler-emitted function with no definition under its own name is judged by the member its
+    compiler name points at (`emitted_member_text`), and by the whole file when that is not found."""
     if "/third_party/" in path.replace(os.sep, "/"):
         return []
     if path not in cache:
         cache[path] = _function_texts(path)
     texts, whole, globals_, placeholders = cache[path]
     # a static initialiser has no source text of its own: it is the file's global definitions
-    text = globals_ if name.startswith("__sinit_") else texts.get(name, whole)
+    if name.startswith("__sinit_"):
+        text = globals_
+    elif name in texts:
+        text = texts[name]
+    else:
+        text = emitted_member_text(name, path, whole)
+        text = whole if text is None else text
     body = re.sub(r"\b%s\b" % re.escape(name), " ", text)            # its own name is not a reference
     failed = []
     if not named(name) or SLOT_NAME_RE.search(name):

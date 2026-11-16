@@ -1,18 +1,18 @@
 igMetaObject *g_beKeyboardReceiver_metaObject;
 igMetaField *g_beKeyboardReceiver_keyboardMetaField;
 
-igMetaObject *FUN_0035d070(void) {
+igMetaObject *beKeyboardReceiver_GetOrCreateMetaObject(void) {
     if (g_beKeyboardReceiver_metaObject == 0) {
         g_beKeyboardReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beKeyboardReceiver_metaObject;
 }
 
-igMetaObject *FUN_0035d0c0(void) {
+igMetaObject *beKeyboardReceiver_GetMetaObject(void) {
     igMetaObject *g = g_beKeyboardReceiver_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0035d1a0();
+        beKeyboardReceiver_EnsureRegistered();
     return g_beKeyboardReceiver_metaObject;
 }
 
@@ -22,15 +22,15 @@ int beKeyboardReceiver_GetVTable(void) {
     struct Ref *p;
 
     igObject_InitHeader(&o);
-    o.vt = DAT_0053a8b0;
+    o.vt = g_beKeyboardReceiver_vtable;
     *(int *)((char *)&o + 8) = 0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_0053a8b0;
+    o.vt = g_beKeyboardReceiver_vtable;
     if (&*(int *)((char *)&o + 8) != 0) { p = *(struct Ref **)((char *)&o + 8); if (p != 0) { p->u.w = p->u.w - 1; if (p->u.b.cnt == 0) igObject_Destroy(p); } }
     return r;
 }
 
-void FUN_0035d1a0(void)
+void beKeyboardReceiver_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beKeyboardReceiver_Register);
 }
@@ -44,7 +44,7 @@ void *beKeyboardReceiver_Register(void) {
         &g_beKeyboardReceiver_metaObject,
         igEventReceiver_Register,
         igEventReceiver_GetPublishedMetaObject,
-        beKeyboardReceiver_GetMetaObject,
+        beKeyboardReceiver_GetMetaObjectFunction,
         "beKeyboardReceiver",
         0xc, /* instance size */
         beKeyboardReceiver_GetVTable,
@@ -54,9 +54,9 @@ void *beKeyboardReceiver_Register(void) {
     );
 }
 
-void beKeyboardReceiver_GetMetaObject(void)
+void beKeyboardReceiver_GetMetaObjectFunction(void)
 {
-    FUN_0035d0c0();
+    beKeyboardReceiver_GetMetaObject();
 }
 
 static FieldFactory g_beKeyboardReceiver_ctorTable[] = {

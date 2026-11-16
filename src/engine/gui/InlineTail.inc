@@ -19,11 +19,11 @@ igMetaObject *Gap__Gui__igClearRenderer__vfunc_22(void) {
     return g_igClearRenderer_metaObject;
 }
 
-void Gap__Gui__igClearRenderer__vfunc_25(void) {
+void igClearRenderer_Traverse(void) {
 
 }
 
-void Gap__Gui__igClearRenderer__vfunc_24(void) {
+void igClearRenderer_ReleaseDrawing(void) {
 
 }
 

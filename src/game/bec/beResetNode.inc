@@ -2,10 +2,10 @@ igMetaObject *g_beResetNode_metaObject;
 igMetaField *g_beResetNode_isResetTimeMetaField;
 igMetaField *g_beResetNode_isResetRotAndScaleMetaField;
 
-void *FUN_0034b4a0(void) {
+void *beResetNode_GetMetaObject(void) {
     igMetaObject *g = g_beResetNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034b560();
+        beResetNode_EnsureRegistered();
     }
     return g_beResetNode_metaObject;
 }
@@ -19,14 +19,14 @@ int beResetNode_GetVTable(void) {
     o.w[2] = 0;
     o.w[3] = 0;
     o.w[6] = 0;
-    o.vt = DAT_00538810;
+    o.vt = g_beResetNode_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_00538810;
+    o.vt = g_beResetNode_vtable;
     FUN_00195a90(&o, 0);
     return r;
 }
 
-void FUN_0034b560(void)
+void beResetNode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beResetNode_Register);
 }
@@ -38,7 +38,7 @@ void *beResetNode_Register(void) {
         &g_beResetNode_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        beResetNode_GetMetaObject,
+        beResetNode_GetMetaObjectFunction,
         "beResetNode",
         0x24, /* instance size */
         beResetNode_GetVTable,
@@ -48,9 +48,9 @@ void *beResetNode_Register(void) {
     );
 }
 
-void beResetNode_GetMetaObject(void)
+void beResetNode_GetMetaObjectFunction(void)
 {
-    FUN_0034b4a0();
+    beResetNode_GetMetaObject();
 }
 
 static FieldFactory g_beResetNode_ctorTable[] = {

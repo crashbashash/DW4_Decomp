@@ -26,13 +26,13 @@ int igBoundingBoxesMaker_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052a4a0[0];
+    obj.vt = &g_igBoundingBoxesMaker_vtable[0];
     obj.w[4] = 0;
     obj.w[5] = 0;
     obj.w[7] = 0;
     obj.w[8] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052a4a0[0];
+    obj.vt = &g_igBoundingBoxesMaker_vtable[0];
     igSmartPointer_igMetaObjectList_Destruct(&obj.w[8], -1);
     igSmartPointer_igStringObj_Destruct(&obj.w[7], -1);
     FUN_0014dd40(&obj.w[5], -1);
@@ -45,7 +45,7 @@ void FUN_001a4970(void)
     igMetaObject_RunStaticInit(igBoundingBoxesMaker_Register);
 }
 
-static igMetaObjectCallback g_igBoundingBoxesMaker_callbackList[] = { FUN_0018a780, igObjectStringMap_EnsureRegistered, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBoundingBoxesMaker_callbackList[] = { igAABox_EnsureRegistered, igObjectStringMap_EnsureRegistered, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, 0 };
 
 void igBoundingBoxesMaker_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -124,7 +124,7 @@ void igBoundingBoxesMaker_InitFields(void) {
     igBoolMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)), 1);
     igBoolMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0018a6a0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAABox_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igObjectStringMap_GetOrCreateMetaObject();

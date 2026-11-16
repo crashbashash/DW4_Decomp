@@ -13,7 +13,7 @@ igMetaObject *igIniShaderFactory_GetMetaObject(void)
 {
     igMetaObject *g = g_igIniShaderFactory_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019efb0();
+        igIniShaderFactory_EnsureRegistered();
     return g_igIniShaderFactory_metaObject;
 }
 
@@ -24,7 +24,7 @@ int igIniShaderFactory_GetVTable(void) {
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
-    obj.vt = &DAT_00528d60[0];
+    obj.vt = &g_igIniShaderFactory_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w8 = 0;
@@ -34,7 +34,7 @@ int igIniShaderFactory_GetVTable(void) {
     obj.w13 = 0;
     obj.w14 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00528d60[0];
+    obj.vt = &g_igIniShaderFactory_vtable[0];
     FUN_0014dd40(&obj.w14, -1);
     FUN_0014dd40(&obj.w13, -1);
     FUN_0019ef30((ObjectRefWord *)&obj.w12, -1);
@@ -77,7 +77,7 @@ ObjectRefWord *FUN_0019ef30(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_0019efb0(void)
+void igIniShaderFactory_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igIniShaderFactory_Register);
 }

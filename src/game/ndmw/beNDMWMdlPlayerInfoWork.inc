@@ -12,11 +12,11 @@ igMetaEnum *g_beNDMWMdlPlayerInfoWork_statusNameMetaEnum;
 igMetaEnum *g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum;
 
 void beNDMWMdlPlayerInfoWork_Create(int arg0) {
-    FUN_003c0280();
+    beNDMWMdlPlayerInfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMdlPlayerInfoWork_metaObject, arg0);
 }
 
-igMetaObject *FUN_003bfcc0(void) {
+igMetaObject *beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlPlayerInfoWork_metaObject == 0) {
         g_beNDMWMdlPlayerInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -30,7 +30,7 @@ igMetaObject *beNDMWMdlPlayerInfoWork_ResolveMetaObject(void)
         ready = (g_beNDMWMdlPlayerInfoWork_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_003c0280();
+    beNDMWMdlPlayerInfoWork_EnsureRegistered();
 done:
     return g_beNDMWMdlPlayerInfoWork_metaObject;
 }
@@ -77,8 +77,8 @@ Obj_3bfde0 *FUN_003bfde0(Obj_3bfde0 *arg0, short arg1) {
             igSmartPointer_igStringRefList_Destruct((char *)arg0 + 36, -1);
             FUN_00350b90((char *)arg0 + 24, -1);
             igStringRef_Destruct((char *)arg0 + 20, -1);
-            FUN_00350b10((char *)arg0 + 12, -1);
-            FUN_00350b10((char *)arg0 + 8, -1);
+            igSmartPointer_beDataObjInt_Destruct((char *)arg0 + 12, -1);
+            igSmartPointer_beDataObjInt_Destruct((char *)arg0 + 8, -1);
         }
         if (arg1 > 0) {
             Memory_FreeBufferAliasC(arg0);
@@ -87,7 +87,17 @@ Obj_3bfde0 *FUN_003bfde0(Obj_3bfde0 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_003c0280(void)
+PEBaseInfoWorkView::PEBaseInfoWorkView() {
+    vtable = g_beNDMWMdlPEBaseInfoWork_vtable;
+    dispRamNoList = 0;
+    dispPosNoList = 0;
+    timerList = 0;
+    isFirstList = 0;
+    downDataList = 0;
+    upDataList = 0;
+}
+
+void beNDMWMdlPlayerInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlPlayerInfoWork_Register);
 }
@@ -116,7 +126,7 @@ void beNDMWMdlPlayerInfoWork_GetMetaObject(void)
     beNDMWMdlPlayerInfoWork_ResolveMetaObject();
 }
 
-igMetaObject *FUN_003c0340(void) {
+igMetaObject *beNDMWMdlPEBaseInfoWork_GetPublishedMetaObject(void) {
     return g_beNDMWMdlPEBaseInfoWork_metaObject;
 }
 

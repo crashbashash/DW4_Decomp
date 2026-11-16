@@ -26,7 +26,7 @@ int igGuiSystem_GetVTable(void) {
     struct Obj_44df70 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00540f20[0];
+    obj.vt = &g_igGuiSystem_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
@@ -34,7 +34,7 @@ int igGuiSystem_GetVTable(void) {
     obj.w6 = 0;
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00540f20[0];
+    obj.vt = &g_igGuiSystem_vtable[0];
     FUN_001a7580(&obj.w7, -1);
     FUN_0044e1e0((O_44e1e0 *)&obj.w6, -1);
     FUN_001d97f0(&obj.w5, -1);
@@ -107,7 +107,7 @@ void igGuiSystem_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiSystem_Register);
 }
 
-static igMetaObjectCallback g_igGuiSystem_callbackList[] = { igGuiSystemRenderer_RunStaticInit, igGuiSystemModel_RunStaticInit, igViewList_EnsureRegistered, FUN_001a5e90, igMouseCursor_RunStaticInit, FUN_001964d0, 0 };
+static igMetaObjectCallback g_igGuiSystem_callbackList[] = { igGuiSystemRenderer_RunStaticInit, igGuiSystemModel_RunStaticInit, igViewList_EnsureRegistered, igAttrSet_EnsureRegistered, igMouseCursor_RunStaticInit, igTransform_EnsureRegistered, 0 };
 
 void igGuiSystem_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -190,12 +190,12 @@ void igGuiSystem_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0044b9f0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_001a5d70();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igAttrSet_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0044e430();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00196190();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igTransform_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     igMetaObject_NameFields(temp_s1, g_igGuiSystem_fieldTable, g_igGuiSystem_fieldHandles, g_igGuiSystem_fieldOffsets, temp_s0);
 }

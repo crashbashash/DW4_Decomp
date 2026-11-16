@@ -11,7 +11,7 @@ igMetaObject *igLod_GetMetaObject(void)
 {
     igMetaObject *g = g_igLod_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019d710();
+        igLod_EnsureRegistered();
     return g_igLod_metaObject;
 }
 
@@ -25,14 +25,14 @@ int igLod_GetVTable(void) {
     o.f[2] = 0;
     o.f[3] = 0;
     o.f[6] = 0;
-    o.vt = &DAT_00528b20[0];
+    o.vt = &g_igLod_vtable[0];
     p16 = &o.f[7];
     *p16 = 0;
     p17 = &o.f[8];
     *p17 = 0;
     o.f[15] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00528b20[0];
+    o.vt = &g_igLod_vtable[0];
     FUN_001354b0(&o.f[15], -1);
     FUN_00198210((ObjectRefWord *)p17, -1);
     FUN_001354b0(p16, -1);
@@ -40,12 +40,12 @@ int igLod_GetVTable(void) {
     return r;
 }
 
-void FUN_0019d710(void)
+void igLod_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLod_Register);
 }
 
-static igMetaObjectCallback g_igLod_callbackList[] = { igFloatList_EnsureRegistered, FUN_0019cf10, 0 };
+static igMetaObjectCallback g_igLod_callbackList[] = { igFloatList_EnsureRegistered, igNode_EnsureRegistered, 0 };
 
 void igLod_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -126,7 +126,7 @@ void igLod_InitFields(void) {
     ((igMetaField *)temp_s2)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2)->_shallowCopyMethod = 2;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)));
     igIntMetaField_SetDefault(temp_v0, -1);

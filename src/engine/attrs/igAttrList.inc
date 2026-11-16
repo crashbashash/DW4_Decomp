@@ -1,11 +1,11 @@
 igMetaObject *g_igAttrList_metaObject;
 
 void FUN_0013aec0(int arg0) {
-    FUN_0013afe0();
+    igAttrList_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F460, arg0);
 }
 
-igMetaObject *FUN_0013af00(void) {
+igMetaObject *igAttrList_GetOrCreateMetaObject(void) {
     if (g_igAttrList_metaObject == 0) {
         g_igAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -16,7 +16,7 @@ igMetaObject *igAttrList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAttrList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013afe0();
+        igAttrList_EnsureRegistered();
     return g_igAttrList_metaObject;
 }
 
@@ -24,11 +24,11 @@ int igAttrList_GetVTable(void) {
     struct Obj_13afa0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524420[0];
+    obj.vt = &g_igAttrList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0013afe0(void)
+void igAttrList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAttrList_Register);
 }

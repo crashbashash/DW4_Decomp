@@ -51,12 +51,12 @@ int igSearchSceneGraph_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.f8 = 0;
-    obj.vt = &DAT_0052d0d0[0];
+    obj.vt = &g_igSearchSceneGraph_vtable[0];
     obj.fC = 0;
     obj.f10 = 0;
     obj.f14 = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
-    obj.vt = &DAT_0052d0d0[0];
+    obj.vt = &g_igSearchSceneGraph_vtable[0];
     igSmartPointer_igMetaObject_Destruct(&obj.f14, -1);
     igStringRef_Destruct(&obj.f10, -1);
     FUN_002293d0(&obj.fC, -1);

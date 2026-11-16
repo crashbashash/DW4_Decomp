@@ -4,20 +4,20 @@ igMetaField *g_beCriAudio_sndfMetaField;
 igMetaField *g_beCriAudio_audioTypeMetaField;
 igMetaField *g_beCriAudio_errVolumeMetaField;
 
-igMetaObject *FUN_003671a0(void) {
+igMetaObject *beCriAudio_GetOrCreateMetaObject(void) {
     if (g_beCriAudio_metaObject == 0) {
         g_beCriAudio_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beCriAudio_metaObject;
 }
 
-void *FUN_003671f0(void) {
+void *beCriAudio_GetMetaObject(void) {
     unsigned char b;
     if (((void * *)&g_beCriAudio_metaObject)[0] != 0) {
         b = (*(int *)((char *)(((void * *)&g_beCriAudio_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00367320();
+    beCriAudio_EnsureRegistered();
 done:
     return ((void * *)&g_beCriAudio_metaObject)[0];
 }
@@ -35,11 +35,11 @@ int beCriAudio_GetVTable(void) {
     igObject_InitHeader(u.b);
     q38 = &u.p[2];
     q3c = &u.p[3];
-    u.w[0] = (int)(&DAT_00534e30[0]);
+    u.w[0] = (int)(&g_beCriAudio_vtable[0]);
     *q38 = 0;
     *q3c = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00534e30[0]);
+    u.w[0] = (int)(&g_beCriAudio_vtable[0]);
     if (q3c != 0) {
         a = (struct Rc *)*q3c;
         if (a != 0) {
@@ -61,12 +61,12 @@ int beCriAudio_GetVTable(void) {
     return t;
 }
 
-void FUN_00367320(void)
+void beCriAudio_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCriAudio_Register);
 }
 
-static igMetaObjectCallback g_beCriAudio_callbackList[] = { FUN_00335260, FUN_003675b0, 0 };
+static igMetaObjectCallback g_beCriAudio_callbackList[] = { igAdxAudio_EnsureRegistered, beCriSndf_EnsureRegistered, 0 };
 
 void *beCriAudio_Register(void) {
     BecLibrary_MarkRegistered();
@@ -75,7 +75,7 @@ void *beCriAudio_Register(void) {
         &g_beCriAudio_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beCriAudio_GetMetaObject,
+        beCriAudio_GetMetaObjectFunction,
         "beCriAudio",
         0x18, /* instance size */
         beCriAudio_GetVTable,
@@ -85,9 +85,9 @@ void *beCriAudio_Register(void) {
     );
 }
 
-void beCriAudio_GetMetaObject(void)
+void beCriAudio_GetMetaObjectFunction(void)
 {
-    FUN_003671f0();
+    beCriAudio_GetMetaObject();
 }
 
 static FieldFactory g_beCriAudio_ctorTable[] = {
@@ -125,9 +125,9 @@ void beCriAudio_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beCriAudio_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00335130();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAdxAudio_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_003674d0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beCriSndf_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beCriAudio_fieldTable, g_beCriAudio_fieldHandles, g_beCriAudio_fieldOffsets, temp_s2);
 }
 

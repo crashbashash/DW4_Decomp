@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWItemWaza_metaObject;
 igMetaField *g_beNDMWItemWaza_baseNoMetaField;
 
 void beNDMWItemWaza_Create(int arg0) {
-    FUN_003c8110();
+    beNDMWItemWaza_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, arg0);
 }
 
@@ -10,7 +10,7 @@ igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWItemWaza_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003c8110();
+        beNDMWItemWaza_EnsureRegistered();
     return g_beNDMWItemWaza_metaObject;
 }
 
@@ -18,11 +18,11 @@ int beNDMWItemWaza_GetVTable(void) {
     int obj[8];
 
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_00540650[0];
+    obj[0] = (int)&g_beNDMWItemWaza_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_003c8110(void)
+void beNDMWItemWaza_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWItemWaza_Register);
 }
@@ -49,7 +49,7 @@ void beNDMWItemWaza_GetMetaObject(void)
     beNDMWItemWaza_GetReadyMetaObject();
 }
 
-igMetaObject *FUN_003c81c0(void) {
+igMetaObject *beNDMWItemBase_GetPublishedMetaObject(void) {
     return g_beNDMWItemBase_metaObject;
 }
 

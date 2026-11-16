@@ -4,17 +4,17 @@ igMetaField *g_beSvPlatBaseData_slotListMetaField;
 igMetaField *g_beSvPlatBaseData_dataSizeMetaField;
 igMetaField *g_beSvPlatBaseData_memNeedMetaField;
 
-igMetaObject *FUN_0034a210(void) {
+igMetaObject *beSvPlatBaseData_GetOrCreateMetaObject(void) {
     if (g_beSvPlatBaseData_metaObject == 0) {
         g_beSvPlatBaseData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSvPlatBaseData_metaObject;
 }
 
-void *FUN_0034a260(void) {
+void *beSvPlatBaseData_GetMetaObject(void) {
     igMetaObject *g = g_beSvPlatBaseData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034a340();
+        beSvPlatBaseData_EnsureRegistered();
     }
     return g_beSvPlatBaseData_metaObject;
 }
@@ -26,11 +26,11 @@ int beSvPlatBaseData_GetVTable(void) {
     int *o;
 
     igObject_InitHeader(&f);
-    f.vt = &DAT_00538d40[0];
+    f.vt = &g_beSvPlatBaseData_vtable[0];
     pr = &f.ref;
     *pr = 0;
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_00538d40[0];
+    f.vt = &g_beSvPlatBaseData_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {
             o = *pr;
@@ -43,12 +43,12 @@ int beSvPlatBaseData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0034a340(void)
+void beSvPlatBaseData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvPlatBaseData_Register);
 }
 
-static igMetaObjectCallback g_beSvPlatBaseData_callbackList[] = { FUN_0034a580, 0 };
+static igMetaObjectCallback g_beSvPlatBaseData_callbackList[] = { beSvSlotDataList_EnsureRegistered, 0 };
 
 void *beSvPlatBaseData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -57,7 +57,7 @@ void *beSvPlatBaseData_Register(void) {
         &g_beSvPlatBaseData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSvPlatBaseData_GetMetaObject,
+        beSvPlatBaseData_GetMetaObjectFunction,
         "beSvPlatBaseData",
         0x18, /* instance size */
         beSvPlatBaseData_GetVTable,
@@ -67,9 +67,9 @@ void *beSvPlatBaseData_Register(void) {
     );
 }
 
-void beSvPlatBaseData_GetMetaObject(void)
+void beSvPlatBaseData_GetMetaObjectFunction(void)
 {
-    FUN_0034a260();
+    beSvPlatBaseData_GetMetaObject();
 }
 
 static FieldFactory g_beSvPlatBaseData_ctorTable[] = {
@@ -106,7 +106,7 @@ void beSvPlatBaseData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beSvPlatBaseData_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a4a0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSvSlotDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beSvPlatBaseData_fieldTable, g_beSvPlatBaseData_fieldHandles, g_beSvPlatBaseData_fieldOffsets, temp_s2);
 }

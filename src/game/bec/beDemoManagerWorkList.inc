@@ -1,16 +1,16 @@
 igMetaObject *g_beDemoManagerWorkList_metaObject;
 
-igMetaObject *FUN_00363630(void) {
+igMetaObject *beDemoManagerWorkList_GetOrCreateMetaObject(void) {
     if (g_beDemoManagerWorkList_metaObject == 0) {
         g_beDemoManagerWorkList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDemoManagerWorkList_metaObject;
 }
 
-void *FUN_00363680(void) {
+void *beDemoManagerWorkList_GetMetaObject(void) {
     igMetaObject *g = g_beDemoManagerWorkList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00363710();
+        beDemoManagerWorkList_EnsureRegistered();
     }
     return g_beDemoManagerWorkList_metaObject;
 }
@@ -19,16 +19,16 @@ int beDemoManagerWorkList_GetVTable(void) {
     struct Obj_3636d0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00535740[0];
+    obj.vt = &g_beDemoManagerWorkList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00363710(void)
+void beDemoManagerWorkList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDemoManagerWorkList_Register);
 }
 
-static igMetaObjectCallback g_beDemoManagerWorkList_callbackList[] = { FUN_00363930, 0 };
+static igMetaObjectCallback g_beDemoManagerWorkList_callbackList[] = { beDemoManagerWork_EnsureRegistered, 0 };
 
 void *beDemoManagerWorkList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beDemoManagerWorkList_Register(void) {
         &g_beDemoManagerWorkList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beDemoManagerWorkList_GetMetaObject,
+        beDemoManagerWorkList_GetMetaObjectFunction,
         "beDemoManagerWorkList",
         0x14, /* instance size */
         beDemoManagerWorkList_GetVTable,
@@ -47,8 +47,8 @@ void *beDemoManagerWorkList_Register(void) {
     );
 }
 
-void beDemoManagerWorkList_GetMetaObject(void)
+void beDemoManagerWorkList_GetMetaObjectFunction(void)
 {
-    FUN_00363680();
+    beDemoManagerWorkList_GetMetaObject();
 }
 

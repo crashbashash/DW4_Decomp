@@ -18,7 +18,7 @@ igMetaObject *igVertexBlendMatrixListAttrPool_GetMetaObject(void)
 int igVertexBlendMatrixListAttrPool_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_0052b040[0];
+    obj[0] = (int)&g_igVertexBlendMatrixListAttrPool_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 

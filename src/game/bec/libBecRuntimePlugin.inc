@@ -39,15 +39,20 @@ igMetaField *g_libBecRuntimePlugin_demoManagerMetaField;
 igMetaField *g_libBecRuntimePlugin_timerMetaField;
 igMetaField *g_libBecRuntimePlugin_memoryMetaField;
 
-void *FUN_0033c900(void) {
+void *libBecRuntimePlugin_GetMetaObject(void) {
     unsigned char b;
     if (g_libBecRuntimePlugin_metaObject != 0) {
         b = (*(int *)((char *)(g_libBecRuntimePlugin_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_0033e350();
+    libBecRuntimePlugin_EnsureRegistered();
 done:
     return g_libBecRuntimePlugin_metaObject;
+}
+
+int libBecRuntimePlugin_GetVTable(void) {
+    BecRuntimePluginView plugin;
+    return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 ObjectRefWord *FUN_0033cd20(ObjectRefWord *self,int delete_storage) {
@@ -886,16 +891,16 @@ int *FUN_0033e300(int *p)
 
 int **FUN_0033e310(int **arg0) {
     igObject_InitHeader();
-    *arg0 = &DAT_005338a0[0];
+    *arg0 = &g_igInsightPlugin_vtable[0];
     return arg0;
 }
 
-void FUN_0033e350(void)
+void libBecRuntimePlugin_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(libBecRuntimePlugin_Register);
 }
 
-static igMetaObjectCallback g_libBecRuntimePlugin_callbackList[] = { FUN_0034c7f0, FUN_0035b9c0, FUN_0035a880, FUN_00345bc0, FUN_00340e80, FUN_0036def0, FUN_00357820, FUN_00342b00, FUN_0033f750, FUN_00369a20, FUN_0034bba0, FUN_00369f80, FUN_003688d0, FUN_00345010, FUN_00360d30, FUN_0035da30, FUN_0035ed50, FUN_003444c0, FUN_003466b0, FUN_0036c1f0, FUN_0035cbf0, FUN_00362170, FUN_00343650, FUN_0035c1d0, FUN_0034e520, FUN_003438b0, FUN_0034f0a0, FUN_00366290, FUN_00346ef0, FUN_003424e0, FUN_00342f30, FUN_00357d10, FUN_003629b0, FUN_0034cb30, FUN_00367b20, be_EnsureRegistered, FUN_00363480, FUN_00341500, FUN_00359310, 0 };
+static igMetaObjectCallback g_libBecRuntimePlugin_callbackList[] = { beParticleCtrl2_EnsureRegistered, beLua_EnsureRegistered, beMatCtrl_EnsureRegistered, beSelectCtrl_EnsureRegistered, beWaterPlain_EnsureRegistered, beAction2_EnsureRegistered, beMeterCtrl_EnsureRegistered, beTargetObj_EnsureRegistered, beWeapon_EnsureRegistered, beCameraCtrl_EnsureRegistered, bePoint01_EnsureRegistered, beBkColor_EnsureRegistered, beChangePosTransform_EnsureRegistered, beShadow01_EnsureRegistered, beGenerater_EnsureRegistered, beHitLandModel_EnsureRegistered, beHitLandDeliv_EnsureRegistered, beSound_EnsureRegistered, beSeCtl_EnsureRegistered, beActionStarter_EnsureRegistered, beLayerCtl_EnsureRegistered, beFont_EnsureRegistered, beSwitchCtrl_EnsureRegistered, beLightCtrl_EnsureRegistered, beNumberCtrl_EnsureRegistered, beStaticInfoCtl_EnsureRegistered, beMovie_EnsureRegistered, beDBManager_EnsureRegistered, beSaveUtil_EnsureRegistered, beTextureCtrl_EnsureRegistered, beSystem_EnsureRegistered, beMessenger_EnsureRegistered, beFileListInfoManager_EnsureRegistered, bePadManager_EnsureRegistered, beCri_EnsureRegistered, be_EnsureRegistered, beDemoManager_EnsureRegistered, beTimer_EnsureRegistered, beMemory_EnsureRegistered, 0 };
 
 void *libBecRuntimePlugin_Register(void) {
     BecLibrary_MarkRegistered();
@@ -904,7 +909,7 @@ void *libBecRuntimePlugin_Register(void) {
         &g_libBecRuntimePlugin_metaObject,
         igInsightPlugin_Register,
         igInsightPlugin_GetPublishedMetaObject,
-        libBecRuntimePlugin_GetMetaObject,
+        libBecRuntimePlugin_GetMetaObjectFunction,
         "libBecRuntimePlugin",
         0xa4, /* instance size */
         libBecRuntimePlugin_GetVTable,
@@ -914,9 +919,9 @@ void *libBecRuntimePlugin_Register(void) {
     );
 }
 
-void libBecRuntimePlugin_GetMetaObject(void)
+void libBecRuntimePlugin_GetMetaObjectFunction(void)
 {
-    FUN_0033c900();
+    libBecRuntimePlugin_GetMetaObject();
 }
 
 static FieldFactory g_libBecRuntimePlugin_ctorTable[] = {
@@ -1131,83 +1136,83 @@ void libBecRuntimePlugin_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_libBecRuntimePlugin_ctorTable, 0x27);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0034c670();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beParticleCtrl2_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0035b770();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beLua_GetOrCreateMetaObject();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0035a750();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beMatCtrl_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_00345a40();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beSelectCtrl_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_00340d00();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)beWaterPlain_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_0036dd70();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)beAction2_GetOrCreateMetaObject();
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_003576a0();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)beMeterCtrl_GetOrCreateMetaObject();
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)FUN_003429b0();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)beTargetObj_GetOrCreateMetaObject();
     temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)FUN_0033f450();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)beWeapon_GetOrCreateMetaObject();
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)FUN_00369860();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)beCameraCtrl_GetOrCreateMetaObject();
     temp_s2_11 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)FUN_0034ba20();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)bePoint01_GetOrCreateMetaObject();
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_00369e00();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)beBkColor_GetOrCreateMetaObject();
     temp_s2_13 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC));
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)FUN_00368750();
+    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)beChangePosTransform_GetOrCreateMetaObject();
     temp_s2_14 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xD));
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)FUN_00344e80();
+    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)beShadow01_GetOrCreateMetaObject();
     temp_s2_15 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xE));
-    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = (int)FUN_00360bb0();
+    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = (int)beGenerater_GetOrCreateMetaObject();
     temp_s2_16 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xF));
-    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = (int)FUN_0035d7c0();
+    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = (int)beHitLandModel_GetOrCreateMetaObject();
     temp_s2_17 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x10));
-    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)FUN_0035ebd0();
+    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)beHitLandDeliv_GetOrCreateMetaObject();
     temp_s2_18 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11));
-    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)FUN_003442f0();
+    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)beSound_GetOrCreateMetaObject();
     temp_s2_19 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x12));
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)FUN_00346530();
+    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)beSeCtl_GetOrCreateMetaObject();
     temp_s2_20 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x13));
-    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)FUN_0036c070();
+    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)beActionStarter_GetOrCreateMetaObject();
     temp_s2_21 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x14));
-    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)FUN_0035cae0();
+    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)beLayerCtl_GetOrCreateMetaObject();
     temp_s2_22 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x15));
-    ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)FUN_00361e90();
+    ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)beFont_GetOrCreateMetaObject();
     temp_s2_23 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x16));
-    ((igObjectRefMetaField *)temp_s2_23)->_metaObject = (int)FUN_003434d0();
+    ((igObjectRefMetaField *)temp_s2_23)->_metaObject = (int)beSwitchCtrl_GetOrCreateMetaObject();
     temp_s2_24 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x17));
-    ((igObjectRefMetaField *)temp_s2_24)->_metaObject = (int)FUN_0035c050();
+    ((igObjectRefMetaField *)temp_s2_24)->_metaObject = (int)beLightCtrl_GetOrCreateMetaObject();
     temp_s2_25 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x18));
-    ((igObjectRefMetaField *)temp_s2_25)->_metaObject = (int)FUN_0034e3a0();
+    ((igObjectRefMetaField *)temp_s2_25)->_metaObject = (int)beNumberCtrl_GetOrCreateMetaObject();
     temp_s2_26 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x19));
-    ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)FUN_003437a0();
+    ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)beStaticInfoCtl_GetOrCreateMetaObject();
     temp_s2_27 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1A));
-    ((igObjectRefMetaField *)temp_s2_27)->_metaObject = (int)FUN_0034ef70();
+    ((igObjectRefMetaField *)temp_s2_27)->_metaObject = (int)beMovie_GetOrCreateMetaObject();
     temp_s2_28 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1B));
-    ((igObjectRefMetaField *)temp_s2_28)->_metaObject = (int)FUN_00366110();
+    ((igObjectRefMetaField *)temp_s2_28)->_metaObject = (int)beDBManager_GetOrCreateMetaObject();
     temp_s2_29 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1C));
-    ((igObjectRefMetaField *)temp_s2_29)->_metaObject = (int)FUN_00346cc0();
+    ((igObjectRefMetaField *)temp_s2_29)->_metaObject = (int)beSaveUtil_GetOrCreateMetaObject();
     temp_s2_30 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1D));
-    ((igObjectRefMetaField *)temp_s2_30)->_metaObject = (int)FUN_00342350();
+    ((igObjectRefMetaField *)temp_s2_30)->_metaObject = (int)beTextureCtrl_GetOrCreateMetaObject();
     temp_s2_31 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1E));
-    ((igObjectRefMetaField *)temp_s2_31)->_metaObject = (int)FUN_00342ce0();
+    ((igObjectRefMetaField *)temp_s2_31)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     temp_s2_32 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1F));
-    ((igObjectRefMetaField *)temp_s2_32)->_metaObject = (int)FUN_00357910();
+    ((igObjectRefMetaField *)temp_s2_32)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     temp_s2_33 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x20));
-    ((igObjectRefMetaField *)temp_s2_33)->_metaObject = (int)FUN_00362830();
+    ((igObjectRefMetaField *)temp_s2_33)->_metaObject = (int)beFileListInfoManager_GetOrCreateMetaObject();
     temp_s2_34 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x21));
-    ((igObjectRefMetaField *)temp_s2_34)->_metaObject = (int)FUN_0034c8e0();
+    ((igObjectRefMetaField *)temp_s2_34)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     temp_s2_35 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x22));
-    ((igObjectRefMetaField *)temp_s2_35)->_metaObject = (int)FUN_003678a0();
+    ((igObjectRefMetaField *)temp_s2_35)->_metaObject = (int)beCri_GetOrCreateMetaObject();
     temp_s2_36 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x23));
-    ((igObjectRefMetaField *)temp_s2_36)->_metaObject = (int)FUN_0036dfe0();
+    ((igObjectRefMetaField *)temp_s2_36)->_metaObject = (int)be_GetOrCreateMetaObject();
     temp_s2_37 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x24));
-    ((igObjectRefMetaField *)temp_s2_37)->_metaObject = (int)FUN_00363250();
+    ((igObjectRefMetaField *)temp_s2_37)->_metaObject = (int)beDemoManager_GetOrCreateMetaObject();
     temp_s2_38 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x25));
-    ((igObjectRefMetaField *)temp_s2_38)->_metaObject = (int)FUN_00341380();
+    ((igObjectRefMetaField *)temp_s2_38)->_metaObject = (int)beTimer_GetOrCreateMetaObject();
     temp_s2_39 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x26));
-    ((igObjectRefMetaField *)temp_s2_39)->_metaObject = (int)FUN_003591e0();
+    ((igObjectRefMetaField *)temp_s2_39)->_metaObject = (int)beMemory_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_libBecRuntimePlugin_fieldTable, g_libBecRuntimePlugin_fieldHandles, g_libBecRuntimePlugin_fieldOffsets, temp_s0);
 }
 

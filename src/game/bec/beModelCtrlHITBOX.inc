@@ -6,16 +6,16 @@ igMetaField *g_beModelCtrlHITBOX_offsetMetaField;
 igMetaField *g_beModelCtrlHITBOX_boxSizeMetaField;
 
 void beModelCtrlHITBOX_Create(int arg0) {
-    FUN_00354b80();
+    beModelCtrlHITBOX_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588D20, arg0);
 }
 
-igMetaObject *FUN_00354aa0(void)
+igMetaObject *beModelCtrlHITBOX_GetMetaObject(void)
 {
     igMetaObject *g = g_beModelCtrlHITBOX_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_00354b80();
+        beModelCtrlHITBOX_EnsureRegistered();
     return g_beModelCtrlHITBOX_metaObject;
 }
 
@@ -31,7 +31,7 @@ int beModelCtrlHITBOX_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_005377d0[0];
+    u.vt = (int)&g_beModelCtrlHITBOX_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -48,7 +48,7 @@ int beModelCtrlHITBOX_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00354b80(void)
+void beModelCtrlHITBOX_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlHITBOX_Register);
 }
@@ -60,7 +60,7 @@ void *beModelCtrlHITBOX_Register(void) {
         &g_beModelCtrlHITBOX_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlHITBOX_GetMetaObject,
+        beModelCtrlHITBOX_GetMetaObjectFunction,
         "beModelCtrlHITBOX",
         0x30, /* instance size */
         beModelCtrlHITBOX_GetVTable,
@@ -70,9 +70,9 @@ void *beModelCtrlHITBOX_Register(void) {
     );
 }
 
-void beModelCtrlHITBOX_GetMetaObject(void)
+void beModelCtrlHITBOX_GetMetaObjectFunction(void)
 {
-    FUN_00354aa0();
+    beModelCtrlHITBOX_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlHITBOX_ctorTable[] = {

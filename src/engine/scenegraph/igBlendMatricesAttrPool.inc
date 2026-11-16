@@ -19,7 +19,7 @@ int igBlendMatricesAttrPool_GetVTable(void) {
     struct Obj_199a90 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b190[0];
+    obj.vt = &g_igBlendMatricesAttrPool_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

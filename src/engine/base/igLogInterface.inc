@@ -20,7 +20,7 @@ int igLogInterface_GetVTable(void) {
     union U_2 u;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_0052bfa0[0]);
+    u.w[0] = (int)(&g_igLogInterface_vtable[0]);
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 

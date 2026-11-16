@@ -30,15 +30,15 @@ extern "C" int beMessenger_AppendFloat(int, float);
 extern "C" int beMessenger_EnqueueSelected(int, const void *, int);
 extern "C" int beMessenger_PrepareDelayedSelection(int, const void *, const char *, int);
 extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_30(void);
-extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_20(void);
+extern "C" int beNDMWPanelWaza_GetInfoMeta(void);
+extern "C" int beNDMWPanelWaza_GetMeta(void);
 extern "C" int beMessenger_RegisterReceiver(int, void *, const void *, int, int);
 extern "C" int beBaseInfoRam_StartTimer(...);
 extern "C" int beBaseInfoRam_IsTimerExpired(void *, const char *);
 extern "C" int FUN_003cc3d0(int, int *);
 extern "C" int FUN_003cc480(void *);
 extern "C" int FUN_003cc540(void *);
-extern "C" void *FUN_003bdb10(void *);
+extern "C" void *beNDMWPanelWazaInfoWork_Create(void *);
 extern "C" int FUN_003bee30(...);
 extern "C" void *Memory_GetAllocatorBySelector(int);
 extern "C" void *igObject_GetAllocator(void *);
@@ -51,10 +51,10 @@ extern "C" int beMessenger_PopArgContext(int);
 extern "C" int beMessenger_PushArgContext(int);
 extern "C" int beMessenger_SendNamed(int, const void *, const void *, int, const void *);
 extern "C" int beMessenger_SetBool(int, int, unsigned char);
-extern "C" int Gap__Bec__beNDMWPanelObjectStat__vfunc_20(void);
-extern "C" void Gap__Bec__beNDMWPanelObjectStat__vfunc_22(void);
-extern "C" int Gap__Bec__beNDMWPanelObjectItem__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWPanelObjectWaza__vfunc_20(void);
+extern "C" int beNDMWPanelObjectStat_GetMeta(void);
+extern "C" void beNDMWPanelObjectStat_Fire(void);
+extern "C" int beNDMWPanelObjectItem_GetMeta(void);
+extern "C" int beNDMWPanelObjectWaza_GetMeta(void);
 #pragma push
 #pragma readonly_strings on
 
@@ -99,15 +99,15 @@ struct Rel { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza *arg0);
+extern "C" void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *arg0);
 /* Property record: integer value at +12. */
 struct PropertyRecordInt { char p[12]; int value; };
-extern "C" void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2);
+extern "C" void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2);
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void Gap__Bec__beNDMWPanelWaza__vfunc_32(beNDMWPanelWaza *arg0);
+extern "C" void beNDMWPanelWaza_Prepare(beNDMWPanelWaza *arg0);
 extern "C" int g_beNDMWPanelWazaInfo_metaObject[4];
 extern "C" int g_beNDMWPanelWaza_metaObject[4];
-extern "C" void Gap__Bec__beNDMWPanelWaza__vfunc_29(beNDMWPanelWaza *arg0, void *arg1);
+extern "C" void beNDMWPanelWaza_OnAddRam(beNDMWPanelWaza *arg0, void *arg1);
 extern "C" bePadData *bePadManager_GetPadForPlayer(int, int);
 class StringRef {
 public:
@@ -156,7 +156,7 @@ static void SetLabel(beNDMWPanelWazaInfoWork *w, int str)
     w->_retWazaLabel = fresh;
 }
 };
-extern "C" void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram);
+extern "C" void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram);
 /* matching construct: dummy-virtual view of beNDMWPanelObjectItem so the call
  * through slot 21 compiles to the retail vtable load; the data fields are
  * reached through the reflected struct. */
@@ -172,7 +172,7 @@ public:
 struct Rec_3d0760 { int p[3]; igObjectList *f12; };
 extern "C" int FUN_003d0760(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1);
 /* matching construct: dummy-virtual view of beNDMWPanelObjectWaza so the call
- * through slot 21 (Gap__Bec__beNDMWPanelObjectWaza__vfunc_21) compiles to the
+ * through slot 21 (beNDMWPanelObjectWaza_Refresh) compiles to the
  * retail vtable load; the data fields are reached through the reflected struct. */
 class WazaPanelShim {
 public:
@@ -196,11 +196,11 @@ struct Rel_3d0a90 { static inline void go(igObject *object) {
 extern "C" void FUN_003d0a90(int arg0, beNDMWPanelWazaInfoRam *arg1, int arg2, igObject *arg3);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2);
+extern "C" int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2);
 extern "C" int g_beNDMWPanelObjectStat_metaObject[4];
 extern "C" int g_beNDMWPanelObjectItem_metaObject[4];
 extern "C" int g_beNDMWPanelObjectWaza_metaObject[4];
-/* matching construct: dummy-virtual view of beNDMWItemDisk; slot 22 (Gap__Bec__beNDMWItemDisk__vfunc_22)
+/* matching construct: dummy-virtual view of beNDMWItemDisk; slot 22 (beNDMWItemDisk_Use)
  * uses one disk on a player and reports whether it took effect */
 class DiskUseShim {
 public:
@@ -423,7 +423,7 @@ void FUN_003ce890(O *arg0) {
 
 static inline int countOf(const igIntList *l) { return l->_count; }
 
-void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza *arg0) {
+void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *arg0) {
     int spB0[3];
     int spA8[2];
     if (arg0->_playerDataList == 0) {
@@ -526,7 +526,7 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza *arg0) {
     } while (i < 4);
 }
 
-void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2) {
+void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2) {
     int temp_s2;
     struct PropertyRecordInt *temp_s1;
     int temp_s0;
@@ -840,18 +840,18 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
     } while (i < 4);
 }
 
-void Gap__Bec__beNDMWPanelWaza__vfunc_32(beNDMWPanelWaza *arg0) {
+void beNDMWPanelWaza_Prepare(beNDMWPanelWaza *arg0) {
     if (arg0->_padManager == 0) {
         arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
     }
 }
 
-int Gap__Bec__beNDMWPanelWaza__vfunc_30(void)
+int beNDMWPanelWaza_GetInfoMeta(void)
 {
     return g_beNDMWPanelWazaInfo_metaObject[0];
 }
 
-void Gap__Bec__beNDMWPanelWaza__vfunc_29(beNDMWPanelWaza *arg0, void *arg1) {
+void beNDMWPanelWaza_OnAddRam(beNDMWPanelWaza *arg0, void *arg1) {
     beMessenger_RegisterReceiver(arg0->_messenger, arg1, "NDMWPANEL", 0, *(int *)((char *)(arg1) + 8));
     *(char *)((char *)(arg1) + 20) = 0;
 }
@@ -861,7 +861,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_29(beNDMWPanelWaza *arg0, void *arg1) {
  * both are out of line. */
 static inline int st3(const beNDMWPanelWazaInfoRam *ram) { return ram->_st3; }
 
-void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram)
+void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram)
 {
     unsigned char show;
     beNDMWPanelWazaInfoRam *ramState;
@@ -1228,7 +1228,7 @@ void FUN_003d0a90(int arg0, beNDMWPanelWazaInfoRam *arg1, int arg2, igObject *ar
 
 /* matching constructs: ok is a C++ bool (daddiu); the AppendBool/SetBool bool arguments are unsigned char so
  * the byte load is scheduled like retail. */
-int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2) {
+int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2) {
     unsigned int kind;
     beNDMWPanelWazaInfoWork *work;
     bool ok;
@@ -1239,7 +1239,7 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
     if (work == 0) {
         alloc = igObject_GetAllocator(self);
         alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        igSmartPointer<igObject> created((igObject *)FUN_003bdb10(alloc));
+        igSmartPointer<igObject> created((igObject *)beNDMWPanelWazaInfoWork_Create(alloc));
         { igObject *n = created.p; RET(n) { igObject *o = (igObject *)ram->_work; REL(o) } ram->_work = (int)n; }
         work = (beNDMWPanelWazaInfoWork *)created.p;
         HOOK(beNDMWPanelObjectWaza, work->_panelWaza)
@@ -1377,26 +1377,26 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
     }
 }
 
-int Gap__Bec__beNDMWPanelWaza__vfunc_20(void)
+int beNDMWPanelWaza_GetMeta(void)
 {
     return g_beNDMWPanelWaza_metaObject[0];
 }
 
-int Gap__Bec__beNDMWPanelObjectStat__vfunc_20(void)
+int beNDMWPanelObjectStat_GetMeta(void)
 {
     return g_beNDMWPanelObjectStat_metaObject[0];
 }
 
-void Gap__Bec__beNDMWPanelObjectStat__vfunc_22(void)
+void beNDMWPanelObjectStat_Fire(void)
 {
 }
 
-int Gap__Bec__beNDMWPanelObjectItem__vfunc_20(void)
+int beNDMWPanelObjectItem_GetMeta(void)
 {
     return g_beNDMWPanelObjectItem_metaObject[0];
 }
 
-int Gap__Bec__beNDMWPanelObjectWaza__vfunc_20(void)
+int beNDMWPanelObjectWaza_GetMeta(void)
 {
     return g_beNDMWPanelObjectWaza_metaObject[0];
 }

@@ -31,12 +31,12 @@ extern "C" void *igProperty_FindByName(...);
 struct RefObject { int vtable; int refCount; };
 extern "C" RefObject * igInsightCore_FindManager(...);
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void beNDMWSaveIntf_AcquirePadManager(beNDMWSaveIntf *self);
+extern "C" void beNDMWSaveIntf_Prepare(beNDMWSaveIntf *self);
 extern "C" int g_beNDMWSaveIntfInfo_metaObject[4];
 extern "C" int g_beNDMWSaveIntf_metaObject[4];
 extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, const void *);
-extern "C" void beNDMWSaveIntf_RegisterReceivers(beNDMWSaveIntf *self, beBaseInfoRam *ram);
+extern "C" void beNDMWSaveIntf_OnAddRam(beNDMWSaveIntf *self, beBaseInfoRam *ram);
 /* The values of the save interface's Message enum (beNDMWSaveIntf_GetMessageEnum). */
 enum SaveMessage {
     MSG_GENERATE = 0,
@@ -262,10 +262,10 @@ static inline void EndInterface(beNDMWLoadCtrl2CommonIntf *common) {
         beNDMWLoadSavePlWork__SetIsCtrl(DataList_GetWordAt_003e9240(works, index), 0);
     }
 }
-extern "C" void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram);
+extern "C" void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram);
 extern "C" int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageArg *message);
 
-void beNDMWSaveIntf_AcquirePadManager(beNDMWSaveIntf *self) {
+void beNDMWSaveIntf_Prepare(beNDMWSaveIntf *self) {
     RefObject *found;
     RefObject *old;
 
@@ -285,7 +285,7 @@ void beNDMWSaveIntf_AcquirePadManager(beNDMWSaveIntf *self) {
     }
 }
 
-void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
+void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
     beNDMWSaveIntfCtrlData *ctrl;
     beNDMWLoadIntf2ComMdlCtrl *comMdl;
     beNDMWLoadIntf2MesWin *mesWin;
@@ -1963,7 +1963,7 @@ int beNDMWSaveIntf_GetInfoMeta(void)
     return g_beNDMWSaveIntfInfo_metaObject[0];
 }
 
-void beNDMWSaveIntf_RegisterReceivers(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
+void beNDMWSaveIntf_OnAddRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "SAVEINTF_ALL");
     beMessenger_RegisterReceiver(self->_messenger, ram, "SAVEINTF", 0, ram->_ramNo);
 }

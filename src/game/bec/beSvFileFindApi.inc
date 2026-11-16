@@ -1,17 +1,17 @@
 igMetaObject *g_beSvFileFindApi_metaObject;
 
-void FUN_00349af0(int arg0) {
-    FUN_00349cc0();
+void beSvFileFindApi_Create(int arg0) {
+    beSvFileFindApi_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588278, arg0);
 }
 
-void *FUN_00349b30(void) {
+void *beSvFileFindApi_GetMetaObject(void) {
     bool ok;
     if (g_beSvFileFindApi_metaObject == 0) goto make;
     ok = !!(g_beSvFileFindApi_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_00349cc0();
+    beSvFileFindApi_EnsureRegistered();
 done:;
     return g_beSvFileFindApi_metaObject;
 }
@@ -27,14 +27,14 @@ int beSvFileFindApi_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.o._imageWork;
     *q1 = 0;
-    u.o._vtable = (int)(&DAT_0053c070[0]);
+    u.o._vtable = (int)(&g_beSaveApi_vtable[0]);
     q2 = &u.o._mountWork;
     *q2 = 0;
     q3 = &u.o._iconWork;
     *q3 = 0;
-    u.o._vtable = (int)(&DAT_0053bf90[0]);
+    u.o._vtable = (int)(&g_beSvFileFindApi_vtable[0]);
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.o._vtable = (int)(&DAT_0053c070[0]);
+    u.o._vtable = (int)(&g_beSaveApi_vtable[0]);
     if (q3 != 0) {
         a0 = (igObject *)*q3;
         if (a0 != 0) {
@@ -65,7 +65,7 @@ int beSvFileFindApi_GetVTable(void) {
     return temp_s2;
 }
 
-void FUN_00349cc0(void)
+void beSvFileFindApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvFileFindApi_Register);
 }
@@ -77,7 +77,7 @@ void *beSvFileFindApi_Register(void) {
         &g_beSvFileFindApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
-        beSvFileFindApi_GetMetaObject,
+        beSvFileFindApi_GetMetaObjectFunction,
         "beSvFileFindApi",
         0x54, /* instance size */
         beSvFileFindApi_GetVTable,
@@ -87,8 +87,8 @@ void *beSvFileFindApi_Register(void) {
     );
 }
 
-void beSvFileFindApi_GetMetaObject(void)
+void beSvFileFindApi_GetMetaObjectFunction(void)
 {
-    FUN_00349b30();
+    beSvFileFindApi_GetMetaObject();
 }
 

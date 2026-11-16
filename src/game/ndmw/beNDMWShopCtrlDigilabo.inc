@@ -8,15 +8,15 @@ igMetaField *g_beNDMWShopCtrlDigilabo_topMenuMetaField;
 igMetaField *g_beNDMWShopCtrlDigilabo_isDemoRunMetaField;
 
 void beNDMWShopCtrlDigilabo_Create(int arg0) {
-    FUN_003b78a0();
+    beNDMWShopCtrlDigilabo_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopCtrlDigilabo_metaObject, arg0);
 }
 
-igMetaObject *FUN_003b7790(void) {
+igMetaObject *beNDMWShopCtrlDigilabo_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWShopCtrlDigilabo_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003b78a0();
+        beNDMWShopCtrlDigilabo_EnsureRegistered();
     return g_beNDMWShopCtrlDigilabo_metaObject;
 }
 
@@ -32,12 +32,12 @@ int beNDMWShopCtrlDigilabo_GetVTable(void) {
     obj.w17 = 0;
     obj.w18 = 0;
     obj.w19 = 0;
-    obj.vt = &DAT_0053fae0[0];
+    obj.vt = &g_beNDMWShopCtrlDigilabo_vtable[0];
     obj.w21 = 0;
     obj.w22 = 0;
     obj.w23 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053fae0[0];
+    obj.vt = &g_beNDMWShopCtrlDigilabo_vtable[0];
     FUN_0019d200(&obj.w23, -1);
     igSmartPointer_igIntList_Destruct(&obj.w22, -1);
     igSmartPointer_igIntList_Destruct(&obj.w21, -1);
@@ -45,7 +45,7 @@ int beNDMWShopCtrlDigilabo_GetVTable(void) {
     return t;
 }
 
-void FUN_003b78a0(void)
+void beNDMWShopCtrlDigilabo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopCtrlDigilabo_Register);
 }
@@ -59,7 +59,7 @@ void *beNDMWShopCtrlDigilabo_Register(void) {
         &g_beNDMWShopCtrlDigilabo_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWShopCtrlDigilabo_GetMetaObject,
+        beNDMWShopCtrlDigilabo_GetMetaObjectFunction,
         "beNDMWShopCtrlDigilabo",
         0x6c, /* instance size */
         beNDMWShopCtrlDigilabo_GetVTable,
@@ -69,9 +69,9 @@ void *beNDMWShopCtrlDigilabo_Register(void) {
     );
 }
 
-void beNDMWShopCtrlDigilabo_GetMetaObject(void)
+void beNDMWShopCtrlDigilabo_GetMetaObjectFunction(void)
 {
-    FUN_003b7790();
+    beNDMWShopCtrlDigilabo_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWShopCtrlDigilabo_ctorTable[] = {

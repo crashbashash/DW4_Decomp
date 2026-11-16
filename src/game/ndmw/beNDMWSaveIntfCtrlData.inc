@@ -18,17 +18,17 @@ igMetaField *g_beNDMWSaveIntfCtrlData_st3MetaField;
 igMetaEnum *g_beNDMWSaveIntfCtrlData_messageMetaEnum;
 
 void beNDMWSaveIntfCtrlData_Create(int arg0) {
-    FUN_003bca60();
+    beNDMWSaveIntfCtrlData_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWSaveIntfCtrlData_metaObject, arg0);
 }
 
-void *FUN_003bc980(void) {
+void *beNDMWSaveIntfCtrlData_GetMetaObject(void) {
     bool ok;
     if (g_beNDMWSaveIntfCtrlData_metaObject == 0) goto make;
     ok = !!(g_beNDMWSaveIntfCtrlData_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003bca60();
+    beNDMWSaveIntfCtrlData_EnsureRegistered();
 done:;
     return g_beNDMWSaveIntfCtrlData_metaObject;
 }
@@ -45,7 +45,7 @@ int beNDMWSaveIntfCtrlData_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053d7d0[0];
+    u.vt = (int)&g_beNDMWSaveIntfCtrlData_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -62,7 +62,7 @@ int beNDMWSaveIntfCtrlData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003bca60(void)
+void beNDMWSaveIntfCtrlData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWSaveIntfCtrlData_Register);
 }
@@ -74,7 +74,7 @@ void *beNDMWSaveIntfCtrlData_Register(void) {
         &g_beNDMWSaveIntfCtrlData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beNDMWSaveIntfCtrlData_GetMetaObject,
+        beNDMWSaveIntfCtrlData_GetMetaObjectFunction,
         "beNDMWSaveIntfCtrlData",
         0x34, /* instance size */
         beNDMWSaveIntfCtrlData_GetVTable,
@@ -84,9 +84,9 @@ void *beNDMWSaveIntfCtrlData_Register(void) {
     );
 }
 
-void beNDMWSaveIntfCtrlData_GetMetaObject(void)
+void beNDMWSaveIntfCtrlData_GetMetaObjectFunction(void)
 {
-    FUN_003bc980();
+    beNDMWSaveIntfCtrlData_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWSaveIntfCtrlData_ctorTable[] = {

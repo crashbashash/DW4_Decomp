@@ -1,16 +1,16 @@
 igMetaObject *g_beGroupKeepList_metaObject;
 
-igMetaObject *FUN_0035ee00(void) {
+igMetaObject *beGroupKeepList_GetOrCreateMetaObject(void) {
     if (g_beGroupKeepList_metaObject == 0) {
         g_beGroupKeepList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beGroupKeepList_metaObject;
 }
 
-void *FUN_0035ee50(void) {
+void *beGroupKeepList_GetMetaObject(void) {
     igMetaObject *g = g_beGroupKeepList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035eee0();
+        beGroupKeepList_EnsureRegistered();
     }
     return g_beGroupKeepList_metaObject;
 }
@@ -19,16 +19,16 @@ int beGroupKeepList_GetVTable(void) {
     struct Obj_35eea0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00536150[0];
+    obj.vt = &g_beGroupKeepList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0035eee0(void)
+void beGroupKeepList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGroupKeepList_Register);
 }
 
-static igMetaObjectCallback g_beGroupKeepList_callbackList[] = { FUN_0035f050, 0 };
+static igMetaObjectCallback g_beGroupKeepList_callbackList[] = { beGroupKeep_EnsureRegistered, 0 };
 
 void *beGroupKeepList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beGroupKeepList_Register(void) {
         &g_beGroupKeepList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beGroupKeepList_GetMetaObject,
+        beGroupKeepList_GetMetaObjectFunction,
         "beGroupKeepList",
         0x14, /* instance size */
         beGroupKeepList_GetVTable,
@@ -47,8 +47,8 @@ void *beGroupKeepList_Register(void) {
     );
 }
 
-void beGroupKeepList_GetMetaObject(void)
+void beGroupKeepList_GetMetaObjectFunction(void)
 {
-    FUN_0035ee50();
+    beGroupKeepList_GetMetaObject();
 }
 

@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int strcmp(const char *, const char *);
-extern "C" int Gap__Bec__beNDMWMdlMapCursor__vfunc_35(int dummy0, const char *kind);
+extern "C" int beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
@@ -19,17 +19,17 @@ extern "C" int beMessenger_GetMatrixCount(...);
 extern "C" int beMessenger_GetMatrix(...);
 extern "C" int igMatrix44f_GetTranslation(...);
 extern "C" int igMatrix44f_SetTranslation(...);
-extern "C" int Gap__Bec__beNDMWMdlMapCursor__vfunc_20(void);
+extern "C" int beNDMWMdlMapCursor_GetMeta(void);
 extern "C" igObject *beBaseInfoDataList_Create(int);
 struct CursorValue;
-extern "C" CursorValue *FUN_00350020(int);
+extern "C" CursorValue *beModelCtrlInfoWork_Create(int);
 struct PropertyEntry;
 extern "C" PropertyEntry * igProperty_FindByName(...);
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-/* The value object FUN_00350020 creates: an igObject whose string token sits at +220 and whose
+/* The value object beModelCtrlInfoWork_Create creates: an igObject whose string token sits at +220 and whose
  * integer at +224. */
 struct CursorValue { igObject base; char pad[212]; int *f220; int f224; };
 /* igObject is 8 bytes */
@@ -61,7 +61,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         ram->_dataList = (int)t;
     }
 } };
-extern "C" void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
 struct PropertyEntry_44b520 { char p[16]; int f16; };
 extern "C" int emptyString[4];
 extern "C" float g_vec3Zero[4];
@@ -76,17 +76,17 @@ struct RefRelease { static inline void go(igObject *object) {
     }
 } };
 struct Vec3f { float x, y, z; };
-extern "C" void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
 extern "C" int g_beNDMWMdlMapCursor_metaObject[4];
 
 #pragma push
 #pragma readonly_strings on
 
-int Gap__Bec__beNDMWMdlMapCursor__vfunc_35(int dummy0, const char *kind) {
+int beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind) {
     return strcmp(kind, "KIND_MAPCURSOR") == 0;
 }
 
-void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
     CursorValue *t;
     void *nw;
     CursorValue *t2;
@@ -100,7 +100,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfo
     {
     /* The new value object is owned by the stack reference while it replaces the record's value and
      * takes the messenger's reply; released at the block end, before the model refresh. */
-    ValueRef value(FUN_00350020(al));
+    ValueRef value(beModelCtrlInfoWork_Create(al));
     t = value.p;
     RefCount::addref(&t->base);
     RefCount::release(&pr->f20->base);
@@ -128,7 +128,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfo
     beModelCtrl__OnGenerate(arg0, arg1);
 }
 
-void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
     static const char *openSequences[] = { "SQ_OPEN00", "SQ_OPEN01", "SQ_OPEN02", "SQ_OPEN03" };
     igObject *s0;
     PropertyEntry_44b520 *r;
@@ -210,7 +210,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
     }
 }
 
-int Gap__Bec__beNDMWMdlMapCursor__vfunc_20(void)
+int beNDMWMdlMapCursor_GetMeta(void)
 {
     return g_beNDMWMdlMapCursor_metaObject[0];
 }

@@ -30,7 +30,7 @@ int igCompileTraversal_GetVTable(void) {
     int temp_s5;
     char *p6, *p5, *p4, *p3, *p2, *p1, *p0;
     FUN_001a10a0((igCommonTraversal *)u.b);
-    u.vt = (int)&DAT_00529330[0];
+    u.vt = (int)&g_igCompileTraversal_vtable[0];
     p0 = &u.b[472]; FUN_0019c360((int *)p0);
     p1 = &u.b[476]; FUN_001a2c60((int *)p1);
     p2 = &u.b[480]; FUN_001a3160((int *)p2);
@@ -92,7 +92,7 @@ void FUN_001a3170(void)
     igMetaObject_RunStaticInit(igCompileTraversal_Register);
 }
 
-static igMetaObjectCallback g_igCompileTraversal_callbackList[] = { FUN_00135620, FUN_001a3500, FUN_001e4a50, FUN_0018a780, FUN_00195de0, FUN_001a14c0, FUN_00139900, 0 };
+static igMetaObjectCallback g_igCompileTraversal_callbackList[] = { FUN_00135620, FUN_001a3500, FUN_001e4a50, igAABox_EnsureRegistered, FUN_00195de0, FUN_001a14c0, FUN_00139900, 0 };
 
 void igCompileTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -200,7 +200,7 @@ void igCompileTraversal_InitFields(void) {
     ((igMetaField *)temp_s2_3)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)))->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0018a6a0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igAABox_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_00195d00();

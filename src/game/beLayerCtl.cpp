@@ -81,14 +81,14 @@ struct Ref {
     }
 };
 
-extern "C" void beLayerCtl__ReleaseLayerSwitch(beLayerCtl *self);
-extern "C" void beLayerCtl__RegisterReceiver(beLayerCtl *self, int receiver);
+extern "C" void beLayerCtl_Prepare(beLayerCtl *self);
+extern "C" void beLayerCtl_OnAddRam(beLayerCtl *self, int receiver);
 extern "C" int beLayerCtl__GetInfoMeta(void);
-extern "C" void beLayerCtl__Update(void);
-extern "C" int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork *work);
+extern "C" void beLayerCtl_UpdateRam(void);
+extern "C" int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork *work);
 extern "C" int beLayerCtl__GetMeta(void);
 
-void beLayerCtl__ReleaseLayerSwitch(beLayerCtl *self) {
+void beLayerCtl_Prepare(beLayerCtl *self) {
     igSwitch *layers;
     igNodeList *children;
     int count;
@@ -111,7 +111,7 @@ void beLayerCtl__ReleaseLayerSwitch(beLayerCtl *self) {
     }
 }
 
-void beLayerCtl__RegisterReceiver(beLayerCtl *self, int receiver)
+void beLayerCtl_OnAddRam(beLayerCtl *self, int receiver)
 {
     beMessenger_RegisterReceiver(self->_messenger, receiver, "LAYERCTL", 0, -1);
 }
@@ -121,11 +121,11 @@ int beLayerCtl__GetInfoMeta(void)
     return g_beLayerInfo_metaObject[0];
 }
 
-void beLayerCtl__Update(void)
+void beLayerCtl_UpdateRam(void)
 {
 }
 
-int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork *work) {
+int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork *work) {
     beLayerInfo *info = (beLayerInfo *)ram->_parentInfo;
     switch (beMessenger_ResolveEnumValue(self->_messenger, beLayerCtl_GetMessageEnum(), (void *)work->_message)) {
     case MESSAGE_ORDER: {

@@ -36,7 +36,7 @@ int igAttrStackManager_GetVTable(void) {
     struct Obj_1a53d0 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00529450[0];
+    obj.vt = &g_igAttrStackManager_vtable[0];
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
@@ -49,7 +49,7 @@ int igAttrStackManager_GetVTable(void) {
     obj.w14 = 0;
     obj.w16 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00529450[0];
+    obj.vt = &g_igAttrStackManager_vtable[0];
     FUN_001a55c0((void * *)&obj.w16, -1);
     FUN_0019ff90((struct T_19fde0 * *)&obj.w14, -1);
     FUN_0019ff10((struct R * *)&obj.w13, -1);
@@ -105,7 +105,7 @@ void FUN_001a5640(void)
     igMetaObject_RunStaticInit(igAttrStackManager_Register);
 }
 
-static igMetaObjectCallback g_igAttrStackManager_callbackList[] = { FUN_001a59e0, FUN_0013afe0, igIntList_EnsureRegistered, FUN_0013ae20, igIntList_EnsureRegistered, FUN_0014fde0, FUN_0013ab50, FUN_0019a650, 0 };
+static igMetaObjectCallback g_igAttrStackManager_callbackList[] = { FUN_001a59e0, igAttrList_EnsureRegistered, igIntList_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igIntList_EnsureRegistered, FUN_0014fde0, FUN_0013ab50, FUN_0019a650, 0 };
 
 void igAttrStackManager_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */
@@ -228,7 +228,7 @@ void igAttrStackManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a5900();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0013af00();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igIntList_GetOrCreateMetaObject();

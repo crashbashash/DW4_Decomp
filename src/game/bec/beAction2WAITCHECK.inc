@@ -1,10 +1,10 @@
 igMetaObject *g_beAction2WAITCHECK_metaObject;
 igMetaField *g_beAction2WAITCHECK_waitTimeMetaField;
 
-void *FUN_0036cfa0(void) {
+void *beAction2WAITCHECK_GetMetaObject(void) {
     igMetaObject *g = g_beAction2WAITCHECK_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036d080();
+        beAction2WAITCHECK_EnsureRegistered();
     }
     return g_beAction2WAITCHECK_metaObject;
 }
@@ -21,7 +21,7 @@ int beAction2WAITCHECK_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_005341b0[0];
+    u.vt = (int)&g_beAction2WAITCHECK_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -38,7 +38,7 @@ int beAction2WAITCHECK_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0036d080(void)
+void beAction2WAITCHECK_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAction2WAITCHECK_Register);
 }
@@ -50,7 +50,7 @@ void *beAction2WAITCHECK_Register(void) {
         &g_beAction2WAITCHECK_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beAction2WAITCHECK_GetMetaObject,
+        beAction2WAITCHECK_GetMetaObjectFunction,
         "beAction2WAITCHECK",
         0x10, /* instance size */
         beAction2WAITCHECK_GetVTable,
@@ -60,9 +60,9 @@ void *beAction2WAITCHECK_Register(void) {
     );
 }
 
-void beAction2WAITCHECK_GetMetaObject(void)
+void beAction2WAITCHECK_GetMetaObjectFunction(void)
 {
-    FUN_0036cfa0();
+    beAction2WAITCHECK_GetMetaObject();
 }
 
 static FieldFactory g_beAction2WAITCHECK_ctorTable[] = {

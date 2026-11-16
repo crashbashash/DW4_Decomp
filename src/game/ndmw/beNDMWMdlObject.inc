@@ -1,11 +1,11 @@
 igMetaObject *g_beNDMWMdlObject_metaObject;
 
 void beNDMWMdlObject_CreateInstance(int arg0) {
-    FUN_003c0c90();
+    beNDMWMdlObject_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMdlObject_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c0b90(void) {
+igMetaObject *beNDMWMdlObject_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlObject_metaObject == 0) {
         g_beNDMWMdlObject_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -15,7 +15,7 @@ igMetaObject *FUN_003c0b90(void) {
 void *beNDMWMdlObject_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWMdlObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c0c90();
+        beNDMWMdlObject_EnsureRegistered();
     }
     return g_beNDMWMdlObject_metaObject;
 }
@@ -27,14 +27,14 @@ int beNDMWMdlObject_GetVTable(void) {
     igObject_InitHeader(&o);
     o.w[1] = 0;
     o.w[5] = 0;
-    o.vt = DAT_0053e480;
+    o.vt = g_beNDMWMdlObject_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_0053e480;
+    o.vt = g_beNDMWMdlObject_vtable;
     FUN_003bf2f0((struct NamedRefObject *)&o, (long long)0);
     return r;
 }
 
-void FUN_003c0c90(void)
+void beNDMWMdlObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlObject_Register);
 }

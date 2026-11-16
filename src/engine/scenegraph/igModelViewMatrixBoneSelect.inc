@@ -1,5 +1,5 @@
 void FUN_0019d3f0(int arg0) {
-    FUN_0019d4f0();
+    igModelViewMatrixBoneSelect_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igModelViewMatrixBoneSelect_metaObject, arg0);
 }
 
@@ -10,7 +10,7 @@ igMetaObject *igModelViewMatrixBoneSelect_GetMetaObject(void)
 {
     igMetaObject *g = g_igModelViewMatrixBoneSelect_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019d4f0();
+        igModelViewMatrixBoneSelect_EnsureRegistered();
     return g_igModelViewMatrixBoneSelect_metaObject;
 }
 
@@ -23,14 +23,14 @@ int igModelViewMatrixBoneSelect_GetVTable(void) {
     u.w[3] = 0;
     u.w[4] = 0;
     u.w[7] = 0;
-    u.w[0] = (int)(&DAT_0052aa10[0]);
+    u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052aa10[0]);
+    u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
     FUN_00195a90((struct T_195a90 *)&u.w[0], 0);
     return temp_s0;
 }
 
-void FUN_0019d4f0(void)
+void igModelViewMatrixBoneSelect_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igModelViewMatrixBoneSelect_Register);
 }

@@ -1,17 +1,17 @@
 igMetaObject *g_beSvStartApi_metaObject;
 int g_beSvStartApi_orderTypeStorage;
 
-void FUN_00348930(int arg0) {
-    FUN_00348b00();
+void beSvStartApi_Create(int arg0) {
+    beSvStartApi_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5881F0, arg0);
 }
 
-igMetaObject *FUN_00348970(void)
+igMetaObject *beSvStartApi_GetMetaObject(void)
 {
     igMetaObject *g = g_beSvStartApi_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_00348b00();
+        beSvStartApi_EnsureRegistered();
     return g_beSvStartApi_metaObject;
 }
 
@@ -22,16 +22,16 @@ int beSvStartApi_GetVTable(void) {
     int *v1; int *a1; int v0; int *a0;
     char *pc; char *pb; char *pa;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     pa = &u.b[48];
     *(int *)pa = 0;
     pb = &u.b[52];
     *(int *)pb = 0;
     pc = &u.b[56];
     *(int *)pc = 0;
-    u.vt = (int)&DAT_0053bcf0[0];
+    u.vt = (int)&g_beSvStartApi_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     if (pc != 0) {
         a0 = *(int **)pc;
         if (a0 != 0) {
@@ -62,7 +62,7 @@ int beSvStartApi_GetVTable(void) {
     return r;
 }
 
-void FUN_00348b00(void)
+void beSvStartApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvStartApi_Register);
 }
@@ -74,7 +74,7 @@ void *beSvStartApi_Register(void) {
         &g_beSvStartApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
-        beSvStartApi_GetMetaObject,
+        beSvStartApi_GetMetaObjectFunction,
         "beSvStartApi",
         0x40, /* instance size */
         beSvStartApi_GetVTable,
@@ -84,9 +84,9 @@ void *beSvStartApi_Register(void) {
     );
 }
 
-void beSvStartApi_GetMetaObject(void)
+void beSvStartApi_GetMetaObjectFunction(void)
 {
-    FUN_00348970();
+    beSvStartApi_GetMetaObject();
 }
 
 void beSvStartApi_InitFields(void) {

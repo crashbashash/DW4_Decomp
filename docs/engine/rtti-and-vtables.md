@@ -57,7 +57,13 @@ string as separate objects, so a compiled vtable of a game class brings all thre
 ```
 
 The array runs until the next `__vt__` header (`{rtti_ptr, 0}`), which is how the
-slot count is recovered. Verified against the docs' live-RAM result:
+slot count is recovered. A null word inside the array is a pure virtual (`= 0`) slot and
+stays in the record as `null` (`beModelCtrl` has 48 slots, 35 and 36 pure); the null words
+after the last slot are the table's 16-byte alignment, and a run of nulls also stops where
+code builds the address of the next table (the `{0, 0}` header of a class without RTTI).
+A class's trailing pure slots show in its subclasses' tables. `scripts/dump_vtables.py`
+reads either the Ghidra program or, with `--elf`, the executable's loaded segments.
+Verified against the docs' live-RAM result:
 `beGeneraterInfoWork`'s vtable is `0x00536050`, exactly the address recorded from
 the running game.
 
@@ -277,8 +283,11 @@ whether the table address is stored into an object's vptr (`object+0`) by a
 constructor, or read by a virtual call site.
 
 **The class of an RTTI-less vtable is nonetheless recovered.** Every class has a
-`<Class>_GetVTable` function, and it builds the class's vtable as the first
-rodata-range value stored to a stack slot, the same rule
+`<Class>_GetVTable` function, and it stamps the class's vtable on a stack temporary: the
+last rodata-range value stored to the slot the first one goes to, before the read back (an
+inlined base constructor stamps the base's table first, as the `igViewMode` subclasses do;
+when the constructor is called out of line the read comes first, and the destructor's first
+stamp is the class's own). The first stamp alone is the rule
 [`seed_names_metafield_slots.py`](naming.md) uses for the MetaField subclasses
 (`metafield-slots`). Applying it to **every** `_GetVTable` symbol
 resolves **958 distinct vtables / 980 classes**, of which **499 are not RTTI

@@ -1,96 +1,96 @@
-igMetaObject *Gap__Bec__beNDMWAfsSetupData__vfunc_20(void)
+igMetaObject *beNDMWAfsSetupData_GetMeta(void)
 {
     return g_beNDMWAfsSetupData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWAfsSetupDataList__vfunc_20(void)
+igMetaObject *beNDMWAfsSetupDataList_GetMeta(void)
 {
     return g_beNDMWAfsSetupDataList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWAfsSetupInfo__vfunc_20(void)
+igMetaObject *beNDMWAfsSetupInfo_GetMeta(void)
 {
     return g_beNDMWAfsSetupInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWGameRamInfo__vfunc_20(void)
+igMetaObject *beNDMWGameRamInfo_GetMeta(void)
 {
     return g_beNDMWGameRamInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWGameRamInfoRam__vfunc_20(void)
+igMetaObject *beNDMWGameRamInfoRam_GetMeta(void)
 {
     return g_beNDMWGameRamInfoRam_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWShinkaObject__vfunc_20(void)
+igMetaObject *beNDMWShinkaObject_GetMeta(void)
 {
     return g_beNDMWShinkaObject_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWShinkaObjectList__vfunc_20(void)
+igMetaObject *beNDMWShinkaObjectList_GetMeta(void)
 {
     return g_beNDMWShinkaObjectList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWShinkaCtrl__vfunc_20(void)
+igMetaObject *beNDMWShinkaCtrl_GetMeta(void)
 {
     return g_beNDMWShinkaCtrl_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWItemBaseList__vfunc_20(void)
+igMetaObject *beNDMWItemBaseList_GetMeta(void)
 {
     return g_beNDMWItemBaseList_metaObject;
 }
 
-int Gap__Bec__beNDMWItemBase__vfunc_24(void) {
+int beNDMWItemBase_Use(void) {
     return 0;
 }
 
-int Gap__Bec__beNDMWItemBase__vfunc_25(void) {
+int beNDMWItemBase_Pack(void) {
     return 0;
 }
 
-void Gap__Bec__beNDMWItemBase__vfunc_26(void)
+void beNDMWItemBase_Unpack(void)
 {
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadCtrl2CtrlData__vfunc_20(void)
+igMetaObject *beNDMWLoadCtrl2CtrlData_GetMeta(void)
 {
     return g_beNDMWLoadCtrl2CtrlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2TextOrder__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2TextOrder_GetMeta(void)
 {
     return g_beNDMWLoadIntf2TextOrder_metaObject;
 }
 
-igMetaObject *Gap__Bec__beLoadIntf2ComMdlData__vfunc_20(void)
+igMetaObject *beLoadIntf2ComMdlData_GetMeta(void)
 {
     return g_beLoadIntf2ComMdlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beLoadIntf2ComMdlDataList__vfunc_20(void)
+igMetaObject *beLoadIntf2ComMdlDataList_GetMeta(void)
 {
     return g_beLoadIntf2ComMdlDataList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2ComMdlCtrl__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2ComMdlCtrl_GetMeta(void)
 {
     return g_beNDMWLoadIntf2ComMdlCtrl_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2MesWin__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2MesWin_GetMeta(void)
 {
     return g_beNDMWLoadIntf2MesWin_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWDegiData__vfunc_20(void)
+igMetaObject *beNDMWDegiData_GetMeta(void)
 {
     return g_beNDMWDegiData_metaObject;
 }
 
-void Gap__Bec__beNDMWDegiData__vfunc_07(beNDMWDegiData *arg0, int arg1) {
+void beNDMWDegiData_userConstruct(beNDMWDegiData *arg0, int arg1) {
     int a;
 
     Gap__Core__igObject__userConstruct(arg0, arg1);
@@ -103,7 +103,7 @@ void Gap__Bec__beNDMWDegiData__vfunc_07(beNDMWDegiData *arg0, int arg1) {
     }
 }
 
-void Gap__Bec__beNDMWDegiData__vfunc_08(V88 *arg0) {
+void beNDMWDegiData_userDestruct(V88 *arg0) {
     int a;
 
     if (arg0->f28 != 0) {
@@ -116,17 +116,17 @@ void Gap__Bec__beNDMWDegiData__vfunc_08(V88 *arg0) {
     Gap__Core__igObject__userDestruct(arg0);
 }
 
-igMetaObject *Gap__Bec__beNDMWDegiDataList__vfunc_20(void)
+igMetaObject *beNDMWDegiDataList_GetMeta(void)
 {
     return g_beNDMWDegiDataList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadSlotPlayer__vfunc_20(void)
+igMetaObject *beNDMWLoadSlotPlayer_GetMeta(void)
 {
     return g_beNDMWLoadSlotPlayer_metaObject;
 }
 
-void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_07(void **arg0) {
+void beNDMWLoadSlotPlayer_userConstruct(void **arg0) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
 }
@@ -134,7 +134,7 @@ void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_07(void **arg0) {
 static inline int countOf(const beNDMWDegiDataList *l) { return l->_count; }
 
 /* matching construct: the dummy-virtual slots only provide the vtable call at +88; data is read through the reflected class */
-void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_08(Obj_3cb470 *arg0) {
+void beNDMWLoadSlotPlayer_userDestruct(Obj_3cb470 *arg0) {
     beNDMWLoadSlotPlayer *self = (beNDMWLoadSlotPlayer *)arg0;
     beNDMWDegiDataList *l = (beNDMWDegiDataList *)self->_saveDataList;
     int n;
@@ -194,59 +194,59 @@ void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_08(Obj_3cb470 *arg0) {
     Gap__Core__igObject__userDestruct(arg0);
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadSlotPlayerList__vfunc_20(void)
+igMetaObject *beNDMWLoadSlotPlayerList_GetMeta(void)
 {
     return g_beNDMWLoadSlotPlayerList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMcSlotPS2__vfunc_20(void)
+igMetaObject *beNDMWMcSlotPS2_GetMeta(void)
 {
     return g_beNDMWMcSlotPS2_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMcSlotGC__vfunc_20(void)
+igMetaObject *beNDMWMcSlotGC_GetMeta(void)
 {
     return g_beNDMWMcSlotGC_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMcSlotXbox__vfunc_20(void)
+igMetaObject *beNDMWMcSlotXbox_GetMeta(void)
 {
     return g_beNDMWMcSlotXbox_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMcSlotList__vfunc_20(void)
+igMetaObject *beNDMWMcSlotList_GetMeta(void)
 {
     return g_beNDMWMcSlotList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadSavePlWork__vfunc_20(void)
+igMetaObject *beNDMWLoadSavePlWork_GetMeta(void)
 {
     return g_beNDMWLoadSavePlWork_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadSavePlWorkList__vfunc_20(void)
+igMetaObject *beNDMWLoadSavePlWorkList_GetMeta(void)
 {
     return g_beNDMWLoadSavePlWorkList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMcUtilCtrl__vfunc_20(void)
+igMetaObject *beNDMWMcUtilCtrl_GetMeta(void)
 {
     return g_beNDMWMcUtilCtrl_metaObject;
 }
 
-void Gap__Bec__beNDMWMcUtilCtrl__vfunc_07(beNDMWMcUtilCtrl *arg0) {
+void beNDMWMcUtilCtrl_userConstruct(beNDMWMcUtilCtrl *arg0) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
     beSaveDataDeliver_AllocateData(arg0->_svData, 0x8000);
 }
 
-void Gap__Bec__beNDMWMcUtilCtrl__vfunc_08(beNDMWMcUtilCtrl *arg0) {
+void beNDMWMcUtilCtrl_userDestruct(beNDMWMcUtilCtrl *arg0) {
     beSaveDataDeliver_FreeData(arg0->_svData);
     igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
     Gap__Core__igObject__userDestruct(arg0);
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_20(void)
+igMetaObject *beNDMWLoadCtrl2CommonIntf_GetMeta(void)
 {
     return g_beNDMWLoadCtrl2CommonIntf_metaObject;
 }
@@ -255,7 +255,7 @@ static inline int countOf_3cb760(const beNDMWDegiDataList *l) { return l->_count
 
 static inline int countOf_3cb760(const beNDMWLoadSavePlWorkList *l) { return l->_count; }
 
-void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *arg0) {
+void beNDMWLoadCtrl2CommonIntf_userDestruct(beNDMWLoadCtrl2CommonIntf *arg0) {
     beNDMWDegiDataList *l = (beNDMWDegiDataList *)arg0->_gameUseData;
     if (countOf_3cb760(l) > 0) {
         int n = l->_count;
@@ -307,106 +307,106 @@ void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *ar
     Gap__Core__igObject__userDestruct(arg0);
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadCtrl2Info__vfunc_20(void)
+igMetaObject *beNDMWLoadCtrl2Info_GetMeta(void)
 {
     return g_beNDMWLoadCtrl2Info_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2CtrlData__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2CtrlData_GetMeta(void)
 {
     return g_beNDMWLoadIntf2CtrlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2MakeChr__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2MakeChr_GetMeta(void)
 {
     return g_beNDMWLoadIntf2MakeChr_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiState__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2DegiState_GetMeta(void)
 {
     return g_beNDMWLoadIntf2DegiState_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiStateList__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2DegiStateList_GetMeta(void)
 {
     return g_beNDMWLoadIntf2DegiStateList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiStateCtrl__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2DegiStateCtrl_GetMeta(void)
 {
     return g_beNDMWLoadIntf2DegiStateCtrl_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2DataSelIntf__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2DataSelIntf_GetMeta(void)
 {
     return g_beNDMWLoadIntf2DataSelIntf_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2Diffselect__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2Diffselect_GetMeta(void)
 {
     return g_beNDMWLoadIntf2Diffselect_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2SelSlot__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2SelSlot_GetMeta(void)
 {
     return g_beNDMWLoadIntf2SelSlot_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2ChrDataSel__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2ChrDataSel_GetMeta(void)
 {
     return g_beNDMWLoadIntf2ChrDataSel_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2NameSel__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2NameSel_GetMeta(void)
 {
     return g_beNDMWLoadIntf2NameSel_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2Info__vfunc_20(void)
+igMetaObject *beNDMWLoadIntf2Info_GetMeta(void)
 {
     return g_beNDMWLoadIntf2Info_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLogoCtrlData__vfunc_20(void)
+igMetaObject *beNDMWLogoCtrlData_GetMeta(void)
 {
     return g_beNDMWLogoCtrlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLogoInfo__vfunc_20(void)
+igMetaObject *beNDMWLogoInfo_GetMeta(void)
 {
     return g_beNDMWLogoInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMdlEnemyInfoWork__vfunc_20(void)
+igMetaObject *beNDMWMdlEnemyInfoWork_GetMeta(void)
 {
     return g_beNDMWMdlEnemyInfoWork_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMdlItemInfoWork__vfunc_20(void)
+igMetaObject *beNDMWMdlItemInfoWork_GetMeta(void)
 {
     return g_beNDMWMdlItemInfoWork_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMdlPlayerInfoWork__vfunc_20(void)
+igMetaObject *beNDMWMdlPlayerInfoWork_GetMeta(void)
 {
     return g_beNDMWMdlPlayerInfoWork_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMdlPlayer2InfoWork__vfunc_20(void)
+igMetaObject *beNDMWMdlPlayer2InfoWork_GetMeta(void)
 {
     return g_beNDMWMdlPlayer2InfoWork_metaObject;
 }
 
-igMetaObject *FUN_003cbb40(void) {
+igMetaObject *beNDMWPanelObject_GetMeta(void) {
     return g_beNDMWPanelObject_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_20(void)
+igMetaObject *beNDMWPanelWazaInfoWork_GetMeta(void)
 {
     return g_beNDMWPanelWazaInfoWork_metaObject;
 }
 
-void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_07(beNDMWPanelWazaInfoWork *arg0) {
+void beNDMWPanelWazaInfoWork_userConstruct(beNDMWPanelWazaInfoWork *arg0) {
     int n;
     char **p;
     igDataList *l;
@@ -467,7 +467,7 @@ void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_07(beNDMWPanelWazaInfoWork *arg0) 
     }
 }
 
-void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_16(beNDMWPanelWazaInfoWork *arg0) {
+void beNDMWPanelWazaInfoWork_TrimCapacity(beNDMWPanelWazaInfoWork *arg0) {
     int *temp_a1;
     int temp_v0;
     int var_v0;
@@ -512,7 +512,7 @@ void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_16(beNDMWPanelWazaInfoWork *arg0) 
     ((PanelVirtualShim *)arg0->_panelStat)->vX();
 }
 
-void Gap__Bec__beNDMWPanelObjectStat__vfunc_16(beNDMWPanelObjectStat *arg0) {
+void beNDMWPanelObjectStat_TrimCapacity(beNDMWPanelObjectStat *arg0) {
 /* matching construct: locals zero-initialised and declared in the order that reproduces retail register assignment */
     igDataList *l = 0;
     int n = 0;
@@ -554,7 +554,7 @@ void Gap__Bec__beNDMWPanelObjectStat__vfunc_16(beNDMWPanelObjectStat *arg0) {
     ((igDataList *)arg0->_listColor)->_count = 0;
 }
 
-void Gap__Bec__beNDMWPanelObjectItem__vfunc_16(beNDMWPanelObjectItem *arg0) {
+void beNDMWPanelObjectItem_TrimCapacity(beNDMWPanelObjectItem *arg0) {
     igObjectList *l;
     ReleaseRef::go((igObject *)arg0->_playerDataList);
     arg0->_playerDataList = 0;
@@ -607,7 +607,7 @@ void Gap__Bec__beNDMWPanelObjectItem__vfunc_16(beNDMWPanelObjectItem *arg0) {
     ((igDataList *)arg0->_listColor)->_count = 0;
 }
 
-void Gap__Bec__beNDMWPanelObjectWaza__vfunc_16(beNDMWPanelObjectWaza *arg0) {
+void beNDMWPanelObjectWaza_TrimCapacity(beNDMWPanelObjectWaza *arg0) {
     igObjectList *l;
     ReleaseRef::go((igObject *)arg0->_playerDataList);
     arg0->_playerDataList = 0;
@@ -733,157 +733,157 @@ int *FUN_003cc550(int *arg0, int arg1) {
     return arg0;
 }
 
-igMetaObject *Gap__Bec__beNDMWPanelWazaInfoRam__vfunc_20(void)
+igMetaObject *beNDMWPanelWazaInfoRam_GetMeta(void)
 {
     return g_beNDMWPanelWazaInfoRam_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWPanelWazaInfo__vfunc_20(void)
+igMetaObject *beNDMWPanelWazaInfo_GetMeta(void)
 {
     return g_beNDMWPanelWazaInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWSaveCtrlCtrlData__vfunc_20(void)
+igMetaObject *beNDMWSaveCtrlCtrlData_GetMeta(void)
 {
     return g_beNDMWSaveCtrlCtrlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWSaveCtrlInfo__vfunc_20(void)
+igMetaObject *beNDMWSaveCtrlInfo_GetMeta(void)
 {
     return g_beNDMWSaveCtrlInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWSaveIntfCtrlData__vfunc_20(void)
+igMetaObject *beNDMWSaveIntfCtrlData_GetMeta(void)
 {
     return g_beNDMWSaveIntfCtrlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beSaveIntfComMdlData__vfunc_20(void)
+igMetaObject *beSaveIntfComMdlData_GetMeta(void)
 {
     return g_beSaveIntfComMdlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beSaveIntfComMdlDataList__vfunc_20(void)
+igMetaObject *beSaveIntfComMdlDataList_GetMeta(void)
 {
     return g_beSaveIntfComMdlDataList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWSaveIntfComMdlCtrl__vfunc_20(void)
+igMetaObject *beNDMWSaveIntfComMdlCtrl_GetMeta(void)
 {
     return g_beNDMWSaveIntfComMdlCtrl_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWSaveIntfInfo__vfunc_20(void)
+igMetaObject *beNDMWSaveIntfInfo_GetMeta(void)
 {
     return g_beNDMWSaveIntfInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWStageCtlInfo__vfunc_20(void)
+igMetaObject *beNDMWStageCtlInfo_GetMeta(void)
 {
     return g_beNDMWStageCtlInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWStageCtlInfoRam__vfunc_20(void)
+igMetaObject *beNDMWStageCtlInfoRam_GetMeta(void)
 {
     return g_beNDMWStageCtlInfoRam_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWWindowCtrl__vfunc_20(void)
+igMetaObject *beNDMWWindowCtrl_GetMeta(void)
 {
     return g_beNDMWWindowCtrl_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWStatusInfoWork__vfunc_20(void)
+igMetaObject *beNDMWStatusInfoWork_GetMeta(void)
 {
     return g_beNDMWStatusInfoWork_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWStatusInfoRam__vfunc_20(void)
+igMetaObject *beNDMWStatusInfoRam_GetMeta(void)
 {
     return g_beNDMWStatusInfoRam_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWStatusInfo__vfunc_20(void)
+igMetaObject *beNDMWStatusInfo_GetMeta(void)
 {
     return g_beNDMWStatusInfo_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWWindow__vfunc_20(void)
+igMetaObject *beNDMWWindow_GetMeta(void)
 {
     return g_beNDMWWindow_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWTitle2CtrlData__vfunc_20(void)
+igMetaObject *beNDMWTitle2CtrlData_GetMeta(void)
 {
     return g_beNDMWTitle2CtrlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWTitle2Option__vfunc_20(void)
+igMetaObject *beNDMWTitle2Option_GetMeta(void)
 {
     return g_beNDMWTitle2Option_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWTitle2Info__vfunc_20(void)
+igMetaObject *beNDMWTitle2Info_GetMeta(void)
 {
     return g_beNDMWTitle2Info_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWWindowList__vfunc_20(void)
+igMetaObject *beNDMWWindowList_GetMeta(void)
 {
     return g_beNDMWWindowList_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWAfsSetupDataList__vfunc_22(void)
+igMetaObject *beNDMWAfsSetupDataList_GetElementMeta(void)
 {
     return g_beNDMWAfsSetupData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWShinkaObjectList__vfunc_22(void)
+igMetaObject *beNDMWShinkaObjectList_GetElementMeta(void)
 {
     return g_beNDMWShinkaObject_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiStateList__vfunc_22(void)
+igMetaObject *beNDMWLoadIntf2DegiStateList_GetElementMeta(void)
 {
     return g_beNDMWLoadIntf2DegiState_metaObject;
 }
 
-igMetaObject *Gap__Bec__beSaveIntfComMdlDataList__vfunc_22(void)
+igMetaObject *beSaveIntfComMdlDataList_GetElementMeta(void)
 {
     return g_beSaveIntfComMdlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWItemBaseList__vfunc_22(void)
+igMetaObject *beNDMWItemBaseList_GetElementMeta(void)
 {
     return g_beNDMWItemBase_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadSavePlWorkList__vfunc_22(void)
+igMetaObject *beNDMWLoadSavePlWorkList_GetElementMeta(void)
 {
     return g_beNDMWLoadSavePlWork_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWMcSlotList__vfunc_22(void)
+igMetaObject *beNDMWMcSlotList_GetElementMeta(void)
 {
     return g_beNDMWMcSlot_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWLoadSlotPlayerList__vfunc_22(void)
+igMetaObject *beNDMWLoadSlotPlayerList_GetElementMeta(void)
 {
     return g_beNDMWLoadSlotPlayer_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWDegiDataList__vfunc_22(void)
+igMetaObject *beNDMWDegiDataList_GetElementMeta(void)
 {
     return g_beNDMWDegiData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beLoadIntf2ComMdlDataList__vfunc_22(void)
+igMetaObject *beLoadIntf2ComMdlDataList_GetElementMeta(void)
 {
     return g_beLoadIntf2ComMdlData_metaObject;
 }
 
-igMetaObject *Gap__Bec__beNDMWWindowList__vfunc_22(void)
+igMetaObject *beNDMWWindowList_GetElementMeta(void)
 {
     return g_beNDMWWindow_metaObject;
 }

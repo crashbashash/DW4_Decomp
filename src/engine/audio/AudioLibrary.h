@@ -254,8 +254,8 @@ extern char igObject_Register[];
 extern char igAudioContext_GetPublishedMetaObject[];
 extern char igDataList_Register[];
 extern int kIGMemoryPoolHandleMetaData[4];
-extern int DAT_00524a80[4];
-extern int DAT_00524b80[4];
+extern int g_igPsx2AudioContext_vtable[4];
+extern int g_igPsx2AudioSourceList_vtable[4];
 extern void *g_objectSystem[4];
 
 int igMetaObject_CreateInstance(int, int);
@@ -303,7 +303,7 @@ void *FUN_001435c0(int arg0);
 unsigned FUN_00145960(void *context, void *voice);
 int FUN_00145a10(void *arg0, void *voice);
 
-void FUN_00143010(void);
+void igAudioContext_EnsureRegistered(void);
 void igAudioContext_Register(void);
 void thunk_igAudioContext_GetMetaObject(void);
 void igAudioContext_InitFields(void);

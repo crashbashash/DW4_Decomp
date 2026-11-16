@@ -1,14 +1,14 @@
 igMetaObject *g_beNDMWStatusPowerSocket_metaObject;
 
 void beNDMWStatusPowerSocket_Create(int arg0) {
-    FUN_003ba9f0();
+    beNDMWStatusPowerSocket_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStatusPowerSocket_metaObject, arg0);
 }
 
-void *FUN_003ba940(void) {
+void *beNDMWStatusPowerSocket_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWStatusPowerSocket_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003ba9f0();
+        beNDMWStatusPowerSocket_EnsureRegistered();
     }
     return g_beNDMWStatusPowerSocket_metaObject;
 }
@@ -18,14 +18,14 @@ int beNDMWStatusPowerSocket_GetVTable(void) {
     int temp_s0;
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)u.b);
-    u.vt = (int)&DAT_0053f0a0[0];
+    u.vt = (int)&g_beNDMWStatusPowerSocket_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053f0a0[0];
+    u.vt = (int)&g_beNDMWStatusPowerSocket_vtable[0];
     FUN_003ba3d0((S_arg0 *)u.b, (long long)0);
     return temp_s0;
 }
 
-void FUN_003ba9f0(void)
+void beNDMWStatusPowerSocket_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusPowerSocket_Register);
 }
@@ -37,7 +37,7 @@ void *beNDMWStatusPowerSocket_Register(void) {
         &g_beNDMWStatusPowerSocket_metaObject,
         beNDMWStatusCtrlBaseEquip_Register,
         beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject,
-        beNDMWStatusPowerSocket_GetMetaObject,
+        beNDMWStatusPowerSocket_GetMetaObjectFunction,
         "beNDMWStatusPowerSocket",
         0x7c, /* instance size */
         beNDMWStatusPowerSocket_GetVTable,
@@ -47,8 +47,8 @@ void *beNDMWStatusPowerSocket_Register(void) {
     );
 }
 
-void beNDMWStatusPowerSocket_GetMetaObject(void)
+void beNDMWStatusPowerSocket_GetMetaObjectFunction(void)
 {
-    FUN_003ba940();
+    beNDMWStatusPowerSocket_GetMetaObject();
 }
 

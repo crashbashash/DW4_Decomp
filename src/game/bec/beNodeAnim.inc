@@ -13,7 +13,7 @@ igMetaField *g_beNodeAnim_playTimeMetaField;
 void *beNodeAnim_ResolveMetaObject(void) {
     igMetaObject *g = g_beNodeAnim_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034e930();
+        beNodeAnim_EnsureRegistered();
     }
     return g_beNodeAnim_metaObject;
 }
@@ -26,15 +26,15 @@ int beNodeAnim_GetVTable(void) {
     o.f12 = 0;
     o.f16 = 0;
     o.f28 = 0;
-    o.vt = &DAT_005381b0[0];
+    o.vt = &g_beNodeAnim_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_005381b0[0];
+    o.vt = &g_beNodeAnim_vtable[0];
     
     FUN_00195a90(&o, 0);
     return r;
 }
 
-void FUN_0034e930(void)
+void beNodeAnim_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNodeAnim_Register);
 }

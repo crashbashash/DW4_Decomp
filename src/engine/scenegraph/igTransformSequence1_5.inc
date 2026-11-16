@@ -14,7 +14,7 @@ igMetaObject *FUN_00194ef0(void)
 {
     igMetaObject *g = g_igTransformSequence1_5_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00195290();
+        igTransformSequence1_5_EnsureRegistered();
     return g_igTransformSequence1_5_metaObject;
 }
 
@@ -26,14 +26,14 @@ int igTransformSequence1_5_GetVTable(void) {
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[4] = 0;
-    obj.vt = &DAT_005282c0[0];
+    obj.vt = &g_igTransformSequence1_5_vtable[0];
     obj.w[13] = 0;
     obj.w[14] = 0;
     obj.w[15] = 0;
     obj.w[16] = 0;
     obj.w[23] = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005282c0[0];
+    obj.vt = &g_igTransformSequence1_5_vtable[0];
     FUN_00195210((ObjectRefWord *)&obj.w[23], -1);
     FUN_001374b0(&obj.w[16], -1);
     FUN_001374b0(&obj.w[15], -1);
@@ -79,12 +79,12 @@ ObjectRefWord *FUN_00195210(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_00195290(void)
+void igTransformSequence1_5_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransformSequence1_5_Register);
 }
 
-static igMetaObjectCallback g_igTransformSequence1_5_callbackList[] = { igLongList_EnsureRegistered, FUN_0018a180, FUN_001a2640, 0 };
+static igMetaObjectCallback g_igTransformSequence1_5_callbackList[] = { igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, FUN_001a2640, 0 };
 
 void igTransformSequence1_5_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */

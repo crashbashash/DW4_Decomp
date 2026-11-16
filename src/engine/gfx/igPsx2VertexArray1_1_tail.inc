@@ -19,12 +19,12 @@ int igPsx2VertexArray1_1_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.w[5] = 0;
     obj.w[6] = 0;
-    obj.vt = &DAT_00525190[0];
+    obj.vt = &g_igPsx2VertexArray1_1_vtable[0];
     obj.w[11] = 0;
     obj.w[12] = 0;
     obj.w[13] = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00525190[0];
+    obj.vt = &g_igPsx2VertexArray1_1_vtable[0];
     FUN_00152560((void **)&obj.w[13], -1);
     igSmartPointer_igPointerList_Destruct(&obj.w[12], -1);
     igSmartPointer_igPointerList_Destruct(&obj.w[11], -1);

@@ -12,7 +12,7 @@ int igListenerList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c4c0[0];
+    obj.vt = &g_igListenerList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -42,13 +42,13 @@ int beNDMWDegiData_GetVTable(void) {
     int temp_v0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053c9a0[0];
+    u.vt = (int)&g_beNDMWDegiData_vtable[0];
     q1 = &u.b[48];
     *(int *)q1 = 0;
     q0 = &u.b[52];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053c9a0[0];
+    u.vt = (int)&g_beNDMWDegiData_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {
@@ -79,7 +79,7 @@ void beNDMWDegiData_RunStaticInit(void)
     igMetaObject_RunStaticInit(beNDMWDegiData_Register);
 }
 
-static igMetaObjectCallback g_beNDMWDegiData_callbackList[] = { FUN_00232de0, 0 };
+static igMetaObjectCallback g_beNDMWDegiData_callbackList[] = { igInsightCore_EnsureRegistered, 0 };
 
 void *beNDMWDegiData_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -175,7 +175,7 @@ void beNDMWDegiData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWDegiData_ctorTable, 0xD);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = FUN_00232840();
+    *(int *)((char *)(temp_s1) + 56) = igInsightCore_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 60) = 0;
     temp_v0 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5);
     *(int *)((char *)(temp_v0) + 52) = 0xA;

@@ -1,9 +1,9 @@
 igMetaObject *g_beModelCtrlJUMP_metaObject;
 
-void *FUN_00355d60(void) {
+void *beModelCtrlJUMP_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlJUMP_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00355e40();
+        beModelCtrlJUMP_EnsureRegistered();
     }
     return g_beModelCtrlJUMP_metaObject;
 }
@@ -20,7 +20,7 @@ int beModelCtrlJUMP_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00537410[0];
+    u.vt = (int)&g_beModelCtrlJUMP_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -37,7 +37,7 @@ int beModelCtrlJUMP_GetVTable(void) {
     return s0;
 }
 
-void FUN_00355e40(void)
+void beModelCtrlJUMP_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlJUMP_Register);
 }
@@ -49,7 +49,7 @@ void *beModelCtrlJUMP_Register(void) {
         &g_beModelCtrlJUMP_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlJUMP_GetMetaObject,
+        beModelCtrlJUMP_GetMetaObjectFunction,
         "beModelCtrlJUMP",
         0xc, /* instance size */
         beModelCtrlJUMP_GetVTable,
@@ -59,8 +59,8 @@ void *beModelCtrlJUMP_Register(void) {
     );
 }
 
-void beModelCtrlJUMP_GetMetaObject(void)
+void beModelCtrlJUMP_GetMetaObjectFunction(void)
 {
-    FUN_00355d60();
+    beModelCtrlJUMP_GetMetaObject();
 }
 

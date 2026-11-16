@@ -18,18 +18,27 @@
 #       .4byte <vfunc 1>
 #       ...
 #
-# until the next __vt__ header. The class-name string is what carries the
-# `Gap::Bec::beModelCtrl`-style identifier, so this is the only route from a
-# stripped binary to class/method names.
+# until the next __vt__ header. A null word inside the run is a pure virtual
+# (`= 0`) slot and stays in the record as `null`; the null words after the
+# last slot, up to the next header, are the table's alignment padding (a
+# class's trailing pure slots show in its subclasses' tables). The
+# class-name string is what carries the `Gap::Bec::beModelCtrl`-style
+# identifier, so this is the only route from a stripped binary to class/method
+# names.
 #
 # Output JSON is consumed by apply_vtable_names.py.
 #
 #   pyghidra-run <binary> --project-path ghidra-projects/dw4 \
 #       --project-name dw4 -postScript dump_vtables.py \
 #       --out ghidra-projects/dw4/vtables.json
+#   python3 scripts/dump_vtables.py --elf orig/SLUS-20836/SLUS_208.36 --out data/vtables.json
+#
+# The second form reads the executable's loaded segments instead of a Ghidra
+# program; the scan only reads memory, so both give the same tables.
 #
 # Args:
 #   --out PATH        default stdout
+#   --elf PATH        read this executable instead of the current Ghidra program
 #   --codemax 0xADDR  override the code/rodata boundary (default: auto-detect)
 #   --min-vfuncs N    drop tables with fewer than N entries (default 2)
 #
@@ -37,8 +46,10 @@
 # @runtime PyGhidra
 
 import json
+import os
 import re
 import struct
+import sys
 import typing
 
 if typing.TYPE_CHECKING:
@@ -46,6 +57,9 @@ if typing.TYPE_CHECKING:
 
     currentProgram: Any = None
     getScriptArgs: Any = None
+
+ELF_LANGUAGE = "r5900:LE:32:default"     # the language Ghidra loads the executable with
+MAX_PURE_RUN = 8                         # null words a record may hold in a row (igFile has 5)
 
 # A class identifier string: namespaced (`Gap::Bec::beModelCtrl`), a template
 # instantiation (`Gap::Core::igTObjectList<...>`), or a bare engine/game type
@@ -70,6 +84,7 @@ def _sanitize(name):
 
 def _args(argv):
     out_path = None
+    elf = None
     codemax = None
     min_vfuncs = 2
     i = 0
@@ -77,6 +92,9 @@ def _args(argv):
         a = argv[i]
         if a in ("--out", "-o") and i + 1 < len(argv):
             out_path = argv[i + 1]
+            i += 2
+        elif a == "--elf" and i + 1 < len(argv):
+            elf = argv[i + 1]
             i += 2
         elif a == "--codemax" and i + 1 < len(argv):
             codemax = int(argv[i + 1], 0)
@@ -86,7 +104,26 @@ def _args(argv):
             i += 2
         else:
             i += 1
-    return out_path, codemax, min_vfuncs
+    return out_path, elf, codemax, min_vfuncs
+
+
+def _read_elf(path):
+    """The executable's loaded segments (their file bytes) as one buffer, as Ghidra's initialized
+    blocks hold them. Returns (lo, buf, hi) with byte offset = va - lo."""
+    data = open(path, "rb").read()
+    phoff, = struct.unpack_from("<I", data, 0x1C)
+    phentsize, phnum = struct.unpack_from("<HH", data, 0x2A)
+    segs = []
+    for k in range(phnum):
+        p_type, p_offset, p_vaddr, _p_paddr, p_filesz = struct.unpack_from("<5I", data, phoff + k * phentsize)
+        if p_type == 1 and p_filesz:
+            segs.append((p_vaddr, p_offset, p_filesz))
+    lo = min(v for v, _, _ in segs)
+    hi = max(v + n for v, _, n in segs)
+    buf = bytearray(hi - lo)
+    for v, off, n in segs:
+        buf[v - lo:v - lo + n] = data[off:off + n]
+    return lo, buf, hi
 
 
 def _read_image():
@@ -168,8 +205,14 @@ def _cstr(buf, lo, va, limit=160):
 
 
 def _main():
-    out_path, codemax_arg, min_vfuncs = _args(list(getScriptArgs()))
-    lo, buf, hi = _read_image()
+    argv = list(getScriptArgs()) if "getScriptArgs" in globals() else sys.argv[1:]
+    out_path, elf, codemax_arg, min_vfuncs = _args(argv)
+    if elf:
+        lo, buf, hi = _read_elf(elf)
+        program, language = os.path.basename(os.path.realpath(elf)), ELF_LANGUAGE
+    else:
+        lo, buf, hi = _read_image()
+        program, language = currentProgram.getName(), str(currentProgram.getLanguageID())
     codemax = codemax_arg if codemax_arg is not None else _detect_codemax(lo, buf, hi)
 
     def u32(va):
@@ -222,16 +265,37 @@ def _main():
             if sum(1 for w in nxt if w is not None and in_code(w)) >= min_vfuncs:
                 headers.add(va)
 
+    # Code builds a table's address with lui/addiu, so an address it builds is where a table (or its
+    # {0, 0} header, for the classes without RTTI) begins: a run of null words stops there.
+    starts = set()
+    hi_reg = {}
+    for va in range(lo, codemax - 3, 4):
+        ins = u32(va)
+        op, rs, rt, imm = ins >> 26, (ins >> 21) & 0x1F, (ins >> 16) & 0x1F, ins & 0xFFFF
+        if op == 0x0F:                                    # lui
+            hi_reg[rt] = imm << 16
+        elif op == 0x09 and rs in hi_reg:                 # addiu
+            v = (hi_reg[rs] + (imm - 0x10000 if imm & 0x8000 else imm)) & 0xFFFFFFFF
+            if codemax <= v < hi:
+                starts.add(v)
+
     vtables = {}
     for va in sorted(headers):
         vfuncs = []
+        pure = 0                                          # null words since the last slot
         a = va + 8
         while a < hi - 3 and len(vfuncs) < 512:
             w = u32(a)
+            if w == 0 and a not in starts and pure < MAX_PURE_RUN:
+                pure += 1
+                a += 4
+                continue
             if w is None or not in_code(w):
                 break
             if is_header(a):
                 break
+            vfuncs.extend([None] * pure)                  # pure virtual slots
+            pure = 0
             vfuncs.append(w)
             a += 4
         if len(vfuncs) >= min_vfuncs:
@@ -277,7 +341,8 @@ def _main():
     for vt, vfuncs in sorted(vtables.items()):
         cls = rtti[u32(vt)]
         for slot, w in enumerate(vfuncs):
-            refs.setdefault(w, []).append((cls, slot, vt))
+            if w:
+                refs.setdefault(w, []).append((cls, slot, vt))
 
     names = {}
     skipped = []
@@ -338,8 +403,8 @@ def _main():
         del name
 
     out = {
-        "program": currentProgram.getName(),
-        "language": str(currentProgram.getLanguageID()),
+        "program": program,
+        "language": language,
         "image_lo": hex(lo),
         "image_hi": hex(hi),
         "codemax": hex(codemax),
@@ -355,7 +420,7 @@ def _main():
             hex(vt): {
                 "rtti": hex(u32(vt)),
                 "class": rtti[u32(vt)],
-                "vfuncs": [hex(w) for w in vfuncs],
+                "vfuncs": [hex(w) if w else None for w in vfuncs],
             }
             for vt, vfuncs in sorted(vtables.items())
         },

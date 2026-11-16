@@ -3,7 +3,7 @@ igMetaObject *g_beNDMWLoadIntf2Info_metaObject;
 void *beNDMWLoadIntf2Info_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWLoadIntf2Info_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c2710();
+        beNDMWLoadIntf2Info_EnsureRegistered();
     }
     return g_beNDMWLoadIntf2Info_metaObject;
 }
@@ -16,14 +16,14 @@ int beNDMWLoadIntf2Info_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
-    u.vt = (int)&DAT_0053d2a0[0];
+    u.vt = (int)&g_beNDMWLoadIntf2Info_vtable[0];
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053d2a0[0];
+    u.vt = (int)&g_beNDMWLoadIntf2Info_vtable[0];
     FUN_0033ec80(u.b, 0);
     return t;
 }
 
-void FUN_003c2710(void)
+void beNDMWLoadIntf2Info_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadIntf2Info_Register);
 }

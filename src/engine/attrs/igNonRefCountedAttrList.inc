@@ -11,7 +11,7 @@ igMetaObject *igNonRefCountedAttrList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNonRefCountedAttrList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013ae20();
+        igNonRefCountedAttrList_EnsureRegistered();
     return g_igNonRefCountedAttrList_metaObject;
 }
 
@@ -19,11 +19,11 @@ int igNonRefCountedAttrList_GetVTable(void) {
     struct Obj_13ade0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524490[0];
+    obj.vt = &g_igNonRefCountedAttrList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0013ae20(void)
+void igNonRefCountedAttrList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igNonRefCountedAttrList_Register);
 }

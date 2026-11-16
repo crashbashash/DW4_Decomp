@@ -16,7 +16,6 @@
 0x00390320	beMeterCtrlNode_Traverse	game
 0x00390890	beMeterCtrlNode_RegisterTraversalFunction	game
 0x003908e0	beModelCtrlInfoHitBody_GetAABoxList	game
-0x00390d70	beModelCtrl_ResolveManagers	game
 0x00390f80	beModelCtrl_UpdateMapAI	game
 0x003915a0	beModelCtrl_UpdateHomingAI	game
 0x00391a10	beModelCtrl_RunCtrl	game

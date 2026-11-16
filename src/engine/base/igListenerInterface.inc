@@ -23,13 +23,13 @@ int igListenerInterface_GetVTable(void) {
     struct Obj_5 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c080[0];
+    obj.vt = &g_igListenerInterface_vtable[0];
     obj.w8 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052c080[0];
+    obj.vt = &g_igListenerInterface_vtable[0];
     FUN_00226db0((T_2 **)&obj.w11, -1);
     igSmartPointer_igMetaObjectList_Destruct(&obj.w10, -1);
     FUN_00226db0((T_2 **)&obj.w9, -1);

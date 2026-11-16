@@ -12,21 +12,6 @@ typedef struct MwsfdFrmBufs {
     void *dec;  /* the decoder's fixed work */
 } MwsfdFrmBufs;
 
-/* what mwPlyGetHdrInf reports */
-typedef struct MwsfdHdrInf {
-    int valid;
-    int type;     /* mwsfcre_GetHdrType */
-    int width;
-    int height;
-    int rate;
-    int f20;
-    int f24;
-    int f28;
-    int f32;
-    int frames;
-    int f40;
-} MwsfdHdrInf;
-
 /* the SFD header analysis mwPlyGetHdrInf reads */
 typedef struct SfdHdrInf {
     signed char ok0;

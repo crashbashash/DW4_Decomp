@@ -1,10 +1,10 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__beNumberCtrl__vfunc_32(void);
-extern "C" int Gap__Bec__beNumberCtrl__vfunc_30(void);
-extern "C" int Gap__Bec__beNumberCtrl__vfunc_20(void);
+extern "C" void beNumberCtrl_Prepare(void);
+extern "C" int beNumberCtrl_GetInfoMeta(void);
+extern "C" int beNumberCtrl_GetMeta(void);
 extern "C" int FUN_003a4e40(void *arg0, int arg1);
-extern "C" void *FUN_0034d2b0(...);
+extern "C" void *beNumberCtrlInfoWork_Create(...);
 extern "C" int FUN_0034e300(...);
 extern "C" int FUN_003a4b20(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
@@ -21,7 +21,7 @@ struct UnidentifiedReceiverObject { char pad8[8]; int f8; UnidentifiedNameHolder
 extern "C" int beMessenger_RegisterReceiver(int, UnidentifiedReceiverObject *, void *, int *, int);
 extern "C" int emptyString[4];
 extern "C" int NUMBERCTRL_4[4];
-extern "C" void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1);
+extern "C" void beNumberCtrl_OnAddRam(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1);
 /* igObject header (vtable, reference count); the count at +4 is not a reflected field */
 /* unreflected message argument: only the command word at +20 is read */
 struct MessageCommandArg { char p0[20]; int command; };
@@ -39,13 +39,13 @@ struct Ref {
         }
     }
 };
-extern "C" int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2);
+extern "C" int beNumberCtrl_OnMessage(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2);
 
-void Gap__Bec__beNumberCtrl__vfunc_32(void)
+void beNumberCtrl_Prepare(void)
 {
 }
 
-int Gap__Bec__beNumberCtrl__vfunc_30(void)
+int beNumberCtrl_GetInfoMeta(void)
 {
     return g_beNumberCtrlInfo_metaObject[0];
 }
@@ -72,7 +72,7 @@ int FUN_003a4e40(void *arg0, int arg1) {
     return v;
 }
 
-void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1) {
+void beNumberCtrl_OnAddRam(beNumberCtrl *arg0, UnidentifiedReceiverObject *arg1) {
     int *var_a3;
     int t = arg1->f8;
     var_a3 = (int *)(((UnidentifiedNameHolder *)arg1->f12)->f8);
@@ -80,7 +80,7 @@ void Gap__Bec__beNumberCtrl__vfunc_29(beNumberCtrl *arg0, UnidentifiedReceiverOb
     beMessenger_RegisterReceiver(arg0->_messenger, arg1, &NUMBERCTRL_4[0], var_a3, t);
 }
 
-int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2) {
+int beNumberCtrl_OnMessage(beNumberCtrl *arg0, beNumberCtrlInfoRam *arg1, MessageCommandArg *arg2) {
     int s3;
     int var;
     beNumberCtrlInfoWork *s0;
@@ -99,7 +99,7 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
             int var;
             var = igObject_GetAllocator(arg0);
             var = g_useOwnerAllocator != 0 ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-            Ref r((igObject *)FUN_0034d2b0(var));
+            Ref r((igObject *)beNumberCtrlInfoWork_Create(var));
             s0 = (beNumberCtrlInfoWork *)r.p;
             if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;
             o = ((igObject *)arg1->_work);
@@ -125,7 +125,7 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
             int var;
             var = igObject_GetAllocator(arg0);
             var = g_useOwnerAllocator != 0 ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-            Ref r((igObject *)FUN_0034d2b0(var));
+            Ref r((igObject *)beNumberCtrlInfoWork_Create(var));
             s0 = (beNumberCtrlInfoWork *)r.p;
             if (s0 != 0) ((igObject *)s0)->_refCount = ((igObject *)s0)->_refCount + 1;
             o = ((igObject *)arg1->_work);
@@ -151,7 +151,7 @@ int Gap__Bec__beNumberCtrl__vfunc_34(beNumberCtrl *arg0, beNumberCtrlInfoRam *ar
     }
 }
 
-int Gap__Bec__beNumberCtrl__vfunc_20(void)
+int beNumberCtrl_GetMeta(void)
 {
     return g_beNumberCtrl_metaObject[0];
 }

@@ -11,7 +11,7 @@ igMetaObject *igNonRefCountedNodeList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNonRefCountedNodeList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019c9a0();
+        igNonRefCountedNodeList_EnsureRegistered();
     return g_igNonRefCountedNodeList_metaObject;
 }
 
@@ -19,16 +19,16 @@ int igNonRefCountedNodeList_GetVTable(void) {
     struct Obj_19c960 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052ac00[0];
+    obj.vt = &g_igNonRefCountedNodeList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0019c9a0(void)
+void igNonRefCountedNodeList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igNonRefCountedNodeList_Register);
 }
 
-static igMetaObjectCallback g_igNonRefCountedNodeList_callbackList[] = { FUN_0019cf10, 0 };
+static igMetaObjectCallback g_igNonRefCountedNodeList_callbackList[] = { igNode_EnsureRegistered, 0 };
 
 void igNonRefCountedNodeList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

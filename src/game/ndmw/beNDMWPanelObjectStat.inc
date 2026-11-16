@@ -4,7 +4,7 @@ igMetaField *g_beNDMWPanelObjectStat_listFolderMetaField;
 igMetaField *g_beNDMWPanelObjectStat_listColorMetaField;
 igMetaField *g_beNDMWPanelObjectStat_playerWorkMetaField;
 
-igMetaObject *FUN_003be0f0(void) {
+igMetaObject *beNDMWPanelObjectStat_GetOrCreateMetaObject(void) {
     if (g_beNDMWPanelObjectStat_metaObject == 0) {
         g_beNDMWPanelObjectStat_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -16,7 +16,7 @@ igMetaObject *beNDMWPanelObjectStat_ResolveMetaObject(void)
     igMetaObject *g = g_beNDMWPanelObjectStat_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_003be360();
+        beNDMWPanelObjectStat_EnsureRegistered();
     return g_beNDMWPanelObjectStat_metaObject;
 }
 
@@ -28,12 +28,12 @@ int beNDMWPanelObjectStat_GetVTable(void) {
     u.w[9] = 0;
     u.w[11] = 0;
     u.w[12] = 0;
-    u.w[0] = (int)(&DAT_0053e0c0[0]);
+    u.w[0] = (int)(&g_beNDMWPanelObjectStat_vtable[0]);
     u.w[15] = 0;
     u.w[16] = 0;
     u.w[17] = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0053e0c0[0]);
+    u.w[0] = (int)(&g_beNDMWPanelObjectStat_vtable[0]);
     FUN_003bde80((struct Ref **)(&u.w[17]), (short)(-1));
     igSmartPointer_igIntList_Destruct(&u.w[16], -1);
     igSmartPointer_igStringRefList_Destruct(&u.w[15], -1);
@@ -43,7 +43,7 @@ int beNDMWPanelObjectStat_GetVTable(void) {
 
 Obj_3be240 *FUN_003be240(Obj_3be240 *arg0, short arg1) {
     if (arg0) {
-        arg0->vt = &DAT_0053d560[0];
+        arg0->vt = &g_beNDMWPanelObject_vtable[0];
         arg0->rel(&arg0->m48);
         arg0->rel(&arg0->m44);
         arg0->rel(&arg0->m36);
@@ -54,12 +54,12 @@ Obj_3be240 *FUN_003be240(Obj_3be240 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_003be360(void)
+void beNDMWPanelObjectStat_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWPanelObjectStat_Register);
 }
 
-static igMetaObjectCallback g_beNDMWPanelObjectStat_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, FUN_003c0280, 0 };
+static igMetaObjectCallback g_beNDMWPanelObjectStat_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, beNDMWMdlPlayerInfoWork_EnsureRegistered, 0 };
 
 void *beNDMWPanelObjectStat_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -83,7 +83,7 @@ void beNDMWPanelObjectStat_GetMetaObject(void)
     beNDMWPanelObjectStat_ResolveMetaObject();
 }
 
-igMetaObject *FUN_003be420(void) {
+igMetaObject *beNDMWPanelObject_GetPublishedMetaObject(void) {
     return g_beNDMWPanelObject_metaObject;
 }
 
@@ -140,7 +140,7 @@ void beNDMWPanelObjectStat_InitFields(void) {
     temp_s0_2->_metaObject = igIntList_GetOrCreateMetaObject();
     temp_s0_2->_construct = 1;
     temp_s0_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    temp_s0_3->_metaObject = (int)FUN_003bfcc0();
+    temp_s0_3->_metaObject = (int)beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWPanelObjectStat_fieldTable, g_beNDMWPanelObjectStat_fieldHandles, g_beNDMWPanelObjectStat_fieldOffsets, temp_s2);
 }
 

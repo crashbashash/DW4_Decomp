@@ -10,17 +10,17 @@ igMetaField *g_beCameraCtrlInfoRamShake_endTimeMetaField;
 igMetaField *g_beCameraCtrlInfoRamShake_movePointMetaField;
 
 void beCameraCtrlInfoRamShake_Create(int arg0) {
-    FUN_00369600();
+    beCameraCtrlInfoRamShake_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589C38, arg0);
 }
 
-void *FUN_003694e0(void) {
+void *beCameraCtrlInfoRamShake_GetMetaObject(void) {
     unsigned char b;
     if (g_beCameraCtrlInfoRamShake_metaObject != 0) {
         b = (*(int *)((char *)(g_beCameraCtrlInfoRamShake_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00369600();
+    beCameraCtrlInfoRamShake_EnsureRegistered();
 done:
     return g_beCameraCtrlInfoRamShake_metaObject;
 }
@@ -36,11 +36,11 @@ int beCameraCtrlInfoRamShake_GetVTable(void) {
     igObject_InitHeader(u.b);
     p0 = (S_ref *)&u.b[8];
     *(int *)p0 = 0;
-    u.vt = (int)&DAT_00534970[0];
+    u.vt = (int)&g_beCameraCtrlInfoRamShake_vtable[0];
     p1 = (S_ref *)&u.b[44];
     *(int *)p1 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00534970[0];
+    u.vt = (int)&g_beCameraCtrlInfoRamShake_vtable[0];
     if (p1 != 0) {
         o = *(char **)p1;
         if (o != 0) {
@@ -67,7 +67,7 @@ int beCameraCtrlInfoRamShake_GetVTable(void) {
     return t;
 }
 
-void FUN_00369600(void)
+void beCameraCtrlInfoRamShake_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCameraCtrlInfoRamShake_Register);
 }
@@ -79,7 +79,7 @@ void *beCameraCtrlInfoRamShake_Register(void) {
         &g_beCameraCtrlInfoRamShake_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beCameraCtrlInfoRamShake_GetMetaObject,
+        beCameraCtrlInfoRamShake_GetMetaObjectFunction,
         "beCameraCtrlInfoRamShake",
         0x40, /* instance size */
         beCameraCtrlInfoRamShake_GetVTable,
@@ -89,9 +89,9 @@ void *beCameraCtrlInfoRamShake_Register(void) {
     );
 }
 
-void beCameraCtrlInfoRamShake_GetMetaObject(void)
+void beCameraCtrlInfoRamShake_GetMetaObjectFunction(void)
 {
-    FUN_003694e0();
+    beCameraCtrlInfoRamShake_GetMetaObject();
 }
 
 static FieldFactory g_beCameraCtrlInfoRamShake_ctorTable[] = {

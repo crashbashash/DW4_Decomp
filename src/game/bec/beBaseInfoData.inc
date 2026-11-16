@@ -1,15 +1,15 @@
 igMetaObject *g_beBaseInfoData_metaObject;
 igMetaField *g_beBaseInfoData_versionMetaField;
 
-void *FUN_0036b050(void) {
+void *beBaseInfoData_GetMetaObject(void) {
     igMetaObject *g = g_beBaseInfoData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036b0a0();
+        beBaseInfoData_EnsureRegistered();
     }
     return g_beBaseInfoData_metaObject;
 }
 
-void FUN_0036b0a0(void)
+void beBaseInfoData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beBaseInfoData_Register);
 }
@@ -21,7 +21,7 @@ void *beBaseInfoData_Register(void) {
         &g_beBaseInfoData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beBaseInfoData_GetMetaObject,
+        beBaseInfoData_GetMetaObjectFunction,
         "beBaseInfoData",
         0x10, /* instance size */
         0,
@@ -31,9 +31,9 @@ void *beBaseInfoData_Register(void) {
     );
 }
 
-void beBaseInfoData_GetMetaObject(void)
+void beBaseInfoData_GetMetaObjectFunction(void)
 {
-    FUN_0036b050();
+    beBaseInfoData_GetMetaObject();
 }
 
 static FieldFactory g_beBaseInfoData_ctorTable[] = {

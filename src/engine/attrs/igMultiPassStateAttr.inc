@@ -24,7 +24,7 @@ igMetaObject *igMultiPassStateAttr_GetMetaObject(void)
 int igMultiPassStateAttr_GetVTable(void) {
     struct O_135270 o;
     igObject_InitHeader(&o.vt);
-    o.vt = DAT_00523390;
+    o.vt = g_igMultiPassStateAttr_vtable;
     return *(int *)((char *)&o.vt + *(int *)(g_objectSystem[0] + 916));
 }
 

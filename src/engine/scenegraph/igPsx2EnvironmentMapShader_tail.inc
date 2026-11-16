@@ -18,7 +18,7 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     char *p2;
     char *p1;
     FUN_001ab4a0((igEnvironmentMapShader2 *)u.b);
-    u.vt = &DAT_00528170[0];
+    u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
     p0 = &u.b[112];
     FUN_001ab490((int *)p0);
     p1 = &u.b[116];
@@ -26,7 +26,7 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     p2 = &u.b[120];
     FUN_001ab480((int *)p2);
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = &DAT_00528170[0];
+    u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
     FUN_001ab400((ObjectRefWord *)p2, -1);
     FUN_0019aa90((void * *)p1, -1);
     FUN_001ab380((void * *)p0, -1);
@@ -69,7 +69,7 @@ Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
         arg0->rel(&arg0->m36);
         arg0->rel(&arg0->m32);
         if (arg0) {
-            arg0->vt = DAT_00528dd0;
+            arg0->vt = g_igGroup_vtable;
             FUN_001958f0((void * *)((char *)arg0 + 28), -1);
             FUN_00195970((struct T_195970 *)arg0, 0);
         }
@@ -109,10 +109,10 @@ void *FUN_001ab4a0(igEnvironmentMapShader2 *arg0) {
     igObject_InitHeader();
     arg0->_vtable = (int)(&g_igNamedObject_vtable[0]);
     arg0->_name = 0;
-    arg0->_vtable = (int)(&DAT_00528a90[0]);
+    arg0->_vtable = (int)(&g_igNode_vtable[0]);
     arg0->_bound = 0;
     arg0->_parentList = 0;
-    arg0->_vtable = (int)(&DAT_00528dd0[0]);
+    arg0->_vtable = (int)(&g_igGroup_vtable[0]);
     arg0->_childList = 0;
     arg0->_vtable = (int)(&DAT_00528fa0[0]);
     arg0->_envMapTexture = 0;
@@ -137,7 +137,7 @@ void FUN_001ab540(void)
     igMetaObject_RunStaticInit(igPsx2EnvironmentMapShader_Register);
 }
 
-static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { FUN_0013a040, FUN_00133290, FUN_001352b0, 0 };
+static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { igBlendFunctionAttr_EnsureRegistered, FUN_00133290, FUN_001352b0, 0 };
 
 void igPsx2EnvironmentMapShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -192,7 +192,7 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00139f10();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBlendFunctionAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_persistent = 0;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, 1 + temp_s2)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_001331a0();

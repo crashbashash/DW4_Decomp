@@ -1,10 +1,10 @@
 void beNDMWStatusSubSlot_Create(int arg0) {
-    FUN_003ba6a0();
+    beNDMWStatusSubSlot_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, arg0);
 }
 
-igMetaObject *FUN_003ba2a0(void) {
-    if (g_beNDMWStatusSubSlot_metaObject == 0 || !isValid(g_beNDMWStatusSubSlot_metaObject)) FUN_003ba6a0();
+igMetaObject *beNDMWStatusSubSlot_GetMetaObject(void) {
+    if (g_beNDMWStatusSubSlot_metaObject == 0 || !isValid(g_beNDMWStatusSubSlot_metaObject)) beNDMWStatusSubSlot_EnsureRegistered();
     return g_beNDMWStatusSubSlot_metaObject;
 }
 
@@ -13,14 +13,14 @@ int beNDMWStatusSubSlot_GetVTable(void) {
     int t;
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)u.b);
-    u.vt = (int)&DAT_0053ef40[0];
+    u.vt = (int)&g_beNDMWStatusSubSlot_vtable[0];
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053ef40[0];
+    u.vt = (int)&g_beNDMWStatusSubSlot_vtable[0];
     FUN_003ba3d0((S_arg0 *)u.b, (long long)0);
     return t;
 }
 
-void **FUN_003ba350(void **arg0, short arg1) {
+void **beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;

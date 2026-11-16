@@ -18,7 +18,7 @@ igMetaObject *Gap__Insight__igWindowResizeEventReceiver__vfunc_22(void) {
     return g_igWindowResizeEventReceiver_metaObject;
 }
 
-int Gap__Gui__igEventReceiver__vfunc_23(void) {
+int igEventReceiver_OnKeyEvent(void) {
     return 0;
 }
 
@@ -76,7 +76,7 @@ igMetaObject *Gap__Insight__igFlushRenderer__vfunc_22(void) {
     return g_igFlushRenderer_metaObject;
 }
 
-void Gap__Insight__igFlushRenderer__vfunc_25(void) {
+void igFlushRenderer_Traverse(void) {
 
 }
 
@@ -84,7 +84,7 @@ void Gap__Insight__igFlushRenderer__vfunc_23(void) {
 
 }
 
-void Gap__Insight__igFlushRenderer__vfunc_24(void) {
+void igFlushRenderer_ReleaseDrawing(void) {
 
 }
 

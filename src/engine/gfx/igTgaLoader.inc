@@ -31,10 +31,10 @@ int igTgaLoader_GetVTable(void) {
 
     igObject_InitHeader(&o);
     ps = &o.ref;
-    o.vt = &DAT_00525cc0[0];
+    o.vt = &g_igTgaLoader_vtable[0];
     *ps = 0;
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00525cc0[0];
+    o.vt = &g_igTgaLoader_vtable[0];
     if (ps != 0) {
         temp_a0 = *ps;
         if (temp_a0 != 0) {

@@ -2,15 +2,15 @@ igMetaObject *g_beUnicodeObj_metaObject;
 igMetaField *g_beUnicodeObj_bufferMetaField;
 
 void beUnicodeObj_Create(int arg0) {
-    FUN_00361610();
+    beUnicodeObj_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589640, arg0);
 }
 
-igMetaObject *FUN_00361530(void) {
+igMetaObject *beUnicodeObj_GetMetaObject(void) {
     igMetaObject *g = g_beUnicodeObj_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_00361610();
+        beUnicodeObj_EnsureRegistered();
     return g_beUnicodeObj_metaObject;
 }
 
@@ -26,7 +26,7 @@ int beUnicodeObj_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053a560[0];
+    u.vt = (int)&g_beUnicodeObj_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -43,7 +43,7 @@ int beUnicodeObj_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00361610(void)
+void beUnicodeObj_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beUnicodeObj_Register);
 }
@@ -55,7 +55,7 @@ void *beUnicodeObj_Register(void) {
         &g_beUnicodeObj_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beUnicodeObj_GetMetaObject,
+        beUnicodeObj_GetMetaObjectFunction,
         "beUnicodeObj",
         0x10, /* instance size */
         beUnicodeObj_GetVTable,
@@ -65,9 +65,9 @@ void *beUnicodeObj_Register(void) {
     );
 }
 
-void beUnicodeObj_GetMetaObject(void)
+void beUnicodeObj_GetMetaObjectFunction(void)
 {
-    FUN_00361530();
+    beUnicodeObj_GetMetaObject();
 }
 
 static FieldFactory g_beUnicodeObj_ctorTable[] = {

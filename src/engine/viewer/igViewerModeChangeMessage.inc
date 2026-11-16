@@ -28,10 +28,10 @@ int igViewerModeChangeMessage_GetVTable(void) {
     int c;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_00542160[0];
+    o.vt = &g_igViewerModeChangeMessage_vtable[0];
     o.s = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    o.vt = &DAT_00542160[0];
+    o.vt = &g_igViewerModeChangeMessage_vtable[0];
     if (&o.s != 0) {
         p = (char *)o.s;
         if (p != 0) {

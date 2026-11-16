@@ -2,15 +2,15 @@ igMetaObject *g_beBinDataObject_metaObject;
 igMetaField *g_beBinDataObject_dataBufferMetaField;
 igMetaField *g_beBinDataObject_dataSizeMetaField;
 
-void *FUN_00343b80(void) {
+void *beBinDataObject_GetMetaObject(void) {
     igMetaObject *g = g_beBinDataObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00343bd0();
+        beBinDataObject_EnsureRegistered();
     }
     return g_beBinDataObject_metaObject;
 }
 
-void FUN_00343bd0(void)
+void beBinDataObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beBinDataObject_Register);
 }
@@ -22,7 +22,7 @@ void *beBinDataObject_Register(void) {
         &g_beBinDataObject_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beBinDataObject_GetMetaObject,
+        beBinDataObject_GetMetaObjectFunction,
         "beBinDataObject",
         0x18, /* instance size */
         0,
@@ -32,12 +32,12 @@ void *beBinDataObject_Register(void) {
     );
 }
 
-void beBinDataObject_GetMetaObject(void)
+void beBinDataObject_GetMetaObjectFunction(void)
 {
-    FUN_00343b80();
+    beBinDataObject_GetMetaObject();
 }
 
-igMetaObject *FUN_00343c80(void) {
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void) {
     return g_beBaseInfoData_metaObject;
 }
 

@@ -6,16 +6,16 @@ extern "C" int beSvConnectCheck_Poll(int);
 extern "C" int beSvConnectCheck_FillDeliver(int, int);
 extern "C" void __dl__FPv(...);
 extern "C" void **FUN_003af090(void **arg0, short arg1);
-extern "C" int Gap__Bec__beSaveUtil__vfunc_30(void);
-extern "C" int Gap__Bec__beSaveUtil__vfunc_20(void);
+extern "C" int beSaveUtil_GetInfoMeta(void);
+extern "C" int beSaveUtil_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" void *FUN_00348c70(...);
-extern "C" void *FUN_00348f60(...);
-extern "C" void *FUN_00349270(...);
-extern "C" void *FUN_003495f0(...);
-extern "C" void *FUN_00349870(...);
-extern "C" void *FUN_00349af0(...);
-extern "C" void *FUN_00349d70(...);
+extern "C" void *beSvGetFreeSizeApi_Create(...);
+extern "C" void *beSvWriteMediaApi_Create(...);
+extern "C" void *beSvReadMediaApi_Create(...);
+extern "C" void *beSvUseCheckApi_Create(...);
+extern "C" void *beSvFormatApi_Create(...);
+extern "C" void *beSvFileFindApi_Create(...);
+extern "C" void *beSvFileMakeApi_Create(...);
 extern "C" int FUN_00346c20(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int beMessenger_AppendBool(...);
@@ -36,7 +36,7 @@ extern "C" unsigned char FUN_003ae680(A *arg0, B *arg1, R *arg2);
 typedef struct S0 { char pad36[36]; int f24; } S0;
 typedef struct S1 { char pad48[48]; int f30; } S1;
 extern "C" void FUN_003ae770(S0 *arg0, S1 *arg1);
-extern "C" void Gap__Bec__beSaveUtil__vfunc_32(beSaveUtil *arg0);
+extern "C" void beSaveUtil_Prepare(beSaveUtil *arg0);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
@@ -45,7 +45,7 @@ typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 extern "C" int g_beSaveUtilInfo_metaObject[4];
 extern "C" int g_beSaveUtil_metaObject[4];
 extern "C" char SAVEUTILITY_2[];
-extern "C" void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2);
+extern "C" void beSaveUtil_OnAddRam(beSaveUtil * p0, int p1, char * p2);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* reference-counted engine object header: refcount word at +4 */
@@ -75,7 +75,7 @@ struct Deliver {
     unsigned char b43;
     unsigned char b44;
 };
-extern "C" int Gap__Bec__beSaveUtil__vfunc_34(beSaveUtil *self, beSaveUtilInfoRam *info, MsgArg *msg);
+extern "C" int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, MsgArg *msg);
 
 unsigned char FUN_003ae680(A *arg0, B *arg1, R *arg2) {
     unsigned char var_v0;
@@ -117,7 +117,7 @@ void FUN_003ae770(S0 *arg0, S1 *arg1) {
     beSvConnectCheck_FillDeliver(arg0->f24, arg1->f30);
 }
 
-void Gap__Bec__beSaveUtil__vfunc_32(beSaveUtil *arg0) {
+void beSaveUtil_Prepare(beSaveUtil *arg0) {
     igObject *temp_a0;
     igObject *temp_a0_2;
 
@@ -174,12 +174,12 @@ void **FUN_003af090(void **arg0, short arg1) {
     return arg0;
 }
 
-int Gap__Bec__beSaveUtil__vfunc_30(void)
+int beSaveUtil_GetInfoMeta(void)
 {
     return g_beSaveUtilInfo_metaObject[0];
 }
 
-void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2)
+void beSaveUtil_OnAddRam(beSaveUtil * p0, int p1, char * p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, SAVEUTILITY_2);
 }
@@ -193,30 +193,30 @@ void Gap__Bec__beSaveUtil__vfunc_29(beSaveUtil * p0, int p1, char * p2)
         int v = beMessenger_GetInt((self)->_messenger, i); \
         switch (i) { case 0: DELIVER(info)->slot = v; break; } \
     }
-int Gap__Bec__beSaveUtil__vfunc_34(beSaveUtil *self, beSaveUtilInfoRam *info, MsgArg *msg) {
+int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, MsgArg *msg) {
     int a;
     int i;
     switch (beMessenger_ResolveEnumValue(self->_messenger, FUN_00346c20(), msg->f20)) {
     case 3: {
-        NEW_REQUEST(r, 0, FUN_00349af0)
+        NEW_REQUEST(r, 0, beSvFileFindApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
         ((int)FUN_003ae680((A *)self, (B *)info, (R *)r.p));
         break;
     }
     case 5: {
-        NEW_REQUEST(r, 1, FUN_003495f0)
+        NEW_REQUEST(r, 1, beSvUseCheckApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
         ((int)FUN_003ae680((A *)self, (B *)info, (R *)r.p));
         break;
     }
     case 8: {
-        NEW_REQUEST(r, 2, FUN_00348c70)
+        NEW_REQUEST(r, 2, beSvGetFreeSizeApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
         ((int)FUN_003ae680((A *)self, (B *)info, (R *)r.p));
         break;
     }
     case 2: {
-        NEW_REQUEST(r, 3, FUN_00349d70)
+        NEW_REQUEST(r, 3, beSvFileMakeApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
         if (beMessenger_GetObjectCount(self->_messenger) != 0) {
             DELIVER(info)->f8 = (int)beMessenger_GetObject(self->_messenger, 0);
@@ -225,13 +225,13 @@ int Gap__Bec__beSaveUtil__vfunc_34(beSaveUtil *self, beSaveUtilInfoRam *info, Ms
         break;
     }
     case 4: {
-        NEW_REQUEST(r, 4, FUN_00349870)
+        NEW_REQUEST(r, 4, beSvFormatApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
         ((int)FUN_003ae680((A *)self, (B *)info, (R *)r.p));
         break;
     }
     case 7: {
-        NEW_REQUEST(r, 5, FUN_00348f60)
+        NEW_REQUEST(r, 5, beSvWriteMediaApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
         if (beMessenger_GetObjectCount(self->_messenger) != 0) {
             DELIVER(info)->f8 = (int)beMessenger_GetObject(self->_messenger, 0);
@@ -240,7 +240,7 @@ int Gap__Bec__beSaveUtil__vfunc_34(beSaveUtil *self, beSaveUtilInfoRam *info, Ms
         break;
     }
     case 6: {
-        NEW_REQUEST(r, 6, FUN_00349270)
+        NEW_REQUEST(r, 6, beSvReadMediaApi_Create)
         TAKE_SLOT_ARGUMENT(self, info)
         if (beMessenger_GetObjectCount(self->_messenger) != 0) {
             DELIVER(info)->f8 = (int)beMessenger_GetObject(self->_messenger, 0);
@@ -330,7 +330,7 @@ int Gap__Bec__beSaveUtil__vfunc_34(beSaveUtil *self, beSaveUtilInfoRam *info, Ms
 #undef ALLOC
 #undef DELIVER
 
-int Gap__Bec__beSaveUtil__vfunc_20(void)
+int beSaveUtil_GetMeta(void)
 {
     return g_beSaveUtil_metaObject[0];
 }

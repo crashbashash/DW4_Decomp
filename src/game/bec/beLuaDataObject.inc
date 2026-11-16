@@ -2,17 +2,17 @@ igMetaObject *g_beLuaDataObject_metaObject;
 igMetaField *g_beLuaDataObject_dataSizeMetaField;
 igMetaField *g_beLuaDataObject_dataMetaField;
 
-igMetaObject *FUN_0035b510(void) {
+igMetaObject *beLuaDataObject_GetOrCreateMetaObject(void) {
     if (g_beLuaDataObject_metaObject == 0) {
         g_beLuaDataObject_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beLuaDataObject_metaObject;
 }
 
-void *FUN_0035b560(void) {
+void *beLuaDataObject_GetMetaObject(void) {
     igMetaObject *g = g_beLuaDataObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035b5f0();
+        beLuaDataObject_EnsureRegistered();
     }
     return g_beLuaDataObject_metaObject;
 }
@@ -21,11 +21,11 @@ int beLuaDataObject_GetVTable(void) {
     struct Obj_35b5b0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005367c0[0];
+    obj.vt = &g_beLuaDataObject_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0035b5f0(void)
+void beLuaDataObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLuaDataObject_Register);
 }
@@ -37,7 +37,7 @@ void *beLuaDataObject_Register(void) {
         &g_beLuaDataObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beLuaDataObject_GetMetaObject,
+        beLuaDataObject_GetMetaObjectFunction,
         "beLuaDataObject",
         0x10, /* instance size */
         beLuaDataObject_GetVTable,
@@ -47,9 +47,9 @@ void *beLuaDataObject_Register(void) {
     );
 }
 
-void beLuaDataObject_GetMetaObject(void)
+void beLuaDataObject_GetMetaObjectFunction(void)
 {
-    FUN_0035b560();
+    beLuaDataObject_GetMetaObject();
 }
 
 static FieldFactory g_beLuaDataObject_ctorTable[] = {

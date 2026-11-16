@@ -114,12 +114,12 @@ int *FUN_001a3d80(void *p)
 
 void *FUN_001a3d90(igTraversal *arg0) {
     igObject_InitHeader();
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00528250[0]);
+    *(int *)((char *)(arg0) + 0) = (int)(&g_igTraversal_vtable[0]);
     arg0->_travProcs = 0;
     return arg0;
 }
 
-void FUN_001a3dd0(void)
+void igCommonTraversal_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCommonTraversal_Register);
 }

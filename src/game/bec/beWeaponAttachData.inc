@@ -2,16 +2,16 @@ igMetaObject *g_beWeaponAttachData_metaObject;
 igMetaField *g_beWeaponAttachData_boneSelectListMetaField;
 igMetaField *g_beWeaponAttachData_appearanceListListMetaField;
 
-void FUN_0033fa80(int arg0) {
-    FUN_0033fbf0();
+void beWeaponAttachData_Create(int arg0) {
+    beWeaponAttachData_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587A80, arg0);
 }
 
-igMetaObject *FUN_0033fac0(void) {
+igMetaObject *beWeaponAttachData_GetMetaObject(void) {
     igMetaObject *g = g_beWeaponAttachData_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0033fbf0();
+        beWeaponAttachData_EnsureRegistered();
     return g_beWeaponAttachData_metaObject;
 }
 
@@ -20,22 +20,22 @@ int beWeaponAttachData_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00539bb0[0];
+    obj.vt = &g_beWeaponAttachData_vtable[0];
     obj.m8 = 0;
     obj.m12 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00539bb0[0];
+    obj.vt = &g_beWeaponAttachData_vtable[0];
     obj.rel12();
     obj.rel8();
     return r;
 }
 
-void FUN_0033fbf0(void)
+void beWeaponAttachData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWeaponAttachData_Register);
 }
 
-static igMetaObjectCallback g_beWeaponAttachData_callbackList[] = { FUN_0033ffe0, FUN_0033fe50, 0 };
+static igMetaObjectCallback g_beWeaponAttachData_callbackList[] = { igModelViewMatrixBoneSelectListBec_EnsureRegistered, igAppearanceListList_EnsureRegistered, 0 };
 
 void *beWeaponAttachData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -44,7 +44,7 @@ void *beWeaponAttachData_Register(void) {
         &g_beWeaponAttachData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beWeaponAttachData_GetMetaObject,
+        beWeaponAttachData_GetMetaObjectFunction,
         "beWeaponAttachData",
         0x10, /* instance size */
         beWeaponAttachData_GetVTable,
@@ -54,9 +54,9 @@ void *beWeaponAttachData_Register(void) {
     );
 }
 
-void beWeaponAttachData_GetMetaObject(void)
+void beWeaponAttachData_GetMetaObjectFunction(void)
 {
-    FUN_0033fac0();
+    beWeaponAttachData_GetMetaObject();
 }
 
 static FieldFactory g_beWeaponAttachData_ctorTable[] = {
@@ -86,10 +86,10 @@ void beWeaponAttachData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beWeaponAttachData_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0033ff00();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igModelViewMatrixBoneSelectListBec_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0033fd70();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igAppearanceListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beWeaponAttachData_fieldTable, g_beWeaponAttachData_fieldHandles, g_beWeaponAttachData_fieldOffsets, temp_s2);
 }

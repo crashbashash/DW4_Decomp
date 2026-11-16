@@ -1,7 +1,7 @@
 igMetaObject *g_beModelCtrlWCHECK_metaObject;
 
-igMetaObject *FUN_00355030(void) {
-    if (g_beModelCtrlWCHECK_metaObject == 0 || !isValid(g_beModelCtrlWCHECK_metaObject)) FUN_00355110();
+igMetaObject *beModelCtrlWCHECK_GetMetaObject(void) {
+    if (g_beModelCtrlWCHECK_metaObject == 0 || !isValid(g_beModelCtrlWCHECK_metaObject)) beModelCtrlWCHECK_EnsureRegistered();
     return g_beModelCtrlWCHECK_metaObject;
 }
 
@@ -17,7 +17,7 @@ int beModelCtrlWCHECK_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_005376b0[0];
+    u.vt = (int)&g_beModelCtrlWCHECK_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -34,7 +34,7 @@ int beModelCtrlWCHECK_GetVTable(void) {
     return s0;
 }
 
-void FUN_00355110(void)
+void beModelCtrlWCHECK_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlWCHECK_Register);
 }
@@ -46,7 +46,7 @@ void *beModelCtrlWCHECK_Register(void) {
         &g_beModelCtrlWCHECK_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlWCHECK_GetMetaObject,
+        beModelCtrlWCHECK_GetMetaObjectFunction,
         "beModelCtrlWCHECK",
         0xc, /* instance size */
         beModelCtrlWCHECK_GetVTable,
@@ -56,8 +56,8 @@ void *beModelCtrlWCHECK_Register(void) {
     );
 }
 
-void beModelCtrlWCHECK_GetMetaObject(void)
+void beModelCtrlWCHECK_GetMetaObjectFunction(void)
 {
-    FUN_00355030();
+    beModelCtrlWCHECK_GetMetaObject();
 }
 

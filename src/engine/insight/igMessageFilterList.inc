@@ -19,7 +19,7 @@ int igMessageFilterList_GetVTable(void) {
     struct Obj_231a70 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052ce40[0];
+    obj.vt = &g_igMessageFilterList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

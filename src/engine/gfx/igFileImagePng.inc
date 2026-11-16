@@ -22,11 +22,11 @@ int igFileImagePng_GetVTable(void) {
     igObject_InitHeader(u.b);
     *(int *)&u.b[68] = 0;
     *(int *)&u.b[88] = 0;
-    u.vt = (int)&DAT_00525d20[0];
+    u.vt = (int)&g_igFileImagePng_vtable[0];
     p = (int *)&u.b[92];
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00525d20[0];
+    u.vt = (int)&g_igFileImagePng_vtable[0];
     igSmartPointer_igFile_Destruct((void **)p, -1);
     FUN_00150490((S_150490 *)u.b, 0);
     return temp_s0;

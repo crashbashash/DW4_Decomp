@@ -9,7 +9,7 @@ igMetaObject *igPsx2ImageConvert_GetMetaObject(void)
 int igPsx2ImageConvert_GetVTable(void) {
     struct Obj_153c40 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005255a0[0];
+    obj.vt = &g_igPsx2ImageConvert_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

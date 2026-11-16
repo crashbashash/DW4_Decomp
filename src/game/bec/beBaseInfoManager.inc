@@ -4,27 +4,27 @@ igMetaField *g_beBaseInfoManager_messengerMetaField;
 igMetaField *g_beBaseInfoManager_infoListMetaField;
 igMetaField *g_beBaseInfoManager_isUpdateRunMetaField;
 
-igMetaObject *FUN_0036a8d0(void) {
+igMetaObject *beBaseInfoManager_GetOrCreateMetaObject(void) {
     if (g_beBaseInfoManager_metaObject == 0) {
         g_beBaseInfoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beBaseInfoManager_metaObject;
 }
 
-igMetaObject *FUN_0036a920(void) {
+igMetaObject *beBaseInfoManager_GetMetaObject(void) {
     igMetaObject *g = g_beBaseInfoManager_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0036a970();
+        beBaseInfoManager_EnsureRegistered();
     return g_beBaseInfoManager_metaObject;
 }
 
-void FUN_0036a970(void)
+void beBaseInfoManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beBaseInfoManager_Register);
 }
 
-static igMetaObjectCallback g_beBaseInfoManager_callbackList[] = { FUN_00342f30, FUN_00357d10, FUN_0036abd0, 0 };
+static igMetaObjectCallback g_beBaseInfoManager_callbackList[] = { beSystem_EnsureRegistered, beMessenger_EnsureRegistered, beBaseInfoList_EnsureRegistered, 0 };
 
 void *beBaseInfoManager_Register(void) {
     BecLibrary_MarkRegistered();
@@ -33,7 +33,7 @@ void *beBaseInfoManager_Register(void) {
         &g_beBaseInfoManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        beBaseInfoManager_GetMetaObject,
+        beBaseInfoManager_GetMetaObjectFunction,
         "beBaseInfoManager",
         0x20, /* instance size */
         0,
@@ -43,9 +43,9 @@ void *beBaseInfoManager_Register(void) {
     );
 }
 
-void beBaseInfoManager_GetMetaObject(void)
+void beBaseInfoManager_GetMetaObjectFunction(void)
 {
-    FUN_0036a920();
+    beBaseInfoManager_GetMetaObject();
 }
 
 static FieldFactory g_beBaseInfoManager_ctorTable[] = {
@@ -84,13 +84,13 @@ void beBaseInfoManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beBaseInfoManager_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00342ce0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00357910();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0036aaf0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beBaseInfoManager_fieldTable, g_beBaseInfoManager_fieldHandles, g_beBaseInfoManager_fieldOffsets, temp_s2);
 }

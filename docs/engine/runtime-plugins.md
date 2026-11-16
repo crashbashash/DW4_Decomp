@@ -8,9 +8,9 @@ the Insight core. Both are built from the same three slots, and their source fil
 
 | Slot | Bec | Ndmw | Role |
 | --- | --- | --- | --- |
-| 20 | `Gap__Bec__libBecRuntimePlugin__vfunc_20` | `Gap__Bec__libNdmwRuntimePlugin__vfunc_20` | returns the plugin's meta object |
-| 21 | `Gap__Bec__libBecRuntimePlugin__vfunc_21` | `Gap__Bec__libNdmwRuntimePlugin__vfunc_21` | creates every manager, then adds each to the core |
-| 22 | `Gap__Bec__libBecRuntimePlugin__vfunc_22` | `Gap__Bec__libNdmwRuntimePlugin__vfunc_22` | removes each manager from the core |
+| 20 | `libBecRuntimePlugin_GetMeta` | `libNdmwRuntimePlugin_GetMeta` | returns the plugin's meta object |
+| 21 | `libBecRuntimePlugin_Attach` | `libNdmwRuntimePlugin_Attach` | creates every manager, then adds each to the core |
+| 22 | `libBecRuntimePlugin_Detach` | `libNdmwRuntimePlugin_Detach` | removes each manager from the core |
 
 ## Creating the managers
 

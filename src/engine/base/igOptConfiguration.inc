@@ -18,7 +18,7 @@ igMetaObject *igOptConfiguration_GetMetaObject(void)
 int igOptConfiguration_GetVTable(void) {
     struct Obj_3 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c610[0];
+    obj.vt = &g_igOptConfiguration_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

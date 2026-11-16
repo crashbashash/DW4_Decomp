@@ -2,7 +2,7 @@ igMetaObject *g_igAlphaStateAttr_metaObject;
 igMetaField *g_igAlphaStateAttr_enabledMetaField;
 
 void FUN_0013b270(int arg0) {
-    FUN_0013b390();
+    igAlphaStateAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F480, arg0);
 }
 
@@ -17,18 +17,18 @@ igMetaObject *igAlphaStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igAlphaStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013b390();
+        igAlphaStateAttr_EnsureRegistered();
     return g_igAlphaStateAttr_metaObject;
 }
 
 int igAlphaStateAttr_GetVTable(void) {
     struct Obj obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524300[0];
+    obj.vt = &g_igAlphaStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0013b390(void)
+void igAlphaStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAlphaStateAttr_Register);
 }

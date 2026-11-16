@@ -93,9 +93,9 @@ bool beCri_IsTransferDone(beCri *self);
 unsigned char beCri_IsReady(beCri *self, const char *name);
 
 void beSound_Prepare(beSound *self);
-void beSound_RegisterReceiver(beSound *self, beBaseInfoRam *ram);
+void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram);
 int beSound_GetInfoMeta(void);
-void beSound_Update(beSound *self, beBaseInfoRam *ram);
+void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram);
 int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *message);
 int beSound_FindData(beSound *self, beBaseInfoRam *ram, char *name);
 int beSound_GetMeta(void);
@@ -234,7 +234,7 @@ void beSound_Prepare(beSound *self) {
     ReserveIfEmpty((igObjectList *)self->_playSEs);
 }
 
-void beSound_RegisterReceiver(beSound *self, beBaseInfoRam *ram) {
+void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram) {
     beSoundInfo *info;
     beMessenger_RegisterReceiver(self->_messenger, ram, "SOUND", 0, -1);
     info = (beSoundInfo *)ram->_parentInfo;
@@ -255,7 +255,7 @@ int beSound_GetInfoMeta(void)
     return g_beSoundInfo_metaObject[0];
 }
 
-void beSound_Update(beSound *self, beBaseInfoRam *ram) {
+void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram) {
     igObjectList *infos;
     long long now;
     beBaseInfo *info;

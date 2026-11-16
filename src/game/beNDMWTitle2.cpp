@@ -27,8 +27,8 @@ extern "C" int beMessenger_GetObject(...);
 extern "C" void * igProperty_GetRecord(...);
 extern "C" int igInsightCore_FindManager(...);
 extern "C" void *beBaseInfoDataList_Create(...);
-extern "C" void *FUN_003b2250(...);
-extern "C" void *FUN_003b2560(...);
+extern "C" void *beNDMWTitle2Option_Create(...);
+extern "C" void *beNDMWTitle2CtrlData_Create(...);
 extern "C" void *beNDMWLoadIntf2ComMdlCtrl_Create(...);
 extern "C" void *beNDMWLoadIntf2TextOrder_Create(...);
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__Start(...);
@@ -55,8 +55,8 @@ extern "C" int igObject_GetAllocator(...);
 extern "C" void *igProperty_FindByName(...);
 extern "C" int FUN_002ff820(...);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, const void *);
-extern "C" int Gap__Bec__beNDMWTitle2__vfunc_30(void);
-extern "C" int Gap__Bec__beNDMWTitle2__vfunc_20(void);
+extern "C" int beNDMWTitle2_GetInfoMeta(void);
+extern "C" int beNDMWTitle2_GetMeta(void);
 extern "C" int FUN_003b2840(...);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger);
@@ -68,7 +68,7 @@ extern "C" { char g_commonSettingsValid; }
 extern "C" int g_beNDMWTitle2Info_metaObject[4];
 extern "C" int g_beNDMWTitle2_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self);
+extern "C" void beNDMWTitle2_Prepare(beNDMWTitle2 *self);
 /* Outer state, CTRL._st0. */
 enum TitleState {
     TitleStateWaitRun = 0,
@@ -113,10 +113,10 @@ template <int Tag> struct TitleRef {
         }
     }
 };
-extern "C" void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam);
-extern "C" void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *self, int info);
+extern "C" void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam);
+extern "C" void beNDMWTitle2_OnAddRam(beNDMWTitle2 *self, int info);
 extern "C" char GPR_00554e70;
-extern "C" int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2);
+extern "C" int beNDMWTitle2_OnMessage(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2);
 
 /* Bind the messenger and load the Options settings. Once the title settings are valid, the saved
  * camera and light modes are read back from the GAMERAM GETCOMMON property group (property record
@@ -159,7 +159,7 @@ static inline int st1(const beNDMWTitle2CtrlData *data) { return data->_st1; }
 
 static inline int st2(const beNDMWTitle2CtrlData *data) { return data->_st2; }
 
-void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
+void beNDMWTitle2_Prepare(beNDMWTitle2 *self) {
     igObject *padManager;
     igObject *held;
     if (self->_padManager == 0) {
@@ -196,7 +196,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
 
 /* per-frame title-menu update. Lazily builds the CTRL / COMMDLCTRL / "OPTION" / TEXTORDER objects in
  * the info record's property list, then runs the CTRL._st0.._st3 state machine. */
-void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
+void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
     int allocator;
     bool left;
     bool right;
@@ -233,7 +233,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
         ALLOC(allocator, self);
-        TitleRef<TitleControl> ctrlRef(FUN_003b2560(allocator));
+        TitleRef<TitleControl> ctrlRef(beNDMWTitle2CtrlData_Create(allocator));
         ObjectList_AppendRetained(infoRam->_dataList, ctrlRef.p);
         ALLOC(allocator, self);
         {
@@ -243,7 +243,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         }
         ALLOC(allocator, self);
         {
-            TitleRef<TitleOptions> optionRef(FUN_003b2250(allocator));
+            TitleRef<TitleOptions> optionRef(beNDMWTitle2Option_Create(allocator));
             beNDMWTitle2Option_InitSettings((beNDMWTitle2Option *)optionRef.p, (int)self->_messenger);
             ObjectList_AppendRetained(infoRam->_dataList, optionRef.p);
         }
@@ -1075,18 +1075,18 @@ done:
     return;
 }
 
-int Gap__Bec__beNDMWTitle2__vfunc_30(void)
+int beNDMWTitle2_GetInfoMeta(void)
 {
     return g_beNDMWTitle2Info_metaObject[0];
 }
 
 /* Slot 29: register the controller as the TITLE2 message receiver. */
-void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *self, int info)
+void beNDMWTitle2_OnAddRam(beNDMWTitle2 *self, int info)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "TITLE2");
 }
 
-int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2) {
+int beNDMWTitle2_OnMessage(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2) {
     int temp_v0;
 
     if (arg1->_dataList == 0) {
@@ -1107,7 +1107,7 @@ int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, vo
     return 1;
 }
 
-int Gap__Bec__beNDMWTitle2__vfunc_20(void)
+int beNDMWTitle2_GetMeta(void)
 {
     return g_beNDMWTitle2_metaObject[0];
 }

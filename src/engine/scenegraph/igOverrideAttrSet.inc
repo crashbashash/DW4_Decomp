@@ -25,9 +25,9 @@ int igOverrideAttrSet_GetVTable(void) {
     f.w[3] = 0;
     f.w[6] = 0;
     f.w[7] = 0;
-    f.vt = &DAT_0052ac70[0];
+    f.vt = &g_igOverrideAttrSet_vtable[0];
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_0052ac70[0];
+    f.vt = &g_igOverrideAttrSet_vtable[0];
     FUN_0019c0e0((struct S_19c0e0 *)&f, 0);
     return temp_s0;
 }

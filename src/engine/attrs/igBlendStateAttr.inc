@@ -2,11 +2,11 @@ igMetaObject *g_igBlendStateAttr_metaObject;
 igMetaField *g_igBlendStateAttr_enabledMetaField;
 
 void igBlendStateAttr_CreateInstance(int arg0) {
-    FUN_00139720();
+    igBlendStateAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F348, arg0);
 }
 
-igMetaObject *FUN_00139640(void) {
+igMetaObject *igBlendStateAttr_GetOrCreateMetaObject(void) {
     if (g_igBlendStateAttr_metaObject == 0) {
         g_igBlendStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -17,18 +17,18 @@ igMetaObject *igBlendStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igBlendStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00139720();
+        igBlendStateAttr_EnsureRegistered();
     return g_igBlendStateAttr_metaObject;
 }
 
 int igBlendStateAttr_GetVTable(void) {
     struct Obj o;
     igObject_InitHeader(&o);
-    o.vt = &DAT_00524080[0];
+    o.vt = &g_igBlendStateAttr_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00139720(void)
+void igBlendStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBlendStateAttr_Register);
 }

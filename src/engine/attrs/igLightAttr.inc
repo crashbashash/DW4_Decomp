@@ -27,7 +27,7 @@ igMetaObject *igLightAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igLightAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00136880();
+        igLightAttr_EnsureRegistered();
     return g_igLightAttr_metaObject;
 }
 
@@ -37,11 +37,11 @@ int igLightAttr_GetVTable(void) {
     char *ps;
     int *temp_a0;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00523700[0];
+    u.vt = (int)&g_igLightAttr_vtable[0];
     ps = &u.b[140];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00523700[0];
+    u.vt = (int)&g_igLightAttr_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
         if (temp_a0 != 0) {
@@ -54,12 +54,12 @@ int igLightAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00136880(void)
+void igLightAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLightAttr_Register);
 }
 
-static igMetaObjectCallback g_igLightAttr_callbackList[] = { FUN_0014a0e0, 0 };
+static igMetaObjectCallback g_igLightAttr_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 void igLightAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -222,7 +222,7 @@ void igLightAttr_InitFields(void) {
     vd[0] = 0; vd[2] = -1.0f; vd[1] = 0;
     FUN_0018e470(temp_s2, vd);
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD);
-    temp_s2->f56 = FUN_0014a040();
+    temp_s2->f56 = igVisualContext_GetOrCreateMetaObject();
     temp_s2->f38 = 0;
     temp_s2->f40 = 1;
     temp_s2->f39 = 1;

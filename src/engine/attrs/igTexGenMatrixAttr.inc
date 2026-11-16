@@ -29,7 +29,7 @@ done:
 int igTexGenMatrixAttr_GetVTable(void) {
     union U_133240 u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00522d00[0];
+    u.vt = (int)&g_igTexGenMatrixAttr_vtable[0];
     igMatrix44f_SetIdentity(&u.b[12]);
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }

@@ -50,11 +50,11 @@ igMetaEnum *FUN_00139e70(void) {
 }
 
 void FUN_00139ed0(int arg0) {
-    FUN_0013a040();
+    igBlendFunctionAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F3B8, arg0);
 }
 
-igMetaObject *FUN_00139f10(void) {
+igMetaObject *igBlendFunctionAttr_GetOrCreateMetaObject(void) {
     if (g_igBlendFunctionAttr_metaObject == 0) {
         g_igBlendFunctionAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -65,7 +65,7 @@ igMetaObject *igBlendFunctionAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igBlendFunctionAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013a040();
+        igBlendFunctionAttr_EnsureRegistered();
     return g_igBlendFunctionAttr_metaObject;
 }
 
@@ -76,10 +76,10 @@ int igBlendFunctionAttr_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     p = (S_ref *)&u.b[24];
-    u.vt = (int)&DAT_00524210[0];
+    u.vt = (int)&g_igBlendFunctionAttr_vtable[0];
     *(int *)p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00524210[0];
+    u.vt = (int)&g_igBlendFunctionAttr_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
         if (p != 0) {
@@ -92,7 +92,7 @@ int igBlendFunctionAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0013a040(void)
+void igBlendFunctionAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBlendFunctionAttr_Register);
 }

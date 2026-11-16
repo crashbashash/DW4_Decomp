@@ -1,12 +1,12 @@
 igMetaObject *g_igAudioContext_metaObject;
 igMetaField *g_igAudioContext_immediateModeMetaField;
 
-void FUN_00142f30(int arg0) {
-    FUN_00143010();
+void igAudioContext_CreateInstance(int arg0) {
+    igAudioContext_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igAudioContext_metaObject, arg0);
 }
 
-igMetaObject *FUN_00142f70(void) {
+igMetaObject *igAudioContext_GetOrCreateMetaObject(void) {
     if (g_igAudioContext_metaObject == 0) {
         g_igAudioContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -17,11 +17,11 @@ igMetaObject *igAudioContext_GetMetaObject(void)
 {
     igMetaObject *g = g_igAudioContext_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00143010();
+        igAudioContext_EnsureRegistered();
     return g_igAudioContext_metaObject;
 }
 
-void FUN_00143010(void)
+void igAudioContext_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAudioContext_Register);
 }

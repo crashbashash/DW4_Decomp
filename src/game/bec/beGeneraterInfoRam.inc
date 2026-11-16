@@ -1,11 +1,11 @@
 igMetaObject *g_beGeneraterInfoRam_metaObject;
 igMetaField *g_beGeneraterInfoRam_workMetaField;
 
-igMetaObject *FUN_0035f410(void) {
+igMetaObject *beGeneraterInfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beGeneraterInfoRam_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0035f5d0();
+        beGeneraterInfoRam_EnsureRegistered();
     return g_beGeneraterInfoRam_metaObject;
 }
 
@@ -15,12 +15,12 @@ int beGeneraterInfoRam_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.m40 = 0;
-    obj.vt = &DAT_00535ff0[0];
+    obj.vt = &g_beGeneraterInfoRam_vtable[0];
     obj.m44 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00535ff0[0];
+    obj.vt = &g_beGeneraterInfoRam_vtable[0];
     obj.rel44();
-    obj.vt = &DAT_00539e90[0];
+    obj.vt = &g_beBaseInfoRam_vtable[0];
     obj.rel40();
     return r;
 }
@@ -38,12 +38,12 @@ void **FUN_0035f550(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void FUN_0035f5d0(void)
+void beGeneraterInfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterInfoRam_callbackList[] = { FUN_0035f2b0, 0 };
+static igMetaObjectCallback g_beGeneraterInfoRam_callbackList[] = { beGeneraterInfoWork_EnsureRegistered, 0 };
 
 void *beGeneraterInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -52,7 +52,7 @@ void *beGeneraterInfoRam_Register(void) {
         &g_beGeneraterInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beGeneraterInfoRam_GetMetaObject,
+        beGeneraterInfoRam_GetMetaObjectFunction,
         "beGeneraterInfoRam",
         0x30, /* instance size */
         beGeneraterInfoRam_GetVTable,
@@ -62,9 +62,9 @@ void *beGeneraterInfoRam_Register(void) {
     );
 }
 
-void beGeneraterInfoRam_GetMetaObject(void)
+void beGeneraterInfoRam_GetMetaObjectFunction(void)
 {
-    FUN_0035f410();
+    beGeneraterInfoRam_GetMetaObject();
 }
 
 static FieldFactory g_beGeneraterInfoRam_ctorTable[] = {
@@ -89,7 +89,7 @@ void beGeneraterInfoRam_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beGeneraterInfoRam_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035f140();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beGeneraterInfoWork_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beGeneraterInfoRam_fieldTable, g_beGeneraterInfoRam_fieldHandles, g_beGeneraterInfoRam_fieldOffsets, temp_s2);
 }
 

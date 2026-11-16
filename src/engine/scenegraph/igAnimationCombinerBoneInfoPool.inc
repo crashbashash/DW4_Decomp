@@ -17,7 +17,7 @@ int igAnimationCombinerBoneInfoPool_GetVTable(void) {
     struct Obj_1a7d50 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00529e70[0];
+    obj.vt = &g_igAnimationCombinerBoneInfoPool_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

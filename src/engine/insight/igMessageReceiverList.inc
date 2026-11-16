@@ -19,7 +19,7 @@ int igMessageReceiverList_GetVTable(void) {
     struct Obj_231830 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052ceb0[0];
+    obj.vt = &g_igMessageReceiverList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

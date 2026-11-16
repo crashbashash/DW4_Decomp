@@ -6,7 +6,7 @@ igMetaField *g_igColorMaskAttr_alphaMetaField;
 igMetaField *g_igColorMaskAttr_unusedMetaField;
 
 void FUN_00138cb0(int arg0) {
-    FUN_00138d80();
+    igColorMaskAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F2B0, arg0);
 }
 
@@ -14,7 +14,7 @@ igMetaObject *igColorMaskAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igColorMaskAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00138d80();
+        igColorMaskAttr_EnsureRegistered();
     return g_igColorMaskAttr_metaObject;
 }
 
@@ -22,11 +22,11 @@ int igColorMaskAttr_GetVTable(void) {
     struct Obj_138d40 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523e50[0];
+    obj.vt = &g_igColorMaskAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00138d80(void)
+void igColorMaskAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igColorMaskAttr_Register);
 }

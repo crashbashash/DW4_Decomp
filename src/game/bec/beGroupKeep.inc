@@ -1,9 +1,9 @@
 igMetaObject *g_beGroupKeep_metaObject;
 
-void *FUN_0035ef90(void) {
+void *beGroupKeep_GetMetaObject(void) {
     igMetaObject *g = g_beGroupKeep_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035f050();
+        beGroupKeep_EnsureRegistered();
     }
     return g_beGroupKeep_metaObject;
 }
@@ -17,14 +17,14 @@ int beGroupKeep_GetVTable(void) {
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w7 = 0;
-    obj.vt = &DAT_005360b0[0];
+    obj.vt = &g_beGroupKeep_vtable[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005360b0[0];
+    obj.vt = &g_beGroupKeep_vtable[0];
     FUN_00195a90(&obj, 0);
     return t;
 }
 
-void FUN_0035f050(void)
+void beGroupKeep_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGroupKeep_Register);
 }
@@ -36,7 +36,7 @@ void *beGroupKeep_Register(void) {
         &g_beGroupKeep_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        beGroupKeep_GetMetaObject,
+        beGroupKeep_GetMetaObjectFunction,
         "beGroupKeep",
         0x20, /* instance size */
         beGroupKeep_GetVTable,
@@ -46,8 +46,8 @@ void *beGroupKeep_Register(void) {
     );
 }
 
-void beGroupKeep_GetMetaObject(void)
+void beGroupKeep_GetMetaObjectFunction(void)
 {
-    FUN_0035ef90();
+    beGroupKeep_GetMetaObject();
 }
 

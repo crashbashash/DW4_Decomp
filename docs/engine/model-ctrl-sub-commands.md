@@ -29,7 +29,7 @@ A `beModelCtrlSubCom` keeps its commands in `_comList`. Each command derives fro
 
 | Function | Role |
 |---|---|
-| `beModelCtrlSubComBase_Update` | adds the system frame time to `_runFrame`; at `_startFrame` sets `_isOneSet` and calls start, afterwards update; returns 0 when the command is done |
+| `beModelCtrlSubComBase_Advance` | adds the system frame time to `_runFrame`; at `_startFrame` sets `_isOneSet` and calls start, afterwards update; returns 0 when the command is done |
 | `beModelCtrlSubCom_Update` | updates every command, releasing and removing the finished ones |
 | `beModelCtrlSubCom_StopAll` | calls stop on every command (an effect only when `_isSeqDead`), then releases and clears the list |
 | `beModelCtrlSubCom_StopType` | stops and removes every command whose meta object is the one given (`beModelCtrl` passes `beModelCtrlSCHitBox`'s) |

@@ -16,12 +16,12 @@ int igOnOffModel_GetVTable(void) {
     void *temp_a0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00540e30[0];
+    u.vt = (int)&g_igModel_vtable[0];
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00541c40[0];
+    u.vt = (int)&g_igOnOffModel_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00540e30[0];
+    u.vt = (int)&g_igModel_vtable[0];
     if (q1 != 0) {
         temp_a0 = *(void **)q1;
         if (temp_a0 != 0) {

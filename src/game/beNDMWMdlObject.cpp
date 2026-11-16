@@ -1,11 +1,11 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int strcmp(int, int *);
-extern "C" int Gap__Bec__beNDMWMdlObject__vfunc_35(int dummy0, int arg1);
-extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_37(void);
-extern "C" int Gap__Bec__beNDMWMdlObject__vfunc_20(void);
+extern "C" int beNDMWMdlObject_IsKind(int dummy0, int arg1);
+extern "C" void beNDMWMdlObject_RegisterReceiver(void);
+extern "C" int beNDMWMdlObject_GetMeta(void);
 extern "C" int StringPool_Allocate(...);
-extern "C" void *FUN_00350020(...);
+extern "C" void *beModelCtrlInfoWork_Create(...);
 extern "C" void *beBaseInfoDataList_Create(...);
 extern "C" int beModelCtrl__OnGenerate(...);
 extern "C" int Memory_GetAllocatorBySelector(int);
@@ -41,20 +41,20 @@ struct DataListSlot { static inline void setDataList(beBaseInfoRam *ram, const i
 }
 static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); setDataList(ram, list); }
 };
-extern "C" void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlObject_OnGenerate(beNDMWMdlObject *arg0, beBaseInfoRam *arg1);
 
 #pragma push
 #pragma readonly_strings on
 
-int Gap__Bec__beNDMWMdlObject__vfunc_35(int dummy0, int arg1) {
+int beNDMWMdlObject_IsKind(int dummy0, int arg1) {
     return strcmp(arg1, &KIND_OBJECT[0]) == 0;
 }
 
-void Gap__Bec__beNDMWMdlObject__vfunc_37(void)
+void beNDMWMdlObject_RegisterReceiver(void)
 {
 }
 
-void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlObject_OnGenerate(beNDMWMdlObject *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
         int al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
@@ -67,7 +67,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
     {
         int a2 = igObject_GetAllocator(arg0);
         int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        InfoWorkRef w((igObject *)FUN_00350020(al2));
+        InfoWorkRef w((igObject *)beModelCtrlInfoWork_Create(al2));
         igObject *t2 = w.p;
         if (t2 != 0) t2->_refCount = t2->_refCount + 1;
         RefRelease::go(s3->f20);
@@ -96,7 +96,7 @@ void Gap__Bec__beNDMWMdlObject__vfunc_36(beNDMWMdlObject *arg0, beBaseInfoRam *a
     beModelCtrl__OnGenerate(arg0, arg1);
 }
 
-int Gap__Bec__beNDMWMdlObject__vfunc_20(void)
+int beNDMWMdlObject_GetMeta(void)
 {
     return g_beNDMWMdlObject_metaObject[0];
 }

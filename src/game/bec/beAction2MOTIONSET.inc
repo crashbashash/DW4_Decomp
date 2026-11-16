@@ -3,13 +3,13 @@ igMetaField *g_beAction2MOTIONSET_hokanModeMetaField;
 igMetaField *g_beAction2MOTIONSET_hokanTimeMetaField;
 igMetaField *g_beAction2MOTIONSET_loopModeMetaField;
 
-void *FUN_0036d5e0(void) {
+void *beAction2MOTIONSET_GetMetaObject(void) {
     unsigned char b;
     if (g_beAction2MOTIONSET_metaObject != 0) {
         b = (*(int *)((char *)(g_beAction2MOTIONSET_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_0036d740();
+    beAction2MOTIONSET_EnsureRegistered();
 done:
     return g_beAction2MOTIONSET_metaObject;
 }
@@ -27,13 +27,13 @@ int beAction2MOTIONSET_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = &u.b[8];
     *(int *)q2 = 0;
-    u.vt = (int)&DAT_00534090[0];
+    u.vt = (int)&g_beAction2MOTIONSET_vtable[0];
     q1 = &u.b[12];
     *(int *)q1 = 0;
     q0 = &u.b[20];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00534090[0];
+    u.vt = (int)&g_beAction2MOTIONSET_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {
@@ -71,7 +71,7 @@ int beAction2MOTIONSET_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0036d740(void)
+void beAction2MOTIONSET_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAction2MOTIONSET_Register);
 }
@@ -83,7 +83,7 @@ void *beAction2MOTIONSET_Register(void) {
         &g_beAction2MOTIONSET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beAction2MOTIONSET_GetMetaObject,
+        beAction2MOTIONSET_GetMetaObjectFunction,
         "beAction2MOTIONSET",
         0x18, /* instance size */
         beAction2MOTIONSET_GetVTable,
@@ -93,9 +93,9 @@ void *beAction2MOTIONSET_Register(void) {
     );
 }
 
-void beAction2MOTIONSET_GetMetaObject(void)
+void beAction2MOTIONSET_GetMetaObjectFunction(void)
 {
-    FUN_0036d5e0();
+    beAction2MOTIONSET_GetMetaObject();
 }
 
 static FieldFactory g_beAction2MOTIONSET_ctorTable[] = {

@@ -27,10 +27,10 @@ int igActorManagerParams_GetVTable(void) {
     igObject_InitHeader(u.b);
     ps = &u.b[8];
     *(int *)ps = 0;
-    u.vt = (int)&DAT_00540e30[0];
-    u.vt = (int)&DAT_00541fe0[0];
+    u.vt = (int)&g_igModel_vtable[0];
+    u.vt = (int)&g_igActorManagerParams_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
-    u.vt = (int)&DAT_00540e30[0];
+    u.vt = (int)&g_igModel_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {

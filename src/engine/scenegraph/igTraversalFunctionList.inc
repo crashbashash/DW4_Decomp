@@ -1,5 +1,5 @@
 int FUN_0019a6e0(int arg0) {
-    FUN_0019a800();
+    igTraversalFunctionList_EnsureRegistered();
     return igMetaObject_CreateInstance((int)g_igTraversalFunctionList_metaObject, arg0);
 }
 
@@ -16,7 +16,7 @@ igMetaObject *igTraversalFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igTraversalFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019a800();
+        igTraversalFunctionList_EnsureRegistered();
     return g_igTraversalFunctionList_metaObject;
 }
 
@@ -24,11 +24,11 @@ int igTraversalFunctionList_GetVTable(void) {
     struct Obj_19a7c0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052adb0[0];
+    obj.vt = &g_igTraversalFunctionList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0019a800(void)
+void igTraversalFunctionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTraversalFunctionList_Register);
 }
@@ -243,10 +243,10 @@ void *FUN_0019acf0(igGroup *arg0) {
     igObject_InitHeader();
     arg0->_vtable = (int)(&g_igNamedObject_vtable[0]);
     arg0->_name = 0;
-    arg0->_vtable = (int)(&DAT_00528a90[0]);
+    arg0->_vtable = (int)(&g_igNode_vtable[0]);
     arg0->_bound = 0;
     arg0->_parentList = 0;
-    arg0->_vtable = (int)(&DAT_00528dd0[0]);
+    arg0->_vtable = (int)(&g_igGroup_vtable[0]);
     arg0->_childList = 0;
     return arg0;
 }

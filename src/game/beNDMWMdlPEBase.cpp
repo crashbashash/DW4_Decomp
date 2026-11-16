@@ -58,12 +58,12 @@ extern "C" void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *self, int insight, int 
 extern "C" void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self);
 extern "C" void beNDMWShinkaObject_Load(beNDMWShinkaObject *self, beNDMWGameRam *gameRam, int playerNo, int form);
 extern "C" int beNDMWMdlPEBase_ShowStatusIcon(beNDMWMdlPEBase *self, beBaseInfoRam *ram, const char *iconName, int iconRamNo, int slot, bool restart);
-extern "C" void beNDMWMdlPEBase__UpdateStatus(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
 extern "C" void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
 extern "C" void beNDMWMdlPEBase_RecalcPlayer(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDMWMdlPEBaseInfoWork *work);
-extern "C" int beNDMWMdlPEBase__OnStatusMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message);
+extern "C" int beNDMWMdlPEBase_OnPreMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message);
 extern "C" void beNDMWMdlPEBaseInfoWork__Destroy(beNDMWMdlPEBaseInfoWork *self);
 extern "C" int beNDMWMdlPEBaseInfoWork_IsPoisoned(beNDMWMdlPEBaseInfoWork *self);
 extern "C" void beNDMWMdlPEBaseInfoWork_CurePoison(beNDMWMdlPEBaseInfoWork *self, beBaseInfoRam *ram);
@@ -362,7 +362,7 @@ fail:
     return -1;
 }
 
-void beNDMWMdlPEBase__UpdateStatus(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
+void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
     beNDMWMdlPEBaseInfoWork *work;
     int damageSeq;
     EnsureDataList(ram);
@@ -697,7 +697,7 @@ void beNDMWMdlPEBase_RecalcPlayer(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beN
     }
 }
 
-int beNDMWMdlPEBase__OnStatusMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message) {
+int beNDMWMdlPEBase_OnPreMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int message) {
     beNDMWMdlPEBaseInfoWork *work;
     int action;
     EnsureDataList(ram);

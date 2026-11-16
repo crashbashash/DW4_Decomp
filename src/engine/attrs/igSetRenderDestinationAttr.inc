@@ -12,7 +12,7 @@ igMetaObject *igSetRenderDestinationAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igSetRenderDestinationAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00133d20();
+        igSetRenderDestinationAttr_EnsureRegistered();
     return g_igSetRenderDestinationAttr_metaObject;
 }
 
@@ -24,10 +24,10 @@ int igSetRenderDestinationAttr_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     q3 = &u.p[3];
-    u.w[0] = (int)(&DAT_00522f50[0]);
+    u.w[0] = (int)(&g_igSetRenderDestinationAttr_vtable[0]);
     *q3 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00522f50[0]);
+    u.w[0] = (int)(&g_igSetRenderDestinationAttr_vtable[0]);
     if (q3 != 0) {
         temp_a0 = *q3;
         if (temp_a0 != 0) {
@@ -53,12 +53,12 @@ ObjectRefWord *FUN_00133ca0(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_00133d20(void)
+void igSetRenderDestinationAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSetRenderDestinationAttr_Register);
 }
 
-static igMetaObjectCallback g_igSetRenderDestinationAttr_callbackList[] = { FUN_00134370, 0 };
+static igMetaObjectCallback g_igSetRenderDestinationAttr_callbackList[] = { igRenderDestinationAttr_EnsureRegistered, 0 };
 
 void igSetRenderDestinationAttr_Register(void) {
     AttrsLibrary_MarkRegistered();

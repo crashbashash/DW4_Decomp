@@ -20,6 +20,7 @@ struct igVec3f {
         z = other.z;
     }
 
+    float operator[](int i) const { return (&x)[i]; }
     float dot(const float *o) const { return o[0] * x + o[1] * y + o[2] * z; }
     void set(float x_, float y_, float z_) {
         x = x_;

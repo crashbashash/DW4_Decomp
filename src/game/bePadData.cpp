@@ -106,7 +106,7 @@ extern "C" void beLoadingNode_RegisterTraversalFunction(void)
                                  (TraversalFunction)beLoadingNode_TraversalFunction);
 }
 
-extern "C" void Gap__Bec__bePadData__vfunc_07(bePadData *pad)
+extern "C" void bePadData_userConstruct(bePadData *pad)
 {
     Gap__Core__igObject__userConstruct(pad);
     /* the dead zone is the length of the vector (0.4, 0) */
@@ -123,7 +123,7 @@ extern "C" void Gap__Bec__bePadData__vfunc_07(bePadData *pad)
     pad->_rptime = 0; pad->_last = 0; pad->_repeat = 0; pad->_trigger = 0; pad->_button = 0;
 }
 
-extern "C" void Gap__Bec__bePadData__vfunc_08(void)
+extern "C" void bePadData_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
@@ -233,7 +233,7 @@ extern "C" void bePadData_StickDirections(bePadData *pad, int *directions, float
     }
 }
 
-extern "C" int Gap__Bec__bePadData__vfunc_20(void)
+extern "C" int bePadData_GetMeta(void)
 {
     return g_bePadData_metaObject[0];
 }

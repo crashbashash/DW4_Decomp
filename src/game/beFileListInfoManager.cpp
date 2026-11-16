@@ -19,8 +19,8 @@
     } \
     l->_count = 0; }
 
-extern "C" void Gap__Bec__beFileListInfoManager__vfunc_24(void);
-extern "C" int Gap__Bec__beFileListInfoManager__vfunc_20(void);
+extern "C" void beFileListInfoManager_Stop(void);
+extern "C" int beFileListInfoManager_GetMeta(void);
 extern "C" void * igInsightCore_FindManager(...);
 extern "C" void List_InsertWords(void *, int, int, void *);
 extern "C" int StringPool_Allocate(int);
@@ -36,12 +36,12 @@ struct S { int pad[2]; void *o; };
 extern "C" int FUN_0037f1b0(S *arg0, int arg1);
 extern "C" void igInsightCore_AddToScheduler(int, beFileListInfoManager *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, beFileListInfoManager *);
-extern "C" void Gap__Bec__beFileListInfoManager__vfunc_21(beFileListInfoManager *self, int unusedArg);
-extern "C" void Gap__Bec__beFileListInfoManager__vfunc_22(beFileListInfoManager *self, int unusedArg);
+extern "C" void beFileListInfoManager_Activate(beFileListInfoManager *self, int unusedArg);
+extern "C" void beFileListInfoManager_Deactivate(beFileListInfoManager *self, int unusedArg);
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
-extern "C" void Gap__Bec__beFileListInfoManager__vfunc_23(beFileListInfoManager *arg0);
+extern "C" void beFileListInfoManager_Start(beFileListInfoManager *arg0);
 extern "C" int g_beFileListInfoManager_metaObject[4];
 extern "C" void beFont_AddFontImages(void *, igObject *);
 extern "C" void ObjectList_AppendRetained(igObjectList *, igObject *);
@@ -49,10 +49,10 @@ extern "C" int g_igNamedObjectInfo_metaObject[4];
 extern "C" int g_beFont_metaObject[4];
 extern "C" int g_beFileListInfo_metaObject[4];
 class MetaVt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int getMeta(); };
-extern "C" int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObject *info);
+extern "C" int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info);
 extern "C" int g_stringPool[4];
 extern "C" int igObject_Destroy(igObject *);
-extern "C" void Gap__Bec__beFileListInfoManager__vfunc_26(beFileListInfoManager *arg0);
+extern "C" void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *arg0);
 extern "C" int igInsightCore_AddInfo(int, igObject *);
 extern "C" int FUN_003817d0(beFileListInfoManager *arg0);
 extern "C" int igObject_IsKindOf(igObject *object, int meta);
@@ -68,7 +68,7 @@ extern "C" int g_beLuaInfo_metaObject[4];
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" char emptyString[];
-extern "C" char DAT_0050e6c8[];
+extern "C" char ROOTATTR_2[];
 extern "C" int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefList *fileNames);
 
 /* A pooled string held by reference: the count sits at p[-1], the chunk header at p[-2]. */
@@ -114,7 +114,7 @@ int FUN_0037f1b0(S *arg0, int arg1) {
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
  * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
  * unused. */
-void Gap__Bec__beFileListInfoManager__vfunc_21(beFileListInfoManager *self, int unusedArg)
+void beFileListInfoManager_Activate(beFileListInfoManager *self, int unusedArg)
 {
     igInsightCore_AddToScheduler(self->_insight, self);
 }
@@ -122,18 +122,18 @@ void Gap__Bec__beFileListInfoManager__vfunc_21(beFileListInfoManager *self, int 
 /* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
  * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
  * is unused. */
-void Gap__Bec__beFileListInfoManager__vfunc_22(beFileListInfoManager *self, int unusedArg)
+void beFileListInfoManager_Deactivate(beFileListInfoManager *self, int unusedArg)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
-void Gap__Bec__beFileListInfoManager__vfunc_23(beFileListInfoManager *arg0) {
+void beFileListInfoManager_Start(beFileListInfoManager *arg0) {
     arg0->_system = ((int)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]));
     arg0->_messenger = ((int)igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]));
     arg0->_sceneInfoManager = ((int)igInsightCore_FindManager(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]));
 }
 
-void Gap__Bec__beFileListInfoManager__vfunc_24(void)
+void beFileListInfoManager_Stop(void)
 {
 }
 
@@ -146,7 +146,7 @@ static inline void insertWords(igObjectList *l, int at, int n, igObject **src) {
     List_InsertWords(l, at, n, (void *)src);
 }
 
-int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObject *info) {
+int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info) {
     if (g_beFileListInfo_metaObject[0] == ((MetaVt *)info)->getMeta()) {
         igObjectList *list = (igObjectList *)self->_infoList;
         if (list->_count > 0) {
@@ -168,7 +168,7 @@ int Gap__Bec__beFileListInfoManager__vfunc_25(beFileListInfoManager *self, igObj
     return 0;
 }
 
-void Gap__Bec__beFileListInfoManager__vfunc_26(beFileListInfoManager *arg0) {
+void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *arg0) {
     igStringRefList *s5;
     int s4;
     int i;
@@ -278,7 +278,7 @@ int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefL
     if (dirs->_count != 0) {
         dir = ((igDirectory **)dirs->_data)[0];
         if (igResource_IsDirectoryLoaded(g_globalContext[0], dir) != 0) {
-            if (DAT_0050e6c8 == 0) {
+            if (ROOTATTR_2 == 0) {
                 rootName = 0;
             } else {
                 if (g_stringPool[0] == 0) {
@@ -286,7 +286,7 @@ int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefL
                     if (pool != 0) { pool = StringPool_Construct(pool); }
                     g_stringPool[0] = pool;
                 }
-                rootName = (int *)StringPool_Intern(g_stringPool[0], (int)DAT_0050e6c8);
+                rootName = (int *)StringPool_Intern(g_stringPool[0], (int)ROOTATTR_2);
             }
             StringRef rootAttr;
             rootAttr.p = rootName;
@@ -403,7 +403,7 @@ int FUN_003817d0(beFileListInfoManager *arg0) {
     return 1;
 }
 
-int Gap__Bec__beFileListInfoManager__vfunc_20(void)
+int beFileListInfoManager_GetMeta(void)
 {
     return g_beFileListInfoManager_metaObject[0];
 }

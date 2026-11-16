@@ -206,12 +206,12 @@ present), and 14/4 for the wave spawner.
 ```
 Lua sd("GENERATER",…,"START","GENE-xx")
   └─ beGenerater::START            (creates per-player beGeneraterInfoWork)
-       └─ Gap__Bec__beGenerater__vfunc_31             per-frame state machine (state @ +0x1c)
+       └─ beGenerater_UpdateRam             per-frame state machine (state @ +0x1c)
             ├─ start modes: 'd' direct / 'r' radar (range vs +0x30) / 't' timer ('BOOT_TIMER')
             ├─ fill modes : 't' timer ('GENE_TIMER') / 'a' add / 'w' wipeout
             ├─ FUN_00384800        drop pass for the dead
             └─ FUN_00384540        spawn: position + facing + the MODELCTRL command
-                 └─ beNDMWMdlEnemy__OnGenerate   enemy model GENERATE
+                 └─ beNDMWMdlEnemy_OnGenerate   enemy model GENERATE
                       message ints: row → _recNo, HPMAX → _mHp and _hp
                       DATABASE 'enemy' GETDATABASE → row RARITY
                       → RARITY ≠ 0: SETRAREICON(rarity) to the ENEMY info, delay 60
@@ -309,7 +309,7 @@ out of the pack (`scripts/igb_inst.py`) **and** live (`beGeneraterInfoRam` →
 ## 6b. Swapping the spawned **model**: pinned, not re-read per spawn
 
 Unlike position and facing, the spawned **model name is latched at generator init**:
-`Gap__Bec__beGenerater__vfunc_31` copies `MODEL` from the row into `beGeneraterInfoWork+0x1c` once when the
+`beGenerater_UpdateRam` copies `MODEL` from the row into `beGeneraterInfoWork+0x1c` once when the
 generator starts, so repointing that field alone has **no effect** on an already-running
 generator. What was tried on the loaded `stag0102` bridge (row 5 = `e_goburi`):
 
@@ -387,14 +387,14 @@ way: 380/383/386/389/392 in 622, 379/382/385/388/391 in 623, 381/384/387/390/393
 
 ## 7. Refuted readings, settled points and open questions
 
-- **Refuted:** `Gap__Bec__beNDMWMdlPlayer2__vfunc_47` is *not* the enemy spawner. It is the
+- **Refuted:** `beNDMWMdlPlayer2_OnPreMessage` is *not* the enemy spawner. It is the
   `g_000bcaps` **checkpoint-capsule** command handler (`GENERATE` / `GENESTAGE` /
   `RAISE`, using `GAMERAM::GETCOMMON`, `BKCHIPSTAGE`, `BKCHIPPOS`, `SQ_ENTR%dP`;
-  sibling `Gap__Bec__beNDMWMdlPlayer2__vfunc_36` writes the checkpoint, `Gap__Bec__beNDMWMdlPlayer2__vfunc_38` is its proximity
-  switch). Enemy generate is `beNDMWMdlEnemy__OnGenerate` (vtable slot `0x53e448`). (The *spawn*
+  sibling `beNDMWMdlPlayer2_OnGenerate` writes the checkpoint, `beNDMWMdlPlayer2_UpdateControl` is its proximity
+  switch). Enemy generate is `beNDMWMdlEnemy_OnGenerate` (vtable slot `0x53e448`). (The *spawn*
   command **is** issued through the `MODELCTRL` interface (`FIND_SPACE` →
   position/facing → `GENERATE`), so "MODELCTRL is not involved" is too strong;
-  what is refuted is only `Gap__Bec__beNDMWMdlPlayer2__vfunc_47` being the spawner.)
+  what is refuted is only `beNDMWMdlPlayer2_OnPreMessage` being the spawner.)
 - **The generator rows AND their positions read offline.** `scripts/igb_inst.py --blob <pack> --lists` reads a stage's generator
   records (`_pos`, `_geneEnemyId`, `_startModeStr`/`_fillModeStr`, the `_startData` frame
   timer, `_callLua`) **and** every list's contents from the disc: a list reads

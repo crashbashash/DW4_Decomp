@@ -1,10 +1,10 @@
 igMetaObject *g_beSeInfoData_metaObject;
 igMetaField *g_beSeInfoData_actionListMetaField;
 
-void *FUN_00345ea0(void) {
+void *beSeInfoData_GetMetaObject(void) {
     igMetaObject *g = g_beSeInfoData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00345fd0();
+        beSeInfoData_EnsureRegistered();
     }
     return g_beSeInfoData_metaObject;
 }
@@ -15,22 +15,22 @@ int beSeInfoData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.m8 = 0;
-    obj.vt = &DAT_00538f40[0];
+    obj.vt = &g_beSeInfoData_vtable[0];
     obj.m16 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00538f40[0];
+    obj.vt = &g_beSeInfoData_vtable[0];
     obj.rel16();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.rel8();
     return r;
 }
 
-void FUN_00345fd0(void)
+void beSeInfoData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSeInfoData_Register);
 }
 
-static igMetaObjectCallback g_beSeInfoData_callbackList[] = { FUN_00346200, 0 };
+static igMetaObjectCallback g_beSeInfoData_callbackList[] = { beSeDataList_EnsureRegistered, 0 };
 
 void *beSeInfoData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -39,7 +39,7 @@ void *beSeInfoData_Register(void) {
         &g_beSeInfoData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beSeInfoData_GetMetaObject,
+        beSeInfoData_GetMetaObjectFunction,
         "beSeInfoData",
         0x14, /* instance size */
         beSeInfoData_GetVTable,
@@ -49,9 +49,9 @@ void *beSeInfoData_Register(void) {
     );
 }
 
-void beSeInfoData_GetMetaObject(void)
+void beSeInfoData_GetMetaObjectFunction(void)
 {
-    FUN_00345ea0();
+    beSeInfoData_GetMetaObject();
 }
 
 static FieldFactory g_beSeInfoData_ctorTable[] = {
@@ -76,7 +76,7 @@ void beSeInfoData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beSeInfoData_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00346120();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSeDataList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beSeInfoData_fieldTable, g_beSeInfoData_fieldHandles, g_beSeInfoData_fieldOffsets, temp_s2);
 }
 

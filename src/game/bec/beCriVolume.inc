@@ -6,20 +6,20 @@ igMetaField *g_beCriVolume_staMetaField;
 igMetaField *g_beCriVolume_endMetaField;
 igMetaField *g_beCriVolume_unitMetaField;
 
-igMetaObject *FUN_00366340(void) {
+igMetaObject *beCriVolume_GetOrCreateMetaObject(void) {
     if (g_beCriVolume_metaObject == 0) {
         g_beCriVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beCriVolume_metaObject;
 }
 
-igMetaObject *FUN_00366390(void) {
+igMetaObject *beCriVolume_GetMetaObject(void) {
     igMetaObject *g = g_beCriVolume_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_00366420();
+    beCriVolume_EnsureRegistered();
 done:
     return g_beCriVolume_metaObject;
 }
@@ -28,11 +28,11 @@ int beCriVolume_GetVTable(void) {
     struct Obj_3663e0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00535090[0];
+    obj.vt = &g_beCriVolume_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00366420(void)
+void beCriVolume_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCriVolume_Register);
 }
@@ -44,7 +44,7 @@ void *beCriVolume_Register(void) {
         &g_beCriVolume_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beCriVolume_GetMetaObject,
+        beCriVolume_GetMetaObjectFunction,
         "beCriVolume",
         0x20, /* instance size */
         beCriVolume_GetVTable,
@@ -54,9 +54,9 @@ void *beCriVolume_Register(void) {
     );
 }
 
-void beCriVolume_GetMetaObject(void)
+void beCriVolume_GetMetaObjectFunction(void)
 {
-    FUN_00366390();
+    beCriVolume_GetMetaObject();
 }
 
 static FieldFactory g_beCriVolume_ctorTable[] = {

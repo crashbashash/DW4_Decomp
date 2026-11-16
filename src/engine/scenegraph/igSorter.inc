@@ -56,7 +56,7 @@ int igSorter_GetVTable(void) {
     int temp_s5;
     char *p276, *p268, *p264, *p260, *p256, *p252, *p248, *p244, *p240;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00528630[0];
+    u.vt = (int)&g_igSorter_vtable[0];
     FUN_00197350((int *)&u.b[8]);
     FUN_00197340((int *)&u.b[16]);
     FUN_00197330((int *)&u.b[20]);
@@ -285,7 +285,7 @@ void FUN_00197360(void)
     igMetaObject_RunStaticInit(igSorter_Register);
 }
 
-static igMetaObjectCallback g_igSorter_callbackList[] = { FUN_00138160, FUN_00197a10, FUN_0013ae20, FUN_001978a0, igIntList_EnsureRegistered, FUN_00138380, FUN_001387b0, FUN_00197cc0, FUN_0019fc00, 0 };
+static igMetaObjectCallback g_igSorter_callbackList[] = { FUN_00138160, FUN_00197a10, igNonRefCountedAttrList_EnsureRegistered, FUN_001978a0, igIntList_EnsureRegistered, igDepthWriteStateAttr_EnsureRegistered, igCullFaceAttr_EnsureRegistered, FUN_00197cc0, igGeometry_EnsureRegistered, 0 };
 
 void igSorter_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -558,7 +558,7 @@ void igSorter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_21)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2_21)->_construct = 1;
     temp_s2_22 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x17)));
-    ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)FUN_0019fae0();
+    ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)igGeometry_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_22)->_construct = 1;
     temp_s2_23 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x18)));
     ((igObjectRefMetaField *)temp_s2_23)->_metaObject = igIntList_GetOrCreateMetaObject();

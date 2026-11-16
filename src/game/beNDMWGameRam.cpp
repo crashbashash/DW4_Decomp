@@ -45,7 +45,7 @@ extern "C" void *beDataObjInt_Create(void *);
 
 extern "C" void * igProperty_GetRecordFolder(...);
 extern "C" void * igProperty_GetRecordArray(...);
-extern "C" void beNDMWGameRam_Update(void);
+extern "C" void beNDMWGameRam_UpdateRam(void);
 extern "C" int beNDMWGameRam_GetMeta(void);
 extern "C" int beNDMWGameRam_GetInfoMeta(void);
 extern "C" int StringPool_Allocate(int);
@@ -312,7 +312,7 @@ public:
 };
 extern "C" void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player);
 extern "C" igObject *beDataObjListList_Create(int);
-extern "C" int Gap__Core__igObject__vfunc_23(beNDMWGameRam *);
+extern "C" int beBaseInfoManager_Start(beNDMWGameRam *);
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -328,12 +328,12 @@ public:
     PlayerDataListListRef(igObject *o) : p(o) {}
     ~PlayerDataListListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-extern "C" void beNDMWGameRam_Initialize(beNDMWGameRam *self);
+extern "C" void beNDMWGameRam_Start(beNDMWGameRam *self);
 /* reference-counted engine object header: refcount word at +4 */
 typedef struct RefCountedHeader { int p0; unsigned refs; } RefCountedHeader;
 /* Object-reference list header: count at +8, capacity at +12, buffer at +16. */
 typedef struct ObjectRefList { char p[8]; int count; int cap; RefCountedHeader **data; } ObjectRefList;
-extern "C" void beNDMWGameRam_ClearLists(beNDMWGameRam *self);
+extern "C" void beNDMWGameRam_Stop(beNDMWGameRam *self);
 /* matching construct: inline release helper reproduces the retail inlined refcount release (release then clear) */
 struct RefRelease {
     static inline void rel(int &r) {
@@ -346,7 +346,7 @@ struct RefRelease {
         r = 0;
     }
 };
-extern "C" void beNDMWGameRam_ReleaseDataBases(beNDMWGameRam *self);
+extern "C" void beNDMWGameRam_Prepare(beNDMWGameRam *self);
 extern "C" beNDMWGameRamInfo *beNDMWGameRamInfo_Create(int);
 extern "C" beNDMWGameRamInfoRam *beNDMWGameRamInfoRam_Create(int);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, beNDMWGameRamInfoRam *, const void *);
@@ -358,7 +358,7 @@ public:
     RamRef(beNDMWGameRamInfoRam *o) : p(o) {}
     ~RamRef() { beNDMWGameRamInfoRam *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-extern "C" int beNDMWGameRam_CreateInfo(beNDMWGameRam *self);
+extern "C" int beNDMWGameRam_AddInfo(beNDMWGameRam *self);
 extern "C" int g_beNDMWGameRam_metaObject[4];
 extern "C" int GETDATABASE_3[4];
 extern "C" int shinka_2[4];
@@ -770,13 +770,13 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
     storePlayerData(self, player, data);
 }
 
-void beNDMWGameRam_Initialize(beNDMWGameRam *self) {
+void beNDMWGameRam_Start(beNDMWGameRam *self) {
     int player;
     int allocator;
     int playersAllocator;
     igObject *created;
 
-    Gap__Core__igObject__vfunc_23(self);
+    beBaseInfoManager_Start(self);
     allocator = igObject_GetAllocator(self);
     if (g_useOwnerAllocator != 0) {
         allocator = (int)allocator;
@@ -816,7 +816,7 @@ void beNDMWGameRam_Initialize(beNDMWGameRam *self) {
     } while (player < 4);
 }
 
-void beNDMWGameRam_ClearLists(beNDMWGameRam *self) {
+void beNDMWGameRam_Stop(beNDMWGameRam *self) {
     RefCountedHeader *data;
     ObjectRefList *common;
     int count;
@@ -875,7 +875,7 @@ void beNDMWGameRam_ClearLists(beNDMWGameRam *self) {
     if (!(0 < ((ObjectRefList *)self->_playerDataListList)->count)) List_Reserve(self->_playerDataListList, 0, 4);
 }
 
-void beNDMWGameRam_ReleaseDataBases(beNDMWGameRam *self) {
+void beNDMWGameRam_Prepare(beNDMWGameRam *self) {
     RefRelease::rel(self->_dBShinka);
     RefRelease::rel(self->_dBPcTech);
     RefRelease::rel(self->_dBWeapon);
@@ -886,7 +886,7 @@ void beNDMWGameRam_ReleaseDataBases(beNDMWGameRam *self) {
     RefRelease::rel(self->_dBEneatk);
 }
 
-int beNDMWGameRam_CreateInfo(beNDMWGameRam *self) {
+int beNDMWGameRam_AddInfo(beNDMWGameRam *self) {
     beBaseInfoList *infos;
     beBaseInfoRamList *rams;
     int allocator;
@@ -917,7 +917,7 @@ int beNDMWGameRam_CreateInfo(beNDMWGameRam *self) {
     return 0;
 }
 
-void beNDMWGameRam_Update(void)
+void beNDMWGameRam_UpdateRam(void)
 {
 }
 

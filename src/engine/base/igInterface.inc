@@ -12,7 +12,7 @@ int igInterface_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c670[0];
+    obj.vt = &g_igInterface_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

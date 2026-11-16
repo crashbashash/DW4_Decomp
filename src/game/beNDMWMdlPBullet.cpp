@@ -1,15 +1,15 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int strcmp(int, int *);
-extern "C" int Gap__Bec__beNDMWMdlPBullet__vfunc_35(int dummy0, int arg1);
-extern "C" void Gap__Bec__beNDMWMdlPBullet__vfunc_37(void);
-extern "C" int Gap__Bec__beNDMWMdlPBullet__vfunc_20(void);
+extern "C" int beNDMWMdlPBullet_IsKind(int dummy0, int arg1);
+extern "C" void beNDMWMdlPBullet_RegisterReceiver(void);
+extern "C" int beNDMWMdlPBullet_GetMeta(void);
 extern "C" int FUN_00396340(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int KIND_PBULLET[4];
 extern "C" int g_beNDMWMdlPBullet_metaObject[4];
-extern "C" igObject *FUN_00350020(...);
+extern "C" igObject *beModelCtrlInfoWork_Create(...);
 extern "C" igObject *beBaseInfoDataList_Create(...);
 struct PropertyRecord { char header[20]; igObject *value; };
 extern "C" PropertyRecord *igProperty_FindByName(...);
@@ -56,20 +56,20 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         ram->_dataList = (int)s0;
     }
 } };
-extern "C" void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlPBullet_OnGenerate(beNDMWMdlPBullet *arg0, beBaseInfoRam *arg1);
 
 #pragma push
 #pragma readonly_strings on
 
-int Gap__Bec__beNDMWMdlPBullet__vfunc_35(int dummy0, int arg1) {
+int beNDMWMdlPBullet_IsKind(int dummy0, int arg1) {
     return strcmp(arg1, &KIND_PBULLET[0]) == 0;
 }
 
-void Gap__Bec__beNDMWMdlPBullet__vfunc_37(void)
+void beNDMWMdlPBullet_RegisterReceiver(void)
 {
 }
 
-void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlPBullet_OnGenerate(beNDMWMdlPBullet *arg0, beBaseInfoRam *arg1) {
     igObject *s0;
     PropertyRecord *s1;
     int alloc;
@@ -82,7 +82,7 @@ void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam 
     } else {
         a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     }
-    ValueRef value(FUN_00350020(a));
+    ValueRef value(beModelCtrlInfoWork_Create(a));
     s0 = value.p;
     if (s0 != 0) {
         s0->_refCount++;
@@ -92,7 +92,7 @@ void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam 
     FUN_00396340(arg0, arg1);
 }
 
-int Gap__Bec__beNDMWMdlPBullet__vfunc_20(void)
+int beNDMWMdlPBullet_GetMeta(void)
 {
     return g_beNDMWMdlPBullet_metaObject[0];
 }

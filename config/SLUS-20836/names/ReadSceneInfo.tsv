@@ -25,12 +25,8 @@
 0x004612a0	igViewerSceneInfoManager_OnPlaybackChanged	engine
 0x004612b0	igViewerSceneInfoManager_UpdateTime	engine
 0x004614b0	Gap::Viewer::igViewerSceneInfoManager::resetFields	engine
-0x00462090	Gap::Viewer::igViewerSceneInfoManager::Deactivate	engine
 0x00462100	igViewerSceneInfoManager_HasGeometry	engine
 0x00462200	igViewerSceneInfoManager_CheckClipping	engine
-0x00462240	Gap::Viewer::igViewerSceneInfoManager::Update	engine
-0x004622a0	Gap::Viewer::igViewerSceneInfoManager::RemoveAllInfo	engine
-0x00462670	Gap::Viewer::igViewerSceneInfoManager::AddInfo	engine
 0x00462a10	igViewerSceneInfoManager_RemoveNormalsRenderer	engine
 0x00462a20	igViewerSceneInfoManager_RemoveBoundingBoxRenderer	engine
 0x00462a30	igViewerSceneInfoManager_RemoveFlushRenderer	engine

@@ -10,7 +10,7 @@ int igPsx2Clut_GetVTable(void) {
     struct Obj_154450 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00526a60[0];
+    obj.vt = &g_igPsx2Clut_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

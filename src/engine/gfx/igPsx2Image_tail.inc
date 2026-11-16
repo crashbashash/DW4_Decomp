@@ -17,7 +17,7 @@ int igPsx2Image_GetVTable(void) {
     *(int *)pr = 0;
     ps = &u.b[88];
     *(int *)ps = 0;
-    u.vt = (int)&DAT_00525630[0];
+    u.vt = (int)&g_igPsx2Image_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00526800[0];
     if (ps != 0) {

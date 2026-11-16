@@ -1,21 +1,21 @@
 igMetaObject *g_beSvConnectCheck_metaObject;
 
-void FUN_00348170(int arg0) {
-    FUN_00348530();
+void beSvConnectCheck_Create(int arg0) {
+    beSvConnectCheck_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5881D8, arg0);
 }
 
-igMetaObject *FUN_003481b0(void) {
+igMetaObject *beSvConnectCheck_GetOrCreateMetaObject(void) {
     if (g_beSvConnectCheck_metaObject == 0) {
         g_beSvConnectCheck_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSvConnectCheck_metaObject;
 }
 
-void *FUN_00348200(void) {
+void *beSvConnectCheck_GetMetaObject(void) {
     igMetaObject *g = g_beSvConnectCheck_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00348530();
+        beSvConnectCheck_EnsureRegistered();
     }
     return g_beSvConnectCheck_metaObject;
 }
@@ -28,16 +28,16 @@ int beSvConnectCheck_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     q2 = (S_ref *)&u.b[48];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[52];
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[56];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_0053bc10[0];
+    u.vt = (int)&g_beSvConnectCheck_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -72,7 +72,7 @@ void *FUN_00348390(struct S_348390 *arg0, short arg1) {
     struct R_348390 *p;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_0053c070[0];
+        arg0->f0 = &g_beSaveApi_vtable[0];
         if (&arg0->f56) {
             p = arg0->f56;
             if (p != 0) {
@@ -107,7 +107,7 @@ void *FUN_00348390(struct S_348390 *arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_003484b0(struct Ref **self, short flag) {
+void **igSmartPointer_beSaveMemoryObj_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -120,7 +120,7 @@ void **FUN_003484b0(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void FUN_00348530(void)
+void beSvConnectCheck_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvConnectCheck_Register);
 }
@@ -132,7 +132,7 @@ void *beSvConnectCheck_Register(void) {
         &g_beSvConnectCheck_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
-        beSvConnectCheck_GetMetaObject,
+        beSvConnectCheck_GetMetaObjectFunction,
         "beSvConnectCheck",
         0x90, /* instance size */
         beSvConnectCheck_GetVTable,
@@ -142,12 +142,12 @@ void *beSvConnectCheck_Register(void) {
     );
 }
 
-void beSvConnectCheck_GetMetaObject(void)
+void beSvConnectCheck_GetMetaObjectFunction(void)
 {
-    FUN_00348200();
+    beSvConnectCheck_GetMetaObject();
 }
 
-igMetaObject *FUN_003485e0(void) {
+igMetaObject *beSaveApi_GetPublishedMetaObject(void) {
     return g_beSaveApi_metaObject;
 }
 

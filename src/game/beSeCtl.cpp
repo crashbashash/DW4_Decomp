@@ -9,13 +9,13 @@ extern "C" void igMatrix44f_SetTranslation(float *, float *);
 extern "C" void FUN_001356b0(void);
 extern "C" void igTimeAttr_CreateInstance(void);
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
-extern "C" int FUN_0034b4a0(...);
+extern "C" int beResetNode_GetMetaObject(...);
 extern "C" void FUN_0039c8c0(void);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
-extern "C" int Gap__Bec__beSeCtl__vfunc_30(void);
-extern "C" void Gap__Bec__beSeCtl__vfunc_31(void);
-extern "C" int Gap__Bec__beSeCtl__vfunc_20(void);
+extern "C" int beSeCtl_GetInfoMeta(void);
+extern "C" void beSeCtl_UpdateRam(void);
+extern "C" int beSeCtl_GetMeta(void);
 extern "C" float __floatdisf(int);
 extern "C" int beMessenger_AppendFloat(int, float);
 extern "C" int beMessenger_AppendString(int, int);
@@ -48,9 +48,9 @@ struct AttrList : igTDataList<igAttr *> {
 extern "C" int FUN_0039c460(beResetNode *node, igCommonTraversal *trav);
 extern "C" int DAT_00562640[4];
 extern "C" int g_beSound_metaObject[4];
-extern "C" void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0);
+extern "C" void beSeCtl_Prepare(beSeCtl *arg0);
 extern "C" char ACTION_BROADCAST_3[];
-extern "C" void Gap__Bec__beSeCtl__vfunc_29(beSeCtl * p0, int p1, char * p2, int p3, int p4);
+extern "C" void beSeCtl_OnAddRam(beSeCtl * p0, int p1, char * p2, int p3, int p4);
 extern "C" int g_beSeInfo_metaObject[4];
 extern "C" int g_beSeCtl_metaObject[4];
 extern "C" int emptyString[4];
@@ -60,7 +60,7 @@ extern "C" int SETSOUND[4];
 struct ContextView { char p[12]; int f12; };
 /* arg2 message record: +12 model name, +16 slot, +20 action name */
 struct SeMessageView { char p[12]; int f12; int f16; int f20; };
-extern "C" int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct SeMessageView *arg2);
+extern "C" int beSeCtl_OnMessage(beSeCtl *arg0, struct ContextView *arg1, struct SeMessageView *arg2);
 
 int FUN_0039c430(void *node, void *traversal) {
     return FUN_0039c460((beResetNode *)traversal, (igCommonTraversal *)node);
@@ -144,30 +144,30 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
 }
 
 void FUN_0039c8c0(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0034b4a0(), (void (*)())FUN_0039c430);
+    igTraversal_RegisterFunction(DAT_00562640[0], beResetNode_GetMetaObject(), (void (*)())FUN_0039c430);
 }
 
-void Gap__Bec__beSeCtl__vfunc_32(beSeCtl *arg0) {
+void beSeCtl_Prepare(beSeCtl *arg0) {
     if (arg0->_sndMng == 0) {
         arg0->_sndMng = igInsightCore_FindManager(arg0->_insight, g_beSound_metaObject[0]);
     }
 }
 
-void Gap__Bec__beSeCtl__vfunc_29(beSeCtl * p0, int p1, char * p2, int p3, int p4)
+void beSeCtl_OnAddRam(beSeCtl * p0, int p1, char * p2, int p3, int p4)
 {
     beMessenger_RegisterReceiver(p0->_messenger, p1, ACTION_BROADCAST_3, 0, -1);
 }
 
-int Gap__Bec__beSeCtl__vfunc_30(void)
+int beSeCtl_GetInfoMeta(void)
 {
     return g_beSeInfo_metaObject[0];
 }
 
-void Gap__Bec__beSeCtl__vfunc_31(void)
+void beSeCtl_UpdateRam(void)
 {
 }
 
-int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct SeMessageView *arg2) {
+int beSeCtl_OnMessage(beSeCtl *arg0, struct ContextView *arg1, struct SeMessageView *arg2) {
     int res;
     int s5;
     beSeDataList *l2;
@@ -227,7 +227,7 @@ int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct 
     return 1;
 }
 
-int Gap__Bec__beSeCtl__vfunc_20(void)
+int beSeCtl_GetMeta(void)
 {
     return g_beSeCtl_metaObject[0];
 }

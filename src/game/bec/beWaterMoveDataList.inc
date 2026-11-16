@@ -1,19 +1,19 @@
 igMetaObject *g_beWaterMoveDataList_metaObject;
 
-igMetaObject *FUN_00340720(void) {
+igMetaObject *beWaterMoveDataList_GetOrCreateMetaObject(void) {
     if (g_beWaterMoveDataList_metaObject == 0) {
         g_beWaterMoveDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beWaterMoveDataList_metaObject;
 }
 
-void *FUN_00340770(void) {
+void *beWaterMoveDataList_GetMetaObject(void) {
     bool ok;
     if (g_beWaterMoveDataList_metaObject == 0) goto make;
     ok = !!(g_beWaterMoveDataList_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_00340800();
+    beWaterMoveDataList_EnsureRegistered();
 done:;
     return g_beWaterMoveDataList_metaObject;
 }
@@ -22,16 +22,16 @@ int beWaterMoveDataList_GetVTable(void) {
     struct Obj_3407c0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005399a0[0];
+    obj.vt = &g_beWaterMoveDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00340800(void)
+void beWaterMoveDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWaterMoveDataList_Register);
 }
 
-static igMetaObjectCallback g_beWaterMoveDataList_callbackList[] = { FUN_00340990, 0 };
+static igMetaObjectCallback g_beWaterMoveDataList_callbackList[] = { beWaterMoveData_EnsureRegistered, 0 };
 
 void *beWaterMoveDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -40,7 +40,7 @@ void *beWaterMoveDataList_Register(void) {
         &g_beWaterMoveDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beWaterMoveDataList_GetMetaObject,
+        beWaterMoveDataList_GetMetaObjectFunction,
         "beWaterMoveDataList",
         0x14, /* instance size */
         beWaterMoveDataList_GetVTable,
@@ -50,8 +50,8 @@ void *beWaterMoveDataList_Register(void) {
     );
 }
 
-void beWaterMoveDataList_GetMetaObject(void)
+void beWaterMoveDataList_GetMetaObjectFunction(void)
 {
-    FUN_00340770();
+    beWaterMoveDataList_GetMetaObject();
 }
 

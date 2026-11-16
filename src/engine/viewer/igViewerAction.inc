@@ -19,7 +19,7 @@ int igViewerAction_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&DAT_00542460[0];
+    tmp[0] = (int)&g_igViewerAction_vtable[0];
     off = *(int *)((char *)(((int *)g_objectSystem[0])) + 916);
     return *(int *)((char *)tmp + off);
 }
@@ -29,7 +29,7 @@ void FUN_00459190(void)
     igMetaObject_RunStaticInit(igViewerAction_Register);
 }
 
-static igMetaObjectCallback g_igViewerAction_callbackList[] = { FUN_00459e40, 0 };
+static igMetaObjectCallback g_igViewerAction_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, 0 };
 
 void igViewerAction_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -79,7 +79,7 @@ void igViewerAction_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igViewerAction_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_00459380();
+    *(int *)((char *)(temp_s1) + 56) = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 60) = 0;
     f2 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     *(short *)((char *)f2 + 20) = 0xC;

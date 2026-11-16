@@ -3,14 +3,14 @@ int g_beModelCtrlInfoRideOn2_modelRamNoStorage;
 igMetaField *g_beModelCtrlInfoRideOn2_vectorMetaField;
 
 void beModelCtrlInfoRideOn2_Create(int arg0) {
-    FUN_00351c60();
+    beModelCtrlInfoRideOn2_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588A90, arg0);
 }
 
-void *FUN_00351b10(void) {
+void *beModelCtrlInfoRideOn2_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlInfoRideOn2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00351c60();
+        beModelCtrlInfoRideOn2_EnsureRegistered();
     }
     return g_beModelCtrlInfoRideOn2_metaObject;
 }
@@ -20,7 +20,7 @@ int beModelCtrlInfoRideOn2_GetVTable(void) {
     return *(int *)((char *)&info + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_00351c60(void)
+void beModelCtrlInfoRideOn2_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoRideOn2_Register);
 }
@@ -32,7 +32,7 @@ void *beModelCtrlInfoRideOn2_Register(void) {
         &g_beModelCtrlInfoRideOn2_metaObject,
         beModelCtrlInfoRideOn_Register,
         beModelCtrlInfoRideOn_GetPublishedMetaObject,
-        beModelCtrlInfoRideOn2_GetMetaObject,
+        beModelCtrlInfoRideOn2_GetMetaObjectFunction,
         "beModelCtrlInfoRideOn2",
         0x60, /* instance size */
         beModelCtrlInfoRideOn2_GetVTable,
@@ -42,9 +42,9 @@ void *beModelCtrlInfoRideOn2_Register(void) {
     );
 }
 
-void beModelCtrlInfoRideOn2_GetMetaObject(void)
+void beModelCtrlInfoRideOn2_GetMetaObjectFunction(void)
 {
-    FUN_00351b10();
+    beModelCtrlInfoRideOn2_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoRideOn2_ctorTable[] = {

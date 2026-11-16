@@ -42,12 +42,12 @@ int igDefaultAspectElement_GetVTable(void) {
     q48 = &u.p[2];
     q4c = &u.p[3];
     q50 = &u.p[4];
-    u.w[0] = (int)(&DAT_00541840[0]);
+    u.w[0] = (int)(&g_igDefaultAspectElement_vtable[0]);
     *q48 = 0;
     *q4c = 0;
     *q50 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00541840[0]);
+    u.w[0] = (int)(&g_igDefaultAspectElement_vtable[0]);
     if (q50 != 0) {
         a = (struct Rc *)*q50;
         if (a != 0) {
@@ -83,7 +83,7 @@ void igDefaultAspectElement_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDefaultAspectElement_Register);
 }
 
-static igMetaObjectCallback g_igDefaultAspectElement_callbackList[] = { igGeometryElement_EnsureRegistered, igColorChanger_RunStaticInit, FUN_001964d0, 0 };
+static igMetaObjectCallback g_igDefaultAspectElement_callbackList[] = { igGeometryElement_EnsureRegistered, igColorChanger_RunStaticInit, igTransform_EnsureRegistered, 0 };
 
 void igDefaultAspectElement_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -155,7 +155,7 @@ void igDefaultAspectElement_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_004521d0();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    *(int *)((char *)(temp_s1_3) + 56) = FUN_00196190();
+    *(int *)((char *)(temp_s1_3) + 56) = igTransform_GetOrCreateMetaObject();
     *(unsigned char *)((char *)(temp_s1_3) + 52) = 1;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);

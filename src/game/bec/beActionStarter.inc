@@ -1,21 +1,21 @@
 igMetaObject *g_beActionStarter_metaObject;
 
 void beActionStarter_CreateInstance(int arg0) {
-    FUN_0036c1f0();
+    beActionStarter_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589E90, arg0);
 }
 
-igMetaObject *FUN_0036c070(void) {
+igMetaObject *beActionStarter_GetOrCreateMetaObject(void) {
     if (g_beActionStarter_metaObject == 0) {
         g_beActionStarter_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beActionStarter_metaObject;
 }
 
-void *FUN_0036c0c0(void) {
+void *beActionStarter_GetMetaObject(void) {
     igMetaObject *g = g_beActionStarter_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036c1f0();
+        beActionStarter_EnsureRegistered();
     }
     return g_beActionStarter_metaObject;
 }
@@ -32,12 +32,12 @@ int beActionStarter_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_0053a030[0];
+    u.vt = (int)&g_beActionStarter_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -62,7 +62,7 @@ int beActionStarter_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0036c1f0(void)
+void beActionStarter_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beActionStarter_Register);
 }
@@ -74,7 +74,7 @@ void *beActionStarter_Register(void) {
         &g_beActionStarter_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beActionStarter_GetMetaObject,
+        beActionStarter_GetMetaObjectFunction,
         "beActionStarter",
         0x20, /* instance size */
         beActionStarter_GetVTable,
@@ -84,8 +84,8 @@ void *beActionStarter_Register(void) {
     );
 }
 
-void beActionStarter_GetMetaObject(void)
+void beActionStarter_GetMetaObjectFunction(void)
 {
-    FUN_0036c0c0();
+    beActionStarter_GetMetaObject();
 }
 

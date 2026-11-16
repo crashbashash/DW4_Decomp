@@ -4,12 +4,12 @@ igMetaField *g_beTimerData_resetConditionMetaField;
 igMetaField *g_beTimerData_callLuaFileMetaField;
 igMetaField *g_beTimerData_downTimerMetaField;
 
-igMetaObject *FUN_00341840(void)
+igMetaObject *beTimerData_GetMetaObject(void)
 {
     igMetaObject *g = g_beTimerData_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_00341950();
+        beTimerData_EnsureRegistered();
     return g_beTimerData_metaObject;
 }
 
@@ -25,11 +25,11 @@ int beTimerData_GetVTable(void) {
     igObject_InitHeader(&obj);
     q1 = &obj._resetCondition;
     q2 = &obj._callLuaFile;
-    obj._vtable = (int)&DAT_00539700[0];
+    obj._vtable = (int)&g_beTimerData_vtable[0];
     obj._resetCondition = 0;
     obj._callLuaFile = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj._vtable = (int)&DAT_00539700[0];
+    obj._vtable = (int)&g_beTimerData_vtable[0];
     if (q2 != 0) {
         o = (char *)*q2;
         if (o != 0) {
@@ -55,7 +55,7 @@ int beTimerData_GetVTable(void) {
     return t;
 }
 
-void FUN_00341950(void)
+void beTimerData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTimerData_Register);
 }
@@ -67,7 +67,7 @@ void *beTimerData_Register(void) {
         &g_beTimerData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beTimerData_GetMetaObject,
+        beTimerData_GetMetaObjectFunction,
         "beTimerData",
         0x20, /* instance size */
         beTimerData_GetVTable,
@@ -77,9 +77,9 @@ void *beTimerData_Register(void) {
     );
 }
 
-void beTimerData_GetMetaObject(void)
+void beTimerData_GetMetaObjectFunction(void)
 {
-    FUN_00341840();
+    beTimerData_GetMetaObject();
 }
 
 static FieldFactory g_beTimerData_ctorTable[] = {

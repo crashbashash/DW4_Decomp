@@ -28,7 +28,7 @@ igMetaObject *igGeometrySetAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igGeometrySetAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00136e90();
+        igGeometrySetAttr_EnsureRegistered();
     return g_igGeometrySetAttr_metaObject;
 }
 
@@ -39,13 +39,13 @@ int igGeometrySetAttr_GetVTable(void) {
     S_ref *q1;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_005237b0[0];
+    u.vt = (int)&g_igGeometrySetAttr_vtable[0];
     q1 = (S_ref *)&u.b[12];
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005237b0[0];
+    u.vt = (int)&g_igGeometrySetAttr_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -85,12 +85,12 @@ void **FUN_00136e10(void **arg0, int arg1) {
     return arg0;
 }
 
-void FUN_00136e90(void)
+void igGeometrySetAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGeometrySetAttr_Register);
 }
 
-static igMetaObjectCallback g_igGeometrySetAttr_callbackList[] = { FUN_0014a0e0, FUN_0013a5b0, 0 };
+static igMetaObjectCallback g_igGeometrySetAttr_callbackList[] = { igVisualContext_EnsureRegistered, igGeometryAttrList_EnsureRegistered, 0 };
 
 void igGeometrySetAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -154,7 +154,7 @@ void igGeometrySetAttr_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igGeometrySetAttr_ctorTable, 5);
     temp_s2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    temp_s2->f56 = FUN_0014a040();
+    temp_s2->f56 = igVisualContext_GetOrCreateMetaObject();
     temp_s2->f38 = 0;
     temp_s2->f40 = 1;
     temp_s2->f39 = 1;
@@ -166,7 +166,7 @@ void igGeometrySetAttr_InitFields(void) {
     temp_v0->f39 = 4;
     temp_v0->f44 = 3;
     temp_s2_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    temp_s2_2->f56 = (int)FUN_0013a4d0();
+    temp_s2_2->f56 = (int)igGeometryAttrList_GetOrCreateMetaObject();
     temp_v0_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
     temp_v0_2->f38 = 0;

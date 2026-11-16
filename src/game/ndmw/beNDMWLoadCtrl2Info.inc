@@ -8,7 +8,7 @@ igMetaObject *beNDMWLoadCtrl2Info_ResolveMetaObject(void)
         ready = (g_beNDMWLoadCtrl2Info_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_003c4a90();
+    beNDMWLoadCtrl2Info_EnsureRegistered();
 done:
     return g_beNDMWLoadCtrl2Info_metaObject;
 }
@@ -22,17 +22,17 @@ int beNDMWLoadCtrl2Info_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
-    u.vt = (int)&DAT_0053ce60[0];
+    u.vt = (int)&g_beNDMWLoadCtrl2Info_vtable[0];
     p = (int *)&u.b[28];
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053ce60[0];
+    u.vt = (int)&g_beNDMWLoadCtrl2Info_vtable[0];
     igSmartPointer_igObjectList_Destruct(p, -1);
     FUN_0033ec80(u.b, 0);
     return temp_s0;
 }
 
-void FUN_003c4a90(void)
+void beNDMWLoadCtrl2Info_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadCtrl2Info_Register);
 }

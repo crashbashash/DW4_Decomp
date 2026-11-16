@@ -475,7 +475,6 @@
 0x00389bc0	beLOA_Traverse	engine
 0x0038f9b0	beMeterCtrl_SetupMaxValue	game
 0x0039e090	beShadow01_AttachPendingInfos	game
-0x0039e370	beShadow01_Update	game
 0x003a9b10	beSvFileMakeApi_Start	game
 0x003ac930	beSvWriteMediaApi_Start	game
 0x003cdef0	beNDMWPanelObject_SetCellText	game
@@ -485,7 +484,6 @@
 0x003cf960	beNDMWPanelObjectStat_Refresh	game
 0x004242a0	beNDMWStatusTitle01_Setup	game
 0x004412c0	beNDMWMdlItem_PlayPickupEffect	game
-0x00442090	beNDMWMdlItem_Update	game
 0x00453be0	igDefaultAspectElement_PlaceGeometry	engine
 0x00453e70	igDefaultAspect_UpdateMinimumSize	engine
 0x00454290	igEventDispatcher_AddReceiver	engine
@@ -495,12 +493,9 @@
 0x004590c0	igViewerAction_Create	engine
 0x0045ec90	igViewerGuiFactory_CreateAction	engine
 0x0045f780	Gap::Viewer::igViewerRenderer::Render	engine
-0x00461c70	Gap::Viewer::igViewerSceneInfoManager::Activate	engine
 0x004629c0	igViewerSceneInfoManager_HideGui	engine
 0x004633f0	igViewerSceneInfoManager_OnActivate	engine
 0x00465ff0	Gap::Viewer::igRotateMode::ApplyDrag	engine
-0x00466610	Gap::Viewer::igPickMode::MoveCursor	engine
-0x00466e20	Gap::Viewer::igActorManager::ClearActors	engine
 0x00100230	_root	runtime
 0x00100240	_d_ulltod	runtime
 0x00100290	_d_utod	runtime

@@ -18,7 +18,7 @@ igMetaObject *igGuiComponentController_GetMetaObject(void)
 int igGuiComponentController_GetVTable(void) {
     struct Obj_44fae0 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00541270[0];
+    obj.vt = &g_igGuiComponentController_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

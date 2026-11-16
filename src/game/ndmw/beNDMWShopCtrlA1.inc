@@ -3,12 +3,12 @@ igMetaField *g_beNDMWShopCtrlA1_cardInfoListMetaField;
 igMetaField *g_beNDMWShopCtrlA1_cardRamNoListMetaField;
 
 void beNDMWShopCtrlA1_Create(int arg0) {
-    FUN_003b7d30();
+    beNDMWShopCtrlA1_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopCtrlA1_metaObject, arg0);
 }
 
-igMetaObject *FUN_003b7c40(void) {
-    if (g_beNDMWShopCtrlA1_metaObject == 0 || !isValid(g_beNDMWShopCtrlA1_metaObject)) FUN_003b7d30();
+igMetaObject *beNDMWShopCtrlA1_GetMetaObject(void) {
+    if (g_beNDMWShopCtrlA1_metaObject == 0 || !isValid(g_beNDMWShopCtrlA1_metaObject)) beNDMWShopCtrlA1_EnsureRegistered();
     return g_beNDMWShopCtrlA1_metaObject;
 }
 
@@ -24,18 +24,18 @@ int beNDMWShopCtrlA1_GetVTable(void) {
     obj.w17 = 0;
     obj.w18 = 0;
     obj.w19 = 0;
-    obj.vt = &DAT_0053fc10[0];
+    obj.vt = &g_beNDMWShopCtrlA1_vtable[0];
     obj.w21 = 0;
     obj.w22 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053fc10[0];
+    obj.vt = &g_beNDMWShopCtrlA1_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj.w22, -1);
     igSmartPointer_igStringRefList_Destruct(&obj.w21, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return t;
 }
 
-void FUN_003b7d30(void)
+void beNDMWShopCtrlA1_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopCtrlA1_Register);
 }
@@ -49,7 +49,7 @@ void *beNDMWShopCtrlA1_Register(void) {
         &g_beNDMWShopCtrlA1_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWShopCtrlA1_GetMetaObject,
+        beNDMWShopCtrlA1_GetMetaObjectFunction,
         "beNDMWShopCtrlA1",
         0x5c, /* instance size */
         beNDMWShopCtrlA1_GetVTable,
@@ -59,9 +59,9 @@ void *beNDMWShopCtrlA1_Register(void) {
     );
 }
 
-void beNDMWShopCtrlA1_GetMetaObject(void)
+void beNDMWShopCtrlA1_GetMetaObjectFunction(void)
 {
-    FUN_003b7c40();
+    beNDMWShopCtrlA1_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWShopCtrlA1_ctorTable[] = {

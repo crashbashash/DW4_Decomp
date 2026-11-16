@@ -21,10 +21,10 @@ int igDefaultAspect_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00541480[0];
+    obj.vt = &g_igDefaultAspect_vtable[0];
     obj.ref = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00541480[0];
+    obj.vt = &g_igDefaultAspect_vtable[0];
     obj.release();
     return r;
 }

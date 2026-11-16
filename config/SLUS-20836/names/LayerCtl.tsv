@@ -3,11 +3,7 @@
 # <va>	<name>	<module>
 0x0035c9e0	beLayerCtl_GetSwtCtlEnum	game
 0x0035ca40	beLayerCtl_GetMessageEnum	game
-0x00389080	beLayerCtl::ReleaseLayerSwitch	game
-0x00389120	beLayerCtl::RegisterReceiver	game
 0x00389150	beLayerCtl::GetInfoMeta	game
-0x00389160	beLayerCtl::Update	game
-0x00389170	beLayerCtl::OnMessage	game
 0x00389b80	beLayerCtl::GetMeta	game
 0x001968f0	igSwitch_CreateInstance	engine
 0x0019f1d0	igGroup_CreateInstance	engine

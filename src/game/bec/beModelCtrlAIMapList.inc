@@ -1,16 +1,16 @@
 igMetaObject *g_beModelCtrlAIMapList_metaObject;
 
-igMetaObject *FUN_003541b0(void) {
+igMetaObject *beModelCtrlAIMapList_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlAIMapList_metaObject == 0) {
         g_beModelCtrlAIMapList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beModelCtrlAIMapList_metaObject;
 }
 
-void *FUN_00354200(void) {
+void *beModelCtrlAIMapList_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlAIMapList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00354290();
+        beModelCtrlAIMapList_EnsureRegistered();
     }
     return g_beModelCtrlAIMapList_metaObject;
 }
@@ -19,16 +19,16 @@ int beModelCtrlAIMapList_GetVTable(void) {
     struct Obj_354250 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00537960[0];
+    obj.vt = &g_beModelCtrlAIMapList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00354290(void)
+void beModelCtrlAIMapList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlAIMapList_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlAIMapList_callbackList[] = { FUN_00354510, 0 };
+static igMetaObjectCallback g_beModelCtrlAIMapList_callbackList[] = { beModelCtrlAIMap_EnsureRegistered, 0 };
 
 void *beModelCtrlAIMapList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beModelCtrlAIMapList_Register(void) {
         &g_beModelCtrlAIMapList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beModelCtrlAIMapList_GetMetaObject,
+        beModelCtrlAIMapList_GetMetaObjectFunction,
         "beModelCtrlAIMapList",
         0x14, /* instance size */
         beModelCtrlAIMapList_GetVTable,
@@ -47,8 +47,8 @@ void *beModelCtrlAIMapList_Register(void) {
     );
 }
 
-void beModelCtrlAIMapList_GetMetaObject(void)
+void beModelCtrlAIMapList_GetMetaObjectFunction(void)
 {
-    FUN_00354200();
+    beModelCtrlAIMapList_GetMetaObject();
 }
 

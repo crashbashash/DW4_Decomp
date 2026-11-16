@@ -1,10 +1,10 @@
 igMetaObject *g_beTextureCtrlInfoList_metaObject;
 
-igMetaObject *FUN_00341aa0(void) {
+igMetaObject *beTextureCtrlInfoList_GetMetaObject(void) {
     igMetaObject *g = g_beTextureCtrlInfoList_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_00341b30();
+        beTextureCtrlInfoList_EnsureRegistered();
     return g_beTextureCtrlInfoList_metaObject;
 }
 
@@ -12,16 +12,16 @@ int beTextureCtrlInfoList_GetVTable(void) {
     struct Obj_341af0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00539690[0];
+    obj.vt = &g_beTextureCtrlInfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00341b30(void)
+void beTextureCtrlInfoList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTextureCtrlInfoList_Register);
 }
 
-static igMetaObjectCallback g_beTextureCtrlInfoList_callbackList[] = { FUN_00341cb0, 0 };
+static igMetaObjectCallback g_beTextureCtrlInfoList_callbackList[] = { beTextureCtrlInfo_EnsureRegistered, 0 };
 
 void *beTextureCtrlInfoList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -30,7 +30,7 @@ void *beTextureCtrlInfoList_Register(void) {
         &g_beTextureCtrlInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beTextureCtrlInfoList_GetMetaObject,
+        beTextureCtrlInfoList_GetMetaObjectFunction,
         "beTextureCtrlInfoList",
         0x14, /* instance size */
         beTextureCtrlInfoList_GetVTable,
@@ -40,8 +40,8 @@ void *beTextureCtrlInfoList_Register(void) {
     );
 }
 
-void beTextureCtrlInfoList_GetMetaObject(void)
+void beTextureCtrlInfoList_GetMetaObjectFunction(void)
 {
-    FUN_00341aa0();
+    beTextureCtrlInfoList_GetMetaObject();
 }
 

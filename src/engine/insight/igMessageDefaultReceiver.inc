@@ -26,11 +26,11 @@ int igMessageDefaultReceiver_GetVTable(void) {
     int *p;
     int v;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052c930[0];
+    u.vt = (int)&g_igMessageDefaultReceiver_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052c930[0];
+    u.vt = (int)&g_igMessageDefaultReceiver_vtable[0];
     if (ps != 0) {
         p = *(int **)ps;
         if (p != 0) {

@@ -1,5 +1,5 @@
 int FUN_00198cc0(int arg0) {
-    FUN_00198e30();
+    igShaderInfo_EnsureRegistered();
     return igMetaObject_CreateInstance((int)g_igShaderInfo_metaObject, arg0);
 }
 
@@ -10,7 +10,7 @@ igMetaObject *igShaderInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_igShaderInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00198e30();
+        igShaderInfo_EnsureRegistered();
     return g_igShaderInfo_metaObject;
 }
 
@@ -28,11 +28,11 @@ int igShaderInfo_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = &u.p[2];
     *q2 = 0;
-    u.w[0] = (int)(&DAT_00528790[0]);
+    u.w[0] = (int)(&g_igShaderInfo_vtable[0]);
     q5 = (S_ref *)&u.p[5];
     *(int *)q5 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00528790[0]);
+    u.w[0] = (int)(&g_igShaderInfo_vtable[0]);
     if (q5 != 0) {
         q5 = *(S_ref **)q5;
         if (q5 != 0) {
@@ -57,12 +57,12 @@ int igShaderInfo_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_00198e30(void)
+void igShaderInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igShaderInfo_Register);
 }
 
-static igMetaObjectCallback g_igShaderInfo_callbackList[] = { FUN_00199080, 0 };
+static igMetaObjectCallback g_igShaderInfo_callbackList[] = { igShaderFactoryList_EnsureRegistered, 0 };
 
 void igShaderInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();

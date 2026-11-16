@@ -19,7 +19,7 @@ int igModelViewMatrixAttrList_GetVTable(void) {
     struct Obj_1355e0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524810[0];
+    obj.vt = &g_igModelViewMatrixAttrList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -28,7 +28,7 @@ void FUN_00135620(void)
     igMetaObject_RunStaticInit(igModelViewMatrixAttrList_Register);
 }
 
-static igMetaObjectCallback g_igModelViewMatrixAttrList_callbackList[] = { FUN_001357e0, 0 };
+static igMetaObjectCallback g_igModelViewMatrixAttrList_callbackList[] = { igModelViewMatrixAttr_EnsureRegistered, 0 };
 
 void igModelViewMatrixAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();

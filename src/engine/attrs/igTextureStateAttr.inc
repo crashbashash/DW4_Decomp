@@ -3,11 +3,11 @@ igMetaField *g_igTextureStateAttr_enabledMetaField;
 igMetaField *g_igTextureStateAttr_unitIDMetaField;
 
 void igTextureStateAttr_CreateInstance(int arg0) {
-    FUN_001314b0();
+    igTextureStateAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55ECA8, arg0);
 }
 
-igMetaObject *FUN_001313d0(void) {
+igMetaObject *igTextureStateAttr_GetOrCreateMetaObject(void) {
     if (g_igTextureStateAttr_metaObject == 0) {
         g_igTextureStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -21,7 +21,7 @@ igMetaObject *igTextureStateAttr_GetMetaObject(void)
         ready = (g_igTextureStateAttr_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_001314b0();
+    igTextureStateAttr_EnsureRegistered();
 done:
     return g_igTextureStateAttr_metaObject;
 }
@@ -30,11 +30,11 @@ int igTextureStateAttr_GetVTable(void) {
     struct Obj_131470 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00522860[0];
+    obj.vt = &g_igTextureStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001314b0(void)
+void igTextureStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTextureStateAttr_Register);
 }

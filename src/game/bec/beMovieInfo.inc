@@ -1,9 +1,9 @@
 igMetaObject *g_beMovieInfo_metaObject;
 
-void *FUN_0034eb10(void) {
+void *beMovieInfo_GetMetaObject(void) {
     igMetaObject *g = g_beMovieInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034ebd0();
+        beMovieInfo_EnsureRegistered();
     }
     return g_beMovieInfo_metaObject;
 }
@@ -16,14 +16,14 @@ int beMovieInfo_GetVTable(void) {
     o.w[1] = 0;
     o.w[4] = 0;
     o.w[5] = 0;
-    o.vt = DAT_005380a0;
+    o.vt = g_beMovieInfo_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_005380a0;
+    o.vt = g_beMovieInfo_vtable;
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 
-void FUN_0034ebd0(void)
+void beMovieInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMovieInfo_Register);
 }
@@ -35,7 +35,7 @@ void *beMovieInfo_Register(void) {
         &g_beMovieInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beMovieInfo_GetMetaObject,
+        beMovieInfo_GetMetaObjectFunction,
         "beMovieInfo",
         0x1c, /* instance size */
         beMovieInfo_GetVTable,
@@ -45,8 +45,8 @@ void *beMovieInfo_Register(void) {
     );
 }
 
-void beMovieInfo_GetMetaObject(void)
+void beMovieInfo_GetMetaObjectFunction(void)
 {
-    FUN_0034eb10();
+    beMovieInfo_GetMetaObject();
 }
 

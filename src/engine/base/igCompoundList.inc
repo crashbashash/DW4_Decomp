@@ -15,7 +15,7 @@ int igCompoundList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c750[0];
+    obj.vt = &g_igCompoundList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

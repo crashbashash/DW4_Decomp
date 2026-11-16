@@ -4,13 +4,13 @@ igMetaField *g_beGeneraterPlayerData_geneMaxCountMetaField;
 igMetaField *g_beGeneraterPlayerData_itemDataListMetaField;
 igMetaField *g_beGeneraterPlayerData_itemLastDataListMetaField;
 
-void *FUN_003600b0(void) {
+void *beGeneraterPlayerData_GetMetaObject(void) {
     bool ok;
     if (g_beGeneraterPlayerData_metaObject == 0) goto make;
     ok = !!(g_beGeneraterPlayerData_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003601e0();
+    beGeneraterPlayerData_EnsureRegistered();
 done:;
     return g_beGeneraterPlayerData_metaObject;
 }
@@ -20,22 +20,22 @@ int beGeneraterPlayerData_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00535de0[0];
+    obj.vt = &g_beGeneraterPlayerData_vtable[0];
     obj.r3 = 0;
     obj.r4 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00535de0[0];
+    obj.vt = &g_beGeneraterPlayerData_vtable[0];
     obj.rel4();
     obj.rel3();
     return r;
 }
 
-void FUN_003601e0(void)
+void beGeneraterPlayerData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterPlayerData_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterPlayerData_callbackList[] = { FUN_00360440, 0 };
+static igMetaObjectCallback g_beGeneraterPlayerData_callbackList[] = { beGeneraterItemDataList_EnsureRegistered, 0 };
 
 void *beGeneraterPlayerData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -44,7 +44,7 @@ void *beGeneraterPlayerData_Register(void) {
         &g_beGeneraterPlayerData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beGeneraterPlayerData_GetMetaObject,
+        beGeneraterPlayerData_GetMetaObjectFunction,
         "beGeneraterPlayerData",
         0x18, /* instance size */
         beGeneraterPlayerData_GetVTable,
@@ -54,9 +54,9 @@ void *beGeneraterPlayerData_Register(void) {
     );
 }
 
-void beGeneraterPlayerData_GetMetaObject(void)
+void beGeneraterPlayerData_GetMetaObjectFunction(void)
 {
-    FUN_003600b0();
+    beGeneraterPlayerData_GetMetaObject();
 }
 
 static FieldFactory g_beGeneraterPlayerData_ctorTable[] = {
@@ -94,10 +94,10 @@ void beGeneraterPlayerData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beGeneraterPlayerData_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00360360();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beGeneraterItemDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00360360();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beGeneraterItemDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beGeneraterPlayerData_fieldTable, g_beGeneraterPlayerData_fieldHandles, g_beGeneraterPlayerData_fieldOffsets, temp_s2);
 }

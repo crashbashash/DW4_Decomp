@@ -1,12 +1,12 @@
 igMetaObject *g_beModelCtrlMSGBOX_metaObject;
 
-void *FUN_00355a40(void) {
+void *beModelCtrlMSGBOX_GetMetaObject(void) {
     unsigned char b;
     if (g_beModelCtrlMSGBOX_metaObject != 0) {
         b = (*(int *)((char *)(g_beModelCtrlMSGBOX_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00355b20();
+    beModelCtrlMSGBOX_EnsureRegistered();
 done:
     return g_beModelCtrlMSGBOX_metaObject;
 }
@@ -22,7 +22,7 @@ int beModelCtrlMSGBOX_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    u.w[0] = (int)(&DAT_005374d0[0]);
+    u.w[0] = (int)(&g_beModelCtrlMSGBOX_vtable[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     if (q1 != 0) {
@@ -39,7 +39,7 @@ int beModelCtrlMSGBOX_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00355b20(void)
+void beModelCtrlMSGBOX_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlMSGBOX_Register);
 }
@@ -51,7 +51,7 @@ void *beModelCtrlMSGBOX_Register(void) {
         &g_beModelCtrlMSGBOX_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlMSGBOX_GetMetaObject,
+        beModelCtrlMSGBOX_GetMetaObjectFunction,
         "beModelCtrlMSGBOX",
         0xc, /* instance size */
         beModelCtrlMSGBOX_GetVTable,
@@ -61,8 +61,8 @@ void *beModelCtrlMSGBOX_Register(void) {
     );
 }
 
-void beModelCtrlMSGBOX_GetMetaObject(void)
+void beModelCtrlMSGBOX_GetMetaObjectFunction(void)
 {
-    FUN_00355a40();
+    beModelCtrlMSGBOX_GetMetaObject();
 }
 

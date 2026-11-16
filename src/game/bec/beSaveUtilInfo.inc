@@ -1,9 +1,9 @@
 igMetaObject *g_beSaveUtilInfo_metaObject;
 
-void *FUN_00346ab0(void) {
+void *beSaveUtilInfo_GetMetaObject(void) {
     igMetaObject *g = g_beSaveUtilInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00346b70();
+        beSaveUtilInfo_EnsureRegistered();
     }
     return g_beSaveUtilInfo_metaObject;
 }
@@ -15,15 +15,15 @@ int beSaveUtilInfo_GetVTable(void) {
     o.f8 = 0;
     o.f20 = 0;
     o.f24 = 0;
-    o.vt = &DAT_00538da0[0];
+    o.vt = &g_beSaveUtilInfo_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00538da0[0];
+    o.vt = &g_beSaveUtilInfo_vtable[0];
     
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 
-void FUN_00346b70(void)
+void beSaveUtilInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSaveUtilInfo_Register);
 }
@@ -35,7 +35,7 @@ void *beSaveUtilInfo_Register(void) {
         &g_beSaveUtilInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beSaveUtilInfo_GetMetaObject,
+        beSaveUtilInfo_GetMetaObjectFunction,
         "beSaveUtilInfo",
         0x1c, /* instance size */
         beSaveUtilInfo_GetVTable,
@@ -45,9 +45,9 @@ void *beSaveUtilInfo_Register(void) {
     );
 }
 
-void beSaveUtilInfo_GetMetaObject(void)
+void beSaveUtilInfo_GetMetaObjectFunction(void)
 {
-    FUN_00346ab0();
+    beSaveUtilInfo_GetMetaObject();
 }
 
 igMetaEnum *g_beSaveUtilInfo_messageMetaEnum;

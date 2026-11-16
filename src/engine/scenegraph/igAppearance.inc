@@ -16,7 +16,7 @@ igMetaObject *igAppearance_GetMetaObject(void)
 {
     igMetaObject *g = g_igAppearance_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a6450();
+        igAppearance_EnsureRegistered();
     return g_igAppearance_metaObject;
 }
 
@@ -25,14 +25,14 @@ int igAppearance_GetVTable(void) {
     int t;
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_0052a090[0];
+    obj.vt = &g_igAppearance_vtable[0];
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052a090[0];
+    obj.vt = &g_igAppearance_vtable[0];
     FUN_001958f0((void * *)&obj.w7, -1);
     igSmartPointer_igStringObjList_Destruct((void * *)&obj.w6, -1);
     FUN_001a63d0((void * *)&obj.w5, -1);
@@ -91,12 +91,12 @@ void **FUN_001a63d0(void **arg0, long long arg1) {
     return arg0;
 }
 
-void FUN_001a6450(void)
+void igAppearance_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAppearance_Register);
 }
 
-static igMetaObjectCallback g_igAppearance_callbackList[] = { FUN_00198290, FUN_00197f40, FUN_0019d360, igStringObjList_EnsureRegistered, FUN_0019ccc0, 0 };
+static igMetaObjectCallback g_igAppearance_callbackList[] = { igSkin_EnsureRegistered, igSkinList_EnsureRegistered, FUN_0019d360, igStringObjList_EnsureRegistered, igNodeList_EnsureRegistered, 0 };
 
 void igAppearance_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -172,7 +172,7 @@ void igAppearance_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igStringObjList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0019cbe0();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igAppearance_fieldTable, g_igAppearance_fieldHandles, g_igAppearance_fieldOffsets, temp_s0);
 }

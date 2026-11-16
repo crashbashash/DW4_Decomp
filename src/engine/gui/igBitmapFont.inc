@@ -23,11 +23,11 @@ int igBitmapFont_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.w2 = 0;
     obj.w5 = 0;
-    obj.vt = &DAT_00541610[0];
+    obj.vt = &g_igBitmapFont_vtable[0];
     obj.w7 = 0;
     obj.w8 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00541610[0];
+    obj.vt = &g_igBitmapFont_vtable[0];
     FUN_0019aa10(&obj.w8, -1);
     FUN_003619a0(&obj.w7, -1);
     FUN_00361a20(&obj, 0);
@@ -39,7 +39,7 @@ void igBitmapFont_RunStaticInit(void)
     igMetaObject_RunStaticInit(igBitmapFont_Register);
 }
 
-static igMetaObjectCallback g_igBitmapFont_callbackList[] = { igCharMetricsList_RunStaticInit, FUN_00132a00, 0 };
+static igMetaObjectCallback g_igBitmapFont_callbackList[] = { igCharMetricsList_RunStaticInit, igTextureBindAttr_EnsureRegistered, 0 };
 
 void igBitmapFont_Register(void) {
     GuiLibrary_MarkRegistered();

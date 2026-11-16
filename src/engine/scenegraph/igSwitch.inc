@@ -1,12 +1,12 @@
 void igSwitch_CreateInstance(int arg0) {
-    FUN_00196ad0();
+    igSwitch_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igSwitch_metaObject, arg0);
 }
 
 igMetaObject *g_igSwitch_metaObject;
 igMetaField *g_igSwitch_childMaskMetaField;
 
-igMetaObject *FUN_00196930(void) {
+igMetaObject *igSwitch_GetOrCreateMetaObject(void) {
     if (g_igSwitch_metaObject == 0) {
         g_igSwitch_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -17,7 +17,7 @@ igMetaObject *igSwitch_GetMetaObject(void)
 {
     igMetaObject *g = g_igSwitch_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00196ad0();
+        igSwitch_EnsureRegistered();
     return g_igSwitch_metaObject;
 }
 
@@ -30,11 +30,11 @@ int igSwitch_GetVTable(void) {
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[28] = 0;
-    u.vt = (int)&DAT_00528590[0];
+    u.vt = (int)&g_igSwitch_vtable[0];
     ps = &u.b[32];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00528590[0];
+    u.vt = (int)&g_igSwitch_vtable[0];
     FUN_00196a50((struct R * *)ps, -1);
     FUN_00195a90((struct T_195a90 *)u.b, 0);
     return temp_s0;
@@ -58,12 +58,12 @@ struct R **FUN_00196a50(struct R **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00196ad0(void)
+void igSwitch_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSwitch_Register);
 }
 
-static igMetaObjectCallback g_igSwitch_callbackList[] = { FUN_001a4e70, 0 };
+static igMetaObjectCallback g_igSwitch_callbackList[] = { igBitMask_EnsureRegistered, 0 };
 
 void igSwitch_Register(void) {
     SceneGraphLibrary_MarkRegistered();

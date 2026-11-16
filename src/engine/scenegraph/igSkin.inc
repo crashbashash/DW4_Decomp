@@ -13,7 +13,7 @@ igMetaObject *igSkin_GetMetaObject(void)
 {
     igMetaObject *g = g_igSkin_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00198290();
+        igSkin_EnsureRegistered();
     return g_igSkin_metaObject;
 }
 
@@ -30,13 +30,13 @@ int igSkin_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.w[0] = (int)(&DAT_0052b3b0[0]);
+    u.w[0] = (int)(&g_igSkin_vtable[0]);
     q2 = (S_ref *)&u.b[12];
     *(int *)q2 = 0;
     q3 = (S_ref *)&u.b[16];
     *(int *)q3 = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052b3b0[0]);
+    u.w[0] = (int)(&g_igSkin_vtable[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
         if (q3 != 0) {
@@ -101,12 +101,12 @@ ObjectRefWord *FUN_00198210(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_00198290(void)
+void igSkin_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSkin_Register);
 }
 
-static igMetaObjectCallback g_igSkin_callbackList[] = { FUN_0019cf10, FUN_0018a780, 0 };
+static igMetaObjectCallback g_igSkin_callbackList[] = { igNode_EnsureRegistered, igAABox_EnsureRegistered, 0 };
 
 void igSkin_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -156,9 +156,9 @@ void igSkin_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkin_ctorTable, 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0018a6a0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igAABox_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkin_fieldTable, g_igSkin_fieldHandles, g_igSkin_fieldOffsets, temp_s2);
 }
 

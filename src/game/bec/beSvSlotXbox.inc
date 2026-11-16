@@ -4,10 +4,10 @@ igMetaField *g_beSvSlotXbox_totalBytesMetaField;
 igMetaField *g_beSvSlotXbox_freeBytesMetaField;
 igMetaField *g_beSvSlotXbox_useBytesMetaField;
 
-void *FUN_0034a8c0(void) {
+void *beSvSlotXbox_GetMetaObject(void) {
     igMetaObject *g = g_beSvSlotXbox_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034a9a0();
+        beSvSlotXbox_EnsureRegistered();
     }
     return g_beSvSlotXbox_metaObject;
 }
@@ -21,11 +21,11 @@ int beSvSlotXbox_GetVTable(void) {
     int temp_v0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00538970[0];
+    u.vt = (int)&g_beSvSlotXbox_vtable[0];
     ps = &u.b[24];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00538970[0];
+    u.vt = (int)&g_beSvSlotXbox_vtable[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {
@@ -40,7 +40,7 @@ int beSvSlotXbox_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0034a9a0(void)
+void beSvSlotXbox_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvSlotXbox_Register);
 }
@@ -52,7 +52,7 @@ void *beSvSlotXbox_Register(void) {
         &g_beSvSlotXbox_metaObject,
         beSvSlotData_Register,
         beSvSlotData_GetPublishedMetaObject,
-        beSvSlotXbox_GetMetaObject,
+        beSvSlotXbox_GetMetaObjectFunction,
         "beSvSlotXbox",
         0x38, /* instance size */
         beSvSlotXbox_GetVTable,
@@ -62,9 +62,9 @@ void *beSvSlotXbox_Register(void) {
     );
 }
 
-void beSvSlotXbox_GetMetaObject(void)
+void beSvSlotXbox_GetMetaObjectFunction(void)
 {
-    FUN_0034a8c0();
+    beSvSlotXbox_GetMetaObject();
 }
 
 static FieldFactory g_beSvSlotXbox_ctorTable[] = {

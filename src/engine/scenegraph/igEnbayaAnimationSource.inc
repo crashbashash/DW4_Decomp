@@ -33,7 +33,7 @@ igMetaObject *igEnbayaAnimationSource_GetMetaObject(void)
 {
     igMetaObject *g = g_igEnbayaAnimationSource_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a22f0();
+        igEnbayaAnimationSource_EnsureRegistered();
     return g_igEnbayaAnimationSource_metaObject;
 }
 
@@ -41,11 +41,11 @@ int igEnbayaAnimationSource_GetVTable(void) {
     union U_1a22b0 u;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_005291e0[0]);
+    u.w[0] = (int)(&g_igEnbayaAnimationSource_vtable[0]);
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_001a22f0(void)
+void igEnbayaAnimationSource_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igEnbayaAnimationSource_Register);
 }

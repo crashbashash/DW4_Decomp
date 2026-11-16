@@ -8,7 +8,7 @@ igMetaObject *igBillboard_GetMetaObject(void)
 {
     igMetaObject *g = g_igBillboard_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a5050();
+        igBillboard_EnsureRegistered();
     return g_igBillboard_metaObject;
 }
 
@@ -21,21 +21,21 @@ int igBillboard_GetVTable(void) {
     u.w[3] = 0;
     u.w[4] = 0;
     u.w[7] = 0;
-    u.w[0] = (int)(&DAT_0052a2a0[0]);
+    u.w[0] = (int)(&g_igBillboard_vtable[0]);
     u.w[15] = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052a2a0[0]);
+    u.w[0] = (int)(&g_igBillboard_vtable[0]);
     FUN_00142d10(&u.w[15], -1);
     FUN_00195a90((struct T_195a90 *)&u.w[0], 0);
     return temp_s0;
 }
 
-void FUN_001a5050(void)
+void igBillboard_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBillboard_Register);
 }
 
-static igMetaObjectCallback g_igBillboard_callbackList[] = { FUN_001357e0, 0 };
+static igMetaObjectCallback g_igBillboard_callbackList[] = { igModelViewMatrixAttr_EnsureRegistered, 0 };
 
 void igBillboard_Register(void) {
     SceneGraphLibrary_MarkRegistered();

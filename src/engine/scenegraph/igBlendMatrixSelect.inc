@@ -7,17 +7,17 @@ igMetaObject *igBlendMatrixSelect_GetMetaObject(void)
 {
     igMetaObject *g = g_igBlendMatrixSelect_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a4c50();
+        igBlendMatrixSelect_EnsureRegistered();
     return g_igBlendMatrixSelect_metaObject;
 }
 
 int igBlendMatrixSelect_GetVTable(void) { struct Obj_1a4ba0 o; int *p = (int *)&o; int *q; int t;
- igObject_InitHeader((struct Obj_1a4ba0 *)p); o.vt = &DAT_0052a400[0]; o.f8 = 0; o.f12 = 0; o.f16 = 0; o.f28 = 0; o.f32 = 0; q = &o.f40; *q = 0;
+ igObject_InitHeader((struct Obj_1a4ba0 *)p); o.vt = &g_igBlendMatrixSelect_vtable[0]; o.f8 = 0; o.f12 = 0; o.f16 = 0; o.f28 = 0; o.f32 = 0; q = &o.f40; *q = 0;
  igMatrix44f_SetIdentity(o.sub1); igMatrix44f_SetIdentity(p + 27);
  t = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
- o.vt = &DAT_0052a400[0]; igSmartPointer_igIntList_Destruct(q, -1); p = (int*)&o; FUN_0019c0e0((struct S_19c0e0 *)((struct Obj_1a4ba0 *)p), 0); return t; }
+ o.vt = &g_igBlendMatrixSelect_vtable[0]; igSmartPointer_igIntList_Destruct(q, -1); p = (int*)&o; FUN_0019c0e0((struct S_19c0e0 *)((struct Obj_1a4ba0 *)p), 0); return t; }
 
-void FUN_001a4c50(void)
+void igBlendMatrixSelect_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBlendMatrixSelect_Register);
 }

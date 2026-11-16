@@ -7,7 +7,7 @@ igMetaObject *igAnimationTrack_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationTrack_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001aa030();
+        igAnimationTrack_EnsureRegistered();
     return g_igAnimationTrack_metaObject;
 }
 
@@ -23,11 +23,11 @@ int igAnimationTrack_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00529830[0];
+    u.vt = (int)&g_igAnimationTrack_vtable[0];
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00529830[0];
+    u.vt = (int)&g_igAnimationTrack_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -52,7 +52,7 @@ int igAnimationTrack_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_001aa030(void)
+void igAnimationTrack_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationTrack_Register);
 }

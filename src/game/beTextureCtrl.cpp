@@ -2,36 +2,36 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" void igObject_Destroy(void *);
-extern "C" int Gap__Bec__beTextureCtrl__vfunc_30(void);
-extern "C" int Gap__Bec__beTextureCtrl__vfunc_20(void);
+extern "C" int beTextureCtrl_GetInfoMeta(void);
+extern "C" int beTextureCtrl_GetMeta(void);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int ObjectList_RemoveFirstRetained(...);
 typedef struct { int pad0; int rc; } RefObj;
-extern "C" void Gap__Bec__beTextureCtrl__vfunc_32(beTextureCtrl *arg0);
+extern "C" void beTextureCtrl_Prepare(beTextureCtrl *arg0);
 extern "C" int g_beTextureCtrlInfo_metaObject[4];
 extern "C" int g_beTextureCtrl_metaObject[4];
 struct TextureCtrlWork { char header[8]; int f8; int f12; };
 /* The _work object: two list handles at +8 and +12. */
 struct TextureCtrlSource { char pad[12]; struct TextureCtrlSource *f12; char pad1[12]; unsigned char f28; char pad2[3]; igObjectList *f32; };
-extern "C" struct TextureCtrlWork *FUN_00342630(int);
+extern "C" struct TextureCtrlWork *beTextureCtrlWork_Create(int);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSource *arg1);
+extern "C" void beTextureCtrl_OnAddRam(beTextureCtrl *arg0, struct TextureCtrlSource *arg1);
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
 class TypeIdVirtual { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int v88(); };
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
 class NewObjectVirtual : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void v132(int); };
 struct PropertyRecord { char pad[12]; int f12; };
-extern "C" NewObjectVirtual *FUN_00132810(...);
+extern "C" NewObjectVirtual *igTextureBindAttr_CreateInstance(...);
 extern "C" PropertyRecord *igProperty_FindByName(...);
 extern "C" int emptyString[4];
 extern "C" int g_igTextureBindAttr_metaObject[4];
 extern "C" int g_propertyNameField[4];
-extern "C" void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1);
+extern "C" void beTextureCtrl_UpdateRam(beTextureCtrl *arg0, beBaseInfoRam *arg1);
 
-void Gap__Bec__beTextureCtrl__vfunc_32(beTextureCtrl *arg0) {
+void beTextureCtrl_Prepare(beTextureCtrl *arg0) {
     RefObj *temp_a0;
 
     arg0->_isFirstTime = 1;
@@ -46,12 +46,12 @@ void Gap__Bec__beTextureCtrl__vfunc_32(beTextureCtrl *arg0) {
     arg0->_work = 0;
 }
 
-int Gap__Bec__beTextureCtrl__vfunc_30(void)
+int beTextureCtrl_GetInfoMeta(void)
 {
     return g_beTextureCtrlInfo_metaObject[0];
 }
 
-void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSource *arg1) {
+void beTextureCtrl_OnAddRam(beTextureCtrl *arg0, struct TextureCtrlSource *arg1) {
     int temp_s4;
     int var_s3;
     int var_s2;
@@ -72,7 +72,7 @@ void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSo
                 igObject_Destroy((void *)old);
             }
         }
-        arg0->_work = (int)FUN_00342630(var_v0);
+        arg0->_work = (int)beTextureCtrlWork_Create(var_v0);
     }
     arg1 = arg1->f12;
     if (arg1->f28 != 0) {
@@ -104,7 +104,7 @@ void Gap__Bec__beTextureCtrl__vfunc_29(beTextureCtrl *arg0, struct TextureCtrlSo
  * on scope exit, after the attribute set has retained it (reference count in the low 23 bits of
  * _refCount). */
 
-void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1) {
+void beTextureCtrl_UpdateRam(beTextureCtrl *arg0, beBaseInfoRam *arg1) {
     struct { int spA0; int pad[5]; } sa;
 
     beTextureCtrlAttr *s1;
@@ -139,7 +139,7 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
                     if (p != 0) {
                         var_v0 = igObject_GetAllocator(arg0);
                         var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-                        igSmartPointer<NewObjectVirtual> attr(FUN_00132810(var_v0));
+                        igSmartPointer<NewObjectVirtual> attr(igTextureBindAttr_CreateInstance(var_v0));
                         attr.p->v132(p->f12);
                         s3 = (igAttrSet *)s1->_attrSet;
                         s6 = ((igAttrList *)s3->_attributes)->_count;
@@ -169,7 +169,7 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
     }
 }
 
-int Gap__Bec__beTextureCtrl__vfunc_20(void)
+int beTextureCtrl_GetMeta(void)
 {
     return g_beTextureCtrl_metaObject[0];
 }

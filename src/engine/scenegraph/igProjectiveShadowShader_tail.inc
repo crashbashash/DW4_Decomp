@@ -1,5 +1,5 @@
 void FUN_001d4180(void) {
-    DAT_005628d8[0] = FUN_00132810(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+    DAT_005628d8[0] = igTextureBindAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
     DAT_005627e8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
     DAT_005627f0[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
     DAT_005627f8[0] = igTextureStateAttr_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
@@ -41,11 +41,11 @@ void igProjectiveShadowShader_ConfigureSharedAttrs(void) {
     ((ShadowSetupObj *)DAT_005628d8[0])->s23(0);
     {
         ShadowRef image;
-        image.p = FUN_00132b60(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
+        image.p = igTextureAttr_CreateInstance(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
         ((ShadowSetupObj *)DAT_005628d8[0])->s31((int)image.p);
         ShadowRef texture;
-        texture.p = FUN_0014df70(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
-        FUN_00140ad0(image.p, texture.p, 0);
+        texture.p = igImage_CreateInstance(FUN_002f88e0(kIGMemoryPoolHandleSystem[0]));
+        igTextureAttr_SetImage(image.p, texture.p, 0);
         texture.p->s26(1);
         texture.p->s27(1);
         texture.p->s28(5);

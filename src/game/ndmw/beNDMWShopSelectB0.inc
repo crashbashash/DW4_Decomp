@@ -1,14 +1,14 @@
 igMetaObject *g_beNDMWShopSelectB0_metaObject;
 
 void beNDMWShopSelectB0_Create(int arg0) {
-    FUN_003b4190();
+    beNDMWShopSelectB0_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopSelectB0_metaObject, arg0);
 }
 
-void *FUN_003b3f80(void) {
+void *beNDMWShopSelectB0_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWShopSelectB0_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003b4190();
+        beNDMWShopSelectB0_EnsureRegistered();
     }
     return g_beNDMWShopSelectB0_metaObject;
 }
@@ -27,9 +27,9 @@ int beNDMWShopSelectB0_GetVTable(void) {
     o.w[18] = 0;
     o.w[19] = 0;
     o.w[26] = 0;
-    o.vt = DAT_0053ff10;
+    o.vt = g_beNDMWShopSelectB0_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_0053ff10;
+    o.vt = g_beNDMWShopSelectB0_vtable;
     FUN_003b4050((struct S_3b4050 *)&o, (short)0);
     return r;
 }
@@ -41,7 +41,7 @@ void *FUN_003b4050(struct S_3b4050 *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_0053f4f0[0];
+        arg0->f0 = &g_beNDMWWindowSelect_vtable[0];
         if (&arg0->f108) {
             p = arg0->f108;
             if (p != 0) {
@@ -69,7 +69,7 @@ void *FUN_003b4050(struct S_3b4050 *arg0, short arg1) {
             igSmartPointer_igStringRefList_Destruct(&arg0->f68, -1);
             igSmartPointer_igStringRefList_Destruct(&arg0->f64, -1);
             igSmartPointer_igStringRefList_Destruct(&arg0->f60, -1);
-            FUN_003b2f30((void **)&arg0->f56, -1);
+            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((void **)&arg0->f56, -1);
             FUN_003b2fb0((void **)&arg0->f52, (short)(-1));
         }
         if (arg1 > 0) {
@@ -79,7 +79,7 @@ void *FUN_003b4050(struct S_3b4050 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_003b4190(void)
+void beNDMWShopSelectB0_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopSelectB0_Register);
 }
@@ -91,7 +91,7 @@ void *beNDMWShopSelectB0_Register(void) {
         &g_beNDMWShopSelectB0_metaObject,
         beNDMWWindowSelect_Register,
         beNDMWWindowSelect_GetPublishedMetaObject,
-        beNDMWShopSelectB0_GetMetaObject,
+        beNDMWShopSelectB0_GetMetaObjectFunction,
         "beNDMWShopSelectB0",
         0x70, /* instance size */
         beNDMWShopSelectB0_GetVTable,
@@ -101,12 +101,12 @@ void *beNDMWShopSelectB0_Register(void) {
     );
 }
 
-void beNDMWShopSelectB0_GetMetaObject(void)
+void beNDMWShopSelectB0_GetMetaObjectFunction(void)
 {
-    FUN_003b3f80();
+    beNDMWShopSelectB0_GetMetaObject();
 }
 
-igMetaObject *FUN_003b4240(void) {
+igMetaObject *beNDMWWindowSelect_GetPublishedMetaObject(void) {
     return g_beNDMWWindowSelect_metaObject;
 }
 

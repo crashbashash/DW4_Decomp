@@ -25,18 +25,18 @@ int igTransientShaderData_GetVTable(void) {
     obj.fC = 0;
     obj.f10 = 0;
     obj.f14 = 0;
-    obj.vt = (&DAT_0052b870[0]);
+    obj.vt = (&g_igTransientShaderData_vtable[0]);
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_0052b870[0]);
+    obj.vt = (&g_igTransientShaderData_vtable[0]);
     FUN_00194930((Obj_194930 *)&obj, 0);
     return temp_s0;
 }
 
 int **FUN_00194790(int **arg0, long long arg1) {
     if (arg0 != 0) {
-        *arg0 = &DAT_0052b870[0];
+        *arg0 = &g_igTransientShaderData_vtable[0];
         if (arg0 != 0) {
-            *arg0 = &DAT_00528870[0];
+            *arg0 = &g_igShaderData_vtable[0];
             FUN_00194830((struct Ref * *)((char *)arg0 + 20), -1);
             FUN_001948b0((void * *)((char *)arg0 + 16), -1);
             FUN_0013a800((char *)arg0 + 12, -1);
@@ -82,7 +82,7 @@ void **FUN_001948b0(void **arg0, long long arg1) {
 
 Obj_194930 *FUN_00194930(Obj_194930 *arg0, short arg1) {
     if (arg0) {
-        arg0->vt = &DAT_00528870[0];
+        arg0->vt = &g_igShaderData_vtable[0];
         arg0->rel(&arg0->m20);
         arg0->rel(&arg0->m16);
         arg0->rel(&arg0->m12);
@@ -99,7 +99,7 @@ void FUN_00194a90(void)
     igMetaObject_RunStaticInit(igTransientShaderData_Register);
 }
 
-static igMetaObjectCallback g_igTransientShaderData_callbackList[] = { FUN_0013acb0, FUN_001e5810, FUN_0019cb10, 0 };
+static igMetaObjectCallback g_igTransientShaderData_callbackList[] = { igAttrListList_EnsureRegistered, FUN_001e5810, FUN_0019cb10, 0 };
 
 void igTransientShaderData_Register(void) {
     SceneGraphLibrary_MarkRegistered();

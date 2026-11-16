@@ -1,13 +1,13 @@
 igMetaObject *g_beLuaData_metaObject;
 igMetaField *g_beLuaData_dataObjectMetaField;
 
-igMetaObject *FUN_0035b150(void) {
+igMetaObject *beLuaData_GetMetaObject(void) {
     igMetaObject *g = g_beLuaData_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_0035b280();
+    beLuaData_EnsureRegistered();
 done:
     return g_beLuaData_metaObject;
 }
@@ -22,10 +22,10 @@ int beLuaData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_00536890[0];
+    obj.vt = &g_beLuaData_vtable[0];
     obj.w3 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00536890[0];
+    obj.vt = &g_beLuaData_vtable[0];
     if (&obj.w3 != 0) {
         io = obj.w3;
         if (io != 0) {
@@ -50,12 +50,12 @@ int beLuaData_GetVTable(void) {
     return t;
 }
 
-void FUN_0035b280(void)
+void beLuaData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLuaData_Register);
 }
 
-static igMetaObjectCallback g_beLuaData_callbackList[] = { FUN_0035b5f0, 0 };
+static igMetaObjectCallback g_beLuaData_callbackList[] = { beLuaDataObject_EnsureRegistered, 0 };
 
 void *beLuaData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -64,7 +64,7 @@ void *beLuaData_Register(void) {
         &g_beLuaData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beLuaData_GetMetaObject,
+        beLuaData_GetMetaObjectFunction,
         "beLuaData",
         0x10, /* instance size */
         beLuaData_GetVTable,
@@ -74,9 +74,9 @@ void *beLuaData_Register(void) {
     );
 }
 
-void beLuaData_GetMetaObject(void)
+void beLuaData_GetMetaObjectFunction(void)
 {
-    FUN_0035b150();
+    beLuaData_GetMetaObject();
 }
 
 static FieldFactory g_beLuaData_ctorTable[] = {
@@ -101,7 +101,7 @@ void beLuaData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beLuaData_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035b510();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beLuaDataObject_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beLuaData_fieldTable, g_beLuaData_fieldHandles, g_beLuaData_fieldOffsets, temp_s2);
 }
 

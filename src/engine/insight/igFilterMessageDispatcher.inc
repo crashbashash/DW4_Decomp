@@ -15,11 +15,11 @@ int igFilterMessageDispatcher_GetVTable(void) {
     igObject *o;
     int t;
     igObject_InitHeader(&obj);
-    *(int **)&obj._vtable = &DAT_0052c8b0[0];
+    *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
     obj._defaultFilters = 0;
     obj._filters = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    *(int **)&obj._vtable = &DAT_0052c8b0[0];
+    *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
     if (&obj._filters != 0) {
         o = (igObject *)obj._filters;
         if (o != 0) {

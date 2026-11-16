@@ -2,21 +2,21 @@ igMetaObject *g_beBkColor_metaObject;
 igMetaField *g_beBkColor_isClearMetaField;
 
 void beBkColor_CreateInstance(int arg0) {
-    FUN_00369f80();
+    beBkColor_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589D10, arg0);
 }
 
-igMetaObject *FUN_00369e00(void) {
+igMetaObject *beBkColor_GetOrCreateMetaObject(void) {
     if (g_beBkColor_metaObject == 0) {
         g_beBkColor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beBkColor_metaObject;
 }
 
-void *FUN_00369e50(void) {
+void *beBkColor_GetMetaObject(void) {
     igMetaObject *g = g_beBkColor_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00369f80();
+        beBkColor_EnsureRegistered();
     }
     return g_beBkColor_metaObject;
 }
@@ -34,12 +34,12 @@ int beBkColor_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = &u.p[2];
     *q2 = 0;
-    u.w[0] = (int)(&DAT_0053a0d0[0]);
+    u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     q3 = &u.p[6];
     *q3 = 0;
-    u.w[0] = (int)(&DAT_0053a170[0]);
+    u.w[0] = (int)(&g_beBkColor_vtable[0]);
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0053a0d0[0]);
+    u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     if (q3 != 0) {
         temp_a0 = *q3;
         if (temp_a0 != 0) {
@@ -64,7 +64,7 @@ int beBkColor_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_00369f80(void)
+void beBkColor_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beBkColor_Register);
 }
@@ -76,7 +76,7 @@ void *beBkColor_Register(void) {
         &g_beBkColor_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beBkColor_GetMetaObject,
+        beBkColor_GetMetaObjectFunction,
         "beBkColor",
         0x24, /* instance size */
         beBkColor_GetVTable,
@@ -86,9 +86,9 @@ void *beBkColor_Register(void) {
     );
 }
 
-void beBkColor_GetMetaObject(void)
+void beBkColor_GetMetaObjectFunction(void)
 {
-    FUN_00369e50();
+    beBkColor_GetMetaObject();
 }
 
 static FieldFactory g_beBkColor_ctorTable[] = {

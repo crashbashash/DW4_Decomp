@@ -12,18 +12,18 @@ igMetaObject *igNormalizeNormalsStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igNormalizeNormalsStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00135090();
+        igNormalizeNormalsStateAttr_EnsureRegistered();
     return g_igNormalizeNormalsStateAttr_metaObject;
 }
 
 int igNormalizeNormalsStateAttr_GetVTable(void) {
     struct Obj obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523310[0];
+    obj.vt = &g_igNormalizeNormalsStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00135090(void)
+void igNormalizeNormalsStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igNormalizeNormalsStateAttr_Register);
 }

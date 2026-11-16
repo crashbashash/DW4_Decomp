@@ -11,7 +11,7 @@ igObject subclass of `beSaveApi` (`beSvStartApi`, `beSvEndApi`, `beSvGetFreeSize
 | 22 | poll once per frame; returns 1 when finished, 0 while a card request is in flight |
 | 23 | report: copy `_result` into the `beSvDeliver` and set `_isEndOperat` |
 
-Slot 7 of `beSaveApi` (`Gap__Bec__beSaveApi__vfunc_07`) is shared by the UseCheck, Format and
+Slot 7 of `beSaveApi` (`beSaveApi_userConstruct`) is shared by the UseCheck, Format and
 FileFind requests, which do not override it.
 
 ## Requests and libmc

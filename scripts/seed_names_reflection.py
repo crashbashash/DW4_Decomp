@@ -15,8 +15,9 @@ This emits
   <Class>_Register     at the registrar function
   <Class>_InitFields   at the post_init function, where one exists
 
-Two MetaObjects share the name `igModelViewMatrixBoneSelectList`; those get their
-handle address as a suffix, which is unique.
+Two MetaObjects share the name `igModelViewMatrixBoneSelectList` (`class_prefixes`): the copy a game
+library registers takes that library as a suffix (`igModelViewMatrixBoneSelectListBec`, the class its
+RTTI vtable names `Gap::Bec::igModelViewMatrixBoneSelectList`), any other copy its handle address.
 
   scripts/seed_names_reflection.py > config/SLUS-20836/names/Reflection.tsv
 """
@@ -25,10 +26,34 @@ import json
 import os
 import re
 import sys
+from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import regions  # noqa: E402
+
 CLASSES = os.path.join(ROOT, "data", "reflection.json")
 SYMBOLS = os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt")
+# A game library that registers a class under a name Alchemy also registers: the suffix its copy takes.
+LIBRARY_SUFFIX = {"bec": "Bec", "ndmw": "Ndmw"}
+
+
+def class_prefixes(classes):
+    """{handle: the symbol prefix of the class registered there}: the class name, unique across
+    `data/reflection.json`.  A name registered twice is told apart by who registers it: the copy whose
+    registrar lies in a game library takes the library's suffix (its RTTI namespace is that library's,
+    `Gap::Bec::`); a copy with no such library keeps its handle address, which marks it as unresolved."""
+    counts = Counter(c["class"] for c in classes.values())
+    out = {}
+    for handle, c in classes.items():
+        name = c["class"]
+        if counts[name] > 1:
+            row = regions.of(toint(c["register_site"]))
+            suffix = LIBRARY_SUFFIX.get(row.id) if row else None
+            name = name + suffix if suffix else "%s_%s" % (name, handle[2:].lower())
+        out[handle] = name
+    assert len(set(out.values())) == len(out), "two classes share a symbol prefix"
+    return out
 
 
 def toint(x):
@@ -123,16 +148,12 @@ def main():
         return None
 
     nsmap = namespace_map(rows)
-    counts = {}
-    for c in classes.values():
-        counts[c["class"]] = counts.get(c["class"], 0) + 1
+    prefixes = class_prefixes(classes)
 
     out = []
     for handle in sorted(classes, key=lambda h: toint(h)):
         c = classes[handle]
-        name = c["class"]
-        if counts[name] > 1:                       # disambiguate by handle slot
-            name = "%s_%s" % (name, handle[2:].lower())
+        name = prefixes[handle]
         reg = containing(toint(c["register_site"]))
         if reg and nameable(reg[2], "%s_Register" % name):
             out.append((reg[0], "%s_Register" % name, module(c["class"], nsmap)))

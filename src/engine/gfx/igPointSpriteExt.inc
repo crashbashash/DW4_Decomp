@@ -54,7 +54,7 @@ int igPointSpriteExt_GetVTable(void) {
     char *pa = (char *)&o;
     igObject_InitHeader(&o);
     o.f8 = 0;
-    o.vt = &DAT_00526600[0];
+    o.vt = &g_igPointSpriteExt_vtable[0];
     o.f16 = 0;
     o.f24 = 0;
     igMatrix44f_SetIdentity((float *)&o.t[8]);
@@ -63,7 +63,7 @@ int igPointSpriteExt_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)(pa + 232));
     igMatrix44f_SetIdentity((float *)(pa + 296));
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00526600[0];
+    o.vt = &g_igPointSpriteExt_vtable[0];
     FUN_001338d0(&o.f24, -1);
     FUN_0014c580((O_14c580 *)&o, 0);
     return r;
@@ -71,7 +71,7 @@ int igPointSpriteExt_GetVTable(void) {
 
 O *FUN_0014c440(O *arg0, short arg1) {
     if (arg0) {
-        arg0->vt = &DAT_00526600[0];
+        arg0->vt = &g_igPointSpriteExt_vtable[0];
         if (&arg0->m24) {
             S1 *t0 = arg0->m24;
             if (t0) { t0->f4 -= 1; if ((t0->f4 & 0x7fffff) == 0) igObject_Destroy(t0); }
@@ -119,7 +119,7 @@ void FUN_0014c670(void)
     igMetaObject_RunStaticInit(igPointSpriteExt_Register);
 }
 
-static igMetaObjectCallback g_igPointSpriteExt_callbackList[] = { FUN_0014a0e0, FUN_0014ba20, 0 };
+static igMetaObjectCallback g_igPointSpriteExt_callbackList[] = { igVisualContext_EnsureRegistered, igVertexArray_EnsureRegistered, 0 };
 
 void igPointSpriteExt_Register(void) {
     FUN_00149bc0();
@@ -235,11 +235,11 @@ void igPointSpriteExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPointSpriteExt_ctorTable, 0x12);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
     ((igMetaField *)temp_s2)->_persistent = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0014b980();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
     igFloatMetaField_SetDefault(temp_v0, 1.0f);

@@ -3,14 +3,14 @@ igMetaField *g_beNDMWShopCtrlSales_salesItemListMetaField;
 igMetaField *g_beNDMWShopCtrlSales_decideListMetaField;
 
 void beNDMWShopCtrlSales_Create(int arg0) {
-    FUN_003b6cf0();
+    beNDMWShopCtrlSales_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopCtrlSales_metaObject, arg0);
 }
 
-void *FUN_003b6c00(void) {
+void *beNDMWShopCtrlSales_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWShopCtrlSales_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003b6cf0();
+        beNDMWShopCtrlSales_EnsureRegistered();
     }
     return g_beNDMWShopCtrlSales_metaObject;
 }
@@ -27,23 +27,23 @@ int beNDMWShopCtrlSales_GetVTable(void) {
     obj.w17 = 0;
     obj.w18 = 0;
     obj.w19 = 0;
-    obj.vt = &DAT_0053f8e0[0];
+    obj.vt = &g_beNDMWShopCtrlSales_vtable[0];
     obj.w24 = 0;
     obj.w25 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053f8e0[0];
+    obj.vt = &g_beNDMWShopCtrlSales_vtable[0];
     FUN_00226990(&obj.w25, -1);
-    FUN_003b6090((void **)&obj.w24, (long long)(-1));
+    igSmartPointer_beNDMWItemBaseList_Destruct((void **)&obj.w24, (long long)(-1));
     FUN_003b6770((int **)&obj, (long long)0);
     return t;
 }
 
-void FUN_003b6cf0(void)
+void beNDMWShopCtrlSales_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopCtrlSales_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopCtrlSales_callbackList[] = { FUN_003c9210, igBoolList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShopCtrlSales_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, igBoolList_EnsureRegistered, 0 };
 
 void *beNDMWShopCtrlSales_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -52,7 +52,7 @@ void *beNDMWShopCtrlSales_Register(void) {
         &g_beNDMWShopCtrlSales_metaObject,
         beNDMWListCtrl_Register,
         beNDMWListCtrl_GetPublishedMetaObject,
-        beNDMWShopCtrlSales_GetMetaObject,
+        beNDMWShopCtrlSales_GetMetaObjectFunction,
         "beNDMWShopCtrlSales",
         0x68, /* instance size */
         beNDMWShopCtrlSales_GetVTable,
@@ -62,9 +62,9 @@ void *beNDMWShopCtrlSales_Register(void) {
     );
 }
 
-void beNDMWShopCtrlSales_GetMetaObject(void)
+void beNDMWShopCtrlSales_GetMetaObjectFunction(void)
 {
-    FUN_003b6c00();
+    beNDMWShopCtrlSales_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWShopCtrlSales_ctorTable[] = {
@@ -94,7 +94,7 @@ void beNDMWShopCtrlSales_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlSales_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9130();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;

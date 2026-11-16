@@ -13,11 +13,11 @@ extern "C" int beMessenger_AppendVec3(int, float *);
 extern "C" int beMessenger_EnqueueSelected(int, const void *, int);
 extern "C" int beMessenger_PrepareDelayedSelection(int, const void *, int, int);
 extern "C" int strcmp(...);
-extern "C" int Gap__Bec__beNDMWMdlItem__vfunc_35(int dummy0, int arg1);
+extern "C" int beNDMWMdlItem_IsKind(int dummy0, int arg1);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int Gap__Core__igObject__vfunc_23(...);
-extern "C" int Gap__Bec__beNDMWMdlItem__vfunc_20(void);
+extern "C" int beBaseInfoManager_Start(...);
+extern "C" int beNDMWMdlItem_GetMeta(void);
 extern "C" int beNDMWItemWeapon_SetRandom(...);
 extern "C" int beNDMWItemBlueArmor_SetRandom(...);
 extern "C" int beNDMWItemYellowArmor_SetRandom(...);
@@ -50,19 +50,19 @@ extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo);
-extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_37(beNDMWMdlItem *p0, int a1);
+extern "C" void beNDMWMdlItem_RegisterReceiver(beNDMWMdlItem *p0, int a1);
 extern "C" int g_beNDMWMdlItem_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
-extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_23(beNDMWMdlItem *self);
-extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_32(beNDMWMdlItem *arg0);
+extern "C" void beNDMWMdlItem_Start(beNDMWMdlItem *self);
+extern "C" void beNDMWMdlItem_Prepare(beNDMWMdlItem *arg0);
 struct Prop { char pad[20]; igObject *f20; };
 struct ParentInfo : public igObject { char *_name; };
 struct Rec { int p[3]; int f12; };
 extern "C" igObject * beBaseInfoDataList_Create(...);
-extern "C" igObject *FUN_003c13f0(...);
+extern "C" igObject *beNDMWMdlItemInfoWork_Create(...);
 extern "C" igObject *beNDMWItemDisk_Create(...);
-extern "C" igObject *FUN_003c83c0(...);
-extern "C" igObject *FUN_003c8240(...);
+extern "C" igObject *beNDMWItemInstant_Create(...);
+extern "C" igObject *beNDMWItemImportant_Create(...);
 extern "C" igObject *beNDMWItemAbilityChip_Create(...);
 extern "C" igObject *beNDMWItemWeapon_Create(...);
 extern "C" igObject *beNDMWItemBlueArmor_Create(...);
@@ -87,7 +87,7 @@ struct Store {
         slot = (int)held2;
     }
 };
-extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info);
+extern "C" void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info);
 struct PropertyValueObj { char p[252]; int f252; unsigned char f256; char p257[3]; int f260; };
 struct PropertyEntry { char p[16]; int f16; PropertyValueObj *q; };
 /* matching construct: inline release helper reproduces the retail inlined refcount release */
@@ -98,9 +98,9 @@ struct RefRelease { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlItem_OnErase(beNDMWMdlItem *arg0, beBaseInfoRam *arg1);
 class MdlItemVt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void exit(beBaseInfoRam *ram); };
-extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRam *ram);
 struct ItemRecord { char p[20]; int f20; };
 struct PropertyFolder { char p[12]; igObjectList *f12; };
 struct PropertyByteArrayHolder { char p[12]; igUnsignedCharList *f12; };
@@ -118,8 +118,8 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
 } };
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
 class MdlItemVirtual { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42();  virtual void vX(beNDMWGameRamInfoRam *); char p[16]; };
-extern "C" void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRam *arg1);
-extern "C" void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlItem_OnAction1(MdlItemVirtual *arg0, beNDMWGameRamInfoRam *arg1);
+extern "C" void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram);
 extern "C" int beTargetObj_SelectTarget(void *, const void *, const char *);
 extern "C" float beTargetObj_GetTargetDistanceSq(void);
 extern "C" int beTargetObj_GetTargetRamNo(void);
@@ -170,11 +170,11 @@ void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo
     beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
 }
 
-int Gap__Bec__beNDMWMdlItem__vfunc_35(int dummy0, int arg1) {
+int beNDMWMdlItem_IsKind(int dummy0, int arg1) {
     return strcmp(arg1, "KIND_ITEM") == 0;
 }
 
-void Gap__Bec__beNDMWMdlItem__vfunc_37(beNDMWMdlItem *p0, int a1)
+void beNDMWMdlItem_RegisterReceiver(beNDMWMdlItem *p0, int a1)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, a1, "DROPITEM");
 }
@@ -182,12 +182,12 @@ void Gap__Bec__beNDMWMdlItem__vfunc_37(beNDMWMdlItem *p0, int a1)
 /* After the shared igObject slot 23 body, caches the viewer scene-info manager registered with the
  * insight core (_viewerSIManager), found by its class metaObject; the same binding step as the
  * other managers' slot 23. */
-void Gap__Bec__beNDMWMdlItem__vfunc_23(beNDMWMdlItem *self) {
-    Gap__Core__igObject__vfunc_23();
+void beNDMWMdlItem_Start(beNDMWMdlItem *self) {
+    beBaseInfoManager_Start();
     self->_viewerSIManager = igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
 }
 
-void Gap__Bec__beNDMWMdlItem__vfunc_32(beNDMWMdlItem *arg0) {
+void beNDMWMdlItem_Prepare(beNDMWMdlItem *arg0) {
     igDataList *l;
     int n;
     int i;
@@ -220,7 +220,7 @@ template <class Ref> static inline void storeItem(const igSmartPointer<beNDMWMdl
     w2->_itemObject = (int)held2;
 }
 
-void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info) {
+void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info) {
     ParentInfo *parent = (ParentInfo *)info->_parentInfo;
     void *alloc;
     Prop *prop;
@@ -236,7 +236,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     prop = igProperty_FindByName((void *)info->_dataList, g_propertyNameField[0], "ONE");
     ALLOC(alloc, kIGMemoryPoolHandleUser1)
     {
-    igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)FUN_003c13f0(alloc));
+    igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)beNDMWMdlItemInfoWork_Create(alloc));
     held = (igObject *)work.p;
     if (held != 0) held->_refCount = held->_refCount + 1;
     REL(prop->f20)
@@ -273,14 +273,14 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     }
     case 1: {
         ALLOC(alloc, kIGMemoryPoolHandleUser0)
-        ItemRefB h(FUN_003c83c0(alloc));
+        ItemRefB h(beNDMWItemInstant_Create(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemInstant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
     }
     case 2: {
         ALLOC(alloc, kIGMemoryPoolHandleUser0)
-        ItemRefC h(FUN_003c8240(alloc));
+        ItemRefC h(beNDMWItemImportant_Create(alloc));
         { beNDMWMdlItemInfoWork *w = work.p; beNDMWItemImportant_Set(h.p, w->_recNo); }
         storeItem(work, h);
         break;
@@ -344,7 +344,7 @@ static inline float DistanceSq(const float *a, const float *b) {
  * player who comes near; a named item shows its name over itself in that player's font, locks
  * itself to the player, blinks the name colour and keeps the label on the item's screen position
  * until the player walks away (then the item is released through slot 45). */
-void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram) {
+void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     beModelCtrlInfoRamData *ramData;
     beNDMWMdlItemInfoWork *work;
     igObjectList *locks;
@@ -554,7 +554,7 @@ void beNDMWMdlItem_Update(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     }
 }
 
-void Gap__Bec__beNDMWMdlItem__vfunc_43(beNDMWMdlItem *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlItem_OnErase(beNDMWMdlItem *arg0, beBaseInfoRam *arg1) {
     PropertyEntry *s3;
     PropertyValueObj *q;
     int idx;
@@ -609,7 +609,7 @@ static inline void adoptDataList(beBaseInfoRam *ram, igObject *created) {
     setDataList(ram, list);
 }
 
-void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram) {
+void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         void *a = igObject_GetAllocator(ram);
         void *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
@@ -621,7 +621,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_44(beNDMWMdlItem *self, beBaseInfoRam *ram) 
         ((MdlItemVt *)self)->exit(ram);
 }
 
-void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRam *arg1) {
+void beNDMWMdlItem_OnAction1(MdlItemVirtual *arg0, beNDMWGameRamInfoRam *arg1) {
     beNDMWMdlItem *self = (beNDMWMdlItem *)arg0;
     igObject *s0;
     beNDMWMdlItemInfoWork *s5;
@@ -719,7 +719,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_45(MdlItemVirtual *arg0, beNDMWGameRamInfoRa
     }
 }
 
-int Gap__Bec__beNDMWMdlItem__vfunc_20(void)
+int beNDMWMdlItem_GetMeta(void)
 {
     return g_beNDMWMdlItem_metaObject[0];
 }

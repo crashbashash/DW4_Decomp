@@ -38,10 +38,10 @@ int igViewModel_GetVTable(void) {
     igObject_InitHeader(u.b);
     p38 = &u.b[8];
     *(int *)p38 = 0;
-    u.vt = (int)&DAT_00542040[0];
+    u.vt = (int)&g_igViewModel_vtable[0];
     igMatrix44f_SetIdentity(&u.b[12]);
     r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
-    u.vt = (int)&DAT_00540e30[0];
+    u.vt = (int)&g_igModel_vtable[0];
     if (p38 != 0) {
         v1 = *(int **)p38;
         if (v1 != 0) {

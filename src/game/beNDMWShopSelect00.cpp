@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 
 extern "C" void *StringPool_Allocate(int size);
 extern "C" void *StringPool_Construct(void *pool);
@@ -106,6 +107,7 @@ extern "C" int g_beNDMWShopSelect00_metaObject[4];
 
 extern "C" void beNDMWShopSelect00_Setup(beNDMWShopSelect00 *self);
 extern "C" void beNDMWShopSelect01_Setup(beNDMWShopSelect01 *self);
+extern "C" void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self);
 extern "C" void beNDMWShopSelect03_Setup(beNDMWShopSelect03 *self);
 extern "C" void beNDMWShopSelect11_Setup(beNDMWShopSelect11 *self);
 extern "C" void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self);
@@ -115,6 +117,27 @@ extern "C" void beNDMWWindow_ShowPaddedDigits(beNDMWWindow *self, int value, uns
 extern "C" void beNDMWShopSelect52_Setup(beNDMWShopSelect52 *self);
 extern "C" void beNDMWShopSelectA0_Setup(beNDMWShopSelectA0 *self);
 extern "C" void beNDMWShopSelectB0_Setup(beNDMWShopSelectB0 *self);
+extern "C" char TALKFONT04[];
+extern "C" char text_font01[];
+extern "C" char text_font02[];
+extern "C" char text_font03[];
+extern "C" char text_font04[];
+extern "C" char text_i_messcr[];
+extern "C" char ISUSE_10[];
+extern "C" char PLAYERNAME_5[];
+extern "C" char DATABASE_13[];
+extern "C" char text_shinka[];
+extern "C" char GETDATABASE_12[];
+extern "C" char DIGIMONNO_7[];
+extern "C" char NAME_7[];
+extern "C" int igProperty_GetRecordByte(int object, const char *name);
+extern "C" PropertyRecord *igProperty_GetRecordFolder(int object, const char *name);
+extern "C" int beMessenger_SendNamed(int messenger, const char *group, const char *name, int ramNo, const char *message);
+extern "C" const char *beDataBase_GetRecordString(int database, int record, const char *key);
+extern "C" void beNDMWWindow_QueueObjectText(void *self, const char *type, const char *name, const igSmartPointer<igObject> &object, const char *align);
+/* Font slots of the four party rows of ShopSelect02. */
+typedef struct PlayerFontTable { const char *fonts[4]; } __attribute__((aligned(16))) PlayerFontTable;
+extern "C" const PlayerFontTable g_shopPlayerNameFonts;
 extern "C" int beNDMWShopSelectB0_GetMeta(void);
 extern "C" int beNDMWShopSelectA0_GetMeta(void);
 extern "C" int beNDMWShopSelect52_GetMeta(void);
@@ -154,7 +177,7 @@ public:
     StringRef(char *s, int retain) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { StringToken_Release(p); }
 };
-extern "C" int StringList_AppendRetained(int list, StringRef *token);
+extern "C" int StringList_AppendRetained(int list, const StringRef &token);
 
 /* Appends a pooled copy of `text` to a window string list; a null text appends a null token. */
 #define INTERN_APPEND(list, text) { \
@@ -165,7 +188,18 @@ extern "C" int StringList_AppendRetained(int list, StringRef *token);
         token = StringPool_Intern(StringPool_Get(), (text)); \
     } \
     StringRef held(token); \
-    StringList_AppendRetained(list, &held); }
+    StringList_AppendRetained(list, held); }
+
+/* A pooled copy of `text`; a null text gives a null token. */
+static inline char *StringPool_InternText(const char *text) {
+    char *token;
+    if (text == 0) {
+        token = 0;
+    } else {
+        token = StringPool_Intern(StringPool_Get(), text);
+    }
+    return token;
+}
 
 /* Interns `name` as the window's SELECTCTRL receiver name, dropping the previous one. */
 #define SET_INFO_NAME(self, name) { \
@@ -180,7 +214,7 @@ void beNDMWShopSelect00_Setup(beNDMWShopSelect00 *self) {
             INTERN_APPEND(self->_textCloseNameList, font000_4)
         } else {
             StringRef held((char *)self->_panelName, 1);
-            StringList_AppendRetained(self->_textCloseNameList, &held);
+            StringList_AppendRetained(self->_textCloseNameList, held);
         }
         beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
     }
@@ -219,6 +253,75 @@ void beNDMWShopSelect01_Setup(beNDMWShopSelect01 *self) {
     self->_offsetPos[0] = 0;
     self->_offsetPos[1] = 0;
     self->_offsetPos[2] = 0;
+    self->_isNoCancel = 0;
+}
+
+void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self) {
+    switch (self->_entCode) {
+    case -1: {
+        PlayerFontTable fonts = g_shopPlayerNameFonts;
+        igIntList *players = (igIntList *)self->_playerNoList;
+        for (int i = 0; i < players->_count; i++) {
+            int playerNo = ((int *)players->_data)[i];
+            beMessenger_SelectGroup(self->_messenger, GAMERAM_10);
+            beMessenger_AppendInt(self->_messenger, playerNo);
+            beMessenger_DispatchSelected(self->_messenger, GETPLAYER_7);
+            int player = beMessenger_GetObject(self->_messenger, 0);
+            igProperty_GetRecordByte(player, ISUSE_10);
+            igObjectList *names = (igObjectList *)igProperty_GetRecordFolder(player, PLAYERNAME_5)->value;
+            if (names->_count > 0) {
+                igSmartPointer<igObject> name(*(igObject **)names->_data, kRetainReference);
+                beNDMWWindow_QueueObjectText(self, TALKFONT01_2, fonts.fonts[i], igSmartPointer<igObject>(name), LEFT_5);
+            }
+            beMessenger_SendNamed(self->_messenger, DATABASE_13, text_shinka, 0, GETDATABASE_12);
+            beNDMWWindow_QueueText(self, TALKFONT04, fonts.fonts[i],
+                beDataBase_GetRecordString(beMessenger_GetObject(self->_messenger, 0), igProperty_GetRecord(player, DIGIMONNO_7)->value, NAME_7),
+                LEFT_5);
+            players = (igIntList *)self->_playerNoList;
+        }
+        self->_selectMax = ((igIntList *)self->_playerNoList)->_count;
+        break;
+    }
+    case 1262: case 1268: case 2003: case 2005: case 2008:
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)));
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, self->_entCode);
+        self->_selectMax = 2;
+        break;
+    case 2: case 3: case 4:
+        self->_selectMax = 4;
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)));
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)));
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font04)));
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 2030);
+        break;
+    case 1:
+        self->_selectMax = 3;
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)));
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
+        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
+        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)));
+        beNDMWWindow_RunMessageScript(self, txt_shop_lua_3, 2034);
+        break;
+    }
+    SET_INFO_NAME(self, text_i_messcr)
+    self->_offsetPos[0] = 0;
+    self->_offsetPos[1] = 0;
+    self->_offsetPos[2] = 0;
+    self->_startPoint = 0;
+    if (self->_entCode == 2003) {
+        self->_isNoCancel = 1;
+        return;
+    }
     self->_isNoCancel = 0;
 }
 

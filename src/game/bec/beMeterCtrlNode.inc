@@ -3,7 +3,7 @@ igMetaField *g_beMeterCtrlNode_isMeterMetaField;
 igMetaField *g_beMeterCtrlNode_timeListMetaField;
 igMetaField *g_beMeterCtrlNode_numberOffsetMetaField;
 
-igMetaObject *FUN_00356cc0(void) {
+igMetaObject *beMeterCtrlNode_GetOrCreateMetaObject(void) {
     if (g_beMeterCtrlNode_metaObject == 0) {
         g_beMeterCtrlNode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -13,7 +13,7 @@ igMetaObject *FUN_00356cc0(void) {
 void *beMeterCtrlNode_ResolveMetaObject(void) {
     igMetaObject *g = g_beMeterCtrlNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00356de0();
+        beMeterCtrlNode_EnsureRegistered();
     }
     return g_beMeterCtrlNode_metaObject;
 }
@@ -27,16 +27,16 @@ int beMeterCtrlNode_GetVTable(void) {
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w7 = 0;
-    obj.vt = &DAT_00537120[0];
+    obj.vt = &g_beMeterCtrlNode_vtable[0];
     obj.w9 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00537120[0];
+    obj.vt = &g_beMeterCtrlNode_vtable[0];
     FUN_00195190(&obj.w9, -1);
     FUN_00195a90(&obj, 0);
     return t;
 }
 
-void FUN_00356de0(void)
+void beMeterCtrlNode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMeterCtrlNode_Register);
 }

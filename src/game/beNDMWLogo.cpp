@@ -7,14 +7,14 @@ extern "C" int beLua__RunNamedChunk(int, int *, int);
 extern "C" void beMessenger_SelectReceivers(int, const char *, const char *, int);
 extern "C" void beMessenger_AppendString(int, const char *);
 extern "C" void beMessenger_DispatchSelected(int, const char *);
-extern "C" int Gap__Bec__beNDMWLogo__vfunc_30(void);
-extern "C" int Gap__Bec__beNDMWLogo__vfunc_20(void);
+extern "C" int beNDMWLogo_GetInfoMeta(void);
+extern "C" int beNDMWLogo_GetMeta(void);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, int *);
 extern "C" int FUN_003c22e0(...);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void Gap__Bec__beNDMWLogo__vfunc_32(beNDMWLogo *arg0);
+extern "C" void beNDMWLogo_Prepare(beNDMWLogo *arg0);
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 extern "C" void **FUN_0044a7f0(struct Ref **self, short flag);
 extern "C" int text_txt_Tar_lua[4];
@@ -38,10 +38,10 @@ extern "C" void FUN_0044a8d0(O *arg0);
 extern "C" int g_beNDMWLogoInfo_metaObject[4];
 extern "C" int g_beNDMWLogo_metaObject[4];
 extern "C" int LOGO[4];
-extern "C" void Gap__Bec__beNDMWLogo__vfunc_29(beNDMWLogo *self, int info);
-extern "C" int Gap__Bec__beNDMWLogo__vfunc_34(beNDMWLogo *arg0, beBaseInfoRam *arg1, void *arg2);
+extern "C" void beNDMWLogo_OnAddRam(beNDMWLogo *self, int info);
+extern "C" int beNDMWLogo_OnMessage(beNDMWLogo *arg0, beBaseInfoRam *arg1, void *arg2);
 
-void Gap__Bec__beNDMWLogo__vfunc_32(beNDMWLogo *arg0) {
+void beNDMWLogo_Prepare(beNDMWLogo *arg0) {
     if (arg0->_padManager == 0) {
         arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
     }
@@ -115,19 +115,19 @@ void FUN_0044a8d0(O *arg0) {
     beMessenger_DispatchSelected(arg0->m, SWITCH_11);
 }
 
-int Gap__Bec__beNDMWLogo__vfunc_30(void)
+int beNDMWLogo_GetInfoMeta(void)
 {
     return g_beNDMWLogoInfo_metaObject[0];
 }
 
 /* Registers the logo controller with its messenger as the receiver named by the "LOGO" string.
  * Same one-call wrapper as beNDMWTitle2 and beFont slot 29. */
-void Gap__Bec__beNDMWLogo__vfunc_29(beNDMWLogo *self, int info)
+void beNDMWLogo_OnAddRam(beNDMWLogo *self, int info)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &LOGO[0]);
 }
 
-int Gap__Bec__beNDMWLogo__vfunc_34(beNDMWLogo *arg0, beBaseInfoRam *arg1, void *arg2) {
+int beNDMWLogo_OnMessage(beNDMWLogo *arg0, beBaseInfoRam *arg1, void *arg2) {
     if (arg1->_dataList == 0) {
         return 1;
     }
@@ -135,7 +135,7 @@ int Gap__Bec__beNDMWLogo__vfunc_34(beNDMWLogo *arg0, beBaseInfoRam *arg1, void *
     return 1;
 }
 
-int Gap__Bec__beNDMWLogo__vfunc_20(void)
+int beNDMWLogo_GetMeta(void)
 {
     return g_beNDMWLogo_metaObject[0];
 }

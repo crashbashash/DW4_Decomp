@@ -8,13 +8,13 @@ extern "C" int igObject_Destroy(struct R *);
 extern "C" int igObject_GetAllocator(struct S *);
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void Gap__igMoviePlugin__vfunc_21(struct S *arg0, int arg1);
+extern "C" void igMoviePlugin_Attach(struct S *arg0, int arg1);
 extern "C" int igInsightCore_RemoveManager(int, int);
-extern "C" void Gap__igMoviePlugin__vfunc_22(void *arg0, int arg1);
+extern "C" void igMoviePlugin_Detach(void *arg0, int arg1);
 extern "C" int g_igMoviePlugin_metaObject[4];
-extern "C" int Gap__igMoviePlugin__vfunc_20(void);
+extern "C" int igMoviePlugin_GetMeta(void);
 
-void Gap__igMoviePlugin__vfunc_21(struct S *arg0, int arg1) {
+void igMoviePlugin_Attach(struct S *arg0, int arg1) {
     int var_v0;
     struct R *temp_a0;
     var_v0 = igObject_GetAllocator(arg0);
@@ -31,11 +31,11 @@ void Gap__igMoviePlugin__vfunc_21(struct S *arg0, int arg1) {
     igInsightCore_AddManager(arg1, arg0->f8);
 }
 
-void Gap__igMoviePlugin__vfunc_22(void *arg0, int arg1) {
+void igMoviePlugin_Detach(void *arg0, int arg1) {
     igInsightCore_RemoveManager(arg1, *(int *)((char *)(arg0) + 8));
 }
 
-int Gap__igMoviePlugin__vfunc_20(void)
+int igMoviePlugin_GetMeta(void)
 {
     return g_igMoviePlugin_metaObject[0];
 }

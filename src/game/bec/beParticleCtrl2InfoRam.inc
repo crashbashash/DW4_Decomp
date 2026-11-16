@@ -3,10 +3,10 @@ igMetaField *g_beParticleCtrl2InfoRam_transformMetaField;
 igMetaField *g_beParticleCtrl2InfoRam_particleTimerMetaField;
 igMetaField *g_beParticleCtrl2InfoRam_workMetaField;
 
-void *FUN_0034bcc0(void) {
+void *beParticleCtrl2InfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beParticleCtrl2InfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034bec0();
+        beParticleCtrl2InfoRam_EnsureRegistered();
     }
     return g_beParticleCtrl2InfoRam_metaObject;
 }
@@ -17,13 +17,13 @@ int beParticleCtrl2InfoRam_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w[9] = 0;
-    obj.vt = &DAT_00538740[0];
+    obj.vt = &g_beParticleCtrl2InfoRam_vtable[0];
     obj.w[10] = 0;
     obj.w[11] = 0;
     obj.w[12] = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00538740[0];
-    FUN_0034be40((ObjectRefWord *)(&obj.w[12]), -1);
+    obj.vt = &g_beParticleCtrl2InfoRam_vtable[0];
+    igSmartPointer_beParticleCtrl2InfoWork_Destruct((ObjectRefWord *)(&obj.w[12]), -1);
     FUN_0034bdc0((void **)(&obj.w[11]), (short)(-1));
     FUN_001a7580(&obj.w[10], -1);
     FUN_0033e920((S *)((int *)&obj), (long long)0);
@@ -48,7 +48,7 @@ void **FUN_0034bdc0(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_0034be40(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_beParticleCtrl2InfoWork_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -61,12 +61,12 @@ ObjectRefWord *FUN_0034be40(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_0034bec0(void)
+void beParticleCtrl2InfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beParticleCtrl2InfoRam_Register);
 }
 
-static igMetaObjectCallback g_beParticleCtrl2InfoRam_callbackList[] = { FUN_001964d0, FUN_0036e6d0, FUN_0034c230, 0 };
+static igMetaObjectCallback g_beParticleCtrl2InfoRam_callbackList[] = { igTransform_EnsureRegistered, ParticleTimer_EnsureRegistered, beParticleCtrl2InfoWork_EnsureRegistered, 0 };
 
 void *beParticleCtrl2InfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -75,7 +75,7 @@ void *beParticleCtrl2InfoRam_Register(void) {
         &g_beParticleCtrl2InfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beParticleCtrl2InfoRam_GetMetaObject,
+        beParticleCtrl2InfoRam_GetMetaObjectFunction,
         "beParticleCtrl2InfoRam",
         0x38, /* instance size */
         beParticleCtrl2InfoRam_GetVTable,
@@ -85,9 +85,9 @@ void *beParticleCtrl2InfoRam_Register(void) {
     );
 }
 
-void beParticleCtrl2InfoRam_GetMetaObject(void)
+void beParticleCtrl2InfoRam_GetMetaObjectFunction(void)
 {
-    FUN_0034bcc0();
+    beParticleCtrl2InfoRam_GetMetaObject();
 }
 
 static FieldFactory g_beParticleCtrl2InfoRam_ctorTable[] = {
@@ -122,11 +122,11 @@ void beParticleCtrl2InfoRam_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beParticleCtrl2InfoRam_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransform_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0036e5c0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)ParticleTimer_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034c080();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beParticleCtrl2InfoWork_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beParticleCtrl2InfoRam_fieldTable, g_beParticleCtrl2InfoRam_fieldHandles, g_beParticleCtrl2InfoRam_fieldOffsets, temp_s2);
 }
 

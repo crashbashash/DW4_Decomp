@@ -1,9 +1,9 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__beLightCtrl__vfunc_32(void);
-extern "C" int Gap__Bec__beLightCtrl__vfunc_30(void);
-extern "C" void Gap__Bec__beLightCtrl__vfunc_31(void);
-extern "C" int Gap__Bec__beLightCtrl__vfunc_20(void);
+extern "C" void beLightCtrl_Prepare(void);
+extern "C" int beLightCtrl_GetInfoMeta(void);
+extern "C" void beLightCtrl_UpdateRam(void);
+extern "C" int beLightCtrl_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int FUN_0035bfb0(...);
 extern "C" int beMessenger_GetString(int, int);
@@ -13,7 +13,7 @@ extern "C" void *igProperty_FindByName(int, int, int);
 extern "C" int g_beLightCtrlInfo_metaObject[4];
 extern "C" int g_beLightCtrl_metaObject[4];
 extern "C" char LIGHTCTRL[];
-extern "C" void Gap__Bec__beLightCtrl__vfunc_29(beLightCtrl * p0, int p1, char * p2);
+extern "C" void beLightCtrl_OnAddRam(beLightCtrl * p0, int p1, char * p2);
 extern "C" int g_propertyNameField[4];
 struct Light {
     virtual void d0();
@@ -52,27 +52,27 @@ struct Light {
 };
 struct V3 { float x; float y; float z; };
 struct V4 { float x; float y; float z; int w; };
-extern "C" int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam *arg1, int arg2);
+extern "C" int beLightCtrl_OnMessageText(beLightCtrl *arg0, beBaseInfoRam *arg1, int arg2);
 
-void Gap__Bec__beLightCtrl__vfunc_32(void)
+void beLightCtrl_Prepare(void)
 {
 }
 
-int Gap__Bec__beLightCtrl__vfunc_30(void)
+int beLightCtrl_GetInfoMeta(void)
 {
     return g_beLightCtrlInfo_metaObject[0];
 }
 
-void Gap__Bec__beLightCtrl__vfunc_29(beLightCtrl * p0, int p1, char * p2)
+void beLightCtrl_OnAddRam(beLightCtrl * p0, int p1, char * p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, LIGHTCTRL);
 }
 
-void Gap__Bec__beLightCtrl__vfunc_31(void)
+void beLightCtrl_UpdateRam(void)
 {
 }
 
-int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
+int beLightCtrl_OnMessageText(beLightCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
     beLightCtrlInfo *s1;
     V3 a;
     Light *l;
@@ -107,7 +107,7 @@ int Gap__Bec__beLightCtrl__vfunc_33(beLightCtrl *arg0, beBaseInfoRam *arg1, int 
     }
 }
 
-int Gap__Bec__beLightCtrl__vfunc_20(void)
+int beLightCtrl_GetMeta(void)
 {
     return g_beLightCtrl_metaObject[0];
 }

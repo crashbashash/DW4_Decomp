@@ -5,7 +5,7 @@ igMetaObject *igLightStateSet_GetMetaObject(void)
 {
     igMetaObject *g = g_igLightStateSet_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019da60();
+        igLightStateSet_EnsureRegistered();
     return g_igLightStateSet_metaObject;
 }
 
@@ -18,10 +18,10 @@ int igLightStateSet_GetVTable(void) {
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[6] = 0;
-    obj.vt = &DAT_00528bc0[0];
+    obj.vt = &g_igLightStateSet_vtable[0];
     obj.w[7] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00528bc0[0];
+    obj.vt = &g_igLightStateSet_vtable[0];
     FUN_0019d9e0((void * *)&obj.w[7], -1);
     FUN_00195a90((struct T_195a90 *)&obj, 0);
     return r;
@@ -45,12 +45,12 @@ void **FUN_0019d9e0(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0019da60(void)
+void igLightStateSet_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLightStateSet_Register);
 }
 
-static igMetaObjectCallback g_igLightStateSet_callbackList[] = { FUN_00136120, 0 };
+static igMetaObjectCallback g_igLightStateSet_callbackList[] = { igLightStateAttrList_EnsureRegistered, 0 };
 
 void igLightStateSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();

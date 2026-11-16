@@ -20,7 +20,7 @@ int igMatrixStack_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052bd50[0];
+    obj.vt = &g_igMatrixStack_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

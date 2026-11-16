@@ -11,7 +11,7 @@ igMetaObject *igParticleAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igParticleAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00134e50();
+        igParticleAttr_EnsureRegistered();
     return g_igParticleAttr_metaObject;
 }
 
@@ -21,10 +21,10 @@ int igParticleAttr_GetVTable(void) {
      Q *q;
 
      igObject_InitHeader(&o);
-     o.vt = &DAT_00523280[0];
+     o.vt = &g_igParticleAttr_vtable[0];
      o.s = 0;
      r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-     o.vt = &DAT_00523280[0];
+     o.vt = &g_igParticleAttr_vtable[0];
      if (&o.s != 0) {
          q = o.s;
          if (q != 0) {
@@ -37,7 +37,7 @@ int igParticleAttr_GetVTable(void) {
      return r;
  }
 
-void FUN_00134e50(void)
+void igParticleAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igParticleAttr_Register);
 }

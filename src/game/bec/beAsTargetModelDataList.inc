@@ -1,19 +1,19 @@
 igMetaObject *g_beAsTargetModelDataList_metaObject;
 
-igMetaObject *FUN_0036b600(void) {
+igMetaObject *beAsTargetModelDataList_GetOrCreateMetaObject(void) {
     if (g_beAsTargetModelDataList_metaObject == 0) {
         g_beAsTargetModelDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beAsTargetModelDataList_metaObject;
 }
 
-void *FUN_0036b650(void) {
+void *beAsTargetModelDataList_GetMetaObject(void) {
     unsigned char b;
     if (((void * *)&g_beAsTargetModelDataList_metaObject)[0] != 0) {
         b = (*(int *)((char *)(((void * *)&g_beAsTargetModelDataList_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_0036b6e0();
+    beAsTargetModelDataList_EnsureRegistered();
 done:
     return ((void * *)&g_beAsTargetModelDataList_metaObject)[0];
 }
@@ -22,16 +22,16 @@ int beAsTargetModelDataList_GetVTable(void) {
     struct Obj_36b6a0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005345a0[0];
+    obj.vt = &g_beAsTargetModelDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0036b6e0(void)
+void beAsTargetModelDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAsTargetModelDataList_Register);
 }
 
-static igMetaObjectCallback g_beAsTargetModelDataList_callbackList[] = { FUN_0036b8c0, 0 };
+static igMetaObjectCallback g_beAsTargetModelDataList_callbackList[] = { beAsTargetModelData_EnsureRegistered, 0 };
 
 void *beAsTargetModelDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -40,7 +40,7 @@ void *beAsTargetModelDataList_Register(void) {
         &g_beAsTargetModelDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beAsTargetModelDataList_GetMetaObject,
+        beAsTargetModelDataList_GetMetaObjectFunction,
         "beAsTargetModelDataList",
         0x14, /* instance size */
         beAsTargetModelDataList_GetVTable,
@@ -50,8 +50,8 @@ void *beAsTargetModelDataList_Register(void) {
     );
 }
 
-void beAsTargetModelDataList_GetMetaObject(void)
+void beAsTargetModelDataList_GetMetaObjectFunction(void)
 {
-    FUN_0036b650();
+    beAsTargetModelDataList_GetMetaObject();
 }
 

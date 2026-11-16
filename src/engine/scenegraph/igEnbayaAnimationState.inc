@@ -6,7 +6,7 @@ igMetaObject *igEnbayaAnimationState_GetMetaObject(void)
 {
     igMetaObject *g = g_igEnbayaAnimationState_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a2030();
+        igEnbayaAnimationState_EnsureRegistered();
     return g_igEnbayaAnimationState_metaObject;
 }
 
@@ -20,16 +20,16 @@ int igEnbayaAnimationState_GetVTable(void) {
     char *p48;
     char *pB8;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00529550[0];
+    u.vt = (int)&g_igAnimationState_vtable[0];
     p48 = &u.b[8];
     *(int *)p48 = 0;
     p58 = &u.b[24];
     *(int *)p58 = 0;
     pB8 = &u.b[120];
     *(int *)pB8 = 0;
-    u.vt = (int)&DAT_00529170[0];
+    u.vt = (int)&g_igEnbayaAnimationState_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00529550[0];
+    u.vt = (int)&g_igAnimationState_vtable[0];
     if (pB8 != 0) {
         v1 = *(int **)pB8;
         if (v1 != 0) {
@@ -60,7 +60,7 @@ int igEnbayaAnimationState_GetVTable(void) {
     return r;
 }
 
-void FUN_001a2030(void)
+void igEnbayaAnimationState_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igEnbayaAnimationState_Register);
 }

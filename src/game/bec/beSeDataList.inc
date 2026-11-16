@@ -1,18 +1,18 @@
 igMetaObject *g_beSeDataList_metaObject;
 
-igMetaObject *FUN_00346120(void) {
+igMetaObject *beSeDataList_GetOrCreateMetaObject(void) {
     if (g_beSeDataList_metaObject == 0) {
         g_beSeDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSeDataList_metaObject;
 }
 
-igMetaObject *FUN_00346170(void)
+igMetaObject *beSeDataList_GetMetaObject(void)
 {
     igMetaObject *g = g_beSeDataList_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_00346200();
+        beSeDataList_EnsureRegistered();
     return g_beSeDataList_metaObject;
 }
 
@@ -20,16 +20,16 @@ int beSeDataList_GetVTable(void) {
     struct Obj_3461c0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00538ed0[0];
+    obj.vt = &g_beSeDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00346200(void)
+void beSeDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSeDataList_Register);
 }
 
-static igMetaObjectCallback g_beSeDataList_callbackList[] = { FUN_003463d0, 0 };
+static igMetaObjectCallback g_beSeDataList_callbackList[] = { beSeData_EnsureRegistered, 0 };
 
 void *beSeDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -38,7 +38,7 @@ void *beSeDataList_Register(void) {
         &g_beSeDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beSeDataList_GetMetaObject,
+        beSeDataList_GetMetaObjectFunction,
         "beSeDataList",
         0x14, /* instance size */
         beSeDataList_GetVTable,
@@ -48,8 +48,8 @@ void *beSeDataList_Register(void) {
     );
 }
 
-void beSeDataList_GetMetaObject(void)
+void beSeDataList_GetMetaObjectFunction(void)
 {
-    FUN_00346170();
+    beSeDataList_GetMetaObject();
 }
 

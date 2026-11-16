@@ -1,16 +1,16 @@
 igMetaObject *g_beFontGeomAttrPairList_metaObject;
 
-igMetaObject *FUN_00362360(void) {
+igMetaObject *beFontGeomAttrPairList_GetOrCreateMetaObject(void) {
     if (g_beFontGeomAttrPairList_metaObject == 0) {
         g_beFontGeomAttrPairList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beFontGeomAttrPairList_metaObject;
 }
 
-void *FUN_003623b0(void) {
+void *beFontGeomAttrPairList_GetMetaObject(void) {
     igMetaObject *g = g_beFontGeomAttrPairList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00362440();
+        beFontGeomAttrPairList_EnsureRegistered();
     }
     return g_beFontGeomAttrPairList_metaObject;
 }
@@ -19,16 +19,16 @@ int beFontGeomAttrPairList_GetVTable(void) {
     struct Obj_362400 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00535940[0];
+    obj.vt = &g_beFontGeomAttrPairList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00362440(void)
+void beFontGeomAttrPairList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beFontGeomAttrPairList_Register);
 }
 
-static igMetaObjectCallback g_beFontGeomAttrPairList_callbackList[] = { FUN_00362690, 0 };
+static igMetaObjectCallback g_beFontGeomAttrPairList_callbackList[] = { beFontGeomAttrPair_EnsureRegistered, 0 };
 
 void *beFontGeomAttrPairList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beFontGeomAttrPairList_Register(void) {
         &g_beFontGeomAttrPairList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beFontGeomAttrPairList_GetMetaObject,
+        beFontGeomAttrPairList_GetMetaObjectFunction,
         "beFontGeomAttrPairList",
         0x14, /* instance size */
         beFontGeomAttrPairList_GetVTable,
@@ -47,8 +47,8 @@ void *beFontGeomAttrPairList_Register(void) {
     );
 }
 
-void beFontGeomAttrPairList_GetMetaObject(void)
+void beFontGeomAttrPairList_GetMetaObjectFunction(void)
 {
-    FUN_003623b0();
+    beFontGeomAttrPairList_GetMetaObject();
 }
 

@@ -1,6 +1,6 @@
 igMetaObject *g_igTransformList_metaObject;
 
-igMetaObject *FUN_00195e70(void) {
+igMetaObject *igTransformList_GetOrCreateMetaObject(void) {
     if (g_igTransformList_metaObject == 0) {
         g_igTransformList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -11,7 +11,7 @@ igMetaObject *igTransformList_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransformList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00195f50();
+        igTransformList_EnsureRegistered();
     return g_igTransformList_metaObject;
 }
 
@@ -19,17 +19,17 @@ int igTransformList_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&DAT_0052b6f0[0];
+    tmp[0] = (int)&g_igTransformList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_00195f50(void)
+void igTransformList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransformList_Register);
 }
 
-static igMetaObjectCallback g_igTransformList_callbackList[] = { FUN_001964d0, 0 };
+static igMetaObjectCallback g_igTransformList_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
 void igTransformList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

@@ -9,18 +9,18 @@ igMetaObject *igFogAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igFogAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00137e30();
+        igFogAttr_EnsureRegistered();
     return g_igFogAttr_metaObject;
 }
 
 int igFogAttr_GetVTable(void) {
     struct Obj_137df0 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523b20[0];
+    obj.vt = &g_igFogAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00137e30(void)
+void igFogAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igFogAttr_Register);
 }

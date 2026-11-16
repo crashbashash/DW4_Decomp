@@ -73,22 +73,22 @@ int beModelCtrlNode2_TraversalFunction(igCommonTraversal *trav, beModelCtrlNode2
 long long beModelCtrlNode2_LocalTime(beModelCtrlNode2 *node, long long now);
 int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav);
 void beModelCtrlNode2_RegisterTraversalFunction(void);
-int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *self, beBaseInfoRam *ram);
-int Gap__Bec__beModelCtrlSCHitBox__vfunc_22(beModelCtrlSCHitBox *self, beBaseInfoRam *ram, int frames);
-int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *self, beBaseInfoRam *ram);
-void Gap__Bec__beModelCtrlSCEffect__vfunc_23(beModelCtrlSCEffect *self, beBaseInfoRam *ram);
-int Gap__Bec__beModelCtrlSCSound__vfunc_21(beModelCtrlSCSound *self, beBaseInfoRam *ram);
-void Gap__Bec__beModelCtrlSCSound__vfunc_23(beModelCtrlSCSound *self, beBaseInfoRam *ram);
-unsigned char beModelCtrlSubComBase_Update(beModelCtrlSubComBase *self, beBaseInfoRam *ram);
+int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram);
+int beModelCtrlSCHitBox_Update(beModelCtrlSCHitBox *self, beBaseInfoRam *ram, int frames);
+int beModelCtrlSCEffect_Start(beModelCtrlSCEffect *self, beBaseInfoRam *ram);
+void beModelCtrlSCEffect_Stop(beModelCtrlSCEffect *self, beBaseInfoRam *ram);
+int beModelCtrlSCSound_Start(beModelCtrlSCSound *self, beBaseInfoRam *ram);
+void beModelCtrlSCSound_Stop(beModelCtrlSCSound *self, beBaseInfoRam *ram);
+unsigned char beModelCtrlSubComBase_Advance(beModelCtrlSubComBase *self, beBaseInfoRam *ram);
 void beModelCtrlSubCom_Update(beModelCtrlSubCom *self, beBaseInfoRam *ram);
 void beModelCtrlSubCom_StopAll(beModelCtrlSubCom *self, beBaseInfoRam *ram);
 void beModelCtrlSubCom_StopType(beModelCtrlSubCom *self, beBaseInfoRam *ram, int metaObject);
 void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, int modelName, int seqName, float *offset, float *rotation, char isSeqDead, char isPositionLock, float startFrame);
 void beModelCtrlSubCom_AddHitBox(beModelCtrlSubCom *self, beModelCtrlHITBOX *hitBox);
 void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float startFrame);
-int Gap__Bec__beModelCtrlSCSound__vfunc_20(void);
-int Gap__Bec__beModelCtrlSCEffect__vfunc_20(void);
-int Gap__Bec__beModelCtrlSCHitBox__vfunc_20(void);
+int beModelCtrlSCSound_GetMeta(void);
+int beModelCtrlSCEffect_GetMeta(void);
+int beModelCtrlSCHitBox_GetMeta(void);
 }
 
 #define CLOCK_TICK_SHIFT 18
@@ -252,7 +252,7 @@ void beModelCtrlNode2_RegisterTraversalFunction(void) {
 /* Start: builds the hit box around the owner's node (offset, sized by _boxSize, moved into the node's
  * matrix), draws it in debug mode, and sends it to the bullet group of _bulletMode. When a receiver
  * reports a hit, the owner's BHit Lua function runs. */
-int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *self, beBaseInfoRam *ram) {
+int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram) {
     float center[3];
     int i;
     float color[4];
@@ -362,7 +362,7 @@ placeAtOffset:
 }
 
 /* Update: the hit box is sent again every frame until _endFrame. */
-int Gap__Bec__beModelCtrlSCHitBox__vfunc_22(beModelCtrlSCHitBox *self, beBaseInfoRam *ram, int frames) {
+int beModelCtrlSCHitBox_Update(beModelCtrlSCHitBox *self, beBaseInfoRam *ram, int frames) {
     if (!(self->_runFrame < self->_endFrame)) {
         return 0;
     }
@@ -373,7 +373,7 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_22(beModelCtrlSCHitBox *self, beBaseInf
 /* Start: finds a free gene model (_geneRamNo) for _modelName and has it generate _seqName at the
  * owner, or at the hit parent named by the owner's work, with the offset, rotation and position
  * lock. A sequence that dies by itself ends the sub-command at once. */
-int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *self, beBaseInfoRam *ram) {
+int beModelCtrlSCEffect_Start(beModelCtrlSCEffect *self, beBaseInfoRam *ram) {
     beBaseInfo *info;
     beBaseInfoManager *manager;
     int *name;
@@ -423,7 +423,7 @@ int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *self, beBaseInf
 }
 
 /* Stop: erases the sequence on the gene model once it has started. */
-void Gap__Bec__beModelCtrlSCEffect__vfunc_23(beModelCtrlSCEffect *self, beBaseInfoRam *ram) {
+void beModelCtrlSCEffect_Stop(beModelCtrlSCEffect *self, beBaseInfoRam *ram) {
     int geneRamNo;
 
     if (self->_isOneSet != 0) {
@@ -435,7 +435,7 @@ void Gap__Bec__beModelCtrlSCEffect__vfunc_23(beModelCtrlSCEffect *self, beBaseIn
 }
 
 /* Start: plays _sndName; the sub-command lives on while the sound handle is valid. */
-int Gap__Bec__beModelCtrlSCSound__vfunc_21(beModelCtrlSCSound *self, beBaseInfoRam *ram) {
+int beModelCtrlSCSound_Start(beModelCtrlSCSound *self, beBaseInfoRam *ram) {
     beBaseInfoManager *manager = (beBaseInfoManager *)ram->_parentManager;
     long long handle;
     beMessenger_SelectGroup(manager->_messenger, "SOUND");
@@ -456,7 +456,7 @@ int Gap__Bec__beModelCtrlSCSound__vfunc_21(beModelCtrlSCSound *self, beBaseInfoR
 }
 
 /* Stop: fades the playing sound down. */
-void Gap__Bec__beModelCtrlSCSound__vfunc_23(beModelCtrlSCSound *self, beBaseInfoRam *ram) {
+void beModelCtrlSCSound_Stop(beModelCtrlSCSound *self, beBaseInfoRam *ram) {
     beBaseInfoManager *manager = (beBaseInfoManager *)ram->_parentManager;
     if (self->_sndHandle != 0) {
         beMessenger_SelectGroup(manager->_messenger, "SOUND");
@@ -468,7 +468,7 @@ void Gap__Bec__beModelCtrlSCSound__vfunc_23(beModelCtrlSCSound *self, beBaseInfo
 
 /* Advances the run frame; starts the sub-command once it reaches _startFrame and updates it after.
  * Returns 0 when the sub-command has finished. */
-unsigned char beModelCtrlSubComBase_Update(beModelCtrlSubComBase *self, beBaseInfoRam *ram) {
+unsigned char beModelCtrlSubComBase_Advance(beModelCtrlSubComBase *self, beBaseInfoRam *ram) {
     float runFrame;
     unsigned char alive;
 
@@ -496,7 +496,7 @@ void beModelCtrlSubCom_Update(beModelCtrlSubCom *self, beBaseInfoRam *ram) {
     i = 0;
     if (count > 0) {
         do {
-            if (!(beModelCtrlSubComBase_Update(((beModelCtrlSubComBase **)((igObjectList *)self->_comList)->_data)[i], ram) & 0xFF)) {
+            if (!(beModelCtrlSubComBase_Advance(((beModelCtrlSubComBase **)((igObjectList *)self->_comList)->_data)[i], ram) & 0xFF)) {
                 list = (igObjectList *)(self->_comList);
                 igRelease(((igObject **)list->_data)[i]);
                 List_RemoveWordAt(list, i);
@@ -721,17 +721,17 @@ void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float star
     ObjectList_AppendRetained(self->_comList, command.p);
 }
 
-int Gap__Bec__beModelCtrlSCSound__vfunc_20(void)
+int beModelCtrlSCSound_GetMeta(void)
 {
     return g_beModelCtrlSCSound_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlSCEffect__vfunc_20(void)
+int beModelCtrlSCEffect_GetMeta(void)
 {
     return g_beModelCtrlSCEffect_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlSCHitBox__vfunc_20(void)
+int beModelCtrlSCHitBox_GetMeta(void)
 {
     return g_beModelCtrlSCHitBox_metaObject[0];
 }

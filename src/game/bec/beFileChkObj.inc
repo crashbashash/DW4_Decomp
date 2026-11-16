@@ -1,15 +1,15 @@
 igMetaObject *g_beFileChkObj_metaObject;
 igMetaField *g_beFileChkObj_fdMetaField;
 
-void FUN_00362f90(int arg0) {
-    FUN_003630b0();
+void beFileChkObj_Create(int arg0) {
+    beFileChkObj_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589780, arg0);
 }
 
-void *FUN_00362fd0(void) {
+void *beFileChkObj_GetMetaObject(void) {
     igMetaObject *g = g_beFileChkObj_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003630b0();
+        beFileChkObj_EnsureRegistered();
     }
     return g_beFileChkObj_metaObject;
 }
@@ -21,11 +21,11 @@ int beFileChkObj_GetVTable(void) {
     int *o;
 
     igObject_InitHeader(&f);
-    f.vt = &DAT_005357b0[0];
+    f.vt = &g_beFileChkObj_vtable[0];
     pr = &f.ref;
     *pr = 0;
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_005357b0[0];
+    f.vt = &g_beFileChkObj_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {
             o = *pr;
@@ -38,7 +38,7 @@ int beFileChkObj_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003630b0(void)
+void beFileChkObj_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beFileChkObj_Register);
 }
@@ -52,7 +52,7 @@ void *beFileChkObj_Register(void) {
         &g_beFileChkObj_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beFileChkObj_GetMetaObject,
+        beFileChkObj_GetMetaObjectFunction,
         "beFileChkObj",
         0xc, /* instance size */
         beFileChkObj_GetVTable,
@@ -62,9 +62,9 @@ void *beFileChkObj_Register(void) {
     );
 }
 
-void beFileChkObj_GetMetaObject(void)
+void beFileChkObj_GetMetaObjectFunction(void)
 {
-    FUN_00362fd0();
+    beFileChkObj_GetMetaObject();
 }
 
 static FieldFactory g_beFileChkObj_ctorTable[] = {

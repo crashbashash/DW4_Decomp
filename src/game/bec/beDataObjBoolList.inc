@@ -2,17 +2,17 @@ igMetaObject *g_beDataObjBoolList_metaObject;
 igMetaField *g_beDataObjBoolList_dataMetaField;
 
 void beDataObjBoolList_Create(int arg0) {
-    FUN_00364ea0();
+    beDataObjBoolList_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589888, arg0);
 }
 
-void *FUN_00364d70(void) {
+void *beDataObjBoolList_GetMetaObject(void) {
     unsigned char b;
     if (g_beDataObjBoolList_metaObject != 0) {
         b = (*(int *)((char *)(g_beDataObjBoolList_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00364ea0();
+    beDataObjBoolList_EnsureRegistered();
 done:
     return g_beDataObjBoolList_metaObject;
 }
@@ -29,11 +29,11 @@ int beDataObjBoolList_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00535350[0];
+    u.vt = (int)&g_beDataObjBoolList_vtable[0];
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00535350[0];
+    u.vt = (int)&g_beDataObjBoolList_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -58,7 +58,7 @@ int beDataObjBoolList_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00364ea0(void)
+void beDataObjBoolList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataObjBoolList_Register);
 }
@@ -72,7 +72,7 @@ void *beDataObjBoolList_Register(void) {
         &g_beDataObjBoolList_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beDataObjBoolList_GetMetaObject,
+        beDataObjBoolList_GetMetaObjectFunction,
         "beDataObjBoolList",
         0x10, /* instance size */
         beDataObjBoolList_GetVTable,
@@ -82,9 +82,9 @@ void *beDataObjBoolList_Register(void) {
     );
 }
 
-void beDataObjBoolList_GetMetaObject(void)
+void beDataObjBoolList_GetMetaObjectFunction(void)
 {
-    FUN_00364d70();
+    beDataObjBoolList_GetMetaObject();
 }
 
 static FieldFactory g_beDataObjBoolList_ctorTable[] = {

@@ -19,7 +19,7 @@ int igTransformStack_GetVTable(void) {
     struct Obj_196080 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b690[0];
+    obj.vt = &g_igTransformStack_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -28,7 +28,7 @@ void FUN_001960c0(void)
     igMetaObject_RunStaticInit(igTransformStack_Register);
 }
 
-static igMetaObjectCallback g_igTransformStack_callbackList[] = { FUN_001964d0, 0 };
+static igMetaObjectCallback g_igTransformStack_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
 void igTransformStack_Register(void) {
     SceneGraphLibrary_MarkRegistered();

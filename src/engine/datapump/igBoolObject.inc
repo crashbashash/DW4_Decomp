@@ -12,7 +12,7 @@ igMetaObject *igBoolObject_GetMetaObject(void)
 int igBoolObject_GetVTable(void) {
     struct O o;
     igObject_InitHeader(&o.vt);
-    o.vt = DAT_0052b9b0;
+    o.vt = g_igBoolObject_vtable;
     return *(int *)((char *)&o.vt + *(int *)(g_objectSystem[0] + 916));
 }
 

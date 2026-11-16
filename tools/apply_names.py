@@ -574,8 +574,11 @@ def rename_unit_objects(data, renamed):
 
     `renamed` is {va: (old, new)}.  An `emitted`/`duplicates`/`externals` key is renamed only
     when the address it holds is a renamed function's and the key is that function's old name;
-    a row's `symbol` likewise against the row's own address."""
+    a row's `symbol` likewise against the row's own address.  A `data` row that already spelled the
+    function's new name at its address (a data-names.tsv row for a function passed by address) goes:
+    the function's own entry now carries that name, and one unit declares a symbol once."""
     count, errors = 0, []
+    new_at = {va: new for va, (_old, new) in renamed.items()}
     for unit, row in data.items():
         for field in ("emitted", "duplicates", "externals"):
             entries = row.get(field)
@@ -593,11 +596,41 @@ def rename_unit_objects(data, renamed):
                 out[name] = addr
             if changed:
                 row[field] = out
+        rows_data = row.get("data")
+        if isinstance(rows_data, dict):
+            functions = {name for field in ("emitted", "duplicates", "externals")
+                         for name in (row.get(field) or {})}
+            for name, addr in list(rows_data.items()):
+                if (isinstance(addr, str) and name in functions
+                        and new_at.get(int(addr, 16)) == name):
+                    del rows_data[name]
+                    count += 1
         hit = renamed.get(int(unit, 16))
         if hit and row.get("symbol") == hit[0]:
             row["symbol"] = hit[1]
             count += 1
     return count, errors
+
+
+def rewrite_documents(docs, renamed):
+    """Rewrite each renamed function's old name as its new one in the Markdown under `docs` (one pass,
+    so a swap never renames its own result) -> the number of names rewritten. A document names a
+    function by its symbol (scripts/check_doc_function_names.py holds it to the symbol table)."""
+    sub = {old: new for old, new in renamed.values() if "_" in old}
+    if not sub or not os.path.isdir(docs):
+        return 0
+    pattern = re.compile(r"\b(?:%s)\b" % "|".join(re.escape(o) for o in sorted(sub, key=len, reverse=True)))
+    count = 0
+    for root, _dirs, files in os.walk(docs):
+        for f in files:
+            if f.endswith(".md"):
+                path = os.path.join(root, f)
+                text = open(path).read()
+                new, n = pattern.subn(lambda m: sub[m.group(0)], text)
+                if n:
+                    open(path, "w").write(new)
+                    count += n
+    return count
 
 
 def main(argv=None):
@@ -738,6 +771,9 @@ def main(argv=None):
     if uo_count:
         with open(unit_objects, "w") as fh:
             fh.write(json.dumps(uo_data, indent=2) + "\n")
+    docs_count = rewrite_documents(os.path.join(os.path.dirname(os.path.abspath(a.src)), "docs"), renamed)
+    if docs_count:
+        print("rewrote %d function names in docs/" % docs_count)
 
     # 2. move each one-function unit to its module folder (through temporary names, so a
     #    swap of two units never finds its destination taken)

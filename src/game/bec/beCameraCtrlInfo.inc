@@ -1,10 +1,10 @@
 igMetaObject *g_beCameraCtrlInfo_metaObject;
 igMetaField *g_beCameraCtrlInfo_dataMetaField;
 
-void *FUN_00368d60(void) {
+void *beCameraCtrlInfo_GetMetaObject(void) {
     igMetaObject *g = g_beCameraCtrlInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00368e30();
+        beCameraCtrlInfo_EnsureRegistered();
     }
     return g_beCameraCtrlInfo_metaObject;
 }
@@ -17,16 +17,16 @@ int beCameraCtrlInfo_GetVTable(void) {
     obj.f8 = 0;
     obj.f14 = 0;
     obj.f18 = 0;
-    obj.vt = (&DAT_00534a90[0]);
+    obj.vt = (&g_beCameraCtrlInfo_vtable[0]);
     obj.f1C = 0;
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_00534a90[0]);
+    obj.vt = (&g_beCameraCtrlInfo_vtable[0]);
     ObjectRef_Destruct_001363f0(&obj.f1C, -1);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return temp_s0;
 }
 
-void FUN_00368e30(void)
+void beCameraCtrlInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCameraCtrlInfo_Register);
 }
@@ -40,7 +40,7 @@ void *beCameraCtrlInfo_Register(void) {
         &g_beCameraCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beCameraCtrlInfo_GetMetaObject,
+        beCameraCtrlInfo_GetMetaObjectFunction,
         "beCameraCtrlInfo",
         0x20, /* instance size */
         beCameraCtrlInfo_GetVTable,
@@ -50,9 +50,9 @@ void *beCameraCtrlInfo_Register(void) {
     );
 }
 
-void beCameraCtrlInfo_GetMetaObject(void)
+void beCameraCtrlInfo_GetMetaObjectFunction(void)
 {
-    FUN_00368d60();
+    beCameraCtrlInfo_GetMetaObject();
 }
 
 static FieldFactory g_beCameraCtrlInfo_ctorTable[] = {

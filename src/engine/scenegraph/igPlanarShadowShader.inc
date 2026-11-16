@@ -28,7 +28,7 @@ int igPlanarShadowShader_GetVTable(void) {
     int temp_s5;
 
     FUN_0019c380((void *)u.b);
-    u.vt = (int)&DAT_005289f0[0];
+    u.vt = (int)&g_igPlanarShadowShader_vtable[0];
     FUN_0019c370((int *)&u.b[40]);
     FUN_0019c360((int *)&u.b[44]);
     FUN_00151090(&u.b[48]);
@@ -60,7 +60,7 @@ void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_005294b0[0];
+        arg0->f0 = &g_igAttrSet_vtable[0];
         if (&arg0->f20) {
             p = arg0->f20;
             if (p != 0) {
@@ -72,7 +72,7 @@ void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->f0 = &DAT_00528dd0[0];
+            arg0->f0 = &g_igGroup_vtable[0];
             FUN_001958f0((void * *)((char *)arg0 + 0x1C), -1);
             FUN_00195970((struct T_195970 *)arg0, 0);
         }
@@ -167,12 +167,12 @@ void *FUN_0019c380(void *arg0) {
     igObject_InitHeader();
     self->_vtable = (int)(&g_igNamedObject_vtable[0]);
     self->_name = 0;
-    self->_vtable = (int)(&DAT_00528a90[0]);
+    self->_vtable = (int)(&g_igNode_vtable[0]);
     self->_bound = 0;
     self->_parentList = 0;
-    self->_vtable = (int)(&DAT_00528dd0[0]);
+    self->_vtable = (int)(&g_igGroup_vtable[0]);
     self->_childList = 0;
-    self->_vtable = (int)(&DAT_005294b0[0]);
+    self->_vtable = (int)(&g_igAttrSet_vtable[0]);
     self->_attributes = 0;
     return arg0;
 }
@@ -182,7 +182,7 @@ void FUN_0019c3f0(void)
     igMetaObject_RunStaticInit(igPlanarShadowShader_Register);
 }
 
-static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { FUN_001366c0, FUN_00135620, FUN_0019fa10, FUN_0013afe0, FUN_00186b20, FUN_00139000, FUN_00133510, 0 };
+static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { igLightList_EnsureRegistered, FUN_00135620, igGeometryList_EnsureRegistered, igAttrList_EnsureRegistered, FUN_00186b20, igColorAttr_EnsureRegistered, FUN_00133510, 0 };
 
 void igPlanarShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -311,11 +311,11 @@ void igPlanarShadowShader_InitFields(void) {
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0019f930();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igGeometryList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     ((igMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0013af00();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
     temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9)));
@@ -325,7 +325,7 @@ void igPlanarShadowShader_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00186a80();
     ((igMetaField *)temp_s2_7)->_persistent = 0;
     temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_00138f20();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igColorAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     ((igMetaField *)temp_s2_8)->_persistent = 0;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)));

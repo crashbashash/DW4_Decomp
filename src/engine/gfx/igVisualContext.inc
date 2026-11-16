@@ -29,11 +29,11 @@ igMetaField *g_igVisualContext_statisticsMemoryPoolMetaField;
 igMetaField *g_igVisualContext_listMemoryPoolMetaField;
 
 void igVisualContext_CreateInstance(int arg0) {
-    FUN_0014a0e0();
+    igVisualContext_EnsureRegistered();
     igMetaObject_CreateInstance(g_igVisualContext_metaObject, arg0);
 }
 
-igMetaObject *FUN_0014a040(void) {
+igMetaObject *igVisualContext_GetOrCreateMetaObject(void) {
     if (g_igVisualContext_metaObject == 0) {
         g_igVisualContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -44,11 +44,11 @@ igMetaObject *igVisualContext_GetMetaObject(void)
 {
     igMetaObject *g = g_igVisualContext_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014a0e0();
+        igVisualContext_EnsureRegistered();
     return g_igVisualContext_metaObject;
 }
 
-void FUN_0014a0e0(void)
+void igVisualContext_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVisualContext_Register);
 }

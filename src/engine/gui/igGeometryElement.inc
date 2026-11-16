@@ -24,7 +24,7 @@ void igGeometryElement_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGeometryElement_Register);
 }
 
-static igMetaObjectCallback g_igGeometryElement_callbackList[] = { FUN_0019fc00, FUN_0013afe0, 0 };
+static igMetaObjectCallback g_igGeometryElement_callbackList[] = { igGeometry_EnsureRegistered, igAttrList_EnsureRegistered, 0 };
 
 void igGeometryElement_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -87,7 +87,7 @@ void igGeometryElement_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igGeometryElement_ctorTable, 4);
     temp_s1 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    temp_s1->f56 = FUN_0019fae0();
+    temp_s1->f56 = igGeometry_GetOrCreateMetaObject();
     temp_s1->f52 = 1;
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     v3[0] = 0.0f;
@@ -101,7 +101,7 @@ void igGeometryElement_InitFields(void) {
     v4[3] = 1.0f;
     FUN_0018e670(temp_a0_2, v4);
     temp_s1_2 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    temp_s1_2->f56 = FUN_0013af00();
+    temp_s1_2->f56 = igAttrList_GetOrCreateMetaObject();
     temp_s1_2->f52 = 1;
     igMetaObject_NameFields(temp_s0, g_igGeometryElement_fieldTable, g_igGeometryElement_fieldHandles, g_igGeometryElement_fieldOffsets, temp_s2);
 }

@@ -3,10 +3,10 @@ int g_beModelCtrlInfoRamData_nameStorage;
 igMetaField *g_beModelCtrlInfoRamData_nodeMetaField;
 igMetaField *g_beModelCtrlInfoRamData_workMetaField;
 
-void *FUN_00352ee0(void) {
+void *beModelCtrlInfoRamData_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlInfoRamData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00353040();
+        beModelCtrlInfoRamData_EnsureRegistered();
     }
     return g_beModelCtrlInfoRamData_metaObject;
 }
@@ -17,11 +17,11 @@ int beModelCtrlInfoRamData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_00537bb0[0];
+    obj.vt = &g_beModelCtrlInfoRamData_vtable[0];
     obj.w4 = 0;
     obj.w5 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00537bb0[0];
+    obj.vt = &g_beModelCtrlInfoRamData_vtable[0];
     FUN_00352fc0((ObjectRefWord *)&obj.w5, -1);
     FUN_0034c1b0((void **)&obj.w4, (short)(-1));
     FUN_00344030((struct W_344030 *)&obj, (short)0);
@@ -41,12 +41,12 @@ ObjectRefWord *FUN_00352fc0(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_00353040(void)
+void beModelCtrlInfoRamData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoRamData_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoRamData_callbackList[] = { FUN_0034fe80, FUN_00350fb0, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoRamData_callbackList[] = { beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoWork_EnsureRegistered, 0 };
 
 void *beModelCtrlInfoRamData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -55,7 +55,7 @@ void *beModelCtrlInfoRamData_Register(void) {
         &g_beModelCtrlInfoRamData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beModelCtrlInfoRamData_GetMetaObject,
+        beModelCtrlInfoRamData_GetMetaObjectFunction,
         "beModelCtrlInfoRamData",
         0x18, /* instance size */
         beModelCtrlInfoRamData_GetVTable,
@@ -65,9 +65,9 @@ void *beModelCtrlInfoRamData_Register(void) {
     );
 }
 
-void beModelCtrlInfoRamData_GetMetaObject(void)
+void beModelCtrlInfoRamData_GetMetaObjectFunction(void)
 {
-    FUN_00352ee0();
+    beModelCtrlInfoRamData_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoRamData_ctorTable[] = {
@@ -110,9 +110,9 @@ void beModelCtrlInfoRamData_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = (int)FUN_0034fd40();
+    *(int *)((char *)(temp_s0) + 56) = (int)beModelCtrlNode2_GetOrCreateMetaObject();
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    *(int *)((char *)(temp_s0_2) + 56) = (int)FUN_00350060();
+    *(int *)((char *)(temp_s0_2) + 56) = (int)beModelCtrlInfoWork_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoRamData_fieldTable, g_beModelCtrlInfoRamData_fieldHandles, g_beModelCtrlInfoRamData_fieldOffsets, temp_s2);
 }
 

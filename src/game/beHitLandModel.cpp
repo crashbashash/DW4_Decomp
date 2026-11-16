@@ -3,9 +3,9 @@
 
 extern "C" int FUN_00386030(void *arg0, int arg1, int arg2);
 extern "C" int igMatrix44f_MakeEulerRotation(void *, float, float, float);
-extern "C" int Gap__Bec__beHitLandModel__vfunc_30(void);
-extern "C" void Gap__Bec__beHitLandModel__vfunc_31(void);
-extern "C" int Gap__Bec__beHitLandModel__vfunc_20(void);
+extern "C" int beHitLandModel_GetInfoMeta(void);
+extern "C" void beHitLandModel_UpdateRam(void);
+extern "C" int beHitLandModel_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
 extern "C" void FUN_00388590(int arg0, float *arg1, float *arg2, int arg3);
 extern "C" bool FUN_003885e0(int arg0, float *arg1, float *arg2, float *arg3, float *arg4);
@@ -19,23 +19,23 @@ extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" void * igObject_GetAllocator(...);
 extern "C" void *FUN_00388e60(void *arg0, void *arg1);
 extern "C" int igRay_SetFromPoints(int, int, int);
-extern "C" int Gap__Bec__beHitLandModelOrder__vfunc_20(void);
+extern "C" int beHitLandModelOrder_GetMeta(void);
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 typedef struct { char vtable[4]; int refs; } RefCountedObject;
-extern "C" void Gap__Bec__beHitLandModel__vfunc_32(beHitLandModel *arg0);
+extern "C" void beHitLandModel_Prepare(beHitLandModel *arg0);
 extern "C" int g_beHitLandModelInfo_metaObject[4];
 extern "C" int g_beHitLandModel_metaObject[4];
 extern "C" char HITLANDMODEL[];
-extern "C" void Gap__Bec__beHitLandModel__vfunc_29(beHitLandModel * p0, int p1, char * p2, int p3, int p4);
-extern "C" beHitLandResultData *FUN_0035e400(void *);
+extern "C" void beHitLandModel_OnAddRam(beHitLandModel * p0, int p1, char * p2, int p3, int p4);
+extern "C" beHitLandResultData *beHitLandResultData_Create(void *);
 extern "C" void *g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 struct HitRecord { char pad[12]; void *matrix; char pad16[8]; float point[3]; char pad36[12]; float position[3]; char pad60[12]; };
 struct ResultRecord { char header[16]; HitRecord hit; };
-extern "C" void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecord *hit);
+extern "C" void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit);
 extern "C" igObject *FUN_00188220(int);
-extern "C" void Gap__Bec__beHitLandModelOrder__vfunc_21(beHitLandModelOrder *self, int a1, int a2);
+extern "C" void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2);
 extern "C" void beHitLandModelOrder_Reset(beHitLandModelOrder *order);
 extern "C" int g_beHitLandModelOrder_metaObject[4];
 #include "dw4/igVec3f.h"
@@ -53,7 +53,7 @@ extern "C" void beMessenger_AppendBool(int messenger, unsigned char value);
 extern "C" void beMessenger_AppendVec3(int messenger, igVec3f value);
 extern "C" void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order);
 
-/* beHitLandModelOrder's virtual methods by vtable slot (slot 21 is Gap__Bec__beHitLandModelOrder__vfunc_21). */
+/* beHitLandModelOrder's virtual methods by vtable slot (slot 21 is beHitLandModelOrder_AddRay). */
 class beHitLandModelOrderMethods {
 public:
     virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3(); virtual void slot4();
@@ -79,7 +79,7 @@ int FUN_00386030(void *arg0, int arg1, int arg2) {
     return 0;
 }
 
-void Gap__Bec__beHitLandModel__vfunc_32(beHitLandModel *arg0) {
+void beHitLandModel_Prepare(beHitLandModel *arg0) {
     RefCountedObject *t;
     t = (RefCountedObject *)arg0->_order;
     if (t != 0) {
@@ -118,17 +118,17 @@ void Gap__Bec__beHitLandModel__vfunc_32(beHitLandModel *arg0) {
     igMatrix44f_MakeEulerRotation((char *)arg0 + 0x30, 0.0f, 1.5707964f, 0.0f);
 }
 
-int Gap__Bec__beHitLandModel__vfunc_30(void)
+int beHitLandModel_GetInfoMeta(void)
 {
     return g_beHitLandModelInfo_metaObject[0];
 }
 
-void Gap__Bec__beHitLandModel__vfunc_29(beHitLandModel * p0, int p1, char * p2, int p3, int p4)
+void beHitLandModel_OnAddRam(beHitLandModel * p0, int p1, char * p2, int p3, int p4)
 {
     beMessenger_RegisterReceiver(p0->_messenger, p1, HITLANDMODEL, 0, -1);
 }
 
-void Gap__Bec__beHitLandModel__vfunc_31(void)
+void beHitLandModel_UpdateRam(void)
 {
 }
 
@@ -302,7 +302,7 @@ bool FUN_003885e0(int arg0, float *arg1, float *arg2, float *arg3, float *arg4) 
     return r;
 }
 
-void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecord *hit) {
+void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit) {
     /* matching construct: declaration-order sweep (24 orders) — this order puts self in s1 and the result in s2 */
     const char *name;
     const char *token;
@@ -311,7 +311,7 @@ void Gap__Bec__beHitLandModelOrder__vfunc_22(beHitLandModelOrder *self, HitRecor
     if (self->_hitdataCount >= ((igObjectList *)self->_hitdataList)->_count) {
         void *alloc = igObject_GetAllocator(self);
         alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        igSmartPointer<beHitLandResultData> created(FUN_0035e400(alloc));
+        igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create(alloc));
         ObjectList_AppendRetained(self->_hitdataList, (beHitLandResultData *)created);
     }
     Vec3f_TransformDirection(hit->position, hit->position, hit->matrix);
@@ -361,7 +361,7 @@ void *FUN_00388e60(void *arg0, void *arg1) {
 /* Owning stack reference to the newly created ray, released on scope exit (reference count in the
  * low 23 bits of _refCount). */
 
-void Gap__Bec__beHitLandModelOrder__vfunc_21(beHitLandModelOrder *self, int a1, int a2) {
+void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2) {
     if (self->_rayCount >= ((igRayList *)self->_rayList)->_count) {
         int a = ((int)igObject_GetAllocator(self));
         igSmartPointer<igObject> ray(FUN_00188220(g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]))));
@@ -378,12 +378,12 @@ void beHitLandModelOrder_Reset(beHitLandModelOrder *order) {
     order->_hitdataCount = 0;
 }
 
-int Gap__Bec__beHitLandModelOrder__vfunc_20(void)
+int beHitLandModelOrder_GetMeta(void)
 {
     return g_beHitLandModelOrder_metaObject[0];
 }
 
-int Gap__Bec__beHitLandModel__vfunc_20(void)
+int beHitLandModel_GetMeta(void)
 {
     return g_beHitLandModel_metaObject[0];
 }

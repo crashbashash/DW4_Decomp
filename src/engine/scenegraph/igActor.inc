@@ -24,7 +24,7 @@ igMetaObject *igActor_GetMetaObject(void)
 {
     igMetaObject *g = g_igActor_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001aaa50();
+        igActor_EnsureRegistered();
     return g_igActor_metaObject;
 }
 
@@ -73,12 +73,12 @@ O *FUN_001aa9d0(O *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_001aaa50(void)
+void igActor_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igActor_Register);
 }
 
-static igMetaObjectCallback g_igActor_callbackList[] = { FUN_001a66a0, FUN_001a6450, FUN_001a7b00, FUN_001a73b0, 0 };
+static igMetaObjectCallback g_igActor_callbackList[] = { FUN_001a66a0, igAppearance_EnsureRegistered, igAnimationDatabase_EnsureRegistered, igAnimationModifierList_EnsureRegistered, 0 };
 
 void igActor_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -201,7 +201,7 @@ void igActor_InitFields(void) {
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001a6150();
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_001a7780();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igAnimationDatabase_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_001a72d0();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;

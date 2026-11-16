@@ -1,13 +1,13 @@
 igMetaObject *g_beGeneraterInfo_metaObject;
 igMetaField *g_beGeneraterInfo_dataListMetaField;
 
-igMetaObject *FUN_0035f720(void) {
+igMetaObject *beGeneraterInfo_GetMetaObject(void) {
     igMetaObject *g = g_beGeneraterInfo_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_0035f870();
+    beGeneraterInfo_EnsureRegistered();
 done:
     return g_beGeneraterInfo_metaObject;
 }
@@ -20,10 +20,10 @@ int beGeneraterInfo_GetVTable(void) {
     f.w[1] = 0;
     f.w[4] = 0;
     f.w[5] = 0;
-    f.vt = &DAT_00535f80[0];
+    f.vt = &g_beGeneraterInfo_vtable[0];
     f.w[6] = 0;
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_00535f80[0];
+    f.vt = &g_beGeneraterInfo_vtable[0];
     FUN_0035f7f0((void **)(&f.w[6]), (long long)(-1));
     FUN_0033ec80((struct S_33ec80 *)&f, (short)0);
     return temp_s0;
@@ -47,12 +47,12 @@ void **FUN_0035f7f0(void **arg0, long long arg1) {
     return arg0;
 }
 
-void FUN_0035f870(void)
+void beGeneraterInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterInfo_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterInfo_callbackList[] = { FUN_0035fab0, 0 };
+static igMetaObjectCallback g_beGeneraterInfo_callbackList[] = { beGeneraterDataList_EnsureRegistered, 0 };
 
 void *beGeneraterInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -61,7 +61,7 @@ void *beGeneraterInfo_Register(void) {
         &g_beGeneraterInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beGeneraterInfo_GetMetaObject,
+        beGeneraterInfo_GetMetaObjectFunction,
         "beGeneraterInfo",
         0x20, /* instance size */
         beGeneraterInfo_GetVTable,
@@ -71,9 +71,9 @@ void *beGeneraterInfo_Register(void) {
     );
 }
 
-void beGeneraterInfo_GetMetaObject(void)
+void beGeneraterInfo_GetMetaObjectFunction(void)
 {
-    FUN_0035f720();
+    beGeneraterInfo_GetMetaObject();
 }
 
 static FieldFactory g_beGeneraterInfo_ctorTable[] = {
@@ -98,7 +98,7 @@ void beGeneraterInfo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beGeneraterInfo_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035f9d0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beGeneraterDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beGeneraterInfo_fieldTable, g_beGeneraterInfo_fieldHandles, g_beGeneraterInfo_fieldOffsets, temp_s2);
 }

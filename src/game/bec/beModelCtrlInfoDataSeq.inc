@@ -2,13 +2,13 @@ igMetaObject *g_beModelCtrlInfoDataSeq_metaObject;
 int g_beModelCtrlInfoDataSeq_nameStorage;
 igMetaField *g_beModelCtrlInfoDataSeq_dataListMetaField;
 
-void *FUN_003535b0(void) {
+void *beModelCtrlInfoDataSeq_GetMetaObject(void) {
     bool ok;
     if (g_beModelCtrlInfoDataSeq_metaObject == 0) goto make;
     ok = !!(g_beModelCtrlInfoDataSeq_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003536e0();
+    beModelCtrlInfoDataSeq_EnsureRegistered();
 done:;
     return g_beModelCtrlInfoDataSeq_metaObject;
 }
@@ -26,11 +26,11 @@ int beModelCtrlInfoDataSeq_GetVTable(void) {
     igObject_InitHeader(u.b);
     q8 = (int *)&u.b[8];
     *q8 = 0;
-    u.vt = (int)&DAT_00537af0[0];
+    u.vt = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
     q16 = (int *)&u.b[16];
     *q16 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00537af0[0];
+    u.vt = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
     if (q16 != 0) {
         o = (char *)*q16;
         if (o != 0) {
@@ -55,7 +55,7 @@ int beModelCtrlInfoDataSeq_GetVTable(void) {
     return t;
 }
 
-void FUN_003536e0(void)
+void beModelCtrlInfoDataSeq_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoDataSeq_Register);
 }
@@ -69,7 +69,7 @@ void *beModelCtrlInfoDataSeq_Register(void) {
         &g_beModelCtrlInfoDataSeq_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beModelCtrlInfoDataSeq_GetMetaObject,
+        beModelCtrlInfoDataSeq_GetMetaObjectFunction,
         "beModelCtrlInfoDataSeq",
         0x14, /* instance size */
         beModelCtrlInfoDataSeq_GetVTable,
@@ -79,9 +79,9 @@ void *beModelCtrlInfoDataSeq_Register(void) {
     );
 }
 
-void beModelCtrlInfoDataSeq_GetMetaObject(void)
+void beModelCtrlInfoDataSeq_GetMetaObjectFunction(void)
 {
-    FUN_003535b0();
+    beModelCtrlInfoDataSeq_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoDataSeq_ctorTable[] = {

@@ -8,14 +8,14 @@ igMetaField *g_beModelCtrlSCEffect_isSeqDeadMetaField;
 igMetaField *g_beModelCtrlSCEffect_isPositionLockMetaField;
 
 void beModelCtrlSCEffect_Create(int arg0) {
-    FUN_0034fa30();
+    beModelCtrlSCEffect_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588800, arg0);
 }
 
-void *FUN_0034f920(void) {
+void *beModelCtrlSCEffect_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlSCEffect_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034fa30();
+        beModelCtrlSCEffect_EnsureRegistered();
     }
     return g_beModelCtrlSCEffect_metaObject;
 }
@@ -31,11 +31,11 @@ int beModelCtrlSCEffect_GetVTable(void) {
     igObject_InitHeader(&obj);
     p0 = &obj._modelName;
     p1 = &obj._seqName;
-    obj._vtable = (int)&DAT_0053aef0[0];
+    obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
     *p0 = 0;
     *p1 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj._vtable = (int)&DAT_0053aef0[0];
+    obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
     if (p1 != 0) {
         o = (char *)*p1;
         if (o != 0) {
@@ -61,7 +61,7 @@ int beModelCtrlSCEffect_GetVTable(void) {
     return t;
 }
 
-void FUN_0034fa30(void)
+void beModelCtrlSCEffect_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlSCEffect_Register);
 }
@@ -73,7 +73,7 @@ void *beModelCtrlSCEffect_Register(void) {
         &g_beModelCtrlSCEffect_metaObject,
         beModelCtrlSubComBase_Register,
         beModelCtrlSubComBase_GetPublishedMetaObject,
-        beModelCtrlSCEffect_GetMetaObject,
+        beModelCtrlSCEffect_GetMetaObjectFunction,
         "beModelCtrlSCEffect",
         0x3c, /* instance size */
         beModelCtrlSCEffect_GetVTable,
@@ -83,9 +83,9 @@ void *beModelCtrlSCEffect_Register(void) {
     );
 }
 
-void beModelCtrlSCEffect_GetMetaObject(void)
+void beModelCtrlSCEffect_GetMetaObjectFunction(void)
 {
-    FUN_0034f920();
+    beModelCtrlSCEffect_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlSCEffect_ctorTable[] = {

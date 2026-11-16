@@ -1,9 +1,9 @@
 igMetaObject *g_beModelCtrlCTRL_metaObject;
 
-void *FUN_00355bd0(void) {
+void *beModelCtrlCTRL_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlCTRL_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00355cb0();
+        beModelCtrlCTRL_EnsureRegistered();
     }
     return g_beModelCtrlCTRL_metaObject;
 }
@@ -20,7 +20,7 @@ int beModelCtrlCTRL_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00537470[0];
+    u.vt = (int)&g_beModelCtrlCTRL_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -37,7 +37,7 @@ int beModelCtrlCTRL_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00355cb0(void)
+void beModelCtrlCTRL_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlCTRL_Register);
 }
@@ -49,7 +49,7 @@ void *beModelCtrlCTRL_Register(void) {
         &g_beModelCtrlCTRL_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlCTRL_GetMetaObject,
+        beModelCtrlCTRL_GetMetaObjectFunction,
         "beModelCtrlCTRL",
         0xc, /* instance size */
         beModelCtrlCTRL_GetVTable,
@@ -59,8 +59,8 @@ void *beModelCtrlCTRL_Register(void) {
     );
 }
 
-void beModelCtrlCTRL_GetMetaObject(void)
+void beModelCtrlCTRL_GetMetaObjectFunction(void)
 {
-    FUN_00355bd0();
+    beModelCtrlCTRL_GetMetaObject();
 }
 

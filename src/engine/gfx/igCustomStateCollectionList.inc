@@ -24,7 +24,7 @@ int igCustomStateCollectionList_GetVTable(void) {
     struct Obj_14eee0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00526d80[0];
+    obj.vt = &g_igCustomStateCollectionList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

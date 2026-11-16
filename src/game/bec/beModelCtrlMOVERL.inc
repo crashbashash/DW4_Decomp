@@ -2,10 +2,10 @@ igMetaObject *g_beModelCtrlMOVERL_metaObject;
 igMetaField *g_beModelCtrlMOVERL_modelNameMetaField;
 igMetaField *g_beModelCtrlMOVERL_boneNameMetaField;
 
-void *FUN_003553c0(void) {
+void *beModelCtrlMOVERL_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlMOVERL_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00355520();
+        beModelCtrlMOVERL_EnsureRegistered();
     }
     return g_beModelCtrlMOVERL_metaObject;
 }
@@ -23,13 +23,13 @@ int beModelCtrlMOVERL_GetVTable(void) {
     igObject_InitHeader(u.b);
     p48 = &u.b[8];
     *(int *)p48 = 0;
-    u.vt = (int)&DAT_005375f0[0];
+    u.vt = (int)&g_beModelCtrlMOVERL_vtable[0];
     p4C = &u.b[12];
     *(int *)p4C = 0;
     p50 = &u.b[16];
     *(int *)p50 = 0;
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005375f0[0];
+    u.vt = (int)&g_beModelCtrlMOVERL_vtable[0];
     if (p50 != 0) {
         v1 = *(int **)p50;
         if (v1 != 0) {
@@ -67,7 +67,7 @@ int beModelCtrlMOVERL_GetVTable(void) {
     return r;
 }
 
-void FUN_00355520(void)
+void beModelCtrlMOVERL_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlMOVERL_Register);
 }
@@ -79,7 +79,7 @@ void *beModelCtrlMOVERL_Register(void) {
         &g_beModelCtrlMOVERL_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlMOVERL_GetMetaObject,
+        beModelCtrlMOVERL_GetMetaObjectFunction,
         "beModelCtrlMOVERL",
         0x14, /* instance size */
         beModelCtrlMOVERL_GetVTable,
@@ -89,9 +89,9 @@ void *beModelCtrlMOVERL_Register(void) {
     );
 }
 
-void beModelCtrlMOVERL_GetMetaObject(void)
+void beModelCtrlMOVERL_GetMetaObjectFunction(void)
 {
-    FUN_003553c0();
+    beModelCtrlMOVERL_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlMOVERL_ctorTable[] = {

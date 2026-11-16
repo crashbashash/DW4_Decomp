@@ -1,9 +1,9 @@
 igMetaObject *g_beWeaponInfoRam_metaObject;
 
-void *FUN_0033e830(void) {
+void *beWeaponInfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beWeaponInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0033ea40();
+        beWeaponInfoRam_EnsureRegistered();
     }
     return g_beWeaponInfoRam_metaObject;
 }
@@ -14,12 +14,12 @@ int beWeaponInfoRam_GetVTable(void) {
     S_ref *p;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00539e90[0];
+    u.vt = (int)&g_beBaseInfoRam_vtable[0];
     p = (S_ref *)&u.b[40];
     *(int *)p = 0;
-    u.vt = (int)&DAT_00539e30[0];
+    u.vt = (int)&g_beWeaponInfoRam_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00539e90[0];
+    u.vt = (int)&g_beBaseInfoRam_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
         if (p != 0) {
@@ -36,7 +36,7 @@ void *FUN_0033e920(S *arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {
-        arg0->vt = (int)(&DAT_00539e90[0]);
+        arg0->vt = (int)(&g_beBaseInfoRam_vtable[0]);
         if (((char *)arg0 + 0x28) != 0) {
             o = arg0->m;
             if (o != 0) {
@@ -66,7 +66,7 @@ ObjectRefWord *ObjectRef_Destruct_0033e9c0(ObjectRefWord *self,int delete_storag
     return self;
 }
 
-void FUN_0033ea40(void)
+void beWeaponInfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWeaponInfoRam_Register);
 }
@@ -78,7 +78,7 @@ void *beWeaponInfoRam_Register(void) {
         &g_beWeaponInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beWeaponInfoRam_GetMetaObject,
+        beWeaponInfoRam_GetMetaObjectFunction,
         "beWeaponInfoRam",
         0x2c, /* instance size */
         beWeaponInfoRam_GetVTable,
@@ -88,12 +88,12 @@ void *beWeaponInfoRam_Register(void) {
     );
 }
 
-void beWeaponInfoRam_GetMetaObject(void)
+void beWeaponInfoRam_GetMetaObjectFunction(void)
 {
-    FUN_0033e830();
+    beWeaponInfoRam_GetMetaObject();
 }
 
-igMetaObject *FUN_0033eaf0(void) {
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void) {
     return g_beBaseInfoRam_metaObject;
 }
 

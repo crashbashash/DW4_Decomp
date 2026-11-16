@@ -3,11 +3,11 @@ igMetaField *g_beNDMWMdlItem_viewerSIManagerMetaField;
 igMetaField *g_beNDMWMdlItem_lockRamListMetaField;
 
 void beNDMWMdlItem_CreateInstance(int arg0) {
-    FUN_003c1270();
+    beNDMWMdlItem_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMdlItem_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c1160(void) {
+igMetaObject *beNDMWMdlItem_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlItem_metaObject == 0) {
         g_beNDMWMdlItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -18,7 +18,7 @@ igMetaObject *beNDMWMdlItem_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWMdlItem_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003c1270();
+        beNDMWMdlItem_EnsureRegistered();
     return g_beNDMWMdlItem_metaObject;
 }
 
@@ -28,21 +28,21 @@ int beNDMWMdlItem_GetVTable(void) {
     igObject_InitHeader(&o);
     o.f8 = 0;
     o.f24 = 0;
-    o.vt = &DAT_00540450[0];
+    o.vt = &g_beNDMWMdlItem_vtable[0];
     o.f48 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00540450[0];
+    o.vt = &g_beNDMWMdlItem_vtable[0];
     igSmartPointer_igObjectList_Destruct(&o.f48, -1);
     FUN_003bf2f0((struct NamedRefObject *)&o, (long long)0);
     return r;
 }
 
-void FUN_003c1270(void)
+void beNDMWMdlItem_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlItem_Register);
 }
 
-static igMetaObjectCallback g_beNDMWMdlItem_callbackList[] = { FUN_00459e40, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWMdlItem_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
 void *beNDMWMdlItem_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -93,7 +93,7 @@ void beNDMWMdlItem_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWMdlItem_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00459380();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igObjectList_GetOrCreateMetaObject();

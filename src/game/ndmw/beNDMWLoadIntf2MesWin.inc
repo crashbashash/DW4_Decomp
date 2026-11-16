@@ -20,11 +20,11 @@ igMetaField *g_beNDMWLoadIntf2MesWin_sysMesNoMetaField;
 igMetaField *g_beNDMWLoadIntf2MesWin_sysStatMetaField;
 
 void beNDMWLoadIntf2MesWin_Create(int arg0) {
-    FUN_003c6c70();
+    beNDMWLoadIntf2MesWin_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLoadIntf2MesWin_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c6b40(void) {
+igMetaObject *beNDMWLoadIntf2MesWin_GetOrCreateMetaObject(void) {
     if (g_beNDMWLoadIntf2MesWin_metaObject == 0) {
         g_beNDMWLoadIntf2MesWin_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -37,7 +37,7 @@ void *beNDMWLoadIntf2MesWin_GetReadyMetaObject(void) {
         b = (*(int *)((char *)(g_beNDMWLoadIntf2MesWin_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_003c6c70();
+    beNDMWLoadIntf2MesWin_EnsureRegistered();
 done:
     return g_beNDMWLoadIntf2MesWin_metaObject;
 }
@@ -54,7 +54,7 @@ int beNDMWLoadIntf2MesWin_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053c940[0];
+    u.vt = (int)&g_beNDMWLoadIntf2MesWin_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -71,12 +71,12 @@ int beNDMWLoadIntf2MesWin_GetVTable(void) {
     return s0;
 }
 
-void FUN_003c6c70(void)
+void beNDMWLoadIntf2MesWin_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadIntf2MesWin_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadIntf2MesWin_callbackList[] = { FUN_00357d10, FUN_0034cb30, FUN_003c7830, 0 };
+static igMetaObjectCallback g_beNDMWLoadIntf2MesWin_callbackList[] = { beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWLoadIntf2TextOrder_EnsureRegistered, 0 };
 
 void *beNDMWLoadIntf2MesWin_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -207,13 +207,13 @@ void beNDMWLoadIntf2MesWin_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    temp_s0->_metaObject = FUN_00357910();
+    temp_s0->_metaObject = beMessenger_GetOrCreateMetaObject();
     temp_s0->_refCounted = 0;
     temp_s0_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    temp_s0_2->_metaObject = FUN_0034c8e0();
+    temp_s0_2->_metaObject = bePadManager_GetOrCreateMetaObject();
     temp_s0_2->_refCounted = 0;
     temp_s0_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    temp_s0_3->_metaObject = (int)FUN_003c7700();
+    temp_s0_3->_metaObject = (int)beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject();
     temp_s0_3->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2MesWin_fieldTable, g_beNDMWLoadIntf2MesWin_fieldHandles, g_beNDMWLoadIntf2MesWin_fieldOffsets, temp_s2);
 }

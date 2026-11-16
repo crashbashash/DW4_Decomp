@@ -3,7 +3,7 @@ igMetaObject *g_beNDMWPanelWazaInfo_metaObject;
 void *beNDMWPanelWazaInfo_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWPanelWazaInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003bd750();
+        beNDMWPanelWazaInfo_EnsureRegistered();
     }
     return g_beNDMWPanelWazaInfo_metaObject;
 }
@@ -16,14 +16,14 @@ int beNDMWPanelWazaInfo_GetVTable(void) {
     obj.w2 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    obj.vt = &DAT_0053d690[0];
+    obj.vt = &g_beNDMWPanelWazaInfo_vtable[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053d690[0];
+    obj.vt = &g_beNDMWPanelWazaInfo_vtable[0];
     FUN_0033ec80(&obj, 0);
     return t;
 }
 
-void FUN_003bd750(void)
+void beNDMWPanelWazaInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWPanelWazaInfo_Register);
 }

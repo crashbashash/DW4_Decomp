@@ -19,7 +19,7 @@ int igControllerList_GetVTable(void) {
     Obj_1463a0 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_00524f70[0];
+    o.vt = &g_igControllerList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

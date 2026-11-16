@@ -12,11 +12,11 @@ igMetaField *g_beNDMWLogo_errTargetMetaField;
 igMetaField *g_beNDMWLogo_errTypeMetaField;
 
 void beNDMWLogo_CreateInstance(int arg0) {
-    FUN_003c2490();
+    beNDMWLogo_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLogo_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c2380(void) {
+igMetaObject *beNDMWLogo_GetOrCreateMetaObject(void) {
     if (g_beNDMWLogo_metaObject == 0) {
         g_beNDMWLogo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -26,7 +26,7 @@ igMetaObject *FUN_003c2380(void) {
 void *beNDMWLogo_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWLogo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c2490();
+        beNDMWLogo_EnsureRegistered();
     }
     return g_beNDMWLogo_metaObject;
 }
@@ -38,21 +38,21 @@ int beNDMWLogo_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.f8 = 0;
     obj.f18 = 0;
-    obj.vt = (&DAT_005409d0[0]);
+    obj.vt = (&g_beNDMWLogo_vtable[0]);
     obj.f28 = 0;
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_005409d0[0]);
+    obj.vt = (&g_beNDMWLogo_vtable[0]);
     FUN_003b2a10((ObjectRefWord *)&obj.f28, -1);
     FUN_0033f5e0(&obj, 0);
     return temp_s0;
 }
 
-void FUN_003c2490(void)
+void beNDMWLogo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLogo_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLogo_callbackList[] = { FUN_0034cb30, FUN_00342f30, FUN_003c5380, 0 };
+static igMetaObjectCallback g_beNDMWLogo_callbackList[] = { bePadManager_EnsureRegistered, beSystem_EnsureRegistered, beNDMWMcUtilCtrl_EnsureRegistered, 0 };
 
 void *beNDMWLogo_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -140,13 +140,13 @@ void beNDMWLogo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWLogo_ctorTable, 0xB);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034c8e0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00342ce0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = beSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_003c5200();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9), -1);
     igMetaObject_NameFields(temp_s0, g_beNDMWLogo_fieldTable, g_beNDMWLogo_fieldHandles, g_beNDMWLogo_fieldOffsets, temp_s2);

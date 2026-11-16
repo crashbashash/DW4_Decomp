@@ -2,15 +2,15 @@ igMetaObject *g_beSvFileMakeApi_metaObject;
 igMetaField *g_beSvFileMakeApi_earlyGamedataMetaField;
 igMetaField *g_beSvFileMakeApi_saveWorkMetaField;
 
-void FUN_00349d70(int arg0) {
-    FUN_00349e90();
+void beSvFileMakeApi_Create(int arg0) {
+    beSvFileMakeApi_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588280, arg0);
 }
 
-void *FUN_00349db0(void) {
+void *beSvFileMakeApi_GetMetaObject(void) {
     igMetaObject *g = g_beSvFileMakeApi_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00349e90();
+        beSvFileMakeApi_EnsureRegistered();
     }
     return g_beSvFileMakeApi_metaObject;
 }
@@ -23,23 +23,23 @@ int beSvFileMakeApi_GetVTable(void) {
     obj.w[11] = 0;
     obj.w[12] = 0;
     obj.w[13] = 0;
-    obj.vt = &DAT_0053c000[0];
+    obj.vt = &g_beSvFileMakeApi_vtable[0];
     obj.w[15] = 0;
     obj.w[16] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053c000[0];
-    FUN_003484b0((struct Ref **)(&obj.w[16]), (short)(-1));
+    obj.vt = &g_beSvFileMakeApi_vtable[0];
+    igSmartPointer_beSaveMemoryObj_Destruct((struct Ref **)(&obj.w[16]), (short)(-1));
     FUN_00349080((void **)(&obj.w[15]), (long long)(-1));
     FUN_00348390((struct S_348390 *)&obj, (short)0);
     return r;
 }
 
-void FUN_00349e90(void)
+void beSvFileMakeApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvFileMakeApi_Register);
 }
 
-static igMetaObjectCallback g_beSvFileMakeApi_callbackList[] = { FUN_0034a340, FUN_0034ad70, 0 };
+static igMetaObjectCallback g_beSvFileMakeApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveMemoryObj_EnsureRegistered, 0 };
 
 void *beSvFileMakeApi_Register(void) {
     BecLibrary_MarkRegistered();
@@ -48,7 +48,7 @@ void *beSvFileMakeApi_Register(void) {
         &g_beSvFileMakeApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
-        beSvFileMakeApi_GetMetaObject,
+        beSvFileMakeApi_GetMetaObjectFunction,
         "beSvFileMakeApi",
         0x418, /* instance size */
         beSvFileMakeApi_GetVTable,
@@ -58,9 +58,9 @@ void *beSvFileMakeApi_Register(void) {
     );
 }
 
-void beSvFileMakeApi_GetMetaObject(void)
+void beSvFileMakeApi_GetMetaObjectFunction(void)
 {
-    FUN_00349db0();
+    beSvFileMakeApi_GetMetaObject();
 }
 
 static FieldFactory g_beSvFileMakeApi_ctorTable[] = {
@@ -90,9 +90,9 @@ void beSvFileMakeApi_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beSvFileMakeApi_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a210();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beSvFileMakeApi_fieldTable, g_beSvFileMakeApi_fieldHandles, g_beSvFileMakeApi_fieldOffsets, temp_s2);
 }
 

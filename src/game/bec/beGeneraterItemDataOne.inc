@@ -3,10 +3,10 @@ igMetaField *g_beGeneraterItemDataOne_idMetaField;
 igMetaField *g_beGeneraterItemDataOne_rankMetaField;
 igMetaField *g_beGeneraterItemDataOne_rateMetaField;
 
-void *FUN_00360910(void) {
+void *beGeneraterItemDataOne_GetMetaObject(void) {
     igMetaObject *g = g_beGeneraterItemDataOne_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003609f0();
+        beGeneraterItemDataOne_EnsureRegistered();
     }
     return g_beGeneraterItemDataOne_metaObject;
 }
@@ -23,7 +23,7 @@ int beGeneraterItemDataOne_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00535c40[0];
+    u.vt = (int)&g_beGeneraterItemDataOne_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -40,7 +40,7 @@ int beGeneraterItemDataOne_GetVTable(void) {
     return s0;
 }
 
-void FUN_003609f0(void)
+void beGeneraterItemDataOne_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterItemDataOne_Register);
 }
@@ -52,7 +52,7 @@ void *beGeneraterItemDataOne_Register(void) {
         &g_beGeneraterItemDataOne_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beGeneraterItemDataOne_GetMetaObject,
+        beGeneraterItemDataOne_GetMetaObjectFunction,
         "beGeneraterItemDataOne",
         0x18, /* instance size */
         beGeneraterItemDataOne_GetVTable,
@@ -62,9 +62,9 @@ void *beGeneraterItemDataOne_Register(void) {
     );
 }
 
-void beGeneraterItemDataOne_GetMetaObject(void)
+void beGeneraterItemDataOne_GetMetaObjectFunction(void)
 {
-    FUN_00360910();
+    beGeneraterItemDataOne_GetMetaObject();
 }
 
 static FieldFactory g_beGeneraterItemDataOne_ctorTable[] = {

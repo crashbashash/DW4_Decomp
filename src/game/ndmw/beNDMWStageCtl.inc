@@ -2,22 +2,22 @@ igMetaObject *g_beNDMWStageCtl_metaObject;
 igMetaField *g_beNDMWStageCtl_resetTrgTimeMetaField;
 
 void beNDMWStageCtl_CreateInstance(int arg0) {
-    FUN_003bbf60();
+    beNDMWStageCtl_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, arg0);
 }
 
-igMetaObject *FUN_003bbde0(void) {
+igMetaObject *beNDMWStageCtl_GetOrCreateMetaObject(void) {
     if (g_beNDMWStageCtl_metaObject == 0) {
         g_beNDMWStageCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWStageCtl_metaObject;
 }
 
-igMetaObject *FUN_003bbe30(void) {
+igMetaObject *beNDMWStageCtl_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWStageCtl_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003bbf60();
+        beNDMWStageCtl_EnsureRegistered();
     return g_beNDMWStageCtl_metaObject;
 }
 
@@ -30,12 +30,12 @@ int beNDMWStageCtl_GetVTable(void) {
     struct T_3bbe80 *a;
 
     igObject_InitHeader(&o);
-    o.vt = DAT_0053a0d0;
+    o.vt = g_beBaseInfoManager_vtable;
     o.str = 0;
     o.ref = 0;
-    o.vt = DAT_0053dea0;
+    o.vt = g_beNDMWStageCtl_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_0053a0d0;
+    o.vt = g_beBaseInfoManager_vtable;
     if (&o.ref != 0) {
         a = o.ref;
         if (a != 0) {
@@ -56,7 +56,7 @@ int beNDMWStageCtl_GetVTable(void) {
     return r;
 }
 
-void FUN_003bbf60(void)
+void beNDMWStageCtl_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStageCtl_Register);
 }
@@ -68,7 +68,7 @@ void *beNDMWStageCtl_Register(void) {
         &g_beNDMWStageCtl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beNDMWStageCtl_GetMetaObject,
+        beNDMWStageCtl_GetMetaObjectFunction,
         "beNDMWStageCtl",
         0x28, /* instance size */
         beNDMWStageCtl_GetVTable,
@@ -78,9 +78,9 @@ void *beNDMWStageCtl_Register(void) {
     );
 }
 
-void beNDMWStageCtl_GetMetaObject(void)
+void beNDMWStageCtl_GetMetaObjectFunction(void)
 {
-    FUN_003bbe30();
+    beNDMWStageCtl_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWStageCtl_ctorTable[] = {

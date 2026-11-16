@@ -2,8 +2,8 @@
 #include "dw4/igSmartPointer.h"
 #define ALLOC(dst, obj) { int alloc = igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
 
-extern "C" int Gap__Bec__beNDMWSaveCtrl__vfunc_30(void);
-extern "C" int Gap__Bec__beNDMWSaveCtrl__vfunc_20(void);
+extern "C" int beNDMWSaveCtrl_GetInfoMeta(void);
+extern "C" int beNDMWSaveCtrl_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
@@ -16,13 +16,13 @@ extern "C" int beMessenger_ResolveEnumValue(...);
 extern "C" int igProperty_FindByName(...);
 extern "C" igObject * igInsightCore_FindManager(...);
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0);
+extern "C" void beNDMWSaveCtrl_Prepare(beNDMWSaveCtrl *arg0);
 extern "C" int g_beNDMWSaveCtrlInfo_metaObject[4];
 extern "C" int g_beNDMWSaveCtrl_metaObject[4];
 extern "C" char SAVECTRL_2[];
-extern "C" void Gap__Bec__beNDMWSaveCtrl__vfunc_29(beNDMWSaveCtrl *p0, int p1, char *p2);
+extern "C" void beNDMWSaveCtrl_OnAddRam(beNDMWSaveCtrl *p0, int p1, char *p2);
 extern "C" igObject *beBaseInfoDataList_Create(int);
-extern "C" igObject *FUN_003bd0b0(int);
+extern "C" igObject *beNDMWSaveCtrlCtrlData_Create(int);
 extern "C" igObject *beNDMWLoadCtrl2CommonIntf_Create(int);
 extern "C" igObject *beNDMWLoadSavePlWork_Create(int);
 extern "C" igObject *beNDMWDegiData_Create(int);
@@ -69,9 +69,9 @@ struct Rel { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2);
+extern "C" int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2);
 
-void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0) {
+void beNDMWSaveCtrl_Prepare(beNDMWSaveCtrl *arg0) {
     igObject *temp_a0;
     igObject *temp_v0;
 
@@ -94,17 +94,17 @@ void Gap__Bec__beNDMWSaveCtrl__vfunc_32(beNDMWSaveCtrl *arg0) {
     }
 }
 
-int Gap__Bec__beNDMWSaveCtrl__vfunc_30(void)
+int beNDMWSaveCtrl_GetInfoMeta(void)
 {
     return g_beNDMWSaveCtrlInfo_metaObject[0];
 }
 
-void Gap__Bec__beNDMWSaveCtrl__vfunc_29(beNDMWSaveCtrl *p0, int p1, char *p2)
+void beNDMWSaveCtrl_OnAddRam(beNDMWSaveCtrl *p0, int p1, char *p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, SAVECTRL_2);
 }
 
-int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2) {
+int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1, A2 *arg2) {
     int e;
     int i;
     e = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003bd390(), arg2->f20);
@@ -120,7 +120,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
             arg1->_dataList = (int)t;
             ALLOC(a, arg0);
             {
-            SaveCtrlDataRef ctrl(FUN_003bd0b0(a));
+            SaveCtrlDataRef ctrl(beNDMWSaveCtrlCtrlData_Create(a));
             ObjectList_AppendRetained((int)(igObject *)arg1->_dataList, (int)ctrl.p);
             beNDMWSaveCtrlCtrlData *o = (beNDMWSaveCtrlCtrlData *)ctrl.p;
             o->_st0 = 1;
@@ -196,7 +196,7 @@ int Gap__Bec__beNDMWSaveCtrl__vfunc_34(beNDMWSaveCtrl *arg0, beBaseInfoRam *arg1
     }
 }
 
-int Gap__Bec__beNDMWSaveCtrl__vfunc_20(void)
+int beNDMWSaveCtrl_GetMeta(void)
 {
     return g_beNDMWSaveCtrl_metaObject[0];
 }

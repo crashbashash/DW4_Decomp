@@ -19,7 +19,7 @@ int igOnOffValueObserverList_GetVTable(void) {
     Obj_44c920 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_00541d00[0];
+    o.vt = &g_igOnOffValueObserverList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

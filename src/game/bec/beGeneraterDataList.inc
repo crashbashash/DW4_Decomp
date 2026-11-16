@@ -1,14 +1,14 @@
 igMetaObject *g_beGeneraterDataList_metaObject;
 
-igMetaObject *FUN_0035f9d0(void) {
+igMetaObject *beGeneraterDataList_GetOrCreateMetaObject(void) {
     if (g_beGeneraterDataList_metaObject == 0) {
         g_beGeneraterDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beGeneraterDataList_metaObject;
 }
 
-igMetaObject *FUN_0035fa20(void) {
-    if (g_beGeneraterDataList_metaObject == 0 || !isValid(g_beGeneraterDataList_metaObject)) FUN_0035fab0();
+igMetaObject *beGeneraterDataList_GetMetaObject(void) {
+    if (g_beGeneraterDataList_metaObject == 0 || !isValid(g_beGeneraterDataList_metaObject)) beGeneraterDataList_EnsureRegistered();
     return g_beGeneraterDataList_metaObject;
 }
 
@@ -16,16 +16,16 @@ int beGeneraterDataList_GetVTable(void) {
     struct Obj_35fa70 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00535f10[0];
+    obj.vt = &g_beGeneraterDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0035fab0(void)
+void beGeneraterDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterDataList_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterDataList_callbackList[] = { FUN_0035fd50, 0 };
+static igMetaObjectCallback g_beGeneraterDataList_callbackList[] = { beGeneraterData_EnsureRegistered, 0 };
 
 void *beGeneraterDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -34,7 +34,7 @@ void *beGeneraterDataList_Register(void) {
         &g_beGeneraterDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beGeneraterDataList_GetMetaObject,
+        beGeneraterDataList_GetMetaObjectFunction,
         "beGeneraterDataList",
         0x14, /* instance size */
         beGeneraterDataList_GetVTable,
@@ -44,8 +44,8 @@ void *beGeneraterDataList_Register(void) {
     );
 }
 
-void beGeneraterDataList_GetMetaObject(void)
+void beGeneraterDataList_GetMetaObjectFunction(void)
 {
-    FUN_0035fa20();
+    beGeneraterDataList_GetMetaObject();
 }
 

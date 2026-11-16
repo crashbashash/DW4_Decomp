@@ -1,10 +1,10 @@
 igMetaObject *g_beBkColorInfo_metaObject;
 igMetaField *g_beBkColorInfo_rgbaMetaField;
 
-void *FUN_00369be0(void) {
+void *beBkColorInfo_GetMetaObject(void) {
     igMetaObject *g = g_beBkColorInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00369ca0();
+        beBkColorInfo_EnsureRegistered();
     }
     return g_beBkColorInfo_metaObject;
 }
@@ -17,14 +17,14 @@ int beBkColorInfo_GetVTable(void) {
     obj.w2 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    obj.vt = &DAT_00534900[0];
+    obj.vt = &g_beBkColorInfo_vtable[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00534900[0];
+    obj.vt = &g_beBkColorInfo_vtable[0];
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return t;
 }
 
-void FUN_00369ca0(void)
+void beBkColorInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beBkColorInfo_Register);
 }
@@ -36,7 +36,7 @@ void *beBkColorInfo_Register(void) {
         &g_beBkColorInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beBkColorInfo_GetMetaObject,
+        beBkColorInfo_GetMetaObjectFunction,
         "beBkColorInfo",
         0x2c, /* instance size */
         beBkColorInfo_GetVTable,
@@ -46,9 +46,9 @@ void *beBkColorInfo_Register(void) {
     );
 }
 
-void beBkColorInfo_GetMetaObject(void)
+void beBkColorInfo_GetMetaObjectFunction(void)
 {
-    FUN_00369be0();
+    beBkColorInfo_GetMetaObject();
 }
 
 static FieldFactory g_beBkColorInfo_ctorTable[] = {

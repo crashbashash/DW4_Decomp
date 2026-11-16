@@ -12,7 +12,7 @@ int igMessageBase_GetVTable(void) {
     Obj_4 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_0052c6e0[0];
+    o.vt = &g_igMessageBase_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

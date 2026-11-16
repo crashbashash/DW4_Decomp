@@ -21,10 +21,10 @@ int igMessageInterface_GetVTable(void) {
     int r;
     struct Ref *p;
     igObject_InitHeader(&o);
-    o.vt = DAT_0052bf30;
+    o.vt = g_igMessageInterface_vtable;
     *(int *)((char *)&o + 32) = 0;
     r = *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
-    o.vt = DAT_0052bf30;
+    o.vt = g_igMessageInterface_vtable;
     if (&*(int *)((char *)&o + 32) != 0) { p = *(struct Ref **)((char *)&o + 32); if (p != 0) { p->u.w = p->u.w - 1; if (p->u.b.cnt == 0) igObject_Destroy(p); } }
     return r;
 }

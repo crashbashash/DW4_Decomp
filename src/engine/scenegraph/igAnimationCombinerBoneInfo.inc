@@ -28,11 +28,11 @@ int igAnimationCombinerBoneInfo_GetVTable(void) {
     int *p;
     int c;
     igObject_InitHeader(&o);
-    o.vt = &DAT_00529d30[0];
+    o.vt = &g_igAnimationCombinerBoneInfo_vtable[0];
     o.m12 = 0;
     o.m16 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00529d30[0];
+    o.vt = &g_igAnimationCombinerBoneInfo_vtable[0];
     if (&o.m16 != 0) {
         t = o.m16;
         if (t != 0) {

@@ -38,7 +38,7 @@ void beMatCtrl_SetRun(beMatCtrl *self, bool run);
 int beMatCtrl_GetPlayerMatStat(beMatCtrl *self, int player);
 void beMatCtrl_Prepare(beMatCtrl *self);
 int beMatCtrl_GetInfoMeta(void);
-void beMatCtrl_RegisterReceiver(beMatCtrl *self, beMatCtrlInfoRam *ram);
+void beMatCtrl_OnAddRam(beMatCtrl *self, beMatCtrlInfoRam *ram);
 void beMatCtrl_MarkContacts(beMatCtrl *self, igIntList *masks, beMatCtrlSearchList *nodes, int player, float *point, beMatCtrlDataList *materials);
 int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork *message);
 int beMatCtrl_GetMeta(void);
@@ -154,7 +154,7 @@ int beMatCtrl_GetInfoMeta(void) {
     return g_beMatCtrlInfo_metaObject[0];
 }
 
-void beMatCtrl_RegisterReceiver(beMatCtrl *self, beMatCtrlInfoRam *ram) {
+void beMatCtrl_OnAddRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
     beMessenger_RegisterReceiver(self->_messenger, ram, MATCTRL, 0, -1);
 }
 

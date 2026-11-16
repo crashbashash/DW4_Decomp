@@ -9,17 +9,17 @@ igMetaField *g_beNDMWStatusCtrlD0_isAutoCloseMetaField;
 igMetaField *g_beNDMWStatusCtrlD0_decideListMetaField;
 
 void beNDMWStatusCtrlD0_Create(int arg0) {
-    FUN_003bb040();
+    beNDMWStatusCtrlD0_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStatusCtrlD0_metaObject, arg0);
 }
 
-void *FUN_003baf50(void) {
+void *beNDMWStatusCtrlD0_GetMetaObject(void) {
     unsigned char b;
     if (g_beNDMWStatusCtrlD0_metaObject != 0) {
         b = (*(int *)((char *)(g_beNDMWStatusCtrlD0_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_003bb040();
+    beNDMWStatusCtrlD0_EnsureRegistered();
 done:
     return g_beNDMWStatusCtrlD0_metaObject;
 }
@@ -36,18 +36,18 @@ int beNDMWStatusCtrlD0_GetVTable(void) {
     obj.f44 = 0;
     obj.f48 = 0;
     obj.f4C = 0;
-    obj.vt = (&DAT_0053eed0[0]);
+    obj.vt = (&g_beNDMWStatusCtrlD0_vtable[0]);
     obj.f64 = 0;
     obj.f70 = 0;
     temp_s1 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_0053eed0[0]);
+    obj.vt = (&g_beNDMWStatusCtrlD0_vtable[0]);
     FUN_00226990(&obj.f70, -1);
     igSmartPointer_igIntList_Destruct(&obj.f64, -1);
     FUN_003b6770((int **)&obj, (long long)0);
     return temp_s1;
 }
 
-void FUN_003bb040(void)
+void beNDMWStatusCtrlD0_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusCtrlD0_Register);
 }
@@ -61,7 +61,7 @@ void *beNDMWStatusCtrlD0_Register(void) {
         &g_beNDMWStatusCtrlD0_metaObject,
         beNDMWListCtrl_Register,
         beNDMWListCtrl_GetPublishedMetaObject,
-        beNDMWStatusCtrlD0_GetMetaObject,
+        beNDMWStatusCtrlD0_GetMetaObjectFunction,
         "beNDMWStatusCtrlD0",
         0x74, /* instance size */
         beNDMWStatusCtrlD0_GetVTable,
@@ -71,9 +71,9 @@ void *beNDMWStatusCtrlD0_Register(void) {
     );
 }
 
-void beNDMWStatusCtrlD0_GetMetaObject(void)
+void beNDMWStatusCtrlD0_GetMetaObjectFunction(void)
 {
-    FUN_003baf50();
+    beNDMWStatusCtrlD0_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWStatusCtrlD0_ctorTable[] = {

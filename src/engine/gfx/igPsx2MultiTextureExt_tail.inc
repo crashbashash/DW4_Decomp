@@ -62,7 +62,7 @@ int igPsx2MultiTextureExt_GetVTable(void) {
     obj.r1 = 0;
     obj.vt = &DAT_00530a10[0];
     obj.r2 = 0;
-    obj.vt = &DAT_00525510[0];
+    obj.vt = &g_igPsx2MultiTextureExt_vtable[0];
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00530a10[0];
     obj.rel(&obj.r2);

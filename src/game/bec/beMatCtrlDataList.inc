@@ -1,16 +1,16 @@
 igMetaObject *g_beMatCtrlDataList_metaObject;
 
-igMetaObject *FUN_0035a2a0(void) {
+igMetaObject *beMatCtrlDataList_GetOrCreateMetaObject(void) {
     if (g_beMatCtrlDataList_metaObject == 0) {
         g_beMatCtrlDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beMatCtrlDataList_metaObject;
 }
 
-void *FUN_0035a2f0(void) {
+void *beMatCtrlDataList_GetMetaObject(void) {
     igMetaObject *g = g_beMatCtrlDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035a380();
+        beMatCtrlDataList_EnsureRegistered();
     }
     return g_beMatCtrlDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beMatCtrlDataList_GetVTable(void) {
     struct Obj_35a340 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00536a30[0];
+    obj.vt = &g_beMatCtrlDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0035a380(void)
+void beMatCtrlDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMatCtrlDataList_Register);
 }
 
-static igMetaObjectCallback g_beMatCtrlDataList_callbackList[] = { FUN_0035a560, 0 };
+static igMetaObjectCallback g_beMatCtrlDataList_callbackList[] = { beMatCtrlData_EnsureRegistered, 0 };
 
 void *beMatCtrlDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beMatCtrlDataList_Register(void) {
         &g_beMatCtrlDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beMatCtrlDataList_GetMetaObject,
+        beMatCtrlDataList_GetMetaObjectFunction,
         "beMatCtrlDataList",
         0x14, /* instance size */
         beMatCtrlDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beMatCtrlDataList_Register(void) {
     );
 }
 
-void beMatCtrlDataList_GetMetaObject(void)
+void beMatCtrlDataList_GetMetaObjectFunction(void)
 {
-    FUN_0035a2f0();
+    beMatCtrlDataList_GetMetaObject();
 }
 

@@ -25,7 +25,7 @@ int igClearRenderer_GetVTable(void) {
     q0 = (S_ref *)&u.b[8];
     *(int *)q0 = 0;
     u.vt = (int)&DAT_0052d060[0];
-    u.vt = (int)&DAT_00540c80[0];
+    u.vt = (int)&g_igClearRenderer_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0052d060[0];
     if (q0 != 0) {

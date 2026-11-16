@@ -10,10 +10,10 @@ igMetaField *g_beModelCtrlAIMap_zoneDMetaField;
 igMetaField *g_beModelCtrlAIMap_targetTypeMetaField;
 igMetaField *g_beModelCtrlAIMap_targetModeMetaField;
 
-void *FUN_00354340(void) {
+void *beModelCtrlAIMap_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlAIMap_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00354510();
+        beModelCtrlAIMap_EnsureRegistered();
     }
     return g_beModelCtrlAIMap_metaObject;
 }
@@ -24,7 +24,7 @@ int beModelCtrlAIMap_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.w[2] = 0;
-    u.w[0] = (int)(&DAT_00537900[0]);
+    u.w[0] = (int)(&g_beModelCtrlAIMap_vtable[0]);
     u.w[7] = 0;
     u.w[8] = 0;
     u.w[9] = 0;
@@ -32,7 +32,7 @@ int beModelCtrlAIMap_GetVTable(void) {
     u.w[11] = 0;
     u.w[12] = 0;
     temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00537900[0]);
+    u.w[0] = (int)(&g_beModelCtrlAIMap_vtable[0]);
     igStringRef_Destruct(&u.w[12], -1);
     igStringRef_Destruct(&u.w[11], -1);
     FUN_00354490((struct R **)(&u.w[10]), (short)(-1));
@@ -61,12 +61,12 @@ struct R **FUN_00354490(struct R **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00354510(void)
+void beModelCtrlAIMap_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlAIMap_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlAIMap_callbackList[] = { FUN_003547b0, 0 };
+static igMetaObjectCallback g_beModelCtrlAIMap_callbackList[] = { beModelCtrlAIDataList_EnsureRegistered, 0 };
 
 void *beModelCtrlAIMap_Register(void) {
     BecLibrary_MarkRegistered();
@@ -75,7 +75,7 @@ void *beModelCtrlAIMap_Register(void) {
         &g_beModelCtrlAIMap_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlAIMap_GetMetaObject,
+        beModelCtrlAIMap_GetMetaObjectFunction,
         "beModelCtrlAIMap",
         0x34, /* instance size */
         beModelCtrlAIMap_GetVTable,
@@ -85,9 +85,9 @@ void *beModelCtrlAIMap_Register(void) {
     );
 }
 
-void beModelCtrlAIMap_GetMetaObject(void)
+void beModelCtrlAIMap_GetMetaObjectFunction(void)
 {
-    FUN_00354340();
+    beModelCtrlAIMap_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlAIMap_ctorTable[] = {
@@ -151,16 +151,16 @@ void beModelCtrlAIMap_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_beModelCtrlAIMap_ctorTable, 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_003546d0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_003546d0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_003546d0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_003546d0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields(temp_s1, g_beModelCtrlAIMap_fieldTable, g_beModelCtrlAIMap_fieldHandles, g_beModelCtrlAIMap_fieldOffsets, temp_s0);
 }

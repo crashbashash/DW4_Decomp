@@ -3,11 +3,11 @@
 
 extern "C" void igSwitch_DisableAllChildren(int);
 extern "C" void igObject_Destroy(void *);
-extern "C" int Gap__Bec__beParticleCtrl2__vfunc_30(void);
-extern "C" int Gap__Bec__beParticleCtrl2__vfunc_20(void);
+extern "C" int beParticleCtrl2_GetInfoMeta(void);
+extern "C" int beParticleCtrl2_GetMeta(void);
 extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" void FUN_00191670(void *, void *, float);
-extern "C" void *FUN_0034c040(...);
+extern "C" void *beParticleCtrl2InfoWork_Create(...);
 extern "C" int FUN_0034c5d0(...);
 extern "C" void igMatrix44f_TranslateLocal(void *, void *);
 extern "C" int Memory_GetAllocatorBySelector(...);
@@ -24,7 +24,7 @@ extern "C" int beMessenger_GetVec3Count(int);
 extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, void *);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int igObject_GetAllocator(...);
-extern "C" void Gap__Bec__beParticleCtrl2__vfunc_32(beParticleCtrl2 *arg0);
+extern "C" void beParticleCtrl2_Prepare(beParticleCtrl2 *arg0);
 extern "C" int g_beParticleCtrl2Info_metaObject[4];
 extern "C" int g_beParticleCtrl2_metaObject[4];
 typedef struct NameHolder { char pad[8]; int *f8; } NameHolder;
@@ -32,7 +32,7 @@ typedef struct RamInfoArg { char pad[8]; int f8; NameHolder *fc; char pad2[4]; u
 extern "C" int beMessenger_RegisterReceiver(int, RamInfoArg *, int *, int *, int);
 extern "C" int emptyString[4];
 extern "C" int MODELCTRL_12[4];
-extern "C" void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1);
+extern "C" void beParticleCtrl2_OnAddRam(beParticleCtrl2 *arg0, RamInfoArg *arg1);
 extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
@@ -120,9 +120,9 @@ struct Mtx {
     virtual void d34();
     virtual void put(void *);
 };
-extern "C" int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2);
+extern "C" int beParticleCtrl2_OnMessage(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2);
 
-void Gap__Bec__beParticleCtrl2__vfunc_32(beParticleCtrl2 *arg0) {
+void beParticleCtrl2_Prepare(beParticleCtrl2 *arg0) {
     int n1;
     int i;
     int n2;
@@ -166,12 +166,12 @@ void Gap__Bec__beParticleCtrl2__vfunc_32(beParticleCtrl2 *arg0) {
     }
 }
 
-int Gap__Bec__beParticleCtrl2__vfunc_30(void)
+int beParticleCtrl2_GetInfoMeta(void)
 {
     return g_beParticleCtrl2Info_metaObject[0];
 }
 
-void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1) {
+void beParticleCtrl2_OnAddRam(beParticleCtrl2 *arg0, RamInfoArg *arg1) {
     int *var_a3;
     int t0;
     igObject *temp_a0;
@@ -191,7 +191,7 @@ void Gap__Bec__beParticleCtrl2__vfunc_29(beParticleCtrl2 *arg0, RamInfoArg *arg1
     arg1->f34 = 0;
 }
 
-int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2) {
+int beParticleCtrl2_OnMessage(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2) {
     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0034c5d0(), (void *)arg2->_message)) {
     case 0:
         if (beMessenger_GetStringCount(arg0->_messenger) != 0) {
@@ -226,7 +226,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
                 } else {
                     a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 }
-                igSmartPointer<beParticleCtrl2InfoWork> work((beParticleCtrl2InfoWork *)FUN_0034c040(a));
+                igSmartPointer<beParticleCtrl2InfoWork> work((beParticleCtrl2InfoWork *)beParticleCtrl2InfoWork_Create(a));
                 igObject *o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
                 beParticleCtrl2InfoWork *r = work.p;
                 if (o != 0) {
@@ -296,7 +296,7 @@ int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, beParticleCtrl2In
     return 1;
 }
 
-int Gap__Bec__beParticleCtrl2__vfunc_20(void)
+int beParticleCtrl2_GetMeta(void)
 {
     return g_beParticleCtrl2_metaObject[0];
 }

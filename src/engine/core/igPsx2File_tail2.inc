@@ -102,7 +102,7 @@ open:
     }
 }
 
-void igPsx2File_CloseHandle(igPsx2FileView *self) {
+void igPsx2File_Close(igPsx2FileView *self) {
     if (self->_fileHandle >= 0) {
         self->Flush();
         sceClose(self->_fileHandle);
@@ -117,7 +117,7 @@ void igPsx2File_CloseHandle(igPsx2FileView *self) {
     }
 }
 
-void **igPsx2File_Open(void **self, const char *fileName, int modeText) {
+void **igPsx2File_OpenFile(void **self, const char *fileName, int modeText) {
     igResult appendBinaryResult;
     igResult appendResult;
     igResult readWriteBinaryResult;
@@ -174,7 +174,7 @@ block_21:
     return (opened == g_resultFailure.v) ? (void **)0 : self;
 }
 
-void igPsx2File_Close(igPsx2FileView *self)
+void igPsx2File_CloseFile(igPsx2FileView *self)
 {
     self->CloseHandle();
 }
@@ -330,7 +330,7 @@ int igPsx2File_Scanf(igPsx2FileView *self, const char *format, ...) {
     return count;
 }
 
-int igPsx2File_Print(igPsx2FileView *self, int format, ...) {
+int igPsx2File_Printf(igPsx2FileView *self, int format, ...) {
     char buf[16384];
     int n;
     int off;

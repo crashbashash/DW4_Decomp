@@ -42,32 +42,32 @@ int g_targetRamNo;
 
 extern "C" float beTargetObj_GetOriginHeading(beTargetObj *self);
 
-extern "C" void Gap__Bec__beTargetObj__vfunc_21(beTargetObj *self, int unused)
+extern "C" void beTargetObj_Activate(beTargetObj *self, int unused)
 {
     igInsightCore_AddToScheduler(self->_insight, self);
 }
 
-extern "C" void Gap__Bec__beTargetObj__vfunc_22(beTargetObj *self, int unused)
+extern "C" void beTargetObj_Deactivate(beTargetObj *self, int unused)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
-extern "C" void Gap__Bec__beTargetObj__vfunc_23(beTargetObj *self)
+extern "C" void beTargetObj_Start(beTargetObj *self)
 {
     g_targetObj = (beTargetObj *)igInsightCore_FindManager(self->_insight, g_beTargetObj_metaObject[0]);
     g_targetMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
 }
 
-extern "C" void Gap__Bec__beTargetObj__vfunc_24(void)
+extern "C" void beTargetObj_Stop(void)
 {
 }
 
-extern "C" int Gap__Bec__beTargetObj__vfunc_25(void)
+extern "C" int beTargetObj_AddInfo(void)
 {
     return 0;
 }
 
-extern "C" void Gap__Bec__beTargetObj__vfunc_26(beTargetObj *self)
+extern "C" void beTargetObj_RemoveAllInfo(beTargetObj *self)
 {
     igVec3fList *playerPositions;
     igIntList *playerRamNos;
@@ -90,7 +90,7 @@ extern "C" void Gap__Bec__beTargetObj__vfunc_26(beTargetObj *self)
     }
 }
 
-extern "C" void Gap__Bec__beTargetObj__vfunc_27(beTargetObj *self)
+extern "C" void beTargetObj_Update(beTargetObj *self)
 {
     ((igVec3fList *)self->_playerPosList)->_count = 0;
     ((igIntList *)self->_playerRamNoList)->_count = 0;
@@ -401,7 +401,7 @@ extern "C" int beTargetObj_GetTargetRamNo(void)
     return g_targetRamNo;
 }
 
-extern "C" int Gap__Bec__beTargetObj__vfunc_20(void)
+extern "C" int beTargetObj_GetMeta(void)
 {
     return g_beTargetObj_metaObject[0];
 }

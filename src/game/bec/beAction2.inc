@@ -1,21 +1,21 @@
 igMetaObject *g_beAction2_metaObject;
 
 void beAction2_CreateInstance(int arg0) {
-    FUN_0036def0();
+    beAction2_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x58A028, arg0);
 }
 
-igMetaObject *FUN_0036dd70(void) {
+igMetaObject *beAction2_GetOrCreateMetaObject(void) {
     if (g_beAction2_metaObject == 0) {
         g_beAction2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beAction2_metaObject;
 }
 
-void *FUN_0036ddc0(void) {
+void *beAction2_GetMetaObject(void) {
     igMetaObject *g = g_beAction2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036def0();
+        beAction2_EnsureRegistered();
     }
     return g_beAction2_metaObject;
 }
@@ -32,12 +32,12 @@ int beAction2_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_00539f90[0];
+    u.vt = (int)&g_beAction2_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -62,7 +62,7 @@ int beAction2_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0036def0(void)
+void beAction2_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAction2_Register);
 }
@@ -74,7 +74,7 @@ void *beAction2_Register(void) {
         &g_beAction2_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beAction2_GetMetaObject,
+        beAction2_GetMetaObjectFunction,
         "beAction2",
         0x20, /* instance size */
         beAction2_GetVTable,
@@ -84,8 +84,8 @@ void *beAction2_Register(void) {
     );
 }
 
-void beAction2_GetMetaObject(void)
+void beAction2_GetMetaObjectFunction(void)
 {
-    FUN_0036ddc0();
+    beAction2_GetMetaObject();
 }
 

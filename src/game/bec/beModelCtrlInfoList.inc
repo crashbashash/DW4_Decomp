@@ -1,12 +1,12 @@
 igMetaObject *g_beModelCtrlInfoList_metaObject;
 
-igMetaObject *FUN_00352b90(void) {
+igMetaObject *beModelCtrlInfoList_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlInfoList_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_00352c20();
+    beModelCtrlInfoList_EnsureRegistered();
 done:
     return g_beModelCtrlInfoList_metaObject;
 }
@@ -15,16 +15,16 @@ int beModelCtrlInfoList_GetVTable(void) {
     struct Obj_352be0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00537c80[0];
+    obj.vt = &g_beModelCtrlInfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00352c20(void)
+void beModelCtrlInfoList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoList_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoList_callbackList[] = { FUN_00352da0, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoList_callbackList[] = { beModelCtrlInfo_EnsureRegistered, 0 };
 
 void *beModelCtrlInfoList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -33,7 +33,7 @@ void *beModelCtrlInfoList_Register(void) {
         &g_beModelCtrlInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beModelCtrlInfoList_GetMetaObject,
+        beModelCtrlInfoList_GetMetaObjectFunction,
         "beModelCtrlInfoList",
         0x14, /* instance size */
         beModelCtrlInfoList_GetVTable,
@@ -43,8 +43,8 @@ void *beModelCtrlInfoList_Register(void) {
     );
 }
 
-void beModelCtrlInfoList_GetMetaObject(void)
+void beModelCtrlInfoList_GetMetaObjectFunction(void)
 {
-    FUN_00352b90();
+    beModelCtrlInfoList_GetMetaObject();
 }
 

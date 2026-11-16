@@ -29,10 +29,10 @@ int igAttrStack_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     q5 = &u.p[5];
-    u.w[0] = (int)(&DAT_0052a160[0]);
+    u.w[0] = (int)(&g_igAttrStack_vtable[0]);
     *q5 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052a160[0]);
+    u.w[0] = (int)(&g_igAttrStack_vtable[0]);
     if (q5 != 0) {
         temp_a0 = *q5;
         if (temp_a0 != 0) {

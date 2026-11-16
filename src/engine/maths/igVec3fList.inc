@@ -2,11 +2,11 @@ igMetaObject *g_igVec3fList_metaObject;
 int g_igVec3fList_externalStorage;
 
 void FUN_0018a060(int arg0) {
-    FUN_0018a180();
+    igVec3fList_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igVec3fList_metaObject, arg0);
 }
 
-igMetaObject *FUN_0018a0a0(void) {
+igMetaObject *igVec3fList_GetOrCreateMetaObject(void) {
     if (g_igVec3fList_metaObject == 0) {
         g_igVec3fList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -17,7 +17,7 @@ igMetaObject *igVec3fList_GetMetaObject(void)
 {
     igMetaObject *g = g_igVec3fList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0018a180();
+        igVec3fList_EnsureRegistered();
     return g_igVec3fList_metaObject;
 }
 
@@ -25,11 +25,11 @@ int igVec3fList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524880[0];
+    obj.vt = &g_igVec3fList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0018a180(void)
+void igVec3fList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVec3fList_Register);
 }

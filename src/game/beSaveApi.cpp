@@ -83,8 +83,8 @@ extern "C" int Memory_FreeBufferWithAllocator(int, int);
 extern "C" int memset(void *, int, int);
 extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
 extern "C" int igMetaObject_CountInstances(...);
-extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_08(beSaveMemoryObj *self);
-extern "C" int Gap__Bec__beSaveMemoryObj__vfunc_20(void);
+extern "C" void beSaveMemoryObj_userDestruct(beSaveMemoryObj *self);
+extern "C" int beSaveMemoryObj_GetMeta(void);
 extern "C" int sceMcFormat(int, int);
 extern "C" int sceMcGetInfo(...);
 extern "C" int sprintf(char *, const char *, ...);
@@ -102,60 +102,60 @@ extern "C" int sceMcSync(...);
 extern "C" int beSvConnectCheck_ProbeSlot(int check, int slot);
 extern "C" int beSvConnectCheck_ProbeSlots(int check, int onlyPresent);
 extern "C" void beSvConnectCheck_PollMultitap(int check, beSvDeliver *deliver);
-extern "C" void Gap__Bec__beSvConnectCheck__vfunc_21(void);
-extern "C" int Gap__Bec__beSvConnectCheck__vfunc_22(void);
-extern "C" void Gap__Bec__beSvConnectCheck__vfunc_23(void);
-extern "C" int Gap__Bec__beSvConnectCheck__vfunc_20(void);
+extern "C" void beSvConnectCheck_Start(void);
+extern "C" int beSvConnectCheck_Update(void);
+extern "C" void beSvConnectCheck_Report(void);
+extern "C" int beSvConnectCheck_GetMeta(void);
 extern "C" int Gap__Core__igObject__userConstruct(...);
-extern "C" void Gap__Bec__beSvConnectCheck__vfunc_07(igObjectVirtuals *self);
-extern "C" int Gap__Bec__beSaveApi__vfunc_20(void);
+extern "C" void beSvConnectCheck_userConstruct(igObjectVirtuals *self);
+extern "C" int beSaveApi_GetMeta(void);
 extern "C" void Gap__Core__igObject__userDestruct(...);
-extern "C" void Gap__Bec__beSvConnectCheck__vfunc_08(void);
-extern "C" int Gap__Bec__beSvEndApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvEndApi__vfunc_07(igObjectVirtuals *self);
-extern "C" void Gap__Bec__beSvEndApi__vfunc_08(void);
-extern "C" int Gap__Bec__beSvStartApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvStartApi__vfunc_07(igObjectVirtuals *self);
-extern "C" void Gap__Bec__beSvStartApi__vfunc_08(void);
-extern "C" int Gap__Bec__beSvGetFreeSizeApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_07(igObjectVirtuals *self);
-extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_08(void);
-extern "C" int Gap__Bec__beSvWriteMediaApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_07(igObjectVirtuals *self);
+extern "C" void beSvConnectCheck_userDestruct(void);
+extern "C" int beSvEndApi_GetMeta(void);
+extern "C" void beSvEndApi_userConstruct(igObjectVirtuals *self);
+extern "C" void beSvEndApi_userDestruct(void);
+extern "C" int beSvStartApi_GetMeta(void);
+extern "C" void beSvStartApi_userConstruct(igObjectVirtuals *self);
+extern "C" void beSvStartApi_userDestruct(void);
+extern "C" int beSvGetFreeSizeApi_GetMeta(void);
+extern "C" void beSvGetFreeSizeApi_userConstruct(igObjectVirtuals *self);
+extern "C" void beSvGetFreeSizeApi_userDestruct(void);
+extern "C" int beSvWriteMediaApi_GetMeta(void);
+extern "C" void beSvWriteMediaApi_userConstruct(igObjectVirtuals *self);
 extern "C" int igObject_Destroy(...);
-extern "C" int Gap__Bec__beSvReadMediaApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_07(igObjectVirtuals *self);
-extern "C" int Gap__Bec__beSvUseCheckApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_08(void);
-extern "C" void Gap__Bec__beSaveApi__vfunc_07(igObjectVirtuals *self);
-extern "C" int Gap__Bec__beSvFormatApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvFormatApi__vfunc_08(void);
-extern "C" int Gap__Bec__beSvFileFindApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvFileFindApi__vfunc_08(void);
-extern "C" int Gap__Bec__beSvFileMakeApi__vfunc_20(void);
-extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_07(igObjectVirtuals *self);
-extern "C" void Gap__Bec__beSaveApi__vfunc_08(void);
-extern "C" void Gap__Bec__beSaveMemoryObj__vfunc_07(igObjectVirtuals *self);
+extern "C" int beSvReadMediaApi_GetMeta(void);
+extern "C" void beSvReadMediaApi_userConstruct(igObjectVirtuals *self);
+extern "C" int beSvUseCheckApi_GetMeta(void);
+extern "C" void beSvUseCheckApi_userDestruct(void);
+extern "C" void beSaveApi_userConstruct(igObjectVirtuals *self);
+extern "C" int beSvFormatApi_GetMeta(void);
+extern "C" void beSvFormatApi_userDestruct(void);
+extern "C" int beSvFileFindApi_GetMeta(void);
+extern "C" void beSvFileFindApi_userDestruct(void);
+extern "C" int beSvFileMakeApi_GetMeta(void);
+extern "C" void beSvFileMakeApi_userConstruct(igObjectVirtuals *self);
+extern "C" void beSaveApi_userDestruct(void);
+extern "C" void beSaveMemoryObj_userConstruct(igObjectVirtuals *self);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beSaveDataDeliver_FreeData(beSaveDataDeliver *deliver);
 extern "C" void beSaveMemoryObj_Allocate(beSaveMemoryObj *self, int size, int alignment);
 extern "C" void beSaveMemoryObj_Free(beSaveMemoryObj *self);
 extern "C" int g_beSaveMemoryObj_metaObject[4];
-extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_23(beSvFileMakeApi *self, beSvDeliver *deliver);
+extern "C" void beSvFileMakeApi_Report(beSvFileMakeApi *self, beSvDeliver *deliver);
 extern "C" unsigned char g_svCardBusy;
-extern "C" void Gap__Bec__beSvFileFindApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
-extern "C" void Gap__Bec__beSvFileFindApi__vfunc_23(beSvFileFindApi *self, beSvDeliver *deliver);
-extern "C" void Gap__Bec__beSvFormatApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" void beSvFileFindApi_Start(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" void beSvFileFindApi_Report(beSvFileFindApi *self, beSvDeliver *deliver);
+extern "C" void beSvFormatApi_Start(beSvApiWork *self, beSvDeliver *deliver);
 extern "C" int g_svMcRequestState[24];
 extern "C" int g_svMcRequestResult[24];
 extern "C" unsigned char g_svConnectCheckPending;
-extern "C" unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvApiWork *self);
-extern "C" void Gap__Bec__beSvFormatApi__vfunc_23(beSvFormatApi *self, beSvDeliver *deliver);
-extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
-extern "C" unsigned char Gap__Bec__beSvUseCheckApi__vfunc_22(beSvUseCheckApiWork *self);
-extern "C" void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *self, beSvDeliver *deliver);
-extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_23(beSvReadMediaApi *self, beSvDeliver *deliver);
+extern "C" unsigned char beSvFormatApi_Update(beSvApiWork *self);
+extern "C" void beSvFormatApi_Report(beSvFormatApi *self, beSvDeliver *deliver);
+extern "C" void beSvUseCheckApi_Start(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" unsigned char beSvUseCheckApi_Update(beSvUseCheckApiWork *self);
+extern "C" void beSvUseCheckApi_Report(beSvUseCheckApi *self, beSvDeliver *deliver);
+extern "C" void beSvReadMediaApi_Report(beSvReadMediaApi *self, beSvDeliver *deliver);
 /* beSvWriteMediaApi with the retry counter at +60 and the image pass at +72, which the registered
  * metadata does not list. */
 typedef struct beSvWriteMediaApiWork {
@@ -187,11 +187,11 @@ extern "C" beSvPlatDataPS2 *g_svPlatformData[1];
 extern "C" CardSlot g_svCardSlots[8];
 extern "C" char slash_percent_s_slash_percent_s[];
 extern "C" int g_svSaveFd[1];
-extern "C" int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiWork *self);
-extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_23(beSvWriteMediaApi *self, beSvDeliver *deliver);
-extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
-extern "C" unsigned char Gap__Bec__beSvGetFreeSizeApi__vfunc_22(beSvGetFreeSizeApiWork *self);
-extern "C" void Gap__Bec__beSvGetFreeSizeApi__vfunc_23(beSvGetFreeSizeApiWork *self, beSvDeliver *deliver);
+extern "C" int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self);
+extern "C" void beSvWriteMediaApi_Report(beSvWriteMediaApi *self, beSvDeliver *deliver);
+extern "C" void beSvGetFreeSizeApi_Start(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" unsigned char beSvGetFreeSizeApi_Update(beSvGetFreeSizeApiWork *self);
+extern "C" void beSvGetFreeSizeApi_Report(beSvGetFreeSizeApiWork *self, beSvDeliver *deliver);
 extern "C" int g_svConnectMax[1];
 extern "C" char mcman_irx[];
 extern "C" char mcserv_irx[];
@@ -199,12 +199,12 @@ extern "C" int g_svSaveVersion[1];
 extern "C" char g_svMultitapState;
 extern "C" unsigned char g_svMcModulesLoaded;
 extern "C" char g_svMultitapChanged;
-extern "C" void Gap__Bec__beSvStartApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver);
-extern "C" int Gap__Bec__beSvStartApi__vfunc_22(beSvStartApi *self);
-extern "C" void Gap__Bec__beSvStartApi__vfunc_23(beSvStartApi *self, beSvDeliver *deliver);
-extern "C" void Gap__Bec__beSvEndApi__vfunc_21(beSvEndApi *self);
-extern "C" int Gap__Bec__beSvEndApi__vfunc_22(beSvEndApi *self);
-extern "C" void Gap__Bec__beSvEndApi__vfunc_23(beSvEndApi *self, beSvDeliver *deliver);
+extern "C" void beSvStartApi_Start(beSvApiWork *self, beSvDeliver *deliver);
+extern "C" int beSvStartApi_Update(beSvStartApi *self);
+extern "C" void beSvStartApi_Report(beSvStartApi *self, beSvDeliver *deliver);
+extern "C" void beSvEndApi_Start(beSvEndApi *self);
+extern "C" int beSvEndApi_Update(beSvEndApi *self);
+extern "C" void beSvEndApi_Report(beSvEndApi *self, beSvDeliver *deliver);
 extern "C" int g_svSlotPresent[8];
 extern "C" int g_svMultitapPollCount[1];
 extern "C" int g_svMultitapPollSuspended[1];
@@ -217,14 +217,14 @@ extern "C" int g_beSvEndApi_metaObject[4];
 extern "C" int g_beSvStartApi_metaObject[4];
 extern "C" int g_beSvGetFreeSizeApi_metaObject[4];
 extern "C" int g_beSvWriteMediaApi_metaObject[4];
-extern "C" void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *self);
+extern "C" void beSvWriteMediaApi_userDestruct(beSvWriteMediaApi *self);
 extern "C" int g_beSvReadMediaApi_metaObject[4];
-extern "C" void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *self);
+extern "C" void beSvReadMediaApi_userDestruct(beSvReadMediaApi *self);
 extern "C" int g_beSvUseCheckApi_metaObject[4];
 extern "C" int g_beSvFormatApi_metaObject[4];
 extern "C" int g_beSvFileFindApi_metaObject[4];
 extern "C" int g_beSvFileMakeApi_metaObject[4];
-extern "C" void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *self);
+extern "C" void beSvFileMakeApi_userDestruct(beSvFileMakeApi *self);
 extern "C" beSaveMemoryObj *beSaveMemoryObj_CreateInstance(int allocator);
 extern "C" void *memcpy(void *, const void *, unsigned int);
 extern "C" void ObjectList_AppendRetained(int list, igObject *item);
@@ -299,13 +299,13 @@ void beSaveMemoryObj_Free(beSaveMemoryObj *self) {
     self->_mem = 0;
 }
 
-void Gap__Bec__beSaveMemoryObj__vfunc_08(beSaveMemoryObj *self) {
+void beSaveMemoryObj_userDestruct(beSaveMemoryObj *self) {
     beSaveMemoryObj_Free(self);
     igMetaObject_CountInstances(((igObjectVirtuals *)self)->getMetaObject(), 1);
     Gap__Core__igObject__userDestruct(self);
 }
 
-int Gap__Bec__beSaveMemoryObj__vfunc_20(void)
+int beSaveMemoryObj_GetMeta(void)
 {
     return g_beSaveMemoryObj_metaObject[0];
 }
@@ -343,12 +343,12 @@ void beSvFileMakeApi_Start(beSvFileMakeApiWork *self, beSvDeliver *deliver) {
     g_svCardBusy = 1;
 }
 
-void Gap__Bec__beSvFileMakeApi__vfunc_23(beSvFileMakeApi *self, beSvDeliver *deliver) {
+void beSvFileMakeApi_Report(beSvFileMakeApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvFileFindApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+void beSvFileFindApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
     int target;
 
     target = deliver->_targetConnect;
@@ -370,12 +370,12 @@ void Gap__Bec__beSvFileFindApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver
     self->_retryCount = 0;
 }
 
-void Gap__Bec__beSvFileFindApi__vfunc_23(beSvFileFindApi *self, beSvDeliver *deliver) {
+void beSvFileFindApi_Report(beSvFileFindApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvFormatApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+void beSvFormatApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
     self->_isEnd = 0;
     self->_connect = deliver->_targetConnect;
     self->_result = 1;
@@ -387,7 +387,7 @@ void Gap__Bec__beSvFormatApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) 
     self->_retryCount = 0;
 }
 
-unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvApiWork *self) {
+unsigned char beSvFormatApi_Update(beSvApiWork *self) {
     int connect;
     int res;
     unsigned char retry;
@@ -446,12 +446,12 @@ unsigned char Gap__Bec__beSvFormatApi__vfunc_22(beSvApiWork *self) {
     return self->_isEnd;
 }
 
-void Gap__Bec__beSvFormatApi__vfunc_23(beSvFormatApi *self, beSvDeliver *deliver) {
+void beSvFormatApi_Report(beSvFormatApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvUseCheckApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+void beSvUseCheckApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
     self->_connect = deliver->_targetConnect;
     self->_isEnd = 0;
     self->_result = 1;
@@ -463,7 +463,7 @@ void Gap__Bec__beSvUseCheckApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver
     self->_retryCount = 0;
 }
 
-unsigned char Gap__Bec__beSvUseCheckApi__vfunc_22(beSvUseCheckApiWork *self) {
+unsigned char beSvUseCheckApi_Update(beSvUseCheckApiWork *self) {
     int connect;
     int res;
     unsigned char retry;
@@ -536,12 +536,12 @@ unsigned char Gap__Bec__beSvUseCheckApi__vfunc_22(beSvUseCheckApiWork *self) {
     return self->_isEnd;
 }
 
-void Gap__Bec__beSvUseCheckApi__vfunc_23(beSvUseCheckApi *self, beSvDeliver *deliver) {
+void beSvUseCheckApi_Report(beSvUseCheckApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvReadMediaApi__vfunc_23(beSvReadMediaApi *self, beSvDeliver *deliver) {
+void beSvReadMediaApi_Report(beSvReadMediaApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
@@ -596,7 +596,7 @@ void beSvWriteMediaApi_Start(beSvWriteMediaApiWork *self, beSvDeliver *deliver) 
  * resets the image pass, 2 seeks to the pass's data offset, 3 writes the save buffer and flushes
  * it (then repeats phases 2-3 for the second pass), 4 closes the file (_result = 2, saved).
  * Returns 1 when already finished, 0 while a request is pending, else _isEnd. */
-int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiWork *self)
+int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
 {
     char path[256];
     int ok;
@@ -845,12 +845,12 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiWork *self)
 #undef SV_FIRST_STEP
 #undef SV_NEXT_STEP
 
-void Gap__Bec__beSvWriteMediaApi__vfunc_23(beSvWriteMediaApi *self, beSvDeliver *deliver) {
+void beSvWriteMediaApi_Report(beSvWriteMediaApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvGetFreeSizeApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+void beSvGetFreeSizeApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
     self->_connect = deliver->_targetConnect;
     self->_isEnd = 0;
     self->_result = 1;
@@ -863,7 +863,7 @@ void Gap__Bec__beSvGetFreeSizeApi__vfunc_21(beSvApiWork *self, beSvDeliver *deli
     self->_retryCount = 0;
 }
 
-unsigned char Gap__Bec__beSvGetFreeSizeApi__vfunc_22(beSvGetFreeSizeApiWork *self) {
+unsigned char beSvGetFreeSizeApi_Update(beSvGetFreeSizeApiWork *self) {
     int connect;
     beSvPlatDataPS2 *platform;
     int res;
@@ -960,7 +960,7 @@ unsigned char Gap__Bec__beSvGetFreeSizeApi__vfunc_22(beSvGetFreeSizeApiWork *sel
     return self->_isEnd;
 }
 
-void Gap__Bec__beSvGetFreeSizeApi__vfunc_23(beSvGetFreeSizeApiWork *self, beSvDeliver *deliver) {
+void beSvGetFreeSizeApi_Report(beSvGetFreeSizeApiWork *self, beSvDeliver *deliver) {
     beSvPlatDataPS2 *platform = g_svPlatformData[0];
 
     deliver->_result = self->_result;
@@ -979,7 +979,7 @@ void Gap__Bec__beSvGetFreeSizeApi__vfunc_23(beSvGetFreeSizeApiWork *self, beSvDe
     deliver->_isfileCapaOK = 1;
 }
 
-void Gap__Bec__beSvStartApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
+void beSvStartApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
     int mcmanId;
     int mcservId;
 
@@ -1010,7 +1010,7 @@ void Gap__Bec__beSvStartApi__vfunc_21(beSvApiWork *self, beSvDeliver *deliver) {
     self->_st1 = 0;
 }
 
-int Gap__Bec__beSvStartApi__vfunc_22(beSvStartApi *self) {
+int beSvStartApi_Update(beSvStartApi *self) {
     if (self->_isEnd != 0) {
         return 1;
     }
@@ -1018,12 +1018,12 @@ int Gap__Bec__beSvStartApi__vfunc_22(beSvStartApi *self) {
     return 1;
 }
 
-void Gap__Bec__beSvStartApi__vfunc_23(beSvStartApi *self, beSvDeliver *deliver) {
+void beSvStartApi_Report(beSvStartApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
 
-void Gap__Bec__beSvEndApi__vfunc_21(beSvEndApi *self) {
+void beSvEndApi_Start(beSvEndApi *self) {
     self->_isEnd = 0;
     self->_result = 1;
     sceMtapPortClose(2);
@@ -1033,7 +1033,7 @@ void Gap__Bec__beSvEndApi__vfunc_21(beSvEndApi *self) {
     self->_st1 = 0;
 }
 
-int Gap__Bec__beSvEndApi__vfunc_22(beSvEndApi *self) {
+int beSvEndApi_Update(beSvEndApi *self) {
     if (self->_isEnd != 0) {
         return 1;
     }
@@ -1042,7 +1042,7 @@ int Gap__Bec__beSvEndApi__vfunc_22(beSvEndApi *self) {
     return 1;
 }
 
-void Gap__Bec__beSvEndApi__vfunc_23(beSvEndApi *self, beSvDeliver *deliver) {
+void beSvEndApi_Report(beSvEndApi *self, beSvDeliver *deliver) {
     deliver->_result = self->_result;
     deliver->_isEndOperat = 1;
 }
@@ -1238,99 +1238,99 @@ int beSvConnectCheck_FillDeliver(int *slotWords, beSvDeliver *deliver) {
     return found;
 }
 
-void Gap__Bec__beSvConnectCheck__vfunc_21(void)
+void beSvConnectCheck_Start(void)
 {
 }
 
-int Gap__Bec__beSvConnectCheck__vfunc_22(void) {
+int beSvConnectCheck_Update(void) {
     return 0;
 }
 
-void Gap__Bec__beSvConnectCheck__vfunc_23(void)
+void beSvConnectCheck_Report(void)
 {
 }
 
-int Gap__Bec__beSvConnectCheck__vfunc_20(void)
+int beSvConnectCheck_GetMeta(void)
 {
     return g_beSvConnectCheck_metaObject[0];
 }
 
-void Gap__Bec__beSvConnectCheck__vfunc_07(igObjectVirtuals *self) {
+void beSvConnectCheck_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-int Gap__Bec__beSaveApi__vfunc_20(void)
+int beSaveApi_GetMeta(void)
 {
     return g_beSaveApi_metaObject[0];
 }
 
-void Gap__Bec__beSvConnectCheck__vfunc_08(void)
+void beSvConnectCheck_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-int Gap__Bec__beSvEndApi__vfunc_20(void)
+int beSvEndApi_GetMeta(void)
 {
     return g_beSvEndApi_metaObject[0];
 }
 
-void Gap__Bec__beSvEndApi__vfunc_07(igObjectVirtuals *self) {
+void beSvEndApi_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-void Gap__Bec__beSvEndApi__vfunc_08(void)
+void beSvEndApi_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-int Gap__Bec__beSvStartApi__vfunc_20(void)
+int beSvStartApi_GetMeta(void)
 {
     return g_beSvStartApi_metaObject[0];
 }
 
-void Gap__Bec__beSvStartApi__vfunc_07(igObjectVirtuals *self) {
+void beSvStartApi_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-void Gap__Bec__beSvStartApi__vfunc_08(void)
+void beSvStartApi_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-int Gap__Bec__beSvGetFreeSizeApi__vfunc_20(void)
+int beSvGetFreeSizeApi_GetMeta(void)
 {
     return g_beSvGetFreeSizeApi_metaObject[0];
 }
 
-void Gap__Bec__beSvGetFreeSizeApi__vfunc_07(igObjectVirtuals *self) {
+void beSvGetFreeSizeApi_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-void Gap__Bec__beSvGetFreeSizeApi__vfunc_08(void)
+void beSvGetFreeSizeApi_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-int Gap__Bec__beSvWriteMediaApi__vfunc_20(void)
+int beSvWriteMediaApi_GetMeta(void)
 {
     return g_beSvWriteMediaApi_metaObject[0];
 }
 
-void Gap__Bec__beSvWriteMediaApi__vfunc_07(igObjectVirtuals *self) {
+void beSvWriteMediaApi_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *self) {
+void beSvWriteMediaApi_userDestruct(beSvWriteMediaApi *self) {
     igObject *saveWork;
 
     saveWork = (igObject *)self->_saveWork;
@@ -1341,12 +1341,12 @@ void Gap__Bec__beSvWriteMediaApi__vfunc_08(beSvWriteMediaApi *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-int Gap__Bec__beSvReadMediaApi__vfunc_20(void)
+int beSvReadMediaApi_GetMeta(void)
 {
     return g_beSvReadMediaApi_metaObject[0];
 }
 
-void Gap__Bec__beSvReadMediaApi__vfunc_07(igObjectVirtuals *self) {
+void beSvReadMediaApi_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
@@ -1354,7 +1354,7 @@ void Gap__Bec__beSvReadMediaApi__vfunc_07(igObjectVirtuals *self) {
 
 static inline int countOf(const igObjectList *l) { return l->_count; }
 
-void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *self) {
+void beSvReadMediaApi_userDestruct(beSvReadMediaApi *self) {
     igObjectList *l = (igObjectList *)self->_loadWorkList;
     if (countOf(l) != 0) {
         int n = l->_count;
@@ -1376,53 +1376,53 @@ void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-int Gap__Bec__beSvUseCheckApi__vfunc_20(void)
+int beSvUseCheckApi_GetMeta(void)
 {
     return g_beSvUseCheckApi_metaObject[0];
 }
 
-void Gap__Bec__beSvUseCheckApi__vfunc_08(void)
+void beSvUseCheckApi_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-void Gap__Bec__beSaveApi__vfunc_07(igObjectVirtuals *self) {
+void beSaveApi_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-int Gap__Bec__beSvFormatApi__vfunc_20(void)
+int beSvFormatApi_GetMeta(void)
 {
     return g_beSvFormatApi_metaObject[0];
 }
 
-void Gap__Bec__beSvFormatApi__vfunc_08(void)
+void beSvFormatApi_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-int Gap__Bec__beSvFileFindApi__vfunc_20(void)
+int beSvFileFindApi_GetMeta(void)
 {
     return g_beSvFileFindApi_metaObject[0];
 }
 
-void Gap__Bec__beSvFileFindApi__vfunc_08(void)
+void beSvFileFindApi_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-int Gap__Bec__beSvFileMakeApi__vfunc_20(void)
+int beSvFileMakeApi_GetMeta(void)
 {
     return g_beSvFileMakeApi_metaObject[0];
 }
 
-void Gap__Bec__beSvFileMakeApi__vfunc_07(igObjectVirtuals *self) {
+void beSvFileMakeApi_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }
 
-void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *self) {
+void beSvFileMakeApi_userDestruct(beSvFileMakeApi *self) {
     igObject *saveWork;
 
     saveWork = (igObject *)self->_saveWork;
@@ -1433,12 +1433,12 @@ void Gap__Bec__beSvFileMakeApi__vfunc_08(beSvFileMakeApi *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-void Gap__Bec__beSaveApi__vfunc_08(void)
+void beSaveApi_userDestruct(void)
 {
     Gap__Core__igObject__userDestruct();
 }
 
-void Gap__Bec__beSaveMemoryObj__vfunc_07(igObjectVirtuals *self) {
+void beSaveMemoryObj_userConstruct(igObjectVirtuals *self) {
     Gap__Core__igObject__userConstruct();
     igMetaObject_CountInstances(self->getMetaObject(), 1);
 }

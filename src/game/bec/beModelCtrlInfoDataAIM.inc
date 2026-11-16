@@ -2,10 +2,10 @@ igMetaObject *g_beModelCtrlInfoDataAIM_metaObject;
 int g_beModelCtrlInfoDataAIM_nameStorage;
 igMetaField *g_beModelCtrlInfoDataAIM_aIMapListMetaField;
 
-void *FUN_00353e90(void) {
+void *beModelCtrlInfoDataAIM_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlInfoDataAIM_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00353fc0();
+        beModelCtrlInfoDataAIM_EnsureRegistered();
     }
     return g_beModelCtrlInfoDataAIM_metaObject;
 }
@@ -21,11 +21,11 @@ int beModelCtrlInfoDataAIM_GetVTable(void) {
     igObject_InitHeader(u.b);
     p0 = (S_ref *)&u.b[8];
     *(int *)p0 = 0;
-    u.vt = (int)&DAT_005379d0[0];
+    u.vt = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
     p1 = (S_ref *)&u.b[16];
     *(int *)p1 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005379d0[0];
+    u.vt = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
     if (p1 != 0) {
         p1 = *(S_ref **)p1;
         if (p1 != 0) {
@@ -50,12 +50,12 @@ int beModelCtrlInfoDataAIM_GetVTable(void) {
     return t;
 }
 
-void FUN_00353fc0(void)
+void beModelCtrlInfoDataAIM_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoDataAIM_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoDataAIM_callbackList[] = { FUN_00354290, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoDataAIM_callbackList[] = { beModelCtrlAIMapList_EnsureRegistered, 0 };
 
 void *beModelCtrlInfoDataAIM_Register(void) {
     BecLibrary_MarkRegistered();
@@ -64,7 +64,7 @@ void *beModelCtrlInfoDataAIM_Register(void) {
         &g_beModelCtrlInfoDataAIM_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beModelCtrlInfoDataAIM_GetMetaObject,
+        beModelCtrlInfoDataAIM_GetMetaObjectFunction,
         "beModelCtrlInfoDataAIM",
         0x14, /* instance size */
         beModelCtrlInfoDataAIM_GetVTable,
@@ -74,9 +74,9 @@ void *beModelCtrlInfoDataAIM_Register(void) {
     );
 }
 
-void beModelCtrlInfoDataAIM_GetMetaObject(void)
+void beModelCtrlInfoDataAIM_GetMetaObjectFunction(void)
 {
-    FUN_00353e90();
+    beModelCtrlInfoDataAIM_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoDataAIM_ctorTable[] = {
@@ -114,7 +114,7 @@ void beModelCtrlInfoDataAIM_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = (int)FUN_003541b0();
+    *(int *)((char *)(temp_s0) + 56) = (int)beModelCtrlAIMapList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0) + 52) = 1;
     igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoDataAIM_fieldTable, g_beModelCtrlInfoDataAIM_fieldHandles, g_beModelCtrlInfoDataAIM_fieldOffsets, temp_s2);
 }

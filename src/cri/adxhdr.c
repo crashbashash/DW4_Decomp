@@ -1,3 +1,5 @@
+#include "dw4/cri/adxt.h"
+
 typedef struct AdxLoopInfo {
     short f0;
     short f2;
@@ -36,16 +38,6 @@ typedef struct AdxHeader {
     char pad62[2];
 } AdxHeader;
 
-typedef struct AdxtHdrInfo {
-    int fmt;
-    int sfreq;
-    int nch;
-    int bps;
-    int nsmpl;
-    int lpcnt;
-    int lpStart;
-    int lpEnd;
-} AdxtHdrInfo;
 
 void ADXERR_CallErrFunc1(const char *message);
 void *memset(void *dst, int value, unsigned int size);
@@ -241,7 +233,7 @@ int FUN_00262fe0(unsigned char *buffer, int size, int *written, AdxHeader *h) {
     return 0;
 }
 
-void FUN_00263060(void *buf, int size, AdxtHdrInfo *out)
+void ADXT_GetHdrInfo(void *buf, int size, AdxtHdrInfo *out)
 {
     AdxtHdrInfo info;
     AdxHeader hdr;

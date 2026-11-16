@@ -21,10 +21,10 @@ int igBoundingSphereMaker_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     p = (S_ref *)&u.b[8];
-    u.vt = (int)&DAT_0052d230[0];
+    u.vt = (int)&g_igBoundingSphereMaker_vtable[0];
     *(int *)p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052d230[0];
+    u.vt = (int)&g_igBoundingSphereMaker_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
         if (p != 0) {

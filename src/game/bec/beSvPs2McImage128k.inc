@@ -2,10 +2,10 @@ igMetaObject *g_beSvPs2McImage128k_metaObject;
 igMetaField *g_beSvPs2McImage128k_dataSizeMetaField;
 igMetaField *g_beSvPs2McImage128k_dataMetaField;
 
-void *FUN_00347c50(void) {
+void *beSvPs2McImage128k_GetMetaObject(void) {
     igMetaObject *g = g_beSvPs2McImage128k_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00347ce0();
+        beSvPs2McImage128k_EnsureRegistered();
     }
     return g_beSvPs2McImage128k_metaObject;
 }
@@ -14,11 +14,11 @@ int beSvPs2McImage128k_GetVTable(void) {
     struct Obj_347ca0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00538b60[0];
+    obj.vt = &g_beSvPs2McImage128k_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00347ce0(void)
+void beSvPs2McImage128k_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvPs2McImage128k_Register);
 }
@@ -30,7 +30,7 @@ void *beSvPs2McImage128k_Register(void) {
         &g_beSvPs2McImage128k_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSvPs2McImage128k_GetMetaObject,
+        beSvPs2McImage128k_GetMetaObjectFunction,
         "beSvPs2McImage128k",
         0x10, /* instance size */
         beSvPs2McImage128k_GetVTable,
@@ -40,9 +40,9 @@ void *beSvPs2McImage128k_Register(void) {
     );
 }
 
-void beSvPs2McImage128k_GetMetaObject(void)
+void beSvPs2McImage128k_GetMetaObjectFunction(void)
 {
-    FUN_00347c50();
+    beSvPs2McImage128k_GetMetaObject();
 }
 
 static FieldFactory g_beSvPs2McImage128k_ctorTable[] = {

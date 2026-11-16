@@ -1,8 +1,8 @@
 igMetaObject *g_beTextureCtrlAttr_metaObject;
 igMetaField *g_beTextureCtrlAttr_attrSetMetaField;
 
-igMetaObject *FUN_00341e10(void) {
-    if (g_beTextureCtrlAttr_metaObject == 0 || !isValid(g_beTextureCtrlAttr_metaObject)) FUN_00341f40();
+igMetaObject *beTextureCtrlAttr_GetMetaObject(void) {
+    if (g_beTextureCtrlAttr_metaObject == 0 || !isValid(g_beTextureCtrlAttr_metaObject)) beTextureCtrlAttr_EnsureRegistered();
     return g_beTextureCtrlAttr_metaObject;
 }
 
@@ -18,11 +18,11 @@ int beTextureCtrlAttr_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_005395c0[0];
+    u.vt = (int)&g_beTextureCtrlAttr_vtable[0];
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005395c0[0];
+    u.vt = (int)&g_beTextureCtrlAttr_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -47,12 +47,12 @@ int beTextureCtrlAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00341f40(void)
+void beTextureCtrlAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTextureCtrlAttr_Register);
 }
 
-static igMetaObjectCallback g_beTextureCtrlAttr_callbackList[] = { FUN_001a5e90, 0 };
+static igMetaObjectCallback g_beTextureCtrlAttr_callbackList[] = { igAttrSet_EnsureRegistered, 0 };
 
 void *beTextureCtrlAttr_Register(void) {
     BecLibrary_MarkRegistered();
@@ -61,7 +61,7 @@ void *beTextureCtrlAttr_Register(void) {
         &g_beTextureCtrlAttr_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beTextureCtrlAttr_GetMetaObject,
+        beTextureCtrlAttr_GetMetaObjectFunction,
         "beTextureCtrlAttr",
         0x10, /* instance size */
         beTextureCtrlAttr_GetVTable,
@@ -71,9 +71,9 @@ void *beTextureCtrlAttr_Register(void) {
     );
 }
 
-void beTextureCtrlAttr_GetMetaObject(void)
+void beTextureCtrlAttr_GetMetaObjectFunction(void)
 {
-    FUN_00341e10();
+    beTextureCtrlAttr_GetMetaObject();
 }
 
 static FieldFactory g_beTextureCtrlAttr_ctorTable[] = {
@@ -98,7 +98,7 @@ void beTextureCtrlAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beTextureCtrlAttr_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001a5d70();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAttrSet_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beTextureCtrlAttr_fieldTable, g_beTextureCtrlAttr_fieldHandles, g_beTextureCtrlAttr_fieldOffsets, temp_s2);
 }
 

@@ -19,7 +19,7 @@ int igRenderPackagePool_GetVTable(void) {
     struct Obj_1979d0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b4e0[0];
+    obj.vt = &g_igRenderPackagePool_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

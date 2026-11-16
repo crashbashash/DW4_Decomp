@@ -1,19 +1,19 @@
 igMetaObject *g_igLightSetList_metaObject;
 
-igMetaObject *FUN_0035bb70(void) {
+igMetaObject *igLightSetList_GetOrCreateMetaObject(void) {
     if (g_igLightSetList_metaObject == 0) {
         g_igLightSetList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_igLightSetList_metaObject;
 }
 
-void *FUN_0035bbc0(void) {
+void *igLightSetList_GetMetaObject(void) {
     bool ok;
     if (g_igLightSetList_metaObject == 0) goto make;
     ok = !!(g_igLightSetList_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_0035bc50();
+    igLightSetList_EnsureRegistered();
 done:;
     return g_igLightSetList_metaObject;
 }
@@ -22,16 +22,16 @@ int igLightSetList_GetVTable(void) {
     struct Obj_35bc10 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00536750[0];
+    obj.vt = &g_igLightSetList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0035bc50(void)
+void igLightSetList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLightSetList_Register);
 }
 
-static igMetaObjectCallback g_igLightSetList_callbackList[] = { FUN_0019dcd0, 0 };
+static igMetaObjectCallback g_igLightSetList_callbackList[] = { igLightSet_EnsureRegistered, 0 };
 
 void *igLightSetList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -40,7 +40,7 @@ void *igLightSetList_Register(void) {
         &g_igLightSetList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        igLightSetList_GetMetaObject,
+        igLightSetList_GetMetaObjectFunction,
         "igLightSetList",
         0x14, /* instance size */
         igLightSetList_GetVTable,
@@ -50,8 +50,8 @@ void *igLightSetList_Register(void) {
     );
 }
 
-void igLightSetList_GetMetaObject(void)
+void igLightSetList_GetMetaObjectFunction(void)
 {
-    FUN_0035bbc0();
+    igLightSetList_GetMetaObject();
 }
 

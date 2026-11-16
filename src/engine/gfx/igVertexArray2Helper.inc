@@ -20,10 +20,10 @@ int igVertexArray2Helper_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.m8 = 0;
-    obj.vt = &DAT_005262a0[0];
+    obj.vt = &g_igVertexArray2Helper_vtable[0];
     obj.m12 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005262a0[0];
+    obj.vt = &g_igVertexArray2Helper_vtable[0];
     obj.rel12();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.rel8();

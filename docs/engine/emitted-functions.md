@@ -423,6 +423,11 @@ README's region table; `regions.tsv` and the module map keep the range, which de
 never spells and GNU as accepts in a label, so the generated `asm/__sinit_be.cpp.s` and the `emitted` key agree.
 An initialiser has no source text of its own, so `tools/progress.py` judges its readability on its file's global
 definitions: the file, comments and strings blanked, without its function definitions.
+Any other compiler-emitted function with no definition under its symbol (an inline destructor's copy,
+`__dt__25igSmartPointer<8igObject>Fv`) is judged on the member definition its `emitted` or `duplicates`
+name points at: the class's member, written in the class body or out of it, in the file as the compiler sees
+it or in a header the file includes. A member the text does not show (a body spelled by a macro) leaves the
+function judged on its whole file.
 
 `verify` compares the `.init` body like any member, its index record with `exceptions.txt`, and the `.ctor`
 word, relocated, with its table entry. An object whose `.init` the row does not name is rejected, as is any

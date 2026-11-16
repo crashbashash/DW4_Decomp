@@ -33,7 +33,7 @@ int igGuiSystemModel_GetVTable(void) {
     p = (char *)&s;
     igObject_InitHeader(p);
     s._views = 0;
-    *(int **)&s._vtable = &DAT_00541170[0];
+    *(int **)&s._vtable = &g_igGuiSystemModel_vtable[0];
     igMatrix44f_SetIdentity(s._viewMatrix);
     igMatrix44f_SetIdentity(((struct igGuiSystemModel *)p)->_projectionMatrix);
     ((struct igGuiSystemModel *)p)->_rootComponent = 0;
@@ -41,7 +41,7 @@ int igGuiSystemModel_GetVTable(void) {
     ((struct igGuiSystemModel *)p)->_componentUnderMouse = 0;
     ((struct igGuiSystemModel *)p)->_pushedComponent = 0;
     r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem[0]) + 916));
-    *(int **)&s._vtable = &DAT_00541170[0];
+    *(int **)&s._vtable = &g_igGuiSystemModel_vtable[0];
     FUN_003cafa0(&s._pushedComponent, -1);
     FUN_003cafa0(&s._componentUnderMouse, -1);
     FUN_003cafa0(&s._focusedComponent, -1);
@@ -156,13 +156,13 @@ void igGuiSystemModel_InitFields(void) {
     FUN_0018e2f0(temp_a0_2, sp40);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_0044ff40();
+    *(int *)((char *)(temp_s1) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_0044ff40();
+    *(int *)((char *)(temp_s1_2) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
-    *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_0044ff40();
+    *(int *)((char *)(temp_s1_3) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9));
-    *(int *)((char *)(temp_s1_4) + 56) = (int)FUN_0044ff40();
+    *(int *)((char *)(temp_s1_4) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_igGuiSystemModel_fieldTable, g_igGuiSystemModel_fieldHandles, g_igGuiSystemModel_fieldOffsets, temp_s2);
 }
 

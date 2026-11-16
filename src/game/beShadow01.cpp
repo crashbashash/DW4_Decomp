@@ -3,8 +3,8 @@
 
 extern "C" void igObject_Destroy(...);
 extern "C" int List_Reserve(...);
-extern "C" int Gap__Bec__beShadow01__vfunc_30(void);
-extern "C" int Gap__Bec__beShadow01__vfunc_20(void);
+extern "C" int beShadow01_GetInfoMeta(void);
+extern "C" int beShadow01_GetMeta(void);
 extern "C" int ObjectList_AppendRetained(...);
 struct ReleaseRef { static inline void go(igObject *object) {
     if (object) {
@@ -13,17 +13,17 @@ struct ReleaseRef { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" void Gap__Bec__beShadow01__vfunc_32(beShadow01 *arg0);
+extern "C" void beShadow01_Prepare(beShadow01 *arg0);
 extern "C" int g_beShadow01Info_metaObject[4];
 extern "C" int g_beShadow01_metaObject[4];
 extern "C" int igGroup_AppendChild(igProjectiveShadowShader *group, int child);
 extern "C" void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info);
 extern "C" int igObject_IsKindOf(beShadow01Info *, int);
-extern "C" int Gap__Core__igObject__vfunc_25(beShadow01 *, beShadow01Info *);
+extern "C" int beBaseInfoManager_AddInfo(beShadow01 *, beShadow01Info *);
 extern "C" int g_beShadow01Info_metaObject[4];
-extern "C" int Gap__Bec__beShadow01__vfunc_25(beShadow01 *arg0, beShadow01Info *arg1);
+extern "C" int beShadow01_AddInfo(beShadow01 *arg0, beShadow01Info *arg1);
 
-void Gap__Bec__beShadow01__vfunc_32(beShadow01 *arg0) {
+void beShadow01_Prepare(beShadow01 *arg0) {
     /* matching construct: the int-indexed ((int *)...)[0] stores below spell the raw word stores of retail; they are list-backing-store writes, not game logic. */
     igDataList *l = (igDataList *)arg0->_svInfoList;
     int n = l->_count;
@@ -78,7 +78,7 @@ void Gap__Bec__beShadow01__vfunc_32(beShadow01 *arg0) {
     arg0->_savePos[2] = 0.0f;
 }
 
-int Gap__Bec__beShadow01__vfunc_30(void)
+int beShadow01_GetInfoMeta(void)
 {
     return g_beShadow01Info_metaObject[0];
 }
@@ -133,7 +133,7 @@ void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info) {
     if (!(0 < ((beShadow01InfoList *)self->_svInfoList)->_count)) List_Reserve(self->_svInfoList, 0, 4);
 }
 
-int Gap__Bec__beShadow01__vfunc_25(beShadow01 *arg0, beShadow01Info *arg1) {
+int beShadow01_AddInfo(beShadow01 *arg0, beShadow01Info *arg1) {
     igProjectiveShadowShader *t;
 
     if (igObject_IsKindOf(arg1, g_beShadow01Info_metaObject[0]) != 0) {
@@ -150,7 +150,7 @@ int Gap__Bec__beShadow01__vfunc_25(beShadow01 *arg0, beShadow01Info *arg1) {
                 t->_left = -100.0f;
             }
             beShadow01_AttachPendingInfos(arg0, arg1);
-            Gap__Core__igObject__vfunc_25(arg0, arg1);
+            beBaseInfoManager_AddInfo(arg0, arg1);
         } else {
             ObjectList_AppendRetained(arg0->_svInfoList, arg1);
         }
@@ -159,7 +159,7 @@ int Gap__Bec__beShadow01__vfunc_25(beShadow01 *arg0, beShadow01Info *arg1) {
     return 0;
 }
 
-extern "C" void beShadow01_Update(beShadow01 *self, beBaseInfoRam *ram);
+extern "C" void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram);
 extern "C" int beTargetObj_GetPlayerCentre(float *out);
 extern "C" void igProjectiveShadowShader_ConfigureSharedAttrs(void);
 extern "C" void igProjectiveShadowShader_Initialize(igProjectiveShadowShader *shader);
@@ -194,7 +194,7 @@ static inline void Vec3Copy(float *dst, const float *src) {
 
 /* Per-frame update: on the first frame attach the shadow casters and initialise the shader,
  * then keep the shadow light 200 units above the players' centre. */
-void beShadow01_Update(beShadow01 *self, beBaseInfoRam *ram) {
+void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
     beShadow01Info *info = (beShadow01Info *)ram->_parentInfo;
     igVec3f centre;
 
@@ -232,7 +232,7 @@ void beShadow01_Update(beShadow01 *self, beBaseInfoRam *ram) {
     }
 }
 
-int Gap__Bec__beShadow01__vfunc_20(void)
+int beShadow01_GetMeta(void)
 {
     return g_beShadow01_metaObject[0];
 }

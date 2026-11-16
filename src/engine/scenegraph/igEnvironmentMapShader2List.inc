@@ -19,7 +19,7 @@ int igEnvironmentMapShader2List_GetVTable(void) {
     struct Obj_1a1480 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052a730[0];
+    obj.vt = &g_igEnvironmentMapShader2List_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -3,10 +3,10 @@ igMetaField *g_beWeaponInfo_nodeListMetaField;
 igMetaField *g_beWeaponInfo_boneNameListMetaField;
 igMetaField *g_beWeaponInfo_seqDataListMetaField;
 
-void *FUN_0033eb00(void) {
+void *beWeaponInfo_GetMetaObject(void) {
     igMetaObject *g = g_beWeaponInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0033ee30();
+        beWeaponInfo_EnsureRegistered();
     }
     return g_beWeaponInfo_metaObject;
 }
@@ -19,12 +19,12 @@ int beWeaponInfo_GetVTable(void) {
     obj.f8 = 0;
     obj.f14 = 0;
     obj.f18 = 0;
-    obj.vt = (&DAT_00539d50[0]);
+    obj.vt = (&g_beWeaponInfo_vtable[0]);
     obj.f1C = 0;
     obj.f20 = 0;
     obj.f24 = 0;
     temp_s2 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_00539d50[0]);
+    obj.vt = (&g_beWeaponInfo_vtable[0]);
     FUN_0033edb0((struct T **)&obj.f24, (short)(-1));
     FUN_00199450(&obj.f20, -1);
     FUN_001958f0(&obj.f1C, -1);
@@ -57,7 +57,7 @@ void *FUN_0033ec80(struct S_33ec80 *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_00539dc0[0];
+        arg0->f0 = &g_beBaseInfo_vtable[0];
         if (&arg0->f24) {
             p = arg0->f24;
             if (p != 0) {
@@ -77,7 +77,7 @@ void *FUN_0033ec80(struct S_33ec80 *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->f0 = &DAT_0052fde0[0];
+            arg0->f0 = &g_igInfo_vtable[0];
             if (arg0 != 0) {
                 arg0->f0 = &g_igNamedObject_vtable[0];
                 if (&arg0->f8) {
@@ -117,12 +117,12 @@ struct T **FUN_0033edb0(struct T **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0033ee30(void)
+void beWeaponInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWeaponInfo_Register);
 }
 
-static igMetaObjectCallback g_beWeaponInfo_callbackList[] = { FUN_0019ccc0, igNamedObjectList_EnsureRegistered, FUN_0033f0c0, 0 };
+static igMetaObjectCallback g_beWeaponInfo_callbackList[] = { igNodeList_EnsureRegistered, igNamedObjectList_EnsureRegistered, beWeaponSeqDataList_EnsureRegistered, 0 };
 
 void *beWeaponInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -131,7 +131,7 @@ void *beWeaponInfo_Register(void) {
         &g_beWeaponInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beWeaponInfo_GetMetaObject,
+        beWeaponInfo_GetMetaObjectFunction,
         "beWeaponInfo",
         0x28, /* instance size */
         beWeaponInfo_GetVTable,
@@ -141,12 +141,12 @@ void *beWeaponInfo_Register(void) {
     );
 }
 
-void beWeaponInfo_GetMetaObject(void)
+void beWeaponInfo_GetMetaObjectFunction(void)
 {
-    FUN_0033eb00();
+    beWeaponInfo_GetMetaObject();
 }
 
-igMetaObject *FUN_0033eef0(void) {
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void) {
     return g_beBaseInfo_metaObject;
 }
 
@@ -182,13 +182,13 @@ void beWeaponInfo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beWeaponInfo_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019cbe0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0033efe0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beWeaponSeqDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beWeaponInfo_fieldTable, g_beWeaponInfo_fieldHandles, g_beWeaponInfo_fieldOffsets, temp_s2);
 }

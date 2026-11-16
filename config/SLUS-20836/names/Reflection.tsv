@@ -859,7 +859,6 @@
 0x0033fc10	beWeaponAttachData_Register	game
 0x0033fcb0	beWeaponAttachData_InitFields	game
 0x0033fe70	igAppearanceListList_Register	game
-0x00340000	igModelViewMatrixBoneSelectList_587aa0_Register	game
 0x003402e0	beWaterPlainInfoRam_Register	game
 0x00340380	beWaterPlainInfoRam_InitFields	game
 0x003405e0	beWaterMove_Register	game

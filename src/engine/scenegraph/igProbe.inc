@@ -1,5 +1,5 @@
 void igProbe_Create(int arg0) {
-    FUN_0019e890();
+    igProbe_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igProbe_metaObject, arg0);
 }
 
@@ -8,7 +8,7 @@ igMetaField *g_igProbe_volumeMetaField;
 igMetaField *g_igProbe_raysMetaField;
 igMetaField *g_igProbe_intersectFaceTypeMetaField;
 
-igMetaObject *FUN_0019e6c0(void) {
+igMetaObject *igProbe_GetOrCreateMetaObject(void) {
     if (g_igProbe_metaObject == 0) {
         g_igProbe_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -19,7 +19,7 @@ igMetaObject *igProbe_GetMetaObject(void)
 {
     igMetaObject *g = g_igProbe_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019e890();
+        igProbe_EnsureRegistered();
     return g_igProbe_metaObject;
 }
 
@@ -31,7 +31,7 @@ int igProbe_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052a950[0];
+    u.vt = (int)&g_igProbe_vtable[0];
     q2 = (S_ref *)&u.b[8];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[12];
@@ -39,7 +39,7 @@ int igProbe_GetVTable(void) {
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052a950[0];
+    u.vt = (int)&g_igProbe_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -70,12 +70,12 @@ int igProbe_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0019e890(void)
+void igProbe_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igProbe_Register);
 }
 
-static igMetaObjectCallback g_igProbe_callbackList[] = { FUN_00186b20, FUN_00188190, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igProbe_callbackList[] = { FUN_00186b20, igRayList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
 void igProbe_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -132,7 +132,7 @@ void igProbe_InitFields(void) {
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00186a80();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_001880b0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igIntList_GetOrCreateMetaObject();

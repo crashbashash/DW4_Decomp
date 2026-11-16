@@ -23,10 +23,10 @@ int igBlendListRecord_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     q2 = &u.p[2];
-    u.w[0] = (int)(&DAT_0052a670[0]);
+    u.w[0] = (int)(&g_igBlendListRecord_vtable[0]);
     *q2 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052a670[0]);
+    u.w[0] = (int)(&g_igBlendListRecord_vtable[0]);
     if (q2 != 0) {
         temp_a0 = *q2;
         if (temp_a0 != 0) {

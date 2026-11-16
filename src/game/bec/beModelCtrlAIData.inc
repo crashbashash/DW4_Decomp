@@ -3,10 +3,10 @@ igMetaField *g_beModelCtrlAIData_dirRadianMetaField;
 igMetaField *g_beModelCtrlAIData_timeMetaField;
 igMetaField *g_beModelCtrlAIData_limitMetaField;
 
-void *FUN_00354860(void) {
+void *beModelCtrlAIData_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlAIData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00354940();
+        beModelCtrlAIData_EnsureRegistered();
     }
     return g_beModelCtrlAIData_metaObject;
 }
@@ -23,7 +23,7 @@ int beModelCtrlAIData_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00537830[0];
+    u.vt = (int)&g_beModelCtrlAIData_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -40,7 +40,7 @@ int beModelCtrlAIData_GetVTable(void) {
     return s0;
 }
 
-void FUN_00354940(void)
+void beModelCtrlAIData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlAIData_Register);
 }
@@ -52,7 +52,7 @@ void *beModelCtrlAIData_Register(void) {
         &g_beModelCtrlAIData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlAIData_GetMetaObject,
+        beModelCtrlAIData_GetMetaObjectFunction,
         "beModelCtrlAIData",
         0x18, /* instance size */
         beModelCtrlAIData_GetVTable,
@@ -62,9 +62,9 @@ void *beModelCtrlAIData_Register(void) {
     );
 }
 
-void beModelCtrlAIData_GetMetaObject(void)
+void beModelCtrlAIData_GetMetaObjectFunction(void)
 {
-    FUN_00354860();
+    beModelCtrlAIData_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlAIData_ctorTable[] = {

@@ -1,5 +1,5 @@
 int igGraphPath_Create(int arg0) {
-    FUN_0019f7a0();
+    igGraphPath_EnsureRegistered();
     return igMetaObject_CreateInstance((int)g_igGraphPath_metaObject, arg0);
 }
 
@@ -8,7 +8,7 @@ igMetaField *g_igGraphPath_pathMetaField;
 igMetaField *g_igGraphPath_centerMetaField;
 igMetaField *g_igGraphPath_lengthMetaField;
 
-igMetaObject *FUN_0019f670(void) {
+igMetaObject *igGraphPath_GetOrCreateMetaObject(void) {
     if (g_igGraphPath_metaObject == 0) {
         g_igGraphPath_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -19,7 +19,7 @@ igMetaObject *igGraphPath_GetMetaObject(void)
 {
     igMetaObject *g = g_igGraphPath_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019f7a0();
+        igGraphPath_EnsureRegistered();
     return g_igGraphPath_metaObject;
 }
 
@@ -31,10 +31,10 @@ int igGraphPath_GetVTable(void) {
 
     igObject_InitHeader(&o);
     ps = &o.ref;
-    o.vt = &DAT_0052a810[0];
+    o.vt = &g_igGraphPath_vtable[0];
     *ps = 0;
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_0052a810[0];
+    o.vt = &g_igGraphPath_vtable[0];
     if (ps != 0) {
         temp_a0 = *ps;
         if (temp_a0 != 0) {
@@ -47,12 +47,12 @@ int igGraphPath_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0019f7a0(void)
+void igGraphPath_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGraphPath_Register);
 }
 
-static igMetaObjectCallback g_igGraphPath_callbackList[] = { FUN_0019ccc0, 0 };
+static igMetaObjectCallback g_igGraphPath_callbackList[] = { igNodeList_EnsureRegistered, 0 };
 
 void igGraphPath_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -107,7 +107,7 @@ void igGraphPath_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGraphPath_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019cbe0();
+    *(int *)((char *)(temp_s1) + 56) = (int)igNodeList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 36) = 3;
     *(char *)((char *)(temp_s1) + 52) = 1;
     temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));

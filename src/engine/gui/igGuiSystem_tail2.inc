@@ -1,4 +1,4 @@
-bool Gap__Gui__igGuiSystem__vfunc_23(Ob *arg0, int arg1, int arg2) {
+bool igGuiSystem_OnKeyEvent(Ob *arg0, int arg1, int arg2) {
     if (arg0->f12->f160 == 0) {
         return false;
     }

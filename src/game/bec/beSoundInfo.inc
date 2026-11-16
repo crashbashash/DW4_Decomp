@@ -4,12 +4,12 @@ igMetaField *g_beSoundInfo_dataTypeMetaField;
 igMetaField *g_beSoundInfo_baseVolumeMetaField;
 igMetaField *g_beSoundInfo_sndfVolumeMetaField;
 
-igMetaObject *FUN_00343d20(void)
+igMetaObject *beSoundInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_beSoundInfo_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_00343e00();
+        beSoundInfo_EnsureRegistered();
     return g_beSoundInfo_metaObject;
 }
 
@@ -22,19 +22,19 @@ int beSoundInfo_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
-    u.vt = (int)&DAT_005393b0[0];
+    u.vt = (int)&g_beSoundInfo_vtable[0];
     p1 = &u.b[28];
     *(int *)p1 = 0;
     *(int *)&u.b[32] = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005393b0[0];
+    u.vt = (int)&g_beSoundInfo_vtable[0];
     igStringRef_Destruct(&u.b[32], -1);
     FUN_00199450(p1, -1);
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
     return temp_s1;
 }
 
-void FUN_00343e00(void)
+void beSoundInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSoundInfo_Register);
 }
@@ -48,7 +48,7 @@ void *beSoundInfo_Register(void) {
         &g_beSoundInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beSoundInfo_GetMetaObject,
+        beSoundInfo_GetMetaObjectFunction,
         "beSoundInfo",
         0x28, /* instance size */
         beSoundInfo_GetVTable,
@@ -58,9 +58,9 @@ void *beSoundInfo_Register(void) {
     );
 }
 
-void beSoundInfo_GetMetaObject(void)
+void beSoundInfo_GetMetaObjectFunction(void)
 {
-    FUN_00343d20();
+    beSoundInfo_GetMetaObject();
 }
 
 static FieldFactory g_beSoundInfo_ctorTable[] = {

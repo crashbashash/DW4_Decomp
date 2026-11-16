@@ -27,12 +27,12 @@ void Lua_sd_OptionalArg(const char *args);
 void beLua__RunNamedChunk(beLua *self, const char *chunk, int arg);
 beDemoManagerWork *beDemoManagerWork_CreateInstance(int allocator);
 beDemoKeepMes *beDemoKeepMes_CreateInstance(int allocator);
-void beDemoManager_AddToScheduler(beDemoManager *self, int unused);
-void beDemoManager_RemoveFromScheduler(beDemoManager *self, int unused);
+void beDemoManager_Activate(beDemoManager *self, int unused);
+void beDemoManager_Deactivate(beDemoManager *self, int unused);
 void beDemoManager_Start(beDemoManager *self);
 void beDemoManager_Stop(void);
-int beDemoManager_AcceptInfo(void);
-void beDemoManager_Reset(beDemoManager *self);
+int beDemoManager_AddInfo(void);
+void beDemoManager_RemoveAllInfo(beDemoManager *self);
 void beDemoManager_Update(beDemoManager *self);
 igMetaObject *beDemoManager_GetMetaObject_Virtual(void);
 extern int kIGMemoryPoolHandleUser1[4];
@@ -207,12 +207,12 @@ void beDemoManager_Run(beDemoManager *self) {
     }
 }
 
-void beDemoManager_AddToScheduler(beDemoManager *self, int unused)
+void beDemoManager_Activate(beDemoManager *self, int unused)
 {
     igInsightCore_AddToScheduler(self->_insight, self);
 }
 
-void beDemoManager_RemoveFromScheduler(beDemoManager *self, int unused)
+void beDemoManager_Deactivate(beDemoManager *self, int unused)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
@@ -226,7 +226,7 @@ void beDemoManager_Stop(void)
 {
 }
 
-int beDemoManager_AcceptInfo(void) {
+int beDemoManager_AddInfo(void) {
     return 0;
 }
 
@@ -258,7 +258,7 @@ static inline void setCapacity(igObjectList *list, int capacity) {
 }
 
 /* Drops every playing and building demo. Called while an update plays, it waits for the update's end. */
-void beDemoManager_Reset(beDemoManager *self) {
+void beDemoManager_RemoveAllInfo(beDemoManager *self) {
     if (self->_disableRemoveAll == 1) {
         self->_calledRemoveAll = 1;
         return;

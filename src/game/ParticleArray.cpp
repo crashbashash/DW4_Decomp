@@ -4,17 +4,17 @@
 extern "C" int igObject_IsKindOf(char *, int);
 extern "C" int FUN_003a3850(char* arg0, char* arg1);
 extern "C" int igTraversal_RegisterFunction(int, int, int ( *)());
-extern "C" int FUN_0036e610(...);
+extern "C" int ParticleTimer_GetMetaObject(...);
 extern "C" void FUN_003a3900(void);
 extern "C" void FUN_001d3550(void);
-extern "C" void Gap__Bec__ParticleTimer__vfunc_11(void);
+extern "C" void ParticleTimer_resetFields(void);
 extern "C" int igAttrStackManager_MarkStackChanged(...);
 extern "C" int FUN_001b9530(void *, void *);
 extern "C" int igObjectPool_Grow(void *, void *);
 extern "C" int igTimeAttr_CreateInstance(...);
 extern "C" int Gap__Gfx__igParticleArray__vfunc_13(...);
-extern "C" int Gap__Bec__ParticleArray__vfunc_20(void);
-extern "C" int Gap__Bec__ParticleTimer__vfunc_20(void);
+extern "C" int ParticleArray_GetMeta(void);
+extern "C" int ParticleTimer_GetMeta(void);
 extern "C" int g_igCommonTraversal_metaObject[4];
 extern "C" int g_ParticleTimer_metaObject[4];
 extern "C" int DAT_00562640[4];
@@ -28,7 +28,7 @@ class TraversalTimeOps { public:
 };
 extern "C" int FUN_003a3960(ParticleTimer *arg0, igCommonTraversal *arg1);
 struct A { char pad[32]; int f; };
-extern "C" void Gap__Bec__ParticleArray__vfunc_11(A *arg0);
+extern "C" void ParticleArray_resetFields(A *arg0);
 extern "C" int Gap__Bec__ParticleArray__vfunc_38(ParticleArray *arg0);
 extern "C" int g_ParticleArray_metaObject[4];
 extern "C" int g_ParticleTimer_metaObject[4];
@@ -50,10 +50,10 @@ int FUN_003a3850(char* arg0, char* arg1) {
 }
 
 void FUN_003a3900(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], FUN_0036e610(), (int (*)())&FUN_003a3850);
+    igTraversal_RegisterFunction(DAT_00562640[0], ParticleTimer_GetMetaObject(), (int (*)())&FUN_003a3850);
 }
 
-void Gap__Bec__ParticleTimer__vfunc_11(void)
+void ParticleTimer_resetFields(void)
 {
     FUN_001d3550();
 }
@@ -122,7 +122,7 @@ int FUN_003a3960(ParticleTimer *arg0, igCommonTraversal *arg1)
     return r;
 }
 
-void Gap__Bec__ParticleArray__vfunc_11(A *arg0) {
+void ParticleArray_resetFields(A *arg0) {
     Gap__Gfx__igParticleArray__vfunc_13();
     if (arg0->f == 0) {
         arg0->f = 0xB4;
@@ -139,12 +139,12 @@ int Gap__Bec__ParticleArray__vfunc_38(ParticleArray *arg0) {
     return var_v0 ^ 1;
 }
 
-int Gap__Bec__ParticleArray__vfunc_20(void)
+int ParticleArray_GetMeta(void)
 {
     return g_ParticleArray_metaObject[0];
 }
 
-int Gap__Bec__ParticleTimer__vfunc_20(void)
+int ParticleTimer_GetMeta(void)
 {
     return g_ParticleTimer_metaObject[0];
 }

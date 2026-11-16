@@ -11,7 +11,7 @@ igMetaObject *igSkeletonList_GetMetaObject(void)
 {
     igMetaObject *g = g_igSkeletonList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001984c0();
+        igSkeletonList_EnsureRegistered();
     return g_igSkeletonList_metaObject;
 }
 
@@ -19,16 +19,16 @@ int igSkeletonList_GetVTable(void) {
     struct Obj_198480 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b340[0];
+    obj.vt = &g_igSkeletonList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001984c0(void)
+void igSkeletonList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSkeletonList_Register);
 }
 
-static igMetaObjectCallback g_igSkeletonList_callbackList[] = { FUN_00198680, 0 };
+static igMetaObjectCallback g_igSkeletonList_callbackList[] = { igSkeleton_EnsureRegistered, 0 };
 
 void igSkeletonList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

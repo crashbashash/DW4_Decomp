@@ -13,30 +13,30 @@ igMetaField *g_beSaveApi_imageWorkMetaField;
 igMetaField *g_beSaveApi_mountWorkMetaField;
 igMetaField *g_beSaveApi_iconWorkMetaField;
 
-igMetaObject *FUN_0034a000(void) {
+igMetaObject *beSaveApi_GetOrCreateMetaObject(void) {
     if (g_beSaveApi_metaObject == 0) {
         g_beSaveApi_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSaveApi_metaObject;
 }
 
-void *FUN_0034a050(void) {
+void *beSaveApi_GetMetaObject(void) {
     unsigned char b;
     if (((void * *)&g_beSaveApi_metaObject)[0] != 0) {
         b = (*(int *)((char *)(((void * *)&g_beSaveApi_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_0034a0a0();
+    beSaveApi_EnsureRegistered();
 done:
     return ((void * *)&g_beSaveApi_metaObject)[0];
 }
 
-void FUN_0034a0a0(void)
+void beSaveApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSaveApi_Register);
 }
 
-static igMetaObjectCallback g_beSaveApi_callbackList[] = { FUN_0034ad70, 0 };
+static igMetaObjectCallback g_beSaveApi_callbackList[] = { beSaveMemoryObj_EnsureRegistered, 0 };
 
 void *beSaveApi_Register(void) {
     BecLibrary_MarkRegistered();
@@ -45,7 +45,7 @@ void *beSaveApi_Register(void) {
         &g_beSaveApi_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSaveApi_GetMetaObject,
+        beSaveApi_GetMetaObjectFunction,
         "beSaveApi",
         0x40, /* instance size */
         0,
@@ -55,9 +55,9 @@ void *beSaveApi_Register(void) {
     );
 }
 
-void beSaveApi_GetMetaObject(void)
+void beSaveApi_GetMetaObjectFunction(void)
 {
-    FUN_0034a050();
+    beSaveApi_GetMetaObject();
 }
 
 static FieldFactory g_beSaveApi_ctorTable[] = {
@@ -132,11 +132,11 @@ void beSaveApi_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beSaveApi_ctorTable, 0xD);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034ac90();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beSaveApi_fieldTable, g_beSaveApi_fieldHandles, g_beSaveApi_fieldOffsets, temp_s2);
 }
 

@@ -18,7 +18,7 @@ igMetaObject *igVertexBlendMatrixAttr_GetMetaObject(void)
 int igVertexBlendMatrixAttr_GetVTable(void) {
     union U_130ca0 u;
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_005226c0[0]);
+    u.w[0] = (int)(&g_igVertexBlendMatrixAttr_vtable[0]);
     igMatrix44f_SetIdentity(&u.w[3]);
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }

@@ -5,11 +5,11 @@ void Gap__Gui__igGuiSystemRenderer__vfunc_23(int *arg0) {
     FUN_001b6ee0((void *)arg0[5], m);
 }
 
-void Gap__Gui__igGuiSystemRenderer__vfunc_24(void) {
+void igGuiSystemRenderer_ReleaseDrawing(void) {
 
 }
 
-void Gap__Gui__igGuiSystemRenderer__vfunc_25(int *arg0) {
+void igGuiSystemRenderer_Traverse(int *arg0) {
     igObject *temp_v0;
     igObject *temp_a0_4;
     ((C29 *)arg0[5])->vX();

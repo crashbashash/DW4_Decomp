@@ -1,13 +1,13 @@
 igMetaObject *g_beMeterCtrlInfo_metaObject;
 igMetaField *g_beMeterCtrlInfo_oneDataListMetaField;
 
-void *FUN_003570a0(void) {
+void *beMeterCtrlInfo_GetMetaObject(void) {
     bool ok;
     if (g_beMeterCtrlInfo_metaObject == 0) goto make;
     ok = !!(g_beMeterCtrlInfo_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_00357170();
+    beMeterCtrlInfo_EnsureRegistered();
 done:;
     return g_beMeterCtrlInfo_metaObject;
 }
@@ -20,16 +20,16 @@ int beMeterCtrlInfo_GetVTable(void) {
     o.w[1] = 0;
     o.w[4] = 0;
     o.w[5] = 0;
-    o.vt = &DAT_00537040[0];
+    o.vt = &g_beMeterCtrlInfo_vtable[0];
     o.s = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00537040[0];
+    o.vt = &g_beMeterCtrlInfo_vtable[0];
     FUN_00199450(&o.s, -1);
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 
-void FUN_00357170(void)
+void beMeterCtrlInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMeterCtrlInfo_Register);
 }
@@ -43,7 +43,7 @@ void *beMeterCtrlInfo_Register(void) {
         &g_beMeterCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beMeterCtrlInfo_GetMetaObject,
+        beMeterCtrlInfo_GetMetaObjectFunction,
         "beMeterCtrlInfo",
         0x20, /* instance size */
         beMeterCtrlInfo_GetVTable,
@@ -53,9 +53,9 @@ void *beMeterCtrlInfo_Register(void) {
     );
 }
 
-void beMeterCtrlInfo_GetMetaObject(void)
+void beMeterCtrlInfo_GetMetaObjectFunction(void)
 {
-    FUN_003570a0();
+    beMeterCtrlInfo_GetMetaObject();
 }
 
 static FieldFactory g_beMeterCtrlInfo_ctorTable[] = {

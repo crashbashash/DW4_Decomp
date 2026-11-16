@@ -11,7 +11,7 @@ igMetaObject *igAnimationTransitionDefinitionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationTransitionDefinitionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a9500();
+        igAnimationTransitionDefinitionList_EnsureRegistered();
     return g_igAnimationTransitionDefinitionList_metaObject;
 }
 
@@ -19,12 +19,12 @@ int igAnimationTransitionDefinitionList_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&DAT_00529a90[0];
+    tmp[0] = (int)&g_igAnimationTransitionDefinitionList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_001a9500(void)
+void igAnimationTransitionDefinitionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationTransitionDefinitionList_Register);
 }

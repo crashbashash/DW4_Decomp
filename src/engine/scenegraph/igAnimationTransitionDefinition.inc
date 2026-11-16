@@ -22,11 +22,11 @@ int igAnimationTransitionDefinition_GetVTable(void) {
     igObject_InitHeader(u.b);
     p1 = (S_ref *)&u.b[16];
     p2 = (S_ref *)&u.b[12];
-    u.vt = (int)&DAT_00529a30[0];
+    u.vt = (int)&g_igAnimationTransitionDefinition_vtable[0];
     *(int *)p2 = 0;
     *(int *)p1 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00529a30[0];
+    u.vt = (int)&g_igAnimationTransitionDefinition_vtable[0];
     if (p1 != 0) {
         t1 = *(S_ref **)p1;
         if (t1 != 0) {
@@ -53,7 +53,7 @@ void FUN_001a96c0(void)
     igMetaObject_RunStaticInit(igAnimationTransitionDefinition_Register);
 }
 
-static igMetaObjectCallback g_igAnimationTransitionDefinition_callbackList[] = { FUN_001a9290, FUN_001a9910, FUN_001a9c90, 0 };
+static igMetaObjectCallback g_igAnimationTransitionDefinition_callbackList[] = { igAnimation_EnsureRegistered, FUN_001a9910, FUN_001a9c90, 0 };
 
 void igAnimationTransitionDefinition_Register(void) {
     SceneGraphLibrary_MarkRegistered();

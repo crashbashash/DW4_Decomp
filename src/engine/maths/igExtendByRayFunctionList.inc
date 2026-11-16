@@ -1,7 +1,7 @@
 igMetaObject *g_igExtendByRayFunctionList_metaObject;
 
 OpTable *FUN_001892c0(int arg0) {
-    FUN_00189390();
+    igExtendByRayFunctionList_EnsureRegistered();
     return (OpTable *)igMetaObject_CreateInstance((int)g_igExtendByRayFunctionList_metaObject, arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igExtendByRayFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igExtendByRayFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00189390();
+        igExtendByRayFunctionList_EnsureRegistered();
     return g_igExtendByRayFunctionList_metaObject;
 }
 
@@ -17,11 +17,11 @@ int igExtendByRayFunctionList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527bb0[0];
+    obj.vt = &g_igExtendByRayFunctionList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00189390(void)
+void igExtendByRayFunctionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igExtendByRayFunctionList_Register);
 }

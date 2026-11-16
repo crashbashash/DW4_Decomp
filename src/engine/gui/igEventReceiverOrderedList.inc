@@ -23,9 +23,9 @@ int igEventReceiverOrderedList_GetVTable(void) {
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[20] = 0;
-    u.vt = (int)&DAT_00541910[0];
+    u.vt = (int)&g_igEventReceiverOrderedList_vtable[0];
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00541910[0];
+    u.vt = (int)&g_igEventReceiverOrderedList_vtable[0];
     FUN_00451160((int **)u.b, 0);
     return t;
 }
@@ -34,7 +34,7 @@ int **FUN_00451160(int **arg0, long long arg1) {
     if (arg0 != 0) {
         *arg0 = &DAT_00541970[0];
         if (arg0 != 0) {
-            *arg0 = &DAT_0052cc20[0];
+            *arg0 = &g_igDependencyOrderedList_vtable[0];
             igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x14), -1);
             igSmartPointer_igPointerList_Destruct((int **)((char *)arg0 + 0x10), -1);
             igSmartPointer_igDependencyList_Destruct((int **)((char *)arg0 + 0xC), -1);

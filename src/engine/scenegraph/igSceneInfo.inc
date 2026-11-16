@@ -1,5 +1,5 @@
-void FUN_0019aea0(int arg0) {
-    FUN_0019b270();
+void igSceneInfo_CreateInstance(int arg0) {
+    igSceneInfo_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igSceneInfo_metaObject, arg0);
 }
 
@@ -12,7 +12,7 @@ igMetaField *g_igSceneInfo_animationEndMetaField;
 igMetaField *g_igSceneInfo_upVectorMetaField;
 igMetaField *g_igSceneInfo_sceneGraphListMetaField;
 
-igMetaObject *FUN_0019aee0(void) {
+igMetaObject *igSceneInfo_GetOrCreateMetaObject(void) {
     if (g_igSceneInfo_metaObject == 0) {
         g_igSceneInfo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -23,7 +23,7 @@ igMetaObject *igSceneInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_igSceneInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019b270();
+        igSceneInfo_EnsureRegistered();
     return g_igSceneInfo_metaObject;
 }
 
@@ -32,13 +32,13 @@ int igSceneInfo_GetVTable(void) {
     int t;
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_005288e0[0];
+    obj.vt = &g_igSceneInfo_vtable[0];
     obj.w5 = 0;
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w15 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005288e0[0];
+    obj.vt = &g_igSceneInfo_vtable[0];
     FUN_001958f0((void * *)&obj.w15, -1);
     FUN_0019b1f0((void * *)&obj.w7, -1);
     FUN_00131aa0(&obj.w6, -1);
@@ -53,7 +53,7 @@ void *FUN_0019b040(igSceneInfo *arg0, short arg1) {
     int *hd;
 
     if (arg0 != 0) {
-        arg0->_vtable = (int)  &DAT_005288e0[0];
+        arg0->_vtable = (int)  &g_igSceneInfo_vtable[0];
         if (&arg0->_sceneGraphList) {
             p = (igObject *)arg0->_sceneGraphList;
             if (p != 0) {
@@ -95,7 +95,7 @@ void *FUN_0019b040(igSceneInfo *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->_vtable = (int)  &DAT_0052fde0[0];
+            arg0->_vtable = (int)  &g_igInfo_vtable[0];
             if (arg0 != 0) {
                 arg0->_vtable = (int)  &g_igNamedObject_vtable[0];
                 if (&arg0->_name) {
@@ -136,12 +136,12 @@ void **FUN_0019b1f0(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0019b270(void)
+void igSceneInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSceneInfo_Register);
 }
 
-static igMetaObjectCallback g_igSceneInfo_callbackList[] = { FUN_0019cf10, FUN_0013a440, FUN_0019f5a0, FUN_0019ccc0, 0 };
+static igMetaObjectCallback g_igSceneInfo_callbackList[] = { igNode_EnsureRegistered, igTextureList_EnsureRegistered, igGraphPathList_EnsureRegistered, igNodeList_EnsureRegistered, 0 };
 
 void igSceneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -215,9 +215,9 @@ void igSceneInfo_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSceneInfo_ctorTable, 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0013a360();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igTextureList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     ((igMetaField *)temp_s2_2)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 2;
@@ -232,7 +232,7 @@ void igSceneInfo_InitFields(void) {
     v.z = 0;
     FUN_0018e470(temp_a0, &v);
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0019cbe0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSceneInfo_fieldTable, g_igSceneInfo_fieldHandles, g_igSceneInfo_fieldOffsets, temp_s1);
 }

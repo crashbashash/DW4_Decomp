@@ -16,7 +16,7 @@ igMetaObject *igWindowSizeObserver_GetMetaObject(void)
 int igWindowSizeObserver_GetVTable(void) {
     struct O o;
     igObject_InitHeader(&o.vt);
-    o.vt = DAT_00541100;
+    o.vt = g_igWindowSizeObserver_vtable;
     return *(int *)((char *)&o.vt + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

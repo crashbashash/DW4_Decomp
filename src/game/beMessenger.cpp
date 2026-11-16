@@ -50,12 +50,12 @@ extern int DAT_004c8f88[4];
 extern unsigned char GPR_005549d4, GPR_005549d8;
 extern int g_beMessenger_metaObject[4];
 
-void Gap__Bec__beMessenger__vfunc_21(beMessenger *, int);
-void Gap__Bec__beMessenger__vfunc_22(beMessenger *, int);
-void Gap__Bec__beMessenger__vfunc_23(void);
-void Gap__Bec__beMessenger__vfunc_24(void);
-int Gap__Bec__beMessenger__vfunc_25(beMessenger *arg0);
-void Gap__Bec__beMessenger__vfunc_26(beMessenger *);
+void beMessenger_Activate(beMessenger *, int);
+void beMessenger_Deactivate(beMessenger *, int);
+void beMessenger_Start(void);
+void beMessenger_Stop(void);
+int beMessenger_AddInfo(beMessenger *arg0);
+void beMessenger_RemoveAllInfo(beMessenger *);
 void beMessenger_SetFreezeTime(beMessenger *arg0, int arg1);
 int beMessenger_ResolveEnumValue(beMessenger *self, int arg1, int arg2);
 void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *name, const char *text, int value);
@@ -106,7 +106,7 @@ int beMessenger_GetObject(beMessenger *self, int index);
 int beMessenger_GetStringCount(beMessenger *self);
 void beMessenger_AppendString(beMessenger *self, const char *text);
 int beMessenger_GetString(beMessenger *self, int index);
-int Gap__Bec__beMessenger__vfunc_20(void);
+int beMessenger_GetMeta(void);
 }
 
 static inline int countOf(const igIntList *l) { return l->_count; }
@@ -435,32 +435,32 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
     beMessengerArgData_Clear((beMessengerArgData *)arg0->_argData);
 }
 
-void Gap__Bec__beMessenger__vfunc_21(beMessenger *self, int unusedArg)
+void beMessenger_Activate(beMessenger *self, int unusedArg)
 {
     igInsightCore_AddToScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
-void Gap__Bec__beMessenger__vfunc_22(beMessenger *self, int unusedArg)
+void beMessenger_Deactivate(beMessenger *self, int unusedArg)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
-void Gap__Bec__beMessenger__vfunc_23(void)
+void beMessenger_Start(void)
 {
 }
 
-void Gap__Bec__beMessenger__vfunc_24(void)
+void beMessenger_Stop(void)
 {
 }
 
-int Gap__Bec__beMessenger__vfunc_25(beMessenger *arg0) {
+int beMessenger_AddInfo(beMessenger *arg0) {
     if (arg0->_isMemoryAssign == 0) {
         beMessenger_InitializeMemory(arg0);
     }
     return 0;
 }
 
-void Gap__Bec__beMessenger__vfunc_26(beMessenger *self)
+void beMessenger_RemoveAllInfo(beMessenger *self)
 {
     beMessenger_ResetMemory(self);
 }
@@ -1386,7 +1386,7 @@ int beMessenger_GetString(beMessenger *self, int index)
     return token;
 }
 
-int Gap__Bec__beMessenger__vfunc_20(void)
+int beMessenger_GetMeta(void)
 {
     return g_beMessenger_metaObject[0];
 }

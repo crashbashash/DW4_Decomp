@@ -14,7 +14,7 @@ void FUN_00233910(void)
     igMetaObject_RunStaticInit(igInfoManager_Register);
 }
 
-static igMetaObjectCallback g_igInfoManager_callbackList[] = { FUN_00232de0, 0 };
+static igMetaObjectCallback g_igInfoManager_callbackList[] = { igInsightCore_EnsureRegistered, 0 };
 
 void igInfoManager_Register(void) {
     InsightLibrary_MarkRegistered();
@@ -59,7 +59,7 @@ void igInfoManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igInfoManager_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00232840();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, g_igInfoManager_fieldTable, g_igInfoManager_fieldHandles, g_igInfoManager_fieldOffsets, temp_s2);
 }

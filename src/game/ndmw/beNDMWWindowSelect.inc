@@ -6,12 +6,12 @@ igMetaField *g_beNDMWWindowSelect_startPointMetaField;
 igMetaField *g_beNDMWWindowSelect_isNoCancelMetaField;
 igMetaField *g_beNDMWWindowSelect_decideListMetaField;
 
-igMetaObject *FUN_003b58b0(void) {
-    if (g_beNDMWWindowSelect_metaObject == 0 || !isValid(g_beNDMWWindowSelect_metaObject)) FUN_003b5900();
+igMetaObject *beNDMWWindowSelect_GetMetaObject(void) {
+    if (g_beNDMWWindowSelect_metaObject == 0 || !isValid(g_beNDMWWindowSelect_metaObject)) beNDMWWindowSelect_EnsureRegistered();
     return g_beNDMWWindowSelect_metaObject;
 }
 
-void FUN_003b5900(void)
+void beNDMWWindowSelect_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWWindowSelect_Register);
 }
@@ -25,7 +25,7 @@ void *beNDMWWindowSelect_Register(void) {
         &g_beNDMWWindowSelect_metaObject,
         beNDMWWindow_Register,
         beNDMWWindow_GetPublishedMetaObject,
-        beNDMWWindowSelect_GetMetaObject,
+        beNDMWWindowSelect_GetMetaObjectFunction,
         "beNDMWWindowSelect",
         0x70, /* instance size */
         0,
@@ -35,9 +35,9 @@ void *beNDMWWindowSelect_Register(void) {
     );
 }
 
-void beNDMWWindowSelect_GetMetaObject(void)
+void beNDMWWindowSelect_GetMetaObjectFunction(void)
 {
-    FUN_003b58b0();
+    beNDMWWindowSelect_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWWindowSelect_ctorTable[] = {

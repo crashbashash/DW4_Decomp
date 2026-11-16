@@ -2,22 +2,22 @@ igMetaObject *g_beMatCtrlInfoWork_metaObject;
 igMetaField *g_beMatCtrlInfoWork_runFlagListMetaField;
 igMetaField *g_beMatCtrlInfoWork_matOnPlListsMetaField;
 
-void FUN_00359480(int arg0) {
-    FUN_00359640();
+void beMatCtrlInfoWork_Create(int arg0) {
+    beMatCtrlInfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5890C0, arg0);
 }
 
-igMetaObject *FUN_003594c0(void) {
+igMetaObject *beMatCtrlInfoWork_GetOrCreateMetaObject(void) {
     if (g_beMatCtrlInfoWork_metaObject == 0) {
         g_beMatCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beMatCtrlInfoWork_metaObject;
 }
 
-void *FUN_00359510(void) {
+void *beMatCtrlInfoWork_GetMetaObject(void) {
     igMetaObject *g = g_beMatCtrlInfoWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00359640();
+        beMatCtrlInfoWork_EnsureRegistered();
     }
     return g_beMatCtrlInfoWork_metaObject;
 }
@@ -27,17 +27,17 @@ int beMatCtrlInfoWork_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00536c40[0];
+    obj.vt = &g_beMatCtrlInfoWork_vtable[0];
     obj.m8 = 0;
     obj.m12 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00536c40[0];
+    obj.vt = &g_beMatCtrlInfoWork_vtable[0];
     obj.rel12();
     obj.rel8();
     return r;
 }
 
-void FUN_00359640(void)
+void beMatCtrlInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMatCtrlInfoWork_Register);
 }
@@ -51,7 +51,7 @@ void *beMatCtrlInfoWork_Register(void) {
         &g_beMatCtrlInfoWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beMatCtrlInfoWork_GetMetaObject,
+        beMatCtrlInfoWork_GetMetaObjectFunction,
         "beMatCtrlInfoWork",
         0x10, /* instance size */
         beMatCtrlInfoWork_GetVTable,
@@ -61,9 +61,9 @@ void *beMatCtrlInfoWork_Register(void) {
     );
 }
 
-void beMatCtrlInfoWork_GetMetaObject(void)
+void beMatCtrlInfoWork_GetMetaObjectFunction(void)
 {
-    FUN_00359510();
+    beMatCtrlInfoWork_GetMetaObject();
 }
 
 static FieldFactory g_beMatCtrlInfoWork_ctorTable[] = {

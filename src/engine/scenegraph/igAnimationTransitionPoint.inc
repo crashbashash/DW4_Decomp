@@ -16,10 +16,10 @@ int igAnimationTransitionPoint_GetVTable(void) {
      Q *q;
 
      igObject_InitHeader(&o);
-     o.vt = &DAT_00529960[0];
+     o.vt = &g_igAnimationTransitionPoint_vtable[0];
      o.s = 0;
      r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-     o.vt = &DAT_00529960[0];
+     o.vt = &g_igAnimationTransitionPoint_vtable[0];
      if (&o.s != 0) {
          q = o.s;
          if (q != 0) {

@@ -79,7 +79,7 @@ static inline void RemoveManager(igInsightCore *core, int manager) {
 
 #define REPLACE_MANAGER(field, create) { int allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = create(allocator); }
 
-extern "C" void Gap__Bec__libBecRuntimePlugin__vfunc_21(libBecRuntimePlugin *plugin, igInsightCore *core) {
+extern "C" void libBecRuntimePlugin_Attach(libBecRuntimePlugin *plugin, igInsightCore *core) {
     REPLACE_MANAGER(_system, beSystem_CreateInstance)
     REPLACE_MANAGER(_luaInterface, be_CreateInstance)
     REPLACE_MANAGER(_messenger, beMessenger_CreateInstance)
@@ -162,7 +162,7 @@ extern "C" void Gap__Bec__libBecRuntimePlugin__vfunc_21(libBecRuntimePlugin *plu
 
 #undef REPLACE_MANAGER
 
-extern "C" void Gap__Bec__libBecRuntimePlugin__vfunc_22(libBecRuntimePlugin *plugin, igInsightCore *core) {
+extern "C" void libBecRuntimePlugin_Detach(libBecRuntimePlugin *plugin, igInsightCore *core) {
     RemoveManager(core, plugin->_system);
     RemoveManager(core, plugin->_luaInterface);
     RemoveManager(core, plugin->_messenger);
@@ -204,6 +204,6 @@ extern "C" void Gap__Bec__libBecRuntimePlugin__vfunc_22(libBecRuntimePlugin *plu
     RemoveManager(core, plugin->_timer);
 }
 
-extern "C" int Gap__Bec__libBecRuntimePlugin__vfunc_20(void) {
+extern "C" int libBecRuntimePlugin_GetMeta(void) {
     return g_libBecRuntimePlugin_metaObject[0];
 }

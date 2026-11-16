@@ -28,7 +28,7 @@ int igViewManager_GetVTable(void) {
     
     
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00542690[0]);
+    u.w[0] = (int)(&g_igViewManager_vtable[0]);
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[12];

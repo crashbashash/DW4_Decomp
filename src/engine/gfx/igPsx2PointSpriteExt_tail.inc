@@ -13,7 +13,7 @@ int igPsx2PointSpriteExt_GetVTable(void) {
 
     igObject_InitHeader(&o);
     o.f8 = 0;
-    o.vt = (int)&DAT_00526600[0];
+    o.vt = (int)&g_igPointSpriteExt_vtable[0];
     o.f16 = 0;
     o.f24 = 0;
     igMatrix44f_SetIdentity((float *)&o.t[8]);
@@ -21,9 +21,9 @@ int igPsx2PointSpriteExt_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)(pa + 168));
     igMatrix44f_SetIdentity((float *)(pa + 232));
     igMatrix44f_SetIdentity((float *)(pa + 296));
-    o.vt = (int)&DAT_00525320[0];
+    o.vt = (int)&g_igPsx2PointSpriteExt_vtable[0];
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = (int)&DAT_00525320[0];
+    o.vt = (int)&g_igPsx2PointSpriteExt_vtable[0];
     FUN_0014c440((O *)&o, 0);
     return temp_s0;
 }

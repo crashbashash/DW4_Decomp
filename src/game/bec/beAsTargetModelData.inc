@@ -1,10 +1,10 @@
 igMetaObject *g_beAsTargetModelData_metaObject;
 igMetaField *g_beAsTargetModelData_dataListMetaField;
 
-void *FUN_0036b790(void) {
+void *beAsTargetModelData_GetMetaObject(void) {
     igMetaObject *g = g_beAsTargetModelData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036b8c0();
+        beAsTargetModelData_EnsureRegistered();
     }
     return g_beAsTargetModelData_metaObject;
 }
@@ -22,11 +22,11 @@ int beAsTargetModelData_GetVTable(void) {
     igObject_InitHeader(u.b);
     q8 = (int *)&u.b[8];
     *q8 = 0;
-    u.vt = (int)&DAT_00534540[0];
+    u.vt = (int)&g_beAsTargetModelData_vtable[0];
     q12 = (int *)&u.b[12];
     *q12 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00534540[0];
+    u.vt = (int)&g_beAsTargetModelData_vtable[0];
     if (q12 != 0) {
         o = (char *)*q12;
         if (o != 0) {
@@ -51,12 +51,12 @@ int beAsTargetModelData_GetVTable(void) {
     return t;
 }
 
-void FUN_0036b8c0(void)
+void beAsTargetModelData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAsTargetModelData_Register);
 }
 
-static igMetaObjectCallback g_beAsTargetModelData_callbackList[] = { FUN_0036bd40, 0 };
+static igMetaObjectCallback g_beAsTargetModelData_callbackList[] = { beActionStarterDataList_EnsureRegistered, 0 };
 
 void *beAsTargetModelData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -65,7 +65,7 @@ void *beAsTargetModelData_Register(void) {
         &g_beAsTargetModelData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beAsTargetModelData_GetMetaObject,
+        beAsTargetModelData_GetMetaObjectFunction,
         "beAsTargetModelData",
         0x10, /* instance size */
         beAsTargetModelData_GetVTable,
@@ -75,9 +75,9 @@ void *beAsTargetModelData_Register(void) {
     );
 }
 
-void beAsTargetModelData_GetMetaObject(void)
+void beAsTargetModelData_GetMetaObjectFunction(void)
 {
-    FUN_0036b790();
+    beAsTargetModelData_GetMetaObject();
 }
 
 static FieldFactory g_beAsTargetModelData_ctorTable[] = {
@@ -102,7 +102,7 @@ void beAsTargetModelData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beAsTargetModelData_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0036bc60();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beActionStarterDataList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beAsTargetModelData_fieldTable, g_beAsTargetModelData_fieldHandles, g_beAsTargetModelData_fieldOffsets, temp_s2);
 }
 

@@ -4,12 +4,12 @@ igMetaField *g_beNDMWItemRevisionPocketBase_pocketMetaField;
 void *beNDMWItemRevisionPocketBase_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWItemRevisionPocketBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c8e60();
+        beNDMWItemRevisionPocketBase_EnsureRegistered();
     }
     return g_beNDMWItemRevisionPocketBase_metaObject;
 }
 
-void FUN_003c8e60(void)
+void beNDMWItemRevisionPocketBase_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWItemRevisionPocketBase_Register);
 }

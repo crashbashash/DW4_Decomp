@@ -3,17 +3,17 @@ igMetaField *g_beModelCtrl_luaManagerMetaField;
 igMetaField *g_beModelCtrl_targetObjMetaField;
 igMetaField *g_beModelCtrl_isDebugHitBoxMetaField;
 
-igMetaObject *FUN_00356b10(void) {
-    if (g_beModelCtrl_metaObject == 0 || !isValid(g_beModelCtrl_metaObject)) FUN_00356b60();
+igMetaObject *beModelCtrl_GetMetaObject(void) {
+    if (g_beModelCtrl_metaObject == 0 || !isValid(g_beModelCtrl_metaObject)) beModelCtrl_EnsureRegistered();
     return g_beModelCtrl_metaObject;
 }
 
-void FUN_00356b60(void)
+void beModelCtrl_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrl_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrl_callbackList[] = { FUN_0035b9c0, FUN_00342b00, 0 };
+static igMetaObjectCallback g_beModelCtrl_callbackList[] = { beLua_EnsureRegistered, beTargetObj_EnsureRegistered, 0 };
 
 void *beModelCtrl_Register(void) {
     BecLibrary_MarkRegistered();
@@ -22,7 +22,7 @@ void *beModelCtrl_Register(void) {
         &g_beModelCtrl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beModelCtrl_GetMetaObject,
+        beModelCtrl_GetMetaObjectFunction,
         "beModelCtrl",
         0x2c, /* instance size */
         0,
@@ -32,9 +32,9 @@ void *beModelCtrl_Register(void) {
     );
 }
 
-void beModelCtrl_GetMetaObject(void)
+void beModelCtrl_GetMetaObjectFunction(void)
 {
-    FUN_00356b10();
+    beModelCtrl_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrl_ctorTable[] = {
@@ -68,10 +68,10 @@ void beModelCtrl_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beModelCtrl_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035b770();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beLua_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_003429b0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beTargetObj_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, g_beModelCtrl_fieldTable, g_beModelCtrl_fieldHandles, g_beModelCtrl_fieldOffsets, temp_s2);
 }

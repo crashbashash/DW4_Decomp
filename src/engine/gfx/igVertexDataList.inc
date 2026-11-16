@@ -23,7 +23,7 @@ igMetaObject *igVertexDataList_GetMetaObject(void)
 int igVertexDataList_GetVTable(void) {
     union U_14b260 u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00527100[0];
+    u.vt = (int)&g_igVertexDataList_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 

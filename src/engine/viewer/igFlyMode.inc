@@ -32,12 +32,12 @@ int igFlyMode_GetVTable(void) {
     int r;
     int *t;
     igObject_InitHeader(&o);
-    o.vt = &DAT_00542960[0];
+    o.vt = &g_igViewMode_vtable[0];
     igMatrix44f_SetIdentity(o.sub);
-    o.vt = &DAT_00542840[0];
+    o.vt = &g_igFlyMode_vtable[0];
     o.ref = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    o.vt = &DAT_00542840[0];
+    o.vt = &g_igFlyMode_vtable[0];
     if (&o.ref != 0) {
         t = o.ref;
         if (t != 0) {

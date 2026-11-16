@@ -6,7 +6,7 @@ igMetaField *g_beNDMWLoadIntf2MakeChr_nameCurMetaField;
 igMetaField *g_beNDMWLoadIntf2MakeChr_mojiSelPointMetaField;
 
 void beNDMWLoadIntf2MakeChr_Create(int arg0) {
-    FUN_003c41e0();
+    beNDMWLoadIntf2MakeChr_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLoadIntf2MakeChr_metaObject, arg0);
 }
 
@@ -17,7 +17,7 @@ igMetaObject *beNDMWLoadIntf2MakeChr_ResolveMetaObject(void)
         ready = (g_beNDMWLoadIntf2MakeChr_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_003c41e0();
+    beNDMWLoadIntf2MakeChr_EnsureRegistered();
 done:
     return g_beNDMWLoadIntf2MakeChr_metaObject;
 }
@@ -34,7 +34,7 @@ int beNDMWLoadIntf2MakeChr_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053cf30[0];
+    u.vt = (int)&g_beNDMWLoadIntf2MakeChr_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -51,7 +51,7 @@ int beNDMWLoadIntf2MakeChr_GetVTable(void) {
     return s0;
 }
 
-void FUN_003c41e0(void)
+void beNDMWLoadIntf2MakeChr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadIntf2MakeChr_Register);
 }

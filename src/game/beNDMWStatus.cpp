@@ -143,11 +143,11 @@ extern "C" int g_beNDMWStatus_metaObject[4];
 /* Strings are declared int[4]: an object of 8 bytes or less would be addressed gp-relative, which
  * changes the register allocation of every function here. */
 
-extern "C" void beNDMWStatus__ReleaseWindow(beNDMWStatus *self);
+extern "C" void beNDMWStatus_Prepare(beNDMWStatus *self);
 extern "C" int beNDMWStatus__GetInfoMeta(void);
-extern "C" void beNDMWStatus__RegisterReceiver(beNDMWStatus *self, beNDMWStatusInfoRam *ram);
-extern "C" void beNDMWStatus__Update(beNDMWStatus *self, beNDMWStatusInfoRam *ram);
-extern "C" int beNDMWStatus__OnMessage(beNDMWStatus *self, beNDMWStatusInfoRam *ram, beBaseInfo *info);
+extern "C" void beNDMWStatus_OnAddRam(beNDMWStatus *self, beNDMWStatusInfoRam *ram);
+extern "C" void beNDMWStatus_UpdateRam(beNDMWStatus *self, beNDMWStatusInfoRam *ram);
+extern "C" int beNDMWStatus_OnMessage(beNDMWStatus *self, beNDMWStatusInfoRam *ram, beBaseInfo *info);
 extern "C" void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
 extern "C" int beNDMWStatus__GetMeta(void);
 
@@ -163,7 +163,7 @@ static inline int countOf(const igIntList *list) { return list->_count; }
 #pragma push
 #pragma readonly_strings on
 
-void beNDMWStatus__ReleaseWindow(beNDMWStatus *self) {
+void beNDMWStatus_Prepare(beNDMWStatus *self) {
     igObject *window = (igObject *)self->_windowPro;
     if (window != 0) {
         window->_refCount = window->_refCount - 1;
@@ -179,14 +179,14 @@ int beNDMWStatus__GetInfoMeta(void)
     return g_beNDMWStatusInfo_metaObject[0];
 }
 
-void beNDMWStatus__RegisterReceiver(beNDMWStatus *self, beNDMWStatusInfoRam *ram) {
+void beNDMWStatus_OnAddRam(beNDMWStatus *self, beNDMWStatusInfoRam *ram) {
     if (((beBaseInfoList *)self->_infoList)->_count == 1) {
         beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "SUBWND");
         ram->_isRun = 0;
     }
 }
 
-void beNDMWStatus__Update(beNDMWStatus *self, beNDMWStatusInfoRam *ram)
+void beNDMWStatus_UpdateRam(beNDMWStatus *self, beNDMWStatusInfoRam *ram)
 {
     int state;
     if (ram->_isRun == 0) return;
@@ -296,7 +296,7 @@ void beNDMWStatus__Update(beNDMWStatus *self, beNDMWStatusInfoRam *ram)
     }
 }
 
-int beNDMWStatus__OnMessage(beNDMWStatus *self, beNDMWStatusInfoRam *ram, beBaseInfo *info) {
+int beNDMWStatus_OnMessage(beNDMWStatus *self, beNDMWStatusInfoRam *ram, beBaseInfo *info) {
     unsigned int message = beMessenger_ResolveEnumValue(self->_messenger, StatusMessage_GetMetaEnum(), info->_dataList);
     float maxHpColor[3];
     float maxMpColor[3];

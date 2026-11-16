@@ -14,16 +14,16 @@
     StringList_AppendRetained(field, &held); }
 
 extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
-extern "C" void Gap__Bec__beNDMWShopTitle00__vfunc_22(int *arg0);
+extern "C" void beNDMWShopTitle00_Setup(int *arg0);
 extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
 extern "C" const char *StringPool_Intern(void *, const char *);
 extern "C" void StringChunk_ReleaseHeader(int, int *);
 extern "C" int beNDMWWindow_RunMessageScript(void *, int *, int);
-extern "C" void Gap__Bec__beNDMWShopTitle03__vfunc_22(int p0, char * p1, int p2, char * p3, char * p4);
-extern "C" int Gap__Bec__beNDMWShopTitle03__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopTitle01__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWShopTitle00__vfunc_20(void);
+extern "C" void beNDMWShopTitle03_Setup(int p0, char * p1, int p2, char * p3, char * p4);
+extern "C" int beNDMWShopTitle03_GetMeta(void);
+extern "C" int beNDMWShopTitle01_GetMeta(void);
+extern "C" int beNDMWShopTitle00_GetMeta(void);
 extern "C" int text_j_shback[4];
 extern "C" int SQ_OPEN_10[4];
 extern "C" int SQ_CLOSE_12[4];
@@ -43,18 +43,18 @@ public:
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
 struct Sh { char p[44]; unsigned f44; char q[12]; int f60; int f64; };
-extern "C" void Gap__Bec__beNDMWShopTitle01__vfunc_22(Sh *arg0);
+extern "C" void beNDMWShopTitle01_Setup(Sh *arg0);
 extern "C" char text_i_messwn[];
 extern "C" int g_beNDMWShopTitle03_metaObject[4];
 extern "C" int g_beNDMWShopTitle01_metaObject[4];
 extern "C" int g_beNDMWShopTitle00_metaObject[4];
 
-void Gap__Bec__beNDMWShopTitle00__vfunc_22(int *arg0) {
+void beNDMWShopTitle00_Setup(int *arg0) {
     beNDMWWindow_PresentModelAtOrigin(arg0, &text_j_shback[0], 0, &SQ_OPEN_10[0], &SQ_CLOSE_12[0]);
     beNDMWWindow_PresentModelAtOrigin(arg0, &text_i_bgclear[0], 0, &SQ_OPEN_10[0], &SQ_CLOSE_12[0]);
 }
 
-void Gap__Bec__beNDMWShopTitle01__vfunc_22(Sh *arg0) {
+void beNDMWShopTitle01_Setup(Sh *arg0) {
     int s;
     beNDMWWindow_PresentModelAtOrigin(arg0, text_i_sttitle, 0, SQ_OPEN_10, SQ_CLOSE_12);
     switch (arg0->f44) {
@@ -74,22 +74,22 @@ void Gap__Bec__beNDMWShopTitle01__vfunc_22(Sh *arg0) {
     beNDMWWindow_RunMessageScript(arg0, text_txt_shop_lua, s);
 }
 
-void Gap__Bec__beNDMWShopTitle03__vfunc_22(int p0, char * p1, int p2, char * p3, char * p4)
+void beNDMWShopTitle03_Setup(int p0, char * p1, int p2, char * p3, char * p4)
 {
     beNDMWWindow_PresentModelAtOrigin(p0, text_i_messwn, 0, ((char *)SQ_OPEN_10), ((char *)SQ_CLOSE_12));
 }
 
-int Gap__Bec__beNDMWShopTitle03__vfunc_20(void)
+int beNDMWShopTitle03_GetMeta(void)
 {
     return g_beNDMWShopTitle03_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopTitle01__vfunc_20(void)
+int beNDMWShopTitle01_GetMeta(void)
 {
     return g_beNDMWShopTitle01_metaObject[0];
 }
 
-int Gap__Bec__beNDMWShopTitle00__vfunc_20(void)
+int beNDMWShopTitle00_GetMeta(void)
 {
     return g_beNDMWShopTitle00_metaObject[0];
 }

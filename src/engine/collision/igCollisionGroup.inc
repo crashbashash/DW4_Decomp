@@ -26,11 +26,11 @@ int igCollisionGroup_GetVTable(void) {
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[28] = 0;
-    u.vt = (int)&DAT_0052d3c0[0];
+    u.vt = (int)&g_igCollisionGroup_vtable[0];
     p = (int *)&u.b[32];
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052d3c0[0];
+    u.vt = (int)&g_igCollisionGroup_vtable[0];
     FUN_001a7580(p, -1);
     FUN_00195a90(u.b, 0);
     return temp_s0;
@@ -41,7 +41,7 @@ void FUN_00239c80(void)
     igMetaObject_RunStaticInit(igCollisionGroup_Register);
 }
 
-static igMetaObjectCallback g_igCollisionGroup_callbackList[] = { FUN_001964d0, 0 };
+static igMetaObjectCallback g_igCollisionGroup_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
 void igCollisionGroup_Register(void) {
     CollisionLibrary_MarkRegistered();
@@ -114,7 +114,7 @@ void igCollisionGroup_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igCollisionGroup_ctorTable, 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransform_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_igCollisionGroup_fieldTable, g_igCollisionGroup_fieldHandles, g_igCollisionGroup_fieldOffsets, temp_s2);
 }
 

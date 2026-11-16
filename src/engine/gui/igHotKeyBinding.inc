@@ -21,10 +21,10 @@ int igHotKeyBinding_GetVTable(void) {
     struct R *t;
     int r;
     igObject_InitHeader(&o);
-    o.vt = &DAT_00541b70[0];
+    o.vt = &g_igHotKeyBinding_vtable[0];
     o.p = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00541b70[0];
+    o.vt = &g_igHotKeyBinding_vtable[0];
     if (&o.p != 0) {
         t = o.p;
         if (t != 0) {

@@ -2,15 +2,15 @@ igMetaObject *g_beNDMWStatusCtrlFlag_metaObject;
 igMetaField *g_beNDMWStatusCtrlFlag_impItemsMetaField;
 
 void beNDMWStatusCtrlFlag_Create(int arg0) {
-    FUN_003b9ed0();
+    beNDMWStatusCtrlFlag_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStatusCtrlFlag_metaObject, arg0);
 }
 
-igMetaObject *FUN_003b9df0(void) {
+igMetaObject *beNDMWStatusCtrlFlag_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWStatusCtrlFlag_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003b9ed0();
+        beNDMWStatusCtrlFlag_EnsureRegistered();
     return g_beNDMWStatusCtrlFlag_metaObject;
 }
 
@@ -27,17 +27,17 @@ int beNDMWStatusCtrlFlag_GetVTable(void) {
     *(int *)&u.b[68] = 0;
     *(int *)&u.b[72] = 0;
     *(int *)&u.b[76] = 0;
-    u.vt = (int)&DAT_0053ee10[0];
+    u.vt = (int)&g_beNDMWStatusCtrlFlag_vtable[0];
     ps = &u.b[84];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053ee10[0];
+    u.vt = (int)&g_beNDMWStatusCtrlFlag_vtable[0];
     igSmartPointer_igIntList_Destruct(ps, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)u.b, (long long)0);
     return temp_s0;
 }
 
-void FUN_003b9ed0(void)
+void beNDMWStatusCtrlFlag_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusCtrlFlag_Register);
 }
@@ -51,7 +51,7 @@ void *beNDMWStatusCtrlFlag_Register(void) {
         &g_beNDMWStatusCtrlFlag_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWStatusCtrlFlag_GetMetaObject,
+        beNDMWStatusCtrlFlag_GetMetaObjectFunction,
         "beNDMWStatusCtrlFlag",
         0x58, /* instance size */
         beNDMWStatusCtrlFlag_GetVTable,
@@ -61,9 +61,9 @@ void *beNDMWStatusCtrlFlag_Register(void) {
     );
 }
 
-void beNDMWStatusCtrlFlag_GetMetaObject(void)
+void beNDMWStatusCtrlFlag_GetMetaObjectFunction(void)
 {
-    FUN_003b9df0();
+    beNDMWStatusCtrlFlag_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWStatusCtrlFlag_ctorTable[] = {

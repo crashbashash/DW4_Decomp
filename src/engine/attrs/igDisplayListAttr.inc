@@ -21,10 +21,10 @@ int igDisplayListAttr_GetVTable(void) {
     char *o;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523ba0[0];
+    obj.vt = &g_igDisplayListAttr_vtable[0];
     obj.m = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00523ba0[0];
+    obj.vt = &g_igDisplayListAttr_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
         if (o != 0) {
@@ -60,7 +60,7 @@ void FUN_00138160(void)
     igMetaObject_RunStaticInit(igDisplayListAttr_Register);
 }
 
-static igMetaObjectCallback g_igDisplayListAttr_callbackList[] = { FUN_0013ae20, 0 };
+static igMetaObjectCallback g_igDisplayListAttr_callbackList[] = { igNonRefCountedAttrList_EnsureRegistered, 0 };
 
 void igDisplayListAttr_Register(void) {
     AttrsLibrary_MarkRegistered();

@@ -1,9 +1,9 @@
 igMetaObject *g_beCriAcxData_metaObject;
 
-void *FUN_003676d0(void) {
+void *beCriAcxData_GetMetaObject(void) {
     igMetaObject *g = g_beCriAcxData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003677b0();
+        beCriAcxData_EnsureRegistered();
     }
     return g_beCriAcxData_metaObject;
 }
@@ -20,7 +20,7 @@ int beCriAcxData_GetVTable(void) {
     u.vt = (int)&g_igNamedObject_vtable[0];
     q0 = &u.b[8];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_00534d70[0];
+    u.vt = (int)&g_beCriAcxData_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (q0 != 0) {
@@ -37,7 +37,7 @@ int beCriAcxData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003677b0(void)
+void beCriAcxData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCriAcxData_Register);
 }
@@ -49,7 +49,7 @@ void *beCriAcxData_Register(void) {
         &g_beCriAcxData_metaObject,
         beBinDataObject_Register,
         beBinDataObject_GetPublishedMetaObject,
-        beCriAcxData_GetMetaObject,
+        beCriAcxData_GetMetaObjectFunction,
         "beCriAcxData",
         0x18, /* instance size */
         beCriAcxData_GetVTable,
@@ -59,8 +59,8 @@ void *beCriAcxData_Register(void) {
     );
 }
 
-void beCriAcxData_GetMetaObject(void)
+void beCriAcxData_GetMetaObjectFunction(void)
 {
-    FUN_003676d0();
+    beCriAcxData_GetMetaObject();
 }
 

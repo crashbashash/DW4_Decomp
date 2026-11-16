@@ -13,7 +13,7 @@ finished when the count changes, and its result is in the parent's `_retCode`.
 | --- | --- | --- |
 | `beNDMWStatusCtrl00` | `beNDMWStatusCtrl00_Update` | Status root: hides the field layers (LAYERCTL `BG01`..`GM03`), opens the titles, runs the status menu and opens equipment, folder or skill. |
 | `beNDMWStatusCtrlEquip` | `beNDMWStatusCtrlEquip_Update` | Equipment menu; `_entCode` 0 is the status screen, 1 a shop. Opens a power socket, main slot or sub slot panel. |
-| `beNDMWStatusCtrlBaseEquip` | `Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_21` | Shared panel update: loads the player's slot lists and drives the panel slots below. |
+| `beNDMWStatusCtrlBaseEquip` | `beNDMWStatusCtrlBaseEquip_Update` | Shared panel update: loads the player's slot lists and drives the panel slots below. |
 | `beNDMWStatusCtrlD0` | `beNDMWStatusCtrlD0_Update` | Device folder list, twelve rows a page, filtered by `_kindList`. |
 | `beNDMWStatusCtrlFolder` | `beNDMWStatusCtrlFolder_Update` | Folder menu: device folder, flags, disks, bits. |
 | `beNDMWStatusCtrlFlag` | `beNDMWStatusCtrlFlag_Update` | Important-item (flag folder) list. |

@@ -674,11 +674,11 @@ extern "C" void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util);
 extern "C" int g_beNDMWLoadCtrl2Info_metaObject[4];
 extern "C" int g_beNDMWLoadCtrl2_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void beNDMWLoadCtrl2__ResolvePadManager(beNDMWLoadCtrl2 *self);
-extern "C" void beNDMWLoadCtrl2__RegisterReceiver(beNDMWLoadCtrl2 *self, int info);
+extern "C" void beNDMWLoadCtrl2_Prepare(beNDMWLoadCtrl2 *self);
+extern "C" void beNDMWLoadCtrl2_OnAddRam(beNDMWLoadCtrl2 *self, int info);
 extern "C" int g_propertyNameField[4];
 extern "C" int g_beLua_metaObject[4];
-extern "C" void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram);
+extern "C" void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram);
 extern "C" igObject *beNDMWLoadCtrl2CtrlData_Create(int);
 extern "C" igObject *beNDMWLoadCtrl2CommonIntf_Create(int);
 extern "C" igObject *beNDMWLoadSavePlWork_Create(int);
@@ -712,7 +712,7 @@ struct ReleaseRef { static inline void Apply(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseInfo *info);
+extern "C" int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseInfo *info);
 
 void TextOrder_Configure(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font, const char *text, int align, int color) {
     switch (align) {
@@ -2401,7 +2401,7 @@ void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util) {
     }
 }
 
-void beNDMWLoadCtrl2__ResolvePadManager(beNDMWLoadCtrl2 *self) {
+void beNDMWLoadCtrl2_Prepare(beNDMWLoadCtrl2 *self) {
     igObject *found;
     igObject *previous;
     if (self->_padManager == 0) {
@@ -2422,7 +2422,7 @@ void beNDMWLoadCtrl2__ResolvePadManager(beNDMWLoadCtrl2 *self) {
 
 static inline int st1(const beNDMWLoadCtrl2CtrlData *data) { return data->_st1; }
 
-void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
+void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
     beNDMWLoadCtrl2CtrlData *ctrl;
     beNDMWLoadCtrl2CommonIntf *intf;
     int i;
@@ -2685,12 +2685,12 @@ int beNDMWLoadCtrl2__GetInfoMeta(void)
 }
 
 /* Registers the load controller with its messenger as the LOADCTRL2 receiver. */
-void beNDMWLoadCtrl2__RegisterReceiver(beNDMWLoadCtrl2 *self, int info)
+void beNDMWLoadCtrl2_OnAddRam(beNDMWLoadCtrl2 *self, int info)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "LOADCTRL2");
 }
 
-int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseInfo *info) {
+int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseInfo *info) {
     int message;
     int j;
     int i;

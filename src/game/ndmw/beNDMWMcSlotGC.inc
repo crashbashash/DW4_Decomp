@@ -3,7 +3,7 @@ igMetaField *g_beNDMWMcSlotGC_fileKazMetaField;
 igMetaField *g_beNDMWMcSlotGC_detailMetaField;
 
 void beNDMWMcSlotGC_Create(int arg0) {
-    FUN_003c5dc0();
+    beNDMWMcSlotGC_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMcSlotGC_metaObject, arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *beNDMWMcSlotGC_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWMcSlotGC_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003c5dc0();
+        beNDMWMcSlotGC_EnsureRegistered();
     return g_beNDMWMcSlotGC_metaObject;
 }
 
@@ -19,11 +19,11 @@ int beNDMWMcSlotGC_GetVTable(void) {
     Obj_3c5d80 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_0053cba0[0];
+    o.vt = &g_beNDMWMcSlotGC_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c5dc0(void)
+void beNDMWMcSlotGC_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMcSlotGC_Register);
 }

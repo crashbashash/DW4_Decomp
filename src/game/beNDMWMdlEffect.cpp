@@ -1,15 +1,15 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int strcmp(int, int *);
-extern "C" int Gap__Bec__beNDMWMdlEffect__vfunc_35(int dummy0, int arg1);
-extern "C" void Gap__Bec__beNDMWMdlEffect__vfunc_37(void);
-extern "C" int Gap__Bec__beNDMWMdlEffect__vfunc_20(void);
+extern "C" int beNDMWMdlEffect_IsKind(int dummy0, int arg1);
+extern "C" void beNDMWMdlEffect_RegisterReceiver(void);
+extern "C" int beNDMWMdlEffect_GetMeta(void);
 extern "C" int FUN_00396340(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int KIND_EFFECT[4];
 extern "C" int g_beNDMWMdlEffect_metaObject[4];
-extern "C" igObject *FUN_00350020(...);
+extern "C" igObject *beModelCtrlInfoWork_Create(...);
 extern "C" igObject *beBaseInfoDataList_Create(...);
 /* Property record: reference at +20. */
 struct PropertyRecordRef { char p[20]; igObject *f20; };
@@ -53,20 +53,20 @@ static inline void create(beBaseInfoRam *ram, int a) { igSmartPointer<igObject> 
 };
 /* matching construct: opaque receiver; arg0 is only forwarded */
 struct EffectReceiverShim { int dummy; };
-extern "C" void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlEffect_OnGenerate(EffectReceiverShim *arg0, beBaseInfoRam *arg1);
 
 #pragma push
 #pragma readonly_strings on
 
-int Gap__Bec__beNDMWMdlEffect__vfunc_35(int dummy0, int arg1) {
+int beNDMWMdlEffect_IsKind(int dummy0, int arg1) {
     return strcmp(arg1, &KIND_EFFECT[0]) == 0;
 }
 
-void Gap__Bec__beNDMWMdlEffect__vfunc_37(void)
+void beNDMWMdlEffect_RegisterReceiver(void)
 {
 }
 
-void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlEffect_OnGenerate(EffectReceiverShim *arg0, beBaseInfoRam *arg1) {
     igObject *s0;
     PropertyRecordRef *s1;
     int alloc;
@@ -89,7 +89,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
     }
     /* matching construct: the effect holder is a named local and the list holder above an unnamed
      * temporary; named locals take their frame slots before temporaries (effect +0x5c, list +0x58) */
-    EffectRef effect(FUN_00350020(a));
+    EffectRef effect(beModelCtrlInfoWork_Create(a));
     s0 = effect.p;
     if (s0 != 0) {
         s0->_refCount++;
@@ -99,7 +99,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
     FUN_00396340(arg0, arg1);
 }
 
-int Gap__Bec__beNDMWMdlEffect__vfunc_20(void)
+int beNDMWMdlEffect_GetMeta(void)
 {
     return g_beNDMWMdlEffect_metaObject[0];
 }

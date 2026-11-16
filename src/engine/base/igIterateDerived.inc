@@ -22,11 +22,11 @@ int igIterateDerived_GetVTable(void) {
     int *o;
 
     igObject_InitHeader(&f);
-    f.vt = &DAT_0052c3a0[0];
+    f.vt = &g_igIterateDerived_vtable[0];
     pr = &f.ref;
     *pr = 0;
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_0052c3a0[0];
+    f.vt = &g_igIterateDerived_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {
             o = *pr;

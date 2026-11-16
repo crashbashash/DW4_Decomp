@@ -1,17 +1,17 @@
 igMetaObject *g_beNDMWStatusSelect00_metaObject;
 
 void beNDMWStatusSelect00_Create(int arg0) {
-    FUN_003b5800();
+    beNDMWStatusSelect00_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStatusSelect00_metaObject, arg0);
 }
 
-igMetaObject *FUN_003b5730(void) {
+igMetaObject *beNDMWStatusSelect00_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWStatusSelect00_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_003b5800();
+    beNDMWStatusSelect00_EnsureRegistered();
 done:
     return g_beNDMWStatusSelect00_metaObject;
 }
@@ -30,14 +30,14 @@ int beNDMWStatusSelect00_GetVTable(void) {
     f.w[18] = 0;
     f.w[19] = 0;
     f.w[26] = 0;
-    f.vt = &DAT_0053f480[0];
+    f.vt = &g_beNDMWStatusSelect00_vtable[0];
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_0053f480[0];
+    f.vt = &g_beNDMWStatusSelect00_vtable[0];
     FUN_003b4050((struct S_3b4050 *)&f, (short)0);
     return temp_s0;
 }
 
-void FUN_003b5800(void)
+void beNDMWStatusSelect00_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusSelect00_Register);
 }
@@ -49,7 +49,7 @@ void *beNDMWStatusSelect00_Register(void) {
         &g_beNDMWStatusSelect00_metaObject,
         beNDMWWindowSelect_Register,
         beNDMWWindowSelect_GetPublishedMetaObject,
-        beNDMWStatusSelect00_GetMetaObject,
+        beNDMWStatusSelect00_GetMetaObjectFunction,
         "beNDMWStatusSelect00",
         0x70, /* instance size */
         beNDMWStatusSelect00_GetVTable,
@@ -59,8 +59,8 @@ void *beNDMWStatusSelect00_Register(void) {
     );
 }
 
-void beNDMWStatusSelect00_GetMetaObject(void)
+void beNDMWStatusSelect00_GetMetaObjectFunction(void)
 {
-    FUN_003b5730();
+    beNDMWStatusSelect00_GetMetaObject();
 }
 

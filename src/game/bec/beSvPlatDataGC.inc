@@ -14,10 +14,10 @@ igMetaField *g_beSvPlatDataGC_iconTplSizeMetaField;
 igMetaField *g_beSvPlatDataGC_iconTplDataMetaField;
 igMetaField *g_beSvPlatDataGC_commentMetaField;
 
-void *FUN_00347e20(void) {
+void *beSvPlatDataGC_GetMetaObject(void) {
     igMetaObject *g = g_beSvPlatDataGC_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00347f50();
+        beSvPlatDataGC_EnsureRegistered();
     }
     return g_beSvPlatDataGC_metaObject;
 }
@@ -34,11 +34,11 @@ int beSvPlatDataGC_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = (S_ref *)&u.b[12];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00538b00[0];
+    u.vt = (int)&g_beSvPlatDataGC_vtable[0];
     q0 = &u.b[104];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00538b00[0];
+    u.vt = (int)&g_beSvPlatDataGC_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {
@@ -50,7 +50,7 @@ int beSvPlatDataGC_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00538d40[0];
+    u.vt = (int)&g_beSvPlatBaseData_vtable[0];
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
         if (q1 != 0) {
@@ -63,7 +63,7 @@ int beSvPlatDataGC_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00347f50(void)
+void beSvPlatDataGC_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvPlatDataGC_Register);
 }
@@ -75,7 +75,7 @@ void *beSvPlatDataGC_Register(void) {
         &g_beSvPlatDataGC_metaObject,
         beSvPlatBaseData_Register,
         beSvPlatBaseData_GetPublishedMetaObject,
-        beSvPlatDataGC_GetMetaObject,
+        beSvPlatDataGC_GetMetaObjectFunction,
         "beSvPlatDataGC",
         0x8c, /* instance size */
         beSvPlatDataGC_GetVTable,
@@ -85,9 +85,9 @@ void *beSvPlatDataGC_Register(void) {
     );
 }
 
-void beSvPlatDataGC_GetMetaObject(void)
+void beSvPlatDataGC_GetMetaObjectFunction(void)
 {
-    FUN_00347e20();
+    beSvPlatDataGC_GetMetaObject();
 }
 
 static FieldFactory g_beSvPlatDataGC_ctorTable[] = {

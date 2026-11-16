@@ -4,12 +4,12 @@ igMetaField *g_beOptInfo_isAsmMetaField;
 igMetaField *g_beOptInfo_libOptMetaField;
 igMetaField *g_beOptInfo_libAsmMetaField;
 
-igMetaObject *FUN_0034d080(void)
+igMetaObject *beOptInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_beOptInfo_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_0034d160();
+        beOptInfo_EnsureRegistered();
     return g_beOptInfo_metaObject;
 }
 
@@ -19,18 +19,18 @@ int beOptInfo_GetVTable(void) {
 
     igObject_InitHeader(&o);
     o.f8 = 0;
-    o.vt = &DAT_00538590[0];
+    o.vt = &g_beOptInfo_vtable[0];
     o.a = 0;
     o.b = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00538590[0];
+    o.vt = &g_beOptInfo_vtable[0];
     igStringRef_Destruct(&o.b, -1);
     igStringRef_Destruct(&o.a, -1);
     igInfo_Destroy(&o, 0);
     return r;
 }
 
-void FUN_0034d160(void)
+void beOptInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beOptInfo_Register);
 }
@@ -42,7 +42,7 @@ void *beOptInfo_Register(void) {
         &g_beOptInfo_metaObject,
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
-        beOptInfo_GetMetaObject,
+        beOptInfo_GetMetaObjectFunction,
         "beOptInfo",
         0x24, /* instance size */
         beOptInfo_GetVTable,
@@ -52,9 +52,9 @@ void *beOptInfo_Register(void) {
     );
 }
 
-void beOptInfo_GetMetaObject(void)
+void beOptInfo_GetMetaObjectFunction(void)
 {
-    FUN_0034d080();
+    beOptInfo_GetMetaObject();
 }
 
 static FieldFactory g_beOptInfo_ctorTable[] = {

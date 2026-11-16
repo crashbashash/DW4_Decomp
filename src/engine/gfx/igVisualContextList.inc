@@ -17,7 +17,7 @@ int igVisualContextList_GetVTable(void) {
     Obj_149f30 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_00527170[0];
+    o.vt = &g_igVisualContextList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -26,7 +26,7 @@ void FUN_00149f70(void)
     igMetaObject_RunStaticInit(igVisualContextList_Register);
 }
 
-static igMetaObjectCallback g_igVisualContextList_callbackList[] = { FUN_0014a0e0, 0 };
+static igMetaObjectCallback g_igVisualContextList_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 void igVisualContextList_Register(void) {
     FUN_00149bc0();

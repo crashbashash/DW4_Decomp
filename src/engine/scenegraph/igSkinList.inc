@@ -11,23 +11,23 @@ igMetaObject *igSkinList_GetMetaObject(void)
 {
     igMetaObject *g = g_igSkinList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00197f40();
+        igSkinList_EnsureRegistered();
     return g_igSkinList_metaObject;
 }
 
 int igSkinList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_0052b410[0];
+    obj[0] = (int)&g_igSkinList_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_00197f40(void)
+void igSkinList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSkinList_Register);
 }
 
-static igMetaObjectCallback g_igSkinList_callbackList[] = { FUN_00198290, 0 };
+static igMetaObjectCallback g_igSkinList_callbackList[] = { igSkin_EnsureRegistered, 0 };
 
 void igSkinList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

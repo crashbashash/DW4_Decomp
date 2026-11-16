@@ -61,10 +61,10 @@ int igPsx2Controller_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     q8 = &u.p[8];
-    u.w[0] = (int)(&DAT_00524d00[0]);
+    u.w[0] = (int)(&g_igPsx2Controller_vtable[0]);
     *q8 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00524d00[0]);
+    u.w[0] = (int)(&g_igPsx2Controller_vtable[0]);
     if (q8 != 0) {
         temp_a0 = *q8;
         if (temp_a0 != 0) {

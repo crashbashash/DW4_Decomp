@@ -24,10 +24,10 @@ int igRadioGroupModel_GetVTable(void) {
     igObject_InitHeader(u.b);
     q0 = (S_ref *)&u.b[8];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_00540e30[0];
-    u.vt = (int)&DAT_00541ca0[0];
+    u.vt = (int)&g_igModel_vtable[0];
+    u.vt = (int)&g_igRadioGroupModel_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00540e30[0];
+    u.vt = (int)&g_igModel_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {

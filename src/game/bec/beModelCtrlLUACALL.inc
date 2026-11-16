@@ -1,12 +1,12 @@
 igMetaObject *g_beModelCtrlLUACALL_metaObject;
 igMetaField *g_beModelCtrlLUACALL_modeNameMetaField;
 
-igMetaObject *FUN_00356450(void)
+igMetaObject *beModelCtrlLUACALL_GetMetaObject(void)
 {
     igMetaObject *g = g_beModelCtrlLUACALL_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_00356570();
+        beModelCtrlLUACALL_EnsureRegistered();
     return g_beModelCtrlLUACALL_metaObject;
 }
 
@@ -16,17 +16,17 @@ int beModelCtrlLUACALL_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.m8 = 0;
-    obj.vt = &DAT_00537290[0];
+    obj.vt = &g_beModelCtrlLUACALL_vtable[0];
     obj.m12 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00537290[0];
+    obj.vt = &g_beModelCtrlLUACALL_vtable[0];
     obj.rel12();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.rel8();
     return r;
 }
 
-void FUN_00356570(void)
+void beModelCtrlLUACALL_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlLUACALL_Register);
 }
@@ -38,7 +38,7 @@ void *beModelCtrlLUACALL_Register(void) {
         &g_beModelCtrlLUACALL_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlLUACALL_GetMetaObject,
+        beModelCtrlLUACALL_GetMetaObjectFunction,
         "beModelCtrlLUACALL",
         0x10, /* instance size */
         beModelCtrlLUACALL_GetVTable,
@@ -48,9 +48,9 @@ void *beModelCtrlLUACALL_Register(void) {
     );
 }
 
-void beModelCtrlLUACALL_GetMetaObject(void)
+void beModelCtrlLUACALL_GetMetaObjectFunction(void)
 {
-    FUN_00356450();
+    beModelCtrlLUACALL_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlLUACALL_ctorTable[] = {

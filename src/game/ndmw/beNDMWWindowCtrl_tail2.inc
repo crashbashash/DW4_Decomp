@@ -2,22 +2,22 @@ igMetaObject *g_beNDMWWindowCtrl_metaObject;
 igMetaField *g_beNDMWWindowCtrl_nowProcKazuMetaField;
 igMetaEnum *g_beNDMWWindowCtrl_messageMetaEnum;
 
-igMetaObject *FUN_003bb570(void) {
+igMetaObject *beNDMWWindowCtrl_GetOrCreateMetaObject(void) {
     if (g_beNDMWWindowCtrl_metaObject == 0) {
         g_beNDMWWindowCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWWindowCtrl_metaObject;
 }
 
-void *FUN_003bb5c0(void) {
+void *beNDMWWindowCtrl_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWWindowCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003bb610();
+        beNDMWWindowCtrl_EnsureRegistered();
     }
     return g_beNDMWWindowCtrl_metaObject;
 }
 
-void FUN_003bb610(void)
+void beNDMWWindowCtrl_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWWindowCtrl_Register);
 }
@@ -29,7 +29,7 @@ void *beNDMWWindowCtrl_Register(void) {
         &g_beNDMWWindowCtrl_metaObject,
         beNDMWWindow_Register,
         beNDMWWindow_GetPublishedMetaObject,
-        beNDMWWindowCtrl_GetMetaObject,
+        beNDMWWindowCtrl_GetMetaObjectFunction,
         "beNDMWWindowCtrl",
         0x54, /* instance size */
         0,
@@ -39,9 +39,9 @@ void *beNDMWWindowCtrl_Register(void) {
     );
 }
 
-void beNDMWWindowCtrl_GetMetaObject(void)
+void beNDMWWindowCtrl_GetMetaObjectFunction(void)
 {
-    FUN_003bb5c0();
+    beNDMWWindowCtrl_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWWindowCtrl_ctorTable[] = {

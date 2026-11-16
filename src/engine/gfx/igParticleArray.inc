@@ -56,14 +56,14 @@ int igParticleArray_GetVTable(void) {
     struct Obj_14ca20 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005266c0[0];
+    obj.vt = &g_igParticleArray_vtable[0];
     obj.w2 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
     obj.w12 = 0;
     obj.w17 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005266c0[0];
+    obj.vt = &g_igParticleArray_vtable[0];
     FUN_00137260(&obj.w17, -1);
     FUN_0014cd10((ObjectRefWord *)&obj.w12, -1);
     FUN_00130140(&obj.w11, -1);
@@ -77,7 +77,7 @@ void *FUN_0014caf0(igParticleArray *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->_vtable = (int)&DAT_005266c0[0];
+        arg0->_vtable = (int)&g_igParticleArray_vtable[0];
         if (&arg0->_primLengthArray) {
             p = (igObject *)arg0->_primLengthArray;
             if (p != 0) {
@@ -170,7 +170,7 @@ void FUN_0014cd90(void)
     igMetaObject_RunStaticInit(igParticleArray_Register);
 }
 
-static igMetaObjectCallback g_igParticleArray_callbackList[] = { FUN_0014d190, FUN_0014ba20, FUN_0014a0e0, FUN_0014c670, FUN_0014c0d0, 0 };
+static igMetaObjectCallback g_igParticleArray_callbackList[] = { igParticleFormat_EnsureRegistered, igVertexArray_EnsureRegistered, igVisualContext_EnsureRegistered, FUN_0014c670, FUN_0014c0d0, 0 };
 
 void igParticleArray_Register(void) {
     FUN_00149bc0();
@@ -311,10 +311,10 @@ void igParticleArray_InitFields(void) {
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 7));
     ((igMemoryRefMetaField *)temp_s2_2)->_memType = igFloatMetaField_GetDefaultDescriptor();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 8));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0014b980();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_3)->_persistent = 0;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xA));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0014c2f0();

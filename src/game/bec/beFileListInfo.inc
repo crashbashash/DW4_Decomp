@@ -2,13 +2,13 @@ igMetaObject *g_beFileListInfo_metaObject;
 igMetaField *g_beFileListInfo_sectionMetaField;
 igMetaField *g_beFileListInfo_fnamesMetaField;
 
-void *FUN_00362c00(void) {
+void *beFileListInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beFileListInfo_metaObject != 0) {
         b = (*(int *)((char *)(g_beFileListInfo_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00362ce0();
+    beFileListInfo_EnsureRegistered();
 done:
     return g_beFileListInfo_metaObject;
 }
@@ -21,20 +21,20 @@ int beFileListInfo_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     *(int *)&u.b[8] = 0;
-    u.vt = (int)&DAT_00535870[0];
+    u.vt = (int)&g_beFileListInfo_vtable[0];
     p2 = &u.b[20];
     *(int *)p2 = 0;
     p1 = &u.b[24];
     *(int *)p1 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00535870[0];
+    u.vt = (int)&g_beFileListInfo_vtable[0];
     FUN_00199450(p1, -1);
     igStringRef_Destruct(p2, -1);
     igInfo_Destroy(u.b, 0);
     return temp_s1;
 }
 
-void FUN_00362ce0(void)
+void beFileListInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beFileListInfo_Register);
 }
@@ -48,7 +48,7 @@ void *beFileListInfo_Register(void) {
         &g_beFileListInfo_metaObject,
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
-        beFileListInfo_GetMetaObject,
+        beFileListInfo_GetMetaObjectFunction,
         "beFileListInfo",
         0x1c, /* instance size */
         beFileListInfo_GetVTable,
@@ -58,9 +58,9 @@ void *beFileListInfo_Register(void) {
     );
 }
 
-void beFileListInfo_GetMetaObject(void)
+void beFileListInfo_GetMetaObjectFunction(void)
 {
-    FUN_00362c00();
+    beFileListInfo_GetMetaObject();
 }
 
 static FieldFactory g_beFileListInfo_ctorTable[] = {

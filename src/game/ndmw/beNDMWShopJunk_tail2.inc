@@ -28,7 +28,7 @@ void beNDMWShopJunk_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWShopJunk_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9130();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beNDMWShopJunk_fieldTable, g_beNDMWShopJunk_fieldHandles, g_beNDMWShopJunk_fieldOffsets, temp_s2);
 }
 

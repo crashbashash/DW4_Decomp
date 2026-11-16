@@ -1,6 +1,6 @@
 igMetaObject *g_igRayList_metaObject;
 
-igMetaObject *FUN_001880b0(void) {
+igMetaObject *igRayList_GetOrCreateMetaObject(void) {
     if (g_igRayList_metaObject == 0) {
         g_igRayList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -11,7 +11,7 @@ igMetaObject *igRayList_GetMetaObject(void)
 {
     igMetaObject *g = g_igRayList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00188190();
+        igRayList_EnsureRegistered();
     return g_igRayList_metaObject;
 }
 
@@ -19,11 +19,11 @@ int igRayList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527f70[0];
+    obj.vt = &g_igRayList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00188190(void)
+void igRayList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRayList_Register);
 }

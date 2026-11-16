@@ -17,7 +17,7 @@ int igGenericAttrDefaultManager_GetVTable(void) {
     struct O_137b40 o;
     int pad[2];
     igObject_InitHeader(&o);
-    o.vt = DAT_00523a20;
+    o.vt = g_igGenericAttrDefaultManager_vtable;
     return *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
 }
 

@@ -12,7 +12,7 @@ igMetaObject *igShadeModelAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igShadeModelAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00133a30();
+        igShadeModelAttr_EnsureRegistered();
     return g_igShadeModelAttr_metaObject;
 }
 
@@ -20,11 +20,11 @@ int igShadeModelAttr_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00522ec0[0];
+    obj.vt = &g_igShadeModelAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00133a30(void)
+void igShadeModelAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igShadeModelAttr_Register);
 }

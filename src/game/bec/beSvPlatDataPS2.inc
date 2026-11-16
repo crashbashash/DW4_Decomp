@@ -23,10 +23,10 @@ igMetaField *g_beSvPlatDataPS2_dataOffSetMetaField;
 igMetaField *g_beSvPlatDataPS2_iconCountMetaField;
 igMetaField *g_beSvPlatDataPS2_imageMetaField;
 
-void *FUN_00347820(void) {
+void *beSvPlatDataPS2_GetMetaObject(void) {
     igMetaObject *g = g_beSvPlatDataPS2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00347970();
+        beSvPlatDataPS2_EnsureRegistered();
     }
     return g_beSvPlatDataPS2_metaObject;
 }
@@ -41,7 +41,7 @@ int beSvPlatDataPS2_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     *(int *)&u.b[12] = 0;
-    u.vt = (int)&DAT_00538bc0[0];
+    u.vt = (int)&g_beSvPlatDataPS2_vtable[0];
     *(int *)&u.b[24] = 0;
     *(int *)&u.b[28] = 0;
     *(int *)&u.b[184] = 0;
@@ -49,7 +49,7 @@ int beSvPlatDataPS2_GetVTable(void) {
     *(int *)&u.b[192] = 0;
     *(int *)&u.b[212] = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00538bc0[0];
+    u.vt = (int)&g_beSvPlatDataPS2_vtable[0];
     igSmartPointer_igObjectList_Destruct(&u.b[212], -1);
     igStringRef_Destruct(&u.b[192], -1);
     igStringRef_Destruct(&u.b[188], -1);
@@ -60,7 +60,7 @@ int beSvPlatDataPS2_GetVTable(void) {
     return t;
 }
 
-void FUN_00347970(void)
+void beSvPlatDataPS2_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvPlatDataPS2_Register);
 }
@@ -74,7 +74,7 @@ void *beSvPlatDataPS2_Register(void) {
         &g_beSvPlatDataPS2_metaObject,
         beSvPlatBaseData_Register,
         beSvPlatBaseData_GetPublishedMetaObject,
-        beSvPlatDataPS2_GetMetaObject,
+        beSvPlatDataPS2_GetMetaObjectFunction,
         "beSvPlatDataPS2",
         0xd8, /* instance size */
         beSvPlatDataPS2_GetVTable,
@@ -84,9 +84,9 @@ void *beSvPlatDataPS2_Register(void) {
     );
 }
 
-void beSvPlatDataPS2_GetMetaObject(void)
+void beSvPlatDataPS2_GetMetaObjectFunction(void)
 {
-    FUN_00347820();
+    beSvPlatDataPS2_GetMetaObject();
 }
 
 static FieldFactory g_beSvPlatDataPS2_ctorTable[] = {

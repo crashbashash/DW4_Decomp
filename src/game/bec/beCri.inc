@@ -13,21 +13,21 @@ igMetaField *g_beCri_pauseOnetimeMetaField;
 igMetaField *g_beCri_dataTypeMetaField;
 
 void beCri_CreateInstance(int arg0) {
-    FUN_00367b20();
+    beCri_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589AD8, arg0);
 }
 
-igMetaObject *FUN_003678a0(void) {
+igMetaObject *beCri_GetOrCreateMetaObject(void) {
     if (g_beCri_metaObject == 0) {
         g_beCri_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beCri_metaObject;
 }
 
-void *FUN_003678f0(void) {
+void *beCri_GetMetaObject(void) {
     igMetaObject *g = g_beCri_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00367b20();
+        beCri_EnsureRegistered();
     }
     return g_beCri_metaObject;
 }
@@ -38,24 +38,24 @@ int beCri_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w[1] = 0;
-    obj.vt = &DAT_0053a3e0[0];
+    obj.vt = &g_beCri_vtable[0];
     obj.w[7] = 0;
     obj.w[8] = 0;
     obj.w[9] = 0;
     obj.w[10] = 0;
     obj.w[11] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053a3e0[0];
+    obj.vt = &g_beCri_vtable[0];
     igSmartPointer_igObjectList_Destruct(&obj.w[11], -1);
     igSmartPointer_igInfoList_Destruct(&obj.w[10], -1);
     FUN_00367aa0((struct Ref **)(&obj.w[9]), (short)(-1));
-    FUN_00367a20((void **)(&obj.w[8]), (short)(-1));
-    FUN_00367a20((void **)(&obj.w[7]), (short)(-1));
+    igSmartPointer_beCriHandle_Destruct((void **)(&obj.w[8]), (short)(-1));
+    igSmartPointer_beCriHandle_Destruct((void **)(&obj.w[7]), (short)(-1));
     FUN_00231030(&obj, 0);
     return r;
 }
 
-void **FUN_00367a20(void **arg0, short arg1) {
+void **igSmartPointer_beCriHandle_Destruct(void **arg0, short arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -86,12 +86,12 @@ void **FUN_00367aa0(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void FUN_00367b20(void)
+void beCri_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCri_Register);
 }
 
-static igMetaObjectCallback g_beCri_callbackList[] = { FUN_00342f30, FUN_00366b20, FUN_00366860, igInfoList_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCri_callbackList[] = { beSystem_EnsureRegistered, beCriHandle_EnsureRegistered, beCriHandleList_EnsureRegistered, igInfoList_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
 void *beCri_Register(void) {
     BecLibrary_MarkRegistered();
@@ -100,7 +100,7 @@ void *beCri_Register(void) {
         &g_beCri_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        beCri_GetMetaObject,
+        beCri_GetMetaObjectFunction,
         "beCri",
         0x48, /* instance size */
         beCri_GetVTable,
@@ -110,9 +110,9 @@ void *beCri_Register(void) {
     );
 }
 
-void beCri_GetMetaObject(void)
+void beCri_GetMetaObjectFunction(void)
 {
-    FUN_003678f0();
+    beCri_GetMetaObject();
 }
 
 static FieldFactory g_beCri_ctorTable[] = {
@@ -186,14 +186,14 @@ void beCri_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_beCri_ctorTable, 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00342ce0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00366950();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beCriHandle_GetOrCreateMetaObject();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_00366950();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beCriHandle_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_00366780();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beCriHandleList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igInfoList_GetOrCreateMetaObject();

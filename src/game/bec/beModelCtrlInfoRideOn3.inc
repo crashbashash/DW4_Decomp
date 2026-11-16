@@ -7,14 +7,14 @@ igMetaField *g_beModelCtrlInfoRideOn3_minKyoriMetaField;
 igMetaField *g_beModelCtrlInfoRideOn3_maxKyoriMetaField;
 
 void beModelCtrlInfoRideOn3_Create(int arg0) {
-    FUN_00351910();
+    beModelCtrlInfoRideOn3_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588A58, arg0);
 }
 
-void *FUN_003517c0(void) {
+void *beModelCtrlInfoRideOn3_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlInfoRideOn3_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00351910();
+        beModelCtrlInfoRideOn3_EnsureRegistered();
     }
     return g_beModelCtrlInfoRideOn3_metaObject;
 }
@@ -24,7 +24,7 @@ int beModelCtrlInfoRideOn3_GetVTable(void) {
     return *(int *)((char *)&info + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_00351910(void)
+void beModelCtrlInfoRideOn3_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoRideOn3_Register);
 }
@@ -36,7 +36,7 @@ void *beModelCtrlInfoRideOn3_Register(void) {
         &g_beModelCtrlInfoRideOn3_metaObject,
         beModelCtrlInfoRideOn_Register,
         beModelCtrlInfoRideOn_GetPublishedMetaObject,
-        beModelCtrlInfoRideOn3_GetMetaObject,
+        beModelCtrlInfoRideOn3_GetMetaObjectFunction,
         "beModelCtrlInfoRideOn3",
         0x70, /* instance size */
         beModelCtrlInfoRideOn3_GetVTable,
@@ -46,9 +46,9 @@ void *beModelCtrlInfoRideOn3_Register(void) {
     );
 }
 
-void beModelCtrlInfoRideOn3_GetMetaObject(void)
+void beModelCtrlInfoRideOn3_GetMetaObjectFunction(void)
 {
-    FUN_003517c0();
+    beModelCtrlInfoRideOn3_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoRideOn3_ctorTable[] = {

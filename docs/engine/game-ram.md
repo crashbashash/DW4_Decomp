@@ -15,11 +15,11 @@ property name. The save file stores the `BASE_*` arrays of these lists ([save fo
 |---|---:|---|---|
 | `0x003f6620` | 2,416 | `beNDMWGameRam_BuildDataList` | appends one named data object per layout row to a list |
 | `0x003f7310` | 1,172 | `beNDMWGameRam_ResetPlayer` | rebuilds a player's data list (player 0 also rebuilds the common list): `BASE_LEVEL` 1, `BASE_SKILL` 1, twelve disks, `BASE_FLAG[960]` set |
-| `0x003f77b0` | 464 | `beNDMWGameRam_Initialize` | creates the two list holders and resets the four players (slot 23) |
-| `0x003f7980` | 720 | `beNDMWGameRam_ClearLists` | empties both lists (slot 24) |
-| `0x003f7c50` | 484 | `beNDMWGameRam_ReleaseDataBases` | releases the eight cached database objects (slot 32) |
-| `0x003f7e40` | 388 | `beNDMWGameRam_CreateInfo` | creates the `gameram` info and its ram record and registers it as receiver of `GAMERAM` (slot 25) |
-| `0x003f80d0` | 8 | `beNDMWGameRam_Update` | empty per-frame update (slot 31) |
+| `0x003f77b0` | 464 | `beNDMWGameRam_Start` | creates the two list holders and resets the four players (slot 23) |
+| `0x003f7980` | 720 | `beNDMWGameRam_Stop` | empties both lists (slot 24) |
+| `0x003f7c50` | 484 | `beNDMWGameRam_Prepare` | releases the eight cached database objects (slot 32) |
+| `0x003f7e40` | 388 | `beNDMWGameRam_AddInfo` | creates the `gameram` info and its ram record and registers it as receiver of `GAMERAM` (slot 25) |
+| `0x003f80d0` | 8 | `beNDMWGameRam_UpdateRam` | empty per-frame update (slot 31) |
 | `0x003f80e0` | 444 | `beNDMWGameRam_FindSpecies` | species row whose `MODEL_NAME` in the `shinka` database is the given model, else 0 |
 | `0x003f82a0` | 1,212 | `beNDMWGameRam_SelectSpecies` | makes a species current: `DIGIMONNO`, `DIGIMONNAME`, and `LEVEL`, `EXP`, `SKILL`, `UPCNT` from the `BASE_*` arrays; player 0 also shares its flags and counters with the common list |
 | `0x003f8760` | 548 | `beNDMWGameRam_StoreSpecies` | the reverse: current values back into the `BASE_*` arrays |
@@ -66,6 +66,6 @@ attributes. The column names come from `g_attributeInitialFields` and `g_attribu
 - `igInsightCore_FindManager` (find an insight's object by meta object), `StringPool_Allocate` (allocate from the
   string pool's allocator) and `igIntList_Create` (create an int list) keep their address names; each
   has callers in more than twenty files.
-- The base call in `beNDMWGameRam_Initialize` is the `beBaseInfoManager` slot 23 body, still
-  named `Gap__Core__igObject__vfunc_23`.
+- The base call in `beNDMWGameRam_Start` is the `beBaseInfoManager` slot 23 body, still
+  named `beBaseInfoManager_Start`.
 - `g_initialBaseFlag960` sets `BASE_FLAG[960]` on every reset; what the flag means is not known.

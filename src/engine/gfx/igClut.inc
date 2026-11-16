@@ -8,7 +8,7 @@ igMetaField *g_igClut_clutDirtyMetaField;
 igMetaField *g_igClut_isAlphaScaledMetaField;
 
 int FUN_0014fa50(int arg0) {
-    FUN_0014fb70();
+    igClut_EnsureRegistered();
     return igMetaObject_CreateInstance(g_igClut_metaObject, arg0);
 }
 
@@ -23,7 +23,7 @@ igMetaObject *igClut_GetMetaObject(void)
 {
     igMetaObject *g = g_igClut_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014fb70();
+        igClut_EnsureRegistered();
     return g_igClut_metaObject;
 }
 
@@ -31,11 +31,11 @@ int igClut_GetVTable(void) {
     struct Obj_14fb30 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005269f0[0];
+    obj.vt = &g_igClut_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0014fb70(void)
+void igClut_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igClut_Register);
 }

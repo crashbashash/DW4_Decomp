@@ -6,14 +6,14 @@ void be_CreateInstance(int arg0) {
     igMetaObject_CreateInstance(*(int *)0x58A030, arg0);
 }
 
-igMetaObject *FUN_0036dfe0(void) {
+igMetaObject *be_GetOrCreateMetaObject(void) {
     if (g_be_metaObject == 0) {
         g_be_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_be_metaObject;
 }
 
-void *FUN_0036e030(void) {
+void *be_GetMetaObject(void) {
     igMetaObject *g = g_be_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         be_EnsureRegistered();
@@ -27,10 +27,10 @@ int be_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.s = 0;
-    obj.vt = &DAT_00539f10[0];
+    obj.vt = &g_be_vtable[0];
     obj.ref = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00539f10[0];
+    obj.vt = &g_be_vtable[0];
     obj.releaseRef();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.releaseStr();
@@ -51,7 +51,7 @@ void *be_Register(void) {
         &g_be_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        be_GetMetaObject,
+        be_GetMetaObjectFunction,
         "be",
         0x14, /* instance size */
         be_GetVTable,
@@ -61,9 +61,9 @@ void *be_Register(void) {
     );
 }
 
-void be_GetMetaObject(void)
+void be_GetMetaObjectFunction(void)
 {
-    FUN_0036e030();
+    be_GetMetaObject();
 }
 
 static FieldFactory g_be_ctorTable[] = {

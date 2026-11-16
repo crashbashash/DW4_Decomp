@@ -6,21 +6,21 @@ igMetaField *g_beSelectCtrlInfoWork_svSeqNameMetaField;
 igMetaField *g_beSelectCtrlInfoWork_decideListMetaField;
 
 void beSelectCtrlInfoWork_Create(int arg0) {
-    FUN_00345830();
+    beSelectCtrlInfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587F60, arg0);
 }
 
-igMetaObject *FUN_003456c0(void) {
+igMetaObject *beSelectCtrlInfoWork_GetOrCreateMetaObject(void) {
     if (g_beSelectCtrlInfoWork_metaObject == 0) {
         g_beSelectCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSelectCtrlInfoWork_metaObject;
 }
 
-void *FUN_00345710(void) {
+void *beSelectCtrlInfoWork_GetMetaObject(void) {
     igMetaObject *g = g_beSelectCtrlInfoWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00345830();
+        beSelectCtrlInfoWork_EnsureRegistered();
     }
     return g_beSelectCtrlInfoWork_metaObject;
 }
@@ -38,11 +38,11 @@ int beSelectCtrlInfoWork_GetVTable(void) {
     igObject_InitHeader(u.b);
     q7 = &u.p[7];
     q8 = (S_ref *)&u.p[8];
-    u.w[0] = (int)(&DAT_00539010[0]);
+    u.w[0] = (int)(&g_beSelectCtrlInfoWork_vtable[0]);
     *q7 = 0;
     *(int *)q8 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00539010[0]);
+    u.w[0] = (int)(&g_beSelectCtrlInfoWork_vtable[0]);
     if (q8 != 0) {
         q8 = *(S_ref **)q8;
         if (q8 != 0) {
@@ -66,7 +66,7 @@ int beSelectCtrlInfoWork_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_00345830(void)
+void beSelectCtrlInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSelectCtrlInfoWork_Register);
 }
@@ -80,7 +80,7 @@ void *beSelectCtrlInfoWork_Register(void) {
         &g_beSelectCtrlInfoWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSelectCtrlInfoWork_GetMetaObject,
+        beSelectCtrlInfoWork_GetMetaObjectFunction,
         "beSelectCtrlInfoWork",
         0x24, /* instance size */
         beSelectCtrlInfoWork_GetVTable,
@@ -90,9 +90,9 @@ void *beSelectCtrlInfoWork_Register(void) {
     );
 }
 
-void beSelectCtrlInfoWork_GetMetaObject(void)
+void beSelectCtrlInfoWork_GetMetaObjectFunction(void)
 {
-    FUN_00345710();
+    beSelectCtrlInfoWork_GetMetaObject();
 }
 
 static FieldFactory g_beSelectCtrlInfoWork_ctorTable[] = {

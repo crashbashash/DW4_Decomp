@@ -11,12 +11,12 @@ igMetaField *g_beNDMWPanelWazaInfoWork_playerWorkMetaField;
 igMetaField *g_beNDMWPanelWazaInfoWork_textSetListMetaField;
 igMetaField *g_beNDMWPanelWazaInfoWork_textColorListMetaField;
 
-void FUN_003bdb10(int arg0) {
-    FUN_003bdf00();
+void beNDMWPanelWazaInfoWork_Create(int arg0) {
+    beNDMWPanelWazaInfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWPanelWazaInfoWork_metaObject, arg0);
 }
 
-igMetaObject *FUN_003bdb50(void) {
+igMetaObject *beNDMWPanelWazaInfoWork_GetOrCreateMetaObject(void) {
     if (g_beNDMWPanelWazaInfoWork_metaObject == 0) {
         g_beNDMWPanelWazaInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -30,7 +30,7 @@ igMetaObject *beNDMWPanelWazaInfoWork_ResolveMetaObject(void)
         ready = (g_beNDMWPanelWazaInfoWork_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_003bdf00();
+    beNDMWPanelWazaInfoWork_EnsureRegistered();
 done:
     return g_beNDMWPanelWazaInfoWork_metaObject;
 }
@@ -40,7 +40,7 @@ int beNDMWPanelWazaInfoWork_GetVTable(void) {
     int temp_s5;
 
     igObject_InitHeader(&obj);
-    obj.vt = (&DAT_0053d5d0[0]);
+    obj.vt = (&g_beNDMWPanelWazaInfoWork_vtable[0]);
     obj.f10 = 0;
     obj.f14 = 0;
     obj.f18 = 0;
@@ -49,7 +49,7 @@ int beNDMWPanelWazaInfoWork_GetVTable(void) {
     obj.f28 = 0;
     obj.f2C = 0;
     temp_s5 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_0053d5d0[0]);
+    obj.vt = (&g_beNDMWPanelWazaInfoWork_vtable[0]);
     igSmartPointer_igIntList_Destruct(&obj.f2C, -1);
     igSmartPointer_igStringRefList_Destruct(&obj.f28, -1);
     FUN_003bde80((struct Ref **)&obj.f24, (short)(-1));
@@ -122,12 +122,12 @@ void **FUN_003bde80(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void FUN_003bdf00(void)
+void beNDMWPanelWazaInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWPanelWazaInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWPanelWazaInfoWork_callbackList[] = { FUN_003bea10, FUN_003be6d0, FUN_003be360, FUN_003c0280, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWPanelWazaInfoWork_callbackList[] = { beNDMWPanelObjectWaza_EnsureRegistered, beNDMWPanelObjectItem_EnsureRegistered, beNDMWPanelObjectStat_EnsureRegistered, beNDMWMdlPlayerInfoWork_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
 void *beNDMWPanelWazaInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -220,16 +220,16 @@ void beNDMWPanelWazaInfoWork_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWPanelWazaInfoWork_ctorTable, 0xB);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_003be8e0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beNDMWPanelObjectWaza_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_003be5a0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beNDMWPanelObjectItem_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_003be0f0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beNDMWPanelObjectStat_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_003bfcc0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;

@@ -22,15 +22,15 @@ igMetaField *g_bePadData_adAngleMetaField;
 igMetaField *g_bePadData_1sttimeMetaField;
 igMetaField *g_bePadData_2ndtimeMetaField;
 
-void FUN_0034ce50(int arg0) {
-    FUN_0034cf20();
+void bePadData_Create(int arg0) {
+    bePadData_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588550, arg0);
 }
 
-void *FUN_0034ce90(void) {
+void *bePadData_GetMetaObject(void) {
     igMetaObject *g = g_bePadData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034cf20();
+        bePadData_EnsureRegistered();
     }
     return g_bePadData_metaObject;
 }
@@ -39,11 +39,11 @@ int bePadData_GetVTable(void) {
     struct Obj_34cee0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053afd0[0];
+    obj.vt = &g_bePadData_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0034cf20(void)
+void bePadData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(bePadData_Register);
 }
@@ -55,7 +55,7 @@ void *bePadData_Register(void) {
         &g_bePadData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        bePadData_GetMetaObject,
+        bePadData_GetMetaObjectFunction,
         "bePadData",
         0x68, /* instance size */
         bePadData_GetVTable,
@@ -65,9 +65,9 @@ void *bePadData_Register(void) {
     );
 }
 
-void bePadData_GetMetaObject(void)
+void bePadData_GetMetaObjectFunction(void)
 {
-    FUN_0034ce90();
+    bePadData_GetMetaObject();
 }
 
 static FieldFactory g_bePadData_ctorTable[] = {

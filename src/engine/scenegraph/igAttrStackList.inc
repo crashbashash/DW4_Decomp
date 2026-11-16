@@ -19,7 +19,7 @@ int igAttrStackList_GetVTable(void) {
     struct Obj_1a59a0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052a1c0[0];
+    obj.vt = &g_igAttrStackList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

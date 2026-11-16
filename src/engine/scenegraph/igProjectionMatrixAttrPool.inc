@@ -19,7 +19,7 @@ int igProjectionMatrixAttrPool_GetVTable(void) {
     struct Obj_19a1c0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052af60[0];
+    obj.vt = &g_igProjectionMatrixAttrPool_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -28,7 +28,7 @@ void FUN_0019a200(void)
     igMetaObject_RunStaticInit(igProjectionMatrixAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igProjectionMatrixAttrPool_callbackList[] = { FUN_001347c0, 0 };
+static igMetaObjectCallback g_igProjectionMatrixAttrPool_callbackList[] = { igProjectionMatrixAttr_EnsureRegistered, 0 };
 
 void igProjectionMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

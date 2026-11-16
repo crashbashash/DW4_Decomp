@@ -33,13 +33,13 @@ int igPsx2AudioContext_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00524a80[0];
+    u.vt = (int)&g_igPsx2AudioContext_vtable[0];
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[48] = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00524a80[0];
+    u.vt = (int)&g_igPsx2AudioContext_vtable[0];
     FUN_00143350((void **)&u.b[48], -1);
     FUN_00143350((void **)&u.b[20], -1);
     igSmartPointer_igThread_Destruct((struct RefCountBits **)&u.b[16], -1);

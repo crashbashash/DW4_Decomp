@@ -103,7 +103,7 @@ static inline void ClearStringList(igStringRefList *list) {
 
 /* Shared title update: st0 0 runs the title's Setup, 2 plays the queued closes and asks the children
  * to close, 3 waits for the close to finish and ends the run. */
-extern "C" void Gap__Bec__beNDMWWindowTitle__vfunc_21(beNDMWWindowTitle *self) {
+extern "C" void beNDMWWindowTitle_Update(beNDMWWindowTitle *self) {
     switch (self->_st0) {
     case 0:
         ((beNDMWWindowTitleVirtuals *)self)->Setup();
@@ -132,7 +132,7 @@ extern "C" void Gap__Bec__beNDMWWindowTitle__vfunc_21(beNDMWWindowTitle *self) {
 }
 
 /* Status background: the back plate and the background clear. */
-extern "C" void Gap__Bec__beNDMWStatusTitle00__vfunc_22(beNDMWStatusTitle00 *self) {
+extern "C" void beNDMWStatusTitle00_Setup(beNDMWStatusTitle00 *self) {
     beNDMWWindow_PresentModelAtOrigin(self, "i_stback", 0, "SQ_OPEN", "SQ_CLOSE");
     beNDMWWindow_PresentModelAtOrigin(self, "i_bgclear", 0, "SQ_OPEN", "SQ_CLOSE");
 }
@@ -296,13 +296,13 @@ extern "C" void beNDMWStatusTitle01_ShowShopLayout(beNDMWStatusTitle01 *self) {
 }
 
 /* Message window plate. */
-extern "C" void Gap__Bec__beNDMWStatusTitle02__vfunc_22(beNDMWStatusTitle02 *self) {
+extern "C" void beNDMWStatusTitle02_Setup(beNDMWStatusTitle02 *self) {
     beNDMWWindow_PresentModelAtOrigin(self, "i_messwn", 0, "SQ_STOPEN", "SQ_STCLOSE");
 }
 
 /* Button-guide plate: queues its three STWINFONT34 texts (font000 Select, font001 Confirm, font002
  * Cancel) for closing and runs txt_status.lua call 0, which fills them. */
-extern "C" void Gap__Bec__beNDMWStatusTitle03__vfunc_22(beNDMWStatusTitle03 *self) {
+extern "C" void beNDMWStatusTitle03_Setup(beNDMWStatusTitle03 *self) {
     beNDMWWindow_PresentModelAtOrigin(self, "i_staccount", 0, "SQ_OPEN", "SQ_CLOSE");
     AppendInterned(self->_textCloseTypeList, "STWINFONT34");
     AppendInterned(self->_textCloseNameList, "font000");
@@ -327,7 +327,7 @@ extern "C" void beNDMWStatusTitle03_SetCancelPromptEnabled(beNDMWStatusTitle03 *
 
 /* Title plate: queues its STWINFONT12 font000 text for closing and runs txt_status.lua with the
  * window's entry code as the call number. */
-extern "C" void Gap__Bec__beNDMWStatusTitle04__vfunc_22(beNDMWStatusTitle04 *self) {
+extern "C" void beNDMWStatusTitle04_Setup(beNDMWStatusTitle04 *self) {
     beNDMWWindow_PresentModelAtOrigin(self, "i_sttitle", 0, "SQ_OPEN", "SQ_CLOSE");
     AppendInterned(self->_textCloseTypeList, "STWINFONT12");
     AppendInterned(self->_textCloseNameList, "font000");
@@ -342,11 +342,11 @@ extern "C" int g_beNDMWStatusTitle00_metaObject[4];
 extern "C" int g_beNDMWWindowTitle_metaObject[4];
 
 /* vfunc_20 of each title class returns its class meta object. */
-extern "C" int Gap__Bec__beNDMWStatusTitle04__vfunc_20(void) { return g_beNDMWStatusTitle04_metaObject[0]; }
-extern "C" int Gap__Bec__beNDMWStatusTitle03__vfunc_20(void) { return g_beNDMWStatusTitle03_metaObject[0]; }
-extern "C" int Gap__Bec__beNDMWStatusTitle02__vfunc_20(void) { return g_beNDMWStatusTitle02_metaObject[0]; }
-extern "C" int Gap__Bec__beNDMWStatusTitle01__vfunc_20(void) { return g_beNDMWStatusTitle01_metaObject[0]; }
-extern "C" int Gap__Bec__beNDMWStatusTitle00__vfunc_20(void) { return g_beNDMWStatusTitle00_metaObject[0]; }
-extern "C" int Gap__Bec__beNDMWWindowTitle__vfunc_20(void) { return g_beNDMWWindowTitle_metaObject[0]; }
+extern "C" int beNDMWStatusTitle04_GetMeta(void) { return g_beNDMWStatusTitle04_metaObject[0]; }
+extern "C" int beNDMWStatusTitle03_GetMeta(void) { return g_beNDMWStatusTitle03_metaObject[0]; }
+extern "C" int beNDMWStatusTitle02_GetMeta(void) { return g_beNDMWStatusTitle02_metaObject[0]; }
+extern "C" int beNDMWStatusTitle01_GetMeta(void) { return g_beNDMWStatusTitle01_metaObject[0]; }
+extern "C" int beNDMWStatusTitle00_GetMeta(void) { return g_beNDMWStatusTitle00_metaObject[0]; }
+extern "C" int beNDMWWindowTitle_GetMeta(void) { return g_beNDMWWindowTitle_metaObject[0]; }
 
 #pragma pop

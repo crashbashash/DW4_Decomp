@@ -13,7 +13,7 @@ void FUN_001e67a0(int, long long);
 
 extern int g_igViewerDataPumpManager_metaObject[4];
 
-int Gap__Viewer__igViewerDataPumpManager__vfunc_27(void *arg0, int arg1) {
+int igViewerDataPumpManager_AddInfo(void *arg0, int arg1) {
     if (igObject_IsKindOf(arg1, g_igDataPumpInfo_metaObject[0]) != 0) {
         FUN_001e68a0(*(int *)((char *)(arg0) + 16), arg1);
         igInsightCore_AddToScheduler(*(int *)((char *)(arg0) + 12), arg0);
@@ -22,7 +22,7 @@ int Gap__Viewer__igViewerDataPumpManager__vfunc_27(void *arg0, int arg1) {
     return 0;
 }
 
-void Gap__Viewer__igViewerDataPumpManager__vfunc_28(igViewerDataPumpManager *arg0) {
+void igViewerDataPumpManager_RemoveAllInfo(igViewerDataPumpManager *arg0) {
     igDataPumpList *l;
     int n;
     int i;
@@ -82,7 +82,7 @@ void Gap__Viewer__igViewerDataPumpManager__vfunc_28(igViewerDataPumpManager *arg
     igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
 }
 
-void Gap__Viewer__igViewerDataPumpManager__vfunc_29(int arg0) {
+void igViewerDataPumpManager_Update(int arg0) {
     FUN_001e67a0(*(int *)((char *)(arg0) + 16), *(long long *)((char *)(*(int *)((char *)(arg0) + 12)) + 80));
 }
 
@@ -90,18 +90,18 @@ int Gap__Viewer__igViewerDataPumpManager__vfunc_22(void) {
     return g_igViewerDataPumpManager_metaObject[0];
 }
 
-void Gap__Viewer__igViewerDataPumpManager__vfunc_25(void) {
+void igViewerDataPumpManager_Start(void) {
 
 }
 
-void Gap__Viewer__igViewerDataPumpManager__vfunc_26(void) {
+void igViewerDataPumpManager_Stop(void) {
 
 }
 
-void Gap__Viewer__igViewerDataPumpManager__vfunc_23(void) {
+void igViewerDataPumpManager_Activate(void) {
 
 }
 
-void Gap__Viewer__igViewerDataPumpManager__vfunc_24(void) {
+void igViewerDataPumpManager_Deactivate(void) {
 
 }

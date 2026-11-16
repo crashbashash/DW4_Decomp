@@ -37,16 +37,16 @@ This does not close the separate runtime cadence or pause routing questions belo
 
 | Entry | Name | Behaviour |
 |---|---|---|
-| `0x0039fd30` | `beSystem_AddToScheduler` | hands the system to the insight scheduler unless it already holds it |
-| `0x0039fd50` | `beSystem_RemoveFromScheduler` | takes it back out when held |
+| `0x0039fd30` | `beSystem_Activate` | hands the system to the insight scheduler unless it already holds it |
+| `0x0039fd50` | `beSystem_Deactivate` | takes it back out when held |
 | `0x0039fd70` | `beSystem_Start` | manager slot `+0x64`, called by the system start: sets `_isActive`, clears `_isFirstTime`, queues `ndmw.igb` as `_nextStage`, drops `_bootDirectory`, stores 100000 in `g_resourceLoaderStackSize`, clears the resource's `_useMemoryPoolAssignmentsState` and points its object, data and temporary pools at the ndmw (object, data) and temporary allocators |
 | `0x0039fff0` | `beSystem_Stop` | manager slot `+0x68`, called by the system stop: empty |
-| `0x003a0000` | `beSystem_AcceptInfo` | slot the insight core offers each new info to; returns 0, so the system keeps none |
-| `0x003a0010` | `beSystem_Reset` | sets `_isFirstTime` |
+| `0x003a0000` | `beSystem_AddInfo` | slot the insight core offers each new info to; returns 0, so the system keeps none |
+| `0x003a0010` | `beSystem_RemoveAllInfo` | sets `_isFirstTime` |
 | `0x003a0540` | `beSystem_IsRunning` | `_isActive` and not `_isFirstTime`; the gate the managers test |
 | `0x003a0560` | `beSystem_GetMetaObject_Virtual` | returns the class meta-object |
 
-Open questions: no caller of the `+0x70` slot (`beSystem_Reset`) is identified, so the
+Open questions: no caller of the `+0x70` slot (`beSystem_RemoveAllInfo`) is identified, so the
 name rests on its body. `g_resourceLoaderStackSize` is the third argument the async
 loader passes when it creates its worker (`0x00304f00`); that it is a stack size is
 inferred from the value, not shown.

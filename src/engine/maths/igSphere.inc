@@ -25,7 +25,7 @@ igMetaObject *igSphere_GetMetaObject(void)
 int igSphere_GetVTable(void) {
     union U2 u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00527fe0[0];
+    u.vt = (int)&g_igSphere_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 

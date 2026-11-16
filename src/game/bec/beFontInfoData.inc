@@ -7,10 +7,10 @@ igMetaField *g_beFontInfoData_heightMetaField;
 igMetaField *g_beFontInfoData_alignMetaField;
 igMetaField *g_beFontInfoData_kindMetaField;
 
-void *FUN_00361130(void) {
+void *beFontInfoData_GetMetaObject(void) {
     igMetaObject *g = g_beFontInfoData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00361210();
+        beFontInfoData_EnsureRegistered();
     }
     return g_beFontInfoData_metaObject;
 }
@@ -21,23 +21,23 @@ int beFontInfoData_GetVTable(void) {
 
     igObject_InitHeader(&f);
     f.w[1] = 0;
-    f.vt = &DAT_00535b70[0];
+    f.vt = &g_beFontInfoData_vtable[0];
     f.w[3] = 0;
     f.w[9] = 0;
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_00535b70[0];
+    f.vt = &g_beFontInfoData_vtable[0];
     FUN_00130720(&f.w[9], -1);
     FUN_001d97f0(&f.w[3], -1);
     FUN_00344030((struct W_344030 *)&f, (short)0);
     return temp_s0;
 }
 
-void FUN_00361210(void)
+void beFontInfoData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beFontInfoData_Register);
 }
 
-static igMetaObjectCallback g_beFontInfoData_callbackList[] = { FUN_001a5e90, 0 };
+static igMetaObjectCallback g_beFontInfoData_callbackList[] = { igAttrSet_EnsureRegistered, 0 };
 
 void *beFontInfoData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -46,7 +46,7 @@ void *beFontInfoData_Register(void) {
         &g_beFontInfoData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beFontInfoData_GetMetaObject,
+        beFontInfoData_GetMetaObjectFunction,
         "beFontInfoData",
         0x2c, /* instance size */
         beFontInfoData_GetVTable,
@@ -56,9 +56,9 @@ void *beFontInfoData_Register(void) {
     );
 }
 
-void beFontInfoData_GetMetaObject(void)
+void beFontInfoData_GetMetaObjectFunction(void)
 {
-    FUN_00361130();
+    beFontInfoData_GetMetaObject();
 }
 
 static FieldFactory g_beFontInfoData_ctorTable[] = {
@@ -107,7 +107,7 @@ void beFontInfoData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beFontInfoData_ctorTable, 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001a5d70();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAttrSet_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beFontInfoData_fieldTable, g_beFontInfoData_fieldHandles, g_beFontInfoData_fieldOffsets, temp_s2);
 }
 

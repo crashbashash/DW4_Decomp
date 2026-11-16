@@ -1,9 +1,9 @@
 igMetaObject *g_beUnicode_metaObject;
 
-void *FUN_00340f30(void) {
+void *beUnicode_GetMetaObject(void) {
     igMetaObject *g = g_beUnicode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00340fc0();
+        beUnicode_EnsureRegistered();
     }
     return g_beUnicode_metaObject;
 }
@@ -12,11 +12,11 @@ int beUnicode_GetVTable(void) {
     union U_340f80 u;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00539870[0]);
+    u.w[0] = (int)(&g_beUnicode_vtable[0]);
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_00340fc0(void)
+void beUnicode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beUnicode_Register);
 }
@@ -28,7 +28,7 @@ void *beUnicode_Register(void) {
         &g_beUnicode_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beUnicode_GetMetaObject,
+        beUnicode_GetMetaObjectFunction,
         "beUnicode",
         8, /* instance size */
         beUnicode_GetVTable,
@@ -38,8 +38,8 @@ void *beUnicode_Register(void) {
     );
 }
 
-void beUnicode_GetMetaObject(void)
+void beUnicode_GetMetaObjectFunction(void)
 {
-    FUN_00340f30();
+    beUnicode_GetMetaObject();
 }
 

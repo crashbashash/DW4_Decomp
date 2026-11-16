@@ -1,18 +1,18 @@
 igMetaObject *g_beModelCtrlSubCom_metaObject;
 igMetaField *g_beModelCtrlSubCom_comListMetaField;
 
-igMetaObject *FUN_0034f210(void) {
+igMetaObject *beModelCtrlSubCom_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlSubCom_metaObject == 0) {
         g_beModelCtrlSubCom_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beModelCtrlSubCom_metaObject;
 }
 
-igMetaObject *FUN_0034f260(void) {
+igMetaObject *beModelCtrlSubCom_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlSubCom_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0034f340();
+        beModelCtrlSubCom_EnsureRegistered();
     return g_beModelCtrlSubCom_metaObject;
 }
 
@@ -21,10 +21,10 @@ int beModelCtrlSubCom_GetVTable(void) {
     struct R *t;
     int r;
     igObject_InitHeader(&o);
-    o.vt = &DAT_00537fe0[0];
+    o.vt = &g_beModelCtrlSubCom_vtable[0];
     o.p = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00537fe0[0];
+    o.vt = &g_beModelCtrlSubCom_vtable[0];
     if (&o.p != 0) {
         t = o.p;
         if (t != 0) {
@@ -37,7 +37,7 @@ int beModelCtrlSubCom_GetVTable(void) {
     return r;
 }
 
-void FUN_0034f340(void)
+void beModelCtrlSubCom_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlSubCom_Register);
 }
@@ -51,7 +51,7 @@ void *beModelCtrlSubCom_Register(void) {
         &g_beModelCtrlSubCom_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beModelCtrlSubCom_GetMetaObject,
+        beModelCtrlSubCom_GetMetaObjectFunction,
         "beModelCtrlSubCom",
         0xc, /* instance size */
         beModelCtrlSubCom_GetVTable,
@@ -61,9 +61,9 @@ void *beModelCtrlSubCom_Register(void) {
     );
 }
 
-void beModelCtrlSubCom_GetMetaObject(void)
+void beModelCtrlSubCom_GetMetaObjectFunction(void)
 {
-    FUN_0034f260();
+    beModelCtrlSubCom_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlSubCom_ctorTable[] = {

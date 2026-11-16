@@ -2,7 +2,7 @@ igMetaObject *g_beNDMWMcSlotXbox_metaObject;
 igMetaField *g_beNDMWMcSlotXbox_mNameMetaField;
 
 void beNDMWMcSlotXbox_Create(int arg0) {
-    FUN_003c5bc0();
+    beNDMWMcSlotXbox_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMcSlotXbox_metaObject, arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *beNDMWMcSlotXbox_GetReadyMetaObject(void)
     igMetaObject *g = g_beNDMWMcSlotXbox_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_003c5bc0();
+        beNDMWMcSlotXbox_EnsureRegistered();
     return g_beNDMWMcSlotXbox_metaObject;
 }
 
@@ -21,15 +21,15 @@ int beNDMWMcSlotXbox_GetVTable(void) {
 
     int *p; int *a1; int t;
     igObject_InitHeader(&o);
-    o.vt = DAT_0053cc00;
+    o.vt = g_beNDMWMcSlotXbox_vtable;
     *(int *)((char *)&o + 24) = 0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_0053cc00;
+    o.vt = g_beNDMWMcSlotXbox_vtable;
     if (&*(int *)((char *)&o + 24) != 0) { p = *(int **)((char *)&o + 24); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader(*a1, a1); } }
     return r;
 }
 
-void FUN_003c5bc0(void)
+void beNDMWMcSlotXbox_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMcSlotXbox_Register);
 }
@@ -56,7 +56,7 @@ void beNDMWMcSlotXbox_GetMetaObject(void)
     beNDMWMcSlotXbox_GetReadyMetaObject();
 }
 
-igMetaObject *FUN_003c5c70(void) {
+igMetaObject *beNDMWMcSlot_GetPublishedMetaObject(void) {
     return g_beNDMWMcSlot_metaObject;
 }
 

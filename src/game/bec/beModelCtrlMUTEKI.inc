@@ -1,11 +1,11 @@
 igMetaObject *g_beModelCtrlMUTEKI_metaObject;
 igMetaField *g_beModelCtrlMUTEKI_frameMetaField;
 
-igMetaObject *FUN_00354ca0(void) {
+igMetaObject *beModelCtrlMUTEKI_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlMUTEKI_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_00354d80();
+        beModelCtrlMUTEKI_EnsureRegistered();
     return g_beModelCtrlMUTEKI_metaObject;
 }
 
@@ -21,7 +21,7 @@ int beModelCtrlMUTEKI_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00537770[0];
+    u.vt = (int)&g_beModelCtrlMUTEKI_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -38,7 +38,7 @@ int beModelCtrlMUTEKI_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00354d80(void)
+void beModelCtrlMUTEKI_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlMUTEKI_Register);
 }
@@ -50,7 +50,7 @@ void *beModelCtrlMUTEKI_Register(void) {
         &g_beModelCtrlMUTEKI_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlMUTEKI_GetMetaObject,
+        beModelCtrlMUTEKI_GetMetaObjectFunction,
         "beModelCtrlMUTEKI",
         0x10, /* instance size */
         beModelCtrlMUTEKI_GetVTable,
@@ -60,9 +60,9 @@ void *beModelCtrlMUTEKI_Register(void) {
     );
 }
 
-void beModelCtrlMUTEKI_GetMetaObject(void)
+void beModelCtrlMUTEKI_GetMetaObjectFunction(void)
 {
-    FUN_00354ca0();
+    beModelCtrlMUTEKI_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlMUTEKI_ctorTable[] = {

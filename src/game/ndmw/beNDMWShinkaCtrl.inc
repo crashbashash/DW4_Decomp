@@ -6,7 +6,7 @@ igMetaField *g_beNDMWShinkaCtrl_playerParameterMetaField;
 igMetaField *g_beNDMWShinkaCtrl_dBShinkaMetaField;
 igMetaField *g_beNDMWShinkaCtrl_listMetaField;
 
-igMetaObject *FUN_003c9480(void) {
+igMetaObject *beNDMWShinkaCtrl_GetOrCreateMetaObject(void) {
     if (g_beNDMWShinkaCtrl_metaObject == 0) {
         g_beNDMWShinkaCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -16,7 +16,7 @@ igMetaObject *FUN_003c9480(void) {
 void *beNDMWShinkaCtrl_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWShinkaCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c9650();
+        beNDMWShinkaCtrl_EnsureRegistered();
     }
     return g_beNDMWShinkaCtrl_metaObject;
 }
@@ -33,7 +33,7 @@ int beNDMWShinkaCtrl_GetVTable(void) {
     void *temp_v1;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)(&DAT_0053c680[0]);
+    u.vt = (int)(&g_beNDMWShinkaCtrl_vtable[0]);
     q0 = (S_ref *)&u.b[20];
     *(int *)q0 = 0;
     q1 = (S_ref *)&u.b[24];
@@ -41,7 +41,7 @@ int beNDMWShinkaCtrl_GetVTable(void) {
     q2 = (S_ref *)&u.b[28];
     *(int *)q2 = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)(&DAT_0053c680[0]);
+    u.vt = (int)(&g_beNDMWShinkaCtrl_vtable[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
         if (q2 != 0) {
@@ -72,12 +72,12 @@ int beNDMWShinkaCtrl_GetVTable(void) {
     return temp_s2;
 }
 
-void FUN_003c9650(void)
+void beNDMWShinkaCtrl_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShinkaCtrl_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShinkaCtrl_callbackList[] = { FUN_00357d10, FUN_003c9f70, FUN_00364170, FUN_00365b00, FUN_003c98f0, 0 };
+static igMetaObjectCallback g_beNDMWShinkaCtrl_callbackList[] = { beMessenger_EnsureRegistered, beNDMWGameRam_EnsureRegistered, beDataObjList_EnsureRegistered, beDataBase_EnsureRegistered, beNDMWShinkaObjectList_EnsureRegistered, 0 };
 
 void *beNDMWShinkaCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -147,17 +147,17 @@ void beNDMWShinkaCtrl_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWShinkaCtrl_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00357910();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_003c9ce0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beNDMWGameRam_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_00364090();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = beDataObjList_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_003658e0();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = beDataBase_GetOrCreateMetaObject();
     temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
-    ((igObjectRefMetaField *)temp_s1_5)->_metaObject = (int)FUN_003c9810();
+    ((igObjectRefMetaField *)temp_s1_5)->_metaObject = (int)beNDMWShinkaObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_5)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beNDMWShinkaCtrl_fieldTable, g_beNDMWShinkaCtrl_fieldHandles, g_beNDMWShinkaCtrl_fieldOffsets, temp_s2);
 }

@@ -1,6 +1,6 @@
 igMetaObject *g_beNDMWShinkaObjectList_metaObject;
 
-igMetaObject *FUN_003c9810(void) {
+igMetaObject *beNDMWShinkaObjectList_GetOrCreateMetaObject(void) {
     if (g_beNDMWShinkaObjectList_metaObject == 0) {
         g_beNDMWShinkaObjectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -12,7 +12,7 @@ igMetaObject *beNDMWShinkaObjectList_ResolveMetaObject(void)
     igMetaObject *g = g_beNDMWShinkaObjectList_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_003c98f0();
+        beNDMWShinkaObjectList_EnsureRegistered();
     return g_beNDMWShinkaObjectList_metaObject;
 }
 
@@ -20,16 +20,16 @@ int beNDMWShinkaObjectList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053c610[0];
+    obj.vt = &g_beNDMWShinkaObjectList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c98f0(void)
+void beNDMWShinkaObjectList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShinkaObjectList_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShinkaObjectList_callbackList[] = { FUN_003c9ac0, 0 };
+static igMetaObjectCallback g_beNDMWShinkaObjectList_callbackList[] = { beNDMWShinkaObject_EnsureRegistered, 0 };
 
 void *beNDMWShinkaObjectList_Register(void) {
     NdmwLibrary_MarkRegistered();

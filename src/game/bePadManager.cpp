@@ -3,7 +3,7 @@
 extern "C" void igInsightCore_AddToScheduler(int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
 extern "C" void *igInsightCore_FindManager(...);
-extern "C" void *FUN_0034ce50(...);
+extern "C" void *bePadData_Create(...);
 extern "C" int igEventDispatcher_AddReceiver(...);
 extern "C" int igEventDispatcher_AddReceiverOrder(...);
 extern "C" int FUN_004574f0(...);
@@ -14,12 +14,12 @@ extern "C" int igObject_Destroy(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int igEventDispatcher_RemoveReceiver(int, int);
 extern "C" int FUN_004542e0(int, int, int);
-extern "C" int Gap__Bec__bePadManager__vfunc_25(void);
-extern "C" void Gap__Bec__bePadManager__vfunc_26(void);
-extern "C" int Gap__Bec__bePadManager__vfunc_20(void);
+extern "C" int bePadManager_AddInfo(void);
+extern "C" void bePadManager_RemoveAllInfo(void);
+extern "C" int bePadManager_GetMeta(void);
 extern "C" int bePadData_UpdateButtons(...);
-extern "C" void Gap__Bec__bePadManager__vfunc_21(bePadManager *self, int unusedArg);
-extern "C" void Gap__Bec__bePadManager__vfunc_22(bePadManager *self, int unusedArg);
+extern "C" void bePadManager_Activate(bePadManager *self, int unusedArg);
+extern "C" void bePadManager_Deactivate(bePadManager *self, int unusedArg);
 struct Rc { int vt; int rc; };
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_beSystem_metaObject[4];
@@ -39,22 +39,22 @@ struct Ref {
 };
 struct M { char p[32]; int f32; int f36; };
 struct O { char p[12]; M *f12; Rc *f16; int f20; int f24; };
-extern "C" void Gap__Bec__bePadManager__vfunc_23(O *o);
-extern "C" void Gap__Bec__bePadManager__vfunc_24(bePadManager *arg0);
+extern "C" void bePadManager_Start(O *o);
+extern "C" void bePadManager_Stop(bePadManager *arg0);
 extern "C" int g_bePadManager_metaObject[4];
 /* matching construct: dummy-virtual pad device class; real slots are v28 (+120), v29 (+124), v30 (+128), v32 (+136) */
 class Pad { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual int v28(); virtual int v29(int, float *, float *); virtual int v30(); virtual void d31(); virtual int v32(); };
 struct Vec2 { float x, y; };
 extern "C" int bePadData_UpdateLeftStick(bePadData *, Vec2 *);
 extern "C" int bePadData_UpdateRightStick(bePadData *, Vec2 *);
-extern "C" void Gap__Bec__bePadManager__vfunc_27(bePadManager *arg0);
+extern "C" void bePadManager_Update(bePadManager *arg0);
 extern "C" int bePadManager_GetPadForPlayer(bePadManager *arg0, int arg1);
 
 /* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
  * calls scheduler slot 24 with it. Same body as beMessenger slot 21. The second argument is
  * unused. */
-void Gap__Bec__bePadManager__vfunc_21(bePadManager *self, int unusedArg)
+void bePadManager_Activate(bePadManager *self, int unusedArg)
 {
     igInsightCore_AddToScheduler(self->_insight, (char *)self);
 }
@@ -62,12 +62,12 @@ void Gap__Bec__bePadManager__vfunc_21(bePadManager *self, int unusedArg)
 /* Counterpart of slot 21 through igInsightCore_RemoveFromScheduler, which calls scheduler slot 25 with the object only
  * when scheduler slot 26 reports it present. Same body as beMessenger slot 22. The second argument
  * is unused. */
-void Gap__Bec__bePadManager__vfunc_22(bePadManager *self, int unusedArg)
+void bePadManager_Deactivate(bePadManager *self, int unusedArg)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
 }
 
-void Gap__Bec__bePadManager__vfunc_23(O *o) {
+void bePadManager_Start(O *o) {
     Rc *t0 = (Rc *)igInsightCore_FindManager(o->f12, g_beSystem_metaObject[0]);
     if (t0 != 0) t0->rc = t0->rc + 1;
     {
@@ -80,7 +80,7 @@ void Gap__Bec__bePadManager__vfunc_23(O *o) {
     o->f16 = t0;
     for (int i = 0; i < 5; i++) {
         int v0 = igObject_GetAllocator(o);
-        Ref sp3C((Rc *)FUN_0034ce50(g_useOwnerAllocator != 0 ? v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])));
+        Ref sp3C((Rc *)bePadData_Create(g_useOwnerAllocator != 0 ? v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])));
         ObjectList_AppendRetained(o->f20, sp3C.p);
     }
     M *m = o->f12;
@@ -100,7 +100,7 @@ void Gap__Bec__bePadManager__vfunc_23(O *o) {
     igViewerSceneInfoManager_CycleGuiVisibility(v);
 }
 
-void Gap__Bec__bePadManager__vfunc_24(bePadManager *arg0) {
+void bePadManager_Stop(bePadManager *arg0) {
     int temp_s0;
     void *temp_v0;
 
@@ -110,15 +110,15 @@ void Gap__Bec__bePadManager__vfunc_24(bePadManager *arg0) {
     igEventDispatcher_RemoveReceiver(temp_s0, arg0->_kbReceiver);
 }
 
-int Gap__Bec__bePadManager__vfunc_25(void) {
+int bePadManager_AddInfo(void) {
     return 0;
 }
 
-void Gap__Bec__bePadManager__vfunc_26(void)
+void bePadManager_RemoveAllInfo(void)
 {
 }
 
-void Gap__Bec__bePadManager__vfunc_27(bePadManager *arg0) {
+void bePadManager_Update(bePadManager *arg0) {
     int b;
     bool flag;
     int i;
@@ -182,7 +182,7 @@ int bePadManager_GetPadForPlayer(bePadManager *arg0, int arg1) {
     return *(int *)(((bePadDataList *)arg0->_padList)->_data + 16);
 }
 
-int Gap__Bec__bePadManager__vfunc_20(void)
+int bePadManager_GetMeta(void)
 {
     return g_bePadManager_metaObject[0];
 }

@@ -3,17 +3,17 @@ igMetaField *g_beModelCtrlSCSound_sndNameMetaField;
 igMetaField *g_beModelCtrlSCSound_sndHandleMetaField;
 
 void beModelCtrlSCSound_Create(int arg0) {
-    FUN_0034f5c0();
+    beModelCtrlSCSound_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5887B0, arg0);
 }
 
-igMetaObject *FUN_0034f4e0(void) {
+igMetaObject *beModelCtrlSCSound_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlSCSound_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_0034f5c0();
+    beModelCtrlSCSound_EnsureRegistered();
 done:
     return g_beModelCtrlSCSound_metaObject;
 }
@@ -27,11 +27,11 @@ int beModelCtrlSCSound_GetVTable(void) {
     int temp_v0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053ae80[0];
+    u.vt = (int)&g_beModelCtrlSCSound_vtable[0];
     ps = &u.b[20];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053ae80[0];
+    u.vt = (int)&g_beModelCtrlSCSound_vtable[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {
@@ -46,7 +46,7 @@ int beModelCtrlSCSound_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0034f5c0(void)
+void beModelCtrlSCSound_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlSCSound_Register);
 }
@@ -58,7 +58,7 @@ void *beModelCtrlSCSound_Register(void) {
         &g_beModelCtrlSCSound_metaObject,
         beModelCtrlSubComBase_Register,
         beModelCtrlSubComBase_GetPublishedMetaObject,
-        beModelCtrlSCSound_GetMetaObject,
+        beModelCtrlSCSound_GetMetaObjectFunction,
         "beModelCtrlSCSound",
         0x20, /* instance size */
         beModelCtrlSCSound_GetVTable,
@@ -68,12 +68,12 @@ void *beModelCtrlSCSound_Register(void) {
     );
 }
 
-void beModelCtrlSCSound_GetMetaObject(void)
+void beModelCtrlSCSound_GetMetaObjectFunction(void)
 {
-    FUN_0034f4e0();
+    beModelCtrlSCSound_GetMetaObject();
 }
 
-igMetaObject *FUN_0034f670(void) {
+igMetaObject *beModelCtrlSubComBase_GetPublishedMetaObject(void) {
     return g_beModelCtrlSubComBase_metaObject;
 }
 

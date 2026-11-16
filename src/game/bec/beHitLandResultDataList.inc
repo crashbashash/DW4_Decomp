@@ -1,16 +1,16 @@
 igMetaObject *g_beHitLandResultDataList_metaObject;
 
-igMetaObject *FUN_0035e270(void) {
+igMetaObject *beHitLandResultDataList_GetOrCreateMetaObject(void) {
     if (g_beHitLandResultDataList_metaObject == 0) {
         g_beHitLandResultDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beHitLandResultDataList_metaObject;
 }
 
-void *FUN_0035e2c0(void) {
+void *beHitLandResultDataList_GetMetaObject(void) {
     igMetaObject *g = g_beHitLandResultDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035e350();
+        beHitLandResultDataList_EnsureRegistered();
     }
     return g_beHitLandResultDataList_metaObject;
 }
@@ -20,17 +20,17 @@ int beHitLandResultDataList_GetVTable(void) {
     int off;
 
     igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&DAT_005362f0[0];
+    tmp[0] = (int)&g_beHitLandResultDataList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_0035e350(void)
+void beHitLandResultDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beHitLandResultDataList_Register);
 }
 
-static igMetaObjectCallback g_beHitLandResultDataList_callbackList[] = { FUN_0035e520, 0 };
+static igMetaObjectCallback g_beHitLandResultDataList_callbackList[] = { beHitLandResultData_EnsureRegistered, 0 };
 
 void *beHitLandResultDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -39,7 +39,7 @@ void *beHitLandResultDataList_Register(void) {
         &g_beHitLandResultDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beHitLandResultDataList_GetMetaObject,
+        beHitLandResultDataList_GetMetaObjectFunction,
         "beHitLandResultDataList",
         0x14, /* instance size */
         beHitLandResultDataList_GetVTable,
@@ -49,8 +49,8 @@ void *beHitLandResultDataList_Register(void) {
     );
 }
 
-void beHitLandResultDataList_GetMetaObject(void)
+void beHitLandResultDataList_GetMetaObjectFunction(void)
 {
-    FUN_0035e2c0();
+    beHitLandResultDataList_GetMetaObject();
 }
 

@@ -4,7 +4,7 @@ igMetaField *g_igTextureCoordSourceAttr_texCoordIndexMetaField;
 igMetaField *g_igTextureCoordSourceAttr_unitIDMetaField;
 
 void FUN_001325a0(int arg0) {
-    FUN_001326c0();
+    igTextureCoordSourceAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55ED68, arg0);
 }
 
@@ -22,7 +22,7 @@ igMetaObject *igTextureCoordSourceAttr_GetMetaObject(void)
         ready = (g_igTextureCoordSourceAttr_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_001326c0();
+    igTextureCoordSourceAttr_EnsureRegistered();
 done:
     return g_igTextureCoordSourceAttr_metaObject;
 }
@@ -31,11 +31,11 @@ int igTextureCoordSourceAttr_GetVTable(void) {
     struct Obj_132680 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00522b40[0];
+    obj.vt = &g_igTextureCoordSourceAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001326c0(void)
+void igTextureCoordSourceAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTextureCoordSourceAttr_Register);
 }

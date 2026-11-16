@@ -1,5 +1,5 @@
-void FUN_00196150(int arg0) {
-    FUN_001964d0();
+void igTransform_CreateInstance(int arg0) {
+    igTransform_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igTransform_metaObject, arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaField *g_igTransform_targetMetaField;
 igMetaField *g_igTransform_mvmMetaField;
 igMetaField *g_igTransform_transformInputMetaField;
 
-igMetaObject *FUN_00196190(void) {
+igMetaObject *igTransform_GetOrCreateMetaObject(void) {
     if (g_igTransform_metaObject == 0) {
         g_igTransform_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -20,7 +20,7 @@ igMetaObject *igTransform_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransform_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001964d0();
+        igTransform_EnsureRegistered();
     return g_igTransform_metaObject;
 }
 
@@ -30,7 +30,7 @@ int igTransform_GetVTable(void) {
     int *pa = (int *)&o;
     igObject_InitHeader(&o);
     o.f[1] = 0;
-    o.vt = &DAT_005284f0[0];
+    o.vt = &g_igTransform_vtable[0];
     o.f[2] = 0;
     o.f[3] = 0;
     o.f[6] = 0;
@@ -38,7 +38,7 @@ int igTransform_GetVTable(void) {
     pa[25] = 0;
     pa[26] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_005284f0[0];
+    o.vt = &g_igTransform_vtable[0];
     FUN_00196450((void * *)&o.f[25], -1);
     FUN_001963d0((ObjectRefWord *)&o.f[24], -1);
     FUN_00195a90((struct T_195a90 *)&o, 0);
@@ -50,7 +50,7 @@ void *FUN_001962d0(struct S_1962d0 *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_005284f0[0];
+        arg0->f0 = &g_igTransform_vtable[0];
         if (&arg0->f68) {
             p = (igObject *)arg0->f68;
             if (p != 0) {
@@ -72,7 +72,7 @@ void *FUN_001962d0(struct S_1962d0 *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->f0 = &DAT_00528dd0[0];
+            arg0->f0 = &g_igGroup_vtable[0];
             FUN_001958f0((void * *)((char *)arg0 + 0x1C), -1);
             FUN_00195970((struct T_195970 *)arg0, 0);
         }
@@ -113,7 +113,7 @@ void **FUN_00196450(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_001964d0(void)
+void igTransform_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransform_Register);
 }

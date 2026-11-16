@@ -22,11 +22,11 @@ int igCollisionGridHelper_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = (S_ref *)&u.p[2];
     q3 = (S_ref *)&u.p[3];
-    u.w[0] = (int)(&DAT_0052d360[0]);
+    u.w[0] = (int)(&g_igCollisionGridHelper_vtable[0]);
     *(int *)q2 = 0;
     *(int *)q3 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052d360[0]);
+    u.w[0] = (int)(&g_igCollisionGridHelper_vtable[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
         if (q3 != 0) {

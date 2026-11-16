@@ -1,16 +1,16 @@
 igMetaObject *g_beSvSlotDataList_metaObject;
 
-igMetaObject *FUN_0034a4a0(void) {
+igMetaObject *beSvSlotDataList_GetOrCreateMetaObject(void) {
     if (g_beSvSlotDataList_metaObject == 0) {
         g_beSvSlotDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSvSlotDataList_metaObject;
 }
 
-void *FUN_0034a4f0(void) {
+void *beSvSlotDataList_GetMetaObject(void) {
     igMetaObject *g = g_beSvSlotDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034a580();
+        beSvSlotDataList_EnsureRegistered();
     }
     return g_beSvSlotDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beSvSlotDataList_GetVTable(void) {
     struct Obj_34a540 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00538a90[0];
+    obj.vt = &g_beSvSlotDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0034a580(void)
+void beSvSlotDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvSlotDataList_Register);
 }
 
-static igMetaObjectCallback g_beSvSlotDataList_callbackList[] = { FUN_0034ab30, 0 };
+static igMetaObjectCallback g_beSvSlotDataList_callbackList[] = { beSvSlotData_EnsureRegistered, 0 };
 
 void *beSvSlotDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beSvSlotDataList_Register(void) {
         &g_beSvSlotDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beSvSlotDataList_GetMetaObject,
+        beSvSlotDataList_GetMetaObjectFunction,
         "beSvSlotDataList",
         0x14, /* instance size */
         beSvSlotDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beSvSlotDataList_Register(void) {
     );
 }
 
-void beSvSlotDataList_GetMetaObject(void)
+void beSvSlotDataList_GetMetaObjectFunction(void)
 {
-    FUN_0034a4f0();
+    beSvSlotDataList_GetMetaObject();
 }
 

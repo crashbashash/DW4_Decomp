@@ -21,10 +21,10 @@ int igMessenger_GetVTable(void) {
     int r;
     struct Ref *p;
     igObject_InitHeader(&o);
-    o.vt = DAT_0052cf20;
+    o.vt = g_igMessenger_vtable;
     o.ref = 0;
     r = *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
-    o.vt = DAT_0052cf20;
+    o.vt = g_igMessenger_vtable;
     if (&o.ref != 0) {
         p = o.ref;
         if (p != 0) {

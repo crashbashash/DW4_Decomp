@@ -3,19 +3,19 @@ igMetaField *g_ParticleTimer_timeRunningMetaField;
 igMetaField *g_ParticleTimer_timeBiasMetaField;
 igMetaField *g_ParticleTimer_timeMetaField;
 
-igMetaObject *FUN_0036e5c0(void) {
+igMetaObject *ParticleTimer_GetOrCreateMetaObject(void) {
     if (g_ParticleTimer_metaObject == 0) {
         g_ParticleTimer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_ParticleTimer_metaObject;
 }
 
-igMetaObject *FUN_0036e610(void)
+igMetaObject *ParticleTimer_GetMetaObject(void)
 {
     igMetaObject *g = g_ParticleTimer_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_0036e6d0();
+        ParticleTimer_EnsureRegistered();
     return g_ParticleTimer_metaObject;
 }
 
@@ -30,14 +30,14 @@ int ParticleTimer_GetVTable(void) {
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w10 = 0;
-    obj.vt = &DAT_0053b7f0[0];
+    obj.vt = &g_ParticleTimer_vtable[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053b7f0[0];
+    obj.vt = &g_ParticleTimer_vtable[0];
     FUN_0019d120(&obj, 0);
     return t;
 }
 
-void FUN_0036e6d0(void)
+void ParticleTimer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(ParticleTimer_Register);
 }
@@ -49,7 +49,7 @@ void *ParticleTimer_Register(void) {
         &g_ParticleTimer_metaObject,
         igGeometry_Register,
         igGeometry_GetPublishedMetaObject,
-        ParticleTimer_GetMetaObject,
+        ParticleTimer_GetMetaObjectFunction,
         "ParticleTimer",
         0x40, /* instance size */
         ParticleTimer_GetVTable,
@@ -59,9 +59,9 @@ void *ParticleTimer_Register(void) {
     );
 }
 
-void ParticleTimer_GetMetaObject(void)
+void ParticleTimer_GetMetaObjectFunction(void)
 {
-    FUN_0036e610();
+    ParticleTimer_GetMetaObject();
 }
 
 static FieldFactory g_ParticleTimer_ctorTable[] = {

@@ -27,8 +27,8 @@ slot 28, and the renderer's slots 24 and 22 run slot 27 and slot 29 on every mov
 | 11 | `Gap__igCriMovieData__resetFields` | `igCriMovieData`'s: after igObject's hook, clears `_mwply`, `_adxt` and `_macroFunction` |
 | 20 | `igCriMovieCodec_GetMeta` / `igCriMovieData_GetMeta` | the class's meta object |
 | 21 | `igCriMovieCodec_IsReusable` | returns 1; the manager keeps a codec in its list, for later movies naming the same codec, only when this slot says so |
-| 22 | `Gap__igCriMovieCodec__vfunc_22` | not matched; calls `mwPlyInitSfdFx` |
-| 23 | `Gap__igCriMovieCodec__vfunc_23` | not matched; opens a movie: creates the ADXT or MWPLY handle and its `igCriMovieData` |
+| 22 | `igCriMovieCodec_Initialize` | not matched; calls `mwPlyInitSfdFx` |
+| 23 | `igCriMovieCodec_Open` | not matched; opens a movie: creates the ADXT or MWPLY handle and its `igCriMovieData` |
 | 24 | `igCriMovieCodec_Close` | closes a movie: stops and destroys the ADXT handle if there is one, destroys the MWPLY handle, frees both work areas through `CriMovie_Free` and clears the fields |
 | 25 | `igCriMovieCodec_Play` | starts or resumes: sets `_state` to 0, then releases the ADXT pause (`ADXT_GetStatPause` / `ADXT_Pause`) or the MWPLY pause (`mwPlyIsPause`, then the handle's pause entry) |
 | 26 | `igCriMovieCodec_Pause` | stores the requested `_state`, then pauses whichever player is running |
@@ -64,8 +64,7 @@ The ADXT names (`ADXT_Destroy`, `ADXT_Stop`, `ADXT_Pause`, `ADXT_GetStatPause`) 
 parameter-error message. `mwPlyIsPause` sits among the `mwSfd*` entry points and reports an invalid
 `SFD_GetPaStat` value. `MWSFD_SetMallocFunc` stores the allocate and free callbacks and their context in the
 MWSFD work area that `MWSFD_Malloc` reads. `Memory_AllocateAlignedWithAllocator` is the aligned counterpart
-of `Memory_FreeBufferWithAllocator`: it calls the pool's slot 53. `CriMovie_DestroyObjectRef` is the deleting
-destructor of a held `igObject` reference that slot 23 uses.
+of `Memory_FreeBufferWithAllocator`: it calls the pool's slot 53. The `igSmartPointer<igCriMovieData>` destructor (0x3387d0) is what slot 23 calls to drop its held movie data.
 
 ## Open questions
 

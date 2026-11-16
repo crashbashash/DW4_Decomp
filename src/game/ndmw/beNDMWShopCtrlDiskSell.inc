@@ -6,14 +6,14 @@ igMetaField *g_beNDMWShopCtrlDiskSell_kazuMetaField;
 igMetaField *g_beNDMWShopCtrlDiskSell_tankaMetaField;
 
 void beNDMWShopCtrlDiskSell_Create(int arg0) {
-    FUN_003b6f80();
+    beNDMWShopCtrlDiskSell_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, arg0);
 }
 
-void *FUN_003b6ea0(void) {
+void *beNDMWShopCtrlDiskSell_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWShopCtrlDiskSell_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003b6f80();
+        beNDMWShopCtrlDiskSell_EnsureRegistered();
     }
     return g_beNDMWShopCtrlDiskSell_metaObject;
 }
@@ -30,16 +30,16 @@ int beNDMWShopCtrlDiskSell_GetVTable(void) {
     u.w[17] = 0;
     u.w[18] = 0;
     u.w[19] = 0;
-    u.w[0] = (int)(&DAT_0053f950[0]);
+    u.w[0] = (int)(&g_beNDMWShopCtrlDiskSell_vtable[0]);
     u.w[21] = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0053f950[0]);
+    u.w[0] = (int)(&g_beNDMWShopCtrlDiskSell_vtable[0]);
     igSmartPointer_igIntList_Destruct(&u.w[21], -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)(&u.w[0]), (long long)0);
     return temp_s0;
 }
 
-void FUN_003b6f80(void)
+void beNDMWShopCtrlDiskSell_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopCtrlDiskSell_Register);
 }
@@ -53,7 +53,7 @@ void *beNDMWShopCtrlDiskSell_Register(void) {
         &g_beNDMWShopCtrlDiskSell_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWShopCtrlDiskSell_GetMetaObject,
+        beNDMWShopCtrlDiskSell_GetMetaObjectFunction,
         "beNDMWShopCtrlDiskSell",
         0x68, /* instance size */
         beNDMWShopCtrlDiskSell_GetVTable,
@@ -63,9 +63,9 @@ void *beNDMWShopCtrlDiskSell_Register(void) {
     );
 }
 
-void beNDMWShopCtrlDiskSell_GetMetaObject(void)
+void beNDMWShopCtrlDiskSell_GetMetaObjectFunction(void)
 {
-    FUN_003b6ea0();
+    beNDMWShopCtrlDiskSell_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWShopCtrlDiskSell_ctorTable[] = {

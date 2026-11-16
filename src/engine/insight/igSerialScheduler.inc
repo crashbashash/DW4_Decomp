@@ -15,11 +15,11 @@ int igSerialScheduler_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c830[0];
+    obj.vt = &g_igSerialScheduler_vtable[0];
     obj.m8 = 0;
     obj.m12 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052c830[0];
+    obj.vt = &g_igSerialScheduler_vtable[0];
     obj.rel12();
     obj.rel8();
     return r;

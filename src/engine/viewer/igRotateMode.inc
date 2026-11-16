@@ -49,9 +49,9 @@ done:;
 int igRotateMode_GetVTable(void) {
     union U_45c630 u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00542960[0];
+    u.vt = (int)&g_igViewMode_vtable[0];
     igMatrix44f_SetIdentity(&u.b[12]);
-    u.vt = (int)&DAT_005427b0[0];
+    u.vt = (int)&g_igRotateMode_vtable[0];
     return *(int *)&u.b[*(int *)((char *)((void *)g_objectSystem[0]) + 916)];
 }
 

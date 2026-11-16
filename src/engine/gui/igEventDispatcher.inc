@@ -28,13 +28,13 @@ int igEventDispatcher_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
-    u.w[0] = (int)(&DAT_005413d0[0]);
+    u.w[0] = (int)(&g_igEventDispatcher_vtable[0]);
     q2 = (S_ref *)&u.b[12];
     *(int *)q2 = 0;
     q3 = (S_ref *)&u.b[16];
     *(int *)q3 = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_005413d0[0]);
+    u.w[0] = (int)(&g_igEventDispatcher_vtable[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
         if (q3 != 0) {

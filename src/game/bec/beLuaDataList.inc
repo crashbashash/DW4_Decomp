@@ -1,17 +1,17 @@
 igMetaObject *g_beLuaDataList_metaObject;
 
-igMetaObject *FUN_0035afc0(void) {
+igMetaObject *beLuaDataList_GetOrCreateMetaObject(void) {
     if (g_beLuaDataList_metaObject == 0) {
         g_beLuaDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beLuaDataList_metaObject;
 }
 
-igMetaObject *FUN_0035b010(void) {
+igMetaObject *beLuaDataList_GetMetaObject(void) {
     igMetaObject *g = g_beLuaDataList_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0035b0a0();
+        beLuaDataList_EnsureRegistered();
     return g_beLuaDataList_metaObject;
 }
 
@@ -19,16 +19,16 @@ int beLuaDataList_GetVTable(void) {
     Obj_35b060 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_005368f0[0];
+    o.vt = &g_beLuaDataList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0035b0a0(void)
+void beLuaDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLuaDataList_Register);
 }
 
-static igMetaObjectCallback g_beLuaDataList_callbackList[] = { FUN_0035b280, 0 };
+static igMetaObjectCallback g_beLuaDataList_callbackList[] = { beLuaData_EnsureRegistered, 0 };
 
 void *beLuaDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beLuaDataList_Register(void) {
         &g_beLuaDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beLuaDataList_GetMetaObject,
+        beLuaDataList_GetMetaObjectFunction,
         "beLuaDataList",
         0x14, /* instance size */
         beLuaDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beLuaDataList_Register(void) {
     );
 }
 
-void beLuaDataList_GetMetaObject(void)
+void beLuaDataList_GetMetaObjectFunction(void)
 {
-    FUN_0035b010();
+    beLuaDataList_GetMetaObject();
 }
 

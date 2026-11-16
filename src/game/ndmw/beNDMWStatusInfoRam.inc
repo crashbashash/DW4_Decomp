@@ -1,10 +1,10 @@
 igMetaObject *g_beNDMWStatusInfoRam_metaObject;
 igMetaField *g_beNDMWStatusInfoRam_workMetaField;
 
-void *FUN_003b5bb0(void) {
+void *beNDMWStatusInfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWStatusInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003b5d70();
+        beNDMWStatusInfoRam_EnsureRegistered();
     }
     return g_beNDMWStatusInfoRam_metaObject;
 }
@@ -21,11 +21,11 @@ int beNDMWStatusInfoRam_GetVTable(void) {
     igObject_InitHeader(u.b);
     p58 = &u.b[40];
     *(int *)p58 = 0;
-    u.vt = (int)&DAT_0053db60[0];
+    u.vt = (int)&g_beNDMWStatusInfoRam_vtable[0];
     p5C = &u.b[44];
     *(int *)p5C = 0;
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053db60[0];
+    u.vt = (int)&g_beNDMWStatusInfoRam_vtable[0];
     if (p5C != 0) {
         v1 = *(int **)p5C;
         if (v1 != 0) {
@@ -35,7 +35,7 @@ int beNDMWStatusInfoRam_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00539e90[0];
+    u.vt = (int)&g_beBaseInfoRam_vtable[0];
     if (p58 != 0) {
         v1 = *(int **)p58;
         if (v1 != 0) {
@@ -48,7 +48,7 @@ int beNDMWStatusInfoRam_GetVTable(void) {
     return r;
 }
 
-void **FUN_003b5cf0(struct Ref **self, short flag) {
+void **igSmartPointer_beNDMWStatusInfoWork_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -61,12 +61,12 @@ void **FUN_003b5cf0(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void FUN_003b5d70(void)
+void beNDMWStatusInfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusInfoRam_callbackList[] = { FUN_003b6110, 0 };
+static igMetaObjectCallback g_beNDMWStatusInfoRam_callbackList[] = { beNDMWStatusInfoWork_EnsureRegistered, 0 };
 
 void *beNDMWStatusInfoRam_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -75,7 +75,7 @@ void *beNDMWStatusInfoRam_Register(void) {
         &g_beNDMWStatusInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beNDMWStatusInfoRam_GetMetaObject,
+        beNDMWStatusInfoRam_GetMetaObjectFunction,
         "beNDMWStatusInfoRam",
         0x30, /* instance size */
         beNDMWStatusInfoRam_GetVTable,
@@ -85,9 +85,9 @@ void *beNDMWStatusInfoRam_Register(void) {
     );
 }
 
-void beNDMWStatusInfoRam_GetMetaObject(void)
+void beNDMWStatusInfoRam_GetMetaObjectFunction(void)
 {
-    FUN_003b5bb0();
+    beNDMWStatusInfoRam_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWStatusInfoRam_ctorTable[] = {
@@ -112,7 +112,7 @@ void beNDMWStatusInfoRam_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWStatusInfoRam_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003b5f00();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWStatusInfoWork_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beNDMWStatusInfoRam_fieldTable, g_beNDMWStatusInfoRam_fieldHandles, g_beNDMWStatusInfoRam_fieldOffsets, temp_s2);
 }
 

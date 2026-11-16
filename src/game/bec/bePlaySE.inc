@@ -3,14 +3,14 @@ igMetaField *g_bePlaySE_idMetaField;
 igMetaField *g_bePlaySE_timeMetaField;
 
 void bePlaySE_CreateInstance(int arg0) {
-    FUN_00344890();
+    bePlaySE_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587ED0, arg0);
 }
 
-void *FUN_00344800(void) {
+void *bePlaySE_GetMetaObject(void) {
     igMetaObject *g = g_bePlaySE_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00344890();
+        bePlaySE_EnsureRegistered();
     }
     return g_bePlaySE_metaObject;
 }
@@ -20,12 +20,12 @@ int bePlaySE_GetVTable(void) {
     int off;
 
     igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&DAT_00539220[0];
+    tmp[0] = (int)&g_bePlaySE_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_00344890(void)
+void bePlaySE_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(bePlaySE_Register);
 }
@@ -37,7 +37,7 @@ void *bePlaySE_Register(void) {
         &g_bePlaySE_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        bePlaySE_GetMetaObject,
+        bePlaySE_GetMetaObjectFunction,
         "bePlaySE",
         0x18, /* instance size */
         bePlaySE_GetVTable,
@@ -47,9 +47,9 @@ void *bePlaySE_Register(void) {
     );
 }
 
-void bePlaySE_GetMetaObject(void)
+void bePlaySE_GetMetaObjectFunction(void)
 {
-    FUN_00344800();
+    bePlaySE_GetMetaObject();
 }
 
 static FieldFactory g_bePlaySE_ctorTable[] = {

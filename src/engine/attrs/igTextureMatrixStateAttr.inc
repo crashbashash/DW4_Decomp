@@ -3,7 +3,7 @@ igMetaField *g_igTextureMatrixStateAttr_enabledMetaField;
 igMetaField *g_igTextureMatrixStateAttr_unitIDMetaField;
 
 void FUN_001315d0(int arg0) {
-    FUN_001316a0();
+    igTextureMatrixStateAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55ECC0, arg0);
 }
 
@@ -14,7 +14,7 @@ igMetaObject *igTextureMatrixStateAttr_GetMetaObject(void)
         ready = (g_igTextureMatrixStateAttr_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_001316a0();
+    igTextureMatrixStateAttr_EnsureRegistered();
 done:
     return g_igTextureMatrixStateAttr_metaObject;
 }
@@ -23,11 +23,11 @@ int igTextureMatrixStateAttr_GetVTable(void) {
     struct Obj_131660 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005228f0[0];
+    obj.vt = &g_igTextureMatrixStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001316a0(void)
+void igTextureMatrixStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTextureMatrixStateAttr_Register);
 }

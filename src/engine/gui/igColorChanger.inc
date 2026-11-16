@@ -18,7 +18,7 @@ igMetaObject *igColorChanger_GetMetaObject(void)
 int igColorChanger_GetVTable(void) {
     struct Obj_452270 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005415b0[0];
+    obj.vt = &g_igColorChanger_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

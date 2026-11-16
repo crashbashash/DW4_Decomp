@@ -2,14 +2,14 @@ igMetaObject *g_beDataObjFloatList_metaObject;
 igMetaField *g_beDataObjFloatList_dataMetaField;
 
 void beDataObjFloatList_Create(int arg0) {
-    FUN_00364390();
+    beDataObjFloatList_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589848, arg0);
 }
 
-void *FUN_00364260(void) {
+void *beDataObjFloatList_GetMetaObject(void) {
     igMetaObject *g = g_beDataObjFloatList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00364390();
+        beDataObjFloatList_EnsureRegistered();
     }
     return g_beDataObjFloatList_metaObject;
 }
@@ -27,11 +27,11 @@ int beDataObjFloatList_GetVTable(void) {
     igObject_InitHeader(u.b);
     q38 = &u.p[2];
     *q38 = 0;
-    u.w[0] = (int)(&DAT_005354d0[0]);
+    u.w[0] = (int)(&g_beDataObjFloatList_vtable[0]);
     q3c = &u.p[3];
     *q3c = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_005354d0[0]);
+    u.w[0] = (int)(&g_beDataObjFloatList_vtable[0]);
     if (q3c != 0) {
         a = (struct Rc *)*q3c;
         if (a != 0) {
@@ -56,7 +56,7 @@ int beDataObjFloatList_GetVTable(void) {
     return t;
 }
 
-void FUN_00364390(void)
+void beDataObjFloatList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataObjFloatList_Register);
 }
@@ -70,7 +70,7 @@ void *beDataObjFloatList_Register(void) {
         &g_beDataObjFloatList_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beDataObjFloatList_GetMetaObject,
+        beDataObjFloatList_GetMetaObjectFunction,
         "beDataObjFloatList",
         0x10, /* instance size */
         beDataObjFloatList_GetVTable,
@@ -80,9 +80,9 @@ void *beDataObjFloatList_Register(void) {
     );
 }
 
-void beDataObjFloatList_GetMetaObject(void)
+void beDataObjFloatList_GetMetaObjectFunction(void)
 {
-    FUN_00364260();
+    beDataObjFloatList_GetMetaObject();
 }
 
 static FieldFactory g_beDataObjFloatList_ctorTable[] = {

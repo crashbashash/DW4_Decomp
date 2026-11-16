@@ -331,7 +331,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     if ((arg1->f84 + (arg1->f64 + (arg1->f72 + (arg1->f40 + (arg1->f36 + (arg1->f28 + arg1->f32)))))) & 7) {
         void **a = (void **)igObject_GetAllocator(arg0);
         release(converted.p);
-        converted.p = (T_1566c0 *)FUN_0014df70((int)a);
+        converted.p = (T_1566c0 *)igImage_CreateInstance((int)a);
         T_1566c0 *created = converted.p;
         if (!(FUN_00157200(created, FUN_0015ac10(arg1->f44), arg1) & 0xFF)) {
             return;

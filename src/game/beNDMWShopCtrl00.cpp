@@ -393,6 +393,7 @@ extern "C" void beNDMWShopCtrlDiskSell_ShowQuantity(beNDMWShopCtrlDiskSell *);
 extern "C" void beNDMWShopCtrlDiskSell_HideQuantity(beNDMWShopCtrlDiskSell *);
 struct ChipPriceText { char text[5]; } __attribute__((aligned(16)));
 extern "C" ChipPriceText dashdashdashdash_2;
+extern "C" void beNDMWShopCtrlSales_Update(beNDMWShopCtrlSales *self);
 extern "C" void beNDMWShopCtrlSales_RefreshText(beNDMWShopCtrlSales *, int, unsigned char);
 extern "C" int beNDMWShopCtrlSales_UpdatePageCount(beNDMWShopCtrlSales *self);
 extern "C" char SOUBI_3[];
@@ -5408,6 +5409,322 @@ enum { UNPRICED_CHIP_RECORD = 185 };
     ReleaseObject(replaced); \
     if ((slots)->_count != 0 && 0 < (slots)->_count) ((beNDMWItemBase **)(slots)->_data)[0] = (item); }
 #define SALES_ITEMS(self) ((igObjectList *)(self)->_salesItemList)
+
+/* beNDMWShopCtrlSales's steps (_st1) while running. */
+enum SalesStep { SALES_STEP_LIST, SALES_STEP_CONFIRM, SALES_STEP_MESSAGE };
+/* beNDMWShopCtrlSales_Update's _st3 in SALES_STEP_MESSAGE: the txt_shop code to show. */
+enum { SALES_MESSAGE_FOLDER_FULL = 0x686, SALES_MESSAGE_TOO_EXPENSIVE = 0x622 };
+/* The device folder holds this many devices. */
+enum { DEVICE_FOLDER_MAX = 36 };
+
+/* Stores `object` in slot `index` of the list, retaining it, and releases the object the slot held. */
+static inline void ObjectList_SetRetained(igObjectList *list, int index, igObject *object)
+{
+    if (object != 0) object->_refCount = object->_refCount + 1;
+    ReleaseObject(((igObject **)list->_data)[index]);
+    if (list->_count != 0 && index >= 0 && index < list->_count) ((igObject **)list->_data)[index] = object;
+}
+
+/* The stock item shown in row `row` of the current page. */
+static inline beNDMWItemRevisionPocketBase *SalesItemOnPage(beNDMWShopCtrlSales *self, int row)
+{
+    int pageStart = self->_nowPage * SALES_PAGE_ROWS;
+    return ((beNDMWItemRevisionPocketBase **)SALES_ITEMS(self)->_data)[pageStart + row];
+}
+
+/* Walks the stock list of one shop (WPU, APU, CHIP or JUNK entry code): a page of up to twelve
+ * rows, a price check and a confirmation before the device moves to the player's folder. */
+void beNDMWShopCtrlSales_Update(beNDMWShopCtrlSales *self) {
+    float leftArrowPos[3];
+    float rightArrowPos[3];
+    void *allocator;
+    int row;
+    const char **rowFont;
+    int message;
+    int kind;
+
+    switch (self->_st0) {
+    case SHOP_STATE_OPEN:
+        beMessenger_SelectGroup(self->_messenger, SUBWND_8);
+        beMessenger_AppendInt(self->_messenger, self->_entCode);
+        beMessenger_DispatchSelected(self->_messenger, GETSHOPDATA);
+        if (beMessenger_GetObjectCount(self->_messenger) <= 0) {
+            ENTER_STATE(self, SHOP_STATE_CLOSE)
+        } else {
+            SET_OBJECT_REF(self->_salesItemList, beMessenger_GetObject(self->_messenger, 0));
+            beNDMWWindow_PresentModelAtOrigin(self, j_shwin, 0, SQ_AWINOPEN, SQ_CLOSE_10);
+            beNDMWShopCtrlSales_UpdatePageCount(self);
+            rightArrowPos[0] = 236.0f;
+            rightArrowPos[2] = 0.0f;
+            rightArrowPos[1] = 25.0f;
+            leftArrowPos[0] = -146.0f;
+            leftArrowPos[1] = 25.0f;
+            leftArrowPos[2] = 0.0f;
+            ((PagedWindow *)self)->PresentPageArrows(leftArrowPos, rightArrowPos);
+            APPEND_INTERNED(self->_textCloseTypeList, STWINFONT29)
+            APPEND_INTERNED(self->_textCloseNameList, font100_3)
+            APPEND_INTERNED(self->_textCloseTypeList, STWINFONT13_2)
+            APPEND_INTERNED(self->_textCloseNameList, font000_5)
+            switch (self->_entCode) {
+            case SHOP_SERVICE_WPU:
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x675);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x641);
+                break;
+            case SHOP_SERVICE_APU:
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x6D9);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x6A5);
+                break;
+            case SHOP_SERVICE_CHIP:
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x73D);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x709);
+                break;
+            case SHOP_SERVICE_JUNK:
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x7A1);
+                beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x76D);
+                break;
+            }
+            row = 0;
+            rowFont = g_fontNames;
+            do {
+                beNDMWWindow_QueueText(self, STWINFONT14, *rowFont, space_2, LEFT_4);
+                beNDMWWindow_QueueText(self, STWINFONT17, *rowFont, space_2, RIGHT_3);
+                row++;
+                rowFont++;
+            } while (row < SALES_PAGE_ROWS);
+            beNDMWWindow_QueueText(self, STWINFONT30, g_fontNames[0], space_2, RIGHT_3);
+            beNDMWWindow_QueueText(self, STWINFONT30, g_fontName1[0], space_2, RIGHT_3);
+            self->_cursor = 0;
+            NEXT_STATE(self)
+            ENTER_STEP(self, SALES_STEP_LIST)
+        }
+    case SHOP_STATE_RUN:
+        switch (self->_st1) {
+        case SALES_STEP_LIST:
+            switch (self->_st2) {
+            case 0:
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWStatusSelectE1> selectWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create(allocator));
+                    self->_retCode = self->_cursor;
+                    beNDMWWindow_BindContext(selectWin.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, selectWin.p);
+                    {
+                        beNDMWStatusSelectE1 *select = selectWin.p;
+                        select->_offsetPos[0] = -121.0f;
+                        select->_offsetPos[1] = 128.0f;
+                        select->_offsetPos[2] = 0.0f;
+                    }
+                    selectWin.p->_startPoint = self->_cursor;
+                    beNDMWWindow_QueueText(selectWin.p, STWINFONT29, g_fontNames[0], space_2, LEFT_4);
+                    selectWin.p->_selectMax = beNDMWShopCtrlSales_UpdatePageCount(self);
+                    SET_DECIDE_LIST(selectWin.p, (igBoolList *)self->_decideList)
+                }
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+            case 1:
+                beNDMWShopCtrlSales_RefreshText(self, 1, 1);
+                NEXT_PHASE(self)
+            case 2: {
+                igObjectList *subWindows = (igObjectList *)self->_subWindow;
+                if (subWindows->_count == self->_nowProcKazu) {
+                    int selected = self->_retCode;
+                    if (selected != -1) {
+                        if (selected != self->_st3) {
+                            beNDMWShopCtrlSales_RefreshText(self, 0, 1);
+                            self->_st3 = self->_retCode;
+                            return;
+                        }
+                        {
+                            beNDMWStatusSelectE1 *selectWin = ((beNDMWStatusSelectE1 **)subWindows->_data)[0];
+                            if (beNDMWWindowSelect_CanRequestFO2TOP(selectWin) != 0) {
+                                bool pageTurned = false;
+                                if (((PagedWindow *)self)->TurnPagePrev() != 0) {
+                                    pageTurned = true;
+                                } else if (((PagedWindow *)self)->TurnPageNext() != 0) {
+                                    pageTurned = true;
+                                }
+                                if (pageTurned) {
+                                    ENTER_STATE(selectWin, SELECT_STATE_RELOAD_TO_TOP)
+                                    self->_st2 = 1;
+                                    self->_st3 = 0;
+                                    selectWin->_selectMax = beNDMWShopCtrlSales_UpdatePageCount(self);
+                                    SET_DECIDE_LIST(selectWin, (igBoolList *)self->_decideList)
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    beNDMWShopCtrlSales_PreviewSelected(self, 0);
+                    switch (self->_retCode) {
+                    default: {
+                        beNDMWItemRevisionPocketBase *item = SalesItemOnPage(self, self->_retCode);
+                        int price = beNDMWItemRevisionPocketBase_GetPrice(item, (beNDMWStatus *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), HANBAI_2);
+                        int player;
+                        int bits;
+                        beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        bits = PlayerInt(player, BIT_7)->_data;
+                        if (PlayerFolder(player, DEVICEFOLDER_4)->_count >= DEVICE_FOLDER_MAX) {
+                            ENTER_STEP(self, SALES_STEP_MESSAGE)
+                            self->_st3 = SALES_MESSAGE_FOLDER_FULL;
+                        } else if (bits < price) {
+                            ENTER_STEP(self, SALES_STEP_MESSAGE)
+                            self->_st3 = SALES_MESSAGE_TOO_EXPENSIVE;
+                        } else {
+                            ENTER_STEP(self, SALES_STEP_CONFIRM)
+                            beNDMWShopCtrlSales_MoveRowCursor((beNDMWWindow *)self, self->_retCode);
+                        }
+                        self->_cursor = self->_retCode;
+                        return;
+                    }
+                    case -1:
+                        ((beNDMWWindow *)self->_mother)->_retCode = -1;
+                        NEXT_STATE(self)
+                        return;
+                    }
+                }
+                break;
+            }
+            }
+            break;
+        case SALES_STEP_CONFIRM:
+            switch (self->_st2) {
+            case 0: {
+                beNDMWItemRevisionPocketBase *item;
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWShopSelect00> questionWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    message = 0;
+                    item = SalesItemOnPage(self, self->_retCode);
+                    if (beNDMWShopCtrlSales_CanPlayerUse(self, (beNDMWItemBase *)item) == false) {
+                        APPEND_INTERNED(questionWin.p->_textCloseTypeList, STWINFONT29)
+                        APPEND_INTERNED(questionWin.p->_textCloseNameList, font000_5)
+                        beNDMWWindow_RunMessageScript(self, txt_shop_lua_2, 0x7F8);
+                    } else {
+                        if (item->_kindNo == ITEM_WEAPON) {
+                            message = 0x677;
+                        } else if (item->_kindNo == ITEM_BLUE_ARMOR || item->_kindNo == ITEM_YELLOW_ARMOR) {
+                            message = 0x6DB;
+                        } else {
+                            message = 0x73F;
+                        }
+                    }
+                    beNDMWWindow_BindContext(questionWin.p, self, self->_insight, self->_playerNo, message);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, questionWin.p);
+                }
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+            }
+            case 1:
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    PICK_ALLOCATOR(allocator, self)
+                    {
+                        igSmartPointer<beNDMWShopSelect01> yesNoWin((beNDMWShopSelect01 *)beNDMWShopSelect01_Create(allocator));
+                        kind = ((beNDMWItemRevisionPocketBase **)SALES_ITEMS(self)->_data)[self->_cursor + self->_nowPage * SALES_PAGE_ROWS]->_kindNo;
+                        if (kind == ITEM_WEAPON) {
+                            message = 0x678;
+                        } else if (kind == ITEM_BLUE_ARMOR || kind == ITEM_YELLOW_ARMOR) {
+                            message = 0x6DC;
+                        } else {
+                            message = 0x740;
+                        }
+                        beNDMWWindow_BindContext(yesNoWin.p, self, self->_insight, self->_playerNo, message);
+                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, yesNoWin.p);
+                    }
+                    self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                    NEXT_PHASE(self)
+                    return;
+                }
+                break;
+            case 2:
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    switch (self->_retCode) {
+                    case ANSWER_YES: {
+                        int slot;
+                        int player;
+                        beNDMWItemRevisionPocketBase *item;
+                        int price;
+                        int bits;
+                        slot = self->_cursor + self->_nowPage * SALES_PAGE_ROWS;
+                        item = ((beNDMWItemRevisionPocketBase **)SALES_ITEMS(self)->_data)[slot];
+                        price = beNDMWItemRevisionPocketBase_GetPrice(item, (beNDMWStatus *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]), HANBAI_2);
+                        beMessenger_SelectGroup(self->_messenger, GAMERAM_14);
+                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_10);
+                        player = beMessenger_GetObject(self->_messenger, 0);
+                        bits = PlayerInt(player, BIT_7)->_data;
+                        PlayerInt(player, BIT_7)->_data = bits - price;
+                        ObjectList_AppendRetained(PlayerFolder(player, DEVICEFOLDER_4), item);
+                        PICK_ALLOCATOR(allocator, self)
+                        {
+                            igSmartPointer<beNDMWItemAbilityChip> soldOut((beNDMWItemAbilityChip *)beNDMWItemAbilityChip_Create(allocator));
+                            beNDMWItemAbilityChip_Set(soldOut.p, UNPRICED_CHIP_RECORD);
+                            igObject *chip = soldOut.p;
+                            igObjectList *items = SALES_ITEMS(self);
+                            ObjectList_SetRetained(items, slot, chip);
+                        }
+                        beMessenger_SelectGroup(self->_messenger, SUBWND_8);
+                        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+                        beMessenger_DispatchSelected(self->_messenger, UPDATE_3);
+                        break;
+                    }
+                    case ANSWER_NO:
+                        break;
+                    }
+                    ENTER_STEP(self, SALES_STEP_LIST)
+                    beNDMWShopCtrlSales_MoveRowCursor((beNDMWWindow *)self, -1);
+                    return;
+                }
+                break;
+            }
+            break;
+        case SALES_STEP_MESSAGE:
+            switch (self->_st2) {
+            case 0:
+                PICK_ALLOCATOR(allocator, self)
+                {
+                    igSmartPointer<beNDMWShopSelect00> messageWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create(allocator));
+                    beNDMWWindow_BindContext(messageWin.p, self, self->_insight, self->_playerNo, self->_st3);
+                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, messageWin.p);
+                }
+                self->_nowProcKazu = ObjectList_Count(self->_subWindow);
+                NEXT_PHASE(self)
+            case 1:
+                if (ObjectList_Count(self->_subWindow) != self->_nowProcKazu) {
+                    ENTER_STEP(self, SALES_STEP_LIST)
+                    return;
+                }
+                break;
+            }
+            break;
+        }
+        break;
+    case SHOP_STATE_CLOSE:
+        beNDMWWindow_PlayQueuedModelClose(self);
+        beNDMWWindow_ClearQueuedText(self);
+        beNDMWWindow_RequestChildrenClose(self);
+        NEXT_STATE(self)
+        row = 0;
+        rowFont = g_fontNames;
+        do {
+            beMessenger_SelectGroup(self->_messenger, TEXTCTL_3);
+            beMessenger_AppendString(self->_messenger, STWINFONT14);
+            beMessenger_AppendString(self->_messenger, *rowFont);
+            beMessenger_DispatchSelected(self->_messenger, DEFAULTCOLOR_5);
+            row++;
+            rowFont++;
+        } while (row < SALES_PAGE_ROWS);
+        return;
+    case SHOP_STATE_WAIT_CLOSED:
+        if (beNDMWWindow_PollCloseComplete(self) != 0) {
+            self->_isRun = 0;
+        }
+        break;
+    }
+}
 
 /* Writes the page's rows (name in its revision colour, price) and page numbers, and/or the
  * selected item's description. */

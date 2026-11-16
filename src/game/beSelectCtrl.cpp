@@ -137,10 +137,10 @@ extern "C" int strcmp(int, const char *);
 extern "C" int List_Resize(igBoolList *, int, int);
 extern "C" igObject *beBaseInfoDataList_Create(...);
 extern "C" beSelectCtrlInfoRamData *igProperty_FindByName(...);
-extern "C" void beSelectCtrl_EnsurePadManager(beSelectCtrl *self);
-extern "C" void beSelectCtrl_RegisterReceiver(beSelectCtrl *self, int info);
-extern "C" void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram);
-extern "C" int beSelectCtrl_OnMessage(beSelectCtrl *self, beBaseInfoRam *ram, int message);
+extern "C" void beSelectCtrl_Prepare(beSelectCtrl *self);
+extern "C" void beSelectCtrl_OnAddRam(beSelectCtrl *self, int info);
+extern "C" void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram);
+extern "C" int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int message);
 extern "C" int g_beSelectCtrlInfo_metaObject[4];
 extern "C" int g_beSelectCtrl_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
@@ -177,7 +177,7 @@ struct DataList {
     static inline void create(beBaseInfoRam *ram, int allocator) { igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocator)); store(ram, list); }
 };
 
-void beSelectCtrl_EnsurePadManager(beSelectCtrl *self)
+void beSelectCtrl_Prepare(beSelectCtrl *self)
 {
     if (self->_padManager == 0) {
         self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
@@ -189,14 +189,14 @@ int beSelectCtrl_GetInfoMeta(void)
     return g_beSelectCtrlInfo_metaObject[0];
 }
 
-void beSelectCtrl_RegisterReceiver(beSelectCtrl *self, int info)
+void beSelectCtrl_OnAddRam(beSelectCtrl *self, int info)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "SELECTCTRL");
 }
 
 static inline int waitOf(const beBaseInfoRam *ram) { return ram->_st2; }
 
-void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
+void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
     beBaseInfo *info;
     float offset[3];
     char slideText[16];
@@ -400,7 +400,7 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
     }
 }
 
-int beSelectCtrl_OnMessage(beSelectCtrl *self, beBaseInfoRam *ram, int message) {
+int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int message) {
     float offset[3];
     int count;
     int i;

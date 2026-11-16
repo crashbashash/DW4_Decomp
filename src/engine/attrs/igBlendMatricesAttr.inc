@@ -20,7 +20,7 @@ int igBlendMatricesAttr_GetVTable(void) {
     struct Obj_139ca0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524190[0];
+    obj.vt = &g_igBlendMatricesAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

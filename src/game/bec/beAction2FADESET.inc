@@ -2,13 +2,13 @@ igMetaObject *g_beAction2FADESET_metaObject;
 igMetaField *g_beAction2FADESET_fadeTimeMetaField;
 igMetaField *g_beAction2FADESET_fadeValueMetaField;
 
-void *FUN_0036d1a0(void) {
+void *beAction2FADESET_GetMetaObject(void) {
     bool ok;
     if (g_beAction2FADESET_metaObject == 0) goto make;
     ok = !!(g_beAction2FADESET_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_0036d280();
+    beAction2FADESET_EnsureRegistered();
 done:;
     return g_beAction2FADESET_metaObject;
 }
@@ -25,7 +25,7 @@ int beAction2FADESET_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00534150[0];
+    u.vt = (int)&g_beAction2FADESET_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -42,7 +42,7 @@ int beAction2FADESET_GetVTable(void) {
     return s0;
 }
 
-void FUN_0036d280(void)
+void beAction2FADESET_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAction2FADESET_Register);
 }
@@ -54,7 +54,7 @@ void *beAction2FADESET_Register(void) {
         &g_beAction2FADESET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beAction2FADESET_GetMetaObject,
+        beAction2FADESET_GetMetaObjectFunction,
         "beAction2FADESET",
         0x14, /* instance size */
         beAction2FADESET_GetVTable,
@@ -64,9 +64,9 @@ void *beAction2FADESET_Register(void) {
     );
 }
 
-void beAction2FADESET_GetMetaObject(void)
+void beAction2FADESET_GetMetaObjectFunction(void)
 {
-    FUN_0036d1a0();
+    beAction2FADESET_GetMetaObject();
 }
 
 static FieldFactory g_beAction2FADESET_ctorTable[] = {

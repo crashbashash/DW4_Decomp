@@ -1,12 +1,12 @@
 igMetaObject *g_beHitLandModelInfoRam_metaObject;
 
-igMetaObject *FUN_0035d300(void) {
+igMetaObject *beHitLandModelInfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beHitLandModelInfoRam_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_0035d3f0();
+    beHitLandModelInfoRam_EnsureRegistered();
 done:
     return g_beHitLandModelInfoRam_metaObject;
 }
@@ -17,15 +17,15 @@ int beHitLandModelInfoRam_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.ref = 0;
-    obj.vt = &DAT_00539e90[0];
-    obj.vt = &DAT_00536440[0];
+    obj.vt = &g_beBaseInfoRam_vtable[0];
+    obj.vt = &g_beHitLandModelInfoRam_vtable[0];
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00539e90[0];
+    obj.vt = &g_beBaseInfoRam_vtable[0];
     obj.releaseRef();
     return r;
 }
 
-void FUN_0035d3f0(void)
+void beHitLandModelInfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beHitLandModelInfoRam_Register);
 }
@@ -37,7 +37,7 @@ void *beHitLandModelInfoRam_Register(void) {
         &g_beHitLandModelInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beHitLandModelInfoRam_GetMetaObject,
+        beHitLandModelInfoRam_GetMetaObjectFunction,
         "beHitLandModelInfoRam",
         0x2c, /* instance size */
         beHitLandModelInfoRam_GetVTable,
@@ -47,8 +47,8 @@ void *beHitLandModelInfoRam_Register(void) {
     );
 }
 
-void beHitLandModelInfoRam_GetMetaObject(void)
+void beHitLandModelInfoRam_GetMetaObjectFunction(void)
 {
-    FUN_0035d300();
+    beHitLandModelInfoRam_GetMetaObject();
 }
 

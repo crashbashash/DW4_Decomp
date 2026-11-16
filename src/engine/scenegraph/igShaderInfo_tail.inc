@@ -1,5 +1,5 @@
 void FUN_001d8ab0(void) {
-    FUN_00199080();
+    igShaderFactoryList_EnsureRegistered();
     igSmartPointer<igObject> info((igObject *)FUN_00198cc0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
     igNamedObject_SetName(info.p, "shaderInfo");
     igSmartPointer<igObject> list = igResource_GetDirectory(g_globalContext[0], (const char *)text_system);

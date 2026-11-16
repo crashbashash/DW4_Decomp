@@ -18,7 +18,7 @@ void FUN_0019d360(void)
     igMetaObject_RunStaticInit(igModelViewMatrixBoneSelectList_561880_Register);
 }
 
-static igMetaObjectCallback g_igModelViewMatrixBoneSelectList_callbackList[] = { FUN_0019d4f0, 0 };
+static igMetaObjectCallback g_igModelViewMatrixBoneSelectList_callbackList[] = { igModelViewMatrixBoneSelect_EnsureRegistered, 0 };
 
 void igModelViewMatrixBoneSelectList_561880_Register(void) {
     SceneGraphLibrary_MarkRegistered();

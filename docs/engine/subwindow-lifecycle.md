@@ -28,20 +28,20 @@ The class's vtable slots carry the same roles as in the sibling `beNDMWLoadCtrl2
 | Slot | Method |
 | --- | --- |
 | 20 | `beNDMWStatus__GetMeta` |
-| 29 | `beNDMWStatus__RegisterReceiver` |
+| 29 | `beNDMWStatus_OnAddRam` |
 | 30 | `beNDMWStatus__GetInfoMeta` |
-| 31 | `beNDMWStatus__Update` |
-| 32 | `beNDMWStatus__ReleaseWindow` |
-| 34 | `beNDMWStatus__OnMessage` |
+| 31 | `beNDMWStatus_UpdateRam` |
+| 32 | `beNDMWStatus_Prepare` |
+| 34 | `beNDMWStatus_OnMessage` |
 
-`beNDMWStatus__RegisterReceiver` registers the receiver name **SUBWND** and clears `_isRun`, but
+`beNDMWStatus_OnAddRam` registers the receiver name **SUBWND** and clears `_isRun`, but
 only when the info list holds exactly one entry; any other count leaves the RAM untouched.
-`beNDMWStatus__ReleaseWindow` drops one reference of the root (the count is the low 23 bits of
+`beNDMWStatus_Prepare` drops one reference of the root (the count is the low 23 bits of
 `_refCount`), destroys it at zero and clears `_windowPro`.
 
 ## Opening and root ownership
 
-`beNDMWStatus__Update` returns at once while `_isRun` is clear. In state 0 it calls
+`beNDMWStatus_UpdateRam` returns at once while `_isRun` is clear. In state 0 it calls
 `beNDMWStatus__PrepareWork`, sends **STAGECTL / ENABLE / PADINPUT** and builds the root window for
 the mode. The modes are the retail `SubWnd` enumeration (`SubWnd_GetMetaEnum`):
 

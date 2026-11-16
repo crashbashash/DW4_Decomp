@@ -4,8 +4,8 @@ igMetaField *g_beHitLandModelInfo_checkSwitchMetaField;
 igMetaField *g_beHitLandModelInfo_nameListMetaField;
 igMetaField *g_beHitLandModelInfo_kindMetaField;
 
-igMetaObject *FUN_0035d4a0(void) {
-    if (g_beHitLandModelInfo_metaObject == 0 || !isValid(g_beHitLandModelInfo_metaObject)) FUN_0035d5a0();
+igMetaObject *beHitLandModelInfo_GetMetaObject(void) {
+    if (g_beHitLandModelInfo_metaObject == 0 || !isValid(g_beHitLandModelInfo_metaObject)) beHitLandModelInfo_EnsureRegistered();
     return g_beHitLandModelInfo_metaObject;
 }
 
@@ -17,12 +17,12 @@ int beHitLandModelInfo_GetVTable(void) {
     obj.w2 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    obj.vt = &DAT_005363d0[0];
+    obj.vt = &g_beHitLandModelInfo_vtable[0];
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w9 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005363d0[0];
+    obj.vt = &g_beHitLandModelInfo_vtable[0];
     FUN_00343260((ObjectRefWord *)&obj.w9, -1);
     FUN_00343260((ObjectRefWord *)&obj.w8, -1);
     igSmartPointer_igObjectList_Destruct(&obj.w7, -1);
@@ -30,12 +30,12 @@ int beHitLandModelInfo_GetVTable(void) {
     return t;
 }
 
-void FUN_0035d5a0(void)
+void beHitLandModelInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beHitLandModelInfo_Register);
 }
 
-static igMetaObjectCallback g_beHitLandModelInfo_callbackList[] = { FUN_00196ad0, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beHitLandModelInfo_callbackList[] = { igSwitch_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
 void *beHitLandModelInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -44,7 +44,7 @@ void *beHitLandModelInfo_Register(void) {
         &g_beHitLandModelInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beHitLandModelInfo_GetMetaObject,
+        beHitLandModelInfo_GetMetaObjectFunction,
         "beHitLandModelInfo",
         0x2c, /* instance size */
         beHitLandModelInfo_GetVTable,
@@ -54,9 +54,9 @@ void *beHitLandModelInfo_Register(void) {
     );
 }
 
-void beHitLandModelInfo_GetMetaObject(void)
+void beHitLandModelInfo_GetMetaObjectFunction(void)
 {
-    FUN_0035d4a0();
+    beHitLandModelInfo_GetMetaObject();
 }
 
 static FieldFactory g_beHitLandModelInfo_ctorTable[] = {
@@ -95,9 +95,9 @@ void beHitLandModelInfo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beHitLandModelInfo_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196930();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igSwitch_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00196930();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igSwitch_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igObjectList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beHitLandModelInfo_fieldTable, g_beHitLandModelInfo_fieldHandles, g_beHitLandModelInfo_fieldOffsets, temp_s2);

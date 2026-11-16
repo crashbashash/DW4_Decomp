@@ -3,12 +3,12 @@ igMetaObject *g_beNDMWMdlPEBase_metaObject;
 void *beNDMWMdlPEBase_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWMdlPEBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c0550();
+        beNDMWMdlPEBase_EnsureRegistered();
     }
     return g_beNDMWMdlPEBase_metaObject;
 }
 
-void FUN_003c0550(void)
+void beNDMWMdlPEBase_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlPEBase_Register);
 }

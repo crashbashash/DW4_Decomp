@@ -147,7 +147,6 @@ extern "C" int strlen(const void *);
 extern "C" int igStringObj_Set(void *, const char *);
 extern "C" int igStringObj_Insert(void *, const void *, int, int);
 extern "C" int __dl__FPv(...);
-extern "C" void beNDMWStatus_PreviewEquipment(...);
 extern "C" int ObjectList_FillRetained(...);
 extern "C" int beNDMWStatusMainSlot_GetMeta(void);
 extern "C" void beNDMWStatusSubSlot_PreviewPocketDevice(void);
@@ -206,9 +205,9 @@ extern "C" char SQ_MOVEEND[];
 extern "C" char SQ_MOVENEXT[];
 extern "C" void beNDMWWindow_PresentModel(beNDMWListCtrl *, const char *, int, const char *, const char *, float *);
 extern "C" bePadData * bePadManager_GetPadForPlayer(...);
-extern "C" void Gap__Bec__beNDMWListCtrl__vfunc_22(beNDMWListCtrl *self,const float *leftArrowPos,const float *rightArrowPos);
-extern "C" bool Gap__Bec__beNDMWListCtrl__vfunc_23(beNDMWListCtrl *self);
-extern "C" bool Gap__Bec__beNDMWListCtrl__vfunc_24(beNDMWListCtrl *self);
+extern "C" void beNDMWListCtrl_PresentPageArrows(beNDMWListCtrl *self,const float *leftArrowPos,const float *rightArrowPos);
+extern "C" bool beNDMWListCtrl_PrevPage(beNDMWListCtrl *self);
+extern "C" bool beNDMWListCtrl_NextPage(beNDMWListCtrl *self);
 /* The window holders are memory-resident stack objects (slots in declaration order w1..w8); each
  * releases its window in its destructor. The offset/index/count loop locals are declared in the
  * order n, i, off with c before them. */
@@ -330,7 +329,7 @@ static inline void AssignRef(int *slot, Obj *v) {
     *slot = (int)v;
 }
 };
-extern "C" void Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_21(beNDMWStatusCtrlBaseEquip *p);
+extern "C" void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p);
 typedef struct Tbl { const char *s[12]; } __attribute__((aligned(16))) Tbl;
 extern "C" char i_stcursor04[];
 extern "C" char font002_2[];
@@ -381,6 +380,7 @@ struct StrList : public igObject {
     int _count;
 };
 extern "C" void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slot, int equipIdx);
+extern "C" void beNDMWStatus_PreviewEquipment(beNDMWStatusCtrlBaseEquip *self, ItemList *slotList, int slot, int index);
 extern "C" char i_stpocket[];
 extern "C" char SQ_0LINEOPEN[];
 extern "C" char SQ_1LINEOPEN[];
@@ -473,6 +473,7 @@ extern "C" void beNDMWStatusMainSlot_OnSlotMenuDecided(beNDMWStatusMainSlot *arg
 extern "C" int DAT_004cf6e0[4];
 extern "C" void beNDMWStatusMainSlot_OpenDeviceFolder(beNDMWStatusMainSlot *arg0);
 extern "C" void beNDMWStatusMainSlot_PreviewPocketDevice(beNDMWStatusMainSlot * self, char * extra, char * unusedA, int unusedB);
+extern "C" void beNDMWStatusMainSlot_PreviewSlotDevice(beNDMWStatusMainSlot *self, int index);
 extern "C" void beNDMWStatusMainSlot_EquipPocket(beNDMWStatusMainSlot * self, char * unusedA, char * unusedB, char * unusedC);
 /* A property record: the value sits at +12. */
 typedef struct PropertyRecord_4164d0 { char pad0[12]; int value; } PropertyRecord_4164d0;
@@ -622,8 +623,36 @@ extern "C" void beNDMWWindow_QueueObjectText(void *, void *, const char *, const
 struct Q48 { Q128 q[3]; };
 extern "C" void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self);
 extern "C" void StringRefList_ResetRange(igStringRefList *arg0, int arg1, int arg2);
-extern "C" void ObjectList_ZeroRange(igObjectList *arg0, int arg1, int arg2);
-extern "C" void ObjectList_ReleaseRange(igObjectList *arg0, int arg1, int arg2);
+static inline void ZeroRange(igObjectList *list, int first, int count)
+{
+    int end = first + count;
+    for (int i = first; i < end; i++) {
+        ((igObject **)list->_data)[i] = 0;
+    }
+}
+
+static inline void ReleaseRange(igObjectList *list, int first, int count)
+{
+    int end = first + count;
+    for (int i = first; i < end; i++) {
+        REL(((igObject **)list->_data)[i])
+    }
+}
+
+extern "C" void ObjectList_ZeroRange(igObjectList *list, int first, int count);
+extern "C" void ObjectList_ReleaseRange(igObjectList *list, int first, int count);
+
+/* Drops the list's share of every object it holds, clears the slots and empties it.
+ * matching construct: inline budget — in retail beNDMWStatusCtrlDisk_Update passes
+ * inline_max_total_size, so its removeAll leaves the two range helpers as the out-of-line calls
+ * ObjectList_ReleaseRange and ObjectList_ZeroRange; this unit's spelling of that function counts
+ * fewer nodes, so it makes those calls itself and only this inline expands the helpers. */
+static inline void ObjectList_RemoveAll(igObjectList *list)
+{
+    ReleaseRange(list, 0, list->_count);
+    ZeroRange(list, 0, list->_count);
+    list->_count = 0;
+}
 extern "C" void **ObjectRef_AssignRetained(void **arg0, igObject *arg1);
 extern "C" void beNDMWStatusCtrlDisk_RefreshText(beNDMWStatusCtrlDisk *arg0, int arg1, int arg2);
 struct ChildWindow;
@@ -1044,7 +1073,7 @@ template <class Window> static inline void SwitchCell(Window *window, const char
 
 /* Create the previous/next page arrow models. The left arrow starts hidden; the right arrow is
  * shown when the list spans more than one page (_maxPage) and hidden otherwise. */
-void Gap__Bec__beNDMWListCtrl__vfunc_22(beNDMWListCtrl *self,const float *leftArrowPos,const float *rightArrowPos){
+void beNDMWListCtrl_PresentPageArrows(beNDMWListCtrl *self,const float *leftArrowPos,const float *rightArrowPos){
     float leftPos[4],rightShownPos[4],rightHiddenPos[4];
     leftPos[0]=leftArrowPos[0];leftPos[1]=leftArrowPos[1];leftPos[2]=leftArrowPos[2];
     beNDMWWindow_PresentModel(self,i_stcursorleft,0,SQ_HIDE,SQ_CLOSE_3,leftPos);
@@ -1058,7 +1087,7 @@ void Gap__Bec__beNDMWListCtrl__vfunc_22(beNDMWListCtrl *self,const float *leftAr
 }
 
 /* Previous page. */
-bool Gap__Bec__beNDMWListCtrl__vfunc_23(beNDMWListCtrl *self){
+bool beNDMWListCtrl_PrevPage(beNDMWListCtrl *self){
     bool changed;
     bool upDownHeld;
     unsigned stickRepeat;
@@ -1091,7 +1120,7 @@ bool Gap__Bec__beNDMWListCtrl__vfunc_23(beNDMWListCtrl *self){
 }
 
 /* Next page. */
-bool Gap__Bec__beNDMWListCtrl__vfunc_24(beNDMWListCtrl *self){
+bool beNDMWListCtrl_NextPage(beNDMWListCtrl *self){
     bool changed;
     bool upDownHeld;
     unsigned stickRepeat;
@@ -1444,7 +1473,7 @@ void beNDMWStatusCtrlEquip_Update(beNDMWStatusCtrlEquip *self)
     }
 }
 
-void Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_21(beNDMWStatusCtrlBaseEquip *p)
+void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
 {
     switch (p->_st0) {
     default: return;
@@ -1938,6 +1967,86 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
     }
 }
 
+/* Stores `item` in slot `index` of the list, retaining it, and releases the item the slot held. */
+static inline void SetItemRetained(ItemList *list, int index, EquipItem *const &item)
+{
+    if (item != 0) item->_refCount = item->_refCount + 1;
+    REL(list->_data[index])
+    if (list->_count != 0 && index >= 0 && index < list->_count) list->_data[index] = item;
+}
+
+static inline igObjectList *SubWindows(const beNDMWStatusCtrlBaseEquip &window) { return (igObjectList *)window._subWindow; }
+
+/* The object as a device-folder list window, or null for any other kind of window. */
+static inline beNDMWStatusCtrlD0 *AsStatusCtrlD0(void *object)
+{
+    if (object != 0 && igObject_IsKindOf(object, g_beNDMWStatusCtrlD0_metaObject[0]) != 0) return (beNDMWStatusCtrlD0 *)object;
+    return 0;
+}
+
+/* Previews the stats of a device row of the device folder: equips it into `slotList` (slot `slot`)
+ * for the stat preview, then puts the slot list back as it was. Index -1 previews the slot empty. */
+void beNDMWStatus_PreviewEquipment(beNDMWStatusCtrlBaseEquip *self, ItemList *slotList, int slot, int index) {
+    if (index == -1) {
+        MovedItemRef held(slotList->_data[slot]);
+        SetItemRetained(slotList, slot, 0);
+        RecalcPlayer(self);
+        SendSubWindowCommand(self, ONPREVIEW);
+        {
+            EquipItem *saved = (EquipItem *)held.p;
+            SetItemRetained(slotList, slot, saved);
+        }
+        RecalcPlayer(self);
+    } else if (self->_retCode != -1) {
+        beNDMWStatusCtrlD0 *folder = 0;
+        int child;
+        for (child = 0; child < SubWindows(*self)->_count; child++) {
+            folder = AsStatusCtrlD0(((void **)SubWindows(*self)->_data)[child]);
+            if (folder != 0) break;
+        }
+        if (folder->_st0 == 1 && folder->_st1 == 1) {
+            int row = beNDMWStatusCtrlD0_GetSelectedIndex(folder);
+            if (row != -1 && (row != self->_st3 || self->_st3 == 999)) {
+                EquipItem *device;
+                bool equippable;
+                FindStatus(self->_insight);
+                device = ((ItemList *)self->_deviceFolder)->_data[row];
+                ItemListRef before(beNDMWItemBaseList_Create(WindowAllocator(self)));
+                for (int i = 0; i < slotList->_count; i++) {
+                    ObjectList_AppendRetained(before.p, slotList->_data[i]);
+                }
+                equippable = false;
+                /* matching construct: tvpe variant search — the index conversion keeps the flag list first in the addu */
+                if (((bool *)((igBoolList *)folder->_decideList)->_data)[(unsigned int)folder->_retCode]) {
+                    if (device->_kind == 3) {
+                        equippable = true;
+                    } else if (AsEquipPanel(self)->CanEquip(row) != 0) {
+                        equippable = true;
+                    }
+                }
+                if (equippable) {
+                    beNDMWStatus_AssignEquipment((StatusPanel *)self, slotList, slot, row);
+                    RecalcPlayer(self);
+                    SendSubWindowCommand(self, ONPREVIEW);
+                    for (int i = 0; i < slotList->_count; i++) {
+                        if (slotList->_data[i] != 0) slotList->_data[i]->_equipped = 0;
+                        SetItemRetained(slotList, i, 0);
+                    }
+                    for (int i = 0; i < ((ItemList *)before.p)->_count; i++) {
+                        EquipItem *item = ((ItemList *)before.p)->_data[i];
+                        if (item != 0) item->_equipped = 1;
+                        SetItemRetained(slotList, i, item);
+                    }
+                    RecalcPlayer(self);
+                } else {
+                    SendSubWindowCommand(self, OFPREVIEW);
+                }
+                self->_st3 = row;
+            }
+        }
+    }
+}
+
 void beNDMWStatusPowerSocket_PresentPanel(beNDMWStatusPowerSocket *self, int open) {
     int *a1;
     int v1;
@@ -2395,12 +2504,12 @@ void beNDMWStatusPowerSocket_EquipSelected(beNDMWStatusPowerSocket *arg0) {
  * other two arguments are unused. */
 void beNDMWStatusPowerSocket_PreviewPocketDevice(beNDMWStatusPowerSocket *self, char *index, char *unusedArg2, int unusedArg3)
 {
-    beNDMWStatus_PreviewEquipment(self, self->_wpuPocket, self->_pocketPos, index);
+    beNDMWStatus_PreviewEquipment((beNDMWStatusCtrlBaseEquip *)self, (ItemList *)self->_wpuPocket, self->_pocketPos, (int)index);
 }
 
 void beNDMWStatusPowerSocket_PreviewSlotDevice(beNDMWStatusPowerSocket *arg0, int arg1) {
     if (arg1 != -1) {
-        beNDMWStatus_PreviewEquipment(arg0, arg0->_powerSocket, 0, arg1);
+        beNDMWStatus_PreviewEquipment((beNDMWStatusCtrlBaseEquip *)arg0, (ItemList *)arg0->_powerSocket, 0, arg1);
     }
 }
 
@@ -2937,8 +3046,29 @@ void beNDMWStatusMainSlot_EquipSelected(beNDMWStatusMainSlotVTable *arg0) {
 /* Only the first argument is used. */
 void beNDMWStatusMainSlot_PreviewPocketDevice(beNDMWStatusMainSlot * self, char * extra, char * unusedA, int unusedB)
 {
-    /* matching construct: (int) cast because the callee takes the receiver as an int */
-    beNDMWStatus_PreviewEquipment((int)self, self->_apuPocket, self->_pocketPos, extra);
+    beNDMWStatus_PreviewEquipment((beNDMWStatusCtrlBaseEquip *)self, (ItemList *)self->_apuPocket, self->_pocketPos, (int)extra);
+}
+
+static inline ItemList *ApuPocket(const beNDMWStatusMainSlot &slot) { return (ItemList *)slot._apuPocket; }
+
+/* Previews a device row for the main slot. Index -1 previews the slot empty, with the APU pocket's
+ * devices put aside for the preview and put back afterwards. */
+void beNDMWStatusMainSlot_PreviewSlotDevice(beNDMWStatusMainSlot *self, int index) {
+    if (index == -1) {
+        ItemListRef pocketDevices(beNDMWItemBaseList_Create(WindowAllocator(self)));
+        for (int i = 0; i < ApuPocket(*self)->_count; i++) {
+            ObjectList_AppendRetained(pocketDevices.p, ApuPocket(*self)->_data[i]);
+        }
+        ObjectList_FillRetained((ItemList *)self->_apuPocket, 0);
+        beNDMWStatus_PreviewEquipment((beNDMWStatusCtrlBaseEquip *)self, (ItemList *)self->_mainSlot, self->_kindListPos, index);
+        for (int i = 0; i < ((ItemList *)pocketDevices.p)->_count; i++) {
+            EquipItem *device = ((ItemList *)pocketDevices.p)->_data[i];
+            SetItemRetained((ItemList *)self->_apuPocket, i, device);
+        }
+        ObjectList_RemoveAll((igObjectList *)pocketDevices.p);
+    } else {
+        beNDMWStatus_PreviewEquipment((beNDMWStatusCtrlBaseEquip *)self, (ItemList *)self->_mainSlot, self->_kindListPos, index);
+    }
 }
 
 void beNDMWStatusMainSlot_OpenPocketList(beNDMWStatusMainSlot *self) {
@@ -3419,7 +3549,7 @@ void beNDMWStatusSubSlot_PreviewPocketDevice(void)
  * row index. The other two arguments are unused. */
 void beNDMWStatusSubSlot_PreviewSlotDevice(beNDMWStatusSubSlot *self, char *index, char *unusedArg2, int unusedArg3)
 {
-    beNDMWStatus_PreviewEquipment(self, self->_subSlot, self->_kindListPos, index);
+    beNDMWStatus_PreviewEquipment((beNDMWStatusCtrlBaseEquip *)self, (ItemList *)self->_subSlot, self->_kindListPos, (int)index);
 }
 
 void beNDMWStatusSubSlot_OpenPocketList(void)
@@ -4831,45 +4961,12 @@ void StringRefList_ResetRange(igStringRefList *arg0, int arg1, int arg2) {
     }
 }
 
-void ObjectList_ZeroRange(igObjectList *arg0, int arg1, int arg2) {
-    int temp_a4;
-    int var_a1;
-    int var_a3;
-
-    var_a1 = arg1;
-    temp_a4 = var_a1 + arg2;
-    var_a3 = var_a1 * 4;
-    if (var_a1 < temp_a4) {
-        do {
-            var_a1 += 1;
-            *(int *)((char *)arg0->_data + var_a3) = 0;
-            var_a3 += 4;
-        } while (var_a1 < temp_a4);
-    }
+void ObjectList_ZeroRange(igObjectList *list, int first, int count) {
+    ZeroRange(list, first, count);
 }
 
-void ObjectList_ReleaseRange(igObjectList *arg0, int arg1, int arg2) {
-    int temp_s2;
-    int var_s1;
-    int var_s0;
-    igObject *temp_a0;
-
-    temp_s2 = arg1 + arg2;
-    var_s1 = arg1;
-    if (arg1 < temp_s2) {
-        var_s0 = arg1 * 4;
-        do {
-            temp_a0 = *(igObject **)(arg0->_data + var_s0);
-            if (temp_a0 != 0) {
-                temp_a0->_refCount = temp_a0->_refCount - 1;
-                if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(temp_a0);
-                }
-            }
-            var_s1 += 1;
-            var_s0 += 4;
-        } while (var_s1 < temp_s2);
-    }
+void ObjectList_ReleaseRange(igObjectList *list, int first, int count) {
+    ReleaseRange(list, first, count);
 }
 
 void **ObjectRef_AssignRetained(void **arg0, igObject *arg1) {

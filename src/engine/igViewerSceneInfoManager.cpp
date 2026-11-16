@@ -591,7 +591,7 @@ MessageReceiver *igMessageDefaultReceiver_CreateInstance(int);
 /* Registers the manager with the insight core: GUI receivers, the render order of the viewer's
  * renderers between the "Clear done" / "Scenes done" / "Overlays done" markers, the renderer's
  * viewport-resize receiver, and the renderers themselves; the GUI starts hidden. */
-void Gap__Viewer__igViewerSceneInfoManager__Activate(igViewerSceneInfoManager *self) {
+void igViewerSceneInfoManager_Activate(igViewerSceneInfoManager *self) {
     igViewerSceneInfoManager_OnActivate();
     igGuiSystem_SetRootComponent(self->_gui, self->_rootComponent);
     int dispatcher = ((igInsightCore *)self->_insight)->_dispatcher;
@@ -631,7 +631,7 @@ void Gap__Viewer__igViewerSceneInfoManager__Activate(igViewerSceneInfoManager *s
     igInsightCore_AddToScheduler(self->_insight, self);
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__Deactivate(igViewerSceneInfoManager *self) {
+void igViewerSceneInfoManager_Deactivate(igViewerSceneInfoManager *self) {
     igInsightCore_RemoveRenderer(self->_insight, ((igGuiSystem *)self->_gui)->_renderer);
     igInsightCore_RemoveRenderer(self->_insight, self->_bboxRenderer);
     igInsightCore_RemoveRenderer(self->_insight, self->_normalsRenderer);
@@ -678,7 +678,7 @@ void igViewerSceneInfoManager_CheckClipping(igViewerSceneInfoManager *self) {
     }
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__Update(igViewerSceneInfoManager *self) {
+void igViewerSceneInfoManager_Update(igViewerSceneInfoManager *self) {
     long long frameTime;
     igInsightCore *insight;
 
@@ -691,7 +691,7 @@ void Gap__Viewer__igViewerSceneInfoManager__Update(igViewerSceneInfoManager *sel
     igViewManager_SetFrameTime(self->_viewManager, frameTime);
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__RemoveAllInfo(igViewerSceneInfoManager *self) {
+void igViewerSceneInfoManager_RemoveAllInfo(igViewerSceneInfoManager *self) {
     igGroup *scene;
     int index;
     igObject *removed;
@@ -732,7 +732,7 @@ void Gap__Viewer__igViewerSceneInfoManager__RemoveAllInfo(igViewerSceneInfoManag
     RELEASE_ALL(self->_textureList)
 }
 
-int Gap__Viewer__igViewerSceneInfoManager__AddInfo(igViewerSceneInfoManager *self, igSceneInfo *info) {
+int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo *info) {
     ViewerMessage sceneChanged, upVectorChanged, camerasChanged, beginChanged, endChanged;
     SharedViewerOptions *options;
     bool useSceneUpVector;
@@ -1129,11 +1129,11 @@ void igViewerSceneInfoManager_ApplyOperationMode(igViewerSceneInfoManager *self)
     }
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__vfunc_25(void) {
+void igViewerSceneInfoManager_Start(void) {
 
 }
 
-void Gap__Viewer__igViewerSceneInfoManager__vfunc_26(void) {
+void igViewerSceneInfoManager_Stop(void) {
 
 }
 

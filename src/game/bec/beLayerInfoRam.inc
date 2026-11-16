@@ -1,9 +1,9 @@
 igMetaObject *g_beLayerInfoRam_metaObject;
 
-void *FUN_0035c280(void) {
+void *beLayerInfoRam_GetMetaObject(void) {
     igMetaObject *g = g_beLayerInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035c370();
+        beLayerInfoRam_EnsureRegistered();
     }
     return g_beLayerInfoRam_metaObject;
 }
@@ -14,12 +14,12 @@ int beLayerInfoRam_GetVTable(void) {
     int temp_s0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00539e90[0];
+    u.vt = (int)&g_beBaseInfoRam_vtable[0];
     q0 = (S_ref *)&u.b[40];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_00536680[0];
+    u.vt = (int)&g_beLayerInfoRam_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00539e90[0];
+    u.vt = (int)&g_beBaseInfoRam_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -32,7 +32,7 @@ int beLayerInfoRam_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0035c370(void)
+void beLayerInfoRam_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLayerInfoRam_Register);
 }
@@ -44,7 +44,7 @@ void *beLayerInfoRam_Register(void) {
         &g_beLayerInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
-        beLayerInfoRam_GetMetaObject,
+        beLayerInfoRam_GetMetaObjectFunction,
         "beLayerInfoRam",
         0x2c, /* instance size */
         beLayerInfoRam_GetVTable,
@@ -54,8 +54,8 @@ void *beLayerInfoRam_Register(void) {
     );
 }
 
-void beLayerInfoRam_GetMetaObject(void)
+void beLayerInfoRam_GetMetaObjectFunction(void)
 {
-    FUN_0035c280();
+    beLayerInfoRam_GetMetaObject();
 }
 

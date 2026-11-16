@@ -190,7 +190,7 @@ extern "C" int List_RemoveWordAt(beLoadIntf2ComMdlDataList *list, int index);
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self);
 extern "C" igObject *igInsightCore_FindManager(int, int);
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void beNDMWLoadIntf2__ResolvePadManager(beNDMWLoadIntf2 *self);
+extern "C" void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 extern "C" int DataList_GetData_003e9090(igDataList *list);
 extern "C" void beNDMWLoadSavePlWork__SetIsCtrl(beNDMWLoadSavePlWork *work, int isCtrl);
@@ -206,7 +206,7 @@ extern "C" int g_beNDMWLoadIntf2Info_metaObject[4];
 extern "C" int g_beNDMWLoadIntf2_metaObject[4];
 extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, const void *);
-extern "C" void beNDMWLoadIntf2__RegisterReceivers(beNDMWLoadIntf2 *self, beBaseInfoRam *ram);
+extern "C" void beNDMWLoadIntf2_OnAddRam(beNDMWLoadIntf2 *self, beBaseInfoRam *ram);
 
 /* The request a beNDMWLoadIntf2DegiState is carrying out (_st0). */
 enum DegiStateRequest {
@@ -655,7 +655,7 @@ static inline void EndInterface(beNDMWLoadCtrl2CommonIntf *common) {
  * and advances the player's stage (_sysStat0: screens, system message, close, card utility, utility
  * error, utility done, resume) and, while the screens run, the CtrlData screen state machine (open,
  * wait for a pad, join, new or load, Digimon choice, name, slot, save data, start). */
-extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *host) {
+extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *host) {
   /* These locals keep the original declaration order, which decides their register and stack
    * assignment; moving most of them to their first use or into the scope that uses them changes
    * the allocation. */
@@ -4525,7 +4525,7 @@ extern int g_propertyNameField[4];
 extern int g_beSystem_metaObject[4];
 extern int g_beLua_metaObject[4];
 
-int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMessengerWork *message);
+int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMessengerWork *message);
 }
 
 /* The values of the LoadIntf2 Message enum (LoadIntf2Message_GetMetaEnum). */
@@ -4760,7 +4760,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self) {
 }
 
 /* Looks the pad manager up through the insight on first use and keeps a reference to it. */
-void beNDMWLoadIntf2__ResolvePadManager(beNDMWLoadIntf2 *self) {
+void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self) {
     igObject *found;
     igObject *previous;
 
@@ -4891,7 +4891,7 @@ int beNDMWLoadIntf2__GetInfoMeta(void)
 }
 
 /* Registers the info record as a receiver of LOADINTF2_ALL and of LOADINTF2 for its ram number. */
-void beNDMWLoadIntf2__RegisterReceivers(beNDMWLoadIntf2 *self, beBaseInfoRam *ram) {
+void beNDMWLoadIntf2_OnAddRam(beNDMWLoadIntf2 *self, beBaseInfoRam *ram) {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "LOADINTF2_ALL");
     beMessenger_RegisterReceiver(self->_messenger, ram, "LOADINTF2", 0, ram->_ramNo);
 }
@@ -4901,7 +4901,7 @@ void beNDMWLoadIntf2__RegisterReceivers(beNDMWLoadIntf2 *self, beBaseInfoRam *ra
  * shared common interface fetched from LOADCTRL2, character maker, model control, text order,
  * slot, name, message, status, data and difficulty selectors); the rest read or set the control
  * data, and SETSELECT_DATA removes a player whose save data is not ready from the game. */
-int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMessengerWork *message) {
+int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMessengerWork *message) {
     unsigned int command;
     beNDMWLoadIntf2CtrlData *control;
     beNDMWLoadCtrl2CommonIntf *common;

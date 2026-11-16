@@ -17,7 +17,7 @@ int igPsx2AudioSourceList_GetVTable(void) {
     struct SourceListProbe obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524b80[0];
+    obj.vt = &g_igPsx2AudioSourceList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -7,7 +7,7 @@ struct R { int w0; int rc; };
 R *igInsightCore_FindManager(...);
 int igObject_Destroy(...);
 extern int g_igViewerSceneInfoManager_metaObject[4];
-void Gap__Viewer__igActorManager__vfunc_25(igActorManager *arg0);
+void igActorManager_Start(igActorManager *arg0);
 
 int igInsightCore_AddToScheduler(...);
 
@@ -44,7 +44,7 @@ static inline int indexOf(struct ActorList *list, const int *value) {
 
 extern int g_igActorManager_metaObject[4];
 
-void Gap__Viewer__igActorManager__vfunc_25(igActorManager *arg0) {
+void igActorManager_Start(igActorManager *arg0) {
     R *temp_v0;
     R *temp_a0;
 
@@ -64,20 +64,20 @@ void Gap__Viewer__igActorManager__vfunc_25(igActorManager *arg0) {
     ((W *)arg0->_skelViewport)->vX(0, 0, 0, 0, 0.0f, 0.2f);
 }
 
-void Gap__Viewer__igActorManager__vfunc_26(void) {
+void igActorManager_Stop(void) {
 
 }
 
-void Gap__Viewer__igActorManager__vfunc_23(int arg0) {
+void igActorManager_Activate(int arg0) {
     igInsightCore_AddToScheduler(*(int *)(arg0 + 12), arg0);
 }
 
-void Gap__Viewer__igActorManager__vfunc_24(int arg0) {
+void igActorManager_Deactivate(int arg0) {
     igInsightCore_RemoveFromScheduler(*(int *)((char *)(arg0) + 12), arg0);
 }
 
 /* Releases every actor the manager holds and leaves the actor list empty. */
-void Gap__Viewer__igActorManager__ClearActors(igActorManager *self) {
+void igActorManager_RemoveAllInfo(igActorManager *self) {
     igObjectList *actors = (igObjectList *)self->_actors;
     int count = actors->_count;
     int i;
@@ -99,7 +99,7 @@ void Gap__Viewer__igActorManager__ClearActors(igActorManager *self) {
 }
 
 /* The list pointer is re-read in the body and in the loop test, with a `0 < n` guard. */
-int Gap__Viewer__igActorManager__vfunc_27(int arg0, A *arg1) {
+int igActorManager_AddInfo(int arg0, A *arg1) {
     int i;
     int off;
     if (igObject_IsKindOf(arg1, igActorInfo_GetMetaObject()) != 0) {
@@ -126,7 +126,7 @@ void FUN_00467030(struct ActorListOwner *arg0, int arg1) {
     }
 }
 
-void Gap__Viewer__igActorManager__vfunc_29(void) {
+void igActorManager_Update(void) {
 
 }
 

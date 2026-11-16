@@ -1,19 +1,19 @@
 igMetaObject *g_beFontImageList_metaObject;
 
-igMetaObject *FUN_00361750(void) {
+igMetaObject *beFontImageList_GetOrCreateMetaObject(void) {
     if (g_beFontImageList_metaObject == 0) {
         g_beFontImageList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beFontImageList_metaObject;
 }
 
-igMetaObject *FUN_003617a0(void) {
+igMetaObject *beFontImageList_GetMetaObject(void) {
     igMetaObject *g = g_beFontImageList_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_00361830();
+    beFontImageList_EnsureRegistered();
 done:
     return g_beFontImageList_metaObject;
 }
@@ -22,16 +22,16 @@ int beFontImageList_GetVTable(void) {
     struct Obj_3617f0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00535a90[0];
+    obj.vt = &g_beFontImageList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00361830(void)
+void beFontImageList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beFontImageList_Register);
 }
 
-static igMetaObjectCallback g_beFontImageList_callbackList[] = { FUN_00361c70, 0 };
+static igMetaObjectCallback g_beFontImageList_callbackList[] = { beFontImage_EnsureRegistered, 0 };
 
 void *beFontImageList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -40,7 +40,7 @@ void *beFontImageList_Register(void) {
         &g_beFontImageList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beFontImageList_GetMetaObject,
+        beFontImageList_GetMetaObjectFunction,
         "beFontImageList",
         0x14, /* instance size */
         beFontImageList_GetVTable,
@@ -50,8 +50,8 @@ void *beFontImageList_Register(void) {
     );
 }
 
-void beFontImageList_GetMetaObject(void)
+void beFontImageList_GetMetaObjectFunction(void)
 {
-    FUN_003617a0();
+    beFontImageList_GetMetaObject();
 }
 

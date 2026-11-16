@@ -1,21 +1,21 @@
 igMetaObject *g_beParticleCtrl2_metaObject;
 
 void beParticleCtrl2_CreateInstance(int arg0) {
-    FUN_0034c7f0();
+    beParticleCtrl2_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588510, arg0);
 }
 
-igMetaObject *FUN_0034c670(void) {
+igMetaObject *beParticleCtrl2_GetOrCreateMetaObject(void) {
     if (g_beParticleCtrl2_metaObject == 0) {
         g_beParticleCtrl2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beParticleCtrl2_metaObject;
 }
 
-void *FUN_0034c6c0(void) {
+void *beParticleCtrl2_GetMetaObject(void) {
     igMetaObject *g = g_beParticleCtrl2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034c7f0();
+        beParticleCtrl2_EnsureRegistered();
     }
     return g_beParticleCtrl2_metaObject;
 }
@@ -32,12 +32,12 @@ int beParticleCtrl2_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_0053b0b0[0];
+    u.vt = (int)&g_beParticleCtrl2_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -62,7 +62,7 @@ int beParticleCtrl2_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0034c7f0(void)
+void beParticleCtrl2_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beParticleCtrl2_Register);
 }
@@ -74,7 +74,7 @@ void *beParticleCtrl2_Register(void) {
         &g_beParticleCtrl2_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beParticleCtrl2_GetMetaObject,
+        beParticleCtrl2_GetMetaObjectFunction,
         "beParticleCtrl2",
         0x20, /* instance size */
         beParticleCtrl2_GetVTable,
@@ -84,8 +84,8 @@ void *beParticleCtrl2_Register(void) {
     );
 }
 
-void beParticleCtrl2_GetMetaObject(void)
+void beParticleCtrl2_GetMetaObjectFunction(void)
 {
-    FUN_0034c6c0();
+    beParticleCtrl2_GetMetaObject();
 }
 

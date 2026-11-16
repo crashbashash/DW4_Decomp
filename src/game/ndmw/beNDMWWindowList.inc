@@ -1,15 +1,15 @@
 igMetaObject *g_beNDMWWindowList_metaObject;
 igMetaEnum *g_beNDMWWindowList_subWndMetaEnum;
 
-igMetaObject *FUN_003b1be0(void) {
+igMetaObject *beNDMWWindowList_GetOrCreateMetaObject(void) {
     if (g_beNDMWWindowList_metaObject == 0) {
         g_beNDMWWindowList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNDMWWindowList_metaObject;
 }
 
-igMetaObject *FUN_003b1c30(void) {
-    if (g_beNDMWWindowList_metaObject == 0 || !isValid(g_beNDMWWindowList_metaObject)) FUN_003b1cc0();
+igMetaObject *beNDMWWindowList_GetMetaObject(void) {
+    if (g_beNDMWWindowList_metaObject == 0 || !isValid(g_beNDMWWindowList_metaObject)) beNDMWWindowList_EnsureRegistered();
     return g_beNDMWWindowList_metaObject;
 }
 
@@ -17,16 +17,16 @@ int beNDMWWindowList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053ddc0[0];
+    obj.vt = &g_beNDMWWindowList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003b1cc0(void)
+void beNDMWWindowList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWWindowList_Register);
 }
 
-static igMetaObjectCallback g_beNDMWWindowList_callbackList[] = { FUN_003b1e70, 0 };
+static igMetaObjectCallback g_beNDMWWindowList_callbackList[] = { beNDMWWindow_EnsureRegistered, 0 };
 
 void *beNDMWWindowList_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -35,7 +35,7 @@ void *beNDMWWindowList_Register(void) {
         &g_beNDMWWindowList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beNDMWWindowList_GetMetaObject,
+        beNDMWWindowList_GetMetaObjectFunction,
         "beNDMWWindowList",
         0x14, /* instance size */
         beNDMWWindowList_GetVTable,
@@ -45,9 +45,9 @@ void *beNDMWWindowList_Register(void) {
     );
 }
 
-void beNDMWWindowList_GetMetaObject(void)
+void beNDMWWindowList_GetMetaObjectFunction(void)
 {
-    FUN_003b1c30();
+    beNDMWWindowList_GetMetaObject();
 }
 
 static const char *g_beNDMWWindowList_subWndNames[] = {

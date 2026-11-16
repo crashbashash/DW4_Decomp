@@ -70,11 +70,11 @@ int igVertexStream_GetVTable(void) {
     igObject_InitHeader(u.b);
     q0 = (void **)&u.b[8];
     *q0 = 0;
-    u.vt = (int)(&DAT_005263a0[0]);
+    u.vt = (int)(&g_igVertexStream_vtable[0]);
     q1 = (S_ref *)&u.b[20];
     *(int *)q1 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)(&DAT_005263a0[0]);
+    u.vt = (int)(&g_igVertexStream_vtable[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
         if (q1 != 0) {

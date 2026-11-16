@@ -29,13 +29,13 @@ int igCompressedTransformSequence1_5Data_GetVTable(void) {
     struct Obj_1a2590 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052a6d0[0];
+    obj.vt = &g_igCompressedTransformSequence1_5Data_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052a6d0[0];
+    obj.vt = &g_igCompressedTransformSequence1_5Data_vtable[0];
     FUN_00164870(&obj.w5, -1);
     FUN_00164870(&obj.w4, -1);
     FUN_00164870(&obj.w3, -1);

@@ -1,9 +1,9 @@
 igMetaObject *g_beDataBaseList_metaObject;
 
-void *FUN_003657a0(void) {
+void *beDataBaseList_GetMetaObject(void) {
     igMetaObject *g = g_beDataBaseList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00365830();
+        beDataBaseList_EnsureRegistered();
     }
     return g_beDataBaseList_metaObject;
 }
@@ -12,16 +12,16 @@ int beDataBaseList_GetVTable(void) {
     struct Obj_3657f0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005351c0[0];
+    obj.vt = &g_beDataBaseList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00365830(void)
+void beDataBaseList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataBaseList_Register);
 }
 
-static igMetaObjectCallback g_beDataBaseList_callbackList[] = { FUN_00365b00, 0 };
+static igMetaObjectCallback g_beDataBaseList_callbackList[] = { beDataBase_EnsureRegistered, 0 };
 
 void *beDataBaseList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -30,7 +30,7 @@ void *beDataBaseList_Register(void) {
         &g_beDataBaseList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beDataBaseList_GetMetaObject,
+        beDataBaseList_GetMetaObjectFunction,
         "beDataBaseList",
         0x14, /* instance size */
         beDataBaseList_GetVTable,
@@ -40,8 +40,8 @@ void *beDataBaseList_Register(void) {
     );
 }
 
-void beDataBaseList_GetMetaObject(void)
+void beDataBaseList_GetMetaObjectFunction(void)
 {
-    FUN_003657a0();
+    beDataBaseList_GetMetaObject();
 }
 

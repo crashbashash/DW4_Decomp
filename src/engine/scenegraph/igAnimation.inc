@@ -1,5 +1,5 @@
 int FUN_001a90f0(int arg0) {
-    FUN_001a9290();
+    igAnimation_EnsureRegistered();
     return igMetaObject_CreateInstance((int)g_igAnimation_metaObject, arg0);
 }
 
@@ -24,7 +24,7 @@ igMetaObject *igAnimation_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimation_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a9290();
+        igAnimation_EnsureRegistered();
     return g_igAnimation_metaObject;
 }
 
@@ -35,7 +35,7 @@ int igAnimation_GetVTable(void) {
     char *p100;
     char *p96;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052a9b0[0];
+    u.vt = (int)&g_igAnimation_vtable[0];
     *(int *)&u.b[8] = 0;
     p96 = &u.b[16];
     *(int *)p96 = 0;
@@ -45,7 +45,7 @@ int igAnimation_GetVTable(void) {
     *(int *)p104 = 0;
     *(int *)&u.b[56] = 0;
     temp_s = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052a9b0[0];
+    u.vt = (int)&g_igAnimation_vtable[0];
     FUN_00196a50((struct R * *)&u.b[56], -1);
     FUN_0019de50((struct Ref * *)p104, -1);
     FUN_0019ded0((void * *)p100, -1);
@@ -54,12 +54,12 @@ int igAnimation_GetVTable(void) {
     return temp_s;
 }
 
-void FUN_001a9290(void)
+void igAnimation_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimation_Register);
 }
 
-static igMetaObjectCallback g_igAnimation_callbackList[] = { FUN_001a8ba0, FUN_001a9e70, FUN_001a9500, FUN_001a4e70, 0 };
+static igMetaObjectCallback g_igAnimation_callbackList[] = { igAnimationBindingList_EnsureRegistered, igAnimationTrackList_EnsureRegistered, igAnimationTransitionDefinitionList_EnsureRegistered, igBitMask_EnsureRegistered, 0 };
 
 void igAnimation_Register(void) {
     SceneGraphLibrary_MarkRegistered();

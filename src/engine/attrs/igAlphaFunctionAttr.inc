@@ -3,7 +3,7 @@ igMetaField *g_igAlphaFunctionAttr_funcMetaField;
 igMetaField *g_igAlphaFunctionAttr_refValueMetaField;
 
 void FUN_0013b490(int arg0) {
-    FUN_0013b560();
+    igAlphaFunctionAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F490, arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igAlphaFunctionAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igAlphaFunctionAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013b560();
+        igAlphaFunctionAttr_EnsureRegistered();
     return g_igAlphaFunctionAttr_metaObject;
 }
 
@@ -19,11 +19,11 @@ int igAlphaFunctionAttr_GetVTable(void) {
     Obj_13b520 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_00524390[0];
+    o.vt = &g_igAlphaFunctionAttr_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0013b560(void)
+void igAlphaFunctionAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAlphaFunctionAttr_Register);
 }

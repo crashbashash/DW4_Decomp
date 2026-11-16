@@ -17,14 +17,14 @@ igMetaField *g_beNDMWLoadIntf2DegiState_st2MetaField;
 igMetaField *g_beNDMWLoadIntf2DegiState_st3MetaField;
 
 void beNDMWLoadIntf2DegiState_Create(int arg0) {
-    FUN_003c3f10();
+    beNDMWLoadIntf2DegiState_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiState_metaObject, arg0);
 }
 
 void *beNDMWLoadIntf2DegiState_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWLoadIntf2DegiState_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c3f10();
+        beNDMWLoadIntf2DegiState_EnsureRegistered();
     }
     return g_beNDMWLoadIntf2DegiState_metaObject;
 }
@@ -32,16 +32,16 @@ void *beNDMWLoadIntf2DegiState_ResolveMetaObject(void) {
 int beNDMWLoadIntf2DegiState_GetVTable(void) {
     struct Obj_3c3ed0 o;
     igObject_InitHeader(&o);
-    o.vt = &DAT_0053cf90[0];
+    o.vt = &g_beNDMWLoadIntf2DegiState_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c3f10(void)
+void beNDMWLoadIntf2DegiState_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadIntf2DegiState_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadIntf2DegiState_callbackList[] = { FUN_003c7090, FUN_003c7830, FUN_003c4f00, FUN_00357d10, 0 };
+static igMetaObjectCallback g_beNDMWLoadIntf2DegiState_callbackList[] = { beNDMWLoadIntf2ComMdlCtrl_EnsureRegistered, beNDMWLoadIntf2TextOrder_EnsureRegistered, beNDMWLoadCtrl2CommonIntf_EnsureRegistered, beMessenger_EnsureRegistered, 0 };
 
 void *beNDMWLoadIntf2DegiState_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -150,16 +150,16 @@ void beNDMWLoadIntf2DegiState_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWLoadIntf2DegiState_ctorTable, 0x10);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c6ee0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_003c7700();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_003c4c20();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_3)->_refCounted = 0;
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_00357910();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_4)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, g_beNDMWLoadIntf2DegiState_fieldTable, g_beNDMWLoadIntf2DegiState_fieldHandles, g_beNDMWLoadIntf2DegiState_fieldOffsets, temp_s2);
 }

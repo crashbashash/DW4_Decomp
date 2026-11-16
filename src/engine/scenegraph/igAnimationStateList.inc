@@ -11,18 +11,18 @@ igMetaObject *igAnimationStateList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationStateList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a6a00();
+        igAnimationStateList_EnsureRegistered();
     return g_igAnimationStateList_metaObject;
 }
 
 int igAnimationStateList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_00529fb0[0];
+    obj[0] = (int)&g_igAnimationStateList_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_001a6a00(void)
+void igAnimationStateList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationStateList_Register);
 }

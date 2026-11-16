@@ -3,10 +3,10 @@
 
 `data/vtables.json` maps a vtable to its class from the class's `__RTTI__` record, and the
 RTTI pass names those slots.  But only **478** classes emit an RTTI record; every class still
-has its own `<Class>_GetVTable` function, and that function builds the class's vtable as the
-**first rodata-range value stored to a stack slot** (the same rule `seed_names_metafield_slots.py`
-uses for the MetaField subclasses).  Resolving those gives **958 distinct vtables /
-980 classes**, of which **499 are not RTTI records** — and each one's slots are unnamed.
+has its own `<Class>_GetVTable` function, and that function stamps the class's vtable on a stack
+temporary: the **last rodata-range value stored to the slot the first one goes to, before the
+read** (an inlined base constructor stamps the base's table first; `class_vtable`).  Resolving
+those gives the RTTI-less vtables (`data/vtables-getvtable.json`, `--json`), and each one's slots are unnamed.
 
 A table ends where code loads the address of the next one. A slot body that (a) is an unmatched
 `FUN_`, (b) is used by exactly one class's vtable and pointed at by nothing else, and (c) is not
@@ -85,24 +85,34 @@ def main():
     ambiguous = {int(x["addr"], 16) for x in vt["ambiguous"]}
 
     def class_vtable(va, size):
-        """The first rodata-range value stored to a stack slot."""
-        reg = {}
+        """The class's own vtable as GetVTable stamps it on its temporary: the last rodata-range value
+        stored to the stack slot the first one goes to, up to the read (`addu rd, rs, sp`, the
+        object-system offset added to the frame).  An inlined base constructor stamps its own vtable
+        first and the class's own goes over it.  When the constructor is called out of line, the read
+        comes first and the destructor's first stamp is the class's own (its later ones are the bases')."""
+        reg, slot, found, read = {}, None, None, False
         for k in range(size // 4):
             ins = word(va + 4 * k)
             if ins is None:
                 break
             op, rs, rt, imm = ins >> 26, (ins >> 21) & 0x1F, (ins >> 16) & 0x1F, ins & 0xFFFF
+            if op == 0 and (ins & 0x3F) == 0x21 and 29 in (rs, rt):
+                if found is not None:
+                    break                                         # addu rd, rs, sp: the read
+                read = True
             if op == 0x0F:                                        # lui
                 reg[rt] = imm << 16
             elif op in (0x09, 0x0D) and rs in reg:                # addiu / ori
                 reg[rt] = reg[rs] + (imm - 0x10000 if imm & 0x8000 else imm)
             elif op == 0x2B and rs == 29:                         # sw rt,imm(sp)
                 v = reg.pop(rt, None)
-                if v is not None and VLO <= v < VHI:
-                    return v
+                if v is not None and VLO <= v < VHI and slot in (None, imm):
+                    if read:
+                        return v
+                    slot, found = imm, v
             else:
                 reg.pop(rt, None)
-        return None
+        return found
 
     def loaded_addresses():
         """Every vtable-range address built by a lui/addiu pair: code names only a table's start."""

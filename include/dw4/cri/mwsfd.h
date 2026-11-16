@@ -6,18 +6,18 @@
 
 #define MWSFD_NPLY 8
 
-/* the init parameters of mwPlyInitSfdFx */
+/* the init parameters of mwPlyInitSfdFx, which copies all 32 bytes into the work area */
 typedef struct MwsfdInitPrm {
     float vhz;          /* 0 */
     int dispCycle;      /* 4 */
     int dispLatency;    /* 8 */
     void *decSvr;       /* 12: the decode server; 1 runs it in a thread (typed apart from the ints: mwsflib_InitLibWork matches only so) */
+    int reserved16[4];  /* 16 */
 } MwsfdInitPrm;
 
 typedef struct MwsfdWork {
     int f0;
     MwsfdInitPrm prm;              /* 4 */
-    char pad20[16];
     int waitingSvr;                /* 36 */
     void *(*mallocFn)(void *obj, int size);  /* 40: MWSFD_SetMallocFunc */
     void (*freeFn)(void *obj, void *ptr);    /* 44 */

@@ -1,16 +1,16 @@
 igMetaObject *g_beMessengerGroupList_metaObject;
 
-igMetaObject *FUN_00358350(void) {
+igMetaObject *beMessengerGroupList_GetOrCreateMetaObject(void) {
     if (g_beMessengerGroupList_metaObject == 0) {
         g_beMessengerGroupList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beMessengerGroupList_metaObject;
 }
 
-void *FUN_003583a0(void) {
+void *beMessengerGroupList_GetMetaObject(void) {
     igMetaObject *g = g_beMessengerGroupList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00358430();
+        beMessengerGroupList_EnsureRegistered();
     }
     return g_beMessengerGroupList_metaObject;
 }
@@ -19,11 +19,11 @@ int beMessengerGroupList_GetVTable(void) {
     struct Obj_3583f0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00536ea0[0];
+    obj.vt = &g_beMessengerGroupList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00358430(void)
+void beMessengerGroupList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMessengerGroupList_Register);
 }
@@ -37,7 +37,7 @@ void *beMessengerGroupList_Register(void) {
         &g_beMessengerGroupList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beMessengerGroupList_GetMetaObject,
+        beMessengerGroupList_GetMetaObjectFunction,
         "beMessengerGroupList",
         0x14, /* instance size */
         beMessengerGroupList_GetVTable,
@@ -47,8 +47,8 @@ void *beMessengerGroupList_Register(void) {
     );
 }
 
-void beMessengerGroupList_GetMetaObject(void)
+void beMessengerGroupList_GetMetaObjectFunction(void)
 {
-    FUN_003583a0();
+    beMessengerGroupList_GetMetaObject();
 }
 

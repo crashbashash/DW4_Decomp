@@ -22,10 +22,10 @@ int igViewerLoadingFileMessage_GetVTable(void) {
     int v0;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00542100[0];
+    obj.vt = &g_igViewerLoadingFileMessage_vtable[0];
     obj.m = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    obj.vt = &DAT_00542100[0];
+    obj.vt = &g_igViewerLoadingFileMessage_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
         if (o != 0) {

@@ -50,7 +50,7 @@ void FUN_00141190(int *arg0, int arg1) {
             }
         }
     } else if (arg1 == 2) {
-        FUN_00140ad0((T_140ad0 *)arg0, (int *)0, 0);
+        igTextureAttr_SetImage((T_140ad0 *)arg0, (int *)0, 0);
     }
 }
 

@@ -3,16 +3,16 @@ igMetaField *g_beSvGetFreeSizeApi_memNeedMetaField;
 igMetaField *g_beSvGetFreeSizeApi_memCapaMetaField;
 igMetaField *g_beSvGetFreeSizeApi_fileCapaMetaField;
 
-void FUN_00348c70(int arg0) {
-    FUN_00348e40();
+void beSvGetFreeSizeApi_Create(int arg0) {
+    beSvGetFreeSizeApi_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588200, arg0);
 }
 
-igMetaObject *FUN_00348cb0(void) {
+igMetaObject *beSvGetFreeSizeApi_GetMetaObject(void) {
     igMetaObject *g = g_beSvGetFreeSizeApi_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_00348e40();
+        beSvGetFreeSizeApi_EnsureRegistered();
     return g_beSvGetFreeSizeApi_metaObject;
 }
 
@@ -27,16 +27,16 @@ int beSvGetFreeSizeApi_GetVTable(void) {
     char *p78;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     p70 = &u.b[48];
     *(int *)p70 = 0;
     p74 = &u.b[52];
     *(int *)p74 = 0;
     p78 = &u.b[56];
     *(int *)p78 = 0;
-    u.vt = (int)&DAT_0053bd60[0];
+    u.vt = (int)&g_beSvGetFreeSizeApi_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     if (p78 != 0) {
         v1 = *(int **)p78;
         if (v1 != 0) {
@@ -67,7 +67,7 @@ int beSvGetFreeSizeApi_GetVTable(void) {
     return r;
 }
 
-void FUN_00348e40(void)
+void beSvGetFreeSizeApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvGetFreeSizeApi_Register);
 }
@@ -79,7 +79,7 @@ void *beSvGetFreeSizeApi_Register(void) {
         &g_beSvGetFreeSizeApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
-        beSvGetFreeSizeApi_GetMetaObject,
+        beSvGetFreeSizeApi_GetMetaObjectFunction,
         "beSvGetFreeSizeApi",
         0x58, /* instance size */
         beSvGetFreeSizeApi_GetVTable,
@@ -89,9 +89,9 @@ void *beSvGetFreeSizeApi_Register(void) {
     );
 }
 
-void beSvGetFreeSizeApi_GetMetaObject(void)
+void beSvGetFreeSizeApi_GetMetaObjectFunction(void)
 {
-    FUN_00348cb0();
+    beSvGetFreeSizeApi_GetMetaObject();
 }
 
 static FieldFactory g_beSvGetFreeSizeApi_ctorTable[] = {

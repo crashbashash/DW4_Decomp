@@ -1,6 +1,6 @@
 igMetaObject *g_igAppearanceList_metaObject;
 
-igMetaObject *FUN_001a5fe0(void) {
+igMetaObject *igAppearanceList_GetOrCreateMetaObject(void) {
     if (g_igAppearanceList_metaObject == 0) {
         g_igAppearanceList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -11,7 +11,7 @@ igMetaObject *igAppearanceList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAppearanceList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a60c0();
+        igAppearanceList_EnsureRegistered();
     return g_igAppearanceList_metaObject;
 }
 
@@ -19,16 +19,16 @@ int igAppearanceList_GetVTable(void) {
     struct Obj_1a6080 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052a0f0[0];
+    obj.vt = &g_igAppearanceList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001a60c0(void)
+void igAppearanceList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAppearanceList_Register);
 }
 
-static igMetaObjectCallback g_igAppearanceList_callbackList[] = { FUN_001a6450, 0 };
+static igMetaObjectCallback g_igAppearanceList_callbackList[] = { igAppearance_EnsureRegistered, 0 };
 
 void igAppearanceList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

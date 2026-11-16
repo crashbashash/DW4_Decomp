@@ -3,9 +3,9 @@
 This page covers the concrete `beSelectCtrl` receiver used by the
 [shop selectors](shop-selectors.md). All six of its bodies are in
 [beSelectCtrl.cpp](../../src/game/beSelectCtrl.cpp), in address order:
-`beSelectCtrl_EnsurePadManager` (`0x0039cb70`, 64 bytes), `beSelectCtrl_GetInfoMeta`
-(`0x0039cbb0`, 12 bytes), `beSelectCtrl_RegisterReceiver` (`0x0039cbc0`, 36 bytes),
-`beSelectCtrl_Update` (`0x0039cbf0`, 2,864 bytes), `beSelectCtrl_OnMessage`
+`beSelectCtrl_Prepare` (`0x0039cb70`, 64 bytes), `beSelectCtrl_GetInfoMeta`
+(`0x0039cbb0`, 12 bytes), `beSelectCtrl_OnAddRam` (`0x0039cbc0`, 36 bytes),
+`beSelectCtrl_UpdateRam` (`0x0039cbf0`, 2,864 bytes), `beSelectCtrl_OnMessageText`
 (`0x0039d720`, 1,960 bytes) and `beSelectCtrl_GetMeta` (`0x0039ded0`, 12 bytes).
 The inherited dispatch check is at `0x00378410` (8 bytes). The work creator
 `beSelectCtrlInfoWork_Create` (`0x00345680`) and the message enum
@@ -13,9 +13,9 @@ The inherited dispatch check is at `0x00378410` (8 bytes). The work creator
 
 ## Entry methods and ownership
 
-The RTTI-headed table at `0x0053b290` stores `beSelectCtrl_RegisterReceiver` at raw byte
-124, `beSelectCtrl_GetInfoMeta` at128, `beSelectCtrl_Update` at132,
-`beSelectCtrl_EnsurePadManager` at136, `beSelectCtrl_OnMessage` at140 and the inherited
+The RTTI-headed table at `0x0053b290` stores `beSelectCtrl_OnAddRam` at raw byte
+124, `beSelectCtrl_GetInfoMeta` at128, `beSelectCtrl_UpdateRam` at132,
+`beSelectCtrl_Prepare` at136, `beSelectCtrl_OnMessageText` at140 and the inherited
 check at144. These are raw offsets from the table header, not an index into a
 headerless function list.
 

@@ -35,12 +35,12 @@ public:
 };
 
 extern "C" {
-int Gap__Bec__beCameraCtrl__vfunc_30(void);
-int Gap__Bec__beCameraCtrl__vfunc_20(void);
-void Gap__Bec__beCameraCtrl__vfunc_29(beCameraCtrl *self, int ram, char *unused);
-void Gap__Bec__beCameraCtrl__vfunc_31(beCameraCtrl *self, beBaseInfoRam *ram);
-void Gap__Bec__beCameraCtrl__vfunc_32(beCameraCtrl *self);
-int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int message);
+int beCameraCtrl_GetInfoMeta(void);
+int beCameraCtrl_GetMeta(void);
+void beCameraCtrl_OnAddRam(beCameraCtrl *self, int ram, char *unused);
+void beCameraCtrl_UpdateRam(beCameraCtrl *self, beBaseInfoRam *ram);
+void beCameraCtrl_Prepare(beCameraCtrl *self);
+int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int message);
 int beCameraCtrl_IsBoxCamera(beCameraCtrl *self, beCameraCtrlInfo *info);
 int beCameraCtrl_IsDemoCamera(beCameraCtrl *self, beCameraCtrlInfo *info);
 void beCameraCtrl_EnableDebugZoom(beCameraCtrl *self, beBaseInfoRam *ram, int on);
@@ -152,17 +152,17 @@ struct DataList {
     }
 };
 
-int Gap__Bec__beCameraCtrl__vfunc_30(void)
+int beCameraCtrl_GetInfoMeta(void)
 {
     return g_beCameraCtrlInfo_metaObject[0];
 }
 
-void Gap__Bec__beCameraCtrl__vfunc_29(beCameraCtrl *self, int ram, char *unused)
+void beCameraCtrl_OnAddRam(beCameraCtrl *self, int ram, char *unused)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "CAMERA");
 }
 
-void Gap__Bec__beCameraCtrl__vfunc_32(beCameraCtrl *self) {
+void beCameraCtrl_Prepare(beCameraCtrl *self) {
     igObject *mode;
 
     self->_cameraNow = 0;
@@ -483,7 +483,7 @@ void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
     }
 }
 
-void Gap__Bec__beCameraCtrl__vfunc_31(beCameraCtrl *self, beBaseInfoRam *ram) {
+void beCameraCtrl_UpdateRam(beCameraCtrl *self, beBaseInfoRam *ram) {
     if (self->_isFirst != 0) {
         igInsightCore_RemoveFromScheduler(self->_insight, self);
         igInsightCore_AddToScheduler(self->_insight, self);
@@ -498,7 +498,7 @@ void Gap__Bec__beCameraCtrl__vfunc_31(beCameraCtrl *self, beBaseInfoRam *ram) {
     }
 }
 
-int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int message) {
+int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int message) {
     float pos[3];
     beCameraCtrlInfo *info = (beCameraCtrlInfo *)ram->_parentInfo;
     char *wanted;
@@ -700,7 +700,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
     }
 }
 
-int Gap__Bec__beCameraCtrl__vfunc_20(void)
+int beCameraCtrl_GetMeta(void)
 {
     return g_beCameraCtrl_metaObject[0];
 }

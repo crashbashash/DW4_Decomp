@@ -18,7 +18,7 @@ int igGeometryMaskAttr_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523840[0];
+    obj.vt = &g_igGeometryMaskAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

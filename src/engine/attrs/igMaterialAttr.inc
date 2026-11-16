@@ -10,7 +10,7 @@ igMetaObject *igMaterialAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igMaterialAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00135c70();
+        igMaterialAttr_EnsureRegistered();
     return g_igMaterialAttr_metaObject;
 }
 
@@ -18,11 +18,11 @@ int igMaterialAttr_GetVTable(void) {
     struct Obj_135c30 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523540[0];
+    obj.vt = &g_igMaterialAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00135c70(void)
+void igMaterialAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMaterialAttr_Register);
 }

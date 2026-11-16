@@ -197,7 +197,7 @@ void FUN_001e2d60(IgForwardTarget_1e2d60 *o) { o->slot23(); }
 
 void FUN_001e2d70(IgForwardTarget_1e2d70 *o) { o->slot25(); }
 
-void Gap__Core__igObject__vfunc_35(int a0) {
+void igTransform_SetMatrix(int a0) {
     igMatrix44f_Copy((char *)a0 + 32);
 }
 

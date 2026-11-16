@@ -34,7 +34,7 @@ int igRenderPackage_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052b480[0];
+    u.vt = (int)&g_igRenderPackage_vtable[0];
     q2 = (S_ref *)&u.b[8];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[16];
@@ -42,7 +42,7 @@ int igRenderPackage_GetVTable(void) {
     q0 = (S_ref *)&u.b[28];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052b480[0];
+    u.vt = (int)&g_igRenderPackage_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -78,7 +78,7 @@ void FUN_00197cc0(void)
     igMetaObject_RunStaticInit(igRenderPackage_Register);
 }
 
-static igMetaObjectCallback g_igRenderPackage_callbackList[] = { FUN_0013ae20, FUN_001978a0, 0 };
+static igMetaObjectCallback g_igRenderPackage_callbackList[] = { igNonRefCountedAttrList_EnsureRegistered, FUN_001978a0, 0 };
 
 void igRenderPackage_Register(void) {
     SceneGraphLibrary_MarkRegistered();

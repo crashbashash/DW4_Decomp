@@ -1,10 +1,10 @@
 igMetaObject *g_beActionStarterData2_metaObject;
 igMetaField *g_beActionStarterData2_rotationMetaField;
 
-void *FUN_0036ba10(void) {
+void *beActionStarterData2_GetMetaObject(void) {
     igMetaObject *g = g_beActionStarterData2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036bb30();
+        beActionStarterData2_EnsureRegistered();
     }
     return g_beActionStarterData2_metaObject;
 }
@@ -24,12 +24,12 @@ int beActionStarterData2_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = &u.p[2];
     *q2 = 0;
-    u.w[0] = (int)(&DAT_005344e0[0]);
+    u.w[0] = (int)(&g_beActionStarterData_vtable[0]);
     q3 = &u.p[3];
     *q3 = 0;
-    u.w[0] = (int)(&DAT_00534480[0]);
+    u.w[0] = (int)(&g_beActionStarterData2_vtable[0]);
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_005344e0[0]);
+    u.w[0] = (int)(&g_beActionStarterData_vtable[0]);
     if (q3 != 0) {
         temp_v1 = *q3;
         if (temp_v1 != 0) {
@@ -56,7 +56,7 @@ int beActionStarterData2_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_0036bb30(void)
+void beActionStarterData2_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beActionStarterData2_Register);
 }
@@ -68,7 +68,7 @@ void *beActionStarterData2_Register(void) {
         &g_beActionStarterData2_metaObject,
         beActionStarterData_Register,
         beActionStarterData_GetPublishedMetaObject,
-        beActionStarterData2_GetMetaObject,
+        beActionStarterData2_GetMetaObjectFunction,
         "beActionStarterData2",
         0x30, /* instance size */
         beActionStarterData2_GetVTable,
@@ -78,12 +78,12 @@ void *beActionStarterData2_Register(void) {
     );
 }
 
-void beActionStarterData2_GetMetaObject(void)
+void beActionStarterData2_GetMetaObjectFunction(void)
 {
-    FUN_0036ba10();
+    beActionStarterData2_GetMetaObject();
 }
 
-igMetaObject *FUN_0036bbe0(void) {
+igMetaObject *beActionStarterData_GetPublishedMetaObject(void) {
     return g_beActionStarterData_metaObject;
 }
 

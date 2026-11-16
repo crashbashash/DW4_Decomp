@@ -20,7 +20,7 @@ int igCharMetricsList_GetVTable(void) {
     Obj_452830 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_00541780[0];
+    o.vt = &g_igCharMetricsList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

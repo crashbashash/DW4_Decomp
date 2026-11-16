@@ -4,14 +4,14 @@ igMetaField *g_beNDMWStatusCtrlSkill_shinkaCtrlMetaField;
 igMetaField *g_beNDMWStatusCtrlSkill_skillListMetaField;
 
 void beNDMWStatusCtrlSkill_Create(int arg0) {
-    FUN_003b93e0();
+    beNDMWStatusCtrlSkill_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStatusCtrlSkill_metaObject, arg0);
 }
 
-void *FUN_003b92f0(void) {
+void *beNDMWStatusCtrlSkill_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWStatusCtrlSkill_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003b93e0();
+        beNDMWStatusCtrlSkill_EnsureRegistered();
     }
     return g_beNDMWStatusCtrlSkill_metaObject;
 }
@@ -29,24 +29,24 @@ int beNDMWStatusCtrlSkill_GetVTable(void) {
     *(int *)&u.b[68] = 0;
     *(int *)&u.b[72] = 0;
     *(int *)&u.b[76] = 0;
-    u.vt = (int)&DAT_0053ec80[0];
+    u.vt = (int)&g_beNDMWStatusCtrlSkill_vtable[0];
     p1 = &u.b[100];
     *(int *)p1 = 0;
     *(int *)&u.b[104] = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053ec80[0];
+    u.vt = (int)&g_beNDMWStatusCtrlSkill_vtable[0];
     igSmartPointer_igIntList_Destruct(&u.b[104], -1);
     FUN_003b8980((ObjectRefWord *)p1, -1);
     FUN_003b6770((int **)u.b, (long long)0);
     return temp_s1;
 }
 
-void FUN_003b93e0(void)
+void beNDMWStatusCtrlSkill_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusCtrlSkill_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusCtrlSkill_callbackList[] = { FUN_003c9650, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusCtrlSkill_callbackList[] = { beNDMWShinkaCtrl_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
 void *beNDMWStatusCtrlSkill_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -55,7 +55,7 @@ void *beNDMWStatusCtrlSkill_Register(void) {
         &g_beNDMWStatusCtrlSkill_metaObject,
         beNDMWListCtrl_Register,
         beNDMWListCtrl_GetPublishedMetaObject,
-        beNDMWStatusCtrlSkill_GetMetaObject,
+        beNDMWStatusCtrlSkill_GetMetaObjectFunction,
         "beNDMWStatusCtrlSkill",
         0x6c, /* instance size */
         beNDMWStatusCtrlSkill_GetVTable,
@@ -65,9 +65,9 @@ void *beNDMWStatusCtrlSkill_Register(void) {
     );
 }
 
-void beNDMWStatusCtrlSkill_GetMetaObject(void)
+void beNDMWStatusCtrlSkill_GetMetaObjectFunction(void)
 {
-    FUN_003b92f0();
+    beNDMWStatusCtrlSkill_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWStatusCtrlSkill_ctorTable[] = {
@@ -101,7 +101,7 @@ void beNDMWStatusCtrlSkill_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlSkill_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9480();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWShinkaCtrl_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();

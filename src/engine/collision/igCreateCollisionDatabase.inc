@@ -24,7 +24,7 @@ int igCreateCollisionDatabase_GetVTable(void) {
     igObject_InitHeader(&o);
     o.f[7] = 0;
     o.f[8] = 0;
-    o.vt = &DAT_0052d130[0];
+    o.vt = &g_igCreateCollisionDatabase_vtable[0];
     p16 = &o.f[12];
     *p16 = 0;
     p17 = &o.f[13];
@@ -33,7 +33,7 @@ int igCreateCollisionDatabase_GetVTable(void) {
     *p18 = 0;
     o.f[15] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_0052d130[0];
+    o.vt = &g_igCreateCollisionDatabase_vtable[0];
     igSmartPointer_igMetaObject_Destruct(&o.f[15], -1);
     igSmartPointer_igMetaObject_Destruct(p18, -1);
     FUN_00239530((O *)p17, -1);

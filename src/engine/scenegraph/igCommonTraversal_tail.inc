@@ -1,4 +1,4 @@
-static igMetaObjectCallback g_igCommonTraversal_callbackList[] = { FUN_001a5640, FUN_001960c0, FUN_0014a0e0, FUN_0014fde0, FUN_0013ab50, FUN_0013ae20, FUN_00197360, FUN_0019a4e0, FUN_0019a370, FUN_0019a090, FUN_00199c40, FUN_00199f20, FUN_00199db0, FUN_0019a200, FUN_00135ac0, FUN_00135090, FUN_001e40f0, FUN_001e4a50, FUN_00195de0, igIntList_EnsureRegistered, igStringObjList_EnsureRegistered, FUN_0019cb10, FUN_00199ad0, FUN_00131040, 0 };
+static igMetaObjectCallback g_igCommonTraversal_callbackList[] = { FUN_001a5640, FUN_001960c0, igVisualContext_EnsureRegistered, FUN_0014fde0, FUN_0013ab50, igNonRefCountedAttrList_EnsureRegistered, FUN_00197360, FUN_0019a4e0, FUN_0019a370, FUN_0019a090, FUN_00199c40, FUN_00199f20, FUN_00199db0, FUN_0019a200, FUN_00135ac0, igNormalizeNormalsStateAttr_EnsureRegistered, FUN_001e40f0, FUN_001e4a50, FUN_00195de0, igIntList_EnsureRegistered, igStringObjList_EnsureRegistered, FUN_0019cb10, FUN_00199ad0, FUN_00131040, 0 };
 
 void igCommonTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -240,7 +240,7 @@ void igCommonTraversal_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00195fe0();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igVisualContext_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0014fd40();
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)));

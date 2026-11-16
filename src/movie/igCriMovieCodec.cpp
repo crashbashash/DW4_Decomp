@@ -1,6 +1,10 @@
 #include "dw4/reflected.h"
 #include "dw4/igMemoryPoolView.h"
 #include "dw4/igSmartPointer.h"
+extern "C" {
+#include "dw4/cri/mwsfd.h"
+#include "dw4/cri/adxt.h"
+}
 
 /* igMovieInfo::_type: a movie of this type is an ADX audio stream played through ADXT instead of
  * a Sofdec video played through MWPLY. */
@@ -8,20 +12,6 @@ enum { kMovieTypeAdx = 2 };
 
 /* igMovieInfo::_state */
 enum { kMovieStatePlaying = 0, kMovieStatePaused = 1 };
-
-/* The MWPLY handle's function table: CRI's mwPly* entry points that are macros over it. */
-typedef struct MwPly MwPly;
-typedef struct MwPlyFunctions {
-    void *reserved0[5];
-    void (*destroy)(MwPly *ply);             /* +20 */
-    void *reserved24[2];
-    int (*getStat)(MwPly *ply);              /* +32 */
-    void *reserved36[1];
-    void (*pause)(MwPly *ply, int sw);       /* +40 */
-} MwPlyFunctions;
-struct MwPly {
-    MwPlyFunctions *functions;
-};
 
 /* mwPlyGetStat: the player ran to the end of the stream, or failed. */
 enum { kMwPlyStatPlayEnd = 3, kMwPlyStatError = 4 };
@@ -34,11 +24,6 @@ typedef struct MwsfdFrmObj {
 
 /* igCriMovieData::_macroFunction: hands a decoded frame to the display. */
 typedef unsigned char (*CriMovieFrameFunction)(igMovieInfo *movie, void *image);
-
-/* A held reference to an igObject. */
-typedef struct igObjectRef {
-    igObject *object;
-} igObjectRef;
 
 /* The codec's virtual functions from slot 20 on, for the slots it calls on itself; slots 0-19 are igObject's. */
 class igCriMovieCodecView {
@@ -58,6 +43,66 @@ public:
     virtual int syncPauseState(igMovieInfo *movie);
 };
 
+/* The video mode a visual context reports: NTSC (59.94 Hz) or PAL (50 Hz) refresh. */
+struct VideoMode {
+    unsigned char enable;
+    unsigned char interlace;
+    int outputFormat;
+    int fullHeight;
+    float refreshRate;
+    int swapInterval;
+    int pal;
+};
+
+/* The visual context's virtual functions up to the video mode query. */
+class igVisualContextView : public igVirtualObject {
+public:
+    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
+    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
+    virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
+    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();
+    virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40();
+    virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48();
+    virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56();
+    virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64();
+    virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72();
+    virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80();
+    virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88();
+    virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96();
+    virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104();
+    virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112();
+    virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120();
+    virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128();
+    virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136();
+    virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144();
+    virtual void d145(); virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152();
+    virtual void d153(); virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160();
+    virtual void d161(); virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168();
+    virtual void d169(); virtual void d170(); virtual void d171(); virtual void d172(); virtual void d173(); virtual void d174(); virtual void d175(); virtual void d176();
+    virtual void d177(); virtual void d178(); virtual void d179(); virtual void d180(); virtual void d181(); virtual void d182(); virtual void d183(); virtual void d184();
+    virtual void d185(); virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190(); virtual void d191(); virtual void d192();
+    virtual void d193(); virtual void d194(); virtual void d195(); virtual void d196(); virtual void d197(); virtual void d198(); virtual void d199(); virtual void d200();
+    virtual void d201(); virtual void d202(); virtual void d203(); virtual void d204(); virtual void d205(); virtual void d206(); virtual void d207(); virtual void d208();
+    virtual void d209(); virtual void d210(); virtual void d211(); virtual void d212(); virtual void d213(); virtual void d214(); virtual void d215(); virtual void d216();
+    virtual void d217(); virtual void d218(); virtual void d219(); virtual void d220(); virtual void d221(); virtual void d222(); virtual void d223(); virtual void d224();
+    virtual void d225(); virtual void d226(); virtual void d227(); virtual void d228(); virtual void d229(); virtual void d230(); virtual void d231(); virtual void d232();
+    virtual void d233(); virtual void d234(); virtual void d235(); virtual void d236(); virtual void d237(); virtual void d238(); virtual void d239(); virtual void d240();
+    virtual void d241(); virtual void d242(); virtual void d243(); virtual void d244(); virtual void d245(); virtual void d246(); virtual void d247(); virtual void d248();
+    virtual void d249(); virtual void d250(); virtual void d251();
+    virtual void getVideoMode(VideoMode *mode);
+};
+
+/* The file object's virtual functions up to the complete-filename slot. */
+class igFileView : public igVirtualObject {
+public:
+    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
+    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
+    virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
+    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();
+    virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38();
+    virtual char *makeCompleteFilename(const char *name);
+};
+
 extern "C" {
 int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called);
 static void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc);
@@ -69,7 +114,6 @@ static void Gif_SetTrxreg(void *qword, unsigned int rrw, unsigned int rrh);
 static void Gif_SetTrxdir(void *qword, unsigned int xdir);
 int CriMovie_BuildFrameUpload(void *packet, void *image, int x, int y, int width, int height, int called);
 int CriMovie_SubmitFrame(igMovieInfo *movie, void *image);
-igObjectRef *CriMovie_DestroyObjectRef(igObjectRef *ref, int deleteStorage);
 void *CriMovie_Allocate(igCriMovieCodec *codec, unsigned int size);
 void *CriMovie_AllocateAligned(igCriMovieCodec *codec, unsigned int size, unsigned char alignment);
 void CriMovie_Free(igCriMovieCodec *codec, void *block);
@@ -96,23 +140,71 @@ igMemoryPoolView *igObject_GetAllocator(void *object);
 igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
 void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool);
 int Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool);
-void __dl__FPv(void *storage);
 int igReportError(const char *format, ...);
 void igPsx2VisualContext_CallDmaChain(igObject *self, void *packet, int size, int flush);
 int igPsx2VisualContext_IsDisplayingFirstBuffer(igObject *self);
 void MWSFD_SetMallocFunc(void *(*allocate)(igCriMovieCodec *, unsigned int),
                          void (*release)(igCriMovieCodec *, void *), igCriMovieCodec *context);
-int mwPlyIsPause(MwPly *ply);
-int ADXT_GetStatPause(int adxt);
-void ADXT_Pause(int adxt, int sw);
-void ADXT_Stop(int adxt);
-void ADXT_Destroy(int adxt);
+int mwPlyIsPause(MwsfdPly *ply);
+int ADXT_GetStatPause(AdxtObj *adxt);
+void ADXT_Pause(AdxtObj *adxt, int sw);
+void ADXT_Destroy(AdxtObj *adxt);
 void ADXM_ExecMain(void);
 void MWSFD_ExecVsyncFrame(void);
-void mwPlyGetCurFrm(MwPly *ply, MwsfdFrmObj *frame);
-void mwPlyRelCurFrm(MwPly *ply);
+void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrmObj *frame);
+void mwPlyRelCurFrm(MwsfdPly *ply);
 int igMovieInfo_GetTiling(igMovieInfo *movie, int *tileWidth, int *tileHeight, int *tilesAcross, int *tilesDown);
 
+extern igSmartPointer<igAdxAfsFileList> g_adxAfsFileList;
+int igAdx_FindAfsFile(const char *name);
+igFileView *igFile_Create(igMemoryPoolView *pool);
+igCriMovieData *igCriMovieData_Create(igMemoryPoolView *pool);
+int ADXF_Open(const char *fname, int dir);
+int ADXF_OpenAfs(int ptid, int flid);
+void ADXF_Close(int adxf);
+void ADXM_ExecVsyncFrame(void);
+void ADXF_ReadNw(int adxf, int nsct, void *buf);
+int ADXF_GetStat(int adxf);
+void ADXT_GetHdrInfo(void *buf, int size, AdxtHdrInfo *info);
+AdxtObj *ADXT_Create(int maxnch, char *work, int worksize);
+void ADXT_StartAfs(AdxtObj *adxt, int ptid, int flid);
+void ADXT_StartFname(AdxtObj *adxt, char *fname);
+void ADXT_EntryFname(AdxtObj *adxt, char *fname);
+void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *info);
+void mwPlySetTimerCh(int ch);
+int mwPlyCalcWorkCprmSfd(MwsfdCreInf *cprm);
+MwsfdPly *mwPlyCreateSofdec(MwsfdCreInf *cprm);
+void mwPlySetAudioCh(MwsfdPly *ply, int ch);
+void mwPlyStartAfs(MwsfdPly *ply, int ptid, int flid);
+void mwPlyStartAfsLp(MwsfdPly *ply, int ptid, int flid);
+void mwPlyStartFnameLp(MwsfdPly *ply, char *fname);
+void mwPlyInitSfdFx(MwsfdInitPrm *prm);
+float log10f(float x);
+int igReportNotice(const char *format, ...);
+int igReport_Warning(const char *format, ...);
+extern int kIGMemoryPoolHandleUser1[4];
+extern unsigned char g_criMovieUseRawPath;
+extern unsigned char g_criMovieOpenFailedMuted;
+extern unsigned char g_criMovieAllocFailedMuted;
+extern unsigned char g_criMovieReadFailedMuted;
+extern unsigned char g_criMovieAhxMuted;
+extern unsigned char g_criMovieUnknownTypeMuted;
+extern unsigned char g_criMovieNoWidthMuted;
+extern unsigned char g_criMovieNoHeightMuted;
+extern unsigned char g_criMovieWidthMismatchMuted;
+extern unsigned char g_criMovieHeightMismatchMuted;
+extern unsigned char g_criMovieMacroblockMuted;
+extern char Could_not_open_s[];
+extern char Aligned_malloc_failed_d_bytes[];
+extern char Read_failure_in_s[];
+extern char AHX_files_aren_t_supported_yet[];
+extern char Got_a_file_of_unknown_type[];
+extern char Could_not_determine_size_of_video[];
+extern char Movie_width_doesn_t_match_info_width[];
+extern char Movie_height_doesn_t_match_info_height[];
+extern char On_PS2_the_width_and_height_of_a_movie[];
+void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, igObject *audioContext);
+int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie);
 extern unsigned char g_useOwnerAllocator;
 extern unsigned char g_criMovieDmaWarningMuted;
 extern int kIGMemoryPoolHandleUser0[4];
@@ -129,19 +221,30 @@ extern "C" {
 igSmartPointer<igPsx2VisualContext> g_criMovieVisualContext;
 }
 
-static inline void mwPlyDestroy(MwPly *ply)
+static inline void mwPlyDestroy(MwsfdPly *ply)
 {
-    ply->functions->destroy(ply);
+    ply->vtbl->destroy(ply);
 }
 
-static inline void mwPlyPause(MwPly *ply, int sw)
+static inline void mwPlyPause(MwsfdPly *ply, int sw)
 {
-    ply->functions->pause(ply, sw);
+    ply->vtbl->pause(ply, sw);
 }
 
-static inline int mwPlyGetStat(MwPly *ply)
+static inline int mwPlyGetStat(MwsfdPly *ply)
 {
-    return ply->functions->getStat(ply);
+    return ply->vtbl->getStat(ply);
+}
+
+/* The MWPLY and ADXT handles an igCriMovieData holds. */
+static inline MwsfdPly *Player(igCriMovieData *data)
+{
+    return (MwsfdPly *)data->_mwply;
+}
+
+static inline AdxtObj *Adxt(igCriMovieData *data)
+{
+    return (AdxtObj *)data->_adxt;
 }
 
 static inline igCriMovieData *AsCriMovieData(void *object)
@@ -334,17 +437,246 @@ int igCriMovieCodec_IsReusable(void)
     return 1;
 }
 
-igObjectRef *CriMovie_DestroyObjectRef(igObjectRef *ref, int deleteStorage) {
-    if (ref) {
-        igObject *object = ref->object;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+/* Takes the visual and audio contexts the movies play through and, the first time, initialises
+ * MWSFD for the display's refresh rate: NTSC 59.94 Hz or PAL 50 Hz, 60 Hz when the context
+ * reports neither. */
+void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, igObject *audioContext) {
+    igVisualContextView *display;
+    VideoMode mode;
+    MwsfdInitPrm prm;
+    float refreshRate;
+
+    if (self->_initialized == 0) {
+        reinterpret_cast<igSmartPointer<igObject> &>(self->_visualContext) = visualContext;
+        reinterpret_cast<igSmartPointer<igObject> &>(self->_audioContext) = audioContext;
+        refreshRate = 60.0f;
+        display = (igVisualContextView *)visualContext;
+        if (display != 0) {
+            mode.pal = 0;
+            mode.enable = 0;
+            mode.interlace = 0;
+            mode.refreshRate = 0.0f;
+            mode.swapInterval = 0;
+            display->getVideoMode(&mode);
+            if (mode.pal == 0 && mode.refreshRate == 59.94f) {
+                refreshRate = 59.94f;
+            } else if (mode.pal == 1 && mode.refreshRate == 50.0f) {
+                refreshRate = 50.0f;
+            }
         }
-        if ((short)deleteStorage > 0) __dl__FPv(ref);
+        memset(&prm, 0, sizeof(prm));
+        prm.vhz = refreshRate;
+        prm.dispLatency = 1;
+        prm.dispCycle = 1;
+        prm.decSvr = 0;
+        mwPlyInitSfdFx(&prm);
     }
-    return ref;
+    self->_initialized = 1;
+}
+
+/* Opens a movie: finds its file (an AFS entry or a plain path), reads the first sectors to tell a
+ * Sofdec stream from an ADX one and takes the stream's size, then creates the MWPLY or ADXT player,
+ * starts it and keeps the handles in an igCriMovieData in the movie's user data. Returns 0 when the
+ * movie cannot be opened. */
+int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
+    char *path;
+    int afsIndex;
+    igMemoryPoolView *pool;
+    int adxf;
+    void *header;
+    int status;
+    unsigned char isAdx;
+    int answer;
+    MwsfdCreInf cre;
+    MwsfdHdrInf sofdecInfo;
+    AdxtHdrInfo adxInfo;
+    igAdxAfsFile *afsFile;
+
+    if (g_criMovieUseRawPath != 0) {
+        path = (char *)movie->_path;
+    } else {
+        pool = igObject_GetAllocator(self);
+        pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        igSmartPointer<igFileView> file(igFile_Create(pool));
+        path = file->makeCompleteFilename((const char *)movie->_path);
+    }
+    afsIndex = igAdx_FindAfsFile(path);
+    pool = igObject_GetAllocator(self);
+    pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    igSmartPointer<igCriMovieData> data(igCriMovieData_Create(pool));
+    if (afsIndex != -1) {
+        afsFile = ((igAdxAfsFile **)g_adxAfsFileList.p->_data)[afsIndex];
+        adxf = ADXF_OpenAfs(afsFile->_ptNumber, afsFile->_fileNumber);
+    } else {
+        adxf = ADXF_Open(path, 0);
+    }
+    if (adxf == 0) {
+        if (g_criMovieOpenFailedMuted == 0) {
+            answer = igReportError(Could_not_open_s, path);
+            if (answer == 1) {
+            } else if (answer == 2) {
+                g_criMovieOpenFailedMuted = 1;
+            }
+        }
+        return 0;
+    }
+    header = CriMovie_AllocateAligned(self, 0x5000, 0x40);
+    if (header == 0) {
+        if (g_criMovieAllocFailedMuted == 0) {
+            answer = igReportError(Aligned_malloc_failed_d_bytes, 0x5000);
+            if (answer == 1) {
+            } else if (answer == 2) {
+                g_criMovieAllocFailedMuted = 1;
+            }
+        }
+        return 0;
+    }
+    memset(header, 0, 0x5000);
+    ADXF_ReadNw(adxf, 10, header);
+    status = ADXF_GetStat(adxf);
+    while (status != 3) {
+        if (status == 4) {
+            if (g_criMovieReadFailedMuted == 0) {
+                answer = igReportError(Read_failure_in_s, path);
+                if (answer == 1) {
+                } else if (answer == 2) {
+                    g_criMovieReadFailedMuted = 1;
+                }
+            }
+            break;
+        }
+        ADXM_ExecVsyncFrame();
+        ADXM_ExecMain();
+        status = ADXF_GetStat(adxf);
+    }
+    ADXF_Close(adxf);
+    mwPlyGetHdrInf((char *)header, 0x5000, &sofdecInfo);
+    if (sofdecInfo.valid == 0) {
+        ADXT_GetHdrInfo(header, 0x1000, &adxInfo);
+        CriMovie_Free(self, header);
+        if (adxInfo.fmt == 1) {
+            isAdx = 1;
+            movie->_type = kMovieTypeAdx;
+        } else if (adxInfo.fmt == 2) {
+            if (g_criMovieAhxMuted == 0) {
+                answer = igReportError(AHX_files_aren_t_supported_yet, path);
+                if (answer == 1) {
+                } else if (answer == 2) {
+                    g_criMovieAhxMuted = 1;
+                }
+            }
+            return 0;
+        } else {
+            if (g_criMovieUnknownTypeMuted == 0) {
+                answer = igReportError(Got_a_file_of_unknown_type, path);
+                if (answer == 1) {
+                } else if (answer == 2) {
+                    g_criMovieUnknownTypeMuted = 1;
+                }
+            }
+            return 0;
+        }
+    } else {
+        CriMovie_Free(self, header);
+        if (sofdecInfo.width == 0 && movie->_width == -1) {
+            if (g_criMovieNoWidthMuted == 0) {
+                answer = igReportError(Could_not_determine_size_of_video);
+                if (answer == 1) {
+                } else if (answer == 2) {
+                    g_criMovieNoWidthMuted = 1;
+                }
+            }
+            return 0;
+        }
+        if (sofdecInfo.height == 0 && movie->_height == -1) {
+            if (g_criMovieNoHeightMuted == 0) {
+                answer = igReportError(Could_not_determine_size_of_video);
+                if (answer == 1) {
+                } else if (answer == 2) {
+                    g_criMovieNoHeightMuted = 1;
+                }
+            }
+            return 0;
+        }
+        if (movie->_width != -1 && sofdecInfo.width != movie->_width && g_criMovieWidthMismatchMuted == 0) {
+            answer = igReportNotice(Movie_width_doesn_t_match_info_width, movie->_width, sofdecInfo.width);
+            if (answer == 1) {
+            } else if (answer == 2) {
+                g_criMovieWidthMismatchMuted = 1;
+            }
+        }
+        if (movie->_height != -1 && sofdecInfo.height != movie->_height && g_criMovieHeightMismatchMuted == 0) {
+            answer = igReportNotice(Movie_height_doesn_t_match_info_height, movie->_height, sofdecInfo.height);
+            if (answer == 1) {
+            } else if (answer == 2) {
+                g_criMovieHeightMismatchMuted = 1;
+            }
+        }
+        movie->_width = sofdecInfo.width;
+        isAdx = 0;
+        movie->_height = sofdecInfo.height;
+    }
+    if (!isAdx && (movie->_width % 16 != 0 || movie->_height % 16 != 0) && g_criMovieMacroblockMuted == 0) {
+        answer = igReport_Warning(On_PS2_the_width_and_height_of_a_movie, movie->_width, movie->_height);
+        if (answer == 1) {
+        } else if (answer == 2) {
+            g_criMovieMacroblockMuted = 1;
+        }
+    }
+    mwPlySetTimerCh(0);
+    memset(&cre, 0, sizeof(cre));
+    cre.f32 = 0;
+    cre.type = 1;
+    cre.maxBps = (movie->_bitrate == -1) ? 0x5B8D80 : movie->_bitrate;
+    cre.maxWidth = sofdecInfo.width;
+    cre.maxHeight = sofdecInfo.height;
+    cre.nfrmPoolWk = 2;
+    cre.nfrm = 1;
+    cre.workSize = mwPlyCalcWorkCprmSfd(&cre);
+    cre.work = (char *)CriMovie_Allocate(self, cre.workSize);
+    data->_mwply = (int)mwPlyCreateSofdec(&cre);
+    data->_cprmbuf = (int)cre.work;
+    if (self->_audioContext != 0) {
+        if (movie->_audioChannel != -1) {
+            mwPlySetAudioCh(Player(data), movie->_audioChannel);
+        }
+        if (movie->_audioVolume != -1) {
+            float level;
+            if (movie->_audioVolume != 0) {
+                level = log10f((float)movie->_audioVolume) / 2.0f;
+            } else {
+                level = 0.0f;
+            }
+            Player(data)->vtbl->setOutVol(Player(data), (int)(796.0f * level - 796.0f));
+        }
+    }
+    if (!isAdx) {
+        if (afsIndex != -1) {
+            afsFile = ((igAdxAfsFile **)g_adxAfsFileList.p->_data)[afsIndex];
+            if (movie->_loop != 0) {
+                mwPlyStartAfsLp(Player(data), afsFile->_ptNumber, afsFile->_fileNumber);
+            } else {
+                mwPlyStartAfs(Player(data), afsFile->_ptNumber, afsFile->_fileNumber);
+            }
+        } else if (movie->_loop != 0) {
+            mwPlyStartFnameLp(Player(data), path);
+        } else {
+            Player(data)->vtbl->startFname(Player(data), path);
+        }
+    } else {
+        data->_adxwork = (int)CriMovie_Allocate(self, 0x231E4);
+        data->_adxt = (int)ADXT_Create(2, (char *)data->_adxwork, 0x231E4);
+        if (afsIndex != -1) {
+            afsFile = ((igAdxAfsFile **)g_adxAfsFileList.p->_data)[afsIndex];
+            ADXT_StartAfs(Adxt(data), afsFile->_ptNumber, afsFile->_fileNumber);
+        } else if (movie->_loop != 0) {
+            ADXT_EntryFname(Adxt(data), path);
+        } else {
+            ADXT_StartFname(Adxt(data), path);
+        }
+    }
+    reinterpret_cast<igSmartPointer<igObject> &>(movie->_userdata) = (igObject *)data.p;
+    return 1;
 }
 
 /* Stops the movie and destroys its ADXT and MWPLY handles, returning their work areas. */
@@ -354,13 +686,13 @@ int igCriMovieCodec_Close(igCriMovieCodec *self, igMovieInfo *movie) {
     data = AsCriMovieData((void *)movie->_userdata);
     if (data != 0) {
         if (data->_adxt != 0) {
-            ADXT_Stop(data->_adxt);
-            ADXT_Destroy(data->_adxt);
+            ADXT_Stop(Adxt(data));
+            ADXT_Destroy(Adxt(data));
             CriMovie_Free(self, (void *)data->_adxwork);
             data->_adxt = 0;
             data->_adxwork = 0;
         }
-        mwPlyDestroy((MwPly *)data->_mwply);
+        mwPlyDestroy(Player(data));
         CriMovie_Free(self, (void *)data->_cprmbuf);
         data->_mwply = 0;
         data->_cprmbuf = 0;
@@ -376,11 +708,11 @@ int igCriMovieCodec_Play(igCriMovieCodec *self, igMovieInfo *movie) {
     if (data != 0) {
         movie->_state = kMovieStatePlaying;
         if (movie->_type == kMovieTypeAdx) {
-            if (ADXT_GetStatPause(data->_adxt) != 0) {
-                ADXT_Pause(data->_adxt, 0);
+            if (ADXT_GetStatPause(Adxt(data)) != 0) {
+                ADXT_Pause(Adxt(data), 0);
             }
-        } else if (mwPlyIsPause((MwPly *)data->_mwply) == 1) {
-            mwPlyPause((MwPly *)data->_mwply, 0);
+        } else if (mwPlyIsPause(Player(data)) == 1) {
+            mwPlyPause(Player(data), 0);
         }
         return 1;
     }
@@ -394,11 +726,11 @@ int igCriMovieCodec_Pause(igCriMovieCodec *self, igMovieInfo *movie, int state) 
     if (data != 0) {
         movie->_state = state;
         if (movie->_type == kMovieTypeAdx) {
-            if (ADXT_GetStatPause(data->_adxt) == 0) {
-                ADXT_Pause(data->_adxt, 1);
+            if (ADXT_GetStatPause(Adxt(data)) == 0) {
+                ADXT_Pause(Adxt(data), 1);
             }
-        } else if (mwPlyIsPause((MwPly *)data->_mwply) == 0) {
-            mwPlyPause((MwPly *)data->_mwply, 1);
+        } else if (mwPlyIsPause(Player(data)) == 0) {
+            mwPlyPause(Player(data), 1);
         }
         return 1;
     }
@@ -411,9 +743,9 @@ int igCriMovieCodec_SyncPauseState(igCriMovieCodecView *self, igMovieInfo *movie
     if (data != 0) {
         bool paused;
         if (movie->_type == kMovieTypeAdx) {
-            paused = ADXT_GetStatPause(data->_adxt) == 1;
+            paused = ADXT_GetStatPause(Adxt(data)) == 1;
         } else {
-            paused = mwPlyIsPause((MwPly *)data->_mwply) == 1;
+            paused = mwPlyIsPause(Player(data)) == 1;
         }
         if (movie->_state == kMovieStatePaused && !paused) {
             return self->pause(movie, 1);
@@ -445,16 +777,16 @@ int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie) {
             MWSFD_ExecVsyncFrame();
             MWSFD_ExecVsyncFrame();
             ADXM_ExecMain();
-            mwPlyGetCurFrm((MwPly *)data->_mwply, &frame);
+            mwPlyGetCurFrm(Player(data), &frame);
             if (frame.bufadr != 0) {
                 if (data->_macroFunction == 0) {
                     igMovieInfo_GetTiling(movie, &tileWidth, &tileHeight, &tilesAcross, &tilesDown);
                     data->_macroFunction = (int)&CriMovie_SubmitFrame;
                 }
                 shown = ((CriMovieFrameFunction)data->_macroFunction)(movie, frame.bufadr);
-                mwPlyRelCurFrm((MwPly *)data->_mwply);
+                mwPlyRelCurFrm(Player(data));
             }
-            stat = mwPlyGetStat((MwPly *)data->_mwply);
+            stat = mwPlyGetStat(Player(data));
             if (stat == kMwPlyStatPlayEnd || stat == kMwPlyStatError) {
                 self->pause(movie, 2);
             }

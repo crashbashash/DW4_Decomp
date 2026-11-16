@@ -3,11 +3,11 @@ igMetaField *g_igAABox_minMetaField;
 igMetaField *g_igAABox_maxMetaField;
 
 void igAABox_CreateInstance(int arg0) {
-    FUN_0018a780();
+    igAABox_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igAABox_metaObject, arg0);
 }
 
-igMetaObject *FUN_0018a6a0(void) {
+igMetaObject *igAABox_GetOrCreateMetaObject(void) {
     if (g_igAABox_metaObject == 0) {
         g_igAABox_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -18,7 +18,7 @@ igMetaObject *igAABox_GetMetaObject(void)
 {
     igMetaObject *g = g_igAABox_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0018a780();
+        igAABox_EnsureRegistered();
     return g_igAABox_metaObject;
 }
 
@@ -26,12 +26,12 @@ int igAABox_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&DAT_005277e0[0];
+    tmp[0] = (int)&g_igAABox_vtable[0];
     off = *(int *)((char *)(g_objectSystem[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_0018a780(void)
+void igAABox_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAABox_Register);
 }

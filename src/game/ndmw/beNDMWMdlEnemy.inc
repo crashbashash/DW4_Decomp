@@ -1,11 +1,11 @@
 igMetaObject *g_beNDMWMdlEnemy_metaObject;
 
 void beNDMWMdlEnemy_CreateInstance(int arg0) {
-    FUN_003c1860();
+    beNDMWMdlEnemy_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMdlEnemy_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c1760(void) {
+igMetaObject *beNDMWMdlEnemy_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlEnemy_metaObject == 0) {
         g_beNDMWMdlEnemy_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -13,7 +13,7 @@ igMetaObject *FUN_003c1760(void) {
 }
 
 igMetaObject *beNDMWMdlEnemy_GetReadyMetaObject(void) {
-    if (g_beNDMWMdlEnemy_metaObject == 0 || !isValid(g_beNDMWMdlEnemy_metaObject)) FUN_003c1860();
+    if (g_beNDMWMdlEnemy_metaObject == 0 || !isValid(g_beNDMWMdlEnemy_metaObject)) beNDMWMdlEnemy_EnsureRegistered();
     return g_beNDMWMdlEnemy_metaObject;
 }
 
@@ -24,14 +24,14 @@ int beNDMWMdlEnemy_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.w2 = 0;
     obj.w6 = 0;
-    obj.vt = &DAT_0053e3b0[0];
+    obj.vt = &g_beNDMWMdlEnemy_vtable[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053e3b0[0];
+    obj.vt = &g_beNDMWMdlEnemy_vtable[0];
     FUN_003bf9d0((O_3bf9d0 *)&obj, (short)0);
     return t;
 }
 
-void FUN_003c1860(void)
+void beNDMWMdlEnemy_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlEnemy_Register);
 }

@@ -5,10 +5,10 @@ igMetaField *g_beSelectCtrlInfoRamData_maxSelectMetaField;
 igMetaField *g_beSelectCtrlInfoRamData_selectNoMetaField;
 igMetaField *g_beSelectCtrlInfoRamData_workMetaField;
 
-void *FUN_003452e0(void) {
+void *beSelectCtrlInfoRamData_GetMetaObject(void) {
     igMetaObject *g = g_beSelectCtrlInfoRamData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00345490();
+        beSelectCtrlInfoRamData_EnsureRegistered();
     }
     return g_beSelectCtrlInfoRamData_metaObject;
 }
@@ -19,10 +19,10 @@ int beSelectCtrlInfoRamData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.r1 = 0;
-    obj.vt = &DAT_00539070[0];
+    obj.vt = &g_beSelectCtrlInfoRamData_vtable[0];
     obj.r6 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00539070[0];
+    obj.vt = &g_beSelectCtrlInfoRamData_vtable[0];
     obj.rel6();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.rel1();
@@ -42,12 +42,12 @@ ObjectRefWord *FUN_00345410(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_00345490(void)
+void beSelectCtrlInfoRamData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSelectCtrlInfoRamData_Register);
 }
 
-static igMetaObjectCallback g_beSelectCtrlInfoRamData_callbackList[] = { FUN_00345830, 0 };
+static igMetaObjectCallback g_beSelectCtrlInfoRamData_callbackList[] = { beSelectCtrlInfoWork_EnsureRegistered, 0 };
 
 void *beSelectCtrlInfoRamData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -56,7 +56,7 @@ void *beSelectCtrlInfoRamData_Register(void) {
         &g_beSelectCtrlInfoRamData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beSelectCtrlInfoRamData_GetMetaObject,
+        beSelectCtrlInfoRamData_GetMetaObjectFunction,
         "beSelectCtrlInfoRamData",
         0x20, /* instance size */
         beSelectCtrlInfoRamData_GetVTable,
@@ -66,9 +66,9 @@ void *beSelectCtrlInfoRamData_Register(void) {
     );
 }
 
-void beSelectCtrlInfoRamData_GetMetaObject(void)
+void beSelectCtrlInfoRamData_GetMetaObjectFunction(void)
 {
-    FUN_003452e0();
+    beSelectCtrlInfoRamData_GetMetaObject();
 }
 
 static FieldFactory g_beSelectCtrlInfoRamData_ctorTable[] = {
@@ -118,7 +118,7 @@ void beSelectCtrlInfoRamData_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
-    *(int *)((char *)(temp_s0) + 56) = (int)FUN_003456c0();
+    *(int *)((char *)(temp_s0) + 56) = (int)beSelectCtrlInfoWork_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_beSelectCtrlInfoRamData_fieldTable, g_beSelectCtrlInfoRamData_fieldHandles, g_beSelectCtrlInfoRamData_fieldOffsets, temp_s2);
 }
 

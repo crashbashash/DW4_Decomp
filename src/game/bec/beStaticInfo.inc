@@ -1,9 +1,9 @@
 igMetaObject *g_beStaticInfo_metaObject;
 
-void *FUN_00343a10(void) {
+void *beStaticInfo_GetMetaObject(void) {
     igMetaObject *g = g_beStaticInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00343ad0();
+        beStaticInfo_EnsureRegistered();
     }
     return g_beStaticInfo_metaObject;
 }
@@ -16,14 +16,14 @@ int beStaticInfo_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
-    u.vt = (int)&DAT_00539420[0];
+    u.vt = (int)&g_beStaticInfo_vtable[0];
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00539420[0];
+    u.vt = (int)&g_beStaticInfo_vtable[0];
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
     return t;
 }
 
-void FUN_00343ad0(void)
+void beStaticInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beStaticInfo_Register);
 }
@@ -35,7 +35,7 @@ void *beStaticInfo_Register(void) {
         &g_beStaticInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beStaticInfo_GetMetaObject,
+        beStaticInfo_GetMetaObjectFunction,
         "beStaticInfo",
         0x1c, /* instance size */
         beStaticInfo_GetVTable,
@@ -45,8 +45,8 @@ void *beStaticInfo_Register(void) {
     );
 }
 
-void beStaticInfo_GetMetaObject(void)
+void beStaticInfo_GetMetaObjectFunction(void)
 {
-    FUN_00343a10();
+    beStaticInfo_GetMetaObject();
 }
 

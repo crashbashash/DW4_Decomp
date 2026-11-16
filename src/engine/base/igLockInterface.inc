@@ -26,7 +26,7 @@ int igLockInterface_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052c010[0];
+    u.vt = (int)&g_igLockInterface_vtable[0];
     q2 = (S_ref *)&u.b[32];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[36];
@@ -34,7 +34,7 @@ int igLockInterface_GetVTable(void) {
     q0 = (S_ref *)&u.b[40];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052c010[0];
+    u.vt = (int)&g_igLockInterface_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {

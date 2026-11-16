@@ -1,22 +1,22 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__beBaseInfoManager__vfunc_21(void);
-extern "C" void Gap__Core__igObject__vfunc_22(void);
-extern "C" void Gap__Core__igObject__vfunc_24(void);
+extern "C" void beBaseInfoManager_Activate(void);
+extern "C" void beBaseInfoManager_Deactivate(void);
+extern "C" void beBaseInfoManager_Stop(void);
 extern "C" int igInsightCore_FindManager(...);
 extern "C" int igInsightCore_AddToScheduler(...);
 extern "C" int ObjectList_AppendRetained(...);
-extern "C" void FUN_003788c0(void);
+extern "C" void beBaseInfoManager_OnAddRam(void);
 extern "C" int igInsightCore_RemoveFromScheduler(...);
 extern "C" int List_Reserve(...);
 extern "C" int igObject_Destroy(...);
 extern "C" int beSystem_IsRunning(...);
-extern "C" int Gap__Bec__beBaseInfoManager__vfunc_20(void);
+extern "C" int beBaseInfoManager_GetMeta(void);
 class V136 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual int vX(); };
 struct A { char pad[12]; int fc; int f10; int f14; };
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
-extern "C" void Gap__Core__igObject__vfunc_23(A *arg0);
+extern "C" void beBaseInfoManager_Start(A *arg0);
 struct Obj;
 struct Obj {
     virtual void a0();
@@ -51,40 +51,40 @@ struct Obj {
     virtual void v124(beBaseInfoRam *);
     virtual int v128();
 };
-extern "C" int Gap__Core__igObject__vfunc_25(Obj *arg0, Obj *arg1);
+extern "C" int beBaseInfoManager_AddInfo(Obj *arg0, Obj *arg1);
 /* matching construct: dummy-virtual view so ->v32() dispatches through the vtable slot;
  * beBaseInfoManager receiver is a hypothesis */
 class O { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void v32(); };
-extern "C" void Gap__Core__igObject__vfunc_26(beBaseInfoManager *arg0);
+extern "C" void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *arg0);
 struct X { char pad[46]; unsigned char f46; };
 struct L { char pad0[8]; int f8; char padC[4]; void **f16; };
 struct Item { char pad[24]; L *f24; };
 struct L2 { char pad0[8]; int f8; char padC[4]; Item **f16; };
 class Self { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void v31(void *); char p4[12]; X *f16; char p20[4]; L2 *f24; unsigned char f28; };
-extern "C" void Gap__Core__igObject__vfunc_27(Self *arg0);
+extern "C" void beBaseInfoManager_Update(Self *arg0);
 extern "C" int g_beBaseInfoManager_metaObject[4];
 
-void Gap__Bec__beBaseInfoManager__vfunc_21(void)
+void beBaseInfoManager_Activate(void)
 {
 }
 
 /* Slot 22 default: empty. */
-void Gap__Core__igObject__vfunc_22(void)
+void beBaseInfoManager_Deactivate(void)
 {
 }
 
-void Gap__Core__igObject__vfunc_23(A *arg0) {
+void beBaseInfoManager_Start(A *arg0) {
     ((V136 *)arg0)->vX();
     arg0->f10 = igInsightCore_FindManager(arg0->fc, g_beSystem_metaObject[0]);
     arg0->f14 = igInsightCore_FindManager(arg0->fc, g_beMessenger_metaObject[0]);
 }
 
 /* Slot 24 default: empty. */
-void Gap__Core__igObject__vfunc_24(void)
+void beBaseInfoManager_Stop(void)
 {
 }
 
-int Gap__Core__igObject__vfunc_25(Obj *arg0, Obj *arg1) {
+int beBaseInfoManager_AddInfo(Obj *arg0, Obj *arg1) {
     beBaseInfoManager *mgr = (beBaseInfoManager *)arg0;
     beBaseInfo *info = (beBaseInfo *)arg1;
     int s0 = arg0->v128();
@@ -112,11 +112,11 @@ int Gap__Core__igObject__vfunc_25(Obj *arg0, Obj *arg1) {
     return 0;
 }
 
-void FUN_003788c0(void)
+void beBaseInfoManager_OnAddRam(void)
 {
 }
 
-void Gap__Core__igObject__vfunc_26(beBaseInfoManager *arg0) {
+void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *arg0) {
     int n1;
     beBaseInfoList *S;
     int i1;
@@ -166,7 +166,7 @@ void Gap__Core__igObject__vfunc_26(beBaseInfoManager *arg0) {
     arg0->_isUpdateRun = 0;
 }
 
-void Gap__Core__igObject__vfunc_27(Self *arg0) {
+void beBaseInfoManager_Update(Self *arg0) {
     int temp_s5;
     int var_s4;
     int temp_s3;
@@ -184,7 +184,7 @@ void Gap__Core__igObject__vfunc_27(Self *arg0) {
     }
 }
 
-int Gap__Bec__beBaseInfoManager__vfunc_20(void)
+int beBaseInfoManager_GetMeta(void)
 {
     return g_beBaseInfoManager_metaObject[0];
 }

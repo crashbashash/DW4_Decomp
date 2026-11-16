@@ -12,7 +12,7 @@ igMetaObject *igBitMask_GetMetaObject(void)
 {
     igMetaObject *g = g_igBitMask_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a4e70();
+        igBitMask_EnsureRegistered();
     return g_igBitMask_metaObject;
 }
 
@@ -20,11 +20,11 @@ int igBitMask_GetVTable(void) {
     struct Obj_1a4e30 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052a340[0];
+    obj.vt = &g_igBitMask_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001a4e70(void)
+void igBitMask_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBitMask_Register);
 }

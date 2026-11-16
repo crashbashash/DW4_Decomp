@@ -4,7 +4,7 @@ igMetaField *g_beNDMWAfsSetupData_fileCountMetaField;
 void *beNDMWAfsSetupData_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWAfsSetupData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003caa70();
+        beNDMWAfsSetupData_EnsureRegistered();
     }
     return g_beNDMWAfsSetupData_metaObject;
 }
@@ -21,7 +21,7 @@ int beNDMWAfsSetupData_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053c3a0[0];
+    u.vt = (int)&g_beNDMWAfsSetupData_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -38,7 +38,7 @@ int beNDMWAfsSetupData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003caa70(void)
+void beNDMWAfsSetupData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWAfsSetupData_Register);
 }

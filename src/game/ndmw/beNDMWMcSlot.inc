@@ -14,12 +14,12 @@ void *beNDMWMcSlot_GetReadyMetaObject(void) {
         ready = g->_validity & 4;
         if (ready != false) goto end;
     }
-    FUN_003c60b0();
+    beNDMWMcSlot_EnsureRegistered();
 end:
     return g_beNDMWMcSlot_metaObject;
 }
 
-void FUN_003c60b0(void)
+void beNDMWMcSlot_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMcSlot_Register);
 }

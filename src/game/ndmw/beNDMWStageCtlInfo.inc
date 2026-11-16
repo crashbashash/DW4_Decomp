@@ -1,12 +1,12 @@
 igMetaObject *g_beNDMWStageCtlInfo_metaObject;
 igMetaEnum *g_beNDMWStageCtlInfo_messageMetaEnum;
 
-igMetaObject *FUN_003bbbd0(void)
+igMetaObject *beNDMWStageCtlInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_beNDMWStageCtlInfo_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_003bbc90();
+        beNDMWStageCtlInfo_EnsureRegistered();
     return g_beNDMWStageCtlInfo_metaObject;
 }
 
@@ -18,14 +18,14 @@ int beNDMWStageCtlInfo_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
-    u.vt = (int)&DAT_0053d9d0[0];
+    u.vt = (int)&g_beNDMWStageCtlInfo_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053d9d0[0];
+    u.vt = (int)&g_beNDMWStageCtlInfo_vtable[0];
     FUN_0033ec80(u.b, 0);
     return temp_s0;
 }
 
-void FUN_003bbc90(void)
+void beNDMWStageCtlInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStageCtlInfo_Register);
 }
@@ -37,7 +37,7 @@ void *beNDMWStageCtlInfo_Register(void) {
         &g_beNDMWStageCtlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beNDMWStageCtlInfo_GetMetaObject,
+        beNDMWStageCtlInfo_GetMetaObjectFunction,
         "beNDMWStageCtlInfo",
         0x1c, /* instance size */
         beNDMWStageCtlInfo_GetVTable,
@@ -47,9 +47,9 @@ void *beNDMWStageCtlInfo_Register(void) {
     );
 }
 
-void beNDMWStageCtlInfo_GetMetaObject(void)
+void beNDMWStageCtlInfo_GetMetaObjectFunction(void)
 {
-    FUN_003bbbd0();
+    beNDMWStageCtlInfo_GetMetaObject();
 }
 
 static const char *g_beNDMWStageCtlInfo_messageNames[] = {

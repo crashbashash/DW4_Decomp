@@ -4,7 +4,7 @@ igMetaObject *igAnimationCombinerBoneInfoList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationCombinerBoneInfoList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a8020();
+        igAnimationCombinerBoneInfoList_EnsureRegistered();
     return g_igAnimationCombinerBoneInfoList_metaObject;
 }
 
@@ -12,11 +12,11 @@ int igAnimationCombinerBoneInfoList_GetVTable(void) {
     struct Obj_1a7fe0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00529d90[0];
+    obj.vt = &g_igAnimationCombinerBoneInfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001a8020(void)
+void igAnimationCombinerBoneInfoList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfoList_Register);
 }

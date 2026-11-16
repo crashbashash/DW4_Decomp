@@ -5,21 +5,21 @@ igMetaField *g_beLua_luaStateMetaField;
 igMetaField *g_beLua_luaGlueMetaField;
 
 void beLua_CreateInstance(int arg0) {
-    FUN_0035b9c0();
+    beLua_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589208, arg0);
 }
 
-igMetaObject *FUN_0035b770(void) {
+igMetaObject *beLua_GetOrCreateMetaObject(void) {
     if (g_beLua_metaObject == 0) {
         g_beLua_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beLua_metaObject;
 }
 
-void *FUN_0035b7c0(void) {
+void *beLua_GetMetaObject(void) {
     igMetaObject *g = g_beLua_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035b9c0();
+        beLua_EnsureRegistered();
     }
     return g_beLua_metaObject;
 }
@@ -30,12 +30,12 @@ int beLua_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w[1] = 0;
-    obj.vt = &DAT_0053a9e0[0];
+    obj.vt = &g_beLua_vtable[0];
     obj.w[4] = 0;
     obj.w[5] = 0;
     obj.w[6] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053a9e0[0];
+    obj.vt = &g_beLua_vtable[0];
     FUN_0035b940((ObjectRefWord *)(&obj.w[6]), -1);
     FUN_0035b8c0((void **)(&obj.w[5]), (short)(-1));
     FUN_0033f560((void **)(&obj.w[4]), -1);
@@ -73,12 +73,12 @@ ObjectRefWord *FUN_0035b940(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_0035b9c0(void)
+void beLua_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLua_Register);
 }
 
-static igMetaObjectCallback g_beLua_callbackList[] = { FUN_00342f30, FUN_0036abd0, FUN_0035abe0, igLuaGlue_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beLua_callbackList[] = { beSystem_EnsureRegistered, beBaseInfoList_EnsureRegistered, beLuaState_EnsureRegistered, igLuaGlue_EnsureRegistered, 0 };
 
 void *beLua_Register(void) {
     BecLibrary_MarkRegistered();
@@ -87,7 +87,7 @@ void *beLua_Register(void) {
         &g_beLua_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        beLua_GetMetaObject,
+        beLua_GetMetaObjectFunction,
         "beLua",
         0x20, /* instance size */
         beLua_GetVTable,
@@ -97,9 +97,9 @@ void *beLua_Register(void) {
     );
 }
 
-void beLua_GetMetaObject(void)
+void beLua_GetMetaObjectFunction(void)
 {
-    FUN_0035b7c0();
+    beLua_GetMetaObject();
 }
 
 static FieldFactory g_beLua_ctorTable[] = {
@@ -139,13 +139,13 @@ void beLua_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beLua_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00342ce0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0036aaf0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0035aa60();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beLuaState_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igLuaGlue_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;

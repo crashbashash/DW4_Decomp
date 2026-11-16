@@ -1082,7 +1082,6 @@
 0x002ef9d0	igMemoryFile_ReleaseEntryList	engine	high	releases the igMemoryFileEntryList at 0x586f48 and clears it; reached at exit through igMemoryFile_ExitCallback
 0x002efa20	igMemoryFile_AddMemoryFileEntry	engine	medium	Creates an igMemoryFileEntry with name, buffer and size, then appends it to the global entry list
 0x002efae0	igMemoryFile_LookupMemoryBuffer	engine	medium	Looks up the file name in a global registered-buffer list via FindByName and returns that entry's buffer and size (offsets +12/+16), or 0 if not found
-0x002efb50	igMemoryFile_Open	engine	medium	igFile vtable word 23: Returns success if already open, falls back to _openMode when mode is 8, looks up the buffer by _fil
 0x002efc40	igMemoryFile_Close	engine	medium	igFile vtable word 24: Body only clears _bIsOpen (=0), which matches a memory-file close override
 0x002efc50	igMemoryFile_OpenFile	engine	medium	igFile vtable word 25: Sets the file name, maps the mode string to an open mode (0 or 4) for vfunc_23, and returns this on
 0x002efd30	igMemoryFile_CloseFile	engine	high	igFile vtable word 26 after word 25 igMemoryFile_OpenFile: forwards to word 24 igMemoryFile_Close
@@ -1881,14 +1880,10 @@
 0x0032aed0	igPsx2CallStackTracer_CaptureCallStack	engine	medium	igCallStackTracer word 24 override: appends the terminator word and returns the address list; igEventTracker word 26 calls word 24 with (max depth, skip) and interns the result in the call-stack table, so the slot captures a call stack (core named the base 0x2d42e0 igCallStackTracer_Reset); alt igPsx2CallStackTracer_Reset
 0x0032af40	igPsx2CallStackTracer_HasSymbols	engine	high	igPsx2CallStackTracer vtable word 25 (the igCallStackTracer_HasSymbols slot): `j igCallStackTracer_HasSymbols`
 0x0032afc0	igPsx2File_OpenWithMode	engine	medium	igFileView vfunc_23 "+92: open in a mode number" (0-3 text, 4-7 binary, 8 last mode); searches the path list
-0x0032b2e0	igPsx2File_CloseHandle	engine	medium	igFileView vfunc_24 "+96: close the handle": flushes, sceClose, frees the buffer
-0x0032b350	igPsx2File_Open	engine	high	igFileView Open(name, mode)
-0x0032b5a0	igPsx2File_Close	engine	high	igFileView Close()
 0x0032b5b0	igPsx2File_GrowBuffer	engine	high	grows _fBuf to at least n bytes (double, or +1MB past 1MB); used by PutChar/PutString
 0x0032b640	igPsx2File_Read	engine	high	igFileView Read()
 0x0032b760	igPsx2File_Write	engine	high	igFileView Write()
 0x0032b870	igPsx2File_Flush	engine	high	igFileView vfunc_32 "+128: flush": writes the text buffer back
-0x0032bba0	igPsx2File_Print	engine	high	igFileView Print (printf)
 0x0032bc80	igPsx2File_GetChar	engine	high	igFileView vfunc_33 "+132: getc"
 0x0032bcf0	igPsx2File_UngetChar	engine	medium	ungetc: steps _bufPos back one, returns the char if it matches
 0x0032bd50	igPsx2File_PutChar	engine	medium	putc: stores one byte at _bufPos, growing the buffer

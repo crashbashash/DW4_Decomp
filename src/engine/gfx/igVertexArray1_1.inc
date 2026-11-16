@@ -7,7 +7,7 @@ igMetaField *g_igVertexArray1_1_pointSpriteSizeMetaField;
 igMetaField *g_igVertexArray1_1_memPoolMetaField;
 
 int FUN_0014b680(int arg0) {
-    FUN_0014b710();
+    igVertexArray1_1_EnsureRegistered();
     return igMetaObject_CreateInstance(g_igVertexArray1_1_metaObject, arg0);
 }
 
@@ -15,11 +15,11 @@ igMetaObject *igVertexArray1_1_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexArray1_1_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014b710();
+        igVertexArray1_1_EnsureRegistered();
     return g_igVertexArray1_1_metaObject;
 }
 
-void FUN_0014b710(void)
+void igVertexArray1_1_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexArray1_1_Register);
 }

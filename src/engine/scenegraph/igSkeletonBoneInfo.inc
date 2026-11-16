@@ -7,7 +7,7 @@ igMetaObject *FUN_00198960(void)
 {
     igMetaObject *g = g_igSkeletonBoneInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00198a40();
+        igSkeletonBoneInfo_EnsureRegistered();
     return g_igSkeletonBoneInfo_metaObject;
 }
 
@@ -22,7 +22,7 @@ int igSkeletonBoneInfo_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0052b270[0];
+    u.vt = (int)&g_igSkeletonBoneInfo_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -39,7 +39,7 @@ int igSkeletonBoneInfo_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00198a40(void)
+void igSkeletonBoneInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSkeletonBoneInfo_Register);
 }

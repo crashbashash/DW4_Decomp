@@ -18,7 +18,7 @@ igMetaObject *FUN_001a8520(void)
 {
     igMetaObject *g = g_igAnimationCombiner_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a8800();
+        igAnimationCombiner_EnsureRegistered();
     return g_igAnimationCombiner_metaObject;
 }
 
@@ -28,12 +28,12 @@ int igAnimationCombiner_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.w2 = 0;
     obj.w3 = 0;
-    obj.vt = &DAT_00529630[0];
+    obj.vt = &g_igAnimationCombiner_vtable[0];
     obj.w12 = 0;
     obj.w13 = 0;
     obj.w14 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00529630[0];
+    obj.vt = &g_igAnimationCombiner_vtable[0];
     FUN_001a8780((struct R * *)&obj.w14, -1);
     igSmartPointer_igIntList_Destruct(&obj.w13, -1);
     FUN_001a8700((ObjectRefWord *)&obj.w12, -1);
@@ -111,12 +111,12 @@ struct R **FUN_001a8780(struct R **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_001a8800(void)
+void igAnimationCombiner_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationCombiner_Register);
 }
 
-static igMetaObjectCallback g_igAnimationCombiner_callbackList[] = { FUN_001a7f00, igIntList_EnsureRegistered, FUN_001a6a00, 0 };
+static igMetaObjectCallback g_igAnimationCombiner_callbackList[] = { igAnimationCombinerBoneInfoListList_EnsureRegistered, igIntList_EnsureRegistered, igAnimationStateList_EnsureRegistered, 0 };
 
 void igAnimationCombiner_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */

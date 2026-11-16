@@ -6,21 +6,21 @@ igMetaField *g_beModelCtrlInfoAI_hStatusMetaField;
 igMetaField *g_beModelCtrlInfoAI_hCountMetaField;
 
 void beModelCtrlInfoAI_Create(int arg0) {
-    FUN_003522b0();
+    beModelCtrlInfoAI_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588AD0, arg0);
 }
 
-igMetaObject *FUN_00352180(void) {
+igMetaObject *beModelCtrlInfoAI_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlInfoAI_metaObject == 0) {
         g_beModelCtrlInfoAI_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beModelCtrlInfoAI_metaObject;
 }
 
-void *FUN_003521d0(void) {
+void *beModelCtrlInfoAI_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlInfoAI_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003522b0();
+        beModelCtrlInfoAI_EnsureRegistered();
     }
     return g_beModelCtrlInfoAI_metaObject;
 }
@@ -33,11 +33,11 @@ int beModelCtrlInfoAI_GetVTable(void) {
     int temp_v0;
 
     igObject_InitHeader(&f);
-    f.vt = &DAT_00537e20[0];
+    f.vt = &g_beModelCtrlInfoAI_vtable[0];
     pr = &f.ref;
     *pr = 0;
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_00537e20[0];
+    f.vt = &g_beModelCtrlInfoAI_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {
             temp_a1 = *pr - 2;
@@ -51,7 +51,7 @@ int beModelCtrlInfoAI_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003522b0(void)
+void beModelCtrlInfoAI_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoAI_Register);
 }
@@ -63,7 +63,7 @@ void *beModelCtrlInfoAI_Register(void) {
         &g_beModelCtrlInfoAI_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beModelCtrlInfoAI_GetMetaObject,
+        beModelCtrlInfoAI_GetMetaObjectFunction,
         "beModelCtrlInfoAI",
         0x24, /* instance size */
         beModelCtrlInfoAI_GetVTable,
@@ -73,9 +73,9 @@ void *beModelCtrlInfoAI_Register(void) {
     );
 }
 
-void beModelCtrlInfoAI_GetMetaObject(void)
+void beModelCtrlInfoAI_GetMetaObjectFunction(void)
 {
-    FUN_003521d0();
+    beModelCtrlInfoAI_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoAI_ctorTable[] = {

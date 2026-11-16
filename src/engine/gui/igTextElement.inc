@@ -26,12 +26,12 @@ int igTextElement_GetVTable(void) {
     igObject_InitHeader(u.b);
     u.w[2] = 0;
     u.w[10] = 0;
-    u.w[0] = (int)(&DAT_00540c10[0]);
+    u.w[0] = (int)(&g_igTextElement_vtable[0]);
     u.w[11] = 0;
     u.w[12] = 0;
     u.w[13] = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00540c10[0]);
+    u.w[0] = (int)(&g_igTextElement_vtable[0]);
     igStringRef_Destruct(&u.w[13], -1);
     FUN_001353b0(&u.w[12], -1);
     FUN_0044bf10((void **)&u.w[11], -1);
@@ -165,7 +165,7 @@ void *FUN_0044c110(struct S *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_00540e30[0];
+        arg0->f0 = &g_igModel_vtable[0];
         if (&arg0->f8) {
             p = arg0->f8;
             if (p != 0) {

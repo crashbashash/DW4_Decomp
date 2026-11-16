@@ -21,9 +21,9 @@ int igPsx2VertexArray2_GetVTable(void) {
     *(int *)&u.b[12] = 0;
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[20] = 0;
-    u.vt = (int)&DAT_00525120[0];
+    u.vt = (int)&g_igPsx2VertexArray2_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00525120[0];
+    u.vt = (int)&g_igPsx2VertexArray2_vtable[0];
     FUN_0014a910((Obj_14a910 *)u.b, 0);
     return temp_s0;
 }

@@ -15,13 +15,4 @@
 0x001dd010	Gap::Sg::igTransform::vfunc_25	engine
 0x001dd070	Gap::Sg::igTransform::vfunc_28	engine
 0x001dd080	Gap::Sg::igTransform::vfunc_29	engine
-0x0036f060	Gap::Bec::beBinDataObject::vfunc_8	game
-0x00378710	Gap::Bec::beBaseInfoManager::vfunc_21	game
-0x00390de0	Gap::Bec::beModelCtrl::vfunc_25	game
-0x00396a80	Gap::Bec::beModelCtrl::vfunc_33	game
 0x003a9a50	Gap::Bec::beSaveApi::vfunc_24	game
-0x0040dae0	Gap::Bec::beNDMWListCtrl::vfunc_22	game
-0x0040dbf0	Gap::Bec::beNDMWListCtrl::vfunc_23	game
-0x0040dd30	Gap::Bec::beNDMWListCtrl::vfunc_24	game
-0x0040f720	Gap::Bec::beNDMWStatusCtrlBaseEquip::vfunc_21	game
-0x00424160	Gap::Bec::beNDMWWindowTitle::vfunc_21	game

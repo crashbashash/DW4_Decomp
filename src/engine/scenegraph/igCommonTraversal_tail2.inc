@@ -182,7 +182,7 @@ int FUN_001b4130(struct O4130 *arg0) {
         return 0;
     }
     if (arg0->f160 == 0) {
-        temp_v0 = ((struct Rc_1b2fa0 *)FUN_00140c00(arg0->f32->f12, 0));
+        temp_v0 = ((struct Rc_1b2fa0 *)igTextureAttr_GetImage(arg0->f32->f12, 0));
         if (temp_v0 != 0) {
             temp_v0->rc = temp_v0->rc + 1;
         }
@@ -347,11 +347,11 @@ void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
 void FUN_001b6be0(void) {
     *(int *)0x562640 = FUN_0019a6e0(Memory_GetAllocatorBySelector(*(int *)0x587038));
     FUN_0013b110();
-    FUN_00132a00();
-    FUN_001357e0();
+    igTextureBindAttr_EnsureRegistered();
+    igModelViewMatrixAttr_EnsureRegistered();
     FUN_00130cf0();
-    FUN_001318f0();
-    FUN_00130830();
+    igTextureMatrixAttr_EnsureRegistered();
+    igVertexBlendStateAttr_EnsureRegistered();
     FUN_00130a70();
 }
 

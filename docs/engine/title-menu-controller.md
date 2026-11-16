@@ -250,7 +250,7 @@ there is no difficulty), then wiring the four slots (`GAMEDATAINIT`, or
 `model_init(work+0x34, messenger, 0)`. Command 3 additionally creates the
 `"COMMONINTF"` object; command 2 is inert.
 
-The update (`beNDMWLoadCtrl2__Update`) is the `beNDMWLoadCtrl2CtrlData` state machine
+The update (`beNDMWLoadCtrl2_UpdateRam`) is the `beNDMWLoadCtrl2CtrlData` state machine
 (`_st0` `+0x14`, `_st1` `+0x18`, `_st2` `+0x1c`, `_st3` `+0x20`):
 
 | `_st0` | Behavior |

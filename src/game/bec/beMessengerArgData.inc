@@ -12,14 +12,14 @@ igMetaField *g_beMessengerArgData_stringListMetaField;
 
 void *beMessengerArgData_Create(void *allocator){beMessengerArgData_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerArgData_metaObject,allocator));}
 
-igMetaObject *FUN_00358dc0(void) {
+igMetaObject *beMessengerArgData_GetOrCreateMetaObject(void) {
     if (g_beMessengerArgData_metaObject == 0) {
         g_beMessengerArgData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beMessengerArgData_metaObject;
 }
 
-igMetaObject *FUN_00358e10(void) {
+igMetaObject *beMessengerArgData_GetMetaObject(void) {
     if (g_beMessengerArgData_metaObject == 0 || !isValid(g_beMessengerArgData_metaObject)) beMessengerArgData_EnsureRegistered();
     return g_beMessengerArgData_metaObject;
 }
@@ -29,7 +29,7 @@ int beMessengerArgData_GetVTable(void) {
     int t;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00536ca0[0];
+    obj.vt = &g_beMessengerArgData_vtable[0];
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
@@ -40,7 +40,7 @@ int beMessengerArgData_GetVTable(void) {
     obj.w10 = 0;
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00536ca0[0];
+    obj.vt = &g_beMessengerArgData_vtable[0];
     igSmartPointer_igStringRefList_Destruct(&obj.w11, -1);
     igSmartPointer_igObjectList_Destruct(&obj.w10, -1);
     FUN_001998f0(&obj.w9, -1);
@@ -55,7 +55,7 @@ int beMessengerArgData_GetVTable(void) {
 
 void beMessengerArgData_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerArgData_Register);}
 
-static igMetaObjectCallback g_beMessengerArgData_callbackList[] = { igBoolList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, igLongList_EnsureRegistered, FUN_0018a180, FUN_00189a80, igObjectList_EnsureRegistered, igStringRefList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMessengerArgData_callbackList[] = { igBoolList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, igMatrix44fList_EnsureRegistered, igObjectList_EnsureRegistered, igStringRefList_EnsureRegistered, 0 };
 
 void *beMessengerArgData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -64,7 +64,7 @@ void *beMessengerArgData_Register(void) {
         &g_beMessengerArgData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beMessengerArgData_GetMetaObject,
+        beMessengerArgData_GetMetaObjectFunction,
         "beMessengerArgData",
         0x30, /* instance size */
         beMessengerArgData_GetVTable,
@@ -74,9 +74,9 @@ void *beMessengerArgData_Register(void) {
     );
 }
 
-void beMessengerArgData_GetMetaObject(void)
+void beMessengerArgData_GetMetaObjectFunction(void)
 {
-    FUN_00358e10();
+    beMessengerArgData_GetMetaObject();
 }
 
 static FieldFactory g_beMessengerArgData_ctorTable[] = {
@@ -156,10 +156,10 @@ void beMessengerArgData_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igLongList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0018a0a0();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_001899a0();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igMatrix44fList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igObjectList_GetOrCreateMetaObject();

@@ -19,7 +19,7 @@ igMetaObject *igRadioGroupSelectedObserver_GetMetaObject(void)
 int igRadioGroupSelectedObserver_GetVTable(void) {
     struct O o;
     igObject_InitHeader(&o.vt);
-    o.vt = DAT_00540d60;
+    o.vt = g_igRadioGroupSelectedObserver_vtable;
     return *(int *)((char *)&o.vt + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

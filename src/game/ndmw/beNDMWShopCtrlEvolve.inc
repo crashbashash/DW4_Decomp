@@ -2,17 +2,17 @@ igMetaObject *g_beNDMWShopCtrlEvolve_metaObject;
 igMetaField *g_beNDMWShopCtrlEvolve_shinkaCtrlMetaField;
 
 void beNDMWShopCtrlEvolve_Create(int arg0) {
-    FUN_003b8a00();
+    beNDMWShopCtrlEvolve_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopCtrlEvolve_metaObject, arg0);
 }
 
-void *FUN_003b88a0(void) {
+void *beNDMWShopCtrlEvolve_GetMetaObject(void) {
     unsigned char b;
     if (g_beNDMWShopCtrlEvolve_metaObject != 0) {
         b = (*(int *)((char *)(g_beNDMWShopCtrlEvolve_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_003b8a00();
+    beNDMWShopCtrlEvolve_EnsureRegistered();
 done:
     return g_beNDMWShopCtrlEvolve_metaObject;
 }
@@ -30,11 +30,11 @@ int beNDMWShopCtrlEvolve_GetVTable(void) {
     *(int *)&u.b[68] = 0;
     *(int *)&u.b[72] = 0;
     *(int *)&u.b[76] = 0;
-    u.vt = (int)&DAT_0053fb40[0];
+    u.vt = (int)&g_beNDMWShopCtrlEvolve_vtable[0];
     p = (int *)&u.b[96];
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053fb40[0];
+    u.vt = (int)&g_beNDMWShopCtrlEvolve_vtable[0];
     FUN_003b8980((ObjectRefWord *)p, -1);
     FUN_003b6770((int **)u.b, (long long)0);
     return temp_s0;
@@ -53,12 +53,12 @@ ObjectRefWord *FUN_003b8980(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_003b8a00(void)
+void beNDMWShopCtrlEvolve_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopCtrlEvolve_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopCtrlEvolve_callbackList[] = { FUN_003c9650, 0 };
+static igMetaObjectCallback g_beNDMWShopCtrlEvolve_callbackList[] = { beNDMWShinkaCtrl_EnsureRegistered, 0 };
 
 void *beNDMWShopCtrlEvolve_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -67,7 +67,7 @@ void *beNDMWShopCtrlEvolve_Register(void) {
         &g_beNDMWShopCtrlEvolve_metaObject,
         beNDMWListCtrl_Register,
         beNDMWListCtrl_GetPublishedMetaObject,
-        beNDMWShopCtrlEvolve_GetMetaObject,
+        beNDMWShopCtrlEvolve_GetMetaObjectFunction,
         "beNDMWShopCtrlEvolve",
         0x64, /* instance size */
         beNDMWShopCtrlEvolve_GetVTable,
@@ -77,9 +77,9 @@ void *beNDMWShopCtrlEvolve_Register(void) {
     );
 }
 
-void beNDMWShopCtrlEvolve_GetMetaObject(void)
+void beNDMWShopCtrlEvolve_GetMetaObjectFunction(void)
 {
-    FUN_003b88a0();
+    beNDMWShopCtrlEvolve_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWShopCtrlEvolve_ctorTable[] = {
@@ -104,7 +104,7 @@ void beNDMWShopCtrlEvolve_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlEvolve_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9480();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWShinkaCtrl_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlEvolve_fieldTable, g_beNDMWShopCtrlEvolve_fieldHandles, g_beNDMWShopCtrlEvolve_fieldOffsets, temp_s2);
 }

@@ -24,12 +24,12 @@ int igFrustCullTraversal_GetVTable(void) {
     struct S_19fde0 s; char *p;
     int r;
     p = (char *)&s; FUN_001a10a0((igCommonTraversal *)p);
-    s.vt = &DAT_00528f10[0];
+    s.vt = &g_igFrustCullTraversal_vtable[0];
     FUN_001a1090(&s.a);
     FUN_001510a0(s.b);
     FUN_001a1080((int *)(p + 548));
     r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem[0]) + 916));
-    s.vt = &DAT_00528f10[0];
+    s.vt = &g_igFrustCullTraversal_vtable[0];
     FUN_001a1000((void **)&s.c, -1);
     FUN_00198190((void * *)&s.a, -1);
     FUN_001a0910((Obj_19fde0 *)&s, 0);
@@ -330,7 +330,7 @@ ObjectRefWord *FUN_001a0890(ObjectRefWord *self,int delete_storage) {
 
 Obj_19fde0 *FUN_001a0910(Obj_19fde0 *arg0, short arg1) {
     if (arg0) {
-        arg0->vt = DAT_005293c0;
+        arg0->vt = g_igCommonTraversal_vtable;
         arg0->rel(&arg0->m336);
         arg0->rel(&arg0->m268);
         arg0->rel(&arg0->m264);
@@ -357,7 +357,7 @@ Obj_19fde0 *FUN_001a0910(Obj_19fde0 *arg0, short arg1) {
         arg0->rel(&arg0->m36);
         arg0->rel(&arg0->m32);
         if (arg0) {
-            arg0->vt = DAT_00528250;
+            arg0->vt = g_igTraversal_vtable;
             arg0->rel(&arg0->m28);
         }
         if (arg1 > 0) {
@@ -399,9 +399,9 @@ int *FUN_001a1090(int *p)
 
 void *FUN_001a10a0(igCommonTraversal *arg0) {
     igObject_InitHeader();
-    arg0->_vtable = (int)(&DAT_00528250[0]);
+    arg0->_vtable = (int)(&g_igTraversal_vtable[0]);
     arg0->_travProcs = 0;
-    arg0->_vtable = (int)(&DAT_005293c0[0]);
+    arg0->_vtable = (int)(&g_igCommonTraversal_vtable[0]);
     arg0->_capabilityManager = 0;
     arg0->_defaultManager = 0;
     arg0->_attrStack = 0;
@@ -440,7 +440,7 @@ void FUN_001a1170(void)
     igMetaObject_RunStaticInit(igFrustCullTraversal_Register);
 }
 
-static igMetaObjectCallback g_igFrustCullTraversal_callbackList[] = { FUN_00139250, FUN_0018a780, 0 };
+static igMetaObjectCallback g_igFrustCullTraversal_callbackList[] = { FUN_00139250, igAABox_EnsureRegistered, 0 };
 
 void igFrustCullTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -581,7 +581,7 @@ void igFrustCullTraversal_InitFields(void) {
     igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)), 1.0f);
     igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)), 2.0f);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0018a6a0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igAABox_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igFrustCullTraversal_fieldTable, g_igFrustCullTraversal_fieldHandles, g_igFrustCullTraversal_fieldOffsets, temp_s0);
     igMetaObject_AddExitCallback(&thunk_FUN_001c45d0);

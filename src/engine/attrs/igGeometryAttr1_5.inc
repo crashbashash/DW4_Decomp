@@ -54,7 +54,7 @@ igMetaObject *igGeometryAttr1_5_GetMetaObject(void)
 {
     igMetaObject *g = g_igGeometryAttr1_5_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001376d0();
+        igGeometryAttr1_5_EnsureRegistered();
     return g_igGeometryAttr1_5_metaObject;
 }
 
@@ -67,10 +67,10 @@ int igGeometryAttr1_5_GetVTable(void) {
     o.f[7] = 0;
     o.f[9] = 0;
     o.f[10] = 0;
-    o.vt = DAT_005238c0;
+    o.vt = g_igGeometryAttr1_5_vtable;
     o.f[11] = 0;
     r = *(int *)((char *)&o + *(int *)(g_objectSystem[0] + 916));
-    o.vt = DAT_005238c0;
+    o.vt = g_igGeometryAttr1_5_vtable;
     FUN_00137260((void **)&o.f[11], -1);
     FUN_00137530((O_137530 *)&o, 0);
     return r;
@@ -113,7 +113,7 @@ O_137530 *FUN_00137530(O_137530 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_001376d0(void)
+void igGeometryAttr1_5_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGeometryAttr1_5_Register);
 }

@@ -1,6 +1,6 @@
 igMetaObject *g_igAABoxList_metaObject;
 
-igMetaObject *FUN_0018a4f0(void) {
+igMetaObject *igAABoxList_GetOrCreateMetaObject(void) {
     if (g_igAABoxList_metaObject == 0) {
         g_igAABoxList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -11,7 +11,7 @@ igMetaObject *igAABoxList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAABoxList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0018a5d0();
+        igAABoxList_EnsureRegistered();
     return g_igAABoxList_metaObject;
 }
 
@@ -19,16 +19,16 @@ int igAABoxList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527840[0];
+    obj.vt = &g_igAABoxList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0018a5d0(void)
+void igAABoxList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAABoxList_Register);
 }
 
-static igMetaObjectCallback g_igAABoxList_callbackList[] = { FUN_0018a780, 0 };
+static igMetaObjectCallback g_igAABoxList_callbackList[] = { igAABox_EnsureRegistered, 0 };
 
 void igAABoxList_Register(void) {
     FUN_00186a40();

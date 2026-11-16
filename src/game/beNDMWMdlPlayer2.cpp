@@ -1,11 +1,12 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/listSet.h"
 
 extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int Gap__Core__igObject__vfunc_23(...);
-extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_20(void);
-extern "C" int strcmp(int, int *);
-extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_35(int dummy0, int arg1);
+extern "C" int beBaseInfoManager_Start(...);
+extern "C" int beNDMWMdlPlayer2_GetMeta(void);
+extern "C" int strcmp(const char *, const char *);
+extern "C" int beNDMWMdlPlayer2_IsKind(int dummy0, int arg1);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
@@ -18,26 +19,26 @@ extern "C" int StringPool_Intern(...);
 extern "C" int StringPool_Allocate(...);
 extern "C" int igMatrix44f_GetTranslation(...);
 extern "C" int bePadManager_GetPadForPlayer(int, int);
-extern "C" int beTargetObj_SelectTarget(int, int *, int *);
+extern "C" int beTargetObj_SelectTarget(int, const char *, const char *);
 extern "C" float beTargetObj_GetTargetDistanceSq(...);
 extern "C" int beLua__RunNamedChunk(int, int *, int);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beNDMWMdlPlayer2_metaObject[4];
-extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_23(beNDMWMdlPlayer2 *self);
-extern "C" int KIND_PLAYER2[4];
+extern "C" void beNDMWMdlPlayer2_Start(beNDMWMdlPlayer2 *self);
+extern "C" char KIND_PLAYER2[];
 extern "C" char PLAYER2_2[];
-extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_37(beNDMWMdlPlayer2 * p0, int p1, char * p2);
+extern "C" void beNDMWMdlPlayer2_RegisterReceiver(beNDMWMdlPlayer2 * p0, int p1, char * p2);
 extern "C" igObject *beBaseInfoDataList_Create(int);
-extern "C" igObject *FUN_003bf560(int);
-extern "C" beDataObjIntList *igProperty_GetRecordStringList(...);
-extern "C" beDataObjFloatList *FUN_003a9370(...);
+extern "C" igObject *beNDMWMdlPlayer2InfoWork_Create(int);
+extern "C" beDataObjStringList *igProperty_GetRecordStringList(int record, const char *name);
+extern "C" beDataObjFloatList *igProperty_GetRecordFloatList(...);
 struct PropertyRecordView { char p[16]; int f16; igObject *f20; };
 extern "C" PropertyRecordView * igProperty_FindByName(...);
-extern "C" int ONE_13[4];
-extern "C" int GAMERAM_15[4];
-extern "C" int GETCOMMON_7[4];
-extern "C" int BKCHIPSTAGE[4];
-extern "C" int BKCHIPPOS[4];
+extern "C" char ONE_13[];
+extern "C" char GAMERAM_15[];
+extern "C" char GETCOMMON_7[];
+extern "C" char BKCHIPSTAGE[];
+extern "C" char BKCHIPPOS[];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
@@ -108,44 +109,44 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         ram->_dataList = (int)s0;
     }
 } };
-extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1);
 /* Player work record: byte at +236, int at +240. */
 struct PlayerWorkTail { char p[236]; unsigned char f236; char p2[3]; int f240; };
 /* property record: pointer to the work record at +20 */
 struct PropertyRecord { char p[16]; int f16; PlayerWorkTail *q; };
-extern "C" int PLAYER_8[4];
-extern "C" int NEAR_3[4];
-extern "C" int SQ_SWON[4];
-extern "C" int SQ_SWOF[4];
+extern "C" char PLAYER_8[];
+extern "C" char NEAR_3[];
+extern "C" char SQ_SWON[];
+extern "C" char SQ_SWOF[];
 extern "C" int text_end_g_000bcaps_lua[4];
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
 
 /* matching construct: dummy-virtual class gives arg0 a vtable so v35 dispatches through slot 35 */
-class MdlPlayer2VirtualShim { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();  virtual void v35(beBaseInfoRam *, int *); char p[28]; int f32; char p2[8]; int f44; };
-extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *arg1);
+class MdlPlayer2VirtualShim { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();  virtual void v35(beBaseInfoRam *, const char *); char p[28]; int f32; char p2[8]; int f44; };
+extern "C" void beNDMWMdlPlayer2_UpdateControl(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *arg1);
 
 /* After the shared igObject slot 23 body, caches the pad manager registered with the insight core
  * (_padManager), found by its class metaObject; the same binding step as the other managers' slot
  * 23. */
-void Gap__Bec__beNDMWMdlPlayer2__vfunc_23(beNDMWMdlPlayer2 *self) {
-    Gap__Core__igObject__vfunc_23();
+void beNDMWMdlPlayer2_Start(beNDMWMdlPlayer2 *self) {
+    beBaseInfoManager_Start();
     self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
 }
 
-int Gap__Bec__beNDMWMdlPlayer2__vfunc_35(int dummy0, int arg1) {
-    return strcmp(arg1, &KIND_PLAYER2[0]) == 0;
+int beNDMWMdlPlayer2_IsKind(int dummy0, int arg1) {
+    return strcmp((const char *)arg1, KIND_PLAYER2) == 0;
 }
 
-void Gap__Bec__beNDMWMdlPlayer2__vfunc_37(beNDMWMdlPlayer2 * p0, int p1, char * p2)
+void beNDMWMdlPlayer2_RegisterReceiver(beNDMWMdlPlayer2 * p0, int p1, char * p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, PLAYER2_2);
 }
 
-void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1) {
     V3 t;
     PropertyRecordView *r;
-    beDataObjIntList *s4;
+    beDataObjStringList *s4;
     beDataObjFloatList *s3;
     int s2;
     int *e;
@@ -160,7 +161,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
         } else {
             a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
-        ValueRef value(FUN_003bf560(a));
+        ValueRef value(beNDMWMdlPlayer2InfoWork_Create(a));
         igObject *n = value.p;
         if (n != 0) {
             n->_refCount++;
@@ -173,7 +174,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
     {
         int o = beMessenger_GetObject(arg0->_messenger, 0);
         s4 = igProperty_GetRecordStringList(o, BKCHIPSTAGE);
-        s3 = FUN_003a9370(o, BKCHIPPOS);
+        s3 = igProperty_GetRecordFloatList(o, BKCHIPPOS);
     }
     /* matching construct: cast from the 4-byte _system reference */
     beSystem *cfg = (beSystem *)arg0->_system;
@@ -222,7 +223,7 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
     }
 }
 
-void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlPlayer2_UpdateControl(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *arg1) {
     PropertyRecord *prop;
     PlayerWorkTail *q;
     float f;
@@ -268,7 +269,158 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInf
     }
 }
 
-int Gap__Bec__beNDMWMdlPlayer2__vfunc_20(void)
+
+extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
+extern "C" beDataObjInt *igProperty_GetRecord(int record, const char *name);
+extern "C" beDataObjIntList *igProperty_GetRecordIntList(int record, const char *name);
+extern "C" beDataObjString *igProperty_GetRecordString(int record, const char *name);
+extern "C" void beMessenger_PrepareDelayedSelection(int messenger, const char *group, const char *name, int ramNo);
+extern "C" void beMessenger_AppendVec3(int messenger, float *value);
+extern "C" void beMessenger_AppendString(int messenger, const char *value);
+extern "C" void beMessenger_EnqueueSelected(int messenger, const char *message, int count);
+extern "C" void beMessenger_GetMatrix(float *out, int messenger, int index);
+extern "C" int beMessenger_GetInt(int messenger, int index);
+extern "C" void beMessenger_SendNamed(int messenger, const char *group, int name, int ramNo, const char *message);
+extern "C" int beMessenger_GetBoolCount(int messenger);
+extern "C" bool beMessenger_GetBool(int messenger, int index);
+extern "C" void beMessenger_SelectGroup(int messenger, const char *group);
+extern "C" void beMessenger_AppendInt(int messenger, int value);
+extern "C" void beMessenger_DispatchSelected(int messenger, const char *message);
+extern "C" void beMessenger_SelectReceivers(int messenger, const char *group, const char *name, int ramNo);
+extern "C" void beMessenger_AppendMatrix(int messenger, float *value);
+extern "C" void beMessenger_SendDelayedNamed(int messenger, const char *group, int name, int ramNo, const char *message, int delay);
+extern "C" int sprintf(char *out, const char *format, ...);
+extern "C" char GENERATE_15[];
+extern "C" char REMOVE_6[];
+extern "C" char GENESTAGE[];
+extern "C" char MODELCTRL_22[];
+extern "C" char g_000bcaps_2[];
+extern "C" char SQ_ENTR_dP[];
+extern "C" char RAISE_2[];
+extern "C" char ISRUN_11[];
+extern "C" char GETPLAYER_15[];
+extern "C" char HP_7[];
+extern "C" char DIGIMONNAME_4[];
+extern "C" char p_agumon[];
+extern "C" char SQ_CMBK[];
+extern "C" char BKCHIPDATA_2[];
+extern "C" char BIT_8[];
+extern "C" char BKCHIPNAME_2[];
+extern "C" char EXP_3[];
+extern "C" char SQ_EXIT_3[];
+
+/* Element of a float list. */
+static inline float floatAt(igFloatList *list, const int &index) { return ((float *)list->_data)[index]; }
+
+/* Field accessors. */
+static inline igStringRefList *getData(beDataObjStringList *record) { return (igStringRefList *)record->_data; }
+static inline int getRamNo(beBaseInfoRam *ram) { return ram->_ramNo; }
+
+/* Stores a retained copy of value at list[index] when the index is in range, releasing the token it
+ * replaces. */
+static inline void setStringAt(igStringRefList *list, int index, const StringRef &value) {
+    if (list->_count != 0 && index >= 0 && index < list->_count) {
+        int *slot = (int *)list->_data + index;
+        int *v = value.p;
+        if (v) v[-1] = v[-1] + 1;
+        Str::release((int *)*slot);
+        *slot = (int)value.p;
+    }
+}
+
+extern "C" int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, const char *command);
+int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, const char *command)
+{
+    if (strcmp(command, GENERATE_15) == 0) {
+        if (ram->_isRun != 0)
+            ((MdlPlayer2VirtualShim *)self)->v35(ram, REMOVE_6);
+    } else if (strcmp(command, GENESTAGE) == 0) {
+        beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
+        int common = beMessenger_GetObject(self->_messenger, 0);
+        igStringRefList *stages = getData(igProperty_GetRecordStringList(common, BKCHIPSTAGE));
+        igFloatList *positions = (igFloatList *)igProperty_GetRecordFloatList(common, BKCHIPPOS)->_data;
+        int ramNo = getRamNo(ram);
+        if (StringList_CopyRetained(stages, ramNo).p != 0
+            && strcmp((const char *)((beSystem *)self->_system)->_stageName, (const char *)StringList_CopyRetained(stages, ramNo).p) == 0) {
+            float x = floatAt(positions, ramNo * 3);
+            float y = floatAt(positions, ramNo * 3 + 1);
+            float z = floatAt(positions, ramNo * 3 + 2);
+            float pos[3];
+            char sequence[16];
+            beMessenger_PrepareDelayedSelection(self->_messenger, MODELCTRL_22, g_000bcaps_2, getRamNo(ram));
+            pos[0] = x;
+            pos[1] = y;
+            pos[2] = z;
+            beMessenger_AppendVec3(self->_messenger, pos);
+            sprintf(sequence, SQ_ENTR_dP, getRamNo(ram) + 1);
+            beMessenger_AppendString(self->_messenger, sequence);
+            beMessenger_EnqueueSelected(self->_messenger, GENERATE_15, 1);
+        }
+        return 1;
+    } else if (strcmp(command, RAISE_2) == 0) {
+        RamDataList::Ensure(ram);
+        beNDMWMdlPlayer2InfoWork *work = (beNDMWMdlPlayer2InfoWork *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_13)->f20;
+        if (work->_timerCount < 10)
+            return 1;
+        float matrix[16];
+        beMessenger_GetMatrix(matrix, self->_messenger, 0);
+        int percent = beMessenger_GetInt(self->_messenger, 0);
+        int hp = beMessenger_GetInt(self->_messenger, 1);
+        bool running = false;
+        beMessenger_SendNamed(self->_messenger, PLAYER_8, 0, getRamNo(ram), ISRUN_11);
+        int count = beMessenger_GetBoolCount(self->_messenger);
+        for (int i = 0; i < count; i++) {
+            if (beMessenger_GetBool(self->_messenger, i) == 1) {
+                running = true;
+                break;
+            }
+        }
+        beMessenger_SelectGroup(self->_messenger, GAMERAM_15);
+        beMessenger_AppendInt(self->_messenger, getRamNo(ram));
+        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_15);
+        int player = beMessenger_GetObject(self->_messenger, 0);
+        if (!running) {
+            igProperty_GetRecord(player, HP_7)->_data = hp;
+            const char *digimon = (const char *)igProperty_GetRecordString(player, DIGIMONNAME_4)->_data;
+            if (*digimon == 0) digimon = p_agumon;
+            beMessenger_SelectReceivers(self->_messenger, MODELCTRL_22, digimon, getRamNo(ram));
+            beMessenger_AppendMatrix(self->_messenger, matrix);
+            beMessenger_AppendString(self->_messenger, SQ_CMBK);
+            beMessenger_DispatchSelected(self->_messenger, GENERATE_15);
+        }
+        beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
+        int common = beMessenger_GetObject(self->_messenger, 0);
+        int bitIndex = getRamNo(ram) * 2;
+        int *chipData = (int *)((igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data)->_data;
+        int bit = chipData[bitIndex];
+        bit += igProperty_GetRecord(player, BIT_8)->_data;
+        igProperty_GetRecord(player, BIT_8)->_data = bit;
+        {
+            igIntList *chips = (igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data;
+            ListSet(chips, bitIndex, 0);
+        }
+        const char *digimon = (const char *)igProperty_GetRecordString(player, DIGIMONNAME_4)->_data;
+        const char *chipName = (const char *)StringList_CopyRetained(getData(igProperty_GetRecordStringList(common, BKCHIPNAME_2)), getRamNo(ram)).p;
+        if (strcmp(digimon, chipName) == 0) {
+            int expIndex = getRamNo(ram) * 2 + 1;
+            chipData = (int *)((igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data)->_data;
+            int chipExp = chipData[expIndex];
+            int exp = (chipExp * percent) / 100;
+            exp += igProperty_GetRecord(player, EXP_3)->_data;
+            igProperty_GetRecord(player, EXP_3)->_data = exp;
+            igIntList *chips = (igIntList *)igProperty_GetRecordIntList(common, BKCHIPDATA_2)->_data;
+            ListSet(chips, expIndex, 0);
+        }
+        beMessenger_SendDelayedNamed(self->_messenger, PLAYER2_2, 0, getRamNo(ram), SQ_EXIT_3, 0);
+        beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
+        common = beMessenger_GetObject(self->_messenger, 0);
+        setStringAt(getData(igProperty_GetRecordStringList(common, BKCHIPSTAGE)), getRamNo(ram), StringRef(0));
+        return 1;
+    }
+    return 0;
+}
+
+int beNDMWMdlPlayer2_GetMeta(void)
 {
     return g_beNDMWMdlPlayer2_metaObject[0];
 }

@@ -1,9 +1,9 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__beActionStarter__vfunc_32(void);
-extern "C" int Gap__Bec__beActionStarter__vfunc_30(void);
-extern "C" void Gap__Bec__beActionStarter__vfunc_31(void);
-extern "C" int Gap__Bec__beActionStarter__vfunc_20(void);
+extern "C" void beActionStarter_Prepare(void);
+extern "C" int beActionStarter_GetInfoMeta(void);
+extern "C" void beActionStarter_UpdateRam(void);
+extern "C" int beActionStarter_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
 extern "C" void beMessenger_AppendBool(int, unsigned char);
 extern "C" void beMessenger_AppendFloat(int, float);
@@ -12,11 +12,11 @@ extern "C" void beMessenger_AppendVec3(int, float *);
 extern "C" void beMessenger_DispatchSelected(int, int *);
 extern "C" void beMessenger_SelectReceivers(int, int *, int, int);
 extern "C" void beMessenger_SetRunCheck(int, unsigned char);
-extern "C" int Gap__Core__igObject__vfunc_33(void);
+extern "C" int beBaseInfoManager_OnMessageText(void);
 extern "C" int g_beActionStarterInfo_metaObject[4];
 extern "C" int g_beActionStarter_metaObject[4];
 extern "C" char ACTION_BROADCAST_2[];
-extern "C" void Gap__Bec__beActionStarter__vfunc_29(beActionStarter * p0, int p1, char * p2, int p3, int p4);
+extern "C" void beActionStarter_OnAddRam(beActionStarter * p0, int p1, char * p2, int p3, int p4);
 extern "C" int emptyString[4];
 extern "C" int MODELCTRL_10[4];
 extern "C" int SETEFFECT_3[4];
@@ -45,27 +45,27 @@ struct ActionStarterDataVTable {
     virtual void d19();
     virtual int getKind();
  };
-extern "C" int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterInfoRam *arg1, int *arg2);
+extern "C" int beActionStarter_OnMessage(beActionStarter *arg0, beActionStarterInfoRam *arg1, int *arg2);
 
-void Gap__Bec__beActionStarter__vfunc_32(void)
+void beActionStarter_Prepare(void)
 {
 }
 
-void Gap__Bec__beActionStarter__vfunc_29(beActionStarter * p0, int p1, char * p2, int p3, int p4)
+void beActionStarter_OnAddRam(beActionStarter * p0, int p1, char * p2, int p3, int p4)
 {
     beMessenger_RegisterReceiver(p0->_messenger, p1, ACTION_BROADCAST_2, 0, -1);
 }
 
-int Gap__Bec__beActionStarter__vfunc_30(void)
+int beActionStarter_GetInfoMeta(void)
 {
     return g_beActionStarterInfo_metaObject[0];
 }
 
-void Gap__Bec__beActionStarter__vfunc_31(void)
+void beActionStarter_UpdateRam(void)
 {
 }
 
-int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterInfoRam *arg1, int *arg2) {
+int beActionStarter_OnMessage(beActionStarter *arg0, beActionStarterInfoRam *arg1, int *arg2) {
     float vA[3];
     float vB[3];
     beActionStarterInfo *s7 = (beActionStarterInfo *)arg1->_parentInfo;
@@ -136,13 +136,13 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
     return 1;
 }
 
-int Gap__Bec__beActionStarter__vfunc_20(void)
+int beActionStarter_GetMeta(void)
 {
     return g_beActionStarter_metaObject[0];
 }
 
 /* Slot 33 default: always 0. */
-int Gap__Core__igObject__vfunc_33(void) {
+int beBaseInfoManager_OnMessageText(void) {
     return 0;
 }
 

@@ -19,7 +19,7 @@ int igCompiledTransformList_GetVTable(void) {
     struct Obj_1a34c0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052a600[0];
+    obj.vt = &g_igCompiledTransformList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

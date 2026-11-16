@@ -4,7 +4,7 @@ igMetaField *g_igAttrPool_nonSharableMetaListMetaField;
 igMetaField *g_igAttrPool_attributeListMetaField;
 
 int FUN_0013a640(int arg0) {
-    FUN_0013a900();
+    igAttrPool_EnsureRegistered();
     return igMetaObject_CreateInstance(*(int *)0x55F428, arg0);
 }
 
@@ -12,7 +12,7 @@ igMetaObject *igAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013a900();
+        igAttrPool_EnsureRegistered();
     return g_igAttrPool_metaObject;
 }
 
@@ -24,7 +24,7 @@ int igAttrPool_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_005242a0[0];
+    u.vt = (int)&g_igAttrPool_vtable[0];
     q2 = (S_ref *)&u.b[8];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[12];
@@ -32,7 +32,7 @@ int igAttrPool_GetVTable(void) {
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005242a0[0];
+    u.vt = (int)&g_igAttrPool_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -94,12 +94,12 @@ ObjectRefWord *igSmartPointer_igMetaObjectList_Destruct(ObjectRefWord *self,int 
     return self;
 }
 
-void FUN_0013a900(void)
+void igAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igAttrPool_callbackList[] = { igMetaObjectList_EnsureRegistered, FUN_0013acb0, 0 };
+static igMetaObjectCallback g_igAttrPool_callbackList[] = { igMetaObjectList_EnsureRegistered, igAttrListList_EnsureRegistered, 0 };
 
 void igAttrPool_Register(void) {
     AttrsLibrary_MarkRegistered();  /* Set-once latch: writes a gp-relative byte flag only if it is clear. */

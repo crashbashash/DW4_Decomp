@@ -3,23 +3,23 @@ igMetaField *g_beMovie_movieMetaField;
 igMetaField *g_beMovie_playingNameMetaField;
 
 void beMovie_CreateInstance(int arg0) {
-    FUN_0034f0a0();
+    beMovie_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588788, arg0);
 }
 
-igMetaObject *FUN_0034ef70(void) {
+igMetaObject *beMovie_GetOrCreateMetaObject(void) {
     if (g_beMovie_metaObject == 0) {
         g_beMovie_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beMovie_metaObject;
 }
 
-igMetaObject *FUN_0034efc0(void)
+igMetaObject *beMovie_GetMetaObject(void)
 {
     igMetaObject *g = g_beMovie_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_0034f0a0();
+        beMovie_EnsureRegistered();
     return g_beMovie_metaObject;
 }
 
@@ -30,23 +30,23 @@ int beMovie_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.w2 = 0;
     obj.w6 = 0;
-    obj.vt = &DAT_0053bad0[0];
+    obj.vt = &g_beMovie_vtable[0];
     obj.w8 = 0;
     obj.w9 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053bad0[0];
+    obj.vt = &g_beMovie_vtable[0];
     igStringRef_Destruct(&obj.w9, -1);
     FUN_003369f0(&obj.w8, -1);
     FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
     return t;
 }
 
-void FUN_0034f0a0(void)
+void beMovie_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMovie_Register);
 }
 
-static igMetaObjectCallback g_beMovie_callbackList[] = { FUN_00336f10, 0 };
+static igMetaObjectCallback g_beMovie_callbackList[] = { igMovieManager_EnsureRegistered, 0 };
 
 void *beMovie_Register(void) {
     BecLibrary_MarkRegistered();
@@ -55,7 +55,7 @@ void *beMovie_Register(void) {
         &g_beMovie_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beMovie_GetMetaObject,
+        beMovie_GetMetaObjectFunction,
         "beMovie",
         0x28, /* instance size */
         beMovie_GetVTable,
@@ -65,9 +65,9 @@ void *beMovie_Register(void) {
     );
 }
 
-void beMovie_GetMetaObject(void)
+void beMovie_GetMetaObjectFunction(void)
 {
-    FUN_0034efc0();
+    beMovie_GetMetaObject();
 }
 
 static FieldFactory g_beMovie_ctorTable[] = {
@@ -96,7 +96,7 @@ void beMovie_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beMovie_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00336c10();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igMovieManager_GetOrCreateMetaObject();
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0);
     igMetaObject_NameFields(temp_s0, g_beMovie_fieldTable, g_beMovie_fieldHandles, g_beMovie_fieldOffsets, temp_s2);
 }

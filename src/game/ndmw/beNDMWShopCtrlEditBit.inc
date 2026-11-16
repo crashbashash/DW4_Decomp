@@ -3,16 +3,16 @@ igMetaField *g_beNDMWShopCtrlEditBit_editBitMetaField;
 igMetaField *g_beNDMWShopCtrlEditBit_editMaxMetaField;
 
 void beNDMWShopCtrlEditBit_Create(int arg0) {
-    FUN_003b7630();
+    beNDMWShopCtrlEditBit_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShopCtrlEditBit_metaObject, arg0);
 }
 
-igMetaObject *FUN_003b7560(void)
+igMetaObject *beNDMWShopCtrlEditBit_GetMetaObject(void)
 {
     igMetaObject *g = g_beNDMWShopCtrlEditBit_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_003b7630();
+        beNDMWShopCtrlEditBit_EnsureRegistered();
     return g_beNDMWShopCtrlEditBit_metaObject;
 }
 
@@ -28,14 +28,14 @@ int beNDMWShopCtrlEditBit_GetVTable(void) {
     o.w[16] = 0;
     o.w[17] = 0;
     o.w[18] = 0;
-    o.vt = &DAT_0053fa80[0];
+    o.vt = &g_beNDMWShopCtrlEditBit_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_0053fa80[0];
+    o.vt = &g_beNDMWShopCtrlEditBit_vtable[0];
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&o, (long long)0);
     return r;
 }
 
-void FUN_003b7630(void)
+void beNDMWShopCtrlEditBit_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopCtrlEditBit_Register);
 }
@@ -47,7 +47,7 @@ void *beNDMWShopCtrlEditBit_Register(void) {
         &g_beNDMWShopCtrlEditBit_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWShopCtrlEditBit_GetMetaObject,
+        beNDMWShopCtrlEditBit_GetMetaObjectFunction,
         "beNDMWShopCtrlEditBit",
         0x5c, /* instance size */
         beNDMWShopCtrlEditBit_GetVTable,
@@ -57,9 +57,9 @@ void *beNDMWShopCtrlEditBit_Register(void) {
     );
 }
 
-void beNDMWShopCtrlEditBit_GetMetaObject(void)
+void beNDMWShopCtrlEditBit_GetMetaObjectFunction(void)
 {
-    FUN_003b7560();
+    beNDMWShopCtrlEditBit_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWShopCtrlEditBit_ctorTable[] = {

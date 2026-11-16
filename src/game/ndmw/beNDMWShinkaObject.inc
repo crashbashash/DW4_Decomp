@@ -20,7 +20,7 @@ igMetaField *g_beNDMWShinkaObject_healMetaField;
 igMetaField *g_beNDMWShinkaObject_forceMetaField;
 
 void beNDMWShinkaObject_CreateInstance(int arg0) {
-    FUN_003c9ac0();
+    beNDMWShinkaObject_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWShinkaObject_metaObject, arg0);
 }
 
@@ -28,7 +28,7 @@ igMetaObject *beNDMWShinkaObject_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWShinkaObject_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003c9ac0();
+        beNDMWShinkaObject_EnsureRegistered();
     return g_beNDMWShinkaObject_metaObject;
 }
 
@@ -40,10 +40,10 @@ int beNDMWShinkaObject_GetVTable(void) {
     int t;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053c5b0[0];
+    obj.vt = &g_beNDMWShinkaObject_vtable[0];
     obj.m = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053c5b0[0];
+    obj.vt = &g_beNDMWShinkaObject_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
         if (o != 0) {
@@ -58,7 +58,7 @@ int beNDMWShinkaObject_GetVTable(void) {
     return t;
 }
 
-void FUN_003c9ac0(void)
+void beNDMWShinkaObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShinkaObject_Register);
 }

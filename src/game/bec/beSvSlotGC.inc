@@ -1,9 +1,9 @@
 igMetaObject *g_beSvSlotGC_metaObject;
 
-void *FUN_0034a780(void) {
+void *beSvSlotGC_GetMetaObject(void) {
     igMetaObject *g = g_beSvSlotGC_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034a810();
+        beSvSlotGC_EnsureRegistered();
     }
     return g_beSvSlotGC_metaObject;
 }
@@ -12,11 +12,11 @@ int beSvSlotGC_GetVTable(void) {
     struct Obj_34a7d0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005389d0[0];
+    obj.vt = &g_beSvSlotGC_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0034a810(void)
+void beSvSlotGC_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvSlotGC_Register);
 }
@@ -28,7 +28,7 @@ void *beSvSlotGC_Register(void) {
         &g_beSvSlotGC_metaObject,
         beSvSlotData_Register,
         beSvSlotData_GetPublishedMetaObject,
-        beSvSlotGC_GetMetaObject,
+        beSvSlotGC_GetMetaObjectFunction,
         "beSvSlotGC",
         0x18, /* instance size */
         beSvSlotGC_GetVTable,
@@ -38,8 +38,8 @@ void *beSvSlotGC_Register(void) {
     );
 }
 
-void beSvSlotGC_GetMetaObject(void)
+void beSvSlotGC_GetMetaObjectFunction(void)
 {
-    FUN_0034a780();
+    beSvSlotGC_GetMetaObject();
 }
 

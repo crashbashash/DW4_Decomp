@@ -1,16 +1,16 @@
 igMetaObject *g_beGeneraterPlayerDataList_metaObject;
 
-igMetaObject *FUN_0035ff20(void) {
+igMetaObject *beGeneraterPlayerDataList_GetOrCreateMetaObject(void) {
     if (g_beGeneraterPlayerDataList_metaObject == 0) {
         g_beGeneraterPlayerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beGeneraterPlayerDataList_metaObject;
 }
 
-void *FUN_0035ff70(void) {
+void *beGeneraterPlayerDataList_GetMetaObject(void) {
     igMetaObject *g = g_beGeneraterPlayerDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00360000();
+        beGeneraterPlayerDataList_EnsureRegistered();
     }
     return g_beGeneraterPlayerDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beGeneraterPlayerDataList_GetVTable(void) {
     union U_35ffc0 u;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00535e40[0];
+    u.vt = (int)&g_beGeneraterPlayerDataList_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_00360000(void)
+void beGeneraterPlayerDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterPlayerDataList_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterPlayerDataList_callbackList[] = { FUN_003601e0, 0 };
+static igMetaObjectCallback g_beGeneraterPlayerDataList_callbackList[] = { beGeneraterPlayerData_EnsureRegistered, 0 };
 
 void *beGeneraterPlayerDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beGeneraterPlayerDataList_Register(void) {
         &g_beGeneraterPlayerDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beGeneraterPlayerDataList_GetMetaObject,
+        beGeneraterPlayerDataList_GetMetaObjectFunction,
         "beGeneraterPlayerDataList",
         0x14, /* instance size */
         beGeneraterPlayerDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beGeneraterPlayerDataList_Register(void) {
     );
 }
 
-void beGeneraterPlayerDataList_GetMetaObject(void)
+void beGeneraterPlayerDataList_GetMetaObjectFunction(void)
 {
-    FUN_0035ff70();
+    beGeneraterPlayerDataList_GetMetaObject();
 }
 

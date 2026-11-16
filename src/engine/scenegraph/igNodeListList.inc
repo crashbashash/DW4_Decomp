@@ -19,7 +19,7 @@ int igNodeListList_GetVTable(void) {
     Obj_19cad0 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_0052ab90[0];
+    o.vt = &g_igNodeListList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -28,7 +28,7 @@ void FUN_0019cb10(void)
     igMetaObject_RunStaticInit(igNodeListList_Register);
 }
 
-static igMetaObjectCallback g_igNodeListList_callbackList[] = { FUN_0019ccc0, 0 };
+static igMetaObjectCallback g_igNodeListList_callbackList[] = { igNodeList_EnsureRegistered, 0 };
 
 void igNodeListList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

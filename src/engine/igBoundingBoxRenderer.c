@@ -1,6 +1,6 @@
 extern int g_igBoundingBoxRenderer_metaObject[4];
 
-void Gap__Viewer__igBoundingBoxRenderer__vfunc_25(void) {
+void igBoundingBoxRenderer_Traverse(void) {
 
 }
 
@@ -8,7 +8,7 @@ void Gap__Viewer__igBoundingBoxRenderer__vfunc_23(void) {
 
 }
 
-void Gap__Viewer__igBoundingBoxRenderer__vfunc_24(void) {
+void igBoundingBoxRenderer_ReleaseDrawing(void) {
 
 }
 

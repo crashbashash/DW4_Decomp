@@ -24,7 +24,7 @@ void igFont_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFont_Register);
 }
 
-static igMetaObjectCallback g_igFont_callbackList[] = { FUN_0013afe0, 0 };
+static igMetaObjectCallback g_igFont_callbackList[] = { igAttrList_EnsureRegistered, 0 };
 
 void igFont_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -81,7 +81,7 @@ void igFont_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igFont_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0013af00();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_igFont_fieldTable, g_igFont_fieldHandles, g_igFont_fieldOffsets, temp_s2);
 }

@@ -1,14 +1,14 @@
 igMetaObject *g_beNumVerDataList_metaObject;
 
-igMetaObject *FUN_0034d8f0(void) {
+igMetaObject *beNumVerDataList_GetOrCreateMetaObject(void) {
     if (g_beNumVerDataList_metaObject == 0) {
         g_beNumVerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNumVerDataList_metaObject;
 }
 
-igMetaObject *FUN_0034d940(void) {
-    if (g_beNumVerDataList_metaObject == 0 || !isValid(g_beNumVerDataList_metaObject)) FUN_0034d9d0();
+igMetaObject *beNumVerDataList_GetMetaObject(void) {
+    if (g_beNumVerDataList_metaObject == 0 || !isValid(g_beNumVerDataList_metaObject)) beNumVerDataList_EnsureRegistered();
     return g_beNumVerDataList_metaObject;
 }
 
@@ -16,16 +16,16 @@ int beNumVerDataList_GetVTable(void) {
     struct Obj_34d990 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00538460[0];
+    obj.vt = &g_beNumVerDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0034d9d0(void)
+void beNumVerDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNumVerDataList_Register);
 }
 
-static igMetaObjectCallback g_beNumVerDataList_callbackList[] = { FUN_0034db60, 0 };
+static igMetaObjectCallback g_beNumVerDataList_callbackList[] = { beNumVerData_EnsureRegistered, 0 };
 
 void *beNumVerDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -34,7 +34,7 @@ void *beNumVerDataList_Register(void) {
         &g_beNumVerDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beNumVerDataList_GetMetaObject,
+        beNumVerDataList_GetMetaObjectFunction,
         "beNumVerDataList",
         0x14, /* instance size */
         beNumVerDataList_GetVTable,
@@ -44,8 +44,8 @@ void *beNumVerDataList_Register(void) {
     );
 }
 
-void beNumVerDataList_GetMetaObject(void)
+void beNumVerDataList_GetMetaObjectFunction(void)
 {
-    FUN_0034d940();
+    beNumVerDataList_GetMetaObject();
 }
 

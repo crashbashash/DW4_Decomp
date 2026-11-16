@@ -5,13 +5,13 @@ igMetaField *g_beSvReadMediaApi_oneSvDataSizeMetaField;
 igMetaField *g_beSvReadMediaApi_lodeDataMetaField;
 igMetaField *g_beSvReadMediaApi_loadWorkListMetaField;
 
-void FUN_00349270(int arg0) {
-    FUN_00349430();
+void beSvReadMediaApi_Create(int arg0) {
+    beSvReadMediaApi_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588238, arg0);
 }
 
-igMetaObject *FUN_003492b0(void) {
-    if (g_beSvReadMediaApi_metaObject == 0 || !isValid(g_beSvReadMediaApi_metaObject)) FUN_00349430();
+igMetaObject *beSvReadMediaApi_GetMetaObject(void) {
+    if (g_beSvReadMediaApi_metaObject == 0 || !isValid(g_beSvReadMediaApi_metaObject)) beSvReadMediaApi_EnsureRegistered();
     return g_beSvReadMediaApi_metaObject;
 }
 
@@ -23,12 +23,12 @@ int beSvReadMediaApi_GetVTable(void) {
     obj.w12 = 0;
     obj.w13 = 0;
     obj.w14 = 0;
-    obj.vt = &DAT_0053be40[0];
+    obj.vt = &g_beSvReadMediaApi_vtable[0];
     obj.w17 = 0;
     obj.w19 = 0;
     obj.w20 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053be40[0];
+    obj.vt = &g_beSvReadMediaApi_vtable[0];
     igSmartPointer_igObjectList_Destruct(&obj.w20, -1);
     FUN_003493b0((O *)&obj.w19, (short)(-1));
     FUN_00349080((void **)&obj.w17, (long long)(-1));
@@ -45,12 +45,12 @@ O *FUN_003493b0(O *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00349430(void)
+void beSvReadMediaApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvReadMediaApi_Register);
 }
 
-static igMetaObjectCallback g_beSvReadMediaApi_callbackList[] = { FUN_0034a340, FUN_0034af90, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSvReadMediaApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
 void *beSvReadMediaApi_Register(void) {
     BecLibrary_MarkRegistered();
@@ -59,7 +59,7 @@ void *beSvReadMediaApi_Register(void) {
         &g_beSvReadMediaApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
-        beSvReadMediaApi_GetMetaObject,
+        beSvReadMediaApi_GetMetaObjectFunction,
         "beSvReadMediaApi",
         0x58, /* instance size */
         beSvReadMediaApi_GetVTable,
@@ -69,9 +69,9 @@ void *beSvReadMediaApi_Register(void) {
     );
 }
 
-void beSvReadMediaApi_GetMetaObject(void)
+void beSvReadMediaApi_GetMetaObjectFunction(void)
 {
-    FUN_003492b0();
+    beSvReadMediaApi_GetMetaObject();
 }
 
 static FieldFactory g_beSvReadMediaApi_ctorTable[] = {
@@ -115,13 +115,13 @@ void beSvReadMediaApi_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beSvReadMediaApi_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a210();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034aeb0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x10);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034aeb0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;

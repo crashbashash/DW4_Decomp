@@ -36,25 +36,25 @@ extern unsigned char g_useOwnerAllocator;
 extern int g_beSystem_metaObject[4];
 extern int ndmw_igb[4];
 
-void beSystem_AddToScheduler(beSystem *self, int unusedArg);
-void beSystem_RemoveFromScheduler(beSystem *self, int unusedArg);
+void beSystem_Activate(beSystem *self, int unusedArg);
+void beSystem_Deactivate(beSystem *self, int unusedArg);
 void beSystem_Start(beSystem *self);
 void beSystem_Stop(void);
-int beSystem_AcceptInfo(void);
-void beSystem_Reset(beSystem *self);
+int beSystem_AddInfo(void);
+void beSystem_RemoveAllInfo(beSystem *self);
 void beSystem_Update(beSystem *self);
 int beSystem_IsRunning(beSystem *self);
 int beSystem_GetMetaObject_Virtual(void);
 }
 
 /* Hands the system to the insight scheduler unless it already holds it. */
-void beSystem_AddToScheduler(beSystem *self, int unusedArg)
+void beSystem_Activate(beSystem *self, int unusedArg)
 {
     igInsightCore_AddToScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
 /* Takes the system back out of the insight scheduler when it holds it. */
-void beSystem_RemoveFromScheduler(beSystem *self, int unusedArg)
+void beSystem_Deactivate(beSystem *self, int unusedArg)
 {
     igInsightCore_RemoveFromScheduler(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
@@ -132,12 +132,12 @@ void beSystem_Stop(void)
 }
 
 /* The system takes none of the infos the insight core offers its managers. */
-int beSystem_AcceptInfo(void)
+int beSystem_AddInfo(void)
 {
     return 0;
 }
 
-void beSystem_Reset(beSystem *self)
+void beSystem_RemoveAllInfo(beSystem *self)
 {
     self->_isFirstTime = 1;
 }

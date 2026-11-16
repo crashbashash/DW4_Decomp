@@ -19,7 +19,7 @@ int igTextureMatrixAttrPool_GetVTable(void) {
     struct Obj_199c00 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b120[0];
+    obj.vt = &g_igTextureMatrixAttrPool_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -28,7 +28,7 @@ void FUN_00199c40(void)
     igMetaObject_RunStaticInit(igTextureMatrixAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igTextureMatrixAttrPool_callbackList[] = { FUN_001318f0, 0 };
+static igMetaObjectCallback g_igTextureMatrixAttrPool_callbackList[] = { igTextureMatrixAttr_EnsureRegistered, 0 };
 
 void igTextureMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

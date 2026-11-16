@@ -3,12 +3,12 @@ igMetaField *g_beNDMWShopJunk_junkMenuMetaField;
 igMetaField *g_beNDMWShopJunk_totalGiftMetaField;
 igMetaField *g_beNDMWShopJunk_junkItemListMetaField;
 
-void FUN_003b64f0(void)
+void beNDMWShopJunk_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopJunk_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopJunk_callbackList[] = { FUN_003c9210, 0 };
+static igMetaObjectCallback g_beNDMWShopJunk_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, 0 };
 
 void *beNDMWShopJunk_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -17,7 +17,7 @@ void *beNDMWShopJunk_Register(void) {
         &g_beNDMWShopJunk_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWShopJunk_GetMetaObject,
+        beNDMWShopJunk_GetMetaObjectFunction,
         "beNDMWShopJunk",
         0x60, /* instance size */
         beNDMWShopJunk_GetVTable,
@@ -27,8 +27,8 @@ void *beNDMWShopJunk_Register(void) {
     );
 }
 
-void beNDMWShopJunk_GetMetaObject(void)
+void beNDMWShopJunk_GetMetaObjectFunction(void)
 {
-    FUN_003b6350();
+    beNDMWShopJunk_GetMetaObject();
 }
 

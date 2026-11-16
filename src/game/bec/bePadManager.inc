@@ -6,21 +6,21 @@ igMetaField *g_bePadManager_is1pAllDeviceMetaField;
 igMetaField *g_bePadManager_isPadDisableMetaField;
 
 void bePadManager_CreateInstance(int arg0) {
-    FUN_0034cb30();
+    bePadManager_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588518, arg0);
 }
 
-igMetaObject *FUN_0034c8e0(void) {
+igMetaObject *bePadManager_GetOrCreateMetaObject(void) {
     if (g_bePadManager_metaObject == 0) {
         g_bePadManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_bePadManager_metaObject;
 }
 
-void *FUN_0034c930(void) {
+void *bePadManager_GetMetaObject(void) {
     igMetaObject *g = g_bePadManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034cb30();
+        bePadManager_EnsureRegistered();
     }
     return g_bePadManager_metaObject;
 }
@@ -31,12 +31,12 @@ int bePadManager_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_0053b030[0];
+    obj.vt = &g_bePadManager_vtable[0];
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053b030[0];
+    obj.vt = &g_bePadManager_vtable[0];
     FUN_0034cab0((struct R **)&obj.w6, (short)(-1));
     FUN_0034ca30((ObjectRefWord *)&obj.w5, -1);
     FUN_0033dc20((void **)&obj.w4, (short)(-1));
@@ -75,12 +75,12 @@ struct R **FUN_0034cab0(struct R **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0034cb30(void)
+void bePadManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(bePadManager_Register);
 }
 
-static igMetaObjectCallback g_bePadManager_callbackList[] = { FUN_00342f30, FUN_0034cda0, FUN_0035d1a0, 0 };
+static igMetaObjectCallback g_bePadManager_callbackList[] = { beSystem_EnsureRegistered, bePadDataList_EnsureRegistered, beKeyboardReceiver_EnsureRegistered, 0 };
 
 void *bePadManager_Register(void) {
     BecLibrary_MarkRegistered();
@@ -89,7 +89,7 @@ void *bePadManager_Register(void) {
         &g_bePadManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        bePadManager_GetMetaObject,
+        bePadManager_GetMetaObjectFunction,
         "bePadManager",
         0x20, /* instance size */
         bePadManager_GetVTable,
@@ -99,9 +99,9 @@ void *bePadManager_Register(void) {
     );
 }
 
-void bePadManager_GetMetaObject(void)
+void bePadManager_GetMetaObjectFunction(void)
 {
-    FUN_0034c930();
+    bePadManager_GetMetaObject();
 }
 
 static FieldFactory g_bePadManager_ctorTable[] = {
@@ -144,12 +144,12 @@ void bePadManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_bePadManager_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00342ce0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034ccc0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)bePadDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0035d070();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beKeyboardReceiver_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_bePadManager_fieldTable, g_bePadManager_fieldHandles, g_bePadManager_fieldOffsets, temp_s2);
 }

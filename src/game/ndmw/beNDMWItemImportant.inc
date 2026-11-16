@@ -1,7 +1,7 @@
 igMetaObject *g_beNDMWItemImportant_metaObject;
 
-void FUN_003c8240(int arg0) {
-    FUN_003c8310();
+void beNDMWItemImportant_Create(int arg0) {
+    beNDMWItemImportant_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWItemImportant_metaObject, arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *beNDMWItemImportant_GetReadyMetaObject(void) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_003c8310();
+    beNDMWItemImportant_EnsureRegistered();
 done:
     return g_beNDMWItemImportant_metaObject;
 }
@@ -20,11 +20,11 @@ int beNDMWItemImportant_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005406c0[0];
+    obj.vt = &g_beNDMWItemImportant_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c8310(void)
+void beNDMWItemImportant_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWItemImportant_Register);
 }

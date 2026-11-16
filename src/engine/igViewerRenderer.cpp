@@ -35,7 +35,7 @@ struct Q { char pad0[8]; V *f8; B *f12; char pad16[28]; int f44; char pad48[20];
 
 void igObject_Destroy(void *);
 
-void Gap__Viewer__igViewerRenderer__vfunc_25(Q *arg0);
+void igViewerRenderer_Traverse(Q *arg0);
 
 class V2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void *v104(void *); virtual void d25(); virtual void v112(int); };
 struct Q2 { char pad8[8]; V2 *f8; char pad12[60]; V2 *f72; char pad76[4]; V2 *f80; char pad84[4]; Rc *f88; };
@@ -90,7 +90,7 @@ typedef struct Frame {
 typedef struct Sub { char pad[8]; int f8; } Sub;
 typedef struct W { char pad[184]; unsigned char f184; unsigned char f185; unsigned char f186; unsigned char f187; int f188; unsigned char f192; unsigned char f193; unsigned char f194; unsigned char f195; unsigned char f196; unsigned char f197; unsigned char f198; unsigned char f199; unsigned char f200; unsigned char f201; unsigned char f202; } W;
 typedef struct Arg { char pad[12]; W *f12; char pad2[44]; Sub *f60; } Arg;
-extern Frame *DAT_0056dc50[4];
+extern Frame *g_sharedViewerOptions[4];
 
 struct V4 { float a, b, c, d; };
 class A2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(V4 *); };
@@ -281,7 +281,7 @@ void FUN_0045f370(S *arg0) {
     }
 }
 
-void Gap__Viewer__igViewerRenderer__vfunc_25(Q *arg0) {
+void igViewerRenderer_Traverse(Q *arg0) {
     Rc *t;
     Rc *n;
     arg0->f8->v203(0, (int)arg0->f12 + 44);
@@ -431,13 +431,13 @@ void igViewerRenderer_ApplyOptions(Arg *arg0) {
     void *p;
     int *h;
     int rc;
-    if (DAT_0056dc50[0] == 0) {
+    if (g_sharedViewerOptions[0] == 0) {
         f = (Frame *)__nw__FUi(240);
         if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
-        DAT_0056dc50[0] = f;
+        g_sharedViewerOptions[0] = f;
     }
-    DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
-    s0 = DAT_0056dc50[0];
+    g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
+    s0 = g_sharedViewerOptions[0];
     s1 = arg0->f60->f8 > 0;
     if (s0->f92 != 0) {
         arg0->f12->f192 = s1;
@@ -525,9 +525,9 @@ void igViewerRenderer_ApplyOptions(Arg *arg0) {
     sp14[0] = 2;
     sp14[2] = DAT_0058ca50[0];
     igModel_NotifyViews(arg0->f12, sp14);
-    if (DAT_0056dc50[0] != 0) {
-        if (--DAT_0056dc50[0]->f232 <= 0) {
-            f = DAT_0056dc50[0];
+    if (g_sharedViewerOptions[0] != 0) {
+        if (--g_sharedViewerOptions[0]->f232 <= 0) {
+            f = g_sharedViewerOptions[0];
             if (f != 0) {
                 if (&f->f236) {
                     p = f->f236;
@@ -553,7 +553,7 @@ void igViewerRenderer_ApplyOptions(Arg *arg0) {
                 }
                 __dl__FPv(f);
             }
-            DAT_0056dc50[0] = 0;
+            g_sharedViewerOptions[0] = 0;
         }
     }
 }
@@ -566,13 +566,13 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     igSmartPointer<igObject> first((igObject *)createFirst());
     sp40.a = 1.0f; sp40.b = 1.0f; sp40.c = 1.0f; sp40.d = 1.0f;
     ((A2 *)first.p)->vX(&sp40);
-    if (DAT_0056dc50[0] == 0) {
+    if (g_sharedViewerOptions[0] == 0) {
         Frame *f = (Frame *)__nw__FUi(240);
         if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
-        DAT_0056dc50[0] = f;
+        g_sharedViewerOptions[0] = f;
     }
-    DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
-    s0 = DAT_0056dc50[0];
+    g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
+    s0 = g_sharedViewerOptions[0];
     igSmartPointer<igObject> second((igObject *)createSecond());
     ((B2 *)second.p)->v128(4);
     ((B2 *)second.p)->v132(s0->range);
@@ -601,9 +601,9 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
         }
         s0b->f16 = s1;
     }
-    if (DAT_0056dc50[0] != 0) {
-        if (--DAT_0056dc50[0]->f232 <= 0) {
-            Frame *s0c = DAT_0056dc50[0];
+    if (g_sharedViewerOptions[0] != 0) {
+        if (--g_sharedViewerOptions[0]->f232 <= 0) {
+            Frame *s0c = g_sharedViewerOptions[0];
             if (s0c != 0) {
                 if (&s0c->f236) {
                     void *p = s0c->f236;
@@ -629,7 +629,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
                 }
                 __dl__FPv(s0c);
             }
-            DAT_0056dc50[0] = 0;
+            g_sharedViewerOptions[0] = 0;
         }
     }
     FUN_00460e00((int *)arg0, (void *)first.p);
@@ -798,16 +798,16 @@ void igViewerRenderer_UpdateLighting(igViewerRenderer *arg0) {
     if (x->_useHeadLight != 0 || x->_useHeadLightSpecular != 0) {
         ((V3 *)arg0->_headlightStateAttr)->v30(1);
         if (((igViewerParameters *)arg0->_parameters)->_useHeadLightSpecular != 0) {
-            if (DAT_0056dc50[0] == 0) {
+            if (g_sharedViewerOptions[0] == 0) {
                 Frame *f = (Frame *)__nw__FUi(240);
                 if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
-                DAT_0056dc50[0] = f;
+                g_sharedViewerOptions[0] = f;
             }
-            DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
-            ((V3 *)arg0->_headlightAttr)->v32((char *)DAT_0056dc50[0] + 116);
-            if (DAT_0056dc50[0] != 0) {
-                if (--DAT_0056dc50[0]->f232 <= 0) {
-                    Frame *s1 = DAT_0056dc50[0];
+            g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
+            ((V3 *)arg0->_headlightAttr)->v32((char *)g_sharedViewerOptions[0] + 116);
+            if (g_sharedViewerOptions[0] != 0) {
+                if (--g_sharedViewerOptions[0]->f232 <= 0) {
+                    Frame *s1 = g_sharedViewerOptions[0];
                     if (s1 != 0) {
                         if (&s1->f236) {
                             void *p = s1->f236;
@@ -833,7 +833,7 @@ void igViewerRenderer_UpdateLighting(igViewerRenderer *arg0) {
                         }
                         __dl__FPv(s1);
                     }
-                    DAT_0056dc50[0] = 0;
+                    g_sharedViewerOptions[0] = 0;
                 }
             }
         } else {
@@ -907,7 +907,7 @@ int Gap__Viewer__igViewerRenderer__vfunc_22(void) {
     return g_igViewerRenderer_metaObject[0];
 }
 
-void Gap__Viewer__igViewerRenderer__vfunc_24(void) {
+void igViewerRenderer_ReleaseDrawing(void) {
 
 }
 

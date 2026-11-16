@@ -2,18 +2,18 @@ igMetaObject *g_beHitLandResultData_metaObject;
 igMetaField *g_beHitLandResultData_infoNameMetaField;
 igMetaField *g_beHitLandResultData_ramNoMetaField;
 
-void FUN_0035e400(int arg0) {
-    FUN_0035e520();
+void beHitLandResultData_Create(int arg0) {
+    beHitLandResultData_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5893E8, arg0);
 }
 
-void *FUN_0035e440(void) {
+void *beHitLandResultData_GetMetaObject(void) {
     unsigned char b;
     if (g_beHitLandResultData_metaObject != 0) {
         b = (*(int *)((char *)(g_beHitLandResultData_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_0035e520();
+    beHitLandResultData_EnsureRegistered();
 done:
     return g_beHitLandResultData_metaObject;
 }
@@ -27,11 +27,11 @@ int beHitLandResultData_GetVTable(void) {
     int temp_v0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00536290[0];
+    u.vt = (int)&g_beHitLandResultData_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00536290[0];
+    u.vt = (int)&g_beHitLandResultData_vtable[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {
@@ -46,7 +46,7 @@ int beHitLandResultData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0035e520(void)
+void beHitLandResultData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beHitLandResultData_Register);
 }
@@ -58,7 +58,7 @@ void *beHitLandResultData_Register(void) {
         &g_beHitLandResultData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beHitLandResultData_GetMetaObject,
+        beHitLandResultData_GetMetaObjectFunction,
         "beHitLandResultData",
         0x58, /* instance size */
         beHitLandResultData_GetVTable,
@@ -68,9 +68,9 @@ void *beHitLandResultData_Register(void) {
     );
 }
 
-void beHitLandResultData_GetMetaObject(void)
+void beHitLandResultData_GetMetaObjectFunction(void)
 {
-    FUN_0035e440();
+    beHitLandResultData_GetMetaObject();
 }
 
 static FieldFactory g_beHitLandResultData_ctorTable[] = {

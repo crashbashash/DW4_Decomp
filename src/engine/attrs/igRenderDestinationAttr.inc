@@ -51,7 +51,7 @@ igMetaEnum *FUN_00134150(void) {
 }
 
 int FUN_001341b0(int arg0) {
-    FUN_00134370();
+    igRenderDestinationAttr_EnsureRegistered();
     return igMetaObject_CreateInstance(*(int *)0x55EED8, arg0);
 }
 
@@ -66,7 +66,7 @@ igMetaObject *igRenderDestinationAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igRenderDestinationAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00134370();
+        igRenderDestinationAttr_EnsureRegistered();
     return g_igRenderDestinationAttr_metaObject;
 }
 
@@ -81,11 +81,11 @@ int igRenderDestinationAttr_GetVTable(void) {
     igObject_InitHeader(u.b);
     p1 = (S_ref *)&u.b[64];
     p2 = (S_ref *)&u.b[32];
-    u.vt = (int)&DAT_00523060[0];
+    u.vt = (int)&g_igRenderDestinationAttr_vtable[0];
     *(int *)p2 = 0;
     *(int *)p1 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00523060[0];
+    u.vt = (int)&g_igRenderDestinationAttr_vtable[0];
     if (p1 != 0) {
         t1 = *(S_ref **)p1;
         if (t1 != 0) {
@@ -107,12 +107,12 @@ int igRenderDestinationAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00134370(void)
+void igRenderDestinationAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRenderDestinationAttr_Register);
 }
 
-static igMetaObjectCallback g_igRenderDestinationAttr_callbackList[] = { FUN_00132cf0, FUN_0014a0e0, 0 };
+static igMetaObjectCallback g_igRenderDestinationAttr_callbackList[] = { igTextureAttr_EnsureRegistered, igVisualContext_EnsureRegistered, 0 };
 
 void igRenderDestinationAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -241,7 +241,7 @@ void igRenderDestinationAttr_InitFields(void) {
     igIntMetaField_SetDefault(temp_v0_4, -1);
     ((igMetaField *)temp_v0_4)->_persistent = 0;
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00132ba0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2)->_persistent = 0;
     temp_v0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     igEnumMetaField_SetDefaultValue(temp_v0_5, g_igRenderDestinationAttr_iTypeDefault);
@@ -265,7 +265,7 @@ void igRenderDestinationAttr_InitFields(void) {
     igIntMetaField_SetDefault(temp_v0_11, -1);
     ((igMetaField *)temp_v0_11)->_persistent = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xD));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igVisualContext_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
     ((igMetaField *)temp_s2_2)->_deepCopyMethod = 1;
     ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 1;

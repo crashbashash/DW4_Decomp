@@ -6,14 +6,14 @@ igMetaField *g_beNDMWStatusSubMenu_playerNoListMetaField;
 igMetaField *g_beNDMWStatusSubMenu_playerDeviceCntMetaField;
 
 void beNDMWStatusSubMenu_Create(int arg0) {
-    FUN_003b9120();
+    beNDMWStatusSubMenu_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, arg0);
 }
 
-void *FUN_003b8f90(void) {
+void *beNDMWStatusSubMenu_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWStatusSubMenu_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003b9120();
+        beNDMWStatusSubMenu_EnsureRegistered();
     }
     return g_beNDMWStatusSubMenu_metaObject;
 }
@@ -30,20 +30,20 @@ int beNDMWStatusSubMenu_GetVTable(void) {
     u.w[17] = 0;
     u.w[18] = 0;
     u.w[19] = 0;
-    u.w[0] = (int)(&DAT_0053ec20[0]);
+    u.w[0] = (int)(&g_beNDMWStatusSubMenu_vtable[0]);
     u.w[22] = 0;
     u.w[24] = 0;
     u.w[25] = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0053ec20[0]);
+    u.w[0] = (int)(&g_beNDMWStatusSubMenu_vtable[0]);
     igSmartPointer_igIntList_Destruct(&u.w[25], -1);
     igSmartPointer_igIntList_Destruct(&u.w[24], -1);
-    FUN_003b90a0((void **)(&u.w[22]), (short)(-1));
+    beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct((void **)(&u.w[22]), (short)(-1));
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)u.b, (long long)0);
     return temp_s2;
 }
 
-void **FUN_003b90a0(void **arg0, short arg1) {
+void **beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct(void **arg0, short arg1) {
     S_temp_a0_3b90a0 *temp_a0;
 
     if (arg0 != 0) {
@@ -61,12 +61,12 @@ void **FUN_003b90a0(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_003b9120(void)
+void beNDMWStatusSubMenu_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusSubMenu_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusSubMenu_callbackList[] = { FUN_003bb610, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusSubMenu_callbackList[] = { beNDMWWindowCtrl_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
 void *beNDMWStatusSubMenu_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -75,7 +75,7 @@ void *beNDMWStatusSubMenu_Register(void) {
         &g_beNDMWStatusSubMenu_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWStatusSubMenu_GetMetaObject,
+        beNDMWStatusSubMenu_GetMetaObjectFunction,
         "beNDMWStatusSubMenu",
         0x68, /* instance size */
         beNDMWStatusSubMenu_GetVTable,
@@ -85,9 +85,9 @@ void *beNDMWStatusSubMenu_Register(void) {
     );
 }
 
-void beNDMWStatusSubMenu_GetMetaObject(void)
+void beNDMWStatusSubMenu_GetMetaObjectFunction(void)
 {
-    FUN_003b8f90();
+    beNDMWStatusSubMenu_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWStatusSubMenu_ctorTable[] = {
@@ -130,7 +130,7 @@ void beNDMWStatusSubMenu_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWStatusSubMenu_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003bb570();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWWindowCtrl_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;

@@ -19,12 +19,12 @@ int igLogoRenderer_GetVTable(void) {
     int t;
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_00542230[0];
+    obj.vt = &g_igLogoRenderer_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w8 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    obj.vt = &DAT_00542230[0];
+    obj.vt = &g_igLogoRenderer_vtable[0];
     FUN_0013bfe0(&obj.w8, -1);
     FUN_0019ab10(&obj.w7, -1);
     FUN_001353b0(&obj.w6, -1);
@@ -37,7 +37,7 @@ void FUN_0045dd20(void)
     igMetaObject_RunStaticInit(igLogoRenderer_Register);
 }
 
-static igMetaObjectCallback g_igLogoRenderer_callbackList[] = { FUN_001378f0, FUN_00139000, FUN_0013afe0, 0 };
+static igMetaObjectCallback g_igLogoRenderer_callbackList[] = { FUN_001378f0, igColorAttr_EnsureRegistered, igAttrList_EnsureRegistered, 0 };
 
 void igLogoRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -98,10 +98,10 @@ void igLogoRenderer_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00137850();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00138f20();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igColorAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0013af00();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_igLogoRenderer_fieldTable, g_igLogoRenderer_fieldHandles, g_igLogoRenderer_fieldOffsets, temp_s2);
 }

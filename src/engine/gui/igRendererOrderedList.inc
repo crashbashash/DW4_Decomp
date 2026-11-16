@@ -1,11 +1,11 @@
 igMetaObject *g_igRendererOrderedList_metaObject;
 
-void FUN_0044c490(int arg0) {
+void igRendererOrderedList_CreateInstance(int arg0) {
     igRendererOrderedList_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igRendererOrderedList_metaObject, arg0);
 }
 
-igMetaObject *FUN_0044c4d0(void) {
+igMetaObject *igRendererOrderedList_GetOrCreateMetaObject(void) {
     if (g_igRendererOrderedList_metaObject == 0) {
         g_igRendererOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -29,9 +29,9 @@ int igRendererOrderedList_GetVTable(void) {
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[4] = 0;
-    obj.vt = &DAT_00541d70[0];
+    obj.vt = &g_igRendererOrderedList_vtable[0];
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00541d70[0];
+    obj.vt = &g_igRendererOrderedList_vtable[0];
     FUN_0044c5e0((int **)&obj, 0);
     return r;
 }
@@ -40,7 +40,7 @@ int **FUN_0044c5e0(int **arg0, long long arg1) {
     if (arg0 != 0) {
         *arg0 = &DAT_00541dd0[0];
         if (arg0 != 0) {
-            *arg0 = &DAT_0052cc20[0];
+            *arg0 = &g_igDependencyOrderedList_vtable[0];
             igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x14), -1);
             igSmartPointer_igPointerList_Destruct((int **)((char *)arg0 + 0x10), -1);
             igSmartPointer_igDependencyList_Destruct((int **)((char *)arg0 + 0xC), -1);

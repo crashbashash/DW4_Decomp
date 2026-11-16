@@ -1,12 +1,12 @@
 igMetaObject *g_beSelectCtrlInfo_metaObject;
 
-void *FUN_00345170(void) {
+void *beSelectCtrlInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beSelectCtrlInfo_metaObject != 0) {
         b = (*(int *)((char *)(g_beSelectCtrlInfo_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00345230();
+    beSelectCtrlInfo_EnsureRegistered();
 done:
     return g_beSelectCtrlInfo_metaObject;
 }
@@ -19,14 +19,14 @@ int beSelectCtrlInfo_GetVTable(void) {
     f.w[1] = 0;
     f.w[4] = 0;
     f.w[5] = 0;
-    f.vt = &DAT_005390d0[0];
+    f.vt = &g_beSelectCtrlInfo_vtable[0];
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &DAT_005390d0[0];
+    f.vt = &g_beSelectCtrlInfo_vtable[0];
     FUN_0033ec80((struct S_33ec80 *)&f, (short)0);
     return temp_s0;
 }
 
-void FUN_00345230(void)
+void beSelectCtrlInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSelectCtrlInfo_Register);
 }
@@ -38,7 +38,7 @@ void *beSelectCtrlInfo_Register(void) {
         &g_beSelectCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beSelectCtrlInfo_GetMetaObject,
+        beSelectCtrlInfo_GetMetaObjectFunction,
         "beSelectCtrlInfo",
         0x1c, /* instance size */
         beSelectCtrlInfo_GetVTable,
@@ -48,8 +48,8 @@ void *beSelectCtrlInfo_Register(void) {
     );
 }
 
-void beSelectCtrlInfo_GetMetaObject(void)
+void beSelectCtrlInfo_GetMetaObjectFunction(void)
 {
-    FUN_00345170();
+    beSelectCtrlInfo_GetMetaObject();
 }
 

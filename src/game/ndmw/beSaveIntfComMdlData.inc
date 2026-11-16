@@ -3,10 +3,10 @@ igMetaField *g_beSaveIntfComMdlData_ramNoMetaField;
 igMetaField *g_beSaveIntfComMdlData_openSQMetaField;
 igMetaField *g_beSaveIntfComMdlData_infoNameMetaField;
 
-void *FUN_003bc710(void) {
+void *beSaveIntfComMdlData_GetMetaObject(void) {
     igMetaObject *g = g_beSaveIntfComMdlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003bc820();
+        beSaveIntfComMdlData_EnsureRegistered();
     }
     return g_beSaveIntfComMdlData_metaObject;
 }
@@ -16,17 +16,17 @@ int beSaveIntfComMdlData_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj._vtable = (int)&DAT_0053d830[0];
+    obj._vtable = (int)&g_beSaveIntfComMdlData_vtable[0];
     obj._openSQ = 0;
     obj._infoName = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj._vtable = (int)&DAT_0053d830[0];
+    obj._vtable = (int)&g_beSaveIntfComMdlData_vtable[0];
     obj.rel16();
     obj.rel12();
     return r;
 }
 
-void FUN_003bc820(void)
+void beSaveIntfComMdlData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSaveIntfComMdlData_Register);
 }
@@ -38,7 +38,7 @@ void *beSaveIntfComMdlData_Register(void) {
         &g_beSaveIntfComMdlData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSaveIntfComMdlData_GetMetaObject,
+        beSaveIntfComMdlData_GetMetaObjectFunction,
         "beSaveIntfComMdlData",
         0x14, /* instance size */
         beSaveIntfComMdlData_GetVTable,
@@ -48,9 +48,9 @@ void *beSaveIntfComMdlData_Register(void) {
     );
 }
 
-void beSaveIntfComMdlData_GetMetaObject(void)
+void beSaveIntfComMdlData_GetMetaObjectFunction(void)
 {
-    FUN_003bc710();
+    beSaveIntfComMdlData_GetMetaObject();
 }
 
 static FieldFactory g_beSaveIntfComMdlData_ctorTable[] = {

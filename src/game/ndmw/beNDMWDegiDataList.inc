@@ -1,6 +1,6 @@
 igMetaObject *g_beNDMWDegiDataList_metaObject;
 
-igMetaObject *FUN_003c66a0(void) {
+igMetaObject *beNDMWDegiDataList_GetOrCreateMetaObject(void) {
     if (g_beNDMWDegiDataList_metaObject == 0) {
         g_beNDMWDegiDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -13,7 +13,7 @@ void *beNDMWDegiDataList_GetReadyMetaObject(void) {
     ok = !!(g_beNDMWDegiDataList_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003c6780();
+    beNDMWDegiDataList_EnsureRegistered();
 done:;
     return g_beNDMWDegiDataList_metaObject;
 }
@@ -22,11 +22,11 @@ int beNDMWDegiDataList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053ca00[0];
+    obj.vt = &g_beNDMWDegiDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c6780(void)
+void beNDMWDegiDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWDegiDataList_Register);
 }

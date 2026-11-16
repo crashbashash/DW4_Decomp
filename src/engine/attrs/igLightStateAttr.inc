@@ -4,7 +4,7 @@ igMetaField *g_igLightStateAttr_enabledMetaField;
 igMetaField *g_igLightStateAttr_internalMetaField;
 
 void FUN_001361b0(int arg0) {
-    FUN_00136470();
+    igLightStateAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F060, arg0);
 }
 
@@ -19,7 +19,7 @@ igMetaObject *igLightStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igLightStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00136470();
+        igLightStateAttr_EnsureRegistered();
     return g_igLightStateAttr_metaObject;
 }
 
@@ -33,11 +33,11 @@ int igLightStateAttr_GetVTable(void) {
     igObject_InitHeader(u.b);
     p0 = (S_ref *)&u.b[12];
     p1 = (S_ref *)&u.b[16];
-    u.vt = (int)&DAT_00523670[0];
+    u.vt = (int)&g_igLightStateAttr_vtable[0];
     *(int *)p0 = 0;
     *(int *)p1 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00523670[0];
+    u.vt = (int)&g_igLightStateAttr_vtable[0];
     if (p1 != 0) {
         p1 = *(S_ref **)p1;
         if (p1 != 0) {
@@ -85,12 +85,12 @@ ObjectRefWord *ObjectRef_Destruct_001363f0(ObjectRefWord *self,int delete_storag
     return self;
 }
 
-void FUN_00136470(void)
+void igLightStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLightStateAttr_Register);
 }
 
-static igMetaObjectCallback g_igLightStateAttr_callbackList[] = { FUN_00136880, igObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLightStateAttr_callbackList[] = { igLightAttr_EnsureRegistered, igObject_EnsureRegistered, 0 };
 
 void igLightStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();

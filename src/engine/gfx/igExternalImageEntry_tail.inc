@@ -1,6 +1,6 @@
 int Gap__Gfx__igExternalImageEntry__vfunc_44(A *arg0) {
     igObject *temp_v0;
-    temp_v0 = (igObject *)FUN_0014df70(igObject_GetAllocator());
+    temp_v0 = (igObject *)igImage_CreateInstance(igObject_GetAllocator());
     if (FUN_001551f0((S_1551f0 *)arg0, (V_1551f0 *)temp_v0) == 0) {
         temp_v0->_refCount = temp_v0->_refCount - 1;
         if ((temp_v0->_refCount & 0x7FFFFF) == 0) {

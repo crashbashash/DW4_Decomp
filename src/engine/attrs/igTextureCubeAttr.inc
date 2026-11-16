@@ -42,14 +42,14 @@ int igTextureCubeAttr_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_00522aa0[0];
+    o.vt = &g_igTextureCubeAttr_vtable[0];
     o.f[2] = 0;
     o.f[11] = 0;
     o.f[13] = 0;
     o.f[15] = 0;
     __construct_array(&o.f[17], &FUN_00132410, &FUN_00132390, 4, 6);
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00522aa0[0];
+    o.vt = &g_igTextureCubeAttr_vtable[0];
     __destroy_arr(&o.f[17], &FUN_00132390, 4, 6);
     FUN_00132230((S_132230 *)&o, 0);
     return r;
@@ -90,7 +90,7 @@ void *FUN_00132230(struct S_132230 *arg0, short arg1) {
     struct R *p;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_00522c60[0];
+        arg0->f0 = &g_igTextureAttr_vtable[0];
         if (&arg0->f64) {
             p = arg0->f64;
             if (p != 0) {
@@ -154,7 +154,7 @@ void FUN_00132420(void)
     igMetaObject_RunStaticInit(igTextureCubeAttr_Register);
 }
 
-static igMetaObjectCallback g_igTextureCubeAttr_callbackList[] = { FUN_0014e050, 0 };
+static igMetaObjectCallback g_igTextureCubeAttr_callbackList[] = { igImage_EnsureRegistered, 0 };
 
 void igTextureCubeAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -212,7 +212,7 @@ void igTextureCubeAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igTextureCubeAttr_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014dfb0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igImage_GetOrCreateMetaObject();
     ((igObjectRefArrayMetaField *)temp_s1)->_num = 6;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);

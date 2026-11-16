@@ -19,7 +19,7 @@ int igAnimationTransitionPointList_GetVTable(void) {
     struct Obj_1a98d0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005299c0[0];
+    obj.vt = &g_igAnimationTransitionPointList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

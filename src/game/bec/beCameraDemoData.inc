@@ -3,13 +3,13 @@ igMetaField *g_beCameraDemoData_cameraPathMetaField;
 igMetaField *g_beCameraDemoData_endTimeMetaField;
 igMetaField *g_beCameraDemoData_totalSecMetaField;
 
-void *FUN_00368f80(void) {
+void *beCameraDemoData_GetMetaObject(void) {
     bool ok;
     if (g_beCameraDemoData_metaObject == 0) goto make;
     ok = !!(g_beCameraDemoData_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_00369060();
+    beCameraDemoData_EnsureRegistered();
 done:;
     return g_beCameraDemoData_metaObject;
 }
@@ -19,20 +19,20 @@ int beCameraDemoData_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00534a30[0];
+    obj.vt = &g_beCameraDemoData_vtable[0];
     obj.ref = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00534a30[0];
+    obj.vt = &g_beCameraDemoData_vtable[0];
     obj.release();
     return r;
 }
 
-void FUN_00369060(void)
+void beCameraDemoData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCameraDemoData_Register);
 }
 
-static igMetaObjectCallback g_beCameraDemoData_callbackList[] = { FUN_0019f7a0, 0 };
+static igMetaObjectCallback g_beCameraDemoData_callbackList[] = { igGraphPath_EnsureRegistered, 0 };
 
 void *beCameraDemoData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -41,7 +41,7 @@ void *beCameraDemoData_Register(void) {
         &g_beCameraDemoData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beCameraDemoData_GetMetaObject,
+        beCameraDemoData_GetMetaObjectFunction,
         "beCameraDemoData",
         0x20, /* instance size */
         beCameraDemoData_GetVTable,
@@ -51,9 +51,9 @@ void *beCameraDemoData_Register(void) {
     );
 }
 
-void beCameraDemoData_GetMetaObject(void)
+void beCameraDemoData_GetMetaObjectFunction(void)
 {
-    FUN_00368f80();
+    beCameraDemoData_GetMetaObject();
 }
 
 static FieldFactory g_beCameraDemoData_ctorTable[] = {
@@ -86,7 +86,7 @@ void beCameraDemoData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beCameraDemoData_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019f670();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igGraphPath_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beCameraDemoData_fieldTable, g_beCameraDemoData_fieldHandles, g_beCameraDemoData_fieldOffsets, temp_s2);
 }
 

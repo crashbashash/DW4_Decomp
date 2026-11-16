@@ -30,10 +30,10 @@ int igGuiComponentModel_GetVTable(void) {
     igObject_InitHeader(u.b);
     q0 = (S_ref *)&u.b[8];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_00540e30[0];
-    u.vt = (int)&DAT_00541e30[0];
+    u.vt = (int)&g_igModel_vtable[0];
+    u.vt = (int)&g_igGuiComponentModel_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00540e30[0];
+    u.vt = (int)&g_igModel_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -122,7 +122,7 @@ void igGuiComponentModel_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igGuiComponentModel_ctorTable, 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_0044ff40();
+    *(int *)((char *)(temp_s1) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();
     *(char *)(60 + (char *)(temp_s1)) = 0;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));

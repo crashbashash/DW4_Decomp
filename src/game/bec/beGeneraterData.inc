@@ -12,10 +12,10 @@ igMetaField *g_beGeneraterData_fillDataMetaField;
 igMetaField *g_beGeneraterData_callLuaMetaField;
 igMetaField *g_beGeneraterData_playerDataListMetaField;
 
-void *FUN_0035fb60(void) {
+void *beGeneraterData_GetMetaObject(void) {
     igMetaObject *g = g_beGeneraterData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035fd50();
+        beGeneraterData_EnsureRegistered();
     }
     return g_beGeneraterData_metaObject;
 }
@@ -26,7 +26,7 @@ int beGeneraterData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_00535eb0[0];
+    obj.vt = &g_beGeneraterData_vtable[0];
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w10 = 0;
@@ -35,7 +35,7 @@ int beGeneraterData_GetVTable(void) {
     obj.w15 = 0;
     obj.w16 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00535eb0[0];
+    obj.vt = &g_beGeneraterData_vtable[0];
     FUN_0035fcd0((O *)&obj.w16, (short)(-1));
     igStringRef_Destruct(&obj.w15, -1);
     igStringRef_Destruct(&obj.w13, -1);
@@ -56,12 +56,12 @@ O *FUN_0035fcd0(O *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0035fd50(void)
+void beGeneraterData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterData_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterData_callbackList[] = { FUN_0018a180, igFloatList_EnsureRegistered, FUN_00360000, 0 };
+static igMetaObjectCallback g_beGeneraterData_callbackList[] = { igVec3fList_EnsureRegistered, igFloatList_EnsureRegistered, beGeneraterPlayerDataList_EnsureRegistered, 0 };
 
 void *beGeneraterData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -70,7 +70,7 @@ void *beGeneraterData_Register(void) {
         &g_beGeneraterData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beGeneraterData_GetMetaObject,
+        beGeneraterData_GetMetaObjectFunction,
         "beGeneraterData",
         0x44, /* instance size */
         beGeneraterData_GetVTable,
@@ -80,9 +80,9 @@ void *beGeneraterData_Register(void) {
     );
 }
 
-void beGeneraterData_GetMetaObject(void)
+void beGeneraterData_GetMetaObjectFunction(void)
 {
-    FUN_0035fb60();
+    beGeneraterData_GetMetaObject();
 }
 
 static FieldFactory g_beGeneraterData_ctorTable[] = {
@@ -153,7 +153,7 @@ void beGeneraterData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beGeneraterData_ctorTable, 0xC);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0018a0a0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igFloatList_GetOrCreateMetaObject();
@@ -161,7 +161,7 @@ void beGeneraterData_InitFields(void) {
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA), 0);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0035ff20();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beGeneraterPlayerDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beGeneraterData_fieldTable, g_beGeneraterData_fieldHandles, g_beGeneraterData_fieldOffsets, temp_s2);
 }

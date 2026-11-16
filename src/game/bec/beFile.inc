@@ -1,9 +1,9 @@
 igMetaObject *g_beFile_metaObject;
 
-void *FUN_00362e50(void) {
+void *beFile_GetMetaObject(void) {
     igMetaObject *g = g_beFile_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00362ee0();
+        beFile_EnsureRegistered();
     }
     return g_beFile_metaObject;
 }
@@ -12,11 +12,11 @@ int beFile_GetVTable(void) {
     struct Obj_362ea0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00535810[0];
+    obj.vt = &g_beFile_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00362ee0(void)
+void beFile_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beFile_Register);
 }
@@ -28,7 +28,7 @@ void *beFile_Register(void) {
         &g_beFile_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beFile_GetMetaObject,
+        beFile_GetMetaObjectFunction,
         "beFile",
         8, /* instance size */
         beFile_GetVTable,
@@ -38,8 +38,8 @@ void *beFile_Register(void) {
     );
 }
 
-void beFile_GetMetaObject(void)
+void beFile_GetMetaObjectFunction(void)
 {
-    FUN_00362e50();
+    beFile_GetMetaObject();
 }
 

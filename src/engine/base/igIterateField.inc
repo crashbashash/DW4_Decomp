@@ -23,11 +23,11 @@ int igIterateField_GetVTable(void) {
     int *q;
     int v;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052c400[0];
+    u.vt = (int)&g_igIterateField_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0052c400[0];
+    u.vt = (int)&g_igIterateField_vtable[0];
     if (ps != 0) {
         p = *(int **)ps;
         if (p != 0) {

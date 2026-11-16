@@ -1,16 +1,16 @@
 igMetaObject *g_beModelCtrlAIDataList_metaObject;
 
-igMetaObject *FUN_003546d0(void) {
+igMetaObject *beModelCtrlAIDataList_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlAIDataList_metaObject == 0) {
         g_beModelCtrlAIDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beModelCtrlAIDataList_metaObject;
 }
 
-void *FUN_00354720(void) {
+void *beModelCtrlAIDataList_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlAIDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003547b0();
+        beModelCtrlAIDataList_EnsureRegistered();
     }
     return g_beModelCtrlAIDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beModelCtrlAIDataList_GetVTable(void) {
     union U_354770 u;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00537890[0];
+    u.vt = (int)&g_beModelCtrlAIDataList_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_003547b0(void)
+void beModelCtrlAIDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlAIDataList_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlAIDataList_callbackList[] = { FUN_00354940, 0 };
+static igMetaObjectCallback g_beModelCtrlAIDataList_callbackList[] = { beModelCtrlAIData_EnsureRegistered, 0 };
 
 void *beModelCtrlAIDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beModelCtrlAIDataList_Register(void) {
         &g_beModelCtrlAIDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beModelCtrlAIDataList_GetMetaObject,
+        beModelCtrlAIDataList_GetMetaObjectFunction,
         "beModelCtrlAIDataList",
         0x14, /* instance size */
         beModelCtrlAIDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beModelCtrlAIDataList_Register(void) {
     );
 }
 
-void beModelCtrlAIDataList_GetMetaObject(void)
+void beModelCtrlAIDataList_GetMetaObjectFunction(void)
 {
-    FUN_00354720();
+    beModelCtrlAIDataList_GetMetaObject();
 }
 

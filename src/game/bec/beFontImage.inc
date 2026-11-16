@@ -1,7 +1,7 @@
 igMetaObject *g_beFontImage_metaObject;
 
-igMetaObject *FUN_003618e0(void) {
-    if (g_beFontImage_metaObject == 0 || !isValid(g_beFontImage_metaObject)) FUN_00361c70();
+igMetaObject *beFontImage_GetMetaObject(void) {
+    if (g_beFontImage_metaObject == 0 || !isValid(g_beFontImage_metaObject)) beFontImage_EnsureRegistered();
     return g_beFontImage_metaObject;
 }
 
@@ -14,9 +14,9 @@ int beFontImage_GetVTable(void) {
     obj.w[4] = 0;
     obj.w[6] = 0;
     obj.w[7] = 0;
-    obj.vt = &DAT_005359b0[0];
+    obj.vt = &g_beFontImage_vtable[0];
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005359b0[0];
+    obj.vt = &g_beFontImage_vtable[0];
     FUN_00361b00((O_361b00 *)&obj, (short)0);
     return r;
 }
@@ -46,7 +46,7 @@ O_361a20 *FUN_00361a20(O_361a20 *arg0, short arg1) {
     int *temp_v1;
 
     if (arg0 != 0) {
-        arg0->vt = &DAT_00535a20[0];
+        arg0->vt = &g_igFont_vtable[0];
         if (&arg0->ref != 0) {
             temp_a0 = arg0->ref;
             if (temp_a0 != 0) {
@@ -86,7 +86,7 @@ O_361b00 *FUN_00361b00(O_361b00 *arg0, short arg1) {
     int *temp_v1;
 
     if (arg0 != 0) {
-        arg0->vt = &DAT_00541610[0];
+        arg0->vt = &g_igBitmapFont_vtable[0];
         if (&arg0->ref32 != 0) {
             temp_a0 = arg0->ref32;
             if (temp_a0 != 0) {
@@ -106,7 +106,7 @@ O_361b00 *FUN_00361b00(O_361b00 *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->vt = &DAT_00535a20[0];
+            arg0->vt = &g_igFont_vtable[0];
             if (&arg0->ref20 != 0) {
                 temp_a0_3 = arg0->ref20;
                 if (temp_a0_3 != 0) {
@@ -138,7 +138,7 @@ O_361b00 *FUN_00361b00(O_361b00 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00361c70(void)
+void beFontImage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beFontImage_Register);
 }
@@ -150,7 +150,7 @@ void *beFontImage_Register(void) {
         &g_beFontImage_metaObject,
         igBitmapFont_Register,
         igBitmapFont_GetPublishedMetaObject,
-        beFontImage_GetMetaObject,
+        beFontImage_GetMetaObjectFunction,
         "beFontImage",
         0x24, /* instance size */
         beFontImage_GetVTable,
@@ -160,12 +160,12 @@ void *beFontImage_Register(void) {
     );
 }
 
-void beFontImage_GetMetaObject(void)
+void beFontImage_GetMetaObjectFunction(void)
 {
-    FUN_003618e0();
+    beFontImage_GetMetaObject();
 }
 
-int FUN_00361d20(void) {
+int igBitmapFont_GetPublishedMetaObject(void) {
     return g_igBitmapFont_metaObject[0];
 }
 

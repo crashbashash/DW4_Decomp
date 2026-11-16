@@ -7,7 +7,7 @@
  * guard, the panel and lobby buttons), wait for a combo step to finish, create the player's info
  * work on GENERATE and close the status panel when control, freeze, erase or remove arrive. */
 
-extern "C" int Gap__Core__igObject__vfunc_23(...);
+extern "C" int beBaseInfoManager_Start(...);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void *StringPool_Allocate(...);
 extern "C" igIntList *igIntList_Create(int);
@@ -113,17 +113,17 @@ extern "C" igResult igMetaEnum_GetValueByName(void *, int, int *);
 extern "C" igResult g_resultSuccess;
 extern "C" void beNDMWMdlPEBase_OnSequenceChange(void *, beBaseInfoRam *);
 
-extern "C" void beNDMWMdlPlayer__ResolveManagers(beNDMWMdlPlayer *self);
-extern "C" int beNDMWMdlPlayer__IsKind(int self, int kind);
-extern "C" void beNDMWMdlPlayer__RegisterReceiver(beNDMWMdlPlayer *self, int info, char *unused);
-extern "C" void beNDMWMdlPlayer__UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPlayer__UpdateWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPlayer__OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPlayer__OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPlayer__OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPlayer__OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlPlayer__OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_Start(beNDMWMdlPlayer *self);
+extern "C" int beNDMWMdlPlayer_IsKind(int self, int kind);
+extern "C" void beNDMWMdlPlayer_RegisterReceiver(beNDMWMdlPlayer *self, int info, char *unused);
+extern "C" void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlPlayer_OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
 extern "C" int beNDMWMdlPlayer__GetMeta(void);
 
 /* Intern `text` through the global string pool and make it the work's key event name. */
@@ -232,23 +232,23 @@ static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer
  * the message handler. */
 struct MdlPlayerSlots { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void vfunc_33(beBaseInfoRam *, const void *);};
 
-void beNDMWMdlPlayer__ResolveManagers(beNDMWMdlPlayer *self) {
-    Gap__Core__igObject__vfunc_23();
+void beNDMWMdlPlayer_Start(beNDMWMdlPlayer *self) {
+    beBaseInfoManager_Start();
     self->_gameRam = igInsightCore_FindManager(self->_insight, g_beNDMWGameRam_metaObject[0]);
     self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
     self->_viewerSIManager = igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
 }
 
-int beNDMWMdlPlayer__IsKind(int self, int kind) {
+int beNDMWMdlPlayer_IsKind(int self, int kind) {
     return strcmp(kind, "KIND_PLAYER") == 0;
 }
 
-void beNDMWMdlPlayer__RegisterReceiver(beNDMWMdlPlayer *self, int info, char *unused)
+void beNDMWMdlPlayer_RegisterReceiver(beNDMWMdlPlayer *self, int info, char *unused)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "PLAYER");
 }
 
-void beNDMWMdlPlayer__UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
+void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     beNDMWMdlPlayerInfoWork *work;
     bePadData *pad;
     float stickX, stickY;
@@ -464,7 +464,7 @@ void beNDMWMdlPlayer__UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     } \
     (work)->_wCheckName = (int)token; }
 
-void beNDMWMdlPlayer__UpdateWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
+void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igObject *created;
     beBaseInfo *info;
     beNDMWMdlPlayerInfoWork *work;
@@ -543,7 +543,7 @@ void beNDMWMdlPlayer__UpdateWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram)
     }
 }
 
-void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
+void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     float startMatrix[16];
     float pointMatrix[16];
     beBaseInfo *info;
@@ -729,7 +729,7 @@ void beNDMWMdlPlayer__OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     }
 }
 
-void beNDMWMdlPlayer__OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
+void beNDMWMdlPlayer_OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     beNDMWMdlPlayerInfoWork *work;
 
     if (ram->_dataList == 0) {
@@ -755,7 +755,7 @@ void beNDMWMdlPlayer__OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     }
 }
 
-void beNDMWMdlPlayer__OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
+void beNDMWMdlPlayer_OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igObject *created;
     if (ram->_dataList == 0) {
         int owner = igObject_GetAllocator(ram);
@@ -807,7 +807,7 @@ static inline void EnsureDataList(beBaseInfoRam *ram)
     }
 }
 
-void beNDMWMdlPlayer__OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram)
+void beNDMWMdlPlayer_OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram)
 {
     beNDMWMdlPlayerInfoWork *work;
     beBaseInfo *info = (beBaseInfo *)ram->_parentInfo;
@@ -841,7 +841,7 @@ void beNDMWMdlPlayer__OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram
     beNDMWMdlPEBase_OnSequenceChange(self, ram);
 }
 
-void beNDMWMdlPlayer__OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
+void beNDMWMdlPlayer_OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igObject *created;
     beModelCtrlInfoRamData *record;
     beNDMWMdlPlayerInfoWork *work;
@@ -881,7 +881,7 @@ void beNDMWMdlPlayer__OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     }
 }
 
-void beNDMWMdlPlayer__OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
+void beNDMWMdlPlayer_OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igObject *created;
     if (((igObject *)ram->_dataList) == 0) {
         int owner = igObject_GetAllocator(ram);

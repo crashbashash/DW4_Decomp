@@ -4,21 +4,21 @@ igMetaField *g_beTargetObj_playerRamNoListMetaField;
 igMetaField *g_beTargetObj_enemyPosListMetaField;
 
 void beTargetObj_CreateInstance(int arg0) {
-    FUN_00342b00();
+    beTargetObj_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587CE8, arg0);
 }
 
-igMetaObject *FUN_003429b0(void) {
+igMetaObject *beTargetObj_GetOrCreateMetaObject(void) {
     if (g_beTargetObj_metaObject == 0) {
         g_beTargetObj_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beTargetObj_metaObject;
 }
 
-void *FUN_00342a00(void) {
+void *beTargetObj_GetMetaObject(void) {
     igMetaObject *g = g_beTargetObj_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00342b00();
+        beTargetObj_EnsureRegistered();
     }
     return g_beTargetObj_metaObject;
 }
@@ -29,12 +29,12 @@ int beTargetObj_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     u.w[2] = 0;
-    u.w[0] = (int)(&DAT_0053ba50[0]);
+    u.w[0] = (int)(&g_beTargetObj_vtable[0]);
     u.w[4] = 0;
     u.w[5] = 0;
     u.w[6] = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0053ba50[0]);
+    u.w[0] = (int)(&g_beTargetObj_vtable[0]);
     FUN_001374b0(&u.w[6], -1);
     igSmartPointer_igIntList_Destruct(&u.w[5], -1);
     FUN_001374b0(&u.w[4], -1);
@@ -42,12 +42,12 @@ int beTargetObj_GetVTable(void) {
     return temp_s2;
 }
 
-void FUN_00342b00(void)
+void beTargetObj_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTargetObj_Register);
 }
 
-static igMetaObjectCallback g_beTargetObj_callbackList[] = { FUN_0018a180, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beTargetObj_callbackList[] = { igVec3fList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
 void *beTargetObj_Register(void) {
     BecLibrary_MarkRegistered();
@@ -56,7 +56,7 @@ void *beTargetObj_Register(void) {
         &g_beTargetObj_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        beTargetObj_GetMetaObject,
+        beTargetObj_GetMetaObjectFunction,
         "beTargetObj",
         0x1c, /* instance size */
         beTargetObj_GetVTable,
@@ -66,9 +66,9 @@ void *beTargetObj_Register(void) {
     );
 }
 
-void beTargetObj_GetMetaObject(void)
+void beTargetObj_GetMetaObjectFunction(void)
 {
-    FUN_00342a00();
+    beTargetObj_GetMetaObject();
 }
 
 static FieldFactory g_beTargetObj_ctorTable[] = {
@@ -103,13 +103,13 @@ void beTargetObj_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beTargetObj_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0018a0a0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0018a0a0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beTargetObj_fieldTable, g_beTargetObj_fieldHandles, g_beTargetObj_fieldOffsets, temp_s2);
 }

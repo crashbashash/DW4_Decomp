@@ -19,7 +19,7 @@ int igFieldChangeViewList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005419d0[0];
+    obj.vt = &g_igFieldChangeViewList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

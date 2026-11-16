@@ -28,11 +28,11 @@ extern "C" int igIterateGraph_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c460[0];
+    obj.vt = &g_igIterateGraph_vtable[0];
     obj.m12 = 0;
     obj.m16 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052c460[0];
+    obj.vt = &g_igIterateGraph_vtable[0];
     obj.rel16();
     obj.rel12();
     return r;
@@ -43,7 +43,7 @@ void FUN_00227620(void)
     igMetaObject_RunStaticInit(igIterateGraph_Register);
 }
 
-static igMetaObjectCallback g_igIterateGraph_callbackList[] = { FUN_0019c9a0, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igIterateGraph_callbackList[] = { igNonRefCountedNodeList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
 void igIterateGraph_Register(void) {
     BaseLibrary_MarkRegistered();

@@ -1,12 +1,12 @@
 igMetaObject *g_beNumberCtrlInfo_metaObject;
 
-void *FUN_0034e190(void) {
+void *beNumberCtrlInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beNumberCtrlInfo_metaObject != 0) {
         b = (*(int *)((char *)(g_beNumberCtrlInfo_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_0034e250();
+    beNumberCtrlInfo_EnsureRegistered();
 done:
     return g_beNumberCtrlInfo_metaObject;
 }
@@ -19,14 +19,14 @@ int beNumberCtrlInfo_GetVTable(void) {
     obj.f8 = 0;
     obj.f14 = 0;
     obj.f18 = 0;
-    obj.vt = (&DAT_00538250[0]);
+    obj.vt = (&g_beNumberCtrlInfo_vtable[0]);
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_00538250[0]);
+    obj.vt = (&g_beNumberCtrlInfo_vtable[0]);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return temp_s0;
 }
 
-void FUN_0034e250(void)
+void beNumberCtrlInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNumberCtrlInfo_Register);
 }
@@ -38,7 +38,7 @@ void *beNumberCtrlInfo_Register(void) {
         &g_beNumberCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beNumberCtrlInfo_GetMetaObject,
+        beNumberCtrlInfo_GetMetaObjectFunction,
         "beNumberCtrlInfo",
         0x1c, /* instance size */
         beNumberCtrlInfo_GetVTable,
@@ -48,9 +48,9 @@ void *beNumberCtrlInfo_Register(void) {
     );
 }
 
-void beNumberCtrlInfo_GetMetaObject(void)
+void beNumberCtrlInfo_GetMetaObjectFunction(void)
 {
-    FUN_0034e190();
+    beNumberCtrlInfo_GetMetaObject();
 }
 
 igMetaEnum *g_beNumberCtrlInfo_messageMetaEnum;

@@ -138,7 +138,7 @@ void FUN_001c20b0(Controller *self) {
   flag = 1;
   thunk_igRegistry_GetValueBool(props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
   self->enabled = flag;
-  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00132810(igObject_GetAllocator(self)))));
+  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(self)))));
   self->f76->setValue(self->a32);
   self->f76->configure(0);
   assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator(self)))));
@@ -165,7 +165,7 @@ void FUN_001c20b0(Controller *self) {
     }
   }
   if (self->a52 != 0) {
-    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00132810(igObject_GetAllocator(self)))));
+    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(self)))));
     self->f100->setValue(self->a52);
     self->f100->configure(0);
     s1 = self->f88;
@@ -317,7 +317,7 @@ void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1) {
     }
     arg0->f32 = (E_1c2eb0 *)arg1;
     arg0->f32->f96 = 0;
-    bool b = FUN_00140c00(arg0->f32, 0) != 0;
+    bool b = igTextureAttr_GetImage(arg0->f32, 0) != 0;
     if (!b) {
         FUN_001c31e0(arg0->f32);
     }
@@ -405,7 +405,7 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
             igObject_Destroy((void *)o);
         }
         arg0->f32->f96 = 2;
-        if ((FUN_00140c00(arg0->f32, 0) != 0) == 0) {
+        if ((igTextureAttr_GetImage(arg0->f32, 0) != 0) == 0) {
             FUN_001c31e0(arg0->f32);
             if (arg0->f73 != 0) {
                 FUN_00141190(arg0->f32, 1);

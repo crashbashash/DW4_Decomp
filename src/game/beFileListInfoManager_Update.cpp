@@ -34,7 +34,7 @@ extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendGroup(...);
 extern int DAT_004c22f0[4];
-extern int DAT_004e0858[4];
+extern int emptyString[4];
 extern int DAT_0050e560[4];
 extern int DAT_0050e570[4];
 extern int DAT_0050e578[4];
@@ -64,7 +64,7 @@ extern int DAT_0050e6a8[4];
 extern int DAT_0050e6b8[4];
 extern int DAT_005615e0[4];
 extern int DAT_00586dd0[4];
-extern int DAT_00586f20[4];
+extern int g_stringPool[4];
 extern int DAT_005886e8[4];
 extern int DAT_00589208[4];
 
@@ -105,7 +105,9 @@ struct StringRef {
 
 extern "C" int StringList_AppendRetained(void *, const StringRef &);
 
-#define EMPTY ((int *)&DAT_004e0858[0])
+static inline unsigned int igStringObj_Length(const igStringObj *s) { return s->_length; }
+static inline const char *igStringObj_Text(const igStringObj *s) { return (char *)s->_buffer == 0 ? (char *)DAT_004c22f0[0] : (char *)s->_buffer; }
+#define EMPTY ((int *)&emptyString[0])
 #define REL_STR(p) { \
     int *q = (int *)(p); \
     if (q != 0) { \
@@ -121,10 +123,10 @@ extern "C" int StringList_AppendRetained(void *, const StringRef &);
         if (((unsigned long long)((long long)(int)((igObject *)q)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(q); \
     } }
 #define POOL() { \
-    if (DAT_00586f20[0] == 0) { \
+    if (g_stringPool[0] == 0) { \
         int pv = StringPool_Allocate(0x10); \
         if (pv != 0) { pv = StringPool_Construct(pv); } \
-        DAT_00586f20[0] = pv; \
+        g_stringPool[0] = pv; \
     } }
 #define CLEAR(T, src) { \
     T *l = (T *)(src); \
@@ -143,7 +145,7 @@ extern "C" int StringList_AppendRetained(void *, const StringRef &);
     } \
     l->_count = 0; }
 
-extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager *arg0) {
+extern "C" void beFileListInfoManager_Update(beFileListInfoManager *arg0) {
     beSystem *sys;
     int spC0[8];
     int spA0[8];
@@ -178,7 +180,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 s1 = s1 ? s1 : EMPTY;
                 s0 = (beSystem *)arg0->_system;
                 POOL()
-                nw = (int *)StringPool_Intern(DAT_00586f20[0], s1);
+                nw = (int *)StringPool_Intern(g_stringPool[0], s1);
                 old = (int *)s0->_stageName;
                 REL_STR(old)
                 s0->_stageName = (int)nw;
@@ -187,14 +189,14 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 int *nw;
                 s0 = (beSystem *)arg0->_system;
                 POOL()
-                nw = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050e560[0]);
+                nw = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050e560[0]);
                 old = (int *)s0->_stageName;
                 REL_STR(old)
                 s0->_stageName = (int)nw;
             }
             igResource_StartAsyncLoading(DAT_00586dd0[0]);
             {
-            igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
+            igSmartPointer<igStringObj> stageObj((igStringObj *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
             igStringObj_Set(stageObj.p, ((beSystem *)arg0->_system)->_stageName);
             igStringObj_Erase(stageObj.p, 0, 2);
             t0 = (int *)stageObj.p; igStringObj_Insert(t0, &DAT_0050e570[0], 0, strlen(&DAT_0050e570[0]));
@@ -236,20 +238,20 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 int *v;
                 if ((char *)&DAT_0050e590[0] == 0) { v = 0; } else {
                     POOL()
-                    v = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050e590[0]);
+                    v = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050e590[0]);
                 }
                 StringRef firstName((char *)v);
                 StringList_AppendRetained((void *)arg0->_fnames, StringRef(firstName));
                 if ((char *)&DAT_0050e5a0[0] == 0) { v = 0; } else {
                     POOL()
-                    v = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050e5a0[0]);
+                    v = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050e5a0[0]);
                 }
                 StringRef secondName((char *)v);
                 StringList_AppendRetained((void *)arg0->_fnames, StringRef(secondName));
                 arg0->_isReadOnetime = 1;
                 arg0->_onetimeCount = 2;
             }
-            igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
+            igSmartPointer<igStringObj> stageObj((igStringObj *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
             found = 0;
             i = 0;
             if (0 < s5->_count) {
@@ -257,31 +259,19 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                     unsigned int lim;
                     int *tmp;
                     int *s4n;
-                    int *base;
                     s4n = (int *)((beFileListInfo **)s5->_data)[i]->_name;
                     s4n = s4n ? s4n : EMPTY;
                     if (s4n == 0) { tmp = 0; } else {
                         POOL()
-                        tmp = (int *)StringPool_Intern(DAT_00586f20[0], s4n);
+                        tmp = (int *)StringPool_Intern(g_stringPool[0], s4n);
                     }
                     {
                     StringRef entryName((char *)tmp);
                     idx = -1;
                     igStringObj_Set(stageObj.p, entryName.p);
-                    {
-                        volatile int *t = (int *)stageObj.p;
-                        j = 0;
-                        if ((unsigned int)j < (unsigned int)t[3]) {
-                            do {
-                                base = (int *)t[2];
-                                if (base == 0) { base = (int *)DAT_004c22f0[0]; }
-                                if (*((char *)base + (int)j) == 0x2F) {
-                                    idx = j;
-                                    break;
-                                }
-                                j += 1;
-                            } while ((unsigned int)j < (unsigned int)t[3]);
-                        }
+                    for (j = 0; (unsigned int)j < igStringObj_Length(stageObj); j++) {
+                        const char *text = igStringObj_Text(stageObj);
+                        if (text[j] == '/') { idx = j; break; }
                     }
                     if (idx == -1) { idx = 0; }
                     { int *t10 = (int *)entryName.p;
@@ -325,7 +315,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 do {
                     slot = (int **)((char *)s6->_data + off);
                     POOL()
-                    nw = (int *)StringPool_Intern(DAT_00586f20[0], 0);
+                    nw = (int *)StringPool_Intern(g_stringPool[0], 0);
                     old = *slot;
                     REL_STR(old)
                     k += 1;
@@ -363,7 +353,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                     s4n = s4n ? s4n : EMPTY;
                     if (s4n == 0) { tmp = 0; } else {
                         POOL()
-                        tmp = (int *)StringPool_Intern(DAT_00586f20[0], s4n);
+                        tmp = (int *)StringPool_Intern(g_stringPool[0], s4n);
                     }
                     {
                     StringRef entryName((char *)tmp);
@@ -509,28 +499,28 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             arg0->_proc = -1;
             if ((char *)&DAT_0050e688[0] == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050e688[0]);
+                rv = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050e688[0]);
             }
             StringRef resetName0((char *)rv);
             if ((char *)&DAT_0050e698[0] == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050e698[0]);
+                rv = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050e698[0]);
             }
             StringRef resetName1((char *)rv);
             if ((char *)&DAT_0050e6a8[0] == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050e6a8[0]);
+                rv = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050e6a8[0]);
             }
             StringRef resetName2((char *)rv);
             if ((char *)&DAT_0050e6b8[0] == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(DAT_00586f20[0], &DAT_0050e6b8[0]);
+                rv = (int *)StringPool_Intern(g_stringPool[0], &DAT_0050e6b8[0]);
             }
             StringRef resetName3((char *)rv);
             nm = (int *)((beSystem *)arg0->_system)->_stageName;
             if (nm == 0) { rv = 0; } else {
                 POOL()
-                rv = (int *)StringPool_Intern(DAT_00586f20[0], nm);
+                rv = (int *)StringPool_Intern(g_stringPool[0], nm);
             }
             StringRef curName((char *)rv);
             {

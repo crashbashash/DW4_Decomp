@@ -2,10 +2,10 @@ igMetaObject *g_beModelCtrlPDMOVE_metaObject;
 igMetaField *g_beModelCtrlPDMOVE_valueMetaField;
 igMetaField *g_beModelCtrlPDMOVE_frameMetaField;
 
-void *FUN_003551c0(void) {
+void *beModelCtrlPDMOVE_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlPDMOVE_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003552a0();
+        beModelCtrlPDMOVE_EnsureRegistered();
     }
     return g_beModelCtrlPDMOVE_metaObject;
 }
@@ -22,7 +22,7 @@ int beModelCtrlPDMOVE_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00537650[0];
+    u.vt = (int)&g_beModelCtrlPDMOVE_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -39,7 +39,7 @@ int beModelCtrlPDMOVE_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003552a0(void)
+void beModelCtrlPDMOVE_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlPDMOVE_Register);
 }
@@ -51,7 +51,7 @@ void *beModelCtrlPDMOVE_Register(void) {
         &g_beModelCtrlPDMOVE_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlPDMOVE_GetMetaObject,
+        beModelCtrlPDMOVE_GetMetaObjectFunction,
         "beModelCtrlPDMOVE",
         0x14, /* instance size */
         beModelCtrlPDMOVE_GetVTable,
@@ -61,9 +61,9 @@ void *beModelCtrlPDMOVE_Register(void) {
     );
 }
 
-void beModelCtrlPDMOVE_GetMetaObject(void)
+void beModelCtrlPDMOVE_GetMetaObjectFunction(void)
 {
-    FUN_003551c0();
+    beModelCtrlPDMOVE_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlPDMOVE_ctorTable[] = {

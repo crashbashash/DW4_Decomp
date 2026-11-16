@@ -10234,7 +10234,12 @@
     "0x3788d0",
     "0x378bc0",
     "0x378400",
-    "0x3788c0"
+    "0x3788c0",
+    null,
+    null,
+    null,
+    "0x378700",
+    "0x378410"
    ]
   },
   "0x53a170": {
@@ -11101,7 +11106,20 @@
     "0x395b50",
     "0x390d70",
     "0x396a80",
-    "0x378410"
+    "0x378410",
+    null,
+    null,
+    "0x390f70",
+    "0x391b40",
+    "0x394f90",
+    "0x398de0",
+    "0x398dd0",
+    "0x398df0",
+    "0x398dc0",
+    "0x398db0",
+    "0x398da0",
+    "0x3960e0",
+    "0x398e00"
    ]
   },
   "0x53ae80": {
@@ -12342,7 +12360,11 @@
     "0x2ff1b0",
     "0x2ff1c0",
     "0x300c60",
-    "0x3adfc0"
+    "0x3adfc0",
+    null,
+    null,
+    null,
+    "0x3a9a50"
    ]
   },
   "0x53c0e0": {
@@ -13791,7 +13813,12 @@
     "0x2ff160",
     "0x2ff170",
     "0x2ff190",
-    "0x2ff180"
+    "0x2ff180",
+    null,
+    "0x2ff1b0",
+    "0x2ff1c0",
+    "0x300c60",
+    "0x3cbb40"
    ]
   },
   "0x53d5d0": {
@@ -15778,7 +15805,11 @@
     "0x2ff1b0",
     "0x2ff1c0",
     "0x300c60",
-    "0x4233e0"
+    "0x4233e0",
+    null,
+    "0x40dae0",
+    "0x40dbf0",
+    "0x40dd30"
    ]
   },
   "0x53f330": {
@@ -17084,7 +17115,20 @@
     "0x395b50",
     "0x390d70",
     "0x396a80",
-    "0x378410"
+    "0x378410",
+    null,
+    null,
+    "0x390f70",
+    "0x391b40",
+    "0x394f90",
+    "0x398de0",
+    "0x398dd0",
+    "0x398df0",
+    "0x398dc0",
+    "0x398db0",
+    "0x398da0",
+    "0x443bd0",
+    "0x445d10"
    ]
   },
   "0x540650": {
@@ -51549,6 +51593,10 @@
      17
     ],
     [
+     "Gap::Bec::beNDMWPanelObject",
+     17
+    ],
+    [
      "Gap::Bec::beNDMWPanelWazaInfoWork",
      17
     ],
@@ -53465,6 +53513,10 @@
      18
     ],
     [
+     "Gap::Bec::beNDMWPanelObject",
+     18
+    ],
+    [
      "Gap::Bec::beNDMWPanelWazaInfoWork",
      18
     ],
@@ -55378,6 +55430,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlPlayer2InfoWork",
+     19
+    ],
+    [
+     "Gap::Bec::beNDMWPanelObject",
      19
     ],
     [
@@ -60905,6 +60961,10 @@
      34
     ],
     [
+     "Gap::Bec::beBaseInfoManager",
+     34
+    ],
+    [
      "Gap::Bec::beBkColor",
      34
     ],
@@ -61086,6 +61146,10 @@
    "refs": [
     [
      "Gap::Bec::beActionStarter",
+     33
+    ],
+    [
+     "Gap::Bec::beBaseInfoManager",
      33
     ],
     [
@@ -63958,24 +64022,16 @@
     ]
    ]
   },
-  "0x390f70": {
-   "name": "Gap::Bec::beNDMWMdlMapCursor::vfunc_37",
-   "owner": "Gap::Bec::beNDMWMdlMapCursor",
-   "slot": 37,
-   "kind": "override",
-   "refs": [
-    [
-     "Gap::Bec::beNDMWMdlMapCursor",
-     37
-    ]
-   ]
-  },
   "0x391b40": {
    "name": "Gap::Core::igObject::vfunc_38",
    "owner": "Gap::Core::igObject",
    "slot": 38,
    "kind": "inherited",
    "refs": [
+    [
+     "Gap::Bec::beModelCtrl",
+     38
+    ],
     [
      "Gap::Bec::beNDMWMdlEBullet",
      38
@@ -63994,6 +64050,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlPBullet",
+     38
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      38
     ],
     [
@@ -64049,6 +64109,10 @@
    "kind": "inherited",
    "refs": [
     [
+     "Gap::Bec::beModelCtrl",
+     39
+    ],
+    [
      "Gap::Bec::beNDMWMdlEBullet",
      39
     ],
@@ -64074,6 +64138,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlItem",
+     39
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      39
     ],
     [
@@ -64149,6 +64217,10 @@
    "kind": "inherited",
    "refs": [
     [
+     "Gap::Bec::beModelCtrl",
+     46
+    ],
+    [
      "Gap::Bec::beNDMWMdlEBullet",
      46
     ],
@@ -64181,6 +64253,10 @@
    "kind": "inherited",
    "refs": [
     [
+     "Gap::Bec::beModelCtrl",
+     45
+    ],
+    [
      "Gap::Bec::beNDMWMdlEBullet",
      45
     ],
@@ -64209,6 +64285,10 @@
      45
     ],
     [
+     "Gap::Bec::beNDMWMdlPEBase",
+     45
+    ],
+    [
      "Gap::Bec::beNDMWMdlMapBase",
      45
     ],
@@ -64224,6 +64304,10 @@
    "slot": 44,
    "kind": "inherited",
    "refs": [
+    [
+     "Gap::Bec::beModelCtrl",
+     44
+    ],
     [
      "Gap::Bec::beNDMWMdlEBullet",
      44
@@ -64242,6 +64326,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlPlayer2",
+     44
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      44
     ],
     [
@@ -64261,6 +64349,10 @@
    "kind": "inherited",
    "refs": [
     [
+     "Gap::Bec::beModelCtrl",
+     43
+    ],
+    [
      "Gap::Bec::beNDMWMdlEBullet",
      43
     ],
@@ -64282,6 +64374,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlPlayer2",
+     43
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      43
     ],
     [
@@ -64301,6 +64397,10 @@
    "kind": "inherited",
    "refs": [
     [
+     "Gap::Bec::beModelCtrl",
+     41
+    ],
+    [
      "Gap::Bec::beNDMWMdlEBullet",
      41
     ],
@@ -64326,6 +64426,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlItem",
+     41
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      41
     ],
     [
@@ -64345,6 +64449,10 @@
    "kind": "inherited",
    "refs": [
     [
+     "Gap::Bec::beModelCtrl",
+     40
+    ],
+    [
      "Gap::Bec::beNDMWMdlEBullet",
      40
     ],
@@ -64370,6 +64478,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlItem",
+     40
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      40
     ],
     [
@@ -64389,6 +64501,10 @@
    "kind": "inherited",
    "refs": [
     [
+     "Gap::Bec::beModelCtrl",
+     42
+    ],
+    [
      "Gap::Bec::beNDMWMdlEBullet",
      42
     ],
@@ -64417,6 +64533,10 @@
      42
     ],
     [
+     "Gap::Bec::beNDMWMdlPEBase",
+     42
+    ],
+    [
      "Gap::Bec::beNDMWMdlMapBase",
      42
     ],
@@ -64432,6 +64552,10 @@
    "slot": 47,
    "kind": "inherited",
    "refs": [
+    [
+     "Gap::Bec::beModelCtrl",
+     47
+    ],
     [
      "Gap::Bec::beNDMWMdlEBullet",
      47
@@ -67746,6 +67870,18 @@
    "refs": [
     [
      "Gap::Bec::beNDMWMdlPlayer2InfoWork",
+     20
+    ]
+   ]
+  },
+  "0x3cbb40": {
+   "name": "Gap::Bec::beNDMWPanelObject::vfunc_20",
+   "owner": "Gap::Bec::beNDMWPanelObject",
+   "slot": 20,
+   "kind": "override",
+   "refs": [
+    [
+     "Gap::Bec::beNDMWPanelObject",
      20
     ]
    ]
@@ -73970,6 +74106,10 @@
      22
     ],
     [
+     "Gap::Bec::beNDMWListCtrl",
+     22
+    ],
+    [
      "Gap::Bec::beNDMWShopDevice",
      22
     ],
@@ -74106,6 +74246,10 @@
      23
     ],
     [
+     "Gap::Bec::beNDMWListCtrl",
+     23
+    ],
+    [
      "Gap::Bec::beNDMWShopDevice",
      23
     ],
@@ -74192,6 +74336,50 @@
     [
      "Gap::Bec::beSvFileMakeApi",
      24
+    ],
+    [
+     "Gap::Bec::beSaveApi",
+     24
+    ]
+   ],
+   "reason": "owner is an intermediate base with no emitted vtable"
+  },
+  {
+   "addr": "0x40dd30",
+   "slot": 24,
+   "resolved_owner": "Gap::Core::igObject",
+   "refs": [
+    [
+     "Gap::Bec::beNDMWStatusCtrlSkill",
+     24
+    ],
+    [
+     "Gap::Bec::beNDMWStatusCtrlD0",
+     24
+    ],
+    [
+     "Gap::Bec::beNDMWListCtrl",
+     24
+    ],
+    [
+     "Gap::Bec::beNDMWShopDevice",
+     24
+    ],
+    [
+     "Gap::Bec::beNDMWShopCtrlXdataChip",
+     24
+    ],
+    [
+     "Gap::Bec::beNDMWShopCtrlSales",
+     24
+    ],
+    [
+     "Gap::Bec::beNDMWShopCtrlDeviceSell",
+     24
+    ],
+    [
+     "Gap::Bec::beNDMWShopCtrlEvolve",
+     24
     ]
    ],
    "reason": "owner is an intermediate base with no emitted vtable"
@@ -74227,42 +74415,6 @@
     ],
     [
      "Gap::Bec::ParticleTimer",
-     24
-    ]
-   ],
-   "reason": "owner is an intermediate base with no emitted vtable"
-  },
-  {
-   "addr": "0x40dd30",
-   "slot": 24,
-   "resolved_owner": "Gap::Core::igObject",
-   "refs": [
-    [
-     "Gap::Bec::beNDMWStatusCtrlSkill",
-     24
-    ],
-    [
-     "Gap::Bec::beNDMWStatusCtrlD0",
-     24
-    ],
-    [
-     "Gap::Bec::beNDMWShopDevice",
-     24
-    ],
-    [
-     "Gap::Bec::beNDMWShopCtrlXdataChip",
-     24
-    ],
-    [
-     "Gap::Bec::beNDMWShopCtrlSales",
-     24
-    ],
-    [
-     "Gap::Bec::beNDMWShopCtrlDeviceSell",
-     24
-    ],
-    [
-     "Gap::Bec::beNDMWShopCtrlEvolve",
      24
     ]
    ],
@@ -74977,6 +75129,26 @@
    "reason": "owner is an intermediate base with no emitted vtable"
   },
   {
+   "addr": "0x390f70",
+   "slot": 37,
+   "resolved_owner": "Gap::Core::igObject",
+   "refs": [
+    [
+     "Gap::Bec::beModelCtrl",
+     37
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
+     37
+    ],
+    [
+     "Gap::Bec::beNDMWMdlMapCursor",
+     37
+    ]
+   ],
+   "reason": "owner is an intermediate base with no emitted vtable"
+  },
+  {
    "addr": "0x443bd0",
    "slot": 46,
    "resolved_owner": "Gap::Core::igObject",
@@ -74987,6 +75159,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlPlayer",
+     46
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      46
     ]
    ],
@@ -75003,6 +75179,10 @@
     ],
     [
      "Gap::Bec::beNDMWMdlPlayer",
+     47
+    ],
+    [
+     "Gap::Bec::beNDMWMdlPEBase",
      47
     ]
    ],

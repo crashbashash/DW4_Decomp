@@ -16,7 +16,7 @@ igMetaObject *igGenericCapabilityManager_GetMetaObject(void)
 int igGenericCapabilityManager_GetVTable(void) {
     struct Obj_14f350 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005268c0[0];
+    obj.vt = &g_igGenericCapabilityManager_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

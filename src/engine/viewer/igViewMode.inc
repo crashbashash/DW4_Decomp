@@ -19,7 +19,7 @@ void *igViewMode_GetMetaObject(void) {
 int igViewMode_GetVTable(void) {
     struct W o;
     igObject_InitHeader(&o);
-    o.vt = DAT_00542960;
+    o.vt = g_igViewMode_vtable;
     igMatrix44f_SetIdentity(&o.f[2]);
     return *(int *)((char *)&o + *(int *)(((char *)g_objectSystem[0]) + 916));
 }

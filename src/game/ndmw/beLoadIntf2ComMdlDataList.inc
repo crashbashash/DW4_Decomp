@@ -1,6 +1,6 @@
 igMetaObject *g_beLoadIntf2ComMdlDataList_metaObject;
 
-igMetaObject *FUN_003c72c0(void) {
+igMetaObject *beLoadIntf2ComMdlDataList_GetOrCreateMetaObject(void) {
     if (g_beLoadIntf2ComMdlDataList_metaObject == 0) {
         g_beLoadIntf2ComMdlDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -10,7 +10,7 @@ igMetaObject *FUN_003c72c0(void) {
 void *beLoadIntf2ComMdlDataList_GetReadyMetaObject(void) {
     igMetaObject *g = g_beLoadIntf2ComMdlDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c73a0();
+        beLoadIntf2ComMdlDataList_EnsureRegistered();
     }
     return g_beLoadIntf2ComMdlDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beLoadIntf2ComMdlDataList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053c870[0];
+    obj.vt = &g_beLoadIntf2ComMdlDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c73a0(void)
+void beLoadIntf2ComMdlDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLoadIntf2ComMdlDataList_Register);
 }
 
-static igMetaObjectCallback g_beLoadIntf2ComMdlDataList_callbackList[] = { FUN_003c75a0, 0 };
+static igMetaObjectCallback g_beLoadIntf2ComMdlDataList_callbackList[] = { beLoadIntf2ComMdlData_EnsureRegistered, 0 };
 
 void *beLoadIntf2ComMdlDataList_Register(void) {
     NdmwLibrary_MarkRegistered();

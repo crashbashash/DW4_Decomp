@@ -1,19 +1,19 @@
 #include "dw4/reflected.h"
 
-extern "C" int Gap__Bec__beCameraMode__vfunc_20(void);
-extern "C" void Gap__Bec__beCameraMode__vfunc_23(void);
-extern "C" void Gap__Bec__beCameraMode__vfunc_24(void);
-extern "C" void Gap__Bec__beCameraMode__vfunc_25(void);
-extern "C" void Gap__Bec__beCameraMode__vfunc_26(void);
-extern "C" void Gap__Bec__beCameraMode__vfunc_27(void);
+extern "C" int beCameraMode_GetMeta(void);
+extern "C" void igViewMode_OnKeyEvent(void);
+extern "C" void igViewMode_OnMouseMove(void);
+extern "C" void igViewMode_OnMouseButton(void);
+extern "C" void igViewMode_OnStickEvent(void);
+extern "C" void igViewMode_OnButtonEvent(void);
 class DW4VC_144_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int vX(); };
-extern "C" void Gap__Bec__beCameraMode__vfunc_30(beCameraMode *arg0);
+extern "C" void beCameraMode_OnDetach(beCameraMode *arg0);
 extern "C" void igModel_NotifyViews(igViewModel *, int *);
 extern "C" int DAT_0058cd48[4];
 extern "C" int DAT_0058cd50[4];
 extern "C" int DAT_0058cd58[4];
 class CameraVt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual int update(); };
-extern "C" void Gap__Bec__beCameraMode__vfunc_29(beCameraMode *self);
+extern "C" void beCameraMode_OnAttach(beCameraMode *self);
 typedef struct CameraMatrix { float m[16]; } CameraMatrix;
 typedef struct CameraVector4 { float v[4]; } CameraVector4;
 extern "C" void igMatrix44f_SetIdentity(CameraMatrix *);
@@ -24,10 +24,10 @@ extern "C" void igGraphPath_GetTransform(int, CameraMatrix *, long long);
 extern "C" void igMatrix44f_GetTranslation(CameraMatrix *, CameraVector4 *);
 extern "C" void igMatrix44f_SetTranslation(CameraMatrix *, CameraVector4 *);
 extern "C" int DAT_0058cd38[4];
-extern "C" void Gap__Bec__beCameraMode__vfunc_28(beCameraMode *self);
+extern "C" void beCameraMode_Update(beCameraMode *self);
 extern "C" int g_beCameraMode_metaObject[4];
 
-void Gap__Bec__beCameraMode__vfunc_30(beCameraMode *arg0) {
+void beCameraMode_OnDetach(beCameraMode *arg0) {
     void **temp_a0;
 
     temp_a0 = (void **)(arg0->_camera);
@@ -36,7 +36,7 @@ void Gap__Bec__beCameraMode__vfunc_30(beCameraMode *arg0) {
     }
 }
 
-void Gap__Bec__beCameraMode__vfunc_29(beCameraMode *self) {
+void beCameraMode_OnAttach(beCameraMode *self) {
     int hfovChanged[4];
     int farChanged[4];
     int nearChanged[4];
@@ -70,7 +70,7 @@ void Gap__Bec__beCameraMode__vfunc_29(beCameraMode *self) {
     }
 }
 
-void Gap__Bec__beCameraMode__vfunc_28(beCameraMode *self) {
+void beCameraMode_Update(beCameraMode *self) {
     float a, b, c;
     int composed;
     CameraVector4 translation;
@@ -110,33 +110,33 @@ void Gap__Bec__beCameraMode__vfunc_28(beCameraMode *self) {
     }
 }
 
-int Gap__Bec__beCameraMode__vfunc_20(void)
+int beCameraMode_GetMeta(void)
 {
     return g_beCameraMode_metaObject[0];
 }
 
 /* Slot 23: empty body. */
-void Gap__Bec__beCameraMode__vfunc_23(void)
+void igViewMode_OnKeyEvent(void)
 {
 }
 
 /* Slot 24: empty body. */
-void Gap__Bec__beCameraMode__vfunc_24(void)
+void igViewMode_OnMouseMove(void)
 {
 }
 
 /* Slot 25: empty body. */
-void Gap__Bec__beCameraMode__vfunc_25(void)
+void igViewMode_OnMouseButton(void)
 {
 }
 
 /* Slot 26: empty body. */
-void Gap__Bec__beCameraMode__vfunc_26(void)
+void igViewMode_OnStickEvent(void)
 {
 }
 
 /* Slot 27: empty body. */
-void Gap__Bec__beCameraMode__vfunc_27(void)
+void igViewMode_OnButtonEvent(void)
 {
 }
 

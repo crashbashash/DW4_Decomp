@@ -207,8 +207,8 @@ Strict scan for the RNG-chain idiom (`lw rX,16(obj)` … `lw rY,48(rX)` …
 | `beNDMWItemRevisionBase_RollRevision` `0x4480C8`, `0x4480F0` | `%6000+1`, `%level`: item revision roll |
 | `beNDMWItemRevisionPocketBase_RollPocket` `0x4481B0` | `%620`: pocket count 0-5 |
 | `FUN_0042EB80` `0x42F288` | `(%1000)*1000`: random step |
-| `Gap__Bec__beNDMWItemDisk__vfunc_22` `0x4489A8` | `%10 <= 8-k`: poison-cure disk check |
-| `Gap__Bec__beNDMWItemInstant__vfunc_22` `0x448CEC` | `%range` scaled: bits paid by item 0 |
+| `beNDMWItemDisk_Use` `0x4489A8` | `%10 <= 8-k`: poison-cure disk check |
+| `beNDMWItemInstant_Use` `0x448CEC` | `%range` scaled: bits paid by item 0 |
 | `FUN_00390F80` `0x39129C` | `& 0xf`: small variant index |
 
 **No reseed.** The same strict scan for a slot‑23 (`sgenrand`) or slot‑22 call on

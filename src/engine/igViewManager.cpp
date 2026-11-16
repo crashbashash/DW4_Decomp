@@ -60,7 +60,7 @@ int igModel_NotifyViews(...);
 
 extern int DAT_0058cd80[4];
 
-int Gap__Viewer__igViewManager__vfunc_23(void *arg0);
+int igViewManager_OnKeyEvent(void *arg0);
 class DW4VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(); };
 
 int __nw__FUi(...);
@@ -90,7 +90,7 @@ typedef struct Frame {
     int f232;
     void *f236;
 } Frame;
-extern Frame *DAT_0056dc50[4];
+extern Frame *g_sharedViewerOptions[4];
 
 int Gap__Viewer__igViewManager__vfunc_24(void *arg0);
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
@@ -161,25 +161,25 @@ ViewerSetup::ViewerSetup(igObject *w)
     if (next != 0) {
         InsightCore *c = core.p;
         c->window = next;
-        if (DAT_0056dc50[0] == 0) {
+        if (g_sharedViewerOptions[0] == 0) {
             Frame *f = (Frame *)__nw__FUi(240);
             if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
-            DAT_0056dc50[0] = f;
+            g_sharedViewerOptions[0] = f;
         }
-        DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
+        g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
         {
-            Frame *g = DAT_0056dc50[0];
+            Frame *g = g_sharedViewerOptions[0];
             showLogo = g->f213 != 0 && !(g->f216 != 0);
         }
-        if (DAT_0056dc50[0] != 0) {
-            if (--DAT_0056dc50[0]->f232 <= 0) {
-                Frame *s1 = DAT_0056dc50[0];
+        if (g_sharedViewerOptions[0] != 0) {
+            if (--g_sharedViewerOptions[0]->f232 <= 0) {
+                Frame *s1 = g_sharedViewerOptions[0];
                 if (s1 != 0) {
                     if (&s1->f236) releaseString(s1->f236);
                     if (s1 != 0) releaseString(s1->f0);
                     __dl__FPv(s1);
                 }
-                DAT_0056dc50[0] = 0;
+                g_sharedViewerOptions[0] = 0;
             }
         }
         if (showLogo) {
@@ -283,7 +283,7 @@ void igViewManager_SetFrameTime(ViewerViewManager *manager, long long frameTime)
     int units = frameTime / 0x40000; manager->clock->setSeconds(262144.0f * (1e-9f * units));
 }
 
-void FUN_00464100(void) {
+void igViewMode_Update(void) {
 
 }
 
@@ -301,7 +301,7 @@ void igViewManager_SetSceneUpVector(void *arg0, void *arg1) {
     igModel_NotifyViews(*(int *)((char *)(arg0) + 12), buf);
 }
 
-int Gap__Viewer__igViewManager__vfunc_23(void *arg0) {
+int igViewManager_OnKeyEvent(void *arg0) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg0) + 8));
@@ -321,13 +321,13 @@ void igViewManager_ApplyOptions(Arg *arg0, int arg1) {
     int *h;
     int rc;
     FUN_00464170(arg1, sp60, &sp6C, 1, -1);
-    if (DAT_0056dc50[0] == 0) {
+    if (g_sharedViewerOptions[0] == 0) {
         f = (Frame *)__nw__FUi(240);
         if (f != 0) f = (Frame *)ViewerOptions_Construct(f);
-        DAT_0056dc50[0] = f;
+        g_sharedViewerOptions[0] = f;
     }
-    DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
-    s0 = DAT_0056dc50[0];
+    g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
+    s0 = g_sharedViewerOptions[0];
     if (!(sp6C <= 0.0f) && s0->b68 != 0) {
         arg0->o->f84 = sp6C / 100.0f;
         arg0->o->f88 = 3.0f * sp6C;
@@ -348,9 +348,9 @@ void igViewManager_ApplyOptions(Arg *arg0, int arg1) {
     r3.z = 0;
     r3.v = DAT_0058cd48[0];
     igModel_NotifyViews(arg0->o, &r3);
-    if (DAT_0056dc50[0] != 0) {
-        if (--DAT_0056dc50[0]->f232 <= 0) {
-            f = DAT_0056dc50[0];
+    if (g_sharedViewerOptions[0] != 0) {
+        if (--g_sharedViewerOptions[0]->f232 <= 0) {
+            f = g_sharedViewerOptions[0];
             if (f != 0) {
                 if (&f->f236) {
                     p = f->f236;
@@ -376,7 +376,7 @@ void igViewManager_ApplyOptions(Arg *arg0, int arg1) {
                 }
                 __dl__FPv(f);
             }
-            DAT_0056dc50[0] = 0;
+            g_sharedViewerOptions[0] = 0;
         }
     }
 }

@@ -11,7 +11,7 @@ igMetaField *g_igParticleFormat_rotationMetaField;
 igMetaField *g_igParticleFormat_lifetimeMetaField;
 
 void FUN_0014d070(int arg0) {
-    FUN_0014d190();
+    igParticleFormat_EnsureRegistered();
     igMetaObject_CreateInstance(g_igParticleFormat_metaObject, arg0);
 }
 
@@ -26,18 +26,18 @@ igMetaObject *igParticleFormat_GetMetaObject(void)
 {
     igMetaObject *g = g_igParticleFormat_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014d190();
+        igParticleFormat_EnsureRegistered();
     return g_igParticleFormat_metaObject;
 }
 
 int igParticleFormat_GetVTable(void) {
     struct Obj_14d150 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00526fc0[0];
+    obj.vt = &g_igParticleFormat_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0014d190(void)
+void igParticleFormat_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igParticleFormat_Register);
 }

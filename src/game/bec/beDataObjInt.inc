@@ -2,21 +2,21 @@ igMetaObject *g_beDataObjInt_metaObject;
 igMetaField *g_beDataObjInt_dataMetaField;
 
 void beDataObjInt_Create(int arg0) {
-    FUN_00365680();
+    beDataObjInt_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5898B8, arg0);
 }
 
-igMetaObject *FUN_00365550(void) {
+igMetaObject *beDataObjInt_GetOrCreateMetaObject(void) {
     if (g_beDataObjInt_metaObject == 0) {
         g_beDataObjInt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDataObjInt_metaObject;
 }
 
-void *FUN_003655a0(void) {
+void *beDataObjInt_GetMetaObject(void) {
     igMetaObject *g = g_beDataObjInt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00365680();
+        beDataObjInt_EnsureRegistered();
     }
     return g_beDataObjInt_metaObject;
 }
@@ -33,7 +33,7 @@ int beDataObjInt_GetVTable(void) {
     u.vt = (int)&g_igNamedObject_vtable[0];
     q0 = &u.b[8];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_00535230[0];
+    u.vt = (int)&g_beDataObjInt_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (q0 != 0) {
@@ -50,7 +50,7 @@ int beDataObjInt_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00365680(void)
+void beDataObjInt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataObjInt_Register);
 }
@@ -62,7 +62,7 @@ void *beDataObjInt_Register(void) {
         &g_beDataObjInt_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beDataObjInt_GetMetaObject,
+        beDataObjInt_GetMetaObjectFunction,
         "beDataObjInt",
         0x10, /* instance size */
         beDataObjInt_GetVTable,
@@ -72,9 +72,9 @@ void *beDataObjInt_Register(void) {
     );
 }
 
-void beDataObjInt_GetMetaObject(void)
+void beDataObjInt_GetMetaObjectFunction(void)
 {
-    FUN_003655a0();
+    beDataObjInt_GetMetaObject();
 }
 
 static FieldFactory g_beDataObjInt_ctorTable[] = {

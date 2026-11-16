@@ -14,10 +14,10 @@ igMetaField *g_beMeterCtrlOneData_isNotchModeMetaField;
 igMetaField *g_beMeterCtrlOneData_hpMetaField;
 igMetaField *g_beMeterCtrlOneData_mHpMetaField;
 
-void *FUN_003572d0(void) {
+void *beMeterCtrlOneData_GetMetaObject(void) {
     igMetaObject *g = g_beMeterCtrlOneData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00357450();
+        beMeterCtrlOneData_EnsureRegistered();
     }
     return g_beMeterCtrlOneData_metaObject;
 }
@@ -28,14 +28,14 @@ int beMeterCtrlOneData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_00536fe0[0];
+    obj.vt = &g_beMeterCtrlOneData_vtable[0];
     obj.w3 = 0;
     obj.w16 = 0;
     obj.w17 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00536fe0[0];
-    FUN_00350b10((void **)&obj.w17, (short)(-1));
-    FUN_00350b10((void **)&obj.w16, (short)(-1));
+    obj.vt = &g_beMeterCtrlOneData_vtable[0];
+    igSmartPointer_beDataObjInt_Destruct((void **)&obj.w17, (short)(-1));
+    igSmartPointer_beDataObjInt_Destruct((void **)&obj.w16, (short)(-1));
     FUN_003573d0((void **)&obj.w3, (long long)(-1));
     FUN_00131bc0(&obj, 0);
     return t;
@@ -59,12 +59,12 @@ void **FUN_003573d0(void **arg0, long long arg1) {
     return arg0;
 }
 
-void FUN_00357450(void)
+void beMeterCtrlOneData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMeterCtrlOneData_Register);
 }
 
-static igMetaObjectCallback g_beMeterCtrlOneData_callbackList[] = { FUN_00356de0, FUN_00365680, 0 };
+static igMetaObjectCallback g_beMeterCtrlOneData_callbackList[] = { beMeterCtrlNode_EnsureRegistered, beDataObjInt_EnsureRegistered, 0 };
 
 void *beMeterCtrlOneData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -73,7 +73,7 @@ void *beMeterCtrlOneData_Register(void) {
         &g_beMeterCtrlOneData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beMeterCtrlOneData_GetMetaObject,
+        beMeterCtrlOneData_GetMetaObjectFunction,
         "beMeterCtrlOneData",
         0x48, /* instance size */
         beMeterCtrlOneData_GetVTable,
@@ -83,9 +83,9 @@ void *beMeterCtrlOneData_Register(void) {
     );
 }
 
-void beMeterCtrlOneData_GetMetaObject(void)
+void beMeterCtrlOneData_GetMetaObjectFunction(void)
 {
-    FUN_003572d0();
+    beMeterCtrlOneData_GetMetaObject();
 }
 
 static FieldFactory g_beMeterCtrlOneData_ctorTable[] = {
@@ -164,13 +164,13 @@ void beMeterCtrlOneData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beMeterCtrlOneData_ctorTable, 0xE);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_00356cc0();
+    *(int *)((char *)(temp_s1) + 56) = (int)beMeterCtrlNode_GetOrCreateMetaObject();
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 0.0f);
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_00365550();
+    *(int *)((char *)(temp_s1_2) + 56) = (int)beDataObjInt_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD));
-    *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00365550();
+    *(int *)((char *)(temp_s1_3) + 56) = (int)beDataObjInt_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beMeterCtrlOneData_fieldTable, g_beMeterCtrlOneData_fieldHandles, g_beMeterCtrlOneData_fieldOffsets, temp_s2);
 }
 

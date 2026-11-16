@@ -8,8 +8,8 @@ igMetaField *g_beNDMWMdlItemInfoWork_isDispNameMetaField;
 igMetaField *g_beNDMWMdlItemInfoWork_fontTypeMetaField;
 igMetaField *g_beNDMWMdlItemInfoWork_isColorLightMetaField;
 
-void FUN_003c13f0(int arg0) {
-    FUN_003c15b0();
+void beNDMWMdlItemInfoWork_Create(int arg0) {
+    beNDMWMdlItemInfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMdlItemInfoWork_metaObject, arg0);
 }
 
@@ -19,7 +19,7 @@ igMetaObject *beNDMWMdlItemInfoWork_GetReadyMetaObject(void) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_003c15b0();
+    beNDMWMdlItemInfoWork_EnsureRegistered();
 done:
     return g_beNDMWMdlItemInfoWork_metaObject;
 }
@@ -53,12 +53,12 @@ int *FUN_003c15a0(int *p)
     return p;
 }
 
-void FUN_003c15b0(void)
+void beNDMWMdlItemInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlItemInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWMdlItemInfoWork_callbackList[] = { FUN_003c9360, 0 };
+static igMetaObjectCallback g_beNDMWMdlItemInfoWork_callbackList[] = { beNDMWItemBase_EnsureRegistered, 0 };
 
 void *beNDMWMdlItemInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -132,7 +132,7 @@ void beNDMWMdlItemInfoWork_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWMdlItemInfoWork_ctorTable, 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c92c0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWItemBase_GetOrCreateMetaObject();
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), -1);
     igMetaObject_NameFields(temp_s0, g_beNDMWMdlItemInfoWork_fieldTable, g_beNDMWMdlItemInfoWork_fieldHandles, g_beNDMWMdlItemInfoWork_fieldOffsets, temp_s2);
 }

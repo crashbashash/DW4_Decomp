@@ -1,12 +1,12 @@
 igMetaObject *g_beSvPlatDataPC_metaObject;
 
-void *FUN_00347060(void) {
+void *beSvPlatDataPC_GetMetaObject(void) {
     bool ok;
     if (g_beSvPlatDataPC_metaObject == 0) goto make;
     ok = !!(g_beSvPlatDataPC_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003471f0();
+    beSvPlatDataPC_EnsureRegistered();
 done:;
     return g_beSvPlatDataPC_metaObject;
 }
@@ -22,10 +22,10 @@ int beSvPlatDataPC_GetVTable(void) {
     igObject_InitHeader(u.b);
     ps = &u.b[12];
     *(int *)ps = 0;
-    u.vt = (int)&DAT_00538d40[0];
-    u.vt = (int)&DAT_00538ce0[0];
+    u.vt = (int)&g_beSvPlatBaseData_vtable[0];
+    u.vt = (int)&g_beSvPlatDataPC_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00538d40[0];
+    u.vt = (int)&g_beSvPlatBaseData_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {
@@ -42,7 +42,7 @@ O_347150 *FUN_00347150(O_347150 *arg0, short arg1) {
     Q *t;
 
     if (arg0 != 0) {
-        arg0->vt = &DAT_00538d40[0];
+        arg0->vt = &g_beSvPlatBaseData_vtable[0];
         if (&arg0->m != 0) {
             t = arg0->m;
             if (t != 0) {
@@ -59,7 +59,7 @@ O_347150 *FUN_00347150(O_347150 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_003471f0(void)
+void beSvPlatDataPC_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvPlatDataPC_Register);
 }
@@ -71,7 +71,7 @@ void *beSvPlatDataPC_Register(void) {
         &g_beSvPlatDataPC_metaObject,
         beSvPlatBaseData_Register,
         beSvPlatBaseData_GetPublishedMetaObject,
-        beSvPlatDataPC_GetMetaObject,
+        beSvPlatDataPC_GetMetaObjectFunction,
         "beSvPlatDataPC",
         0x18, /* instance size */
         beSvPlatDataPC_GetVTable,
@@ -81,12 +81,12 @@ void *beSvPlatDataPC_Register(void) {
     );
 }
 
-void beSvPlatDataPC_GetMetaObject(void)
+void beSvPlatDataPC_GetMetaObjectFunction(void)
 {
-    FUN_00347060();
+    beSvPlatDataPC_GetMetaObject();
 }
 
-igMetaObject *FUN_003472a0(void) {
+igMetaObject *beSvPlatBaseData_GetPublishedMetaObject(void) {
     return g_beSvPlatBaseData_metaObject;
 }
 

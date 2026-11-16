@@ -63,11 +63,11 @@ through.
 | `0x003f13d0` | 136 | `beNDMWMcUtilCtrl__IsRemoved` | whether the utility is gone |
 | `0x003f1460` | 48 | `beNDMWMcUtilCtrl__Request` | queues a request kind for a slot |
 | `0x003f1490` | 1,360 | `beNDMWMcUtilCtrl__Update` | reads the card states (`GETDELIVER`) and runs the queued request through `ISBUSY` and `GETRESULT` |
-| `0x003f19e0` | 156 | `beNDMWLoadCtrl2__ResolvePadManager` | takes the pad manager reference (slot 32) |
-| `0x003f1a80` | 2,504 | `beNDMWLoadCtrl2__Update` | the per-frame state machine (slot 31): utility start, the load interface, result hand-off to `GAMERAM`/`TITLE2`, utility removal and the stage switch |
+| `0x003f19e0` | 156 | `beNDMWLoadCtrl2_Prepare` | takes the pad manager reference (slot 32) |
+| `0x003f1a80` | 2,504 | `beNDMWLoadCtrl2_UpdateRam` | the per-frame state machine (slot 31): utility start, the load interface, result hand-off to `GAMERAM`/`TITLE2`, utility removal and the stage switch |
 | `0x003f2450` | 12 | `beNDMWLoadCtrl2__GetInfoMeta` | returns the `beNDMWLoadCtrl2Info` meta object (slot 30) |
-| `0x003f2460` | 36 | `beNDMWLoadCtrl2__RegisterReceiver` | registers the controller as receiver `LOADCTRL2` (slot 29) |
-| `0x003f2490` | 1,832 | `beNDMWLoadCtrl2__OnMessage` | message handler (slot 34): creates the `CTRL` and `COMMONINTF` records, initialises the game data, answers `COMMONINTF` queries |
+| `0x003f2460` | 36 | `beNDMWLoadCtrl2_OnAddRam` | registers the controller as receiver `LOADCTRL2` (slot 29) |
+| `0x003f2490` | 1,832 | `beNDMWLoadCtrl2_OnMessage` | message handler (slot 34): creates the `CTRL` and `COMMONINTF` records, initialises the game data, answers `COMMONINTF` queries |
 | `0x003f2bc0` | 128 | `FUN_003f2bc0` | out-of-line holder destructor |
 | `0x003f2c40` | 128 | `FUN_003f2c40` | out-of-line holder destructor |
 | `0x003f2cc0` | 128 | `FUN_003f2cc0` | out-of-line holder destructor |

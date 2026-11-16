@@ -3,23 +3,23 @@ igMetaField *g_beNumberCtrlInfoWork_dispNumMetaField;
 igMetaField *g_beNumberCtrlInfoWork_realNumMetaField;
 igMetaField *g_beNumberCtrlInfoWork_changeNumMetaField;
 
-void FUN_0034d2b0(int arg0) {
-    FUN_0034d3d0();
+void beNumberCtrlInfoWork_Create(int arg0) {
+    beNumberCtrlInfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588630, arg0);
 }
 
-igMetaObject *FUN_0034d2f0(void) {
+igMetaObject *beNumberCtrlInfoWork_GetOrCreateMetaObject(void) {
     if (g_beNumberCtrlInfoWork_metaObject == 0) {
         g_beNumberCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNumberCtrlInfoWork_metaObject;
 }
 
-igMetaObject *FUN_0034d340(void) {
+igMetaObject *beNumberCtrlInfoWork_GetMetaObject(void) {
     igMetaObject *g = g_beNumberCtrlInfoWork_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0034d3d0();
+        beNumberCtrlInfoWork_EnsureRegistered();
     return g_beNumberCtrlInfoWork_metaObject;
 }
 
@@ -27,11 +27,11 @@ int beNumberCtrlInfoWork_GetVTable(void) {
     int obj[8];
 
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_00538530[0];
+    obj[0] = (int)&g_beNumberCtrlInfoWork_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_0034d3d0(void)
+void beNumberCtrlInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNumberCtrlInfoWork_Register);
 }
@@ -43,7 +43,7 @@ void *beNumberCtrlInfoWork_Register(void) {
         &g_beNumberCtrlInfoWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beNumberCtrlInfoWork_GetMetaObject,
+        beNumberCtrlInfoWork_GetMetaObjectFunction,
         "beNumberCtrlInfoWork",
         0x14, /* instance size */
         beNumberCtrlInfoWork_GetVTable,
@@ -53,9 +53,9 @@ void *beNumberCtrlInfoWork_Register(void) {
     );
 }
 
-void beNumberCtrlInfoWork_GetMetaObject(void)
+void beNumberCtrlInfoWork_GetMetaObjectFunction(void)
 {
-    FUN_0034d340();
+    beNumberCtrlInfoWork_GetMetaObject();
 }
 
 static FieldFactory g_beNumberCtrlInfoWork_ctorTable[] = {

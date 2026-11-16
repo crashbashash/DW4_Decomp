@@ -5,10 +5,10 @@ igMetaField *g_beSvPlatDataXbox_imageMetaField;
 igMetaField *g_beSvPlatDataXbox_saveDataSizeMetaField;
 igMetaField *g_beSvPlatDataXbox_dataOffSetMetaField;
 
-void *FUN_003472b0(void) {
+void *beSvPlatDataXbox_GetMetaObject(void) {
     igMetaObject *g = g_beSvPlatDataXbox_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003473f0();
+        beSvPlatDataXbox_EnsureRegistered();
     }
     return g_beSvPlatDataXbox_metaObject;
 }
@@ -22,11 +22,11 @@ int beSvPlatDataXbox_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = (S_ref *)&u.b[12];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00538c80[0];
+    u.vt = (int)&g_beSvPlatDataXbox_vtable[0];
     q0 = (S_ref *)&u.b[36];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00538c80[0];
+    u.vt = (int)&g_beSvPlatDataXbox_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -36,7 +36,7 @@ int beSvPlatDataXbox_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&DAT_00538d40[0];
+    u.vt = (int)&g_beSvPlatBaseData_vtable[0];
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
         if (q1 != 0) {
@@ -49,12 +49,12 @@ int beSvPlatDataXbox_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003473f0(void)
+void beSvPlatDataXbox_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvPlatDataXbox_Register);
 }
 
-static igMetaObjectCallback g_beSvPlatDataXbox_callbackList[] = { FUN_003476e0, 0 };
+static igMetaObjectCallback g_beSvPlatDataXbox_callbackList[] = { beXboxImage24k_EnsureRegistered, 0 };
 
 void *beSvPlatDataXbox_Register(void) {
     BecLibrary_MarkRegistered();
@@ -63,7 +63,7 @@ void *beSvPlatDataXbox_Register(void) {
         &g_beSvPlatDataXbox_metaObject,
         beSvPlatBaseData_Register,
         beSvPlatBaseData_GetPublishedMetaObject,
-        beSvPlatDataXbox_GetMetaObject,
+        beSvPlatDataXbox_GetMetaObjectFunction,
         "beSvPlatDataXbox",
         0x2c, /* instance size */
         beSvPlatDataXbox_GetVTable,
@@ -73,9 +73,9 @@ void *beSvPlatDataXbox_Register(void) {
     );
 }
 
-void beSvPlatDataXbox_GetMetaObject(void)
+void beSvPlatDataXbox_GetMetaObjectFunction(void)
 {
-    FUN_003472b0();
+    beSvPlatDataXbox_GetMetaObject();
 }
 
 static FieldFactory g_beSvPlatDataXbox_ctorTable[] = {
@@ -126,7 +126,7 @@ void beSvPlatDataXbox_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (F_3474b0 *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    temp_s0->f56 = (int)FUN_00347600();
+    temp_s0->f56 = (int)beXboxImage24k_GetOrCreateMetaObject();
     temp_s0->b52 = 1;
     tg = (G_3474b0 *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3);
     tg->w52 = 2;

@@ -1,11 +1,11 @@
 igMetaObject *g_beNDMWWindowTitle_metaObject;
 
-igMetaObject *FUN_003b3e40(void) {
-    if (g_beNDMWWindowTitle_metaObject == 0 || !isValid(g_beNDMWWindowTitle_metaObject)) FUN_003b3e90();
+igMetaObject *beNDMWWindowTitle_GetMetaObject(void) {
+    if (g_beNDMWWindowTitle_metaObject == 0 || !isValid(g_beNDMWWindowTitle_metaObject)) beNDMWWindowTitle_EnsureRegistered();
     return g_beNDMWWindowTitle_metaObject;
 }
 
-void FUN_003b3e90(void)
+void beNDMWWindowTitle_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWWindowTitle_Register);
 }
@@ -17,7 +17,7 @@ void *beNDMWWindowTitle_Register(void) {
         &g_beNDMWWindowTitle_metaObject,
         beNDMWWindow_Register,
         beNDMWWindow_GetPublishedMetaObject,
-        beNDMWWindowTitle_GetMetaObject,
+        beNDMWWindowTitle_GetMetaObjectFunction,
         "beNDMWWindowTitle",
         0x50, /* instance size */
         0,
@@ -27,12 +27,12 @@ void *beNDMWWindowTitle_Register(void) {
     );
 }
 
-void beNDMWWindowTitle_GetMetaObject(void)
+void beNDMWWindowTitle_GetMetaObjectFunction(void)
 {
-    FUN_003b3e40();
+    beNDMWWindowTitle_GetMetaObject();
 }
 
-igMetaObject *FUN_003b3f30(void) {
+igMetaObject *beNDMWWindow_GetPublishedMetaObject(void) {
     return g_beNDMWWindow_metaObject;
 }
 

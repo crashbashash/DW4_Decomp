@@ -20,10 +20,10 @@ int igCustomStateCollection_GetVTable(void) {
     int r;
     int *p; int *a1; int t;
     igObject_InitHeader(&o);
-    o.vt = DAT_00526d10;
+    o.vt = g_igCustomStateCollection_vtable;
     *(int *)((char *)&o + 20) = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = DAT_00526d10;
+    o.vt = g_igCustomStateCollection_vtable;
     if (&*(int *)((char *)&o + 20) != 0) { p = *(int **)((char *)&o + 20); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader(*a1, a1); } }
     return r;
 }

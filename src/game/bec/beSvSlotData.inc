@@ -5,16 +5,16 @@ igMetaField *g_beSvSlotData_freeSizeMetaField;
 igMetaField *g_beSvSlotData_useSizeMetaField;
 igMetaField *g_beSvSlotData_totalSizeMetaField;
 
-igMetaObject *FUN_0034aae0(void)
+igMetaObject *beSvSlotData_GetMetaObject(void)
 {
     igMetaObject *g = g_beSvSlotData_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_0034ab30();
+        beSvSlotData_EnsureRegistered();
     return g_beSvSlotData_metaObject;
 }
 
-void FUN_0034ab30(void)
+void beSvSlotData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvSlotData_Register);
 }
@@ -26,7 +26,7 @@ void *beSvSlotData_Register(void) {
         &g_beSvSlotData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSvSlotData_GetMetaObject,
+        beSvSlotData_GetMetaObjectFunction,
         "beSvSlotData",
         0x18, /* instance size */
         0,
@@ -36,9 +36,9 @@ void *beSvSlotData_Register(void) {
     );
 }
 
-void beSvSlotData_GetMetaObject(void)
+void beSvSlotData_GetMetaObjectFunction(void)
 {
-    FUN_0034aae0();
+    beSvSlotData_GetMetaObject();
 }
 
 static FieldFactory g_beSvSlotData_ctorTable[] = {

@@ -2,20 +2,20 @@ igMetaObject *g_beSaveDataDeliver_metaObject;
 igMetaField *g_beSaveDataDeliver_sizeMetaField;
 igMetaField *g_beSaveDataDeliver_dataMetaField;
 
-igMetaObject *FUN_0034aeb0(void) {
+igMetaObject *beSaveDataDeliver_GetOrCreateMetaObject(void) {
     if (g_beSaveDataDeliver_metaObject == 0) {
         g_beSaveDataDeliver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSaveDataDeliver_metaObject;
 }
 
-igMetaObject *FUN_0034af00(void) {
+igMetaObject *beSaveDataDeliver_GetMetaObject(void) {
     igMetaObject *g = g_beSaveDataDeliver_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_0034af90();
+    beSaveDataDeliver_EnsureRegistered();
 done:
     return g_beSaveDataDeliver_metaObject;
 }
@@ -24,11 +24,11 @@ int beSaveDataDeliver_GetVTable(void) {
     struct Obj_34af50 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00538910[0];
+    obj.vt = &g_beSaveDataDeliver_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0034af90(void)
+void beSaveDataDeliver_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSaveDataDeliver_Register);
 }
@@ -40,7 +40,7 @@ void *beSaveDataDeliver_Register(void) {
         &g_beSaveDataDeliver_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSaveDataDeliver_GetMetaObject,
+        beSaveDataDeliver_GetMetaObjectFunction,
         "beSaveDataDeliver",
         0x10, /* instance size */
         beSaveDataDeliver_GetVTable,
@@ -50,9 +50,9 @@ void *beSaveDataDeliver_Register(void) {
     );
 }
 
-void beSaveDataDeliver_GetMetaObject(void)
+void beSaveDataDeliver_GetMetaObjectFunction(void)
 {
-    FUN_0034af00();
+    beSaveDataDeliver_GetMetaObject();
 }
 
 static FieldFactory g_beSaveDataDeliver_ctorTable[] = {

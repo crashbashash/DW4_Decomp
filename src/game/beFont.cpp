@@ -115,13 +115,13 @@ struct FloatListView { char header[8]; int count; int capacity; float *data; int
 union FloatBits { float f; struct { unsigned char b0, b1, b2; unsigned char high : 7; unsigned char sign : 1; } bits; };
 
 extern "C" {
-void Gap__Bec__beFont__vfunc_23(void);
-void Gap__Bec__beFont__vfunc_24(beFont *self);
-void Gap__Bec__beFont__vfunc_29(beFont *self, int receiver);
-void Gap__Bec__beFont__vfunc_32(beFont *self);
-int Gap__Bec__beFont__vfunc_30(void);
-void Gap__Bec__beFont__vfunc_31(void);
-int Gap__Bec__beFont__vfunc_34(beFont *self, beBaseInfoRam *ram, beMessengerWork *work);
+void beFont_Start(void);
+void beFont_Stop(beFont *self);
+void beFont_OnAddRam(beFont *self, int receiver);
+void beFont_Prepare(beFont *self);
+int beFont_GetInfoMeta(void);
+void beFont_UpdateRam(void);
+int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work);
 void beFont_AddFontImages(beFont *self, igNamedObjectInfo *info);
 igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *text);
 int beFont_FindFontIndex(beFont *self, int name);
@@ -133,13 +133,13 @@ void beFont_AlignLines(beFont *self, int text, beFontInfoData *entry, igVertexAr
 void beFont_LockVertexArray(beFont *self, igVertexArrayView *vertices, igVertexArrayLock *positions, igVertexArrayLock *texCoords);
 int beFont_FindFirstLayoutEntry(beFont *self, beBaseInfoRam *ram, int dataName, int setName);
 int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram);
-int Gap__Bec__beFont__vfunc_20(void);
-void Gap__Bec__beUnicodeObj__vfunc_08(beUnicodeObj *self);
+int beFont_GetMeta(void);
+void beUnicodeObj_userDestruct(beUnicodeObj *self);
 void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length);
-int Gap__Bec__beUnicodeObj__vfunc_20(void);
+int beUnicodeObj_GetMeta(void);
 
-void Gap__Core__igObject__vfunc_23(void);
-int Gap__Core__igObject__vfunc_24(beFont *);
+void beBaseInfoManager_Start(void);
+int beBaseInfoManager_Stop(beFont *);
 int Gap__Core__igObject__userDestruct(beUnicodeObj *);
 void *igObject_GetAllocator(...);
 void *Memory_GetAllocatorBySelector(...);
@@ -364,12 +364,12 @@ static inline void releaseString(int text) {
 
 /* Tail call to the base-class slot 23 (igObject::vfunc_23). The receiver stays in the argument
  * register, which is why the declaration takes no parameters. */
-void Gap__Bec__beFont__vfunc_23(void)
+void beFont_Start(void)
 {
-    Gap__Core__igObject__vfunc_23();
+    beBaseInfoManager_Start();
 }
 
-void Gap__Bec__beFont__vfunc_24(beFont *self) {
+void beFont_Stop(beFont *self) {
     beFontImageList *fonts;
     int count;
     int clearCount;
@@ -388,19 +388,19 @@ void Gap__Bec__beFont__vfunc_24(beFont *self) {
         ((igObject **)fonts->_data)[j] = 0;
     }
     fonts->_count = 0;
-    Gap__Core__igObject__vfunc_24(self);
+    beBaseInfoManager_Stop(self);
 }
 
 /* Registers `receiver` with the font's messenger under the "TEXTCTL" group string, with a null
  * text argument and -1 as the last argument. */
-void Gap__Bec__beFont__vfunc_29(beFont *self, int receiver)
+void beFont_OnAddRam(beFont *self, int receiver)
 {
     beMessenger_RegisterReceiver(self->_messenger, receiver, "TEXTCTL", 0, -1);
 }
 
 static inline int count(const beFontGeomAttrPairList *list) { return list->_count; }
 
-void Gap__Bec__beFont__vfunc_32(beFont *self) {
+void beFont_Prepare(beFont *self) {
     beFontGeomAttrPairList *pairs;
     int pairCount;
     int clearCount;
@@ -431,19 +431,19 @@ void Gap__Bec__beFont__vfunc_32(beFont *self) {
     igStringObj_Clear(self->_convertData);
 }
 
-int Gap__Bec__beFont__vfunc_30(void)
+int beFont_GetInfoMeta(void)
 {
     return g_beFontInfo_metaObject[0];
 }
 
-void Gap__Bec__beFont__vfunc_31(void)
+void beFont_UpdateRam(void)
 {
 }
 
 /* Message handler. INITIALIZE asks the layer controller for the font's layer node, keeps its
  * attribute set as _root and pairs every panel of every category with a new geometry attribute;
  * the other messages act on every layout entry the first two string arguments select. */
-int Gap__Bec__beFont__vfunc_34(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
+int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
     beFontInfo *info;
     int message;
     igNodeView *group;
@@ -1230,7 +1230,7 @@ int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram) {
     return found;
 }
 
-void Gap__Bec__beUnicodeObj__vfunc_08(beUnicodeObj *self) {
+void beUnicodeObj_userDestruct(beUnicodeObj *self) {
     if (self->_buffer != 0) {
         Memory_FreeBufferWithAllocator(self->_buffer, ((int)igObject_GetAllocator()));
     }
@@ -1252,12 +1252,12 @@ void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length) {
     memset(self->_buffer, 0, Memory_GetBufferSize(self->_buffer));
 }
 
-int Gap__Bec__beUnicodeObj__vfunc_20(void)
+int beUnicodeObj_GetMeta(void)
 {
     return g_beUnicodeObj_metaObject[0];
 }
 
-int Gap__Bec__beFont__vfunc_20(void)
+int beFont_GetMeta(void)
 {
     return g_beFont_metaObject[0];
 }

@@ -1,19 +1,19 @@
 igMetaObject *g_beMessengerArgDataList_metaObject;
 
-igMetaObject *FUN_00358bf0(void) {
+igMetaObject *beMessengerArgDataList_GetOrCreateMetaObject(void) {
     if (g_beMessengerArgDataList_metaObject == 0) {
         g_beMessengerArgDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beMessengerArgDataList_metaObject;
 }
 
-igMetaObject *FUN_00358c40(void) {
+igMetaObject *beMessengerArgDataList_GetMetaObject(void) {
     igMetaObject *g = g_beMessengerArgDataList_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_00358cd0();
+    beMessengerArgDataList_EnsureRegistered();
 done:
     return g_beMessengerArgDataList_metaObject;
 }
@@ -22,11 +22,11 @@ int beMessengerArgDataList_GetVTable(void) {
     struct Obj_358c90 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00536d00[0];
+    obj.vt = &g_beMessengerArgDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00358cd0(void)
+void beMessengerArgDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beMessengerArgDataList_Register);
 }
@@ -40,7 +40,7 @@ void *beMessengerArgDataList_Register(void) {
         &g_beMessengerArgDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beMessengerArgDataList_GetMetaObject,
+        beMessengerArgDataList_GetMetaObjectFunction,
         "beMessengerArgDataList",
         0x14, /* instance size */
         beMessengerArgDataList_GetVTable,
@@ -50,8 +50,8 @@ void *beMessengerArgDataList_Register(void) {
     );
 }
 
-void beMessengerArgDataList_GetMetaObject(void)
+void beMessengerArgDataList_GetMetaObjectFunction(void)
 {
-    FUN_00358c40();
+    beMessengerArgDataList_GetMetaObject();
 }
 

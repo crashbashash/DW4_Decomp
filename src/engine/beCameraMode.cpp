@@ -164,11 +164,11 @@ void Gap__Bec__beCameraMode__vfunc_22(igViewModeVirtuals *self, ViewModelEvent *
     }
 }
 
-void FUN_00465080(void) {
+void igViewMode_OnDetach(void) {
 
 }
 
-void FUN_00465090(void) {
+void igViewMode_OnAttach(void) {
 
 }
 
@@ -254,7 +254,7 @@ void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
     }
 }
 
-void FUN_00465380(igCameraMode *self) {
+void igCameraMode_OnDetach(igCameraMode *self) {
     igCameraVirtuals *camera;
 
     camera = (igCameraVirtuals *)self->_camera;
@@ -263,7 +263,7 @@ void FUN_00465380(igCameraMode *self) {
     }
 }
 
-void FUN_004653c0(igCameraMode *self) {
+void igCameraMode_OnAttach(igCameraMode *self) {
     int hfovChanged[4];
     int farChanged[4];
     int nearChanged[4];
@@ -297,7 +297,7 @@ void FUN_004653c0(igCameraMode *self) {
     }
 }
 
-void FUN_004654d0(igCameraMode *self) {
+void igCameraMode_Update(igCameraMode *self) {
     float x, y, z;
     int status;
     float translation[4];
@@ -321,7 +321,7 @@ void FUN_004654d0(igCameraMode *self) {
     }
 }
 
-void FUN_004655a0(igFlyMode *self, int key, int down) {
+void igFlyMode_OnKeyEvent(igFlyMode *self, int key, int down) {
     float f;
     switch (key) {
     case 0x9C:
@@ -360,7 +360,7 @@ void FUN_004655a0(igFlyMode *self, int key, int down) {
     }
 }
 
-void FUN_004657b0(igFlyMode *self, int button, int pressed) {
+void igFlyMode_OnMouseButton(igFlyMode *self, int button, int pressed) {
     switch (button) {
     case 0:
         self->_moveDirection[2] += pressed ? 1.0f : -1.0f;
@@ -377,12 +377,12 @@ void FUN_004657b0(igFlyMode *self, int button, int pressed) {
     }
 }
 
-void FUN_00465870(igFlyMode *self, float x, float y) {
+void igFlyMode_OnMouseMove(igFlyMode *self, float x, float y) {
     self->_mousePos[0] = x;
     self->_mousePos[1] = y;
 }
 
-void FUN_00465880(igFlyMode *self, int unused, unsigned short axis, float x, float y)
+void igFlyMode_OnStickEvent(igFlyMode *self, int unused, unsigned short axis, float x, float y)
 {
     if (axis == 0) {
         self->_joystickR[0] = x;
@@ -398,7 +398,7 @@ void igFlyMode_AimingChanged(igFlyMode *self)
 {
 }
 
-void FUN_00465cc0(igFlyMode *self, float seconds) {
+void igFlyMode_Update(igFlyMode *self, float seconds) {
     int changed[3];
     int model;
 
@@ -414,7 +414,7 @@ void FUN_00465cc0(igFlyMode *self, float seconds) {
     igModel_NotifyViews(model, changed);
 }
 
-void FUN_00465d40(igFlyMode *self) {
+void igFlyMode_OnAttach(igFlyMode *self) {
     igViewModel *model;
     float dx;
     float dy;
@@ -438,14 +438,14 @@ void FUN_00465d40(igFlyMode *self) {
     self->_speed = 0.2f * sqrtf(dx * dx + dy * dy + dz * dz);
 }
 
-void FUN_00465dc0(igFlyMode *self) {
+void igFlyMode_OnDetach(igFlyMode *self) {
     if (self->_aiming != 0) {
         self->_aiming = 0;
         igFlyMode_AimingChanged(self);
     }
 }
 
-void FUN_00465df0(igRotateMode *self, int key, char down) {
+void igRotateMode_OnKeyEvent(igRotateMode *self, int key, char down) {
     if ((self->_maya != 0) && ((key == 0xC8) || (key == 0xC9))) {
         self->_active = down;
     }
@@ -460,7 +460,7 @@ constrain:
     }
 }
 
-void FUN_00465e40(igRotateMode *self, int button, char pressed) {
+void igRotateMode_OnMouseButton(igRotateMode *self, int button, char pressed) {
     switch (button) {
     case 0:
         self->_leftMouseActive = pressed;
@@ -515,7 +515,7 @@ void FUN_004660f0(igRotateMode *state, const float *delta) {
     }
 }
 
-void FUN_004661e0(igRotateMode *self, int unused, int stick, float x, float y) {
+void igRotateMode_OnStickEvent(igRotateMode *self, int unused, int stick, float x, float y) {
     int axis;
     axis = stick & 0xFFFF;
     if (axis == 0) {
@@ -527,7 +527,7 @@ void FUN_004661e0(igRotateMode *self, int unused, int stick, float x, float y) {
     }
 }
 
-void FUN_00466220(igRotateMode *state) {
+void igRotateMode_OnAttach(igRotateMode *state) {
     igViewModel *model = (igViewModel *)state->_model;
     float dx;
     float dy;
@@ -561,7 +561,7 @@ int igPickMode_HitProc(int traversal, int data, int hit) {
 
 /* Moves the GUI mouse cursor by the joystick's deflection over `seconds` and tells the GUI model's
  * views that the mouse position changed. */
-void Gap__Viewer__igPickMode__MoveCursor(igPickMode *pickMode, float seconds) {
+void igPickMode_Update(igPickMode *pickMode, float seconds) {
     igGuiSystemModel *model = (igGuiSystemModel *)((igGuiSystem *)pickMode->_guiSystem)->_model;
     float dx = pickMode->_joystickT[0];
     float dy = pickMode->_joystickT[1];
@@ -580,14 +580,14 @@ void Gap__Viewer__igPickMode__MoveCursor(igPickMode *pickMode, float seconds) {
     }
 }
 
-void FUN_004666c0(igPickMode *self, int unused, int stick, float x, float y) {
+void igPickMode_OnStickEvent(igPickMode *self, int unused, int stick, float x, float y) {
     if (!(stick & 0xFFFF)) {
         self->_joystickT[0] = x;
         self->_joystickT[1] = y;
     }
 }
 
-void FUN_004666e0(igPickMode *self, int button, int pressed) {
+void igPickMode_OnMouseButton(igPickMode *self, int button, int pressed) {
     ViewModelEvent changed;
     int *selected;
     igObject *object;
@@ -612,13 +612,13 @@ void FUN_004666e0(igPickMode *self, int button, int pressed) {
     }
 }
 
-void FUN_004667a0(igPickMode *self, void *unused, int key, int down) {
+void igPickMode_OnButtonEvent(igPickMode *self, void *unused, int key, int down) {
     if ((key == 0xE) && (down != 0)) {
         igPickMode_Pick(self);
     }
 }
 
-void FUN_004667d0(igPickMode *pickMode) {
+void igPickMode_OnAttach(igPickMode *pickMode) {
     struct { int pad; char b; int w; } unprojected;
     igProbe *created;
     igIntList *faceTypes;
@@ -663,7 +663,7 @@ void FUN_004667d0(igPickMode *pickMode) {
     }
 }
 
-void FUN_004669d0(igPickMode *self) {
+void igPickMode_OnDetach(igPickMode *self) {
     if (self->_guiSystem != 0) {
         igGuiSystem_SetMouseCursor(self->_guiSystem, self->_savedCursor);
         igGuiSystem_SetMouseCursorVisible(self->_guiSystem, self->_savedCursorState);

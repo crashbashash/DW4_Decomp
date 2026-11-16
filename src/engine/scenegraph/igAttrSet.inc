@@ -1,9 +1,9 @@
-void FUN_001a5d30(int arg0) {
-    FUN_001a5e90();
+void igAttrSet_CreateInstance(int arg0) {
+    igAttrSet_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igAttrSet_metaObject, arg0);
 }
 
-igMetaObject *FUN_001a5d70(void) {
+igMetaObject *igAttrSet_GetOrCreateMetaObject(void) {
     if (g_igAttrSet_metaObject == 0) {
         g_igAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -14,7 +14,7 @@ igMetaObject *igAttrSet_GetMetaObject(void)
 {
     igMetaObject *g = g_igAttrSet_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a5e90();
+        igAttrSet_EnsureRegistered();
     return g_igAttrSet_metaObject;
 }
 
@@ -27,21 +27,21 @@ int igAttrSet_GetVTable(void) {
     o.w[2] = 0;
     o.w[3] = 0;
     o.w[6] = 0;
-    o.vt = &DAT_005294b0[0];
+    o.vt = &g_igAttrSet_vtable[0];
     o.s = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_005294b0[0];
+    o.vt = &g_igAttrSet_vtable[0];
     FUN_0013bfe0(&o.s, -1);
     FUN_00195a90((struct T_195a90 *)&o, 0);
     return r;
 }
 
-void FUN_001a5e90(void)
+void igAttrSet_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAttrSet_Register);
 }
 
-static igMetaObjectCallback g_igAttrSet_callbackList[] = { FUN_0013afe0, 0 };
+static igMetaObjectCallback g_igAttrSet_callbackList[] = { igAttrList_EnsureRegistered, 0 };
 
 void igAttrSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -90,7 +90,7 @@ void igAttrSet_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAttrSet_ctorTable, 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0013af00();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;

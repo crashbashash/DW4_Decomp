@@ -24,10 +24,10 @@ int igRenderListAttr_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     p = (S_ref *)&u.b[16];
-    u.vt = (int)&DAT_00522fd0[0];
+    u.vt = (int)&g_igRenderListAttr_vtable[0];
     *(int *)p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00522fd0[0];
+    u.vt = (int)&g_igRenderListAttr_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
         if (p != 0) {
@@ -45,7 +45,7 @@ void FUN_00133f80(void)
     igMetaObject_RunStaticInit(igRenderListAttr_Register);
 }
 
-static igMetaObjectCallback g_igRenderListAttr_callbackList[] = { FUN_0014a0e0, 0 };
+static igMetaObjectCallback g_igRenderListAttr_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 void igRenderListAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -98,7 +98,7 @@ void igRenderListAttr_InitFields(void) {
     igIntMetaField_SetDefault(temp_v0, -1);
     temp_v0->b38 = 0;
     temp_s1 = (struct F_134020 *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    temp_s1->f56 = FUN_0014a040();
+    temp_s1->f56 = igVisualContext_GetOrCreateMetaObject();
     temp_s1->b38 = 0;
     temp_s1->b40 = 1;
     temp_s1->b39 = 1;

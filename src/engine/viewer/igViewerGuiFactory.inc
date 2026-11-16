@@ -28,7 +28,7 @@ int igViewerGuiFactory_GetVTable(void) {
     struct Obj_45b970 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00542390[0];
+    obj.vt = &g_igViewerGuiFactory_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
@@ -38,7 +38,7 @@ int igViewerGuiFactory_GetVTable(void) {
     obj.w8 = 0;
     obj.w9 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    obj.vt = &DAT_00542390[0];
+    obj.vt = &g_igViewerGuiFactory_vtable[0];
     FUN_0045bb90((void **)&obj.w9, -1);
     FUN_0045bb10((Ref **)&obj.w8, -1);
     FUN_0045bb10((Ref **)&obj.w7, -1);

@@ -1,6 +1,6 @@
 igMetaObject *g_igRandomNumber_metaObject;
 
-igMetaObject *FUN_001e4240(void) {
+igMetaObject *igRandomNumber_GetOrCreateMetaObject(void) {
     if (g_igRandomNumber_metaObject == 0) {
         g_igRandomNumber_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -11,11 +11,11 @@ igMetaObject *igRandomNumber_GetMetaObject(void)
 {
     igMetaObject *g = g_igRandomNumber_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e42e0();
+        igRandomNumber_EnsureRegistered();
     return g_igRandomNumber_metaObject;
 }
 
-void FUN_001e42e0(void)
+void igRandomNumber_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRandomNumber_Register);
 }

@@ -26,7 +26,7 @@ int igVertexBlendMatrixListAttr_GetVTable(void) {
     S_ref *q0;
     int pi = (int)u.b;
     igObject_InitHeader(pi);
-    u.vt = (int)&DAT_00522640[0];
+    u.vt = (int)&g_igVertexBlendMatrixListAttr_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
     igMatrix44f_SetIdentity(&u.b[28]);

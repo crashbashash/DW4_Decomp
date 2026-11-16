@@ -5,11 +5,11 @@ igMetaField *g_beModelCtrlNode2_timeBiasMetaField;
 igMetaField *g_beModelCtrlNode2_overrideAttrListMetaField;
 
 void beModelCtrlNode2_Create(int arg0) {
-    FUN_0034fe80();
+    beModelCtrlNode2_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588860, arg0);
 }
 
-igMetaObject *FUN_0034fd40(void) {
+igMetaObject *beModelCtrlNode2_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlNode2_metaObject == 0) {
         g_beModelCtrlNode2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -22,7 +22,7 @@ void *beModelCtrlNode2_ResolveMetaObject(void) {
     ok = !!(g_beModelCtrlNode2_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_0034fe80();
+    beModelCtrlNode2_EnsureRegistered();
 done:;
     return g_beModelCtrlNode2_metaObject;
 }
@@ -32,12 +32,12 @@ int beModelCtrlNode2_GetVTable(void) {
     return *(int *)((char *)&node + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_0034fe80(void)
+void beModelCtrlNode2_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlNode2_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlNode2_callbackList[] = { FUN_0013afe0, 0 };
+static igMetaObjectCallback g_beModelCtrlNode2_callbackList[] = { igAttrList_EnsureRegistered, 0 };
 
 void *beModelCtrlNode2_Register(void) {
     BecLibrary_MarkRegistered();
@@ -96,7 +96,7 @@ void beModelCtrlNode2_InitFields(void) {
     igMetaObject_CreateFields(temp_s0, g_beModelCtrlNode2_ctorTable, 4);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    *(int *)((char *)(temp_s1) + 56) = FUN_0013af00();
+    *(int *)((char *)(temp_s1) + 56) = igAttrList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 52) = 1;
     igMetaObject_NameFields(temp_s0, g_beModelCtrlNode2_fieldTable, g_beModelCtrlNode2_fieldHandles, g_beModelCtrlNode2_fieldOffsets, temp_s2);
 }

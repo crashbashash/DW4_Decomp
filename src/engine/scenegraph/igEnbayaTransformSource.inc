@@ -6,7 +6,7 @@ igMetaObject *FUN_001a18b0(void)
 {
     igMetaObject *g = g_igEnbayaTransformSource_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a1990();
+        igEnbayaTransformSource_EnsureRegistered();
     return g_igEnbayaTransformSource_metaObject;
 }
 
@@ -18,10 +18,10 @@ int igEnbayaTransformSource_GetVTable(void) {
 
     igObject_InitHeader(&o);
     ps = &o.ref;
-    o.vt = &DAT_00529080[0];
+    o.vt = &g_igEnbayaTransformSource_vtable[0];
     *ps = 0;
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00529080[0];
+    o.vt = &g_igEnbayaTransformSource_vtable[0];
     if (ps != 0) {
         temp_a0 = *ps;
         if (temp_a0 != 0) {
@@ -34,12 +34,12 @@ int igEnbayaTransformSource_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_001a1990(void)
+void igEnbayaTransformSource_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igEnbayaTransformSource_Register);
 }
 
-static igMetaObjectCallback g_igEnbayaTransformSource_callbackList[] = { FUN_001a22f0, 0 };
+static igMetaObjectCallback g_igEnbayaTransformSource_callbackList[] = { igEnbayaAnimationSource_EnsureRegistered, 0 };
 
 void igEnbayaTransformSource_Register(void) {
     SceneGraphLibrary_MarkRegistered();

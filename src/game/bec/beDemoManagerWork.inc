@@ -3,21 +3,21 @@ igMetaField *g_beDemoManagerWork_advancecMetaField;
 igMetaField *g_beDemoManagerWork_keepMesListMetaField;
 
 void beDemoManagerWork_CreateInstance(int arg0) {
-    FUN_00363930();
+    beDemoManagerWork_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5897D8, arg0);
 }
 
-igMetaObject *FUN_00363800(void) {
+igMetaObject *beDemoManagerWork_GetOrCreateMetaObject(void) {
     if (g_beDemoManagerWork_metaObject == 0) {
         g_beDemoManagerWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDemoManagerWork_metaObject;
 }
 
-void *FUN_00363850(void) {
+void *beDemoManagerWork_GetMetaObject(void) {
     igMetaObject *g = g_beDemoManagerWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00363930();
+        beDemoManagerWork_EnsureRegistered();
     }
     return g_beDemoManagerWork_metaObject;
 }
@@ -29,11 +29,11 @@ int beDemoManagerWork_GetVTable(void) {
     int *temp_a0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_005356e0[0];
+    u.vt = (int)&g_beDemoManagerWork_vtable[0];
     ps = &u.b[12];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005356e0[0];
+    u.vt = (int)&g_beDemoManagerWork_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
         if (temp_a0 != 0) {
@@ -46,12 +46,12 @@ int beDemoManagerWork_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00363930(void)
+void beDemoManagerWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDemoManagerWork_Register);
 }
 
-static igMetaObjectCallback g_beDemoManagerWork_callbackList[] = { FUN_00363b70, 0 };
+static igMetaObjectCallback g_beDemoManagerWork_callbackList[] = { beDemoKeepMesList_EnsureRegistered, 0 };
 
 void *beDemoManagerWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -60,7 +60,7 @@ void *beDemoManagerWork_Register(void) {
         &g_beDemoManagerWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beDemoManagerWork_GetMetaObject,
+        beDemoManagerWork_GetMetaObjectFunction,
         "beDemoManagerWork",
         0x10, /* instance size */
         beDemoManagerWork_GetVTable,
@@ -70,9 +70,9 @@ void *beDemoManagerWork_Register(void) {
     );
 }
 
-void beDemoManagerWork_GetMetaObject(void)
+void beDemoManagerWork_GetMetaObjectFunction(void)
 {
-    FUN_00363850();
+    beDemoManagerWork_GetMetaObject();
 }
 
 static FieldFactory g_beDemoManagerWork_ctorTable[] = {
@@ -101,7 +101,7 @@ void beDemoManagerWork_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beDemoManagerWork_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00363a90();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beDemoKeepMesList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beDemoManagerWork_fieldTable, g_beDemoManagerWork_fieldHandles, g_beDemoManagerWork_fieldOffsets, temp_s2);
 }

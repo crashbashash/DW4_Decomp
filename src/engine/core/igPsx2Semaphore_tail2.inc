@@ -227,7 +227,7 @@ void SystemAllocator_GetStatistics(SystemAllocator *self, SystemMemoryStatistics
     stats->freeFromTop = bottom - heapTop;
     stats->heapTop = heapTop;
     stats->codeStart = (int)__code_start__;
-    stats->codeSize = (int)(Gap__Bec__beFont__vfunc_32 + 0x90);
+    stats->codeSize = (int)(beFont_Prepare + 0x90);
     stats->dataStart = (int)__data_start__;
     stats->dataSize = end - (unsigned)__data_start__;
     stats->initializedStart = (int)__data_start__;

@@ -108,21 +108,21 @@ extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int igInsightCore_FindManager(...);
-extern "C" int Gap__Core__igObject__vfunc_30(void);
-extern "C" void Gap__Core__igObject__vfunc_39(void);
-extern "C" void Gap__Core__igObject__vfunc_46(void);
-extern "C" void Gap__Core__igObject__vfunc_45(void);
-extern "C" void Gap__Core__igObject__vfunc_44(void);
-extern "C" void Gap__Core__igObject__vfunc_43(void);
-extern "C" void Gap__Core__igObject__vfunc_41(void);
-extern "C" void Gap__Core__igObject__vfunc_40(void);
-extern "C" void Gap__Core__igObject__vfunc_42(void);
-extern "C" int Gap__Core__igObject__vfunc_47(void);
-extern "C" int Gap__Core__igObject__vfunc_25(...);
-extern "C" int Gap__Bec__beModelCtrl__vfunc_25(beModelCtrl *self, beModelCtrlInfo *info);
+extern "C" int beModelCtrl_GetInfoMeta(void);
+extern "C" void beModelCtrl_OnWaitCheck(void);
+extern "C" void beModelCtrl_OnUpdateRam(void);
+extern "C" void beModelCtrl_OnAction1(void);
+extern "C" void beModelCtrl_OnSequenceChange(void);
+extern "C" void beModelCtrl_OnErase(void);
+extern "C" void beModelCtrl_OnFreeze(void);
+extern "C" void beModelCtrl_OnControlOff(void);
+extern "C" void beModelCtrl_OnRemove(void);
+extern "C" int beModelCtrl_OnPreMessage(void);
+extern "C" int beBaseInfoManager_AddInfo(...);
+extern "C" int beModelCtrl_AddInfo(beModelCtrl *self, beModelCtrlInfo *info);
 extern "C" int beMessenger_RegisterReceiverFromInfo(...);
 extern "C" void * igProperty_FindByName(...);
-extern "C" void Gap__Bec__beNDMWMdlMapCursor__vfunc_37(void);
+extern "C" void beModelCtrl_RegisterReceiver(void);
 extern "C" int StringPool_Allocate(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringChunk_ReleaseHeader(...);
@@ -138,7 +138,7 @@ extern "C" int beMessenger_SendNamed(...);
 extern "C" int igMatrix44f_Copy(...);
 extern "C" void igObject_Destroy(void *);
 extern "C" void igMatrix44f_SetTranslation(float *matrix, void *vec3);
-extern "C" int Gap__Bec__beModelCtrlInfoRideOn2__vfunc_20(void);
+extern "C" int beModelCtrlInfoRideOn2_GetMeta(void);
 extern "C" float sqrtf(float);
 extern "C" int igMatrix44f_GetTranslation(int, float *);
 extern "C" void *beModelCtrlInfoRideOn_Create(...);
@@ -191,9 +191,9 @@ extern "C" int beMessenger_GetVec3Count(int);
 extern "C" void beMessenger_PopArgContext(int);
 extern "C" void beMessenger_PushArgContext(int);
 extern "C" unsigned beMessenger_ResolveEnumValue(int, int, const char *);
-extern "C" int Gap__Bec__beModelCtrlInfoRideOn4__vfunc_20(void);
-extern "C" int Gap__Bec__beModelCtrlInfoRideOn3__vfunc_20(void);
-extern "C" int Gap__Bec__beModelCtrl__vfunc_20(void);
+extern "C" int beModelCtrlInfoRideOn4_GetMeta(void);
+extern "C" int beModelCtrlInfoRideOn3_GetMeta(void);
+extern "C" int beModelCtrl_GetMeta(void);
 extern "C" int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *data);
 extern "C" int beMeterCtrlNode_TraversalFunction(igCommonTraversal *traversal, void *node);
 extern "C" int DAT_00562640[4];
@@ -213,13 +213,13 @@ extern "C" unsigned char g_useOwnerAllocator;
 extern "C" igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, beBaseInfoRam *ram, int matrix, long long time);
 extern "C" int g_beTargetObj_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
-extern "C" void beModelCtrl_ResolveManagers(beModelCtrl *self);
+extern "C" void beModelCtrl_Prepare(beModelCtrl *self);
 extern "C" int g_beModelCtrlInfo_metaObject[4];
 extern "C" char MODELCTRL_7[];
 extern "C" char HITPLAYERBULLET_2[];
 extern "C" char HITPLAYERTALK_2[];
 extern "C" char HITENEMYBULLET_2[];
-extern "C" void Gap__Core__igObject__vfunc_29(beModelCtrl *self, beBaseInfoRam *ram);
+extern "C" void beModelCtrl_OnAddRam(beModelCtrl *self, beBaseInfoRam *ram);
 extern "C" int g_beNDMWMdlMapCursor_metaObject[4];
 extern "C" igObject * beBaseInfoDataList_Create(...);
 extern "C" int emptyString[4];
@@ -268,7 +268,7 @@ extern "C" int beModelCtrl_RunCtrl(beModelCtrl *self, beModelCtrlInfoWork *work,
 extern "C" void beModelCtrl_UpdateHomingAI(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlInfoDataAIH *homing);
 extern "C" char AIM[];
 extern "C" char AIH[];
-extern "C" void Gap__Core__igObject__vfunc_38(beModelCtrl *self, beBaseInfoRam *ram);
+extern "C" void beModelCtrl_UpdateControl(beModelCtrl *self, beBaseInfoRam *ram);
 extern "C" char ACTION_2[];
 extern "C" int beModelCtrl_RunAction(beModelCtrl *self, beModelCtrlInfo *info, beBaseInfoRam *ram, beModelCtrlACTION *command);
 extern "C" igObject * beMessenger_GetObject(...);
@@ -276,9 +276,9 @@ extern "C" char GETMATRIX_2[];
 extern "C" void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, int ramNo, int messenger);
 extern "C" int beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *self, int modelName, int ramNo);
 extern "C" int g_beModelCtrlInfoRideOn2_metaObject[4];
-extern "C" void Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21(beModelCtrlInfoRideOn2 *self);
+extern "C" void beModelCtrlInfoRideOn2_Move(beModelCtrlInfoRideOn2 *self);
 extern "C" float g_vec3Zero[4];
-extern "C" void Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21(beModelCtrlInfoRideOn3 *self, void *m);
+extern "C" void beModelCtrlInfoRideOn3_Move(beModelCtrlInfoRideOn3 *self, void *m);
 extern "C" char HITWALL[];
 extern "C" char HITWALLFULL[];
 extern "C" char HITLANDDELIVER[];
@@ -406,7 +406,7 @@ extern "C" char SQ_ERAS_2[];
 extern "C" char REMOVE_2[];
 extern "C" char GETBONEMATRIX[];
 extern "C" void * DAT_00561288[4];
-extern "C" void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram);
+extern "C" void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram);
 extern "C" int igStringRefList_IndexOf(int list, StringRef *key, int);
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 extern "C" int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *work);
@@ -469,7 +469,7 @@ struct DataList {
         }
     }
 };
-extern "C" int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const char *message);
+extern "C" int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char *message);
 extern "C" int g_beModelCtrlInfoRideOn4_metaObject[4];
 extern "C" int g_beModelCtrlInfoRideOn3_metaObject[4];
 extern "C" int g_beModelCtrl_metaObject[4];
@@ -564,7 +564,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
     return (igAABoxList *)body->_AABoxList;
 }
 
-void beModelCtrl_ResolveManagers(beModelCtrl *self) {
+void beModelCtrl_Prepare(beModelCtrl *self) {
     if (self->_luaManager == 0) {
         self->_luaManager = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
     }
@@ -574,23 +574,23 @@ void beModelCtrl_ResolveManagers(beModelCtrl *self) {
 }
 
 /* Slot 30 default: first word of the beModelCtrlInfo MetaObject record. */
-int Gap__Core__igObject__vfunc_30(void)
+int beModelCtrl_GetInfoMeta(void)
 {
     return g_beModelCtrlInfo_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrl__vfunc_25(beModelCtrl *self, beModelCtrlInfo *info) {
+int beModelCtrl_AddInfo(beModelCtrl *self, beModelCtrlInfo *info) {
     int infoMeta;
 
     infoMeta = ((beModelCtrlSlots *)self)->vfunc_30();
     if ((infoMeta == ((igObjectSlots *)info)->vfunc_20()) && ((((beModelCtrlSlots *)self)->vfunc_35((const char *)info->_kindString) & 0xFF) == 1)) {
-        Gap__Core__igObject__vfunc_25(self, info);
+        beBaseInfoManager_AddInfo(self, info);
         return 1;
     }
     return 0;
 }
 
-void Gap__Core__igObject__vfunc_29(beModelCtrl *self, beBaseInfoRam *ram) {
+void beModelCtrl_OnAddRam(beModelCtrl *self, beBaseInfoRam *ram) {
     beBaseInfo *info;
     beModelCtrlInfoDataHit *hit;
 
@@ -611,7 +611,7 @@ void Gap__Core__igObject__vfunc_29(beModelCtrl *self, beBaseInfoRam *ram) {
     ((beModelCtrlSlots *)self)->vfunc_37(ram);
 }
 
-void Gap__Bec__beNDMWMdlMapCursor__vfunc_37(void)
+void beModelCtrl_RegisterReceiver(void)
 {
 }
 
@@ -812,7 +812,7 @@ int beModelCtrl_RunCtrl(beModelCtrl *self, beModelCtrlInfoWork *work, beModelCtr
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
 
-void Gap__Core__igObject__vfunc_38(beModelCtrl *self, beBaseInfoRam *ram) {
+void beModelCtrl_UpdateControl(beModelCtrl *self, beBaseInfoRam *ram) {
     beBaseInfo *info;
     int work;
     beBaseInfoData *property;
@@ -988,12 +988,12 @@ int beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *self, int modelName, in
 /* Resets the ride-on pose: clears the translation of `_oldMatrix` to (0,0,0) and writes `_vector`
  * into the translation of the model node's matrix (+0x20 of a node, the igTransform `_m` offset).
  * igMatrix44f_SetTranslation copies vec3 into matrix words 12..14. */
-void Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21(beModelCtrlInfoRideOn2 *self) {
+void beModelCtrlInfoRideOn2_Move(beModelCtrlInfoRideOn2 *self) {
     igMatrix44f_SetTranslation(self->_oldMatrix, &g_vec3Zero[0]);
     igMatrix44f_SetTranslation((float *)(self->_modelNode + 0x20), self->_vector);
 }
 
-void Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21(beModelCtrlInfoRideOn3 *self, void *m) {
+void beModelCtrlInfoRideOn3_Move(beModelCtrlInfoRideOn3 *self, void *m) {
     Vec3 t;
     Vec3 d;
     float e, x, g, k, b, z, len, inv, y, c, a;
@@ -1952,7 +1952,7 @@ void beModelCtrl_UpdateWaitCheck(beModelCtrl *self, beModelCtrlInfo *info, beBas
 #undef END_WAIT
 
 /* Slot 39 default: empty. */
-void Gap__Core__igObject__vfunc_39(void)
+void beModelCtrl_OnWaitCheck(void)
 {
 }
 
@@ -2170,7 +2170,7 @@ pre:
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
 
-void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
+void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
     int inverted;
     float oldPos[3];
     float newPos[3];
@@ -2291,7 +2291,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram) {
 }
 
 /* Slot 46 default: empty. */
-void Gap__Core__igObject__vfunc_46(void)
+void beModelCtrl_OnUpdateRam(void)
 {
 }
 
@@ -2435,7 +2435,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
 #define MODEL_NODE ((beModelCtrlNode2 *)ramData->_node)
 #define FIRST_LOD(n) (((igLod **)((igObjectList *)(n)->_childList)->_data)[0])
 #define ENSURE_DATA_LIST(ram_) DataList::Ensure(ram_, held);
-int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const char *message) {
+int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char *message) {
     beBaseInfo *info = (beBaseInfo *)ram->_parentInfo;
     Vec3 startForward, setForward, movePosition, moveRotation, bulletPos, modelPos, quicksandPos, floorPos, effectOffset, effectRotation, effectRotationIn, conveyorVector, quicksandCenter;
     float setMatrix[16], moveMatrix[16], bulletMatrix[16], quicksandMatrix[16], floorMatrix[16];
@@ -2982,56 +2982,56 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ram, const
 #undef ALLOCATOR
 
 /* Slot 45 default: empty. */
-void Gap__Core__igObject__vfunc_45(void)
+void beModelCtrl_OnAction1(void)
 {
 }
 
 /* Slot 44 default: empty. */
-void Gap__Core__igObject__vfunc_44(void)
+void beModelCtrl_OnSequenceChange(void)
 {
 }
 
 /* Slot 43 default: empty. */
-void Gap__Core__igObject__vfunc_43(void)
+void beModelCtrl_OnErase(void)
 {
 }
 
 /* Slot 41 default: empty. */
-void Gap__Core__igObject__vfunc_41(void)
+void beModelCtrl_OnFreeze(void)
 {
 }
 
 /* Slot 40 default: empty. */
-void Gap__Core__igObject__vfunc_40(void)
+void beModelCtrl_OnControlOff(void)
 {
 }
 
 /* Slot 42 default: empty. */
-void Gap__Core__igObject__vfunc_42(void)
+void beModelCtrl_OnRemove(void)
 {
 }
 
 /* Slot 47 default: always 0. */
-int Gap__Core__igObject__vfunc_47(void) {
+int beModelCtrl_OnPreMessage(void) {
     return 0;
 }
 
-int Gap__Bec__beModelCtrlInfoRideOn4__vfunc_20(void)
+int beModelCtrlInfoRideOn4_GetMeta(void)
 {
     return g_beModelCtrlInfoRideOn4_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoRideOn3__vfunc_20(void)
+int beModelCtrlInfoRideOn3_GetMeta(void)
 {
     return g_beModelCtrlInfoRideOn3_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrlInfoRideOn2__vfunc_20(void)
+int beModelCtrlInfoRideOn2_GetMeta(void)
 {
     return g_beModelCtrlInfoRideOn2_metaObject[0];
 }
 
-int Gap__Bec__beModelCtrl__vfunc_20(void)
+int beModelCtrl_GetMeta(void)
 {
     return g_beModelCtrl_metaObject[0];
 }

@@ -15,9 +15,9 @@ int igPsx2ParticleArray_GetVTable(void) {
     *(int *)&u.b[44] = 0;
     *(int *)&u.b[48] = 0;
     *(int *)&u.b[68] = 0;
-    u.vt = (int)&DAT_005253e0[0];
+    u.vt = (int)&g_igPsx2ParticleArray_vtable[0];
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005253e0[0];
+    u.vt = (int)&g_igPsx2ParticleArray_vtable[0];
     FUN_0014caf0((igParticleArray *)u.b, 0);
     return t;
 }

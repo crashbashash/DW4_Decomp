@@ -121,9 +121,9 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
     A_1e1210 *a;
     FUN_001c20b0((Controller *)self);
     *(int *)((char *)self->f32 + 96) = 2;
-    if ((((A_1e1210 *)FUN_00140c00(self->f32, 0)) != 0) == 0) FUN_001c31e0(self->f32);
-    if (self->f52 != 0 && ((A_1e1210 *)FUN_00140c00(self->f52, 0)) != 0 && *(int *)((char *)((A_1e1210 *)FUN_00140c00(self->f52, 0)) + 44) == 0) {
-        a = ((A_1e1210 *)FUN_00140c00(self->f52, 0));
+    if ((((A_1e1210 *)igTextureAttr_GetImage(self->f32, 0)) != 0) == 0) FUN_001c31e0(self->f32);
+    if (self->f52 != 0 && ((A_1e1210 *)igTextureAttr_GetImage(self->f52, 0)) != 0 && *(int *)((char *)((A_1e1210 *)igTextureAttr_GetImage(self->f52, 0)) + 44) == 0) {
+        a = ((A_1e1210 *)igTextureAttr_GetImage(self->f52, 0));
         a->v28(1);
     }
     if (self->f73 != 0) FUN_00141190(self->f32, 1);
@@ -281,7 +281,7 @@ void FUN_001e16a0(EnvMapShaderView *arg0, void *) {
         ObjectList_AppendRetained(sp2C.p, g_envMapTextureUnit1On.p);
         ObjectList_AppendRetained(sp28.p, g_envMapTextureUnit1On.p);
         EnvMapRef sp24;
-        sp24.p = ((EnvMapAttr *)FUN_00132810(igObject_GetAllocator(arg0)));
+        sp24.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(arg0)));
         ((EnvMapAttrOps *)sp24.p)->d23(1);
         ((EnvMapAttrOps *)sp24.p)->vY(arg0->f36->f12);
         ObjectList_AppendRetained(sp2C.p, sp24.p);
@@ -478,7 +478,7 @@ void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
         ObjectList_AppendRetained(a.p, ((EnvMapAttr *)g_envMapTextureUnit2On.p));
         ObjectList_AppendRetained(b.p, ((EnvMapAttr *)g_envMapTextureUnit2On.p));
         EnvMapRef c;
-        c.p = ((EnvMapAttr *)FUN_00132810(igObject_GetAllocator(arg0)));
+        c.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance(igObject_GetAllocator(arg0)));
         ((EnvMapAttrOps *)c.p)->d23(2);
         ((EnvMapAttrOps *)c.p)->vY(arg0->f36->f12);
         ObjectList_AppendRetained(a.p, c.p);

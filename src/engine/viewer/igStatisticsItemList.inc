@@ -19,7 +19,7 @@ int igStatisticsItemList_GetVTable(void) {
     struct Obj_458b80 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005421c0[0];
+    obj.vt = &g_igStatisticsItemList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
 }
 

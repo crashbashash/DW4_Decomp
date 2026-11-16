@@ -3,7 +3,7 @@ int g_beNDMWPanelObjectWaza_nameExternalEnumStorage;
 igMetaField *g_beNDMWPanelObjectWaza_listFolderMetaField;
 igMetaField *g_beNDMWPanelObjectWaza_listColorMetaField;
 
-igMetaObject *FUN_003be8e0(void) {
+igMetaObject *beNDMWPanelObjectWaza_GetOrCreateMetaObject(void) {
     if (g_beNDMWPanelObjectWaza_metaObject == 0) {
         g_beNDMWPanelObjectWaza_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -16,7 +16,7 @@ igMetaObject *beNDMWPanelObjectWaza_ResolveMetaObject(void) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_003bea10();
+    beNDMWPanelObjectWaza_EnsureRegistered();
 done:
     return g_beNDMWPanelObjectWaza_metaObject;
 }
@@ -29,18 +29,18 @@ int beNDMWPanelObjectWaza_GetVTable(void) {
     obj.w9 = 0;
     obj.w11 = 0;
     obj.w12 = 0;
-    obj.vt = &DAT_0053e1a0[0];
+    obj.vt = &g_beNDMWPanelObjectWaza_vtable[0];
     obj.w15 = 0;
     obj.w16 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053e1a0[0];
+    obj.vt = &g_beNDMWPanelObjectWaza_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj.w16, -1);
     igSmartPointer_igObjectList_Destruct(&obj.w15, -1);
     FUN_003be240((Obj_3be240 *)&obj, (short)0);
     return t;
 }
 
-void FUN_003bea10(void)
+void beNDMWPanelObjectWaza_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWPanelObjectWaza_Register);
 }

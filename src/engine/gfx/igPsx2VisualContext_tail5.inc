@@ -901,7 +901,7 @@ int thunk_FUN_0017aa20(TexContext *context, int width, int height, int format, i
 inline void adoptNewImage(MipImage *&image, AdoptReference)
 {
     igRelease(image);
-    image = (MipImage *)FUN_0014df70(0);
+    image = (MipImage *)igImage_CreateInstance(0);
 }
 
 int FUN_0017aa20(TexContext *context, int width, int height, int format, int kind, unsigned int flags,
@@ -1098,7 +1098,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
             int i;
 
             for (i = 0; i < count; i++) {
-                igSmartPointer<MipImage> mip((MipImage *)FUN_0014df70(FUN_00165cf0((int *)context)));
+                igSmartPointer<MipImage> mip((MipImage *)igImage_CreateInstance(FUN_00165cf0((int *)context)));
                 int mipFormat;
 
                 mip->reduceFrom(previous);

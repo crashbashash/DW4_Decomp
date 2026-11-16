@@ -7,7 +7,7 @@ igMetaObject *FUN_0014f420(void)
         ready = (g_igExternalImageEntry_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_0014f6d0();
+    igExternalImageEntry_EnsureRegistered();
 done:
     return g_igExternalImageEntry_metaObject;
 }
@@ -20,9 +20,9 @@ int igExternalImageEntry_GetVTable(void) {
     o.f[6] = 0;
     o.f[7] = 0;
     o.f[9] = 0;
-    o.vt = DAT_00526930;
+    o.vt = g_igExternalImageEntry_vtable;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = DAT_00526930;
+    o.vt = g_igExternalImageEntry_vtable;
     FUN_0014f580((W_14f580 *)&o, 0);
     return r;
 }
@@ -33,7 +33,7 @@ void *igDirEntry_Destroy(struct S *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_00530900[0];
+        arg0->f0 = &g_igDirEntry_vtable[0];
         if (arg0 != 0) {
             arg0->f0 = &g_igNamedObject_vtable[0];
             if (&arg0->f8) {
@@ -58,12 +58,12 @@ void *igDirEntry_Destroy(struct S *arg0, short arg1) {
 W_14f580 *FUN_0014f580(W_14f580 *t, short flag)
 {
     if (t != 0) {
-        t->vt = DAT_00530360;
+        t->vt = g_igExternalDirEntry_vtable;
         t->s40.~Str();
         t->s32.~Str();
         t->s28.~Str();
         if (t != 0) {
-            t->vt = DAT_00530900;
+            t->vt = g_igDirEntry_vtable;
             if (t != 0) {
                 t->vt = g_igNamedObject_vtable;
                 t->s8.~Str();
@@ -76,7 +76,7 @@ W_14f580 *FUN_0014f580(W_14f580 *t, short flag)
     return t;
 }
 
-void FUN_0014f6d0(void)
+void igExternalImageEntry_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igExternalImageEntry_Register);
 }

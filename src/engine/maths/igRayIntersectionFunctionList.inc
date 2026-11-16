@@ -1,7 +1,7 @@
 igMetaObject *g_igRayIntersectionFunctionList_metaObject;
 
 OpTable *FUN_00189420(int arg0) {
-    FUN_001894f0();
+    igRayIntersectionFunctionList_EnsureRegistered();
     return (OpTable *)igMetaObject_CreateInstance((int)g_igRayIntersectionFunctionList_metaObject, arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igRayIntersectionFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igRayIntersectionFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001894f0();
+        igRayIntersectionFunctionList_EnsureRegistered();
     return g_igRayIntersectionFunctionList_metaObject;
 }
 
@@ -17,11 +17,11 @@ int igRayIntersectionFunctionList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527b50[0];
+    obj.vt = &g_igRayIntersectionFunctionList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001894f0(void)
+void igRayIntersectionFunctionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRayIntersectionFunctionList_Register);
 }

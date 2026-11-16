@@ -1,10 +1,10 @@
 #include "dw4/reflected.h"
 
-extern "C" int Gap__Core__igObject__vfunc_24(...);
+extern "C" int beBaseInfoManager_Stop(...);
 extern "C" int igInsightCore_FindManager(int, int);
-extern "C" int Gap__Bec__beStaticInfoCtl__vfunc_30(void);
-extern "C" void Gap__Bec__beStaticInfoCtl__vfunc_31(void);
-extern "C" int Gap__Bec__beStaticInfoCtl__vfunc_20(void);
+extern "C" int beStaticInfoCtl_GetInfoMeta(void);
+extern "C" void beStaticInfoCtl_UpdateRam(void);
+extern "C" int beStaticInfoCtl_GetMeta(void);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int beMessenger_RegisterReceiver(...);
 extern "C" int FUN_00343700(...);
@@ -19,9 +19,9 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" void Gap__Bec__beStaticInfoCtl__vfunc_24(beStaticInfoCtl *arg0);
+extern "C" void beStaticInfoCtl_Stop(beStaticInfoCtl *arg0);
 extern "C" int g_beMessenger_metaObject[4];
-extern "C" void Gap__Bec__beStaticInfoCtl__vfunc_32(beStaticInfoCtl *arg0);
+extern "C" void beStaticInfoCtl_Prepare(beStaticInfoCtl *arg0);
 extern "C" int g_beStaticInfoCtl_metaObject[4];
 extern "C" int g_beStaticInfo_metaObject[4];
 extern "C" int emptyString[4];
@@ -30,10 +30,10 @@ struct A;
 class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void v136(); };
 /* matching construct: dummy-virtual base so arg0->v136() dispatches through the vtable entry at byte offset 136 */
 struct A : VC {};
-extern "C" void Gap__Bec__beStaticInfoCtl__vfunc_29(A *arg0, beBaseInfoRam *arg1);
-extern "C" int Gap__Bec__beStaticInfoCtl__vfunc_34(beStaticInfoCtl *arg0, beBaseInfoRam *arg1, beMessengerWork *arg2);
+extern "C" void beStaticInfoCtl_OnAddRam(A *arg0, beBaseInfoRam *arg1);
+extern "C" int beStaticInfoCtl_OnMessage(beStaticInfoCtl *arg0, beBaseInfoRam *arg1, beMessengerWork *arg2);
 
-void Gap__Bec__beStaticInfoCtl__vfunc_24(beStaticInfoCtl *arg0) {
+void beStaticInfoCtl_Stop(beStaticInfoCtl *arg0) {
     igDataList *l = (igDataList *)arg0->_staticInfoList;
     int n = l->_count;
     int i = 0;
@@ -69,25 +69,25 @@ void Gap__Bec__beStaticInfoCtl__vfunc_24(beStaticInfoCtl *arg0) {
         }
     }
     l->_count = 0;
-    Gap__Core__igObject__vfunc_24(arg0);
+    beBaseInfoManager_Stop(arg0);
 }
 
-void Gap__Bec__beStaticInfoCtl__vfunc_32(beStaticInfoCtl *arg0) {
+void beStaticInfoCtl_Prepare(beStaticInfoCtl *arg0) {
     if (arg0->_messenger == 0) {
         arg0->_messenger = igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]);
     }
 }
 
-int Gap__Bec__beStaticInfoCtl__vfunc_30(void)
+int beStaticInfoCtl_GetInfoMeta(void)
 {
     return g_beStaticInfo_metaObject[0];
 }
 
-void Gap__Bec__beStaticInfoCtl__vfunc_31(void)
+void beStaticInfoCtl_UpdateRam(void)
 {
 }
 
-void Gap__Bec__beStaticInfoCtl__vfunc_29(A *arg0, beBaseInfoRam *arg1) {
+void beStaticInfoCtl_OnAddRam(A *arg0, beBaseInfoRam *arg1) {
     /* matching construct: a typed view of the receiver declared first; casting arg0 at each use makes the compiler hoist the field address into an extra saved register */
     beStaticInfoCtl *self = (beStaticInfoCtl *)arg0; int a0; beBaseInfo *s0; int *a3; int z; int t0;
     a0 = self->_messenger;
@@ -101,7 +101,7 @@ void Gap__Bec__beStaticInfoCtl__vfunc_29(A *arg0, beBaseInfoRam *arg1) {
     ObjectList_AppendRetained(self->_staticInfoList, s0);
 }
 
-int Gap__Bec__beStaticInfoCtl__vfunc_34(beStaticInfoCtl *arg0, beBaseInfoRam *arg1, beMessengerWork *arg2) {
+int beStaticInfoCtl_OnMessage(beStaticInfoCtl *arg0, beBaseInfoRam *arg1, beMessengerWork *arg2) {
     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_00343700(), arg2->_message)) {
     case 0:
         beMessenger_AppendObject(arg0->_messenger, arg0->_staticInfoList);
@@ -113,7 +113,7 @@ one:
     return 1;
 }
 
-int Gap__Bec__beStaticInfoCtl__vfunc_20(void)
+int beStaticInfoCtl_GetMeta(void)
 {
     return g_beStaticInfoCtl_metaObject[0];
 }

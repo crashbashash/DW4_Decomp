@@ -19,7 +19,7 @@ igMetaObject *igStencilStateAttr_GetMetaObject(void)
 int igStencilStateAttr_GetVTable(void) {
     struct Obj_1334d0 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00522d90[0];
+    obj.vt = &g_igStencilStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

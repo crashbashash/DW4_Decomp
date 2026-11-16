@@ -31,7 +31,7 @@ int igRadioGroup_GetVTable(void) {
     char *p48;
     char *p50;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00540dd0[0];
+    u.vt = (int)&g_igRadioGroup_vtable[0];
     p48 = &u.b[8];
     *(int *)p48 = 0;
     p4C = &u.b[12];
@@ -39,7 +39,7 @@ int igRadioGroup_GetVTable(void) {
     p50 = &u.b[16];
     *(int *)p50 = 0;
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00540dd0[0];
+    u.vt = (int)&g_igRadioGroup_vtable[0];
     if (p50 != 0) {
         v1 = *(int **)p50;
         if (v1 != 0) {

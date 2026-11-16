@@ -13,7 +13,7 @@ igMetaField *g_beNDMWMdlPEBaseInfoWork_messengerMetaField;
 void *beNDMWMdlPEBaseInfoWork_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWMdlPEBaseInfoWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c0770();
+        beNDMWMdlPEBaseInfoWork_EnsureRegistered();
     }
     return g_beNDMWMdlPEBaseInfoWork_metaObject;
 }
@@ -29,12 +29,12 @@ int *FUN_003c0760(int *p)
     return p;
 }
 
-void FUN_003c0770(void)
+void beNDMWMdlPEBaseInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlPEBaseInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWMdlPEBaseInfoWork_callbackList[] = { igIntList_EnsureRegistered, igBoolList_EnsureRegistered, FUN_00357d10, 0 };
+static igMetaObjectCallback g_beNDMWMdlPEBaseInfoWork_callbackList[] = { igIntList_EnsureRegistered, igBoolList_EnsureRegistered, beMessenger_EnsureRegistered, 0 };
 
 void *beNDMWMdlPEBaseInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -136,7 +136,7 @@ void beNDMWMdlPEBaseInfoWork_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igIntList_GetOrCreateMetaObject();
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00357910();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_7)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWMdlPEBaseInfoWork_fieldTable, g_beNDMWMdlPEBaseInfoWork_fieldHandles, g_beNDMWMdlPEBaseInfoWork_fieldOffsets, temp_s0);
 }

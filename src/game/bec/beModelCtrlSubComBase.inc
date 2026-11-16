@@ -3,15 +3,15 @@ igMetaField *g_beModelCtrlSubComBase_isOneSetMetaField;
 igMetaField *g_beModelCtrlSubComBase_runFrameMetaField;
 igMetaField *g_beModelCtrlSubComBase_startFrameMetaField;
 
-void *FUN_0034fb70(void) {
+void *beModelCtrlSubComBase_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlSubComBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034fbc0();
+        beModelCtrlSubComBase_EnsureRegistered();
     }
     return g_beModelCtrlSubComBase_metaObject;
 }
 
-void FUN_0034fbc0(void)
+void beModelCtrlSubComBase_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlSubComBase_Register);
 }
@@ -23,7 +23,7 @@ void *beModelCtrlSubComBase_Register(void) {
         &g_beModelCtrlSubComBase_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beModelCtrlSubComBase_GetMetaObject,
+        beModelCtrlSubComBase_GetMetaObjectFunction,
         "beModelCtrlSubComBase",
         0x14, /* instance size */
         0,
@@ -33,9 +33,9 @@ void *beModelCtrlSubComBase_Register(void) {
     );
 }
 
-void beModelCtrlSubComBase_GetMetaObject(void)
+void beModelCtrlSubComBase_GetMetaObjectFunction(void)
 {
-    FUN_0034fb70();
+    beModelCtrlSubComBase_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlSubComBase_ctorTable[] = {

@@ -14,7 +14,7 @@ compiled whole under the `-O4,p -inline level=8,bottomup` profile.
 |---|---:|---|---|
 | `0x00375e00` | 8 | `beAction2_Prepare` | empty (slot 32, which `beBaseInfoManager` calls before it starts and before it drops its infos) |
 | `0x00375e10` | 12 | `beAction2_GetInfoMeta` | returns the `beAction2Info` meta object (slot 30) |
-| `0x00375e20` | 68 | `beAction2_RegisterReceiver` | registers the ram as receiver of `ACTION`, clears `_isRun`, sets `g_enbayaPlayOnceEndOffset` to −1/30 (slot 29) |
+| `0x00375e20` | 68 | `beAction2_OnAddRam` | registers the ram as receiver of `ACTION`, clears `_isRun`, sets `g_enbayaPlayOnceEndOffset` to −1/30 (slot 29) |
 | `0x00375e70` | 376 | `beAction2FLASHSET_Update` | when the `FLASH` timer expires, removes the flash's override attributes from the node |
 | `0x00375ff0` | 848 | `beAction2FLASHSET_Start` | colour, texture-state and lighting-state overrides; red and green to 1.0, texturing and lighting off, a four-frame `FLASH` timer |
 | `0x00376340` | 372 | `beAction2WAITCHECK_Update` | see [timing](action2-timing.md#waitcheck) |
@@ -26,8 +26,8 @@ compiled whole under the `-O4,p -inline level=8,bottomup` profile.
 | `0x00377090` | 680 | `beAction2MOTIONSET_Update` | waits a frame, updates the combiner while it blends, then moves the remaining state onto the node's time scale |
 | `0x00377340` | 960 | `beAction2MOTIONSET_Start` | plays the named animation on the ram's combiner with a hokan (transition) blend; hokan mode `S` freezes the outgoing/incoming state, loop mode `L` loops |
 | `0x00377700` | 456 | `beAction2_StartComponents` | the component walker |
-| `0x003778d0` | 192 | `beAction2_Update` | the per-frame driver (slot 31) |
-| `0x00377990` | 2,644 | `beAction2_OnMessage` | message handler (slot 33) |
+| `0x003778d0` | 192 | `beAction2_UpdateRam` | the per-frame driver (slot 31) |
+| `0x00377990` | 2,644 | `beAction2_OnMessageText` | message handler (slot 33) |
 | `0x003783f0` | 12 | `beAction2_GetMeta` | returns the `beAction2` meta object (slot 20) |
 | `0x00378400` | 8 | `Gap::Core::igObject::vfunc_28` | shared empty default |
 | `0x00378410` | 8 | `Gap::Core::igObject::vfunc_34` | shared default returning 0 |
@@ -81,7 +81,7 @@ round-toward-zero arithmetic, which makes 30 frames 499,999,968 ns rather than 5
   `beAction2Data`'s component list (an `igObjectList`-shaped `{_count, _capacity, _data}` struct at
   `_comList`) and calls each component's virtual `GetMetaObject()` to route it to one of the five
   `*_Start` handlers, advancing `_comIndex` and stopping at the first handler that returns false.
-- `beAction2_Update` (`0x003778d0`, 192 B) is the per-frame Update driver. After the ram's
+- `beAction2_UpdateRam` (`0x003778d0`, 192 B) is the per-frame Update driver. After the ram's
   `_isRun` gate and the work's `_isFreeze` gate it calls each active component's `*_Update` in type
   order (MOTIONSET, JOINTSET, FADESET, WAITCHECK, FLASHSET), keyed on the work's
   `_motionSt0`/`_jointSt0`/`_fadeSt0`/`_waitSt0`/`_flashSt0` state slots.
@@ -109,7 +109,7 @@ holds the controller's message handling and resolves string-keyed ids through
 | 25-27 | `SETCONVEYOR`, `SETQUICKSAND`, `SETSLIPPEDFLOOR` |
 | 28-32 | `ISRUN`, `ISSEQNAME`, `ONHITBULLETBOX`, `OFHITBULLETBOX`, `GETSEQNAMELIST` |
 
-`beAction2_OnMessage` (`0x377990`) uses a 7-entry table at `0x4c81f0`, built by `beAction2_GetMessageEnum`:
+`beAction2_OnMessageText` (`0x377990`) uses a 7-entry table at `0x4c81f0`, built by `beAction2_GetMessageEnum`:
 0 `ISCOMEND`, 1 `ISRUN`, 2 `GETNAMELIST`, 3 `GETAPPEARANCELIST`, 4 `GETBONEMATRIX`, 5 `ONFREEZE`,
 6 `OFFREEZE`. `ONFREEZE`/`OFFREEZE` set every timer's scale and the node's `_timeScale` to 0 or 1
 without a jump in node time, and set `_isFreeze`. Any other name is an action:

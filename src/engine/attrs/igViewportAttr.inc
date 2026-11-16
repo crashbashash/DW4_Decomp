@@ -18,7 +18,7 @@ igMetaObject *igViewportAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igViewportAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00130570();
+        igViewportAttr_EnsureRegistered();
     return g_igViewportAttr_metaObject;
 }
 
@@ -28,11 +28,11 @@ int igViewportAttr_GetVTable(void) {
     char *ps;
     int *temp_a0;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00522520[0];
+    u.vt = (int)&g_igViewportAttr_vtable[0];
     ps = &u.b[28];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00522520[0];
+    u.vt = (int)&g_igViewportAttr_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
         if (temp_a0 != 0) {
@@ -45,7 +45,7 @@ int igViewportAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00130570(void)
+void igViewportAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewportAttr_Register);
 }

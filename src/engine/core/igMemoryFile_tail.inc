@@ -25,7 +25,7 @@ void igMemoryFile_LookupMemoryBuffer(int name, int *buffer, int *size) {
     }
 }
 
-void igMemoryFile_Open(int *result, igMemoryFileView *self, unsigned int mode) {
+void igMemoryFile_OpenWithMode(int *result, igMemoryFileView *self, unsigned int mode) {
     int buffer;
     int size;
 

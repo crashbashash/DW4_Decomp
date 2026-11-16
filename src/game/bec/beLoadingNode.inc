@@ -5,7 +5,7 @@ igMetaField *g_beLoadingNode_playLimitTimeMetaField;
 void *beLoadingNode_ResolveMetaObject(void) {
     igMetaObject *g = g_beLoadingNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034e710();
+        beLoadingNode_EnsureRegistered();
     }
     return g_beLoadingNode_metaObject;
 }
@@ -19,18 +19,18 @@ int beLoadingNode_GetVTable(void) {
     obj.fC = 0;
     obj.f10 = 0;
     obj.f1C = 0;
-    obj.vt = (&DAT_00538110[0]);
+    obj.vt = (&g_beLoadingNode_vtable[0]);
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&DAT_00538110[0]);
+    obj.vt = (&g_beLoadingNode_vtable[0]);
     FUN_0034e690((int **)&obj, (long long)0);
     return temp_s0;
 }
 
 int **FUN_0034e690(int **arg0, long long arg1) {
     if (arg0 != 0) {
-        *arg0 = &DAT_005381b0[0];
+        *arg0 = &g_beNodeAnim_vtable[0];
         if (arg0 != 0) {
-            *arg0 = &DAT_00528dd0[0];
+            *arg0 = &g_igGroup_vtable[0];
             FUN_001958f0((char *)arg0 + 0x1C, -1);
             FUN_00195970(arg0, 0);
         }
@@ -41,7 +41,7 @@ int **FUN_0034e690(int **arg0, long long arg1) {
     return arg0;
 }
 
-void FUN_0034e710(void)
+void beLoadingNode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLoadingNode_Register);
 }
@@ -68,7 +68,7 @@ void beLoadingNode_GetMetaObject(void)
     beLoadingNode_ResolveMetaObject();
 }
 
-igMetaObject *FUN_0034e7d0(void) {
+igMetaObject *beNodeAnim_GetPublishedMetaObject(void) {
     return g_beNodeAnim_metaObject;
 }
 

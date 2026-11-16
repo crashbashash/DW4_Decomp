@@ -5,8 +5,8 @@ igMetaField *g_beNDMWMdlPlayer2InfoWork_bitMetaField;
 igMetaField *g_beNDMWMdlPlayer2InfoWork_expMetaField;
 igMetaEnum *g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum;
 
-void FUN_003bf560(int arg0) {
-    FUN_003bf700();
+void beNDMWMdlPlayer2InfoWork_Create(int arg0) {
+    beNDMWMdlPlayer2InfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, arg0);
 }
 
@@ -16,7 +16,7 @@ void *beNDMWMdlPlayer2InfoWork_ResolveMetaObject(void) {
     ok = !!(g_beNDMWMdlPlayer2InfoWork_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003bf700();
+    beNDMWMdlPlayer2InfoWork_EnsureRegistered();
 done:;
     return g_beNDMWMdlPlayer2InfoWork_metaObject;
 }
@@ -26,9 +26,9 @@ int beNDMWMdlPlayer2InfoWork_GetVTable(void) {
     int r;
 
     beModelCtrlInfoWork_Construct((beModelCtrlInfoWork *)&o);
-    o.vt = DAT_0053d500;
+    o.vt = g_beNDMWMdlPlayer2InfoWork_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_0053d500;
+    o.vt = g_beNDMWMdlPlayer2InfoWork_vtable;
     FUN_00350410(&o, 0);
     return r;
 }
@@ -67,7 +67,7 @@ void *beModelCtrlInfoWork_Construct(beModelCtrlInfoWork *self) {
     return self;
 }
 
-void FUN_003bf700(void)
+void beNDMWMdlPlayer2InfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlPlayer2InfoWork_Register);
 }
@@ -94,7 +94,7 @@ void beNDMWMdlPlayer2InfoWork_GetMetaObject(void)
     beNDMWMdlPlayer2InfoWork_ResolveMetaObject();
 }
 
-int FUN_003bf7b0(void) {
+int beModelCtrlInfoWork_GetPublishedMetaObject(void) {
     return g_beModelCtrlInfoWork_metaObject[0];
 }
 

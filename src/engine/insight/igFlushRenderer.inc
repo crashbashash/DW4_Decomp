@@ -32,7 +32,7 @@ int igFlushRenderer_GetVTable(void) {
     u.w[0] = (int)(&DAT_0052d060[0]);
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
-    u.w[0] = (int)(&DAT_0052ca80[0]);
+    u.w[0] = (int)(&g_igFlushRenderer_vtable[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0052d060[0]);
     if (q1 != 0) {

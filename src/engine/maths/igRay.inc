@@ -26,7 +26,7 @@ igMetaObject *igRay_GetMetaObject(void)
 int igRay_GetVTable(void) {
     struct Obj7 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527f10[0];
+    obj.vt = &g_igRay_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

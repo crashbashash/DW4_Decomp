@@ -9,10 +9,10 @@ extern "C" int igProperty_GetRecordFolder(int container, char *key, int unused);
 extern "C" void igProperty_GetRecordIntList(int p0, char * p1, int p2);
 extern "C" void igProperty_GetRecordString(int p0, char * p1, int p2);
 extern "C" void igProperty_GetRecordStringList(int p0, char * p1, int p2);
-extern "C" void FUN_003a9370(int p0, char * p1, int p2);
-extern "C" void Gap__Bec__beDBManager__vfunc_32(void);
-extern "C" int Gap__Bec__beDBManager__vfunc_30(void);
-extern "C" int Gap__Bec__beDBManager__vfunc_20(void);
+extern "C" void igProperty_GetRecordFloatList(int p0, char * p1, int p2);
+extern "C" void beDBManager_Prepare(void);
+extern "C" int beDBManager_GetInfoMeta(void);
+extern "C" int beDBManager_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, void *);
 extern "C" int FUN_00366070(...);
@@ -43,9 +43,9 @@ extern "C" int beDataBase_GetRecordCount(beDataBase *self);
 extern "C" int g_beDBManagerInfo_metaObject[4];
 extern "C" int g_beDBManager_metaObject[4];
 extern "C" char DATABASE_9[];
-extern "C" void Gap__Bec__beDBManager__vfunc_29(beDBManager *p0, int p1, char *p2);
-extern "C" void Gap__Bec__beDBManager__vfunc_31(beDBManager *p0, int p1);
-extern "C" int Gap__Bec__beDBManager__vfunc_33(beDBManager *arg0, beBaseInfoRam *arg1, int arg2);
+extern "C" void beDBManager_OnAddRam(beDBManager *p0, int p1, char *p2);
+extern "C" void beDBManager_UpdateRam(beDBManager *p0, int p1);
+extern "C" int beDBManager_OnMessageText(beDBManager *arg0, beBaseInfoRam *arg1, int arg2);
 
 int igProperty_GetRecord(int container, char *key, int unused)
 {
@@ -82,7 +82,7 @@ int igProperty_GetRecordFolder(int container, char *key, int unused)
     return igProperty_FindByName(container, g_propertyNameField[0], key);
 }
 
-void FUN_003a9370(int p0, char * p1, int p2)
+void igProperty_GetRecordFloatList(int p0, char * p1, int p2)
 {
     igProperty_FindByName(p0, *(int *)0x00585be0, p1);
 }
@@ -174,26 +174,26 @@ int beDataBase_GetRecordCount(beDataBase *self) {
 
 #undef BEDATABASE_NO_INDEX
 
-void Gap__Bec__beDBManager__vfunc_32(void)
+void beDBManager_Prepare(void)
 {
 }
 
-int Gap__Bec__beDBManager__vfunc_30(void)
+int beDBManager_GetInfoMeta(void)
 {
     return g_beDBManagerInfo_metaObject[0];
 }
 
-void Gap__Bec__beDBManager__vfunc_29(beDBManager *p0, int p1, char *p2)
+void beDBManager_OnAddRam(beDBManager *p0, int p1, char *p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, DATABASE_9);
 }
 
-void Gap__Bec__beDBManager__vfunc_31(beDBManager *p0, int p1)
+void beDBManager_UpdateRam(beDBManager *p0, int p1)
 {
     igInsightCore_RemoveFromScheduler(p0->_insight, p0);
 }
 
-int Gap__Bec__beDBManager__vfunc_33(beDBManager *arg0, beBaseInfoRam *arg1, int arg2) {
+int beDBManager_OnMessageText(beDBManager *arg0, beBaseInfoRam *arg1, int arg2) {
     beBaseInfoRam *p = (beBaseInfoRam *)arg1->_parentInfo;
     int r;
     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_00366070(), arg2)) {
@@ -208,7 +208,7 @@ int Gap__Bec__beDBManager__vfunc_33(beDBManager *arg0, beBaseInfoRam *arg1, int 
     return r;
 }
 
-int Gap__Bec__beDBManager__vfunc_20(void)
+int beDBManager_GetMeta(void)
 {
     return g_beDBManager_metaObject[0];
 }

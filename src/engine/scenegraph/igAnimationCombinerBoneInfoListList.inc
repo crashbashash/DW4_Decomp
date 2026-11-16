@@ -11,7 +11,7 @@ igMetaObject *igAnimationCombinerBoneInfoListList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationCombinerBoneInfoListList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a7f00();
+        igAnimationCombinerBoneInfoListList_EnsureRegistered();
     return g_igAnimationCombinerBoneInfoListList_metaObject;
 }
 
@@ -19,16 +19,16 @@ int igAnimationCombinerBoneInfoListList_GetVTable(void) {
     struct Obj_1a7ec0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00529e00[0];
+    obj.vt = &g_igAnimationCombinerBoneInfoListList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001a7f00(void)
+void igAnimationCombinerBoneInfoListList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfoListList_Register);
 }
 
-static igMetaObjectCallback g_igAnimationCombinerBoneInfoListList_callbackList[] = { FUN_001a8020, 0 };
+static igMetaObjectCallback g_igAnimationCombinerBoneInfoListList_callbackList[] = { igAnimationCombinerBoneInfoList_EnsureRegistered, 0 };
 
 void igAnimationCombinerBoneInfoListList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

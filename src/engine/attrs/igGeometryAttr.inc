@@ -34,7 +34,7 @@ void FUN_001378f0(void)
     igMetaObject_RunStaticInit(igGeometryAttr_Register);
 }
 
-static igMetaObjectCallback g_igGeometryAttr_callbackList[] = { FUN_0014ba20, FUN_0014d890, igUnsignedIntList_EnsureRegistered, FUN_0018a180, 0 };
+static igMetaObjectCallback g_igGeometryAttr_callbackList[] = { igVertexArray_EnsureRegistered, igIndexArray_EnsureRegistered, igUnsignedIntList_EnsureRegistered, igVec3fList_EnsureRegistered, 0 };
 
 void igGeometryAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -116,7 +116,7 @@ void igGeometryAttr_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igGeometryAttr_ctorTable, 9);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0014b980();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igVertexArray_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0014d7f0();
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
@@ -125,9 +125,9 @@ void igGeometryAttr_InitFields(void) {
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igUnsignedIntList_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0018a0a0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igVec3fList_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0018a0a0();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igVec3fList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_igGeometryAttr_fieldTable, g_igGeometryAttr_fieldHandles, g_igGeometryAttr_fieldOffsets, temp_s0);
     *(int *)((char *)(g_igGeometryAttr_metaObject) + 60) = (int)thunk_igGeometryAttr1_5_GetMetaObject;
 }

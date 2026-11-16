@@ -2,21 +2,21 @@ igMetaObject *g_beStaticInfoCtl_metaObject;
 igMetaField *g_beStaticInfoCtl_staticInfoListMetaField;
 
 void beStaticInfoCtl_CreateInstance(int arg0) {
-    FUN_003438b0();
+    beStaticInfoCtl_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587E10, arg0);
 }
 
-igMetaObject *FUN_003437a0(void) {
+igMetaObject *beStaticInfoCtl_GetOrCreateMetaObject(void) {
     if (g_beStaticInfoCtl_metaObject == 0) {
         g_beStaticInfoCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beStaticInfoCtl_metaObject;
 }
 
-void *FUN_003437f0(void) {
+void *beStaticInfoCtl_GetMetaObject(void) {
     igMetaObject *g = g_beStaticInfoCtl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003438b0();
+        beStaticInfoCtl_EnsureRegistered();
     }
     return g_beStaticInfoCtl_metaObject;
 }
@@ -28,21 +28,21 @@ int beStaticInfoCtl_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.w2 = 0;
     obj.w6 = 0;
-    obj.vt = &DAT_0053b9b0[0];
+    obj.vt = &g_beStaticInfoCtl_vtable[0];
     obj.w8 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053b9b0[0];
+    obj.vt = &g_beStaticInfoCtl_vtable[0];
     FUN_0033f560((void **)&obj.w8, -1);
     FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
     return t;
 }
 
-void FUN_003438b0(void)
+void beStaticInfoCtl_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beStaticInfoCtl_Register);
 }
 
-static igMetaObjectCallback g_beStaticInfoCtl_callbackList[] = { FUN_0036abd0, 0 };
+static igMetaObjectCallback g_beStaticInfoCtl_callbackList[] = { beBaseInfoList_EnsureRegistered, 0 };
 
 void *beStaticInfoCtl_Register(void) {
     BecLibrary_MarkRegistered();
@@ -51,7 +51,7 @@ void *beStaticInfoCtl_Register(void) {
         &g_beStaticInfoCtl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beStaticInfoCtl_GetMetaObject,
+        beStaticInfoCtl_GetMetaObjectFunction,
         "beStaticInfoCtl",
         0x24, /* instance size */
         beStaticInfoCtl_GetVTable,
@@ -61,9 +61,9 @@ void *beStaticInfoCtl_Register(void) {
     );
 }
 
-void beStaticInfoCtl_GetMetaObject(void)
+void beStaticInfoCtl_GetMetaObjectFunction(void)
 {
-    FUN_003437f0();
+    beStaticInfoCtl_GetMetaObject();
 }
 
 static FieldFactory g_beStaticInfoCtl_ctorTable[] = {
@@ -88,7 +88,7 @@ void beStaticInfoCtl_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beStaticInfoCtl_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0036aaf0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beStaticInfoCtl_fieldTable, g_beStaticInfoCtl_fieldHandles, g_beStaticInfoCtl_fieldOffsets, temp_s2);
 }

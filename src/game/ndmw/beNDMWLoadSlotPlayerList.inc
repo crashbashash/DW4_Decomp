@@ -1,6 +1,6 @@
 igMetaObject *g_beNDMWLoadSlotPlayerList_metaObject;
 
-igMetaObject *FUN_003c61d0(void) {
+igMetaObject *beNDMWLoadSlotPlayerList_GetOrCreateMetaObject(void) {
     if (g_beNDMWLoadSlotPlayerList_metaObject == 0) {
         g_beNDMWLoadSlotPlayerList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -10,7 +10,7 @@ igMetaObject *FUN_003c61d0(void) {
 void *beNDMWLoadSlotPlayerList_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWLoadSlotPlayerList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c62b0();
+        beNDMWLoadSlotPlayerList_EnsureRegistered();
     }
     return g_beNDMWLoadSlotPlayerList_metaObject;
 }
@@ -19,16 +19,16 @@ int beNDMWLoadSlotPlayerList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053cad0[0];
+    obj.vt = &g_beNDMWLoadSlotPlayerList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c62b0(void)
+void beNDMWLoadSlotPlayerList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadSlotPlayerList_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadSlotPlayerList_callbackList[] = { FUN_003c6520, 0 };
+static igMetaObjectCallback g_beNDMWLoadSlotPlayerList_callbackList[] = { beNDMWLoadSlotPlayer_EnsureRegistered, 0 };
 
 void *beNDMWLoadSlotPlayerList_Register(void) {
     NdmwLibrary_MarkRegistered();

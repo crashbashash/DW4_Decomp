@@ -3,15 +3,15 @@ igMetaField *g_beNDMWListCtrl_nowPageMetaField;
 igMetaField *g_beNDMWListCtrl_maxPageMetaField;
 igMetaField *g_beNDMWListCtrl_cursorMetaField;
 
-void *FUN_003bb400(void) {
+void *beNDMWListCtrl_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWListCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003bb450();
+        beNDMWListCtrl_EnsureRegistered();
     }
     return g_beNDMWListCtrl_metaObject;
 }
 
-void FUN_003bb450(void)
+void beNDMWListCtrl_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWListCtrl_Register);
 }
@@ -23,7 +23,7 @@ void *beNDMWListCtrl_Register(void) {
         &g_beNDMWListCtrl_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
-        beNDMWListCtrl_GetMetaObject,
+        beNDMWListCtrl_GetMetaObjectFunction,
         "beNDMWListCtrl",
         0x60, /* instance size */
         0,
@@ -33,9 +33,9 @@ void *beNDMWListCtrl_Register(void) {
     );
 }
 
-void beNDMWListCtrl_GetMetaObject(void)
+void beNDMWListCtrl_GetMetaObjectFunction(void)
 {
-    FUN_003bb400();
+    beNDMWListCtrl_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWListCtrl_ctorTable[] = {

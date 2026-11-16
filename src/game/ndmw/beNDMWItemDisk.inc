@@ -2,11 +2,11 @@ igMetaObject *g_beNDMWItemDisk_metaObject;
 igMetaField *g_beNDMWItemDisk_kazuMetaField;
 
 void beNDMWItemDisk_Create(int arg0) {
-    FUN_003c86d0();
+    beNDMWItemDisk_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWItemDisk_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c85f0(void) {
+igMetaObject *beNDMWItemDisk_GetOrCreateMetaObject(void) {
     if (g_beNDMWItemDisk_metaObject == 0) {
         g_beNDMWItemDisk_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -16,7 +16,7 @@ igMetaObject *FUN_003c85f0(void) {
 void *beNDMWItemDisk_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWItemDisk_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c86d0();
+        beNDMWItemDisk_EnsureRegistered();
     }
     return g_beNDMWItemDisk_metaObject;
 }
@@ -25,11 +25,11 @@ int beNDMWItemDisk_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005407a0[0];
+    obj.vt = &g_beNDMWItemDisk_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c86d0(void)
+void beNDMWItemDisk_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWItemDisk_Register);
 }

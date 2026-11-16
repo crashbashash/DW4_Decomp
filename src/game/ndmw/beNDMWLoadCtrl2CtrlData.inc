@@ -8,14 +8,14 @@ igMetaField *g_beNDMWLoadCtrl2CtrlData_st3MetaField;
 igMetaEnum *g_beNDMWLoadCtrl2CtrlData_messageMetaEnum;
 
 void beNDMWLoadCtrl2CtrlData_Create(int arg0) {
-    FUN_003c7b60();
+    beNDMWLoadCtrl2CtrlData_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLoadCtrl2CtrlData_metaObject, arg0);
 }
 
 void *beNDMWLoadCtrl2CtrlData_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWLoadCtrl2CtrlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c7b60();
+        beNDMWLoadCtrl2CtrlData_EnsureRegistered();
     }
     return g_beNDMWLoadCtrl2CtrlData_metaObject;
 }
@@ -32,7 +32,7 @@ int beNDMWLoadCtrl2CtrlData_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053c750[0];
+    u.vt = (int)&g_beNDMWLoadCtrl2CtrlData_vtable[0];
     s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -49,7 +49,7 @@ int beNDMWLoadCtrl2CtrlData_GetVTable(void) {
     return s0;
 }
 
-void FUN_003c7b60(void)
+void beNDMWLoadCtrl2CtrlData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadCtrl2CtrlData_Register);
 }

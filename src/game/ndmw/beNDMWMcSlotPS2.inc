@@ -1,7 +1,7 @@
 igMetaObject *g_beNDMWMcSlotPS2_metaObject;
 
 void beNDMWMcSlotPS2_Create(int arg0) {
-    FUN_003c5fb0();
+    beNDMWMcSlotPS2_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMcSlotPS2_metaObject, arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *beNDMWMcSlotPS2_GetReadyMetaObject(void) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_003c5fb0();
+    beNDMWMcSlotPS2_EnsureRegistered();
 done:
     return g_beNDMWMcSlotPS2_metaObject;
 }
@@ -20,11 +20,11 @@ int beNDMWMcSlotPS2_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053cb40[0];
+    obj.vt = &g_beNDMWMcSlotPS2_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c5fb0(void)
+void beNDMWMcSlotPS2_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMcSlotPS2_Register);
 }

@@ -5,11 +5,11 @@ igMetaField *g_igVertexArray_vtypeMetaField;
 igMetaField *g_igVertexArray_usageFlagsMetaField;
 
 int igVertexArray_Create(int arg0) {
-    FUN_0014ba20();
+    igVertexArray_EnsureRegistered();
     return igMetaObject_CreateInstance(g_igVertexArray_metaObject, arg0);
 }
 
-igMetaObject *FUN_0014b980(void) {
+igMetaObject *igVertexArray_GetOrCreateMetaObject(void) {
     if (g_igVertexArray_metaObject == 0) {
         g_igVertexArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -20,11 +20,11 @@ igMetaObject *igVertexArray_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexArray_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014ba20();
+        igVertexArray_EnsureRegistered();
     return g_igVertexArray_metaObject;
 }
 
-void FUN_0014ba20(void)
+void igVertexArray_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexArray_Register);
 }

@@ -15,7 +15,7 @@ int igObjectPool_GetVTable(void) {
     struct Obj_196780 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b5c0[0];
+    obj.vt = &g_igObjectPool_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

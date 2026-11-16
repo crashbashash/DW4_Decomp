@@ -2,7 +2,7 @@ igMetaObject *g_igQuaternionfList_metaObject;
 int g_igQuaternionfList_externalStorage;
 
 void FUN_00189bd0(int arg0) {
-    FUN_00189cf0();
+    igQuaternionfList_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igQuaternionfList_metaObject, arg0);
 }
 
@@ -17,7 +17,7 @@ igMetaObject *igQuaternionfList_GetMetaObject(void)
 {
     igMetaObject *g = g_igQuaternionfList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00189cf0();
+        igQuaternionfList_EnsureRegistered();
     return g_igQuaternionfList_metaObject;
 }
 
@@ -25,12 +25,12 @@ int igQuaternionfList_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&DAT_00527970[0];
+    tmp[0] = (int)&g_igQuaternionfList_vtable[0];
     off = *(int *)((char *)(g_objectSystem[0]) + 916);
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_00189cf0(void)
+void igQuaternionfList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igQuaternionfList_Register);
 }

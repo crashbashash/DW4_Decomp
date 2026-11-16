@@ -50,7 +50,7 @@ int igPsx2VisualContext_GetVTable(void) {
     int r;
     p = (char *)&s;
     FUN_001510e0((igVisualContext *)p);
-    s.vt = &DAT_00525870[0];
+    s.vt = &g_igPsx2VisualContext_vtable[0];
     q = (char *)&s + 332;
     igSmartPointer_igIntList_Construct((int *)q);
     FUN_001510a0((int)((char *)&s + 772));
@@ -74,7 +74,7 @@ int igPsx2VisualContext_GetVTable(void) {
     FUN_00151030(p + 1348);
     FUN_00151090((int)(p + 1432));
     r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem[0]) + 916));
-    s.vt = &DAT_00525870[0];
+    s.vt = &g_igPsx2VisualContext_vtable[0];
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 1016), -1);
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 1012), -1);
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 1008), -1);
@@ -267,7 +267,7 @@ void FUN_001511a0(void)
     igMetaObject_RunStaticInit(igPsx2VisualContext_Register);
 }
 
-static igMetaObjectCallback g_igPsx2VisualContext_callbackList[] = { igIntList_EnsureRegistered, FUN_001525e0, FUN_0014d890, FUN_0014c0d0, FUN_001e4820, FUN_00153000, 0 };
+static igMetaObjectCallback g_igPsx2VisualContext_callbackList[] = { igIntList_EnsureRegistered, FUN_001525e0, igIndexArray_EnsureRegistered, FUN_0014c0d0, FUN_001e4820, FUN_00153000, 0 };
 
 void igPsx2VisualContext_Register(void) {
     FUN_00149bc0();

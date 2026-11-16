@@ -7,7 +7,7 @@ igMetaObject *FUN_00198550(void)
 {
     igMetaObject *g = g_igSkeleton_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00198680();
+        igSkeleton_EnsureRegistered();
     return g_igSkeleton_metaObject;
 }
 
@@ -24,11 +24,11 @@ int igSkeleton_GetVTable(void) {
     igObject_InitHeader(u.b);
     ps = (int *)&u.b[8];
     *ps = 0;
-    u.vt = (int)&DAT_005286a0[0];
+    u.vt = (int)&g_igSkeleton_vtable[0];
     pr = (int *)&u.b[16];
     *pr = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005286a0[0];
+    u.vt = (int)&g_igSkeleton_vtable[0];
     if (pr != 0) {
         o = (char *)*pr;
         if (o != 0) {
@@ -53,12 +53,12 @@ int igSkeleton_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_00198680(void)
+void igSkeleton_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSkeleton_Register);
 }
 
-static igMetaObjectCallback g_igSkeleton_callbackList[] = { FUN_001988d0, 0 };
+static igMetaObjectCallback g_igSkeleton_callbackList[] = { igSkeletonBoneInfoList_EnsureRegistered, 0 };
 
 void igSkeleton_Register(void) {
     SceneGraphLibrary_MarkRegistered();

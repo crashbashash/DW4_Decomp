@@ -22,8 +22,8 @@ sequence layer polls.
 | `0x00376de0` | 332 | `a2_jointset_update(mgr, act)` | `beAction2JOINTSET_Update` |
 | `0x00376f40` | 324 | `a2_jointset_start(mgr, act, comp)` | `beAction2JOINTSET_Start`; returns 1 |
 | `0x00377700` | 456 | `a2_start_components(mgr, act)` | `beAction2_StartComponents` |
-| `0x003778d0` | 192 | `a2_update(mgr, act)` | `beAction2_Update`, the per-frame driver |
-| `0x00377990` | - | `a2_msg_iscomend(mgr, act, msg)` | the `ISCOMEND` case of `beAction2_OnMessage` only; any other resolved case returns −1 |
+| `0x003778d0` | 192 | `a2_update(mgr, act)` | `beAction2_UpdateRam`, the per-frame driver |
+| `0x00377990` | - | `a2_msg_iscomend(mgr, act, msg)` | the `ISCOMEND` case of `beAction2_OnMessageText` only; any other resolved case returns −1 |
 
 Signatures come from the call sites, not from guesses. Every handler's first argument
 is the `Gap::Bec::beAction2` manager (`mgr`) and its second the playing-action object
@@ -151,7 +151,7 @@ WAITCHECK**, FLASHSET, each gated on its own state slot. JOINTSET therefore upda
 before WAITCHECK within one frame: a one-shot that ends this frame completes its
 `WAITCHECK Joint` in the same frame.
 
-`ISCOMEND` (message case 0 of `beAction2_OnMessage`) answers true when **`work+0x44 == 0` and
+`ISCOMEND` (message case 0 of `beAction2_OnMessageText`) answers true when **`work+0x44 == 0` and
 `_comIndex == component count`**.
 
 ## The logo programs
@@ -192,7 +192,7 @@ These are conditional clock-model results, not measured console timings.
   confirming that result, not every arithmetic operation or exceptional case.
 - **Leaf behavior.** Property-list lookup/insert, allocation, string interning, the
   FADESET/MOTIONSET/FLASHSET handlers, the motion clock `UnsignedDivMod64_Cached`/`igAnimationState_UpdateLocalTime`, the
-  messenger, and `beAction2_OnMessage`'s other message cases are not established here. `FADESET`
+  messenger, and `beAction2_OnMessageText`'s other message cases are not established here. `FADESET`
   completion does not gate an action.
 - **The node's `_timeScale`** is read, not set, here; actions are assumed to run at 1.0
   unless another writer says otherwise.

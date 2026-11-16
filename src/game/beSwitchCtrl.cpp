@@ -14,14 +14,14 @@ extern "C" char SWITCHCTRL[];
 extern "C" int g_beSwitchCtrlInfo_metaObject[4];
 extern "C" int g_beSwitchCtrl_metaObject[4];
 
-extern "C" void beSwitchCtrl__Prepare(void);
+extern "C" void beSwitchCtrl_Prepare(void);
 extern "C" int beSwitchCtrl__GetInfoMeta(void);
-extern "C" void beSwitchCtrl__RegisterReceiver(beSwitchCtrl *self, beBaseInfoRam *ram);
-extern "C" void beSwitchCtrl__Update(void);
-extern "C" int beSwitchCtrl__OnMessage(beSwitchCtrl *self, beBaseInfoRam *ram, int message);
+extern "C" void beSwitchCtrl_OnAddRam(beSwitchCtrl *self, beBaseInfoRam *ram);
+extern "C" void beSwitchCtrl_UpdateRam(void);
+extern "C" int beSwitchCtrl_OnMessageText(beSwitchCtrl *self, beBaseInfoRam *ram, int message);
 extern "C" int beSwitchCtrl__GetMeta(void);
 
-void beSwitchCtrl__Prepare(void)
+void beSwitchCtrl_Prepare(void)
 {
 }
 
@@ -30,16 +30,16 @@ int beSwitchCtrl__GetInfoMeta(void)
     return g_beSwitchCtrlInfo_metaObject[0];
 }
 
-void beSwitchCtrl__RegisterReceiver(beSwitchCtrl *self, beBaseInfoRam *ram)
+void beSwitchCtrl_OnAddRam(beSwitchCtrl *self, beBaseInfoRam *ram)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, SWITCHCTRL);
 }
 
-void beSwitchCtrl__Update(void)
+void beSwitchCtrl_UpdateRam(void)
 {
 }
 
-int beSwitchCtrl__OnMessage(beSwitchCtrl *self, beBaseInfoRam *ram, int message)
+int beSwitchCtrl_OnMessageText(beSwitchCtrl *self, beBaseInfoRam *ram, int message)
 {
     beSwitchCtrlInfo *info = (beSwitchCtrlInfo *)ram->_parentInfo;
 

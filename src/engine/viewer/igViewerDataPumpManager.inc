@@ -29,11 +29,11 @@ int igViewerDataPumpManager_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = &u.p[2];
     *q2 = 0;
-    u.w[0] = (int)(&DAT_00542310[0]);
+    u.w[0] = (int)(&g_igViewerDataPumpManager_vtable[0]);
     q4 = (S_ref *)&u.p[4];
     *(int *)q4 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
-    u.w[0] = (int)(&DAT_00542310[0]);
+    u.w[0] = (int)(&g_igViewerDataPumpManager_vtable[0]);
     if (q4 != 0) {
         q4 = *(S_ref **)q4;
         if (q4 != 0) {

@@ -1,10 +1,10 @@
 igMetaObject *g_beWeaponSeqData_metaObject;
 igMetaField *g_beWeaponSeqData_labelMetaField;
 
-void *FUN_0033f170(void) {
+void *beWeaponSeqData_GetMetaObject(void) {
     igMetaObject *g = g_beWeaponSeqData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0033f290();
+        beWeaponSeqData_EnsureRegistered();
     }
     return g_beWeaponSeqData_metaObject;
 }
@@ -15,17 +15,17 @@ int beWeaponSeqData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.r1 = 0;
-    obj.vt = &DAT_00539c80[0];
+    obj.vt = &g_beWeaponSeqData_vtable[0];
     obj.r2 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00539c80[0];
+    obj.vt = &g_beWeaponSeqData_vtable[0];
     obj.rel2();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.rel1();
     return r;
 }
 
-void FUN_0033f290(void)
+void beWeaponSeqData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWeaponSeqData_Register);
 }
@@ -37,7 +37,7 @@ void *beWeaponSeqData_Register(void) {
         &g_beWeaponSeqData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beWeaponSeqData_GetMetaObject,
+        beWeaponSeqData_GetMetaObjectFunction,
         "beWeaponSeqData",
         0x10, /* instance size */
         beWeaponSeqData_GetVTable,
@@ -47,9 +47,9 @@ void *beWeaponSeqData_Register(void) {
     );
 }
 
-void beWeaponSeqData_GetMetaObject(void)
+void beWeaponSeqData_GetMetaObjectFunction(void)
 {
-    FUN_0033f170();
+    beWeaponSeqData_GetMetaObject();
 }
 
 static FieldFactory g_beWeaponSeqData_ctorTable[] = {

@@ -1,50 +1,50 @@
 
-extern "C" void Gap__Bec__beMemory__vfunc_21(void);
-extern "C" void Gap__Bec__beMemory__vfunc_22(void);
-extern "C" void Gap__Bec__beMemory__vfunc_23(void);
-extern "C" void Gap__Bec__beMemory__vfunc_24(void);
-extern "C" int Gap__Bec__beMemory__vfunc_25(void);
-extern "C" void Gap__Bec__beMemory__vfunc_26(void);
-extern "C" void Gap__Bec__beMemory__vfunc_27(void);
-extern "C" int Gap__Bec__beMemory__vfunc_20(void);
+extern "C" void beMemory_Activate(void);
+extern "C" void beMemory_Deactivate(void);
+extern "C" void beMemory_Start(void);
+extern "C" void beMemory_Stop(void);
+extern "C" int beMemory_AddInfo(void);
+extern "C" void beMemory_RemoveAllInfo(void);
+extern "C" void beMemory_Update(void);
+extern "C" int beMemory_GetMeta(void);
 extern "C" int g_beMemory_metaObject[4];
 
 /* Slot 21, empty override. */
-void Gap__Bec__beMemory__vfunc_21(void)
+void beMemory_Activate(void)
 {
 }
 
 /* Slot 22, empty override. */
-void Gap__Bec__beMemory__vfunc_22(void)
+void beMemory_Deactivate(void)
 {
 }
 
 /* Slot 23, empty override. */
-void Gap__Bec__beMemory__vfunc_23(void)
+void beMemory_Start(void)
 {
 }
 
 /* Slot 24, empty override. */
-void Gap__Bec__beMemory__vfunc_24(void)
+void beMemory_Stop(void)
 {
 }
 
 /* Slot 25, empty override returning 0. */
-int Gap__Bec__beMemory__vfunc_25(void) {
+int beMemory_AddInfo(void) {
     return 0;
 }
 
 /* Slot 26, empty override. */
-void Gap__Bec__beMemory__vfunc_26(void)
+void beMemory_RemoveAllInfo(void)
 {
 }
 
 /* Slot 27, empty override. */
-void Gap__Bec__beMemory__vfunc_27(void)
+void beMemory_Update(void)
 {
 }
 
-int Gap__Bec__beMemory__vfunc_20(void)
+int beMemory_GetMeta(void)
 {
     return g_beMemory_metaObject[0];
 }

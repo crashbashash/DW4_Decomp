@@ -8,7 +8,7 @@ beNDMWWindowCtrl *beNDMWWindowCtrl_Destroy(beNDMWWindowCtrl *self, long long fla
             igSmartPointer_igStringRefList_Destruct(&self->_modelCloseInfoNameList, -1);
             igSmartPointer_igStringRefList_Destruct(&self->_textCloseNameList, -1);
             igSmartPointer_igStringRefList_Destruct(&self->_textCloseTypeList, -1);
-            FUN_003b2f30((void **)&self->_mother, -1);
+            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((void **)&self->_mother, -1);
             FUN_003b2fb0((void **)&self->_subWindow, (short)(-1));
         }
         if ((short)flags > 0) Memory_FreeBufferAliasC(self);

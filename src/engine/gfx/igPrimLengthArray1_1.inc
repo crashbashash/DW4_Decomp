@@ -7,7 +7,7 @@ igMetaObject *FUN_0014bde0(void)
         ready = (g_igPrimLengthArray1_1_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_0014be70();
+    igPrimLengthArray1_1_EnsureRegistered();
 done:
     return g_igPrimLengthArray1_1_metaObject;
 }
@@ -16,11 +16,11 @@ int igPrimLengthArray1_1_GetVTable(void) {
     struct Obj_14be30 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00526590[0];
+    obj.vt = &g_igPrimLengthArray1_1_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0014be70(void)
+void igPrimLengthArray1_1_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPrimLengthArray1_1_Register);
 }

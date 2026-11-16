@@ -1,5 +1,5 @@
 int FUN_001a8c30(int arg0) {
-    FUN_001a8df0();
+    igAnimationBinding_EnsureRegistered();
     return igMetaObject_CreateInstance((int)g_igAnimationBinding_metaObject, arg0);
 }
 
@@ -14,7 +14,7 @@ igMetaObject *igAnimationBinding_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationBinding_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a8df0();
+        igAnimationBinding_EnsureRegistered();
     return g_igAnimationBinding_metaObject;
 }
 
@@ -26,7 +26,7 @@ int igAnimationBinding_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00529b70[0];
+    u.vt = (int)&g_igAnimationBinding_vtable[0];
     q2 = (S_ref *)&u.b[8];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[20];
@@ -34,7 +34,7 @@ int igAnimationBinding_GetVTable(void) {
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00529b70[0];
+    u.vt = (int)&g_igAnimationBinding_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -65,12 +65,12 @@ int igAnimationBinding_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_001a8df0(void)
+void igAnimationBinding_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationBinding_Register);
 }
 
-static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { FUN_001a71a0, igIntList_EnsureRegistered, FUN_001a4e70, 0 };
+static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { FUN_001a71a0, igIntList_EnsureRegistered, igBitMask_EnsureRegistered, 0 };
 
 void igAnimationBinding_Register(void) {
     SceneGraphLibrary_MarkRegistered();

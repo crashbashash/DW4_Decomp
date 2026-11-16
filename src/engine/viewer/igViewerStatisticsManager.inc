@@ -10,7 +10,7 @@ int igViewerStatisticsManager_GetVTable(void) {
     struct Obj obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005425b0[0];
+    obj.vt = &g_igViewerStatisticsManager_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
@@ -20,12 +20,12 @@ int igViewerStatisticsManager_GetVTable(void) {
     obj.w9 = 0;
     obj.w10 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    obj.vt = &DAT_005425b0[0];
+    obj.vt = &g_igViewerStatisticsManager_vtable[0];
     igSmartPointer_igMetaFieldList_Destruct(&obj.w10, -1);
     igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
     igSmartPointer_igStringObj_Destruct(&obj.w7, -1);
-    FUN_0025a2b0(&obj.w6, -1);
-    FUN_0025a2b0(&obj.w5, -1);
+    GameMain_igSmartPointer_igObject_Destruct(&obj.w6, -1);
+    GameMain_igSmartPointer_igObject_Destruct(&obj.w5, -1);
     FUN_004583f0(&obj.w4, -1);
     FUN_00130140(&obj.w3, -1);
     FUN_00458860((ObjectRefWord *)&obj.w2, -1);
@@ -51,7 +51,7 @@ void FUN_004588e0(void)
     igMetaObject_RunStaticInit(igViewerStatisticsManager_Register);
 }
 
-static igMetaObjectCallback g_igViewerStatisticsManager_callbackList[] = { FUN_00458bc0, FUN_0014a0e0, FUN_0045bc10, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerStatisticsManager_callbackList[] = { FUN_00458bc0, igVisualContext_EnsureRegistered, FUN_0045bc10, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
 
 void igViewerStatisticsManager_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -162,13 +162,13 @@ void igViewerStatisticsManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00458ae0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igVisualContext_GetOrCreateMetaObject();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0045b8d0();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_00452340();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00452340();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;

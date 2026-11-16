@@ -9,7 +9,7 @@ igMetaObject *beNDMWAfsStageLoad_ResolveMetaObject(void)
         ready = (g_beNDMWAfsStageLoad_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_003cac70();
+    beNDMWAfsStageLoad_EnsureRegistered();
 done:
     return g_beNDMWAfsStageLoad_metaObject;
 }
@@ -21,11 +21,11 @@ int beNDMWAfsStageLoad_GetVTable(void) {
     int *temp_a0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053df40[0];
+    u.vt = (int)&g_beNDMWAfsStageLoad_vtable[0];
     ps = &u.b[12];
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053df40[0];
+    u.vt = (int)&g_beNDMWAfsStageLoad_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;
         if (temp_a0 != 0) {
@@ -38,12 +38,12 @@ int beNDMWAfsStageLoad_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003cac70(void)
+void beNDMWAfsStageLoad_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWAfsStageLoad_Register);
 }
 
-static igMetaObjectCallback g_beNDMWAfsStageLoad_callbackList[] = { FUN_00232de0, igNamedObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWAfsStageLoad_callbackList[] = { igInsightCore_EnsureRegistered, igNamedObject_EnsureRegistered, 0 };
 
 void *beNDMWAfsStageLoad_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -67,7 +67,7 @@ void beNDMWAfsStageLoad_GetMetaObject(void)
     beNDMWAfsStageLoad_ResolveMetaObject();
 }
 
-int FUN_003cad30(void) {
+int igAction_GetPublishedMetaObject(void) {
     return g_igAction_metaObject[0];
 }
 
@@ -98,7 +98,7 @@ void beNDMWAfsStageLoad_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beNDMWAfsStageLoad_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00232840();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igNamedObject_GetOrCreateMetaObject();

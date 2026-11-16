@@ -2,7 +2,7 @@ igMetaObject *g_igProjectionMatrixAttr_metaObject;
 igMetaField *g_igProjectionMatrixAttr_mMetaField;
 
 void FUN_00134690(int arg0) {
-    FUN_001347c0();
+    igProjectionMatrixAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55EF50, arg0);
 }
 
@@ -17,19 +17,19 @@ igMetaObject *igProjectionMatrixAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igProjectionMatrixAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001347c0();
+        igProjectionMatrixAttr_EnsureRegistered();
     return g_igProjectionMatrixAttr_metaObject;
 }
 
 int igProjectionMatrixAttr_GetVTable(void) {
     struct Obj_134770 o;
     igObject_InitHeader(&o);
-    o.vt = &DAT_005230e0[0];
+    o.vt = &g_igProjectionMatrixAttr_vtable[0];
     igMatrix44f_SetIdentity(&o.pad[8]);
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001347c0(void)
+void igProjectionMatrixAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igProjectionMatrixAttr_Register);
 }

@@ -6,17 +6,17 @@ extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" void igLuaState_RunString(void);
 extern "C" int igLuaState_RunBuffer(...);
-extern "C" void Gap__Bec__beLuaState__vfunc_21(void);
-extern "C" void Gap__Bec__beLuaState__vfunc_23(void);
+extern "C" void beLuaState_RunString(void);
+extern "C" void beLuaState_RunBuffer(void);
 extern "C" int Memory_AllocateAlignedWithAllocator(int, int, int);
-extern "C" int Gap__Bec__beLuaState__vfunc_20(void);
+extern "C" int beLuaState_GetMeta(void);
 extern "C" int igLuaState_Close(beLuaState *);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void Gap__Bec__beLuaState__vfunc_08(beLuaState *arg0);
-extern "C" igObject *FUN_00362f90(int);
+extern "C" void beLuaState_userDestruct(beLuaState *arg0);
+extern "C" igObject *beFileChkObj_Create(int);
 extern "C" int FUN_0037f1b0(igObject *, int);
-extern "C" igObject *FUN_00334dc0(int);
+extern "C" igObject *igAdxFile_Create(int);
 extern "C" int igAdxFile_GetFileSize(igObject *);
 extern "C" int igAdxFile_SetUseBuffer(igObject *, int);
 extern "C" int igAdxFile_SetUseAsync(igObject *, int);
@@ -36,10 +36,10 @@ public:
     ReaderRef(igObject *o) : p(o) {}
     ~ReaderRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-extern "C" int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1);
+extern "C" int beLuaState_RunFile(beLuaState *arg0, int arg1);
 extern "C" int g_beLuaState_metaObject[4];
 
-void Gap__Bec__beLuaState__vfunc_08(beLuaState *arg0) {
+void beLuaState_userDestruct(beLuaState *arg0) {
     int var_v0;
 
     if (arg0->_lp != 0) {
@@ -50,12 +50,12 @@ void Gap__Bec__beLuaState__vfunc_08(beLuaState *arg0) {
     igLuaState_Close(arg0);
 }
 
-void Gap__Bec__beLuaState__vfunc_21(void)
+void beLuaState_RunString(void)
 {
     igLuaState_RunString();
 }
 
-int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1) {
+int beLuaState_RunFile(beLuaState *arg0, int arg1) {
     int var_v0;
     int s0;
     char *a1;
@@ -63,13 +63,13 @@ int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1) {
     bool found;
     var_v0 = igObject_GetAllocator();
     var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-    igSmartPointer<igObject> locator(FUN_00362f90(var_v0));
+    igSmartPointer<igObject> locator(beFileChkObj_Create(var_v0));
     if (FUN_0037f1b0(locator.p, arg1) == 0) {
         return 2;
     }
     var_v0 = igObject_GetAllocator(arg0);
     var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-    ReaderRef reader(FUN_00334dc0(var_v0));
+    ReaderRef reader(igAdxFile_Create(var_v0));
     if (((V *)reader.p)->v23(arg1, "rb") == 0) {
         return -1;
     }
@@ -111,12 +111,12 @@ int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1) {
     return s0;
 }
 
-void Gap__Bec__beLuaState__vfunc_23(void)
+void beLuaState_RunBuffer(void)
 {
     igLuaState_RunBuffer();
 }
 
-int Gap__Bec__beLuaState__vfunc_20(void)
+int beLuaState_GetMeta(void)
 {
     return g_beLuaState_metaObject[0];
 }

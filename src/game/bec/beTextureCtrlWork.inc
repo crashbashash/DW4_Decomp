@@ -2,25 +2,25 @@ igMetaObject *g_beTextureCtrlWork_metaObject;
 igMetaField *g_beTextureCtrlWork_textureListMetaField;
 igMetaField *g_beTextureCtrlWork_attributeListMetaField;
 
-void FUN_00342630(int arg0) {
-    FUN_003427f0();
+void beTextureCtrlWork_Create(int arg0) {
+    beTextureCtrlWork_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587CD0, arg0);
 }
 
-igMetaObject *FUN_00342670(void) {
+igMetaObject *beTextureCtrlWork_GetOrCreateMetaObject(void) {
     if (g_beTextureCtrlWork_metaObject == 0) {
         g_beTextureCtrlWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beTextureCtrlWork_metaObject;
 }
 
-void *FUN_003426c0(void) {
+void *beTextureCtrlWork_GetMetaObject(void) {
     bool ok;
     if (g_beTextureCtrlWork_metaObject == 0) goto make;
     ok = !!(g_beTextureCtrlWork_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003427f0();
+    beTextureCtrlWork_EnsureRegistered();
 done:;
     return g_beTextureCtrlWork_metaObject;
 }
@@ -32,13 +32,13 @@ int beTextureCtrlWork_GetVTable(void) {
     S_ref *q1;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00539500[0];
+    u.vt = (int)&g_beTextureCtrlWork_vtable[0];
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[12];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00539500[0];
+    u.vt = (int)&g_beTextureCtrlWork_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -60,7 +60,7 @@ int beTextureCtrlWork_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003427f0(void)
+void beTextureCtrlWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTextureCtrlWork_Register);
 }
@@ -74,7 +74,7 @@ void *beTextureCtrlWork_Register(void) {
         &g_beTextureCtrlWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beTextureCtrlWork_GetMetaObject,
+        beTextureCtrlWork_GetMetaObjectFunction,
         "beTextureCtrlWork",
         0x10, /* instance size */
         beTextureCtrlWork_GetVTable,
@@ -84,9 +84,9 @@ void *beTextureCtrlWork_Register(void) {
     );
 }
 
-void beTextureCtrlWork_GetMetaObject(void)
+void beTextureCtrlWork_GetMetaObjectFunction(void)
 {
-    FUN_003426c0();
+    beTextureCtrlWork_GetMetaObject();
 }
 
 static FieldFactory g_beTextureCtrlWork_ctorTable[] = {

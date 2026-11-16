@@ -1,7 +1,7 @@
 igMetaObject *g_beNDMWItemWeapon_metaObject;
 
 void beNDMWItemWeapon_Create(int arg0) {
-    FUN_003c8d60();
+    beNDMWItemWeapon_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWItemWeapon_metaObject, arg0);
 }
 
@@ -11,7 +11,7 @@ void *beNDMWItemWeapon_GetReadyMetaObject(void) {
         b = (*(int *)((char *)(g_beNDMWItemWeapon_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_003c8d60();
+    beNDMWItemWeapon_EnsureRegistered();
 done:
     return g_beNDMWItemWeapon_metaObject;
 }
@@ -20,11 +20,11 @@ int beNDMWItemWeapon_GetVTable(void) {
     union U_3c8d20 u;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00540960[0];
+    u.vt = (int)&g_beNDMWItemWeapon_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_003c8d60(void)
+void beNDMWItemWeapon_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWItemWeapon_Register);
 }

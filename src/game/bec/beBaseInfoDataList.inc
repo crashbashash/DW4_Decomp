@@ -1,18 +1,18 @@
 igMetaObject *g_beBaseInfoDataList_metaObject;
 
 void beBaseInfoDataList_Create(int arg0) {
-    FUN_0036afa0();
+    beBaseInfoDataList_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589E00, arg0);
 }
 
-igMetaObject *FUN_0036aec0(void) {
+igMetaObject *beBaseInfoDataList_GetOrCreateMetaObject(void) {
     if (g_beBaseInfoDataList_metaObject == 0) {
         g_beBaseInfoDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beBaseInfoDataList_metaObject;
 }
 
-void *FUN_0036af10(void) {
+void *beBaseInfoDataList_GetMetaObject(void) {
     igMetaObject *g = g_beBaseInfoDataList_metaObject;
     int ready;
     if (g) {
@@ -21,7 +21,7 @@ void *FUN_0036af10(void) {
         ready = (g->_validity & 4) != 0;
         if (ready) goto end;
     }
-    FUN_0036afa0();
+    beBaseInfoDataList_EnsureRegistered();
 end:
     return g_beBaseInfoDataList_metaObject;
 }
@@ -30,16 +30,16 @@ int beBaseInfoDataList_GetVTable(void) {
     struct Obj_36af60 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005346e0[0];
+    obj.vt = &g_beBaseInfoDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0036afa0(void)
+void beBaseInfoDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beBaseInfoDataList_Register);
 }
 
-static igMetaObjectCallback g_beBaseInfoDataList_callbackList[] = { FUN_0036b0a0, 0 };
+static igMetaObjectCallback g_beBaseInfoDataList_callbackList[] = { beBaseInfoData_EnsureRegistered, 0 };
 
 void *beBaseInfoDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -48,7 +48,7 @@ void *beBaseInfoDataList_Register(void) {
         &g_beBaseInfoDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beBaseInfoDataList_GetMetaObject,
+        beBaseInfoDataList_GetMetaObjectFunction,
         "beBaseInfoDataList",
         0x14, /* instance size */
         beBaseInfoDataList_GetVTable,
@@ -58,8 +58,8 @@ void *beBaseInfoDataList_Register(void) {
     );
 }
 
-void beBaseInfoDataList_GetMetaObject(void)
+void beBaseInfoDataList_GetMetaObjectFunction(void)
 {
-    FUN_0036af10();
+    beBaseInfoDataList_GetMetaObject();
 }
 

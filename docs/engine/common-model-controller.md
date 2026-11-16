@@ -7,7 +7,7 @@ The logic of `0x003e3b80` is under [Submission and completion](#submission-and-c
 | Entry | Bytes | Symbol and arguments |
 |---|---:|---|
 | `0x003e3b80` | 504 | `beNDMWLoadIntf2ComMdlCtrl__Start(cm, slot, name, sequence, wait)`: GENERATE, play, optional open tracking |
-| `0x003e3d80` | 128 | `FUN_003e3d80(wrapper, flags)`: release wrapped object, optionally delete wrapper |
+| `0x003e3d80` | 128 | `igSmartPointer_beLoadIntf2ComMdlData_Destruct(wrapper, flags)`: release wrapped object, optionally delete wrapper |
 | `0x003e3e00` | 556 | `beNDMWLoadIntf2ComMdlCtrl__StartAt(cm, slot, name, sequence, vec3, wait)`: positioned GENERATE, play, optional open tracking |
 | `0x003e4030` | 472 | `beNDMWLoadIntf2ComMdlCtrl__Play(cm, slot, name, sequence, wait)` |
 | `0x003e4210` | 104 | `beNDMWLoadIntf2ComMdlCtrl__IsSequence(cm, slot, name, sequence)`: MODELCTRL ISSEQNAME |

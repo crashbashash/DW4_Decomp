@@ -5,7 +5,7 @@ igMetaField *g_igAnimationDatabase_skinListMetaField;
 igMetaField *g_igAnimationDatabase_appearanceListMetaField;
 igMetaField *g_igAnimationDatabase_combinerListMetaField;
 
-igMetaObject *FUN_001a7780(void) {
+igMetaObject *igAnimationDatabase_GetOrCreateMetaObject(void) {
     if (g_igAnimationDatabase_metaObject == 0) {
         g_igAnimationDatabase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -16,7 +16,7 @@ igMetaObject *igAnimationDatabase_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationDatabase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a7b00();
+        igAnimationDatabase_EnsureRegistered();
     return g_igAnimationDatabase_metaObject;
 }
 
@@ -29,7 +29,7 @@ int igAnimationDatabase_GetVTable(void) {
     int r;
     igObject_InitHeader(&o);
     o.f[1] = 0;
-    o.vt = &DAT_005295c0[0];
+    o.vt = &g_igAnimationDatabase_vtable[0];
     p16 = &o.f[4];
     *p16 = 0;
     p17 = &o.f[5];
@@ -40,7 +40,7 @@ int igAnimationDatabase_GetVTable(void) {
     *p19 = 0;
     o.f[8] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_005295c0[0];
+    o.vt = &g_igAnimationDatabase_vtable[0];
     FUN_001a7a80((void * *)&o.f[8], -1);
     FUN_001a7a00((ObjectRefWord *)p19, -1);
     FUN_001a6350((struct Ref * *)p18, -1);
@@ -111,12 +111,12 @@ void **FUN_001a7a80(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_001a7b00(void)
+void igAnimationDatabase_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationDatabase_Register);
 }
 
-static igMetaObjectCallback g_igAnimationDatabase_callbackList[] = { FUN_001984c0, FUN_001a9060, FUN_00197f40, FUN_001a60c0, FUN_001a8490, 0 };
+static igMetaObjectCallback g_igAnimationDatabase_callbackList[] = { igSkeletonList_EnsureRegistered, igAnimationList_EnsureRegistered, igSkinList_EnsureRegistered, igAppearanceList_EnsureRegistered, igAnimationCombinerList_EnsureRegistered, 0 };
 
 void igAnimationDatabase_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -190,7 +190,7 @@ void igAnimationDatabase_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_00197e60();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001a5fe0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igAppearanceList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_001a83b0();

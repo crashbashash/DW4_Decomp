@@ -1,16 +1,16 @@
 igMetaObject *g_beWeaponSeqDataList_metaObject;
 
-igMetaObject *FUN_0033efe0(void) {
+igMetaObject *beWeaponSeqDataList_GetOrCreateMetaObject(void) {
     if (g_beWeaponSeqDataList_metaObject == 0) {
         g_beWeaponSeqDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beWeaponSeqDataList_metaObject;
 }
 
-void *FUN_0033f030(void) {
+void *beWeaponSeqDataList_GetMetaObject(void) {
     igMetaObject *g = g_beWeaponSeqDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0033f0c0();
+        beWeaponSeqDataList_EnsureRegistered();
     }
     return g_beWeaponSeqDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beWeaponSeqDataList_GetVTable(void) {
     union U_33f080 u;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00539ce0[0];
+    u.vt = (int)&g_beWeaponSeqDataList_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_0033f0c0(void)
+void beWeaponSeqDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWeaponSeqDataList_Register);
 }
 
-static igMetaObjectCallback g_beWeaponSeqDataList_callbackList[] = { FUN_0033f290, 0 };
+static igMetaObjectCallback g_beWeaponSeqDataList_callbackList[] = { beWeaponSeqData_EnsureRegistered, 0 };
 
 void *beWeaponSeqDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beWeaponSeqDataList_Register(void) {
         &g_beWeaponSeqDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beWeaponSeqDataList_GetMetaObject,
+        beWeaponSeqDataList_GetMetaObjectFunction,
         "beWeaponSeqDataList",
         0x14, /* instance size */
         beWeaponSeqDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beWeaponSeqDataList_Register(void) {
     );
 }
 
-void beWeaponSeqDataList_GetMetaObject(void)
+void beWeaponSeqDataList_GetMetaObjectFunction(void)
 {
-    FUN_0033f030();
+    beWeaponSeqDataList_GetMetaObject();
 }
 

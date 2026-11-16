@@ -16,11 +16,11 @@ igMetaObject *igIndexArray_GetMetaObject(void)
 {
     igMetaObject *g = g_igIndexArray_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014d890();
+        igIndexArray_EnsureRegistered();
     return g_igIndexArray_metaObject;
 }
 
-void FUN_0014d890(void)
+void igIndexArray_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igIndexArray_Register);
 }

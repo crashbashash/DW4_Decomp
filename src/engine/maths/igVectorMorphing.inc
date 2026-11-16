@@ -18,7 +18,7 @@ end:
 int igVectorMorphing_GetVTable(void) {
     struct Obj2 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005280a0[0];
+    obj.vt = &g_igVectorMorphing_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

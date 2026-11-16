@@ -23,15 +23,15 @@ int igCameraMode_GetVTable(void) {
     
     
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00542960[0]);
+    u.w[0] = (int)(&g_igViewMode_vtable[0]);
     igMatrix44f_SetIdentity(&u.w[3]);
-    u.w[0] = (int)(&DAT_005428d0[0]);
+    u.w[0] = (int)(&g_igCameraMode_vtable[0]);
     q1 = (S_ref *)&u.b[76];
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[80];
     *(int *)q2 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
-    u.w[0] = (int)(&DAT_005428d0[0]);
+    u.w[0] = (int)(&g_igCameraMode_vtable[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
         if (q2 != 0) {
@@ -58,7 +58,7 @@ void FUN_0045cdc0(void)
     igMetaObject_RunStaticInit(igCameraMode_Register);
 }
 
-static igMetaObjectCallback g_igCameraMode_callbackList[] = { FUN_0019f7a0, FUN_001a4670, 0 };
+static igMetaObjectCallback g_igCameraMode_callbackList[] = { igGraphPath_EnsureRegistered, igCamera_EnsureRegistered, 0 };
 
 void igCameraMode_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -108,9 +108,9 @@ void igCameraMode_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igCameraMode_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019f670();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igGraphPath_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_001a4560();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igCamera_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_igCameraMode_fieldTable, g_igCameraMode_fieldHandles, g_igCameraMode_fieldOffsets, temp_s2);
 }
 

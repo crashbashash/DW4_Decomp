@@ -18,7 +18,7 @@ igMetaObject *igMatrixObjectList_GetMetaObject(void)
 int igMatrixObjectList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_0052bc70[0];
+    obj[0] = (int)&g_igMatrixObjectList_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 

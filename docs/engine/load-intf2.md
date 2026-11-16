@@ -22,7 +22,7 @@ are, in retail order:
 | `0x003de260`–`0x003def80` | `beNDMWLoadIntf2NameSel` | `beNDMWLoadIntf2NameSel__Init`, `__DrawRowLetters`, `__DrawColumnLetters`, `__DrawEnteredName`, `__SetAnswer`, `__Update` |
 | `0x003e0b80`–`0x003e3070` | `beNDMWLoadIntf2SelSlot` | `beNDMWLoadIntf2SelSlot__Reset`, `__Init`, `__Open`, `__UpdateSelection`, `__PublishCursor`, `__Close`, `__RefreshSlotMarks` |
 | `0x003e3b80`–`0x003e44f0` | `beNDMWLoadIntf2ComMdlCtrl` | `beNDMWLoadIntf2ComMdlCtrl__Start`, `__StartAt`, `__Play`, `__IsSequence`, `__IsOpenQueueEmpty`, `__Close`, `__IsRunning`, `__IsCloseQueueEmpty`, `__Poll` |
-| `0x003e46b0`–`0x003eba00` | `beNDMWLoadIntf2` | `beNDMWLoadIntf2__ResolvePadManager`, `beNDMWLoadIntf2__Update`, the out-of-line accessor copies, `beNDMWLoadIntf2__GetInfoMeta`, `beNDMWLoadIntf2__RegisterReceivers`, `beNDMWLoadIntf2__OnMessage`, `beNDMWLoadIntf2__GetMeta` |
+| `0x003e46b0`–`0x003eba00` | `beNDMWLoadIntf2` | `beNDMWLoadIntf2_Prepare`, `beNDMWLoadIntf2_UpdateRam`, the out-of-line accessor copies, `beNDMWLoadIntf2__GetInfoMeta`, `beNDMWLoadIntf2_OnAddRam`, `beNDMWLoadIntf2_OnMessage`, `beNDMWLoadIntf2__GetMeta` |
 
 The other members of the compiler object are copies the compiler emits out of line:
 the `igSmartPointer<beLoadIntf2ComMdlData>` destructor (`0x003e3d80`) after `Start`;
@@ -38,7 +38,7 @@ the ones the retail linker kept.
 ### Why the update is defined early
 
 The unit compiles with `-inline level=8,bottomup`: a function defined earlier in the
-file is inlined into a later caller. `beNDMWLoadIntf2__Update` calls the DegiState,
+file is inlined into a later caller. `beNDMWLoadIntf2_UpdateRam` calls the DegiState,
 DataSelIntf, Diffselect, NameSel, SelSlot and ComMdlCtrl functions, and retail calls
 each of them, so its definition sits right after `beNDMWLoadIntf2DegiState__Init`,
 before all of them; the compiler still emits it at its retail place. The small
@@ -117,9 +117,9 @@ addressing each child by name through `igProperty_FindByName`, the same lookup
 | `DATASELINTF` | `beNDMWLoadIntf2DataSelIntf` |
 | `DIFFSELECT` | `beNDMWLoadIntf2Diffselect` |
 
-`beNDMWLoadIntf2__RegisterReceivers` registers the record under `LOADINTF2_ALL`
+`beNDMWLoadIntf2_OnAddRam` registers the record under `LOADINTF2_ALL`
 (`beMessenger_RegisterReceiverFromInfo`) and under `LOADINTF2` with its `_ramNo`
-(`beMessenger_RegisterReceiver`). `beNDMWLoadIntf2__OnMessage` resolves the message
+(`beMessenger_RegisterReceiver`). `beNDMWLoadIntf2_OnMessage` resolves the message
 through the `Message` meta-enum (`LoadIntf2Message_GetMetaEnum`, names and values
 from the tables at `0x004cb710`/`0x004cb730`):
 
@@ -163,12 +163,12 @@ function and an owning `igSmartPointer` that releases it once the list holds it:
 11. `beNDMWLoadIntf2Diffselect_Create`: `_padManager`, `_comMdlCtrl`, `_textOrder`,
     `_commonIntf`, `_mesWin`.
 
-## Master update (`beNDMWLoadIntf2__Update`)
+## Master update (`beNDMWLoadIntf2_UpdateRam`)
 
 The per-frame update of one player's interface (18,616 bytes, nine switch tables).
 It finds the named working set under the record's data list (creating the list when
 it is empty), samples the player's pad through the pad manager
-(`beNDMWLoadIntf2__ResolvePadManager` takes the reference on first use), returns early
+(`beNDMWLoadIntf2_Prepare` takes the reference on first use), returns early
 while `CTRL._isSystem` is set, polls the model queues, and then advances two state
 machines:
 

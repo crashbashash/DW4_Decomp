@@ -24,13 +24,13 @@ int igItemInterface_GetVTable(void) {
     struct Obj_7 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052c0f0[0];
+    obj.vt = &g_igItemInterface_vtable[0];
     obj.w8 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052c0f0[0];
+    obj.vt = &g_igItemInterface_vtable[0];
     igSmartPointer_igStringRefListList_Destruct((void **)&obj.w11, -1);
     FUN_00227df0((ObjectRefWord *)&obj.w10, -1);
     igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);

@@ -1,10 +1,10 @@
 igMetaObject *g_beTextureCtrlData_metaObject;
 igMetaField *g_beTextureCtrlData_texMetaField;
 
-void *FUN_00342090(void) {
+void *beTextureCtrlData_GetMetaObject(void) {
     igMetaObject *g = g_beTextureCtrlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003421c0();
+        beTextureCtrlData_EnsureRegistered();
     }
     return g_beTextureCtrlData_metaObject;
 }
@@ -18,10 +18,10 @@ int beTextureCtrlData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._name = 0;
-    *(int **)&obj._vtable = &DAT_00539560[0];
+    *(int **)&obj._vtable = &g_beTextureCtrlData_vtable[0];
     obj._tex = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    *(int **)&obj._vtable = &DAT_00539560[0];
+    *(int **)&obj._vtable = &g_beTextureCtrlData_vtable[0];
     if (&obj._tex != 0) {
         o = (char *)obj._tex;
         if (o != 0) {
@@ -46,12 +46,12 @@ int beTextureCtrlData_GetVTable(void) {
     return t;
 }
 
-void FUN_003421c0(void)
+void beTextureCtrlData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTextureCtrlData_Register);
 }
 
-static igMetaObjectCallback g_beTextureCtrlData_callbackList[] = { FUN_00132cf0, 0 };
+static igMetaObjectCallback g_beTextureCtrlData_callbackList[] = { igTextureAttr_EnsureRegistered, 0 };
 
 void *beTextureCtrlData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -60,7 +60,7 @@ void *beTextureCtrlData_Register(void) {
         &g_beTextureCtrlData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beTextureCtrlData_GetMetaObject,
+        beTextureCtrlData_GetMetaObjectFunction,
         "beTextureCtrlData",
         0x10, /* instance size */
         beTextureCtrlData_GetVTable,
@@ -70,9 +70,9 @@ void *beTextureCtrlData_Register(void) {
     );
 }
 
-void beTextureCtrlData_GetMetaObject(void)
+void beTextureCtrlData_GetMetaObjectFunction(void)
 {
-    FUN_00342090();
+    beTextureCtrlData_GetMetaObject();
 }
 
 static FieldFactory g_beTextureCtrlData_ctorTable[] = {
@@ -97,7 +97,7 @@ void beTextureCtrlData_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beTextureCtrlData_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00132ba0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTextureAttr_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beTextureCtrlData_fieldTable, g_beTextureCtrlData_fieldHandles, g_beTextureCtrlData_fieldOffsets, temp_s2);
 }
 

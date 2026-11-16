@@ -20,7 +20,7 @@ int igPsx2DisableExt_GetVTable(void) {
     *(int *)p38 = 0;
     p40 = &u.b[16];
     *(int *)p40 = 0;
-    u.vt = (int)&DAT_005257f0[0];
+    u.vt = (int)&g_igPsx2DisableExt_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00530a10[0];
     if (p40 != 0) {

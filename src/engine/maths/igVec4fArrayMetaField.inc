@@ -3,7 +3,7 @@ igMetaField *g_igVec4fArrayMetaField_numMetaField;
 M *g_igVec4fArrayMetaField_descriptor;
 
 void FUN_00187560(int arg0) {
-    FUN_00187680();
+    igVec4fArrayMetaField_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igVec4fArrayMetaField_metaObject, arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igVec4fArrayMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igVec4fArrayMetaField_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00187680();
+        igVec4fArrayMetaField_EnsureRegistered();
     return g_igVec4fArrayMetaField_metaObject;
 }
 
@@ -24,7 +24,7 @@ int igVec4fArrayMetaField_GetVTable(void) {
     int temp_v0;
 
     igMetaField_Init(u.b);
-    u.vt = (int)&DAT_005273e0[0];
+    u.vt = (int)&g_igVec4fArrayMetaField_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
@@ -42,7 +42,7 @@ int igVec4fArrayMetaField_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00187680(void)
+void igVec4fArrayMetaField_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVec4fArrayMetaField_Register);
 }

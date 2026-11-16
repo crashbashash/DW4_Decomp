@@ -9,15 +9,15 @@ igMetaField *g_beNDMWSaveCtrlCtrlData_st2MetaField;
 igMetaField *g_beNDMWSaveCtrlCtrlData_st3MetaField;
 igMetaEnum *g_beNDMWSaveCtrlCtrlData_messageMetaEnum;
 
-void FUN_003bd0b0(int arg0) {
-    FUN_003bd1d0();
+void beNDMWSaveCtrlCtrlData_Create(int arg0) {
+    beNDMWSaveCtrlCtrlData_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWSaveCtrlCtrlData_metaObject, arg0);
 }
 
-void *FUN_003bd0f0(void) {
+void *beNDMWSaveCtrlCtrlData_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWSaveCtrlCtrlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003bd1d0();
+        beNDMWSaveCtrlCtrlData_EnsureRegistered();
     }
     return g_beNDMWSaveCtrlCtrlData_metaObject;
 }
@@ -34,7 +34,7 @@ int beNDMWSaveCtrlCtrlData_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053d700[0];
+    u.vt = (int)&g_beNDMWSaveCtrlCtrlData_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -51,7 +51,7 @@ int beNDMWSaveCtrlCtrlData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003bd1d0(void)
+void beNDMWSaveCtrlCtrlData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWSaveCtrlCtrlData_Register);
 }
@@ -63,7 +63,7 @@ void *beNDMWSaveCtrlCtrlData_Register(void) {
         &g_beNDMWSaveCtrlCtrlData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beNDMWSaveCtrlCtrlData_GetMetaObject,
+        beNDMWSaveCtrlCtrlData_GetMetaObjectFunction,
         "beNDMWSaveCtrlCtrlData",
         0x2c, /* instance size */
         beNDMWSaveCtrlCtrlData_GetVTable,
@@ -73,9 +73,9 @@ void *beNDMWSaveCtrlCtrlData_Register(void) {
     );
 }
 
-void beNDMWSaveCtrlCtrlData_GetMetaObject(void)
+void beNDMWSaveCtrlCtrlData_GetMetaObjectFunction(void)
 {
-    FUN_003bd0f0();
+    beNDMWSaveCtrlCtrlData_GetMetaObject();
 }
 
 static FieldFactory g_beNDMWSaveCtrlCtrlData_ctorTable[] = {

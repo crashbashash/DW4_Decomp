@@ -21,10 +21,10 @@ int igVisualContextAttrDefaultManager_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     p = (S_ref *)&u.b[8];
-    u.vt = (int)&DAT_005224b0[0];
+    u.vt = (int)&g_igVisualContextAttrDefaultManager_vtable[0];
     *(int *)p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005224b0[0];
+    u.vt = (int)&g_igVisualContextAttrDefaultManager_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;
         if (p != 0) {
@@ -60,7 +60,7 @@ void FUN_001301c0(void)
     igMetaObject_RunStaticInit(igVisualContextAttrDefaultManager_Register);
 }
 
-static igMetaObjectCallback g_igVisualContextAttrDefaultManager_callbackList[] = { FUN_0014a0e0, 0 };
+static igMetaObjectCallback g_igVisualContextAttrDefaultManager_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 void igVisualContextAttrDefaultManager_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -109,7 +109,7 @@ void igVisualContextAttrDefaultManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igVisualContextAttrDefaultManager_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014a040();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVisualContext_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_persistent = 0;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 1;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 1;

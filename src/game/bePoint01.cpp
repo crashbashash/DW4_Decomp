@@ -1,9 +1,9 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__bePoint01__vfunc_32(void);
-extern "C" int Gap__Bec__bePoint01__vfunc_30(void);
-extern "C" void Gap__Bec__bePoint01__vfunc_31(void);
-extern "C" int Gap__Bec__bePoint01__vfunc_20(void);
+extern "C" void bePoint01_Prepare(void);
+extern "C" int bePoint01_GetInfoMeta(void);
+extern "C" void bePoint01_UpdateRam(void);
+extern "C" int bePoint01_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int igMatrix44f_Copy(int *, int *);
 extern "C" int beMessenger_AppendMatrix(int, void *);
@@ -17,27 +17,27 @@ extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" int g_bePoint01Info_metaObject[4];
 extern "C" int g_bePoint01_metaObject[4];
 extern "C" char PLAYERPOINT_4[];
-extern "C" void Gap__Bec__bePoint01__vfunc_29(bePoint01 * p0, int p1, char * p2);
+extern "C" void bePoint01_OnAddRam(bePoint01 * p0, int p1, char * p2);
 extern "C" int DAT_004e0ef0[4];
 extern "C" void FUN_0039c1c0(bePoint01 *arg0, bePoint01Info *arg1, int arg2, int arg3);
 extern "C" int emptyString[4];
-extern "C" int Gap__Bec__bePoint01__vfunc_34(bePoint01 *arg0, beBaseInfoRam *arg1, void *arg2);
+extern "C" int bePoint01_OnMessage(bePoint01 *arg0, beBaseInfoRam *arg1, void *arg2);
 
-void Gap__Bec__bePoint01__vfunc_32(void)
+void bePoint01_Prepare(void)
 {
 }
 
-int Gap__Bec__bePoint01__vfunc_30(void)
+int bePoint01_GetInfoMeta(void)
 {
     return g_bePoint01Info_metaObject[0];
 }
 
-void Gap__Bec__bePoint01__vfunc_29(bePoint01 * p0, int p1, char * p2)
+void bePoint01_OnAddRam(bePoint01 * p0, int p1, char * p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, PLAYERPOINT_4);
 }
 
-void Gap__Bec__bePoint01__vfunc_31(void)
+void bePoint01_UpdateRam(void)
 {
 }
 
@@ -58,7 +58,7 @@ void FUN_0039c1c0(bePoint01 *arg0, bePoint01Info *arg1, int arg2, int arg3) {
     beMessenger_AppendMatrix(arg0->_messenger, sp20);
 }
 
-int Gap__Bec__bePoint01__vfunc_34(bePoint01 *arg0, beBaseInfoRam *arg1, void *arg2) {
+int bePoint01_OnMessage(bePoint01 *arg0, beBaseInfoRam *arg1, void *arg2) {
     unsigned int v;
     int ent;
     bePoint01Info *s0;
@@ -107,7 +107,7 @@ int Gap__Bec__bePoint01__vfunc_34(bePoint01 *arg0, beBaseInfoRam *arg1, void *ar
     }
 }
 
-int Gap__Bec__bePoint01__vfunc_20(void)
+int bePoint01_GetMeta(void)
 {
     return g_bePoint01_metaObject[0];
 }

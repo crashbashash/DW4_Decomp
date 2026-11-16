@@ -7,12 +7,12 @@ igMetaField *g_beModelCtrlSCHitBox_boxSizeMetaField;
 igMetaField *g_beModelCtrlSCHitBox_isPositionLockMetaField;
 
 void beModelCtrlSCHitBox_Create(int arg0) {
-    FUN_0034f7c0();
+    beModelCtrlSCHitBox_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5887C8, arg0);
 }
 
-igMetaObject *FUN_0034f730(void) {
-    if (g_beModelCtrlSCHitBox_metaObject == 0 || !isValid(g_beModelCtrlSCHitBox_metaObject)) FUN_0034f7c0();
+igMetaObject *beModelCtrlSCHitBox_GetMetaObject(void) {
+    if (g_beModelCtrlSCHitBox_metaObject == 0 || !isValid(g_beModelCtrlSCHitBox_metaObject)) beModelCtrlSCHitBox_EnsureRegistered();
     return g_beModelCtrlSCHitBox_metaObject;
 }
 
@@ -20,11 +20,11 @@ int beModelCtrlSCHitBox_GetVTable(void) {
     struct Obj_34f780 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053af60[0];
+    obj.vt = &g_beModelCtrlSCHitBox_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0034f7c0(void)
+void beModelCtrlSCHitBox_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlSCHitBox_Register);
 }
@@ -36,7 +36,7 @@ void *beModelCtrlSCHitBox_Register(void) {
         &g_beModelCtrlSCHitBox_metaObject,
         beModelCtrlSubComBase_Register,
         beModelCtrlSubComBase_GetPublishedMetaObject,
-        beModelCtrlSCHitBox_GetMetaObject,
+        beModelCtrlSCHitBox_GetMetaObjectFunction,
         "beModelCtrlSCHitBox",
         0x3c, /* instance size */
         beModelCtrlSCHitBox_GetVTable,
@@ -46,9 +46,9 @@ void *beModelCtrlSCHitBox_Register(void) {
     );
 }
 
-void beModelCtrlSCHitBox_GetMetaObject(void)
+void beModelCtrlSCHitBox_GetMetaObjectFunction(void)
 {
-    FUN_0034f730();
+    beModelCtrlSCHitBox_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlSCHitBox_ctorTable[] = {

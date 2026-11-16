@@ -1,10 +1,10 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__beTimer__vfunc_21(void);
-extern "C" void Gap__Bec__beTimer__vfunc_22(void);
-extern "C" void Gap__Bec__beTimer__vfunc_24(void);
-extern "C" int Gap__Bec__beTimer__vfunc_25(void);
-extern "C" int Gap__Bec__beTimer__vfunc_20(void);
+extern "C" void beTimer_Activate(void);
+extern "C" void beTimer_Deactivate(void);
+extern "C" void beTimer_Stop(void);
+extern "C" int beTimer_AddInfo(void);
+extern "C" int beTimer_GetMeta(void);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int igObject_Destroy(...);
 extern "C" int beLua__RunNamedChunk(...);
@@ -15,38 +15,38 @@ extern "C" int g_beTimer_metaObject[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
-extern "C" void Gap__Bec__beTimer__vfunc_23(beTimer *arg0);
-extern "C" void Gap__Bec__beTimer__vfunc_26(beTimer *arg0);
+extern "C" void beTimer_Start(beTimer *arg0);
+extern "C" void beTimer_RemoveAllInfo(beTimer *arg0);
 struct Pad { char pad[36]; int f36; char p2[28]; int f68; };
 struct O { char pad[20]; int f20; };
 extern "C" struct Pad *bePadManager_GetPadForPlayer(int, int);
 extern "C" int FUN_003a54a0(struct O *arg0);
 extern "C" int NOPADDATA[4];
-extern "C" void Gap__Bec__beTimer__vfunc_27(beTimer *arg0);
+extern "C" void beTimer_Update(beTimer *arg0);
 
-void Gap__Bec__beTimer__vfunc_21(void)
+void beTimer_Activate(void)
 {
 }
 
-void Gap__Bec__beTimer__vfunc_22(void)
+void beTimer_Deactivate(void)
 {
 }
 
-void Gap__Bec__beTimer__vfunc_23(beTimer *arg0) {
+void beTimer_Start(beTimer *arg0) {
     arg0->_system = igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
     arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
     arg0->_luaManager = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
 }
 
-void Gap__Bec__beTimer__vfunc_24(void)
+void beTimer_Stop(void)
 {
 }
 
-int Gap__Bec__beTimer__vfunc_25(void) {
+int beTimer_AddInfo(void) {
     return 0;
 }
 
-void Gap__Bec__beTimer__vfunc_26(beTimer *arg0) {
+void beTimer_RemoveAllInfo(beTimer *arg0) {
     igObjectList *l = (igObjectList *)arg0->_dataList;
     int n = l->_count;
     int i;
@@ -86,7 +86,7 @@ int FUN_003a54a0(struct O *arg0) {
     return 0;
 }
 
-void Gap__Bec__beTimer__vfunc_27(beTimer *arg0) {
+void beTimer_Update(beTimer *arg0) {
     long long old, now, delta, nv;
     int n, i, off;
     beTimerData *it;
@@ -135,7 +135,7 @@ void Gap__Bec__beTimer__vfunc_27(beTimer *arg0) {
     }
 }
 
-int Gap__Bec__beTimer__vfunc_20(void)
+int beTimer_GetMeta(void)
 {
     return g_beTimer_metaObject[0];
 }

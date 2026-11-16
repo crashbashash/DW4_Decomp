@@ -1,10 +1,10 @@
 igMetaObject *g_beCopyTransform_metaObject;
 igMetaField *g_beCopyTransform_srcTransformMetaField;
 
-void *FUN_00367e50(void) {
+void *beCopyTransform_GetMetaObject(void) {
     igMetaObject *g = g_beCopyTransform_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00367f40();
+        beCopyTransform_EnsureRegistered();
     }
     return g_beCopyTransform_metaObject;
 }
@@ -14,12 +14,12 @@ int beCopyTransform_GetVTable(void) {
     return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_00367f40(void)
+void beCopyTransform_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCopyTransform_Register);
 }
 
-static igMetaObjectCallback g_beCopyTransform_callbackList[] = { FUN_001964d0, 0 };
+static igMetaObjectCallback g_beCopyTransform_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
 void *beCopyTransform_Register(void) {
     BecLibrary_MarkRegistered();
@@ -28,7 +28,7 @@ void *beCopyTransform_Register(void) {
         &g_beCopyTransform_metaObject,
         igTransform_Register,
         igTransform_GetPublishedMetaObject,
-        beCopyTransform_GetMetaObject,
+        beCopyTransform_GetMetaObjectFunction,
         "beCopyTransform",
         0x70, /* instance size */
         beCopyTransform_GetVTable,
@@ -38,9 +38,9 @@ void *beCopyTransform_Register(void) {
     );
 }
 
-void beCopyTransform_GetMetaObject(void)
+void beCopyTransform_GetMetaObjectFunction(void)
 {
-    FUN_00367e50();
+    beCopyTransform_GetMetaObject();
 }
 
 static FieldFactory g_beCopyTransform_ctorTable[] = {
@@ -65,7 +65,7 @@ void beCopyTransform_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beCopyTransform_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransform_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beCopyTransform_fieldTable, g_beCopyTransform_fieldHandles, g_beCopyTransform_fieldOffsets, temp_s2);
 }
 

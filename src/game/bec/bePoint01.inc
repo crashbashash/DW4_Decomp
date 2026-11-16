@@ -2,24 +2,24 @@ igMetaObject *g_bePoint01_metaObject;
 igMetaField *g_bePoint01_pointNoMetaField;
 
 void bePoint01_CreateInstance(int arg0) {
-    FUN_0034bba0();
+    bePoint01_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588498, arg0);
 }
 
-igMetaObject *FUN_0034ba20(void) {
+igMetaObject *bePoint01_GetOrCreateMetaObject(void) {
     if (g_bePoint01_metaObject == 0) {
         g_bePoint01_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_bePoint01_metaObject;
 }
 
-void *FUN_0034ba70(void) {
+void *bePoint01_GetMetaObject(void) {
     bool ok;
     if (g_bePoint01_metaObject == 0) goto make;
     ok = !!(g_bePoint01_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_0034bba0();
+    bePoint01_EnsureRegistered();
 done:;
     return g_bePoint01_metaObject;
 }
@@ -31,14 +31,14 @@ int bePoint01_GetVTable(void) {
     int *v1; int *a1; int v0; int *a0;
     char *pr; char *ps;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
     pr = &u.b[24];
     *(int *)pr = 0;
-    u.vt = (int)&DAT_0053b150[0];
+    u.vt = (int)&g_bePoint01_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (pr != 0) {
         a0 = *(int **)pr;
         if (a0 != 0) {
@@ -63,7 +63,7 @@ int bePoint01_GetVTable(void) {
     return r;
 }
 
-void FUN_0034bba0(void)
+void bePoint01_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(bePoint01_Register);
 }
@@ -75,7 +75,7 @@ void *bePoint01_Register(void) {
         &g_bePoint01_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        bePoint01_GetMetaObject,
+        bePoint01_GetMetaObjectFunction,
         "bePoint01",
         0x24, /* instance size */
         bePoint01_GetVTable,
@@ -85,9 +85,9 @@ void *bePoint01_Register(void) {
     );
 }
 
-void bePoint01_GetMetaObject(void)
+void bePoint01_GetMetaObjectFunction(void)
 {
-    FUN_0034ba70();
+    bePoint01_GetMetaObject();
 }
 
 static FieldFactory g_bePoint01_ctorTable[] = {

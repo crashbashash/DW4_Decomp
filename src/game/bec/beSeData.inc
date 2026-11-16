@@ -2,11 +2,11 @@ igMetaObject *g_beSeData_metaObject;
 igMetaField *g_beSeData_soundMetaField;
 igMetaField *g_beSeData_delayMetaField;
 
-igMetaObject *FUN_003462b0(void) {
+igMetaObject *beSeData_GetMetaObject(void) {
     igMetaObject *g = g_beSeData_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003463d0();
+        beSeData_EnsureRegistered();
     return g_beSeData_metaObject;
 }
 
@@ -16,17 +16,17 @@ int beSeData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._name = 0;
-    obj._vtable = (int)&DAT_00538e70[0];
+    obj._vtable = (int)&g_beSeData_vtable[0];
     obj._sound = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj._vtable = (int)&DAT_00538e70[0];
+    obj._vtable = (int)&g_beSeData_vtable[0];
     obj.relSound();
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj.relName();
     return r;
 }
 
-void FUN_003463d0(void)
+void beSeData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSeData_Register);
 }
@@ -38,7 +38,7 @@ void *beSeData_Register(void) {
         &g_beSeData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beSeData_GetMetaObject,
+        beSeData_GetMetaObjectFunction,
         "beSeData",
         0x14, /* instance size */
         beSeData_GetVTable,
@@ -48,9 +48,9 @@ void *beSeData_Register(void) {
     );
 }
 
-void beSeData_GetMetaObject(void)
+void beSeData_GetMetaObjectFunction(void)
 {
-    FUN_003462b0();
+    beSeData_GetMetaObject();
 }
 
 static FieldFactory g_beSeData_ctorTable[] = {

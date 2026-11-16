@@ -3,10 +3,10 @@ igMetaField *g_beAction2JOINTSET_startTimeMetaField;
 igMetaField *g_beAction2JOINTSET_endTimeMetaField;
 igMetaField *g_beAction2JOINTSET_loopModeMetaField;
 
-void *FUN_0036d3a0(void) {
+void *beAction2JOINTSET_GetMetaObject(void) {
     igMetaObject *g = g_beAction2JOINTSET_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036d4c0();
+        beAction2JOINTSET_EnsureRegistered();
     }
     return g_beAction2JOINTSET_metaObject;
 }
@@ -23,11 +23,11 @@ int beAction2JOINTSET_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_005340f0[0];
+    u.vt = (int)&g_beAction2JOINTSET_vtable[0];
     q0 = &u.b[20];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005340f0[0];
+    u.vt = (int)&g_beAction2JOINTSET_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {
@@ -54,7 +54,7 @@ int beAction2JOINTSET_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0036d4c0(void)
+void beAction2JOINTSET_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAction2JOINTSET_Register);
 }
@@ -66,7 +66,7 @@ void *beAction2JOINTSET_Register(void) {
         &g_beAction2JOINTSET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beAction2JOINTSET_GetMetaObject,
+        beAction2JOINTSET_GetMetaObjectFunction,
         "beAction2JOINTSET",
         0x18, /* instance size */
         beAction2JOINTSET_GetVTable,
@@ -76,9 +76,9 @@ void *beAction2JOINTSET_Register(void) {
     );
 }
 
-void beAction2JOINTSET_GetMetaObject(void)
+void beAction2JOINTSET_GetMetaObjectFunction(void)
 {
-    FUN_0036d3a0();
+    beAction2JOINTSET_GetMetaObject();
 }
 
 static FieldFactory g_beAction2JOINTSET_ctorTable[] = {

@@ -1,16 +1,16 @@
 igMetaObject *g_beSaveIntfComMdlDataList_metaObject;
 
-igMetaObject *FUN_003bc580(void) {
+igMetaObject *beSaveIntfComMdlDataList_GetOrCreateMetaObject(void) {
     if (g_beSaveIntfComMdlDataList_metaObject == 0) {
         g_beSaveIntfComMdlDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSaveIntfComMdlDataList_metaObject;
 }
 
-void *FUN_003bc5d0(void) {
+void *beSaveIntfComMdlDataList_GetMetaObject(void) {
     igMetaObject *g = g_beSaveIntfComMdlDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003bc660();
+        beSaveIntfComMdlDataList_EnsureRegistered();
     }
     return g_beSaveIntfComMdlDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beSaveIntfComMdlDataList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053d890[0];
+    obj.vt = &g_beSaveIntfComMdlDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003bc660(void)
+void beSaveIntfComMdlDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSaveIntfComMdlDataList_Register);
 }
 
-static igMetaObjectCallback g_beSaveIntfComMdlDataList_callbackList[] = { FUN_003bc820, 0 };
+static igMetaObjectCallback g_beSaveIntfComMdlDataList_callbackList[] = { beSaveIntfComMdlData_EnsureRegistered, 0 };
 
 void *beSaveIntfComMdlDataList_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beSaveIntfComMdlDataList_Register(void) {
         &g_beSaveIntfComMdlDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beSaveIntfComMdlDataList_GetMetaObject,
+        beSaveIntfComMdlDataList_GetMetaObjectFunction,
         "beSaveIntfComMdlDataList",
         0x14, /* instance size */
         beSaveIntfComMdlDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beSaveIntfComMdlDataList_Register(void) {
     );
 }
 
-void beSaveIntfComMdlDataList_GetMetaObject(void)
+void beSaveIntfComMdlDataList_GetMetaObjectFunction(void)
 {
-    FUN_003bc5d0();
+    beSaveIntfComMdlDataList_GetMetaObject();
 }
 

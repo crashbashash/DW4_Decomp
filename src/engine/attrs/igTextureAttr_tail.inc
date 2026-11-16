@@ -30,7 +30,7 @@ int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator
     if (allocator == 0) {
         allocator = (Allocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0]);
     }
-    igSmartPointer<Image> image((Image *)FUN_00140c00(attr, 0), kRetainReference);
+    igSmartPointer<Image> image((Image *)igTextureAttr_GetImage(attr, 0), kRetainReference);
     const char *name = "NO_IMAGE";
     if (image.p != 0) {
         if (image.p->name != 0) {
@@ -61,9 +61,9 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
     }
     var_s1 = "NO_IMAGE";
     var_a1 = "NO_IMAGE";
-    if (FUN_00140c00(arg0, 0) != 0) {
-        if (((T_140740 *)FUN_00140c00(arg0, 0))->f88 != 0) {
-            var_s1 = (FUN_001405a0((char *)((T_140740 *)FUN_00140c00(arg0, 0))->f88));
+    if (igTextureAttr_GetImage(arg0, 0) != 0) {
+        if (((T_140740 *)igTextureAttr_GetImage(arg0, 0))->f88 != 0) {
+            var_s1 = (FUN_001405a0((char *)((T_140740 *)igTextureAttr_GetImage(arg0, 0))->f88));
         }
         var_a1 = var_s1;
     }
@@ -88,7 +88,7 @@ void Gap__Attrs__igTextureAttr__vfunc_17(S0 *arg0) {
     FUN_0013b820(arg0);
 }
 
-void FUN_00140ad0(T_140ad0 *arg0, int *arg1, int arg2) {
+void igTextureAttr_SetImage(T_140ad0 *arg0, int *arg1, int arg2) {
     L_140ad0 *s1;
     int s0;
     int n;
@@ -131,7 +131,7 @@ void FUN_00140ad0(T_140ad0 *arg0, int *arg1, int arg2) {
     }
 }
 
-int FUN_00140c00(void *arg0, int arg1) {
+int igTextureAttr_GetImage(void *arg0, int arg1) {
     if (arg1 == 0) {
         return *(int *)((char *)(arg0) + 48);
     }

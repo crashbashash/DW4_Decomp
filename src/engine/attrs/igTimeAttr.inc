@@ -24,7 +24,7 @@ igMetaObject *igTimeAttr_GetMetaObject(void)
 int igTimeAttr_GetVTable(void) {
     union U_131000 u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00522750[0];
+    u.vt = (int)&g_igTimeAttr_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 

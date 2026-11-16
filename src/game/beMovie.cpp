@@ -95,11 +95,11 @@ extern "C" void beBaseInfoRam_SetTimerScale(beBaseInfoRam *self, int name, float
 extern "C" void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *self, float scale);
 extern "C" void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, char *name);
 extern "C" void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self);
-extern "C" void Gap__Bec__beMovie__vfunc_32(beMovie *self);
-extern "C" void Gap__Bec__beMovie__vfunc_29(beMovie *self, int receiver, char *, int, int);
-extern "C" int Gap__Bec__beMovie__vfunc_30(void);
-extern "C" void Gap__Bec__beMovie__vfunc_31(beMovie *self, beBaseInfoRam *ram);
-extern "C" int Gap__Bec__beMovie__vfunc_20(void);
+extern "C" void beMovie_Prepare(beMovie *self);
+extern "C" void beMovie_OnAddRam(beMovie *self, int receiver, char *, int, int);
+extern "C" int beMovie_GetInfoMeta(void);
+extern "C" void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram);
+extern "C" int beMovie_GetMeta(void);
 
 static inline bool isSndfVoice(beCriAudio *s) { return s->_sndf != 0 && s->_audioType == kAudioSndf; }
 static inline bool isAdxFileVoice(beCriAudio *s) { return s->_adxt != 0 && s->_audioType == kAudioAdxFile; }
@@ -679,7 +679,7 @@ void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
 }
 
 /* Takes a reference to the insight's movie manager. */
-void Gap__Bec__beMovie__vfunc_32(beMovie *self) {
+void beMovie_Prepare(beMovie *self) {
     igObject *manager = (igObject *)igInsightCore_FindManager(self->_insight, g_igMovieManager_metaObject[0]);
     if (manager != 0) {
         manager->_refCount = manager->_refCount + 1;
@@ -688,12 +688,12 @@ void Gap__Bec__beMovie__vfunc_32(beMovie *self) {
     self->_movie = (int)manager;
 }
 
-void Gap__Bec__beMovie__vfunc_29(beMovie *self, int receiver, char *, int, int)
+void beMovie_OnAddRam(beMovie *self, int receiver, char *, int, int)
 {
     beMessenger_RegisterReceiver(self->_messenger, receiver, MOVIE, 0, -1);
 }
 
-int Gap__Bec__beMovie__vfunc_30(void)
+int beMovie_GetInfoMeta(void)
 {
     return g_beMovieInfo_metaObject[0];
 }
@@ -721,7 +721,7 @@ struct StringHeader { int owner; int refCount; };
 
 /* While a movie plays: Start or Cross stops it, and once it has finished the Lua chunk its
  * beMovieInfoData names runs and the playing name is cleared. */
-void Gap__Bec__beMovie__vfunc_31(beMovie *self, beBaseInfoRam *ram) {
+void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram) {
     bePadData *pad;
     int pressed;
     MoviePlayer *player;
@@ -792,7 +792,7 @@ MovieObjectRef::~MovieObjectRef() {
     if (held) { held->_refCount -= 1; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); }
 }
 
-int Gap__Bec__beMovie__vfunc_20(void)
+int beMovie_GetMeta(void)
 {
     return g_beMovie_metaObject[0];
 }

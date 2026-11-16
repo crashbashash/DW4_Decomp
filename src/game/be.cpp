@@ -137,12 +137,12 @@ igLuaGlue::Class *beLuaWrapper_Create(void);
 igLuaGlue::Class *BecLuaWrapper_Create(void);
 void LuaAPI_RegisterClasses(void);
 int be_GetMetaObject_Virtual(void);
-void be_AddToScheduler(void);
-void be_RemoveFromScheduler(void);
+void be_Activate(void);
+void be_Deactivate(void);
 void be_Start(be *self);
 void be_Stop(void);
-int be_AcceptInfo(void);
-void be_Reset(void);
+int be_AddInfo(void);
+void be_RemoveAllInfo(void);
 void be_Update(void);
 int bePlayer_GetStruct(int slot);
 unsigned char SYSisJoinPlayer(int playerIndex);
@@ -819,11 +819,11 @@ void Gap::Bec::beLuaWrapper::registerFunctions() {
                            LUA_API_FUNCTION_COUNT, g_luaApiFunctionCodes, 0);
 }
 
-void be_AddToScheduler(void)
+void be_Activate(void)
 {
 }
 
-void be_RemoveFromScheduler(void)
+void be_Deactivate(void)
 {
 }
 
@@ -844,12 +844,12 @@ void be_Stop(void)
 }
 
 /* Keeps no info the insight core offers. */
-int be_AcceptInfo(void) {
+int be_AddInfo(void) {
     return 0;
 }
 
 /* Empties the be's string list. */
-void be_Reset(void) {
+void be_RemoveAllInfo(void) {
     clearStringList((igStringRefList *)g_be->_stringRefList);
     {
         igStringRefList *list = (igStringRefList *)g_be->_stringRefList;

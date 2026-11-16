@@ -2,19 +2,19 @@ igMetaObject *g_beChangePosTransform_metaObject;
 igMetaField *g_beChangePosTransform_oldPosMetaField;
 
 void beChangePosTransform_CreateInstance(int arg0) {
-    FUN_003688d0();
+    beChangePosTransform_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589B80, arg0);
 }
 
-igMetaObject *FUN_00368750(void) {
+igMetaObject *beChangePosTransform_GetOrCreateMetaObject(void) {
     if (g_beChangePosTransform_metaObject == 0) {
         g_beChangePosTransform_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beChangePosTransform_metaObject;
 }
 
-igMetaObject *FUN_003687a0(void) {
-    if (g_beChangePosTransform_metaObject == 0 || !isValid(g_beChangePosTransform_metaObject)) FUN_003688d0();
+igMetaObject *beChangePosTransform_GetMetaObject(void) {
+    if (g_beChangePosTransform_metaObject == 0 || !isValid(g_beChangePosTransform_metaObject)) beChangePosTransform_EnsureRegistered();
     return g_beChangePosTransform_metaObject;
 }
 
@@ -30,12 +30,12 @@ int beChangePosTransform_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_0053a340[0];
+    u.vt = (int)&g_beChangePosTransform_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -60,7 +60,7 @@ int beChangePosTransform_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003688d0(void)
+void beChangePosTransform_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beChangePosTransform_Register);
 }
@@ -72,7 +72,7 @@ void *beChangePosTransform_Register(void) {
         &g_beChangePosTransform_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beChangePosTransform_GetMetaObject,
+        beChangePosTransform_GetMetaObjectFunction,
         "beChangePosTransform",
         0x2c, /* instance size */
         beChangePosTransform_GetVTable,
@@ -82,9 +82,9 @@ void *beChangePosTransform_Register(void) {
     );
 }
 
-void beChangePosTransform_GetMetaObject(void)
+void beChangePosTransform_GetMetaObjectFunction(void)
 {
-    FUN_003687a0();
+    beChangePosTransform_GetMetaObject();
 }
 
 static FieldFactory g_beChangePosTransform_ctorTable[] = {

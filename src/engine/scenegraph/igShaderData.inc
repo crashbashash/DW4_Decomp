@@ -10,13 +10,13 @@ int igShaderData_GetVTable(void) {
     struct Obj_1996b0 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00528870[0];
+    obj.vt = &g_igShaderData_vtable[0];
     obj.w2 = 0;
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00528870[0];
+    obj.vt = &g_igShaderData_vtable[0];
     FUN_00194830((struct Ref * *)&obj.w5, -1);
     FUN_001948b0((void * *)&obj.w4, -1);
     FUN_0013a800(&obj.w3, -1);
@@ -29,7 +29,7 @@ void FUN_00199760(void)
     igMetaObject_RunStaticInit(igShaderData_Register);
 }
 
-static igMetaObjectCallback g_igShaderData_callbackList[] = { FUN_0013acb0, FUN_001e5810, FUN_0019cb10, 0 };
+static igMetaObjectCallback g_igShaderData_callbackList[] = { igAttrListList_EnsureRegistered, FUN_001e5810, FUN_0019cb10, 0 };
 
 void igShaderData_Register(void) {
     SceneGraphLibrary_MarkRegistered();

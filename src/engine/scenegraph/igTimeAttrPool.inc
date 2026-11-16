@@ -18,7 +18,7 @@ igMetaObject *igTimeAttrPool_GetMetaObject(void)
 int igTimeAttrPool_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_0052aef0[0];
+    obj[0] = (int)&g_igTimeAttrPool_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 

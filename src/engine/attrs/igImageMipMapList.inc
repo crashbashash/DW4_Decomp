@@ -11,7 +11,7 @@ igMetaObject *igImageMipMapList_GetMetaObject(void)
 {
     igMetaObject *g = g_igImageMipMapList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001330d0();
+        igImageMipMapList_EnsureRegistered();
     return g_igImageMipMapList_metaObject;
 }
 
@@ -19,16 +19,16 @@ int igImageMipMapList_GetVTable(void) {
     Obj_133090 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_005248e0[0];
+    o.vt = &g_igImageMipMapList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001330d0(void)
+void igImageMipMapList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igImageMipMapList_Register);
 }
 
-static igMetaObjectCallback g_igImageMipMapList_callbackList[] = { FUN_0014e050, 0 };
+static igMetaObjectCallback g_igImageMipMapList_callbackList[] = { igImage_EnsureRegistered, 0 };
 
 void igImageMipMapList_Register(void) {
     AttrsLibrary_MarkRegistered();

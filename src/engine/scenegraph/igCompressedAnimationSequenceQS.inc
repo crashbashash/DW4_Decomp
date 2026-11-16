@@ -19,7 +19,7 @@ igMetaObject *igCompressedAnimationSequenceQS_GetMetaObject(void)
         ready = (g_igCompressedAnimationSequenceQS_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_001a2940();
+    igCompressedAnimationSequenceQS_EnsureRegistered();
 done:
     return g_igCompressedAnimationSequenceQS_metaObject;
 }
@@ -32,7 +32,7 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00529260[0];
+    u.vt = (int)&g_igCompressedAnimationSequenceQS_vtable[0];
     q2 = (S_ref *)&u.b[8];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[12];
@@ -40,7 +40,7 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00529260[0];
+    u.vt = (int)&g_igCompressedAnimationSequenceQS_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -71,7 +71,7 @@ int igCompressedAnimationSequenceQS_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_001a2940(void)
+void igCompressedAnimationSequenceQS_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCompressedAnimationSequenceQS_Register);
 }

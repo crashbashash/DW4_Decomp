@@ -1,24 +1,24 @@
 igMetaObject *g_beDataObjListList_metaObject;
 
 void beDataObjListList_Create(int arg0) {
-    FUN_00363fa0();
+    beDataObjListList_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589838, arg0);
 }
 
-igMetaObject *FUN_00363ec0(void) {
+igMetaObject *beDataObjListList_GetOrCreateMetaObject(void) {
     if (g_beDataObjListList_metaObject == 0) {
         g_beDataObjListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDataObjListList_metaObject;
 }
 
-igMetaObject *FUN_00363f10(void) {
+igMetaObject *beDataObjListList_GetMetaObject(void) {
     igMetaObject *g = g_beDataObjListList_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_00363fa0();
+    beDataObjListList_EnsureRegistered();
 done:
     return g_beDataObjListList_metaObject;
 }
@@ -27,16 +27,16 @@ int beDataObjListList_GetVTable(void) {
     Obj_363f60 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_005355a0[0];
+    o.vt = &g_beDataObjListList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00363fa0(void)
+void beDataObjListList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataObjListList_Register);
 }
 
-static igMetaObjectCallback g_beDataObjListList_callbackList[] = { FUN_00364170, 0 };
+static igMetaObjectCallback g_beDataObjListList_callbackList[] = { beDataObjList_EnsureRegistered, 0 };
 
 void *beDataObjListList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -45,7 +45,7 @@ void *beDataObjListList_Register(void) {
         &g_beDataObjListList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beDataObjListList_GetMetaObject,
+        beDataObjListList_GetMetaObjectFunction,
         "beDataObjListList",
         0x14, /* instance size */
         beDataObjListList_GetVTable,
@@ -55,8 +55,8 @@ void *beDataObjListList_Register(void) {
     );
 }
 
-void beDataObjListList_GetMetaObject(void)
+void beDataObjListList_GetMetaObjectFunction(void)
 {
-    FUN_00363f10();
+    beDataObjListList_GetMetaObject();
 }
 

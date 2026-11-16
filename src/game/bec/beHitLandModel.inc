@@ -6,21 +6,21 @@ igMetaField *g_beHitLandModel_isHitWallMetaField;
 igMetaField *g_beHitLandModel_mat90MetaField;
 
 void beHitLandModel_CreateInstance(int arg0) {
-    FUN_0035da30();
+    beHitLandModel_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589350, arg0);
 }
 
-igMetaObject *FUN_0035d7c0(void) {
+igMetaObject *beHitLandModel_GetOrCreateMetaObject(void) {
     if (g_beHitLandModel_metaObject == 0) {
         g_beHitLandModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beHitLandModel_metaObject;
 }
 
-void *FUN_0035d810(void) {
+void *beHitLandModel_GetMetaObject(void) {
     igMetaObject *g = g_beHitLandModel_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035da30();
+        beHitLandModel_EnsureRegistered();
     }
     return g_beHitLandModel_metaObject;
 }
@@ -66,12 +66,12 @@ void **FUN_0035d9b0(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0035da30(void)
+void beHitLandModel_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beHitLandModel_Register);
 }
 
-static igMetaObjectCallback g_beHitLandModel_callbackList[] = { FUN_0035e090, FUN_0035dd30, FUN_0019e890, 0 };
+static igMetaObjectCallback g_beHitLandModel_callbackList[] = { beHitLandModelOrder_EnsureRegistered, beHitLandModelTraversal_EnsureRegistered, igProbe_EnsureRegistered, 0 };
 
 void *beHitLandModel_Register(void) {
     BecLibrary_MarkRegistered();
@@ -80,7 +80,7 @@ void *beHitLandModel_Register(void) {
         &g_beHitLandModel_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beHitLandModel_GetMetaObject,
+        beHitLandModel_GetMetaObjectFunction,
         "beHitLandModel",
         0x70, /* instance size */
         beHitLandModel_GetVTable,
@@ -90,9 +90,9 @@ void *beHitLandModel_Register(void) {
     );
 }
 
-void beHitLandModel_GetMetaObject(void)
+void beHitLandModel_GetMetaObjectFunction(void)
 {
-    FUN_0035d810();
+    beHitLandModel_GetMetaObject();
 }
 
 static FieldFactory g_beHitLandModel_ctorTable[] = {
@@ -135,11 +135,11 @@ void beHitLandModel_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beHitLandModel_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035ded0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beHitLandModelOrder_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0035dc10();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beHitLandModelTraversal_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0019e6c0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igProbe_GetOrCreateMetaObject();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
     igMetaObject_NameFields(temp_s0, g_beHitLandModel_fieldTable, g_beHitLandModel_fieldHandles, g_beHitLandModel_fieldOffsets, temp_s2);
 }

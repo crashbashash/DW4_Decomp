@@ -37,13 +37,13 @@ int igPsx2Window_GetVTable(void) {
     int temp_v0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00524be0[0];
+    u.vt = (int)&g_igPsx2Window_vtable[0];
     q1 = (S_ref *)&u.b[24];
     *(int *)q1 = 0;
     q0 = &u.b[32];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00524be0[0];
+    u.vt = (int)&g_igPsx2Window_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {
@@ -72,7 +72,7 @@ void FUN_00146b80(void)
     igMetaObject_RunStaticInit(igPsx2Window_Register);
 }
 
-static igMetaObjectCallback g_igPsx2Window_callbackList[] = { FUN_0014a0e0, 0 };
+static igMetaObjectCallback g_igPsx2Window_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 void igPsx2Window_Register(void) {
     WindowInputLibrary_MarkRegistered();
@@ -163,7 +163,7 @@ void igPsx2Window_InitFields(void) {
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0x280);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0x1C0);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    *(int *)((char *)(temp_s1) + 56) = FUN_0014a040();
+    *(int *)((char *)(temp_s1) + 56) = igVisualContext_GetOrCreateMetaObject();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 1);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 0);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7), -1);

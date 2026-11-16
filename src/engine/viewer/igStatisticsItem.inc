@@ -34,14 +34,14 @@ int igStatisticsItem_GetVTable(void) {
     struct Obj_458cf0 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00542620[0];
+    obj.vt = &g_igStatisticsItem_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    obj.vt = &DAT_00542620[0];
+    obj.vt = &g_igStatisticsItem_vtable[0];
     FUN_00458e40((ObjectRefWord *)&obj.w11, -1);
     FUN_00458dc0((void **)&obj.w10, -1);
     FUN_003cafa0(&obj.w9, -1);
@@ -181,7 +181,7 @@ void igStatisticsItem_InitFields(void) {
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0), 0.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1), -1.0f);
     temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    temp_s2->_metaObject = FUN_0044ff40();
+    temp_s2->_metaObject = igGuiComponent_GetOrCreateMetaObject();
     temp_s2_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     temp_s2_2->_metaObject = FUN_004516e0();
     temp_s2_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));

@@ -1,7 +1,7 @@
 igMetaObject *g_igTransformFunctionList_metaObject;
 
 OpTable *FUN_00188d40(int arg0) {
-    FUN_00188e10();
+    igTransformFunctionList_EnsureRegistered();
     return (OpTable *)igMetaObject_CreateInstance((int)g_igTransformFunctionList_metaObject, arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igTransformFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransformFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00188e10();
+        igTransformFunctionList_EnsureRegistered();
     return g_igTransformFunctionList_metaObject;
 }
 
@@ -17,11 +17,11 @@ int igTransformFunctionList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527d30[0];
+    obj.vt = &g_igTransformFunctionList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00188e10(void)
+void igTransformFunctionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransformFunctionList_Register);
 }

@@ -2,7 +2,7 @@ igMetaObject *g_igDepthStateAttr_metaObject;
 igMetaField *g_igDepthStateAttr_enabledMetaField;
 
 void FUN_001384a0(int arg0) {
-    FUN_00138570();
+    igDepthStateAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F228, arg0);
 }
 
@@ -10,18 +10,18 @@ igMetaObject *igDepthStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igDepthStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00138570();
+        igDepthStateAttr_EnsureRegistered();
     return g_igDepthStateAttr_metaObject;
 }
 
 int igDepthStateAttr_GetVTable(void) {
     struct Obj obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523cb0[0];
+    obj.vt = &g_igDepthStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00138570(void)
+void igDepthStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDepthStateAttr_Register);
 }

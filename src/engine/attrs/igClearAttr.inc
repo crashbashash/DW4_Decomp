@@ -8,7 +8,7 @@ igMetaField *g_igClearAttr_colorPackedMetaField;
 igMetaField *g_igClearAttr_depthFMetaField;
 
 void FUN_00139370(int arg0) {
-    FUN_00139440();
+    igClearAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55F308, arg0);
 }
 
@@ -16,18 +16,18 @@ igMetaObject *igClearAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igClearAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00139440();
+        igClearAttr_EnsureRegistered();
     return g_igClearAttr_metaObject;
 }
 
 int igClearAttr_GetVTable(void) {
     struct Obj_139400 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00524000[0];
+    obj.vt = &g_igClearAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00139440(void)
+void igClearAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igClearAttr_Register);
 }

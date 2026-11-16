@@ -15,14 +15,14 @@ igMetaField *g_beNDMWLoadSavePlWork_sysStat3MetaField;
 igMetaField *g_beNDMWLoadSavePlWork_sysCount0MetaField;
 
 void beNDMWLoadSavePlWork_Create(int arg0) {
-    FUN_003c5780();
+    beNDMWLoadSavePlWork_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLoadSavePlWork_metaObject, arg0);
 }
 
 void *beNDMWLoadSavePlWork_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWLoadSavePlWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c5780();
+        beNDMWLoadSavePlWork_EnsureRegistered();
     }
     return g_beNDMWLoadSavePlWork_metaObject;
 }
@@ -31,16 +31,16 @@ int beNDMWLoadSavePlWork_GetVTable(void) {
     struct O_3c5740 o;
 
     igObject_InitHeader(&o.vt);
-    o.vt = DAT_0053ccd0;
+    o.vt = g_beNDMWLoadSavePlWork_vtable;
     return *(int *)((char *)&o.vt + *(int *)(((char * *)g_objectSystem)[0] + 916));
 }
 
-void FUN_003c5780(void)
+void beNDMWLoadSavePlWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadSavePlWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadSavePlWork_callbackList[] = { FUN_003c6520, 0 };
+static igMetaObjectCallback g_beNDMWLoadSavePlWork_callbackList[] = { beNDMWLoadSlotPlayer_EnsureRegistered, 0 };
 
 void *beNDMWLoadSavePlWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -140,7 +140,7 @@ void beNDMWLoadSavePlWork_InitFields(void) {
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c63a0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWLoadSlotPlayer_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields(temp_s0, g_beNDMWLoadSavePlWork_fieldTable, g_beNDMWLoadSavePlWork_fieldHandles, g_beNDMWLoadSavePlWork_fieldOffsets, temp_s2);
 }

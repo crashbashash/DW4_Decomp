@@ -2,14 +2,14 @@ igMetaObject *g_beDataObjBool_metaObject;
 igMetaField *g_beDataObjBool_dataMetaField;
 
 void beDataObjBool_Create(int arg0) {
-    FUN_00365120();
+    beDataObjBool_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589898, arg0);
 }
 
-void *FUN_00365040(void) {
+void *beDataObjBool_GetMetaObject(void) {
     igMetaObject *g = g_beDataObjBool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00365120();
+        beDataObjBool_EnsureRegistered();
     }
     return g_beDataObjBool_metaObject;
 }
@@ -24,7 +24,7 @@ int beDataObjBool_GetVTable(void) {
     igObject_InitHeader(&o);
     o.vt = g_igNamedObject_vtable;
     o.str = 0;
-    o.vt = DAT_005352f0;
+    o.vt = g_beDataObjBool_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = g_igNamedObject_vtable;
     if (&o.str != 0) {
@@ -39,7 +39,7 @@ int beDataObjBool_GetVTable(void) {
     return r;
 }
 
-void FUN_00365120(void)
+void beDataObjBool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataObjBool_Register);
 }
@@ -51,7 +51,7 @@ void *beDataObjBool_Register(void) {
         &g_beDataObjBool_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beDataObjBool_GetMetaObject,
+        beDataObjBool_GetMetaObjectFunction,
         "beDataObjBool",
         0x10, /* instance size */
         beDataObjBool_GetVTable,
@@ -61,9 +61,9 @@ void *beDataObjBool_Register(void) {
     );
 }
 
-void beDataObjBool_GetMetaObject(void)
+void beDataObjBool_GetMetaObjectFunction(void)
 {
-    FUN_00365040();
+    beDataObjBool_GetMetaObject();
 }
 
 static FieldFactory g_beDataObjBool_ctorTable[] = {

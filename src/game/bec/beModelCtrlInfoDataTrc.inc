@@ -2,17 +2,17 @@ igMetaObject *g_beModelCtrlInfoDataTrc_metaObject;
 int g_beModelCtrlInfoDataTrc_nameStorage;
 igMetaField *g_beModelCtrlInfoDataTrc_recorderNodeMetaField;
 
-igMetaObject *FUN_00353240(void) {
+igMetaObject *beModelCtrlInfoDataTrc_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlInfoDataTrc_metaObject == 0) {
         g_beModelCtrlInfoDataTrc_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beModelCtrlInfoDataTrc_metaObject;
 }
 
-void *FUN_00353290(void) {
+void *beModelCtrlInfoDataTrc_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlInfoDataTrc_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003533c0();
+        beModelCtrlInfoDataTrc_EnsureRegistered();
     }
     return g_beModelCtrlInfoDataTrc_metaObject;
 }
@@ -30,11 +30,11 @@ int beModelCtrlInfoDataTrc_GetVTable(void) {
     igObject_InitHeader(u.b);
     q0 = (void **)&u.b[8];
     *q0 = 0;
-    u.vt = (int)(&DAT_00537b50[0]);
+    u.vt = (int)(&g_beModelCtrlInfoDataTrc_vtable[0]);
     q1 = (S_ref *)&u.b[16];
     *(int *)q1 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)(&DAT_00537b50[0]);
+    u.vt = (int)(&g_beModelCtrlInfoDataTrc_vtable[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
         if (q1 != 0) {
@@ -59,12 +59,12 @@ int beModelCtrlInfoDataTrc_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_003533c0(void)
+void beModelCtrlInfoDataTrc_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoDataTrc_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoDataTrc_callbackList[] = { FUN_00195c00, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoDataTrc_callbackList[] = { igTransformRecorder_EnsureRegistered, 0 };
 
 void *beModelCtrlInfoDataTrc_Register(void) {
     BecLibrary_MarkRegistered();
@@ -73,7 +73,7 @@ void *beModelCtrlInfoDataTrc_Register(void) {
         &g_beModelCtrlInfoDataTrc_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beModelCtrlInfoDataTrc_GetMetaObject,
+        beModelCtrlInfoDataTrc_GetMetaObjectFunction,
         "beModelCtrlInfoDataTrc",
         0x14, /* instance size */
         beModelCtrlInfoDataTrc_GetVTable,
@@ -83,9 +83,9 @@ void *beModelCtrlInfoDataTrc_Register(void) {
     );
 }
 
-void beModelCtrlInfoDataTrc_GetMetaObject(void)
+void beModelCtrlInfoDataTrc_GetMetaObjectFunction(void)
 {
-    FUN_00353290();
+    beModelCtrlInfoDataTrc_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoDataTrc_ctorTable[] = {
@@ -123,7 +123,7 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = FUN_001957c0();
+    *(int *)((char *)(temp_s0) + 56) = igTransformRecorder_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoDataTrc_fieldTable, g_beModelCtrlInfoDataTrc_fieldHandles, g_beModelCtrlInfoDataTrc_fieldOffsets, temp_s2);
 }
 

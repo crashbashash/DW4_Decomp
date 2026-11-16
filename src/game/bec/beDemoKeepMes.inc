@@ -8,15 +8,15 @@ igMetaField *g_beDemoKeepMes_messageMetaField;
 igMetaField *g_beDemoKeepMes_mesParamMetaField;
 
 void beDemoKeepMes_CreateInstance(int arg0) {
-    FUN_00363d60();
+    beDemoKeepMes_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5897F8, arg0);
 }
 
-igMetaObject *FUN_00363c60(void) {
+igMetaObject *beDemoKeepMes_GetMetaObject(void) {
     igMetaObject *g = g_beDemoKeepMes_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_00363d60();
+        beDemoKeepMes_EnsureRegistered();
     return g_beDemoKeepMes_metaObject;
 }
 
@@ -28,13 +28,13 @@ int beDemoKeepMes_GetVTable(void) {
     int v0;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00535610[0];
+    u.vt = (int)&g_beDemoKeepMes_vtable[0];
     *(int *)&u.b[24] = 0;
     *(int *)&u.b[28] = 0;
     *(int *)&u.b[36] = 0;
     *(int *)&u.b[40] = 0;
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00535610[0];
+    u.vt = (int)&g_beDemoKeepMes_vtable[0];
     igStringRef_Destruct(&u.b[40], -1);
     igStringRef_Destruct(&u.b[36], -1);
     igStringRef_Destruct(&u.b[28], -1);
@@ -42,7 +42,7 @@ int beDemoKeepMes_GetVTable(void) {
     return r;
 }
 
-void FUN_00363d60(void)
+void beDemoKeepMes_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDemoKeepMes_Register);
 }
@@ -54,7 +54,7 @@ void *beDemoKeepMes_Register(void) {
         &g_beDemoKeepMes_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beDemoKeepMes_GetMetaObject,
+        beDemoKeepMes_GetMetaObjectFunction,
         "beDemoKeepMes",
         0x30, /* instance size */
         beDemoKeepMes_GetVTable,
@@ -64,9 +64,9 @@ void *beDemoKeepMes_Register(void) {
     );
 }
 
-void beDemoKeepMes_GetMetaObject(void)
+void beDemoKeepMes_GetMetaObjectFunction(void)
 {
-    FUN_00363c60();
+    beDemoKeepMes_GetMetaObject();
 }
 
 static FieldFactory g_beDemoKeepMes_ctorTable[] = {

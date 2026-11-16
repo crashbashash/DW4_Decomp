@@ -3,13 +3,13 @@ igMetaField *g_beShadow01Info_receiverNodeMetaField;
 igMetaField *g_beShadow01Info_casterNodeMetaField;
 igMetaField *g_beShadow01Info_projShadowShaderMetaField;
 
-void *FUN_00344b40(void) {
+void *beShadow01Info_GetMetaObject(void) {
     bool ok;
     if (g_beShadow01Info_metaObject == 0) goto make;
     ok = !!(g_beShadow01Info_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_00344cc0();
+    beShadow01Info_EnsureRegistered();
 done:;
     return g_beShadow01Info_metaObject;
 }
@@ -26,12 +26,12 @@ int beShadow01Info_GetVTable(void) {
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[24] = 0;
-    u.vt = (int)&DAT_00539140[0];
+    u.vt = (int)&g_beShadow01Info_vtable[0];
     *(int *)&u.b[28] = 0;
     *(int *)&u.b[32] = 0;
     *(int *)&u.b[36] = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00539140[0];
+    u.vt = (int)&g_beShadow01Info_vtable[0];
     FUN_00344c40((ObjectRefWord *)(&u.b[36]), -1);
     FUN_00198210(&u.b[32], -1);
     FUN_00198210(&u.b[28], -1);
@@ -52,12 +52,12 @@ ObjectRefWord *FUN_00344c40(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_00344cc0(void)
+void beShadow01Info_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beShadow01Info_Register);
 }
 
-static igMetaObjectCallback g_beShadow01Info_callbackList[] = { FUN_0019cf10, FUN_0019b800, 0 };
+static igMetaObjectCallback g_beShadow01Info_callbackList[] = { igNode_EnsureRegistered, igProjectiveShadowShader_EnsureRegistered, 0 };
 
 void *beShadow01Info_Register(void) {
     BecLibrary_MarkRegistered();
@@ -66,7 +66,7 @@ void *beShadow01Info_Register(void) {
         &g_beShadow01Info_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beShadow01Info_GetMetaObject,
+        beShadow01Info_GetMetaObjectFunction,
         "beShadow01Info",
         0x28, /* instance size */
         beShadow01Info_GetVTable,
@@ -76,9 +76,9 @@ void *beShadow01Info_Register(void) {
     );
 }
 
-void beShadow01Info_GetMetaObject(void)
+void beShadow01Info_GetMetaObjectFunction(void)
 {
-    FUN_00344b40();
+    beShadow01Info_GetMetaObject();
 }
 
 static FieldFactory g_beShadow01Info_ctorTable[] = {
@@ -113,11 +113,11 @@ void beShadow01Info_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beShadow01Info_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNode_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0019cd50();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igNode_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0019b440();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igProjectiveShadowShader_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beShadow01Info_fieldTable, g_beShadow01Info_fieldHandles, g_beShadow01Info_fieldOffsets, temp_s2);
 }
 

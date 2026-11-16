@@ -5,11 +5,11 @@ igMetaField *g_beNDMWAfsSetup_subMenuMetaField;
 igMetaField *g_beNDMWAfsSetup_subMenuHolderMetaField;
 
 void beNDMWAfsSetup_CreateInstance(int arg0) {
-    FUN_003cb020();
+    beNDMWAfsSetup_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWAfsSetup_metaObject, arg0);
 }
 
-igMetaObject *FUN_003cae40(void) {
+igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void) {
     if (g_beNDMWAfsSetup_metaObject == 0) {
         g_beNDMWAfsSetup_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -19,7 +19,7 @@ igMetaObject *FUN_003cae40(void) {
 void *beNDMWAfsSetup_ResolveMetaObject(void) {
     igMetaObject *g = g_beNDMWAfsSetup_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003cb020();
+        beNDMWAfsSetup_EnsureRegistered();
     }
     return g_beNDMWAfsSetup_metaObject;
 }
@@ -29,16 +29,16 @@ int beNDMWAfsSetup_GetVTable(void) {
     int t;
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_0053dfa0[0];
+    obj.vt = &g_beNDMWAfsSetup_vtable[0];
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0053dfa0[0];
+    obj.vt = &g_beNDMWAfsSetup_vtable[0];
     FUN_003cafa0((igObject **)&obj.w7, (short)(-1));
-    FUN_0025a2b0(&obj.w6, -1);
-    FUN_0025a2b0(&obj.w5, -1);
+    GameMain_igSmartPointer_igObject_Destruct(&obj.w6, -1);
+    GameMain_igSmartPointer_igObject_Destruct(&obj.w5, -1);
     igSmartPointer_igInfoList_Destruct(&obj.w4, -1);
     FUN_00231030(&obj, 0);
     return t;
@@ -62,7 +62,7 @@ igObject **FUN_003cafa0(igObject **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_003cb020(void)
+void beNDMWAfsSetup_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWAfsSetup_Register);
 }
@@ -131,11 +131,11 @@ void beNDMWAfsSetup_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00452340();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_00452340();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_0044ff40();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igGuiComponent_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beNDMWAfsSetup_fieldTable, g_beNDMWAfsSetup_fieldHandles, g_beNDMWAfsSetup_fieldOffsets, temp_s2);
 }
 

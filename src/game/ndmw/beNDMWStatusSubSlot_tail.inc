@@ -1,6 +1,6 @@
 igMetaObject *g_beNDMWStatusSubSlot_metaObject;
 
-void FUN_003ba6a0(void)
+void beNDMWStatusSubSlot_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWStatusSubSlot_Register);
 }
@@ -12,7 +12,7 @@ void *beNDMWStatusSubSlot_Register(void) {
         &g_beNDMWStatusSubSlot_metaObject,
         beNDMWStatusCtrlBaseEquip_Register,
         beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject,
-        beNDMWStatusSubSlot_GetMetaObject,
+        beNDMWStatusSubSlot_GetMetaObjectFunction,
         "beNDMWStatusSubSlot",
         0x7c, /* instance size */
         beNDMWStatusSubSlot_GetVTable,
@@ -22,12 +22,12 @@ void *beNDMWStatusSubSlot_Register(void) {
     );
 }
 
-void beNDMWStatusSubSlot_GetMetaObject(void)
+void beNDMWStatusSubSlot_GetMetaObjectFunction(void)
 {
-    FUN_003ba2a0();
+    beNDMWStatusSubSlot_GetMetaObject();
 }
 
-igMetaObject *FUN_003ba750(void) {
+igMetaObject *beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject(void) {
     return g_beNDMWStatusCtrlBaseEquip_metaObject;
 }
 

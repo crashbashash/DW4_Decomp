@@ -5,7 +5,7 @@ igMetaField *g_beMessengerGroup_ramListMetaField;
 
 void *beMessengerGroup_Create(void *allocator){beMessengerGroup_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerGroup_metaObject,allocator));}
 
-void *FUN_00358520(void) {
+void *beMessengerGroup_GetMetaObject(void) {
     igMetaObject *g = g_beMessengerGroup_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beMessengerGroup_EnsureRegistered();
@@ -19,12 +19,12 @@ int beMessengerGroup_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.w2 = 0;
-    obj.vt = &DAT_00536e40[0];
+    obj.vt = &g_beMessengerGroup_vtable[0];
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00536e40[0];
+    obj.vt = &g_beMessengerGroup_vtable[0];
     FUN_0033ec00((igObject **)&obj.w5, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj.w4, -1);
     igSmartPointer_igStringRefList_Destruct(&obj.w3, -1);
@@ -43,7 +43,7 @@ void *beMessengerGroup_Register(void) {
         &g_beMessengerGroup_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beMessengerGroup_GetMetaObject,
+        beMessengerGroup_GetMetaObjectFunction,
         "beMessengerGroup",
         0x18, /* instance size */
         beMessengerGroup_GetVTable,
@@ -53,9 +53,9 @@ void *beMessengerGroup_Register(void) {
     );
 }
 
-void beMessengerGroup_GetMetaObject(void)
+void beMessengerGroup_GetMetaObjectFunction(void)
 {
-    FUN_00358520();
+    beMessengerGroup_GetMetaObject();
 }
 
 static FieldFactory g_beMessengerGroup_ctorTable[] = {

@@ -11,7 +11,7 @@ igMetaObject *FUN_00187010(void)
         if (ready != false)
             goto end;
     }
-    FUN_001870f0();
+    igVec4ucMetaField_EnsureRegistered();
 end:
     return g_igVec4ucMetaField_metaObject;
 }
@@ -25,7 +25,7 @@ int igVec4ucMetaField_GetVTable(void) {
     int temp_v0;
 
     igMetaField_Init(u.b);
-    u.vt = (int)&DAT_005271e0[0];
+    u.vt = (int)&g_igVec4ucMetaField_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
@@ -43,7 +43,7 @@ int igVec4ucMetaField_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_001870f0(void)
+void igVec4ucMetaField_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVec4ucMetaField_Register);
 }
@@ -99,7 +99,7 @@ void FUN_00187190(void) {
 
 int FUN_00187260(void) {
     if (g_igVec4ucMetaField_descriptor == 0) {
-        FUN_001870f0();
+        igVec4ucMetaField_EnsureRegistered();
     }
     return (int)g_igVec4ucMetaField_descriptor;
 }

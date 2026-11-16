@@ -1,16 +1,16 @@
 igMetaObject *g_beActionStarterDataList_metaObject;
 
-igMetaObject *FUN_0036bc60(void) {
+igMetaObject *beActionStarterDataList_GetOrCreateMetaObject(void) {
     if (g_beActionStarterDataList_metaObject == 0) {
         g_beActionStarterDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beActionStarterDataList_metaObject;
 }
 
-void *FUN_0036bcb0(void) {
+void *beActionStarterDataList_GetMetaObject(void) {
     igMetaObject *g = g_beActionStarterDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036bd40();
+        beActionStarterDataList_EnsureRegistered();
     }
     return g_beActionStarterDataList_metaObject;
 }
@@ -19,16 +19,16 @@ int beActionStarterDataList_GetVTable(void) {
     struct Obj_36bd00 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00534410[0];
+    obj.vt = &g_beActionStarterDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0036bd40(void)
+void beActionStarterDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beActionStarterDataList_Register);
 }
 
-static igMetaObjectCallback g_beActionStarterDataList_callbackList[] = { FUN_0036bf10, 0 };
+static igMetaObjectCallback g_beActionStarterDataList_callbackList[] = { beActionStarterData_EnsureRegistered, 0 };
 
 void *beActionStarterDataList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beActionStarterDataList_Register(void) {
         &g_beActionStarterDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beActionStarterDataList_GetMetaObject,
+        beActionStarterDataList_GetMetaObjectFunction,
         "beActionStarterDataList",
         0x14, /* instance size */
         beActionStarterDataList_GetVTable,
@@ -47,8 +47,8 @@ void *beActionStarterDataList_Register(void) {
     );
 }
 
-void beActionStarterDataList_GetMetaObject(void)
+void beActionStarterDataList_GetMetaObjectFunction(void)
 {
-    FUN_0036bcb0();
+    beActionStarterDataList_GetMetaObject();
 }
 

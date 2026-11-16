@@ -14,18 +14,18 @@ it is missing.
 
 | Start | Bytes | Symbol | Slot | Role |
 |---|---:|---|---:|---|
-| `0x003d2230` | 96 | `beNDMWMdlPlayer__ResolveManagers` | 23 | finds the game RAM, pad manager and viewer scene-info manager in the insight |
-| `0x003d2290` | 44 | `beNDMWMdlPlayer__IsKind` | 35 | `KIND_PLAYER` |
-| `0x003d22c0` | 36 | `beNDMWMdlPlayer__RegisterReceiver` | 37 | registers the info under `PLAYER` |
-| `0x003d22f0` | 3,700 | `beNDMWMdlPlayer__UpdateControl` | 38 | the pad, while the controller has control |
+| `0x003d2230` | 96 | `beNDMWMdlPlayer_Start` | 23 | finds the game RAM, pad manager and viewer scene-info manager in the insight |
+| `0x003d2290` | 44 | `beNDMWMdlPlayer_IsKind` | 35 | `KIND_PLAYER` |
+| `0x003d22c0` | 36 | `beNDMWMdlPlayer_RegisterReceiver` | 37 | registers the info under `PLAYER` |
+| `0x003d22f0` | 3,700 | `beNDMWMdlPlayer_UpdateControl` | 38 | the pad, while the controller has control |
 | `0x003d3170` | 128 | `__dt__9HitBoxRefFv` | | destructor of the lobby hit box reference |
-| `0x003d31f0` | 1,104 | `beNDMWMdlPlayer__UpdateWaitCheck` | 39 | the `Atck01`–`Atck03` combo waits |
-| `0x003d3640` | 2,736 | `beNDMWMdlPlayer__OnGenerate` | 36 | `GENERATE`: the info work, start matrix, stats and HUD |
-| `0x003d40f0` | 328 | `beNDMWMdlPlayer__OnControlOff` | 40 | `OFCTRL`: closes the panel |
-| `0x003d4240` | 328 | `beNDMWMdlPlayer__OnFreeze` | 41 | `ONFREEZE`: closes the panel |
-| `0x003d4390` | 608 | `beNDMWMdlPlayer__OnSequenceChange` | 44 | a new sequence: the player-number badge, panel close, then `beNDMWMdlPEBase_OnSequenceChange` ([player/enemy base](mdl-pe-base.md)) |
-| `0x003d45f0` | 556 | `beNDMWMdlPlayer__OnErase` | 43 | `SQ_ERAS`: the entry effect and panel close |
-| `0x003d4820` | 328 | `beNDMWMdlPlayer__OnRemove` | 42 | `REMOVE`: closes the panel |
+| `0x003d31f0` | 1,104 | `beNDMWMdlPlayer_OnWaitCheck` | 39 | the `Atck01`–`Atck03` combo waits |
+| `0x003d3640` | 2,736 | `beNDMWMdlPlayer_OnGenerate` | 36 | `GENERATE`: the info work, start matrix, stats and HUD |
+| `0x003d40f0` | 328 | `beNDMWMdlPlayer_OnControlOff` | 40 | `OFCTRL`: closes the panel |
+| `0x003d4240` | 328 | `beNDMWMdlPlayer_OnFreeze` | 41 | `ONFREEZE`: closes the panel |
+| `0x003d4390` | 608 | `beNDMWMdlPlayer_OnSequenceChange` | 44 | a new sequence: the player-number badge, panel close, then `beNDMWMdlPEBase_OnSequenceChange` ([player/enemy base](mdl-pe-base.md)) |
+| `0x003d45f0` | 556 | `beNDMWMdlPlayer_OnErase` | 43 | `SQ_ERAS`: the entry effect and panel close |
+| `0x003d4820` | 328 | `beNDMWMdlPlayer_OnRemove` | 42 | `REMOVE`: closes the panel |
 | `0x003d4970` | 12 | `beNDMWMdlPlayer__GetMeta` | 20 | the meta object |
 
 The slot numbers are the `beModelCtrl` vtable positions. `beModelCtrl`'s message handler (slot 33)

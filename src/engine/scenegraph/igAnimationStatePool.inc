@@ -16,7 +16,7 @@ igMetaObject *igAnimationStatePool_GetMetaObject(void)
 int igAnimationStatePool_GetVTable(void) {
     union U u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052a020[0];
+    u.vt = (int)&g_igAnimationStatePool_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 

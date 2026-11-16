@@ -66,25 +66,25 @@ struct DataListSlot {
     static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); set(ram, list); }
 };
 
-extern "C" int beNDMWMdlEnemy__IsKind(int self, int kind);
-extern "C" void beNDMWMdlEnemy__RegisterReceiver(beNDMWMdlEnemy *self, int info, char *unused);
-extern "C" void beNDMWMdlEnemy__OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram);
-extern "C" void beNDMWMdlEnemy__OnSequenceChange(void);
+extern "C" int beNDMWMdlEnemy_IsKind(int self, int kind);
+extern "C" void beNDMWMdlEnemy_RegisterReceiver(beNDMWMdlEnemy *self, int info, char *unused);
+extern "C" void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram);
+extern "C" void beNDMWMdlEnemy_OnSequenceChange(void);
 extern "C" int beNDMWMdlEnemy__GetMeta(void);
 
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlEnemy__IsKind(int self, int kind) {
+int beNDMWMdlEnemy_IsKind(int self, int kind) {
     return strcmp(kind, &KIND_ENEMY[0]) == 0;
 }
 
-void beNDMWMdlEnemy__RegisterReceiver(beNDMWMdlEnemy *self, int info, char *unused)
+void beNDMWMdlEnemy_RegisterReceiver(beNDMWMdlEnemy *self, int info, char *unused)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, ((char *)ENEMY_3));
 }
 
-void beNDMWMdlEnemy__OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
+void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
     beBaseInfo *info;
     beModelCtrlInfoRamData *record;
     int *infoName;
@@ -127,7 +127,7 @@ void beNDMWMdlEnemy__OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
     beModelCtrl__OnGenerate(self, ram);
 }
 
-void beNDMWMdlEnemy__OnSequenceChange(void)
+void beNDMWMdlEnemy_OnSequenceChange(void)
 {
     beNDMWMdlPEBase_OnSequenceChange();
 }

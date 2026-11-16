@@ -1,8 +1,8 @@
 igMetaObject *g_beModelCtrlInfo_metaObject;
 igMetaField *g_beModelCtrlInfo_kindStringMetaField;
 
-igMetaObject *FUN_00352cd0(void) {
-    if (g_beModelCtrlInfo_metaObject == 0 || !isValid(g_beModelCtrlInfo_metaObject)) FUN_00352da0();
+igMetaObject *beModelCtrlInfo_GetMetaObject(void) {
+    if (g_beModelCtrlInfo_metaObject == 0 || !isValid(g_beModelCtrlInfo_metaObject)) beModelCtrlInfo_EnsureRegistered();
     return g_beModelCtrlInfo_metaObject;
 }
 
@@ -14,16 +14,16 @@ int beModelCtrlInfo_GetVTable(void) {
     u.w[2] = 0;
     u.w[5] = 0;
     u.w[6] = 0;
-    u.w[0] = (int)(&DAT_00537c10[0]);
+    u.w[0] = (int)(&g_beModelCtrlInfo_vtable[0]);
     u.w[7] = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00537c10[0]);
+    u.w[0] = (int)(&g_beModelCtrlInfo_vtable[0]);
     igStringRef_Destruct(&u.w[7], -1);
     FUN_0033ec80((struct S_33ec80 *)(&u.w[0]), (short)0);
     return temp_s0;
 }
 
-void FUN_00352da0(void)
+void beModelCtrlInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfo_Register);
 }
@@ -35,7 +35,7 @@ void *beModelCtrlInfo_Register(void) {
         &g_beModelCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beModelCtrlInfo_GetMetaObject,
+        beModelCtrlInfo_GetMetaObjectFunction,
         "beModelCtrlInfo",
         0x20, /* instance size */
         beModelCtrlInfo_GetVTable,
@@ -45,9 +45,9 @@ void *beModelCtrlInfo_Register(void) {
     );
 }
 
-void beModelCtrlInfo_GetMetaObject(void)
+void beModelCtrlInfo_GetMetaObjectFunction(void)
 {
-    FUN_00352cd0();
+    beModelCtrlInfo_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfo_ctorTable[] = {

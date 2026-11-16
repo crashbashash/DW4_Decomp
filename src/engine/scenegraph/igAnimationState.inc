@@ -73,7 +73,7 @@ int igAnimationState_GetVTable(void) {
     
     
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00529550[0]);
+    u.w[0] = (int)(&g_igAnimationState_vtable[0]);
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[24];
@@ -81,7 +81,7 @@ int igAnimationState_GetVTable(void) {
     q3 = (S_ref *)&u.b[120];
     *(int *)q3 = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00529550[0]);
+    u.w[0] = (int)(&g_igAnimationState_vtable[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
         if (q3 != 0) {
@@ -117,7 +117,7 @@ void FUN_001a6dc0(void)
     igMetaObject_RunStaticInit(igAnimationState_Register);
 }
 
-static igMetaObjectCallback g_igAnimationState_callbackList[] = { FUN_001a9290, 0 };
+static igMetaObjectCallback g_igAnimationState_callbackList[] = { igAnimation_EnsureRegistered, 0 };
 
 void igAnimationState_Register(void) {
     SceneGraphLibrary_MarkRegistered();

@@ -6,11 +6,11 @@ igMetaField *g_beSoundData_channelMetaField;
 igMetaField *g_beSoundData_volumeMetaField;
 igMetaField *g_beSoundData_priorityMetaField;
 
-igMetaObject *FUN_00343f50(void) {
+igMetaObject *beSoundData_GetMetaObject(void) {
     igMetaObject *g = g_beSoundData_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_003440d0();
+        beSoundData_EnsureRegistered();
     return g_beSoundData_metaObject;
 }
 
@@ -25,7 +25,7 @@ int beSoundData_GetVTable(void) {
     u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.w[0] = (int)(&DAT_005392f0[0]);
+    u.w[0] = (int)(&g_beSoundData_vtable[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_igNamedObject_vtable[0]);
     if (q1 != 0) {
@@ -48,7 +48,7 @@ struct W_344030 *FUN_00344030(struct W_344030 *arg0, short arg1) {
     int *temp_v1;
 
     if (arg0 != 0) {
-        arg0->vt = &DAT_00539350[0];
+        arg0->vt = &g_beBaseInfoData_vtable[0];
         if (arg0 != 0) {
             arg0->vt = &g_igNamedObject_vtable[0];
             if (&arg0->name != 0) {
@@ -70,7 +70,7 @@ struct W_344030 *FUN_00344030(struct W_344030 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_003440d0(void)
+void beSoundData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSoundData_Register);
 }
@@ -82,7 +82,7 @@ void *beSoundData_Register(void) {
         &g_beSoundData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beSoundData_GetMetaObject,
+        beSoundData_GetMetaObjectFunction,
         "beSoundData",
         0x20, /* instance size */
         beSoundData_GetVTable,
@@ -92,9 +92,9 @@ void *beSoundData_Register(void) {
     );
 }
 
-void beSoundData_GetMetaObject(void)
+void beSoundData_GetMetaObjectFunction(void)
 {
-    FUN_00343f50();
+    beSoundData_GetMetaObject();
 }
 
 static FieldFactory g_beSoundData_ctorTable[] = {

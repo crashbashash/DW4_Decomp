@@ -18,10 +18,10 @@ int igTraversal_GetVTable(void) {
     struct R *t;
     int r;
     igObject_InitHeader(&o);
-    o.vt = &DAT_00528250[0];
+    o.vt = &g_igTraversal_vtable[0];
     o.p = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00528250[0];
+    o.vt = &g_igTraversal_vtable[0];
     if (&o.p != 0) {
         t = o.p;
         if (t != 0) {
@@ -39,7 +39,7 @@ void *FUN_00194490(struct S *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_00528250[0];
+        arg0->f0 = &g_igTraversal_vtable[0];
         if (&arg0->f1c) {
             p = arg0->f1c;
             if (p != 0) {
@@ -62,7 +62,7 @@ void FUN_00194530(void)
     igMetaObject_RunStaticInit(igTraversal_Register);
 }
 
-static igMetaObjectCallback g_igTraversal_callbackList[] = { FUN_0019a800, 0 };
+static igMetaObjectCallback g_igTraversal_callbackList[] = { igTraversalFunctionList_EnsureRegistered, 0 };
 
 void igTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();

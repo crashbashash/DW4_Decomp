@@ -24,7 +24,7 @@ igMetaField *g_beNDMWLoadIntf2SelSlot_st2MetaField;
 igMetaField *g_beNDMWLoadIntf2SelSlot_st3MetaField;
 
 void beNDMWLoadIntf2SelSlot_Create(int arg0) {
-    FUN_003c2f80();
+    beNDMWLoadIntf2SelSlot_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLoadIntf2SelSlot_metaObject, arg0);
 }
 
@@ -35,7 +35,7 @@ igMetaObject *beNDMWLoadIntf2SelSlot_ResolveMetaObject(void)
         ready = (g_beNDMWLoadIntf2SelSlot_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_003c2f80();
+    beNDMWLoadIntf2SelSlot_EnsureRegistered();
 done:
     return g_beNDMWLoadIntf2SelSlot_metaObject;
 }
@@ -52,7 +52,7 @@ int beNDMWLoadIntf2SelSlot_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053d180[0];
+    u.vt = (int)&g_beNDMWLoadIntf2SelSlot_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -69,12 +69,12 @@ int beNDMWLoadIntf2SelSlot_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003c2f80(void)
+void beNDMWLoadIntf2SelSlot_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadIntf2SelSlot_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadIntf2SelSlot_callbackList[] = { FUN_00357d10, FUN_0034cb30, FUN_003c7090, FUN_003c7830, FUN_003c4f00, 0 };
+static igMetaObjectCallback g_beNDMWLoadIntf2SelSlot_callbackList[] = { beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWLoadIntf2ComMdlCtrl_EnsureRegistered, beNDMWLoadIntf2TextOrder_EnsureRegistered, beNDMWLoadCtrl2CommonIntf_EnsureRegistered, 0 };
 
 void *beNDMWLoadIntf2SelSlot_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -223,19 +223,19 @@ void beNDMWLoadIntf2SelSlot_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    ((igObjectRefMetaField *)temp_s0)->_metaObject = FUN_00357910();
+    ((igObjectRefMetaField *)temp_s0)->_metaObject = beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0)->_refCounted = 0;
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = FUN_0034c8e0();
+    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0_2)->_refCounted = 0;
     temp_s0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = (int)FUN_003c6ee0();
+    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0_3)->_refCounted = 0;
     temp_s0_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s0_4)->_metaObject = (int)FUN_003c7700();
+    ((igObjectRefMetaField *)temp_s0_4)->_metaObject = (int)beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0_4)->_refCounted = 0;
     temp_s0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s0_5)->_metaObject = (int)FUN_003c4c20();
+    ((igObjectRefMetaField *)temp_s0_5)->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0_5)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2SelSlot_fieldTable, g_beNDMWLoadIntf2SelSlot_fieldHandles, g_beNDMWLoadIntf2SelSlot_fieldOffsets, temp_s2);
 }

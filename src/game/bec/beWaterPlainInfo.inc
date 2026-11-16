@@ -1,12 +1,12 @@
 igMetaObject *g_beWaterPlainInfo_metaObject;
 
-void *FUN_00340af0(void) {
+void *beWaterPlainInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beWaterPlainInfo_metaObject != 0) {
         b = (*(int *)((char *)(g_beWaterPlainInfo_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00340bb0();
+    beWaterPlainInfo_EnsureRegistered();
 done:
     return g_beWaterPlainInfo_metaObject;
 }
@@ -19,14 +19,14 @@ int beWaterPlainInfo_GetVTable(void) {
     o.f[1] = 0;
     o.f[4] = 0;
     o.f[5] = 0;
-    o.vt = DAT_005398d0;
+    o.vt = g_beWaterPlainInfo_vtable;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = DAT_005398d0;
+    o.vt = g_beWaterPlainInfo_vtable;
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 
-void FUN_00340bb0(void)
+void beWaterPlainInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWaterPlainInfo_Register);
 }
@@ -38,7 +38,7 @@ void *beWaterPlainInfo_Register(void) {
         &g_beWaterPlainInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beWaterPlainInfo_GetMetaObject,
+        beWaterPlainInfo_GetMetaObjectFunction,
         "beWaterPlainInfo",
         0x1c, /* instance size */
         beWaterPlainInfo_GetVTable,
@@ -48,9 +48,9 @@ void *beWaterPlainInfo_Register(void) {
     );
 }
 
-void beWaterPlainInfo_GetMetaObject(void)
+void beWaterPlainInfo_GetMetaObjectFunction(void)
 {
-    FUN_00340af0();
+    beWaterPlainInfo_GetMetaObject();
 }
 
 igMetaEnum *g_beWaterPlainInfo_messageMetaEnum;
@@ -61,7 +61,7 @@ static int g_beWaterPlainInfo_messageValues[] = {
     0,
 };
 
-igMetaEnum *FUN_00340c60(void) {
+igMetaEnum *beWaterPlain_GetMessageEnum(void) {
     if (g_beWaterPlainInfo_messageMetaEnum == 0) {
         g_beWaterPlainInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beWaterPlainInfo_messageNames, g_beWaterPlainInfo_messageValues, 1);
     }

@@ -20,7 +20,7 @@ fi
 mkdir -p "$REPO/data"
 
 # tables / dumps written by scripts in scripts/
-FILES="functions.json symbols.json strings.json script_api.json vtables.json reflection.json weapons.json
+FILES="functions.json symbols.json strings.json script_api.json reflection.json weapons.json
 styled.json armor.json item_ids.json mods.json cores.json item_names.txt
 lua_strings.txt afs_strings.txt lua_all_strings.txt lua_globals.txt
 lua_filenames.txt lua_igb_paths.txt lua_stages.txt lua_sequences.txt
@@ -29,6 +29,10 @@ lua_missions.txt"
 # Derived tables (not Ghidra dumps) that belong in data/ as well.
 n=0
 if [ -f "$REPO/orig/SLUS-20836/SLUS_208.36" ]; then
+    # the RTTI vtables: the same scan as the Ghidra post-script, on the executable's segments
+    python3 "$REPO/scripts/dump_vtables.py" --elf "$REPO/orig/SLUS-20836/SLUS_208.36" \
+        --out "$REPO/data/vtables.json" >/dev/null \
+        && n=$((n + 1)) || echo "sync_data: vtables skipped" >&2
     python3 "$REPO/scripts/gen_class_hierarchy.py" >/dev/null \
         && n=$((n + 1)) || echo "sync_data: gen_class_hierarchy skipped" >&2
     python3 "$REPO/tools/sdk_bindings.py" --json "$REPO/data/sdk-bindings.json" >/dev/null \

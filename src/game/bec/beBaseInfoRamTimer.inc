@@ -7,14 +7,14 @@ igMetaField *g_beBaseInfoRamTimer_svBeforTimeMetaField;
 igMetaField *g_beBaseInfoRamTimer_keikaFrameMetaField;
 
 void beBaseInfoRamTimer_Create(int arg0) {
-    FUN_0036a630();
+    beBaseInfoRamTimer_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589D78, arg0);
 }
 
-void *FUN_0036a550(void) {
+void *beBaseInfoRamTimer_GetMetaObject(void) {
     igMetaObject *g = g_beBaseInfoRamTimer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036a630();
+        beBaseInfoRamTimer_EnsureRegistered();
     }
     return g_beBaseInfoRamTimer_metaObject;
 }
@@ -31,7 +31,7 @@ int beBaseInfoRamTimer_GetVTable(void) {
     q = &o.s;
     *q = 0;
     o.vt = &g_igNamedObject_vtable[0];
-    o.vt = &DAT_00534830[0];
+    o.vt = &g_beBaseInfoRamTimer_vtable[0];
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igNamedObject_vtable[0];
     if (q != 0) {
@@ -48,7 +48,7 @@ int beBaseInfoRamTimer_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0036a630(void)
+void beBaseInfoRamTimer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beBaseInfoRamTimer_Register);
 }
@@ -60,7 +60,7 @@ void *beBaseInfoRamTimer_Register(void) {
         &g_beBaseInfoRamTimer_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beBaseInfoRamTimer_GetMetaObject,
+        beBaseInfoRamTimer_GetMetaObjectFunction,
         "beBaseInfoRamTimer",
         0x40, /* instance size */
         beBaseInfoRamTimer_GetVTable,
@@ -70,9 +70,9 @@ void *beBaseInfoRamTimer_Register(void) {
     );
 }
 
-void beBaseInfoRamTimer_GetMetaObject(void)
+void beBaseInfoRamTimer_GetMetaObjectFunction(void)
 {
-    FUN_0036a550();
+    beBaseInfoRamTimer_GetMetaObject();
 }
 
 static FieldFactory g_beBaseInfoRamTimer_ctorTable[] = {

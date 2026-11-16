@@ -4,7 +4,7 @@ igMetaField *g_igNode_parentListMetaField;
 igMetaField *g_igNode_flagsMetaField;
 igMetaField *g_igNode_handleMetaField;
 
-igMetaObject *FUN_0019cd50(void) {
+igMetaObject *igNode_GetOrCreateMetaObject(void) {
     if (g_igNode_metaObject == 0) {
         g_igNode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -15,7 +15,7 @@ igMetaObject *igNode_GetMetaObject(void)
 {
     igMetaObject *g = g_igNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019cf10();
+        igNode_EnsureRegistered();
     return g_igNode_metaObject;
 }
 
@@ -32,13 +32,13 @@ int igNode_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = &u.b[8];
     *(int *)q2 = 0;
-    u.vt = (int)&DAT_00528a90[0];
+    u.vt = (int)&g_igNode_vtable[0];
     q1 = (S_ref *)&u.b[12];
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00528a90[0];
+    u.vt = (int)&g_igNode_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -72,12 +72,12 @@ int igNode_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0019cf10(void)
+void igNode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igNode_Register);
 }
 
-static igMetaObjectCallback g_igNode_callbackList[] = { FUN_00186b20, FUN_0019c9a0, 0 };
+static igMetaObjectCallback g_igNode_callbackList[] = { FUN_00186b20, igNonRefCountedNodeList_EnsureRegistered, 0 };
 
 void igNode_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -168,7 +168,7 @@ void *FUN_0019d120(struct S_19d120 *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_00528e70[0];
+        arg0->f0 = &g_igGeometry_vtable[0];
         if (&arg0->f28) {
             p = arg0->f28;
             if (p != 0) {
@@ -180,7 +180,7 @@ void *FUN_0019d120(struct S_19d120 *arg0, short arg1) {
             }
         }
         if (arg0 != 0) {
-            arg0->f0 = &DAT_005294b0[0];
+            arg0->f0 = &g_igAttrSet_vtable[0];
             FUN_0013bfe0((char *)arg0 + 0x20, -1);
             FUN_00195a90((struct T_195a90 *)arg0, 0);
         }

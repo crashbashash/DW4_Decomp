@@ -11,8 +11,6 @@
 0x0038aea0	beMatCtrl_GetPlayerMatStat	game
 0x0038af70	beMatCtrl_Prepare	game
 0x0038b040	beMatCtrl_GetInfoMeta	game
-0x0038b050	beMatCtrl_RegisterReceiver	game
 0x0038b080	beMatCtrl_MarkContacts	game
-0x0038b1f0	beMatCtrl_Update	game
 0x0038bdf0	beMatCtrl_OnMessage	game
 0x0038bed0	beMatCtrl_GetMeta	game

@@ -24,9 +24,9 @@ int igInfoManagerOrderedList_GetVTable(void) {
     o.w[2] = 0;
     o.w[3] = 0;
     o.w[4] = 0;
-    o.vt = &DAT_0052cb60[0];
+    o.vt = &g_igInfoManagerOrderedList_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_0052cb60[0];
+    o.vt = &g_igInfoManagerOrderedList_vtable[0];
     FUN_00233610((int **)&o, 0);
     return r;
 }
@@ -48,7 +48,7 @@ int **FUN_00233610(int **arg0, long long arg1) {
     if (arg0 != 0) {
         *arg0 = &DAT_0052cbc0[0];
         if (arg0 != 0) {
-            *arg0 = &DAT_0052cc20[0];
+            *arg0 = &g_igDependencyOrderedList_vtable[0];
             igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x14), -1);
             igSmartPointer_igPointerList_Destruct((int **)((char *)arg0 + 0x10), -1);
             igSmartPointer_igDependencyList_Destruct((ObjectRefWord *)((char *)arg0 + 0xC), -1);

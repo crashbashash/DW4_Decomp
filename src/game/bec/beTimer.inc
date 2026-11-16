@@ -6,21 +6,21 @@ igMetaField *g_beTimer_dataListMetaField;
 igMetaField *g_beTimer_oldWorldTimeMetaField;
 
 void beTimer_CreateInstance(int arg0) {
-    FUN_00341500();
+    beTimer_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587C18, arg0);
 }
 
-igMetaObject *FUN_00341380(void) {
+igMetaObject *beTimer_GetOrCreateMetaObject(void) {
     if (g_beTimer_metaObject == 0) {
         g_beTimer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beTimer_metaObject;
 }
 
-void *FUN_003413d0(void) {
+void *beTimer_GetMetaObject(void) {
     igMetaObject *g = g_beTimer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00341500();
+        beTimer_EnsureRegistered();
     }
     return g_beTimer_metaObject;
 }
@@ -37,11 +37,11 @@ int beTimer_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053b930[0];
+    u.vt = (int)&g_beTimer_vtable[0];
     q0 = (S_ref *)&u.b[28];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053b930[0];
+    u.vt = (int)&g_beTimer_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -66,12 +66,12 @@ int beTimer_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00341500(void)
+void beTimer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTimer_Register);
 }
 
-static igMetaObjectCallback g_beTimer_callbackList[] = { FUN_00342f30, FUN_0034cb30, FUN_0035b9c0, FUN_00341790, 0 };
+static igMetaObjectCallback g_beTimer_callbackList[] = { beSystem_EnsureRegistered, bePadManager_EnsureRegistered, beLua_EnsureRegistered, beTimerDataList_EnsureRegistered, 0 };
 
 void *beTimer_Register(void) {
     BecLibrary_MarkRegistered();
@@ -80,7 +80,7 @@ void *beTimer_Register(void) {
         &g_beTimer_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        beTimer_GetMetaObject,
+        beTimer_GetMetaObjectFunction,
         "beTimer",
         0x28, /* instance size */
         beTimer_GetVTable,
@@ -90,9 +90,9 @@ void *beTimer_Register(void) {
     );
 }
 
-void beTimer_GetMetaObject(void)
+void beTimer_GetMetaObjectFunction(void)
 {
-    FUN_003413d0();
+    beTimer_GetMetaObject();
 }
 
 static FieldFactory g_beTimer_ctorTable[] = {
@@ -136,16 +136,16 @@ void beTimer_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beTimer_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00342ce0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034c8e0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0035b770();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beLua_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_3)->_refCounted = 0;
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_003416b0();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)beTimerDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;
     igMetaObject_NameFields(temp_s0, g_beTimer_fieldTable, g_beTimer_fieldHandles, g_beTimer_fieldOffsets, temp_s2);
 }

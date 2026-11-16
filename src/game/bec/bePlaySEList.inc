@@ -1,14 +1,14 @@
 igMetaObject *g_bePlaySEList_metaObject;
 
-igMetaObject *FUN_00344630(void) {
+igMetaObject *bePlaySEList_GetOrCreateMetaObject(void) {
     if (g_bePlaySEList_metaObject == 0) {
         g_bePlaySEList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_bePlaySEList_metaObject;
 }
 
-igMetaObject *FUN_00344680(void) {
-    if (g_bePlaySEList_metaObject == 0 || !isValid(g_bePlaySEList_metaObject)) FUN_00344710();
+igMetaObject *bePlaySEList_GetMetaObject(void) {
+    if (g_bePlaySEList_metaObject == 0 || !isValid(g_bePlaySEList_metaObject)) bePlaySEList_EnsureRegistered();
     return g_bePlaySEList_metaObject;
 }
 
@@ -16,16 +16,16 @@ int bePlaySEList_GetVTable(void) {
     struct Obj_3446d0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00539280[0];
+    obj.vt = &g_bePlaySEList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00344710(void)
+void bePlaySEList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(bePlaySEList_Register);
 }
 
-static igMetaObjectCallback g_bePlaySEList_callbackList[] = { FUN_00344890, 0 };
+static igMetaObjectCallback g_bePlaySEList_callbackList[] = { bePlaySE_EnsureRegistered, 0 };
 
 void *bePlaySEList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -34,7 +34,7 @@ void *bePlaySEList_Register(void) {
         &g_bePlaySEList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        bePlaySEList_GetMetaObject,
+        bePlaySEList_GetMetaObjectFunction,
         "bePlaySEList",
         0x14, /* instance size */
         bePlaySEList_GetVTable,
@@ -44,8 +44,8 @@ void *bePlaySEList_Register(void) {
     );
 }
 
-void bePlaySEList_GetMetaObject(void)
+void bePlaySEList_GetMetaObjectFunction(void)
 {
-    FUN_00344680();
+    bePlaySEList_GetMetaObject();
 }
 

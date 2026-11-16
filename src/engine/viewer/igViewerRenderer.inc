@@ -43,7 +43,7 @@ int igViewerRenderer_GetVTable(void) {
     union U_45aaf0 u;
     int r;
     FUN_0045b090(&u.b[0]);
-    u.pv = &DAT_005423f0[0];
+    u.pv = &g_igViewerRenderer_vtable[0];
     FUN_00459e20((int *)&u.b[12]);
     FUN_00197300(&u.b[16]);
     FUN_0045b080((int *)&u.b[20]);
@@ -64,7 +64,7 @@ int igViewerRenderer_GetVTable(void) {
     FUN_00197350(&u.b[84]);
     FUN_0045afd0((int *)&u.b[88]);
     r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem[0])) + 916)];
-    u.pv = &DAT_005423f0[0];
+    u.pv = &g_igViewerRenderer_vtable[0];
     FUN_0045af50((void **)&u.b[88], -1);
     FUN_00197160(&u.b[84], -1);
     FUN_001d9870(&u.b[80], -1);
@@ -240,7 +240,7 @@ void FUN_0045b0d0(void)
     igMetaObject_RunStaticInit(igViewerRenderer_Register);
 }
 
-static igMetaObjectCallback g_igViewerRenderer_callbackList[] = { FUN_0045b590, FUN_001387b0, FUN_0013b390, FUN_00133a30, FUN_00134a20, FUN_00135f40, FUN_00136880, FUN_00136470, FUN_001a5e90, FUN_0019c7b0, FUN_001964d0, FUN_0019dcd0, FUN_001366c0, FUN_00136120, FUN_001a3dd0, FUN_00138160, FUN_0014f810, 0 };
+static igMetaObjectCallback g_igViewerRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, igCullFaceAttr_EnsureRegistered, igAlphaStateAttr_EnsureRegistered, igShadeModelAttr_EnsureRegistered, FUN_00134a20, igLightingStateAttr_EnsureRegistered, igLightAttr_EnsureRegistered, igLightStateAttr_EnsureRegistered, igAttrSet_EnsureRegistered, FUN_0019c7b0, igTransform_EnsureRegistered, igLightSet_EnsureRegistered, igLightList_EnsureRegistered, igLightStateAttrList_EnsureRegistered, igCommonTraversal_EnsureRegistered, FUN_00138160, FUN_0014f810, 0 };
 
 void igViewerRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -379,7 +379,7 @@ void igViewerRenderer_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igViewerRenderer_ctorTable, 0x14);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_001386d0();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
@@ -393,7 +393,7 @@ void igViewerRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00134940();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00135e60();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igLightingStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00136750();
@@ -402,13 +402,13 @@ void igViewerRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_001361f0();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_001a5d70();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = igAttrSet_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_0019c6a0();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = FUN_00196190();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = igTransform_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = FUN_0019dbb0();

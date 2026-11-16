@@ -1,12 +1,12 @@
 igMetaObject *g_beModelCtrlAIMAP_metaObject;
 
-igMetaObject *FUN_00354ea0(void) {
+igMetaObject *beModelCtrlAIMAP_GetMetaObject(void) {
     igMetaObject *g = g_beModelCtrlAIMAP_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_00354f80();
+    beModelCtrlAIMAP_EnsureRegistered();
 done:
     return g_beModelCtrlAIMAP_metaObject;
 }
@@ -23,7 +23,7 @@ int beModelCtrlAIMAP_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00537710[0];
+    u.vt = (int)&g_beModelCtrlAIMAP_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -40,7 +40,7 @@ int beModelCtrlAIMAP_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00354f80(void)
+void beModelCtrlAIMAP_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlAIMAP_Register);
 }
@@ -52,7 +52,7 @@ void *beModelCtrlAIMAP_Register(void) {
         &g_beModelCtrlAIMAP_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beModelCtrlAIMAP_GetMetaObject,
+        beModelCtrlAIMAP_GetMetaObjectFunction,
         "beModelCtrlAIMAP",
         0xc, /* instance size */
         beModelCtrlAIMAP_GetVTable,
@@ -62,8 +62,8 @@ void *beModelCtrlAIMAP_Register(void) {
     );
 }
 
-void beModelCtrlAIMAP_GetMetaObject(void)
+void beModelCtrlAIMAP_GetMetaObjectFunction(void)
 {
-    FUN_00354ea0();
+    beModelCtrlAIMAP_GetMetaObject();
 }
 

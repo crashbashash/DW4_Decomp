@@ -20,8 +20,8 @@ int igTimeAttr_CreateInstance(...);
 int igMatrix44f_SetIdentity(void *matrix);
 int FUN_001904f0(void *result, void *left, void *right);
 int igMatrix44f_Copy(void *to, void *from);
-igMetaObject *FUN_003680b0(void);
-igMetaObject *FUN_00367e50(void);
+igMetaObject *beCopyModelCtrl2_GetMetaObject(void);
+igMetaObject *beCopyTransform_GetMetaObject(void);
 extern int DAT_00562640[4];
 extern igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 
@@ -165,14 +165,14 @@ void beCopyModelCtrl2_RegisterTraversal(void);
 int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransform *node);
 int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal);
 void beCopyTransform_RegisterTraversal(void);
-void Gap__Bec__beCri__vfunc_21(beCri *self);
+void beCri_Activate(beCri *self);
 int beCri_AdxFileProxy(void);
-void Gap__Bec__beCri__vfunc_22(beCri *self);
-void Gap__Bec__beCri__vfunc_23(beCri *self);
-void Gap__Bec__beCri__vfunc_24(beCri *self);
-int Gap__Bec__beCri__vfunc_25(beCri *self, MetaObjectView *info);
-void Gap__Bec__beCri__vfunc_26(beCri *self);
-void Gap__Bec__beCri__vfunc_27(beCri *self);
+void beCri_Deactivate(beCri *self);
+void beCri_Start(beCri *self);
+void beCri_Stop(beCri *self);
+int beCri_AddInfo(beCri *self, MetaObjectView *info);
+void beCri_RemoveAllInfo(beCri *self);
+void beCri_Update(beCri *self);
 int beCri_AcquireVoice(beCri *self, unsigned char kind, short priority);
 long long beCri_PlayStream(beCri *self, igObjectList *names, beSoundData *cue);
 long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue);
@@ -196,7 +196,7 @@ void beCri_SetFx(beCri *self, char *name);
 unsigned char beCri_IsReady(beCri *self, const char *name);
 void beCri_SetSndfVolume(beCri *self, int volume);
 void beCriSfpData_SetupBufferAlignment(void);
-int Gap__Bec__beCri__vfunc_20(void);
+int beCri_GetMeta(void);
 }
 
 /* A name field read as text: a null name reads as "". */
@@ -332,7 +332,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
 }
 
 void beCopyModelCtrl2_RegisterTraversal(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], FUN_003680b0(), (void (*)())beCopyModelCtrl2_TraverseCallback);
+    igTraversal_RegisterFunction(DAT_00562640[0], beCopyModelCtrl2_GetMetaObject(), (void (*)())beCopyModelCtrl2_TraverseCallback);
 }
 
 int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransform *node)
@@ -389,13 +389,13 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
 }
 
 void beCopyTransform_RegisterTraversal(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], FUN_00367e50(), (void (*)())beCopyTransform_TraverseCallback);
+    igTraversal_RegisterFunction(DAT_00562640[0], beCopyTransform_GetMetaObject(), (void (*)())beCopyTransform_TraverseCallback);
 }
 
 /* Attach: registers with the insight, reads the IOP module path from the BECRUNTIME ini section (else
  * the CRI default for the library version), starts the ADX library on DVD media, and routes igFile
  * through igAdxFile. */
-void Gap__Bec__beCri__vfunc_21(beCri *self) {
+void beCri_Activate(beCri *self) {
     int section;
     int registry;
     igInsightCore_AddToScheduler(self->_insight, self);
@@ -429,14 +429,14 @@ int beCri_AdxFileProxy(void) {
 }
 
 /* Detach: restores igFile's proxy and leaves the insight. */
-void Gap__Bec__beCri__vfunc_22(beCri *self) {
+void beCri_Deactivate(beCri *self) {
     g_igFile_metaObject[0]->_abstractProxy = g_savedIgFileAbstractProxy;
     igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
 /* Start: finds the beSystem, creates the BGM and ambience stream handles (two-channel ADX) and the
  * effect handles, and clears the sound-bank port tables. */
-void Gap__Bec__beCri__vfunc_23(beCri *self) {
+void beCri_Start(beCri *self) {
     void *allocator;
     void *ambienceAllocator;
     beCriHandle *old;
@@ -465,7 +465,7 @@ void Gap__Bec__beCri__vfunc_23(beCri *self) {
 }
 
 /* Stop: stops every handle and releases the voices. */
-void Gap__Bec__beCri__vfunc_24(beCri *self) {
+void beCri_Stop(beCri *self) {
     beCri_StopGroup(self, 5);
     beCriAudio_Release(Bgm(self)->_audio);
     beCriAudio_Release(Env(self)->_audio);
@@ -473,7 +473,7 @@ void Gap__Bec__beCri__vfunc_24(beCri *self) {
 }
 
 /* Takes a beCriFxInfo into the effect list. */
-int Gap__Bec__beCri__vfunc_25(beCri *self, MetaObjectView *info) {
+int beCri_AddInfo(beCri *self, MetaObjectView *info) {
     int meta;
 
     meta = g_beCriFxInfo_metaObject[0];
@@ -485,7 +485,7 @@ int Gap__Bec__beCri__vfunc_25(beCri *self, MetaObjectView *info) {
 }
 
 /* Reset: turns the effect off, empties the effect list and frees the sound banks. */
-void Gap__Bec__beCri__vfunc_26(beCri *self) {
+void beCri_RemoveAllInfo(beCri *self) {
     beCri_SetFx(self, "NONE");
     ReleaseAll((igObjectList *)self->_infoList);
     ReserveIfEmpty((igObjectList *)self->_infoList);
@@ -496,7 +496,7 @@ void Gap__Bec__beCri__vfunc_26(beCri *self) {
  * resumed once it clears; otherwise each playing handle's fade steps, and a handle whose voice has
  * stopped, or whose fade to silence has passed audibility, is stopped. The BGM and ambience handles
  * join the effect list for the walk. */
-void Gap__Bec__beCri__vfunc_27(beCri *self) {
+void beCri_Update(beCri *self) {
     int removed0, removed1, removed2, removed3, removed4, removed5;
     int i;
     int j;
@@ -1216,7 +1216,7 @@ void beCriSfpData_SetupBufferAlignment(void) {
     igMemoryRefMetaField_SetAlignmentType(field, "sndfBuffer");
 }
 
-int Gap__Bec__beCri__vfunc_20(void)
+int beCri_GetMeta(void)
 {
     return g_beCri_metaObject[0];
 }

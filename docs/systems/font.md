@@ -2,7 +2,7 @@
 
 `beFont` (`src/game/beFont.cpp`) draws message text into the layer scene graph. A stage's layer controller
 owns the scene graph; each beFont is registered with the messenger under the `TEXTCTL` group
-(`Gap__Bec__beFont__vfunc_29`) and is driven entirely by messages.
+(`beFont_OnAddRam`) and is driven entirely by messages.
 
 ## State and messages
 

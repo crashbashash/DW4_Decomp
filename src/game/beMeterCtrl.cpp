@@ -1,8 +1,8 @@
 #include "dw4/reflected.h"
 
-extern "C" void Gap__Bec__beMeterCtrl__vfunc_32(void);
-extern "C" int Gap__Bec__beMeterCtrl__vfunc_30(void);
-extern "C" int Gap__Bec__beMeterCtrl__vfunc_20(void);
+extern "C" void beMeterCtrl_Prepare(void);
+extern "C" int beMeterCtrl_GetInfoMeta(void);
+extern "C" int beMeterCtrl_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int FUN_00357600(...);
 extern "C" int beMessenger_AppendFloat(int, float);
@@ -18,21 +18,21 @@ extern "C" int igObject_Destroy(...);
 extern "C" int g_beMeterCtrlInfo_metaObject[4];
 extern "C" int g_beMeterCtrl_metaObject[4];
 extern "C" char METERCTRL_3[];
-extern "C" void Gap__Bec__beMeterCtrl__vfunc_29(beMeterCtrl * p0, int p1, char * p2);
+extern "C" void beMeterCtrl_OnAddRam(beMeterCtrl * p0, int p1, char * p2);
 extern "C" int MODELCTRL_11[4];
 extern "C" int GETHP_2[4];
-extern "C" int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2);
+extern "C" int beMeterCtrl_OnMessageText(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2);
 
-void Gap__Bec__beMeterCtrl__vfunc_32(void)
+void beMeterCtrl_Prepare(void)
 {
 }
 
-int Gap__Bec__beMeterCtrl__vfunc_30(void)
+int beMeterCtrl_GetInfoMeta(void)
 {
     return g_beMeterCtrlInfo_metaObject[0];
 }
 
-void Gap__Bec__beMeterCtrl__vfunc_29(beMeterCtrl * p0, int p1, char * p2)
+void beMeterCtrl_OnAddRam(beMeterCtrl * p0, int p1, char * p2)
 {
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, METERCTRL_3);
 }
@@ -68,7 +68,7 @@ static void beMeterCtrl_SetupMaxValue(beMeterCtrl *self, beMeterCtrlOneData *dat
     data->_isChange = 1;
 }
 
-int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
+int beMeterCtrl_OnMessageText(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
     beMeterCtrlOneData *s1;
     igObjectList *l;
     float f0, f2, f3, v;
@@ -148,7 +148,7 @@ int Gap__Bec__beMeterCtrl__vfunc_33(beMeterCtrl *arg0, beBaseInfoRam *arg1, int 
     }
 }
 
-int Gap__Bec__beMeterCtrl__vfunc_20(void)
+int beMeterCtrl_GetMeta(void)
 {
     return g_beMeterCtrl_metaObject[0];
 }

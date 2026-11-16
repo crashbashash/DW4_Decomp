@@ -1,21 +1,21 @@
 igMetaObject *g_beNumberCtrl_metaObject;
 
 void beNumberCtrl_CreateInstance(int arg0) {
-    FUN_0034e520();
+    beNumberCtrl_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5886E0, arg0);
 }
 
-igMetaObject *FUN_0034e3a0(void) {
+igMetaObject *beNumberCtrl_GetOrCreateMetaObject(void) {
     if (g_beNumberCtrl_metaObject == 0) {
         g_beNumberCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beNumberCtrl_metaObject;
 }
 
-void *FUN_0034e3f0(void) {
+void *beNumberCtrl_GetMetaObject(void) {
     igMetaObject *g = g_beNumberCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0034e520();
+        beNumberCtrl_EnsureRegistered();
     }
     return g_beNumberCtrl_metaObject;
 }
@@ -29,14 +29,14 @@ int beNumberCtrl_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_0053a0d0[0]);
+    u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     q1 = &u.b[8];
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[24];
     *(int *)q2 = 0;
-    u.w[0] = (int)(&DAT_0053b890[0]);
+    u.w[0] = (int)(&g_beNumberCtrl_vtable[0]);
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0053a0d0[0]);
+    u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
         if (q2 != 0) {
@@ -61,7 +61,7 @@ int beNumberCtrl_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_0034e520(void)
+void beNumberCtrl_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNumberCtrl_Register);
 }
@@ -73,7 +73,7 @@ void *beNumberCtrl_Register(void) {
         &g_beNumberCtrl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beNumberCtrl_GetMetaObject,
+        beNumberCtrl_GetMetaObjectFunction,
         "beNumberCtrl",
         0x20, /* instance size */
         beNumberCtrl_GetVTable,
@@ -83,8 +83,8 @@ void *beNumberCtrl_Register(void) {
     );
 }
 
-void beNumberCtrl_GetMetaObject(void)
+void beNumberCtrl_GetMetaObjectFunction(void)
 {
-    FUN_0034e3f0();
+    beNumberCtrl_GetMetaObject();
 }
 

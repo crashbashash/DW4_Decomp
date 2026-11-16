@@ -1,7 +1,7 @@
 igMetaObject *g_igIntersectionFunctionList_metaObject;
 
 OpTable *FUN_00189840(int arg0) {
-    FUN_00189910();
+    igIntersectionFunctionList_EnsureRegistered();
     return (OpTable *)igMetaObject_CreateInstance((int)g_igIntersectionFunctionList_metaObject, arg0);
 }
 
@@ -9,18 +9,18 @@ igMetaObject *igIntersectionFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igIntersectionFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00189910();
+        igIntersectionFunctionList_EnsureRegistered();
     return g_igIntersectionFunctionList_metaObject;
 }
 
 int igIntersectionFunctionList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_00527a30[0];
+    obj[0] = (int)&g_igIntersectionFunctionList_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_00189910(void)
+void igIntersectionFunctionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igIntersectionFunctionList_Register);
 }

@@ -9,9 +9,7 @@
 0x00344250	beSound_GetMessageEnum	game
 0x003447c0	bePlaySE_CreateInstance	game
 0x0039e540	beSound_Prepare	game
-0x0039e740	beSound_RegisterReceiver	game
 0x0039e860	beSound_GetInfoMeta	game
-0x0039e870	beSound_Update	game
 0x0039ec10	beSound_OnMessage	game
 0x0039fae0	igSmartPointer_bePlaySE_Destruct	game
 0x0039fb60	beSound_FindData	game

@@ -4,11 +4,23 @@
 
 typedef struct MwsfdPly MwsfdPly;
 
+/* the player's function table (mwply_vtbl); CRI's mwPly* calls on a handle go through it */
 typedef struct MwsfdPlyVtbl {
-    void *slot[8];
-    int (*getStat)(MwsfdPly *ply);             /* 32 */
-    void *slot36[6];
-    void (*setSj)(MwsfdPly *ply, struct SfdSj *sj); /* 60: given the input SJ before a file start */
+    void *reserved0[3];
+    void (*vsyncProc)(void);                                  /* 12: mwsfsvr_VsyncProc */
+    int (*execSvrHndl)(MwsfdPly *ply);                        /* 16: mwPlyExecSvrHndl */
+    void (*destroy)(MwsfdPly *ply);                           /* 20: mwsfcre_DestroyPly */
+    void (*startFname)(MwsfdPly *ply, char *fname);           /* 24: mwPlyStartFname */
+    void (*stop)(MwsfdPly *ply);                              /* 28: mwSfdStop */
+    int (*getStat)(MwsfdPly *ply);                            /* 32: mwSfdGetStat */
+    void (*getTime)(MwsfdPly *ply, int *count, int *unit);    /* 36: mwSfdGetTime */
+    void (*pause)(MwsfdPly *ply, int sw);                     /* 40: mwSfdPause */
+    void (*setOutVol)(MwsfdPly *ply, int vol);                /* 44: mwSfdSetOutVol */
+    int (*getOutVol)(MwsfdPly *ply);                          /* 48: mwSfdGetOutVol */
+    void (*setOutPan)(MwsfdPly *ply, int channel, int pan);   /* 52: mwSfdSetOutPan */
+    int (*getOutPan)(MwsfdPly *ply, int channel);             /* 56: mwSfdGetOutPan */
+    void (*setSj)(MwsfdPly *ply, struct SfdSj *sj);           /* 60: mwSfdStartSj; given the input SJ before a file start */
+    void (*startMem)(MwsfdPly *ply, char *buf, int size);     /* 64: mwSfdStartMem */
 } MwsfdPlyVtbl;
 
 /* the creation parameters (mwPlyCreateSofdec's cprm), copied into the handle */
@@ -26,6 +38,21 @@ typedef struct MwsfdCreInf {
     int f40;         /* 40 */
     int f44;         /* 44 */
 } MwsfdCreInf;
+
+/* what mwPlyGetHdrInf reports about a stream header; valid is 0 for anything but a Sofdec stream */
+typedef struct MwsfdHdrInf {
+    int valid;
+    int type;     /* mwsfcre_GetHdrType */
+    int width;
+    int height;
+    int rate;
+    int f20;
+    int f24;
+    int f28;
+    int f32;
+    int frames;
+    int f40;
+} MwsfdHdrInf;
 
 /* the player's own allocation pool */
 typedef struct MwsfdMemPool {

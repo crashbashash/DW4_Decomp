@@ -1,11 +1,11 @@
 igMetaObject *g_beNDMWMdlEBullet_metaObject;
 
 void beNDMWMdlEBullet_CreateInstance(int arg0) {
-    FUN_003c1de0();
+    beNDMWMdlEBullet_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWMdlEBullet_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c1ce0(void) {
+igMetaObject *beNDMWMdlEBullet_GetOrCreateMetaObject(void) {
     if (g_beNDMWMdlEBullet_metaObject == 0) {
         g_beNDMWMdlEBullet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -18,7 +18,7 @@ void *beNDMWMdlEBullet_GetReadyMetaObject(void) {
     ok = !!(g_beNDMWMdlEBullet_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003c1de0();
+    beNDMWMdlEBullet_EnsureRegistered();
 done:;
     return g_beNDMWMdlEBullet_metaObject;
 }
@@ -30,14 +30,14 @@ int beNDMWMdlEBullet_GetVTable(void) {
     igObject_InitHeader(u.b);
     *(int *)&u.b[8] = 0;
     *(int *)&u.b[24] = 0;
-    u.vt = (int)&DAT_0053e210[0];
+    u.vt = (int)&g_beNDMWMdlEBullet_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053e210[0];
+    u.vt = (int)&g_beNDMWMdlEBullet_vtable[0];
     FUN_003bf2f0((struct NamedRefObject *)u.b, (long long)0);
     return temp_s0;
 }
 
-void FUN_003c1de0(void)
+void beNDMWMdlEBullet_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWMdlEBullet_Register);
 }

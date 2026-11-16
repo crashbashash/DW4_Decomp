@@ -1,18 +1,18 @@
 igMetaObject *g_beModelCtrlMoveObjectList_metaObject;
 
-igMetaObject *FUN_003527b0(void) {
+igMetaObject *beModelCtrlMoveObjectList_GetOrCreateMetaObject(void) {
     if (g_beModelCtrlMoveObjectList_metaObject == 0) {
         g_beModelCtrlMoveObjectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beModelCtrlMoveObjectList_metaObject;
 }
 
-igMetaObject *FUN_00352800(void)
+igMetaObject *beModelCtrlMoveObjectList_GetMetaObject(void)
 {
     igMetaObject *g = g_beModelCtrlMoveObjectList_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_00352890();
+        beModelCtrlMoveObjectList_EnsureRegistered();
     return g_beModelCtrlMoveObjectList_metaObject;
 }
 
@@ -20,16 +20,16 @@ int beModelCtrlMoveObjectList_GetVTable(void) {
     struct Obj_352850 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00537d50[0];
+    obj.vt = &g_beModelCtrlMoveObjectList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00352890(void)
+void beModelCtrlMoveObjectList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlMoveObjectList_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlMoveObjectList_callbackList[] = { FUN_00352a10, 0 };
+static igMetaObjectCallback g_beModelCtrlMoveObjectList_callbackList[] = { beModelCtrlMoveObject_EnsureRegistered, 0 };
 
 void *beModelCtrlMoveObjectList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -38,7 +38,7 @@ void *beModelCtrlMoveObjectList_Register(void) {
         &g_beModelCtrlMoveObjectList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beModelCtrlMoveObjectList_GetMetaObject,
+        beModelCtrlMoveObjectList_GetMetaObjectFunction,
         "beModelCtrlMoveObjectList",
         0x14, /* instance size */
         beModelCtrlMoveObjectList_GetVTable,
@@ -48,8 +48,8 @@ void *beModelCtrlMoveObjectList_Register(void) {
     );
 }
 
-void beModelCtrlMoveObjectList_GetMetaObject(void)
+void beModelCtrlMoveObjectList_GetMetaObjectFunction(void)
 {
-    FUN_00352800();
+    beModelCtrlMoveObjectList_GetMetaObject();
 }
 

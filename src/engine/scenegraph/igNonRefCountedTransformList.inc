@@ -18,7 +18,7 @@ igMetaObject *igNonRefCountedTransformList_GetMetaObject(void)
 int igNonRefCountedTransformList_GetVTable(void) {
     union U u;
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0052b760[0];
+    u.vt = (int)&g_igNonRefCountedTransformList_vtable[0];
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
@@ -27,7 +27,7 @@ void FUN_00195de0(void)
     igMetaObject_RunStaticInit(igNonRefCountedTransformList_Register);
 }
 
-static igMetaObjectCallback g_igNonRefCountedTransformList_callbackList[] = { FUN_001964d0, 0 };
+static igMetaObjectCallback g_igNonRefCountedTransformList_callbackList[] = { igTransform_EnsureRegistered, 0 };
 
 void igNonRefCountedTransformList_Register(void) {
     SceneGraphLibrary_MarkRegistered();

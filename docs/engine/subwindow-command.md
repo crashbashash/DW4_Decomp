@@ -1,6 +1,6 @@
 # SUBWND command receiver
 
-`beNDMWStatus__OnMessage` is the SUBWND manager's message receiver (`src/game/beNDMWStatus.cpp`).
+`beNDMWStatus_OnMessage` is the SUBWND manager's message receiver (`src/game/beNDMWStatus.cpp`).
 With the [lifecycle](subwindow-lifecycle.md) and the [work preparation](subwindow-preparation.md)
 it makes up the manager.
 

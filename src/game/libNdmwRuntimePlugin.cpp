@@ -62,7 +62,7 @@ static inline void RemoveManager(igInsightCore *core, int manager) {
 
 #define REPLACE_MANAGER(field, create) { int allocator = PluginAllocator(plugin); ReleaseRef(plugin->field); plugin->field = create(allocator); }
 
-extern "C" void Gap__Bec__libNdmwRuntimePlugin__vfunc_21(libNdmwRuntimePlugin *plugin, igInsightCore *core) {
+extern "C" void libNdmwRuntimePlugin_Attach(libNdmwRuntimePlugin *plugin, igInsightCore *core) {
     REPLACE_MANAGER(_afsSetup, beNDMWAfsSetup_CreateInstance)
     REPLACE_MANAGER(_stageCtl, beNDMWStageCtl_CreateInstance)
     REPLACE_MANAGER(_panelWaza, beNDMWPanelWaza_CreateInstance)
@@ -110,7 +110,7 @@ extern "C" void Gap__Bec__libNdmwRuntimePlugin__vfunc_21(libNdmwRuntimePlugin *p
 
 #undef REPLACE_MANAGER
 
-extern "C" void Gap__Bec__libNdmwRuntimePlugin__vfunc_22(libNdmwRuntimePlugin *plugin, igInsightCore *core) {
+extern "C" void libNdmwRuntimePlugin_Detach(libNdmwRuntimePlugin *plugin, igInsightCore *core) {
     RemoveManager(core, plugin->_mdlMapCursor);
     RemoveManager(core, plugin->_mdlMapBase);
     RemoveManager(core, plugin->_mdlEffect);
@@ -134,6 +134,6 @@ extern "C" void Gap__Bec__libNdmwRuntimePlugin__vfunc_22(libNdmwRuntimePlugin *p
     RemoveManager(core, plugin->_stageCtl);
 }
 
-extern "C" int Gap__Bec__libNdmwRuntimePlugin__vfunc_20(void) {
+extern "C" int libNdmwRuntimePlugin_GetMeta(void) {
     return g_libNdmwRuntimePlugin_metaObject[0];
 }

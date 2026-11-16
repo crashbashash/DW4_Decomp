@@ -30,9 +30,9 @@ int igPickMode_GetVTable(void) {
     int r;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00542960[0];
+    obj.vt = &g_igViewMode_vtable[0];
     igMatrix44f_SetIdentity(&obj.w[2]);
-    obj.vt = &DAT_00542720[0];
+    obj.vt = &g_igPickMode_vtable[0];
     obj.w[18] = 0;
     obj.w[19] = 0;
     obj.w[20] = 0;
@@ -42,7 +42,7 @@ int igPickMode_GetVTable(void) {
     obj.w[27] = 0;
     igMatrix44f_SetIdentity(&obj.w[28]);
     r = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
-    obj.vt = &DAT_00542720[0];
+    obj.vt = &g_igPickMode_vtable[0];
     FUN_001d6560(&obj.w[27], -1);
     FUN_0019e3c0(&obj.w[24], -1);
     FUN_0044ee80(&obj.w[23], -1);
@@ -58,7 +58,7 @@ void FUN_0045c330(void)
     igMetaObject_RunStaticInit(igPickMode_Register);
 }
 
-static igMetaObjectCallback g_igPickMode_callbackList[] = { FUN_0045b590, igGuiSystem_RunStaticInit, igMouseCursor_RunStaticInit, FUN_0019e440, FUN_00188340, FUN_0019f7a0, 0 };
+static igMetaObjectCallback g_igPickMode_callbackList[] = { igViewerParameters_EnsureRegistered, igGuiSystem_RunStaticInit, igMouseCursor_RunStaticInit, FUN_0019e440, FUN_00188340, igGraphPath_EnsureRegistered, 0 };
 
 void igPickMode_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -155,7 +155,7 @@ void igPickMode_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igPickMode_ctorTable, 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0044ded0();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
@@ -170,7 +170,7 @@ void igPickMode_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7), 0.0f);
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_0019f670();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igGraphPath_GetOrCreateMetaObject();
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
     sp48[0] = 0;
     sp48[1] = 0;

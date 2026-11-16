@@ -1,16 +1,16 @@
 igMetaObject *g_beGeneraterItemDataOneList_metaObject;
 
-igMetaObject *FUN_00360780(void) {
+igMetaObject *beGeneraterItemDataOneList_GetOrCreateMetaObject(void) {
     if (g_beGeneraterItemDataOneList_metaObject == 0) {
         g_beGeneraterItemDataOneList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beGeneraterItemDataOneList_metaObject;
 }
 
-void *FUN_003607d0(void) {
+void *beGeneraterItemDataOneList_GetMetaObject(void) {
     igMetaObject *g = g_beGeneraterItemDataOneList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00360860();
+        beGeneraterItemDataOneList_EnsureRegistered();
     }
     return g_beGeneraterItemDataOneList_metaObject;
 }
@@ -19,16 +19,16 @@ int beGeneraterItemDataOneList_GetVTable(void) {
     int obj[8];
 
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_00535ca0[0];
+    obj[0] = (int)&g_beGeneraterItemDataOneList_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_00360860(void)
+void beGeneraterItemDataOneList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterItemDataOneList_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterItemDataOneList_callbackList[] = { FUN_003609f0, 0 };
+static igMetaObjectCallback g_beGeneraterItemDataOneList_callbackList[] = { beGeneraterItemDataOne_EnsureRegistered, 0 };
 
 void *beGeneraterItemDataOneList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ void *beGeneraterItemDataOneList_Register(void) {
         &g_beGeneraterItemDataOneList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        beGeneraterItemDataOneList_GetMetaObject,
+        beGeneraterItemDataOneList_GetMetaObjectFunction,
         "beGeneraterItemDataOneList",
         0x14, /* instance size */
         beGeneraterItemDataOneList_GetVTable,
@@ -47,8 +47,8 @@ void *beGeneraterItemDataOneList_Register(void) {
     );
 }
 
-void beGeneraterItemDataOneList_GetMetaObject(void)
+void beGeneraterItemDataOneList_GetMetaObjectFunction(void)
 {
-    FUN_003607d0();
+    beGeneraterItemDataOneList_GetMetaObject();
 }
 

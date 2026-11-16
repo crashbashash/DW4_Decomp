@@ -17,7 +17,7 @@ done:
 int igMersenneTwisterRandomNumber_GetVTable(void) {
     struct Obj_1e45e0 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b8e0[0];
+    obj.vt = &g_igMersenneTwisterRandomNumber_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

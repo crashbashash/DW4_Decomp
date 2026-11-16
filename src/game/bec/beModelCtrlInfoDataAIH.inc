@@ -9,13 +9,13 @@ igMetaField *g_beModelCtrlInfoDataAIH_limitRotXMetaField;
 igMetaField *g_beModelCtrlInfoDataAIH_limitRotYMetaField;
 igMetaField *g_beModelCtrlInfoDataAIH_limitCountMetaField;
 
-void *FUN_00353bf0(void) {
+void *beModelCtrlInfoDataAIH_GetMetaObject(void) {
     unsigned char b;
     if (g_beModelCtrlInfoDataAIH_metaObject != 0) {
         b = (*(int *)((char *)(g_beModelCtrlInfoDataAIH_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00353cd0();
+    beModelCtrlInfoDataAIH_EnsureRegistered();
 done:
     return g_beModelCtrlInfoDataAIH_metaObject;
 }
@@ -32,7 +32,7 @@ int beModelCtrlInfoDataAIH_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00537a30[0];
+    u.vt = (int)&g_beModelCtrlInfoDataAIH_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -49,7 +49,7 @@ int beModelCtrlInfoDataAIH_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00353cd0(void)
+void beModelCtrlInfoDataAIH_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beModelCtrlInfoDataAIH_Register);
 }
@@ -61,7 +61,7 @@ void *beModelCtrlInfoDataAIH_Register(void) {
         &g_beModelCtrlInfoDataAIH_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
-        beModelCtrlInfoDataAIH_GetMetaObject,
+        beModelCtrlInfoDataAIH_GetMetaObjectFunction,
         "beModelCtrlInfoDataAIH",
         0x2c, /* instance size */
         beModelCtrlInfoDataAIH_GetVTable,
@@ -71,9 +71,9 @@ void *beModelCtrlInfoDataAIH_Register(void) {
     );
 }
 
-void beModelCtrlInfoDataAIH_GetMetaObject(void)
+void beModelCtrlInfoDataAIH_GetMetaObjectFunction(void)
 {
-    FUN_00353bf0();
+    beModelCtrlInfoDataAIH_GetMetaObject();
 }
 
 static FieldFactory g_beModelCtrlInfoDataAIH_ctorTable[] = {

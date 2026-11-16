@@ -163,7 +163,7 @@ void *igMetaObject_FindFieldByName(int meta, const char *name);
 
 void beAction2_Prepare(void);
 int beAction2_GetInfoMeta(void);
-void beAction2_RegisterReceiver(beAction2 *self, beAction2InfoRam *ram);
+void beAction2_OnAddRam(beAction2 *self, beAction2InfoRam *ram);
 void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram);
 int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component);
 void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram);
@@ -175,11 +175,11 @@ int beAction2JOINTSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
 void beAction2MOTIONSET_Update(beAction2 *manager, beAction2InfoRam *ram);
 int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2MOTIONSET *component);
 void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram);
-void beAction2_Update(beAction2 *self, beAction2InfoRam *ram);
-int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name);
+void beAction2_UpdateRam(beAction2 *self, beAction2InfoRam *ram);
+int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name);
 int beAction2_GetMeta(void);
-void Gap__Core__igObject__vfunc_28(void);
-int Gap__Core__igObject__vfunc_34(void);
+void beBaseInfoManager_OnAddInfo(void);
+int beBaseInfoManager_OnMessage(void);
 
 extern int g_beAction2Info_metaObject[4];
 extern int g_beAction2_metaObject[4];
@@ -208,7 +208,7 @@ int beAction2_GetInfoMeta(void)
 }
 
 /* Registers the ram as the receiver of ACTION messages and clears its running flag. */
-void beAction2_RegisterReceiver(beAction2 *self, beAction2InfoRam *ram) {
+void beAction2_OnAddRam(beAction2 *self, beAction2InfoRam *ram) {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "ACTION");
     ram->_isRun = 0;
     g_enbayaPlayOnceEndOffset[0] = -1.0f / 30.0f;
@@ -781,7 +781,7 @@ void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram)
 }
 
 /* Slot 31, per frame for each running, unfrozen ram: updates each active component kind. */
-void beAction2_Update(beAction2 *self, beAction2InfoRam *ram) {
+void beAction2_UpdateRam(beAction2 *self, beAction2InfoRam *ram) {
     beAction2InfoWork *work;
 
     if (ram->_isRun == 0) {
@@ -821,7 +821,7 @@ inline WorkRef::~WorkRef() {
 /* Slot 33: answers ISCOMEND, ISRUN, GETNAMELIST, GETAPPEARANCELIST and GETBONEMATRIX, freezes and
  * unfreezes the action on ONFREEZE and OFFREEZE, stops it on NDSP and starts any other name as the
  * action's data. */
-int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name)
+int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
 {
     WorkRef workRef;
     beAction2Info *info;
@@ -1049,12 +1049,12 @@ int beAction2_GetMeta(void)
  * do. */
 
 /* Slot 28 default: empty. */
-void Gap__Core__igObject__vfunc_28(void)
+void beBaseInfoManager_OnAddInfo(void)
 {
 }
 
 /* Slot 34 default: always 0. */
-int Gap__Core__igObject__vfunc_34(void) {
+int beBaseInfoManager_OnMessage(void) {
     return 0;
 }
 

@@ -18,15 +18,15 @@ igMetaField *g_beSvDeliver_totalSizeListMetaField;
 igMetaField *g_beSvDeliver_gameDataMetaField;
 igMetaField *g_beSvDeliver_platformDataMetaField;
 
-igMetaObject *FUN_0034b0d0(void) {
+igMetaObject *beSvDeliver_GetOrCreateMetaObject(void) {
     if (g_beSvDeliver_metaObject == 0) {
         g_beSvDeliver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSvDeliver_metaObject;
 }
 
-igMetaObject *FUN_0034b120(void) {
-    if (g_beSvDeliver_metaObject == 0 || !isValid(g_beSvDeliver_metaObject)) FUN_0034b260();
+igMetaObject *beSvDeliver_GetMetaObject(void) {
+    if (g_beSvDeliver_metaObject == 0 || !isValid(g_beSvDeliver_metaObject)) beSvDeliver_EnsureRegistered();
     return g_beSvDeliver_metaObject;
 }
 
@@ -35,7 +35,7 @@ int beSvDeliver_GetVTable(void) {
     int temp_s5;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_005388b0[0]);
+    u.w[0] = (int)(&g_beSvDeliver_vtable[0]);
     u.w[3] = 0;
     u.w[12] = 0;
     u.w[13] = 0;
@@ -43,7 +43,7 @@ int beSvDeliver_GetVTable(void) {
     u.w[15] = 0;
     u.w[16] = 0;
     temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_005388b0[0]);
+    u.w[0] = (int)(&g_beSvDeliver_vtable[0]);
     FUN_00349080((void **)(&u.w[16]), (long long)(-1));
     igSmartPointer_igIntList_Destruct(&u.w[15], -1);
     igSmartPointer_igIntList_Destruct(&u.w[14], -1);
@@ -53,12 +53,12 @@ int beSvDeliver_GetVTable(void) {
     return temp_s5;
 }
 
-void FUN_0034b260(void)
+void beSvDeliver_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvDeliver_Register);
 }
 
-static igMetaObjectCallback g_beSvDeliver_callbackList[] = { igIntList_EnsureRegistered, FUN_0034af90, FUN_0034a340, 0 };
+static igMetaObjectCallback g_beSvDeliver_callbackList[] = { igIntList_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, beSvPlatBaseData_EnsureRegistered, 0 };
 
 void *beSvDeliver_Register(void) {
     BecLibrary_MarkRegistered();
@@ -67,7 +67,7 @@ void *beSvDeliver_Register(void) {
         &g_beSvDeliver_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSvDeliver_GetMetaObject,
+        beSvDeliver_GetMetaObjectFunction,
         "beSvDeliver",
         0x44, /* instance size */
         beSvDeliver_GetVTable,
@@ -77,9 +77,9 @@ void *beSvDeliver_Register(void) {
     );
 }
 
-void beSvDeliver_GetMetaObject(void)
+void beSvDeliver_GetMetaObjectFunction(void)
 {
-    FUN_0034b120();
+    beSvDeliver_GetMetaObject();
 }
 
 static FieldFactory g_beSvDeliver_ctorTable[] = {
@@ -195,10 +195,10 @@ void beSvDeliver_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x10));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_0034aeb0();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_6)->_refCounted = 0;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_0034a210();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_beSvDeliver_fieldTable, g_beSvDeliver_fieldHandles, g_beSvDeliver_fieldOffsets, temp_s0);
 }
 

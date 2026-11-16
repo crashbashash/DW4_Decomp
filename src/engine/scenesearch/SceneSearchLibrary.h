@@ -34,7 +34,7 @@ extern "C" int igSmartPointer_igMetaObject_Destruct(...);
 extern "C" int FUN_002293d0(...);
 extern "C" int FUN_00131bc0(...);
 extern "C" int igStringRef_Destruct(...);
-extern "C" int DAT_0052d0d0[4];
+extern "C" int g_igSearchSceneGraph_vtable[4];
 extern "C" void *g_objectSystem[4];
 
 /* InitFields' field tables and field helpers. */

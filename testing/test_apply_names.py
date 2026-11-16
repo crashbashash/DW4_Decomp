@@ -217,5 +217,19 @@ class ApplyNames(unittest.TestCase):
             self.assertEqual(json.loads((base/'unit-objects.json').read_text())['0x00100000']['emitted'],
                              {'B':'0x00100010','A':'0x00100020'})
 
+    def test_unit_objects_data_row_of_the_renamed_function_goes(self):
+        # the data row spelled the function's new name (passed by address); once the function's
+        # own entry carries it, the unit would declare the symbol twice
+        objects={'0x00100000':{'whole_file':True,'emitted':{'FUN_00100010':'0x00100010'},
+                               'data':{'Accessor':'0x00100010','Other':'0x004d0000'}}}
+        with tempfile.TemporaryDirectory(prefix='dw4-name-batch-') as td:
+            base=fixture(td,[(0x100000,'FUN_00100000'),(0x100010,'FUN_00100010')],
+                         [(0x100010,'Accessor')],{})
+            (base/'unit-objects.json').write_text(json.dumps(objects,indent=2)+'\n')
+            run_batch(base,'--apply')
+            row=json.loads((base/'unit-objects.json').read_text())['0x00100000']
+            self.assertEqual(row['emitted'],{'Accessor':'0x00100010'})
+            self.assertEqual(row['data'],{'Other':'0x004d0000'})
+
 
 if __name__=='__main__':unittest.main()

@@ -1,7 +1,7 @@
 igMetaObject *g_igGetCenterFunctionList_metaObject;
 
 OpTable *FUN_00188920(int arg0) {
-    FUN_001889f0();
+    igGetCenterFunctionList_EnsureRegistered();
     return (OpTable *)igMetaObject_CreateInstance((int)g_igGetCenterFunctionList_metaObject, arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igGetCenterFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igGetCenterFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001889f0();
+        igGetCenterFunctionList_EnsureRegistered();
     return g_igGetCenterFunctionList_metaObject;
 }
 
@@ -17,11 +17,11 @@ int igGetCenterFunctionList_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00527e50[0];
+    obj.vt = &g_igGetCenterFunctionList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001889f0(void)
+void igGetCenterFunctionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGetCenterFunctionList_Register);
 }

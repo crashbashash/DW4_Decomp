@@ -1,21 +1,21 @@
 igMetaObject *g_beWaterPlain_metaObject;
 
 void beWaterPlain_CreateInstance(int arg0) {
-    FUN_00340e80();
+    beWaterPlain_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x587BF8, arg0);
 }
 
-igMetaObject *FUN_00340d00(void) {
+igMetaObject *beWaterPlain_GetOrCreateMetaObject(void) {
     if (g_beWaterPlain_metaObject == 0) {
         g_beWaterPlain_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beWaterPlain_metaObject;
 }
 
-void *FUN_00340d50(void) {
+void *beWaterPlain_GetMetaObject(void) {
     igMetaObject *g = g_beWaterPlain_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00340e80();
+        beWaterPlain_EnsureRegistered();
     }
     return g_beWaterPlain_metaObject;
 }
@@ -32,12 +32,12 @@ int beWaterPlain_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_0053b590[0];
+    u.vt = (int)&g_beWaterPlain_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -62,7 +62,7 @@ int beWaterPlain_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00340e80(void)
+void beWaterPlain_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beWaterPlain_Register);
 }
@@ -74,7 +74,7 @@ void *beWaterPlain_Register(void) {
         &g_beWaterPlain_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beWaterPlain_GetMetaObject,
+        beWaterPlain_GetMetaObjectFunction,
         "beWaterPlain",
         0x20, /* instance size */
         beWaterPlain_GetVTable,
@@ -84,8 +84,8 @@ void *beWaterPlain_Register(void) {
     );
 }
 
-void beWaterPlain_GetMetaObject(void)
+void beWaterPlain_GetMetaObjectFunction(void)
 {
-    FUN_00340d50();
+    beWaterPlain_GetMetaObject();
 }
 

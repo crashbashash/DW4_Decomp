@@ -44,7 +44,7 @@ igMetaObject *igCopyRenderDestinationAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igCopyRenderDestinationAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00138b20();
+        igCopyRenderDestinationAttr_EnsureRegistered();
     return g_igCopyRenderDestinationAttr_metaObject;
 }
 
@@ -56,7 +56,7 @@ int igCopyRenderDestinationAttr_GetVTable(void) {
     S_ref *q2;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_00523dd0[0];
+    u.vt = (int)&g_igCopyRenderDestinationAttr_vtable[0];
     q2 = (S_ref *)&u.b[16];
     *(int *)q2 = 0;
     q1 = (S_ref *)&u.b[20];
@@ -64,7 +64,7 @@ int igCopyRenderDestinationAttr_GetVTable(void) {
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00523dd0[0];
+    u.vt = (int)&g_igCopyRenderDestinationAttr_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -95,12 +95,12 @@ int igCopyRenderDestinationAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00138b20(void)
+void igCopyRenderDestinationAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCopyRenderDestinationAttr_Register);
 }
 
-static igMetaObjectCallback g_igCopyRenderDestinationAttr_callbackList[] = { FUN_00134370, FUN_0014e050, FUN_00132cf0, 0 };
+static igMetaObjectCallback g_igCopyRenderDestinationAttr_callbackList[] = { igRenderDestinationAttr_EnsureRegistered, igImage_EnsureRegistered, igTextureAttr_EnsureRegistered, 0 };
 
 void igCopyRenderDestinationAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -189,9 +189,9 @@ void igCopyRenderDestinationAttr_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001341f0();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0014dfb0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igImage_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_00132ba0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_igCopyRenderDestinationAttr_fieldTable, g_igCopyRenderDestinationAttr_fieldHandles, g_igCopyRenderDestinationAttr_fieldOffsets, temp_s2);
 }
 

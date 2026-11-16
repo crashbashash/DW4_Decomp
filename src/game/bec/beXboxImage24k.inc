@@ -2,20 +2,20 @@ igMetaObject *g_beXboxImage24k_metaObject;
 igMetaField *g_beXboxImage24k_dataSizeMetaField;
 igMetaField *g_beXboxImage24k_dataMetaField;
 
-igMetaObject *FUN_00347600(void) {
+igMetaObject *beXboxImage24k_GetOrCreateMetaObject(void) {
     if (g_beXboxImage24k_metaObject == 0) {
         g_beXboxImage24k_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beXboxImage24k_metaObject;
 }
 
-void *FUN_00347650(void) {
+void *beXboxImage24k_GetMetaObject(void) {
     unsigned char b;
     if (((void * *)&g_beXboxImage24k_metaObject)[0] != 0) {
         b = (*(int *)((char *)(((void * *)&g_beXboxImage24k_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_003476e0();
+    beXboxImage24k_EnsureRegistered();
 done:
     return ((void * *)&g_beXboxImage24k_metaObject)[0];
 }
@@ -24,11 +24,11 @@ int beXboxImage24k_GetVTable(void) {
     struct Obj_3476a0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00538c20[0];
+    obj.vt = &g_beXboxImage24k_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003476e0(void)
+void beXboxImage24k_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beXboxImage24k_Register);
 }
@@ -40,7 +40,7 @@ void *beXboxImage24k_Register(void) {
         &g_beXboxImage24k_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beXboxImage24k_GetMetaObject,
+        beXboxImage24k_GetMetaObjectFunction,
         "beXboxImage24k",
         0x10, /* instance size */
         beXboxImage24k_GetVTable,
@@ -50,9 +50,9 @@ void *beXboxImage24k_Register(void) {
     );
 }
 
-void beXboxImage24k_GetMetaObject(void)
+void beXboxImage24k_GetMetaObjectFunction(void)
 {
-    FUN_00347650();
+    beXboxImage24k_GetMetaObject();
 }
 
 static FieldFactory g_beXboxImage24k_ctorTable[] = {

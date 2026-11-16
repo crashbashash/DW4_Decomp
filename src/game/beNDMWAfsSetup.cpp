@@ -1,21 +1,21 @@
 #include "dw4/reflected.h"
 
 extern "C" int beCri_ReleasePartitions(int);
-extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_21(void);
-extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_22(void);
-extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_23(void);
-extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_27(void);
-extern "C" int Gap__Bec__beNDMWAfsSetup__vfunc_20(void);
+extern "C" void beNDMWAfsSetup_Activate(void);
+extern "C" void beNDMWAfsSetup_Deactivate(void);
+extern "C" void beNDMWAfsSetup_Start(void);
+extern "C" void beNDMWAfsSetup_Update(void);
+extern "C" int beNDMWAfsSetup_GetMeta(void);
 extern "C" void * igInsightCore_FindManager(...);
 extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
 extern "C" const char *StringPool_Intern(void *, const char *);
 extern "C" void StringChunk_ReleaseHeader(int, int *);
-extern "C" void Gap__Bec__beNDMWAfsStageLoad__vfunc_21(void);
-extern "C" int Gap__Bec__beNDMWAfsStageLoad__vfunc_20(void);
+extern "C" void beNDMWAfsStageLoad_Execute(void);
+extern "C" int beNDMWAfsStageLoad_GetMeta(void);
 extern "C" int g_beCri_metaObject[4];
 extern "C" int g_beNDMWAfsSetup_metaObject[4];
-extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_24(beNDMWAfsSetup *self);
+extern "C" void beNDMWAfsSetup_Stop(beNDMWAfsSetup *self);
 extern "C" int igObject_IsKindOf(igObject *, int);
 extern "C" void igInsightCore_AddToScheduler(int, beNDMWAfsSetup *);
 extern "C" void beCri_SetupPartitions(beCri *, int, int);
@@ -27,35 +27,35 @@ extern "C" int g_beCri_metaObject[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" char emptyString[];
 extern "C" char text_stagis08_igb[];
-extern "C" int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info);
+extern "C" int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info);
 extern "C" int igInsightCore_RemoveFromScheduler(int, beNDMWAfsSetup *);
 extern "C" int List_Reserve(igDataList *, int, int);
 extern "C" int igObject_Destroy(igObject *);
-extern "C" void Gap__Bec__beNDMWAfsSetup__vfunc_26(beNDMWAfsSetup *arg0);
+extern "C" void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *arg0);
 extern "C" int g_beNDMWAfsStageLoad_metaObject[4];
 
 /* Empty virtual slot 21 */
-void Gap__Bec__beNDMWAfsSetup__vfunc_21(void)
+void beNDMWAfsSetup_Activate(void)
 {
 }
 
 /* Empty virtual slot 22 */
-void Gap__Bec__beNDMWAfsSetup__vfunc_22(void)
+void beNDMWAfsSetup_Deactivate(void)
 {
 }
 
 /* Empty virtual slot 23 */
-void Gap__Bec__beNDMWAfsSetup__vfunc_23(void)
+void beNDMWAfsSetup_Start(void)
 {
 }
 
 /* Finds the insight's beCri component (CRI sound middleware owner) and hands it to beCri_ReleasePartitions,
  * which tears down the global string/object lists. */
-void Gap__Bec__beNDMWAfsSetup__vfunc_24(beNDMWAfsSetup *self) {
+void beNDMWAfsSetup_Stop(beNDMWAfsSetup *self) {
     beCri_ReleasePartitions(((int)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0])));
 }
 
-int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
+int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info) {
     if (igObject_IsKindOf(info, g_beNDMWAfsSetupInfo_metaObject[0])) {
         beCri *cri = (beCri *)igInsightCore_FindManager(self->_insight, g_beCri_metaObject[0]);
         if (cri == 0) return 0;
@@ -91,7 +91,7 @@ int Gap__Bec__beNDMWAfsSetup__vfunc_25(beNDMWAfsSetup *self, igObject *info) {
     return 0;
 }
 
-void Gap__Bec__beNDMWAfsSetup__vfunc_26(beNDMWAfsSetup *arg0) {
+void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *arg0) {
     igDataList *l;
     int n;
     int n2;
@@ -122,20 +122,20 @@ void Gap__Bec__beNDMWAfsSetup__vfunc_26(beNDMWAfsSetup *arg0) {
 }
 
 /* Empty virtual slot 27 */
-void Gap__Bec__beNDMWAfsSetup__vfunc_27(void)
+void beNDMWAfsSetup_Update(void)
 {
 }
 
-void Gap__Bec__beNDMWAfsStageLoad__vfunc_21(void)
+void beNDMWAfsStageLoad_Execute(void)
 {
 }
 
-int Gap__Bec__beNDMWAfsStageLoad__vfunc_20(void)
+int beNDMWAfsStageLoad_GetMeta(void)
 {
     return g_beNDMWAfsStageLoad_metaObject[0];
 }
 
-int Gap__Bec__beNDMWAfsSetup__vfunc_20(void)
+int beNDMWAfsSetup_GetMeta(void)
 {
     return g_beNDMWAfsSetup_metaObject[0];
 }

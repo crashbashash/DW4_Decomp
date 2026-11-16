@@ -154,8 +154,8 @@ through a different chain:
    | `beNDMWItemRevisionBase_RollRevision` `0x4480C8` `0x4480F0` | two rolls `%6000+1` and `%level`: **item revision** of a new weapon or armour |
    | `beNDMWItemRevisionPocketBase_RollPocket` `0x4481B0` | `genrand()%620` → pocket count (0–5) of a new weapon or blue armour |
    | `FUN_0042EB80` `0x42F288` | `(genrand()%1000)*1000`: random step |
-   | `Gap__Bec__beNDMWItemDisk__vfunc_22` `0x4489A8` | `genrand()%10 <= 8-k`: poison-cure disk, `k` the poison endurance |
-   | `Gap__Bec__beNDMWItemInstant__vfunc_22` `0x448CEC` | `genrand()%range` scaled by `(BITRITSU+100)/100`: bits paid by consumable 0 |
+   | `beNDMWItemDisk_Use` `0x4489A8` | `genrand()%10 <= 8-k`: poison-cure disk, `k` the poison endurance |
+   | `beNDMWItemInstant_Use` `0x448CEC` | `genrand()%range` scaled by `(BITRITSU+100)/100`: bits paid by consumable 0 |
    | `FUN_00390F80` `0x39129C` | `genrand() & 0xf`: small index/variant roll |
 
 So combat, loot, AI and other systems advance the same stream; the Lua sites

@@ -139,45 +139,45 @@ extern "C" int beNDMWItemRevisionPocketBase_GetPrice(beNDMWItemRevisionPocketBas
 extern "C" int beNDMWItemBase_IndexOfRecNo(igObjectList *items, int recNo);
 extern "C" void beNDMWItemRevisionBase_RollRevision(beNDMWItemRevisionBase *self, beNDMWStatus *status, unsigned int level);
 extern "C" void beNDMWItemRevisionPocketBase_RollPocket(beNDMWItemRevisionPocketBase *self, beNDMWStatus *status, int level);
-extern "C" beDataBase *Gap__Bec__beNDMWItemWeapon__vfunc_21(beNDMWItemWeapon *self, beNDMWStatus *status);
+extern "C" beDataBase *beNDMWItemWeapon_GetDataBase(beNDMWItemWeapon *self, beNDMWStatus *status);
 extern "C" void beNDMWItemWeapon_Set(beNDMWItemWeapon *self, int recNo, int pocket, int revision);
 extern "C" void beNDMWItemWeapon_SetRandom(beNDMWItemWeapon *self, int recNo, beNDMWStatus *status, int level);
-extern "C" int Gap__Bec__beNDMWItemWeapon__vfunc_23(beNDMWItemWeapon *self);
-extern "C" void Gap__Bec__beNDMWItemWeapon__vfunc_24(beNDMWItemWeapon *self, int packed);
-extern "C" beDataBase *Gap__Bec__beNDMWItemBlueArmor__vfunc_21(beNDMWItemBlueArmor *self, beNDMWStatus *status);
+extern "C" int beNDMWItemWeapon_Pack(beNDMWItemWeapon *self);
+extern "C" void beNDMWItemWeapon_Unpack(beNDMWItemWeapon *self, int packed);
+extern "C" beDataBase *beNDMWItemBlueArmor_GetDataBase(beNDMWItemBlueArmor *self, beNDMWStatus *status);
 extern "C" void beNDMWItemBlueArmor_Set(beNDMWItemBlueArmor *self, int recNo, int pocket, int revision);
 extern "C" void beNDMWItemBlueArmor_SetRandom(beNDMWItemBlueArmor *self, int recNo, beNDMWStatus *status, int level);
-extern "C" int Gap__Bec__beNDMWItemBlueArmor__vfunc_23(beNDMWItemBlueArmor *self);
-extern "C" void Gap__Bec__beNDMWItemBlueArmor__vfunc_24(beNDMWItemBlueArmor *self, int packed);
-extern "C" beDataBase *Gap__Bec__beNDMWItemYellowArmor__vfunc_21(beNDMWItemYellowArmor *self, beNDMWStatus *status);
+extern "C" int beNDMWItemBlueArmor_Pack(beNDMWItemBlueArmor *self);
+extern "C" void beNDMWItemBlueArmor_Unpack(beNDMWItemBlueArmor *self, int packed);
+extern "C" beDataBase *beNDMWItemYellowArmor_GetDataBase(beNDMWItemYellowArmor *self, beNDMWStatus *status);
 extern "C" void beNDMWItemYellowArmor_Set(beNDMWItemYellowArmor *self, int recNo, int revision);
 extern "C" void beNDMWItemYellowArmor_SetRandom(beNDMWItemYellowArmor *self, int recNo, beNDMWStatus *status, int level);
-extern "C" int Gap__Bec__beNDMWItemYellowArmor__vfunc_23(beNDMWItemYellowArmor *self);
-extern "C" void Gap__Bec__beNDMWItemYellowArmor__vfunc_24(beNDMWItemYellowArmor *self, int packed);
-extern "C" beDataBase *Gap__Bec__beNDMWItemAbilityChip__vfunc_21(beNDMWItemAbilityChip *self, beNDMWStatus *status);
+extern "C" int beNDMWItemYellowArmor_Pack(beNDMWItemYellowArmor *self);
+extern "C" void beNDMWItemYellowArmor_Unpack(beNDMWItemYellowArmor *self, int packed);
+extern "C" beDataBase *beNDMWItemAbilityChip_GetDataBase(beNDMWItemAbilityChip *self, beNDMWStatus *status);
 extern "C" void beNDMWItemAbilityChip_Set(beNDMWItemAbilityChip *self, int recNo);
-extern "C" int Gap__Bec__beNDMWItemAbilityChip__vfunc_23(beNDMWItemAbilityChip *self);
-extern "C" void Gap__Bec__beNDMWItemAbilityChip__vfunc_24(beNDMWItemAbilityChip *self, int packed);
-extern "C" beDataBase *Gap__Bec__beNDMWItemDisk__vfunc_21(beNDMWItemDisk *self, beNDMWStatus *status);
+extern "C" int beNDMWItemAbilityChip_Pack(beNDMWItemAbilityChip *self);
+extern "C" void beNDMWItemAbilityChip_Unpack(beNDMWItemAbilityChip *self, int packed);
+extern "C" beDataBase *beNDMWItemDisk_GetDataBase(beNDMWItemDisk *self, beNDMWStatus *status);
 extern "C" void beNDMWItemDisk_Set(beNDMWItemDisk *self, int recNo);
-extern "C" int Gap__Bec__beNDMWItemDisk__vfunc_23(beNDMWItemDisk *self);
-extern "C" void Gap__Bec__beNDMWItemDisk__vfunc_24(beNDMWItemDisk *self, int packed);
-extern "C" int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerNo);
-extern "C" beDataBase *Gap__Bec__beNDMWItemInstant__vfunc_21(beNDMWItemInstant *self, beNDMWStatus *status);
+extern "C" int beNDMWItemDisk_Pack(beNDMWItemDisk *self);
+extern "C" void beNDMWItemDisk_Unpack(beNDMWItemDisk *self, int packed);
+extern "C" int beNDMWItemDisk_Use(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerNo);
+extern "C" beDataBase *beNDMWItemInstant_GetDataBase(beNDMWItemInstant *self, beNDMWStatus *status);
 extern "C" void beNDMWItemInstant_Set(beNDMWItemInstant *self, int recNo);
-extern "C" int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int playerNo);
-extern "C" beDataBase *Gap__Bec__beNDMWItemImportant__vfunc_21(beNDMWItemImportant *self, beNDMWStatus *status);
+extern "C" int beNDMWItemInstant_Use(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int playerNo);
+extern "C" beDataBase *beNDMWItemImportant_GetDataBase(beNDMWItemImportant *self, beNDMWStatus *status);
 extern "C" void beNDMWItemImportant_Set(beNDMWItemImportant *self, int recNo);
-extern "C" beDataBase *Gap__Bec__beNDMWItemWaza__vfunc_21(beNDMWItemWaza *self, beNDMWStatus *status);
+extern "C" beDataBase *beNDMWItemWaza_GetDataBase(beNDMWItemWaza *self, beNDMWStatus *status);
 extern "C" void beNDMWItemWaza_Set(beNDMWItemWaza *self, int recNo, int baseNo);
-extern "C" int Gap__Bec__beNDMWItemWaza__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWItemImportant__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWItemInstant__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWItemDisk__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWItemAbilityChip__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWItemYellowArmor__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWItemBlueArmor__vfunc_20(void);
-extern "C" int Gap__Bec__beNDMWItemWeapon__vfunc_20(void);
+extern "C" int beNDMWItemWaza_GetMeta(void);
+extern "C" int beNDMWItemImportant_GetMeta(void);
+extern "C" int beNDMWItemInstant_GetMeta(void);
+extern "C" int beNDMWItemDisk_GetMeta(void);
+extern "C" int beNDMWItemAbilityChip_GetMeta(void);
+extern "C" int beNDMWItemYellowArmor_GetMeta(void);
+extern "C" int beNDMWItemBlueArmor_GetMeta(void);
+extern "C" int beNDMWItemWeapon_GetMeta(void);
 
 #pragma push
 #pragma readonly_strings on
@@ -328,7 +328,7 @@ void beNDMWItemRevisionPocketBase_RollPocket(beNDMWItemRevisionPocketBase *self,
     self->_pocket = pocket;
 }
 
-beDataBase *Gap__Bec__beNDMWItemWeapon__vfunc_21(beNDMWItemWeapon *self, beNDMWStatus *status) {
+beDataBase *beNDMWItemWeapon_GetDataBase(beNDMWItemWeapon *self, beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "weapon");
 }
 
@@ -347,7 +347,7 @@ void beNDMWItemWeapon_SetRandom(beNDMWItemWeapon *self, int recNo, beNDMWStatus 
 }
 
 /* Packs this item into an inventory word. */
-int Gap__Bec__beNDMWItemWeapon__vfunc_23(beNDMWItemWeapon *self) {
+int beNDMWItemWeapon_Pack(beNDMWItemWeapon *self) {
     int packed = self->_recNo;
     packed |= self->_isEquip ? ITEM_EQUIPPED_BIT : 0;
     packed |= self->_kindNo << ITEM_KIND_SHIFT;
@@ -357,7 +357,7 @@ int Gap__Bec__beNDMWItemWeapon__vfunc_23(beNDMWItemWeapon *self) {
 }
 
 /* Unpacks an inventory word into this item. */
-void Gap__Bec__beNDMWItemWeapon__vfunc_24(beNDMWItemWeapon *self, int packed) {
+void beNDMWItemWeapon_Unpack(beNDMWItemWeapon *self, int packed) {
     self->_recNo = packed & ITEM_REC_NO_MASK;
     self->_isEquip = (packed & ITEM_EQUIPPED_BIT) != 0;
     self->_kindNo = (packed >> ITEM_KIND_SHIFT) & ITEM_KIND_MASK;
@@ -365,7 +365,7 @@ void Gap__Bec__beNDMWItemWeapon__vfunc_24(beNDMWItemWeapon *self, int packed) {
     self->_revision = (packed >> ITEM_REVISION_SHIFT) & ITEM_REVISION_MASK;
 }
 
-beDataBase *Gap__Bec__beNDMWItemBlueArmor__vfunc_21(beNDMWItemBlueArmor *self, beNDMWStatus *status) {
+beDataBase *beNDMWItemBlueArmor_GetDataBase(beNDMWItemBlueArmor *self, beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "armor1");
 }
 
@@ -385,7 +385,7 @@ void beNDMWItemBlueArmor_SetRandom(beNDMWItemBlueArmor *self, int recNo, beNDMWS
 }
 
 /* Packs this item into an inventory word. */
-int Gap__Bec__beNDMWItemBlueArmor__vfunc_23(beNDMWItemBlueArmor *self) {
+int beNDMWItemBlueArmor_Pack(beNDMWItemBlueArmor *self) {
     int packed = self->_recNo;
     packed |= self->_isEquip ? ITEM_EQUIPPED_BIT : 0;
     packed |= self->_kindNo << ITEM_KIND_SHIFT;
@@ -395,7 +395,7 @@ int Gap__Bec__beNDMWItemBlueArmor__vfunc_23(beNDMWItemBlueArmor *self) {
 }
 
 /* Unpacks an inventory word into this item. */
-void Gap__Bec__beNDMWItemBlueArmor__vfunc_24(beNDMWItemBlueArmor *self, int packed) {
+void beNDMWItemBlueArmor_Unpack(beNDMWItemBlueArmor *self, int packed) {
     self->_recNo = packed & ITEM_REC_NO_MASK;
     self->_isEquip = (packed & ITEM_EQUIPPED_BIT) != 0;
     self->_kindNo = (packed >> ITEM_KIND_SHIFT) & ITEM_KIND_MASK;
@@ -403,7 +403,7 @@ void Gap__Bec__beNDMWItemBlueArmor__vfunc_24(beNDMWItemBlueArmor *self, int pack
     self->_revision = (packed >> ITEM_REVISION_SHIFT) & ITEM_REVISION_MASK;
 }
 
-beDataBase *Gap__Bec__beNDMWItemYellowArmor__vfunc_21(beNDMWItemYellowArmor *self, beNDMWStatus *status) {
+beDataBase *beNDMWItemYellowArmor_GetDataBase(beNDMWItemYellowArmor *self, beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "armor2");
 }
 
@@ -421,7 +421,7 @@ void beNDMWItemYellowArmor_SetRandom(beNDMWItemYellowArmor *self, int recNo, beN
 }
 
 /* Packs this item into an inventory word. */
-int Gap__Bec__beNDMWItemYellowArmor__vfunc_23(beNDMWItemYellowArmor *self) {
+int beNDMWItemYellowArmor_Pack(beNDMWItemYellowArmor *self) {
     int packed = self->_recNo;
     packed |= self->_isEquip ? ITEM_EQUIPPED_BIT : 0;
     packed |= self->_kindNo << ITEM_KIND_SHIFT;
@@ -430,14 +430,14 @@ int Gap__Bec__beNDMWItemYellowArmor__vfunc_23(beNDMWItemYellowArmor *self) {
 }
 
 /* Unpacks an inventory word into this item. */
-void Gap__Bec__beNDMWItemYellowArmor__vfunc_24(beNDMWItemYellowArmor *self, int packed) {
+void beNDMWItemYellowArmor_Unpack(beNDMWItemYellowArmor *self, int packed) {
     self->_recNo = packed & ITEM_REC_NO_MASK;
     self->_isEquip = (packed & ITEM_EQUIPPED_BIT) != 0;
     self->_kindNo = (packed >> ITEM_KIND_SHIFT) & ITEM_KIND_MASK;
     self->_revision = (packed >> ITEM_REVISION_SHIFT) & ITEM_REVISION_MASK;
 }
 
-beDataBase *Gap__Bec__beNDMWItemAbilityChip__vfunc_21(beNDMWItemAbilityChip *self,
+beDataBase *beNDMWItemAbilityChip_GetDataBase(beNDMWItemAbilityChip *self,
                                                       beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "abChip");
 }
@@ -449,7 +449,7 @@ void beNDMWItemAbilityChip_Set(beNDMWItemAbilityChip *self, int recNo) {
 }
 
 /* Packs this item into an inventory word. */
-int Gap__Bec__beNDMWItemAbilityChip__vfunc_23(beNDMWItemAbilityChip *self) {
+int beNDMWItemAbilityChip_Pack(beNDMWItemAbilityChip *self) {
     int packed = self->_recNo;
     packed |= self->_isEquip ? ITEM_EQUIPPED_BIT : 0;
     packed |= self->_kindNo << ITEM_KIND_SHIFT;
@@ -457,13 +457,13 @@ int Gap__Bec__beNDMWItemAbilityChip__vfunc_23(beNDMWItemAbilityChip *self) {
 }
 
 /* Unpacks an inventory word into this item. */
-void Gap__Bec__beNDMWItemAbilityChip__vfunc_24(beNDMWItemAbilityChip *self, int packed) {
+void beNDMWItemAbilityChip_Unpack(beNDMWItemAbilityChip *self, int packed) {
     self->_recNo = packed & ITEM_REC_NO_MASK;
     self->_isEquip = (packed & ITEM_EQUIPPED_BIT) != 0;
     self->_kindNo = (packed >> ITEM_KIND_SHIFT) & ITEM_KIND_MASK;
 }
 
-beDataBase *Gap__Bec__beNDMWItemDisk__vfunc_21(beNDMWItemDisk *self, beNDMWStatus *status) {
+beDataBase *beNDMWItemDisk_GetDataBase(beNDMWItemDisk *self, beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "conItem");
 }
 
@@ -475,7 +475,7 @@ void beNDMWItemDisk_Set(beNDMWItemDisk *self, int recNo) {
 }
 
 /* Packs this item into an inventory word. */
-int Gap__Bec__beNDMWItemDisk__vfunc_23(beNDMWItemDisk *self) {
+int beNDMWItemDisk_Pack(beNDMWItemDisk *self) {
     int packed = self->_recNo;
     packed |= self->_isEquip ? ITEM_EQUIPPED_BIT : 0;
     packed |= self->_kindNo << ITEM_KIND_SHIFT;
@@ -484,7 +484,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_23(beNDMWItemDisk *self) {
 }
 
 /* Unpacks an inventory word into this item. */
-void Gap__Bec__beNDMWItemDisk__vfunc_24(beNDMWItemDisk *self, int packed) {
+void beNDMWItemDisk_Unpack(beNDMWItemDisk *self, int packed) {
     self->_recNo = packed & ITEM_REC_NO_MASK;
     self->_isEquip = (packed & ITEM_EQUIPPED_BIT) != 0;
     self->_kindNo = (packed >> ITEM_KIND_SHIFT) & ITEM_KIND_MASK;
@@ -494,7 +494,7 @@ void Gap__Bec__beNDMWItemDisk__vfunc_24(beNDMWItemDisk *self, int packed) {
 /* Uses a disk on player `playerNo`. Records 0-2 restore HP, 3-5 MP and 9 both, by the record's HP
  * and MP values; 6 may clear the player's poison timer, 7 sends the player's fight calculation a
  * -50 magic effect and 8 runs the gate disc script, the only use that returns 1. */
-int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerNo) {
+int beNDMWItemDisk_Use(beNDMWItemDisk *self, beNDMWGameRam *gameRam, int playerNo) {
     int recNo = self->_recNo;
 
     switch (recNo) {
@@ -553,7 +553,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
     return 0;
 }
 
-beDataBase *Gap__Bec__beNDMWItemInstant__vfunc_21(beNDMWItemInstant *self, beNDMWStatus *status) {
+beDataBase *beNDMWItemInstant_GetDataBase(beNDMWItemInstant *self, beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "insItem");
 }
 
@@ -566,7 +566,7 @@ void beNDMWItemInstant_Set(beNDMWItemInstant *self, int recNo) {
  * amount from a band set by the first player's level, raised by its BITRITSU percentage, kept in
  * _value. Records 1-3 add to the player's "XDATA"; 4-25 add to one UPCNT counter and recalculate the
  * player, the only use that returns 1. */
-int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int playerNo) {
+int beNDMWItemInstant_Use(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int playerNo) {
     unsigned int recNo;
     int leader;
     int level;
@@ -662,7 +662,7 @@ int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam
     return 0;
 }
 
-beDataBase *Gap__Bec__beNDMWItemImportant__vfunc_21(beNDMWItemImportant *self, beNDMWStatus *status) {
+beDataBase *beNDMWItemImportant_GetDataBase(beNDMWItemImportant *self, beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "impItem");
 }
 
@@ -671,7 +671,7 @@ void beNDMWItemImportant_Set(beNDMWItemImportant *self, int recNo) {
     self->_kindNo = ITEM_KIND_IMPORTANT;
 }
 
-beDataBase *Gap__Bec__beNDMWItemWaza__vfunc_21(beNDMWItemWaza *self, beNDMWStatus *status) {
+beDataBase *beNDMWItemWaza_GetDataBase(beNDMWItemWaza *self, beNDMWStatus *status) {
     return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "pcTech");
 }
 
@@ -682,42 +682,42 @@ void beNDMWItemWaza_Set(beNDMWItemWaza *self, int recNo, int baseNo) {
     self->_isEquip = 0;
 }
 
-int Gap__Bec__beNDMWItemWaza__vfunc_20(void)
+int beNDMWItemWaza_GetMeta(void)
 {
     return g_beNDMWItemWaza_metaObject[0];
 }
 
-int Gap__Bec__beNDMWItemImportant__vfunc_20(void)
+int beNDMWItemImportant_GetMeta(void)
 {
     return g_beNDMWItemImportant_metaObject[0];
 }
 
-int Gap__Bec__beNDMWItemInstant__vfunc_20(void)
+int beNDMWItemInstant_GetMeta(void)
 {
     return g_beNDMWItemInstant_metaObject[0];
 }
 
-int Gap__Bec__beNDMWItemDisk__vfunc_20(void)
+int beNDMWItemDisk_GetMeta(void)
 {
     return g_beNDMWItemDisk_metaObject[0];
 }
 
-int Gap__Bec__beNDMWItemAbilityChip__vfunc_20(void)
+int beNDMWItemAbilityChip_GetMeta(void)
 {
     return g_beNDMWItemAbilityChip_metaObject[0];
 }
 
-int Gap__Bec__beNDMWItemYellowArmor__vfunc_20(void)
+int beNDMWItemYellowArmor_GetMeta(void)
 {
     return g_beNDMWItemYellowArmor_metaObject[0];
 }
 
-int Gap__Bec__beNDMWItemBlueArmor__vfunc_20(void)
+int beNDMWItemBlueArmor_GetMeta(void)
 {
     return g_beNDMWItemBlueArmor_metaObject[0];
 }
 
-int Gap__Bec__beNDMWItemWeapon__vfunc_20(void)
+int beNDMWItemWeapon_GetMeta(void)
 {
     return g_beNDMWItemWeapon_metaObject[0];
 }

@@ -9,24 +9,24 @@ igMetaField *g_beGeneraterInfoWork_geneEnemyNameMetaField;
 igMetaField *g_beGeneraterInfoWork_geneEnemyRecNoMetaField;
 igMetaField *g_beGeneraterInfoWork_geneEnemyMHpMetaField;
 
-void FUN_0035f100(int arg0) {
-    FUN_0035f2b0();
+void beGeneraterInfoWork_Create(int arg0) {
+    beGeneraterInfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589478, arg0);
 }
 
-igMetaObject *FUN_0035f140(void) {
+igMetaObject *beGeneraterInfoWork_GetOrCreateMetaObject(void) {
     if (g_beGeneraterInfoWork_metaObject == 0) {
         g_beGeneraterInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beGeneraterInfoWork_metaObject;
 }
 
-igMetaObject *FUN_0035f190(void)
+igMetaObject *beGeneraterInfoWork_GetMetaObject(void)
 {
     igMetaObject *g = g_beGeneraterInfoWork_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_0035f2b0();
+        beGeneraterInfoWork_EnsureRegistered();
     return g_beGeneraterInfoWork_metaObject;
 }
 
@@ -41,11 +41,11 @@ int beGeneraterInfoWork_GetVTable(void) {
     igObject_InitHeader(u.b);
     p0 = (S_ref *)&u.b[20];
     p1 = (S_ref *)&u.b[28];
-    u.vt = (int)&DAT_00536050[0];
+    u.vt = (int)&g_beGeneraterInfoWork_vtable[0];
     *(int *)p0 = 0;
     *(int *)p1 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00536050[0];
+    u.vt = (int)&g_beGeneraterInfoWork_vtable[0];
     if (p1 != 0) {
         o = *(char **)p1;
         if (o != 0) {
@@ -69,7 +69,7 @@ int beGeneraterInfoWork_GetVTable(void) {
     return t;
 }
 
-void FUN_0035f2b0(void)
+void beGeneraterInfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beGeneraterInfoWork_Register);
 }
@@ -83,7 +83,7 @@ void *beGeneraterInfoWork_Register(void) {
         &g_beGeneraterInfoWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beGeneraterInfoWork_GetMetaObject,
+        beGeneraterInfoWork_GetMetaObjectFunction,
         "beGeneraterInfoWork",
         0x28, /* instance size */
         beGeneraterInfoWork_GetVTable,
@@ -93,9 +93,9 @@ void *beGeneraterInfoWork_Register(void) {
     );
 }
 
-void beGeneraterInfoWork_GetMetaObject(void)
+void beGeneraterInfoWork_GetMetaObjectFunction(void)
 {
-    FUN_0035f190();
+    beGeneraterInfoWork_GetMetaObject();
 }
 
 static FieldFactory g_beGeneraterInfoWork_ctorTable[] = {

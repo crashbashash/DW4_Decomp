@@ -12,17 +12,17 @@ igMetaField *g_beCriFxXbData_flDiffusionMetaField;
 igMetaField *g_beCriFxXbData_flDensityMetaField;
 igMetaField *g_beCriFxXbData_flHFReferenceMetaField;
 
-igMetaObject *FUN_00366fa0(void) {
+igMetaObject *beCriFxXbData_GetOrCreateMetaObject(void) {
     if (g_beCriFxXbData_metaObject == 0) {
         g_beCriFxXbData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beCriFxXbData_metaObject;
 }
 
-void *FUN_00366ff0(void) {
+void *beCriFxXbData_GetMetaObject(void) {
     igMetaObject *g = g_beCriFxXbData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00367080();
+        beCriFxXbData_EnsureRegistered();
     }
     return g_beCriFxXbData_metaObject;
 }
@@ -31,11 +31,11 @@ int beCriFxXbData_GetVTable(void) {
     union U_367040 u;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00534e90[0]);
+    u.w[0] = (int)(&g_beCriFxXbData_vtable[0]);
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_00367080(void)
+void beCriFxXbData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beCriFxXbData_Register);
 }
@@ -47,7 +47,7 @@ void *beCriFxXbData_Register(void) {
         &g_beCriFxXbData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beCriFxXbData_GetMetaObject,
+        beCriFxXbData_GetMetaObjectFunction,
         "beCriFxXbData",
         0x38, /* instance size */
         beCriFxXbData_GetVTable,
@@ -57,9 +57,9 @@ void *beCriFxXbData_Register(void) {
     );
 }
 
-void beCriFxXbData_GetMetaObject(void)
+void beCriFxXbData_GetMetaObjectFunction(void)
 {
-    FUN_00366ff0();
+    beCriFxXbData_GetMetaObject();
 }
 
 static FieldFactory g_beCriFxXbData_ctorTable[] = {

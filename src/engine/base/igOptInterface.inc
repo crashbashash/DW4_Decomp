@@ -23,13 +23,13 @@ int igOptInterface_GetVTable(void) {
     struct Obj_2 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052be10[0];
+    obj.vt = &g_igOptInterface_vtable[0];
     obj.w8 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_0052be10[0];
+    obj.vt = &g_igOptInterface_vtable[0];
     igSmartPointer_igInfoList_Destruct(&obj.w11, -1);
     FUN_00225b90((void **)&obj.w10, -1);
     igStringRef_Destruct(&obj.w9, -1);

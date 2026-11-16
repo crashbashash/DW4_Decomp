@@ -20,10 +20,10 @@ int igFieldChangeView_GetVTable(void) {
     char *o;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00541360[0];
+    obj.vt = &g_igFieldChangeView_vtable[0];
     obj.m = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00541360[0];
+    obj.vt = &g_igFieldChangeView_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;
         if (o != 0) {

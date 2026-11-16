@@ -2,17 +2,17 @@ igMetaObject *g_beDataObjStringList_metaObject;
 igMetaField *g_beDataObjStringList_dataMetaField;
 
 void beDataObjStringList_Create(int arg0) {
-    FUN_00364930();
+    beDataObjStringList_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589868, arg0);
 }
 
-void *FUN_00364800(void) {
+void *beDataObjStringList_GetMetaObject(void) {
     bool ok;
     if (g_beDataObjStringList_metaObject == 0) goto make;
     ok = !!(g_beDataObjStringList_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_00364930();
+    beDataObjStringList_EnsureRegistered();
 done:;
     return g_beDataObjStringList_metaObject;
 }
@@ -23,17 +23,17 @@ int beDataObjStringList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj.m8 = 0;
-    obj.vt = &DAT_00535410[0];
+    obj.vt = &g_beDataObjStringList_vtable[0];
     obj.m12 = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00535410[0];
+    obj.vt = &g_beDataObjStringList_vtable[0];
     obj.rel12();
     obj.vt = &g_igNamedObject_vtable[0];
     obj.rel8();
     return r;
 }
 
-void FUN_00364930(void)
+void beDataObjStringList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataObjStringList_Register);
 }
@@ -47,7 +47,7 @@ void *beDataObjStringList_Register(void) {
         &g_beDataObjStringList_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beDataObjStringList_GetMetaObject,
+        beDataObjStringList_GetMetaObjectFunction,
         "beDataObjStringList",
         0x10, /* instance size */
         beDataObjStringList_GetVTable,
@@ -57,9 +57,9 @@ void *beDataObjStringList_Register(void) {
     );
 }
 
-void beDataObjStringList_GetMetaObject(void)
+void beDataObjStringList_GetMetaObjectFunction(void)
 {
-    FUN_00364800();
+    beDataObjStringList_GetMetaObject();
 }
 
 static FieldFactory g_beDataObjStringList_ctorTable[] = {

@@ -2,22 +2,22 @@ igMetaObject *g_beSaveMemoryObj_metaObject;
 igMetaField *g_beSaveMemoryObj_memMetaField;
 
 void beSaveMemoryObj_CreateInstance(int arg0) {
-    FUN_0034ad70();
+    beSaveMemoryObj_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x5883A0, arg0);
 }
 
-igMetaObject *FUN_0034ac90(void) {
+igMetaObject *beSaveMemoryObj_GetOrCreateMetaObject(void) {
     if (g_beSaveMemoryObj_metaObject == 0) {
         g_beSaveMemoryObj_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beSaveMemoryObj_metaObject;
 }
 
-igMetaObject *FUN_0034ace0(void) {
+igMetaObject *beSaveMemoryObj_GetMetaObject(void) {
     igMetaObject *g = g_beSaveMemoryObj_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0034ad70();
+        beSaveMemoryObj_EnsureRegistered();
     return g_beSaveMemoryObj_metaObject;
 }
 
@@ -25,11 +25,11 @@ int beSaveMemoryObj_GetVTable(void) {
     struct Obj_34ad30 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0053c0e0[0];
+    obj.vt = &g_beSaveMemoryObj_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_0034ad70(void)
+void beSaveMemoryObj_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSaveMemoryObj_Register);
 }
@@ -41,7 +41,7 @@ void *beSaveMemoryObj_Register(void) {
         &g_beSaveMemoryObj_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beSaveMemoryObj_GetMetaObject,
+        beSaveMemoryObj_GetMetaObjectFunction,
         "beSaveMemoryObj",
         0xc, /* instance size */
         beSaveMemoryObj_GetVTable,
@@ -51,9 +51,9 @@ void *beSaveMemoryObj_Register(void) {
     );
 }
 
-void beSaveMemoryObj_GetMetaObject(void)
+void beSaveMemoryObj_GetMetaObjectFunction(void)
 {
-    FUN_0034ace0();
+    beSaveMemoryObj_GetMetaObject();
 }
 
 static FieldFactory g_beSaveMemoryObj_ctorTable[] = {

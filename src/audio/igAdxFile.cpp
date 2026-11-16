@@ -31,8 +31,8 @@ struct igResult {
 extern "C" {
 /* CRI ADXF, on the handle in `_adxf` */
 int ADXF_Open(char *fname, int dir);   /* open by name */
-int FUN_00261b78(int ptid, int flid);     /* open an AFS partition entry */
-void FUN_00261c88(int adxf);              /* close */
+int ADXF_OpenAfs(int ptid, int flid);     /* open an AFS partition entry */
+void ADXF_Close(int adxf);              /* close */
 int ADXF_ReadNw(int adxf, int nsct, char *buf); /* start a read of nsct sectors */
 int FUN_002623f8(int adxf, int nsct, int type);  /* seek */
 int FUN_00262510(int adxf);               /* tell, in sectors */
@@ -96,14 +96,14 @@ struct ThreadManager { int _vtable; unsigned int _refCount; ThreadList *_threads
 
 extern "C" {
 extern ThreadManager *g_threadManager;
-extern igAdxAfsFileList *DAT_00587620[4]; /* the files the AFS partitions hold */
+extern igAdxAfsFileList *g_adxAfsFileList[4]; /* the files the AFS partitions hold */
 
-void Gap__igAdxFile__vfunc_01(igAdxFile *self)
+void igAdxFile_constructFields(igAdxFile *self)
 {
     Gap__Core__igObject__constructFields(self);
 }
 
-void Gap__igAdxFile__vfunc_11(igAdxFile *self)
+void igAdxFile_resetFields(igAdxFile *self)
 {
     Gap__Core__igObject__resetFields(self);
     self->_pBufferPtr = self->_pBuffer;
@@ -112,7 +112,7 @@ void Gap__igAdxFile__vfunc_11(igAdxFile *self)
     self->_adxf = 0;
 }
 
-void Gap__igAdxFile__vfunc_07(igAdxFile *self)
+void igAdxFile_userConstruct(igAdxFile *self)
 {
     Gap__Core__igObject__userConstruct(self);
     igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->vfunc_20(), 1);
@@ -124,12 +124,12 @@ void Gap__igAdxFile__vfunc_07(igAdxFile *self)
     }
 }
 
-int Gap__igAdxFile__vfunc_20(void)
+int igAdxFile_GetMeta(void)
 {
     return g_igAdxFile_metaObject[0];
 }
 
-void Gap__igAdxFile__vfunc_02(igAdxFile *self)
+void igAdxFile_destructFields(igAdxFile *self)
 {
     if (self->_pBuffer != 0) {
         Memory_FreeBufferWithAllocator(self->_pBuffer, (int)igObject_GetAllocator(self));
@@ -140,7 +140,7 @@ void Gap__igAdxFile__vfunc_02(igAdxFile *self)
     }
 }
 
-void Gap__igAdxFile__vfunc_08(igAdxFile *self)
+void igAdxFile_userDestruct(igAdxFile *self)
 {
     igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->vfunc_20(), 1);
     Gap__Core__igObject__userDestruct(self);
@@ -174,7 +174,7 @@ void igAdxFile_SetUseAsync(igAdxFile *self, bool useAsync)
     self->_bUseAsync = useAsync;
 }
 
-void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
+void igAdxFile_OpenWithMode(igResult *result, igAdxFile *self, OpenMode mode)
 {
     char fileName[256];
     int answer;
@@ -232,8 +232,8 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
     open:
         index = igAdx_FindAfsFile(self->_fileName);
         if (index != -1) {
-            entry = ((igAdxAfsFile **)DAT_00587620[0]->_data)[index];
-            self->_adxf = FUN_00261b78(entry->_ptNumber, entry->_fileNumber);
+            entry = ((igAdxAfsFile **)g_adxAfsFileList[0]->_data)[index];
+            self->_adxf = ADXF_OpenAfs(entry->_ptNumber, entry->_fileNumber);
         } else {
             strcpy(fileName, self->_fileName);
             self->_adxf = ADXF_Open(fileName, 0);
@@ -248,16 +248,16 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
     }
 }
 
-void Gap__igAdxFile__vfunc_22(igAdxFile *self)
+void igAdxFile_Close(igAdxFile *self)
 {
     self->_bBufferFilled = 0;
     self->_iBufferPos = 0;
     if (self->_adxf != 0) {
-        FUN_00261c88(self->_adxf);
+        ADXF_Close(self->_adxf);
     }
 }
 
-igAdxFile *Gap__igAdxFile__vfunc_23(igAdxFile *self, const char *fileName, const char *mode)
+igAdxFile *igAdxFile_OpenFile(igAdxFile *self, const char *fileName, const char *mode)
 {
     bool opened;
 
@@ -272,12 +272,12 @@ igAdxFile *Gap__igAdxFile__vfunc_23(igAdxFile *self, const char *fileName, const
     return opened ? self : 0;
 }
 
-void Gap__igAdxFile__vfunc_24(igAdxFile *self)
+void igAdxFile_CloseFile(igAdxFile *self)
 {
-    FUN_00261c88(self->_adxf);
+    ADXF_Close(self->_adxf);
 }
 
-int Gap__igAdxFile__vfunc_25(igAdxFile *self, char *dest, int size, int count)
+int igAdxFile_Read(igAdxFile *self, char *dest, int size, int count)
 {
     int total;
     int sectors;
@@ -377,47 +377,47 @@ int Gap__igAdxFile__vfunc_25(igAdxFile *self, char *dest, int size, int count)
     return count;
 }
 
-int Gap__igAdxFile__vfunc_27(void)
+int igAdxFile_Write(void)
 {
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_28(igAdxFile *self, const char *format, ...)
+int igAdxFile_Scanf(igAdxFile *self, const char *format, ...)
 {
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_29(igAdxFile *self, const char *format, ...)
+int igAdxFile_Printf(igAdxFile *self, const char *format, ...)
 {
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_30(void)
+int igAdxFile_Flush(void)
 {
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_31(void)
+int igAdxFile_GetChar(void)
 {
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_33(void)
+int igAdxFile_PutChar(void)
 {
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_34(void)
+int igAdxFile_GetString(void)
 {
     return 0;
 }
 
-int Gap__igAdxFile__vfunc_35(void)
+int igAdxFile_PutString(void)
 {
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_36(igAdxFile *self, int offset, int whence)
+int igAdxFile_Seek(igAdxFile *self, int offset, int whence)
 {
     int sector;
     int end;
@@ -441,13 +441,13 @@ int Gap__igAdxFile__vfunc_36(igAdxFile *self, int offset, int whence)
     return -1;
 }
 
-int Gap__igAdxFile__vfunc_37(igAdxFile *self)
+int igAdxFile_Tell(igAdxFile *self)
 {
     FUN_00262510(self->_adxf);
     return self->_iSeekPosition;
 }
 
-int Gap__igAdxFile__vfunc_32(void)
+int igAdxFile_UngetChar(void)
 {
     return -1;
 }

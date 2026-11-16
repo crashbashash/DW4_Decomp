@@ -1,12 +1,12 @@
 igMetaObject *g_beNDMWSaveIntfInfo_metaObject;
 
-igMetaObject *FUN_003bc080(void) {
+igMetaObject *beNDMWSaveIntfInfo_GetMetaObject(void) {
     igMetaObject *g = g_beNDMWSaveIntfInfo_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_003bc140();
+    beNDMWSaveIntfInfo_EnsureRegistered();
 done:
     return g_beNDMWSaveIntfInfo_metaObject;
 }
@@ -19,14 +19,14 @@ int beNDMWSaveIntfInfo_GetVTable(void) {
     u.w[2] = 0;
     u.w[5] = 0;
     u.w[6] = 0;
-    u.w[0] = (int)(&DAT_0053d960[0]);
+    u.w[0] = (int)(&g_beNDMWSaveIntfInfo_vtable[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_0053d960[0]);
+    u.w[0] = (int)(&g_beNDMWSaveIntfInfo_vtable[0]);
     FUN_0033ec80(&u.w[0], 0);
     return temp_s0;
 }
 
-void FUN_003bc140(void)
+void beNDMWSaveIntfInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWSaveIntfInfo_Register);
 }
@@ -38,7 +38,7 @@ void *beNDMWSaveIntfInfo_Register(void) {
         &g_beNDMWSaveIntfInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
-        beNDMWSaveIntfInfo_GetMetaObject,
+        beNDMWSaveIntfInfo_GetMetaObjectFunction,
         "beNDMWSaveIntfInfo",
         0x1c, /* instance size */
         beNDMWSaveIntfInfo_GetVTable,
@@ -48,8 +48,8 @@ void *beNDMWSaveIntfInfo_Register(void) {
     );
 }
 
-void beNDMWSaveIntfInfo_GetMetaObject(void)
+void beNDMWSaveIntfInfo_GetMetaObjectFunction(void)
 {
-    FUN_003bc080();
+    beNDMWSaveIntfInfo_GetMetaObject();
 }
 

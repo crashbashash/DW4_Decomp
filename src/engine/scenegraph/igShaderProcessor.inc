@@ -16,7 +16,7 @@ igMetaObject *igShaderProcessor_GetMetaObject(void)
 int igShaderProcessor_GetVTable(void) {
     struct Obj_198bf0 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00528720[0];
+    obj.vt = &g_igShaderProcessor_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

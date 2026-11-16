@@ -1,21 +1,21 @@
 igMetaObject *g_beHitLandDeliv_metaObject;
 
 void beHitLandDeliv_CreateInstance(int arg0) {
-    FUN_0035ed50();
+    beHitLandDeliv_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589460, arg0);
 }
 
-igMetaObject *FUN_0035ebd0(void) {
+igMetaObject *beHitLandDeliv_GetOrCreateMetaObject(void) {
     if (g_beHitLandDeliv_metaObject == 0) {
         g_beHitLandDeliv_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beHitLandDeliv_metaObject;
 }
 
-void *FUN_0035ec20(void) {
+void *beHitLandDeliv_GetMetaObject(void) {
     igMetaObject *g = g_beHitLandDeliv_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0035ed50();
+        beHitLandDeliv_EnsureRegistered();
     }
     return g_beHitLandDeliv_metaObject;
 }
@@ -32,12 +32,12 @@ int beHitLandDeliv_GetVTable(void) {
     igObject_InitHeader(u.b);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     q0 = (S_ref *)&u.b[24];
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_0053a700[0];
+    u.vt = (int)&g_beHitLandDeliv_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053a0d0[0];
+    u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -62,7 +62,7 @@ int beHitLandDeliv_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0035ed50(void)
+void beHitLandDeliv_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beHitLandDeliv_Register);
 }
@@ -74,7 +74,7 @@ void *beHitLandDeliv_Register(void) {
         &g_beHitLandDeliv_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
-        beHitLandDeliv_GetMetaObject,
+        beHitLandDeliv_GetMetaObjectFunction,
         "beHitLandDeliv",
         0x20, /* instance size */
         beHitLandDeliv_GetVTable,
@@ -84,8 +84,8 @@ void *beHitLandDeliv_Register(void) {
     );
 }
 
-void beHitLandDeliv_GetMetaObject(void)
+void beHitLandDeliv_GetMetaObjectFunction(void)
 {
-    FUN_0035ec20();
+    beHitLandDeliv_GetMetaObject();
 }
 

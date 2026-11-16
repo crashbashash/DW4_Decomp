@@ -19,7 +19,7 @@ int igViewportResizedMessage_GetVTable(void) {
     struct Obj_233340 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052cc80[0];
+    obj.vt = &g_igViewportResizedMessage_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

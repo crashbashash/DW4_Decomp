@@ -12,18 +12,18 @@ igMetaObject *igDepthWriteStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igDepthWriteStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00138380();
+        igDepthWriteStateAttr_EnsureRegistered();
     return g_igDepthWriteStateAttr_metaObject;
 }
 
 int igDepthWriteStateAttr_GetVTable(void) {
     struct Obj_138340 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00523c20[0];
+    obj.vt = &g_igDepthWriteStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00138380(void)
+void igDepthWriteStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDepthWriteStateAttr_Register);
 }

@@ -5,18 +5,18 @@ igMetaObject *igVertexBlendStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexBlendStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00130830();
+        igVertexBlendStateAttr_EnsureRegistered();
     return g_igVertexBlendStateAttr_metaObject;
 }
 
 int igVertexBlendStateAttr_GetVTable(void) {
     struct Obj obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_005225b0[0];
+    obj.vt = &g_igVertexBlendStateAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00130830(void)
+void igVertexBlendStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexBlendStateAttr_Register);
 }

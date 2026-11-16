@@ -8,6 +8,18 @@
 #define ADXT_MAX_OBJ 16
 #define ADXT_SCT_LEN 2048
 
+/* what ADXT_GetHdrInfo reports about an ADX header; fmt 1 is ADX and 2 is AHX */
+typedef struct AdxtHdrInfo {
+    int fmt;
+    int sfreq;
+    int nch;
+    int bps;
+    int nsmpl;
+    int lpcnt;
+    int lpStart;
+    int lpEnd;
+} AdxtHdrInfo;
+
 typedef struct AdxSjdObj AdxSjdObj;
 typedef struct AdxStmObj AdxStmObj;
 typedef struct AdxRna AdxRna;

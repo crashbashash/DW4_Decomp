@@ -1,6 +1,6 @@
 igMetaObject *g_beNDMWAfsSetupDataList_metaObject;
 
-igMetaObject *FUN_003ca800(void) {
+igMetaObject *beNDMWAfsSetupDataList_GetOrCreateMetaObject(void) {
     if (g_beNDMWAfsSetupDataList_metaObject == 0) {
         g_beNDMWAfsSetupDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -13,7 +13,7 @@ void *beNDMWAfsSetupDataList_ResolveMetaObject(void) {
     ok = !!(g_beNDMWAfsSetupDataList_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
-    FUN_003ca8e0();
+    beNDMWAfsSetupDataList_EnsureRegistered();
 done:;
     return g_beNDMWAfsSetupDataList_metaObject;
 }
@@ -22,16 +22,16 @@ int beNDMWAfsSetupDataList_GetVTable(void) {
     Obj_3ca8a0 o;
 
     igObject_InitHeader(&o);
-    o.vt = &DAT_0053c400[0];
+    o.vt = &g_beNDMWAfsSetupDataList_vtable[0];
     return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003ca8e0(void)
+void beNDMWAfsSetupDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWAfsSetupDataList_Register);
 }
 
-static igMetaObjectCallback g_beNDMWAfsSetupDataList_callbackList[] = { FUN_003caa70, 0 };
+static igMetaObjectCallback g_beNDMWAfsSetupDataList_callbackList[] = { beNDMWAfsSetupData_EnsureRegistered, 0 };
 
 void *beNDMWAfsSetupDataList_Register(void) {
     NdmwLibrary_MarkRegistered();

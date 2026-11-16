@@ -1,9 +1,9 @@
-void FUN_0019faa0(int arg0) {
-    FUN_0019fc00();
+void igGeometry_CreateInstance(int arg0) {
+    igGeometry_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igGeometry_metaObject, arg0);
 }
 
-igMetaObject *FUN_0019fae0(void) {
+igMetaObject *igGeometry_GetOrCreateMetaObject(void) {
     if (g_igGeometry_metaObject == 0) {
         g_igGeometry_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -14,7 +14,7 @@ igMetaObject *igGeometry_GetMetaObject(void)
 {
     igMetaObject *g = g_igGeometry_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019fc00();
+        igGeometry_EnsureRegistered();
     return g_igGeometry_metaObject;
 }
 
@@ -27,16 +27,16 @@ int igGeometry_GetVTable(void) {
     obj.w4 = 0;
     obj.w7 = 0;
     obj.w8 = 0;
-    obj.vt = &DAT_00528e70[0];
+    obj.vt = &g_igGeometry_vtable[0];
     obj.w10 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00528e70[0];
+    obj.vt = &g_igGeometry_vtable[0];
     FUN_0019d0a0((void * *)&obj.w10, -1);
     FUN_0019c0e0((struct S_19c0e0 *)&obj, 0);
     return t;
 }
 
-void FUN_0019fc00(void)
+void igGeometry_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGeometry_Register);
 }

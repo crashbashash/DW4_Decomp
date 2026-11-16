@@ -19,7 +19,7 @@ int igInfoManagerList_GetVTable(void) {
     struct Obj_2337f0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052caf0[0];
+    obj.vt = &g_igInfoManagerList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

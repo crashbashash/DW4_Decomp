@@ -21,12 +21,12 @@ igMetaField *g_igImage_compressedMetaField;
 igMetaField *g_igImage_bitsDepthMetaField;
 igMetaField *g_igImage_pNameStringMetaField;
 
-int FUN_0014df70(int arg0) {
-    FUN_0014e050();
+int igImage_CreateInstance(int arg0) {
+    igImage_EnsureRegistered();
     return igMetaObject_CreateInstance(g_igImage_metaObject, arg0);
 }
 
-igMetaObject *FUN_0014dfb0(void) {
+igMetaObject *igImage_GetOrCreateMetaObject(void) {
     if (g_igImage_metaObject == 0) {
         g_igImage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -37,16 +37,16 @@ igMetaObject *igImage_GetMetaObject(void)
 {
     igMetaObject *g = g_igImage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014e050();
+        igImage_EnsureRegistered();
     return g_igImage_metaObject;
 }
 
-void FUN_0014e050(void)
+void igImage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igImage_Register);
 }
 
-static igMetaObjectCallback g_igImage_callbackList[] = { FUN_0014fb70, 0 };
+static igMetaObjectCallback g_igImage_callbackList[] = { igClut_EnsureRegistered, 0 };
 
 void igImage_Register(void) {
     FUN_00149bc0();

@@ -107,7 +107,7 @@ AdxfSj *SJRBF_Create(void *buf, int size, int a);
 int cvFsGetFileSize();
 
 int ADXF_GetPtStat(int ptid);
-void FUN_00261c88(AdxfHandle *adxf);
+void ADXF_Close(AdxfHandle *adxf);
 int FUN_00261f48(AdxfHandle *adxf, int nsct, void *buf);
 int FUN_00262118(AdxfHandle *adxf);
 int ADXF_GetStat(AdxfHandle *adxf);
@@ -267,7 +267,7 @@ int FUN_00260f50(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf
 }
 
 AdxfHandle *ADXF_Open(const char *fname, void *dir);
-AdxfHandle *FUN_00261b78(int afsid, int flid);
+AdxfHandle *ADXF_OpenAfs(int afsid, int flid);
 int ADXF_ReadNw(AdxfHandle *adxf, int nsct, void *buf);
 
 int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, AdxfPtInfo *ptinfo,
@@ -283,7 +283,7 @@ int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, Ad
         return -1;
     }
     if (adxf_ldptnw_hn != 0) {
-        FUN_00261c88(adxf_ldptnw_hn);
+        ADXF_Close(adxf_ldptnw_hn);
         adxf_ldptnw_hn = 0;
     }
     adxf_ldptnw_ptid = -1;
@@ -315,7 +315,7 @@ int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, Ad
     adxf_ptinfo[ptid] = ptinfo;
     ptinfo->next = 0;
     if (fname == 0) {
-        adxf_ldptnw_hn = FUN_00261b78(afsid, flid);
+        adxf_ldptnw_hn = ADXF_OpenAfs(afsid, flid);
         if (adxf_ldptnw_hn == 0) {
             ADXERR_CallErrFunc1("E9040804:can't open file.(load partition)");
             adxf_ldptnw_stat = 4;
@@ -344,7 +344,7 @@ int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, Ad
     adxf_ldptnw_nsct = nsct;
     ret = ADXF_ReadNw(adxf_ldptnw_hn, nsct, tmpbuf);
     if (ret < 0) {
-        FUN_00261c88(adxf_ldptnw_hn);
+        ADXF_Close(adxf_ldptnw_hn);
         adxf_ldptnw_stat = 4;
         return ret;
     }
@@ -353,7 +353,7 @@ int FUN_00260f88(int ptid, int afsid, int flid, const char *fname, void *dir, Ad
 }
 
 void adxf_CloseLdptnwHn(void) {
-    FUN_00261c88(adxf_ldptnw_hn);
+    ADXF_Close(adxf_ldptnw_hn);
     adxf_ldptnw_hn = 0;
     adxf_ldptnw_nfile = 0;
     adxf_ldptnw_nsct = 0;
@@ -547,7 +547,7 @@ AdxfHandle *ADXF_Open(const char *fname, void *dir) {
         if (FUN_00261810(var_s0, fname, dir) < 0) {
             temp_a0 = var_s0;
             var_s0 = 0;
-            FUN_00261c88(temp_a0);
+            ADXF_Close(temp_a0);
         }
     }
     FUN_00260c20(1, 1, (int)fname, (int)dir, -1);
@@ -580,7 +580,7 @@ AdxfHandle *FUN_002619e0(const char *fname, void *dir, int ofst, int nsct) {
         if (FUN_00261960(var_s2, fname, dir, ofst, nsct) < 0) {
             temp_a0 = var_s2;
             var_s2 = 0;
-            FUN_00261c88(temp_a0);
+            ADXF_Close(temp_a0);
         }
     }
     FUN_00260c20(1, 1, (int)fname, (int)dir, -1);
@@ -617,7 +617,7 @@ int FUN_00261aa0(AdxfHandle *adxf, int afsid, int flid)
     return 0;
 }
 
-AdxfHandle *FUN_00261b78(int afsid, int flid) {
+AdxfHandle *ADXF_OpenAfs(int afsid, int flid) {
     AdxfHandle *temp_a0;
     AdxfHandle *var_s0;
     FUN_00260c20(2, 0, afsid, flid, -1);
@@ -626,7 +626,7 @@ AdxfHandle *FUN_00261b78(int afsid, int flid) {
         if (FUN_00261aa0(var_s0, afsid, flid) < 0) {
             temp_a0 = var_s0;
             var_s0 = 0;
-            FUN_00261c88(temp_a0);
+            ADXF_Close(temp_a0);
         }
     }
     FUN_00260c20(2, 1, afsid, flid, -1);
@@ -645,7 +645,7 @@ void FUN_00261c18(AdxfHandle *adxf) {
     }
 }
 
-void FUN_00261c88(AdxfHandle *adxf) {
+void ADXF_Close(AdxfHandle *adxf) {
     void *stm;
     FUN_00260c20(3, 0, (int)adxf, -1, -1);
     if (adxf != 0) {
@@ -671,7 +671,7 @@ void FUN_00261d40(void) {
     i = 15;
     do {
         if (adxf->used == 1) {
-            FUN_00261c88(adxf);
+            ADXF_Close(adxf);
         }
         i -= 1;
         adxf++;

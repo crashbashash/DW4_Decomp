@@ -4,11 +4,11 @@ igMetaField *g_beNDMWLoadIntf2TextOrder_messengerMetaField;
 igMetaField *g_beNDMWLoadIntf2TextOrder_luaMetaField;
 
 void beNDMWLoadIntf2TextOrder_Create(int arg0) {
-    FUN_003c7830();
+    beNDMWLoadIntf2TextOrder_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWLoadIntf2TextOrder_metaObject, arg0);
 }
 
-igMetaObject *FUN_003c7700(void) {
+igMetaObject *beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject(void) {
     if (g_beNDMWLoadIntf2TextOrder_metaObject == 0) {
         g_beNDMWLoadIntf2TextOrder_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -18,7 +18,7 @@ igMetaObject *FUN_003c7700(void) {
 void *beNDMWLoadIntf2TextOrder_GetReadyMetaObject(void) {
     igMetaObject *g = g_beNDMWLoadIntf2TextOrder_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c7830();
+        beNDMWLoadIntf2TextOrder_EnsureRegistered();
     }
     return g_beNDMWLoadIntf2TextOrder_metaObject;
 }
@@ -35,7 +35,7 @@ int beNDMWLoadIntf2TextOrder_GetVTable(void) {
     ps = &u.b[8];
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0053c7b0[0];
+    u.vt = (int)&g_beNDMWLoadIntf2TextOrder_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -52,12 +52,12 @@ int beNDMWLoadIntf2TextOrder_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_003c7830(void)
+void beNDMWLoadIntf2TextOrder_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWLoadIntf2TextOrder_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadIntf2TextOrder_callbackList[] = { FUN_00357d10, FUN_0035b9c0, 0 };
+static igMetaObjectCallback g_beNDMWLoadIntf2TextOrder_callbackList[] = { beMessenger_EnsureRegistered, beLua_EnsureRegistered, 0 };
 
 void *beNDMWLoadIntf2TextOrder_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -123,10 +123,10 @@ void beNDMWLoadIntf2TextOrder_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    ((igObjectRefMetaField *)temp_s0)->_metaObject = FUN_00357910();
+    ((igObjectRefMetaField *)temp_s0)->_metaObject = beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0)->_refCounted = 0;
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = FUN_0035b770();
+    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = beLua_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s0_2)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2TextOrder_fieldTable, g_beNDMWLoadIntf2TextOrder_fieldHandles, g_beNDMWLoadIntf2TextOrder_fieldOffsets, temp_s2);
 }

@@ -11,139 +11,139 @@
 class Pool;
 struct NamedLists;
 struct Holder;
-extern "C" int FUN_00130570(...);
-extern "C" int FUN_00130830(...);
-extern "C" int FUN_00131240(...);
-extern "C" int FUN_001314b0(...);
-extern "C" int FUN_001316a0(...);
-extern "C" int FUN_001318f0(...);
-extern "C" int FUN_00131d80(...);
-extern "C" int FUN_001326c0(...);
-extern "C" int FUN_00132a00(...);
-extern "C" int FUN_00132cf0(...);
-extern "C" int FUN_001330d0(...);
-extern "C" int FUN_00133a30(...);
-extern "C" int FUN_00133d20(...);
-extern "C" int FUN_00134370(...);
-extern "C" int FUN_001347c0(...);
-extern "C" int FUN_00134e50(...);
-extern "C" int FUN_00135090(...);
-extern "C" int FUN_001357e0(...);
-extern "C" int FUN_00135c70(...);
-extern "C" int FUN_00135f40(...);
-extern "C" int FUN_00136120(...);
-extern "C" int FUN_00136470(...);
-extern "C" int FUN_001366c0(...);
-extern "C" int FUN_00136880(...);
-extern "C" int FUN_00136e90(...);
-extern "C" int FUN_001376d0(...);
-extern "C" int FUN_00137ca0(...);
-extern "C" int FUN_00137e30(...);
-extern "C" int FUN_00138380(...);
-extern "C" int FUN_00138570(...);
-extern "C" int FUN_001387b0(...);
-extern "C" int FUN_00138b20(...);
-extern "C" int FUN_00138d80(...);
-extern "C" int FUN_00139000(...);
-extern "C" int FUN_00139440(...);
-extern "C" int FUN_00139720(...);
-extern "C" int FUN_0013a040(...);
-extern "C" int FUN_0013a440(...);
-extern "C" int FUN_0013a900(...);
-extern "C" int FUN_0013acb0(...);
-extern "C" int FUN_0013ae20(...);
-extern "C" int FUN_0013afe0(...);
-extern "C" int FUN_0013b390(...);
-extern "C" int FUN_0013b560(...);
-extern "C" int FUN_0014b710(...);
-extern "C" int FUN_0014be70(...);
-extern "C" int FUN_0014d190(...);
-extern "C" int FUN_0014d890(...);
-extern "C" int FUN_0014e050(...);
-extern "C" int FUN_0014e4a0(...);
-extern "C" int FUN_0014f6d0(...);
-extern "C" int FUN_0014fb70(...);
-extern "C" int FUN_001870f0(...);
-extern "C" int FUN_001873c0(...);
-extern "C" int FUN_00187680(...);
-extern "C" int FUN_001879b0(...);
-extern "C" int FUN_00187c70(...);
-extern "C" int FUN_00188780(...);
-extern "C" int FUN_001889f0(...);
-extern "C" int FUN_00188b50(...);
-extern "C" int FUN_00188cb0(...);
-extern "C" int FUN_00188e10(...);
-extern "C" int FUN_00188f70(...);
-extern "C" int FUN_001890d0(...);
-extern "C" int FUN_00189230(...);
-extern "C" int FUN_00189390(...);
-extern "C" int FUN_001894f0(...);
-extern "C" int FUN_00189650(...);
-extern "C" int FUN_001897b0(...);
-extern "C" int FUN_00189910(...);
-extern "C" int FUN_00189cf0(...);
-extern "C" int FUN_0018a180(...);
-extern "C" int FUN_0018a780(...);
-extern "C" int FUN_00195290(...);
-extern "C" int FUN_00195c00(...);
-extern "C" int FUN_00195f50(...);
-extern "C" int FUN_001964d0(...);
-extern "C" int FUN_00196ad0(...);
-extern "C" int FUN_00197f40(...);
-extern "C" int FUN_00198290(...);
-extern "C" int FUN_001984c0(...);
-extern "C" int FUN_00198680(...);
-extern "C" int FUN_001988d0(...);
-extern "C" int FUN_00198a40(...);
-extern "C" int FUN_00198e30(...);
-extern "C" int FUN_00199080(...);
-extern "C" int FUN_0019a800(...);
-extern "C" int FUN_0019b270(...);
-extern "C" int FUN_0019b800(...);
-extern "C" int FUN_0019c9a0(...);
-extern "C" int FUN_0019ccc0(...);
+extern "C" int igViewportAttr_EnsureRegistered(...);
+extern "C" int igVertexBlendStateAttr_EnsureRegistered(...);
+extern "C" int igTextureUnloadAttr_EnsureRegistered(...);
+extern "C" int igTextureStateAttr_EnsureRegistered(...);
+extern "C" int igTextureMatrixStateAttr_EnsureRegistered(...);
+extern "C" int igTextureMatrixAttr_EnsureRegistered(...);
+extern "C" int igTextureFunctionAttr_EnsureRegistered(...);
+extern "C" int igTextureCoordSourceAttr_EnsureRegistered(...);
+extern "C" int igTextureBindAttr_EnsureRegistered(...);
+extern "C" int igTextureAttr_EnsureRegistered(...);
+extern "C" int igImageMipMapList_EnsureRegistered(...);
+extern "C" int igShadeModelAttr_EnsureRegistered(...);
+extern "C" int igSetRenderDestinationAttr_EnsureRegistered(...);
+extern "C" int igRenderDestinationAttr_EnsureRegistered(...);
+extern "C" int igProjectionMatrixAttr_EnsureRegistered(...);
+extern "C" int igParticleAttr_EnsureRegistered(...);
+extern "C" int igNormalizeNormalsStateAttr_EnsureRegistered(...);
+extern "C" int igModelViewMatrixAttr_EnsureRegistered(...);
+extern "C" int igMaterialAttr_EnsureRegistered(...);
+extern "C" int igLightingStateAttr_EnsureRegistered(...);
+extern "C" int igLightStateAttrList_EnsureRegistered(...);
+extern "C" int igLightStateAttr_EnsureRegistered(...);
+extern "C" int igLightList_EnsureRegistered(...);
+extern "C" int igLightAttr_EnsureRegistered(...);
+extern "C" int igGeometrySetAttr_EnsureRegistered(...);
+extern "C" int igGeometryAttr1_5_EnsureRegistered(...);
+extern "C" int igFogStateAttr_EnsureRegistered(...);
+extern "C" int igFogAttr_EnsureRegistered(...);
+extern "C" int igDepthWriteStateAttr_EnsureRegistered(...);
+extern "C" int igDepthStateAttr_EnsureRegistered(...);
+extern "C" int igCullFaceAttr_EnsureRegistered(...);
+extern "C" int igCopyRenderDestinationAttr_EnsureRegistered(...);
+extern "C" int igColorMaskAttr_EnsureRegistered(...);
+extern "C" int igColorAttr_EnsureRegistered(...);
+extern "C" int igClearAttr_EnsureRegistered(...);
+extern "C" int igBlendStateAttr_EnsureRegistered(...);
+extern "C" int igBlendFunctionAttr_EnsureRegistered(...);
+extern "C" int igTextureList_EnsureRegistered(...);
+extern "C" int igAttrPool_EnsureRegistered(...);
+extern "C" int igAttrListList_EnsureRegistered(...);
+extern "C" int igNonRefCountedAttrList_EnsureRegistered(...);
+extern "C" int igAttrList_EnsureRegistered(...);
+extern "C" int igAlphaStateAttr_EnsureRegistered(...);
+extern "C" int igAlphaFunctionAttr_EnsureRegistered(...);
+extern "C" int igVertexArray1_1_EnsureRegistered(...);
+extern "C" int igPrimLengthArray1_1_EnsureRegistered(...);
+extern "C" int igParticleFormat_EnsureRegistered(...);
+extern "C" int igIndexArray_EnsureRegistered(...);
+extern "C" int igImage_EnsureRegistered(...);
+extern "C" int igTrackedElementMetaField_EnsureRegistered(...);
+extern "C" int igExternalImageEntry_EnsureRegistered(...);
+extern "C" int igClut_EnsureRegistered(...);
+extern "C" int igVec4ucMetaField_EnsureRegistered(...);
+extern "C" int igVec4fMetaField_EnsureRegistered(...);
+extern "C" int igVec4fArrayMetaField_EnsureRegistered(...);
+extern "C" int igVec3fMetaField_EnsureRegistered(...);
+extern "C" int igVec2fMetaField_EnsureRegistered(...);
+extern "C" int igMatrix44fMetaField_EnsureRegistered(...);
+extern "C" int igGetCenterFunctionList_EnsureRegistered(...);
+extern "C" int igIsEmptyFunctionList_EnsureRegistered(...);
+extern "C" int igEmptyFunctionList_EnsureRegistered(...);
+extern "C" int igTransformFunctionList_EnsureRegistered(...);
+extern "C" int igContainsVecFunctionList_EnsureRegistered(...);
+extern "C" int igExtendByVecFunctionList_EnsureRegistered(...);
+extern "C" int igContainsRayFunctionList_EnsureRegistered(...);
+extern "C" int igExtendByRayFunctionList_EnsureRegistered(...);
+extern "C" int igRayIntersectionFunctionList_EnsureRegistered(...);
+extern "C" int igContainsFunctionList_EnsureRegistered(...);
+extern "C" int igExtendByFunctionList_EnsureRegistered(...);
+extern "C" int igIntersectionFunctionList_EnsureRegistered(...);
+extern "C" int igQuaternionfList_EnsureRegistered(...);
+extern "C" int igVec3fList_EnsureRegistered(...);
+extern "C" int igAABox_EnsureRegistered(...);
+extern "C" int igTransformSequence1_5_EnsureRegistered(...);
+extern "C" int igTransformRecorder_EnsureRegistered(...);
+extern "C" int igTransformList_EnsureRegistered(...);
+extern "C" int igTransform_EnsureRegistered(...);
+extern "C" int igSwitch_EnsureRegistered(...);
+extern "C" int igSkinList_EnsureRegistered(...);
+extern "C" int igSkin_EnsureRegistered(...);
+extern "C" int igSkeletonList_EnsureRegistered(...);
+extern "C" int igSkeleton_EnsureRegistered(...);
+extern "C" int igSkeletonBoneInfoList_EnsureRegistered(...);
+extern "C" int igSkeletonBoneInfo_EnsureRegistered(...);
+extern "C" int igShaderInfo_EnsureRegistered(...);
+extern "C" int igShaderFactoryList_EnsureRegistered(...);
+extern "C" int igTraversalFunctionList_EnsureRegistered(...);
+extern "C" int igSceneInfo_EnsureRegistered(...);
+extern "C" int igProjectiveShadowShader_EnsureRegistered(...);
+extern "C" int igNonRefCountedNodeList_EnsureRegistered(...);
+extern "C" int igNodeList_EnsureRegistered(...);
 extern "C" int FUN_0019d360(...);
-extern "C" int FUN_0019d4f0(...);
-extern "C" int FUN_0019d710(...);
-extern "C" int FUN_0019da60(...);
-extern "C" int FUN_0019dcd0(...);
-extern "C" int FUN_0019efb0(...);
-extern "C" int FUN_0019f330(...);
-extern "C" int FUN_0019f5a0(...);
-extern "C" int FUN_0019f7a0(...);
-extern "C" int FUN_0019fa10(...);
-extern "C" int FUN_0019fc00(...);
-extern "C" int FUN_001a1990(...);
+extern "C" int igModelViewMatrixBoneSelect_EnsureRegistered(...);
+extern "C" int igLod_EnsureRegistered(...);
+extern "C" int igLightStateSet_EnsureRegistered(...);
+extern "C" int igLightSet_EnsureRegistered(...);
+extern "C" int igIniShaderFactory_EnsureRegistered(...);
+extern "C" int igGroup_EnsureRegistered(...);
+extern "C" int igGraphPathList_EnsureRegistered(...);
+extern "C" int igGraphPath_EnsureRegistered(...);
+extern "C" int igGeometryList_EnsureRegistered(...);
+extern "C" int igGeometry_EnsureRegistered(...);
+extern "C" int igEnbayaTransformSource_EnsureRegistered(...);
 extern "C" int igEnbayaContextPool_RunStaticInit(...);
-extern "C" int FUN_001a2030(...);
-extern "C" int FUN_001a22f0(...);
-extern "C" int FUN_001a2940(...);
-extern "C" int FUN_001a3dd0(...);
-extern "C" int FUN_001a4670(...);
-extern "C" int FUN_001a4c50(...);
-extern "C" int FUN_001a4e70(...);
-extern "C" int FUN_001a5050(...);
-extern "C" int FUN_001a5e90(...);
-extern "C" int FUN_001a60c0(...);
-extern "C" int FUN_001a6450(...);
+extern "C" int igEnbayaAnimationState_EnsureRegistered(...);
+extern "C" int igEnbayaAnimationSource_EnsureRegistered(...);
+extern "C" int igCompressedAnimationSequenceQS_EnsureRegistered(...);
+extern "C" int igCommonTraversal_EnsureRegistered(...);
+extern "C" int igCamera_EnsureRegistered(...);
+extern "C" int igBlendMatrixSelect_EnsureRegistered(...);
+extern "C" int igBitMask_EnsureRegistered(...);
+extern "C" int igBillboard_EnsureRegistered(...);
+extern "C" int igAttrSet_EnsureRegistered(...);
+extern "C" int igAppearanceList_EnsureRegistered(...);
+extern "C" int igAppearance_EnsureRegistered(...);
 extern "C" int igAnimationStatePool_RunStaticInit(...);
-extern "C" int FUN_001a6a00(...);
-extern "C" int FUN_001a73b0(...);
-extern "C" int FUN_001a7b00(...);
+extern "C" int igAnimationStateList_EnsureRegistered(...);
+extern "C" int igAnimationModifierList_EnsureRegistered(...);
+extern "C" int igAnimationDatabase_EnsureRegistered(...);
 extern "C" int igAnimationCombinerBoneInfoPool_RunStaticInit(...);
-extern "C" int FUN_001a7f00(...);
-extern "C" int FUN_001a8020(...);
-extern "C" int FUN_001a8490(...);
-extern "C" int FUN_001a8800(...);
-extern "C" int FUN_001a8ba0(...);
-extern "C" int FUN_001a8df0(...);
-extern "C" int FUN_001a9060(...);
-extern "C" int FUN_001a9290(...);
-extern "C" int FUN_001a9500(...);
-extern "C" int FUN_001a9e70(...);
-extern "C" int FUN_001aa030(...);
-extern "C" int FUN_001aa6a0(...);
-extern "C" int FUN_001aaa50(...);
+extern "C" int igAnimationCombinerBoneInfoListList_EnsureRegistered(...);
+extern "C" int igAnimationCombinerBoneInfoList_EnsureRegistered(...);
+extern "C" int igAnimationCombinerList_EnsureRegistered(...);
+extern "C" int igAnimationCombiner_EnsureRegistered(...);
+extern "C" int igAnimationBindingList_EnsureRegistered(...);
+extern "C" int igAnimationBinding_EnsureRegistered(...);
+extern "C" int igAnimationList_EnsureRegistered(...);
+extern "C" int igAnimation_EnsureRegistered(...);
+extern "C" int igAnimationTransitionDefinitionList_EnsureRegistered(...);
+extern "C" int igAnimationTrackList_EnsureRegistered(...);
+extern "C" int igAnimationTrack_EnsureRegistered(...);
+extern "C" int igActorList_EnsureRegistered(...);
+extern "C" int igActor_EnsureRegistered(...);
 extern "C" int igVirtualCFuncMetaField_EnsureRegistered(...);
 extern "C" int igUnsignedShortArrayMetaField_EnsureRegistered(...);
 extern "C" int igUnsignedLongArrayMetaField_EnsureRegistered(...);
@@ -219,7 +219,7 @@ extern "C" int strcpy(...);
 extern "C" int strlen(...);
 extern "C" int igStringObj_HasFileExtensionText(...);
 extern "C" int List_RemoveWordAt(...);
-extern "C" void Gap__Core__igFolder__vfunc_26(void **arg0);
+extern "C" void igFolder_ListEntries(void **arg0);
 extern "C" int igObject_IsKindOf(...);
 extern "C" int FUN_00463c80(...);
 typedef igObject Obj;
@@ -234,7 +234,7 @@ extern "C" igAnimationCombinerBoneInfoPool * igAnimationCombinerBoneInfoPool_Cre
 extern "C" igAnimationStatePool * igAnimationStatePool_Create(...);
 extern "C" igEnbayaContextPool * igEnbayaContextPool_Create(...);
 extern igSmartPointer<igAnimationCombinerBoneInfoPool> g_igAnimationCombinerBoneInfoPool_instance;
-extern "C" G *DAT_0056dc50[4];
+extern "C" G *g_sharedViewerOptions[4];
 extern "C" int DAT_00586fd8[4];
 extern "C" int DAT_00586fe0[4];
 extern "C" int DAT_00586fe8[4];
@@ -281,7 +281,7 @@ struct R { int v; R() {} R(int x) { v = x; } R(const R &o) : v(o.v) {} };
 class C { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int v30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual int v40(); char p4[28]; int f32; int f36; char p40[5]; unsigned char f45; };
 extern "C" int g_resultSuccess[4];
 extern "C" int g_resultFailure[4];
-extern "C" R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2);
+extern "C" R igPsx2Thread_SetStackSize(C *arg1, int arg2);
 class igResult {
 public:
     int v;
@@ -534,7 +534,7 @@ struct H { static void *castit(void *s) {
 extern "C" void FUN_0025afe0(Holder *arg0);
 
 void FUN_002590c0(void) {
-    FUN_0014f6d0();
+    igExternalImageEntry_EnsureRegistered();
     igVirtualCFuncMetaField_EnsureRegistered();
     igUnsignedShortArrayMetaField_EnsureRegistered();
     igUnsignedLongArrayMetaField_EnsureRegistered();
@@ -558,143 +558,143 @@ void FUN_002590c0(void) {
     igPointerListList_EnsureRegistered();
     igBoolArrayMetaField_EnsureRegistered();
     igMemoryDescriptorMetaField_EnsureRegistered();
-    FUN_001894f0();
-    FUN_00189390();
-    FUN_00189230();
-    FUN_001890d0();
-    FUN_00188f70();
-    FUN_00188cb0();
-    FUN_00188b50();
-    FUN_00188e10();
-    FUN_001889f0();
-    FUN_00189910();
-    FUN_001897b0();
-    FUN_00189650();
-    FUN_001879b0();
-    FUN_00187c70();
-    FUN_001873c0();
-    FUN_001870f0();
-    FUN_00188780();
-    FUN_0014e4a0();
-    FUN_0014e050();
-    FUN_00130570();
-    FUN_00132cf0();
-    FUN_001330d0();
-    FUN_001314b0();
-    FUN_001316a0();
-    FUN_00131d80();
-    FUN_00132a00();
-    FUN_00135f40();
-    FUN_00138380();
-    FUN_001387b0();
-    FUN_00139720();
-    FUN_0013a040();
-    FUN_0013a900();
-    FUN_0013acb0();
-    FUN_0013afe0();
-    FUN_0013b390();
-    FUN_00187680();
-    FUN_0019a800();
-    FUN_00198e30();
-    FUN_00199080();
-    FUN_001a9290();
-    FUN_001a8ba0();
-    FUN_001a9e70();
-    FUN_001a9500();
+    igRayIntersectionFunctionList_EnsureRegistered();
+    igExtendByRayFunctionList_EnsureRegistered();
+    igContainsRayFunctionList_EnsureRegistered();
+    igExtendByVecFunctionList_EnsureRegistered();
+    igContainsVecFunctionList_EnsureRegistered();
+    igEmptyFunctionList_EnsureRegistered();
+    igIsEmptyFunctionList_EnsureRegistered();
+    igTransformFunctionList_EnsureRegistered();
+    igGetCenterFunctionList_EnsureRegistered();
+    igIntersectionFunctionList_EnsureRegistered();
+    igExtendByFunctionList_EnsureRegistered();
+    igContainsFunctionList_EnsureRegistered();
+    igVec3fMetaField_EnsureRegistered();
+    igVec2fMetaField_EnsureRegistered();
+    igVec4fMetaField_EnsureRegistered();
+    igVec4ucMetaField_EnsureRegistered();
+    igMatrix44fMetaField_EnsureRegistered();
+    igTrackedElementMetaField_EnsureRegistered();
+    igImage_EnsureRegistered();
+    igViewportAttr_EnsureRegistered();
+    igTextureAttr_EnsureRegistered();
+    igImageMipMapList_EnsureRegistered();
+    igTextureStateAttr_EnsureRegistered();
+    igTextureMatrixStateAttr_EnsureRegistered();
+    igTextureFunctionAttr_EnsureRegistered();
+    igTextureBindAttr_EnsureRegistered();
+    igLightingStateAttr_EnsureRegistered();
+    igDepthWriteStateAttr_EnsureRegistered();
+    igCullFaceAttr_EnsureRegistered();
+    igBlendStateAttr_EnsureRegistered();
+    igBlendFunctionAttr_EnsureRegistered();
+    igAttrPool_EnsureRegistered();
+    igAttrListList_EnsureRegistered();
+    igAttrList_EnsureRegistered();
+    igAlphaStateAttr_EnsureRegistered();
+    igVec4fArrayMetaField_EnsureRegistered();
+    igTraversalFunctionList_EnsureRegistered();
+    igShaderInfo_EnsureRegistered();
+    igShaderFactoryList_EnsureRegistered();
+    igAnimation_EnsureRegistered();
+    igAnimationBindingList_EnsureRegistered();
+    igAnimationTrackList_EnsureRegistered();
+    igAnimationTransitionDefinitionList_EnsureRegistered();
     igAnimationCombinerBoneInfoPool_RunStaticInit();
     igAnimationStatePool_RunStaticInit();
-    FUN_0019efb0();
+    igIniShaderFactory_EnsureRegistered();
     igEnbayaContextPool_RunStaticInit();
-    FUN_0014fb70();
-    FUN_0018a780();
-    FUN_0014b710();
-    FUN_0013a440();
-    FUN_00133a30();
-    FUN_00135c70();
-    FUN_00136e90();
-    FUN_001376d0();
-    FUN_00139000();
-    FUN_0019c9a0();
-    FUN_0019ccc0();
-    FUN_00196ad0();
-    FUN_001a4e70();
-    FUN_001a5e90();
-    FUN_0019fc00();
-    FUN_0019b270();
-    FUN_0019f5a0();
-    FUN_001964d0();
-    FUN_0014be70();
-    FUN_0014d890();
+    igClut_EnsureRegistered();
+    igAABox_EnsureRegistered();
+    igVertexArray1_1_EnsureRegistered();
+    igTextureList_EnsureRegistered();
+    igShadeModelAttr_EnsureRegistered();
+    igMaterialAttr_EnsureRegistered();
+    igGeometrySetAttr_EnsureRegistered();
+    igGeometryAttr1_5_EnsureRegistered();
+    igColorAttr_EnsureRegistered();
+    igNonRefCountedNodeList_EnsureRegistered();
+    igNodeList_EnsureRegistered();
+    igSwitch_EnsureRegistered();
+    igBitMask_EnsureRegistered();
+    igAttrSet_EnsureRegistered();
+    igGeometry_EnsureRegistered();
+    igSceneInfo_EnsureRegistered();
+    igGraphPathList_EnsureRegistered();
+    igTransform_EnsureRegistered();
+    igPrimLengthArray1_1_EnsureRegistered();
+    igIndexArray_EnsureRegistered();
     igBoolList_EnsureRegistered();
     igFloatList_EnsureRegistered();
-    FUN_00130830();
-    FUN_00198290();
-    FUN_00197f40();
-    FUN_00198a40();
-    FUN_001988d0();
-    FUN_00198680();
-    FUN_001984c0();
+    igVertexBlendStateAttr_EnsureRegistered();
+    igSkin_EnsureRegistered();
+    igSkinList_EnsureRegistered();
+    igSkeletonBoneInfo_EnsureRegistered();
+    igSkeletonBoneInfoList_EnsureRegistered();
+    igSkeleton_EnsureRegistered();
+    igSkeletonList_EnsureRegistered();
     FUN_0019d360();
-    FUN_001a8df0();
-    FUN_001aa030();
-    FUN_001aaa50();
-    FUN_001a6450();
-    FUN_001a7b00();
-    FUN_001a9060();
-    FUN_001a60c0();
-    FUN_001a8490();
-    FUN_001a8800();
-    FUN_001a7f00();
-    FUN_001a8020();
-    FUN_001a6a00();
-    FUN_001a73b0();
-    FUN_001a1990();
-    FUN_001a22f0();
-    FUN_001a2030();
-    FUN_001a4c50();
-    FUN_001aa6a0();
-    FUN_001347c0();
-    FUN_001357e0();
-    FUN_00137ca0();
-    FUN_00138570();
+    igAnimationBinding_EnsureRegistered();
+    igAnimationTrack_EnsureRegistered();
+    igActor_EnsureRegistered();
+    igAppearance_EnsureRegistered();
+    igAnimationDatabase_EnsureRegistered();
+    igAnimationList_EnsureRegistered();
+    igAppearanceList_EnsureRegistered();
+    igAnimationCombinerList_EnsureRegistered();
+    igAnimationCombiner_EnsureRegistered();
+    igAnimationCombinerBoneInfoListList_EnsureRegistered();
+    igAnimationCombinerBoneInfoList_EnsureRegistered();
+    igAnimationStateList_EnsureRegistered();
+    igAnimationModifierList_EnsureRegistered();
+    igEnbayaTransformSource_EnsureRegistered();
+    igEnbayaAnimationSource_EnsureRegistered();
+    igEnbayaAnimationState_EnsureRegistered();
+    igBlendMatrixSelect_EnsureRegistered();
+    igActorList_EnsureRegistered();
+    igProjectionMatrixAttr_EnsureRegistered();
+    igModelViewMatrixAttr_EnsureRegistered();
+    igFogStateAttr_EnsureRegistered();
+    igDepthStateAttr_EnsureRegistered();
     igLongList_EnsureRegistered();
-    FUN_0018a180();
-    FUN_0019f330();
-    FUN_00195290();
-    FUN_00189cf0();
-    FUN_0013b560();
-    FUN_001a5050();
-    FUN_00135090();
-    FUN_00138d80();
-    FUN_0014d190();
-    FUN_00134e50();
-    FUN_00131240();
-    FUN_001318f0();
-    FUN_001326c0();
-    FUN_00133d20();
-    FUN_00134370();
-    FUN_00136470();
-    FUN_00136880();
-    FUN_00136120();
-    FUN_001366c0();
-    FUN_00137e30();
-    FUN_0013ae20();
-    FUN_00138b20();
-    FUN_00139440();
-    FUN_0019b800();
-    FUN_0019da60();
-    FUN_0019dcd0();
-    FUN_00195f50();
-    FUN_0019f7a0();
-    FUN_0019fa10();
-    FUN_001a4670();
+    igVec3fList_EnsureRegistered();
+    igGroup_EnsureRegistered();
+    igTransformSequence1_5_EnsureRegistered();
+    igQuaternionfList_EnsureRegistered();
+    igAlphaFunctionAttr_EnsureRegistered();
+    igBillboard_EnsureRegistered();
+    igNormalizeNormalsStateAttr_EnsureRegistered();
+    igColorMaskAttr_EnsureRegistered();
+    igParticleFormat_EnsureRegistered();
+    igParticleAttr_EnsureRegistered();
+    igTextureUnloadAttr_EnsureRegistered();
+    igTextureMatrixAttr_EnsureRegistered();
+    igTextureCoordSourceAttr_EnsureRegistered();
+    igSetRenderDestinationAttr_EnsureRegistered();
+    igRenderDestinationAttr_EnsureRegistered();
+    igLightStateAttr_EnsureRegistered();
+    igLightAttr_EnsureRegistered();
+    igLightStateAttrList_EnsureRegistered();
+    igLightList_EnsureRegistered();
+    igFogAttr_EnsureRegistered();
+    igNonRefCountedAttrList_EnsureRegistered();
+    igCopyRenderDestinationAttr_EnsureRegistered();
+    igClearAttr_EnsureRegistered();
+    igProjectiveShadowShader_EnsureRegistered();
+    igLightStateSet_EnsureRegistered();
+    igLightSet_EnsureRegistered();
+    igTransformList_EnsureRegistered();
+    igGraphPath_EnsureRegistered();
+    igGeometryList_EnsureRegistered();
+    igCamera_EnsureRegistered();
     igUnsignedShortList_EnsureRegistered();
-    FUN_001a2940();
-    FUN_0019d4f0();
+    igCompressedAnimationSequenceQS_EnsureRegistered();
+    igModelViewMatrixBoneSelect_EnsureRegistered();
     igFloatListList_EnsureRegistered();
-    FUN_00195c00();
-    FUN_0019d710();
-    FUN_001a3dd0();
+    igTransformRecorder_EnsureRegistered();
+    igLod_EnsureRegistered();
+    igCommonTraversal_EnsureRegistered();
 }
 
 int main(int arg0, int *arg1) {
@@ -733,25 +733,25 @@ int main(int arg0, int *arg1) {
     g_igAnimationStatePool_instance.p = igAnimationStatePool_Create(a);
     Blk sp30;
     FUN_00259f90((struct A *)&sp30, (struct R_259f90 *)sp70.f236, (struct R_259f90 *)sp70.f232);
-    if (DAT_0056dc50[0] == 0) {
+    if (g_sharedViewerOptions[0] == 0) {
         G *v = __nw__FUi(240);
         if (v != 0) v = ViewerOptions_Construct(v);
-        DAT_0056dc50[0] = v;
+        g_sharedViewerOptions[0] = v;
     }
-    DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
-    if (DAT_0056dc50[0]->f216 != 0) FUN_0025a8c0((App_25a8c0 *)&sp30);
+    g_sharedViewerOptions[0]->f232 = g_sharedViewerOptions[0]->f232 + 1;
+    if (g_sharedViewerOptions[0]->f216 != 0) FUN_0025a8c0((App_25a8c0 *)&sp30);
     else FUN_0025a580((A0 *)&sp30);
-    if (DAT_0056dc50[0] != 0) {
-        int t = DAT_0056dc50[0]->f232 - 1;
-        DAT_0056dc50[0]->f232 = t;
+    if (g_sharedViewerOptions[0] != 0) {
+        int t = g_sharedViewerOptions[0]->f232 - 1;
+        g_sharedViewerOptions[0]->f232 = t;
         if (t <= 0) {
-            s0 = DAT_0056dc50[0];
+            s0 = g_sharedViewerOptions[0];
             if (s0 != 0) {
                 U::relstr(&s0->f236);
                 U::relstr((int *)s0);
                 __dl__FPv(s0);
             }
-            DAT_0056dc50[0] = 0;
+            g_sharedViewerOptions[0] = 0;
         }
     }
     return 0;
@@ -815,7 +815,7 @@ void FUN_00259b60(void) {
     sp20 = ((DW4VCSR_120_0 *)(temp_v0))->vX();
 }
 
-R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2) {
+R igPsx2Thread_SetStackSize(C *arg1, int arg2) {
     if (arg1->v30() == 0) {
         if (arg2 & 0xF) {
             return R(g_resultFailure[0]);
@@ -984,16 +984,16 @@ void FUN_0025a580(A0 *arg0) {
     int sp40[4];
     if (arg0->f24 != 0) {
         g_activeApp = arg0;
-        if (((struct Fr * *)DAT_0056dc50)[0] == 0) {
+        if (((struct Fr * *)g_sharedViewerOptions)[0] == 0) {
             void **v = ((void **)__nw__FUi(0xF0));
             if (v != 0) {
                 v = ((void **)ViewerOptions_Construct(v));
             }
-            ((struct Fr * *)DAT_0056dc50)[0] = (Fr *)v;
+            ((struct Fr * *)g_sharedViewerOptions)[0] = (Fr *)v;
         }
-        ((struct Fr * *)DAT_0056dc50)[0]->f232 = ((struct Fr * *)DAT_0056dc50)[0]->f232 + 1;
+        ((struct Fr * *)g_sharedViewerOptions)[0]->f232 = ((struct Fr * *)g_sharedViewerOptions)[0]->f232 + 1;
         {
-            Fr *g = ((struct Fr * *)DAT_0056dc50)[0];
+            Fr *g = ((struct Fr * *)g_sharedViewerOptions)[0];
             g->f180 = 0;
             g->f213 = 0;
             g->f5 = 0;
@@ -1005,11 +1005,11 @@ void FUN_0025a580(A0 *arg0) {
             g->f94 = 1;
             g->f168 = 1;
         }
-        if (((struct Fr * *)DAT_0056dc50)[0] != 0) {
-            int rc = ((struct Fr * *)DAT_0056dc50)[0]->f232 - 1;
-            ((struct Fr * *)DAT_0056dc50)[0]->f232 = rc;
+        if (((struct Fr * *)g_sharedViewerOptions)[0] != 0) {
+            int rc = ((struct Fr * *)g_sharedViewerOptions)[0]->f232 - 1;
+            ((struct Fr * *)g_sharedViewerOptions)[0]->f232 = rc;
             if (rc <= 0) {
-                Fr *f = ((struct Fr * *)DAT_0056dc50)[0];
+                Fr *f = ((struct Fr * *)g_sharedViewerOptions)[0];
                 if (f != 0) {
                     if (&f->f236) {
                         void *p = f->f236;
@@ -1035,7 +1035,7 @@ void FUN_0025a580(A0 *arg0) {
                     }
                     __dl__FPv(f);
                 }
-                ((struct Fr * *)DAT_0056dc50)[0] = 0;
+                ((struct Fr * *)g_sharedViewerOptions)[0] = 0;
             }
         }
         FUN_00239390();
@@ -1132,19 +1132,19 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
         obj->_showNormals = 0;
         e2.a = 2; e2.b = 0; e2.c = DAT_0058cac8[0];
         igModel_NotifyViews(obj, &e2);
-        if (((Frame * *)DAT_0056dc50)[0] == 0) {
+        if (((Frame * *)g_sharedViewerOptions)[0] == 0) {
             Frame *v = ((Frame *)__nw__FUi(240));
             if (v != 0) v = ((Frame *)ViewerOptions_Construct(v));
-            ((Frame * *)DAT_0056dc50)[0] = v;
+            ((Frame * *)g_sharedViewerOptions)[0] = v;
         }
-        ((Frame * *)DAT_0056dc50)[0]->f232 = ((Frame * *)DAT_0056dc50)[0]->f232 + 1;
-        s2 = *(int *)((char *)((Frame * *)DAT_0056dc50)[0] + 220);
+        ((Frame * *)g_sharedViewerOptions)[0]->f232 = ((Frame * *)g_sharedViewerOptions)[0]->f232 + 1;
+        s2 = *(int *)((char *)((Frame * *)g_sharedViewerOptions)[0] + 220);
         if (s2 < 0) s2 = 0;
-        s1 = *(int *)((char *)((Frame * *)DAT_0056dc50)[0] + 224);
+        s1 = *(int *)((char *)((Frame * *)g_sharedViewerOptions)[0] + 224);
         if (s1 < 0) s1 = 0;
-        if (((Frame * *)DAT_0056dc50)[0] != 0) {
-            if (--((Frame * *)DAT_0056dc50)[0]->f232 <= 0) {
-                f = ((Frame * *)DAT_0056dc50)[0];
+        if (((Frame * *)g_sharedViewerOptions)[0] != 0) {
+            if (--((Frame * *)g_sharedViewerOptions)[0]->f232 <= 0) {
+                f = ((Frame * *)g_sharedViewerOptions)[0];
                 if (f != 0) {
                     if (&f->f236) {
                         p = f->f236;
@@ -1166,7 +1166,7 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
                     }
                     __dl__FPv(f);
                 }
-                ((Frame * *)DAT_0056dc50)[0] = 0;
+                ((Frame * *)g_sharedViewerOptions)[0] = 0;
             }
         }
         FUN_00463bc0(arg0);
@@ -1268,7 +1268,7 @@ void FUN_0025ac60(S *arg0) {
     }
 }
 
-void Gap__Core__igFolder__vfunc_26(void **arg0) {
+void igFolder_ListEntries(void **arg0) {
     void *temp_a0;
 
     *arg0 = 0;

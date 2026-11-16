@@ -84,14 +84,14 @@ record number, or -1.
 
 ### Using disks and consumables
 
-`Gap__Bec__beNDMWItemDisk__vfunc_22` switches on the record number. Records 0-2 restore HP and 3-5
+`beNDMWItemDisk_Use` switches on the record number. Records 0-2 restore HP and 3-5
 MP, by the record's `HP` or `MP` value; record 9 restores both. Record 6 fetches the player's
 `GETPEBASEWORK` model work and, when the first entry of its timer list is running, clears it when
 `genrand() % 10` is at most `8 - _poisonEndurance`: by that field, a poison cure. Record 7 sends `GAMERAM` the `P2PKOUKAMAGIC` fight calculation with the
 player as source and target and -50. Record 8 sets the gate stage for the player and runs
 `gatedisc.lua`; it is the only record that returns 1.
 
-`Gap__Bec__beNDMWItemInstant__vfunc_22` reads the record's `UP` value and the player's `GAMERAM`
+`beNDMWItemInstant_Use` reads the record's `UP` value and the player's `GAMERAM`
 record. Record 0 pays bits: a random amount in a band chosen by the first player's `LEVEL`, raised by
 its `BITRITSU` percentage, added to the player's `BIT` and kept in `_value`.
 

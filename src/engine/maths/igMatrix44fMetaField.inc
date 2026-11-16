@@ -2,7 +2,7 @@ igMetaObject *g_igMatrix44fMetaField_metaObject;
 int g_igMatrix44fMetaField_descriptor;
 
 void FUN_00188660(int arg0) {
-    FUN_00188780();
+    igMatrix44fMetaField_EnsureRegistered();
     igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject, arg0);
 }
 
@@ -10,7 +10,7 @@ igMetaObject *igMatrix44fMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igMatrix44fMetaField_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00188780();
+        igMatrix44fMetaField_EnsureRegistered();
     return g_igMatrix44fMetaField_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igMatrix44fMetaField_GetVTable(void) {
     int temp_v0;
 
     igMetaField_Init(u.b);
-    u.vt = (int)&DAT_005276e0[0];
+    u.vt = (int)&g_igMatrix44fMetaField_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
@@ -41,7 +41,7 @@ int igMatrix44fMetaField_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00188780(void)
+void igMatrix44fMetaField_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMatrix44fMetaField_Register);
 }
@@ -92,7 +92,7 @@ void FUN_00188810(void) {
 
 int FUN_001888e0(void) {
     if (g_igMatrix44fMetaField_descriptor == 0) {
-        FUN_00188780();
+        igMatrix44fMetaField_EnsureRegistered();
     }
     return g_igMatrix44fMetaField_descriptor;
 }

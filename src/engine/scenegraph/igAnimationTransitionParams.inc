@@ -23,7 +23,7 @@ int igAnimationTransitionParams_GetVTable(void) {
     struct Obj_1a9c50 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00529900[0];
+    obj.vt = &g_igAnimationTransitionParams_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

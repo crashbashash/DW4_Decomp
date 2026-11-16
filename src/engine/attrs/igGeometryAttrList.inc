@@ -1,6 +1,6 @@
 igMetaObject *g_igGeometryAttrList_metaObject;
 
-igMetaObject *FUN_0013a4d0(void) {
+igMetaObject *igGeometryAttrList_GetOrCreateMetaObject(void) {
     if (g_igGeometryAttrList_metaObject == 0) {
         g_igGeometryAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -11,18 +11,18 @@ igMetaObject *igGeometryAttrList_GetMetaObject(void)
 {
     igMetaObject *g = g_igGeometryAttrList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013a5b0();
+        igGeometryAttrList_EnsureRegistered();
     return g_igGeometryAttrList_metaObject;
 }
 
 int igGeometryAttrList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader(obj);
-    obj[0] = (int)&DAT_005245e0[0];
+    obj[0] = (int)&g_igGeometryAttrList_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void FUN_0013a5b0(void)
+void igGeometryAttrList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGeometryAttrList_Register);
 }

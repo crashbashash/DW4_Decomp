@@ -46,13 +46,13 @@ int igShaderFactory_GetVTable(void) {
     igObject_InitHeader(u.b);
     q2 = &u.b[8];
     *(int *)q2 = 0;
-    u.vt = (int)&DAT_00528800[0];
+    u.vt = (int)&g_igShaderFactory_vtable[0];
     q1 = (S_ref *)&u.b[12];
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_00528800[0];
+    u.vt = (int)&g_igShaderFactory_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -91,7 +91,7 @@ void *FUN_00199330(struct T_199330 *arg0, long long arg1) {
     int *a1;
     int v0;
     if (arg0 != 0) {
-        arg0->vt = &DAT_00528800[0];
+        arg0->vt = &g_igShaderFactory_vtable[0];
         if (&arg0->f16 != 0) {
             o = arg0->f16;
             if (o != 0) {

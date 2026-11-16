@@ -157,9 +157,9 @@ Shapes found on one function:
   helper copies it emits, nine jump tables, exception index and sixteen cleanup
   ranges/actions. See [the full recovery](load-intf2.md#matched-source).
 
-### `beMatCtrl_Update`
+### `beMatCtrl_UpdateRam`
 
-A C++ spelling of `beMatCtrl_Update` (3,064 bytes)
+A C++ spelling of `beMatCtrl_UpdateRam` (3,064 bytes)
 reproduces five owner lifetimes, both destructor profiles and the complete
 exception index/table, with ten differences in its main body. The manual-reference draft's five stale call
 arguments are corrected. See [ownership and ABI evidence](material-contact.md#update-ownership-and-call-contracts).

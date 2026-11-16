@@ -5,10 +5,10 @@ igMetaField *g_beActionStarterData_offsetMetaField;
 igMetaField *g_beActionStarterData_isSeqDeadMetaField;
 igMetaField *g_beActionStarterData_isPositionLockMetaField;
 
-void *FUN_0036bdf0(void) {
+void *beActionStarterData_GetMetaObject(void) {
     igMetaObject *g = g_beActionStarterData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0036bf10();
+        beActionStarterData_EnsureRegistered();
     }
     return g_beActionStarterData_metaObject;
 }
@@ -19,17 +19,17 @@ int beActionStarterData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._name = 0;
-    obj._vtable = (int)&DAT_005344e0[0];
+    obj._vtable = (int)&g_beActionStarterData_vtable[0];
     obj._message = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj._vtable = (int)&DAT_005344e0[0];
+    obj._vtable = (int)&g_beActionStarterData_vtable[0];
     obj.rel12();
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj.rel8();
     return r;
 }
 
-void FUN_0036bf10(void)
+void beActionStarterData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beActionStarterData_Register);
 }
@@ -41,7 +41,7 @@ void *beActionStarterData_Register(void) {
         &g_beActionStarterData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        beActionStarterData_GetMetaObject,
+        beActionStarterData_GetMetaObjectFunction,
         "beActionStarterData",
         0x24, /* instance size */
         beActionStarterData_GetVTable,
@@ -51,9 +51,9 @@ void *beActionStarterData_Register(void) {
     );
 }
 
-void beActionStarterData_GetMetaObject(void)
+void beActionStarterData_GetMetaObjectFunction(void)
 {
-    FUN_0036bdf0();
+    beActionStarterData_GetMetaObject();
 }
 
 static FieldFactory g_beActionStarterData_ctorTable[] = {

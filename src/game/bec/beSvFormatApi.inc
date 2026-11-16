@@ -1,14 +1,14 @@
 igMetaObject *g_beSvFormatApi_metaObject;
 
-void FUN_00349870(int arg0) {
-    FUN_00349a40();
+void beSvFormatApi_Create(int arg0) {
+    beSvFormatApi_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x588270, arg0);
 }
 
-void *FUN_003498b0(void) {
+void *beSvFormatApi_GetMetaObject(void) {
     igMetaObject *g = g_beSvFormatApi_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00349a40();
+        beSvFormatApi_EnsureRegistered();
     }
     return g_beSvFormatApi_metaObject;
 }
@@ -23,16 +23,16 @@ int beSvFormatApi_GetVTable(void) {
     S_ref *q3;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     q1 = (S_ref *)&u.b[48];
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[52];
     *(int *)q2 = 0;
     q3 = (S_ref *)&u.b[56];
     *(int *)q3 = 0;
-    u.vt = (int)&DAT_0053bf20[0];
+    u.vt = (int)&g_beSvFormatApi_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053c070[0];
+    u.vt = (int)&g_beSaveApi_vtable[0];
     if (q3 != 0) {
         q3 = *(S_ref **)q3;
         if (q3 != 0) {
@@ -63,7 +63,7 @@ int beSvFormatApi_GetVTable(void) {
     return r;
 }
 
-void FUN_00349a40(void)
+void beSvFormatApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvFormatApi_Register);
 }
@@ -75,7 +75,7 @@ void *beSvFormatApi_Register(void) {
         &g_beSvFormatApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
-        beSvFormatApi_GetMetaObject,
+        beSvFormatApi_GetMetaObjectFunction,
         "beSvFormatApi",
         0x40, /* instance size */
         beSvFormatApi_GetVTable,
@@ -85,8 +85,8 @@ void *beSvFormatApi_Register(void) {
     );
 }
 
-void beSvFormatApi_GetMetaObject(void)
+void beSvFormatApi_GetMetaObjectFunction(void)
 {
-    FUN_003498b0();
+    beSvFormatApi_GetMetaObject();
 }
 

@@ -21,7 +21,7 @@ int igViewerSceneInfoManagerController_GetVTable(void) {
     struct Obj_45a8c0 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00542540[0];
+    obj.vt = &g_igViewerSceneInfoManagerController_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
 }
 
@@ -30,7 +30,7 @@ void FUN_0045a9a0(void)
     igMetaObject_RunStaticInit(igViewerSceneInfoManagerController_Register);
 }
 
-static igMetaObjectCallback g_igViewerSceneInfoManagerController_callbackList[] = { FUN_00459e40, FUN_0045b0d0, 0 };
+static igMetaObjectCallback g_igViewerSceneInfoManagerController_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, FUN_0045b0d0, 0 };
 
 void igViewerSceneInfoManagerController_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -80,7 +80,7 @@ void igViewerSceneInfoManagerController_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igViewerSceneInfoManagerController_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00459380();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0045aaf0();

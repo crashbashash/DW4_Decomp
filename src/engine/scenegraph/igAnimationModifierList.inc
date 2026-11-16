@@ -11,7 +11,7 @@ igMetaObject *igAnimationModifierList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationModifierList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a73b0();
+        igAnimationModifierList_EnsureRegistered();
     return g_igAnimationModifierList_metaObject;
 }
 
@@ -19,11 +19,11 @@ int igAnimationModifierList_GetVTable(void) {
     struct Obj_1a7370 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00529f40[0];
+    obj.vt = &g_igAnimationModifierList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_001a73b0(void)
+void igAnimationModifierList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationModifierList_Register);
 }

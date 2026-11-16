@@ -7,7 +7,7 @@ igMetaField *g_igGuiComponent_guiSystemMetaField;
 igMetaField *g_igGuiComponent_nodeMetaField;
 igMetaField *g_igGuiComponent_linkedMetaField;
 
-igMetaObject *FUN_0044ff40(void) {
+igMetaObject *igGuiComponent_GetOrCreateMetaObject(void) {
     if (g_igGuiComponent_metaObject == 0) {
         g_igGuiComponent_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
@@ -26,13 +26,13 @@ int igGuiComponent_GetVTable(void) {
     struct Obj_44ffe0 obj;
     int t;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00541300[0];
+    obj.vt = &g_igGuiComponent_vtable[0];
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00541300[0];
+    obj.vt = &g_igGuiComponent_vtable[0];
     FUN_00450370((ObjectRefWord *)&obj.w7, -1);
     FUN_004502f0((void **)&obj.w5, -1);
     FUN_00450270((ObjectRefWord *)&obj.w4, -1);
@@ -42,7 +42,7 @@ int igGuiComponent_GetVTable(void) {
 
 O_450090 *FUN_00450090(O_450090 *arg0, short arg1) {
     if (arg0) {
-        arg0->vt = &DAT_00541300[0];
+        arg0->vt = &g_igGuiComponent_vtable[0];
         if (&arg0->m28) {
             S1 *t = arg0->m28;
             if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
@@ -210,7 +210,7 @@ void igGuiComponent_InitFields(void) {
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0044fbb0();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0044ff40();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_4)->_refCounted = 0;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0044ded0();

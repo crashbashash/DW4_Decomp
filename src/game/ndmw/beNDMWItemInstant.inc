@@ -1,13 +1,13 @@
 igMetaObject *g_beNDMWItemInstant_metaObject;
 igMetaField *g_beNDMWItemInstant_valueMetaField;
 
-void FUN_003c83c0(int arg0) {
-    FUN_003c8490();
+void beNDMWItemInstant_Create(int arg0) {
+    beNDMWItemInstant_EnsureRegistered();
     igMetaObject_CreateInstance(g_beNDMWItemInstant_metaObject, arg0);
 }
 
 igMetaObject *beNDMWItemInstant_GetReadyMetaObject(void) {
-    if (g_beNDMWItemInstant_metaObject == 0 || !isValid(g_beNDMWItemInstant_metaObject)) FUN_003c8490();
+    if (g_beNDMWItemInstant_metaObject == 0 || !isValid(g_beNDMWItemInstant_metaObject)) beNDMWItemInstant_EnsureRegistered();
     return g_beNDMWItemInstant_metaObject;
 }
 
@@ -15,11 +15,11 @@ int beNDMWItemInstant_GetVTable(void) {
     struct Obj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00540730[0];
+    obj.vt = &g_beNDMWItemInstant_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_003c8490(void)
+void beNDMWItemInstant_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beNDMWItemInstant_Register);
 }

@@ -12,11 +12,11 @@ int igPsx2UserUCodeExt_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.w2 = 0;
     obj.w4 = 0;
-    obj.vt = &DAT_005252a0[0];
+    obj.vt = &g_igPsx2UserUCodeExt_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_005252a0[0];
+    obj.vt = &g_igPsx2UserUCodeExt_vtable[0];
     FUN_00152c90((void **)&obj.w7, -1);
     FUN_00152c10((ObjectRefWord *)&obj.w6, -1);
     FUN_00152b10((S_152b10 *)&obj, 0);

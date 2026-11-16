@@ -22,23 +22,23 @@ igMetaField *g_beAction2InfoWork_textureStateAttrMetaField;
 igMetaField *g_beAction2InfoWork_lightingStateAttrMetaField;
 
 void beAction2InfoWork_CreateInstance(int arg0) {
-    FUN_0036c4d0();
+    beAction2InfoWork_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x589E98, arg0);
 }
 
-igMetaObject *FUN_0036c2e0(void) {
+igMetaObject *beAction2InfoWork_GetOrCreateMetaObject(void) {
     if (g_beAction2InfoWork_metaObject == 0) {
         g_beAction2InfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beAction2InfoWork_metaObject;
 }
 
-igMetaObject *FUN_0036c330(void)
+igMetaObject *beAction2InfoWork_GetMetaObject(void)
 {
     igMetaObject *g = g_beAction2InfoWork_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_0036c4d0();
+        beAction2InfoWork_EnsureRegistered();
     return g_beAction2InfoWork_metaObject;
 }
 
@@ -51,7 +51,7 @@ int beAction2InfoWork_GetVTable(void) {
     char *p104;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_005343b0[0];
+    u.vt = (int)&g_beAction2InfoWork_vtable[0];
     p104 = &u.b[8];
     *(int *)p104 = 0;
     p176 = &u.b[80];
@@ -62,7 +62,7 @@ int beAction2InfoWork_GetVTable(void) {
     *(int *)p184 = 0;
     *(int *)&u.b[92] = 0;
     temp_s = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_005343b0[0];
+    u.vt = (int)&g_beAction2InfoWork_vtable[0];
     FUN_00239200(&u.b[92], -1);
     FUN_001d21b0(p184, -1);
     FUN_001aaf00(p180, -1);
@@ -89,12 +89,12 @@ void **FUN_0036c450(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0036c4d0(void)
+void beAction2InfoWork_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beAction2InfoWork_Register);
 }
 
-static igMetaObjectCallback g_beAction2InfoWork_callbackList[] = { FUN_0036db70, FUN_00139000, FUN_00139720, FUN_001314b0, FUN_00135f40, 0 };
+static igMetaObjectCallback g_beAction2InfoWork_callbackList[] = { beAction2Data_EnsureRegistered, igColorAttr_EnsureRegistered, igBlendStateAttr_EnsureRegistered, igTextureStateAttr_EnsureRegistered, igLightingStateAttr_EnsureRegistered, 0 };
 
 void *beAction2InfoWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -103,7 +103,7 @@ void *beAction2InfoWork_Register(void) {
         &g_beAction2InfoWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beAction2InfoWork_GetMetaObject,
+        beAction2InfoWork_GetMetaObjectFunction,
         "beAction2InfoWork",
         0x60, /* instance size */
         beAction2InfoWork_GetVTable,
@@ -113,9 +113,9 @@ void *beAction2InfoWork_Register(void) {
     );
 }
 
-void beAction2InfoWork_GetMetaObject(void)
+void beAction2InfoWork_GetMetaObjectFunction(void)
 {
-    FUN_0036c330();
+    beAction2InfoWork_GetMetaObject();
 }
 
 static FieldFactory g_beAction2InfoWork_ctorTable[] = {
@@ -224,15 +224,15 @@ void beAction2InfoWork_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_beAction2InfoWork_ctorTable, 0x15);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0036d9f0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beAction2Data_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x11));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00138f20();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igColorAttr_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x12));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_00139640();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igBlendStateAttr_GetOrCreateMetaObject();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x13));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_001313d0();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igTextureStateAttr_GetOrCreateMetaObject();
     temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x14));
-    ((igObjectRefMetaField *)temp_s1_5)->_metaObject = FUN_00135e60();
+    ((igObjectRefMetaField *)temp_s1_5)->_metaObject = igLightingStateAttr_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_beAction2InfoWork_fieldTable, g_beAction2InfoWork_fieldHandles, g_beAction2InfoWork_fieldOffsets, temp_s2);
 }
 

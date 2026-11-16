@@ -10,7 +10,6 @@
 0x00398e80	beModelCtrlNode2_LocalTime	game
 0x00398ef0	beModelCtrlNode2_Traverse	game
 0x003993a0	beModelCtrlNode2_RegisterTraversalFunction	game
-0x00399d90	beModelCtrlSubComBase_Update	game
 0x00399e20	beModelCtrlSubCom_Update	game
 0x00399f20	beModelCtrlSubCom_StopAll	game
 0x0039a130	beModelCtrlSubCom_StopType	game

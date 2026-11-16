@@ -11,7 +11,7 @@ igMetaObject *igShaderFactoryList_GetMetaObject(void)
 {
     igMetaObject *g = g_igShaderFactoryList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00199080();
+        igShaderFactoryList_EnsureRegistered();
     return g_igShaderFactoryList_metaObject;
 }
 
@@ -19,11 +19,11 @@ int igShaderFactoryList_GetVTable(void) {
     struct Obj_199040 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_0052b200[0];
+    obj.vt = &g_igShaderFactoryList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00199080(void)
+void igShaderFactoryList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igShaderFactoryList_Register);
 }

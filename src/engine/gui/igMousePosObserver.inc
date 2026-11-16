@@ -23,7 +23,7 @@ igMetaObject *igMousePosObserver_GetMetaObject(void)
 int igMousePosObserver_GetVTable(void) {
     igMousePosObserver s; igMousePosObserver *o = &s; igObject *a; int t; int *p2; int *p1; int *p0;
     igObject_InitHeader(o);
-    o->_vtable = (int)&DAT_00541090[0];
+    o->_vtable = (int)&g_igMousePosObserver_vtable[0];
     p0 = &o->_intersectTraversal; p1 = &o->_ray; p2 = &o->_hitPath;
     *p0 = 0; *p1 = 0; *p2 = 0;
     igMatrix44f_SetIdentity(o->_inverseProjectionMatrix);
@@ -77,7 +77,7 @@ void igMousePosObserver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igMousePosObserver_Register);
 }
 
-static igMetaObjectCallback g_igMousePosObserver_callbackList[] = { igGuiSystem_RunStaticInit, FUN_0019e440, FUN_00188340, FUN_0019f7a0, 0 };
+static igMetaObjectCallback g_igMousePosObserver_callbackList[] = { igGuiSystem_RunStaticInit, FUN_0019e440, FUN_00188340, igGraphPath_EnsureRegistered, 0 };
 
 void igMousePosObserver_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -159,7 +159,7 @@ void igMousePosObserver_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_construct = 1;
     igFloatMetaField_SetDefault((int)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0.0f);
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019f670();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igGraphPath_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_igMousePosObserver_fieldTable, g_igMousePosObserver_fieldHandles, g_igMousePosObserver_fieldOffsets, temp_s0);
 }
 

@@ -12,7 +12,7 @@ igMetaObject *igOnOffValueObserver_GetMetaObject(void)
 int igOnOffValueObserver_GetVTable(void) {
     struct Obj_44ca40 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00540cf0[0];
+    obj.vt = &g_igOnOffValueObserver_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

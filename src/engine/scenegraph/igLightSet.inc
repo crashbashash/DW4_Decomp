@@ -12,7 +12,7 @@ igMetaObject *igLightSet_GetMetaObject(void)
 {
     igMetaObject *g = g_igLightSet_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019dcd0();
+        igLightSet_EnsureRegistered();
     return g_igLightSet_metaObject;
 }
 
@@ -23,21 +23,21 @@ int igLightSet_GetVTable(void) {
     o.f8 = 0;
     o.f12 = 0;
     o.f16 = 0;
-    o.vt = &DAT_00528c60[0];
+    o.vt = &g_igLightSet_vtable[0];
     o.f28 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &DAT_00528c60[0];
+    o.vt = &g_igLightSet_vtable[0];
     FUN_0019c1a0((ObjectRefWord *)&o.f28, -1);
     FUN_00195970((struct T_195970 *)&o, 0);
     return r;
 }
 
-void FUN_0019dcd0(void)
+void igLightSet_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLightSet_Register);
 }
 
-static igMetaObjectCallback g_igLightSet_callbackList[] = { FUN_001366c0, 0 };
+static igMetaObjectCallback g_igLightSet_callbackList[] = { igLightList_EnsureRegistered, 0 };
 
 void igLightSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();

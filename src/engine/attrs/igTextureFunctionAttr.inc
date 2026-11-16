@@ -8,7 +8,7 @@ igMetaField *g_igTextureFunctionAttr_call_stateMetaField;
 igMetaField *g_igTextureFunctionAttr_functionTypeMetaField;
 
 void FUN_00131c60(int arg0) {
-    FUN_00131d80();
+    igTextureFunctionAttr_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x55ED00, arg0);
 }
 
@@ -23,18 +23,18 @@ igMetaObject *igTextureFunctionAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igTextureFunctionAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00131d80();
+        igTextureFunctionAttr_EnsureRegistered();
     return g_igTextureFunctionAttr_metaObject;
 }
 
 int igTextureFunctionAttr_GetVTable(void) {
     struct Obj_131d40 obj;
     igObject_InitHeader(&obj);
-    obj.vt = &DAT_00522a10[0];
+    obj.vt = &g_igTextureFunctionAttr_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
-void FUN_00131d80(void)
+void igTextureFunctionAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTextureFunctionAttr_Register);
 }

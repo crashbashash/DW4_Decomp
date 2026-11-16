@@ -13,7 +13,7 @@ int igPsx2IndexArray_GetVTable(void) {
     igObject_InitHeader(&obj);
     obj.ref = 0;
     obj.vt = &DAT_00526760[0];
-    obj.vt = &DAT_00526ad0[0];
+    obj.vt = &g_igPsx2IndexArray_vtable[0];
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00526760[0];
     obj.releaseRef();

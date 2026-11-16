@@ -12,17 +12,17 @@ igMetaField *g_beDataBase_boolDataMetaField;
 igMetaField *g_beDataBase_stringOffsetListMetaField;
 igMetaField *g_beDataBase_stringDataMetaField;
 
-igMetaObject *FUN_003658e0(void) {
+igMetaObject *beDataBase_GetOrCreateMetaObject(void) {
     if (g_beDataBase_metaObject == 0) {
         g_beDataBase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
     return g_beDataBase_metaObject;
 }
 
-void *FUN_00365930(void) {
+void *beDataBase_GetMetaObject(void) {
     igMetaObject *g = g_beDataBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00365b00();
+        beDataBase_EnsureRegistered();
     }
     return g_beDataBase_metaObject;
 }
@@ -32,7 +32,7 @@ int beDataBase_GetVTable(void) {
     int temp_s5;
 
     igObject_InitHeader(u.b);
-    u.w[0] = (int)(&DAT_00535160[0]);
+    u.w[0] = (int)(&g_beDataBase_vtable[0]);
     u.w[2] = 0;
     u.w[3] = 0;
     u.w[4] = 0;
@@ -46,7 +46,7 @@ int beDataBase_GetVTable(void) {
     u.w[12] = 0;
     u.w[13] = 0;
     temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&DAT_00535160[0]);
+    u.w[0] = (int)(&g_beDataBase_vtable[0]);
     FUN_00199450(&u.w[13], -1);
     FUN_00199450(&u.w[12], -1);
     FUN_00226990(&u.w[11], -1);
@@ -62,7 +62,7 @@ int beDataBase_GetVTable(void) {
     return temp_s5;
 }
 
-void FUN_00365b00(void)
+void beDataBase_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beDataBase_Register);
 }
@@ -76,7 +76,7 @@ void *beDataBase_Register(void) {
         &g_beDataBase_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        beDataBase_GetMetaObject,
+        beDataBase_GetMetaObjectFunction,
         "beDataBase",
         0x38, /* instance size */
         beDataBase_GetVTable,
@@ -86,9 +86,9 @@ void *beDataBase_Register(void) {
     );
 }
 
-void beDataBase_GetMetaObject(void)
+void beDataBase_GetMetaObjectFunction(void)
 {
-    FUN_00365930();
+    beDataBase_GetMetaObject();
 }
 
 static FieldFactory g_beDataBase_ctorTable[] = {

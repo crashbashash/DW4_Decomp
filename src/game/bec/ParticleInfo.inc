@@ -79,11 +79,11 @@ igMetaField *g_ParticleInfo_resizeCurvesMetaField;
 igMetaField *g_ParticleInfo_startOffsetMetaField;
 igMetaField *g_ParticleInfo_geometryMetaField;
 
-igMetaObject *FUN_0036ea00(void) {
+igMetaObject *ParticleInfo_GetMetaObject(void) {
     igMetaObject *g = g_ParticleInfo_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0036eaf0();
+        ParticleInfo_EnsureRegistered();
     return g_ParticleInfo_metaObject;
 }
 
@@ -97,23 +97,23 @@ int ParticleInfo_GetVTable(void) {
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w15 = 0;
-    obj.vt = &DAT_00533f50[0];
+    obj.vt = &g_ParticleInfo_vtable[0];
     obj.w242 = 0;
     obj.w254 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &DAT_00533f50[0];
+    obj.vt = &g_ParticleInfo_vtable[0];
     FUN_001971e0(&obj.w254, -1);
     FUN_00132390(&obj.w242, -1);
     FUN_0019b040(&obj, 0);
     return t;
 }
 
-void FUN_0036eaf0(void)
+void ParticleInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(ParticleInfo_Register);
 }
 
-static igMetaObjectCallback g_ParticleInfo_callbackList[] = { FUN_0014e050, FUN_0019fc00, 0 };
+static igMetaObjectCallback g_ParticleInfo_callbackList[] = { igImage_EnsureRegistered, igGeometry_EnsureRegistered, 0 };
 
 void *ParticleInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -122,7 +122,7 @@ void *ParticleInfo_Register(void) {
         &g_ParticleInfo_metaObject,
         igSceneInfo_Register,
         igSceneInfo_GetPublishedMetaObject,
-        ParticleInfo_GetMetaObject,
+        ParticleInfo_GetMetaObjectFunction,
         "ParticleInfo",
         0x400, /* instance size */
         ParticleInfo_GetVTable,
@@ -132,12 +132,12 @@ void *ParticleInfo_Register(void) {
     );
 }
 
-void ParticleInfo_GetMetaObject(void)
+void ParticleInfo_GetMetaObjectFunction(void)
 {
-    FUN_0036ea00();
+    ParticleInfo_GetMetaObject();
 }
 
-int FUN_0036ebb0(void) {
+int igSceneInfo_GetPublishedMetaObject(void) {
     return g_igSceneInfo_metaObject[0];
 }
 
@@ -240,7 +240,7 @@ void ParticleInfo_InitFields(void) {
     igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 10.0f);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 0xA);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4);
-    ((igObjectRefMetaField *)f)->_metaObject = FUN_0014dfb0();
+    ((igObjectRefMetaField *)f)->_metaObject = igImage_GetOrCreateMetaObject();
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5);
     igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e940;
@@ -257,7 +257,7 @@ void ParticleInfo_InitFields(void) {
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE), 1);
     igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10)), 0.0f);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11);
-    ((igObjectRefMetaField *)f)->_metaObject = FUN_0019fae0();
+    ((igObjectRefMetaField *)f)->_metaObject = igGeometry_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, g_ParticleInfo_fieldTable, g_ParticleInfo_fieldHandles, g_ParticleInfo_fieldOffsets, temp_s1);
 }
 

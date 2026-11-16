@@ -4,14 +4,14 @@ igMetaField *g_beLoadIntf2ComMdlData_openSQMetaField;
 igMetaField *g_beLoadIntf2ComMdlData_infoNameMetaField;
 
 void beLoadIntf2ComMdlData__Create(int allocator) {
-    FUN_003c75a0();
+    beLoadIntf2ComMdlData_EnsureRegistered();
     igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject, allocator);
 }
 
 void *beLoadIntf2ComMdlData_GetReadyMetaObject(void) {
     igMetaObject *g = g_beLoadIntf2ComMdlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_003c75a0();
+        beLoadIntf2ComMdlData_EnsureRegistered();
     }
     return g_beLoadIntf2ComMdlData_metaObject;
 }
@@ -26,13 +26,13 @@ int beLoadIntf2ComMdlData_GetVTable(void) {
     char *p40;
 
     igObject_InitHeader(u.b);
-    u.vt = (int)&DAT_0053c810[0];
+    u.vt = (int)&g_beLoadIntf2ComMdlData_vtable[0];
     p3C = &u.b[12];
     *(int *)p3C = 0;
     p40 = &u.b[16];
     *(int *)p40 = 0;
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&DAT_0053c810[0];
+    u.vt = (int)&g_beLoadIntf2ComMdlData_vtable[0];
     if (p40 != 0) {
         v1 = *(int **)p40;
         if (v1 != 0) {
@@ -58,7 +58,7 @@ int beLoadIntf2ComMdlData_GetVTable(void) {
     return r;
 }
 
-void FUN_003c75a0(void)
+void beLoadIntf2ComMdlData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beLoadIntf2ComMdlData_Register);
 }
