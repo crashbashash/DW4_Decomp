@@ -52,7 +52,7 @@ typedef struct AdxStmObj {
     int maxsct;                 /* sector to stop at, ADXSTM_NO_MAXSCT for none */
 } AdxStmObj;
 
-void ADXSTMF_SetNrmlNum(int num);
+void ADXT_SetupRtimeNumStm(int num);
 void ADXSTMF_SetRtimNum(int num);
 int ADXSTM_Init(void);
 void ADXSTM_Reset(void);
@@ -65,7 +65,7 @@ void ADXSTM_BindFileNw(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsc
 void ADXSTM_BindFile(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsct);
 void ADXSTM_ReleaseFileNw(AdxStmObj *stm);
 void ADXSTM_ReleaseFile(AdxStmObj *stm);
-int ADXSTM_IsFileOpened(AdxStmObj *stm);
+int ADXSTM_IsOpenedFile(AdxStmObj *stm);
 int ADXSTM_GetStat(AdxStmObj *stm);
 int ADXSTM_Seek(AdxStmObj *stm, int pos);
 int ADXSTM_Tell(AdxStmObj *stm);
@@ -81,7 +81,7 @@ int ADXSTM_GetBufSize(AdxStmObj *stm, int *min, int *max);
 SfdSj *ADXSTM_GetSj(AdxStmObj *stm);
 int ADXSTM_SetBufSize(AdxStmObj *stm, int min, int max);
 int ADXSTM_SetReqRdSize(AdxStmObj *stm, int nsct);
-void ADXSTM_SetPrio(AdxStmObj *stm, int prio);
+void ADXSTM_EntryErrFunc(AdxStmObj *stm, int prio);
 int ADXSTM_GetFileLen(AdxStmObj *stm);
 int ADXSTM_GetFileSct(AdxStmObj *stm);
 void ADXSTM_SetPause(AdxStmObj *stm, int sw);
@@ -91,10 +91,10 @@ int ADXSTM_GetFad(AdxStmObj *stm, int *fad);
 int ADXSTM_GetFsizeSct(const char *fname, int *nsct);
 int ADXSTM_GetFsizeByte(const char *fname, int *nbyte);
 void ADXSTM_SetSj(AdxStmObj *stm, SfdSj *sj);
-void ADXSTM_SetFsizeSct(AdxStmObj *stm, int nsct);
+void ADXSTM_SetRdSct(AdxStmObj *stm, int nsct);
 void ADXSTM_SetOfst(AdxStmObj *stm, int ofst);
-void ADXSTM_SetMaxRetry(int num);
-int ADXSTM_GetStatRead(AdxStmObj *stm);
-void ADXSTM_OpenFile(AdxStmObj *stm);
+void ADXT_SetNumRetry(int num);
+int ADXSTM_GetReadFlg(AdxStmObj *stm);
+void ADXSTM_OpenCvfs(AdxStmObj *stm);
 
 #endif

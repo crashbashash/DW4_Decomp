@@ -49,15 +49,15 @@ extern char DAT_004aa420[];
 extern char DAT_004aa440[];
 extern void (*DAT_004aa540[64])(int object, int *data, unsigned int words);
 extern int DAT_004aa640[64];
-extern int DAT_0056e580[64];
-extern int DAT_0056e680[64];
+extern int dtx_sbuf[64];
+extern int dtx_rbuf[64];
 
-extern char DAT_004f00b0[];
-extern char DAT_004f00c8[];
-extern char DAT_004f00e8[];
-extern char DAT_004f0108[];
-extern char DAT_004f0120[];
-extern char DAT_004f0138[];
+extern char Hello_from_EE_d[];
+extern char eewk_is_not_alignment_64_byte[];
+extern char iopwk_is_not_alignment_32_byte[];
+extern char wklen_d_is_not_64_N[];
+extern char illeagal_ID_d[];
+extern char DTX_Create_can_t_create_DTX_of_server[];
 extern char E0092101_DTX_Init_bind_errr[];
 
 void *memset(void *dst, int value, unsigned int n);
@@ -113,38 +113,38 @@ int FUN_00273128(void)
     return 0;
 }
 
-int FUN_002731a8(unsigned int id, char *eewk, int iopwk, int wklen)
+int dtx_create_rmt(unsigned int id, char *eewk, int iopwk, int wklen)
 {
-    DAT_0056e580[0] = id;
-    DAT_0056e580[1] = (int)eewk;
-    DAT_0056e580[2] = iopwk;
-    DAT_0056e580[3] = wklen;
-    sceSifCallRpc(&dtx_rpc_client, 2, 0, DAT_0056e580, 0x10, DAT_0056e680, 4, 0, 0);
-    return DAT_0056e680[0];
+    dtx_sbuf[0] = id;
+    dtx_sbuf[1] = (int)eewk;
+    dtx_sbuf[2] = iopwk;
+    dtx_sbuf[3] = wklen;
+    sceSifCallRpc(&dtx_rpc_client, 2, 0, dtx_sbuf, 0x10, dtx_rbuf, 4, 0, 0);
+    return dtx_rbuf[0];
 }
 
-void FUN_00273218(int server)
+void dtx_destroy_rmt(int server)
 {
-    DAT_0056e580[0] = server;
-    sceSifCallRpc(&dtx_rpc_client, 3, 0, DAT_0056e580, 4, DAT_0056e680, 0, 0, 0);
+    dtx_sbuf[0] = server;
+    sceSifCallRpc(&dtx_rpc_client, 3, 0, dtx_sbuf, 4, dtx_rbuf, 0, 0, 0);
 }
 
-void FUN_00273268(int obj, char *buf, int size)
+void dtx_def_rcvcbf(int obj, char *buf, int size)
 {
     DAT_004a9b20++;
 }
 
-void FUN_00273280(int obj, char *buf, int size)
+void dtx_def_sndcbf(int obj, char *buf, int size)
 {
     int i;
     for (i = 0; i < size; i++) {
         buf[i] = 0xAA;
     }
-    sprintf(buf, DAT_004f00b0, DAT_004a9b24);
+    sprintf(buf, Hello_from_EE_d, DAT_004a9b24);
     DAT_004a9b24++;
 }
 
-DtxObj *FUN_002732f0(unsigned int id)
+DtxObj *DTX_Open(unsigned int id)
 {
     if (id >= 16) {
         return 0;
@@ -152,7 +152,7 @@ DtxObj *FUN_002732f0(unsigned int id)
     return &DAT_004a9b30[id];
 }
 
-void FUN_00273320(DtxObj *dtx)
+void DTX_Close(DtxObj *dtx)
 {
     dtx->recv = 0;
     dtx->recv_obj = 0;
@@ -165,28 +165,28 @@ DtxObj *DTX_Create(unsigned int id, char *eewk, int iopwk, int wklen)
     DtxObj *dtx;
     int size;
     if ((int)eewk & 63) {
-        ADXMSG_PrintErr(DAT_004f00c8);
+        ADXMSG_PrintErr(eewk_is_not_alignment_64_byte);
         return 0;
     }
     if (iopwk & 31) {
-        ADXMSG_PrintErr(DAT_004f00e8);
+        ADXMSG_PrintErr(iopwk_is_not_alignment_32_byte);
         return 0;
     }
     if (wklen & 63) {
-        ADXMSG_PrintErr(DAT_004f0108, wklen);
+        ADXMSG_PrintErr(wklen_d_is_not_64_N, wklen);
         return 0;
     }
     if (id >= 16) {
-        ADXMSG_PrintErr(DAT_004f0120, id);
+        ADXMSG_PrintErr(illeagal_ID_d, id);
         return 0;
     }
     dtx = &DAT_004a9b30[id];
     if (dtx->used != 0) {
         return 0;
     }
-    dtx->server = FUN_002731a8(id, eewk, iopwk, wklen);
+    dtx->server = dtx_create_rmt(id, eewk, iopwk, wklen);
     if (dtx->server == 0) {
-        ADXMSG_PrintErr(DAT_004f0138);
+        ADXMSG_PrintErr(DTX_Create_can_t_create_DTX_of_server);
         return 0;
     }
     size = wklen - 64;
@@ -201,8 +201,8 @@ DtxObj *DTX_Create(unsigned int id, char *eewk, int iopwk, int wklen)
     SyncDCache(dtx->eewk, dtx->eewk + dtx->size + 63);
     InvalidDCache(dtx->eewk, dtx->eewk + dtx->size + 63);
     /* matching construct: statement-order sweep — order of the final field stores */
-    dtx->recv = FUN_00273268;
-    dtx->send = FUN_00273280;
+    dtx->recv = dtx_def_rcvcbf;
+    dtx->send = dtx_def_sndcbf;
     dtx->recv_obj = 0;
     dtx->send_obj = 0;
     dtx->flag = 1;
@@ -216,7 +216,7 @@ void DTX_Destroy(DtxObj *dtx)
     while (dtx->state == 1) {
         DTX_ExecServer();
     }
-    FUN_00273218(dtx->server);
+    dtx_destroy_rmt(dtx->server);
     memset(dtx, 0, sizeof(DtxObj));
 }
 
@@ -235,7 +235,7 @@ void DTX_SetSndCbf(DtxObj *dtx, void (*send)(int obj, char *buf, int size), int 
 }
 
 /* matching construct: statement-order sweep of the four DMA stores */
-void FUN_00273558(DtxObj *dtx)
+void DTX_ExecHndl(DtxObj *dtx)
 {
     DAT_004a9b28++;
     if (dtx->state == 1) {
@@ -306,14 +306,14 @@ int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv)
     int i;
     SVM_Lock();
     for (i = 0; i < nsend; i++) {
-        DAT_0056e580[i] = send[i];
+        dtx_sbuf[i] = send[i];
     }
-    sceSifCallRpc(&dtx_rpc_client, fno + 1024, 0, DAT_0056e580, nsend * 4, DAT_0056e680, nrecv * 4, 0, 0);
+    sceSifCallRpc(&dtx_rpc_client, fno + 1024, 0, dtx_sbuf, nsend * 4, dtx_rbuf, nrecv * 4, 0, 0);
     for (i = 0; i < nrecv; i++) {
-        recv[i] = DAT_0056e680[i];
+        recv[i] = dtx_rbuf[i];
     }
     SVM_Unlock();
-    return DAT_0056e680[0];
+    return dtx_rbuf[0];
 }
 
 void DTX_ExecServer(void)
@@ -324,7 +324,7 @@ void DTX_ExecServer(void)
     dtx = DAT_004a9b30;
     for (i = 0; i < 16; i++, dtx++) {
         if (dtx->used == 1) {
-            FUN_00273558(dtx);
+            DTX_ExecHndl(dtx);
         }
     }
     SJCRS_Unlock();

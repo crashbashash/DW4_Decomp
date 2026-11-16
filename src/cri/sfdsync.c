@@ -10,37 +10,37 @@ int sfd_ReportError(SfdHandle *hn, int code);
 int SFLIB_CheckHn(SfdHandle *hn);
 void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
-int SFD_GetCond(SfdHandle *hn, int index);
-void sfd_SetCond(SfdHandle *hn, int index, int value);
+int SFSET_GetCond(SfdHandle *hn, int index);
+void SFSET_SetCond(SfdHandle *hn, int index, int value);
 
-int SFD_SetLnkStm(SfdHandle *hn) {
+int SFD_SetConcatPlay(SfdHandle *hn) {
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000161);
     }
-    sfd_SetCond(hn, SFD_COND_LNKSTM, 1);
+    SFSET_SetCond(hn, SFD_COND_LNKSTM, 1);
     return 0;
 }
 
-int sfd_IsLnkStm(SfdHandle *hn) {
-    return SFD_GetCond(hn, SFD_COND_LNKSTM) != 0;
+int SFCON_IsEndcodeSkip(SfdHandle *hn) {
+    return SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0;
 }
 
-int sfd_IsSupplyEnd(SfdHandle *hn) {
-    if (SFD_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFD_GetCond(hn, SFD_COND_SUPPLY_END) != 0) {
+int SFCON_IsSystemEndcodeSkip(SfdHandle *hn) {
+    if (SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFSET_GetCond(hn, SFD_COND_SUPPLY_END) != 0) {
         return 1;
     }
     return 0;
 }
 
-int sfd_IsDecodeEnd(SfdHandle *hn) {
-    if (SFD_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFD_GetCond(hn, SFD_COND_DECODE_END) != 0) {
+int SFCON_IsVideoEndcodeSkip(SfdHandle *hn) {
+    if (SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFSET_GetCond(hn, SFD_COND_DECODE_END) != 0) {
         return 1;
     }
     return 0;
 }
 
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
-int sfsync_AddTotal(SfdHandle *hn, int amount) {
+int SFCON_UpdateConcatTime(SfdHandle *hn, int amount) {
     char guard[16];
     SfdTimView *tim = &hn->tim;
     int total;
@@ -56,7 +56,7 @@ int sfsync_AddTotal(SfdHandle *hn, int amount) {
     sfd_Unlock(guard);
 }
 
-int sfsync_PushPts(SfdHandle *hn, int pts, int last) {
+int SFCON_WriteTotSmplQue(SfdHandle *hn, int pts, int last) {
     SfdTimView *tim = &hn->tim;
     char guard[16];
     int ok = 0;
@@ -72,7 +72,7 @@ int sfsync_PushPts(SfdHandle *hn, int pts, int last) {
     return ok;
 }
 
-int sfsync_PopPts(SfdHandle *hn, int *pts, int *last) {
+int SFCON_ReadTotSmplQue(SfdHandle *hn, int *pts, int *last) {
     SfdTimView *tim = &hn->tim;
     char guard[16];
     int ok;

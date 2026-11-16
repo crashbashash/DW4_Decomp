@@ -136,16 +136,16 @@ int SFH_AnlyHdrToolVer(SfhHn *hn, int *major, int *minor);
 int getToolVer(char *text, int *major, int *minor);
 char *convAsciiToDigit(char *text, int *value);
 void *getElemInfPtr(SfhHn *hn, int id);
-int sfh_FrmRateCodeToRate(int code);
+int getPicRate(int code);
 int isEnableAudFtr(int id, SfhAudioStm *stm);
 int isEnableVidFtr(int id, SfhVideoStm *stm);
 int chkStmId(int id);
 
-char *SFH_GetVersionStr(void) {
+char *SFH_GetSbverStr(void) {
     return "\nCRI SFH/PS2EE Ver.1.19 Build:Oct  6 2004 11:36:25\n";
 }
 
-int sfh_IsStatAnalysed(int stat) {
+int SFH_CheckStructSiz(int stat) {
     return stat == SFH_STAT_ANALYSED;
 }
 
@@ -158,7 +158,7 @@ void SFH_Init(int maxHn, SfhHn *hns) {
     sfh_init_cnt++;
     /* matching construct: the result address is taken into a local before the call */
     verstr = &sfh_verstr_ptr;
-    *verstr = SFH_GetVersionStr();
+    *verstr = SFH_GetSbverStr();
     initLibWork(maxHn, hns);
     initObjInf(&sfh_pool, maxHn, hns);
 }
@@ -785,7 +785,7 @@ int SFH_AnlyElemPicRate(SfhHn *hn, unsigned char id, int *value) {
     if (chkStmId(id) != SFH_STM_VIDEO) {
         return 0;
     }
-    *value = sfh_FrmRateCodeToRate(stm->frmRateCode);
+    *value = getPicRate(stm->frmRateCode);
     return 1;
 }
 
@@ -925,7 +925,7 @@ int SFH_AnlyFtrFxType(SfhHn *hn, unsigned char id, int *value) {
 }
 
 /* MPEG-2 frame_rate_code to frames per 1000 seconds. */
-int sfh_FrmRateCodeToRate(int code) {
+int getPicRate(int code) {
     switch (code) {
     case 1: return 23976;
     case 2: return 24000;

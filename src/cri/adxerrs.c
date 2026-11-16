@@ -12,14 +12,14 @@ int adxerr_obj = 0;
 char adxerr_msg[256] = {0};
 static char adxerr_digits[32];
 
-void FUN_00260750(void)
+void ADXERR_Init(void)
 {
     memset(adxerr_msg, 0, 0x100);
     adxerr_func = 0;
     adxerr_obj = 0;
 }
 
-void FUN_00260788(void)
+void ADXERR_Finish(void)
 {
     memset(adxerr_msg, 0, 0x100);
     adxerr_func = 0;
@@ -52,7 +52,7 @@ void ADXERR_CallErrFunc2(const char *code, const char *msg)
     SVM_CallErr(adxerr_msg);
 }
 
-void FUN_002608b0(int value, char *dst, int size)
+void ADXERR_ItoA(int value, char *dst, int size)
 {
     int i;
     int len;
@@ -77,7 +77,7 @@ void FUN_002608b0(int value, char *dst, int size)
 
 void ADXERR_ItoA2(int value, int extra, char *text, int size)
 {
-    FUN_002608b0(value, text, size);
+    ADXERR_ItoA(value, text, size);
     strncat(text, " ", (size - strlen(text)) - 1);
-    FUN_002608b0(extra, text + strlen(text), 4 - strlen(text));
+    ADXERR_ItoA(extra, text + strlen(text), 4 - strlen(text));
 }

@@ -43,18 +43,18 @@ extern SfxaLib sfxa_lib;
 
 SfxaHn *sfxalp_SearchFreeHn(void);
 void sfxalp_InitHn(SfxaHn *hn);
-void sfxa_InitLib(void);
+void sfxalp_InitLibWork(void);
 
-void sfxa_Init(void) {
-    sfxa_InitLib();
+void SFXA_Init(void) {
+    sfxalp_InitLibWork();
 }
 
-void sfxa_InitLib(void) {
+void sfxalp_InitLibWork(void) {
     memset(&sfxa_lib, 0, sizeof(SfxaLib));
     sfxa_lib.maxhn = 8;
 }
 
-void sfxa_Finish(void) {
+void SFXA_Finish(void) {
 }
 
 SfxaHn *SFXA_Create(void) {
@@ -118,7 +118,7 @@ void SFXA_MakeAlp3110Tbl(SfxaHn *hn, int unused, int table) {
     cft_MakeAlpha3Tbl(table, hn->alpha[0], hn->alpha[1], hn->alpha[2]);
 }
 
-void SFXA_MakeAlp3211Tbl(SfxaHn *hn, int unused, int table) {
+void SFXA_MakeAlp3Tbl(SfxaHn *hn, int unused, int table) {
     cft_MakeAlpha3TblBlack(table, hn->alpha[0], hn->alpha[1], hn->alpha[2]);
 }
 

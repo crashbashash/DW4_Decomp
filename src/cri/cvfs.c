@@ -233,14 +233,14 @@ void cvFsSetDefDev(char *devname)
         return;
     }
     toUpperStr(devname);
-    if (isExistDevName(devname, len) == 1) {
+    if (isExistDev(devname, len) == 1) {
         memcpy(cvfs_defdev, devname, len + 1);
         return;
     }
     cvFsError(cvFsSetDefDev_2_unknown_device_name);
 }
 
-int isExistDevName(const char *devname, int len)
+int isExistDev(const char *devname, int len)
 {
     int i;
 
@@ -257,7 +257,7 @@ char *cvFsGetDefDev(void)
     return cvfs_defdev;
 }
 
-CvFsVtbl *getPathDevice(char *devname, char *fname, const char *path)
+CvFsVtbl *variousProc(char *devname, char *fname, const char *path)
 {
     CvFsVtbl *vtbl;
 
@@ -267,7 +267,7 @@ CvFsVtbl *getPathDevice(char *devname, char *fname, const char *path)
             return 0;
         }
     }
-    makeFullPath(devname, fname);
+    addDevName(devname, fname);
     vtbl = getDevice(devname);
     if (vtbl == 0) {
         getDefDev(devname);
@@ -291,39 +291,39 @@ CvFsHandle *cvFsOpen(const char *path, void *atr, int rw)
         cvFsError(cvFsOpen_1_illegal_file_name);
         return 0;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsOpen_1_illegal_file_name);
         return 0;
     }
-    hdl = allocCvFsHdl();
+    hdl = allocCvFsHn();
     if (hdl == 0) {
         cvFsError(cvFsOpen_3_failed_handle_alloced);
         return 0;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     hdl->vtbl = vtbl;
     if (vtbl == 0) {
-        releaseCvFsHdl(hdl);
+        releaseCvFsHn(hdl);
         cvFsError(cvFsOpen_4_device_not_found);
         return 0;
     }
     if (vtbl->open != 0) {
         hdl->fd = ((int (*)(const char *, void *, int))vtbl->open)(fname, atr, rw);
     } else {
-        releaseCvFsHdl(hdl);
+        releaseCvFsHn(hdl);
         cvFsError(cvFsOpen_5_vtbl_error);
         return 0;
     }
     if (hdl->fd == 0) {
-        releaseCvFsHdl(hdl);
+        releaseCvFsHn(hdl);
         cvFsError(cvFsOpen_6_open_failed);
         return 0;
     }
     return hdl;
 }
 
-CvFsHandle *allocCvFsHdl(void)
+CvFsHandle *allocCvFsHn(void)
 {
     int i;
 
@@ -338,14 +338,14 @@ CvFsHandle *allocCvFsHdl(void)
     return &cvfs_handles[i];
 }
 
-void releaseCvFsHdl(CvFsHandle *hdl)
+void releaseCvFsHn(CvFsHandle *hdl)
 {
     /* matching construct: variant search — fd is cleared before vtbl, the retail store order */
     hdl->fd = 0;
     hdl->vtbl = 0;
 }
 
-void splitPath(char *devname, char *fname, const char *path)
+void getDevName(char *devname, char *fname, const char *path)
 {
     int i;
     int j;
@@ -394,7 +394,7 @@ void cvFsClose(CvFsHandle *hdl)
     }
     if (hdl->vtbl->close != 0) {
         ((void (*)(int))hdl->vtbl->close)(hdl->fd);
-        releaseCvFsHdl(hdl);
+        releaseCvFsHn(hdl);
         return;
     }
     cvFsError(cvFsClose_2_vtbl_error);
@@ -518,12 +518,12 @@ int cvFsGetFileSize(const char *path)
         cvFsError(cvFsGetFileSize_1_illegal_file_name);
         return 0;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsGetFileSize_1_illegal_file_name);
         return 0;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl == 0) {
         /* Retail reports the miss and still reads the table. */
         cvFsError(cvFsGetFileSize_3_device_not_found);
@@ -548,12 +548,12 @@ int cvFsGetFileSizeEx(const char *path, int arg)
         cvFsError(cvFsGetFileSizeEx_1_illegal_file_name);
         return 0;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsGetFileSizeEx_1_illegal_file_name);
         return 0;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl == 0) {
         /* Retail reports the miss and still reads the table. */
         cvFsError(cvFsGetFileSizeEx_3_device_not_found);
@@ -677,12 +677,12 @@ int cvFsChangeDir(const char *path)
         cvFsError(cvFsChangeDir_1_illegal_directory_name);
         return -1;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsChangeDir_1_illegal_directory_name);
         return -1;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl == 0) {
         /* Retail reports the miss and still reads the table. */
         cvFsError(cvFsChangeDir_3_device_not_found);
@@ -702,12 +702,12 @@ int cvFsIsExistFile(const char *path)
     char fname[CVFS_PATH_SIZE];
     CvFsVtbl *vtbl;
 
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsIsExistFile_1_illegal_file_name);
         return 0;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl == 0) {
         /* Retail reports the miss and still reads the table. */
         cvFsError(cvFsIsExistFile_3_device_not_found);
@@ -734,7 +734,7 @@ int cvFsGetNumFiles(const char *devname)
             continue;
         }
         vtbl = cvfs_devices[i].vtbl;
-        if (isFullPathDev(devname) != 0) {
+        if (isNeedDevName(devname) != 0) {
             if (vtbl != 0 && vtbl->opt_fn1 != 0) {
                 arg.volume = (int)devname;
                 nfile = ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_GET_NUM_FILES, 0, 0);
@@ -757,7 +757,7 @@ int cvFsLoadDirInfo(const char *path, void *work, int nfile)
     CvFsVtbl *vtbl;
     int nload;
 
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     nload = 0;
     if (devname[0] == 0) {
         getDefDev(devname);
@@ -766,7 +766,7 @@ int cvFsLoadDirInfo(const char *path, void *work, int nfile)
             return 0;
         }
     }
-    makeFullPath(devname, fname);
+    addDevName(devname, fname);
     vtbl = getDevice(devname);
     if (vtbl != 0 && vtbl->load_dir_info != 0) {
         nload = ((int (*)(const char *, void *, int))vtbl->load_dir_info)(path, work, nfile);
@@ -798,12 +798,12 @@ int cvFsMakeDir(const char *path)
         cvFsError(cvFsMakeDir_1_illegal_directory_name);
         return -1;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsMakeDir_1_illegal_directory_name);
         return -1;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl == 0) {
         /* Retail reports the miss and still reads the table. */
         cvFsError(cvFsMakeDir_3_device_not_found);
@@ -828,12 +828,12 @@ int cvFsRemoveDir(const char *path)
         cvFsError(cvFsRemoveDir_1_illegal_directory_name);
         return -1;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsRemoveDir_1_illegal_directory_name);
         return -1;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl == 0) {
         /* Retail reports the miss and still reads the table. */
         cvFsError(cvFsRemoveDir_3_device_not_found);
@@ -858,12 +858,12 @@ int cvFsDeleteFile(const char *path)
         cvFsError(cvFsDeleteFile_1_illegal_file_name);
         return -1;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     if (fname[0] == 0) {
         cvFsError(cvFsDeleteFile_1_illegal_file_name);
         return -1;
     }
-    vtbl = getPathDevice(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl == 0) {
         /* Retail reports the miss and still reads the table. */
         cvFsError(cvFsDeleteFile_3_device_not_found);
@@ -1078,7 +1078,7 @@ void cvFsSetDefVol(const char *devname, const char *volume)
     }
 }
 
-int isFullPathDev(const char *devname)
+int isNeedDevName(const char *devname)
 {
     CvFsVtbl *vtbl;
 
@@ -1092,18 +1092,18 @@ int isFullPathDev(const char *devname)
     return 0;
 }
 
-void makeFullPath(char *devname, char *fname)
+void addDevName(char *devname, char *fname)
 {
     if (devname == 0) {
         devname = cvFsGetDefDev();
     }
-    if (isFullPathDev(devname) == 1) {
+    if (isNeedDevName(devname) == 1) {
         strcpy(cvfs_path_work, fname);
         sprintf(fname, percent_s_colon_percent_s, devname, cvfs_path_work);
     }
 }
 
-int cvFsIsExistDev(const char *devname)
+int cvFsIsExistDevice(const char *devname)
 {
     return getDevice(devname) != 0;
 }
@@ -1131,8 +1131,8 @@ long long cvFsGetFileSize64(const char *path)
     long long size = 0;
     int high;
 
-    splitPath(devname, fname, path);
-    vtbl = getPathDevice(devname, fname, path);
+    getDevName(devname, fname, path);
+    vtbl = variousProc(devname, fname, path);
     if (vtbl->opt_fn1 != 0) {
         high = ((int (*)(const char *, int, char *, int))vtbl->opt_fn1)(path, CVFS_OPT_FILE_SIZE64_HIGH, fname, 0);
         size = ((long long)high << 32)
@@ -1154,7 +1154,7 @@ long long cvFsGetFileSizeEx64(const char *path, int arg)
     if (vtbl == 0) {
         return 0;
     }
-    splitPath(devname, fname, path);
+    getDevName(devname, fname, path);
     size = 0;
     if (vtbl->opt_fn1 != 0) {
         high = ((int (*)(const char *, int, char *, int))vtbl->opt_fn1)(path, CVFS_OPT_FILE_SIZE_EX64_HIGH, fname, arg);

@@ -159,10 +159,10 @@
    "handle": 0,
    "jtbl": 456,
    "literal": 244,
-   "named": 87546,
+   "named": 90851,
    "pad": 211675,
    "ptr": 3056,
-   "ref": 94789,
+   "ref": 91484,
    "region": 109384,
    "source": 491167,
    "str": 76188,
@@ -348,7 +348,7 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 2202,
+   "fun_dat_refs": 1463,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -376,9 +376,9 @@
   "fully_matched": 20242,
   "fully_verified": 20080,
   "matched": 20087,
-  "named": 16536,
-  "named_semantic": 11055,
-  "named_semantic_matched": 10794,
+  "named": 17350,
+  "named_semantic": 11869,
+  "named_semantic_matched": 11562,
   "total": 20576
  },
  "kernel_patches": {
@@ -403,7 +403,7 @@
    "va": "0x004081a0"
   },
   {
-   "name": "FUN_00286d28",
+   "name": "parseEsc",
    "size": 12256,
    "va": "0x00286d28"
   },
@@ -472,11 +472,11 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2306212,
+  "bytes": 2350960,
   "failing": {
    "addresses": {
-    "bytes": 749264,
-    "functions": 4949
+    "bytes": 689200,
+    "functions": 4270
    },
    "fields": {
     "bytes": 322740,
@@ -487,16 +487,16 @@
     "functions": 2216
    },
    "name": {
-    "bytes": 606564,
-    "functions": 5491
+    "bytes": 520040,
+    "functions": 4726
    },
    "placed": {
-    "bytes": 18492,
-    "functions": 69
+    "bytes": 3408,
+    "functions": 41
    },
    "references": {
-    "bytes": 507276,
-    "functions": 2335
+    "bytes": 467244,
+    "functions": 1994
    },
    "types": {
     "bytes": 304192,
@@ -507,7 +507,7 @@
     "functions": 546
    }
   },
-  "functions": 13241,
+  "functions": 13780,
   "matched_functions": 20242
  },
  "regions": [

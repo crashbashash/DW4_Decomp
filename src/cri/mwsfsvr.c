@@ -26,12 +26,12 @@ void SVM_SetCbVsyncBegin(void (*fn)(void *obj), void *obj);
 void SVM_SetCbVsyncEnd(void (*fn)(void *obj), void *obj);
 void SVM_LockVar(void);
 void SVM_UnlockVar(void);
-void SVM_LockRsc(void);
-void SVM_UnlockRsc(void);
+void SVM_LockSync(void);
+void SVM_UnlockSync(void);
 void SVM_LockDev(void);
 void SVM_UnlockDev(void);
-void SVM_LockEtc(void);
-void SVM_UnlockEtc(void);
+void SVM_LockThrd(void);
+void SVM_UnlockThrd(void);
 int SVM_TestAndSet(int *flag);
 void SVM_GotoSvrBorder(int id);
 void SVM_CallErr1(const char *msg);
@@ -50,7 +50,7 @@ int mwPlySfdStart(MwsfdPly *ply);
 void mwSfdPause(MwsfdPly *ply, int sw);
 void mwPlyChkSupply(MwsfdPly *ply);
 void mwsfsfx_SetCompoMode(MwsfdPly *ply);
-int mwsflsc_IsLscErr(struct LscObj *lsc);
+int MWSFLSC_IsFsStatErr(struct LscObj *lsc);
 int LSC_GetNumStm(struct LscObj *lsc);
 int mwsst_GetStat(MwsfdSst *sst);
 void mwsst_Pause(MwsfdSst *sst, int sw);
@@ -61,13 +61,13 @@ int MWSTM_IsFsStatErr(void *stm);
 
 /* SFD */
 int SFD_GetHnStat(void *sfd);
-int SFD_SetLnkStm(void *sfd);
+int SFD_SetConcatPlay(void *sfd);
 int SFD_TermSupply(void *sfd);
 int SFD_ExecOne(void *sfd);
-int SFD_IsHnSvrDone(void *sfd);
+int SFD_IsHnSvrWait(void *sfd);
 int SFD_IsSvrDone(void);
 void SFD_VsyncSvr(void);
-int SFD_UpdateSysStat(void);
+int SFD_GetSvrStat(void);
 
 extern int mwsfd_init_flag;         /* 1 while MWSFD is initialised */
 extern int mwsfsvr_vint_svr_id;
@@ -79,16 +79,16 @@ extern volatile int mwsfsvr_vsync_cnt2;
 extern MwsfdPly *mwsfsvr_cur_ply;  /* the player the server is executing */
 extern char mwsfd_err_msg[256];
 
-void mwsfsvr_WaitIfBusy(MwsfdPly *ply);
-void mwsfsvr_SetWaitingSvr(MwsfdPly *ply, int sw);
-int mwsfsvr_IsSvrBusy(MwsfdPly *ply);
-int mwsfsvr_GetWaitingSvr(void);
-void mwsfsvr_SetSvrBusy(MwsfdPly *ply, int sw);
-void mwsfsvr_SetSfdExecuting(MwsfdPly *ply, int sw);
-int mwsfsvr_ExecSvrHndl(MwsfdPly *ply);
-int mwsfd_GetSvrLock(void);
+void MWSFSVR_CheckForceSvrBdr(MwsfdPly *ply);
+void MWSFD_SetReqSvrBdrHn(MwsfdPly *ply, int sw);
+int MWSFSVR_GetHnMwplySvrFlg(MwsfdPly *ply);
+int MWSFD_GetReqSvrBdrLib(void);
+void MWSFSVR_SetHnMwplySvrFlg(MwsfdPly *ply, int sw);
+void MWSFSVR_SetHnSfdSvrFlg(MwsfdPly *ply, int sw);
+int mwsfd_ExecSvrHndl(MwsfdPly *ply);
+int MWSFSVR_GetMwsfdSvrFlg(void);
 
-void mwsfsvr_Init(void)
+void MWSFSVM_Init(void)
 {
     SVM_Init();
     mwsfsvr_vint_svr_id = 0;
@@ -97,53 +97,53 @@ void mwsfsvr_Init(void)
     mwsfsvr_main_svr_id = 0;
 }
 
-void mwsfsvr_Finish(void)
+void MWSFSVM_Finish(void)
 {
     SVM_Finish();
 }
 
-void mwsfsvr_SetVintSvr(void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryVint(void (*fn)(void *obj), void *obj)
 {
     mwsfsvr_vint_svr_id = SVM_SetCbSvr(SVM_SVR_VINT, fn, obj);
 }
 
-void mwsfsvr_DelVintSvr(void)
+void MWSFSVM_DeleteVint(void)
 {
     SVM_DelCbSvr(SVM_SVR_VINT, mwsfsvr_vint_svr_id);
 }
 
-void mwsfsvr_SetVsyncSvr(void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryVfunc(void (*fn)(void *obj), void *obj)
 {
     mwsfsvr_vsync_svr_id = SVM_SetCbSvr(SVM_SVR_VSYNC, fn, obj);
 }
 
-void mwsfsvr_SetVsyncSvrId(int id, void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryIdVfunc(int id, void (*fn)(void *obj), void *obj)
 {
     SVM_SetCbSvrId(SVM_SVR_VSYNC, id, fn, obj);
     mwsfsvr_vsync_svr_id = id;
 }
 
-void mwsfsvr_DelVsyncSvr(void)
+void MWSFSVM_DeleteVfunc(void)
 {
     SVM_DelCbSvr(SVM_SVR_VSYNC, mwsfsvr_vsync_svr_id);
 }
 
-void mwsfsvr_SetMwIdleSvr(void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryIdleFunc(void (*fn)(void *obj), void *obj)
 {
     mwsfsvr_mwidle_svr_id = SVM_SetCbSvr(SVM_SVR_MWIDLE, fn, obj);
 }
 
-void mwsfsvr_DelMwIdleSvr(void)
+void MWSFSVM_DeleteIdleFunc(void)
 {
     SVM_DelCbSvr(SVM_SVR_MWIDLE, mwsfsvr_mwidle_svr_id);
 }
 
-void mwsfsvr_SetMainSvr(void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryMainFunc(void (*fn)(void *obj), void *obj)
 {
     mwsfsvr_main_svr_id = SVM_SetCbSvr(SVM_SVR_MAIN, fn, obj);
 }
 
-void mwsfsvr_DelMainSvr(void)
+void MWSFSVM_DeleteMainFunc(void)
 {
     SVM_DelCbSvr(SVM_SVR_MAIN, mwsfsvr_main_svr_id);
 }
@@ -186,13 +186,13 @@ void mwsfsvr_UnlockVar(void)
 
 int mwsfsvr_LockRsc(void)
 {
-    SVM_LockRsc();
+    SVM_LockSync();
     return 1;
 }
 
 void mwsfsvr_UnlockRsc(void)
 {
-    SVM_UnlockRsc();
+    SVM_UnlockSync();
 }
 
 int mwsfsvr_LockDev(void)
@@ -206,32 +206,32 @@ void mwsfsvr_UnlockDev(void)
     SVM_UnlockDev();
 }
 
-int mwsfsvr_LockEtc(void)
+int MWSFSVM_Lock(void)
 {
-    SVM_LockEtc();
+    SVM_LockThrd();
     return 1;
 }
 
 void mwsfsvr_UnlockEtc(void)
 {
-    SVM_UnlockEtc();
+    SVM_UnlockThrd();
 }
 
-int mwsfsvr_TestAndSet(int *flag)
+int MWSFSVM_Unlock(int *flag)
 {
     return SVM_TestAndSet(flag);
 }
 
-void mwsfsvr_CallErr1(const char *msg);
+void mwl_callErrCb(const char *msg);
 
-void mwsfd_Error(const char *format, ...)
+void MWSFSVM_Error(const char *format, ...)
 {
     va_list args;
 
     memset(mwsfd_err_msg, 0, sizeof(mwsfd_err_msg));
     __builtin_stdarg_start(args, format);
     vsprintf(mwsfd_err_msg, format, args);
-    mwsfsvr_CallErr1(mwsfd_err_msg);
+    mwl_callErrCb(mwsfd_err_msg);
     __builtin_va_end(args);
 }
 
@@ -240,39 +240,39 @@ void MWSFSVM_GotoIdleBorder(void)
     SVM_GotoSvrBorder(SVM_SVR_MWIDLE);
 }
 
-void mwsfsvr_SetCbErr(void (*fn)(void *obj, const char *msg), void *obj)
+void mwPlyEntryErrFn(void (*fn)(void *obj, const char *msg), void *obj)
 {
     ADXM_SetCbErr(fn, obj);
 }
 
-void mwsfsvr_CallErr1(const char *msg)
+void mwl_callErrCb(const char *msg)
 {
     SVM_CallErr1(msg);
 }
 
-int mwsfsvr_IsSfdBusy(void)
+int MWSFSVR_IsEndDec(void)
 {
-    return SFD_UpdateSysStat() != 1;
+    return SFD_GetSvrStat() != 1;
 }
 
-void mwsfsvr_WaitSvr(MwsfdPly *ply);
+void mwsfsvr_ExecForceSvrBdr(MwsfdPly *ply);
 
-void mwsfsvr_WaitIfBusy(MwsfdPly *ply)
+void MWSFSVR_CheckForceSvrBdr(MwsfdPly *ply)
 {
     if (ply->svrBusy == 1) {
-        mwsfsvr_WaitSvr(ply);
+        mwsfsvr_ExecForceSvrBdr(ply);
     }
 }
 
 /* lets the server run for up to 10 frames until it is out of the player */
-void mwsfsvr_WaitSvr(MwsfdPly *ply)
+void mwsfsvr_ExecForceSvrBdr(MwsfdPly *ply)
 {
     int i;
 
     for (i = 0; i < 10; i++) {
-        mwsfsvr_SetWaitingSvr(ply, 1);
+        MWSFD_SetReqSvrBdrHn(ply, 1);
         ADXM_ExecVsyncFrame();
-        mwsfsvr_SetWaitingSvr(ply, 0);
+        MWSFD_SetReqSvrBdrHn(ply, 0);
         if (ply->svrBusy == 0) {
             break;
         }
@@ -336,8 +336,8 @@ void mwply_CheckPreparedSst(MwsfdPly *ply)
             if (ply->pause == 0) {
                 mwSfdPause(ply, 0);
             }
-            if (ply->linkReq == 1 && SFD_SetLnkStm(ply->sfd) != 0) {
-                mwsfd_Error(mwply_lnk_err_msg);
+            if (ply->linkReq == 1 && SFD_SetConcatPlay(ply->sfd) != 0) {
+                MWSFSVM_Error(mwply_lnk_err_msg);
             }
             if (ply->pause == 0) {
                 mwsst_Pause(sst, 0);
@@ -353,8 +353,8 @@ void mwply_CheckPreparedStm(MwsfdPly *ply)
         if (ply->pause == 0) {
             mwSfdPause(ply, 0);
         }
-        if (ply->linkReq == 1 && SFD_SetLnkStm(ply->sfd) != 0) {
-            mwsfd_Error(mwply_lnk_err_msg);
+        if (ply->linkReq == 1 && SFD_SetConcatPlay(ply->sfd) != 0) {
+            MWSFSVM_Error(mwply_lnk_err_msg);
         }
     }
 }
@@ -376,7 +376,7 @@ int mwsfsvr_StartStm(MwsfdPly *ply)
     if (MWSTM_ReqStart(ply->stm) == -1) {
         ply->stat = 4;
         MWSFLIB_SetErrCode(-102);
-        mwsfd_Error("E211141 MWSTM_ReqStart: can't start '%s'", ply->fname);
+        MWSFSVM_Error("E211141 MWSTM_ReqStart: can't start '%s'", ply->fname);
         ply->stmReq = 0;
         return -1;
     }
@@ -392,7 +392,7 @@ void mwlSfdExecDecSvrPlaying(MwsfdPly *ply)
     if (ply->linkPrev == 1) {
         if (LSC_GetNumStm(ply->lsc) == 0) {
             if (SFD_TermSupply(sfd) != 0) {
-                mwsfd_Error("E99072102 mwlSfdExecDecSvrPlaying: can't term");
+                MWSFSVM_Error("E99072102 mwlSfdExecDecSvrPlaying: can't term");
             }
             ply->linkPrev = 0;
         }
@@ -406,7 +406,7 @@ void mwlSfdExecDecSvrPlaying(MwsfdPly *ply)
 
 void mwsfsvr_CheckStmErr(MwsfdPly *ply);
 
-int mwsfsvr_ExecDecSvr(MwsfdPly *ply)
+int mwSfdExecDecSvrHndl(MwsfdPly *ply)
 {
     switch (ply->stat) {
     case 1:
@@ -436,7 +436,7 @@ void mwsfsvr_CheckStmErr(MwsfdPly *ply)
         ply->stat = 4;
     }
     lsc = ply->lsc;
-    if (lsc != 0 && mwsflsc_IsLscErr(lsc) == 1) {
+    if (lsc != 0 && MWSFLSC_IsFsStatErr(lsc) == 1) {
         ply->stat = 4;
     }
 }
@@ -484,7 +484,7 @@ int mwsfsvr_IdleSvr(void *obj)
 
 int mwsfsvr_IsDecSvr(void)
 {
-    return (int)MWSFLIB_GetLibWorkPtr()->prm.decSvr;
+    return (int)mwsflib_GetVersionStr()->prm.decSvr;
 }
 
 void mwsfsvr_VsyncProc(void);
@@ -506,8 +506,8 @@ void mwsfsvr_VsyncProc(void)
     mwsfsvr_vsync_cnt2++;
     init = mwsfd_init_flag;
     if (init == 1) {
-        execLock = &MWSFLIB_GetLibWorkPtr()->execLock;
-        if (mwsfsvr_TestAndSet(execLock) != 0) {
+        execLock = &mwsflib_GetVersionStr()->execLock;
+        if (MWSFSVM_Unlock(execLock) != 0) {
             if (mwsfd_init_flag == init) {
                 SFD_VsyncSvr();
             }
@@ -518,7 +518,7 @@ void mwsfsvr_VsyncProc(void)
 
 void mwsfsvr_SetSvrHooks(void (*preFn)(void *obj), void *preObj, void (*postFn)(void *obj), void *postObj)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
 
     work->preSvrFn = preFn;
     work->preSvrObj = preObj;
@@ -528,7 +528,7 @@ void mwsfsvr_SetSvrHooks(void (*preFn)(void *obj), void *preObj, void (*postFn)(
 
 void mwsfsvr_CallPreSvr(void)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
     void (*fn)(void *obj) = work->preSvrFn;
     void *obj = work->preSvrObj;
 
@@ -539,7 +539,7 @@ void mwsfsvr_CallPreSvr(void)
 
 void mwsfsvr_CallPostSvr(void)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
     void *obj = work->postSvrObj;
     void (*fn)(void *obj) = work->postSvrFn;
 
@@ -550,7 +550,7 @@ void mwsfsvr_CallPostSvr(void)
 
 void mwsfsvr_SetIdleHook(void (*fn)(void *obj), void *obj)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
 
     work->idleFn = fn;
     work->idleObj = obj;
@@ -558,7 +558,7 @@ void mwsfsvr_SetIdleHook(void (*fn)(void *obj), void *obj)
 
 void mwsfsvr_CallIdle(void)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
     void *obj = work->idleObj;
     void (*fn)(void *obj) = work->idleFn;
 
@@ -579,49 +579,49 @@ int mwPlyExecSvrHndl(MwsfdPly *ply)
         return 0;
     }
     if (ply == 0) {
-        mwsfd_Error("E1071901 mwPlyExecSvrHndl: NULL handle.");
+        MWSFSVM_Error("E1071901 mwPlyExecSvrHndl: NULL handle.");
         return 0;
     }
     used = *(volatile int *)&ply->used;
     if (used != mwsfd_init_flag) {
         return 0;
     }
-    if (mwsfsvr_IsSvrBusy(ply) == used) {
+    if (MWSFSVR_GetHnMwplySvrFlg(ply) == used) {
         return 0;
     }
-    if (mwsfsvr_GetWaitingSvr() == used) {
+    if (MWSFD_GetReqSvrBdrLib() == used) {
         return 0;
     }
-    return mwsfsvr_ExecSvrHndl(ply);
+    return mwsfd_ExecSvrHndl(ply);
 }
 
 /* one server pass over a player; returns non-zero while its SFD has more to do */
-int mwsfsvr_ExecSvrHndl(MwsfdPly *ply)
+int mwsfd_ExecSvrHndl(MwsfdPly *ply)
 {
     void *sfd = ply->sfd;
     int used;
 
-    mwsfsvr_SetSvrBusy(ply, 1);
+    MWSFSVR_SetHnMwplySvrFlg(ply, 1);
     used = ply->used;
     if (used != 1) {
-        mwsfsvr_SetSvrBusy(ply, 0);
+        MWSFSVR_SetHnMwplySvrFlg(ply, 0);
         return 0;
     }
     mwsfsvr_cur_ply = ply;
-    mwsfsvr_SetSfdExecuting(ply, 1);
+    MWSFSVR_SetHnSfdSvrFlg(ply, 1);
     SFD_ExecOne(sfd);
-    mwsfsvr_SetSfdExecuting(ply, 0);
+    MWSFSVR_SetHnSfdSvrFlg(ply, 0);
     if (ply->stat == 0) {
         ply->execFlg = 0;
     } else {
         ply->execFlg = used;
-        mwsfsvr_ExecDecSvr(ply);
+        mwSfdExecDecSvrHndl(ply);
     }
-    mwsfsvr_SetSvrBusy(ply, 0);
-    return SFD_IsHnSvrDone(sfd) != 1;
+    MWSFSVR_SetHnMwplySvrFlg(ply, 0);
+    return SFD_IsHnSvrWait(sfd) != 1;
 }
 
-int mwsfsvr_ExecVsyncSvr(void)
+int MWSFSVR_Vint(void)
 {
     mwsfsvr_VsyncProc();
     return 0;
@@ -632,32 +632,32 @@ void mwsfsvr_Exec(void)
     mwsfsvr_ExecServer(0);
 }
 
-void mwsfd_SetSvrLock(int lock)
+void MWSFSVR_SetMwsfdSvrFlg(int lock)
 {
-    MWSFLIB_GetLibWorkPtr()->svrLock = lock;
+    mwsflib_GetVersionStr()->svrLock = lock;
 }
 
-int mwsfd_GetSvrLock(void)
+int MWSFSVR_GetMwsfdSvrFlg(void)
 {
-    return MWSFLIB_GetLibWorkPtr()->svrLock;
+    return mwsflib_GetVersionStr()->svrLock;
 }
 
-void mwsfsvr_SetSvrBusy(MwsfdPly *ply, int sw)
+void MWSFSVR_SetHnMwplySvrFlg(MwsfdPly *ply, int sw)
 {
     ply->svrBusy = sw;
 }
 
-int mwsfsvr_IsSvrBusy(MwsfdPly *ply)
+int MWSFSVR_GetHnMwplySvrFlg(MwsfdPly *ply)
 {
     return ply->svrBusy;
 }
 
-void mwsfsvr_SetSfdExecuting(MwsfdPly *ply, int sw)
+void MWSFSVR_SetHnSfdSvrFlg(MwsfdPly *ply, int sw)
 {
     ply->inSfdExec = sw;
 }
 
-int mwsfsvr_IsSfdExecuting(MwsfdPly *ply)
+int MWSFSVR_GetHnSfdSvrFlg(MwsfdPly *ply)
 {
     return ply->inSfdExec;
 }
@@ -665,33 +665,33 @@ int mwsfsvr_IsSfdExecuting(MwsfdPly *ply)
 int MWSFSVR_IsSvrBdrHndl(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E2011101: MWSFSVR_IsSvrBdrHndl: handle is invalid.");
+        MWSFSVM_Error("E2011101: MWSFSVR_IsSvrBdrHndl: handle is invalid.");
         return 0;
     }
-    return mwsfsvr_IsSvrBusy(ply) != 1;
+    return MWSFSVR_GetHnMwplySvrFlg(ply) != 1;
 }
 
-void mwsfsvr_SetWaitingSvr(MwsfdPly *ply, int sw)
+void MWSFD_SetReqSvrBdrHn(MwsfdPly *ply, int sw)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
 
     ply->waitingSvr = sw;
     work->waitingSvr = sw;
 }
 
-int mwsfsvr_IsWaitingSvr(MwsfdPly *ply)
+int MWSFD_GetReqSvrBdrHn(MwsfdPly *ply)
 {
     return ply->waitingSvr;
 }
 
-int mwsfsvr_GetWaitingSvr(void)
+int MWSFD_GetReqSvrBdrLib(void)
 {
-    return MWSFLIB_GetLibWorkPtr()->waitingSvr;
+    return mwsflib_GetVersionStr()->waitingSvr;
 }
 
-int mwsfsvr_IsSvrUnlocked(void)
+int mwPlyIsSvrBdr(void)
 {
-    return mwsfd_GetSvrLock() != 1;
+    return MWSFSVR_GetMwsfdSvrFlg() != 1;
 }
 
 /* runs the idle server up to its border with the player marked waiting, then waits out a pass
@@ -699,9 +699,9 @@ int mwsfsvr_IsSvrUnlocked(void)
 void mwlSfdSleepDecSvr(MwsfdPly *ply)
 {
     mwPlySaveRsc();
-    mwsfsvr_SetWaitingSvr(ply, 1);
+    MWSFD_SetReqSvrBdrHn(ply, 1);
     MWSFSVM_GotoIdleBorder();
-    mwsfsvr_SetWaitingSvr(ply, 0);
+    MWSFD_SetReqSvrBdrHn(ply, 0);
     mwPlyRestoreRsc();
-    mwsfsvr_WaitIfBusy(ply);
+    MWSFSVR_CheckForceSvrBdr(ply);
 }

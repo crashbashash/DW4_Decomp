@@ -56,16 +56,16 @@ extern char E204162_mwPlyGetHdrInf_bufsize_error[];
 extern char E2053001_MWSFD_Malloc_cnt_over[];
 
 void *memset(void *s, int c, unsigned int n);
-void mwsfd_Error(const char *msg);
+void MWSFSVM_Error(const char *msg);
 void MWSFLIB_SetErrCode(int code);
 int MWSFD_GetUsePicUsr(void);
 void MWSFLIB_SfdErrFunc(void);
 void mwSfdStopDec(MwsfdPly *ply);
 void mwply_GetPicInf(char *buf, int size, MwsfdHdrInf *hdr);
-int mwsfsfx_CalcWorkSize(int width, int height);
-void mwsfsfx_Destroy(void *sfx);
-int mwsfd_IsAddInfOn(MwsfdCreInf *cprm);
-void mwsfd_DestroyAddInfSj(MwsfdPly *ply);
+int MWSFSFX_CalcHnWorkSiz(int width, int height);
+void MWSFSFX_Destroy(void *sfx);
+int MWSFTAG_IsUseAinfSj(MwsfdCreInf *cprm);
+void MWSFTAG_DestroyAinfSj(MwsfdPly *ply);
 void MWSTM_Destroy(void *stm);
 void MWSST_Destroy(MwsfdSst *sst);
 void LSC_Destroy(struct LscObj *lsc);
@@ -76,24 +76,24 @@ int SFD_SetErrFn(void *sfd, void (*fn)(void), void *obj);
 void SFD_SetCond(void *sfd, int no, int value);
 void SFD_SetMpvCond(void *sfd, int no, int value);
 void SFD_SetPicUsrBuf(void *sfd, char *addr, int count, int unit);
-void SFD_GetHdrInf(char *buf, int size, SfdHdrInf *inf);
+void SFD_AnalyCreInf(char *buf, int size, SfdHdrInf *inf);
 
-int mwsfcre_CalcMpvWorkSize(MwsfdCreInf *cprm);
-int mwsfcre_CalcSfxWorkSize(MwsfdCreInf *cprm);
+int mwPlyCalcWorkSfd(MwsfdCreInf *cprm);
+int mwPlyCalcWorkCompo(MwsfdCreInf *cprm);
 void *MWSFD_Malloc(MwsfdPly *ply, int size);
-void *mwsfd_PoolMalloc(MwsfdPly *ply, int size);
-void *mwsfd_UsrMalloc(int size);
-int mwsfd_IncMallocCnt(MwsfdPly *ply);
-int mwsfd_DecMallocCnt(MwsfdPly *ply);
-int mwsfd_GetMallocCnt(MwsfdPly *ply);
-void mwsfd_PoolFree(MwsfdPly *ply, void *ptr);
-void mwsfd_UsrFree(void *ptr);
-void mwsfd_FreeAll(MwsfdPly *ply);
-int mwsfcre_GetHdrType(SfdHdrInf *inf);
-int mwsfcre_IsHdrValid(MwsfdHdrInf *hdr);
+void *mwsfcre_OrgMalloc(MwsfdPly *ply, int size);
+void *mwsfcre_UsrMalloc(int size);
+int mwsfcre_IncMallocCnt(MwsfdPly *ply);
+int mwsfcre_DecMallocCnt(MwsfdPly *ply);
+int mwsfcre_GetMallocCnt(MwsfdPly *ply);
+void mwsfcre_OrgFree(MwsfdPly *ply, void *ptr);
+void mwsfcre_UsrFree(void *ptr);
+void mwsfcre_AllFree(MwsfdPly *ply);
+int mwsfcre_DecideFtypeByHdrInf(SfdHdrInf *inf);
+int mwsfdcre_IsPlayableByHdrInf(MwsfdHdrInf *hdr);
 
 /* matching construct: permuter, reduced by hand: the type read in each test */
-void mwsfcre_CalcMpvWorkSizes(MwsfdCreInf *cprm, int *inBuf, int *f1, int *xBuf, int *mpv0, int *mpv1,
+void mwsfcre_CalcWorkStmBuf(MwsfdCreInf *cprm, int *inBuf, int *f1, int *xBuf, int *mpv0, int *mpv1,
                               int *mpv2) {
     int nfrm = cprm->nfrm;
     int maxBps;
@@ -126,7 +126,7 @@ void mwsfcre_CalcMpvWorkSizes(MwsfdCreInf *cprm, int *inBuf, int *f1, int *xBuf,
 }
 
 /* the picture size, and the chroma plane's: half the width rounded up to 32, half the height */
-void mwsfcre_GetPicSizes(MwsfdCreInf *cprm, int *width, int *height, int *halfWidth, int *halfHeight) {
+void mwsfcre_CalcFrmRes(MwsfdCreInf *cprm, int *width, int *height, int *halfWidth, int *halfHeight) {
     int w = cprm->maxWidth;
     int h = cprm->maxHeight;
 
@@ -137,7 +137,7 @@ void mwsfcre_GetPicSizes(MwsfdCreInf *cprm, int *width, int *height, int *halfWi
 }
 
 /* the internal buffer format of a creation parameter's one */
-int mwsfcre_ConvBufFmt(int format) {
+int mwsfcre_ConvBufFmtFromMwsfd(int format) {
     int result;
 
     if (format == 1) {
@@ -149,7 +149,7 @@ int mwsfcre_ConvBufFmt(int format) {
     } else if (format == 3) {
         result = 3;
     } else {
-        mwsfd_Error(E206011_MwsfdCrePrm_illigal_buffmt);
+        MWSFSVM_Error(E206011_MwsfdCrePrm_illigal_buffmt);
         result = 3;
     }
     return result;
@@ -166,16 +166,16 @@ int mpv_GetFixedWorkSizes(MwsfdCreInf *cprm, int *size_a, int *size_b) {
     return *size_a + *size_b;
 }
 
-/* the slack mwsfcre_CalcMpvWorkSize adds for alignment */
+/* the slack mwPlyCalcWorkSfd adds for alignment */
 int mwsfcre_GetAlignMargin(void) {
     return 256;
 }
 
 /* the sfx work and, with additional information on, its SJ buffer */
-int mwsfcre_CalcSfxWorkSize(MwsfdCreInf *cprm) {
-    int size = mwsfsfx_CalcWorkSize(cprm->maxWidth, cprm->maxHeight);
+int mwPlyCalcWorkCompo(MwsfdCreInf *cprm) {
+    int size = MWSFSFX_CalcHnWorkSiz(cprm->maxWidth, cprm->maxHeight);
 
-    if (mwsfd_IsAddInfOn(cprm) == 1) {
+    if (MWSFTAG_IsUseAinfSj(cprm) == 1) {
         size += MWSFD_ADDINF_BUF_SIZE;
     }
     return size;
@@ -185,11 +185,11 @@ int mwPlyCalcWorkCprmSfd(MwsfdCreInf *cprm) {
     int size;
 
     if (cprm == 0) {
-        mwsfd_Error(E1122613_mwPlyCalcWorkCprmSfd_cprm_is_NULL);
+        MWSFSVM_Error(E1122613_mwPlyCalcWorkCprmSfd_cprm_is_NULL);
         return 0;
     }
-    size = mwsfcre_CalcMpvWorkSize(cprm);
-    return size + mwsfcre_CalcSfxWorkSize(cprm);
+    size = mwPlyCalcWorkSfd(cprm);
+    return size + mwPlyCalcWorkCompo(cprm);
 }
 
 /* registers caller-owned frame buffers instead of allocating them per player */
@@ -203,7 +203,7 @@ void MPV_SetFrameBuffers(int num, int size, void **bufs) {
 }
 
 /* matching construct: two orders tried: the buffer pointers read into locals first */
-int mwsfcre_AllocFrmBufs(MwsfdPly *ply, MwsfdCreInf *cprm, MwsfdFrmBufs *bufs) {
+int mwsfcre_MallocRfb(MwsfdPly *ply, MwsfdCreInf *cprm, MwsfdFrmBufs *bufs) {
     int ret = 0;
     int size[2];
     int n;
@@ -287,14 +287,14 @@ void mwsfcre_AttachPicUsrBuf(MwsfdPly *ply) {
     int unit;
 
     if (buf == 0) {
-        mwsfd_Error(E02120501_Internal_Error_mwsfcre_AttachPicUsrBuf);
+        MWSFSVM_Error(E02120501_Internal_Error_mwsfcre_AttachPicUsrBuf);
         return;
     }
     unit = buf->unit;
     count = ply->cre.nfrmPoolWk + 4;
     addr = buf->addr;
     if (buf->size < count * unit) {
-        mwsfd_Error(E02120502_mwsfcre_AttachPicUsrBuf_usrdatbuf_is_short);
+        MWSFSVM_Error(E02120502_mwsfcre_AttachPicUsrBuf_usrdatbuf_is_short);
         return;
     }
     if (MWSFD_GetUsePicUsr() != 1)
@@ -315,7 +315,7 @@ void mwPlyAttachPicUsrBuf(MwsfdPly *ply, char *buf, int size, int unit) {
         ply->picUsrBuf = sys;
     } else {
         if (size < (ply->cre.nfrmPoolWk + 4) * unit) {
-            mwsfd_Error(mwPlyAttachPicUsrBuf_short_msg);
+            MWSFSVM_Error(mwPlyAttachPicUsrBuf_short_msg);
             return;
         }
         ub->addr = buf;
@@ -329,7 +329,7 @@ void mwPlyAttachPicUsrBuf(MwsfdPly *ply, char *buf, int size, int unit) {
 void MWSFCRE_DestroySfd(void *sfd) {
     if (SFD_Destroy(sfd) != 0) {
         MWSFLIB_SetErrCode(-0x132);
-        mwsfd_Error(E20010703E_MWSFCRE_DestroySfd);
+        MWSFSVM_Error(E20010703E_MWSFCRE_DestroySfd);
     }
 }
 
@@ -367,25 +367,25 @@ int MWSFCRE_ResetSfdHn(MwsfdPly *ply) {
     void *sfd = ply->sfd;
 
     if (SFD_Stop(sfd) != 0) {
-        mwsfd_Error(E0203261_MWSFCRE_ResetSfdHn_SFD_Stop_failed);
+        MWSFSVM_Error(E0203261_MWSFCRE_ResetSfdHn_SFD_Stop_failed);
         return -1;
     }
     if (SFD_SetErrFn(sfd, MWSFLIB_SfdErrFunc, ply) != 0) {
         MWSFLIB_SetErrCode(-303);
-        mwsfd_Error(E0203262_MWSFCRE_ResetSfdHn_SFD_SetErrFn_failed);
+        MWSFSVM_Error(E0203262_MWSFCRE_ResetSfdHn_SFD_SetErrFn_failed);
         return -1;
     }
     mwsfcre_AttachPicUsrBuf(ply);
     return 0;
 }
 
-SfdSj *mwsfcre_CreateInputSj(MwsfdPly *ply) {
+SfdSj *mwsfcre_CreateSj(MwsfdPly *ply) {
     return SJRBF_Create(ply->inputBuf, ply->inputBufSize, ply->inputXSize);
 }
 
 /* -1 when no work area is given and the malloc/free functions are not both set */
-int mwsfcre_CheckMallocFn(MwsfdCreInf *cprm) {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm) {
+    MwsfdWork *work = mwsflib_GetVersionStr();
     int result = 0;
 
     if (cprm->work == 0) {
@@ -398,7 +398,7 @@ int mwsfcre_CheckMallocFn(MwsfdCreInf *cprm) {
 }
 
 /* the player allocates from the creation parameter's work area */
-void mwsfcre_InitMemPool(MwsfdPly *ply, MwsfdCreInf *cprm) {
+void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm) {
     MwsfdMemPool *pool = &ply->pool;
     void **blk = &ply->mallocBlk[MWSFD_MALLOC_MAX - 1];
     int i;
@@ -417,35 +417,35 @@ int mwsfcre_CheckCprm(MwsfdCreInf *cprm) {
     int ok = 1;
 
     if (cprm->type == 2) {
-        mwsfd_Error(E3012100_M1V_Decode_is_not_support_yet);
+        MWSFSVM_Error(E3012100_M1V_Decode_is_not_support_yet);
         ok = 0;
     }
     if ((unsigned int)cprm->bufFmt >= 3U) {
-        mwsfd_Error(E3012101_Buffer_format_is_invalid);
+        MWSFSVM_Error(E3012101_Buffer_format_is_invalid);
         ok = 0;
     }
     return ok;
 }
 
 /* allocates the sfx work and, with additional information on, its SJ buffer */
-int mwsfcre_AllocSfxWork(MwsfdPly *ply) {
+int mwsfcre_MallocCompoWork(MwsfdPly *ply) {
     MwsfdCreInf *cre = &ply->cre;
-    int size = mwsfsfx_CalcWorkSize(cre->maxWidth, cre->maxHeight);
+    int size = MWSFSFX_CalcHnWorkSiz(cre->maxWidth, cre->maxHeight);
     char *work = MWSFD_Malloc(ply, size);
     char *addInf;
 
     if (work == 0) {
-        mwsfd_Error(E2053003_not_enough_work_sfx_wk);
-        mwsfd_FreeAll(ply);
+        MWSFSVM_Error(E2053003_not_enough_work_sfx_wk);
+        mwsfcre_AllFree(ply);
         return -1;
     }
     ply->sfxWork = work;
     ply->sfxWorkSize = size;
-    if (mwsfd_IsAddInfOn(cre) == 1) {
+    if (MWSFTAG_IsUseAinfSj(cre) == 1) {
         addInf = MWSFD_Malloc(ply, MWSFD_ADDINF_BUF_SIZE);
         if (addInf == 0) {
-            mwsfd_Error(E2053004_not_enough_work_ainfsj_buf);
-            mwsfd_FreeAll(ply);
+            MWSFSVM_Error(E2053004_not_enough_work_ainfsj_buf);
+            mwsfcre_AllFree(ply);
             return -1;
         }
         ply->addInfBase = addInf;
@@ -458,13 +458,13 @@ int mwsfcre_AllocSfxWork(MwsfdPly *ply) {
 }
 
 /* releases everything a player holds and returns its entry to the table */
-void mwsfcre_DestroyPly(MwsfdPly *ply) {
+void mwSfdDestroy(MwsfdPly *ply) {
     if (ply != 0) {
         mwSfdStopDec(ply);
         ply->used = 0;
-        mwsfd_DestroyAddInfSj(ply);
+        MWSFTAG_DestroyAinfSj(ply);
         if (ply->sfx != 0) {
-            mwsfsfx_Destroy(ply->sfx);
+            MWSFSFX_Destroy(ply->sfx);
         }
         if (ply->lsc != 0) {
             LSC_Destroy(ply->lsc);
@@ -482,9 +482,9 @@ void mwsfcre_DestroyPly(MwsfdPly *ply) {
             MWSFCRE_DestroySfd(ply->sfd);
         }
         MWSST_Destroy(&ply->sst);
-        mwsfd_FreeAll(ply);
-        if (mwsfd_GetMallocCnt(ply) != 0) {
-            mwsfd_Error(E2053005_forgot_free);
+        mwsfcre_AllFree(ply);
+        if (mwsfcre_GetMallocCnt(ply) != 0) {
+            MWSFSVM_Error(E2053005_forgot_free);
         }
         memset(ply, 0, sizeof(MwsfdPly));
         ply->used = 0;
@@ -502,33 +502,33 @@ void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *out) {
     SfdHdrInf inf;
 
     if (buf == 0 || out == 0) {
-        mwsfd_Error(E204161_mwPlyGetHdrInf_NULL_pointer);
+        MWSFSVM_Error(E204161_mwPlyGetHdrInf_NULL_pointer);
         return;
     }
     if (size <= 0) {
-        mwsfd_Error(E204162_mwPlyGetHdrInf_bufsize_error);
+        MWSFSVM_Error(E204162_mwPlyGetHdrInf_bufsize_error);
         return;
     }
     memset(&hdr, 0, sizeof(hdr));
-    SFD_GetHdrInf(buf, size, &inf);
+    SFD_AnalyCreInf(buf, size, &inf);
     if (inf.ok0 == 0 || inf.ok1 == 0) {
         *out = hdr;
         out->valid = 0;
         return;
     }
-    hdr.type = mwsfcre_GetHdrType(&inf);
+    hdr.type = mwsfcre_DecideFtypeByHdrInf(&inf);
     hdr.width = inf.width;
     hdr.height = inf.height;
     hdr.rate = inf.rate;
     hdr.frames = inf.frames;
     hdr.f40 = inf.f40;
     mwply_GetPicInf(buf, size, &hdr);
-    hdr.valid = mwsfcre_IsHdrValid(&hdr);
+    hdr.valid = mwsfdcre_IsPlayableByHdrInf(&hdr);
     *out = hdr;
 }
 
 /* video with audio 1, video alone 3, audio alone 2, else 0 */
-int mwsfcre_GetHdrType(SfdHdrInf *inf) {
+int mwsfcre_DecideFtypeByHdrInf(SfdHdrInf *inf) {
     int kind = 0;
 
     if (inf->video == 0) {
@@ -543,9 +543,9 @@ int mwsfcre_GetHdrType(SfdHdrInf *inf) {
     return kind;
 }
 
-void MWSFD_SetMallocFunc(void *(*mallocFn)(void *obj, int size), void (*freeFn)(void *obj, void *ptr),
+void mwPlySetMallocFn(void *(*mallocFn)(void *obj, int size), void (*freeFn)(void *obj, void *ptr),
                          void *obj) {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
 
     work->mallocFn = mallocFn;
     work->freeFn = freeFn;
@@ -553,30 +553,30 @@ void MWSFD_SetMallocFunc(void *(*mallocFn)(void *obj, int size), void (*freeFn)(
 }
 
 /* from the player's pool when it has one, else through the installed malloc function; each block is
- * recorded for mwsfd_FreeAll */
+ * recorded for mwsfcre_AllFree */
 void *MWSFD_Malloc(MwsfdPly *ply, int size) {
     void *block;
 
     if (ply->mallocCnt >= MWSFD_MALLOC_MAX) {
-        mwsfd_Error(E2053001_MWSFD_Malloc_cnt_over);
+        MWSFSVM_Error(E2053001_MWSFD_Malloc_cnt_over);
         return 0;
     }
     if (size < 0) {
         return 0;
     }
     if (ply->pool.base != 0) {
-        block = mwsfd_PoolMalloc(ply, size);
+        block = mwsfcre_OrgMalloc(ply, size);
     } else {
-        block = mwsfd_UsrMalloc(size);
+        block = mwsfcre_UsrMalloc(size);
     }
     if (block != 0) {
         ply->mallocBlk[ply->mallocCnt] = block;
-        mwsfd_IncMallocCnt(ply);
+        mwsfcre_IncMallocCnt(ply);
     }
     return block;
 }
 
-void *mwsfd_PoolMalloc(MwsfdPly *ply, int size) {
+void *mwsfcre_OrgMalloc(MwsfdPly *ply, int size) {
     MwsfdMemPool *pool = &ply->pool;
     unsigned int used = pool->used + size;
     char *block = 0;
@@ -589,32 +589,32 @@ void *mwsfd_PoolMalloc(MwsfdPly *ply, int size) {
     return block;
 }
 
-void *mwsfd_UsrMalloc(int size) {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+void *mwsfcre_UsrMalloc(int size) {
+    MwsfdWork *work = mwsflib_GetVersionStr();
 
     return work->mallocFn(work->mallocObj, size);
 }
 
 void MWSFD_Free(MwsfdPly *ply, void *ptr) {
     if (ply->pool.base != 0) {
-        mwsfd_PoolFree(ply, ptr);
+        mwsfcre_OrgFree(ply, ptr);
     } else {
-        mwsfd_UsrFree(ptr);
+        mwsfcre_UsrFree(ptr);
     }
-    mwsfd_DecMallocCnt(ply);
+    mwsfcre_DecMallocCnt(ply);
 }
 
 /* the pool is released as a whole */
-void mwsfd_PoolFree(MwsfdPly *ply, void *ptr) {
+void mwsfcre_OrgFree(MwsfdPly *ply, void *ptr) {
 }
 
-void mwsfd_UsrFree(void *ptr) {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+void mwsfcre_UsrFree(void *ptr) {
+    MwsfdWork *work = mwsflib_GetVersionStr();
 
     work->freeFn(work->mallocObj, ptr);
 }
 
-void mwsfd_FreeAll(MwsfdPly *ply) {
+void mwsfcre_AllFree(MwsfdPly *ply) {
     void **blk = &ply->mallocBlk[MWSFD_MALLOC_MAX - 1];
     int i;
 
@@ -627,14 +627,14 @@ void mwsfd_FreeAll(MwsfdPly *ply) {
     }
 }
 
-int mwsfd_IncMallocCnt(MwsfdPly *ply) {
+int mwsfcre_IncMallocCnt(MwsfdPly *ply) {
     return ++ply->mallocCnt;
 }
 
-int mwsfd_DecMallocCnt(MwsfdPly *ply) {
+int mwsfcre_DecMallocCnt(MwsfdPly *ply) {
     return --ply->mallocCnt;
 }
 
-int mwsfd_GetMallocCnt(MwsfdPly *ply) {
+int mwsfcre_GetMallocCnt(MwsfdPly *ply) {
     return ply->mallocCnt;
 }

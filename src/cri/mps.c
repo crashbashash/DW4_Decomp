@@ -10,9 +10,9 @@ extern MpsWork *mps_work;
 int MPS_GetPackHd(MpsHn *mps, MpsPackHd *out) {
     int result;
 
-    result = mps_CheckHn(mps);
+    result = MPSLIB_CheckHn(mps);
     if (result != 0) {
-        mps_ReportError(0, 0xFF020201);
+        MPSLIB_SetErr(0, 0xFF020201);
         return;
     }
     *out = mps->pack;
@@ -20,20 +20,20 @@ int MPS_GetPackHd(MpsHn *mps, MpsPackHd *out) {
 }
 
 int MPS_GetSysHdOfKind(MpsHn *mps, MpsSysHd *out, int kind) {
-    int result = mps_CheckHn(mps);
+    int result = MPSLIB_CheckHn(mps);
 
     if (result != 0) {
-        return mps_ReportError(0, 0xFF020202);
+        return MPSLIB_SetErr(0, 0xFF020202);
     }
     *out = mps->sysHdKind[kind];
     return result;
 }
 
 int MPS_GetSysHd(MpsHn *mps, MpsSysHd *out) {
-    int result = mps_CheckHn(mps);
+    int result = MPSLIB_CheckHn(mps);
 
     if (result != 0) {
-        return mps_ReportError(0, 0xFF020202);
+        return MPSLIB_SetErr(0, 0xFF020202);
     }
     *out = mps->sysHd;
     return result;
@@ -43,9 +43,9 @@ int MPS_GetSysHd(MpsHn *mps, MpsSysHd *out) {
 int MPS_GetPesInf(MpsHn *mps, MpsPesInf *out) {
     int result;
 
-    result = mps_CheckHn(mps);
+    result = MPSLIB_CheckHn(mps);
     if (result != 0) {
-        mps_ReportError(0, 0xFF020203);
+        MPSLIB_SetErr(0, 0xFF020203);
         return;
     }
     *out = mps->pes;
@@ -56,18 +56,18 @@ char *MPS_GetVersionStr(void) {
     return cri_mps_version;
 }
 
-int mps_InitWork(int nhn, MpsWork *work);
+int mpslib_InitLibWork(int nhn, MpsWork *work);
 
-void mps_InitLibErr(MpsErr *err);
+void mpslib_InitErr(MpsErr *err);
 int MPS_Destroy(MpsHn *mps);
 
-int mps_InitWork(int nhn, MpsWork *work) {
+int mpslib_InitLibWork(int nhn, MpsWork *work) {
     MpsHn *hn;
     int i;
 
     mps_work = work;
-    mpsutl_FillWords((int *)work, 0, nhn * 64 + 4);
-    mps_InitLibErr(&mps_work->err);
+    UTY_MemsetDword((int *)work, 0, nhn * 64 + 4);
+    mpslib_InitErr(&mps_work->err);
     mps_work->nhn = nhn;
     hn = mps_work->hn;
     if (nhn > 0) {
@@ -95,31 +95,31 @@ void MPS_Finish(void) {
     mpsdmx_Finish();
 }
 
-void mps_ClearErr(MpsErr *err);
+void MPSLIB_InitErrInf(MpsErr *err);
 
-void mps_InitLibErr(MpsErr *err) {
-    mps_ClearErr(err);
+void mpslib_InitErr(MpsErr *err) {
+    MPSLIB_InitErrInf(err);
 }
 
-void mps_ClearErr(MpsErr *err) {
+void MPSLIB_InitErrInf(MpsErr *err) {
     err->fn = 0;
     err->obj = 0;
     err->code = 0;
 }
 
-int mps_CallErrFn(MpsErr *err, int code);
+int mpslib_SetErrSub(MpsErr *err, int code);
 
-int mps_ReportError(MpsHn *mps, int code) {
+int MPSLIB_SetErr(MpsHn *mps, int code) {
     if (mps == 0) {
-        mps_CallErrFn(&mps_work->err, code);
+        mpslib_SetErrSub(&mps_work->err, code);
     } else {
-        mps_CallErrFn(&mps->err, code);
+        mpslib_SetErrSub(&mps->err, code);
     }
     return code;
 }
 
 /* Records code and, when it is an error, calls the error callback; returns the callback's result. */
-int mps_CallErrFn(MpsErr *err, int code) {
+int mpslib_SetErrSub(MpsErr *err, int code) {
     err->code = code;
     if (code != 0) {
         code = (int)err->fn;
@@ -130,22 +130,22 @@ int mps_CallErrFn(MpsErr *err, int code) {
     return code;
 }
 
-void mps_SetErrFn(MpsErr *err, MpsErrFn fn, void *obj);
+void mpslib_SetErrFnSub(MpsErr *err, MpsErrFn fn, void *obj);
 
 /* Sets the error callback of a handle, or the library's for a null handle. */
-int MPS_EntryErrFunc(MpsHn *mps, MpsErrFn fn, void *obj) {
+int MPS_SetErrFn(MpsHn *mps, MpsErrFn fn, void *obj) {
     if (mps == 0) {
-        mps_SetErrFn(&mps_work->err, fn, obj);
+        mpslib_SetErrFnSub(&mps_work->err, fn, obj);
     } else {
-        if (mps_CheckHn(mps) != 0) {
-            return mps_ReportError(0, 0xFF020101);
+        if (MPSLIB_CheckHn(mps) != 0) {
+            return MPSLIB_SetErr(0, 0xFF020101);
         }
-        mps_SetErrFn(&mps->err, fn, obj);
+        mpslib_SetErrFnSub(&mps->err, fn, obj);
     }
     return 0;
 }
 
-void mps_SetErrFn(MpsErr *err, MpsErrFn fn, void *obj) {
+void mpslib_SetErrFnSub(MpsErr *err, MpsErrFn fn, void *obj) {
     err->fn = fn;
     err->obj = obj;
 }
@@ -154,8 +154,8 @@ int MPS_GetErrInf(MpsHn *mps, MpsErr *out) {
     if (mps == 0) {
         *out = mps_work->err;
     } else {
-        if (mps_CheckHn(mps) != 0) {
-            return mps_ReportError(0, 0xFF020102);
+        if (MPSLIB_CheckHn(mps) != 0) {
+            return MPSLIB_SetErr(0, 0xFF020102);
         }
         *out = mps->err;
     }
@@ -163,7 +163,7 @@ int MPS_GetErrInf(MpsHn *mps, MpsErr *out) {
 }
 
 /* Makes mps the current handle; -1 for a null or free handle. */
-int mps_CheckHn(MpsHn *mps) {
+int MPSLIB_CheckHn(MpsHn *mps) {
     mps_curhn = mps;
     if (mps == 0) {
         return -1;
@@ -171,19 +171,19 @@ int mps_CheckHn(MpsHn *mps) {
     return mps->stat != MPS_HN_FREE ? 0 : -1;
 }
 
-MpsHn *mps_AllocHn(void);
-MpsHn *mps_InitHn(MpsHn *mps);
+MpsHn *mpslib_SearchFreeHn(void);
+MpsHn *mpslib_InitHn(MpsHn *mps);
 
 MpsHn *MPS_Create(void) {
-    MpsHn *mps = mps_AllocHn();
+    MpsHn *mps = mpslib_SearchFreeHn();
 
     if (mps != 0) {
-        return mps_InitHn(mps);
+        return mpslib_InitHn(mps);
     }
     return 0;
 }
 
-MpsHn *mps_AllocHn(void) {
+MpsHn *mpslib_SearchFreeHn(void) {
     int nhn = mps_work->nhn;
     MpsHn *hn = mps_work->hn;
     int i;
@@ -197,19 +197,19 @@ MpsHn *mps_AllocHn(void) {
 }
 
 void mps_ResetPackHd(MpsPackHd *pack);
-void mps_ResetSysHd(MpsSysHd *sysHd);
+void mpslib_InitSys(MpsSysHd *sysHd);
 void mps_ResetPesInf(MpsPesInf *pes);
 
-MpsHn *mps_InitHn(MpsHn *mps) {
-    mpsutl_FillWords((int *)mps, 0, 64);
+MpsHn *mpslib_InitHn(MpsHn *mps) {
+    UTY_MemsetDword((int *)mps, 0, 64);
     mps->stat = MPS_HN_USED;
-    mps_ClearErr(&mps->err);
+    MPSLIB_InitErrInf(&mps->err);
     mps->pesSw = 2;
     mps_ResetPackHd(&mps->pack);
-    mps_ResetSysHd(&mps->sysHd);
-    mps_ResetSysHd(&mps->sysHdKind[0]);
-    mps_ResetSysHd(&mps->sysHdKind[1]);
-    mps_ResetSysHd(&mps->sysHdKind[2]);
+    mpslib_InitSys(&mps->sysHd);
+    mpslib_InitSys(&mps->sysHdKind[0]);
+    mpslib_InitSys(&mps->sysHdKind[1]);
+    mpslib_InitSys(&mps->sysHdKind[2]);
     mps_ResetPesInf(&mps->pes);
     mps->f208 = 0;
     mps->f216 = 0;
@@ -227,7 +227,7 @@ void mps_ResetPackHd(MpsPackHd *pack) {
     pack->muxRate = -1;
 }
 
-void mps_ResetSysHd(MpsSysHd *sysHd) {
+void mpslib_InitSys(MpsSysHd *sysHd) {
     sysHd->f0 = -1;
     sysHd->f4 = -1;
     sysHd->audioBound = -1;
@@ -250,8 +250,8 @@ void mps_ResetPesInf(MpsPesInf *pes) {
 }
 
 int MPS_Destroy(MpsHn *mps) {
-    if (mps_CheckHn(mps) != 0) {
-        return mps_ReportError(0, 0xFF020103);
+    if (MPSLIB_CheckHn(mps) != 0) {
+        return MPSLIB_SetErr(0, 0xFF020103);
     }
     mps->stat = MPS_HN_FREE;
     return 0;

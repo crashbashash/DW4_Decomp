@@ -16,16 +16,16 @@ typedef struct {
 } Mpeg2Hdr;
 typedef struct { char pad0[352]; Mpeg2Hdr hdr; } Mpeg2Ctx;
 
-int mpv_SkipToStartCode(SjObj *sj);
-char *FUN_0028a260();
+int MPV_GoNextDelimSj(SjObj *sj);
+char *parsePsc();
 char *FUN_00289d08();
-char *FUN_00286d28();
+char *parseEsc();
 char *FUN_00286958();
-char *FUN_00286010();
+char *parseShc();
 char *FUN_00286838();
 void SJ_SplitChunk(Chunk *src, int n, Chunk *head, Chunk *tail);
 
-int FUN_00285c78(Mpeg2Ctx *ctx, SjObj *sj) {
+int m2vhdec_ParseSj(Mpeg2Ctx *ctx, SjObj *sj) {
     Mpeg2Hdr *h = &ctx->hdr;
     Chunk ck;
     Chunk rest;
@@ -38,12 +38,12 @@ int FUN_00285c78(Mpeg2Ctx *ctx, SjObj *sj) {
     saved = h->error_count;
     h->expected_ext_id = 0;
     h->error_count = 0;
-    while ((code = mpv_SkipToStartCode(sj)) != 0) {
+    while ((code = MPV_GoNextDelimSj(sj)) != 0) {
         sj->vt->getChunk(sj, 1, 0x7FFFFFFF, &ck);
         end = 0;
         switch (code) {
         case 64:
-            end = FUN_00286010(ctx, ck.data);
+            end = parseShc(ctx, ck.data);
             break;
         case 128:
             end = FUN_00286838(ctx, ck.data);
@@ -52,13 +52,13 @@ int FUN_00285c78(Mpeg2Ctx *ctx, SjObj *sj) {
             end = FUN_00286958(ctx, ck.data);
             break;
         case 16:
-            end = FUN_00286d28(ctx, ck.data);
+            end = parseEsc(ctx, ck.data);
             break;
         case 8:
             end = FUN_00289d08(ctx, ck.data);
             break;
         case 4:
-            end = FUN_0028a260(ctx, ck.data);
+            end = parsePsc(ctx, ck.data);
             break;
         }
         if (end == 0) {

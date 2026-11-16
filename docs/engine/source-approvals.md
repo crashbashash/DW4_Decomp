@@ -150,7 +150,7 @@ event callbacks, thread bodies, the idle-border switches and the shutdown functi
 * Four rows have a single read of the word and differ from a plain spelling only by the address form: the two
   idle-border switches and the two shutdown functions. They rest on the file-scope declaration the functions above
   prove.
-* Three of the ids are also read by `adxm_exec_vint`, the vertical-blank interrupt path, which is the reader in
+* Three of the ids are also read by `ADXPS2_ExecVint`, the vertical-blank interrupt path, which is the reader in
   another context.
 
 ### svm-lock-counts
@@ -229,7 +229,7 @@ clock pointer (`0x5856d0`), the nesting count (`0x5856d4`), and the two tables o
 ### mwsfd-handle-used
 
 The MWSFD player handle's in-use word, which the server pass reads (`mwPlyExecSvrHndl`) while the application side
-clears it when it destroys a player (`mwsfcre_DestroyPly`). The server pass runs as an SVM server callback, and the
+clears it when it destroys a player (`mwSfdDestroy`). The server pass runs as an SVM server callback, and the
 read is the server half of the destroy handshake, so it reads the word where the other side's change must be seen.
 Written as a `volatile` cast at the read, as the DMA channels' shared words are ([dma-channel-shared-words](#dma-channel-shared-words)). The
 keyword keeps no extra load (stripped, the read moves into a branch delay slot), so the row rests on the shared
@@ -238,7 +238,7 @@ state alone.
 ### mwsfsvr-vsync-count
 
 MWSFD's second V-sync count (`0x4be8ac`), cleared by the player init and incremented by the V-sync server, which
-`adxm_vsync_thrd` runs and which MWPLY also exposes as its `VsyncHndl` slot ("called by user while v-sync
+`adxm_vsync_proc` runs and which MWPLY also exposes as its `VsyncHndl` slot ("called by user while v-sync
 interrupt"). On PS2 the keyword only keeps one store out of a delay slot. The Xbox build's same function (`0x270550`)
 compiles to its exact bytes under MSVC 7.1 only with this count `volatile` and the first count plain, the PS2
 declarations; every other combination differs by 39 to 41 bytes. The owner approved the row on that second build.
@@ -257,8 +257,8 @@ approved `0x56dfa8` word. `SFD_Init` and `MPS_Init` have no row (see [Open quest
 
 ADXT's tick count at `0x49c8f0`, which some ADXT files declare `volatile` and others plain.
 
-* ADXT's init clears it, the server entry and `adxm_exec_vint` increment it, and the handle code copies it into a
-  handle as a start time. `adxm_exec_vint` is the vertical-blank interrupt path, reached from `ADXM_ExecVint`
+* ADXT's init clears it, the server entry and `ADXPS2_ExecVint` increment it, and the handle code copies it into a
+  handle as a start time. `ADXPS2_ExecVint` is the vertical-blank interrupt path, reached from `ADXM_ExecVint`
   (registered through `AddIntcHandler`), and needs the keyword itself: stripped, it comes out 8 bytes short.
 * The same statement, a handle's start time set from the count, compiles in the `lui`, `addiu`, `0(reg)` form
   in one ADXT file and folded into `%lo` in another, which one declaration cannot give. `adxtinit.c` declares the
@@ -277,7 +277,7 @@ ADXT's tick count at `0x49c8f0`, which some ADXT files declare `volatile` and ot
 Entry guards of ADX servers that run on one thread and are waited on or entered from another.
 
 * ADXSTM's server busy word (`0x4a7f00`) is taken through `SVM_TestAndSet` on the file-system thread and polled in
-  `ADXSTM_OpenFile`'s wait loop on the main thread. The keyword is on the server's clearing store: stripped, the
+  `ADXSTM_OpenCvfs`'s wait loop on the main thread. The keyword is on the server's clearing store: stripped, the
   function is 4 bytes short. The 3rd Strike decompilation declares the same word `volatile`.
 * ADXT's server phase word is the entry guard of `ADXT_ExecServer`, which runs on the V-sync server thread and on
   the main thread (through `ADXT_DiscardSmpl`). Only the last store's keyword matters, and stripped it changes one
@@ -286,7 +286,7 @@ Entry guards of ADX servers that run on one thread and are waited on or entered 
 * `ADXT_IsActiveFsSvr` reads ADXT's file-system server step word (`0x49c8c0`), which is `ADXT_ExecFsSvr`'s re-entry
   guard, once. The server runs on the file-system thread (registered with the server manager as a server type) and
   the main thread enters it from the blocking stream calls (`ADXSTM_BindFile`, `ADXSTM_ReleaseFile`,
-  `ADXSTM_Stop`) and from `ADXPS2_ExecServer`. The keyword, a cast at the read, decides only the address form
+  `ADXSTM_Stop`) and from `ADXPS2_ExecServerEx`. The keyword, a cast at the read, decides only the address form
   (`lui; addiu; lw 0` against `lui; lw %lo`, 5 words against 4), which is the form a `volatile`-qualified access
   gives; fourteen plain spellings all give the folded form. No other build tells the two apart, and the 3rd Strike
   decompilation declares the word plain but leaves the function and its caller unwritten. The word is defined in the
@@ -496,35 +496,35 @@ the requests and wait on the exit words, so the state really is shared between t
 
 * The rows also cover the border flag (set by the border wait, cleared by the idle threads), the MW-idle thread's
   slept flag (set by that thread, read and cleared by the V-sync thread), the V-sync waiting flag (set by
-  `ADXM_WaitVsync`, read and cleared by the V-sync thread), the busy flags `adxm_usrvsync_busy`, `adxm_fs_busy` and
-  `adxm_vsync_busy` (read by `adxm_exec_vint`, the vertical-blank interrupt path), and thread-id words whose
+  `ADXPS2_SleepMainThrd`, read and cleared by the V-sync thread), the busy flags `adxm_usrvsync_busy`, `adxm_fs_busy` and
+  `adxm_vsync_busy` (read by `ADXPS2_ExecVint`, the vertical-blank interrupt path), and thread-id words whose
   evidence is under [ADXM thread ids](#adxm-thread-ids).
 * The loops contain calls, so they reload the flags with or without the keyword, and the strip test loses no load.
   It does not leave the functions unchanged: stripping an exit request or exited word shortens the thread bodies,
-  `adxm_request_thrd_exit` and the delete functions by 4 to 20 bytes, through the address form and hoisting. The case
+  `adxm_ShutdownPreProcedure` and the delete functions by 4 to 20 bytes, through the address form and hoisting. The case
   rests on the shared state, approved on that basis.
 * Retail reads every one of these words through a full address in a register. Under ee-gcc 2.96 a single plain access
   is never written that way, which supports a `volatile`-qualified access in the source.
 * One server thread also writes the GS background colour register at its fixed address, a hardware access.
-* `adxm_exec_vint` is that interrupt path, registered through `AddIntcHandler` behind its wrapper `ADXM_ExecVint`.
+* `ADXPS2_ExecVint` is that interrupt path, registered through `AddIntcHandler` behind its wrapper `ADXM_ExecVint`.
   It reads the three busy flags and three thread ids, increments ADXT's tick count
   ([adxt-ready-count](#adxt-ready-count)) and guards itself with a re-entry flag. Each of its eight keywords is
   needed: stripped, it comes out 8 bytes short. The busy flags are single reads in the full-address form, beside a
   plain read of the set-up count folded into `%lo` in the same function.
-* `adxm_vsync_thrd` and `adxm_fs_thrd` have rows on a second build: the 3rd Strike decompilation (ADXPS2 2.46)
+* `adxm_vsync_proc` and `adxm_fs_proc` have rows on a second build: the 3rd Strike decompilation (ADXPS2 2.46)
   declares the V-sync, file-system and MW-idle tick counts `Sint64 volatile` and matches its V-sync and
   file-system procs in C; those bodies compiled with this project's ee-gcc 2.96 schedule the count's `daddu`/`sd`
   differently when the counts are plain, so that retail has the volatile shape too.
-* `adxm_usrvsync_thrd` has a row too, on the owner's standing rule for words shared between threads. Its three
+* `adxm_usrvsync_proc` has a row too, on the owner's standing rule for words shared between threads. Its three
   keywords are the exit request and the exited word (other threads set and wait on them) and the busy flag
-  `adxm_usrvsync_busy`, which `adxm_exec_vint` reads. Its tick count (`0x49da08`) is plain: the busy store is
+  `adxm_usrvsync_busy`, which `ADXPS2_ExecVint` reads. Its tick count (`0x49da08`) is plain: the busy store is
   written through `ADXM_SET_BUSY`, a statement macro whose loop notes keep the count's `ld`/`daddu`/`sd` ahead of
   the flag store and the call, as `do { } while (0)` does in `sftim.c`. 3rd Strike declares that count plain too.
   `adxm_usridle_thrd` has no row: its tick count is plain the same way, and its busy flag, which only its own
   thread touches, only keeps the store out of a delay slot (see [Open questions](#open-questions)).
 * `adxm_mwidle_thrd` has a row too, on the owner's instruction. Five of its seven keywords are on shared words (the
   exit request, the exited word, the border request, the user-idle thread id and the slept flag). The other two are
-  the tick count (`0x49da00`) and the busy flag (`0x49d9d4`), which only this thread touches (`adxm_exec_vint`
+  the tick count (`0x49da00`) and the busy flag (`0x49d9d4`), which only this thread touches (`ADXPS2_ExecVint`
   reads the other busy flags). Strip either and the busy store is scheduled ahead of the count's `ld`/`sd`;
   ee-gcc keeps the two in order only when both are `volatile`. The 3rd Strike decompilation declares the count and
   the busy flag (`adxm_mwidle_cnt`, `adxm_mwidleproc_exec_flag`) `volatile`, but it left this function as assembly,

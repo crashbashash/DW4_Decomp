@@ -5,13 +5,13 @@
 
 int sprintf(char *buf, const char *format, ...);
 void *memset(void *dst, int value, unsigned int size);
-void mwsfd_Error(const char *format, ...);
+void MWSFSVM_Error(const char *format, ...);
 int MWSFD_IsEnableHndl(void *ply);
 void mwSfdStartSj(MwsfdPly *ply, SfdSj *sj);
 void MWSFPLY_SetFlowLimit(MwsfdPly *ply);
 void MWSFPLY_RecordFname(MwsfdPly *ply, const char *fname);
 void MWSFCRE_SetSupplySj(MwsfdPly *ply);
-int SFD_SetLnkStm(void *sfd);
+int SFD_SetConcatPlay(void *sfd);
 int ADXF_GetFnameRangeEx(int patid, int fid, char *fname, void **dir, int *ofst, int *nsct);
 char *ADXF_GetFnameFromPt(int patid);
 int LSC_EntryFname(LscObj *lsc, const char *fname);
@@ -33,16 +33,16 @@ void mwPlyLinkStm(void *hn, int sw);
 void mwPlyEntryFname(MwsfdPly *ply, const char *fname)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122633: mwPlyEntryFname: handle is invalid.");
+        MWSFSVM_Error("E1122633: mwPlyEntryFname: handle is invalid.");
         return;
     }
     if (fname == 0) {
-        mwsfd_Error("E10915B: mwPlyEntryFname: fname is NULL.");
+        MWSFSVM_Error("E10915B: mwPlyEntryFname: fname is NULL.");
         return;
     }
     if (LSC_EntryFname(ply->lsc, fname) < 0) {
         ply->stat = 4;
-        mwsfd_Error("E204021: mwPlyEntryFname: Can't entry file'%s'", fname);
+        MWSFSVM_Error("E204021: mwPlyEntryFname: Can't entry file'%s'", fname);
         return;
     }
     ply->nEntry++;
@@ -53,7 +53,7 @@ void mwPlyStartSeamless(MwsfdPly *ply)
     SfdSj *sj;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122634: mwPlyStartSeamless: handle is invalid.");
+        MWSFSVM_Error("E1122634: mwPlyStartSeamless: handle is invalid.");
         return;
     }
     mwPlyLinkStm(ply, 1);
@@ -70,7 +70,7 @@ void mwPlyStartSeamless(MwsfdPly *ply)
 void mwPlySetLpFlg(MwsfdPly *ply, int loop)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122641: mwPlySetLpFlg: handle is invalid.");
+        MWSFSVM_Error("E1122641: mwPlySetLpFlg: handle is invalid.");
         return;
     }
     LSC_SetLpFlg(ply->lsc, loop);
@@ -79,11 +79,11 @@ void mwPlySetLpFlg(MwsfdPly *ply, int loop)
 void mwPlyStartFnameLp(MwsfdPly *ply, const char *fname)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122630: mwPlyStartFnameLp: handle is invalid.");
+        MWSFSVM_Error("E1122630: mwPlyStartFnameLp: handle is invalid.");
         return;
     }
     if (fname == 0) {
-        mwsfd_Error("E10915A: mwPlyStartFnameLp: fname is NULL.");
+        MWSFSVM_Error("E10915A: mwPlyStartFnameLp: fname is NULL.");
         return;
     }
     MWSFPLY_RecordFname(ply, fname);
@@ -98,7 +98,7 @@ void mwPlyReleaseSeamless(MwsfdPly *ply);
 void mwPlyReleaseLp(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122631: mwPlyReleaseLp: handle is invalid.");
+        MWSFSVM_Error("E1122631: mwPlyReleaseLp: handle is invalid.");
         return;
     }
     mwPlySetLpFlg(ply, 0);
@@ -108,7 +108,7 @@ void mwPlyReleaseLp(MwsfdPly *ply)
 void mwPlyReleaseSeamless(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122635: mwPlyReleaseSeamless: handle is invalid.");
+        MWSFSVM_Error("E1122635: mwPlyReleaseSeamless: handle is invalid.");
         return;
     }
     mwPlyLinkStm(ply, 0);
@@ -126,20 +126,20 @@ void mwPlyEntryAfs(MwsfdPly *ply, int patid, int fid)
     LscObj *lsc;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122636: mwPlyEntryAfs: handle is invalid.");
+        MWSFSVM_Error("E1122636: mwPlyEntryAfs: handle is invalid.");
         return;
     }
     lsc = ply->lsc;
     if (ADXF_GetFnameRangeEx(patid, fid, ply->fname, &dir, &ofst, &nsct) == 0)
         LSC_EntryFileRange(lsc, ADXF_GetFnameFromPt(patid), dir, ofst, nsct);
     else
-        mwsfd_Error("E008311 mwPlyEntryAfs: can't entry pid=%d fid=%d", patid, fid);
+        MWSFSVM_Error("E008311 mwPlyEntryAfs: can't entry pid=%d fid=%d", patid, fid);
 }
 
 void mwPlyStartAfsLp(MwsfdPly *ply, int patid, int fid)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122632: mwPlyStartAfsLp: handle is invalid.");
+        MWSFSVM_Error("E1122632: mwPlyStartAfsLp: handle is invalid.");
         return;
     }
     LSC_Stop(ply->lsc);
@@ -151,7 +151,7 @@ void mwPlyStartAfsLp(MwsfdPly *ply, int patid, int fid)
 void mwPlyEntryFnameRange(MwsfdPly *ply, char *fname, int ofst, int nsct)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E407023: mwPlyEntryFnameRange: handle is invalid.");
+        MWSFSVM_Error("E407023: mwPlyEntryFnameRange: handle is invalid.");
         return;
     }
     LSC_EntryFileRange(ply->lsc, fname, 0, ofst, nsct);
@@ -160,7 +160,7 @@ void mwPlyEntryFnameRange(MwsfdPly *ply, char *fname, int ofst, int nsct)
 void mwPlyStartFnameRangeLp(MwsfdPly *ply, char *fname, int ofst, int nsct)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E407024: mwPlyStartFnameRangeLp: handle is invalid.");
+        MWSFSVM_Error("E407024: mwPlyStartFnameRangeLp: handle is invalid.");
         return;
     }
     LSC_Stop(ply->lsc);
@@ -169,52 +169,52 @@ void mwPlyStartFnameRangeLp(MwsfdPly *ply, char *fname, int ofst, int nsct)
     mwPlyStartSeamless(ply);
 }
 
-int mwPlyGetSlStmId(MwsfdPly *ply, int no);
-char *mwPlyGetSlStmFname(MwsfdPly *ply, int id);
+int MWSFLSC_GetStmId(MwsfdPly *ply, int no);
+char *MWSFLSC_GetStmFname(MwsfdPly *ply, int id);
 
 char *mwPlyGetSlFname(MwsfdPly *ply, int no)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122637: mwPlyGetSlFname: handle is invalid.");
+        MWSFSVM_Error("E1122637: mwPlyGetSlFname: handle is invalid.");
         return 0;
     }
     if (no < mwPlyGetNumSlFiles(ply)) {
         if (no < 0) {
-            mwsfd_Error("E10821B : Invalid value of stm_no : %d", no);
+            MWSFSVM_Error("E10821B : Invalid value of stm_no : %d", no);
             return 0;
         }
-        return mwPlyGetSlStmFname(ply, mwPlyGetSlStmId(ply, no));
+        return MWSFLSC_GetStmFname(ply, MWSFLSC_GetStmId(ply, no));
     }
     return 0;
 }
 
-int mwPlyGetSlStat(MwsfdPly *ply)
+int MWSFLSC_GetStat(MwsfdPly *ply)
 {
     return LSC_GetStat(ply->lsc);
 }
 
-int mwPlyGetSlStmId(MwsfdPly *ply, int no)
+int MWSFLSC_GetStmId(MwsfdPly *ply, int no)
 {
     return LSC_GetStmId(ply->lsc, no);
 }
 
-char *mwPlyGetSlStmFname(MwsfdPly *ply, int id)
+char *MWSFLSC_GetStmFname(MwsfdPly *ply, int id)
 {
     return LSC_GetStmFname(ply->lsc, id);
 }
 
-int mwPlyGetSlStmStat(MwsfdPly *ply, int id)
+int MWSFLSC_GetStmStat(MwsfdPly *ply, int id)
 {
     return LSC_GetStmStat(ply->lsc, id);
 }
 
-int mwPlyGetSlStmRdSct(MwsfdPly *ply, int id)
+int MWSFLSC_GetStmRdSct(MwsfdPly *ply, int id)
 {
     return LSC_GetStmRdSct(ply->lsc, id);
 }
 
 /* LSC state 3 is its error state */
-int mwsflsc_IsLscErr(LscObj *lsc)
+int MWSFLSC_IsFsStatErr(LscObj *lsc)
 {
     return LSC_GetStat(lsc) == 3;
 }
@@ -228,7 +228,7 @@ void MWSFLSC_SetFlowLimit(MwsfdPly *ply, int min)
     }
 }
 
-void mwPlyGetSlFlowLimit(MwsfdPly *ply, int *min)
+void MWSFLSC_GetFlowLimit(MwsfdPly *ply, int *min)
 {
     *min = LSC_GetFlowLimit(ply->lsc);
 }
@@ -241,15 +241,15 @@ void mwPlyLinkStm(void *hn, int sw)
     void *sfd;
 
     if (MWSFD_IsEnableHndl(hn) == 0) {
-        mwsfd_Error("E1122642: mwPlyLinkStm: handle is invalid.");
+        MWSFSVM_Error("E1122642: mwPlyLinkStm: handle is invalid.");
         return;
     }
     ply = hn;
     sfd = ply->sfd;
     if (ply->linkReq == 1 && sw == 0)
         ply->linkPrev = 1;
-    if (ply->linkReq == 0 && sw == 1 && SFD_SetLnkStm(sfd) != 0)
-        mwsfd_Error("E99072101 mwPlyLinkStm: can't link stream");
+    if (ply->linkReq == 0 && sw == 1 && SFD_SetConcatPlay(sfd) != 0)
+        MWSFSVM_Error("E99072101 mwPlyLinkStm: can't link stream");
     ply->linkReq = sw;
 }
 

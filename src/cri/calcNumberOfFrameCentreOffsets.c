@@ -12,7 +12,7 @@ struct Decoder00285f48 {
     int f308; /* +308 */
 };
 
-void FUN_00285f48(struct Decoder00285f48 *d) {
+void calcNumberOfFrameCentreOffsets(struct Decoder00285f48 *d) {
     if (d->progressive == 1 || d->structure == 1 || d->structure == 2) {
         d->mode = 1;
     } else if (d->f308 == 1) {

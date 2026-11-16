@@ -14,7 +14,7 @@ rows in `unit-objects.json`; [whole-file units](emitted-functions.md#whole-file-
 | code | `0x26ee48` up to `0x26f2b8` | the CFG module starts at `0x26f2b8` with the function that reads its build string; no function in the range calls code, or reads data, from the ADXT functions before `0x26ee48` |
 | data | `0x4a8eb0` up to `0x4a9278` | `adxpd_odd_block_error`, then the job table `adxpd_obj` (16 × 60 bytes); cvFs's data starts at `0x4a9278` |
 
-Compiling the file whole matters: `ADXPD_ExecHndl` calls `adxpd_SetOddBlockError`, and only with that
+Compiling the file whole matters: `ADXPD_ExecHndl` calls `adxpd_error`, and only with that
 function compiled earlier in the same file does GCC treat the call as unable to throw, which decides
 how the delay slots of `ADXPD_ExecHndl` are filled.
 

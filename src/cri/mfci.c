@@ -55,12 +55,12 @@ static char mfci_msg[304] = {0};
 
 void mfCiStopTr(MfCiFile *fh);
 
-void FUN_00277da0(void)
+void mfCrsLock(void)
 {
     SVM_Lock();
 }
 
-void FUN_00277db8(void)
+void mfCrsUnlock(void)
 {
     SVM_Unlock();
 }
@@ -71,7 +71,7 @@ CvFsVtbl *mfCiGetInterface(void)
     return &mfci_vtbl;
 }
 
-void FUN_00277de8(void *detail, const char *message)
+void mfci_call_errfn(void *detail, const char *message)
 {
     if (mfci_err_func != 0) {
         mfci_err_func(mfci_err_obj, message, detail);
@@ -83,18 +83,18 @@ unsigned long FUN_00277e18(const char *s, char **end, int base)
     return strtoul(s, end, base);
 }
 
-char *FUN_00277e30(char *name, int *size)
+char *mfci_get_adr_size(char *name, int *size)
 {
     char *p;
     char *data;
 
     if (strlen(name) != 17) {
         sprintf(mfci_msg, "E01100308:length of '%s' is not 17 bytes.(mfci_get_adr_size)", name);
-        FUN_00277de8(0, mfci_msg);
+        mfci_call_errfn(0, mfci_msg);
     }
     if (name[8] != '.') {
         sprintf(mfci_msg, "E01100309:illegal file name format '%s'(mfci_get_adr_size)", name);
-        FUN_00277de8(0, mfci_msg);
+        mfci_call_errfn(0, mfci_msg);
     }
     p = name;
     data = (char *)FUN_00277e18(p, &p, 16);
@@ -107,7 +107,7 @@ char *FUN_00277e30(char *name, int *size)
     return data;
 }
 
-void FUN_00277f28(MfCiFile *fh)
+void mfCiExecHndl(MfCiFile *fh)
 {
 }
 
@@ -120,7 +120,7 @@ void mfCiExecServer(void)
     i = 0x27;
     do {
         if (fh->used != 0) {
-            FUN_00277f28(fh);
+            mfCiExecHndl(fh);
         }
         i -= 1;
         fh += 1;
@@ -137,11 +137,11 @@ int mfCiGetFileSize(char *name)
 {
     int size;
 
-    FUN_00277e30(name, &size);
+    mfci_get_adr_size(name, &size);
     return size;
 }
 
-MfCiFile *FUN_00277fc0(void)
+MfCiFile *mfci_alloc(void)
 {
     MfCiFile *found = 0;
     int i;
@@ -155,12 +155,12 @@ MfCiFile *FUN_00277fc0(void)
     return found;
 }
 
-void FUN_00278018(MfCiFile *fh)
+void mfci_free(MfCiFile *fh)
 {
     memset(fh, 0, 0x38);
 }
 
-void FUN_00278038(MfCiFile *fh)
+void mfci_reset_hn(MfCiFile *fh)
 {
     int size;
 
@@ -180,20 +180,20 @@ MfCiFile *mfCiOpen(const char *fname, int reserved, int rw)
     MfCiFile *fh;
 
     if (fname == 0) {
-        FUN_00277de8(0, "E01100301:fname is null.(mfCiOpen)");
+        mfci_call_errfn(0, "E01100301:fname is null.(mfCiOpen)");
         return 0;
     }
     if (rw != 0) {
-        FUN_00277de8(0, "E01100302:rw is illigal.(mfCiOpen)");
+        mfci_call_errfn(0, "E01100302:rw is illigal.(mfCiOpen)");
         return 0;
     }
-    fh = FUN_00277fc0();
+    fh = mfci_alloc();
     if (fh == 0) {
-        FUN_00277de8(0, "E01100303:not enough handle resource.(mfCiOpen)");
+        mfci_call_errfn(0, "E01100303:not enough handle resource.(mfCiOpen)");
         return 0;
     }
     strcpy(fh->name, fname);
-    FUN_00278038(fh);
+    mfci_reset_hn(fh);
     return fh;
 }
 
@@ -205,7 +205,7 @@ int mfCiClose(MfCiFile *fh)
         mfCiStopTr(fh);
         if (fh->used == 1) {
             fh->used = 0;
-            FUN_00278018(fh);
+            mfci_free(fh);
         }
     }
 }
@@ -215,10 +215,10 @@ int mfCiSeek(MfCiFile *fh, int offset, int origin)
     int pos;
 
     if (fh == 0) {
-        FUN_00277de8(fh, "E01100305:handl is null.");
+        mfci_call_errfn(fh, "E01100305:handl is null.");
         return 0;
     }
-    FUN_00277da0();
+    mfCrsLock();
     if (origin == 0) {
         fh->pos = offset;
     } else if (origin == 2) {
@@ -234,14 +234,14 @@ int mfCiSeek(MfCiFile *fh, int offset, int origin)
         pos = 0;
     }
     fh->pos = pos;
-    FUN_00277db8();
+    mfCrsUnlock();
     return fh->pos;
 }
 
 int mfCiTell(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, "E01100306:handl is null.");
+        mfci_call_errfn(0, "E01100306:handl is null.");
         return 0;
     }
     return fh->pos;
@@ -257,15 +257,15 @@ int mfCiReqRd(MfCiFile *fh, int nsct, char *buf)
     int avail;
 
     if (fh == 0) {
-        FUN_00277de8(fh, "E01100307:handl is null.");
+        mfci_call_errfn(fh, "E01100307:handl is null.");
         return 0;
     }
     if (nsct < 0) {
-        FUN_00277de8(fh, "E01100308:nsct < 0.(mfCiReqRd)");
+        mfci_call_errfn(fh, "E01100308:nsct < 0.(mfCiReqRd)");
         return 0;
     }
     if (buf == 0) {
-        FUN_00277de8(fh, "E01100309:buf is null.(mfCiReqRd)");
+        mfci_call_errfn(fh, "E01100309:buf is null.(mfCiReqRd)");
         return 0;
     }
     if (nsct == 0) {
@@ -275,7 +275,7 @@ int mfCiReqRd(MfCiFile *fh, int nsct, char *buf)
     if (fh->stat == 2) {
         return 0;
     }
-    FUN_00277da0();
+    mfCrsLock();
     fh->nbyte = 0;
     n = fh->nsct - fh->pos;
     if (nsct < n) {
@@ -286,40 +286,40 @@ int mfCiReqRd(MfCiFile *fh, int nsct, char *buf)
     len = n * fh->sctsize;
     if (len == 0) {
         fh->stat = 1;
-        FUN_00277db8();
+        mfCrsUnlock();
         return 0;
     }
     fh->ofs = ofs;
     fh->len = len;
     fh->stat = 2;
-    data = FUN_00277e30(fh->name, &size);
+    data = mfci_get_adr_size(fh->name, &size);
     avail = (size - fh->ofs < fh->len) ? size - fh->ofs : fh->len;
-    FUN_00277db8();
+    mfCrsUnlock();
     memcpy(buf, data + fh->ofs, fh->len);
     memset(buf + avail, 0, fh->len - avail);
-    FUN_00277da0();
+    mfCrsLock();
     fh->stat = 1;
     fh->pos += fh->reqsct;
     fh->nbyte = fh->reqsct * fh->sctsize;
-    FUN_00277db8();
+    mfCrsUnlock();
     return fh->reqsct;
 }
 
 void mfCiStopTr(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, "E0092912:handl is null.");
+        mfci_call_errfn(0, "E0092912:handl is null.");
         return;
     }
-    FUN_00277da0();
+    mfCrsLock();
     fh->stat = 0;
-    FUN_00277db8();
+    mfCrsUnlock();
 }
 
 char mfCiGetStat(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(fh, "E0092912:handl is null.");
+        mfci_call_errfn(fh, "E0092912:handl is null.");
         return 0;
     }
     return fh->stat;
@@ -328,7 +328,7 @@ char mfCiGetStat(MfCiFile *fh)
 int mfCiGetSctLen(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, "E0040301:handl is null.");
+        mfci_call_errfn(0, "E0040301:handl is null.");
         return 0;
     }
     return fh->sctsize;
@@ -340,7 +340,7 @@ void mfCiSetSctLen(MfCiFile *fh, int sctsize)
     int pos;
 
     if (fh == 0) {
-        FUN_00277de8(fh, "E0040302:handl is null.");
+        mfci_call_errfn(fh, "E0040302:handl is null.");
         return;
     }
     pos = fh->pos;
@@ -354,7 +354,7 @@ void mfCiSetSctLen(MfCiFile *fh, int sctsize)
 int mfCiGetNumTr(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, "E0092912:handl is null.");
+        mfci_call_errfn(0, "E0092912:handl is null.");
         return 0;
     }
     return fh->nbyte;
@@ -365,18 +365,18 @@ MfCiFile *mfCiOpenEntry(int entry, int reserved, int rw)
     MfCiFile *fh;
 
     if (entry <= 0) {
-        FUN_00277de8(0, "E1041001:invalid entry number.(mfCiOpenEntry)");
+        mfci_call_errfn(0, "E1041001:invalid entry number.(mfCiOpenEntry)");
         return 0;
     }
     if (rw != 0) {
-        FUN_00277de8(0, "E1041002:rw is illigal.(mfCiOpenEntry)");
+        mfci_call_errfn(0, "E1041002:rw is illigal.(mfCiOpenEntry)");
         return 0;
     }
-    fh = FUN_00277fc0();
+    fh = mfci_alloc();
     if (fh == 0) {
-        FUN_00277de8(0, "E1041002:not enough handle resource.(mfCiOpenEntry)");
+        mfci_call_errfn(0, "E1041002:not enough handle resource.(mfCiOpenEntry)");
         return 0;
     }
-    FUN_00278038(fh);
+    mfci_reset_hn(fh);
     return fh;
 }

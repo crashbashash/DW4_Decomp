@@ -86,7 +86,7 @@ extern char SVM_ExecSvrFuncId_illegal_svtype[];
 
 void SVM_CallErr(const char *format, ...);
 void SVM_CallErr1(const char *msg);
-void svm_reset(void);
+void svm_reset_variable(void);
 
 void svm_lock(int type)
 {
@@ -128,7 +128,7 @@ void SVM_LockVar(void)
     svm_lock(SVM_LOCK_VAR);
 }
 
-void SVM_LockRsc(void)
+void SVM_LockSync(void)
 {
     svm_lock(SVM_LOCK_RSC);
 }
@@ -138,7 +138,7 @@ void SVM_LockDev(void)
     svm_lock(SVM_LOCK_DEV);
 }
 
-void SVM_LockEtc(void)
+void SVM_LockThrd(void)
 {
     svm_lock(SVM_LOCK_ETC);
 }
@@ -153,7 +153,7 @@ void SVM_UnlockVar(void)
     svm_unlock(SVM_LOCK_VAR);
 }
 
-void SVM_UnlockRsc(void)
+void SVM_UnlockSync(void)
 {
     svm_unlock(SVM_LOCK_RSC);
 }
@@ -163,7 +163,7 @@ void SVM_UnlockDev(void)
     svm_unlock(SVM_LOCK_DEV);
 }
 
-void SVM_UnlockEtc(void)
+void SVM_UnlockThrd(void)
 {
     svm_unlock(SVM_LOCK_ETC);
 }
@@ -389,7 +389,7 @@ void SVM_ExecSvrVsync(void)
     SVM_ExecSvrFunc(SVM_SVTYPE_VSYNC);
 }
 
-void SVM_ExecSvrFsVsync(void)
+void SVM_ExecSvrVsync1(void)
 {
     SVM_ExecSvrFunc(SVM_SVTYPE_FSVSYNC);
 }
@@ -415,7 +415,7 @@ void SVM_ExecSvrUsrIdle(void)
 }
 
 /* matching construct: hand search — the bounds test and the element address are computed before the branch, as retail does */
-int SVM_GetExecCnt(int svtype)
+int SVM_GetExecCount(int svtype)
 {
     int ok = (unsigned int)svtype < 7;
     int *p = &svm_exec_cnt[svtype];
@@ -425,7 +425,7 @@ int SVM_GetExecCnt(int svtype)
     return 0;
 }
 
-void svm_reset(void)
+void svm_reset_variable(void)
 {
     int *cnt;
     int i;
@@ -446,7 +446,7 @@ void svm_reset(void)
 void SVM_Init(void)
 {
     if (svm_init_cnt == 0) {
-        svm_reset();
+        svm_reset_variable();
     }
     svm_init_cnt++;
 }
@@ -455,7 +455,7 @@ void SVM_Finish(void)
 {
     svm_init_cnt--;
     if (svm_init_cnt == 0) {
-        svm_reset();
+        svm_reset_variable();
         memset(&svm_cberr, 0, sizeof(svm_cberr));
     }
 }

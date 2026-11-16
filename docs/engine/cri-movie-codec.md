@@ -22,7 +22,7 @@ slot 28, and the renderer's slots 24 and 22 run slot 27 and slot 29 on every mov
 
 | slot | function | what it does |
 | --- | --- | --- |
-| 1 | `Gap__igCriMovieCodec__constructFields` | after igObject's hook, installs `CriMovie_Allocate` / `CriMovie_Free` with the codec as context through `MWSFD_SetMallocFunc`, so MWSFD's work areas come from the codec's pool |
+| 1 | `Gap__igCriMovieCodec__constructFields` | after igObject's hook, installs `CriMovie_Allocate` / `CriMovie_Free` with the codec as context through `mwPlySetMallocFn`, so MWSFD's work areas come from the codec's pool |
 | 2 | `Gap__igCriMovieCodec__destructFields` | igObject's hook only |
 | 11 | `Gap__igCriMovieData__resetFields` | `igCriMovieData`'s: after igObject's hook, clears `_mwply`, `_adxt` and `_macroFunction` |
 | 20 | `igCriMovieCodec_GetMeta` / `igCriMovieData_GetMeta` | the class's meta object |
@@ -62,13 +62,13 @@ four register writers `Gif_SetBitbltbuf`, `Gif_SetTrxpos`, `Gif_SetTrxreg` and `
 
 The ADXT names (`ADXT_Destroy`, `ADXT_Stop`, `ADXT_Pause`, `ADXT_GetStatPause`) are each function's own
 parameter-error message. `mwPlyIsPause` sits among the `mwSfd*` entry points and reports an invalid
-`SFD_GetPaStat` value. `MWSFD_SetMallocFunc` stores the allocate and free callbacks and their context in the
+`SFD_GetPaStat` value. `mwPlySetMallocFn` stores the allocate and free callbacks and their context in the
 MWSFD work area that `MWSFD_Malloc` reads. `Memory_AllocateAlignedWithAllocator` is the aligned counterpart
 of `Memory_FreeBufferWithAllocator`: it calls the pool's slot 53. The `igSmartPointer<igCriMovieData>` destructor (0x3387d0) is what slot 23 calls to drop its held movie data.
 
 ## Open questions
 
-- `mwPlyIsPause` and `MWSFD_SetMallocFunc` are named from behaviour; the library's own spellings are unknown.
+- `mwPlyIsPause` and `mwPlySetMallocFn` are named from behaviour; the library's own spellings are unknown.
 - The slot names (`constructFields`, `destructFields`, `IsReusable`, `Play`, `ReleaseDrawing` and the rest) come
   from their callers and what they do; no string spells Alchemy's own. Slot 25 both starts a movie (the manager's
   "Failed to start movie" follows it) and resumes a paused one; `Play` covers both.

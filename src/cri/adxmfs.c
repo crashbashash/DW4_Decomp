@@ -4,14 +4,14 @@
 /* End-of-stream margin handed to each ADXT stream. */
 int adxt_stm_eos = 25;
 
-void adxps2_mfs_errfn(void *obj, const char *msg, int code)
+void adxps2_err_mem(void *obj, const char *msg, int code)
 {
     ADXERR_CallErrFunc1(msg);
 }
 
-void ADXPS2_SetupMfs(void)
+void ADXPS2_SetupMemFs(void)
 {
-    cvFsEntryErrFunc(adxps2_mfs_errfn, 0);
+    cvFsEntryErrFunc(adxps2_err_mem, 0);
     cvFsAddDev("MFS", mfCiGetInterface, 0);
 }
 

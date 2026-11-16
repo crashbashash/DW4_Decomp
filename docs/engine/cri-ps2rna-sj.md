@@ -35,7 +35,7 @@ ADXSJD's header hook (`adxsjd_header_hook`), which passes the decoded sample rat
 are set up, the library is off and every entry point returns at once. `ps2rna_init_psj` builds one stream
 path per voice: an SJRMT on the IOP, an SJUNI on the EE handed a 16 KB IOP buffer as free space, and the SJX
 joining them. A handle (`Ps2Rna`, 100 bytes, 16 of them at `ps2rna_obj`) holds each setting twice, as set
-and as last sent. The DTX send callback (`ps2rna_dtx_send`) turns every difference into a 16-byte command
+and as last sent. The DTX send callback (`ps2rna_sndcbf`) turns every difference into a 16-byte command
 for the IOP, so the setters only store. `PS2RNA_ExecServer` runs each active handle's transfers between
 `SJCRS_BeginSvr` and `SJCRS_EndSvr`, then the DTR and SJX servers. Many entry points exist only to
 report `not implemented`.
@@ -51,7 +51,7 @@ handle's error callback with -3.
 
 - No source yet: `pl2enc_Init` and `pl2enc_Create` (the `memcmp` that keeps PL2ENC's build string comes out
   scheduled differently: retail sets up the stack and return address around the first argument), the
-  `PS2RNA_Init` and `PS2RNA_Create` bodies, the DTX send callback `ps2rna_dtx_send` and the per-handle
+  `PS2RNA_Init` and `PS2RNA_Create` bodies, the DTX send callback `ps2rna_sndcbf` and the per-handle
   server step `ps2rna_exec_one` (all four long, not attempted), and `FUN_0027b2a0` in SJCRS, which clears
   the word at `0x4b5140` in the `lui`, `addiu`, `0(reg)` form only a `volatile` gives.
 - The PS2RNA names not taken from strings are guesses from behaviour: the global output mode
@@ -59,4 +59,4 @@ handle's error callback with -3.
   the per-handle `auxsw`, command 10), the two output ports (`PS2RNA_OpenPort`/`ClosePort`, commands 16 and
   17, opened from the port mode the IOP reports for `BASE_SFREQ`) and the per-handle `dualsw` (command 12,
   only when both ports are open).
-- `ps2rna_dtx_recv` waits out a spin count the IOP sends back and hangs on no reply.
+- `ps2rna_rcvcbf` waits out a spin count the IOP sends back and hangs on no reply.

@@ -58,7 +58,7 @@ static short adxb_ulaw_tbl[256] = {
 };
 
 /* Reads the big-endian header words, sets the sample format and returns the start of the sample data. */
-unsigned char *adxb_GetAuInfo(unsigned char *buf, int len, int *sfreq, int *nch, int *bits, int *nsmpl,
+unsigned char *AU_GetInfo(unsigned char *buf, int len, int *sfreq, int *nch, int *bits, int *nsmpl,
                               int *fmt)
 {
     unsigned char *p;
@@ -144,7 +144,7 @@ int ADX_DecodeInfoAu(unsigned char *buf, int len, short *hdrlen, signed char *hd
         *hdrlen = 0;
         return -1;
     }
-    data = adxb_GetAuInfo(buf, len, &freq, &ch, &bits, &smpl, fmt);
+    data = AU_GetInfo(buf, len, &freq, &ch, &bits, &smpl, fmt);
     if (data == 0) {
         return -1;
     }

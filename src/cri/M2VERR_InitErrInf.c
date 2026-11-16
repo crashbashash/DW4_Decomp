@@ -1,4 +1,4 @@
-void FUN_002854d0(void *arg0) {
+void M2VERR_InitErrInf(void *arg0) {
     *(int *)((char *)(arg0) + 0) = 0;
     *(int *)(4 + (char *)(arg0)) = 0;
     *(int *)((char *)(arg0) + 8) = 0;

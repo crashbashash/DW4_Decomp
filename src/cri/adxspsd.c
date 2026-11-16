@@ -14,7 +14,7 @@ typedef struct AdxbSpsdHeader {
 
 int memcmp(const void *a, const void *b, unsigned int size);
 
-int adxb_GetSpsdInfo(AdxbSpsdHeader *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
+int ADX_DecodeInfoSpsd(AdxbSpsdHeader *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
                      signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl,
                      short *pcm_fmt)
 {
@@ -67,7 +67,7 @@ int ADXB_DecodeHeaderSpsd(AdxbObj *adxb, AdxbSpsdHeader *hdr, int size)
     short hdrlen;
 
     adxb->hdr_set = 1;
-    if (adxb_GetSpsdInfo(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
+    if (ADX_DecodeInfoSpsd(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
                          &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
         return 0;
     }

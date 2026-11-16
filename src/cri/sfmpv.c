@@ -16,17 +16,17 @@ extern void *memset(void *dst, int value, unsigned int size);
 extern void *memcpy(void *dst, const void *src, unsigned int size);
 int SJRBF_GetFlowCnt(int sj, int id, int mode);
 int FUN_00285118(int id, int arg, int a, int b);
-int UTY_MemCpy(void *dst, void *src, int n);
-void mpsutl_FillWords(void *dst, int value, int size);
-int mpvsc_GetKind();
+int M2VMC_MacroBlock(void *dst, void *src, int n);
+void UTY_MemsetDword(void *dst, int value, int size);
+int MPV_CheckDelim();
 int MPV_EntryErrFunc(void *handle, void (*callback)(SfdPlayer *, int), SfdPlayer *player);
 char *MPV_SearchDelim(char *data, int size, int mask);
-int MPV_SearchDelimSj(void *handle, int sj);
+int MPV_SkipFrmSj(void *handle, int sj);
 int MPV_GetBitRate(void *handle, int *value);
 void MPV_GetVbvBufSiz(void *handle, int *x, int *y, int *z);
 int MPV_GetLinkFlg(void *handle, int *a, int *b);
-int mpv_SetBufEnt(void *handle, int index, int a, int b, int c);
-int MPV_DecHdrMem(void *handle, void *chunk, int *result);
+int MPV_SetUsrSj(void *handle, int index, int a, int b, int c);
+int MPV_DecodePicAtr(void *handle, void *chunk, int *result);
 int MPV_Init(int count, void *work);
 int MPV_Finish(void);
 void *MPV_Create(void);
@@ -34,105 +34,105 @@ int MPV_Destroy();
 int MPV_SetCond(void *handle, int index, int value);
 int MPV_GetCond(void *handle, int index, int *value);
 int UTY_MulDiv(int a, int b, int c);
-int sfbuf_GetReadStat(SfdPlayer *player, int index, SfdRingInfo *info);
-void sfbuf_AddReadLen(SfdPlayer *player, int index, int n);
-int FUN_0029e290(SfdPlayer *player, int index);
-int sfbuf_GetNumData(SfdPlayer *player, int index);
-int FUN_0029e370(SfdPlayer *player, int index, int *entry);
-void FUN_0029e3d0(SfdPlayer *player, int index, int amount);
-int sfbuf_SetFlagA(SfdPlayer *player, int index, int value);
-int sfbuf_GetFlagA(SfdPlayer *player, int index);
-int sfbuf_SetFlagB(SfdPlayer *player, int index, int value);
-int sfbuf_GetFlagB(SfdPlayer *player, int index);
-int FUN_0029eaa8(SfdPlayer *player, int index);
+int SFBUF_RingGetRead(SfdPlayer *player, int index, SfdRingInfo *info);
+void SFBUF_RingAddRead(SfdPlayer *player, int index, int n);
+int SFBUF_GetRingBufSiz(SfdPlayer *player, int index);
+int SFBUF_GetWTot(SfdPlayer *player, int index);
+int SFBUF_RingGetSj(SfdPlayer *player, int index, int *entry);
+void SFBUF_AddRtotSj(SfdPlayer *player, int index, int amount);
+int SFBUF_SetPrepFlg(SfdPlayer *player, int index, int value);
+int SFBUF_GetPrepFlg(SfdPlayer *player, int index);
+int SFBUF_SetTermFlg(SfdPlayer *player, int index, int value);
+int SFBUF_GetTermFlg(SfdPlayer *player, int index);
+int SFBUF_RingGetDataSiz(SfdPlayer *player, int index);
 void sfbuf_GetSjPos(int entry, int *a, int *b);
 long sfbuf_MergeTotal(long total, int a);
-void sfsync_AddTotal(SfdPlayer *player, int count);
-int sfhdr_GetVideoPicType(SfdPlayer *player);
+void SFCON_UpdateConcatTime(SfdPlayer *player, int count);
+int SFHDS_GetColType(SfdPlayer *player);
 int sfd_ReportError();
 int SFLIB_CheckHn(SfdPlayer *player);
 void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
-char *FUN_002a41a8(SfdRingInfo *ring, int mask, int *code);
+char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, int *code);
 void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size);
-void FUN_002a7af0(SfdBufPool *pool);
+void sfmpv_InitPicUsr(SfdBufPool *pool);
 void FUN_002a7e30(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out);
-void FUN_002a96f0(void);
-int FUN_002a96e0(SfdPlayer *player);
-void FUN_002a97a0(SfdPlayer *player);
+void SFMPVP_Init(void);
+int SFMPVP_IsSceMpegUsed(SfdPlayer *player);
+void SFMPVP_Create(SfdPlayer *player);
 void FUN_002a9bc8(SfdPlayer *player);
-int FUN_002aa040(SfdPlayer *player);
-void FUN_002abc98(SfdPlayer *player, int a, int b);
-int FUN_002abf68(void);
-int sfd_SetCond(SfdPlayer *player, int option, int value);
-int SFD_GetCond(SfdPlayer *player, int option);
+int SFMPVP_GetFrameCount(SfdPlayer *player);
+void SFPLY_AddSkipPic(SfdPlayer *player, int a, int b);
+int SFPLY_GetResetFlg(void);
+int SFSET_SetCond(SfdPlayer *player, int option, int value);
+int SFSET_GetCond(SfdPlayer *player, int option);
 void SFTIM_InitTtu(SfdTimeStamp *stamp, int value);
-void FUN_002af070(SfdTimeCode *tc, int *a, int *b);
-int FUN_002af6c0(SfdPlayer *player, int a, int b);
+void SFTIM_Tc2Time(SfdTimeCode *tc, int *a, int *b);
+int SFTIM_IsGetFrmTimeTunit(SfdPlayer *player, int a, int b);
 int FUN_002b03e8(SfdPlayer *player, int index);
 
 int FUN_002a3558();
-int FUN_002a3708(void);
-int FUN_002a3748(SfdPlayer *player);
-void FUN_002a37e0(SfdPlayer *player);
+int sfmpv_ChkFatal(void);
+int sfmpv_ExecServerSub(SfdPlayer *player);
+void sfmpv_SetCondY16(SfdPlayer *player);
 void FUN_002a3850(SfdPlayer *player);
-int FUN_002a38f0(SfdPlayer *player);
-void FUN_002a3908(SfdPlayer *player);
-int FUN_002a39b8(SfdPlayer *player);
-int FUN_002a3a18(SfdPlayer *player);
-int FUN_002a3a60(SfdPlayer *player);
-void FUN_002a3b48(SfdPlayer *player);
-void FUN_002a3b70(SfdPlayer *player);
-void FUN_002a3c18(SfdPlayer *player, int value);
+int sfmpv_GetTermDst(SfdPlayer *player);
+void sfmpv_ChkPrepFlg(SfdPlayer *player);
+int sfmpv_IsPrepEnd(SfdPlayer *player);
+int sfmpv_IsPrepFrmEnough(SfdPlayer *player);
+int sfmpv_IsVbvEnough(SfdPlayer *player);
+void sfmpv_FixedStartTtu(SfdPlayer *player);
+void sfmpv_ChkTermFlg(SfdPlayer *player);
+void sfmpv_SetTermDst(SfdPlayer *player, int value);
 int FUN_002a3c38(SfdPlayer *player);
-int FUN_002a3cb8(SfdPlayer *player, int *a, int *b, int *c);
-int FUN_002a4468(SfdPlayer *player, int a, int b, int c, int *more);
-int FUN_002a4888(SfdPlayer *player);
+int sfmpv_GetActiveSize(SfdPlayer *player, int *a, int *b, int *c);
+int sfmpv_DecodeOneUnit(SfdPlayer *player, int a, int b, int c, int *more);
+int sfmpv_ConcatSub(SfdPlayer *player);
 int FUN_002a4958(SfdPlayer *player);
-int FUN_002a49b8(SfdPlayer *player);
-void FUN_002a4a60(SfdPlayer *player, SfdStream *stream);
+int sfmpv_CalcAudioTotTime(SfdPlayer *player);
+void sfmpv_DiscardSec(SfdPlayer *player, SfdStream *stream);
 void FUN_002a4b20(SfdPlayer *player, int amount);
-int FUN_002a4bb0(SfdPlayer *player);
-int FUN_002a4bc8(SfdPlayer *player, int status, int n, int code);
-int FUN_002a5680(SfdPlayer *player, SfdPicInfo *pic);
+int sfmpv_GetTermSrc(SfdPlayer *player);
+int sfmpv_ChkMpvErr(SfdPlayer *player, int status, int n, int code);
+int sfmpv_DetectTcErr(SfdPlayer *player, SfdPicInfo *pic);
 void FUN_002a5740(SfdPlayer *player, SfdPicInfo *pic, long id, int flag);
-void FUN_002a5838(long id, int a, int b, int c, SfdTimeCode *tc);
+void sfmpv_Pts2Tc(long id, int a, int b, int c, SfdTimeCode *tc);
 void FUN_002a5a50(SfdTimeCode *src, SfdTimeCode *dst);
-void FUN_002a5ef0(SfdPlayer *player, int pts, SfdChunk *chunk);
-void FUN_002a6010(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x);
-int FUN_002a6048(SfdPlayer *player, SfdPicGeom *geom);
-int FUN_002a6308(SfdPlayer *player, int kind);
-int FUN_002a64c0(SfdPlayer *player, unsigned int kind);
-void FUN_002a6870(SfdPlayer *player);
-int FUN_002a6470(SfdPlayer *player);
+void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk);
+void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x);
+int sfmpv_ChkBufSiz(SfdPlayer *player, SfdPicGeom *geom);
+int sfmpv_IsDefect(SfdPlayer *player, int kind);
+int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind);
+void sfmpv_SetSkipTtu(SfdPlayer *player);
+int sfmpv_IsSeekSkip(SfdPlayer *player);
 int FUN_002a6510(SfdPlayer *player, unsigned int type, SfdChunk *chunk);
-int FUN_002a65f0(SfdPlayer *player, unsigned int type);
+int sfmpv_IsLate(SfdPlayer *player, unsigned int type);
 void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind);
 void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot);
 void FUN_002a73f0(SfdChunk *dst, SfdChunk *src);
-void FUN_002a7598(SfdPlayer *player, int n);
-int FUN_002a7770(SfdPlayer *player, SfdMpv *mpv);
-int FUN_002a7968(void);
-void FUN_002a7a30(SfdSlot *slot, int *ids, int count);
-void FUN_002a7ad0(SfdPicInfo *info);
+void sfmpv_RingAddRead(SfdPlayer *player, int n);
+int sfmpv_InitInf(SfdPlayer *player, SfdMpv *mpv);
+int sfmpv_CheckMpvPara(void);
+void sfmpv_InitFrmObj(SfdSlot *slot, int *ids, int count);
+void sfmpv_InitPicAtr(SfdPicInfo *info);
 void FUN_002a7b48(SfdPlayer *player, int code);
-int FUN_002a7d18(void *handle);
+int sfmpv_DestroySub(void *handle);
 int FUN_002a8088(SfdPlayer *player, char *body);
 SfdPicRecord *FUN_002a8158(SfdPlayer *player, char *body);
-int FUN_002a81d0(SfdPlayer *player, SfdMpv *mpv, int *ok);
-SfdPicture *FUN_002a82c8(SfdPlayer *player);
+int sfmpv_ReprocessShc(SfdPlayer *player, SfdMpv *mpv, int *ok);
+SfdPicture *sfmpv_GetHd(SfdPlayer *player);
 SfdSlot *FUN_002a8440(SfdPlayer *player, char *body);
-int FUN_002a84e0(SfdPlayer *player);
-int FUN_002a8500(SfdPlayer *player);
-void FUN_002a8668(SfdSlot *slot);
-SfdSlot *FUN_002a86b8(SfdPlayer *player, int *out);
+int SFMPVF_IsTermDec(SfdPlayer *player);
+int SFMPVF_GetNumFrm(SfdPlayer *player);
+void SFMPVF_EndDrawFrm(SfdSlot *slot);
+SfdSlot *SFMPVF_HoldFrm(SfdPlayer *player, int *out);
 int FUN_002a8878(SfdPlayer *player);
 SfdSlot *FUN_002a8998(SfdPlayer *player);
 void FUN_002a8a30();
-int FUN_002a8b30(SfdSlot *a, SfdSlot *b);
+int sfmpvf_IsChkFirst(SfdSlot *a, SfdSlot *b);
 void FUN_002a75b8(SfdPlayer *player);
 
-void FUN_002a2f30(SfdMpvCond *cond) {
+void SFD_SetMpvPara(SfdMpvCond *cond) {
     DAT_005855b0 = *cond;
     DAT_005855b0.f16 = (DAT_005855b0.f16 + 0x3F) & ~0x3F;
     DAT_005855b0.f32 = (DAT_005855b0.f32 + 0x3F) & ~0x3F;
@@ -140,7 +140,7 @@ void FUN_002a2f30(SfdMpvCond *cond) {
     memset(&DAT_005855e0, 0, 0x40);
 }
 
-void FUN_002a2fe0(SfdMpvCond *cond, int *work, int *bufs)
+void SFD_SetMpvParaTbl(SfdMpvCond *cond, int *work, int *bufs)
 {
     int i;
     int count;
@@ -158,7 +158,7 @@ void FUN_002a2fe0(SfdMpvCond *cond, int *work, int *bufs)
     }
 }
 
-void FUN_002a30d0(SfdMpvCond *cond, SfdPlanes *planes) {
+void SFD_MakeRfbInfo(SfdMpvCond *cond, SfdPlanes *planes) {
     int columns = (cond->f0 + 15) / 16;
     int rows;
     int lumaBlocks = (columns * 16 + 63) / 64;
@@ -174,7 +174,7 @@ void FUN_002a30d0(SfdMpvCond *cond, SfdPlanes *planes) {
     planes->chroma = planes->luma + ((chromaBlocks * rows) << 9);
 }
 
-void sfmpv_GetPlanes(char *base, int width, int height, SfdPlanes *planes) {
+void SFD_CalcYccPlane(char *base, int width, int height, SfdPlanes *planes) {
     int columns = (width + 15) / 16;
     int rows;
     int lumaBlocks = (columns * 16 + 63) / 64;
@@ -238,22 +238,22 @@ void FUN_002a3340(SfdPlayer *player, int *values, int count) {
     }
 }
 
-int SFD_GetNumDecPool(SfdPlayer *player, int *out) {
+int SFD_GetNumFrm(SfdPlayer *player, int *out) {
     *out = 0;
     if (SFLIB_CheckHn(player) != 0) {
         return sfd_ReportError(0, 0xFF000182);
     }
-    *out = FUN_002a8500(player);
+    *out = SFMPVF_GetNumFrm(player);
     return 0;
 }
 
-int FUN_002a3428(SfdPlayer *player, int index, int a, int b, int c) {
+int SFD_SetVideoUsrSj(SfdPlayer *player, int index, int a, int b, int c) {
     SfdMpv *mpv;
     if (SFLIB_CheckHn(player) != 0) {
         return sfd_ReportError(0, 0xFF000184, a, b, c);
     }
     mpv = player->streams.mpv;
-    mpv_SetBufEnt(mpv->handle, index, a, b, c);
+    MPV_SetUsrSj(mpv->handle, index, a, b, c);
     return 0;
 }
 
@@ -271,7 +271,7 @@ int FUN_002a3558(SfdPlayer *player, char *base, int count, int size)
     SfdBufPool *pool = &mpv->pool;
     int i;
     if (base == 0 || count == 0 || size == 0) {
-        FUN_002a7af0(pool);
+        sfmpv_InitPicUsr(pool);
         return 0;
     }
     if (count < player->f44 + 4)
@@ -295,10 +295,10 @@ int FUN_002a3558(SfdPlayer *player, char *base, int count, int size)
     return 0;
 }
 
-int FUN_002a3628(void) {
+int SFMPV_Init(void) {
     int result;
-    FUN_002a96f0();
-    if (FUN_002a3708() != 0) {
+    SFMPVP_Init();
+    if (sfmpv_ChkFatal() != 0) {
         /* The EE short-loop workaround pads this empty loop with nops. */
         for (;;) {
         }
@@ -314,47 +314,47 @@ int FUN_002a3628(void) {
     return 0;
 }
 
-int FUN_002a3708(void) {
+int sfmpv_ChkFatal(void) {
     return 0;
 }
 
-int FUN_002a3710(void) {
+int SFMPV_Finish(void) {
     MPV_Finish();
     return 0;
 }
 
-void FUN_002a3730(SfdPlayer *player) {
-    FUN_002a3748(player);
+void SFMPV_ExecServer(SfdPlayer *player) {
+    sfmpv_ExecServerSub(player);
 }
 
-int FUN_002a3748(SfdPlayer *player) {
+int sfmpv_ExecServerSub(SfdPlayer *player) {
     int status;
     int result;
-    result = SFD_GetCond(player, 5);
+    result = SFSET_GetCond(player, 5);
     if (result != 0) {
-        if (FUN_002a38f0(player) == 1) {
+        if (sfmpv_GetTermDst(player) == 1) {
             return 0;
         }
-        FUN_002a37e0(player);
+        sfmpv_SetCondY16(player);
         if (player->f72 == 2) {
             FUN_002a3850(player);
         }
         status = FUN_002a3c38(player);
-        FUN_002a3908(player);
-        FUN_002a3b70(player);
+        sfmpv_ChkPrepFlg(player);
+        sfmpv_ChkTermFlg(player);
         result = status;
         return result;
     }
     return result;
 }
 
-void FUN_002a37e0(SfdPlayer *player) {
+void sfmpv_SetCondY16(SfdPlayer *player) {
     int value;
     int mode;
-    if (SFD_GetCond(player, 28) == 0) {
+    if (SFSET_GetCond(player, 28) == 0) {
         return;
     }
-    value = sfhdr_GetVideoPicType(player);
+    value = SFHDS_GetColType(player);
     if (value == 0) {
         mode = 1;
     } else if (value > 0) {
@@ -372,38 +372,38 @@ void FUN_002a3850(SfdPlayer *player) {
     void *handle = mpv->handle;
     int pair[2];
     int result[4];
-    pair[0] = SFD_GetCond(player, 93);
-    pair[1] = SFD_GetCond(player, 94);
+    pair[0] = SFSET_GetCond(player, 93);
+    pair[1] = SFSET_GetCond(player, 94);
     if (pair[0] != 0 && pair[1] != 0 && mpv->state == 192) {
-        if (MPV_DecHdrMem(handle, pair, result) == 0) {
+        if (MPV_DecodePicAtr(handle, pair, result) == 0) {
             mpv->f116 = 2;
             mpv->state = 200;
         }
     }
 }
 
-int FUN_002a38f0(SfdPlayer *player) {
-    return sfbuf_GetFlagB(player, player->streams.f20);
+int sfmpv_GetTermDst(SfdPlayer *player) {
+    return SFBUF_GetTermFlg(player, player->streams.f20);
 }
 
-void FUN_002a3908(SfdPlayer *player) {
+void sfmpv_ChkPrepFlg(SfdPlayer *player) {
     SfdStreams *streams = &player->streams;
     int target = streams->f20;
     int source = streams->f16;
-    if (sfbuf_GetFlagA(player, target) != 1 && sfbuf_GetFlagA(player, source) == 1 && FUN_002a39b8(player) != 0) {
-        sfbuf_SetFlagA(player, target, 1);
-        FUN_002a3b48(player);
+    if (SFBUF_GetPrepFlg(player, target) != 1 && SFBUF_GetPrepFlg(player, source) == 1 && sfmpv_IsPrepEnd(player) != 0) {
+        SFBUF_SetPrepFlg(player, target, 1);
+        sfmpv_FixedStartTtu(player);
     }
 }
 
-int FUN_002a39b8(SfdPlayer *player) {
-    if ((FUN_002a84e0(player) != 0) || ((FUN_002a3a18(player) != 0) && (FUN_002a3a60(player) != 0))) {
+int sfmpv_IsPrepEnd(SfdPlayer *player) {
+    if ((SFMPVF_IsTermDec(player) != 0) || ((sfmpv_IsPrepFrmEnough(player) != 0) && (sfmpv_IsVbvEnough(player) != 0))) {
         return 1;
     }
     return 0;
 }
 
-int FUN_002a3a18(SfdPlayer *player) {
+int sfmpv_IsPrepFrmEnough(SfdPlayer *player) {
     int limit = player->pending.f92;
     int size = player->f44;
     if (limit == -1) {
@@ -412,54 +412,54 @@ int FUN_002a3a18(SfdPlayer *player) {
     if (size < limit) {
         limit = size;
     }
-    if (FUN_002a8500(player) < limit) {
+    if (SFMPVF_GetNumFrm(player) < limit) {
         return 0;
     }
     return 1;
 }
 
-int FUN_002a3a60(SfdPlayer *player)
+int sfmpv_IsVbvEnough(SfdPlayer *player)
 {
     SfdMpv *mpv = player->streams.mpv;
     void *handle = mpv->handle;
     SfdPicWait *wait = &player->picWait;
     int value;
     int idx;
-    if (FUN_002a4bb0(player) == 1)
+    if (sfmpv_GetTermSrc(player) == 1)
         return 1;
     if (wait->busy != 0 && wait->f124 == 0)
         return 1;
     MPV_GetBitRate(handle, &value);
     if (value == 0x3FFFF)
         return 1;
-    if (sfbuf_GetNumData(player, 1) >= mpv->limit)
+    if (SFBUF_GetWTot(player, 1) >= mpv->limit)
         return 1;
     idx = FUN_002b03e8(player, 1) == 0;
-    if (sfbuf_GetNumData(player, idx) < FUN_0029e290(player, idx))
+    if (SFBUF_GetWTot(player, idx) < SFBUF_GetRingBufSiz(player, idx))
         return 0;
     return 1;
 }
 
-void FUN_002a3b48(SfdPlayer *player) {
+void sfmpv_FixedStartTtu(SfdPlayer *player) {
     SfdTimeStamp *stamp = &player->timer.f280;
     if (stamp->a != 0x7FFFFFFF) {
         stamp->done = 1;
     }
 }
 
-void FUN_002a3b70(SfdPlayer *player) {
+void sfmpv_ChkTermFlg(SfdPlayer *player) {
     SfdDecodeFlags *decode = &player->decode;
-    int status = FUN_002a8500(player);
-    if (status == -1 || (FUN_002a84e0(player) != 0 && status == 1 && decode->f24 != 0)) {
-        FUN_002a3c18(player, 1);
+    int status = SFMPVF_GetNumFrm(player);
+    if (status == -1 || (SFMPVF_IsTermDec(player) != 0 && status == 1 && decode->f24 != 0)) {
+        sfmpv_SetTermDst(player, 1);
         if (decode->f0 == 0) {
-            sfd_SetCond(player, 5, 0);
+            SFSET_SetCond(player, 5, 0);
         }
     }
 }
 
-void FUN_002a3c18(SfdPlayer *player, int value) {
-    sfbuf_SetFlagB(player, player->streams.f20, value);
+void sfmpv_SetTermDst(SfdPlayer *player, int value) {
+    SFBUF_SetTermFlg(player, player->streams.f20, value);
 }
 
 int FUN_002a3c38(SfdPlayer *player) {
@@ -469,11 +469,11 @@ int FUN_002a3c38(SfdPlayer *player) {
     int more;
     int status;
     do {
-        status = FUN_002a3cb8(player, &a, &b, &c);
+        status = sfmpv_GetActiveSize(player, &a, &b, &c);
         if (status != 0) {
             break;
         }
-        status = FUN_002a4468(player, a, b, c, &more);
+        status = sfmpv_DecodeOneUnit(player, a, b, c, &more);
         if (status != 0) {
             break;
         }
@@ -482,7 +482,7 @@ int FUN_002a3c38(SfdPlayer *player) {
     return status;
 }
 
-int FUN_002a40b8(SfdRingInfo *ring, char *addr) {
+int sfmpv_CalcDistance(SfdRingInfo *ring, char *addr) {
     int offset;
     if (addr >= ring->addr0 && addr < ring->addr0 + ring->len0) {
         offset = addr - ring->addr0;
@@ -494,18 +494,18 @@ int FUN_002a40b8(SfdRingInfo *ring, char *addr) {
     return offset;
 }
 
-int FUN_002a4120(SfdPlayer *player) {
+int sfmpv_CheckViBufSiz(SfdPlayer *player) {
     int index = player->streams.f16;
-    int total = FUN_0029e290(player, index);
-    if (total - FUN_0029eaa8(player, index) < player->f40) {
+    int total = SFBUF_GetRingBufSiz(player, index);
+    if (total - SFBUF_RingGetDataSiz(player, index) < player->f40) {
         return sfd_ReportError(player, 0xFF000F1C);
     }
     return 0;
 }
 
-void FUN_002a4730(SfdPlayer *player, SfdChunk *out) {
+void sfmpv_PeekChnk(SfdPlayer *player, SfdChunk *out) {
     SfdRingInfo info;
-    if (sfbuf_GetReadStat(player, player->streams.f16, &info) != 0) {
+    if (SFBUF_RingGetRead(player, player->streams.f16, &info) != 0) {
         out->addr = 0;
         out->size = 0;
     } else {
@@ -514,31 +514,31 @@ void FUN_002a4730(SfdPlayer *player, SfdChunk *out) {
     }
 }
 
-int FUN_002a4838(SfdPlayer *player, SfdStream *stream) {
-    if (FUN_002a4888(player) == -1) {
+int sfmpv_Concat(SfdPlayer *player, SfdStream *stream) {
+    if (sfmpv_ConcatSub(player) == -1) {
         return -1;
     }
-    FUN_002a4a60(player, stream);
+    sfmpv_DiscardSec(player, stream);
     return 0;
 }
 
-int FUN_002a4888(SfdPlayer *player) {
+int sfmpv_ConcatSub(SfdPlayer *player) {
     SfdTimer *timer = &player->timer;
     SfdMpv *mpv = player->streams.mpv;
     int count;
-    if (SFD_GetCond(player, 6) == 0) {
+    if (SFSET_GetCond(player, 6) == 0) {
         count = FUN_002a4958(player);
     } else {
-        count = FUN_002a49b8(player);
+        count = sfmpv_CalcAudioTotTime(player);
         if (count < 0) {
             return -1;
         }
     }
     if (count > 0) {
-        sfsync_AddTotal(player, count);
+        SFCON_UpdateConcatTime(player, count);
         mpv->f136++;
-        if (FUN_002a96e0(player) != 0) {
-            timer->f352 = FUN_002aa040(player) + 1;
+        if (SFMPVP_IsSceMpegUsed(player) != 0) {
+            timer->f352 = SFMPVP_GetFrameCount(player) + 1;
         }
     }
     SFTIM_InitTtu(&timer->state, 0x7FFFFFFF);
@@ -558,15 +558,15 @@ int FUN_002a4958(SfdPlayer *player) {
     }
     FUN_002a5a50(&player->timer.best.tc, &tc);
     tc.add = 0;
-    FUN_002af070(&tc, &position, &size);
+    SFTIM_Tc2Time(&tc, &position, &size);
     return position - state->a;
 }
 
-void FUN_002a4a60(SfdPlayer *player, SfdStream *stream) {
+void sfmpv_DiscardSec(SfdPlayer *player, SfdStream *stream) {
     int buf[4];
     for (;;) {
         stream->ops->read(stream, 1, 4, buf);
-        if (buf[1] != 4 || mpvsc_GetKind(buf[0]) != 128) {
+        if (buf[1] != 4 || MPV_CheckDelim(buf[0]) != 128) {
             break;
         }
         stream->ops->skip(stream, 0, buf);
@@ -576,25 +576,25 @@ void FUN_002a4a60(SfdPlayer *player, SfdStream *stream) {
 }
 
 void FUN_002a4b20(SfdPlayer *player, int amount) {
-    FUN_0029e3d0(player, player->streams.f16, amount);
+    SFBUF_AddRtotSj(player, player->streams.f16, amount);
     player->f2464 += amount;
 }
 
-int FUN_002a4b68(SfdPlayer *player, int level, int kind) {
+int sfmpv_IsTerm(SfdPlayer *player, int level, int kind) {
     if (kind == 128) {
         return 1;
     }
-    if (level < 5 && FUN_002a4bb0(player) == 1) {
+    if (level < 5 && sfmpv_GetTermSrc(player) == 1) {
         return 1;
     }
     return 0;
 }
 
-int FUN_002a4bb0(SfdPlayer *player) {
-    return sfbuf_GetFlagB(player, player->streams.f16);
+int sfmpv_GetTermSrc(SfdPlayer *player) {
+    return SFBUF_GetTermFlg(player, player->streams.f16);
 }
 
-int FUN_002a4bc8(SfdPlayer *player, int status, int n, int code)
+int sfmpv_ChkMpvErr(SfdPlayer *player, int status, int n, int code)
 {
     switch (status) {
     case 0:
@@ -612,7 +612,7 @@ int FUN_002a4bc8(SfdPlayer *player, int status, int n, int code)
     }
 }
 
-void FUN_002a5060(SfdRecord *record) {
+void sfmpv_InitComplementPts(SfdRecord *record) {
     SfdRecordTail *tail = &record->tail;
     record->f0 = 0;
     record->f4 = 0;
@@ -631,7 +631,7 @@ void FUN_002a54d0(SfdPlayer *player, SfdSlot *slot) {
     SfdTimer *timer;
     int d;
     timer = &player->timer;
-    FUN_002af070(&slot->stamp.tc, &t[0], &t[1]);
+    SFTIM_Tc2Time(&slot->stamp.tc, &t[0], &t[1]);
     d = t[0] - timer->state.a;
     slot->stamp.done = 1;
     slot->stamp.a = d;
@@ -641,13 +641,13 @@ void FUN_002a54d0(SfdPlayer *player, SfdSlot *slot) {
     }
 }
 
-void FUN_002a55a0(SfdPlayer *player, SfdPicInfo *pic, long a, int b) {
-    int enabled = SFD_GetCond(player, 52);
+void sfmpv_ReformTc(SfdPlayer *player, SfdPicInfo *pic, long a, int b) {
+    int enabled = SFSET_GetCond(player, 52);
     if (enabled == 0) {
         if (a >= 0 || pic->f48 == 0 || pic->f87 != 0
-            || (b != 0 && FUN_002a5680(player, pic) != 0)) {
+            || (b != 0 && sfmpv_DetectTcErr(player, pic) != 0)) {
             enabled = 1;
-            sfd_SetCond(player, 52, 1);
+            SFSET_SetCond(player, 52, 1);
         }
     }
     if (enabled == 1) {
@@ -655,7 +655,7 @@ void FUN_002a55a0(SfdPlayer *player, SfdPicInfo *pic, long a, int b) {
     }
 }
 
-int FUN_002a5680(SfdPlayer *player, SfdPicInfo *pic) {
+int sfmpv_DetectTcErr(SfdPlayer *player, SfdPicInfo *pic) {
     SfdTimeCode tc;
     int now;
     int rate;
@@ -665,9 +665,9 @@ int FUN_002a5680(SfdPlayer *player, SfdPicInfo *pic) {
         return 0;
     }
     tc = player->timer.tc;
-    FUN_002af070(&tc, &now, &rate);
-    FUN_002af070(&player->timer.best.tc, &start, &rate);
-    span = SFD_GetCond(player, 53) * rate;
+    SFTIM_Tc2Time(&tc, &now, &rate);
+    SFTIM_Tc2Time(&player->timer.best.tc, &start, &rate);
+    span = SFSET_GetCond(player, 53) * rate;
     if (now <= start) {
         return 1;
     }
@@ -684,7 +684,7 @@ void FUN_002a5740(SfdPlayer *player, SfdPicInfo *pic, long id, int flag)
     int a = pic->rateIndex;
     int idx = pic->number;
     if (flag != 0 && id >= 0) {
-        FUN_002a5838(id, a, b, idx, &player->timer.tc);
+        sfmpv_Pts2Tc(id, a, b, idx, &player->timer.tc);
         return;
     }
     if (timer->best.done == 0) {
@@ -719,7 +719,7 @@ void FUN_002a5b48(SfdPlayer *player, SfdPicInfo *pic)
         return;
     tc = player->timer.tc;
     tc.add = 0;
-    FUN_002af070(&tc, &a, &b);
+    SFTIM_Tc2Time(&tc, &a, &b);
     state->tc = tc;
     state->a = a;
     state->b = b;
@@ -735,7 +735,7 @@ void FUN_002a5c28(SfdPlayer *player, SfdPicInfo *pic)
     SfdTimeStamp *best;
     int d;
     tc = player->timer.tc;
-    FUN_002af070(&tc, &a, &b);
+    SFTIM_Tc2Time(&tc, &a, &b);
     player->timer.cur.tc = tc;
     cur = &player->timer.cur;
     best = &player->timer.best;
@@ -747,7 +747,7 @@ void FUN_002a5c28(SfdPlayer *player, SfdPicInfo *pic)
         *best = *cur;
 }
 
-void FUN_002a5d70(SfdPicInfo *pic, SfdTimeCode *out) {
+void sfmpv_ReadTcode(SfdPicInfo *pic, SfdTimeCode *out) {
     out->rate = pic->rateIndex;
     out->drop = pic->f28;
     out->hour = pic->f32;
@@ -759,7 +759,7 @@ void FUN_002a5d70(SfdPicInfo *pic, SfdTimeCode *out) {
     out->field = 0;
 }
 
-int FUN_002a5dc0(SfdPlayer *player, void *sj, SfdPicInfo *pic, SfdChunk *chunk)
+int sfmpv_FirstPicAtr(SfdPlayer *player, void *sj, SfdPicInfo *pic, SfdChunk *chunk)
 {
     SfdPicGeom *geom = &player->geom;
     SfdMpv *mpv = player->streams.mpv;
@@ -771,26 +771,26 @@ int FUN_002a5dc0(SfdPlayer *player, void *sj, SfdPicInfo *pic, SfdChunk *chunk)
     if (MPV_GetBitRate(sj, &pts) != 0)
         return sfd_ReportError(player, 0xFF000F16);
     MPV_GetVbvBufSiz(sj, &x, &y, &z);
-    if (SFD_GetCond(player, 60) == 0)
+    if (SFSET_GetCond(player, 60) == 0)
         mpv->limit = 0;
     else {
-        n = FUN_0029e290(player, 1);
+        n = SFBUF_GetRingBufSiz(player, 1);
         if (z == -1)
             z = x;
         mpv->limit = z < n ? z : n;
     }
-    FUN_002a5ef0(player, pts, chunk);
-    FUN_002a6010(geom, pts, pic, x);
-    return FUN_002a6048(player, geom);
+    sfmpv_SetMpvHd(player, pts, chunk);
+    sfmpv_SetMvInf(geom, pts, pic, x);
+    return sfmpv_ChkBufSiz(player, geom);
 }
 
-void FUN_002a5ef0(SfdPlayer *player, int pts, SfdChunk *chunk)
+void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk)
 {
     SfdPicture *picture;
     SfdUserData *user;
     int len;
     SfdTimer *timer;
-    picture = FUN_002a82c8(player);
+    picture = sfmpv_GetHd(player);
     if (picture == 0 || picture->valid != 0)
         return;
     len = chunk->size;
@@ -799,7 +799,7 @@ void FUN_002a5ef0(SfdPlayer *player, int pts, SfdChunk *chunk)
         len = 512;
     timer = &player->timer;
     user->size = len;
-    UTY_MemCpy(user->data, chunk->addr, len);
+    M2VMC_MacroBlock(user->data, chunk->addr, len);
     if (pts == 0x3FFFF) {
         picture->pts = 0;
         picture->hasPts = 0;
@@ -811,7 +811,7 @@ void FUN_002a5ef0(SfdPlayer *player, int pts, SfdChunk *chunk)
     picture->valid = 1;
 }
 
-void FUN_002a6010(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x) {
+void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x) {
     /* matching construct: statement-order sweep — pic->rateIndex is read before the copies */
     int fifth = pic->rateIndex;
     geom->width = pic->width;
@@ -823,33 +823,33 @@ void FUN_002a6010(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x) {
     geom->f32 = x;
 }
 
-int FUN_002a6200(SfdPlayer *player) {
+int sfmpv_IsConcatTimeFix(SfdPlayer *player) {
     return player->timer.base >= 0;
 }
 
-int FUN_002a6210(SfdPlayer *player, SfdChunk *chunk) {
+int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk) {
     SfdMpv *mpv = player->streams.mpv;
     SfdPicInfo *pic = &mpv->pic;
     int skip;
     int busy;
     unsigned int type;
-    if (SFD_GetCond(player, 47) == 1)
+    if (SFSET_GetCond(player, 47) == 1)
         return 1;
-    if (SFD_GetCond(player, 39) == 1)
+    if (SFSET_GetCond(player, 39) == 1)
         return 0;
     if (pic->f88 != 0)
         return mpv->f364;
     type = pic->type;
-    busy = FUN_002a6470(player);
+    busy = sfmpv_IsSeekSkip(player);
     skip = 1;
-    if (busy == 0 && FUN_002a64c0(player, type) == 0 && FUN_002a6510(player, type, chunk) == 0
-        && FUN_002a6308(player, type) == 0)
-        skip = FUN_002a65f0(player, type) != 0;
+    if (busy == 0 && sfmpv_IsPtypeSkip(player, type) == 0 && FUN_002a6510(player, type, chunk) == 0
+        && sfmpv_IsDefect(player, type) == 0)
+        skip = sfmpv_IsLate(player, type) != 0;
     FUN_002a6368(player, pic, skip);
     return skip;
 }
 
-int FUN_002a6308(SfdPlayer *player, int kind) {
+int sfmpv_IsDefect(SfdPlayer *player, int kind) {
     SfdMpv *mpv = player->streams.mpv;
     unsigned int mode = mpv->f116;
     int result = 0;
@@ -879,7 +879,7 @@ void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind)
         if (a == 1)
             mode = 5;
         else {
-            if (player->timer.f280.done == 0 && SFD_GetCond(player, 73) == 1)
+            if (player->timer.f280.done == 0 && SFSET_GetCond(player, 73) == 1)
                 b = 1;
             if (b == 1)
                 mode = 2;
@@ -895,7 +895,7 @@ void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind)
     mpv->f116 = mode;
 }
 
-int FUN_002a6470(SfdPlayer *player) {
+int sfmpv_IsSeekSkip(SfdPlayer *player) {
     SfdLink *link = &player->link;
     SfdTimeStamp *cur = &player->timer.cur;
     SfdTimeStamp *f280 = &player->timer.f280;
@@ -908,7 +908,7 @@ int FUN_002a6470(SfdPlayer *player) {
     return FUN_00285118(link->id, link->arg, cur->a, cur->b) == 0;
 }
 
-int FUN_002a64c0(SfdPlayer *player, unsigned int kind) {
+int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind) {
     SfdPending *pending = &player->pending;
     int value;
     switch (kind) {
@@ -927,13 +927,13 @@ int FUN_002a64c0(SfdPlayer *player, unsigned int kind) {
     return value == 0;
 }
 
-void FUN_002a6768(SfdPlayer *player, int unused, int *first, int *second) {
+void sfmpv_GetDtime(SfdPlayer *player, int unused, int *first, int *second) {
     SfdPending *pending = &player->pending;
     *second = pending->f172;
     *first = pending->f168;
 }
 
-int FUN_002a6780(SfdPlayer *player, int sj)
+int sfmpv_SkipFrm(SfdPlayer *player, int sj)
 {
     SfdMpv *mpv = player->streams.mpv;
     void *handle = mpv->handle;
@@ -942,22 +942,22 @@ int FUN_002a6780(SfdPlayer *player, int sj)
     int status;
     int used;
     int ret;
-    FUN_002a6870(player);
+    sfmpv_SetSkipTtu(player);
     before = SJRBF_GetFlowCnt(sj, 0, 1);
     pic = &mpv->pic;
-    status = MPV_SearchDelimSj(handle, sj);
+    status = MPV_SkipFrmSj(handle, sj);
     used = SJRBF_GetFlowCnt(sj, 0, 1) - before;
-    ret = FUN_002a4bc8(player, status, used, 0xFF000F07);
+    ret = sfmpv_ChkMpvErr(player, status, used, 0xFF000F07);
     FUN_002a4b20(player, used);
     if (ret != 0)
         return ret;
     if (pic->f88 == 0)
         mpv->f364 = 1;
-    FUN_002abc98(player, 1, pic->type);
+    SFPLY_AddSkipPic(player, 1, pic->type);
     return 0;
 }
 
-void FUN_002a6870(SfdPlayer *player) {
+void sfmpv_SetSkipTtu(SfdPlayer *player) {
     SfdTimeStamp *current = &player->timer.cur;
     SfdTimeStamp *latest = &player->timer.latest;
     if (current->a < player->timer.f280.a) {
@@ -984,7 +984,7 @@ void FUN_002a6ea0(SfdPlayer *player, SfdMpv *mpv, int *out64, int *out68) {
     *out68 = 0;
 }
 
-void FUN_002a6f28(SfdPlayer *player)
+void sfmpv_SetStartTtu(SfdPlayer *player)
 {
     SfdTimeStamp *state2 = &player->timer.f280;
     SfdTimeStamp *state = &player->timer.state;
@@ -993,9 +993,9 @@ void FUN_002a6f28(SfdPlayer *player)
     if (state2->done != 0)
         return;
     tc = player->timer.cur.tc;
-    if (FUN_002a6308(player, 3) == 0 && FUN_002a64c0(player, 3) == 0)
+    if (sfmpv_IsDefect(player, 3) == 0 && sfmpv_IsPtypeSkip(player, 3) == 0)
         tc.add = 0;
-    FUN_002af070(&tc, &a, &b);
+    SFTIM_Tc2Time(&tc, &a, &b);
     state2->tc = tc;
     state2->a = a - state->a;
     state2->b = b;
@@ -1004,8 +1004,8 @@ void FUN_002a6f28(SfdPlayer *player)
 
 void FUN_002a7040(SfdPlayer *player, SfdSlot *slot) {
     slot->stamp = player->timer.cur;
-    if (FUN_002a96e0(player) != 0) {
-        slot->f224 = FUN_002aa040(player);
+    if (SFMPVP_IsSceMpegUsed(player) != 0) {
+        slot->f224 = SFMPVP_GetFrameCount(player);
     }
     FUN_002a70e8(player, slot);
 }
@@ -1018,7 +1018,7 @@ void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot) {
     slot->f56 = in->a - player->timer.f280.a + timer->base;
     slot->f76 = in->a;
     slot->f80 = in->a + timer->base;
-    if (FUN_002a96e0(player) != 0) {
+    if (SFMPVP_IsSceMpegUsed(player) != 0) {
         t = UTY_MulDiv(slot->f60, (slot->f224 - timer->f352) * 1000, DAT_004f5060[slot->info.rateIndex]);
         slot->f76 = t;
         slot->f56 = slot->f80 = t + timer->base;
@@ -1061,7 +1061,7 @@ void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size) {
     if (seq == 0) {
         DAT_004beb0c++;
     } else {
-        if ((mpvsc_GetKind(seq) & 4) != 0) {
+        if ((MPV_CheckDelim(seq) & 4) != 0) {
             if (chunk.size < seq - chunk.addr + 6) {
                 DAT_004beb0c++;
             } else {
@@ -1069,7 +1069,7 @@ void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size) {
                 if (*kind == 3) {
                     rest = chunk.addr - seq + chunk.size;
                     pic = MPV_SearchDelim(seq, rest, 34);
-                    if (pic != 0 && (mpvsc_GetKind(pic) & 0x20) != 0) {
+                    if (pic != 0 && (MPV_CheckDelim(pic) & 0x20) != 0) {
                         ext = MPV_SearchDelim(seq, rest, 2);
                         if (ext == 0) {
                             DAT_004beb0c++;
@@ -1099,11 +1099,11 @@ int FUN_002a7438(SfdPlayer *player, int unused, int mask)
     int i;
     int found;
     int c;
-    if (sfbuf_GetReadStat(player, player->streams.f16, &area) != 0)
+    if (SFBUF_RingGetRead(player, player->streams.f16, &area) != 0)
         return 0;
     if (area.len0 == 0)
         return 0;
-    p = FUN_002a41a8(&area, mask, &code);
+    p = sfmpv_SearchDelim(&area, mask, &code);
     if (p == 0) {
         n = area.len0 + area.len1 - 3;
         if (n < 0)
@@ -1114,7 +1114,7 @@ int FUN_002a7438(SfdPlayer *player, int unused, int mask)
         n = p - area.addr1 + area.len0;
     else
         n = 0;
-    FUN_002a7598(player, n);
+    sfmpv_RingAddRead(player, n);
     found = 0;
     for (i = 0; i < (n < 4 ? n : 3); i++) {
         if (i < area.len0)
@@ -1134,9 +1134,9 @@ int FUN_002a7438(SfdPlayer *player, int unused, int mask)
 
 /* matching construct: hand search — an empty macro after the call keeps it from being a tail call */
 #define EMPTY_MACRO() do { } while (0)
-void FUN_002a7598(SfdPlayer *player, int n)
+void sfmpv_RingAddRead(SfdPlayer *player, int n)
 {
-    sfbuf_AddReadLen(player, player->streams.f16, n);
+    SFBUF_RingAddRead(player, player->streams.f16, n);
     EMPTY_MACRO();
 }
 
@@ -1144,46 +1144,46 @@ void FUN_002a75b8(SfdPlayer *player) {
     int entry;
     int a;
     int b;
-    FUN_0029e370(player, player->streams.f16, &entry);
+    SFBUF_RingGetSj(player, player->streams.f16, &entry);
     if (entry != 0) {
         sfbuf_GetSjPos(entry, &a, &b);
         player->f2456 = sfbuf_MergeTotal(player->f2456, a);
     }
 }
 
-int FUN_002a7610(SfdPlayer *player)
+int SFMPV_Create(SfdPlayer *player)
 {
     SfdMpv *mpv = &player->mpvBody;
     void *dec;
     int ret;
-    ret = SFD_GetCond(player, 5);
+    ret = SFSET_GetCond(player, 5);
     if (ret == 0)
         return ret;
     player->streams.mpv = mpv;
-    ret = FUN_002a7770(player, mpv);
+    ret = sfmpv_InitInf(player, mpv);
     if (ret != 0)
         return ret;
-    FUN_002a97a0(player);
+    SFMPVP_Create(player);
     dec = MPV_Create();
     if (dec == 0)
         return sfd_ReportError(0, 0xFF000F0A);
     if (MPV_EntryErrFunc(dec, FUN_002a7b48, player) != 0) {
-        FUN_002a7d18(dec);
+        sfmpv_DestroySub(dec);
         return sfd_ReportError(0, 0xFF000F0B);
     }
-    MPV_SetCond(dec, 1, SFD_GetCond(player, 0));
-    MPV_SetCond(dec, 2, SFD_GetCond(player, 1));
+    MPV_SetCond(dec, 1, SFSET_GetCond(player, 0));
+    MPV_SetCond(dec, 2, SFSET_GetCond(player, 1));
     MPV_SetCond(dec, 6, player->f56);
     mpv->handle = dec;
-    if (FUN_002abf68() != 0)
+    if (SFPLY_GetResetFlg() != 0)
         FUN_002a3558(player, DAT_00585620, DAT_00585624, DAT_00585628);
     return 0;
 }
 
-int FUN_002a7770(SfdPlayer *player, SfdMpv *mpv) {
+int sfmpv_InitInf(SfdPlayer *player, SfdMpv *mpv) {
     int i;
 
-    if (FUN_002a7968() != 0) {
+    if (sfmpv_CheckMpvPara() != 0) {
         return sfd_ReportError(0, 0xFF000F15);
     }
     mpv->cond = DAT_005855b0;
@@ -1203,22 +1203,22 @@ int FUN_002a7770(SfdPlayer *player, SfdMpv *mpv) {
     mpv->f364 = 0;
     mpv->f368 = 0;
     mpv->f372 = 0;
-    FUN_002a7a30(mpv->slots, mpv->bufs.w, 16);
+    sfmpv_InitFrmObj(mpv->slots, mpv->bufs.w, 16);
     mpv->f132 = 0;
     mpv->f136 = 0;
-    FUN_002a7ad0(&mpv->pic);
+    sfmpv_InitPicAtr(&mpv->pic);
     mpv->f268 = -1;
     mpv->f272 = 0;
     mpv->limit = 0x7FFFFFFF;
-    FUN_002a5060((SfdRecord *)&mpv->track);
-    FUN_002a7af0(&mpv->pool);
+    sfmpv_InitComplementPts((SfdRecord *)&mpv->track);
+    sfmpv_InitPicUsr(&mpv->pool);
     for (i = 15; i >= 0; i--) {
         mpv->slots[i].blob = &mpv->pool.slot[i + 2];
     }
     return 0;
 }
 
-int FUN_002a7968(void) {
+int sfmpv_CheckMpvPara(void) {
     int i;
     if ((unsigned)(DAT_005855b0.count - 1) >= 16) {
 fail:
@@ -1235,7 +1235,7 @@ fail:
     return 0;
 }
 
-void FUN_002a7a30(SfdSlot *slot, int *ids, int count) {
+void sfmpv_InitFrmObj(SfdSlot *slot, int *ids, int count) {
     if (count > 0) {
         int *id = ids;
         int remaining = count;
@@ -1251,18 +1251,18 @@ void FUN_002a7a30(SfdSlot *slot, int *ids, int count) {
             slot->f72 = 0;
             slot->f76 = 0;
             slot->f80 = 0;
-            FUN_002a7ad0(&slot->info);
+            sfmpv_InitPicAtr(&slot->info);
             slot->f224 = 0;
             slot++;
         } while (--remaining != 0);
     }
 }
 
-void FUN_002a7ad0(SfdPicInfo *info) {
-    mpsutl_FillWords(info, -1, 32);
+void sfmpv_InitPicAtr(SfdPicInfo *info) {
+    UTY_MemsetDword(info, -1, 32);
 }
 
-void FUN_002a7af0(SfdBufPool *pool) {
+void sfmpv_InitPicUsr(SfdBufPool *pool) {
     int i;
     pool->base = 0;
     pool->count = 0;
@@ -1296,49 +1296,49 @@ int FUN_002a7b88(SfdPlayer *player)
     DAT_00585624 = mpv->pool.count;
     DAT_00585628 = mpv->pool.size;
     FUN_002a9bc8(player);
-    if (FUN_002a7d18(dec) != 0)
+    if (sfmpv_DestroySub(dec) != 0)
         return sfd_ReportError(player, 0xFF000F0C);
     mpv->handle = 0;
     return 0;
 }
 
-int FUN_002a7d18(void *handle) {
+int sfmpv_DestroySub(void *handle) {
     return MPV_Destroy(handle);
 }
 
-int FUN_002a7d30(void) {
+int SFMPV_Standby(void) {
     return 0;
 }
 
-int FUN_002a7d38(void) {
+int SFMPV_Start(void) {
     return 0;
 }
 
-int FUN_002a7d40(void) {
+int SFMPV_Stop(void) {
     return 0;
 }
 
-int FUN_002a7d48(void) {
+int SFMPV_Pause(void) {
     return 0;
 }
 
-void FUN_002a7d50(SfdPlayer *player) {
+void SFMPV_GetWrite(SfdPlayer *player) {
     sfd_ReportError(player, 0xFF000F0D);
 }
 
-void FUN_002a7d70(SfdPlayer *player) {
+void SFMPV_AddWrite(SfdPlayer *player) {
     sfd_ReportError(player, 0xFF000F0D);
 }
 
-int FUN_002a7d90(SfdPlayer *player, SfdFrameInfo **out) {
+int SFMPV_GetRead(SfdPlayer *player, SfdFrameInfo **out) {
     int buf[4];
     SfdTimer *timer = &player->timer;
     SfdSlot *slot;
-    if (FUN_002a8500(player) == -1) {
+    if (SFMPVF_GetNumFrm(player) == -1) {
         *out = 0;
         return 0;
     }
-    slot = FUN_002a86b8(player, buf);
+    slot = SFMPVF_HoldFrm(player, buf);
     if (slot == 0) {
         *out = 0;
         return 0;
@@ -1349,7 +1349,7 @@ int FUN_002a7d90(SfdPlayer *player, SfdFrameInfo **out) {
     return 0;
 }
 
-int FUN_002a8038(SfdPlayer *player, char *body) {
+int SFMPV_AddRead(SfdPlayer *player, char *body) {
     char guard[16];
     int result;
     sfd_Lock(guard);
@@ -1372,7 +1372,7 @@ int FUN_002a8088(SfdPlayer *player, char *body) {
         return sfd_ReportError(player, 0xFF000F0F);
     }
     record->f0 = 0;
-    FUN_002a8668(current);
+    SFMPVF_EndDrawFrm(current);
     return 0;
 }
 
@@ -1380,18 +1380,18 @@ SfdPicRecord *FUN_002a8158(SfdPlayer *player, char *body) {
     return (SfdPicRecord *)(body - 8);
 }
 
-int FUN_002a8160(SfdPlayer *player) {
+int SFMPV_Seek(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
     int flag[4];
     int ready;
     int status;
-    status = FUN_002a81d0(player, mpv, flag);
+    status = sfmpv_ReprocessShc(player, mpv, flag);
     if (status != 0) {
         return status;
     }
     ready = flag[0];
     mpv->f116 = 2;
-    if (ready == 0 || SFD_GetCond(player, 48) == 0) {
+    if (ready == 0 || SFSET_GetCond(player, 48) == 0) {
         mpv->state = 192;
     } else {
         mpv->state = 200;
@@ -1399,14 +1399,14 @@ int FUN_002a8160(SfdPlayer *player) {
     return 0;
 }
 
-int FUN_002a81d0(SfdPlayer *player, SfdMpv *mpv, int *ok)
+int sfmpv_ReprocessShc(SfdPlayer *player, SfdMpv *mpv, int *ok)
 {
     SfdPicture *picture;
     SfdChunk chunk;
     SfdUserData *user;
     int out[4];
     *ok = 0;
-    picture = FUN_002a82c8(player);
+    picture = sfmpv_GetHd(player);
     if (picture == 0)
         return 0;
     if (picture->valid == 0)
@@ -1415,13 +1415,13 @@ int FUN_002a81d0(SfdPlayer *player, SfdMpv *mpv, int *ok)
     user = &picture->user;
     chunk.addr = user->data;
     chunk.size = user->size;
-    if (MPV_DecHdrMem(mpv->handle, &chunk, out) != 0)
+    if (MPV_DecodePicAtr(mpv->handle, &chunk, out) != 0)
         return sfd_ReportError(player, 0xFF000F1B);
     *ok = 1;
     return 0;
 }
 
-SfdPicture *FUN_002a82c8(SfdPlayer *player) {
+SfdPicture *sfmpv_GetHd(SfdPlayer *player) {
     char *work = player->userWork;
     SfdMpv *mpv = player->streams.mpv;
     if (work == 0) {
@@ -1503,23 +1503,23 @@ SfdPicRecord *FUN_002a8488(SfdPlayer *player, SfdSlot *target) {
     return 0;
 }
 
-void FUN_002a84d0(SfdPlayer *player) {
+void SFMPVF_TermDec(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
     mpv->f124 = 1;
 }
 
-int FUN_002a84e0(SfdPlayer *player) {
+int SFMPVF_IsTermDec(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
     return mpv->f124;
 }
 
-SfdMpv *FUN_002a84f0(SfdPlayer *player, int value) {
+SfdMpv *SFMPVF_SetGopStat(SfdPlayer *player, int value) {
     SfdMpv *mpv = player->streams.mpv;
     mpv->f128 = value;
     return mpv;
 }
 
-int FUN_002a8500(SfdPlayer *player) {
+int SFMPVF_GetNumFrm(SfdPlayer *player) {
     char guard[16];
     SfdMpv *mpv;
     SfdSlot *slot;
@@ -1544,7 +1544,7 @@ int FUN_002a8500(SfdPlayer *player) {
     return count;
 }
 
-SfdSlot *FUN_002a85a0(SfdPlayer *player) {
+SfdSlot *SFMPVF_AllocFrm(SfdPlayer *player) {
     char guard[16];
     SfdMpv *mpv;
     SfdSlot *slot;
@@ -1567,25 +1567,25 @@ SfdSlot *FUN_002a85a0(SfdPlayer *player) {
     return slot;
 }
 
-void FUN_002a8628(SfdSlot *slot) {
+void SFMPVF_FreeFrm(SfdSlot *slot) {
     if (slot != 0) {
         slot->state = 0;
     }
 }
 
-void FUN_002a8638(SfdSlot *slot) {
+void SFMPVF_StbyFrm(SfdSlot *slot) {
     if (slot != 0) {
         slot->state = 2;
     }
 }
 
-void FUN_002a8650(SfdSlot *slot) {
+void SFMPVF_RefStbyFrm(SfdSlot *slot) {
     if (slot != 0) {
         slot->state = 4;
     }
 }
 
-void FUN_002a8668(SfdSlot *slot) {
+void SFMPVF_EndDrawFrm(SfdSlot *slot) {
     if (slot != 0) {
         if (slot->state == 4) {
             slot->state = 3;
@@ -1595,7 +1595,7 @@ void FUN_002a8668(SfdSlot *slot) {
     }
 }
 
-void FUN_002a8690(SfdSlot *slot) {
+void SFMPVF_EndRefFrm(SfdSlot *slot) {
     if (slot != 0) {
         if (slot->state == 4) {
             slot->state = 2;
@@ -1605,7 +1605,7 @@ void FUN_002a8690(SfdSlot *slot) {
     }
 }
 
-SfdSlot *FUN_002a86b8(SfdPlayer *player, int *out) {
+SfdSlot *SFMPVF_HoldFrm(SfdPlayer *player, int *out) {
     int c;
     SfdSlot *best = 0;
     int n = 0;
@@ -1619,7 +1619,7 @@ SfdSlot *FUN_002a86b8(SfdPlayer *player, int *out) {
     *out = 0;
     for (i = 0; i < cnt; i++, slot++) {
         if (slot->state == 2 || slot->state == 4) {
-            if (FUN_002a8b30(best, slot) != 0) best = slot;
+            if (sfmpvf_IsChkFirst(best, slot) != 0) best = slot;
             n++;
         }
     }
@@ -1668,9 +1668,9 @@ int FUN_002a8878(SfdPlayer *player) {
     sfd_Lock(&c);
     FUN_002a8a30(player, &p, &q);
     if (player->f72 != 4) q = 0;
-    k = SFD_GetCond(player, 15);
-    if (p != 0 && (k == 0 || FUN_002af6c0(player, p->f56, p->f60) != 0)) {
-        if (q != 0 && (k == 0 || FUN_002af6c0(player, q->f56, q->f60) != 0)) {
+    k = SFSET_GetCond(player, 15);
+    if (p != 0 && (k == 0 || SFTIM_IsGetFrmTimeTunit(player, p->f56, p->f60) != 0)) {
+        if (q != 0 && (k == 0 || SFTIM_IsGetFrmTimeTunit(player, q->f56, q->f60) != 0)) {
             r = 2;
         } else {
             r = 1;
@@ -1699,8 +1699,8 @@ SfdSlot *FUN_002a8998(SfdPlayer *player) {
         second = 0;
     } else {
         FUN_002a8a30(player, &best, &second);
-        if (second != 0 && SFD_GetCond(player, 15) != 0) {
-            if (FUN_002af6c0(player, second->f56, second->f60) == 0) {
+        if (second != 0 && SFSET_GetCond(player, 15) != 0) {
+            if (SFTIM_IsGetFrmTimeTunit(player, second->f56, second->f60) == 0) {
                 second = 0;
             }
         }
@@ -1724,10 +1724,10 @@ void FUN_002a8a30(SfdPlayer *player, void **best, void **second) {
     for (i = 0; i < n; i++) {
         if (slot->state == 2 || slot->state == 4) {
             held++;
-            if (FUN_002a8b30(*best, slot) != 0) {
+            if (sfmpvf_IsChkFirst(*best, slot) != 0) {
                 *second = *best;
                 *best = slot;
-            } else if (FUN_002a8b30(*second, slot) != 0) {
+            } else if (sfmpvf_IsChkFirst(*second, slot) != 0) {
                 *second = slot;
             }
         }
@@ -1741,7 +1741,7 @@ void FUN_002a8a30(SfdPlayer *player, void **best, void **second) {
     }
 }
 
-int FUN_002a8b30(SfdSlot *a, SfdSlot *b) {
+int sfmpvf_IsChkFirst(SfdSlot *a, SfdSlot *b) {
     int result;
     result = 1;
     if (a != 0) {

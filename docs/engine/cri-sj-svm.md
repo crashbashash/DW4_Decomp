@@ -14,11 +14,11 @@ SJX links an EE SJ line to an IOP SJ; SVM is the critical section and the server
 | `src/cri/sjutl.c` | `cri_sjutl` | `0x27d470` up to `0x27d780` | `SJ_SplitChunk` and the tags (a 7-character id, a 7-digit hex length, the content from byte 16) that `SJ_MakeTag`, `SJ_GetTagContent` and `SJ_SearchTag` write and read | no strings; its hex digit and digit-value tables at `0x4ba2a0` and `0x4ba2b8` follow SJUNI's objects, and SJRMT's build-string word at `0x4ba478` follows them |
 | `src/cri/sjrmt.c` | `cri_sjrmt` | `0x27d780` up to `0x27dba8` | SJRMT: create, destroy and the SJ calls for SJs on the IOP, one DTX remote call each (numbers 32 to 42) | `SJRMT Ver.1.03` at `0x4f2468`, its pointer at `0x4ba478` read by `SJRMT_Init`, the init count at `0x4ba47c`; the send, receive and UUID buffers at `0x5707c0`, `0x5708c0`, `0x570780` |
 | `src/cri/sjx.c` | `cri_sjx` | `0x27dba8` up to `0x27e0d0` | SJX: 32 joins of an EE SJ line to an IOP SJ; DTX's send callback gathers each join's waiting chunks for the IOP (at most 128 per exchange) and its receive callback puts back the chunks the IOP returns | `SJX Ver.1.08` at `0x4f2498` (pointer `0x4ba480`), then `E0100301`, `E0100302` (`SJX_Init`) and `E0100401` (`SJX_Create`); its data runs from `0x4ba484` to the 2256-byte DTX work area ending at `0x4baff0` |
-| `src/cri/svm.c` | `cri_svm` | `0x27e0d0` up to `0x27ede0` | SVM (`SVM/PS2EE Ver.1.54`): the lock and unlock callbacks with a lock type per caller, error reporting, the per-type server table (8 types, 6 functions each), the border callbacks, the test-and-set hook and the callbacks around a vsync frame | its build-string pointer at `0x4baff0` follows SJX's work area; its messages `2103102:SVM:svm_unlock` to `1071302:SVM_ExecSvrFuncId` run in function order; `svm_reset` (`0x27eb68`) clears the vsync-frame callbacks the last functions (`0x27ed50` to `0x27edb0`) set and run, which ends the file at `0x27ede0`, where Enbaya's MWCC file starts |
+| `src/cri/svm.c` | `cri_svm` | `0x27e0d0` up to `0x27ede0` | SVM (`SVM/PS2EE Ver.1.54`): the lock and unlock callbacks with a lock type per caller, error reporting, the per-type server table (8 types, 6 functions each), the border callbacks, the test-and-set hook and the callbacks around a vsync frame | its build-string pointer at `0x4baff0` follows SJX's work area; its messages `2103102:SVM:svm_unlock` to `1071302:SVM_ExecSvrFuncId` run in function order; `svm_reset_variable` (`0x27eb68`) clears the vsync-frame callbacks the last functions (`0x27ed50` to `0x27edb0`) set and run, which ends the file at `0x27ede0`, where Enbaya's MWCC file starts |
 
 Each SJRBF and SJUNI entry point takes the SJ critical section (`SJCRS_Lock`, `SJCRS_Unlock`) around a
 lower-case body that checks the handle and reports through `SJERR_CallErr`; the body's errors on a bad line
-go to the object's own error callback, which defaults to `sjrbf_Error` / `sjuni_Error`. A chunk put on SJRBF's
+go to the object's own error callback, which defaults to `SJRBF_Error` / `SJUNI_Error`. A chunk put on SJRBF's
 data line is copied into the extra area when it starts inside the mirrored region, and its part past the end
 is copied to the start. SJUNI in join mode merges a chunk that continues a line's end chunk, and a GetChunk
 shorter than the first chunk splits it.
@@ -31,7 +31,7 @@ shorter than the first chunk splits it.
 - Lock types 4, 5 and 1000 are named `Dev`, `Etc` and `Usr` from their users (SRD's device access takes type
   4); the CRI names are unknown. Server type 3 is named `FsVsync` by its place between the vsync and the file
   system types.
-- `svm_reset` clears the execution counts of only the first six server types, and `SVM_GetExecCnt` reads
+- `svm_reset_variable` clears the execution counts of only the first six server types, and `SVM_GetExecCount` reads
   only the first seven.
 - `SVM_DelCbTestAndSet` calls `SVM_SetCbTestAndSet` with no function, which only sets one when none is set,
   so it changes nothing; the name is the intent.
@@ -43,4 +43,4 @@ shorter than the first chunk splits it.
   - `SVM_GetLockType` (`0x27e2e0`), `SVM_Init` (`0x27ec10`) and `SVM_Finish` (`0x27ec50`) reproduce only
     with the lock type and the init count `volatile` (the finish re-reads the count after its store), the same
     mechanism the lock counts already have an approval for; they need the owner's approval first.
-  - `SVM_GetExecCnt` (`0x27eb40`): the bounds test and the scaled index land in each other's registers.
+  - `SVM_GetExecCount` (`0x27eb40`): the bounds test and the scaled index land in each other's registers.

@@ -50,8 +50,8 @@ extern volatile unsigned int *DAT_004f5a80[];
 extern char DAT_004f5a90[];
 extern char DAT_004f5a98[];
 
-extern int DAT_004bf280;
-extern long long DAT_004bf288;
+extern int sud_init_cnt;
+extern long long utytmr_unit;
 extern volatile int DAT_004bf290;
 extern int DAT_004bf294;
 extern int DAT_004bf298;
@@ -63,29 +63,29 @@ extern volatile SudClock DAT_005856c0;
 extern volatile SudClock *volatile DAT_005856d0;
 extern volatile int DAT_005856d4;
 
-char *FUN_002b5138(void);
+char *sud_GetVersionStr(void);
 void FUN_002b5ce0(long long rate);
 
-void FUN_002b50e8(void) {
-    if (DAT_004bf280 <= 0) {
-        DAT_005856a8 = FUN_002b5138();
-        DAT_004bf280++;
+void SUD_Init(void) {
+    if (sud_init_cnt <= 0) {
+        DAT_005856a8 = sud_GetVersionStr();
+        sud_init_cnt++;
     }
 }
 
-char *FUN_002b5138(void) {
+char *sud_GetVersionStr(void) {
     return DAT_004f59c0;
 }
 
-void FUN_002b5148(void) {
-    if (DAT_004bf280 > 0) {
-        DAT_004bf280--;
+void SUD_Finish(void) {
+    if (sud_init_cnt > 0) {
+        sud_init_cnt--;
     }
 }
 
 void FUN_002b51f8(char *dst, int *flags);
 
-void FUN_002b5168(char *out, int unused, int *flags) {
+void SUD_MakePicUsrDat(char *out, int unused, int *flags) {
     char number[16];
     char *field;
     strncpy(out, DAT_004f59f8, 8);
@@ -115,14 +115,14 @@ unsigned int FUN_002b52d8(char *header, int index) {
     return atoi(digits.c);
 }
 
-int FUN_002b5320(char *header, int index) {
+int SUD_AnalyTypeDivField(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
     return strncmp(header + 18, DAT_004f5a28, 1) == 0;
 }
 
-int FUN_002b5360(char *header, int index) {
+int SUD_AnalyTypeCcs(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
@@ -313,53 +313,53 @@ long long FUN_002b5a10(void) {
 
 int FUN_002b5b38(void) {
     FUN_002b5a10();
-    return DAT_004bf288 == 1;
+    return utytmr_unit == 1;
 }
 
 void FUN_002b5b68(long long rate) {
     FUN_002b5ce0(rate);
 }
 
-long long FUN_002b5b80(void) {
-    return DAT_004bf288;
+long long UTY_GetTmrUnit(void) {
+    return utytmr_unit;
 }
 
-long long FUN_002b5b90(long long ticks) {
-    return ticks * 1000000 / DAT_004bf288;
+long long UTY_TmrToUsec(long long ticks) {
+    return ticks * 1000000 / utytmr_unit;
 }
 
-long long FUN_002b5bd0(long long ticks) {
-    return ticks * 1000 / DAT_004bf288;
+long long UTY_TmrToMsec(long long ticks) {
+    return ticks * 1000 / utytmr_unit;
 }
 
-long long FUN_002b5c08(long long ticks) {
-    return ticks / DAT_004bf288;
+long long UTY_TmrToSec(long long ticks) {
+    return ticks / utytmr_unit;
 }
 
 float FUN_002b5c30(long long ticks) {
-    return (float)(int)ticks * 1000000.0f / (float)(int)DAT_004bf288;
+    return (float)(int)ticks * 1000000.0f / (float)(int)utytmr_unit;
 }
 
 float FUN_002b5c70(long long ticks) {
-    return (float)(int)ticks * 1000.0f / (float)(int)DAT_004bf288;
+    return (float)(int)ticks * 1000.0f / (float)(int)utytmr_unit;
 }
 
 float FUN_002b5cb0(long long ticks) {
-    return (float)(int)ticks / (float)(int)DAT_004bf288;
+    return (float)(int)ticks / (float)(int)utytmr_unit;
 }
 
 void FUN_002b5ce0(long long rate) {
-    DAT_004bf288 = rate;
+    utytmr_unit = rate;
 }
 
-void FUN_002b5cf0(SudStats *stats) {
+void UTY_InitTsum(SudStats *stats) {
     stats->sum = 0;
     stats->min = 0x7FFFFFFFFFFFFFFFLL;
     stats->max = 0;
     stats->count = 0;
 }
 
-void FUN_002b5d10(SudStats *stats, long long value) {
+void UTY_AddTsum(SudStats *stats, long long value) {
     stats->sum += value;
     stats->min = value < stats->min ? value : stats->min;
     stats->max = stats->max < value ? value : stats->max;

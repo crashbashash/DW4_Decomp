@@ -34,34 +34,34 @@ typedef struct SfdTrnModules {
 } SfdTrnModules;
 
 int sfd_ReportError();
-void sfd_SetCond(SfdHn *hn, int index, int value);
+void SFSET_SetCond(SfdHn *hn, int index, int value);
 
-int FUN_002afcb8(SfdTrnModules *modules, int k);
-void FUN_002afdf0(SfdTrnSlot *slot, SfdTrnFn *fns);
-int FUN_002afe38(SfdHn *hn, SfdTrnConfig *config);
-void FUN_002aff58(SfdHn *hn, SfdTrnConfig *config);
-void FUN_002b0048(SfdHn *hn, SfdTrnConfig *config);
-void FUN_002b00e8(SfdHn *hn, SfdTrnConfig *config);
-void FUN_002b0188(SfdHn *hn, SfdTrnConfig *config);
-void FUN_002b01a8(SfdHn *hn, int from, int to);
-void FUN_002b01c8(SfdHn *hn, int from, int to);
-void FUN_002b01e8(SfdHn *hn, int from, int to);
-void FUN_002b0208(SfdHn *hn, int from, int to);
+int sftrn_CallTrEntry(SfdTrnModules *modules, int k);
+void sftrn_InitTrData(SfdTrnSlot *slot, SfdTrnFn *fns);
+int sftrn_BuildAll(SfdHn *hn, SfdTrnConfig *config);
+void sftrn_BuildSystem(SfdHn *hn, SfdTrnConfig *config);
+void sftrn_BuildVideo(SfdHn *hn, SfdTrnConfig *config);
+void sftrn_BuildAudio(SfdHn *hn, SfdTrnConfig *config);
+void sftrn_BuildUsr(SfdHn *hn, SfdTrnConfig *config);
+void sftrn_ConnTrnBuf0(SfdHn *hn, int from, int to);
+void sftrn_ConnTrnBufV(SfdHn *hn, int from, int to);
+void sftrn_ConnTrnBufA(SfdHn *hn, int from, int to);
+void sftrn_ConnTrnBufU(SfdHn *hn, int from, int to);
 void FUN_002b0228(char *ctx, int from, int slot, int to);
 void FUN_002b0268(char *ctx, int from, int to);
 
-void sftrn_Init(SfdTrnModules *dst, SfdTrnModules *src)
+void SFTRN_Init(SfdTrnModules *dst, SfdTrnModules *src)
 {
     *dst = *src;
-    FUN_002afcb8(src, 0);
+    sftrn_CallTrEntry(src, 0);
 }
 
-void sftrn_Finish(SfdTrnModules *modules)
+void SFTRN_Finish(SfdTrnModules *modules)
 {
-    FUN_002afcb8(modules, 1);
+    sftrn_CallTrEntry(modules, 1);
 }
 
-int FUN_002afcb8(SfdTrnModules *modules, int k)
+int sftrn_CallTrEntry(SfdTrnModules *modules, int k)
 {
     SfdTrnFn **tbl = modules->fns;
     int i;
@@ -75,20 +75,20 @@ int FUN_002afcb8(SfdTrnModules *modules, int k)
     return r;
 }
 
-void FUN_002afd38(SfdHn *hn, SfdTrnSlot *s, SfdTrnConfig **pconfig)
+void SFTRN_InitHn(SfdHn *hn, SfdTrnSlot *s, SfdTrnConfig **pconfig)
 {
     SfdTrnConfig *config = *pconfig;
     int i;
     for (i = 0; i < 9; i++) {
         s[i].f8 = 0;
-        FUN_002afdf0(&s[i], config->fns[i]);
+        sftrn_InitTrData(&s[i], config->fns[i]);
     }
-    if (FUN_002afe38(hn, config) != 0) {
+    if (sftrn_BuildAll(hn, config) != 0) {
         sfd_ReportError(hn, 0xFF000302);
     }
 }
 
-void FUN_002afdf0(SfdTrnSlot *slot, SfdTrnFn *fns)
+void sftrn_InitTrData(SfdTrnSlot *slot, SfdTrnFn *fns)
 {
     int i;
     slot->f4 = 0;
@@ -102,26 +102,26 @@ void FUN_002afdf0(SfdTrnSlot *slot, SfdTrnFn *fns)
     slot->f32 = -1;
 }
 
-int FUN_002afe38(SfdHn *hn, SfdTrnConfig *config)
+int sftrn_BuildAll(SfdHn *hn, SfdTrnConfig *config)
 {
     if (config->fns[1] != 0) {
-        FUN_002b01a8(hn, 0, 0);
-        FUN_002aff58(hn, config);
+        sftrn_ConnTrnBuf0(hn, 0, 0);
+        sftrn_BuildSystem(hn, config);
     } else if (config->fns[2] != 0) {
-        FUN_002b01a8(hn, 0, 1);
-        FUN_002b0048(hn, config);
-        sfd_SetCond(hn, 6, 0);
+        sftrn_ConnTrnBuf0(hn, 0, 1);
+        sftrn_BuildVideo(hn, config);
+        SFSET_SetCond(hn, 6, 0);
         hn->cond2[6] = 0;
     } else if (config->fns[3] != 0) {
-        FUN_002b01a8(hn, 0, 2);
-        FUN_002b00e8(hn, config);
-        sfd_SetCond(hn, 5, 0);
+        sftrn_ConnTrnBuf0(hn, 0, 2);
+        sftrn_BuildAudio(hn, config);
+        SFSET_SetCond(hn, 5, 0);
         hn->cond2[5] = 0;
     } else if (config->fns[8] != 0) {
-        FUN_002b01a8(hn, 0, 7);
-        FUN_002b0188(hn, config);
-        sfd_SetCond(hn, 6, 0);
-        sfd_SetCond(hn, 5, 0);
+        sftrn_ConnTrnBuf0(hn, 0, 7);
+        sftrn_BuildUsr(hn, config);
+        SFSET_SetCond(hn, 6, 0);
+        SFSET_SetCond(hn, 5, 0);
         hn->cond2[6] = 0;
         hn->cond2[5] = 0;
     } else {
@@ -130,76 +130,76 @@ int FUN_002afe38(SfdHn *hn, SfdTrnConfig *config)
     return 0;
 }
 
-void FUN_002aff58(SfdHn *hn, SfdTrnConfig *config)
+void sftrn_BuildSystem(SfdHn *hn, SfdTrnConfig *config)
 {
     FUN_002b0268((char *)hn, 0, 1);
     if (config->fns[2] != 0) {
-        FUN_002b01c8(hn, 1, 1);
-        FUN_002b0048(hn, config);
+        sftrn_ConnTrnBufV(hn, 1, 1);
+        sftrn_BuildVideo(hn, config);
     } else {
-        sfd_SetCond(hn, 5, 0);
+        SFSET_SetCond(hn, 5, 0);
         hn->cond2[5] = 0;
     }
     if (config->fns[3] != 0) {
-        FUN_002b01e8(hn, 1, 2);
-        FUN_002b00e8(hn, config);
+        sftrn_ConnTrnBufA(hn, 1, 2);
+        sftrn_BuildAudio(hn, config);
     } else {
-        sfd_SetCond(hn, 6, 0);
+        SFSET_SetCond(hn, 6, 0);
         hn->cond2[6] = 0;
     }
     if (config->fns[8] != 0) {
-        FUN_002b0208(hn, 1, 7);
-        FUN_002b0188(hn, config);
+        sftrn_ConnTrnBufU(hn, 1, 7);
+        sftrn_BuildUsr(hn, config);
     }
 }
 
-void FUN_002b0048(SfdHn *hn, SfdTrnConfig *config)
+void sftrn_BuildVideo(SfdHn *hn, SfdTrnConfig *config)
 {
     FUN_002b0268((char *)hn, 1, 2);
-    FUN_002b01a8(hn, 2, 3);
+    sftrn_ConnTrnBuf0(hn, 2, 3);
     if (config->fns[4] != 0) {
         FUN_002b0268((char *)hn, 3, 4);
-        FUN_002b01a8(hn, 4, 5);
+        sftrn_ConnTrnBuf0(hn, 4, 5);
         FUN_002b0268((char *)hn, 5, 6);
         return;
     }
     FUN_002b0268((char *)hn, 3, 6);
 }
 
-void FUN_002b00e8(SfdHn *hn, SfdTrnConfig *config)
+void sftrn_BuildAudio(SfdHn *hn, SfdTrnConfig *config)
 {
     FUN_002b0268((char *)hn, 2, 3);
-    FUN_002b01a8(hn, 3, 4);
+    sftrn_ConnTrnBuf0(hn, 3, 4);
     if (config->fns[5] != 0) {
         FUN_002b0268((char *)hn, 4, 5);
-        FUN_002b01a8(hn, 5, 6);
+        sftrn_ConnTrnBuf0(hn, 5, 6);
         FUN_002b0268((char *)hn, 6, 7);
         return;
     }
     FUN_002b0268((char *)hn, 4, 7);
 }
 
-void FUN_002b0188(SfdHn *hn, SfdTrnConfig *config)
+void sftrn_BuildUsr(SfdHn *hn, SfdTrnConfig *config)
 {
     FUN_002b0268((char *)hn, 7, 8);
 }
 
-void FUN_002b01a8(SfdHn *hn, int from, int to)
+void sftrn_ConnTrnBuf0(SfdHn *hn, int from, int to)
 {
     FUN_002b0228((char *)hn, from, 0, to);
 }
 
-void FUN_002b01c8(SfdHn *hn, int from, int to)
+void sftrn_ConnTrnBufV(SfdHn *hn, int from, int to)
 {
     FUN_002b0228((char *)hn, from, 0, to);
 }
 
-void FUN_002b01e8(SfdHn *hn, int from, int to)
+void sftrn_ConnTrnBufA(SfdHn *hn, int from, int to)
 {
     FUN_002b0228((char *)hn, from, 1, to);
 }
 
-void FUN_002b0208(SfdHn *hn, int from, int to)
+void sftrn_ConnTrnBufU(SfdHn *hn, int from, int to)
 {
     FUN_002b0228((char *)hn, from, 2, to);
 }
@@ -222,7 +222,7 @@ void FUN_002b0268(char *ctx, int from, int to)
     ((SfdTrnLink *)(ctx + off74))->to = to;
 }
 
-int FUN_002b02a0(SfdHn *hn, int k)
+int SFTRN_CallTrSetup(SfdHn *hn, int k)
 {
     int i;
     int r = 0;

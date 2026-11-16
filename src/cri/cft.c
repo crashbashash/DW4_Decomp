@@ -23,12 +23,12 @@ typedef struct CftGifPacket {
 
 extern char *DAT_004bb3e8;
 extern int DAT_004bb3ec;
-extern int DAT_004bb3f0;
+extern int cft_ver_str;
 extern CftGifPacket DAT_004bb3f8;
 extern char DAT_004f2800[];
 extern char *volatile DAT_00573ea8;
 
-int *FUN_00283098(void);
+int *CFT_GetVersionStr(void);
 void FUN_002830a8(int max);
 
 void FUN_00283018(char *name)
@@ -54,70 +54,70 @@ int FUN_00283048(void)
 void FUN_00283058(void)
 {
     DAT_00573ea8 = DAT_004f2800;
-    *FUN_00283098() = 0;
+    *CFT_GetVersionStr() = 0;
     FUN_002830a8(128);
 }
 
-void FUN_00283090(void)
+void CFT_Finish(void)
 {
 }
 
-int *FUN_00283098(void)
+int *CFT_GetVersionStr(void)
 {
-    return &DAT_004bb3f0;
+    return &cft_ver_str;
 }
 
 void FUN_002830a8(int max)
 {
-    *FUN_00283098() = max;
+    *CFT_GetVersionStr() = max;
 }
 
 int FUN_002830d0(void)
 {
-    return *FUN_00283098();
+    return *CFT_GetVersionStr();
 }
 
-void FUN_002830f0(void)
+void CFT_Ycc420rgbToArgb8888(void)
 {
 }
 
-void FUN_002830f8(void)
+void CFT_Ycc420plnToYcc422pix2(void)
 {
 }
 
-void FUN_00283100(void)
+void CFT_Ycc420plnToY84C44(void)
 {
 }
 
-void FUN_00283108(void)
+void CFT_InitYcc420mbToArgb8888(void)
 {
 }
 
-void FUN_00283110(void)
+void CFT_Ycc420mbToYcc422pix2(void)
 {
 }
 
-void FUN_00283118(void)
+void CFT_Argb420ToArgb8(void)
 {
 }
 
-void FUN_00283120(void)
+void CFT_Ycc420plnToA3V(void)
 {
 }
 
-void FUN_00283128(void)
+void CFT_Ycc420plnToA256V(void)
 {
 }
 
-void FUN_00283130(void)
+void CFT_Ycc420plnToZ16(void)
 {
 }
 
-void FUN_00283138(void)
+void CFT_Ycc420plnToZ32(void)
 {
 }
 
-void FUN_00283140(void)
+void CFT_Ycc420mbToZ32(void)
 {
 }
 
@@ -141,7 +141,7 @@ void FUN_00283140(void)
     (s) += 64;                      \
     (o) += img->stride;
 
-void FUN_00283148(unsigned char **src, CftImage *img, int *table)
+void CFT_Argb8888mbToZ32(unsigned char **src, CftImage *img, int *table)
 {
     int rows = img->height / 16;
     int cols = img->width / 16;

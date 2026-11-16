@@ -56,41 +56,41 @@ void ADXB_Ac3TermSupply();
 void ADXB_SetAhxInSj();
 void ADXB_SetAhxDecSmpl();
 void ADXB_AhxTermSupply();
-void FUN_0025d300(void);
+void ADXB_Init(void);
 void adxb_SetDefaultFmt(AdxbObj *adxb);
 int ADXB_DecodeHeader(AdxbObj *adxb, char *hdr, int size);
-AdxbObj *FUN_0025d3c0(int nch, void *buf, int bsize, int xsize);
-void FUN_0025d4f8(AdxbObj *adxb);
+AdxbObj *ADXB_Create(int nch, void *buf, int bsize, int xsize);
+void ADXB_Destroy(AdxbObj *adxb);
 void FUN_0025d830(AdxbObj *adxb);
-void FUN_0025da40();
+void ADXB_EntryGetWrFunc();
 int ADXB_GetPcmBuf(AdxbObj *adxb);
 int ADXB_GetFormat(AdxbObj *adxb);
-int FUN_0025da70(AdxbObj *adxb);
+int ADXB_GetSfreq(AdxbObj *adxb);
 int ADXB_GetNumChan(AdxbObj *adxb);
-int FUN_0025daa8(AdxbObj *adxb);
-int FUN_0025dab0(AdxbObj *adxb);
-int FUN_0025db10(AdxbObj *adxb);
-int FUN_0025db18(AdxbObj *adxb);
+int ADXB_GetFmtBps(AdxbObj *adxb);
+int ADXB_GetOutBps(AdxbObj *adxb);
+int ADXB_GetBlkSmpl(AdxbObj *adxb);
+int ADXB_GetBlkLen(AdxbObj *adxb);
 int ADXB_GetTotalNumSmpl(AdxbObj *adxb);
-int FUN_0025db28(AdxbObj *adxb);
-int FUN_0025db30(AdxbObj *adxb);
-int FUN_0025db38(AdxbObj *adxb);
-int FUN_0025db40(AdxbObj *adxb);
+int ADXB_GetCof(AdxbObj *adxb);
+int ADXB_GetLpInsNsmpl(AdxbObj *adxb);
+int ADXB_GetNumLoop(AdxbObj *adxb);
+int ADXB_GetLpStartPos(AdxbObj *adxb);
 int FUN_0025db48(AdxbObj *adxb);
-int FUN_0025db60(AdxbObj *adxb);
-int FUN_0025db68(AdxbObj *adxb);
+int ADXB_GetLpEndPos(AdxbObj *adxb);
+int ADXB_GetLpEndOfst(AdxbObj *adxb);
 int FUN_0025db70(AdxbObj *adxb);
 short FUN_0025db78(AdxbObj *adxb);
-short FUN_0025db80(AdxbObj *adxb, int arg);
+short ADXB_GetDefPan(AdxbObj *adxb, int arg);
 char *FUN_0025db90(AdxbObj *adxb);
-void FUN_0025db98(AdxbObj *adxb);
+void ADXB_TakeSnapshot(AdxbObj *adxb);
 void FUN_0025dbd8(AdxbObj *adxb);
 void FUN_0025dc18();
 void FUN_0025dc80();
-int FUN_0025ddc8(AdxbObj *adxb);
+int ADXB_GetStat(AdxbObj *adxb);
 void ADXB_EntryData(AdxbObj *adxb, char *data, int len);
 void ADXB_Start(AdxbObj *adxb);
-void FUN_0025de68(AdxbObj *adxb);
+void ADXB_Stop(AdxbObj *adxb);
 int ADXB_GetDecDtLen(AdxbObj *adxb);
 int ADXB_GetDecNumSmpl(AdxbObj *adxb);
 void ADXB_Reset(AdxbObj *adxb);
@@ -122,18 +122,18 @@ void FUN_00265f40(void)
     adxsjd_use_cnt -= 1;
 }
 
-void FUN_00265f58(void)
+void ADXSJD_Init(void)
 {
-    FUN_0025d300();
+    ADXB_Init();
     memset(adxsjd_objs, 0, sizeof(adxsjd_objs));
 }
 
-void FUN_00265f88(void)
+void ADXSJD_Finish(void)
 {
     memset(adxsjd_objs, 0, sizeof(adxsjd_objs));
 }
 
-void FUN_00265fb0(AdxSjdObj *sjd)
+void adxsjd_clear(AdxSjdObj *sjd)
 {
     sjd->trap_nsmpl = -1;
     sjd->max_dec_nsmpl = 0x7FFFFFFF;
@@ -174,18 +174,18 @@ AdxSjdObj *ADXSJD_Create(SfdSj *sji, int nch, SfdSj **sjo)
     buf = SJRBF_GetBufPtr(sj0);
     bsize = SJRBF_GetBufSize(sj0) / 2;
     xsize = SJRBF_GetXtrSize(sj0) / 2;
-    sjd->adxb = FUN_0025d3c0(nch, buf, bsize, bsize + xsize);
+    sjd->adxb = ADXB_Create(nch, buf, bsize, bsize + xsize);
     if (sjd->adxb == 0) {
         return 0;
     }
-    FUN_0025da40(sjd->adxb, adxsjd_get_wr, sjd);
+    ADXB_EntryGetWrFunc(sjd->adxb, adxsjd_get_wr, sjd);
     sjd->sji = sji;
     sjd->nch = nch;
     for (ch = 0; ch < nch; ch++) {
         sjd->sjo[ch] = sjo[ch];
     }
     sjd->stat = ADXSJD_STAT_STOP;
-    FUN_00265fb0(sjd);
+    adxsjd_clear(sjd);
     sjd->trap_func = 0;
     sjd->trap_obj = 0;
     sjd->flt_func = 0;
@@ -202,7 +202,7 @@ void ADXSJD_Destroy(AdxSjdObj *sjd)
         adxb = sjd->adxb;
         if (adxb != 0) {
             sjd->adxb = 0;
-            FUN_0025d4f8(adxb);
+            ADXB_Destroy(adxb);
         }
         ADXCRS_Lock();
         memset(sjd, 0, sizeof(AdxSjdObj));
@@ -222,7 +222,7 @@ void ADXSJD_SetInSj(AdxSjdObj *sjd, SfdSj *sji)
     ADXB_SetAc3InSj(sjd->adxb, sji);
 }
 
-void FUN_00266218(AdxSjdObj *sjd, int ch, SfdSj *sjo)
+void ADXSJD_SetOutSj(AdxSjdObj *sjd, int ch, SfdSj *sjo)
 {
     sjd->sjo[ch] = sjo;
 }
@@ -242,13 +242,13 @@ void ADXSJD_TermSupply(AdxSjdObj *sjd)
 
 void ADXSJD_Start(AdxSjdObj *sjd)
 {
-    FUN_00265fb0(sjd);
+    adxsjd_clear(sjd);
     sjd->stat = ADXSJD_STAT_DECHDR;
 }
 
 void ADXSJD_Stop(AdxSjdObj *sjd)
 {
-    FUN_0025de68(sjd->adxb);
+    ADXB_Stop(sjd->adxb);
     sjd->stat = ADXSJD_STAT_STOP;
 }
 
@@ -446,7 +446,7 @@ void adxsjd_decexec_end(AdxSjdObj *sjd)
     ADXB_Reset(adxb);
 }
 
-void FUN_00266be0(AdxSjdObj *sjd)
+void adxsjd_decexec_extra(AdxSjdObj *sjd)
 {
     AdxbObj *adxb = sjd->adxb;
     int total = ADXB_GetTotalNumSmpl(adxb);
@@ -469,16 +469,16 @@ void FUN_00266c70(AdxSjdObj *sjd)
     short type;
 
     adxb = sjd->adxb;
-    if (FUN_0025ddc8(adxb) == 0) {
+    if (ADXB_GetStat(adxb) == 0) {
         adxsjd_decexec_start(sjd);
     }
     FUN_0025e4b8(adxb);
-    if (FUN_0025ddc8(adxb) == 3) {
+    if (ADXB_GetStat(adxb) == 3) {
         adxsjd_decexec_end(sjd);
     }
     type = adxb->format;
     if (type == 10 || type == 20 || type == 11 || type == 12 || type == 15) {
-        FUN_00266be0(sjd);
+        adxsjd_decexec_extra(sjd);
     }
 }
 
@@ -591,7 +591,7 @@ void ADXSJD_SetDecPos(AdxSjdObj *sjd, int value)
     sjd->dec_pos = value;
 }
 
-int FUN_002670e8(AdxSjdObj *sjd)
+int ADXSJD_GetDecPos(AdxSjdObj *sjd)
 {
     return sjd->dec_pos;
 }
@@ -601,12 +601,12 @@ void ADXSJD_SetLnkSw(AdxSjdObj *sjd, int value)
     sjd->lnksw = value;
 }
 
-int FUN_002670f8(AdxSjdObj *sjd)
+int ADXSJD_GetLnkSw(AdxSjdObj *sjd)
 {
     return sjd->lnksw;
 }
 
-void ADXSJD_SetKeyString(AdxSjdObj *sjd, const char *text)
+void ADXSJD_SetExtString(AdxSjdObj *sjd, const char *text)
 {
     FUN_0025dc18(sjd->adxb, text);
 }
@@ -650,7 +650,7 @@ void ADXSJD_SetTrapNumSmpl(AdxSjdObj *sjd, int value)
     sjd->trap_nsmpl = value;
 }
 
-int FUN_002671d0(AdxSjdObj *sjd)
+int ADXSJD_GetTrapNumSmpl(AdxSjdObj *sjd)
 {
     return sjd->trap_nsmpl;
 }
@@ -660,7 +660,7 @@ void ADXSJD_SetTrapCnt(AdxSjdObj *sjd, int value)
     sjd->trap_cnt = value;
 }
 
-int FUN_002671e0(AdxSjdObj *sjd)
+int ADXSJD_GetTrapCnt(AdxSjdObj *sjd)
 {
     return sjd->trap_cnt;
 }
@@ -670,7 +670,7 @@ void ADXSJD_SetTrapDtLen(AdxSjdObj *sjd, int value)
     sjd->trap_dtlen = value;
 }
 
-int FUN_002671f0(AdxSjdObj *sjd)
+int ADXSJD_GetTrapDtLen(AdxSjdObj *sjd)
 {
     return sjd->trap_dtlen;
 }
@@ -682,7 +682,7 @@ int ADXSJD_GetFormat(AdxSjdObj *sjd)
 
 int ADXSJD_GetSfreq(AdxSjdObj *sjd)
 {
-    return FUN_0025da70(sjd->adxb);
+    return ADXB_GetSfreq(sjd->adxb);
 }
 
 int ADXSJD_GetNumChan(AdxSjdObj *sjd)
@@ -692,17 +692,17 @@ int ADXSJD_GetNumChan(AdxSjdObj *sjd)
 
 int ADXSJD_GetOutBps(AdxSjdObj *sjd)
 {
-    return FUN_0025dab0(sjd->adxb);
+    return ADXB_GetOutBps(sjd->adxb);
 }
 
 int ADXSJD_GetBlkSmpl(AdxSjdObj *sjd)
 {
-    return FUN_0025db10(sjd->adxb);
+    return ADXB_GetBlkSmpl(sjd->adxb);
 }
 
 int FUN_00267270(AdxSjdObj *sjd)
 {
-    return FUN_0025db18(sjd->adxb);
+    return ADXB_GetBlkLen(sjd->adxb);
 }
 
 int ADXSJD_GetTotalNumSmpl(AdxSjdObj *sjd)
@@ -712,22 +712,22 @@ int ADXSJD_GetTotalNumSmpl(AdxSjdObj *sjd)
 
 int FUN_002672a0(AdxSjdObj *sjd)
 {
-    return FUN_0025db28(sjd->adxb);
+    return ADXB_GetCof(sjd->adxb);
 }
 
 int ADXSJD_GetNumLoop(AdxSjdObj *sjd)
 {
-    return FUN_0025db38(sjd->adxb);
+    return ADXB_GetNumLoop(sjd->adxb);
 }
 
 int FUN_002672d0(AdxSjdObj *sjd)
 {
-    return FUN_0025db30(sjd->adxb);
+    return ADXB_GetLpInsNsmpl(sjd->adxb);
 }
 
 int ADXSJD_GetLpStartPos(AdxSjdObj *sjd)
 {
-    return FUN_0025db40(sjd->adxb);
+    return ADXB_GetLpStartPos(sjd->adxb);
 }
 
 int ADXSJD_GetLpStartOfst(AdxSjdObj *sjd)
@@ -740,15 +740,15 @@ int ADXSJD_GetLpStartOfst(AdxSjdObj *sjd)
 
 int ADXSJD_GetLpEndPos(AdxSjdObj *sjd)
 {
-    return FUN_0025db60(sjd->adxb);
+    return ADXB_GetLpEndPos(sjd->adxb);
 }
 
 int ADXSJD_GetLpEndOfst(AdxSjdObj *sjd)
 {
-    return FUN_0025db68(sjd->adxb);
+    return ADXB_GetLpEndOfst(sjd->adxb);
 }
 
-int FUN_00267360(AdxSjdObj *sjd)
+int ADXSJD_GetAinfLen(AdxSjdObj *sjd)
 {
     return FUN_0025db70(sjd->adxb);
 }
@@ -765,7 +765,7 @@ int ADXSJD_GetDefPan(AdxSjdObj *sjd, int arg)
 {
     if (FUN_0025db70(sjd->adxb) > 0) {
         if (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND) {
-            return FUN_0025db80(sjd->adxb, arg);
+            return ADXB_GetDefPan(sjd->adxb, arg);
         }
     }
     return -128;
@@ -786,7 +786,7 @@ int ADXSJD_GetHdrLen(AdxSjdObj *sjd)
 
 int ADXSJD_GetFmtBps(AdxSjdObj *sjd)
 {
-    return FUN_0025daa8(sjd->adxb);
+    return ADXB_GetFmtBps(sjd->adxb);
 }
 
 char *ADXSJD_GetSpsdInfo(AdxSjdObj *sjd)
@@ -794,12 +794,12 @@ char *ADXSJD_GetSpsdInfo(AdxSjdObj *sjd)
     return sjd->hdr;
 }
 
-void ADXSJD_SaveDly(AdxSjdObj *sjd)
+void ADXSJD_TakeSnapshot(AdxSjdObj *sjd)
 {
-    FUN_0025db98(sjd->adxb);
+    ADXB_TakeSnapshot(sjd->adxb);
 }
 
-void ADXSJD_RestoreDly(AdxSjdObj *sjd)
+void ADXSJD_RestoreSnapshot(AdxSjdObj *sjd)
 {
     FUN_0025dbd8(sjd->adxb);
 }

@@ -120,11 +120,11 @@ int ADXT_ExecServer();
 int ADXT_ExecFsSvr();
 void ADXMSG_PrintErr(const char *format, ...);
 
-void adxm_wakeup_thrd(int threadId);
-int adxm_resume_thrd(int threadId);
-int adxm_suspend_thrd(int threadId);
-void adxm_sleep_thrd(void);
-int adxm_is_usridle_mode(void);
+void adxm_WakeupThread(int threadId);
+int adxm_ResumeThread(int threadId);
+int adxm_SuspendThread(int threadId);
+void adxm_SleepThread(void);
+int adxm_IsSetupThrdEx(void);
 void adxm_call_mwidle_sleep_cb(void);
 void adxm_call_vsync_frame_cb(void);
 extern volatile int adxps2_exec_vint;
@@ -132,28 +132,28 @@ extern long long adxm_vint_cnt;
 extern int (*adxm_old_cbf)(int arg);
 extern volatile int adxt_vsync_cnt;
 int SVM_ExecSvrVint();
-int adxm_exec_vint(int arg);
+int ADXPS2_ExecVint(int arg);
 void ADXM_SetupThrd(AdxmThreadPrm *tprm);
-void adxm_delete_mwidle_thrd(void);
-void adxm_delete_vsync_thrd(void);
-void adxm_delete_fs_thrd(void);
-void adxm_delete_safe_thrd(void);
+void adxm_ShutdownMwIdleThrd(void);
+void adxm_ShutdownVsyncThrd(void);
+void adxm_ShutdownFsThrd(void);
+void adxm_ShutdownSafeThrd(void);
 
-void adxm_lock(void) {
+void _adxm_lock(void) {
     int threadId;
     if (adxm_lock_level == 0) {
         threadId = GetThreadId();
         adxm_lock_saved_prio = ChangeThreadPriority(threadId, adxm_tprm.lockPrio);
         adxm_lock_thid = threadId;
-        adxm_resume_thrd(adxm_safe_thid);
+        adxm_ResumeThread(adxm_safe_thid);
         adxm_safe_thid; /* matching construct: retail re-reads the thread id after the call (dead load) */
     }
     adxm_lock_level++;
 }
 
-void adxm_unlock(void) {
+void _adxm_unlock(void) {
     if (--adxm_lock_level == 0) {
-        adxm_suspend_thrd(adxm_safe_thid);
+        adxm_SuspendThread(adxm_safe_thid);
         adxm_safe_thid; /* matching construct: retail re-reads the thread id after the call (dead load) */
         ChangeThreadPriority(GetThreadId(), adxm_lock_saved_prio);
     }
@@ -171,8 +171,8 @@ void adxm_goto_svr_border(int threadId, int priority)
     adxm_border_request = 1;
     ChangeThreadPriority(threadId, adxm_tprm.lockPrio);
     for (i = 0; ; i++) {
-        adxm_wakeup_thrd(threadId);
-        adxm_resume_thrd(threadId);
+        adxm_WakeupThread(threadId);
+        adxm_ResumeThread(threadId);
         if (adxm_border_request == 0) {
             break;
         }
@@ -192,13 +192,13 @@ void adxm_goto_usridle_border(void) {
     adxm_goto_svr_border(adxm_usridle_thid, adxm_tprm.usrIdlePrio);
 }
 
-void adxm_safe_count_up(void) {
+void adxm_safe_trap(void) {
     adxm_safe_loop_count += 1;
 }
 
-void adxm_safe_thrd(void *arg) {
+void adxm_safe_proc(void *arg) {
     while (adxm_safe_exit_request == 0) {
-        adxm_safe_count_up();
+        adxm_safe_trap();
     }
     adxm_safe_exited = 1;
     ExitDeleteThread();
@@ -208,41 +208,41 @@ void adxm_safe_thrd(void *arg) {
  * scheduling barrier that keeps the tick count's ld/daddu/sd ahead of the flag store and the call */
 #define ADXM_SET_BUSY(flag) do { (flag) = 1; } while (0)
 
-void adxm_usrvsync_thrd(void *arg) {
+void adxm_usrvsync_proc(void *arg) {
     while (adxm_usrvsync_exit_request == 0) {
         adxm_usrvsync_count++;
         ADXM_SET_BUSY(adxm_usrvsync_busy);
         SVM_ExecSvrUsrVsync();
         adxm_usrvsync_busy = 0;
-        adxm_sleep_thrd();
+        adxm_SleepThread();
     }
     adxm_usrvsync_exited = 1;
     ExitDeleteThread();
 }
 
-void adxm_vsync_thrd(void *arg)
+void adxm_vsync_proc(void *arg)
 {
     while (adxm_vsync_exit_request == 0) {
         adxm_vsync_count++;
-        adxm_suspend_thrd(adxm_mwidle_thid);
+        adxm_SuspendThread(adxm_mwidle_thid);
         if (adxm_mwidle_slept == 0) {
             adxm_call_mwidle_sleep_cb();
         }
         adxm_mwidle_slept = 0;
-        if (adxm_is_usridle_mode() == 1) {
-            adxm_suspend_thrd(adxm_usridle_thid);
+        if (adxm_IsSetupThrdEx() == 1) {
+            adxm_SuspendThread(adxm_usridle_thid);
         }
-        adxm_wakeup_vsync_waiter();
+        ADXPS2_WakeupMainThrd();
         adxm_vsync_busy = 1;
         SVM_ExecSvrVsync();
         adxm_vsync_busy = 0;
-        adxm_sleep_thrd();
+        adxm_SleepThread();
     }
     adxm_vsync_exited = 1;
     ExitDeleteThread();
 }
 
-void adxm_fs_thrd(void *arg)
+void adxm_fs_proc(void *arg)
 {
     while (adxm_fs_exit_request == 0) {
         adxm_fs_count++;
@@ -255,7 +255,7 @@ void adxm_fs_thrd(void *arg)
             *(volatile unsigned long long *)0x120000E0 = 0;
         }
         adxm_fs_busy = 0;
-        adxm_sleep_thrd();
+        adxm_SleepThread();
     }
     adxm_fs_exited = 1;
     ExitDeleteThread();
@@ -271,19 +271,19 @@ void adxm_mwidle_thrd(void *arg)
         adxm_mwidle_busy = 0;
         if (adxm_border_request == 1) {
             adxm_border_request = 0;
-            adxm_sleep_thrd();
+            adxm_SleepThread();
         }
         if (busy == 0) {
-            if (adxm_is_usridle_mode() == 1) {
-                if (adxm_resume_thrd(adxm_usridle_thid) == adxm_usridle_thid) {
-                    adxm_wakeup_thrd(adxm_usridle_thid);
+            if (adxm_IsSetupThrdEx() == 1) {
+                if (adxm_ResumeThread(adxm_usridle_thid) == adxm_usridle_thid) {
+                    adxm_WakeupThread(adxm_usridle_thid);
                 }
             }
             if (adxm_border_request != 1) {
                 adxm_call_mwidle_sleep_cb();
                 adxm_mwidle_slept = 1;
             }
-            adxm_sleep_thrd();
+            adxm_SleepThread();
         }
     }
     adxm_mwidle_exited = 1;
@@ -300,17 +300,17 @@ void adxm_usridle_thrd(void *arg)
         adxm_usridle_busy = 0;
         if (adxm_border_request == 1) {
             adxm_border_request = 0;
-            adxm_sleep_thrd();
+            adxm_SleepThread();
         }
         if (busy == 0) {
-            adxm_sleep_thrd();
+            adxm_SleepThread();
         }
     }
     adxm_usridle_exited = 1;
     ExitDeleteThread();
 }
 
-void adxm_iwakeup_thrd(int threadId) {
+void adxm_iWakeupThread(int threadId) {
     struct ThreadParam status;
     if (threadId != 0) {
         iReferThreadStatus(threadId, &status);
@@ -320,7 +320,7 @@ void adxm_iwakeup_thrd(int threadId) {
     }
 }
 
-void adxm_wakeup_thrd(int threadId) {
+void adxm_WakeupThread(int threadId) {
     struct ThreadParam status;
     if (threadId != 0) {
         ReferThreadStatus(threadId, &status);
@@ -330,11 +330,11 @@ void adxm_wakeup_thrd(int threadId) {
     }
 }
 
-void adxm_sleep_thrd(void) {
+void adxm_SleepThread(void) {
     SleepThread();
 }
 
-int adxm_resume_thrd(int threadId) {
+int adxm_ResumeThread(int threadId) {
     struct ThreadParam status;
     int result = 0;
     if (threadId != 0) {
@@ -346,7 +346,7 @@ int adxm_resume_thrd(int threadId) {
     return result;
 }
 
-int adxm_suspend_thrd(int threadId) {
+int adxm_SuspendThread(int threadId) {
     struct ThreadParam status;
     int result = 0;
     if (threadId != 0) {
@@ -358,9 +358,9 @@ int adxm_suspend_thrd(int threadId) {
     return result;
 }
 
-void adxm_create_safe_thrd(void) {
+void adxm_SetupSafeThrd(void) {
     struct ThreadParam param;
-    param.entry = adxm_safe_thrd;
+    param.entry = adxm_safe_proc;
     param.stack = adxm_safe_stack;
     param.stackSize = 2048;
     param.initPriority = adxm_main_init_prio;
@@ -369,7 +369,7 @@ void adxm_create_safe_thrd(void) {
     adxm_safe_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_safe_thid, 0);
     if (adxm_safe_thid != 0) {
-        adxm_suspend_thrd(adxm_safe_thid);
+        adxm_SuspendThread(adxm_safe_thid);
         adxm_safe_thid; /* matching construct: dead re-read, as above */
     }
     ChangeThreadPriority(adxm_safe_thid, adxm_tprm.safePrio);
@@ -377,7 +377,7 @@ void adxm_create_safe_thrd(void) {
 
 void adxm_create_usrvsync_thrd(void *stack, int stackSize) {
     struct ThreadParam param;
-    param.entry = adxm_usrvsync_thrd;
+    param.entry = adxm_usrvsync_proc;
     if (stack == 0) {
         param.stack = adxm_usrvsync_stack;
         param.stackSize = 4096;
@@ -394,9 +394,9 @@ void adxm_create_usrvsync_thrd(void *stack, int stackSize) {
     ChangeThreadPriority(adxm_usrvsync_thid, adxm_tprm.usrVsyncPrio);
 }
 
-void adxm_create_vsync_thrd(void) {
+void adxm_SetupVsyncThrd(void) {
     struct ThreadParam param;
-    param.entry = adxm_vsync_thrd;
+    param.entry = adxm_vsync_proc;
     param.stack = adxm_vsync_stack;
     param.stackSize = 4096;
     param.initPriority = adxm_main_init_prio;
@@ -407,9 +407,9 @@ void adxm_create_vsync_thrd(void) {
     ChangeThreadPriority(adxm_vsync_thid, adxm_tprm.vsyncPrio);
 }
 
-void adxm_create_fs_thrd(void) {
+void adxm_SetupFsThrd(void) {
     struct ThreadParam param;
-    param.entry = adxm_fs_thrd;
+    param.entry = adxm_fs_proc;
     param.stack = adxm_fs_stack;
     param.stackSize = 4096;
     param.initPriority = adxm_main_init_prio;
@@ -420,7 +420,7 @@ void adxm_create_fs_thrd(void) {
     ChangeThreadPriority(adxm_fs_thid, adxm_tprm.fsPrio);
 }
 
-void adxm_create_mwidle_thrd(void) {
+void adxm_SetupMwIdleThrd(void) {
     struct ThreadParam param;
     param.entry = adxm_mwidle_thrd;
     param.stack = adxm_mwidle_stack;
@@ -431,7 +431,7 @@ void adxm_create_mwidle_thrd(void) {
     adxm_mwidle_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_mwidle_thid, 0);
     ChangeThreadPriority(adxm_mwidle_thid, adxm_tprm.mwIdlePrio);
-    adxm_suspend_thrd(adxm_mwidle_thid);
+    adxm_SuspendThread(adxm_mwidle_thid);
     adxm_mwidle_thid; /* matching construct: dead re-read, as above */
 }
 
@@ -452,11 +452,11 @@ void adxm_create_usridle_thrd(void *stack, int stackSize) {
     adxm_usridle_thid; /* matching construct: retail re-reads the thread id after each use (dead load) */
     _StartThread(adxm_usridle_thid, 0);
     ChangeThreadPriority(adxm_usridle_thid, adxm_tprm.usrIdlePrio);
-    adxm_suspend_thrd(adxm_usridle_thid);
+    adxm_SuspendThread(adxm_usridle_thid);
     adxm_mwidle_thid; /* matching construct: retail re-reads the other thread's id here (dead load) */
 }
 
-int adxm_is_usridle_mode(void) {
+int adxm_IsSetupThrdEx(void) {
     return adxm_usridle_mode;
 }
 
@@ -508,8 +508,8 @@ void ADXM_SetupThrd(AdxmThreadPrm *tprm) {
     adxm_vsync_waiting = 0;
     if (adxm_setup_count == 0) {
         SVM_Init();
-        SVM_SetCbLock(adxm_lock, 0);
-        SVM_SetCbUnlock(adxm_unlock, 0);
+        SVM_SetCbLock(_adxm_lock, 0);
+        SVM_SetCbUnlock(_adxm_unlock, 0);
         adxm_vsync_frame_cb.func = 0;
         adxm_vsync_frame_cb.arg = 0;
         adxm_mwidle_sleep_cb.func = 0;
@@ -532,17 +532,17 @@ void ADXM_SetupThrd(AdxmThreadPrm *tprm) {
         adxm_main_thid = GetThreadId();
         ReferThreadStatus(adxm_main_thid, &param);
         adxm_main_init_prio = param.currentPriority;
-        adxm_create_safe_thrd();
-        adxm_create_vsync_thrd();
-        adxm_create_fs_thrd();
-        adxm_create_mwidle_thrd();
+        adxm_SetupSafeThrd();
+        adxm_SetupVsyncThrd();
+        adxm_SetupFsThrd();
+        adxm_SetupMwIdleThrd();
         ChangeThreadPriority(adxm_main_thid, adxm_tprm.mainPrio);
         SVM_SetCbBdr(6, adxm_goto_mwidle_border, 0);
     }
     adxm_setup_count++;
 }
 
-void adxm_request_thrd_exit(void) {
+void adxm_ShutdownPreProcedure(void) {
     adxm_safe_exit_request = 1;
     adxm_usrvsync_exit_request = 1;
     adxm_vsync_exit_request = 1;
@@ -553,11 +553,11 @@ void adxm_request_thrd_exit(void) {
 
 void ADXM_ShutdownThrd(void) {
     if (--adxm_setup_count == 0) {
-        adxm_request_thrd_exit();
-        adxm_delete_mwidle_thrd();
-        adxm_delete_fs_thrd();
-        adxm_delete_vsync_thrd();
-        adxm_delete_safe_thrd();
+        adxm_ShutdownPreProcedure();
+        adxm_ShutdownMwIdleThrd();
+        adxm_ShutdownFsThrd();
+        adxm_ShutdownVsyncThrd();
+        adxm_ShutdownSafeThrd();
         ChangeThreadPriority(adxm_main_thid, adxm_main_init_prio);
         SVM_SetCbLock(0, 0);
         SVM_SetCbUnlock(0, 0);
@@ -570,43 +570,43 @@ void adxm_delete_usridle_thrd(void) {
         adxm_usridle_exit_request = 1;
         ChangeThreadPriority(adxm_usridle_thid, 1);
         WakeupThread(adxm_usridle_thid);
-        adxm_resume_thrd(adxm_usridle_thid);
+        adxm_ResumeThread(adxm_usridle_thid);
     }
     adxm_usridle_exited = 0;
     adxm_usridle_exit_request = 0;
     adxm_usridle_thid = 0;
 }
 
-void adxm_delete_mwidle_thrd(void) {
+void adxm_ShutdownMwIdleThrd(void) {
     while (adxm_mwidle_exited == 0) {
         adxm_mwidle_exit_request = 1;
         ChangeThreadPriority(adxm_mwidle_thid, 1);
         WakeupThread(adxm_mwidle_thid);
-        adxm_resume_thrd(adxm_mwidle_thid);
+        adxm_ResumeThread(adxm_mwidle_thid);
     }
     adxm_mwidle_exited = 0;
     adxm_mwidle_exit_request = 0;
     adxm_mwidle_thid = 0;
 }
 
-void adxm_delete_vsync_thrd(void) {
+void adxm_ShutdownVsyncThrd(void) {
     while (adxm_vsync_exited == 0) {
         adxm_vsync_exit_request = 1;
         ChangeThreadPriority(adxm_vsync_thid, 1);
         WakeupThread(adxm_vsync_thid);
-        adxm_resume_thrd(adxm_vsync_thid);
+        adxm_ResumeThread(adxm_vsync_thid);
     }
     adxm_vsync_exited = 0;
     adxm_vsync_exit_request = 0;
     adxm_vsync_thid = 0;
 }
 
-void adxm_delete_fs_thrd(void) {
+void adxm_ShutdownFsThrd(void) {
     while (adxm_fs_exited == 0) {
         adxm_fs_exit_request = 1;
         ChangeThreadPriority(adxm_fs_thid, 1);
         WakeupThread(adxm_fs_thid);
-        adxm_resume_thrd(adxm_fs_thid);
+        adxm_ResumeThread(adxm_fs_thid);
     }
     adxm_fs_exited = 0;
     adxm_fs_exit_request = 0;
@@ -618,19 +618,19 @@ void adxm_delete_usrvsync_thrd(void) {
         adxm_usrvsync_exit_request = 1;
         ChangeThreadPriority(adxm_usrvsync_thid, 1);
         WakeupThread(adxm_usrvsync_thid);
-        adxm_resume_thrd(adxm_usrvsync_thid);
+        adxm_ResumeThread(adxm_usrvsync_thid);
     }
     adxm_usrvsync_exited = 0;
     adxm_usrvsync_exit_request = 0;
     adxm_usrvsync_thid = 0;
 }
 
-void adxm_delete_safe_thrd(void) {
+void adxm_ShutdownSafeThrd(void) {
     while (adxm_safe_exited == 0) {
         adxm_safe_exit_request = 1;
         ChangeThreadPriority(adxm_safe_thid, 1);
         WakeupThread(adxm_safe_thid);
-        adxm_resume_thrd(adxm_safe_thid);
+        adxm_ResumeThread(adxm_safe_thid);
     }
     adxm_safe_exited = 0;
     adxm_safe_exit_request = 0;
@@ -649,19 +649,19 @@ int ADXM_GetLockLevel(void) {
     return adxm_lock_level;
 }
 
-int adxm_exec_vint(int arg) {
+int ADXPS2_ExecVint(int arg) {
     adxt_vsync_cnt += 1;
     if (adxps2_exec_vint == 0) {
         adxps2_exec_vint = 1;
         if (adxm_setup_count > 0) {
             if (adxm_vsync_busy != 1) {
-                adxm_iwakeup_thrd(adxm_vsync_thid);
+                adxm_iWakeupThread(adxm_vsync_thid);
             }
             if (adxm_fs_busy != 1) {
-                adxm_iwakeup_thrd(adxm_fs_thid);
+                adxm_iWakeupThread(adxm_fs_thid);
             }
-            if (adxm_is_usridle_mode() == 1 && adxm_usrvsync_busy != 1) {
-                adxm_iwakeup_thrd(adxm_usrvsync_thid);
+            if (adxm_IsSetupThrdEx() == 1 && adxm_usrvsync_busy != 1) {
+                adxm_iWakeupThread(adxm_usrvsync_thid);
             }
             adxm_vint_cnt += 1;
         }
@@ -675,23 +675,23 @@ int adxm_exec_vint(int arg) {
 }
 
 int ADXM_ExecVint(int arg) {
-    return adxm_exec_vint(arg);
+    return ADXPS2_ExecVint(arg);
 }
 
 void ADXM_ExecMain(void) {
     SVM_ExecSvrMain();
 }
 
-void adxm_wakeup_idle_thrds(void) {
-    if (adxm_resume_thrd(adxm_mwidle_thid) == adxm_mwidle_thid) {
-        adxm_wakeup_thrd(adxm_mwidle_thid);
+void ADXPS2_ResumeIdleThrd(void) {
+    if (adxm_ResumeThread(adxm_mwidle_thid) == adxm_mwidle_thid) {
+        adxm_WakeupThread(adxm_mwidle_thid);
     }
-    if (adxm_is_usridle_mode() == 1 && adxm_resume_thrd(adxm_usridle_thid) == adxm_usridle_thid) {
-        adxm_wakeup_thrd(adxm_usridle_thid);
+    if (adxm_IsSetupThrdEx() == 1 && adxm_ResumeThread(adxm_usridle_thid) == adxm_usridle_thid) {
+        adxm_WakeupThread(adxm_usridle_thid);
     }
 }
 
-void adxm_wakeup_vsync_waiter(void) {
+void ADXPS2_WakeupMainThrd(void) {
     struct ThreadParam info;
     if (adxm_vsync_waiting == 1) {
         ReferThreadStatus(adxm_main_thid, &info);
@@ -703,24 +703,24 @@ void adxm_wakeup_vsync_waiter(void) {
     }
 }
 
-void ADXM_WaitVsync(void) {
+void ADXPS2_SleepMainThrd(void) {
     adxm_vsync_waiting = 1;
-    adxm_sleep_thrd();
+    adxm_SleepThread();
 }
 
 void ADXM_ExecVsyncFrame(void) {
     SVM_ExecVsyncBegin();
-    adxm_wakeup_idle_thrds();
+    ADXPS2_ResumeIdleThrd();
     adxm_call_vsync_frame_cb();
-    ADXM_WaitVsync();
+    ADXPS2_SleepMainThrd();
     SVM_ExecVsyncEnd();
 }
 
-void ADXPS2_ExecVsyncFrame(void) {
+void ADXPS2_WaitVsync(void) {
     ADXM_ExecVsyncFrame();
 }
 
-int ADXPS2_ExecServer(void) {
+int ADXPS2_ExecServerEx(void) {
     if (adxps2_server_busy == 0) {
         adxps2_server_busy = 1;
         ADXT_ExecServer();
@@ -779,8 +779,8 @@ void ADXM_SetupThrdEx(AdxmThreadPrmEx *tprm) {
     adxps2_build;
     if (adxm_setup_count == 0) {
         SVM_Init();
-        SVM_SetCbLock(adxm_lock, 0);
-        SVM_SetCbUnlock(adxm_unlock, 0);
+        SVM_SetCbLock(_adxm_lock, 0);
+        SVM_SetCbUnlock(_adxm_unlock, 0);
         if (tprm == 0) {
             adxm_tprm.mainPrio = 24;
             adxm_tprm.lockPrio = 1;
@@ -811,11 +811,11 @@ void ADXM_SetupThrdEx(AdxmThreadPrmEx *tprm) {
         adxm_main_thid = GetThreadId();
         ReferThreadStatus(adxm_main_thid, &param);
         adxm_main_init_prio = param.currentPriority;
-        adxm_create_safe_thrd();
+        adxm_SetupSafeThrd();
         adxm_create_usrvsync_thrd(adxm_tprm.usrVsyncStack, adxm_tprm.usrVsyncStackSize);
-        adxm_create_vsync_thrd();
-        adxm_create_fs_thrd();
-        adxm_create_mwidle_thrd();
+        adxm_SetupVsyncThrd();
+        adxm_SetupFsThrd();
+        adxm_SetupMwIdleThrd();
         adxm_create_usridle_thrd(adxm_tprm.usrIdleStack, adxm_tprm.usrIdleStackSize);
         ChangeThreadPriority(adxm_main_thid, adxm_tprm.mainPrio);
         SVM_SetCbBdr(6, adxm_goto_mwidle_border, 0);
@@ -827,13 +827,13 @@ void ADXM_SetupThrdEx(AdxmThreadPrmEx *tprm) {
 
 void ADXM_ShutdownThrdEx(void) {
     if (--adxm_setup_count == 0) {
-        adxm_request_thrd_exit();
+        adxm_ShutdownPreProcedure();
         adxm_delete_usridle_thrd();
-        adxm_delete_mwidle_thrd();
-        adxm_delete_fs_thrd();
-        adxm_delete_vsync_thrd();
+        adxm_ShutdownMwIdleThrd();
+        adxm_ShutdownFsThrd();
+        adxm_ShutdownVsyncThrd();
         adxm_delete_usrvsync_thrd();
-        adxm_delete_safe_thrd();
+        adxm_ShutdownSafeThrd();
         ChangeThreadPriority(adxm_main_thid, adxm_main_init_prio);
         SVM_SetCbLock(0, 0);
         SVM_SetCbUnlock(0, 0);
@@ -850,7 +850,7 @@ void ADXM_SetCbUsrIdle(int func, int object) {
     SVM_SetCbSvrId(7, 0, func, object);
 }
 
-void ADXM_GotoUsrIdleBorder(void) {
+void ADXM_GotoUsrIdleBdr(void) {
     SVM_GotoSvrBorder(7);
 }
 

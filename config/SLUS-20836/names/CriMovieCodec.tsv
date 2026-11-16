@@ -20,7 +20,6 @@
 0x0026bc60	ADXT_Stop	cri
 0x0026ce40	ADXT_Pause	cri
 0x0026cf70	ADXT_GetStatPause	cri
-0x002934c0	MWSFD_SetMallocFunc	cri
 0x00295468	mwPlyIsPause	cri
 0x002ed2b0	Memory_AllocateAlignedWithAllocator	engine
 0x0016cdd0	igPsx2VisualContext_CallDmaChain	engine

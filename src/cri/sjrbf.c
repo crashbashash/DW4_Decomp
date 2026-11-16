@@ -87,7 +87,7 @@ void sjrbf_PutChunk(SjRbfObj *sj, int line, SfdSjChunk *ck);
 void sjrbf_UngetChunk(SjRbfObj *sj, int line, SfdSjChunk *ck);
 int sjrbf_IsGetChunk(SjRbfObj *sj, int line, int nbyte, int *rbyte);
 
-void sjrbf_Error(void *obj, int code)
+void SJRBF_Error(void *obj, int code)
 {
     SJERR_CallErr("SJRBF Error");
 }
@@ -150,7 +150,7 @@ SjRbfObj *sjrbf_Create(char *buf, int bsize, int xsize)
         sj->bsize = bsize;
         sj->xsize = xsize;
         sj->uuid = sjrbf_uuid;
-        sj->err = sjrbf_Error;
+        sj->err = SJRBF_Error;
         sj->errobj = sj;
         sjrbf_Reset(sj);
     }

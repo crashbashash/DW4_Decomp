@@ -125,7 +125,7 @@ char *ADXSJD_GetDataId(AdxSjdObj *sjd);
 int ADXSJD_GetDecDtLen(AdxSjdObj *sjd);
 void ADXSJD_EntryDecFunc(AdxSjdObj *sjd, AdxtDecFunc func, void *obj);
 void ADXSJD_SetLnkSw(AdxSjdObj *sjd, int sw);
-void ADXSJD_SetKeyString(AdxSjdObj *sjd, char *str);
+void ADXSJD_SetExtString(AdxSjdObj *sjd, char *str);
 void ADXSJD_SetDefKeyString(char *str);
 void ADXSJD_ResetDefFmt(AdxSjdObj *sjd);
 int ADXSJD_AdjustSmpl(AdxSjdObj *sjd, int nsmpl);
@@ -150,7 +150,7 @@ void LSC_Stop(LscObj *lsc);
 void ADXERR_EntryErrFunc(AdxtErrFunc func, void *obj);
 int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
 int ADX_DecodeInfoAinf(unsigned char *hdr, int size, int *ainfsiz, char *dataid, short *volume, short *pan);
-int ADX_DecodeHeader(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
+int ADX_DecodeInfo(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
                      signed char *bits, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl);
 void ADXT_AttachPl2(AdxtObj *adxt, char *work, int worksize);
 
@@ -162,7 +162,7 @@ int ADXT_GetNumSmplObuf(AdxtObj *adxt, int ch);
 void ADXT_ExecServer(void);
 
 /* Prints how much of channel 0's output sits in the EE-side SJ and in the IOP-side SJ. */
-void ADXT_DumpBufStat(AdxtObj *adxt)
+void adxt_disp_rna_stat(AdxtObj *adxt)
 {
     AdxRna *rna = adxt->rna;
     int sjrmt = PS2RNA_GetSjRmt(rna, 0);
@@ -287,7 +287,7 @@ void ADXT_DetachAhx(AdxtObj *adxt)
     }
 }
 
-void ADXT_DetachMpa(AdxtObj *adxt)
+void adxt_detach_ac3(AdxtObj *adxt)
 {
     if (adxt_detach_mpa != 0) {
         adxt_detach_mpa(adxt);
@@ -311,7 +311,7 @@ void ADXT_Destroy(AdxtObj *adxt)
         return;
     }
     ADXT_DetachAhx(adxt);
-    ADXT_DetachMpa(adxt);
+    adxt_detach_ac3(adxt);
     ADXT_DetachPl2(adxt);
     if (adxt->used == 1) {
         ADXT_Stop(adxt);
@@ -507,7 +507,7 @@ void ADXT_SetTimeMode(int mode)
 }
 
 /* The time the renderer has played, as a sample count and a rate. */
-void ADXT_GetTimeRna(AdxtObj *adxt, int *ncount, int *tscale)
+void ADXT_GetTimeSfreq(AdxtObj *adxt, int *ncount, int *tscale)
 {
     if (adxt->stat == ADXT_STAT_PLAYING || adxt->stat == ADXT_STAT_DECEND) {
         ADXRNA_GetTime(adxt->rna, ncount, tscale);
@@ -523,7 +523,7 @@ void ADXT_GetTimeRna(AdxtObj *adxt, int *ncount, int *tscale)
 }
 
 /* The time played, from the decoded samples less those still queued for the renderer. */
-void adxt_GetTimeSmpl(AdxtObj *adxt, int *ncount, int *tscale)
+void ADXT_GetTimeSfreq2(AdxtObj *adxt, int *ncount, int *tscale)
 {
     int ndec;
     int nrna;
@@ -545,7 +545,7 @@ void adxt_GetTimeSmpl(AdxtObj *adxt, int *ncount, int *tscale)
     *ncount += adxt->time_ofst;
 }
 
-void adxt_IncTimeResync(void)
+void adxt_time_adjust_trap(void)
 {
     adxt_time_resync_cnt++;
 }
@@ -564,7 +564,7 @@ void ADXT_GetTime(AdxtObj *adxt, int *ncount, int *tscale)
         return;
     }
     if (adxt_time_mode == ADXT_TMODE_STD) {
-        adxt_GetTimeSmpl(adxt, ncount, tscale);
+        ADXT_GetTimeSfreq2(adxt, ncount, tscale);
         return;
     }
     adxt_time_diff = 0;
@@ -574,7 +574,7 @@ void ADXT_GetTime(AdxtObj *adxt, int *ncount, int *tscale)
         } else {
             *ncount = adxt->vtime;
         }
-        adxt_GetTimeSmpl(adxt, &nsmpl, &sfreq);
+        ADXT_GetTimeSfreq2(adxt, &nsmpl, &sfreq);
         diff = ((float)nsmpl / (float)sfreq - (float)*ncount / (float)adxt_time_unit) * 1000.0f;
         adxt_time_diff = diff;
         if (diff > ADXT_TIME_RESYNC_MS || diff < -ADXT_TIME_RESYNC_MS) {
@@ -583,7 +583,7 @@ void ADXT_GetTime(AdxtObj *adxt, int *ncount, int *tscale)
                 adxt_time_mode = ADXT_TMODE_STD;
                 ADXT_GetTime(adxt, &nsmpl, &sfreq);
                 adxt_time_mode = mode;
-                adxt_IncTimeResync();
+                adxt_time_adjust_trap();
             }
             adxt->vtime = (float)nsmpl / (float)sfreq * (float)adxt_time_unit;
             adxt->vbase = adxt_vsync_cnt;
@@ -1100,11 +1100,11 @@ int ADXT_GetOutMode(void)
     return ADXRNA_GetOutMode();
 }
 
-void ADXT_SetFx(AdxtObj *adxt, int fxch, int fxlev)
+void ADXT_SetTranspose(AdxtObj *adxt, int fxch, int fxlev)
 {
 }
 
-void ADXT_GetFx(AdxtObj *adxt, int *fxch, int *fxlev)
+void ADXT_GetTranspose(AdxtObj *adxt, int *fxch, int *fxlev)
 {
 }
 
@@ -1234,7 +1234,7 @@ void ADXT_EntryDecFunc(AdxtObj *adxt, AdxtDecFunc func, void *obj)
 }
 
 /* Whether the data starts with an ADX header (0x8000 then its length); returns the length. */
-int adxt_IsHeader(unsigned char *buf, int len, int *hdrlen)
+int ADXT_IsHeader(unsigned char *buf, int len, int *hdrlen)
 {
     short ofst;
     signed char type;
@@ -1253,7 +1253,7 @@ int adxt_IsHeader(unsigned char *buf, int len, int *hdrlen)
     if ((unsigned short)((word >> 8) | (word << 8)) != 0x8000) {
         return 0;
     }
-    if (ADX_DecodeHeader(buf, len, &ofst, &type, &bsize, &bits, &nch, &sfreq, &nsmpl, &blksmpl) < 0) {
+    if (ADX_DecodeInfo(buf, len, &ofst, &type, &bsize, &bits, &nch, &sfreq, &nsmpl, &blksmpl) < 0) {
         return 0;
     }
     *hdrlen = ofst;
@@ -1261,7 +1261,7 @@ int adxt_IsHeader(unsigned char *buf, int len, int *hdrlen)
 }
 
 /* Whether the data starts with an ADX footer (0x8001). */
-int adxt_IsFooter(unsigned char *buf, int len, int *ftrlen)
+int ADXT_IsEndcode(unsigned char *buf, int len, int *ftrlen)
 {
     unsigned short word;
 
@@ -1301,7 +1301,7 @@ void ADXT_SetKeyString(AdxtObj *adxt, char *str)
         ADXERR_CallErrFunc1(E02080860_ADXT_SetKeyString_parameter_error);
         return;
     }
-    ADXSJD_SetKeyString(adxt->sjd, str);
+    ADXSJD_SetExtString(adxt->sjd, str);
 }
 
 void ADXT_SetDefKeyString(char *str)

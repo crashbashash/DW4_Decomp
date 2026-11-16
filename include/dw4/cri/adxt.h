@@ -145,8 +145,8 @@ void ADXT_Stop(AdxtObj *adxt);
 int ADXT_GetStat(AdxtObj *adxt);
 int ADXT_GetNumChan(AdxtObj *adxt);
 void ADXT_SetOutPan(AdxtObj *adxt, int ch, int pan);
-void ADXT_SetFx(AdxtObj *adxt, int fxch, int fxlev);
-void ADXT_GetFx(AdxtObj *adxt, int *fxch, int *fxlev);
+void ADXT_SetTranspose(AdxtObj *adxt, int fxch, int fxlev);
+void ADXT_GetTranspose(AdxtObj *adxt, int *fxch, int *fxlev);
 void ADXT_SetLnkSw(AdxtObj *adxt, int sw);
 
 /* adxtsvr.c */

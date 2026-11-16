@@ -1,10 +1,10 @@
 typedef struct { int w[32]; } Info;
 typedef struct { char pad[88]; Info info; } Obj;
-int FUN_0028b098();
-void FUN_002855d8();
+int M2VLIB_CheckHn();
+void M2VERR_SetCode();
 void FUN_00285720(Obj *o, Info *out) {
-    if (FUN_0028b098(o) != 0) {
-        FUN_002855d8(0, 0xFF03020C);
+    if (M2VLIB_CheckHn(o) != 0) {
+        M2VERR_SetCode(0, 0xFF03020C);
         return;
     }
     *out = o->info;

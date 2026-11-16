@@ -3,13 +3,13 @@
  * supported (0xFF000701). */
 
 int sfd_ReportError();
-int SFD_GetCond();
-int sfbuf_GetRead();
-int sfbuf_AddRead();
-int sfbuf_GetFlagA();
-int sfbuf_GetFlagB();
-int sftim_IsSpanReached();
-int sftim_IsReady();
+int SFSET_GetCond();
+int SFBUF_VfrmGetRead();
+int SFBUF_VfrmAddRead();
+int SFBUF_GetPrepFlg();
+int SFBUF_GetTermFlg();
+int SFTIM_IsGetFrmTime();
+int SFTIM_IsVideoTerm();
 int sftrn_SetFlagA();
 int sftrn_SetFlagB();
 int sftrn_GetFlagA();
@@ -31,106 +31,106 @@ typedef struct SfoutHn {
     SfoutTrn trn[9];
 } SfoutHn;
 
-int sfout_IsWriteReady(SfoutHn *hn);
-int sfout_IsReadReady(SfoutHn *hn);
-int sfout_Exec(SfoutHn *hn);
-void sfout_UpdateWrite(SfoutHn *hn);
-void sfout_UpdateRead(SfoutHn *hn);
+int sfvom_IsTerm(SfoutHn *hn);
+int sfvom_IsPrepEnd(SfoutHn *hn);
+int sfvom_OutputServer(SfoutHn *hn);
+void sfvom_ChkTermFlg(SfoutHn *hn);
+void sfvom_ChkPrepFlg(SfoutHn *hn);
 
-int sfout_InitFn(void) {
+int SFVOM_Init(void) {
     return 0;
 }
 
-int sfout_FinishFn(void) {
+int SFVOM_Finish(void) {
     return 0;
 }
 
-int sfout_ExecServer(SfoutHn *hn) {
+int SFVOM_ExecServer(SfoutHn *hn) {
     int result;
 
-    if (SFD_GetCond(hn, 5) == 0) {
+    if (SFSET_GetCond(hn, 5) == 0) {
         return 0;
     }
-    sfout_UpdateWrite(hn);
-    result = sfout_Exec(hn);
-    sfout_UpdateRead(hn);
+    sfvom_ChkTermFlg(hn);
+    result = sfvom_OutputServer(hn);
+    sfvom_ChkPrepFlg(hn);
     return result;
 }
 
-void sfout_UpdateWrite(SfoutHn *hn) {
-    if (sftrn_GetFlagB(hn, SFOUT_SLOT) != 1 && sfbuf_GetFlagB(hn, hn->trn[SFOUT_SLOT].from) == 1
-        && sfout_IsWriteReady(hn) != 0) {
+void sfvom_ChkTermFlg(SfoutHn *hn) {
+    if (sftrn_GetFlagB(hn, SFOUT_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFOUT_SLOT].from) == 1
+        && sfvom_IsTerm(hn) != 0) {
         sftrn_SetFlagB(hn, SFOUT_SLOT, 1);
     }
 }
 
-int sfout_IsWriteReady(SfoutHn *hn) {
-    if (SFD_GetCond(hn, 15) == 0) {
+int sfvom_IsTerm(SfoutHn *hn) {
+    if (SFSET_GetCond(hn, 15) == 0) {
         return 1;
     }
-    return sftim_IsReady(hn) != 0;
+    return SFTIM_IsVideoTerm(hn) != 0;
 }
 
-void sfout_UpdateRead(SfoutHn *hn) {
-    if (sftrn_GetFlagA(hn, SFOUT_SLOT) != 1 && sfbuf_GetFlagA(hn, hn->trn[SFOUT_SLOT].from) == 1
-        && sfout_IsReadReady(hn) != 0) {
+void sfvom_ChkPrepFlg(SfoutHn *hn) {
+    if (sftrn_GetFlagA(hn, SFOUT_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFOUT_SLOT].from) == 1
+        && sfvom_IsPrepEnd(hn) != 0) {
         sftrn_SetFlagA(hn, SFOUT_SLOT, 1);
     }
 }
 
-int sfout_IsReadReady(SfoutHn *hn) {
+int sfvom_IsPrepEnd(SfoutHn *hn) {
     return 1;
 }
 
-int sfout_Exec(SfoutHn *hn) {
+int sfvom_OutputServer(SfoutHn *hn) {
     return 0;
 }
 
-int sfout_CreateFn(void) {
+int SFVOM_Create(void) {
     return 0;
 }
 
-int sfout_DestroyFn(void) {
+int SFVOM_Destroy(void) {
     return 0;
 }
 
-int sfout_StartFn(void) {
+int SFVOM_Standby(void) {
     return 0;
 }
 
-int sfout_StopFn(void) {
+int SFVOM_Start(void) {
     return 0;
 }
 
-int sfout_PauseFn(void) {
+int SFVOM_Stop(void) {
     return 0;
 }
 
-int sfout_SeekFn(void) {
+int SFVOM_Pause(void) {
     return 0;
 }
 
-void sfout_GetWriteFn(SfoutHn *hn) {
+void SFVOM_GetWrite(SfoutHn *hn) {
     sfd_ReportError(hn, 0xFF000701);
 }
 
-void sfout_AddWriteFn(SfoutHn *hn) {
+void SFVOM_AddWrite(SfoutHn *hn) {
     sfd_ReportError(hn, 0xFF000701);
 }
 
 /* Only while playing, and only data whose time has come. */
-int sfout_GetReadFn(SfoutHn *hn, int *data) {
+int SFVOM_GetRead(SfoutHn *hn, int *data) {
     int result;
 
     if ((unsigned int)(hn->stat - 3) >= 2) {
         *data = 0;
         return 0;
     }
-    result = sfbuf_GetRead(hn, hn->trn[SFOUT_SLOT].from, data);
+    result = SFBUF_VfrmGetRead(hn, hn->trn[SFOUT_SLOT].from, data);
     if (result != 0) {
         return result;
     }
-    result = sftim_IsSpanReached(hn, *data);
+    result = SFTIM_IsGetFrmTime(hn, *data);
     if (result == 0) {
         *data = 0;
         return result;
@@ -138,10 +138,10 @@ int sfout_GetReadFn(SfoutHn *hn, int *data) {
     return 0;
 }
 
-void sfout_AddReadFn(SfoutHn *hn, int size) {
-    sfbuf_AddRead(hn, hn->trn[SFOUT_SLOT].from, size);
+void SFVOM_AddRead(SfoutHn *hn, int size) {
+    SFBUF_VfrmAddRead(hn, hn->trn[SFOUT_SLOT].from, size);
 }
 
-int sfout_TermFn(void) {
+int SFVOM_Seek(void) {
     return 0;
 }

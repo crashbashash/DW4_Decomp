@@ -49,14 +49,14 @@ void ADXT_SetLnkSw(AdxtHandle *adxt, int value);
 void ADXERR_ItoA2(int value, int extra, char *text, int size);
 int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
 char *ADXF_GetFnameFromPt(int ptid);
-void FUN_00263768(AdxtHandle *adxt, const char *name, int first, int last);
+void ADXT_EntryFnameRange(AdxtHandle *adxt, const char *name, int first, int last);
 void ADXT_EntryAfs(AdxtHandle *adxt, int afs, int fid);
 
 void FUN_00263748(AdxtHandle *adxt, const char *name) {
-    FUN_00263768(adxt, name, 0, 0xFFFFF);
+    ADXT_EntryFnameRange(adxt, name, 0, 0xFFFFF);
 }
 
-void FUN_00263768(AdxtHandle *adxt, const char *name, int first, int last) {
+void ADXT_EntryFnameRange(AdxtHandle *adxt, const char *name, int first, int last) {
     /* the file list is read before the null check (retail loads it in the branch delay slot) */
     void *stm = adxt->stm;
     if (adxt == 0) {
@@ -86,7 +86,7 @@ void ADXT_EntryAfs(AdxtHandle *adxt, int afs, int fid) {
     }
 }
 
-void FUN_002638a0(AdxtHandle *adxt) {
+void ADXT_StartSeamless(AdxtHandle *adxt) {
     void *stm = adxt->stm;
     AdxtSj *sji;
     if (adxt == 0) {
@@ -105,7 +105,7 @@ void FUN_002638a0(AdxtHandle *adxt) {
     ADXT_SetLnkSw(adxt, 1);
 }
 
-void FUN_00263950(AdxtHandle *adxt, int enable) {
+void ADXT_SetSeamlessLp(AdxtHandle *adxt, int enable) {
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee1a8);
         return;
@@ -113,14 +113,14 @@ void FUN_00263950(AdxtHandle *adxt, int enable) {
     LSC_SetLpFlg(adxt->stm, enable);
 }
 
-void FUN_002639a0(AdxtHandle *adxt, const char *name, int first, int last);
+void ADXT_StartFnameLp(AdxtHandle *adxt, const char *name, int first, int last);
 
 void ADXT_EntryFname(AdxtHandle *adxt, const char *name)
 {
-    FUN_002639a0(adxt, name, 0, 0xfffff);
+    ADXT_StartFnameLp(adxt, name, 0, 0xfffff);
 }
 
-void FUN_002639a0(AdxtHandle *adxt, const char *name, int first, int last) {
+void ADXT_StartFnameLp(AdxtHandle *adxt, const char *name, int first, int last) {
     void *stm;
     if (adxt == 0 || name == 0) {
         ADXERR_CallErrFunc1(DAT_004ee1d8);
@@ -128,12 +128,12 @@ void FUN_002639a0(AdxtHandle *adxt, const char *name, int first, int last) {
     }
     stm = adxt->stm;
     LSC_Stop(stm);
-    FUN_00263768(adxt, name, first, last);
+    ADXT_EntryFnameRange(adxt, name, first, last);
     LSC_SetLpFlg(stm, 1);
-    FUN_002638a0(adxt);
+    ADXT_StartSeamless(adxt);
 }
 
-void FUN_00263a50(AdxtHandle *adxt, int afs, unsigned int fid) {
+void ADXT_StartAfsLp(AdxtHandle *adxt, int afs, unsigned int fid) {
     void *stm;
     if (adxt == 0 || afs >= 1 || fid > 0x10000) {
         ADXERR_CallErrFunc1(DAT_004ee210);
@@ -143,14 +143,14 @@ void FUN_00263a50(AdxtHandle *adxt, int afs, unsigned int fid) {
     LSC_Stop(stm);
     ADXT_EntryAfs(adxt, afs, fid);
     LSC_SetLpFlg(stm, 1);
-    FUN_002638a0(adxt);
+    ADXT_StartSeamless(adxt);
 }
 
-void FUN_00263b00(void)
+void ADXT_ReleaseSeamless(void)
 {
 }
 
-int FUN_00263b08(AdxtHandle *adxt) {
+int ADXT_GetNumFiles(AdxtHandle *adxt) {
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee240);
         return -1;
@@ -158,7 +158,7 @@ int FUN_00263b08(AdxtHandle *adxt) {
     return LSC_GetNumStm(adxt->stm);
 }
 
-void FUN_00263b40(AdxtHandle *adxt) {
+void ADXT_ResetEntry(AdxtHandle *adxt) {
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee270);
         return;

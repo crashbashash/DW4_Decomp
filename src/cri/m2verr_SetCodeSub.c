@@ -4,7 +4,7 @@ typedef struct SofdecCallback {
     int enabled;
 } SofdecCallback;
 
-int FUN_00285628(SofdecCallback *cb, int enabled) {
+int m2verr_SetCodeSub(SofdecCallback *cb, int enabled) {
     cb->enabled = enabled;
     if (enabled != 0) {
         enabled = (int)cb->fn;

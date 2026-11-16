@@ -9,10 +9,10 @@ SFX alpha functions carry CRI's own names, taken from the GameCube builds of the
 
 | file | unit | range | what it is | evidence |
 | --- | --- | --- | --- | --- |
-| `src/cri/sfdainf.c` | `cri_sfdainf` | `0x2b0ed0` up to `0x2b1410` | the additional-information channel: the handler of stream graph slot 8, which passes the slot's buffer channel to up to three user outputs (`SFD_SetAinfMem`, `SFD_SetAinfSj`) | errors `0xFF0006xx` only in this run; its 14-entry handler table at `0x4f5278` lists the functions in code order from `sfainf_InitFn` to `sfainf_TermFn`; the setters reset the list the table's create entry builds |
-| `src/cri/sfdout.c` | `cri_sfdout` | `0x2b1410` up to `0x2b16e0` | the output handler of stream graph slot 6: the application reads the slot's buffer channel through its GetRead and AddRead entries, gated by the time block | errors `0xFF0007xx`; its handler table at `0x4f52b0` follows the first and lists `sfout_InitFn` up to `sfout_TermFn` in code order |
-| `src/cri/sfh.c` | `cri_sfh` | `0x2b16e0` up to `0x2b2ee8` | SFH (`CRI SFH/PS2EE Ver.1.19`): the header sector of a Sofdec stream: handle pool, magic and version checks, file information and the per-stream audio and video descriptors | its read-only data `0x4f52f0` up to `0x4f53b0` (the `SFH Version` and copyright strings, the build string `SFH_GetVersionStr` returns, `SofdecStream`, `Ver.` and the jump table of `sfh_FrmRateCodeToRate`) follows the second handler table; its bss is `0x585688` up to `0x5856a0` |
-| `src/cri/sfxa.c` | `cri_sfxa` | `0x2b2ee8` up to `0x2b31d8` | SFX alpha: the alpha handles an SFX handle keeps (`SfxHn.ahn`): the parameters of the CFT colour table and the three alpha levels of the CFT alpha tables, then three frame helpers | its data `sfxa_lib` (`0x4beb58`, 200 bytes) sits between the time-stamp file's data and SFX's library object at `0x4bec28`; `sfxa_Init` and `sfxa_Finish` are called from SFX's init and finish; the SFX conversion code at `0x2b31d8` starts with the next read-only data (`sfxcnv_` messages) |
+| `src/cri/sfdainf.c` | `cri_sfdainf` | `0x2b0ed0` up to `0x2b1410` | the additional-information channel: the handler of stream graph slot 8, which passes the slot's buffer channel to up to three user outputs (`SFD_SetSystemUsrSj`, `SFD_SetUsrSj`) | errors `0xFF0006xx` only in this run; its 14-entry handler table at `0x4f5278` lists the functions in code order from `SFUO_Init` to `SFUO_Seek`; the setters reset the list the table's create entry builds |
+| `src/cri/sfdout.c` | `cri_sfdout` | `0x2b1410` up to `0x2b16e0` | the output handler of stream graph slot 6: the application reads the slot's buffer channel through its GetRead and AddRead entries, gated by the time block | errors `0xFF0007xx`; its handler table at `0x4f52b0` follows the first and lists `SFVOM_Init` up to `SFVOM_Seek` in code order |
+| `src/cri/sfh.c` | `cri_sfh` | `0x2b16e0` up to `0x2b2ee8` | SFH (`CRI SFH/PS2EE Ver.1.19`): the header sector of a Sofdec stream: handle pool, magic and version checks, file information and the per-stream audio and video descriptors | its read-only data `0x4f52f0` up to `0x4f53b0` (the `SFH Version` and copyright strings, the build string `SFH_GetSbverStr` returns, `SofdecStream`, `Ver.` and the jump table of `getPicRate`) follows the second handler table; its bss is `0x585688` up to `0x5856a0` |
+| `src/cri/sfxa.c` | `cri_sfxa` | `0x2b2ee8` up to `0x2b31d8` | SFX alpha: the alpha handles an SFX handle keeps (`SfxHn.ahn`): the parameters of the CFT colour table and the three alpha levels of the CFT alpha tables, then three frame helpers | its data `sfxa_lib` (`0x4beb58`, 200 bytes) sits between the time-stamp file's data and SFX's library object at `0x4bec28`; `SFXA_Init` and `SFXA_Finish` are called from SFX's init and finish; the SFX conversion code at `0x2b31d8` starts with the next read-only data (`sfxcnv_` messages) |
 
 Each file declares its own types. The two handlers see the stream graph entry (`0x44` bytes at handle +7976) only
 as far as they use it; `SfainfTrn.list` is the word the graph code keeps as `f8`. SFH's handle (`SfhHn`, 16 bytes)
@@ -38,7 +38,7 @@ address sits in `v1` and the loop comes out with the move in the slot and a pad 
 - The handler tables at `0x4f5278` and `0x4f52b0` are not defined in C; nothing in the code references them, only
   the module lists in MWSFD's data.
 - What the stream graph slots 6 and 8 carry: the file names `sfdout` and `sfdainf` rest on behaviour and on the
-  MWSFD caller that sets the additional-information stream join through `SFD_SetAinfSj`.
+  MWSFD caller that sets the additional-information stream join through `SFD_SetUsrSj`.
 - `SFX_SetClipping`, `SFX_SetBottomUpDstBuf` and `SFX_SetBottomUpPlnBuf` are called from nowhere in the image.
 - Medium confidence: the SFH getters of the file, element and header fields outside the `SFH_AnlyNumElem*` and `SFH_AnlyFtr*`
   names (the other `SFH_Anly*` getters, `SFH_IsSfdHeader`, `SFH_IsExistStmId`, `SFH_IsEffFtrInf`, `SFH_AnlyMaxPicSiz` and
@@ -47,10 +47,10 @@ address sits in `v1` and the loop comes out with the move in the slot and a pad 
   `convAsciiToDigit`, `getElemInfPtr`, `isEnableAudFtr`, `isEnableVidFtr`, `chkStmId`) and the SFX alpha names `SFXA_SetLumiPrm`,
   `SFXA_GetLumiPrm`, `SFXA_SetAlp3Prm`, `SFXA_GetAlp3Prm`, `sfxalp_SearchFreeHn`, `sfxalp_InitHn`, `SFX_SetClipping`,
   `SFX_SetBottomUpDstBuf` and `SFX_SetBottomUpPlnBuf` (`SFXA_Create`, `SFXA_Destroy`, `SFXA_MakeAlpLumiTbl`,
-  `SFXA_MakeAlp3110Tbl`, `SFXA_MakeAlp3211Tbl` and `SFXA_IsNeedUpdateLumiTbl` come from the GameCube library's own symbols and are
+  `SFXA_MakeAlp3110Tbl`, `SFXA_MakeAlp3Tbl` and `SFXA_IsNeedUpdateLumiTbl` come from the GameCube library's own symbols and are
   high). Source: the Persona 3 FES PlayStation 2 symbol list (its provenance is not stated), whose order and
   sizes match this library one for one, with Persona 4's proven names where it has them and the Shadow the Hedgehog `sfh_main.c`
   for the offsets and tests. The two bottom-up helpers have identical bodies, so the Dst/Pln split rests on that list's order
   alone; the GameCube library keeps them in `sfx_cnv.c`, not in the SFX alpha file.
-- `SFH_GetVersionStr` and `sfh_IsStatAnalysed` keep their names: the Persona 3 list has `SFH_CheckStructSiz` and an unnamed
+- `SFH_GetSbverStr` and `SFH_CheckStructSiz` keep their names: the Persona 3 list has `SFH_CheckStructSiz` and an unnamed
   function in those slots (low confidence).

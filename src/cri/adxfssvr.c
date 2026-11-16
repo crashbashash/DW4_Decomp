@@ -2,10 +2,10 @@
 
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);
-void FUN_00272118(void);
+void SRD_ExecServer(void);
 void cvFsExecServer(void);
 void ADXSTM_ExecServer(void);
-void FUN_00262398(void);
+void ADXF_ExecServer(void);
 
 /* The step the running pass has reached, 0 when no pass is running. */
 int adxt_fssvr_step = 0;
@@ -20,19 +20,19 @@ void ADXT_ExecFsSvr(void)
     adxt_fssvr_step = 1;
     ADXCRS_Unlock();
     adxt_fssvr_step = 2;
-    FUN_00272118();
+    SRD_ExecServer();
     adxt_fssvr_step = 3;
     cvFsExecServer();
     adxt_fssvr_step = 4;
     ADXSTM_ExecServer();
     adxt_fssvr_step = 5;
-    FUN_00262398();
+    ADXF_ExecServer();
     adxt_fssvr_step = 6;
     ADXSTM_ExecServer();
     adxt_fssvr_step = 7;
     cvFsExecServer();
     adxt_fssvr_step = 8;
-    FUN_00272118();
+    SRD_ExecServer();
     adxt_fssvr_step = 0;
 }
 

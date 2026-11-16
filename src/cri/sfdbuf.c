@@ -71,24 +71,24 @@ int FUN_002b0338();
 int FUN_002b03e8(SfdBufHn *h, int n);
 
 void FUN_0029ebb0(void);
-void FUN_0029d5f8(char **areas, int *sizes, char *base);
-int FUN_0029d638(SfdBufEnt *ents, char **areas, int *sizes, int index, int extra);
+void sfbuf_MakeBufPtr(char **areas, int *sizes, char *base);
+int sfbuf_InitRingSj(SfdBufEnt *ents, char **areas, int *sizes, int index, int extra);
 int FUN_0029d6f8(SfdBufInf *inf, char *data, int size, int extra);
-void FUN_0029d7d0(SfdBufHn *h, int index);
-void FUN_0029d838(SfdBufHn *h, SfdBufEnt *ents, char **areas, int *sizes, int index);
-void FUN_0029d8f0(SfdBufEnt *ents, char **areas, int *sizes, int index);
-void FUN_0029da18(SfdBufEnt *ents, char **areas, int *sizes, int index);
-void FUN_0029da68(SfdBufEnt *ent, int state, int flag);
-void FUN_0029da88(void *body);
-int sfbuf_ChkInf(SfdBufInf *inf);
-int FUN_0029dba8(SfdBufHn *h, SfdBufInf *inf, int index);
-void FUN_0029dc18(SfdBufBody *body, void *src, SfdBufEnt *ent, int flag);
-void FUN_0029dcb8(SfdBufCur *cur);
+void sfbuf_DestroySjSub(SfdBufHn *h, int index);
+void sfbuf_InitVfrmBuf(SfdBufHn *h, SfdBufEnt *ents, char **areas, int *sizes, int index);
+void sfbuf_InitAringBuf(SfdBufEnt *ents, char **areas, int *sizes, int index);
+void sfbuf_InitUoSjBuf(SfdBufEnt *ents, char **areas, int *sizes, int index);
+void sfbuf_InitBufData(SfdBufEnt *ent, int state, int flag);
+void sfbuf_InitUoSj(void *body);
+int sfbuf_ChkSupSj(SfdBufInf *inf);
+int sfbuf_SetSupplySjSub(SfdBufHn *h, SfdBufInf *inf, int index);
+void sfbuf_SetSupSj(SfdBufBody *body, void *src, SfdBufEnt *ent, int flag);
+void sfbuf_InitConti(SfdBufCur *cur);
 int sfbuf_GetStat(SfdBufHn *h, int index, SfdBufStat *stat, int id);
-int FUN_0029de88(SfdBufHn *h, int index, int len, int id);
-void FUN_0029dfd8(SfdBufBody *body);
-int sfbuf_PeekChunks(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second);
-int FUN_0029e160(SfdSj *sj, int id, int len);
+int sfbuf_RingAddSub(SfdBufHn *h, int index, int len, int id);
+void sfbuf_ResetConti(SfdBufBody *body);
+int sfbuf_PeekChunk(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second);
+int sfbuf_MoveChunk(SfdSj *sj, int id, int len);
 int FUN_0029ec40(SfdSj *sj);
 int FUN_0029ec78(SfdSj *sj);
 
@@ -96,32 +96,32 @@ void sfbuf_Init(void) {
     FUN_0029ebb0();
 }
 
-void sfbuf_Finish(void) {
+void SFBUF_Finish(void) {
 }
 
-int FUN_0029d4c0(SfdBufHn *h, SfdBufEnt *ents, SfdBufCrePrm *prm) {
+int SFBUF_InitHn(SfdBufHn *h, SfdBufEnt *ents, SfdBufCrePrm *prm) {
     int *sizes = prm->sizes;
     char *areas[8];
     int ret;
-    FUN_0029d5f8(areas, sizes, prm->work);
-    ret = FUN_0029d638(ents, areas, sizes, 0, sizes[0] % prm->unit);
+    sfbuf_MakeBufPtr(areas, sizes, prm->work);
+    ret = sfbuf_InitRingSj(ents, areas, sizes, 0, sizes[0] % prm->unit);
     if (ret != 0)
         return ret;
-    ret = FUN_0029d638(ents, areas, sizes, 1, 2048);
+    ret = sfbuf_InitRingSj(ents, areas, sizes, 1, 2048);
     if (ret != 0)
         return ret;
-    ret = FUN_0029d638(ents, areas, sizes, 2, 0);
+    ret = sfbuf_InitRingSj(ents, areas, sizes, 2, 0);
     if (ret != 0)
         return ret;
-    FUN_0029d838(h, ents, areas, sizes, 3);
-    FUN_0029d8f0(ents, areas, sizes, 4);
-    FUN_0029d838(h, ents, areas, sizes, 5);
-    FUN_0029d8f0(ents, areas, sizes, 6);
-    FUN_0029da18(ents, areas, sizes, 7);
+    sfbuf_InitVfrmBuf(h, ents, areas, sizes, 3);
+    sfbuf_InitAringBuf(ents, areas, sizes, 4);
+    sfbuf_InitVfrmBuf(h, ents, areas, sizes, 5);
+    sfbuf_InitAringBuf(ents, areas, sizes, 6);
+    sfbuf_InitUoSjBuf(ents, areas, sizes, 7);
     return 0;
 }
 
-void FUN_0029d5f8(char **areas, int *sizes, char *base) {
+void sfbuf_MakeBufPtr(char **areas, int *sizes, char *base) {
     int i;
     for (i = 0; i < 8; i++) {
         areas[i] = base;
@@ -129,7 +129,7 @@ void FUN_0029d5f8(char **areas, int *sizes, char *base) {
     }
 }
 
-int FUN_0029d638(SfdBufEnt *ents, char **areas, int *sizes, int index, int extra) {
+int sfbuf_InitRingSj(SfdBufEnt *ents, char **areas, int *sizes, int index, int extra) {
     SfdBufInf inf;
     SfdBufEnt *ent = &ents[index];
     SfdBufBody *body = &ent->body;
@@ -151,9 +151,9 @@ int FUN_0029d638(SfdBufEnt *ents, char **areas, int *sizes, int index, int extra
         if (status != 0) {
             return status;
         }
-        FUN_0029dc18(body, &inf, ent, 1);
+        sfbuf_SetSupSj(body, &inf, ent, 1);
     }
-    FUN_0029da68(ent, state, flag);
+    sfbuf_InitBufData(ent, state, flag);
     return 0;
 }
 
@@ -177,13 +177,13 @@ int FUN_0029d6f8(SfdBufInf *inf, char *data, int size, int extra) {
     return 0;
 }
 
-void FUN_0029d790(SfdBufHn *h) {
-    FUN_0029d7d0(h, 0);
-    FUN_0029d7d0(h, 1);
-    FUN_0029d7d0(h, 2);
+void SFBUF_DestroySj(SfdBufHn *h) {
+    sfbuf_DestroySjSub(h, 0);
+    sfbuf_DestroySjSub(h, 1);
+    sfbuf_DestroySjSub(h, 2);
 }
 
-void FUN_0029d7d0(SfdBufHn *h, int index) {
+void sfbuf_DestroySjSub(SfdBufHn *h, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     SfdBufInf *inf = &ent->body.inf;
@@ -197,12 +197,12 @@ void FUN_0029d7d0(SfdBufHn *h, int index) {
     }
 }
 
-void FUN_0029d838(SfdBufHn *h, SfdBufEnt *ents, char **areas, int *sizes, int index) {
+void sfbuf_InitVfrmBuf(SfdBufHn *h, SfdBufEnt *ents, char **areas, int *sizes, int index) {
     char **area = &areas[index];
     int *size = &sizes[index];
     SfdBufInf *inf = &ents[index].body.inf;
     int i;
-    FUN_0029da68(&ents[index], 1, *size != 0);
+    sfbuf_InitBufData(&ents[index], 1, *size != 0);
     inf->data = *area;
     inf->sj = (SfdSj *)*size;
     inf->buf = 0;
@@ -213,12 +213,12 @@ void FUN_0029d838(SfdBufHn *h, SfdBufEnt *ents, char **areas, int *sizes, int in
     }
 }
 
-void FUN_0029d8f0(SfdBufEnt *ents, char **areas, int *sizes, int index) {
+void sfbuf_InitAringBuf(SfdBufEnt *ents, char **areas, int *sizes, int index) {
     char **area = &areas[index];
     int *size = &sizes[index];
     SfdBufEnt *ent = &ents[index];
     SfdBufBody *body = &ent->body;
-    FUN_0029da68(ent, 2, *size != 0);
+    sfbuf_InitBufData(ent, 2, *size != 0);
     body->inf.data = *area;
     body->inf.sj = (SfdSj *)*size;
     body->inf.buf = 0;
@@ -233,7 +233,7 @@ void FUN_0029d8f0(SfdBufEnt *ents, char **areas, int *sizes, int index) {
     body->f44 = 0;
 }
 
-void sfbuf_SetRingInf(SfdBufHn *h, int index, int bits, int count, int value) {
+void SFBUF_FixAringBuf(SfdBufHn *h, int index, int bits, int count, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     SfdBufBody *body = &ent->body;
@@ -255,14 +255,14 @@ void sfbuf_SetRingInf(SfdBufHn *h, int index, int bits, int count, int value) {
     body->cur.len = size / bytes;
 }
 
-void FUN_0029da18(SfdBufEnt *ents, char **areas, int *sizes, int index) {
+void sfbuf_InitUoSjBuf(SfdBufEnt *ents, char **areas, int *sizes, int index) {
     SfdBufEnt *ent = &ents[index];
     void *body = &ent->body;
-    FUN_0029da68(ent, 3, 1);
-    FUN_0029da88(body);
+    sfbuf_InitBufData(ent, 3, 1);
+    sfbuf_InitUoSj(body);
 }
 
-void FUN_0029da68(SfdBufEnt *ent, int state, int flag) {
+void sfbuf_InitBufData(SfdBufEnt *ent, int state, int flag) {
     ent->state = state;
     ent->valid = flag;
     ent->f8 = 0;
@@ -271,7 +271,7 @@ void FUN_0029da68(SfdBufEnt *ent, int state, int flag) {
     ent->f80 = 9;
 }
 
-void FUN_0029da88(void *body) {
+void sfbuf_InitUoSj(void *body) {
     int *p = body;
     int i = 2;
     do {
@@ -284,9 +284,9 @@ void FUN_0029da88(void *body) {
     } while (i >= 0);
 }
 
-void FUN_0029dab8(SfdBufHn *h, SfdBufInf *inf) {
+void SFBUF_SetSupplySj(SfdBufHn *h, SfdBufInf *inf) {
     int index;
-    if (sfbuf_ChkInf(inf) != 0) {
+    if (sfbuf_ChkSupSj(inf) != 0) {
         sfd_ReportError(h, 0xFF000408);
         return;
     }
@@ -299,10 +299,10 @@ void FUN_0029dab8(SfdBufHn *h, SfdBufInf *inf) {
     } else {
         index = 0;
     }
-    FUN_0029dba8(h, inf, index);
+    sfbuf_SetSupplySjSub(h, inf, index);
 }
 
-int sfbuf_ChkInf(SfdBufInf *inf) {
+int sfbuf_ChkSupSj(SfdBufInf *inf) {
     if (inf->sj == 0) {
         return -1;
     }
@@ -320,36 +320,36 @@ int sfbuf_ChkInf(SfdBufInf *inf) {
     return 0;
 }
 
-int FUN_0029dba8(SfdBufHn *h, SfdBufInf *inf, int index) {
+int sfbuf_SetSupplySjSub(SfdBufHn *h, SfdBufInf *inf, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     SfdBufBody *body = &ent->body;
     if (ent->state != 4) {
         return sfd_ReportError(h, 0xFF000409);
     }
-    FUN_0029dc18(body, inf, ent, inf->sj != 0);
+    sfbuf_SetSupSj(body, inf, ent, inf->sj != 0);
     return 0;
 }
 
-void FUN_0029dc18(SfdBufBody *body, void *src, SfdBufEnt *ent, int flag) {
+void sfbuf_SetSupSj(SfdBufBody *body, void *src, SfdBufEnt *ent, int flag) {
     int lock;
     sfd_Lock(&lock);
     ent->valid = flag;
     memcpy(&body->inf, src, sizeof(SfdBufInf));
-    FUN_0029dcb8(&body->cur);
+    sfbuf_InitConti(&body->cur);
     body->f32 = 0;
     body->f36 = 0;
     FUN_002ac6d0(&body->f40);
     sfd_Unlock(&lock);
 }
 
-void FUN_0029dcb8(SfdBufCur *cur) {
+void sfbuf_InitConti(SfdBufCur *cur) {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     cur->pos = 0;
     cur->len = 0;
 }
 
-void sfbuf_SetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
+void SFBUF_SetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     char *slots = (char *)&ent->body;
@@ -357,7 +357,7 @@ void sfbuf_SetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
     memcpy(slots, uoch, 16);
 }
 
-void sfbuf_GetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
+void SFBUF_GetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     char *slots = (char *)&ent->body;
@@ -365,7 +365,7 @@ void sfbuf_GetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
     memcpy(uoch, slots, 16);
 }
 
-void FUN_0029dd58(SfdBufHn *h, int index, SfdSj **out) {
+void SFBUF_GetRingSj(SfdBufHn *h, int index, SfdSj **out) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     *out = ent->body.inf.sj;
@@ -389,7 +389,7 @@ int sfbuf_GetStat(SfdBufHn *h, int index, SfdBufStat *stat, int id) {
     if (ent->valid == 0 || sj == 0) {
         return 0;
     }
-    sfbuf_PeekChunks(sj, id, &first, &second);
+    sfbuf_PeekChunk(sj, id, &first, &second);
     stat->ck0.data = first.data;
     stat->ck0.len = first.len;
     stat->ck1.data = second.data;
@@ -397,28 +397,28 @@ int sfbuf_GetStat(SfdBufHn *h, int index, SfdBufStat *stat, int id) {
     return 0;
 }
 
-void sfbuf_GetWriteStat(SfdBufHn *h, int index, SfdBufStat *stat) {
+void SFBUF_RingGetWrite(SfdBufHn *h, int index, SfdBufStat *stat) {
     sfbuf_GetStat(h, index, stat, 0);
 }
 
-void sfbuf_GetReadStat(SfdBufHn *h, int index, SfdBufStat *stat) {
+void SFBUF_RingGetRead(SfdBufHn *h, int index, SfdBufStat *stat) {
     sfbuf_GetStat(h, index, stat, 1);
 }
 
-void sfbuf_AddWriteLen(SfdBufHn *h, int index, int len) {
-    FUN_0029de88(h, index, len, 0);
+void SFBUF_RingAddWrite(SfdBufHn *h, int index, int len) {
+    sfbuf_RingAddSub(h, index, len, 0);
 }
 
-void sfbuf_AddReadLen(SfdBufHn *h, int index, int len) {
-    FUN_0029de88(h, index, len, 1);
+void SFBUF_RingAddRead(SfdBufHn *h, int index, int len) {
+    sfbuf_RingAddSub(h, index, len, 1);
 }
 
-void FUN_0029dfd8(SfdBufBody *body) {
+void sfbuf_ResetConti(SfdBufBody *body) {
     SfdBufCur *cur = &body->cur;
     SfdSjChunk first;
     SfdSjChunk second;
     char *pos;
-    sfbuf_PeekChunks(body->inf.sj, 1, &first, &second);
+    sfbuf_PeekChunk(body->inf.sj, 1, &first, &second);
     pos = cur->pos;
     if (pos < first.data || pos >= first.data + first.len) {
         if (pos < second.data || pos >= second.data + second.len) {
@@ -428,7 +428,7 @@ void FUN_0029dfd8(SfdBufBody *body) {
     }
 }
 
-int sfbuf_PeekChunks(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second) {
+int sfbuf_PeekChunk(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second) {
     int available = sj->vtbl->getNumData(sj, id);
     sj->vtbl->getChunk(sj, id, 0x7FFFFFFF, first);
     if (first->len < available) {
@@ -442,7 +442,7 @@ int sfbuf_PeekChunks(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second) {
     return available;
 }
 
-int FUN_0029e160(SfdSj *sj, int id, int len) {
+int sfbuf_MoveChunk(SfdSj *sj, int id, int len) {
     SfdSjChunk ck;
     int other = id == 0;
     sj->vtbl->getChunk(sj, id, len, &ck);
@@ -450,7 +450,7 @@ int FUN_0029e160(SfdSj *sj, int id, int len) {
     return ck.len;
 }
 
-void FUN_0029e1b8(SfdBufHn *h, int index, int *pos, int *len) {
+void SFBUF_RingGetDlm(SfdBufHn *h, int index, int *pos, int *len) {
     int lock;
     SfdBufCur *cur = &h->ent[index].body.cur;
     sfd_Lock(&lock);
@@ -459,7 +459,7 @@ void FUN_0029e1b8(SfdBufHn *h, int index, int *pos, int *len) {
     sfd_Unlock(&lock);
 }
 
-void FUN_0029e228(SfdBufHn *h, int index, int pos, int len) {
+void SFBUF_RingSetDlm(SfdBufHn *h, int index, int pos, int len) {
     int lock;
     SfdBufCur *cur = &h->ent[index].body.cur;
     sfd_Lock(&lock);
@@ -468,19 +468,19 @@ void FUN_0029e228(SfdBufHn *h, int index, int pos, int len) {
     sfd_Unlock(&lock);
 }
 
-int FUN_0029e290(SfdBufHn *h, int index) {
+int SFBUF_GetRingBufSiz(SfdBufHn *h, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->body.inf.size;
 }
 
-int FUN_0029e2b0(SfdBufHn *h, int index) {
+int SFBUF_GetRTot(SfdBufHn *h, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->body.f36;
 }
 
-int sfbuf_GetNumData(SfdBufHn *h, int index) {
+int SFBUF_GetWTot(SfdBufHn *h, int index) {
     int lock;
     SfdBufBody *body = &h->ent[index].body;
     int count;
@@ -498,7 +498,7 @@ int sfbuf_GetNumData(SfdBufHn *h, int index) {
     return count;
 }
 
-int FUN_0029e370(SfdBufHn *h, int index, SfdSj **out) {
+int SFBUF_RingGetSj(SfdBufHn *h, int index, SfdSj **out) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent;
     *out = 0;
@@ -510,14 +510,14 @@ int FUN_0029e370(SfdBufHn *h, int index, SfdSj **out) {
     return 0;
 }
 
-void FUN_0029e3d0(SfdBufHn *h, int index, int len) {
+void SFBUF_AddRtotSj(SfdBufHn *h, int index, int len) {
     SfdBufBody *body = &h->ent[index].body;
     if (body->f36 >= 0) {
         body->f36 += len;
     }
 }
 
-int FUN_0029e5b0(SfdBufHn *h, int index, int n) {
+int SFBUF_AringAddWrite(SfdBufHn *h, int index, int n) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     SfdBufBody *body;
@@ -543,7 +543,7 @@ int FUN_0029e5b0(SfdBufHn *h, int index, int n) {
     return ret;
 }
 
-int FUN_0029e858(SfdBufHn *h, int index, int n) {
+int SFBUF_AringAddRead(SfdBufHn *h, int index, int n) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     SfdBufBody *body;
@@ -569,11 +569,11 @@ int FUN_0029e858(SfdBufHn *h, int index, int n) {
     return ret;
 }
 
-int FUN_0029e948(void) {
+int SFBUF_VfrmGetWrite(void) {
     return 0;
 }
 
-int sfbuf_GetRead(SfdBufHn *h, int index, int value) {
+int SFBUF_VfrmGetRead(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     if (ent->valid == 0) {
@@ -582,7 +582,7 @@ int sfbuf_GetRead(SfdBufHn *h, int index, int value) {
     return 0;
 }
 
-int sfbuf_AddRead(SfdBufHn *h, int index, int value) {
+int SFBUF_VfrmAddRead(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     int result = 0;
@@ -593,39 +593,39 @@ int sfbuf_AddRead(SfdBufHn *h, int index, int value) {
     return result;
 }
 
-int sfbuf_SetFlagA(SfdBufHn *h, int index, int value) {
+int SFBUF_SetPrepFlg(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     ent->f8 = value;
 }
 
-int sfbuf_GetFlagA(SfdBufHn *h, int index) {
+int SFBUF_GetPrepFlg(SfdBufHn *h, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->f8;
 }
 
-void sfbuf_SetFlagB(SfdBufHn *h, int index, int value) {
+void SFBUF_SetTermFlg(SfdBufHn *h, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     ent->f12 = value;
 }
 
-int sfbuf_GetFlagB(SfdBufHn *h, int index) {
+int SFBUF_GetTermFlg(SfdBufHn *h, int index) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->f12;
 }
 
-int FUN_0029eaa8(SfdBufHn *h, int index) {
+int SFBUF_RingGetDataSiz(SfdBufHn *h, int index) {
     SfdBufStat stat;
-    sfbuf_GetReadStat(h, index, &stat);
+    SFBUF_RingGetRead(h, index, &stat);
     return stat.ck0.len + stat.ck1.len;
 }
 
-int FUN_0029ead0(SfdBufHn *h, int index) {
+int SFBUF_RingGetFreeSiz(SfdBufHn *h, int index) {
     SfdBufStat stat;
-    sfbuf_GetWriteStat(h, index, &stat);
+    SFBUF_RingGetWrite(h, index, &stat);
     return stat.ck0.len + stat.ck1.len;
 }
 

@@ -11,13 +11,13 @@ struct Pool0028ae28 {
     struct Handle0028ae28 *handles;  /* +68 */
 };
 
-extern struct Pool0028ae28 DAT_00573eb8;
+extern struct Pool0028ae28 m2vlib_libwork;
 
-struct Handle0028ae28 *FUN_0028ae28(void) {
-    struct Handle0028ae28 *handle = DAT_00573eb8.handles;
+struct Handle0028ae28 *m2vlib_SearchFreeHn(void) {
+    struct Handle0028ae28 *handle = m2vlib_libwork.handles;
     int i;
 
-    for (i = 0; i < DAT_00573eb8.count; i++, handle++) {
+    for (i = 0; i < m2vlib_libwork.count; i++, handle++) {
         if (handle->state == 1) {
             return handle;
         }

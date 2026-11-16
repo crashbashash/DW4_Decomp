@@ -104,18 +104,18 @@ extern char E409171_mwPlyGetNumRemainFrm_inv_hn[]; /* "E409171: mwPlyGetNumRemai
 
 void *memset(void *dst, int c, unsigned int n);
 void *memcpy(void *dst, const void *src, unsigned int n);
-void mwsfd_Error(const char *message, ...);
+void MWSFSVM_Error(const char *message, ...);
 int MWSFD_GetUsePicUsr(void);
 int MWSFD_IsEnableHndl(MwsfdPly *ply);
 void *mwPlyGetSfdHn(MwsfdPly *ply);
-void mwsfsfx_SetOutMode(MwsfdPly *ply, int flag);
-void mwsfsfx_SetOutModeByPic(MwsfdPly *ply, int flag);
+void MWSFSFX_SetColAdj(MwsfdPly *ply, int flag);
+void MWSFD_SetColAdj(MwsfdPly *ply, int flag);
 void mwsfsfx_UpdateAddInf(MwsfdPly *ply);
 void mwsfsfx_SetPicUsr(MwsfdPly *ply, char *ud, int udsize);
-int mwsfsfx_GetPicUsrItem3(MwsfdPly *ply);
-int mwsfsfx_GetPicUsrFrmType(MwsfdPly *ply);
+int MWSFSFX_SetPicUsrDat(MwsfdPly *ply);
+int MWSFD_IsFrmDivField(MwsfdPly *ply);
 void UTY_MulDiv(int a, int b, int c);
-void sfmpv_GetPlanes(int a, int b, int c, SfdPlanes *planes);
+void SFD_CalcYccPlane(int a, int b, int c, SfdPlanes *planes);
 void SFD_GetNextPicUsr(void *sfd, char **addr, int *size);
 int SFD_GetNumRemainFrm(void *sfd);
 int SFD_IsNextFrmReady(void *sfd);
@@ -132,13 +132,13 @@ int SFH_IsSfdHeader(SfdHdrHn *hdr, int *present);
 int SFH_AnlyMaxFrmNum(SfdHdrHn *hdr, int *value);
 void SUD_FindTag(char *addr, int size, char **data, int *len);
 
-int mwply_GetFrmSync(MwsfdPly *ply);
-int mwply_HasPicUsrData(MwsfdPly *ply);
-void mwply_CopyPlanes(SfdPlanes *src, MwsfdPlanes *dst);
-int mwply_ConvPicType(unsigned int ptype);
+int MWSFD_GetFrmSync(MwsfdPly *ply);
+int MWSFD_IsEnablePicUsr(MwsfdPly *ply);
+void mwl_convYccPlaneFromSFD(SfdPlanes *src, MwsfdPlanes *dst);
+int mwl_convBufFmtToSFD(unsigned int ptype);
 int mwl_convPtypeToSFD(unsigned int ptype);
 int mwply_GetCurPicHdrInfo(MwsfdPly *ply);
-int mwply_GetPicHdrInfo(SfdHdrHn *hdr);
+int mwsffrm_AnalyTotalFrm(SfdHdrHn *hdr);
 int mwply_GetPicCompoMode(SfdHdrHn *hdr);
 int mwply_IsPicItemType3(SfdHdrHn *hdr);
 void mwply_LogPic(MwsfdPly *ply, char *buf, unsigned int size);
@@ -150,7 +150,7 @@ int mwply_GetCurPicCompoMode(MwsfdPly *ply);
 void mwPlySetFrmSync(MwsfdPly *ply, int frmSync)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error(E1122629_mwPlySetFrmSync_inv_hn);
+        MWSFSVM_Error(E1122629_mwPlySetFrmSync_inv_hn);
         return;
     }
     ply->frmSync = frmSync;
@@ -159,13 +159,13 @@ void mwPlySetFrmSync(MwsfdPly *ply, int frmSync)
 int mwPlyGetFrmSync(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error(E2010801_mwPlyGetFrmSync_inv_hn);
+        MWSFSVM_Error(E2010801_mwPlyGetFrmSync_inv_hn);
         return 0;
     }
-    return mwply_GetFrmSync(ply);
+    return MWSFD_GetFrmSync(ply);
 }
 
-int mwply_GetFrmSync(MwsfdPly *ply)
+int MWSFD_GetFrmSync(MwsfdPly *ply)
 {
     return ply->frmSync;
 }
@@ -186,11 +186,11 @@ void mwply_ApplyItemType3(MwsfdPly *ply)
     int has;
 
     flag = mwply_IsCurPicItemTypeThree(ply) == on;
-    has = mwply_HasPicUsrData(ply);
+    has = MWSFD_IsEnablePicUsr(ply);
     if (has == on) {
-        flag = mwsfsfx_GetPicUsrItem3(ply) == has;
+        flag = MWSFSFX_SetPicUsrDat(ply) == has;
     }
-    mwsfsfx_SetOutModeByPic(ply, flag);
+    MWSFD_SetColAdj(ply, flag);
 }
 
 /* the frame's user data without its 4-byte header; none while picture user data is off or the
@@ -220,7 +220,7 @@ void mwply_MulDivMs(int a, int b, int sec)
     UTY_MulDiv(a, b, sec * 1000);
 }
 
-int mwply_ConvPicTypeFromSFD(unsigned int ptype)
+int mwl_convBufFmtFromSFD(unsigned int ptype)
 {
     int result;
 
@@ -259,7 +259,7 @@ int mwl_convPtypeFromSFD(unsigned int ptype)
         result = 4;
         break;
     default:
-        mwsfd_Error(mwl_convPtypeFromSFD_Invalid_Ptype);
+        MWSFSVM_Error(mwl_convPtypeFromSFD_Invalid_Ptype);
         result = 1;
         break;
     }
@@ -288,10 +288,10 @@ int mwsffrm_DecideFrmType(MwsfdPly *ply, MwsfdPicStat *pic)
         break;
     case 0:
     default:
-        mwsfd_Error(E301271_mwsffrm_DecideFrmType_Invalid_Pstruct);
+        MWSFSVM_Error(E301271_mwsffrm_DecideFrmType_Invalid_Pstruct);
         break;
     }
-    if (MWSFD_GetUsePicUsr() == 1 && mwsfsfx_GetPicUsrFrmType(ply) == 1)
+    if (MWSFD_GetUsePicUsr() == 1 && MWSFD_IsFrmDivField(ply) == 1)
         ret = 2;
     return ret;
 }
@@ -344,7 +344,7 @@ void mwply_UpdatePicUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm)
     mwsfsfx_SetPicUsr(ply, ply->ud, ply->udsize);
 }
 
-void mwPlyGetPicUsrData(MwsfdPly *ply, char **ud, int *udsize)
+void MWSFD_GetPicUsrDat(MwsfdPly *ply, char **ud, int *udsize)
 {
     char *data = ply->ud;
     int size = ply->udsize;
@@ -353,25 +353,25 @@ void mwPlyGetPicUsrData(MwsfdPly *ply, char **ud, int *udsize)
     *ud = data;
 }
 
-int mwply_HasPicUsrData(MwsfdPly *ply)
+int MWSFD_IsEnablePicUsr(MwsfdPly *ply)
 {
     return ply->ud != 0;
 }
 
-void mwply_GetPlanes(int a, int b, int c, MwsfdPlanes *out)
+void mwPlyCalcYccPlane(int a, int b, int c, MwsfdPlanes *out)
 {
     SfdPlanes planes;
 
-    sfmpv_GetPlanes(a, b, c, &planes);
-    mwply_CopyPlanes(&planes, out);
+    SFD_CalcYccPlane(a, b, c, &planes);
+    mwl_convYccPlaneFromSFD(&planes, out);
 }
 
-void mwply_ConvFrmInf(SfdFrmInf *src, MwsfdFrmInf *dst)
+void mwl_convFrmInfToSFD(SfdFrmInf *src, MwsfdFrmInf *dst)
 {
     int f0, ptype, f8, f12, f16, f20, pstruct;
 
     f0 = src->f0;
-    ptype = mwply_ConvPicType(src->ptype);
+    ptype = mwl_convBufFmtToSFD(src->ptype);
     f8 = src->f8;
     f12 = src->f12;
     f16 = src->f16;
@@ -391,7 +391,7 @@ void mwply_ConvFrmInf(SfdFrmInf *src, MwsfdFrmInf *dst)
     dst->f44 = (void *)src->f44;
 }
 
-int mwply_ConvPicType(unsigned int ptype)
+int mwl_convBufFmtToSFD(unsigned int ptype)
 {
     int result;
 
@@ -430,7 +430,7 @@ int mwl_convPtypeToSFD(unsigned int ptype)
         result = 4;
         break;
     default:
-        mwsfd_Error(mwl_convPtypeToSFD_Invalid_Ptype);
+        MWSFSVM_Error(mwl_convPtypeToSFD_Invalid_Ptype);
         result = 1;
         break;
     }
@@ -439,7 +439,7 @@ int mwl_convPtypeToSFD(unsigned int ptype)
 
 /* the SFD plane layout in the order the SFX conversion takes: the three plane addresses (base
  * first) and the matching strides (luma, then chroma twice) */
-void mwply_CopyPlanes(SfdPlanes *src, MwsfdPlanes *dst)
+void mwl_convYccPlaneFromSFD(SfdPlanes *src, MwsfdPlanes *dst)
 {
     dst->addr0 = src->base;
     dst->addr1 = src->luma;
@@ -457,7 +457,7 @@ void mwPlyRelCurFrm(MwsfdPly *ply)
     void *sfd;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error(E1122615_mwPlyRelCurFrm_inv_hn);
+        MWSFSVM_Error(E1122615_mwPlyRelCurFrm_inv_hn);
         return;
     }
     limit = ply->limit;
@@ -473,7 +473,7 @@ void mwPlyRelCurFrm(MwsfdPly *ply)
 int mwPlyIsNextFrmReady(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error(E1122618_mwPlyIsNextFrmReady_inv_hn);
+        MWSFSVM_Error(E1122618_mwPlyIsNextFrmReady_inv_hn);
         return 0;
     }
     return SFD_IsNextFrmReady(mwPlyGetSfdHn(ply));
@@ -486,7 +486,7 @@ void mwPlyGetNextPicUsr(MwsfdPly *ply, char **addr, int *size)
     char *a;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error(E3122201_mwPlyGetNextPicUsr_inv_hn);
+        MWSFSVM_Error(E3122201_mwPlyGetNextPicUsr_inv_hn);
         *addr = 0;
         *size = 0;
     } else {
@@ -501,7 +501,7 @@ void mwPlyGetNextPicUsr(MwsfdPly *ply, char **addr, int *size)
 }
 
 /* the counter advanced by one while below its limit, the counter at the limit, 0 past it */
-int mwply_NextCount(MwsfdPly *ply)
+int MWSFD_GetLastFrmCnt(MwsfdPly *ply)
 {
     int limit = ply->limit;
     int count = ply->count;
@@ -519,7 +519,7 @@ int mwply_NextCount(MwsfdPly *ply)
 int mwPlyGetNumSkipDisp(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error(E202231_mwPlyGetNumSkipDisp_inv_hn);
+        MWSFSVM_Error(E202231_mwPlyGetNumSkipDisp_inv_hn);
         return 0;
     }
     return ply->numSkipDisp;
@@ -530,7 +530,7 @@ void mwPlyGetCurPicHdrInfo(MwsfdPly *ply)
     mwply_GetCurPicHdrInfo(ply);
 }
 
-int mwply_GetPicHdrInfo(SfdHdrHn *hdr)
+int mwsffrm_AnalyTotalFrm(SfdHdrHn *hdr)
 {
     int value;
 
@@ -604,7 +604,7 @@ void mwply_ResetPicLog(MwsfdPly *ply)
         ply->log[i].hdrInfo = 0;
         ply->log[i].compoMode = 17;
     }
-    mwsfsfx_SetOutMode(ply, 0);
+    MWSFSFX_SetColAdj(ply, 0);
 }
 
 void mwply_SetPicUsrCb(MwsfdPly *ply)
@@ -635,7 +635,7 @@ void mwply_LogPic(MwsfdPly *ply, char *buf, unsigned int size)
         return;
     }
     itemTypeThree = mwply_IsPicItemType3(hdr);
-    hdrInfo = mwply_GetPicHdrInfo(hdr);
+    hdrInfo = mwsffrm_AnalyTotalFrm(hdr);
     compoMode = mwply_GetPicCompoMode(hdr);
     i = ply->logWrite;
     ply->log[i].picNo = ply->picCount - 1;
@@ -712,7 +712,7 @@ int mwply_GetLogPos(MwsfdPly *ply)
 int mwPlyGetNumRemainFrm(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error(E409171_mwPlyGetNumRemainFrm_inv_hn);
+        MWSFSVM_Error(E409171_mwPlyGetNumRemainFrm_inv_hn);
         return 0;
     }
     return SFD_GetNumRemainFrm(mwPlyGetSfdHn(ply));

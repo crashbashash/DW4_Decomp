@@ -74,19 +74,19 @@ int strcmp(const char *a, const char *b);
 void FUN_00265928(const char *format, ...);
 void ADXMSG_PrintErr(const char *format, ...);
 
-SrdObj *FUN_00271670(void);
-void FUN_002716f8(SrdObj *stm);
-int FUN_00271888(SrdObj *stm, int fd, long pos, unsigned long nbyte, char *buf);
-int FUN_00271938(SrdObj *stm);
-void FUN_00271b98(SrdObj *stm);
-void FUN_00272118(void);
-void FUN_00272228(void);
-void FUN_002725a0(int marker);
-long SRD_Lseek(int fd, long offset, int whence);
-int FUN_00272838(int fd, int cmd, int *result);
-int FUN_002728b0(const char *name, int flags);
-int FUN_00272918(int fd);
-int FUN_00272970(int fd, void *buf, int size);
+SrdObj *SRD_Create(void);
+void SRD_Destroy(SrdObj *stm);
+int SRD_ReqRdHst(SrdObj *stm, int fd, long pos, unsigned long nbyte, char *buf);
+int SRD_GetStat(SrdObj *stm);
+void SRD_Break(SrdObj *stm);
+void SRD_ExecServer(void);
+void SRD_WaitForExecServer(void);
+void SRD_SetHistory(int marker);
+long SRD_SceLseek(int fd, long offset, int whence);
+int SRD_SceIoctl(int fd, int cmd, int *result);
+int SRD_SceOpen(const char *name, int flags);
+int SRD_SceClose(int fd);
+int SRD_SceRead(int fd, void *buf, int size);
 void SVM_LockVar(void);
 void SVM_UnlockVar(void);
 int SVM_TestAndSet(int *flag);
@@ -94,25 +94,25 @@ int SVM_TestAndSet(int *flag);
 long htCiGetFileSize64(const char *fname);
 void htCiStopTr(HtCiFile *h);
 int htCiGetStat(HtCiFile *h);
-void FUN_00276220(const char *name, char *out);
+void htci_conv_fname(const char *name, char *out);
 int FUN_00276440(char *buf, char *list, int n, int nameLen);
-int FUN_002765e0(const char *name, void *buf);
-int FUN_00276740(HtCiFileLoc *files, int n);
-int FUN_002768f8(void);
-void FUN_00276af0(void);
-void FUN_00276b18(const char *name, HtCiFileLoc *loc);
+int htci_load_flist(const char *name, void *buf);
+int open_file_all(HtCiFileLoc *files, int n);
+int close_file_all(void);
+void htci_init_flist(void);
+void htci_get_finf(const char *name, HtCiFileLoc *loc);
 void htCiSetRootDir(const char *path);
-void FUN_00276da8(const char *prefix);
+void htCiSetAccessName(const char *prefix);
 
 CvFsVtbl *htCiGetInterface(void)
 {
     htci_build;
     htCiSetRootDir(0);
-    FUN_00276da8(0);
+    htCiSetAccessName(0);
     return &htci_vtbl;
 }
 
-void FUN_002753a8(void)
+void htci_wait(void)
 {
     int count;
     /* matching construct: hand search — GCC deletes this empty loop when the test is `count >= 0` */
@@ -120,14 +120,14 @@ void FUN_002753a8(void)
     }
 }
 
-void FUN_002753d8(void *detail, const char *message)
+void htci_call_errfn(void *detail, const char *message)
 {
     if (htci_err_func != 0) {
         htci_err_func(htci_err_obj, message, detail);
     }
 }
 
-int FUN_00275408(void)
+int htci_is_exec_hn(void)
 {
     int i;
     for (i = 0; i < 13; i++) {
@@ -138,13 +138,13 @@ int FUN_00275408(void)
     return 0;
 }
 
-int FUN_00275458(HtCiFile *h)
+int htci_is_exec_hn_one(HtCiFile *h)
 {
     int result;
     int ret;
-    FUN_002725a0(0x4000);
-    result = FUN_00272838(h->fd, 1, &h->f20);
-    FUN_002725a0(0x4001);
+    SRD_SetHistory(0x4000);
+    result = SRD_SceIoctl(h->fd, 1, &h->f20);
+    SRD_SetHistory(0x4001);
     ret = 0;
     if (result >= 0) {
         ret = h->f20 != 1;
@@ -152,7 +152,7 @@ int FUN_00275458(HtCiFile *h)
     return ret;
 }
 
-void FUN_002754c0(HtCiFile *h, int nsct)
+void htci_zero_padding(HtCiFile *h, int nsct)
 {
     unsigned long long end;
     int n;
@@ -163,27 +163,27 @@ void FUN_002754c0(HtCiFile *h, int nsct)
     }
 }
 
-void FUN_00275520(HtCiFile *h)
+void htCiExecHndl(HtCiFile *h)
 {
     if (h->stm == 0)
         return;
     SVM_LockVar();
-    switch (FUN_00271938(h->stm)) {
+    switch (SRD_GetStat(h->stm)) {
     case 9:
         h->state = 3;
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         break;
     case 3:
         h->done = h->req;
         h->pos += h->req;
         h->state = 1;
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         break;
     case 0:
         h->state = 0;
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         break;
     case 1: case 2: case 4: case 5: case 6: case 7: case 8:
@@ -198,7 +198,7 @@ void htCiExecServer(void)
     if (SVM_TestAndSet(&htci_lock) != 0) {
         for (i = 0; i < 13; i++) {
             if (htci_files[i].used == 1) {
-                FUN_00275520(&htci_files[i]);
+                htCiExecHndl(&htci_files[i]);
             }
         }
         htci_lock = 0;
@@ -218,18 +218,18 @@ int htCiIsExistFileOnHost(const char *name)
     if (name == 0) {
         return 0;
     }
-    FUN_00276b18(name, &loc);
+    htci_get_finf(name, &loc);
     if (loc.size == 0) {
-        FUN_00276220(name, htci_path);
-        FUN_002725a0(0x4200);
-        fd = FUN_002728b0(htci_path, 1);
-        FUN_002725a0(0x4201);
+        htci_conv_fname(name, htci_path);
+        SRD_SetHistory(0x4200);
+        fd = SRD_SceOpen(htci_path, 1);
+        SRD_SetHistory(0x4201);
         if (fd < 0) {
             return 0;
         }
-        FUN_002725a0(0x4300);
-        FUN_00272918(fd);
-        FUN_002725a0(0x4301);
+        SRD_SetHistory(0x4300);
+        SRD_SceClose(fd);
+        SRD_SetHistory(0x4301);
     }
     return 1;
 }
@@ -245,48 +245,48 @@ long htCiGetFileSize64(const char *fname)
     long size;
     int fd;
     if (fname == 0) {
-        FUN_002753d8(0, "E0092704:fname is null.(htCiGetFileSize)");
+        htci_call_errfn(0, "E0092704:fname is null.(htCiGetFileSize)");
         return 0;
     }
-    FUN_00276b18(fname, &loc);
+    htci_get_finf(fname, &loc);
     if (loc.size == 0) {
-        FUN_00276220(fname, htci_path);
-        FUN_002725a0(0x4400);
-        fd = FUN_002728b0(htci_path, 1);
-        FUN_002725a0(0x4401);
+        htci_conv_fname(fname, htci_path);
+        SRD_SetHistory(0x4400);
+        fd = SRD_SceOpen(htci_path, 1);
+        SRD_SetHistory(0x4401);
         if (fd < 0) {
             ADXMSG_PrintErr("HTCI: sceOpen failed. \"%s\"\n", htci_path);
-            FUN_002753d8(0, "E0092705:sceOpen fail.(htCiGetFileSize)");
+            htci_call_errfn(0, "E0092705:sceOpen fail.(htCiGetFileSize)");
             return 0;
         }
         if (fd == 0x10004) {
             ADXMSG_PrintErr("HTCI: sceOpen failed. IOP Module version is invalid.\n");
-            FUN_002753d8(0, "E0082101:sceOpen fail.(htCiGetFileSize)");
+            htci_call_errfn(0, "E0082101:sceOpen fail.(htCiGetFileSize)");
             return 0;
         }
         if (fd == 19) {
             ADXMSG_PrintErr("HTCI: sceOpen failed. file desc is insufficient.\n");
-            FUN_002753d8(0, "E0082101:sceOpen fail.(htCiGetFileSize)");
+            htci_call_errfn(0, "E0082101:sceOpen fail.(htCiGetFileSize)");
             return 0;
         }
-        FUN_002725a0(0x4600);
-        SRD_Lseek(fd, 0, 0);
-        FUN_002725a0(0x4601);
-        FUN_002725a0(0x4600);
-        size = SRD_Lseek(fd, 0, 2);
-        FUN_002725a0(0x4601);
+        SRD_SetHistory(0x4600);
+        SRD_SceLseek(fd, 0, 0);
+        SRD_SetHistory(0x4601);
+        SRD_SetHistory(0x4600);
+        size = SRD_SceLseek(fd, 0, 2);
+        SRD_SetHistory(0x4601);
         if (size < 0) {
-            FUN_002753d8(0, "E0092706:sceLseek fail.(htCiGetFileSize)");
-            FUN_002725a0(0x4500);
-            FUN_00272918(fd);
-            FUN_002725a0(0x4501);
+            htci_call_errfn(0, "E0092706:sceLseek fail.(htCiGetFileSize)");
+            SRD_SetHistory(0x4500);
+            SRD_SceClose(fd);
+            SRD_SetHistory(0x4501);
             return 0;
         }
-        FUN_002725a0(0x5000);
-        fd = FUN_00272918(fd);
-        FUN_002725a0(0x5001);
+        SRD_SetHistory(0x5000);
+        fd = SRD_SceClose(fd);
+        SRD_SetHistory(0x5001);
         if (fd < 0) {
-            FUN_002753d8(0, "E0092707:sceClose fail.(htCiGetFileSize)");
+            htci_call_errfn(0, "E0092707:sceClose fail.(htCiGetFileSize)");
             return 0;
         }
     } else {
@@ -295,25 +295,25 @@ long htCiGetFileSize64(const char *fname)
     return size;
 }
 
-long FUN_002758f8(int fd)
+long htci_get_fsize_opened(int fd)
 {
     long result;
-    FUN_002725a0(0x4700);
-    result = SRD_Lseek(fd, 0, 0);
-    FUN_002725a0(0x4701);
+    SRD_SetHistory(0x4700);
+    result = SRD_SceLseek(fd, 0, 0);
+    SRD_SetHistory(0x4701);
     if (result < 0) {
         return 0;
     }
-    FUN_002725a0(0x4800);
-    result = SRD_Lseek(fd, 0, 2);
-    FUN_002725a0(0x4801);
+    SRD_SetHistory(0x4800);
+    result = SRD_SceLseek(fd, 0, 2);
+    SRD_SetHistory(0x4801);
     if (result < 0) {
         return 0;
     }
     return result;
 }
 
-HtCiFile *FUN_00275980(void)
+HtCiFile *htci_alloc(void)
 {
     HtCiFile *found = 0;
     int i;
@@ -325,7 +325,7 @@ HtCiFile *FUN_00275980(void)
     return found;
 }
 
-void FUN_002759b8(HtCiFile *h)
+void htci_free(HtCiFile *h)
 {
     memset(h, 0, sizeof(HtCiFile));
 }
@@ -336,32 +336,32 @@ HtCiFile *htCiOpen(const char *fname, void *atr, int rw)
     HtCiFile *h;
     memset(&loc, 0, sizeof(loc));
     if (fname == 0) {
-        FUN_002753d8(0, "E0092708:fname is null.(htCiOpen)");
+        htci_call_errfn(0, "E0092708:fname is null.(htCiOpen)");
         return 0;
     }
     if (rw != 0) {
-        FUN_002753d8(0, "E0092709:rw is illigal.(htCiOpen)");
+        htci_call_errfn(0, "E0092709:rw is illigal.(htCiOpen)");
         return 0;
     }
-    h = FUN_00275980();
+    h = htci_alloc();
     if (h == 0) {
-        FUN_002753d8(0, "E0092710:not enough handle resource.(htCiOpen)");
+        htci_call_errfn(0, "E0092710:not enough handle resource.(htCiOpen)");
         return 0;
     }
-    FUN_00276b18(fname, &loc);
+    htci_get_finf(fname, &loc);
     if (loc.size == 0) {
-        FUN_00276220(fname, htci_path);
+        htci_conv_fname(fname, htci_path);
         FUN_00265928("HTCI: File cache was not hit. \"%s\"\n", fname);
         h->size = htCiGetFileSize64(fname);
         if (h->size == 0) {
             return 0;
         }
-        FUN_002725a0(0x4900);
-        h->fd = FUN_002728b0(htci_path, htci_open_mode);
-        FUN_002725a0(0x4901);
+        SRD_SetHistory(0x4900);
+        h->fd = SRD_SceOpen(htci_path, htci_open_mode);
+        SRD_SetHistory(0x4901);
         if (h->fd < 0) {
-            FUN_002753d8(0, "E0092711:sceOpen fail.(htCiOpen)");
-            FUN_002759b8(h);
+            htci_call_errfn(0, "E0092711:sceOpen fail.(htCiOpen)");
+            htci_free(h);
             return 0;
         }
         h->cached = 0;
@@ -388,15 +388,15 @@ void htCiClose(HtCiFile *h)
             htCiStopTr(h);
         }
         if (h->cached == 0) {
-            FUN_002725a0(0x5000);
-            result = FUN_00272918(h->fd);
-            FUN_002725a0(0x5001);
+            SRD_SetHistory(0x5000);
+            result = SRD_SceClose(h->fd);
+            SRD_SetHistory(0x5001);
             if (result < 0) {
                 FUN_00265928("HTCI: Failed sceClose\n");
             }
         }
         h->used = 0;
-        FUN_002759b8(h);
+        htci_free(h);
     }
 }
 
@@ -404,7 +404,7 @@ int htCiSeek(HtCiFile *h, int offset, int origin)
 {
     int position;
     if (h == 0) {
-        FUN_002753d8(h, "E0092712:handl is null.");
+        htci_call_errfn(h, "E0092712:handl is null.");
         return 0;
     }
     if (origin == 0) {
@@ -429,7 +429,7 @@ int htCiSeek(HtCiFile *h, int offset, int origin)
 int htCiTell(HtCiFile *h)
 {
     if (h == 0) {
-        FUN_002753d8(0, "E0092712:handl is null.");
+        htci_call_errfn(0, "E0092712:handl is null.");
         return 0;
     }
     return h->pos;
@@ -439,18 +439,18 @@ int htCiReqRd(HtCiFile *h, int nsct, char *buf)
 {
     unsigned long nbyte;
     if (h == 0) {
-        FUN_002753d8(h, "E0092712:handl is null.");
+        htci_call_errfn(h, "E0092712:handl is null.");
         return 0;
     }
     if (nsct < 0) {
-        FUN_002753d8(h, "E0092713:nsct < 0.(htCiReqRd)");
+        htci_call_errfn(h, "E0092713:nsct < 0.(htCiReqRd)");
         return 0;
     }
     if (buf == 0) {
-        FUN_002753d8(h, "E0092714:buf is null.(htCiReqRd)");
+        htci_call_errfn(h, "E0092714:buf is null.(htCiReqRd)");
         return 0;
     }
-    if (FUN_00275408() == 1) {
+    if (htci_is_exec_hn() == 1) {
         return 0;
     }
     if (h->state == 2) {
@@ -460,7 +460,7 @@ int htCiReqRd(HtCiFile *h, int nsct, char *buf)
         h->state = 1;
         return 0;
     }
-    h->stm = FUN_00271670();
+    h->stm = SRD_Create();
     if (h->stm == 0) {
         return 0;
     }
@@ -470,15 +470,15 @@ int htCiReqRd(HtCiFile *h, int nsct, char *buf)
     if (h->size < nbyte) {
         nbyte = h->size;
     }
-    FUN_002754c0(h, h->req);
-    if (FUN_00271888(h->stm, h->fd, h->pos, nbyte, buf) == 0) {
+    htci_zero_padding(h, h->req);
+    if (SRD_ReqRdHst(h->stm, h->fd, h->pos, nbyte, buf) == 0) {
         return 0;
     }
     if (htci_open_mode == 1) {
-        FUN_00272228();
-        FUN_00272118();
+        SRD_WaitForExecServer();
+        SRD_ExecServer();
         h->pos += h->req;
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         h->state = 1;
         h->done = h->req;
@@ -495,17 +495,17 @@ void htCiStopTr(HtCiFile *h)
     int i;
     i = 0;
     if (h == 0) {
-        FUN_002753d8(0, "E0082401:handl is null.");
+        htci_call_errfn(0, "E0082401:handl is null.");
         return;
     }
     if ((unsigned char)h->state < 2) {
         return;
     }
     if (h->stm != 0) {
-        FUN_00271b98(h->stm);
+        SRD_Break(h->stm);
     }
     while (1) {
-        FUN_00272118();
+        SRD_ExecServer();
         htCiExecServer();
         htCiGetStat(h);
         if (h->state != 2) {
@@ -515,7 +515,7 @@ void htCiStopTr(HtCiFile *h)
             ADXMSG_PrintErr("HTCI: htCiStopTr timeout.\r\n");
             break;
         }
-        FUN_002753a8();
+        htci_wait();
     }
     h->state = 0;
     h->done = 0;
@@ -524,7 +524,7 @@ void htCiStopTr(HtCiFile *h)
 int htCiGetStat(HtCiFile *h)
 {
     if (h == 0) {
-        FUN_002753d8(0, "E0092712:handl is null.");
+        htci_call_errfn(0, "E0092712:handl is null.");
         return 0;
     }
     return h->state;
@@ -538,7 +538,7 @@ int htCiGetSctLen(void)
 int htCiGetNumTr(HtCiFile *h)
 {
     if (h == 0) {
-        FUN_002753d8(0, "E0092712:handl is null.");
+        htci_call_errfn(0, "E0092712:handl is null.");
         return 0;
     }
     if (h->state == 1) {
@@ -547,35 +547,35 @@ int htCiGetNumTr(HtCiFile *h)
     return 0;
 }
 
-long FUN_00275fd8(const char *fname)
+long htci_get_filesize64(const char *fname)
 {
     return htCiGetFileSize64(fname);
 }
 
-int FUN_00275ff0(h)
+int htci_getnumtr_upper(h)
     HtCiFile *h;
 {
     unsigned long long size = (long long)h->done << 11;
     return (long long)(h->size < size ? h->size : size) >> 32;
 }
 
-int FUN_00276010(h)
+int htci_getnumtr_lower(h)
     HtCiFile *h;
 {
     unsigned long long size = (long long)h->done << 11;
     return (int)((h->size < size ? h->size : size) & 0xFFFFFFFF);
 }
 
-int FUN_00276040(fname)
+int htci_filesize_upper(fname)
     const char *fname;
 {
-    return FUN_00275fd8(fname) >> 0x20;
+    return htci_get_filesize64(fname) >> 0x20;
 }
 
-int FUN_00276060(fname)
+int htci_filesize_lower(fname)
     const char *fname;
 {
-    return (int)(FUN_00275fd8(fname) & 0xFFFFFFFF);
+    return (int)(htci_get_filesize64(fname) & 0xFFFFFFFF);
 }
 
 /* matching construct: old-style getter definitions called with no arguments; retail never loads a0 before these calls */
@@ -588,18 +588,18 @@ int htCiOptFn1(void *obj, int code)
     }
     switch (code) {
     case 200:
-        result = FUN_00275ff0();
+        result = htci_getnumtr_upper();
         break;
     case 201:
-        result = FUN_00276010();
+        result = htci_getnumtr_lower();
         break;
     case 202:
     case 204:
-        result = FUN_00276040();
+        result = htci_filesize_upper();
         break;
     case 203:
     case 205:
-        result = FUN_00276060();
+        result = htci_filesize_lower();
         break;
     case 299:
         result = 1;
@@ -608,7 +608,7 @@ int htCiOptFn1(void *obj, int code)
     return result;
 }
 
-int FUN_00276158(const char *path)
+int htci_is_inc_colon(const char *path)
 {
     unsigned int len;
     unsigned int i;
@@ -624,7 +624,7 @@ int FUN_00276158(const char *path)
     return 0;
 }
 
-int FUN_002761c8(const char *tag)
+int htci_is_bgn_host(const char *tag)
 {
     char buf[6];
     memset(buf, 0, 6);
@@ -633,16 +633,16 @@ int FUN_002761c8(const char *tag)
     return strcmp(buf, "host") == 0;
 }
 
-void FUN_00276220(const char *name, char *out)
+void htci_conv_fname(const char *name, char *out)
 {
     char c;
     int len;
     int i;
     out[0] = 0;
-    if (FUN_00276158(name) == 0) {
+    if (htci_is_inc_colon(name) == 0) {
         strcpy(out, htci_prefix);
     }
-    if (FUN_002761c8(out) == 1) {
+    if (htci_is_bgn_host(out) == 1) {
         strcat(out, htci_root_dir);
         c = htci_root_dir[strlen(htci_root_dir) - 1];
         if (c != '\\' && c != '/' && c != 0 && name[0] != '\\' && name[0] != '/') {
@@ -658,19 +658,19 @@ void FUN_00276220(const char *name, char *out)
     }
 }
 
-char FUN_00276338(char c)
+char htci_conv_cmp(char c)
 {
     return ((c ^ 0x5C) != 0) ? c : 0x2F;
 }
 
-int FUN_00276350(char a, char b)
+int htci_charicmp(char a, char b)
 {
     int ca;
-    ca = FUN_00276338(a);
-    return ((ca ^ FUN_00276338(b)) != 0) ? -1 : 0;
+    ca = htci_conv_cmp(a);
+    return ((ca ^ htci_conv_cmp(b)) != 0) ? -1 : 0;
 }
 
-int FUN_002763a8(const char *a, const char *b)
+int htci_stricmp(const char *a, const char *b)
 {
     int len;
     int i;
@@ -679,7 +679,7 @@ int FUN_002763a8(const char *a, const char *b)
         return -1;
     }
     for (i = 0; i < len; i++) {
-        if (FUN_00276350(a[i], b[i]) != 0) {
+        if (htci_charicmp(a[i], b[i]) != 0) {
             return -1;
         }
     }
@@ -730,51 +730,51 @@ int FUN_00276440(char *buf, char *list, int n, int nameLen)
     return count;
 }
 
-int FUN_002765e0(const char *name, void *buf)
+int htci_load_flist(const char *name, void *buf)
 {
     char path[256];
     int fd;
     long size;
     int ret;
     memset(path, 0, 256);
-    FUN_00276220(name, path);
-    FUN_002725a0(0x6000);
-    fd = FUN_002728b0(path, 1);
-    FUN_002725a0(0x6001);
+    htci_conv_fname(name, path);
+    SRD_SetHistory(0x6000);
+    fd = SRD_SceOpen(path, 1);
+    SRD_SetHistory(0x6001);
     if (fd < 0) {
         return 0;
     }
-    FUN_002725a0(0x6100);
-    size = SRD_Lseek(fd, 0, 2);
-    FUN_002725a0(0x6101);
+    SRD_SetHistory(0x6100);
+    size = SRD_SceLseek(fd, 0, 2);
+    SRD_SetHistory(0x6101);
     if (size < 0) {
         return 0;
     }
-    FUN_002725a0(0x6200);
-    ret = SRD_Lseek(fd, 0, 0);
-    FUN_002725a0(0x6201);
+    SRD_SetHistory(0x6200);
+    ret = SRD_SceLseek(fd, 0, 0);
+    SRD_SetHistory(0x6201);
     if (ret < 0) {
         return 0;
     }
     if (size > 4096) {
         size = 4096;
     }
-    FUN_002725a0(0x6300);
-    ret = FUN_00272970(fd, buf, size);
-    FUN_002725a0(0x6301);
+    SRD_SetHistory(0x6300);
+    ret = SRD_SceRead(fd, buf, size);
+    SRD_SetHistory(0x6301);
     if (ret < 0) {
-        FUN_002725a0(0x6500);
-        FUN_00272918(fd);
-        FUN_002725a0(0x6501);
+        SRD_SetHistory(0x6500);
+        SRD_SceClose(fd);
+        SRD_SetHistory(0x6501);
         return 0;
     }
-    FUN_002725a0(0x6400);
-    FUN_00272918(fd);
-    FUN_002725a0(0x6401);
+    SRD_SetHistory(0x6400);
+    SRD_SceClose(fd);
+    SRD_SetHistory(0x6401);
     return 1;
 }
 
-int FUN_00276740(HtCiFileLoc *files, int n)
+int open_file_all(HtCiFileLoc *files, int n)
 {
     char path[256];
     char *name;
@@ -790,13 +790,13 @@ int FUN_00276740(HtCiFileLoc *files, int n)
     }
     for (i = 0; i < n; i++) {
         name = (char *)files + (htci_dir_table.nent * 8 + (htci_dir_table.namelen + 1) * i);
-        FUN_00276220(name, path);
+        htci_conv_fname(name, path);
         if (name[0] == 0) {
             continue;
         }
-        FUN_002725a0(0x6600);
-        fd = FUN_002728b0(path, 1);
-        FUN_002725a0(0x6601);
+        SRD_SetHistory(0x6600);
+        fd = SRD_SceOpen(path, 1);
+        SRD_SetHistory(0x6601);
         if (fd < 0) {
             failed++;
             FUN_00265928("HTCI: \"%s\" can't Open.(sceOpen)\n", path);
@@ -804,14 +804,14 @@ int FUN_00276740(HtCiFileLoc *files, int n)
         }
         files[i].fd = fd;
         opened++;
-        files[i].size = FUN_002758f8(fd);
+        files[i].size = htci_get_fsize_opened(fd);
         FUN_00265928("HTCI: \"%s\" Opened.(sceOpen)\n", name);
-        FUN_002725a0(0x6800);
-        FUN_00272918(fd);
-        FUN_002725a0(0x6801);
-        FUN_002725a0(0x6700);
-        FUN_002728b0(path, htci_open_mode);
-        FUN_002725a0(0x6701);
+        SRD_SetHistory(0x6800);
+        SRD_SceClose(fd);
+        SRD_SetHistory(0x6801);
+        SRD_SetHistory(0x6700);
+        SRD_SceOpen(path, htci_open_mode);
+        SRD_SetHistory(0x6701);
     }
     FUN_00265928("HTCI: Total %d files.\n", opened);
     if (failed > 0) {
@@ -820,7 +820,7 @@ int FUN_00276740(HtCiFileLoc *files, int n)
     return opened;
 }
 
-int FUN_002768f8(void)
+int close_file_all(void)
 {
     char path[256];
     HtCiFileLoc *files;
@@ -837,13 +837,13 @@ int FUN_002768f8(void)
     n = htci_dir_table.nfiles;
     for (i = 0; i < n; i++) {
         name = (char *)files + (htci_dir_table.nent * 8 + (htci_dir_table.namelen + 1) * i);
-        FUN_00276220(name, path);
+        htci_conv_fname(name, path);
         if (name[0] == 0) {
             continue;
         }
-        FUN_002725a0(0x6900);
-        ret = FUN_00272918(files[i].fd);
-        FUN_002725a0(0x6901);
+        SRD_SetHistory(0x6900);
+        ret = SRD_SceClose(files[i].fd);
+        SRD_SetHistory(0x6901);
         if (ret < 0) {
             ADXMSG_PrintErr("HTCI: \"%s\" can't Close.(sceClose)\n", path);
         } else {
@@ -852,17 +852,17 @@ int FUN_002768f8(void)
         }
     }
     ADXMSG_PrintErr("HTCI: Total %d files\n", closed);
-    FUN_00276af0();
+    htci_init_flist();
     return 1;
 }
 
 /* matching construct: 16-variant sweep — the address sum */
-void FUN_00276a28(HtCiFileLoc *out, const char *name, HtCiFileLoc *entries, int n)
+void get_fstate(HtCiFileLoc *out, const char *name, HtCiFileLoc *entries, int n)
 {
     int i;
     for (i = 0; i < n; i++) {
         const char *entryName = (char *)entries + (htci_dir_table.nent * sizeof(HtCiFileLoc) + i * (htci_dir_table.namelen + 1));
-        if (FUN_002763a8(name, entryName) == 0) {
+        if (htci_stricmp(name, entryName) == 0) {
             out->fd = entries[i].fd;
             out->size = entries[i].size;
             return;
@@ -872,17 +872,17 @@ void FUN_00276a28(HtCiFileLoc *out, const char *name, HtCiFileLoc *entries, int 
     out->size = 0;
 }
 
-void FUN_00276af0(void)
+void htci_init_flist(void)
 {
     memset(&htci_dir_table, 0, sizeof(HtCiTable));
 }
 
-void FUN_00276b18(const char *name, HtCiFileLoc *loc)
+void htci_get_finf(const char *name, HtCiFileLoc *loc)
 {
     loc->fd = 0;
     loc->size = 0;
     if (htci_dir_table.files != 0) {
-        FUN_00276a28(loc, name, (HtCiFileLoc *)htci_dir_table.files, htci_dir_table.nfiles);
+        get_fstate(loc, name, (HtCiFileLoc *)htci_dir_table.files, htci_dir_table.nfiles);
     }
 }
 
@@ -893,9 +893,9 @@ int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen)
     int stride;
     memset(htci_dir_buf, 0, 4096);
     if (htci_dir_table.files == 0) {
-        FUN_00276af0();
+        htci_init_flist();
     }
-    FUN_002768f8();
+    close_file_all();
     if (path == 0) {
         return 0;
     }
@@ -908,21 +908,21 @@ int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen)
         return 0;
     }
     memset(buf, 0, size);
-    if (FUN_002765e0(path, htci_dir_buf) == 0) {
+    if (htci_load_flist(path, htci_dir_buf) == 0) {
         FUN_00265928("HTCI: Can't read filelist file.(%s)\n", path);
-        FUN_002753d8(0, "E0111501:can't read filelist.(htCiLoadDirInfo)");
+        htci_call_errfn(0, "E0111501:can't read filelist.(htCiLoadDirInfo)");
         return 0;
     }
     n = FUN_00276440(buf, htci_dir_buf, size / (nameLen + 9), nameLen);
     stride = nameLen + 1;
-    found = FUN_00276740(buf, n);
+    found = open_file_all(buf, n);
     return size / (nameLen + 9) * 8 + found * stride;
 }
 
-int htCiIsExistFile(const char *name)
+int htCiIsExistFcache(const char *name)
 {
     HtCiFileLoc loc;
-    FUN_00276b18(name, &loc);
+    htci_get_finf(name, &loc);
     return loc.size != 0;
 }
 
@@ -956,12 +956,12 @@ void htCiSetRootDir(const char *path)
     strcpy(htci_root_dir, path);
 }
 
-char *FUN_00276d98(void)
+char *htCiGetRootDir(void)
 {
     return htci_root_dir;
 }
 
-void FUN_00276da8(const char *prefix)
+void htCiSetAccessName(const char *prefix)
 {
     if (prefix == 0) {
         strcpy(htci_prefix, "host:");
@@ -970,22 +970,22 @@ void FUN_00276da8(const char *prefix)
     }
 }
 
-char *FUN_00276e10(void)
+char *htCiGetAccessName(void)
 {
     return htci_prefix;
 }
 
-int FUN_00276e20(void)
+int htci_get_opmode(void)
 {
     return htci_open_mode;
 }
 
-void FUN_00276e30(int value)
+void htCiSetOutputDebugLevel(int value)
 {
     htci_option = value;
 }
 
-int FUN_00276e40(void)
+int htCiGetOutputDebugLevel(void)
 {
     return htci_option;
 }

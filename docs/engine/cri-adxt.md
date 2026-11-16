@@ -48,13 +48,13 @@ or restarts it from the start of its input.
 - One error code, `ADXT_ERR_SHRTBUF` (-1), stands for a starved input, a file that cannot be opened and a read
   error.
 - Names from behaviour, without a string: `ADXT_CreatePl2`, `ADXT_DestroyAll`, `ADXT_CloseAllHandles`,
-  `ADXT_StopWithoutLsc`, `ADXT_GetTimeRna`, `ADXT_GetTimeReal`, `ADXT_GetDefOutVol`, `ADXT_GetDefPan`,
+  `ADXT_StopWithoutLsc`, `ADXT_GetTimeSfreq`, `ADXT_GetTimeReal`, `ADXT_GetDefOutVol`, `ADXT_GetDefPan`,
   `ADXT_GetDataId`, `ADXT_SetDefSvrFreq`, `ADXT_SetAutoRcvr`, `ADXT_ExecSvr` (a wrapper of the server pass that
   nothing calls), `ADXT_SetOutMode`/`ADXT_GetOutMode` (PS2RNA's output-mode word), `ADXT_TermSupply`,
   `ADXT_EntryErrFunc`, `ADXT_DiscardSmpl`, `ADXT_SetTimeOfst`, `ADXT_AdjustSmpl`, `ADXT_EntryFltFunc`,
-  `ADXT_EntryDecFunc` (its message is `ADXT_GetDecDtLen`'s), `adxt_IsHeader`, `ADXT_SetOutputMono`,
+  `ADXT_EntryDecFunc` (its message is `ADXT_GetDecDtLen`'s), `ADXT_IsHeader`, `ADXT_SetOutputMono`,
   `ADXT_SetDefKeyString`, `ADXT_ResetDefFmt`, `ADXT_StartMem`, `ADXT_InsertSilence`, `adxt_trap_entry` (its
-  message names it), `adxt_stat_prep`, `adxt_stat_playing`, `adxt_stat_playend`, `adxt_ExecRdErrChk`,
-  `adxt_ExecRdCompChk`; the hook at `0x4a8e64` that `ADXT_Stop` calls is `adxt_stop_func`.
+  message names it), `adxt_stat_prep`, `adxt_stat_playing`, `adxt_stat_playend`, `ADXT_ExecRdErrChk`,
+  `ADXT_ExecRdCompChk`; the hook at `0x4a8e64` that `ADXT_Stop` calls is `adxt_stop_func`.
 - `src/cri/adxtinit.c` and `src/cri/adxtsml.c` still declare their own handle layouts; they should use
   `AdxtObj` from `adxt.h`.

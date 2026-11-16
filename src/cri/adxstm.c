@@ -30,7 +30,7 @@ extern int srd_spindlctrl_sw;
 extern unsigned char srd_spindlctrl;
 static AdxStmObj adxstmf_obj[ADXSTM_MAX_OBJ] = {0};
 
-void ADXSTMF_SetNrmlNum(int num)
+void ADXT_SetupRtimeNumStm(int num)
 {
     adxstmf_nrml_num = num;
 }
@@ -193,7 +193,7 @@ void ADXSTM_ReleaseFile(AdxStmObj *stm)
     }
 }
 
-int ADXSTM_IsFileOpened(AdxStmObj *stm)
+int ADXSTM_IsOpenedFile(AdxStmObj *stm)
 {
     return stm->opened;
 }
@@ -222,7 +222,7 @@ int ADXSTM_Tell(AdxStmObj *stm)
     return stm->curpos;
 }
 
-void adxstmf_start_sub(AdxStmObj *stm)
+void adxstm_start_sub(AdxStmObj *stm)
 {
     stm->rdbyte = 0;
     stm->rtrycnt = 0;
@@ -240,7 +240,7 @@ void adxstmf_start_sub(AdxStmObj *stm)
 int ADXSTM_Start(AdxStmObj *stm)
 {
     ADXCRS_Lock();
-    adxstmf_start_sub(stm);
+    adxstm_start_sub(stm);
     stm->maxsct = ADXSTM_NO_MAXSCT;
     ADXCRS_Unlock();
     return 1;
@@ -249,7 +249,7 @@ int ADXSTM_Start(AdxStmObj *stm)
 int ADXSTM_Start2(AdxStmObj *stm, int maxsct)
 {
     ADXCRS_Lock();
-    adxstmf_start_sub(stm);
+    adxstm_start_sub(stm);
     stm->maxsct = maxsct;
     ADXCRS_Unlock();
     return 1;
@@ -295,7 +295,7 @@ void ADXSTM_SetEos(AdxStmObj *stm, int eos)
     stm->eos = stm->fsctsz;
 }
 
-void adxstmf_IncNoSjCnt(void)
+void adxstm_sj_internal_error(void)
 {
     adxstmf_nosj_cnt++;
 }
@@ -375,7 +375,7 @@ void adxstmf_rd_exec(AdxStmObj *stm)
     }
     if (sj == 0 || sj->vtbl == 0) {
         stm->rdflg = 0;
-        adxstmf_IncNoSjCnt();
+        adxstm_sj_internal_error();
         return;
     }
     if (stm->buflen - sj->vtbl->getNumData(sj, 0) >= stm->minrdsz) {
@@ -541,7 +541,7 @@ int ADXSTM_SetReqRdSize(AdxStmObj *stm, int nsct)
 }
 
 /* The PS2 file system has no read priority. */
-void ADXSTM_SetPrio(AdxStmObj *stm, int prio)
+void ADXSTM_EntryErrFunc(AdxStmObj *stm, int prio)
 {
 }
 
@@ -607,7 +607,7 @@ void ADXSTM_SetSj(AdxStmObj *stm, SfdSj *sj)
     stm->minrdsz = stm->maxrdsz = stm->buflen;
 }
 
-void ADXSTM_SetFsizeSct(AdxStmObj *stm, int nsct)
+void ADXSTM_SetRdSct(AdxStmObj *stm, int nsct)
 {
     stm->fsctsz = nsct;
     stm->fsize = nsct << 11;
@@ -619,18 +619,18 @@ void ADXSTM_SetOfst(AdxStmObj *stm, int ofst)
     ADXSTM_Seek(stm, 0);
 }
 
-void ADXSTM_SetMaxRetry(int num)
+void ADXT_SetNumRetry(int num)
 {
     adxstm_max_retry = num;
 }
 
-int ADXSTM_GetStatRead(AdxStmObj *stm)
+int ADXSTM_GetReadFlg(AdxStmObj *stm)
 {
     return stm->rdflg;
 }
 
 /* Opens the bound file now, running the server step on this stream until the open is done. */
-void ADXSTM_OpenFile(AdxStmObj *stm)
+void ADXSTM_OpenCvfs(AdxStmObj *stm)
 {
     if (stm->fname != 0 && stm->fd == 0) {
         stm->open_req = 1;

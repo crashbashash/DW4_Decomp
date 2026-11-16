@@ -100,13 +100,13 @@ typedef struct AdxEnc {
     int esmpl;                  /* 0x2f4 */
 } AdxEnc;
 
-extern int DAT_004a5d58;
+extern int skg_init_count;
 extern void (*DAT_004a5d5c)(void *obj, const char *msg);
 extern void *DAT_004a5d60;
 extern int DAT_004a5d68;
 extern AdxEnc DAT_004a5d70[8];
-extern AdxEncPredictor DAT_004a7530[16];
-extern AdxEncFilter DAT_004a75f0[16];
+extern AdxEncPredictor adxsje_iirflt_obj[16];
+extern AdxEncFilter adxsje_prdflt_obj[16];
 extern const short skg_tbl[1024];
 extern const char DAT_004ee3e8[];
 extern const char DAT_004ee428[];
@@ -117,12 +117,12 @@ unsigned int strlen(const char *s);
 int abs(int value);
 char *strncpy(char *dst, const char *src, unsigned int size);
 int ADX_GetCoefficient(short id, int arg, short *first, short *second);
-int ADX_DecodeHeader(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
+int ADX_DecodeInfo(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
 
-int FUN_0025fd98(int type, int len, int ofst, unsigned int blk);
-int adxenc_EncodeBlock(AdxEnc *e, int ch);
-void FUN_002683e8(AdxEnc *e, int ch);
-int FUN_00268b10(AdxEnc *e, Sj *out);
+int ADX_CalcHdrInfoLen(int type, int len, int ofst, unsigned int blk);
+int adxsje_calc_rsig(AdxEnc *e, int ch);
+void adxsje_set_rsig(AdxEnc *e, int ch);
+int adxsje_output_header(AdxEnc *e, Sj *out);
 
 int FUN_002674e8(void)
 {
@@ -146,24 +146,24 @@ int FUN_00267508(const char *msg)
 
 int FUN_00267540(void)
 {
-    DAT_004a5d58 += 1;
+    skg_init_count += 1;
     return 0;
 }
 
 int FUN_00267560(void)
 {
-    DAT_004a5d58 -= 1;
+    skg_init_count -= 1;
     return 0;
 }
 
-int FUN_00267580(const char *str, int len, unsigned short *k0, unsigned short *k1, unsigned short *k2)
+int ADXKEY_GenerateKey(const char *str, int len, unsigned short *k0, unsigned short *k1, unsigned short *k2)
 {
     int i;
     short a;
     short b;
     short c;
 
-    if (DAT_004a5d58 == 0) {
+    if (skg_init_count == 0) {
         FUN_00267540();
     }
     *k0 = 0;
@@ -190,37 +190,37 @@ int FUN_00267580(const char *str, int len, unsigned short *k0, unsigned short *k
     return 0;
 }
 
-int FUN_00267738(unsigned short *k0, unsigned short *k1, unsigned short *k2)
+int ADXKEY_GetDefKey(unsigned short *k0, unsigned short *k1, unsigned short *k2)
 {
-    if (DAT_004a5d58 == 0) {
+    if (skg_init_count == 0) {
         FUN_00267540();
     }
-    FUN_00267580(DAT_004ee3e8, 6, k0, k1, k2);
+    ADXKEY_GenerateKey(DAT_004ee3e8, 6, k0, k1, k2);
     return 0;
 }
 
-int FUN_002677a8(unsigned short *x, unsigned short *mul, unsigned short *add)
+int SKG_GetNextKey(unsigned short *x, unsigned short *mul, unsigned short *add)
 {
     *x = *x * *mul + *add;
     return 0;
 }
 
-int FUN_002677c8(void)
+int ADXSJE_GetVersion(void)
 {
     return 256;
 }
 
-const char *FUN_002677d0(void)
+const char *ADXSJE_GetVerStr(void)
 {
     return DAT_004ee428;
 }
 
-int FUN_002677e0(int count, int base, int bits)
+int adxsje_nsmpl_to_ofst(int count, int base, int bits)
 {
     return (bits + 31) / 32 * count * 18 + base + 4;
 }
 
-void FUN_00267810(int nch, int len, int len2, int *hdrlen, int *pad, int *size, int *size2)
+void ADXSJE_CalcLpInfo(int nch, int len, int len2, int *hdrlen, int *pad, int *size, int *size2)
 {
     int blk;
     int nblk;
@@ -232,14 +232,14 @@ void FUN_00267810(int nch, int len, int len2, int *hdrlen, int *pad, int *size, 
     *pad = (blk - len % blk) % blk;
     nblk = (len + *pad) / 32 * nch;
     body = nblk * 18;
-    hdr = FUN_0025fd98(1, 0, 4, 4);
+    hdr = ADX_CalcHdrInfoLen(1, 0, 4, 4);
     tail = (2048 - (body + hdr + 4) % 2048) % 2048;
     *hdrlen = hdr + tail;
-    *size = FUN_002677e0(nch, *hdrlen, len + *pad);
-    *size2 = FUN_002677e0(nch, *hdrlen, len2 + *pad);
+    *size = adxsje_nsmpl_to_ofst(nch, *hdrlen, len + *pad);
+    *size2 = adxsje_nsmpl_to_ofst(nch, *hdrlen, len2 + *pad);
 }
 
-int FUN_00267968(unsigned short *data, int size, int *out_c, int *out_e, int *out_f, int *out_g)
+int ADXSJE_GetInfo(unsigned short *data, int size, int *out_c, int *out_e, int *out_f, int *out_g)
 {
     short value_a;
     char value_b;
@@ -249,13 +249,13 @@ int FUN_00267968(unsigned short *data, int size, int *out_c, int *out_e, int *ou
     int value_h;
     int result;
 
-    result = ADX_DecodeHeader(data, size, &value_a, &value_b, &value_c, &value_d, &value_e, out_f, out_g, &value_h);
+    result = ADX_DecodeInfo(data, size, &value_a, &value_b, &value_c, &value_d, &value_e, out_f, out_g, &value_h);
     *out_e = value_e;
     *out_c = value_c;
     return result;
 }
 
-int FUN_002679d0(void *src, int size, int n, Sj *sj)
+int adxsje_write68(void *src, int size, int n, Sj *sj)
 {
     CriSjChunk ck;
     int nbyte;
@@ -296,18 +296,18 @@ int FUN_002679d0(void *src, int size, int n, Sj *sj)
     return n;
 }
 
-void FUN_00267b90(void)
+void iirflt_init(void)
 {
-    memset(DAT_004a7530, 0, sizeof(DAT_004a7530));
+    memset(adxsje_iirflt_obj, 0, sizeof(adxsje_iirflt_obj));
 }
 
-AdxEncPredictor *FUN_00267bb8(void)
+AdxEncPredictor *iirflt_create(void)
 {
     AdxEncPredictor *entry;
     int i;
 
     for (i = 0; i < 16; i++) {
-        entry = &DAT_004a7530[i];
+        entry = &adxsje_iirflt_obj[i];
         if (entry->used == 0) {
             break;
         }
@@ -318,7 +318,7 @@ AdxEncPredictor *FUN_00267bb8(void)
     return 0;
 }
 
-void FUN_00267c18(AdxEncPredictor *entry)
+void iirflt_destroy(AdxEncPredictor *entry)
 {
     if (entry != 0) {
         entry->used = 0;
@@ -326,28 +326,28 @@ void FUN_00267c18(AdxEncPredictor *entry)
     }
 }
 
-void FUN_00267c50(AdxEncPredictor *p, short k0, short k1)
+void iirflt_set_coef(AdxEncPredictor *p, short k0, short k1)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     p->k0 = k0;
     p->k1 = k1;
 }
 
-void adxenc_SetPredHistory(AdxEncPredictor *p, short h0, short h1)
+void iirflt_set_delay(AdxEncPredictor *p, short h0, short h1)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     p->h0 = h0;
     p->h1 = h1;
 }
 
-void adxenc_GetPredHistory(AdxEncPredictor *p, unsigned short *h0, unsigned short *h1)
+void iirflt_get_delay(AdxEncPredictor *p, unsigned short *h0, unsigned short *h1)
 {
     unsigned short t = p->h0;
     *h0 = t;
     *h1 = p->h1;
 }
 
-short adxenc_PredictSample(AdxEncPredictor *state, short input)
+short iirflt_put_sig(AdxEncPredictor *state, short input)
 {
     int value;
     short output;
@@ -366,9 +366,9 @@ short adxenc_PredictSample(AdxEncPredictor *state, short input)
     return input;
 }
 
-AdxEncFilter *FUN_00267d00(int nsmpl)
+AdxEncFilter *pflt_create(int nsmpl)
 {
-    AdxEncPredictor *pred = FUN_00267bb8();
+    AdxEncPredictor *pred = iirflt_create();
     AdxEncFilter *entry;
     int i;
 
@@ -376,7 +376,7 @@ AdxEncFilter *FUN_00267d00(int nsmpl)
         return 0;
     }
     for (i = 0; i < 16; i++) {
-        entry = &DAT_004a75f0[i];
+        entry = &adxsje_prdflt_obj[i];
         if (entry->used == 0) {
             break;
         }
@@ -391,7 +391,7 @@ AdxEncFilter *FUN_00267d00(int nsmpl)
     return 0;
 }
 
-void FUN_00267da0(AdxEncFilter *entry)
+void pflt_destroy(AdxEncFilter *entry)
 {
     if (entry != 0) {
         entry->used = 0;
@@ -399,31 +399,31 @@ void FUN_00267da0(AdxEncFilter *entry)
     }
 }
 
-void FUN_00267dd8(AdxEncFilter *f, short k0, short k1)
+void pflt_set_coef(AdxEncFilter *f, short k0, short k1)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     f->k0 = k0;
     f->k1 = k1;
 }
 
-void FUN_00267de8(AdxEncFilter *f, int id, int arg)
+void pflt_calc_coef(AdxEncFilter *f, int id, int arg)
 {
     short first;
     short second;
 
     ADX_GetCoefficient(id, arg, &first, &second);
-    FUN_00267dd8(f, first, second);
-    FUN_00267c50(f->pred, first, second);
+    pflt_set_coef(f, first, second);
+    iirflt_set_coef(f->pred, first, second);
 }
 
-void adxenc_SetFilterHistory(AdxEncFilter *f, short h0, short h1)
+void pflt_set_delay(AdxEncFilter *f, short h0, short h1)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     f->h0 = h0;
     f->h1 = h1;
 }
 
-void adxenc_FilterSample(AdxEncFilter *f, int i, short input)
+void pflt_put_sig(AdxEncFilter *f, int i, short input)
 {
     int j;
     int value;
@@ -450,7 +450,7 @@ void adxenc_FilterSample(AdxEncFilter *f, int i, short input)
     }
 }
 
-void adxenc_CalcScale(AdxEncFilter *f)
+void pflt_calc_gain(AdxEncFilter *f)
 {
     int scale;
     int n;
@@ -466,7 +466,7 @@ void adxenc_CalcScale(AdxEncFilter *f)
     }
 }
 
-short adxenc_GetResidual(AdxEncFilter *f, int i)
+short pflt_get_rsig(AdxEncFilter *f, int i)
 {
     short v;
 
@@ -477,7 +477,7 @@ short adxenc_GetResidual(AdxEncFilter *f, int i)
     return v;
 }
 
-int FUN_00267ff0(AdxEncFilter *f, int i)
+int pflt_get_rsig_q(AdxEncFilter *f, int i)
 {
     int v;
 
@@ -488,12 +488,12 @@ int FUN_00267ff0(AdxEncFilter *f, int i)
     return v;
 }
 
-void adxenc_SetNibble(AdxEncFilter *f, int i, signed char v)
+void pflt_set_rsig_q(AdxEncFilter *f, int i, signed char v)
 {
     f->nibble[i] = v;
 }
 
-int FUN_00268018(AdxEnc *x, int pos, int n, short **bufs)
+int adxsje_get_pcm_data(AdxEnc *x, int pos, int n, short **bufs)
 {
     CriSjChunk ck;
     int i;
@@ -519,7 +519,7 @@ int FUN_00268018(AdxEnc *x, int pos, int n, short **bufs)
     return cnt;
 }
 
-int adxenc_EncodeBlock(AdxEnc *e, int ch)
+int adxsje_calc_rsig(AdxEnc *e, int ch)
 {
     AdxEncFilter *f;
     AdxEncPredictor *pred;
@@ -532,31 +532,31 @@ int adxenc_EncodeBlock(AdxEnc *e, int ch)
 
     f = e->flt[ch];
     pred = f->pred;
-    adxenc_SetFilterHistory(f, e->prev1[ch], e->prev2[ch]);
+    pflt_set_delay(f, e->prev1[ch], e->prev2[ch]);
     /* matching construct: variant search — the samples are read as *(e->buf[ch] + i), not e->buf[ch][i]; the row offset then stays a loop invariant of its own in both loops */
     for (i = 0; i < e->blklen; i++) {
-        adxenc_FilterSample(f, i, *(e->buf[ch] + i));
+        pflt_put_sig(f, i, *(e->buf[ch] + i));
     }
-    adxenc_CalcScale(f);
-    adxenc_SetPredHistory(f->pred, e->prev1[ch], e->prev2[ch]);
+    pflt_calc_gain(f);
+    iirflt_set_delay(f->pred, e->prev1[ch], e->prev2[ch]);
     for (i = 0; i < e->blklen; i++) {
         sample = *(e->buf[ch] + i);
-        adxenc_GetPredHistory(pred, &h0, &h1);
-        adxenc_SetFilterHistory(f, h0, h1);
-        adxenc_FilterSample(f, i, sample);
-        level = adxenc_GetResidual(f, i) * f->rscale;
+        iirflt_get_delay(pred, &h0, &h1);
+        pflt_set_delay(f, h0, h1);
+        pflt_put_sig(f, i, sample);
+        level = pflt_get_rsig(f, i) * f->rscale;
         level = (short)(level > 32767 ? 32767 : (level < -32768 ? -32768 : level));
         level = (level < 0 ? level - 2340 : level + 2340) / 4681;
         level = level >= 7 ? 7 : (level < -8 ? -8 : level);
-        adxenc_SetNibble(f, i, level);
+        pflt_set_rsig_q(f, i, level);
         level *= f->scale;
         decoded = level > 32767 ? 32767 : (level < -32768 ? -32768 : level);
-        adxenc_PredictSample(f->pred, decoded);
+        iirflt_put_sig(f->pred, decoded);
     }
     return 0;
 }
 
-int FUN_00268670(AdxEnc *e)
+int adxsje_encode_blk(AdxEnc *e)
 {
     short *bufs[2];
     unsigned short h0;
@@ -573,7 +573,7 @@ int FUN_00268670(AdxEnc *e)
     if (e->blklen < n) {
         n = e->blklen;
     }
-    if (FUN_00268018(e, e->pos, n, bufs) == 0) {
+    if (adxsje_get_pcm_data(e, e->pos, n, bufs) == 0) {
         return 0;
     }
     if (n < e->blklen) {
@@ -585,15 +585,15 @@ int FUN_00268670(AdxEnc *e)
     }
     e->pos += e->blklen;
     for (ch = 0; ch < e->nch; ch++) {
-        adxenc_EncodeBlock(e, ch);
+        adxsje_calc_rsig(e, ch);
         f = e->flt[ch];
         pred = f->pred;
         e->scale[ch] = f->scale;
         e->rscale[ch] = f->rscale;
-        adxenc_GetPredHistory(pred, &h0, &h1);
+        iirflt_get_delay(pred, &h0, &h1);
         e->prev1[ch] = h0;
         e->prev2[ch] = h1;
-        FUN_002683e8(e, ch);
+        adxsje_set_rsig(e, ch);
     }
     return e->blklen;
 }
@@ -617,16 +617,16 @@ int FUN_00268830(AdxEnc *e)
             s = 0;
         }
         b = s >> 8;
-        FUN_002679d0(&b, 1, 1, sj);
+        adxsje_write68(&b, 1, 1, sj);
         b = s;
-        FUN_002679d0(&b, 1, 1, sj);
-        FUN_002679d0(blk, 1, 16, sj);
+        adxsje_write68(&b, 1, 1, sj);
+        adxsje_write68(blk, 1, 16, sj);
         total += 18;
     }
     return total;
 }
 
-int FUN_00268960(AdxEnc *e)
+int adxsje_encode_data(AdxEnc *e)
 {
     Sj *sj;
     int total;
@@ -637,7 +637,7 @@ int FUN_00268960(AdxEnc *e)
         if (sj->vt->get_num_data(sj, 0) / 18 / e->nch <= 0) {
             break;
         }
-        if (FUN_00268670(e) == 0) {
+        if (adxsje_encode_blk(e) == 0) {
             break;
         }
         total += FUN_00268830(e);
@@ -645,7 +645,7 @@ int FUN_00268960(AdxEnc *e)
     return total;
 }
 
-int FUN_00268a10(AdxEnc *e)
+int adxsje_write_end_code(AdxEnc *e)
 {
     int len;
     unsigned short tag;
@@ -667,23 +667,23 @@ int FUN_00268a10(AdxEnc *e)
         return 0;
     }
     tag = 0x8001;
-    FUN_002679d0(&tag, 2, 1, sj);
+    adxsje_write68(&tag, 2, 1, sj);
     tag = n;
-    FUN_002679d0(&tag, 2, 1, sj);
+    adxsje_write68(&tag, 2, 1, sj);
     zero = 0;
     for (i = 0; i < n; i++) {
-        FUN_002679d0(&zero, 1, 1, sj);
+        adxsje_write68(&zero, 1, 1, sj);
     }
     return len;
 }
 
-void FUN_00269268(void)
+void ADXSJE_Init(void)
 {
     FUN_00267540();
     memset(DAT_004a5d70, 0, sizeof(DAT_004a5d70));
 }
 
-void FUN_00269298(void)
+void ADXSJE_Finish(void)
 {
     FUN_00267560();
     memset(DAT_004a5d70, 0, sizeof(DAT_004a5d70));
@@ -693,24 +693,24 @@ void FUN_00269298(void)
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);
 
-void FUN_00269498(AdxEnc *e)
+void ADXSJE_Destroy(AdxEnc *e)
 {
     if (e == 0) {
         return;
     }
     ADXCRS_Lock();
     if (e->flt[0] != 0) {
-        FUN_00267da0(e->flt[0]);
+        pflt_destroy(e->flt[0]);
     }
     if (e->flt[1] != 0) {
-        FUN_00267da0(e->flt[1]);
+        pflt_destroy(e->flt[1]);
     }
     /* matching construct: hand search — the four status bytes are cleared together, one word store */
     memset(e, 0, 4);
     ADXCRS_Unlock();
 }
 
-void FUN_00269508(AdxEnc *x)
+void ADXSJE_Start(AdxEnc *x)
 {
     CriSjChunk ck;
     int i;
@@ -736,92 +736,92 @@ void FUN_00269508(AdxEnc *x)
     x->stat = 1;
 }
 
-int FUN_00269500(AdxEnc *e)
+int ADXSJE_GetStat(AdxEnc *e)
 {
     return e->stat;
 }
 
-void ADXENC_SetEnd(AdxEnc *e)
+void ADXSJE_Stop(AdxEnc *e)
 {
     e->ended = 1;
 }
 
-void FUN_00269640(AdxEnc *e, int v)
+void ADXSJE_SetSfreq(AdxEnc *e, int v)
 {
     e->f92 = v;
 }
 
-void FUN_00269648(AdxEnc *e, int v)
+void ADXSJE_SetHdInfoSize(AdxEnc *e, int v)
 {
     e->hdrsize = v;
 }
 
-void FUN_00269650(AdxEnc *e, int v)
+void ADXSJE_SetNumChan(AdxEnc *e, int v)
 {
     e->nch = v;
 }
 
-void FUN_00269658(AdxEnc *e, int v)
+void ADXSJE_SetOutBps(AdxEnc *e, int v)
 {
     e->f84 = v;
 }
 
-void FUN_00269660(AdxEnc *e, int blklen)
+void ADXSJE_SetBlkSmpl(AdxEnc *e, int blklen)
 {
     e->blklen = blklen;
     if (e->flt[0] != 0) {
-        FUN_00267da0(e->flt[0]);
+        pflt_destroy(e->flt[0]);
     }
-    e->flt[0] = FUN_00267d00(e->blklen);
+    e->flt[0] = pflt_create(e->blklen);
     if (e->flt[1] != 0) {
-        FUN_00267da0(e->flt[1]);
+        pflt_destroy(e->flt[1]);
     }
-    e->flt[1] = FUN_00267d00(e->blklen);
+    e->flt[1] = pflt_create(e->blklen);
 }
 
-void FUN_002696c8(AdxEnc *e, int v)
+void ADXSJE_SetBlkLen(AdxEnc *e, int v)
 {
     e->f80 = v;
 }
 
-void FUN_002696d0(AdxEnc *e, int v)
+void ADXSJE_SetTotalNumSmpl(AdxEnc *e, int v)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     e->end = v;
     e->f96 = v;
 }
 
-void FUN_002696e0(AdxEnc *e, int v)
+void ADXSJE_SetCof(AdxEnc *e, int v)
 {
     e->f100 = v;
 }
 
-void FUN_002696e8(AdxEnc *e, int v)
+void ADXSJE_SetNumLoop(AdxEnc *e, int v)
 {
     e->f108 = v;
 }
 
-void FUN_002696f0(AdxEnc *e, int v)
+void ADXSJE_SetLpInsNsmpl(AdxEnc *e, int v)
 {
     e->nsmpl = v;
 }
 
-void FUN_002696f8(AdxEnc *e, int v)
+void ADXSJE_SetLpStartPos(AdxEnc *e, int v)
 {
     e->f112 = v;
 }
 
-void FUN_00269700(AdxEnc *e, int v)
+void ADXSJE_SetLpStartOfst(AdxEnc *e, int v)
 {
     e->f116 = v;
 }
 
-void FUN_00269708(AdxEnc *e, int v)
+void ADXSJE_SetLpEndPos(AdxEnc *e, int v)
 {
     e->f120 = v;
 }
 
-void FUN_00269710(AdxEnc *e, int v)
+void ADXSJE_SetLpEndOfst(AdxEnc *e, int v)
 {
     e->f124 = v;
 }
@@ -876,60 +876,60 @@ void FUN_00269828(AdxEnc *e, int lsmpl, int esmpl)
     }
 }
 
-void FUN_00269878(AdxEnc *e, int nch, int f92, int end)
+void ADXSJE_SetConfigSfa(AdxEnc *e, int nch, int f92, int end)
 {
     /* matching construct: permuter — the no-op a2++/a2-- raises a2's use count so ee-gcc gives it s0 (retail order s0=a2, s1=object, s2=a3) */
     f92++;
     f92--;
-    FUN_00269650(e, nch);
-    FUN_00269640(e, f92);
-    FUN_002696d0(e, end);
-    FUN_00269648(e, 284);
+    ADXSJE_SetNumChan(e, nch);
+    ADXSJE_SetSfreq(e, f92);
+    ADXSJE_SetTotalNumSmpl(e, end);
+    ADXSJE_SetHdInfoSize(e, 284);
 }
 
 void FUN_002698d8(AdxEnc *e, const char *text)
 {
     unsigned short a, b, c;
 
-    FUN_00267580(text, strlen(text), &a, &b, &c);
+    ADXKEY_GenerateKey(text, strlen(text), &a, &b, &c);
     e->key_x = a;
     e->key_mul = b;
     e->key_add = c;
 }
 
-int FUN_00269940(AdxEnc *e)
+int ADXSJE_GetEncDtLen(AdxEnc *e)
 {
     return e->total;
 }
 
-int FUN_00269948(AdxEnc *e)
+int ADXSJE_GetEncNumSmpl(AdxEnc *e)
 {
     return e->pos;
 }
 
-void FUN_00269950(AdxEnc *e, int v)
+void ADXSJE_SetEncPos(AdxEnc *e, int v)
 {
     e->pos = v;
 }
 
-int FUN_00269958(AdxEnc *e)
+int ADXSJE_GetEncPos(AdxEnc *e)
 {
     return e->pos;
 }
 
-void FUN_00269960(AdxEnc *e, unsigned int i, Sj *sj)
+void ADXSJE_SetInSj(AdxEnc *e, unsigned int i, Sj *sj)
 {
     if (i < 2) {
         e->in[i] = sj;
     }
 }
 
-void FUN_00269980(AdxEnc *e, Sj *sj)
+void ADXSJE_SetOutSj(AdxEnc *e, Sj *sj)
 {
     e->out = sj;
 }
 
-void FUN_00269988(AdxEnc *e)
+void adxsje_encode_prep(AdxEnc *e)
 {
     CriSjChunk ck;
     Sj *out;
@@ -952,25 +952,25 @@ void FUN_00269988(AdxEnc *e)
         e->prev1[i] = e->first1[i];
         e->prev2[i] = e->first2[i];
     }
-    n = FUN_00268b10(e, out);
+    n = adxsje_output_header(e, out);
     if (n == 0) {
         return;
     }
     e->total += n;
     for (i = 0; i < e->nch; i++) {
-        FUN_00267de8(e->flt[i], e->f100, e->f92);
+        pflt_calc_coef(e->flt[i], e->f100, e->f92);
     }
     e->stat = 2;
 }
 
-void FUN_00269af8(AdxEnc *e)
+void adxsje_encode_exec(AdxEnc *e)
 {
     int count;
 
     /* matching construct: goto — retail re-tests the ended flag after setting it; structured loops reorder the blocks */
 loop:
     if (e->ended == 0) {
-        while ((count = FUN_00268960(e)) != 0) {
+        while ((count = adxsje_encode_data(e)) != 0) {
             e->total += count;
             if (e->pos >= e->end) {
                 e->ended = 1;
@@ -979,21 +979,21 @@ loop:
         }
         return;
     }
-    if (FUN_00268a10(e) > 0) {
+    if (adxsje_write_end_code(e) > 0) {
         e->stat = 3;
     }
 }
 
-void FUN_00269b90(AdxEnc *e)
+void ADXSJE_ExecHndl(AdxEnc *e)
 {
     if (e->stat == 1) {
-        FUN_00269988(e);
+        adxsje_encode_prep(e);
     } else if (e->stat == 2) {
-        FUN_00269af8(e);
+        adxsje_encode_exec(e);
     }
 }
 
-void FUN_00269bd0(void)
+void ADXSJE_ExecServer(void)
 {
     int i;
     AdxEnc *e;
@@ -1002,7 +1002,7 @@ void FUN_00269bd0(void)
     i = 7;
     do {
         if (e->used == 1) {
-            FUN_00269b90(e);
+            ADXSJE_ExecHndl(e);
         }
         i -= 1;
         e++;

@@ -67,7 +67,7 @@ static void *sjx_dtx = 0;
 static int sjx_wklen = 0;
 static char sjx_eewkbuf[SJX_EEWK_SIZE] = {0};
 
-void sjx_RcvCbf(void *obj, SjxList *list, int size)
+void sjx_rcvcbf(void *obj, SjxList *list, int size)
 {
     SjxEntry *entry;
     SfdSj *sj;
@@ -90,7 +90,7 @@ void sjx_RcvCbf(void *obj, SjxList *list, int size)
     SJCRS_Unlock();
 }
 
-void sjx_SndCbf(void *obj, SjxList *list, int size)
+void sjx_sndcbf(void *obj, SjxList *list, int size)
 {
     SjxObj *sjx;
     SjxEntry *entry;
@@ -155,8 +155,8 @@ void SJX_Init(void)
             for (;;) {
             }
         }
-        DTX_SetRcvCbf(sjx_dtx, sjx_RcvCbf, 0);
-        DTX_SetSndCbf(sjx_dtx, sjx_SndCbf, 0);
+        DTX_SetRcvCbf(sjx_dtx, sjx_rcvcbf, 0);
+        DTX_SetSndCbf(sjx_dtx, sjx_sndcbf, 0);
         DTX_CallUrpc(SJX_RPC_START, 0, 0, 0, 0);
     }
     sjx_init_cnt++;
@@ -216,7 +216,7 @@ void SJX_Destroy(SjxObj *sjx)
     sjx->used = 0;
 }
 
-void SJX_IncCnt(SjxObj *sjx)
+void SJX_Reset(SjxObj *sjx)
 {
     sjx->cnt = sjx->cnt + 1;
 }

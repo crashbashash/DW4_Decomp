@@ -12,14 +12,14 @@ struct DecoderTable28b {
     struct Decoder28b *decoders;  /* +68 */
 };
 
-extern struct DecoderTable28b DAT_00573eb8;
+extern struct DecoderTable28b m2vlib_libwork;
 
-void FUN_0028b040(int index, int value) {
+void m2vlib_SetCondAll(int index, int value) {
     struct Decoder28b *decoder;
     int remaining;
 
-    remaining = DAT_00573eb8.count;
-    decoder = DAT_00573eb8.decoders;
+    remaining = m2vlib_libwork.count;
+    decoder = m2vlib_libwork.decoders;
     if (remaining > 0) {
         do {
             if (decoder->state == 2) {

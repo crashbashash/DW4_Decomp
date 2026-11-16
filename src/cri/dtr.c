@@ -128,7 +128,7 @@ void FUN_002729e8(DtrObj *dtr)
     dtr->transfer = 1;
 }
 
-signed char FUN_00272d58(DtrObj *dtr)
+signed char DTR_GetStat(DtrObj *dtr)
 {
     return dtr->stat;
 }
@@ -151,7 +151,7 @@ void DTR_ExecServer(void)
     DTX_ExecServer();
 }
 
-void FUN_00272e20(void)
+void DTR_Init(void)
 {
     ADXMSG_PrintErr("DTR_Init: in (%d)\n", dtr_init_cnt);
     if (dtr_init_cnt == 0) {
@@ -161,12 +161,12 @@ void FUN_00272e20(void)
     ADXMSG_PrintErr("DTR_Init: out\n");
 }
 
-void FUN_00272e88(void)
+void DTR_Finish(void)
 {
     dtr_init_cnt--;
 }
 
-DtrObj *FUN_00272ea0(SjObj *sjs, SjObj *sjd)
+DtrObj *DTR_Create(SjObj *sjs, SjObj *sjd)
 {
     DtrObj *dtr;
     int i;
@@ -203,7 +203,7 @@ void DTR_Destroy(DtrObj *dtr)
     SJCRS_Unlock();
 }
 
-void FUN_00272fb8(DtrObj *dtr)
+void DTR_Start(DtrObj *dtr)
 {
     dtr->total = 0;
     dtr->stat = 1;

@@ -85,7 +85,7 @@ int Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool);
 int igReportError(const char *format, ...);
 void igPsx2VisualContext_CallDmaChain(igObject *self, void *packet, int size, int flush);
 int igPsx2VisualContext_IsDisplayingFirstBuffer(igObject *self);
-void MWSFD_SetMallocFunc(void *(*allocate)(igCriMovieCodec *, unsigned int),
+void mwPlySetMallocFn(void *(*allocate)(igCriMovieCodec *, unsigned int),
                          void (*release)(igCriMovieCodec *, void *), igCriMovieCodec *context);
 int mwPlyIsPause(MwsfdPly *ply);
 int ADXT_GetStatPause(AdxtObj *adxt);
@@ -366,7 +366,7 @@ void Gap__igCriMovieData__resetFields(igCriMovieData *self) {
 /* Routes MWSFD's allocations through the codec's memory pool. */
 void Gap__igCriMovieCodec__constructFields(igCriMovieCodec *self) {
     Gap__Core__igObject__constructFields();
-    MWSFD_SetMallocFunc(&CriMovie_Allocate, &CriMovie_Free, self);
+    mwPlySetMallocFn(&CriMovie_Allocate, &CriMovie_Free, self);
 }
 
 void Gap__igCriMovieCodec__destructFields(void)

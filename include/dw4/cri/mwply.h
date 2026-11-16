@@ -9,7 +9,7 @@ typedef struct MwsfdPlyVtbl {
     void *reserved0[3];
     void (*vsyncProc)(void);                                  /* 12: mwsfsvr_VsyncProc */
     int (*execSvrHndl)(MwsfdPly *ply);                        /* 16: mwPlyExecSvrHndl */
-    void (*destroy)(MwsfdPly *ply);                           /* 20: mwsfcre_DestroyPly */
+    void (*destroy)(MwsfdPly *ply);                           /* 20: mwSfdDestroy */
     void (*startFname)(MwsfdPly *ply, char *fname);           /* 24: mwPlyStartFname */
     void (*stop)(MwsfdPly *ply);                              /* 28: mwSfdStop */
     int (*getStat)(MwsfdPly *ply);                            /* 32: mwSfdGetStat */
@@ -42,7 +42,7 @@ typedef struct MwsfdCreInf {
 /* what mwPlyGetHdrInf reports about a stream header; valid is 0 for anything but a Sofdec stream */
 typedef struct MwsfdHdrInf {
     int valid;
-    int type;     /* mwsfcre_GetHdrType */
+    int type;     /* mwsfcre_DecideFtypeByHdrInf */
     int width;
     int height;
     int rate;

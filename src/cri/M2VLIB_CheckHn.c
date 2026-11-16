@@ -4,10 +4,10 @@ struct Decoder28b {
     int state;   /* +0: 2 = valid */
 };
 
-extern struct Decoder28b *DAT_00573f00;
+extern struct Decoder28b *m2vlib_m2vobj;
 
-int FUN_0028b098(struct Decoder28b *decoder) {
-    DAT_00573f00 = decoder;
+int M2VLIB_CheckHn(struct Decoder28b *decoder) {
+    m2vlib_m2vobj = decoder;
     if (decoder == 0) {
         return -1;
     }

@@ -23,7 +23,7 @@ hooks the player calls.
 
 The public `mwPly*`/`mwSfd*` setters and getters: each checks the handle with `MWSFD_IsEnableHndl` and
 forwards to the SFD decoder (`ply->sfd`), the ADXT handle (`ply->adxt`) or the file stream
-(`ply->stm`). SFD condition words are set through `MWSFD_SetCond` and its wrappers (the counter and timer callbacks `mwply_SetCntCb`/`mwply_SetTmrCb`, `mwply_SetNoSkip`, the idle auto-off of video and audio `mwply_SetVideoAutoOff`/`mwply_SetAudioAutoOff`); the file
+(`ply->stm`). SFD condition words are set through `MWSFD_SetCond` and its wrappers (the counter and timer callbacks `mwPlyEntryDecExecCb`/`mwPlyEntryDecSkipCb`, `mwPlySetNeverSkip`, the idle auto-off of video and audio `mwply_SetVideoAutoOff`/`mwply_SetAudioAutoOff`); the file
 declares the decoder's header and playback information blocks (`SfdHdrInf`, `SfdPlyInf`) and the
 caller-side `MwsfdPlyInf` / `MwsfdFlowInf` locally, as nothing else reads them yet. `MwsfdPly` comes
 from `include/dw4/cri/mwply.h`.
@@ -35,7 +35,7 @@ from `include/dw4/cri/mwply.h`.
   GameCube library, so the unit's end at `0x296328` may be two files; the evidence for the cut is not collected.
 - SFD condition words are named by what the reader does where it was traced; each condition has a reader in this
   image. Medium confidence, from the GameCube build's readers of the same conditions (the setters themselves are in no symbol list):
-  `mwply_SetDispLatencyTime` (44: the lead added to the clock in the time verdict of `sftim.c`, seeded at creation from
+  `MWSFD_AdjustGetFrmTiming` (44: the lead added to the clock in the time verdict of `sftim.c`, seeded at creation from
   the v-syncs per frame and the display latency), `mwply_SetSystemEndcodeSkip`/`mwply_SetVideoEndcodeSkip` (56/57, each
   ORed with condition 49 in the SFD core at `0x29ed68` and `0x29edb0`), `mwply_SetSeqHdrData` (93/94, a buffer and length
   handed to the MPV decoder while it waits for the first sequence header, read at `0x2a3850`), `mwply_SetSeqHdrCbFn`
@@ -48,8 +48,8 @@ from `include/dw4/cri/mwply.h`.
   nonzero return). The GameCube build also reads the callback and the object from the one condition, so the object is lost.
   A name needs a symbol list or a clearer reading.
 - `mwPlySetFastHalfpel` (`0x296dd0`) sets MPV condition 3 through `SFD_SetMpvCond` (medium confidence: CRI's Dreamcast
-  header documents the function and its semantics, and the Katana library's body sets MPV condition 3). `mwply_SetMpvPara4`
-  and `mwply_SetMpvPara5` set MPV conditions 4 and 5 through the same function: 4 selects the intra output table in the
+  header documents the function and its semantics, and the Katana library's body sets MPV condition 3). `mwPlySetIpicOnly`
+  and `mwPlySetAdjustY16` set MPV conditions 4 and 5 through the same function: 4 selects the intra output table in the
   MPV decoder, and 5 is the motion-compensation chroma flag, which `SFD_SetMpvCond` forces to 0, so its setter can only
   clear it. The M2V readers of conditions 3, 4 and 5 were not traced.
 - Medium confidence, from the Persona 3 FES PlayStation 2 symbol list placing the names by slot and size (provenance not stated),

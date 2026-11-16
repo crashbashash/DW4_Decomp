@@ -149,7 +149,7 @@ int ADXPD_GetNumBlk(AdxPdObj *pd)
     return pd->nblk_decoded;
 }
 
-void adxpd_SetOddBlockError(void) {
+void adxpd_error(void) {
     adxpd_odd_block_error = 1;
 }
 
@@ -168,7 +168,7 @@ void ADXPD_ExecHndl(AdxPdObj *pd)
         pd->nblk_decoded = ADX_DecodeSte4(pd->ibuf, pd->nblk, pd->obufl, pd->dly[0], pd->obufr,
                                           pd->dly[1], pd->k0, pd->k1, &pd->seed, pd->mul, pd->add);
         if (pd->nblk_decoded % 2 == 1) {
-            adxpd_SetOddBlockError();
+            adxpd_error();
         }
     }
     pd->stat = ADXPD_STAT_DECEND;

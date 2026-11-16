@@ -26,8 +26,8 @@ onwards, from `0x290b28`) is described with the rest of the MPV library.
 - `mpsdmx_ParsePack`, `mpsdmx_ParseSysHd` and `mpsdmx_ParsePes` have no source: large bit-field parsers that
   read the stream a byte at a time through an expanded bit reader.
 - `MPS_Init` stores the version pointer through a `volatile`-looking store that has no approval; it links from
-  retail. `mps_ResetSysHd` matches only under MWCC (its stores come out in another order under EE GCC) and also
+  retail. `mpslib_InitSys` matches only under MWCC (its stores come out in another order under EE GCC) and also
   links from retail.
-- `MPV_DecHdrSj`, `mpv_DecSeqHdr`, `mpv_DecSeqExt`, `mpv_DecPicHdr`, `mpv_DecGop` and `mpv_DecUsrDat` have no
-  source; their names are guesses from their size and the start codes `MPV_DecHdrSj` dispatches on.
+- `MPV_DecodePicAtrSj`, `mpv_DecSeqHdr`, `mpvhdec_DecGscSj`, `mpv_DecPicHdr`, `mpvhdec_DecEscSj` and `mpvhdec_AnalyUd` have no
+  source; their names are guesses from their size and the start codes `MPV_DecodePicAtrSj` dispatches on.
 - The handle field pair at `MpsHn` +236 is set by `MPS_SetAuxFn` but no MPS code with source calls it.

@@ -13,7 +13,7 @@ int memcmp(const void *a, const void *b, unsigned int size);
 extern char FORM[];
 extern char AIFF[];
 
-unsigned char *adxb_GetAiffInfo(unsigned char *buf, int *sfreq, int *nch, int *bits, int *nsmpl);
+unsigned char *AIFF_GetInfo(unsigned char *buf, int *sfreq, int *nch, int *bits, int *nsmpl);
 
 int ADXB_CheckAiff(unsigned char *hdr)
 {
@@ -37,7 +37,7 @@ int ADX_DecodeInfoAiff(unsigned char *buf, int len, short *hdrlen, signed char *
         *hdrlen = 0;
         return -1;
     }
-    data = adxb_GetAiffInfo(buf, &freq, &ch, &bits, &smpl);
+    data = AIFF_GetInfo(buf, &freq, &ch, &bits, &smpl);
     if (data == 0) {
         return -1;
     }

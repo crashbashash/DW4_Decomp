@@ -19,25 +19,25 @@ extern char mwsfd_sfd_version[];    /* "1.946", the SFD version this build needs
 extern char E011081_mwPlySfdInit_Not_compatible_SFD_Version[];
 
 void *memset(void *dst, int c, unsigned int n);
-void mwsfd_Error(const char *message, ...);
-void mwsfd_SetSvrLock(int value);
+void MWSFSVM_Error(const char *message, ...);
+void MWSFSVR_SetMwsfdSvrFlg(int value);
 void LSC_Finish(void);
 void ADXT_Finish(void);
 void SJMEM_Finish(void);
 void SJRBF_Finish(void);
 void SJUNI_Finish(void);
-void mwsfcre_DestroyPly(MwsfdPly *ply);
+void mwSfdDestroy(MwsfdPly *ply);
 void MWSFD_FinishRsc(void);
 void *mwPlyGetSfdHn(MwsfdPly *ply);
 void MWSFD_SetCond(MwsfdPly *ply, int id, int value);
-void mwsfsfx_Finish(void);
-void mwsfsvr_Finish(void);
-void mwsfsvr_SetVsyncSvrId(int n, void (*fn)(), int arg);
-void mwsfsvr_DelVsyncSvr(void);
-void mwsfsvr_SetMwIdleSvr(void (*fn)(), int arg);
-void mwsfsvr_DelMwIdleSvr(void);
-void mwsfsvr_SetMainSvr(void (*fn)(), int arg);
-void mwsfsvr_DelMainSvr(void);
+void MWSFSFX_Finish(void);
+void MWSFSVM_Finish(void);
+void MWSFSVM_EntryIdVfunc(int n, void (*fn)(), int arg);
+void MWSFSVM_DeleteVfunc(void);
+void MWSFSVM_EntryIdleFunc(void (*fn)(), int arg);
+void MWSFSVM_DeleteIdleFunc(void);
+void MWSFSVM_EntryMainFunc(void (*fn)(), int arg);
+void MWSFSVM_DeleteMainFunc(void);
 void mwsfsvr_SetVsyncHooks(void);
 void mwsfsvr_DelVsyncHooks(void);
 void mwsfsvr_VsyncSvr();
@@ -63,7 +63,7 @@ char *MWSFD_GetVersionStr(void)
     return mwsfd_version;
 }
 
-MwsfdWork *MWSFLIB_GetLibWorkPtr(void)
+MwsfdWork *mwsflib_GetVersionStr(void)
 {
     return &mwsfd_work;
 }
@@ -71,14 +71,14 @@ MwsfdWork *MWSFLIB_GetLibWorkPtr(void)
 /* the SFD error callback: reports the message, ignoring the context */
 void mwsflib_LscErrFunc(void *obj, const char *msg)
 {
-    mwsfd_Error(msg);
+    MWSFSVM_Error(msg);
 }
 
 void mwsflib_SetSvrFunc(void)
 {
-    mwsfsvr_SetVsyncSvrId(2, mwsfsvr_VsyncSvr, 0);
-    mwsfsvr_SetMainSvr(mwsfsvr_MainSvr, 0);
-    mwsfsvr_SetMwIdleSvr(mwsfsvr_IdleSvr, 0);
+    MWSFSVM_EntryIdVfunc(2, mwsfsvr_VsyncSvr, 0);
+    MWSFSVM_EntryMainFunc(mwsfsvr_MainSvr, 0);
+    MWSFSVM_EntryIdleFunc(mwsfsvr_IdleSvr, 0);
     mwsfsvr_SetVsyncHooks();
 }
 
@@ -86,11 +86,11 @@ void mwsflib_SetSvrFunc(void)
  * latency 1, no decode server) without them */
 void mwsflib_InitLibWork(MwsfdInitPrm *iprm)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
     MwsfdInitPrm *prm;
 
     memset(work, 0, sizeof(MwsfdWork));
-    mwsfd_SetSvrLock(0);
+    MWSFSVR_SetMwsfdSvrFlg(0);
     work->execLock = 0;
     prm = &work->prm;
     if (iprm != 0) {
@@ -110,22 +110,22 @@ void mwsflib_InitLibWork(MwsfdInitPrm *iprm)
 
 void MWSFD_SetUsePicUsr(int enable)
 {
-    MWSFLIB_GetLibWorkPtr()->picUsrEnable = enable;
+    mwsflib_GetVersionStr()->picUsrEnable = enable;
 }
 
 int MWSFD_GetUsePicUsr(void)
 {
-    return MWSFLIB_GetLibWorkPtr()->picUsrEnable;
+    return mwsflib_GetVersionStr()->picUsrEnable;
 }
 
 void MWSFD_SetPauseBdr(int wait)
 {
-    MWSFLIB_GetLibWorkPtr()->waitSvrOnStart = wait;
+    mwsflib_GetVersionStr()->waitSvrOnStart = wait;
 }
 
 int MWSFD_GetPauseBdr(void)
 {
-    return MWSFLIB_GetLibWorkPtr()->waitSvrOnStart;
+    return mwsflib_GetVersionStr()->waitSvrOnStart;
 }
 
 void mwsflib_SetDefCond(MwsfdInitPrm *prm)
@@ -145,7 +145,7 @@ void mwPlyResetSfdFx(void)
 /* drops the init count; at zero, finishes every player in use and shuts the libraries down */
 void mwPlyFinishSfdFx(void)
 {
-    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
+    MwsfdWork *work = mwsflib_GetVersionStr();
     MwsfdPly *ply;
     int i;
 
@@ -155,15 +155,15 @@ void mwPlyFinishSfdFx(void)
     ply = work->ply;
     for (i = 0; i < MWSFD_NPLY; i++) {
         if (ply->used == 1) {
-            mwsfcre_DestroyPly(ply);
+            mwSfdDestroy(ply);
         }
         ply++;
     }
     mwsfsvr_DelVsyncHooks();
-    mwsfsvr_DelVsyncSvr();
-    mwsfsvr_DelMainSvr();
-    mwsfsvr_DelMwIdleSvr();
-    mwsfsfx_Finish();
+    MWSFSVM_DeleteVfunc();
+    MWSFSVM_DeleteMainFunc();
+    MWSFSVM_DeleteIdleFunc();
+    MWSFSFX_Finish();
     LSC_Finish();
     mwPlySfdFinish();
     ADXT_Finish();
@@ -172,18 +172,18 @@ void mwPlyFinishSfdFx(void)
     SJMEM_Finish();
     SJRBF_Finish();
     MWSFD_FinishRsc();
-    mwsfsvr_Finish();
+    MWSFSVM_Finish();
 }
 
 int MWSFLIB_SetErrCode(int code)
 {
-    MWSFLIB_GetLibWorkPtr()->errCode = code;
+    mwsflib_GetVersionStr()->errCode = code;
     return code;
 }
 
 int MWSFD_GetErrCode(void)
 {
-    return MWSFLIB_GetLibWorkPtr()->errCode;
+    return mwsflib_GetVersionStr()->errCode;
 }
 
 /* checks the SFD library version, initialises it and installs the error callback */
@@ -194,7 +194,7 @@ int mwPlySfdInit(int arg)
 
     prm.arg = arg;
     if (SFD_IsHnSize(mwsfd_sfd_version, SFD_VERSION_WORK) != 1) {
-        mwsfd_Error(E011081_mwPlySfdInit_Not_compatible_SFD_Version);
+        MWSFSVM_Error(E011081_mwPlySfdInit_Not_compatible_SFD_Version);
         return -1;
     }
     if (SFD_Init(&prm) != 0) {
@@ -213,19 +213,19 @@ int mwPlySfdFinish(void)
     return 0;
 }
 
-int mwsfd_GetMode(void)
+int MWSFD_GetErrMwplyHn(void)
 {
     return mwsfd_err_mwsfdhn;
 }
 
 void MWSFLIB_SetSeekFlg(int flag)
 {
-    MWSFLIB_GetLibWorkPtr()->workFlag = flag;
+    mwsflib_GetVersionStr()->workFlag = flag;
 }
 
 int MWSFLIB_GetSeekFlg(void)
 {
-    return MWSFLIB_GetLibWorkPtr()->workFlag;
+    return mwsflib_GetVersionStr()->workFlag;
 }
 
 void mwply_SetTimeFn(MwsfdPly *ply, int a, int b, int c)

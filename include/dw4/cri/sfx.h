@@ -67,13 +67,13 @@ typedef struct SfxHn {
     int f116;
 } SfxHn;
 
-void FUN_002b3b38(void *obj, void *info, char *msg);
-void FUN_002b4210(void);
-void FUN_002b4268(void);
-SfxZHn *FUN_002b4270(void);
-void FUN_002b4358(SfxZHn *zhn, char *data, int size);
+void SFXLIB_Error(void *obj, void *info, char *msg);
+void SFXZ_Init(void);
+void SFXZ_Finish(void);
+SfxZHn *SFXZ_Create(void);
+void SFXZ_SetTagInf(SfxZHn *zhn, char *data, int size);
 void FUN_002b4498(SfxZHn *zhn, int frame, int *first, int *second);
-void FUN_002b4aa8(SfxZHn *zhn, float zmin, float zmax);
-void FUN_002b4b40(SfxZHn *zhn, float *zmin, float *zmax);
+void SFXZ_SetZclip(SfxZHn *zhn, float zmin, float zmax);
+void SFXZ_GetZclip(SfxZHn *zhn, float *zmin, float *zmax);
 
 #endif

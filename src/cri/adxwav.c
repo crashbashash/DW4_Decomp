@@ -13,7 +13,7 @@ extern char RIFF[];
 extern char WAVE[];
 
 /* The chunk scan that finds "fmt " and "data" and reads the format fields; still retail code. */
-int adxb_GetWavInfo(unsigned char *buf, int len, short *hdrlen, signed char *hdrtype, signed char *fmtbps,
+int ADX_DecodeInfoWav(unsigned char *buf, int len, short *hdrlen, signed char *hdrtype, signed char *fmtbps,
                     signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl, short *pcmfmt);
 
 int ADXB_DecodeHeaderWav(AdxbObj *adxb, unsigned char *hdr, int size)
@@ -21,7 +21,7 @@ int ADXB_DecodeHeaderWav(AdxbObj *adxb, unsigned char *hdr, int size)
     short hdrlen;
 
     adxb->hdr_set = 1;
-    if (adxb_GetWavInfo(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
+    if (ADX_DecodeInfoWav(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
                         &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
         return 0;
     }
@@ -134,7 +134,7 @@ void ADXB_ExecOneWav8(AdxbObj *obj)
 }
 
 /* 16-bit samples assembled from little-endian byte pairs. */
-void ADXB_ExecOneWav16Le(AdxbObj *obj)
+void ADXB_ExecOneWav4(AdxbObj *obj)
 {
     AdxbBuf *buf;
     unsigned char *src;
@@ -189,7 +189,7 @@ int ADXB_CheckWav(unsigned char *hdr)
 void ADXB_ExecOneWav(AdxbObj *obj)
 {
     if (obj->pcmfmt == ADXB_PCM_4) {
-        ADXB_ExecOneWav16Le(obj);
+        ADXB_ExecOneWav4(obj);
     } else if (obj->pcmfmt == ADXB_PCM_8) {
         ADXB_ExecOneWav8(obj);
     } else if (obj->pcmfmt == ADXB_PCM_16) {

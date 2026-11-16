@@ -88,7 +88,7 @@ void DTX_Finish(void);
 void DTR_ExecServer(void);
 void DTR_Destroy(DtrObj *dtr);
 void DTR_Stop(DtrObj *dtr);
-void *SJRMT_Create(int mode, int work, int size);
+void *SJUNI_CreateRmt(int mode, int work, int size);
 void SJRMT_Destroy(void *sjrmt);
 void SJRMT_Finish(void);
 SfdSj *SJUNI_Create(int mode, char *work, int size);
@@ -136,7 +136,7 @@ void DTX_Init(void);
 void *DTX_Create(int id, int eewk, int iopwk, int wksize);
 void DTX_SetRcvCbf(void *dtx, void (*func)(void *obj, int *reply), void *obj);
 void DTX_SetSndCbf(void *dtx, void (*func)(void *obj, int *buf), void *obj);
-void ps2rna_dtx_send(void *obj, int *buf);
+void ps2rna_sndcbf(void *obj, int *buf);
 void ps2rna_init_port(void);
 extern char PS2RNA_SetupVoice_Illigal_parameter_nste_d[];
 extern char PS2RNA_SetupVoice_Illigal_parameter_nmono_d[];
@@ -221,7 +221,7 @@ void ps2rna_init_psj(void)
             for (;;) {
             }
         }
-        psj->sjrmt = SJRMT_Create(1, work, PS2RNA_RMT_WKSIZE);
+        psj->sjrmt = SJUNI_CreateRmt(1, work, PS2RNA_RMT_WKSIZE);
         work += PS2RNA_RMT_WKSIZE;
         if (psj->sjrmt == 0) {
             ADXMSG_PrintErr(E0110102_ps2rna_init_psj_can_t_creat_SJUNI_CreaetRmt);
@@ -301,7 +301,7 @@ void ps2rna_release_psj(Ps2RnaPsj *psj)
 }
 
 /* The DTX receive callback: the IOP's reply is a spin count to wait out; no reply hangs. */
-void ps2rna_dtx_recv(void *obj, int *reply)
+void ps2rna_rcvcbf(void *obj, int *reply)
 {
     int n;
 
@@ -353,8 +353,8 @@ void PS2RNA_Init(void)
             for (;;) {
             }
         }
-        DTX_SetRcvCbf(ps2rna_dtx, ps2rna_dtx_recv, 0);
-        DTX_SetSndCbf(ps2rna_dtx, ps2rna_dtx_send, 0);
+        DTX_SetRcvCbf(ps2rna_dtx, ps2rna_rcvcbf, 0);
+        DTX_SetSndCbf(ps2rna_dtx, ps2rna_sndcbf, 0);
         if (ps2rna_rna_heap == 0) {
             ps2rna_rna_nvoice = ps2rna_nvoice;
             ps2rna_rna_heap_size = ps2rna_nvoice * 1024 + 64;
@@ -814,7 +814,7 @@ void PS2RNA_ClearOverflow(void)
     }
 }
 
-void PS2RNA_ExecHndl(void)
+void PS2RNA_Flush(void)
 {
 }
 

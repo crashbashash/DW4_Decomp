@@ -42,31 +42,31 @@ typedef struct AdxHeader {
 void ADXERR_CallErrFunc1(const char *message);
 void *memset(void *dst, int value, unsigned int size);
 
-void FUN_00262a30(unsigned char *bytes, short value) {
+void ADXHDR_WriteBeShort(unsigned char *bytes, short value) {
     bytes[1] = value;
     bytes[0] = (unsigned short)value >> 8;
 }
 
-void FUN_00262a48(unsigned char *bytes, short value) {
+void ADXHDR_WriteLeShort(unsigned char *bytes, short value) {
     bytes[0] = value;
     bytes[1] = (unsigned short)value >> 8;
 }
 
-void FUN_00262a60(unsigned char *bytes, unsigned int value) {
+void ADXHDR_WriteBeLong(unsigned char *bytes, unsigned int value) {
     bytes[0] = value >> 24;
     bytes[1] = value >> 16;
     bytes[2] = value >> 8;
     bytes[3] = value;
 }
 
-void FUN_00262a80(unsigned char *bytes, unsigned int value) {
+void ADXHDR_WriteLeLong(unsigned char *bytes, unsigned int value) {
     bytes[0] = value;
     bytes[1] = value >> 8;
     bytes[2] = value >> 16;
     bytes[3] = value >> 24;
 }
 
-void FUN_00262aa0(unsigned char *src, AdxHeader *h)
+void adxhdr_get_base_info(unsigned char *src, AdxHeader *h)
 {
     h->encoding = *src++;
     h->blockSize = *src++;
@@ -82,12 +82,12 @@ void FUN_00262aa0(unsigned char *src, AdxHeader *h)
     h->flags = src[1];
 }
 
-void FUN_00262b60(unsigned char *src, AdxHeader *h) {
+void adxhdr_get_ext_info(unsigned char *src, AdxHeader *h) {
     unsigned char *field = src + 2;
     h->nloop = field[1] | (field[0] << 8);
 }
 
-void FUN_00262b80(unsigned char *src, AdxLoopInfo *dst)
+void adxhdr_get_loop_prm(unsigned char *src, AdxLoopInfo *dst)
 {
     dst->f0 = (src[0] << 8) | src[1];
     src += 2;
@@ -102,7 +102,7 @@ void FUN_00262b80(unsigned char *src, AdxLoopInfo *dst)
     dst->f16 = (src[0] << 24) | (src[1] << 16) | (src[2] << 8) | src[3];
 }
 
-void FUN_00262c70(unsigned char *src, AdxChannelInfo *dst)
+void adxhdr_get_ply_prm(unsigned char *src, AdxChannelInfo *dst)
 {
     dst->f0 = (src[0] << 8) | src[1];
     src += 2;
@@ -163,7 +163,7 @@ int FUN_00262d30(void *data, int size, int *hdrSize, AdxHeader *hdr)
     if (len < 16) {
         return -2;
     }
-    FUN_00262aa0(buf, hdr);
+    adxhdr_get_base_info(buf, hdr);
     buf += 16;
     len -= 16;
     if (hdr->version == 4) {
@@ -173,13 +173,13 @@ int FUN_00262d30(void *data, int size, int *hdrSize, AdxHeader *hdr)
     if (len < 4) {
         return 0;
     }
-    FUN_00262b60(buf, hdr);
+    adxhdr_get_ext_info(buf, hdr);
     buf += 4;
     if (len < hdr->nloop * 20) {
         return 0;
     }
     for (i = 0; i < hdr->nloop; i++) {
-        FUN_00262b80(buf, &hdr->loop[i]);
+        adxhdr_get_loop_prm(buf, &hdr->loop[i]);
     }
     len -= hdr->nloop * 20;
     for (i = 0; i < hdr->channels; i++) {
@@ -187,13 +187,13 @@ int FUN_00262d30(void *data, int size, int *hdrSize, AdxHeader *hdr)
             return 0;
         }
         len -= 12;
-        FUN_00262c70(buf, &hdr->channel[i]);
+        adxhdr_get_ply_prm(buf, &hdr->channel[i]);
         buf += 12;
     }
     return 0;
 }
 
-void FUN_00262ee8(unsigned char *dst, AdxHeader *h)
+void adxhdr_set_base_info(unsigned char *dst, AdxHeader *h)
 {
     unsigned char *p;
     int i;
@@ -202,11 +202,11 @@ void FUN_00262ee8(unsigned char *dst, AdxHeader *h)
     *dst++ = h->blockSize;
     *dst++ = h->bitsPerSample;
     *dst++ = h->channels;
-    FUN_00262a60(dst, h->sfreq);
+    ADXHDR_WriteBeLong(dst, h->sfreq);
     dst += 4;
-    FUN_00262a60(dst, h->nsmpl);
+    ADXHDR_WriteBeLong(dst, h->nsmpl);
     dst += 4;
-    FUN_00262a30(dst, h->cutoff);
+    ADXHDR_WriteBeShort(dst, h->cutoff);
     dst += 2;
     *dst++ = h->version;
     *dst++ = h->flags;
@@ -218,7 +218,7 @@ void FUN_00262ee8(unsigned char *dst, AdxHeader *h)
     }
 }
 
-int FUN_00262fe0(unsigned char *buffer, int size, int *written, AdxHeader *h) {
+int ADX_EncodeHeader(unsigned char *buffer, int size, int *written, AdxHeader *h) {
     if (written != 0) {
         *written = 0;
     }
@@ -227,8 +227,8 @@ int FUN_00262fe0(unsigned char *buffer, int size, int *written, AdxHeader *h) {
     }
     buffer[1] = 0;
     buffer[0] = 0x80;
-    FUN_00262a30(buffer + 2, 32);
-    FUN_00262ee8(buffer + 4, h);
+    ADXHDR_WriteBeShort(buffer + 2, 32);
+    adxhdr_set_base_info(buffer + 4, h);
     *written = 36;
     return 0;
 }

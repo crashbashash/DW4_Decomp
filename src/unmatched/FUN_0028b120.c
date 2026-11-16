@@ -1,5 +1,5 @@
-int UTY_MemCpy();
+int M2VMC_MacroBlock();
 
 void FUN_0028b120(void) {
-    UTY_MemCpy();
+    M2VMC_MacroBlock();
 }

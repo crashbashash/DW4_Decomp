@@ -54,19 +54,19 @@ extern SfdLib DAT_004bea88;
 
 int sfd_ReportError();
 int SFLIB_CheckHn(SfdHn *hn);
-int sfply_UpdateSysStat();
+int SFPLY_DecideSvrStat();
 int FUN_002b03e8(SfdHn *hn, int check);
 
-void FUN_002ada08(int index, int value);
-void sfd_SetCond(SfdHn *hn, int index, int value);
-void FUN_002adac8(SfdHn *hn, int index, int value);
-int FUN_002adb18(SfdHn *hn, int index, int value);
-int SFD_GetCond(SfdHn *hn, int index);
+void sfset_SetCondAll(int index, int value);
+void SFSET_SetCond(SfdHn *hn, int index, int value);
+void sfset_SetUsrCond(SfdHn *hn, int index, int value);
+int sfset_IsCondValid(SfdHn *hn, int index, int value);
+int SFSET_GetCond(SfdHn *hn, int index);
 void FUN_002adf48(char *ctx, int index, int *out);
 
-void SFD_UpdateSysStat(void)
+void SFD_GetSvrStat(void)
 {
-    sfply_UpdateSysStat();
+    SFPLY_DecideSvrStat();
 }
 
 int SFD_GetHnStat(SfdHn *hn)
@@ -80,44 +80,44 @@ int SFD_GetHnStat(SfdHn *hn)
 int SFD_SetCond(SfdHn *hn, int index, int value)
 {
     if (hn == 0) {
-        FUN_002ada08(index, value);
+        sfset_SetCondAll(index, value);
         sfd_lib[index] = value;
     } else {
         if (SFLIB_CheckHn(hn) != 0) {
             return sfd_ReportError(0, 0xFF000112);
         }
-        sfd_SetCond(hn, index, value);
-        FUN_002adac8(hn, index, value);
+        SFSET_SetCond(hn, index, value);
+        sfset_SetUsrCond(hn, index, value);
     }
     return 0;
 }
 
-void FUN_002ada08(int index, int value)
+void sfset_SetCondAll(int index, int value)
 {
     SfdHn **slots = DAT_004bea88.slots;
     int i;
     for (i = 0; i < 8; i++) {
         if (slots[i] != 0) {
-            sfd_SetCond(slots[i], index, value);
+            SFSET_SetCond(slots[i], index, value);
         }
     }
 }
 
-void sfd_SetCond(SfdHn *hn, int index, int value)
+void SFSET_SetCond(SfdHn *hn, int index, int value)
 {
-    if (FUN_002adb18(hn, index, value) != 0) {
+    if (sfset_IsCondValid(hn, index, value) != 0) {
         hn->cond[index] = value;
     }
 }
 
-void FUN_002adac8(SfdHn *hn, int index, int value)
+void sfset_SetUsrCond(SfdHn *hn, int index, int value)
 {
-    if (FUN_002adb18(hn, index, value) != 0) {
+    if (sfset_IsCondValid(hn, index, value) != 0) {
         hn->cond2[index] = value;
     }
 }
 
-int FUN_002adb18(SfdHn *hn, int index, int value)
+int sfset_IsCondValid(SfdHn *hn, int index, int value)
 {
     if (index == 6 && value == 1 && FUN_002b03e8(hn, 3) == 0) {
         return 0;
@@ -137,12 +137,12 @@ int SFD_GetCondDef(SfdHn *hn, int index, int *out)
         if (SFLIB_CheckHn(hn) != 0) {
             return sfd_ReportError(0, 0xFF000113);
         }
-        *out = SFD_GetCond(hn, index);
+        *out = SFSET_GetCond(hn, index);
     }
     return 0;
 }
 
-int SFD_GetCond(SfdHn *hn, int index)
+int SFSET_GetCond(SfdHn *hn, int index)
 {
     return hn->cond[index];
 }
@@ -166,7 +166,7 @@ int SFD_GetPlyInf(SfdHn *hn, SfdStatus160 *out)
     return 0;
 }
 
-int FUN_002adec8(SfdHn *hn, int index, int *out)
+int SFD_GetTrHn(SfdHn *hn, int index, int *out)
 {
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000117, out);
@@ -185,7 +185,7 @@ void FUN_002adf48(char *ctx, int index, int *out)
     *out = *value;
 }
 
-int FUN_002adf78(SfdHn *hn, char **data, int *size)
+int SFD_GetSofdecHeader(SfdHn *hn, char **data, int *size)
 {
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF00011C);

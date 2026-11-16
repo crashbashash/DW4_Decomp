@@ -7,9 +7,9 @@ int dvCiLoadDirInfo(const char *flist, void *buf, int bufsize, int fnamelen);
 int dvCiLoadDirInfoMem(const char *list, int listlen, void *buf, int bufsize, int fnamelen);
 void dvCiSetRdMode(int trycount, int spindlctrl, int datapattern, int rdmode);
 void dvCiSetRootDir(const char *rootdir);
-int dvCiIsExistFile(const char *fname);
-void dvCiSetLayer(unsigned int layer);
-int dvCiGetLayer(void);
+int dvCiIsExistFcache(const char *fname);
+void dvCiSetDvdLayer(unsigned int layer);
+int dvCiGetDvdLayer(void);
 int dvCiSrdSeek(int lsn);
 void ADXT_StartFname(void *adxt, const char *fname);
 void ADXT_EntryFname(void *adxt, const char *fname);
@@ -17,7 +17,7 @@ void *ADXF_Open(const char *fname, void *dir);
 
 extern int adxt_srd_rmode_sw;
 
-void adxps2_dvd_errfn(void *obj, const char *msg, int code)
+void adxps2_err_dvd(void *obj, const char *msg, int code)
 {
     ADXERR_CallErrFunc1(msg);
 }
@@ -46,7 +46,7 @@ int ADXPS2_LoadFcacheDvdMem(AdxFcachePrm *prm, const char *list, int listlen)
     return size;
 }
 
-void ADXPS2_SetDvdFsPrm(AdxDvdFsPrm *prm)
+void ADXPS2_SetRdModeDvd(AdxDvdFsPrm *prm)
 {
     if (prm != 0) {
         dvCiSetRdMode(prm->trycount, prm->spindlctrl, prm->datapattern, prm->rdmode);
@@ -59,17 +59,17 @@ void ADXPS2_SetDvdFsPrm(AdxDvdFsPrm *prm)
 
 int ADXPS2_IsExistFileDvd(const char *fname)
 {
-    return dvCiIsExistFile(fname);
+    return dvCiIsExistFcache(fname);
 }
 
 void ADXPS2_SetDvdLayer(unsigned int layer)
 {
-    dvCiSetLayer(layer);
+    dvCiSetDvdLayer(layer);
 }
 
 int ADXPS2_GetDvdLayer(void)
 {
-    return dvCiGetLayer();
+    return dvCiGetDvdLayer();
 }
 
 int ADXPS2_SeekDvd(int lsn)

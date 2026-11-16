@@ -48,9 +48,9 @@ typedef struct SfdTstHeader {
 
 extern SfdTstHeader DAT_004f50d0;
 extern char DAT_004f51e8[];
-extern int DAT_004be8b8;
-extern int DAT_004beb40;
-extern char *DAT_004beb44;
+extern int sfadxt_stat;
+extern int sftst_debout_siz;
+extern char *sftst_debout_buf;
 extern char *DAT_004beb4c;
 extern char *DAT_004beb50;
 extern SfdTst *DAT_004beb48;
@@ -61,14 +61,14 @@ int strlen();
 int sprintf();
 int UTY_MulDiv(int value, int scale, int divisor);
 
-void FUN_002b04e8(SfdTst *tst);
-int FUN_002b0a70(SfdTst *tst, int value);
-void FUN_002b0ad0(SfdTst *tst, int delta);
+void sftst_ResetHist(SfdTst *tst);
+int sftst_UpdateMovAve(SfdTst *tst, int value);
+void sftst_ModifyHist(SfdTst *tst, int delta);
 void FUN_002b0cf8(SfdTst *tst);
-int FUN_002b0b30(SfdTst *tst);
-void FUN_002b0b98(void);
+int sftst_CalcMovAve(SfdTst *tst);
+void sftst_DebInit(void);
 
-void FUN_002b0408(SfdTst *p)
+void SFTST_Create(SfdTst *p)
 {
     memset(p, 0, 0x1C0);
     p->f0 = 1;
@@ -76,7 +76,7 @@ void FUN_002b0408(SfdTst *p)
     p->adjmode = 0;
     p->paused = 1;
     p->count = 10;
-    FUN_002b04e8(p);
+    sftst_ResetHist(p);
     p->master_time = 0;
     p->f272 = 1;
     p->help_time = 0;
@@ -105,10 +105,10 @@ void FUN_002b0408(SfdTst *p)
     p->diff_l_min = 0;
     p->diff_a_max = 0;
     p->diff_a_min = 0;
-    FUN_002b0b98();
+    sftst_DebInit();
 }
 
-void FUN_002b04e8(SfdTst *tst)
+void sftst_ResetHist(SfdTst *tst)
 {
     memset(tst->values, 0, 0xF0);
     tst->pos = 0;
@@ -121,7 +121,7 @@ void FUN_002b0528(SfdTst *tst, int value)
 }
 
 /* Returns the first copied value so it holds v0 and the second takes v1. */
-long FUN_002b0530(SfdTst *tst, SfdRatio *ratio)
+long SFTST_SetTolerance(SfdTst *tst, SfdRatio *ratio)
 {
     long r = ratio->num;
     tst->f312 = r;
@@ -129,19 +129,19 @@ long FUN_002b0530(SfdTst *tst, SfdRatio *ratio)
     return r;
 }
 
-void FUN_002b0548(SfdTst *tst, SfdRatio *ratio)
+void SFTST_SetExcessErr(SfdTst *tst, SfdRatio *ratio)
 {
     tst->f328 = ratio->num;
     tst->f336 = ratio->den;
 }
 
-void FUN_002b0560(SfdTst *tst, SfdRatio *ratio)
+void SFTST_SetAdjStart(SfdTst *tst, SfdRatio *ratio)
 {
     tst->f344 = ratio->num;
     tst->f352 = ratio->den;
 }
 
-long FUN_002b0578(SfdTst *tst, SfdRatio *ratio)
+long SFTST_SetAdjPoff(SfdTst *tst, SfdRatio *ratio)
 {
     long a;
     long b;
@@ -152,53 +152,53 @@ long FUN_002b0578(SfdTst *tst, SfdRatio *ratio)
     return a;
 }
 
-void FUN_002b0590(SfdTst *tst, int count)
+void SFTST_SetMovaveRange(SfdTst *tst, int count)
 {
     if (count > 0) {
         tst->count = count;
     }
 }
 
-void FUN_002b05a0(SfdTst *tst, unsigned int pastat)
+void SFTST_Pause(SfdTst *tst, unsigned int pastat)
 {
     tst->pastat = pastat;
 }
 
-void FUN_002b05a8(SfdTst *tst, int paused)
+void SFTST_SetAdjFlg(SfdTst *tst, int paused)
 {
     tst->paused = paused;
 }
 
-void FUN_002b05b0(SfdTst *tst, SfdRatio *ratio)
+void SFTST_GoNextFrame(SfdTst *tst, SfdRatio *ratio)
 {
     if (tst->paused == 0) {
         tst->out_time += tst->f304 * ratio->num / ratio->den;
     }
 }
 
-int FUN_002b0a70(SfdTst *tst, int value)
+int sftst_UpdateMovAve(SfdTst *tst, int value)
 {
     int *pos = &tst->pos;
     int p = *pos;
     int average;
     tst->values[p % tst->count] = value;
     *pos = p + 1;
-    average = FUN_002b0b30(tst);
+    average = sftst_CalcMovAve(tst);
     tst->movave_1st = average;
     tst->movave_2nd = average;
     return average;
 }
 
-void FUN_002b0ad0(SfdTst *tst, int delta)
+void sftst_ModifyHist(SfdTst *tst, int delta)
 {
     int i;
     for (i = 0; i < tst->count; i++) {
         tst->values[i] -= delta;
     }
-    tst->movave_2nd = FUN_002b0b30(tst);
+    tst->movave_2nd = sftst_CalcMovAve(tst);
 }
 
-int FUN_002b0b30(SfdTst *tst)
+int sftst_CalcMovAve(SfdTst *tst)
 {
     int count = tst->count;
     int sum = 0;
@@ -209,18 +209,18 @@ int FUN_002b0b30(SfdTst *tst)
     return sum / count;
 }
 
-void FUN_002b0b80(char *buf, int size)
+void SFDEB_InitTst(char *buf, int size)
 {
-    DAT_004beb44 = buf;
-    DAT_004beb40 = size;
+    sftst_debout_buf = buf;
+    sftst_debout_siz = size;
 }
 
-void FUN_002b0b98(void)
+void sftst_DebInit(void)
 {
     SfdTstHeader s = DAT_004f50d0;
-    if (DAT_004beb44 != 0) {
-        memset(DAT_004beb44, 0, DAT_004beb40);
-        DAT_004beb4c = DAT_004beb44;
+    if (sftst_debout_buf != 0) {
+        memset(sftst_debout_buf, 0, sftst_debout_siz);
+        DAT_004beb4c = sftst_debout_buf;
         strcpy(DAT_004beb4c, s.text);
         DAT_004beb4c += strlen(s.text);
         DAT_004beb50 = DAT_004beb4c;

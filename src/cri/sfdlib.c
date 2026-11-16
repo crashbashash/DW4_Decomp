@@ -33,8 +33,8 @@ extern SfdLibInf sfd_lib;
 extern int sfd_cond_defaults[100];
 extern SfdHandle *sfd_cur_hn;
 
-void UTY_MemCpy(char *dst, char *src, unsigned int n);
-void mpsutl_FillWords(int *dst, int value, unsigned int count);
+void M2VMC_MacroBlock(char *dst, char *src, unsigned int n);
+void UTY_MemsetDword(int *dst, int value, unsigned int count);
 void SJRBF_Init(void);
 void SJRBF_Finish(void);
 void SVM_Lock(void);
@@ -42,13 +42,13 @@ void SVM_Unlock(void);
 void SFTIM_Init(void *tim, int prm);
 void SFTIM_Finish(void *tim);
 void sfbuf_Init(void *buf);
-void sfbuf_Finish(void *buf);
-int sftrn_Init(void *dst, void *src);
-int sftrn_Finish(void *modules);
+void SFBUF_Finish(void *buf);
+int SFTRN_Init(void *dst, void *src);
+int SFTRN_Finish(void *modules);
 int SFD_Destroy(SfdHandle *hn);
 void sfmpvps2_Init(void);
-void sfhdr_Init(void);
-void sfhdr_Finish(void);
+void SFHDS_Init(void);
+void SFHDS_Finish(void);
 
 long sfd_InitLib(SfdInitPrm *prm);
 void sfd_ClearSvrCnt(SfdLibInf *lib);
@@ -72,13 +72,13 @@ int SFD_IsHnSize(void *work, int size) {
     return size == SFD_HN_SIZE;
 }
 
-/* matching construct: manual — a long result returned from the int-valued sftrn_Init keeps the final call a jal, not a sibling call */
+/* matching construct: manual — a long result returned from the int-valued SFTRN_Init keeps the final call a jal, not a sibling call */
 long sfd_InitLib(SfdInitPrm *prm) {
     SfdLibInf *lib = &sfd_lib;
     int i;
 
-    mpsutl_FillWords((int *)lib, 0, sizeof(SfdLibInf) / 4);
-    UTY_MemCpy((char *)lib->cond, (char *)sfd_cond_defaults, sizeof(lib->cond));
+    UTY_MemsetDword((int *)lib, 0, sizeof(SfdLibInf) / 4);
+    M2VMC_MacroBlock((char *)lib->cond, (char *)sfd_cond_defaults, sizeof(lib->cond));
     lib->prm = *prm;
     lib->sysStat = 0;
     sfd_InitErr(&lib->err);
@@ -88,7 +88,7 @@ long sfd_InitLib(SfdInitPrm *prm) {
     for (i = 7; i >= 0; i--) {
         lib->hn[i] = 0;
     }
-    return sftrn_Init(sfd_lib.trn, prm->modules);
+    return SFTRN_Init(sfd_lib.trn, prm->modules);
 }
 
 void sfd_ClearSvrCnt(SfdLibInf *lib) {
@@ -113,8 +113,8 @@ int SFD_Finish(void) {
         hn++;
     }
     SFTIM_Finish(sfd_lib.tim);
-    sfbuf_Finish(sfd_lib.buf);
-    err = sftrn_Finish(sfd_lib.trn);
+    SFBUF_Finish(sfd_lib.buf);
+    err = SFTRN_Finish(sfd_lib.trn);
     sfd_FinishOther();
     sfd_FinishModules();
     sfd_FinishSj();
@@ -214,11 +214,11 @@ void sfd_FinishSj(void) {
 
 void sfd_InitModules(void) {
     sfmpvps2_Init();
-    sfhdr_Init();
+    SFHDS_Init();
 }
 
 void sfd_FinishModules(void) {
-    sfhdr_Finish();
+    SFHDS_Finish();
 }
 
 void sfd_InitOther(void) {

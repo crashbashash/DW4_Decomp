@@ -7,19 +7,19 @@ extern MpvBuildInf mpv_build_inf;
 extern unsigned char mpv_endian_mark[4]; /* 4, 3, 2, 1 */
 extern int mpv_default_cond[MPV_COND_MAX];
 extern MpvLib mpv_lib;
-extern MpvHn *mpv_cur_hn;               /* the handle last given to mpv_CheckHn */
+extern MpvHn *mpv_cur_hn;               /* the handle last given to MPVLIB_CheckHn */
 extern int mpv_lower_work[];            /* 0x3840 bytes for the lower layer */
 extern unsigned char mpv_clamp_table[1024];
 extern unsigned char *mpv_clamp;        /* mpv_clamp_table + 384 */
 
 unsigned char *MPV_SearchDelim(unsigned char *data, int size, int code);
-int mpvsc_GetKind(unsigned char *p);
+int MPV_CheckDelim(unsigned char *p);
 int mpv_ReportError(void *hn, int error);
-void mpsutl_CopyWords(void *dst, const void *src, int words);
-void mpsutl_FillWords(void *dst, int value, int size);
+void UTY_MemcpyDword(void *dst, const void *src, int words);
+void UTY_MemsetDword(void *dst, int value, int size);
 void mpv_ResetErr(MpvErrObj *err);
-void mpv_SetBufEnt(MpvHn *hn, int index, int a, int b, int c);
-void mpv_SetLowSize(MpvHn *hn, int a, int b);
+void MPV_SetUsrSj(MpvHn *hn, int index, int a, int b, int c);
+void MPV_SetPicUsrBuf(MpvHn *hn, int a, int b);
 int mpvhook_IsInstalled(void);
 void mpvhook_Init(int n, void *work, int size);
 void mpv_InstallHooks(void);
@@ -40,16 +40,16 @@ long long __muldi3(long long a, long long b);
 int mpv_IsLowerReady(void);
 void mpv_BuildClampTable(void);
 void mpv_FinishLower(void);
-void mpv_ReleaseMem(void *p, int size);
-void mpv_ClearMem(void *p, int size);
-MpvHn *mpv_SearchFreeHn(void);
-MpvHn *mpv_InitHn(MpvHn *hn);
-int mpv_CreateLower(MpvHn *hn);
+void mpvlib_FreeLc(void *p, int size);
+void mpvlib_AllocLc(void *p, int size);
+MpvHn *mpvlib_SearchFreeHn(void);
+MpvHn *mpvlib_InitHn(MpvHn *hn);
+int mpvcmc_OneMakeMbTa(MpvHn *hn);
 void mpv_BindHnBuffers(MpvHn *hn);
 void mpv_ResetPicInf(MpvPicInf *inf);
-int mpv_CheckHn(MpvHn *hn);
-void mpv_DestroyLower(MpvHn *hn);
-void mpv_NullCbFn(void);
+int MPVLIB_CheckHn(MpvHn *hn);
+void mpvcmc_BiMakeMbTa(MpvHn *hn);
+void MPV_MbCbFn(void);
 void mpvlib_SetCondAll(int no, int value);
 void mpv_SetLowerCond(MpvHn *hn, int no, int value);
 void mpv_GetLowerInf(MpvHn *hn);
@@ -79,13 +79,13 @@ int MPV_IsConformable(unsigned char *data, int size) {
     if (p == 0) {
         return 0;
     }
-    if (mpvsc_GetKind(p) & 0x10) {
+    if (MPV_CheckDelim(p) & 0x10) {
         return 0;
     }
     return 1;
 }
 
-int mpv_CheckLibIntegrity(void) {
+int mpvlib_ChkFatal(void) {
     if (mpv_build_inf.magic != 0x5a5a5a5a) {
         return mpv_ReportError(0, 0xff03ff02);
     }
@@ -97,17 +97,17 @@ int mpv_CheckLibIntegrity(void) {
     return 0;
 }
 
-void mpv_InitStatus(int status) {
+void mpvlib_ChkCacheMode(int status) {
 }
 
-int mpv_AddOptionFlag(int flags) {
+int MPVLIB_ConvIix(int flags) {
     if (mpv_lib.optionFlag != 0) {
         flags |= 0x02000000;
     }
     return flags;
 }
 
-int mpv_AddInitFlag(int flags) {
+int MPVLIB_ConvOix(int flags) {
     if (mpv_lib.initFlag != 0) {
         flags |= 0x02000000;
     }
@@ -118,7 +118,7 @@ int mpv_AddInitFlag(int flags) {
 void mpv_InitClampTable(unsigned char *copy) {
     mpv_BuildClampTable();
     if (copy != 0) {
-        mpsutl_CopyWords(copy, mpv_clamp_table, 256);
+        UTY_MemcpyDword(copy, mpv_clamp_table, 256);
         mpv_clamp = copy + 384;
     }
 }
@@ -140,7 +140,7 @@ void mpv_BuildClampTable(void) {
     mpv_clamp = &mpv_clamp_table[384];
 }
 
-void mpv_FreeAllHn(void) {
+void mpvlib_InitObjTbl(void) {
     MpvHn *hn = mpv_lib.hn;
     int nhn = mpv_lib.nhn;
     int i;
@@ -164,17 +164,17 @@ void mpv_InitHw(MpvLib *pool) {
 }
 
 /* matching construct: 72-variant sweep — store order and declarations */
-void mpv_InitWork(int nhn, char *work) {
+void mpvlib_InitWork(int nhn, char *work) {
     char *base;
     char *tables;
     char *pool;
 
     base = (char *)(((int)work + 63) & ~63);
-    mpsutl_FillWords(base, 0, (nhn << 8) + 0x800);
+    UTY_MemsetDword(base, 0, (nhn << 8) + 0x800);
     tables = base + (nhn << 10);
     pool = tables + 0x420;
-    mpv_ClearMem(pool, MPV_POOL_SIZE);
-    mpsutl_CopyWords(&mpv_lib, mpv_default_cond, MPV_COND_MAX);
+    mpvlib_AllocLc(pool, MPV_POOL_SIZE);
+    UTY_MemcpyDword(&mpv_lib, mpv_default_cond, MPV_COND_MAX);
     mpv_lib.tables = tables;
     mpv_lib.pool = pool;
     mpv_lib.nhn = nhn;
@@ -225,23 +225,23 @@ void mpv_ResetPicInf(MpvPicInf *inf) {
 
 void MPV_Finish(void) {
     mpv_FinishLower();
-    mpv_ReleaseMem(mpv_lib.pool, MPV_POOL_SIZE);
+    mpvlib_FreeLc(mpv_lib.pool, MPV_POOL_SIZE);
 }
 
 MpvHn *MPV_Create(void) {
     MpvHn *hn;
 
-    hn = mpv_SearchFreeHn();
+    hn = mpvlib_SearchFreeHn();
     if (hn == 0) {
         return 0;
     }
-    mpv_ClearMem(hn, MPV_HN_SIZE);
-    hn = mpv_InitHn(hn);
-    hn->lower = mpv_CreateLower(hn);
+    mpvlib_AllocLc(hn, MPV_HN_SIZE);
+    hn = mpvlib_InitHn(hn);
+    hn->lower = mpvcmc_OneMakeMbTa(hn);
     return hn;
 }
 
-MpvHn *mpv_SearchFreeHn(void) {
+MpvHn *mpvlib_SearchFreeHn(void) {
     MpvHn *hn = mpv_lib.hn;
     int nhn = mpv_lib.nhn;
     int i;
@@ -254,12 +254,12 @@ MpvHn *mpv_SearchFreeHn(void) {
     return 0;
 }
 
-MpvHn *mpv_InitHn(MpvHn *hn) {
+MpvHn *mpvlib_InitHn(MpvHn *hn) {
     int i;
 
     mpv_BindHnBuffers(hn);
     hn->f396 = 0;
-    mpsutl_CopyWords(hn->cond, mpv_lib.cond, MPV_COND_MAX);
+    UTY_MemcpyDword(hn->cond, mpv_lib.cond, MPV_COND_MAX);
     mpv_ResetErr(&hn->err);
     mpv_ResetPicInf(&hn->picInf);
     hn->skipReq = 0;
@@ -271,14 +271,14 @@ MpvHn *mpv_InitHn(MpvHn *hn) {
     hn->f868 = 0;
     hn->idcPrec = 0;
     for (i = 0; i < 4; i++) {
-        mpv_SetBufEnt(hn, i, 0, 0, 0);
+        MPV_SetUsrSj(hn, i, 0, 0, 0);
     }
-    mpv_SetLowSize(hn, 0, 0);
+    MPV_SetPicUsrBuf(hn, 0, 0);
     hn->stat = MPV_HN_USED;
     return hn;
 }
 
-void MPV_GetPicSize(MpvHn *hn, int *width, int *height) {
+void MPV_GetDctCnt(MpvHn *hn, int *width, int *height) {
     MpvSeqInf *seq = &hn->seq;
 
     *width = seq->width;
@@ -286,22 +286,22 @@ void MPV_GetPicSize(MpvHn *hn, int *width, int *height) {
 }
 
 int MPV_Destroy(MpvHn *hn) {
-    if (mpv_CheckHn(hn) != 0) {
+    if (MPVLIB_CheckHn(hn) != 0) {
         return mpv_ReportError(0, 0xFF030201);
     }
-    mpv_DestroyLower(hn);
-    mpv_ReleaseMem(hn, MPV_HN_SIZE);
+    mpvcmc_BiMakeMbTa(hn);
+    mpvlib_FreeLc(hn, MPV_HN_SIZE);
     hn->stat = MPV_HN_FREE;
     return 0;
 }
 
-void mpv_ClearMem(void *p, int size) {
+void mpvlib_AllocLc(void *p, int size) {
 }
 
-void mpv_ReleaseMem(void *p, int size) {
+void mpvlib_FreeLc(void *p, int size) {
 }
 
-void mpv_NullCbFn(void) {
+void MPV_MbCbFn(void) {
 }
 
 /* sets condition `no` of a handle, or with no handle the default of every new and every live handle */
@@ -309,13 +309,13 @@ int MPV_SetCond(MpvHn *hn, int no, int value) {
     int *cond;
 
     if (no == MPV_COND_CBFN && value == 0) {
-        value = (int)mpv_NullCbFn;
+        value = (int)MPV_MbCbFn;
     }
     if (hn == 0) {
         mpvlib_SetCondAll(no, value);
         cond = mpv_lib.cond;
     } else {
-        if (mpv_CheckHn(hn) != 0) {
+        if (MPVLIB_CheckHn(hn) != 0) {
             return mpv_ReportError(0, 0xFF030202);
         }
         cond = hn->cond;
@@ -343,7 +343,7 @@ int MPV_GetCond(MpvHn *hn, int no, int *value) {
     if (hn == 0) {
         cond = mpv_lib.cond;
     } else {
-        if (mpv_CheckHn(hn) != 0) {
+        if (MPVLIB_CheckHn(hn) != 0) {
             return mpv_ReportError(0, 0xFF030210);
         }
         cond = hn->cond;
@@ -352,7 +352,7 @@ int MPV_GetCond(MpvHn *hn, int no, int *value) {
     return 0;
 }
 
-int mpv_CheckHn(MpvHn *hn) {
+int MPVLIB_CheckHn(MpvHn *hn) {
     mpv_cur_hn = hn;
     if (hn == 0) {
         return -1;
@@ -376,11 +376,11 @@ void mpv_FinishLower(void) {
     mpvhook_Finish();
 }
 
-int mpv_CreateLower(MpvHn *hn) {
+int mpvcmc_OneMakeMbTa(MpvHn *hn) {
     return mpvhook_Create(hn);
 }
 
-void mpv_DestroyLower(MpvHn *hn) {
+void mpvcmc_BiMakeMbTa(MpvHn *hn) {
     mpvhook_Destroy(hn->lower);
 }
 

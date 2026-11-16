@@ -19,7 +19,7 @@ int strlen(const char *s);
 char *strcpy(char *dst, const char *src);
 char *strncpy(char *dst, const char *src, int n);
 int sprintf(char *buf, const char *fmt, ...);
-void mwsfd_Error(const char *message, ...);
+void MWSFSVM_Error(const char *message, ...);
 int ADXF_GetFnameRangeEx(int dir, int ofst, char *fname, void **outDir, int *outOfst, int *outNsct);
 SfdSj *SJMEM_Create(char *buf, int size);
 void LSC_Stop(struct LscObj *lsc);
@@ -30,9 +30,9 @@ void MWSFSEE_StartFnameSub2(MwsfdPly *ply, int a, int b);
 void MWSFD_SetFlowLimit(MwsfdPly *ply, int lo, int hi);
 int MWSFD_IsEnableHndl(MwsfdPly *ply);
 SfdSj *mwPlyGetInputSj(MwsfdPly *ply);
-int mwsfsfx_SetAddInfSj(MwsfdPly *ply);
+int MWSFTAG_SetAinfSj(MwsfdPly *ply);
 void mwsfsfx_ResetAddInf(MwsfdPly *ply);
-void mwsfsfx_ResetAddInfSj(MwsfdPly *ply);
+void MWSFTAG_ResetAinfSj(MwsfdPly *ply);
 void mwPlyLinkStm(MwsfdPly *ply, int sw);
 void mwsst_Start(void *input);
 void mwsst_Stop(void *input);
@@ -46,10 +46,10 @@ int SFD_Pause(void *sfd, int sw);
 int SFD_Standby(void *sfd);
 int SFD_Start(void *sfd);
 int SFD_Stop(void *sfd);
-void SFD_SetReadIndex(void *sfd, int index);
+void SFD_AddWritePtr(void *sfd, int index);
 void SFD_TermSupply(void *sfd);
 int SFD_GetCondDef(void *sfd, int id, int *value);
-void SFD_GetInputBufStat(void *sfd, SfdBufStat *stat);
+void SFD_GetWritePtr(void *sfd, SfdBufStat *stat);
 
 void mwSfdStopDec(MwsfdPly *ply);
 void mw_sfd_start_ex(MwsfdPly *ply);
@@ -72,7 +72,7 @@ int mwPlySfdStandby(MwsfdPly *ply)
 
     if (err != 0) {
         MWSFLIB_SetErrCode(-311);
-        mwsfd_Error("E20010703F mwPlySfdStandby: ");
+        MWSFSVM_Error("E20010703F mwPlySfdStandby: ");
         err = -311;
     }
     return err;
@@ -84,7 +84,7 @@ int mwPlySfdStart(MwsfdPly *ply)
 
     if (err != 0) {
         MWSFLIB_SetErrCode(-307);
-        mwsfd_Error("E20010703G mwPlySfdStart: ");
+        MWSFSVM_Error("E20010703G mwPlySfdStart: ");
         err = -307;
     }
     return err;
@@ -95,7 +95,7 @@ void mwPlySfdGetWritePtr(MwsfdPly *ply, char **data, int *len, int *tailLen)
 {
     SfdBufStat stat;
 
-    SFD_GetInputBufStat(ply->sfd, &stat);
+    SFD_GetWritePtr(ply->sfd, &stat);
     *data = stat.ck0.data;
     *len = stat.ck0.len;
     *tailLen = stat.tailLen;
@@ -106,7 +106,7 @@ void mwPlySfdAddWritePtr(MwsfdPly *ply, int index)
     void *sfd = ply->sfd;
 
     if (index >= 0) {
-        SFD_SetReadIndex(sfd, index);
+        SFD_AddWritePtr(sfd, index);
     }
 }
 
@@ -120,7 +120,7 @@ int mwPlyIsPause(MwsfdPly *ply)
     } else if (stat == 1) {
         result = 1;
     } else {
-        mwsfd_Error("E10821A : Invalid value of SFD_GetPaStat : %d", stat);
+        MWSFSVM_Error("E10821A : Invalid value of SFD_GetPaStat : %d", stat);
         result = 0;
     }
     return result;
@@ -136,16 +136,16 @@ void mw_sfd_start_ex(MwsfdPly *ply)
 {
     void *input;
 
-    MWSFLIB_GetLibWorkPtr();
+    mwsflib_GetVersionStr();
     if (ply->sfd != 0) {
         if (MWSFCRE_ResetSfdHn(ply) != 0) {
-            mwsfd_Error("E0203263: mw_sfd_start_ex: RESET failed.");
+            MWSFSVM_Error("E0203263: mw_sfd_start_ex: RESET failed.");
             return;
         }
         MWSST_Restart(ply);
-        mwsfsfx_ResetAddInfSj(ply);
-        if (mwsfsfx_SetAddInfSj(ply) != 0) {
-            mwsfd_Error("E201213 mw_sfd_start_ex: can't set AddInfSJ");
+        MWSFTAG_ResetAinfSj(ply);
+        if (MWSFTAG_SetAinfSj(ply) != 0) {
+            MWSFSVM_Error("E201213 mw_sfd_start_ex: can't set AddInfSJ");
             return;
         }
         mwsfsfx_ResetAddInf(ply);
@@ -173,11 +173,11 @@ void mwsfd_InitForStart(MwsfdPly *ply)
 void mwPlyStartFname(MwsfdPly *ply, char *fname)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122601: mwPlyStartFname: handle is invalid.");
+        MWSFSVM_Error("E1122601: mwPlyStartFname: handle is invalid.");
         return;
     }
     if (fname == 0) {
-        mwsfd_Error("E10915C: mwPlyStartFname: fname is NULL.");
+        MWSFSVM_Error("E10915C: mwPlyStartFname: fname is NULL.");
         return;
     }
     mwSfdStartFnameSub(ply, fname, 0, -1);
@@ -198,7 +198,7 @@ void mwSfdStartMem(MwsfdPly *ply, char *buf, int size)
     SfdSj *sj;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122610 mwSfdStartMem: handle is invalid.");
+        MWSFSVM_Error("E1122610 mwSfdStartMem: handle is invalid.");
         return;
     }
     mwSfdStopDec(ply);
@@ -215,7 +215,7 @@ void mwSfdStartMem(MwsfdPly *ply, char *buf, int size)
 void mwSfdStartSj(MwsfdPly *ply, SfdSj *sj)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122609 mwSfdStartSj: handle is invalid.");
+        MWSFSVM_Error("E1122609 mwSfdStartSj: handle is invalid.");
         return;
     }
     mwSfdStopDec(ply);
@@ -239,7 +239,7 @@ void mwSfdStopDec(MwsfdPly *ply)
     ply->stat = 0;
     if (SFD_Stop(sfd) != 0) {
         MWSFLIB_SetErrCode(-308);
-        mwsfd_Error("E2003 mwSfdStop:can't stop SFD");
+        MWSFSVM_Error("E2003 mwSfdStop:can't stop SFD");
     }
     mwsst_Stop(&ply->sst);
     ply->f692 = 0;
@@ -252,7 +252,7 @@ void mwSfdStopDec(MwsfdPly *ply)
 void mwSfdStop(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122602 mwSfdStop: handle is invalid.");
+        MWSFSVM_Error("E1122602 mwSfdStop: handle is invalid.");
         return;
     }
     mwSfdStopDec(ply);
@@ -267,7 +267,7 @@ void mwSfdPause(MwsfdPly *ply, int sw)
     int value;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122604 mwSfdPause; handle is invalid.");
+        MWSFSVM_Error("E1122604 mwSfdPause; handle is invalid.");
         return;
     }
     sfd = ply->sfd;
@@ -282,7 +282,7 @@ void mwSfdPause(MwsfdPly *ply, int sw)
     }
     if (SFD_Pause(sfd, sw) != 0) {
         MWSFLIB_SetErrCode(-310);
-        mwsfd_Error("E2007 mwSfdPause; can't pause (%s)", sw == 1 ? "ON" : "OFF");
+        MWSFSVM_Error("E2007 mwSfdPause; can't pause (%s)", sw == 1 ? "ON" : "OFF");
     }
     mwsst_Pause(&ply->sst, sw);
     ply->pause = sw;
@@ -291,7 +291,7 @@ void mwSfdPause(MwsfdPly *ply, int sw)
 void mwPlyStartAfs(MwsfdPly *ply, int dir, int ofst)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122638: mwPlyStartAfs: handle is invalid.");
+        MWSFSVM_Error("E1122638: mwPlyStartAfs: handle is invalid.");
         return;
     }
     ply->vtbl->setSj(ply, mwPlyGetInputSj(ply));
@@ -319,7 +319,7 @@ void mwPlyChkSupply(MwsfdPly *ply)
 void MWSFPLY_RecordFname(MwsfdPly *ply, char *fname)
 {
     if (ply->fnameMax < strlen(fname)) {
-        mwsfd_Error("E211121: filename is longer.");
+        MWSFSVM_Error("E211121: filename is longer.");
         strncpy(ply->fname, fname, ply->fnameMax);
         return;
     }
@@ -352,7 +352,7 @@ void mwply_SetAfsRange(MwsfdPly *ply, int dir, int ofst)
         ply->stmNsct = outNsct;
         ply->stmReq = 1;
     } else {
-        mwsfd_Error("E211151: ADXF_GetFnameRangeEx() faild.");
+        MWSFSVM_Error("E211151: ADXF_GetFnameRangeEx() faild.");
     }
 }
 
@@ -369,11 +369,11 @@ void mwply_OpenSctRange(MwsfdNameObj *obj, int first, unsigned int size)
 void mwPlyStartFnameRange(MwsfdPly *ply, char *fname, int ofst, int nsct)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E407021: mwPlyStartFnameRange: handle is invalid.");
+        MWSFSVM_Error("E407021: mwPlyStartFnameRange: handle is invalid.");
         return;
     }
     if (fname == 0) {
-        mwsfd_Error("E407022: mwPlyStartFnameRange: fname is NULL.");
+        MWSFSVM_Error("E407022: mwPlyStartFnameRange: fname is NULL.");
         return;
     }
     ply->vtbl->setSj(ply, mwPlyGetInputSj(ply));

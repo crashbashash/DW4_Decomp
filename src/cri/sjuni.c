@@ -90,7 +90,7 @@ int sjuni_IsGetChunk(SjUniObj *sj, unsigned int line, int nbyte, int *rbyte);
 int sjuni_GetNumChunk(SjUniObj *sj, int line);
 int sjuni_GetNumFreeNode(SjUniObj *sj);
 
-void sjuni_Error(void *obj, int code)
+void SJUNI_Error(void *obj, int code)
 {
     SJERR_CallErr("SJUNI Error");
 }
@@ -154,7 +154,7 @@ SjUniObj *sjuni_Create(int mode, char *work, int wksize)
     sj->uuid = sjuni_uuid;
     sj->pool = (SjUniNode *)work;
     sj->npool = wksize / (int)sizeof(SjUniNode);
-    sj->err = sjuni_Error;
+    sj->err = SJUNI_Error;
     sj->errobj = sj;
     sjuni_Reset(sj);
     return sj;

@@ -22,9 +22,9 @@ int ADXSJD_GetFormat(AdxSjdObj *sjd);
 int ADXSJD_GetNumLoop(AdxSjdObj *sjd);
 int ADXSJD_GetLpEndOfst(AdxSjdObj *sjd);
 char *ADXSJD_GetSpsdInfo(AdxSjdObj *sjd);
-void ADXSJD_SaveDly(AdxSjdObj *sjd);
-void ADXSJD_RestoreDly(AdxSjdObj *sjd);
-int ADXSTM_GetStatRead(AdxStmObj *stm);
+void ADXSJD_TakeSnapshot(AdxSjdObj *sjd);
+void ADXSJD_RestoreSnapshot(AdxSjdObj *sjd);
+int ADXSTM_GetReadFlg(AdxStmObj *stm);
 void ADXSTM_Stop(AdxStmObj *stm);
 int ADXRNA_GetNumRoom(AdxRna *rna);
 void ADXRNA_SetNumChan(AdxRna *rna, int nch);
@@ -38,14 +38,14 @@ int LSC_GetStat(LscObj *lsc);
 void adxt_trap_entry(AdxtObj *adxt);
 
 /* Trap at the loop start: keeps the decoder's history there and arms the loop-end trap. */
-void adxt_trap_entry_lp(AdxtObj *adxt)
+void adxt_trap_entry_lps(AdxtObj *adxt)
 {
     AdxSjdObj *sjd = adxt->sjd;
     int lpspos = ADXSJD_GetLpStartPos(sjd);
     int lpsofst = ADXSJD_GetLpStartOfst(sjd);
     int lpepos = ADXSJD_GetLpEndPos(sjd);
 
-    ADXSJD_SaveDly(sjd);
+    ADXSJD_TakeSnapshot(sjd);
     ADXSJD_SetTrapCnt(sjd, 0);
     adxt->trpnsmpl = lpepos - lpspos;
     ADXSJD_SetTrapNumSmpl(sjd, adxt->trpnsmpl);
@@ -86,7 +86,7 @@ void adxt_trap_entry(AdxtObj *adxt)
         sji->vtbl->getChunk(sji, SJ_LIN_DATA, lpsofst, &ck);
         sji->vtbl->putChunk(sji, SJ_LIN_FREE, &ck);
     }
-    ADXSJD_RestoreDly(sjd);
+    ADXSJD_RestoreSnapshot(sjd);
     adxt->lpcnt++;
 }
 
@@ -121,7 +121,7 @@ void adxt_set_outpan(AdxtObj *adxt)
 
 /* Trap at the end of a linked stream: drops the footer and the next stream's header from the input
  * (they may straddle two chunks) and restarts the decoder on the next stream. */
-void adxt_trap_entry_lnk(AdxtObj *adxt)
+void adxt_nlp_trap_entry(AdxtObj *adxt)
 {
     AdxSjdObj *sjd;
     SfdSj *sj;
@@ -255,7 +255,7 @@ void adxt_stat_decinfo(AdxtObj *adxt)
         ADXSJD_SetTrapNumSmpl(sjd, adxt->trpnsmpl);
         ADXSJD_SetTrapDtLen(sjd, 0);
         ADXSJD_SetTrapCnt(sjd, 0);
-        ADXSJD_EntryTrapFunc(sjd, adxt_trap_entry_lp, adxt);
+        ADXSJD_EntryTrapFunc(sjd, adxt_trap_entry_lps, adxt);
     } else {
         if (adxt->stm != 0) {
             ADXSTM_SetEos(adxt->stm, 0x7fffffff);
@@ -263,7 +263,7 @@ void adxt_stat_decinfo(AdxtObj *adxt)
         ADXSJD_SetTrapNumSmpl(sjd, ADXSJD_GetTotalNumSmpl(sjd));
         ADXSJD_SetTrapDtLen(sjd, 0);
         ADXSJD_SetTrapCnt(sjd, 0);
-        ADXSJD_EntryTrapFunc(sjd, adxt_trap_entry_lnk, adxt);
+        ADXSJD_EntryTrapFunc(sjd, adxt_nlp_trap_entry, adxt);
     }
     sfreq = ADXSJD_GetSfreq(sjd);
     nch = ADXSJD_GetNumChan(sjd);
@@ -273,9 +273,9 @@ void adxt_stat_decinfo(AdxtObj *adxt)
     ADXRNA_SetNumChan(adxt->rna, nch);
     ADXRNA_SetTotalNumSmpl(adxt->rna, total_nsmpl);
     ADXRNA_SetOutVol(adxt->rna, adxt->outvol + ADXSJD_GetDefOutVol(adxt->sjd));
-    ADXT_GetFx(adxt, &fxch, &fxlev);
+    ADXT_GetTranspose(adxt, &fxch, &fxlev);
     if (fxch != 0 || fxlev != 0) {
-        ADXT_SetFx(adxt, fxch, fxlev);
+        ADXT_SetTranspose(adxt, fxch, fxlev);
     }
     adxt_set_outpan(adxt);
     if (adxt->amp != 0) {
@@ -445,7 +445,7 @@ void adxt_RcvrReplay(AdxtObj *adxt)
 
 /* Error watchdog: flags a stalled decoder or a starved input (5 seconds of server calls, 20 before
  * playback) and, by the auto-recovery mode, stops or restarts the handle; the same for a read error. */
-void adxt_ExecErrChk(AdxtObj *adxt)
+void ADXT_ExecErrChk(AdxtObj *adxt)
 {
     int stat;
     int pos;
@@ -520,7 +520,7 @@ void adxt_ExecErrChk(AdxtObj *adxt)
 }
 
 /* A read error of the stream or of the seamless list puts the handle in state ERROR. */
-void adxt_ExecRdErrChk(AdxtObj *adxt)
+void ADXT_ExecRdErrChk(AdxtObj *adxt)
 {
     if (adxt->stm != 0 && ADXSTM_GetStat(adxt->stm) == ADXSTM_STAT_ERROR) {
         adxt->ercode = ADXT_ERR_SHRTBUF;
@@ -533,7 +533,7 @@ void adxt_ExecRdErrChk(AdxtObj *adxt)
 }
 
 /* Once the whole file has been read, the decoder is told no more data follows. */
-void adxt_ExecRdCompChk(AdxtObj *adxt)
+void ADXT_ExecRdCompChk(AdxtObj *adxt)
 {
     if (adxt->stm == 0) {
         return;
@@ -575,8 +575,8 @@ void ADXT_ExecHndl(AdxtObj *adxt)
     } else if (adxt->stat == ADXT_STAT_PLAYEND) {
         adxt_stat_playend(adxt);
     }
-    adxt_ExecRdCompChk(adxt);
-    adxt_ExecRdErrChk(adxt);
+    ADXT_ExecRdCompChk(adxt);
+    ADXT_ExecRdErrChk(adxt);
 }
 
 /* Whether a disc read is in flight for the handle's stream (or its seamless list's stream). */
@@ -590,9 +590,9 @@ int ADXT_GetStatRead(AdxtObj *adxt)
             return 0;
         }
         if (adxt->lsc->stm != 0) {
-            return ADXSTM_GetStatRead(adxt->lsc->stm);
+            return ADXSTM_GetReadFlg(adxt->lsc->stm);
         }
         return 0;
     }
-    return ADXSTM_GetStatRead(adxt->stm);
+    return ADXSTM_GetReadFlg(adxt->stm);
 }

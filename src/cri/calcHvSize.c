@@ -25,7 +25,7 @@ struct Decoder00285e98 {
     int halfHeight; /* +960 */
 };
 
-void FUN_00285e98(struct Decoder00285e98 *d) {
+void calcHvSize(struct Decoder00285e98 *d) {
     int width = (d->widthExt << 12) | d->width;
     int height = (d->heightExt << 12) | d->height;
 

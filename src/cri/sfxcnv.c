@@ -1,7 +1,7 @@
 /* CRI SFX conversion: checks a conversion format and, per composition kind, builds the lookup table the
  * conversion reads. Fields of the handles are named by offset. */
 
-/* The format handle FUN_002b31d8 checks. */
+/* The format handle sfxcnv_IsCnvUpHalf checks. */
 typedef struct SfxCnvHn {
     int pad0;
     int format;
@@ -28,16 +28,16 @@ extern char DAT_004f53e0[];
 extern int D_004f5758[];
 extern int D_004f5788[];
 
-void FUN_002b3b38(void *hn, void *info, void *msg);
-void FUN_002b3318(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo);
+void SFXLIB_Error(void *hn, void *info, void *msg);
+void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo);
 int FUN_002b3bf0(void *hn);
-int FUN_002b4788();
-int FUN_002b4b58(int x);
+int SFXZ_MakeCnvZ32Tbl();
+int SFXZ_IsSetZclip(int x);
 void FUN_002b50c8(SfxCnvTbl *tbl, int n);
 int SFXA_IsNeedUpdateLumiTbl(int);
 int SFXA_MakeAlpLumiTbl();
 int SFXA_MakeAlp3110Tbl();
-int SFXA_MakeAlp3211Tbl();
+int SFXA_MakeAlp3Tbl();
 int FUN_00284dc8();
 int FUN_00284dc0();
 
@@ -51,7 +51,7 @@ void FUN_002b3660(SfxCnvTbl *tbl, SfxCnvSrc *src);
 void FUN_002b3678(SfxCnvTbl *tbl, SfxCnvSrc *src);
 int FUN_002b3490(SfxCnvTbl *tbl, unsigned int compo);
 
-int FUN_002b31d8(SfxCnvHn *hn) {
+int sfxcnv_IsCnvUpHalf(SfxCnvHn *hn) {
     switch (hn->format) {
     case 4097:
         return 0;
@@ -68,7 +68,7 @@ int FUN_002b31d8(SfxCnvHn *hn) {
     case 273:
         break;
     default:
-        FUN_002b3b38(0, 0, DAT_004f53b0);
+        SFXLIB_Error(0, 0, DAT_004f53b0);
         break;
     }
     return 0;
@@ -76,10 +76,10 @@ int FUN_002b31d8(SfxCnvHn *hn) {
 
 
 void FUN_002b3300(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo) {
-    FUN_002b3318(tbl, src, compo);
+    sfxcnv_MakeTable(tbl, src, compo);
 }
 
-void FUN_002b3318(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo)
+void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo)
 {
     if (FUN_002b3490(tbl, compo) != 1)
         return;
@@ -110,7 +110,7 @@ void FUN_002b3318(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo)
     case 0:
     case 100:
     default:
-        FUN_002b3b38(tbl, (void *)src, DAT_004f53e0);
+        SFXLIB_Error(tbl, (void *)src, DAT_004f53e0);
         return;
     }
 }
@@ -144,7 +144,7 @@ int FUN_002b3490(SfxCnvTbl *tbl, unsigned int compo)
 }
 
 void FUN_002b3510(SfxCnvTbl *tbl, SfxCnvSrc *src) {
-    FUN_002b4788(tbl->f40, src->f76, tbl->table);
+    SFXZ_MakeCnvZ32Tbl(tbl->f40, src->f76, tbl->table);
 }
 
 void FUN_002b3530(SfxCnvTbl *tbl, SfxCnvSrc *src) {
@@ -173,7 +173,7 @@ void FUN_002b3620(SfxCnvTbl *tbl, SfxCnvSrc *src) {
 }
 
 void FUN_002b3640(SfxCnvTbl *tbl, SfxCnvSrc *src) {
-    SFXA_MakeAlp3211Tbl(tbl->f52, src->f76, tbl->table);
+    SFXA_MakeAlp3Tbl(tbl->f52, src->f76, tbl->table);
 }
 
 void FUN_002b3660(SfxCnvTbl *tbl, SfxCnvSrc *src) {
@@ -184,25 +184,25 @@ void FUN_002b3678(SfxCnvTbl *tbl, SfxCnvSrc *src) {
     FUN_00284dc0(tbl->table);
 }
 
-void FUN_002b3690(SfxCnvTbl *tbl, SfxCnvSrc *src) {
-    if (FUN_002b4b58(tbl->f40) != 1) {
-        FUN_002b3b38(tbl, src, D_004f5758);
+void SFX_MakeTblZ16(SfxCnvTbl *tbl, SfxCnvSrc *src) {
+    if (SFXZ_IsSetZclip(tbl->f40) != 1) {
+        SFXLIB_Error(tbl, src, D_004f5758);
         return;
     }
     FUN_002b50c8(tbl, 16);
     FUN_002b3510(tbl, src);
 }
 
-void FUN_002b3708(SfxCnvTbl *tbl, SfxCnvSrc *src) {
-    if (FUN_002b4b58(tbl->f40) != 1) {
-        FUN_002b3b38(tbl, src, D_004f5788);
+void SFX_MakeTblZ32(SfxCnvTbl *tbl, SfxCnvSrc *src) {
+    if (SFXZ_IsSetZclip(tbl->f40) != 1) {
+        SFXLIB_Error(tbl, src, D_004f5788);
         return;
     }
     FUN_002b50c8(tbl, 32);
     FUN_002b3510(tbl, src);
 }
 
-int FUN_002b3780(void)
+int SFXINF_GetStmInf(void)
 {
     return 17;
 }

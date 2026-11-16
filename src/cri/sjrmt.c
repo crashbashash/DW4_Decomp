@@ -27,7 +27,7 @@ static int sjrmt_rbuf[64] __attribute__((aligned(64)));
 char *volatile sjrmt_build = "\nSJRMT Ver.1.03 Build:Oct  6 2004 11:47:21\n";  /* the version string, read so it is linked */
 int sjrmt_init_cnt = 0;
 
-int SJRMT_RbfCreate(int buf, int bsize, int xsize)
+int SJRBF_CreateRmt(int buf, int bsize, int xsize)
 {
     sjrmt_sbuf[0] = buf;
     sjrmt_sbuf[1] = bsize;
@@ -36,7 +36,7 @@ int SJRMT_RbfCreate(int buf, int bsize, int xsize)
     return sjrmt_rbuf[0];
 }
 
-int SJRMT_MemCreate(int buf, int bsize)
+int SJMEM_CreateRmt(int buf, int bsize)
 {
     sjrmt_sbuf[0] = buf;
     sjrmt_sbuf[1] = bsize;
@@ -45,7 +45,7 @@ int SJRMT_MemCreate(int buf, int bsize)
 }
 
 /* An SJUNI on the IOP over a work area there. */
-int SJRMT_Create(int mode, int work, int wksize)
+int SJUNI_CreateRmt(int mode, int work, int wksize)
 {
     sjrmt_sbuf[0] = mode;
     sjrmt_sbuf[1] = work;

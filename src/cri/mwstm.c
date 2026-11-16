@@ -13,7 +13,7 @@ int MWSTM_InitStatic(void)
     return 0;
 }
 
-int mwstm_StubThird(void)
+int MWSTM_Finish(void)
 {
     return 0;
 }
@@ -90,7 +90,7 @@ void MWSTM_GetFsizeByte(AdxStmObj *stm, int *len)
 
 int MWSTM_GetStatRead(AdxStmObj *stm)
 {
-    return ADXSTM_GetStatRead(stm);
+    return ADXSTM_GetReadFlg(stm);
 }
 
 AdxStmObj *MWSTM_Create(SfdSj *sj)

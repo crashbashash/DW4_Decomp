@@ -32,7 +32,7 @@ static AdxAmpObj adxamp_obj[ADXAMP_MAX_OBJ] = {0};
 void *memset(void *dst, int value, unsigned int size);
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);
-void adxamp_Extract(AdxAmpObj *amp);
+void adxamp_extract(AdxAmpObj *amp);
 
 void ADXAMP_Init(void)
 {
@@ -132,7 +132,7 @@ void ADXAMP_Stop(AdxAmpObj *amp)
 void ADXAMP_ExecHndl(AdxAmpObj *amp)
 {
     if (amp->stat == ADXAMP_STAT_EXEC) {
-        adxamp_Extract(amp);
+        adxamp_extract(amp);
     }
 }
 
@@ -148,7 +148,7 @@ void ADXAMP_ExecServer(void)
     }
 }
 
-int ADXAMP_GetNumSmpl(AdxAmpObj *amp)
+int ADXAMP_GetExtractNumSmpl(AdxAmpObj *amp)
 {
     return amp->nsmpl[0];
 }
@@ -185,7 +185,7 @@ float ADXAMP_GetFrmPrd(AdxAmpObj *amp)
 
 /* One frame of every channel at a time: the peak of the absolute sample values, written with the running
  * sample count, the sample rate and the frame length as a 16-byte record. */
-void adxamp_Extract(AdxAmpObj *amp)
+void adxamp_extract(AdxAmpObj *amp)
 {
     SfdSjChunk ck;
     SfdSjChunk rec;

@@ -61,8 +61,8 @@ extern "C" int sprintf(...);
 extern "C" int ADXPS2_SetupDvdFs(int);
 extern "C" int ADXPS2_LoadFcacheDvd(AdxFcachePrm *);
 extern "C" int ADXPS2_SetupHostFs(AdxHstFsPrm *);
-extern "C" int ADXPS2_LoadFcacheHst(AdxFcachePrm *);
-extern "C" int ADXPS2_SetupMfs(int);
+extern "C" int ADXPS2_LoadFcacheHost(AdxFcachePrm *);
+extern "C" int ADXPS2_SetupMemFs(int);
 extern "C" int igPsx2_LoadIopModule(...);
 extern "C" int strcmp(...);
 extern "C" int igAdx_SetupIop(void);
@@ -472,7 +472,7 @@ int igAdx_SetupIop(void) {
     sndfConfig[2] = 0;
     sndfConfig[3] = 0;
     SNDF_Init(sndfConfig);
-    ADXPS2_SetupMfs(0);
+    ADXPS2_SetupMemFs(0);
     if (g_adxHostRootPath[0] != 0) {
         memset(&g_adxHostFsParams, 0, 0x10);
         g_adxHostFsParams.rootdir = &g_adxHostRootPath[0];
@@ -487,7 +487,7 @@ int igAdx_SetupIop(void) {
         g_adxHostFileCache.fnamelen = 0x20;
         g_adxHostFileCache.bufsize = ((g_adxHostFileCache.fnamelen + 1) * 0xD) + 0x68;
         g_adxHostFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxHostFileCache.bufsize, 0x10, allocator);
-        ADXPS2_LoadFcacheHst(&g_adxHostFileCache);
+        ADXPS2_LoadFcacheHost(&g_adxHostFileCache);
     }
     if (g_adxMediaMode != 0) {
         ADXPS2_SetupDvdFs(0);

@@ -4,9 +4,9 @@
 
 int SFLIB_CheckHn();
 int sfd_ReportError();
-void sfbuf_SetUoch();
-int sfbuf_GetFlagA();
-int sfbuf_GetFlagB();
+void SFBUF_SetUoch();
+int SFBUF_GetPrepFlg();
+int SFBUF_GetTermFlg();
 int sftrn_SetFlagA();
 int sftrn_SetFlagB();
 int sftrn_GetFlagA();
@@ -44,16 +44,16 @@ typedef struct SfainfHn {
     SfainfList list;
 } SfainfHn;
 
-void sfainf_SetOut(SfainfOut *out, int kind, void *sj, void *buf, int size);
-void sfainf_ResetList(SfainfHn *hn, SfainfList *list, int from);
-void sfainf_ClearOut(SfainfOut *out);
-int sfainf_IsWriteReady(SfainfHn *hn);
-int sfainf_IsReadReady(SfainfHn *hn);
-int sfainf_Exec(SfainfHn *hn);
-void sfainf_UpdateWrite(SfainfHn *hn);
-void sfainf_UpdateRead(SfainfHn *hn);
+void sfuo_SetUoch(SfainfOut *out, int kind, void *sj, void *buf, int size);
+void sfuo_InitInf(SfainfHn *hn, SfainfList *list, int from);
+void sfuo_InitUoch(SfainfOut *out);
+int sfuo_IsTerm(SfainfHn *hn);
+int sfuo_IsPrepEnd(SfainfHn *hn);
+int sfuo_OutputServer(SfainfHn *hn);
+void sfuo_ChkTermFlg(SfainfHn *hn);
+void sfuo_ChkPrepFlg(SfainfHn *hn);
 
-int SFD_SetAinfMem(SfainfHn *hn, int index, int kind, void *buf, int size) {
+int SFD_SetSystemUsrSj(SfainfHn *hn, int index, int kind, void *buf, int size) {
     SfainfTrn *trn = &hn->trn[SFAINF_SLOT];
     int from;
     SfainfOut *out;
@@ -72,12 +72,12 @@ int SFD_SetAinfMem(SfainfHn *hn, int index, int kind, void *buf, int size) {
         return sfd_ReportError(hn, 0xFF000602);
     }
     out = &list->out[index];
-    sfainf_SetOut(out, kind, 0, buf, size);
-    sfbuf_SetUoch(hn, from, index, out);
+    sfuo_SetUoch(out, kind, 0, buf, size);
+    SFBUF_SetUoch(hn, from, index, out);
     return 0;
 }
 
-int SFD_SetAinfSj(SfainfHn *hn, int index, int kind, void *sj) {
+int SFD_SetUsrSj(SfainfHn *hn, int index, int kind, void *sj) {
     SfainfTrn *trn = &hn->trn[SFAINF_SLOT];
     int from;
     SfainfOut *out;
@@ -93,122 +93,122 @@ int SFD_SetAinfSj(SfainfHn *hn, int index, int kind, void *sj) {
         return sfd_ReportError(hn, 0xFF000602);
     }
     out = &list->out[index];
-    sfainf_SetOut(out, kind, sj, 0, 0);
-    sfbuf_SetUoch(hn, from, index, out);
+    sfuo_SetUoch(out, kind, sj, 0, 0);
+    SFBUF_SetUoch(hn, from, index, out);
     return 0;
 }
 
-int sfainf_InitFn(void) {
+int SFUO_Init(void) {
     return 0;
 }
 
-int sfainf_FinishFn(void) {
+int SFUO_Finish(void) {
     return 0;
 }
 
-int sfainf_ExecServer(SfainfHn *hn) {
+int SFUO_ExecServer(SfainfHn *hn) {
     int result;
 
-    sfainf_UpdateWrite(hn);
-    result = sfainf_Exec(hn);
-    sfainf_UpdateRead(hn);
+    sfuo_ChkTermFlg(hn);
+    result = sfuo_OutputServer(hn);
+    sfuo_ChkPrepFlg(hn);
     return result;
 }
 
-void sfainf_UpdateWrite(SfainfHn *hn) {
-    if (sftrn_GetFlagB(hn, SFAINF_SLOT) != 1 && sfbuf_GetFlagB(hn, hn->trn[SFAINF_SLOT].from) == 1
-        && sfainf_IsWriteReady(hn) != 0) {
+void sfuo_ChkTermFlg(SfainfHn *hn) {
+    if (sftrn_GetFlagB(hn, SFAINF_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
+        && sfuo_IsTerm(hn) != 0) {
         sftrn_SetFlagB(hn, SFAINF_SLOT, 1);
     }
 }
 
-int sfainf_IsWriteReady(SfainfHn *hn) {
+int sfuo_IsTerm(SfainfHn *hn) {
     return 1;
 }
 
-void sfainf_UpdateRead(SfainfHn *hn) {
-    if (sftrn_GetFlagA(hn, SFAINF_SLOT) != 1 && sfbuf_GetFlagA(hn, hn->trn[SFAINF_SLOT].from) == 1
-        && sfainf_IsReadReady(hn) != 0) {
+void sfuo_ChkPrepFlg(SfainfHn *hn) {
+    if (sftrn_GetFlagA(hn, SFAINF_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
+        && sfuo_IsPrepEnd(hn) != 0) {
         sftrn_SetFlagA(hn, SFAINF_SLOT, 1);
     }
 }
 
-int sfainf_IsReadReady(SfainfHn *hn) {
+int sfuo_IsPrepEnd(SfainfHn *hn) {
     return 1;
 }
 
-int sfainf_Exec(SfainfHn *hn) {
+int sfuo_OutputServer(SfainfHn *hn) {
     return 0;
 }
 
-int sfainf_CreateFn(SfainfHn *hn) {
+int SFUO_Create(SfainfHn *hn) {
     /* matching construct: permuter — taking the slot before the list gives retail's v0 copy of hn */
     SfainfTrn *trn = &hn->trn[SFAINF_SLOT];
     SfainfList *list = &hn->list;
 
     trn->list = list;
-    sfainf_ResetList(hn, list, trn->from);
+    sfuo_InitInf(hn, list, trn->from);
     return 0;
 }
 
-/* matching construct: permuter — sfbuf_SetUoch declared void (its result is unused) leaves v0 free for the loop test, as in retail */
-void sfainf_ResetList(SfainfHn *hn, SfainfList *list, int from) {
+/* matching construct: permuter — SFBUF_SetUoch declared void (its result is unused) leaves v0 free for the loop test, as in retail */
+void sfuo_InitInf(SfainfHn *hn, SfainfList *list, int from) {
     int i;
 
     list->nout = 0;
     for (i = 0; i < SFAINF_NOUT; i++) {
-        sfainf_ClearOut(&list->out[i]);
-        sfbuf_SetUoch(hn, from, i, &list->out[i]);
+        sfuo_InitUoch(&list->out[i]);
+        SFBUF_SetUoch(hn, from, i, &list->out[i]);
     }
 }
 
-void sfainf_ClearOut(SfainfOut *out) {
-    sfainf_SetOut(out, 0, 0, 0, 0);
+void sfuo_InitUoch(SfainfOut *out) {
+    sfuo_SetUoch(out, 0, 0, 0, 0);
 }
 
-void sfainf_SetOut(SfainfOut *out, int kind, void *sj, void *buf, int size) {
+void sfuo_SetUoch(SfainfOut *out, int kind, void *sj, void *buf, int size) {
     out->kind = kind;
     out->sj = sj;
     out->buf = buf;
     out->size = size;
 }
 
-int sfainf_DestroyFn(void) {
+int SFUO_Destroy(void) {
     return 0;
 }
 
-int sfainf_StartFn(void) {
+int SFUO_Standby(void) {
     return 0;
 }
 
-int sfainf_StopFn(void) {
+int SFUO_Start(void) {
     return 0;
 }
 
-int sfainf_PauseFn(void) {
+int SFUO_Stop(void) {
     return 0;
 }
 
-int sfainf_SeekFn(void) {
+int SFUO_Pause(void) {
     return 0;
 }
 
-void sfainf_GetWriteFn(SfainfHn *hn) {
+void SFUO_GetWrite(SfainfHn *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 
-void sfainf_AddWriteFn(SfainfHn *hn) {
+void SFUO_AddWrite(SfainfHn *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 
-void sfainf_GetReadFn(SfainfHn *hn) {
+void SFUO_GetRead(SfainfHn *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 
-void sfainf_AddReadFn(SfainfHn *hn) {
+void SFUO_AddRead(SfainfHn *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 
-int sfainf_TermFn(void) {
+int SFUO_Seek(void) {
     return 0;
 }

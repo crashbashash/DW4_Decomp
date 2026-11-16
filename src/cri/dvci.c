@@ -97,25 +97,25 @@ int sceCdSync(int mode);
 int sceCdRead(unsigned int lsn, unsigned int sectors, void *buf, CdReadMode *mode);
 int sceCdLayerSearchFile(sceCdlFILE *fp, const char *name, int layer);
 
-SrdObj *FUN_00271670(void);
-void FUN_002716f8(SrdObj *stm);
-int FUN_00271798(SrdObj *stm, int lsn, int sectors, void *buf, CdReadMode *mode);
-int FUN_00271938(SrdObj *stm);
+SrdObj *SRD_Create(void);
+void SRD_Destroy(SrdObj *stm);
+int SRD_ReqRdDvd(SrdObj *stm, int lsn, int sectors, void *buf, CdReadMode *mode);
+int SRD_GetStat(SrdObj *stm);
 void FUN_00271a68(SrdObj *stm);
-void FUN_00271b98(SrdObj *stm);
-void FUN_00272118(void);
-void FUN_00272228(void);
-void FUN_002725a0(int marker);
-int FUN_002765e0(const char *name, void *buf);
+void SRD_Break(SrdObj *stm);
+void SRD_ExecServer(void);
+void SRD_WaitForExecServer(void);
+void SRD_SetHistory(int marker);
+int htci_load_flist(const char *name, void *buf);
 void SVM_LockVar(void);
 void SVM_UnlockVar(void);
 int SVM_TestAndSet(int *flag);
 
-void FUN_00273be8(char *path);
+void dvci_to_large_to_yen(char *path);
 void dvCiStopTr(DvCiFile *h);
 int dvCiGetStat(DvCiFile *h);
-void FUN_002745c0(const char *name, char *path);
-void FUN_00274c40(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n);
+void dvci_conv_fname(const char *name, char *path);
+void get_fp_from_fname(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n);
 int FUN_00274e30(const char *name, sceCdlFILE *fp);
 void dvCiSetRootDir(const char *path);
 
@@ -126,23 +126,23 @@ CvFsVtbl *dvCiGetInterface(void)
     return &dvci_vtbl;
 }
 
-void FUN_002739b8(void *detail, const char *message)
+void dvci_call_errfn(void *detail, const char *message)
 {
     if (dvci_err_func != 0) {
         dvci_err_func(dvci_err_obj, message, detail);
     }
 }
 
-int FUN_002739e8(sceCdlFILE *fp, const char *name)
+int dvCiCdSearchFile(sceCdlFILE *fp, const char *name)
 {
     int result;
-    FUN_002725a0(0x8000);
+    SRD_SetHistory(0x8000);
     result = sceCdLayerSearchFile(fp, name, dvci_layer);
-    FUN_002725a0(0x8001);
+    SRD_SetHistory(0x8001);
     return result;
 }
 
-int FUN_00273a40(void)
+int dvci_is_exec_hn(void)
 {
     int i;
     for (i = 0; i < 40; i++) {
@@ -153,27 +153,27 @@ int FUN_00273a40(void)
     return 0;
 }
 
-void FUN_00273a90(DvCiFile *h)
+void dvCiExecHndl(DvCiFile *h)
 {
     if (h->stm == 0)
         return;
     SVM_LockVar();
-    switch (FUN_00271938(h->stm)) {
+    switch (SRD_GetStat(h->stm)) {
     case 9:
         h->state = 3;
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         break;
     case 3:
         h->done = h->req;
         h->pos += h->req;
         h->state = 1;
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         break;
     case 0:
         h->state = 0;
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         break;
     case 1: case 2: case 4: case 5: case 6: case 7: case 8:
@@ -188,7 +188,7 @@ void dvCiExecServer(void)
     if (SVM_TestAndSet(&dvci_lock) != 0) {
         for (i = 0; i < 40; i++) {
             if (dvci_files[i].used == 1) {
-                FUN_00273a90(&dvci_files[i]);
+                dvCiExecHndl(&dvci_files[i]);
             }
         }
         dvci_lock = 0;
@@ -201,7 +201,7 @@ void dvCiEntryErrFunc(void (*callback)(void *context, const char *message, void 
     dvci_err_obj = context;
 }
 
-void FUN_00273be8(char *path)
+void dvci_to_large_to_yen(char *path)
 {
     unsigned int len;
     unsigned int i;
@@ -224,11 +224,11 @@ int dvCiIsExistFileOnDisc(const char *name)
     }
     FUN_00274e30(name, &fp);
     if (fp.size == 0) {
-        FUN_002745c0(name, dvci_path);
-        FUN_002725a0(0x8100);
+        dvci_conv_fname(name, dvci_path);
+        SRD_SetHistory(0x8100);
         sceCdSync(0);
-        FUN_002725a0(0x8101);
-        if (FUN_002739e8(&fp, dvci_path) == 0) {
+        SRD_SetHistory(0x8101);
+        if (dvCiCdSearchFile(&fp, dvci_path) == 0) {
             return 0;
         }
     }
@@ -239,25 +239,25 @@ int dvCiGetFileSize(const char *fname)
 {
     sceCdlFILE fp;
     if (fname == 0) {
-        FUN_002739b8(0, "E0092901:fname is null.(dvCiGetFileSize)");
+        dvci_call_errfn(0, "E0092901:fname is null.(dvCiGetFileSize)");
         return 0;
     }
     FUN_00274e30(fname, &fp);
     if (fp.size == 0) {
-        FUN_002745c0(fname, dvci_path);
-        FUN_002725a0(0x8200);
+        dvci_conv_fname(fname, dvci_path);
+        SRD_SetHistory(0x8200);
         sceCdSync(0);
-        FUN_002725a0(0x8201);
-        if (FUN_002739e8(&fp, dvci_path) == 0) {
+        SRD_SetHistory(0x8201);
+        if (dvCiCdSearchFile(&fp, dvci_path) == 0) {
             ADXMSG_PrintErr("DVCI: sceCdSearchFile failed. \"%s\"\n", dvci_path);
-            FUN_002739b8(0, "E0092902:can't find file.(dvCiGetFileSize)");
+            dvci_call_errfn(0, "E0092902:can't find file.(dvCiGetFileSize)");
             return 0;
         }
     }
     return fp.size;
 }
 
-DvCiFile *FUN_00273da8(void)
+DvCiFile *dvci_alloc(void)
 {
     DvCiFile *found = 0;
     int i;
@@ -268,7 +268,7 @@ DvCiFile *FUN_00273da8(void)
     return found;
 }
 
-void FUN_00273de0(DvCiFile *h)
+void dvci_free(DvCiFile *h)
 {
     memset(h, 0, sizeof(DvCiFile));
 }
@@ -278,28 +278,28 @@ DvCiFile *dvCiOpen(const char *fname, void *atr, int rw)
     DvCiFile *h;
     int ret;
     if (fname == 0) {
-        FUN_002739b8(0, "E0092908:fname is null.(dvCiOpen)");
+        dvci_call_errfn(0, "E0092908:fname is null.(dvCiOpen)");
         return 0;
     }
     if (rw != 0) {
-        FUN_002739b8(0, "E0092909:rw is illigal.(dvCiOpen)");
+        dvci_call_errfn(0, "E0092909:rw is illigal.(dvCiOpen)");
         return 0;
     }
-    h = FUN_00273da8();
+    h = dvci_alloc();
     if (h == 0) {
-        FUN_002739b8(0, "E0092910:not enough handle resource.(dvCiOpen)");
+        dvci_call_errfn(0, "E0092910:not enough handle resource.(dvCiOpen)");
         return 0;
     }
     ret = FUN_00274e30(fname, &h->fp);
     if (h->fp.size == 0) {
-        FUN_002745c0(fname, dvci_path);
+        dvci_conv_fname(fname, dvci_path);
         ADXMSG_PrintErr("DVCI: File cache was not hit. \"%s\"\n", dvci_path);
-        FUN_002725a0(0x8300);
+        SRD_SetHistory(0x8300);
         sceCdSync(0);
-        FUN_002725a0(0x8301);
-        if (FUN_002739e8(&h->fp, dvci_path) == 0) {
-            FUN_002739b8(0, "E0092911:sceCdSearchFile fail.(dvCiOpen)");
-            FUN_00273de0(h);
+        SRD_SetHistory(0x8301);
+        if (dvCiCdSearchFile(&h->fp, dvci_path) == 0) {
+            dvci_call_errfn(0, "E0092911:sceCdSearchFile fail.(dvCiOpen)");
+            dvci_free(h);
             return 0;
         }
         h->cached = 0;
@@ -328,7 +328,7 @@ void dvCiClose(DvCiFile *h)
             dvCiStopTr(h);
         }
         h->used = 0;
-        FUN_00273de0(h);
+        dvci_free(h);
     }
 }
 
@@ -336,7 +336,7 @@ int dvCiSeek(DvCiFile *h, int offset, int origin)
 {
     int position;
     if (h == 0) {
-        FUN_002739b8(h, "E0092912:handl is null.");
+        dvci_call_errfn(h, "E0092912:handl is null.");
         return 0;
     }
     if (origin == 0) {
@@ -361,7 +361,7 @@ int dvCiSeek(DvCiFile *h, int offset, int origin)
 int dvCiTell(DvCiFile *h)
 {
     if (h == 0) {
-        FUN_002739b8(0, "E0092912:handl is null.");
+        dvci_call_errfn(0, "E0092912:handl is null.");
         return 0;
     }
     return h->pos;
@@ -372,15 +372,15 @@ int dvCiReqRd(DvCiFile *h, int nsct, char *buf)
     int n, rem;
     int ready;
     if (h == 0) {
-        FUN_002739b8(h, "E0092912:handl is null.");
+        dvci_call_errfn(h, "E0092912:handl is null.");
         return 0;
     }
     if (nsct < 0) {
-        FUN_002739b8(h, "E0092913:nsct < 0.(dvCiReqRd)");
+        dvci_call_errfn(h, "E0092913:nsct < 0.(dvCiReqRd)");
         return 0;
     }
     if (buf == 0) {
-        FUN_002739b8(h, "E0092914:buf is null.(dvCiReqRd)");
+        dvci_call_errfn(h, "E0092914:buf is null.(dvCiReqRd)");
         return 0;
     }
     if (h->state == 2)
@@ -389,7 +389,7 @@ int dvCiReqRd(DvCiFile *h, int nsct, char *buf)
         h->state = 1;
         return 0;
     }
-    h->stm = FUN_00271670();
+    h->stm = SRD_Create();
     if (h->stm == 0)
         return 0;
     rem = h->nsct - h->pos;
@@ -400,17 +400,17 @@ int dvCiReqRd(DvCiFile *h, int nsct, char *buf)
     h->buf = buf;
     h->req = n;
     InvalidDCache(buf, buf + (n << 11) - 1);
-    if (FUN_00271798(h->stm, h->fp.lsn + h->pos, h->req, h->buf, &h->rmode) == 0) {
-        FUN_002716f8(h->stm);
+    if (SRD_ReqRdDvd(h->stm, h->fp.lsn + h->pos, h->req, h->buf, &h->rmode) == 0) {
+        SRD_Destroy(h->stm);
         return 0;
     }
     ready = dvci_rd_sync;
     if (ready == 1) {
         sceCdSync(0);
-        FUN_00272228();
-        FUN_00272118();
+        SRD_WaitForExecServer();
+        SRD_ExecServer();
         FUN_00271a68(h->stm);
-        FUN_002716f8(h->stm);
+        SRD_Destroy(h->stm);
         h->stm = 0;
         h->done = nsct;
         h->state = ready;
@@ -426,17 +426,17 @@ void dvCiStopTr(DvCiFile *h)
     int i;
     i = 0;
     if (h == 0) {
-        FUN_002739b8(0, "E0092912:handl is null.");
+        dvci_call_errfn(0, "E0092912:handl is null.");
         return;
     }
     if ((unsigned char)h->state < 2) {
         return;
     }
     if (h->stm != 0) {
-        FUN_00271b98(h->stm);
+        SRD_Break(h->stm);
     }
     while (1) {
-        FUN_00272118();
+        SRD_ExecServer();
         dvCiExecServer();
         dvCiGetStat(h);
         if (h->state != 2) {
@@ -454,7 +454,7 @@ void dvCiStopTr(DvCiFile *h)
 int dvCiGetStat(DvCiFile *h)
 {
     if (h == 0) {
-        FUN_002739b8(0, "E0092912:handl is null.");
+        dvci_call_errfn(0, "E0092912:handl is null.");
         return 0;
     }
     return h->state;
@@ -468,7 +468,7 @@ int dvCiGetSctLen(void)
 int dvCiGetNumTr(DvCiFile *h)
 {
     if (h == 0) {
-        FUN_002739b8(0, "E0092912:handl is null.");
+        dvci_call_errfn(0, "E0092912:handl is null.");
         return 0;
     }
     if (h->state == 1) {
@@ -477,17 +477,17 @@ int dvCiGetNumTr(DvCiFile *h)
     return 0;
 }
 
-void FUN_002743c0(int value)
+void dvCiSetOutputDebugLevel(int value)
 {
     dvci_option = value;
 }
 
-int FUN_002743d0(void)
+int dvCiGetOutputDebugLevel(void)
 {
     return dvci_option;
 }
 
-void dvCiSetLayer(unsigned int layer)
+void dvCiSetDvdLayer(unsigned int layer)
 {
     dvci_layer = layer;
     if (layer >= 2) {
@@ -495,21 +495,21 @@ void dvCiSetLayer(unsigned int layer)
     }
 }
 
-int dvCiGetLayer(void)
+int dvCiGetDvdLayer(void)
 {
     return dvci_layer;
 }
 
-int FUN_00274410(const char *fname)
+int dvci_getfilesize32(const char *fname)
 {
     sceCdlFILE fp;
     FUN_00274e30(fname, &fp);
     if (fp.size == 0) {
-        FUN_002745c0(fname, dvci_path);
-        FUN_002725a0(0x8400);
+        dvci_conv_fname(fname, dvci_path);
+        SRD_SetHistory(0x8400);
         sceCdSync(0);
-        FUN_002725a0(0x8401);
-        if (FUN_002739e8(&fp, dvci_path) == 0) {
+        SRD_SetHistory(0x8401);
+        if (dvCiCdSearchFile(&fp, dvci_path) == 0) {
             ADXMSG_PrintErr("DVCI: sceCdSearchFile failed. \"%s\"\n", dvci_path);
             return 0;
         }
@@ -517,28 +517,28 @@ int FUN_00274410(const char *fname)
     return fp.size;
 }
 
-int FUN_002744a8(h)
+int dvci_getnumtr_upper(h)
     DvCiFile *h;
 {
     return (long)h->done * 2048 >> 32;
 }
 
-int FUN_002744b8(h)
+int dvci_getnumtr_lower(h)
     DvCiFile *h;
 {
     return ((long long)h->done << 11) & 0xFFFFFFFF;
 }
 
-int FUN_002744d8(fname)
+int dvci_filesize_upper(fname)
     const char *fname;
 {
     return 0;
 }
 
-int FUN_002744e0(fname)
+int dvci_filesize_lower(fname)
     const char *fname;
 {
-    return FUN_00274410(fname);
+    return dvci_getfilesize32(fname);
 }
 
 /* matching construct: old-style getter definitions called with no arguments; retail never loads a0 before these calls */
@@ -551,18 +551,18 @@ int dvCiOptFn1(void *obj, int code)
     }
     switch (code) {
     case 200:
-        result = FUN_002744a8();
+        result = dvci_getnumtr_upper();
         break;
     case 201:
-        result = FUN_002744b8();
+        result = dvci_getnumtr_lower();
         break;
     case 202:
     case 204:
-        result = FUN_002744d8();
+        result = dvci_filesize_upper();
         break;
     case 203:
     case 205:
-        result = FUN_002744e0();
+        result = dvci_filesize_lower();
         break;
     case 299:
         result = 1;
@@ -571,7 +571,7 @@ int dvCiOptFn1(void *obj, int code)
     return result;
 }
 
-void FUN_002745c0(const char *name, char *path)
+void dvci_conv_fname(const char *name, char *path)
 {
     char c;
     strcpy(path, dvci_root_dir);
@@ -583,10 +583,10 @@ void FUN_002745c0(const char *name, char *path)
     if (strcmp(path + strlen(path) - 2, ";1") != 0) {
         strcat(path, ";1");
     }
-    FUN_00273be8(path);
+    dvci_to_large_to_yen(path);
 }
 
-char FUN_00274668(char c)
+char dvci_conv_cmp(char c)
 {
     char upper;
     upper = c;
@@ -596,14 +596,14 @@ char FUN_00274668(char c)
     return ((c ^ 0x5C) != 0) ? upper : 0x2F;
 }
 
-int FUN_002746a0(char a, char b)
+int dvci_charicmp(char a, char b)
 {
     int ca;
-    ca = FUN_00274668(a);
-    return ((ca ^ FUN_00274668(b)) != 0) ? -1 : 0;
+    ca = dvci_conv_cmp(a);
+    return ((ca ^ dvci_conv_cmp(b)) != 0) ? -1 : 0;
 }
 
-int FUN_002746f8(const char *a, const char *b)
+int dvci_stricmp(const char *a, const char *b)
 {
     int len;
     int i;
@@ -612,7 +612,7 @@ int FUN_002746f8(const char *a, const char *b)
         return -1;
     }
     for (i = 0; i < len; i++) {
-        if (FUN_002746a0(a[i], b[i]) != 0) {
+        if (dvci_charicmp(a[i], b[i]) != 0) {
             return -1;
         }
     }
@@ -643,7 +643,7 @@ int FUN_00274790(char *buf, char *list, int listlen, int n, int nameLen)
             }
             dst = buf + (n * sizeof(DvCiFileLoc) + count * (nameLen + 1));
             memcpy(dst, list + start, len);
-            FUN_00273be8(dst);
+            dvci_to_large_to_yen(dst);
             if (dst[len - 1] != 0) {
                 dst[len] = 0;
             }
@@ -667,7 +667,7 @@ int FUN_00274790(char *buf, char *list, int listlen, int n, int nameLen)
     return count;
 }
 
-int FUN_00274928(const char *path, void *buf)
+int load_flist(const char *path, void *buf)
 {
     sceCdlFILE fp;
     CdReadMode mode;
@@ -675,38 +675,38 @@ int FUN_00274928(const char *path, void *buf)
     memcpy(dev, path, 5);
     dev[4] = 0;
     if (strcasecmp(dev, "HST:") == 0) {
-        return FUN_002765e0(path + 4, buf);
+        return htci_load_flist(path + 4, buf);
     }
     memset(dvci_dir_path, 0, 128);
-    FUN_002745c0(path, dvci_dir_path);
-    FUN_002725a0(0x9000);
+    dvci_conv_fname(path, dvci_dir_path);
+    SRD_SetHistory(0x9000);
     while (sceCdSync(1) == 1) {
     }
-    FUN_002725a0(0x9001);
-    FUN_002725a0(0x9100);
-    if (FUN_002739e8(&fp, dvci_dir_path) == 0) {
-        FUN_002725a0(0x9101);
+    SRD_SetHistory(0x9001);
+    SRD_SetHistory(0x9100);
+    if (dvCiCdSearchFile(&fp, dvci_dir_path) == 0) {
+        SRD_SetHistory(0x9101);
         return 0;
     }
-    FUN_002725a0(0x9102);
+    SRD_SetHistory(0x9102);
     mode.trycount = 0;
     mode.spindlctrl = 1;
     mode.datapattern = 0;
     mode.pad = 0;
-    FUN_002725a0(0x9200);
+    SRD_SetHistory(0x9200);
     if (sceCdRead(fp.lsn, 2, buf, &mode) == 0) {
-        FUN_002725a0(0x9201);
+        SRD_SetHistory(0x9201);
         return 0;
     }
-    FUN_002725a0(0x9202);
-    FUN_002725a0(0x9300);
+    SRD_SetHistory(0x9202);
+    SRD_SetHistory(0x9300);
     while (sceCdSync(1) == 1) {
     }
-    FUN_002725a0(0x9301);
+    SRD_SetHistory(0x9301);
     return 1;
 }
 
-int FUN_00274ab0(DvCiFileLoc *files, int n)
+int search_fstate(DvCiFileLoc *files, int n)
 {
     sceCdlFILE fp;
     int missing;
@@ -718,20 +718,20 @@ int FUN_00274ab0(DvCiFileLoc *files, int n)
         name = (char *)files + ((dvci_dir_table.nent << 3) + (dvci_dir_table.namelen * i + i));
         if (*name == 0)
             continue;
-        FUN_002745c0(name, dvci_dir_path);
-        FUN_002725a0(0x9400);
+        dvci_conv_fname(name, dvci_dir_path);
+        SRD_SetHistory(0x9400);
         while (sceCdSync(1) == 1)
             ;
-        FUN_002725a0(0x9401);
-        FUN_002725a0(0x9500);
-        if (FUN_002739e8(&fp, dvci_dir_path) == 1) {
-            FUN_002725a0(0x9501);
+        SRD_SetHistory(0x9401);
+        SRD_SetHistory(0x9500);
+        if (dvCiCdSearchFile(&fp, dvci_dir_path) == 1) {
+            SRD_SetHistory(0x9501);
             found++;
             files[i].lsn = fp.lsn;
             files[i].size = fp.size;
             FUN_00265928("DVCI: \"%s\" found.\n", name);
         } else {
-            FUN_002725a0(0x9502);
+            SRD_SetHistory(0x9502);
             missing++;
             FUN_00265928("DVCI: \"%s\" Not found.\n", name);
         }
@@ -742,11 +742,11 @@ int FUN_00274ab0(DvCiFileLoc *files, int n)
     return found;
 }
 
-void FUN_00274c40(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n)
+void get_fp_from_fname(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n)
 {
     int i;
     for (i = 0; i < n; i++) {
-        if (FUN_002746f8(name, (char *)files + ((dvci_dir_table.nent << 3) + (dvci_dir_table.namelen * i + i))) == 0) {
+        if (dvci_stricmp(name, (char *)files + ((dvci_dir_table.nent << 3) + (dvci_dir_table.namelen * i + i))) == 0) {
             out->lsn = files[i].lsn;
             out->size = files[i].size;
             return;
@@ -756,7 +756,7 @@ void FUN_00274c40(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n)
     out->size = 0;
 }
 
-void FUN_00274d08(void)
+void dvci_init_flist(void)
 {
     memset(&dvci_dir_table, 0, sizeof(DvCiTable));
 }
@@ -805,7 +805,7 @@ int FUN_00274e30(const char *name, sceCdlFILE *fp)
     fp->lsn = 0;
     fp->size = 0;
     if (dvci_dir_table.files != 0) {
-        FUN_00274c40(fp, name, (DvCiFileLoc *)dvci_dir_table.files, dvci_dir_table.nfiles);
+        get_fp_from_fname(fp, name, (DvCiFileLoc *)dvci_dir_table.files, dvci_dir_table.nfiles);
     }
     return 0;
 }
@@ -816,10 +816,10 @@ int dvCiLoadDirInfo(const char *path, char *buf, unsigned int size, int nameLen)
     int found;
     memset(dvci_dir_buf, 0, 4096);
     if (dvci_dir_table.files != 0) {
-        FUN_00274d08();
+        dvci_init_flist();
     }
     if (path == 0 || buf == 0 || size == 0) {
-        FUN_00274d08();
+        dvci_init_flist();
     }
     if (path == 0) {
         return 0;
@@ -833,13 +833,13 @@ int dvCiLoadDirInfo(const char *path, char *buf, unsigned int size, int nameLen)
         return 0;
     }
     memset(buf, 0, size);
-    if (FUN_00274928(path, dvci_dir_buf) == 0) {
+    if (load_flist(path, dvci_dir_buf) == 0) {
         FUN_00265928("DVCI: Can't read filelist file.(%s)\n", path);
-        FUN_002739b8(0, "E0111501:can't read filelist.(dvCiLoadDirInfo)");
+        dvci_call_errfn(0, "E0111501:can't read filelist.(dvCiLoadDirInfo)");
         return 0;
     }
     n = FUN_00274790(buf, dvci_dir_buf, 4096, size / (nameLen + 9), nameLen);
-    found = FUN_00274ab0((DvCiFileLoc *)buf, n);
+    found = search_fstate((DvCiFileLoc *)buf, n);
     return size / (nameLen + 9) * 8 + found * (nameLen + 1);
 }
 
@@ -849,10 +849,10 @@ int dvCiLoadDirInfoMem(char *list, int listlen, char *buf, unsigned int size, in
     int found;
     memset(dvci_dir_buf, 0, 4096);
     if (dvci_dir_table.files != 0) {
-        FUN_00274d08();
+        dvci_init_flist();
     }
     if (list == 0 || buf == 0 || listlen == 0 || size == 0) {
-        FUN_00274d08();
+        dvci_init_flist();
     }
     if (list == 0) {
         return 0;
@@ -866,11 +866,11 @@ int dvCiLoadDirInfoMem(char *list, int listlen, char *buf, unsigned int size, in
         return 0;
     }
     n = FUN_00274790(buf, list, listlen, size / (nameLen + 9), nameLen);
-    found = FUN_00274ab0((DvCiFileLoc *)buf, n);
+    found = search_fstate((DvCiFileLoc *)buf, n);
     return size / (nameLen + 9) * 8 + found * (nameLen + 1);
 }
 
-int dvCiIsExistFile(const char *name)
+int dvCiIsExistFcache(const char *name)
 {
     sceCdlFILE fp;
     FUN_00274e30(name, &fp);
@@ -904,7 +904,7 @@ void dvCiSetRootDir(const char *path)
     }
 }
 
-char *FUN_002752e8(void)
+char *dvCiGetRootDir(void)
 {
     return dvci_root_dir;
 }

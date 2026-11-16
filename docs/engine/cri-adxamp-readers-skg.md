@@ -22,8 +22,8 @@ passes the AHX handle to the key hook of its own data.
 ## Open questions
 
 - Names come from behaviour, in the ADXB, ADXAMP and SKG API styles. The AC-3 slot `0x498a44` is never read.
-- No source yet: `adxamp_Extract` (`0x25b618`, the per-frame peak scan; retail holds five undecoded words in a
-  loop that spins when an output chunk is empty), `adxb_GetAiffInfo` (`0x25bc40`, the chunk walk with the
+- No source yet: `adxamp_extract` (`0x25b618`, the per-frame peak scan; retail holds five undecoded words in a
+  loop that spins when an output chunk is empty), `AIFF_GetInfo` (`0x25bc40`, the chunk walk with the
   80-bit sample rate), `ADXB_ExecOneAiff16` and `ADXB_ExecOneAu16` (`0x25c260`, `0x25cb20`, byte-swapped
   16-bit samples), and `ADXB_DecodeHeaderAu` (`0x25ca20`: the copies after the call differ from retail in
   the registers of the two buffer-size loads; reordering them has not found retail's order).

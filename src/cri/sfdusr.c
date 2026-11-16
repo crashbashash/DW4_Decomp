@@ -20,26 +20,26 @@ struct SfdUsrHn {
 
 int sfd_ReportError();
 int SFLIB_CheckHn(SfdUsrHn *h);
-int SFD_GetCond(SfdUsrHn *h, int option);
+int SFSET_GetCond(SfdUsrHn *h, int option);
 int FUN_002b0338(SfdUsrHn *h, int group, int event, int a, int b);
 void sftrn_SetFlagA(SfdUsrHn *h, int flag, int value);
 int sftrn_GetFlagA(SfdUsrHn *h, int flag);
 void sftrn_SetFlagB(SfdUsrHn *h, int flag, int value);
 int sftrn_GetFlagB(SfdUsrHn *h, int flag);
-int sfbuf_GetFlagA(SfdUsrHn *h, int index);
-int sfbuf_GetFlagB(SfdUsrHn *h, int index);
+int SFBUF_GetPrepFlg(SfdUsrHn *h, int index);
+int SFBUF_GetTermFlg(SfdUsrHn *h, int index);
 
-int FUN_0029d188(SfdUsrHn *h);
-void FUN_0029d1b8(SfdUsrHn *h);
-void FUN_0029d228(SfdUsrHn *h);
-void FUN_0029d2d8(SfdUsrIf *iface);
+int sfaoap_OutputServer(SfdUsrHn *h);
+void sfaoap_ChkPrepFlg(SfdUsrHn *h);
+void sfaoap_ChkTermFlg(SfdUsrHn *h);
+void sfaoap_InitInf(SfdUsrIf *iface);
 
 void SFD_SetOutPan(SfdUsrHn *h, int a, int b) {
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A1);
         return;
     }
-    if (SFD_GetCond(h, 6) != 0) {
+    if (SFSET_GetCond(h, 6) != 0) {
         h->iface->f4(h, a, b);
     }
 }
@@ -49,7 +49,7 @@ int SFD_GetOutPan(SfdUsrHn *h, int a) {
         sfd_ReportError(0, 0xFF0001A2);
         return 0;
     }
-    if (SFD_GetCond(h, 6) == 0) {
+    if (SFSET_GetCond(h, 6) == 0) {
         return 0;
     }
     return h->iface->f8(h, a);
@@ -60,7 +60,7 @@ void SFD_SetOutVol(SfdUsrHn *h, int a) {
         sfd_ReportError(0, 0xFF0001A3);
         return;
     }
-    if (SFD_GetCond(h, 6) != 0) {
+    if (SFSET_GetCond(h, 6) != 0) {
         h->iface->f12(h, a);
     }
 }
@@ -70,15 +70,15 @@ int SFD_GetOutVol(SfdUsrHn *h) {
         sfd_ReportError(0, 0xFF0001A4);
         return 0;
     }
-    if (SFD_GetCond(h, 6) == 0) {
+    if (SFSET_GetCond(h, 6) == 0) {
         return 0;
     }
     return h->iface->f16(h);
 }
 
-void FUN_0029d0e0(SfdUsrHn *h, int a) {
+void SFAOAP_SetSpeed(SfdUsrHn *h, int a) {
     void (*fn)(SfdUsrHn *, int);
-    if (SFD_GetCond(h, 6) != 0) {
+    if (SFSET_GetCond(h, 6) != 0) {
         fn = h->iface->f20;
         if (fn != 0) {
             fn(h, a);
@@ -86,97 +86,97 @@ void FUN_0029d0e0(SfdUsrHn *h, int a) {
     }
 }
 
-int FUN_0029d138(void) {
+int SFAOAP_Init(void) {
     return 0;
 }
 
-int FUN_0029d140(void) {
+int SFAOAP_Finish(void) {
     return 0;
 }
 
-void FUN_0029d148(SfdUsrHn *h) {
-    if (SFD_GetCond(h, 6) != 0) {
-        FUN_0029d188(h);
+void SFAOAP_ExecServer(SfdUsrHn *h) {
+    if (SFSET_GetCond(h, 6) != 0) {
+        sfaoap_OutputServer(h);
     }
 }
 
-int FUN_0029d188(SfdUsrHn *h) {
-    FUN_0029d1b8(h);
-    FUN_0029d228(h);
+int sfaoap_OutputServer(SfdUsrHn *h) {
+    sfaoap_ChkPrepFlg(h);
+    sfaoap_ChkTermFlg(h);
     return 0;
 }
 
-void FUN_0029d1b8(SfdUsrHn *h) {
-    if (sftrn_GetFlagA(h, 7) != 1 && sfbuf_GetFlagA(h, h->stream) == 1) {
+void sfaoap_ChkPrepFlg(SfdUsrHn *h) {
+    if (sftrn_GetFlagA(h, 7) != 1 && SFBUF_GetPrepFlg(h, h->stream) == 1) {
         sftrn_SetFlagA(h, 7, 1);
     }
 }
 
-void FUN_0029d228(SfdUsrHn *h) {
-    if (sftrn_GetFlagB(h, 7) != 1 && sfbuf_GetFlagB(h, h->stream) == 1) {
+void sfaoap_ChkTermFlg(SfdUsrHn *h) {
+    if (sftrn_GetFlagB(h, 7) != 1 && SFBUF_GetTermFlg(h, h->stream) == 1) {
         sftrn_SetFlagB(h, 7, 1);
     }
 }
 
-int FUN_0029d298(SfdUsrHn *h) {
-    int result = SFD_GetCond(h, 6);
+int SFAOAP_Create(SfdUsrHn *h) {
+    int result = SFSET_GetCond(h, 6);
     SfdUsrIf *iface = &h->ifaceStorage;
     if (result != 0) {
         h->iface = iface;
-        FUN_0029d2d8(iface);
+        sfaoap_InitInf(iface);
         result = 0;
     }
     return result;
 }
 
-void FUN_0029d2d8(SfdUsrIf *iface) {
+void sfaoap_InitInf(SfdUsrIf *iface) {
 }
 
-int FUN_0029d2e0(void) {
+int SFAOAP_Destroy(void) {
     return 0;
 }
 
-int FUN_0029d2e8(SfdUsrHn *h) {
-    if (SFD_GetCond(h, 6) != 0) {
+int SFAOAP_Standby(SfdUsrHn *h) {
+    if (SFSET_GetCond(h, 6) != 0) {
         FUN_002b0338(h, 3, 5, 0, 0);
     }
 }
 
-int FUN_0029d330(SfdUsrHn *h) {
-    if (SFD_GetCond(h, 6) != 0) {
+int SFAOAP_Start(SfdUsrHn *h) {
+    if (SFSET_GetCond(h, 6) != 0) {
         FUN_002b0338(h, 3, 6, 0, 0);
     }
 }
 
-int FUN_0029d378(SfdUsrHn *h) {
-    if (SFD_GetCond(h, 6) != 0) {
+int SFAOAP_Stop(SfdUsrHn *h) {
+    if (SFSET_GetCond(h, 6) != 0) {
         FUN_002b0338(h, 3, 7, 0, 0);
     }
 }
 
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
-int FUN_0029d3c0(SfdUsrHn *h, int value) {
-    if (SFD_GetCond(h, 6) != 0) {
+int SFAOAP_Pause(SfdUsrHn *h, int value) {
+    if (SFSET_GetCond(h, 6) != 0) {
         FUN_002b0338(h, 3, 8, value, 0);
     }
 }
 
-void FUN_0029d418(SfdUsrHn *h) {
+void SFAOAP_GetWrite(SfdUsrHn *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 
-void FUN_0029d438(SfdUsrHn *h) {
+void SFAOAP_AddWrite(SfdUsrHn *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 
-void FUN_0029d458(SfdUsrHn *h) {
+void SFAOAP_GetRead(SfdUsrHn *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 
-void FUN_0029d478(SfdUsrHn *h) {
+void SFAOAP_AddRead(SfdUsrHn *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 
-int FUN_0029d498(void) {
+int SFAOAP_Seek(void) {
     return 0;
 }

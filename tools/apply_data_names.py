@@ -25,17 +25,22 @@ address (`*(int *)0x0058a0e0` becomes `g_ParticleInfo_metaObject_0058a0e0[0]`, w
 an `extern int ...[4];` declaration — the array form keeps the load absolute rather
 than gp-relative, as for every other extern here).
 
+The `cri` module also renames the `DAT_<addr>` keys of the `data` rows in `unit-objects.json` for the
+CRI whole-file units (`cri_*` in `units.tsv`), so a unit's own datum has one name in its source, its
+row and this table.
+
 Run `make check` and `make link` afterwards: only a clean check makes the batch
 safe to commit.
 """
 import argparse
+import json
 import os
 import re
 import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SCOPE = ("engine", "game", "lua", "audio", "menu", "movie")
+SCOPE = ("engine", "game", "lua", "audio", "menu", "movie", "cri")
 DAT = re.compile(r"\bDAT_([0-9a-f]{8})\b")
 
 
@@ -66,6 +71,38 @@ def rewrite(text, rows, cpp=False):
                 text = declaration(addr).sub("" if already else "int %s();\n" % name, text, count=1)
         text = re.sub(r"\bDAT_%08x\b" % addr, name, text)
     return text, len(used)
+
+
+def cri_unit_starts():
+    """Start addresses (`0x%08x`) of the CRI whole-file units in units.tsv."""
+    starts = set()
+    for ln in open(os.path.join(ROOT, "config/SLUS-20836/units.tsv")):
+        cols = ln.split("\t")
+        if not ln.startswith("#") and len(cols) > 2 and cols[2].startswith("cri_"):
+            starts.add("0x%08x" % int(cols[0], 16))
+    return starts
+
+
+def rename_unit_data(unit_objects, rows):
+    """Rename the `DAT_<addr>` keys of each CRI unit's `data` rows to their recovered name, keeping the
+    order. -> (document, number of keys renamed)."""
+    document = json.load(open(unit_objects))
+    cri = cri_unit_starts()
+    count = 0
+    for start, unit in document.items():
+        data = unit.get("data")
+        if start not in cri or not isinstance(data, dict):
+            continue
+        renamed = {}
+        for key, addr in data.items():
+            m = DAT.fullmatch(key)
+            row = rows.get(int(m.group(1), 16)) if m else None
+            if row and row[1] != "function-symbol" and row[0] not in data and row[0] not in renamed:
+                key = row[0]
+                count += 1
+            renamed[key] = addr
+        unit["data"] = renamed
+    return document, count
 
 
 LITERAL = re.compile(r"\*\s*\(\s*int\s*\*\s*\)\s*0x0*([0-9a-fA-F]{6})\b")
@@ -124,8 +161,16 @@ def main():
                 renamed += n
                 if a.apply:
                     open(path, "w").write(new)
-    print("%s %d symbol uses in %d files (%s)" %
-          ("renamed" if a.apply else "would rename", renamed, files, ", ".join(mods)))
+    keys = 0
+    if "cri" in mods:
+        # a whole-file unit's `data` rows spell the datum by its name, as its definition does
+        unit_objects = os.path.join(ROOT, "config/SLUS-20836/unit-objects.json")
+        document, keys = rename_unit_data(unit_objects, rows)
+        if keys and a.apply:
+            with open(unit_objects, "w") as fh:
+                fh.write(json.dumps(document, indent=2) + "\n")
+    print("%s %d symbol uses in %d files, %d unit-objects.json data keys (%s)" %
+          ("renamed" if a.apply else "would rename", renamed, files, keys, ", ".join(mods)))
     if a.apply and a.check:
         for target in ("check", "link"):
             if subprocess.call(["make", target], cwd=ROOT) != 0:

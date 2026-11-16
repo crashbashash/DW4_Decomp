@@ -57,7 +57,7 @@ typedef struct MwsfdFlowInf {
     long long flow[12];
 } MwsfdFlowInf;
 
-void mwsfd_Error(const char *msg);
+void MWSFSVM_Error(const char *msg);
 void MWSFLIB_SetErrCode(int code);
 int mwPlyGetNumSkipDisp(MwsfdPly *ply);
 void MWSFRNA_SetOutVol(MwsfdPly *ply, int vol);
@@ -75,7 +75,7 @@ void MWSTM_GetFsizeByte(void *stm, int *len);
 int SFD_GetVideoCh(void *sfd);
 int SFD_GetAudioCh(void *sfd);
 void SFD_SetMpvCond(void *sfd, int param, int value);
-int SFD_GetNumDecPool(void *sfd, int *num);
+int SFD_GetNumFrm(void *sfd, int *num);
 void SFD_SetSpeed(void *sfd, int speed);
 int SFD_SetAudioCh(void *sfd, int ch);
 int SFD_SetVideoCh(void *sfd, int ch);
@@ -85,7 +85,7 @@ void SFD_GetHnHdrInf(void *sfd, SfdHdrInf *inf);
 void SFD_GetPlyInf(void *sfd, SfdPlyInf *inf);
 int SFD_GetTime(void *sfd, int *count, int *unit);
 int SFD_GetHnStat(void *sfd);
-void SFD_GetInputBufStat(void *sfd, SfdBufStat *stat);
+void SFD_GetWritePtr(void *sfd, SfdBufStat *stat);
 int SFD_SetStmObject(void *sfd, int id, void *object, int (*cb)(void *obj, int arg), void *cbObj);
 int MWSTM_GetStatRead(void *stm);
 
@@ -94,15 +94,15 @@ void *mwPlyGetSfdHn(MwsfdPly *ply);
 void *MWSFD_GetAdxtHn(MwsfdPly *ply);
 int mwPlyGetNumSkipDec(MwsfdPly *ply);
 void mwply_SetPicSkip(MwsfdPly *ply, int mode, int param);
-void mwply_GetSfdPlyInf(MwsfdPly *ply, SfdPlyInf *inf);
-void mwply_GetHdrInf(MwsfdPly *ply, SfdHdrInf *inf);
+void MWSFD_GetPlyInf(MwsfdPly *ply, SfdPlyInf *inf);
+void MWSFD_GetMvInf(MwsfdPly *ply, SfdHdrInf *inf);
 void MWSFD_SetCond(MwsfdPly *ply, int param, int value);
 void MWSFD_SetFlowLimit(MwsfdPly *ply, int limit, int cap);
 int mwPlyGetNumSkipEmptyB(MwsfdPly *ply);
 
 void mwPlySetAudioSw(MwsfdPly *ply, int sw) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122617 mwPlySetAudioSw: handle is invalid.");
+        MWSFSVM_Error("E1122617 mwPlySetAudioSw: handle is invalid.");
         return;
     }
     SFD_SetCond(ply->sfd, SFD_COND_AUDIO_SW, sw);
@@ -114,7 +114,7 @@ void mwPlySetVideoSw(MwsfdPly *ply, int sw) {
 
 void *mwPlyGetSfdHn(MwsfdPly *ply) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122640: mwPlyGetSfdHn: handle is invalid.");
+        MWSFSVM_Error("E1122640: mwPlyGetSfdHn: handle is invalid.");
         return 0;
     }
     return ply->sfd;
@@ -122,7 +122,7 @@ void *mwPlyGetSfdHn(MwsfdPly *ply) {
 
 void *mwPlyGetAdxtHn(MwsfdPly *ply) {
     if (!MWSFD_IsEnableHndl(ply)) {
-        mwsfd_Error("E1122639: mwPlyGetAdxtHn: handle is invalid.");
+        MWSFSVM_Error("E1122639: mwPlyGetAdxtHn: handle is invalid.");
         return 0;
     }
     return MWSFD_GetAdxtHn(ply);
@@ -132,7 +132,7 @@ int mwPlyGetNumDropFrm(MwsfdPly *ply) {
     int numSkipDec;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E202232: mwPlyGetNumDropFrm: handle is invalid.");
+        MWSFSVM_Error("E202232: mwPlyGetNumDropFrm: handle is invalid.");
         return 0;
     }
     numSkipDec = mwPlyGetNumSkipDec(ply);
@@ -143,7 +143,7 @@ int mwPlyGetNumSkipDec(MwsfdPly *ply) {
     SfdPlyInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122619: mwPlyGetNumSkipDec: handle is invalid.");
+        MWSFSVM_Error("E1122619: mwPlyGetNumSkipDec: handle is invalid.");
         return 0;
     }
     SFD_GetPlyInf(mwPlyGetSfdHn(ply), &inf);
@@ -160,7 +160,7 @@ void mwPlySetPpicSkip(MwsfdPly *ply, int mode) {
 
 void mwply_SetPicSkip(MwsfdPly *ply, int mode, int param) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122628: mwPlySetBpicSkip mwPlySetPpicSkip: handle is invalid.");
+        MWSFSVM_Error("E1122628: mwPlySetBpicSkip mwPlySetPpicSkip: handle is invalid.");
         return;
     }
     SFD_SetCond(ply->sfd, param, mode != 1);
@@ -168,11 +168,11 @@ void mwply_SetPicSkip(MwsfdPly *ply, int mode, int param) {
 
 void mwPlySetAudioCh(MwsfdPly *ply, int ch) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122616 mwPlySetAudioCh: handle is invalid.");
+        MWSFSVM_Error("E1122616 mwPlySetAudioCh: handle is invalid.");
         return;
     }
     if (SFD_SetAudioCh(ply->sfd, ch) != 0) {
-        mwsfd_Error("E10911A mwPlySetAudioCh: Invalid ch no.");
+        MWSFSVM_Error("E10911A mwPlySetAudioCh: Invalid ch no.");
         return; /* matching construct: manual — the explicit return makes this call a tail jump */
     }
 }
@@ -185,20 +185,20 @@ int mwPlyGetNumAudioCh(MwsfdPly *ply) {
     SfdHdrInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E2080801 mwPlyGetNumAudioCh: handle is invalid.");
+        MWSFSVM_Error("E2080801 mwPlyGetNumAudioCh: handle is invalid.");
         return -1;
     }
-    mwply_GetHdrInf(ply, &inf);
+    MWSFD_GetMvInf(ply, &inf);
     return inf.numAudioCh;
 }
 
 void mwPlySetVideoCh(MwsfdPly *ply, int ch) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E2080601 mwPlySetVideoCh: handle is invalid.");
+        MWSFSVM_Error("E2080601 mwPlySetVideoCh: handle is invalid.");
         return;
     }
     if (SFD_SetVideoCh(ply->sfd, ch) != 0) {
-        mwsfd_Error("E2080602 mwPlySetVideoCh: Invalid ch no.");
+        MWSFSVM_Error("E2080602 mwPlySetVideoCh: Invalid ch no.");
         return; /* matching construct: manual — the explicit return makes this call a tail jump */
     }
 }
@@ -211,18 +211,18 @@ int mwPlyGetNumVideoCh(MwsfdPly *ply) {
     SfdHdrInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E2080802 mwPlyGetNumVideoCh: handle is invalid.");
+        MWSFSVM_Error("E2080802 mwPlyGetNumVideoCh: handle is invalid.");
         return -1;
     }
-    mwply_GetHdrInf(ply, &inf);
+    MWSFD_GetMvInf(ply, &inf);
     return inf.numVideoCh;
 }
 
-void mwply_GetSfdPlyInf(MwsfdPly *ply, SfdPlyInf *inf) {
+void MWSFD_GetPlyInf(MwsfdPly *ply, SfdPlyInf *inf) {
     SFD_GetPlyInf(ply->sfd, inf);
 }
 
-void mwply_GetHdrInf(MwsfdPly *ply, SfdHdrInf *inf) {
+void MWSFD_GetMvInf(MwsfdPly *ply, SfdHdrInf *inf) {
     SFD_GetHnHdrInf(ply->sfd, inf);
 }
 
@@ -257,20 +257,20 @@ void MWSFD_SetFlowLimit(MwsfdPly *ply, int limit, int cap) {
     MWSFLSC_SetFlowLimit(ply, limit);
 }
 
-void mwply_GetFlowLimit(MwsfdPly *ply, int *limit, int *cap) {
+void MWSFD_GetFlowLimit(MwsfdPly *ply, int *limit, int *cap) {
     MWSTM_GetFlowLimit(ply->stm, limit, cap);
 }
 
-int mwply_SetReqRdSize(MwsfdPly *ply, int value) {
+int MWSFD_SetRdSct(MwsfdPly *ply, int value) {
     return MWSTM_SetRdSct(ply->stm, value);
 }
 
 /* the stream side does nothing and returns 0 */
-int mwply_StmNop(MwsfdPly *ply) {
+int MWSFD_SetTrSct(MwsfdPly *ply) {
     return MWSTM_SetTrSct(ply->stm);
 }
 
-void mwply_SetDispLatencyTime(MwsfdPly *ply, int value) {
+void MWSFD_AdjustGetFrmTiming(MwsfdPly *ply, int value) {
     SFD_SetCond(ply->sfd, 44, value);
 }
 
@@ -298,7 +298,7 @@ void *MWSFD_GetSfxHn(MwsfdPly *ply) {
 /* the limit is given in seconds and kept in milliseconds */
 void mwPlySetLimitTime(MwsfdPly *ply, int sec) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122625: mwPlySetLimitTime: handle is invalid.");
+        MWSFSVM_Error("E1122625: mwPlySetLimitTime: handle is invalid.");
         return;
     }
     MWSFD_SetCond(ply, SFD_COND_LIMIT_TIME, sec * 1000);
@@ -312,7 +312,7 @@ int mwSfdGetStat(MwsfdPly *ply) {
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
         MWSFLIB_SetErrCode(-12);
-        mwsfd_Error("W2004 mwSfdGetStat: handle is invalid");
+        MWSFSVM_Error("W2004 mwSfdGetStat: handle is invalid");
         return 0;
     }
     stat = ply->stat;
@@ -326,7 +326,7 @@ int mwSfdGetStat(MwsfdPly *ply) {
     return stat;
 }
 
-void mwply_SetSyncSw(MwsfdPly *ply, int on) {
+void mwPlySetAsync(MwsfdPly *ply, int on) {
     void *sfd = ply->sfd;
 
     if (on == 0) {
@@ -344,7 +344,7 @@ void mwPlySetSyncMode(MwsfdPly *ply, int mode) {
     void *sfd;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122626: mwPlySetSyncMode: handle is invalid.");
+        MWSFSVM_Error("E1122626: mwPlySetSyncMode: handle is invalid.");
         return;
     }
     sfd = ply->sfd;
@@ -375,7 +375,7 @@ int mwPlyGetSyncMode(MwsfdPly *ply) {
     int mode;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E2010802: mwPlyGetSyncMode: handle is invalid.");
+        MWSFSVM_Error("E2010802: mwPlyGetSyncMode: handle is invalid.");
         return -1;
     }
     SFD_GetCondDef(ply->sfd, SFD_COND_SYNC_MODE, &value);
@@ -390,7 +390,7 @@ int mwPlyGetSyncMode(MwsfdPly *ply) {
         mode = MWSFD_SYNC_AUDIO;
         break;
     default:
-        mwsfd_Error("E2010803: mwPlyGetSyncMode: mode is invalid.");
+        MWSFSVM_Error("E2010803: mwPlyGetSyncMode: mode is invalid.");
         mode = -1;
         break;
     }
@@ -401,11 +401,11 @@ int mwPlyGetNumDecPool(MwsfdPly *ply) {
     int num;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122621: mwPlyGetNumDecPool: handle is invalid.");
+        MWSFSVM_Error("E1122621: mwPlyGetNumDecPool: handle is invalid.");
         return 0;
     }
-    if (SFD_GetNumDecPool(ply->sfd, &num) != 0) {
-        mwsfd_Error("E1121601 mwPlyGetNumDecPool");
+    if (SFD_GetNumFrm(ply->sfd, &num) != 0) {
+        MWSFSVM_Error("E1121601 mwPlyGetNumDecPool");
     }
     return num;
 }
@@ -414,31 +414,31 @@ int mwPlyGetNumTotalDec(MwsfdPly *ply) {
     SfdPlyInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122620: mwPlyGetNumTotalDec: handle is invalid.");
+        MWSFSVM_Error("E1122620: mwPlyGetNumTotalDec: handle is invalid.");
         return 0;
     }
-    mwply_GetSfdPlyInf(ply, &inf);
+    MWSFD_GetPlyInf(ply, &inf);
     return inf.numTotalDec;
 }
 
-int mwply_GetInputBufLen(MwsfdPly *ply) {
+int mwPlyGetNumIbufRoom(MwsfdPly *ply) {
     SfdBufStat stat;
 
-    SFD_GetInputBufStat(ply->sfd, &stat);
+    SFD_GetWritePtr(ply->sfd, &stat);
     return stat.ck0.len + stat.ck1.len;
 }
 
 /* The time is count/unit seconds; an invalid handle, a failed read or a negative count read 0/1. */
 void mwSfdGetTime(MwsfdPly *ply, int *count, int *unit) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122603 mwSfdGetTime; handle is invalid.");
+        MWSFSVM_Error("E1122603 mwSfdGetTime; handle is invalid.");
         *count = 0;
         *unit = 1;
         return;
     }
     if (SFD_GetTime(ply->sfd, count, unit) != 0) {
         MWSFLIB_SetErrCode(-309);
-        mwsfd_Error("E2006 mwSfdGetTime; can't get time");
+        MWSFSVM_Error("E2006 mwSfdGetTime; can't get time");
         *count = 0;
         *unit = 1;
     }
@@ -457,7 +457,7 @@ void mwPlySetFastHalfpel(MwsfdPly *ply, int value) {
     SFD_SetMpvCond(sfd, 3, value);
 }
 
-void mwply_SetMpvPara5(MwsfdPly *ply, int value) {
+void mwPlySetAdjustY16(MwsfdPly *ply, int value) {
     void *sfd = 0;
 
     if (ply != 0) {
@@ -468,7 +468,7 @@ void mwply_SetMpvPara5(MwsfdPly *ply, int value) {
 
 void mwSfdSetOutVol(MwsfdPly *ply, int vol) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122605 mwSfdSetOutVol: handle is invalid.");
+        MWSFSVM_Error("E1122605 mwSfdSetOutVol: handle is invalid.");
         return;
     }
     MWSFRNA_SetOutVol(ply, vol);
@@ -480,7 +480,7 @@ int mwSfdGetOutVol(MwsfdPly *ply) {
     int adxtVol, inputVol, vol;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122606 mwSfdGetOutVol: handle is invalid.");
+        MWSFSVM_Error("E1122606 mwSfdGetOutVol: handle is invalid.");
         return 0;
     }
     adxtVol = MWSFRNA_GetOutVol(ply);
@@ -497,7 +497,7 @@ int mwSfdGetOutVol(MwsfdPly *ply) {
 
 void mwSfdSetOutPan(MwsfdPly *ply, int channel, int pan) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122607 mwSfdSetOutPan: handle is invalid.");
+        MWSFSVM_Error("E1122607 mwSfdSetOutPan: handle is invalid.");
         return;
     }
     MWSFRNA_SetOutPan(ply, channel, pan);
@@ -505,13 +505,13 @@ void mwSfdSetOutPan(MwsfdPly *ply, int channel, int pan) {
 
 int mwSfdGetOutPan(MwsfdPly *ply, int channel) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122608 mwSfdGetOutPan: handle is invalid.");
+        MWSFSVM_Error("E1122608 mwSfdGetOutPan: handle is invalid.");
         return 0;
     }
     return MWSFRNA_GetOutPan(ply, channel);
 }
 
-void mwply_SetMpvPara4(MwsfdPly *ply, int on) {
+void mwPlySetIpicOnly(MwsfdPly *ply, int on) {
     void *sfd = 0;
 
     if (ply != 0) {
@@ -524,7 +524,7 @@ void mwply_SetMpvPara4(MwsfdPly *ply, int on) {
     SFD_SetMpvCond(sfd, 4, 0);
 }
 
-void mwply_SetNoSkip(MwsfdPly *ply, int on) {
+void mwPlySetNeverSkip(MwsfdPly *ply, int on) {
     void *sfd = ply->sfd;
 
     if (on == 1) {
@@ -536,7 +536,7 @@ void mwply_SetNoSkip(MwsfdPly *ply, int on) {
 
 /* matching construct: manual — retail reads ply->sfd before the NULL test (load in the branch
  * delay slot); testing first and loading inside the branch does not match. */
-void mwply_SetCntCb(MwsfdPly *ply, int value) {
+void mwPlyEntryDecExecCb(MwsfdPly *ply, int value) {
     void *sfd = ply->sfd;
 
     if (ply != 0) {
@@ -544,8 +544,8 @@ void mwply_SetCntCb(MwsfdPly *ply, int value) {
     }
 }
 
-/* matching construct: manual — as mwply_SetCntCb. */
-void mwply_SetTmrCb(MwsfdPly *ply, int value) {
+/* matching construct: manual — as mwPlyEntryDecExecCb. */
+void mwPlyEntryDecSkipCb(MwsfdPly *ply, int value) {
     void *sfd = ply->sfd;
 
     if (ply != 0) {
@@ -557,16 +557,16 @@ int mwPlyGetNumSkipEmptyB(MwsfdPly *ply) {
     SfdPlyInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122623: mwPlyGetNumSkipEmptyB: handle is invalid.");
+        MWSFSVM_Error("E1122623: mwPlyGetNumSkipEmptyB: handle is invalid.");
         return 0;
     }
-    mwply_GetSfdPlyInf(ply, &inf);
+    MWSFD_GetPlyInf(ply, &inf);
     return inf.numSkipEmptyB;
 }
 
 void mwPlySetEmptyBpicSkip(MwsfdPly *ply, int mode) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122627: mwPlySetEmptyBpicSkip: handle is invalid.");
+        MWSFSVM_Error("E1122627: mwPlySetEmptyBpicSkip: handle is invalid.");
         return;
     }
     SFD_SetCond(mwPlyGetSfdHn(ply), SFD_COND_EMPTY_BPIC_SKIP, mode != 1);
@@ -574,7 +574,7 @@ void mwPlySetEmptyBpicSkip(MwsfdPly *ply, int mode) {
 
 SfdSj *mwPlyGetInputSj(MwsfdPly *ply) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122624: mwPlyGetInputSj: handle is invalid.");
+        MWSFSVM_Error("E1122624: mwPlyGetInputSj: handle is invalid.");
         return 0;
     }
     return ply->defSj;
@@ -584,7 +584,7 @@ void mwPlyGetPlyInf(MwsfdPly *ply, MwsfdPlyInf *out) {
     SfdPlyInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E202191: mwPlyGetPlyInf: handle is invalid.");
+        MWSFSVM_Error("E202191: mwPlyGetPlyInf: handle is invalid.");
         return;
     }
     SFD_GetPlyInf(mwPlyGetSfdHn(ply), &inf);
@@ -599,7 +599,7 @@ void mwPlyGetFlowInf(MwsfdPly *ply, MwsfdFlowInf *out) {
     SfdPlyInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E1122643: mwPlyGetFlowInf: handle is invalid.");
+        MWSFSVM_Error("E1122643: mwPlyGetFlowInf: handle is invalid.");
         return;
     }
     SFD_GetPlyInf(mwPlyGetSfdHn(ply), &inf);
@@ -619,7 +619,7 @@ void mwPlyGetFlowInf(MwsfdPly *ply, MwsfdFlowInf *out) {
 
 /* The stream's byte rate (maxBps / 8, rounded down to whole 2 KiB sectors) times `ratio`, capped
  * at the input buffer size. */
-void mwply_SetFlowLimitRatio(MwsfdPly *ply, float ratio) {
+void mwPlySetReloadTime(MwsfdPly *ply, float ratio) {
     int cap = ply->inputBufSize;
     int limit = (float)((ply->cre.maxBps / 16384) << 11) * ratio;
 
@@ -629,7 +629,7 @@ void mwply_SetFlowLimitRatio(MwsfdPly *ply, float ratio) {
     MWSFD_SetFlowLimit(ply, limit, cap);
 }
 
-int mwply_GetFileLen(MwsfdPly *ply) {
+int mwPlyGetFsizeByte(MwsfdPly *ply) {
     int len;
     void *stm = ply->stm;
 
@@ -662,7 +662,7 @@ int mwply_GetStmStatRead(MwsfdPly *ply) {
 
 void mwPlySetSpeed(MwsfdPly *ply, int speed) {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E302251: mwPlySetSpeed: handle is invalid.");
+        MWSFSVM_Error("E302251: mwPlySetSpeed: handle is invalid.");
         return;
     }
     SFD_SetSpeed(mwPlyGetSfdHn(ply), speed);
@@ -675,7 +675,7 @@ void mwPlySetFloatSpeed(MwsfdPly *ply, float speed) {
     int milli;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        mwsfd_Error("E211051: mwPlySetFloatSpeed: handle is invalid.");
+        MWSFSVM_Error("E211051: mwPlySetFloatSpeed: handle is invalid.");
         return;
     }
     sfd = mwPlyGetSfdHn(ply);
@@ -730,7 +730,7 @@ int mwply_SetStmObject(MwsfdPly *ply, int id, void *object, int (*cb)(void *obj,
 
 void mwPlySetTimerCh(int ch) {
     if (ch < -1 || ch > 1) {
-        mwsfd_Error("E309101 : Timer channel is only -1, 0, 1.");
+        MWSFSVM_Error("E309101 : Timer channel is only -1, 0, 1.");
         return;
     }
     SFD_SetCond(0, SFD_COND_TIMER_CH, ch);

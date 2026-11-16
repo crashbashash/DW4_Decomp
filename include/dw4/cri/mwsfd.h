@@ -19,7 +19,7 @@ typedef struct MwsfdWork {
     int f0;
     MwsfdInitPrm prm;              /* 4 */
     int waitingSvr;                /* 36 */
-    void *(*mallocFn)(void *obj, int size);  /* 40: MWSFD_SetMallocFunc */
+    void *(*mallocFn)(void *obj, int size);  /* 40: mwPlySetMallocFn */
     void (*freeFn)(void *obj, void *ptr);    /* 44 */
     void *mallocObj;                         /* 48 */
     int workFlag;                  /* 52 */
@@ -38,6 +38,6 @@ typedef struct MwsfdWork {
     MwsfdPly ply[MWSFD_NPLY];      /* 108 */
 } MwsfdWork;
 
-MwsfdWork *MWSFLIB_GetLibWorkPtr(void);
+MwsfdWork *mwsflib_GetVersionStr(void);
 
 #endif

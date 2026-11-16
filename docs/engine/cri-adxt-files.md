@@ -24,7 +24,7 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
   is declared plain, and `ADXT_Init` clears it through a `volatile int` cast of its address. The stream
   file reads the count plain.
 - ADXPS2 declares its thread words `volatile` at file scope; the functions that use them rely on owner
-  approval ([source approvals](source-approvals.md#adxm-thread-ids)). `adxm_exec_vint` (`0x2650a8`) is the
+  approval ([source approvals](source-approvals.md#adxm-thread-ids)). `ADXPS2_ExecVint` (`0x2650a8`) is the
   V-blank reader of the ADXM busy flags and thread ids and of `adxt_vsync_cnt`: it counts the tick, and while
   its re-entry word `adxps2_exec_vint` is clear it wakes the V-sync, FS and user V-sync threads whose busy
   flags are not set, counts `adxm_vint_cnt`, runs `SVM_ExecSvrVint` and calls the callback in `adxm_old_cbf`.
@@ -35,9 +35,9 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
 - ADXPS2's names: `adxm_goto_svr_border` is named by its own internal-error message, and the user V-sync and
   user idle threads by the messages that print their stacks. The other threads are named from the server
   type each runs through SVM (`0x27e910`): 1 user V-sync, 2 V-sync (woken from the V-blank handler
-  `ADXM_ExecVint`, it releases `ADXM_WaitVsync`), 4 FS, 5 main (run by the caller through `ADXM_ExecMain`),
+  `ADXM_ExecVint`, it releases `ADXPS2_SleepMainThrd`), 4 FS, 5 main (run by the caller through `ADXM_ExecMain`),
   6 MW idle and 7 user idle (each with a border callback registered with SVM), plus the safe thread
-  `adxm_lock` resumes while the lock is held. "FS" for type 4 and "main" for type 5 are guesses; that
+  `_adxm_lock` resumes while the lock is held. "FS" for type 4 and "main" for type 5 are guesses; that
   thread 4's loop sets the GS background colour from `adxm_fs_bgcolor` only says it is a debug aid.
   The `ADXPS2_*` and `ADXM_*` API spellings follow CRI's convention; none of them survives as a string.
 - The SVM functions ADXPS2 calls (`0x27e1c0` lock, `0x27e1d8` unlock, `0x27e398` error, `0x27e748`

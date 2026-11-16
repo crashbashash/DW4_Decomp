@@ -1,0 +1,1303 @@
+# CRI ADX/Sofdec function name worklist: one row per function renamed to CRI's own name.
+# Read by scripts/seed_names_cri.py, which writes config/SLUS-20836/names/CriAdx.tsv and CriSofdec.tsv.
+# Columns: <va> <name> <confidence> <evidence>.
+# Evidence tokens: `sdk:<archive>/<member> <tier>` is a member of the CRI PS2 SDK archive (libadxe.a or libmwsfde.a, Sep 2002),
+# `3s:<file> <tier>` a file of the Street Fighter III 3rd Strike libadxe (2003). Tiers: A masked-exact body, B/C near body
+# (>=0.8 / 0.6-0.8 similarity after address masking), O same position in order with equal size. Sources are cited, not vendored.
+0x25b618	adxamp_extract	high	sdk:libadxe.a/adx_amp.o A + 3s:adx_amp D agree
+0x25b930	ADXAMP_GetExtractNumSmpl	high	sdk:libadxe.a/adx_amp.o A + 3s:adx_amp O agree
+0x25bc40	AIFF_GetInfo	high	sdk:libadxe.a/adx_baif.o B + 3s:adx_baif D agree
+0x25c5a0	AU_GetInfo	high	sdk:libadxe.a/adx_bau.o B + 3s:adx_bau O agree
+0x25d300	ADXB_Init	medium	sdk:libadxe.a/adx_bsc.o B
+0x25d338	ADXB_Finish	medium	sdk:libadxe.a/adx_bsc.o B
+0x25d370	adxb_DefGetWr	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc C agree
+0x25d3a0	adxb_DefAddWr	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc A agree
+0x25d3c0	ADXB_Create	high	sdk:libadxe.a/adx_bsc.o C + 3s:adx_bsc B agree
+0x25d4f8	ADXB_Destroy	medium	sdk:libadxe.a/adx_bsc.o B
+0x25d540	ADXB_DecodeHeaderAdx	high	sdk:libadxe.a/adx_bsc.o C + 3s:adx_bsc B agree
+0x25da40	ADXB_EntryGetWrFunc	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25da50	ADXB_EntryAddWrFunc	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc D agree
+0x25da70	ADXB_GetSfreq	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc A agree
+0x25daa8	ADXB_GetFmtBps	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25dab0	ADXB_GetOutBps	high	sdk:libadxe.a/adx_bsc.o B + 3s:adx_bsc B agree
+0x25db10	ADXB_GetBlkSmpl	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc A agree
+0x25db18	ADXB_GetBlkLen	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25db28	ADXB_GetCof	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25db30	ADXB_GetLpInsNsmpl	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25db38	ADXB_GetNumLoop	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25db40	ADXB_GetLpStartPos	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25db60	ADXB_GetLpEndPos	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25db68	ADXB_GetLpEndOfst	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25db80	ADXB_GetDefPan	medium	3s:adx_bsc B
+0x25db98	ADXB_TakeSnapshot	medium	3s:adx_bsc O by order and size
+0x25dcc8	adxb_get_key	high	sdk:libadxe.a/adx_bsc.o C + 3s:adx_bsc B agree
+0x25ddc8	ADXB_GetStat	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25de68	ADXB_Stop	high	sdk:libadxe.a/adx_bsc.o C + 3s:adx_bsc B agree
+0x25df10	ADXB_GetAdxpd	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25e120	memcpy2	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc A agree
+0x25e150	ADXB_CopyExtraBufSte	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc A agree
+0x25e1c0	ADXB_CopyExtraBufMono	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
+0x25e1e0	ADXB_EndDecode	high	sdk:libadxe.a/adx_bsc.o C + 3s:adx_bsc B agree
+0x25e368	ADXB_ExecOneAdx	high	sdk:libadxe.a/adx_bsc.o D + 3s:adx_bsc B agree
+0x25e608	ADXB_ExecServer	medium	sdk:libadxe.a/adx_bsc.o B
+0x25e668	ADX_DecodeInfoSpsd	high	sdk:libadxe.a/adx_bsps.o A + 3s:adx_bsps O agree
+0x25ea20	ADX_DecodeInfoWav	high	sdk:libadxe.a/adx_bwav.o B + 3s:adx_bwav O agree
+0x25f060	ADXB_ExecOneWav4	high	sdk:libadxe.a/adx_bwav.o A + 3s:adx_bwav D agree
+0x25f4e0	ADX_IsAdxFmt	high	sdk:libadxe.a/adx_dcd.o A + 3s:adx_dcd D agree
+0x25f588	ADX_DecodeInfo	high	sdk:libadxe.a/adx_dcd.o A + 3s:adx_dcd A agree
+0x25f688	ADX_DecodeInfoExADPCM2	high	sdk:libadxe.a/adx_dcd.o A + 3s:adx_dcd A agree
+0x25f780	ADX_DecodeInfoExIdly	high	sdk:libadxe.a/adx_dcd.o A + 3s:adx_dcd A agree
+0x25fd98	ADX_CalcHdrInfoLen	high	sdk:libadxe.a/adx_dcd.o A + 3s:adx_dcd D agree
+0x25ffd0	ADX_DecodeSte4AsMono	high	sdk:libadxe.a/adx_dcd5.o A (3s - -)
+0x260398	ADX_DecodeSte4AsSte	high	sdk:libadxe.a/adx_dcd5.o A (3s - -)
+0x260750	ADXERR_Init	high	sdk:libadxe.a/adx_errs.o B + 3s:adx_errs A agree
+0x260788	ADXERR_Finish	high	sdk:libadxe.a/adx_errs.o B + 3s:adx_errs A agree
+0x2608b0	ADXERR_ItoA	high	sdk:libadxe.a/adx_errs.o A + 3s:adx_errs A agree
+0x260bf8	ADXF_CALC_BYTE2SCT	high	3s:adx_fs A (sdk - -)
+0x260c20	adxf_SetCmdHstry	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs A agree
+0x260cd0	adxf_wait_1ms	high	sdk:libadxe.a/adx_fs.o A + 3s:adx_fs A agree
+0x260d00	adxf_ChkPrmPt	high	sdk:libadxe.a/adx_fs.o A + 3s:adx_fs A agree
+0x260e10	ADXF_LoadPartitionFromAfsNw	medium	3s:adx_fs O by order and size
+0x260e38	ADXF_LoadPartitionFmgLongNw	medium	3s:adx_fs O by order and size
+0x260e60	ADXF_LoadPartitionFromAfsFmgLongNw	medium	3s:adx_fs O by order and size
+0x260e88	ADXF_LoadPtNwEx	high	3s:adx_fs A (sdk - -)
+0x260f08	ADXF_LoadPtFmgLongNwEx	medium	3s:adx_fs O by order and size
+0x260f50	ADXF_LoadPtFromAfsFmgLongNwEx	medium	3s:adx_fs O by order and size
+0x260f88	adxf_LoadPtBothNw	medium	3s:adx_fs C by order and size
+0x261258	ADXF_StopPtLd	high	sdk:libadxe.a/adx_fs.o A + 3s:adx_fs A agree
+0x261708	ADXF_GetPtinfoSize	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs O agree
+0x261720	adxf_AllocAdxFs	high	sdk:libadxe.a/adx_fs.o C + 3s:adx_fs A agree
+0x261778	adxf_CreateAdxFs	high	3s:adx_fs B; own error string names it
+0x261810	adxf_SetFileInfoEx	high	sdk:libadxe.a/adx_fs.o D + 3s:adx_fs B agree
+0x261aa0	adxf_SetAfsFileInfo	high	3s:adx_fs A (sdk - -)
+0x261c18	adxf_CloseSjStm	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs A agree
+0x261d40	ADXF_CloseAll	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs A agree
+0x261da0	adxf_read_sj32	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs A agree
+0x261ea0	ADXF_ReadSj32	high	sdk:libadxe.a/adx_fs.o A + 3s:adx_fs D agree
+0x261f30	ADXF_ReadSj	high	sdk:libadxe.a/adx_fs.o A + 3s:adx_fs D agree
+0x261f48	ADXF_ReadNw32	high	sdk:libadxe.a/adx_fs.o C + 3s:adx_fs A agree
+0x262118	ADXF_Stop	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs A agree
+0x262208	ADXF_StopNw	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs A agree
+0x2622d0	adxf_ExecOne	high	sdk:libadxe.a/adx_fs.o C + 3s:adx_fs A agree
+0x262398	ADXF_ExecServer	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs A agree
+0x2625f8	ADXF_GetNumReqSct	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs D agree
+0x262648	ADXF_GetNumReadSct	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs O agree
+0x2626a8	adxf_ChkPrmGfr	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs B agree
+0x262720	ADXF_GetFnameRange	high	3s:adx_fs A (sdk - -)
+0x2628b8	ADXF_SetOcbiSw	high	sdk:libadxe.a/adx_fs.o A + 3s:adx_fs D agree
+0x2628c8	ADXF_SetReqRdSct	high	sdk:libadxe.a/adx_fs.o B + 3s:adx_fs D agree
+0x262900	ADXF_GetStatRead	high	sdk:libadxe.a/adx_fs.o A + 3s:adx_fs D agree
+0x262a30	ADXHDR_WriteBeShort	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262a48	ADXHDR_WriteLeShort	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262a60	ADXHDR_WriteBeLong	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262a80	ADXHDR_WriteLeLong	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262aa0	adxhdr_get_base_info	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262b60	adxhdr_get_ext_info	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262b80	adxhdr_get_loop_prm	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262c70	adxhdr_get_ply_prm	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x262ee8	adxhdr_set_base_info	medium	sdk:libadxe.a/adx_hdr.o B
+0x262fe0	ADX_EncodeHeader	high	sdk:libadxe.a/adx_hdr.o A (3s - -)
+0x2631c8	ADXT_ConfigVsyncSvr	high	3s:adx_inis A (sdk - -)
+0x2631d8	adxini_rnaerr_cbfn	high	3s:adx_inis A (sdk - -)
+0x2631f0	adxini_lscerr_cbfn	high	3s:adx_inis A (sdk - -)
+0x263208	ADXT_VsyncProc	high	3s:adx_inis A (sdk - -)
+0x263230	adxt_exec_main_thrd	high	3s:adx_inis A (sdk - -)
+0x263250	adxt_exec_main_nothrd	high	3s:adx_inis A (sdk - -)
+0x263280	adxt_exec_tsvr	high	3s:adx_inis A (sdk - -)
+0x2632a0	adxt_exec_fssvr	high	3s:adx_inis A (sdk - -)
+0x263450	ADXT_ResetLibrary	high	3s:adx_inis A (sdk - -)
+0x263768	ADXT_EntryFnameRange	medium	own error string only
+0x2638a0	ADXT_StartSeamless	high	3s:adx_lsc A (sdk - -)
+0x263950	ADXT_SetSeamlessLp	high	3s:adx_lsc B; own error string names it
+0x2639a0	ADXT_StartFnameLp	medium	3s:adx_lsc C by order and size
+0x263a50	ADXT_StartAfsLp	medium	own error string only
+0x263b00	ADXT_ReleaseSeamless	high	3s:adx_lsc A (sdk - -)
+0x263b08	ADXT_GetNumFiles	high	3s:adx_lsc B; own error string names it
+0x263b40	ADXT_ResetEntry	high	3s:adx_lsc B; own error string names it
+0x263b80	_adxm_lock	high	3s:adx_mps2 A (sdk adxm_lock D)
+0x263c08	_adxm_unlock	high	3s:adx_mps2 A (sdk - -)
+0x263db0	adxm_safe_trap	high	3s:adx_mps2 A (sdk - -)
+0x263dc8	adxm_safe_proc	high	3s:adx_mps2 A (sdk adxm_usrvsync_proc D)
+0x263e20	adxm_usrvsync_proc	medium	3s:adx_mps2 O by order and size
+0x263eb8	adxm_vsync_proc	medium	3s:adx_mps2 C by order and size
+0x263fc0	adxm_fs_proc	medium	3s:adx_mps2 B
+0x2642b0	adxm_iWakeupThread	high	sdk:libadxe.a/adx_mps2.o A + 3s:adx_mps2 A agree
+0x264300	adxm_WakeupThread	high	sdk:libadxe.a/adx_mps2.o A + 3s:adx_mps2 A agree
+0x264350	adxm_SleepThread	high	sdk:libadxe.a/adx_mps2.o C + 3s:adx_mps2 A agree
+0x264368	adxm_ResumeThread	high	sdk:libadxe.a/adx_mps2.o A + 3s:adx_mps2 A agree
+0x2643d0	adxm_SuspendThread	high	sdk:libadxe.a/adx_mps2.o A + 3s:adx_mps2 A agree
+0x264430	adxm_SetupSafeThrd	high	sdk:libadxe.a/adx_mps2.o C + 3s:adx_mps2 A agree
+0x264590	adxm_SetupVsyncThrd	high	3s:adx_mps2 A (sdk adxm_SetupUsrVsyncThrd C)
+0x264618	adxm_SetupFsThrd	high	3s:adx_mps2 A (sdk adxm_SetupVsyncThrd C)
+0x2646a0	adxm_SetupMwIdleThrd	high	3s:adx_mps2 A (sdk adxm_SetupUsrIdleThrd C)
+0x264808	adxm_IsSetupThrdEx	high	sdk:libadxe.a/adx_mps2.o C + 3s:adx_mps2 A agree
+0x264aa0	adxm_ShutdownPreProcedure	high	3s:adx_mps2 A (sdk - -)
+0x264c58	adxm_ShutdownMwIdleThrd	medium	3s:adx_mps2 B
+0x264d28	adxm_ShutdownVsyncThrd	medium	3s:adx_mps2 B
+0x264df8	adxm_ShutdownFsThrd	medium	3s:adx_mps2 B
+0x264f98	adxm_ShutdownSafeThrd	medium	3s:adx_mps2 B
+0x2650a8	ADXPS2_ExecVint	high	3s:adx_mps2 A (sdk - -)
+0x265200	ADXPS2_ResumeIdleThrd	medium	3s:adx_mps2 O by order and size
+0x265288	ADXPS2_WakeupMainThrd	high	sdk:libadxe.a/adx_mps2.o D + 3s:adx_mps2 A agree
+0x265308	ADXPS2_SleepMainThrd	medium	sdk:libadxe.a/adx_mps2.o C by order and size
+0x265368	ADXPS2_WaitVsync	high	sdk:libadxe.a/adx_mps2.o A + 3s:adx_mps2 D agree
+0x265380	ADXPS2_ExecServerEx	medium	3s:adx_mps2 O by order and size
+0x2657c8	ADXM_GotoUsrIdleBdr	medium	3s:adx_mps2 O by order and size
+0x265a20	ADXPS2_SetupVoice	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
+0x265a38	ADXPS2_GetNumDataSjtmp	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265a78	ADXPS2_GetNumRoomSjtmp	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265ab8	ADXPS2_GetNumDataSjiop	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265af0	ADXPS2_GetNumRoomSjiop	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265b70	ADXPS2_RestoreIopSnd	medium	3s:adx_rnap O by order and size
+0x265b88	ADXPS2_BeginDolbyDigital	medium	3s:adx_rnap O by order and size
+0x265ba0	ADXPS2_EndDolbyDigital	medium	3s:adx_rnap O by order and size
+0x265c00	ADXRNA_Init	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
+0x265c18	ADXRNA_Finish	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
+0x265c30	ADXRNA_EntryErrFunc	high	3s:adx_rnap A (sdk - -)
+0x265c88	ADXRNA_Start	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265ca0	ADXRNA_Stop	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265d30	ADXRNA_GetStat	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265e58	ADXRNA_GetOutVol	high	sdk:libadxe.a/adx_rnap.o A (3s ADXRNA_GetOutPan D)
+0x265e70	ADXRNA_GetOutPan	high	sdk:libadxe.a/adx_rnap.o A (3s ADXRNA_GetOutBalance D)
+0x265e88	ADXRNA_GetBitPerSmpl	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
+0x265eb8	ADXRNA_ClearBuf	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
+0x265ec0	ADXRNA_SetPcmType	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
+0x265f00	ADXRNA_SetWavFname	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
+0x265f58	ADXSJD_Init	high	sdk:libadxe.a/adx_sjd.o B + 3s:adx_sjd B agree
+0x265f88	ADXSJD_Finish	high	sdk:libadxe.a/adx_sjd.o B + 3s:adx_sjd B agree
+0x265fb0	adxsjd_clear	medium	3s:adx_sjd C by order and size
+0x266218	ADXSJD_SetOutSj	high	sdk:libadxe.a/adx_sjd.o A + 3s:adx_sjd O agree
+0x266be0	adxsjd_decexec_extra	high	sdk:libadxe.a/adx_sjd.o A + 3s:adx_sjd D agree
+0x2670e8	ADXSJD_GetDecPos	high	sdk:libadxe.a/adx_sjd.o A + 3s:adx_sjd O agree
+0x2670f8	ADXSJD_GetLnkSw	medium	3s:adx_sjd O by order and size
+0x267100	ADXSJD_SetExtString	high	sdk:libadxe.a/adx_sjd.o A + 3s:adx_sjd O agree
+0x2671d0	ADXSJD_GetTrapNumSmpl	high	sdk:libadxe.a/adx_sjd.o A + 3s:adx_sjd O agree
+0x2671e0	ADXSJD_GetTrapCnt	high	sdk:libadxe.a/adx_sjd.o A + 3s:adx_sjd O agree
+0x2671f0	ADXSJD_GetTrapDtLen	high	sdk:libadxe.a/adx_sjd.o A + 3s:adx_sjd O agree
+0x267360	ADXSJD_GetAinfLen	medium	3s:adx_sjd O by order and size
+0x2674b8	ADXSJD_TakeSnapshot	medium	3s:adx_sjd O by order and size
+0x2674d0	ADXSJD_RestoreSnapshot	medium	3s:adx_sjd O by order and size
+0x267580	ADXKEY_GenerateKey	medium	sdk:libadxe.a/adx_sje.o C by order and size
+0x267738	ADXKEY_GetDefKey	medium	sdk:libadxe.a/adx_sje.o B
+0x2677a8	SKG_GetNextKey	medium	3s:adx_bsc O by order and size
+0x2677c8	ADXSJE_GetVersion	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2677d0	ADXSJE_GetVerStr	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2677e0	adxsje_nsmpl_to_ofst	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267810	ADXSJE_CalcLpInfo	medium	sdk:libadxe.a/adx_sje.o C by order and size
+0x267968	ADXSJE_GetInfo	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2679d0	adxsje_write68	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267b90	iirflt_init	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267bb8	iirflt_create	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267c18	iirflt_destroy	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267c50	iirflt_set_coef	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267c60	iirflt_set_delay	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267c70	iirflt_get_delay	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267c88	iirflt_put_sig	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267d00	pflt_create	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267da0	pflt_destroy	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267dd8	pflt_set_coef	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267de8	pflt_calc_coef	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267e40	pflt_set_delay	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267e50	pflt_put_sig	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267f38	pflt_calc_gain	medium	sdk:libadxe.a/adx_sje.o B
+0x267fd0	pflt_get_rsig	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x267ff0	pflt_get_rsig_q	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x268008	pflt_set_rsig_q	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x268018	adxsje_get_pcm_data	medium	sdk:libadxe.a/adx_sje.o B
+0x268188	adxsje_calc_rsig	medium	sdk:libadxe.a/adx_sje.o B
+0x2683e8	adxsje_set_rsig	medium	sdk:libadxe.a/adx_sje.o B
+0x268670	adxsje_encode_blk	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x268960	adxsje_encode_data	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x268a10	adxsje_write_end_code	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x268b10	adxsje_output_header	medium	sdk:libadxe.a/adx_sje.o C by order and size
+0x269268	ADXSJE_Init	medium	sdk:libadxe.a/adx_sje.o B
+0x269298	ADXSJE_Finish	medium	sdk:libadxe.a/adx_sje.o B
+0x2692c8	ADXSJE_Create	medium	sdk:libadxe.a/adx_sje.o B
+0x269498	ADXSJE_Destroy	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269500	ADXSJE_GetStat	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269508	ADXSJE_Start	medium	sdk:libadxe.a/adx_sje.o C by order and size
+0x269630	ADXSJE_Stop	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269640	ADXSJE_SetSfreq	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269648	ADXSJE_SetHdInfoSize	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269650	ADXSJE_SetNumChan	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269658	ADXSJE_SetOutBps	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269660	ADXSJE_SetBlkSmpl	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2696c8	ADXSJE_SetBlkLen	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2696d0	ADXSJE_SetTotalNumSmpl	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2696e0	ADXSJE_SetCof	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2696e8	ADXSJE_SetNumLoop	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2696f0	ADXSJE_SetLpInsNsmpl	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x2696f8	ADXSJE_SetLpStartPos	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269700	ADXSJE_SetLpStartOfst	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269708	ADXSJE_SetLpEndPos	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269710	ADXSJE_SetLpEndOfst	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269878	ADXSJE_SetConfigSfa	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269940	ADXSJE_GetEncDtLen	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269948	ADXSJE_GetEncNumSmpl	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269950	ADXSJE_SetEncPos	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269958	ADXSJE_GetEncPos	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269960	ADXSJE_SetInSj	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269980	ADXSJE_SetOutSj	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269988	adxsje_encode_prep	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269af8	adxsje_encode_exec	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269b90	ADXSJE_ExecHndl	high	sdk:libadxe.a/adx_sje.o A (3s - -)
+0x269bd0	ADXSJE_ExecServer	medium	sdk:libadxe.a/adx_sje.o C by order and size
+0x269c30	ADXT_SetupRtimeNumStm	medium	sdk:libadxe.a/adx_stmc.o C by order and size
+0x26a130	ADXSTM_IsOpenedFile	medium	3s:adx_stmc O by order and size
+0x26a178	adxstm_start_sub	high	3s:adx_stmc A (sdk - -)
+0x26a318	adxstm_sj_internal_error	high	sdk:libadxe.a/adx_stmc.o C + 3s:adx_stmc A agree
+0x26a9f8	ADXSTM_EntryErrFunc	high	sdk:libadxe.a/adx_stmc.o A + 3s:adx_stmc A agree
+0x26ab68	ADXSTM_SetRdSct	medium	3s:adx_stmc O by order and size
+0x26ab98	ADXT_SetNumRetry	medium	sdk:libadxe.a/adx_stmc.o C by order and size
+0x26aba8	ADXSTM_GetReadFlg	high	sdk:libadxe.a/adx_stmc.o A + 3s:adx_stmc O agree
+0x26abb0	ADXSTM_OpenCvfs	high	3s:adx_stmc A (sdk - -)
+0x26ac38	adxps2_err_dvd	high	sdk:libadxe.a/adx_sudv.o A + 3s:adx_sudv A agree
+0x26ae18	ADXPS2_SetRdModeDvd	high	sdk:libadxe.a/adx_sudv.o A + 3s:adx_sudv D agree
+0x26aff0	adxps2_err_host	high	sdk:libadxe.a/adx_suht.o A + 3s:adx_suht A agree
+0x26b120	ADXPS2_LoadFcacheHost	high	sdk:libadxe.a/adx_suht.o A + 3s:adx_suht A agree
+0x26b170	ADXPS2_IsExistFcacheHost	high	sdk:libadxe.a/adx_suht.o A + 3s:adx_suht D agree
+0x26b188	ADXPS2_SetRdModeHost	high	sdk:libadxe.a/adx_suht.o A + 3s:adx_suht D agree
+0x26b1d8	adxps2_err_mem	high	sdk:libadxe.a/adx_sumf.o A (3s - -)
+0x26b1f0	ADXPS2_SetupMemFs	high	sdk:libadxe.a/adx_sumf.o A (3s - -)
+0x26b248	adxt_disp_rna_stat	high	sdk:libadxe.a/adx_tlk.o A + 3s:adx_tlk D agree
+0x26b6d8	adxt_detach_ac3	high	3s:adx_tlk A (sdk - -)
+0x26bd88	ADXT_GetTimeSfreq	high	sdk:libadxe.a/adx_tlk.o A + 3s:adx_tlk O agree
+0x26be50	ADXT_GetTimeSfreq2	high	sdk:libadxe.a/adx_tlk.o B + 3s:adx_tlk B agree
+0x26bf78	adxt_time_adjust_trap	high	sdk:libadxe.a/adx_tlk.o C + 3s:adx_tlk A agree
+0x26cfd0	ADXT_SetTranspose	high	sdk:libadxe.a/adx_tlk.o A + 3s:adx_tlk A agree
+0x26cfd8	ADXT_GetTranspose	high	sdk:libadxe.a/adx_tlk.o A + 3s:adx_tlk A agree
+0x26d250	ADXT_IsHeader	high	sdk:libadxe.a/adx_tlk.o A + 3s:adx_tlk O agree
+0x26d2e8	ADXT_IsEndcode	high	sdk:libadxe.a/adx_tlk.o A + 3s:adx_tlk O agree
+0x26da28	adxt_trap_entry_lps	medium	3s:adx_tsvr O by order and size
+0x26dd70	adxt_nlp_trap_entry	high	sdk:libadxe.a/adx_tsvr.o B + 3s:adx_tsvr D agree
+0x26e9a8	ADXT_ExecErrChk	high	sdk:libadxe.a/adx_tsvr.o A + 3s:adx_tsvr D agree
+0x26ebf8	ADXT_ExecRdErrChk	high	sdk:libadxe.a/adx_tsvr.o A + 3s:adx_tsvr A agree
+0x26ec78	ADXT_ExecRdCompChk	high	sdk:libadxe.a/adx_tsvr.o B + 3s:adx_tsvr B agree
+0x26f150	adxpd_error	high	sdk:libadxe.a/adx_xpnd.o C + 3s:adx_xpnd A agree
+0x26fb28	isExistDev	high	sdk:libadxe.a/cri_cvfs.o A + 3s:cri_cvfs A agree
+0x26fbb8	variousProc	high	sdk:libadxe.a/cri_cvfs.o A + 3s:cri_cvfs A agree
+0x26fd88	allocCvFsHn	high	sdk:libadxe.a/cri_cvfs.o A + 3s:cri_cvfs A agree
+0x26fdf0	releaseCvFsHn	high	sdk:libadxe.a/cri_cvfs.o A + 3s:cri_cvfs A agree
+0x26fe00	getDevName	high	sdk:libadxe.a/cri_cvfs.o C + 3s:cri_cvfs A agree
+0x2712c8	isNeedDevName	high	sdk:libadxe.a/cri_cvfs.o A + 3s:cri_cvfs A agree
+0x271318	addDevName	high	sdk:libadxe.a/cri_cvfs.o A + 3s:cri_cvfs A agree
+0x2713b0	cvFsIsExistDevice	high	sdk:libadxe.a/cri_cvfs.o A + 3s:cri_cvfs O agree
+0x271640	srd_reset_obj	high	sdk:libadxe.a/cri_srd.o D + 3s:cri_srd A agree
+0x271670	SRD_Create	high	sdk:libadxe.a/cri_srd.o A + 3s:cri_srd A agree
+0x2716f8	SRD_Destroy	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd A agree
+0x271798	SRD_ReqRdDvd	high	sdk:libadxe.a/cri_srd.o C + 3s:cri_srd A agree
+0x271888	SRD_ReqRdHst	high	sdk:libadxe.a/cri_srd.o A + 3s:cri_srd O agree
+0x271938	SRD_GetStat	high	sdk:libadxe.a/cri_srd.o A + 3s:cri_srd A agree
+0x271940	srd_wait	high	sdk:libadxe.a/cri_srd.o C + 3s:cri_srd A agree
+0x271970	srd_wait_dvd	medium	3s:cri_srd O by order and size
+0x271998	srd_wait_hst	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd A agree
+0x271b98	SRD_Break	medium	3s:cri_srd O by order and size
+0x271c00	srd_check_dvd_error	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd B agree
+0x271d50	srd_exec_dvd	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd B agree
+0x271f38	srd_exec_hst	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd B agree
+0x272118	SRD_ExecServer	high	sdk:libadxe.a/cri_srd.o C + 3s:cri_srd A agree
+0x272208	SRD_GetDevTypeNow	high	sdk:libadxe.a/cri_srd.o A + 3s:cri_srd D agree
+0x272218	SRD_GetErrCode	high	sdk:libadxe.a/cri_srd.o A + 3s:cri_srd D agree
+0x272228	SRD_WaitForExecServer	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd O agree
+0x272290	SRD_LockedForDvdExec	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd O agree
+0x2722c8	SRD_LockedForHstExec	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd O agree
+0x272300	SRD_LockedForGetError	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd O agree
+0x272338	SRD_CallForGetError	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd O agree
+0x272370	SRD_SetError	high	sdk:libadxe.a/cri_srd.o A + 3s:cri_srd O agree
+0x272380	SRD_GetReadStatusDvd	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd D agree
+0x2723c0	SRD_GetReadStatusHost	medium	sdk:libadxe.a/cri_srd.o C by order and size
+0x272460	SRD_GetReadStatus	high	sdk:libadxe.a/cri_srd.o A + 3s:cri_srd D agree
+0x2724b0	SRD_DebugPrint	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd D agree
+0x272580	SRD_GetReadEndCount	medium	3s:cri_srd O by order and size
+0x272590	SRD_GetReadBeginCount	medium	3s:cri_srd O by order and size
+0x2725a0	SRD_SetHistory	high	sdk:libadxe.a/cri_srd.o B + 3s:cri_srd A agree
+0x2725c0	SRD_GetHistory	medium	3s:cri_srd O by order and size
+0x272688	srd_sw_lock	high	3s:cri_srd A (sdk - -)
+0x2726c0	srd_sw_unlock	high	3s:cri_srd A (sdk - -)
+0x272780	SRD_SceLseek	high	3s:cri_srd A (sdk - -)
+0x272838	SRD_SceIoctl	high	3s:cri_srd A (sdk - -)
+0x2728b0	SRD_SceOpen	high	3s:cri_srd A (sdk - -)
+0x272918	SRD_SceClose	high	3s:cri_srd A (sdk - -)
+0x272970	SRD_SceRead	high	3s:cri_srd A (sdk - -)
+0x272d58	DTR_GetStat	high	sdk:libadxe.a/dtr.o A + 3s:dtr A agree
+0x272e20	DTR_Init	high	3s:dtr O by order and size; own error string names it
+0x272e88	DTR_Finish	medium	3s:dtr O by order and size
+0x272ea0	DTR_Create	high	sdk:libadxe.a/dtr.o A + 3s:dtr A agree
+0x272fb8	DTR_Start	high	sdk:libadxe.a/dtr.o A + 3s:dtr A agree
+0x2731a8	dtx_create_rmt	high	sdk:libadxe.a/dtx.o B + 3s:dtx B agree
+0x273218	dtx_destroy_rmt	high	sdk:libadxe.a/dtx.o A + 3s:dtx A agree
+0x273268	dtx_def_rcvcbf	high	sdk:libadxe.a/dtx.o C + 3s:dtx A agree
+0x273280	dtx_def_sndcbf	high	sdk:libadxe.a/dtx.o C + 3s:dtx A agree
+0x2732f0	DTX_Open	high	sdk:libadxe.a/dtx.o B + 3s:dtx D agree
+0x273320	DTX_Close	high	sdk:libadxe.a/dtx.o A + 3s:dtx D agree
+0x273558	DTX_ExecHndl	high	sdk:libadxe.a/dtx.o B + 3s:dtx B agree
+0x2739b8	dvci_call_errfn	high	sdk:libadxe.a/dvci.o A + 3s:dvci A agree
+0x2739e8	dvCiCdSearchFile	high	sdk:libadxe.a/dvci.o B + 3s:dvci A agree
+0x273a40	dvci_is_exec_hn	high	sdk:libadxe.a/dvci.o A + 3s:dvci O agree
+0x273a90	dvCiExecHndl	high	sdk:libadxe.a/dvci.o B + 3s:dvci B agree
+0x273be8	dvci_to_large_to_yen	high	sdk:libadxe.a/dvci.o A + 3s:dvci A agree
+0x273da8	dvci_alloc	high	sdk:libadxe.a/dvci.o A + 3s:dvci A agree
+0x273de0	dvci_free	high	sdk:libadxe.a/dvci.o A + 3s:dvci A agree
+0x2743c0	dvCiSetOutputDebugLevel	high	sdk:libadxe.a/dvci.o A + 3s:dvci D agree
+0x2743d0	dvCiGetOutputDebugLevel	high	sdk:libadxe.a/dvci.o A + 3s:dvci D agree
+0x2743e0	dvCiSetDvdLayer	high	sdk:libadxe.a/dvci.o A + 3s:dvci O agree
+0x274400	dvCiGetDvdLayer	high	sdk:libadxe.a/dvci.o A + 3s:dvci D agree
+0x274410	dvci_getfilesize32	high	sdk:libadxe.a/dvci.o C + 3s:dvci B agree
+0x2744a8	dvci_getnumtr_upper	high	sdk:libadxe.a/dvci.o C + 3s:dvci A agree
+0x2744b8	dvci_getnumtr_lower	high	sdk:libadxe.a/dvci.o B + 3s:dvci A agree
+0x2744d8	dvci_filesize_upper	high	sdk:libadxe.a/dvci.o A + 3s:dvci A agree
+0x2744e0	dvci_filesize_lower	high	sdk:libadxe.a/dvci.o A + 3s:dvci A agree
+0x2745c0	dvci_conv_fname	high	sdk:libadxe.a/dvci_sub.o B + 3s:dvci_sub A agree
+0x274668	dvci_conv_cmp	high	sdk:libadxe.a/dvci_sub.o A + 3s:dvci_sub A agree; static name repeats in dvci_sub.o and htci_sub.o: file-stem prefix
+0x2746a0	dvci_charicmp	high	sdk:libadxe.a/dvci_sub.o A + 3s:dvci_sub A agree
+0x2746f8	dvci_stricmp	high	sdk:libadxe.a/dvci_sub.o A + 3s:dvci_sub A agree
+0x274928	load_flist	high	sdk:libadxe.a/dvci_sub.o D + 3s:dvci_sub A agree
+0x274ab0	search_fstate	medium	3s:dvci_sub C by order and size
+0x274c40	get_fp_from_fname	high	sdk:libadxe.a/dvci_sub.o A + 3s:dvci_sub A agree
+0x274d08	dvci_init_flist	high	sdk:libadxe.a/dvci_sub.o C + 3s:dvci_sub A agree
+0x2751d8	dvCiIsExistFcache	high	sdk:libadxe.a/dvci_sub.o A + 3s:dvci_sub D agree
+0x2752e8	dvCiGetRootDir	high	sdk:libadxe.a/dvci_sub.o A + 3s:dvci_sub D agree
+0x2753a8	htci_wait	medium	sdk:libadxe.a/htci.o C by order and size
+0x2753d8	htci_call_errfn	high	sdk:libadxe.a/htci.o A + 3s:htci O agree
+0x275408	htci_is_exec_hn	high	sdk:libadxe.a/htci.o A + 3s:htci O agree
+0x275458	htci_is_exec_hn_one	high	sdk:libadxe.a/htci.o B + 3s:htci D agree
+0x2754c0	htci_zero_padding	high	sdk:libadxe.a/htci.o A + 3s:htci O agree
+0x275520	htCiExecHndl	high	sdk:libadxe.a/htci.o B + 3s:htci D agree
+0x2758f8	htci_get_fsize_opened	medium	3s:htci O by order and size
+0x275980	htci_alloc	high	sdk:libadxe.a/htci.o A + 3s:htci D agree
+0x2759b8	htci_free	high	sdk:libadxe.a/htci.o A + 3s:htci D agree
+0x275fd8	htci_get_filesize64	medium	sdk:libadxe.a/htci.o C by order and size
+0x275ff0	htci_getnumtr_upper	high	sdk:libadxe.a/htci.o B + 3s:htci D agree
+0x276010	htci_getnumtr_lower	high	sdk:libadxe.a/htci.o B + 3s:htci D agree
+0x276040	htci_filesize_upper	high	sdk:libadxe.a/htci.o A + 3s:htci O agree
+0x276060	htci_filesize_lower	high	sdk:libadxe.a/htci.o A + 3s:htci O agree
+0x276158	htci_is_inc_colon	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub A agree
+0x2761c8	htci_is_bgn_host	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub A agree
+0x276220	htci_conv_fname	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub A agree
+0x276338	htci_conv_cmp	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub O agree; static name repeats in dvci_sub.o and htci_sub.o: file-stem prefix
+0x276350	htci_charicmp	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x2763a8	htci_stricmp	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x2765e0	htci_load_flist	high	sdk:libadxe.a/htci_sub.o C + 3s:htci_sub A agree
+0x276740	open_file_all	high	sdk:libadxe.a/htci_sub.o B + 3s:htci_sub D agree
+0x2768f8	close_file_all	medium	sdk:libadxe.a/htci_sub.o C by order and size
+0x276a28	get_fstate	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub O agree
+0x276af0	htci_init_flist	medium	sdk:libadxe.a/htci_sub.o C by order and size
+0x276b18	htci_get_finf	high	sdk:libadxe.a/htci_sub.o B + 3s:htci_sub D agree
+0x276cc0	htCiIsExistFcache	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x276d98	htCiGetRootDir	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x276da8	htCiSetAccessName	medium	sdk:libadxe.a/htci_sub.o C by order and size
+0x276e10	htCiGetAccessName	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x276e20	htci_get_opmode	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x276e30	htCiSetOutputDebugLevel	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x276e40	htCiGetOutputDebugLevel	high	sdk:libadxe.a/htci_sub.o A + 3s:htci_sub D agree
+0x276e50	lsc_Alloc	high	sdk:libadxe.a/lsc.o B + 3s:lsc B agree
+0x277730	LSC_CallStatFunc	medium	sdk:libadxe.a/lsc.o C by order and size
+0x277798	LSC_LockCrs	high	3s:lsc_crs A (sdk - -)
+0x2777b8	LSC_UnlockCrs	high	3s:lsc_crs A (sdk - -)
+0x2777f8	LSC_CallErrFunc	high	3s:lsc_err A (sdk - -)
+0x277888	lsc_EntrySvrInt	high	3s:lsc_ini A (sdk - -)
+0x277890	lsc_DeleteSvrInt	high	3s:lsc_ini A (sdk - -)
+0x2779d8	lsc_StatWait	medium	3s:lsc_svr O by order and size
+0x277da0	mfCrsLock	medium	sdk:libadxe.a/mfci.o C by order and size
+0x277db8	mfCrsUnlock	medium	sdk:libadxe.a/mfci.o C by order and size
+0x277de8	mfci_call_errfn	high	sdk:libadxe.a/mfci.o A (3s - -)
+0x277e30	mfci_get_adr_size	high	sdk:libadxe.a/mfci.o B; own error string names it
+0x277f28	mfCiExecHndl	high	sdk:libadxe.a/mfci.o A (3s - -)
+0x277fc0	mfci_alloc	high	sdk:libadxe.a/mfci.o A (3s - -)
+0x278018	mfci_free	high	sdk:libadxe.a/mfci.o A (3s - -)
+0x278038	mfci_reset_hn	high	sdk:libadxe.a/mfci.o A (3s - -)
+0x279730	ps2rna_rcvcbf	high	sdk:libadxe.a/ps2_rna.o A + 3s:ps2_rna A agree
+0x279790	ps2rna_sndcbf	medium	3s:ps2_rna C by order and size
+0x27b0f0	PS2RNA_Flush	high	sdk:libadxe.a/ps2_rna.o A + 3s:ps2_rna A agree
+0x27bc38	SJRBF_Error	high	3s:sj_rbf A (sdk mpvvlc_InitCbp C)
+0x27c778	SJUNI_Error	high	3s:sj_uni A (sdk mpvvlc_InitCbp C)
+0x27d4d0	sj_val_to_hexstr	high	sdk:libadxe.a/sj_utl.o A + 3s:sj_utl D agree
+0x27d568	sj_hexstr_to_val	high	sdk:libadxe.a/sj_utl.o A + 3s:sj_utl D agree
+0x27d780	SJRBF_CreateRmt	high	sdk:libadxe.a/sjr_clt.o B + 3s:sjr_clt D agree
+0x27d7d8	SJMEM_CreateRmt	high	sdk:libadxe.a/sjr_clt.o B + 3s:sjr_clt O agree
+0x27d828	SJUNI_CreateRmt	high	sdk:libadxe.a/sjr_clt.o B + 3s:sjr_clt B agree
+0x27dba8	sjx_rcvcbf	high	sdk:libadxe.a/sjx.o A + 3s:sjx A agree
+0x27dc48	sjx_sndcbf	medium	3s:sjx B; alt sjx_sndcbf_iop
+0x27e0c0	SJX_Reset	medium	3s:sjx O by order and size
+0x27e208	SVM_LockSync	medium	3s:svm O by order and size
+0x27e238	SVM_LockThrd	medium	3s:svm O by order and size
+0x27e280	SVM_UnlockSync	medium	3s:svm O by order and size
+0x27e2b0	SVM_UnlockThrd	medium	3s:svm O by order and size
+0x27eac8	SVM_ExecSvrVsync1	medium	sdk:libadxe.a/svm.o B; alt SVM_ExecSvrUhigh
+0x27eb40	SVM_GetExecCount	high	sdk:libadxe.a/svm.o B + 3s:svm O agree
+0x27eb68	svm_reset_variable	high	sdk:libadxe.a/svm.o C + 3s:svm B agree
+0x283090	CFT_Finish	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283098	CFT_GetVersionStr	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x2830f0	CFT_Ycc420rgbToArgb8888	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x2830f8	CFT_Ycc420plnToYcc422pix2	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283100	CFT_Ycc420plnToY84C44	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283108	CFT_InitYcc420mbToArgb8888	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283110	CFT_Ycc420mbToYcc422pix2	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283118	CFT_Argb420ToArgb8	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283120	CFT_Ycc420plnToA3V	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283128	CFT_Ycc420plnToA256V	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283130	CFT_Ycc420plnToZ16	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283138	CFT_Ycc420plnToZ32	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283140	CFT_Ycc420mbToZ32	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x283148	CFT_Argb8888mbToZ32	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
+0x2854b0	M2VERR_Init	high	sdk:libmwsfde.a/m2v_err.o A (3s - -)
+0x2854d0	M2VERR_InitErrInf	high	sdk:libmwsfde.a/m2v_err.o A (3s - -)
+0x2854e8	M2V_SetErrFunc	medium	sdk:libmwsfde.a/m2v_err.o B
+0x285558	M2V_GetErrInf	medium	sdk:libmwsfde.a/m2v_err.o B
+0x2855d8	M2VERR_SetCode	high	sdk:libmwsfde.a/m2v_err.o A (3s - -)
+0x285628	m2verr_SetCodeSub	high	sdk:libmwsfde.a/m2v_err.o A (3s - -)
+0x285660	M2V_SkipFrm	medium	sdk:libmwsfde.a/m2v_frm.o B
+0x285718	M2V_DecodeFrm	high	sdk:libmwsfde.a/m2v_frm.o A (3s - -)
+0x285820	M2V_GetBitRate	medium	sdk:libmwsfde.a/m2v_get.o B
+0x285880	M2V_GetVbvBufSiz	medium	sdk:libmwsfde.a/m2v_get.o B
+0x285910	M2V_GetLinkFlg	medium	sdk:libmwsfde.a/m2v_get.o B
+0x285a90	M2V_DecodePicAtr	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x285c78	m2vhdec_ParseSj	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x285e98	calcHvSize	medium	sdk:libmwsfde.a/m2v_hdec.o C by order and size
+0x285f48	calcNumberOfFrameCentreOffsets	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x286010	parseShc	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x286d28	parseEsc	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x28a260	parsePsc	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x28ab00	M2V_GetVersionStr	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
+0x28abc0	M2V_Init	medium	sdk:libmwsfde.a/m2v_lib.o C by order and size
+0x28ac50	m2vlib_InitObjTbl	medium	sdk:libmwsfde.a/m2v_lib.o B
+0x28ac98	m2vlib_InitWork	medium	sdk:libmwsfde.a/m2v_lib.o B
+0x28ade8	M2V_Finish	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
+0x28adf0	M2V_Create	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
+0x28ae28	m2vlib_SearchFreeHn	medium	sdk:libmwsfde.a/m2v_lib.o B
+0x28ae78	m2vlib_InitHn	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
+0x28af38	M2V_Destroy	medium	sdk:libmwsfde.a/m2v_lib.o B
+0x28af88	M2V_MbCbFn	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
+0x28af90	M2V_SetCond	medium	sdk:libmwsfde.a/m2v_lib.o B
+0x28b040	m2vlib_SetCondAll	medium	sdk:libmwsfde.a/m2v_lib.o B
+0x28b098	M2VLIB_CheckHn	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
+0x28b0c0	M2VMC_MacroBlock	high	sdk:libmwsfde.a/m2v_mc.o A (3s - -)
+0x28b180	UTY_MemcpyByte	high	sdk:libmwsfde.a/memcpyb.o A (3s - -)
+0x28b350	UTY_MemcpyDword	high	sdk:libmwsfde.a/memcpyd.o A (3s - -)
+0x28b460	UTY_MemsetByte	high	sdk:libmwsfde.a/memsetb.o A (3s - -)
+0x28b530	UTY_MemsetDword	high	sdk:libmwsfde.a/memsetd.o A (3s - -)
+0x28d760	mpslib_InitLibWork	medium	sdk:libmwsfde.a/mps_lib.o B
+0x28d868	mpslib_InitErr	high	sdk:libmwsfde.a/mps_lib.o A (3s - -)
+0x28d880	MPSLIB_InitErrInf	high	sdk:libmwsfde.a/mps_lib.o A (3s - -)
+0x28d890	MPSLIB_SetErr	high	sdk:libmwsfde.a/mps_lib.o A (3s - -)
+0x28d8e0	mpslib_SetErrSub	high	sdk:libmwsfde.a/mps_lib.o A (3s - -)
+0x28d918	MPS_SetErrFn	medium	sdk:libmwsfde.a/mps_lib.o B
+0x28d9b0	mpslib_SetErrFnSub	high	sdk:libmwsfde.a/mps_lib.o A (3s - -)
+0x28da60	MPSLIB_CheckHn	high	sdk:libmwsfde.a/mps_lib.o A (3s - -)
+0x28dac0	mpslib_SearchFreeHn	medium	sdk:libmwsfde.a/mps_lib.o B
+0x28db18	mpslib_InitHn	medium	sdk:libmwsfde.a/mps_lib.o C by order and size
+0x28dbd0	mpslib_InitSys	high	sdk:libmwsfde.a/mps_lib.o A (3s - -)
+0x28dc78	MPV_CheckDelim	high	sdk:libmwsfde.a/mpv_deli.o A (3s - -)
+0x28dd10	MPV_BsearchDelim	high	sdk:libmwsfde.a/mpv_deli.o A (3s - -)
+0x28df18	MPV_CopyStm	high	sdk:libmwsfde.a/mpv_deli.o A (3s - -)
+0x28e028	MPV_IsEmptyBpic	high	sdk:libmwsfde.a/mpv_emp.o names it; body matches the SDK C shape
+0x28e4d0	MPV_IsEmptyPpic	high	sdk:libmwsfde.a/mpv_emp.o names it; body matches the SDK C shape
+0x28ebc0	MPV_DecodeFrm	high	sdk:libmwsfde.a/mpv_frm.o A (3s - -)
+0x28ec70	MPV_SkipFrm	medium	sdk:libmwsfde.a/mpv_frm.o B
+0x28ed20	MPVFRM_Init	high	sdk:libmwsfde.a/mpv_frm.o A (3s - -)
+0x28ed30	MPV_SkipFrmSj	medium	sdk:libmwsfde.a/mpv_frm.o B
+0x28f098	MPV_SetUsrSj	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x28f0c0	MPV_SetPicUsrBuf	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x28f0d8	MPV_GetPicUsr	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x28f100	MPV_DecodePicAtrSj	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x28f2f0	mpvhdec_GetCurDelim	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x28f360	MPV_DecodePicAtr	high	sdk:libmwsfde.a/mpv_hdec.o A (3s - -)
+0x28f400	mpvhdec_GetCodec	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x28fb60	mpvhdec_DecGscSj	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x290370	mpvhdec_DecEscSj	medium	sdk:libmwsfde.a/mpv_hdec.o C by order and size
+0x290430	mpvhdec_DecUdscSj	medium	sdk:libmwsfde.a/mpv_hdec.o C by order and size
+0x290520	mpvhdec_AnalyUd	medium	sdk:libmwsfde.a/mpv_hdec.o C by order and size
+0x2907f0	MPVHDEC_GoNextDelim	high	sdk:libmwsfde.a/mpv_hdec.o A (3s - -)
+0x290898	MPV_GoNextDelimSj	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x2909f0	mpvhdec_RecoverSj	medium	sdk:libmwsfde.a/mpv_hdec.o B
+0x290ac0	MPV_MoveChunk	high	sdk:libmwsfde.a/mpv_hdec.o A (3s - -)
+0x290ca8	mpvlib_ChkFatal	medium	sdk:libmwsfde.a/mpv_lib.o C by order and size
+0x290d20	mpvlib_ChkCacheMode	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
+0x290d28	MPVLIB_ConvIix	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
+0x290d48	MPVLIB_ConvOix	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
+0x290e40	mpvlib_InitObjTbl	medium	sdk:libmwsfde.a/mpv_lib.o B
+0x290ec8	mpvlib_InitWork	medium	sdk:libmwsfde.a/mpv_lib.o C by order and size
+0x2910a0	mpvlib_SearchFreeHn	medium	sdk:libmwsfde.a/mpv_lib.o B
+0x2910f0	mpvlib_InitHn	medium	sdk:libmwsfde.a/mpv_lib.o C by order and size
+0x2911b8	MPV_GetDctCnt	medium	sdk:libmwsfde.a/mpv_lib.o B
+0x291238	mpvlib_AllocLc	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
+0x291240	mpvlib_FreeLc	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
+0x291248	MPV_MbCbFn	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
+0x2913f8	MPVLIB_CheckHn	medium	sdk:libmwsfde.a/mpv_lib.o B
+0x291480	mpvcmc_OneMakeMbTa	medium	sdk:libmwsfde.a/mpv_cmc.o C by order and size
+0x291498	mpvcmc_BiMakeMbTa	medium	sdk:libmwsfde.a/mpv_cmc.o C by order and size
+0x2918c0	mwsfcre_CalcWorkStmBuf	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x2919a8	mwsfcre_CalcFrmRes	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x2919f8	mwsfcre_CalcWorkFrmBuf	medium	sdk:libmwsfde.a/mwsfdcre.o B
+0x291af8	mwsfcre_ConvBufFmtFromMwsfd	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x291b70	mwPlyCalcWorkSfd	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x291c28	mwPlyCalcWorkCompo	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x291e00	mwsfcre_MallocRfb	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x291f10	mwsfcre_MallocTab	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x292b80	mwsfcre_CreateSj	medium	sdk:libmwsfde.a/mwsfdcre.o B
+0x292f40	mwsfcre_IsOkUsrMalloc	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x292f90	mwsfcre_InitMemMng	medium	sdk:libmwsfde.a/mwsfdcre.o B
+0x293050	mwsfcre_MallocCompoWork	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x293118	mwSfdDestroy	medium	sdk:libmwsfde.a/mwsfdcre.o B
+0x2933f8	mwsfcre_DecideFtypeByHdrInf	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x293448	mwsfdcre_IsPlayableByHdrInf	medium	sdk:libmwsfde.a/mwsfdcre.o B
+0x2934c0	mwPlySetMallocFn	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x2935a8	mwsfcre_OrgMalloc	medium	sdk:libmwsfde.a/mwsfdcre.o B
+0x2935e0	mwsfcre_UsrMalloc	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x293668	mwsfcre_OrgFree	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x293670	mwsfcre_UsrFree	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
+0x2936a8	mwsfcre_AllFree	medium	sdk:libmwsfde.a/mwsfdcre.o B
+0x293708	mwsfcre_IncMallocCnt	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x293718	mwsfcre_DecMallocCnt	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x293728	mwsfcre_GetMallocCnt	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x2937d8	MWSFD_GetFrmSync	medium	sdk:libmwsfde.a/mwsfdfrm.o C by order and size
+0x293ca0	mwl_convBufFmtFromSFD	high	sdk:libmwsfde.a/mwsfdfrm.o A (3s - -)
+0x293f38	MWSFD_GetPicUsrDat	medium	sdk:libmwsfde.a/mwsfdfrm.o C by order and size
+0x293f50	MWSFD_IsEnablePicUsr	medium	sdk:libmwsfde.a/mwsfdfrm.o B
+0x293f60	mwPlyCalcYccPlane	high	sdk:libmwsfde.a/mwsfdfrm.o A (3s - -)
+0x293f98	mwl_convFrmInfToSFD	high	sdk:libmwsfde.a/mwsfdfrm.o A (3s - -)
+0x294060	mwl_convBufFmtToSFD	high	sdk:libmwsfde.a/mwsfdfrm.o A (3s - -)
+0x294108	mwl_convYccPlaneFromSFD	high	sdk:libmwsfde.a/mwsfdfrm.o A (3s - -)
+0x2942e0	MWSFD_GetLastFrmCnt	medium	sdk:libmwsfde.a/mwsfdfrm.o B
+0x294360	mwsffrm_AnalyTotalFrm	high	sdk:libmwsfde.a/mwsfdfrm.o A (3s - -)
+0x294a30	mwsflib_GetVersionStr	high	sdk:libmwsfde.a/mwsfdlib.o A (3s - -)
+0x295278	MWSFD_GetErrMwplyHn	high	sdk:libmwsfde.a/mwsfdlib.o A (3s - -)
+0x296788	MWSFD_GetPlyInf	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x2967a0	MWSFD_GetMvInf	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x296858	MWSFD_GetFlowLimit	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x296870	MWSFD_SetRdSct	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x296888	MWSFD_SetTrSct	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x2968a0	MWSFD_AdjustGetFrmTiming	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x2969e8	mwPlySetAsync	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x296cf8	mwPlyGetNumIbufRoom	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x296e00	mwPlySetAdjustY16	medium	sdk:libmwsfde.a/mwsfdset.o C by order and size
+0x296ff0	mwPlySetIpicOnly	medium	sdk:libmwsfde.a/mwsfdset.o C by order and size
+0x297038	mwPlySetNeverSkip	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x297078	mwPlyEntryDecExecCb	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x2970b0	mwPlyEntryDecSkipCb	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x297348	mwPlySetReloadTime	medium	sdk:libmwsfde.a/mwsfdset.o B
+0x2973a0	mwPlyGetFsizeByte	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x297780	MWSFSFX_Init	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2977a8	mwsfsfx_SfxErrCbFn	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2977c0	MWSFSFX_Finish	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2977d8	MWSFSFX_CalcHnWorkSiz	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2977e0	MWSFSFX_Create	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2977f8	MWSFSFX_Destroy	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297810	MWSFSFX_GetSfxHn	medium	sdk:libmwsfde.a/mwsfdsfx.o C by order and size
+0x297818	MWSFSFX_SetSfxHn	medium	sdk:libmwsfde.a/mwsfdsfx.o C by order and size
+0x297820	MWSFD_CnvFrmInfToSfx	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297838	mwsfsfx_CnvFrmInfToSfx	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x2978b0	mwsfsfx_CnvFrmFmtTypeToSfx	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297910	mwsfsfx_SetYcc420plnInfToSfx	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2979c8	mwsfsfx_SetNfrm	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2979d8	mwsfsfx_SetSfxBufInf	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2979e8	mwsfsfx_SetSfxInfTag	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x297bd8	MWSFD_SetSfxCnvTbl	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x297bf0	MWSFD_GetSfxCnvTbl	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x297c08	mwPlyFxCnvFrmZ16	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297cb0	mwPlyFxCnvFrmZ32	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297d58	mwPlyFxSetCompoMode	high	D only: sdk mwPlyFxSetCompoMode / 3s ; own error string names it
+0x297e58	MWSFSFX_SetCompoMode	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297e88	mwPlyFxGetCompoMode	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297f18	MWSFSFX_SetColAdj	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x297f30	MWSFD_SetColAdj	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x297f48	MWSFD_GetColAdj	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x297f78	mwPlyFxSetOutBufSize	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298028	mwPlyFxGetOutBufSize	medium	sdk:libmwsfde.a/mwsfdsfx.o C by order and size
+0x2980c0	mwPlyFxSetOutZscale	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298128	mwPlyFxGetOutZscale	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298188	mwPlyFxSetOutZoffset	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x2981f0	mwPlyFxGetOutZoffset	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298250	mwsftag_IsPlayM1V	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298260	MWSFTAG_IsUseAinfSj	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298288	MWSFTAG_CreateAinfSj	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x2982e8	MWSFTAG_DestroyAinfSj	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298318	MWSFTAG_SetAinfSj	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298398	MWSFTAG_ResetAinfSj	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x2983c8	MWSFTAG_SetTagInf	medium	sdk:libmwsfde.a/mwsfdsfx.o C by order and size
+0x2985b8	mwPlyAttachAddInfBuf	medium	own error string only
+0x298618	mwsftag_GetSFXinfFromAinf	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x2986c0	MWSFTAG_ClearUsrSj	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298720	mwPlyFxSetZclip	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298738	mwPlyFxGetZclip	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298750	MWSFD_GetAinfAll	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298768	MWSFD_GetAinfFx	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x2987b8	MWSFD_GetZfrmRange	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298830	mwPlyFxSetLumiPrm	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298880	mwPlyFxGetLumiPrm	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298990	MWSFD_MakeTblZ16	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298a30	MWSFD_MakeTblZ32	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298ae8	MWSFSFX_SetPicUsrDat	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298b00	MWSFSFX_IsFrmCcs	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298b18	MWSFD_IsFrmDivField	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298b30	MWSFD_IsFrmCcs	high	sdk:libmwsfde.a/mwsfdsfx.o A (3s - -)
+0x298bf0	MWSFD_SetSplitField	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298c08	MWSFD_GetSplitField	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298c20	MWSFD_SetProgOut	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298c38	MWSFD_GetProgOut	medium	sdk:libmwsfde.a/mwsfdsfx.o B
+0x298de0	mwPlySetCnvBottomUp	medium	own error string only
+0x298e48	mwPlyGetCnvBottomUp	medium	own error string only
+0x2994e0	MWSFLSC_GetStat	high	sdk:libmwsfde.a/mwsfdsl.o A (3s - -)
+0x2994f8	MWSFLSC_GetStmId	high	sdk:libmwsfde.a/mwsfdsl.o A (3s - -)
+0x299510	MWSFLSC_GetStmFname	high	sdk:libmwsfde.a/mwsfdsl.o A (3s - -)
+0x299528	MWSFLSC_GetStmStat	high	sdk:libmwsfde.a/mwsfdsl.o A (3s - -)
+0x299540	MWSFLSC_GetStmRdSct	high	sdk:libmwsfde.a/mwsfdsl.o A (3s - -)
+0x299558	MWSFLSC_IsFsStatErr	high	sdk:libmwsfde.a/mwsfdsl.o A (3s - -)
+0x2995b0	MWSFLSC_GetFlowLimit	high	sdk:libmwsfde.a/mwsfdsl.o A (3s - -)
+0x299fc8	MWSFSVM_Init	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a008	MWSFSVM_Finish	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a020	MWSFSVM_EntryVint	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a050	MWSFSVM_DeleteVint	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a070	MWSFSVM_EntryVfunc	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a0a0	MWSFSVM_EntryIdVfunc	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a0e0	MWSFSVM_DeleteVfunc	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a100	MWSFSVM_EntryIdleFunc	medium	sdk:libmwsfde.a/mwsfdsvm.o B
+0x29a130	MWSFSVM_DeleteIdleFunc	medium	sdk:libmwsfde.a/mwsfdsvm.o B
+0x29a150	MWSFSVM_EntryMainFunc	medium	sdk:libmwsfde.a/mwsfdsvm.o B
+0x29a180	MWSFSVM_DeleteMainFunc	medium	sdk:libmwsfde.a/mwsfdsvm.o B
+0x29a2d0	MWSFSVM_Lock	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a308	MWSFSVM_Unlock	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a320	MWSFSVM_Error	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a3d0	mwPlyEntryErrFn	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a3e8	mwl_callErrCb	high	sdk:libmwsfde.a/mwsfdsvm.o A (3s - -)
+0x29a400	MWSFSVR_IsEndDec	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
+0x29a428	MWSFSVR_CheckForceSvrBdr	medium	sdk:libmwsfde.a/mwsfdsvr.o B
+0x29a450	mwsfsvr_ExecForceSvrBdr	medium	sdk:libmwsfde.a/mwsfdsvr.o B
+0x29a868	mwSfdExecDecSvrHndl	medium	sdk:libmwsfde.a/mwsfdsvr.o B
+0x29ade0	mwsfd_ExecSvrHndl	medium	sdk:libmwsfde.a/mwsfdsvr.o B
+0x29aea0	MWSFSVR_Vint	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
+0x29aed8	MWSFSVR_SetMwsfdSvrFlg	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
+0x29af00	MWSFSVR_GetMwsfdSvrFlg	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
+0x29af20	MWSFSVR_SetHnMwplySvrFlg	medium	sdk:libmwsfde.a/mwsfdsvr.o C by order and size
+0x29af28	MWSFSVR_GetHnMwplySvrFlg	medium	sdk:libmwsfde.a/mwsfdsvr.o C by order and size
+0x29af30	MWSFSVR_SetHnSfdSvrFlg	medium	sdk:libmwsfde.a/mwsfdsvr.o C by order and size
+0x29af38	MWSFSVR_GetHnSfdSvrFlg	medium	sdk:libmwsfde.a/mwsfdsvr.o C by order and size
+0x29af90	MWSFD_SetReqSvrBdrHn	medium	sdk:libmwsfde.a/mwsfdsvr.o B
+0x29afc8	MWSFD_GetReqSvrBdrHn	medium	sdk:libmwsfde.a/mwsfdsvr.o C by order and size
+0x29afd0	MWSFD_GetReqSvrBdrLib	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
+0x29aff0	mwPlyIsSvrBdr	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
+0x29b078	MWSTM_Finish	high	sdk:libmwsfde.a/mwstm.o A (3s - -)
+0x29b3a8	SFADXT_IsHeader	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29b408	SFADXT_IsEndcode	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29b448	SFADXT_SetOutPan	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b468	SFADXT_GetOutPan	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b488	SFADXT_SetOutVol	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b4a8	SFADXT_GetOutVol	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b580	SFD_SetAdxtPara	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b5d8	SFADXT_Init	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29b618	SFADXT_Finish	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29b640	sfadxt_HeadDecCallBack	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b6d0	SFADXT_ExecServer	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29b6e8	sfadxt_ExecServerSub	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b790	sfadxt_SupplyData	medium	sdk:libmwsfde.a/sfd_adxt.o C by order and size
+0x29b820	sfadxt_GetFreeChunk	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29b850	sfadxt_PutDataChunk	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29b8d8	sfadxt_CopyData	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b990	sfadxt_AdjustSync	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29bbf8	sfadxt_AdjDiscard	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29bc80	sfadxt_InsertSilence	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29bca0	sfadxt_ExcludeHdr	medium	sdk:libmwsfde.a/sfd_adxt.o C by order and size
+0x29bd60	sfadxt_SearchAlign	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29be80	sfadxt_ExcludeSilence	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29bf98	sfadxt_GetNchSfreq	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29bfe8	sfadxt_ChkPrepFlg	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c090	sfadxt_IsPrepEnd	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c0b8	sfadxt_ChkTermFlg	medium	sdk:libmwsfde.a/sfd_adxt.o C by order and size
+0x29c258	sfadxt_RingGetRead	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c2a0	sfadxt_RingAddRead	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c368	sfadxt_GetTermSrc	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c380	sfadxt_GetTermDst	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c398	sfadxt_SetTermDst	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c3b8	sfadxt_SetAdxtHd	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c470	sfadxt_IsEndDecinfo	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29c500	SFADXT_Create	medium	sdk:libmwsfde.a/sfd_adxt.o C by order and size
+0x29c658	sfadxt_InitInf	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c810	sfadxt_CreateEx	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29c880	sfadxt_RestoreAdxtHn	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29c8d0	sfadxt_GetTime	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29c990	sfadxt_GetTimeTst	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29ca38	SFADXT_Destroy	medium	sdk:libmwsfde.a/sfd_adxt.o C by order and size
+0x29cb10	sfadxt_DestroySub	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29cb30	sfadxt_SaveAdxtHn	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29cb40	SFADXT_Standby	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29cb48	SFADXT_Start	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29cb68	SFADXT_Stop	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29cb90	SFADXT_Pause	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29cc80	sfadxt_WaitStart	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29ccd0	sfadxt_DoPause	medium	sdk:libmwsfde.a/sfd_adxt.o C by order and size
+0x29cd18	sfadxt_WtPause	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29cd58	sfadxt_GetTimeOneFrmAudio	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
+0x29cda8	SFADXT_GetWrite	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29cdc8	SFADXT_AddWrite	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29cde8	SFADXT_GetRead	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29ce08	SFADXT_AddRead	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29ce28	SFADXT_Seek	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29ceb8	sfadxt_GetHd	medium	sdk:libmwsfde.a/sfd_adxt.o C by order and size
+0x29d0e0	SFAOAP_SetSpeed	medium	sdk:libmwsfde.a/sfd_aoap.o C by order and size
+0x29d138	SFAOAP_Init	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d140	SFAOAP_Finish	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d148	SFAOAP_ExecServer	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d188	sfaoap_OutputServer	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d1b8	sfaoap_ChkPrepFlg	medium	sdk:libmwsfde.a/sfd_aoap.o B
+0x29d228	sfaoap_ChkTermFlg	medium	sdk:libmwsfde.a/sfd_aoap.o B
+0x29d298	SFAOAP_Create	medium	sdk:libmwsfde.a/sfd_aoap.o B
+0x29d2d8	sfaoap_InitInf	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d2e0	SFAOAP_Destroy	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d2e8	SFAOAP_Standby	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d330	SFAOAP_Start	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d378	SFAOAP_Stop	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d3c0	SFAOAP_Pause	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d418	SFAOAP_GetWrite	medium	sdk:libmwsfde.a/sfd_aoap.o B
+0x29d438	SFAOAP_AddWrite	medium	sdk:libmwsfde.a/sfd_aoap.o B
+0x29d458	SFAOAP_GetRead	medium	sdk:libmwsfde.a/sfd_aoap.o B
+0x29d478	SFAOAP_AddRead	medium	sdk:libmwsfde.a/sfd_aoap.o B
+0x29d498	SFAOAP_Seek	high	sdk:libmwsfde.a/sfd_aoap.o A (3s - -)
+0x29d4b8	SFBUF_Finish	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29d4c0	SFBUF_InitHn	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29d5f8	sfbuf_MakeBufPtr	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29d638	sfbuf_InitRingSj	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29d790	SFBUF_DestroySj	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29d7d0	sfbuf_DestroySjSub	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29d838	sfbuf_InitVfrmBuf	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29d8f0	sfbuf_InitAringBuf	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29d990	SFBUF_FixAringBuf	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29da18	sfbuf_InitUoSjBuf	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29da68	sfbuf_InitBufData	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29da88	sfbuf_InitUoSj	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29dab8	SFBUF_SetSupplySj	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29db60	sfbuf_ChkSupSj	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29dba8	sfbuf_SetSupplySjSub	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29dc18	sfbuf_SetSupSj	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29dcb8	sfbuf_InitConti	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29dcc8	SFBUF_SetUoch	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29dd10	SFBUF_GetUoch	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29dd58	SFBUF_GetRingSj	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29dd80	SFBUF_RingGetWrite	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29dd98	SFBUF_RingGetRead	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29de58	SFBUF_RingAddWrite	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29de70	SFBUF_RingAddRead	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29de88	sfbuf_RingAddSub	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29dfd8	sfbuf_ResetConti	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29e068	sfbuf_PeekChunk	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e160	sfbuf_MoveChunk	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29e1b8	SFBUF_RingGetDlm	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e228	SFBUF_RingSetDlm	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e290	SFBUF_GetRingBufSiz	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29e2b0	SFBUF_GetRTot	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29e2d0	SFBUF_GetWTot	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e370	SFBUF_RingGetSj	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e3d0	SFBUF_AddRtotSj	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29e408	SFBUF_AringGetWrite	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e5b0	SFBUF_AringAddWrite	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e6a8	SFBUF_AringGetRead	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e858	SFBUF_AringAddRead	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e948	SFBUF_VfrmGetWrite	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29e950	SFBUF_VfrmAddWrite	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e960	SFBUF_VfrmGetRead	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29e9b8	SFBUF_VfrmAddRead	medium	sdk:libmwsfde.a/sfd_buf.o B
+0x29ea28	SFBUF_SetPrepFlg	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29ea48	SFBUF_GetPrepFlg	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29ea68	SFBUF_SetTermFlg	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29ea88	SFBUF_GetTermFlg	medium	sdk:libmwsfde.a/sfd_buf.o C by order and size
+0x29eaa8	SFBUF_RingGetDataSiz	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29ead0	SFBUF_RingGetFreeSiz	high	sdk:libmwsfde.a/sfd_buf.o A (3s - -)
+0x29ece8	SFD_SetConcatPlay	medium	sdk:libmwsfde.a/sfd_con.o B
+0x29ed48	SFCON_IsEndcodeSkip	high	sdk:libmwsfde.a/sfd_con.o A (3s - -)
+0x29ed68	SFCON_IsSystemEndcodeSkip	high	sdk:libmwsfde.a/sfd_con.o A (3s - -)
+0x29edb0	SFCON_IsVideoEndcodeSkip	high	sdk:libmwsfde.a/sfd_con.o A (3s - -)
+0x29edf8	SFCON_UpdateConcatTime	medium	sdk:libmwsfde.a/sfd_con.o B
+0x29ee80	SFCON_WriteTotSmplQue	medium	sdk:libmwsfde.a/sfd_con.o B
+0x29ef38	SFCON_ReadTotSmplQue	medium	sdk:libmwsfde.a/sfd_con.o B
+0x29f008	SFD_GetTimePerFile	medium	sdk:libmwsfde.a/sfd_con.o B
+0x29f160	SFD_AnalyCreInf	medium	sdk:libmwsfde.a/sfd_cre.o C by order and size
+0x29f200	sfcre_AnalyCreInf	medium	sdk:libmwsfde.a/sfd_cre.o B
+0x29f2b0	sfcre_SetDflCreInf	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f318	sfcre_AnalyMps	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f3d0	sfcre_AnalyPackSiz	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f4b8	sfcre_AnalyMuxRate	medium	sdk:libmwsfde.a/sfd_cre.o B
+0x29f550	sfcre_AnalySfh	medium	sdk:libmwsfde.a/sfd_cre.o B
+0x29f640	sfcre_ProcessHdr	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f690	sfcre_AnalyAudio	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f798	sfcre_SearchMpsDelim	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f800	sfcre_GetPketData	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f880	sfcre_AnalyAdx	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f918	sfcre_AnalyAdxAlign4	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29f9f0	SFCRE_AnalyMpaBitrate	medium	sdk:libmwsfde.a/sfd_cre.o B
+0x29fa68	SFCRE_AnalyAauSiz	medium	sdk:libmwsfde.a/sfd_cre.o B
+0x29fbc8	sfcre_SerachMpaAau	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29fc98	sfcre_ReadAauHdr	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29fd18	sfcre_AnalyMpv	high	sdk:libmwsfde.a/sfd_cre.o A (3s - -)
+0x29fe80	SFHDS_Init	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x29fea0	SFHDS_Finish	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x29feb8	SFHDS_InitFhd	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x29fed0	SFHDS_FinishFhd	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x29fee0	SFHDS_SetHdr	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x29ff98	sfhds_IsPrvate2PketStart	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x29ffc0	sfhds_ReadLong	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x29fff0	SFHDS_IsSfdHeader	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0110	sfhds_SetHdrSeek	medium	sdk:libmwsfde.a/sfd_hds.o B
+0x2a0150	sfhds_CopyFhd	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0220	SFHDS_ReprocessHdr	medium	sdk:libmwsfde.a/sfd_hds.o B
+0x2a0288	sfhds_GetHd	medium	sdk:libmwsfde.a/sfd_hds.o C by order and size
+0x2a02d8	SFHDS_ProcessHdr	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0340	sfhds_DoProcessHdr	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0498	sfhds_AnlyHead	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0528	sfhds_AnlySys	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a05e0	sfhds_AnlyUsedStmid	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0658	sfhds_AnlyAudio	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a06f0	sfhds_AnlyVideo	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0888	sfhds_CallN	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a08c0	sfhds_CallS	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a08f8	sfhds_SetMvInf	medium	sdk:libmwsfde.a/sfd_hds.o B
+0x2a0920	SFHDS_GetPketLenField	high	sdk:libmwsfde.a/sfd_hds.o A (3s - -)
+0x2a0928	SFHDS_GetMuxVerNum	medium	sdk:libmwsfde.a/sfd_hds.o B
+0x2a0960	SFHDS_GetColType	medium	sdk:libmwsfde.a/sfd_hds.o B
+0x2a1078	SFMPS_Init	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a10e8	sfmps_ChkFatal	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a10f0	SFMPS_Finish	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a1110	SFMPS_ExecServer	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a1128	sfmps_ExecServerSub	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a12f8	sfmps_RingGetRead	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a1360	sfmps_RingAddRead	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a1650	sfmps_SkipNext	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a1770	sfmps_IsEndOfRingBuf	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a17d0	sfmps_GetSupSj	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a19e0	sfmps_CopyAudio	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a1b50	sfmps_CopyVideo	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a1d28	sfmps_AutoVchPlay	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a1db0	sfmps_CopyPrvate	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a1f28	sfmps_CopySj	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a1fd0	sfmps_ExecCopySj	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2040	sfmps_CopyPadding	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2248	sfmps_GetTermDst	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a22b8	sfmps_Concat	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a2418	sfmps_IsEffectiveEndcode	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a24d0	sfmps_ProcPrep	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2528	sfmps_ChkPrepFlg	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a25b0	sfmps_GetPrepDst	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2620	sfmps_SetPrepDst	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2680	sfmps_IsPrepEnd	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a26e0	sfmps_AdjustAvPlay	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a27d8	sfmps_GetStmNum	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2888	sfmps_SetMvInf	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a29d8	sfmps_SetMpsRaw	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2b10	SFMPS_Create	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a2c78	SFMPS_Destroy	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2cc8	sfmps_DestroySub	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2ce0	SFMPS_Standby	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2ce8	SFMPS_Start	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2cf0	SFMPS_Stop	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2cf8	SFMPS_Pause	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2d00	SFMPS_GetWrite	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2d20	SFMPS_AddWrite	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2d40	SFMPS_GetRead	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2d60	SFMPS_AddRead	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2d80	SFMPS_Seek	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a2e28	sfmps_SetCustomPketLen	high	sdk:libmwsfde.a/sfd_mps.o A (3s - -)
+0x2a2e30	sfmps_ReprocessHdr	medium	sdk:libmwsfde.a/sfd_mps.o B
+0x2a2ed0	sfmps_GetHd	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a2f20	SFMPS_GetConcatCnt	medium	sdk:libmwsfde.a/sfd_mps.o C by order and size
+0x2a2f30	SFD_SetMpvPara	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a2fe0	SFD_SetMpvParaTbl	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a30d0	SFD_MakeRfbInfo	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a3170	SFD_CalcYccPlane	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a33b8	SFD_GetNumFrm	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3428	SFD_SetVideoUsrSj	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3628	SFMPV_Init	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3708	sfmpv_ChkFatal	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a3710	SFMPV_Finish	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a3730	SFMPV_ExecServer	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a3748	sfmpv_ExecServerSub	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a37e0	sfmpv_SetCondY16	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a38f0	sfmpv_GetTermDst	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3908	sfmpv_ChkPrepFlg	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a39b8	sfmpv_IsPrepEnd	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a3a18	sfmpv_IsPrepFrmEnough	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3a60	sfmpv_IsVbvEnough	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3b48	sfmpv_FixedStartTtu	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3b70	sfmpv_ChkTermFlg	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3c18	sfmpv_SetTermDst	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3cb8	sfmpv_GetActiveSize	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a40b8	sfmpv_CalcDistance	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a4120	sfmpv_CheckViBufSiz	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a41a8	sfmpv_SearchDelim	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a4300	sfmpv_BsearchDelim	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a4468	sfmpv_DecodeOneUnit	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a4730	sfmpv_PeekChnk	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a4780	sfmpv_FixedForSeek	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a4838	sfmpv_Concat	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a4888	sfmpv_ConcatSub	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a49b8	sfmpv_CalcAudioTotTime	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a4a60	sfmpv_DiscardSec	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a4b68	sfmpv_IsTerm	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a4bb0	sfmpv_GetTermSrc	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a4bc8	sfmpv_ChkMpvErr	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a5060	sfmpv_InitComplementPts	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a5088	sfmpv_ComplementPts	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a55a0	sfmpv_ReformTc	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a5680	sfmpv_DetectTcErr	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a5838	sfmpv_Pts2Tc	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a5d70	sfmpv_ReadTcode	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a5dc0	sfmpv_FirstPicAtr	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a5ef0	sfmpv_SetMpvHd	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a6010	sfmpv_SetMvInf	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a6048	sfmpv_ChkBufSiz	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a6200	sfmpv_IsConcatTimeFix	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a6210	sfmpv_IsSkip	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a6308	sfmpv_IsDefect	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a6470	sfmpv_IsSeekSkip	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a64c0	sfmpv_IsPtypeSkip	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a65f0	sfmpv_IsLate	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a6768	sfmpv_GetDtime	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a6780	sfmpv_SkipFrm	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a6870	sfmpv_SetSkipTtu	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a6b98	sfmpv_SetFrmPara	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a6f28	sfmpv_SetStartTtu	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a7598	sfmpv_RingAddRead	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a7610	SFMPV_Create	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a7770	sfmpv_InitInf	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a7968	sfmpv_CheckMpvPara	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a7a30	sfmpv_InitFrmObj	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a7ad0	sfmpv_InitPicAtr	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a7af0	sfmpv_InitPicUsr	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a7d18	sfmpv_DestroySub	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a7d30	SFMPV_Standby	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a7d38	SFMPV_Start	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a7d40	SFMPV_Stop	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a7d48	SFMPV_Pause	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a7d50	SFMPV_GetWrite	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a7d70	SFMPV_AddWrite	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a7d90	SFMPV_GetRead	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a8038	SFMPV_AddRead	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a8160	SFMPV_Seek	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a81d0	sfmpv_ReprocessShc	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a82c8	sfmpv_GetHd	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a84d0	SFMPVF_TermDec	medium	sdk:libmwsfde.a/sfd_mpvf.o C by order and size
+0x2a84e0	SFMPVF_IsTermDec	medium	sdk:libmwsfde.a/sfd_mpvf.o C by order and size
+0x2a84f0	SFMPVF_SetGopStat	medium	sdk:libmwsfde.a/sfd_mpvf.o C by order and size
+0x2a8500	SFMPVF_GetNumFrm	medium	sdk:libmwsfde.a/sfd_mpvf.o C by order and size
+0x2a85a0	SFMPVF_AllocFrm	medium	sdk:libmwsfde.a/sfd_mpvf.o B
+0x2a8628	SFMPVF_FreeFrm	high	sdk:libmwsfde.a/sfd_mpvf.o A (3s - -)
+0x2a8638	SFMPVF_StbyFrm	high	sdk:libmwsfde.a/sfd_mpvf.o A (3s - -)
+0x2a8650	SFMPVF_RefStbyFrm	high	sdk:libmwsfde.a/sfd_mpvf.o A (3s - -)
+0x2a8668	SFMPVF_EndDrawFrm	high	sdk:libmwsfde.a/sfd_mpvf.o A (3s - -)
+0x2a8690	SFMPVF_EndRefFrm	high	sdk:libmwsfde.a/sfd_mpvf.o A (3s - -)
+0x2a86b8	SFMPVF_HoldFrm	medium	sdk:libmwsfde.a/sfd_mpvf.o B
+0x2a8b30	sfmpvf_IsChkFirst	medium	sdk:libmwsfde.a/sfd_mpvf.o B
+0x2a8b50	getFIFOindex	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a8c08	setD4_CHCR	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a8c70	scTag2	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2a8c98	viBufCreate	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a8d10	viBufReset	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a8e50	viBufBeginPut	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2a8f40	viBufEndPut	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2a8f90	viBufUnput	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2a9010	viBufAddDMA	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a9210	viBufStopDMA	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a9310	viBufRestartDMA	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a9628	viBufDelete	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a9680	viBufFlush	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a96d0	SFD_SetSceMpeg	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2a96e0	SFMPVP_IsSceMpegUsed	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a96f0	SFMPVP_Init	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2a9738	SFMPVP_GetViBufInf	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a97a0	SFMPVP_Create	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a99b8	SFD_GetSceErrMessage	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a99c8	mpegError	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a9a30	sfmpvp_PutVibuf	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a9b78	mpegStopDMA	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a9ba0	mpegRestartDMA	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a9c50	sfmpvp_SaveMpvp	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a9c78	sfmpvp_RestoreMpvp	medium	sdk:libmwsfde.a/sfd_mpvp.o B
+0x2a9ca0	SFMPVP_Put	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a9d10	SFMPVP_Unput	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2a9dc8	copy2area	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2a9ef8	SFMPVP_DecodeFrmSj	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2aa040	SFMPVP_GetFrameCount	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2aa268	sfmpvp_ConsumePsc	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2aa280	SFMPVP_IsPscEnough	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2aa2e8	SFMPVP_GetSizeSceMpegHn	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
+0x2aa6c0	sfply_ChkCondDfl	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aa720	SFD_VbOut	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2aa728	SFD_IsHnSvrWait	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aa868	sfply_ExecOne	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aa9c0	sfply_StatStop	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aa9f0	sfply_StatPrep	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aaab0	sfply_IsPrepEnd	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2aab90	sfply_FixAvPlay	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aac38	sfply_AdjustSyncMode	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aad88	sfply_StatStby	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aae28	sfply_StatPlay	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aae98	sfply_StatFin	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
+0x2aaea0	sfply_IsStartSync	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aaf08	sfply_ChkBpa	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2aafb8	sfply_IsBpaOn	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ab138	sfply_IsBpaOff	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
+0x2ab218	sfply_IsAnyoneTerm	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2ab2b8	sfply_EnoughViData	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ab3f0	sfply_ChkFin	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2ab460	sfply_IsEtime	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ab4d0	sfply_IsEtrg	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ab598	sfply_IsStagnant	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ab5f0	sfply_IsPlayTimeAutoStop	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ab6b8	SFPLY_DecideSvrStat	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
+0x2abae0	sfply_InitMvInf	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2abb48	sfply_InitPlyInf	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
+0x2abbd0	sfply_InitTmrInf	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2abc30	SFPLY_AddDecPic	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2abc98	SFPLY_AddSkipPic	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2abdb8	sfply_TrDestroy	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2abe60	sfply_Start	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2abe70	sfply_TrStart	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2abef0	SFPLY_Stop	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
+0x2abf58	SFPLY_SetResetFlg	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2abf68	SFPLY_GetResetFlg	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
+0x2abf78	sfply_TrStop	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ac3a8	SFD_GetWritePtr	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ac418	SFD_AddWritePtr	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ac528	SFPLY_IsTermSupply	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2ac548	SFD_GetFrm	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
+0x2ac670	SFD_SetSupplySj	medium	sdk:libmwsfde.a/sfd_ply.o B
+0x2acb30	SFSEE_InitHn	high	sdk:libmwsfde.a/sfd_see.o A (3s - -)
+0x2acb50	SFD_InitSeek	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2acb98	sfsee_InitSeekInf	medium	sdk:libmwsfde.a/sfd_see.o C by order and size
+0x2acc08	sfsee_InitHeadInf	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2accc0	SFD_EntrySeek	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2acd18	SFD_SetSeekPosTbl	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2acd78	SFD_StartHeadAnaly	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2acdd8	SFD_IsHeadAnalyEnd	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ace48	sfsee_IsHeadAnalyEnd	high	sdk:libmwsfde.a/sfd_see.o A (3s - -)
+0x2ace60	SFSEE_FixAvPlay	medium	sdk:libmwsfde.a/sfd_see.o C by order and size
+0x2ace90	SFSEE_ExecServer	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2aced8	sfsee_ExecHeadAnaly	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad040	sfsee_IsAudioAnalyzing	high	sdk:libmwsfde.a/sfd_see.o A (3s - -)
+0x2ad0c0	sfsee_IsVideoAnalyzing	high	sdk:libmwsfde.a/sfd_see.o A (3s - -)
+0x2ad140	sfsee_IsMpsStream	high	sdk:libmwsfde.a/sfd_see.o A (3s - -)
+0x2ad160	SFD_IsSeekAble	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad1d0	sfsee_IsSeekAble	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad240	SFD_CnvTimeToPos	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad2e0	sfsee_CnvTimeToPos	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad330	sfsee_SearchTimeToPos	high	sdk:libmwsfde.a/sfd_see.o A (3s - -)
+0x2ad338	SFD_CnvPosToTime	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad3e0	sfsee_CnvPosToTime	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad468	sfsee_SearchPosToTime	high	sdk:libmwsfde.a/sfd_see.o A (3s - -)
+0x2ad478	SFD_Seek	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad570	SFD_SetFileSize	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad5e0	SFD_SetTotTime	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad668	SFD_SetByteRate	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad6d8	SFD_SetSeekPos	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad738	sfsee_ExecFinAnaly	medium	sdk:libmwsfde.a/sfd_see.o B
+0x2ad870	sfsee_UpdateEByteRate	medium	sdk:libmwsfde.a/sfd_see.o C by order and size
+0x2ad8f8	SFD_GetSvrStat	high	sdk:libmwsfde.a/sfd_set.o A (3s - -)
+0x2ada08	sfset_SetCondAll	medium	sdk:libmwsfde.a/sfd_set.o C by order and size
+0x2ada78	SFSET_SetCond	medium	sdk:libmwsfde.a/sfd_set.o B
+0x2adac8	sfset_SetUsrCond	medium	sdk:libmwsfde.a/sfd_set.o B
+0x2adb18	sfset_IsCondValid	high	sdk:libmwsfde.a/sfd_set.o A (3s - -)
+0x2adc40	SFSET_GetCond	medium	sdk:libmwsfde.a/sfd_set.o B
+0x2addc0	SFD_GetTmrInf	medium	sdk:libmwsfde.a/sfd_set.o B
+0x2adec8	SFD_GetTrHn	medium	sdk:libmwsfde.a/sfd_set.o B
+0x2adf78	SFD_GetSofdecHeader	medium	sdk:libmwsfde.a/sfd_set.o B
+0x2ae2b8	SFTIM_UpdateItime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae358	SFTIM_GetNextItime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae408	sftim_HnVbIn	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2ae458	sftim_CntupHnVbIn	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae4c8	sftim_IsTimeIncre	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae500	sftim_IsVbinStIncre	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae528	sftim_ResetVtimeTmr	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae570	sftim_GetVtimeTmr	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae608	SFTIM_IsStagnant	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae648	sftim_IsAudioStagnant	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae728	SFTIM_GetVideoStartSample	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae7a0	SFTIM_SetStartTime	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
+0x2ae828	SFTIM_GetTimeSub	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae8d8	SFD_GetTimeAfterSeek	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2ae950	sfdtim_GetTimeAfterSeek	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2ae988	SFD_GetNowTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2aea00	SFTIM_GetNowTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2aea98	sftim_GetTimeNone	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2aeae0	sftim_GetTimeVsync	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2aeb40	sftim_GetTimeUfrm	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2aeb60	sftim_GetTimeExtClock	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
+0x2aec58	SFTIM_ChkRegularTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2aeca8	SFD_OutUsrFrmSync	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2aed08	SFD_SetUsrIsSkipFn	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2aed60	SFD_CmpTime	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2aefe0	sftim_UpdateTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af060	SFTIM_SetTimeFn	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af070	SFTIM_Tc2Time	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af1a0	sftim_Tc2Time23N	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2af1d8	sftim_Tc2Time29N	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2af210	sftim_Tc2Time59N	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2af248	sftim_Tc2Time23D	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
+0x2af380	sftim_Tc2Time59D	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
+0x2af540	SFTIM_GetTimeOneFrmVideo	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af580	SFD_GetFps	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af5f8	SFD_GetPlayFps	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af688	SFTIM_IsGetFrmTime	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2af6c0	SFTIM_IsGetFrmTimeTunit	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af6f8	SFD_OutDispSync	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af780	SFD_IsDrawTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af848	SFTIM_IsExecTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2af998	sftim_IsTakeOffExecTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2afa10	sftim_IsGrExecTime	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2afb00	SFTIM_IsVideoTerm	medium	sdk:libmwsfde.a/sfd_tim.o B
+0x2afb98	SFTIM_SetSpeed	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
+0x2afba0	SFTIM_GetSpeed	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
+0x2afc08	SFTRN_Init	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2afca0	SFTRN_Finish	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2afcb8	sftrn_CallTrEntry	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2afd38	SFTRN_InitHn	medium	sdk:libmwsfde.a/sfd_trn.o B
+0x2afdf0	sftrn_InitTrData	medium	sdk:libmwsfde.a/sfd_trn.o B
+0x2afe38	sftrn_BuildAll	medium	sdk:libmwsfde.a/sfd_trn.o B
+0x2aff58	sftrn_BuildSystem	medium	sdk:libmwsfde.a/sfd_trn.o B
+0x2b0048	sftrn_BuildVideo	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2b00e8	sftrn_BuildAudio	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2b0188	sftrn_BuildUsr	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2b01a8	sftrn_ConnTrnBuf0	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2b01c8	sftrn_ConnTrnBufV	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2b01e8	sftrn_ConnTrnBufA	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2b0208	sftrn_ConnTrnBufU	high	sdk:libmwsfde.a/sfd_trn.o A (3s - -)
+0x2b02a0	SFTRN_CallTrSetup	medium	sdk:libmwsfde.a/sfd_trn.o B
+0x2b0408	SFTST_Create	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b04e8	sftst_ResetHist	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0530	SFTST_SetTolerance	high	sdk:libmwsfde.a/sfd_tst.o A (3s - -)
+0x2b0548	SFTST_SetExcessErr	high	sdk:libmwsfde.a/sfd_tst.o A (3s - -)
+0x2b0560	SFTST_SetAdjStart	high	sdk:libmwsfde.a/sfd_tst.o A (3s - -)
+0x2b0578	SFTST_SetAdjPoff	high	sdk:libmwsfde.a/sfd_tst.o A (3s - -)
+0x2b0590	SFTST_SetMovaveRange	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b05a0	SFTST_Pause	medium	sdk:libmwsfde.a/sfd_tst.o C by order and size
+0x2b05a8	SFTST_SetAdjFlg	medium	sdk:libmwsfde.a/sfd_tst.o C by order and size
+0x2b05b0	SFTST_GoNextFrame	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0608	SFTST_Calc	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0a70	sftst_UpdateMovAve	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0ad0	sftst_ModifyHist	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0b30	sftst_CalcMovAve	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0b80	SFDEB_InitTst	high	sdk:libmwsfde.a/sfd_tst.o A (3s - -)
+0x2b0b98	sftst_DebInit	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0ed0	SFD_SetSystemUsrSj	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b0ff8	SFD_SetUsrSj	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b1108	SFUO_Init	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1110	SFUO_Finish	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1118	SFUO_ExecServer	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1160	sfuo_ChkTermFlg	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b11e0	sfuo_IsTerm	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b11e8	sfuo_ChkPrepFlg	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b1268	sfuo_IsPrepEnd	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1270	sfuo_OutputServer	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1278	SFUO_Create	medium	sdk:libmwsfde.a/sfd_uo.o C by order and size
+0x2b12a8	sfuo_InitInf	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1320	sfuo_InitUoch	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1348	sfuo_SetUoch	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1360	SFUO_Destroy	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1368	SFUO_Standby	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1370	SFUO_Start	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1378	SFUO_Stop	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1380	SFUO_Pause	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1388	SFUO_GetWrite	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b13a8	SFUO_AddWrite	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b13c8	SFUO_GetRead	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b13e8	SFUO_AddRead	medium	sdk:libmwsfde.a/sfd_uo.o B
+0x2b1408	SFUO_Seek	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)
+0x2b1410	SFVOM_Init	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b1418	SFVOM_Finish	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b1420	SFVOM_ExecServer	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b1478	sfvom_ChkTermFlg	medium	sdk:libmwsfde.a/sfd_vom.o B
+0x2b14f8	sfvom_IsTerm	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b1540	sfvom_ChkPrepFlg	medium	sdk:libmwsfde.a/sfd_vom.o B
+0x2b15c0	sfvom_IsPrepEnd	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b15c8	sfvom_OutputServer	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b15d0	SFVOM_Create	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b15d8	SFVOM_Destroy	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b15e0	SFVOM_Standby	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b15e8	SFVOM_Start	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b15f0	SFVOM_Stop	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b15f8	SFVOM_Pause	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b1600	SFVOM_GetWrite	medium	sdk:libmwsfde.a/sfd_vom.o B
+0x2b1620	SFVOM_AddWrite	medium	sdk:libmwsfde.a/sfd_vom.o B
+0x2b1640	SFVOM_GetRead	medium	sdk:libmwsfde.a/sfd_vom.o B
+0x2b16b8	SFVOM_AddRead	medium	sdk:libmwsfde.a/sfd_vom.o B
+0x2b16d8	SFVOM_Seek	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
+0x2b16e0	SFH_GetSbverStr	high	sdk:libmwsfde.a/sfh_main.o A (3s - -)
+0x2b16f0	SFH_CheckStructSiz	high	sdk:libmwsfde.a/sfh_main.o A (3s - -)
+0x2b2db0	getPicRate	medium	sdk:libmwsfde.a/sfh_main.o B
+0x2b2ee8	SFXA_Init	high	sdk:libmwsfde.a/sfx_alp.o A (3s - -)
+0x2b2f00	sfxalp_InitLibWork	medium	sdk:libmwsfde.a/sfx_alp.o B
+0x2b2f40	SFXA_Finish	high	sdk:libmwsfde.a/sfx_alp.o A (3s - -)
+0x2b30c0	SFXA_MakeAlp3Tbl	medium	sdk:libmwsfde.a/sfx_alp.o C by order and size
+0x2b31d8	sfxcnv_IsCnvUpHalf	medium	own error string only
+0x2b3318	sfxcnv_MakeTable	medium	own error string only
+0x2b3690	SFX_MakeTblZ16	medium	own error string only
+0x2b3708	SFX_MakeTblZ32	medium	own error string only
+0x2b3780	SFXINF_GetStmInf	high	sdk:libmwsfde.a/sfx_inf.o A (3s - -)
+0x2b3788	SFX_Init	medium	sdk:libmwsfde.a/sfx_lib.o B
+0x2b37f8	sfx_GetVersionStr	high	sdk:libmwsfde.a/sfx_lib.o A (3s - -)
+0x2b3808	sfx_InitLibWork	medium	sdk:libmwsfde.a/sfx_lib.o C by order and size
+0x2b3858	SFX_Finish	medium	sdk:libmwsfde.a/sfx_lib.o B
+0x2b38b0	SFX_SetErrFn	medium	sdk:libmwsfde.a/sfx_lib.o B
+0x2b38c8	SFX_Create	medium	sdk:libmwsfde.a/sfx_lib.o C by order and size
+0x2b39e0	sfx_SearchFreeHn	medium	sdk:libmwsfde.a/sfx_lib.o B
+0x2b3a30	sfx_InitHn	medium	sdk:libmwsfde.a/sfx_lib.o C by order and size
+0x2b3ad8	sfx_IsEnoughHnWorkSize	high	sdk:libmwsfde.a/sfx_lib.o A (3s - -)
+0x2b3ae8	SFX_Destroy	medium	sdk:libmwsfde.a/sfx_lib.o B
+0x2b3b38	SFXLIB_Error	medium	sdk:libmwsfde.a/sfx_lib.o B
+0x2b3bd8	SFX_SetCompoMode	high	sdk:libmwsfde.a/sfx_set.o A (3s - -)
+0x2b3be0	SFX_GetCompoMode	high	sdk:libmwsfde.a/sfx_set.o A (3s - -)
+0x2b3be8	SFX_SetOutBufSize	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3c08	SFX_GetOutBufSize	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3c28	SFX_SetCnvTable	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3c78	SFX_GetCnvTable	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3c88	SFXSET_SetTblPtn	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3c90	SFXSET_GetTblPtn	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3c98	SFX_SetTagInf	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3d30	SFX_GetTagInf	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3d60	SFX_SetOutZscale	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3d68	SFX_GetOutZscale	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3d70	SFX_SetOutZoffset	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3d78	SFX_GetOutZoffset	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3d80	SFX_SetZclip	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3d98	SFX_GetZclip	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3db0	SFX_GetZfrmRange	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3de8	SFX_SetALumiPrm	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3e40	SFX_GetALumiPrm	medium	sdk:libmwsfde.a/sfx_set.o B
+0x2b3e68	SFX_SetColAdj	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3e70	SFX_GetColAdj	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3e78	SFX_SetSplitField	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3e80	SFX_GetSplitField	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3e88	SFX_SetProgOut	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3e90	SFX_GetProgOut	medium	sdk:libmwsfde.a/sfx_set.o C by order and size
+0x2b3e98	SFX_ShiftYccPtrByLine	high	sdk:libmwsfde.a/sfx_set.o A (3s - -)
+0x2b3ef8	sfxset_ShiftBufInfByLine	high	sdk:libmwsfde.a/sfx_set.o A (3s - -)
+0x2b3f20	SFX_SetMaxRowToYccPln	high	sdk:libmwsfde.a/sfx_set.o A (3s - -)
+0x2b4210	SFXZ_Init	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4228	sfxzmv_InitLibWork	medium	sdk:libmwsfde.a/sfx_zmv.o B
+0x2b4268	SFXZ_Finish	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4270	SFXZ_Create	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b42c8	sfxzmv_SearchFreeHn	medium	sdk:libmwsfde.a/sfx_zmv.o B
+0x2b4330	SFXZ_Destroy	medium	sdk:libmwsfde.a/sfx_zmv.o C by order and size
+0x2b4358	SFXZ_SetTagInf	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4380	sfxzmv_SetTagGrp	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4468	SFXZ_GetTagInf	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b45b0	sfxzmv_GetZfrmInf	medium	sdk:libmwsfde.a/sfx_zmv.o B
+0x2b4648	sfxzmv_MakeOrgZ32Tbl	medium	sdk:libmwsfde.a/sfx_zmv.o B
+0x2b4788	SFXZ_MakeCnvZ32Tbl	medium	sdk:libmwsfde.a/sfx_zmv.o C by order and size
+0x2b48d0	sfxzmv_MakeZ16TblFromOrgZ32	medium	own error string only
+0x2b4aa8	SFXZ_SetZclip	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4b10	sfxzmv_IsOkZclip	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4b40	SFXZ_GetZclip	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4b58	SFXZ_IsSetZclip	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4b88	SFXZ_SetZbufType	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4b98	SFXZ_GetZbufType	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
+0x2b4c98	sfxcnv_CnvFrmZcmn	medium	own error string only
+0x2b5068	sfxcnv_CnvZbitToCft	medium	own error string only
+0x2b50e8	SUD_Init	high	sdk:libmwsfde.a/sud_lib.o A (3s - -)
+0x2b5138	sud_GetVersionStr	high	sdk:libmwsfde.a/sud_lib.o A (3s - -)
+0x2b5148	SUD_Finish	high	sdk:libmwsfde.a/sud_lib.o A (3s - -)
+0x2b5168	SUD_MakePicUsrDat	medium	sdk:libmwsfde.a/sud_lib.o B
+0x2b5320	SUD_AnalyTypeDivField	high	sdk:libmwsfde.a/sud_lib.o A (3s - -)
+0x2b5360	SUD_AnalyTypeCcs	high	sdk:libmwsfde.a/sud_lib.o A (3s - -)
+0x2b5b80	UTY_GetTmrUnit	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
+0x2b5b90	UTY_TmrToUsec	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
+0x2b5bd0	UTY_TmrToMsec	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
+0x2b5c08	UTY_TmrToSec	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
+0x2b5cf0	UTY_InitTsum	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
+0x2b5d10	UTY_AddTsum	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)

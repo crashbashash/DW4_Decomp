@@ -4,8 +4,8 @@ typedef __builtin_va_list va_list;
 
 int adxmsg_level = 0;
 
-int FUN_002743c0();
-int FUN_00276e30();
+int dvCiSetOutputDebugLevel();
+int htCiSetOutputDebugLevel();
 int vsprintf(char *buffer, const char *format, va_list args);
 void scePrintf(const char *format, ...);
 
@@ -15,8 +15,8 @@ int FUN_00265868(void) {
 
 void FUN_00265878(int level) {
     adxmsg_level = level;
-    FUN_00276e30();
-    FUN_002743c0(level);
+    htCiSetOutputDebugLevel();
+    dvCiSetOutputDebugLevel(level);
 }
 
 void FUN_002658a8(const char *format, ...) {

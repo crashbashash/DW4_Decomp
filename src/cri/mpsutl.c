@@ -1,7 +1,7 @@
 /* MPS memory utilities: unrolled byte and word copies and fills. */
 #include "dw4/cri/mps.h"
 
-void mpsutl_CopyBytes(char *dst, char *src, unsigned int n) {
+void UTY_MemcpyByte(char *dst, char *src, unsigned int n) {
     int i;
     int a, b, c, d;
 
@@ -30,7 +30,7 @@ void mpsutl_CopyBytes(char *dst, char *src, unsigned int n) {
     }
 }
 
-void mpsutl_CopyWords(int *dst, int *src, unsigned int n) {
+void UTY_MemcpyDword(int *dst, int *src, unsigned int n) {
     int i;
     int a, b, c, d;
 
@@ -51,7 +51,7 @@ void mpsutl_CopyWords(int *dst, int *src, unsigned int n) {
 }
 
 /* Both fills work backwards from the end: the remainder first, then blocks of 16. */
-void mpsutl_FillBytes(char *dst, char value, unsigned int count) {
+void UTY_MemsetByte(char *dst, char value, unsigned int count) {
     char *p = dst + count;
     unsigned int n;
 
@@ -66,7 +66,7 @@ void mpsutl_FillBytes(char *dst, char value, unsigned int count) {
     }
 }
 
-void mpsutl_FillWords(int *dst, int value, unsigned int count) {
+void UTY_MemsetDword(int *dst, int value, unsigned int count) {
     int *p = dst + count;
     unsigned int n;
 

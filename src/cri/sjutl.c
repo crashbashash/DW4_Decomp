@@ -37,7 +37,7 @@ void SJ_SplitChunk(SfdSjChunk *ck, int nbyte, SfdSjChunk *head, SfdSjChunk *rest
 }
 
 /* Writes the low 28 bits of value as seven lower-case hex digits, most significant first, unterminated. */
-void sj_PutHex7(int value, char *text)
+void sj_val_to_hexstr(int value, char *text)
 {
     text[6] = sj_hex_digit[value & 15];
     value >>= 4;
@@ -54,7 +54,7 @@ void sj_PutHex7(int value, char *text)
     text[0] = sj_hex_digit[value & 15];
 }
 
-int sj_GetHex7(signed char *text)
+int sj_hexstr_to_val(signed char *text)
 {
     int value;
 
@@ -73,13 +73,13 @@ void SJ_MakeTag(SfdSjChunk *tag, const char *id)
 {
     memset(tag->data, 0, tag->len);
     strncpy(tag->data, id, SJ_TAG_ID_LEN);
-    sj_PutHex7(tag->len - SJ_TAG_HDR_LEN, tag->data + SJ_TAG_LEN_OFS);
+    sj_val_to_hexstr(tag->len - SJ_TAG_HDR_LEN, tag->data + SJ_TAG_LEN_OFS);
 }
 
 void SJ_GetTagContent(char *tag, SfdSjChunk *content)
 {
     content->data = tag + SJ_TAG_HDR_LEN;
-    content->len = sj_GetHex7((signed char *)tag + SJ_TAG_LEN_OFS);
+    content->len = sj_hexstr_to_val((signed char *)tag + SJ_TAG_LEN_OFS);
 }
 
 /* Walks the tags of a chunk for id, giving up at the end tag endid; returns the tag found and its
@@ -92,7 +92,7 @@ char *SJ_SearchTag(SfdSjChunk *ck, const char *id, const char *endid, SfdSjChunk
     content->data = 0;
     content->len = 0;
     end = ck->data + ck->len;
-    for (tag = ck->data; tag < end; tag += sj_GetHex7((signed char *)tag + SJ_TAG_LEN_OFS) + SJ_TAG_HDR_LEN) {
+    for (tag = ck->data; tag < end; tag += sj_hexstr_to_val((signed char *)tag + SJ_TAG_LEN_OFS) + SJ_TAG_HDR_LEN) {
         if (strncmp(tag, id, SJ_TAG_ID_LEN) == 0) {
             SJ_GetTagContent(tag, content);
             break;

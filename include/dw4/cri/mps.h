@@ -87,10 +87,10 @@ typedef struct MpsWork {
     MpsHn hn[1];
 } MpsWork;
 
-void mpsutl_CopyBytes(char *dst, char *src, unsigned int n);
-void mpsutl_CopyWords(int *dst, int *src, unsigned int n);
-void mpsutl_FillBytes(char *dst, char value, unsigned int count);
-void mpsutl_FillWords(int *dst, int value, unsigned int count);
+void UTY_MemcpyByte(char *dst, char *src, unsigned int n);
+void UTY_MemcpyDword(int *dst, int *src, unsigned int n);
+void UTY_MemsetByte(char *dst, char value, unsigned int count);
+void UTY_MemsetDword(int *dst, int value, unsigned int count);
 void mpsutl_Init(void);
 void mpsutl_Finish(void);
 
@@ -112,13 +112,13 @@ int MPS_GetSysHd(MpsHn *mps, MpsSysHd *out);
 int MPS_GetPesInf(MpsHn *mps, MpsPesInf *out);
 char *MPS_GetVersionStr(void);
 int MPS_Init(int nhn, MpsWork *work);
-int mps_InitWork(int nhn, MpsWork *work);
+int mpslib_InitLibWork(int nhn, MpsWork *work);
 void MPS_Finish(void);
-int MPS_EntryErrFunc(MpsHn *mps, MpsErrFn fn, void *obj);
+int MPS_SetErrFn(MpsHn *mps, MpsErrFn fn, void *obj);
 int MPS_GetErrInf(MpsHn *mps, MpsErr *out);
 MpsHn *MPS_Create(void);
 int MPS_Destroy(MpsHn *mps);
-int mps_CheckHn(MpsHn *mps);
-int mps_ReportError(MpsHn *mps, int code);
+int MPSLIB_CheckHn(MpsHn *mps);
+int MPSLIB_SetErr(MpsHn *mps, int code);
 
 #endif

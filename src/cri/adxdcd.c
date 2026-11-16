@@ -49,7 +49,7 @@ int ADX_ScanInfoCode(unsigned char *buf, int size, short *pos)
 }
 
 /* Is the buffer an ADX header that ends with the (c)CRI copyright? Returns 1 and the data offset if so. */
-int ADX_IsCopyrightHeader(unsigned char *hdr, int size, short *ofst)
+int ADX_IsAdxFmt(unsigned char *hdr, int size, short *ofst)
 {
     int hdrlen;
     int copyright;
@@ -75,7 +75,7 @@ int ADX_IsCopyrightHeader(unsigned char *hdr, int size, short *ofst)
     return 1;
 }
 
-int ADX_DecodeHeader(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
+int ADX_DecodeInfo(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
                  signed char *bits, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl)
 {
     if (len < 16) {
@@ -99,7 +99,7 @@ int ADX_DecodeHeader(unsigned char *hdr, int len, short *ofst, signed char *type
     return 0;
 }
 
-int FUN_0025f688(unsigned char *hdr, int size, short *out) {
+int ADX_DecodeInfoExADPCM2(unsigned char *hdr, int size, short *out) {
     const unsigned short *words = (const unsigned short *)hdr;
     if (size < 18) {
         return -1;
@@ -131,7 +131,7 @@ int ADX_DecodeInfoExVer(unsigned char *hdr, int size, unsigned char *ver, unsign
     return 0;
 }
 
-int FUN_0025f780(unsigned char *hdr, int size, short *start, short *end)
+int ADX_DecodeInfoExIdly(unsigned char *hdr, int size, short *start, short *end)
 {
     const unsigned short *words = (const unsigned short *)hdr;
     unsigned char ver;
@@ -289,7 +289,7 @@ int ADX_DecodeFooter(unsigned char *hdr, int size, short *ofst)
     return 0;
 }
 
-int FUN_0025fd98(int type, int len, int ofst, unsigned int blk)
+int ADX_CalcHdrInfoLen(int type, int len, int ofst, unsigned int blk)
 {
     if (type == 0) {
         return ((len + (ofst + blk) + 33) / blk) * blk - ofst;
@@ -297,16 +297,16 @@ int FUN_0025fd98(int type, int len, int ofst, unsigned int blk)
     return ((len + (ofst + blk) + 57) / blk) * blk - ofst;
 }
 
-int FUN_0025ffd0(unsigned char *ibuf, int nblk, short *obufr, short *dlyl, short *obufl, short *dlyr,
+int ADX_DecodeSte4AsMono(unsigned char *ibuf, int nblk, short *obufr, short *dlyl, short *obufl, short *dlyr,
                  short k0, short k1, unsigned short *seed, short mul, short add);
-int FUN_00260398(unsigned char *ibuf, int nblk, short *obufl, short *dlyl, short *obufr, short *dlyr,
+int ADX_DecodeSte4AsSte(unsigned char *ibuf, int nblk, short *obufl, short *dlyl, short *obufr, short *dlyr,
                  short k0, short k1, unsigned short *seed, short mul, short add);
 
 int ADX_DecodeSte4(unsigned char *ibuf, int nblk, short *obufl, short *dlyl, short *obufr, short *dlyr,
                  short k0, short k1, unsigned short *seed, short mul, short add)
 {
     if (DAT_00499cd0 == 0) {
-        return FUN_00260398(ibuf, nblk, obufl, dlyl, obufr, dlyr, k0, k1, seed, mul, add);
+        return ADX_DecodeSte4AsSte(ibuf, nblk, obufl, dlyl, obufr, dlyr, k0, k1, seed, mul, add);
     }
-    return FUN_0025ffd0(ibuf, nblk, obufl, dlyl, obufr, dlyr, k0, k1, seed, mul, add);
+    return ADX_DecodeSte4AsMono(ibuf, nblk, obufl, dlyl, obufr, dlyr, k0, k1, seed, mul, add);
 }

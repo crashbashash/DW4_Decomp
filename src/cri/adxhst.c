@@ -5,11 +5,11 @@ struct CvFsVtbl *htCiGetInterface(void);
 void htCiSetOpenMode(int mode);
 void htCiSetRootDir(const char *rootdir);
 int htCiLoadDirInfo(const char *flist, void *buf, int bufsize, int fnamelen);
-int htCiIsExistFile(const char *fname);
+int htCiIsExistFcache(const char *fname);
 void htCiSetHost64(int sw);
 void htCiSetHostLock(int sw);
 
-void adxps2_hst_errfn(void *obj, const char *msg, int code)
+void adxps2_err_host(void *obj, const char *msg, int code)
 {
     ADXERR_CallErrFunc1(msg);
 }
@@ -17,9 +17,9 @@ void adxps2_hst_errfn(void *obj, const char *msg, int code)
 /* Host files are read through HST by default; MFS serves files already in memory. */
 void ADXPS2_SetupHostFs(AdxHstFsPrm *prm)
 {
-    cvFsEntryErrFunc(adxps2_hst_errfn, 0);
+    cvFsEntryErrFunc(adxps2_err_host, 0);
     cvFsAddDev("MFS", mfCiGetInterface, 0);
-    cvFsEntryErrFunc(adxps2_hst_errfn, 0);
+    cvFsEntryErrFunc(adxps2_err_host, 0);
     cvFsAddDev("HST", htCiGetInterface, 0);
     cvFsSetDefDev("HST");
     if (prm != 0) {
@@ -43,7 +43,7 @@ void ADXPS2_SetupHostFs(AdxHstFsPrm *prm)
     htCiSetHostLock(0);
 }
 
-int ADXPS2_LoadFcacheHst(AdxFcachePrm *prm)
+int ADXPS2_LoadFcacheHost(AdxFcachePrm *prm)
 {
     int size;
 
@@ -55,12 +55,12 @@ int ADXPS2_LoadFcacheHst(AdxFcachePrm *prm)
     return size;
 }
 
-int ADXPS2_IsExistFileHst(const char *fname)
+int ADXPS2_IsExistFcacheHost(const char *fname)
 {
-    return htCiIsExistFile(fname);
+    return htCiIsExistFcache(fname);
 }
 
-void ADXPS2_SetHstFsPrm(AdxHstFsPrm *prm)
+void ADXPS2_SetRdModeHost(AdxHstFsPrm *prm)
 {
     if (prm != 0) {
         htCiSetOpenMode(prm->openmode);

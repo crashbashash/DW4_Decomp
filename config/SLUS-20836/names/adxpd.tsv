@@ -22,6 +22,5 @@
 0x0026f108	ADXPD_Stop	cri
 0x0026f130	ADXPD_Reset	cri
 0x0026f148	ADXPD_GetNumBlk	cri
-0x0026f150	adxpd_SetOddBlockError	cri
 0x0026f160	ADXPD_ExecHndl	cri
 0x0026f258	ADXPD_ExecServer	cri

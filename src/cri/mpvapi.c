@@ -2,11 +2,11 @@
  * stream joint, and the picture and VBV values of the last sequence header. */
 #include "dw4/cri/mpv.h"
 
-int mpv_CheckHn(MpvHn *mpv);
+int MPVLIB_CheckHn(MpvHn *mpv);
 SfdSj *SJMEM_Create(void *buf, int size);
 char *MPV_SearchDelim(char *buf, int len, int mask);
-int mpv_SkipToStartCode(SfdSj *sj);
-int mpv_SkipBytes(SfdSj *sj, int id, int n);
+int MPV_GoNextDelimSj(SfdSj *sj);
+int MPV_MoveChunk(SfdSj *sj, int id, int n);
 
 void mpv_ResetErr(MpvErrObj *err);
 
@@ -31,7 +31,7 @@ int mpv_ReportError(MpvHn *mpv, int code);
 void MPV_EntryErrFunc(MpvHn *mpv, int (*fn)(void *arg), void *arg) {
     MpvErrObj *err;
 
-    if (mpv_CheckHn(mpv) != 0) {
+    if (MPVLIB_CheckHn(mpv) != 0) {
         mpv_ReportError(0, 0xFF030203);
         return;
     }
@@ -41,7 +41,7 @@ void MPV_EntryErrFunc(MpvHn *mpv, int (*fn)(void *arg), void *arg) {
 }
 
 int MPV_GetErrInf(MpvHn *mpv, MpvErrObj *out) {
-    int status = mpv_CheckHn(mpv);
+    int status = MPVLIB_CheckHn(mpv);
 
     if (status != 0) {
         return mpv_ReportError(0, 0xFF030204);
@@ -76,7 +76,7 @@ int mpv_CallErrFn(MpvErrObj *err, int code) {
 int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, int arg);
 
 /* Decodes a picture from memory through a temporary memory stream joint; *used gets the bytes taken. */
-int MPV_DecPicMem(MpvHn *mpv, SfdSjChunk *buf, int *used, int arg) {
+int MPV_DecodeFrm(MpvHn *mpv, SfdSjChunk *buf, int *used, int arg) {
     SfdSj *sj = SJMEM_Create(buf->data, buf->len);
     int result;
 
@@ -91,13 +91,13 @@ int MPV_DecPicMem(MpvHn *mpv, SfdSjChunk *buf, int *used, int arg) {
 
 /* Finds the next picture, group, sequence header or sequence end in a buffer; *ofst gets its offset,
  * or the buffer's length when there is none. */
-int MPV_SearchDelimMem(MpvHn *mpv, SfdSjChunk *buf, int *ofst) {
+int MPV_SkipFrm(MpvHn *mpv, SfdSjChunk *buf, int *ofst) {
     char *data;
     int len;
     char *hit;
     int code;
 
-    if (mpv_CheckHn(mpv) != 0) {
+    if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020A);
     }
     data = buf->data;
@@ -113,25 +113,25 @@ int MPV_SearchDelimMem(MpvHn *mpv, SfdSjChunk *buf, int *ofst) {
     return mpv_ReportError(mpv, code);
 }
 
-void mpv_EmptyHook(void) {
+void MPVFRM_Init(void) {
 }
 
 int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, int arg) {
     return -1;
 }
 
-/* As MPV_SearchDelimMem, skipping through a stream joint up to the delimiter. */
-void MPV_SearchDelimSj(MpvHn *mpv, SfdSj *sj) {
+/* As MPV_SkipFrm, skipping through a stream joint up to the delimiter. */
+void MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj) {
     int code;
     int kind;
 
-    if (mpv_CheckHn(mpv) != 0) {
+    if (MPVLIB_CheckHn(mpv) != 0) {
         mpv_ReportError(0, 0xFF03020A);
         return;
     }
     code = 0xFF030305;
     for (;;) {
-        kind = mpv_SkipToStartCode(sj);
+        kind = MPV_GoNextDelimSj(sj);
         if (kind == 0) {
             break;
         }
@@ -139,7 +139,7 @@ void MPV_SearchDelimSj(MpvHn *mpv, SfdSj *sj) {
             code = 0;
             break;
         }
-        if (mpv_SkipBytes(sj, 1, 4) != 4) {
+        if (MPV_MoveChunk(sj, 1, 4) != 4) {
             break;
         }
     }
@@ -147,14 +147,14 @@ void MPV_SearchDelimSj(MpvHn *mpv, SfdSj *sj) {
 }
 
 int MPV_GetPicInf(MpvHn *mpv, MpvPicInf *out) {
-    if (mpv_CheckHn(mpv) != 0)
+    if (MPVLIB_CheckHn(mpv) != 0)
         return mpv_ReportError(0, 0xFF03020C);
     *out = mpv->picInf;
     return 0;
 }
 
 int MPV_GetBitRate(MpvHn *mpv, int *bitRate) {
-    if (mpv_CheckHn(mpv) != 0) {
+    if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020D);
     }
     *bitRate = mpv->lowInf0;
@@ -164,7 +164,7 @@ int MPV_GetBitRate(MpvHn *mpv, int *bitRate) {
 /* The VBV buffer size in bytes, the VBV delay, and the bytes that delay holds at the bit rate
  * (-1 for a variable bit rate). */
 int MPV_GetVbvBufSiz(MpvHn *mpv, int *size, int *delay, int *bytes) {
-    if (mpv_CheckHn(mpv) != 0) {
+    if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020F);
     }
     *size = mpv->lowInf1 << 11;
@@ -178,7 +178,7 @@ int MPV_GetVbvBufSiz(MpvHn *mpv, int *size, int *delay, int *bytes) {
 }
 
 int MPV_GetLinkFlg(MpvHn *mpv, int *inf3, int *inf4) {
-    if (mpv_CheckHn(mpv) != 0) {
+    if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020E);
     }
     *inf3 = mpv->lowInf3;

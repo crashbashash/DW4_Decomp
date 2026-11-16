@@ -114,8 +114,8 @@ typedef struct Mpeg2Ext {
 } Mpeg2Ext;
 typedef struct Mpeg2Ctx { char pad0[336]; int field_336; char pad1[12]; Mpeg2Ext ext; } Mpeg2Ctx;
 
-extern void FUN_00285e98(Mpeg2Ext *);
-extern void FUN_00285f48(Mpeg2Ext *);
+extern void calcHvSize(Mpeg2Ext *);
+extern void calcNumberOfFrameCentreOffsets(Mpeg2Ext *);
 extern void FUN_00285f98(Mpeg2Ext *);
 extern void FUN_00286008(Mpeg2Ext *);
 extern int D_004f2890[];   /* blocks per macroblock, indexed by chroma_format: 0, 6, 8, 12 */
@@ -166,7 +166,7 @@ extern int D_004f2890[];   /* blocks per macroblock, indexed by chroma_format: 0
     }
 
 /* Returns the position in buf just after the parsed extension. */
-char *FUN_00286d28(Mpeg2Ctx *ctx, char *buf)
+char *parseEsc(Mpeg2Ctx *ctx, char *buf)
 {
     Mpeg2Ext *h = &ctx->ext;
     char *p = (char *)((unsigned int)buf & ~3);
@@ -226,7 +226,7 @@ char *FUN_00286d28(Mpeg2Ctx *ctx, char *buf)
             h->chroma_format = 1;
         }
         h->blocks_per_macroblock = D_004f2890[h->chroma_format];
-        FUN_00285e98(h);
+        calcHvSize(h);
         h->bit_rate = (h->bit_rate_extension << 18) | h->bit_rate_value;
         h->vbv_buffer_size = (h->vbv_buffer_size_extension << 10) | h->vbv_buffer_size_value;
         break;
@@ -290,7 +290,7 @@ char *FUN_00286d28(Mpeg2Ctx *ctx, char *buf)
         }
         break;
     case 7:
-        FUN_00285f48(h);
+        calcNumberOfFrameCentreOffsets(h);
         for (i = 0; i < h->number_of_frame_centre_offsets; i++) {
             GET_BITS(h->frame_centre_horizontal_offset[i], 16);
             GET_BITS(h->marker_bit, 1);
@@ -322,7 +322,7 @@ char *FUN_00286d28(Mpeg2Ctx *ctx, char *buf)
             GET_BITS(h->burst_amplitude, 7);
             GET_BITS(h->sub_carrier_phase, 8);
         }
-        FUN_00285e98(h);
+        calcHvSize(h);
         FUN_00285f98(h);
         if (h->field_964 == 0)
             ctx->field_336 = 0;

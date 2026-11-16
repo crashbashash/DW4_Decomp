@@ -286,40 +286,40 @@ typedef struct SfdEntry44 {
     int f32;
 } SfdEntry44;
 
-int mpsutl_FillWords();
+int UTY_MemsetDword();
 int UTY_MulDiv(int value, int scale, int divisor);
-void sfhdr_InitInf(void *blk);
-int sfd_IsLnkStm(SfdPly *hn);
-int sfd_GetStmVersion(SfdPly *hn);
+void SFHDS_InitFhd(void *blk);
+int SFCON_IsEndcodeSkip(SfdPly *hn);
+int SFHDS_GetMuxVerNum(SfdPly *hn);
 int sfd_ReportError();
 int SFLIB_CheckHn(SfdPly *hn);
 int FUN_002aa538(SfdPly *hn);
-int FUN_002abef0(SfdPly *hn);
-void sfd_SetCond(SfdPly *hn, int index, int value);
-int SFD_GetCond();
+int SFPLY_Stop(SfdPly *hn);
+void SFSET_SetCond(SfdPly *hn, int index, int value);
+int SFSET_GetCond();
 void SFTIM_InitTtu(void *blk, int value);
-int FUN_002b02a0(SfdPly *hn, int command);
+int SFTRN_CallTrSetup(SfdPly *hn, int command);
 int FUN_002b03e8();
 
-void FUN_002acb98(SfdRec *rec);
-void FUN_002acc08(SfdRec *rec);
+void sfsee_InitSeekInf(SfdRec *rec);
+void sfsee_InitHeadInf(SfdRec *rec);
 /* matching construct: declared void here — an int prototype moves the flag load from v0 to v1 */
-void FUN_002ace48(SfdRec *record, int *running);
-void sfrec_DecideTime(SfdPly *hn);
-int sfrec_ChkVideoRate(SfdPly *hn, SfdRecVideoTime *rate, int *status);
-int sfrec_ChkAudioRate(SfdPly *hn, SfdRecAudioTime *rate, int *status);
-int sfrec_HasSysTrn(SfdPly *hn);
-void FUN_002ad1d0(SfdRec *record, int *ready);
-void FUN_002ad2e0(SfdRec *record, int scale, int divisor, int *out);
-void FUN_002ad330(int delegate, int scale, int divisor, int *out);
-void FUN_002ad3e0(SfdRec *record, int value, int *out, int *out_scale);
-void FUN_002ad468(int delegate, int value, int *out, int *out_scale);
-void FUN_002ad738(SfdPly *hn);
+void sfsee_IsHeadAnalyEnd(SfdRec *record, int *running);
+void sfsee_ExecHeadAnaly(SfdPly *hn);
+int sfsee_IsAudioAnalyzing(SfdPly *hn, SfdRecVideoTime *rate, int *status);
+int sfsee_IsVideoAnalyzing(SfdPly *hn, SfdRecAudioTime *rate, int *status);
+int sfsee_IsMpsStream(SfdPly *hn);
+void sfsee_IsSeekAble(SfdRec *record, int *ready);
+void sfsee_CnvTimeToPos(SfdRec *record, int scale, int divisor, int *out);
+void sfsee_SearchTimeToPos(int delegate, int scale, int divisor, int *out);
+void sfsee_CnvPosToTime(SfdRec *record, int value, int *out, int *out_scale);
+void sfsee_SearchPosToTime(int delegate, int value, int *out, int *out_scale);
+void sfsee_ExecFinAnaly(SfdPly *hn);
 int FUN_002ad828(char *ctx);
-int sfrec_CalcDerivedTime(SfdPly *hn);
+int sfsee_UpdateEByteRate(SfdPly *hn);
 
 
-void FUN_002acb30(SfdRecSlot *slot)
+void SFSEE_InitHn(SfdRecSlot *slot)
 {
     SfdRecSub *sub = &slot->sub;
     sub->f0 = 0;
@@ -328,16 +328,16 @@ void FUN_002acb30(SfdRecSlot *slot)
     slot->rec = 0;
 }
 
-void FUN_002acb50(SfdRec *recs, int count) {
+void SFD_InitSeek(SfdRec *recs, int count) {
     int i;
     for (i = 0; i < count; i++) {
-        FUN_002acb98(&recs[i]);
+        sfsee_InitSeekInf(&recs[i]);
     }
 }
 
-void FUN_002acb98(SfdRec *rec) {
-    mpsutl_FillWords(rec, 0, 886);
-    FUN_002acc08(rec);
+void sfsee_InitSeekInf(SfdRec *rec) {
+    UTY_MemsetDword(rec, 0, 886);
+    sfsee_InitHeadInf(rec);
     rec->derived = 0;
     rec->default_value = 0;
     rec->default_divisor = -8;
@@ -352,14 +352,14 @@ void FUN_002acb98(SfdRec *rec) {
     rec->offset = -1;
 }
 
-void FUN_002acc08(SfdRec *rec) {
+void sfsee_InitHeadInf(SfdRec *rec) {
     SfdRecSysTime *a = &rec->sysTime;
     SfdRecVideoTime *c = &rec->videoTime;
     SfdRecAudioTime *b = &rec->audioTime;
     rec->state = 0;
     rec->time = 0;
     rec->unit = 0;
-    sfhdr_InitInf(&rec->hdrInf);
+    SFHDS_InitFhd(&rec->hdrInf);
     a->set = 0;
     a->time = 0;
     a->unit = 0;
@@ -381,7 +381,7 @@ void FUN_002acc08(SfdRec *rec) {
     c->unit = 1; /* matching construct: manual — this store written last keeps retail's store order */
 }
 
-int FUN_002accc0(SfdPly *h, SfdRec *rec) {
+int SFD_EntrySeek(SfdPly *h, SfdRec *rec) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000151);
     }
@@ -389,7 +389,7 @@ int FUN_002accc0(SfdPly *h, SfdRec *rec) {
     return 0;
 }
 
-int FUN_002acd18(SfdPly *h, int value) {
+int SFD_SetSeekPosTbl(SfdPly *h, int value) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000152);
     }
@@ -397,32 +397,32 @@ int FUN_002acd18(SfdPly *h, int value) {
     return 0;
 }
 
-void FUN_002acd78(SfdPly *h) {
+void SFD_StartHeadAnaly(SfdPly *h) {
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000153, 1);
         return;
     }
-    sfd_SetCond(h, 47, 1);
+    SFSET_SetCond(h, 47, 1);
     FUN_002aa538(h);
 }
 
-int FUN_002acdd8(SfdPly *hn, int *running)
+int SFD_IsHeadAnalyEnd(SfdPly *hn, int *running)
 {
     *running = 0;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000154);
     }
-    FUN_002ace48(hn->recSlot.rec, running);
+    sfsee_IsHeadAnalyEnd(hn->recSlot.rec, running);
     return 0;
 }
 
-void FUN_002ace48(SfdRec *record, int *running)
+void sfsee_IsHeadAnalyEnd(SfdRec *record, int *running)
 {
     int state = record->state;
     *running = (state ^ 1) == 0 ? state : 0;
 }
 
-void FUN_002ace60(SfdPly *hn, int id3512, int id3516)
+void SFSEE_FixAvPlay(SfdPly *hn, int id3512, int id3516)
 {
     SfdRec *record = hn->recSlot.rec;
     if (record != 0) {
@@ -435,16 +435,16 @@ void FUN_002ace60(SfdPly *hn, int id3512, int id3516)
     }
 }
 
-void FUN_002ace90(SfdPly *hn)
+void SFSEE_ExecServer(SfdPly *hn)
 {
     if (hn->recSlot.rec == 0) {
         return;
     }
-    sfrec_DecideTime(hn);
-    FUN_002ad738(hn);
+    sfsee_ExecHeadAnaly(hn);
+    sfsee_ExecFinAnaly(hn);
 }
 
-void sfrec_DecideTime(SfdPly *hn)
+void sfsee_ExecHeadAnaly(SfdPly *hn)
 {
     SfdRec *record = hn->recSlot.rec;
     SfdRecHdrInf *hdr = &record->hdrInf;
@@ -459,13 +459,13 @@ void sfrec_DecideTime(SfdPly *hn)
     if (record->state != 0) {
         return;
     }
-    if (sfrec_ChkVideoRate(hn, video, &videoStatus) != 0) {
+    if (sfsee_IsAudioAnalyzing(hn, video, &videoStatus) != 0) {
         return;
     }
-    if (sfrec_ChkAudioRate(hn, audio, &audioStatus) != 0) {
+    if (sfsee_IsVideoAnalyzing(hn, audio, &audioStatus) != 0) {
         return;
     }
-    if (sfrec_HasSysTrn(hn) != 0) {
+    if (sfsee_IsMpsStream(hn) != 0) {
         sys->set = 1;
         if (hdr->valid == 0) {
             time = sys->time;
@@ -478,7 +478,7 @@ void sfrec_DecideTime(SfdPly *hn)
             } else {
                 time = count;
             }
-        } else if (sfd_GetStmVersion(hn) < 108) {
+        } else if (SFHDS_GetMuxVerNum(hn) < 108) {
             time = (sys->time << 11) / 2018;
         } else {
             time = sys->time;
@@ -496,14 +496,14 @@ void sfrec_DecideTime(SfdPly *hn)
     record->time = time;
     record->unit = unit;
     record->state = 1;
-    sfrec_CalcDerivedTime(hn);
+    sfsee_UpdateEByteRate(hn);
 }
 
-int sfrec_ChkVideoRate(SfdPly *hn, SfdRecVideoTime *rate, int *status)
+int sfsee_IsAudioAnalyzing(SfdPly *hn, SfdRecVideoTime *rate, int *status)
 {
     int result;
     if (FUN_002b03e8(hn, 3) != 0) {
-        result = SFD_GetCond(hn, 6);
+        result = SFSET_GetCond(hn, 6);
         if (result == 1) {
             *status = result;
             return rate->set == 0;
@@ -513,11 +513,11 @@ int sfrec_ChkVideoRate(SfdPly *hn, SfdRecVideoTime *rate, int *status)
     return 0;
 }
 
-int sfrec_ChkAudioRate(SfdPly *hn, SfdRecAudioTime *rate, int *status)
+int sfsee_IsVideoAnalyzing(SfdPly *hn, SfdRecAudioTime *rate, int *status)
 {
     int result;
     if (FUN_002b03e8(hn, 2) != 0) {
-        result = SFD_GetCond(hn, 5);
+        result = SFSET_GetCond(hn, 5);
         if (result == 1) {
             *status = result;
             return rate->set == 0;
@@ -527,29 +527,29 @@ int sfrec_ChkAudioRate(SfdPly *hn, SfdRecAudioTime *rate, int *status)
     return 0;
 }
 
-int sfrec_HasSysTrn(SfdPly *hn)
+int sfsee_IsMpsStream(SfdPly *hn)
 {
     return FUN_002b03e8(hn, 1) != 0;
 }
 
-int FUN_002ad160(SfdPly *hn, int *ready)
+int SFD_IsSeekAble(SfdPly *hn, int *ready)
 {
     *ready = 0;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000155);
     }
-    FUN_002ad1d0(hn->recSlot.rec, ready);
+    sfsee_IsSeekAble(hn->recSlot.rec, ready);
     return 0;
 }
 
-void FUN_002ad1d0(SfdRec *record, int *ready)
+void sfsee_IsSeekAble(SfdRec *record, int *ready)
 {
     int running;
     *ready = 0;
     if (record == 0) {
         return;
     }
-    FUN_002ace48(record, &running);
+    sfsee_IsHeadAnalyEnd(record, &running);
     if (running != 0) {
         if (record->delegate != 0 || record->derived > 0) {
             *ready = 1;
@@ -557,7 +557,7 @@ void FUN_002ad1d0(SfdRec *record, int *ready)
     }
 }
 
-int FUN_002ad240(SfdPly *hn, int scale, int divisor, int *out)
+int SFD_CnvTimeToPos(SfdPly *hn, int scale, int divisor, int *out)
 {
     SfdRec **timing;
     int ready;
@@ -567,30 +567,30 @@ int FUN_002ad240(SfdPly *hn, int scale, int divisor, int *out)
     }
     /* matching construct: the record address is taken after the guard */
     timing = &hn->recSlot.rec;
-    FUN_002ad1d0(*timing, &ready);
+    sfsee_IsSeekAble(*timing, &ready);
     if (ready == 0) {
         return 0;
     }
-    FUN_002ad2e0(*timing, scale, divisor, out);
+    sfsee_CnvTimeToPos(*timing, scale, divisor, out);
     return 0;
 }
 
-void FUN_002ad2e0(SfdRec *record, int scale, int divisor, int *out)
+void sfsee_CnvTimeToPos(SfdRec *record, int scale, int divisor, int *out)
 {
     int delegate = record->delegate;
     if (delegate != 0) {
-        FUN_002ad330(delegate, scale, divisor, out);
+        sfsee_SearchTimeToPos(delegate, scale, divisor, out);
         return;
     }
     *out = UTY_MulDiv(record->derived, scale, divisor);
 }
 
-void FUN_002ad330(int delegate, int scale, int divisor, int *out)
+void sfsee_SearchTimeToPos(int delegate, int scale, int divisor, int *out)
 {
     *out = 0;
 }
 
-int FUN_002ad338(SfdPly *hn, int value, int *out, int *pending)
+int SFD_CnvPosToTime(SfdPly *hn, int value, int *out, int *pending)
 {
     SfdRec **timing;
     int ready;
@@ -601,21 +601,21 @@ int FUN_002ad338(SfdPly *hn, int value, int *out, int *pending)
     }
     /* matching construct: the record address is taken after the guard */
     timing = &hn->recSlot.rec;
-    FUN_002ad1d0(*timing, &ready);
+    sfsee_IsSeekAble(*timing, &ready);
     if (ready == 0) {
         return 0;
     }
-    FUN_002ad3e0(*timing, value, out, pending);
+    sfsee_CnvPosToTime(*timing, value, out, pending);
     return 0;
 }
 
-void FUN_002ad3e0(SfdRec *record, int value, int *out, int *out_scale)
+void sfsee_CnvPosToTime(SfdRec *record, int value, int *out, int *out_scale)
 {
     int delegate = record->delegate;
     int divisor;
     if (delegate != 0) {
         /* matching construct: manual — forwarding all arguments keeps a2/a3 live, so value is copied to t0 as in retail */
-        FUN_002ad468(delegate, value, out, out_scale);
+        sfsee_SearchPosToTime(delegate, value, out, out_scale);
         return;
     }
     divisor = record->derived;
@@ -627,13 +627,13 @@ void FUN_002ad3e0(SfdRec *record, int value, int *out, int *out_scale)
     *out_scale = 1000;
 }
 
-void FUN_002ad468(int delegate, int value, int *out, int *out_scale)
+void sfsee_SearchPosToTime(int delegate, int value, int *out, int *out_scale)
 {
     *out = 0;
     *out_scale = 0x3E8;
 }
 
-void FUN_002ad478(SfdPly *hn, SfdRecSub *settings)
+void SFD_Seek(SfdPly *hn, SfdRecSub *settings)
 {
     SfdRec *timing;
     if (SFLIB_CheckHn(hn) != 0) {
@@ -644,21 +644,21 @@ void FUN_002ad478(SfdPly *hn, SfdRecSub *settings)
     if (timing == 0) {
         return;
     }
-    if (FUN_002abef0(hn) != 0) {
+    if (SFPLY_Stop(hn) != 0) {
         return;
     }
-    sfd_SetCond(hn, 47, 0);
+    SFSET_SetCond(hn, 47, 0);
     if (timing->id3512 == 0) {
-        sfd_SetCond(hn, 5, 0);
+        SFSET_SetCond(hn, 5, 0);
     }
     if (timing->id3516 == 0) {
-        sfd_SetCond(hn, 6, 0);
+        SFSET_SetCond(hn, 6, 0);
     }
     hn->recSlot.sub = *settings;
-    FUN_002b02a0(hn, 13);
+    SFTRN_CallTrSetup(hn, 13);
 }
 
-int FUN_002ad570(SfdPly *hn, int value)
+int SFD_SetFileSize(SfdPly *hn, int value)
 {
     SfdRec *record;
     if (SFLIB_CheckHn(hn) != 0) {
@@ -669,11 +669,11 @@ int FUN_002ad570(SfdPly *hn, int value)
         return 0;
     }
     record->value = value;
-    sfrec_CalcDerivedTime(hn);
+    sfsee_UpdateEByteRate(hn);
     return 0;
 }
 
-int FUN_002ad5e0(SfdPly *hn, int divisor, int scale)
+int SFD_SetTotTime(SfdPly *hn, int divisor, int scale)
 {
     SfdRec *timing;
     if (SFLIB_CheckHn(hn) != 0) {
@@ -685,11 +685,11 @@ int FUN_002ad5e0(SfdPly *hn, int divisor, int scale)
     }
     timing->divisor = divisor;
     timing->scale = scale;
-    sfrec_CalcDerivedTime(hn);
+    sfsee_UpdateEByteRate(hn);
     return 0;
 }
 
-int FUN_002ad668(SfdPly *hn, int value)
+int SFD_SetByteRate(SfdPly *hn, int value)
 {
     SfdRec *record;
     if (SFLIB_CheckHn(hn) != 0) {
@@ -700,11 +700,11 @@ int FUN_002ad668(SfdPly *hn, int value)
         return 0;
     }
     record->explicit_value = value;
-    sfrec_CalcDerivedTime(hn);
+    sfsee_UpdateEByteRate(hn);
     return 0;
 }
 
-void FUN_002ad6d8(SfdPly *hn, int offset)
+void SFD_SetSeekPos(SfdPly *hn, int offset)
 {
     SfdRec *record;
     if (SFLIB_CheckHn(hn) != 0) {
@@ -717,13 +717,13 @@ void FUN_002ad6d8(SfdPly *hn, int offset)
     }
 }
 
-void FUN_002ad738(SfdPly *hn)
+void sfsee_ExecFinAnaly(SfdPly *hn)
 {
     SfdTimeRec *rec = &hn->d28.rec148;
     SfdRecSub *settings = &hn->recSlot.sub;
     SfdRec *s = hn->recSlot.rec;
     int changed, base, t;
-    if (sfd_IsLnkStm(hn) == 0) {
+    if (SFCON_IsEndcodeSkip(hn) == 0) {
     changed = 0;
     if (s->default_value <= 0) {
         base = 0;
@@ -741,7 +741,7 @@ void FUN_002ad738(SfdPly *hn)
         changed = 1;
         s->default_scale = rec->unit;
     }
-    if (changed) sfrec_CalcDerivedTime(hn);
+    if (changed) sfsee_UpdateEByteRate(hn);
     }
 }
 
@@ -759,7 +759,7 @@ int FUN_002ad828(char *ctx)
     return value;
 }
 
-int sfrec_CalcDerivedTime(SfdPly *hn)
+int sfsee_UpdateEByteRate(SfdPly *hn)
 {
     SfdRec *record = hn->recSlot.rec;
     int value = record->explicit_value;

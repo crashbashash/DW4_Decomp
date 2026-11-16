@@ -4,29 +4,29 @@
 /* matching construct: hand search — int return type with no return value (implicit-int style); with void
    the epilogue restores are scheduled differently */
 int MPS_SetPesSw(MpsHn *mps, int sw) {
-    if (mps_CheckHn(mps) != 0) {
-        mps_ReportError(0, 0xFF020302);
+    if (MPSLIB_CheckHn(mps) != 0) {
+        MPSLIB_SetErr(0, 0xFF020302);
         return;
     }
     mps->pesSw = sw;
 }
 
 void MPS_SetSysHdFn(MpsHn *mps, MpsCbFn fn, void *obj) {
-    if (mps_CheckHn(mps) == 0) {
+    if (MPSLIB_CheckHn(mps) == 0) {
         mps->sysHdFn = fn;
         mps->sysHdObj = obj;
     }
 }
 
 void MPS_SetAuxFn(MpsHn *mps, MpsCbFn fn, void *obj) {
-    if (mps_CheckHn(mps) == 0) {
+    if (MPSLIB_CheckHn(mps) == 0) {
         mps->auxFn = fn;
         mps->auxObj = obj;
     }
 }
 
 void MPS_SetPesFn(MpsHn *mps, MpsCbFn fn, void *obj) {
-    if (mps_CheckHn(mps) == 0) {
+    if (MPSLIB_CheckHn(mps) == 0) {
         mps->pesFn = fn;
         mps->pesObj = obj;
     }
@@ -36,8 +36,8 @@ void MPS_SetPesFn(MpsHn *mps, MpsCbFn fn, void *obj) {
 int MPS_DecodeChunk(MpsHn *mps, unsigned char *pos, int n, int *len, int *flags) {
     *len = 0;
     *flags = 0;
-    if (mps_CheckHn(mps) != 0) {
-        return mps_ReportError(0, 0xFF020301);
+    if (MPSLIB_CheckHn(mps) != 0) {
+        return MPSLIB_SetErr(0, 0xFF020301);
     }
     return mps->decode(mps, pos, n, len, flags);
 }
