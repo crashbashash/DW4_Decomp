@@ -5,7 +5,8 @@ understood when the cause is known in the compiler's terms and the spelling that
 own terms. A search that only finds bytes is not understanding: it is the last resort, and its result carries a
 `matching construct` comment.
 
-The procedure comes first, then the instruments, then the causes found so far, each with the unit where it turned up.
+The procedure comes first, then a last-mile checklist for drafts a few words off, then the instruments, then the
+causes found so far, each with the unit where it turned up.
 [Source idioms](matching-decomp.md#source-idioms) is the short list of shape and spelling; this document is the
 method and the reasons.
 
@@ -45,6 +46,49 @@ method and the reasons.
 
 A delegated agent briefed on a resisting shape gets this document, the previous agent's report and its table of
 spellings tried.
+
+## Last mile
+
+What to try first when a draft is a few words from retail. Each item names a cause below; `python3 tools/levers.py
+--symptom "..."` finds the rest.
+
+**First, write it the way the matched code around it is written.** Equivalent C is not identical C: `x > 0` and
+`!(x <= 0)`, `if (f())` and `if (f() != 0)`, a `for` and a `while`, an early `return` and an `else` compile to
+different branches, masks and blocks. Phrase comparisons, loops, switches, early returns and temporaries as the
+function's matched neighbours in the same file do, and take an idiom from them before inventing one. The Gfx
+library's metaobject tests are all `if (!g || ((g->_validity & 4) != 0) == false)` (`src/engine/gfx/*.inc`), a
+flag test written `== false` throughout; `src/engine/p2draw.c` takes each element from its cursor as
+`strip = header++;` and then stores through `strip`. A draft that spells the same test or walk another way starts
+from bytes the original author never produced.
+
+- **Two registers exchanged, instructions identical.** Declaration order and getters decide allocator ids
+  ([declaration order](#declaration-order-and-evaluation-order)); a class local is numbered after every declared
+  local; a parameter reached through a cast local or an inline cast, where the source used the real class as the
+  parameter type ([casts of a parameter](#declaration-order-and-evaluation-order)); an enum-typed inline parameter
+  ([types and values](#types-and-values)). Then the [register-allocator tracer](#the-register-allocator-tracer).
+- **Operands or arguments in the other order.** A commutative add takes the plain variable first
+  ([delay slots](#delay-slots-b52-1)); a conversion on an operand evaluates it first, an integer-typed argument is
+  computed ahead of the others and a cast to `int` hoists loads ([scheduling](#scheduling-b52)); a typed prototype
+  against a `(...)` one ([what a declaration changes at the call](#declaration-order-and-evaluation-order)); a
+  sparse `switch` tests its cases in reverse source order ([control flow](#control-flow)).
+- **One load or store in another place.** Under ee-gcc 2.96 an access moves past another only when their alias
+  sets differ: an `int` against a pointer, two pointer types, an enum field or parameter, an address-taken local
+  ([scheduling (EE GCC)](#scheduling-ee-gcc)). Under b52: an array element reloads after a store through it where a
+  scalar pointer is reused, a `const float &` parameter reloads ([loads shared or kept apart](#loads-shared-or-kept-apart-b52)),
+  a `const` reference getter reloads. Where the SDK has the object, its line table gives the statement order
+  ([SDK and library archives](#sdk-and-library-archives)).
+- **A delay slot filled where retail has `nop`, or the reverse.** b52: a deleted jump or a coalesced copy empties
+  the predecessor lists, statement order around the branch ([delay slots (b52)](#delay-slots-b52)). ee-gcc 2.96:
+  `bne`+`nop` against `bnel` is a `volatile` access at the target, a call's slot depends on whether the callee was
+  compiled earlier in the same file, and a register whose last use filled an earlier slot
+  ([delay slots (EE GCC)](#delay-slots-ee-gcc)). Then the `volatile`-only shapes ([`asm` and `volatile`](#asm-and-volatile)).
+- **A few bytes long or short.** Narrow returns and parameters: a one-byte result is masked only where it is
+  compared or widened, a one-byte parameter is narrowed at the call, a `float` behind `(...)` becomes a `double`,
+  a `long long` parameter or result adds `dsll32`/`dsra32` ([types and values](#types-and-values),
+  [what a declaration changes at the call](#declaration-order-and-evaluation-order)); a one- or two-byte global is
+  `gp`-relative; a literal passed by `const &` becomes a data object; a `switch` with an empty case or a closing
+  `return;`; a gcse-made jump around a loop entry ([loops (EE GCC)](#loops-ee-gcc)); MWCC's `asm` `li` encoding
+  ([`asm` and `volatile`](#asm-and-volatile)).
 
 ## Instruments
 
@@ -301,6 +345,12 @@ members (`ar x LIB.a`) and compare:
   return registers. The compiler writes `$29`/`$31` for every function it emits, leaves included; a routine
   assembled without `.frame` has `$0`/`$0`. Together with the procedure order this shows which functions of a
   member were C holding an `asm` statement and which were assembly.
+- **`.mdebug` line numbers.** The same section holds a line table: each procedure's local symbols include gcc's
+  `$LM<n>` labels, whose index field is a source line number and whose value is an address in the procedure.
+  Mapped onto `mipsel-linux-gnu-objdump -d`, they give every instruction its source line, so a library function's
+  statement order, the statement a stray load belongs to and where its locals were declared come from the SDK's own
+  build. The ADX encoder's reference-signal setup (`src/cri/adxenc.c`, 0x2683e8) was laid out from it: the loop
+  index declared first, the filter read after the period, the clamps as conditional expressions.
 - **Source texts.** Where the SDK ships source or headers, the exact statement text (an `__asm__` with its
   operands and clobbers) is the strongest evidence there is.
 
@@ -331,6 +381,22 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     in place.
   - *Spelling:* declare the callee with its real pointer parameter and pass `path`.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ebde0 calling 0x2ebc40).
+- **An array element reloads after a store through it; a scalar pointer global is reused.**
+  - *Symptom:* `p->head = 0; p->tail = 0;` on a global packet pointer: retail loads the pointer again between the
+    two stores (`lui; lw` twice) where the candidate stores both through one load, 8 bytes short.
+  - *Cause:* the global is an element of an array; a store through an element read does not let b52 reuse the
+    element for the next statement, while a scalar pointer global is loaded once. A `[4]` declaration of the same
+    word matched only because it is an array; the real array with a constant index does the same.
+  - *Spelling:* declare the real array and index it, `p2DmaCurrentPacket[P2_DMA_GIF]->head = 0;`.
+  - *Unit:* `src/engine/p2texture.c` (0x2097f0).
+- **A scalar passed by `const float &` is reloaded for every use.**
+  - *Symptom:* a vector scaled by one value: retail loads the value again (`lwc1`) before each component's `mul.s`,
+    where a by-value parameter keeps it in one FP register.
+  - *Cause:* through the reference every use is a read of memory, and the component stores between them keep the
+    reads apart, as for the `const` reference getter below.
+  - *Spelling:* a vector member taking the factor by reference,
+    `void scale(const float &s) { (*this)[0] *= s; (*this)[1] *= s; (*this)[2] *= s; }`, called `eye.scale(size)`.
+  - *Unit:* `src/engine/igViewManager.cpp` (0x4643a0, 0x464760, 0x4648b0).
 - **A release written through the field rereads it.** A macro that names `file->_media` at each use reloads the
   field after the count store; retail's single read comes from the form that takes one local copy
   (`RELEASE_REF`). *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ebde0).
@@ -751,8 +817,18 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 - **An `else if` chain with an empty first arm.** `beq x,1` past the arm then `bne x,2`: MWCC keeps the empty arm's
   compare. *Spelling:* `if (x == 1) { } else if (x == 2) { ... }`. *Unit:* `src/movie/igCriMovieCodec.cpp`.
 - **A switch with an explicit empty case.** A compare chain `beq 2; beq 1; beqz end; b end` is a switch with
-  `case 0: break;` and the cases in that order; without `case 0` the function is 8 bytes short, with
-  `case 0: return;` 8 long. *Unit:* `src/game/beAction2.cpp`.
+  `case 0: break;` written first and then cases 1 and 2 (the chain runs in reverse source order, next entry);
+  without `case 0` the function is 8 bytes short, with `case 0: return;` 8 long. *Unit:* `src/game/beAction2.cpp`.
+- **A switch that compiles to a compare chain tests its cases in reverse source order.**
+  - *Symptom:* a run of `li v0,K; beq a0,v0,L` whose constants are neither sorted nor in the order the case bodies
+    sit in.
+  - *Cause:* b52 emits one `beq` per case label, the last label first, and lays the case bodies out in source
+    order. It neither sorts the labels nor merges consecutive ones into a range test. Probe:
+    `switch (x) { case 100: ...; case 3: ...; case 50: ...; case 7: ...; }` tests 7, 50, 3, 100 and places the bodies
+    100, 3, 50, 7; labels `'u' 'x' 'c' 'd' 'e' 'f' 'g' 'n'` sharing one body give eight `beq`s from `'n'` back to
+    `'u'`.
+  - *Spelling:* the case labels in the reverse of retail's test order, the bodies in retail's layout order.
+  - *Unit:* `src/engine/gfx/GfxLibrary.cpp` (0x1586d0).
 - **A constant on the left keeps `slt`.** `if (capacity >= list->_count)` with `capacity` 0 gives `slt zero,count`
   and `bnez`, where `count <= 0` folds to `blez`; a `bool` local compared `== false` keeps the materialised test.
   *Units:* `src/game/beDemoManager.cpp`, `src/game/beSound.cpp`.
@@ -882,9 +958,14 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   first (`andi v0,s2,0xffff; beqz v0`). *Unit:* `src/engine/core/CoreLibrary.cpp` (0x3236a0).
 
 - **Byte-returning callees make `& 0xFF` natural.** b52 emits `andi v,v0,0xff` after a call only when the result
-  of a byte-returning function is compared (`f() == 0`, `== 1`), never for a truth test (`if (f())`). Each retail
+  of a byte-returning function is compared (`f() == 0`, `== 1`) or widened (`int x = f();`), never for a truth test
+  (`if (f())`, `!f()`, an `&&` operand), a byte store (`sb v0`) or a return of the same type. Each retail
   `andi 0xff` before a branch is the compare of a function declared `unsigned char` or `bool`; an explicit mask is
-  not the source, and an `int` declaration of a byte function drops it. *Unit:* `src/game/beNDMWLoadCtrl2.cpp`.
+  not the source, and an `int` declaration of a byte function drops it. Moving a declaration from `int` to the
+  narrow type moves its call sites with it: `f(a) != 0` becomes `f(a)`, `f(a) == 0` becomes `!f(a)`,
+  `(f(a) & 0xFF) == 1` becomes `f(a) == 1`; a call left as `f(a) != 0` against the narrow type is 8 bytes long.
+  *Units:* `src/game/beNDMWLoadCtrl2.cpp`, `src/game/beNDMWWindow.cpp` and the other callers of
+  `beMessenger_GetBool` (0x38f220).
 - **A `bool` compared `== false` keeps the `andi 0xff`.** `andi v,v,0xff` ahead of the branch on a flag held in a
   `bool` or `unsigned char`: `if (flag == false)` has it, `if (!flag)` branches on the register. The GameCube build
   also normalises the flag (`clrlwi.`). The comparison with `0` of a getter that returns `unsigned char` keeps it as
@@ -896,13 +977,17 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   index is converted (`(cast)i * stride` in the IR dump) and `IRO_DoStrengthReduction` leaves the multiplication. An
   `int` stride local and an `unsigned` index are both strength-reduced; reading the field directly reloads it on every
   pass. *Unit:* `src/game/beWaterPlain.cpp` (0x3a1290).
-- **`const bool &` and `const int &` literal temporaries become data.** A literal passed by `const &` to an inline
-  becomes an anonymous `@N` object per call: a one-byte `.sdata` constant for a `bool`, a four-byte `.data` word for
-  an `int` (a probe under `-O4,p -sdatathreshold 2` puts one `.data` section per call; the words sit 8 bytes apart in
-  retail). Retail data that looks like a named flag table can be these: the five zero words of a save utility's slot
-  lists were once a named empty slot. *Units:* `src/game/beNDMWMdlPEBase.cpp` (58 int and 34 bool constants),
-  `src/game/beNDMWShopCtrl00.cpp`, `src/game/beNDMWListCtrl.cpp`, `src/game/beSaveUtil.cpp` (0x4c91f8..0x4c9218),
-  `src/game/beMatCtrl.cpp` (zero words 0x4c8f70..0x4c8f80, the `true` byte 0x5549d0).
+- **`const bool &`, `const int &` and `const float &` literal temporaries become data.** A literal passed by
+  `const &` to an inline becomes an anonymous `@N` object per call: a one-byte `.sdata` constant for a `bool`, a
+  four-byte `.data` word for an `int` (a probe under `-O4,p -sdatathreshold 2` puts one `.data` section per call;
+  the words sit 8 bytes apart in retail), and a four-byte float loaded with `lwc1` for a `float`. Retail data that
+  looks like a named flag table can be these: the five zero words of a save utility's slot lists were once a named
+  empty slot. Separate `.data` words that each hold `0.5f` are literals bound to a `const float &` parameter (an
+  `operator*(const igVec3f &, const float &)` or a scaling helper), not a named constant. *Units:*
+  `src/game/beNDMWMdlPEBase.cpp` (58 int and 34 bool constants), `src/game/beNDMWShopCtrl00.cpp`,
+  `src/game/beNDMWListCtrl.cpp`, `src/game/beSaveUtil.cpp` (0x4c91f8..0x4c9218), `src/game/beMatCtrl.cpp` (zero
+  words 0x4c8f70..0x4c8f80, the `true` byte 0x5549d0), `src/engine/scenegraph/SceneGraphLibrary.cpp` (the floats at
+  0x48d8d8 and 0x48d8e0 read by 0x1b1fa0, 0x48da10..0x48da20 by 0x1c4140).
 - **An inlined `operator+=` gives a frameless function an exception record.** Retail keeps an exception record
   for a leaf with no frame. `*vertex += shift;` through an inline
   `igVec3f &operator+=(const igVec3f &o) { x += o.x; y += o.y; z += o.z; return *this; }` keeps it and explains the
@@ -1036,9 +1121,10 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2dd1c0).
 - **A range test spelled as an unsigned difference keeps it.** `addiu t4,c,-99; sltiu at,t4,5; bnez at` inside a
   chain of `beq` tests is `(unsigned)(c - 'c') > 4` (with `<=` for the other sense). `c >= 'c' && c <= 'g'` gives two
-  `slti` tests, a run of `c != 'c' && c != 'd' && ...` gives one `beq` each and is not merged, and a `switch` sorts its
-  cases, so a chain in retail's own unsorted order (`u x i s S c-g C ] n-p`) is a flat `&&` chain. The spelling was
-  found by a variant test. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
+  `slti` tests, a run of `c != 'c' && c != 'd' && ...` gives one `beq` each and is not merged, and a `switch` gives
+  one `beq` per label in reverse source order (entry above), so a range test inside a chain in retail's own order
+  (`u x i s S c-g C ] n-p`) is a flat `&&` chain. The spelling was found by a variant test. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
 - **A large buffer that receives a literal's own size is a `strcpy` under read-only strings.** A 256-byte frame
   slot filled by a 15-byte copy (`ld`, `lwc1`/`swc1`, `lh`, `lbu` from the literal) and then passed to `strcat` is
   `char name[256]; strcpy(name, "igMetaObject: ");` with the literal read-only (the readonly-strings entry above).
@@ -1160,6 +1246,18 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     parameter, or an `int` field cast to the enum parameter, do.
   - *Spelling:* `static inline bool isAnimated(igGfxParticleCoord coord)` called with the field.
   - *Unit:* `src/game/ParticleArray.cpp` (0x3a3c10).
+- **A 64-bit parameter or result adds `dsll32`/`dsra32` where its width changes.**
+  - *Symptom:* `nor; dsll32; dsra32` before a callee returns and `dsll32 s5,v0,0; dsra32 s5,s5,0` after the call
+    in its caller; or the pair with a shift of 16 at the use of a flag parameter.
+  - *Cause:* b52 sign-extends wherever a parameter or a call result converts between 32 and 64 bits. In the
+    callee `return ~m` narrows a `long long` work value to the `int` result; in the caller the `int` result widens
+    into the `long long` it is stored to. A `short` read from a `long long` parameter (`(short)arg1`) gives the pair
+    with 16.
+  - *Spelling:* one prototype for both halves, `int f(long long arg)` with the work local `long long m`; a
+    destructor's flag is its real `short deleteFlag`. Fixing only one of two wrong types (an `__divdi3` declared
+    `int` feeding a `long long` parameter) adds 8 bytes; fixing both is neutral.
+  - *Units:* `src/engine/renderState.c` (0x202fa0 and its caller), `src/engine/scenegraph/SceneGraphLibrary.cpp`
+    (0x195970), `src/game/beNDMWMdlPlayer.cpp`.
 - **A small vector passed by value needs a user copy constructor to be passed by pointer.** A callee taking an
   `igVec2f` by value is called with a pointer to a copy of the argument on PS2 (the Xbox build passes it on the
   stack); without a user-defined copy constructor MWCC passes the struct in a register (`ld a2`). The copy also
@@ -1206,6 +1304,10 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Spelling:* `igReportNotice(format, (unsigned)block + 8u, 0xBBBBBBBF, *tail)`: the format prints the address
     with `%x`.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x31f480).
+  - *Also:* a pointer passed as `(int)obj->field` to an `int` parameter, or through an inline accessor returning
+    `int`, hoists both of its loads above the computation of the arguments before it; passing the pointer itself
+    to the callee's real `igRegistry *` parameter keeps retail's order. Why the conversion does this was not traced.
+    *Unit:* `src/engine/core/CoreLibrary.cpp` (the callers of 0x306770).
 - **Under `-O4,p` every label opens its block with an alignment directive that takes integer pipe 0.**
   - *Symptom:* a block that starts at a label begins with an integer load where retail's begins with an `lwc1`
     (two instructions exchanged, no register differences).
@@ -1216,13 +1318,49 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 
 ### Scheduling (EE GCC)
 
-- **EE GCC orders stores only within one alias set; a field's or read's type decides the schedule.** Two memory
-  accesses are kept in order when they may alias, and the alias set comes from the lvalue's type. Before register
-  allocation only same-type accesses through the same base are ordered; after it the base registers are set more
-  than once, so every pair in one alias set is ordered, and an access of another type (a pointer read among integer
-  stores) is outside that chain, gets low priority and is issued ahead of the first store. Giving a field the same
-  pointer type as another, or reading a reply through its true type, changes the order of the instructions around
-  it. *Unit:* `src/sony/libpad/libpad.c`.
+- **EE GCC orders memory accesses only within one alias set; a field's or read's type decides the schedule.**
+  - *Symptom:* a load issued above a store retail keeps it after, or a store ahead of one retail has first, with
+    the registers of the values around it exchanged as a consequence; no statement order moves it.
+  - *Cause:* two accesses are kept in order when they may alias, and the alias set comes from the lvalue's type.
+    Before register allocation only same-type accesses through the same base are ordered; after it the base
+    registers are set more than once, so every pair in one alias set is ordered, and an access of another type (a
+    pointer read among integer stores) is outside that chain, gets low priority and is issued ahead of the first
+    store. Every pointer type is a set of its own, apart from `int` and from the other pointer types: a `void *`
+    store and a function-pointer load are independent.
+  - *Spelling:* the field's real type. Giving a field the same pointer type as another, or reading a reply through
+    its true type, changes the order of the instructions around it; an IOP buffer field typed `void *` instead of
+    `int` gives retail's load and store order.
+  - *Reading it:* compile the unit once with `-fno-strict-aliasing`. When the difference shrinks, the cause is a
+    pair of accesses in different sets, and the types of those two lvalues are the ones to settle. The flag is a
+    property of a whole unit, never a fix for one function: on every CRI unit at once it breaks about 50 of them.
+    The CVFS unit keeps its SDK types (function-pointer slots, a `void *` argument block) and its row carries the
+    flag ([CRI CVFS](cri-cvfs.md#argument-block-and-aliasing)).
+  - *Units:* `src/sony/libpad/libpad.c`, `src/cri/sndf.c` (0x281df0), `src/cri/sfadx.c` (0x29c500, not matched: 3
+    words off without strict aliasing), `src/cri/cvfs.c`.
+- **An enum field or parameter has an alias set of its own.**
+  - *Symptom:* a load from a header or state struct issued above stores retail keeps it after, or stores out of
+    retail's order, around a few fields that look like plain `int`s.
+  - *Cause:* ee-gcc 2.96 gives an enum type its own alias set, apart from `int`. A store to an enum-typed field, or
+    through an enum-typed pointer parameter, no longer conflicts with the `int` accesses around it, and the
+    scheduler moves them across it. Every field involved has to be an enum (one left `int` leaves 2 to 22 words);
+    one shared enum type works as well as four, `long` does not.
+  - *Spelling:* the SDK's enum types: the coded-picture fields of the MPEG-2 picture attributes (`M2vFrameRate`,
+    `M2vPicType`, `M2vPicStruct`), the luminance key `MwsfdLumiKey *` of the Sofdec effect getter.
+  - *Units:* `src/cri/m2vhdec.c` (0x285b10), `src/cri/mwsfsfx.c` (0x298880).
+- **An address-taken local's alias set depends on what the file compiled before it.**
+  - *Symptom:* loads of address-taken locals (a local whose address went to a call, read afterwards) ordered against
+    a store differently from retail with unchanged C, in a function that matches or stops matching when another
+    function is added, removed or moved earlier in the file.
+  - *Cause:* when a scalar local's address is taken, `gen_mem_addressof` turns its register rtx into a memory
+    reference in place and sets only the low word of the alias set; the high word keeps whatever the
+    garbage-collected heap held there. A zero word makes the read conflict with every store, a non-zero one with
+    none. The value is fixed for a given file text, so a build is reproducible, but a change to any function
+    compiled earlier can flip it. Forcing the word non-zero under gdb, with the C unchanged, makes such a function
+    byte-identical to retail.
+  - *Reading it:* draft the unit in address order, add each function in its place and re-run the whole unit after
+    each; when a function differs only in such loads, the missing piece is an earlier function, not its own source.
+    A function that matches in a small file can lose it in the full unit, and the reverse.
+  - *Unit:* `src/cri/sfmpv.c` (0x2a49b8 and 0x2a4468, not matched; 0x2a6f28 flips with the functions before it).
 - **In a run of independent stores, the one that ends a register's life is issued first.** Before register
   allocation the scheduler breaks a tie between equally ready instructions in favour of the one that frees
   registers. Stores of one value through one pointer all become ready together, so the last statement, which holds
@@ -1281,6 +1419,42 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   The compiler binary keeps its symbols, so gdb breakpoints on `fill_slots_from_thread`, `mostly_true_jump`,
   `own_thread_p` and `mark_target_live_regs` print each decision and the live set behind it. *Unit:*
   `src/cri/sfh.c`.
+- **A call to a function compiled earlier in the same file fills its delay slot differently.**
+  - *Symptom:* a call whose delay slot takes another instruction than retail's; the caller matches when the
+    callee's body is not compiled before it.
+  - *Cause:* without exceptions ee-gcc 2.96 marks every function whose body it has compiled as unable to throw
+    (`TREE_NOTHROW`). Every later call to it in the same file gets a `REG_EH_REGION` note, and that note changes
+    which instruction the delay-slot filler picks. A callee defined later, or in another file, is called without
+    the note.
+  - *Reading it:* retail's form without the note means the callee's body was not compiled before the caller; when
+    both are in one unit, that places a file boundary or the function order. A call that needs the note needs the
+    callee defined earlier.
+  - *Units:* `src/cri/sndf.c` and `src/cri/sndfcmd.c` (0x2825e0 calling 0x281ac0 in the other file),
+    `src/cri/m2vhdec.c` (0x286010, whose two callees come first).
+- **`bne` with a `nop` where plain C gives `bnel`: the target starts with a `volatile` access.**
+  - *Symptom:* retail `bne; nop` with a load at the branch target; every plain spelling gives `bnel` with that load
+    in the annulled slot.
+  - *Cause:* in `fill_eager_delay_slots`, when filling from the fall-through fails, reorg falls back to an annulled
+    fill from the target, whatever the predicted direction. The slot stays empty only when the target's first
+    instruction cannot move, and `resource_conflicts_p` makes a `volatile` memory reference conflict with
+    everything. The same keyword stops jump2 from cross-jumping two identical stores.
+  - *Spelling:* a `volatile` access, which only the owner approves ([source approvals](source-approvals.md)); six
+    control-flow shapes, seven `do { } while (0)` placements and about 20 load orders do not reproduce it.
+  - *Unit:* `src/cri/sftim.c` (0x2ae528, 0x2aeb60).
+
+### Loops (EE GCC)
+
+- **A jump around a loop's entry is a reload gcse put on the back edge.**
+  - *Symptom:* a row loop entered by a jump to its own top over a block of reloads, and a `mult` left in the loop
+    that strength reduction would have removed; `for`, `while` and `do`-`while` spellings of the loop all give the
+    plain entry.
+  - *Cause:* the source computes the row pointer before the loop and again at the top of each row. Partial
+    redundancy elimination in gcse finds the base field and `cols * 2` available on entry and inserts their reload
+    on the back edge; `split_edge` places that new block in front of the loop top, so the entry needs a jump around
+    it. `loop.c` skips a loop whose first scanned insn is not a code label, so the row loop is not optimised and its
+    `mult` stays.
+  - *Spelling:* `s = plane->base + cols * 384;` both before a plain `for` row loop and at the top of its body.
+  - *Unit:* `src/cri/cft.c` (0x284f30, 0x285040).
 
 ### Delay slots (b52)
 
@@ -1367,6 +1541,38 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     stood before. *Unit:* `src/game/beDemoManager.cpp`.
   - An inline's arguments are evaluated before its body: `AppendRecordString(self->_messenger, db, record, key)`
     loads the messenger into a saved register before the call inside it. *Unit:* `src/game/beNDMWShopCtrl00.cpp`.
+- **A parameter reached through a cast moves registers; the real class as the parameter type does not.**
+  - *Symptom:* `self` and a flag parameter in exchanged saved registers (`s0`/`s1`), or a member read through a
+    computed address (`lw a0,0(v1)` where retail has `lw a0,16(s1)`).
+  - *Cause:* a cast local (`View *v = (View *)self;`) is a declared local with an id of its own, which changes the
+    colouring order; an inline cast on each access (`((View *)self)->f16`) makes `&member` a value the
+    common-subexpression pass shares with the load.
+  - *Spelling:* declare the parameter with its real class and read the reflected fields through it; cast the
+    loaded handle, not the object (`o = (struct Rc *)self->_parentList;`).
+  - *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp` (0x195970 and the other scene-graph destroy functions).
+- **What a declaration changes at the call.** A `(...)` or K&R `()` declaration and a prototype give the same
+  call when the arguments are word-sized `int`, pointer or enum values, or constants. They differ in these cases,
+  so each is tested on every caller when a declaration moves to its home:
+  - a `float` argument behind `(...)` (C++) or `()` (C) is promoted to `double` by a software conversion (8 to 72
+    bytes more in each of five units tested);
+  - a one- or two-byte parameter with a non-constant argument is narrowed by the caller, with `andi` for an
+    unsigned type and `sll`/`sra` for a signed one, so only the real type reproduces retail;
+  - a one- or two-byte return is masked at the callers that compare or widen it (the byte-returning entry);
+  - a one- or two-byte global is small data under `-sdatathreshold 2`, reached through `gp`; declared as an array
+    it is reached through `lui`/`addiu` (16 bytes more in one function), while larger globals are reached the same
+    way as scalars or arrays;
+  - a call that omits an argument: retail passed whatever was already in the register, and the real call names
+    that variable;
+  - a typed prototype can change the order in which a caller loads its arguments even with word-sized
+    parameters: giving one image function of the Gfx library a prototype reordered the argument loads of two
+    matched callers.
+  - *Units:* `src/engine/igViewerRenderer.cpp`, `src/engine/p2viewport.c`, `src/game/ParticleArray.cpp` (floats),
+    `src/game/beActionStarter.cpp` (a byte parameter), `src/game/GameMain.cpp` (a byte global),
+    `src/engine/gfx/GfxLibrary.cpp` (0x157990 and 0x1566c0 calling 0x159320).
+- **A `const` reference parameter takes its temporary where retail built it.** A callee taking `const igVec3f &`
+  called with `igVec3f(0, 0, -1.2f)` builds the temporary in retail's frame slot; a named local declared for the
+  call takes another one. A reference is a pointer in the ABI, so the callee's own bytes do not change. *Unit:*
+  `src/movie/igMovieManager.cpp` (the caller of 0x1909b0).
 - **A class local is numbered after every declared local, wherever it is declared.**
   - *Symptom:* instructions identical, two saved registers exchanged between a result object and a pointer local
     (`s2`/`s3`). The result declared `int` and read as `.v` matches; declared as its class it does not, and no
@@ -1915,3 +2121,18 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 - **Hand-written assembly shows in alignment and MMI.** A 4-aligned object or a loop top at 4 mod 8 under
   ee-gcc 2.96, `lui`/`ori` for -1 where 2.96 uses `addiu`, and MMI byte operations (`psubb`, `pcpyh`, `psubw`) with no
   C spelling: the R5900 string and memory routines. *Unit:* `src/newlib/`.
+- **MWCC's assembler writes `li reg,0` as `addi`.** In an MWCC `asm` function `li a1,0` assembles to
+  `addi a1,zero,0`; retail's constant builds have `ori a1,zero,0`, which the source writes out. *Unit:*
+  `src/engine/p2core.c` (0x1eba30).
+- **Three shapes only `volatile` gives under ee-gcc 2.96.** No type, alias set, pointer spelling or statement
+  barrier has reproduced these, so a function that needs one of them was compiled with a `volatile` access (the
+  owner still decides the row, [source approvals](source-approvals.md)):
+  - a load or store kept out of a delay slot: a plain access before a `jal`, or at the head of a branch's target, is
+    always taken into the slot (`bnel; lw` where retail has `bne; nop` and the load after it), and
+    `do { } while (0)` does not stop it;
+  - the single-use `lui`, `addiu`, `0(reg)` address form with no call or block boundary before it;
+  - a store followed by a load of the same address, or two reads with nothing between them: no spelling makes the
+    compiler forget a value at the same address.
+  The alias-set causes (enum, pointer types, address-taken locals, `-fno-strict-aliasing`) only order accesses to
+  different addresses and reach none of the three. *Units:* `src/cri/mwsfsvr.c` (0x29ad40, the slot),
+  `src/cri/svm.c` (0x27ec50, `sw; lw` back to back: 88 bytes against 84 without the keyword).

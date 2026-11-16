@@ -17,4 +17,5 @@ function after DTR's code is the first to use DTX's data.
 ## Open questions
 
 - The RPC server's thread function at `0x273128` matches only with its ready flag (`0x4a9b18`) `volatile`;
-  it has no approval and stays `unapproved`.
+  the owner approved that keyword on CRI's own 2002 object (`dtx.o` in `libadxe.a`), see
+  [dtx-server-flag](source-approvals.md#dtx-server-flag).

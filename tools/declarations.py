@@ -200,9 +200,18 @@ class Types:
         self.raw = collections.defaultdict(set)
         self._resolved = {}
 
+    _MODE = re.compile(r"__attribute__\s*\(\(\s*(?:__)?mode(?:__)?\s*\(\s*(?:__)?(QI|HI|SI|DI|SF|DF)(?:__)?\s*\)\s*\)\)")
+    _MODE_TYPE = {"QI": "char", "HI": "short", "SI": "int", "DI": "long long", "SF": "float", "DF": "double"}
+
     def add_typedef(self, stmt):
+        # gcc's `typedef int DItype __attribute__((mode(DI)))` declares the mode's type, not the written one
+        mode = self._MODE.search(stmt)
         body = _ATTR.sub(" ", stmt)
         body = re.sub(r"^\s*typedef\b", "", body).strip()
+        if mode:
+            unsigned = re.match(r"\s*unsigned\b", body)
+            body = re.sub(r"^\s*(?:unsigned\s+|signed\s+)?(?:int|char|short|long|float|double)\b(?:\s+(?:int|long))*",
+                          ("unsigned " if unsigned else "") + self._MODE_TYPE[mode.group(1)], body, count=1)
         p = _first_paren(body)
         if p >= 0:                                    # function or function-pointer typedef: opaque
             m = re.search(r"\(\s*[*&]?\s*([A-Za-z_]\w*)\s*\)", body[p:]) or _NAME_BEFORE_PAREN.search(body[:p])

@@ -44,6 +44,7 @@ from pathlib import Path
 import cc
 import unitcompilers
 import unitflags
+import srctext
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_PATH = "config/SLUS-20836/units.tsv"
@@ -189,16 +190,17 @@ _ASM_CACHE = {}
 def asm_body_names(path):
     """The functions `path` defines as asm bodies (decided by content, never by folder): an
     `asm <type> name(` definition, after any `static`, `extern "C"` or `inline`, with or without the pragma. A C function with an inline
-    `asm { sync }` statement is not an asm body."""
+    `asm { sync }` statement is not an asm body. A unity-built unit is read with its `#include "src/..."` fragments expanded
+    (srctext), so an asm function defined in a fragment is found the way the compiler sees it."""
     try:
-        stamp = os.stat(path).st_mtime_ns
+        stamp = tuple(os.stat(p).st_mtime_ns for p in [path] + [os.path.join(srctext.ROOT, i) for i in srctext.included(path)])
     except OSError:
         return frozenset()
     hit = _ASM_CACHE.get(path)
     if hit is None or hit[0] != stamp:
         try:
-            text = open(path, errors="replace").read()
-        except OSError:
+            text = srctext.read(path, errors="replace")
+        except (OSError, ValueError):
             return frozenset()
         names = frozenset(ASM_DEF_RE.findall(text)) if "asm" in text else frozenset()
         hit = (stamp, names)

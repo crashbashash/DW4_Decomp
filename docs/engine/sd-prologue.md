@@ -8,7 +8,7 @@ rebuild with it through `tools/cc.py` / `tools/eegcc_compile.py`, pinned per uni
 [the Sony compiler](#the-sony-libraries-compiler)).
 
 * **Population:** 1,690-1,694 non-leaf functions (about 415 KB) in five contiguous blocks that hold 3,295 functions / 527 KB in total:
-  `0x1029f8..0x130000` (Sony libgraph to libmc, newlib), `0x2252d8..0x225770` (libmtap), `0x22e4b8..0x230f50`
+  `0x1029f8..0x130000` (Sony libgraph to libmc, newlib), `0x2252d8..0x225770` (libmtap), `0x22e440..0x230f50`
   (libgcc), `0x25b248..0x27ede0` (CRI ADX/AFS/ADXF), `0x280b98..0x2b5d50` (CRI CFT/M2V/MPS/MPV/Sofdec).
   `config/SLUS-20836/regions.tsv` holds these bounds. libkernl's kernel patches (`0x481f28..0x4834c8`) are
   EE GCC code too, but linked at `0x80074000` and up and kept as data.
@@ -100,7 +100,7 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
 * **CRI ADX/AFS and Sofdec/MPEG** units rebuild at `-O2 -G0`. A macro must be a plain block,
   since a `do/while(0)` macro changes scheduling; a switch becomes a jump table only when every table
   index is a case label; volatile statistics words change delay-slot filling.
-* **newlib and libgcc** build at `-O2 -G0 -g` throughout (`0x11acc0..0x130000`, `0x22e4b8..0x230f50`):
+* **newlib and libgcc** build at `-O2 -G0 -g` throughout (`0x11acc0..0x130000`, `0x22e440..0x230f50`):
   `ee-as` must receive `-g` so libcall delay slots keep their nops, and `-G0` so non-simple float
   literals use `lui`/`ori`/`mtc1`. Members without a libcall match either way. newlib adds
   `-fno-builtin`, as its own build does: fdlibm calls `fabs` as a function, and the builtin would
@@ -135,7 +135,7 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   `fp_bit.h`, `libgcc_longlong.h`).
   Open question: the name `__thenan_df` at `0x4e83a8` follows upstream gcc 2.96's shared constant; the 2.9-ee
   archive has a per-object `thenan` instead, and no 2.96 `libgcc.a` is available to confirm it.
-  `__muldi3` at `0x22e440` sits just below the region's start in `regions.tsv`.
+  `__muldi3` at `0x22e440` is the first member of the region and builds from `src/libgcc/libgcc2.c` through `umul_ppmm`.
 * **`mprec.c` and `signal.c` are whole-file units** (`src/newlib/`; `0x1273e0..0x1283f8`, 17
   functions, and `0x129940..0x129c28`, 8 functions). A call compiles differently when its callee is
   defined earlier in the same file: `multadd` and `pow5mult` reproduce only after `Balloc` and `i2b`,

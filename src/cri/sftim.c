@@ -285,7 +285,7 @@ void sftim_CntupHnVbIn(SfdHn *hn)
 {
     SfdTim *tim = &hn->tim;
     if (sftim_IsTimeIncre(hn)) {
-        *(volatile int *)&tim->stream_pos += tim->step;
+        tim->stream_pos += tim->step;
     }
     if (sftim_IsVbinStIncre(hn, tim)) {
         *(volatile int *)&tim->count += tim->step;

@@ -5,6 +5,8 @@ typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float SFtype __attribute__((mode(SF)));
 typedef float DFtype __attribute__((mode(DF)));
 
+#include "dw4/libgcc_longlong.h"
+
 #define WORD_SIZE (sizeof(SItype) * 8)
 #define HIGH_HALFWORD_COEFF (((UDItype)1) << (WORD_SIZE / 2))
 #define HIGH_WORD_COEFF (((UDItype)1) << WORD_SIZE)
@@ -16,6 +18,22 @@ typedef float DFtype __attribute__((mode(DF)));
 
 DItype __fixunsdfdi(DFtype a);
 DItype __fixunssfdi(SFtype original_a);
+
+DItype __muldi3(DItype u, DItype v) {
+    DWunion w;
+    DWunion uu, vv;
+
+    uu.ll = u, vv.ll = v;
+
+    w.ll = ({
+        DWunion __w;
+        umul_ppmm(__w.s.high, __w.s.low, uu.s.low, vv.s.low);
+        __w.ll;
+    });
+    w.s.high += ((UWtype)uu.s.low * (UWtype)vv.s.high + (UWtype)uu.s.high * (UWtype)vv.s.low);
+
+    return w.ll;
+}
 
 DFtype __floatdidf(DItype u) {
     DFtype d;

@@ -235,6 +235,10 @@ A matching agent works each function the same way:
   profile, unit-objects row, source comments and every document line naming it; read each earlier refutation
   and open note it shows, and do not retry a refuted spelling without a new reason. Then look the difference up:
   `python3 tools/levers.py --symptom "<the difference in machine terms>"` lists the known causes sharing it.
+- **Working one function:** read its context pack (`python3 tools/pack.py --function <name>`) rather than whole unity
+  files; for functions of 1 KB or more, record drafts on the region board (`python3 tools/region_board.py --unit-va <va>
+  --function <name> --cand <unit file> --record <label>`) and start from it. Verification is always the whole-unit
+  `tools/check.py`.
 - **Fix the difference in order:** control flow and call order, then load and store order, then instruction
   selection, then registers, then the frame. A later kind often moves when an earlier one is fixed.
 - **Stop on a budget.** About 30 attempts or 45 minutes on one function without the differing-word count

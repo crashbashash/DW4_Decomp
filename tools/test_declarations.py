@@ -46,6 +46,12 @@ TREE = {
     "src/engine/lib.cpp": "#include \"src/engine/LibLibrary.h\"\n"
                           "extern \"C\" int Lib_Own(void) { return Foreign_Get(); }\n",
     "src/engine/foreign.c": "int Foreign_Get(void) { return 2; }\n",
+    # gcc's mode attribute: DItype is long long, so the header's long long declaration agrees and the
+    # copy declaring int parameters does not
+    "src/libgcc/mul.c": "typedef int DItype __attribute__((mode(DI)));\n"
+                        "DItype __muldi3(DItype u, DItype v) { return u * v; }\n",
+    "include/dw4/soft.h": "long long __muldi3(long long, long long);\n",
+    "src/game/narrow.c": "int __muldi3(int, int);\nint Narrow_Mul(int a) { return __muldi3(a, a); }\n",
 }
 
 
@@ -77,7 +83,9 @@ class Declarations(unittest.TestCase):
         self.assertNotIn("Log_Printf", {d.name for d in self.idx.varargs + self.idx.conflicts})
 
     def test_array_against_scalar_is_a_conflict(self):
-        self.assertEqual(self.names(self.idx.conflicts), [("src/game/main.cpp", "g_poolSize")])
+        # and a mode(DI) typedef's real type: only the int copy of __muldi3 disagrees with it
+        self.assertEqual(self.names(self.idx.conflicts),
+                         [("src/game/main.cpp", "g_poolSize"), ("src/game/narrow.c", "__muldi3")])
 
     def test_local_externs(self):
         # the C++ unit's extern "C" line for its own Main_Run, the fragment's line for its unit's
@@ -85,6 +93,7 @@ class Declarations(unittest.TestCase):
         # g_asmTable (assembly, one consumer) stay where they are used; g_asmShared has two consumers
         self.assertEqual(self.names(self.idx.local),
                          [("src/engine/LibLibrary.h", "Foreign_Get"), ("src/game/main.cpp", "g_poolSize"),
+                          ("src/game/narrow.c", "__muldi3"),
                           ("src/game/old.c", "g_asmShared"), ("src/game/user.c", "Foo_Get"),
                           ("src/game/user.c", "g_asmShared"), ("src/game/user.c", "g_count")])
 
@@ -96,8 +105,8 @@ class Declarations(unittest.TestCase):
         self.assertEqual((old.ret, old.params), ("int", None))
 
     def test_counts(self):
-        self.assertEqual(self.idx.counts(), {"decl.local_externs": 6, "decl.varargs": 3,
-                                             "decl.type_conflicts": 1, "decl.header_conflicts": 1})
+        self.assertEqual(self.idx.counts(), {"decl.local_externs": 7, "decl.varargs": 3,
+                                             "decl.type_conflicts": 2, "decl.header_conflicts": 1})
 
     def test_bad_names_per_unit(self):
         root = self.folder.name

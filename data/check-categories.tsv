@@ -6498,6 +6498,7 @@
 0022e220	Gap__igItemDataBaseList__vfunc_18	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0022e2a0	Gap__igItemDataBaseList__vfunc_04	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0022e3c0	FUN_0022e3c0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022e440	__muldi3	match	-
 0022e4b8	__divdi3	match	-
 0022eb50	__moddi3	match	-
 0022f1e0	__udivdi3	match	-
@@ -7768,7 +7769,7 @@
 00263eb8	adxm_vsync_proc	match	-
 00263fc0	adxm_fs_proc	match	-
 002640a0	adxm_mwidle_thrd	match	-
-002641d8	adxm_usridle_thrd	unapproved	unapproved: 4 volatile without an approval row
+002641d8	adxm_usridle_thrd	match	-
 002642b0	adxm_iWakeupThread	match	-
 00264300	adxm_WakeupThread	match	-
 00264350	adxm_SleepThread	match	-
@@ -8347,7 +8348,7 @@
 00272fb8	DTR_Start	match	-
 00272fc8	DTR_Stop	match	-
 00273078	FUN_00273078	match	-
-00273128	FUN_00273128	unapproved	unapproved: 1 volatile without an approval row
+00273128	FUN_00273128	match	-
 002731a8	dtx_create_rmt	match	-
 00273218	dtx_destroy_rmt	match	-
 00273268	dtx_def_rcvcbf	match	-

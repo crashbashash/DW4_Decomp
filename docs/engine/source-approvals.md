@@ -121,8 +121,10 @@ the statement back in the counter. `python3 tools/inline_asm.py` prints the appr
 
 ### umul_ppmm
 
-`__divdi3`, `__moddi3`, `__udivdi3` and `__umoddi3` reach one `multu` through `umul_ppmm` in
-`include/dw4/libgcc_longlong.h`.
+`__divdi3`, `__moddi3`, `__udivdi3`, `__umoddi3` and `__muldi3` reach one `multu` through `umul_ppmm` in
+`include/dw4/libgcc_longlong.h`. `__muldi3` is the low-by-low product of gcc's `libgcc2.c` (`umul_ppmm` into a
+double word plus the two cross products added to the high word); its retail code sits at `0x22e440`, the first
+member of the libgcc region.
 
 * Upstream GCC writes this statement for MIPS: the `longlong.h` of 2.95.3 and 3.0 both have
   `__asm__ ("multu %2,%3" : "=l" ... : "d" ... )`. The exact 2.96-ee source is not available to confirm it.
@@ -282,8 +284,8 @@ reaches them through `sftim_HnVbIn`, which calls `sftim_CntupHnVbIn` (adds the s
 `sftim_IsVbinStIncre` (reads the count); the timer adjustment at `0x2af488` changes both from the game thread,
 between the library's lock and unlock calls, while the V-sync path writes them too. Stripped,
 `sftim_IsVbinStIncre` differs by five words, the count update in `sftim_CntupHnVbIn` by one and either store in
-the adjustment by nine; the stream position's keyword in `sftim_CntupHnVbIn` changes no byte and keeps the two
-words' accesses alike. They are written as `volatile` casts at the access, so the other functions that touch the
+the adjustment by nine. The stream position's store in `sftim_CntupHnVbIn` is plain: a `volatile` there changes
+no byte, so only the count's cast stays. They are written as `volatile` casts at the access, so the other functions that touch the
 words keep their plain accesses. The rows are approved under the owner's standing rule for words a vsync callback
 and another thread share.
 
@@ -586,8 +588,19 @@ the requests and wait on the exit words, so the state really is shared between t
   `adxm_usrvsync_busy`, which `ADXPS2_ExecVint` reads. Its tick count (`0x49da08`) is plain: the busy store is
   written through `ADXM_SET_BUSY`, a statement macro whose loop notes keep the count's `ld`/`daddu`/`sd` ahead of
   the flag store and the call, as `do { } while (0)` does in `sftim.c`. 3rd Strike declares that count plain too.
-  `adxm_usridle_thrd` has no row: its tick count is plain the same way, and its busy flag, which only its own
-  thread touches, only keeps the store out of a delay slot (see [Open questions](#open-questions)).
+  `adxm_usridle_thrd` has a row too (four keywords), on CRI's own build: see the vendor-object evidence below. Its
+  tick count is plain in source through `ADXM_SET_BUSY`, as above.
+* CRI's own 2002 SDK object `adx_mps2.o` in `libadxe.a` (the SDK archives of
+  [SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) holds
+  `adxm_usridle_proc`, the earlier form of `adxm_usridle_thrd`: `li s1,1; nop; ld cnt; daddiu; sd cnt; sw s1,busy;
+  jal; nop; sw zero,busy; move s0,v0; lw border; ...`. Compiled with this project's ee-gcc 2.96 (`-O2 -G8`) it is
+  byte-equal to that object only when the busy flag `adxm_usridleproc_exec_flag` is `volatile`: plain, the clearing
+  store moves into a delay slot. So the busy flag the keyword guards is `volatile` in CRI's own build, although only
+  that thread touches it, and the same object has `volatile` tick counts. The other `adx_mps2.o` members back the
+  remaining rows: the `adxm_*_proc` thread bodies match only with their tick counts, busy flags and thread ids
+  `volatile`, and `adxm_ShutdownSafeThrd` (and its Vsync, MwIdle, UsrIdle and UsrVsync siblings, the same code on
+  their own words) only with the exit request, exited word and id `volatile`. Objects cannot show the spelling
+  (stabs drop the qualifier), only the code the qualifier gives.
 * `adxm_mwidle_thrd` has a row too, on the owner's instruction. Five of its seven keywords are on shared words (the
   exit request, the exited word, the border request, the user-idle thread id and the slept flag). The other two are
   the tick count (`0x49da00`) and the busy flag (`0x49d9d4`), which only this thread touches (`ADXPS2_ExecVint`
@@ -595,6 +608,22 @@ the requests and wait on the exit words, so the state really is shared between t
   ee-gcc keeps the two in order only when both are `volatile`. The 3rd Strike decompilation declares the count and
   the busy flag (`adxm_mwidle_cnt`, `adxm_mwidleproc_exec_flag`) `volatile`, but it left this function as assembly,
   so those declarations were never tested by a match.
+
+### dtx-server-flag
+
+The DTX RPC server's thread function (`0x273128`, `dtx_svr_proc`) stores 1 to its ready flag (`0x4a9b18`,
+`dtx_proc_init_flag`) and then calls `sceSifRpcLoop`. The store is the word's only access in the function. Written
+plain, the store moves into the call's delay slot; retail keeps it ahead of the call with a `nop` in the slot, and
+only a `volatile` flag gives that. The row has one keyword, approved by the owner on vendor evidence:
+
+* CRI's own 2002 SDK object `dtx.o` in `libadxe.a` (the SDK archives of
+  [SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) holds `dtx_svr_proc`:
+  `li v0,1; move a0,sp; sw v0,dtx_proc_init_flag(gp); jal sceSifRpcLoop; nop`. Compiled with this project's
+  ee-gcc 2.96 the function is byte-equal to it with a `volatile` flag, and plain puts the store into the `jal`
+  slot. The flag is `volatile` in CRI's own build, although it guards no other access in the function.
+* The second builds disagree: the 2001 decompilation of an earlier library declares `Sint32 volatile
+  dtx_proc_init_flag`, and the 3rd Strike decompilation declares it plain. The original compiler output decides.
+* Stabs drop the qualifier, so the object shows the code the qualifier gives, not the spelling.
 
 ### sony-hardware-registers
 
@@ -957,15 +986,6 @@ file: `p2SoftwareBlendFourWeights`, `p2SoftwareBlendThreeWeights`, `p2SoftwareBl
 
 ## Open questions
 
-* **Revoked CRI rows.** Two CRI functions match only with a `volatile` whose keyword keeps no memory access
-  and guards no state another context touches. Their rows were revoked, and they stay `unapproved` until there is
-  evidence that the original declared the words `volatile`, such as an upstream CRI source or a second build:
-  * the ADXM server thread body `adxm_usridle_thrd`: its tick count is plain, but its busy flag
-    `adxm_usridle_busy` is touched by its own thread only, and its keyword only keeps the store out of the
-    delay slot of the call that follows;
-  * the function at `0x273128`, a DTX word whose single store is its only access; the keyword moves it out of a
-    call's delay slot, and the 3rd Strike decompilation declares the matching `dtx_proc_init_flag` plain.
-
 * **libcdvd's semaphore ids.** Two command pre-checks and `sceCdBreak` match only with a `volatile` on the command
   semaphore ids (`0x483568`, `0x48356c`), which keeps a load out of a call's delay slot and gains or loses no
   access; the ids are written only at start-up. A file-scope declaration cannot be what Sony wrote: SDK 3.0.3's
@@ -984,8 +1004,8 @@ file: `p2SoftwareBlendFourWeights`, `p2SoftwareBlendThreeWeights`, `p2SoftwareBl
   (`0x4b5140`) that is its only access in the executable; written plain it is `lui; jr; sw zero,%lo` (12 bytes
   against 16), and only a `*(volatile int *)` store gives retail's form. A `memset` or `__builtin_memset` of four
   bytes, an array element through a pointer, a `long long` reinterpretation, a pointer copy and a struct copy all
-  fold or load. It is the shape of the revoked DTX row and fits no category, and no other build has the function
-  (the 3rd Strike decompilation's SJCRS predates it).
+  fold or load. It has the shape of the [DTX server flag](#dtx-server-flag), but no vendor object holds this
+  function (the 3rd Strike decompilation's SJCRS predates it).
 
 * **The SFX handle's in-use word.** Five functions keep a `volatile` that decides only delay-slot filling and keeps
   no access: the handle searches at `0x2b39e0` (`sfx.c`), `sfxalp_SearchFreeHn` (`sfxa.c`) and `0x2b42c8`

@@ -7,6 +7,7 @@ asm	__divdi3	1	#umul_ppmm
 asm	__moddi3	1	#umul_ppmm
 asm	__udivdi3	1	#umul_ppmm
 asm	__umoddi3	1	#umul_ppmm
+asm	__muldi3	1	#umul_ppmm
 asm	sceGsResetPath	2	#sony-vu-and-gp-asm
 asm	sceSdRemote	2	#sony-vu-and-gp-asm
 volatile	sceGsResetGraph	1	#sony-hardware-registers
@@ -266,6 +267,8 @@ volatile	adxm_vsync_proc	7	#adxm-thread-flags
 volatile	adxm_fs_proc	6	#adxm-thread-flags
 volatile	adxm_mwidle_thrd	7	#adxm-thread-flags
 volatile	adxm_usrvsync_proc	3	#adxm-thread-flags
+volatile	adxm_usridle_thrd	4	#adxm-thread-flags
+volatile	FUN_00273128	1	#dtx-server-flag
 volatile	SRD_Create	1	#srd-module-words
 volatile	FUN_00271a68	1	#srd-module-words
 volatile	srd_check_dvd_error	3	#srd-module-words
@@ -359,7 +362,7 @@ volatile	MPV_Init	1	#build-string-stores
 volatile	SFD_Init	1	#build-string-stores
 volatile	mwPlyInitSfdFx	2	#build-string-stores
 volatile	sfply_ExecOne	1	#sfd-play-pending
-volatile	sftim_CntupHnVbIn	2	#sfd-time-counts
+volatile	sftim_CntupHnVbIn	1	#sfd-time-counts
 volatile	sftim_IsVbinStIncre	1	#sfd-time-counts
 volatile	FUN_002af488	2	#sfd-time-counts
 volatile	sftim_ResetVtimeTmr	2	#sfd-time-counts

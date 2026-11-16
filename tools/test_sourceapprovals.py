@@ -95,6 +95,22 @@ class SourceApprovals(unittest.TestCase):
         path = self.write("a.cpp", "asm void f(void) {\n    nop\n}\n")
         self.assertIn("f", sa.unitprofiles.asm_body_names(path))
 
+    def test_an_asm_function_in_a_fragment_is_found(self):
+        # a unity unit's `#include "src/..."` fragment is compiled as part of the unit
+        folder = tempfile.mkdtemp(dir=os.path.join(sa.ROOT, "src"))
+        try:
+            rel = os.path.relpath(folder, sa.ROOT)
+            with open(os.path.join(folder, "frag.inc"), "w") as fh:
+                fh.write("asm void g(void) {\n    nop\n}\n")
+            unit = os.path.join(folder, "unit.cpp")
+            with open(unit, "w") as fh:
+                fh.write('#include "%s/frag.inc"\nvoid f(void) { }\n' % rel)
+            self.assertIn("g", sa.unitprofiles.asm_body_names(unit))
+            self.assertEqual(sa.uses(unit, "g")["asm-function"], 1)
+        finally:
+            import shutil
+            shutil.rmtree(folder)
+
     def test_comments_and_strings_do_not_count(self):
         path = self.write("a.c", '/* volatile */ char *f(void) { return "volatile"; } // asm("nop")\n')
         self.assertIsNone(sa.problem(path, "f", {}))
