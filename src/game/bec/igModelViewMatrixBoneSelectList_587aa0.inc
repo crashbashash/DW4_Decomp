@@ -4,10 +4,10 @@ igMetaObject *igModelViewMatrixBoneSelectListBec_GetMetaObject(void) {
 }
 
 int igModelViewMatrixBoneSelectListBec_GetVTable(void) {
-    struct Obj_33ffa0 obj;
+    igModelViewMatrixBoneSelectList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igModelViewMatrixBoneSelectListBec_vtable[0];
+    obj._vtable = (int)&g_igModelViewMatrixBoneSelectListBec_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

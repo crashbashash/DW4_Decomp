@@ -24,7 +24,7 @@ int beModelCtrlInfoRamData_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoRamData_vtable[0];
     igSmartPointer_beModelCtrlInfoWork_Destruct((igSmartPointer<igObject> *)&obj._work, -1);
     igSmartPointer_beModelCtrlNode2_Destruct((void **)&obj._node, (short)(-1));
-    beBaseInfoData_Destroy((struct W_344030 *)&obj, (short)0);
+    beBaseInfoData_Destroy((beBaseInfoData *)&obj, (short)0);
     return vtable;
 }
 

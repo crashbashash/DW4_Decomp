@@ -14,18 +14,22 @@ void *beActionStarterData_GetMetaObject(void) {
 }
 
 int beActionStarterData_GetVTable(void) {
-    Obj_36be40 obj;
+    beActionStarterData obj;
     int vtable;
+    char **messageSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj._name = 0;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
-    obj._message = 0;
+    messageSlot = (char **)&obj._message;
+    *messageSlot = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
-    obj.rel12();
+    igStringRef_Release(messageSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj.rel8();
+    igStringRef_Release(nameSlot);
     return vtable;
 }
 

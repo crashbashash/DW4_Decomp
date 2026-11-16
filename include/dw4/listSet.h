@@ -11,6 +11,9 @@ template <class List, class T> static inline void ListSet(List *list, int index,
 /* Stores `value` in a list's storage at `index`, unchecked (a loop over a list's storage). */
 template <class T> static inline void ListStoreAt(T *data, int index, const T &value) { data[index] = value; }
 
+/* Stores `value` in a list's storage at `index`, unchecked (the slot an append has just made). */
+template <class List, class T> static inline void ListStore(List *list, int index, const T &value) { ((T *)list->_data)[index] = value; }
+
 /* The same for an int list whose storage is read through the list's data accessor (a call, as the game's
    code makes it). */
 extern "C" int beNDMWLoadIntf2_igIntList_GetData(...);

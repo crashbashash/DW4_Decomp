@@ -44,43 +44,17 @@ int beSvConnectCheck_GetVTable(void) {
     return vtable;
 }
 
-void *beSaveApi_Destroy(struct S_348390 *arg0, short arg1) {
-    struct R_348390 *p;
-
-    if (arg0 != 0) {
-        arg0->f0 = &g_beSaveApi_vtable[0];
-        if (&arg0->f56) {
-            p = arg0->f56;
-            if (p != 0) {
-                p->rc = p->rc - 1;
-                if ((p->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy(p);
-                }
-            }
-        }
-        if (&arg0->f52) {
-            p = arg0->f52;
-            if (p != 0) {
-                p->rc = p->rc - 1;
-                if ((p->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy(p);
-                }
-            }
-        }
-        if (&arg0->f48) {
-            p = arg0->f48;
-            if (p != 0) {
-                p->rc = p->rc - 1;
-                if ((p->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy(p);
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+void *beSaveApi_Destroy(beSaveApi *self, short delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_beSaveApi_vtable[0];
+        igObjectRef_Release((igObject **)&self->_iconWork);
+        igObjectRef_Release((igObject **)&self->_mountWork);
+        igObjectRef_Release((igObject **)&self->_imageWork);
+        if (delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beSaveMemoryObj_Destruct(igSmartPointer<igObject> *self, short delete_storage) {

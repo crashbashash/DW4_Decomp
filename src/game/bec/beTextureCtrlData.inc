@@ -11,38 +11,21 @@ void *beTextureCtrlData_GetMetaObject(void) {
 
 int beTextureCtrlData_GetVTable(void) {
     beTextureCtrlData obj;
-    char *text;
-    int *header;
-    int refCount;
     int vtable;
+    igObject **texSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj._name = 0;
-    *(int **)&obj._vtable = &g_beTextureCtrlData_vtable[0];
-    obj._tex = 0;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beTextureCtrlData_vtable[0];
+    texSlot = (igObject **)&obj._tex;
+    *texSlot = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    *(int **)&obj._vtable = &g_beTextureCtrlData_vtable[0];
-    if (&obj._tex != 0) {
-        text = (char *)obj._tex;
-        if (text != 0) {
-            ((igObject *)text)->_refCount = ((igObject *)text)->_refCount - 1;
-            if ((((igObject *)text)->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(text);
-            }
-        }
-    }
-    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
-    if (&obj._name != 0) {
-        text = (char *)obj._name;
-        if (text != 0) {
-            header = (int *)(text - 8);
-            refCount = *(int *)(text - 4) - 1;
-            *(int *)(text - 4) = refCount;
-            if (refCount == 0) {
-                StringChunk_ReleaseHeader(*header, header);
-            }
-        }
-    }
+    obj._vtable = (int)&g_beTextureCtrlData_vtable[0];
+    igObjectRef_Release(texSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
     return vtable;
 }
 

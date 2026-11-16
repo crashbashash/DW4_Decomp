@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #define RELS(o) { char *rs = (o); if (rs != 0) { int *hd = (int *)rs - 2; int rc = hd[1] - 1; hd[1] = rc; if (rc == 0) { StringChunk_ReleaseHeader(hd[0], hd); } } }
 #include "dw4/igSmartPointer.h"
+#include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
 #define RELEASE(p) IG_OBJECT_RELEASE((igObject *)(p));
@@ -638,35 +639,6 @@ static inline beNDMWWindowSelect *AsPageSelector(igObject *window)
     }
     return 0;
 }
-
-/* Dispatch-only view of the system's igMersenneTwisterRandomNumber: genrand is vtable slot 22. */
-class RandomNumberDispatch {
-  public:
-    virtual void slot0();
-    virtual void slot1();
-    virtual void slot2();
-    virtual void slot3();
-    virtual void slot4();
-    virtual void slot5();
-    virtual void slot6();
-    virtual void slot7();
-    virtual void slot8();
-    virtual void slot9();
-    virtual void slot10();
-    virtual void slot11();
-    virtual void slot12();
-    virtual void slot13();
-    virtual void slot14();
-    virtual void slot15();
-    virtual void slot16();
-    virtual void slot17();
-    virtual void slot18();
-    virtual void slot19();
-    virtual void slot20();
-    virtual void sgenrand(unsigned int seed);
-    virtual unsigned int genrand();
-};
-
 
 static inline void FillHpMp(int player)
 {
@@ -1693,7 +1665,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                     /* Row band*100 holds the band's entry count; its entries follow it. */
                     bandRow = band * 100;
                     entryCount = beDataBase_GetRecordInt(table, bandRow, ID);
-                    roll = ((RandomNumberDispatch *)((beSystem *)((beNDMWStatus *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]))->_system)->_random)->genrand() % RATE_TOTAL;
+                    roll = ((igRandomNumberDispatchView *)((beSystem *)((beNDMWStatus *)igInsightCore_FindManager(self->_insight, g_beNDMWStatus_metaObject[0]))->_system)->_random)->genrand() % RATE_TOTAL;
                     rateSum = 0;
                     entry = 1;
                     if (entryCount > 0) {
@@ -3225,7 +3197,7 @@ void beNDMWShopCtrlA2_Update(beNDMWShopCtrlA2 *self) {
                             int chance;
                             int card;
                             int cardCount;
-                            cardRolls[i] = (((RandomNumberDispatch *)((beSystem *)status->_system)->_random)->genrand() % CARD_CHANCE_SCALE) * CARD_CHANCE_SCALE;
+                            cardRolls[i] = (((igRandomNumberDispatchView *)((beSystem *)status->_system)->_random)->genrand() % CARD_CHANCE_SCALE) * CARD_CHANCE_SCALE;
                             drawn = 0;
                             chance = 0;
                             card = 0;

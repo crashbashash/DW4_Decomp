@@ -54,7 +54,7 @@ int beWaterPlainInfoRam_GetVTable(void) {
     igSmartPointer_igIntList_Destruct(&obj._dplist2VertexNO, -1);
     igSmartPointer_igFloatList_Destruct(&obj._dampeningGrid, -1);
     igSmartPointer_igVertexArray_Destruct(&obj._vertexArray, -1);
-    beBaseInfoRam_Destroy((S *)&obj, (long long)0);
+    beBaseInfoRam_Destroy((beBaseInfoRam *)&obj, (long long)0);
     return vtable;
 }
 

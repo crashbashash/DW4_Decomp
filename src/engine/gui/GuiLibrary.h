@@ -600,7 +600,7 @@ extern "C" igMetaObject *FUN_004524f0(void);
 extern "C" igMetaObject *igBitmapFont_GetMetaObject(void);
 struct Obj_452590 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 extern "C" int FUN_0019aa10(...);
-extern "C" int igSmartPointer_FUN_00452790_Destruct(...);
+extern "C" int igSmartPointer_igCharMetricsList_Destruct(...);
 extern "C" int igFont_Destroy(...);
 extern "C" int g_igBitmapFont_vtable[4];
 extern "C" int igBitmapFont_GetVTable(void);

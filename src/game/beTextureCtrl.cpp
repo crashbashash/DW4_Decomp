@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igObjectVirtuals.h"
+#include "dw4/igTextureBindAttrDispatchView.h"
 #include "dw4/igobject_release.h"
 
 extern "C" void igObject_Destroy(void *);
@@ -17,18 +17,12 @@ extern "C" beTextureCtrlWork *beTextureCtrlWork_Create(int allocator);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram);
-/* igTextureBindAttr seen through its vtable: slot 31 sets the bound texture. */
-class NewObjectVirtual : public igVirtualObject {
-public:
-    DW4_SLOTS_20(s) DW4_SLOTS_5(t) DW4_SLOTS_5(u)
-    virtual void setTexture(int texture);
-};
 /* A property record: the name it is found by and its value. */
-struct PropertyRecord { int _vtable; unsigned int _refCount; int _name; int _value; };
-extern "C" NewObjectVirtual *igTextureBindAttr_CreateInstance(...);
+struct PropertyRecord { int _vtable; unsigned int _refCount; int _name; igObject *_value; };
+extern "C" igTextureBindAttrDispatchView *igTextureBindAttr_CreateInstance(...);
 extern "C" PropertyRecord *igProperty_FindByName(...);
 extern "C" int emptyString[4];
-extern "C" int g_igTextureBindAttr_metaObject[4];
+extern "C" igMetaObject *g_igTextureBindAttr_metaObject;
 extern "C" int g_propertyNameField[4];
 extern "C" void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram);
 
@@ -112,9 +106,9 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
     int allocator;
     beTextureCtrlWork *work;
     PropertyRecord *property;
-    igObjectVirtuals *existing;
+    igObjectDispatchView *existing;
     int boundCount;
-    int bindMeta;
+    igMetaObject *bindMeta;
     int attributeIndex;
     int boundOffset;
     if (self->_isFirstTime != 0) {
@@ -136,7 +130,7 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                     if (property != 0) {
                         allocator = igObject_GetAllocator(self);
                         allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-                        igSmartPointer<NewObjectVirtual> attr(igTextureBindAttr_CreateInstance(allocator));
+                        igSmartPointer<igTextureBindAttrDispatchView> attr(igTextureBindAttr_CreateInstance(allocator));
                         attr.p->setTexture(property->_value);
                         attrSet = (igAttrSet *)entry->_attrSet;
                         boundCount = ((igAttrList *)attrSet->_attributes)->_count;
@@ -144,9 +138,9 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                         if (0 < boundCount) {
                             boundOffset = 0;
                             do {
-                                bindMeta = g_igTextureBindAttr_metaObject[0];
-                                existing = (igObjectVirtuals *)*(int *)(((igAttrList *)attrSet->_attributes)->_data + boundOffset);
-                                if (bindMeta == existing->getMeta()) {
+                                bindMeta = g_igTextureBindAttr_metaObject;
+                                existing = (igObjectDispatchView *)*(int *)(((igAttrList *)attrSet->_attributes)->_data + boundOffset);
+                                if (bindMeta == existing->GetMeta()) {
                                     int removed; /* matching construct: the removal out-slot is declared after the holder so it lies below it (+0xb8 under +0xbc) as in retail */
                                     ObjectList_RemoveFirstRetained(&removed, attrSet->_attributes, existing, 0);
                                     break;

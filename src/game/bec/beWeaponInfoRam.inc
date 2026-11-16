@@ -24,25 +24,15 @@ int beWeaponInfoRam_GetVTable(void) {
     return vtable;
 }
 
-void *beBaseInfoRam_Destroy(S *arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        arg0->vt = (int)(&g_beBaseInfoRam_vtable[0]);
-        if (((char *)arg0 + 0x28) != 0) {
-            o = arg0->m;
-            if (o != 0) {
-                *(int *)(o + 4) = *(int *)(o + 4) - 1;
-                if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                    igObject_Destroy(o);
-                }
-            }
-        }
-        if ((short)arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+void *beBaseInfoRam_Destroy(beBaseInfoRam *self, long long delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)(&g_beBaseInfoRam_vtable[0]);
+        igObjectRef_Release((igObject **)&self->_dataList);
+        if ((short)delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 igSmartPointer<igObject> *beWeaponInfoRam_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, int delete_storage) {

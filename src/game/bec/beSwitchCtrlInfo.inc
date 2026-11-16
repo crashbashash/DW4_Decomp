@@ -22,7 +22,7 @@ int beSwitchCtrlInfo_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beSwitchCtrlInfo_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switchNode), -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

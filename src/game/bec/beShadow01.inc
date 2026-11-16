@@ -34,7 +34,7 @@ int beShadow01_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
     obj._vtable = (int)&g_beShadow01_vtable[0];
     igSmartPointer_beShadow01InfoList_Destruct((igSmartPointer<igObject> *)(&obj._svInfoList), (short)(-1));
-    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
 

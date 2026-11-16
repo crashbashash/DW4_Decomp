@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
-#include "dw4/beBaseInfoManagerVirtuals.h"
+#include "dw4/beBaseInfoManagerDispatchView.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -134,7 +134,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
     beWeaponInfo *info = (beWeaponInfo *)ram->_parentInfo;
     switch (beMessenger_ResolveEnumValue(self->_messenger, beWeaponSeqData_GetMsgActionEnum(), message)) {
     case 0: {
-        ((beBaseInfoManagerVirtuals *)self)->onMessageText((beBaseInfoRam *)ram, "REMOVE");
+        ((beBaseInfoManagerDispatchView *)self)->OnMessageText((beBaseInfoRam *)ram, "REMOVE");
         beMessenger_SendRam(self->_messenger, "PLAYER", ram->_ramNo, "GETINFONAME_RUN");
         if (beMessenger_GetStringCount(self->_messenger) == 1) {
             const char *infoName = beMessenger_GetString(self->_messenger, 0);

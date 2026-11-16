@@ -4,9 +4,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igObjectDispatchView.h"
+#include "dw4/igTransformDispatchView.h"
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
-#define OBJ(m) if (&m) { o = (igObject *)m; if (o != 0) { rc = (int)o->_refCount - 1; o->_refCount = rc; if (((unsigned long long) ((long long) (int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); } } }
-#define STR(m) if (&m) { p = (void *)m; if (p != 0) { h = (int *)((char *)(p) - 8); rc = *(int *)((char *)(p) - 4) - 1; *(int *)((char *)(p) - 4) = rc; if (rc == 0) { StringChunk_ReleaseHeader(*h, h); } } }
 #define RELEASE_OBJ(o) { \
     if (o) { \
         --(o)->_refCount; \
@@ -124,47 +123,47 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beFileListInfoManager_Destru
 extern "C" igSmartPointer<igObject> *igSmartPointer_beCri_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_be_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beTimer_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" int *igSmartPointer_beMemory_Construct(int *p);
-extern "C" int *igSmartPointer_beTimer_Construct(int *p);
-extern "C" int *igSmartPointer_beDemoManager_Construct(int *p);
-extern "C" int *igSmartPointer_be_Construct(int *p);
-extern "C" int *igSmartPointer_beCri_Construct(int *p);
-extern "C" int *igSmartPointer_bePadManager_Construct(int *p);
-extern "C" int *igSmartPointer_beFileListInfoManager_Construct(int *p);
-extern "C" int *igSmartPointer_beMessenger_Construct(int *p);
-extern "C" int *igSmartPointer_beSystem_Construct(int *p);
-extern "C" int *igSmartPointer_beTextureCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beSaveUtil_Construct(int *p);
-extern "C" int *igSmartPointer_beDBManager_Construct(int *p);
-extern "C" int *igSmartPointer_beMovie_Construct(int *p);
-extern "C" int *igSmartPointer_beStaticInfoCtl_Construct(int *p);
-extern "C" int *igSmartPointer_beNumberCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beLightCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beSwitchCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beFont_Construct(int *p);
-extern "C" int *igSmartPointer_beLayerCtl_Construct(int *p);
-extern "C" int *igSmartPointer_beActionStarter_Construct(int *p);
-extern "C" int *igSmartPointer_beSeCtl_Construct(int *p);
-extern "C" int *igSmartPointer_beSound_Construct(int *p);
-extern "C" int *igSmartPointer_beHitLandDeliv_Construct(int *p);
-extern "C" int *igSmartPointer_beHitLandModel_Construct(int *p);
-extern "C" int *igSmartPointer_beGenerater_Construct(int *p);
-extern "C" int *igSmartPointer_beShadow01_Construct(int *p);
-extern "C" int *igSmartPointer_beChangePosTransform_Construct(int *p);
-extern "C" int *igSmartPointer_beBkColor_Construct(int *p);
-extern "C" int *igSmartPointer_bePoint01_Construct(int *p);
-extern "C" int *igSmartPointer_beCameraCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beWeapon_Construct(int *p);
-extern "C" int *igSmartPointer_beTargetObj_Construct(int *p);
-extern "C" int *igSmartPointer_beMeterCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beAction2_Construct(int *p);
-extern "C" int *igSmartPointer_beWaterPlain_Construct(int *p);
-extern "C" int *igSmartPointer_beSelectCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beMatCtrl_Construct(int *p);
-extern "C" int *igSmartPointer_beLua_Construct(int *p);
-extern "C" int *igSmartPointer_beParticleCtrl2_Construct(int *p);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beMemory_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beTimer_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beDemoManager_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_be_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beCri_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_bePadManager_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beFileListInfoManager_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beMessenger_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beSystem_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beTextureCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beSaveUtil_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beDBManager_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beMovie_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beStaticInfoCtl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beNumberCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beLightCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beSwitchCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beFont_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beLayerCtl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beActionStarter_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beSeCtl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beSound_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beHitLandDeliv_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beHitLandModel_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beGenerater_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beShadow01_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beChangePosTransform_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beBkColor_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_bePoint01_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beCameraCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beWeapon_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beTargetObj_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beMeterCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beAction2_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beWaterPlain_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beSelectCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beMatCtrl_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beLua_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2_Construct(igSmartPointer<igObject> *self);
 extern "C" int igObject_InitHeader(...);
-extern "C" int **igInsightPlugin_Construct(int **arg0);
+extern "C" igObject *igInsightPlugin_Construct(igObject *self);
 extern "C" void igMetaObject_RunStaticInit(...);
 extern "C" void libBecRuntimePlugin_EnsureRegistered(void);
 extern "C" void * igMetaObject_RegisterClass(...);
@@ -911,7 +910,7 @@ extern "C" void beNumberCtrl_GetMetaObjectFunction(void);
 extern "C" void *beLoadingNode_ResolveMetaObject(void);
 extern "C" int beLoadingNode_GetVTable(void);
 extern "C" int igNode_Destroy(int **, int);
-extern "C" int **beNodeAnim_Destroy(int **arg0, long long arg1);
+extern "C" beNodeAnim *beNodeAnim_Destroy(beNodeAnim *self, long long delete_storage);
 extern "C" void beLoadingNode_EnsureRegistered(void);
 extern "C" void *beLoadingNode_Register(void);
 extern "C" void beLoadingNode_GetMetaObject(void);
@@ -935,7 +934,6 @@ extern "C" void *beMovieInfo_Register(void);
 extern "C" void beMovieInfo_GetMetaObjectFunction(void);
 extern "C" void *beMovieInfoData_GetMetaObject(void);
 extern "C" int igSmartPointer_igSceneInfo_Destruct(int *, int);
-extern "C" int FUN_00130720(...);
 extern "C" int beMovieInfoData_GetVTable(void);
 extern "C" void beMovieInfoData_EnsureRegistered(void);
 extern "C" void *beMovieInfoData_Register(void);
@@ -1001,16 +999,16 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Destruct(igSmar
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Destruct(igSmartPointer<igObject> *self, long long delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoRideOn_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" int *igSmartPointer_beModelCtrlSubCom_Construct(int *p);
-extern "C" int *igSmartPointer_beModelCtrlInfoHitBody_Construct(int *p);
-extern "C" int *igSmartPointer_igGroup_Construct(int *p);
-extern "C" int *igSmartPointer_beModelCtrlInfoRideOn_Construct(int *p);
-extern "C" int *igSmartPointer_beModelCtrlMoveObjectList_Construct(int *p);
-extern "C" int *igSmartPointer_beModelCtrlInfoDataTrc_Construct(int *p);
-extern "C" int *igSmartPointer_beModelCtrlNode2_Construct(int *p);
-extern "C" int *igSmartPointer_beModelCtrlInfoAI_Construct(int *p);
-extern "C" int *igSmartPointer_beModelCtrlData_Construct(int *p);
-extern "C" int *igSmartPointer_beDataObjInt_Construct(int *p);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igGroup_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoRideOn_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoDataTrc_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlNode2_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Construct(igSmartPointer<igObject> *self);
+extern "C" igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Construct(igSmartPointer<igObject> *self);
 extern "C" void beModelCtrlInfoWork_EnsureRegistered(void);
 extern "C" int beModelCtrlInfoWork_GetVTable(void);
 extern "C" void *beModelCtrlInfoWork_Register(void);
@@ -1720,7 +1718,7 @@ extern "C" void beFontImageList_EnsureRegistered(void);
 extern "C" void *beFontImageList_Register(void);
 extern "C" void beFontImageList_GetMetaObjectFunction(void);
 extern "C" int beFontImage_GetVTable(void);
-extern "C" igSmartPointer<igObject> *igSmartPointer_FUN_00452790_Destruct(igSmartPointer<igObject> *self, short delete_storage);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igCharMetricsList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" void beFontImage_EnsureRegistered(void);
 extern "C" void *igBitmapFont_Register(void);
 extern "C" void *beFontImage_Register(void);
@@ -2643,8 +2641,7 @@ extern "C" igMetaObject *g_beWeaponInfoRam_metaObject;
 extern "C" int g_beWeaponInfoRam_vtable[4];
 extern "C" int g_beBaseInfoRam_vtable[4];
 extern "C" void * g_objectSystem[4];
-typedef struct { int vt; char p[36]; char *m; } S;
-extern "C" void *beBaseInfoRam_Destroy(S *arg0, long long arg1);
+extern "C" void *beBaseInfoRam_Destroy(beBaseInfoRam *self, long long delete_storage);
 extern "C" igSmartPointer<igObject> *beWeaponInfoRam_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_beWeaponInfo_metaObject;
 extern "C" int g_beWeaponInfo_vtable[4];
@@ -2652,16 +2649,7 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beBaseInfoRamList_Destruct(i
 extern "C" int g_igNamedObject_vtable[4];
 extern "C" int g_igInfo_vtable[4];
 extern "C" int g_beBaseInfo_vtable[4];
-struct R_33ec80 { int w0; int rc; };
-struct S_33ec80 {
-    void *f0;
-    char pad[4];
-    int *f8;
-    char pad2[8];
-    struct R_33ec80 *f20;
-    struct R_33ec80 *f24;
-};
-extern "C" void *beBaseInfo_Destroy(struct S_33ec80 *arg0, short arg1);
+extern "C" void *beBaseInfo_Destroy(beBaseInfo *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beWeaponSeqDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *g_beWeaponSeqDataList_metaObject;
@@ -2670,76 +2658,19 @@ struct igMetaObject_33f0e0;
 extern "C" igMetaObject_33f0e0 * igObjectList_GetPublishedMetaObject(...);
 extern "C" igMetaObject *g_beWeaponSeqData_metaObject;
 extern "C" int g_beWeaponSeqData_vtable[4];
-struct Obj_33f1c0 {
-    int *vt; int w0; int *r1; int *r2;
-    inline void rel1() {
-        int **self = &r1;
-        if (self) {
-            int *p = *self;
-            if (p) {
-                int *a1 = p - 2;
-                int v0 = p[-1] - 1;
-                p[-1] = v0;
-                if (v0 == 0)
-                    StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    inline void rel2() {
-        int **self = &r2;
-        if (self) {
-            int *p = *self;
-            if (p) {
-                int *a1 = p - 2;
-                int v0 = p[-1] - 1;
-                p[-1] = v0;
-                if (v0 == 0)
-                    StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-};
 struct igMetaObject_33f2b0;
 extern "C" igMetaObject_33f2b0 * igNamedObject_GetPublishedMetaObject(...);
 extern "C" igMetaObject *g_beWeapon_metaObject;
 extern "C" int g_beWeapon_vtable[4];
 extern "C" int g_igInfoManager_vtable[4];
 extern "C" int g_beBaseInfoManager_vtable[4];
-typedef struct R_33f5e0 { int w0; int refs; } R_33f5e0;
-typedef struct O_33f5e0 { int *vt; int f4; int *str; int f12; int f16; int f20; R_33f5e0 *ref; } O_33f5e0;
-extern "C" O_33f5e0 *beBaseInfoManager_Destroy(O_33f5e0 *arg0, short arg1);
+extern "C" beBaseInfoManager *beBaseInfoManager_Destroy(beBaseInfoManager *self, short delete_storage);
 extern "C" igMetaObject *g_beWeaponAttachDataList_metaObject;
 extern "C" igMetaObject *beWeaponAttachDataList_GetMetaObject(void);
 extern "C" int g_beWeaponAttachDataList_vtable[4];
 extern "C" igMetaObject *g_beWeaponAttachData_metaObject;
 extern "C" igMetaObject *beWeaponAttachData_GetMetaObject(void);
-struct T_33fb10 { int word0; int references; };
 extern "C" int g_beWeaponAttachData_vtable[4];
-struct Obj_33fb10 {
-    int *vt; char p4[4]; T_33fb10 *m8; T_33fb10 *m12; 
-    inline void rel8() {
-        T_33fb10 **self = &m8;
-        if (self) {
-            T_33fb10 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void rel12() {
-        T_33fb10 **self = &m12;
-        if (self) {
-            T_33fb10 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 struct igMetaObject_33fc10;
 extern "C" igMetaObject_33fc10 * igObject_GetMetaObject_ParentAccessor(...);
 extern "C" igMetaObject *g_igAppearanceListList_metaObject;
@@ -2747,7 +2678,6 @@ extern "C" igMetaObject *igAppearanceListList_GetMetaObject(void);
 /* Stack object, vtable slot read through the object plus a runtime offset. */
 extern "C" int g_igAppearanceListList_vtable[4];
 extern "C" igMetaObject *igModelViewMatrixBoneSelectListBec_GetMetaObject(void);
-struct Obj_33ffa0 { int *vt; char pad[28]; };
 extern "C" int g_igModelViewMatrixBoneSelectListBec_vtable[4];
 extern "C" igMetaObject *g_beWaterPlainInfoRam_metaObject;
 extern "C" int g_beWaterPlainInfoRam_vtable[4];
@@ -2901,7 +2831,6 @@ extern "C" int g_beTextureCtrlAttr_vtable[4];
 extern "C" igMetaObject *g_beTextureCtrlData_metaObject;
 extern "C" int g_beTextureCtrlData_vtable[4];
 extern "C" igMetaObject *g_beTextureCtrl_metaObject;
-typedef struct { int *vt; int w[8]; int s; } Obj_3423f0;
 extern "C" int g_beTextureCtrl_vtable[4];
 extern "C" igMetaObject *g_beTextureCtrlWork_metaObject;
 extern "C" int g_beTextureCtrlWork_vtable[4];
@@ -2926,8 +2855,7 @@ extern "C" igMetaObject *g_beSoundData_metaObject;
 extern "C" igMetaObject *beSoundData_GetMetaObject(void);
 extern "C" int g_beSoundData_vtable[4];
 extern "C" int g_beBaseInfoData_vtable[4];
-struct W_344030 { int *vt; int pad; int *name; };
-extern "C" struct W_344030 *beBaseInfoData_Destroy(struct W_344030 *arg0, short arg1);
+extern "C" beBaseInfoData *beBaseInfoData_Destroy(beBaseInfoData *self, short delete_storage);
 extern "C" igMetaObject *g_beSound_metaObject;
 extern "C" igMetaObject *beSound_GetMetaObject(void);
 extern "C" int g_beSound_vtable[4];
@@ -2948,35 +2876,7 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beShadow01InfoList_Destruct(
 extern "C" igMetaObject *g_beSelectCtrlInfo_metaObject;
 extern "C" int g_beSelectCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beSelectCtrlInfoRamData_metaObject;
-struct T_345330 { int word0; int references; };
 extern "C" int g_beSelectCtrlInfoRamData_vtable[4];
-struct Obj_345330 {
-    int *vt; int w0; int *r1; int w2; int w3; int w4; int w5; T_345330 *r6;
-    inline void rel1() {
-        int **self = &r1;
-        if (self) {
-            int *p = *self;
-            if (p) {
-                int *a1 = p - 2;
-                int v0 = p[-1] - 1;
-                p[-1] = v0;
-                if (v0 == 0)
-                    StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    inline void rel6() {
-        T_345330 **self = &r6;
-        if (self) {
-            T_345330 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igSmartPointer<igObject> *igSmartPointer_beSelectCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igMetaObject *g_beSelectCtrlInfoWork_metaObject;
 extern "C" int g_beSelectCtrlInfoWork_vtable[4];
@@ -2985,36 +2885,7 @@ extern "C" int g_beSelectCtrl_vtable[4];
 extern "C" igMetaObject *g_beSeInfo_metaObject;
 extern "C" int g_beSeInfo_vtable[4];
 extern "C" igMetaObject *g_beSeInfoData_metaObject;
-struct T_345ef0 { int word0; int references; };
 extern "C" int g_beSeInfoData_vtable[4];
-struct Obj_345ef0 {
-    int *vt; char p4[4]; char *m8; char p12[4]; T_345ef0 *m16; char tail[12]; 
-    inline void rel8() {
-        char **self = &m8;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-    inline void rel16() {
-        T_345ef0 **self = &m16;
-        if (self) {
-            T_345ef0 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beSeDataList_metaObject;
 extern "C" igMetaObject *beSeDataList_GetMetaObject(void);
 extern "C" int g_beSeDataList_vtable[4];
@@ -3060,19 +2931,14 @@ extern "C" igMetaObject *beSaveUtilInfoRam_GetMetaObject(void);
 extern "C" int g_beSaveUtilInfoRam_vtable[4];
 extern "C" igMetaObject *g_beSaveUtilInfo_metaObject;
 extern "C" int g_beSaveUtilInfo_vtable[4];
-struct Obj_346b00 { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; };
 extern "C" igMetaObject *g_beSaveUtil_metaObject;
 extern "C" int g_beSaveUtil_vtable[4];
 extern "C" igMetaObject *g_beSvPlatDataPC_metaObject;
 extern "C" int g_beSvPlatDataPC_vtable[4];
 extern "C" int g_beSvPlatBaseData_vtable[4];
-struct Q { char pad4[4]; int f4; };
-struct O_347150 { int *vt; int p4; int p8; Q *m; };
-extern "C" O_347150 *beSvPlatBaseData_Destroy(O_347150 *arg0, short arg1);
+extern "C" beSvPlatBaseData *beSvPlatBaseData_Destroy(beSvPlatBaseData *self, short delete_storage);
 extern "C" igMetaObject *g_beSvPlatDataXbox_metaObject;
 extern "C" int g_beSvPlatDataXbox_vtable[4];
-struct F_3474b0 { char pad[52]; unsigned char b52; char pad2[3]; int f56; };
-struct G_3474b0 { char pad[52]; int w52; };
 extern "C" igMetaObject *g_beXboxImage24k_metaObject;
 extern "C" int g_beXboxImage24k_vtable[4];
 extern "C" igMetaObject *g_beSvPlatDataPS2_metaObject;
@@ -3081,39 +2947,14 @@ extern "C" igMetaObject *g_beSvPs2McImage128k_metaObject;
 extern "C" int g_beSvPs2McImage128k_vtable[4];
 extern "C" igMetaObject *g_beSvPlatDataGC_metaObject;
 extern "C" int g_beSvPlatDataGC_vtable[4];
-struct G_348000 { char pad[52]; int w52; };
-struct H { char pad[60]; int f60; };
 extern "C" igMetaObject *g_beSvConnectCheck_metaObject;
 extern "C" int g_beSvConnectCheck_vtable[4];
 extern "C" int g_beSaveApi_vtable[4];
-struct R_348390 { int w0; int rc; };
-struct S_348390 {
-    void *f0;
-    char pad[44];
-    struct R_348390 *f48;
-    struct R_348390 *f52;
-    struct R_348390 *f56;
-};
-extern "C" void *beSaveApi_Destroy(struct S_348390 *arg0, short arg1);
+extern "C" void *beSaveApi_Destroy(beSaveApi *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beSaveMemoryObj_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igMetaObject *g_beSaveApi_metaObject;
 extern "C" igMetaObject *g_beSvEndApi_metaObject;
-struct T_348680 { int word0; int references; };
 extern "C" int g_beSvEndApi_vtable[4];
-struct Obj_348680 {
-    int *vt; int w0[11]; T_348680 *r1; T_348680 *r2; T_348680 *r3; int pad;
-    inline void rel(T_348680 **self) {
-        if (self) {
-            T_348680 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
-struct SR { char pad4[4]; int f4; };
 extern "C" igMetaObject *g_beSvStartApi_metaObject;
 extern "C" igMetaObject *beSvStartApi_GetMetaObject(void);
 extern "C" int g_beSvStartApi_vtable[4];
@@ -3183,7 +3024,6 @@ extern "C" igMetaObject *g_bePadData_metaObject;
 extern "C" int g_bePadData_vtable[4];
 extern "C" igMetaObject *g_beOptInfo_metaObject;
 extern "C" igMetaObject *beOptInfo_GetMetaObject(void);
-typedef struct { int *vt; int p4; int f8; int pad[4]; int a; int b; int tail[3]; } Obj_34d0d0;
 extern "C" int g_beOptInfo_vtable[4];
 struct igMetaObject_34d180;
 extern "C" igMetaObject_34d180 * igInfo_GetPublishedMetaObject(...);
@@ -3213,7 +3053,6 @@ extern "C" int g_beLoadingNode_vtable[4];
 extern "C" int g_igGroup_vtable[4];
 extern "C" int g_beNodeAnim_vtable[4];
 extern "C" igMetaObject *g_beNodeAnim_metaObject;
-struct Obj_34e8c0 { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; int f32; int f36; int f40; int f44; int f48; int f52; int f56; int f60; int f64; int f68; int f72; int f76; int f80; int f84; int f88; int f92; int f96; int f100; int f104; int f108; };
 extern "C" igMetaObject *g_beMovieInfo_metaObject;
 extern "C" int g_beMovieInfo_vtable[4];
 extern "C" igMetaObject *g_beMovieInfoData_metaObject;
@@ -3328,7 +3167,7 @@ struct ModelCtrlInfoWorkView : igObjectView, ModelCtrlInfoWorkVtable {
     ModelCtrlInfoWorkView() : ModelCtrlInfoWorkVtable(&vtable) { }
     ~ModelCtrlInfoWorkView() { vtable = g_beModelCtrlInfoWork_vtable; }
 };
-extern "C" void *beModelCtrlInfoWork_Destroy(beNDMWMdlPlayer2InfoWork *arg0, long long arg1);
+extern "C" void *beModelCtrlInfoWork_Destroy(beModelCtrlInfoWork *self, long long delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoDataTrc_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
@@ -3470,72 +3309,12 @@ extern "C" int g_beModelCtrlLABEL_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlLUACALL_metaObject;
 extern "C" igMetaObject *beModelCtrlLUACALL_GetMetaObject(void);
 extern "C" int g_beModelCtrlLUACALL_vtable[4];
-struct Obj_3564a0 {
-    int *vt; char p4[4]; char *m8; char *m12; 
-    inline void rel8() {
-        char **self = &m8;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-    inline void rel12() {
-        char **self = &m12;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beModelCtrlDataList_metaObject;
 extern "C" igMetaObject *beModelCtrlDataList_GetMetaObject(void);
 extern "C" int g_beModelCtrlDataList_vtable[4];
 extern "C" igMetaObject *g_beModelCtrlData_metaObject;
 extern "C" igMetaObject *beModelCtrlData_GetMetaObject(void);
-struct T_356870 { int word0; int references; };
 extern "C" int g_beModelCtrlData_vtable[4];
-struct Obj_356870 {
-    int *vt; int w0[1]; char *s; T_356870 *ref;
-    inline void releaseRef() {
-        T_356870 **self = &ref;
-        if (self) {
-            T_356870 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void releaseStr() {
-        char **self = &s;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beModelCtrl_metaObject;
 extern "C" igMetaObject *beModelCtrl_GetMetaObject(void);
 extern "C" igMetaObject *g_beMeterCtrlNode_metaObject;
@@ -3543,40 +3322,11 @@ extern "C" int g_beMeterCtrlNode_vtable[4];
 extern "C" igMetaObject *g_beMeterCtrlInfoList_metaObject;
 extern "C" int g_beMeterCtrlInfoList_vtable[4];
 extern "C" igMetaObject *g_beMeterCtrlInfo_metaObject;
-typedef struct { int *vt; int w[6]; int s; } Obj_3570f0;
 extern "C" int g_beMeterCtrlInfo_vtable[4];
 extern "C" igMetaObject *g_beMeterCtrlOneData_metaObject;
 extern "C" int g_beMeterCtrlOneData_vtable[4];
 extern "C" igMetaObject *g_beMeterCtrl_metaObject;
-struct T_357740 { int word0; int references; };
 extern "C" int g_beMeterCtrl_vtable[4];
-struct Obj_357740 {
-    int *vt; int w0; int *r1; int w1[3]; T_357740 *r2; int pad;
-    inline void rel1() {
-        int **self = &r1;
-        if (self) {
-            int *p = *self;
-            if (p) {
-                int *a1 = p - 2;
-                int v0 = p[-1] - 1;
-                p[-1] = v0;
-                if (v0 == 0)
-                    StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    inline void rel2() {
-        T_357740 **self = &r2;
-        if (self) {
-            T_357740 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beMessenger_metaObject;
 extern "C" int g_beMessenger_vtable[4];
 extern "C" void *g_stringPool[4];
@@ -3669,61 +3419,9 @@ extern "C" int g_beMessengerArgData_vtable[4];
 extern "C" igMetaObject *g_beMemory_metaObject;
 extern "C" int g_beMemory_vtable[4];
 extern "C" igMetaObject *g_beMatCtrlInfoWork_metaObject;
-struct T_359560 { int word0; int references; };
 extern "C" int g_beMatCtrlInfoWork_vtable[4];
-struct Obj_359560 {
-    int *vt; char p4[4]; T_359560 *m8; T_359560 *m12; 
-    inline void rel8() {
-        T_359560 **self = &m8;
-        if (self) {
-            T_359560 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void rel12() {
-        T_359560 **self = &m12;
-        if (self) {
-            T_359560 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beMatCtrlInfoRam_metaObject;
-struct T_359810 { int word0; int references; };
 extern "C" int g_beMatCtrlInfoRam_vtable[4];
-struct Obj_359810 {
-    int *vt; int w0; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; T_359810 *r9; T_359810 *r10;
-    inline void rel9() {
-        T_359810 **self = &r9;
-        if (self) {
-            T_359810 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void rel10() {
-        T_359810 **self = &r10;
-        if (self) {
-            T_359810 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMatCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igMetaObject *g_beMatCtrlInfo_metaObject;
 extern "C" int g_beMatCtrlInfo_vtable[4];
@@ -3737,38 +3435,9 @@ extern "C" igMetaObject *g_beMatCtrlData_metaObject;
 extern "C" int g_beMatCtrlData_vtable[4];
 extern "C" igMetaObject *g_beMatCtrl_metaObject;
 extern "C" int g_beMatCtrl_vtable[4];
-struct F_35a940 { char pad[52]; int f52; int f56; char f60; };
 extern "C" igMetaObject *g_beLuaState_metaObject;
-struct T_35ab00 { int word0; int references; };
 extern "C" int g_beLuaState_vtable[4];
 extern "C" int g_igLuaState_vtable[4];
-struct Obj_35ab00 {
-    int *vt; int w0; int *r1; int w1; T_35ab00 *r2;
-    inline void rel1() {
-        int **self = &r1;
-        if (self) {
-            int *p = *self;
-            if (p) {
-                int *a1 = p - 2;
-                int v0 = p[-1] - 1;
-                p[-1] = v0;
-                if (v0 == 0)
-                    StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    inline void rel2() {
-        T_35ab00 **self = &r2;
-        if (self) {
-            T_35ab00 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" int g_igLuaState_metaObject[4];
 extern "C" igMetaObject *g_beLuaInfo_metaObject;
 extern "C" igMetaObject *beLuaInfo_GetMetaObject(void);
@@ -3817,22 +3486,7 @@ struct igMetaObject_35d1c0;
 extern "C" igMetaObject_35d1c0 *igEventReceiver_GetPublishedMetaObject(void);
 extern "C" igMetaObject *g_beHitLandModelInfoRam_metaObject;
 extern "C" igMetaObject *beHitLandModelInfoRam_GetMetaObject(void);
-struct T_35d350 { int word0; int references; };
 extern "C" int g_beHitLandModelInfoRam_vtable[4];
-struct Obj_35d350 {
-    int *vt; int w0[9]; T_35d350 *ref; char pad[4];
-    inline void releaseRef() {
-        T_35d350 **self = &ref;
-        if (self) {
-            T_35d350 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beHitLandModelInfo_metaObject;
 extern "C" igMetaObject *beHitLandModelInfo_GetMetaObject(void);
 extern "C" int g_beHitLandModelInfo_vtable[4];
@@ -3870,7 +3524,6 @@ extern "C" igMetaObject *g_beHitLandDelivInfoRam_metaObject;
 extern "C" int g_beHitLandDelivInfoRam_vtable[4];
 extern "C" igMetaObject *g_beHitLandDelivInfo_metaObject;
 extern "C" int g_beHitLandDelivInfo_vtable[4];
-struct Obj_35ea10 { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; };
 extern "C" igMetaObject *g_beHitLandDeliv_metaObject;
 extern "C" int g_beHitLandDeliv_vtable[4];
 extern "C" igMetaObject *g_beGroupKeepList_metaObject;
@@ -3882,33 +3535,7 @@ extern "C" igMetaObject *beGeneraterInfoWork_GetMetaObject(void);
 extern "C" int g_beGeneraterInfoWork_vtable[4];
 extern "C" igMetaObject *g_beGeneraterInfoRam_metaObject;
 extern "C" igMetaObject *beGeneraterInfoRam_GetMetaObject(void);
-struct T_35f460 { int word0; int references; };
 extern "C" int g_beGeneraterInfoRam_vtable[4];
-struct Obj_35f460 {
-    int *vt; char p4[36]; T_35f460 *m40; T_35f460 *m44; 
-    inline void rel40() {
-        T_35f460 **self = &m40;
-        if (self) {
-            T_35f460 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void rel44() {
-        T_35f460 **self = &m44;
-        if (self) {
-            T_35f460 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igSmartPointer<igObject> *igSmartPointer_beGeneraterInfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igMetaObject *g_beGeneraterInfo_metaObject;
 extern "C" igMetaObject *beGeneraterInfo_GetMetaObject(void);
@@ -3922,33 +3549,7 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beGeneraterPlayerDataList_De
 extern "C" igMetaObject *g_beGeneraterPlayerDataList_metaObject;
 extern "C" int g_beGeneraterPlayerDataList_vtable[4];
 extern "C" igMetaObject *g_beGeneraterPlayerData_metaObject;
-struct T_360100 { int word0; int references; };
 extern "C" int g_beGeneraterPlayerData_vtable[4];
-struct Obj_360100 {
-    int *vt; int w0; int w1; int w2; T_360100 *r3; T_360100 *r4; int w5; int w6;
-    inline void rel3() {
-        T_360100 **self = &r3;
-        if (self) {
-            T_360100 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void rel4() {
-        T_360100 **self = &r4;
-        if (self) {
-            T_360100 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beGeneraterItemDataList_metaObject;
 extern "C" int g_beGeneraterItemDataList_vtable[4];
 extern "C" igMetaObject *g_beGeneraterItemData_metaObject;
@@ -3977,13 +3578,9 @@ extern "C" igMetaObject *g_beFontImage_metaObject;
 extern "C" igMetaObject *beFontImage_GetMetaObject(void);
 extern "C" int g_beFontImage_vtable[4];
 extern "C" int g_igFont_vtable[4];
-typedef struct R_361a20 { int w0; int refs; } R_361a20;
-typedef struct O_361a20 { int *vt; int f4; int *str; int f12; int f16; R_361a20 *ref; } O_361a20;
-extern "C" O_361a20 *igFont_Destroy(O_361a20 *arg0, short arg1);
+extern "C" igFont *igFont_Destroy(igFont *self, short delete_storage);
 extern "C" int g_igBitmapFont_vtable[4];
-typedef struct R_361b00 { int w0; int refs; } R_361b00;
-typedef struct O_361b00 { int *vt; int f4; int *str; int f12; int f16; R_361b00 *ref20; int f24; R_361b00 *ref28; R_361b00 *ref32; } O_361b00;
-extern "C" O_361b00 *igBitmapFont_Destroy(O_361b00 *arg0, short arg1);
+extern "C" igBitmapFont *igBitmapFont_Destroy(igBitmapFont *self, short delete_storage);
 extern "C" int g_igBitmapFont_metaObject[4];
 extern "C" igMetaObject *g_beFont_metaObject;
 extern "C" int g_beFont_vtable[4];
@@ -4002,7 +3599,6 @@ extern "C" igMetaObject *g_beFileChkObj_metaObject;
 extern "C" int g_beFileChkObj_vtable[4];
 extern "C" igMetaObject *g_beDemoManager_metaObject;
 extern "C" int g_beDemoManager_vtable[4];
-struct Obj_3632f0 { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; char t[4]; };
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDemoManagerWork_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDemoManagerWorkList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igMetaObject *g_beDemoManagerWorkList_metaObject;
@@ -4025,66 +3621,9 @@ extern "C" int g_beDataObjList_vtable[4];
 extern "C" igMetaObject *g_beDataObjFloatList_metaObject;
 extern "C" int g_beDataObjFloatList_vtable[4];
 extern "C" igMetaObject *g_beDataObjObjectList_metaObject;
-struct T_364580 { int word0; int references; };
 extern "C" int g_beDataObjObjectList_vtable[4];
-struct Obj_364580 {
-    int *vt; int w0; int *r1; T_364580 *r2;
-    inline void rel1() {
-        int **self = &r1;
-        if (self) {
-            int *p = *self;
-            if (p) {
-                int *a1 = p - 2;
-                int v0 = p[-1] - 1;
-                p[-1] = v0;
-                if (v0 == 0)
-                    StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    inline void rel2() {
-        T_364580 **self = &r2;
-        if (self) {
-            T_364580 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beDataObjStringList_metaObject;
-struct T_364850 { int word0; int references; };
 extern "C" int g_beDataObjStringList_vtable[4];
-struct Obj_364850 {
-    int *vt; char p4[4]; char *m8; T_364850 *m12; 
-    inline void rel8() {
-        char **self = &m8;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-    inline void rel12() {
-        T_364850 **self = &m12;
-        if (self) {
-            T_364850 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beDataObjString_metaObject;
 extern "C" int g_beDataObjString_vtable[4];
 extern "C" igMetaObject *g_beDataObjBoolList_metaObject;
@@ -4092,36 +3631,7 @@ extern "C" int g_beDataObjBoolList_vtable[4];
 extern "C" igMetaObject *g_beDataObjBool_metaObject;
 extern "C" int g_beDataObjBool_vtable[4];
 extern "C" igMetaObject *g_beDataObjIntList_metaObject;
-struct T_3652d0 { int word0; int references; };
 extern "C" int g_beDataObjIntList_vtable[4];
-struct Obj_3652d0 {
-    int *vt; char p4[4]; char *m8; T_3652d0 *m12; 
-    inline void rel8() {
-        char **self = &m8;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-    inline void rel12() {
-        T_3652d0 **self = &m12;
-        if (self) {
-            T_3652d0 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beDataObjInt_metaObject;
 extern "C" int g_beDataObjInt_vtable[4];
 extern "C" igMetaObject *g_beDataBaseList_metaObject;
@@ -4131,7 +3641,6 @@ extern "C" int g_beDataBase_vtable[4];
 extern "C" igMetaObject *g_beDBManagerInfo_metaObject;
 extern "C" igMetaObject *beDBManagerInfo_GetMetaObject(void);
 extern "C" int g_beDBManagerInfo_vtable[4];
-struct Obj_365e10 { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; };
 extern "C" igMetaObject *g_beDBManager_metaObject;
 extern "C" igMetaObject *beDBManager_GetMetaObject(void);
 extern "C" int g_beDBManager_vtable[4];
@@ -4183,33 +3692,7 @@ struct CopyModelCtrl2View : igTransformView, CopyModelCtrl2Vtable {
 };
 extern "C" igMetaObject *g_beChangePosTransformInfoRam_metaObject;
 extern "C" igMetaObject *beChangePosTransformInfoRam_GetMetaObject(void);
-struct T_368360 { int word0; int references; };
 extern "C" int g_beChangePosTransformInfoRam_vtable[4];
-struct Obj_368360 {
-    int *vt; char p4[36]; T_368360 *m40; T_368360 *m44; 
-    inline void rel40() {
-        T_368360 **self = &m40;
-        if (self) {
-            T_368360 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void rel44() {
-        T_368360 **self = &m44;
-        if (self) {
-            T_368360 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beChangePosTransformInfo_metaObject;
 extern "C" igMetaObject *beChangePosTransformInfo_GetMetaObject(void);
 extern "C" int g_beChangePosTransformInfo_vtable[4];
@@ -4224,22 +3707,7 @@ extern "C" igMetaObject *g_beCameraCtrlInfo_metaObject;
 extern "C" int g_beCameraCtrlInfo_vtable[4];
 extern "C" int g_igObject_metaObject[4];
 extern "C" igMetaObject *g_beCameraDemoData_metaObject;
-struct T_368fd0 { int word0; int references; };
 extern "C" int g_beCameraDemoData_vtable[4];
-struct Obj_368fd0 {
-    int *vt; int pad4; T_368fd0 *ref; int w[5];
-    inline void release() {
-        T_368fd0 **self = &ref;
-        if (self) {
-            T_368fd0 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beCameraBoxData_metaObject;
 extern "C" int g_beCameraBoxData_vtable[4];
 extern "C" igMetaObject *g_beCameraCtrlInfoRamShake_metaObject;
@@ -4288,22 +3756,7 @@ extern "C" igMetaObject *g_beBaseInfoDataList_metaObject;
 extern "C" int g_beBaseInfoDataList_vtable[4];
 extern "C" igMetaObject *g_beBaseInfoData_metaObject;
 extern "C" igMetaObject *g_beActionStarterInfoRam_metaObject;
-struct T_36b210 { int word0; int references; };
 extern "C" int g_beActionStarterInfoRam_vtable[4];
-struct Obj_36b210 {
-    int *vt; int w0[9]; T_36b210 *ref; char pad[4];
-    inline void releaseRef() {
-        T_36b210 **self = &ref;
-        if (self) {
-            T_36b210 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beActionStarterInfo_metaObject;
 extern "C" int g_beActionStarterInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beAsTargetModelDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
@@ -4317,36 +3770,6 @@ extern "C" int g_beActionStarterData_vtable[4];
 extern "C" igMetaObject *g_beActionStarterDataList_metaObject;
 extern "C" int g_beActionStarterDataList_vtable[4];
 extern "C" igMetaObject *g_beActionStarterData_metaObject;
-struct Obj_36be40 : beActionStarterData {
-    inline void rel8() {
-        char **self = (char **)&_name;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-    inline void rel12() {
-        char **self = (char **)&_message;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_beActionStarter_metaObject;
 extern "C" int g_beActionStarter_vtable[4];
 extern "C" igMetaObject *g_beAction2InfoWork_metaObject;
@@ -4379,36 +3802,7 @@ extern "C" int g_beAction2Data_vtable[4];
 extern "C" igMetaObject *g_beAction2_metaObject;
 extern "C" int g_beAction2_vtable[4];
 extern "C" igMetaObject *g_be_metaObject;
-struct T_36e080 { int word0; int references; };
 extern "C" int g_be_vtable[4];
-struct Obj_36e080 {
-    int *vt; int w0[1]; char *s; int w3; T_36e080 *ref; char tail[12];
-    inline void releaseRef() {
-        T_36e080 **self = &ref;
-        if (self) {
-            T_36e080 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void releaseStr() {
-        char **self = &s;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
-        }
-    }
-};
 extern "C" igMetaObject *g_ParticleArray_metaObject;
 extern "C" int igParticleArray_Destroy(igParticleArray *, int);
 extern "C" int g_ParticleArray_vtable[4];
@@ -4426,7 +3820,7 @@ extern "C" int igSceneInfo_Destroy(igSceneInfo *, int);
 extern "C" int g_ParticleInfo_vtable[4];
 extern "C" int g_igSceneInfo_metaObject[4];
 extern "C" void ParticleInfo_resetFields(ParticleInfo *self, int clearControls);
-extern "C" void beBinDataObject_userDestruct(beBinDataObject *arg0);
+extern "C" void beBinDataObject_userDestruct(beBinDataObject *self);
 // clang-format off
 /* beDataBase record lookup and row count, 0x003a93a0..0x003a9708. A beDataBase is a table of
  * records (rows). Its cells are split by type into six data lists (char, short, int, float, bool,
@@ -4451,84 +3845,17 @@ extern "C" char *beDataBase_GetRecordString(beDataBase *, int, const char *);
 extern "C" int beDataBase_GetRecordCount(beDataBase *);
 extern "C" int g_igFont_metaObject[4];
 extern "C" int g_igLightSet_metaObject[4];
-extern "C" void beLuaDataObject_userDestruct(beLuaDataObject *arg0);
-struct T_36f970 { int word0; int references; };
+extern "C" void beLuaDataObject_userDestruct(beLuaDataObject *self);
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int kIGMemoryPoolHandleUser1[4];
-struct Rel { static inline void go(T_36f970 *object) {
-    if (object) {
-        --object->references;
-        if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
-} };
-struct Ref_36f970 { T_36f970 *p; Ref_36f970(T_36f970 *x) : p(x) {} ~Ref_36f970() { Rel::go(p); } };
-struct Obj_36f970 {
-    virtual void a0();
-    virtual void a1();
-    virtual void a2();
-    virtual void a3();
-    virtual void a4();
-    virtual void a5();
-    virtual void a6();
-    virtual void a7();
-    virtual void a8();
-    virtual void a9();
-    virtual void a10();
-    virtual void a11();
-    virtual void a12();
-    virtual void a13();
-    virtual void a14();
-    virtual void a15();
-    virtual void a16();
-    virtual void a17();
-    virtual void a18();
-    virtual void a19();
-    virtual int v88();
-    int f4; int f8; void *list;
-};
-extern "C" void beNumVerData_userConstruct(Obj_36f970 *arg0, int arg1);
-/* matching construct: inlined release helper reproducing the retail refcount decrement */
-struct Rel_36fae0 { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
-} };
-/* matching construct: dummy-virtual receiver so arg0->v88() dispatches through vtable offset 88 */
-struct Obj_36fae0 {
-    virtual void a0();
-    virtual void a1();
-    virtual void a2();
-    virtual void a3();
-    virtual void a4();
-    virtual void a5();
-    virtual void a6();
-    virtual void a7();
-    virtual void a8();
-    virtual void a9();
-    virtual void a10();
-    virtual void a11();
-    virtual void a12();
-    virtual void a13();
-    virtual void a14();
-    virtual void a15();
-    virtual void a16();
-    virtual void a17();
-    virtual void a18();
-    virtual void a19();
-    virtual int v88();
-};
-extern "C" void beNumVerData_userDestruct(Obj_36fae0 *arg0);
+extern "C" void beNumVerData_userConstruct(beNumVerData *self, int flag);
+extern "C" void beNumVerData_userDestruct(beNumVerData *self);
 extern "C" void beSaveDataDeliver_userDestruct(beSaveDataDeliver *self);
 extern "C" void beSvPlatDataGC_userDestruct(beSvPlatDataGC *self);
 extern "C" void beSvPs2McImage128k_userConstruct(beSvPs2McImage128k *self, int flag);
 extern "C" void beXboxImage24k_userConstruct(beXboxImage24k *self, int flag);
 extern "C" void beXboxImage24k_userDestruct(beXboxImage24k *self);
-/* igTransform's virtual functions past igObject's; slot 35 is SetMatrix (igTransform/35). */
-class igTransformDispatchView : public igObjectDispatchView { public: virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31(); virtual void s32(); virtual void s33(); virtual void s34(); virtual void SetMatrix(int matrix); };
-extern "C" void beTransformSync_SetMatrix(beTransformSync *self, int matrix);
+extern "C" void beTransformSync_SetMatrix(beTransformSync *self, const float *matrix);
 extern "C" int g_igAppearanceList_metaObject[4];
 
 #endif

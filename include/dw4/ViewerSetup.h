@@ -10,7 +10,7 @@ struct InsightCore : igObject {
 };
 
 /* The viewer's setup: an Insight core, its scene-info, actor and data-pump managers, the logo
-   renderer and the window, each held by reference (the same object FUN_00463bc0 reads as S). */
+   renderer and the window, each held by reference (the same object ViewerSetup_Update reads as S). */
 struct ViewerSetup {
     igSmartPointer<InsightCore> core;
     igSmartPointer<igObject> sceneInfo;

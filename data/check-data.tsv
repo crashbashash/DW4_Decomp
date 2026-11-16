@@ -3098,6 +3098,11 @@
 004c8f70	4	.data	0038aca0	match
 004c8f78	4	.data	0038aca0	match
 004c8f80	4	.data	0038aca0	match
+004c8f88	4	.data	0038bee0	match
+004c8fa0	4	.data	003902f0	match
+004c8fa8	4	.data	003902f0	match
+004c8fb0	4	.data	003902f0	match
+004c8fb8	4	.data	003902f0	match
 004c91f8	4	.data	003ae680	match
 004c9200	4	.data	003ae680	match
 004c9208	4	.data	003ae680	match
@@ -10468,6 +10473,8 @@
 0050e7a8	13	.rodata	003819a0	match
 0050e7b8	4	.rodata	003819a0	match
 0050e860	10	.rodata	003844a0	match
+0050e870	11	.rodata	003844a0	match
+0050e880	8	.rodata	003844a0	match
 0050e888	9	.rodata	003844a0	match
 0050e910	14	.rodata	003844a0	match
 0050e920	8	.rodata	003844a0	match
@@ -13065,6 +13072,8 @@
 005549c8	1	.sdata	00370780	match
 005549cc	1	.sdata	00370780	match
 005549d0	1	.sdata	0038aca0	match
+005549d4	1	.sdata	0038bee0	match
+005549d8	1	.sdata	0038bee0	match
 005549e0	1	.sdata	003d2230	match
 005549e4	1	.sdata	003f6620	match
 005549e8	1	.sdata	003f6620	match

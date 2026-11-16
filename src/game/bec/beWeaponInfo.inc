@@ -28,7 +28,7 @@ int beWeaponInfo_GetVTable(void) {
     igSmartPointer_beWeaponSeqDataList_Destruct((igSmartPointer<igObject> *)&obj._seqDataList, (short)(-1));
     igSmartPointer_igNamedObjectList_Destruct(&obj._boneNameList, -1);
     igSmartPointer_igNodeList_Destruct(&obj._nodeList, -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 
@@ -45,54 +45,24 @@ igSmartPointer<igObject> *igSmartPointer_beBaseInfoRamList_Destruct(igSmartPoint
     return self;
 }
 
-void *beBaseInfo_Destroy(struct S_33ec80 *arg0, short arg1) {
-    struct R_33ec80 *p;
-    int *h;
-    int *a1;
-    int rc;
-
-    if (arg0 != 0) {
-        arg0->f0 = &g_beBaseInfo_vtable[0];
-        if (&arg0->f24) {
-            p = arg0->f24;
-            if (p != 0) {
-                p->rc = p->rc - 1;
-                if ((p->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy(p);
-                }
+void *beBaseInfo_Destroy(beBaseInfo *self, short delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_beBaseInfo_vtable[0];
+        igObjectRef_Release((igObject **)&self->_ramList);
+        igObjectRef_Release((igObject **)&self->_dataList);
+        /* ~igInfo and ~igNamedObject are inlined here with their own null checks on `this` */
+        if (self != 0) {
+            self->_vtable = (int)&g_igInfo_vtable[0];
+            if (self != 0) {
+                self->_vtable = (int)&g_igNamedObject_vtable[0];
+                igStringRef_Release((char **)&self->_name);
             }
         }
-        if (&arg0->f20) {
-            p = arg0->f20;
-            if (p != 0) {
-                p->rc = p->rc - 1;
-                if ((p->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy(p);
-                }
-            }
-        }
-        if (arg0 != 0) {
-            arg0->f0 = &g_igInfo_vtable[0];
-            if (arg0 != 0) {
-                arg0->f0 = &g_igNamedObject_vtable[0];
-                if (&arg0->f8) {
-                    h = arg0->f8;
-                    if (h != 0) {
-                        a1 = h - 2;
-                        rc = h[-1] - 1;
-                        h[-1] = rc;
-                        if (rc == 0) {
-                            StringChunk_ReleaseHeader(*a1, a1);
-                        }
-                    }
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beWeaponSeqDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {

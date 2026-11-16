@@ -351,7 +351,7 @@
 0x0019ccd0	igNodeList_Register	engine
 0x0019cf20	igNode_Register	engine
 0x0019cfb0	igNode_InitFields	engine
-0x0019d370	igModelViewMatrixBoneSelectList_561880_Register	game
+0x0019d370	igModelViewMatrixBoneSelectListSg_Register	game
 0x0019d500	igModelViewMatrixBoneSelect_Register	engine
 0x0019d580	igModelViewMatrixBoneSelect_InitFields	engine
 0x0019d720	igLod_Register	engine

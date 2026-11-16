@@ -9,18 +9,18 @@ void *beSaveUtilInfo_GetMetaObject(void) {
 }
 
 int beSaveUtilInfo_GetVTable(void) {
-    struct Obj_346b00 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.f20 = 0;
-    o.f24 = 0;
-    o.vt = &g_beSaveUtilInfo_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beSaveUtilInfo_vtable[0];
-    
-    beBaseInfo_Destroy((struct S_33ec80 *)&o, (short)0);
-    return r;
+    beSaveUtilInfo obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beSaveUtilInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSaveUtilInfo_vtable[0];
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
+    return vtable;
 }
 
 void beSaveUtilInfo_EnsureRegistered(void)

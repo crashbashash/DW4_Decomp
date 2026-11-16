@@ -1,8 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igVec3f.h"
-#include "dw4/igTransformVirtuals.h"
-#include "dw4/igRandomNumberDispatch.h"
+#include "dw4/igTransformDispatchView.h"
+#include "dw4/igRandomNumberDispatchView.h"
 
 extern "C" void igSwitch_DisableAllChildren(int);
 extern "C" void igSwitch_EnableChild(void *, unsigned int);
@@ -128,7 +128,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
             igMatrix44f_SetIdentity(matrix);
             igMatrix44f_Copy(matrix, ((igTransform *)work->_positionLockNode)->_m);
             igMatrix44f_TranslateLocal(matrix, work->_positionLockOffset);
-            ((igTransformVirtuals *)ram->_transform)->setMatrix(matrix);
+            ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         }
         switch (StateOf(ram)) {
         case PARTICLE_START:
@@ -212,7 +212,7 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
                 rotationX = rotation.x;
                 rotationZ = rotation.z;
                 if (!(rotationY <= 6.2831855f)) {
-                    rotationY = (float)(((RandomNumberDispatch *)((beSystem *)self->_system)->_random)->genrand() % 6144U) / 1000.0f;
+                    rotationY = (float)(((igRandomNumberDispatchView *)((beSystem *)self->_system)->_random)->genrand() % 6144U) / 1000.0f;
                 }
             } else {
                 rotationX = g_vec3Zero[0];
@@ -259,11 +259,11 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
             if (rotationZ != 0.0f) {
                 igMatrix44f_PreRotateAxisAngle(matrix, g_vec3ZAxis, rotationZ);
             }
-            ((igTransformVirtuals *)ram->_transform)->setMatrix(matrix);
+            ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         } else {
             float identity[16];
             igMatrix44f_SetIdentity(identity);
-            ((igTransformVirtuals *)ram->_transform)->setMatrix(identity);
+            ((igTransformDispatchView *)ram->_transform)->SetMatrix(identity);
         }
         ram->_isRun = 1;
         ram->_st0 = 0;

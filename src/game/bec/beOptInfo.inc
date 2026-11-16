@@ -14,20 +14,20 @@ igMetaObject *beOptInfo_GetMetaObject(void)
 }
 
 int beOptInfo_GetVTable(void) {
-    Obj_34d0d0 o;
-    int r;
+    beOptInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.vt = &g_beOptInfo_vtable[0];
-    o.a = 0;
-    o.b = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beOptInfo_vtable[0];
-    igStringRef_Destruct(&o.b, -1);
-    igStringRef_Destruct(&o.a, -1);
-    igInfo_Destroy(&o, 0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._vtable = (int)&g_beOptInfo_vtable[0];
+    obj._libOpt = 0;
+    obj._libAsm = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beOptInfo_vtable[0];
+    igStringRef_Destruct(&obj._libAsm, -1);
+    igStringRef_Destruct(&obj._libOpt, -1);
+    igInfo_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beOptInfo_EnsureRegistered(void)

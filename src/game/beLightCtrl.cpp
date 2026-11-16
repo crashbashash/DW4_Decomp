@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igMath.h"
-#include "dw4/igLightAttrVirtuals.h"
+#include "dw4/igLightAttrDispatchView.h"
 
 extern "C" void beLightCtrl_Prepare(void);
 extern "C" int beLightCtrl_GetInfoMeta(void);
@@ -41,8 +41,8 @@ void beLightCtrl_UpdateRam(void)
 int beLightCtrl_OnMessageText(beLightCtrl *self, beBaseInfoRam *ram, const char *message) {
     beLightCtrlInfo *info;
     igVec3f ambient;
-    igLightAttrVirtuals *light;
-    igLightAttrVirtuals **lights;
+    igLightAttrDispatchView *light;
+    igLightAttrDispatchView **lights;
     igVec3f diffuse;
     igVec3f specular;
     int name;
@@ -57,7 +57,7 @@ int beLightCtrl_OnMessageText(beLightCtrl *self, beBaseInfoRam *ram, const char 
         beMessenger_GetVec3(&specular, self->_messenger, 2);
         lightSet = (igLightSet *)igProperty_FindByName(info->_lightSetList, g_propertyNameField[0], name);
         if (lightSet != 0) {
-            lights = (igLightAttrVirtuals **)((igLightList *)lightSet->_lights)->_data;
+            lights = (igLightAttrDispatchView **)((igLightList *)lightSet->_lights)->_data;
             light = *lights;
             colour.w = 1.0f;
             colour.x = ambient.x; colour.y = ambient.y; colour.z = ambient.z;

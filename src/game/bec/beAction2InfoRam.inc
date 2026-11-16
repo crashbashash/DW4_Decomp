@@ -29,7 +29,7 @@ int beAction2InfoRam_GetVTable(void) {
     igSmartPointer_igActorList_Destruct(&obj._actorList, -1);
     igSmartPointer_igAppearanceList_Destruct(&obj._appearanceList, -1);
     igSmartPointer_beModelCtrlNode2_Destruct((void **)(&obj._node), (short)(-1));
-    beBaseInfoRam_Destroy((S *)&obj, (long long)0);
+    beBaseInfoRam_Destroy((beBaseInfoRam *)&obj, (long long)0);
     return vtable;
 }
 

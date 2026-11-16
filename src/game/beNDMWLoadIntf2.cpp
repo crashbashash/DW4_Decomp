@@ -29,7 +29,7 @@ extern "C" void igObject_Destroy(void *);
 extern "C" void Vec3f_Copy(void *destination, void *source);
 extern "C" void *igProperty_FindByName(int list, int nameField, const void *name);
 extern "C" void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, const void *name);
-extern "C" int ObjectRef_Get_003e92a0(int *reference);
+extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(int *reference);
 extern "C" int beBaseInfoDataList_Create(int);
 /* An allocator handle returned by value. */
 struct AllocatorValue {
@@ -39,7 +39,7 @@ struct AllocatorValue {
 };
 extern "C" AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(int allocator);
 extern "C" int beNDMWLoadIntf2_Memory_SelectAllocator(const int *selector, int ownAllocator);
-extern "C" int ObjectRef_Get_003e93b0(int *reference);
+extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(int *reference);
 extern "C" int beNDMWLoadIntf2__GetInfoMeta(void);
 extern "C" int beNDMWLoadIntf2__GetMeta(void);
 extern "C" void beNDMWLoadIntf2DegiState__Init(beNDMWLoadIntf2DegiState *self, int plNo, int commonIntf, int textOrder, int comMdlCtrl, int messenger, int dispPos);
@@ -608,7 +608,7 @@ static inline void CopyTypedName(unsigned short *destination, beNDMWLoadIntf2Nam
 }
 /* One named object of the player's working set (host->_dataList). */
 static inline void *FindWorkObject(beBaseInfoRam *host, const void *name) {
-  return beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0], name);
+  return beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&host->_dataList), g_propertyNameField[0], name);
 }
 /* The memory-card slot picked on the slot screen. */
 static inline beNDMWMcSlot *SelectedCardSlot(beNDMWLoadCtrl2CommonIntf *common, beNDMWLoadIntf2SelSlot *slots) {
@@ -689,47 +689,47 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
     return;
   /* matching construct: each lookup repeats the empty-reference check here; moving it into an
    * inline helper changes the exception cleanup emitted for FreshDataList::Assign's temporary. */
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   common = (beNDMWLoadCtrl2CommonIntf *)FindWorkObject(host, "COMMONINTF");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   control = (beNDMWLoadIntf2CtrlData *)FindWorkObject(host, "CTRL");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   creation = (beNDMWLoadIntf2MakeChr *)FindWorkObject(host, "MAKECHR");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   models = (beNDMWLoadIntf2ComMdlCtrl *)FindWorkObject(host, "COMMDLCTRL");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   messages = (beNDMWLoadIntf2MesWin *)FindWorkObject(host, "MESWIN");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   slots = (beNDMWLoadIntf2SelSlot *)FindWorkObject(host, "SELSLOT");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   nameEntry = (beNDMWLoadIntf2NameSel *)FindWorkObject(host, "NAMESEL");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   textOrder = (beNDMWLoadIntf2TextOrder *)FindWorkObject(host, "TEXTORDER");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   status = (beNDMWLoadIntf2DegiStateCtrl *)FindWorkObject(host, "DEGISTATECTRL");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   dataSelection = (beNDMWLoadIntf2DataSelIntf *)FindWorkObject(host, "DATASELINTF");
-  if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
+  if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
   difficulty = (beNDMWLoadIntf2Diffselect *)FindWorkObject(host, "DIFFSELECT");
@@ -4846,7 +4846,7 @@ void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, c
     return igProperty_FindByName(list, nameField, name);
 }
 
-int ObjectRef_Get_003e92a0(int *reference)
+int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(int *reference)
 {
     return *reference;
 }
@@ -4878,7 +4878,7 @@ int beNDMWLoadIntf2_Memory_SelectAllocator(const int *selector, int ownAllocator
         return Memory_GetAllocatorBySelector(*selector);
 }
 
-int ObjectRef_Get_003e93b0(int *reference)
+int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(int *reference)
 {
     return *reference;
 }

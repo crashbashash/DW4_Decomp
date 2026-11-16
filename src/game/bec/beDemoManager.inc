@@ -28,19 +28,20 @@ void *beDemoManager_GetMetaObject(void) {
 }
 
 int beDemoManager_GetVTable(void) {
-    struct Obj_3632f0 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.vt = &g_beDemoManager_vtable[0];
-    o.f8 = 0;
-    o.f24 = 0;
-    o.f28 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beDemoManager_vtable[0];
-    igSmartPointer_beDemoManagerWorkList_Destruct((igSmartPointer<igObject> *)&o.f28, (short)(-1));
-    igSmartPointer_beDemoManagerWork_Destruct((igSmartPointer<igObject> *)&o.f24, -1);
-    igInfoManager_Destroy(&o, 0);
-    return r;
+    beDemoManager obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beDemoManager_vtable[0];
+    obj._name = 0;
+    obj._buildData = 0;
+    obj._activeDataList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beDemoManager_vtable[0];
+    igSmartPointer_beDemoManagerWorkList_Destruct((igSmartPointer<igObject> *)&obj._activeDataList, (short)(-1));
+    igSmartPointer_beDemoManagerWork_Destruct((igSmartPointer<igObject> *)&obj._buildData, -1);
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beDemoManagerWork_Destruct(igSmartPointer<igObject> *self, int delete_storage) {

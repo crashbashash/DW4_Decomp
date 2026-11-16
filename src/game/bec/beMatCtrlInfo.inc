@@ -28,7 +28,7 @@ int beMatCtrlInfo_GetVTable(void) {
     igSmartPointer_beMatCtrlSearchList_Destruct((igSmartPointer<igObject> *)(&obj._search), (short)(-1));
     igSmartPointer_beMatCtrlDataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), (long long)(-1));
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switchgraph), -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)((int *)&obj), (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

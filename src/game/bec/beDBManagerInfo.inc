@@ -11,19 +11,20 @@ igMetaObject *beDBManagerInfo_GetMetaObject(void)
 }
 
 int beDBManagerInfo_GetVTable(void) {
-    struct Obj_365e10 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.f20 = 0;
-    o.f24 = 0;
-    o.vt = &g_beDBManagerInfo_vtable[0];
-    o.f28 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beDBManagerInfo_vtable[0];
-    igSmartPointer_beDataBase_Destruct((igSmartPointer<igObject> *)&o.f28, (long long)(-1));
-    beBaseInfo_Destroy((struct S_33ec80 *)&o, (short)0);
-    return r;
+    beDBManagerInfo obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beDBManagerInfo_vtable[0];
+    obj._dataBase = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beDBManagerInfo_vtable[0];
+    igSmartPointer_beDataBase_Destruct((igSmartPointer<igObject> *)&obj._dataBase, (long long)(-1));
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beDataBase_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {

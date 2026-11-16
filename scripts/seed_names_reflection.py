@@ -15,9 +15,10 @@ This emits
   <Class>_Register     at the registrar function
   <Class>_InitFields   at the post_init function, where one exists
 
-Two MetaObjects share the name `igModelViewMatrixBoneSelectList` (`class_prefixes`): the copy a game
-library registers takes that library as a suffix (`igModelViewMatrixBoneSelectListBec`, the class its
-RTTI vtable names `Gap::Bec::igModelViewMatrixBoneSelectList`), any other copy its handle address.
+Two MetaObjects share the name `igModelViewMatrixBoneSelectList` (`class_prefixes`): each copy takes the
+library that registers it as a suffix (`igModelViewMatrixBoneSelectListBec`, the class whose RTTI vtable
+names `Gap::Bec::igModelViewMatrixBoneSelectList`, and `igModelViewMatrixBoneSelectListSg` for SceneGraph);
+a copy in no such library keeps its handle address.
 
   scripts/seed_names_reflection.py > config/SLUS-20836/names/Reflection.tsv
 """
@@ -34,8 +35,8 @@ import regions  # noqa: E402
 
 CLASSES = os.path.join(ROOT, "data", "reflection.json")
 SYMBOLS = os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt")
-# A game library that registers a class under a name Alchemy also registers: the suffix its copy takes.
-LIBRARY_SUFFIX = {"bec": "Bec", "ndmw": "Ndmw"}
+# A library that registers a class under a name another library also registers: the suffix its copy takes.
+LIBRARY_SUFFIX = {"bec": "Bec", "ndmw": "Ndmw", "alchemy-scene-graph": "Sg"}
 
 
 def class_prefixes(classes):

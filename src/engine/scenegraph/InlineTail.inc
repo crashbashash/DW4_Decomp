@@ -698,7 +698,7 @@ int Gap__Sg__igModelViewMatrixBoneSelect__vfunc_22(void) {
 }
 
 igMetaObject *FUN_001e3840(void) {
-    return g_igModelViewMatrixBoneSelectList_metaObject;
+    return g_igModelViewMatrixBoneSelectListSg_metaObject;
 }
 
 igMetaObject *Gap__Sg__igNodeList__vfunc_22(void) {

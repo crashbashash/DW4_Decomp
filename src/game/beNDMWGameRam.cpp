@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 #include "dw4/listSet.h"
-#include "dw4/igRandomNumberDispatch.h"
+#include "dw4/igRandomNumberDispatchView.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
 #define ALLOC(owner, var) { void *got = ((void *)igObject_GetAllocator(owner)); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])); }
 #define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) List_Reserve(l, entry->count, SZ); }
@@ -89,9 +89,9 @@ extern "C" void beMessenger_PushArgContext(int);
 extern "C" void beMessenger_SetRunCheck(int,unsigned char);
 extern "C" void beMessenger_PopArgContext(int);
 extern "C" int beNDMWGameRam_beDataObjStringList_GetData(int *p);
-extern "C" int ObjectRef_Get_00406dc0(int *p);
-extern "C" int ObjectRef_Get_00406df0(int *p);
-extern "C" int ObjectRef_Get_00406e00(int *p);
+extern "C" int beNDMWGameRam_igSmartPointer_igIntList_Deref(int *p);
+extern "C" int beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(int *p);
+extern "C" int beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(int *p);
 extern "C" int beBaseInfoDataList_Create(int);
 extern "C" int *beNDMWGameRam_CreateDataListRef(int *ref, int *allocator);
 extern "C" int beNDMWGameRam_beDataObjIntList_GetData(int *p);
@@ -562,7 +562,7 @@ struct RecomputeHelpers {
 extern "C" void beNDMWGameRam_RecomputeStats(beNDMWGameRam *self, int index, unsigned char apply);
 extern "C" void beNDMWGameRam_FindTechniqueRow(beNDMWGameRam *receiver, void *player, int base_no, int *output);
 extern "C" int beNDMWGameRam_igStringRefList_GetData(igDataList *p);
-extern "C" int DataList_GetWordAt_00406dd0(igDataList *list, int index);
+extern "C" int beNDMWGameRam_beModelCtrlMoveObjectList_Get(igDataList *list, int index);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 extern "C" ObjectRefTarget **beNDMWGameRam_igSmartPointer_beDataBase_Assign(ObjectRefTarget **destination,ObjectRefTarget *incoming);
 extern "C" int beNDMWGameRam_igBoolList_GetData(igUnsignedCharList *p);
@@ -2035,14 +2035,13 @@ void igMatrix44f_Copy(...);
 void igMatrix44f_SetIdentity(...);
 void *FightCom_GetMetaEnum(...);
 void *GameRamMessage_GetMetaEnum(...);
-int FUN_0033e9c0(...);
 void *beNDMWItemAbilityChip_Create(...);
 void *beNDMWItemYellowArmor_Create(...);
 void *beNDMWItemBlueArmor_Create(...);
 int beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(...);
-int ObjectRef_Get_003e92a0(...);
+int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(...);
 AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(...);
-int ObjectRef_Get_003e93b0(...);
+int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(...);
 int beNDMWMdlPEBaseInfoWork_IsPoisoned(...);
 int beNDMWMdlPEBaseInfoWork_CurePoison(...);
 int beNDMWItemBase_IndexOfRecNo(...);
@@ -2116,6 +2115,14 @@ struct MessageDatabases {
         }
         return (void *)beNDMWGameRam_igSmartPointer_beDataBase_Get(&self->_dBEneatk);
     }
+    static inline void *Shinka(beNDMWGameRam *self)
+    {
+        if (beNDMWGameRam_igSmartPointer_beDataBase_Get(&self->_dBShinka) == 0) {
+            beMessenger_SendNamed(self->_messenger, DATABASE_3, shinka_2, 0, GETDATABASE_3);
+            beNDMWGameRam_igSmartPointer_beDataBase_Assign((ObjectRefTarget **)&self->_dBShinka, (ObjectRefTarget *)beMessenger_GetObject(self->_messenger, 0));
+        }
+        return (void *)beNDMWGameRam_igSmartPointer_beDataBase_Get(&self->_dBShinka);
+    }
 };
 /* Reads the message handler repeats: a player's data record and the system's random source. */
 struct MessageAccess {
@@ -2123,9 +2130,9 @@ struct MessageAccess {
     {
         return beNDMWLoadIntf2_igObjectList_Get(beNDMWGameRam_igSmartPointer_beDataObjListList_Get(&self->_playerDataListList), index);
     }
-    static inline RandomNumberDispatch *Random(beNDMWGameRam *self)
+    static inline igRandomNumberDispatchView *Random(beNDMWGameRam *self)
     {
-        return (RandomNumberDispatch *)beNDMWGameRam_igSmartPointer_igRandomNumber_Get(&((beSystem *)self->_system)->_random);
+        return (igRandomNumberDispatchView *)beNDMWGameRam_igSmartPointer_igRandomNumber_Get(&((beSystem *)self->_system)->_random);
     }
 };
 /* The command names of the FIGHTCOM message (g_FightCom_commandNames), by value. */
@@ -2181,19 +2188,24 @@ enum GameRamMessageId {
     GAMERAM_BKCHIPBITEXP,
     GAMERAM_CTRLPLAYER
 };
+/* How an enemy attack record (the eneatk table's TYPE) computes its damage. */
+enum EnemyAttackType { ENEATK_PHYSICAL, ENEATK_MAGIC, ENEATK_MAXHPRATIO };
+/* Byte offsets into g_skillGainTable's halfwords that the raise case reads as ints, indexed by technique row
+ * (matching construct: retail reads the table's own bytes here, not g_raiseFirstValue / g_raiseSecondValue). */
+enum { RAISE_FIRST_OFFSET = 424, RAISE_SECOND_OFFSET = 456 };
 int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *message) {
-    int e2p_diff_705;
-    int temp_ret_634;
-    int temp_ret_657;
-    unsigned char var_s5_7;
-    int temp_s3_6;
-    int temp_ret_635;
-    int temp_ret_636;
-    int temp_s1_9;
-    void *temp_v0_104;
-    int temp_s0_20;
-    int temp_s0_21;
-    int temp_ret_652;
+    int e2pDmgNetCrit;
+    int e2pHitPlayerIndex;
+    int e2pHitAccuracy;
+    unsigned char e2pHit;
+    int e2pHitAttackNo;
+    int e2pHitEnemyRecNo;
+    int e2pHitAttackId;
+    int e2pHitPlayerSpeed;
+    void *e2pHitPlayer;
+    int e2pHitGuardRate;
+    int e2pHitEvasion;
+    int e2pHitEnemySpeed;
     int hitEnemyRecNo;
     int hitAgility;
     int hitPlayerIndex;
@@ -2203,1064 +2215,508 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
     int hitEnemyAgility;
     beNDMWMdlPEBaseInfoWork *hitEnemy;
     int hitWeaponSkill;
-    void *temp_v0_34;
-    int var_s2;
-    char *temp_v0_19;
-    char *temp_v0_10;
-
-    void *temp_v0_47;
-
-    Vector3 sp3D8;
-    Vector3 sp3C8;
-    Vector3 sp3B8;
-    Vector3 sp3A8;
-    Vector3 sp398;
-    Vector3 sp388;
+    void *player;
+    Vector3 healCenter;
+    Vector3 cureCenter;
+    Vector3 raiseCenter;
+    Vector3 speedCenter;
+    Vector3 powerCenter;
+    Vector3 refractCenter;
     Vector3 hpEffectOffset;
     Vector3 mpEffectOffset;
-    Vector3 sp358;
-    Vector3 sp348;
-    Vector3 sp338;
-    Vector3 sp328;
-    Vector3 sp318;
-    Vector3 sp308;
-    Vector3 sp2F8;
-    Matrix44 sp2B0;
-    Matrix44 sp270;
-    Matrix44 sp230;
-    Matrix44 sp1F0;
-    Matrix44 sp1B0;
-    Matrix44 sp170;
-    Matrix44 sp130;
-    int sp12C;
-    int sp128;
-    int sp124;
-    int sp120;
-    unsigned char sp110;
-    int temp_s5_4;
-    int var_s2_12;
-    int var_s3_5;
-    int temp_ret_1260;
-    int temp_ret_1102;
-    int temp_ret_1103;
-    int temp_ret_1124;
-    int temp_ret_1136;
-    int temp_ret_1139;
-    int temp_ret_1140;
-    int temp_ret_1191;
-    int temp_ret_1192;
-    int temp_ret_1234;
-    int temp_ret_1235;
-    int temp_ret_1273;
-    int temp_ret_1274;
-    int temp_ret_135;
-    int temp_ret_136;
-    int temp_ret_141;
-    int temp_ret_142;
-    int temp_ret_147;
-    int temp_ret_148;
-    int temp_ret_153;
-    int temp_ret_154;
-    int temp_ret_358;
-    int temp_ret_359;
-    int temp_ret_386;
-    int temp_ret_387;
-    int temp_ret_390;
-    int temp_ret_391;
-    int temp_ret_392;
-    int temp_ret_393;
-    int temp_ret_394;
-    int temp_ret_395;
-    int temp_ret_396;
-    int temp_ret_397;
-    int temp_ret_398;
-    int temp_ret_399;
-    int temp_ret_66;
-    int temp_ret_67;
-    int temp_ret_77;
-    int temp_ret_78;
-    beDataObjBool *temp_ret_366;
-    beDataObjBool *temp_ret_48;
-    int temp_s1_3;
-    int *temp_ret_347;
-    int *temp_ret_786;
-    int temp_a0_10;
-    int temp_a0_4;
-    int temp_a0_5;
-    int temp_a2_10;
-    int temp_a2_11;
-    int temp_a2_12;
-    int temp_a2_13;
-    int temp_a2_14;
-    int temp_a2_15;
-    int temp_a2_16;
-    int temp_a2_17;
-    int temp_a2_18;
-    int temp_a2_19;
-    int temp_a2_4;
-    int temp_a2_5;
-    int temp_a2_6;
-    int temp_a2_7;
-    int temp_a2_8;
-    int temp_a2_9;
-    int temp_a4_4;
-    int temp_lo;
-    int temp_ret_1004;
-    int temp_ret_1005;
-    int temp_ret_1006;
-    int temp_ret_1008;
-    int temp_ret_1009;
-    int temp_ret_1015;
-    int temp_ret_101;
-    int temp_ret_1025;
-    int temp_ret_1026;
-    int temp_ret_1032;
-    int temp_ret_1033;
-    int temp_ret_1034;
-    int temp_ret_103;
-    int temp_ret_1042;
-    int temp_ret_1047;
-    int temp_ret_1048;
-    int temp_ret_1049;
-    int temp_ret_104;
-    int temp_ret_1050;
-    int temp_ret_1051;
-    int temp_ret_1059;
-    int temp_ret_105;
-    int temp_ret_1064;
-    int temp_ret_1065;
-    int temp_ret_1066;
-    int temp_ret_1068;
-    int temp_ret_1069;
-    int temp_ret_106;
-    int temp_ret_1070;
-    int temp_ret_1072;
-    int temp_ret_1077;
-    int temp_ret_1078;
-    int temp_ret_107;
-    int temp_ret_1080;
-    int temp_ret_1081;
-    int temp_ret_1083;
-    int temp_ret_1084;
-    int temp_ret_1086;
-    int temp_ret_1091;
-    int temp_ret_1092;
-    int temp_ret_1093;
-    int temp_ret_1094;
-    int temp_ret_1096;
-    int temp_ret_1097;
-    int temp_ret_1099;
-    int temp_ret_1100;
-    int temp_ret_1108;
-    int temp_ret_1109;
-    int temp_ret_1111;
-    int temp_ret_1112;
-    int temp_ret_1114;
-    int temp_ret_1115;
-    int temp_ret_1117;
-    int temp_ret_1118;
-    int temp_ret_111;
-    int temp_ret_1122;
-    int temp_ret_1125;
-    int temp_ret_1127;
-    int temp_ret_1129;
-    int temp_ret_112;
-    int temp_ret_1130;
-    int temp_ret_1134;
-    int temp_ret_1137;
-    int temp_ret_113;
-    int temp_ret_1141;
-    int temp_ret_1143;
-    int temp_ret_1149;
-    int temp_ret_114;
-    int temp_ret_1150;
-    int temp_ret_1155;
-    int temp_ret_1156;
-    int temp_ret_1158;
-    int temp_ret_1163;
-    int temp_ret_1164;
-    int temp_ret_1168;
-    int temp_ret_1170;
-    int temp_ret_1175;
-    int temp_ret_1180;
-    int temp_ret_1185;
-    int temp_ret_1186;
-    int temp_ret_1189;
-    int temp_ret_1193;
-    int temp_ret_1198;
-    int temp_ret_11;
-    int temp_ret_1203;
-    int temp_ret_1204;
-    int temp_ret_1206;
-    int temp_ret_1211;
-    int temp_ret_1216;
-    int temp_ret_1221;
-    int temp_ret_1222;
-    int temp_ret_1226;
-    int temp_ret_1228;
-    int temp_ret_1229;
-    int temp_ret_122;
-    int temp_ret_1232;
-    int temp_ret_1240;
-    int temp_ret_1245;
-    int temp_ret_124;
-    int temp_ret_1250;
-    int temp_ret_1255;
-    int temp_ret_125;
-    int temp_ret_1261;
-    int temp_ret_1265;
-    int temp_ret_1267;
-    int temp_ret_1268;
-    int temp_ret_1271;
-    int temp_ret_1280;
-    int temp_ret_1289;
-    int temp_ret_1290;
-    int temp_ret_1292;
-    int temp_ret_1293;
-    int temp_ret_1294;
-    int temp_ret_1295;
-    int temp_ret_1296;
-    int temp_ret_1298;
-    int temp_ret_1299;
-    int temp_ret_131;
-    int temp_ret_132;
-    int temp_ret_137;
-    int temp_ret_138;
-    int temp_ret_13;
-    int temp_ret_143;
-    int temp_ret_144;
-    int temp_ret_149;
-    int temp_ret_150;
-    int temp_ret_155;
-    int temp_ret_157;
-    int temp_ret_159;
-    int temp_ret_15;
-    int temp_ret_160;
-    int temp_ret_162;
-    int temp_ret_163;
-    int temp_ret_164;
-    int temp_ret_165;
-    int temp_ret_166;
-    int temp_ret_167;
-    int temp_ret_168;
-    int temp_ret_169;
-    int temp_ret_16;
-    int temp_ret_170;
-    int temp_ret_172;
-    int temp_ret_179;
-    int temp_ret_17;
-    int temp_ret_181;
-    int temp_ret_182;
-    int temp_ret_183;
-    int temp_ret_184;
-    int temp_ret_185;
-    int temp_ret_198;
-    int temp_ret_199;
-    int temp_ret_200;
-    int temp_ret_201;
-    int temp_ret_203;
-    int temp_ret_204;
-    int temp_ret_20;
-    int temp_ret_212;
-    int temp_ret_214;
-    int temp_ret_215;
-    int temp_ret_216;
-    int temp_ret_218;
-    int temp_ret_219;
-    int temp_ret_226;
-    int temp_ret_227;
-    int temp_ret_228;
-    int temp_ret_229;
-    int temp_ret_22;
-    int temp_ret_230;
-    int temp_ret_235;
-    int temp_ret_240;
-    int temp_ret_243;
-    int temp_ret_244;
-    int temp_ret_245;
-
-    int temp_ret_249;
-    int temp_ret_24;
-    int temp_ret_250;
-    int temp_ret_251;
-    int temp_ret_252;
-    int temp_ret_254;
-    int temp_ret_257;
-    int temp_ret_262;
-    int temp_ret_263;
-    int temp_ret_268;
-    int temp_ret_26;
-    int temp_ret_274;
-    int temp_ret_279;
-    int temp_ret_27;
-    int temp_ret_280;
-    int temp_ret_282;
-    int temp_ret_287;
-    int temp_ret_288;
-    int temp_ret_294;
-    int temp_ret_295;
-    int temp_ret_296;
-    int temp_ret_297;
-    int temp_ret_298;
-    int temp_ret_29;
-    int temp_ret_303;
-    int temp_ret_306;
-    int temp_ret_307;
-    int temp_ret_308;
-    int temp_ret_310;
-    int temp_ret_311;
-    int temp_ret_313;
-    int temp_ret_314;
-    int temp_ret_31;
-    int temp_ret_320;
-    int temp_ret_321;
-    int temp_ret_322;
-    int temp_ret_323;
-    int temp_ret_324;
-    int temp_ret_325;
-    int temp_ret_326;
-    int temp_ret_327;
-
-    int temp_ret_330;
-    int temp_ret_331;
-    int temp_ret_332;
-    int temp_ret_333;
-    int temp_ret_335;
-    int temp_ret_33;
-    int temp_ret_340;
-    int temp_ret_341;
-    int temp_ret_343;
-    int temp_ret_344;
-    int temp_ret_349;
-    int temp_ret_351;
-    int temp_ret_353;
-    int temp_ret_356;
-    int temp_ret_35;
-    int temp_ret_360;
-    int temp_ret_361;
-    int temp_ret_363;
-    int temp_ret_365;
-    int temp_ret_367;
-    int temp_ret_368;
-    int temp_ret_373;
-    int temp_ret_374;
-    int temp_ret_375;
-    int temp_ret_376;
-    int temp_ret_377;
-    int temp_ret_378;
-    int temp_ret_381;
-    int temp_ret_382;
-    int temp_ret_383;
-    int temp_ret_384;
-    int temp_ret_388;
-    int temp_ret_389;
-    int temp_ret_38;
-    int temp_ret_3;
-    int temp_ret_400;
-    int temp_ret_401;
-    int temp_ret_402;
-    int temp_ret_403;
-    int temp_ret_404;
-    int temp_ret_406;
-    int temp_ret_407;
-    int temp_ret_412;
-    int temp_ret_417;
-    int temp_ret_418;
-    int temp_ret_419;
-    int temp_ret_421;
-    int temp_ret_422;
-    int temp_ret_427;
-    int temp_ret_428;
-    int temp_ret_430;
-    int temp_ret_435;
-    int temp_ret_437;
-    int temp_ret_442;
-    int temp_ret_449;
-    int temp_ret_44;
-    int temp_ret_450;
-    int temp_ret_451;
-    int temp_ret_453;
-    int temp_ret_458;
-    int temp_ret_459;
-    int temp_ret_461;
-    int temp_ret_466;
-    int temp_ret_468;
-    int temp_ret_473;
-    int temp_ret_474;
-    int temp_ret_475;
-    int temp_ret_476;
-    int temp_ret_478;
-    int temp_ret_47;
-    int temp_ret_483;
-    int temp_ret_484;
-    int temp_ret_486;
-    int temp_ret_491;
-    int temp_ret_493;
-    int temp_ret_498;
-    int temp_ret_49;
-    int temp_ret_502;
-    int temp_ret_503;
-    int temp_ret_504;
-    int temp_ret_506;
-    int temp_ret_507;
-    int temp_ret_50;
-    int temp_ret_512;
-    int temp_ret_513;
-    int temp_ret_515;
-    int temp_ret_51;
-    int temp_ret_520;
-    int temp_ret_522;
-    int temp_ret_527;
-    int temp_ret_528;
-    int temp_ret_52;
-    int temp_ret_533;
-    int temp_ret_534;
-    int temp_ret_536;
-    int temp_ret_53;
-    int temp_ret_541;
-    int temp_ret_546;
-    int temp_ret_547;
-    int temp_ret_54;
-    int temp_ret_552;
-    int temp_ret_553;
-    int temp_ret_558;
-    int temp_ret_559;
-    int temp_ret_55;
-    int temp_ret_564;
-    int temp_ret_569;
-    int temp_ret_56;
-    int temp_ret_570;
-    int temp_ret_571;
-    int temp_ret_573;
-    int temp_ret_574;
-    int temp_ret_579;
-    int temp_ret_580;
-    int temp_ret_582;
-    int temp_ret_587;
-    int temp_ret_589;
-    int temp_ret_594;
-    int temp_ret_595;
-    int temp_ret_5;
-    int temp_ret_600;
-    int temp_ret_601;
-    int temp_ret_603;
-    int temp_ret_608;
-    int temp_ret_613;
-    int temp_ret_614;
-    int temp_ret_619;
-    int temp_ret_61;
-    int temp_ret_620;
-    int temp_ret_622;
-    int temp_ret_627;
-    int temp_ret_632;
-    int temp_ret_638;
-    int temp_ret_63;
-    int temp_ret_643;
-    int temp_ret_644;
-    int temp_ret_646;
-    int temp_ret_647;
-    int temp_ret_64;
-    int temp_ret_659;
-    int temp_ret_660;
-    int temp_ret_661;
-    int temp_ret_664;
-    int temp_ret_669;
-    int temp_ret_670;
-    int temp_ret_673;
-    int temp_ret_678;
-    int temp_ret_683;
-    int temp_ret_689;
-    int temp_ret_68;
-    int temp_ret_690;
-    int temp_ret_691;
-    int temp_ret_692;
-    int temp_ret_693;
-    int temp_ret_694;
-    int temp_ret_695;
-    int temp_ret_696;
-    int temp_ret_69;
-    int temp_ret_700;
-    int temp_ret_705;
-    int temp_ret_70;
-    int temp_ret_710;
-    int temp_ret_716;
-    int temp_ret_71;
-    int temp_ret_721;
-    int temp_ret_722;
-    int temp_ret_728;
-    int temp_ret_729;
-    int temp_ret_730;
-    int temp_ret_731;
-    int temp_ret_732;
-    int temp_ret_733;
-    int temp_ret_734;
-    int temp_ret_735;
-    int temp_ret_740;
-    int temp_ret_746;
-    int temp_ret_747;
-    int temp_ret_74;
-    int temp_ret_753;
-    int temp_ret_754;
-    int temp_ret_755;
-    int temp_ret_756;
-    int temp_ret_757;
-    int temp_ret_758;
-    int temp_ret_759;
-    int temp_ret_75;
-    int temp_ret_760;
-    int temp_ret_763;
-    int temp_ret_764;
-    int temp_ret_765;
-    int temp_ret_766;
-    int temp_ret_769;
-    int temp_ret_779;
-    int temp_ret_780;
-    int temp_ret_781;
-    int temp_ret_782;
-    int temp_ret_788;
-    int temp_ret_789;
-    int temp_ret_790;
-    int temp_ret_793;
-
-    int temp_ret_795;
-    int temp_ret_796;
-    int temp_ret_797;
-    int temp_ret_7;
-    int temp_ret_800;
-    int temp_ret_805;
-    int temp_ret_808;
-    int temp_ret_80;
-    int temp_ret_813;
-    int temp_ret_819;
-    int temp_ret_820;
-    int temp_ret_825;
-    int temp_ret_826;
-    int temp_ret_828;
-    int temp_ret_829;
-    int temp_ret_82;
-    int temp_ret_835;
-    int temp_ret_83;
-    int temp_ret_841;
-    int temp_ret_847;
-    int temp_ret_848;
-    int temp_ret_849;
-    int temp_ret_854;
-    int temp_ret_855;
-    int temp_ret_85;
-    int temp_ret_860;
-    int temp_ret_862;
-    int temp_ret_863;
-    int temp_ret_864;
-    int temp_ret_86;
-    int temp_ret_872;
-    int temp_ret_877;
-    int temp_ret_87;
-    int temp_ret_882;
-    int temp_ret_883;
-    int temp_ret_889;
-    int temp_ret_88;
-    int temp_ret_890;
-    int temp_ret_891;
-    int temp_ret_892;
-    int temp_ret_894;
-    int temp_ret_89;
-    int temp_ret_900;
-    int temp_s3_11;
-    int var_s2_11;
-    int temp_ret_905;
-    int temp_ret_90;
-    int temp_ret_910;
-    int temp_ret_915;
-    int temp_ret_916;
-    int temp_ret_922;
-    int temp_ret_927;
-    int temp_ret_92;
-    int temp_ret_932;
-    int temp_ret_933;
-    int temp_ret_937;
-    int temp_ret_938;
-    int temp_ret_939;
-    int temp_ret_941;
-    int temp_ret_942;
-    int temp_ret_948;
-    int temp_ret_94;
-    int temp_ret_958;
-    int temp_ret_959;
-    int temp_ret_95;
-    int temp_ret_965;
-    int temp_ret_966;
-    int temp_ret_967;
-    int temp_ret_96;
-    int temp_ret_975;
-    int temp_ret_97;
-    int temp_ret_980;
-    int temp_ret_981;
-    int temp_ret_982;
-    int temp_ret_983;
-    int temp_ret_984;
-    int temp_ret_98;
-    int temp_ret_992;
-    int temp_ret_997;
-    int temp_ret_998;
-    int temp_ret_999;
-    int temp_ret_99;
-    int temp_ret_9;
-    int temp_s0_10;
-    int temp_s0_12;
-    int temp_s0_13;
-    int temp_s0_14;
-    int temp_s0_15;
-    unsigned int temp_s1_6;
-    int temp_s0_16;
-    int temp_s0_17;
-    int temp_s0_18;
-    int temp_s0_19;
-    int temp_s0_23;
-    int temp_s0_25;
-    int temp_s0_26;
-    int temp_s0_28;
-    int temp_s0_31;
-    int temp_s0_4;
-    int var_s2_2;
-    int var_s1;
-    int temp_s0_5;
-    int temp_s0_6;
-    int temp_s0_8;
-    int temp_s1_4;
-    int temp_s1_5;
-    int temp_s2;
-    int temp_s2_11;
-    int temp_s2_3;
-    int temp_s2_4;
-    int temp_s2_5;
-    int temp_s2_7;
-    int temp_s2_9;
-    int temp_s3_14;
-    int temp_s3_3;
-    int temp_s3_4;
-    int temp_s3_5;
-    int temp_s3_7;
-    int temp_s3_8;
-    int temp_s3_9;
-    int temp_s5;
-    int temp_s5_2;
-    int temp_s5_3;
-    int temp_s5_5;
-    int temp_s5_6;
-    int temp_s6;
-    beNDMWMdlPEBaseInfoWork *temp_v0_132;
-    int temp_s6_2;
-    int temp_s6_4;
-    int temp_s6_5;
-    int temp_v0_101;
-    int temp_v0_108;
-    int temp_v0_111;
-    int temp_v0_114;
-    int temp_v0_116;
-    int temp_v0_118;
-    int temp_v0_11;
-    int temp_v0_129;
-    int temp_v0_131;
-    int temp_v0_134;
-    int temp_v0_136;
-    int temp_v0_141;
-    int temp_v0_143;
-    int temp_v0_147;
-    int temp_v0_148;
-    int temp_v0_156;
-    int temp_v0_157;
-    int temp_v0_164;
-    int temp_v0_166;
-    int temp_v0_167;
-    int temp_v0_171;
-    int temp_v0_177;
-    int temp_v0_189;
-    int temp_v0_20;
-    int temp_v0_21;
-    int temp_v0_22;
-    int temp_v0_23;
-    int temp_v0_29;
-    int temp_v0_2;
-    int temp_v0_30;
-    int temp_v0_40;
-    int temp_v0_44;
-    int temp_v0_45;
-    int temp_v0_48;
-    int temp_v0_51;
-    int temp_v0_59;
-    int temp_v0_60;
-    int temp_v0_63;
-    int temp_v0_69;
-    int temp_v0_72;
-    int temp_v0_73;
-    int temp_v0_74;
-    int temp_v0_77;
-    int temp_v0_79;
-    int temp_v0_7;
-    int temp_v0_83;
-    int temp_v0_87;
-    int temp_v0_8;
-    int temp_v0_91;
-    int temp_v0_92;
-    int temp_v0_94;
-    int temp_v0_98;
-    int temp_v0_99;
-    int temp_v1;
-    int temp_v1_10;
-    int temp_v1_11;
-    int temp_v1_12;
-    int temp_v1_14;
-    int temp_v1_2;
-    int temp_v1_3;
-    int temp_v1_6;
-    int temp_v1_7;
-    int temp_v1_9;
-    int var_a2;
-    int var_a3;
-    int var_s0;
-    int var_s0_10;
-    int var_s0_11;
-    int var_s0_12;
-    int var_s0_13;
-    int var_s0_14;
-    int var_s0_15;
-    int var_s0_16;
-    int var_s0_17;
-    int var_s0_18;
-    int var_s0_19;
-    int var_s0_20;
-    int var_s0_21;
-    int var_s1_16;
-    bool var_s0_22;
-    int var_s0_23;
-    int var_s0_2;
-    int var_s0_3;
-    int var_s0_4;
-    int var_s0_5;
-    int var_s0_6;
-    int var_s0_7;
-    int var_s0_8;
-    int var_s0_9;
-    int var_s1_10;
-    int var_s1_11;
-    int var_s1_13;
-    int var_s1_14;
-    int var_s1_15;
-    int var_s1_18;
-    int var_s1_19;
-    int var_s1_20;
-    int temp_ret_953;
-    int var_s1_21;
-    int var_s1_22;
-    int var_s1_23;
-    int var_s1_24;
-    int var_s1_25;
-    int var_s1_3;
-    int temp_ret_1020;
-    int var_s2_3;
-    int var_s1_4;
-    int var_s2_4;
-    int var_s1_5;
-    int var_s2_5;
-    int var_s1_6;
-    int var_s2_6;
-    int var_s1_7;
-    int var_s1_8;
-    int var_s1_9;
-    int var_s2_10;
-    int var_s2_7;
-    int var_s2_9;
-    int var_s3_2;
-    int var_s3_4;
-    int var_s2_8;
-    int var_s3_6;
-    int var_s3_7;
-    int temp_s4;
-    int var_s3_8;
-    int var_s5;
-    int var_s5_10;
-    int var_s5_3;
-    int var_s5_8;
-    int var_s5_9;
-    int var_s7;
-    int var_s7_2;
-    int var_s8;
-    int var_s8_2;
-    int var_v0_13;
-    int var_v0_15;
-    int var_v0_18;
-    int var_v0_2;
-    int var_v0_3;
-    int var_v0_5;
-    int var_v0_9;
-    int var_v1_11;
-    int var_v1_12;
-    int var_v1_13;
-    int var_v1_14;
-    int var_v1_15;
-    int var_v1_16;
-    int var_v1_7;
-    int var_v1_8;
-    int var_v1_9;
-    const char *temp_ret;
-    char *temp_ret_1001;
-    const char *temp_ret_100;
-    char *temp_ret_1014;
-    const char *temp_ret_108;
-    const char *temp_ret_109;
-    const char *temp_ret_110;
-    const char *temp_ret_1095;
-    const char *temp_ret_1101;
-    const char *temp_ret_1119;
-    const char *temp_ret_1126;
-    const char *temp_ret_1131;
-    const char *temp_ret_1138;
-    const char *temp_ret_1142;
-    const char *temp_ret_1165;
-    const char *temp_ret_1187;
-    const char *temp_ret_1190;
-    const char *temp_ret_1223;
-    const char *temp_ret_1230;
-    const char *temp_ret_1233;
-    const char *temp_ret_1262;
-    const char *temp_ret_1269;
-    const char *temp_ret_1272;
-    const char *temp_ret_1281;
-    const char *temp_ret_187;
-    const char *temp_ret_191;
-    const char *temp_ret_21;
-    char *temp_ret_225;
-    char *temp_ret_293;
-    char *temp_ret_319;
-    const char *temp_ret_34;
-    char *temp_ret_357;
-    char *temp_ret_385;
-    const char *temp_ret_39;
-    char *temp_ret_414;
-    char *temp_ret_499;
-    char *temp_ret_566;
-    const char *temp_ret_65;
-    char *temp_ret_688;
-    char *temp_ret_727;
-    char *temp_ret_752;
-    const char *temp_ret_76;
-    const char *temp_ret_79;
-    const char *temp_ret_81;
-    char *temp_ret_822;
-    char *temp_ret_834;
-    char *temp_ret_871;
-    char *temp_ret_899;
-    const char *temp_ret_91;
-    char *temp_ret_934;
-    char *temp_ret_947;
-    beNDMWMdlPEBaseInfoWork *temp_v0_109;
-    char *temp_v0_112;
-    char *temp_v0_117;
-    char *temp_v0_121;
-    char *temp_v0_137;
-    const char *temp_v0_13;
-    char *temp_v0_146;
-    char *temp_v0_155;
-    const char *temp_v0_15;
-    const char *temp_v0_18;
-    const char *temp_v0_186;
-    char *temp_v0_17;
-    const char *temp_v0_32;
-    char *temp_v0_39;
-    char *temp_v0_3;
-    char *temp_v0_52;
-    char *temp_v0_5;
-    char *temp_v0_62;
-    char *temp_v0_76;
-    char *temp_v0_90;
-    char *temp_v0_97;
-    const char *temp_v0_9;
-    char *var_v0_20;
-    char *var_v0_21;
-    unsigned int temp_a0_6;
-    unsigned int temp_a0_7;
-    unsigned int temp_a0_8;
-    unsigned int temp_a0_9;
-    unsigned int temp_a2_20;
-    unsigned int temp_a2_21;
-    unsigned int temp_a2_22;
+    Vector3 skillEffectOffset;
+    Vector3 levelUpEffectOffset;
+    Vector3 healEffectOffset;
+    Vector3 cureEffectOffset;
+    Vector3 speedEffectOffset;
+    Vector3 powerEffectOffset;
+    Vector3 refractEffectOffset;
+    Matrix44 raiseMatrix;
+    Matrix44 healMatrix;
+    Matrix44 cureMatrix;
+    Matrix44 raiseSourceMatrix;
+    Matrix44 speedMatrix;
+    Matrix44 powerMatrix;
+    Matrix44 refractMatrix;
+    int isCritical;
+    int skillGainMode;
+    int killerExp;
+    int e2pStunEnemyRecNo;
+    unsigned char eBindApplies;
+    int raiseSecondValue;
+    int healSkill;
+    int refractDark;
+    int gainRate;
+    int sleepTechniqueNo;
+    int bindTechniqueNo;
+    int atkDownTimeTechNo;
+    int atkDownSpeedTechNo;
+    int atkDownCritTechNo;
+    int atkDownParalysisTechNo;
+    int atkDownEvadeTechNo;
+    int powDownTimeTechNo;
+    int powDownStrengthTechNo;
+    int powDownDefTechNo;
+    int techniqueNo;
+    int patkTechniqueNo;
+    int skillTechniqueNo;
+    int poisonTechniqueNo;
+    int poisonDamageTechniqueNo;
+    int levelBaseExp;
+    int rankDamagePercent;
+    int ePowPlayerIndex;
+    int ePowEnemyRecNo;
+    int ePowAttackId;
+    int ePowEnemyIntelligence;
+    int ePowBaseTime;
+    int ePowStrRank;
+    int ePowStrEnemyIntelligence;
+    int ePowDefRank;
+    int ePowDefEnemyIntelligence;
+    int targetIndex;
+    int healListDefault;
+    int healDataDefault;
+    int healList7;
+    int healData7;
+    int healList8;
+    int healData8;
+    int healBaseHp;
+    int healListData;
+    int cureListData;
+    int raiseListData;
+    int speedSkillNo;
+    int speedTimeBase;
+    int speedSkillList;
+    int speedSkillData;
+    int speedTechSpeed;
+    int speedListData;
+    int speedCrit;
+    int speedParalysis;
+    int speedEvade;
+    int powerTimeBase;
+    int powerSkillNo;
+    int powerSkillList;
+    int powerSkillData;
+    int powerMaxHp;
+    int powerStrength;
+    int powerDefense;
+    int powerListData;
+    int refractTime;
+    int refractListData;
+    PropertyRecord *digimonNameProp;
+    IntProperty *bitProp;
+    IntValuesProperty *chipDataProp;
+    int *chipDataBuffer;
+    IntProperty *bitResetProp;
+    IntProperty *levelProp;
+    IntProperty *expProp;
+    IntValuesProperty *chipDataExpProp;
+    int *chipDataExpBuffer;
+    IntProperty *expWriteProp;
+    int playerIndex;
+    int enemyRecNo;
+    int attackId;
+    int patkPlayerIndex;
+    int patkAttackId;
+    int skillPlayerIndex;
+    int skillAttackId;
+    int weaponSkillList;
+    int weaponSkillData;
+    int techniqueSkillNo;
+    int techSkillList;
+    int techSkillData;
+    int skillRecord;
+    int skillData;
+    int growRate;
+    int killerIndex;
+    int expEnemyRecNo;
+    int stunPlayerIndex;
+    int stunEnemyRecNo;
+    int stunScale;
+    int stunPower;
+    int stunResist;
+    int poisonPlayerIndex;
+    int poisonEnemyRecNo;
+    int poisonAttackId;
+    int poisonSkillNo;
+    int poisonSkillList;
+    int poisonSkillData;
+    int poisonResist;
+    int poisonBaseTime;
+    int sleepPlayerIndex;
+    int sleepEnemyRecNo;
+    int sleepAttackId;
+    int sleepSkillNo;
+    int sleepSkillList;
+    int sleepSkillData;
+    int sleepSpirit;
+    int sleepBaseTime;
+    int bindPlayerIndex;
+    int bindEnemyRecNo;
+    int bindAttackId;
+    int bindSkillNo;
+    int bindSkillList;
+    int bindSkillData;
+    int bindSpirit;
+    int bindBaseTime;
+    int atkDownPlayerIndex;
+    int atkDownEnemyRecNo;
+    int atkDownAttackId;
+    int atkDownSkillNo;
+    int atkDownSkillList;
+    int atkDownSkillData;
+    int atkDownSpirit;
+    int atkDownBaseTime;
+    int atkDownSpeedSkillNo;
+    int atkDownSpeedSkillList;
+    int atkDownSpeedSkillData;
+    int atkDownEnemySpeed;
+    int atkDownTechSpeed;
+    int atkDownCritRate;
+    int atkDownParalysisRate;
+    int atkDownEvadeRate;
+    int powDownPlayerIndex;
+    int powDownEnemyRecNo;
+    int powDownAttackId;
+    int powDownSkillNo;
+    int powDownSkillList;
+    int powDownSkillData;
+    int powDownSpirit;
+    int powDownBaseTime;
+    int powDownStrSkillNo;
+    int powDownStrSkillList;
+    int powDownStrSkillData;
+    int powDownEnemyStrength;
+    int powDownTechStrength;
+    int powDownDefSkillNo;
+    int powDownDefSkillList;
+    int powDownDefSkillData;
+    int powDownEnemyDefense;
+    int powDownTechDefense;
+    int e2pHitAttackType;
+    int e2pDmgPlayerIndex;
+    int e2pDmgEnemyRecNo;
+    int e2pDmgAttackId;
+    int e2pDmgDownValues;
+    int e2pDmgEnemyStrength;
+    int e2pDmgAttackStrength;
+    int e2pDmgDown2Values;
+    int e2pDmgEnemyCrit;
+    int e2pDmgEnemyIntelligence;
+    int e2pDmgRatioPower;
+    IntProperty *e2pDmgMaxHpProperty;
+    int rankPlayerIndex;
+    int rankAttackId;
+    int rankHitCount;
+    int rankDamage;
+    int rankPlayer;
+    int e2pStunPlayerIndex;
+    int e2pStunAttackId;
+    int e2pStunDamage;
+    int e2pStunHitKind;
+    int e2pStunDownValues;
+    int e2pStunEnemyParalysisRate;
+    int ePoisonPlayerIndex;
+    int ePoisonAttackId;
+    int ePoisonBaseTime;
+    int ePoisonRate;
+    int ePoisonCure;
+    int eSleepPlayerIndex;
+    int eSleepEnemyRecNo;
+    int eSleepAttackId;
+    int eSleepRank;
+    int eSleepEnemyIntelligence;
+    int eSleepBaseTime;
+    int eBindPlayerIndex;
+    int eBindEnemyRecNo;
+    int eBindAttackId;
+    int eBindAttackNo;
+    int eBindTime;
+    int eBindRank;
+    int eBindAttackType;
+    int eBindEnemyIntelligence;
+    int eBindFixedTime;
+    int eBindBaseTime;
+    int eBindTimeEnemyIntelligence;
+    int eAtkPlayerIndex;
+    int eAtkEnemyRecNo;
+    int eAtkAttackId;
+    int eAtkEnemyIntelligence;
+    int eAtkBaseTime;
+    int eAtkSpeedRank;
+    int eAtkSpeedEnemyIntelligence;
+    int eAtkAccRank;
+    int eAtkAccEnemyIntelligence;
+    int maxHp;
+    int intelligence;
+    int sleepIntelligence;
+    int bindIntelligence;
+    int atkDownIntelligence;
+    unsigned int atkDownSpeedSkill;
+    int atkDownSpeedFloor;
+    int powDownIntelligence;
+    int powDownStrFloor;
+    int powDownDefFloor;
+    int e2pStunResist;
+    int ePoisonMaxHp;
+    int eSleepChanceBase;
+    int eAtkChanceBase;
+    int ePowChanceBase;
+    int damage;
+    int element;
+    int weaponSkillNo;
+    int rollKind;
+    int digimonNo;
+    int poisonSkill;
+    int atkDownSkill;
+    int strength;
+    int powerSkillBonus;
+    int eAtkAttackNo;
+    int ePowAttackNo;
+    int healAmount;
+    int speedIntelligence;
+    int powerIntelligence;
+    int healCount;
+    int sleepSkill;
+    int bindSkill;
+    int powDownSkill;
+    int e2pDmgDefense;
+    int e2pStunMaxHp;
+    int ePoisonAttackNo;
+    int maxMp;
+    int e2pDmgAttackNo;
+    int rankAttackNo;
+    int healTarget;
+    int raiseCount;
+    int partySize;
+    beNDMWMdlPEBaseInfoWork *e2pStunEnemy;
+    int e2pStunAttackNo;
+    int powerCount;
+    int refractCount;
+    int e2pDmgAttackType;
+    int e2pDmgAttackCrit;
+    int e2pDmgMagicPower;
+    int e2pDmgMagicCrit;
+    int rankSequence;
+    int e2pStunAttackType;
+    int e2pStunTimeSum;
+    int casterIndex;
+    int healSkillNo;
+    int cureSkillNo;
+    int cureCount;
+    int speedCount;
+    int currentExp;
+    int elementResistance;
+    int techPower;
+    int hpDrain;
+    int mpDrain;
+    int expBonus;
+    int eAtkAccCount;
+    int ePowStrCount;
+    int ePowDefCount;
+    int chipDataCount;
+    int skillCount;
+    int stunChanceSum;
+    int e2pStunChanceSum;
+    int eAtkDownCount;
+    int skillValue;
+    int patkElement;
+    int gainChance;
+    int baseExp;
+    int poisonResult;
+    int sleepResult;
+    int bindResult;
+    int atkDownTime;
+    int powDownChance;
+    int powDownTime;
+    int e2pDmgDownCrit;
+    int e2pDmgMagicCritThreshold;
+    int e2pStunAttackParalysis;
+    bool e2pStunApplies;
+    int e2pStunDownValue;
+    int powDownDefPenalty;
+    int e2pDmgDownDefense;
+    int e2pDmgMagicResist;
+    int e2pDmgRatioResist;
+    int e2pDmgIsHighRoll;
+    int eAtkTime;
+    int eAtkSpeedPenalty;
+    int eAtkAccPenalty;
+    int eAtkRank;
+    int ePowTime;
+    int ePowStrPenalty;
+    int ePowDefPenalty;
+    int healLoop;
+    int raiseLoop;
+    int stunTime;
+    int ePowRank;
+    int poisonHit;
+    int poisonChance;
+    int sleepHit;
+    int sleepChance;
+    int bindHit;
+    int bindChance;
+    int atkDownHit;
+    int atkDownChance;
+    int atkDownSpeedPenalty;
+    int powDownStrPenalty;
+    int ePoisonTime;
+    int powDownHit;
+    int e2pStunTime;
+    int isHighRoll;
+    int e2pDmgDamage;
+    int e2pDmgElement;
+    int cureLoop;
+    int raiseFirst;
+    int expSlot;
+    int newExp;
+    int refractLoop;
+    int skillNo;
+    int speedLoop;
+    int powerLoop;
+    int defense;
+    int currentSkill;
+    int skillCap;
+    int e2pStunEnemyParalysis;
+    int e2pDmgResistBonus;
+    int e2pDmgCritBonus;
+    int e2pStunChance;
+    int techResistance;
+    int stunChance;
+    int bindSkillTerm;
+    int bindIntelligenceBonus;
+    int atkDownSkillTerm;
+    int atkDownIntelligenceBonus;
+    int powDownSkillTerm;
+    int powDownIntelligenceBonus;
+    int skillTerm;
+    int intelligenceBonus;
+    int sleepSkillTerm;
+    char *ePowMode;
+    char *ePowEffectName;
+    char *patkElementName;
+    char *digimonName;
+    char *levelUpName;
+    char *poisonMode;
+    char *atkDownMode;
+    char *powDownMode;
+    char *ePoisonMode;
+    char *ePoisonEffectName;
+    char *eSleepEffectName;
+    char *eBindEffectName;
+    char *eAtkMode;
+    char *eAtkEffectName;
+    beNDMWMdlPEBaseInfoWork *e2pDmgEnemy;
+    char *e2pDmgPhysElementName;
+    char *e2pDmgMagicElementName;
+    char *e2pDmgRatioElementName;
+    const char *chipName;
+    char *elementName;
+    char *eAtkInternedMode;
+    char *ePowInternedMode;
+    unsigned int stunRoll;
+    unsigned int e2pDmgCritRoll;
+    unsigned int e2pHitRoll;
+    unsigned int e2pDmgResistRoll;
+    unsigned int e2pStunRoll;
     int chance_sum;
-    unsigned int temp_a2_23;
-    unsigned int temp_a2_24;
-    unsigned int temp_a2_3;
-    unsigned int temp_a4;
-    unsigned int temp_a4_2;
-    unsigned int temp_a4_3;
-    unsigned int temp_s1_7;
-    unsigned int temp_s1_8;
-    unsigned int temp_s2_10;
-    unsigned int temp_s2_8;
-    unsigned int temp_s3_10;
-    unsigned int temp_s3_12;
-    unsigned int temp_s3_13;
-    unsigned int temp_v0;
-    unsigned int temp_v0_103;
-    unsigned int temp_v0_106;
-    unsigned int temp_v0_120;
-    unsigned int temp_v0_124;
-    unsigned int temp_v0_125;
-    unsigned int temp_v0_126;
-    unsigned int temp_v0_127;
-    unsigned int temp_v0_170;
-    unsigned int temp_v0_175;
-    unsigned int temp_v0_38;
-    unsigned int temp_v0_43;
-    unsigned int temp_v0_50;
-    unsigned int temp_v0_55;
-    unsigned int temp_v0_56;
-    unsigned int temp_v0_57;
-    unsigned int temp_v0_58;
-    unsigned int temp_v0_66;
-    unsigned int temp_v0_81;
-    unsigned int temp_v0_85;
-    unsigned int temp_v0_89;
-    unsigned int temp_v0_96;
-    unsigned int temp_v1_8;
-    unsigned int var_s1_12;
-    unsigned char *temp_ret_174;
-    unsigned char *temp_ret_175;
-    unsigned char *temp_ret_176;
-    unsigned char *temp_ret_177;
-    unsigned char *temp_ret_178;
-    unsigned char temp_ret_186;
-    unsigned char temp_ret_18;
-    unsigned char temp_s0;
-    unsigned char temp_s0_2;
-    unsigned char var_a1;
-    unsigned char var_a1_2;
-    unsigned char var_a1_3;
-    void *temp_ret_1035;
-    void *temp_ret_1052;
-    void *temp_ret_1079;
-    void *temp_ret_1082;
-    void *temp_ret_1085;
-    void *temp_ret_1110;
-    void *temp_ret_1113;
-    void *temp_ret_1116;
-    void *temp_ret_1120;
-    void *temp_ret_1121;
-    void *temp_ret_1132;
-    void *temp_ret_1133;
-    void *temp_ret_1157;
-    void *temp_ret_1166;
-    int temp_s2_6;
-    int temp_s3_15;
-    int temp_s3_16;
-    int temp_s3_17;
-    int temp_s6_3;
-    int temp_s8_2;
-    void *temp_ret_1205;
-    void *temp_ret_1210;
-    void *temp_ret_1224;
-    void *temp_ret_1263;
-    void *temp_ret_126;
-    void *temp_ret_1278;
-    void *temp_ret_1291;
-    void *temp_ret_1297;
-    void *temp_ret_134;
-    void *temp_ret_140;
-    void *temp_ret_146;
-    void *temp_ret_152;
-    void *temp_ret_161;
-    void *temp_ret_171;
-    void *temp_ret_173;
-    void *temp_ret_190;
-    void *temp_ret_196;
-    void *temp_ret_202;
-    void *temp_ret_210;
-    void *temp_ret_211;
-    void *temp_ret_247;
-    void *temp_ret_253;
-    void *temp_ret_255;
-    void *temp_ret_256;
-    void *temp_ret_281;
-    void *temp_ret_2;
-    void *temp_ret_334;
-    void *temp_ret_342;
-    void *temp_ret_345;
-    void *temp_ret_346;
-    void *temp_ret_348;
-    void *temp_ret_352;
-    void *temp_ret_362;
-    void *temp_ret_36;
-    void *temp_ret_429;
-    void *temp_ret_460;
-    void *temp_ret_485;
-    void *temp_ret_4;
-    void *temp_ret_514;
-    void *temp_ret_535;
-    void *temp_ret_581;
-    void *temp_ret_602;
-    void *temp_ret_621;
-    void *temp_ret_662;
-    void *temp_ret_671;
-    void *temp_ret_672;
-    void *temp_ret_698;
-    void *temp_ret_699;
-    void *temp_ret_767;
-    void *temp_ret_791;
-    void *temp_ret_792;
-    void *temp_ret_798;
-    void *temp_ret_806;
-    void *temp_ret_807;
-    void *temp_ret_865;
-    void *temp_ret_968;
-    void *temp_ret_985;
-    void *temp_v0_100;
-    void *temp_v0_110;
-    void *temp_v0_128;
-    void *temp_v0_12;
-    void *temp_v0_130;
-    void *temp_v0_133;
-    void *temp_v0_138;
-    void *temp_v0_142;
-    void *temp_v0_145;
-    void *temp_v0_149;
-    void *temp_v0_14;
-    void *temp_v0_151;
-    void *temp_v0_152;
-    void *temp_v0_153;
-    void *temp_v0_154;
-    void *temp_v0_158;
-    void *temp_v0_160;
-    void *temp_v0_161;
-    void *temp_v0_162;
-    void *temp_v0_163;
-    void *temp_v0_165;
-    void *temp_v0_168;
-    void *temp_v0_16;
-    void *temp_v0_172;
-    void *temp_v0_173;
-    void *temp_v0_176;
-    void *temp_v0_178;
-    void *temp_v0_179;
-    void *temp_v0_180;
-    void *temp_v0_181;
-    void *temp_v0_182;
-    void *temp_v0_188;
-    void *temp_v0_190;
-    igObjectList *temp_v0_24;
-    void *temp_v0_25;
-    beNDMWItemDisk *temp_v0_26;
-    beNDMWItemDisk *temp_v0_27;
-    void *temp_v0_28;
-    void *temp_v0_31;
-    void *temp_v0_36;
-    beNDMWMdlPEBaseInfoWork *temp_v0_46;
-    void *temp_v0_4;
-    void *temp_v0_61;
-    void *temp_v0_67;
-    void *temp_v0_6;
-    void *temp_v0_78;
-    void *temp_v0_82;
-    void *temp_v0_86;
-    void *temp_v0_93;
-
+    unsigned int eSleepRoll;
+    unsigned int eBindRoll;
+    unsigned int eAtkRoll;
+    unsigned int ePowRoll;
+    unsigned int powDownStrSkill;
+    unsigned int powDownDefSkill;
+    unsigned int powerSkill;
+    unsigned int speedSkill;
+    unsigned int eSleepSpirit;
+    unsigned int eAtkSpirit;
+    unsigned int ePowSpirit;
+    unsigned int powDownRoll;
+    unsigned int e2pHitGuardRoll;
+    unsigned int e2pDmgMagicCritRoll;
+    unsigned int e2pDmgSpread;
+    unsigned int cureRoll;
+    unsigned int cureLoopRoll;
+    unsigned int resistanceRoll;
+    unsigned int rollSpread;
+    unsigned int gainRoll;
+    unsigned int poisonRoll;
+    unsigned int sleepRoll;
+    unsigned int bindRoll;
+    unsigned int atkDownRoll;
+    unsigned int ePoisonRoll;
+    unsigned int e2pDmgPhysResist;
+    void *healValuesDefault;
+    void *healValues7;
+    void *healValues8;
+    void *cureOwner;
+    void *cureLoopOwner;
+    void *speedSkillValues;
+    int cureTarget;
+    int speedTarget;
+    int powerTarget;
+    int refractTarget;
+    int cureChance;
+    int cureLoopChance;
+    void *powerSkillValues;
+    void *powerTechTable;
+    void *playerList;
+    igIntList *chipDataList;
+    igIntList *chipDataExpList;
+    void *weaponSkillValues;
+    void *techSkillValues;
+    igIntList *skillValueList;
+    void *commonData;
+    void *poisonSkillValues;
+    void *sleepSkillValues;
+    void *bindSkillValues;
+    void *atkDownSkillValues;
+    void *atkDownSpeedSkillValues;
+    void *powDownSkillValues;
+    void *powDownStrSkillValues;
+    void *powDownDefSkillValues;
+    void *e2pDmgDownCheck;
+    void *e2pDmgDownList;
+    void *e2pDmgDown2Check;
+    void *e2pDmgDown2List;
+    void *rankMoveObject;
+    void *e2pStunDownCheck;
+    void *e2pStunDownList;
+    void *eSleepPlayerList;
+    void *powDownPlayer;
+    void *e2pDmgPlayer;
+    void *rankEnemy;
+    void *rankMoveList;
+    void *e2pStunPlayer;
+    void *ePoisonPlayer;
+    void *eBindPlayer;
+    IntProperty *eBindSpiritProperty;
+    void *eAtkPlayer;
+    void *eAtkDownList;
+    IntProperty *eAtkSpeedSpirit;
+    void *eAtkAccList;
+    IntProperty *eAtkAccSpirit;
+    void *ePowPlayer;
+    void *ePowStrList;
+    IntProperty *ePowStrSpirit;
+    void *ePowDefList;
+    IntProperty *ePowDefSpirit;
+    void *magicPlayer;
+    void *cureWork;
+    void *cureLoopPlayer;
+    void *cureLoopWork;
+    void *speedTargetList;
+    void *speedTargetPlayer;
+    void *powerTargetList;
+    void *powerTargetPlayer;
+    void *refractTargetList;
+    void *refractTargetPlayer;
+    beNDMWMdlPEBaseInfoWork *enemy;
+    void *patkPlayer;
+    void *poisonPlayer;
+    void *sleepPlayer;
+    void *bindPlayer;
+    void *atkDownPlayer;
     const char *messageName = (const char *)beNDMWGameRam_igStringRef_Get(&message->_message);
     void *messageEnum = GameRamMessage_GetMetaEnum();
     unsigned int messageId = beMessenger_ResolveEnumValue(self->_messenger, messageEnum, messageName);
@@ -3857,226 +3313,193 @@ done:
             beMessenger_AppendBool(self->_messenger, isCritical);
             break;
         }
-        case 5:
-            temp_ret_243 = beMessenger_GetInt(self->_messenger, 0);
-            temp_v0_44 = temp_ret_243;
-            temp_ret_244 = beMessenger_GetInt(self->_messenger, 1);
-            temp_v0_45 = temp_ret_244;
-            temp_ret_245 = beMessenger_GetInt(self->_messenger, 2);
-            sp12C = beMessenger_GetInt(self->_messenger, 3);
-            temp_ret_247 = (void *)(beMessenger_GetObject(self->_messenger, 0));
-            temp_v0_46 = (beNDMWMdlPEBaseInfoWork *)(temp_ret_247);
-            temp_ret_249 = MessageAccess::Player(self, temp_v0_44);
-            temp_v0_47 = (void *)(temp_ret_249);
-            var_s1 = -1;
-            switch (temp_ret_245 / 10000) {
+        case FIGHTCOM_P2EDAMAGE: {
+            playerIndex = beMessenger_GetInt(self->_messenger, 0);
+            enemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            attackId = beMessenger_GetInt(self->_messenger, 2);
+            isCritical = beMessenger_GetInt(self->_messenger, 3);
+            enemy = (beNDMWMdlPEBaseInfoWork *)(void *)(beMessenger_GetObject(self->_messenger, 0));
+            player = (void *)MessageAccess::Player(self, playerIndex);
+            element = -1;
+            switch (attackId / 10000) {
             default: {
-                temp_ret_250 = (int)igProperty_GetRecord(temp_v0_47, "WEAPONSKILLNO");
-                temp_s0_5 = ((beDataObjInt *)temp_ret_250)->_data;
-                temp_ret_251 = (int)igProperty_GetRecord(temp_v0_47, "TSUYOSA");
-                temp_s2 = ((beDataObjInt *)temp_ret_251)->_data;
-                temp_ret_252 = (int)igProperty_GetRecordIntList(temp_v0_47, "SKILL");
-                temp_ret_253 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_252)->_data));
-                temp_ret_254 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_253);
-                var_s0 = *(int *)(temp_ret_254 + (temp_s0_5 * 4));
-                temp_ret_255 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_46->_downDataList));
-                if (temp_ret_255 == 0) {
-                    var_s7 = 0;
+                weaponSkillNo = igProperty_GetRecord(player, "WEAPONSKILLNO")->value;
+                strength = igProperty_GetRecord(player, "TSUYOSA")->value;
+                int skillList = (int)igProperty_GetRecordIntList(player, "SKILL");
+                void *skillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)skillList)->_data));
+                int skillData = beNDMWLoadIntf2_igIntList_GetData(skillValues);
+                skillValue = *(int *)(skillData + (weaponSkillNo * 4));
+                if (beNDMWGameRam_igSmartPointer_igIntList_Get(&enemy->_downDataList) == 0) {
+                    defense = 0;
                 } else {
-                    temp_ret_256 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_46->_downDataList));
-                    temp_ret_257 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_256);
-                    var_s7 = ((int *)temp_ret_257)[5];
+                    void *downData = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&enemy->_downDataList));
+                    defense = ((int *)beNDMWLoadIntf2_igIntList_GetData(downData))[5];
                 }
-                temp_ret_262 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_45, "MAMORI");
-                var_s7 = temp_ret_262 - var_s7;
-                var_s2_2 = (int)((int) ((temp_s2 * 6) + (var_s0 * 4)) / var_s7);
-                if (var_s2_2 < 0) {
-                    var_s2_2 = 0;
-                } else if (var_s2_2 > 0x1869F) {
-                    var_s2_2 = 0x1869F;
+                defense = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), enemyRecNo, "MAMORI") - defense;
+                damage = (int)((int) ((strength * 6) + (skillValue * 4)) / defense);
+                if (damage < 0) {
+                    damage = 0;
+                } else if (damage > 0x1869F) {
+                    damage = 0x1869F;
                 }
-                if (var_s2_2 != 0) {
-                    temp_ret_263 = (int)igProperty_GetRecord(temp_v0_47, "ATTACKZOKUSEI");
-                    var_s1 = ((beDataObjInt *)temp_ret_263)->_data;
-                    if (var_s1 != -1) {
-                        temp_ret_268 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_45, g_elementResistanceFields[var_s1]);
-                        temp_v0_48 = temp_ret_268;
-                        temp_v0_50 = MessageAccess::Random(self)->genrand() % 1000U;
-                        if (temp_v0_48 < (int) temp_v0_50) {
-                            var_s2_2 += (int) (var_s2_2 * (0x3E8 - temp_v0_48)) / 1000;
+                if (damage != 0) {
+                    element = igProperty_GetRecord(player, "ATTACKZOKUSEI")->value;
+                    if (element != -1) {
+                        elementResistance = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), enemyRecNo, g_elementResistanceFields[element]);
+                        resistanceRoll = MessageAccess::Random(self)->genrand() % 1000U;
+                        if (elementResistance < (int) resistanceRoll) {
+                            damage += (int) (damage * (0x3E8 - elementResistance)) / 1000;
                         }
                     }
                 }
             break; }
             case 4: {
-                temp_a2_5 = (int)((int) temp_ret_245 % 1000);
-                int sp48C;
-                beNDMWGameRam_FindTechniqueRow(self, temp_v0_47, temp_a2_5, &sp48C);
-                temp_ret_274 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp48C, "HP");
-                temp_v0_51 = (int)(0U - (unsigned int)temp_ret_274);
-                if (temp_v0_51 != 0) {
-                    temp_ret_279 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp48C, "SKILL");
-                    temp_ret_280 = (int)igProperty_GetRecordIntList(temp_v0_47, "SKILL");
-                    temp_ret_281 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_280)->_data));
-                    temp_ret_282 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_281);
-                    var_s0 = *(int *)(temp_ret_282 + (temp_ret_279 * 4));
-                    temp_ret_287 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_45, "SEISHIN");
-                    temp_ret_288 = (int)igProperty_GetRecord(temp_v0_47, "KASHIKOSA");
-                    int techDmg = (int)((int) ((var_s0 * 5) + ((temp_v0_51 * 0x14) + (((beDataObjInt *)temp_ret_288)->_data * 0xA))) / temp_ret_287);
+                techniqueNo = (int)((int) attackId % 1000);
+                int techniqueRow;
+                beNDMWGameRam_FindTechniqueRow(self, player, techniqueNo, &techniqueRow);
+                techPower = (int)(0U - (unsigned int)beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "HP"));
+                if (techPower != 0) {
+                    int techSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                    int skillList = (int)igProperty_GetRecordIntList(player, "SKILL");
+                    void *skillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)skillList)->_data));
+                    int skillData = beNDMWLoadIntf2_igIntList_GetData(skillValues);
+                    skillValue = *(int *)(skillData + (techSkillNo * 4));
+                    int enemySpirit = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), enemyRecNo, "SEISHIN");
+                    int techDmg = (int)((int) ((skillValue * 5) + ((techPower * 0x14) + (igProperty_GetRecord(player, "KASHIKOSA")->value * 0xA))) / enemySpirit);
                     if (techDmg < 0) {
                         techDmg = 0;
                     } else if (techDmg > 0x1869F) {
                         techDmg = 0x1869F;
                     }
-                    var_s2_2 = techDmg;
+                    damage = techDmg;
                 } else {
-                    var_s2_2 = 0;
+                    damage = 0;
                 }
-                if (var_s2_2 != 0) {
-                    temp_ret_293 = (char *)(beDataBase_GetRecordString(MessageDatabases::PcTech(self), sp48C, "ZOKUSEI"));
-                    temp_v0_52 = (char *)(temp_ret_293);
-                    temp_ret_294 = strcmp(temp_v0_52, "fire");
-                    if (temp_ret_294 == 0) {
-                        var_s1 = 0;
+                if (damage != 0) {
+                    elementName = (char *)(beDataBase_GetRecordString(MessageDatabases::PcTech(self), techniqueRow, "ZOKUSEI"));
+                    if (strcmp(elementName, "fire") == 0) {
+                        element = 0;
                     } else {
-                        temp_ret_295 = strcmp(temp_v0_52, "ice");
-                        if (temp_ret_295 == 0) {
-                            var_s1 = 1;
+                        if (strcmp(elementName, "ice") == 0) {
+                            element = 1;
                         } else {
-                            temp_ret_296 = strcmp(temp_v0_52, "thunder");
-                            if (temp_ret_296 == 0) {
-                                var_s1 = 2;
+                            if (strcmp(elementName, "thunder") == 0) {
+                                element = 2;
                             } else {
-                                temp_ret_297 = strcmp(temp_v0_52, "dark");
-                                if (temp_ret_297 == 0) {
-                                    var_s1 = 3;
+                                if (strcmp(elementName, "dark") == 0) {
+                                    element = 3;
                                 } else {
-                                    temp_ret_298 = strcmp(temp_v0_52, "poison");
-                                    if (temp_ret_298 == 0) {
-                                        var_s1 = 4;
+                                    if (strcmp(elementName, "poison") == 0) {
+                                        element = 4;
                                     } else {
-                                        var_s1 = -1;
+                                        element = -1;
                                     }
                                 }
                             }
                         }
                     }
-                    if (var_s1 >= 0) {
-                        temp_ret_303 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_45, g_resistanceFields[var_s1]);
-                        var_v0_5 = temp_ret_303;
+                    if (element >= 0) {
+                        techResistance = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), enemyRecNo, g_resistanceFields[element]);
                     } else {
-                        var_v0_5 = 0;
+                        techResistance = 0;
                     }
-                    var_s2_2 = (int)((int) (var_s2_2 * (0x3E8 - var_v0_5)) / 1000);
+                    damage = (int)((int) (damage * (0x3E8 - techResistance)) / 1000);
                 }
             break; }
             }
-            if (var_s2_2 < 0) {
-                var_s2_2 = 0;
-            } else if (var_s2_2 > 0x1869F) {
-                var_s2_2 = 0x1869F;
+            if (damage < 0) {
+                damage = 0;
+            } else if (damage > 0x1869F) {
+                damage = 0x1869F;
             }
-            var_s3_2 = 0;
-            if (var_s2_2 != 0) {
-                if (sp12C != 0) {
-                    if (var_s0 < 0x3E9) {
-                        var_s2_2 += (int)((int) (var_s2_2 * ((var_s0 / 20) + 0x1E)) / 100);
-                    } else if (var_s0 < 0x7D1) {
-                        var_s2_2 += (int)((int) (var_s2_2 * (((int) (var_s0 - 0x3E8) / 50) + 0x50)) / 100);
+            isHighRoll = 0;
+            if (damage != 0) {
+                if (isCritical != 0) {
+                    if (skillValue < 0x3E9) {
+                        damage += (int)((int) (damage * ((skillValue / 20) + 0x1E)) / 100);
+                    } else if (skillValue < 0x7D1) {
+                        damage += (int)((int) (damage * (((int) (skillValue - 0x3E8) / 50) + 0x50)) / 100);
                     } else {
-                        var_s2_2 += (int)((int) (var_s2_2 * (((int) (var_s0 - 0x7D0) / 100) + 0x64)) / 100);
+                        damage += (int)((int) (damage * (((int) (skillValue - 0x7D0) / 100) + 0x64)) / 100);
                     }
                 }
-                if (var_s2_2 != 0) {
-                    temp_s0_6 = MessageAccess::Random(self)->genrand() & 3;
-                    temp_v0_55 = MessageAccess::Random(self)->genrand() % (unsigned int) (var_s2_2 * 0x19);
-                    switch (temp_s0_6) {
+                if (damage != 0) {
+                    rollKind = MessageAccess::Random(self)->genrand() & 3;
+                    rollSpread = MessageAccess::Random(self)->genrand() % (unsigned int) (damage * 0x19);
+                    switch (rollKind) {
 
                     case 0:
-                        temp_v0_56 = temp_v0_55 + (var_s2_2 * 950);
-                        var_s2_2 = (int)temp_v0_56 / 1000;
+                        damage = (int)(rollSpread + (damage * 950)) / 1000;
                         break;
 
                     case 1:
-                        temp_v0_57 = temp_v0_55 + (var_s2_2 * 975);
-                        var_s2_2 = (int)temp_v0_57 / 1000;
+                        damage = (int)(rollSpread + (damage * 975)) / 1000;
                         break;
 
                     case 2:
-                        temp_v0_58 = temp_v0_55 + (var_s2_2 * 1000);
-                        var_s2_2 = (int)temp_v0_58 / 1000;
+                        damage = (int)(rollSpread + (damage * 1000)) / 1000;
                         break;
 
                     case 3:
-                        temp_a0_6 = temp_v0_55 + (var_s2_2 * 1025);
-                        var_s2_2 = (int)temp_a0_6 / 1000;
-                        var_s3_2 = 1;
+                        damage = (int)(rollSpread + (damage * 1025)) / 1000;
+                        isHighRoll = 1;
                         break;
                     }
                 }
-                if (var_s2_2 < 0) {
-                    var_s2_2 = 0;
-                } else if (var_s2_2 > 0x1869F) {
-                    var_s2_2 = 0x1869F;
+                if (damage < 0) {
+                    damage = 0;
+                } else if (damage > 0x1869F) {
+                    damage = 0x1869F;
                 }
-                switch (temp_ret_245 / 10000) {
+                switch (attackId / 10000) {
                 default: {
-                    temp_ret_306 = (int)igProperty_GetRecord(temp_v0_47, "HPDRAIN");
-                    temp_v0_59 = ((beDataObjInt *)temp_ret_306)->_data;
-                    if (temp_v0_59 != 0) {
-                        temp_ret_307 = beNDMWGameRam_ChangeHp(self, temp_v0_44, (int) (var_s2_2 * temp_v0_59) / 100, -1);
+                    hpDrain = igProperty_GetRecord(player, "HPDRAIN")->value;
+                    if (hpDrain != 0) {
+                        beNDMWGameRam_ChangeHp(self, playerIndex, (int) (damage * hpDrain) / 100, -1);
                     }
-                    temp_ret_308 = (int)igProperty_GetRecord(temp_v0_47, "MPDRAIN");
-                    temp_v0_60 = ((beDataObjInt *)temp_ret_308)->_data;
-                    if (temp_v0_60 != 0) {
-                        beNDMWGameRam_ChangeMp(self, temp_v0_44, (int) (var_s2_2 * temp_v0_60) / 100);
+                    mpDrain = igProperty_GetRecord(player, "MPDRAIN")->value;
+                    if (mpDrain != 0) {
+                        beNDMWGameRam_ChangeMp(self, playerIndex, (int) (damage * mpDrain) / 100);
                     }
                 break; }
                 case 4: break;
                 }
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s2_2);
-            beMessenger_AppendInt(self->_messenger, var_s1);
-            beMessenger_AppendInt(self->_messenger, var_s3_2);
+            beMessenger_AppendInt(self->_messenger, damage);
+            beMessenger_AppendInt(self->_messenger, element);
+            beMessenger_AppendInt(self->_messenger, isHighRoll);
             break;
-        case 21:
-            temp_ret_310 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_311 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_313 = MessageAccess::Player(self, temp_ret_310);
-            temp_v0_61 = (void *)(temp_ret_313);
-            switch (temp_ret_311 / 10000) {
+        }
+        case FIGHTCOM_GETPATKZOKUSEI:
+            patkPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            patkAttackId = beMessenger_GetInt(self->_messenger, 1);
+            patkPlayer = (void *)MessageAccess::Player(self, patkPlayerIndex);
+            switch (patkAttackId / 10000) {
             default: {
-                temp_ret_314 = (int)igProperty_GetRecord(temp_v0_61, "ATTACKZOKUSEI");
-                var_s0_10 = ((beDataObjInt *)temp_ret_314)->_data;
+                patkElement = igProperty_GetRecord(patkPlayer, "ATTACKZOKUSEI")->value;
             break; }
             case 4: {
-                temp_a2_6 = (int)((int) temp_ret_311 % 10000);
-                int sp488;
-                beNDMWGameRam_FindTechniqueRow(self, temp_v0_61, temp_a2_6, &sp488);
-                temp_ret_319 = (char *)(beDataBase_GetRecordString(MessageDatabases::PcTech(self), sp488, "ZOKUSEI"));
-                temp_v0_62 = (char *)(temp_ret_319);
-                temp_ret_320 = strcmp(temp_v0_62, "fire");
-                if (temp_ret_320 == 0) {
-                    var_s0_10 = 0;
+                patkTechniqueNo = (int)((int) patkAttackId % 10000);
+                int techniqueRow;
+                beNDMWGameRam_FindTechniqueRow(self, patkPlayer, patkTechniqueNo, &techniqueRow);
+                patkElementName = (char *)(beDataBase_GetRecordString(MessageDatabases::PcTech(self), techniqueRow, "ZOKUSEI"));
+                if (strcmp(patkElementName, "fire") == 0) {
+                    patkElement = 0;
                 } else {
-                    temp_ret_321 = strcmp(temp_v0_62, "ice");
-                    if (temp_ret_321 == 0) {
-                        var_s0_10 = 1;
+                    if (strcmp(patkElementName, "ice") == 0) {
+                        patkElement = 1;
                     } else {
-                        temp_ret_322 = strcmp(temp_v0_62, "thunder");
-                        if (temp_ret_322 == 0) {
-                            var_s0_10 = 2;
+                        if (strcmp(patkElementName, "thunder") == 0) {
+                            patkElement = 2;
                         } else {
-                            temp_ret_323 = strcmp(temp_v0_62, "dark");
-                            if (temp_ret_323 == 0) {
-                                var_s0_10 = 3;
+                            if (strcmp(patkElementName, "dark") == 0) {
+                                patkElement = 3;
                             } else {
-                                temp_ret_324 = strcmp(temp_v0_62, "poison");
-                                if (temp_ret_324 == 0) {
-                                    var_s0_10 = 4;
+                                if (strcmp(patkElementName, "poison") == 0) {
+                                    patkElement = 4;
                                 } else {
-                                    var_s0_10 = -1;
+                                    patkElement = -1;
                                 }
                             }
                         }
@@ -4085,227 +3508,201 @@ done:
             break; }
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s0_10);
+            beMessenger_AppendInt(self->_messenger, patkElement);
             break;
-        case 13:
-            int skband;
-            void *skp;
-            int sklv;
-            int skcls;
-            int skcnt;
-            int skgrp;
-            int skhard;
-            short *skptr;
-            temp_ret_325 = beMessenger_GetInt(self->_messenger, 0);
-            temp_v0_63 = temp_ret_325;
-            temp_ret_326 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_327 = beMessenger_GetInt(self->_messenger, 2);
-            sp128 = beMessenger_GetInt(self->_messenger, 3);
-            temp_ret_330 = MessageAccess::Player(self, temp_v0_63);
-            skp = (void *)(temp_ret_330);
-            temp_ret_331 = (int)igProperty_GetRecord(skp, "LEVEL");
-            sklv = ((beDataObjInt *)temp_ret_331)->_data;
+        case FIGHTCOM_P2ESKILLUP:
+            int levelBand;
+            void *skillPlayer;
+            int level;
+            int attackClass;
+            int bandIndex;
+            int levelGroup;
+            int gainMode;
+            short *bandThreshold;
+            skillPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            skillAttackId = beMessenger_GetInt(self->_messenger, 1);
+            beMessenger_GetInt(self->_messenger, 2);
+            skillGainMode = beMessenger_GetInt(self->_messenger, 3);
+            skillPlayer = (void *)MessageAccess::Player(self, skillPlayerIndex);
+            level = igProperty_GetRecord(skillPlayer, "LEVEL")->value;
             /* Ternary chain rather than if/else: only this form copies each next compare into the
              * beqz delay slot. */
-            var_s8 = (sklv < 0x25) ? sklv * 0x1E
-                   : (sklv < 0x6C) ? (sklv * 0x14) + 0x168
-                   : (sklv < 0xE4) ? (sklv * 0xA) + 0x596
-                   : (sklv * 8) + 0x75C;
-            skcls = temp_ret_326 / 10000;
-            if ((skcls != 9) && (skcls != 8) && (skcls != 4)) {
-                temp_ret_332 = (int)igProperty_GetRecord(skp, "WEAPONSKILLNO");
-                var_s5_3 = ((beDataObjInt *)temp_ret_332)->_data;
-                temp_ret_333 = (int)igProperty_GetRecordIntList(skp, "SKILL");
-                temp_ret_334 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_333)->_data));
-                temp_ret_335 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_334);
-                var_s7_2 = *(int *)(temp_ret_335 + (var_s5_3 * 4));
+            skillCap = (level < 0x25) ? level * 0x1E
+                   : (level < 0x6C) ? (level * 0x14) + 0x168
+                   : (level < 0xE4) ? (level * 0xA) + 0x596
+                   : (level * 8) + 0x75C;
+            attackClass = skillAttackId / 10000;
+            if ((attackClass != 9) && (attackClass != 8) && (attackClass != 4)) {
+                skillNo = igProperty_GetRecord(skillPlayer, "WEAPONSKILLNO")->value;
+                weaponSkillList = (int)igProperty_GetRecordIntList(skillPlayer, "SKILL");
+                weaponSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)weaponSkillList)->_data));
+                weaponSkillData = beNDMWLoadIntf2_igIntList_GetData(weaponSkillValues);
+                currentSkill = *(int *)(weaponSkillData + (skillNo * 4));
             } else {
-                temp_a2_7 = (int)((int) temp_ret_326 % 10000);
-                int sp484;
-                beNDMWGameRam_FindTechniqueRow(self, skp, temp_a2_7, &sp484);
-                temp_ret_340 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp484, "SKILL");
-                var_s5_3 = temp_ret_340;
-                temp_ret_341 = (int)igProperty_GetRecordIntList(skp, "SKILL");
-                temp_ret_342 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_341)->_data));
-                temp_ret_343 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_342);
-                var_s7_2 = *(int *)(temp_ret_343 + (var_s5_3 * 4));
+                skillTechniqueNo = (int)((int) skillAttackId % 10000);
+                int techniqueRow;
+                beNDMWGameRam_FindTechniqueRow(self, skillPlayer, skillTechniqueNo, &techniqueRow);
+                /* matching construct: the technique's skill number passes through its own local before it becomes skillNo */
+                techniqueSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                skillNo = techniqueSkillNo;
+                techSkillList = (int)igProperty_GetRecordIntList(skillPlayer, "SKILL");
+                techSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)techSkillList)->_data));
+                techSkillData = beNDMWLoadIntf2_igIntList_GetData(techSkillValues);
+                currentSkill = *(int *)(techSkillData + (skillNo * 4));
             }
-            if (var_s7_2 < var_s8) {
+            if (currentSkill < skillCap) {
                 /* Same ternary form for the level band; the 0/2 pick below stays an if/else. */
-                skgrp = (sklv < 0x25) ? 0 : (sklv < 0x6C) ? 1 : (sklv < 0xE4) ? 2 : 3;
-                if (sp128 == 1) {
-                    skhard = 2;
+                levelGroup = (level < 0x25) ? 0 : (level < 0x6C) ? 1 : (level < 0xE4) ? 2 : 3;
+                if (skillGainMode == 1) {
+                    gainMode = 2;
                 } else {
-                    skhard = 0;
+                    gainMode = 0;
                 }
-                skptr = (short *)(g_skillGainThresholds);
+                bandThreshold = (short *)(g_skillGainThresholds);
                 /* `value <= *p` (not `*p >= value`) keeps the compare as slt at / bnez at. */
-                for (skcnt = 0; skcnt < 0x15; skcnt++, skptr++) {
-                    if (var_s7_2 <= *skptr) {
-                        skband = skcnt;
+                for (bandIndex = 0; bandIndex < 0x15; bandIndex++, bandThreshold++) {
+                    if (currentSkill <= *bandThreshold) {
+                        levelBand = bandIndex;
                         break;
                     }
                 }
-                temp_s1_3 = g_skillGainTable[skgrp][skband][skhard];
+                gainRate = g_skillGainTable[levelGroup][levelBand][gainMode];
                 /* A switch with the default arm first, rather than a != chain, places the nop
                  * after the third beq. */
-                switch (skcls) {
+                switch (attackClass) {
                 default: {
-                    temp_ret_344 = (int)igProperty_GetRecord(skp, "DIGIMONNO");
-                    temp_s0_8 = ((beDataObjInt *)temp_ret_344)->_data;
-                    temp_ret_345 = (void *)(beNDMWGameRam_igSmartPointer_beDataBase_Get(&self->_dBShinka));
-                    if (temp_ret_345 == 0) {
+                    digimonNo = igProperty_GetRecord(skillPlayer, "DIGIMONNO")->value;
+                    if (beNDMWGameRam_igSmartPointer_beDataBase_Get(&self->_dBShinka) == 0) {
                         beMessenger_SendNamed(self->_messenger, DATABASE_3, shinka_2, 0, GETDATABASE_3);
-                        temp_ret_346 = (void *)(beMessenger_GetObject(self->_messenger, 0));
-                        temp_ret_347 = (int *)(beNDMWGameRam_igSmartPointer_beDataBase_Assign((ObjectRefTarget **)&self->_dBShinka, (ObjectRefTarget *)temp_ret_346));
+                        beNDMWGameRam_igSmartPointer_beDataBase_Assign((ObjectRefTarget **)&self->_dBShinka, (ObjectRefTarget *)beMessenger_GetObject(self->_messenger, 0));
                     }
-                    temp_ret_348 = (void *)(beNDMWGameRam_igSmartPointer_beDataBase_Get(&self->_dBShinka));
-                    temp_ret_349 = beDataBase_GetRecordInt(temp_ret_348, temp_s0_8, g_weaponGrowFields[var_s5_3]);
-                    var_s0_11 = (int)((int) (temp_s1_3 * temp_ret_349 * 0x1F4) / 1000);
+                    growRate = beDataBase_GetRecordInt((void *)beNDMWGameRam_igSmartPointer_beDataBase_Get(&self->_dBShinka), digimonNo, g_weaponGrowFields[skillNo]);
+                    gainChance = (int)((int) (gainRate * growRate * 0x1F4) / 1000);
                 break; }
                 case 4: case 8: case 9:
-                    var_s0_11 = temp_s1_3 * 0x64;
+                    gainChance = gainRate * 0x64;
                     break;
                 }
-                temp_v0_66 = MessageAccess::Random(self)->genrand() % 100000U;
-                if ((int) temp_v0_66 < var_s0_11) {
-                    int skill_next = var_s7_2 + 1;
-                    temp_ret_351 = (int)igProperty_GetRecordIntList(skp, "SKILL");
-                    temp_ret_352 = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)temp_ret_351));
-                    temp_v0_67 = (void *)(temp_ret_352);
-                    temp_v1_3 = ((igIntList *)temp_v0_67)->_count;
-                    if ((temp_v1_3 != 0) && (var_s5_3 >= 0) && (var_s5_3 < temp_v1_3)) {
-                        temp_ret_353 = beNDMWLoadIntf2_igIntList_GetData(temp_v0_67);
-                        *(int *)(temp_ret_353 + (var_s5_3 * 4)) = skill_next;
+                gainRoll = MessageAccess::Random(self)->genrand() % 100000U;
+                if ((int) gainRoll < gainChance) {
+                    int newSkill = currentSkill + 1;
+                    skillRecord = (int)igProperty_GetRecordIntList(skillPlayer, "SKILL");
+                    skillValueList = (igIntList *)beNDMWGameRam_beDataObjIntList_GetData((int *)skillRecord);
+                    skillCount = skillValueList->_count;
+                    if ((skillCount != 0) && (skillNo >= 0) && (skillNo < skillCount)) {
+                        skillData = beNDMWLoadIntf2_igIntList_GetData(skillValueList);
+                        *(int *)(skillData + (skillNo * 4)) = newSkill;
                     }
-                    beNDMWGameRam_RecomputeStats(self, temp_v0_63, 1);
-                    beNDMWGameRam_StoreSpecies(self, temp_v0_63);
-                    temp_ret_356 = (int)igProperty_GetRecordString(skp, "DIGIMONNAME");
-                    temp_ret_357 = (char *)(beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_356)->_data));
-                    temp_ret_358 = beMessenger_PrepareDelayedSelection(self->_messenger, "MODELCTRL", temp_ret_357, temp_v0_63);
+                    beNDMWGameRam_RecomputeStats(self, skillPlayerIndex, 1);
+                    beNDMWGameRam_StoreSpecies(self, skillPlayerIndex);
+                    digimonName = (char *)(beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(skillPlayer, "DIGIMONNAME"))->_data));
+                    beMessenger_PrepareDelayedSelection(self->_messenger, "MODELCTRL", digimonName, skillPlayerIndex);
                     beMessenger_AppendString(self->_messenger, "i_getitempnl01");
                     beMessenger_AppendString(self->_messenger, "SQ_TECUP");
                     beMessenger_AppendFloat(self->_messenger, 1.0f);
-                    Vec3f_Copy(&sp358, &g_vec3Zero[0]);
-                    beMessenger_AppendVec3(self->_messenger, &sp358);
+                    Vec3f_Copy(&skillEffectOffset, &g_vec3Zero[0]);
+                    beMessenger_AppendVec3(self->_messenger, &skillEffectOffset);
                     beMessenger_AppendBool(self->_messenger, 0U);
                     beMessenger_AppendBool(self->_messenger, 1U);
-                    temp_ret_359 = beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+                    beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
                 }
             }
             break;
-        case 6:
+        case FIGHTCOM_P2EEXPUP:
             /* Block-local webs are declared in the order expup_idx, expup_player, expup_level,
              * expup_exp; their register ids fix the allocator push order. */
             int expup_idx;
             void *expup_player;
             int expup_level;
             int expup_exp;
-            temp_ret_360 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_361 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_362 = (void *)(beNDMWGameRam_igSmartPointer_beDataObjList_Get(&self->_commonDataList));
-            temp_ret_363 = (int)igProperty_GetRecord(temp_ret_362, "NINZU");
-            temp_s6 = ((beDataObjInt *)temp_ret_363)->_data;
+            killerIndex = beMessenger_GetInt(self->_messenger, 0);
+            expEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            commonData = (void *)(beNDMWGameRam_igSmartPointer_beDataObjList_Get(&self->_commonDataList));
+            partySize = igProperty_GetRecord(commonData, "NINZU")->value;
             expup_idx = 0;
-            sp124 = 0;
+            killerExp = 0;
             do {
-                temp_ret_365 = MessageAccess::Player(self, expup_idx);
-                expup_player = (void *)(temp_ret_365);
-                temp_ret_366 = (beDataObjBool *)(igProperty_GetRecordByte((int)expup_player, "ISUSE"));
-                if (temp_ret_366->_data != 0) {
-                    temp_ret_367 = (int)igProperty_GetRecord(expup_player, "HP");
-                    if (((beDataObjInt *)temp_ret_367)->_data != 0) {
-                        temp_ret_368 = (int)igProperty_GetRecord(expup_player, "LEVEL");
-                        expup_level = ((beDataObjInt *)temp_ret_368)->_data;
+                expup_player = (void *)MessageAccess::Player(self, expup_idx);
+                if (igProperty_GetRecordByte((int)expup_player, "ISUSE")->value != 0) {
+                    if (igProperty_GetRecord(expup_player, "HP")->value != 0) {
+                        expup_level = igProperty_GetRecord(expup_player, "LEVEL")->value;
                         if (expup_level != 0x3E7) {
-                            temp_ret_373 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_ret_361, "EXP");
-                            var_s0_12 = temp_ret_373;
-                            temp_ret_374 = (int)igProperty_GetRecord(expup_player, "EXPRITSU");
-                            temp_v0_69 = ((beDataObjInt *)temp_ret_374)->_data;
-                            if (temp_v0_69 != 0) {
-                                var_s0_12 = (int)((int) (var_s0_12 * (temp_v0_69 + 0x64)) / 100);
+                            baseExp = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), expEnemyRecNo, "EXP");
+                            expBonus = igProperty_GetRecord(expup_player, "EXPRITSU")->value;
+                            if (expBonus != 0) {
+                                baseExp = (int)((int) (baseExp * (expBonus + 0x64)) / 100);
                             }
                             int split;  /* Declared here: a late register id lets the allocator push the receiver before the four hot loop webs. */
-                            switch (temp_s6) {
+                            switch (partySize) {
                             case 1:  /* Case 1 shares the default body, which keeps a dead `li v0,1` compare. */
                             default:
-                                split = (var_s0_12 * 100) / 2;
+                                split = (baseExp * 100) / 2;
                                 break;
                             case 2:
-                                split = (var_s0_12 * 140) / 3;
+                                split = (baseExp * 140) / 3;
                                 break;
                             case 3:
-                                split = (var_s0_12 * 160) / 4;
+                                split = (baseExp * 160) / 4;
                                 break;
                             case 4:
-                                split = (var_s0_12 * 200) / 5;
+                                split = (baseExp * 200) / 5;
                                 break;
                             }
-                            if (expup_idx == temp_ret_360) {
+                            if (expup_idx == killerIndex) {
                                 split /= 50;
-                                sp124 = split;
+                                killerExp = split;
                             } else {
                                 split /= 100;
                             }
-                            temp_ret_375 = (int)igProperty_GetRecord(expup_player, "EXP");
                             /* The old value is read before the second record lookup (it lives
                              * across that call); the add is in place. */
-                            expup_exp = ((beDataObjInt *)temp_ret_375)->_data;
+                            expup_exp = igProperty_GetRecord(expup_player, "EXP")->value;
                             expup_exp = expup_exp + split;
-                            temp_ret_376 = (int)igProperty_GetRecord(expup_player, "EXP");
-                            ((beDataObjInt *)temp_ret_376)->_data = expup_exp;
+                            igProperty_GetRecord(expup_player, "EXP")->value = expup_exp;
                             bool leveled_up = false;
-                            temp_ret_377 = (int)igProperty_GetRecord(expup_player, "NEXTEXP");
-                            if (((beDataObjInt *)temp_ret_377)->_data <= expup_exp) {
+                            if (igProperty_GetRecord(expup_player, "NEXTEXP")->value <= expup_exp) {
 loop_449:
                                 expup_level += 1;
-                                temp_ret_378 = (int)igProperty_GetRecord(expup_player, "LEVEL");
-                                ((beDataObjInt *)temp_ret_378)->_data = expup_level;
+                                igProperty_GetRecord(expup_player, "LEVEL")->value = expup_level;
                                 beNDMWGameRam_RecomputeStats(self, expup_idx, 1);
                                 beNDMWGameRam_StoreSpecies(self, expup_idx);
                                 leveled_up = true;
                                 if (expup_level != 0x3E7) {
-                                    temp_ret_381 = (int)igProperty_GetRecord(expup_player, "NEXTEXP");
-                                    if (expup_exp >= ((beDataObjInt *)temp_ret_381)->_data) {
+                                    if (expup_exp >= igProperty_GetRecord(expup_player, "NEXTEXP")->value) {
                                         goto loop_449;
                                     }
                                 }
                             }
                             if (leveled_up) {
-                                temp_ret_382 = (int)igProperty_GetRecord(expup_player, "MHP");
-                                temp_s0_10 = ((beDataObjInt *)temp_ret_382)->_data;
-                                temp_ret_383 = (int)igProperty_GetRecord(expup_player, "MMP");
-                                temp_s5 = ((beDataObjInt *)temp_ret_383)->_data;
-                                temp_ret_384 = (int)igProperty_GetRecordString(expup_player, "DIGIMONNAME");
-                                temp_ret_385 = (char *)(beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_384)->_data));
-                                temp_ret_386 = beMessenger_PrepareDelayedSelection(self->_messenger, "MODELCTRL", temp_ret_385, expup_idx);
+                                maxHp = igProperty_GetRecord(expup_player, "MHP")->value;
+                                maxMp = igProperty_GetRecord(expup_player, "MMP")->value;
+                                levelUpName = (char *)(beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(expup_player, "DIGIMONNAME"))->_data));
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "MODELCTRL", levelUpName, expup_idx);
                                 beMessenger_AppendString(self->_messenger, "i_getitempnl01");
                                 beMessenger_AppendString(self->_messenger, "SQ_LVUP");
                                 beMessenger_AppendFloat(self->_messenger, 1.0f);
-                                Vec3f_Copy(&sp348, &g_vec3Zero[0]);
-                                beMessenger_AppendVec3(self->_messenger, &sp348);
+                                Vec3f_Copy(&levelUpEffectOffset, &g_vec3Zero[0]);
+                                beMessenger_AppendVec3(self->_messenger, &levelUpEffectOffset);
                                 beMessenger_AppendBool(self->_messenger, 0U);
                                 beMessenger_AppendBool(self->_messenger, 1U);
-                                temp_ret_387 = beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
-                                temp_ret_388 = (int)igProperty_GetRecord(expup_player, "HP");
-                                ((beDataObjInt *)temp_ret_388)->_data = temp_s0_10;
-                                temp_ret_389 = (int)igProperty_GetRecord(expup_player, "MP");
-                                ((beDataObjInt *)temp_ret_389)->_data = temp_s5;
-                                temp_ret_390 = beMessenger_PrepareDelayedSelection(self->_messenger, "NUMBERCTRL", "lvnm", expup_idx);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+                                igProperty_GetRecord(expup_player, "HP")->value = maxHp;
+                                igProperty_GetRecord(expup_player, "MP")->value = maxMp;
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "NUMBERCTRL", "lvnm", expup_idx);
                                 beMessenger_AppendInt(self->_messenger, expup_level);
-                                temp_ret_391 = beMessenger_EnqueueSelected(self->_messenger, "SETVALUE", 1);
-                                temp_ret_392 = beMessenger_PrepareDelayedSelection(self->_messenger, "METERCTRL", "hpmt", expup_idx);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETVALUE", 1);
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "METERCTRL", "hpmt", expup_idx);
                                 beMessenger_AppendFloat(self->_messenger, 100.0f);
-                                temp_ret_393 = beMessenger_EnqueueSelected(self->_messenger, "SETPERCENT", 1);
-                                temp_ret_394 = beMessenger_PrepareDelayedSelection(self->_messenger, "NUMBERCTRL", "hpnm", expup_idx);
-                                beMessenger_AppendInt(self->_messenger, temp_s0_10);
-                                temp_ret_395 = beMessenger_EnqueueSelected(self->_messenger, "SETVALUE", 1);
-                                temp_ret_396 = beMessenger_PrepareDelayedSelection(self->_messenger, "METERCTRL", "mpmt", expup_idx);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETPERCENT", 1);
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "NUMBERCTRL", "hpnm", expup_idx);
+                                beMessenger_AppendInt(self->_messenger, maxHp);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETVALUE", 1);
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "METERCTRL", "mpmt", expup_idx);
                                 beMessenger_AppendFloat(self->_messenger, 100.0f);
-                                temp_ret_397 = beMessenger_EnqueueSelected(self->_messenger, "SETPERCENT", 1);
-                                temp_ret_398 = beMessenger_PrepareDelayedSelection(self->_messenger, "NUMBERCTRL", "mpnm", expup_idx);
-                                beMessenger_AppendInt(self->_messenger, temp_s5);
-                                temp_ret_399 = beMessenger_EnqueueSelected(self->_messenger, "SETVALUE", 1);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETPERCENT", 1);
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "NUMBERCTRL", "mpnm", expup_idx);
+                                beMessenger_AppendInt(self->_messenger, maxMp);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETVALUE", 1);
                             }
                         }
                     }
@@ -4313,280 +3710,252 @@ loop_449:
                 expup_idx += 1;
             } while (expup_idx < 4);
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, sp124);
+            beMessenger_AppendInt(self->_messenger, killerExp);
             break;
-        case 14: {
-            temp_ret_400 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_401 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_402 = beMessenger_GetInt(self->_messenger, 2);
-            temp_v0_72 = temp_ret_402;
-            temp_ret_403 = beMessenger_GetInt(self->_messenger, 3);
-            temp_v0_73 = temp_ret_403;
-            temp_ret_404 = beMessenger_GetInt(self->_messenger, 4);
-            temp_ret_406 = MessageAccess::Player(self, temp_ret_400);
-            temp_ret_407 = (int)igProperty_GetRecord(temp_ret_406, "MAHIRITSU");
-            int stun_base = ((beDataObjInt *)temp_ret_407)->_data;
-            temp_ret_412 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_ret_401, "RES_STUN");
-            temp_v0_74 = temp_ret_412;
-            temp_a0_7 = MessageAccess::Random(self)->genrand() % 100U;
-            var_s1_3 = 0;
-            temp_v1_6 = (stun_base + ((int) (temp_v0_73 * 0x32) / temp_v0_72) + 0x64) - temp_v0_74;
-            var_v0_9 = temp_v1_6 / 2;
-            if ((int) temp_a0_7 < var_v0_9) {
-                var_s1_3 = (int)((int) ((0xC8 - temp_v0_74) * (((int) (temp_v0_73 * 0x1E) / temp_v0_72) + (stun_base * 3))) / 400);
+        case FIGHTCOM_P2ESTUNTIME: {
+            stunPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            stunEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            stunScale = beMessenger_GetInt(self->_messenger, 2);
+            stunPower = beMessenger_GetInt(self->_messenger, 3);
+            beMessenger_GetInt(self->_messenger, 4);
+            int stunBase = igProperty_GetRecord((void *)MessageAccess::Player(self, stunPlayerIndex), "MAHIRITSU")->value;
+            stunResist = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), stunEnemyRecNo, "RES_STUN");
+            stunRoll = MessageAccess::Random(self)->genrand() % 100U;
+            stunTime = 0;
+            stunChanceSum = (stunBase + ((int) (stunPower * 0x32) / stunScale) + 0x64) - stunResist;
+            stunChance = stunChanceSum / 2;
+            if ((int) stunRoll < stunChance) {
+                stunTime = (int)((int) ((0xC8 - stunResist) * (((int) (stunPower * 0x1E) / stunScale) + (stunBase * 3))) / 400);
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s1_3);
+            beMessenger_AppendInt(self->_messenger, stunTime);
             break; }
-        case 15:
-            temp_ret_414 = (char *)(beMessenger_GetString(self->_messenger, 1));
-            temp_v0_76 = (char *)(temp_ret_414);
-            { StringRef sp480(temp_v0_76 == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), temp_v0_76));
-            temp_ret_417 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_418 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_419 = beMessenger_GetInt(self->_messenger, 2);
-            temp_v0_77 = temp_ret_419;
-            temp_ret_421 = MessageAccess::Player(self, temp_ret_417);
-            temp_v0_78 = (void *)(temp_ret_421);
-            temp_ret_422 = strcmp(sp480.p, "TIME");
-            if (temp_ret_422 == 0) {
-                int sp47C;
-                sp47C = 0;
-                temp_a2_8 = temp_v0_77 % 10000;
-                var_s2_3 = 0;
-                beNDMWGameRam_FindTechniqueRow(self, temp_v0_78, temp_a2_8, &sp47C);
-                temp_ret_427 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp47C, "SKILL");
-                temp_ret_428 = (int)igProperty_GetRecordIntList(temp_v0_78, "SKILL");
-                temp_ret_429 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_428 + 0xC)));
-                temp_ret_430 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_429);
-                temp_s1_4 = ((int *)temp_ret_430)[temp_ret_427];
-                temp_ret_435 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_ret_418, "RES_POISON");
-                temp_v0_79 = temp_ret_435;
-                if (temp_s1_4 < 0x3E9) {
-                    var_v1_7 = temp_s1_4 / 4;
-                    var_s1_4 = (int)((int) ((var_v1_7 + 0x2EE) * (0x3E8 - temp_v0_79)) / 1000);
-                } else if (temp_s1_4 < 0x7D1) {
-                    var_s1_4 = (int)((int) ((((int) (temp_s1_4 - 0x3E8) / 5) + 0x3E8) * (0x3E8 - temp_v0_79)) / 1000);
+        case FIGHTCOM_P2EPOISONTIME:
+            poisonMode = (char *)(beMessenger_GetString(self->_messenger, 1));
+            { StringRef mode(poisonMode == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), poisonMode));
+            poisonPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            poisonEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            poisonAttackId = beMessenger_GetInt(self->_messenger, 2);
+            poisonPlayer = (void *)MessageAccess::Player(self, poisonPlayerIndex);
+            if (strcmp(mode.p, "TIME") == 0) {
+                int techniqueRow;
+                techniqueRow = 0;
+                poisonTechniqueNo = poisonAttackId % 10000;
+                poisonHit = 0;
+                beNDMWGameRam_FindTechniqueRow(self, poisonPlayer, poisonTechniqueNo, &techniqueRow);
+                poisonSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                poisonSkillList = (int)igProperty_GetRecordIntList(poisonPlayer, "SKILL");
+                poisonSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)poisonSkillList)->_data));
+                poisonSkillData = beNDMWLoadIntf2_igIntList_GetData(poisonSkillValues);
+                poisonSkill = ((int *)poisonSkillData)[poisonSkillNo];
+                poisonResist = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), poisonEnemyRecNo, "RES_POISON");
+                if (poisonSkill < 0x3E9) {
+                    skillTerm = poisonSkill / 4;
+                    poisonChance = (int)((int) ((skillTerm + 0x2EE) * (0x3E8 - poisonResist)) / 1000);
+                } else if (poisonSkill < 0x7D1) {
+                    poisonChance = (int)((int) ((((int) (poisonSkill - 0x3E8) / 5) + 0x3E8) * (0x3E8 - poisonResist)) / 1000);
                 } else {
-                    var_s1_4 = (int)((int) ((((int) (temp_s1_4 - 0x7D0) / 10) + 0x4B0) * (0x3E8 - temp_v0_79)) / 1000);
+                    poisonChance = (int)((int) ((((int) (poisonSkill - 0x7D0) / 10) + 0x4B0) * (0x3E8 - poisonResist)) / 1000);
                 }
-                temp_v0_81 = MessageAccess::Random(self)->genrand() % 1000U;
-                if ((int) temp_v0_81 < var_s1_4) {
-                    var_s2_3 = 1;
+                poisonRoll = MessageAccess::Random(self)->genrand() % 1000U;
+                if ((int) poisonRoll < poisonChance) {
+                    poisonHit = 1;
                 }
-                if (var_s2_3 != 0) {
-                    temp_ret_437 = (int)igProperty_GetRecord(temp_v0_78, "KASHIKOSA");
-                    temp_s0_12 = ((beDataObjInt *)temp_ret_437)->_data;
-                    temp_ret_442 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp47C, "TIME");
-                    var_v1_8 = temp_s0_12 / 2;
-                    var_s0_13 = temp_ret_442 + var_v1_8;
+                if (poisonHit != 0) {
+                    intelligence = igProperty_GetRecord(poisonPlayer, "KASHIKOSA")->value;
+                    poisonBaseTime = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TIME");
+                    intelligenceBonus = intelligence / 2;
+                    poisonResult = poisonBaseTime + intelligenceBonus;
                 } else {
-                    var_s0_13 = 0;
+                    poisonResult = 0;
                 }
-                if (var_s0_13 == 0) {
-                    var_s0_13 = -1;
+                if (poisonResult == 0) {
+                    poisonResult = -1;
                 }
                 beMessenger_ClearInt(self->_messenger);
-                beMessenger_AppendInt(self->_messenger, var_s0_13);
+                beMessenger_AppendInt(self->_messenger, poisonResult);
             } else {
-                temp_a2_9 = temp_v0_77 % 10000;
-                int sp478;
-                beNDMWGameRam_FindTechniqueRow(self, temp_v0_78, temp_a2_9, &sp478);
-                var_s0_13 = -(beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp478, "HP") / 5);
+                poisonDamageTechniqueNo = poisonAttackId % 10000;
+                int techniqueRow;
+                beNDMWGameRam_FindTechniqueRow(self, poisonPlayer, poisonDamageTechniqueNo, &techniqueRow);
+                poisonResult = -(beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "HP") / 5);
 
                 beMessenger_ClearInt(self->_messenger);
-                beMessenger_AppendInt(self->_messenger, var_s0_13);
+                beMessenger_AppendInt(self->_messenger, poisonResult);
             }
             }
             break;
-        case 16:
-            temp_ret_449 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_450 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_451 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_453 = MessageAccess::Player(self, temp_ret_449);
-            temp_v0_82 = (void *)(temp_ret_453);
-            int sp474;
-            sp474 = 0;
-            temp_a2_10 = temp_ret_451 % 10000;
-            var_s2_4 = 0;
-            beNDMWGameRam_FindTechniqueRow(self, temp_v0_82, temp_a2_10, &sp474);
-            temp_ret_458 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp474, "SKILL");
-            temp_ret_459 = (int)igProperty_GetRecordIntList(temp_v0_82, "SKILL");
-            temp_ret_460 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_459 + 0xC)));
-            temp_ret_461 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_460);
-            temp_s3_3 = ((int *)temp_ret_461)[temp_ret_458];
-            temp_ret_466 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_ret_450, "SEISHIN");
-            temp_v0_83 = temp_ret_466;
-            if (temp_s3_3 < 0x3E9) {
-                var_v1_9 = temp_s3_3 / 4;
-                var_s1_5 = (int)((int) ((var_v1_9 + 0x226) * 0x64) / temp_v0_83);
-            } else if (temp_s3_3 < 0x7D1) {
-                var_s1_5 = (int)((int) ((((int) (temp_s3_3 - 0x3E8) / 5) + 0x320) * 0x64) / temp_v0_83);
+        case FIGHTCOM_P2ESLEEPTIME:
+            sleepPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            sleepEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            sleepAttackId = beMessenger_GetInt(self->_messenger, 2);
+            sleepPlayer = (void *)MessageAccess::Player(self, sleepPlayerIndex);
+            int sleepTechniqueRow;
+            sleepTechniqueRow = 0;
+            sleepTechniqueNo = sleepAttackId % 10000;
+            sleepHit = 0;
+            beNDMWGameRam_FindTechniqueRow(self, sleepPlayer, sleepTechniqueNo, &sleepTechniqueRow);
+            sleepSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sleepTechniqueRow, "SKILL");
+            sleepSkillList = (int)igProperty_GetRecordIntList(sleepPlayer, "SKILL");
+            sleepSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)sleepSkillList)->_data));
+            sleepSkillData = beNDMWLoadIntf2_igIntList_GetData(sleepSkillValues);
+            sleepSkill = ((int *)sleepSkillData)[sleepSkillNo];
+            sleepSpirit = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), sleepEnemyRecNo, "SEISHIN");
+            if (sleepSkill < 0x3E9) {
+                sleepSkillTerm = sleepSkill / 4;
+                sleepChance = (int)((int) ((sleepSkillTerm + 0x226) * 0x64) / sleepSpirit);
+            } else if (sleepSkill < 0x7D1) {
+                sleepChance = (int)((int) ((((int) (sleepSkill - 0x3E8) / 5) + 0x320) * 0x64) / sleepSpirit);
             } else {
-                var_s1_5 = (int)((int) ((((int) (temp_s3_3 - 0x7D0) / 10) + 0x3E8) * 0x64) / temp_v0_83);
+                sleepChance = (int)((int) ((((int) (sleepSkill - 0x7D0) / 10) + 0x3E8) * 0x64) / sleepSpirit);
             }
-            temp_v0_85 = MessageAccess::Random(self)->genrand() % 1000U;
-            if ((int) temp_v0_85 < var_s1_5) {
-                var_s2_4 = 1;
+            sleepRoll = MessageAccess::Random(self)->genrand() % 1000U;
+            if ((int) sleepRoll < sleepChance) {
+                sleepHit = 1;
             }
-            if (var_s2_4 != 0) {
-                temp_ret_468 = (int)igProperty_GetRecord(temp_v0_82, "KASHIKOSA");
-                temp_s0_13 = ((beDataObjInt *)temp_ret_468)->_data;
-                temp_ret_473 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp474, "TIME");
-                var_s0_14 = temp_ret_473 + temp_s0_13 / 2;
+            if (sleepHit != 0) {
+                sleepIntelligence = igProperty_GetRecord(sleepPlayer, "KASHIKOSA")->value;
+                sleepBaseTime = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sleepTechniqueRow, "TIME");
+                sleepResult = sleepBaseTime + sleepIntelligence / 2;
             } else {
-                var_s0_14 = 0;
+                sleepResult = 0;
             }
-            if (var_s0_14 == 0) {
-                var_s0_14 = -1;
+            if (sleepResult == 0) {
+                sleepResult = -1;
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s0_14);
+            beMessenger_AppendInt(self->_messenger, sleepResult);
             break;
-        case 17:
-            temp_ret_474 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_475 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_476 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_478 = MessageAccess::Player(self, temp_ret_474);
-            temp_v0_86 = (void *)(temp_ret_478);
-            int sp470;
-            sp470 = 0;
-            temp_a2_11 = temp_ret_476 % 10000;
-            var_s2_5 = 0;
-            beNDMWGameRam_FindTechniqueRow(self, temp_v0_86, temp_a2_11, &sp470);
-            temp_ret_483 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp470, "SKILL");
-            temp_ret_484 = (int)igProperty_GetRecordIntList(temp_v0_86, "SKILL");
-            temp_ret_485 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_484 + 0xC)));
-            temp_ret_486 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_485);
-            temp_s3_4 = ((int *)temp_ret_486)[temp_ret_483];
-            temp_ret_491 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_ret_475, "SEISHIN");
-            temp_v0_87 = temp_ret_491;
-            if (temp_s3_4 < 0x3E9) {
-                var_v1_11 = temp_s3_4 / 4;
-                var_s1_6 = (int)((int) ((var_v1_11 + 0x226) * 0x64) / temp_v0_87);
-            } else if (temp_s3_4 < 0x7D1) {
-                var_s1_6 = (int)((int) ((((int) (temp_s3_4 - 0x3E8) / 5) + 0x320) * 0x64) / temp_v0_87);
+        case FIGHTCOM_P2EBINDTIME:
+            bindPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            bindEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            bindAttackId = beMessenger_GetInt(self->_messenger, 2);
+            bindPlayer = (void *)MessageAccess::Player(self, bindPlayerIndex);
+            int bindTechniqueRow;
+            bindTechniqueRow = 0;
+            bindTechniqueNo = bindAttackId % 10000;
+            bindHit = 0;
+            beNDMWGameRam_FindTechniqueRow(self, bindPlayer, bindTechniqueNo, &bindTechniqueRow);
+            bindSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), bindTechniqueRow, "SKILL");
+            bindSkillList = (int)igProperty_GetRecordIntList(bindPlayer, "SKILL");
+            bindSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)bindSkillList)->_data));
+            bindSkillData = beNDMWLoadIntf2_igIntList_GetData(bindSkillValues);
+            bindSkill = ((int *)bindSkillData)[bindSkillNo];
+            bindSpirit = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), bindEnemyRecNo, "SEISHIN");
+            if (bindSkill < 0x3E9) {
+                bindSkillTerm = bindSkill / 4;
+                bindChance = (int)((int) ((bindSkillTerm + 0x226) * 0x64) / bindSpirit);
+            } else if (bindSkill < 0x7D1) {
+                bindChance = (int)((int) ((((int) (bindSkill - 0x3E8) / 5) + 0x320) * 0x64) / bindSpirit);
             } else {
-                var_s1_6 = (int)((int) ((((int) (temp_s3_4 - 0x7D0) / 10) + 0x3E8) * 0x64) / temp_v0_87);
+                bindChance = (int)((int) ((((int) (bindSkill - 0x7D0) / 10) + 0x3E8) * 0x64) / bindSpirit);
             }
-            temp_v0_89 = MessageAccess::Random(self)->genrand() % 1000U;
-            if ((int) temp_v0_89 < var_s1_6) {
-                var_s2_5 = 1;
+            bindRoll = MessageAccess::Random(self)->genrand() % 1000U;
+            if ((int) bindRoll < bindChance) {
+                bindHit = 1;
             }
-            if (var_s2_5 != 0) {
-                temp_ret_493 = (int)igProperty_GetRecord(temp_v0_86, "KASHIKOSA");
-                temp_s0_14 = ((beDataObjInt *)temp_ret_493)->_data;
-                temp_ret_498 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp470, "TIME");
-                var_v1_12 = temp_s0_14 / 2;
-                var_s0_15 = temp_ret_498 + var_v1_12;
+            if (bindHit != 0) {
+                bindIntelligence = igProperty_GetRecord(bindPlayer, "KASHIKOSA")->value;
+                bindBaseTime = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), bindTechniqueRow, "TIME");
+                bindIntelligenceBonus = bindIntelligence / 2;
+                bindResult = bindBaseTime + bindIntelligenceBonus;
             } else {
-                var_s0_15 = 0;
+                bindResult = 0;
             }
-            if (var_s0_15 == 0) {
-                var_s0_15 = -1;
+            if (bindResult == 0) {
+                bindResult = -1;
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s0_15);
+            beMessenger_AppendInt(self->_messenger, bindResult);
             break;
-        case 18:
-            temp_ret_499 = (char *)(beMessenger_GetString(self->_messenger, 1));
-            temp_v0_90 = (char *)(temp_ret_499);
-            { StringRef sp46C(temp_v0_90 == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), temp_v0_90));
-            temp_ret_502 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_503 = beMessenger_GetInt(self->_messenger, 1);
-            temp_v0_91 = temp_ret_503;
-            temp_ret_504 = beMessenger_GetInt(self->_messenger, 2);
-            temp_v0_92 = temp_ret_504;
-            temp_ret_506 = MessageAccess::Player(self, temp_ret_502);
-            temp_v0_93 = (void *)(temp_ret_506);
-            temp_ret_507 = strcmp(sp46C.p, "TIME");
-            if (temp_ret_507 == 0) {
-                int sp468;
-                sp468 = 0;
-                temp_a2_12 = temp_v0_92 % 10000;
-                var_s2_6 = 0;
-                beNDMWGameRam_FindTechniqueRow(self, temp_v0_93, temp_a2_12, &sp468);
-                temp_ret_512 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp468, "SKILL");
-                temp_ret_513 = (int)igProperty_GetRecordIntList(temp_v0_93, "SKILL");
-                temp_ret_514 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_513 + 0xC)));
-                temp_ret_515 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_514);
-                temp_s1_5 = ((int *)temp_ret_515)[temp_ret_512];
-                temp_ret_520 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_91, "SEISHIN");
-                temp_v0_94 = temp_ret_520;
-                if (temp_s1_5 < 0x3E9) {
-                    var_v1_13 = temp_s1_5 / 4;
-                    var_s1_7 = (int)((int) ((var_v1_13 + 0x226) * 0x64) / temp_v0_94);
-                } else if (temp_s1_5 < 0x7D1) {
-                    var_s1_7 = (int)((int) ((((int) (temp_s1_5 - 0x3E8) / 5) + 0x320) * 0x64) / temp_v0_94);
+        case FIGHTCOM_P2EATKDWNTIME:
+            atkDownMode = (char *)(beMessenger_GetString(self->_messenger, 1));
+            { StringRef mode(atkDownMode == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), atkDownMode));
+            atkDownPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            atkDownEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            atkDownAttackId = beMessenger_GetInt(self->_messenger, 2);
+            atkDownPlayer = (void *)MessageAccess::Player(self, atkDownPlayerIndex);
+            if (strcmp(mode.p, "TIME") == 0) {
+                int techniqueRow;
+                techniqueRow = 0;
+                atkDownTimeTechNo = atkDownAttackId % 10000;
+                atkDownHit = 0;
+                beNDMWGameRam_FindTechniqueRow(self, atkDownPlayer, atkDownTimeTechNo, &techniqueRow);
+                atkDownSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                atkDownSkillList = (int)igProperty_GetRecordIntList(atkDownPlayer, "SKILL");
+                atkDownSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)atkDownSkillList)->_data));
+                atkDownSkillData = beNDMWLoadIntf2_igIntList_GetData(atkDownSkillValues);
+                atkDownSkill = ((int *)atkDownSkillData)[atkDownSkillNo];
+                atkDownSpirit = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), atkDownEnemyRecNo, "SEISHIN");
+                if (atkDownSkill < 0x3E9) {
+                    atkDownSkillTerm = atkDownSkill / 4;
+                    atkDownChance = (int)((int) ((atkDownSkillTerm + 0x226) * 0x64) / atkDownSpirit);
+                } else if (atkDownSkill < 0x7D1) {
+                    atkDownChance = (int)((int) ((((int) (atkDownSkill - 0x3E8) / 5) + 0x320) * 0x64) / atkDownSpirit);
                 } else {
-                    var_s1_7 = (int)((int) ((((int) (temp_s1_5 - 0x7D0) / 10) + 0x3E8) * 0x64) / temp_v0_94);
+                    atkDownChance = (int)((int) ((((int) (atkDownSkill - 0x7D0) / 10) + 0x3E8) * 0x64) / atkDownSpirit);
                 }
-                temp_v0_96 = MessageAccess::Random(self)->genrand() % 1000U;
-                if ((int) temp_v0_96 < var_s1_7) {
-                    var_s2_6 = 1;
+                atkDownRoll = MessageAccess::Random(self)->genrand() % 1000U;
+                if ((int) atkDownRoll < atkDownChance) {
+                    atkDownHit = 1;
                 }
-                if (var_s2_6 != 0) {
-                    temp_ret_522 = (int)igProperty_GetRecord(temp_v0_93, "KASHIKOSA");
-                    temp_s0_15 = ((beDataObjInt *)temp_ret_522)->_data;
-                    temp_ret_527 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp468, "TIME");
-                    var_v1_14 = temp_s0_15 / 2;
-                    var_s0_16 = temp_ret_527 + var_v1_14;
+                if (atkDownHit != 0) {
+                    atkDownIntelligence = igProperty_GetRecord(atkDownPlayer, "KASHIKOSA")->value;
+                    atkDownBaseTime = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TIME");
+                    atkDownIntelligenceBonus = atkDownIntelligence / 2;
+                    atkDownTime = atkDownBaseTime + atkDownIntelligenceBonus;
                 } else {
-                    var_s0_16 = 0;
+                    atkDownTime = 0;
                 }
-                if (var_s0_16 == 0) {
-                    var_s0_16 = -1;
+                if (atkDownTime == 0) {
+                    atkDownTime = -1;
                 }
                 beMessenger_ClearInt(self->_messenger);
-                beMessenger_AppendInt(self->_messenger, var_s0_16);
+                beMessenger_AppendInt(self->_messenger, atkDownTime);
             } else {
-                temp_ret_528 = strcmp(sp46C.p, "SUBAYASA");
-                if (temp_ret_528 == 0) {
-                    temp_a2_13 = temp_v0_92 % 10000;
-                    int sp464;
-                    sp464 = 0;
-                    beNDMWGameRam_FindTechniqueRow(self, temp_v0_93, temp_a2_13, &sp464);
-                    temp_ret_533 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp464, "SKILL");
-                    temp_ret_534 = (int)igProperty_GetRecordIntList(temp_v0_93, "SKILL");
-                    temp_ret_535 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_534 + 0xC)));
-                    temp_ret_536 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_535);
-                    temp_s1_6 = ((int *)temp_ret_536)[temp_ret_533];
-                    temp_ret_541 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_91, "SUBAYASA");
-                    temp_s0_16 = (int)((int) (-temp_ret_541 * 0x50) / 100);
-                    temp_ret_546 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp464, "SUBAYASA");
-                    var_s1_8 = temp_ret_546 - ((int) temp_s1_6 / 20);
-                    if (var_s1_8 < temp_s0_16) {
-                        var_s1_8 = temp_s0_16;
+                if (strcmp(mode.p, "SUBAYASA") == 0) {
+                    atkDownSpeedTechNo = atkDownAttackId % 10000;
+                    int techniqueRow;
+                    techniqueRow = 0;
+                    beNDMWGameRam_FindTechniqueRow(self, atkDownPlayer, atkDownSpeedTechNo, &techniqueRow);
+                    atkDownSpeedSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                    atkDownSpeedSkillList = (int)igProperty_GetRecordIntList(atkDownPlayer, "SKILL");
+                    atkDownSpeedSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)atkDownSpeedSkillList)->_data));
+                    atkDownSpeedSkillData = beNDMWLoadIntf2_igIntList_GetData(atkDownSpeedSkillValues);
+                    atkDownSpeedSkill = ((int *)atkDownSpeedSkillData)[atkDownSpeedSkillNo];
+                    atkDownEnemySpeed = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), atkDownEnemyRecNo, "SUBAYASA");
+                    atkDownSpeedFloor = (int)((int) (-atkDownEnemySpeed * 0x50) / 100);
+                    atkDownTechSpeed = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SUBAYASA");
+                    atkDownSpeedPenalty = atkDownTechSpeed - ((int) atkDownSpeedSkill / 20);
+                    if (atkDownSpeedPenalty < atkDownSpeedFloor) {
+                        atkDownSpeedPenalty = atkDownSpeedFloor;
                     }
                     beMessenger_ClearInt(self->_messenger);
-                    beMessenger_AppendInt(self->_messenger, -var_s1_8);
+                    beMessenger_AppendInt(self->_messenger, -atkDownSpeedPenalty);
                 } else {
-                    temp_ret_547 = strcmp(sp46C.p, "CHIMEIRITSU");
-                    if (temp_ret_547 == 0) {
-                        temp_a2_14 = temp_v0_92 % 10000;
-                        int sp460;
-                        beNDMWGameRam_FindTechniqueRow(self, temp_v0_93, temp_a2_14, &sp460);
-                        temp_ret_552 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp460, "CHIMEIRITSU");
+                    if (strcmp(mode.p, "CHIMEIRITSU") == 0) {
+                        atkDownCritTechNo = atkDownAttackId % 10000;
+                        int techniqueRow;
+                        beNDMWGameRam_FindTechniqueRow(self, atkDownPlayer, atkDownCritTechNo, &techniqueRow);
+                        atkDownCritRate = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "CHIMEIRITSU");
                         beMessenger_ClearInt(self->_messenger);
-                        beMessenger_AppendInt(self->_messenger, -temp_ret_552);
+                        beMessenger_AppendInt(self->_messenger, -atkDownCritRate);
                     } else {
-                        temp_ret_553 = strcmp(sp46C.p, "MAHIRITSU");
-                        if (temp_ret_553 == 0) {
-                            temp_a2_15 = temp_v0_92 % 10000;
-                            int sp45C;
-                            beNDMWGameRam_FindTechniqueRow(self, temp_v0_93, temp_a2_15, &sp45C);
-                            temp_ret_558 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp45C, "MHIRITSU");
+                        if (strcmp(mode.p, "MAHIRITSU") == 0) {
+                            atkDownParalysisTechNo = atkDownAttackId % 10000;
+                            int techniqueRow;
+                            beNDMWGameRam_FindTechniqueRow(self, atkDownPlayer, atkDownParalysisTechNo, &techniqueRow);
+                            atkDownParalysisRate = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "MHIRITSU");
                             beMessenger_ClearInt(self->_messenger);
-                            beMessenger_AppendInt(self->_messenger, -temp_ret_558);
+                            beMessenger_AppendInt(self->_messenger, -atkDownParalysisRate);
                         } else {
-                            temp_ret_559 = strcmp(sp46C.p, "KAIHIRITSU");
-                            if (temp_ret_559 == 0) {
-                                temp_a2_16 = temp_v0_92 % 10000;
-                                int sp458;
-                                beNDMWGameRam_FindTechniqueRow(self, temp_v0_93, temp_a2_16, &sp458);
-                                temp_ret_564 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp458, "KAIHIRITSU");
+                            if (strcmp(mode.p, "KAIHIRITSU") == 0) {
+                                atkDownEvadeTechNo = atkDownAttackId % 10000;
+                                int techniqueRow;
+                                beNDMWGameRam_FindTechniqueRow(self, atkDownPlayer, atkDownEvadeTechNo, &techniqueRow);
+                                atkDownEvadeRate = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "KAIHIRITSU");
                                 beMessenger_ClearInt(self->_messenger);
-                                beMessenger_AppendInt(self->_messenger, -temp_ret_564);
+                                beMessenger_AppendInt(self->_messenger, -atkDownEvadeRate);
                             }
                         }
                     }
@@ -4594,1179 +3963,998 @@ loop_449:
             }
             }
             break;
-        case 19:
-            temp_ret_566 = (char *)(beMessenger_GetString(self->_messenger, 1));
-            temp_v0_97 = (char *)(temp_ret_566);
-            { StringRef sp454(temp_v0_97 == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), temp_v0_97));
-            temp_ret_569 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_570 = beMessenger_GetInt(self->_messenger, 1);
-            temp_v0_98 = temp_ret_570;
-            temp_ret_571 = beMessenger_GetInt(self->_messenger, 2);
-            temp_v0_99 = temp_ret_571;
-            temp_ret_573 = MessageAccess::Player(self, temp_ret_569);
-            temp_v0_100 = (void *)(temp_ret_573);
-            temp_ret_574 = strcmp(sp454.p, "TIME");
-            if (temp_ret_574 == 0) {
-                int sp450;
-                sp450 = 0;
-                temp_a2_17 = temp_v0_99 % 10000;
-                var_s2_7 = 0;
-                beNDMWGameRam_FindTechniqueRow(self, temp_v0_100, temp_a2_17, &sp450);
-                temp_ret_579 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp450, "SKILL");
-                temp_ret_580 = (int)igProperty_GetRecordIntList(temp_v0_100, "SKILL");
-                temp_ret_581 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_580 + 0xC)));
-                temp_ret_582 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_581);
-                temp_s3_5 = ((int *)temp_ret_582)[temp_ret_579];
-                temp_ret_587 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_98, "SEISHIN");
-                temp_v0_101 = temp_ret_587;
-                if (temp_s3_5 < 0x3E9) {
-                    var_v1_15 = temp_s3_5 / 4;
-                    var_s0_17 = (int)((int) ((var_v1_15 + 0x226) * 0x64) / temp_v0_101);
-                } else if (temp_s3_5 < 0x7D1) {
-                    var_s0_17 = (int)((int) ((((int) (temp_s3_5 - 0x3E8) / 5) + 0x320) * 0x64) / temp_v0_101);
+        case FIGHTCOM_P2EPOWDWNTIME:
+            powDownMode = (char *)(beMessenger_GetString(self->_messenger, 1));
+            { StringRef mode(powDownMode == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), powDownMode));
+            powDownPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            powDownEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            powDownAttackId = beMessenger_GetInt(self->_messenger, 2);
+            powDownPlayer = (void *)MessageAccess::Player(self, powDownPlayerIndex);
+            if (strcmp(mode.p, "TIME") == 0) {
+                int techniqueRow;
+                techniqueRow = 0;
+                powDownTimeTechNo = powDownAttackId % 10000;
+                powDownHit = 0;
+                beNDMWGameRam_FindTechniqueRow(self, powDownPlayer, powDownTimeTechNo, &techniqueRow);
+                powDownSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                powDownSkillList = (int)igProperty_GetRecordIntList(powDownPlayer, "SKILL");
+                powDownSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)powDownSkillList)->_data));
+                powDownSkillData = beNDMWLoadIntf2_igIntList_GetData(powDownSkillValues);
+                powDownSkill = ((int *)powDownSkillData)[powDownSkillNo];
+                powDownSpirit = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), powDownEnemyRecNo, "SEISHIN");
+                if (powDownSkill < 0x3E9) {
+                    powDownSkillTerm = powDownSkill / 4;
+                    powDownChance = (int)((int) ((powDownSkillTerm + 0x226) * 0x64) / powDownSpirit);
+                } else if (powDownSkill < 0x7D1) {
+                    powDownChance = (int)((int) ((((int) (powDownSkill - 0x3E8) / 5) + 0x320) * 0x64) / powDownSpirit);
                 } else {
-                    var_s0_17 = (int)((int) ((((int) (temp_s3_5 - 0x7D0) / 10) + 0x3E8) * 0x64) / temp_v0_101);
+                    powDownChance = (int)((int) ((((int) (powDownSkill - 0x7D0) / 10) + 0x3E8) * 0x64) / powDownSpirit);
                 }
-                temp_v0_103 = MessageAccess::Random(self)->genrand() % 1000U;
-                if ((int) temp_v0_103 < var_s0_17) {
-                    var_s2_7 = 1;
+                powDownRoll = MessageAccess::Random(self)->genrand() % 1000U;
+                if ((int) powDownRoll < powDownChance) {
+                    powDownHit = 1;
                 }
-                if (var_s2_7 != 0) {
-                    temp_ret_589 = (int)igProperty_GetRecord(temp_v0_100, "KASHIKOSA");
-                    temp_s0_17 = ((beDataObjInt *)temp_ret_589)->_data;
-                    temp_ret_594 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp450, "TIME");
-                    var_v1_16 = temp_s0_17 / 2;
-                    var_s0_18 = temp_ret_594 + var_v1_16;
+                if (powDownHit != 0) {
+                    powDownIntelligence = igProperty_GetRecord(powDownPlayer, "KASHIKOSA")->value;
+                    powDownBaseTime = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TIME");
+                    powDownIntelligenceBonus = powDownIntelligence / 2;
+                    powDownTime = powDownBaseTime + powDownIntelligenceBonus;
                 } else {
-                    var_s0_18 = 0;
+                    powDownTime = 0;
                 }
-                if (var_s0_18 == 0) {
-                    var_s0_18 = -1;
+                if (powDownTime == 0) {
+                    powDownTime = -1;
                 }
                 beMessenger_ClearInt(self->_messenger);
-                beMessenger_AppendInt(self->_messenger, var_s0_18);
+                beMessenger_AppendInt(self->_messenger, powDownTime);
             } else {
-                temp_ret_595 = strcmp(sp454.p, "TSUYOSA");
-                if (temp_ret_595 == 0) {
-                    temp_a2_18 = temp_v0_99 % 10000;
-                    int sp44C;
-                    sp44C = 0;
-                    beNDMWGameRam_FindTechniqueRow(self, temp_v0_100, temp_a2_18, &sp44C);
-                    temp_ret_600 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp44C, "SKILL");
-                    temp_ret_601 = (int)igProperty_GetRecordIntList(temp_v0_100, "SKILL");
-                    temp_ret_602 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_601 + 0xC)));
-                    temp_ret_603 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_602);
-                    temp_s1_7 = ((int *)temp_ret_603)[temp_ret_600];
-                    temp_ret_608 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_98, "TSUYOSA");
-                    temp_s0_18 = (int)((int) (-temp_ret_608 * 0x50) / 100);
-                    temp_ret_613 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp44C, "TSUYOSA");
-                    var_s1_9 = temp_ret_613 - ((int) temp_s1_7 / 20);
-                    if (var_s1_9 < temp_s0_18) {
-                        var_s1_9 = temp_s0_18;
+                if (strcmp(mode.p, "TSUYOSA") == 0) {
+                    powDownStrengthTechNo = powDownAttackId % 10000;
+                    int techniqueRow;
+                    techniqueRow = 0;
+                    beNDMWGameRam_FindTechniqueRow(self, powDownPlayer, powDownStrengthTechNo, &techniqueRow);
+                    powDownStrSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                    powDownStrSkillList = (int)igProperty_GetRecordIntList(powDownPlayer, "SKILL");
+                    powDownStrSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)powDownStrSkillList)->_data));
+                    powDownStrSkillData = beNDMWLoadIntf2_igIntList_GetData(powDownStrSkillValues);
+                    powDownStrSkill = ((int *)powDownStrSkillData)[powDownStrSkillNo];
+                    powDownEnemyStrength = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), powDownEnemyRecNo, "TSUYOSA");
+                    powDownStrFloor = (int)((int) (-powDownEnemyStrength * 0x50) / 100);
+                    powDownTechStrength = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TSUYOSA");
+                    powDownStrPenalty = powDownTechStrength - ((int) powDownStrSkill / 20);
+                    if (powDownStrPenalty < powDownStrFloor) {
+                        powDownStrPenalty = powDownStrFloor;
                     }
                     beMessenger_ClearInt(self->_messenger);
-                    beMessenger_AppendInt(self->_messenger, -var_s1_9);
+                    beMessenger_AppendInt(self->_messenger, -powDownStrPenalty);
                 } else {
-                    temp_ret_614 = strcmp(sp454.p, "MAMORI");
-                    if (temp_ret_614 == 0) {
-                        temp_a2_19 = temp_v0_99 % 10000;
-                        int sp448;
-                        sp448 = 0;
-                        beNDMWGameRam_FindTechniqueRow(self, temp_v0_100, temp_a2_19, &sp448);
-                        temp_ret_619 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp448, "SKILL");
-                        temp_ret_620 = (int)igProperty_GetRecordIntList(temp_v0_100, "SKILL");
-                        temp_ret_621 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get((int *)(temp_ret_620 + 0xC)));
-                        temp_ret_622 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_621);
-                        temp_s1_8 = ((int *)temp_ret_622)[temp_ret_619];
-                        temp_ret_627 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_98, "MAMORI");
-                        temp_s0_19 = (int)((int) (-temp_ret_627 * 0x50) / 100);
-                        temp_ret_632 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp448, "MAMORI");
-                        var_s1_10 = temp_ret_632 - ((int) temp_s1_8 / 20);
-                        if (var_s1_10 < temp_s0_19) {
-                            var_s1_10 = temp_s0_19;
+                    if (strcmp(mode.p, "MAMORI") == 0) {
+                        powDownDefTechNo = powDownAttackId % 10000;
+                        int techniqueRow;
+                        techniqueRow = 0;
+                        beNDMWGameRam_FindTechniqueRow(self, powDownPlayer, powDownDefTechNo, &techniqueRow);
+                        powDownDefSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                        powDownDefSkillList = (int)igProperty_GetRecordIntList(powDownPlayer, "SKILL");
+                        powDownDefSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)powDownDefSkillList)->_data));
+                        powDownDefSkillData = beNDMWLoadIntf2_igIntList_GetData(powDownDefSkillValues);
+                        powDownDefSkill = ((int *)powDownDefSkillData)[powDownDefSkillNo];
+                        powDownEnemyDefense = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), powDownEnemyRecNo, "MAMORI");
+                        powDownDefFloor = (int)((int) (-powDownEnemyDefense * 0x50) / 100);
+                        powDownTechDefense = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "MAMORI");
+                        powDownDefPenalty = powDownTechDefense - ((int) powDownDefSkill / 20);
+                        if (powDownDefPenalty < powDownDefFloor) {
+                            powDownDefPenalty = powDownDefFloor;
                         }
                         beMessenger_ClearInt(self->_messenger);
-                        beMessenger_AppendInt(self->_messenger, -var_s1_10);
+                        beMessenger_AppendInt(self->_messenger, -powDownDefPenalty);
                     }
                 }
             }
             }
             break;
-        case 0:
-            temp_ret_634 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_635 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_636 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_638 = MessageAccess::Player(self, temp_ret_634);
-            temp_v0_104 = (void *)(temp_ret_638);
-            temp_s3_6 = temp_ret_636 % 10000;
-            var_s5_7 = 0;
-            temp_ret_643 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_6, "TYPE");
-            switch (temp_ret_643) {
-            case 0:
-                temp_ret_644 = (int)igProperty_GetRecord(temp_v0_104, "BOUGYORITSU");
-                temp_s0_20 = ((beDataObjInt *)temp_ret_644)->_data;
-                temp_v0_106 = MessageAccess::Random(self)->genrand() % 100U;
-                if (temp_s0_20 <= (int) temp_v0_106) {
-                    temp_ret_646 = (int)igProperty_GetRecord(temp_v0_104, "SUBAYASA");
-                    temp_s1_9 = ((beDataObjInt *)temp_ret_646)->_data;
-                    temp_ret_647 = (int)igProperty_GetRecord(temp_v0_104, "KAIHIRITSU");
-                    temp_s0_21 = ((beDataObjInt *)temp_ret_647)->_data;
-                    temp_ret_652 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_ret_635, "SUBAYASA");
-                    temp_ret_657 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_6, "MEICHURITSU");
-                    temp_a2_20 = MessageAccess::Random(self)->genrand() % 100U;
-                    if ((int) temp_a2_20 < ((int) (temp_ret_657 * temp_ret_652) / (int) ((int) (temp_s1_9 * (temp_s0_21 + 0x64)) / 100))) {
-                        var_s5_7 = 1;
+        case FIGHTCOM_E2PISHITCHECK:
+            e2pHitPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            e2pHitEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            e2pHitAttackId = beMessenger_GetInt(self->_messenger, 2);
+            e2pHitPlayer = (void *)MessageAccess::Player(self, e2pHitPlayerIndex);
+            e2pHitAttackNo = e2pHitAttackId % 10000;
+            e2pHit = 0;
+            e2pHitAttackType = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pHitAttackNo, "TYPE");
+            switch (e2pHitAttackType) {
+            case ENEATK_PHYSICAL:
+                e2pHitGuardRate = igProperty_GetRecord(e2pHitPlayer, "BOUGYORITSU")->value;
+                e2pHitGuardRoll = MessageAccess::Random(self)->genrand() % 100U;
+                if (e2pHitGuardRate <= (int) e2pHitGuardRoll) {
+                    e2pHitPlayerSpeed = igProperty_GetRecord(e2pHitPlayer, "SUBAYASA")->value;
+                    e2pHitEvasion = igProperty_GetRecord(e2pHitPlayer, "KAIHIRITSU")->value;
+                    e2pHitEnemySpeed = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), e2pHitEnemyRecNo, "SUBAYASA");
+                    e2pHitAccuracy = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pHitAttackNo, "MEICHURITSU");
+                    e2pHitRoll = MessageAccess::Random(self)->genrand() % 100U;
+                    if ((int) e2pHitRoll < ((int) (e2pHitAccuracy * e2pHitEnemySpeed) / (int) ((int) (e2pHitPlayerSpeed * (e2pHitEvasion + 0x64)) / 100))) {
+                        e2pHit = 1;
                     }
                 }
                 break;
             default:
-                var_s5_7 = 1;
+                e2pHit = 1;
                 break;
             }
             beMessenger_ClearBool(self->_messenger);
-            beMessenger_AppendBool(self->_messenger, var_s5_7);
+            beMessenger_AppendBool(self->_messenger, e2pHit);
             break;
-        case 3:
-            temp_ret_659 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_660 = beMessenger_GetInt(self->_messenger, 1);
-            temp_v0_108 = temp_ret_660;
-            temp_ret_661 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_662 = (void *)(beMessenger_GetObject(self->_messenger, 0));
-            temp_v0_109 = (beNDMWMdlPEBaseInfoWork *)(temp_ret_662);
-            temp_ret_664 = MessageAccess::Player(self, temp_ret_659);
-            temp_v0_110 = (void *)(temp_ret_664);
-            temp_s5_2 = temp_ret_661 % 10000;
-            temp_ret_669 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "TYPE");
-            temp_v0_111 = temp_ret_669;
-            var_s3_4 = 0;
-            var_s2_8 = -1;
-            switch (temp_v0_111) {
-            case 0:
-                temp_ret_670 = (int)igProperty_GetRecord(temp_v0_110, "MAMORI");
-                temp_s3_7 = ((beDataObjInt *)temp_ret_670)->_data;
-                temp_ret_671 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_109->_downDataList));
-                if (temp_ret_671 == 0) {
-                    var_s1_11 = 0;
+        case FIGHTCOM_E2PDAMAGE:
+            e2pDmgPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            e2pDmgEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            e2pDmgAttackId = beMessenger_GetInt(self->_messenger, 2);
+            e2pDmgEnemy = (beNDMWMdlPEBaseInfoWork *)(void *)(beMessenger_GetObject(self->_messenger, 0));
+            e2pDmgPlayer = (void *)MessageAccess::Player(self, e2pDmgPlayerIndex);
+            e2pDmgAttackNo = e2pDmgAttackId % 10000;
+            e2pDmgAttackType = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "TYPE");
+            e2pDmgDamage = 0;
+            e2pDmgElement = -1;
+            switch (e2pDmgAttackType) {
+            case ENEATK_PHYSICAL:
+                e2pDmgDefense = igProperty_GetRecord(e2pDmgPlayer, "MAMORI")->value;
+                e2pDmgDownCheck = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&e2pDmgEnemy->_downDataList));
+                if (e2pDmgDownCheck == 0) {
+                    e2pDmgDownDefense = 0;
                 } else {
-                    temp_ret_672 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_109->_downDataList));
-                    temp_ret_673 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_672);
-                    var_s1_11 = ((int *)temp_ret_673)[4];
+                    e2pDmgDownList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&e2pDmgEnemy->_downDataList));
+                    e2pDmgDownValues = beNDMWLoadIntf2_igIntList_GetData(e2pDmgDownList);
+                    e2pDmgDownDefense = ((int *)e2pDmgDownValues)[4];
                 }
-                temp_ret_678 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_108, "TSUYOSA");
-                int e2p_diff_678; e2p_diff_678 = temp_ret_678 - var_s1_11;
-                temp_ret_683 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "TSUYOSA");
-                var_s3_4 = (int)((int) (e2p_diff_678 * temp_ret_683) / temp_s3_7);
-                if (var_s3_4 < 0) {
-                    var_s3_4 = 0;
-                } else if (var_s3_4 > 0x1869F) {
-                    var_s3_4 = 0x1869F;
+                e2pDmgEnemyStrength = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), e2pDmgEnemyRecNo, "TSUYOSA");
+                int e2pDmgNetStrength; e2pDmgNetStrength = e2pDmgEnemyStrength - e2pDmgDownDefense;
+                e2pDmgAttackStrength = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "TSUYOSA");
+                e2pDmgDamage = (int)((int) (e2pDmgNetStrength * e2pDmgAttackStrength) / e2pDmgDefense);
+                if (e2pDmgDamage < 0) {
+                    e2pDmgDamage = 0;
+                } else if (e2pDmgDamage > 0x1869F) {
+                    e2pDmgDamage = 0x1869F;
                 }
-                temp_ret_688 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "ZOKUSEI"));
-                temp_v0_112 = (char *)(temp_ret_688);
-                var_s1_12 = 0;
-                temp_ret_689 = strcmp(temp_v0_112, "fire");
-                if (temp_ret_689 == 0) {
-                    temp_ret_690 = (int)igProperty_GetRecord(temp_v0_110, "HONOOTEIKO");
-                    var_s1_12 = ((beDataObjInt *)temp_ret_690)->_data;
-                    var_s2_8 = 0;
+                e2pDmgPhysElementName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "ZOKUSEI"));
+                e2pDmgPhysResist = 0;
+                if (strcmp(e2pDmgPhysElementName, "fire") == 0) {
+                    e2pDmgPhysResist = igProperty_GetRecord(e2pDmgPlayer, "HONOOTEIKO")->value;
+                    e2pDmgElement = 0;
                 } else {
-                    temp_ret_691 = strcmp(temp_v0_112, "ice");
-                    if (temp_ret_691 == 0) {
-                        temp_ret_692 = (int)igProperty_GetRecord(temp_v0_110, "KOORITEIKO");
-                        var_s1_12 = ((beDataObjInt *)temp_ret_692)->_data;
-                        var_s2_8 = 1;
+                    if (strcmp(e2pDmgPhysElementName, "ice") == 0) {
+                        e2pDmgPhysResist = igProperty_GetRecord(e2pDmgPlayer, "KOORITEIKO")->value;
+                        e2pDmgElement = 1;
                     } else {
-                        temp_ret_693 = strcmp(temp_v0_112, "thunder");
-                        if (temp_ret_693 == 0) {
-                            temp_ret_694 = (int)igProperty_GetRecord(temp_v0_110, "KAMINARITEIKO");
-                            var_s1_12 = ((beDataObjInt *)temp_ret_694)->_data;
-                            var_s2_8 = 2;
+                        if (strcmp(e2pDmgPhysElementName, "thunder") == 0) {
+                            e2pDmgPhysResist = igProperty_GetRecord(e2pDmgPlayer, "KAMINARITEIKO")->value;
+                            e2pDmgElement = 2;
                         } else {
-                            temp_ret_695 = strcmp(temp_v0_112, "dark");
-                            if (temp_ret_695 == 0) {
-                                temp_ret_696 = (int)igProperty_GetRecord(temp_v0_110, "YAMITEIKO");
-                                var_s1_12 = ((beDataObjInt *)temp_ret_696)->_data;
-                                var_s2_8 = 3;
+                            if (strcmp(e2pDmgPhysElementName, "dark") == 0) {
+                                e2pDmgPhysResist = igProperty_GetRecord(e2pDmgPlayer, "YAMITEIKO")->value;
+                                e2pDmgElement = 3;
                             }
                         }
                     }
                 }
-                if (var_s1_12 != 0) {
-                    temp_a2_21 = MessageAccess::Random(self)->genrand() % 1000U;
-                    if (((int) var_s1_12 / 5) <= (int) temp_a2_21) {
-                        if ((int) var_s1_12 < 0x3E9) {
-                            var_v0_13 = (int)((int) (var_s3_4 * (((int) (0x3E8 - var_s1_12) / 20) + 0x32)) / 100);
-                        } else if ((int) var_s1_12 < 0x1389) {
-                            var_v0_13 = (int)((int) (var_s3_4 * ((int) (0x1388 - var_s1_12) / 80)) / 100);
+                if (e2pDmgPhysResist != 0) {
+                    e2pDmgResistRoll = MessageAccess::Random(self)->genrand() % 1000U;
+                    if (((int) e2pDmgPhysResist / 5) <= (int) e2pDmgResistRoll) {
+                        if ((int) e2pDmgPhysResist < 0x3E9) {
+                            e2pDmgResistBonus = (int)((int) (e2pDmgDamage * (((int) (0x3E8 - e2pDmgPhysResist) / 20) + 0x32)) / 100);
+                        } else if ((int) e2pDmgPhysResist < 0x1389) {
+                            e2pDmgResistBonus = (int)((int) (e2pDmgDamage * ((int) (0x1388 - e2pDmgPhysResist) / 80)) / 100);
                         } else {
-                            var_v0_13 = 0;
+                            e2pDmgResistBonus = 0;
                         }
-                        var_s3_4 += var_v0_13;
+                        e2pDmgDamage += e2pDmgResistBonus;
                     }
                 }
-                if (var_s3_4 != 0) {
-                    temp_ret_698 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_109->_downDataList));
-                    if (temp_ret_698 == 0) {
-                        var_s0_19 = 0;
+                if (e2pDmgDamage != 0) {
+                    e2pDmgDown2Check = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&e2pDmgEnemy->_downDataList));
+                    if (e2pDmgDown2Check == 0) {
+                        e2pDmgDownCrit = 0;
                     } else {
-                        temp_ret_699 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_109->_downDataList));
-                        temp_ret_700 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_699);
-                        var_s0_19 = ((int *)temp_ret_700)[1];
+                        e2pDmgDown2List = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&e2pDmgEnemy->_downDataList));
+                        e2pDmgDown2Values = beNDMWLoadIntf2_igIntList_GetData(e2pDmgDown2List);
+                        e2pDmgDownCrit = ((int *)e2pDmgDown2Values)[1];
                     }
-                    temp_ret_705 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_108, "CHIMEIRITSU");
-                    e2p_diff_705 = temp_ret_705 - var_s0_19;
-                    temp_ret_710 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "CHIMEIRITSU");
-                    temp_v0_114 = temp_ret_710;
-                    temp_a0_8 = MessageAccess::Random(self)->genrand() % 10000U;
-                    if (((0x64 - e2p_diff_705) * (0x64 - temp_v0_114)) <= (int) temp_a0_8) {
-                        var_v0_15 = (int)((int) (var_s3_4 * (temp_v0_114 / 2 + 0x5A)) / 100);
-                        var_s3_4 += var_v0_15;
+                    e2pDmgEnemyCrit = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), e2pDmgEnemyRecNo, "CHIMEIRITSU");
+                    e2pDmgNetCrit = e2pDmgEnemyCrit - e2pDmgDownCrit;
+                    e2pDmgAttackCrit = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "CHIMEIRITSU");
+                    e2pDmgCritRoll = MessageAccess::Random(self)->genrand() % 10000U;
+                    if (((0x64 - e2pDmgNetCrit) * (0x64 - e2pDmgAttackCrit)) <= (int) e2pDmgCritRoll) {
+                        e2pDmgCritBonus = (int)((int) (e2pDmgDamage * (e2pDmgAttackCrit / 2 + 0x5A)) / 100);
+                        e2pDmgDamage += e2pDmgCritBonus;
                     }
                 }
                 break;
-            case 1:
-                temp_ret_716 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "TSUYOSA");
-                temp_v0_116 = temp_ret_716;
-                if (temp_v0_116 != 0) {
-                    temp_ret_721 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_108, "KASHIKOSA");
-                    temp_ret_722 = (int)igProperty_GetRecord(temp_v0_110, "SEISHIN");
-                    var_s3_4 = (int)((int) (temp_ret_721 * temp_v0_116) / (int) ((beDataObjInt *)temp_ret_722)->_data);
-                    if (var_s3_4 < 0) {
-                        var_s3_4 = 0;
-                    } else if (var_s3_4 > 0x1869F) {
-                        var_s3_4 = 0x1869F;
+            case ENEATK_MAGIC:
+                e2pDmgMagicPower = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "TSUYOSA");
+                if (e2pDmgMagicPower != 0) {
+                    e2pDmgEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), e2pDmgEnemyRecNo, "KASHIKOSA");
+                    e2pDmgDamage = (int)((int) (e2pDmgEnemyIntelligence * e2pDmgMagicPower) / (int) igProperty_GetRecord(e2pDmgPlayer, "SEISHIN")->value);
+                    if (e2pDmgDamage < 0) {
+                        e2pDmgDamage = 0;
+                    } else if (e2pDmgDamage > 0x1869F) {
+                        e2pDmgDamage = 0x1869F;
                     }
-                    var_s1_13 = 0;
-                    temp_ret_727 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "ZOKUSEI"));
-                    temp_v0_117 = (char *)(temp_ret_727);
-                    temp_ret_728 = strcmp(temp_v0_117, "fire");
-                    if (temp_ret_728 == 0) {
-                        temp_ret_729 = (int)igProperty_GetRecord(temp_v0_110, "HONOOTEIKO");
-                        var_s1_13 = ((beDataObjInt *)temp_ret_729)->_data;
-                        var_s2_8 = 0;
+                    e2pDmgMagicResist = 0;
+                    e2pDmgMagicElementName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "ZOKUSEI"));
+                    if (strcmp(e2pDmgMagicElementName, "fire") == 0) {
+                        e2pDmgMagicResist = igProperty_GetRecord(e2pDmgPlayer, "HONOOTEIKO")->value;
+                        e2pDmgElement = 0;
                     } else {
-                        temp_ret_730 = strcmp(temp_v0_117, "ice");
-                        if (temp_ret_730 == 0) {
-                            temp_ret_731 = (int)igProperty_GetRecord(temp_v0_110, "KOORITEIKO");
-                            var_s1_13 = ((beDataObjInt *)temp_ret_731)->_data;
-                            var_s2_8 = 1;
+                        if (strcmp(e2pDmgMagicElementName, "ice") == 0) {
+                            e2pDmgMagicResist = igProperty_GetRecord(e2pDmgPlayer, "KOORITEIKO")->value;
+                            e2pDmgElement = 1;
                         } else {
-                            temp_ret_732 = strcmp(temp_v0_117, "thunder");
-                            if (temp_ret_732 == 0) {
-                                temp_ret_733 = (int)igProperty_GetRecord(temp_v0_110, "KAMINARITEIKO");
-                                var_s1_13 = ((beDataObjInt *)temp_ret_733)->_data;
-                                var_s2_8 = 2;
+                            if (strcmp(e2pDmgMagicElementName, "thunder") == 0) {
+                                e2pDmgMagicResist = igProperty_GetRecord(e2pDmgPlayer, "KAMINARITEIKO")->value;
+                                e2pDmgElement = 2;
                             } else {
-                                temp_ret_734 = strcmp(temp_v0_117, "dark");
-                                if (temp_ret_734 == 0) {
-                                    temp_ret_735 = (int)igProperty_GetRecord(temp_v0_110, "YAMITEIKO");
-                                    var_s1_13 = ((beDataObjInt *)temp_ret_735)->_data;
-                                    var_s2_8 = 3;
+                                if (strcmp(e2pDmgMagicElementName, "dark") == 0) {
+                                    e2pDmgMagicResist = igProperty_GetRecord(e2pDmgPlayer, "YAMITEIKO")->value;
+                                    e2pDmgElement = 3;
                                 }
                             }
                         }
                     }
-                    if (var_s1_13 != 0) {
-                        if (var_s1_13 < 0x3E9) {
-                            var_s3_4 = (int)((int) (var_s3_4 * (((int) (0x3E8 - var_s1_13) / 20) + 0x32)) / 100);
-                        } else if (var_s1_13 < 0x1069) {
-                            var_s3_4 = (int)((int) (var_s3_4 * ((int) (0x1388 - var_s1_13) / 80)) / 100);
+                    if (e2pDmgMagicResist != 0) {
+                        if (e2pDmgMagicResist < 0x3E9) {
+                            e2pDmgDamage = (int)((int) (e2pDmgDamage * (((int) (0x3E8 - e2pDmgMagicResist) / 20) + 0x32)) / 100);
+                        } else if (e2pDmgMagicResist < 0x1069) {
+                            e2pDmgDamage = (int)((int) (e2pDmgDamage * ((int) (0x1388 - e2pDmgMagicResist) / 80)) / 100);
                         } else {
-                            var_s3_4 = var_s3_4 / 10;
+                            e2pDmgDamage = e2pDmgDamage / 10;
                         }
                     }
-                    if (var_s3_4 != 0) {
-                        temp_ret_740 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "CHIMEIRITSU");
-                        temp_v0_118 = temp_ret_740;
-                        if (temp_v0_118 != 0) {
-                            if (var_s1_13 < 0x3E9) {
-                                var_s0_20 = (0x3E8 - var_s1_13) + (temp_v0_118 * 0x64);
+                    if (e2pDmgDamage != 0) {
+                        e2pDmgMagicCrit = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "CHIMEIRITSU");
+                        if (e2pDmgMagicCrit != 0) {
+                            if (e2pDmgMagicResist < 0x3E9) {
+                                e2pDmgMagicCritThreshold = (0x3E8 - e2pDmgMagicResist) + (e2pDmgMagicCrit * 0x64);
                             } else {
-                                var_s0_20 = (temp_v0_118 * 0x64) - ((int) (var_s1_13 - 0x3E8) / 10);
+                                e2pDmgMagicCritThreshold = (e2pDmgMagicCrit * 0x64) - ((int) (e2pDmgMagicResist - 0x3E8) / 10);
                             }
-                            temp_v0_120 = MessageAccess::Random(self)->genrand() % 10000U;
-                            if (var_s0_20 <= (int) temp_v0_120) {
-                                var_v0_15 = (int)((int) (var_s3_4 + (temp_v0_118 / 2 + 0x5A)) / 100);
-                                var_s3_4 += var_v0_15;
+                            e2pDmgMagicCritRoll = MessageAccess::Random(self)->genrand() % 10000U;
+                            if (e2pDmgMagicCritThreshold <= (int) e2pDmgMagicCritRoll) {
+                                e2pDmgCritBonus = (int)((int) (e2pDmgDamage + (e2pDmgMagicCrit / 2 + 0x5A)) / 100);
+                                e2pDmgDamage += e2pDmgCritBonus;
                                 break;
                             }
                         }
                     }
                 }
                 break;
-            case 2:
-                temp_ret_746 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "TSUYOSA");
-                temp_ret_747 = (int)igProperty_GetRecord(temp_v0_110, "MHP");
-                var_s3_4 = (int)((int) (((beDataObjInt *)temp_ret_747)->_data * temp_ret_746) / 100);
-                if (var_s3_4 < 0) {
-                    var_s3_4 = 0;
-                } else if (var_s3_4 > 0x1869F) {
-                    var_s3_4 = 0x1869F;
+            case ENEATK_MAXHPRATIO:
+                e2pDmgRatioPower = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "TSUYOSA");
+                e2pDmgMaxHpProperty = igProperty_GetRecord(e2pDmgPlayer, "MHP");
+                e2pDmgDamage = (int)((int) (e2pDmgMaxHpProperty->value * e2pDmgRatioPower) / 100);
+                if (e2pDmgDamage < 0) {
+                    e2pDmgDamage = 0;
+                } else if (e2pDmgDamage > 0x1869F) {
+                    e2pDmgDamage = 0x1869F;
                 }
-                var_s1_14 = 0;
-                temp_ret_752 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_2, "ZOKUSEI"));
-                temp_v0_121 = (char *)(temp_ret_752);
-                temp_ret_753 = strcmp(temp_v0_121, "fire");
-                if (temp_ret_753 == 0) {
-                    temp_ret_754 = (int)igProperty_GetRecord(temp_v0_110, "HONOOTEIKO");
-                    var_s1_14 = ((beDataObjInt *)temp_ret_754)->_data;
-                    var_s2_8 = 0;
+                e2pDmgRatioResist = 0;
+                e2pDmgRatioElementName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), e2pDmgAttackNo, "ZOKUSEI"));
+                if (strcmp(e2pDmgRatioElementName, "fire") == 0) {
+                    e2pDmgRatioResist = igProperty_GetRecord(e2pDmgPlayer, "HONOOTEIKO")->value;
+                    e2pDmgElement = 0;
                 } else {
-                    temp_ret_755 = strcmp(temp_v0_121, "ice");
-                    if (temp_ret_755 == 0) {
-                        temp_ret_756 = (int)igProperty_GetRecord(temp_v0_110, "KOORITEIKO");
-                        var_s1_14 = ((beDataObjInt *)temp_ret_756)->_data;
-                        var_s2_8 = 1;
+                    if (strcmp(e2pDmgRatioElementName, "ice") == 0) {
+                        e2pDmgRatioResist = igProperty_GetRecord(e2pDmgPlayer, "KOORITEIKO")->value;
+                        e2pDmgElement = 1;
                     } else {
-                        temp_ret_757 = strcmp(temp_v0_121, "thunder");
-                        if (temp_ret_757 == 0) {
-                            temp_ret_758 = (int)igProperty_GetRecord(temp_v0_110, "KAMINARITEIKO");
-                            var_s1_14 = ((beDataObjInt *)temp_ret_758)->_data;
-                            var_s2_8 = 2;
+                        if (strcmp(e2pDmgRatioElementName, "thunder") == 0) {
+                            e2pDmgRatioResist = igProperty_GetRecord(e2pDmgPlayer, "KAMINARITEIKO")->value;
+                            e2pDmgElement = 2;
                         } else {
-                            temp_ret_759 = strcmp(temp_v0_121, "dark");
-                            if (temp_ret_759 == 0) {
-                                temp_ret_760 = (int)igProperty_GetRecord(temp_v0_110, "YAMITEIKO");
-                                var_s1_14 = ((beDataObjInt *)temp_ret_760)->_data;
-                                var_s2_8 = 3;
+                            if (strcmp(e2pDmgRatioElementName, "dark") == 0) {
+                                e2pDmgRatioResist = igProperty_GetRecord(e2pDmgPlayer, "YAMITEIKO")->value;
+                                e2pDmgElement = 3;
                             }
                         }
                     }
                 }
-                if (var_s1_14 != 0) {
-                    if (var_s1_14 < 0x3E9) {
-                        var_v0_15 = (int)((int) (var_s3_4 * (((int) (0x3E8 - var_s1_14) / 20) + 0x32)) / 100);
-                        var_s3_4 += var_v0_15;
+                if (e2pDmgRatioResist != 0) {
+                    if (e2pDmgRatioResist < 0x3E9) {
+                        e2pDmgCritBonus = (int)((int) (e2pDmgDamage * (((int) (0x3E8 - e2pDmgRatioResist) / 20) + 0x32)) / 100);
+                        e2pDmgDamage += e2pDmgCritBonus;
                                 break;
                     }
-                    if (var_s1_14 < 0x1389) {
-                        var_v0_15 = (int)((int) (var_s3_4 * ((int) (0x1388 - var_s1_14) / 80)) / 100);
-                        var_s3_4 += var_v0_15;
+                    if (e2pDmgRatioResist < 0x1389) {
+                        e2pDmgCritBonus = (int)((int) (e2pDmgDamage * ((int) (0x1388 - e2pDmgRatioResist) / 80)) / 100);
+                        e2pDmgDamage += e2pDmgCritBonus;
                                 break;
                     }
                 }
                 break;
             }
-            if (var_s3_4 < 0) {
-                var_s3_4 = 0;
-            } else if (var_s3_4 > 0x1869F) {
-                var_s3_4 = 0x1869F;
+            if (e2pDmgDamage < 0) {
+                e2pDmgDamage = 0;
+            } else if (e2pDmgDamage > 0x1869F) {
+                e2pDmgDamage = 0x1869F;
             }
-            var_s1_15 = 0;
-            if (var_s3_4 != 0) {
-                int e2p_rng = MessageAccess::Random(self)->genrand() & 3;
-                temp_v0_124 = MessageAccess::Random(self)->genrand() % (unsigned int) (var_s3_4 * 0x19);
-                switch (e2p_rng) {
+            e2pDmgIsHighRoll = 0;
+            if (e2pDmgDamage != 0) {
+                int e2pDmgRollKind = MessageAccess::Random(self)->genrand() & 3;
+                e2pDmgSpread = MessageAccess::Random(self)->genrand() % (unsigned int) (e2pDmgDamage * 0x19);
+                switch (e2pDmgRollKind) {
 
                     case 0:
-                        temp_v0_125 = temp_v0_124 + (var_s3_4 * 950);
-                        var_s3_4 = (int)temp_v0_125 / 1000;
+                        e2pDmgDamage = (int)(e2pDmgSpread + (e2pDmgDamage * 950)) / 1000;
                         break;
 
                     case 1:
-                        temp_v0_126 = temp_v0_124 + (var_s3_4 * 975);
-                        var_s3_4 = (int)temp_v0_126 / 1000;
+                        e2pDmgDamage = (int)(e2pDmgSpread + (e2pDmgDamage * 975)) / 1000;
                         break;
 
                     case 2:
-                        temp_v0_127 = temp_v0_124 + (var_s3_4 * 1000);
-                        var_s3_4 = (int)temp_v0_127 / 1000;
+                        e2pDmgDamage = (int)(e2pDmgSpread + (e2pDmgDamage * 1000)) / 1000;
                         break;
 
                     case 3:
-                        temp_a0_9 = temp_v0_124 + (var_s3_4 * 1025);
-                        var_s3_4 = (int)temp_a0_9 / 1000;
-                        var_s1_15 = 1;
+                        e2pDmgDamage = (int)(e2pDmgSpread + (e2pDmgDamage * 1025)) / 1000;
+                        e2pDmgIsHighRoll = 1;
                         break;
                     }
             }
-            if (var_s3_4 < 0) {
-                var_s3_4 = 0;
-            } else if (var_s3_4 > 0x1869F) {
-                var_s3_4 = 0x1869F;
+            if (e2pDmgDamage < 0) {
+                e2pDmgDamage = 0;
+            } else if (e2pDmgDamage > 0x1869F) {
+                e2pDmgDamage = 0x1869F;
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s3_4);
-            beMessenger_AppendInt(self->_messenger, var_s2_8);
-            beMessenger_AppendInt(self->_messenger, var_s1_15);
+            beMessenger_AppendInt(self->_messenger, e2pDmgDamage);
+            beMessenger_AppendInt(self->_messenger, e2pDmgElement);
+            beMessenger_AppendInt(self->_messenger, e2pDmgIsHighRoll);
             break;
-        case 4:
-            int var_s0_21;
-            temp_ret_763 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_764 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_765 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_766 = beMessenger_GetInt(self->_messenger, 3);
-            temp_ret_767 = (void *)(beMessenger_GetObject(self->_messenger, 0));
-            temp_v0_128 = (void *)(temp_ret_767);
-            var_s0_21 = 0;
-            if (temp_ret_765 <= 0) {
-                var_s0_21 = 3;
+        case FIGHTCOM_E2PDAMAGERANK:
+            int rank;
+            rankPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            rankAttackId = beMessenger_GetInt(self->_messenger, 1);
+            rankHitCount = beMessenger_GetInt(self->_messenger, 2);
+            rankDamage = beMessenger_GetInt(self->_messenger, 3);
+            rankEnemy = (void *)(beMessenger_GetObject(self->_messenger, 0));
+            rank = 0;
+            if (rankHitCount <= 0) {
+                rank = 3;
             } else {
-                temp_ret_769 = MessageAccess::Player(self, temp_ret_763);
-                temp_s5_3 = temp_ret_764 % 10000;
-                int temp_ret_774 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_3, "TSUYOSA");
-                temp_ret_779 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s5_3, "SEQUENCE");
-                temp_v0_129 = temp_ret_779;
-                temp_ret_780 = (int)igProperty_GetRecord(temp_ret_769, "MHP");
-                int e2p_rec_780; e2p_rec_780 = ((beDataObjInt *)temp_ret_780)->_data;
-                switch (temp_v0_129) {
+                rankPlayer = MessageAccess::Player(self, rankPlayerIndex);
+                rankAttackNo = rankAttackId % 10000;
+                int rankPower = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), rankAttackNo, "TSUYOSA");
+                rankSequence = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), rankAttackNo, "SEQUENCE");
+                int rankMaxHp; rankMaxHp = igProperty_GetRecord((void *)rankPlayer, "MHP")->value;
+                switch (rankSequence) {
                 case 0:
-                    if (temp_ret_774 == 0) {
-                        var_s0_21 = -1;
+                    if (rankPower == 0) {
+                        rank = -1;
                     } else {
-                        temp_lo = (int)((int) (temp_ret_766 * 0x64) / e2p_rec_780);
-                        if (temp_lo < 0xA) {
-                            var_s0_21 = 0;
-                        } else if (temp_lo < 0x28) {
-                            var_s0_21 = 1;
+                        rankDamagePercent = (int)((int) (rankDamage * 0x64) / rankMaxHp);
+                        if (rankDamagePercent < 0xA) {
+                            rank = 0;
+                        } else if (rankDamagePercent < 0x28) {
+                            rank = 1;
                         } else {
-                            var_s0_21 = 2;
+                            rank = 2;
                         }
                     }
                     break;
                 case 1:
-                    var_s0_21 = -1;
+                    rank = -1;
                     break;
                 case 2:
-                    var_s0_21 = 0;
+                    rank = 0;
                     break;
                 case 3:
-                    var_s0_21 = 2;
+                    rank = 2;
                     break;
                 case 4:
-                    var_s0_21 = 1;
+                    rank = 1;
                     break;
                 }
             }
-            if (var_s0_21 == 2) {
-                /* obj+0x28 is recomputed at each of the three uses (no common subexpression); the
-                 * integer-sum form of the first use, and a plain byte-offset form for the others,
-                 * keeps the compiler from hoisting it into a saved register. */
-                temp_ret_781 = ObjectRef_Get_003e93b0((void *)((int)temp_v0_128 + 0x28));
-                if (temp_ret_781 == 0) {
-                    temp_ret_782 = igObject_GetAllocator(temp_v0_128);
-                    temp_ret_786 = ObjectRefAssigner::Assign((char *)temp_v0_128 + 0x28, temp_ret_782);
+            if (rank == 2) {
+                /* matching construct: the enemy's _dataList address is recomputed at each of the three uses; the
+                 * integer-sum spelling of the first use keeps the compiler from hoisting it into a saved register. */
+                if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get((void *)((int)rankEnemy + 0x28)) == 0) {
+                    ObjectRefAssigner::Assign(&((beBaseInfoRam *)rankEnemy)->_dataList, igObject_GetAllocator(rankEnemy));
                 }
-                temp_ret_788 = ObjectRef_Get_003e92a0((char *)temp_v0_128 + 0x28);
-                temp_ret_789 = beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(temp_ret_788, g_propertyNameField[0], "ONE");
-                temp_ret_790 = ObjectRef_Get_00406e00(&((beModelCtrlInfoRamData *)temp_ret_789)->_work);
-                temp_ret_791 = (void *)(ObjectRef_Get_00406df0(&((beNDMWMdlPEBaseInfoWork *)temp_ret_790)->_moveObjectList));
-                temp_v0_130 = (void *)(temp_ret_791);
-                if (((beModelCtrlMoveObjectList *)temp_v0_130)->_count != 0) {
-                    temp_ret_792 = (void *)(DataList_GetWordAt_00406dd0((igDataList *)temp_v0_130, 1));
-                    if (((beModelCtrlMoveObject *)temp_ret_792)->_isRun != 0) {
-                        var_s0_21 = 1;
+                rankMoveList = (void *)(beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(&((beNDMWMdlPEBaseInfoWork *)beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(&((beModelCtrlInfoRamData *)beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&((beBaseInfoRam *)rankEnemy)->_dataList), g_propertyNameField[0], "ONE"))->_work))->_moveObjectList));
+                if (((beModelCtrlMoveObjectList *)rankMoveList)->_count != 0) {
+                    rankMoveObject = (void *)(beNDMWGameRam_beModelCtrlMoveObjectList_Get((igDataList *)rankMoveList, 1));
+                    if (((beModelCtrlMoveObject *)rankMoveObject)->_isRun != 0) {
+                        rank = 1;
                     }
                 }
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s0_21);
+            beMessenger_AppendInt(self->_messenger, rank);
             break;
-        case 7: {
-            temp_ret_793 = beMessenger_GetInt(self->_messenger, 0);
-            sp120 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_795 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_796 = beMessenger_GetInt(self->_messenger, 3);
-            temp_ret_797 = beMessenger_GetInt(self->_messenger, 4);
-            temp_v0_131 = temp_ret_797;
-            temp_ret_798 = (void *)(beMessenger_GetObject(self->_messenger, 0));
-            temp_v0_132 = (beNDMWMdlPEBaseInfoWork *)(temp_ret_798);
-            temp_ret_800 = MessageAccess::Player(self, temp_ret_793);
-            temp_v0_133 = (void *)(temp_ret_800);
-            temp_s6_2 = temp_ret_795 % 10000;
-            temp_ret_805 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s6_2, "TYPE");
-            temp_v0_134 = temp_ret_805;
-            var_s8_2 = 0;
-            var_s1_16 = 0;
-            var_s0_22 = 0;
-            switch (temp_v0_134) {
-            case 0:
-                switch (temp_v0_131) { case 1: case 2: {
-                    temp_ret_806 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_132->_downDataList));
-                    if (temp_ret_806 == 0) {
-                        var_s0_23 = 0;
+        case FIGHTCOM_E2PSTUNTIME: {
+            e2pStunPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            e2pStunEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            e2pStunAttackId = beMessenger_GetInt(self->_messenger, 2);
+            e2pStunDamage = beMessenger_GetInt(self->_messenger, 3);
+            e2pStunHitKind = beMessenger_GetInt(self->_messenger, 4);
+            e2pStunEnemy = (beNDMWMdlPEBaseInfoWork *)(void *)(beMessenger_GetObject(self->_messenger, 0));
+            e2pStunPlayer = (void *)MessageAccess::Player(self, e2pStunPlayerIndex);
+            e2pStunAttackNo = e2pStunAttackId % 10000;
+            e2pStunAttackType = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pStunAttackNo, "TYPE");
+            e2pStunEnemyParalysis = 0;
+            e2pStunAttackParalysis = 0;
+            e2pStunApplies = 0;
+            switch (e2pStunAttackType) {
+            case ENEATK_PHYSICAL:
+                switch (e2pStunHitKind) { case 1: case 2: {
+                    e2pStunDownCheck = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&e2pStunEnemy->_downDataList));
+                    if (e2pStunDownCheck == 0) {
+                        e2pStunDownValue = 0;
                     } else {
-                        temp_ret_807 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&temp_v0_132->_downDataList));
-                        temp_ret_808 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_807);
-                        var_s0_23 = ((int *)temp_ret_808)[2];
+                        e2pStunDownList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&e2pStunEnemy->_downDataList));
+                        e2pStunDownValues = beNDMWLoadIntf2_igIntList_GetData(e2pStunDownList);
+                        e2pStunDownValue = ((int *)e2pStunDownValues)[2];
                     }
-                    temp_ret_813 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), sp120, "MAHIRITSU");
-                    var_s8_2 = temp_ret_813 - var_s0_23;
-                    var_s0_22 = 1;
+                    e2pStunEnemyParalysisRate = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), e2pStunEnemyRecNo, "MAHIRITSU");
+                    e2pStunEnemyParalysis = e2pStunEnemyParalysisRate - e2pStunDownValue;
+                    e2pStunApplies = 1;
                 } }
                 break;
-            case 1:
-                var_s1_16 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s6_2, "MAHIRITSU");
-                if (var_s1_16 > 0) {
-                    var_s0_22 = 1;
+            case ENEATK_MAGIC:
+                e2pStunAttackParalysis = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), e2pStunAttackNo, "MAHIRITSU");
+                if (e2pStunAttackParalysis > 0) {
+                    e2pStunApplies = 1;
                 }
                 break;
-            case 2:
-                switch (temp_v0_131) { case 1: case 2: {
-                    var_s0_22 = 1;
+            case ENEATK_MAXHPRATIO:
+                switch (e2pStunHitKind) { case 1: case 2: {
+                    e2pStunApplies = 1;
                 } }
                 break;
             }
-            var_s2_9 = 0;
-            if (var_s0_22) {
-                temp_ret_819 = (int)igProperty_GetRecord(temp_v0_133, "MHP");
-                temp_s3_8 = ((beDataObjInt *)temp_ret_819)->_data;
-                temp_ret_820 = (int)igProperty_GetRecord(temp_v0_133, "MAHITEIKOU");
-                temp_s0_23 = ((beDataObjInt *)temp_ret_820)->_data;
-                temp_a2_22 = MessageAccess::Random(self)->genrand() % 100U;
-                chance_sum = var_s1_16 + var_s8_2;
-                int temp_lo_2 = (int)((int) (temp_ret_796 * 0x32) / temp_s3_8);
-                temp_v1_7 = temp_s0_23 + (temp_lo_2 + 0x64 + chance_sum);
-                var_v0_18 = temp_v1_7 / 2;
-                if ((int) temp_a2_22 < var_v0_18) {
-                    temp_v0_136 = temp_s0_23 + (temp_lo_2 + 0x1E + chance_sum);
-                    var_s2_9 = temp_v0_136 / 4;
+            e2pStunTime = 0;
+            if (e2pStunApplies) {
+                e2pStunMaxHp = igProperty_GetRecord(e2pStunPlayer, "MHP")->value;
+                e2pStunResist = igProperty_GetRecord(e2pStunPlayer, "MAHITEIKOU")->value;
+                e2pStunRoll = MessageAccess::Random(self)->genrand() % 100U;
+                chance_sum = e2pStunAttackParalysis + e2pStunEnemyParalysis;
+                int e2pStunDamagePercent = (int)((int) (e2pStunDamage * 0x32) / e2pStunMaxHp);
+                e2pStunChanceSum = e2pStunResist + (e2pStunDamagePercent + 0x64 + chance_sum);
+                e2pStunChance = e2pStunChanceSum / 2;
+                if ((int) e2pStunRoll < e2pStunChance) {
+                    e2pStunTimeSum = e2pStunResist + (e2pStunDamagePercent + 0x1E + chance_sum);
+                    e2pStunTime = e2pStunTimeSum / 4;
                 }
-                if (var_s2_9 == 0) {
-                    var_s2_9 = -1;
+                if (e2pStunTime == 0) {
+                    e2pStunTime = -1;
                 }
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s2_9);
+            beMessenger_AppendInt(self->_messenger, e2pStunTime);
             break; }
-        case 8:
-            temp_ret_822 = (char *)(beMessenger_GetString(self->_messenger, 1));
-            temp_v0_137 = (char *)(temp_ret_822);
-            { StringRef sp444((char *)(temp_v0_137 == 0 ? (char *)0 : (char *)StringPool_Intern((void *)StringPool_GetInstance(), temp_v0_137)));
-            temp_ret_825 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_826 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_828 = MessageAccess::Player(self, temp_ret_825);
-            temp_v0_138 = (void *)(temp_ret_828);
-            temp_s3_9 = temp_ret_826 % 10000;
-            temp_ret_829 = strcmp(sp444.p, "TIME");
-            if (temp_ret_829 == 0) {
-                var_s2_10 = 0;
-                temp_ret_834 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_9, "KOUKA"));
-                temp_ret_835 = strcmp(temp_ret_834, "doku");
-                if (temp_ret_835 == 0) {
-                    int temp_ret_840 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_9, "KOUKARANK");
-                    temp_ret_841 = (int)igProperty_GetRecord(temp_v0_138, "DOKUTEIKOU");
-                    int temp_s0_24 = ((beDataObjInt *)temp_ret_841)->_data;
-                    temp_v1_8 = MessageAccess::Random(self)->genrand() % 100U;
-                    if ((int) temp_v1_8 < (temp_s0_24 + ((temp_ret_840 * 0xF) + 0x1E))) {
-                        temp_ret_847 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_9, "KOUKATIME");
-                        var_s2_10 = temp_s0_24 / 2 + temp_ret_847;
+        case FIGHTCOM_E2PPOISONTIME:
+            ePoisonMode = (char *)(beMessenger_GetString(self->_messenger, 1));
+            { StringRef mode((char *)(ePoisonMode == 0 ? (char *)0 : (char *)StringPool_Intern((void *)StringPool_GetInstance(), ePoisonMode)));
+            ePoisonPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            ePoisonAttackId = beMessenger_GetInt(self->_messenger, 1);
+            ePoisonPlayer = (void *)MessageAccess::Player(self, ePoisonPlayerIndex);
+            ePoisonAttackNo = ePoisonAttackId % 10000;
+            if (strcmp(mode.p, "TIME") == 0) {
+                ePoisonTime = 0;
+                ePoisonEffectName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), ePoisonAttackNo, "KOUKA"));
+                if (strcmp(ePoisonEffectName, "doku") == 0) {
+                    int effectRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePoisonAttackNo, "KOUKARANK");
+                    int poisonResist = igProperty_GetRecord(ePoisonPlayer, "DOKUTEIKOU")->value;
+                    ePoisonRoll = MessageAccess::Random(self)->genrand() % 100U;
+                    if ((int) ePoisonRoll < (poisonResist + ((effectRank * 0xF) + 0x1E))) {
+                        ePoisonBaseTime = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePoisonAttackNo, "KOUKATIME");
+                        ePoisonTime = poisonResist / 2 + ePoisonBaseTime;
                     }
-                    if (var_s2_10 == 0) {
-                        var_s2_10 = -1;
+                    if (ePoisonTime == 0) {
+                        ePoisonTime = -1;
                     }
                 }
                 beMessenger_ClearInt(self->_messenger);
-                beMessenger_AppendInt(self->_messenger, var_s2_10);
+                beMessenger_AppendInt(self->_messenger, ePoisonTime);
             } else {
-                temp_ret_848 = strcmp(sp444.p, "DAMAGE");
-                if (temp_ret_848 == 0) {
-                    temp_ret_849 = (int)igProperty_GetRecord(temp_v0_138, "MHP");
-                    temp_s0_25 = ((beDataObjInt *)temp_ret_849)->_data;
-                    temp_ret_854 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_9, "KOUKARANK");
+                if (strcmp(mode.p, "DAMAGE") == 0) {
+                    ePoisonMaxHp = igProperty_GetRecord(ePoisonPlayer, "MHP")->value;
+                    ePoisonRate = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePoisonAttackNo, "KOUKARANK");
                     beMessenger_ClearInt(self->_messenger);
-                    beMessenger_AppendInt(self->_messenger, (int) (temp_s0_25 * temp_ret_854) / 100);
+                    beMessenger_AppendInt(self->_messenger, (int) (ePoisonMaxHp * ePoisonRate) / 100);
                 } else {
-                    temp_ret_855 = strcmp(sp444.p, "GEDOKU");
-                    if (temp_ret_855 == 0) {
-                        temp_ret_860 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_9, "GEDOKU");
+                    if (strcmp(mode.p, "GEDOKU") == 0) {
+                        ePoisonCure = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePoisonAttackNo, "GEDOKU");
                         beMessenger_ClearInt(self->_messenger);
-                        beMessenger_AppendInt(self->_messenger, temp_ret_860);
+                        beMessenger_AppendInt(self->_messenger, ePoisonCure);
                     }
                 }
             }
             }
             break;
-        case 9: {
-            temp_ret_862 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_863 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_864 = beMessenger_GetInt(self->_messenger, 2);
+        case FIGHTCOM_E2PSLEEPTIME: {
+            eSleepPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            eSleepEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            eSleepAttackId = beMessenger_GetInt(self->_messenger, 2);
             /* matching construct: this lookup stays written out (and its result declared here); through
              * MessageAccess::Player the player and the modulo result swap callee-saved registers */
-            temp_ret_865 = (void *)(beNDMWGameRam_igSmartPointer_beDataObjListList_Get(&self->_playerDataListList));
-            int temp_ret_866 = beNDMWLoadIntf2_igObjectList_Get(temp_ret_865, temp_ret_862);
-            int temp_s2_2 = temp_ret_864 % 10000;
-            temp_ret_871 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_2, "KOUKA"));
-            int var_s1_17 = 0;
-            temp_ret_872 = strcmp(temp_ret_871, "sleep");
-            if (temp_ret_872 == 0) {
-                temp_ret_877 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_2, "KOUKARANK");
-                temp_ret_882 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_ret_863, "KASHIKOSA");
-                temp_ret_883 = (int)igProperty_GetRecord(temp_ret_866, "SEISHIN");
-                temp_s3_10 = ((beDataObjInt *)temp_ret_883)->_data;
-                temp_a2_23 = MessageAccess::Random(self)->genrand() % 10000U;
-                temp_s0_26 = (((int) (temp_ret_882 * 3) / (int) temp_s3_10) + 0x64) - ((int) temp_s3_10 / 40);
-                int hit_base = temp_ret_877 * 5;
-                if ((int) temp_a2_23 < (hit_base * temp_s0_26)) {
-                    temp_ret_889 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_2, "KOUKATIME");
-                    var_s1_17 = (int)((int) (temp_ret_889 * temp_s0_26) / 100);
+            eSleepPlayerList = (void *)(beNDMWGameRam_igSmartPointer_beDataObjListList_Get(&self->_playerDataListList));
+            int eSleepPlayer = beNDMWLoadIntf2_igObjectList_Get(eSleepPlayerList, eSleepPlayerIndex);
+            int eSleepAttackNo = eSleepAttackId % 10000;
+            eSleepEffectName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), eSleepAttackNo, "KOUKA"));
+            int eSleepTime = 0;
+            if (strcmp(eSleepEffectName, "sleep") == 0) {
+                eSleepRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eSleepAttackNo, "KOUKARANK");
+                eSleepEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), eSleepEnemyRecNo, "KASHIKOSA");
+                eSleepSpirit = igProperty_GetRecord((void *)eSleepPlayer, "SEISHIN")->value;
+                eSleepRoll = MessageAccess::Random(self)->genrand() % 10000U;
+                eSleepChanceBase = (((int) (eSleepEnemyIntelligence * 3) / (int) eSleepSpirit) + 0x64) - ((int) eSleepSpirit / 40);
+                int hit_base = eSleepRank * 5;
+                if ((int) eSleepRoll < (hit_base * eSleepChanceBase)) {
+                    eSleepBaseTime = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eSleepAttackNo, "KOUKATIME");
+                    eSleepTime = (int)((int) (eSleepBaseTime * eSleepChanceBase) / 100);
                 }
-                if (var_s1_17 == 0) {
-                    var_s1_17 = -1;
+                if (eSleepTime == 0) {
+                    eSleepTime = -1;
                 }
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s1_17);
+            beMessenger_AppendInt(self->_messenger, eSleepTime);
             break; }
-        case 10: {
-            temp_ret_890 = beMessenger_GetInt(self->_messenger, 0);
-            temp_ret_891 = beMessenger_GetInt(self->_messenger, 1);
-            temp_v0_141 = temp_ret_891;
-            temp_ret_892 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_894 = MessageAccess::Player(self, temp_ret_890);
-            temp_v0_142 = (void *)(temp_ret_894);
-            temp_s3_11 = temp_ret_892 % 10000;
-            temp_ret_899 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_11, "KOUKA"));
-            var_s2_11 = 0;
-            temp_ret_900 = strcmp(temp_ret_899, "ashidome");
-            if (temp_ret_900 == 0) {
-                temp_ret_905 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_11, "KOUKARANK");
-                temp_ret_910 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_11, "TYPE");
-                temp_v0_143 = temp_ret_910;
-                sp110 = 1;
-                if (temp_v0_143 != 2) {
-                    temp_ret_915 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_141, "KASHIKOSA");
-                    temp_ret_916 = (int)igProperty_GetRecord(temp_v0_142, "SEISHIN");
-                    unsigned int temp_s0_27 = ((beDataObjInt *)temp_ret_916)->_data;
-                    temp_a2_24 = MessageAccess::Random(self)->genrand() % 10000U;
-                    if ((temp_ret_905 * 5 * ((((int) (temp_ret_915 * 3) / (int) temp_s0_27) + 0x64) - ((int) temp_s0_27 / 40))) <= (int) temp_a2_24) {
-                        sp110 = 0;
+        case FIGHTCOM_E2PBINDTIME: {
+            eBindPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            eBindEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            eBindAttackId = beMessenger_GetInt(self->_messenger, 2);
+            eBindPlayer = (void *)MessageAccess::Player(self, eBindPlayerIndex);
+            eBindAttackNo = eBindAttackId % 10000;
+            eBindEffectName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), eBindAttackNo, "KOUKA"));
+            eBindTime = 0;
+            if (strcmp(eBindEffectName, "ashidome") == 0) {
+                eBindRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eBindAttackNo, "KOUKARANK");
+                eBindAttackType = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eBindAttackNo, "TYPE");
+                eBindApplies = 1;
+                if (eBindAttackType != ENEATK_MAXHPRATIO) {
+                    eBindEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), eBindEnemyRecNo, "KASHIKOSA");
+                    unsigned int eBindSpirit = igProperty_GetRecord(eBindPlayer, "SEISHIN")->value;
+                    eBindRoll = MessageAccess::Random(self)->genrand() % 10000U;
+                    if ((eBindRank * 5 * ((((int) (eBindEnemyIntelligence * 3) / (int) eBindSpirit) + 0x64) - ((int) eBindSpirit / 40))) <= (int) eBindRoll) {
+                        eBindApplies = 0;
                     }
                 }
-                if (sp110) {
-                    if (temp_v0_143 == 2) {
-                        temp_ret_922 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_11, "KOUKATIME");
-                        var_s2_11 = temp_ret_922;
+                if (eBindApplies) {
+                    if (eBindAttackType == ENEATK_MAXHPRATIO) {
+                        eBindFixedTime = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eBindAttackNo, "KOUKATIME");
+                        eBindTime = eBindFixedTime;
                     } else {
-                        temp_ret_927 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s3_11, "KOUKATIME");
-                        temp_ret_932 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_141, "KASHIKOSA");
-                        temp_ret_933 = (int)igProperty_GetRecord(temp_v0_142, "SEISHIN");
-                        temp_v0_145 = (void *)(temp_ret_933);
-                        var_s2_11 = (int)((int) (temp_ret_927 * ((((int) (temp_ret_932 * 3) / (int) ((beDataObjInt *)temp_v0_145)->_data) + 0x64) - ((int) ((beDataObjInt *)temp_v0_145)->_data / 40))) / 100);
+                        eBindBaseTime = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eBindAttackNo, "KOUKATIME");
+                        eBindTimeEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), eBindEnemyRecNo, "KASHIKOSA");
+                        eBindSpiritProperty = igProperty_GetRecord(eBindPlayer, "SEISHIN");
+                        eBindTime = (int)((int) (eBindBaseTime * ((((int) (eBindTimeEnemyIntelligence * 3) / (int) eBindSpiritProperty->value) + 0x64) - ((int) eBindSpiritProperty->value / 40))) / 100);
                     }
                 }
-                if (var_s2_11 == 0) {
-                    var_s2_11 = -1;
+                if (eBindTime == 0) {
+                    eBindTime = -1;
                 }
             }
             beMessenger_ClearInt(self->_messenger);
-            beMessenger_AppendInt(self->_messenger, var_s2_11);
+            beMessenger_AppendInt(self->_messenger, eBindTime);
             break; }
-        case 11: {
-            temp_ret_934 = (char *)(beMessenger_GetString(self->_messenger, 1));
-            temp_v0_146 = (char *)(temp_ret_934);
-            if (temp_v0_146 == 0) {
-                var_v0_20 = (char *)(0);
+        case FIGHTCOM_E2PATKDWNTIME: {
+            eAtkMode = (char *)(beMessenger_GetString(self->_messenger, 1));
+            if (eAtkMode == 0) {
+                eAtkInternedMode = (char *)(0);
             } else {
-                var_v0_20 = (char *)StringPool_Intern(StringPool_GetInstance(), temp_v0_146);
+                eAtkInternedMode = (char *)StringPool_Intern(StringPool_GetInstance(), eAtkMode);
             }
-            { StringRef sp440((char *)(var_v0_20));
-            temp_ret_937 = beMessenger_GetInt(self->_messenger, 0);
-            temp_v0_147 = temp_ret_937;
-            temp_ret_938 = beMessenger_GetInt(self->_messenger, 1);
-            temp_v0_148 = temp_ret_938;
-            temp_ret_939 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_941 = MessageAccess::Player(self, temp_v0_147);
-            temp_v0_149 = (void *)(temp_ret_941);
-            temp_s2_3 = temp_ret_939 % 10000;
-            temp_ret_942 = strcmp(sp440.p, "TIME");
-            if (temp_ret_942 == 0) {
-                temp_ret_947 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_3, "KOUKA"));
-                var_s1_18 = 0;
-                temp_ret_948 = strcmp(temp_ret_947, "freeze");
-                if (temp_ret_948 == 0) {
-                    temp_ret_953 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_3, "KOUKARANK");
-                    temp_ret_958 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_148, "KASHIKOSA");
-                    temp_ret_959 = (int)igProperty_GetRecord(temp_v0_149, "SEISHIN");
-                    temp_s3_12 = ((beDataObjInt *)temp_ret_959)->_data;
-                    temp_a4_2 = MessageAccess::Random(self)->genrand() % 10000U;
-                    temp_s0_28 = (((int) (temp_ret_958 * 3) / (int) temp_s3_12) + 0x64) - ((int) temp_s3_12 / 40);
-                    int rec_scaled = (int) (temp_ret_953 * 0xA0) / 100;
-                    if ((int) temp_a4_2 < (rec_scaled * temp_s0_28)) {
-                        temp_ret_965 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_3, "KOUKATIME");
-                        var_s1_18 = (int)((int) (temp_ret_965 * temp_s0_28) / 100);
+            { StringRef mode((char *)(eAtkInternedMode));
+            eAtkPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            eAtkEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            eAtkAttackId = beMessenger_GetInt(self->_messenger, 2);
+            eAtkPlayer = (void *)MessageAccess::Player(self, eAtkPlayerIndex);
+            eAtkAttackNo = eAtkAttackId % 10000;
+            if (strcmp(mode.p, "TIME") == 0) {
+                eAtkEffectName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), eAtkAttackNo, "KOUKA"));
+                eAtkTime = 0;
+                if (strcmp(eAtkEffectName, "freeze") == 0) {
+                    eAtkRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eAtkAttackNo, "KOUKARANK");
+                    eAtkEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), eAtkEnemyRecNo, "KASHIKOSA");
+                    eAtkSpirit = igProperty_GetRecord(eAtkPlayer, "SEISHIN")->value;
+                    eAtkRoll = MessageAccess::Random(self)->genrand() % 10000U;
+                    eAtkChanceBase = (((int) (eAtkEnemyIntelligence * 3) / (int) eAtkSpirit) + 0x64) - ((int) eAtkSpirit / 40);
+                    int rec_scaled = (int) (eAtkRank * 0xA0) / 100;
+                    if ((int) eAtkRoll < (rec_scaled * eAtkChanceBase)) {
+                        eAtkBaseTime = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eAtkAttackNo, "KOUKATIME");
+                        eAtkTime = (int)((int) (eAtkBaseTime * eAtkChanceBase) / 100);
                     }
-                    if (var_s1_18 == 0) {
-                        var_s1_18 = -1;
+                    if (eAtkTime == 0) {
+                        eAtkTime = -1;
                     }
                 }
                 beMessenger_ClearInt(self->_messenger);
-                beMessenger_AppendInt(self->_messenger, var_s1_18);
+                beMessenger_AppendInt(self->_messenger, eAtkTime);
             } else {
-                temp_ret_966 = strcmp(sp440.p, "SUBAYASA");
-                if (temp_ret_966 == 0) {
-                    temp_ret_967 = (int)igProperty_GetRecordIntList(temp_v0_149, "DOWNDATA");
-                    temp_ret_968 = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)temp_ret_967));
-                    temp_v0_151 = (void *)(temp_ret_968);
-                    temp_v1_9 = ((igIntList *)temp_v0_151)->_count;
-                    IntListSet((igIntList *)temp_v0_151, 0, 0);
-                    beNDMWGameRam_RecomputeStats(self, temp_v0_147, 1);
-                    temp_ret_975 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_3, "KOUKARANK");
-                    temp_ret_980 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_148, "KASHIKOSA");
-                    temp_ret_981 = (int)igProperty_GetRecord(temp_v0_149, "SEISHIN");
-                    temp_v0_152 = (void *)(temp_ret_981);
-                    var_s1_19 = (temp_ret_975 + ((int) ((int) (temp_ret_980 * 0x96) / (int) ((beDataObjInt *)temp_v0_152)->_data) / 100)) - ((int) ((beDataObjInt *)temp_v0_152)->_data / 80);
-                    if (var_s1_19 < 0x14) {
-                        var_s1_19 = 0x14;
+                if (strcmp(mode.p, "SUBAYASA") == 0) {
+                    eAtkDownList = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)igProperty_GetRecordIntList(eAtkPlayer, "DOWNDATA")));
+                    eAtkDownCount = ((igIntList *)eAtkDownList)->_count;
+                    IntListSet((igIntList *)eAtkDownList, 0, 0);
+                    beNDMWGameRam_RecomputeStats(self, eAtkPlayerIndex, 1);
+                    eAtkSpeedRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eAtkAttackNo, "KOUKARANK");
+                    eAtkSpeedEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), eAtkEnemyRecNo, "KASHIKOSA");
+                    eAtkSpeedSpirit = igProperty_GetRecord(eAtkPlayer, "SEISHIN");
+                    eAtkSpeedPenalty = (eAtkSpeedRank + ((int) ((int) (eAtkSpeedEnemyIntelligence * 0x96) / (int) eAtkSpeedSpirit->value) / 100)) - ((int) eAtkSpeedSpirit->value / 80);
+                    if (eAtkSpeedPenalty < 0x14) {
+                        eAtkSpeedPenalty = 0x14;
                     }
-                    if (var_s1_19 > 0x50) {
-                        var_s1_19 = 0x50;
+                    if (eAtkSpeedPenalty > 0x50) {
+                        eAtkSpeedPenalty = 0x50;
                     }
-                    temp_ret_982 = (int)igProperty_GetRecord(temp_v0_149, "SUBAYASA");
-                    int temp_s0_29 = ((beDataObjInt *)temp_ret_982)->_data;
+                    int eAtkSpeed = igProperty_GetRecord(eAtkPlayer, "SUBAYASA")->value;
                     beMessenger_ClearInt(self->_messenger);
-                    beMessenger_AppendInt(self->_messenger, (int) (temp_s0_29 * var_s1_19) / 100);
+                    beMessenger_AppendInt(self->_messenger, (int) (eAtkSpeed * eAtkSpeedPenalty) / 100);
                 } else {
-                    temp_ret_983 = strcmp(sp440.p, "MEICHURITSU");
-                    if (temp_ret_983 == 0) {
-                        temp_ret_984 = (int)igProperty_GetRecordIntList(temp_v0_149, "DOWNDATA");
-                        temp_ret_985 = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)temp_ret_984));
-                        temp_v0_153 = (void *)(temp_ret_985);
-                        temp_v1_10 = ((igIntList *)temp_v0_153)->_count;
-                        IntListSet((igIntList *)temp_v0_153, 1, 0);
-                        beNDMWGameRam_RecomputeStats(self, temp_v0_147, 1);
-                        temp_ret_992 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_3, "KOUKARANK");
-                        temp_ret_997 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_148, "KASHIKOSA");
-                        temp_ret_998 = (int)igProperty_GetRecord(temp_v0_149, "SEISHIN");
-                        temp_v0_154 = (void *)(temp_ret_998);
-                        var_s1_20 = (temp_ret_992 + ((int) ((int) (temp_ret_997 * 0x96) / (int) ((beDataObjInt *)temp_v0_154)->_data) / 100)) - ((int) ((beDataObjInt *)temp_v0_154)->_data / 80);
-                        if (var_s1_20 < 0x14) {
-                            var_s1_20 = 0x14;
+                    if (strcmp(mode.p, "MEICHURITSU") == 0) {
+                        eAtkAccList = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)igProperty_GetRecordIntList(eAtkPlayer, "DOWNDATA")));
+                        eAtkAccCount = ((igIntList *)eAtkAccList)->_count;
+                        IntListSet((igIntList *)eAtkAccList, 1, 0);
+                        beNDMWGameRam_RecomputeStats(self, eAtkPlayerIndex, 1);
+                        eAtkAccRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), eAtkAttackNo, "KOUKARANK");
+                        eAtkAccEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), eAtkEnemyRecNo, "KASHIKOSA");
+                        eAtkAccSpirit = igProperty_GetRecord(eAtkPlayer, "SEISHIN");
+                        eAtkAccPenalty = (eAtkAccRank + ((int) ((int) (eAtkAccEnemyIntelligence * 0x96) / (int) eAtkAccSpirit->value) / 100)) - ((int) eAtkAccSpirit->value / 80);
+                        if (eAtkAccPenalty < 0x14) {
+                            eAtkAccPenalty = 0x14;
                         }
-                        if (var_s1_20 > 0x50) {
-                            var_s1_20 = 0x50;
+                        if (eAtkAccPenalty > 0x50) {
+                            eAtkAccPenalty = 0x50;
                         }
-                        temp_ret_999 = (int)igProperty_GetRecord(temp_v0_149, "MEICHURITSU");
-                        int temp_s0_30 = ((beDataObjInt *)temp_ret_999)->_data;
+                        int eAtkAccuracy = igProperty_GetRecord(eAtkPlayer, "MEICHURITSU")->value;
                         beMessenger_ClearInt(self->_messenger);
-                        beMessenger_AppendInt(self->_messenger, (int) (temp_s0_30 * var_s1_20) / 100);
+                        beMessenger_AppendInt(self->_messenger, (int) (eAtkAccuracy * eAtkAccPenalty) / 100);
                     }
                 }
             }
             }
             break; }
-        case 12: {
-            temp_ret_1001 = (char *)(beMessenger_GetString(self->_messenger, 1));
-            temp_v0_155 = (char *)(temp_ret_1001);
-            if (temp_v0_155 == 0) {
-                var_v0_21 = (char *)(0);
+        case FIGHTCOM_E2PPOWDWNTIME: {
+            ePowMode = (char *)(beMessenger_GetString(self->_messenger, 1));
+            if (ePowMode == 0) {
+                ePowInternedMode = (char *)(0);
             } else {
-                var_v0_21 = (char *)StringPool_Intern(StringPool_GetInstance(), temp_v0_155);
+                ePowInternedMode = (char *)StringPool_Intern(StringPool_GetInstance(), ePowMode);
             }
-            { StringRef sp43C((char *)(var_v0_21));
-            temp_ret_1004 = beMessenger_GetInt(self->_messenger, 0);
-            temp_v0_156 = temp_ret_1004;
-            temp_ret_1005 = beMessenger_GetInt(self->_messenger, 1);
-            temp_v0_157 = temp_ret_1005;
-            temp_ret_1006 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_1008 = MessageAccess::Player(self, temp_v0_156);
-            temp_v0_158 = (void *)(temp_ret_1008);
-            temp_s2_4 = temp_ret_1006 % 10000;
-            temp_ret_1009 = strcmp(sp43C.p, "TIME");
-            if (temp_ret_1009 == 0) {
-                temp_ret_1014 = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_4, "KOUKA"));
-                var_s1_21 = 0;
-                temp_ret_1015 = strcmp(temp_ret_1014, "powerdown");
-                if (temp_ret_1015 == 0) {
-                    temp_ret_1020 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_4, "KOUKARANK");
-                    temp_ret_1025 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_157, "KASHIKOSA");
-                    temp_ret_1026 = (int)igProperty_GetRecord(temp_v0_158, "SEISHIN");
-                    temp_s3_13 = ((beDataObjInt *)temp_ret_1026)->_data;
-                    temp_a4_3 = MessageAccess::Random(self)->genrand() % 10000U;
-                    temp_s0_31 = (((int) (temp_ret_1025 * 3) / (int) temp_s3_13) + 0x64) - ((int) temp_s3_13 / 40);
-                    int rec_scaled = (int) (temp_ret_1020 * 0xA0) / 100;
-                    if ((int) temp_a4_3 < (rec_scaled * temp_s0_31)) {
-                        temp_ret_1032 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_4, "KOUKATIME");
-                        var_s1_21 = (int)((int) (temp_ret_1032 * temp_s0_31) / 100);
+            { StringRef mode((char *)(ePowInternedMode));
+            ePowPlayerIndex = beMessenger_GetInt(self->_messenger, 0);
+            ePowEnemyRecNo = beMessenger_GetInt(self->_messenger, 1);
+            ePowAttackId = beMessenger_GetInt(self->_messenger, 2);
+            ePowPlayer = (void *)MessageAccess::Player(self, ePowPlayerIndex);
+            ePowAttackNo = ePowAttackId % 10000;
+            if (strcmp(mode.p, "TIME") == 0) {
+                ePowEffectName = (char *)(beDataBase_GetRecordString(MessageDatabases::Eneatk(self, "eneatk"), ePowAttackNo, "KOUKA"));
+                ePowTime = 0;
+                if (strcmp(ePowEffectName, "powerdown") == 0) {
+                    ePowRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePowAttackNo, "KOUKARANK");
+                    ePowEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), ePowEnemyRecNo, "KASHIKOSA");
+                    ePowSpirit = igProperty_GetRecord(ePowPlayer, "SEISHIN")->value;
+                    ePowRoll = MessageAccess::Random(self)->genrand() % 10000U;
+                    ePowChanceBase = (((int) (ePowEnemyIntelligence * 3) / (int) ePowSpirit) + 0x64) - ((int) ePowSpirit / 40);
+                    int rec_scaled = (int) (ePowRank * 0xA0) / 100;
+                    if ((int) ePowRoll < (rec_scaled * ePowChanceBase)) {
+                        ePowBaseTime = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePowAttackNo, "KOUKATIME");
+                        ePowTime = (int)((int) (ePowBaseTime * ePowChanceBase) / 100);
                     }
-                    if (var_s1_21 == 0) {
-                        var_s1_21 = -1;
+                    if (ePowTime == 0) {
+                        ePowTime = -1;
                     }
                 }
                 beMessenger_ClearInt(self->_messenger);
-                beMessenger_AppendInt(self->_messenger, var_s1_21);
+                beMessenger_AppendInt(self->_messenger, ePowTime);
             } else {
-                temp_ret_1033 = strcmp(sp43C.p, "TSUYOSA");
-                if (temp_ret_1033 == 0) {
-                    temp_ret_1034 = (int)igProperty_GetRecordIntList(temp_v0_158, "DOWNDATA");
-                    temp_ret_1035 = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)temp_ret_1034));
-                    temp_v0_160 = (void *)(temp_ret_1035);
-                    temp_v1_11 = ((igIntList *)temp_v0_160)->_count;
-                    IntListSet((igIntList *)temp_v0_160, 4, 0);
-                    beNDMWGameRam_RecomputeStats(self, temp_v0_156, 1);
-                    temp_ret_1042 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_4, "KOUKARANK");
-                    temp_ret_1047 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_157, "KASHIKOSA");
-                    temp_ret_1048 = (int)igProperty_GetRecord(temp_v0_158, "SEISHIN");
-                    temp_v0_161 = (void *)(temp_ret_1048);
-                    var_s1_22 = (temp_ret_1042 + ((int) ((int) (temp_ret_1047 * 0x96) / (int) ((beDataObjInt *)temp_v0_161)->_data) / 100)) - ((int) ((beDataObjInt *)temp_v0_161)->_data / 80);
-                    if (var_s1_22 < 0x14) {
-                        var_s1_22 = 0x14;
+                if (strcmp(mode.p, "TSUYOSA") == 0) {
+                    ePowStrList = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)igProperty_GetRecordIntList(ePowPlayer, "DOWNDATA")));
+                    ePowStrCount = ((igIntList *)ePowStrList)->_count;
+                    IntListSet((igIntList *)ePowStrList, 4, 0);
+                    beNDMWGameRam_RecomputeStats(self, ePowPlayerIndex, 1);
+                    ePowStrRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePowAttackNo, "KOUKARANK");
+                    ePowStrEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), ePowEnemyRecNo, "KASHIKOSA");
+                    ePowStrSpirit = igProperty_GetRecord(ePowPlayer, "SEISHIN");
+                    ePowStrPenalty = (ePowStrRank + ((int) ((int) (ePowStrEnemyIntelligence * 0x96) / (int) ePowStrSpirit->value) / 100)) - ((int) ePowStrSpirit->value / 80);
+                    if (ePowStrPenalty < 0x14) {
+                        ePowStrPenalty = 0x14;
                     }
-                    if (var_s1_22 > 0x50) {
-                        var_s1_22 = 0x50;
+                    if (ePowStrPenalty > 0x50) {
+                        ePowStrPenalty = 0x50;
                     }
-                    temp_ret_1049 = (int)igProperty_GetRecord(temp_v0_158, "TSUYOSA");
-                    int temp_s0_32 = ((beDataObjInt *)temp_ret_1049)->_data;
+                    int ePowStrength = igProperty_GetRecord(ePowPlayer, "TSUYOSA")->value;
                     beMessenger_ClearInt(self->_messenger);
-                    beMessenger_AppendInt(self->_messenger, (int) (temp_s0_32 * var_s1_22) / 100);
+                    beMessenger_AppendInt(self->_messenger, (int) (ePowStrength * ePowStrPenalty) / 100);
                 } else {
-                    temp_ret_1050 = strcmp(sp43C.p, "MAMORI");
-                    if (temp_ret_1050 == 0) {
-                        temp_ret_1051 = (int)igProperty_GetRecordIntList(temp_v0_158, "DOWNDATA");
-                        temp_ret_1052 = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)temp_ret_1051));
-                        temp_v0_162 = (void *)(temp_ret_1052);
-                        temp_v1_12 = ((igIntList *)temp_v0_162)->_count;
-                        IntListSet((igIntList *)temp_v0_162, 5, 0);
-                        beNDMWGameRam_RecomputeStats(self, temp_v0_156, 1);
-                        temp_ret_1059 = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), temp_s2_4, "KOUKARANK");
-                        temp_ret_1064 = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), temp_v0_157, "KASHIKOSA");
-                        temp_ret_1065 = (int)igProperty_GetRecord(temp_v0_158, "SEISHIN");
-                        temp_v0_163 = (void *)(temp_ret_1065);
-                        var_s1_23 = (temp_ret_1059 + ((int) ((int) (temp_ret_1064 * 0x96) / (int) ((beDataObjInt *)temp_v0_163)->_data) / 100)) - ((int) ((beDataObjInt *)temp_v0_163)->_data / 80);
-                        var_s1_23 = (temp_ret_1059 + ((int) ((int) (temp_ret_1064 * 0x96) / (int) ((beDataObjInt *)temp_v0_163)->_data) / 100)) - ((int) ((beDataObjInt *)temp_v0_163)->_data / 80);
-                        if (var_s1_23 < 0x14) {
-                            var_s1_23 = 0x14;
+                    if (strcmp(mode.p, "MAMORI") == 0) {
+                        ePowDefList = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)igProperty_GetRecordIntList(ePowPlayer, "DOWNDATA")));
+                        ePowDefCount = ((igIntList *)ePowDefList)->_count;
+                        IntListSet((igIntList *)ePowDefList, 5, 0);
+                        beNDMWGameRam_RecomputeStats(self, ePowPlayerIndex, 1);
+                        ePowDefRank = beDataBase_GetRecordInt(MessageDatabases::Eneatk(self, "eneatk"), ePowAttackNo, "KOUKARANK");
+                        ePowDefEnemyIntelligence = beDataBase_GetRecordInt(MessageDatabases::Enemy(self, "enemy"), ePowEnemyRecNo, "KASHIKOSA");
+                        ePowDefSpirit = igProperty_GetRecord(ePowPlayer, "SEISHIN");
+                        ePowDefPenalty = (ePowDefRank + ((int) ((int) (ePowDefEnemyIntelligence * 0x96) / (int) ePowDefSpirit->value) / 100)) - ((int) ePowDefSpirit->value / 80);
+                        if (ePowDefPenalty < 0x14) {
+                            ePowDefPenalty = 0x14;
                         }
-                        if (var_s1_23 > 0x50) {
-                            var_s1_23 = 0x50;
+                        if (ePowDefPenalty > 0x50) {
+                            ePowDefPenalty = 0x50;
                         }
-                        temp_ret_1066 = (int)igProperty_GetRecord(temp_v0_158, "MAMORI");
-                        int temp_s0_33 = ((beDataObjInt *)temp_ret_1066)->_data;
+                        int ePowDefense = igProperty_GetRecord(ePowPlayer, "MAMORI")->value;
                         beMessenger_ClearInt(self->_messenger);
-                        beMessenger_AppendInt(self->_messenger, (int) (temp_s0_33 * var_s1_23) / 100);
+                        beMessenger_AppendInt(self->_messenger, (int) (ePowDefense * ePowDefPenalty) / 100);
                     }
                 }
             }
             }
             break; }
-        case 20:
-            temp_ret_1068 = beMessenger_GetInt(self->_messenger, 0);
-            temp_v0_164 = temp_ret_1068;
-            temp_ret_1069 = beMessenger_GetInt(self->_messenger, 1);
-            temp_ret_1070 = beMessenger_GetInt(self->_messenger, 2);
-            temp_ret_1072 = MessageAccess::Player(self, temp_v0_164);
-            temp_v0_165 = (void *)(temp_ret_1072);
-            if (temp_v0_164 == temp_ret_1069) {
-                temp_s5_4 = temp_ret_1070 % 10000;
-                if (temp_s5_4 == 40 || temp_s5_4 == 45) {
-                    int sp438;
-                    beNDMWGameRam_FindTechniqueRow(self, temp_v0_165, temp_s5_4, &sp438);
-                    temp_ret_1077 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp438, "SKILL");
-                    temp_v0_166 = temp_ret_1077;
-                    if (temp_v0_166 != 8) {
-                        if (temp_v0_166 != 7) {
-                            temp_ret_1078 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
-                            temp_ret_1079 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1078)->_data));
-                            temp_ret_1080 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_1079);
-                            var_s3_5 = *(int *)(temp_ret_1080 + (temp_v0_166 * 4));
+        case FIGHTCOM_P2PKOUKAMAGIC:
+            casterIndex = beMessenger_GetInt(self->_messenger, 0);
+            targetIndex = beMessenger_GetInt(self->_messenger, 1);
+            attackId = beMessenger_GetInt(self->_messenger, 2);
+            magicPlayer = (void *)MessageAccess::Player(self, casterIndex);
+            if (casterIndex == targetIndex) {
+                techniqueNo = attackId % 10000;
+                if (techniqueNo == 40 || techniqueNo == 45) {
+                    int techniqueRow;
+                    beNDMWGameRam_FindTechniqueRow(self, magicPlayer, techniqueNo, &techniqueRow);
+                    healSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                    if (healSkillNo != 8) {
+                        if (healSkillNo != 7) {
+                            healListDefault = (int)igProperty_GetRecordIntList(magicPlayer, "SKILL");
+                            healValuesDefault = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)healListDefault)->_data));
+                            healDataDefault = beNDMWLoadIntf2_igIntList_GetData(healValuesDefault);
+                            healSkill = *(int *)(healDataDefault + (healSkillNo * 4));
                         } else {
-                            temp_ret_1081 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
-                            temp_ret_1082 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1081)->_data));
-                            temp_ret_1083 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_1082);
-                            var_s3_5 = ((int *)temp_ret_1083)[7];
+                            healList7 = (int)igProperty_GetRecordIntList(magicPlayer, "SKILL");
+                            healValues7 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)healList7)->_data));
+                            healData7 = beNDMWLoadIntf2_igIntList_GetData(healValues7);
+                            healSkill = ((int *)healData7)[7];
                         }
                     } else {
-                        temp_ret_1084 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
-                        temp_ret_1085 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1084)->_data));
-                        temp_ret_1086 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_1085);
-                        var_s3_5 = ((int *)temp_ret_1086)[8];
+                        healList8 = (int)igProperty_GetRecordIntList(magicPlayer, "SKILL");
+                        healValues8 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)healList8)->_data));
+                        healData8 = beNDMWLoadIntf2_igIntList_GetData(healValues8);
+                        healSkill = ((int *)healData8)[8];
                     }
-                    temp_ret_1091 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp438, "HP");
-                    temp_ret_1092 = (int)igProperty_GetRecord(temp_v0_165, "KASHIKOSA");
-                    int pre_sum = temp_ret_1091 + var_s3_5;
-                    temp_s2_5 = pre_sum + ((beDataObjInt *)temp_ret_1092)->_data;
-                    temp_ret_1093 = beNDMWGameRam_ChangeHp(self, temp_v0_164, temp_s2_5, -1);
-                    if (temp_s5_4 == 0x2D) {
-                        temp_ret_1094 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
-                        temp_ret_1095 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1094)->_data);
-                        beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1095, temp_v0_164, GETMATRIX);
-                        beMessenger_GetMatrix(&sp270, self->_messenger, 0);
-                        igMatrix44f_GetTranslation(&sp270, &sp3D8);
-                        { NearbyListRef sp434 = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", temp_v0_164, &sp3D8);
-                        temp_s3_14 = ((igIntList *)sp434.value)->_count;
-                        for (var_s1_24 = 0; var_s1_24 < temp_s3_14; ++var_s1_24) {
-                                temp_ret_1096 = beNDMWLoadIntf2_igIntList_GetData(sp434.value);
-                                temp_s5_5 = ((int *)temp_ret_1096)[var_s1_24];
-                                temp_ret_1097 = beNDMWGameRam_ChangeHp(self, temp_s5_5, temp_s2_5, -1);
-                                temp_ret_1099 = MessageAccess::Player(self, temp_s5_5);
-                                temp_ret_1100 = (int)igProperty_GetRecordString((void *)temp_ret_1099, "DIGIMONNAME");
-                                temp_ret_1101 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1100)->_data);
-                                temp_ret_1102 = beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", temp_ret_1101, temp_s5_5);
+                    healBaseHp = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "HP");
+                    int pre_sum = healBaseHp + healSkill;
+                    healAmount = pre_sum + igProperty_GetRecord(magicPlayer, "KASHIKOSA")->value;
+                    beNDMWGameRam_ChangeHp(self, casterIndex, healAmount, -1);
+                    if (techniqueNo == 0x2D) {
+                        beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(magicPlayer, "DIGIMONNAME"))->_data), casterIndex, GETMATRIX);
+                        beMessenger_GetMatrix(&healMatrix, self->_messenger, 0);
+                        igMatrix44f_GetTranslation(&healMatrix, &healCenter);
+                        { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &healCenter);
+                        healCount = ((igIntList *)nearby.value)->_count;
+                        for (healLoop = 0; healLoop < healCount; ++healLoop) {
+                                healListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);
+                                healTarget = ((int *)healListData)[healLoop];
+                                beNDMWGameRam_ChangeHp(self, healTarget, healAmount, -1);
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString((void *)MessageAccess::Player(self, healTarget), "DIGIMONNAME"))->_data), healTarget);
                                 beMessenger_AppendString(self->_messenger, "x_250healhit00");
                                 beMessenger_AppendString(self->_messenger, "SQ_HEALEFONLY");
                                 beMessenger_AppendFloat(self->_messenger, 1.0f);
-                                Vec3f_Copy(&sp338, &g_vec3Zero[0]);
-                                beMessenger_AppendVec3(self->_messenger, &sp338);
+                                Vec3f_Copy(&healEffectOffset, &g_vec3Zero[0]);
+                                beMessenger_AppendVec3(self->_messenger, &healEffectOffset);
                                 beMessenger_AppendBool(self->_messenger, 0U);
                                 beMessenger_AppendBool(self->_messenger, 1U);
-                                temp_ret_1103 = beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
                         }
                         }
                     }
-                } else if (temp_s5_4 == 55 || temp_s5_4 == 60) {
-                    int sp430;
-                    beNDMWGameRam_FindTechniqueRow(self, temp_v0_165, temp_s5_4, &sp430);
-                    temp_ret_1108 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp430, "SKILL");
-                    temp_v0_167 = temp_ret_1108;
-                    switch (temp_v0_167) { default: temp_ret_1109 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
- temp_ret_1110 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1109)->_data));
- temp_ret_1111 = (int)beNDMWLoadIntf2_igIntList_GetData(temp_ret_1110); break; case 7: temp_ret_1112 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
- temp_ret_1113 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1112)->_data));
- temp_ret_1114 = (int)beNDMWLoadIntf2_igIntList_GetData(temp_ret_1113); break; case 8: temp_ret_1115 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
- temp_ret_1116 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1115)->_data));
- temp_ret_1117 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_1116); break; }
-temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
-                    temp_ret_1119 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1118)->_data);
-                    beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1119, temp_v0_164, "GETPEBASEWORK");
-                    temp_ret_1120 = (void *)(beMessenger_GetObject(self->_messenger, 0));
-                    temp_ret_1121 = (void *)(beMessenger_GetObject(self->_messenger, 1));
-                    temp_v0_168 = (void *)(temp_ret_1121);
-                    temp_ret_1122 = beNDMWMdlPEBaseInfoWork_IsPoisoned(temp_v0_168);
-                    if (temp_ret_1122 != 0) {
-                        temp_s6_3 = ((sp430 - temp_s5_4) + 5) - ((beNDMWMdlPEBaseInfoWork *)temp_v0_168)->_poisonEndurance;
-                        temp_v0_170 = MessageAccess::Random(self)->genrand() % 10U;
-                        if (temp_s6_3 >= (int) temp_v0_170) {
-                            temp_ret_1124 = beNDMWMdlPEBaseInfoWork_CurePoison(temp_v0_168, temp_ret_1120);
+                } else if (techniqueNo == 55 || techniqueNo == 60) {
+                    int techniqueRow;
+                    beNDMWGameRam_FindTechniqueRow(self, magicPlayer, techniqueNo, &techniqueRow);
+                    cureSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                    switch (cureSkillNo) { default: beNDMWLoadIntf2_igIntList_GetData((void *)beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)igProperty_GetRecordIntList(magicPlayer, "SKILL"))->_data)); break; case 7: beNDMWLoadIntf2_igIntList_GetData((void *)beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)igProperty_GetRecordIntList(magicPlayer, "SKILL"))->_data)); break; case 8: beNDMWLoadIntf2_igIntList_GetData((void *)beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)igProperty_GetRecordIntList(magicPlayer, "SKILL"))->_data)); break; }
+                    beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(magicPlayer, "DIGIMONNAME"))->_data), casterIndex, "GETPEBASEWORK");
+                    cureOwner = (void *)(beMessenger_GetObject(self->_messenger, 0));
+                    cureWork = (void *)(beMessenger_GetObject(self->_messenger, 1));
+                    if (beNDMWMdlPEBaseInfoWork_IsPoisoned(cureWork) != 0) {
+                        cureChance = ((techniqueRow - techniqueNo) + 5) - ((beNDMWMdlPEBaseInfoWork *)cureWork)->_poisonEndurance;
+                        cureRoll = MessageAccess::Random(self)->genrand() % 10U;
+                        if (cureChance >= (int) cureRoll) {
+                            beNDMWMdlPEBaseInfoWork_CurePoison(cureWork, cureOwner);
                         }
                     }
-                    if (temp_s5_4 == 0x3C) {
-                        temp_ret_1125 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
-                        temp_ret_1126 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1125)->_data);
-                        beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1126, temp_v0_164, GETMATRIX);
-                        beMessenger_GetMatrix(&sp230, self->_messenger, 0);
-                        igMatrix44f_GetTranslation(&sp230, &sp3C8);
-                        { NearbyListRef sp42C = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", temp_v0_164, &sp3C8);
-                        temp_v0_171 = ((igIntList *)sp42C.value)->_count;
-                        int sp100 = temp_v0_171;
-                        for (var_s3_6 = 0; var_s3_6 < sp100; ++var_s3_6) {
-                                temp_ret_1127 = beNDMWLoadIntf2_igIntList_GetData(sp42C.value);
-                                temp_s2_6 = ((int *)temp_ret_1127)[var_s3_6];
-                                temp_ret_1129 = MessageAccess::Player(self, temp_s2_6);
-                                temp_v0_172 = (void *)(temp_ret_1129);
-                                temp_ret_1130 = (int)igProperty_GetRecordString(temp_v0_172, "DIGIMONNAME");
-                                temp_ret_1131 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1130)->_data);
-                                beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1131, temp_s2_6, "GETPEBASEWORK");
-                                temp_ret_1132 = (void *)(beMessenger_GetObject(self->_messenger, 0));
-                                temp_ret_1133 = (void *)(beMessenger_GetObject(self->_messenger, 1));
-                                temp_v0_173 = (void *)(temp_ret_1133);
-                                temp_ret_1134 = beNDMWMdlPEBaseInfoWork_IsPoisoned(temp_v0_173);
-                                if (temp_ret_1134 != 0) {
-                                    temp_s8_2 = ((sp430 - temp_s5_4) + 5) - ((beNDMWMdlPEBaseInfoWork *)temp_v0_173)->_poisonEndurance;
-                                    temp_v0_175 = MessageAccess::Random(self)->genrand() % 10U;
-                                    if (temp_s8_2 >= (int) temp_v0_175) {
-                                        temp_ret_1136 = beNDMWMdlPEBaseInfoWork_CurePoison(temp_v0_173, temp_ret_1132);
+                    if (techniqueNo == 0x3C) {
+                        beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(magicPlayer, "DIGIMONNAME"))->_data), casterIndex, GETMATRIX);
+                        beMessenger_GetMatrix(&cureMatrix, self->_messenger, 0);
+                        igMatrix44f_GetTranslation(&cureMatrix, &cureCenter);
+                        { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &cureCenter);
+                        cureCount = ((igIntList *)nearby.value)->_count;
+                        int cureCountCopy = cureCount;
+                        for (cureLoop = 0; cureLoop < cureCountCopy; ++cureLoop) {
+                                cureListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);
+                                cureTarget = ((int *)cureListData)[cureLoop];
+                                cureLoopPlayer = (void *)MessageAccess::Player(self, cureTarget);
+                                beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(cureLoopPlayer, "DIGIMONNAME"))->_data), cureTarget, "GETPEBASEWORK");
+                                cureLoopOwner = (void *)(beMessenger_GetObject(self->_messenger, 0));
+                                cureLoopWork = (void *)(beMessenger_GetObject(self->_messenger, 1));
+                                if (beNDMWMdlPEBaseInfoWork_IsPoisoned(cureLoopWork) != 0) {
+                                    cureLoopChance = ((techniqueRow - techniqueNo) + 5) - ((beNDMWMdlPEBaseInfoWork *)cureLoopWork)->_poisonEndurance;
+                                    cureLoopRoll = MessageAccess::Random(self)->genrand() % 10U;
+                                    if (cureLoopChance >= (int) cureLoopRoll) {
+                                        beNDMWMdlPEBaseInfoWork_CurePoison(cureLoopWork, cureLoopOwner);
                                     }
                                 }
-                                temp_ret_1137 = (int)igProperty_GetRecordString(temp_v0_172, "DIGIMONNAME");
-                                temp_ret_1138 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1137)->_data);
-                                temp_ret_1139 = beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", temp_ret_1138, temp_s2_6);
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(cureLoopPlayer, "DIGIMONNAME"))->_data), cureTarget);
                                 beMessenger_AppendString(self->_messenger, "x_250curehit00");
                                 beMessenger_AppendString(self->_messenger, "SQ_CUREEFONLY");
                                 beMessenger_AppendFloat(self->_messenger, 1.0f);
-                                Vec3f_Copy(&sp328, &g_vec3Zero[0]);
-                                beMessenger_AppendVec3(self->_messenger, &sp328);
+                                Vec3f_Copy(&cureEffectOffset, &g_vec3Zero[0]);
+                                beMessenger_AppendVec3(self->_messenger, &cureEffectOffset);
                                 beMessenger_AppendBool(self->_messenger, 0U);
                                 beMessenger_AppendBool(self->_messenger, 1U);
-                                temp_ret_1140 = beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
                         }
                         }
                     }
-                } else if (temp_s5_4 == 50 || temp_s5_4 == -50) {
-                    if (temp_s5_4 >= 0) {
-                        int sp428;
-                        beNDMWGameRam_FindTechniqueRow(self, temp_v0_165, temp_s5_4, &sp428);
-                        temp_a0_10 = sp428 * 4;
-                        var_s3_7 = ((const int *)((const char *)g_skillGainTable + 424))[sp428];
-                        var_s2_12 = ((const int *)((const char *)g_skillGainTable + 456))[sp428];
+                } else if (techniqueNo == 50 || techniqueNo == -50) {
+                    if (techniqueNo >= 0) {
+                        int techniqueRow;
+                        beNDMWGameRam_FindTechniqueRow(self, magicPlayer, techniqueNo, &techniqueRow);
+                        raiseFirst = ((const int *)((const char *)g_skillGainTable + RAISE_FIRST_OFFSET))[techniqueRow];
+                        raiseSecondValue = ((const int *)((const char *)g_skillGainTable + RAISE_SECOND_OFFSET))[techniqueRow];
                     } else {
-                        var_s3_7 = g_raiseFirstValue[0];
-                        var_s2_12 = g_raiseSecondValue[0];
+                        raiseFirst = g_raiseFirstValue[0];
+                        raiseSecondValue = g_raiseSecondValue[0];
                     }
-                    igMatrix44f_SetIdentity(&sp2B0);
-                    temp_ret_1141 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
-                    temp_ret_1142 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1141)->_data);
-                    beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1142, temp_v0_164, GETMATRIX);
-                    beMessenger_GetMatrix(&sp1F0, self->_messenger, 0);
-                    igMatrix44f_Copy(&sp2B0, &sp1F0);
-                    igMatrix44f_GetTranslation(&sp2B0, &sp3B8);
-                    { NearbyListRef sp424 = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER2", -1, &sp3B8);
-                    temp_s5_6 = ((igIntList *)sp424.value)->_count;
-                    for (var_s1_25 = 0; var_s1_25 < temp_s5_6; ++var_s1_25) {
-                            temp_ret_1143 = beNDMWLoadIntf2_igIntList_GetData(sp424.value);
-                            beMessenger_SelectReceivers(self->_messenger, "PLAYER2", 0, ((int *)temp_ret_1143)[var_s1_25]);
-                            beMessenger_AppendMatrix(self->_messenger, &sp2B0);
-                            beMessenger_AppendInt(self->_messenger, var_s3_7);
-                            beMessenger_AppendInt(self->_messenger, var_s2_12);
+                    igMatrix44f_SetIdentity(&raiseMatrix);
+                    beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(magicPlayer, "DIGIMONNAME"))->_data), casterIndex, GETMATRIX);
+                    beMessenger_GetMatrix(&raiseSourceMatrix, self->_messenger, 0);
+                    igMatrix44f_Copy(&raiseMatrix, &raiseSourceMatrix);
+                    igMatrix44f_GetTranslation(&raiseMatrix, &raiseCenter);
+                    { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER2", -1, &raiseCenter);
+                    raiseCount = ((igIntList *)nearby.value)->_count;
+                    for (raiseLoop = 0; raiseLoop < raiseCount; ++raiseLoop) {
+                            raiseListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);
+                            beMessenger_SelectReceivers(self->_messenger, "PLAYER2", 0, ((int *)raiseListData)[raiseLoop]);
+                            beMessenger_AppendMatrix(self->_messenger, &raiseMatrix);
+                            beMessenger_AppendInt(self->_messenger, raiseFirst);
+                            beMessenger_AppendInt(self->_messenger, raiseSecondValue);
                             beMessenger_DispatchSelected(self->_messenger, (const char *)"RAISE");
                     }
                     }
-                } else if (temp_s5_4 == 65) {
-                    int sp420;
-                    beNDMWGameRam_FindTechniqueRow(self, temp_v0_165, temp_s5_4, &sp420);
-                    temp_ret_1149 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp420, "SKILL");
-                    temp_ret_1150 = (int)igProperty_GetRecord(temp_v0_165, "KASHIKOSA");
-                    temp_s2_7 = ((beDataObjInt *)temp_ret_1150)->_data;
-                    temp_ret_1155 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp420, "TIME");
-                    int spF0 = temp_ret_1155 + temp_s2_7;
-                    temp_ret_1156 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
-                    temp_ret_1157 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1156)->_data));
-                    temp_ret_1158 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_1157);
-                    temp_s2_8 = *(int *)(temp_ret_1158 + (temp_ret_1149 * 4));
-                    temp_ret_1163 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp420, "SUBAYASA");
-                    int spE0 = ((int) temp_s2_8 / 5) + temp_ret_1163;
-                    temp_ret_1164 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
-                    temp_ret_1165 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1164)->_data);
-                    beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1165, temp_v0_164, GETMATRIX);
-                    beMessenger_GetMatrix(&sp1B0, self->_messenger, 0);
-                    igMatrix44f_GetTranslation(&sp1B0, &sp3A8);
-                    { NearbyListRef sp41C = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", temp_v0_164, &sp3A8);
-                    temp_ret_1166 = (void *)(ObjectRef_Get_00406dc0((int *)&sp41C.value));
-                    temp_v0_176 = (void *)(temp_ret_1166);
-                    RecoveryList::append(temp_v0_176, temp_v0_164);
-                    temp_v0_177 = ((igIntList *)sp41C.value)->_count;
-                    int spD0 = temp_v0_177;
-                    for (var_s5_8 = 0; var_s5_8 < spD0; ++var_s5_8) {
-                            temp_ret_1168 = beNDMWLoadIntf2_igIntList_GetData(sp41C.value);
-                            temp_s3_15 = ((int *)temp_ret_1168)[var_s5_8];
-                            temp_ret_1170 = MessageAccess::Player(self, temp_s3_15);
-                            temp_v0_178 = (void *)(temp_ret_1170);
-                            temp_ret_1175 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp420, "CHIMEIRITSU");
-                            temp_ret_1180 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp420, "MHIRITSU");
-                            temp_ret_1185 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp420, "KAIHIRITSU");
+                } else if (techniqueNo == 65) {
+                    int techniqueRow;
+                    beNDMWGameRam_FindTechniqueRow(self, magicPlayer, techniqueNo, &techniqueRow);
+                    speedSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                    speedIntelligence = igProperty_GetRecord(magicPlayer, "KASHIKOSA")->value;
+                    speedTimeBase = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TIME");
+                    int speedDuration = speedTimeBase + speedIntelligence;
+                    speedSkillList = (int)igProperty_GetRecordIntList(magicPlayer, "SKILL");
+                    speedSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)speedSkillList)->_data));
+                    speedSkillData = beNDMWLoadIntf2_igIntList_GetData(speedSkillValues);
+                    speedSkill = *(int *)(speedSkillData + (speedSkillNo * 4));
+                    speedTechSpeed = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SUBAYASA");
+                    int speedBoost = ((int) speedSkill / 5) + speedTechSpeed;
+                    beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(magicPlayer, "DIGIMONNAME"))->_data), casterIndex, GETMATRIX);
+                    beMessenger_GetMatrix(&speedMatrix, self->_messenger, 0);
+                    igMatrix44f_GetTranslation(&speedMatrix, &speedCenter);
+                    { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &speedCenter);
+                    speedTargetList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Deref((int *)&nearby.value));
+                    RecoveryList::append(speedTargetList, casterIndex);
+                    speedCount = ((igIntList *)nearby.value)->_count;
+                    int speedCountCopy = speedCount;
+                    for (speedLoop = 0; speedLoop < speedCountCopy; ++speedLoop) {
+                            speedListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);
+                            speedTarget = ((int *)speedListData)[speedLoop];
+                            speedTargetPlayer = (void *)MessageAccess::Player(self, speedTarget);
+                            speedCrit = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "CHIMEIRITSU");
+                            speedParalysis = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "MHIRITSU");
+                            speedEvade = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "KAIHIRITSU");
                             beMessenger_PushArgContext(self->_messenger);
-                            temp_ret_1186 = (int)igProperty_GetRecordString(temp_v0_178, "DIGIMONNAME");
-                            temp_ret_1187 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1186)->_data);
-                            beMessenger_SelectReceivers(self->_messenger, "PLAYER", temp_ret_1187, temp_s3_15);
-                            beMessenger_AppendInt(self->_messenger, spF0);
-                            beMessenger_AppendInt(self->_messenger, spE0);
-                            beMessenger_AppendInt(self->_messenger, temp_ret_1175);
-                            beMessenger_AppendInt(self->_messenger, temp_ret_1180);
-                            beMessenger_AppendInt(self->_messenger, temp_ret_1185);
+                            beMessenger_SelectReceivers(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(speedTargetPlayer, "DIGIMONNAME"))->_data), speedTarget);
+                            beMessenger_AppendInt(self->_messenger, speedDuration);
+                            beMessenger_AppendInt(self->_messenger, speedBoost);
+                            beMessenger_AppendInt(self->_messenger, speedCrit);
+                            beMessenger_AppendInt(self->_messenger, speedParalysis);
+                            beMessenger_AppendInt(self->_messenger, speedEvade);
                             beMessenger_DispatchSelected(self->_messenger, (const char *)"SETSPEEDUP");
-                            if (temp_s3_15 != temp_v0_164) {
-                                temp_ret_1189 = (int)igProperty_GetRecordString(temp_v0_178, "DIGIMONNAME");
-                                temp_ret_1190 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1189)->_data);
-                                temp_ret_1191 = beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", temp_ret_1190, temp_s3_15);
+                            if (speedTarget != casterIndex) {
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(speedTargetPlayer, "DIGIMONNAME"))->_data), speedTarget);
                                 beMessenger_AppendString(self->_messenger, "x_250uphit00");
                                 beMessenger_AppendString(self->_messenger, "SQ_UPEFONLY");
                                 beMessenger_AppendFloat(self->_messenger, 1.0f);
-                                Vec3f_Copy(&sp318, &g_vec3Zero[0]);
-                                beMessenger_AppendVec3(self->_messenger, &sp318);
+                                Vec3f_Copy(&speedEffectOffset, &g_vec3Zero[0]);
+                                beMessenger_AppendVec3(self->_messenger, &speedEffectOffset);
                                 beMessenger_AppendBool(self->_messenger, 0U);
                                 beMessenger_AppendBool(self->_messenger, 1U);
-                                temp_ret_1192 = beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
                             }
                             beMessenger_PopArgContext(self->_messenger);
                     }
                     }
-                } else if (temp_s5_4 == 80) {
-                    int sp418;
-                    beNDMWGameRam_FindTechniqueRow(self, temp_v0_165, temp_s5_4, &sp418);
-                    temp_ret_1193 = (int)igProperty_GetRecord(temp_v0_165, "KASHIKOSA");
-                    temp_s2_9 = ((beDataObjInt *)temp_ret_1193)->_data;
-                    temp_ret_1198 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp418, "TIME");
-                    int sum80a = temp_ret_1198 + temp_s2_9;
-                    temp_ret_1203 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp418, "SKILL");
-                    temp_ret_1204 = (int)igProperty_GetRecordIntList(temp_v0_165, "SKILL");
-                    temp_ret_1205 = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)temp_ret_1204)->_data));
-                    temp_ret_1206 = beNDMWLoadIntf2_igIntList_GetData(temp_ret_1205);
-                    temp_s2_10 = *(int *)(temp_ret_1206 + (temp_ret_1203 * 4));
-                    temp_ret_1210 = MessageDatabases::PcTech(self);
-                    temp_s2_11 = (int)((int) temp_s2_10 / 5);
-                    temp_ret_1211 = beDataBase_GetRecordInt(temp_ret_1210, sp418, "MAXHP");
-                    int sum80d = temp_s2_11 + temp_ret_1211;
-                    temp_ret_1216 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp418, "TSUYOSA");
-                    int spC0 = temp_s2_11 + temp_ret_1216;
-                    temp_ret_1221 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp418, "MAMORI");
-                    int spB0 = temp_s2_11 + temp_ret_1221;
-                    temp_ret_1222 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
-                    temp_ret_1223 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1222)->_data);
-                    beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1223, temp_v0_164, GETMATRIX);
-                    beMessenger_GetMatrix(&sp170, self->_messenger, 0);
-                    igMatrix44f_GetTranslation(&sp170, &sp398);
-                    { NearbyListRef sp414 = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", temp_v0_164, &sp398);
-                    temp_ret_1224 = (void *)(ObjectRef_Get_00406dc0((int *)&sp414.value));
-                    temp_v0_179 = (void *)(temp_ret_1224);
-                    RecoveryList::append(temp_v0_179, temp_v0_164);
-                    temp_s6_4 = ((igIntList *)sp414.value)->_count;
-                    for (var_s5_9 = 0; var_s5_9 < temp_s6_4; ++var_s5_9) {
-                            temp_ret_1226 = beNDMWLoadIntf2_igIntList_GetData(sp414.value);
-                            temp_s3_16 = ((int *)temp_ret_1226)[var_s5_9];
-                            temp_ret_1228 = MessageAccess::Player(self, temp_s3_16);
-                            temp_v0_180 = (void *)(temp_ret_1228);
+                } else if (techniqueNo == 80) {
+                    int techniqueRow;
+                    beNDMWGameRam_FindTechniqueRow(self, magicPlayer, techniqueNo, &techniqueRow);
+                    powerIntelligence = igProperty_GetRecord(magicPlayer, "KASHIKOSA")->value;
+                    powerTimeBase = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TIME");
+                    int powerDuration = powerTimeBase + powerIntelligence;
+                    powerSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
+                    powerSkillList = (int)igProperty_GetRecordIntList(magicPlayer, "SKILL");
+                    powerSkillValues = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Get(&((beDataObjIntList *)powerSkillList)->_data));
+                    powerSkillData = beNDMWLoadIntf2_igIntList_GetData(powerSkillValues);
+                    powerSkill = *(int *)(powerSkillData + (powerSkillNo * 4));
+                    powerTechTable = MessageDatabases::PcTech(self);
+                    powerSkillBonus = (int)((int) powerSkill / 5);
+                    powerMaxHp = beDataBase_GetRecordInt(powerTechTable, techniqueRow, "MAXHP");
+                    int powerMaxHpBonus = powerSkillBonus + powerMaxHp;
+                    powerStrength = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TSUYOSA");
+                    int powerStrengthBonus = powerSkillBonus + powerStrength;
+                    powerDefense = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "MAMORI");
+                    int powerDefenseBonus = powerSkillBonus + powerDefense;
+                    beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(magicPlayer, "DIGIMONNAME"))->_data), casterIndex, GETMATRIX);
+                    beMessenger_GetMatrix(&powerMatrix, self->_messenger, 0);
+                    igMatrix44f_GetTranslation(&powerMatrix, &powerCenter);
+                    { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &powerCenter);
+                    powerTargetList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Deref((int *)&nearby.value));
+                    RecoveryList::append(powerTargetList, casterIndex);
+                    powerCount = ((igIntList *)nearby.value)->_count;
+                    for (powerLoop = 0; powerLoop < powerCount; ++powerLoop) {
+                            powerListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);
+                            powerTarget = ((int *)powerListData)[powerLoop];
+                            powerTargetPlayer = (void *)MessageAccess::Player(self, powerTarget);
                             beMessenger_PushArgContext(self->_messenger);
-                            temp_ret_1229 = (int)igProperty_GetRecordString(temp_v0_180, "DIGIMONNAME");
-                            temp_ret_1230 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1229)->_data);
-                            beMessenger_SelectReceivers(self->_messenger, "PLAYER", temp_ret_1230, temp_s3_16);
-                            beMessenger_AppendInt(self->_messenger, sum80a);
-                            beMessenger_AppendInt(self->_messenger, spC0);
-                            beMessenger_AppendInt(self->_messenger, spB0);
-                            beMessenger_AppendInt(self->_messenger, sum80d);
+                            beMessenger_SelectReceivers(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(powerTargetPlayer, "DIGIMONNAME"))->_data), powerTarget);
+                            beMessenger_AppendInt(self->_messenger, powerDuration);
+                            beMessenger_AppendInt(self->_messenger, powerStrengthBonus);
+                            beMessenger_AppendInt(self->_messenger, powerDefenseBonus);
+                            beMessenger_AppendInt(self->_messenger, powerMaxHpBonus);
                             beMessenger_DispatchSelected(self->_messenger, (const char *)"SETPOWERUP");
-                            if (temp_s3_16 != temp_v0_164) {
-                                temp_ret_1232 = (int)igProperty_GetRecordString(temp_v0_180, "DIGIMONNAME");
-                                temp_ret_1233 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1232)->_data);
-                                temp_ret_1234 = beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", temp_ret_1233, temp_s3_16);
+                            if (powerTarget != casterIndex) {
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(powerTargetPlayer, "DIGIMONNAME"))->_data), powerTarget);
                                 beMessenger_AppendString(self->_messenger, "x_250uphit00");
                                 beMessenger_AppendString(self->_messenger, "SQ_UPEFONLY");
                                 beMessenger_AppendFloat(self->_messenger, 1.0f);
-                                Vec3f_Copy(&sp308, &g_vec3Zero[0]);
-                                beMessenger_AppendVec3(self->_messenger, &sp308);
+                                Vec3f_Copy(&powerEffectOffset, &g_vec3Zero[0]);
+                                beMessenger_AppendVec3(self->_messenger, &powerEffectOffset);
                                 beMessenger_AppendBool(self->_messenger, 0U);
                                 beMessenger_AppendBool(self->_messenger, 1U);
-                                temp_ret_1235 = beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
                             }
                             beMessenger_PopArgContext(self->_messenger);
                     }
                     }
-                } else if (temp_s5_4 == 75) {
-                    int sp410;
-                    beNDMWGameRam_FindTechniqueRow(self, temp_v0_165, temp_s5_4, &sp410);
-                    temp_ret_1240 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp410, "TIME");
-                    temp_ret_1245 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp410, "FIRE");
-                    int spAC = temp_ret_1245;
-                    temp_ret_1250 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp410, "ICE");
-                    int spA8 = temp_ret_1250;
-                    temp_ret_1255 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp410, "THUNDER");
-                    int spA4 = temp_ret_1255;
-                    temp_ret_1260 = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), sp410, "DARK");
-                    temp_ret_1261 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
-                    temp_ret_1262 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1261)->_data);
-                    beMessenger_SendNamed(self->_messenger, "PLAYER", temp_ret_1262, temp_v0_164, GETMATRIX);
-                    beMessenger_GetMatrix(&sp130, self->_messenger, 0);
-                    igMatrix44f_GetTranslation(&sp130, &sp388);
-                    { NearbyListRef sp40C = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", temp_v0_164, &sp388);
-                    temp_ret_1263 = (void *)(ObjectRef_Get_00406dc0((int *)&sp40C.value));
-                    temp_v0_181 = (void *)(temp_ret_1263);
-                    RecoveryList::append(temp_v0_181, temp_v0_164);
-                    temp_s6_5 = ((igIntList *)sp40C.value)->_count;
-                    for (var_s5_10 = 0; var_s5_10 < temp_s6_5; ++var_s5_10) {
-                            temp_ret_1265 = beNDMWLoadIntf2_igIntList_GetData(sp40C.value);
-                            temp_s3_17 = ((int *)temp_ret_1265)[var_s5_10];
-                            temp_ret_1267 = MessageAccess::Player(self, temp_s3_17);
-                            temp_v0_182 = (void *)(temp_ret_1267);
+                } else if (techniqueNo == 75) {
+                    int techniqueRow;
+                    beNDMWGameRam_FindTechniqueRow(self, magicPlayer, techniqueNo, &techniqueRow);
+                    refractTime = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "TIME");
+                    int refractFire = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "FIRE");
+                    int refractIce = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "ICE");
+                    int refractThunder = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "THUNDER");
+                    refractDark = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "DARK");
+                    beMessenger_SendNamed(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(magicPlayer, "DIGIMONNAME"))->_data), casterIndex, GETMATRIX);
+                    beMessenger_GetMatrix(&refractMatrix, self->_messenger, 0);
+                    igMatrix44f_GetTranslation(&refractMatrix, &refractCenter);
+                    { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &refractCenter);
+                    refractTargetList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Deref((int *)&nearby.value));
+                    RecoveryList::append(refractTargetList, casterIndex);
+                    refractCount = ((igIntList *)nearby.value)->_count;
+                    for (refractLoop = 0; refractLoop < refractCount; ++refractLoop) {
+                            refractListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);
+                            refractTarget = ((int *)refractListData)[refractLoop];
+                            refractTargetPlayer = (void *)MessageAccess::Player(self, refractTarget);
                             beMessenger_PushArgContext(self->_messenger);
-                            temp_ret_1268 = (int)igProperty_GetRecordString(temp_v0_182, "DIGIMONNAME");
-                            temp_ret_1269 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1268)->_data);
-                            beMessenger_SelectReceivers(self->_messenger, "PLAYER", temp_ret_1269, temp_s3_17);
-                            beMessenger_AppendInt(self->_messenger, temp_ret_1240);
-                            beMessenger_AppendInt(self->_messenger, spAC);
-                            beMessenger_AppendInt(self->_messenger, spA8);
-                            beMessenger_AppendInt(self->_messenger, spA4);
-                            beMessenger_AppendInt(self->_messenger, temp_ret_1260);
+                            beMessenger_SelectReceivers(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(refractTargetPlayer, "DIGIMONNAME"))->_data), refractTarget);
+                            beMessenger_AppendInt(self->_messenger, refractTime);
+                            beMessenger_AppendInt(self->_messenger, refractFire);
+                            beMessenger_AppendInt(self->_messenger, refractIce);
+                            beMessenger_AppendInt(self->_messenger, refractThunder);
+                            beMessenger_AppendInt(self->_messenger, refractDark);
                             beMessenger_DispatchSelected(self->_messenger, (const char *)"SETREFRACT");
-                            if (temp_s3_17 != temp_v0_164) {
-                                temp_ret_1271 = (int)igProperty_GetRecordString(temp_v0_182, "DIGIMONNAME");
-                                temp_ret_1272 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1271)->_data);
-                                temp_ret_1273 = beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", temp_ret_1272, temp_s3_17);
+                            if (refractTarget != casterIndex) {
+                                beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString(refractTargetPlayer, "DIGIMONNAME"))->_data), refractTarget);
                                 beMessenger_AppendString(self->_messenger, "x_250uphit00");
                                 beMessenger_AppendString(self->_messenger, "SQ_UPEFONLY");
                                 beMessenger_AppendFloat(self->_messenger, 1.0f);
-                                Vec3f_Copy(&sp2F8, &g_vec3Zero[0]);
-                                beMessenger_AppendVec3(self->_messenger, &sp2F8);
+                                Vec3f_Copy(&refractEffectOffset, &g_vec3Zero[0]);
+                                beMessenger_AppendVec3(self->_messenger, &refractEffectOffset);
                                 beMessenger_AppendBool(self->_messenger, 0U);
                                 beMessenger_AppendBool(self->_messenger, 1U);
-                                temp_ret_1274 = beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
+                                beMessenger_EnqueueSelected(self->_messenger, "SETEFFECT", 1);
                             }
                             beMessenger_PopArgContext(self->_messenger);
                     }
@@ -5780,58 +4968,55 @@ temp_ret_1118 = (int)igProperty_GetRecordString(temp_v0_165, "DIGIMONNAME");
         }
         return 1;
     }
-    case 20:
+    case GAMERAM_BKCHIPBITEXP:
         /* Block-local webs are declared in the order player, common, idx; their register ids fix
          * the allocator push order. */
-        int tail_idx;
-        int temp_s3_18;
-        int temp_s0_34;
-        void *tail_common;
-        void *tail_player;
-        int temp_s0_35;
-        tail_idx = beMessenger_GetInt(self->_messenger, 0);
-                tail_common = (void *)(beNDMWGameRam_igSmartPointer_beDataObjList_Get(&self->_commonDataList));
-                temp_ret_1278 = (void *)(beNDMWGameRam_igSmartPointer_beDataObjListList_Get(&self->_playerDataListList));
-        tail_player = (void *)beNDMWLoadIntf2_igObjectList_Get(temp_ret_1278, tail_idx);
-                temp_ret_1280 = (int)igProperty_GetRecordString(tail_player, "DIGIMONNAME");
-        temp_ret_1281 = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)temp_ret_1280)->_data);
-        temp_v0_186 = temp_ret_1281;
-        StringListStore::SetAt((igStringRefList *)beNDMWGameRam_beDataObjStringList_GetData((int *)(igProperty_GetRecordStringList(tail_common, "BKCHIPNAME"))), tail_idx, StringRef(temp_v0_186 == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), temp_v0_186)));
-        temp_s0_34 = tail_idx * 2;
-        temp_ret_1289 = (int)igProperty_GetRecord(tail_player, "BIT");
-        temp_s3_18 = ((beDataObjInt *)temp_ret_1289)->_data;
-        temp_ret_1290 = (int)igProperty_GetRecordIntList(tail_common, "BKCHIPDATA");
-        temp_ret_1291 = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)temp_ret_1290));
-        temp_v0_188 = (void *)(temp_ret_1291);
-        temp_v1_14 = ((igIntList *)temp_v0_188)->_count;
-        if ((temp_v1_14 != 0) && (temp_s0_34 >= 0) && (temp_s0_34 < temp_v1_14)) {
-            temp_ret_1292 = beNDMWLoadIntf2_igIntList_GetData(temp_v0_188);
-            *(int *)(temp_ret_1292 + (temp_s0_34 * 4)) = temp_s3_18;
+        int chipIndex;
+        int savedBit;
+        int bitSlot;
+        void *bkCommon;
+        void *bkPlayer;
+        int bkLevel;
+        chipIndex = beMessenger_GetInt(self->_messenger, 0);
+                bkCommon = (void *)(beNDMWGameRam_igSmartPointer_beDataObjList_Get(&self->_commonDataList));
+                playerList = (void *)(beNDMWGameRam_igSmartPointer_beDataObjListList_Get(&self->_playerDataListList));
+        bkPlayer = (void *)beNDMWLoadIntf2_igObjectList_Get(playerList, chipIndex);
+                digimonNameProp = igProperty_GetRecordString(bkPlayer, "DIGIMONNAME");
+        chipName = (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)digimonNameProp)->_data);
+        StringListStore::SetAt((igStringRefList *)beNDMWGameRam_beDataObjStringList_GetData((int *)(igProperty_GetRecordStringList(bkCommon, "BKCHIPNAME"))), chipIndex, StringRef(chipName == 0 ? (char *)0 : (char *)StringPool_Intern(StringPool_GetInstance(), chipName)));
+        bitSlot = chipIndex * 2;
+        bitProp = igProperty_GetRecord(bkPlayer, "BIT");
+        savedBit = bitProp->value;
+        chipDataProp = igProperty_GetRecordIntList(bkCommon, "BKCHIPDATA");
+        chipDataList = (igIntList *)beNDMWGameRam_beDataObjIntList_GetData((int *)chipDataProp);
+        chipDataCount = chipDataList->_count;
+        if ((chipDataCount != 0) && (bitSlot >= 0) && (bitSlot < chipDataCount)) {
+            chipDataBuffer = (int *)beNDMWLoadIntf2_igIntList_GetData(chipDataList);
+            chipDataBuffer[bitSlot] = savedBit;
         }
-        temp_ret_1293 = (int)igProperty_GetRecord(tail_player, "BIT");
-        ((beDataObjInt *)temp_ret_1293)->_data = 0;
-        temp_s4 = temp_s0_34 + 1;
-        temp_ret_1294 = (int)igProperty_GetRecord(tail_player, "LEVEL");
-        temp_s0_35 = ((beDataObjInt *)temp_ret_1294)->_data;
-        if ((temp_s0_35 != 0x3E7) && (temp_s0_35 != 1)) {
-            temp_ret_1295 = (int)igProperty_GetRecord(tail_player, "EXP");
-            temp_v0_189 = ((beDataObjInt *)temp_ret_1295)->_data;
-            temp_a4_4 = LevelExpCurve::g(temp_s0_35 - 1, temp_s0_35);
-            var_s3_8 = temp_v0_189 - ((temp_a4_4 - LevelExpCurve::g(temp_s0_35 - 2, temp_s0_35 - 1)) * 2) / 10;
-            if (var_s3_8 < temp_a4_4) {
-                var_s3_8 = temp_a4_4;
+        bitResetProp = igProperty_GetRecord(bkPlayer, "BIT");
+        bitResetProp->value = 0;
+        expSlot = bitSlot + 1;
+        levelProp = igProperty_GetRecord(bkPlayer, "LEVEL");
+        bkLevel = levelProp->value;
+        if ((bkLevel != 0x3E7) && (bkLevel != 1)) {
+            expProp = igProperty_GetRecord(bkPlayer, "EXP");
+            currentExp = expProp->value;
+            levelBaseExp = LevelExpCurve::g(bkLevel - 1, bkLevel);
+            newExp = currentExp - ((levelBaseExp - LevelExpCurve::g(bkLevel - 2, bkLevel - 1)) * 2) / 10;
+            if (newExp < levelBaseExp) {
+                newExp = levelBaseExp;
             }
-            int new_value = temp_v0_189 - var_s3_8;
-            temp_ret_1296 = (int)igProperty_GetRecordIntList(tail_common, "BKCHIPDATA");
-            temp_ret_1297 = (void *)(beNDMWGameRam_beDataObjIntList_GetData((int *)temp_ret_1296));
-            temp_v0_190 = (void *)(temp_ret_1297);
-            int temp_v1_15 = ((igIntList *)temp_v0_190)->_count;
-            if ((temp_v1_15 != 0) && (temp_s4 >= 0) && (temp_s4 < temp_v1_15)) {
-                temp_ret_1298 = beNDMWLoadIntf2_igIntList_GetData(temp_v0_190);
-                *(int *)(temp_ret_1298 + (temp_s4 * 4)) = new_value;
+            int expLost = currentExp - newExp;
+            chipDataExpProp = igProperty_GetRecordIntList(bkCommon, "BKCHIPDATA");
+            chipDataExpList = (igIntList *)beNDMWGameRam_beDataObjIntList_GetData((int *)chipDataExpProp);
+            int chipDataExpCount = chipDataExpList->_count;
+            if ((chipDataExpCount != 0) && (expSlot >= 0) && (expSlot < chipDataExpCount)) {
+                chipDataExpBuffer = (int *)beNDMWLoadIntf2_igIntList_GetData(chipDataExpList);
+                chipDataExpBuffer[expSlot] = expLost;
             }
-            temp_ret_1299 = (int)igProperty_GetRecord(tail_player, "EXP");
-            ((beDataObjInt *)temp_ret_1299)->_data = var_s3_8;
+            expWriteProp = igProperty_GetRecord(bkPlayer, "EXP");
+            expWriteProp->value = newExp;
         }
         return 1;
     default:
@@ -5854,21 +5039,21 @@ int beNDMWGameRam_beDataObjStringList_GetData(int *p)
     return ((IntProperty *)p)->value;
 }
 
-int ObjectRef_Get_00406dc0(int *p)
+int beNDMWGameRam_igSmartPointer_igIntList_Deref(int *p)
 {
     return *p;
 }
 
-int DataList_GetWordAt_00406dd0(igDataList *list, int index) {
+int beNDMWGameRam_beModelCtrlMoveObjectList_Get(igDataList *list, int index) {
     return *(int *)(list->_data + (index * 4));
 }
 
-int ObjectRef_Get_00406df0(int *p)
+int beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(int *p)
 {
     return *p;
 }
 
-int ObjectRef_Get_00406e00(int *p)
+int beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(int *p)
 {
     return *p;
 }

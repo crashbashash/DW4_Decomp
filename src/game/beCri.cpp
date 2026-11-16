@@ -32,7 +32,7 @@ int ObjectList_RemoveFirstRetained(...);
 int List_Reserve(...);
 int List_RemoveWordAt(igObjectList *list, int index);
 int Memory_FreeBuffer(...);
-int igMetaObject_FindFieldByName(int meta, const char *name);
+int igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
 int igMemoryRefMetaField_SetAlignmentType(int field, const char *name);
 int igResource_AddAlignment(int context, const char *name, int alignment);
 void igInsightCore_AddToScheduler(int insight, beCri *component);
@@ -71,12 +71,12 @@ extern int g_igAdxFile_metaObject[4];
 extern igMetaObject *g_igFile_metaObject[4];
 
 /* the sound IOP module */
-int FUN_00280f60(void *sizes);
-int FUN_00281078(int port, int buffer);
-int FUN_002813c8(int port);
-int FUN_00281cf8(...);
-void FUN_002829f0(int command, int value);
-int FUN_002825e0(int channel, unsigned int command, int value);
+int SNDF_SetPortSizes(void *sizes);
+int SNDF_StartTransfer(int port, int buffer);
+int SNDF_FreePort(int port);
+int SNDF_GetTransferStatus(...);
+void SNDF_SetMasterParam(int command, int value);
+int SNDF_SendControl(int channel, unsigned int command, int value);
 
 /* the voices */
 beCriHandle *beCriHandle_Create(void *allocator);
@@ -98,9 +98,9 @@ int beCriVolume_StepSndfLevel(...);
 
 extern int g_beCri_metaObject[4];
 extern int g_beSystem_metaObject[4];
-extern int g_beCriFxInfo_metaObject[4];
-extern int g_beCriSfpData_metaObject[4];
-extern int g_beCriAcxData_metaObject[4];
+extern igMetaObject *g_beCriFxInfo_metaObject;
+extern igMetaObject *g_beCriSfpData_metaObject;
+extern igMetaObject *g_beCriAcxData_metaObject;
 
 }
 
@@ -114,17 +114,6 @@ int g_savedIgFileAbstractProxy;
 SfpPortSizes g_sfpPortSizes;
 int g_sfpTransferState[32];
 }
-
-/* The classes whose virtual functions this file calls, seen through the slots it calls. */
-/* igObject: slot 20 returns the object's meta object. */
-class MetaObjectView {
-public:
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
-    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
-    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual int getMetaObject();
-};
 
 /* The registry the object system reads its ini settings into. */
 struct ObjectSystemView { char pad[56]; int registry; };
@@ -142,7 +131,7 @@ int beCri_AdxFileProxy(void);
 void beCri_Deactivate(beCri *self);
 void beCri_Start(beCri *self);
 void beCri_Stop(beCri *self);
-int beCri_AddInfo(beCri *self, MetaObjectView *info);
+int beCri_AddInfo(beCri *self, igObjectDispatchView *info);
 void beCri_RemoveAllInfo(beCri *self);
 void beCri_Update(beCri *self);
 int beCri_AcquireVoice(beCri *self, unsigned char kind, short priority);
@@ -226,7 +215,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     long long time;
     igObjectPool *matrixPool;
     igObjectPool *timePool;
-    ModelViewMatrixAttrView *matrixAttr;
+    igModelViewMatrixAttrDispatchView *matrixAttr;
     igTimeAttr *timeAttr;
     igAttrStack *stack;
     int matrixIndex;
@@ -252,17 +241,17 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
         igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (ModelViewMatrixAttrView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
     matrixAttr->setMatrix(modelView);
     timePool = (igObjectPool *)traversal->_timePool;
     timeAttr = (igTimeAttr *)TakePooled(timePool, (void *)&igTimeAttr_CreateInstance);
     timeAttr->_time = time;
-    ((CommonTraversalView *)traversal)->pushTime(time);
+    ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
     matrixAttrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
     matrixUnitID = &((igAttr *)matrixAttr)->_cachedUnitID;
     matrixIndex = *matrixUnitID + ((int *)attrs->_attrStackIndexTable)[*matrixAttrIndex];
     stack = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[matrixIndex];
-    ((igTDataList<ModelViewMatrixAttrView *> *)stack)->append(matrixAttr);
+    ((igTDataList<igModelViewMatrixAttrDispatchView *> *)stack)->append(matrixAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, matrixIndex);
     timeAttrIndex = &timeAttr->_cachedAttrIndex;
     timeUnitID = &timeAttr->_cachedUnitID;
@@ -273,7 +262,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     result = igTraversal_TraverseChildren(traversal, node);
     PopAttr(attrs, *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex]);
     PopAttr(attrs, *matrixUnitID + ((int *)attrs->_attrStackIndexTable)[*matrixAttrIndex]);
-    ((CommonTraversalView *)traversal)->popTime();
+    ((igCommonTraversalDispatchView *)traversal)->popTime();
     if (result == 2) {
         return 2;
     }
@@ -296,7 +285,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     float modelView[16];
     float identity[16];
     igObjectPool *matrixPool;
-    ModelViewMatrixAttrView *matrixAttr;
+    igModelViewMatrixAttrDispatchView *matrixAttr;
     igAttrStack *stack;
     int index;
     int result;
@@ -319,7 +308,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
         igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (ModelViewMatrixAttrView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
     matrixAttr->setMatrix(modelView);
     attrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
     unitID = &((igAttr *)matrixAttr)->_cachedUnitID;
@@ -327,7 +316,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     index = *attrIndex;
     index = *unitID + ((int *)attrs->_attrStackIndexTable)[index];
     stack = ((igAttrStack **)stack->_data)[index];
-    ((igTDataList<ModelViewMatrixAttrView *> *)stack)->append(matrixAttr);
+    ((igTDataList<igModelViewMatrixAttrDispatchView *> *)stack)->append(matrixAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, index);
     result = igTraversal_TraverseChildren(traversal, node);
     PopAttr(attrs, *unitID + ((int *)attrs->_attrStackIndexTable)[*attrIndex]);
@@ -422,11 +411,11 @@ void beCri_Stop(beCri *self) {
 }
 
 /* Takes a beCriFxInfo into the effect list. */
-int beCri_AddInfo(beCri *self, MetaObjectView *info) {
-    int meta;
+int beCri_AddInfo(beCri *self, igObjectDispatchView *info) {
+    igMetaObject *meta;
 
-    meta = g_beCriFxInfo_metaObject[0];
-    if (meta == info->getMetaObject()) {
+    meta = g_beCriFxInfo_metaObject;
+    if (meta == info->GetMeta()) {
         ObjectList_AppendRetained(self->_infoList, info);
         return 1;
     }
@@ -944,14 +933,14 @@ int beCri_TransferSfp(beCri *self, beCriSfpData *bank) {
     }
     port = bank->_portNo;
     if (g_sfpPortSizes.tblSize[port] != 0 || g_sfpPortSizes.pcmSize[port] != 0) {
-        FUN_002813c8(port);
+        SNDF_FreePort(port);
     }
     g_sfpPortSizes.tblSize[port] = bank->_tblSize;
     g_sfpPortSizes.pcmSize[port] = bank->_pcmSize;
-    if (FUN_00280f60(&g_sfpPortSizes) < 0) {
+    if (SNDF_SetPortSizes(&g_sfpPortSizes) < 0) {
         return 0;
     }
-    if (FUN_00281078(port, bank->_dataBuffer) < 0) {
+    if (SNDF_StartTransfer(port, bank->_dataBuffer) < 0) {
         return 0;
     }
     g_sfpTransferState[port] = 1;
@@ -991,21 +980,21 @@ int beCri_FreeSfpData(beCri *self, int includeFirst) {
     int lowest;
     beCriSfpData *bank;
     int offset;
-    int acx;
-    int sfp;
+    igMetaObject *acx;
+    igMetaObject *sfp;
     lowest = -(includeFirst & 0xFF);
     i = Banks(self)->_count - 1;
     if (lowest < i) {
         offset = i * 4;
         do {
-            acx = g_beCriAcxData_metaObject[0];
+            acx = g_beCriAcxData_metaObject;
             bank = *(beCriSfpData **)((char *)Banks(self)->_data + offset);
-            if (acx != ((MetaObjectView *)bank)->getMetaObject()) {
-                sfp = g_beCriSfpData_metaObject[0];
-                if (sfp == ((MetaObjectView *)bank)->getMetaObject() && bank->_isTransfer != 0) {
+            if (acx != ((igObjectDispatchView *)bank)->GetMeta()) {
+                sfp = g_beCriSfpData_metaObject;
+                if (sfp == ((igObjectDispatchView *)bank)->GetMeta() && bank->_isTransfer != 0) {
                     int port = bank->_portNo;
                     if (g_sfpPortSizes.tblSize[port] != 0 || g_sfpPortSizes.pcmSize[port] != 0) {
-                        FUN_002813c8(port);
+                        SNDF_FreePort(port);
                         g_sfpPortSizes.tblSize[port] = 0;
                         g_sfpPortSizes.pcmSize[port] = 0;
                         g_sfpTransferState[port] = 0;
@@ -1039,7 +1028,7 @@ bool beCri_IsTransferDone(beCri *self) {
         state = &g_sfpTransferState[0];
         do {
             if (*state != 0 && *state != 2) {
-                *state = FUN_00281cf8(i);
+                *state = SNDF_GetTransferStatus(i);
                 status = *state;
                 switch (status) {
                 case 1:
@@ -1083,13 +1072,13 @@ void beCri_SetFx(beCri *self, char *name) {
             name = "NONE";
         }
         if (strcmp(name, NameOf(info->_name)) == 0) {
-            FUN_002829f0(0xA4000000, info->_reverb);
+            SNDF_SetMasterParam(0xA4000000, info->_reverb);
             return;
         }
-        FUN_002829f0(0xA4000000, 0x7F);
+        SNDF_SetMasterParam(0xA4000000, 0x7F);
         return;
     }
-    FUN_002829f0(0xA4000000, 0x7F);
+    SNDF_SetMasterParam(0xA4000000, 0x7F);
 }
 
 /* ISREADY: 1 unless the handle named `name` plays an ADX voice not yet in state 3 (playing); ALL tests
@@ -1143,7 +1132,7 @@ void beCri_SetSndfVolume(beCri *self, int volume) {
     if (self->_sndfVolume == 0) {
         if (volume <= 0 || volume > 127) volume = 127;
         self->_sndfVolume = volume;
-        FUN_002825e0(0, 0xA0010000, volume);
+        SNDF_SendControl(0, 0xA0010000, volume);
     }
 }
 
@@ -1160,7 +1149,7 @@ void beCriSfpData_SetupBufferAlignment(void) {
     int field;
 
     igResource_AddAlignment(g_globalContext[0], "sndfBuffer", 0x20);
-    field = igMetaObject_FindFieldByName(g_beCriSfpData_metaObject[0], "_dataBuffer");
+    field = igMetaObject_FindFieldByName(g_beCriSfpData_metaObject, "_dataBuffer");
     field = AsMemoryRefField(field);
     igMemoryRefMetaField_SetAlignmentType(field, "sndfBuffer");
 }

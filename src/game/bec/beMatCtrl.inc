@@ -43,7 +43,7 @@ int beMatCtrl_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrl_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj._wkMatOldOnList, -1);
     igSmartPointer_igIntList_Destruct(&obj._wkMatOnList, -1);
-    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
 
@@ -124,23 +124,23 @@ static int g_beMatCtrl_fieldOffsets[] = {
 void beMatCtrl_InitFields(void) {
     igMetaObject *meta;
     int base;
-    struct F_35a940 *wkMatOnList;
-    struct F_35a940 *wkMatOldOnList;
-    struct F_35a940 *lua;
-    struct F_35a940 *t;
+    igObjectRefMetaField *wkMatOnList;
+    igObjectRefMetaField *wkMatOldOnList;
+    igObjectRefMetaField *lua;
+    igBoolArrayMetaField *wkPlExist;
 
     meta = g_beMatCtrl_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrl_ctorTable, 9);
-    t = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 4));
-    t->f52 = 4;
-    wkMatOnList = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 5));
-    wkMatOnList->f56 = igIntList_GetOrCreateMetaObject();
-    wkMatOldOnList = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 6));
-    wkMatOldOnList->f56 = igIntList_GetOrCreateMetaObject();
-    lua = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 8));
-    lua->f56 = (int)beLua_GetOrCreateMetaObject();
-    lua->f60 = 0;
+    wkPlExist = (igBoolArrayMetaField *)igMetaObject_GetFieldAt(meta, base + 4);
+    wkPlExist->_num = 4;
+    wkMatOnList = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
+    wkMatOnList->_metaObject = igIntList_GetOrCreateMetaObject();
+    wkMatOldOnList = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
+    wkMatOldOnList->_metaObject = igIntList_GetOrCreateMetaObject();
+    lua = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 8);
+    lua->_metaObject = (int)beLua_GetOrCreateMetaObject();
+    lua->_refCounted = 0;
     igMetaObject_NameFields(meta, g_beMatCtrl_fieldTable, g_beMatCtrl_fieldHandles, g_beMatCtrl_fieldOffsets, base);
 }
 

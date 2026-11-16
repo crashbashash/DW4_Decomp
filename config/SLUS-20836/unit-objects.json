@@ -8397,11 +8397,11 @@
       "FUN_0019d1f0": "0x0019d1f0",
       "igSmartPointer_igIntListList_Destruct": "0x0019d200",
       "FUN_0019d280": "0x0019d280",
-      "igModelViewMatrixBoneSelectList_561880_GetMetaObject": "0x0019d2d0",
-      "igModelViewMatrixBoneSelectList_561880_GetVTable": "0x0019d320",
-      "igModelViewMatrixBoneSelectList_561880_EnsureRegistered": "0x0019d360",
-      "igModelViewMatrixBoneSelectList_561880_Register": "0x0019d370",
-      "thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject": "0x0019d3e0",
+      "igModelViewMatrixBoneSelectListSg_GetMetaObject": "0x0019d2d0",
+      "igModelViewMatrixBoneSelectListSg_GetVTable": "0x0019d320",
+      "igModelViewMatrixBoneSelectListSg_EnsureRegistered": "0x0019d360",
+      "igModelViewMatrixBoneSelectListSg_Register": "0x0019d370",
+      "thunk_igModelViewMatrixBoneSelectListSg_GetMetaObject": "0x0019d3e0",
       "igModelViewMatrixBoneSelect_CreateInstance": "0x0019d3f0",
       "igModelViewMatrixBoneSelect_GetMetaObject": "0x0019d430",
       "igModelViewMatrixBoneSelect_GetVTable": "0x0019d480",
@@ -10219,7 +10219,7 @@
       "g_igNode_fieldTable": "0x0048bca0",
       "g_igNode_fieldHandles": "0x0048bcb0",
       "g_igNode_fieldOffsets": "0x0048bcc0",
-      "g_igModelViewMatrixBoneSelectList_callbackList": "0x0048bcd0",
+      "g_igModelViewMatrixBoneSelectListSg_callbackList": "0x0048bcd0",
       "g_igModelViewMatrixBoneSelect_ctorTable": "0x0048bcd8",
       "g_igModelViewMatrixBoneSelect_fieldTable": "0x0048bce0",
       "g_igModelViewMatrixBoneSelect_fieldHandles": "0x0048bce8",
@@ -10707,7 +10707,7 @@
       "g_igNode_parentListMetaField": "0x00561848",
       "g_igNode_flagsMetaField": "0x00561850",
       "g_igNode_handleMetaField": "0x00561858",
-      "g_igModelViewMatrixBoneSelectList_metaObject": "0x00561880",
+      "g_igModelViewMatrixBoneSelectListSg_metaObject": "0x00561880",
       "g_igModelViewMatrixBoneSelect_metaObject": "0x00561888",
       "g_igModelViewMatrixBoneSelect_matrixIndexMetaField": "0x00561890",
       "g_igLod_metaObject": "0x00561898",
@@ -17500,7 +17500,7 @@
       "GameMain_InitAtstream": "0x00259d10",
       "GameMain_PollAtstream": "0x00259d40",
       "GameMain_ReplaceSceneFile": "0x00259dc0",
-      "FUN_00259f80": "0x00259f80",
+      "GameMain_LoadScene": "0x00259f80",
       "GameMain_SetViewerFileLists": "0x00259f90",
       "__ct__3BlkFv": "0x0025a070",
       "__dt__44igSmartPointer<26igViewerLoadingFileMessage>Fv": "0x0025a230",
@@ -17520,9 +17520,9 @@
       "DAT_004fb418": "0x004fb418",
       "g_resultFailure": "0x004fb418",
       "g_atstreamFullReload": "0x00554990",
-      "GPR_0055499c": "0x0055499c",
+      "g_reportEchoToStdout": "0x0055499c",
       "g_startupFlagB": "0x005549a0",
-      "GPR_005549b8": "0x005549b8",
+      "g_igPsx2_resetIopServices": "0x005549b8",
       "g_atstreamTextReady": "0x00554be8",
       "g_atfilePrefixSet": "0x00554bec",
       "g_frameRateReportIgnored": "0x00554bf0",
@@ -17568,14 +17568,14 @@
     "duplicates": {
       "__dt__25igSmartPointer<8igFolder>Fv": "0x001ce350",
       "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0",
-      "__dt__29igSmartPointer<11igTimerView>Fv": "0x00150a70",
+      "__dt__37igSmartPointer<19igTimerDispatchView>Fv": "0x00150a70",
       "__dt__30igSmartPointer<12igPsx2Window>Fv": "0x00143350",
       "__dt__33igSmartPointer<15igStringRefList>Fv": "0x001c6460",
       "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
-      "FUN_001ca620": "0x001ca620",
-      "FUN_00238d40": "0x00238d40",
+      "SceneSearchLibrary_RegisterClasses": "0x00238d40",
+      "StringList_AppendRetained": "0x001ca620",
       "__ct__11ViewerSetupFP8igObject": "0x00463560",
       "__ct__3AppFv": "0x00234900",
       "__dt__11ViewerSetupFv": "0x00463910",
@@ -19695,11 +19695,11 @@
       "SNDF_Start": "0x00280d48",
       "FUN_00280e38": "0x00280e38",
       "FUN_00280f10": "0x00280f10",
-      "FUN_00280f60": "0x00280f60",
+      "SNDF_SetPortSizes": "0x00280f60",
       "FUN_00281018": "0x00281018",
       "FUN_00281300": "0x00281300",
       "FUN_00281368": "0x00281368",
-      "FUN_002813c8": "0x002813c8",
+      "SNDF_FreePort": "0x002813c8",
       "FUN_00281420": "0x00281420",
       "SNDF_SendSysMessage": "0x002814d0",
       "FUN_00281660": "0x00281660",
@@ -19717,12 +19717,12 @@
       "FUN_00281a00": "0x00281a00",
       "sndf_PushCommand": "0x00281ac0",
       "SNDF_SeqCommand": "0x00281bb8",
-      "FUN_00281cf8": "0x00281cf8",
+      "SNDF_GetTransferStatus": "0x00281cf8",
       "FUN_00281d80": "0x00281d80",
       "sndf_SendMessage": "0x002823f0",
       "FUN_00282490": "0x00282490",
       "FUN_00282538": "0x00282538",
-      "FUN_002829f0": "0x002829f0",
+      "SNDF_SetMasterParam": "0x002829f0",
       "FUN_00282ab8": "0x00282ab8",
       "FUN_00282c20": "0x00282c20",
       "FUN_00282d10": "0x00282d10",
@@ -28286,7 +28286,7 @@
     "data": {
       "g_resultSuccess": "0x004fb410",
       "g_resultFailure": "0x004fb418",
-      "GPR_00554de8": "0x00554de8",
+      "g_adxIopReady": "0x00554de8",
       "g_igAdxFile_ignoreReadModeWarning": "0x00554df0",
       "g_igAdxFile_ignoreWriteWarning": "0x00554df4",
       "g_igAdxFile_ignoreOpenModeWarning": "0x00554df8",
@@ -30513,7 +30513,7 @@
       "beFontImageList_GetMetaObjectFunction": "0x003618c0",
       "beFontImage_GetMetaObject": "0x003618e0",
       "beFontImage_GetVTable": "0x00361930",
-      "igSmartPointer_FUN_00452790_Destruct": "0x003619a0",
+      "igSmartPointer_igCharMetricsList_Destruct": "0x003619a0",
       "igFont_Destroy": "0x00361a20",
       "igBitmapFont_Destroy": "0x00361b00",
       "beFontImage_EnsureRegistered": "0x00361c70",
@@ -31250,7 +31250,7 @@
       "beNumVerInsideDataList_GetMeta": "0x0036f950",
       "beNumVerData_GetMeta": "0x0036f960",
       "beNumVerData_userConstruct": "0x0036f970",
-      "__dt__10Ref_36f970Fv": "0x0036fa60",
+      "__dt__36igSmartPointer<18beNumVerInsideData>Fv": "0x0036fa60",
       "beNumVerData_userDestruct": "0x0036fae0",
       "beNumVerDataList_GetMeta": "0x0036fc80",
       "beNumberCtrlInfoRam_GetMeta": "0x0036fc90",
@@ -36407,6 +36407,7 @@
     "emitted": {
       "beGenerater_GetInfoMeta": "0x003844e0",
       "beGenerater_OnAddRam": "0x003844f0",
+      "beGenerater_SpawnEnemies": "0x00384540",
       "beGenerater_DropItemsForDead": "0x00384800",
       "beGenerater_OnMessageText": "0x003853c0",
       "beGenerater_GetMeta": "0x00385820"
@@ -36722,7 +36723,6 @@
       "beMessenger_GetMeta": "0x0038f950"
     },
     "data": {
-      "DAT_004c8f88": "0x004c8f88",
       "DAT_004e0858": "0x004e0858",
       "DAT_004fb410": "0x004fb410",
       "DAT_0050ee10": "0x0050ee10",
@@ -36733,14 +36733,17 @@
       "DAT_0058a4e0": "0x0058a4e0",
       "DAT_0058a4f0": "0x0058a4f0",
       "DAT_0058a530": "0x0058a530",
-      "GPR_005549d4": "0x005549d4",
-      "GPR_005549d8": "0x005549d8",
       "g_useOwnerAllocator": "0x00554c14",
       "g_beMessenger_metaObject": "0x00588f38",
       "g_stringPool": "0x00586f20",
       "g_resultSuccess": "0x004fb410",
       "g_propertyNameField": "0x00585be0"
     },
+    "anon": [
+      "0x004c8f88",
+      "0x005549d4",
+      "0x005549d8"
+    ],
     "duplicates": {
       "__dt__9ObjectRefFv": "0x00357a90",
       "__dt__9StringRefFv": "0x00130720"
@@ -36846,16 +36849,12 @@
       "AllClear": "0x0050f178",
       "BHit_2": "0x0050f120",
       "Back": "0x0050f0e0",
-      "DAT_004c8fa8": "0x004c8fa8",
-      "DAT_004c8fb0": "0x004c8fb0",
-      "DAT_004c8fb8": "0x004c8fb8",
       "DAT_004e0ef0": "0x004e0ef0",
       "DAT_004e1078": "0x004e1078",
       "DAT_004e1088": "0x004e1088",
       "DAT_004e1098": "0x004e1098",
       "DAT_00561288": "0x00561288",
       "DAT_00562640": "0x00562640",
-      "D_004c8fa0": "0x004c8fa0",
       "ENEMY_4": "0x0050efa0",
       "FHit": "0x0050f078",
       "Fall": "0x0050f0f0",
@@ -36972,6 +36971,10 @@
       "g_beNDMWMdlMapCursor_metaObject": "0x0058b498"
     },
     "anon": [
+      "0x004c8fa0",
+      "0x004c8fa8",
+      "0x004c8fb0",
+      "0x004c8fb8",
       "0x0050f080",
       "0x0050f0a0",
       "0x0050f240"
@@ -36988,7 +36991,7 @@
       "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
-      "FUN_001ca620": "0x001ca620"
+      "StringList_AppendRetained": "0x001ca620"
     },
     "symbol": "beMeterCtrlNode_TraversalFunction"
   },
@@ -37923,7 +37926,7 @@
       "g_propertyNameField": "0x00585be0"
     },
     "duplicates": {
-      "__dt__34igSmartPointer<16NewObjectVirtual>Fv": "0x0019aa10"
+      "__dt__47igSmartPointer<29igTextureBindAttrDispatchView>Fv": "0x0019aa10"
     },
     "symbol": "beTextureCtrl_Prepare",
     "anon": []
@@ -40706,7 +40709,7 @@
       "__vt__21NdmwRuntimePluginView": "0x0053de30"
     },
     "duplicates": {
-      "__dt__16StringRef_3cbb60Fv": "0x00130720"
+      "__dt__13HeldStringRefFv": "0x00130720"
     },
     "stripped": [
       "__dt__12ItemInfoWorkFv",
@@ -40716,8 +40719,6 @@
       "__dt__21NdmwRuntimePluginViewFv"
     ],
     "externals": {
-      "FUN_00150eb0": "0x00150eb0",
-      "FUN_003b6430": "0x003b6430",
       "__ct__11StatusFieldFv": "0x003b1800",
       "__ct__11Title2FieldFv": "0x003b1860",
       "__ct__12ComDataFieldFv": "0x00350f90",
@@ -40749,8 +40750,8 @@
       "__ct__15RideOnDataFieldFv": "0x00350f40",
       "__ct__15SubCommandFieldFv": "0x00350f10",
       "__ct__16PosLockNodeFieldFv": "0x00350f70",
-      "__ct__16StringRef_3cbd80FPCc": "0x003cc550",
       "__ct__17InsightPluginViewFv": "0x0033e310",
+      "__ct__17InternedStringRefFPCc": "0x003cc550",
       "__ct__17MdlMapCursorFieldFv": "0x003b1760",
       "__ct__17MoveDataListFieldFv": "0x0019d1f0",
       "__ct__19MoveObjectListFieldFv": "0x00350f50",
@@ -40791,7 +40792,7 @@
       "__dt__15RideOnDataFieldFv": "0x00350d90",
       "__dt__15SubCommandFieldFv": "0x00350e90",
       "__dt__16PosLockNodeFieldFv": "0x0034c1b0",
-      "__dt__16StringRef_3cbd80Fv": "0x00130720",
+      "__dt__17InternedStringRefFv": "0x00130720",
       "__dt__17MdlMapCursorFieldFv": "0x003b16e0",
       "__dt__17MoveDataListFieldFv": "0x001354b0",
       "__dt__18PEBaseInfoWorkViewFv": "0x003bfde0",
@@ -42259,12 +42260,12 @@
       "beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get": "0x003e9240",
       "beNDMWLoadIntf2_igObjectList_Get": "0x003e9260",
       "beNDMWLoadIntf2_beBaseInfoDataList_FindProperty": "0x003e9280",
-      "ObjectRef_Get_003e92a0": "0x003e92a0",
+      "beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref": "0x003e92a0",
       "beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign": "0x003e92b0",
       "__ct__14NewDataListRefFRC14AllocatorValue": "0x003e9330",
       "beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue": "0x003e9360",
       "beNDMWLoadIntf2_Memory_SelectAllocator": "0x003e9370",
-      "ObjectRef_Get_003e93b0": "0x003e93b0",
+      "beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get": "0x003e93b0",
       "beNDMWLoadIntf2__GetInfoMeta": "0x003e93c0",
       "beNDMWLoadIntf2_OnAddRam": "0x003e93d0",
       "beNDMWLoadIntf2_OnMessage": "0x003e9430",
@@ -43058,10 +43059,10 @@
       "beNDMWGameRam_OnMessage": "0x003fca10",
       "beNDMWGameRam_igStringRefList_GetData": "0x00406da0",
       "beNDMWGameRam_beDataObjStringList_GetData": "0x00406db0",
-      "ObjectRef_Get_00406dc0": "0x00406dc0",
-      "DataList_GetWordAt_00406dd0": "0x00406dd0",
-      "ObjectRef_Get_00406df0": "0x00406df0",
-      "ObjectRef_Get_00406e00": "0x00406e00",
+      "beNDMWGameRam_igSmartPointer_igIntList_Deref": "0x00406dc0",
+      "beNDMWGameRam_beModelCtrlMoveObjectList_Get": "0x00406dd0",
+      "beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get": "0x00406df0",
+      "beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get": "0x00406e00",
       "beNDMWGameRam_CreateDataListRef": "0x00406e10",
       "beNDMWGameRam_beDataObjIntList_GetData": "0x00406e40",
       "beNDMWGameRam_igSmartPointer_igRandomNumber_Get": "0x00406e50",
@@ -44645,10 +44646,6 @@
       "beNDMWMdlItem_GetMeta": "0x00443100"
     },
     "data": {
-      "DAT_004cfb40": "0x004cfb40",
-      "DAT_004cfb44": "0x004cfb44",
-      "DAT_004e105c": "0x004e105c",
-      "DAT_004e1060": "0x004e1060",
       "emptyString": "0x004e0858",
       "g_beNDMWMdlItem_metaObject": "0x0058b4a8",
       "kIGMemoryPoolHandleUser1": "0x00587110",
@@ -47520,12 +47517,12 @@
     "whole_file": true,
     "emitted": {
       "__dt__11ViewerSetupFv": "0x00463910",
-      "FUN_00463b30": "0x00463b30",
-      "FUN_00463b70": "0x00463b70",
-      "FUN_00463bb0": "0x00463bb0",
-      "FUN_00463bc0": "0x00463bc0",
-      "FUN_00463c70": "0x00463c70",
-      "FUN_00463c80": "0x00463c80",
+      "ViewerSetup_Open": "0x00463b30",
+      "ViewerSetup_Close": "0x00463b70",
+      "ViewerSetup_RunFrame": "0x00463bb0",
+      "ViewerSetup_Update": "0x00463bc0",
+      "ViewerSetup_ResetView": "0x00463c70",
+      "ViewerSetup_ClearInfos": "0x00463c80",
       "igViewManager_SetViewMode": "0x00463fd0",
       "igViewManager_SetFrameTime": "0x00464080",
       "igViewMode_Update": "0x00464100",

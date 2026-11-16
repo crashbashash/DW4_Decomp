@@ -44,11 +44,10 @@ extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_AppendInt(...);
 extern "C" int beNDMWItemBase_IndexOfRecNo(...);
 extern "C" int ObjectList_AppendRetained(...);
-extern "C" int g_itemPickupSeqs[4];
-extern "C" int DAT_004cfb44[4];
+/* Per instant item (recNo 1..25): the pickup panel model and the sequence it plays. */
+struct ItemPickupSeq { const char *panel; const char *sequence; };
+extern "C" ItemPickupSeq g_itemPickupSeqs[25];
 extern "C" float g_vec3Zero[4];
-extern "C" float DAT_004e105c[4];
-extern "C" float DAT_004e1060[4];
 extern "C" void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo);
 extern "C" void beNDMWMdlItem_RegisterReceiver(beNDMWMdlItem *self, int info);
 extern "C" int g_beNDMWMdlItem_metaObject[4];
@@ -133,16 +132,16 @@ const char *g_itemNameFontNames[4] = { "font00", "font01", "font02", "font03" };
 /* Plays the pickup effect of instant item recNo (1..25) on player playerNo. */
 void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo) {
     float pos[4];
-    int tableOffset;
+    int index;
 
     beMessenger_PrepareDelayedSelection(self->_messenger, "PLAYER", 0, playerNo);
-    tableOffset = (recNo - 1) * 8;
-    beMessenger_AppendString(self->_messenger, *(int *)((char *)g_itemPickupSeqs + tableOffset));
-    beMessenger_AppendString(self->_messenger, *(int *)((char *)DAT_004cfb44 + tableOffset));
+    index = recNo - 1;
+    beMessenger_AppendString(self->_messenger, g_itemPickupSeqs[index].panel);
+    beMessenger_AppendString(self->_messenger, g_itemPickupSeqs[index].sequence);
     beMessenger_AppendFloat(self->_messenger, 1.0f);
     pos[0] = g_vec3Zero[0];
-    pos[1] = DAT_004e105c[0];
-    pos[2] = DAT_004e1060[0];
+    pos[1] = g_vec3Zero[1];
+    pos[2] = g_vec3Zero[2];
     beMessenger_AppendVec3(self->_messenger, pos);
     beMessenger_AppendBool(self->_messenger, 0);
     beMessenger_AppendBool(self->_messenger, 1);

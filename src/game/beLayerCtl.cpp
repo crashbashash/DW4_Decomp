@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igObjectVirtuals.h"
+#include "dw4/igObjectDispatchView.h"
 #include "dw4/igobject_release.h"
 #pragma push
 #pragma readonly_strings on
@@ -56,13 +56,13 @@ extern "C" int strcmp(char *, char *);
 extern "C" char emptyString[];
 extern "C" int g_beLayerInfo_metaObject[4];
 extern "C" int g_beLayerCtl_metaObject[4];
-extern "C" int g_igLightStateSet_metaObject[4];
+extern "C" igMetaObject *g_igLightStateSet_metaObject;
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 
-#define META_OF(node) (((igObjectVirtuals *)(node))->getMeta())
+#define META_OF(node) (((igObjectDispatchView *)(node))->GetMeta())
 
 extern "C" void beLayerCtl_Prepare(beLayerCtl *self);
 extern "C" void beLayerCtl_OnAddRam(beLayerCtl *self, int receiver);
@@ -125,7 +125,7 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
             int i;
             for (i = 0; i < CHILD_COUNT(CHILDREN(root)); i++) {
                 igGroup *node = NODE_AT(CHILDREN(root), i);
-                int lightMeta = g_igLightStateSet_metaObject[0];
+                igMetaObject *lightMeta = g_igLightStateSet_metaObject;
                 if (lightMeta == META_OF(node)) lights = node;
             }
             if (lights == 0) return 0;
@@ -164,7 +164,7 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
         while (index < CHILD_COUNT(CHILDREN(root))) {
             node = NODE_AT(CHILDREN(root), index);
             if (NAME_OF(node) == 0) igNamedObject_SetName(node, "NONE");
-            if (strcmp("ROOTATTR", NAME_OF(node)) == 0 || g_igLightStateSet_metaObject[0] == META_OF(node)) {
+            if (strcmp("ROOTATTR", NAME_OF(node)) == 0 || g_igLightStateSet_metaObject == META_OF(node)) {
                 index += 1;
             } else {
                 name = NAME_OF(node);

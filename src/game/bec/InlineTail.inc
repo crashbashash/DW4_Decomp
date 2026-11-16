@@ -183,12 +183,12 @@ igMetaObject *beCriAcxData_GetMeta(void)
     return g_beCriAcxData_metaObject;
 }
 
-void beBinDataObject_userDestruct(beBinDataObject *arg0) {
-    if (arg0->_dataBuffer != 0) {
-        Memory_FreeBuffer((void *)arg0->_dataBuffer);
-        arg0->_dataBuffer = 0;
+void beBinDataObject_userDestruct(beBinDataObject *self) {
+    if (self->_dataBuffer != 0) {
+        Memory_FreeBuffer((void *)self->_dataBuffer);
+        self->_dataBuffer = 0;
     }
-    Gap__Core__igObject__userDestruct(arg0);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 igMetaObject *beCriSndf_GetMeta(void)
@@ -508,15 +508,15 @@ igMetaObject *beLuaDataObject_GetMeta(void)
     return g_beLuaDataObject_metaObject;
 }
 
-void beLuaDataObject_userDestruct(beLuaDataObject *arg0) {
-    int temp_a0;
+void beLuaDataObject_userDestruct(beLuaDataObject *self) {
+    int buffer;
 
-    temp_a0 = arg0->_data;
-    if (temp_a0 != 0) {
-        Memory_FreeBuffer(temp_a0);
+    buffer = self->_data;
+    if (buffer != 0) {
+        Memory_FreeBuffer(buffer);
     }
-    arg0->_data = 0;
-    Gap__Core__igObject__userDestruct(arg0);
+    self->_data = 0;
+    Gap__Core__igObject__userDestruct(self);
 }
 
 igMetaObject *beLuaDataObjectist_GetMeta(void)
@@ -877,76 +877,47 @@ igMetaObject *beNumVerData_GetMeta(void)
     return g_beNumVerData_metaObject;
 }
 
-void beNumVerData_userConstruct(Obj_36f970 *arg0, int arg1) {
+void beNumVerData_userConstruct(beNumVerData *self, int flag) {
     int i;
-    void *alloc;
-    Gap__Core__igObject__userConstruct(arg0, arg1);
-    igMetaObject_CountInstances(arg0->v88(), 1);
-    if (!(arg1 & 0xFF)) {
+    void *allocator;
+    Gap__Core__igObject__userConstruct(self, flag);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    if (!(flag & 0xFF)) {
         i = 0;
         do {
-            alloc = igObject_GetAllocator(arg0);
-            alloc = (g_useOwnerAllocator != 0) ? alloc : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
-            { Ref_36f970 sp3C(((T_36f970 *)beNumVerInsideData_Create((int)alloc)));
-            ObjectList_AppendRetained(arg0->list, sp3C.p); }
+            allocator = igObject_GetAllocator(self);
+            allocator = (g_useOwnerAllocator != 0) ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
+            {
+                igSmartPointer<beNumVerInsideData> item((beNumVerInsideData *)beNumVerInsideData_Create((int)allocator));
+                ObjectList_AppendRetained((void *)self->_verDataList, item.p);
+            }
             i += 1;
         } while (i < 6);
     }
 }
 
-static inline int count(const beNumVerDataList *list) { return list->_count; }
+static inline int beNumVerDataList_GetCount(const beNumVerDataList *list) { return list->_count; }
 
-void beNumVerData_userDestruct(Obj_36fae0 *arg0) {
-    beNumVerDataList *l = (beNumVerDataList *)((beNumVerData *)arg0)->_verDataList;
-    int n;
-    if (count(l) > 0) {
-    n = l->_count;
-    int i = 0;
-    int off;
-    int j;
-    if (0 < n) {
-        off = 0;
-        do {
-            Rel_36fae0::go(((igObject **)(l->_data + off))[0]);
-            i++;
-            off += 4;
-        } while (i < n);
-    }
-    int n2 = l->_count;
-    int v = 0;
-    if (0 < n2) {
-        int lim;
-        int off3;
-        int off4;
-        if (n2 > 8) {
-            lim = n2 - 8;
-            off3 = 0;
-            do {
-                v += 8;
-                ((int *)(l->_data + off3))[0] = 0;
-                ((int *)(l->_data + off3))[1] = 0;
-                ((int *)(l->_data + off3))[2] = 0;
-                ((int *)(l->_data + off3))[3] = 0;
-                ((int *)(l->_data + off3))[4] = 0;
-                ((int *)(l->_data + off3))[5] = 0;
-                ((int *)(l->_data + off3))[6] = 0;
-                ((int *)(l->_data + off3))[7] = 0;
-                off3 += 32;
-            } while (v < lim);
+void beNumVerData_userDestruct(beNumVerData *self) {
+    beNumVerDataList *list = (beNumVerDataList *)self->_verDataList;
+    int releaseCount;
+    int releaseIndex;
+    int clearCount;
+    int clearIndex;
+
+    if (beNumVerDataList_GetCount(list) > 0) {
+        releaseCount = list->_count;
+        for (releaseIndex = 0; releaseIndex < releaseCount; releaseIndex++) {
+            igRelease(((igObject **)list->_data)[releaseIndex]);
         }
-        off4 = v * 4;
-        if (v < n2) {
-            do {
-                v++;
-                ((int *)(l->_data + off4))[0] = 0;
-                off4 += 4;
-            } while (v < n2);
+        clearCount = list->_count;
+        for (clearIndex = 0; clearIndex < clearCount; clearIndex++) {
+            ((int *)list->_data)[clearIndex] = 0;
         }
+        list->_count = 0;
     }
-    l->_count = 0;
-    }
-    igMetaObject_CountInstances(arg0->v88(), 1);
-    Gap__Core__igObject__userDestruct(arg0);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 igMetaObject *beNumVerDataList_GetMeta(void)
@@ -1268,12 +1239,12 @@ igMetaObject *beTransformSync_GetMeta(void)
     return g_beTransformSync_metaObject;
 }
 
-void beTransformSync_SetMatrix(beTransformSync *self, int matrix) {
+void beTransformSync_SetMatrix(beTransformSync *self, const float *matrix) {
     int count;
     int index;
     int offset;
 
-    igMatrix44f_Copy((char *)self + 0x20, matrix);
+    igMatrix44f_Copy(self->_m, matrix);
     count = ((igObjectList *)self->_syncTransformList)->_count;
     index = 0;
     if (0 < count) {

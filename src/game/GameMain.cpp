@@ -1,6 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igWindowDispatchView.h"
+#include "dw4/igCommonTraversalDispatchView.h"
 #include "dw4/ViewerSetup.h"
 #include "dw4/ViewerOptions.h"
 #include "dw4/igMemoryPoolView.h"
@@ -101,7 +103,7 @@ extern "C" int igSceneInfo_EnsureRegistered(...);
 extern "C" int igProjectiveShadowShader_EnsureRegistered(...);
 extern "C" int igNonRefCountedNodeList_EnsureRegistered(...);
 extern "C" int igNodeList_EnsureRegistered(...);
-extern "C" int igModelViewMatrixBoneSelectList_561880_EnsureRegistered(...);
+extern "C" int igModelViewMatrixBoneSelectListSg_EnsureRegistered(...);
 extern "C" int igModelViewMatrixBoneSelect_EnsureRegistered(...);
 extern "C" int igLod_EnsureRegistered(...);
 extern "C" int igLightStateSet_EnsureRegistered(...);
@@ -177,7 +179,7 @@ extern "C" int igVisualContext_SetImageMemoryPool(int);
 extern "C" int igObjectSystem_Acquire(int);
 extern "C" int igObjectSystem_Release(...);
 extern "C" int StringChunk_ReleaseHeader(...);
-extern "C" int main(int arg0, int *arg1);
+extern "C" int main(int argc, int *argv);
 extern "C" const char *GameMain_GetIniText(void);
 extern "C" int igObjectSystem_SetIniText(const char *);
 extern "C" void GameMain_ApplyIniText(void);
@@ -194,22 +196,20 @@ extern "C" int igObject_FreeMemory(...);
 extern "C" bool GameMain_SetAtfilePrefix(const char *path);
 extern "C" void GameMain_InitAtstream(void);
 extern "C" int StringPool_Allocate(...);
-extern "C" int FUN_00463c70(...);
+extern "C" int ViewerSetup_ResetView(...);
 extern "C" int StringPool_Construct(...);
 extern "C" int StringPool_Intern(...);
-extern "C" void FUN_00259f80(struct Blk *app);
+extern "C" void GameMain_LoadScene(struct Blk *app);
 extern "C" void *igInsightCore_FindManager(...);
 extern "C" int CollisionLibrary_RegisterClasses(...);
-extern "C" int FUN_00238d40(...);
 extern "C" int AdxMovieLibrary_RegisterClasses(...);
 extern "C" int BecLibrary_RegisterClasses(...);
 extern "C" int LuaAPI_RegisterClasses(...);
 extern "C" int NdmwLibrary_RegisterClasses(...);
-extern "C" int FUN_00463b30(...);
-extern "C" int FUN_00463b70(...);
-extern "C" int FUN_00463bb0(...);
-extern "C" int FUN_00463bc0(...);
-extern "C" float __floatdisf(int);
+extern "C" int ViewerSetup_Open(...);
+extern "C" int ViewerSetup_Close(...);
+extern "C" int ViewerSetup_RunFrame(...);
+extern "C" int ViewerSetup_Update(...);
 extern "C" int fptodp(float);
 extern "C" int igReport_Info(...);
 extern "C" int igModel_NotifyViews(...);
@@ -220,7 +220,7 @@ extern "C" int igStringObj_HasFileExtensionText(...);
 extern "C" int List_RemoveWordAt(...);
 extern "C" igSmartPointer<igStringRefList> igFolder_ListEntries(void);
 extern "C" int igObject_IsKindOf(...);
-extern "C" int FUN_00463c80(...);
+extern "C" int ViewerSetup_ClearInfos(...);
 /* matching construct: out-of-line ctor/dtor classes reproduce the retail unwind table (retail 0x2595e0 table 0x542b5c: App dtor 0x234b90, Blk dtor 0x25a330, scope guard dtor 0x2599b0) */
 /* The viewer's parsed command line: the option block, then the repeat counts and the model names. */
 struct App { char options[232]; igIntList *intList; igStringRefList *stringList; App(); ~App(); };
@@ -240,8 +240,8 @@ extern "C" int g_stringPoolPreSize[4];
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_igPsx2_useCdrom[4];
 extern "C" const char *g_igPsx2_iopImagePath[4];
-extern "C" char GPR_0055499c;
-extern "C" char GPR_005549b8;
+extern "C" unsigned char g_reportEchoToStdout;
+extern "C" unsigned char g_igPsx2_resetIopServices;
 extern "C" unsigned char g_useOwnerAllocator;
 struct Guard { ~Guard() { igObjectSystem_Release(); } };
 /* The allocator a new pool comes from: the owner's, or the user-0 pool when the owner allocator is off. */
@@ -384,78 +384,35 @@ struct StringRef {
     }
     ~StringRef() { Release(p); }
 };
-extern "C" int FUN_001ca620(void *, StringRef *);
+extern "C" int StringList_AppendRetained(void *, StringRef *);
 extern "C" void GameMain_ReplaceSceneFile(Blk *app, int text, int fullReload);
 extern "C" void GameMain_SetViewerFileLists(Blk *app, igStringRefList *modelNames, igIntList *repeatCounts);
 extern "C" void GameMain_ReloadScene(Blk *app, int);
 extern "C" { Blk *g_activeApp; }
 extern "C" int g_beSystem_metaObject[16];
-/* igVisualContext: slot 33 resets the context for a new stage, slot 175 sets its clear colour (roles from the call sites). */
-class igVisualContextView {
+/* igFolder's virtual functions: slot 24 lists the folder's entries (igFolder_ListEntries).
+ * ABI view only: never instantiated. */
+class igFolderDispatchView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
-    virtual void d32();
-    virtual void Reset();
-    virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41();
-    virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49();
-    virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57();
-    virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65();
-    virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73();
-    virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81();
-    virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89();
-    virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97();
-    virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105();
-    virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113();
-    virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121();
-    virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128(); virtual void d129();
-    virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136(); virtual void d137();
-    virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144(); virtual void d145();
-    virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152(); virtual void d153();
-    virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160(); virtual void d161();
-    virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168(); virtual void d169();
-    virtual void d170(); virtual void d171(); virtual void d172(); virtual void d173(); virtual void d174();
-    virtual void SetClearColor(int *color);
-};
-/* the viewer's window: slot 36 gives its visual context */
-class igWindowView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
-    virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35();
-    virtual igVisualContextView *GetVisualContext();
-};
-/* the scene traversal: slot 29 resets it for a new stage (role from the call site) */
-class igCommonTraversalView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
-    virtual void Reset();
-};
-/* igFolder: slot 24 lists its entries */
-class igFolderView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual igSmartPointer<igStringRefList> ListEntries();
+    virtual void d21(); virtual void d22(); virtual void d23();
+    virtual igSmartPointer<igStringRefList> ListEntries();                  /* slot 24 */
 };
 extern "C" void GameMain_RunGame(Blk *app);
 /* A model change record handed to igModel_NotifyViews: type 2 reports that the field named by `field` changed. */
 struct ModelChange { int type; int flags; int field; int reserved; };
-/* igTimer (igPsx2LongTimer): slot 24 reads the elapsed time, 26 stops the clock and 29 starts it. */
-class igTimerView : public igVirtualObject {
+/* igTimer's virtual functions as the game calls them on igPsx2LongTimer (igPsx2LongTimer_<Name>):
+ * slot 24 reads the elapsed nanoseconds, slot 26 stops the clock and slot 29 restarts it.
+ * ABI view only: never instantiated. */
+class igTimerDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual int GetElapsedTime(); virtual void d25(); virtual void Stop(); virtual void d27(); virtual void d28(); virtual void Start();
+    virtual void d21(); virtual void d22(); virtual void d23();
+    virtual long long GetElapsedTime();                                     /* slot 24 */
+    virtual void d25();
+    virtual void Stop();                                                    /* slot 26 */
+    virtual void d27(); virtual void d28();
+    virtual void Restart();                                                 /* slot 29 */
 };
-extern "C" igTimerView *igTimer_Create(...);
+extern "C" igTimerDispatchView *igTimer_Create(...);
 extern "C" int g_igViewerParameters_showGuiMetaField[4];
 extern "C" int g_igViewerParameters_showBoundingBoxMetaField[4];
 extern "C" int g_igViewerParameters_showNormalsMetaField[4];
@@ -590,7 +547,7 @@ void GameMain_RegisterEngineClasses(void) {
     igSkeletonBoneInfoList_EnsureRegistered();
     igSkeleton_EnsureRegistered();
     igSkeletonList_EnsureRegistered();
-    igModelViewMatrixBoneSelectList_561880_EnsureRegistered();
+    igModelViewMatrixBoneSelectListSg_EnsureRegistered();
     igAnimationBinding_EnsureRegistered();
     igAnimationTrack_EnsureRegistered();
     igActor_EnsureRegistered();
@@ -659,9 +616,9 @@ int main(int argc, int *argv) {
     GameMain_ApplyIniText();
     GameMain_SetAtfilePrefix((const char *)(*argv));
     g_igPsx2_useCdrom[0] = 2;
-    GPR_0055499c = 0;
+    g_reportEchoToStdout = 0;
     g_igPsx2_iopImagePath[0] = "cdrom0:\\MODULES\\IOPRP280.IMG;1";
-    GPR_005549b8 = 1;
+    g_igPsx2_resetIopServices = 1;
     g_startupFlagB = 0;
     g_bootstrapPoolPreSize[0] = 0x40000;
     g_systemPoolPreSize[0] = 0x4000;
@@ -825,7 +782,7 @@ void GameMain_ReplaceSceneFile(Blk *app, int text, int fullReload) {
     }
     {
         StringRef name(interned);
-        FUN_001ca620(app->modelNames.p, &name);
+        StringList_AppendRetained(app->modelNames.p, &name);
     }
     resetCounts(app, AdoptReference());
     counts = (NameList *)app->repeatCounts.p;
@@ -839,11 +796,11 @@ void GameMain_ReplaceSceneFile(Blk *app, int text, int fullReload) {
     counts->_data[index] = defaultCount;
     GameMain_ReloadScene(app, defaultCount);
     if (fullReload != 0) {
-        FUN_00463c70(app);
+        ViewerSetup_ResetView(app);
     }
 }
 
-void FUN_00259f80(Blk *app) {
+void GameMain_LoadScene(Blk *app) {
     /* matching construct: hand search — the branch folds away, leaving the load and its delay slot */
     if (app->modelNames.p) return;
 }
@@ -881,13 +838,13 @@ Blk::~Blk() {
 
 void GameMain_ReloadScene(Blk *app, int) {
     GameMain_ClearScene(app);
-    FUN_00259f80(app);
+    GameMain_LoadScene(app);
 }
 
 void GameMain_RunGame(Blk *app) {
     beSystem *system;
     int nextStage;
-    int clearColor[4];
+    float clearColor[4];
     if (app->viewer.window.p != 0) {
         g_activeApp = app;
         AcquireSharedOptions();
@@ -896,25 +853,24 @@ void GameMain_RunGame(Blk *app) {
             options->optimizeTextures = 0;
             options->showLogo = 0;
             options->showNormals = 0;
-            /* matching construct: the colour is written as raw words (0x3DCCCCCD is 0.1f, 0x3F800000 is 1.0f); a float literal loads from the constant pool */
-            ((int *)options->clearColor)[0] = 0x3DCCCCCD;
-            ((int *)options->clearColor)[1] = 0x3DCCCCCD;
-            ((int *)options->clearColor)[2] = 0x3DCCCCCD;
-            ((int *)options->clearColor)[3] = 0x3F800000;
+            options->clearColor[0] = 0.1f;
+            options->clearColor[1] = 0.1f;
+            options->clearColor[2] = 0.1f;
+            options->clearColor[3] = 1.0f;
             options->autoSceneLights = 0;
             options->useSceneLights = 1;
             options->alphaTest = 1;
         }
         ReleaseSharedOptions();
         CollisionLibrary_RegisterClasses();
-        FUN_00238d40();
+        SceneSearchLibrary_RegisterClasses();
         AdxMovieLibrary_RegisterClasses();
         BecLibrary_RegisterClasses();
         LuaAPI_RegisterClasses();
         NdmwLibrary_RegisterClasses();
-        FUN_00463b30(app);
-        FUN_00259f80(app);
-        FUN_00463c70(app);
+        ViewerSetup_Open(app);
+        GameMain_LoadScene(app);
+        ViewerSetup_ResetView(app);
         system = (beSystem *)igInsightCore_FindManager(app->viewer.core.p, g_beSystem_metaObject[0]);
         if (g_stringPool[0] == 0) {
             int pool = StringPool_Allocate(0x10);
@@ -929,13 +885,12 @@ void GameMain_RunGame(Blk *app) {
             system->_nextStage = nextStage;
         }
         {
-            igVisualContextView *context = ((igWindowView *)app->viewer.window.p)->GetVisualContext();
-            /* matching construct: the colour is built as raw words (0x3F800000 is 1.0f) */
-            clearColor[0] = 0;
-            clearColor[3] = 0x3F800000;
-            clearColor[1] = 0;
-            clearColor[2] = 0;
-            context->SetClearColor(clearColor);
+            igVisualContextDispatchView *context = ((igWindowDispatchView *)app->viewer.window.p)->getVisualContext();
+            clearColor[0] = 0.0f;
+            clearColor[3] = 1.0f;
+            clearColor[1] = 0.0f;
+            clearColor[2] = 0.0f;
+            context->setClearColor(clearColor);
         }
         while (app->isFinished == 0 && system->_isShutDown == 0) {
             while (app->isFinished == 0 && system->_isStageLoop != 0) {
@@ -945,15 +900,15 @@ void GameMain_RunGame(Blk *app) {
                     idle = 0;
                 }
                 GameMain_PollAtstream(app, idle);
-                if (FUN_00463bc0(app) == 0) break;
-                FUN_00463bb0(app);
+                if (ViewerSetup_Update(app) == 0) break;
+                ViewerSetup_RunFrame(app);
             }
             if (system->_nextStage == 0) break;
             GameMain_ClearScene(app);
             system->_isStageLoop = 1;
         }
         GameMain_ClearScene(app);
-        FUN_00463b70(app);
+        ViewerSetup_Close(app);
         g_activeApp = 0;
     }
 }
@@ -973,9 +928,9 @@ void GameMain_RunBenchmark(Blk *app) {
     if (app->viewer.window.p != 0) {
         CollisionLibrary_RegisterClasses();
         SceneSearchLibrary_RegisterClasses();
-        FUN_00463b30(app);
-        FUN_00259f80(app);
-        FUN_00463c70(app);
+        ViewerSetup_Open(app);
+        GameMain_LoadScene(app);
+        ViewerSetup_ResetView(app);
         parameters = (igViewerParameters *)((igViewerSceneInfoManager *)app->viewer.sceneInfo.p)->_parameters;
         parameters->_showGui = 0;
         showGui.type = 2; showGui.flags = 0; showGui.field = g_igViewerParameters_showGuiMetaField[0];
@@ -992,35 +947,35 @@ void GameMain_RunBenchmark(Blk *app) {
         frames = g_sharedViewerOptions[0]->benchmarkFrames;
         if (frames < 0) frames = 0;
         ReleaseSharedOptions();
-        FUN_00463bc0(app);
+        ViewerSetup_Update(app);
         step = 0;
         if (0 < skipFrames) {
             do {
-                FUN_00463bb0(app);
+                ViewerSetup_RunFrame(app);
                 step++;
             } while (step < skipFrames);
         }
-        FUN_00463bc0(app);
-        igSmartPointer<igTimerView> timer(igTimer_Create(0), AdoptReference());
-        timer->Start();
+        ViewerSetup_Update(app);
+        igSmartPointer<igTimerDispatchView> timer(igTimer_Create(0), AdoptReference());
+        timer->Restart();
         i = 0;
         if (0 < frames - 1) {
             do {
-                FUN_00463bb0(app);
+                ViewerSetup_RunFrame(app);
                 i++;
             } while (i < frames - 1);
         }
         parameters->_flushFrames = 1;
         flushFrames.type = 2; flushFrames.flags = 0; flushFrames.field = g_igViewerParameters_flushFramesMetaField[0];
         igModel_NotifyViews(parameters, &flushFrames);
-        FUN_00463bb0(app);
+        ViewerSetup_RunFrame(app);
         timer->Stop();
-        framesPerSecond = (1e9f * (float)frames) / __floatdisf(timer->GetElapsedTime());
+        framesPerSecond = (1e9f * (float)frames) / (float)timer->GetElapsedTime();
         if (g_frameRateReportIgnored == 0) {
             result = igReport_Info("average frame rate over %d frames : %f fps", frames, fptodp(framesPerSecond));
             if (result != 1 && result == 2) g_frameRateReportIgnored = 1;
         }
-        FUN_00463b70(app);
+        ViewerSetup_Close(app);
     }
 }
 
@@ -1037,7 +992,7 @@ void GameMain_ListIgbFiles(Blk *app) {
     int *slot;
     int slotOffset;
 
-    Assign::Take(app->fileNames.p, ((igFolderView *)app->folder.p)->ListEntries());
+    Assign::Take(app->fileNames.p, ((igFolderDispatchView *)app->folder.p)->ListEntries());
     firstPass = app->fileNames.p;
     if (firstPass != 0) {
         index = firstPass->_count - 1;
@@ -1098,10 +1053,10 @@ void GameMain_ClearScene(Blk *app) {
     igMemoryPoolView *userPool;
     igMemoryPoolView *allocator;
     igViewerSceneInfoManager *sceneInfo;
-    FUN_00463c80();
+    ViewerSetup_ClearInfos();
     sceneInfo = AsSceneInfoManager(igInsightCore_FindManager(app->viewer.core.p, g_igViewerSceneInfoManager_metaObject[0]));
-    ((igCommonTraversalView *)((igViewerRenderer *)sceneInfo->_viewerRenderer)->_sceneTraversal)->Reset();
-    ((igVisualContextView *)((igInsightCore *)app->viewer.core.p)->_visualContext)->Reset();
+    ((igCommonTraversalDispatchView *)((igViewerRenderer *)sceneInfo->_viewerRenderer)->_sceneTraversal)->reset();
+    ((igVisualContextDispatchView *)((igInsightCore *)app->viewer.core.p)->_visualContext)->releaseVertexArrays();
     RELEASE_SHIFTED(g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = 0;
     { igMemoryPoolView *current = Memory_GetCurrentAllocator(); allocator = g_useOwnerAllocator != 0 ? current : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }

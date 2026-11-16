@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igFileVirtuals.h"
+#include "dw4/igFileDispatchView.h"
 
 extern "C" int Memory_FreeBufferWithAllocator(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
@@ -16,7 +16,7 @@ extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beLuaState_userDestruct(beLuaState *self);
 extern "C" igObject *beFileChkObj_Create(int);
-extern "C" int beFileChkObj_FileExists(igObject *, int);
+extern "C" int beFileChkObj_FileExists(igObject *, const char *);
 extern "C" igObject *igAdxFile_Create(int);
 extern "C" int igAdxFile_GetFileSize(igObject *);
 extern "C" int igAdxFile_SetUseBuffer(igObject *, int);
@@ -35,7 +35,7 @@ public:
     ReaderRef(igObject *o) : p(o) {}
     ~ReaderRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-extern "C" int beLuaState_RunFile(beLuaState *self, int fileName);
+extern "C" int beLuaState_RunFile(beLuaState *self, const char *fileName);
 extern "C" int g_beLuaState_metaObject[4];
 
 void beLuaState_userDestruct(beLuaState *self) {
@@ -54,7 +54,7 @@ void beLuaState_RunString(void)
     igLuaState_RunString();
 }
 
-int beLuaState_RunFile(beLuaState *self, int fileName) {
+int beLuaState_RunFile(beLuaState *self, const char *fileName) {
     int allocator;
     int fileSize;
     char *buffer;
@@ -69,7 +69,7 @@ int beLuaState_RunFile(beLuaState *self, int fileName) {
     allocator = igObject_GetAllocator(self);
     allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     ReaderRef reader(igAdxFile_Create(allocator));
-    if (((igFileVirtuals *)reader.p)->openFile(fileName, "rb") == 0) {
+    if (((igFileDispatchView *)reader.p)->OpenFile(fileName, "rb") == 0) {
         return -1;
     }
     fileSize = igAdxFile_GetFileSize(reader.p);
@@ -82,16 +82,16 @@ int beLuaState_RunFile(beLuaState *self, int fileName) {
     allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     self->_lp = (int)Memory_AllocateAlignedWithAllocator(fileSize, 0x40, allocator);
     if (self->_lp == 0) {
-        ((igFileVirtuals *)reader.p)->closeFile();
+        ((igFileDispatchView *)reader.p)->CloseFile();
         return -1;
     }
     igAdxFile_SetUseBuffer(reader.p, 0);
     igAdxFile_SetUseAsync(reader.p, 0);
-    ((igFileVirtuals *)reader.p)->read(self->_lp, 1, fileSize);
+    ((igFileDispatchView *)reader.p)->Read((void *)self->_lp, 1, fileSize);
     igAdxFile_WaitForReadEnd(reader.p);
     igAdxFile_SetUseBuffer(reader.p, 1);
     igAdxFile_SetUseAsync(reader.p, 1);
-    ((igFileVirtuals *)reader.p)->closeFile();
+    ((igFileDispatchView *)reader.p)->CloseFile();
     buffer = (char *)self->_lp;
     found = false;
     length = 0;

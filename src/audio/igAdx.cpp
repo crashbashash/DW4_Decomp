@@ -116,14 +116,6 @@ char g_adxUseFileInfoCache;
 unsigned char g_adxIopReady;
 char g_adxUnusedFlag;
 }
-/* An object seen through its vtable: slot 20 is igObject::getMeta. */
-class igObjectVirtuals {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
-    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
-    virtual void d18(); virtual void d19(); virtual int getMeta();
-};
 extern "C" int g_igAdx_metaObject[4];
 extern "C" int SNDF_Init(int *config);
 extern "C" char g_igPsx2_resetIopServices;
@@ -393,7 +385,7 @@ void Gap__igAdx__resetFields(void) {
 
 void Gap__igAdx__userConstruct(igObject *self) {
     Gap__Core__igObject__userConstruct();
-    igMetaObject_CountInstances(((igObjectVirtuals *)self)->getMeta(), 1);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
 }
 
 int Gap__igAdx__getMeta(void)
@@ -406,7 +398,7 @@ void Gap__igAdx__destructFields(void)
 }
 
 void Gap__igAdx__userDestruct(igObject *self) {
-    igMetaObject_CountInstances(((igObjectVirtuals *)self)->getMeta(), 1);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     Gap__Core__igObject__userDestruct(self);
 }
 

@@ -3,7 +3,12 @@
 #include "dw4/igTDataList.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igTraversalView.h"
+#include "dw4/beBaseInfoManagerDispatchView.h"
+#include "dw4/igRandomNumberDispatchView.h"
+#include "dw4/igTransformDispatchView.h"
+#include "dw4/igLodDispatchView.h"
 #include "dw4/beTime.h"
+#include "dw4/listSet.h"
 #define SELECT_ALLOCATOR(var, arg) { int base_ = igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
@@ -44,19 +49,12 @@ enum beModelCtrlMessage {
     MSG_OFHITBULLETBOX,
     MSG_GETSEQNAMELIST,
 };
-/* Local views of the retail vtables: a dN entry holds the place of a slot this file does not call, and
- * the named entries are the slots it dispatches, named as the same slot is in the class that introduces it. */
-/* beModelCtrl and its subclasses */
-class beModelCtrlSlots {
+/* beModelCtrl's own virtual functions past beBaseInfoManager's, as this file dispatches them (each
+ * named as the same slot is in the class that introduces it).
+ * ABI view only: never instantiated. */
+class beModelCtrlDispatchView : public beBaseInfoManagerDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual int GetMeta();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
-    virtual int GetInfoMeta();
-    virtual void d31(); virtual void d32();
-    virtual int OnMessageText(beBaseInfoRam *ram, const char *message);
-    virtual void d34();
-    virtual int IsKind(const char *kind);
+    virtual int IsKind(const char *kind);                                   /* slot 35 */
     virtual void OnGenerate(beBaseInfoRam *ram);
     virtual void RegisterReceiver(beBaseInfoRam *ram);
     virtual void UpdateControl(beBaseInfoRam *ram);
@@ -68,39 +66,13 @@ public:
     virtual void OnSequenceChange(beBaseInfoRam *ram);
     virtual void OnAction1(beBaseInfoRam *ram);
     virtual void OnUpdateRam(beBaseInfoRam *ram);
-    virtual unsigned char OnPreMessage(beBaseInfoRam *ram, const char *message);
+    virtual unsigned char OnPreMessage(beBaseInfoRam *ram, const char *message); /* slot 47 */
 };
-/* any igObject: slot 20 returns its meta object */
-class igObjectSlots {
+/* beModelCtrlInfoRideOn2/3/4: slot 21 moves the ride-on model with a matrix.
+ * ABI view only: never instantiated. */
+class beModelCtrlInfoRideOnDispatchView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual int GetMeta();
-};
-/* beSystem's random generator (igRandomNumber): slot 22 draws the next number (no name recovered yet) */
-class RandomSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
-    virtual int NextNumber();
-};
-/* beModelCtrlInfoRideOn2/3/4: slot 21 is Move, which carries the ride-on model */
-class beModelCtrlInfoRideOnSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void Move(void *matrix);
-};
-/* beModelCtrlNode2 (an igTransform): slot 35 is igTransform's SetMatrix */
-class beModelCtrlNode2Slots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34();
-    virtual void SetMatrix(void *matrix);
-};
-/* igLod: slot 20 meta object; slot 29 follows an edit of its range list (igLod's own, no name recovered yet) */
-class igLodSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual int GetMeta();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
-    virtual void RangesChanged();
+    virtual void Move(float *matrix);                                       /* slot 21 */
 };
 /* The matrix of a transform node held as a plain reference field. */
 static inline float *NodeMatrix(int node) { return ((igTransform *)node)->_m; }
@@ -320,8 +292,8 @@ extern "C" char Jump[];
 extern "C" char Fall[];
 extern "C" char JOINT[];
 extern "C" char GETTRCDATA[];
-extern "C" int g_beModelCtrlMOVEEX_metaObject[4];
-extern "C" int g_beModelCtrlMOVE_metaObject[4];
+extern "C" igMetaObject *g_beModelCtrlMOVEEX_metaObject;
+extern "C" igMetaObject *g_beModelCtrlMOVE_metaObject;
 
 struct MoveRef {
     igObject *p;
@@ -348,7 +320,6 @@ struct Locals {
     }
 };
 extern "C" unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, igObject *command);
-extern "C" float D_004c8fa0[4];
 extern "C" int beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlPDMOVE *command);
 extern "C" int beModelCtrl_RunLabelCtrl(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlLABELCTRL *command);
 
@@ -395,19 +366,19 @@ extern "C" char OFFFLOOR[];
 extern "C" char ONFLOOR[];
 struct MutekiNameOf { static int *Get(beModelCtrlMUTEKI *m) { if (m->_name != 0) { return (int *)m->_name; } return &emptyString[0]; } };
 extern "C" int beModelCtrl_RunMuteki(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlMUTEKI *command);
-extern "C" int g_beModelCtrlCTRL_metaObject[4];
-extern "C" int g_beModelCtrlACTION_metaObject[4];
-extern "C" int g_beModelCtrlMOVERL_metaObject[4];
-extern "C" int g_beModelCtrlPDMOVE_metaObject[4];
-extern "C" int g_beModelCtrlWCHECK_metaObject[4];
-extern "C" int g_beModelCtrlHITBOX_metaObject[4];
-extern "C" int g_beModelCtrlMUTEKI_metaObject[4];
-extern "C" int g_beModelCtrlLABELCTRL_metaObject[4];
-extern "C" int g_beModelCtrlLUACALL_metaObject[4];
-extern "C" int g_beModelCtrlAIMAP_metaObject[4];
-extern "C" int g_beModelCtrlMSGBOX_metaObject[4];
-extern "C" int g_beModelCtrlLABEL_metaObject[4];
-extern "C" int g_beModelCtrlJUMP_metaObject[4];
+extern "C" igMetaObject *g_beModelCtrlCTRL_metaObject;
+extern "C" igMetaObject *g_beModelCtrlACTION_metaObject;
+extern "C" igMetaObject *g_beModelCtrlMOVERL_metaObject;
+extern "C" igMetaObject *g_beModelCtrlPDMOVE_metaObject;
+extern "C" igMetaObject *g_beModelCtrlWCHECK_metaObject;
+extern "C" igMetaObject *g_beModelCtrlHITBOX_metaObject;
+extern "C" igMetaObject *g_beModelCtrlMUTEKI_metaObject;
+extern "C" igMetaObject *g_beModelCtrlLABELCTRL_metaObject;
+extern "C" igMetaObject *g_beModelCtrlLUACALL_metaObject;
+extern "C" igMetaObject *g_beModelCtrlAIMAP_metaObject;
+extern "C" igMetaObject *g_beModelCtrlMSGBOX_metaObject;
+extern "C" igMetaObject *g_beModelCtrlLABEL_metaObject;
+extern "C" igMetaObject *g_beModelCtrlJUMP_metaObject;
 extern "C" void beModelCtrl_RunCommands(beModelCtrl *self, beModelCtrlInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
 
 extern "C" void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work, int force);
@@ -442,7 +413,6 @@ extern "C" void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *, float);
 extern "C" void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *);
 extern "C" void igMatrix44f_FromTranslation(void *, igVec3f *);
 extern "C" igVec3f beMessenger_GetVec3(int messenger, int index);
-extern "C" float DAT_004c8fb8[4];
 extern "C" float g_matrix44Identity[4];
 extern "C" float g_vec3XAxis[4];
 extern "C" float g_vec3YAxis[4];
@@ -456,7 +426,7 @@ extern "C" char GETRECNO[];
 extern "C" char hit[];
 extern "C" char Hit[];
 extern "C" char SQ_ERAS2[];
-extern "C" int g_igLod_metaObject[4];
+extern "C" igMetaObject *g_igLod_metaObject;
 
 /* Owning stack references to the objects this handler creates before binding them: kind 0 the AI
  * info, 1 the hit-body info, 2..4 the ride-on infos of commands 25..27 and 5 their model node. */
@@ -493,7 +463,7 @@ extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 /* Pops the attribute pushed for a subtree and the traversal time, and passes the subtree's result on. */
 static inline int PopSubtree(igCommonTraversal *traversal, igAttrStackManager *attrs, int index, const int result) {
     PopAttr(attrs, index);
-    ((CommonTraversalView *)traversal)->popTime();
+    ((igCommonTraversalDispatchView *)traversal)->popTime();
     return result;
 }
 
@@ -520,7 +490,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
     int slot;
     int result;
     igAttrStackManager *attrs;
-    ModelViewMatrixAttrView *matrixAttr;
+    igModelViewMatrixAttrDispatchView *matrixAttr;
     int attrId;
     void *firstChild;
     int index;
@@ -548,7 +518,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
             timePool->_freeIndex = slot + 1;
             timeAttr = ((igTimeAttr **)timePool->_data)[slot];
             timeAttr->_time = time;
-            ((CommonTraversalView *)traversal)->pushTime(time);
+            ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
             timeAttrIndex = &timeAttr->_cachedAttrIndex;
             timeUnitID = &timeAttr->_cachedUnitID;
             index = *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex];
@@ -561,7 +531,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
     } else {
         firstChild = ((void **)((igObjectList *)((beMeterCtrlNode *)data)->_childList)->_data)[0];
         igMatrix44f_SetIdentity(modelView);
-        matrixAttr = (ModelViewMatrixAttrView *)TakePooled((igObjectPool *)traversal->_matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+        matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled((igObjectPool *)traversal->_matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
         depth = matrices->_count - 1;
         igMatrix44f_Copy(modelView, (char *)((void **)matrices->_data)[depth] + 12);
         igMatrix44f_GetTranslation((int)modelView, (float *)&translation);
@@ -579,7 +549,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
             igMatrix44f_SetTranslation(modelView, &translation);
             matrixAttr->setMatrix(modelView);
             clock->_time = time;
-            ((CommonTraversalView *)traversal)->pushTime(time);
+            ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
             matrixAttrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
             matrixUnitID = &((igAttr *)matrixAttr)->_cachedUnitID;
             index = *matrixUnitID + ((int *)attrs->_attrStackIndexTable)[*matrixAttrIndex];
@@ -704,10 +674,10 @@ int beModelCtrl_GetInfoMeta(void)
 }
 
 int beModelCtrl_AddInfo(beModelCtrl *self, beModelCtrlInfo *info) {
-    int infoMeta;
+    igMetaObject *infoMeta;
 
-    infoMeta = ((beModelCtrlSlots *)self)->GetInfoMeta();
-    if ((infoMeta == ((igObjectSlots *)info)->GetMeta()) && ((((beModelCtrlSlots *)self)->IsKind((const char *)info->_kindString) & 0xFF) == 1)) {
+    infoMeta = ((beModelCtrlDispatchView *)self)->GetInfoMeta();
+    if ((infoMeta == ((igObjectDispatchView *)info)->GetMeta()) && ((((beModelCtrlDispatchView *)self)->IsKind((const char *)info->_kindString) & 0xFF) == 1)) {
         beBaseInfoManager_AddInfo(self, info);
         return 1;
     }
@@ -732,7 +702,7 @@ void beModelCtrl_OnAddRam(beModelCtrl *self, beBaseInfoRam *ram) {
             beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, HITENEMYBULLET_2);
         }
     }
-    ((beModelCtrlSlots *)self)->RegisterReceiver(ram);
+    ((beModelCtrlDispatchView *)self)->RegisterReceiver(ram);
 }
 
 void beModelCtrl_RegisterReceiver(void)
@@ -810,7 +780,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
         } else {
             zoneList = (beModelCtrlAIDataList *)map->_zoneD;
         }
-        roll = ((RandomSlots *)((beSystem *)self->_system)->_random)->NextNumber() & 0xf;
+        roll = ((igRandomNumberDispatchView *)((beSystem *)self->_system)->_random)->genrand() & 0xf;
         count = zoneList->_count;
         i = 0;
         if (i < count) {
@@ -1072,7 +1042,7 @@ struct KeyEventName { static inline void rel(char *p) {
 } };
 void beModelCtrl_UpdateKeyCtrl(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work)
 {
-    if (work->_isOnCtrl != 0) ((beModelCtrlSlots *)self)->UpdateControl(ram);
+    if (work->_isOnCtrl != 0) ((beModelCtrlDispatchView *)self)->UpdateControl(ram);
     if (strcmp((void *)work->_keyEventName, SQ_NONE) == 0) {
         switch (work->_ctrlSt0) {
         case 1: {
@@ -1132,7 +1102,7 @@ void beModelCtrl_UpdateKeyCtrl(beModelCtrl *self, beBaseInfo *info, beBaseInfoRa
         }
     }
     if (strcmp((void *)work->_keyEventName, SQ_NONE) != 0 && strcmp((void *)work->_keyEventName, (void *)work->_seqCodeName) != 0) {
-        ((beModelCtrlSlots *)self)->OnMessageText(ram, (const char *)work->_keyEventName);
+        ((beModelCtrlDispatchView *)self)->OnMessageText(ram, (const char *)work->_keyEventName);
     }
 }
 
@@ -1387,7 +1357,7 @@ void beModelCtrl_CheckWallAndFloor(beModelCtrl *self, beBaseInfo *info, beBaseIn
                 return;
             } else {
                 if (strcmp(work->_seqCodeName, SQ_SLEP) == 0) return;
-                ((beModelCtrlSlots *)self)->OnMessageText(ram, SQ_FALL);
+                ((beModelCtrlDispatchView *)self)->OnMessageText(ram, SQ_FALL);
                 return;
             }
         }
@@ -1544,7 +1514,7 @@ static inline beModelCtrlMoveObject **MoveObjects(beModelCtrlInfoWork *work) {
 
 void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work) {
     float step[3];
-    int matrix[16];
+    float matrix[16];
     float frames;
     float turn;
     int allocator;
@@ -1595,7 +1565,7 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
             step[1] = beModelCtrlMoveObject_Step(MoveObjects(work)[1], frames);
             step[2] = beModelCtrlMoveObject_Step(MoveObjects(work)[2], frames);
             igMatrix44f_TranslateLocal(matrix, step);
-            ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(matrix);
+            ((igTransformDispatchView *)ramData->_node)->SetMatrix(matrix);
             work->_isHitCheck = 1;
             box = (void *)work->_baseAABox;
             if (box != 0) {
@@ -1608,7 +1578,7 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
 unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, igObject *command)
 {
     float forward[3];
-    int meta;
+    igMetaObject *meta;
     if (!(beBaseInfoRam_HasTimer(ram, KEIKATIMER) & 0xFF)) {
         beBaseInfoRam_StartTimer(ram, KEIKATIMER, 0);
     }
@@ -1651,8 +1621,8 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ObjectList_AppendRetained(list, created); }
     }
-    meta = g_beModelCtrlMOVE_metaObject[0];
-    if (meta == ((igObjectSlots *)command)->GetMeta()) {
+    meta = g_beModelCtrlMOVE_metaObject;
+    if (meta == ((igObjectDispatchView *)command)->GetMeta()) {
         char *name;
         float value, frame;
         beModelCtrlMOVE *m = (beModelCtrlMOVE *)command;
@@ -1673,8 +1643,8 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
             beModelCtrlMoveObject_Start(MoveObjects(work)[1], 1, value, frame, 0.0f);
         }
     } else {
-        meta = g_beModelCtrlMOVEEX_metaObject[0];
-        if (meta == ((igObjectSlots *)command)->GetMeta()) {
+        meta = g_beModelCtrlMOVEEX_metaObject;
+        if (meta == ((igObjectDispatchView *)command)->GetMeta()) {
             char *name;
             int idx, mode, base;
             unsigned char isSeqStop;
@@ -1784,7 +1754,7 @@ int beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfo
             } else {
                 List_Resize(list, k + 1, 4);
             }
-            list->_data[k] = D_004c8fa0[0];
+            ListStoreAt(list->_data, k, 0.0f);
         }
     }
     valueList = (igTDataList<float> *)work->_pdMoveDataList;
@@ -1807,9 +1777,7 @@ int beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfo
 
 extern "C" void *igStringRefList_Create(int);
 extern "C" void *igIntList_Create(int);
-extern "C" int FUN_001ca620(igStringRefList *, StringRef *);
-extern "C" int DAT_004c8fa8[4];
-extern "C" int DAT_004c8fb0[4];
+extern "C" int StringList_AppendRetained(igStringRefList *, StringRef *);
 static inline int intListCount(const igIntList *list) { return list->_count; }
 /* Holder of the label lists created on first use; the table names its own out-of-line destructor copy. */
 struct LabelListRef { igObject *p; LabelListRef() { p = 0; } ~LabelListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
@@ -1965,7 +1933,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         }
         count = offsetList->_count;
         if (count != 0 && idx >= 0 && idx < count) {
-            ((int *)offsetList->_data)[idx] = DAT_004c8fa8[0];
+            ListStoreAt((int *)offsetList->_data, idx, -1);
         }
     } else {
         if (seqName == 0) {
@@ -1980,7 +1948,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         }
         {
             StringRef newSeq((char *)token);
-            FUN_001ca620(seqList, &newSeq);
+            StringList_AppendRetained(seqList, &newSeq);
         }
         if (labelName == 0) {
             token = 0;
@@ -1994,7 +1962,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         }
         {
             StringRef newLabel((char *)token);
-            FUN_001ca620(labelList, &newLabel);
+            StringList_AppendRetained(labelList, &newLabel);
         }
         k = intListCount(offsetList);
         if (k < offsetList->_capacity) {
@@ -2002,7 +1970,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         } else {
             List_Resize(offsetList, k + 1, 4);
         }
-        ((int *)offsetList->_data)[k] = DAT_004c8fb0[0];
+        ListStoreAt((int *)offsetList->_data, k, -1);
     }
 }
 
@@ -2168,7 +2136,7 @@ int beModelCtrl_RunJump(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlJUMP *
 
     sequence = (int *)(command->_name);
     sequence = sequence ? sequence : (int *)&emptyString[0];
-    ((beModelCtrlSlots *)self)->OnMessageText(ram, (const char *)sequence);
+    ((beModelCtrlDispatchView *)self)->OnMessageText(ram, (const char *)sequence);
     return 1;
 }
 
@@ -2233,7 +2201,7 @@ void beModelCtrl_UpdateWaitCheck(beModelCtrl *self, beModelCtrlInfo *info, beBas
             END_WAIT();
         }
     } else {
-        ((beModelCtrlSlots *)self)->OnWaitCheck(ram);
+        ((beModelCtrlDispatchView *)self)->OnWaitCheck(ram);
     }
 }
 
@@ -2295,61 +2263,61 @@ void beModelCtrl_RunCommands(beModelCtrl *self, beModelCtrlInfo *info, beBaseInf
     const beModelCtrlData *commands;
     int index;
     unsigned char next;
-    igObjectSlots *command;
+    igObjectDispatchView *command;
     jumped = 0;
     commands = (beModelCtrlData *)work->_comData;
     index = work->_comIndex;
     if (index != ((igObjectList *)commands->_comList)->_count) {
         do {
             next = 1;
-            command = ((igObjectSlots **)((igObjectList *)commands->_comList)->_data)[index];
-            if (g_beModelCtrlCTRL_metaObject[0] == command->GetMeta()) {
+            command = ((igObjectDispatchView **)((igObjectList *)commands->_comList)->_data)[index];
+            if (g_beModelCtrlCTRL_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunCtrl(self, work, (beModelCtrlCTRL *)command));
                 index += 1;
-            } else if (g_beModelCtrlACTION_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlACTION_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunAction(self, info, ram, (beModelCtrlACTION *)command));
                 index += 1;
-            } else if (g_beModelCtrlMOVE_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlMOVE_metaObject == command->GetMeta()) {
                 next = beModelCtrl_RunMove(self, ram, work, (igObject *)command);
                 index += 1;
-            } else if (g_beModelCtrlMOVEEX_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlMOVEEX_metaObject == command->GetMeta()) {
                 next = beModelCtrl_RunMove(self, ram, work, (igObject *)command);
                 index += 1;
-            } else if (g_beModelCtrlMOVERL_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlMOVERL_metaObject == command->GetMeta()) {
                 next = beModelCtrl_RunMove(self, ram, work, (igObject *)command);
                 index += 1;
-            } else if (g_beModelCtrlPDMOVE_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlPDMOVE_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunPdMove(self, ram, work, (beModelCtrlPDMOVE *)command));
                 index += 1;
-            } else if (g_beModelCtrlWCHECK_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlWCHECK_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_StartWaitCheck(self, work, (beModelCtrlWCHECK *)command));
                 index += 1;
-            } else if (g_beModelCtrlHITBOX_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlHITBOX_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunHitBox(self, ram, work, (beModelCtrlHITBOX *)command));
                 index += 1;
-            } else if (g_beModelCtrlMUTEKI_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlMUTEKI_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunMuteki(self, ram, work, (beModelCtrlMUTEKI *)command));
                 index += 1;
-            } else if (g_beModelCtrlLABELCTRL_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlLABELCTRL_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunLabelCtrl(self, ram, work, (beModelCtrlLABELCTRL *)command));
                 index += 1;
-            } else if (g_beModelCtrlLUACALL_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlLUACALL_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunLuaCall(self, (beBaseInfo *)info, ram, work, (beModelCtrlLUACALL *)command));
                 index += 1;
-            } else if (g_beModelCtrlAIMAP_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlAIMAP_metaObject == command->GetMeta()) {
                 next = ((unsigned char)beModelCtrl_RunAiMap(self, info, ram, work, (beModelCtrlAIMAP *)command));
                 index += 1;
-            } else if (g_beModelCtrlMSGBOX_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlMSGBOX_metaObject == command->GetMeta()) {
                 next = beModelCtrl_RunMsgBox(self, info, work, (beModelCtrlMSGBOX *)command);
                 index += 1;
-            } else if (g_beModelCtrlLABEL_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlLABEL_metaObject == command->GetMeta()) {
                 if (work->_comLabelCount != 0) {
                     next = 0;
                 } else {
                     work->_comLabelCount = 1;
                     index += 1;
                 }
-            } else if (g_beModelCtrlJUMP_metaObject[0] == command->GetMeta()) {
+            } else if (g_beModelCtrlJUMP_metaObject == command->GetMeta()) {
                 jumped = ((unsigned char)beModelCtrl_RunJump(self, ram, (beModelCtrlJUMP *)command)) & 0xFF;
             }
         } while (jumped == 0 && (next & 0xFF) && index != ((igObjectList *)commands->_comList)->_count);
@@ -2464,13 +2432,13 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
     float newPos[3];
     float delta[3];
     float pos[3];
-    int lockMatrix[16];
+    float lockMatrix[16];
     int boneMatrix[16];
-    int modelMatrix[16];
+    float modelMatrix[16];
     int oldRotation[16];
     int offset[16];
     int local[16];
-    int world[16];
+    float world[16];
     beBaseInfo *info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
         int allocator = igObject_GetAllocator(ram);
@@ -2495,7 +2463,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
         int posNode;
         beModelCtrlInfoRideOn4 *rideOn;
         if (strcmp(work->_seqCodeName, SQ_ERAS_2) == 0) {
-            ((beModelCtrlSlots *)self)->OnMessageText(ram, REMOVE_2);
+            ((beModelCtrlDispatchView *)self)->OnMessageText(ram, REMOVE_2);
             return;
         }
         work->_keyInput = 0;
@@ -2517,16 +2485,16 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
         } else if (work->_aI != 0) {
             beBaseInfoRam_RemoveTimer(ram, AITIMER);
         }
-        ((beModelCtrlSlots *)self)->OnUpdateRam(ram);
+        ((beModelCtrlDispatchView *)self)->OnUpdateRam(ram);
         if (work->_isPosLock == 0) {
             beModelCtrl_ApplyMoves(self, info, ram, work);
         } else {
             if (work->_posLockNode != 0) {
                 igMatrix44f_Copy(lockMatrix, NodeMatrix(work->_posLockNode));
                 igMatrix44f_TranslateLocal(lockMatrix, &work->_posLockOffset[0]);
-                ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(lockMatrix);
+                ((igTransformDispatchView *)ramData->_node)->SetMatrix(lockMatrix);
             } else if (work->_posLockTrc != 0) {
-                ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix((int *)(*(int *)(work->_posLockTrc + 16) + *(int *)((char *)g_igTransformRecorder_mMetaField[0] + 8)));
+                ((igTransformDispatchView *)ramData->_node)->SetMatrix((float *)(*(int *)(work->_posLockTrc + 16) + *(int *)((char *)g_igTransformRecorder_mMetaField[0] + 8)));
             } else if (work->_posLockModelName != 0) {
                 beMessenger_SelectReceivers(self->_messenger, ACTION_2, work->_posLockModelName, ram->_ramNo);
                 beMessenger_AppendString(self->_messenger, work->_posLockBoneName);
@@ -2537,7 +2505,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
                     if (beMessenger_GetMatrixCount(self->_messenger) == 1) {
                         beMessenger_GetMatrix(modelMatrix, self->_messenger, 0);
                         igMatrix44f_PreMultiply(modelMatrix, boneMatrix);
-                        ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(modelMatrix);
+                        ((igTransformDispatchView *)ramData->_node)->SetMatrix(modelMatrix);
                     }
                 }
             }
@@ -2545,7 +2513,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
         }
         rideOn = (beModelCtrlInfoRideOn4 *)work->_rideOnData;
         if (rideOn != 0) {
-            ((beModelCtrlInfoRideOnSlots *)rideOn)->Move(NodeMatrix(ramData->_node));
+            ((beModelCtrlInfoRideOnDispatchView *)rideOn)->Move(NodeMatrix(ramData->_node));
             igMatrix44f_GetTranslation((int)rideOn->_oldMatrix, (float *)oldPos);
             igMatrix44f_GetTranslation((int)NodeMatrix(ramData->_node), newPos);
             delta[0] = newPos[0] - oldPos[0];
@@ -2560,7 +2528,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
             igMatrix44f_Multiply(local, offset, oldRotation);
             igMatrix44f_SetIdentity(world);
             igMatrix44f_Multiply(world, local, NodeMatrix(rideOn->_modelNode));
-            ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(world);
+            ((igTransformDispatchView *)ramData->_node)->SetMatrix(world);
             igMatrix44f_Copy(rideOn->_oldMatrix, NodeMatrix(rideOn->_modelNode));
             work->_isHitCheck = 1;
         }
@@ -2615,7 +2583,7 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
                 count = ((igObjectList *)commands->_comList)->_count;
                 for (i = 0; i < count; i++) {
                     beModelCtrlLABEL *label = (beModelCtrlLABEL *)((int *)((igObjectList *)commands->_comList)->_data)[i];
-                    if (g_beModelCtrlLABEL_metaObject[0] == ((igObjectSlots *)label)->GetMeta()) {
+                    if (g_beModelCtrlLABEL_metaObject == ((igObjectDispatchView *)label)->GetMeta()) {
                         if (strcmp(label->_name != 0 ? (int *)label->_name : &emptyString[0], labelName) == 0) {
                             igIntList *offsets = (igIntList *)work->_labelOffsetList;
                             index = i;
@@ -2722,7 +2690,7 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
     if (rotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, g_vec3XAxis, rotation.x);
     if (rotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, g_vec3YAxis, rotation.y);
     if (rotation.z != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, (float *)g_vec3ZAxis, rotation.z);
-    ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(matrix);
+    ((igTransformDispatchView *)ramData->_node)->SetMatrix(matrix);
     work->_aIHOffsetY = offset.y;
 }
 
@@ -2762,12 +2730,12 @@ void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
             igVec3f rotation = beMessenger_GetVec3(self->_messenger, 1);
             igMatrix44f_SetEulerRotation(matrix, 0.017453292f * Component(rotation, 0), 0.017453292f * Component(rotation, 1), 0.017453292f * Component(rotation, 2));
         }
-        ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(matrix);
+        ((igTransformDispatchView *)ramData->_node)->SetMatrix(matrix);
         return;
     }
     if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
         beMessenger_GetMatrix(given, self->_messenger, 0);
-        ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(given);
+        ((igTransformDispatchView *)ramData->_node)->SetMatrix(given);
     }
 }
 
@@ -2826,7 +2794,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
     ENSURE_DATA_LIST(ram)
     beModelCtrlInfoRamData *ramData = (beModelCtrlInfoRamData *)((beBaseInfoData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ((char *)ONE_3)));
     beModelCtrlInfoWork *work = (beModelCtrlInfoWork *)ramData->_work;
-    if (((beModelCtrlSlots *)self)->OnPreMessage(ram, message) == 1) return 1;
+    if (((beModelCtrlDispatchView *)self)->OnPreMessage(ram, message) == 1) return 1;
     unsigned sel = beMessenger_ResolveEnumValue(MESSENGER, beModelCtrl_GetMessageEnum(), message);
     switch (sel) {
     case MSG_GENERATE: {
@@ -2849,7 +2817,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             RELEASE_STRING(o)
             sequence.p = (char *)tk;
         }
-        ((beModelCtrlSlots *)self)->OnGenerate(ram);
+        ((beModelCtrlDispatchView *)self)->OnGenerate(ram);
         beModelCtrlInfoWork *started = (beModelCtrlInfoWork *)ramData->_work;
         beDataObjInt *mHp = (beDataObjInt *)started->_mHp;
         if (mHp->_data == 0) {
@@ -2877,16 +2845,16 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             started->_aI = (int)s;
         }
         if (sequence.p == 0)
-            ((beModelCtrlSlots *)self)->OnMessageText(ram, SQ_WAIT_2);
+            ((beModelCtrlDispatchView *)self)->OnMessageText(ram, SQ_WAIT_2);
         else
-            ((beModelCtrlSlots *)self)->OnMessageText(ram, sequence.p);
+            ((beModelCtrlDispatchView *)self)->OnMessageText(ram, sequence.p);
         igObject *baseBox = (igObject *)started->_baseAABox;
         if (baseBox != 0) beModelCtrl_UpdateBound(self, MODEL_NODE, (igAABox *)baseBox);
         return 1;
     }
     case MSG_REMOVE:
         if (ram->_isRun != 0) {
-            ((beModelCtrlSlots *)self)->OnRemove(ram);
+            ((beModelCtrlDispatchView *)self)->OnRemove(ram);
             beMessenger_PushArgContext(MESSENGER);
             int id = ram->_ramNo;
             INFO_NAME(n)
@@ -2967,7 +2935,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
     case MSG_SETMATRIX:
         if (ram->_isRun != 0 && work != 0 && beMessenger_GetMatrixCount(MESSENGER) != 0) {
             beMessenger_GetMatrix(setMatrix, MESSENGER, 0);
-            ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(setMatrix);
+            ((igTransformDispatchView *)ramData->_node)->SetMatrix(setMatrix);
             if (work != 0) {
                 Vec3f_TransformDirection(&setForward, ((float *)g_vec3ZAxis), setMatrix);
                 float ang = atan2f(setForward.x, setForward.z);
@@ -3002,7 +2970,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
     case MSG_OFCTRL:
         if (ram->_isRun != 0 && work != 0) {
             work->_isOnCtrl = 0;
-            ((beModelCtrlSlots *)self)->OnControlOff(ram);
+            ((beModelCtrlDispatchView *)self)->OnControlOff(ram);
         }
         return 1;
     case MSG_ONFREEZE:
@@ -3012,7 +2980,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             INFO_NAME(n)
             beMessenger_SendNamed(MESSENGER, ((char *)ACTION_2), n, id, ONFREEZE);
             work->_isOnFreeze = 1;
-            ((beModelCtrlSlots *)self)->OnFreeze(ram);
+            ((beModelCtrlDispatchView *)self)->OnFreeze(ram);
         }
         return 1;
     case MSG_OFFREEZE:
@@ -3026,9 +2994,9 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         return 1;
     case MSG_SETLODHIGH:
         if (ram->_isRun != 0 && work != 0 && work->_svLODHighRange == -1.0f) {
-            int t = g_igLod_metaObject[0];
+            igMetaObject *t = g_igLod_metaObject;
             igLod *o = FIRST_LOD(MODEL_NODE);
-            if (t == ((igLodSlots *)o)->GetMeta()) {
+            if (t == ((igLodDispatchView *)o)->GetMeta()) {
                 igNodeList *children = (igNodeList *)o->_childList;
                 int cnt = 0;
                 if (children != 0) cnt = children->_count;
@@ -3036,8 +3004,8 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     igFloatList *ranges = (igFloatList *)o->_rangeList;
                     work->_svLODHighRange = ((float *)ranges->_data)[2];
                     int n = ranges->_count;
-                    if (n != 0 && n > 2) ((float *)ranges->_data)[2] = DAT_004c8fb8[0];
-                    ((igLodSlots *)o)->RangesChanged();
+                    if (n != 0 && n > 2) ListStoreAt((float *)ranges->_data, 2, 100000000.0f);
+                    ((igLodDispatchView *)o)->resetLastRange();
                 }
             }
         }
@@ -3051,7 +3019,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                 int n = ranges->_count;
                 if (n != 0 && n > 2) ((float *)ranges->_data)[2] = f;
                 work->_svLODHighRange = -1.0f;
-                ((igLodSlots *)o)->RangesChanged();
+                ((igLodDispatchView *)o)->resetLastRange();
             }
         }
         return 1;
@@ -3064,7 +3032,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             if (moveRotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, g_vec3XAxis, 0.017453292f * moveRotation.x);
             if (moveRotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, g_vec3YAxis, 0.017453292f * moveRotation.y);
             { float rz = moveRotation.z; if (rz != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, ((float *)g_vec3ZAxis), 0.017453292f * rz); }
-            ((beModelCtrlNode2Slots *)ramData->_node)->SetMatrix(moveMatrix);
+            ((igTransformDispatchView *)ramData->_node)->SetMatrix(moveMatrix);
             work->_targetDirection[1] = 0.017453292f * moveRotation.y;
             beModelCtrl_UpdateDirection(self, info, ram, work, 1);
             igObject *a2 = (igObject *)work->_baseAABox;
@@ -3165,7 +3133,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
     default:
         if (ram->_isRun != 0) {
             if (strcmp(message, ((char *)SQ_ERAS_2)) == 0) {
-                ((beModelCtrlSlots *)self)->OnErase(ram);
+                ((beModelCtrlDispatchView *)self)->OnErase(ram);
                 POOL()
                 const char *tk = ((const char *)StringPool_Intern(((void * *)g_stringPool)[0], ((char *)SQ_ERAS_2)));
                 const char *old = (const char *)work->_seqCodeName;
@@ -3219,12 +3187,12 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     }
                 }
                 beModelCtrl_RunCommands(self, (beModelCtrlInfo *)info, ram, work);
-                ((beModelCtrlSlots *)self)->OnSequenceChange(ram);
+                ((beModelCtrlDispatchView *)self)->OnSequenceChange(ram);
             }
         }
         return 1;
     case MSG_ACTION1:
-        ((beModelCtrlSlots *)self)->OnAction1(ram);
+        ((beModelCtrlDispatchView *)self)->OnAction1(ram);
         return 1;
     case MSG_SETCONVEYOR:
         if (work != 0) {
@@ -3236,7 +3204,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     {
                         ALLOCATOR(b, self)
                         ObjRef<5> r2((igObject *)beModelCtrlNode2_Create(b));
-                        ((beModelCtrlNode2Slots *)r2.p)->SetMatrix(mt);
+                        ((igTransformDispatchView *)r2.p)->SetMatrix(mt);
                         node2 = r2.p;
                         held = (beModelCtrlInfoRideOn *)r.p;
                         RETAIN(node2)
@@ -3271,7 +3239,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     {
                         ALLOCATOR(b, self)
                         ObjRef<5> r2((igObject *)beModelCtrlNode2_Create(b));
-                        ((beModelCtrlNode2Slots *)r2.p)->SetMatrix(quicksandMatrix);
+                        ((igTransformDispatchView *)r2.p)->SetMatrix(quicksandMatrix);
                         node2 = r2.p;
                         held = (beModelCtrlInfoRideOn *)r.p;
                         RETAIN(node2)
@@ -3310,7 +3278,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     {
                         ALLOCATOR(b, self)
                         ObjRef<5> r2((igObject *)beModelCtrlNode2_Create(b));
-                        ((beModelCtrlNode2Slots *)r2.p)->SetMatrix(floorMatrix);
+                        ((igTransformDispatchView *)r2.p)->SetMatrix(floorMatrix);
                         node2 = r2.p;
                         held = (beModelCtrlInfoRideOn *)r.p;
                         RETAIN(node2)

@@ -19,19 +19,19 @@ void *beNodeAnim_ResolveMetaObject(void) {
 }
 
 int beNodeAnim_GetVTable(void) {
-    struct Obj_34e8c0 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.f12 = 0;
-    o.f16 = 0;
-    o.f28 = 0;
-    o.vt = &g_beNodeAnim_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNodeAnim_vtable[0];
-    
-    igGroup_Destroy(&o, 0);
-    return r;
+    beNodeAnim obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._bound = 0;
+    obj._parentList = 0;
+    obj._childList = 0;
+    obj._vtable = (int)&g_beNodeAnim_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beNodeAnim_vtable[0];
+    igGroup_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNodeAnim_EnsureRegistered(void)

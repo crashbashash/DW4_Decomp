@@ -514,8 +514,8 @@
 0x0019cf20	igNode_Register	function-symbol
 0x0019cfa0	thunk_igNode_GetMetaObject	function-symbol
 0x0019d1e0	igGeometry_GetPublishedMetaObject	published-accessor
-0x0019d320	igModelViewMatrixBoneSelectList_561880_GetVTable	function-symbol
-0x0019d3e0	thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject	function-symbol
+0x0019d320	igModelViewMatrixBoneSelectListSg_GetVTable	function-symbol
+0x0019d3e0	thunk_igModelViewMatrixBoneSelectListSg_GetMetaObject	function-symbol
 0x0019d480	igModelViewMatrixBoneSelect_GetVTable	function-symbol
 0x0019d570	thunk_igModelViewMatrixBoneSelect_GetMetaObject	function-symbol
 0x0019d660	igLod_GetVTable	function-symbol
@@ -2438,7 +2438,7 @@
 0x004858e0	__malloc_current_mallinfo	recovered-global
 0x00485908	__malloc_lock_owner	recovered-global
 0x0048590c	call_count	recovered-global
-0x0048bcd0	g_igModelViewMatrixBoneSelectList_561880_callbackList	callback-list
+0x0048bcd0	g_igModelViewMatrixBoneSelectListSg_callbackList	callback-list
 0x0048dc88	p2FogScale	recovered-global
 0x0048dc8c	p2FogOffset	recovered-global
 0x0048dc90	p2FogEnable	recovered-global
@@ -7672,7 +7672,7 @@
 0x00560ef8	g_gsRawCounter	recovered-global
 0x00561288	g_igTransformRecorder_mMetaField	recovered-global
 0x005615e0	g_igSceneInfo_metaObject	recovered-global
-0x00561880	g_igModelViewMatrixBoneSelectList_metaObject_00561880	class-handle
+0x00561880	g_igModelViewMatrixBoneSelectListSg_metaObject	class-handle
 0x00562640	g_igCommonTraversal_travProcs	recovered-global
 0x00562868	g_shadowTextureFunctionAttr0	recovered-global
 0x00562c70	p2ProgramFlags	recovered-global

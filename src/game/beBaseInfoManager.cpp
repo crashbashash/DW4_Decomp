@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#include "dw4/beBaseInfoManagerVirtuals.h"
+#include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/igobject_release.h"
 
 extern "C" void beBaseInfoManager_Activate(void);
@@ -32,7 +32,7 @@ void beBaseInfoManager_Deactivate(void)
 }
 
 void beBaseInfoManager_Start(beBaseInfoManager *self) {
-    ((beBaseInfoManagerVirtuals *)self)->prepare();
+    ((beBaseInfoManagerDispatchView *)self)->Prepare();
     self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
     self->_messenger = igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
 }
@@ -43,13 +43,13 @@ void beBaseInfoManager_Stop(void)
 }
 
 int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info) {
-    beBaseInfoManagerVirtuals *manager = (beBaseInfoManagerVirtuals *)self;
-    int infoMeta = manager->getInfoMeta();
-    if (infoMeta == ((igObjectVirtuals *)info)->getMeta()) {
+    beBaseInfoManagerDispatchView *manager = (beBaseInfoManagerDispatchView *)self;
+    igMetaObject *infoMeta = manager->GetInfoMeta();
+    if (infoMeta == ((igObjectDispatchView *)info)->GetMeta()) {
         int count;
         int i;
         ObjectList_AppendRetained(self->_infoList, info);
-        manager->onAddInfo(info);
+        manager->OnAddInfo(info);
         count = ((beBaseInfoRamList *)info->_ramList)->_count;
         for (i = 0; i < count; i++) {
             beBaseInfoRam *ram = ((beBaseInfoRam **)((beBaseInfoRamList *)info->_ramList)->_data)[i];
@@ -60,7 +60,7 @@ int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info) {
             ram->_parentManager = (int)self;
             ram->_parentInfo = (int)info;
             ram->_ramNo = i;
-            manager->onAddRam(ram);
+            manager->OnAddRam(ram);
         }
         igInsightCore_AddToScheduler(self->_insight, self);
         self->_isUpdateRun = 1;
@@ -86,7 +86,7 @@ void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *self) {
     int clearIndex;
     int releaseIndex;
 
-    ((beBaseInfoManagerVirtuals *)self)->prepare();
+    ((beBaseInfoManagerDispatchView *)self)->Prepare();
     infos = (beBaseInfoList *)self->_infoList;
     infoCount = infos->_count;
     for (infoIndex = 0; infoIndex < infoCount; infoIndex++) {
@@ -130,7 +130,7 @@ void beBaseInfoManager_Update(beBaseInfoManager *self) {
             rams = (beBaseInfoRamList *)((beBaseInfo **)((beBaseInfoList *)self->_infoList)->_data)[infoIndex]->_ramList;
             ramCount = rams->_count;
             for (ramIndex = 0; ramIndex < ramCount; ramIndex++) {
-                ((beBaseInfoManagerVirtuals *)self)->updateRam(((beBaseInfoRam **)rams->_data)[ramIndex]);
+                ((beBaseInfoManagerDispatchView *)self)->UpdateRam(((beBaseInfoRam **)rams->_data)[ramIndex]);
             }
         }
     }

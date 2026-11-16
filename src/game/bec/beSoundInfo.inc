@@ -30,7 +30,7 @@ int beSoundInfo_GetVTable(void) {
     obj._vtable = (int)&g_beSoundInfo_vtable[0];
     igStringRef_Destruct(&obj._dataType, -1);
     igSmartPointer_igNamedObjectList_Destruct(fnameListSlot, -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

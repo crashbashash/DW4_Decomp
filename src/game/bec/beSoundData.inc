@@ -30,32 +30,19 @@ int beSoundData_GetVTable(void) {
     return vtable;
 }
 
-struct W_344030 *beBaseInfoData_Destroy(struct W_344030 *arg0, short arg1) {
-    int *temp_a1;
-    int temp_v0;
-    int *temp_v1;
-
-    if (arg0 != 0) {
-        arg0->vt = &g_beBaseInfoData_vtable[0];
-        if (arg0 != 0) {
-            arg0->vt = &g_igNamedObject_vtable[0];
-            if (&arg0->name != 0) {
-                temp_v1 = arg0->name;
-                if (temp_v1 != 0) {
-                    temp_a1 = temp_v1 - 2;
-                    temp_v0 = temp_v1[-1] - 1;
-                    temp_v1[-1] = temp_v0;
-                    if (temp_v0 == 0) {
-                        StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-                    }
-                }
-            }
+beBaseInfoData *beBaseInfoData_Destroy(beBaseInfoData *self, short delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_beBaseInfoData_vtable[0];
+        /* ~igNamedObject is inlined here with its own null check on `this` */
+        if (self != 0) {
+            self->_vtable = (int)&g_igNamedObject_vtable[0];
+            igStringRef_Release((char **)&self->_name);
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beSoundData_EnsureRegistered(void)

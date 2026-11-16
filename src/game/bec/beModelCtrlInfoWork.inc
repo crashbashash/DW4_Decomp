@@ -75,47 +75,42 @@ int beModelCtrlInfoWork_GetVTable(void) {
     return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void *beModelCtrlInfoWork_Destroy(beNDMWMdlPlayer2InfoWork *arg0, long long arg1) {
-    void *p;
-    igObject *o;
-    int *h;
-    int rc;
-
-    if (arg0 != 0) {
-        arg0->_vtable = (int)&g_beModelCtrlInfoWork_vtable[0];
-        OBJ(arg0->_baseAABox)
-        OBJ(arg0->_subCommand)
-        STR(arg0->_hitParentName)
-        OBJ(arg0->_hitBody)
-        OBJ(arg0->_debugHitBoxNode)
-        OBJ(arg0->_rideOnData)
-        OBJ(arg0->_moveObjectList)
-        STR(arg0->_posLockBoneName)
-        STR(arg0->_posLockModelName)
-        OBJ(arg0->_posLockTrc)
-        OBJ(arg0->_posLockNode)
-        STR(arg0->_keyEventName)
-        STR(arg0->_targetSpc1)
-        STR(arg0->_targetKind)
-        STR(arg0->_targetMode)
-        OBJ(arg0->_aI)
-        STR(arg0->_wCheckName)
-        OBJ(arg0->_pdMoveDataList)
-        STR(arg0->_luaFHit)
-        STR(arg0->_luaWHit)
-        STR(arg0->_luaBHit)
-        OBJ(arg0->_labelOffsetList)
-        OBJ(arg0->_labelNameList)
-        OBJ(arg0->_labelSeqList)
-        OBJ(arg0->_comData)
-        STR(arg0->_seqCodeName)
-        OBJ(arg0->_hp)
-        OBJ(arg0->_mHp)
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            Memory_FreeBufferAliasC(arg0);
+void *beModelCtrlInfoWork_Destroy(beModelCtrlInfoWork *self, long long delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_beModelCtrlInfoWork_vtable[0];
+        igObjectRef_Release((igObject **)&self->_baseAABox);
+        igObjectRef_Release((igObject **)&self->_subCommand);
+        igStringRef_Release((char **)&self->_hitParentName);
+        igObjectRef_Release((igObject **)&self->_hitBody);
+        igObjectRef_Release((igObject **)&self->_debugHitBoxNode);
+        igObjectRef_Release((igObject **)&self->_rideOnData);
+        igObjectRef_Release((igObject **)&self->_moveObjectList);
+        igStringRef_Release((char **)&self->_posLockBoneName);
+        igStringRef_Release((char **)&self->_posLockModelName);
+        igObjectRef_Release((igObject **)&self->_posLockTrc);
+        igObjectRef_Release((igObject **)&self->_posLockNode);
+        igStringRef_Release((char **)&self->_keyEventName);
+        igStringRef_Release((char **)&self->_targetSpc1);
+        igStringRef_Release((char **)&self->_targetKind);
+        igStringRef_Release((char **)&self->_targetMode);
+        igObjectRef_Release((igObject **)&self->_aI);
+        igStringRef_Release((char **)&self->_wCheckName);
+        igObjectRef_Release((igObject **)&self->_pdMoveDataList);
+        igStringRef_Release((char **)&self->_luaFHit);
+        igStringRef_Release((char **)&self->_luaWHit);
+        igStringRef_Release((char **)&self->_luaBHit);
+        igObjectRef_Release((igObject **)&self->_labelOffsetList);
+        igObjectRef_Release((igObject **)&self->_labelNameList);
+        igObjectRef_Release((igObject **)&self->_labelSeqList);
+        igObjectRef_Release((igObject **)&self->_comData);
+        igStringRef_Release((char **)&self->_seqCodeName);
+        igObjectRef_Release((igObject **)&self->_hp);
+        igObjectRef_Release((igObject **)&self->_mHp);
+        if ((short)delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
@@ -222,64 +217,64 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Destruct(igSmartPoint
     return self;
 }
 
-int *igSmartPointer_beModelCtrlSubCom_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beModelCtrlInfoHitBody_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Construct(igSmartPointer<igObject> *self)
 {
-    *p = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_igGroup_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_igGroup_Construct(igSmartPointer<igObject> *self)
 {
-    *p = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beModelCtrlInfoRideOn_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoRideOn_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beModelCtrlMoveObjectList_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beModelCtrlInfoDataTrc_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoDataTrc_Construct(igSmartPointer<igObject> *self)
 {
-    *p = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beModelCtrlNode2_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlNode2_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beModelCtrlInfoAI_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beModelCtrlData_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beDataObjInt_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
 void beModelCtrlInfoWork_EnsureRegistered(void)

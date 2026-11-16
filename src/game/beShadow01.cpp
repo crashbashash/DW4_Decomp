@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
-#include "dw4/igLightAttrVirtuals.h"
+#include "dw4/igLightAttrDispatchView.h"
 
 extern "C" void igObject_Destroy(...);
 extern "C" int List_Reserve(...);
@@ -212,7 +212,7 @@ void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
         if (Vec3Differs(centre, saved)) {
             igLightAttr *light = (igLightAttr *)((igProjectiveShadowShader *)info->_projShadowShader)->_light;
             float *direction = (float *)((char *)light + g_igLightAttr_directionMetaField[0]->_offset);
-            ((igLightAttrVirtuals *)light)->setPosition(&centre.x);
+            ((igLightAttrDispatchView *)light)->setPosition(&centre.x);
             Vec3Copy(light->_cachedPosition, &centre.x);
             Vec3Copy(light->_cachedDirection, direction);
             Vec3Copy(self->_savePos, &centre.x);

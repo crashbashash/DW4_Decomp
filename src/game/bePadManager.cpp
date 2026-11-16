@@ -2,7 +2,7 @@
 #include "dw4/igMath.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
-#include "dw4/igControllerVirtuals.h"
+#include "dw4/igControllerDispatchView.h"
 
 extern "C" void igInsightCore_AddToScheduler(int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
@@ -106,7 +106,7 @@ void bePadManager_Update(bePadManager *self) {
     int i;
     unsigned short id;
     igControllerList *list;
-    igControllerVirtuals *pad;
+    igControllerDispatchView *pad;
     bePadData *slot;
     igVec2f stick;
     igVec2f left;
@@ -117,7 +117,7 @@ void bePadManager_Update(bePadManager *self) {
         keyboardTaken = false;
         list = (igControllerList *)((igControllerManager *)((igEventDispatcher *)((igInsightCore *)self->_insight)->_dispatcher)->_controllerManager)->_controllers;
         for (i = 0; i < list->_count; i++) {
-            pad = ((igControllerVirtuals **)list->_data)[i];
+            pad = ((igControllerDispatchView **)list->_data)[i];
             id = pad->getId();
             connected = (unsigned char)pad->isConnected();
             if (id == 2) {

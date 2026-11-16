@@ -270,7 +270,9 @@ the generator finishes). Four states:
 the facing `× 57.29578` to degrees, stamps the `MODELCTRL` command sequence
 (`FIND_SPACE` → position/facing → sequence (`_geneEnemySeq`, default `SQ_ENTR`) →
 `GENERATE`), and returns the number actually spawned: `0` when the model pool is
-full, which stops the wave rather than overrunning it.
+full, which stops the wave rather than overrunning it. It has recovered source in `src/game/beGenerater.cpp`
+and matches inside that whole unit; its position arithmetic is spelled as a one-pass loop to reproduce the
+retail block layout ([understanding a resisting shape](../engine/understanding-shapes.md)).
 
 A wave is synchronous. GENE-11's list count reaches 1, 2, 3 within 2 ms and 4 one tick
 later, with the state object's remaining count (`+0x10`) at 0 at once; GENE-10 reaches 4

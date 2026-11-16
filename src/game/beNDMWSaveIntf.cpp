@@ -118,9 +118,9 @@ extern "C" int beNDMWLoadSavePlWork__SetIsCtrl(...);
 extern "C" int beNDMWLoadSavePlWork__GetIsRdy(...);
 extern "C" int beNDMWLoadSavePlWork__GetIsEntry(...);
 extern "C" void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(...);
-extern "C" int ObjectRef_Get_003e92a0(...);
+extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(...);
 extern "C" AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(...);
-extern "C" int ObjectRef_Get_003e93b0(...);
+extern "C" int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(...);
 extern "C" int beNDMWLoadIntf2MesWin__Update(...);
 extern "C" int beNDMWLoadIntf2MesWin__RequestOpen(...);
 extern "C" int beNDMWLoadIntf2MesWin__RequestClose(...);
@@ -326,41 +326,41 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
 
     int tref;
     if (ram->_dataList != 0) {
-        tref = ObjectRef_Get_003e93b0(&ram->_dataList);
+        tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        ctrl = (beNDMWSaveIntfCtrlData *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "CTRL"));
-        tref = ObjectRef_Get_003e93b0(&ram->_dataList);
+        ctrl = (beNDMWSaveIntfCtrlData *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "CTRL"));
+        tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        comMdl = (beNDMWLoadIntf2ComMdlCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "COMMDLCTRL"));
-        tref = ObjectRef_Get_003e93b0(&ram->_dataList);
+        comMdl = (beNDMWLoadIntf2ComMdlCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "COMMDLCTRL"));
+        tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        mesWin = (beNDMWLoadIntf2MesWin *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "MESWIN"));
-        tref = ObjectRef_Get_003e93b0(&ram->_dataList);
+        mesWin = (beNDMWLoadIntf2MesWin *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "MESWIN"));
+        tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        selSlot = (beNDMWLoadIntf2SelSlot *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "SELSLOT"));
-        tref = ObjectRef_Get_003e93b0(&ram->_dataList);
+        selSlot = (beNDMWLoadIntf2SelSlot *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "SELSLOT"));
+        tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        common = (beNDMWLoadCtrl2CommonIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "COMMONINTF"));
-        tref = ObjectRef_Get_003e93b0(&ram->_dataList);
+        common = (beNDMWLoadCtrl2CommonIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "COMMONINTF"));
+        tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        degiStates = (beNDMWLoadIntf2DegiStateCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "DEGISTATECTRL"));
-        tref = ObjectRef_Get_003e93b0(&ram->_dataList);
+        degiStates = (beNDMWLoadIntf2DegiStateCtrl *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "DEGISTATECTRL"));
+        tref = beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        dataSel = (beNDMWLoadIntf2DataSelIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "DATASELINTF"));
+        dataSel = (beNDMWLoadIntf2DataSelIntf *)(beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&ram->_dataList), g_propertyNameField[0], "DATASELINTF"));
         beNDMWLoadIntf2ComMdlCtrl__Poll(comMdl);
         beNDMWLoadIntf2MesWin__Update(mesWin);
         padTrigger = 0;

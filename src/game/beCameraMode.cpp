@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#include "dw4/igObjectVirtuals.h"
+#include "dw4/igCameraDispatchView.h"
 
 extern "C" int beCameraMode_GetMeta(void);
 extern "C" void igViewMode_OnKeyEvent(void);
@@ -12,13 +12,6 @@ extern "C" void igModel_NotifyViews(igViewModel *, int *);
 extern "C" int g_igViewModel_hfovMetaField[4];
 extern "C" int g_igViewModel_nearPlaneMetaField[4];
 extern "C" int g_igViewModel_farPlaneMetaField[4];
-/* The camera seen through its vtable: slot 33 refreshes it and slot 34 is the detach hook. */
-class igCameraVirtuals : public igObjectVirtuals {
-public:
-    DW4_SLOTS_5(t) DW4_SLOTS_5(u) DW4_SLOTS_1(v0) DW4_SLOTS_1(v1)
-    virtual int update();
-    virtual void detach();
-};
 extern "C" void beCameraMode_OnAttach(beCameraMode *self);
 typedef struct CameraMatrix { float m[16]; } CameraMatrix;
 typedef struct CameraVector4 { float v[4]; } CameraVector4;
@@ -34,11 +27,11 @@ extern "C" void beCameraMode_Update(beCameraMode *self);
 extern "C" int g_beCameraMode_metaObject[4];
 
 void beCameraMode_OnDetach(beCameraMode *self) {
-    igCameraVirtuals *camera;
+    igCameraDispatchView *camera;
 
-    camera = (igCameraVirtuals *)(self->_camera);
+    camera = (igCameraDispatchView *)(self->_camera);
     if (camera != 0) {
-        camera->detach();
+        camera->vfunc_36();
     }
 }
 
@@ -52,7 +45,7 @@ void beCameraMode_OnAttach(beCameraMode *self) {
     igViewModel *model;
 
     if (self->_camera != 0) {
-        ((igCameraVirtuals *)self->_camera)->update();
+        ((igCameraDispatchView *)self->_camera)->vfunc_35();
         model = (igViewModel *)self->_model;
         camera = (igCamera *)self->_camera;
         farPlane = camera->_farPlane;

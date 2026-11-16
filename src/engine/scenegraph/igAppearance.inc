@@ -96,7 +96,7 @@ void igAppearance_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAppearance_Register);
 }
 
-static igMetaObjectCallback g_igAppearance_callbackList[] = { igSkin_EnsureRegistered, igSkinList_EnsureRegistered, igModelViewMatrixBoneSelectList_561880_EnsureRegistered, igStringObjList_EnsureRegistered, igNodeList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAppearance_callbackList[] = { igSkin_EnsureRegistered, igSkinList_EnsureRegistered, igModelViewMatrixBoneSelectListSg_EnsureRegistered, igStringObjList_EnsureRegistered, igNodeList_EnsureRegistered, 0 };
 
 void igAppearance_Register(void) {
     SceneGraphLibrary_MarkRegistered();

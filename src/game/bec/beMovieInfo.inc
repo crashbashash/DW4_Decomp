@@ -19,7 +19,7 @@ int beMovieInfo_GetVTable(void) {
     obj._vtable = (int)&g_beMovieInfo_vtable[0];
     vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
     obj._vtable = (int)&g_beMovieInfo_vtable[0];
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

@@ -31,7 +31,7 @@ int beShadow01Info_GetVTable(void) {
     igSmartPointer_igProjectiveShadowShader_Destruct((igSmartPointer<igObject> *)(&obj._projShadowShader), -1);
     igSmartPointer_igNode_Destruct(&obj._casterNode, -1);
     igSmartPointer_igNode_Destruct(&obj._receiverNode, -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

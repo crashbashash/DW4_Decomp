@@ -26,9 +26,9 @@ int beFontInfoData_GetVTable(void) {
     obj._kind = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beFontInfoData_vtable[0];
-    FUN_00130720(&obj._kind, -1);
+    igStringRef_Destruct(&obj._kind, -1);
     igSmartPointer_igAttrSet_Destruct(&obj._attrSet, -1);
-    beBaseInfoData_Destroy((struct W_344030 *)&obj, (short)0);
+    beBaseInfoData_Destroy((beBaseInfoData *)&obj, (short)0);
     return vtable;
 }
 

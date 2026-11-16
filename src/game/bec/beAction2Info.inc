@@ -29,7 +29,7 @@ int beAction2Info_GetVTable(void) {
     igSmartPointer_beAction2DataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), -1);
     igSmartPointer_igAnimationDatabase_Destruct(animationDatabaseSlot, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)switchSlot, -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

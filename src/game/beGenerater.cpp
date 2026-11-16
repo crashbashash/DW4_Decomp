@@ -2,6 +2,7 @@
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igRandomNumberDispatchView.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -9,9 +10,9 @@ extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int beGenerater_GetInfoMeta(void);
 extern "C" int beGenerater_GetMeta(void);
 extern "C" int beMessenger_RegisterReceiver(...);
-extern "C" void beGenerater_OnAddRam(void *a0, void *a1);
+extern "C" void beGenerater_OnAddRam(void *selfArg, void *ramArg);
 extern "C" int g_beLua_metaObject[4];
-extern "C" void beGenerater_Prepare(beGenerater *arg0);
+extern "C" void beGenerater_Prepare(beGenerater *self);
 extern "C" int g_beGeneraterInfo_metaObject[4];
 extern "C" int g_beGenerater_metaObject[4];
 extern "C" int emptyString[4];
@@ -69,36 +70,6 @@ extern "C" void beMessenger_AppendString(int messenger, const char *text);
 extern "C" void beMessenger_AppendInt(int messenger, int value);
 extern "C" void beMessenger_DispatchSelected(int messenger, const char *message);
 extern "C" int beGenerater_SpawnEnemies(beGenerater *self, beBaseInfoRam *ram, int count);
-/* arg1 message record: +8 is the first argument, +12 a pointer whose +8 word is the optional name. */
-typedef struct MessageArgsView { char pad8[8]; int f8; int *f12; } MessageArgsView;
-
-/* The system's random number source; genrand is slot 22. */
-class RandomNumberDispatch {
-  public:
-    virtual void slot0();
-    virtual void slot1();
-    virtual void slot2();
-    virtual void slot3();
-    virtual void slot4();
-    virtual void slot5();
-    virtual void slot6();
-    virtual void slot7();
-    virtual void slot8();
-    virtual void slot9();
-    virtual void slot10();
-    virtual void slot11();
-    virtual void slot12();
-    virtual void slot13();
-    virtual void slot14();
-    virtual void slot15();
-    virtual void slot16();
-    virtual void slot17();
-    virtual void slot18();
-    virtual void slot19();
-    virtual void slot20();
-    virtual void sgenrand(unsigned int seed);
-    virtual unsigned int genrand();
-};
 
 /* An object list with the list's inline accessors. */
 template <class T> struct ObjectListOf : igObjectList {
@@ -117,17 +88,13 @@ static inline beGeneraterData *dataOf(beGeneraterInfoRam *geneRam)
 struct Vec3fList : igObjectList {
     igVec3f *at(int index) const { return &((igVec3f *)_data)[index]; }
 };
-static inline igVec3f Offset(igVec3f point, const float *by)
-{
-    return igVec3f(point.x + by[0], point.y + by[1], point.z + by[2]);
-}
 struct FloatList : igObjectList {
     float at(int index) const { return ((float *)_data)[index]; }
 };
 
-void beGenerater_Prepare(beGenerater *arg0) {
-    if (arg0->_luaManager == 0) {
-        arg0->_luaManager = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
+void beGenerater_Prepare(beGenerater *self) {
+    if (self->_luaManager == 0) {
+        self->_luaManager = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
     }
 }
 
@@ -136,22 +103,67 @@ int beGenerater_GetInfoMeta(void)
     return g_beGeneraterInfo_metaObject[0];
 }
 
-void beGenerater_OnAddRam(void *a0, void *a1) {
+void beGenerater_OnAddRam(void *selfArg, void *ramArg) {
     /* matching construct: void* parameters recast so the frame matches */
-    beGenerater *arg0 = (beGenerater *)a0;
-    MessageArgsView *arg1 = (MessageArgsView *)a1;
-    int *v = *(int **)((char *)arg1->f12 + 8);
-    int f8 = arg1->f8;
-    beMessenger_RegisterReceiver(arg0->_messenger, a1, &GENERATER[0], v ? v : &emptyString[0], f8);
+    beGenerater *self = (beGenerater *)selfArg;
+    beGeneraterInfoRam *ram = (beGeneraterInfoRam *)ramArg;
+    int *name = (int *)((beGeneraterInfo *)ram->_parentInfo)->_name;
+    int ramNo = ram->_ramNo;
+    beMessenger_RegisterReceiver(self->_messenger, ramArg, &GENERATER[0], name ? name : &emptyString[0], ramNo);
 }
 
-/* Where the generator puts its next enemy: the spawn point itself, or the point taken from the data's position. */
-static inline igVec3f spawnPosition(beGeneraterData *data, int point)
+/* Sends FIND_SPACE for each enemy still to spawn and GENERATE to the model that answers, at the next spawn point;
+ * returns how many it spawned. */
+int beGenerater_SpawnEnemies(beGenerater *self, beBaseInfoRam *ram, int count)
 {
-    if (data->_genePosIsGlobal) {
-        return *((Vec3fList *)data->_genePosList)->at(point);
+    beGeneraterInfoRam *geneRam = (beGeneraterInfoRam *)ram;
+    if (count <= 0) {
+        return 0;
     }
-    return Offset(*((Vec3fList *)data->_genePosList)->at(point), data->_pos);
+    beGeneraterInfoWork *work = (beGeneraterInfoWork *)geneRam->_work;
+    int spawned = 0;
+    beGeneraterData *data = dataOf(geneRam);
+    int point = work->_genePoint;
+    int pointCount = ((igObjectList *)data->_genePosList)->_count;
+    do {
+        beMessenger_SendNamed(self->_messenger, "MODELCTRL", (const char *)work->_geneEnemyName, -1, "FIND_SPACE");
+        if (beMessenger_GetObjectCount(self->_messenger) == 0) {
+            break;
+        }
+        beBaseInfoRam *enemyRam = (beBaseInfoRam *)beMessenger_GetObject(self->_messenger, 0);
+        ObjectList_AppendRetained(work->_enemyRamList, enemyRam);
+        beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", (const char *)work->_geneEnemyName, enemyRam->_ramNo);
+        igVec3f position;
+        if (data->_genePosIsGlobal) {
+            position = *((Vec3fList *)data->_genePosList)->at(point);
+        } else {
+            igVec3f relative = *((Vec3fList *)data->_genePosList)->at(point);
+            /* matching construct: IR dump — the one-pass loop puts the sum after the return path; the indexed
+             * stores and the x term read from the data keep its stack offsets and operand order */
+            for (int i = 0; i < 1; i++) {
+                const float *origin = data->_pos;
+                const igVec3f &offset = (&relative)[i];
+                position.x = offset.x + data->_pos[0];
+                (&position)[i].y = offset.y + origin[1];
+                (&position)[i].z = offset.z + origin[2];
+            }
+        }
+        float degrees = 57.29578f * ((FloatList *)data->_geneRotYRadianList)->at(point);
+        const char *sequence = data->_geneEnemySeq == 0 ? "SQ_ENTR" : (const char *)data->_geneEnemySeq;
+        beMessenger_AppendVec3(self->_messenger, position);
+        beMessenger_AppendVec3(self->_messenger, igVec3f(0.0f, degrees, 0.0f));
+        beMessenger_AppendString(self->_messenger, sequence);
+        beMessenger_AppendInt(self->_messenger, work->_geneEnemyRecNo);
+        beMessenger_AppendInt(self->_messenger, work->_geneEnemyMHp);
+        beMessenger_DispatchSelected(self->_messenger, "GENERATE");
+        point++;
+        spawned++;
+        if (point == pointCount) {
+            point = 0;
+        }
+        work->_genePoint = point;
+    } while (count == -1 || --count != 0);
+    return spawned;
 }
 
 /* Rolls the item drop of every enemy that has died since the last call and removes it from the live list. */
@@ -185,7 +197,7 @@ void beGenerater_DropItemsForDead(beGenerater *self, beBaseInfoRam *ram, bool la
             if (dropCount != 0) {
                 do {
                     dropped = false;
-                    unsigned int roll = ((RandomNumberDispatch *)((beSystem *)self->_system)->_random)->genrand() % 10000;
+                    unsigned int roll = ((igRandomNumberDispatchView *)((beSystem *)self->_system)->_random)->genrand() % 10000;
                     for (int i = 0; i < dropCount; i++) {
                         beGeneraterItemDataOne *drop = ((DropListRef &)items->_dataList)->get(i);
                         roll -= drop->_rate;

@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#include "dw4/igObjectVirtuals.h"
+#include "dw4/igObjectDispatchView.h"
 
 extern "C" int Gap__Core__igObject__userConstruct(...);
 extern "C" int igMetaObject_CountInstances(...);
@@ -11,7 +11,7 @@ extern "C" int g_igAdxAudio_metaObject[4];
 
 void igAdxAudio_userConstruct(igAdxAudio *self) {
     Gap__Core__igObject__userConstruct();
-    igMetaObject_CountInstances(((igObjectVirtuals *)self)->getMeta(), 1);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     self->_bIsInitialized = 0;
     self->_adxt = 0;
 }

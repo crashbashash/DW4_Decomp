@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#include "dw4/igFileVirtuals.h"
+#include "dw4/igFileDispatchView.h"
 #define CLEAR(T, src) { \
     T *l = (T *)(src); \
     int n = l->_count; \
@@ -29,7 +29,7 @@ extern "C" int List_Reserve(void *, int, int);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
-extern "C" int beFileChkObj_FileExists(beFileChkObj *checker, int fileName);
+extern "C" int beFileChkObj_FileExists(beFileChkObj *checker, const char *fileName);
 extern "C" void igInsightCore_AddToScheduler(int, beFileListInfoManager *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, beFileListInfoManager *);
 extern "C" void beFileListInfoManager_Activate(beFileListInfoManager *self, int unusedArg);
@@ -41,17 +41,16 @@ extern "C" void beFileListInfoManager_Start(beFileListInfoManager *self);
 extern "C" int g_beFileListInfoManager_metaObject[4];
 extern "C" void beFont_AddFontImages(void *, igObject *);
 extern "C" void ObjectList_AppendRetained(igObjectList *, igObject *);
-extern "C" int g_igNamedObjectInfo_metaObject[4];
+extern "C" igMetaObject *g_igNamedObjectInfo_metaObject;
 extern "C" int g_beFont_metaObject[4];
-extern "C" int g_beFileListInfo_metaObject[4];
-class MetaVt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int getMeta(); };
+extern "C" igMetaObject *g_beFileListInfo_metaObject;
 extern "C" int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info);
 extern "C" int g_stringPool[4];
 extern "C" int igObject_Destroy(igObject *);
 extern "C" void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self);
 extern "C" int igInsightCore_AddInfo(int, igObject *);
 extern "C" int beFileListInfoManager_AddReadInfos(beFileListInfoManager *self);
-extern "C" int igObject_IsKindOf(igObject *object, int meta);
+extern "C" int igObject_IsKindOf(igObject *object, igMetaObject *meta);
 extern "C" int igResource_IsDirectoryLoaded(int resource, igDirectory *directory);
 extern "C" void igResource_UnloadDirectory(int resource, int name);
 extern "C" igObject *igResource_LoadDirectory(int resource, int *name);
@@ -59,8 +58,8 @@ extern "C" int igObject_GetAllocator(...);
 extern "C" int Memory_GetAllocatorBySelector(int key);
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int g_globalContext[4];
-extern "C" int g_igSceneInfo_metaObject[4];
-extern "C" int g_beLuaInfo_metaObject[4];
+extern "C" igMetaObject *g_igSceneInfo_metaObject;
+extern "C" igMetaObject *g_beLuaInfo_metaObject;
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" char emptyString[];
@@ -98,9 +97,9 @@ static inline void insertReadInfo(beFileListInfoManager *self, int at, const Inf
     List_InsertWords((void *)list, at, 1, (void *)word);
 }
 
-int beFileChkObj_FileExists(beFileChkObj *checker, int fileName) {
-    if (((igFileVirtuals *)checker->_fd)->openFile(fileName, "rb") != 0) {
-        ((igFileVirtuals *)checker->_fd)->closeFile();
+int beFileChkObj_FileExists(beFileChkObj *checker, const char *fileName) {
+    if (((igFileDispatchView *)checker->_fd)->OpenFile(fileName, "rb") != 0) {
+        ((igFileDispatchView *)checker->_fd)->CloseFile();
         return 1;
     }
     return 0;
@@ -143,7 +142,7 @@ static inline void insertWords(igObjectList *l, int at, int n, igObject **src) {
 }
 
 int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info) {
-    if (g_beFileListInfo_metaObject[0] == ((MetaVt *)info)->getMeta()) {
+    if (g_beFileListInfo_metaObject == ((igObjectDispatchView *)info)->GetMeta()) {
         igObjectList *list = (igObjectList *)self->_infoList;
         if (list->_count > 0) {
             igObject *first = info;
@@ -155,7 +154,7 @@ int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info) {
         ((beSystem *)self->_system)->_isSResetEnable = 0;
         return 1;
     }
-    if (g_igNamedObjectInfo_metaObject[0] == ((MetaVt *)info)->getMeta()) {
+    if (g_igNamedObjectInfo_metaObject == ((igObjectDispatchView *)info)->GetMeta()) {
         void *found = igInsightCore_FindManager(self->_insight, g_beFont_metaObject[0]);
         if (found == 0) return 0;
         beFont_AddFontImages(found, info);
@@ -264,8 +263,8 @@ int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefL
     int i;
     int readIndex;
     int j;
-    MetaVt *info;
-    int meta;
+    igObjectDispatchView *info;
+    igMetaObject *meta;
     int *rootName;
     igDirectoryList *dirs;
     int fileCount = fileNames->_count;
@@ -291,15 +290,15 @@ int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefL
             if (i < infos->_count) {
                 offset = 0;
                 do {
-                    meta = g_beLuaInfo_metaObject[0];
-                    info = *(MetaVt **)(infos->_data + offset);
-                    if (meta == info->getMeta()) {
+                    meta = g_beLuaInfo_metaObject;
+                    info = *(igObjectDispatchView **)(infos->_data + offset);
+                    if (meta == info->GetMeta()) {
                         igInsightCore_AddInfo(self->_insight, (igObject *)info);
                     } else {
-                        meta = g_igSceneInfo_metaObject[0];
-                        if (meta == info->getMeta()) {
+                        meta = g_igSceneInfo_metaObject;
+                        if (meta == info->GetMeta()) {
                             igSceneInfo *scene;
-                            if (info != 0 && igObject_IsKindOf((igObject *)info, g_igSceneInfo_metaObject[0]) != 0) {
+                            if (info != 0 && igObject_IsKindOf((igObject *)info, g_igSceneInfo_metaObject) != 0) {
                                 scene = (igSceneInfo *)info;
                             } else {
                                 scene = 0;
@@ -321,8 +320,8 @@ int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefL
                             j = 0;
                             if (j < ((igInfoList *)self->_readInfoList)->_count) {
                                 do {
-                                    int sceneMeta = g_igSceneInfo_metaObject[0];
-                                    if (sceneMeta == info->getMeta()) {
+                                    igMetaObject *sceneMeta = g_igSceneInfo_metaObject;
+                                    if (sceneMeta == info->GetMeta()) {
                                         readIndex = j;
                                         break;
                                     }

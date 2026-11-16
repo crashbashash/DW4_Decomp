@@ -476,7 +476,6 @@ extern "C" void beNDMWShopCtrl40_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrl40_InitFields(void);
 extern "C" void beNDMWShopCtrl30_Create(int allocator);
 extern "C" void *beNDMWShopCtrl30_GetMetaObject(void);
-extern "C" int FUN_003b6430(...);
 extern "C" int beNDMWShopCtrl30_GetVTable(void);
 extern "C" void beNDMWShopCtrl30_EnsureRegistered(void);
 extern "C" void *beNDMWShopCtrl30_Register(void);
@@ -515,7 +514,6 @@ extern "C" void beNDMWStatusCtrlSkill_GetMetaObjectFunction(void);
 extern "C" void beNDMWStatusCtrlSkill_InitFields(void);
 extern "C" void beNDMWStatusCtrlSendBit_Create(int allocator);
 extern "C" void *beNDMWStatusCtrlSendBit_GetMetaObject(void);
-extern "C" int FUN_00150eb0(void *, int);
 extern "C" int beNDMWStatusCtrlSendBit_GetVTable(void);
 extern "C" void beNDMWStatusCtrlSendBit_EnsureRegistered(void);
 extern "C" void *beNDMWStatusCtrlSendBit_Register(void);
@@ -1986,24 +1984,24 @@ extern "C" void beNDMWLoadCtrl2CommonIntf_userDestruct(beNDMWLoadCtrl2CommonIntf
 extern "C" int List_Reserve(igDataList *, int, int);
 extern "C" int List_Resize(igDataList *, int, int);
 extern "C" int StringList_Resize(igDataList *, int);
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef_3cbb60 {
+/* Owning stack reference to a pooled string token it is handed (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit, inline. */
+class HeldStringRef {
 public:
     char *p;
-    StringRef_3cbb60(char *s) : p(s) {}
-    ~StringRef_3cbb60() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
+    HeldStringRef(char *s) : p(s) {}
+    ~HeldStringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" void beNDMWPanelWazaInfoWork_userConstruct(beNDMWPanelWazaInfoWork *self);
 extern "C" int g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]). The constructor interns the text and the destructor releases the token on scope exit;
  * both are out of line. */
-class StringRef_3cbd80 {
+class InternedStringRef {
 public:
     char *p;
-    StringRef_3cbd80(const char *text);
-    ~StringRef_3cbd80();
+    InternedStringRef(const char *text);
+    ~InternedStringRef();
 };
 extern "C" void beNDMWPanelWazaInfoWork_TrimCapacity(beNDMWPanelWazaInfoWork *self);
 extern "C" void beNDMWPanelObjectStat_TrimCapacity(beNDMWPanelObjectStat *self);

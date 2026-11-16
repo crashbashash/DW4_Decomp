@@ -40,13 +40,9 @@ igMetaField *g_libBecRuntimePlugin_timerMetaField;
 igMetaField *g_libBecRuntimePlugin_memoryMetaField;
 
 void *libBecRuntimePlugin_GetMetaObject(void) {
-    unsigned char b;
-    if (g_libBecRuntimePlugin_metaObject != 0) {
-        b = (*(int *)((char *)(g_libBecRuntimePlugin_metaObject) + 36) & 4) != 0;
-        if (b != 0) goto done;
+    if (g_libBecRuntimePlugin_metaObject == 0 || !isValid(g_libBecRuntimePlugin_metaObject)) {
+        libBecRuntimePlugin_EnsureRegistered();
     }
-    libBecRuntimePlugin_EnsureRegistered();
-done:
     return g_libBecRuntimePlugin_metaObject;
 }
 
@@ -562,244 +558,244 @@ igSmartPointer<igObject> *igSmartPointer_beMemory_Destruct(igSmartPointer<igObje
     return self;
 }
 
-int *igSmartPointer_beMemory_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beMemory_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beTimer_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beTimer_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beDemoManager_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beDemoManager_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_be_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_be_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beCri_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beCri_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_bePadManager_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_bePadManager_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beFileListInfoManager_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beFileListInfoManager_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beMessenger_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beMessenger_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beSystem_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beSystem_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beTextureCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beTextureCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beSaveUtil_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beSaveUtil_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beDBManager_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beDBManager_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beMovie_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beMovie_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beStaticInfoCtl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beStaticInfoCtl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beNumberCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNumberCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beLightCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beLightCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beSwitchCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beSwitchCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beFont_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beFont_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beLayerCtl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beLayerCtl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beActionStarter_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beActionStarter_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beSeCtl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beSeCtl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beSound_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beSound_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beHitLandDeliv_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beHitLandDeliv_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beHitLandModel_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beHitLandModel_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beGenerater_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beGenerater_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beShadow01_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beShadow01_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beChangePosTransform_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beChangePosTransform_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beBkColor_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beBkColor_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_bePoint01_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_bePoint01_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beCameraCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beCameraCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beWeapon_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beWeapon_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beTargetObj_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beTargetObj_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beMeterCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beMeterCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beAction2_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beAction2_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beWaterPlain_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beWaterPlain_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beSelectCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beSelectCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beMatCtrl_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beMatCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beLua_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beLua_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *igSmartPointer_beParticleCtrl2_Construct(int *p)
+igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int **igInsightPlugin_Construct(int **arg0) {
+igObject *igInsightPlugin_Construct(igObject *self) {
     igObject_InitHeader();
-    *arg0 = &g_igInsightPlugin_vtable[0];
-    return arg0;
+    self->_vtable = (int)&g_igInsightPlugin_vtable[0];
+    return self;
 }
 
 void libBecRuntimePlugin_EnsureRegistered(void)

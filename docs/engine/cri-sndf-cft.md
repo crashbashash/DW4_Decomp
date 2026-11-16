@@ -15,3 +15,6 @@ The first two files of the Sofdec block, each compiled as one whole file with So
 - CFT's init stores its version string in a `volatile` word and is `unapproved`
   ([build-string stores](source-approvals.md#build-string-stores)). Two table builders and two alpha-plane loops have no source (store order; a multiply retail
   recomputes on each pass).
+- The SNDF entry points the game calls for its sound banks (port sizes, transfer start and status, freeing a
+  port, the control and master-parameter messages) are named from what they do and how the game uses them;
+  no string or other build carries the library's own names for them.

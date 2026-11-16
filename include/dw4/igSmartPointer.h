@@ -1,6 +1,7 @@
 #ifndef DW4_IGSMARTPOINTER_H
 #define DW4_IGSMARTPOINTER_H
 #include "dw4/reflected.h"
+#include "dw4/igObjectDispatchView.h"
 
 extern "C" void igObject_Destroy(void *);
 
@@ -19,6 +20,13 @@ static inline void igRelease(igObject *o) {
 }
 
 static inline void igRelease(igVirtualObject *o) {
+    if (o != 0) {
+        o->_refCount = o->_refCount - 1;
+        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
+    }
+}
+
+static inline void igRelease(igObjectDispatchView *o) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
         if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);

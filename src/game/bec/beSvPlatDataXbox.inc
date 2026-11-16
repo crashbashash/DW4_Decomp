@@ -91,8 +91,8 @@ void beSvPlatDataXbox_InitFields(void) {
     int base;
     int index;
     void **found;
-    F_3474b0 *image;
-    G_3474b0 *tg;
+    void *image;
+    void *dataOffSet;
     void *meta;
     igIntMetaField *clone;
 
@@ -109,11 +109,11 @@ void beSvPlatDataXbox_InitFields(void) {
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    image = (F_3474b0 *)(igMetaObject_GetFieldAt(meta, base + 1));
-    image->f56 = (int)beXboxImage24k_GetOrCreateMetaObject();
-    image->b52 = 1;
-    tg = (G_3474b0 *)igMetaObject_GetFieldAt(meta, base + 3);
-    tg->w52 = 2;
+    image = (igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)image)->_metaObject = (int)beXboxImage24k_GetOrCreateMetaObject();
+    ((igRefMetaField *)image)->_construct = 1;
+    dataOffSet = igMetaObject_GetFieldAt(meta, base + 3);
+    ((igIntArrayMetaField *)dataOffSet)->_num = 2;
     igMetaObject_NameFields(meta, g_beSvPlatDataXbox_fieldTable, g_beSvPlatDataXbox_fieldHandles, g_beSvPlatDataXbox_fieldOffsets, base);
 }
 

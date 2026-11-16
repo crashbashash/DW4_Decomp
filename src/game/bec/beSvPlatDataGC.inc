@@ -134,9 +134,10 @@ void beSvPlatDataGC_InitFields(void) {
     int base;
     int index;
     void **found;
-    H *banTplData;
-    G_348000 *tg;
-    H *iconTplData;
+    void *banTplData;
+    void *comment;
+    void *dataOffSet;
+    void *iconTplData;
     void *meta;
     igIntMetaField *clone;
 
@@ -153,14 +154,14 @@ void beSvPlatDataGC_InitFields(void) {
     if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(clone);
     }
-    tg = (G_348000 *)igMetaObject_GetFieldAt(meta, base + 2);
-    tg->w52 = 2;
-    banTplData = (H *)(igMetaObject_GetFieldAt(meta, base + 9));
-    banTplData->f60 = igCharMetaField_GetDefaultDescriptor();
-    iconTplData = (H *)(igMetaObject_GetFieldAt(meta, base + 0xB));
-    iconTplData->f60 = igCharMetaField_GetDefaultDescriptor();
-    tg = (G_348000 *)igMetaObject_GetFieldAt(meta, base + 0xC);
-    tg->w52 = 0x40;
+    dataOffSet = igMetaObject_GetFieldAt(meta, base + 2);
+    ((igIntArrayMetaField *)dataOffSet)->_num = 2;
+    banTplData = (igMetaObject_GetFieldAt(meta, base + 9));
+    ((igMemoryRefMetaField *)banTplData)->_memType = igCharMetaField_GetDefaultDescriptor();
+    iconTplData = (igMetaObject_GetFieldAt(meta, base + 0xB));
+    ((igMemoryRefMetaField *)iconTplData)->_memType = igCharMetaField_GetDefaultDescriptor();
+    comment = igMetaObject_GetFieldAt(meta, base + 0xC);
+    ((igCharArrayMetaField *)comment)->_num = 0x40;
     igMetaObject_NameFields(meta, g_beSvPlatDataGC_fieldTable, g_beSvPlatDataGC_fieldHandles, g_beSvPlatDataGC_fieldOffsets, base);
 }
 

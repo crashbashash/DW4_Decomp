@@ -27,39 +27,21 @@ done:;
 int bePoint01_GetVTable(void) {
     bePoint01 obj;
     int vtable;
+    igObject **infoListSlot;
+    char **nameSlot;
 
-    int *text; int *header; int refCount; int *a0;
-    char *infoListSlot; char *nameSlot;
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
-    nameSlot = (char *)&obj._name;
-    *(int *)nameSlot = 0;
-    infoListSlot = (char *)&obj._infoList;
-    *(int *)infoListSlot = 0;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    infoListSlot = (igObject **)&obj._infoList;
+    *infoListSlot = 0;
     obj._vtable = (int)&g_bePoint01_vtable[0];
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
-    if (infoListSlot != 0) {
-        a0 = *(int **)infoListSlot;
-        if (a0 != 0) {
-            a0[1] = a0[1] - 1;
-            if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(a0);
-            }
-        }
-    }
+    igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
-    if (nameSlot != 0) {
-        text = *(int **)nameSlot;
-        if (text != 0) {
-            header = text - 2;
-            refCount = text[-1] - 1;
-            text[-1] = refCount;
-            if (refCount == 0) {
-                StringChunk_ReleaseHeader(*header, header);
-            }
-        }
-    }
+    igStringRef_Release(nameSlot);
     return vtable;
 }
 

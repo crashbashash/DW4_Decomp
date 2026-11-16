@@ -23,19 +23,19 @@ void *beTextureCtrl_GetMetaObject(void) {
 }
 
 int beTextureCtrl_GetVTable(void) {
-    Obj_3423f0 o;
-    int r;
+    beTextureCtrl obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[1] = 0;
-    o.w[5] = 0;
-    o.vt = &g_beTextureCtrl_vtable[0];
-    o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beTextureCtrl_vtable[0];
-    igSmartPointer_beTextureCtrlWork_Destruct((igSmartPointer<igObject> *)&o.s, (short)(-1));
-    beBaseInfoManager_Destroy((O_33f5e0 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beTextureCtrl_vtable[0];
+    obj._work = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beTextureCtrl_vtable[0];
+    igSmartPointer_beTextureCtrlWork_Destruct((igSmartPointer<igObject> *)&obj._work, (short)(-1));
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beTextureCtrlWork_Destruct(igSmartPointer<igObject> *self, short delete_storage) {

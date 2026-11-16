@@ -36,7 +36,7 @@ int beNumberCtrlInfoRam_GetVTable(void) {
     igSmartPointer_beNumberCtrlInfoWork_Destruct((igSmartPointer<igObject> *)(&obj._work), -1);
     igSmartPointer_beNumVerDataList_Destruct((igSmartPointer<igObject> *)numListSlot, (long long)(-1));
     igSmartPointer_igGeometry_Destruct(geometrySlot, -1);
-    beBaseInfoRam_Destroy((S *)&obj, (long long)0);
+    beBaseInfoRam_Destroy((beBaseInfoRam *)&obj, (long long)0);
     return vtable;
 }
 

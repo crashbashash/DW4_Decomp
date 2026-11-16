@@ -616,8 +616,6 @@
 0x003e90b0	beNDMWLoadSavePlWork::GetIsRdy	game
 0x003e90c0	beNDMWLoadSavePlWork::GetIsEntry	game
 0x003e9220	Vec3f_Copy	engine
-0x003e92a0	ObjectRef_Get_003e92a0	game
-0x003e93b0	ObjectRef_Get_003e93b0	game
 0x003e93c0	beNDMWLoadIntf2::GetInfoMeta	game
 0x003eba00	beNDMWLoadIntf2::GetMeta	game
 0x003eba10	TextOrder_Configure	game
@@ -693,10 +691,6 @@
 0x003fa850	beNDMWGameRam_CalcAttribute	game
 0x003fab90	beNDMWGameRam_RecomputeStats	game
 0x003fca10	beNDMWGameRam_OnMessage	game
-0x00406dc0	ObjectRef_Get_00406dc0	game
-0x00406dd0	DataList_GetWordAt_00406dd0	game
-0x00406df0	ObjectRef_Get_00406df0	game
-0x00406e00	ObjectRef_Get_00406e00	game
 0x00407060	beNDMWGameRam_GetMeta	game
 0x00407070	beNDMWGameRam_GetInfoMeta	game
 0x0040c1b0	beNDMWSaveIntf_GetInfoMeta	game

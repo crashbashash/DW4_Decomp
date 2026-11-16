@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/listSet.h"
 
 class StringRef;
 
@@ -46,8 +47,6 @@ extern int g_resolveEnumLastName[4];
 extern int g_resolveEnumLastValue[4];
 extern int emptyString[4];
 extern char SEARCH[], FIND_SPACE_3[];
-extern int DAT_004c8f88[4];
-extern unsigned char GPR_005549d4, GPR_005549d8;
 extern int g_beMessenger_metaObject[4];
 
 void beMessenger_Activate(beMessenger *, int);
@@ -889,7 +888,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
                 igBoolList *bla = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
                 int na = bla->_count;
                 if (na < bla->_capacity) bla->_count = na + 1; else List_Resize(bla, na + 1, 1);
-                ((char *)bla->_data)[na] = GPR_005549d4;
+                ListStore(bla, na, true);
                 il = (igIntList *)((beMessengerArgData *)self->_argData)->_intList;
                 n = il->_count;
                 if (n < il->_capacity) il->_count = listCount(il) + 1; else List_Resize(il, n + 1, 4);
@@ -898,11 +897,11 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
                 igBoolList *blc = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
                 n = blc->_count;
                 if (n < blc->_capacity) blc->_count = n + 1; else List_Resize(blc, n + 1, 1);
-                ((char *)blc->_data)[n] = GPR_005549d8;
+                ListStore(blc, n, false);
                 il = (igIntList *)((beMessengerArgData *)self->_argData)->_intList;
                 int nd = il->_count;
                 if (nd < il->_capacity) il->_count = listCount(il) + 1; else List_Resize(il, nd + 1, 4);
-                ((int *)il->_data)[nd] = DAT_004c8f88[0];
+                ListStore(il, nd, 0);
             }
         }
     } else if (strcmp(name, FIND_SPACE_3) == 0) {

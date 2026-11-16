@@ -52,7 +52,7 @@ int beSvPlatDataPS2_GetVTable(void) {
     igStringRef_Destruct(&obj._fnameIcon0, -1);
     igStringRef_Destruct(&obj._title, -1);
     igStringRef_Destruct(&obj._dirName, -1);
-    beSvPlatBaseData_Destroy((O_347150 *)&obj, (short)0);
+    beSvPlatBaseData_Destroy((beSvPlatBaseData *)&obj, (short)0);
     return vtable;
 }
 

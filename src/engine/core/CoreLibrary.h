@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igObjectDispatchView.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igMemoryPoolView.h"
 extern "C" {
@@ -3410,29 +3411,6 @@ class igExternalInfoEntryView : public igDirEntryView { public:
     void setDirectoryIndex(int index) { _directoryIndex = index; }
     void setKey(char *key) { char *interned = (char *)StringPool_Intern(InternedStrings::get(), key); releaseString(_key); _key = interned; }
     void setInfoName(char *name) { char *interned = (char *)StringPool_Intern(InternedStrings::get(), name); releaseString(_infoName); _infoName = interned; }
-};
-/* igObject's virtual functions: slot n sits at vtable byte offset 8 + 4 * n (the first two words
- * are the class header). The reflected igObject is the same object seen as data. The slots carry
- * the igObject symbol names (Gap::Core::igObject::<name>, igObject_<Name>). Slot 17 takes the
- * value the meta-object's write proxy returns.
- * ABI view only: never instantiated. */
-class igObjectDispatchView {
-public:
-    virtual void Destruct();
-    virtual void constructFields(int flag);
-    virtual void destructFields();
-    virtual void userDeepCopy(igObjectDispatchView *source); virtual void userShallowCopy(int source);
-    virtual int userIsAlikeDeep(igObjectDispatchView *other);
-    virtual int userIsAlikeShallow(igObjectDispatchView *other);
-    virtual void userConstruct(int flag);
-    virtual void userDestruct();
-    virtual void InitDefaults(); virtual void ReleaseDefaults();
-    virtual void resetFields(int flag);
-    virtual void userPreWrite(); virtual void userWriteFilePreProcess(); virtual void userPostRead();
-    virtual void userPostLoad(); virtual void TrimCapacity(); virtual void userApplyWriteProxy(int value); virtual void userMakeConcrete(igMetaObject *meta);
-    virtual igObject *CloneViaMetadata(int copyMode);
-    virtual igMetaObject *GetMeta();
-    unsigned int _refCount;
 };
 /* Removes the object at `index`, releasing it, and clears the vacated last slot. */
 static inline void objectListRemoveRetained(igTDataList<igObject *> *list, int index) {

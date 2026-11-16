@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#include "dw4/beBaseInfoManagerVirtuals.h"
+#include "dw4/beBaseInfoManagerDispatchView.h"
 
 extern "C" int beBaseInfoManager_Stop(...);
 extern "C" int igInsightCore_FindManager(int, int);
@@ -96,7 +96,7 @@ void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram) {
     unresolved = ((messenger != 0) ^ 1);
     if (unresolved) {
         do {
-            ((beBaseInfoManagerVirtuals *)self)->prepare();
+            ((beBaseInfoManagerDispatchView *)self)->Prepare();
             messenger = self->_messenger;
             unresolved = ((messenger != 0) ^ 1);
         } while (unresolved);

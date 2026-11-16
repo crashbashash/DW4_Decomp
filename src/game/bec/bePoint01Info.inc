@@ -25,7 +25,7 @@ int bePoint01Info_GetVTable(void) {
     obj._vtable = (int)&g_bePoint01Info_vtable[0];
     igSmartPointer_beGroupKeepList_Destruct((igSmartPointer<igObject> *)&obj._dataList_, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switch, -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

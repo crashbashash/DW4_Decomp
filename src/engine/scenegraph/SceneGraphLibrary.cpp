@@ -71,7 +71,7 @@ igSmartPointer<igBlendFunctionAttr> g_envMapBlendZeroSrcAlphaUnit1(0, kRetainRef
 #include "src/engine/scenegraph/igNodeListList.inc"
 #include "src/engine/scenegraph/igNodeList.inc"
 #include "src/engine/scenegraph/igNode.inc"
-#include "src/engine/scenegraph/igModelViewMatrixBoneSelectList_561880.inc"
+#include "src/engine/scenegraph/igModelViewMatrixBoneSelectListSg.inc"
 #include "src/engine/scenegraph/igModelViewMatrixBoneSelect.inc"
 #include "src/engine/scenegraph/igLod.inc"
 #include "src/engine/scenegraph/igLightStateSet.inc"

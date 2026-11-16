@@ -27,7 +27,7 @@ are, in retail order:
 The other members of the compiler object are copies the compiler emits out of line:
 the `igSmartPointer<beLoadIntf2ComMdlData>` destructor (`0x003e3d80`) after `Start`;
 after the update, the owned-reference destructor (`igSmartPointer_beNDMWDegiData_Destruct`), the
-small accessors `beNDMWLoadIntf2_igIntList_GetData` … `ObjectRef_Get_003e93b0`
+small accessors `beNDMWLoadIntf2_igIntList_GetData` … `beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get`
 (with `beNDMWLoadSavePlWork__SetIsCtrl`/`__GetIsRdy`/`__GetIsEntry`,
 `beNDMWLoadIntf2_igObject_Release`, `Vec3f_Copy` and the new-list constructor at
 `0x003e9330`); and after the message handler, one `igSmartPointer<…>` destructor per
@@ -363,10 +363,10 @@ The title's two character flows:
 
 ## Open questions
 
-- **Address-suffixed accessor copies.** `beNDMWLoadIntf2_igIntList_GetData` …
-  `ObjectRef_Get_003e93b0` are this unit's out-of-line copies of shared inline
-  accessors; other units call them, and their names keep the address until the
-  shared inlines have one name each.
+- **The two `igSmartPointer<beBaseInfoDataList>` getters.** `beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref`
+  and `beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get` have the same body; the first is only ever the
+  receiver of `FindProperty` and the second only the empty-reference test, so they are read as `operator->` and
+  the conversion to the pointer. Nothing in the image says which copy is which beyond those call sites.
 - **Name guesses.** `beNDMWLoadIntf2DegiState__RequestChange` (the request that swaps
   the shown record without reopening the windows),
   `beNDMWLoadIntf2NameSel__DrawRowLetters`/`__DrawColumnLetters`/`__DrawEnteredName`,

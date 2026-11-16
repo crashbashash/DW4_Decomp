@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/igObjectDispatchView.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -44,7 +45,7 @@ void Gap__Core__igObject__userConstruct(igObject *self);
 void Gap__Core__igObject__userDestruct(igObject *self);
 void Gap__Core__igObject__resetFields(igObject *self);
 void *igObject_GetAllocator(igObject *self);
-int igMetaObject_CountInstances(int meta, int recursive);
+int igMetaObject_CountInstances(igMetaObject *meta, int recursive);
 char *Memory_AllocateAlignedWithAllocator(int size, int align, void *allocator); /* aligned allocation */
 int Memory_FreeBufferWithAllocator(int buffer, int allocator);
 void igFile_SetFileName(igObject *file, const char *fileName); /* sets igFile::_fileName */
@@ -61,7 +62,7 @@ int memcpy(char *, char *, int);
 extern int g_resultSuccess[4];
 extern int g_resultFailure[4];
 extern int g_igAdxFile_metaObject[4];
-extern unsigned char GPR_00554de8; /* set while igAdx is initialised */
+extern unsigned char g_adxIopReady;
 unsigned char g_igAdxFile_ignoreReadModeWarning;
 unsigned char g_igAdxFile_ignoreWriteWarning;
 unsigned char g_igAdxFile_ignoreOpenModeWarning;
@@ -69,16 +70,12 @@ unsigned char g_igAdxFile_ignoreOpenModeWarning;
 
 inline bool igResult::succeeded() { return value == g_resultSuccess[0]; }
 
-/* The two igAdxFile virtuals the class calls on itself: the meta-object getter (slot 20)
- * and open with a mode (slot 21). */
-class igAdxFileVirtuals {
+/* igAdxFile's own virtual function it calls on itself: open with a mode (slot 21,
+ * igAdxFile_OpenWithMode).
+ * ABI view only: never instantiated. */
+class igAdxFileDispatchView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual int getMeta();
-    virtual igResult openWithMode(OpenMode mode);
+    virtual igResult OpenWithMode(OpenMode mode);                           /* slot 21 */
 };
 
 /* The thread the asynchronous wait sleeps on; sleep is its slot 23. */
@@ -115,7 +112,7 @@ void igAdxFile_resetFields(igAdxFile *self)
 void igAdxFile_userConstruct(igAdxFile *self)
 {
     Gap__Core__igObject__userConstruct(self);
-    igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->getMeta(), 1);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     self->_pBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
     /* matching construct: hand search — the failed-allocation return folds into the epilogue, leaving the reload of
        _pBuffer; the GameCube build keeps the same compare with no branch after it */
@@ -142,7 +139,7 @@ void igAdxFile_destructFields(igAdxFile *self)
 
 void igAdxFile_userDestruct(igAdxFile *self)
 {
-    igMetaObject_CountInstances(((igAdxFileVirtuals *)self)->getMeta(), 1);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     Gap__Core__igObject__userDestruct(self);
 }
 
@@ -181,7 +178,7 @@ void igAdxFile_OpenWithMode(igResult *result, igAdxFile *self, OpenMode mode)
     int index;
     igAdxAfsFile *entry;
 
-    if (GPR_00554de8 == 0) {
+    if (g_adxIopReady == 0) {
         result->value = g_resultFailure[0];
         return;
     }
@@ -263,9 +260,9 @@ igAdxFile *igAdxFile_OpenFile(igAdxFile *self, const char *fileName, const char 
 
     igFile_SetFileName(self, fileName);
     if (strcmp(mode, "rb") == 0) {
-        opened = ((igAdxFileVirtuals *)self)->openWithMode(kReadBinary).succeeded();
+        opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kReadBinary).succeeded();
     } else if (strcmp(mode, "r") == 0) {
-        opened = ((igAdxFileVirtuals *)self)->openWithMode(kRead).succeeded();
+        opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kRead).succeeded();
     } else {
         return 0;
     }

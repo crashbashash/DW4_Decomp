@@ -13,20 +13,20 @@ done:;
 }
 
 int beMeterCtrlInfo_GetVTable(void) {
-    Obj_3570f0 o;
-    int r;
+    beMeterCtrlInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[1] = 0;
-    o.w[4] = 0;
-    o.w[5] = 0;
-    o.vt = &g_beMeterCtrlInfo_vtable[0];
-    o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beMeterCtrlInfo_vtable[0];
-    igSmartPointer_igNamedObjectList_Destruct(&o.s, -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beMeterCtrlInfo_vtable[0];
+    obj._oneDataList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMeterCtrlInfo_vtable[0];
+    igSmartPointer_igNamedObjectList_Destruct(&obj._oneDataList, -1);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
+    return vtable;
 }
 
 void beMeterCtrlInfo_EnsureRegistered(void)

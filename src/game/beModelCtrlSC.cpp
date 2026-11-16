@@ -152,7 +152,7 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     mgr = (igAttrStackManager *)trav->_attrStack;
     metaId = g_igModelViewMatrixAttr_metaObject[0]->_id;
     mvStack = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[((int *)mgr->_attrStackIndexTable)[metaId]];
-    time = beModelCtrlNode2_LocalTime(node, ((CommonTraversalView *)trav)->getTime());
+    time = beModelCtrlNode2_LocalTime(node, ((igCommonTraversalDispatchView *)trav)->getTime());
     node->_time = time;
     igMatrix44f_SetIdentity(m);
     if (mvStack->_count != 0) {
@@ -164,10 +164,10 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
         igMatrix44f_Multiply(m, node->_m, identity);
     }
     matAttr = (igModelViewMatrixAttr *)TakePooled((igObjectPool *)trav->_matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
-    ((ModelViewMatrixAttrView *)matAttr)->setMatrix(m);
+    ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
     timeAttr = (igTimeAttr *)TakePooled((igObjectPool *)trav->_timePool, (void *)&igTimeAttr_CreateInstance);
     timeAttr->_time = time;
-    ((CommonTraversalView *)trav)->pushTime(time);
+    ((igCommonTraversalDispatchView *)trav)->pushTime(time);
 
     matUnitID = &matAttr->_cachedUnitID;
     matAttrIndex = &matAttr->_cachedAttrIndex;
@@ -199,7 +199,7 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     }
     PopAttr(mgr, *timeUnitID + ((int *)mgr->_attrStackIndexTable)[*timeAttrIndex]);
     PopAttr(mgr, *matUnitID + ((int *)mgr->_attrStackIndexTable)[*matAttrIndex]);
-    ((CommonTraversalView *)trav)->popTime();
+    ((igCommonTraversalDispatchView *)trav)->popTime();
     if (result == 2) return 2;
     return 0;
 }

@@ -36,7 +36,7 @@ int beSaveUtil_GetVTable(void) {
     obj._vtable = (int)&g_beSaveUtil_vtable[0];
     igSmartPointer_beSvConnectCheck_Destruct((igSmartPointer<igObject> *)&obj._connectCheck, (short)(-1));
     igSmartPointer_beSaveApi_Destruct((igSmartPointer<igObject> *)&obj._api, -1);
-    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
 

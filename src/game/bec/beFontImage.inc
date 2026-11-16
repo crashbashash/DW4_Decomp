@@ -17,11 +17,11 @@ int beFontImage_GetVTable(void) {
     obj._vtable = (int)&g_beFontImage_vtable[0];
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beFontImage_vtable[0];
-    igBitmapFont_Destroy((O_361b00 *)&obj, (short)0);
+    igBitmapFont_Destroy((igBitmapFont *)&obj, (short)0);
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_FUN_00452790_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igCharMetricsList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -34,103 +34,41 @@ igSmartPointer<igObject> *igSmartPointer_FUN_00452790_Destruct(igSmartPointer<ig
     return self;
 }
 
-O_361a20 *igFont_Destroy(O_361a20 *arg0, short arg1) {
-    int *temp_a1;
-    int temp_v0;
-    R_361a20 *temp_a0;
-    int *temp_v1;
-
-    if (arg0 != 0) {
-        arg0->vt = &g_igFont_vtable[0];
-        if (&arg0->ref != 0) {
-            temp_a0 = arg0->ref;
-            if (temp_a0 != 0) {
-                temp_a0->refs = temp_a0->refs - 1;
-                if (((unsigned long long)((long long)temp_a0->refs << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0);
-                }
-            }
+igFont *igFont_Destroy(igFont *self, short delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_igFont_vtable[0];
+        igObjectRef_Release((igObject **)&self->_attrList);
+        /* ~igNamedObject is inlined here with its own null check on `this` */
+        if (self != 0) {
+            self->_vtable = (int)&g_igNamedObject_vtable[0];
+            igStringRef_Release((char **)&self->_name);
         }
-        if (arg0 != 0) {
-            arg0->vt = &g_igNamedObject_vtable[0];
-            if (&arg0->str != 0) {
-                temp_v1 = arg0->str;
-                if (temp_v1 != 0) {
-                    temp_a1 = temp_v1 - 2;
-                    temp_v0 = temp_v1[-1] - 1;
-                    temp_v1[-1] = temp_v0;
-                    if (temp_v0 == 0) {
-                        StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-                    }
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
-O_361b00 *igBitmapFont_Destroy(O_361b00 *arg0, short arg1) {
-    int *temp_a1;
-    int temp_v0;
-    R_361b00 *temp_a0;
-    R_361b00 *temp_a0_2;
-    R_361b00 *temp_a0_3;
-    int *temp_v1;
-
-    if (arg0 != 0) {
-        arg0->vt = &g_igBitmapFont_vtable[0];
-        if (&arg0->ref32 != 0) {
-            temp_a0 = arg0->ref32;
-            if (temp_a0 != 0) {
-                temp_a0->refs = temp_a0->refs - 1;
-                if (((unsigned long long)((long long)temp_a0->refs << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0);
-                }
+igBitmapFont *igBitmapFont_Destroy(igBitmapFont *self, short delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_igBitmapFont_vtable[0];
+        igObjectRef_Release((igObject **)&self->_textureBind);
+        igObjectRef_Release((igObject **)&self->_charMetricsList);
+        /* ~igFont and ~igNamedObject are inlined here with their own null checks on `this` */
+        if (self != 0) {
+            self->_vtable = (int)&g_igFont_vtable[0];
+            igObjectRef_Release((igObject **)&self->_attrList);
+            if (self != 0) {
+                self->_vtable = (int)&g_igNamedObject_vtable[0];
+                igStringRef_Release((char **)&self->_name);
             }
         }
-        if (&arg0->ref28 != 0) {
-            temp_a0_2 = arg0->ref28;
-            if (temp_a0_2 != 0) {
-                temp_a0_2->refs = temp_a0_2->refs - 1;
-                if (((unsigned long long)((long long)temp_a0_2->refs << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0_2);
-                }
-            }
-        }
-        if (arg0 != 0) {
-            arg0->vt = &g_igFont_vtable[0];
-            if (&arg0->ref20 != 0) {
-                temp_a0_3 = arg0->ref20;
-                if (temp_a0_3 != 0) {
-                    temp_a0_3->refs = temp_a0_3->refs - 1;
-                    if (((unsigned long long)((long long)temp_a0_3->refs << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(temp_a0_3);
-                    }
-                }
-            }
-            if (arg0 != 0) {
-                arg0->vt = &g_igNamedObject_vtable[0];
-                if (&arg0->str != 0) {
-                    temp_v1 = arg0->str;
-                    if (temp_v1 != 0) {
-                        temp_a1 = temp_v1 - 2;
-                        temp_v0 = temp_v1[-1] - 1;
-                        temp_v1[-1] = temp_v0;
-                        if (temp_v0 == 0) {
-                            StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-                        }
-                    }
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beFontImage_EnsureRegistered(void)

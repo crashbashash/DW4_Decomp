@@ -4,6 +4,7 @@
 #include "dw4/lua.h"
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/beDemoManager.h"
 #include "dw4/listSet.h"
 
@@ -71,35 +72,6 @@ struct FloatingNumberStyleData {
     const char *modelInfoName;
     const char *numberInfoName;
     const char *digitSequences[5];
-};
-
-/* Dispatch-only ABI projection of the system's igMersenneTwisterRandomNumber: genrand is vtable
- * slot 22. */
-class RandomNumberDispatch {
-  public:
-    virtual void slot0();
-    virtual void slot1();
-    virtual void slot2();
-    virtual void slot3();
-    virtual void slot4();
-    virtual void slot5();
-    virtual void slot6();
-    virtual void slot7();
-    virtual void slot8();
-    virtual void slot9();
-    virtual void slot10();
-    virtual void slot11();
-    virtual void slot12();
-    virtual void slot13();
-    virtual void slot14();
-    virtual void slot15();
-    virtual void slot16();
-    virtual void slot17();
-    virtual void slot18();
-    virtual void slot19();
-    virtual void slot20();
-    virtual void sgenrand(unsigned int seed);
-    virtual unsigned int genrand();
 };
 
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
@@ -940,7 +912,7 @@ int SYSgetIsPackOnly(void)
 
 /* The game's only random-number entry point: genrand() % range. */
 unsigned int SYSgetRandom(unsigned int range) {
-    return ((RandomNumberDispatch *)g_beSystem->_random)->genrand() % range;
+    return ((igRandomNumberDispatchView *)g_beSystem->_random)->genrand() % range;
 }
 
 /* Records the gate stage; a null name stores the empty string. */

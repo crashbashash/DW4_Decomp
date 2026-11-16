@@ -29,7 +29,7 @@ int igBitmapFont_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_igBitmapFont_vtable[0];
     FUN_0019aa10(&obj.w8, -1);
-    igSmartPointer_FUN_00452790_Destruct(&obj.w7, -1);
+    igSmartPointer_igCharMetricsList_Destruct(&obj.w7, -1);
     igFont_Destroy(&obj, 0);
     return t;
 }

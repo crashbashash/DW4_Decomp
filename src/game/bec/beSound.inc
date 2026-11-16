@@ -46,7 +46,7 @@ int beSound_GetVTable(void) {
     igSmartPointer_bePlaySEList_Destruct((igSmartPointer<igObject> *)(&obj._playSEs), (short)(-1));
     igStringRef_Destruct(currentBGMSlot, -1);
     igSmartPointer_beCri_Destruct((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)criSlot)), (short)(-1));
-    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
 

@@ -143,7 +143,7 @@ int sceSifCallRpc();
 void memset();
 int FUN_00281a00(int cmd, int *args, int n, int size);
 void FUN_00280e38(void);
-int FUN_00281078();
+int SNDF_StartTransfer();
 void SyncDCache(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
@@ -153,7 +153,7 @@ int sceSifFreeIopHeap(int addr);
 int sceSdRemote(int arg, int command, ...);
 int FUN_00281420(unsigned int channel, int *start, int *size);
 int sndf_PushCommand(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
-int FUN_00281cf8(unsigned int channel);
+int SNDF_GetTransferStatus(unsigned int channel);
 void FUN_00281df0(unsigned int channel);
 int sndf_SendMessage(unsigned int message);
 
@@ -237,7 +237,7 @@ int FUN_00280f10(void)
     return var_a0;
 }
 
-int FUN_00280f60(SndfTables *tables)
+int SNDF_SetPortSizes(SndfTables *tables)
 {
     SndfTables request;
     int result;
@@ -265,10 +265,10 @@ int FUN_00281018(int arg, int extra)
     if (sndf_ctx->open == 0) {
         return -30;
     }
-    FUN_00281078(arg, extra);
+    SNDF_StartTransfer(arg, extra);
     do {
         FUN_00281df0(arg);
-        status = FUN_00281cf8(arg);
+        status = SNDF_GetTransferStatus(arg);
     } while (status == 1);
     if (status == 2) {
         status = 0;
@@ -306,7 +306,7 @@ int FUN_00281368(unsigned int channel)
     return result;
 }
 
-int FUN_002813c8(unsigned int channel)
+int SNDF_FreePort(unsigned int channel)
 {
     int result;
 
@@ -530,7 +530,7 @@ int SNDF_SeqCommand(unsigned int cmd, unsigned char id, int value)
     return result;
 }
 
-int FUN_00281cf8(unsigned int channel)
+int SNDF_GetTransferStatus(unsigned int channel)
 {
     int result = 0;
     int error;
@@ -634,7 +634,7 @@ int FUN_00282538(unsigned int channel, unsigned int kind, unsigned int data1, un
     return result;
 }
 
-int FUN_002829f0(unsigned int base, unsigned int value)
+int SNDF_SetMasterParam(unsigned int base, unsigned int value)
 {
     unsigned int message;
     int result;

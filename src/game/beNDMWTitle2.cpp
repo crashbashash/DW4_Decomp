@@ -114,7 +114,6 @@ template <int Tag> struct TitleRef {
 };
 extern "C" void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam);
 extern "C" void beNDMWTitle2_OnAddRam(beNDMWTitle2 *self, int info);
-extern "C" char GPR_00554e70;
 extern "C" int beNDMWTitle2_OnMessage(beNDMWTitle2 *self, beBaseInfoRam *ram, beMessengerWork *message);
 
 /* Bind the messenger and load the Options settings. Once the title settings are valid, the saved
@@ -1100,7 +1099,7 @@ int beNDMWTitle2_OnMessage(beNDMWTitle2 *self, beBaseInfoRam *ram, beMessengerWo
         ram->_st1 = 0;
         break;
     case 1:
-        GPR_00554e70 = 1;
+        g_commonSettingsValid = 1;
         break;
     }
     return 1;

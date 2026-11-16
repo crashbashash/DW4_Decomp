@@ -5,8 +5,11 @@
 /* igObject's virtual functions: slot n sits at vtable byte offset 8 + 4 * n (the first two words
  * are the class header). The reflected igObject is the same object seen as data. The slots carry
  * the igObject symbol names (Gap::Core::igObject::<name>, igObject_<Name>). Slot 17 takes the
- * value the meta-object's write proxy returns. The same view src/engine/core/CoreLibrary.h
- * declares for the engine units.
+ * value the meta-object's write proxy returns.
+ * A class whose virtual functions are called is seen through `<Class>DispatchView`, derived from
+ * its base class's view: `dN` holds slot N's place, and a called slot carries the method name of
+ * its implementation's symbol, or where that symbol has none a name for what its body does, spelled
+ * as the engine's own views spell it; `vfunc_N` (the symbol's number) while neither is known.
  * ABI view only: never instantiated. */
 class igObjectDispatchView {
 public:

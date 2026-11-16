@@ -33,7 +33,7 @@ int beStaticInfoCtl_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beStaticInfoCtl_vtable[0];
     igSmartPointer_beBaseInfoList_Destruct((igSmartPointer<igObject> *)&obj._staticInfoList, -1);
-    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
 

@@ -67,7 +67,7 @@ EE Timer 1 count (0x10000800)  ─ p2ReadNanoseconds ─▶ 100 ns ticks (u64) �
 | Raw source | `0x0032dab0` `igPsx2LongTimer::vfunc_37` | **[static]** calls `0x0020d290` and returns the u64 |
 | Timer time | `0x00330af0` `igPsx2LongTimer::vfunc_26` | **[static]** if byte `+0x20` ≠ 0 return `+0x10`, else `+0x10 + vfunc_37() − +8` |
 | Clock update | `0x00237730` `FUN_00237730` | **[static]** see below; the writer found for `sys+0x50` |
-| Caller | `0x00463bc0` `FUN_00463bc0` | **[static]** `jal 0x237730` with `a0 = *(this+0)` |
+| Caller | `0x00463bc0` `ViewerSetup_Update` | **[static]** `jal 0x237730` with `a0 = *(this+0)` |
 
 `gp` is `0x0055c870` (entry code `0x001001bc`), so the float is at `0x005548b8` and the
 accumulator at `0x0056c190`.

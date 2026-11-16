@@ -15,43 +15,20 @@ igMetaObject *beTimerData_GetMetaObject(void)
 
 int beTimerData_GetVTable(void) {
     beTimerData obj;
-    int *resetConditionSlot;
-    int *callLuaFileSlot;
-    char *text;
-    int *header;
-    int refCount;
     int vtable;
+    char **resetConditionSlot;
+    char **callLuaFileSlot;
 
     igObject_InitHeader(&obj);
-    resetConditionSlot = &obj._resetCondition;
-    callLuaFileSlot = &obj._callLuaFile;
+    callLuaFileSlot = (char **)&obj._callLuaFile;
+    resetConditionSlot = (char **)&obj._resetCondition;
     obj._vtable = (int)&g_beTimerData_vtable[0];
-    obj._resetCondition = 0;
-    obj._callLuaFile = 0;
+    *resetConditionSlot = 0;
+    *callLuaFileSlot = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beTimerData_vtable[0];
-    if (callLuaFileSlot != 0) {
-        text = (char *)*callLuaFileSlot;
-        if (text != 0) {
-            header = (int *)(text - 8);
-            refCount = *(int *)(text - 4) - 1;
-            *(int *)(text - 4) = refCount;
-            if (refCount == 0) {
-                StringChunk_ReleaseHeader(*header, header);
-            }
-        }
-    }
-    if (resetConditionSlot != 0) {
-        text = (char *)*resetConditionSlot;
-        if (text != 0) {
-            header = (int *)(text - 8);
-            refCount = *(int *)(text - 4) - 1;
-            *(int *)(text - 4) = refCount;
-            if (refCount == 0) {
-                StringChunk_ReleaseHeader(*header, header);
-            }
-        }
-    }
+    igStringRef_Release(callLuaFileSlot);
+    igStringRef_Release(resetConditionSlot);
     return vtable;
 }
 

@@ -22,23 +22,24 @@ int beLoadingNode_GetVTable(void) {
     obj._vtable = (int)&g_beLoadingNode_vtable[0];
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beLoadingNode_vtable[0];
-    beNodeAnim_Destroy((int **)&obj, (long long)0);
+    beNodeAnim_Destroy((beNodeAnim *)&obj, (long long)0);
     return vtable;
 }
 
-int **beNodeAnim_Destroy(int **arg0, long long arg1) {
-    if (arg0 != 0) {
-        *arg0 = &g_beNodeAnim_vtable[0];
-        if (arg0 != 0) {
-            *arg0 = &g_igGroup_vtable[0];
-            igSmartPointer_igNodeList_Destruct((char *)arg0 + 0x1C, -1);
-            igNode_Destroy(arg0, 0);
+beNodeAnim *beNodeAnim_Destroy(beNodeAnim *self, long long delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_beNodeAnim_vtable[0];
+        /* ~igGroup is inlined here with its own null check on `this` */
+        if (self != 0) {
+            self->_vtable = (int)&g_igGroup_vtable[0];
+            igSmartPointer_igNodeList_Destruct(&self->_childList, -1);
+            igNode_Destroy((int **)self, 0);
         }
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if ((short)delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beLoadingNode_EnsureRegistered(void)

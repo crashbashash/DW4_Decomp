@@ -209,24 +209,24 @@ ViewerSetup::~ViewerSetup() {
     }
 }
 
-void FUN_00463b30(int *arg0) {
+void ViewerSetup_Open(int *arg0) {
     FUN_00237530(*arg0);
     FUN_00236ca0(*arg0);
     FUN_002371f0(*arg0);
 }
 
-void FUN_00463b70(int *arg0) {
+void ViewerSetup_Close(int *arg0) {
     FUN_00237280(*arg0);
     FUN_00236e80(*arg0);
     FUN_002376b0(*arg0);
 }
 
-int FUN_00463bb0(int *p)
+int ViewerSetup_RunFrame(int *p)
 {
     return FUN_002377c0(*(int *)((char *)p + 0));
 }
 
-extern "C" int FUN_00463bc0(S *s) {
+extern "C" int ViewerSetup_Update(S *s) {
     FUN_00237730(s->a);
     if (s->f16) {
         igInsightCore *t = s->a;
@@ -245,12 +245,12 @@ extern "C" int FUN_00463bc0(S *s) {
     return r;
 }
 
-int FUN_00463c70(int *p)
+int ViewerSetup_ResetView(int *p)
 {
     return igViewerSceneInfoManager_ResetView(*(int *)((char *)p + 4));
 }
 
-int FUN_00463c80(int *p)
+int ViewerSetup_ClearInfos(int *p)
 {
     return FUN_002370c0(*(int *)((char *)p + 0));
 }

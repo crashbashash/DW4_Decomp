@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#include "dw4/igObjectVirtuals.h"
+#include "dw4/igObjectDispatchView.h"
 #include "dw4/beTime.h"
 #pragma push
 #pragma readonly_strings on
@@ -97,8 +97,8 @@ int strcmp(...);
 
 extern int g_beCameraCtrlInfo_metaObject[4];
 extern int g_beCameraCtrl_metaObject[4];
-extern int g_beCameraBoxData_metaObject[4];
-extern int g_beCameraDemoData_metaObject[4];
+extern igMetaObject *g_beCameraBoxData_metaObject;
+extern igMetaObject *g_beCameraDemoData_metaObject;
 extern int g_igCamera_metaObject[16];
 extern int g_igViewerSceneInfoManager_metaObject[4];
 extern int g_propertyNameField[4];
@@ -174,15 +174,15 @@ void beCameraCtrl_Prepare(beCameraCtrl *self) {
 }
 
 int beCameraCtrl_IsBoxCamera(beCameraCtrl *self, beCameraCtrlInfo *info) {
-    igObjectVirtuals *data = (igObjectVirtuals *)info->_data;
-    int boxMeta = g_beCameraBoxData_metaObject[0];
-    return boxMeta == data->getMeta();
+    igObjectDispatchView *data = (igObjectDispatchView *)info->_data;
+    igMetaObject *boxMeta = g_beCameraBoxData_metaObject;
+    return boxMeta == data->GetMeta();
 }
 
 int beCameraCtrl_IsDemoCamera(beCameraCtrl *self, beCameraCtrlInfo *info) {
-    igObjectVirtuals *data = (igObjectVirtuals *)info->_data;
-    int demoMeta = g_beCameraDemoData_metaObject[0];
-    return demoMeta == data->getMeta();
+    igObjectDispatchView *data = (igObjectDispatchView *)info->_data;
+    igMetaObject *demoMeta = g_beCameraDemoData_metaObject;
+    return demoMeta == data->GetMeta();
 }
 
 void beCameraCtrl_EnableDebugZoom(beCameraCtrl *self, beBaseInfoRam *ram, int on)

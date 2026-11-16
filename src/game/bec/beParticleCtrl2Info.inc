@@ -27,7 +27,7 @@ int beParticleCtrl2Info_GetVTable(void) {
     obj._vtable = (int)&g_beParticleCtrl2Info_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._subSwitch, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._mainSwitch, -1);
-    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 

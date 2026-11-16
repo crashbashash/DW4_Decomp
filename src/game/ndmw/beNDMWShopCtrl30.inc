@@ -29,7 +29,7 @@ int beNDMWShopCtrl30_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWShopCtrl30_vtable[0];
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrl30_vtable[0];
-    FUN_003b6430(&obj, 0);
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
 }
 

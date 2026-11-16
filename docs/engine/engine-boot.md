@@ -118,8 +118,20 @@ pipeline split rather than as a variant selector.
 `main` calls one of them around `0x2598c0`/`0x2598d0`, chosen by byte `+0xd8` of the frame
 object; the update loop itself is inside the body.
 
+The `0x463b30`…`0x463c80` calls are the viewer setup's methods (the object at the start of the app,
+built at `0x463560` and torn down at `0x463910`): open (window, visual context, one instance of every
+Insight plugin class, managers and timer started), close (the reverse), one core frame, the per-frame
+update that retires the logo after four seconds and reports whether to keep running, the scene-info
+manager's view reset, and clearing the core's infos. `0x259f80` is the scene-load step between
+clearing and the view reset; its retail body only reads the model-name list.
+
 `GameMain_RunGame` is in `src/game/GameMain.cpp`.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in
 `s1` and reloads `24(s1)` for the later virtual call.  This allocation is source-driven, not a compiler
 flag effect: in a minimal MWCC test a two-parameter function with a `short` second parameter gets
 `s1` = arg0, `s0` = arg1 only when the first call in the body takes no argument, and passing a pointer
 to that call flips them.
+
+## Open questions
+
+- The viewer setup's class name (`ViewerSetup`) is a description: the class has no vtable, no
+  reflection record and no string, so its methods carry that name until the original surfaces.

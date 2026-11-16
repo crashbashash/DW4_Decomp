@@ -223,12 +223,12 @@ void **igSmartPointer_igIntListList_Destruct(void **arg0, int arg1) {
     return arg0;
 }
 
-igMetaObject *g_igModelViewMatrixBoneSelectList_metaObject;
+igMetaObject *g_igModelViewMatrixBoneSelectListSg_metaObject;
 
 igMetaObject *FUN_0019d280(void) {
-    if (g_igModelViewMatrixBoneSelectList_metaObject == 0) {
-        g_igModelViewMatrixBoneSelectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igModelViewMatrixBoneSelectListSg_metaObject == 0) {
+        g_igModelViewMatrixBoneSelectListSg_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igModelViewMatrixBoneSelectList_metaObject;
+    return g_igModelViewMatrixBoneSelectListSg_metaObject;
 }
 

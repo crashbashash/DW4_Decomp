@@ -810,23 +810,42 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Spelling:* a setter taking the stored value by `const` reference, `setItem(ItemList *, int, Item *const &)`,
     called with `0`; called with a variable it leaves the loop rotated. Confirmed in a probe and in the IR dump.
   - *Unit:* `src/game/beNDMWListCtrl.cpp` (0x412600).
-- **Open: the add block after the return path of an invariant loop whose operand stays in memory.**
+- **Only loop phases create IR nodes: an invariant pull's preheader plus the unrolled body give a block after the
+  return path.**
   - *Symptom:* a vector offset helper (`point + by`) whose three adds sit in a block placed after the function's
-    return path, with folded stack offsets (`208(sp)`, `224(sp)`) and the vector `point` kept in memory.
-  - *Cause (probed):* the block is the preheader `IRO_PullOutInvariantAssignments` appends after the function's last
-    node, as in the entry above: when a `for` or `while` loop is entered by a jump and its body is invariant, the body
-    moves into that node; a known trip count of at least one leaves no guard and the empty loop is removed.
-    `for (int i = 0; i < 1; i++) { r.x = point.x + by[0]; … }` inside the helper puts the block at retail's place,
-    and a loop over the three components with one invariant assignment makes the tail node and the unrolled adds
-    follow it, in retail's order (`point + by`). It is not the inliner: an inline body is entered by a jump to the very
-    next node.
-  - *Open:* retail's block is explicit member code, not an unrolled loop, and `point` stays in memory (the GameCube
-    build too, with dead stores). An invariant loop body with plain member reads scalarises `point` (112 words), and
-    a pointer to `point` keeps it in memory but is not pulled out of a loop. No natural source has both. Loop forms
-    (`for`, `while`, `do`, counting down, a pointer walk), `operator[]`, a `const &` alias, an out-parameter, inline
-    depth, the helper's definition order, ternary contexts and a `goto` layout (74 words) leave at least 41 words.
-    No matched function in the census has an add block after its return path.
-  - *Unit:* `src/game/beGenerater.cpp` (0x384540, not matched).
+    return path, with folded stack offsets (`208(sp)`, `224(sp)`) and the vector kept in memory.
+  - *Cause (IR dump):* no `if`/`else`, `?:` or by-value return makes an end-of-function node (a `?:` on a struct is
+    lowered to a pointer select, and the branches of an `if`/`else` expand to member-wise copies that are never single
+    assignments). Only the loop phases add nodes: `IRO_PullOutInvariantAssignments` appends the preheader after the
+    function's last node, and `IRO_LoopUnroller` places its copy of the body after that. The inner loop needs one
+    assignment that is pulled out; expression propagation leaves `origin = data->_pos` alone because it is used several
+    times and is not a plain address.
+  - *Spelling:* a one-pass loop, `for (int i = 0; i < 1; i++) { ... }`, with the invariant local declared inside it. A
+    known trip count of at least one leaves no guard. The loop is unrolled rather than removed, which matters for the
+    next entry. The nearest natural reading is an inlined "offset `count` points" helper called with 1 (three words
+    off); the one-pass loop carries a matching-construct comment.
+  - *Unit:* `src/game/beGenerater.cpp` (`beGenerater_SpawnEnemies` 0x384540).
+- **A removed empty loop leaves an orphan node that breaks the dominators.** When the pulled loop is removed instead of
+  unrolled, its node stays behind with no predecessors; the dominator computation then fails and the enclosing loop is
+  never processed, so the addresses the spawn loop would have lifted stay in the body. Keeping the pull loop alive
+  (unrolled) is what leaves no orphan. *Unit:* `src/game/beGenerater.cpp` (`beGenerater_SpawnEnemies` 0x384540).
+- **A const-reference read is never merged with non-const lifted addresses; an `sp`-based pointer variable is never
+  folded into a load or store offset.**
+  - *Symptom:* `lwc1` and `swc1` offsets that retail folds against `sp` (`224(sp)`) come out as `addiu v1,sp,224` with
+    `0(v1)`.
+  - *Cause:* in `IRO_MoveInvariantExpressions` the indexed stores `(&position)[i]` and the read through `(&relative)[i]`
+    depend on `i`, so they are not lifted in pass 1; in pass 2 the read is flagged const (node flags `0x0001`, seen
+    under gdb) and is not merged with the lifted `position + 4`. The code generator folds base plus offset only for
+    registers, never for an `sp` address, so any spelling through a pointer variable stays unfolded.
+  - *Spelling:* indexed access to the vectors themselves (no pointer variable, no `const` reference alias).
+  - *Unit:* `src/game/beGenerater.cpp` (`beGenerater_SpawnEnemies` 0x384540).
+- **The evaluation order of a commutative add decides its register colours.** The heavier operand is loaded first, which
+  fixes which float register pair holds each term: `data->_pos[0] + relative[0]` gives retail's `f3`/`f2` and
+  `add.s f2,f2,f3`, where reading `origin[0]` gives every other byte right and one register pair swapped. *Spelling:*
+  the term read straight from the data first. *Unit:* `src/game/beGenerater.cpp` (`beGenerater_SpawnEnemies` 0x384540).
+- **A `?:` that selects a default has no join label.** Rebuilt into a conditional expression it emits no label
+  statement, so no alignment directive is written at the join; as an `if`/`else` the extra `nop` and ordering differ.
+  *Unit:* `src/game/beGenerater.cpp` (`beGenerater_SpawnEnemies` 0x384540).
 - **The code generator opens a new block in front of a loop whenever the block before it falls straight into the
   header.** The routine is at 0x4c5ad0 (calling 0x4ae730), found under gdb. Every loop of a function then has a
   block of its own to receive the values the code generator hoists, and retail's order of those preheaders follows

@@ -249,13 +249,11 @@ igMetaObject *beNDMWLoadCtrl2CommonIntf_GetMeta(void)
     return g_beNDMWLoadCtrl2CommonIntf_metaObject;
 }
 
-static inline int countOf_3cb760(const beNDMWDegiDataList *l) { return l->_count; }
-
-static inline int countOf_3cb760(const beNDMWLoadSavePlWorkList *l) { return l->_count; }
+static inline int countOf(const beNDMWLoadSavePlWorkList *l) { return l->_count; }
 
 void beNDMWLoadCtrl2CommonIntf_userDestruct(beNDMWLoadCtrl2CommonIntf *self) {
     beNDMWDegiDataList *l = (beNDMWDegiDataList *)self->_gameUseData;
-    if (countOf_3cb760(l) > 0) {
+    if (countOf(l) > 0) {
         int n = l->_count;
         int i;
         igObject *o;
@@ -279,7 +277,7 @@ void beNDMWLoadCtrl2CommonIntf_userDestruct(beNDMWLoadCtrl2CommonIntf *self) {
     }
     {
     beNDMWLoadSavePlWorkList *l2 = (beNDMWLoadSavePlWorkList *)self->_flagWork;
-    if (countOf_3cb760(l2) > 0) {
+    if (countOf(l2) > 0) {
         int n = l2->_count;
         int i;
         igObject *o;
@@ -425,7 +423,7 @@ void beNDMWPanelWazaInfoWork_userConstruct(beNDMWPanelWazaInfoWork *self) {
     StringList_Resize((igDataList *)self->_textSetList, 0x30);
     {
         /* every text slot takes a share of one empty token */
-        StringRef_3cbb60 empty(0);
+        HeldStringRef empty(0);
         l = (igDataList *)self->_textSetList;
         n = l->_count;
         p = (char **)l->_data;
@@ -501,7 +499,7 @@ void beNDMWPanelWazaInfoWork_TrimCapacity(beNDMWPanelWazaInfoWork *self) {
     }
     self->_playerWork = 0;
     {
-        StringRef_3cbd80 empty(0);
+        InternedStringRef empty(0);
         beNDMWPanelWazaInfoWork_igStringRefList_SetAll((igDataList *)(((void *)beNDMWPanelWazaInfoWork_GetTextSetList(self))), (char **)&empty);
     }
     beNDMWPanelWazaInfoWork_igIntList_SetAll((igIntList *)beNDMWPanelWazaInfoWork_GetTextColorList(self), &g_beNDMWPanelWazaInfoWork_textColorNoneReset);

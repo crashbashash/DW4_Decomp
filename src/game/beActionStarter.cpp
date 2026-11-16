@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-#include "dw4/igObjectVirtuals.h"
+#include "dw4/igObjectDispatchView.h"
 
 extern "C" void beActionStarter_Prepare(void);
 extern "C" int beActionStarter_GetInfoMeta(void);
@@ -21,7 +21,7 @@ extern "C" void beActionStarter_OnAddRam(beActionStarter * p0, int p1, char * p2
 extern "C" int emptyString[4];
 extern "C" int MODELCTRL_10[4];
 extern "C" int SETEFFECT_3[4];
-extern "C" int g_beActionStarterData2_metaObject[4];
+extern "C" igMetaObject *g_beActionStarterData2_metaObject;
 /* One entry of an info's model list: the model's name and the data list of its commands. */
 struct ActionStarterModel {
     int _vtable;
@@ -102,8 +102,8 @@ int beActionStarter_OnMessage(beActionStarter *self, beActionStarterInfoRam *ram
                     beMessenger_AppendBool(self->_messenger, command->_isSeqDead);
                     beMessenger_AppendBool(self->_messenger, command->_isPositionLock);
                     {
-                        int rotatedMeta = g_beActionStarterData2_metaObject[0];
-                        if (rotatedMeta == ((igObjectVirtuals *)command)->getMeta()) {
+                        igMetaObject *rotatedMeta = g_beActionStarterData2_metaObject;
+                        if (rotatedMeta == ((igObjectDispatchView *)command)->GetMeta()) {
                             rotation[0] = ((float *)&command->_rotation)[0];
                             rotation[1] = ((float *)&command->_rotation)[1];
                             rotation[2] = ((float *)&command->_rotation)[2];

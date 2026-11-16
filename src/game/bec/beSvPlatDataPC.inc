@@ -27,25 +27,15 @@ int beSvPlatDataPC_GetVTable(void) {
     return vtable;
 }
 
-O_347150 *beSvPlatBaseData_Destroy(O_347150 *arg0, short arg1) {
-    Q *t;
-
-    if (arg0 != 0) {
-        arg0->vt = &g_beSvPlatBaseData_vtable[0];
-        if (&arg0->m != 0) {
-            t = arg0->m;
-            if (t != 0) {
-                t->f4 -= 1;
-                if ((t->f4 & 0x7fffff) == 0) {
-                    igObject_Destroy(t);
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+beSvPlatBaseData *beSvPlatBaseData_Destroy(beSvPlatBaseData *self, short delete_storage) {
+    if (self != 0) {
+        self->_vtable = (int)&g_beSvPlatBaseData_vtable[0];
+        igObjectRef_Release((igObject **)&self->_slotList);
+        if (delete_storage > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beSvPlatDataPC_EnsureRegistered(void)

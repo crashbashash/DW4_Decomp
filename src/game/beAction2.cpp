@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
+#include "dw4/igRandomNumberDispatchView.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -19,18 +20,6 @@ public:
     virtual void vfunc_24(); virtual void vfunc_25(); virtual void vfunc_26(); virtual void vfunc_27();
     virtual void vfunc_28(); virtual void vfunc_29();
     virtual void SetValue(void *value);
-};
-
-/* The system's random source; slot 22 returns the next number. */
-class RandomSource {
-public:
-    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
-    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
-    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
-    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
-    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
-    virtual void vfunc_20(); virtual void vfunc_21();
-    virtual unsigned Next();
 };
 
 /* matching construct: igObjectList-shaped component list with a pointer-typed buffer; reflected
@@ -372,7 +361,7 @@ int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
             return 1;
         }
         range = (int)(100.0f * frames - 100.0f * g_randomWaitMinimum);
-        r = ((RandomSource *)((beSystem *)manager->_system)->_random)->Next() % range;
+        r = ((igRandomNumberDispatchView *)((beSystem *)manager->_system)->_random)->genrand() % range;
         frames = g_randomWaitMinimum + (float)r / 100.0f;
     }
     case 'F':

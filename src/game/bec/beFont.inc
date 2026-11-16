@@ -56,7 +56,7 @@ int beFont_GetVTable(void) {
     igSmartPointer_beFontGeomAttrPairList_Destruct((igSmartPointer<igObject> *)&obj._gaPairList, (short)(-1));
     igSmartPointer_beFontImageList_Destruct((igSmartPointer<igObject> *)&obj._fonts, -1);
     igSmartPointer_igAttrSet_Destruct(&obj._root, -1);
-    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
 
