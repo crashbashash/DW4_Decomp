@@ -563,7 +563,7 @@ int mwsfd_IsAddInfOn(MwsfdCreInf *cre)
 {
     int result;
 
-    switch (cre->f32) {
+    switch (cre->addInfMode) {
     case 0:
     case 0x101:
         result = 1;

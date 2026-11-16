@@ -567,7 +567,7 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
     }
     mwPlySetTimerCh(0);
     memset(&cre, 0, sizeof(cre));
-    cre.f32 = 0;
+    cre.addInfMode = 0; /* asks for the additional-information stream; the store survives the memset above */
     cre.type = 1;
     cre.maxBps = (movie->_bitrate == -1) ? 0x5B8D80 : movie->_bitrate;
     cre.maxWidth = sofdecInfo.width;

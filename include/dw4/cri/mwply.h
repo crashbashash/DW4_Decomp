@@ -33,7 +33,7 @@ typedef struct MwsfdCreInf {
     int nfrm;        /* 20: input size multiplier, at least 1 */
     char *work;      /* 24: the player's malloc pool; 0 needs malloc functions */
     int workSize;    /* 28 */
-    int f32;         /* 32 */
+    int addInfMode;  /* 32: 0 or 0x101 enables the additional-information stream */
     int bufFmt;      /* 36: below 3 */
     int f40;         /* 40 */
     int f44;         /* 44 */
