@@ -256,7 +256,8 @@ int beNDMWWindow_PollCloseComplete(beNDMWWindow *self) {
     n = ((igStringRefList *)self->_modelCloseInfoNameList)->_count;
     for (i = 0; i < n; i++) {
         StringList_CopyRetained(&modelCopy, (igStringRefList *)self->_modelCloseInfoNameList, i);
-        /* matching construct: cxx_sweep — the token copy moved into the release test */
+        /* matching construct: cxx_sweep — the token copy moved into the release test; as a statement of its own, like
+         * the sequence copy below, the loop index moves from s1 to s2 */
         if ((model = modelCopy)) { header = model - 2; refs = model[-1] - 1; model[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader(*header, header); }
         id = ((int *)((igStringRefList *)self->_modelCloseRamNoList)->_data)[i];
         StringList_CopyRetained(&sequenceCopy, (igStringRefList *)self->_modelCloseSeqNameList, i);

@@ -644,9 +644,9 @@
   "error": null,
   "offset_casts": 4071,
   "pct": 46.31,
-  "recovered": 31533,
+  "recovered": 31525,
   "synthetic": 5896,
-  "total": 68089,
+  "total": 68081,
   "typeable": 295,
   "typeable_pct": 0.43
  }

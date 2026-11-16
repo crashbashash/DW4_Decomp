@@ -284,7 +284,8 @@ struct MoveRef {
 };
 
 /* matching construct: the data-list holder (slot 152) must sit below the move-object holder (slot 156), so it is
- * a local of a static inline member (allocated after the caller's); al/p/old stay the caller's locals. */
+ * a local of a static inline member (allocated after the caller's); al/p/old stay the caller's locals. Assigned
+ * through igSmartPointer::operator= instead, beModelCtrl_RunMove's registers differ. */
 struct Locals {
     static inline void CreateDataList(beBaseInfoRam *arg1, int &al, igObject *&p, igObject *&old) {
         SELECT_ALLOCATOR(al, arg1);
@@ -373,13 +374,6 @@ extern "C" void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram);
 extern "C" int igStringRefList_IndexOf(int list, StringRef *key, int);
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 extern "C" int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *work);
-struct Rel { static inline void go(igAABox *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
-} };
 extern "C" void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox *box);
 extern "C" beModelCtrlNode2 *beModelCtrlNode2_Create(int);
 extern "C" beModelCtrlInfoRideOn4 *beModelCtrlInfoRideOn4_Create(int);
@@ -419,7 +413,8 @@ template <int kind> struct ObjRef {
 };
 
 /* Creates the ram's data list on first use.
- * matching construct: the handler's ride-on local doubles as the list's holder; a local of its own moves registers */
+ * matching construct: the handler's ride-on local doubles as the list's holder; a local of its own, or an
+ * assignment through igSmartPointer::operator=, moves registers */
 struct DataList {
     static inline void Ensure(beBaseInfoRam *ram, beModelCtrlInfoRideOn *&held) {
         if (ram->_dataList == 0) {
@@ -2736,14 +2731,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
             allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igAABox> created(igAABox_CreateInstance(allocator));
-        bound = created.p;
-        if (bound != 0) {
-            bound->_refCount++;
-        }
-        Rel::go((igAABox *)node->_bound);
-        node->_bound = (int)bound;
-        /* matching construct: the box is re-read from the reference before it leaves scope, so the release
-         * below works on that register copy (retail 0x003969ec) */
+        (igSmartPointer<igAABox> &)node->_bound = created;
         bound = created.p;
     }
     bound->_min[0] = box->_min[0];

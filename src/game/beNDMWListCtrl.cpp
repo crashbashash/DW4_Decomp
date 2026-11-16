@@ -2112,7 +2112,8 @@ void beNDMWStatusPowerSocket_RefreshPocket(beNDMWStatusPowerSocket *self) {
         beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stpocket, 0, sequence.p);
     }
     int i = 0;
-    /* matching construct: the loop guard reads the pocket list through a const view, so the body reloads it as retail does */
+    /* matching construct: the loop guard reads the pocket list through a const view, so the body reloads it as retail
+     * does; a plain guard, a for loop over the field or a const count() accessor leave the function 8 bytes short */
     const beNDMWStatusPowerSocket *view = self;
     if (0 < ((igObjectList *)view->_wpuPocket)->_count) {
         do {
@@ -2189,7 +2190,9 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
     }
     BoolList_Append(flags.p, fl0);
     if (((beNDMWWindow *)self->_mother)->_entCode == 1) BoolList_Append(flags.p, fl);
-    /* matching construct: a const view of the holder keeps the retail reload of the list */
+    /* matching construct: the decide list goes into the window's reference written out, the list read through a const
+     * view of the holder before the window is fetched; through igSmartPointer::operator= or an inline setter the window
+     * and the list exchange registers */
     { const igSmartPointer<igBoolList> &view = flags; l0 = view.p; }
     w = win.p;
     if (l0 != 0) {
@@ -2702,7 +2705,8 @@ void beNDMWStatusMainSlot_RefreshPocket(beNDMWStatusMainSlot *self) {
         beMessenger_SendNamed(self->_messenger, MODELCTRL_3, i_stpocket, 0, sequence.p);
     }
     int i = 0;
-    /* matching construct: the loop guard reads the pocket list through a const view, so the body reloads it as retail does */
+    /* matching construct: the loop guard reads the pocket list through a const view, so the body reloads it as retail
+     * does; a plain guard, a for loop over the field or a const count() accessor leave the function 8 bytes short */
     const beNDMWStatusMainSlot *view = self;
     if (0 < ((igObjectList *)view->_apuPocket)->_count) {
         do {
@@ -2771,7 +2775,9 @@ void beNDMWStatusMainSlot_OpenSlotMenu(beNDMWStatusMainSlot *self) {
     }
     BoolList_Append(flags.p, fl0);
     BoolList_Append(flags.p, fl);
-    /* matching construct: a const view of the holder keeps the retail reload of the list */
+    /* matching construct: the decide list goes into the window's reference written out, the list read through a const
+     * view of the holder before the window is fetched; through igSmartPointer::operator= or an inline setter the window
+     * and the list exchange registers */
     { const igSmartPointer<igBoolList> &view = flags; l0 = view.p; }
     w = win.p;
     if (l0 != 0) {
@@ -3265,7 +3271,8 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
     if (t->_count > 0 && ((int *)t->_data)[self->_kindListPos] != 0) fl = true;
     BoolList_Append(flags.p, fl0);
     BoolList_Append(flags.p, fl);
-    l0 = *(igBoolList **)&flags.p;
+    /* matching construct: as in the power socket's menu, the list is read through a const view of the holder */
+    { const igSmartPointer<igBoolList> &view = flags; l0 = view.p; }
     w = win.p;
     if (l0 != 0) {
         l0->_refCount = l0->_refCount + 1;

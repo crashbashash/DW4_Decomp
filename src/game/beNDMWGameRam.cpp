@@ -283,7 +283,11 @@ public:
     ~StringRef() { release(&p); }
 };
 struct Fill {
-    /* clear every slot of the string list to the empty token. matching construct: the empty-token holder is a temporary of the call statement (passed by const reference), which takes the lowest frame slot (retail slot 140) below the case holders; the loop counters stay the caller's variables so the register assignment matches */
+    /* Clears every slot of the string list to the empty token.
+     * matching construct: the empty-token holder is a temporary of the call statement (passed by const reference), which
+     * takes the lowest frame slot (retail slot 140) below the case holders, and the loop counters stay the caller's
+     * variables. Written in place in the case the function is 12 bytes long; with the counters local to this inline
+     * the registers differ. */
     static inline void emptyStrings(beDataObjStringList *h5, const StringRef &str, int &n5, int **&d5, int &i5) {
         igStringRefList *l5 = (igStringRefList *)h5->_data;
         n5 = l5->_count;
@@ -913,7 +917,8 @@ int beNDMWGameRam_FindSpecies(beNDMWGameRam *self, const char *modelName) {
 }
 
 void beNDMWGameRam_SelectSpecies(beNDMWGameRam *self, int index, int species) {
-/* matching construct: local declaration order fixes register allocation */
+/* matching construct: local declaration order fixes register allocation; declared where first set, or in the
+ * order first set (with for loops and a bounds-checked setter), the function differs in registers only */
     int upcntOffset;
     igIntList *skills;
     int player;
@@ -962,7 +967,7 @@ void beNDMWGameRam_SelectSpecies(beNDMWGameRam *self, int index, int species) {
     baseExps = (igIntList *)((PropertyRecord *)igProperty_GetRecordIntList(player, "BASE_EXP"))->value;
     value = ((int *)baseExps->_data)[species];
     ((PropertyRecord *)igProperty_GetRecord(player, "EXP"))->value = (void *)value;
-    /* matching construct: skillBase/upcntBase hoisted into locals, else MWCC strength-reduces the index */
+    /* matching construct: skillBase/upcntBase hoisted into locals; indexed as species * 9 + skill the function is 8 bytes short */
     skillBase = species * 9;
     skill = 0;
     skillOffset = 0;
@@ -2020,18 +2025,21 @@ extern unsigned char g_boolListClearValue;
 int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *message);
 }
 extern "C" int igStringRef_Assign(void *, const StringRef &);
-/* matching construct: RAII copied-reference local reproduces the retail unwind table */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const AllocatorValue &source); ~RecoveryCopiedRef(); };
+/* The data-list reference made from an allocator value: constructed by beNDMWGameRam_CreateDataListRef and released by the shared igSmartPointer destructor, both out of line. */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const AllocatorValue &source); ~RecoveryCopiedRef(); };
 extern "C" int *beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(void *, const RecoveryCopiedRef &);
 /* Gives `obj` a fresh object from the allocator.
  * matching construct: written in place, the copied reference takes the frame slot below retail's (1028 for 1032);
  * in this inline's own scope it lies where retail has it. */
 struct ObjectRefAssigner { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(kIGMemoryPoolHandleUser1, alloc))); return beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(obj, c); } };
-/* matching construct: out-of-line helper that reproduces the retail call shape of the BKCHIPNAME string-list store */
+/* Stores a retained copy of `v` at list[idx] when idx is in range: the bounds-checked setter of a string list. */
 struct StringListStore { static void SetAt(igStringRefList *list, int idx, const StringRef &v) { if (list->_count != 0 && idx >= 0 && idx < list->_count) igStringRef_Assign((void *)((char *)beNDMWGameRam_igStringRefList_GetData((igDataList *)list) + idx * 4), v); } };
-/* matching construct: RAII list local reproduces the retail unwind table */ class RecoveryList { public:
+/* Appends to an int list, growing it when full; the element buffer is read through the out-of-line accessor. */
+class IntListAppend { public:
  struct Header { int word0; int word1; int count; int capacity; };
  static void append(void *list, int value) {
   Header *h = (Header *)list;
+  /* matching construct: the count is re-read through a const view of the header; read plainly or through a const
+   * accessor, the message handler's size changes (41856 or 41880 for 41864) */
   const Header *view = h;
   int index = h->count;
   if (index < h->capacity) {
@@ -4788,7 +4796,7 @@ loop_449:
                     igMatrix44f_GetTranslation(&speedMatrix, &speedCenter);
                     { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &speedCenter);
                     speedTargetList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Deref((int *)&nearby.value));
-                    RecoveryList::append(speedTargetList, casterIndex);
+                    IntListAppend::append(speedTargetList, casterIndex);
                     speedCount = ((igIntList *)nearby.value)->_count;
                     int speedCountCopy = speedCount;
                     for (speedLoop = 0; speedLoop < speedCountCopy; ++speedLoop) {
@@ -4844,7 +4852,7 @@ loop_449:
                     igMatrix44f_GetTranslation(&powerMatrix, &powerCenter);
                     { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &powerCenter);
                     powerTargetList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Deref((int *)&nearby.value));
-                    RecoveryList::append(powerTargetList, casterIndex);
+                    IntListAppend::append(powerTargetList, casterIndex);
                     powerCount = ((igIntList *)nearby.value)->_count;
                     for (powerLoop = 0; powerLoop < powerCount; ++powerLoop) {
                             powerListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);
@@ -4884,7 +4892,7 @@ loop_449:
                     igMatrix44f_GetTranslation(&refractMatrix, &refractCenter);
                     { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER", casterIndex, &refractCenter);
                     refractTargetList = (void *)(beNDMWGameRam_igSmartPointer_igIntList_Deref((int *)&nearby.value));
-                    RecoveryList::append(refractTargetList, casterIndex);
+                    IntListAppend::append(refractTargetList, casterIndex);
                     refractCount = ((igIntList *)nearby.value)->_count;
                     for (refractLoop = 0; refractLoop < refractCount; ++refractLoop) {
                             refractListData = beNDMWLoadIntf2_igIntList_GetData(nearby.value);

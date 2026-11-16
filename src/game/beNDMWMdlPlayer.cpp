@@ -12,7 +12,6 @@ extern "C" int beBaseInfoManager_Start(...);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void *StringPool_Allocate(...);
 extern "C" igIntList *igIntList_Create(int);
-extern "C" int igMatrix44f_Invert(void *, void *, int);
 extern "C" int Vec3f_TransformDirection(void *, void *, void *);
 extern "C" void beModelCtrl__OnGenerate(...);
 extern "C" int strcmp(...);
@@ -110,6 +109,7 @@ extern "C" PropByteListRecord *igProperty_GetRecordArray(...);
 extern "C" PropStringListRecord *igProperty_GetRecordStringList(...);
 
 struct igResult { int w0; igResult() {} igResult(const igResult &o) { w0 = o.w0; } bool operator==(const igResult &o) const { return w0 == o.w0; } };
+extern "C" igResult igMatrix44f_Invert(void *matrix, int source);
 extern "C" igResult igMetaEnum_GetValueByName(void *, int, int *);
 extern "C" igResult g_resultSuccess;
 extern "C" void beNDMWMdlPEBase_OnSequenceChange(void *, beBaseInfoRam *);
@@ -191,31 +191,18 @@ public:
 };
 extern "C" StringRef StringList_CopyRetained(igStringObjList *, int);
 
-/* matching construct: slot order.  HitBoxRef (slot 252) is a block local of the caller; the locals of a
- * static inline member are allocated below the caller's, and `list` (244) must sit under the view-transform
- * result (248), which is therefore a by-reference temporary (Scratch).  Found by trial (no permuter). */
-struct Scratch { int w; Scratch() { } };
+/* matching construct: slot order. The data list's holder is a local of this static inline member, allocated below
+ * the caller's locals, so `list` (244) sits under the discarded igResult of igMatrix44f_Invert (248) and the caller's
+ * HitBoxRef (252). */
 struct Locals {
     static inline void CreateDataList(beBaseInfoRam *ram) {
         void *alloc;
-        igObject *created;
-        igObject *old;
         alloc = ((void *)igObject_GetAllocator(ram));
         alloc = g_useOwnerAllocator ? alloc : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
         {
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
-            created = list.p;
-            if (created != 0) created->_refCount = created->_refCount + 1;
-            old = (igObject *)ram->_dataList;
-            if (old != 0) {
-                old->_refCount = old->_refCount - 1;
-                if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-            }
-            ram->_dataList = (int)created;
+            (igSmartPointer<igObject> &)ram->_dataList = list;
         }
-    }
-    static inline void Project(void *matrix, int view, const Scratch &result) {
-        igMatrix44f_Invert((void *)&result, matrix, view);
     }
 };
 /* matching construct: the new list is held in this inline's own scope, which puts it in the stack slot below
@@ -280,7 +267,7 @@ void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         if (running >= 8) turnTimersFull = 1;
         igMatrix44f_SetIdentity(cameraMatrix);
-        Locals::Project(cameraMatrix, (int)&((igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters)->_viewMatrix, Scratch());
+        igMatrix44f_Invert(cameraMatrix, (int)&((igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters)->_viewMatrix);
         Vec3f_TransformDirection(cameraForward, g_vec3ZAxis, cameraMatrix);
         {
             float cameraYaw = atan2f(cameraForward[0], cameraForward[2]);
@@ -439,34 +426,30 @@ void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
 }
 
 /* Finish the pending wait check: clear the work's wait-check name to the pool's empty token. */
-#define CLEAR_WAIT_CHECK(work, token, old) { \
-    if (g_stringPool[0] == 0) { \
-        int pool = ((int)StringPool_Allocate(16)); \
-        if (pool != 0) pool = ((int)StringPool_Construct(pool)); \
-        g_stringPool[0] = pool; \
-    } \
-    token = ((int *)StringPool_Intern(g_stringPool[0], 0)); \
-    old = (int *)(work)->_wCheckName; \
-    if (old != 0) { \
-        int *hdr = old - 2; \
-        int refs = old[-1] - 1; \
-        old[-1] = refs; \
-        if (refs == 0) StringChunk_ReleaseHeader(*hdr, hdr); \
-    } \
-    (work)->_wCheckName = (int)token; }
+static inline void ClearWaitCheck(beNDMWMdlPlayerInfoWork *work) {
+    int *token;
+    int *old;
+    if (g_stringPool[0] == 0) {
+        int pool = ((int)StringPool_Allocate(16));
+        if (pool != 0) pool = ((int)StringPool_Construct(pool));
+        g_stringPool[0] = pool;
+    }
+    token = ((int *)StringPool_Intern(g_stringPool[0], 0));
+    old = (int *)work->_wCheckName;
+    if (old != 0) {
+        int *hdr = old - 2;
+        int refs = old[-1] - 1;
+        old[-1] = refs;
+        if (refs == 0) StringChunk_ReleaseHeader(*hdr, hdr);
+    }
+    work->_wCheckName = (int)token;
+}
 
 void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igObject *created;
     beBaseInfo *info;
     beNDMWMdlPlayerInfoWork *work;
     int held;
-    /* matching construct: separate per-arm token/old locals, declared in this order, fix register allocation */
-    int *token1;
-    int *token2;
-    int *token3;
-    int *old1;
-    int *old2;
-    int *old3;
     int *infoName;
     int ramNo;
     info = (beBaseInfo *)ram->_parentInfo;
@@ -505,7 +488,7 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             infoName = infoName ? infoName : emptyString;
             beMessenger_SendNamed(self->_messenger, "ACTION", infoName, ramNo, "ISCOMEND");
             if (beMessenger_GetBool(self->_messenger, 0) != 0) {
-                CLEAR_WAIT_CHECK(work, token1, old1)
+                ClearWaitCheck(work);
                 work->_wCheckSt = 0;
                 if (work->_wCheckMode == 0) {
                     beModelCtrl_RunCommands(self, info, ram, work);
@@ -525,11 +508,11 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         infoName = infoName ? infoName : emptyString;
         beMessenger_SendNamed(self->_messenger, "ACTION", infoName, ramNo, "ISCOMEND");
         if (beMessenger_GetBool(self->_messenger, 0) != 0) {
-            CLEAR_WAIT_CHECK(work, token2, old2)
+            ClearWaitCheck(work);
             beModelCtrl_RunCommands(self, info, ram, work);
         }
     } else if (strcmp(work->_wCheckName, "Atck03") == 0 && !(held & 0x4000)) {
-        CLEAR_WAIT_CHECK(work, token3, old3)
+        ClearWaitCheck(work);
         beModelCtrl_RunCommands(self, info, ram, work);
     }
 }
