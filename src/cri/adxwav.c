@@ -12,6 +12,39 @@ int memcmp(const void *a, const void *b, unsigned int size);
 extern char RIFF[];
 extern char WAVE[];
 
+/* The chunk scan that finds "fmt " and "data" and reads the format fields; still retail code. */
+int adxb_GetWavInfo(unsigned char *buf, int len, short *hdrlen, signed char *hdrtype, signed char *fmtbps,
+                    signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl, short *pcmfmt);
+
+int ADXB_DecodeHeaderWav(AdxbObj *adxb, unsigned char *hdr, int size)
+{
+    short hdrlen;
+
+    adxb->hdr_set = 1;
+    if (adxb_GetWavInfo(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
+                        &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
+        return 0;
+    }
+    adxb->lp_end_ofst = 0;
+    adxb->lp_end_pos = 0;
+    adxb->lp_start_ofst = 0;
+    adxb->lp_start_pos = 0;
+    adxb->cof = 0;
+    adxb->lpins_nsmpl = 0;
+    adxb->lptype = 0;
+    adxb->nloop = 0;
+    adxb->buf.nch = adxb->nch;
+    adxb->buf.blklen = adxb->blklen;
+    adxb->buf.blksmpl = adxb->blksmpl;
+    adxb->wpos = 0;
+    adxb->buf.pcmbuf = adxb->pcmbuf;
+    adxb->dec_nsmpl = 0;
+    adxb->buf.pcmbsize = adxb->pcmbsize;
+    adxb->buf.pcmbdist = adxb->pcmbdist;
+    adxb->format = ADXB_FORMAT_WAV;
+    return hdrlen;
+}
+
 void ADXB_ExecOneWav16(AdxbObj *obj)
 {
     AdxbBuf *buf;

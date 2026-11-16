@@ -197,8 +197,11 @@ the lock switches (`0x4a92c8`, `0x4a92cc`, `0x4a92d0`), the error-check switch (
   counter reloaded on each pass.
 * They are shared state: the module's server step runs under CRI's lock and test-and-set routines, and the words
   it writes are read by setters, getters and the module's debug summary.
-* The create count (`0x4a92e8`) is touched only by its own increment in the function at `0x271670`, and its keyword changes only
-  how a delay slot is filled. That function has no row (see [Open questions](#open-questions)).
+* The create count (`0x4a92e8`) is touched only by its own increment in the function at `0x271670`, and its keyword
+  changes only how a delay slot is filled (stripped, that function is 128 bytes against 132). The owner approved
+  the row on a second build: the 3rd Strike decompilation declares `Sint32 volatile srd_create_cnt`, with the
+  destroy count plain, as here, and matches its `SRD_Create` in C. The source takes that build's statement order
+  (`used`, `stat`, `mode`, `abort_request`, then the count); in it the function matches only with the keyword.
 
 ### sud-timer
 
@@ -246,8 +249,9 @@ A module's init stores the address of its version string in a word that nothing 
 `lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. Seven inits do it: ADXT
 (`0x56dfa8`), SUD (`0x5856a8`), SFX (`0x5856a0`), CFT (`0x573ea8`), SFD (`0x580d58`), MPS (`0x573f08`) and CFG
 (`0x56dfd0`). In each the store is the word's only access in the executable, and stripping changes only the address
-form and where the store sits, never whether it happens. These inits have no row (see
-[Open questions](#open-questions)).
+form and where the store sits, never whether it happens. The owner approved the stores in the CFG init and in the
+functions at `0x283058` (CFT), `0x2b3788` (SFX) and `0x2b50e8` (SUD), the same kind of store as `ADXT_Init`'s
+approved `0x56dfa8` word. `SFD_Init` and `MPS_Init` have no row (see [Open questions](#open-questions)).
 
 ### adxt-ready-count
 
@@ -329,6 +333,9 @@ the value.
   ([adxm-thread-flags](#adxm-thread-flags); stripped, its store folds into `%lo` and moves into the delay slot) and
   `adxm_main_thid` ([adxm-thread-ids](#adxm-thread-ids); stripped, the load after the store is forwarded). The table
   holds one row per kind and function, so the row cites this anchor and counts all three.
+* `ADXM_SetupThrdEx` reads the same build word (`adxps2_build`) and sets `adxm_main_thid`, so its count of two is the
+  build word and that declaration, approved under [adxm-thread-ids](#adxm-thread-ids). Its set-up count and
+  thread parameters are plain.
 
 ### metrowerks-runtime-asm-functions
 
@@ -507,10 +514,21 @@ the requests and wait on the exit words, so the state really is shared between t
 * `adxm_vsync_thrd` and `adxm_fs_thrd` have rows on a second build: the 3rd Strike decompilation (ADXPS2 2.46)
   declares the V-sync, file-system and MW-idle tick counts `Sint64 volatile` and matches its V-sync and
   file-system procs in C; those bodies compiled with this project's ee-gcc 2.96 schedule the count's `daddu`/`sd`
-  differently when the counts are plain, so that retail has the volatile shape too. The other three bodies
-  (`adxm_usridle_thrd`, `adxm_mwidle_thrd`, `adxm_usrvsync_thrd`) have no row: they rest only on that build's
-  declarations, which give the user V-sync and user-idle counts as plain, and their busy flags, which only their
-  own thread touches, only reorder a store (see [Open questions](#open-questions)).
+  differently when the counts are plain, so that retail has the volatile shape too.
+* `adxm_usrvsync_thrd` has a row too, on the owner's standing rule for words shared between threads. Its three
+  keywords are the exit request and the exited word (other threads set and wait on them) and the busy flag
+  `adxm_usrvsync_busy`, which `adxm_exec_vint` reads. Its tick count (`0x49da08`) is plain: the busy store is
+  written through `ADXM_SET_BUSY`, a statement macro whose loop notes keep the count's `ld`/`daddu`/`sd` ahead of
+  the flag store and the call, as `do { } while (0)` does in `sftim.c`. 3rd Strike declares that count plain too.
+  `adxm_usridle_thrd` has no row: its tick count is plain the same way, and its busy flag, which only its own
+  thread touches, only keeps the store out of a delay slot (see [Open questions](#open-questions)).
+* `adxm_mwidle_thrd` has a row too, on the owner's instruction. Five of its seven keywords are on shared words (the
+  exit request, the exited word, the border request, the user-idle thread id and the slept flag). The other two are
+  the tick count (`0x49da00`) and the busy flag (`0x49d9d4`), which only this thread touches (`adxm_exec_vint`
+  reads the other busy flags). Strip either and the busy store is scheduled ahead of the count's `ld`/`sd`;
+  ee-gcc keeps the two in order only when both are `volatile`. The 3rd Strike decompilation declares the count and
+  the busy flag (`adxm_mwidle_cnt`, `adxm_mwidleproc_exec_flag`) `volatile`, but it left this function as assembly,
+  so those declarations were never tested by a match.
 
 ### sony-hardware-registers
 
@@ -871,23 +889,20 @@ file: `p2SoftwareBlendFourWeights`, `p2SoftwareBlendThreeWeights`, `p2SoftwareBl
 
 ## Open questions
 
-* **Revoked CRI rows.** Thirteen CRI functions match only with a `volatile` whose keyword keeps no memory access
+* **Revoked CRI rows.** Four CRI functions match only with a `volatile` whose keyword keeps no memory access
   and guards no state another context touches. Their rows were revoked, and they stay `unapproved` until there is
   evidence that the original declared the words `volatile`, such as an upstream CRI source or a second build:
-  * the ADXM server thread bodies `adxm_vsync_thrd`, `adxm_fs_thrd`, `adxm_usridle_thrd`, `adxm_mwidle_thrd` and
-    `adxm_usrvsync_thrd`: the tick counts `0x49d9e8` to `0x49da08` and the busy flags `adxm_mwidle_busy` and
-    `adxm_usridle_busy` are touched by their own thread only, and their keywords only reorder a store;
-  * the function at `0x271670`, the SRD create count `0x4a92e8`: touched only by this increment; the keyword only leaves a
-    delay slot unfilled;
+  * the ADXM server thread body `adxm_usridle_thrd`: its tick count is plain, but its busy flag
+    `adxm_usridle_busy` is touched by its own thread only, and its keyword only keeps the store out of the
+    delay slot of the call that follows;
   * the function at `0x273128`, a DTX word whose single store is its only access; the keyword moves it out of a
-    call's delay slot;
-  * the build-string stores `SFD_Init` (`0x580d58`), `MPS_Init` (`0x573f08`), `CRICFG_Init` (`0x56dfd0`) and the SUD
-    init at `0x2b50e8` (`0x5856a8`), and the functions at `0x2b3788` and `0x283058` (`0x5856a0`, `0x573ea8`): each
-    store is its word's only access, and the keyword, as a declaration or as a cast on the store, changes only its
-    address form and position (a plain store folds into `%lo` and is scheduled elsewhere; `MPS_Init`'s folded
-    store also shifts the alignment of the infinite loop that follows). The GameCube and Xbox builds store the
-    same words whatever the qualifier (an immediate store on Xbox, a folded `stw` on GameCube), carry no CRI CFG
-    string, and the 3rd Strike decompilation holds none of these modules, so no build can decide a store.
+    call's delay slot, and the 3rd Strike decompilation declares the matching `dtx_proc_init_flag` plain;
+  * the build-string stores `SFD_Init` (`0x580d58`) and `MPS_Init` (`0x573f08`): each store is its word's only
+    access, and the keyword, as a declaration or as a cast on the store, changes only its address form and
+    position (a plain store folds into `%lo` and is scheduled elsewhere; `MPS_Init`'s folded store also shifts the
+    alignment of the infinite loop that follows). The GameCube and Xbox builds store the same words whatever the
+    qualifier (an immediate store on Xbox, a folded `stw` on GameCube), and the 3rd Strike decompilation holds
+    neither module, so no build can decide a store.
 
 * **libcdvd's semaphore ids.** Two command pre-checks and `sceCdBreak` match only with a `volatile` on the command
   semaphore ids (`0x483568`, `0x48356c`), which keeps a load out of a call's delay slot and gains or loses no

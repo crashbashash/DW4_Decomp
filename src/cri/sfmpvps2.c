@@ -1,4 +1,5 @@
 #include "dw4/cri/sfmpv.h"
+#include "dw4/eekernel.h"
 
 #define D_ENABLER ((volatile unsigned int *)0x1000F520)
 #define D_ENABLEW ((volatile unsigned int *)0x1000F590)
@@ -9,6 +10,7 @@
 #define D4_TADR ((volatile unsigned int *)0x1000B430)
 #define REG(a) (*(volatile int *)(a))
 #define UNCACHED(address) (((address) & 0x0FFFFFFF) | 0x20000000)
+#define PHYSICAL(address) ((address) & 0x0FFFFFFF)
 
 extern int DAT_004beb10;
 extern SfdMpegCtx DAT_00585630;
@@ -28,11 +30,37 @@ void mpsutl_CopyBytes(void *dst, void *src, int size);
 void mpsutl_FillBytes(void *dst, int value, int size);
 int sfd_ReportError();
 int FUN_002abf68(void);
+typedef struct SfdPicOut {
+    char pad0[32];
+    int buf;
+} SfdPicOut;
+int MPV_DecPicSj(int a, int b, SfdPicOut *out, SfdPlayer *player);
+int MPV_SearchDelimSj(int a, int b, SfdPicOut *out, SfdPlayer *player);
+int sceMpegGetPicture(SfdMpegCtx *mpeg, int buf, int mbs);
+int sceMpegGetPictureRAW8(SfdMpegCtx *mpeg, int buf, int mbs);
+void FUN_002aa268(SfdPlayer *player);
+int FUN_002a9ef8(int a, int b, SfdPicOut *out, SfdPlayer *player);
+unsigned char *MPV_SearchDelim(unsigned char *data, int size, int code);
+int mpvsc_GetKind(unsigned char *code);
+int FUN_0029ed48(SfdPlayer *player);
+int FUN_0029edb0(SfdPlayer *player);
+
+void FUN_002aa050(SfdPlayer *player, unsigned char *data, int size);
+int sceMpegCreate(SfdMpegCtx *mpeg, int buf, int size);
+int sceMpegAddCallback(SfdMpegCtx *mpeg, int type, void *callback, void *arg);
+void FUN_002a97a0(SfdPlayer *player);
+int FUN_002a99c8(void *unused, void *record, SfdPlayer *player);
+int sfmpvps2_ExecIpu(int unused0, int unused1, SfdPlayer *player);
+int FUN_002a9b78(int unused0, int unused1, SfdPlayer *player);
+int FUN_002a9ba0(int unused0, int unused1, SfdPlayer *player);
 void sceMpegGetPictureAbort(SfdMpegCtx *mpeg);
 
 extern char sfmpv_seqend_codes[16];
 
-void FUN_002a8e50(SfdIpuStream *stream, unsigned int *first, int *firstSize, unsigned int *second, int *secondSize);
+int FUN_002a8c98(SfdIpuStream *stream, int base, unsigned int address, int sectors, SfdIpuEntry *entries, int entryCount);
+int FUN_002a8d10(SfdIpuStream *stream);
+void FUN_002a8c70(long long *arg0, long long arg1, long long arg2, long long arg3);
+void FUN_002a8e50(SfdIpuStream *stream, char **first, int *firstSize, char **second, int *secondSize);
 int sfmpvps2_SendIpu(SfdIpuStream *stream);
 void FUN_002a8f40(SfdIpuStream *stream, int bytes);
 int FUN_002a8f90(SfdIpuStream *stream, int count);
@@ -167,13 +195,13 @@ int FUN_002a99c8(void *unused, void *record, SfdPlayer *player) {
 }
 
 int sfmpvps2_PutData(SfdIpuStream *stream, char *src, int pos) {
-    unsigned int first;
+    char *first;
     int firstSize;
-    unsigned int second;
+    char *second;
     int secondSize;
     int result;
     FUN_002a8e50(stream, &first, &firstSize, &second, &secondSize);
-    result = FUN_002a9dc8((char *)UNCACHED(first), firstSize, (char *)UNCACHED(second), secondSize, src, pos, 0, 0);
+    result = FUN_002a9dc8((char *)UNCACHED((unsigned int)first), firstSize, (char *)UNCACHED((unsigned int)second), secondSize, src, pos, 0, 0);
     FUN_002a8f40(stream, result);
     return result;
 }
@@ -285,9 +313,70 @@ int FUN_002a9dc8(char *buf, int size, char *dst, int cap, char *src, int pos, ch
     return r;
 }
 
+
+
 int FUN_002aa040(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;
     return mpv->mpeg.f8;
+}
+
+void FUN_002aa050(SfdPlayer *player, unsigned char *data, int size) {
+    SfdMpv *mpv = player->streams.mpv;
+    SfdIpuCtl *ipu = &mpv->ipu;
+    unsigned char win[6];
+    unsigned char *hit;
+    int found = 0;
+    int i = 0;
+    int skip;
+    ipu->f12 += ipu->f4;
+    ipu->f4 = ipu->f8;
+    ipu->f8 = 0;
+    win[0] = ipu->f16;
+    win[1] = ipu->f17;
+    win[2] = ipu->f18;
+    win[3] = data[0];
+    win[4] = data[1];
+    win[5] = data[2];
+    while (i < (size < 4 ? size : 3)) {
+        if (win[i] == 0 && win[i + 1] == 0 && win[i + 2] == 1) {
+            if (win[i + 3] == 0) {
+                ipu->f8++;
+                break;
+            }
+            if (win[i + 3] == 0xB7) {
+                found = 1;
+                break;
+            }
+        }
+        i++;
+    }
+    if (size < 3) {
+        ipu->f16 = win[size];
+        ipu->f17 = win[size + 1];
+        ipu->f18 = win[size + 2];
+    } else {
+        ipu->f16 = data[size - 3];
+        ipu->f17 = data[size - 2];
+        ipu->f18 = data[size - 1];
+    }
+    while (size >= 4) {
+        hit = MPV_SearchDelim(data, size, 132);
+        if (hit == 0) {
+            break;
+        }
+        if (mpvsc_GetKind(hit) & 4) {
+            ipu->f8++;
+        } else {
+            found = 1;
+        }
+        hit += 4;
+        skip = hit - data;
+        data = hit;
+        size -= skip;
+    }
+    if (found == 1 && FUN_0029ed48(player) == 0 && FUN_0029edb0(player) == 0) {
+        sfmpvps2_StopIpu(player, 1);
+    }
 }
 
 void FUN_002aa268(SfdPlayer *player) {

@@ -269,6 +269,7 @@
 # the 8-byte getter at 0x267490 (jal target of FUN_0026c3c8) is its own function
 0x00267438	88	FUN_00267438	cut
 0x00269878	92	FUN_00269878	cut
+0x002825e0	448	SNDF_SendControl	cut
 0x00297f30	20	FUN_00297f30	cut
 0x002980c0	100	FUN_002980c0	cut
 0x00299110	84	FUN_00299110	cut

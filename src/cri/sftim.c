@@ -128,9 +128,11 @@ extern long DAT_004beb28;
 extern int DAT_004beb30;
 extern int DAT_004beb34;
 extern int DAT_004beb38;
+extern int DAT_004bea90;
 
 int FUN_00285118();
 int UTY_MulDiv(int value, int scale, int divisor);
+int FUN_002916f8(int value);
 int sfd_ReportError();
 int SFLIB_CheckHn(void *handle);
 void sfd_Lock(void *guard);
@@ -140,6 +142,7 @@ void sfd_SetCond();
 long __muldi3(long a, long b);
 long __divdi3(long a, long b);
 
+void SFTIM_InitHn(SfdHn *hn, SfdTim *tim);
 void SFTIM_InitTtu(SfdTimeRec *rec, int time);
 void SFTIM_InitTcode(SfdTimeCode *tc);
 void FUN_002ae408(SfdHn *hn);
@@ -155,6 +158,7 @@ int FUN_002ae968(SfdHn *hn, int *time, int *unit);
 int FUN_002aea00(SfdHn *hn, int *time, int *unit);
 int FUN_002aea98(SfdHn *hn, int *time, int *unit);
 int FUN_002aeae0(SfdHn *hn, int *time, int *unit);
+int FUN_002aeb60(SfdHn *hn, int *time, int *unit);
 int FUN_002aeb40();
 int sftim_IsPlaying();
 int FUN_002aef78(SfdHn *hn);
@@ -876,3 +880,10 @@ void FUN_002afba8(SfdStat64 *stat)
     stat->count = 0;
 }
 
+void FUN_002afbc8(SfdStat64 *stat, long time)
+{
+    stat->sum += time;
+    stat->min = (time < stat->min) ? time : stat->min;
+    stat->max = (stat->max < time) ? time : stat->max;
+    stat->count++;
+}

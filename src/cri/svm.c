@@ -414,6 +414,17 @@ void SVM_ExecSvrUsrIdle(void)
     SVM_ExecSvrFunc(SVM_SVTYPE_USRIDLE);
 }
 
+/* matching construct: hand search — the bounds test and the element address are computed before the branch, as retail does */
+int SVM_GetExecCnt(int svtype)
+{
+    int ok = (unsigned int)svtype < 7;
+    int *p = &svm_exec_cnt[svtype];
+    if (ok) {
+        return *p;
+    }
+    return 0;
+}
+
 void svm_reset(void)
 {
     int *cnt;

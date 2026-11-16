@@ -96,6 +96,7 @@ volatile	cvFsAddDev	1	#build-string-reads
 volatile	mfCiGetInterface	1	#build-string-reads
 volatile	PS2RNA_Init	1	#build-string-reads
 volatile	ADXM_SetupThrd	3	#build-string-reads
+volatile	ADXM_SetupThrdEx	2	#build-string-reads
 volatile	FUN_00272228	1	#srd-spin-counter
 asm	DelayThread	1	#sony-libkernl-cop0-and-syscall
 volatile	DelayThread	1	#sony-libkernl-cop0-and-syscall
@@ -260,6 +261,9 @@ volatile	ADXM_WaitVsync	1	#adxm-thread-flags
 volatile	adxm_wakeup_vsync_waiter	2	#adxm-thread-flags
 volatile	adxm_vsync_thrd	7	#adxm-thread-flags
 volatile	adxm_fs_thrd	6	#adxm-thread-flags
+volatile	adxm_mwidle_thrd	7	#adxm-thread-flags
+volatile	adxm_usrvsync_thrd	3	#adxm-thread-flags
+volatile	FUN_00271670	1	#srd-module-words
 volatile	FUN_00271a68	1	#srd-module-words
 volatile	FUN_00271c00	3	#srd-module-words
 volatile	FUN_00271d50	3	#srd-module-words
@@ -339,3 +343,7 @@ asm	igPsx2Semaphore_Signal	1	#psx2-semaphore-interrupt-status
 volatile	igPsx2Semaphore_Signal	1	#psx2-semaphore-interrupt-status
 asm	igPsx2Semaphore_Wait	1	#psx2-semaphore-interrupt-status
 volatile	igPsx2Semaphore_Wait	1	#psx2-semaphore-interrupt-status
+volatile	CRICFG_Init	1	#build-string-stores
+volatile	FUN_00283058	1	#build-string-stores
+volatile	FUN_002b3788	1	#build-string-stores
+volatile	FUN_002b50e8	1	#build-string-stores

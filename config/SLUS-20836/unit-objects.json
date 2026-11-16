@@ -17766,11 +17766,14 @@
       "ADXB_ExecOneWav8": "0x0025eec8",
       "ADXB_ExecOneWav16Le": "0x0025f060",
       "ADXB_CheckWav": "0x0025f200",
-      "ADXB_ExecOneWav": "0x0025f268"
+      "ADXB_ExecOneWav": "0x0025f268",
+      "ADXB_DecodeHeaderWav": "0x0025ec50"
     },
     "data": {
       "RIFF": "0x004ed868",
-      "WAVE": "0x004ed870"
+      "WAVE": "0x004ed870",
+      "@rodata": "0x004ed858",
+      "@data": "0x00499cc0"
     }
   },
   "0x0025f2c0": {
@@ -18034,7 +18037,8 @@
       "ADXM_SetCbVsyncFrame": "0x002657e0",
       "adxm_call_vsync_frame_cb": "0x00265808",
       "adxm_call_mwidle_sleep_cb": "0x00265838",
-      "adxm_exec_vint": "0x002650a8"
+      "adxm_exec_vint": "0x002650a8",
+      "ADXM_SetupThrdEx": "0x002654d8"
     },
     "data": {
       "DAT_0049d984": "0x0049d984",
@@ -19586,7 +19590,8 @@
       "SVM_SetCbVsyncBegin": "0x0027ed50",
       "SVM_SetCbVsyncEnd": "0x0027ed68",
       "SVM_ExecVsyncBegin": "0x0027ed80",
-      "SVM_ExecVsyncEnd": "0x0027edb0"
+      "SVM_ExecVsyncEnd": "0x0027edb0",
+      "SVM_GetExecCnt": "0x0027eb40"
     },
     "data": {
       "SVM_DelCbSvr_illegal_id": "0x004f25f8",
@@ -19719,9 +19724,11 @@
       "SNDF_SeqCommand": "0x00281bb8",
       "SNDF_GetTransferStatus": "0x00281cf8",
       "FUN_00281d80": "0x00281d80",
+      "SNDF_ExecServer": "0x00282038",
       "sndf_SendMessage": "0x002823f0",
       "FUN_00282490": "0x00282490",
       "FUN_00282538": "0x00282538",
+      "FUN_002827a0": "0x002827a0",
       "SNDF_SetMasterParam": "0x002829f0",
       "FUN_00282ab8": "0x00282ab8",
       "FUN_00282c20": "0x00282c20",
@@ -19735,12 +19742,17 @@
       "DAT_004bb100": "0x004bb100",
       "DAT_004bb104": "0x004bb104",
       "DAT_004bb108": "0x004bb108",
+      "sndf_version": "0x004bb10c",
+      "DAT_004bb110": "0x004bb110",
       "sndf_ctx": "0x004bb114",
       "DAT_004bb118": "0x004bb118",
       "DAT_00570c00": "0x00570c00",
       "DAT_00570d00": "0x00570d00",
       "DAT_00571700": "0x00571700",
+      "DAT_00571740": "0x00571740",
       "DAT_00571750": "0x00571750",
+      "DAT_00571778": "0x00571778",
+      "DAT_005717a0": "0x005717a0",
       "sndf_status": "0x005717c0",
       "DAT_00572a00": "0x00572a00"
     }
@@ -20908,7 +20920,8 @@
       "sfmps_NotifyHdr": "0x002a2e28",
       "sfd_DecodePicTexts": "0x002a2e30",
       "sfmps_GetPicRec": "0x002a2ed0",
-      "sfmps_GetNumPics": "0x002a2f20"
+      "sfmps_GetNumPics": "0x002a2f20",
+      "sfmps_ChkEnd": "0x002a22d0"
     },
     "data": {
       "sfmps_audio_fn": "0x004beb1c",
@@ -21026,7 +21039,11 @@
       "SFD_IsNextFrmReady": "0x002a8940",
       "FUN_002a8998": "0x002a8998",
       "FUN_002a8a30": "0x002a8a30",
-      "FUN_002a8b30": "0x002a8b30"
+      "FUN_002a8b30": "0x002a8b30",
+      "FUN_002a7278": "0x002a7278",
+      "FUN_002a7770": "0x002a7770",
+      "FUN_002a85a0": "0x002a85a0",
+      "SFD_GetNextPicUsr": "0x002a87a0"
     },
     "data": {
       "DAT_004beb08": "0x004beb08",
@@ -21037,7 +21054,12 @@
       "DAT_005855e0": "0x005855e0",
       "DAT_00585620": "0x00585620",
       "DAT_00585624": "0x00585624",
-      "DAT_00585628": "0x00585628"
+      "DAT_00585628": "0x00585628",
+      "DAT_004beb0c": "0x004beb0c",
+      "DAT_004f4e70": "0x004f4e70",
+      "DAT_004f4e08": "0x004f4e08",
+      "DAT_004f4e30": "0x004f4e30",
+      "DAT_004f4e50": "0x004f4e50"
     }
   },
   "0x002a8b50": {
@@ -21072,7 +21094,8 @@
       "FUN_002aa268": "0x002aa268",
       "FUN_002aa280": "0x002aa280",
       "FUN_002aa2d8": "0x002aa2d8",
-      "FUN_002aa2e8": "0x002aa2e8"
+      "FUN_002aa2e8": "0x002aa2e8",
+      "FUN_002aa050": "0x002aa050"
     },
     "data": {
       "DAT_004beb10": "0x004beb10",
@@ -21292,7 +21315,8 @@
       "sftim_IsReady": "0x002afb00",
       "FUN_002afb98": "0x002afb98",
       "FUN_002afba0": "0x002afba0",
-      "FUN_002afba8": "0x002afba8"
+      "FUN_002afba8": "0x002afba8",
+      "FUN_002afbc8": "0x002afbc8"
     },
     "data": {
       "DAT_004bea88": "0x004bea88",
@@ -47696,5 +47720,27 @@
       "sceSdRemoteCallbackQuit"
     ],
     "source": "sony/libsdr/sdr_cb.c"
+  },
+  "0x002b31d8": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_002b3300": "0x002b3300",
+      "FUN_002b3318": "0x002b3318",
+      "FUN_002b3490": "0x002b3490",
+      "FUN_002b3510": "0x002b3510",
+      "FUN_002b3530": "0x002b3530",
+      "FUN_002b3548": "0x002b3548",
+      "FUN_002b3600": "0x002b3600",
+      "FUN_002b3620": "0x002b3620",
+      "FUN_002b3640": "0x002b3640",
+      "FUN_002b3660": "0x002b3660",
+      "FUN_002b3678": "0x002b3678",
+      "FUN_002b3690": "0x002b3690",
+      "FUN_002b3708": "0x002b3708",
+      "FUN_002b3780": "0x002b3780"
+    },
+    "data": {
+      "@rodata": "0x004f5420"
+    }
   }
 }

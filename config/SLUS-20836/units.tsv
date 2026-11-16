@@ -276,14 +276,14 @@
 0x002ac6d0	0x002acb30	cri_sfdring	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002acb30	0x002ad8f4	cri_sfdrec	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002ad8f8	0x002ae00c	cri_sfdcond	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x002ae010	0x002afbc4	cri_sftim	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x002ae010	0x002afc08	cri_sftim	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002afc08	0x002b0404	cri_sfdtrn	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b0408	0x002b0cf4	cri_sfdtst	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b0ed0	0x002b1410	cri_sfdainf	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b1410	0x002b16e0	cri_sfdout	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b16e0	0x002b2ee8	cri_sfh	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b2ee8	0x002b31d8	cri_sfxa	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x002b31d8	0x002b3784	cri-sofdec_2b31d8	ee-gcc	-O2 -G0 -Iinclude	off	-	cri-sofdec block 0x280b98-0x2b5848 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x2b31d8-0x2b3b84; `sd` prologues (Sony EE GCC); exceptions off: none of 21 non-leaf functions has a retail index record; 20 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 5/5 members
+0x002b31d8	0x002b3784	cri_sfxcnv	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b3788	0x002b4210	cri_sfx	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b4210	0x002b50e4	cri_sfxz	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b50e8	0x002b5d4c	cri_sud	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file

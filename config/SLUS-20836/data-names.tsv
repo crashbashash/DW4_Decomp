@@ -3556,7 +3556,7 @@
 0x004f0838	HTCI_Failed_sceClose	string-literal
 0x004f0850	E0092712_handl_is_null	string-literal
 0x004f0f08	pl2enc_gain_tbl	recovered-global
-0x004f1304	E03090101_NULL_pointer_is_specified	recovered-global
+0x004f1308	E03090101_NULL_pointer_is_specified	recovered-global
 0x004f1330	E03090102_Work_size_is_too_short	recovered-global
 0x004f1358	E03091001_Work_size_is_too_short	recovered-global
 0x004f1380	E03090306_NULL_pointer_is_specified	recovered-global

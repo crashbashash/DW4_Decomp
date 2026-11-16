@@ -50,7 +50,9 @@ typedef struct SfdFieldEntry {
 } SfdFieldEntry;
 
 typedef struct SfdTimer {
-    char pad0[28];
+    char pad0[24];
+    int (*hook)(void *player, int kind, int offset, int extra);
+
     SfdTimeCode tc;
     SfdTimeStamp state;
     SfdTimeStamp best;
@@ -59,8 +61,8 @@ typedef struct SfdTimer {
     SfdTimeStamp latest;
     SfdTimeStamp f280;
     char pad324[12];
-    int f336;
-    char pad340[12];
+    long f336;
+    char pad344[8];
     int f352;
     int base;
     char pad360[136];
@@ -88,25 +90,34 @@ typedef struct SfdPicInfo {
     int f40;
     int f44;
     int f48;
-    char pad52[32];
+    int f52;
+    int f56;
+    int f60;
+    int f64;
+    int f68;
+    int f72;
+    int f76;
+    unsigned short f80;
+    unsigned short f82;
     unsigned char f84;
-    char pad85[2];
+    unsigned char f85;
+    unsigned char f86;
     signed char f87;
     signed char f88;
-    char pad89[39];
+    unsigned char f89;
+    unsigned char f90;
+    unsigned char f91;
+    unsigned char f92;
+    unsigned char f93;
+    unsigned char f94;
+    unsigned char f95;
+    unsigned char f96;
+    unsigned char f97;
+    unsigned char f98;
+    unsigned char f99;
+    unsigned char f100;
+    char pad101[27];
 } SfdPicInfo;
-
-typedef struct SfdPicSummary {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
-    short f28;
-    short f30;
-} SfdPicSummary;
 
 typedef struct SfdUserData {
     char data[512];
@@ -121,17 +132,6 @@ typedef struct SfdPicture {
     SfdUserData user;
 } SfdPicture;
 
-typedef struct SfdSlotInfo {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int rateIndex;
-    int f20;
-    int kind;
-    int f28;
-} SfdSlotInfo;
-
 typedef struct SfdSlot {
     int state;
     int refs;
@@ -145,8 +145,8 @@ typedef struct SfdSlot {
     int f76;
     int f80;
     SfdChunk *blob;
-    SfdSlotInfo info;
-    char pad120[104];
+    SfdPicInfo info;
+    long f216;
     int f224;
     int pad228;
 } SfdSlot;
@@ -157,6 +157,14 @@ typedef struct SfdBufPool {
     int size;
     SfdChunk slot[18];
 } SfdBufPool;
+
+typedef struct SfdPlaneSet {
+    SfdPlanes planes[2];
+    int id;
+    struct SfdPicInfo *pic;
+    int f40;
+    int f44;
+} SfdPlaneSet;
 
 typedef struct SfdMpvCond {
     int f0;
@@ -183,7 +191,10 @@ typedef struct SfdIpuCtl {
     int f4;
     int f8;
     int f12;
-    char pad16[4];
+    char f16;
+    char f17;
+    char f18;
+    char f19;
     int endRequest; /* 20 */
     int endSent;    /* 24 */
     int stopped;
@@ -196,6 +207,13 @@ typedef struct SfdMpegCtx {
     int f8;
     char pad12[60];
 } SfdMpegCtx;
+
+typedef struct SfdIpuEntry {
+    long f0;
+    long f8;
+    int f16;
+    int f20;
+} SfdIpuEntry;
 
 typedef struct SfdIpuStream {
     int base;
@@ -217,14 +235,25 @@ typedef struct SfdIpuStream {
     int sema;
     int f68;
     long f72;
-    int f80;
-    int f84;
+    SfdIpuEntry *entries;
+    int entryCount;
+    int f88;
+    int f92;
 } SfdIpuStream;
 
 typedef struct SfdIpuEvent {
     int f0;
     int f4;
 } SfdIpuEvent;
+
+typedef struct SfdPicTrack {
+    int number;
+    int base;
+    int count;
+    int pad12;
+    long pos;
+    long timeSum;
+} SfdPicTrack;
 
 typedef struct SfdMpv {
     void *handle;
@@ -242,7 +271,10 @@ typedef struct SfdMpv {
     int f268;
     int f272;
     int limit;
-    char pad280[72];
+    SfdPicTrack track;
+    int f312;
+    int f316;
+    SfdPlanes planes[2];
     SfdSlot *first;
     SfdSlot *second;
     SfdSlot *f360;
@@ -259,7 +291,6 @@ typedef struct SfdMpv {
     int pad4300;
     SfdMpegCtx mpeg;
     SfdIpuStream stream;
-    char pad4464[8];
     SfdIpuEvent event;
 } SfdMpv;
 
@@ -282,11 +313,15 @@ typedef struct SfdPicGeom {
 
 typedef struct SfdDecodeFlags {
     int f0;
-    char pad4[20];
+    int f4;
+    int f8;
+    int f12;
+    int f16;
+    int f20;
     int f24;
     char pad28[8];
     int f36;
-    char pad40[4];
+    int f40;
     int f44;
 } SfdDecodeFlags;
 
@@ -297,7 +332,9 @@ typedef struct SfdPending {
     int f16;
     char pad20[72];
     int f92;
-    char pad96[72];
+    char pad96[56];
+    int f152;
+    char pad156[12];
     int f168;
     int f172;
 } SfdPending;
@@ -325,8 +362,26 @@ typedef struct SfdLink {
     int arg;
 } SfdLink;
 
+typedef struct SfdAudioMod {
+    char pad0[12];
+    void *handler;
+} SfdAudioMod;
+
+typedef struct SfdDecStat {
+    int f0;
+    int f4;
+    int f8;
+    int f12;
+    int f16;
+} SfdDecStat;
+
+typedef struct SfdTblEnt {
+    char pad0[32];
+} SfdTblEnt;
+
 typedef struct SfdPlayer {
-    char pad0[40];
+    SfdAudioMod *audio;
+    char pad4[36];
     int f40;
     int f44;
     char pad48[8];
@@ -343,7 +398,8 @@ typedef struct SfdPlayer {
     long f2456;
     long f2464;
     long f2472;
-    char pad2480[84];
+    char pad2480[64];
+    SfdDecStat stat;
     SfdPending pending;
     char pad2740[628];
     SfdTimer timer;
@@ -356,6 +412,8 @@ typedef struct SfdPlayer {
     char pad13600[264];
     char *userWork;
     SfdLink link;
+    SfdTblEnt tbl[5];
+    char trailer[64];
 } SfdPlayer;
 
 typedef struct SfdStream SfdStream;
@@ -386,9 +444,49 @@ typedef struct SfdRecord {
 } SfdRecord;
 
 typedef struct SfdFrameInfo {
-    char pad0[20];
+    int f0;
+    int f4;
+    int f8;
+    int f12;
+    int f16;
     int f20;
     int f24;
+    int f28;
+    int f32;
+    int f36;
+    int f40;
+    int f44;
+    int f48;
+    int f52;
+    int f56;
+    int f60;
+    int f64;
+    char pad68[4];
+    int f72;
+    char pad76[4];
+    long f80;
+    int f88;
+    int f92;
+    int f96;
+    int f100;
+    unsigned short f104;
+    unsigned short f106;
+    unsigned char f108;
+    unsigned char f109;
+    unsigned char f110;
+    unsigned char f111;
+    unsigned char f112;
+    unsigned char f113;
+    unsigned char f114;
+    unsigned char f115;
+    unsigned char f116;
+    unsigned char f117;
+    unsigned char f118;
+    unsigned char f119;
+    unsigned char f120;
+    unsigned char f121;
+    unsigned char f122;
+    char pad123[5];
 } SfdFrameInfo;
 
 #endif

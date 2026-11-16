@@ -171,7 +171,7 @@ typedef struct SfdMpsPrm {
     int videoCh;                            /* 52 */
     int audioCh;                            /* 56 */
     int f60;
-    void *object[68];                       /* 64: indexed by stream id - 0xBC */
+    SfdSj *object[68];                      /* 64: indexed by stream id - 0xBC */
     int (*stmCb)(void *obj, int arg);       /* 336 */
     void *stmCbObj;                         /* 340 */
     int f344;
@@ -211,7 +211,9 @@ typedef struct SfdUoch {
 
 /* The SFD handle as the core, header, supply and MPS files see it. */
 typedef struct SfdHandle {
-    char pad0[40];
+    char pad0[8];
+    int f8;                  /* 8: the input size limit (0 or negative when unset) */
+    char pad12[28];
     int zeroPad;             /* 40: the zero padding the demultiplexer skips */
     char pad44[28];
     int stat;                /* 72; made non-positive by an error */

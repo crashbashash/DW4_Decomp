@@ -52,12 +52,12 @@ extern volatile int adxm_mwidle_busy;
 extern volatile int adxm_usridle_busy;
 extern volatile int adxm_usrvsync_busy;
 extern volatile int adxm_vsync_waiting;
-extern volatile long long adxm_usrvsync_count;
+extern long long adxm_usrvsync_count;
 extern long long adxm_safe_loop_count;
 extern volatile long long adxm_vsync_count;
 extern volatile long long adxm_fs_count;
 extern volatile long long adxm_mwidle_count;
-extern volatile long long adxm_usridle_count;
+extern long long adxm_usridle_count;
 extern volatile int adxm_safe_thid;
 extern volatile int adxm_usrvsync_thid;
 extern volatile int adxm_vsync_thid;
@@ -204,10 +204,14 @@ void adxm_safe_thrd(void *arg) {
     ExitDeleteThread();
 }
 
+/* matching construct: hand search — setting the busy flag is a statement macro; its loop notes are a
+ * scheduling barrier that keeps the tick count's ld/daddu/sd ahead of the flag store and the call */
+#define ADXM_SET_BUSY(flag) do { (flag) = 1; } while (0)
+
 void adxm_usrvsync_thrd(void *arg) {
     while (adxm_usrvsync_exit_request == 0) {
         adxm_usrvsync_count++;
-        adxm_usrvsync_busy = 1;
+        ADXM_SET_BUSY(adxm_usrvsync_busy);
         SVM_ExecSvrUsrVsync();
         adxm_usrvsync_busy = 0;
         adxm_sleep_thrd();
@@ -291,7 +295,7 @@ void adxm_usridle_thrd(void *arg)
     int busy;
     while (adxm_usridle_exit_request == 0) {
         adxm_usridle_count++;
-        adxm_usridle_busy = 1;
+        ADXM_SET_BUSY(adxm_usridle_busy);
         busy = SVM_ExecSvrUsrIdle();
         adxm_usridle_busy = 0;
         if (adxm_border_request == 1) {
@@ -767,6 +771,58 @@ void ADXPS2_Lock(void) {
 
 void ADXPS2_Unlock(void) {
     SVM_Unlock();
+}
+
+void ADXM_SetupThrdEx(AdxmThreadPrmEx *tprm) {
+    struct ThreadParam param;
+
+    adxps2_build;
+    if (adxm_setup_count == 0) {
+        SVM_Init();
+        SVM_SetCbLock(adxm_lock, 0);
+        SVM_SetCbUnlock(adxm_unlock, 0);
+        if (tprm == 0) {
+            adxm_tprm.mainPrio = 24;
+            adxm_tprm.lockPrio = 1;
+            adxm_tprm.safePrio = 8;
+            adxm_tprm.usrVsyncPrio = 15;
+            adxm_tprm.vsyncPrio = 16;
+            adxm_tprm.fsPrio = 18;
+            adxm_tprm.mwIdlePrio = ADXPS2_MWIDLE_PRIO;
+            adxm_tprm.usrIdlePrio = 26;
+            adxm_tprm.usrVsyncStack = 0;
+            adxm_tprm.usrVsyncStackSize = 0;
+            adxm_tprm.usrIdleStack = 0;
+            adxm_tprm.usrIdleStackSize = 0;
+        } else {
+            adxm_tprm.mainPrio = tprm->mainPrio;
+            adxm_tprm.lockPrio = tprm->lockPrio;
+            adxm_tprm.safePrio = tprm->safePrio;
+            adxm_tprm.usrVsyncPrio = tprm->usrVsyncPrio;
+            adxm_tprm.vsyncPrio = tprm->vsyncPrio;
+            adxm_tprm.fsPrio = tprm->fsPrio;
+            adxm_tprm.mwIdlePrio = tprm->mwIdlePrio;
+            adxm_tprm.usrIdlePrio = tprm->usrIdlePrio;
+            adxm_tprm.usrVsyncStack = tprm->usrVsyncStack;
+            adxm_tprm.usrVsyncStackSize = tprm->usrVsyncStackSize;
+            adxm_tprm.usrIdleStack = tprm->usrIdleStack;
+            adxm_tprm.usrIdleStackSize = tprm->usrIdleStackSize;
+        }
+        adxm_main_thid = GetThreadId();
+        ReferThreadStatus(adxm_main_thid, &param);
+        adxm_main_init_prio = param.currentPriority;
+        adxm_create_safe_thrd();
+        adxm_create_usrvsync_thrd(adxm_tprm.usrVsyncStack, adxm_tprm.usrVsyncStackSize);
+        adxm_create_vsync_thrd();
+        adxm_create_fs_thrd();
+        adxm_create_mwidle_thrd();
+        adxm_create_usridle_thrd(adxm_tprm.usrIdleStack, adxm_tprm.usrIdleStackSize);
+        ChangeThreadPriority(adxm_main_thid, adxm_tprm.mainPrio);
+        SVM_SetCbBdr(6, adxm_goto_mwidle_border, 0);
+        SVM_SetCbBdr(7, adxm_goto_usridle_border, 0);
+        adxm_usridle_mode = 1;
+    }
+    adxm_setup_count++;
 }
 
 void ADXM_ShutdownThrdEx(void) {

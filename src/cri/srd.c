@@ -109,10 +109,10 @@ SrdObj *FUN_00271670(void)
     if (DAT_004a9288.used == 0) {
         FUN_00271640();
         DAT_004a9288.used = 1;
-        DAT_004a9288.mode = -1;
         DAT_004a9288.stat = 0;
-        DAT_004a92e8++;
+        DAT_004a9288.mode = -1;
         DAT_004a9288.abort_request = 0;
+        DAT_004a92e8++;
         srd = &DAT_004a9288;
     }
     SVM_UnlockVar();

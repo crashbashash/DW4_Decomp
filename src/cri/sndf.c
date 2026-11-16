@@ -51,7 +51,7 @@ typedef struct SndfContext {
     unsigned char channelOn[32];
     int base;
     SndfQueueEntry ring[128];
-    signed char count;
+    unsigned char count;
     unsigned char writeIndex;
     unsigned char readIndex;
     signed char sending;
@@ -67,7 +67,7 @@ typedef struct SndfContext {
     int error[32];
     int f3228[32];
     SndfTransfer transfers[32];
-    int f5020;
+    int (*f5020)(int channel);
     void (*notify)(int a, int b);
     SndfTables tables;
 } SndfContext;
@@ -75,6 +75,17 @@ typedef struct SndfContext {
 typedef struct SndfMessage {
     int word[4];
 } SndfMessage;
+
+typedef struct SndfOutbox {
+    SndfQueueEntry ring[128];
+    unsigned int count;
+    char pad2564[60];
+} SndfOutbox;
+
+typedef struct SifClientData {
+    char pad0[36];
+    void *serve;
+} SifClientData;
 
 typedef struct SndfVoice {
     char pad0[9];
@@ -96,10 +107,11 @@ typedef struct SndfParam {
 } SndfParam;
 
 typedef struct SndfStream {
+    char pad0[12];
     unsigned char flags;
-    char pad1;
+    char pad13;
     unsigned char channel;
-    char pad3[37];
+    char pad15[25];
 } SndfStream;
 
 typedef struct SndfPort {
@@ -111,7 +123,7 @@ typedef struct SndfPort {
 
 typedef struct SndfStatus {
     unsigned char f0;
-    char pad1;
+    unsigned char f1;
     unsigned short mask;
     int f4;
     unsigned char f8;
@@ -119,13 +131,16 @@ typedef struct SndfStatus {
     char pad10[2];
     SndfVoice voices[32];
     SndfProgram programs[32][16];
-    SndfParam params[64];
+    SndfParam params[61];
     SndfStream streams[16];
-    char pad3468[3564 - 3468];
+    char pad3456[12];
+    SndfSlot slots[24];
     SndfPort ports[256];
     unsigned char f4588[32];
 } SndfStatus;
 
+extern int DAT_005717a0;
+extern char *sndf_version;
 extern int DAT_004bb100;
 extern int DAT_004bb104;
 extern int DAT_004bb108;
@@ -133,13 +148,19 @@ extern int DAT_004bb110;
 extern SndfContext *sndf_ctx;
 extern int DAT_004bb118[];
 extern int DAT_00570c00[];
-extern char DAT_00570d00[];
+extern SndfOutbox DAT_00570d00;
+extern SndfMessage DAT_00571740;
 extern int DAT_00571700;
-extern int DAT_00571750[];
+extern SifClientData DAT_00571750;
+extern SifClientData DAT_00571778;
 extern SndfStatus sndf_status;
 extern SndfContext DAT_00572a00;
 
 int sceSifCallRpc();
+int sceSifCheckStatRpc();
+int sceSifInitRpc();
+int sceSifBindRpc();
+void InvalidDCache(char *start, char *end);
 void memset();
 int FUN_00281a00(int cmd, int *args, int n, int size);
 void FUN_00280e38(void);
@@ -147,7 +168,7 @@ int SNDF_StartTransfer();
 void SyncDCache(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
-int sceSifQueryMaxFreeMemSize(void);
+unsigned int sceSifQueryMaxFreeMemSize(void);
 int sceSifAllocIopHeap(int size);
 int sceSifFreeIopHeap(int addr);
 int sceSdRemote(int arg, int command, ...);
@@ -156,6 +177,8 @@ int sndf_PushCommand(unsigned short kind, unsigned short arg, int a, int b, int 
 int SNDF_GetTransferStatus(unsigned int channel);
 void FUN_00281df0(unsigned int channel);
 int sndf_SendMessage(unsigned int message);
+void *memcpy();
+void FUN_00281d80(SndfMessage *message);
 
 #define SWAP32_A(x) (((x) << 24) | (((x) & 0xFF00) << 8) | (((x) >> 8) & 0xFF00) | ((x) >> 24))
 #define SWAP32_B(x) (((x) << 24) | ((x) >> 24) | ((((x) >> 8) & 0xFF00) | (((x) & 0xFF00) << 8)))
@@ -184,7 +207,7 @@ int SNDF_Start(void)
         result = DAT_00570c00[0];
         sndf_ctx->base = DAT_00570c00[1];
         memset(&sndf_status, 0, 0x1240);
-        memset(DAT_00570d00, 0, 0xA40);
+        memset(&DAT_00570d00, 0, 0xA40);
         if (result == 0) {
             req[0] = (int)&sndf_status;
             sndf_ctx->handle = FUN_00281a00(0x1600, req, 1, 4);
@@ -467,7 +490,7 @@ int FUN_00281a00(int cmd, int *args, int n, int size)
         for (i = 0; i < n; i++) {
             DAT_00570c00[i] = *args++;
         }
-        sceSifCallRpc(DAT_00571750, cmd, 0, DAT_00570c00, n * 4, DAT_00570c00, size, 0, 0);
+        sceSifCallRpc(&DAT_00571750, cmd, 0, DAT_00570c00, n * 4, DAT_00570c00, size, 0, 0);
         DAT_004bb100 = 0;
         return DAT_00570c00[0];
     }
@@ -479,7 +502,7 @@ int sndf_PushCommand(unsigned short kind, unsigned short arg, int a, int b, int 
     SndfContext *ctx = sndf_ctx;
     int result = 0;
 
-    if (ctx->count >= 0 && ctx->ring[ctx->writeIndex].kind == 0) {
+    if ((signed char)ctx->count >= 0 && ctx->ring[ctx->writeIndex].kind == 0) {
         ctx->ring[ctx->writeIndex].kind = kind;
         ctx->ring[ctx->writeIndex].arg = arg;
         ctx->ring[ctx->writeIndex].a = a;
@@ -569,6 +592,53 @@ void FUN_00281d80(SndfMessage *message)
     __asm__ ("ei");
 }
 
+void SNDF_ExecServer(void)
+{
+    unsigned int i;
+    SndfContext *ctx;
+
+    InvalidDCache((char *)&sndf_status, (char *)&sndf_status + 4671);
+    if (sndf_status.f1 == 0) {
+        memcpy(sndf_ctx->slots, sndf_status.slots, sizeof(sndf_status.slots));
+        sndf_status.f1 = 1;
+    }
+    if (sndf_ctx->count != 0 && DAT_00570d00.count == 0) {
+        do {
+            ctx = sndf_ctx;
+            DAT_00570d00.ring[DAT_00570d00.count].kind = ctx->ring[ctx->readIndex].kind;
+            DAT_00570d00.ring[DAT_00570d00.count].arg = ctx->ring[ctx->readIndex].arg;
+            DAT_00570d00.ring[DAT_00570d00.count].a = ctx->ring[ctx->readIndex].a;
+            DAT_00570d00.ring[DAT_00570d00.count].b = ctx->ring[ctx->readIndex].b;
+            DAT_00570d00.ring[DAT_00570d00.count].c = ctx->ring[ctx->readIndex].c;
+            DAT_00570d00.ring[DAT_00570d00.count].d = ctx->ring[ctx->readIndex].d;
+            if (++DAT_00570d00.count >= 128) {
+                break;
+            }
+            ctx->ring[ctx->readIndex].kind = 0;
+            ctx->ring[ctx->readIndex].c = 0;
+            ctx->readIndex = (ctx->readIndex + 1) & 0x7F;
+            sndf_ctx->count--;
+        } while (sndf_ctx->count != 0);
+    }
+    if (sceSifCheckStatRpc(&DAT_00571778) == 0) {
+        SyncDCache((char *)&DAT_00570d00, (char *)&DAT_00570d00 + 2623);
+        sceSifCallRpc(&DAT_00571778, 0x8000, 1, &DAT_00570d00, 2624, &DAT_00571740, 16, FUN_00281d80,
+                      &DAT_00571740);
+    }
+    i = 0;
+    if (sndf_ctx->f5020 != 0) {
+        for (i = 0; i < 32; i++) {
+            if ((sndf_ctx->f2972[i] & 3) == 1 && sndf_ctx->state[i] == 1) {
+                sndf_ctx->error[i] = sndf_ctx->f5020(i);
+            }
+        }
+        i = 0;
+    }
+    do {
+        FUN_00281df0(i++);
+    } while (i < 32);
+}
+
 int sndf_SendMessage(unsigned int message)
 {
     SndfContext *ctx = sndf_ctx;
@@ -632,6 +702,50 @@ int FUN_00282538(unsigned int channel, unsigned int kind, unsigned int data1, un
     result = sndf_PushCommand(1, channel, 0, 0, ((kind | 0xA0) << 24) | (data1 << 16) | (data2 << 8), 0);
     sndf_ctx->sending = 0;
     return result;
+}
+
+int FUN_002827a0(int channel, int port, unsigned int cmd, int value)
+{
+    unsigned int base = ((port - 1) & 0xF) << 24;
+    unsigned int message = base + cmd;
+    int result;
+
+    if (cmd != 0) {
+        switch (cmd) {
+        case 0xB0780000:
+            break;
+        case 0xB0070000:
+        case 0xB00D0000:
+        case 0xB0270000:
+        case 0xB02D0000:
+            message += (value & 0x7F) << 8;
+            break;
+        case 0xA0110000:
+        case 0xB00A0000:
+        case 0xB02A0000:
+            message += ((value + 64) & 0x7F) << 8;
+            break;
+        case 0xB0300000:
+            result = sndf_PushCommand(1, channel & 0xFFFF, 0, 0,
+                                      (((value / 100 + 64) & 0x7F) << 8) + base + 0xB0310000, 0);
+            if (result != 0) {
+                return result;
+            }
+            message = ((((value % 100) * 64 / 100 + 64) & 0x7F) << 8) + base + 0xB0320000;
+            break;
+        case 0xB0100000:
+            result = sndf_PushCommand(1, channel & 0xFFFF, 0, 0,
+                                      (((value / 100 + 64) & 0x7F) << 8) + base + 0xB0110000, 0);
+            if (result != 0) {
+                return result;
+            }
+            message = ((((value % 100) * 64 / 100 + 64) & 0x7F) << 8) + base + 0xB0120000;
+            break;
+        default:
+            return -2;
+        }
+    }
+    return sndf_PushCommand(1, channel & 0xFFFF, 0, 0, message, 0);
 }
 
 int SNDF_SetMasterParam(unsigned int base, unsigned int value)

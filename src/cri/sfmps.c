@@ -100,6 +100,9 @@ void sfmps_NotifyHdr(SfdHandle *hn);
 int sfd_DecodePicTexts(SfdHandle *hn, SfdMpsPrm *prm, SfdPicRec *rec);
 SfdPicRec *sfmps_GetPicRec(SfdHandle *hn);
 int sfmps_GetNumPics(SfdHandle *hn);
+int sfmps_IsEndCode(SfdHandle *hn, int kind);
+void sfmps_ChkInEnd(SfdHandle *hn, int *done);
+int FUN_0029e2b0(SfdHandle *hn, int ch);
 
 /* Attaches an object to stream id 0xBC..0xFF in the handle's stream table, with the callback run
  * on its data. */
@@ -287,11 +290,11 @@ SfdChanInf *sfmps_GetInChan(SfdHandle *hn) {
 }
 
 /* Puts data into a ring and, when it went in, runs the callback. */
-int sfmps_PutAndNotify(SfdSj *sj, void (*cb)(int, int), int arg0, int arg1, unsigned char *data, int len) {
+int sfmps_PutAndNotify(SfdSj *sj, int (*cb)(void *obj, int arg), void *obj, int arg, unsigned char *data, int len) {
     int ret = sfmps_PutSj(sj, data, len);
 
     if (ret == 1 && cb != 0) {
-        cb(arg0, arg1);
+        cb(obj, arg);
     }
     return ret;
 }
@@ -474,6 +477,46 @@ int sfmps_IncPics(SfdHandle *hn) {
     SfdMpsPrm *prm = hn->mps.prm;
 
     return prm->nPics = prm->nPics + 1;
+}
+
+int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total) {
+    SfdMpsSlot *mps = &hn->mps;
+    SfdMpsPrm *prm = mps->prm;
+    int from = mps->from;
+    int kind;
+    int done;
+
+    if (len >= 4) {
+        kind = MPS_GetStartCodeKind(addr);
+        if (kind == MPS_SC_END) {
+            if (mps->f32 < 0) {
+                mps->f32 = FUN_0029e2b0(hn, from) + 4;
+            }
+            prm->f60 = 1;
+        } else if (kind != 0) {
+            prm->f60 = 0;
+        }
+    } else {
+        kind = 0;
+    }
+    if (sfmps_IsEndCode(hn, kind) != 0) {
+        sfmps_SetOutEnd(hn, 1);
+        return 0;
+    }
+    if (total < 4) {
+        sfmps_ChkInEnd(hn, &done);
+        if (done != 0) {
+            return 0;
+        }
+    }
+    if (len >= 64) {
+        return 1;
+    }
+    if (kind != MPS_SC_PACK && kind != MPS_SC_PES) {
+        return 1;
+    }
+    sfmps_ChkInEnd(hn, 0);
+    return 0;
 }
 
 /* An end code ends the stream unless the next stream is linked or the supply is still open. */
