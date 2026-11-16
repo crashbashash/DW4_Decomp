@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWWindowDispatchView.h"
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \
@@ -81,8 +82,6 @@ extern "C" void beNDMWWindow_RequestChildrenClose(beNDMWWindow *self);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" void beNDMWWindow_BindContext(beNDMWWindow *self, igObject *mother, int insight, int playerNo, int entCode);
-/* matching construct: dummy-virtual view so ->Update() dispatches through vtable slot 21 of the window */
-struct WinView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void Update(); };
 extern "C" void beNDMWWindow_UpdateTree(beNDMWWindow *w);
 
 #pragma push
@@ -319,7 +318,7 @@ void beNDMWWindow_UpdateTree(beNDMWWindow *w) {
     beNDMWWindow *ch;
     igObjectList *k;
     if (w->_isRun != 0) {
-        ((WinView *)w)->Update();
+        ((beNDMWWindowDispatchView *)w)->Update();
     }
     if (w->_isRun == 0 || w->_st0 >= 2) {
         c = ((igObjectList *)w->_subWindow)->_count;

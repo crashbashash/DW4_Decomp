@@ -41,12 +41,12 @@ int beTextureCtrl_GetInfoMeta(void)
 }
 
 void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
+    beTextureCtrlInfo *info;
     int count;
     int i;
     int offset;
     int allocator;
     igObject *old;
-    beTextureCtrlInfo *info;
 
     if (self->_work == 0) {
         allocator = igObject_GetAllocator(self);
@@ -64,8 +64,7 @@ void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
         }
         self->_work = (int)beTextureCtrlWork_Create(allocator);
     }
-    ram = (beBaseInfoRam *)ram->_parentInfo;
-    info = (beTextureCtrlInfo *)ram;
+    info = (beTextureCtrlInfo *)ram->_parentInfo;
     if (info->_isTexture != 0) {
         count = ((igObjectList *)info->_dataList_)->_count;
         i = 0;
@@ -96,8 +95,7 @@ void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
  * _refCount). */
 
 void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
-    /* matching construct: hand search — retail keeps the attribute count in a stack slot; the padding places it at +0xa0 */
-    struct { int count; int pad[5]; } spilled;
+    int attributeCount;
     beTextureCtrlAttr *entry;
     int boundIndex;
     int offset;
@@ -113,9 +111,9 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
     int boundOffset;
     if (self->_isFirstTime != 0) {
         if (((beTextureCtrlInfo *)ram->_parentInfo)->_isTexture == 0) {
-            spilled.count = ((igObjectList *)((beTextureCtrlWork *)self->_work)->_attributeList)->_count;
+            attributeCount = ((igObjectList *)((beTextureCtrlWork *)self->_work)->_attributeList)->_count;
             attributeIndex = 0;
-            if (0 < spilled.count) {
+            if (0 < attributeCount) {
                 offset = 0;
                 do {
                     work = (beTextureCtrlWork *)self->_work;
@@ -153,7 +151,7 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                     }
                     attributeIndex++;
                     offset += 4;
-                } while (attributeIndex < spilled.count);
+                } while (attributeIndex < attributeCount);
             }
         }
         self->_isFirstTime = 0;

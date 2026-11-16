@@ -30,6 +30,12 @@ site; it does not claim recovery of the callee's own 96-byte assembly body.
 The class name in the emitted symbol belongs to the source's ABI projection,
 not a claim about the original class/template spelling.
 
+An `emitted` or `duplicates` key is the compiler's mangled symbol, so a source rename of the class it names
+(a dispatch view, a local view) renames the key (`__dt__37igSmartPointer<19igTimerDispatchView>Fv`). The
+project name the symbols and name overlays give the retail address is separate and follows the
+[naming conventions](naming.md#conventions-the-game-and-alchemy-overlays-follow): `igSmartPointer_<T>_Destruct`,
+and `<Owner>_igSmartPointer_<T>_Destruct` where one instance is emitted in several files.
+
 The owner supplies compiler and flag settings to every member. Source discovery
 adds members only when the owner's actual definition exists. Extraction of a
 logical member compiles that owner's source, including its class definition.
@@ -624,8 +630,8 @@ remains the integration oracle.
   (`{0,0,0,0, 0x7E01C000, 0x6E018002}`) that has no known purpose, and `0x4913d0` may lead the next unit's data.
   Both stay undefined until something says what they are.
 - **Names given only by use:** `g_startupFlagB` (GameMain, set 1, cleared once by `main`, read nowhere),
-  `g_raiseFirstValue`/`g_raiseSecondValue` (GameRam, the two ints of the `RAISE` message when the technique has no
-  row), and the `_reserved` words of the CRI blocks.
+  `g_raiseFirstValue`/`g_raiseSecondValue` (GameRam, the two ints of the `RAISE` message, indexed by the technique's
+  row less 50, element 0 when the technique has no row), and the `_reserved` words of the CRI blocks.
 
 - **Why `igTDataList` takes its parameter's address.** `find` and `append` take the value by value and read it through
   `const T *p = &v`, which is what keeps it on the stack. A plain read or a reference folds it into a register. The

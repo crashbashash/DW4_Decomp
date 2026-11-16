@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/listSet.h"
 
 extern "C" int igInsightCore_FindManager(int, int);
@@ -42,14 +43,6 @@ extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-/* matching construct: Rel::go and Str::release inline the retail refcount releases */
-struct Rel { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
-} };
 struct Str { static inline int *intern(int s) {
     int *ref;
     if (s == 0) {
@@ -100,11 +93,13 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
             a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
+        /* matching construct: retained, released and stored by hand; through igSmartPointer::operator= this
+         * unit's profile leaves the operator an out-of-line call inside the inline */
         igObject *s0 = list.p;
         if (s0 != 0) {
             s0->_refCount++;
         }
-        Rel::go((igObject *)ram->_dataList);
+        igRelease((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
 } };
@@ -117,8 +112,6 @@ extern "C" int text_end_g_000bcaps_lua[4];
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
 
-/* matching construct: dummy-virtual class gives self a vtable so OnMessageText dispatches through the retail slot 33 */
-class MdlPlayer2VirtualShim { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void OnMessageText(beBaseInfoRam *, const char *); };
 extern "C" void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram);
 
 /* After the shared igObject slot 23 body, caches the pad manager registered with the insight core
@@ -157,12 +150,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
             a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
         ValueRef value(beNDMWMdlPlayer2InfoWork_Create(a));
-        igObject *n = value.p;
-        if (n != 0) {
-            n->_refCount++;
-        }
-        Rel::go((igObject *)r->_work);
-        r->_work = (int)n;
+        (igSmartPointer<igObject> &)r->_work = value.p;
     }
     beModelCtrl__OnGenerate(self, ram);
     beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
@@ -171,7 +159,6 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
         s4 = igProperty_GetRecordStringList(o, BKCHIPSTAGE);
         s3 = igProperty_GetRecordFloatList(o, BKCHIPPOS);
     }
-    /* matching construct: cast from the 4-byte _system reference */
     beSystem *cfg = (beSystem *)self->_system;
     s2 = cfg->_stageName;
     s1 = ram->_ramNo;
@@ -253,11 +240,11 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
         if (q->_isPowerOn == 0) {
             if (f < 900.0f) {
                 q->_isPowerOn = 1;
-                ((MdlPlayer2VirtualShim *)self)->OnMessageText(ram, SQ_SWON);
+                ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, SQ_SWON);
             }
         } else if (!(f <= 900.0f)) {
             q->_isPowerOn = 0;
-            ((MdlPlayer2VirtualShim *)self)->OnMessageText(ram, SQ_SWOF);
+            ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, SQ_SWOF);
         }
     } else {
         beLua__RunNamedChunk(self->_luaManager, text_end_g_000bcaps_lua, 0);
@@ -328,7 +315,7 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
 {
     if (strcmp(command, GENERATE_15) == 0) {
         if (ram->_isRun != 0)
-            ((MdlPlayer2VirtualShim *)self)->OnMessageText(ram, REMOVE_6);
+            ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, REMOVE_6);
     } else if (strcmp(command, GENESTAGE) == 0) {
         beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
         int common = beMessenger_GetObject(self->_messenger, 0);

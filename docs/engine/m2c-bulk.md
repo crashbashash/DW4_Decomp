@@ -956,8 +956,9 @@ re-spells it as a synthesized virtual call on a class with `K/4 - 2` leading slo
 `+vcpp` variant by both `m2c_batch.score_candidate` and `m2c_loop.prepare`, and `--write` picks
 the `.cpp` extension from the winning variant's tag. It recovers the object address from the
 base m2c wrote (`(*E)` or a word load `*(int *)((char *)(E) + 0)`, both "load the word at E")
-and re-spells the call as `((DW4VC_K_N *)(E))->vX((int)(A1), …)`, wrapping the declarations in
-`extern "C"`.
+and re-spells the call as `((<synth K_N> *)(E))->vX((int)(A1), …)`, wrapping the declarations in
+`extern "C"`. The synthesized class is a scratch spelling for the candidate only; matched source calls through
+the dispatch views ([RTTI and vtables §7](rtti-and-vtables.md#7-virtual-calls-the-dispatch-views)).
 
 Three traps, each invisible until it produces a *wrong* file
 rather than an error: the callee declarations must be **variadic** (`int f(...);`), because C++
@@ -1020,9 +1021,9 @@ one such function reproduces **byte-identically** as a struct-returning virtual 
 
 ```cpp
 struct DW4SR1 { int w0; };
-/* class DW4VC_280_1 has 68 preceding virtuals */
+/* the synthesized class has 68 preceding virtuals */
 void FUN_XXXXXXXX(void *arg0, void **arg1) {
-    *(int *)((char *)(arg0) + 12) = ((DW4VC_280_1 *)(arg1))->vX().w0;
+    *(int *)((char *)(arg0) + 12) = ((<synth 280_1> *)(arg1))->vX().w0;
 }
 ```
 

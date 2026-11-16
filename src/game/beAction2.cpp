@@ -1,6 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igRandomNumberDispatchView.h"
+#include "dw4/igObjectDispatchView.h"
+#include "dw4/igSkeletonDispatchView.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -31,32 +33,18 @@ struct Action2ComponentList {
     struct Action2Component **_data;
 };
 
-/* A beAction2Data component; only slot 20 (GetMetaObject) is called. */
-class Action2Component {
-public:
-    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
-    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
-    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
-    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
-    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
-    virtual int GetMetaObject();
-};
+/* A beAction2Data component, whose only call is GetMeta (slot 20). */
+class Action2Component : public igObjectDispatchView {};
 
 /* matching construct: the guard reads the list through its own view, so its load stays apart from
  * the loads in the loop. */
 struct Action2DataGuardView : beAction2Data {};
 
-/* igObject and igActor calls the message handler makes through their vtables. */
-class VirtualObject {
+/* The animation system's slot 26 returns a bone's matrix.
+ * ABI view only: never instantiated. */
+class igAnimationSystemDispatchView : public igObjectDispatchView {
 public:
-    virtual void vfunc_00(); virtual void vfunc_01(); virtual void vfunc_02(); virtual void vfunc_03();
-    virtual void vfunc_04(); virtual void vfunc_05(); virtual void vfunc_06(); virtual void vfunc_07();
-    virtual void vfunc_08(); virtual void vfunc_09(); virtual void vfunc_10(); virtual void vfunc_11();
-    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14(); virtual void vfunc_15();
-    virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18(); virtual void vfunc_19();
-    virtual int GetMetaObject();
-    virtual void vfunc_21(); virtual void vfunc_22(); virtual void vfunc_23(); virtual void vfunc_24();
-    virtual int FindBoneIndex(int name);
+    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
     virtual int GetBoneMatrix(int index);
 };
 
@@ -148,7 +136,7 @@ int beMessenger_GetString(int messenger, int index);
 int beMessenger_SendNamed(int messenger, const char *message, void *sender, int ramNo, void *name);
 int strcmp(const void *, const char *);
 int List_Reserve(void *list, int count, int capacity);
-void *igMetaObject_FindFieldByName(int meta, const char *name);
+void *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
 
 void beAction2_Prepare(void);
 int beAction2_GetInfoMeta(void);
@@ -172,11 +160,11 @@ int beBaseInfoManager_OnMessage(void);
 
 extern int g_beAction2Info_metaObject[4];
 extern int g_beAction2_metaObject[4];
-extern int g_beAction2FLASHSET_metaObject[4];
-extern int g_beAction2WAITCHECK_metaObject[4];
-extern int g_beAction2FADESET_metaObject[4];
-extern int g_beAction2JOINTSET_metaObject[4];
-extern int g_beAction2MOTIONSET_metaObject[4];
+extern igMetaObject *g_beAction2FLASHSET_metaObject[4];
+extern igMetaObject *g_beAction2WAITCHECK_metaObject[4];
+extern igMetaObject *g_beAction2FADESET_metaObject[4];
+extern igMetaObject *g_beAction2JOINTSET_metaObject[4];
+extern igMetaObject *g_beAction2MOTIONSET_metaObject[4];
 extern int g_igEnbayaTransformSource_metaObject[4];
 extern int g_propertyNameField[4];
 extern int kIGMemoryPoolHandleUser1[4];
@@ -748,19 +736,19 @@ void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram)
         do {
             keepGoing = true;
             component = (((Action2ComponentList *)data->_comList)->_data)[index];
-            if (g_beAction2MOTIONSET_metaObject[0] == component->GetMetaObject()) {
+            if (g_beAction2MOTIONSET_metaObject[0] == component->GetMeta()) {
                 keepGoing = beAction2MOTIONSET_Start(manager, ram, (beAction2MOTIONSET *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2JOINTSET_metaObject[0] == component->GetMetaObject()) {
+            } else if (g_beAction2JOINTSET_metaObject[0] == component->GetMeta()) {
                 keepGoing = beAction2JOINTSET_Start(manager, ram, (beAction2JOINTSET *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2FADESET_metaObject[0] == component->GetMetaObject()) {
+            } else if (g_beAction2FADESET_metaObject[0] == component->GetMeta()) {
                 keepGoing = beAction2FADESET_Start(manager, ram, (beAction2FADESET *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2WAITCHECK_metaObject[0] == component->GetMetaObject()) {
+            } else if (g_beAction2WAITCHECK_metaObject[0] == component->GetMeta()) {
                 keepGoing = beAction2WAITCHECK_Start(manager, ram, (beAction2WAITCHECK *)component) & 0xFF;
                 index += 1;
-            } else if (g_beAction2FLASHSET_metaObject[0] == component->GetMetaObject()) {
+            } else if (g_beAction2FLASHSET_metaObject[0] == component->GetMeta()) {
                 keepGoing = beAction2FLASHSET_Start(manager, ram, (beAction2FLASHSET *)component) & 0xFF;
                 index += 1;
             }
@@ -848,12 +836,12 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
         if (ram->_isRun != 0) {
             int boneName = beMessenger_GetString(self->_messenger, 0);
             igActor *actor = (igActor *)((int *)((igObjectList *)ram->_actorList)->_data)[0];
-            int bone = ((VirtualObject *)((igAnimationCombiner *)actor->_animationSystem)->_animHierarchy)->FindBoneIndex(boneName);
+            int bone = ((igSkeletonDispatchView *)((igAnimationCombiner *)actor->_animationSystem)->_animHierarchy)->FindBoneIndex((const char *)boneName);
             int matrix;
             if (actor->_actorCacheUsed != 0) {
                 matrix = actor->_boneMatrixCacheArray + (bone << 6);
             } else {
-                matrix = ((VirtualObject *)actor->_animationSystem)->GetBoneMatrix(bone);
+                matrix = ((igAnimationSystemDispatchView *)actor->_animationSystem)->GetBoneMatrix(bone);
             }
             beMessenger_AppendMatrix(self->_messenger, matrix);
         }
@@ -944,7 +932,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
                 int k;
                 igMetaField *field;
                 igMetaField *field2;
-                VirtualObject *actor;
+                igObjectDispatchView *actor;
                 int buffer;
                 int buffer2;
                 if (combiners != 0) {
@@ -952,14 +940,14 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
                 }
                 actorCount = ((igObjectList *)ram->_actorList)->_count;
                 for (k = 0; k < actorCount; k++) {
-                    actor = (VirtualObject *)((int *)((igObjectList *)ram->_actorList)->_data)[k];
-                    field = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), "_boneMatrixCacheArray");
+                    actor = (igObjectDispatchView *)((int *)((igObjectList *)ram->_actorList)->_data)[k];
+                    field = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMeta(), "_boneMatrixCacheArray");
                     buffer = *(int *)((char *)actor + field->_offset);
                     if (buffer != 0) {
                         Memory_FreeBuffer(buffer);
                         *(int *)((char *)actor + field->_offset) = 0;
                     }
-                    field2 = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), "_blendMatrixCacheArray");
+                    field2 = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMeta(), "_blendMatrixCacheArray");
                     buffer2 = *(int *)((char *)actor + field2->_offset);
                     if (buffer2 != 0) {
                         Memory_FreeBuffer(buffer2);

@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
+#include "dw4/igObjectDispatchView.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
 
@@ -33,8 +34,8 @@ extern "C" int strcmp(const char *a, const char *b);
 extern "C" void beHitLandModel_CheckWall(beHitLandModel *self);
 extern "C" void beHitLandModel_CheckWallFull(beHitLandModel *self);
 static void beHitLandModel_FindLand(beHitLandModel *self);
-extern "C" int g_igStringObjList_metaObject[4];
-extern "C" int g_igNamedObjectList_metaObject[4];
+extern "C" igMetaObject *g_igStringObjList_metaObject[4];
+extern "C" igMetaObject *g_igNamedObjectList_metaObject[4];
 extern "C" char *g_stringObjEmptyText;
 extern "C" int emptyString[4];
 extern "C" void beHitLandModel_Prepare(beHitLandModel *self);
@@ -154,16 +155,6 @@ void beHitLandModel_UpdateRam(void)
 {
 }
 
-/* The virtual methods of an Alchemy object up to its meta object query. */
-class MetaVt {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
-    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
-    virtual void d18(); virtual void d19();
-    virtual int getMeta();
-};
-
 /* beMessenger_ResolveEnumValue values of the model's message names. */
 enum HitLandModelMessage {
     MESSAGE_CHECKWALL, MESSAGE_CHECKWALLFULL, MESSAGE_CHECKLAND, MESSAGE_ONHIT, MESSAGE_OFFHIT
@@ -191,8 +182,8 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
     if (self->_order == 0) {
         int count = ((igObjectList *)self->_infoList)->_count;
         for (int i = 0; i < count; i++) {
-            MetaVt *names = (MetaVt *)((beHitLandModelInfo **)((igObjectList *)self->_infoList)->_data)[i]->_nameList;
-            if (names != 0) names->getMeta();
+            igObjectDispatchView *names = (igObjectDispatchView *)((beHitLandModelInfo **)((igObjectList *)self->_infoList)->_data)[i]->_nameList;
+            if (names != 0) names->GetMeta();
         }
     }
     if (self->_order == 0) {
@@ -240,7 +231,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
     /* matching construct: register-allocator tracer — i declared before count in each name loop gives retail's i and count registers */
     case MESSAGE_ONHIT:
         if (info->_nameList != 0) {
-            if (g_igStringObjList_metaObject[0] == ((MetaVt *)info->_nameList)->getMeta()) {
+            if (g_igStringObjList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igStringObjList *names = (igStringObjList *)info->_nameList;
                 int i;
                 int count = names->_count;
@@ -250,7 +241,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                         break;
                     }
                 }
-            } else if (g_igNamedObjectList_metaObject[0] == ((MetaVt *)info->_nameList)->getMeta()) {
+            } else if (g_igNamedObjectList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igNamedObjectList *names = (igNamedObjectList *)info->_nameList;
                 int i;
                 int count = names->_count;
@@ -265,7 +256,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
         break;
     case MESSAGE_OFFHIT:
         if (info->_nameList != 0) {
-            if (g_igStringObjList_metaObject[0] == ((MetaVt *)info->_nameList)->getMeta()) {
+            if (g_igStringObjList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igStringObjList *names = (igStringObjList *)info->_nameList;
                 int i;
                 int count = names->_count;
@@ -275,7 +266,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                         break;
                     }
                 }
-            } else if (g_igNamedObjectList_metaObject[0] == ((MetaVt *)info->_nameList)->getMeta()) {
+            } else if (g_igNamedObjectList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igNamedObjectList *names = (igNamedObjectList *)info->_nameList;
                 int i;
                 int count = names->_count;

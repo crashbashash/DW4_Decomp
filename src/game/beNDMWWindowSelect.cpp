@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/beNDMWWindowSetupDispatchView.h"
 
 extern "C" int beMessenger_AppendBool(int messenger, int value);
 extern "C" int beMessenger_AppendInt(int messenger, int value);
@@ -88,16 +89,13 @@ extern "C" int StringList_AppendRetained(int list, StringRef *token);
     StringRef held(token); \
     StringList_AppendRetained(list, &held); }
 
-/* matching construct: dummy-virtual view (22 slots) so Setup() compiles to the retail vtable call; it carries no data. */
-class beNDMWWindowSelectVirtuals { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void Setup();
- };
 extern "C" int beNDMWWindow_ClearQueuedText(beNDMWWindowSelect *self);
 extern "C" int beNDMWWindow_PlayQueuedModelClose(beNDMWWindowSelect *self);
 extern "C" int beNDMWWindow_PollCloseComplete(beNDMWWindowSelect *self);
 extern "C" int beNDMWWindow_PresentModelAtOrigin(void *self, const char *model, int id, const char *sequence, const char *close);
 extern "C" int beNDMWWindow_RunMessageScript(void *self, const char *script, int entCode);
 extern "C" int beNDMWWindow_QueueText(void *self, const char *type, const char *name, const char *text, const char *align);
-extern "C" void beNDMWWindowSelect_Update(beNDMWWindowSelectVirtuals *self);
+extern "C" void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *self);
 extern "C" bool beNDMWWindowSelect_CanRequestFO2TOP(beNDMWWindowSelect *self);
 extern "C" void beNDMWStatusSelect00_Setup(beNDMWStatusSelect00 *self);
 extern "C" void beNDMWStatusSelect01_Setup(beNDMWStatusSelect01 *self);
@@ -112,7 +110,7 @@ extern "C" int beNDMWWindowSelect_GetMeta(void);
 #pragma push
 #pragma readonly_strings on
 
-void beNDMWWindowSelect_Update(beNDMWWindowSelectVirtuals *view) {
+void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *view) {
     /* matching construct: typed view of the dummy-virtual receiver; data is reached only through s. */
     beNDMWWindowSelect *s = (beNDMWWindowSelect *)view;
     float offset[3];

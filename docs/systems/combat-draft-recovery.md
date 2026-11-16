@@ -1,8 +1,8 @@
 # GAMERAM draft: reviewed ABI and memory repairs
 
 The full `beNDMWGameRam_OnMessage` callback (41,864 code bytes, including the nested
-36,000-byte FIGHTCALC region) is described in
-[the dispatcher page](combat-dispatcher.md). This page describes the reviewed repairs
+36,000-byte FIGHTCALC region) is matched source in `src/game/beNDMWGameRam.cpp`
+([the dispatcher page](combat-dispatcher.md)). This page describes the reviewed repairs
 applied to its m2c draft. The repairs make a provisional draft more faithful; they do not
 by themselves establish complete equivalence, and the draft variants measured below are
 diagnostics, not the dispatcher's source.

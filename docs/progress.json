@@ -472,7 +472,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2292688,
+  "bytes": 2292564,
   "failing": {
    "addresses": {
     "bytes": 745116,
@@ -503,11 +503,11 @@
     "functions": 1217
    },
    "virtuals": {
-    "bytes": 141832,
-    "functions": 549
+    "bytes": 141956,
+    "functions": 551
    }
   },
-  "functions": 13225,
+  "functions": 13223,
   "matched_functions": 20220
  },
  "regions": [
@@ -643,10 +643,10 @@
  "typed": {
   "error": null,
   "offset_casts": 4071,
-  "pct": 46.32,
-  "recovered": 31547,
+  "pct": 46.31,
+  "recovered": 31533,
   "synthetic": 5896,
-  "total": 68113,
+  "total": 68089,
   "typeable": 295,
   "typeable_pct": 0.43
  }

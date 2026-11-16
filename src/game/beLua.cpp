@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
+#include "dw4/igObjectDispatchView.h"
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
 extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);
@@ -32,33 +33,14 @@ extern "C" int g_igCommonTraversal_travProcs[4];
  * exit; the `unsigned size` parameter fixes the lw a2/a1 load order. */
 
 
-/* matching construct: 22 dummy virtuals put Run at vtable offset 96 and RunBuffer at 100 */
-class LuaStateVt {
+/* beLuaState's virtual functions past igObject's: slot 22 runs a Lua file (beLuaState_RunFile) and
+ * slot 23 a Lua chunk held in memory (beLuaState_RunBuffer).
+ * ABI view only: never instantiated. */
+class beLuaStateDispatchView : public igObjectDispatchView {
 public:
-    virtual void vfunc_00();
-    virtual void vfunc_01();
-    virtual void vfunc_02();
-    virtual void vfunc_03();
-    virtual void vfunc_04();
-    virtual void vfunc_05();
-    virtual void vfunc_06();
-    virtual void vfunc_07();
-    virtual void vfunc_08();
-    virtual void vfunc_09();
-    virtual void vfunc_10();
-    virtual void vfunc_11();
-    virtual void vfunc_12();
-    virtual void vfunc_13();
-    virtual void vfunc_14();
-    virtual void vfunc_15();
-    virtual void vfunc_16();
-    virtual void vfunc_17();
-    virtual void vfunc_18();
-    virtual void vfunc_19();
-    virtual void vfunc_20();
-    virtual void vfunc_21();
-    virtual int Run(char *path);
-    virtual int RunBuffer(void *data, unsigned size, const char *name);
+    virtual void d21();
+    virtual int RunFile(char *path);                                        /* slot 22 */
+    virtual int RunBuffer(void *data, unsigned size, const char *name);     /* slot 23 */
 };
 extern "C" int g_stringPool[4];
 extern "C" char text_s_lua[];
@@ -284,14 +266,14 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
             const char *nm = d->_name ? (const char *)d->_name : emptyString;
             if (nm != 0 && strcmp(d->_name ? (const char *)d->_name : emptyString, name) == 0) {
                 beLuaDataObject *o = (beLuaDataObject *)d->_dataObject;
-                result = ((LuaStateVt *)self->_luaState)->RunBuffer((void *)o->_data, o->_dataSize, name);
+                result = ((beLuaStateDispatchView *)self->_luaState)->RunBuffer((void *)o->_data, o->_dataSize, name);
                 break;
             }
         }
     }
     if (result == -1) {
         sprintf(buf2, percent_s_slash_percent_s_2, ref.value, name);
-        result = ((LuaStateVt *)self->_luaState)->Run(buf2);
+        result = ((beLuaStateDispatchView *)self->_luaState)->RunFile(buf2);
     }
     return result;
 }

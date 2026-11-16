@@ -3,7 +3,7 @@
 #include "dw4/igTDataList.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igTraversalView.h"
-#include "dw4/beBaseInfoManagerDispatchView.h"
+#include "dw4/beModelCtrlDispatchView.h"
 #include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/igTransformDispatchView.h"
 #include "dw4/igLodDispatchView.h"
@@ -48,25 +48,6 @@ enum beModelCtrlMessage {
     MSG_ONHITBULLETBOX,
     MSG_OFHITBULLETBOX,
     MSG_GETSEQNAMELIST,
-};
-/* beModelCtrl's own virtual functions past beBaseInfoManager's, as this file dispatches them (each
- * named as the same slot is in the class that introduces it).
- * ABI view only: never instantiated. */
-class beModelCtrlDispatchView : public beBaseInfoManagerDispatchView {
-public:
-    virtual int IsKind(const char *kind);                                   /* slot 35 */
-    virtual void OnGenerate(beBaseInfoRam *ram);
-    virtual void RegisterReceiver(beBaseInfoRam *ram);
-    virtual void UpdateControl(beBaseInfoRam *ram);
-    virtual void OnWaitCheck(beBaseInfoRam *ram);
-    virtual void OnControlOff(beBaseInfoRam *ram);
-    virtual void OnFreeze(beBaseInfoRam *ram);
-    virtual void OnRemove(beBaseInfoRam *ram);
-    virtual void OnErase(beBaseInfoRam *ram);
-    virtual void OnSequenceChange(beBaseInfoRam *ram);
-    virtual void OnAction1(beBaseInfoRam *ram);
-    virtual void OnUpdateRam(beBaseInfoRam *ram);
-    virtual unsigned char OnPreMessage(beBaseInfoRam *ram, const char *message); /* slot 47 */
 };
 /* beModelCtrlInfoRideOn2/3/4: slot 21 moves the ride-on model with a matrix.
  * ABI view only: never instantiated. */
@@ -136,7 +117,7 @@ extern "C" int sprintf(...);
 extern "C" int beLua__RunNamedChunk(...);
 extern "C" int beBaseInfoRam_RemoveTimer(...);
 
-extern "C" int beModelCtrlSubCom_StopType(int, int, int);
+extern "C" int beModelCtrlSubCom_StopType(int, int, igMetaObject *);
 extern "C" void beModelCtrl_UpdateMuteki(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
 extern "C" int igMatrix44f_MakeEulerRotation(int, float, float, float);
 extern "C" int igMatrix44f_SetIdentity(...);
@@ -176,8 +157,9 @@ extern "C" int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal
 extern "C" int beMeterCtrlNode_TraversalFunction(igCommonTraversal *traversal, void *node);
 extern "C" int g_igCommonTraversal_travProcs[4];
 /* A component of a vector by index, read through the vector's address.
- * matching construct: the generate handler's rotation is read through this call; as .x/.y/.z or igVec3f's own
- * operator[] the three loads schedule differently. */
+ * matching construct: only this inline read gives the generate handler retail's float registers (the degree
+ * factor in $f2, x in $f3); .x/.y/.z, igVec3f::operator[] and the same cast written in place exchange the two.
+ * operator[] written this way matches here too, but beWaterPlain_UpdateRam needs its (&x)[i] form. */
 static inline float Component(const igVec3f &v, int i) { return ((const float *)&v)[i]; }
 
 extern "C" igAABox * igAABox_CreateInstance(...);
@@ -358,7 +340,7 @@ extern "C" void beModelCtrl_UpdateWaitCheck(beModelCtrl *self, beModelCtrlInfo *
 extern "C" int beModelCtrlSubCom_AddHitBox(int, beModelCtrlHITBOX *);
 extern "C" char AllClear[];
 extern "C" char Set[];
-extern "C" int g_beModelCtrlSCHitBox_metaObject[4];
+extern "C" igMetaObject *g_beModelCtrlSCHitBox_metaObject[4];
 extern "C" int beModelCtrl_RunHitBox(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, beModelCtrlHITBOX *command);
 extern "C" char OFFWALL[];
 extern "C" char ONWALL[];

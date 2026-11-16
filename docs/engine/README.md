@@ -184,7 +184,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [Sony libkernl IOP clients](sony-libkernl-iop-clients.md): libkernl's filestub, iopheap and eeloadfile files; extents from the SDK member layout, the shared request buffers.
 - [Sony libkernl system files](sony-libkernl-sys.md): libkernl's IOP reset, TLB system calls, kernel patches built from source, timer and alarms as whole files.
 - [Sony libpad](sony-libpad.md): libpad as one whole file (the padman.irx RPC clients, pad DMA frames, send_to_iop, port open); extent evidence, why the stores compile in retail's order.
-- [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold: the measured MWCC wall behind the 983 accessors, what was tried, and the family's generators.
+- [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold behind the 983 accessors: the addressing rule under the default compiler, why `b52` reaches it, what was tried, and the family's generators.
 - [assembly-sources](assembly-sources.md): hand-written `.S` routines the owner approved (`config/assembly-sources.tsv`), the evidence each needs, and the candidates still open.
 - [source-approvals](source-approvals.md): inline `asm` and `volatile` the owner approved (`config/source-approvals.tsv`), and the `unapproved` category for the rest.
 - [asm-body-matches](asm-body-matches.md): asm bodies are not kept in the repository (owner decision); what a function without C looks like, the generator for local study, assembler quirks.

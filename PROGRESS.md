@@ -35,7 +35,7 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**13,225** of the 20,220 matched functions are readable: **2,292,688** code bytes, **66.0 %** of the code.
+**13,223** of the 20,220 matched functions are readable: **2,292,564** code bytes, **66.0 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
@@ -46,7 +46,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 2,324 | 503,912 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,225 | 398,112 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,699 | 323,068 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 549 | 141,832 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 551 | 141,956 |
 
 ## Debt
 
@@ -189,7 +189,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 31,547 of 68,113 (46.32 %) |
+| field accesses using a **recovered** type (not an offset cast) | 31,533 of 68,089 (46.31 %) |
 | functions in the retail split (`asm/`, generated) | 20,575 |
 
 ## How these numbers are produced

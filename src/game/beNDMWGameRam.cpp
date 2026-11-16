@@ -6,8 +6,6 @@
 #define ALLOC(owner, var) { void *got = ((void *)igObject_GetAllocator(owner)); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])); }
 #define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) List_Reserve(l, entry->count, SZ); }
 #define RESIZE(LT, h, SZ) { int n = entry->count; LT *l = (LT *)(h)->_data; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, SZ); } }
-/* matching construct: inline release macro with block-local q */
-#define RELO(X) { igObject *q = (X); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7fffff) == 0) igObject_Destroy(q); } }
 /* Sentinel for the `absolute` argument of the HP update: apply `delta` instead. */
 #define NO_ABSOLUTE_HP (-1)
 #define NEARBY_RADIUS_SQUARED 900.0f
@@ -101,7 +99,7 @@ extern "C" int beNDMWGameRam_igSmartPointer_igIntList_Get(int *p);
 extern "C" int beNDMWGameRam_igSmartPointer_igBoolList_Get(int *p);
 extern "C" void List_RemoveWordAt(void *list, int index);
 extern "C" void beNDMWGameRam_igObjectList_Remove(void *list, int index);
-/* matching construct: copy-constructed struct return reproduces the retail hidden-return calling shape */ struct AllocatorValue { int v; AllocatorValue(int value):v(value) {} AllocatorValue(const AllocatorValue &o):v(o.v) {} };
+/* What the allocator helpers return by value: a class with a copy constructor, so it comes back through a hidden return slot. */ struct AllocatorValue { int v; AllocatorValue(int value):v(value) {} AllocatorValue(const AllocatorValue &o):v(o.v) {} };
 extern "C" AllocatorValue beNDMWGameRam_beNDMWItemAbilityChip_MakeAllocatorValue(int value);
 extern "C" AllocatorValue beNDMWGameRam_beNDMWItemYellowArmor_MakeAllocatorValue(int value);
 extern "C" AllocatorValue beNDMWGameRam_beNDMWItemBlueArmor_MakeAllocatorValue(int value);
@@ -314,14 +312,6 @@ public:
 extern "C" void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player);
 extern "C" igObject *beDataObjListList_Create(int);
 extern "C" int beBaseInfoManager_Start(beNDMWGameRam *);
-/* matching construct: inline release helper reproduces the retail release sequence */
-struct ReleaseRef { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
-} };
 /* Owning stack reference to the new per-player data-list list, released the same way. */
 class PlayerDataListListRef {
 public:
@@ -335,18 +325,6 @@ typedef struct RefCountedHeader { int p0; unsigned refs; } RefCountedHeader;
 /* Object-reference list header: count at +8, capacity at +12, buffer at +16. */
 typedef struct ObjectRefList { char p[8]; int count; int cap; RefCountedHeader **data; } ObjectRefList;
 extern "C" void beNDMWGameRam_Stop(beNDMWGameRam *self);
-/* matching construct: inline release helper reproduces the retail inlined refcount release (release then clear) */
-struct RefRelease {
-    static inline void rel(int &r) {
-        igObject *object = (igObject *)r;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
-        r = 0;
-    }
-};
 extern "C" void beNDMWGameRam_Prepare(beNDMWGameRam *self);
 extern "C" beNDMWGameRamInfo *beNDMWGameRamInfo_Create(int);
 extern "C" beNDMWGameRamInfoRam *beNDMWGameRamInfoRam_Create(int);
@@ -775,7 +753,6 @@ void beNDMWGameRam_Start(beNDMWGameRam *self) {
     int player;
     int allocator;
     int playersAllocator;
-    igObject *created;
 
     beBaseInfoManager_Start(self);
     allocator = igObject_GetAllocator(self);
@@ -788,12 +765,7 @@ void beNDMWGameRam_Start(beNDMWGameRam *self) {
         /* The new list is owned by the stack reference while it is retained into the field and the old
          * list is released; the reference's own release runs at the block end. */
         igSmartPointer<igObject> common(beDataObjList_Create(allocator));
-        created = common.p;
-        if (created != 0) {
-            created->_refCount = created->_refCount + 1;
-        }
-        ReleaseRef::go((igObject *)self->_commonDataList);
-        self->_commonDataList = (int)created;
+        (igSmartPointer<igObject> &)self->_commonDataList = common;
     }
     playersAllocator = igObject_GetAllocator(self);
     if (g_useOwnerAllocator != 0) {
@@ -803,12 +775,7 @@ void beNDMWGameRam_Start(beNDMWGameRam *self) {
     }
     {
         PlayerDataListListRef players(beDataObjListList_Create(playersAllocator));
-        created = players.p;
-        if (created != 0) {
-            created->_refCount = created->_refCount + 1;
-        }
-        ReleaseRef::go((igObject *)self->_playerDataListList);
-        self->_playerDataListList = (int)created;
+        (igSmartPointer<igObject> &)self->_playerDataListList = players.p;
     }
     player = 0;
     do {
@@ -877,14 +844,14 @@ void beNDMWGameRam_Stop(beNDMWGameRam *self) {
 }
 
 void beNDMWGameRam_Prepare(beNDMWGameRam *self) {
-    RefRelease::rel(self->_dBShinka);
-    RefRelease::rel(self->_dBPcTech);
-    RefRelease::rel(self->_dBWeapon);
-    RefRelease::rel(self->_dBArmor1);
-    RefRelease::rel(self->_dBArmor2);
-    RefRelease::rel(self->_dBAbChip);
-    RefRelease::rel(self->_dBEnemy);
-    RefRelease::rel(self->_dBEneatk);
+    ((igSmartPointer<igObject> &)self->_dBShinka).clear();
+    ((igSmartPointer<igObject> &)self->_dBPcTech).clear();
+    ((igSmartPointer<igObject> &)self->_dBWeapon).clear();
+    ((igSmartPointer<igObject> &)self->_dBArmor1).clear();
+    ((igSmartPointer<igObject> &)self->_dBArmor2).clear();
+    ((igSmartPointer<igObject> &)self->_dBAbChip).clear();
+    ((igSmartPointer<igObject> &)self->_dBEnemy).clear();
+    ((igSmartPointer<igObject> &)self->_dBEneatk).clear();
 }
 
 int beNDMWGameRam_AddInfo(beNDMWGameRam *self) {
@@ -965,7 +932,6 @@ void beNDMWGameRam_SelectSpecies(beNDMWGameRam *self, int index, int species) {
     int value;
     PropertyRecord *commonFlags;
     PropertyRecord *nameRecord;
-    igObject *released;
     int upcntBase;
     igObject *flags;
     igObject *counter;
@@ -1024,22 +990,13 @@ void beNDMWGameRam_SelectSpecies(beNDMWGameRam *self, int index, int species) {
     if (index == 0) {
         flags = (igObject *)((PropertyRecord *)igProperty_GetRecordArray(player, "BASE_FLAG"))->value;
         commonFlags = ((PropertyRecord *)igProperty_GetRecordArray(self->_commonDataList, "FLAG"));
-        if (flags != 0) flags->_refCount = flags->_refCount + 1;
-        released = (igObject *)commonFlags->value;
-        RELO(released)
-        commonFlags->value = flags;
+        (igSmartPointer<igObject> &)commonFlags->value = flags;
         flagFolder = (igObject *)((PropertyRecord *)igProperty_GetRecordArray(player, "BASE_FLAGFOLDER"))->value;
         commonFlagFolder = ((PropertyRecord *)igProperty_GetRecordArray(self->_commonDataList, "FLAGFOLDER"));
-        if (flagFolder != 0) flagFolder->_refCount = flagFolder->_refCount + 1;
-        released = (igObject *)commonFlagFolder->value;
-        RELO(released)
-        commonFlagFolder->value = flagFolder;
+        (igSmartPointer<igObject> &)commonFlagFolder->value = flagFolder;
         counter = (igObject *)((PropertyRecord *)igProperty_GetRecordIntList(player, "BASE_COUNTER"))->value;
         commonCounter = ((PropertyRecord *)igProperty_GetRecordIntList(self->_commonDataList, "COUNTER"));
-        if (counter != 0) counter->_refCount = counter->_refCount + 1;
-        released = (igObject *)commonCounter->value;
-        RELO(released)
-        commonCounter->value = counter;
+        (igSmartPointer<igObject> &)commonCounter->value = counter;
     }
 }
 
@@ -2063,12 +2020,11 @@ extern unsigned char g_boolListClearValue;
 int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *message);
 }
 extern "C" int igStringRef_Assign(void *, const StringRef &);
-/* Experience needed to reach a level: 200 per level below plus a quadratic term. The extra named step
- * (g/f) keeps the retail arithmetic shape (matching construct). */
-struct LevelExpCurve { static int g(int d, int x) { return d * 0xC8 + (x + 0x8B) * (d * d); } static int f(int x) { int d = x - 1; return d * 0xC8 + (x + 0x8B) * (d * d); } };
 /* matching construct: RAII copied-reference local reproduces the retail unwind table */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const AllocatorValue &source); ~RecoveryCopiedRef(); };
 extern "C" int *beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(void *, const RecoveryCopiedRef &);
-/* Gives `obj` a fresh object from the allocator; kept out of line as retail calls it (matching construct). */
+/* Gives `obj` a fresh object from the allocator.
+ * matching construct: written in place, the copied reference takes the frame slot below retail's (1028 for 1032);
+ * in this inline's own scope it lies where retail has it. */
 struct ObjectRefAssigner { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(kIGMemoryPoolHandleUser1, alloc))); return beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(obj, c); } };
 /* matching construct: out-of-line helper that reproduces the retail call shape of the BKCHIPNAME string-list store */
 struct StringListStore { static void SetAt(igStringRefList *list, int idx, const StringRef &v) { if (list->_count != 0 && idx >= 0 && idx < list->_count) igStringRef_Assign((void *)((char *)beNDMWGameRam_igStringRefList_GetData((igDataList *)list) + idx * 4), v); } };
@@ -2190,9 +2146,6 @@ enum GameRamMessageId {
 };
 /* How an enemy attack record (the eneatk table's TYPE) computes its damage. */
 enum EnemyAttackType { ENEATK_PHYSICAL, ENEATK_MAGIC, ENEATK_MAXHPRATIO };
-/* Byte offsets into g_skillGainTable's halfwords that the raise case reads as ints, indexed by technique row
- * (matching construct: retail reads the table's own bytes here, not g_raiseFirstValue / g_raiseSecondValue). */
-enum { RAISE_FIRST_OFFSET = 424, RAISE_SECOND_OFFSET = 456 };
 int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *message) {
     int e2pDmgNetCrit;
     int e2pHitPlayerIndex;
@@ -2685,7 +2638,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
     void *eSleepPlayerList;
     void *powDownPlayer;
     void *e2pDmgPlayer;
-    void *rankEnemy;
+    beBaseInfoRam *rankEnemy;
     void *rankMoveList;
     void *e2pStunPlayer;
     void *ePoisonPlayer;
@@ -3024,13 +2977,13 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                     int itemCount = items->_count;
                     removed = 0;
                     for (clearIndex = 0; clearIndex < itemCount; ++clearIndex) {
-                        item = (beNDMWItemBase *)((void **)items->_data)[clearIndex]; /* matching construct: _data is a 4-byte int reference, indexed as the pointer array the pre-typing struct declared */
+                        item = ((beNDMWItemBase **)items->_data)[clearIndex];
                         if ((slotKind == item->_kindNo) && (recNo == item->_recNo) && (item->_isEquip == 0)) {
 
                             beNDMWLoadIntf2_igObject_Release(beNDMWLoadIntf2_igObjectList_Get(items, clearIndex));
                             beNDMWGameRam_igObjectList_Remove(items, clearIndex);
                             removed = 1;
-                            ((void **)items->_data)[items->_count] = 0; /* matching construct: _data is a 4-byte int reference, indexed as the pointer array the pre-typing struct declared */
+                            ((igObject **)items->_data)[items->_count] = 0;
                             break;
                         }
                     }
@@ -3042,7 +2995,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                     beNDMWItemBase *item;
                     int itemCount = items->_count;
                     for (findIndex = 0; findIndex < itemCount; ++findIndex) {
-                        item = (beNDMWItemBase *)((void **)items->_data)[findIndex]; /* matching construct: _data is a 4-byte int reference, indexed as the pointer array the pre-typing struct declared */
+                        item = ((beNDMWItemBase **)items->_data)[findIndex];
                         if ((slotKind == item->_kindNo) && (recNo == item->_recNo)) {
 
                             beMessenger_AppendBool(self->_messenger, 1U);
@@ -3065,7 +3018,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                     int itemCount = items->_count;
                     equipped = 0;
                     for (equipIndex = 0; equipIndex < itemCount; ++equipIndex) {
-                        item = (beNDMWItemBase *)((void **)items->_data)[equipIndex]; /* matching construct: _data is a 4-byte int reference, indexed as the pointer array the pre-typing struct declared */
+                        item = ((beNDMWItemBase **)items->_data)[equipIndex];
                         if ((slotKind == item->_kindNo) && (recNo == item->_recNo) && (item->_isEquip != 0)) {
 
                             equipped = 1;
@@ -3542,7 +3495,8 @@ done:
                 skillTechniqueNo = (int)((int) skillAttackId % 10000);
                 int techniqueRow;
                 beNDMWGameRam_FindTechniqueRow(self, skillPlayer, skillTechniqueNo, &techniqueRow);
-                /* matching construct: the technique's skill number passes through its own local before it becomes skillNo */
+                /* matching construct: the technique's skill number passes through its own local before it becomes
+                 * skillNo; assigned to skillNo directly, the case needs another spill slot and the frame grows by 16 */
                 techniqueSkillNo = beDataBase_GetRecordInt(MessageDatabases::PcTech(self), techniqueRow, "SKILL");
                 skillNo = techniqueSkillNo;
                 techSkillList = (int)igProperty_GetRecordIntList(skillPlayer, "SKILL");
@@ -4312,7 +4266,7 @@ loop_449:
             rankAttackId = beMessenger_GetInt(self->_messenger, 1);
             rankHitCount = beMessenger_GetInt(self->_messenger, 2);
             rankDamage = beMessenger_GetInt(self->_messenger, 3);
-            rankEnemy = (void *)(beMessenger_GetObject(self->_messenger, 0));
+            rankEnemy = (beBaseInfoRam *)beMessenger_GetObject(self->_messenger, 0);
             rank = 0;
             if (rankHitCount <= 0) {
                 rank = 3;
@@ -4352,12 +4306,10 @@ loop_449:
                 }
             }
             if (rank == 2) {
-                /* matching construct: the enemy's _dataList address is recomputed at each of the three uses; the
-                 * integer-sum spelling of the first use keeps the compiler from hoisting it into a saved register. */
-                if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get((void *)((int)rankEnemy + 0x28)) == 0) {
-                    ObjectRefAssigner::Assign(&((beBaseInfoRam *)rankEnemy)->_dataList, igObject_GetAllocator(rankEnemy));
+                if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&rankEnemy->_dataList) == 0) {
+                    ObjectRefAssigner::Assign(&rankEnemy->_dataList, igObject_GetAllocator(rankEnemy));
                 }
-                rankMoveList = (void *)(beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(&((beNDMWMdlPEBaseInfoWork *)beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(&((beModelCtrlInfoRamData *)beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&((beBaseInfoRam *)rankEnemy)->_dataList), g_propertyNameField[0], "ONE"))->_work))->_moveObjectList));
+                rankMoveList = (void *)(beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(&((beNDMWMdlPEBaseInfoWork *)beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(&((beModelCtrlInfoRamData *)beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&rankEnemy->_dataList), g_propertyNameField[0], "ONE"))->_work))->_moveObjectList));
                 if (((beModelCtrlMoveObjectList *)rankMoveList)->_count != 0) {
                     rankMoveObject = (void *)(beNDMWGameRam_beModelCtrlMoveObjectList_Get((igDataList *)rankMoveList, 1));
                     if (((beModelCtrlMoveObject *)rankMoveObject)->_isRun != 0) {
@@ -4795,8 +4747,9 @@ loop_449:
                     if (techniqueNo >= 0) {
                         int techniqueRow;
                         beNDMWGameRam_FindTechniqueRow(self, magicPlayer, techniqueNo, &techniqueRow);
-                        raiseFirst = ((const int *)((const char *)g_skillGainTable + RAISE_FIRST_OFFSET))[techniqueRow];
-                        raiseSecondValue = ((const int *)((const char *)g_skillGainTable + RAISE_SECOND_OFFSET))[techniqueRow];
+                        /* the raise techniques' rows start at 50 */
+                        raiseFirst = g_raiseFirstValue[techniqueRow - 50];
+                        raiseSecondValue = g_raiseSecondValue[techniqueRow - 50];
                     } else {
                         raiseFirst = g_raiseFirstValue[0];
                         raiseSecondValue = g_raiseSecondValue[0];
@@ -5002,8 +4955,9 @@ loop_449:
         if ((bkLevel != 0x3E7) && (bkLevel != 1)) {
             expProp = igProperty_GetRecord(bkPlayer, "EXP");
             currentExp = expProp->value;
-            levelBaseExp = LevelExpCurve::g(bkLevel - 1, bkLevel);
-            newExp = currentExp - ((levelBaseExp - LevelExpCurve::g(bkLevel - 2, bkLevel - 1)) * 2) / 10;
+            /* experience at the start of a level: 200 per level below it plus (level + 139) per square of those levels */
+            levelBaseExp = (bkLevel - 1) * 200 + (bkLevel + 139) * ((bkLevel - 1) * (bkLevel - 1));
+            newExp = currentExp - ((levelBaseExp - ((bkLevel - 2) * 200 + (bkLevel - 1 + 139) * ((bkLevel - 2) * (bkLevel - 2)))) * 2) / 10;
             if (newExp < levelBaseExp) {
                 newExp = levelBaseExp;
             }

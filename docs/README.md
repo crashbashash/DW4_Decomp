@@ -26,7 +26,7 @@ places both bodies of the nearby-query compiler unit.
 [Retail unwind recovery](engine/exception-unwind.md) decodes the complete combat
 cleanup table and constrains automatic-object lifetimes.
 [Dispatcher draft recovery](systems/combat-draft-recovery.md) records the
-reviewed call interfaces and memory repairs while the full callback is unmatched.
+reviewed call interfaces and memory repairs applied to the callback's m2c draft.
 
 ## The game at a glance
 

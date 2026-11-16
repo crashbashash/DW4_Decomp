@@ -9,7 +9,7 @@ matched unit [beNDMWShopSelect00.cpp](../../src/game/beNDMWShopSelect00.cpp), in
 | --- | --- | ---: |
 | `0x0043d1d0` | `beNDMWShopSelect00_Setup` | 636 |
 | `0x0043d450` | `beNDMWShopSelect01_Setup` | 1,976 |
-| `0x0043dc10` | `beNDMWShopSelect02_Setup` (unmatched, own file) | 3,736 |
+| `0x0043dc10` | `beNDMWShopSelect02_Setup` (`code-only`: its exception index matches retail, 20 orphan bytes remain) | 3,736 |
 | `0x0043eab0` | `beNDMWShopSelect03_Setup` | 524 |
 | `0x0043ecc0` | `beNDMWShopSelect11_Setup` | 3,752 |
 | `0x0043fb70` | `beNDMWShopSelect11_RefreshStatCosts` | 696 |

@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
+#include "dw4/igMovieManagerDispatchView.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -63,7 +64,7 @@ extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int emptyString[4];
 extern "C" int g_stringPool[4];
-extern "C" int g_beBaseInfoRamTimer_metaObject[4];
+extern "C" igMetaObject *g_beBaseInfoRamTimer_metaObject[4];
 extern "C" int g_igMovieManager_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beMovieInfoData_metaObject[4];
@@ -608,28 +609,18 @@ void beBaseInfoRam_SetTimerScale(beBaseInfoRam *self, int name, float scale) {
     }
 }
 
-/* An igObject with its vtable as a real vptr: slot 20 returns the object's meta object. */
-class TypedObject {
-public:
-    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3(); virtual void slot4();
-    virtual void slot5(); virtual void slot6(); virtual void slot7(); virtual void slot8(); virtual void slot9();
-    virtual void slot10(); virtual void slot11(); virtual void slot12(); virtual void slot13(); virtual void slot14();
-    virtual void slot15(); virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
-    virtual int getMetaObject();
-};
-
 void beBaseInfoRam_SetAllTimerScales(beBaseInfoRam *self, float scale) {
     int count;
     int i;
-    int timerMeta;
+    igMetaObject *timerMeta;
     int *name;
-    TypedObject *entry;
+    igObjectDispatchView *entry;
     if (self->_dataList != 0) {
         count = ((beBaseInfoDataList *)self->_dataList)->_count;
         for (i = 0; i < count; i++) {
             timerMeta = g_beBaseInfoRamTimer_metaObject[0];
-            entry = ((TypedObject **)((beBaseInfoDataList *)self->_dataList)->_data)[i];
-            if (timerMeta == entry->getMetaObject()) {
+            entry = ((igObjectDispatchView **)((beBaseInfoDataList *)self->_dataList)->_data)[i];
+            if (timerMeta == entry->GetMeta()) {
                 name = (int *)((beBaseInfoData *)entry)->_name;
                 name = name != 0 ? name : emptyString;
                 beBaseInfoRam_SetTimerScale(self, (int)name, scale);
@@ -659,13 +650,13 @@ void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, char *name) {
 static inline int countOf(const igObjectList *l) { return l->_count; }
 
 void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
-    int timerMeta;
+    igMetaObject *timerMeta;
     int count;
     int i;
     igObjectList *list;
     int offset;
     int size;
-    TypedObject *entry;
+    igObjectDispatchView *entry;
     igObjectList *first;
 
     first = ((igObjectList *)self->_dataList);
@@ -675,9 +666,9 @@ void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
         if (count > 0) {
             do {
                 offset = i * 4;
-                entry = *(TypedObject **)(((igObjectList *)self->_dataList)->_data + offset);
+                entry = *(igObjectDispatchView **)(((igObjectList *)self->_dataList)->_data + offset);
                 timerMeta = g_beBaseInfoRamTimer_metaObject[0];
-                if (timerMeta == entry->getMetaObject()) {
+                if (timerMeta == entry->GetMeta()) {
                     list = ((igObjectList *)self->_dataList);
                     igRelease(*(igObject **)(list->_data + offset));
                     List_RemoveWordAt(list, i);
@@ -716,21 +707,6 @@ int beMovie_GetInfoMeta(void)
     return g_beMovieInfo_metaObject[0];
 }
 
-/* The igMovieManager virtuals the movie controller calls: slot 26 stops every movie, slot 30
- * returns a named movie's state (2 once it has finished or is not playing). */
-/* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
-class MoviePlayer {
-public:
-    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3(); virtual void slot4();
-    virtual void slot5(); virtual void slot6(); virtual void slot7(); virtual void slot8(); virtual void slot9();
-    virtual void slot10(); virtual void slot11(); virtual void slot12(); virtual void slot13(); virtual void slot14();
-    virtual void slot15(); virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
-    virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23(); virtual void slot24();
-    virtual void slot25();
-    virtual void stopAll();
-    virtual void slot27(); virtual void slot28(); virtual void slot29();
-    virtual int getState(int *name);
-};
 enum MovieState { kMovieFinished = 2 };
 /* Start or Cross in the pad's pressed word skips the movie. */
 enum MovieSkipButton { kButtonStart = 0x0008, kButtonCross = 0x4000 };
@@ -775,7 +751,7 @@ static inline const char *nameOf(const beMovieInfoData *data) {
 void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram) {
     bePadData *pad;
     int pressed;
-    MoviePlayer *player;
+    igMovieManagerDispatchView *player;
     bool finished;
     int lua;
     beBaseInfoDataList *list;
@@ -788,13 +764,13 @@ void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram) {
         pad = bePadManager_GetPadForPlayer((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]), 0);
         pressed = pad->_trigger;
         if ((pressed & kButtonStart) || (pressed & kButtonCross)) {
-            player = (MoviePlayer *)self->_movie;
-            if (player != 0) player->stopAll();
+            player = (igMovieManagerDispatchView *)self->_movie;
+            if (player != 0) player->stopAllMovies();
         }
-        player = (MoviePlayer *)self->_movie;
+        player = (igMovieManagerDispatchView *)self->_movie;
         finished = false;
         if (player != 0) {
-            if (player->getState((int *)self->_playingName) == kMovieFinished) finished = true;
+            if (player->getMovieState((const char *)self->_playingName) == kMovieFinished) finished = true;
         } else finished = true;
         if (finished) {
             lua = (int)igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);

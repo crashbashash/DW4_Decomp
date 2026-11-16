@@ -39,6 +39,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
+#include "dw4/beNDMWWindowDispatchView.h"
 /* The element count of a list, read through a const view. */
 template <class List> static inline int ListCount(const List *list) { return list->_count; }
 /* The list index of a row shown on a page: the index of the page's first entry plus the row. */
@@ -741,23 +742,10 @@ template <class Window> static inline void SwitchLayer(Window *window, const cha
     beMessenger_DispatchSelected(window->_messenger, SWITCH_4);
 }
 
-/* Virtual slots 0-21, which every window class inherits; 20 is GetMeta and 21 the per-frame Update. */
-class beNDMWWindowVirtuals {
-public:
-    virtual void InheritedSlot0(); virtual void InheritedSlot1(); virtual void InheritedSlot2();
-    virtual void InheritedSlot3(); virtual void InheritedSlot4(); virtual void InheritedSlot5();
-    virtual void InheritedSlot6(); virtual void InheritedSlot7(); virtual void InheritedSlot8();
-    virtual void InheritedSlot9(); virtual void InheritedSlot10(); virtual void InheritedSlot11();
-    virtual void InheritedSlot12(); virtual void InheritedSlot13(); virtual void InheritedSlot14();
-    virtual void InheritedSlot15(); virtual void InheritedSlot16(); virtual void InheritedSlot17();
-    virtual void InheritedSlot18(); virtual void InheritedSlot19();
-    virtual int GetMeta();
-    virtual void Update();
-};
-
-/* The equipment panels' own slots 22-30: beNDMWStatusCtrlBaseEquip's Update drives them and
- * beNDMWStatusPowerSocket, beNDMWStatusMainSlot and beNDMWStatusSubSlot implement them. */
-class EquipPanelSlots : public beNDMWWindowVirtuals {
+/* The equipment panels' own slots 22-30, below igObject's 0-20 and the window's per-frame Update
+ * (slot 21): beNDMWStatusCtrlBaseEquip's Update drives them and beNDMWStatusPowerSocket,
+ * beNDMWStatusMainSlot and beNDMWStatusSubSlot implement them. */
+class beNDMWStatusCtrlBaseEquipDispatchView : public beNDMWWindowDispatchView {
 public:
     virtual void RefreshPocket();
     virtual void PresentPanel(int open);
@@ -771,7 +759,7 @@ public:
 };
 
 /* Slots 31-39, as the update step calls them. */
-class EquipPanelVirtuals : public EquipPanelSlots {
+class beNDMWStatusEquipPanelDispatchView : public beNDMWStatusCtrlBaseEquipDispatchView {
 public:
     virtual void EquipSelected();
     virtual void PreviewSlotDevice(int index);
@@ -784,36 +772,23 @@ public:
     virtual void PreviewPocketDevice(int index);
 };
 
-/* matching construct: the slot-menu handlers call EquipSelected (slot 31) with two leftover argument
- * registers, so they reach it through this view that declares them; the remaining slots are
- * EquipPanelVirtuals'. */
-class EquipPanelMenuVirtuals : public EquipPanelSlots {
-public:
-    virtual void EquipSelected(int menuEntry, int slot);
-};
-
-template <class Panel> static inline EquipPanelVirtuals *AsEquipPanel(Panel *panel)
+template <class Panel> static inline beNDMWStatusEquipPanelDispatchView *AsEquipPanel(Panel *panel)
 {
-    return (EquipPanelVirtuals *)panel;
-}
-
-template <class Panel> static inline EquipPanelMenuVirtuals *AsEquipPanelMenu(Panel *panel)
-{
-    return (EquipPanelMenuVirtuals *)panel;
+    return (beNDMWStatusEquipPanelDispatchView *)panel;
 }
 
 /* The scrolling list windows' own slots, 22-24: the page arrows and the page turns (the
- * beNDMWListCtrl functions). matching construct: the callers test the page-turn results as ints. */
-class ListCtrlVirtuals : public beNDMWWindowVirtuals {
+ * beNDMWListCtrl functions). */
+class beNDMWListCtrlDispatchView : public beNDMWWindowDispatchView {
 public:
     virtual void PresentPageArrows(const float *leftArrowPos, const float *rightArrowPos);
-    virtual int PrevPage();
-    virtual int NextPage();
+    virtual bool PrevPage();
+    virtual bool NextPage();
 };
 
-template <class Window> static inline ListCtrlVirtuals *AsListCtrl(Window *window)
+template <class Window> static inline beNDMWListCtrlDispatchView *AsListCtrl(Window *window)
 {
-    return (ListCtrlVirtuals *)window;
+    return (beNDMWListCtrlDispatchView *)window;
 }
 
 /* SUBWND_2 messages carry the player number: OFPREVIEW and ONPREVIEW end and show the stat preview
@@ -861,19 +836,6 @@ static inline void AssignReference(int *slot, igObject *object)
 }
 
 static inline void BoolList_Append(igBoolList *list, const bool &value)
-{
-    int count = list->_count;
-    if (count < list->_capacity) {
-        list->_count = count + 1;
-    } else {
-        List_Resize(list, count + 1, 1);
-    }
-    ((bool *)list->_data)[count] = value;
-}
-
-/* matching construct: the sub slot's menu appends its constant false by value, so retail stores it
- * without a literal's datum. */
-static inline void BoolList_AppendValue(igBoolList *list, bool value)
 {
     int count = list->_count;
     if (count < list->_capacity) {
@@ -2070,7 +2032,7 @@ void beNDMWStatusPowerSocket_ShowSlotDescription(beNDMWStatusPowerSocket *a) {
     int *onOff;
     int slot;
     int item;
-    int recordString; /* matching construct: one register serves the record string and then the held string's length */
+    const char *recordString;
     char digit[2];
     igStringObj *t2;
     igStringObj *t3;
@@ -2083,15 +2045,15 @@ void beNDMWStatusPowerSocket_ShowSlotDescription(beNDMWStatusPowerSocket *a) {
         item = *(int *)(items->_data + (slot * 4));
     }
     if (item != 0) {
-        recordString = beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(a->_insight, g_beNDMWStatus_metaObject[0]), TXT_2);
+        recordString = (const char *)beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(a->_insight, g_beNDMWStatus_metaObject[0]), TXT_2);
         digit[1] = 0;
         digit[0] = ((beNDMWItemRevisionPocketBase *)item)->_pocket + 0x30;
         {
         igSmartPointer<igStringObj> description((igStringObj *)(((beSystem *)igInsightCore_FindManager(a->_insight, g_beSystem_metaObject[0]))->_globalStrObj), kRetainReference);
-        igStringObj_Set(description.p, (const char *)recordString);
+        igStringObj_Set(description.p, recordString);
         t2 = (igStringObj *)description.p;
-        recordString = t2->_length;
-        igStringObj_Insert(t2, digit, recordString, strlen(digit));
+        int length = t2->_length;
+        igStringObj_Insert(t2, digit, length, strlen(digit));
         t3 = (igStringObj *)description.p;
         text = (int *)t3->_buffer;
         text = (text == 0) ? ((int * *)g_stringObjEmptyText)[0] : text;
@@ -2200,7 +2162,7 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained((unsigned int)self->_subWindow /* matching construct: unsigned argument keeps the retail load order */, win.p);
+    ObjectList_AppendRetained(self->_subWindow, win.p);
     switch (((beNDMWWindow *)self->_mother)->_entCode) {
     case 0:
         win.p->_entCode = 124;
@@ -2285,7 +2247,7 @@ void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocket *self) {
         break;
     case 2:
         self->_retCode = -1;
-        AsEquipPanelMenu(self)->EquipSelected(2, entry);
+        AsEquipPanel(self)->EquipSelected();
         self->_retCode = self->_kindListPos;
         AsEquipPanel(self)->RefreshSlotList();
         beMessenger_SelectReceivers(self->_messenger, GAMERAM_9, 0, 0);
@@ -2672,7 +2634,7 @@ void beNDMWStatusMainSlot_RefreshSlotList(beNDMWStatusMainSlot *self) {
 
 void beNDMWStatusMainSlot_ShowSlotDescription(beNDMWStatusMainSlot *a) {
     beNDMWItemRevisionPocketBase *item = 0;
-    int temp; /* matching construct: one register serves the record string and then the held string's length */
+    const char *recordString;
     char buf[2];
     igStringObj *p;
     igStringObj *q;
@@ -2682,15 +2644,17 @@ void beNDMWStatusMainSlot_ShowSlotDescription(beNDMWStatusMainSlot *a) {
         item = ((beNDMWItemRevisionPocketBase **)((igObjectList *)a->_mainSlot)->_data)[a->_retCode];
     }
     if (item != 0) {
-        temp = beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(a->_insight, g_beNDMWStatus_metaObject[0]), TXT_2);
+        recordString = (const char *)beNDMWItemBase_GetRecordString(item, igInsightCore_FindManager(a->_insight, g_beNDMWStatus_metaObject[0]), TXT_2);
         buf[1] = 0;
         buf[0] = item->_pocket + 0x30;
         {
         igSmartPointer<igStringObj> description((igStringObj *)(((beSystem *)igInsightCore_FindManager(a->_insight, g_beSystem_metaObject[0]))->_globalStrObj), kRetainReference);
-        igStringObj_Set(description.p, (const char *)temp);
-        q = description.p;
-        temp = q->_length;
-        igStringObj_Insert(q, buf, temp, strlen(buf));
+        igStringObj_Set(description.p, recordString);
+        /* matching construct: the held pointer is read through a cast, as the power socket's description reads it;
+         * read plainly, the length takes another register */
+        q = (igStringObj *)description.p;
+        int length = q->_length;
+        igStringObj_Insert(q, buf, length, strlen(buf));
         p = description.p;
         str = (p->_buffer == 0) ? g_stringObjEmptyText[0] : (char *)p->_buffer;
         }
@@ -2788,7 +2752,7 @@ void beNDMWStatusMainSlot_OpenSlotMenu(beNDMWStatusMainSlot *self) {
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained((unsigned int)self->_subWindow /* matching construct: unsigned argument keeps the retail load order */, win.p);
+    ObjectList_AppendRetained(self->_subWindow, win.p);
     win.p->_selectMax = 3;
     win.p->_entCode = 0x78;
     a = ((int)igObject_GetAllocator(self));
@@ -2853,7 +2817,7 @@ void beNDMWStatusMainSlot_OnSlotMenuDecided(beNDMWStatusMainSlot *self) {
         break;
     case 2:
         self->_retCode = -1;
-        AsEquipPanelMenu(self)->EquipSelected(2, entry);
+        AsEquipPanel(self)->EquipSelected();
         self->_retCode = self->_kindListPos;
         AsEquipPanel(self)->RefreshSlotList();
         beMessenger_SelectReceivers(self->_messenger, GAMERAM_9, 0, 0);
@@ -3277,6 +3241,7 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
     int a;
     igBoolList *l0;
     beNDMWStatusSelectE0 *w;
+    bool fl0;
     bool fl;
     int i;
     char **p;
@@ -3287,7 +3252,7 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext(win.p, self, self->_insight, self->_playerNo, 0);
-    ObjectList_AppendRetained((unsigned int)self->_subWindow /* matching construct: unsigned argument keeps the retail load order */, win.p);
+    ObjectList_AppendRetained(self->_subWindow, win.p);
     win.p->_selectMax = 3;
     win.p->_entCode = 0x78;
     a = ((int)igObject_GetAllocator(self));
@@ -3295,9 +3260,10 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
     igSmartPointer<igBoolList> flags((igBoolList *)igBoolList_Create((void *)a));
     BoolList_Append(flags.p, true);
     t = (igIntList *)self->_subSlot;
+    fl0 = false;
     fl = false;
     if (t->_count > 0 && ((int *)t->_data)[self->_kindListPos] != 0) fl = true;
-    BoolList_AppendValue(flags.p, false);
+    BoolList_Append(flags.p, fl0);
     BoolList_Append(flags.p, fl);
     l0 = *(igBoolList **)&flags.p;
     w = win.p;
@@ -3344,7 +3310,7 @@ void beNDMWStatusSubSlot_OnSlotMenuDecided(beNDMWStatusSubSlot *self) {
         break;
     case 2:
         self->_retCode = -1;
-        AsEquipPanelMenu(self)->EquipSelected(2, entry);
+        AsEquipPanel(self)->EquipSelected();
         self->_retCode = self->_kindListPos;
         AsEquipPanel(self)->RefreshSlotList();
         beMessenger_SelectReceivers(self->_messenger, GAMERAM_9, 0, 0);
@@ -3541,9 +3507,9 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
                     mother = (beNDMWWindowSelect *)*(int *)((int)((igObjectList *)self->_subWindow)->_data);
                     if (beNDMWWindowSelect_CanRequestFO2TOP(mother, self->_subWindow) != 0) {
                         bool ready = false;
-                        if (AsListCtrl(self)->PrevPage() != 0) {
+                        if (AsListCtrl(self)->PrevPage()) {
                             ready = true;
-                        } else if (AsListCtrl(self)->NextPage() != 0) {
+                        } else if (AsListCtrl(self)->NextPage()) {
                             ready = true;
                         }
                         if (ready) {

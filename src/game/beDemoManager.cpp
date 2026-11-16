@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/beDemoManager.h"
 
 extern "C" {
@@ -43,19 +44,6 @@ extern igMetaObject *g_beLua_metaObject[4];
 extern igMetaObject *g_beDemoManager_metaObject[4];
 extern int g_mdlEntity[4];
 }
-
-/* An insight manager's virtual functions, as far as the demo manager calls them. */
-class InsightManagerSlots {
-public:
-    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
-    virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7();
-    virtual void slot8(); virtual void slot9(); virtual void slot10(); virtual void slot11();
-    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
-    virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
-    virtual void getMetaObject(); virtual void addToScheduler(); virtual void removeFromScheduler();
-    virtual void start(); virtual void stop(); virtual void acceptInfo();
-    virtual void reset();
-};
 
 /* The allocator an object's new members come from: its own, or the default one. */
 static inline int allocatorFor(void *object) {
@@ -359,7 +347,7 @@ void beDemoManager_Update(beDemoManager *self) {
         ((int *)list->_data)[list->_count] = 0;
     }
     self->_disableRemoveAll = 0;
-    if (self->_calledRemoveAll != 0) ((InsightManagerSlots *)self)->reset();
+    if (self->_calledRemoveAll != 0) ((igInfoManagerDispatchView *)self)->RemoveAllInfo();
 }
 
 igMetaObject *beDemoManager_GetMetaObject_Virtual(void)

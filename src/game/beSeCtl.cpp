@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
+#include "dw4/igCommonTraversalDispatchView.h"
+#include "dw4/igModelViewMatrixAttrDispatchView.h"
 
 extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
 extern "C" void igMatrix44f_SetIdentity(float *);
@@ -26,9 +28,6 @@ extern "C" void igObjectPool_Grow(igObjectPool *, void (*)(void));
 extern "C" void igAttrStackManager_MarkStackChanged(igAttrStackManager *, igAttrStack *, int);
 extern "C" int igTraversal_TraverseChildren(igCommonTraversal *, beResetNode *);
 extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
-/* virtual slots 32/33 (offsets 128/132): the matrix attribute takes the matrix; the traversal sets/ends the time */
-class MatrixAttrVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setMatrix(float *m); };
-class TraversalVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setTime(long long t); virtual void endTime(); };
 struct AttrStackOps {
     static inline igAttrStack *stackFor(igAttrStackManager *mgr, int index) {
         return ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[((int *)mgr->_attrStackIndexTable)[index]];
@@ -81,7 +80,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         if (pool->_freeIndex >= pool->_count)
             igObjectPool_Grow(pool, igModelViewMatrixAttr_CreateInstance);
         matAttr = ((igModelViewMatrixAttr **)pool->_data)[pool->_freeIndex++];
-        ((MatrixAttrVT *)matAttr)->setMatrix(m);
+        ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
     }
     time = 0;
     timeAttr = 0;
@@ -94,7 +93,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         timeAttr->_time = time;
     }
     if (node->_isResetTime)
-        ((TraversalVT *)trav)->setTime(time);
+        ((igCommonTraversalDispatchView *)trav)->pushTime(time);
     if (node->_isResetTime) {
         /* push timeAttr on the attribute stack of its class (stack = index table[attr id] + attr unit) */
         int idx = timeAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[timeAttr->_cachedAttrIndex];
@@ -133,7 +132,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         igAttrStackManager_MarkStackChanged(mgr, st, idx);
     }
     if (node->_isResetTime)
-        ((TraversalVT *)trav)->endTime();
+        ((igCommonTraversalDispatchView *)trav)->popTime();
     if (r == 2)
         return 2;
     return 0;

@@ -1,4 +1,4 @@
-# `*_GetVTable`: the plain-family stack-offset fold (a measured MWCC wall)
+# `*_GetVTable`: the plain-family stack-offset fold (a property of the compiler build)
 
 The 983 `*_GetVTable` functions split into ~345 **plain** (48–68 B) bodies and ~638
 larger variants (68–964 B). Every one of them ends in the same
@@ -22,7 +22,10 @@ lw   v0,0(v0)
 ```
 
 That is 11 of 15 instructions identical, 60 vs 64 bytes, the 5 relocations identical
-(`tools/verify.py 0x1307f0 …`). Status: **fail-closed**, a compiler wall; the drafts stay in `build/m2c/` and nothing guessed is committed.
+(`tools/verify.py 0x1307f0 …`), and it is the result under the default compiler (3.0-011126), which no spelling
+changes. 3.0b52 does fold it, so the accessor verifies in a unit whose profile is `b52`: 980 of the 983
+`*_GetVTable` functions are `match` in `data/check-categories.tsv`
+([One translation unit, one profile](#one-translation-unit-one-profile)).
 
 ## The measured addressing rule
 
@@ -77,10 +80,9 @@ required axes:
 - **compiler modes**: `-O1`…`-O4`, `,p`, `,s`, `-enum min`, C vs C++ (extensions),
   plus MWCC 2.4 / 2.3.3.
 
-**Zero fold-hits.** The project's decomp-permuter searched ~1,800 candidates from
-the closest hand-typed seed and floored at score 100 (never 0). There is **no
-matched oracle**: the sites outside `_GetVTable` that carry the fold have no source that reproduces
-it either.
+**Zero fold-hits under the default compiler.** The project's decomp-permuter searched ~1,800 candidates from
+the closest hand-typed seed and floored at score 100 (never 0). The fold is the compiler build's, not a source
+spelling: the sites outside `_GetVTable` that carry the fold are in units that compile under `b52`.
 
 ## Hypotheses eliminated
 
@@ -92,14 +94,13 @@ addend order and parenthesisation; declaration order / extra temporaries;
 version; C vs C++ front end. All produce the `addiu` form (or an `sll`-carrying
 subscript), never the fold.
 
-## Decision: link-verbatim where no source matches
+## No source spelling under the default compiler
 
-A `*_GetVTable` that no C or C++ source reproduces stays as retail bytes reassembled from `asm/`. These are per-class type-metadata accessors; no matched
-code depends on them being C, and the only other way to match one is
-whole-function inline assembly, which recovers no source and would only inflate the percentage. If a C or C++ spelling of the fold under
-the default compiler is ever found (the stack-offset fold is the open question) they can be matched mechanically; until then do not spend matching time on that spelling.
-
-The decision does not cover the accessors the pinned alternate compiler reproduces: the stack-object `*_GetVTable` accessors with a 48-byte frame (the 60-byte family) compile to retail as C at `-O3,p` with a `struct Obj { int *vt; char pad[28]; }` template. Other `_GetVTable` sizes are worth re-testing with the same template.
+Under 3.0-011126 no C or C++ spelling reproduces a `*_GetVTable`, and whole-function inline assembly would
+recover no source. These per-class type-metadata accessors are matched through their unit's profile instead:
+`b52` for the plain family (see below), and the pinned alternate compiler for the stack-object accessors with a
+48-byte frame (the 60-byte family), which compile to retail as C at `-O3,p` with a `struct Obj { int *vt; char
+pad[28]; }` template.
 
 ## One translation unit, one profile
 
@@ -119,9 +120,8 @@ stores into typed pointers replaced by the target's own type, the body unchanged
 under the unit profile. `getvtable_stack_gen.py` runs the same step on every draft it writes, so a newly generated
 accessor lands in the language its unit needs.
 
-Ten accessors are different (`libBecRuntimePlugin`, `libNdmwRuntimePlugin`, `beTransformSync`,
-`beModelCtrlNode2`, `beModelCtrlInfoWork`, `beCopyTransform`, `beCopyModelCtrl2`, `beCameraCtrl`,
-`beNDMWMdlPlayerInfoWork`, `beNDMWMdlItemInfoWork` `_GetVTable`). A C body reproduces the code and the index
+Three accessors are `code-only` (`libBecRuntimePlugin`, `libNdmwRuntimePlugin`, `beModelCtrlInfoWork`
+`_GetVTable`). A C body reproduces the code and the index
 record, but retail also keeps a **16–20-byte exception table** for them (`config/SLUS-20836/exceptions.txt`,
 `exc=differ orphan=20`): the stack object had a destructor the unwinder must run, i.e. the original
 was a real C++ class temporary (`Class tmp; return tmp.vtable slot`) whose destructor is the

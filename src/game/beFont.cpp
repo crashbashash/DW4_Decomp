@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igVertexArrayLock.h"
+#include "dw4/igObjectDispatchView.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -24,20 +25,14 @@ enum beFontMessage {
     kFontMessageReplaceUnknown = 8
 };
 
-/* igObject with its vtable as a real vptr, laid out as igAttrSet (igGroup and igSwitch share the
- * prefix up to _childList). Slot 20 returns the class's meta object; slot 30 is igColorAttr's colour
- * setter. */
-class igNodeView {
+/* igObject laid out as igAttrSet (igGroup and igSwitch share the prefix up to _childList), seen
+ * through its virtual functions: slot 30 is igColorAttr's colour setter.
+ * ABI view only: never instantiated. */
+class igNodeView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual int getMetaObject();
     virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
     virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
     virtual void setColor(void *color);
-    unsigned int _refCount;
     int _name;
     int _bound;
     igObjectList *_parentList;
@@ -48,26 +43,20 @@ public:
 };
 
 /* beFontImage's virtuals: slot 22 writes the glyph quads of a UTF-16 text into a vertex array, slot 23
- * returns the triangles one character draws (0 when the font has no glyph for it). */
-class beFontImageView {
+ * returns the triangles one character draws (0 when the font has no glyph for it).
+ * ABI view only: never instantiated. */
+class beFontImageDispatchView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21();
+    virtual void d21();
     virtual void buildVertices(igVertexArrayView *vertices, int text);
     virtual int countTriangles(int character);
 };
 
-/* igGeometryAttr's slot 37 sets the primitive type, primitive count and first index. */
-class igGeometryAttrView {
+/* igGeometryAttr's slot 37 sets the primitive type, primitive count and first index.
+ * ABI view only: never instantiated. */
+class igGeometryAttrDispatchView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
+    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
     virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
     virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34();
     virtual void d35(); virtual void d36();
@@ -113,14 +102,14 @@ int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram);
 int beFont_GetMeta(void);
 void beUnicodeObj_userDestruct(beUnicodeObj *self);
 void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length);
-int beUnicodeObj_GetMeta(void);
+igMetaObject *beUnicodeObj_GetMeta(void);
 
 void beBaseInfoManager_Start(void);
 int beBaseInfoManager_Stop(beFont *);
 int Gap__Core__igObject__userDestruct(beUnicodeObj *);
 void *igObject_GetAllocator(...);
 void *Memory_GetAllocatorBySelector(...);
-int igObject_IsKindOf(void *, int);
+int igObject_IsKindOf(void *, igMetaObject *);
 int List_Reserve(int, int, int);
 void List_Resize(void *, int, int);
 void List_RemoveWordAt(void *, int);
@@ -283,11 +272,11 @@ extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_beFont_metaObject[4];
 extern int g_beFontInfo_metaObject[4];
-extern int g_beFontImage_metaObject[4];
-extern int g_beUnicodeObj_metaObject[4];
-extern int g_igColorAttr_metaObject[4];
-extern int g_igGroup_metaObject[4];
-extern int g_igAttrSet_metaObject[4];
+extern igMetaObject *g_beFontImage_metaObject[4];
+extern igMetaObject *g_beUnicodeObj_metaObject[4];
+extern igMetaObject *g_igColorAttr_metaObject[4];
+extern igMetaObject *g_igGroup_metaObject[4];
+extern igMetaObject *g_igAttrSet_metaObject[4];
 }
 
 static inline igNodeView *nodeAt(igObjectList *list, int index) { return ((igNodeView **)list->_data)[index]; }
@@ -457,13 +446,13 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         beMessenger_DispatchSelected(self->_messenger, "GETLAYERNODE");
         if (beMessenger_GetBoolCount(self->_messenger) <= 0) { abandonLoad(ram); result = 1; goto end; }
         group = (igNodeView *)beMessenger_GetObject(self->_messenger, 0);
-        if (g_igGroup_metaObject[0] != group->getMetaObject()) { abandonLoad(ram); result = 1; goto end; }
+        if (g_igGroup_metaObject[0] != group->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
         list = group->_childList;
         childCount = 0;
         if (list != 0) childCount = list->_count;
         if (childCount <= 0) { abandonLoad(ram); result = 1; goto end; }
         pair = (beFontGeomAttrPair *)nodeAt(list, 0);
-        if (g_igAttrSet_metaObject[0] != ((igNodeView *)pair)->getMetaObject()) { abandonLoad(ram); result = 1; goto end; }
+        if (g_igAttrSet_metaObject[0] != ((igNodeView *)pair)->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
         if (pair) pair->_refCount = pair->_refCount + 1;
         {
             igNodeView *old = (igNodeView *)self->_root;
@@ -531,8 +520,8 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                 }
             } else if (beMessenger_GetObjectCount(self->_messenger) > 0) {
                 igNodeView *object = (igNodeView *)beMessenger_GetObject(self->_messenger, 0);
-                object->getMetaObject();
-                if (g_beUnicodeObj_metaObject[0] == object->getMetaObject()) {
+                object->GetMeta();
+                if (g_beUnicodeObj_metaObject[0] == object->GetMeta()) {
                     text = (igObject *)object;
                 } else {
                     igStringObj_Set(scratch.p, "\202\251\202\347\202\301\202\333");
@@ -670,7 +659,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     if (0 < attributes->_count) {
                         do {
                         attribute = ((igNodeView **)attributes->_data)[a];
-                        if (g_igColorAttr_metaObject[0] == attribute->getMetaObject()) {
+                        if (g_igColorAttr_metaObject[0] == attribute->GetMeta()) {
                             igColor4f color;
                             Color4f_Unpack(&color, 1, ((igColorAttr *)attribute)->_colorPacked);
                             color.r = red;
@@ -692,7 +681,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             {
                 beUnicodeObj *text = (beUnicodeObj *)beMessenger_GetObject(self->_messenger, 0);
                 int replacement = beMessenger_GetInt(self->_messenger, 0);
-                beFontImageView *font = ((beFontImageView **)((beFontImageList *)self->_fonts)->_data)[0];
+                beFontImageDispatchView *font = ((beFontImageDispatchView **)((beFontImageList *)self->_fonts)->_data)[0];
                 unsigned short *p = (unsigned short *)text->_buffer;
                 unsigned int length = Memory_GetBufferSize(p) >> 1;
                 int c;
@@ -728,8 +717,8 @@ void beFont_AddFontImages(beFont *self, igNamedObjectInfo *info) {
     int i;
     for (i = 0; i < objectCount(named->getObjects()); i++) {
         igNodeView *object = objectAt(named->objects, i);
-        int fontImageMeta = g_beFontImage_metaObject[0];
-        if (fontImageMeta == object->getMetaObject()) {
+        igMetaObject *fontImageMeta = g_beFontImage_metaObject[0];
+        if (fontImageMeta == object->GetMeta()) {
             ObjectList_AppendRetained((void *)self->_fonts, object);
         }
     }
@@ -861,7 +850,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     void *spare = nodeAt(target->_attributes, 0);
     igSmartPointer<beUnicodeObj> unicode((beUnicodeObj *)0, kRetainReference);
     igMetaObject *meta;
-    meta = (igMetaObject *)text->getMetaObject();
+    meta = text->GetMeta();
     if (strcmp((const char *)meta->_name, "igStringObj") == 0) {
         const char *buffer = (const char *)((igStringObj *)text)->_buffer;
         const char *sjis;
@@ -906,7 +895,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     igGeometryAttr *geometry = (igGeometryAttr *)nodeAt((igObjectList *)pair->_geomAttrs, 0);
     beFont_PrepareGeometry(self, geometry, characters, 1);
     igVertexArrayView *vertices = (igVertexArrayView *)geometry->_vertexArray;
-    ((beFontImageView **)((beFontImageList *)self->_fonts)->_data)[self->_fontIdx]->buildVertices(vertices, characters);
+    ((beFontImageDispatchView **)((beFontImageList *)self->_fonts)->_data)[self->_fontIdx]->buildVertices(vertices, characters);
     igVertexArrayLock positions;
     igVertexArrayLock texCoords;
     igVertexArrayLock_Init(&positions);
@@ -982,7 +971,7 @@ void beFont_PrepareGeometry(beFont *self, igGeometryAttr *geometry, int text, in
         triangles = beFontImage_CountTriangles(((int *)((igObjectList *)self->_fonts)->_data)[self->_fontIdx], text);
         vertexCount = triangles * 3;
     }
-    ((igGeometryAttrView *)geometry)->configure(3, triangles, 0);
+    ((igGeometryAttrDispatchView *)geometry)->configure(3, triangles, 0);
     {
         igSmartPointer<igVertexArray> vertices((igVertexArray *)geometry->_vertexArray);
         held = vertices.p;
@@ -1229,7 +1218,7 @@ void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length) {
     memset(self->_buffer, 0, Memory_GetBufferSize(self->_buffer));
 }
 
-int beUnicodeObj_GetMeta(void)
+igMetaObject *beUnicodeObj_GetMeta(void)
 {
     return g_beUnicodeObj_metaObject[0];
 }

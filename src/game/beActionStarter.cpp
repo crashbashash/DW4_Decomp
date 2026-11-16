@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igObjectDispatchView.h"
+#include "dw4/igTDataList.h"
 
 extern "C" void beActionStarter_Prepare(void);
 extern "C" int beActionStarter_GetInfoMeta(void);
@@ -58,28 +59,20 @@ int beActionStarter_OnMessage(beActionStarter *self, beActionStarterInfoRam *ram
     int infoName = work->_infoName;
     int ramNo = work->_ramNo;
     int modelIndex;
-    igDataList *models = (igDataList *)info->_modelList;
-    modelIndex = 0;
-    /* matching construct: hand search — reading the first count through an int pointer keeps the list in a0 and the
-       received self in s5 as retail does */
-    if (0 < *(int *)&models->_count) {
-        ActionStarterModel **entry = (ActionStarterModel **)models->_data;
-        do {
-            int *name = (int *)(*entry)->_name;
-            name = name != 0 ? name : &emptyString[0];
-            if (infoName == (int)name) {
-                found = true;
-                break;
-            }
-            modelIndex += 1;
-            entry += 1;
-        } while (modelIndex < models->_count);
+    igTDataList<ActionStarterModel *> *models = (igTDataList<ActionStarterModel *> *)info->_modelList;
+    for (modelIndex = 0; modelIndex < models->count(); modelIndex++) {
+        int *name = (int *)models->get(modelIndex)->_name;
+        name = name != 0 ? name : &emptyString[0];
+        if (infoName == (int)name) {
+            found = true;
+            break;
+        }
     }
     if (!found) {
         return 1;
     }
     {
-        igDataList *commands = (igDataList *)((ActionStarterModel **)models->_data)[modelIndex]->_dataList;
+        igDataList *commands = (igDataList *)models->get(modelIndex)->_dataList;
         int commandIndex = 0;
         if (0 < commands->_count) {
             int offsetInList = 0;

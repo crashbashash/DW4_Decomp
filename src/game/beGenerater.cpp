@@ -10,7 +10,7 @@ extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int beGenerater_GetInfoMeta(void);
 extern "C" int beGenerater_GetMeta(void);
 extern "C" int beMessenger_RegisterReceiver(...);
-extern "C" void beGenerater_OnAddRam(void *selfArg, void *ramArg);
+extern "C" void beGenerater_OnAddRam(beGenerater *self, beGeneraterInfoRam *ram);
 extern "C" int g_beLua_metaObject[4];
 extern "C" void beGenerater_Prepare(beGenerater *self);
 extern "C" int g_beGeneraterInfo_metaObject[4];
@@ -103,13 +103,10 @@ int beGenerater_GetInfoMeta(void)
     return g_beGeneraterInfo_metaObject[0];
 }
 
-void beGenerater_OnAddRam(void *selfArg, void *ramArg) {
-    /* matching construct: void* parameters recast so the frame matches */
-    beGenerater *self = (beGenerater *)selfArg;
-    beGeneraterInfoRam *ram = (beGeneraterInfoRam *)ramArg;
+void beGenerater_OnAddRam(beGenerater *self, beGeneraterInfoRam *ram) {
     int *name = (int *)((beGeneraterInfo *)ram->_parentInfo)->_name;
     int ramNo = ram->_ramNo;
-    beMessenger_RegisterReceiver(self->_messenger, ramArg, &GENERATER[0], name ? name : &emptyString[0], ramNo);
+    beMessenger_RegisterReceiver(self->_messenger, ram, &GENERATER[0], name ? name : &emptyString[0], ramNo);
 }
 
 /* Sends FIND_SPACE for each enemy still to spawn and GENERATE to the model that answers, at the next spawn point;
@@ -331,7 +328,8 @@ int beGenerater_OnMessageText(beGenerater *self, beBaseInfoRam *ram, int message
             }
             releaseAll((igObjectList *)work->_enemyRamList);
             setCapacity((igObjectList *)work->_enemyRamList, 0);
-            /* matching construct: hand search — the unsigned cast puts count first in the add */
+            /* matching construct: hand search — the unsigned conversion puts count first in the add (addu v0,s1,v0);
+             * as an int add (+=, either operand order, a const count or the list's count()) the remaining count comes first */
             work->_nokoriKazu = (unsigned)count + work->_nokoriKazu;
             if (work->_nokoriKazu != 0 && geneRam->_st1 == 3) {
                 geneRam->_st1 = 2;

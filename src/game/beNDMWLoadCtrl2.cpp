@@ -12,6 +12,7 @@
 #define PLW_AT(list, off) (*(beNDMWLoadSavePlWork **)((char *)((beNDMWLoadSavePlWorkList *)(list))->_data + (off)))
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
+#include "dw4/beNDMWItemBaseDispatchView.h"
 #define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; int i; if (RESIZE) { if (l->_count > CAP) ObjectList_ResizeRetained(l, CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
 #define BYTES(DST, FN, REC) { igTDataList<unsigned char> *l = FN(props, REC)->value; int i = 0; if (0 < l->_count) { do { DST[i] = l->_data[i]; i++; } while (i < l->_count); } }
 #define FINDN(DST, REC, N) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value; int a; for (a = 0; a < N; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
@@ -1856,8 +1857,6 @@ extern "C" igObject *beNDMWItemAbilityChip_Create(int);
 extern "C" igObject *beNDMWItemYellowArmor_Create(int);
 extern "C" igObject *beNDMWItemBlueArmor_Create(int);
 extern "C" igObject *beNDMWItemWeapon_Create(int);
-/* matching construct: dummy virtual slots so InitFromId dispatches through the retail vtable offset */
-struct ItemVirtual { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int InitFromId(int); };
 /* matching construct: one releasing holder class per retail destructor copy (the table at 0x544c20 names 0x3d9d50, 0x3d9cd0, 0x3d9c50, 0x3d9bd0 and 0x3b9ba0; the last is not the copy other members of this file name for their holders) */
 template <int K> struct CreatedItemRef { igObject *p; CreatedItemRef(igObject *o) : p(o) {} ~CreatedItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 
@@ -1877,31 +1876,31 @@ ItemRef beNDMWDegiData__CreateItem(void *owner, int id) {
     if (kind == 0) {
         {
             CreatedItemRef<1> item((igObject *)beNDMWItemWeapon_Create(itemAllocator(owner)));
-            ((ItemVirtual *)item.p)->InitFromId(id);
+            ((beNDMWItemBaseDispatchView *)item.p)->Unpack(id);
             return ItemRef((RefCounted *)item.p, kRetainReference);
         }
     } else if (kind == 1) {
         {
             CreatedItemRef<2> item((igObject *)beNDMWItemBlueArmor_Create(itemAllocator(owner)));
-            ((ItemVirtual *)item.p)->InitFromId(id);
+            ((beNDMWItemBaseDispatchView *)item.p)->Unpack(id);
             return ItemRef((RefCounted *)item.p, kRetainReference);
         }
     } else if (kind == 2) {
         {
             CreatedItemRef<3> item((igObject *)beNDMWItemYellowArmor_Create(itemAllocator(owner)));
-            ((ItemVirtual *)item.p)->InitFromId(id);
+            ((beNDMWItemBaseDispatchView *)item.p)->Unpack(id);
             return ItemRef((RefCounted *)item.p, kRetainReference);
         }
     } else if (kind == 3) {
         {
             CreatedItemRef<4> item((igObject *)beNDMWItemAbilityChip_Create(itemAllocator(owner)));
-            ((ItemVirtual *)item.p)->InitFromId(id);
+            ((beNDMWItemBaseDispatchView *)item.p)->Unpack(id);
             return ItemRef((RefCounted *)item.p, kRetainReference);
         }
     } else if (kind == 4) {
         {
             CreatedItemRef<5> item((igObject *)beNDMWItemDisk_Create(itemAllocator(owner)));
-            ((ItemVirtual *)item.p)->InitFromId(id);
+            ((beNDMWItemBaseDispatchView *)item.p)->Unpack(id);
             return ItemRef((RefCounted *)item.p, kRetainReference);
         }
     } else {

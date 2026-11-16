@@ -2,6 +2,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
 #include "dw4/beBaseInfoManagerDispatchView.h"
+#include "dw4/igSkeletonDispatchView.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -44,15 +45,6 @@ void igObject_Destroy(void *object);
 
 extern char emptyString[];
 }
-
-/* The skeleton slot the weapon calls: slot 25 looks a bone up by name (-1 when it has none). */
-class SkeletonSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
-    virtual int findBoneIndex(const char *name);
-};
 
 static inline const char *nameOf(int name) { return name != 0 ? (const char *)name : emptyString; }
 
@@ -140,7 +132,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
             const char *infoName = beMessenger_GetString(self->_messenger, 0);
             beMessenger_SendNamed(self->_messenger, "ACTION", infoName, ram->_ramNo, "GETAPPEARANCELIST");
             igObjectList *appearances = (igObjectList *)beMessenger_GetObject(self->_messenger, 0);
-            SkeletonSlots *skeleton = (SkeletonSlots *)beMessenger_GetObject(self->_messenger, 1);
+            igSkeletonDispatchView *skeleton = (igSkeletonDispatchView *)beMessenger_GetObject(self->_messenger, 1);
             int seqCount = ((beWeaponSeqDataList *)info->_seqDataList)->_count;
             for (int i = 0; i < seqCount; i++) {
                 beWeaponSeqData *seq = ((beWeaponSeqData **)((beWeaponSeqDataList *)info->_seqDataList)->_data)[i];
@@ -152,7 +144,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
             int nodeCount = ((igObjectList *)info->_nodeList)->_count;
             for (int j = 0; j < nodeCount; j++) {
                 igNamedObject *boneName = ((igNamedObject **)((igObjectList *)info->_boneNameList)->_data)[j];
-                int bone = skeleton->findBoneIndex(nameOf(boneName->_name));
+                int bone = skeleton->FindBoneIndex(nameOf(boneName->_name));
                 if (bone >= 0) {
                     int allocator = igObject_GetAllocator(self);
                     allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);

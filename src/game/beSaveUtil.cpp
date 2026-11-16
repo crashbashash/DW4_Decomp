@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beSaveApiDispatchView.h"
 #include "dw4/igTDataList.h"
 
 extern "C" int beSvConnectCheck_PollMultitap(int, int);
@@ -46,23 +47,10 @@ extern "C" beSvStartApi *beSvStartApi_Create(int allocator);
 extern "C" void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info);
 extern "C" unsigned char g_useOwnerAllocator;
 
-/* The request slots a beSaveApi object answers after getMetaObject (slot 20). */
-class beSaveApiVirtuals {
-public:
-    virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
-    virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
-    virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
-    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
-    virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
-    virtual void slot20();
-    virtual void start(beSvDeliver *deliver);
-    virtual int poll();
-    virtual void report(beSvDeliver *deliver);
-};
 #define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
 
 #define DELIVERY(info) ((beSvDeliver *)(info)->_deliver)
-#define API(self) ((beSaveApiVirtuals *)(self)->_api)
+#define API(self) ((beSaveApiDispatchView *)(self)->_api)
 
 unsigned char beSaveUtil_StartApi(beSaveUtil *self, beSaveUtilInfoRam *info, beSaveApi *request) {
     unsigned char started;
@@ -186,7 +174,7 @@ void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info) {
                 {
                     ALLOC(allocator, self)
                     igSmartPointer<beSvStartApi> request(beSvStartApi_Create(allocator));
-                    ((beSaveApiVirtuals *)request.p)->start(DELIVERY(info));
+                    ((beSaveApiDispatchView *)request.p)->start(DELIVERY(info));
                     *(igSmartPointer<igObject> *)&self->_api = (igObject *)request.p;
                     info->_st2 = info->_st2 + 1;
                     info->_st3 = 0;
@@ -226,7 +214,7 @@ void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info) {
             case 0: {
                 ALLOC(allocator, self)
                 igSmartPointer<beSvEndApi> request(beSvEndApi_Create(allocator));
-                ((beSaveApiVirtuals *)request.p)->start(DELIVERY(info));
+                ((beSaveApiDispatchView *)request.p)->start(DELIVERY(info));
                 *(igSmartPointer<igObject> *)&self->_api = (igObject *)request.p;
                 info->_st2 = info->_st2 + 1;
                 info->_st3 = 0;

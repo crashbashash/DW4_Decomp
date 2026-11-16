@@ -2,6 +2,7 @@
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTraversalView.h"
+#include "dw4/igObjectDispatchView.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -52,9 +53,9 @@ int StringPool_Construct(...);
 void *StringPool_Intern(...);
 
 extern igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
-extern int g_beModelCtrlSCSound_metaObject[4];
-extern int g_beModelCtrlSCEffect_metaObject[4];
-extern int g_beModelCtrlSCHitBox_metaObject[4];
+extern igMetaObject *g_beModelCtrlSCSound_metaObject[4];
+extern igMetaObject *g_beModelCtrlSCEffect_metaObject[4];
+extern igMetaObject *g_beModelCtrlSCHitBox_metaObject[4];
 extern int g_igCommonTraversal_travProcs[4];
 extern int g_propertyNameField[4];
 extern int kIGMemoryPoolHandleUser1[4];
@@ -78,19 +79,26 @@ void beModelCtrlSCSound_Stop(beModelCtrlSCSound *self, beBaseInfoRam *ram);
 unsigned char beModelCtrlSubComBase_Advance(beModelCtrlSubComBase *self, beBaseInfoRam *ram);
 void beModelCtrlSubCom_Update(beModelCtrlSubCom *self, beBaseInfoRam *ram);
 void beModelCtrlSubCom_StopAll(beModelCtrlSubCom *self, beBaseInfoRam *ram);
-void beModelCtrlSubCom_StopType(beModelCtrlSubCom *self, beBaseInfoRam *ram, int metaObject);
+void beModelCtrlSubCom_StopType(beModelCtrlSubCom *self, beBaseInfoRam *ram, igMetaObject *metaObject);
 void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, int modelName, int seqName, float *offset, float *rotation, char isSeqDead, char isPositionLock, float startFrame);
 void beModelCtrlSubCom_AddHitBox(beModelCtrlSubCom *self, beModelCtrlHITBOX *hitBox);
 void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float startFrame);
-int beModelCtrlSCSound_GetMeta(void);
-int beModelCtrlSCEffect_GetMeta(void);
-int beModelCtrlSCHitBox_GetMeta(void);
+igMetaObject *beModelCtrlSCSound_GetMeta(void);
+igMetaObject *beModelCtrlSCEffect_GetMeta(void);
+igMetaObject *beModelCtrlSCHitBox_GetMeta(void);
 }
 
 #define CLOCK_TICK_SHIFT 18
 
-/* The sub-command slots: 20 meta object, 21 start, 22 update, 23 stop. */
-class SubCommandVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int metaObject(); virtual unsigned char start(beBaseInfoRam *ram, int frames); virtual unsigned char update(beBaseInfoRam *ram, int frames); virtual void stop(beBaseInfoRam *ram); };
+/* The sub-commands' virtual functions past igObject's: slot 21 starts the command, slot 22 updates it
+ * each frame (beModelCtrlSCHitBox_Update) and slot 23 stops it (beModelCtrlSC<Kind>_Stop).
+ * ABI view only: never instantiated. */
+class beModelCtrlSubComDispatchView : public igObjectDispatchView {
+public:
+    virtual unsigned char Start(beBaseInfoRam *ram, int frames);            /* slot 21 */
+    virtual unsigned char Update(beBaseInfoRam *ram, int frames);
+    virtual void Stop(beBaseInfoRam *ram);
+};
 typedef igTDataList<igAttr *> AttrList;
 
 /* matching construct: expression temporary -- the freshly created data list is held by a temporary passed to an
@@ -325,7 +333,7 @@ int beModelCtrlSCHitBox_Update(beModelCtrlSCHitBox *self, beBaseInfoRam *ram, in
     if (!(self->_runFrame < self->_endFrame)) {
         return 0;
     }
-    ((SubCommandVT *)self)->start(ram, frames);
+    ((beModelCtrlSubComDispatchView *)self)->Start(ram, frames);
     return 1;
 }
 
@@ -437,10 +445,10 @@ unsigned char beModelCtrlSubComBase_Advance(beModelCtrlSubComBase *self, beBaseI
     if (self->_isOneSet == 0) {
         if (!(runFrame < self->_startFrame)) {
             self->_isOneSet = 1;
-            alive = ((SubCommandVT *)self)->start(ram, 1);
+            alive = ((beModelCtrlSubComDispatchView *)self)->Start(ram, 1);
         }
     } else {
-        alive = ((SubCommandVT *)self)->update(ram, 1);
+        alive = ((beModelCtrlSubComDispatchView *)self)->Update(ram, 1);
     }
     return alive;
 }
@@ -474,20 +482,20 @@ void beModelCtrlSubCom_StopAll(beModelCtrlSubCom *self, beBaseInfoRam *ram) {
     int i;
     int count;
     int cleared;
-    SubCommandVT *command;
+    beModelCtrlSubComDispatchView *command;
     int j;
     int k;
     int n;
-    int effectMeta;
+    igMetaObject *effectMeta;
 
     n = ((igObjectList *)self->_comList)->_count;
     i = 0;
     if (0 < n) {
         do {
             effectMeta = g_beModelCtrlSCEffect_metaObject[0];
-            command = ((SubCommandVT **)((igObjectList *)self->_comList)->_data)[i];
-            if (effectMeta != command->metaObject() || ((beModelCtrlSCEffect *)command)->_isSeqDead != 0) {
-                command->stop(ram);
+            command = ((beModelCtrlSubComDispatchView **)((igObjectList *)self->_comList)->_data)[i];
+            if (effectMeta != command->GetMeta() || ((beModelCtrlSCEffect *)command)->_isSeqDead != 0) {
+                command->Stop(ram);
             }
             i += 1;
         } while (i < n);
@@ -509,15 +517,15 @@ void beModelCtrlSubCom_StopAll(beModelCtrlSubCom *self, beBaseInfoRam *ram) {
 }
 
 /* Stops and drops every sub-command of one class. */
-void beModelCtrlSubCom_StopType(beModelCtrlSubCom *self, beBaseInfoRam *ram, int metaObject) {
-    int count; int i; SubCommandVT *command; igObjectList *list;
+void beModelCtrlSubCom_StopType(beModelCtrlSubCom *self, beBaseInfoRam *ram, igMetaObject *metaObject) {
+    int count; int i; beModelCtrlSubComDispatchView *command; igObjectList *list;
     count = ((igObjectList *)self->_comList)->_count;
     i = 0;
     if (count > 0) {
         do {
-            command = ((SubCommandVT **)((igObjectList *)self->_comList)->_data)[i];
-            if (metaObject == command->metaObject()) {
-                command->stop(ram);
+            command = ((beModelCtrlSubComDispatchView **)((igObjectList *)self->_comList)->_data)[i];
+            if (metaObject == command->GetMeta()) {
+                command->Stop(ram);
                 list = (igObjectList *)self->_comList;
                 igRelease(((igObject **)list->_data)[i]);
                 List_RemoveWordAt(list, i);
@@ -680,17 +688,17 @@ void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, int sndName, float star
     ObjectList_AppendRetained(self->_comList, command.p);
 }
 
-int beModelCtrlSCSound_GetMeta(void)
+igMetaObject *beModelCtrlSCSound_GetMeta(void)
 {
     return g_beModelCtrlSCSound_metaObject[0];
 }
 
-int beModelCtrlSCEffect_GetMeta(void)
+igMetaObject *beModelCtrlSCEffect_GetMeta(void)
 {
     return g_beModelCtrlSCEffect_metaObject[0];
 }
 
-int beModelCtrlSCHitBox_GetMeta(void)
+igMetaObject *beModelCtrlSCHitBox_GetMeta(void)
 {
     return g_beModelCtrlSCHitBox_metaObject[0];
 }

@@ -890,7 +890,7 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   also normalises the flag (`clrlwi.`). The comparison with `0` of a getter that returns `unsigned char` keeps it as
   well. The compiler pass was not traced. *Units:* `src/game/beChangePosTransform.cpp` (0x37aae0),
   `src/game/beNDMWShopCtrl00.cpp` (0x438160), `src/game/beNDMWSaveCtrl.cpp` (0x407120),
-  `src/game/beNDMWLogo.cpp` (0x449030), `src/game/beGenerater.cpp` (0x384c40).
+  `src/game/beNDMWLogo.cpp` (0x449030).
 - **A loop index under an `int`-to-`unsigned` conversion keeps its `mult`.** Retail multiplies `i * stride` on every
   pass of a vertex-array loop: the stride field is `unsigned int` and the local that holds it takes that type, so the
   index is converted (`(cast)i * stride` in the IR dump) and `IRO_DoStrengthReduction` leaves the multiplication. An
@@ -1480,7 +1480,7 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     update the work, the data and the player data go through inline helpers too, and so does the enemy record number
     inside the setter: the id-order search could not find it because the ids come from where a value is created,
     with `database` < the model-name temporaries < `recNo` < the reload of `created`, and `ready` < `work` < `data` <
-    `playerData`. *Unit:* `src/game/beGenerater.cpp` (0x384c40).
+    `playerData`. The example is the unmatched beGenerater_UpdateRam candidate (0x384c40), which has no source in the tree.
 - **A decoder's helpers take the cursor and the result by reference, and the results are typed scratch locals.**
   - *Symptom:* a record decoder runs a variable-length-integer loop per field. Retail keeps the read pointer in
     one saved register throughout, the flags word in the next and the slot counter between them; the value and
@@ -1839,26 +1839,39 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     loop index, at the head of the branch (inside the loop 8 words differ); that line carries a `matching construct`
     note.
   - *Unit:* `src/game/beNumberCtrl.cpp` (0x3a4b20).
-- **Open: a physical `a0` that is live across a block in retail and not in the source.**
+- **A physical `a0` that is live across a block in retail and not in the source: the runtime-call register mask leaks from an earlier file.**
   - *Symptom:* in a meter update's hp block every temporary is one register higher in retail (`a1`-`a3` where the
     source has `a0`-`a2`, 15 words); in a generator update's fill switch retail has `lw a1,52(s3); li v1,116; lb
     a1,0(a1); beq a1,v1` where the source has `a0` (3 words; the switches of cases 0 and 2 use `a0` in both
     builds).
-  - *What is known:* replaying the allocator on the meter's graph with physical `a0` made to interfere with those
-    nodes reproduces every one of retail's colours, so in retail `a0` is live across the block. Retail has no read of
-    `a0` there that is not written first, and in this compiler's model the return marker uses `v0` and calls
-    do not define their return register, which is why `v0` already interferes. In the generator the two nodes border
-    only `v0`, `v1`, `s1` and `s3`, no instruction on either path out of the block reads `a0` before redefining it,
-    and `a0` cannot be live at the function's exit, or the other two switches would avoid it too. A construct that
-    leaves a use of `a0` reaching past the block is missing.
-  - *No effect:* meter: `int` locals for the hp values, an hp pointer local, a percent local, the percent as an inline
-    helper (with and without an unused `self`), a shared `nonZero` flag, a variadic conversion call, the implicit
-    conversion; `igTDataList::append` and `static` are worse (88 and 32 lines). Generator: the selector as an `if`,
-    as `unsigned`, through an index, a local, an inline or a variable shared by the three switches; `default:` before
-    or after the case; the timer start as `return`, `break`, an inline or with a time local; case 1 as one inline;
-    `total` placed elsewhere; an explicit or variadic `__fixsfdi`; a variadic `StartTimer`; double constants. A
-    standalone test of the same shape also gives `a0`, and no matched function in the census has the pattern.
-  - *Unit:* `src/game/beMeterCtrl.cpp` (0x38fa50), `src/game/beGenerater.cpp` (0x384c40); neither is matched.
+  - *Cause:* the helper that emits a runtime call (`0x4ba430`) takes the call's used registers from one global mask
+    (general registers at `0x567280`, float bits at `0x567284`); the code that loads a runtime call's arguments
+    (`0x4ba450`, `0x4ba580`) adds each argument register to it with `or`, and nothing in the executable writes it back
+    to zero. Every runtime call compiled later in the same compiler process therefore also uses those registers,
+    later files included. The `__fixsfdi` call in the meter's hp block uses only `f12` in a fresh process; after an
+    earlier `(float)longlong` (`__floatdisf`, argument in `a0`) it uses `a0` too, so physical `a0` is live from the
+    function's entry up to that call, which is the interference that reproduces retail's colours (replaying the
+    allocator with `a0` made to interfere reproduces every one). In the generator the `__fixsfdi` on case 1's path reads
+    `a0` with no write between `beGenerater_SpawnEnemies` and the call.
+  - *Evidence:* compiling a one-line prelude, `extern "C" float LeakA0(long long x) { return (float)x; }`, ahead of the
+    unit in the same compiler process makes both whole units match; a `(double)int` (`litodp`) prelude does as well,
+    while `long long` division (`a0` and `a1`) and `(double)float` (`f12` only) do not. Retail's meter and generater
+    units contain no runtime call with an integer argument; in link order `beLOA_Traverse` (`0x389bc0`, `__floatdisf`)
+    and `LuaAPI_Dispatch` (`0x370780`, `litodp`) do. That the original build compiled several files in one compiler
+    session is an inference; the leak does not reach every file (`beAction2_OnMessageText` puts a temporary in `a0`
+    before its `__fixsfdi`), so which files carry it depends on the original build order, which is not known.
+  - *No spelling:* no source text inside the unit produces the `a0` use. Meter: `int` locals for the hp values, an hp
+    pointer local, a percent local, the percent as an inline helper (with and without an unused `self`), a shared
+    `nonZero` flag, a variadic conversion call, the implicit conversion; `igTDataList::append` and `static` are worse
+    (88 and 32 lines). Generator: the selector as an `if`, as `unsigned`, through an index, a local, an inline or a
+    variable shared by the three switches; `default:` before or after the case; the timer start as `return`, `break`,
+    an inline or with a time local; case 1 as one inline; `total` placed elsewhere; an explicit or variadic
+    `__fixsfdi`; a variadic `StartTimer`; double constants. All 23 conversion and call spellings tried leave the call
+    using `f12` only. A standalone test of the same shape also gives `a0`, and no matched function in the census has
+    the pattern.
+  - *Unit:* `beMeterCtrl_UpdateRam` (`0x38fa50`) and `beGenerater_UpdateRam` (`0x384c40`) are the two game functions
+    with no source in the tree: each matches only with a one-line `a0`-leaking prelude compiled first in the same
+    compiler process, which `tools/check.py` does not do, and the build has no setting for it.
 - **Stack slots: address-taken named locals take the top slots, by-value temporaries the slots below.**
   - *Symptom:* spill and local slots of a function that builds vectors from calls sit in another order than retail's.
   - *Rule:* named locals whose address is taken take the top slots in source declaration order, whatever their scope;

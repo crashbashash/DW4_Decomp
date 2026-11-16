@@ -3,7 +3,7 @@
 `src/game/beNDMWShopCtrl00.cpp` holds the shop service windows the SUBWND menu opens
 ([SUBWND lifecycle](subwindow-lifecycle.md)): each class's update (vtable slot 21, `<Class>_Update`)
 and meta getter (slot 20, `<Class>_GetMeta`, which returns `g_<Class>_metaObject[0]`), plus the
-helpers the updates call. `beNDMWShopCtrlSales_Update` has no source yet; its helpers do.
+helpers the updates call, `beNDMWShopCtrlSales_Update` (`0x438160`) included.
 
 ## Common shape
 
@@ -140,7 +140,6 @@ before the record lookup is called.
 ## Open questions
 
 - Message codes are `txt_shop.lua` indices; what each says is inferred from where it is used.
-- `beNDMWShopCtrlSales_Update` has no source.
 - `SUBWINDOW_AT` reads `_subWindow` through the field's address with a cast. That is the separate
   load retail has, but what the original source wrote there is not known: probably an inline of the
   field's own reference type.

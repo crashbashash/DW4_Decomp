@@ -28795,7 +28795,7 @@
       "0x005878c8"
     ],
     "duplicates": {
-      "__dt__28igSmartPointer<10igFileView>Fv": "0x00150180"
+      "__dt__36igSmartPointer<18igFileDispatchView>Fv": "0x00150180"
     },
     "externals": {
       "ADXF_Close": "0x00261c88",
@@ -28885,18 +28885,18 @@
       "__dt__25igSmartPointer<8igCamera>Fv": "0x00239300",
       "__dt__26igSmartPointer<9igAttrSet>Fv": "0x001d97f0",
       "__dt__28igSmartPointer<10igGeometry>Fv": "0x001971e0",
-      "__dt__29igSmartPointer<11igImageView>Fv": "0x00132390",
       "__dt__29igSmartPointer<11igSceneInfo>Fv": "0x001d3650",
       "__dt__31igSmartPointer<13igTextureList>Fv": "0x00131aa0",
-      "__dt__33igSmartPointer<15igTransformView>Fv": "0x001a7580",
-      "__dt__35igSmartPointer<17igTextureAttrView>Fv": "0x00132980",
-      "__dt__35igSmartPointer<17igVertexArrayView>Fv": "0x001338d0",
-      "__dt__36igSmartPointer<18igGeometryAttrView>Fv": "0x001353b0",
-      "__dt__38igSmartPointer<20igBlendStateAttrView>Fv": "0x001aaf00",
+      "__dt__37igSmartPointer<19igImageDispatchView>Fv": "0x00132390",
       "__dt__39igSmartPointer<21igTextureBindAttrList>Fv": "0x003363c0",
       "__dt__39igSmartPointer<21igTextureBindAttrView>Fv": "0x0019aa10",
-      "__dt__40igSmartPointer<22igTextureStateAttrView>Fv": "0x001d21b0",
-      "__dt__34igSmartPointer<16igMovieCodecView>Fv": "0x00336440"
+      "__dt__41igSmartPointer<23igTransformDispatchView>Fv": "0x001a7580",
+      "__dt__42igSmartPointer<24igMovieCodecDispatchView>Fv": "0x00336440",
+      "__dt__43igSmartPointer<25igTextureAttrDispatchView>Fv": "0x00132980",
+      "__dt__43igSmartPointer<25igVertexArrayDispatchView>Fv": "0x001338d0",
+      "__dt__44igSmartPointer<26igGeometryAttrDispatchView>Fv": "0x001353b0",
+      "__dt__46igSmartPointer<28igBlendStateAttrDispatchView>Fv": "0x001aaf00",
+      "__dt__48igSmartPointer<30igTextureStateAttrDispatchView>Fv": "0x001d21b0"
     },
     "symbol": "igMovieInfo_GetTiling",
     "externals": {

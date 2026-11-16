@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igMath.h"
+#include "dw4/igCameraDispatchView.h"
 
 extern "C" {
 
@@ -63,13 +64,23 @@ extern igPickMode *g_pickingMode[4];
 typedef struct ViewModelEvent { int type; int sender; int field; } ViewModelEvent;
 enum { VIEW_MODEL_FIELD_CHANGED = 2 };
 
-/* igViewMode's own virtual methods past igObject's, by vtable slot; what slots 29 and 30 are for has
- * not been named. */
-class igViewModeVirtuals { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void v124(); virtual void v128(); };
-/* igCamera's virtual slots 33 and 34 (unnamed). */
-class igCameraVirtuals { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual int vX(); virtual int vY(); };
-/* igIntersectTraversal's virtual slots 23 and 25 (unnamed). */
-class igIntersectTraversalVirtuals { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void v23(int); virtual void d24(); virtual void v25(long long); };
+/* igViewMode's own virtual methods past igObject's; what slots 29 and 30 are for has not been named.
+ * ABI view only: never instantiated. */
+class igViewModeDispatchView : public igObjectDispatchView {
+public:
+    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
+    virtual void vfunc_31();                                                /* slot 29 */
+    virtual void vfunc_32();                                                /* slot 30 */
+};
+/* igIntersectTraversal's virtual slots 23 and 25, which have no recovered names.
+ * ABI view only: never instantiated. */
+class igIntersectTraversalDispatchView : public igObjectDispatchView {
+public:
+    virtual void d21(); virtual void d22();
+    virtual void vfunc_25(int scene);                                       /* slot 23 */
+    virtual void d24();
+    virtual void vfunc_27(long long time);                                  /* slot 25 */
+};
 
 /* What an intersect traversal hands its hit callback. */
 struct IntersectHit { char pad0[8]; int nodes; char pad12[8]; float distance; };
@@ -141,7 +152,7 @@ void Gap__Bec__beCameraMode__vfunc_21(igViewMode *self, igObject *model) {
     igObject_IsKindOf(model, g_igViewModel_metaObject[0]);
 }
 
-void Gap__Bec__beCameraMode__vfunc_22(igViewModeVirtuals *self, ViewModelEvent *event) {
+void Gap__Bec__beCameraMode__vfunc_22(igViewModeDispatchView *self, ViewModelEvent *event) {
     int field = event->field;
     int type;
     if (field == g_igViewModel_viewMatrixMetaField[0]) {
@@ -158,9 +169,9 @@ void Gap__Bec__beCameraMode__vfunc_22(igViewModeVirtuals *self, ViewModelEvent *
     if (type == 0) {
         igViewMode_UpdateInverseMatrix((igViewMode *)self);
         igViewMode_UpdateModelVectors((igViewMode *)self);
-        self->v124();
+        self->vfunc_31();
     } else if (type == 1) {
-        self->v128();
+        self->vfunc_32();
     }
 }
 
@@ -255,11 +266,11 @@ void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
 }
 
 void igCameraMode_OnDetach(igCameraMode *self) {
-    igCameraVirtuals *camera;
+    igCameraDispatchView *camera;
 
-    camera = (igCameraVirtuals *)self->_camera;
+    camera = (igCameraDispatchView *)self->_camera;
     if (camera != 0) {
-        camera->vY();
+        camera->vfunc_36();
     }
 }
 
@@ -273,7 +284,7 @@ void igCameraMode_OnAttach(igCameraMode *self) {
     igViewModel *model;
 
     if (self->_camera != 0) {
-        ((igCameraVirtuals *)self->_camera)->vX();
+        ((igCameraDispatchView *)self->_camera)->vfunc_35();
         model = (igViewModel *)self->_model;
         camera = (igCamera *)self->_camera;
         farPlane = camera->_farPlane;
@@ -704,10 +715,10 @@ void igPickMode_Pick(igPickMode *self) {
             igObject_Destroy(previous);
     }
     self->_hitPath = 0;
-    igIntersectTraversal_ResetStacks((igIntersectTraversalVirtuals *)self->_intersectTraversal);
-    ((igIntersectTraversalVirtuals *)self->_intersectTraversal)->v25(model->_drawTime);
+    igIntersectTraversal_ResetStacks((igIntersectTraversalDispatchView *)self->_intersectTraversal);
+    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->vfunc_27(model->_drawTime);
     g_pickingMode[0] = self;
-    ((igIntersectTraversalVirtuals *)self->_intersectTraversal)->v23(((igViewerParameters *)self->_parameters)->_scene);
+    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->vfunc_25(((igViewerParameters *)self->_parameters)->_scene);
     g_pickingMode[0] = 0;
     selected = &((igViewerParameters *)self->_parameters)->_selectedObject;
     hitPath = (igObject *)self->_hitPath;

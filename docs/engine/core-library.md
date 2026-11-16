@@ -54,10 +54,10 @@ change to `igMemoryPoolView.h` also needs the movie codec's and the two Lua unit
 
 ## Class families and their views
 
-A *view* is a class in `CoreLibrary.h` that spells a reflected class's vtable so callers can make virtual
-calls: placeholder slots (`d<N>`, `RESERVED(n)`) hold the position of slots nobody calls, and the named slots sit
-at their retail byte offsets (MWCC keeps two header words in front, so slot N is at byte 8 + 4N). Views are ABI
-only and never instantiated; there is one per class, derived where retail's classes derive.
+A *view* is a class that spells a reflected class's vtable so callers can make virtual calls; the convention
+is in [RTTI and vtables §7](rtti-and-vtables.md#7-virtual-calls-the-dispatch-views). The views of this library's
+own classes sit in `CoreLibrary.h` (`RESERVED(n)` is its placeholder macro); the ones shared with other
+libraries are `include/dw4/*DispatchView.h`.
 
 ### Object model
 

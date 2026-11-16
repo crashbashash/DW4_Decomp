@@ -89,18 +89,13 @@ void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram) {
     beBaseInfo *info;
     int *name;
     int ramNo;
-    int unresolved;
-    /* matching construct: hand search — the unresolved flag is computed as (messenger != 0) ^ 1 and tested twice, as retail does */
-    messenger = self->_messenger;
     info = (beBaseInfo *)ram->_parentInfo;
-    unresolved = ((messenger != 0) ^ 1);
-    if (unresolved) {
-        do {
-            ((beBaseInfoManagerDispatchView *)self)->Prepare();
-            messenger = self->_messenger;
-            unresolved = ((messenger != 0) ^ 1);
-        } while (unresolved);
+    /* matching construct: the reference is tested through a bool conversion; retail materialises the flag
+       (sltu, xori) before each branch, where a test of the int or of a pointer branches on the field itself */
+    while (!(bool)self->_messenger) {
+        ((beBaseInfoManagerDispatchView *)self)->Prepare();
     }
+    messenger = self->_messenger;
     name = (int *)info->_name;
     ramNo = ram->_ramNo;
     name = name != 0 ? name : &emptyString[0];

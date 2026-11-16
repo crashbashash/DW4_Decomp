@@ -1,6 +1,7 @@
 /* The title windows of the status screens: the shared beNDMWWindowTitle update, and the model and
  * text setup of beNDMWStatusTitle00..04 (background, Digimon face, account and title plates). */
 #include "dw4/reflected.h"
+#include "dw4/beNDMWWindowSetupDispatchView.h"
 
 extern "C" void beNDMWWindow_ClearQueuedText(beNDMWWindow *self);
 extern "C" void beNDMWWindow_PlayQueuedModelClose(...);
@@ -36,10 +37,6 @@ extern "C" {
 FontNameList g_statusLayoutFontNames = { { "font030", "font031", "font032", "font033", "font034", "font035", "font036", "font037", "font038", "font039", "font060", "font061", "font000", "font001", "font010", "font011", "font040", "font041", "font042", "font043", "font044", "font045", "font046", "font047", "font048", "font049", "font070", "font071", 0 } };
 FontNameList g_shopLayoutFontNames = { { "font030", "font031", "font032", "font033", "font034", "font035", "font036", "font037", "font038", "font039", "font060", "font061", "font000", "font001", "font010", "font011", "font040", "font041", "font042", "font043", "font044", "font045", "font046", "font047", "font048", "font049", "font070", "font071", 0 } };
 }
-
-/* matching construct: dummy-virtual view (22 slots) so Setup() compiles to the retail vtable call
- * through slot 22, the per-title model setup; it carries no data. */
-class beNDMWWindowTitleVirtuals { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void Setup(); };
 
 static inline void *SharedStringPool() {
     if (g_stringPool[0] == 0) {
@@ -106,7 +103,7 @@ static inline void ClearStringList(igStringRefList *list) {
 extern "C" void beNDMWWindowTitle_Update(beNDMWWindowTitle *self) {
     switch (self->_st0) {
     case 0:
-        ((beNDMWWindowTitleVirtuals *)self)->Setup();
+        ((beNDMWWindowSetupDispatchView *)self)->Setup();
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;
         self->_st2 = 0;

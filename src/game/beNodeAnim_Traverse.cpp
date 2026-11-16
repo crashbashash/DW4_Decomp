@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
+#include "dw4/igCommonTraversalDispatchView.h"
 extern "C" {
 void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index);
 int igTraversal_TraverseChildren(igCommonTraversal *traversal, beNodeAnim *node);
@@ -9,14 +10,6 @@ void beNodeAnim_SetTime(beNodeAnim *node, long long startTime, long long now);
 long long beNodeAnim_UpdateTime(beNodeAnim *node, long long now);
 }
 typedef void (*AttrPopProc)(void *attr, int data);
-/* vtable view of the traversal context (igCommonTraversal): slots 24/30/31 only */
-class TraversalTimeOps { public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual long long getTime();
-    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
-    virtual void pushTime(long long time);
-    virtual void popTime();
-};
 /* The attribute list of one stack: count and storage of the pushed attributes. */
 typedef igTDataList<igAttr *> AttrList;
 /* matching construct: the 4-byte reference fields (_attrStack, _timePool, _attrStacks, _data, _popProc, ...) are viewed through pointer casts; no layout effect */
@@ -43,7 +36,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     short *timeUnitID;
 
     attrs = (igAttrStackManager *)traversal->_attrStack;
-    now = ((TraversalTimeOps *)traversal)->getTime();
+    now = ((igCommonTraversalDispatchView *)traversal)->getTime();
     if (node->_isFirstTime != 0) {
         beNodeAnim_SetTime(node, node->_startTime, now);
         node->_beforeTime = now;
@@ -58,7 +51,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     timePool->_freeIndex = slot + 1;
     timeAttr = ((igTimeAttr **)timePool->_data)[slot];
     timeAttr->_time = time;
-    ((TraversalTimeOps *)traversal)->pushTime(time);
+    ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
     timeAttrIndex = &timeAttr->_cachedAttrIndex;
     timeUnitID = &timeAttr->_cachedUnitID;
     index = *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex];
@@ -84,7 +77,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     }
     top->_count = top->_count - 1;
     igAttrStackManager_MarkStackChanged(attrs, top, popIndex);
-    ((TraversalTimeOps *)traversal)->popTime();
+    ((igCommonTraversalDispatchView *)traversal)->popTime();
     if (result == 2) {
         return 2;
     }

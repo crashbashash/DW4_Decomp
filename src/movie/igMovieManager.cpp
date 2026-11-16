@@ -2,6 +2,10 @@
 #include "dw4/reflected.h"
 #include "dw4/igMatrix44f.h"
 #include "dw4/igVec3f.h"
+#include "dw4/igWindowDispatchView.h"
+#include "dw4/igTextureBindAttrDispatchView.h"
+#include "dw4/igTransformDispatchView.h"
+#include "dw4/igMovieManagerDispatchView.h"
 
 /* igMovieInfo::_type: an ADX audio stream, which plays without a scene. */
 enum { kMovieTypeAdx = 2 };
@@ -52,15 +56,12 @@ struct igMovieInfoListView : igObject {
     }
 };
 
-/* The igMovieCodec slots the manager calls on a movie's codec. igVirtualObject's vptr is slot 0, so
- * dN is the slot at vtable byte 8 + 4 * N. */
-class igMovieCodecView : public igVirtualObject {
+/* The igMovieCodec slots the manager calls on a movie's codec: slot 20 is GetMeta, from igObject.
+ * ABI view only: never instantiated. */
+class igMovieCodecDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual igMetaObject *getMeta();                                                             /* slot 20 */
     virtual int isReusable();                                                                    /* slot 21 */
-    virtual void initialize(igObject *visualContext, igObject *audioContext);                    /* slot 22 */
+    virtual void initialize(igVisualContextDispatchView *visualContext, igObject *audioContext);  /* slot 22 */
     virtual int open(igMovieInfo *movie);                                                        /* slot 23 */
     virtual int close(igMovieInfo *movie);                                                       /* slot 24 */
     virtual int play(igMovieInfo *movie);                                                        /* slot 25 */
@@ -70,37 +71,14 @@ public:
     virtual int releaseDrawing(igMovieInfo *movie);                                              /* slot 29 */
 };
 
-/* The manager's own slots that it calls on itself. */
-class igMovieManagerView : public igVirtualObject {
+/* The audio context the manager creates for movie sound.
+ * ABI view only: never instantiated. */
+class igAudioContextDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
-    virtual void stopAllMovies();                                                                /* slot 26 */
-    virtual void d27();
-    virtual int stopMovie(igObject *movie);                                                      /* slot 28 */
-    virtual int buildScene(igMovieInfo *movie);                                                  /* slot 29 */
-};
-
-/* The audio context the manager creates for movie sound. */
-class igAudioContextView : public igVirtualObject {
-public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void d21();
     virtual igResult initialize();                                                               /* slot 22 */
     virtual void d23();
     virtual void setWindow(igObject *window);                                                    /* slot 24 */
-};
-
-/* The insight's window, which holds the visual context. */
-class igWindowView : public igVirtualObject {
-public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
-    virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35();
-    virtual igObject *getVisualContext();                                                        /* slot 36 */
 };
 
 /* Which components a vertex array holds: positions, normals and a count of texture coordinate sets. */
@@ -121,21 +99,17 @@ struct igVertexFormat {
 };
 
 /* The scene-graph classes the movie scene is built from, with the virtual functions it calls.
- * igVirtualObject's vptr is slot 0, so dN is the slot at vtable byte 8 + 4 * N. */
-class igStateAttrView : public igVirtualObject {
+ * ABI view only: never instantiated. */
+class igStateAttrDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
     virtual void setEnabled(bool enabled);                                   /* slot 30 */
 };
-class igBlendStateAttrView : public igStateAttrView {};
-class igTextureStateAttrView : public igStateAttrView {};
+class igBlendStateAttrDispatchView : public igStateAttrDispatchView {};
+class igTextureStateAttrDispatchView : public igStateAttrDispatchView {};
 
-class igTextureAttrView : public igVirtualObject {
+class igTextureAttrDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
     virtual void setMagFilter(int filter);                                   /* slot 30 */
     virtual void setMinFilter(int filter);                                   /* slot 31 */
@@ -145,20 +119,15 @@ public:
     void *_videoBuffer;                                                      /* +68 */
 };
 
-class igTextureBindAttrView : public igVirtualObject {
+/* igTextureBindAttr with the texture it binds, which sits after the vptr and reference count at +12. */
+class igTextureBindAttrView : public igTextureBindAttrDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
-    virtual void setTexture(igTextureAttrView *texture);                     /* slot 31 */
     char _pad8[4];
-    igTextureAttrView *_texture;                                             /* +12 */
+    igTextureAttrDispatchView *_texture;                                     /* +12 */
 };
 
-class igImageView : public igVirtualObject {
+class igImageDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
     virtual void setWidth(int width);                                        /* slot 26 */
     virtual void setHeight(int height);                                      /* slot 27 */
@@ -170,10 +139,8 @@ public:
     void *_pImage;                                                           /* +52 */
 };
 
-class igVertexArrayView : public igVirtualObject {
+class igVertexArrayDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void d21();
     virtual void configure(igVertexFormat &format, int vertexCount, int, int);     /* slot 22 */
     virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26();
@@ -185,30 +152,19 @@ public:
     virtual void setTextureCoord(int unit, int index, const igVec2f &coord); /* slot 48 */
 };
 
-class igGeometryAttrView : public igVirtualObject {
+class igGeometryAttrDispatchView : public igObjectDispatchView {
 public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
     virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36();
     virtual void configure(int primType, int primCount, int offset);        /* slot 37 */
     virtual void setVertexRange(int first, int count);                      /* slot 38 */
     char _pad8[4];
-    igVertexArrayView *_vertexArray;                                         /* +12 */
-    void setVertexArray(igVertexArrayView *vertices) {
+    igVertexArrayDispatchView *_vertexArray;                                 /* +12 */
+    void setVertexArray(igVertexArrayDispatchView *vertices) {
         if (vertices != 0) vertices->_refCount = vertices->_refCount + 1;
         igRelease(_vertexArray);
         _vertexArray = vertices;
     }
-};
-
-class igTransformView : public igVirtualObject {
-public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
-    virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34();
-    virtual void setMatrix(const igMatrix44f &matrix);                      /* slot 35 */
 };
 
 extern "C" {
@@ -244,7 +200,7 @@ int List_RemoveWordAt(void *list, int index);
 int igReportError(const char *format, ...);
 igObject *igMovieCodecList_Create(int allocator);
 igObject *igMovieInfoList_Create(int allocator);
-igAudioContextView *igAudioContext_CreateInstance(int allocator);
+igAudioContextDispatchView *igAudioContext_CreateInstance(int allocator);
 igObject *igRendererOrderedList_CreateInstance(int allocator);
 void igInsightCore_AddToScheduler(int insight, igMovieManager *manager);
 void igInsightCore_RemoveFromScheduler(int insight, igMovieManager *manager);
@@ -254,19 +210,19 @@ void igRendererOrderedList_Clear(int list);
 igAttrSet *igAttrSet_CreateInstance(int allocator);
 igGeometry *igGeometry_CreateInstance(int allocator);
 igCamera *igCamera_CreateInstance(int allocator);
-igTransformView *igTransform_CreateInstance(int allocator);
+igTransformDispatchView *igTransform_CreateInstance(int allocator);
 igSceneInfo *igSceneInfo_CreateInstance(int allocator);
-igImageView *igImage_CreateInstance(int allocator);
-igTextureAttrView *igTextureAttr_CreateInstance(int allocator);
+igImageDispatchView *igImage_CreateInstance(int allocator);
+igTextureAttrDispatchView *igTextureAttr_CreateInstance(int allocator);
 igTextureBindAttrView *igTextureBindAttr_CreateInstance(int allocator);
 igTextureList *igTextureList_CreateInstance(int allocator);
 igTextureBindAttrList *igTextureBindAttrList_Create(int allocator);
-igBlendStateAttrView *igBlendStateAttr_CreateInstance(int allocator);
-igTextureStateAttrView *igTextureStateAttr_CreateInstance(int allocator);
-igGeometryAttrView *igGeometryAttr_Create(int allocator);
-igVertexArrayView *igVertexArray_Create(int allocator);
-void igTextureAttr_SetImage(igTextureAttrView *texture, igImageView *image, int level);
-igImageView *igTextureAttr_GetImage(igTextureAttrView *texture, int level);
+igBlendStateAttrDispatchView *igBlendStateAttr_CreateInstance(int allocator);
+igTextureStateAttrDispatchView *igTextureStateAttr_CreateInstance(int allocator);
+igGeometryAttrDispatchView *igGeometryAttr_Create(int allocator);
+igVertexArrayDispatchView *igVertexArray_Create(int allocator);
+void igTextureAttr_SetImage(igTextureAttrDispatchView *texture, igImageDispatchView *image, int level);
+igImageDispatchView *igTextureAttr_GetImage(igTextureAttrDispatchView *texture, int level);
 void igNamedObject_SetName(void *object, const char *name);
 void igGroup_AppendChild(void *group, void *child);
 void igMatrix44f_FromTranslation(igMatrix44f *matrix, const igVec3f &translation);
@@ -413,14 +369,14 @@ void igMovieManager_Activate(void)
 }
 
 void igMovieManager_Deactivate(igMovieManager *self) {
-    ((igMovieManagerView *)self)->stopAllMovies();
+    ((igMovieManagerDispatchView *)self)->stopAllMovies();
 }
 
 /* Hands the visual context to the codec of every playing movie. */
 void igMovieManager_InitializeDrawing(igMovieManager *self, igSmartPointer<igObject> visualContext) {
     for (int i = 0; i < ((igMovieInfoListView *)self->_movieList)->_count; i++) {
         igMovieInfo *movie = (igMovieInfo *)((igMovieInfoListView *)self->_movieList)->_data[i];
-        ((igMovieCodecView *)movie->_codec)->initializeDrawing(movie, igSmartPointer<igObject>(visualContext.p, kRetainReference));
+        ((igMovieCodecDispatchView *)movie->_codec)->initializeDrawing(movie, igSmartPointer<igObject>(visualContext.p, kRetainReference));
     }
 }
 
@@ -428,7 +384,7 @@ void igMovieManager_InitializeDrawing(igMovieManager *self, igSmartPointer<igObj
 void igMovieManager_ReleaseDrawing(igMovieManager *self) {
     for (int i = 0; i < ((igMovieInfoListView *)self->_movieList)->_count; i++) {
         igMovieInfo *movie = (igMovieInfo *)((igMovieInfoListView *)self->_movieList)->_data[i];
-        ((igMovieCodecView *)movie->_codec)->releaseDrawing(movie);
+        ((igMovieCodecDispatchView *)movie->_codec)->releaseDrawing(movie);
     }
 }
 
@@ -460,11 +416,11 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
             if (movies != 0) {
                 if (movies->indexOf(movie) != -1) return 0;
             }
-            igSmartPointer<igMovieCodecView> codec(0, kRetainReference);
+            igSmartPointer<igMovieCodecDispatchView> codec(0, kRetainReference);
             if (self->_codecList != 0) {
                 for (i = 0; i < ((igObjectListView *)self->_codecList)->_count; i++) {
-                    igMovieCodecView *candidate = (igMovieCodecView *)((igObjectListView *)self->_codecList)->_data[i];
-                    if (strcmp((const char *)candidate->getMeta()->_name, codecType) == 0) {
+                    igMovieCodecDispatchView *candidate = (igMovieCodecDispatchView *)((igObjectListView *)self->_codecList)->_data[i];
+                    if (strcmp((const char *)candidate->GetMeta()->_name, codecType) == 0) {
                         codec = candidate;
                         break;
                     }
@@ -483,16 +439,16 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                 }
                 allocator = MovieAllocator(self);
                 igObject *created = igMetaObject_CreateInstance(meta, allocator);
-                igMovieCodecView *createdCodec;
+                igMovieCodecDispatchView *createdCodec;
                 if (created != 0 && igObject_IsKindOf(created, g_igMovieCodec_metaObject[0]) != 0) {
-                    createdCodec = (igMovieCodecView *)created;
+                    createdCodec = (igMovieCodecDispatchView *)created;
                 } else {
                     createdCodec = 0;
                 }
                 codec = createdCodec;
                 /* the factory's reference */
                 {
-                    igMovieCodecView *held = codec.p;
+                    igMovieCodecDispatchView *held = codec.p;
                     held->_refCount = held->_refCount - 1;
                     if ((held->_refCount & 0x7FFFFF) == 0) igObject_Destroy(held);
                 }
@@ -505,17 +461,17 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                     ObjectList_AppendRetained((void *)self->_codecList, codec.p);
                 }
             }
-            (igSmartPointer<igMovieCodecView> &)movie->_codec = codec;
+            (igSmartPointer<igMovieCodecDispatchView> &)movie->_codec = codec;
             if (self->_audioDisabled == 0 && self->_audio == 0) {
                 allocator = MovieAllocator(self);
                 igRelease((igObject *)self->_audio);
                 self->_audio = (int)igAudioContext_CreateInstance(allocator);
-                ((igAudioContextView *)self->_audio)->setWindow((igObject *)((igInsightCore *)self->_insight)->_window);
-                ((igAudioContextView *)self->_audio)->initialize();
+                ((igAudioContextDispatchView *)self->_audio)->setWindow((igObject *)((igInsightCore *)self->_insight)->_window);
+                ((igAudioContextDispatchView *)self->_audio)->initialize();
             }
-            codec->initialize(((igWindowView *)((igInsightCore *)self->_insight)->_window)->getVisualContext(), (igObject *)self->_audio);
+            codec->initialize(((igWindowDispatchView *)((igInsightCore *)self->_insight)->_window)->getVisualContext(), (igObject *)self->_audio);
             if (codec->open(movie) != 0) {
-                if (movie->_type == kMovieTypeAdx || ((igMovieManagerView *)self)->buildScene(movie) != 0) {
+                if (movie->_type == kMovieTypeAdx || ((igMovieManagerDispatchView *)self)->buildScene(movie) != 0) {
                     if (codec->play(movie) == 0) {
                         if (g_movieStartFailedMuted == 0) {
                             int answer = igReportError(text_Failed_to_start_movie_s, MovieName(movie));
@@ -604,8 +560,8 @@ int igMovieManager_StopMovie(igMovieManager *self, void *object) {
         found:;
         }
         if (index != -1) {
-            ((igMovieCodecView *)movie->_codec)->pause(movie, kMovieStatePaused);
-            ((igMovieCodecView *)movie->_codec)->close(movie);
+            ((igMovieCodecDispatchView *)movie->_codec)->pause(movie, kMovieStatePaused);
+            ((igMovieCodecDispatchView *)movie->_codec)->close(movie);
             {
                 igMovieInfoListView *list = (igMovieInfoListView *)self->_movieList;
                 igRelease(list->_data[index]);
@@ -646,7 +602,7 @@ void igMovieManager_RemoveAllInfo(igMovieManager *self) {
     /* matching construct: variant test — the (bool) conversion materialises the list test (sltu, xori) where a
      * plain pointer test branches on it */
     while ((movies = (igMovieInfoListView *)self->_movieList, (bool)movies) && movies->_count != 0) {
-        if (((igMovieManagerView *)self)->stopMovie(movies->_data[0]) == 0) break;
+        if (((igMovieManagerDispatchView *)self)->stopMovie(movies->_data[0]) == 0) break;
     }
 }
 
@@ -742,10 +698,10 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                 root.p = igAttrSet_CreateInstance(allocator);
             }
             igNamedObject_SetName(root.p, Scene_Root);
-            igSmartPointer<igBlendStateAttrView> blend(igBlendStateAttr_CreateInstance(MovieAllocator(self)));
+            igSmartPointer<igBlendStateAttrDispatchView> blend(igBlendStateAttr_CreateInstance(MovieAllocator(self)));
             blend->setEnabled(true);
             ObjectList_AppendRetained((void *)root->_attributes, blend.p);
-            igSmartPointer<igTextureStateAttrView> textureState(igTextureStateAttr_CreateInstance(MovieAllocator(self)));
+            igSmartPointer<igTextureStateAttrDispatchView> textureState(igTextureStateAttr_CreateInstance(MovieAllocator(self)));
             textureState->setEnabled(true);
             ObjectList_AppendRetained((void *)root->_attributes, textureState.p);
 
@@ -794,8 +750,8 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                         tile.p = igAttrSet_CreateInstance(allocator);
                     }
                     igSmartPointer<igGeometry> geometry(igGeometry_CreateInstance(MovieAllocator(self)));
-                    igSmartPointer<igGeometryAttrView> geometryAttr(igGeometryAttr_Create(MovieAllocator(self)));
-                    igSmartPointer<igVertexArrayView> vertices(igVertexArray_Create(MovieAllocator(self)));
+                    igSmartPointer<igGeometryAttrDispatchView> geometryAttr(igGeometryAttr_Create(MovieAllocator(self)));
+                    igSmartPointer<igVertexArrayDispatchView> vertices(igVertexArray_Create(MovieAllocator(self)));
                     vertices->configure(format, 4, 2, 0);
                     /* the quad's left edge (0) and right edge (1), top vertex then bottom */
                     for (int edge = 0; edge <= 1; edge++) {
@@ -832,9 +788,9 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             igNamedObject_SetName(camera.p, Movie_camera);
             camera->_nearPlane = 0.0f;
             camera->_farPlane = 1.2f;
-            igSmartPointer<igTransformView> transform(igTransform_CreateInstance(MovieAllocator(self)));
+            igSmartPointer<igTransformDispatchView> transform(igTransform_CreateInstance(MovieAllocator(self)));
             igNamedObject_SetName(transform.p, Default_primitive_camera);
-            transform->setMatrix(view);
+            transform->SetMatrix(view.m);
             igGroup_AppendChild(transform.p, camera.p);
             igGroup_AppendChild(root.p, transform.p);
             char name[256];
@@ -856,8 +812,8 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             textures.release();
             textures.p = igTextureList_CreateInstance(allocator);
         }
-        igSmartPointer<igImageView> image;
-        igSmartPointer<igTextureAttrView> texture;
+        igSmartPointer<igImageDispatchView> image;
+        igSmartPointer<igTextureAttrDispatchView> texture;
         for (int i = 0; i < binds->_count; i++) {
             {
                 int allocator = MovieAllocator(self);
@@ -880,7 +836,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             texture->setMinFilter(movie->_minificationFilter);
             texture->setMagFilter(movie->_magnificationFilter);
             igTextureAttr_SetImage(texture.p, image.p, 0);
-            ((igTextureBindAttrView **)binds->_data)[i]->setTexture(texture.p);
+            ((igTextureBindAttrView **)binds->_data)[i]->setTexture((igObject *)texture.p);
             ObjectList_AppendRetained(textures.p, texture.p);
         }
         (igSmartPointer<igTextureList> &)movie->_runtimeTextures = textures;
@@ -901,7 +857,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                 memset(image->_pImage, 0, image->_imageSize);
             }
         }
-        (igSmartPointer<igImageView> &)movie->_runtimeImage = image;
+        (igSmartPointer<igImageDispatchView> &)movie->_runtimeImage = image;
         return 1;
     }
     if (g_movieSceneNoSizeMuted == 0) {
@@ -920,7 +876,7 @@ void igMovieManager_UpdateMovies(igMovieManager *self) {
     if (self->_movieList != 0) {
         for (int i = 0; i < ((igMovieInfoListView *)self->_movieList)->_count; i++) {
             igMovieInfo *movie = (igMovieInfo *)((igMovieInfoListView *)self->_movieList)->_data[i];
-            ((igMovieCodecView *)movie->_codec)->update(movie);
+            ((igMovieCodecDispatchView *)movie->_codec)->update(movie);
         }
     }
 }

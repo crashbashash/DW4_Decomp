@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beNDMWItemBaseDispatchView.h"
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define RET(o) { igObject *rt = (o); if (rt != 0) rt->_refCount = rt->_refCount + 1; }
 #define SETP(T, panel, src, field) { igObject *c = (igObject *)(src); T *pp = (T *)(panel); if (c != 0) c->_refCount = c->_refCount + 1; { igObject *o = (igObject *)pp->field; REL(o) } pp->field = (int)c; }
@@ -112,16 +113,10 @@ public:
     ~StringRef();
 };
 extern "C" int beNDMWPanelWazaInfoWork_igStringRefList_SetAll(int, StringRef *);
-/* matching construct: dummy-virtual panel object; slot 21 refreshes, slot 22 asks for a fire request */
-class PanelVt { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
+/* The panel objects' own slots: 21 refreshes the panel, 22 fires it and reports the label and wait. */
+class beNDMWPanelObjectDispatchView : public igObjectDispatchView { public:
  virtual void Refresh();
- virtual void GetFireRequest(int *label, long long *result);
-};
-/* matching construct: dummy-virtual info work; slot 16 is the "finished" notification */
-class WorkVt { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
- virtual void Finished();
+ virtual void Fire(int *label, long long *result);
 };
 struct InfoWorkOps {
 static void SetLabel(beNDMWPanelWazaInfoWork *w, int str)
@@ -162,17 +157,6 @@ extern "C" int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaI
 extern "C" int g_beNDMWPanelObjectStat_metaObject[4];
 extern "C" int g_beNDMWPanelObjectItem_metaObject[4];
 extern "C" int g_beNDMWPanelObjectWaza_metaObject[4];
-/* matching construct: dummy-virtual view of beNDMWItemDisk; slot 22 (beNDMWItemDisk_Use)
- * uses one disk on a player and reports whether it took effect */
-class DiskUseShim {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21();
-    virtual int Use(int manager, int playerNo);
-};
 extern "C" const float g_vec3Zero[4];
 extern "C" void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self);
 extern "C" void beNDMWPanelObjectItem_Fire(beNDMWPanelObjectItem *self, int *label, long long *wait);
@@ -642,7 +626,7 @@ void beNDMWPanelObjectItem_Fire(beNDMWPanelObjectItem *self, int *label, long lo
         disk = ((beNDMWItemDisk **)((igObjectList *)self->_listFolder)->_data)[idx];
         kazu = disk->_kazu;
         if (kazu != 0) {
-            used = ((DiskUseShim *)disk)->Use(self->_manager, self->_playerNo);
+            used = ((beNDMWItemBaseDispatchView *)disk)->Use((igObject *)self->_manager, self->_playerNo);
             if (!used) {
                 *wait = 1000000000;
             } else {
@@ -900,7 +884,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                     if (panel->_isEmg != 0 ||
                         (blocked == 0 && (trig & 0x4000) && panel->_listKazu != 0 && work->_page != 2)) {
                         if (ramState->_st3 >= 2) {
-                            ((PanelVt *)panel)->GetFireRequest(&refStr, &ret);
+                            ((beNDMWPanelObjectDispatchView *)panel)->Fire(&refStr, &ret);
                             if (0 < ret) {
                                 InfoWorkOps::SetLabel(work, refStr);
                                 work->_retIsFire = 1;
@@ -990,7 +974,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                 }
                 break;
             }
-            ((PanelVt *)panel)->Refresh();
+            ((beNDMWPanelObjectDispatchView *)panel)->Refresh();
             if (prevKazu != panel->_listKazu) {
                 if (panel->_isEmg != 0 && emg) {
                     beNDMWPanelObject_Open(panel, work->_isWindowGenerate, 1);
@@ -1040,7 +1024,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
             return;
         case 3:
             ramState->_isRun = 0;
-            ((WorkVt *)work)->Finished();
+            ((igObjectDispatchView *)work)->TrimCapacity();
             break;
         }
     }
@@ -1089,7 +1073,7 @@ int beNDMWPanelWaza_FindEmergencyHealDisk(beNDMWPanelWaza *self, beNDMWPanelWaza
         } while (j < n);
     }
     if (best != -1) {
-        ((PanelVt *)work->_panelItem)->Refresh();
+        ((beNDMWPanelObjectDispatchView *)work->_panelItem)->Refresh();
         ((beNDMWPanelObjectItem *)work->_panelItem)->_cursor = start;
         ((beNDMWPanelObjectItem *)work->_panelItem)->_offset = len;
         ((beNDMWPanelObjectItem *)work->_panelItem)->_isEmg = 1;
@@ -1130,7 +1114,7 @@ int beNDMWPanelWaza_FindEmergencyHealWaza(beNDMWPanelWaza *self, beNDMWPanelWaza
                 } else {
                     s4 -= r;
                 }
-                ((PanelVt *)work->_panelWaza)->Refresh();
+                ((beNDMWPanelObjectDispatchView *)work->_panelWaza)->Refresh();
                 ((beNDMWPanelObjectWaza *)work->_panelWaza)->_cursor = s4;
                 ((beNDMWPanelObjectWaza *)work->_panelWaza)->_offset = r;
                 ((beNDMWPanelObjectWaza *)work->_panelWaza)->_isEmg = 1;

@@ -4,6 +4,8 @@
 #include "dw4/igMath.h"
 #include "dw4/igVertexArrayLock.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igCommonTraversalDispatchView.h"
+#include "dw4/igVisualContextDispatchView.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -39,19 +41,6 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
 igMetaObject *ParticleArray_GetMeta(void);
 igMetaObject *ParticleTimer_GetMeta(void);
 }
-
-/* igCommonTraversal's time stack: slot 24 reads the current time, slot 30 pushes a time and slot 31
- * pops it. */
-class igCommonTraversalSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual long long getTime();
-    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
-    virtual void pushTime(long long time);
-    virtual void popTime();
-};
 
 typedef void (*igAttrPopProc)(igObject *attr, int data, void *proc);
 
@@ -94,12 +83,10 @@ struct igVertexFormat {
 };
 
 /* ParticleArray's virtuals: slot 21 configures the array for a format, slot 24 returns a particle,
- * slot 30 the format, and slot 38 whether igParticleArray's own update is enough. */
-class ParticleArraySlots {
+ * slot 30 the format, and slot 38 whether igParticleArray's own update is enough.
+ * ABI view only: never instantiated. */
+class igParticleArrayDispatchView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20();
     virtual void configure(int format, unsigned int maxNum, void *context, float lifeStart, float lifeEnd);
     virtual void d22(); virtual void d23();
     virtual Particle *getParticle(unsigned int index);
@@ -109,21 +96,11 @@ public:
     virtual int usesBaseUpdate();
 };
 
-/* The visual context's slot 24 looks an extension up by name. */
-class igVisualContextSlots {
+/* igPointSpriteExt's per-sprite setters.
+ * ABI view only: never instantiated. */
+class igPointSpriteExtDispatchView : public igObjectDispatchView {
 public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual igObject *getExtension(const char *name);
-};
-
-/* igPointSpriteExt's per-sprite setters. */
-class igPointSpriteExtSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
+    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
     virtual void d30(); virtual void d31();
     virtual void setSpriteSizeSpace(int space);
     virtual void configure(igObject *vertexArray, igVertexFormat *format, unsigned int maxNum, int mode);
@@ -152,8 +129,8 @@ static inline void setSpriteVertexArray(ParticleArray *self, igObject *array) {
     sprite->_vertexArray = (int)array;
 }
 
-static inline igPointSpriteExtSlots *pointSprite(ParticleArray *self) {
-    return (igPointSpriteExtSlots *)self->_pointSpriteInterface;
+static inline igPointSpriteExtDispatchView *pointSprite(ParticleArray *self) {
+    return (igPointSpriteExtDispatchView *)self->_pointSpriteInterface;
 }
 
 static inline igParticleFormat *particleFormat(ParticleArray *self) {
@@ -170,7 +147,7 @@ static inline void createContext(ParticleArray *self) {
     if (self->_context == 0) {
         assignReference(self->_context, igVisualContext_FindFirst());
         if (self->_configured && particleFormat(self)->_spriteType != 0 && self->_pointSpriteInterface == 0) {
-            assignReference(self->_pointSpriteInterface, ((igVisualContextSlots *)self->_context)->getExtension("igPointSpriteExt"));
+            assignReference(self->_pointSpriteInterface, ((igVisualContextDispatchView *)self->_context)->GetExtension("igPointSpriteExt"));
         }
     }
 }
@@ -220,7 +197,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     short *attrIndex;
     short *unitID;
 
-    now = ((igCommonTraversalSlots *)traversal)->getTime();
+    now = ((igCommonTraversalDispatchView *)traversal)->getTime();
     if (timer->_time == -1) {
         timer->_timeBias = now;
     }
@@ -238,7 +215,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     pool->_freeIndex = index + 1;
     attr = ((igTimeAttr **)pool->_data)[index];
     attr->_time = elapsed;
-    ((igCommonTraversalSlots *)traversal)->pushTime(elapsed);
+    ((igCommonTraversalDispatchView *)traversal)->pushTime(elapsed);
     attrIndex = &attr->_cachedAttrIndex;
     unitID = &attr->_cachedUnitID;
     stack = (igTDataList<igTimeAttr *> *)stacks->_attrStacks;
@@ -259,7 +236,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     }
     popStack->_count = popStack->_count - 1;
     igAttrStackManager_MarkStackChanged(stacks, popStack, popIndex);
-    ((igCommonTraversalSlots *)traversal)->popTime();
+    ((igCommonTraversalDispatchView *)traversal)->popTime();
     return result;
 }
 
@@ -289,14 +266,14 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
         return 1;
     }
     self->_currentTime -= start;
-    if (((ParticleArraySlots *)self)->usesBaseUpdate()) {
+    if (((igParticleArrayDispatchView *)self)->usesBaseUpdate()) {
         return igParticleArray_Update(self, num, offset, status, self->_currentTime);
     }
     if (self->_context == 0) {
         createContext(self);
         if (self->_context != 0) {
             if (!self->_configured) {
-                ((ParticleArraySlots *)self)->configure(self->_particleFormat, self->_maxNum, (void *)self->_context, self->_particleLifeStart, self->_particleLifeEnd);
+                ((igParticleArrayDispatchView *)self)->configure(self->_particleFormat, self->_maxNum, (void *)self->_context, self->_particleLifeStart, self->_particleLifeEnd);
             }
         } else {
             *status = 1;
@@ -307,7 +284,7 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
     self->_particleOffset = offset;
     self->_aliveParticleNum = num;
     if (self->_pointSpriteInterface == 0) {
-        assignReference(self->_pointSpriteInterface, ((igVisualContextSlots *)self->_context)->getExtension("igPointSpriteExt"));
+        assignReference(self->_pointSpriteInterface, ((igVisualContextDispatchView *)self->_context)->GetExtension("igPointSpriteExt"));
     }
     if (self->_vertexArray1 == 0) {
         int allocator = igObject_GetAllocator(self);
@@ -338,10 +315,10 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
     assignReference(self->_internalVertexArray, (igObject *)nextArray);
     unsigned char *constantsWritten = self->_whichVertexArray ? &self->_setConstant2 : &self->_setConstant1;
     setSpriteVertexArray(self, (igObject *)self->_internalVertexArray);
-    int sizeSpace = ((ParticleArraySlots *)self)->getParticleFormat()->_spriteSpace;
+    int sizeSpace = ((igParticleArrayDispatchView *)self)->getParticleFormat()->_spriteSpace;
     pointSprite(self)->setSpriteSizeSpace(sizeSpace);
     for (unsigned int i = offset; i < offset + num; i++) {
-        Particle *particle = ((ParticleArraySlots *)self)->getParticle(i);
+        Particle *particle = ((igParticleArrayDispatchView *)self)->getParticle(i);
         igVec3f position;
         igVec4f color;
         igVec2f size;

@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/beBaseInfoManagerDispatchView.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
@@ -131,13 +132,6 @@ static inline long long FramesToTime(int frames) { return (long long)frames * 10
 struct igResult { int value; bool operator==(const igResult &other) const { return value == other.value; } };
 extern "C" igResult igMetaEnum_GetValueByName(...);
 extern "C" igResult g_resultSuccess;
-
-/* beModelCtrl's vtable up to its message handler (slot 33). */
-class beModelCtrlSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();
-    virtual int handleMessage(beBaseInfoRam *ram, const char *message);
-};
 
 /* Stores a new reference to `object` in an object-reference field, releasing the one it held. */
 static inline void AssignReference(int &field, igObject *object) {
@@ -403,7 +397,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 hp = (beDataObjInt *)work->_hp;
                 if (hp->_data <= 0) {
                     if (work->_isPlayer != 0) {
-                        ((beModelCtrlSlots *)self)->handleMessage(ram, "SQ_DEAD");
+                        ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_DEAD");
                         beBaseInfoRam_RemoveTimer(ram, "POISON");
                         IntList_Set((igIntList *)work->_timerList, STATUS_POISON, 0);
                     } else {
@@ -428,11 +422,11 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
         if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_SLEEP) != 0) {
             if (BoolAt(work->_isFirstList, STATUS_SLEEP) != 0) {
                 beBaseInfoRam_StartTimer(ram, "SLEEP", FramesToTime(IntAt(work->_timerList, STATUS_SLEEP)));
-                if (strcmp((const char *)work->_seqCodeName, "SQ_SLEP") != 0) ((beModelCtrlSlots *)self)->handleMessage(ram, "SQ_SLEP");
+                if (strcmp((const char *)work->_seqCodeName, "SQ_SLEP") != 0) ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_SLEP");
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SLEEP, false);
             }
             if (beBaseInfoRam_IsTimerExpired(ram, "SLEEP") != 0) {
-                ((beModelCtrlSlots *)self)->handleMessage(ram, "SQ_WAIT");
+                ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
                 beBaseInfoRam_RemoveTimer(ram, "SLEEP");
                 IntList_Set((igIntList *)work->_timerList, STATUS_SLEEP, 0);
             }
@@ -445,7 +439,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
             if (beBaseInfoRam_IsTimerExpired(ram, "STUN") != 0) {
                 IntList_Set((igIntList *)work->_timerList, STATUS_STUN, 0);
                 beBaseInfoRam_RemoveTimer(ram, "STUN");
-                ((beModelCtrlSlots *)self)->handleMessage(ram, "SQ_WAIT");
+                ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
             }
         }
         if (work->_isOnCtrl != 0 && IntAt(work->_timerList, STATUS_BIND) != 0) {
@@ -456,7 +450,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
             if (beBaseInfoRam_IsTimerExpired(ram, "BIND") != 0) {
                 beBaseInfoRam_RemoveTimer(ram, "BIND");
                 IntList_Set((igIntList *)work->_timerList, STATUS_BIND, 0);
-                ((beModelCtrlSlots *)self)->handleMessage(ram, "SQ_WAIT");
+                ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
             } else {
                 if (!(igMetaEnum_GetValueByName(DamageSeq_GetMetaEnum(), (const char *)work->_seqCodeName, &damageSeq) == g_resultSuccess)) {
                     igObjectList *moves = (igObjectList *)work->_moveObjectList;
@@ -623,7 +617,7 @@ void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *self, beBaseInfoRam *ram)
             }
             if (IntAt(work->_timerList, STATUS_STUN) != 0) {
                 if (strcmp((const char *)work->_seqCodeName, "SQ_WAIT") == 0) {
-                    ((beModelCtrlSlots *)self)->handleMessage(ram, "SQ_STUN");
+                    ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_STUN");
                     return;
                 }
                 if (strcmp((const char *)work->_seqCodeName, "SQ_STUN") != 0) {
@@ -939,7 +933,7 @@ int beNDMWMdlPEBase_OnPreMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int 
             beBaseInfoRam_RemoveTimer(ram, "BIND");
             BoolList_Set((igBoolList *)work->_isFirstList, STATUS_BIND, false);
             IntList_Set((igIntList *)work->_timerList, STATUS_BIND, 0);
-            ((beModelCtrlSlots *)self)->handleMessage(ram, "SQ_WAIT");
+            ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
         }
         return 1;
     default:
