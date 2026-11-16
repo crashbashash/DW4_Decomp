@@ -34,8 +34,8 @@ typedef struct SfdPicOut {
     char pad0[32];
     int buf;
 } SfdPicOut;
-int MPV_DecPicSj(int a, int b, SfdPicOut *out, SfdPlayer *player);
-int MPV_SkipFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player);
+int MPV_DecPicSj(int a, int b, SfdPicOut *out);
+int MPV_SkipFrmSj(int a, int b);
 int sceMpegGetPicture(SfdMpegCtx *mpeg, int buf, int mbs);
 int sceMpegGetPictureRAW8(SfdMpegCtx *mpeg, int buf, int mbs);
 void sfmpvp_ConsumePsc(SfdPlayer *player);
@@ -313,7 +313,38 @@ int copy2area(char *buf, int size, char *dst, int cap, char *src, int pos, char 
     return r;
 }
 
+int SFMPVP_DecodeFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player) {
+    SfdMpv *mpv;
+    SfdIpuStream *stream;
+    SfdIpuCtl *ipu;
+    SfdMpvCond *cond;
+    int result;
+    int mbs;
+    int mode;
 
+    if (SFMPVP_IsSceMpegUsed(player) == 0) {
+        return MPV_DecPicSj(a, b, out);
+    }
+    mpv = player->streams.mpv;
+    result = MPV_SkipFrmSj(a, b);
+    stream = &mpv->ipu.stream;
+    ipu = &mpv->ipu;
+    cond = &mpv->cond;
+    viBufRestartDMA(stream);
+    viBufAddDMA(stream);
+    mode = player->f56;
+    ipu->endRequest = 1;
+    mbs = (cond->f8 / 16) * (cond->f12 / 16);
+    if (mode == 2) {
+        sceMpegGetPicture(&mpv->ipu.mpeg, out->buf, mbs);
+    } else {
+        sceMpegGetPictureRAW8(&mpv->ipu.mpeg, out->buf, mbs);
+    }
+    ipu->endRequest = 0;
+    viBufStopDMA(&ipu->stream);
+    sfmpvp_ConsumePsc(player);
+    return ipu->endSent ? -3 : result;
+}
 
 int SFMPVP_GetFrameCount(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.mpv;

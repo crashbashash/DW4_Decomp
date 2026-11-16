@@ -24,7 +24,7 @@ typedef struct SndfTransfer {
     char pad3[5];
     unsigned int bufferSize;
     char pad12[4];
-    int iopBuffer;
+    void *iopBuffer;  /* IOP heap block; a pointer, so its loads get their own alias set */
     char pad20[4];
     int spuAddr;
     char pad28[4];
@@ -172,8 +172,8 @@ void SyncDCache(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
 unsigned int sceSifQueryMaxFreeMemSize(void);
-int sceSifAllocIopHeap(int size);
-int sceSifFreeIopHeap(int addr);
+void *sceSifAllocIopHeap(int size);
+int sceSifFreeIopHeap(void *addr);
 int sceSdRemote(int arg, int command, ...);
 int FUN_00281420(unsigned int channel, int *start, int *size);
 int sndf_PushCommand(unsigned short kind, unsigned short arg, int a, int b, int c, int d);

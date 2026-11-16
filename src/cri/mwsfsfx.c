@@ -783,6 +783,24 @@ void mwPlyFxSetLumiPrm(MwsfdPly *ply, int a, int b, int mode)
     FUN_002b3dd0(MWSFSFX_GetSfxHn(ply), a, b, mode == 1);
 }
 
+/* The luminance-key parameters of the sfx; the key comes back as an MwsfdLumiKey, an enum, so its
+ * store does not alias the int stores and retail's store order holds. */
+void mwPlyFxGetLumiPrm(MwsfdPly *ply, int *first, int *second, MwsfdLumiKey *flag)
+{
+    int a;
+    int b;
+    int c;
+    int s;
+    MwsfdLumiKey fl;
+
+    SFX_SetALumiPrm(MWSFSFX_GetSfxHn(ply), &a, &b, &c);
+    s = b;
+    fl = (c ^ 1) != 0 ? 0 : c;
+    *first = a;
+    *flag = fl;
+    *second = s;
+}
+
 void FUN_002988f0(MwsfdPly *ply, unsigned char a, unsigned char b, unsigned char c)
 {
     FUN_002b3e00(MWSFSFX_GetSfxHn(ply), a, b, c);

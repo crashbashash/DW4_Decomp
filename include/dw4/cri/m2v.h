@@ -168,14 +168,35 @@ typedef struct Mpeg2Ext {
     int field_1292;  /* +1292 */
     char padend[1480];  /* +1296 */
 } Mpeg2Ext;
+/* The coded-picture fields of M2vPicAtr are enums in CRI's header, not int: their stores get an
+ * alias set of their own, which lets m2vhdec_SetPicAtr's scheduler move the next int load from the
+ * header state above them (its paired loads and early f64 store depend on it). The enumerator
+ * names follow ISO/IEC 13818-2; M2vPicAtrF64 is a placeholder for an unknown enum. */
+typedef enum M2vFrameRate {
+    M2V_FRAME_RATE_FORBIDDEN = 0
+} M2vFrameRate;
+typedef enum M2vPicType {
+    M2V_PICTYPE_I = 1,
+    M2V_PICTYPE_P = 2,
+    M2V_PICTYPE_B = 3,
+    M2V_PICTYPE_D = 4
+} M2vPicType;
+typedef enum M2vPicStruct {
+    M2V_PICSTRUCT_TOP_FIELD = 1,
+    M2V_PICSTRUCT_BOTTOM_FIELD = 2,
+    M2V_PICSTRUCT_FRAME = 3
+} M2vPicStruct;
+typedef enum M2vPicAtrF64 {
+    M2V_PICATR_F64_0 = 0
+} M2vPicAtrF64;
 typedef struct M2vPicAtr {
     int horizontal_size;  /* +0 */
     int vertical_size;  /* +4 */
     int mb_width;  /* +8 */
     int mb_height;  /* +12 */
-    int frame_rate_code;  /* +16 */
+    M2vFrameRate frame_rate_code;  /* +16 */
     int temporal_reference;  /* +20 */
-    int picture_coding_type;  /* +24 */
+    M2vPicType picture_coding_type;  /* +24 */
     int drop_frame_flag;  /* +28 */
     int time_code_hours;  /* +32 */
     int time_code_minutes;  /* +36 */
@@ -183,9 +204,9 @@ typedef struct M2vPicAtr {
     int time_code_pictures;  /* +44 */
     int gsc_count;  /* +48 */
     int shc_count;  /* +52 */
-    int picture_structure;  /* +56 */
+    M2vPicStruct picture_structure;  /* +56 */
     int chroma_format;  /* +60 */
-    int f64;  /* +64 */
+    M2vPicAtrF64 f64;  /* +64 */
     int f68;  /* +68 */
     int bit_rate;  /* +72 */
     int vbv_buffer_size;  /* +76 */

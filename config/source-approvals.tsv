@@ -362,3 +362,7 @@ volatile	sfply_ExecOne	1	#sfd-play-pending
 volatile	sftim_CntupHnVbIn	2	#sfd-time-counts
 volatile	sftim_IsVbinStIncre	1	#sfd-time-counts
 volatile	FUN_002af488	2	#sfd-time-counts
+volatile	sftim_ResetVtimeTmr	2	#sfd-time-counts
+volatile	sftim_GetVtimeTmr	2	#sfd-time-counts
+volatile	sftim_GetTimeExtClock	4	#sfd-time-counts
+volatile	sftim_IsTakeOffExecTime	1	#sfd-time-counts

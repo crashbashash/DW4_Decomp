@@ -39,6 +39,7 @@ typedef struct SfdMpaHdr {
 extern char sfadx_handler[];
 extern char sfmps_handler[];
 extern char sfmpv_handler[];
+extern int sfana_frame_rates[];
 extern int sfana_mpa_nch[4];
 extern int sfana_mpa_sfreqs[4];
 extern int sfana_mpa_bitrates[4][16];
@@ -49,6 +50,7 @@ extern SfdHdrInf sfana_hdr;
 
 void *memset(void *dst, int value, unsigned int size);
 void *memcpy(void *dst, const void *src, unsigned int size);
+unsigned char *MPV_SearchDelim(unsigned char *buf, int size, int mask);
 void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
 int SFADXT_IsHeader(unsigned char *p, int size, int *hdrSize);
@@ -397,4 +399,49 @@ void sfcre_ReadAauHdr(SfdMpaHdr *hdr, unsigned char *p) {
     hdr->copyright = (b3 >> 3) & 1;
     hdr->original = (b3 >> 2) & 1;
     hdr->emphasis = b3 & 3;
+}
+
+/* The first sequence header with a valid frame rate gives the picture size, bit rate and VBV size. */
+int sfcre_AnalyMpv(unsigned char *buf, int size, SfdAnaInf *inf) {
+    unsigned char *seq;
+    unsigned char b4, b5, b6, b7, b8, b9, b10, b11;
+    int used;
+
+    while (size > 0) {
+        seq = MPV_SearchDelim(buf, size, 64);
+        if (seq == 0) {
+            return 0;
+        }
+        used = seq - buf;
+        used++;
+        size -= used;
+        buf += used;
+        b4 = seq[4];
+        b5 = seq[5];
+        b6 = seq[6];
+        b7 = seq[7];
+        b8 = seq[8];
+        b9 = seq[9];
+        b10 = seq[10];
+        b11 = seq[11];
+        if ((b7 >> 4) == 0) {
+            continue;
+        }
+        b7 &= 0xF;
+        if (b7 < 1 || b7 > 8) {
+            continue;
+        }
+        if ((b10 >> 5) & 1) {
+            inf->width = (b4 << 4) | (b5 >> 4);
+            inf->height = ((b5 & 0xF) << 8) | b6;
+            if (inf->bps == 0) {
+                inf->bps = ((b8 << 10) | (b9 << 2) | (b10 >> 6)) * 50;
+            }
+            inf->frameRate = sfana_frame_rates[b7];
+            inf->video = sfmpv_handler;
+            inf->vbvSize = (((b10 & 0x1F) << 5) | (b11 >> 3)) << 11;
+            break;
+        }
+    }
+    return 1;
 }

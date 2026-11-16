@@ -103,6 +103,10 @@ int SFMPS_GetConcatCnt(SfdHandle *hn);
 int sfmps_IsEffectiveEndcode(SfdHandle *hn, int kind);
 void sfmps_ChkInEnd(SfdHandle *hn, int *done);
 int SFBUF_GetRTot(SfdHandle *hn, int ch);
+int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts);
+int SFMPVP_Put(SfdHandle *hn, unsigned char *data, int len);
+int SFMPVP_Unput(SfdHandle *hn, int len);
+void FUN_002aa050(SfdHandle *hn, unsigned char *data, int len);
 
 /* Attaches an object to stream id 0xBC..0xFF in the handle's stream table, with the callback run
  * on its data. */
@@ -295,6 +299,86 @@ int sfmps_PutAndNotify(SfdSj *sj, int (*cb)(void *obj, int arg), void *obj, int 
 
     if (ret == 1 && cb != 0) {
         cb(obj, arg);
+    }
+    return ret;
+}
+
+/* An audio packet: remembers which audio stream is played and the earliest time stamp, then writes it. */
+int sfmps_CopyAudio(SfdHandle *hn, int stm, unsigned char *data, int len, long pts) {
+    SfdMpsSlot *mps;
+    SfdMpsPrm *prm;
+    int sel;
+
+    if (SFSET_GetCond(hn, SFD_COND_AUDIO) == 0) {
+        return 1;
+    }
+    mps = &hn->mps;
+    prm = mps->prm;
+    if (prm->audioCh == -1) {
+        prm->audioCh = stm;
+    }
+    if (prm->f48 == -1) {
+        prm->f48 = stm;
+    }
+    sel = SFSET_GetCond(hn, 30);
+    if (sel != -1) {
+        if (SFSET_GetCond(hn, 55) != 0 ? stm < prm->f40 : stm == prm->f48) {
+            prm->audioCh = sel;
+        }
+    }
+    prm->f40 = stm;
+    if (prm->audioCh != stm) {
+        return 1;
+    }
+    if (pts >= 0) {
+        prm->startPts = pts < prm->startPts ? pts : prm->startPts;
+        prm->firstPts = pts < prm->firstPts ? pts : prm->firstPts;
+    }
+    return sfmps_PutEs(hn, mps->outputs[SFMPS_OUT_AUDIO], data, len, pts);
+}
+
+/* A video packet: remembers which video stream is played (switching only at a sequence or group header),
+ * then writes what the picture layer keeps of it. */
+int sfmps_CopyVideo(SfdHandle *hn, int stm, unsigned char *data, int len, long pts) {
+    SfdMpsSlot *mps;
+    SfdMpsPrm *prm;
+    int sel;
+    int ret;
+    signed char *head = (signed char *)data;
+
+    if (SFSET_GetCond(hn, SFD_COND_VIDEO) == 0) {
+        return 1;
+    }
+    mps = &hn->mps;
+    prm = mps->prm;
+    if (prm->videoCh == -1) {
+        prm->videoCh = sfmps_AutoVchPlay(hn, stm);
+    }
+    if (prm->f44 == -1) {
+        prm->f44 = stm;
+    }
+    sel = SFSET_GetCond(hn, 29);
+    if (sel != -1) {
+        if (SFSET_GetCond(hn, 55) != 0 ? stm < prm->f36 : stm == prm->f44) {
+            if (prm->videoCh != sel && len >= 4 && head[0] == 0 && head[1] == 0
+                && (unsigned char)head[2] == 1 && ((unsigned char)head[3] == 0xB3 || (unsigned char)head[3] == 0xB8)) {
+                prm->videoCh = sel;
+            }
+        }
+    }
+    prm->f36 = stm;
+    if (prm->videoCh != stm) {
+        return 1;
+    }
+    len = SFMPVP_Put(hn, data, len);
+    if (len <= 0) {
+        return 0;
+    }
+    ret = sfmps_PutEs(hn, mps->outputs[SFMPS_OUT_VIDEO], data, len, pts);
+    if (ret != 1) {
+        SFMPVP_Unput(hn, len);
+    } else {
+        FUN_002aa050(hn, data, len);
     }
     return ret;
 }

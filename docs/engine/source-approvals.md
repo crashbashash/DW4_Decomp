@@ -276,15 +276,35 @@ delay-slot filler moves the store into the call's delay slot where retail has a 
 
 ### sfd-time-counts
 
-The SFD timer's stream position (`+680`) and tick count (`+716`), shared between the V-sync callback chain and the
-game thread. The V-sync server reaches them through `sftim_HnVbIn`, which calls `sftim_CntupHnVbIn` (adds the step
-to both) and `sftim_IsVbinStIncre` (reads the count); the timer adjustment at `0x2af488` changes both from the game
-thread, between the library's lock and unlock calls, while the V-sync path writes them too. Stripped,
+The SFD timer's stream position (`+680`), tick count (`+716`), decoded position (`+732`), external clock's last
+reading (`+728`) and rate (`+736`), shared between the V-sync callback chain and the game thread. The V-sync server
+reaches them through `sftim_HnVbIn`, which calls `sftim_CntupHnVbIn` (adds the step to both of the first two) and
+`sftim_IsVbinStIncre` (reads the count); the timer adjustment at `0x2af488` changes both from the game thread,
+between the library's lock and unlock calls, while the V-sync path writes them too. Stripped,
 `sftim_IsVbinStIncre` differs by five words, the count update in `sftim_CntupHnVbIn` by one and either store in
 the adjustment by nine; the stream position's keyword in `sftim_CntupHnVbIn` changes no byte and keeps the two
 words' accesses alike. They are written as `volatile` casts at the access, so the other functions that touch the
 words keep their plain accesses. The rows are approved under the owner's standing rule for words a vsync callback
 and another thread share.
+
+The decoded position, last reading and rate belong to the same rule through the external-clock getter. The V-sync
+path is `mwsfsvr_VsyncProc`, `SFD_VsyncSvr`, the step at `0x2ae398`, `sftim_HnVbIn` and `sftim_UpdateTime`, which calls
+`sftim_ResetVtimeTmr` (reads the decoded position) and `SFTIM_GetNowTime`; that one calls the getter in slot 5 of the
+timer's table, `sftim_GetTimeExtClock`, which writes all three words. The game thread reaches the same getter from
+`mwSfdGetTime`, `SFD_GetTime` and `SFTIM_GetTimeSub`, and from `SFD_UpdateTime`; the ADXM server thread reaches it
+from `sfply_IsPlayTimeAutoStop`; and `sfply_ChkBpa` and `SFD_Pause` add to the decoded position through
+the pause helpers at `0x2af428` and `0x2af4f0`. Four functions read or write the words:
+
+* `sftim_ResetVtimeTmr` has two keywords, the stream position and the decoded position; stripped it comes out three
+  words short.
+* `sftim_GetVtimeTmr` has two, the decoded position and the rate in the branch that reads them; stripped it is one
+  word short.
+* `sftim_GetTimeExtClock` has four, the first read of the last reading, the decoded position's add and read and the
+  rate's store; stripped it is one word short.
+* `sftim_IsTakeOffExecTime` has one, the first read of the count; stripped it is two words short (the guarded load
+  fills a delay slot that retail leaves a `nop`).
+
+Each row cites this anchor and counts the keywords in its function.
 
 ### adxt-ready-count
 

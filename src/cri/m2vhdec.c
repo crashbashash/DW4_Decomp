@@ -124,7 +124,7 @@ int M2VLIB_CheckHn(void *hn);
 int M2VERR_SetCode(void *hn, int code);
 struct SjObj;
 int m2vhdec_ParseSj(Mpeg2Ctx *hn, struct SjObj *sj);
-void FUN_00285b10(Mpeg2Ctx *hn);
+void m2vhdec_SetPicAtr(Mpeg2Ctx *hn);
 
 int M2V_DecodePicAtr(Mpeg2Ctx *hn, struct SjObj *sj)
 {
@@ -135,9 +135,56 @@ int M2V_DecodePicAtr(Mpeg2Ctx *hn, struct SjObj *sj)
     }
     err = m2vhdec_ParseSj(hn, sj);
     if (err == 0) {
-        FUN_00285b10(hn);
+        m2vhdec_SetPicAtr(hn);
     }
     return err;
+}
+
+/* Copies the parsed header state into the picture attributes handed to callers. */
+void m2vhdec_SetPicAtr(Mpeg2Ctx *hn)
+{
+    Mpeg2Ext *h = &hn->ext;
+    M2vPicAtr *a = &hn->picatr;
+
+    a->horizontal_size = h->horizontal_size;
+    a->vertical_size = h->vertical_size;
+    a->mb_width = h->mb_width;
+    a->mb_height = h->mb_height;
+    a->frame_rate_code = h->frame_rate_code;
+    a->temporal_reference = h->temporal_reference;
+    a->picture_coding_type = h->picture_coding_type;
+    a->drop_frame_flag = h->drop_frame_flag;
+    a->time_code_hours = h->time_code_hours;
+    a->time_code_minutes = h->time_code_minutes;
+    a->time_code_seconds = h->time_code_seconds;
+    a->time_code_pictures = h->time_code_pictures;
+    a->gsc_count = h->gsc_count;
+    a->shc_count = h->shc_count;
+    a->picture_structure = h->picture_structure;
+    a->chroma_format = h->chroma_format;
+    a->f64 = 0;
+    a->f68 = 1;
+    a->bit_rate = h->bit_rate;
+    a->vbv_buffer_size = h->vbv_buffer_size;
+    a->display_horizontal_size = h->display_horizontal_size;
+    a->display_vertical_size = h->display_vertical_size;
+    a->field_count = D_004f28a0[(h->progressive_sequence * 2 + h->repeat_first_field) * 2 + h->top_field_first];
+    a->progressive_frame = h->progressive_frame;
+    a->top_field_first = h->top_field_first;
+    a->repeat_first_field = h->repeat_first_field;
+    a->field_964 = h->field_964;
+    a->aspect_ratio_information = h->aspect_ratio_information;
+    a->constrained_parameters_flag = h->constrained_parameters_flag;
+    a->frame_rate_extension_n = h->frame_rate_extension_n;
+    a->frame_rate_extension_d = h->frame_rate_extension_d;
+    a->profile_and_level_indication = h->profile_and_level_indication;
+    a->progressive_sequence = h->progressive_sequence;
+    a->low_delay = h->low_delay;
+    a->video_format = h->video_format;
+    a->colour_description = h->colour_description;
+    a->colour_primaries = h->colour_primaries;
+    a->transfer_characteristics = h->transfer_characteristics;
+    a->matrix_coefficients = h->matrix_coefficients;
 }
 
 typedef struct { char *data; int len; } Chunk;

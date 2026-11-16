@@ -456,6 +456,7 @@
 0x285988	M2VHDEC_Init	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x2859b8	M2VHDEC_InitHn	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x285a90	M2V_DecodePicAtr	medium	sdk:libmwsfde.a/m2v_hdec.o B
+0x285b10	m2vhdec_SetPicAtr	high	sdk:libmwsfde.a/m2v_hdec.o B
 0x285c78	m2vhdec_ParseSj	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x285e90	resetQuantiserMatrix	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x285e98	calcHvSize	medium	sdk:libmwsfde.a/m2v_hdec.o C by order and size

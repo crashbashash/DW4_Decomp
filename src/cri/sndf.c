@@ -474,6 +474,43 @@ void FUN_00281d80(SndfMessage *message)
     __asm__ ("ei");
 }
 
+/* Moves the next block of a channel's pending upload to its IOP buffer and on to SPU memory,
+ * then frees the buffer once the whole bank has gone. */
+void FUN_00281df0(unsigned int channel)
+{
+    SifDmaData dma;
+    unsigned int id;
+
+    if (sndf_ctx->state[channel] == 1 && sndf_ctx->f2972[channel] == 0
+        && (sndf_ctx->open = sceSdRemote(1, 0x80F0, DAT_004bb110, 0)) == 1) {
+        if (sndf_ctx->transfers[channel].state == 1) {
+            if (sndf_ctx->transfers[channel].remaining < sndf_ctx->transfers[channel].bufferSize) {
+                sndf_ctx->transfers[channel].bufferSize = sndf_ctx->transfers[channel].remaining;
+            }
+            dma.data = (unsigned int)sndf_ctx->transfers[channel].data;
+            dma.addr = (unsigned int)sndf_ctx->transfers[channel].iopBuffer;
+            dma.size = sndf_ctx->transfers[channel].bufferSize;
+            dma.mode = 0;
+            id = sceSifSetDma(&dma, 1);
+            while (sceSifDmaStat(id) >= 0) {
+            }
+            sceSdRemote(1, 0x80D0, DAT_004bb110, 0, sndf_ctx->transfers[channel].iopBuffer,
+                        sndf_ctx->transfers[channel].spuAddr, sndf_ctx->transfers[channel].bufferSize);
+            sndf_ctx->transfers[channel].spuAddr += sndf_ctx->transfers[channel].bufferSize;
+            sndf_ctx->transfers[channel].data += sndf_ctx->transfers[channel].bufferSize;
+            sndf_ctx->transfers[channel].remaining -= sndf_ctx->transfers[channel].bufferSize;
+            if (sndf_ctx->transfers[channel].remaining == 0) {
+                sndf_ctx->transfers[channel].state = 2;
+            }
+        } else if (sndf_ctx->transfers[channel].state == 2) {
+            sceSifFreeIopHeap(sndf_ctx->transfers[channel].iopBuffer);
+            sndf_ctx->error[channel] = FUN_00281368(channel);
+            sndf_ctx->state[channel] = 2;
+            sndf_ctx->f3228[channel] = 0xFF;
+        }
+    }
+}
+
 void SNDF_ExecServer(void)
 {
     unsigned int i;

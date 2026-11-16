@@ -1,5 +1,14 @@
 #include "dw4/cri/sfmpv.h"
 
+/* Start-code kinds: the bit MPV_CheckDelim returns for a delimiter, and the masks the searches take. */
+typedef enum SfdDelim {
+    SFD_DLM_SLICE = 0x02,
+    SFD_DLM_PIC = 0x04,
+    SFD_DLM_GOP = 0x08,
+    SFD_DLM_SEQ = 0x40,
+    SFD_DLM_END = 0x80
+} SfdDelim;
+
 extern char DAT_00581570[];
 extern SfdMpvCond DAT_005855b0;
 extern SfdMpvWorkBufs DAT_005855d8;
@@ -53,7 +62,7 @@ int sfd_ReportError();
 int SFLIB_CheckHn(SfdPlayer *player);
 void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
-char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, int *code);
+char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
 void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size);
 void sfmpv_InitPicUsr(SfdBufPool *pool);
 void FUN_002a7e30(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out);
@@ -500,6 +509,44 @@ int sfmpv_CheckViBufSiz(SfdPlayer *player) {
     int total = SFBUF_GetRingBufSiz(player, index);
     if (total - SFBUF_RingGetDataSiz(player, index) < player->f40) {
         return sfd_ReportError(player, 0xFF000F1C);
+    }
+    return 0;
+}
+
+/* Searches the readable data of the ring (two chunks) for a start code in `mask`, including one that
+ * straddles the wrap; returns its address and its kind in *code, or 0. */
+char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code) {
+    char tmp[8];
+    char *p;
+    int n1;
+    int n2;
+    int i;
+    int c;
+
+    *code = 0;
+    p = MPV_SearchDelim(ring->addr0, ring->len0, mask);
+    if (p != 0) {
+        *code = MPV_CheckDelim(p);
+        return p;
+    }
+    if (ring->len1 == 0) {
+        return 0;
+    }
+    n1 = (ring->len0 < 3) ? ring->len0 : 3;
+    n2 = (ring->len1 < 3) ? ring->len1 : 3;
+    memcpy(tmp, ring->addr0 + ring->len0 - n1, n1);
+    memcpy(tmp + n1, ring->addr1, n2);
+    for (i = 0; i < n1 + n2 - 3; i++) {
+        c = MPV_CheckDelim(&tmp[i]);
+        if (c & mask) {
+            *code = c;
+            return ring->addr0 + ring->len0 - n1 + i;
+        }
+    }
+    p = MPV_SearchDelim(ring->addr1, ring->len1, mask);
+    if (p != 0) {
+        *code = MPV_CheckDelim(p);
+        return p;
     }
     return 0;
 }
@@ -1131,7 +1178,7 @@ void FUN_002a73f0(SfdChunk *dst, SfdChunk *src) {
 int FUN_002a7438(SfdPlayer *player, int unused, int mask)
 {
     SfdRingInfo area;
-    int code;
+    SfdDelim code;
     char *p;
     int n;
     int i;

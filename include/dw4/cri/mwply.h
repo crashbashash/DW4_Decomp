@@ -74,6 +74,13 @@ typedef enum MwsfdChromaPos {
     MWSFD_CHROMA_POS_1
 } MwsfdChromaPos;
 
+/* The transparence key of the luminance alpha. */
+typedef enum MwsfdLumiKey {
+    MWSFD_LUMIKEY_BLACK = 0,
+    MWSFD_LUMIKEY_WHITE = 1,
+    MWSFD_LUMIKEY_END
+} MwsfdLumiKey;
+
 typedef struct MwsfdPicInf {
     unsigned int pictureStructure; /* 0 */
     unsigned int chromaFormat;     /* 4 */

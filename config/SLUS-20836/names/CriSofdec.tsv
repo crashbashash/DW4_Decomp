@@ -35,6 +35,7 @@
 0x00285988	M2VHDEC_Init	cri	medium	recvx-decomp-cri libmwsfde.a m2v_hdec.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x002859b8	M2VHDEC_InitHn	cri	medium	recvx-decomp-cri libmwsfde.a m2v_hdec.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x00285a90	M2V_DecodePicAtr	cri	medium	recvx-decomp-cri libmwsfde.a m2v_hdec.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
+0x00285b10	m2vhdec_SetPicAtr	cri	high	recvx-decomp-cri libmwsfde.a m2v_hdec.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x00285c78	m2vhdec_ParseSj	cri	medium	recvx-decomp-cri libmwsfde.a m2v_hdec.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x00285e90	resetQuantiserMatrix	cri	medium	recvx-decomp-cri libmwsfde.a m2v_hdec.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x00285e98	calcHvSize	cri	medium	recvx-decomp-cri libmwsfde.a m2v_hdec.o C by order and size [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]

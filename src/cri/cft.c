@@ -17,6 +17,14 @@ typedef struct CftImage {
     int width;
 } CftImage;
 
+/* ARGB8888 destination of the alpha copies: base address and the byte stride of one line. */
+typedef struct CftArgbBuf {
+    unsigned char *base;
+    int f4;
+    int f8;
+    int stride;
+} CftArgbBuf;
+
 typedef struct CftGifPacket {
     int w[0x600];
 } CftGifPacket;
@@ -358,5 +366,58 @@ void FUN_00284e80(CftPlane *plane)
             }
         }
         row += cols * 2048;
+    }
+}
+
+/* Writes the alpha plane of each 16x16 macroblock (the second 384 bytes of a 768-byte block)
+ * through table into byte 3 of every ARGB8888 pixel of a dest line image. s is set for the first
+ * row before the loop as well: retail's gcse then keeps plane->base and cols * 2 out of the row
+ * loop (the row loop's mult survives because that loop is no longer seen by loop.c). */
+void FUN_00284f30(CftPlane *plane, CftArgbBuf *dest, unsigned char *table)
+{
+    int rows = plane->height / 16;
+    int cols = plane->width / 32;
+    unsigned char *s = plane->base + cols * 384;
+    int stride = dest->stride;
+    unsigned char *d;
+    int y, x, r, c;
+
+    for (y = 0; y < rows; y++) {
+        s = plane->base + cols * y * 768 + cols * 384;
+        for (x = 0; x < cols; x++) {
+            d = dest->base + y * 64 + x * stride * 16 + 3;
+            for (r = 0; r < 16; r++) {
+                for (c = 0; c < 16; c++) {
+                    *d = table[*s];
+                    s++;
+                    d += 4;
+                }
+                d += stride - 64;
+            }
+            s += 128;
+        }
+    }
+}
+
+/* The same alpha copy into a macroblock-ordered ARGB8888 buffer (1024 bytes per macroblock). */
+void FUN_00285040(CftPlane *plane, CftArgbBuf *dest, unsigned char *table)
+{
+    int rows = plane->height / 16;
+    int cols = plane->width / 32;
+    unsigned char *s = plane->base + cols * 384;
+    unsigned char *d = dest->base + 3;
+    int y, x, i;
+
+    for (y = 0; y < rows; y++) {
+        s = plane->base + cols * y * 768 + cols * 384;
+        d = dest->base + cols * y * 1024 + 3;
+        for (x = 0; x < cols; x++) {
+            for (i = 0; i < 256; i++) {
+                *d = table[*s];
+                s++;
+                d += 4;
+            }
+            s += 128;
+        }
     }
 }

@@ -313,6 +313,27 @@ int sftim_IsVbinStIncre(SfdHn *hn, SfdTim *tim)
     return hn->f76 == 4;
 }
 
+void sftim_ResetVtimeTmr(SfdHn *hn, SfdTim *tim)
+{
+    if (SFSET_GetCond(hn, 71) == 1) {
+        tim->f720 = *(volatile int *)&tim->stream_pos;
+    } else {
+        tim->f720 = *(volatile int *)&tim->decoded_pos;
+    }
+}
+
+void sftim_GetVtimeTmr(SfdHn *hn, SfdTim *tim, int *pos, int *rate)
+{
+    SfdLib *lib = &DAT_004bea88;
+    if (SFSET_GetCond(hn, 71) == 1) {
+        *pos = tim->stream_pos - tim->f720;
+        *rate = lib->rate;
+    } else {
+        *pos = *(volatile int *)&tim->decoded_pos - tim->f720;
+        *rate = *(volatile int *)&tim->rate;
+    }
+}
+
 int SFTIM_IsStagnant(SfdHn *hn)
 {
     if (sftim_IsAudioStagnant(hn) != 0) {
@@ -478,6 +499,37 @@ int sftim_GetTimeUfrm(SfdHn *hn, int *time, int *unit)
 {
     SFTIM_ChkRegularTime(hn, time, unit);
     return 0;
+}
+
+int sftim_GetTimeExtClock(SfdHn *hn, int *time, int *unit)
+{
+    SfdTim *tim;
+    int ret;
+    int now;
+    int rate;
+    int d;
+    if (SFTIM_ChkRegularTime(hn, time, unit) == 0) {
+        return 0;
+    }
+    tim = &hn->tim;
+    if (tim->clock_get == 0) {
+        *time = -2;
+        *unit = 1;
+        return 0;
+    }
+    ret = tim->clock_get(tim->clock_ctx, &now, &rate);
+    if (sftim_IsTimeIncre(hn) != 0 && *(volatile int *)&tim->clock_last != -5) {
+        d = now - tim->clock_last;
+        if (d < 0) {
+            d += tim->clock_wrap + 1;
+        }
+        *(volatile int *)&tim->decoded_pos += d;
+    }
+    tim->clock_last = now;
+    *(volatile int *)&tim->rate = rate;
+    *time = *(volatile int *)&tim->decoded_pos;
+    *unit = tim->rate;
+    return ret;
 }
 
 int SFTIM_ChkRegularTime(SfdHn *hn, int *time, int *unit)
@@ -843,6 +895,20 @@ void SFTIM_IsExecTime(SfdHn *hn, int time, int unit, int *decision, int delay)
         *decision = 1;
     else
         *decision = 0;
+}
+
+void sftim_IsTakeOffExecTime(SfdHn *hn, int time, int unit, int *decision)
+{
+    SfdTim *tim = &hn->tim;
+    SfdLib *lib = &DAT_004bea88;
+    if (*(volatile int *)&tim->count < 0) {
+        tim->count = 0;
+        *decision = 1;
+    } else if (UTY_CmpTime(time, unit, tim->count, lib->rate) != 0) {
+        *decision = 1;
+    } else {
+        *decision = 0;
+    }
 }
 
 void sftim_IsGrExecTime(SfdHn *hn, int *decision, float t, float ref)
