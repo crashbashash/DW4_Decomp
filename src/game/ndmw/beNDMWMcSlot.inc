@@ -76,12 +76,12 @@ static int g_beNDMWMcSlot_fieldOffsets[] = {
 };
 
 void beNDMWMcSlot_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWMcSlot_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWMcSlot_ctorTable, 5);
-    igMetaObject_NameFields(temp_s0, g_beNDMWMcSlot_fieldTable, g_beNDMWMcSlot_fieldHandles, g_beNDMWMcSlot_fieldOffsets, temp_s1);
+    meta = g_beNDMWMcSlot_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWMcSlot_ctorTable, 5);
+    igMetaObject_NameFields(meta, g_beNDMWMcSlot_fieldTable, g_beNDMWMcSlot_fieldHandles, g_beNDMWMcSlot_fieldOffsets, base);
 }
 

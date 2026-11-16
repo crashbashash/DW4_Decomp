@@ -29,15 +29,15 @@ int beSelectCtrlInfoRamData_GetVTable(void) {
     return r;
 }
 
-ObjectRefWord *FUN_00345410(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_00345410(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -97,28 +97,28 @@ static int g_beSelectCtrlInfoRamData_fieldOffsets[] = {
 };
 
 void beSelectCtrlInfoRamData_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s1;
-    T_345550 *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    void *work;
+    void *meta;
+    igStringMetaField *clone;
 
-    temp_s1 = (void *)(((void * *)&g_beSelectCtrlInfoRamData_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beSelectCtrlInfoRamData_ctorTable, 4);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (T_345550 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "ONE");
-    temp_v0_2->f28 = (int)(&g_beSelectCtrlInfoRamData_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->references = temp_v0_2->references - 1;
-    if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beSelectCtrlInfoRamData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSelectCtrlInfoRamData_ctorTable, 4);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(clone, "ONE");
+    clone->_externalEnumStorage = (int)(&g_beSelectCtrlInfoRamData_nameStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
-    *(int *)((char *)(temp_s0) + 56) = (int)beSelectCtrlInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_beSelectCtrlInfoRamData_fieldTable, g_beSelectCtrlInfoRamData_fieldHandles, g_beSelectCtrlInfoRamData_fieldOffsets, temp_s2);
+    work = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beSelectCtrlInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beSelectCtrlInfoRamData_fieldTable, g_beSelectCtrlInfoRamData_fieldHandles, g_beSelectCtrlInfoRamData_fieldOffsets, base);
 }
 

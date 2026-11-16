@@ -79,12 +79,12 @@ static int g_beNDMWAfsSetupData_fieldOffsets[] = {
 };
 
 void beNDMWAfsSetupData_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWAfsSetupData_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWAfsSetupData_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWAfsSetupData_fieldTable, g_beNDMWAfsSetupData_fieldHandles, g_beNDMWAfsSetupData_fieldOffsets, temp_s1);
+    meta = g_beNDMWAfsSetupData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWAfsSetupData_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beNDMWAfsSetupData_fieldTable, g_beNDMWAfsSetupData_fieldHandles, g_beNDMWAfsSetupData_fieldOffsets, base);
 }
 

@@ -4329,7 +4329,7 @@
       "Gap__Bec__ParticleArray__vfunc_24": "0x0015b840",
       "Gap__Bec__ParticleArray__vfunc_25": "0x0015b870",
       "FUN_0015bb50": "0x0015bb50",
-      "Gap__Gfx__igParticleArray__vfunc_28": "0x0015c230",
+      "igParticleArray_Update": "0x0015c230",
       "Gap__Bec__ParticleArray__vfunc_28": "0x0015c790",
       "Gap__Bec__ParticleArray__vfunc_30": "0x0015c830",
       "Gap__Bec__ParticleArray__vfunc_29": "0x0015c840",
@@ -4355,7 +4355,7 @@
       "FUN_0015da00": "0x0015da00",
       "FUN_0015da70": "0x0015da70",
       "FUN_0015dae0": "0x0015dae0",
-      "FUN_0015db00": "0x0015db00",
+      "igPointSpriteExt_SetSize": "0x0015db00",
       "FUN_0015db40": "0x0015db40",
       "FUN_0015db60": "0x0015db60",
       "Gap__Gfx__igPrimLengthArray1_1__vfunc_20": "0x0015db80",
@@ -4476,7 +4476,7 @@
       "FUN_00166c70": "0x00166c70",
       "FUN_00166c80": "0x00166c80",
       "FUN_00166c90": "0x00166c90",
-      "FUN_00166d40": "0x00166d40",
+      "igVisualContext_FindFirst": "0x00166d40",
       "FUN_00166de0": "0x00166de0",
       "FUN_00166f90": "0x00166f90",
       "FUN_00166fa0": "0x00166fa0",
@@ -7668,7 +7668,7 @@
       "Vec3f_TransformDirection": "0x00192f50",
       "Vec3f_TransformProjective": "0x00192fc0",
       "FUN_001930f0": "0x001930f0",
-      "FUN_001931b0": "0x001931b0",
+      "igVec4f_PackColor": "0x001931b0",
       "Color4f_Unpack": "0x00193540",
       "FUN_00193c50": "0x00193c50",
       "Gap__igVec4ucMetaField__vfunc_22": "0x00193d00",
@@ -36770,6 +36770,7 @@
   "0x003902f0": {
     "whole_file": true,
     "emitted": {
+      "beMeterCtrlNode_Traverse": "0x00390320",
       "beMeterCtrlNode_RegisterTraversalFunction": "0x00390890",
       "beModelCtrl_DrawDebugHitBox": "0x003908d0",
       "beModelCtrlInfoHitBody_GetAABoxList": "0x003908e0",
@@ -36788,6 +36789,7 @@
       "beModelCtrlInfoRideOn_IsModel": "0x003921a0",
       "beModelCtrlInfoRideOn2_Move": "0x00392200",
       "beModelCtrlInfoRideOn3_Move": "0x00392240",
+      "beModelCtrlInfoRideOn4_Move": "0x003923c0",
       "beModelCtrl_CheckWallAndFloor": "0x003926d0",
       "beModelCtrl_QueryMove": "0x00392be0",
       "beModelCtrlMoveObject_Start": "0x00392d20",
@@ -36815,6 +36817,7 @@
       "beModelCtrl_UpdateRam": "0x00395b50",
       "beModelCtrl_OnUpdateRam": "0x003960e0",
       "beModelCtrlInfoWork_FindSeqLabel": "0x003960f0",
+      "beModelCtrl__OnGenerateFromParent": "0x00396340",
       "beModelCtrl__OnGenerate": "0x00396740",
       "beModelCtrl_UpdateBound": "0x00396940",
       "beModelCtrl_OnMessageText": "0x00396a80",
@@ -36933,6 +36936,7 @@
       "g_beModelCtrl_metaObject": "0x00588e58",
       "g_beTargetObj_metaObject": "0x00587ce8",
       "g_bltShootRamNo": "0x0058a208",
+      "g_igModelViewMatrixAttr_metaObject": "0x0055efe8",
       "kIGMemoryPoolHandleUser1": "0x00587110",
       "g_hitterInfoName": "0x0058a204",
       "g_hitterRecNo": "0x0058a20c",
@@ -37428,7 +37432,8 @@
       "ParticleTimer_resetFields": "0x003a3940",
       "FUN_003a3960": "0x003a3960",
       "ParticleArray_resetFields": "0x003a3bb0",
-      "Gap__Bec__ParticleArray__vfunc_38": "0x003a3bf0",
+      "ParticleArray_UsesBaseUpdate": "0x003a3bf0",
+      "ParticleArray_Update": "0x003a3c10",
       "ParticleArray_GetMeta": "0x003a4910",
       "ParticleTimer_GetMeta": "0x003a4920"
     },
@@ -37441,7 +37446,9 @@
       "g_igCommonTraversal_metaObject": "0x00561d78"
     },
     "symbol": "FUN_003a3850",
-    "anon": []
+    "anon": [
+      "0x0050fd00"
+    ]
   },
   "0x003a4930": {
     "whole_file": true,

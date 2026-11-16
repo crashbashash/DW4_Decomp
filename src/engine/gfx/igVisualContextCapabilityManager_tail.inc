@@ -490,7 +490,7 @@ void FUN_00166c90(void **arg0, int arg1, int arg2, int arg3) {
     }
 }
 
-int FUN_00166d40(void) {
+int igVisualContext_FindFirst(void) {
     int r;
     int i;
 

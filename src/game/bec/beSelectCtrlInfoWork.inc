@@ -5,9 +5,9 @@ igMetaField *g_beSelectCtrlInfoWork_isCancelMetaField;
 igMetaField *g_beSelectCtrlInfoWork_svSeqNameMetaField;
 igMetaField *g_beSelectCtrlInfoWork_decideListMetaField;
 
-void beSelectCtrlInfoWork_Create(int arg0) {
+void beSelectCtrlInfoWork_Create(int allocator) {
     beSelectCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587F60, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587F60, allocator);
 }
 
 igMetaObject *beSelectCtrlInfoWork_GetOrCreateMetaObject(void) {
@@ -29,7 +29,7 @@ int beSelectCtrlInfoWork_GetVTable(void) {
     union U_345760 u;
     int temp_s1;
     void **q7;
-    S_ref *q8;
+    igObject *q8;
     int *temp_a1;
     int temp_v0;
     void *temp_a0;
@@ -37,17 +37,17 @@ int beSelectCtrlInfoWork_GetVTable(void) {
 
     igObject_InitHeader(u.b);
     q7 = &u.p[7];
-    q8 = (S_ref *)&u.p[8];
+    q8 = (igObject *)&u.p[8];
     u.w[0] = (int)(&g_beSelectCtrlInfoWork_vtable[0]);
     *q7 = 0;
     *(int *)q8 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beSelectCtrlInfoWork_vtable[0]);
     if (q8 != 0) {
-        q8 = *(S_ref **)q8;
+        q8 = *(igObject **)q8;
         if (q8 != 0) {
-            q8->f4 = (int)((int) (q8->f4 - 1));
-            if (((unsigned long long) ((long long) q8->f4 << 0x29) >> 0x29) == 0) {
+            q8->_refCount = (int)q8->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q8->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q8);
             }
         }
@@ -125,17 +125,17 @@ static int g_beSelectCtrlInfoWork_fieldOffsets[] = {
 };
 
 void beSelectCtrlInfoWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *decideList;
+    void *meta;
 
-    temp_s0 = (void *)g_beSelectCtrlInfoWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSelectCtrlInfoWork_ctorTable, 5);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beSelectCtrlInfoWork_fieldTable, g_beSelectCtrlInfoWork_fieldHandles, g_beSelectCtrlInfoWork_fieldOffsets, temp_s2);
+    meta = (void *)g_beSelectCtrlInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSelectCtrlInfoWork_ctorTable, 5);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
+    decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)decideList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beSelectCtrlInfoWork_fieldTable, g_beSelectCtrlInfoWork_fieldHandles, g_beSelectCtrlInfoWork_fieldOffsets, base);
 }
 
 igMetaEnum *g_beSelectCtrlInfoWork_msgActionMetaEnum;

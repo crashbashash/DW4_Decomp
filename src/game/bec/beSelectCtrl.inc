@@ -2,9 +2,9 @@ igMetaObject *g_beSelectCtrl_metaObject;
 igMetaField *g_beSelectCtrl_padManagerMetaField;
 igMetaField *g_beSelectCtrl_isEnableCtrlMetaField;
 
-void beSelectCtrl_CreateInstance(int arg0) {
+void beSelectCtrl_CreateInstance(int allocator) {
     beSelectCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587F98, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587F98, allocator);
 }
 
 igMetaObject *beSelectCtrl_GetOrCreateMetaObject(void) {
@@ -25,7 +25,7 @@ void *beSelectCtrl_GetMetaObject(void) {
 int beSelectCtrl_GetVTable(void) {
     union U u;
     int temp_s0;
-    S_ref *q0;
+    igObject *q0;
     char *q1;
     int *temp_v1;
     int *temp_a1;
@@ -35,16 +35,16 @@ int beSelectCtrl_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    q0 = (S_ref *)&u.b[24];
+    q0 = (igObject *)&u.b[24];
     *(int *)q0 = 0;
     u.vt = (int)&g_beSelectCtrl_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)q0->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }
@@ -111,17 +111,17 @@ static int g_beSelectCtrl_fieldOffsets[] = {
 };
 
 void beSelectCtrl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *padManager;
+    void *meta;
 
-    temp_s0 = (void *)g_beSelectCtrl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSelectCtrl_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
-    igMetaObject_NameFields(temp_s0, g_beSelectCtrl_fieldTable, g_beSelectCtrl_fieldHandles, g_beSelectCtrl_fieldOffsets, temp_s2);
+    meta = (void *)g_beSelectCtrl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSelectCtrl_ctorTable, 2);
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_refCounted = 0;
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 1), 1);
+    igMetaObject_NameFields(meta, g_beSelectCtrl_fieldTable, g_beSelectCtrl_fieldHandles, g_beSelectCtrl_fieldOffsets, base);
 }
 

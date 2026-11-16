@@ -14,13 +14,17 @@ int beTransformSync_GetVTable(void) {
     return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-O *FUN_00341160(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+igSmartPointer<igObject> *FUN_00341160(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beTransformSync_EnsureRegistered(void)
@@ -66,16 +70,16 @@ static int g_beTransformSync_fieldOffsets[] = {
 };
 
 void beTransformSync_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *syncTransformList;
+    void *meta;
 
-    temp_s0 = (void *)g_beTransformSync_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beTransformSync_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransformList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beTransformSync_fieldTable, g_beTransformSync_fieldHandles, g_beTransformSync_fieldOffsets, temp_s2);
+    meta = (void *)g_beTransformSync_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beTransformSync_ctorTable, 1);
+    syncTransformList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)syncTransformList)->_metaObject = igTransformList_GetOrCreateMetaObject();
+    ((igRefMetaField *)syncTransformList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beTransformSync_fieldTable, g_beTransformSync_fieldHandles, g_beTransformSync_fieldOffsets, base);
 }
 

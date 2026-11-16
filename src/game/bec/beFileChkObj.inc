@@ -1,9 +1,9 @@
 igMetaObject *g_beFileChkObj_metaObject;
 igMetaField *g_beFileChkObj_fdMetaField;
 
-void beFileChkObj_Create(int arg0) {
+void beFileChkObj_Create(int allocator) {
     beFileChkObj_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589780, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589780, allocator);
 }
 
 void *beFileChkObj_GetMetaObject(void) {
@@ -81,16 +81,16 @@ static int g_beFileChkObj_fieldOffsets[] = {
 };
 
 void beFileChkObj_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *fd;
+    void *meta;
 
-    temp_s0 = (void *)g_beFileChkObj_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beFileChkObj_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igFile_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beFileChkObj_fieldTable, g_beFileChkObj_fieldHandles, g_beFileChkObj_fieldOffsets, temp_s2);
+    meta = (void *)g_beFileChkObj_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beFileChkObj_ctorTable, 1);
+    fd = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)fd)->_metaObject = igFile_GetOrCreateMetaObject();
+    ((igRefMetaField *)fd)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beFileChkObj_fieldTable, g_beFileChkObj_fieldHandles, g_beFileChkObj_fieldOffsets, base);
 }
 

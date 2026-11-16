@@ -23,20 +23,20 @@ int beLayerInfo_GetVTable(void) {
     *(int *)ps = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beLayerInfo_vtable[0];
-    FUN_0035c4f0((ObjectRefWord *)ps, -1);
+    FUN_0035c4f0((igSmartPointer<igObject> *)ps, -1);
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
     return t;
 }
 
-ObjectRefWord *FUN_0035c4f0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_0035c4f0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -84,15 +84,15 @@ static int g_beLayerInfo_fieldOffsets[] = {
 };
 
 void beLayerInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *groups;
+    void *meta;
 
-    temp_s0 = (void *)g_beLayerInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLayerInfo_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beLayerGroupList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beLayerInfo_fieldTable, g_beLayerInfo_fieldHandles, g_beLayerInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beLayerInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLayerInfo_ctorTable, 1);
+    groups = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)groups)->_metaObject = (int)beLayerGroupList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beLayerInfo_fieldTable, g_beLayerInfo_fieldHandles, g_beLayerInfo_fieldOffsets, base);
 }
 

@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -52,7 +53,6 @@ extern "C" void *igObjectList_Register(void);
 extern "C" void *igAdxAfsFileList_Register(void);
 extern "C" void igAdxAfsFileList_GetMetaObjectFunction(void);
 extern "C" void *igAdxAfsFile_GetMetaObject(void);
-extern "C" int igObject_Destroy(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int igAdxAfsFile_GetVTable(void);
 extern "C" void igAdxAfsFile_EnsureRegistered(void);
@@ -78,7 +78,7 @@ extern "C" int igNamedObjectList_GetOrCreateMetaObject(void);
 extern "C" void * igMetaObject_GetFieldAt(...);
 extern "C" void igFileName_InitFields(void);
 extern "C" int igMetaObject_CreateInstance(igMetaObject *, int);
-extern "C" void igAdxFile_Create(int arg0);
+extern "C" void igAdxFile_Create(int allocator);
 extern "C" void *igAdxFile_GetMetaObject(void);
 extern "C" int igAdxFile_GetVTable(void);
 extern "C" void igAdxFile_EnsureRegistered(void);
@@ -94,7 +94,7 @@ extern "C" void igAdxFile_StaticInitialize(void);
 extern "C" void FUN_003350b0(void);
 extern "C" void igAdxFile_StaticFinalize(void);
 extern "C" void FUN_003350d0(void);
-extern "C" void igAdxAudio_Create(int arg0);
+extern "C" void igAdxAudio_Create(int allocator);
 extern "C" igMetaObject *igAdxAudio_GetOrCreateMetaObject(void);
 extern "C" void *igAdxAudio_GetMetaObject(void);
 extern "C" int igAdxAudio_GetVTable(void);
@@ -103,7 +103,7 @@ extern "C" void *igAdxAudio_Register(void);
 extern "C" void igAdxAudio_GetMetaObjectFunction(void);
 extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" void igAdxAudio_InitFields(void);
-extern "C" void igMovieCodecList_Create(int arg0);
+extern "C" void igMovieCodecList_Create(int allocator);
 extern "C" igMetaObject *igMovieCodecList_GetOrCreateMetaObject(void);
 extern "C" void *igMovieCodecList_GetMetaObject(void);
 extern "C" int igMovieCodecList_GetVTable(void);
@@ -126,19 +126,19 @@ extern "C" igMetaObject *igMovieCodec_GetPublishedMetaObject(void);
 extern "C" int igAudioContext_GetOrCreateMetaObject(void);
 extern "C" int igVisualContext_GetOrCreateMetaObject(void);
 extern "C" void igCriMovieCodec_InitFields(void);
-extern "C" void igCriMovieData_Create(int arg0);
+extern "C" void igCriMovieData_Create(int allocator);
 extern "C" int igCriMovieData_GetVTable(void);
 extern "C" void igCriMovieData_EnsureRegistered(void);
 extern "C" void *igCriMovieData_Register(void);
 extern "C" void igCriMovieData_GetMetaObjectFunction(void);
 extern "C" void igCriMovieData_InitFields(void);
-extern "C" void igMovieInfoList_Create(int arg0);
+extern "C" void igMovieInfoList_Create(int allocator);
 extern "C" igMetaObject *igMovieInfoList_GetOrCreateMetaObject(void);
 extern "C" int igMovieInfoList_GetVTable(void);
 extern "C" void igMovieInfoList_EnsureRegistered(void);
 extern "C" void *igMovieInfoList_Register(void);
 extern "C" void igMovieInfoList_GetMetaObjectFunction(void);
-extern "C" void igTextureBindAttrList_Create(int arg0);
+extern "C" void igTextureBindAttrList_Create(int allocator);
 extern "C" igMetaObject *igTextureBindAttrList_GetOrCreateMetaObject(void);
 extern "C" int igTextureBindAttrList_GetVTable(void);
 extern "C" void igTextureBindAttrList_EnsureRegistered(void);
@@ -147,7 +147,7 @@ extern "C" void igTextureBindAttrList_GetMetaObjectFunction(void);
 extern "C" igMetaEnum *igMetaEnum_Create(const char *, const char **, int *, int);
 extern "C" igMetaEnum *FUN_00336140(void);
 extern "C" igMetaEnum *FUN_003361a0(void);
-extern "C" void igMovieInfo_Create(int arg0);
+extern "C" void igMovieInfo_Create(int allocator);
 extern "C" void *igMovieInfo_GetMetaObject(void);
 extern "C" int FUN_00131aa0(int *, int);
 extern "C" int FUN_00132390(int *, int);
@@ -177,7 +177,7 @@ extern "C" void *igRenderer_Register(void);
 extern "C" void *igMovieRenderer_Register(void);
 extern "C" void igMovieRenderer_GetMetaObjectFunction(void);
 extern "C" void igMovieRenderer_InitFields(void);
-extern "C" void igMovieManager_CreateInstance(int arg0);
+extern "C" void igMovieManager_CreateInstance(int allocator);
 extern "C" igMetaObject *igMovieManager_GetOrCreateMetaObject(void);
 extern "C" void *igMovieManager_GetMetaObject(void);
 extern "C" int FUN_00231030(char *, int);
@@ -313,8 +313,7 @@ extern "C" igMetaObject_336a90 *igRenderer_GetPublishedMetaObject(void);
 extern "C" igMetaObject *g_igMovieManager_metaObject;
 union U_336cb0 { int vt; int w[12]; void *p[12]; char b[48]; };
 extern "C" int g_igMovieManager_vtable[4];
-struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
-extern "C" void **FUN_00336d90(struct Ref **self, short flag);
+extern "C" igSmartPointer<igObject> *FUN_00336d90(igSmartPointer<igObject> *self, short flag);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O_336e90 { S_temp_a0 *m; };
 extern "C" O_336e90 *FUN_00336e90(O_336e90 *arg0, short arg1);
@@ -590,7 +589,7 @@ igMetaObject *g_igFileNameList_metaObject;
 void *igFileNameList_GetMetaObject(void) {
     unsigned char b;
     if (g_igFileNameList_metaObject != 0) {
-        b = (*(int *)((char *)(g_igFileNameList_metaObject) + 36) & 4) != 0;
+        b = (g_igFileNameList_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     igFileNameList_EnsureRegistered();
@@ -757,9 +756,9 @@ igMetaField *g_igAdxFile_iFileSizeMetaField;
 igMetaField *g_igAdxFile_iSectorSizeMetaField;
 igMetaField *g_igAdxFile_lSleepTimeMetaField;
 
-void igAdxFile_Create(int arg0) {
+void igAdxFile_Create(int allocator) {
     igAdxFile_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igAdxFile_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igAdxFile_metaObject, allocator);
 }
 
 void *igAdxFile_GetMetaObject(void) {
@@ -891,7 +890,7 @@ void igAdxFile_InitFields(void) {
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 0xC)), 0x800);
     igUnsignedLongMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(meta, firstField + 0xD)), 0xFE502A);
     igMetaObject_NameFields(meta, g_igAdxFile_fieldTable, g_igAdxFile_fieldHandles, g_igAdxFile_fieldOffsets, firstField);
-    *(int *)((char *)g_igAdxFile_metaObject + 64) = (int)(&igFile_GetMetaObjectFunction);
+    g_igAdxFile_metaObject->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
     igMetaObject_AddExitCallback(&FUN_003350d0);
 }
 
@@ -916,9 +915,9 @@ igMetaField *g_igAdxAudio_iMaxFrequencyMetaField;
 igMetaField *g_igAdxAudio_bIsInitializedMetaField;
 igMetaField *g_igAdxAudio_filenameMetaField;
 
-void igAdxAudio_Create(int arg0) {
+void igAdxAudio_Create(int allocator) {
     igAdxAudio_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igAdxAudio_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igAdxAudio_metaObject, allocator);
 }
 
 igMetaObject *igAdxAudio_GetOrCreateMetaObject(void) {
@@ -1039,9 +1038,9 @@ void igAdxAudio_InitFields(void) {
 
 igMetaObject *g_igMovieCodecList_metaObject;
 
-void igMovieCodecList_Create(int arg0) {
+void igMovieCodecList_Create(int allocator) {
     igMovieCodecList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igMovieCodecList_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igMovieCodecList_metaObject, allocator);
 }
 
 igMetaObject *igMovieCodecList_GetOrCreateMetaObject(void) {
@@ -1330,9 +1329,9 @@ igMetaField *g_igCriMovieData_adxtMetaField;
 igMetaField *g_igCriMovieData_adxworkMetaField;
 igMetaField *g_igCriMovieData_macroFunctionMetaField;
 
-void igCriMovieData_Create(int arg0) {
+void igCriMovieData_Create(int allocator) {
     igCriMovieData_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igCriMovieData_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igCriMovieData_metaObject, allocator);
 }
 
 igMetaObject *igCriMovieData_GetMetaObject(void) {
@@ -1433,9 +1432,9 @@ void igCriMovieData_InitFields(void) {
 
 igMetaObject *g_igMovieInfoList_metaObject;
 
-void igMovieInfoList_Create(int arg0) {
+void igMovieInfoList_Create(int allocator) {
     igMovieInfoList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igMovieInfoList_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igMovieInfoList_metaObject, allocator);
 }
 
 igMetaObject *igMovieInfoList_GetOrCreateMetaObject(void) {
@@ -1495,9 +1494,9 @@ void igMovieInfoList_GetMetaObjectFunction(void)
 
 igMetaObject *g_igTextureBindAttrList_metaObject;
 
-void igTextureBindAttrList_Create(int arg0) {
+void igTextureBindAttrList_Create(int allocator) {
     igTextureBindAttrList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igTextureBindAttrList_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igTextureBindAttrList_metaObject, allocator);
 }
 
 igMetaObject *igTextureBindAttrList_GetOrCreateMetaObject(void) {
@@ -1612,9 +1611,9 @@ igMetaField *g_igMovieInfo_imageFormatMetaField;
 igMetaField *g_igMovieInfo_userdataMetaField;
 igMetaField *g_igMovieInfo_bitrateMetaField;
 
-void igMovieInfo_Create(int arg0) {
+void igMovieInfo_Create(int allocator) {
     igMovieInfo_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igMovieInfo_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igMovieInfo_metaObject, allocator);
 }
 
 void *igMovieInfo_GetMetaObject(void) {
@@ -1815,63 +1814,64 @@ static int g_igMovieInfo_fieldOffsets[] = {
 void igMovieInfo_InitFields(void) {
     int firstField;
     void *meta;
-    struct MovieInfoFieldView *videoTexturesField;
-    struct MovieInfoFieldView *codecField;
-    struct MovieInfoFieldView *sceneInfoField;
-    struct MovieInfoFieldView *runtimeImageField;
-    struct MovieInfoFieldView *runtimeTexturesField;
-    struct MovieInfoFieldView *typeField;
-    struct MovieInfoFieldView *minificationFilterField;
-    struct MovieInfoFieldView *magnificationFilterField;
-    struct MovieInfoFieldView *stateField;
-    struct MovieInfoFieldView *imageFormatField;
-    struct MovieInfoFieldView *userdataField;
+    igObjectRefMetaField *videoTexturesField;
+    igObjectRefMetaField *codecField;
+    igObjectRefMetaField *sceneInfoField;
+    igObjectRefMetaField *runtimeImageField;
+    igObjectRefMetaField *runtimeTexturesField;
+    igEnumMetaField *typeField;
+    igEnumMetaField *minificationFilterField;
+    igEnumMetaField *magnificationFilterField;
+    igEnumMetaField *stateField;
+    igEnumMetaField *imageFormatField;
+    igObjectRefMetaField *userdataField;
 
     meta = g_igMovieInfo_metaObject;
     firstField = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igMovieInfo_ctorTable, 0x15);
-    igStringMetaField_SetDefaultText(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField)), 0);
-    typeField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 1)));
+    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, firstField)), 0);
+    typeField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 1);
     igEnumMetaField_SetDefaultValue(typeField, 0);
-    typeField->f52 = (int)FUN_003361a0;
-    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 3)), -1);
-    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 4)), -1);
-    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 5)), -1);
-    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 6)), -1);
-    videoTexturesField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 7)));
-    videoTexturesField->f56 = (int)igTextureBindAttrList_GetOrCreateMetaObject();
-    minificationFilterField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 8)));
+    typeField->_getMetaEnumFunction = (int)FUN_003361a0;
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 3)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 4)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 5)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 6)), -1);
+    videoTexturesField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 7);
+    videoTexturesField->_metaObject = (int)igTextureBindAttrList_GetOrCreateMetaObject();
+    minificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 8);
     igEnumMetaField_SetDefaultValue(minificationFilterField, 0);
-    *(void (**)(void))&minificationFilterField->f52 = FUN_00149980;
-    magnificationFilterField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 9)));
+    /* matching construct: a function-pointer store; an int store pools the getter addresses in .data */
+    *(void (**)(void))&minificationFilterField->_getMetaEnumFunction = FUN_00149980;
+    magnificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 9);
     igEnumMetaField_SetDefaultValue(magnificationFilterField, 0);
-    *(void (**)(void))&magnificationFilterField->f52 = FUN_00149980;
-    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xA)), -1);
-    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xB)), -1);
-    igStringMetaField_SetDefaultText(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xC)), 0);
-    codecField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xD)));
-    codecField->f56 = (int)igMovieCodec_GetOrCreateMetaObject();
-    codecField->f38 = 0;
-    stateField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xE)));
+    *(void (**)(void))&magnificationFilterField->_getMetaEnumFunction = FUN_00149980;
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 0xA)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 0xB)), -1);
+    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, firstField + 0xC)), 0);
+    codecField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0xD);
+    codecField->_metaObject = (int)igMovieCodec_GetOrCreateMetaObject();
+    codecField->_persistent = 0;
+    stateField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0xE);
     igEnumMetaField_SetDefaultValue(stateField, 1);
-    stateField->f52 = (int)FUN_00336140;
-    sceneInfoField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xF)));
-    sceneInfoField->f56 = igSceneInfo_GetOrCreateMetaObject();
-    sceneInfoField->f38 = 0;
-    runtimeImageField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0x10)));
-    runtimeImageField->f56 = igImage_GetOrCreateMetaObject();
-    runtimeImageField->f38 = 0;
-    runtimeTexturesField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0x11)));
-    runtimeTexturesField->f56 = igTextureList_GetOrCreateMetaObject();
-    runtimeTexturesField->f38 = 0;
-    imageFormatField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0x12)));
+    stateField->_getMetaEnumFunction = (int)FUN_00336140;
+    sceneInfoField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0xF);
+    sceneInfoField->_metaObject = igSceneInfo_GetOrCreateMetaObject();
+    sceneInfoField->_persistent = 0;
+    runtimeImageField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0x10);
+    runtimeImageField->_metaObject = igImage_GetOrCreateMetaObject();
+    runtimeImageField->_persistent = 0;
+    runtimeTexturesField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0x11);
+    runtimeTexturesField->_metaObject = igTextureList_GetOrCreateMetaObject();
+    runtimeTexturesField->_persistent = 0;
+    imageFormatField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0x12);
     igEnumMetaField_SetDefaultValue(imageFormatField, 7);
-    imageFormatField->f38 = 0;
-    imageFormatField->f52 = (int)FUN_001499e0;
-    userdataField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0x13)));
-    userdataField->f56 = (int)((int) g_igObject_metaObject[0]);
-    userdataField->f38 = 0;
-    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0x14)), -1);
+    imageFormatField->_persistent = 0;
+    imageFormatField->_getMetaEnumFunction = (int)FUN_001499e0;
+    userdataField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0x13);
+    userdataField->_metaObject = (int)((int)g_igObject_metaObject[0]);
+    userdataField->_persistent = 0;
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 0x14)), -1);
     igMetaObject_NameFields(meta, g_igMovieInfo_fieldTable, g_igMovieInfo_fieldHandles, g_igMovieInfo_fieldOffsets, firstField);
 }
 
@@ -1991,9 +1991,9 @@ igMetaField *g_igMovieManager_codecListMetaField;
 igMetaField *g_igMovieManager_movieRendererMetaField;
 igMetaField *g_igMovieManager_rendererListMetaField;
 
-void igMovieManager_CreateInstance(int arg0) {
+void igMovieManager_CreateInstance(int allocator) {
     igMovieManager_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igMovieManager_metaObject, arg0);
+    igMetaObject_CreateInstance(g_igMovieManager_metaObject, allocator);
 }
 
 igMetaObject *igMovieManager_GetOrCreateMetaObject(void) {
@@ -2032,22 +2032,22 @@ int igMovieManager_GetVTable(void) {
     FUN_00336e90((O_336e90 *)(&u.w[8]), (short)(-1));
     FUN_00336e10((void **)(&u.w[7]), (long long)(-1));
     FUN_00335930((struct R **)(&u.w[6]), (short)(-1));
-    FUN_00336d90((struct Ref **)(&u.w[4]), (short)(-1));
+    FUN_00336d90((igSmartPointer<igObject> *)(&u.w[4]), (short)(-1));
     FUN_00231030(u.b, 0);
     return temp_s4;
 }
 
-void **FUN_00336d90(struct Ref **self, short flag) {
-    struct Ref *p;
+igSmartPointer<igObject> *FUN_00336d90(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+        igObject *object = self->p;
+        if (object != 0) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
         }
         if (flag > 0) __dl__FPv(self);
     }
-    return (void **)self;
+    return self;
 }
 
 void **FUN_00336e10(void **arg0, long long arg1) {

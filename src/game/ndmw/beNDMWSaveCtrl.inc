@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWSaveCtrl_metaObject;
 igMetaField *g_beNDMWSaveCtrl_padManagerMetaField;
 
-void beNDMWSaveCtrl_CreateInstance(int arg0) {
+void beNDMWSaveCtrl_CreateInstance(int allocator) {
     beNDMWSaveCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWSaveCtrl_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWSaveCtrl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWSaveCtrl_GetOrCreateMetaObject(void) {
@@ -82,15 +82,15 @@ static int g_beNDMWSaveCtrl_fieldOffsets[] = {
 };
 
 void beNDMWSaveCtrl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *padManager;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWSaveCtrl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWSaveCtrl_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = bePadManager_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWSaveCtrl_fieldTable, g_beNDMWSaveCtrl_fieldHandles, g_beNDMWSaveCtrl_fieldOffsets, temp_s2);
+    meta = g_beNDMWSaveCtrl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWSaveCtrl_ctorTable, 1);
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWSaveCtrl_fieldTable, g_beNDMWSaveCtrl_fieldHandles, g_beNDMWSaveCtrl_fieldOffsets, base);
 }
 

@@ -4,9 +4,9 @@ igMetaField *g_beNDMWStatusCtrlSendBit_editMaxMetaField;
 igMetaField *g_beNDMWStatusCtrlSendBit_playerNoListMetaField;
 igMetaField *g_beNDMWStatusCtrlSendBit_receiptMetaField;
 
-void beNDMWStatusCtrlSendBit_Create(int arg0) {
+void beNDMWStatusCtrlSendBit_Create(int allocator) {
     beNDMWStatusCtrlSendBit_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlSendBit_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlSendBit_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrlSendBit_GetMetaObject(void) {
@@ -93,15 +93,15 @@ static int g_beNDMWStatusCtrlSendBit_fieldOffsets[] = {
 };
 
 void beNDMWStatusCtrlSendBit_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *playerNoList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusCtrlSendBit_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlSendBit_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlSendBit_fieldTable, g_beNDMWStatusCtrlSendBit_fieldHandles, g_beNDMWStatusCtrlSendBit_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatusCtrlSendBit_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlSendBit_ctorTable, 4);
+    playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWStatusCtrlSendBit_fieldTable, g_beNDMWStatusCtrlSendBit_fieldHandles, g_beNDMWStatusCtrlSendBit_fieldOffsets, base);
 }
 

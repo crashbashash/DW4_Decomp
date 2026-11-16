@@ -16,21 +16,21 @@ int beModelCtrlInfoDataAIM_GetVTable(void) {
     char *o;
     int *a1;
     int v0;
-    S_ref *p0, *p1;
+    igObject *p0, *p1;
 
     igObject_InitHeader(u.b);
-    p0 = (S_ref *)&u.b[8];
+    p0 = (igObject *)&u.b[8];
     *(int *)p0 = 0;
     u.vt = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
-    p1 = (S_ref *)&u.b[16];
+    p1 = (igObject *)&u.b[16];
     *(int *)p1 = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
     if (p1 != 0) {
-        p1 = *(S_ref **)p1;
+        p1 = *(igObject **)p1;
         if (p1 != 0) {
-            p1->f4 = (int)((int) (p1->f4 - 1));
-            if (((unsigned long long) ((long long) p1->f4 << 0x29) >> 0x29) == 0) {
+            p1->_refCount = (int)p1->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)p1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p1);
             }
         }
@@ -93,29 +93,29 @@ static int g_beModelCtrlInfoDataAIM_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoDataAIM_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s1;
-    T_temp_v0_2 *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    void *aIMapList;
+    void *meta;
+    igStringMetaField *clone;
 
-    temp_s1 = (void *)(((void * *)&g_beModelCtrlInfoDataAIM_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoDataAIM_ctorTable, 1);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (T_temp_v0_2 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "AIM");
-    temp_v0_2->f28 = (int)(&g_beModelCtrlInfoDataAIM_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->references = temp_v0_2->references - 1;
-    if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beModelCtrlInfoDataAIM_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataAIM_ctorTable, 1);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(clone, "AIM");
+    clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIM_nameStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = (int)beModelCtrlAIMapList_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s0) + 52) = 1;
-    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoDataAIM_fieldTable, g_beModelCtrlInfoDataAIM_fieldHandles, g_beModelCtrlInfoDataAIM_fieldOffsets, temp_s2);
+    aIMapList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)aIMapList)->_metaObject = (int)beModelCtrlAIMapList_GetOrCreateMetaObject();
+    ((igRefMetaField *)aIMapList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoDataAIM_fieldTable, g_beModelCtrlInfoDataAIM_fieldHandles, g_beModelCtrlInfoDataAIM_fieldOffsets, base);
 }
 

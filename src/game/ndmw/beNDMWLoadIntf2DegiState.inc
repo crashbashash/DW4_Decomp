@@ -16,9 +16,9 @@ igMetaField *g_beNDMWLoadIntf2DegiState_st1MetaField;
 igMetaField *g_beNDMWLoadIntf2DegiState_st2MetaField;
 igMetaField *g_beNDMWLoadIntf2DegiState_st3MetaField;
 
-void beNDMWLoadIntf2DegiState_Create(int arg0) {
+void beNDMWLoadIntf2DegiState_Create(int allocator) {
     beNDMWLoadIntf2DegiState_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiState_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiState_metaObject, allocator);
 }
 
 void *beNDMWLoadIntf2DegiState_ResolveMetaObject(void) {
@@ -139,28 +139,28 @@ static int g_beNDMWLoadIntf2DegiState_fieldOffsets[] = {
 };
 
 void beNDMWLoadIntf2DegiState_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_4;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *messenger;
+    void *commonIntf;
+    void *textOrder;
+    void *comMdlCtrl;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWLoadIntf2DegiState_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWLoadIntf2DegiState_ctorTable, 0x10);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_3)->_refCounted = 0;
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_4)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beNDMWLoadIntf2DegiState_fieldTable, g_beNDMWLoadIntf2DegiState_fieldHandles, g_beNDMWLoadIntf2DegiState_fieldOffsets, temp_s2);
+    meta = g_beNDMWLoadIntf2DegiState_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWLoadIntf2DegiState_ctorTable, 0x10);
+    comMdlCtrl = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)comMdlCtrl)->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)comMdlCtrl)->_refCounted = 0;
+    textOrder = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)textOrder)->_metaObject = (int)beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)textOrder)->_refCounted = 0;
+    commonIntf = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)commonIntf)->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)commonIntf)->_refCounted = 0;
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beNDMWLoadIntf2DegiState_fieldTable, g_beNDMWLoadIntf2DegiState_fieldHandles, g_beNDMWLoadIntf2DegiState_fieldOffsets, base);
 }
 

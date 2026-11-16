@@ -12,7 +12,7 @@ igMetaField *g_beModelCtrlInfoDataAIH_limitCountMetaField;
 void *beModelCtrlInfoDataAIH_GetMetaObject(void) {
     unsigned char b;
     if (g_beModelCtrlInfoDataAIH_metaObject != 0) {
-        b = (*(int *)((char *)(g_beModelCtrlInfoDataAIH_metaObject) + 36) & 4) != 0;
+        b = (g_beModelCtrlInfoDataAIH_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beModelCtrlInfoDataAIH_EnsureRegistered();
@@ -118,25 +118,25 @@ static int g_beModelCtrlInfoDataAIH_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoDataAIH_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s1;
-    S_ref *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    void *meta;
+    igStringMetaField *clone;
 
-    temp_s1 = (void *)(g_beModelCtrlInfoDataAIH_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoDataAIH_ctorTable, 8);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (S_ref *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "AIH");
-    *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_beModelCtrlInfoDataAIH_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->f4 = temp_v0_2->f4 - 1;
-    if (((unsigned long long) ((long long) temp_v0_2->f4 << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beModelCtrlInfoDataAIH_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataAIH_ctorTable, 8);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(clone, "AIH");
+    clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIH_nameStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoDataAIH_fieldTable, g_beModelCtrlInfoDataAIH_fieldHandles, g_beModelCtrlInfoDataAIH_fieldOffsets, temp_s2);
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoDataAIH_fieldTable, g_beModelCtrlInfoDataAIH_fieldHandles, g_beModelCtrlInfoDataAIH_fieldOffsets, base);
 }
 

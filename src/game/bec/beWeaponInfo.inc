@@ -25,29 +25,24 @@ int beWeaponInfo_GetVTable(void) {
     obj.f24 = 0;
     temp_s2 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&g_beWeaponInfo_vtable[0]);
-    FUN_0033edb0((struct T **)&obj.f24, (short)(-1));
+    FUN_0033edb0((igSmartPointer<igObject> *)&obj.f24, (short)(-1));
     FUN_00199450(&obj.f20, -1);
     FUN_001958f0(&obj.f1C, -1);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return temp_s2;
 }
 
-igObject **FUN_0033ec00(igObject **arg0, short arg1) {
-    igObject *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = temp_a0->_refCount - 1;
-            if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0033ec00(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void *FUN_0033ec80(struct S_33ec80 *arg0, short arg1) {
@@ -100,21 +95,17 @@ void *FUN_0033ec80(struct S_33ec80 *arg0, short arg1) {
     return arg0;
 }
 
-struct T **FUN_0033edb0(struct T **arg0, short arg1) {
-    struct T *o;
-    if (arg0 != 0) {
-        o = *arg0;
-        if (o != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_0033edb0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beWeaponInfo_EnsureRegistered(void)
@@ -172,24 +163,24 @@ static int g_beWeaponInfo_fieldOffsets[] = {
 };
 
 void beWeaponInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s0;
+    int base;
+    void *nodeList;
+    void *boneNameList;
+    void *seqDataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beWeaponInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beWeaponInfo_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNodeList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beWeaponSeqDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beWeaponInfo_fieldTable, g_beWeaponInfo_fieldHandles, g_beWeaponInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beWeaponInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beWeaponInfo_ctorTable, 3);
+    nodeList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)nodeList)->_metaObject = igNodeList_GetOrCreateMetaObject();
+    ((igRefMetaField *)nodeList)->_construct = 1;
+    boneNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)boneNameList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)boneNameList)->_construct = 1;
+    seqDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)seqDataList)->_metaObject = (int)beWeaponSeqDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)seqDataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beWeaponInfo_fieldTable, g_beWeaponInfo_fieldHandles, g_beWeaponInfo_fieldOffsets, base);
 }
 

@@ -71,12 +71,12 @@ static int g_beSvSlotData_fieldOffsets[] = {
 };
 
 void beSvSlotData_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beSvSlotData_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSvSlotData_ctorTable, 5);
-    igMetaObject_NameFields(temp_s0, g_beSvSlotData_fieldTable, g_beSvSlotData_fieldHandles, g_beSvSlotData_fieldOffsets, temp_s1);
+    meta = (void *)g_beSvSlotData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSvSlotData_ctorTable, 5);
+    igMetaObject_NameFields(meta, g_beSvSlotData_fieldTable, g_beSvSlotData_fieldHandles, g_beSvSlotData_fieldOffsets, base);
 }
 

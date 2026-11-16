@@ -2,9 +2,9 @@ igMetaObject *g_beWeaponAttachData_metaObject;
 igMetaField *g_beWeaponAttachData_boneSelectListMetaField;
 igMetaField *g_beWeaponAttachData_appearanceListListMetaField;
 
-void beWeaponAttachData_Create(int arg0) {
+void beWeaponAttachData_Create(int allocator) {
     beWeaponAttachData_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587A80, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587A80, allocator);
 }
 
 igMetaObject *beWeaponAttachData_GetMetaObject(void) {
@@ -77,20 +77,20 @@ static int g_beWeaponAttachData_fieldOffsets[] = {
 };
 
 void beWeaponAttachData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *appearanceListList;
+    void *boneSelectList;
+    void *meta;
 
-    temp_s0 = (void *)g_beWeaponAttachData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beWeaponAttachData_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igModelViewMatrixBoneSelectListBec_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igAppearanceListList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beWeaponAttachData_fieldTable, g_beWeaponAttachData_fieldHandles, g_beWeaponAttachData_fieldOffsets, temp_s2);
+    meta = (void *)g_beWeaponAttachData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beWeaponAttachData_ctorTable, 2);
+    boneSelectList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)boneSelectList)->_metaObject = (int)igModelViewMatrixBoneSelectListBec_GetOrCreateMetaObject();
+    ((igRefMetaField *)boneSelectList)->_construct = 1;
+    appearanceListList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)appearanceListList)->_metaObject = (int)igAppearanceListList_GetOrCreateMetaObject();
+    ((igRefMetaField *)appearanceListList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beWeaponAttachData_fieldTable, g_beWeaponAttachData_fieldHandles, g_beWeaponAttachData_fieldOffsets, base);
 }
 

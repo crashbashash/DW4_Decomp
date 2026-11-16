@@ -23,21 +23,21 @@ int bePoint01Info_GetVTable(void) {
     obj.f20 = 0;
     temp_s1 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&g_bePoint01Info_vtable[0]);
-    FUN_0034b790((ObjectRefWord *)&obj.f20, -1);
-    FUN_00343260((ObjectRefWord *)&obj.f1C, -1);
+    FUN_0034b790((igSmartPointer<igObject> *)&obj.f20, -1);
+    FUN_00343260((igSmartPointer<igObject> *)&obj.f1C, -1);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return temp_s1;
 }
 
-ObjectRefWord *FUN_0034b790(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_0034b790(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -89,20 +89,20 @@ static int g_bePoint01Info_fieldOffsets[] = {
 };
 
 void bePoint01Info_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s0;
+    int base;
+    void *switchField;
+    void *dataList;
+    void *meta;
 
-    temp_s0 = (void *)g_bePoint01Info_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_bePoint01Info_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igSwitch_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beGroupKeepList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_bePoint01Info_fieldTable, g_bePoint01Info_fieldHandles, g_bePoint01Info_fieldOffsets, temp_s2);
+    meta = (void *)g_bePoint01Info_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_bePoint01Info_ctorTable, 2);
+    switchField = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)switchField)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beGroupKeepList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_bePoint01Info_fieldTable, g_bePoint01Info_fieldHandles, g_bePoint01Info_fieldOffsets, base);
 }
 
 igMetaEnum *g_bePoint01Info_msgActionMetaEnum;

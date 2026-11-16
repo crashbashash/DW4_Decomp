@@ -21,22 +21,17 @@ int beFontImage_GetVTable(void) {
     return r;
 }
 
-void **FUN_003619a0(void **arg0, short arg1) {
-    S_temp_a0_3619a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_3619a0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_003619a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 O_361a20 *FUN_00361a20(O_361a20 *arg0, short arg1) {

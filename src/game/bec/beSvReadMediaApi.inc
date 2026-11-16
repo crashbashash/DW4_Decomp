@@ -5,9 +5,9 @@ igMetaField *g_beSvReadMediaApi_oneSvDataSizeMetaField;
 igMetaField *g_beSvReadMediaApi_lodeDataMetaField;
 igMetaField *g_beSvReadMediaApi_loadWorkListMetaField;
 
-void beSvReadMediaApi_Create(int arg0) {
+void beSvReadMediaApi_Create(int allocator) {
     beSvReadMediaApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588238, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588238, allocator);
 }
 
 igMetaObject *beSvReadMediaApi_GetMetaObject(void) {
@@ -30,19 +30,23 @@ int beSvReadMediaApi_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beSvReadMediaApi_vtable[0];
     igSmartPointer_igObjectList_Destruct(&obj.w20, -1);
-    FUN_003493b0((O *)&obj.w19, (short)(-1));
-    FUN_00349080((void **)&obj.w17, (long long)(-1));
+    FUN_003493b0((igSmartPointer<igObject> *)&obj.w19, (short)(-1));
+    FUN_00349080((igSmartPointer<igObject> *)&obj.w17, (long long)(-1));
     FUN_00348390((struct S_348390 *)&obj, (short)0);
     return t;
 }
 
-O *FUN_003493b0(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+igSmartPointer<igObject> *FUN_003493b0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beSvReadMediaApi_EnsureRegistered(void)
@@ -104,27 +108,27 @@ static int g_beSvReadMediaApi_fieldOffsets[] = {
 };
 
 void beSvReadMediaApi_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s1_4;
-    void *temp_s0;
+    int base;
+    void *outputGamedata;
+    void *gameData;
+    void *lodeData;
+    void *loadWorkList;
+    void *meta;
 
-    temp_s0 = (void *)g_beSvReadMediaApi_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSvReadMediaApi_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x10);
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beSvReadMediaApi_fieldTable, g_beSvReadMediaApi_fieldHandles, g_beSvReadMediaApi_fieldOffsets, temp_s2);
+    meta = (void *)g_beSvReadMediaApi_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSvReadMediaApi_ctorTable, 5);
+    outputGamedata = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)outputGamedata)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
+    gameData = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)gameData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)gameData)->_refCounted = 0;
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), 0x10);
+    lodeData = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)lodeData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
+    loadWorkList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)loadWorkList)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)loadWorkList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beSvReadMediaApi_fieldTable, g_beSvReadMediaApi_fieldHandles, g_beSvReadMediaApi_fieldOffsets, base);
 }
 

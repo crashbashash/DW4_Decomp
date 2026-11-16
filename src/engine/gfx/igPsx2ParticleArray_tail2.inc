@@ -2,7 +2,7 @@ int Gap__Gfx__igPsx2ParticleArray__vfunc_28(igPsx2ParticleArray *self, float tim
     void *context;
 
     if (!self->_hardwareSupport) {
-        return Gap__Gfx__igParticleArray__vfunc_28((PA *)self, num, offset, status, time);
+        return igParticleArray_Update((PA *)self, num, offset, status, time);
     }
     self->_currentTime = time;
     if (!(time <= self->_particleLifeEnd + self->_particleLifetimeEndOffset)) {
@@ -17,7 +17,7 @@ int Gap__Gfx__igPsx2ParticleArray__vfunc_28(igPsx2ParticleArray *self, float tim
     self->_particleNum = num;
     self->_particleOffset = offset;
     if (self->_context == 0) {
-        context = (void *)FUN_00166d40();
+        context = (void *)igVisualContext_FindFirst();
         if (context != 0) {
             ((ParticleArrayCalls *)self)->configure(self->_particleLifeStart, self->_particleFormat, self->_particleLifeEnd, self->_maxNum, context);
             *status = 0;

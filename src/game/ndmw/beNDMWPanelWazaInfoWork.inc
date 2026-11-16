@@ -11,9 +11,9 @@ igMetaField *g_beNDMWPanelWazaInfoWork_playerWorkMetaField;
 igMetaField *g_beNDMWPanelWazaInfoWork_textSetListMetaField;
 igMetaField *g_beNDMWPanelWazaInfoWork_textColorListMetaField;
 
-void beNDMWPanelWazaInfoWork_Create(int arg0) {
+void beNDMWPanelWazaInfoWork_Create(int allocator) {
     beNDMWPanelWazaInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWPanelWazaInfoWork_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWPanelWazaInfoWork_metaObject, allocator);
 }
 
 igMetaObject *beNDMWPanelWazaInfoWork_GetOrCreateMetaObject(void) {
@@ -52,74 +52,64 @@ int beNDMWPanelWazaInfoWork_GetVTable(void) {
     obj.vt = (&g_beNDMWPanelWazaInfoWork_vtable[0]);
     igSmartPointer_igIntList_Destruct(&obj.f2C, -1);
     igSmartPointer_igStringRefList_Destruct(&obj.f28, -1);
-    FUN_003bde80((struct Ref **)&obj.f24, (short)(-1));
+    FUN_003bde80((igSmartPointer<igObject> *)&obj.f24, -1);
     igStringRef_Destruct(&obj.f20, -1);
-    FUN_003bde00((void **)&obj.f18, (short)(-1));
-    FUN_003bdd80((void **)&obj.f14, -1);
-    FUN_003bdd00((ObjectRefWord *)&obj.f10, -1);
+    FUN_003bde00((igSmartPointer<igObject> *)&obj.f18, -1);
+    FUN_003bdd80((igSmartPointer<igObject> *)&obj.f14, -1);
+    FUN_003bdd00((igSmartPointer<igObject> *)&obj.f10, -1);
     return temp_s5;
 }
 
-ObjectRefWord *FUN_003bdd00(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_003bdd00(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_003bdd80(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_003bdd80(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_003bde00(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_003bde00(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_003bde80(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+igSmartPointer<igObject> *FUN_003bde80(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return (void **)self;
+    return self;
 }
 
 void beNDMWPanelWazaInfoWork_EnsureRegistered(void)
@@ -205,37 +195,37 @@ static int g_beNDMWPanelWazaInfoWork_fieldOffsets[] = {
 };
 
 void beNDMWPanelWazaInfoWork_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s1;
-    int temp_s0;
+    void *panelWaza;
+    void *panelItem;
+    void *panelStat;
+    void *playerWork;
+    void *textSetList;
+    void *textColorList;
+    void *meta;
+    int base;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (void *)g_beNDMWPanelWazaInfoWork_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWPanelWazaInfoWork_ctorTable, 0xB);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beNDMWPanelObjectWaza_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beNDMWPanelObjectItem_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beNDMWPanelObjectStat_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject();
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igStringRefList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWPanelWazaInfoWork_fieldTable, g_beNDMWPanelWazaInfoWork_fieldHandles, g_beNDMWPanelWazaInfoWork_fieldOffsets, temp_s0);
+    meta = (void *)g_beNDMWPanelWazaInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelWazaInfoWork_ctorTable, 0xB);
+    panelWaza = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)panelWaza)->_metaObject = (int)beNDMWPanelObjectWaza_GetOrCreateMetaObject();
+    ((igRefMetaField *)panelWaza)->_construct = 1;
+    panelItem = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)panelItem)->_metaObject = (int)beNDMWPanelObjectItem_GetOrCreateMetaObject();
+    ((igRefMetaField *)panelItem)->_construct = 1;
+    panelStat = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)panelStat)->_metaObject = (int)beNDMWPanelObjectStat_GetOrCreateMetaObject();
+    ((igRefMetaField *)panelStat)->_construct = 1;
+    playerWork = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)playerWork)->_metaObject = (int)beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject();
+    textSetList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)textSetList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igRefMetaField *)textSetList)->_construct = 1;
+    textColorList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
+    ((igObjectRefMetaField *)textColorList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)textColorList)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWPanelWazaInfoWork_fieldTable, g_beNDMWPanelWazaInfoWork_fieldHandles, g_beNDMWPanelWazaInfoWork_fieldOffsets, base);
 }
 

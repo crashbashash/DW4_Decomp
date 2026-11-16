@@ -9,10 +9,16 @@ struct igVec2f {
     float y;
 
     igVec2f() {}
+    igVec2f(const igVec2f &o) {
+        x = o.x;
+        y = o.y;
+    }
     igVec2f(float x_, float y_) {
         x = x_;
         y = y_;
     }
+    igVec2f operator*(float s) const { return igVec2f(x * s, y * s); }
+    igVec2f operator+(const igVec2f &o) const { return igVec2f(x + o.x, y + o.y); }
     void set(float x_, float y_) {
         x = x_;
         y = y_;
@@ -42,6 +48,8 @@ struct igVec4f {
         z = z_;
         w = w_;
     }
+    igVec4f operator*(float s) const { return igVec4f(x * s, y * s, z * s, w * s); }
+    igVec4f operator+(const igVec4f &o) const { return igVec4f(x + o.x, y + o.y, z + o.z, w + o.w); }
     void set(float x_, float y_, float z_, float w_) {
         x = x_;
         y = y_;

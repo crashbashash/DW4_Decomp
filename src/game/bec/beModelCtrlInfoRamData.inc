@@ -22,21 +22,21 @@ int beModelCtrlInfoRamData_GetVTable(void) {
     obj.w5 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beModelCtrlInfoRamData_vtable[0];
-    FUN_00352fc0((ObjectRefWord *)&obj.w5, -1);
+    FUN_00352fc0((igSmartPointer<igObject> *)&obj.w5, -1);
     FUN_0034c1b0((void **)&obj.w4, (short)(-1));
     FUN_00344030((struct W_344030 *)&obj, (short)0);
     return t;
 }
 
-ObjectRefWord *FUN_00352fc0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_00352fc0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -88,31 +88,31 @@ static int g_beModelCtrlInfoRamData_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoRamData_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s0_2;
-    void *temp_s1;
-    S_ref *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    void *node;
+    void *work;
+    void *meta;
+    igStringMetaField *clone;
 
-    temp_s1 = (void *)(((void * *)&g_beModelCtrlInfoRamData_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoRamData_ctorTable, 2);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (S_ref *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "ONE");
-    *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_beModelCtrlInfoRamData_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->f4 = temp_v0_2->f4 - 1;
-    if (((unsigned long long) ((long long) temp_v0_2->f4 << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beModelCtrlInfoRamData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoRamData_ctorTable, 2);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(clone, "ONE");
+    clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRamData_nameStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = (int)beModelCtrlNode2_GetOrCreateMetaObject();
-    temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    *(int *)((char *)(temp_s0_2) + 56) = (int)beModelCtrlInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoRamData_fieldTable, g_beModelCtrlInfoRamData_fieldHandles, g_beModelCtrlInfoRamData_fieldOffsets, temp_s2);
+    node = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)node)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
+    work = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beModelCtrlInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoRamData_fieldTable, g_beModelCtrlInfoRamData_fieldHandles, g_beModelCtrlInfoRamData_fieldOffsets, base);
 }
 

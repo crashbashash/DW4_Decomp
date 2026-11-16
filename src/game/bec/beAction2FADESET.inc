@@ -87,12 +87,12 @@ static int g_beAction2FADESET_fieldOffsets[] = {
 };
 
 void beAction2FADESET_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beAction2FADESET_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beAction2FADESET_ctorTable, 2);
-    igMetaObject_NameFields(temp_s0, g_beAction2FADESET_fieldTable, g_beAction2FADESET_fieldHandles, g_beAction2FADESET_fieldOffsets, temp_s1);
+    meta = (void *)g_beAction2FADESET_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beAction2FADESET_ctorTable, 2);
+    igMetaObject_NameFields(meta, g_beAction2FADESET_fieldTable, g_beAction2FADESET_fieldHandles, g_beAction2FADESET_fieldOffsets, base);
 }
 

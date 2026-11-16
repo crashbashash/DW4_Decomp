@@ -81,16 +81,16 @@ static int g_beMovieInfoData_fieldOffsets[] = {
 };
 
 void beMovieInfoData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *sceneInfo;
+    void *meta;
 
-    temp_s0 = (void *)g_beMovieInfoData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMovieInfoData_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igSceneInfo_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beMovieInfoData_fieldTable, g_beMovieInfoData_fieldHandles, g_beMovieInfoData_fieldOffsets, temp_s2);
+    meta = (void *)g_beMovieInfoData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMovieInfoData_ctorTable, 3);
+    sceneInfo = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)sceneInfo)->_metaObject = igSceneInfo_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beMovieInfoData_fieldTable, g_beMovieInfoData_fieldHandles, g_beMovieInfoData_fieldOffsets, base);
 }
 
 igMetaEnum *g_beMovieInfoData_messageMetaEnum;

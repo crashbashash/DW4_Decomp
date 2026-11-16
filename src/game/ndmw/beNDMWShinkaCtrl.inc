@@ -135,30 +135,30 @@ static int g_beNDMWShinkaCtrl_fieldOffsets[] = {
 };
 
 void beNDMWShinkaCtrl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_5;
-    void *temp_s1_4;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *list;
+    void *dBShinka;
+    void *playerParameter;
+    void *gameRam;
+    void *messenger;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWShinkaCtrl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWShinkaCtrl_ctorTable, 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beNDMWGameRam_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = beDataObjList_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
-    ((igObjectRefMetaField *)temp_s1_5)->_metaObject = (int)beNDMWShinkaObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_5)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWShinkaCtrl_fieldTable, g_beNDMWShinkaCtrl_fieldHandles, g_beNDMWShinkaCtrl_fieldOffsets, temp_s2);
+    meta = g_beNDMWShinkaCtrl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWShinkaCtrl_ctorTable, 6);
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    gameRam = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)gameRam)->_metaObject = (int)beNDMWGameRam_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)gameRam)->_refCounted = 0;
+    playerParameter = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)playerParameter)->_metaObject = beDataObjList_GetOrCreateMetaObject();
+    dBShinka = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)dBShinka)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    list = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)list)->_metaObject = (int)beNDMWShinkaObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)list)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWShinkaCtrl_fieldTable, g_beNDMWShinkaCtrl_fieldHandles, g_beNDMWShinkaCtrl_fieldOffsets, base);
 }
 

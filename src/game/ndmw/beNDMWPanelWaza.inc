@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWPanelWaza_metaObject;
 igMetaField *g_beNDMWPanelWaza_padManagerMetaField;
 
-void beNDMWPanelWaza_CreateInstance(int arg0) {
+void beNDMWPanelWaza_CreateInstance(int allocator) {
     beNDMWPanelWaza_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWPanelWaza_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWPanelWaza_metaObject, allocator);
 }
 
 igMetaObject *beNDMWPanelWaza_GetOrCreateMetaObject(void) {
@@ -106,16 +106,16 @@ static int g_beNDMWPanelWaza_fieldOffsets[] = {
 };
 
 void beNDMWPanelWaza_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *padManager;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWPanelWaza_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWPanelWaza_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = bePadManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beNDMWPanelWaza_fieldTable, g_beNDMWPanelWaza_fieldHandles, g_beNDMWPanelWaza_fieldOffsets, temp_s2);
+    meta = g_beNDMWPanelWaza_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWPanelWaza_ctorTable, 1);
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beNDMWPanelWaza_fieldTable, g_beNDMWPanelWaza_fieldHandles, g_beNDMWPanelWaza_fieldOffsets, base);
 }
 

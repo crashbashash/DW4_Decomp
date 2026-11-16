@@ -25,17 +25,17 @@ int beGeneraterInfoRam_GetVTable(void) {
     return r;
 }
 
-void **FUN_0035f550(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+igSmartPointer<igObject> *FUN_0035f550(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return (void **)self;
+    return self;
 }
 
 void beGeneraterInfoRam_EnsureRegistered(void)
@@ -81,15 +81,15 @@ static int g_beGeneraterInfoRam_fieldOffsets[] = {
 };
 
 void beGeneraterInfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *work;
+    void *meta;
 
-    temp_s0 = (void *)g_beGeneraterInfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beGeneraterInfoRam_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beGeneraterInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beGeneraterInfoRam_fieldTable, g_beGeneraterInfoRam_fieldHandles, g_beGeneraterInfoRam_fieldOffsets, temp_s2);
+    meta = (void *)g_beGeneraterInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beGeneraterInfoRam_ctorTable, 1);
+    work = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beGeneraterInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beGeneraterInfoRam_fieldTable, g_beGeneraterInfoRam_fieldHandles, g_beGeneraterInfoRam_fieldOffsets, base);
 }
 

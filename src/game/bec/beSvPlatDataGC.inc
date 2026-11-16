@@ -26,13 +26,13 @@ int beSvPlatDataGC_GetVTable(void) {
     union U_347e70 u;
     int temp_s0;
     char *q0;
-    S_ref *q1;
+    igObject *q1;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
     igObject_InitHeader(u.b);
-    q1 = (S_ref *)&u.b[12];
+    q1 = (igObject *)&u.b[12];
     *(int *)q1 = 0;
     u.vt = (int)&g_beSvPlatDataGC_vtable[0];
     q0 = &u.b[104];
@@ -52,10 +52,10 @@ int beSvPlatDataGC_GetVTable(void) {
     }
     u.vt = (int)&g_beSvPlatBaseData_vtable[0];
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)q1->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }
@@ -152,36 +152,36 @@ static int g_beSvPlatDataGC_fieldOffsets[] = {
 };
 
 void beSvPlatDataGC_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    H *temp_s0;
+    int base;
+    int index;
+    void **found;
+    H *banTplData;
     G_348000 *tg;
-    H *temp_s0_2;
-    void *temp_s1;
-    T_348000 *temp_v0_2;
+    H *iconTplData;
+    void *meta;
+    igIntMetaField *clone;
 
-    temp_s1 = (void *)(((void * *)&g_beSvPlatDataGC_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beSvPlatDataGC_ctorTable, 0xD);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_connectMax"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (T_348000 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igIntMetaField_SetDefault(temp_v0_2, 2);
-    temp_v0_2->f1c = &g_beSvPlatDataGC_connectMaxStorage;
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->refs = temp_v0_2->refs - 1;
-    if (((unsigned long long) ((long long) temp_v0_2->refs << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beSvPlatDataGC_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSvPlatDataGC_ctorTable, 0xD);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_connectMax"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igIntMetaField_SetDefault(clone, 2);
+    clone->_externalEnumStorage = (int)(&g_beSvPlatDataGC_connectMaxStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    tg = (G_348000 *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2);
+    tg = (G_348000 *)igMetaObject_GetFieldAt(meta, base + 2);
     tg->w52 = 2;
-    temp_s0 = (H *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 9));
-    temp_s0->f60 = igCharMetaField_GetDefaultDescriptor();
-    temp_s0_2 = (H *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xB));
-    temp_s0_2->f60 = igCharMetaField_GetDefaultDescriptor();
-    tg = (G_348000 *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xC);
+    banTplData = (H *)(igMetaObject_GetFieldAt(meta, base + 9));
+    banTplData->f60 = igCharMetaField_GetDefaultDescriptor();
+    iconTplData = (H *)(igMetaObject_GetFieldAt(meta, base + 0xB));
+    iconTplData->f60 = igCharMetaField_GetDefaultDescriptor();
+    tg = (G_348000 *)igMetaObject_GetFieldAt(meta, base + 0xC);
     tg->w52 = 0x40;
-    igMetaObject_NameFields(temp_s1, g_beSvPlatDataGC_fieldTable, g_beSvPlatDataGC_fieldHandles, g_beSvPlatDataGC_fieldOffsets, temp_s2);
+    igMetaObject_NameFields(meta, g_beSvPlatDataGC_fieldTable, g_beSvPlatDataGC_fieldHandles, g_beSvPlatDataGC_fieldOffsets, base);
 }
 

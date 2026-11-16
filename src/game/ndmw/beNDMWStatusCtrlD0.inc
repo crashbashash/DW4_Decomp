@@ -8,9 +8,9 @@ igMetaField *g_beNDMWStatusCtrlD0_isUnknownDisableMetaField;
 igMetaField *g_beNDMWStatusCtrlD0_isAutoCloseMetaField;
 igMetaField *g_beNDMWStatusCtrlD0_decideListMetaField;
 
-void beNDMWStatusCtrlD0_Create(int arg0) {
+void beNDMWStatusCtrlD0_Create(int allocator) {
     beNDMWStatusCtrlD0_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlD0_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlD0_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrlD0_GetMetaObject(void) {
@@ -118,21 +118,21 @@ static int g_beNDMWStatusCtrlD0_fieldOffsets[] = {
 };
 
 void beNDMWStatusCtrlD0_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *decideList;
+    void *kindList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusCtrlD0_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlD0_ctorTable, 8);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igBoolList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlD0_fieldTable, g_beNDMWStatusCtrlD0_fieldHandles, g_beNDMWStatusCtrlD0_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatusCtrlD0_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlD0_ctorTable, 8);
+    kindList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)kindList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)kindList)->_construct = 1;
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 6), 1);
+    decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)decideList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igRefMetaField *)decideList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWStatusCtrlD0_fieldTable, g_beNDMWStatusCtrlD0_fieldHandles, g_beNDMWStatusCtrlD0_fieldOffsets, base);
 }
 

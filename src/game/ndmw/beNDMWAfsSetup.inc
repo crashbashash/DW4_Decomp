@@ -4,9 +4,9 @@ igMetaField *g_beNDMWAfsSetup_customMenuMetaField;
 igMetaField *g_beNDMWAfsSetup_subMenuMetaField;
 igMetaField *g_beNDMWAfsSetup_subMenuHolderMetaField;
 
-void beNDMWAfsSetup_CreateInstance(int arg0) {
+void beNDMWAfsSetup_CreateInstance(int allocator) {
     beNDMWAfsSetup_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWAfsSetup_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWAfsSetup_metaObject, allocator);
 }
 
 igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void) {
@@ -36,7 +36,7 @@ int beNDMWAfsSetup_GetVTable(void) {
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beNDMWAfsSetup_vtable[0];
-    FUN_003cafa0((igObject **)&obj.w7, (short)(-1));
+    FUN_003cafa0((igSmartPointer<igObject> *)&obj.w7, -1);
     GameMain_igSmartPointer_igObject_Destruct(&obj.w6, -1);
     GameMain_igSmartPointer_igObject_Destruct(&obj.w5, -1);
     igSmartPointer_igInfoList_Destruct(&obj.w4, -1);
@@ -44,22 +44,17 @@ int beNDMWAfsSetup_GetVTable(void) {
     return t;
 }
 
-igObject **FUN_003cafa0(igObject **arg0, short arg1) {
-    igObject *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = temp_a0->_refCount - 1;
-            if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_003cafa0(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWAfsSetup_EnsureRegistered(void)
@@ -117,25 +112,25 @@ static int g_beNDMWAfsSetup_fieldOffsets[] = {
 };
 
 void beNDMWAfsSetup_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_4;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *subMenuHolder;
+    void *subMenu;
+    void *customMenu;
+    void *infoList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWAfsSetup_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWAfsSetup_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igGuiComponent_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWAfsSetup_fieldTable, g_beNDMWAfsSetup_fieldHandles, g_beNDMWAfsSetup_fieldOffsets, temp_s2);
+    meta = g_beNDMWAfsSetup_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWAfsSetup_ctorTable, 4);
+    infoList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)infoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)infoList)->_construct = 1;
+    customMenu = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)customMenu)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
+    subMenu = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)subMenu)->_metaObject = igBoxComponent_GetOrCreateMetaObject();
+    subMenuHolder = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)subMenuHolder)->_metaObject = igGuiComponent_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWAfsSetup_fieldTable, g_beNDMWAfsSetup_fieldHandles, g_beNDMWAfsSetup_fieldOffsets, base);
 }
 

@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWShopTitle03_metaObject;
 
-void beNDMWShopTitle03_Create(int arg0) {
+void beNDMWShopTitle03_Create(int allocator) {
     beNDMWShopTitle03_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopTitle03_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopTitle03_metaObject, allocator);
 }
 
 void *beNDMWShopTitle03_GetMetaObject(void) {
@@ -115,40 +115,30 @@ void *FUN_003b2d10(beNDMWWindowCtrl *arg0, short arg1) {
     return arg0;
 }
 
-void **beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_003b2fb0(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_003b2fb0(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 int **FUN_003b3030(int **arg0, long long arg1) {
@@ -161,8 +151,8 @@ int **FUN_003b3030(int **arg0, long long arg1) {
             igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x44), -1);
             igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x40), -1);
             igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x3C), -1);
-            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((void **)((int **)((char *)arg0 + 0x38)), -1);
-            FUN_003b2fb0((void **)((int **)((char *)arg0 + 0x34)), (short)(-1));
+            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)((int **)((char *)arg0 + 0x38)), -1);
+            FUN_003b2fb0((igSmartPointer<igObject> *)((int **)((char *)arg0 + 0x34)), -1);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasC(arg0);

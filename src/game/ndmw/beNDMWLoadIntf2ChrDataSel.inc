@@ -160,43 +160,43 @@ static int g_beNDMWLoadIntf2ChrDataSel_fieldOffsets[] = {
 };
 
 void beNDMWLoadIntf2ChrDataSel_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    igObjectRefMetaField *temp_s0;
-    igObjectRefMetaField *temp_s0_2;
-    igObjectRefMetaField *temp_s0_3;
-    igObjectRefMetaField *temp_s0_4;
-    igMetaObject *temp_s1;
-    igStringMetaField *temp_v0_2;
+    int base;
+    int nameIndex;
+    void **inheritedName;
+    igObjectRefMetaField *messenger;
+    igObjectRefMetaField *padManager;
+    igObjectRefMetaField *comMdlCtrl;
+    igObjectRefMetaField *commonIntf;
+    igMetaObject *meta;
+    igStringMetaField *nameField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (igMetaObject *)(g_beNDMWLoadIntf2ChrDataSel_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2ChrDataSel_ctorTable, 0x10);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
-    temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "CHRDATASEL");
-    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2ChrDataSel_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
-    if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (igMetaObject *)(g_beNDMWLoadIntf2ChrDataSel_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2ChrDataSel_ctorTable, 0x10);
+    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
+    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(nameField, "CHRDATASEL");
+    nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2ChrDataSel_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    nameField->_refCount = nameField->_refCount - 1;
+    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(nameField);
     }
-    temp_s0 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    temp_s0->_metaObject = beMessenger_GetOrCreateMetaObject();
-    temp_s0->_refCounted = 0;
-    temp_s0_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    temp_s0_2->_metaObject = bePadManager_GetOrCreateMetaObject();
-    temp_s0_2->_refCounted = 0;
-    temp_s0_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    temp_s0_3->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();
-    temp_s0_3->_refCounted = 0;
-    temp_s0_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
-    temp_s0_4->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
-    temp_s0_4->_refCounted = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2ChrDataSel_fieldTable, g_beNDMWLoadIntf2ChrDataSel_fieldHandles, g_beNDMWLoadIntf2ChrDataSel_fieldOffsets, temp_s2);
+    messenger = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
+    messenger->_metaObject = beMessenger_GetOrCreateMetaObject();
+    messenger->_refCounted = 0;
+    padManager = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 1));
+    padManager->_metaObject = bePadManager_GetOrCreateMetaObject();
+    padManager->_refCounted = 0;
+    comMdlCtrl = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 2));
+    comMdlCtrl->_metaObject = (int)beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject();
+    comMdlCtrl->_refCounted = 0;
+    commonIntf = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 3));
+    commonIntf->_metaObject = (int)beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject();
+    commonIntf->_refCounted = 0;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadIntf2ChrDataSel_fieldTable, g_beNDMWLoadIntf2ChrDataSel_fieldHandles, g_beNDMWLoadIntf2ChrDataSel_fieldOffsets, base);
 }
 

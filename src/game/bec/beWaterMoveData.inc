@@ -88,16 +88,16 @@ static int g_beWaterMoveData_fieldOffsets[] = {
 };
 
 void beWaterMoveData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *posList;
+    void *meta;
 
-    temp_s0 = (void *)g_beWaterMoveData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beWaterMoveData_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVec3fList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beWaterMoveData_fieldTable, g_beWaterMoveData_fieldHandles, g_beWaterMoveData_fieldOffsets, temp_s2);
+    meta = (void *)g_beWaterMoveData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beWaterMoveData_ctorTable, 3);
+    posList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)posList)->_metaObject = igVec3fList_GetOrCreateMetaObject();
+    ((igRefMetaField *)posList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beWaterMoveData_fieldTable, g_beWaterMoveData_fieldHandles, g_beWaterMoveData_fieldOffsets, base);
 }
 

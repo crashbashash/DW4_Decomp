@@ -58,16 +58,16 @@ static int g_beCopyModelCtrl2_fieldOffsets[] = {
 };
 
 void beCopyModelCtrl2_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *srcNode;
+    void *meta;
 
-    temp_s0 = (void *)g_beCopyModelCtrl2_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCopyModelCtrl2_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beCopyModelCtrl2_fieldTable, g_beCopyModelCtrl2_fieldHandles, g_beCopyModelCtrl2_fieldOffsets, temp_s2);
+    meta = (void *)g_beCopyModelCtrl2_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCopyModelCtrl2_ctorTable, 1);
+    srcNode = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)srcNode)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beCopyModelCtrl2_fieldTable, g_beCopyModelCtrl2_fieldHandles, g_beCopyModelCtrl2_fieldOffsets, base);
 }
 
 void FUN_003682f0(void)

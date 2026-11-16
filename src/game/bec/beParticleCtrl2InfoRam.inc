@@ -23,40 +23,35 @@ int beParticleCtrl2InfoRam_GetVTable(void) {
     obj.w[12] = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beParticleCtrl2InfoRam_vtable[0];
-    igSmartPointer_beParticleCtrl2InfoWork_Destruct((ObjectRefWord *)(&obj.w[12]), -1);
-    FUN_0034bdc0((void **)(&obj.w[11]), (short)(-1));
+    igSmartPointer_beParticleCtrl2InfoWork_Destruct((igSmartPointer<igObject> *)(&obj.w[12]), -1);
+    FUN_0034bdc0((igSmartPointer<igObject> *)(&obj.w[11]), (short)(-1));
     FUN_001a7580(&obj.w[10], -1);
     FUN_0033e920((S *)((int *)&obj), (long long)0);
     return t;
 }
 
-void **FUN_0034bdc0(void **arg0, short arg1) {
-    S_temp_a0_34bdc0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_34bdc0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0034bdc0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-ObjectRefWord *igSmartPointer_beParticleCtrl2InfoWork_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2InfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -112,21 +107,21 @@ static int g_beParticleCtrl2InfoRam_fieldOffsets[] = {
 };
 
 void beParticleCtrl2InfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s0;
+    int base;
+    void *transform;
+    void *particleTimer;
+    void *work;
+    void *meta;
 
-    temp_s0 = (void *)g_beParticleCtrl2InfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beParticleCtrl2InfoRam_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransform_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)ParticleTimer_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beParticleCtrl2InfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beParticleCtrl2InfoRam_fieldTable, g_beParticleCtrl2InfoRam_fieldHandles, g_beParticleCtrl2InfoRam_fieldOffsets, temp_s2);
+    meta = (void *)g_beParticleCtrl2InfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beParticleCtrl2InfoRam_ctorTable, 3);
+    transform = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)transform)->_metaObject = igTransform_GetOrCreateMetaObject();
+    particleTimer = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)particleTimer)->_metaObject = (int)ParticleTimer_GetOrCreateMetaObject();
+    work = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beParticleCtrl2InfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beParticleCtrl2InfoRam_fieldTable, g_beParticleCtrl2InfoRam_fieldHandles, g_beParticleCtrl2InfoRam_fieldOffsets, base);
 }
 

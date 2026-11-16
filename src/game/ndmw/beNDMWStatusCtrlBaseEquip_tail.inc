@@ -100,34 +100,34 @@ static int g_beNDMWStatusCtrlBaseEquip_fieldOffsets[] = {
 };
 
 void beNDMWStatusCtrlBaseEquip_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    igMetaObject *temp_s1;
+    int base;
+    void *playerList;
+    void *powerSocket;
+    void *mainSlot;
+    void *subSlot;
+    void *wpuPocket;
+    void *apuPocket;
+    void *deviceFolder;
+    igMetaObject *meta;
 
-    temp_s1 = g_beNDMWStatusCtrlBaseEquip_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beNDMWStatusCtrlBaseEquip_ctorTable, 0xA);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1), 1);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = beDataObjList_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_beNDMWStatusCtrlBaseEquip_fieldTable, g_beNDMWStatusCtrlBaseEquip_fieldHandles, g_beNDMWStatusCtrlBaseEquip_fieldOffsets, temp_s0);
+    meta = g_beNDMWStatusCtrlBaseEquip_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlBaseEquip_ctorTable, 0xA);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 1);
+    playerList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)playerList)->_metaObject = beDataObjList_GetOrCreateMetaObject();
+    powerSocket = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)powerSocket)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    mainSlot = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)mainSlot)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    subSlot = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)subSlot)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    wpuPocket = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)wpuPocket)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    apuPocket = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)apuPocket)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    deviceFolder = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)deviceFolder)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWStatusCtrlBaseEquip_fieldTable, g_beNDMWStatusCtrlBaseEquip_fieldHandles, g_beNDMWStatusCtrlBaseEquip_fieldOffsets, base);
 }
 

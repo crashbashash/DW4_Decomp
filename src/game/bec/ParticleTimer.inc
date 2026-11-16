@@ -86,22 +86,22 @@ static int g_ParticleTimer_fieldOffsets[] = {
 };
 
 void ParticleTimer_InitFields(void) {
-    int temp_s2;
-    void *temp_v0_2;
-    void *temp_v0;
-    void *temp_s0;
+    int base;
+    void *time;
+    void *timeBias;
+    void *meta;
 
-    temp_s0 = (void *)g_ParticleTimer_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_ParticleTimer_ctorTable, 3);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igLongMetaField_SetDefault(temp_v0, 0);
-    *(char *)((char *)(temp_v0) + 38) = 0;
-    temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    igLongMetaField_SetDefault(temp_v0_2, 0);
-    *(char *)((char *)(temp_v0_2) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, g_ParticleTimer_fieldTable, g_ParticleTimer_fieldHandles, g_ParticleTimer_fieldOffsets, temp_s2);
+    meta = (void *)g_ParticleTimer_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_ParticleTimer_ctorTable, 3);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    timeBias = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    igLongMetaField_SetDefault(timeBias, 0);
+    ((igLongMetaField *)timeBias)->_persistent = 0;
+    time = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    igLongMetaField_SetDefault(time, 0);
+    ((igLongMetaField *)time)->_persistent = 0;
+    igMetaObject_NameFields(meta, g_ParticleTimer_fieldTable, g_ParticleTimer_fieldHandles, g_ParticleTimer_fieldOffsets, base);
 }
 
 void FUN_0036e860(void)

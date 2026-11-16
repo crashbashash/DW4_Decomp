@@ -2,9 +2,9 @@ igMetaObject *g_beDemoManagerWork_metaObject;
 igMetaField *g_beDemoManagerWork_advancecMetaField;
 igMetaField *g_beDemoManagerWork_keepMesListMetaField;
 
-void beDemoManagerWork_CreateInstance(int arg0) {
+void beDemoManagerWork_CreateInstance(int allocator) {
     beDemoManagerWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5897D8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5897D8, allocator);
 }
 
 igMetaObject *beDemoManagerWork_GetOrCreateMetaObject(void) {
@@ -93,16 +93,16 @@ static int g_beDemoManagerWork_fieldOffsets[] = {
 };
 
 void beDemoManagerWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *keepMesList;
+    void *meta;
 
-    temp_s0 = (void *)g_beDemoManagerWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beDemoManagerWork_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beDemoKeepMesList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beDemoManagerWork_fieldTable, g_beDemoManagerWork_fieldHandles, g_beDemoManagerWork_fieldOffsets, temp_s2);
+    meta = (void *)g_beDemoManagerWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beDemoManagerWork_ctorTable, 2);
+    keepMesList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)keepMesList)->_metaObject = (int)beDemoKeepMesList_GetOrCreateMetaObject();
+    ((igRefMetaField *)keepMesList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beDemoManagerWork_fieldTable, g_beDemoManagerWork_fieldHandles, g_beDemoManagerWork_fieldOffsets, base);
 }
 

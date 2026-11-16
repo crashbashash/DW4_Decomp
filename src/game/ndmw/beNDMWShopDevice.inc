@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopDevice_metaObject;
 igMetaField *g_beNDMWShopDevice_salesListMetaField;
 
-void beNDMWShopDevice_Create(int arg0) {
+void beNDMWShopDevice_Create(int allocator) {
     beNDMWShopDevice_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopDevice_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopDevice_metaObject, allocator);
 }
 
 void *beNDMWShopDevice_GetMetaObject(void) {
@@ -33,7 +33,7 @@ int beNDMWShopDevice_GetVTable(void) {
     obj.w24 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beNDMWShopDevice_vtable[0];
-    igSmartPointer_beNDMWItemBaseList_Destruct((void **)&obj.w24, (long long)(-1));
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj.w24, -1);
     FUN_003b6770((int **)&obj, (long long)0);
     return t;
 }
@@ -99,15 +99,15 @@ static int g_beNDMWShopDevice_fieldOffsets[] = {
 };
 
 void beNDMWShopDevice_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *salesList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWShopDevice_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWShopDevice_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWShopDevice_fieldTable, g_beNDMWShopDevice_fieldHandles, g_beNDMWShopDevice_fieldOffsets, temp_s2);
+    meta = g_beNDMWShopDevice_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWShopDevice_ctorTable, 1);
+    salesList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)salesList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWShopDevice_fieldTable, g_beNDMWShopDevice_fieldHandles, g_beNDMWShopDevice_fieldOffsets, base);
 }
 

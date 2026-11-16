@@ -3,9 +3,9 @@ igMetaField *g_beFontGeomAttrPair_categoryMetaField;
 igMetaField *g_beFontGeomAttrPair_panelMetaField;
 igMetaField *g_beFontGeomAttrPair_geomAttrsMetaField;
 
-void beFontGeomAttrPair_Create(int arg0) {
+void beFontGeomAttrPair_Create(int allocator) {
     beFontGeomAttrPair_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5896D8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5896D8, allocator);
 }
 
 void *beFontGeomAttrPair_GetMetaObject(void) {
@@ -24,7 +24,7 @@ int beFontGeomAttrPair_GetVTable(void) {
     int temp_s2;
     void ** q1;
     void ** q0;
-    S_ref * q2;
+    igObject * q2;
     int *temp_a1;
     int temp_v0;
     void *temp_a0;
@@ -36,15 +36,15 @@ int beFontGeomAttrPair_GetVTable(void) {
     *q0 = 0;
     q1 = (void **)&u.b[12];
     *q1 = 0;
-    q2 = (S_ref *)&u.b[16];
+    q2 = (igObject *)&u.b[16];
     *(int *)q2 = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)(&g_beFontGeomAttrPair_vtable[0]);
     if (q2 != 0) {
-        q2 = *(S_ref **)q2;
+        q2 = *(igObject **)q2;
         if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
+            q2->_refCount = (int)q2->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q2->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q2);
             }
         }
@@ -125,16 +125,16 @@ static int g_beFontGeomAttrPair_fieldOffsets[] = {
 };
 
 void beFontGeomAttrPair_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *geomAttrs;
+    void *meta;
 
-    temp_s0 = (void *)g_beFontGeomAttrPair_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beFontGeomAttrPair_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igGeometryAttrList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beFontGeomAttrPair_fieldTable, g_beFontGeomAttrPair_fieldHandles, g_beFontGeomAttrPair_fieldOffsets, temp_s2);
+    meta = (void *)g_beFontGeomAttrPair_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beFontGeomAttrPair_ctorTable, 3);
+    geomAttrs = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)geomAttrs)->_metaObject = igGeometryAttrList_GetOrCreateMetaObject();
+    ((igRefMetaField *)geomAttrs)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beFontGeomAttrPair_fieldTable, g_beFontGeomAttrPair_fieldHandles, g_beFontGeomAttrPair_fieldOffsets, base);
 }
 

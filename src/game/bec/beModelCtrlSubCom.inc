@@ -80,16 +80,16 @@ static int g_beModelCtrlSubCom_fieldOffsets[] = {
 };
 
 void beModelCtrlSubCom_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *comList;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlSubCom_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlSubCom_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlSubCom_fieldTable, g_beModelCtrlSubCom_fieldHandles, g_beModelCtrlSubCom_fieldOffsets, temp_s2);
+    meta = (void *)g_beModelCtrlSubCom_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlSubCom_ctorTable, 1);
+    comList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)comList)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)comList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beModelCtrlSubCom_fieldTable, g_beModelCtrlSubCom_fieldHandles, g_beModelCtrlSubCom_fieldOffsets, base);
 }
 

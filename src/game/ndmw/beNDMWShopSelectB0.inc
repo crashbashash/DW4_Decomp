@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWShopSelectB0_metaObject;
 
-void beNDMWShopSelectB0_Create(int arg0) {
+void beNDMWShopSelectB0_Create(int allocator) {
     beNDMWShopSelectB0_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopSelectB0_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopSelectB0_metaObject, allocator);
 }
 
 void *beNDMWShopSelectB0_GetMetaObject(void) {
@@ -69,8 +69,8 @@ void *FUN_003b4050(struct S_3b4050 *arg0, short arg1) {
             igSmartPointer_igStringRefList_Destruct(&arg0->f68, -1);
             igSmartPointer_igStringRefList_Destruct(&arg0->f64, -1);
             igSmartPointer_igStringRefList_Destruct(&arg0->f60, -1);
-            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((void **)&arg0->f56, -1);
-            FUN_003b2fb0((void **)&arg0->f52, (short)(-1));
+            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)&arg0->f56, -1);
+            FUN_003b2fb0((igSmartPointer<igObject> *)&arg0->f52, -1);
         }
         if (arg1 > 0) {
             Memory_FreeBufferAliasC(arg0);

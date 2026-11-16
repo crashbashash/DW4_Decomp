@@ -57,16 +57,16 @@ static int g_beCopyTransform_fieldOffsets[] = {
 };
 
 void beCopyTransform_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *srcTransform;
+    void *meta;
 
-    temp_s0 = (void *)g_beCopyTransform_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCopyTransform_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTransform_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beCopyTransform_fieldTable, g_beCopyTransform_fieldHandles, g_beCopyTransform_fieldOffsets, temp_s2);
+    meta = (void *)g_beCopyTransform_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCopyTransform_ctorTable, 1);
+    srcTransform = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)srcTransform)->_metaObject = igTransform_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beCopyTransform_fieldTable, g_beCopyTransform_fieldHandles, g_beCopyTransform_fieldOffsets, base);
 }
 
 void FUN_00368090(void)

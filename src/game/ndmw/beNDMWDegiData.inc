@@ -13,9 +13,9 @@ igMetaField *g_beNDMWDegiData_maxMpMetaField;
 igMetaField *g_beNDMWDegiData_dataSizeMetaField;
 igMetaField *g_beNDMWDegiData_dataMetaField;
 
-void beNDMWDegiData_Create(int arg0) {
+void beNDMWDegiData_Create(int allocator) {
     beNDMWDegiData_RunStaticInit();
-    igMetaObject_CreateInstance(g_beNDMWDegiData_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWDegiData_metaObject, allocator);
 }
 
 void *beNDMWDegiData_GetReadyMetaObject(void) {
@@ -165,22 +165,22 @@ static int g_beNDMWDegiData_fieldOffsets[] = {
 };
 
 void beNDMWDegiData_InitFields(void) {
-    igMetaObject *temp_s0;
-    int temp_s2;
-    void *temp_s1;
-    void *temp_v0;
-    void *temp_s1_2;
+    igMetaObject *meta;
+    int base;
+    void *insight;
+    void *dmNameUni;
+    void *data;
 
-    temp_s0 = g_beNDMWDegiData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWDegiData_ctorTable, 0xD);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = igInsightCore_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 60) = 0;
-    temp_v0 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5);
-    *(int *)((char *)(temp_v0) + 52) = 0xA;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    *(int *)((char *)(temp_s1_2) + 60) = igCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, g_beNDMWDegiData_fieldTable, g_beNDMWDegiData_fieldHandles, g_beNDMWDegiData_fieldOffsets, temp_s2);
+    meta = g_beNDMWDegiData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWDegiData_ctorTable, 0xD);
+    insight = (void *)(igMetaObject_GetFieldAt(meta, base));
+    *(int *)((char *)(insight) + 56) = igInsightCore_GetOrCreateMetaObject();
+    *(char *)((char *)(insight) + 60) = 0;
+    dmNameUni = igMetaObject_GetFieldAt(meta, base + 5);
+    *(int *)((char *)(dmNameUni) + 52) = 0xA;
+    data = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    *(int *)((char *)(data) + 60) = igCharMetaField_GetDefaultDescriptor();
+    igMetaObject_NameFields(meta, g_beNDMWDegiData_fieldTable, g_beNDMWDegiData_fieldHandles, g_beNDMWDegiData_fieldOffsets, base);
 }
 

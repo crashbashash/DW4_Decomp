@@ -35,30 +35,25 @@ int beModelCtrlAIMap_GetVTable(void) {
     u.w[0] = (int)(&g_beModelCtrlAIMap_vtable[0]);
     igStringRef_Destruct(&u.w[12], -1);
     igStringRef_Destruct(&u.w[11], -1);
-    FUN_00354490((struct R **)(&u.w[10]), (short)(-1));
-    FUN_00354490((struct R **)(&u.w[9]), (short)(-1));
-    FUN_00354490((struct R **)(&u.w[8]), (short)(-1));
-    FUN_00354490((struct R **)(&u.w[7]), (short)(-1));
+    FUN_00354490((igSmartPointer<igObject> *)(&u.w[10]), (short)(-1));
+    FUN_00354490((igSmartPointer<igObject> *)(&u.w[9]), (short)(-1));
+    FUN_00354490((igSmartPointer<igObject> *)(&u.w[8]), (short)(-1));
+    FUN_00354490((igSmartPointer<igObject> *)(&u.w[7]), (short)(-1));
     FUN_00131bc0(u.b, 0);
     return temp_s5;
 }
 
-struct R **FUN_00354490(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_00354490(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beModelCtrlAIMap_EnsureRegistered(void)
@@ -140,28 +135,28 @@ static int g_beModelCtrlAIMap_fieldOffsets[] = {
 };
 
 void beModelCtrlAIMap_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s1;
-    int temp_s0;
+    void *zoneA;
+    void *zoneB;
+    void *zoneC;
+    void *zoneD;
+    void *meta;
+    int base;
 
-    temp_s1 = (void *)g_beModelCtrlAIMap_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beModelCtrlAIMap_ctorTable, 0xA);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_beModelCtrlAIMap_fieldTable, g_beModelCtrlAIMap_fieldHandles, g_beModelCtrlAIMap_fieldOffsets, temp_s0);
+    meta = (void *)g_beModelCtrlAIMap_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlAIMap_ctorTable, 0xA);
+    zoneA = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)zoneA)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)zoneA)->_construct = 1;
+    zoneB = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)zoneB)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)zoneB)->_construct = 1;
+    zoneC = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)zoneC)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)zoneC)->_construct = 1;
+    zoneD = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)zoneD)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)zoneD)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beModelCtrlAIMap_fieldTable, g_beModelCtrlAIMap_fieldHandles, g_beModelCtrlAIMap_fieldOffsets, base);
 }
 

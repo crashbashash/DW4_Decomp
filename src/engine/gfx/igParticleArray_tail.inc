@@ -1,4 +1,4 @@
-int Gap__Gfx__igParticleArray__vfunc_28(PA *arg0, int arg1, int arg2, int *arg3, float fparg0) {
+int igParticleArray_Update(PA *arg0, int arg1, int arg2, int *arg3, float fparg0) {
     int sp70[8];
     int temp_s0;
     O44 *a;
@@ -17,7 +17,7 @@ int Gap__Gfx__igParticleArray__vfunc_28(PA *arg0, int arg1, int arg2, int *arg3,
     DAT_00560668[0] += 1;
     if (arg0->f44 == 0) {
         if (arg0->f44 == 0) {
-            a = (O44 *)FUN_00166d40();
+            a = (O44 *)igVisualContext_FindFirst();
             if (a != 0) {
                 a->refs = a->refs + 1;
             }

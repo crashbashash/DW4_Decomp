@@ -3,9 +3,9 @@ igMetaField *g_beNumberCtrlInfoWork_dispNumMetaField;
 igMetaField *g_beNumberCtrlInfoWork_realNumMetaField;
 igMetaField *g_beNumberCtrlInfoWork_changeNumMetaField;
 
-void beNumberCtrlInfoWork_Create(int arg0) {
+void beNumberCtrlInfoWork_Create(int allocator) {
     beNumberCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588630, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588630, allocator);
 }
 
 igMetaObject *beNumberCtrlInfoWork_GetOrCreateMetaObject(void) {
@@ -80,15 +80,15 @@ static int g_beNumberCtrlInfoWork_fieldOffsets[] = {
 };
 
 void beNumberCtrlInfoWork_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beNumberCtrlInfoWork_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNumberCtrlInfoWork_ctorTable, 3);
-    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
-    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), -1);
-    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), -1);
-    igMetaObject_NameFields(temp_s0, g_beNumberCtrlInfoWork_fieldTable, g_beNumberCtrlInfoWork_fieldHandles, g_beNumberCtrlInfoWork_fieldOffsets, temp_s1);
+    meta = (void *)g_beNumberCtrlInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNumberCtrlInfoWork_ctorTable, 3);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base + 1)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base + 2)), -1);
+    igMetaObject_NameFields(meta, g_beNumberCtrlInfoWork_fieldTable, g_beNumberCtrlInfoWork_fieldHandles, g_beNumberCtrlInfoWork_fieldOffsets, base);
 }
 

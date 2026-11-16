@@ -1,5 +1,5 @@
 void Gap__Gfx__igPsx2VisualContext__vfunc_65(VisualContextView *arg0, void *color) {
-    unsigned int value = FUN_001931b0((float *)color, 1);
+    unsigned int value = igVec4f_PackColor((float *)color, 1);
     unsigned int hi;
     unsigned int lo;
     int c;

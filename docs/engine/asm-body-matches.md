@@ -157,23 +157,6 @@ Shapes found on one function:
   helper copies it emits, nine jump tables, exception index and sixteen cleanup
   ranges/actions. See [the full recovery](load-intf2.md#matched-source).
 
-### `beMatCtrl_UpdateRam`
-
-A C++ spelling of `beMatCtrl_UpdateRam` (3,064 bytes)
-reproduces five owner lifetimes, both destructor profiles and the complete
-exception index/table, with ten differences in its main body. The manual-reference draft's five stale call
-arguments are corrected. See [ownership and ABI evidence](material-contact.md#update-ownership-and-call-contracts).
-
-The manual-reference draft differs at 11
-words after about 80 attempts. Its blocker, found with `tools/dispatcher/regalloc.py`: retail's registers need `mbc` to have a higher
-virtual-register id than the compare-chain temporaries (order 380 < 381 < 67), and every source form leaves named variables and hoisted
-IR vregs below the chain temps, since the compiler numbers temps in textual order; the shared `li a3,1` additionally forces a loop-carried
-`one = 1` that costs a delay-slot `li` where retail has a `nop`. Tried and ruled out: declaration orders, block-local vs function-level
-locals, load and operand order, nine compare spellings, pointer locals, empty-destructor holders, inline helpers, `#pragma opt_*`,
-`-O4,p`, `-Cpp_exceptions off`, loop forms. Adding the mbc/mac chains as named function-level webs makes the `and`/`xor` of both chains colour as retail and leaves the `sltiu` result of the first chain as the one wrong node: every compare lowering creates a late temp (id about 386) and `regalloc.py` says 67 < 386 < 68 would be needed.
-That single-node diagnosis describes the manual-reference draft; it does not prove
-all source forms impossible.
-
 ## Counting and verifying
 
 `extern "C" { }` wrappers: `definitions()` in `tools/units.py` treats `extern "C" { ... }` as transparent (its definitions are top-level

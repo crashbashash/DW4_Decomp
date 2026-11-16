@@ -1,6 +1,6 @@
-void beNDMWStatusSubSlot_Create(int arg0) {
+void beNDMWStatusSubSlot_Create(int allocator) {
     beNDMWStatusSubSlot_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusSubSlot_GetMetaObject(void) {
@@ -20,21 +20,17 @@ int beNDMWStatusSubSlot_GetVTable(void) {
     return t;
 }
 
-void **beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void *FUN_003ba3d0(S_arg0 *arg0, long long arg1) {

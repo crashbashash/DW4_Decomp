@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWItemBaseList_metaObject;
 
-void beNDMWItemBaseList_Create(int arg0) {
+void beNDMWItemBaseList_Create(int allocator) {
     beNDMWItemBaseList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemBaseList_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemBaseList_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemBaseList_GetOrCreateMetaObject(void) {

@@ -131,17 +131,17 @@ static int g_beSoundData_fieldOffsets[] = {
 };
 
 void beSoundData_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beSoundData_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSoundData_ctorTable, 6);
-    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
-    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), -1);
-    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), -1);
-    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 1);
-    igMetaObject_NameFields(temp_s0, g_beSoundData_fieldTable, g_beSoundData_fieldHandles, g_beSoundData_fieldOffsets, temp_s1);
+    meta = (void *)g_beSoundData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSoundData_ctorTable, 6);
+    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base)), -1);
+    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base + 1)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base + 2)), -1);
+    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base + 3)), 1);
+    igMetaObject_NameFields(meta, g_beSoundData_fieldTable, g_beSoundData_fieldHandles, g_beSoundData_fieldOffsets, base);
 }
 
 igMetaEnum *g_beSoundData_messageMetaEnum;

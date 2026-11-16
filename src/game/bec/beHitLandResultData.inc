@@ -2,15 +2,15 @@ igMetaObject *g_beHitLandResultData_metaObject;
 igMetaField *g_beHitLandResultData_infoNameMetaField;
 igMetaField *g_beHitLandResultData_ramNoMetaField;
 
-void beHitLandResultData_Create(int arg0) {
+void beHitLandResultData_Create(int allocator) {
     beHitLandResultData_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5893E8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5893E8, allocator);
 }
 
 void *beHitLandResultData_GetMetaObject(void) {
     unsigned char b;
     if (g_beHitLandResultData_metaObject != 0) {
-        b = (*(int *)((char *)(g_beHitLandResultData_metaObject) + 36) & 4) != 0;
+        b = (g_beHitLandResultData_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beHitLandResultData_EnsureRegistered();
@@ -91,13 +91,13 @@ static int g_beHitLandResultData_fieldOffsets[] = {
 };
 
 void beHitLandResultData_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beHitLandResultData_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beHitLandResultData_ctorTable, 2);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), "");
-    igMetaObject_NameFields(temp_s0, g_beHitLandResultData_fieldTable, g_beHitLandResultData_fieldHandles, g_beHitLandResultData_fieldOffsets, temp_s1);
+    meta = (void *)g_beHitLandResultData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beHitLandResultData_ctorTable, 2);
+    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), "");
+    igMetaObject_NameFields(meta, g_beHitLandResultData_fieldTable, g_beHitLandResultData_fieldHandles, g_beHitLandResultData_fieldOffsets, base);
 }
 

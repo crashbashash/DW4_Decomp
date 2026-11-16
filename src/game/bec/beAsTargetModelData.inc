@@ -94,15 +94,15 @@ static int g_beAsTargetModelData_fieldOffsets[] = {
 };
 
 void beAsTargetModelData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *dataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beAsTargetModelData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beAsTargetModelData_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beActionStarterDataList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beAsTargetModelData_fieldTable, g_beAsTargetModelData_fieldHandles, g_beAsTargetModelData_fieldOffsets, temp_s2);
+    meta = (void *)g_beAsTargetModelData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beAsTargetModelData_ctorTable, 1);
+    dataList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beActionStarterDataList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beAsTargetModelData_fieldTable, g_beAsTargetModelData_fieldHandles, g_beAsTargetModelData_fieldOffsets, base);
 }
 

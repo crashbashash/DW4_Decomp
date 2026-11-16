@@ -8,9 +8,9 @@ igMetaField *g_beNDMWMdlItemInfoWork_isDispNameMetaField;
 igMetaField *g_beNDMWMdlItemInfoWork_fontTypeMetaField;
 igMetaField *g_beNDMWMdlItemInfoWork_isColorLightMetaField;
 
-void beNDMWMdlItemInfoWork_Create(int arg0) {
+void beNDMWMdlItemInfoWork_Create(int allocator) {
     beNDMWMdlItemInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlItemInfoWork_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlItemInfoWork_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlItemInfoWork_GetReadyMetaObject(void) {
@@ -29,22 +29,17 @@ int beNDMWMdlItemInfoWork_GetVTable(void) {
     return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void **FUN_003c1520(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_003c1520(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 int *FUN_003c15a0(int *p)
@@ -124,16 +119,16 @@ static int g_beNDMWMdlItemInfoWork_fieldOffsets[] = {
 };
 
 void beNDMWMdlItemInfoWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *itemObject;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWMdlItemInfoWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWMdlItemInfoWork_ctorTable, 8);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWItemBase_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), -1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWMdlItemInfoWork_fieldTable, g_beNDMWMdlItemInfoWork_fieldHandles, g_beNDMWMdlItemInfoWork_fieldOffsets, temp_s2);
+    meta = g_beNDMWMdlItemInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWMdlItemInfoWork_ctorTable, 8);
+    itemObject = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)itemObject)->_metaObject = (int)beNDMWItemBase_GetOrCreateMetaObject();
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), -1);
+    igMetaObject_NameFields(meta, g_beNDMWMdlItemInfoWork_fieldTable, g_beNDMWMdlItemInfoWork_fieldHandles, g_beNDMWMdlItemInfoWork_fieldOffsets, base);
 }
 

@@ -2,9 +2,9 @@ igMetaObject *g_beMatCtrlInfoWork_metaObject;
 igMetaField *g_beMatCtrlInfoWork_runFlagListMetaField;
 igMetaField *g_beMatCtrlInfoWork_matOnPlListsMetaField;
 
-void beMatCtrlInfoWork_Create(int arg0) {
+void beMatCtrlInfoWork_Create(int allocator) {
     beMatCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5890C0, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5890C0, allocator);
 }
 
 igMetaObject *beMatCtrlInfoWork_GetOrCreateMetaObject(void) {
@@ -84,20 +84,20 @@ static int g_beMatCtrlInfoWork_fieldOffsets[] = {
 };
 
 void beMatCtrlInfoWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *matOnPlLists;
+    void *runFlagList;
+    void *meta;
 
-    temp_s0 = (void *)g_beMatCtrlInfoWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMatCtrlInfoWork_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntListList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beMatCtrlInfoWork_fieldTable, g_beMatCtrlInfoWork_fieldHandles, g_beMatCtrlInfoWork_fieldOffsets, temp_s2);
+    meta = (void *)g_beMatCtrlInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMatCtrlInfoWork_ctorTable, 2);
+    runFlagList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)runFlagList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igRefMetaField *)runFlagList)->_construct = 1;
+    matOnPlLists = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)matOnPlLists)->_metaObject = igIntListList_GetOrCreateMetaObject();
+    ((igRefMetaField *)matOnPlLists)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beMatCtrlInfoWork_fieldTable, g_beMatCtrlInfoWork_fieldHandles, g_beMatCtrlInfoWork_fieldOffsets, base);
 }
 

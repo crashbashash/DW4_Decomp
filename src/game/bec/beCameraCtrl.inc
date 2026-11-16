@@ -13,9 +13,9 @@ igMetaField *g_beCameraCtrl_intMatrixMetaField;
 igMetaField *g_beCameraCtrl_debugZoomMetaField;
 igMetaField *g_beCameraCtrl_isFirstMetaField;
 
-void beCameraCtrl_CreateInstance(int arg0) {
+void beCameraCtrl_CreateInstance(int allocator) {
     beCameraCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589C90, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589C90, allocator);
 }
 
 igMetaObject *beCameraCtrl_GetOrCreateMetaObject(void) {
@@ -38,22 +38,17 @@ int beCameraCtrl_GetVTable(void) {
     return *(int *)((char *)&camera + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void **FUN_003699a0(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_003699a0(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beCameraCtrl_EnsureRegistered(void)
@@ -147,25 +142,25 @@ static int g_beCameraCtrl_fieldOffsets[] = {
 };
 
 void beCameraCtrl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s0;
+    int base;
+    void *viewerMang;
+    void *viewerPara;
+    void *cameraMode;
+    void *meta;
 
-    temp_s0 = (void *)g_beCameraCtrl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCameraCtrl_ctorTable, 0xD);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = igViewerSceneInfoManager_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 60) = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    *(int *)((char *)(temp_s1_2) + 56) = igViewerParameters_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1_2) + 60) = 0;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    *(int *)((char *)(temp_s1_3) + 56) = (int)beCameraMode_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 1.0f);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC), 1);
-    igMetaObject_NameFields(temp_s0, g_beCameraCtrl_fieldTable, g_beCameraCtrl_fieldHandles, g_beCameraCtrl_fieldOffsets, temp_s2);
+    meta = (void *)g_beCameraCtrl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCameraCtrl_ctorTable, 0xD);
+    viewerMang = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)viewerMang)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerMang)->_refCounted = 0;
+    viewerPara = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)viewerPara)->_metaObject = igViewerParameters_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerPara)->_refCounted = 0;
+    cameraMode = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)cameraMode)->_metaObject = (int)beCameraMode_GetOrCreateMetaObject();
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xB), 1.0f);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0xC), 1);
+    igMetaObject_NameFields(meta, g_beCameraCtrl_fieldTable, g_beCameraCtrl_fieldHandles, g_beCameraCtrl_fieldOffsets, base);
 }
 

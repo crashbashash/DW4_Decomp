@@ -27,19 +27,19 @@ void *beBaseInfoRam_GetMetaObject(void) {
 int beBaseInfoRam_GetVTable(void) {
     union U u;
     int temp_s0;
-    S_ref *p;
+    igObject *p;
 
     igObject_InitHeader(u.b);
-    p = (S_ref *)&u.b[40];
+    p = (igObject *)&u.b[40];
     u.vt = (int)&g_beBaseInfoRam_vtable[0];
     *(int *)p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beBaseInfoRam_vtable[0];
     if (p != 0) {
-        p = *(S_ref **)p;
+        p = *(igObject **)p;
         if (p != 0) {
-            p->f4 = (int)((int) (p->f4 - 1));
-            if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
+            p->_refCount = (int)p->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
         }
@@ -122,26 +122,26 @@ static int g_beBaseInfoRam_fieldOffsets[] = {
 };
 
 void beBaseInfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *dataList;
+    void *parentManager;
+    void *parentInfo;
+    void *meta;
 
-    temp_s0 = (void *)g_beBaseInfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beBaseInfoRam_ctorTable, 9);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beBaseInfo_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    ((igMetaField *)temp_s1)->_persistent = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beBaseInfoManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    ((igMetaField *)temp_s1_2)->_persistent = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beBaseInfoDataList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beBaseInfoRam_fieldTable, g_beBaseInfoRam_fieldHandles, g_beBaseInfoRam_fieldOffsets, temp_s2);
+    meta = (void *)g_beBaseInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beBaseInfoRam_ctorTable, 9);
+    parentInfo = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)parentInfo)->_metaObject = (int)beBaseInfo_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)parentInfo)->_refCounted = 0;
+    ((igMetaField *)parentInfo)->_persistent = 0;
+    parentManager = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)parentManager)->_metaObject = (int)beBaseInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)parentManager)->_refCounted = 0;
+    ((igMetaField *)parentManager)->_persistent = 0;
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beBaseInfoDataList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beBaseInfoRam_fieldTable, g_beBaseInfoRam_fieldHandles, g_beBaseInfoRam_fieldOffsets, base);
 }
 

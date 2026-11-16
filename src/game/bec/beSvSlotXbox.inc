@@ -93,13 +93,13 @@ static int g_beSvSlotXbox_fieldOffsets[] = {
 };
 
 void beSvSlotXbox_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beSvSlotXbox_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSvSlotXbox_ctorTable, 4);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), "");
-    igMetaObject_NameFields(temp_s0, g_beSvSlotXbox_fieldTable, g_beSvSlotXbox_fieldHandles, g_beSvSlotXbox_fieldOffsets, temp_s1);
+    meta = (void *)g_beSvSlotXbox_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSvSlotXbox_ctorTable, 4);
+    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), "");
+    igMetaObject_NameFields(meta, g_beSvSlotXbox_fieldTable, g_beSvSlotXbox_fieldHandles, g_beSvSlotXbox_fieldOffsets, base);
 }
 

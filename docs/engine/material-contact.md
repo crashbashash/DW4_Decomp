@@ -7,8 +7,7 @@ bindings; the binding wrappers at `0x00373160..0x00373274` are C++ in
 [`src/game/be.cpp`](../../src/game/be.cpp). The controller methods at `0x0038af70..0x0038bed0`
 (prepare, receiver registration, recursive contact search, the per-instance update, message
 dispatch and two metadata getters) follow them; the box-membership leaf `igAABox_IntersectPoint`
-and the message enum getter `beMatCtrl_GetMessageEnum` live in the maths and Bec libraries. For the
-update see [Open items](#open-items).
+and the message enum getter `beMatCtrl_GetMessageEnum` live in the maths and Bec libraries.
 
 None of this establishes whole-frame or general portal acceptance.
 
@@ -44,7 +43,7 @@ then use the dry run and `--apply --check` naming workflow.
 | `0x0038b040` | `beMatCtrl_GetInfoMeta` | metadata getter | `src/game/beMatCtrl.cpp` |
 | `0x0038b050` | `beMatCtrl_OnAddRam` | receiver registration (44 bytes) | `src/game/beMatCtrl.cpp` |
 | `0x0038b080` | `beMatCtrl_MarkContacts` | recursive contact search | `src/game/beMatCtrl.cpp` |
-| `0x0038b1f0` | `beMatCtrl_UpdateRam` | per-instance update (3,064 bytes) | `asm/` |
+| `0x0038b1f0` | `beMatCtrl_UpdateRam` | per-instance update (3,064 bytes) | `src/game/beMatCtrl.cpp` |
 | `0x0038bdf0` | `beMatCtrl_OnMessage` | message dispatch (220 bytes) | `src/game/beMatCtrl.cpp` |
 | `0x0038bed0` | `beMatCtrl_GetMeta` | metadata getter | `src/game/beMatCtrl.cpp` |
 | `0x0018b630` | `igAABox_IntersectPoint` | box membership | `src/engine/maths/igAABox.inc` |
@@ -122,7 +121,10 @@ data count at info +32 and appends them to Work's list at +12, filled from the z
 `0x4c8f70` and `0x4c8f78`. It sizes Work's run-flag byte list at +8 to the same count and fills it from
 the enabled byte at `0x5549d0`, clears the player-existence bytes and publishes `_st0=1` plus zero
 `_st1/_st2/_st3`. This initialization does not also run contact callbacks in that tick. The
-allocator fallback is controlled by the byte at `0x554c14`.
+allocator fallback is controlled by the byte at `0x554c14`. The zero words and the enabled byte are not
+named data: they are the anonymous objects the compiler makes for the literals `0` and `true` bound to
+`const int &` and `const bool &` parameters, one per call (the three zero words are the two list fills and the
+clear of the current buffer).
 
 Active update retains slot 0 of Work's mask list as the current buffer and slot 1 as the previous one,
 and clears the current buffer from the word at `0x4c8f80`. It selects PLAYER/GETMATRIX results
@@ -210,35 +212,21 @@ Two call contracts follow from a callee and format-string audit:
 Further argument-register values at those call sites (three at the formatting call, two at the
 messenger call) are stale register contents, not inputs.
 
-These contracts are recovered independently of a matching main-body claim.
+The bit-test loop of the changed-bit scan reads the mask words through the list holders
+(`(*(MaskListRef &)current)[material]`, `MaskListRef` an `igSmartPointer` of the integer list), leaves the
+scan after the first changed bit, and compares `now != was` with the two results held in `bool` locals; the
+reasons are in [understanding a resisting shape](understanding-shapes.md).
 
 ### Regional and platform counterparts
 
 The corresponding update is at `0x0038b480` in Europe and
-`0x0038c8c0` in Japan. All three releases have the same critical bit-test loop. Address-shaped
+`0x0038c8c0` in Japan. All three releases have the same bit-test loop. Address-shaped
 operand differences in the rest of the body do not establish equivalent behavior of the referenced
-callees or data, and comparing the releases does not resolve the USA mismatch.
-
-A comparison with the GameCube and Xbox updates shows different load placement
-there; it does not close the USA boundary either. The regional and platform targets are retired
-and their comparison tooling is not in the repository.
+callees or data. The GameCube and Xbox updates place loads differently. The regional and platform
+targets are retired and their comparison tooling is not in the repository.
 
 ## Open items
 
-- **The update main body (`0x0038b1f0`, 3,064 bytes).** A C++ spelling
-  reproduces the five owner lifetimes, both destructor variants, the exception index and the
-  complete table extent, but its main body has ten differing instructions in the bit-test loop of
-  the changed-bit scan. The register gap is that retail holds the previous word in `a0` and the
-  current compare temporary in `a1`.
-- **Natural loop forms do not close the gap.** Retail leaves the four-bit
-  scan after the first changed bit: the changed path ends with an unconditional branch to the
-  outer-loop increment (`0x38bc58`), and the unchanged path increments the bit and branches back to
-  the shift at `0x38ba58`. The current and previous list words are loaded once before that loop.
-  Five natural spellings of this shape (a `for` with `break` using the hoisted words and the shared
-  constant, the same with a literal `1`, a `do`/`while` with `break`, both word reads inline, and
-  the previous-word compare first), compiled with the five-scope owner frame and the pinned
-  alternate compiler, leave 13, 13, 13, 15 and 13 main-body words different, against the
-  goto-shaped candidate's ten, with the same register gap.
 - **Engine services.** Matrix queries, allocator and list services, formatting, Lua execution,
   receiver registration and the constructor/framework services are not described here.
 - **Names.** `igAABox_IntersectPoint` is named from its 0/2 result, the pattern of the other

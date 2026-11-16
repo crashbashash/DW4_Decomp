@@ -29,7 +29,7 @@ int beMessengerWork_GetVTable(void) {
     obj._findRamList = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beMessengerWork_vtable[0];
-    FUN_0033ec00((igObject **)&obj._findRamList, (short)(-1));
+    FUN_0033ec00((igSmartPointer<igObject> *)&obj._findRamList, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj._findRamNoList, -1);
     igStringRef_Destruct(&obj._message, -1);
     igStringRef_Destruct(&obj._infoName, -1);
@@ -97,20 +97,20 @@ static int g_beMessengerWork_fieldOffsets[] = {
 };
 
 void beMessengerWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *findRamList;
+    void *findRamNoList;
+    void *meta;
 
-    temp_s0 = (void *)g_beMessengerWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMessengerWork_ctorTable, 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beMessengerWork_fieldTable, g_beMessengerWork_fieldHandles, g_beMessengerWork_fieldOffsets, temp_s2);
+    meta = (void *)g_beMessengerWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMessengerWork_ctorTable, 6);
+    findRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)findRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)findRamNoList)->_construct = 1;
+    findRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)findRamList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
+    ((igRefMetaField *)findRamList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beMessengerWork_fieldTable, g_beMessengerWork_fieldHandles, g_beMessengerWork_fieldOffsets, base);
 }
 

@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWMcSlotGC_metaObject;
 igMetaField *g_beNDMWMcSlotGC_fileKazMetaField;
 igMetaField *g_beNDMWMcSlotGC_detailMetaField;
 
-void beNDMWMcSlotGC_Create(int arg0) {
+void beNDMWMcSlotGC_Create(int allocator) {
     beNDMWMcSlotGC_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMcSlotGC_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMcSlotGC_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMcSlotGC_GetReadyMetaObject(void) {
@@ -68,12 +68,12 @@ static int g_beNDMWMcSlotGC_fieldOffsets[] = {
 };
 
 void beNDMWMcSlotGC_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWMcSlotGC_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWMcSlotGC_ctorTable, 2);
-    igMetaObject_NameFields(temp_s0, g_beNDMWMcSlotGC_fieldTable, g_beNDMWMcSlotGC_fieldHandles, g_beNDMWMcSlotGC_fieldOffsets, temp_s1);
+    meta = g_beNDMWMcSlotGC_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWMcSlotGC_ctorTable, 2);
+    igMetaObject_NameFields(meta, g_beNDMWMcSlotGC_fieldTable, g_beNDMWMcSlotGC_fieldHandles, g_beNDMWMcSlotGC_fieldOffsets, base);
 }
 

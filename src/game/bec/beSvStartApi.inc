@@ -1,9 +1,9 @@
 igMetaObject *g_beSvStartApi_metaObject;
 int g_beSvStartApi_orderTypeStorage;
 
-void beSvStartApi_Create(int arg0) {
+void beSvStartApi_Create(int allocator) {
     beSvStartApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5881F0, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5881F0, allocator);
 }
 
 igMetaObject *beSvStartApi_GetMetaObject(void)
@@ -90,21 +90,21 @@ void beSvStartApi_GetMetaObjectFunction(void)
 }
 
 void beSvStartApi_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void **temp_v0;
-    T_348bb0 *temp_v0_2;
+    int index;
+    void *meta;
+    void **found;
+    igIntMetaField *clone;
 
-    temp_s1 = (void *)(((void * *)&g_beSvStartApi_metaObject)[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_orderType"));
-    temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (T_348bb0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igIntMetaField_SetDefault(temp_v0_2, 0xA);
-    temp_v0_2->f28 = (int)(&g_beSvStartApi_orderTypeStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_v0_2);
-    temp_v0_2->references = temp_v0_2->references - 1;
-    if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beSvStartApi_metaObject;
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igIntMetaField_SetDefault(clone, 0xA);
+    clone->_externalEnumStorage = (int)(&g_beSvStartApi_orderTypeStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
 }
 

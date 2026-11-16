@@ -1,8 +1,8 @@
 igMetaObject *g_beSvConnectCheck_metaObject;
 
-void beSvConnectCheck_Create(int arg0) {
+void beSvConnectCheck_Create(int allocator) {
     beSvConnectCheck_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5881D8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5881D8, allocator);
 }
 
 igMetaObject *beSvConnectCheck_GetOrCreateMetaObject(void) {
@@ -23,44 +23,44 @@ void *beSvConnectCheck_GetMetaObject(void) {
 int beSvConnectCheck_GetVTable(void) {
     union U_348250 u;
     int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    S_ref *q2;
+    igObject *q0;
+    igObject *q1;
+    igObject *q2;
 
     igObject_InitHeader(u.b);
     u.vt = (int)&g_beSaveApi_vtable[0];
-    q2 = (S_ref *)&u.b[48];
+    q2 = (igObject *)&u.b[48];
     *(int *)q2 = 0;
-    q1 = (S_ref *)&u.b[52];
+    q1 = (igObject *)&u.b[52];
     *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[56];
+    q0 = (igObject *)&u.b[56];
     *(int *)q0 = 0;
     u.vt = (int)&g_beSvConnectCheck_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beSaveApi_vtable[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)q0->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }
     }
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)q1->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }
     }
     if (q2 != 0) {
-        q2 = *(S_ref **)q2;
+        q2 = *(igObject **)q2;
         if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
+            q2->_refCount = (int)q2->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q2->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q2);
             }
         }
@@ -107,17 +107,17 @@ void *FUN_00348390(struct S_348390 *arg0, short arg1) {
     return arg0;
 }
 
-void **igSmartPointer_beSaveMemoryObj_Destruct(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+igSmartPointer<igObject> *igSmartPointer_beSaveMemoryObj_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return (void **)self;
+    return self;
 }
 
 void beSvConnectCheck_EnsureRegistered(void)

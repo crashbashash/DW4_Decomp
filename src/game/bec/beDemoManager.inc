@@ -7,9 +7,9 @@ igMetaField *g_beDemoManager_turningOKMetaField;
 igMetaField *g_beDemoManager_disableRemoveAllMetaField;
 igMetaField *g_beDemoManager_calledRemoveAllMetaField;
 
-void beDemoManager_CreateInstance(int arg0) {
+void beDemoManager_CreateInstance(int allocator) {
     beDemoManager_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589790, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589790, allocator);
 }
 
 igMetaObject *beDemoManager_GetOrCreateMetaObject(void) {
@@ -37,41 +37,36 @@ int beDemoManager_GetVTable(void) {
     o.f28 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beDemoManager_vtable[0];
-    FUN_00363400((struct R **)&o.f28, (short)(-1));
-    FUN_00363380((ObjectRefWord *)&o.f24, -1);
+    FUN_00363400((igSmartPointer<igObject> *)&o.f28, (short)(-1));
+    FUN_00363380((igSmartPointer<igObject> *)&o.f24, -1);
     FUN_00231030(&o, 0);
     return r;
 }
 
-ObjectRefWord *FUN_00363380(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_00363380(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-struct R **FUN_00363400(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_00363400(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beDemoManager_EnsureRegistered(void)
@@ -141,27 +136,27 @@ static int g_beDemoManager_fieldOffsets[] = {
 };
 
 void beDemoManager_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s1_4;
-    void *temp_s0;
+    int base;
+    void *messenger;
+    void *lua;
+    void *buildData;
+    void *activeDataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beDemoManager_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beDemoManager_ctorTable, 7);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beLua_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beDemoManagerWork_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)beDemoManagerWorkList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beDemoManager_fieldTable, g_beDemoManager_fieldHandles, g_beDemoManager_fieldOffsets, temp_s2);
+    meta = (void *)g_beDemoManager_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beDemoManager_ctorTable, 7);
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    lua = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)lua)->_metaObject = (int)beLua_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lua)->_refCounted = 0;
+    buildData = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)buildData)->_metaObject = (int)beDemoManagerWork_GetOrCreateMetaObject();
+    activeDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)activeDataList)->_metaObject = (int)beDemoManagerWorkList_GetOrCreateMetaObject();
+    ((igRefMetaField *)activeDataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beDemoManager_fieldTable, g_beDemoManager_fieldHandles, g_beDemoManager_fieldOffsets, base);
 }
 

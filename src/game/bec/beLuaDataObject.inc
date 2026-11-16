@@ -70,15 +70,15 @@ static int g_beLuaDataObject_fieldOffsets[] = {
 };
 
 void beLuaDataObject_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *data;
+    void *meta;
 
-    temp_s0 = (void *)g_beLuaDataObject_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLuaDataObject_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = igCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, g_beLuaDataObject_fieldTable, g_beLuaDataObject_fieldHandles, g_beLuaDataObject_fieldOffsets, temp_s2);
+    meta = (void *)g_beLuaDataObject_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLuaDataObject_ctorTable, 2);
+    data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igMemoryRefMetaField *)data)->_memType = igCharMetaField_GetDefaultDescriptor();
+    igMetaObject_NameFields(meta, g_beLuaDataObject_fieldTable, g_beLuaDataObject_fieldHandles, g_beLuaDataObject_fieldOffsets, base);
 }
 

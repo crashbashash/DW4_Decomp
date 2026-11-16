@@ -21,18 +21,22 @@ int beActionStarterInfo_GetVTable(void) {
     obj.f1c = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beActionStarterInfo_vtable[0];
-    FUN_0036b430((O *)&obj.f1c, (short)(-1));
+    FUN_0036b430((igSmartPointer<igObject> *)&obj.f1c, (short)(-1));
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return t;
 }
 
-O *FUN_0036b430(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+igSmartPointer<igObject> *FUN_0036b430(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beActionStarterInfo_EnsureRegistered(void)
@@ -78,15 +82,15 @@ static int g_beActionStarterInfo_fieldOffsets[] = {
 };
 
 void beActionStarterInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *modelList;
+    void *meta;
 
-    temp_s0 = (void *)g_beActionStarterInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beActionStarterInfo_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beAsTargetModelDataList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beActionStarterInfo_fieldTable, g_beActionStarterInfo_fieldHandles, g_beActionStarterInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beActionStarterInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beActionStarterInfo_ctorTable, 1);
+    modelList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)modelList)->_metaObject = (int)beAsTargetModelDataList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beActionStarterInfo_fieldTable, g_beActionStarterInfo_fieldHandles, g_beActionStarterInfo_fieldOffsets, base);
 }
 

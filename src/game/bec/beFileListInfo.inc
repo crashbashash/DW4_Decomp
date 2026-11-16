@@ -5,7 +5,7 @@ igMetaField *g_beFileListInfo_fnamesMetaField;
 void *beFileListInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beFileListInfo_metaObject != 0) {
-        b = (*(int *)((char *)(g_beFileListInfo_metaObject) + 36) & 4) != 0;
+        b = (g_beFileListInfo_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beFileListInfo_EnsureRegistered();
@@ -81,16 +81,16 @@ static int g_beFileListInfo_fieldOffsets[] = {
 };
 
 void beFileListInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *fnames;
+    void *meta;
 
-    temp_s0 = (void *)g_beFileListInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beFileListInfo_ctorTable, 2);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beFileListInfo_fieldTable, g_beFileListInfo_fieldHandles, g_beFileListInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beFileListInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beFileListInfo_ctorTable, 2);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), 0);
+    fnames = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)fnames)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beFileListInfo_fieldTable, g_beFileListInfo_fieldHandles, g_beFileListInfo_fieldOffsets, base);
 }
 

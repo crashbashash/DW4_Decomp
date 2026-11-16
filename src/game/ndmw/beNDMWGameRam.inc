@@ -125,9 +125,9 @@ igMetaEnum *GameRamMessage_GetMetaEnum(void) {
     return g_GameRamMessage_metaEnum;
 }
 
-void beNDMWGameRam_CreateInstance(int arg0) {
+void beNDMWGameRam_CreateInstance(int allocator) {
     beNDMWGameRam_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWGameRam_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWGameRam_metaObject, allocator);
 }
 
 igMetaObject *beNDMWGameRam_GetOrCreateMetaObject(void) {
@@ -168,8 +168,8 @@ int beNDMWGameRam_GetVTable(void) {
     obj.w17 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beNDMWGameRam_vtable[0];
-    FUN_003c9ef0((void **)&obj.w17, (short)(-1));
-    beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct((void **)&obj.w16, (short)(-1));
+    FUN_003c9ef0((igSmartPointer<igObject> *)&obj.w17, -1);
+    beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w16, -1);
     FUN_00365e90(&obj.w15, -1);
     FUN_00365e90(&obj.w14, -1);
     FUN_00365e90(&obj.w13, -1);
@@ -182,21 +182,17 @@ int beNDMWGameRam_GetVTable(void) {
     return t;
 }
 
-void **FUN_003c9ef0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_003c9ef0(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWGameRam_EnsureRegistered(void)
@@ -282,44 +278,44 @@ static int g_beNDMWGameRam_fieldOffsets[] = {
 };
 
 void beNDMWGameRam_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_10;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_s2_8;
-    void *temp_s2_9;
-    void *temp_s1;
-    int temp_s0;
+    void *dBShinka;
+    void *playerDataListList;
+    void *dBPcTech;
+    void *dBWeapon;
+    void *dBArmor1;
+    void *dBArmor2;
+    void *dBAbChip;
+    void *dBEnemy;
+    void *dBEneatk;
+    void *commonDataList;
+    void *meta;
+    int base;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (void *)g_beNDMWGameRam_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWGameRam_ctorTable, 0xB);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = beDataBase_GetOrCreateMetaObject();
-    temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = beDataObjList_GetOrCreateMetaObject();
-    temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = beDataObjListList_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWGameRam_fieldTable, g_beNDMWGameRam_fieldHandles, g_beNDMWGameRam_fieldOffsets, temp_s0);
+    meta = (void *)g_beNDMWGameRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWGameRam_ctorTable, 0xB);
+    dBShinka = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)dBShinka)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    dBPcTech = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)dBPcTech)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    dBWeapon = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)dBWeapon)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    dBArmor1 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)dBArmor1)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    dBArmor2 = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)dBArmor2)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    dBAbChip = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)dBAbChip)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    dBEnemy = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)dBEnemy)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    dBEneatk = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)dBEneatk)->_metaObject = beDataBase_GetOrCreateMetaObject();
+    commonDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)commonDataList)->_metaObject = beDataObjList_GetOrCreateMetaObject();
+    playerDataListList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)playerDataListList)->_metaObject = beDataObjListList_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWGameRam_fieldTable, g_beNDMWGameRam_fieldHandles, g_beNDMWGameRam_fieldOffsets, base);
 }
 

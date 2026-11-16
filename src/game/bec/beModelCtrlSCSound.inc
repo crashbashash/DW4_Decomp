@@ -2,9 +2,9 @@ igMetaObject *g_beModelCtrlSCSound_metaObject;
 igMetaField *g_beModelCtrlSCSound_sndNameMetaField;
 igMetaField *g_beModelCtrlSCSound_sndHandleMetaField;
 
-void beModelCtrlSCSound_Create(int arg0) {
+void beModelCtrlSCSound_Create(int allocator) {
     beModelCtrlSCSound_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5887B0, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5887B0, allocator);
 }
 
 igMetaObject *beModelCtrlSCSound_GetMetaObject(void) {
@@ -95,12 +95,12 @@ static int g_beModelCtrlSCSound_fieldOffsets[] = {
 };
 
 void beModelCtrlSCSound_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlSCSound_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlSCSound_ctorTable, 2);
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlSCSound_fieldTable, g_beModelCtrlSCSound_fieldHandles, g_beModelCtrlSCSound_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlSCSound_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlSCSound_ctorTable, 2);
+    igMetaObject_NameFields(meta, g_beModelCtrlSCSound_fieldTable, g_beModelCtrlSCSound_fieldHandles, g_beModelCtrlSCSound_fieldOffsets, base);
 }
 

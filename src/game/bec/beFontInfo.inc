@@ -23,20 +23,20 @@ int beFontInfo_GetVTable(void) {
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beFontInfo_vtable[0];
-    FUN_00360f60((ObjectRefWord *)ps, -1);
+    FUN_00360f60((igSmartPointer<igObject> *)ps, -1);
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
     return temp_s0;
 }
 
-ObjectRefWord *FUN_00360f60(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_00360f60(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -84,15 +84,15 @@ static int g_beFontInfo_fieldOffsets[] = {
 };
 
 void beFontInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *unicodeList;
+    void *meta;
 
-    temp_s0 = (void *)g_beFontInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beFontInfo_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beUnicodeObjList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beFontInfo_fieldTable, g_beFontInfo_fieldHandles, g_beFontInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beFontInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beFontInfo_ctorTable, 1);
+    unicodeList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)unicodeList)->_metaObject = (int)beUnicodeObjList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beFontInfo_fieldTable, g_beFontInfo_fieldHandles, g_beFontInfo_fieldOffsets, base);
 }
 

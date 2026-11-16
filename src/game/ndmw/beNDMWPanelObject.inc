@@ -129,31 +129,31 @@ static int g_beNDMWPanelObject_fieldOffsets[] = {
 };
 
 void beNDMWPanelObject_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_5;
-    void *temp_s1_4;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *textColorList;
+    void *textSetList;
+    void *playerDataList;
+    void *messenger;
+    void *manager;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWPanelObject_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWPanelObject_ctorTable, 0x10);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = beBaseInfoManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 2);
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = beDataObjList_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igStringRefList_GetOrCreateMetaObject();
-    temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD));
-    ((igObjectRefMetaField *)temp_s1_5)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWPanelObject_fieldTable, g_beNDMWPanelObject_fieldHandles, g_beNDMWPanelObject_fieldOffsets, temp_s2);
+    meta = g_beNDMWPanelObject_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWPanelObject_ctorTable, 0x10);
+    manager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)manager)->_metaObject = beBaseInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)manager)->_refCounted = 0;
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 6), 2);
+    playerDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)playerDataList)->_metaObject = beDataObjList_GetOrCreateMetaObject();
+    textSetList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    ((igObjectRefMetaField *)textSetList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    textColorList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
+    ((igObjectRefMetaField *)textColorList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWPanelObject_fieldTable, g_beNDMWPanelObject_fieldHandles, g_beNDMWPanelObject_fieldOffsets, base);
 }
 
 static const char *g_beNDMWPanelObject_messageNames[] = {

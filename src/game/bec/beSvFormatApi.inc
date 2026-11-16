@@ -1,8 +1,8 @@
 igMetaObject *g_beSvFormatApi_metaObject;
 
-void beSvFormatApi_Create(int arg0) {
+void beSvFormatApi_Create(int allocator) {
     beSvFormatApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588270, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588270, allocator);
 }
 
 void *beSvFormatApi_GetMetaObject(void) {
@@ -18,44 +18,44 @@ int beSvFormatApi_GetVTable(void) {
     int r;
     int *tv1, *ta1;
     int tc1;
-    S_ref *q2;
-    S_ref *q1;
-    S_ref *q3;
+    igObject *q2;
+    igObject *q1;
+    igObject *q3;
 
     igObject_InitHeader(u.b);
     u.vt = (int)&g_beSaveApi_vtable[0];
-    q1 = (S_ref *)&u.b[48];
+    q1 = (igObject *)&u.b[48];
     *(int *)q1 = 0;
-    q2 = (S_ref *)&u.b[52];
+    q2 = (igObject *)&u.b[52];
     *(int *)q2 = 0;
-    q3 = (S_ref *)&u.b[56];
+    q3 = (igObject *)&u.b[56];
     *(int *)q3 = 0;
     u.vt = (int)&g_beSvFormatApi_vtable[0];
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beSaveApi_vtable[0];
     if (q3 != 0) {
-        q3 = *(S_ref **)q3;
+        q3 = *(igObject **)q3;
         if (q3 != 0) {
-            q3->f4 = (int)((int) (q3->f4 - 1));
-            if (((unsigned long long) ((long long) q3->f4 << 0x29) >> 0x29) == 0) {
+            q3->_refCount = (int)q3->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q3->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q3);
             }
         }
     }
     if (q2 != 0) {
-        q2 = *(S_ref **)q2;
+        q2 = *(igObject **)q2;
         if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
+            q2->_refCount = (int)q2->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q2->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q2);
             }
         }
     }
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)q1->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }

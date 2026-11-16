@@ -87,35 +87,35 @@ static int g_beNDMWPanelObjectWaza_fieldOffsets[] = {
 };
 
 void beNDMWPanelObjectWaza_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s0_2;
-    void *temp_s1;
-    igMetaField *temp_v0_2;
+    int base;
+    int pageIndex;
+    void **inheritedPage;
+    void *listFolder;
+    void *listColor;
+    void *meta;
+    igIntMetaField *pageField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (void *)(g_beNDMWPanelObjectWaza_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWPanelObjectWaza_ctorTable, 2);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_page"));
-    temp_s3 = ObjectPointerList_FindIndex(((igMetaObject *)temp_s1)->_metaFields, temp_v0);
-    temp_v0_2 = (igMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igIntMetaField_SetDefault(temp_v0_2, 0);
-    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWPanelObjectWaza_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
-    if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)(g_beNDMWPanelObjectWaza_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectWaza_ctorTable, 2);
+    inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
+    pageIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedPage);
+    pageField = (igIntMetaField *)(((DW4VC_84_1 *)(inheritedPage))->vX((int)(1)));
+    igIntMetaField_SetDefault(pageField, 0);
+    pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectWaza_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);
+    pageField->_refCount = pageField->_refCount - 1;
+    if (((unsigned long long)(long long)pageField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(pageField);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    ((igObjectRefMetaField *)temp_s0)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0)->_construct = 1;
-    temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWPanelObjectWaza_fieldTable, g_beNDMWPanelObjectWaza_fieldHandles, g_beNDMWPanelObjectWaza_fieldOffsets, temp_s2);
+    listFolder = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)listFolder)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)listFolder)->_construct = 1;
+    listColor = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)listColor)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)listColor)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWPanelObjectWaza_fieldTable, g_beNDMWPanelObjectWaza_fieldHandles, g_beNDMWPanelObjectWaza_fieldOffsets, base);
 }
 

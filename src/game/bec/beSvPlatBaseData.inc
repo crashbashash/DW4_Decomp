@@ -98,16 +98,16 @@ static int g_beSvPlatBaseData_fieldOffsets[] = {
 };
 
 void beSvPlatBaseData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *slotList;
+    void *meta;
 
-    temp_s0 = (void *)g_beSvPlatBaseData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSvPlatBaseData_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSvSlotDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beSvPlatBaseData_fieldTable, g_beSvPlatBaseData_fieldHandles, g_beSvPlatBaseData_fieldOffsets, temp_s2);
+    meta = (void *)g_beSvPlatBaseData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSvPlatBaseData_ctorTable, 4);
+    slotList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)slotList)->_metaObject = (int)beSvSlotDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)slotList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beSvPlatBaseData_fieldTable, g_beSvPlatBaseData_fieldHandles, g_beSvPlatBaseData_fieldOffsets, base);
 }
 

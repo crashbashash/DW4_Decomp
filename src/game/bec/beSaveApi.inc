@@ -22,13 +22,13 @@ igMetaObject *beSaveApi_GetOrCreateMetaObject(void) {
 
 void *beSaveApi_GetMetaObject(void) {
     unsigned char b;
-    if (((void * *)&g_beSaveApi_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)&g_beSaveApi_metaObject)[0]) + 36) & 4) != 0;
+    if (g_beSaveApi_metaObject != 0) {
+        b = (g_beSaveApi_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beSaveApi_EnsureRegistered();
 done:
-    return ((void * *)&g_beSaveApi_metaObject)[0];
+    return g_beSaveApi_metaObject;
 }
 
 void beSaveApi_EnsureRegistered(void)
@@ -122,21 +122,21 @@ static int g_beSaveApi_fieldOffsets[] = {
 };
 
 void beSaveApi_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *iconWork;
+    void *mountWork;
+    void *imageWork;
+    void *meta;
 
-    temp_s0 = (void *)g_beSaveApi_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSaveApi_ctorTable, 0xD);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beSaveApi_fieldTable, g_beSaveApi_fieldHandles, g_beSaveApi_fieldOffsets, temp_s2);
+    meta = (void *)g_beSaveApi_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSaveApi_ctorTable, 0xD);
+    imageWork = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
+    ((igObjectRefMetaField *)imageWork)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
+    mountWork = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
+    ((igObjectRefMetaField *)mountWork)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
+    iconWork = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    ((igObjectRefMetaField *)iconWork)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beSaveApi_fieldTable, g_beSaveApi_fieldHandles, g_beSaveApi_fieldOffsets, base);
 }
 

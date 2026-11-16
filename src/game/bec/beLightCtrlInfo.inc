@@ -21,27 +21,22 @@ int beLightCtrlInfo_GetVTable(void) {
     o.f[6] = 0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = g_beLightCtrlInfo_vtable;
-    FUN_0035bdd0((struct R **)(&o.f[6]), (short)(-1));
+    FUN_0035bdd0((igSmartPointer<igObject> *)(&o.f[6]), (short)(-1));
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 
-struct R **FUN_0035bdd0(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0035bdd0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beLightCtrlInfo_EnsureRegistered(void)
@@ -87,17 +82,17 @@ static int g_beLightCtrlInfo_fieldOffsets[] = {
 };
 
 void beLightCtrlInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *lightSetList;
+    void *meta;
 
-    temp_s0 = (void *)g_beLightCtrlInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLightCtrlInfo_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igLightSetList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beLightCtrlInfo_fieldTable, g_beLightCtrlInfo_fieldHandles, g_beLightCtrlInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beLightCtrlInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLightCtrlInfo_ctorTable, 1);
+    lightSetList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)lightSetList)->_metaObject = (int)igLightSetList_GetOrCreateMetaObject();
+    ((igRefMetaField *)lightSetList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beLightCtrlInfo_fieldTable, g_beLightCtrlInfo_fieldHandles, g_beLightCtrlInfo_fieldOffsets, base);
 }
 
 igMetaEnum *g_beLightCtrlInfo_msgActionMetaEnum;

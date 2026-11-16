@@ -5,9 +5,9 @@ igMetaField *g_beNDMWMdlPlayer2InfoWork_bitMetaField;
 igMetaField *g_beNDMWMdlPlayer2InfoWork_expMetaField;
 igMetaEnum *g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum;
 
-void beNDMWMdlPlayer2InfoWork_Create(int arg0) {
+void beNDMWMdlPlayer2InfoWork_Create(int allocator) {
     beNDMWMdlPlayer2InfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, allocator);
 }
 
 void *beNDMWMdlPlayer2InfoWork_ResolveMetaObject(void) {
@@ -124,13 +124,13 @@ static int g_beNDMWMdlPlayer2InfoWork_fieldOffsets[] = {
 };
 
 void beNDMWMdlPlayer2InfoWork_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWMdlPlayer2InfoWork_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWMdlPlayer2InfoWork_ctorTable, 4);
-    igMetaObject_NameFields(temp_s0, g_beNDMWMdlPlayer2InfoWork_fieldTable, g_beNDMWMdlPlayer2InfoWork_fieldHandles, g_beNDMWMdlPlayer2InfoWork_fieldOffsets, temp_s1);
+    meta = g_beNDMWMdlPlayer2InfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWMdlPlayer2InfoWork_ctorTable, 4);
+    igMetaObject_NameFields(meta, g_beNDMWMdlPlayer2InfoWork_fieldTable, g_beNDMWMdlPlayer2InfoWork_fieldHandles, g_beNDMWMdlPlayer2InfoWork_fieldOffsets, base);
 }
 
 static const char *g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListNames[] = {

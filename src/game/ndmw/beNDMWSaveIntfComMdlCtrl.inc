@@ -21,21 +21,21 @@ int beNDMWSaveIntfComMdlCtrl_GetVTable(void) {
     obj.w6 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beNDMWSaveIntfComMdlCtrl_vtable[0];
-    FUN_003bc2d0((ObjectRefWord *)&obj.w6, -1);
-    FUN_003bc2d0((ObjectRefWord *)&obj.w5, -1);
+    FUN_003bc2d0((igSmartPointer<igObject> *)&obj.w6, -1);
+    FUN_003bc2d0((igSmartPointer<igObject> *)&obj.w5, -1);
     FUN_00344030(&obj, 0);
     return t;
 }
 
-ObjectRefWord *FUN_003bc2d0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_003bc2d0(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -95,39 +95,39 @@ static int g_beNDMWSaveIntfComMdlCtrl_fieldOffsets[] = {
 };
 
 void beNDMWSaveIntfComMdlCtrl_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s0_2;
-    void *temp_s0_3;
-    igMetaObject *temp_s1;
-    igStringMetaField *temp_v0_2;
+    int base;
+    int nameIndex;
+    void **inheritedName;
+    void *messenger;
+    void *openDataList;
+    void *closeDataList;
+    igMetaObject *meta;
+    igStringMetaField *nameField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (igMetaObject *)(g_beNDMWSaveIntfComMdlCtrl_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWSaveIntfComMdlCtrl_ctorTable, 4);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
-    temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "COMMDLCTRL");
-    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWSaveIntfComMdlCtrl_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
-    if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (igMetaObject *)(g_beNDMWSaveIntfComMdlCtrl_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWSaveIntfComMdlCtrl_ctorTable, 4);
+    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
+    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(nameField, "COMMDLCTRL");
+    nameField->_externalEnumStorage = (int)(&g_beNDMWSaveIntfComMdlCtrl_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    nameField->_refCount = nameField->_refCount - 1;
+    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(nameField);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    ((igObjectRefMetaField *)temp_s0)->_metaObject = beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0)->_refCounted = 0;
-    temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = (int)beSaveIntfComMdlDataList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0_2)->_construct = 1;
-    temp_s0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = (int)beSaveIntfComMdlDataList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0_3)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWSaveIntfComMdlCtrl_fieldTable, g_beNDMWSaveIntfComMdlCtrl_fieldHandles, g_beNDMWSaveIntfComMdlCtrl_fieldOffsets, temp_s2);
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    openDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)openDataList)->_metaObject = (int)beSaveIntfComMdlDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)openDataList)->_construct = 1;
+    closeDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)closeDataList)->_metaObject = (int)beSaveIntfComMdlDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)closeDataList)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWSaveIntfComMdlCtrl_fieldTable, g_beNDMWSaveIntfComMdlCtrl_fieldHandles, g_beNDMWSaveIntfComMdlCtrl_fieldOffsets, base);
 }
 

@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWItemBlueArmor_metaObject;
 
-void beNDMWItemBlueArmor_Create(int arg0) {
+void beNDMWItemBlueArmor_Create(int allocator) {
     beNDMWItemBlueArmor_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemBlueArmor_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemBlueArmor_metaObject, allocator);
 }
 
 void *beNDMWItemBlueArmor_GetReadyMetaObject(void) {

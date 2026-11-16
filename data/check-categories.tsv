@@ -2669,7 +2669,7 @@
 0015b840	Gap__Bec__ParticleArray__vfunc_24	match	-
 0015b870	Gap__Bec__ParticleArray__vfunc_25	match	-
 0015bb50	FUN_0015bb50	match	-
-0015c230	Gap__Gfx__igParticleArray__vfunc_28	match	-
+0015c230	igParticleArray_Update	match	-
 0015c790	Gap__Bec__ParticleArray__vfunc_28	match	-
 0015c830	Gap__Bec__ParticleArray__vfunc_30	match	-
 0015c840	Gap__Bec__ParticleArray__vfunc_29	match	-
@@ -2695,7 +2695,7 @@
 0015da00	FUN_0015da00	match	-
 0015da70	FUN_0015da70	match	-
 0015dae0	FUN_0015dae0	match	-
-0015db00	FUN_0015db00	match	-
+0015db00	igPointSpriteExt_SetSize	match	-
 0015db40	FUN_0015db40	match	-
 0015db60	FUN_0015db60	match	-
 0015db80	Gap__Gfx__igPrimLengthArray1_1__vfunc_20	match	-
@@ -2816,7 +2816,7 @@
 00166c70	FUN_00166c70	match	-
 00166c80	FUN_00166c80	match	-
 00166c90	FUN_00166c90	match	-
-00166d40	FUN_00166d40	match	-
+00166d40	igVisualContext_FindFirst	match	-
 00166de0	FUN_00166de0	match	-
 00166f90	FUN_00166f90	match	-
 00166fa0	FUN_00166fa0	match	-
@@ -3785,7 +3785,7 @@
 00192f50	Vec3f_TransformDirection	match	-
 00192fc0	Vec3f_TransformProjective	match	-
 001930f0	FUN_001930f0	match	-
-001931b0	FUN_001931b0	match	-
+001931b0	igVec4f_PackColor	match	-
 00193540	Color4f_Unpack	match	-
 00193c50	FUN_00193c50	match	-
 00193d00	Gap__igVec4ucMetaField__vfunc_22	match	-
@@ -16870,6 +16870,7 @@
 0038ff40	beMeterCtrl_OnMessageText	match	-
 003902e0	beMeterCtrl_GetMeta	match	-
 003902f0	beMeterCtrlNode_TraversalFunction	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
+00390320	beMeterCtrlNode_Traverse	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00390890	beMeterCtrlNode_RegisterTraversalFunction	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003908d0	beModelCtrl_DrawDebugHitBox	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003908e0	beModelCtrlInfoHitBody_GetAABoxList	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
@@ -16888,6 +16889,7 @@
 003921a0	beModelCtrlInfoRideOn_IsModel	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00392200	beModelCtrlInfoRideOn2_Move	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00392240	beModelCtrlInfoRideOn3_Move	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
+003923c0	beModelCtrlInfoRideOn4_Move	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003926d0	beModelCtrl_CheckWallAndFloor	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00392be0	beModelCtrl_QueryMove	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00392d20	beModelCtrlMoveObject_Start	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
@@ -16915,6 +16917,7 @@
 00395b50	beModelCtrl_UpdateRam	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003960e0	beModelCtrl_OnUpdateRam	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003960f0	beModelCtrlInfoWork_FindSeqLabel	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
+00396340	beModelCtrl__OnGenerateFromParent	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00396740	beModelCtrl__OnGenerate	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00396940	beModelCtrl_UpdateBound	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00396a80	beModelCtrl_OnMessageText	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
@@ -17066,7 +17069,8 @@
 003a3940	ParticleTimer_resetFields	match	-
 003a3960	FUN_003a3960	match	-
 003a3bb0	ParticleArray_resetFields	match	-
-003a3bf0	Gap__Bec__ParticleArray__vfunc_38	match	-
+003a3bf0	ParticleArray_UsesBaseUpdate	match	-
+003a3c10	ParticleArray_Update	match	-
 003a4910	ParticleArray_GetMeta	match	-
 003a4920	ParticleTimer_GetMeta	match	-
 003a4930	beNumberCtrl_Prepare	match	-

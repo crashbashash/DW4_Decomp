@@ -10,9 +10,9 @@ igMetaField *g_beFont_condition00MetaField;
 igMetaField *g_beFont_condition01MetaField;
 igMetaField *g_beFont_historyMetaField;
 
-void beFont_CreateInstance(int arg0) {
+void beFont_CreateInstance(int allocator) {
     beFont_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589678, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589678, allocator);
 }
 
 igMetaObject *beFont_GetOrCreateMetaObject(void) {
@@ -53,41 +53,37 @@ int beFont_GetVTable(void) {
     igSmartPointer_igStringObj_Destruct(&obj.w14, -1);
     FUN_001354b0(&obj.w13, -1);
     igSmartPointer_igIntList_Destruct(&obj.w12, -1);
-    FUN_003620f0((void **)&obj.w11, (short)(-1));
-    FUN_00362070((ObjectRefWord *)&obj.w9, -1);
+    FUN_003620f0((igSmartPointer<igObject> *)&obj.w11, (short)(-1));
+    FUN_00362070((igSmartPointer<igObject> *)&obj.w9, -1);
     FUN_001d97f0(&obj.w8, -1);
     FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
     return t;
 }
 
-ObjectRefWord *FUN_00362070(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_00362070(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_003620f0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_003620f0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beFont_EnsureRegistered(void)
@@ -169,35 +165,35 @@ static int g_beFont_fieldOffsets[] = {
 };
 
 void beFont_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s1;
-    int temp_s0;
+    void *root;
+    void *fonts;
+    void *gaPairList;
+    void *lineFeedList;
+    void *alignList;
+    void *convertData;
+    void *meta;
+    int base;
 
-    temp_s1 = (void *)g_beFont_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beFont_ctorTable, 0xA);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = igAttrSet_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beFontImageList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beFontGeomAttrPairList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igFloatList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igStringObj_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_beFont_fieldTable, g_beFont_fieldHandles, g_beFont_fieldOffsets, temp_s0);
+    meta = (void *)g_beFont_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beFont_ctorTable, 0xA);
+    root = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)root)->_metaObject = igAttrSet_GetOrCreateMetaObject();
+    fonts = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)fonts)->_metaObject = (int)beFontImageList_GetOrCreateMetaObject();
+    ((igRefMetaField *)fonts)->_construct = 1;
+    gaPairList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)gaPairList)->_metaObject = (int)beFontGeomAttrPairList_GetOrCreateMetaObject();
+    ((igRefMetaField *)gaPairList)->_construct = 1;
+    lineFeedList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)lineFeedList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)lineFeedList)->_construct = 1;
+    alignList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)alignList)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    ((igRefMetaField *)alignList)->_construct = 1;
+    convertData = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)convertData)->_metaObject = igStringObj_GetOrCreateMetaObject();
+    ((igRefMetaField *)convertData)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beFont_fieldTable, g_beFont_fieldHandles, g_beFont_fieldOffsets, base);
 }
 

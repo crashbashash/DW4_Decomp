@@ -93,12 +93,12 @@ static int g_beCriVolume_fieldOffsets[] = {
 };
 
 void beCriVolume_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beCriVolume_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCriVolume_ctorTable, 6);
-    igMetaObject_NameFields(temp_s0, g_beCriVolume_fieldTable, g_beCriVolume_fieldHandles, g_beCriVolume_fieldOffsets, temp_s1);
+    meta = (void *)g_beCriVolume_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCriVolume_ctorTable, 6);
+    igMetaObject_NameFields(meta, g_beCriVolume_fieldTable, g_beCriVolume_fieldHandles, g_beCriVolume_fieldOffsets, base);
 }
 

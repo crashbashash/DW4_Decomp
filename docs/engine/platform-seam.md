@@ -235,6 +235,10 @@ _no fields serialised_.
 | +384 | `_frustumNear` | `igFloatMetaField` |
 | +388 | `_frustumFar` | `igFloatMetaField` |
 
+Its virtual slots the particle array calls, read from the retail vtable: 32 sets the sprite size space
+(`_spriteSizeSpace`), 33 configures the sprite from the context, 34 sets and 35 gets a vertex position, 36 sets a
+vertex colour and 40 sets a texture coordinate.
+
 ### `igScissorExt`
 
 _no fields serialised_.

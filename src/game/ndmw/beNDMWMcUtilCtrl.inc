@@ -17,9 +17,9 @@ igMetaField *g_beNDMWMcUtilCtrl_st1MetaField;
 igMetaField *g_beNDMWMcUtilCtrl_st2MetaField;
 igMetaField *g_beNDMWMcUtilCtrl_st3MetaField;
 
-void beNDMWMcUtilCtrl_Create(int arg0) {
+void beNDMWMcUtilCtrl_Create(int allocator) {
     beNDMWMcUtilCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMcUtilCtrl_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMcUtilCtrl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMcUtilCtrl_GetOrCreateMetaObject(void) {
@@ -176,24 +176,24 @@ static int g_beNDMWMcUtilCtrl_fieldOffsets[] = {
 };
 
 void beNDMWMcUtilCtrl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *slot;
+    void *svData;
+    void *messenger;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWMcUtilCtrl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWMcUtilCtrl_ctorTable, 0x11);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = beSaveDataDeliver_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beNDMWMcSlotList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWMcUtilCtrl_fieldTable, g_beNDMWMcUtilCtrl_fieldHandles, g_beNDMWMcUtilCtrl_fieldOffsets, temp_s2);
+    meta = g_beNDMWMcUtilCtrl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWMcUtilCtrl_ctorTable, 0x11);
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    svData = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
+    ((igObjectRefMetaField *)svData)->_metaObject = beSaveDataDeliver_GetOrCreateMetaObject();
+    ((igRefMetaField *)svData)->_construct = 1;
+    slot = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    ((igObjectRefMetaField *)slot)->_metaObject = (int)beNDMWMcSlotList_GetOrCreateMetaObject();
+    ((igRefMetaField *)slot)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWMcUtilCtrl_fieldTable, g_beNDMWMcUtilCtrl_fieldHandles, g_beNDMWMcUtilCtrl_fieldOffsets, base);
 }
 

@@ -1,6 +1,6 @@
-void beNDMWShopJunk_Create(int arg0) {
+void beNDMWShopJunk_Create(int allocator) {
     beNDMWShopJunk_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopJunk_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopJunk_metaObject, allocator);
 }
 
 void *beNDMWShopJunk_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int beNDMWShopJunk_GetVTable(void) {
     obj.f5C = 0;
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&g_beNDMWShopJunk_vtable[0]);
-    igSmartPointer_beNDMWItemBaseList_Destruct((void **)&obj.f5C, (long long)(-1));
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj.f5C, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return temp_s0;
 }

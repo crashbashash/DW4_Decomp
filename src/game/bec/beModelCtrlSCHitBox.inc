@@ -6,9 +6,9 @@ igMetaField *g_beModelCtrlSCHitBox_offsetMetaField;
 igMetaField *g_beModelCtrlSCHitBox_boxSizeMetaField;
 igMetaField *g_beModelCtrlSCHitBox_isPositionLockMetaField;
 
-void beModelCtrlSCHitBox_Create(int arg0) {
+void beModelCtrlSCHitBox_Create(int allocator) {
     beModelCtrlSCHitBox_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5887C8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5887C8, allocator);
 }
 
 igMetaObject *beModelCtrlSCHitBox_GetMetaObject(void) {
@@ -85,12 +85,12 @@ static int g_beModelCtrlSCHitBox_fieldOffsets[] = {
 };
 
 void beModelCtrlSCHitBox_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlSCHitBox_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlSCHitBox_ctorTable, 6);
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlSCHitBox_fieldTable, g_beModelCtrlSCHitBox_fieldHandles, g_beModelCtrlSCHitBox_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlSCHitBox_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlSCHitBox_ctorTable, 6);
+    igMetaObject_NameFields(meta, g_beModelCtrlSCHitBox_fieldTable, g_beModelCtrlSCHitBox_fieldHandles, g_beModelCtrlSCHitBox_fieldOffsets, base);
 }
 

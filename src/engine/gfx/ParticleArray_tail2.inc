@@ -1,7 +1,7 @@
 void Gap__Bec__ParticleArray__vfunc_15(void *arg0) {
     int temp_v0;
 
-    temp_v0 = FUN_00166d40();
+    temp_v0 = igVisualContext_FindFirst();
     if (temp_v0 != 0) {
         ((DW4VC_92_5 *)(((char *)(arg0) + 0)))->vX((int)(((ParticleArray *)arg0)->_particleFormat), (int)(*(int *)((char *)(arg0) + 12)), (int)(temp_v0), ((ParticleArray *)arg0)->_particleLifeStart, ((ParticleArray *)arg0)->_particleLifeEnd);
     }
@@ -343,7 +343,7 @@ void FUN_0015dae0(igPointSpriteExtView *self, unsigned int index, float value)
     self->_vertexArray->vfunc_51(index, value);
 }
 
-void FUN_0015db00(Sdb00 *arg0, int arg1, V2f *arg2) {
+void igPointSpriteExt_SetSize(Sdb00 *arg0, int arg1, V2f *arg2) {
     V2f v;
     v.x = arg2->x;
     v.y = arg2->y;

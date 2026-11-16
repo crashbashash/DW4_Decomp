@@ -23,14 +23,14 @@ void *beWaterMove_GetMetaObject(void) {
 int beWaterMove_GetVTable(void) {
     struct W o;
     int r;
-    struct Ref *p;
+    igObject *p;
 
     igObject_InitHeader(&o);
     o.vt = g_beWaterMove_vtable;
     *(int *)((char *)&o + 36) = 0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = g_beWaterMove_vtable;
-    if (&*(int *)((char *)&o + 36) != 0) { p = *(struct Ref **)((char *)&o + 36); if (p != 0) { p->u.w = p->u.w - 1; if (p->u.b.cnt == 0) igObject_Destroy(p); } }
+    if (&*(int *)((char *)&o + 36) != 0) { p = *(igObject **)((char *)&o + 36); if (p != 0) { p->_refCount = (int)p->_refCount - 1; if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(p); } }
     return r;
 }
 
@@ -93,16 +93,16 @@ static int g_beWaterMove_fieldOffsets[] = {
 };
 
 void beWaterMove_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *dataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beWaterMove_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beWaterMove_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beWaterMoveDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beWaterMove_fieldTable, g_beWaterMove_fieldHandles, g_beWaterMove_fieldOffsets, temp_s2);
+    meta = (void *)g_beWaterMove_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beWaterMove_ctorTable, 5);
+    dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beWaterMoveDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beWaterMove_fieldTable, g_beWaterMove_fieldHandles, g_beWaterMove_fieldOffsets, base);
 }
 

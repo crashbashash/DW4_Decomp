@@ -79,12 +79,12 @@ static int g_beModelCtrlMUTEKI_fieldOffsets[] = {
 };
 
 void beModelCtrlMUTEKI_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlMUTEKI_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlMUTEKI_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlMUTEKI_fieldTable, g_beModelCtrlMUTEKI_fieldHandles, g_beModelCtrlMUTEKI_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlMUTEKI_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlMUTEKI_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beModelCtrlMUTEKI_fieldTable, g_beModelCtrlMUTEKI_fieldHandles, g_beModelCtrlMUTEKI_fieldOffsets, base);
 }
 

@@ -5,9 +5,9 @@ igMetaField *g_beNDMWStatusSubMenu_receiptMetaField;
 igMetaField *g_beNDMWStatusSubMenu_playerNoListMetaField;
 igMetaField *g_beNDMWStatusSubMenu_playerDeviceCntMetaField;
 
-void beNDMWStatusSubMenu_Create(int arg0) {
+void beNDMWStatusSubMenu_Create(int allocator) {
     beNDMWStatusSubMenu_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, allocator);
 }
 
 void *beNDMWStatusSubMenu_GetMetaObject(void) {
@@ -38,27 +38,22 @@ int beNDMWStatusSubMenu_GetVTable(void) {
     u.w[0] = (int)(&g_beNDMWStatusSubMenu_vtable[0]);
     igSmartPointer_igIntList_Destruct(&u.w[25], -1);
     igSmartPointer_igIntList_Destruct(&u.w[24], -1);
-    beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct((void **)(&u.w[22]), (short)(-1));
+    beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)(&u.w[22]), -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)u.b, (long long)0);
     return temp_s2;
 }
 
-void **beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct(void **arg0, short arg1) {
-    S_temp_a0_3b90a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_3b90a0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWStatusSubMenu_EnsureRegistered(void)
@@ -120,23 +115,23 @@ static int g_beNDMWStatusSubMenu_fieldOffsets[] = {
 };
 
 void beNDMWStatusSubMenu_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    igMetaObject *temp_s0;
+    int base;
+    void *deviceFolderList;
+    void *playerNoList;
+    void *playerDeviceCnt;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusSubMenu_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusSubMenu_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWWindowCtrl_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusSubMenu_fieldTable, g_beNDMWStatusSubMenu_fieldHandles, g_beNDMWStatusSubMenu_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatusSubMenu_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusSubMenu_ctorTable, 5);
+    deviceFolderList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)deviceFolderList)->_metaObject = (int)beNDMWWindowCtrl_GetOrCreateMetaObject();
+    playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)playerNoList)->_construct = 1;
+    playerDeviceCnt = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)playerDeviceCnt)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)playerDeviceCnt)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWStatusSubMenu_fieldTable, g_beNDMWStatusSubMenu_fieldHandles, g_beNDMWStatusSubMenu_fieldOffsets, base);
 }
 

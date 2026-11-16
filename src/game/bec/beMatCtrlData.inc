@@ -12,7 +12,7 @@ void *beMatCtrlData_GetMetaObject(void) {
 int beMatCtrlData_GetVTable(void) {
     union U_35a480 u;
     int temp_s0;
-    S_ref *q0;
+    igObject *q0;
     char *q1;
     int *temp_v1;
     int *temp_a1;
@@ -22,15 +22,15 @@ int beMatCtrlData_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_beMatCtrlData_vtable[0];
-    q0 = (S_ref *)&u.b[12];
+    q0 = (igObject *)&u.b[12];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beMatCtrlData_vtable[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)q0->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }
@@ -93,16 +93,16 @@ static int g_beMatCtrlData_fieldOffsets[] = {
 };
 
 void beMatCtrlData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *chkBox;
+    void *meta;
 
-    temp_s0 = (void *)g_beMatCtrlData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMatCtrlData_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAABox_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beMatCtrlData_fieldTable, g_beMatCtrlData_fieldHandles, g_beMatCtrlData_fieldOffsets, temp_s2);
+    meta = (void *)g_beMatCtrlData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMatCtrlData_ctorTable, 1);
+    chkBox = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)chkBox)->_metaObject = igAABox_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beMatCtrlData_fieldTable, g_beMatCtrlData_fieldHandles, g_beMatCtrlData_fieldOffsets, base);
 }
 
 igMetaEnum *g_beMatCtrlData_messageMetaEnum;

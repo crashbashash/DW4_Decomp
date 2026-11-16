@@ -69,15 +69,15 @@ static int g_beCameraCtrlInfo_fieldOffsets[] = {
 };
 
 void beCameraCtrlInfo_InitFields(void) {
-    int temp_s1;
+    int base;
     void *f;
-    void *temp_s0;
+    void *meta;
 
-    temp_s0 = (void *)g_beCameraCtrlInfo_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCameraCtrlInfo_ctorTable, 1);
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1);
-    *(int *)((char *)f + 56) = g_igObject_metaObject[0];
-    igMetaObject_NameFields(temp_s0, g_beCameraCtrlInfo_fieldTable, g_beCameraCtrlInfo_fieldHandles, g_beCameraCtrlInfo_fieldOffsets, temp_s1);
+    meta = (void *)g_beCameraCtrlInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCameraCtrlInfo_ctorTable, 1);
+    f = igMetaObject_GetFieldAt(meta, base);
+    ((igObjectRefMetaField *)f)->_metaObject = g_igObject_metaObject[0];
+    igMetaObject_NameFields(meta, g_beCameraCtrlInfo_fieldTable, g_beCameraCtrlInfo_fieldHandles, g_beCameraCtrlInfo_fieldOffsets, base);
 }
 

@@ -5,9 +5,9 @@ igMetaField *g_beCriHandle_playIDMetaField;
 igMetaField *g_beCriHandle_typeMetaField;
 igMetaField *g_beCriHandle_priorityMetaField;
 
-void beCriHandle_Create(int arg0) {
+void beCriHandle_Create(int allocator) {
     beCriHandle_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5899C8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5899C8, allocator);
 }
 
 igMetaObject *beCriHandle_GetOrCreateMetaObject(void) {
@@ -137,20 +137,20 @@ static int g_beCriHandle_fieldOffsets[] = {
 };
 
 void beCriHandle_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *volume;
+    void *audio;
+    void *meta;
 
-    temp_s0 = (void *)g_beCriHandle_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCriHandle_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beCriAudio_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beCriVolume_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beCriHandle_fieldTable, g_beCriHandle_fieldHandles, g_beCriHandle_fieldOffsets, temp_s2);
+    meta = (void *)g_beCriHandle_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCriHandle_ctorTable, 5);
+    audio = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)audio)->_metaObject = (int)beCriAudio_GetOrCreateMetaObject();
+    ((igRefMetaField *)audio)->_construct = 1;
+    volume = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)volume)->_metaObject = (int)beCriVolume_GetOrCreateMetaObject();
+    ((igRefMetaField *)volume)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beCriHandle_fieldTable, g_beCriHandle_fieldHandles, g_beCriHandle_fieldOffsets, base);
 }
 

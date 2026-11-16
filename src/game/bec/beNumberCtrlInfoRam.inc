@@ -33,47 +33,37 @@ int beNumberCtrlInfoRam_GetVTable(void) {
     o.f[15] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beNumberCtrlInfoRam_vtable[0];
-    igSmartPointer_beNumberCtrlInfoWork_Destruct((void **)(&o.f[15]), -1);
-    FUN_0034d640((void **)p17, (long long)(-1));
+    igSmartPointer_beNumberCtrlInfoWork_Destruct((igSmartPointer<igObject> *)(&o.f[15]), -1);
+    FUN_0034d640((igSmartPointer<igObject> *)p17, (long long)(-1));
     FUN_001971e0(p16, -1);
     FUN_0033e920((S *)&o, (long long)0);
     return r;
 }
 
-void **FUN_0034d640(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_0034d640(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **igSmartPointer_beNumberCtrlInfoWork_Destruct(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *igSmartPointer_beNumberCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beNumberCtrlInfoRam_EnsureRegistered(void)
@@ -139,23 +129,23 @@ static int g_beNumberCtrlInfoRam_fieldOffsets[] = {
 };
 
 void beNumberCtrlInfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s0;
+    int base;
+    void *geometry;
+    void *numList;
+    void *work;
+    void *meta;
 
-    temp_s0 = (void *)g_beNumberCtrlInfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNumberCtrlInfoRam_ctorTable, 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = igGeometry_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0.09375f);
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)beNumVerDataList_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1_2) + 52) = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
-    *(int *)((char *)(temp_s1_3) + 56) = (int)beNumberCtrlInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNumberCtrlInfoRam_fieldTable, g_beNumberCtrlInfoRam_fieldHandles, g_beNumberCtrlInfoRam_fieldOffsets, temp_s2);
+    meta = (void *)g_beNumberCtrlInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNumberCtrlInfoRam_ctorTable, 6);
+    geometry = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)geometry)->_metaObject = igGeometry_GetOrCreateMetaObject();
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 0.09375f);
+    numList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)numList)->_metaObject = (int)beNumVerDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)numList)->_construct = 1;
+    work = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beNumberCtrlInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNumberCtrlInfoRam_fieldTable, g_beNumberCtrlInfoRam_fieldHandles, g_beNumberCtrlInfoRam_fieldOffsets, base);
 }
 

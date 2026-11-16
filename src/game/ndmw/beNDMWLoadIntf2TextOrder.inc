@@ -3,9 +3,9 @@ int g_beNDMWLoadIntf2TextOrder_nameExternalEnumStorage;
 igMetaField *g_beNDMWLoadIntf2TextOrder_messengerMetaField;
 igMetaField *g_beNDMWLoadIntf2TextOrder_luaMetaField;
 
-void beNDMWLoadIntf2TextOrder_Create(int arg0) {
+void beNDMWLoadIntf2TextOrder_Create(int allocator) {
     beNDMWLoadIntf2TextOrder_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2TextOrder_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadIntf2TextOrder_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject(void) {
@@ -99,35 +99,35 @@ static int g_beNDMWLoadIntf2TextOrder_fieldOffsets[] = {
 };
 
 void beNDMWLoadIntf2TextOrder_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s0_2;
-    void *temp_s1;
-    igStringMetaField *temp_v0_2;
+    int base;
+    int nameIndex;
+    void **inheritedName;
+    void *messenger;
+    void *lua;
+    void *meta;
+    igStringMetaField *nameField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (void *)(g_beNDMWLoadIntf2TextOrder_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2TextOrder_ctorTable, 2);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(((igMetaObject *)temp_s1)->_metaFields, temp_v0);
-    temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "TEXTORDER");
-    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2TextOrder_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
-    if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)(g_beNDMWLoadIntf2TextOrder_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2TextOrder_ctorTable, 2);
+    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
+    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(nameField, "TEXTORDER");
+    nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2TextOrder_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    nameField->_refCount = nameField->_refCount - 1;
+    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(nameField);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    ((igObjectRefMetaField *)temp_s0)->_metaObject = beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0)->_refCounted = 0;
-    temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = beLua_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0_2)->_refCounted = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2TextOrder_fieldTable, g_beNDMWLoadIntf2TextOrder_fieldHandles, g_beNDMWLoadIntf2TextOrder_fieldOffsets, temp_s2);
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    lua = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)lua)->_metaObject = beLua_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lua)->_refCounted = 0;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadIntf2TextOrder_fieldTable, g_beNDMWLoadIntf2TextOrder_fieldHandles, g_beNDMWLoadIntf2TextOrder_fieldOffsets, base);
 }
 

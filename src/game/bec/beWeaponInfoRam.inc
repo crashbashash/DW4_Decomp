@@ -11,20 +11,20 @@ void *beWeaponInfoRam_GetMetaObject(void) {
 int beWeaponInfoRam_GetVTable(void) {
     union U u;
     int temp_s0;
-    S_ref *p;
+    igObject *p;
 
     igObject_InitHeader(u.b);
     u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    p = (S_ref *)&u.b[40];
+    p = (igObject *)&u.b[40];
     *(int *)p = 0;
     u.vt = (int)&g_beWeaponInfoRam_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beBaseInfoRam_vtable[0];
     if (p != 0) {
-        p = *(S_ref **)p;
+        p = *(igObject **)p;
         if (p != 0) {
-            p->f4 = (int)((int) (p->f4 - 1));
-            if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
+            p->_refCount = (int)p->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
         }
@@ -53,15 +53,15 @@ void *FUN_0033e920(S *arg0, long long arg1) {
     return arg0;
 }
 
-ObjectRefWord *ObjectRef_Destruct_0033e9c0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *ObjectRef_Destruct_0033e9c0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }

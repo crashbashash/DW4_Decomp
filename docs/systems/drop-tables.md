@@ -110,7 +110,7 @@ generator holds an explicit pointer into it.** There is no name lookup, no
 inheritance and no fallback:
 
 * The reference is a raw pointer on the generator itself: `beGeneraterData +0x40`
-  → `beGeneraterPlayerData` → `+0x10`/`+0x14`. `beGenerater_DropItemsForDead`'s caller loads it and
+  → `beGeneraterPlayerData` → `+0x10`/`+0x14`. `beGenerater_DropItemsForDead` loads it and
   rolls; nothing anywhere resolves a list *by name*.
 * **There is no "zone default" to fall back to.** A generator whose list is empty
   drops nothing. Verified live: zeroing every weight in the active
@@ -333,9 +333,9 @@ The live split of the three lists is 11 / 25 / 21 = 57 references.
 | `conItem` | 2 | 0 | 50 (0.50 %) | HP Disk γ |
 | `insItem` | 2 | 0 | 50 (0.50 %) | x-data |
 
-**The "last enemy" list is inert here.** `beGenerater_DropItemsForDead`'s caller picks
-`_itemLastDataList` (+0x14) instead of `_itemDataList` (+0x10) when the generator is
-down to its final enemy (`0x384948: bne v0,v1` then `lw v0,20(a0)` vs `lw v0,16(a0)`).
+**The "last enemy" list is inert here.** `beGenerater_DropItemsForDead` itself picks
+`_itemLastDataList` (+0x14) instead of `_itemDataList` (+0x10) when it is called with its last-wave flag and the
+generator's live list holds exactly one enemy (`0x384948: bne v0,v1` then `lw v0,20(a0)` vs `lw v0,16(a0)`).
 **All 24 spawners in `stagGF01` have the two lists byte-identical**, so the rule never
 changes a roll in this stage; nothing in the fortress is a guaranteed drop.
 

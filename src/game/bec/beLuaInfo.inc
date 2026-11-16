@@ -22,20 +22,20 @@ int beLuaInfo_GetVTable(void) {
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beLuaInfo_vtable[0];
-    FUN_0035ade0((ObjectRefWord *)&obj.w7, -1);
+    FUN_0035ade0((igSmartPointer<igObject> *)&obj.w7, -1);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return t;
 }
 
-ObjectRefWord *FUN_0035ade0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_0035ade0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -83,16 +83,16 @@ static int g_beLuaInfo_fieldOffsets[] = {
 };
 
 void beLuaInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *dataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beLuaInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLuaInfo_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beLuaDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beLuaInfo_fieldTable, g_beLuaInfo_fieldHandles, g_beLuaInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beLuaInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLuaInfo_ctorTable, 1);
+    dataList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beLuaDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beLuaInfo_fieldTable, g_beLuaInfo_fieldHandles, g_beLuaInfo_fieldOffsets, base);
 }
 

@@ -13,13 +13,13 @@ igMetaObject *beCriAudio_GetOrCreateMetaObject(void) {
 
 void *beCriAudio_GetMetaObject(void) {
     unsigned char b;
-    if (((void * *)&g_beCriAudio_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)&g_beCriAudio_metaObject)[0]) + 36) & 4) != 0;
+    if (g_beCriAudio_metaObject != 0) {
+        b = (g_beCriAudio_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beCriAudio_EnsureRegistered();
 done:
-    return ((void * *)&g_beCriAudio_metaObject)[0];
+    return g_beCriAudio_metaObject;
 }
 
 int beCriAudio_GetVTable(void) {
@@ -116,18 +116,18 @@ static int g_beCriAudio_fieldOffsets[] = {
 };
 
 void beCriAudio_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *sndf;
+    void *adxt;
+    void *meta;
 
-    temp_s0 = (void *)g_beCriAudio_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCriAudio_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAdxAudio_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beCriSndf_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beCriAudio_fieldTable, g_beCriAudio_fieldHandles, g_beCriAudio_fieldOffsets, temp_s2);
+    meta = (void *)g_beCriAudio_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCriAudio_ctorTable, 4);
+    adxt = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)adxt)->_metaObject = igAdxAudio_GetOrCreateMetaObject();
+    sndf = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)sndf)->_metaObject = (int)beCriSndf_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beCriAudio_fieldTable, g_beCriAudio_fieldHandles, g_beCriAudio_fieldOffsets, base);
 }
 

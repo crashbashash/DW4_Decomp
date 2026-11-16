@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWStatusMainSlot_metaObject;
 
-void beNDMWStatusMainSlot_Create(int arg0) {
+void beNDMWStatusMainSlot_Create(int allocator) {
     beNDMWStatusMainSlot_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusMainSlot_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusMainSlot_metaObject, allocator);
 }
 
 void *beNDMWStatusMainSlot_GetMetaObject(void) {

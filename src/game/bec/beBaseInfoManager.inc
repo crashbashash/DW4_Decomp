@@ -74,24 +74,24 @@ static int g_beBaseInfoManager_fieldOffsets[] = {
 };
 
 void beBaseInfoManager_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *infoList;
+    void *messenger;
+    void *system;
+    void *meta;
 
-    temp_s0 = (void *)g_beBaseInfoManager_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beBaseInfoManager_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beBaseInfoManager_fieldTable, g_beBaseInfoManager_fieldHandles, g_beBaseInfoManager_fieldOffsets, temp_s2);
+    meta = (void *)g_beBaseInfoManager_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beBaseInfoManager_ctorTable, 4);
+    system = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_refCounted = 0;
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    infoList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)infoList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beBaseInfoManager_fieldTable, g_beBaseInfoManager_fieldHandles, g_beBaseInfoManager_fieldOffsets, base);
 }
 

@@ -77,16 +77,16 @@ static int g_beTextureCtrlInfo_fieldOffsets[] = {
 };
 
 void beTextureCtrlInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *dataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beTextureCtrlInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beTextureCtrlInfo_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beTextureCtrlInfo_fieldTable, g_beTextureCtrlInfo_fieldHandles, g_beTextureCtrlInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beTextureCtrlInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beTextureCtrlInfo_ctorTable, 2);
+    dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)dataList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beTextureCtrlInfo_fieldTable, g_beTextureCtrlInfo_fieldHandles, g_beTextureCtrlInfo_fieldOffsets, base);
 }
 

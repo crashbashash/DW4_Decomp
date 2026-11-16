@@ -2,9 +2,9 @@ igMetaObject *g_beParticleCtrl2InfoWork_metaObject;
 igMetaField *g_beParticleCtrl2InfoWork_positionLockNodeMetaField;
 igMetaField *g_beParticleCtrl2InfoWork_positionLockOffsetMetaField;
 
-void beParticleCtrl2InfoWork_Create(int arg0) {
+void beParticleCtrl2InfoWork_Create(int allocator) {
     beParticleCtrl2InfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5884C8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5884C8, allocator);
 }
 
 igMetaObject *beParticleCtrl2InfoWork_GetOrCreateMetaObject(void) {
@@ -16,13 +16,13 @@ igMetaObject *beParticleCtrl2InfoWork_GetOrCreateMetaObject(void) {
 
 void *beParticleCtrl2InfoWork_GetMetaObject(void) {
     unsigned char b;
-    if (((void * *)&g_beParticleCtrl2InfoWork_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)&g_beParticleCtrl2InfoWork_metaObject)[0]) + 36) & 4) != 0;
+    if (g_beParticleCtrl2InfoWork_metaObject != 0) {
+        b = (g_beParticleCtrl2InfoWork_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beParticleCtrl2InfoWork_EnsureRegistered();
 done:
-    return ((void * *)&g_beParticleCtrl2InfoWork_metaObject)[0];
+    return g_beParticleCtrl2InfoWork_metaObject;
 }
 
 int beParticleCtrl2InfoWork_GetVTable(void) {
@@ -96,15 +96,15 @@ static int g_beParticleCtrl2InfoWork_fieldOffsets[] = {
 };
 
 void beParticleCtrl2InfoWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *positionLockNode;
+    void *meta;
 
-    temp_s0 = (void *)g_beParticleCtrl2InfoWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beParticleCtrl2InfoWork_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beParticleCtrl2InfoWork_fieldTable, g_beParticleCtrl2InfoWork_fieldHandles, g_beParticleCtrl2InfoWork_fieldOffsets, temp_s2);
+    meta = (void *)g_beParticleCtrl2InfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beParticleCtrl2InfoWork_ctorTable, 2);
+    positionLockNode = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)positionLockNode)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beParticleCtrl2InfoWork_fieldTable, g_beParticleCtrl2InfoWork_fieldHandles, g_beParticleCtrl2InfoWork_fieldOffsets, base);
 }
 

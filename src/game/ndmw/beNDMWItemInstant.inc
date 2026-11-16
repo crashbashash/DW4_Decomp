@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWItemInstant_metaObject;
 igMetaField *g_beNDMWItemInstant_valueMetaField;
 
-void beNDMWItemInstant_Create(int arg0) {
+void beNDMWItemInstant_Create(int allocator) {
     beNDMWItemInstant_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemInstant_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemInstant_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemInstant_GetReadyMetaObject(void) {
@@ -60,12 +60,12 @@ static int g_beNDMWItemInstant_fieldOffsets[] = {
 };
 
 void beNDMWItemInstant_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWItemInstant_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWItemInstant_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWItemInstant_fieldTable, g_beNDMWItemInstant_fieldHandles, g_beNDMWItemInstant_fieldOffsets, temp_s1);
+    meta = g_beNDMWItemInstant_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWItemInstant_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beNDMWItemInstant_fieldTable, g_beNDMWItemInstant_fieldHandles, g_beNDMWItemInstant_fieldOffsets, base);
 }
 

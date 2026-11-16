@@ -1,8 +1,8 @@
 igMetaObject *g_beSvUseCheckApi_metaObject;
 
-void beSvUseCheckApi_Create(int arg0) {
+void beSvUseCheckApi_Create(int allocator) {
     beSvUseCheckApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588268, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588268, allocator);
 }
 
 void *beSvUseCheckApi_GetMetaObject(void) {
@@ -16,44 +16,44 @@ void *beSvUseCheckApi_GetMetaObject(void) {
 int beSvUseCheckApi_GetVTable(void) {
     union U_349680 u;
     int temp_s2;
-    S_ref *qb;
-    S_ref *qa;
-    S_ref *qc;
+    igObject *qb;
+    igObject *qa;
+    igObject *qc;
 
     igObject_InitHeader(u.b);
     u.w[0] = (int)(&g_beSaveApi_vtable[0]);
-    qa = (S_ref *)&u.b[48];
+    qa = (igObject *)&u.b[48];
     *(int *)qa = 0;
-    qb = (S_ref *)&u.b[52];
+    qb = (igObject *)&u.b[52];
     *(int *)qb = 0;
-    qc = (S_ref *)&u.b[56];
+    qc = (igObject *)&u.b[56];
     *(int *)qc = 0;
     u.w[0] = (int)(&g_beSvUseCheckApi_vtable[0]);
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beSaveApi_vtable[0]);
     if (qc != 0) {
-        qc = *(S_ref **)qc;
+        qc = *(igObject **)qc;
         if (qc != 0) {
-            qc->f4 = (int)((int) (qc->f4 - 1));
-            if (((unsigned long long) ((long long) qc->f4 << 0x29) >> 0x29) == 0) {
+            qc->_refCount = (int)qc->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)qc->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(qc);
             }
         }
     }
     if (qb != 0) {
-        qb = *(S_ref **)qb;
+        qb = *(igObject **)qb;
         if (qb != 0) {
-            qb->f4 = (int)((int) (qb->f4 - 1));
-            if (((unsigned long long) ((long long) qb->f4 << 0x29) >> 0x29) == 0) {
+            qb->_refCount = (int)qb->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)qb->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(qb);
             }
         }
     }
     if (qa != 0) {
-        qa = *(S_ref **)qa;
+        qa = *(igObject **)qa;
         if (qa != 0) {
-            qa->f4 = (int)((int) (qa->f4 - 1));
-            if (((unsigned long long) ((long long) qa->f4 << 0x29) >> 0x29) == 0) {
+            qa->_refCount = (int)qa->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)qa->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(qa);
             }
         }

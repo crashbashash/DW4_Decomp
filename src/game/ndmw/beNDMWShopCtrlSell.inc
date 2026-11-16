@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWShopCtrlSell_metaObject;
 
-void beNDMWShopCtrlSell_Create(int arg0) {
+void beNDMWShopCtrlSell_Create(int allocator) {
     beNDMWShopCtrlSell_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlSell_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlSell_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlSell_GetMetaObject(void) {

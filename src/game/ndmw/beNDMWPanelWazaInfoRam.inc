@@ -53,22 +53,17 @@ int beNDMWPanelWazaInfoRam_GetVTable(void) {
     return temp_s1;
 }
 
-struct RefHolderTarget **beNDMWPanelWazaInfoRam_igSmartPointer_igObject_Destruct(struct RefHolderTarget **arg0, short arg1) {
-    struct RefHolderTarget *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *beNDMWPanelWazaInfoRam_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWPanelWazaInfoRam_EnsureRegistered(void)
@@ -114,15 +109,15 @@ static int g_beNDMWPanelWazaInfoRam_fieldOffsets[] = {
 };
 
 void beNDMWPanelWazaInfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *work;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWPanelWazaInfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWPanelWazaInfoRam_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWPanelWazaInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWPanelWazaInfoRam_fieldTable, g_beNDMWPanelWazaInfoRam_fieldHandles, g_beNDMWPanelWazaInfoRam_fieldOffsets, temp_s2);
+    meta = g_beNDMWPanelWazaInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWPanelWazaInfoRam_ctorTable, 1);
+    work = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beNDMWPanelWazaInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWPanelWazaInfoRam_fieldTable, g_beNDMWPanelWazaInfoRam_fieldHandles, g_beNDMWPanelWazaInfoRam_fieldOffsets, base);
 }
 

@@ -25,7 +25,18 @@ is **refuted** (§7).
 `beGenerater` (the subsystem) methods are
 `START / STOP / STOPREVERS / RESET / RESTART / PERFECTDROP / ONFREEZE / OFFREEZE`
 (name table at `0x4c6b50`). Lua calls them as
-`sd("GENERATER", nil, -1, "<METHOD>", "<GENE-xx>")`.
+`sd("GENERATER", nil, -1, "<METHOD>", "<GENE-xx>")`. `beGenerater_OnMessageText` (slot 33) answers them, and only
+when the message's optional string names this generator's `_name`:
+
+| Message | Effect |
+|---|---|
+| `START` | starts a generator that has no state object yet (`_isRun = 1` when its state `_st0` is 0), otherwise clears `_isFreeze` |
+| `STOP` | sets `_isFreeze` |
+| `ONFREEZE` / `OFFREEZE` | set / clear `_isSystemFreeze` |
+| `STOPREVERS` | sets `_isFreeze`, sends `SQ_ERAS` to every live enemy, empties the live list, adds the count back to `_nokoriKazu` and, when `_nokoriKazu` is then nonzero in state 3, returns the generator to state 2 |
+| `RESET` | clears `_isRun`, releases the state object and zeroes the states |
+| `RESTART` | sets `_isRun`, releases the state object and zeroes the sub-states `_st1`..`_st3` |
+| `PERFECTDROP` | sets the generator's `_isPerfectDrop` from the message's first int |
 
 ## 2. `beGeneraterData`: the authored spawn record
 
@@ -232,7 +243,7 @@ not on the InfoWork itself): `+0x0c` the 1-based
 player index, `+0x10` `_nokoriKazu` (remaining to spawn), `+0x14` the live-enemy
 list, `+0x18` the `_genePoint` cursor, `+0x1c` the **latched** `MODEL` name,
 `+0x20` the row, `+0x24` `HPMAX`, `+0x28` a float timer speed, and `+0x08`/`+0x09`
-two flags that bypass the state machine (drops keep being processed, nothing spawns).
+(`_isSystemFreeze`, `_isFreeze`) two flags that bypass the state machine (drops keep being processed, nothing spawns).
 The enemy-side InfoWork is `beNDMWMdlPEBaseInfoWork` (vtable `0x53D3E0`),
 `+0x10` row, `[+0x0c]+0x0c` current HP.
 
@@ -251,7 +262,7 @@ the generator finishes). Four states:
 | 0 | **start condition** | `d` direct → fire now; `r` radar → fire when the player is within `_startData` (a squared distance); `t` timer → arm `BOOT_TIMER` with `_startData` and fire on expiry | the condition holds |
 | 1 | **first wave** | spawn up to `_geneMaxCount` (`beGenerater_SpawnEnemies` returns how many landed) and set `_nokoriKazu = _geneCount − spawned` | always → 2, or → 3 if `_nokoriKazu < 1` |
 | 2 | **maintain** | run the drop pass for the dead, then the fill mode (§3) | `_nokoriKazu < 1` → 3 |
-| 3 | **finish** | drop pass with `param = 1`, which selects `_itemLastDataList` (`+0x14`) instead of `_itemDataList` (`+0x10`) | the live list is empty → call `_callLua` (`+0x3c`), clear the active flag, release the state object, reset to 0 |
+| 3 | **finish** | drop pass with the last-wave flag, which selects `_itemLastDataList` (`+0x14`) instead of `_itemDataList` (`+0x10`) when the live list holds exactly one enemy | the live list is empty → call `_callLua` (`+0x3c`), clear the active flag, release the state object, reset to 0 |
 
 `beGenerater_SpawnEnemies` is the spawn (not the drop pass): it reads
 `_genePosList[_genePoint]` (the cursor wrapping modulo the list's count) and

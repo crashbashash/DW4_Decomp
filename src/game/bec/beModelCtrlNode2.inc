@@ -4,9 +4,9 @@ igMetaField *g_beModelCtrlNode2_timeScaleMetaField;
 igMetaField *g_beModelCtrlNode2_timeBiasMetaField;
 igMetaField *g_beModelCtrlNode2_overrideAttrListMetaField;
 
-void beModelCtrlNode2_Create(int arg0) {
+void beModelCtrlNode2_Create(int allocator) {
     beModelCtrlNode2_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588860, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588860, allocator);
 }
 
 igMetaObject *beModelCtrlNode2_GetOrCreateMetaObject(void) {
@@ -87,18 +87,18 @@ static int g_beModelCtrlNode2_fieldOffsets[] = {
 };
 
 void beModelCtrlNode2_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *overrideAttrList;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlNode2_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlNode2_ctorTable, 4);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    *(int *)((char *)(temp_s1) + 56) = igAttrList_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 52) = 1;
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlNode2_fieldTable, g_beModelCtrlNode2_fieldHandles, g_beModelCtrlNode2_fieldOffsets, temp_s2);
+    meta = (void *)g_beModelCtrlNode2_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlNode2_ctorTable, 4);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 1.0f);
+    overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)overrideAttrList)->_metaObject = igAttrList_GetOrCreateMetaObject();
+    ((igRefMetaField *)overrideAttrList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beModelCtrlNode2_fieldTable, g_beModelCtrlNode2_fieldHandles, g_beModelCtrlNode2_fieldOffsets, base);
 }
 
 void FUN_00350000(void)

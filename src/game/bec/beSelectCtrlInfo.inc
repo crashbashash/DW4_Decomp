@@ -3,7 +3,7 @@ igMetaObject *g_beSelectCtrlInfo_metaObject;
 void *beSelectCtrlInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beSelectCtrlInfo_metaObject != 0) {
-        b = (*(int *)((char *)(g_beSelectCtrlInfo_metaObject) + 36) & 4) != 0;
+        b = (g_beSelectCtrlInfo_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beSelectCtrlInfo_EnsureRegistered();

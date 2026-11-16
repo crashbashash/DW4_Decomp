@@ -64,13 +64,13 @@ static int g_beModelCtrlInfo_fieldOffsets[] = {
 };
 
 void beModelCtrlInfo_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlInfo_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlInfo_ctorTable, 1);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), 0);
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlInfo_fieldTable, g_beModelCtrlInfo_fieldHandles, g_beModelCtrlInfo_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfo_ctorTable, 1);
+    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), 0);
+    igMetaObject_NameFields(meta, g_beModelCtrlInfo_fieldTable, g_beModelCtrlInfo_fieldHandles, g_beModelCtrlInfo_fieldOffsets, base);
 }
 

@@ -32,22 +32,22 @@ int beShadow01Info_GetVTable(void) {
     *(int *)&u.b[36] = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beShadow01Info_vtable[0];
-    FUN_00344c40((ObjectRefWord *)(&u.b[36]), -1);
+    FUN_00344c40((igSmartPointer<igObject> *)(&u.b[36]), -1);
     FUN_00198210(&u.b[32], -1);
     FUN_00198210(&u.b[28], -1);
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
     return t;
 }
 
-ObjectRefWord *FUN_00344c40(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_00344c40(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -103,21 +103,21 @@ static int g_beShadow01Info_fieldOffsets[] = {
 };
 
 void beShadow01Info_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s0;
+    int base;
+    void *receiverNode;
+    void *casterNode;
+    void *projShadowShader;
+    void *meta;
 
-    temp_s0 = (void *)g_beShadow01Info_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beShadow01Info_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNode_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igNode_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igProjectiveShadowShader_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beShadow01Info_fieldTable, g_beShadow01Info_fieldHandles, g_beShadow01Info_fieldOffsets, temp_s2);
+    meta = (void *)g_beShadow01Info_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beShadow01Info_ctorTable, 3);
+    receiverNode = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)receiverNode)->_metaObject = igNode_GetOrCreateMetaObject();
+    casterNode = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)casterNode)->_metaObject = igNode_GetOrCreateMetaObject();
+    projShadowShader = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)projShadowShader)->_metaObject = igProjectiveShadowShader_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beShadow01Info_fieldTable, g_beShadow01Info_fieldHandles, g_beShadow01Info_fieldOffsets, base);
 }
 

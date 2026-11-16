@@ -89,16 +89,16 @@ static int g_beSaveUtilInfoRam_fieldOffsets[] = {
 };
 
 void beSaveUtilInfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *deliver;
+    void *meta;
 
-    temp_s0 = (void *)g_beSaveUtilInfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSaveUtilInfoRam_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSvDeliver_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beSaveUtilInfoRam_fieldTable, g_beSaveUtilInfoRam_fieldHandles, g_beSaveUtilInfoRam_fieldOffsets, temp_s2);
+    meta = (void *)g_beSaveUtilInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSaveUtilInfoRam_ctorTable, 2);
+    deliver = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)deliver)->_metaObject = (int)beSvDeliver_GetOrCreateMetaObject();
+    ((igRefMetaField *)deliver)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beSaveUtilInfoRam_fieldTable, g_beSaveUtilInfoRam_fieldHandles, g_beSaveUtilInfoRam_fieldOffsets, base);
 }
 

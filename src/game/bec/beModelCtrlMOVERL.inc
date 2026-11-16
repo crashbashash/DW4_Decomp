@@ -112,12 +112,12 @@ static int g_beModelCtrlMOVERL_fieldOffsets[] = {
 };
 
 void beModelCtrlMOVERL_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlMOVERL_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlMOVERL_ctorTable, 2);
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlMOVERL_fieldTable, g_beModelCtrlMOVERL_fieldHandles, g_beModelCtrlMOVERL_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlMOVERL_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlMOVERL_ctorTable, 2);
+    igMetaObject_NameFields(meta, g_beModelCtrlMOVERL_fieldTable, g_beModelCtrlMOVERL_fieldHandles, g_beModelCtrlMOVERL_fieldOffsets, base);
 }
 

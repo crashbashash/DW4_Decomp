@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWMdlMapCursor_metaObject;
 
-void beNDMWMdlMapCursor_CreateInstance(int arg0) {
+void beNDMWMdlMapCursor_CreateInstance(int allocator) {
     beNDMWMdlMapCursor_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlMapCursor_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlMapCursor_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlMapCursor_GetOrCreateMetaObject(void) {

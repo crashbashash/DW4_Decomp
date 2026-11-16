@@ -84,35 +84,35 @@ static int g_beNDMWPanelObjectItem_fieldOffsets[] = {
 };
 
 void beNDMWPanelObjectItem_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s0_2;
-    void *temp_s1;
-    void *temp_v0_2;
+    int base;
+    int pageIndex;
+    void **inheritedPage;
+    void *listFolder;
+    void *listColor;
+    void *meta;
+    igIntMetaField *pageField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (void *)(g_beNDMWPanelObjectItem_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWPanelObjectItem_ctorTable, 2);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_page"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igIntMetaField_SetDefault(temp_v0_2, 1);
-    *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_beNDMWPanelObjectItem_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    ((RT *)temp_v0_2)->references = ((RT *)temp_v0_2)->references - 1;
-    if (((unsigned long long)(long long)((RT *)temp_v0_2)->references & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)(g_beNDMWPanelObjectItem_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectItem_ctorTable, 2);
+    inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
+    pageIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedPage);
+    pageField = (igIntMetaField *)(((DW4VC_84_1 *)(inheritedPage))->vX((int)(1)));
+    igIntMetaField_SetDefault(pageField, 1);
+    pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectItem_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);
+    pageField->_refCount = pageField->_refCount - 1;
+    if (((unsigned long long)(long long)pageField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(pageField);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    ((FT *)temp_s0)->meta = igObjectList_GetOrCreateMetaObject();
-    ((FT *)temp_s0)->flag = 1;
-    temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((FT *)temp_s0_2)->meta = igIntList_GetOrCreateMetaObject();
-    ((FT *)temp_s0_2)->flag = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWPanelObjectItem_fieldTable, g_beNDMWPanelObjectItem_fieldHandles, g_beNDMWPanelObjectItem_fieldOffsets, temp_s2);
+    listFolder = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((FT *)listFolder)->meta = igObjectList_GetOrCreateMetaObject();
+    ((FT *)listFolder)->flag = 1;
+    listColor = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((FT *)listColor)->meta = igIntList_GetOrCreateMetaObject();
+    ((FT *)listColor)->flag = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWPanelObjectItem_fieldTable, g_beNDMWPanelObjectItem_fieldHandles, g_beNDMWPanelObjectItem_fieldOffsets, base);
 }
 

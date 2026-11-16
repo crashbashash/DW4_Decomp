@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWStatusPowerSocket_metaObject;
 
-void beNDMWStatusPowerSocket_Create(int arg0) {
+void beNDMWStatusPowerSocket_Create(int allocator) {
     beNDMWStatusPowerSocket_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusPowerSocket_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusPowerSocket_metaObject, allocator);
 }
 
 void *beNDMWStatusPowerSocket_GetMetaObject(void) {

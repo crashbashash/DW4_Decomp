@@ -48,17 +48,17 @@ int beNDMWStatusInfoRam_GetVTable(void) {
     return r;
 }
 
-void **igSmartPointer_beNDMWStatusInfoWork_Destruct(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+igSmartPointer<igObject> *igSmartPointer_beNDMWStatusInfoWork_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return (void **)self;
+    return self;
 }
 
 void beNDMWStatusInfoRam_EnsureRegistered(void)
@@ -104,15 +104,15 @@ static int g_beNDMWStatusInfoRam_fieldOffsets[] = {
 };
 
 void beNDMWStatusInfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *work;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusInfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusInfoRam_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWStatusInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusInfoRam_fieldTable, g_beNDMWStatusInfoRam_fieldHandles, g_beNDMWStatusInfoRam_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatusInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusInfoRam_ctorTable, 1);
+    work = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beNDMWStatusInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWStatusInfoRam_fieldTable, g_beNDMWStatusInfoRam_fieldHandles, g_beNDMWStatusInfoRam_fieldOffsets, base);
 }
 

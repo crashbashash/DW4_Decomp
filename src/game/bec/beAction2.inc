@@ -1,8 +1,8 @@
 igMetaObject *g_beAction2_metaObject;
 
-void beAction2_CreateInstance(int arg0) {
+void beAction2_CreateInstance(int allocator) {
     beAction2_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x58A028, arg0);
+    igMetaObject_CreateInstance(*(int *)0x58A028, allocator);
 }
 
 igMetaObject *beAction2_GetOrCreateMetaObject(void) {
@@ -23,7 +23,7 @@ void *beAction2_GetMetaObject(void) {
 int beAction2_GetVTable(void) {
     union U_36de10 u;
     int temp_s0;
-    S_ref *q0;
+    igObject *q0;
     int temp_v0;
     int *temp_a1;
     int *temp_v1;
@@ -33,16 +33,16 @@ int beAction2_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    q0 = (S_ref *)&u.b[24];
+    q0 = (igObject *)&u.b[24];
     *(int *)q0 = 0;
     u.vt = (int)&g_beAction2_vtable[0];
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beBaseInfoManager_vtable[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)q0->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }

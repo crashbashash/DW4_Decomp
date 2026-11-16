@@ -25,8 +25,8 @@ int beParticleCtrl2Info_GetVTable(void) {
     o.f20 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beParticleCtrl2Info_vtable[0];
-    FUN_00343260((ObjectRefWord *)&o.f20, -1);
-    FUN_00343260((ObjectRefWord *)&o.f1c, -1);
+    FUN_00343260((igSmartPointer<igObject> *)&o.f20, -1);
+    FUN_00343260((igSmartPointer<igObject> *)&o.f1c, -1);
     FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
     return r;
 }
@@ -86,19 +86,19 @@ static int g_beParticleCtrl2Info_fieldOffsets[] = {
 };
 
 void beParticleCtrl2Info_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *subSwitch;
+    void *mainSwitch;
+    void *meta;
 
-    temp_s0 = (void *)g_beParticleCtrl2Info_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beParticleCtrl2Info_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igSwitch_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igSwitch_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beParticleCtrl2Info_fieldTable, g_beParticleCtrl2Info_fieldHandles, g_beParticleCtrl2Info_fieldOffsets, temp_s2);
+    meta = (void *)g_beParticleCtrl2Info_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beParticleCtrl2Info_ctorTable, 4);
+    mainSwitch = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)mainSwitch)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    subSwitch = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)subSwitch)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beParticleCtrl2Info_fieldTable, g_beParticleCtrl2Info_fieldHandles, g_beParticleCtrl2Info_fieldOffsets, base);
 }
 
 igMetaEnum *g_beParticleCtrl2Info_messageMetaEnum;

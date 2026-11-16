@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWMdlPlayer2_metaObject;
 igMetaField *g_beNDMWMdlPlayer2_padManagerMetaField;
 
-void beNDMWMdlPlayer2_CreateInstance(int arg0) {
+void beNDMWMdlPlayer2_CreateInstance(int allocator) {
     beNDMWMdlPlayer2_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlPlayer2_GetOrCreateMetaObject(void) {
@@ -126,16 +126,16 @@ static int g_beNDMWMdlPlayer2_fieldOffsets[] = {
 };
 
 void beNDMWMdlPlayer2_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *padManager;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWMdlPlayer2_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWMdlPlayer2_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = bePadManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beNDMWMdlPlayer2_fieldTable, g_beNDMWMdlPlayer2_fieldHandles, g_beNDMWMdlPlayer2_fieldOffsets, temp_s2);
+    meta = g_beNDMWMdlPlayer2_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWMdlPlayer2_ctorTable, 1);
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beNDMWMdlPlayer2_fieldTable, g_beNDMWMdlPlayer2_fieldHandles, g_beNDMWMdlPlayer2_fieldOffsets, base);
 }
 

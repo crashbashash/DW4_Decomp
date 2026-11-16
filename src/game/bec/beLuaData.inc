@@ -93,15 +93,15 @@ static int g_beLuaData_fieldOffsets[] = {
 };
 
 void beLuaData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *dataObject;
+    void *meta;
 
-    temp_s0 = (void *)g_beLuaData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLuaData_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beLuaDataObject_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beLuaData_fieldTable, g_beLuaData_fieldHandles, g_beLuaData_fieldOffsets, temp_s2);
+    meta = (void *)g_beLuaData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLuaData_ctorTable, 1);
+    dataObject = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)dataObject)->_metaObject = (int)beLuaDataObject_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beLuaData_fieldTable, g_beLuaData_fieldHandles, g_beLuaData_fieldOffsets, base);
 }
 

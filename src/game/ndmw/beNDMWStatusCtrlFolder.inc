@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWStatusCtrlFolder_metaObject;
 igMetaField *g_beNDMWStatusCtrlFolder_folderMenuMetaField;
 
-void beNDMWStatusCtrlFolder_Create(int arg0) {
+void beNDMWStatusCtrlFolder_Create(int allocator) {
     beNDMWStatusCtrlFolder_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlFolder_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlFolder_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusCtrlFolder_GetMetaObject(void) {
@@ -77,12 +77,12 @@ static int g_beNDMWStatusCtrlFolder_fieldOffsets[] = {
 };
 
 void beNDMWStatusCtrlFolder_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusCtrlFolder_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlFolder_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlFolder_fieldTable, g_beNDMWStatusCtrlFolder_fieldHandles, g_beNDMWStatusCtrlFolder_fieldOffsets, temp_s1);
+    meta = g_beNDMWStatusCtrlFolder_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlFolder_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beNDMWStatusCtrlFolder_fieldTable, g_beNDMWStatusCtrlFolder_fieldHandles, g_beNDMWStatusCtrlFolder_fieldOffsets, base);
 }
 

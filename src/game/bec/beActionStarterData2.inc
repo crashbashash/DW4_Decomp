@@ -101,12 +101,12 @@ static int g_beActionStarterData2_fieldOffsets[] = {
 };
 
 void beActionStarterData2_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beActionStarterData2_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beActionStarterData2_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beActionStarterData2_fieldTable, g_beActionStarterData2_fieldHandles, g_beActionStarterData2_fieldOffsets, temp_s1);
+    meta = (void *)g_beActionStarterData2_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beActionStarterData2_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beActionStarterData2_fieldTable, g_beActionStarterData2_fieldHandles, g_beActionStarterData2_fieldOffsets, base);
 }
 

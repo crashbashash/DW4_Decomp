@@ -224,40 +224,40 @@ static int g_ParticleInfo_fieldOffsets[] = {
 
 
 void ParticleInfo_InitFields(void) {
-    int temp_s1;
+    int base;
     void *f;
-    void *temp_s0;
+    void *meta;
 
-    temp_s0 = (void *)g_ParticleInfo_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_ParticleInfo_ctorTable, 0x12);
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1);
+    meta = (void *)g_ParticleInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_ParticleInfo_ctorTable, 0x12);
+    f = igMetaObject_GetFieldAt(meta, base);
     ((igFloatArrayMetaField *)f)->_num = 0xC0;
     ((igFloatArrayMetaField *)f)->_resetMethod = 3;
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
+    f = igMetaObject_GetFieldAt(meta, base + 1);
     ((igIntArrayMetaField *)f)->_num = 0x20;
     ((igIntArrayMetaField *)f)->_resetMethod = 3;
-    igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 10.0f);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 0xA);
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4);
+    igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(meta, base + 2)), 10.0f);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 3), 0xA);
+    f = igMetaObject_GetFieldAt(meta, base + 4);
     ((igObjectRefMetaField *)f)->_metaObject = igImage_GetOrCreateMetaObject();
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5);
+    f = igMetaObject_GetFieldAt(meta, base + 5);
     igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e940;
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6);
+    f = igMetaObject_GetFieldAt(meta, base + 6);
     igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e8e0;
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9);
+    f = igMetaObject_GetFieldAt(meta, base + 9);
     igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e880;
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB);
+    f = igMetaObject_GetFieldAt(meta, base + 0xB);
     igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e9a0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE), 1);
-    igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10)), 0.0f);
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xD), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xE), 1);
+    igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(meta, base + 0x10)), 0.0f);
+    f = igMetaObject_GetFieldAt(meta, base + 0x11);
     ((igObjectRefMetaField *)f)->_metaObject = igGeometry_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_ParticleInfo_fieldTable, g_ParticleInfo_fieldHandles, g_ParticleInfo_fieldOffsets, temp_s1);
+    igMetaObject_NameFields(meta, g_ParticleInfo_fieldTable, g_ParticleInfo_fieldHandles, g_ParticleInfo_fieldOffsets, base);
 }
 

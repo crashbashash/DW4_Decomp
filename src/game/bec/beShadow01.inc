@@ -2,9 +2,9 @@ igMetaObject *g_beShadow01_metaObject;
 igMetaField *g_beShadow01_svInfoListMetaField;
 igMetaField *g_beShadow01_savePosMetaField;
 
-void beShadow01_CreateInstance(int arg0) {
+void beShadow01_CreateInstance(int allocator) {
     beShadow01_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587F10, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587F10, allocator);
 }
 
 igMetaObject *beShadow01_GetOrCreateMetaObject(void) {
@@ -33,27 +33,22 @@ int beShadow01_GetVTable(void) {
     o.f[7] = 0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = g_beShadow01_vtable;
-    FUN_00344f90((struct R **)(&o.f[7]), (short)(-1));
+    FUN_00344f90((igSmartPointer<igObject> *)(&o.f[7]), (short)(-1));
     FUN_0033f5e0((O_33f5e0 *)&o, (short)0);
     return r;
 }
 
-struct R **FUN_00344f90(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_00344f90(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beShadow01_EnsureRegistered(void)
@@ -103,16 +98,16 @@ static int g_beShadow01_fieldOffsets[] = {
 };
 
 void beShadow01_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *svInfoList;
+    void *meta;
 
-    temp_s0 = (void *)g_beShadow01_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beShadow01_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beShadow01InfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beShadow01_fieldTable, g_beShadow01_fieldHandles, g_beShadow01_fieldOffsets, temp_s2);
+    meta = (void *)g_beShadow01_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beShadow01_ctorTable, 2);
+    svInfoList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)svInfoList)->_metaObject = (int)beShadow01InfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)svInfoList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beShadow01_fieldTable, g_beShadow01_fieldHandles, g_beShadow01_fieldOffsets, base);
 }
 

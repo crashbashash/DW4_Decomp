@@ -440,7 +440,6 @@
 0x00155130	Gap::Gfx::igExternalImageEntry::vfunc_44	engine
 0x001552f0	Gap::Gfx::igExternalImageEntry::vfunc_11	engine
 0x00155330	Gap::Gfx::igGenericCapabilityManager::vfunc_23	engine
-0x0015c230	Gap::Gfx::igParticleArray::vfunc_28	engine
 0x0015db80	Gap::Gfx::igPrimLengthArray1_1::vfunc_20	engine
 0x0015f7d0	Gap::Gfx::igVertexArray2::vfunc_23	engine
 0x0015feb0	Gap::Gfx::igVertexStream::vfunc_27	engine

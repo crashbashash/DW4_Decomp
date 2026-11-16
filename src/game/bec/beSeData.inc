@@ -71,12 +71,12 @@ static int g_beSeData_fieldOffsets[] = {
 };
 
 void beSeData_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beSeData_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSeData_ctorTable, 2);
-    igMetaObject_NameFields(temp_s0, g_beSeData_fieldTable, g_beSeData_fieldHandles, g_beSeData_fieldOffsets, temp_s1);
+    meta = (void *)g_beSeData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSeData_ctorTable, 2);
+    igMetaObject_NameFields(meta, g_beSeData_fieldTable, g_beSeData_fieldHandles, g_beSeData_fieldOffsets, base);
 }
 

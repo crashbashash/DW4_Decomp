@@ -193,7 +193,7 @@ void FUN_001d6a70(void) {
   white.x = 1.0f; white.y = 1.0f; white.z = 1.0f; white.w = 1.0f;
   tint = DAT_00562940[0];
   tint->color = white;
-  tint->w60 = FUN_001931b0(&white, 1, 0x3f800000, lens);
+  tint->w60 = igVec4f_PackColor(&white, 1, 0x3f800000, lens);
   DAT_00562940[0]->mode = 3;
   DAT_00562948[0]->set(5);
   DAT_00562948[0]->select(0);
@@ -290,9 +290,9 @@ void FUN_001d7120(ProjectiveShadowView *s) {
     s->texture->s33(0);
     igTextureAttr_SetImage(s->texture, s->image, 0);
     ((ShadowTexState *)s->texture)->width = 3;
-    if (FUN_00166d40() != 0) {
+    if (igVisualContext_FindFirst() != 0) {
         ShadowStateObj *t = s->texture;
-        t->s22(FUN_00166d40());
+        t->s22(igVisualContext_FindFirst());
     }
     s->target->f24 = 1;
     s->target->f20 = -1;

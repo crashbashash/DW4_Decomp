@@ -187,41 +187,41 @@ static int g_beSvPlatDataPS2_fieldOffsets[] = {
 };
 
 void beSvPlatDataPS2_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    igEnumMetaField *temp_s0;
-    igMetaObject *temp_s1;
-    igEnumMetaField *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    igEnumMetaField *field;
+    void *meta;
+    igIntMetaField *clone;
 
-    temp_s1 = (igMetaObject *)(((void * *)&g_beSvPlatDataPS2_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beSvPlatDataPS2_ctorTable, 0x16);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_connectMax"));
-    temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
-    temp_v0_2 = (igEnumMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igIntMetaField_SetDefault(temp_v0_2, 5);
-    temp_v0_2->_externalEnumStorage = (int)(&g_beSvPlatDataPS2_connectMaxStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = (int)temp_v0_2->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)temp_v0_2->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (igMetaObject *)(((void * *)&g_beSvPlatDataPS2_metaObject)[0]);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSvPlatDataPS2_ctorTable, 0x16);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_connectMax"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igIntMetaField_SetDefault(clone, 5);
+    clone->_externalEnumStorage = (int)(&g_beSvPlatDataPS2_connectMaxStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 4); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 5); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 6); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 7); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 8); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 9); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xA); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xB); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xC); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xD); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xE); temp_s0->_getMetaEnumFunction = 4;
-    temp_s0 = (igEnumMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x13); temp_s0->_getMetaEnumFunction = 2;
-    igObjectRefMetaField *temp_s4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x15));
-    temp_s4->_metaObject = igObjectList_GetOrCreateMetaObject();
-    temp_s4->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_beSvPlatDataPS2_fieldTable, g_beSvPlatDataPS2_fieldHandles, g_beSvPlatDataPS2_fieldOffsets, temp_s2);
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 4); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 5); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 6); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 7); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 8); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 9); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0xA); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0xB); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0xC); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0xD); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0xE); field->_getMetaEnumFunction = 4;
+    field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0x13); field->_getMetaEnumFunction = 2;
+    igObjectRefMetaField *image = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x15));
+    image->_metaObject = igObjectList_GetOrCreateMetaObject();
+    image->_construct = 1;
+    igMetaObject_NameFields(meta, g_beSvPlatDataPS2_fieldTable, g_beSvPlatDataPS2_fieldHandles, g_beSvPlatDataPS2_fieldOffsets, base);
 }
 

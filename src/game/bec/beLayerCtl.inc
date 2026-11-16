@@ -2,9 +2,9 @@ igMetaObject *g_beLayerCtl_metaObject;
 igMetaField *g_beLayerCtl_isOrderedMetaField;
 igMetaField *g_beLayerCtl_layerSwtMetaField;
 
-void beLayerCtl_CreateInstance(int arg0) {
+void beLayerCtl_CreateInstance(int allocator) {
     beLayerCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589298, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589298, allocator);
 }
 
 igMetaObject *beLayerCtl_GetOrCreateMetaObject(void) {
@@ -35,7 +35,7 @@ int beLayerCtl_GetVTable(void) {
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beLayerCtl_vtable[0];
-    FUN_00343260((ObjectRefWord *)p, -1);
+    FUN_00343260((igSmartPointer<igObject> *)p, -1);
     FUN_0033f5e0((O_33f5e0 *)u.b, (short)0);
     return temp_s0;
 }
@@ -87,15 +87,15 @@ static int g_beLayerCtl_fieldOffsets[] = {
 };
 
 void beLayerCtl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *layerSwt;
+    void *meta;
 
-    temp_s0 = (void *)g_beLayerCtl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLayerCtl_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igSwitch_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beLayerCtl_fieldTable, g_beLayerCtl_fieldHandles, g_beLayerCtl_fieldOffsets, temp_s2);
+    meta = (void *)g_beLayerCtl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLayerCtl_ctorTable, 2);
+    layerSwt = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)layerSwt)->_metaObject = igSwitch_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beLayerCtl_fieldTable, g_beLayerCtl_fieldHandles, g_beLayerCtl_fieldOffsets, base);
 }
 

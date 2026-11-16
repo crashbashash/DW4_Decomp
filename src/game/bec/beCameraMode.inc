@@ -8,9 +8,9 @@ igMetaField *g_beCameraMode_timeLengthMetaField;
 igMetaField *g_beCameraMode_isEndMetaField;
 igMetaField *g_beCameraMode_isFreezeMetaField;
 
-void beCameraMode_Create(int arg0) {
+void beCameraMode_Create(int allocator) {
     beCameraMode_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589B90, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589B90, allocator);
 }
 
 igMetaObject *beCameraMode_GetOrCreateMetaObject(void) {
@@ -137,22 +137,22 @@ static int g_beCameraMode_fieldOffsets[] = {
 };
 
 void beCameraMode_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *insight;
+    void *camera;
+    void *cameraPath;
+    void *meta;
 
-    temp_s0 = (void *)g_beCameraMode_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCameraMode_ctorTable, 8);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igGraphPath_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igCamera_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igInsightCore_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_3)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beCameraMode_fieldTable, g_beCameraMode_fieldHandles, g_beCameraMode_fieldOffsets, temp_s2);
+    meta = (void *)g_beCameraMode_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCameraMode_ctorTable, 8);
+    cameraPath = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)cameraPath)->_metaObject = igGraphPath_GetOrCreateMetaObject();
+    camera = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)camera)->_metaObject = igCamera_GetOrCreateMetaObject();
+    insight = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beCameraMode_fieldTable, g_beCameraMode_fieldHandles, g_beCameraMode_fieldOffsets, base);
 }
 

@@ -3,9 +3,9 @@ igMetaField *g_beNDMWStatus_windowProMetaField;
 igMetaField *g_beNDMWStatus_whoGenerateMetaField;
 igMetaField *g_beNDMWStatus_subWndNoMetaField;
 
-void beNDMWStatus_CreateInstance(int arg0) {
+void beNDMWStatus_CreateInstance(int allocator) {
     beNDMWStatus_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatus_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatus_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatus_GetOrCreateMetaObject(void) {
@@ -36,7 +36,7 @@ int beNDMWStatus_GetVTable(void) {
     *(int *)ps = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beNDMWStatus_vtable[0];
-    beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((void **)ps, -1);
+    beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)ps, -1);
     FUN_0033f5e0(u.b, 0);
     return t;
 }
@@ -92,15 +92,15 @@ static int g_beNDMWStatus_fieldOffsets[] = {
 };
 
 void beNDMWStatus_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *windowPro;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatus_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatus_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWWindow_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatus_fieldTable, g_beNDMWStatus_fieldHandles, g_beNDMWStatus_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatus_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatus_ctorTable, 3);
+    windowPro = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)windowPro)->_metaObject = (int)beNDMWWindow_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWStatus_fieldTable, g_beNDMWStatus_fieldHandles, g_beNDMWStatus_fieldOffsets, base);
 }
 

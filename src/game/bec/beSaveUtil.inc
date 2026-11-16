@@ -2,9 +2,9 @@ igMetaObject *g_beSaveUtil_metaObject;
 igMetaField *g_beSaveUtil_apiMetaField;
 igMetaField *g_beSaveUtil_connectCheckMetaField;
 
-void beSaveUtil_CreateInstance(int arg0) {
+void beSaveUtil_CreateInstance(int allocator) {
     beSaveUtil_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588020, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588020, allocator);
 }
 
 igMetaObject *beSaveUtil_GetOrCreateMetaObject(void) {
@@ -34,46 +34,36 @@ int beSaveUtil_GetVTable(void) {
     obj.w9 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beSaveUtil_vtable[0];
-    FUN_00346e70((void **)&obj.w9, (short)(-1));
-    FUN_00346df0((void **)&obj.w8, -1);
+    FUN_00346e70((igSmartPointer<igObject> *)&obj.w9, (short)(-1));
+    FUN_00346df0((igSmartPointer<igObject> *)&obj.w8, -1);
     FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
     return t;
 }
 
-void **FUN_00346df0(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_00346df0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_00346e70(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_00346e70(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beSaveUtil_EnsureRegistered(void)
@@ -123,18 +113,18 @@ static int g_beSaveUtil_fieldOffsets[] = {
 };
 
 void beSaveUtil_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s0;
+    int base;
+    void *api;
+    void *connectCheck;
+    void *meta;
 
-    temp_s0 = (void *)g_beSaveUtil_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSaveUtil_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSaveApi_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beSvConnectCheck_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beSaveUtil_fieldTable, g_beSaveUtil_fieldHandles, g_beSaveUtil_fieldOffsets, temp_s2);
+    meta = (void *)g_beSaveUtil_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSaveUtil_ctorTable, 2);
+    api = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)api)->_metaObject = (int)beSaveApi_GetOrCreateMetaObject();
+    connectCheck = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)connectCheck)->_metaObject = (int)beSvConnectCheck_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beSaveUtil_fieldTable, g_beSaveUtil_fieldHandles, g_beSaveUtil_fieldOffsets, base);
 }
 

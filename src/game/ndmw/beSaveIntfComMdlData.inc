@@ -75,12 +75,12 @@ static int g_beSaveIntfComMdlData_fieldOffsets[] = {
 };
 
 void beSaveIntfComMdlData_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beSaveIntfComMdlData_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSaveIntfComMdlData_ctorTable, 3);
-    igMetaObject_NameFields(temp_s0, g_beSaveIntfComMdlData_fieldTable, g_beSaveIntfComMdlData_fieldHandles, g_beSaveIntfComMdlData_fieldOffsets, temp_s1);
+    meta = g_beSaveIntfComMdlData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSaveIntfComMdlData_ctorTable, 3);
+    igMetaObject_NameFields(meta, g_beSaveIntfComMdlData_fieldTable, g_beSaveIntfComMdlData_fieldHandles, g_beSaveIntfComMdlData_fieldOffsets, base);
 }
 

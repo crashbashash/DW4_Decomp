@@ -11,9 +11,9 @@ igMetaField *g_beNDMWLogo_selectMetaField;
 igMetaField *g_beNDMWLogo_errTargetMetaField;
 igMetaField *g_beNDMWLogo_errTypeMetaField;
 
-void beNDMWLogo_CreateInstance(int arg0) {
+void beNDMWLogo_CreateInstance(int allocator) {
     beNDMWLogo_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLogo_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLogo_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLogo_GetOrCreateMetaObject(void) {
@@ -42,7 +42,7 @@ int beNDMWLogo_GetVTable(void) {
     obj.f28 = 0;
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&g_beNDMWLogo_vtable[0]);
-    FUN_003b2a10((ObjectRefWord *)&obj.f28, -1);
+    FUN_003b2a10((igSmartPointer<igObject> *)&obj.f28, -1);
     FUN_0033f5e0(&obj, 0);
     return temp_s0;
 }
@@ -130,25 +130,25 @@ static int g_beNDMWLogo_fieldOffsets[] = {
 };
 
 void beNDMWLogo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *mcUtilCtrl;
+    void *system;
+    void *padManager;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWLogo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWLogo_ctorTable, 0xB);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = bePadManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = beSystem_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9), -1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWLogo_fieldTable, g_beNDMWLogo_fieldHandles, g_beNDMWLogo_fieldOffsets, temp_s2);
+    meta = g_beNDMWLogo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWLogo_ctorTable, 0xB);
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_refCounted = 0;
+    system = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)system)->_metaObject = beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_refCounted = 0;
+    mcUtilCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)mcUtilCtrl)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 6), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 9), -1);
+    igMetaObject_NameFields(meta, g_beNDMWLogo_fieldTable, g_beNDMWLogo_fieldHandles, g_beNDMWLogo_fieldOffsets, base);
 }
 

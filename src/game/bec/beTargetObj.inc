@@ -3,9 +3,9 @@ igMetaField *g_beTargetObj_playerPosListMetaField;
 igMetaField *g_beTargetObj_playerRamNoListMetaField;
 igMetaField *g_beTargetObj_enemyPosListMetaField;
 
-void beTargetObj_CreateInstance(int arg0) {
+void beTargetObj_CreateInstance(int allocator) {
     beTargetObj_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587CE8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587CE8, allocator);
 }
 
 igMetaObject *beTargetObj_GetOrCreateMetaObject(void) {
@@ -93,24 +93,24 @@ static int g_beTargetObj_fieldOffsets[] = {
 };
 
 void beTargetObj_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *enemyPosList;
+    void *playerRamNoList;
+    void *playerPosList;
+    void *meta;
 
-    temp_s0 = (void *)g_beTargetObj_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beTargetObj_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVec3fList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igVec3fList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beTargetObj_fieldTable, g_beTargetObj_fieldHandles, g_beTargetObj_fieldOffsets, temp_s2);
+    meta = (void *)g_beTargetObj_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beTargetObj_ctorTable, 3);
+    playerPosList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)playerPosList)->_metaObject = igVec3fList_GetOrCreateMetaObject();
+    ((igRefMetaField *)playerPosList)->_construct = 1;
+    playerRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)playerRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)playerRamNoList)->_construct = 1;
+    enemyPosList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)enemyPosList)->_metaObject = igVec3fList_GetOrCreateMetaObject();
+    ((igRefMetaField *)enemyPosList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beTargetObj_fieldTable, g_beTargetObj_fieldHandles, g_beTargetObj_fieldOffsets, base);
 }
 

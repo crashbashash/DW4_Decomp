@@ -1,9 +1,9 @@
 igMetaObject *g_bePoint01_metaObject;
 igMetaField *g_bePoint01_pointNoMetaField;
 
-void bePoint01_CreateInstance(int arg0) {
+void bePoint01_CreateInstance(int allocator) {
     bePoint01_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588498, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588498, allocator);
 }
 
 igMetaObject *bePoint01_GetOrCreateMetaObject(void) {
@@ -104,12 +104,12 @@ static int g_bePoint01_fieldOffsets[] = {
 };
 
 void bePoint01_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_bePoint01_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_bePoint01_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_bePoint01_fieldTable, g_bePoint01_fieldHandles, g_bePoint01_fieldOffsets, temp_s1);
+    meta = (void *)g_bePoint01_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_bePoint01_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_bePoint01_fieldTable, g_bePoint01_fieldHandles, g_bePoint01_fieldOffsets, base);
 }
 

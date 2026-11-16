@@ -22,9 +22,9 @@ igMetaField *g_bePadData_adAngleMetaField;
 igMetaField *g_bePadData_1sttimeMetaField;
 igMetaField *g_bePadData_2ndtimeMetaField;
 
-void bePadData_Create(int arg0) {
+void bePadData_Create(int allocator) {
     bePadData_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588550, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588550, allocator);
 }
 
 void *bePadData_GetMetaObject(void) {
@@ -168,24 +168,24 @@ static int g_bePadData_fieldOffsets[] = {
 };
 
 void bePadData_InitFields(void) {
-    int sp38[2];
-    int sp30[2];
-    int temp_a0;
-    int temp_a0_2;
-    int temp_s1;
-    void *temp_s0;
+    int lStickDefault[2];
+    int rStickDefault[2];
+    int LStick;
+    int RStick;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_bePadData_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_bePadData_ctorTable, 0x16);
-    temp_a0 = ((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
-    sp38[0] = 0;
-    sp38[1] = 0;
-    FUN_0018e2f0(temp_a0, sp38);
-    temp_a0_2 = ((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
-    sp30[0] = 0;
-    sp30[1] = 0;
-    FUN_0018e2f0(temp_a0_2, sp30);
-    igMetaObject_NameFields(temp_s0, g_bePadData_fieldTable, g_bePadData_fieldHandles, g_bePadData_fieldOffsets, temp_s1);
+    meta = (void *)g_bePadData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_bePadData_ctorTable, 0x16);
+    LStick = ((int)igMetaObject_GetFieldAt(meta, base + 1));
+    lStickDefault[0] = 0;
+    lStickDefault[1] = 0;
+    FUN_0018e2f0(LStick, lStickDefault);
+    RStick = ((int)igMetaObject_GetFieldAt(meta, base + 2));
+    rStickDefault[0] = 0;
+    rStickDefault[1] = 0;
+    FUN_0018e2f0(RStick, rStickDefault);
+    igMetaObject_NameFields(meta, g_bePadData_fieldTable, g_bePadData_fieldHandles, g_bePadData_fieldOffsets, base);
 }
 

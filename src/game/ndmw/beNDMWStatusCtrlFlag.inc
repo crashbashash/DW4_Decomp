@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWStatusCtrlFlag_metaObject;
 igMetaField *g_beNDMWStatusCtrlFlag_impItemsMetaField;
 
-void beNDMWStatusCtrlFlag_Create(int arg0) {
+void beNDMWStatusCtrlFlag_Create(int allocator) {
     beNDMWStatusCtrlFlag_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlFlag_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlFlag_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusCtrlFlag_GetMetaObject(void) {
@@ -80,16 +80,16 @@ static int g_beNDMWStatusCtrlFlag_fieldOffsets[] = {
 };
 
 void beNDMWStatusCtrlFlag_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *impItems;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusCtrlFlag_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlFlag_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlFlag_fieldTable, g_beNDMWStatusCtrlFlag_fieldHandles, g_beNDMWStatusCtrlFlag_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatusCtrlFlag_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlFlag_ctorTable, 1);
+    impItems = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)impItems)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)impItems)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWStatusCtrlFlag_fieldTable, g_beNDMWStatusCtrlFlag_fieldHandles, g_beNDMWStatusCtrlFlag_fieldOffsets, base);
 }
 

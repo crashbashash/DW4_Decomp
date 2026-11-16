@@ -4,9 +4,9 @@ igMetaField *g_beModelCtrlInfoRideOn_modelRamNoMetaField;
 igMetaField *g_beModelCtrlInfoRideOn_modelNodeMetaField;
 igMetaField *g_beModelCtrlInfoRideOn_oldMatrixMetaField;
 
-void beModelCtrlInfoRideOn_Create(int arg0) {
+void beModelCtrlInfoRideOn_Create(int allocator) {
     beModelCtrlInfoRideOn_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588AA8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588AA8, allocator);
 }
 
 igMetaObject *beModelCtrlInfoRideOn_GetOrCreateMetaObject(void) {
@@ -84,15 +84,15 @@ static int g_beModelCtrlInfoRideOn_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoRideOn_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *modelNode;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlInfoRideOn_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlInfoRideOn_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlInfoRideOn_fieldTable, g_beModelCtrlInfoRideOn_fieldHandles, g_beModelCtrlInfoRideOn_fieldOffsets, temp_s2);
+    meta = (void *)g_beModelCtrlInfoRideOn_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoRideOn_ctorTable, 4);
+    modelNode = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)modelNode)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoRideOn_fieldTable, g_beModelCtrlInfoRideOn_fieldHandles, g_beModelCtrlInfoRideOn_fieldOffsets, base);
 }
 

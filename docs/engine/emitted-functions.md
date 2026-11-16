@@ -644,8 +644,7 @@ remains the integration oracle.
 - **A unit's profile and its pragma.** One member of a `-O3,p` unit needs no pragma under `-O4,p -inline level=8`, but
   another member then gains a code difference. Which profile the unit was built with is open.
 - **Limits of the unit-objects model.** Two class symbols cannot alias one retail destructor address:
-`0x41acf0` needs direct-p and single-load shapes at different sites of one class. The closest spelling of
-`0x38b1f0` differs in the order and registers of loop-invariant values in the preheader.
+`0x41acf0` needs direct-p and single-load shapes at different sites of one class.
 - **Member-subobject tables at the frame size.** `0x350100`, `0x3b0a80`, `0x33c950`, `0x3c0120`, `0x3c0640`,
   `0x3bfd60` and `0x3c1480` are the only retail functions with tag `0x07`/`0x87` (`0x86` for the base) tables
   whose location field equals the frame size, and they never materialise an inlined `this`: every member

@@ -1,8 +1,8 @@
 igMetaObject *g_beNumberCtrl_metaObject;
 
-void beNumberCtrl_CreateInstance(int arg0) {
+void beNumberCtrl_CreateInstance(int allocator) {
     beNumberCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5886E0, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5886E0, allocator);
 }
 
 igMetaObject *beNumberCtrl_GetOrCreateMetaObject(void) {
@@ -26,22 +26,22 @@ int beNumberCtrl_GetVTable(void) {
     char *q1;
     int *tv1, *ta1;
     int tc1;
-    S_ref *q2;
+    igObject *q2;
 
     igObject_InitHeader(u.b);
     u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     q1 = &u.b[8];
     *(int *)q1 = 0;
-    q2 = (S_ref *)&u.b[24];
+    q2 = (igObject *)&u.b[24];
     *(int *)q2 = 0;
     u.w[0] = (int)(&g_beNumberCtrl_vtable[0]);
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     if (q2 != 0) {
-        q2 = *(S_ref **)q2;
+        q2 = *(igObject **)q2;
         if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
+            q2->_refCount = (int)q2->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q2->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q2);
             }
         }

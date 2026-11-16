@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrlDeviceSell_metaObject;
 igMetaField *g_beNDMWShopCtrlDeviceSell_decideListMetaField;
 
-void beNDMWShopCtrlDeviceSell_Create(int arg0) {
+void beNDMWShopCtrlDeviceSell_Create(int allocator) {
     beNDMWShopCtrlDeviceSell_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlDeviceSell_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlDeviceSell_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlDeviceSell_GetMetaObject(void) {
@@ -78,16 +78,16 @@ static int g_beNDMWShopCtrlDeviceSell_fieldOffsets[] = {
 };
 
 void beNDMWShopCtrlDeviceSell_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *decideList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWShopCtrlDeviceSell_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlDeviceSell_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlDeviceSell_fieldTable, g_beNDMWShopCtrlDeviceSell_fieldHandles, g_beNDMWShopCtrlDeviceSell_fieldOffsets, temp_s2);
+    meta = g_beNDMWShopCtrlDeviceSell_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWShopCtrlDeviceSell_ctorTable, 1);
+    decideList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)decideList)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igRefMetaField *)decideList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWShopCtrlDeviceSell_fieldTable, g_beNDMWShopCtrlDeviceSell_fieldHandles, g_beNDMWShopCtrlDeviceSell_fieldOffsets, base);
 }
 

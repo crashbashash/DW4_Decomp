@@ -49,8 +49,8 @@ int beWaterPlainInfoRam_GetVTable(void) {
     obj.w44 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beWaterPlainInfoRam_vtable[0];
-    FUN_00340240((void **)&obj.w44, (long long)(-1));
-    FUN_003401c0((struct Ref **)&obj.w38, (short)(-1));
+    FUN_00340240((igSmartPointer<igObject> *)&obj.w44, (long long)(-1));
+    FUN_003401c0((igSmartPointer<igObject> *)&obj.w38, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj.w23, -1);
     FUN_001354b0(&obj.w22, -1);
     FUN_001338d0(&obj.w21, -1);
@@ -58,35 +58,30 @@ int beWaterPlainInfoRam_GetVTable(void) {
     return t;
 }
 
-void **FUN_003401c0(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+igSmartPointer<igObject> *FUN_003401c0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return (void **)self;
+    return self;
 }
 
-void **FUN_00340240(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_00340240(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beWaterPlainInfoRam_EnsureRegistered(void)
@@ -236,30 +231,30 @@ static int g_beWaterPlainInfoRam_fieldOffsets[] = {
 };
 
 void beWaterPlainInfoRam_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s1;
-    int temp_s0;
+    void *vertexArray;
+    void *dampeningGrid;
+    void *dplist2VertexNO;
+    void *gridLists;
+    void *waterMove;
+    void *meta;
+    int base;
 
-    temp_s1 = (void *)g_beWaterPlainInfoRam_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beWaterPlainInfoRam_ctorTable, 0x1B);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = igVertexArray_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igFloatList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x15));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igFloatListList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1A));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)beWaterMove_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_beWaterPlainInfoRam_fieldTable, g_beWaterPlainInfoRam_fieldHandles, g_beWaterPlainInfoRam_fieldOffsets, temp_s0);
+    meta = (void *)g_beWaterPlainInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beWaterPlainInfoRam_ctorTable, 0x1B);
+    vertexArray = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
+    ((igObjectRefMetaField *)vertexArray)->_metaObject = igVertexArray_GetOrCreateMetaObject();
+    dampeningGrid = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
+    ((igObjectRefMetaField *)dampeningGrid)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dampeningGrid)->_construct = 1;
+    dplist2VertexNO = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    ((igObjectRefMetaField *)dplist2VertexNO)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dplist2VertexNO)->_construct = 1;
+    gridLists = (void *)(igMetaObject_GetFieldAt(meta, base + 0x15));
+    ((igObjectRefMetaField *)gridLists)->_metaObject = igFloatListList_GetOrCreateMetaObject();
+    ((igRefMetaField *)gridLists)->_construct = 1;
+    waterMove = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1A));
+    ((igObjectRefMetaField *)waterMove)->_metaObject = (int)beWaterMove_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beWaterPlainInfoRam_fieldTable, g_beWaterPlainInfoRam_fieldHandles, g_beWaterPlainInfoRam_fieldOffsets, base);
 }
 

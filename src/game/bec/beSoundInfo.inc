@@ -89,15 +89,15 @@ static int g_beSoundInfo_fieldOffsets[] = {
 };
 
 void beSoundInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *fnameList;
+    void *meta;
 
-    temp_s0 = (void *)g_beSoundInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSoundInfo_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beSoundInfo_fieldTable, g_beSoundInfo_fieldHandles, g_beSoundInfo_fieldOffsets, temp_s2);
+    meta = (void *)g_beSoundInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSoundInfo_ctorTable, 4);
+    fnameList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)fnameList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beSoundInfo_fieldTable, g_beSoundInfo_fieldHandles, g_beSoundInfo_fieldOffsets, base);
 }
 

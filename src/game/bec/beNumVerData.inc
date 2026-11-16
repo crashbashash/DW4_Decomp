@@ -79,17 +79,17 @@ static int g_beNumVerData_fieldOffsets[] = {
 };
 
 void beNumVerData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *verDataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beNumVerData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNumVerData_ctorTable, 2);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), -1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNumVerInsideDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNumVerData_fieldTable, g_beNumVerData_fieldHandles, g_beNumVerData_fieldOffsets, temp_s2);
+    meta = (void *)g_beNumVerData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNumVerData_ctorTable, 2);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);
+    verDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)verDataList)->_metaObject = (int)beNumVerInsideDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)verDataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNumVerData_fieldTable, g_beNumVerData_fieldHandles, g_beNumVerData_fieldOffsets, base);
 }
 

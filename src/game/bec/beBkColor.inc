@@ -1,9 +1,9 @@
 igMetaObject *g_beBkColor_metaObject;
 igMetaField *g_beBkColor_isClearMetaField;
 
-void beBkColor_CreateInstance(int arg0) {
+void beBkColor_CreateInstance(int allocator) {
     beBkColor_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589D10, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589D10, allocator);
 }
 
 igMetaObject *beBkColor_GetOrCreateMetaObject(void) {
@@ -105,12 +105,12 @@ static int g_beBkColor_fieldOffsets[] = {
 };
 
 void beBkColor_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beBkColor_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beBkColor_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beBkColor_fieldTable, g_beBkColor_fieldHandles, g_beBkColor_fieldOffsets, temp_s1);
+    meta = (void *)g_beBkColor_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beBkColor_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beBkColor_fieldTable, g_beBkColor_fieldHandles, g_beBkColor_fieldOffsets, base);
 }
 

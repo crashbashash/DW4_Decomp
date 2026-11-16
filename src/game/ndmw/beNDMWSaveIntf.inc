@@ -3,9 +3,9 @@ igMetaField *g_beNDMWSaveIntf_padManagerMetaField;
 igMetaField *g_beNDMWSaveIntf_systemMetaField;
 igMetaField *g_beNDMWSaveIntf_kindHardMetaField;
 
-void beNDMWSaveIntf_CreateInstance(int arg0) {
+void beNDMWSaveIntf_CreateInstance(int allocator) {
     beNDMWSaveIntf_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWSaveIntf_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWSaveIntf_metaObject, allocator);
 }
 
 igMetaObject *beNDMWSaveIntf_GetOrCreateMetaObject(void) {
@@ -90,19 +90,19 @@ static int g_beNDMWSaveIntf_fieldOffsets[] = {
 };
 
 void beNDMWSaveIntf_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *system;
+    void *padManager;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWSaveIntf_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWSaveIntf_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = bePadManager_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = beSystem_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beNDMWSaveIntf_fieldTable, g_beNDMWSaveIntf_fieldHandles, g_beNDMWSaveIntf_fieldOffsets, temp_s2);
+    meta = g_beNDMWSaveIntf_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWSaveIntf_ctorTable, 3);
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    system = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)system)->_metaObject = beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beNDMWSaveIntf_fieldTable, g_beNDMWSaveIntf_fieldHandles, g_beNDMWSaveIntf_fieldOffsets, base);
 }
 

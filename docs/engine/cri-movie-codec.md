@@ -27,8 +27,8 @@ slot 28, and the renderer's slots 24 and 22 run slot 27 and slot 29 on every mov
 | 11 | `Gap__igCriMovieData__resetFields` | `igCriMovieData`'s: after igObject's hook, clears `_mwply`, `_adxt` and `_macroFunction` |
 | 20 | `igCriMovieCodec_GetMeta` / `igCriMovieData_GetMeta` | the class's meta object |
 | 21 | `igCriMovieCodec_IsReusable` | returns 1; the manager keeps a codec in its list, for later movies naming the same codec, only when this slot says so |
-| 22 | `igCriMovieCodec_Initialize` | not matched; calls `mwPlyInitSfdFx` |
-| 23 | `igCriMovieCodec_Open` | not matched; opens a movie: creates the ADXT or MWPLY handle and its `igCriMovieData` |
+| 22 | `igCriMovieCodec_Initialize` | takes the visual and audio contexts the movies play through and, on the first call only, initialises MWSFD (`mwPlyInitSfdFx`) for the display's refresh rate: 59.94 Hz for an NTSC video mode, 50 Hz for PAL and 60 Hz when the visual context reports neither |
+| 23 | `igCriMovieCodec_Open` | opens a movie: finds its file (an AFS entry through `igAdx_FindAfsFile`, otherwise a plain path), reads the first ten sectors to tell a Sofdec stream from an ADX one (`mwPlyGetHdrInf`, then `ADXT_GetHdrInfo`; an AHX or unknown file is refused with a report) and takes a Sofdec stream's size, creates the MWPLY handle with its work area and, for ADX, the ADXT handle, sets the audio channel and volume, starts the stream (a looping movie through the `Lp` entry points) and keeps the handles in a new `igCriMovieData` in `_userdata`; returns 0 when the movie cannot be opened |
 | 24 | `igCriMovieCodec_Close` | closes a movie: stops and destroys the ADXT handle if there is one, destroys the MWPLY handle, frees both work areas through `CriMovie_Free` and clears the fields |
 | 25 | `igCriMovieCodec_Play` | starts or resumes: sets `_state` to 0, then releases the ADXT pause (`ADXT_GetStatPause` / `ADXT_Pause`) or the MWPLY pause (`mwPlyIsPause`, then the handle's pause entry) |
 | 26 | `igCriMovieCodec_Pause` | stores the requested `_state`, then pauses whichever player is running |
@@ -75,6 +75,7 @@ of `Memory_FreeBufferWithAllocator`: it calls the pool's slot 53. The `igSmartPo
   `igReportError` is the level-1 (`ERROR`) report, the sibling of `igReportNotice`.
 - `igPsx2VisualContext_IsDisplayingFirstBuffer` returns whether the GS buffer index the flip toggles is 0;
   whether that index is the displayed or the drawn buffer is not settled.
-- The meaning of `igMovieInfo::_type` 2 beyond "uses ADXT" is not confirmed by a movie table.
-- The MWPLY handle is declared here as a view of its function table; `src/cri/mwsfsfx.c` declares the full
-  handle privately, and one shared declaration would serve both.
+- A movie's `_type` becomes 2 in slot 23 when the stream's header says ADX (format 1); no movie table was read to see
+  which movies carry it.
+- The MWPLY handle and its 14-entry function table are declared in `include/dw4/cri/mwply.h`, which the codec and
+  `src/cri/mwsfsfx.c` share.

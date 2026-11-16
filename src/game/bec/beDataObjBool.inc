@@ -1,9 +1,9 @@
 igMetaObject *g_beDataObjBool_metaObject;
 igMetaField *g_beDataObjBool_dataMetaField;
 
-void beDataObjBool_Create(int arg0) {
+void beDataObjBool_Create(int allocator) {
     beDataObjBool_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589898, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589898, allocator);
 }
 
 void *beDataObjBool_GetMetaObject(void) {
@@ -80,12 +80,12 @@ static int g_beDataObjBool_fieldOffsets[] = {
 };
 
 void beDataObjBool_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beDataObjBool_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beDataObjBool_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beDataObjBool_fieldTable, g_beDataObjBool_fieldHandles, g_beDataObjBool_fieldOffsets, temp_s1);
+    meta = (void *)g_beDataObjBool_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beDataObjBool_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beDataObjBool_fieldTable, g_beDataObjBool_fieldHandles, g_beDataObjBool_fieldOffsets, base);
 }
 

@@ -1814,7 +1814,7 @@ struct DepthOfFieldNode {
     float _aspect;
     unsigned char _projectionDirty;
 };
-extern "C" int FUN_001931b0(...);
+extern "C" int igVec4f_PackColor(...);
 extern "C" void DepthOfField_UpdateProjections(DepthOfFieldNode *);
 extern "C" int FUN_001db720(...);
 extern "C" long long fptodp(float);
@@ -2929,7 +2929,7 @@ class ShadowSetupObj : public ShadowRefObj { public: virtual void s1(); virtual 
 class ShadowFogObj { public: virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(int); virtual void s24(); virtual void s25(); virtual void s26(int); virtual void s27(int); virtual void s28(int); virtual void s29(); virtual void s30(int); virtual void s31(float); virtual void s32(int); virtual void s33(int); };
 struct ShadowColor { float r, g, b, a; };
 struct ShadowColorObj { char pad0[12]; int enabled; ShadowColor color; char pad32[28]; int packed;
-    void setColor(ShadowColor &c) { color = c; packed = FUN_001931b0(&c, 1); }
+    void setColor(ShadowColor &c) { color = c; packed = igVec4f_PackColor(&c, 1); }
 };
 struct ShadowModeObj { char pad0[12]; int mode; };
 extern "C" int FUN_002f88e0(...);
@@ -3110,7 +3110,7 @@ extern "C" Gfx *DAT_005629d8[4];
 extern "C" Gfx *DAT_005629e0[4];
 extern "C" Gfx *DAT_005629e8[4];
 extern "C" Gfx *DAT_005629f0[4];
-extern "C" int FUN_00166d40(void);
+extern "C" int igVisualContext_FindFirst(void);
 extern "C" int DAT_004e4820[];
 class ShadowStateObj : public ShadowRefObj { public: virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(int); virtual void s23(int); virtual void s24(); virtual void s25(); virtual void s26(int); virtual void s27(int); virtual void s28(int); virtual void s29(); virtual void s30(int); virtual void s31(int); virtual void s32(int); virtual void s33(int); };
 class ShadowViewportObj { public: virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30(int, int, int, int, float, float); };

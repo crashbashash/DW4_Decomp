@@ -55,602 +55,509 @@ int libBecRuntimePlugin_GetVTable(void) {
     return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-ObjectRefWord *FUN_0033cd20(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_0033cd20(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_0033cda0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_0033cda0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033ce20(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-struct R **FUN_0033cea0(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0033ce20(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033cf20(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033cfa0(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033d020(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033d0a0(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
-        }
-        if (flag > 0) __dl__FPv(self);
-    }
-    return (void **)self;
-}
-
-void **FUN_0033d120(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-O *FUN_0033d1a0(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
-    }
-    return arg0;
-}
-
-void **FUN_0033d220(void **arg0, long long arg1) {
-    char *o;
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033d2a0(void **arg0, short arg1) {
-    S_temp_a0_33d2a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_33d2a0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033d320(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_0033d3a0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_0033cea0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033d420(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-struct R **FUN_0033d4a0(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0033cf20(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033d520(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_0033d5a0(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_0033cfa0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033d620(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033d6a0(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
-        }
-        if (flag > 0) __dl__FPv(self);
-    }
-    return (void **)self;
-}
-
-void **FUN_0033d720(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-O *FUN_0033d7a0(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033d820(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_0033d8a0(void **arg0, short arg1) {
-    S_temp_a0_33d8a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_33d8a0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0033d020(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033d920(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_0033d9a0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_0033d0a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033da20(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-struct R **FUN_0033daa0(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0033d120(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033db20(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_0033dba0(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_0033d1a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033dc20(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033dca0(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
-        }
-        if (flag > 0) __dl__FPv(self);
-    }
-    return (void **)self;
-}
-
-void **FUN_0033dd20(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-O *FUN_0033dda0(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
-    }
-    return arg0;
-}
-
-void **FUN_0033de20(void **arg0, short arg1) {
-    S_temp_a0_33de20 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_33de20 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0033dea0(void **arg0, short arg1) {
-    S_temp_a0_33dea0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_33dea0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_0033df20(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_0033dfa0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_0033d220(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-ObjectRefWord *FUN_0033e020(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_0033d2a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d320(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d3a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d420(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d4a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d520(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d5a0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d620(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d6a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d720(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d7a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d820(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d8a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d920(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033d9a0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033da20(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033daa0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033db20(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033dba0(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033dc20(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033dca0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033dd20(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033dda0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033de20(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033dea0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033df20(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033dfa0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_0033e020(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -1090,129 +997,129 @@ static int g_libBecRuntimePlugin_fieldOffsets[] = {
 };
 
 void libBecRuntimePlugin_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_10;
-    void *temp_s2_11;
-    void *temp_s2_12;
-    void *temp_s2_13;
-    void *temp_s2_14;
-    void *temp_s2_15;
-    void *temp_s2_16;
-    void *temp_s2_17;
-    void *temp_s2_18;
-    void *temp_s2_19;
-    void *temp_s2_20;
-    void *temp_s2_21;
-    void *temp_s2_22;
-    void *temp_s2_23;
-    void *temp_s2_24;
-    void *temp_s2_25;
-    void *temp_s2_26;
-    void *temp_s2_27;
-    void *temp_s2_28;
-    void *temp_s2_29;
-    void *temp_s2_2;
-    void *temp_s2_30;
-    void *temp_s2_31;
-    void *temp_s2_32;
-    void *temp_s2_33;
-    void *temp_s2_34;
-    void *temp_s2_35;
-    void *temp_s2_36;
-    void *temp_s2_37;
-    void *temp_s2_38;
-    void *temp_s2_39;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_s2_8;
-    void *temp_s2_9;
-    void *temp_s1;
-    int temp_s0;
+    void *particleCtrl2;
+    void *cameraCtrl;
+    void *point01;
+    void *bkColor;
+    void *cpTransform;
+    void *shadow01;
+    void *generater;
+    void *hitLandModel;
+    void *hitLandDeliv;
+    void *sound;
+    void *seCtl;
+    void *actionStarter;
+    void *layerCtl;
+    void *font;
+    void *switchCtrl;
+    void *lightCtrl;
+    void *numberCtrl;
+    void *staticInfoCtl;
+    void *movie;
+    void *dbManager;
+    void *saveUtil;
+    void *luaManager;
+    void *textureCtrl;
+    void *system;
+    void *messenger;
+    void *fileList;
+    void *padManager;
+    void *cri;
+    void *luaInterface;
+    void *demoManager;
+    void *timer;
+    void *memory;
+    void *matCtrl;
+    void *selectCtrl;
+    void *waterPlain;
+    void *action2;
+    void *meterCtrl;
+    void *targetObj;
+    void *weapon;
+    void *meta;
+    int base;
 
-    temp_s1 = (void *)g_libBecRuntimePlugin_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_libBecRuntimePlugin_ctorTable, 0x27);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beParticleCtrl2_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beLua_GetOrCreateMetaObject();
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beMatCtrl_GetOrCreateMetaObject();
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)beSelectCtrl_GetOrCreateMetaObject();
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)beWaterPlain_GetOrCreateMetaObject();
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)beAction2_GetOrCreateMetaObject();
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)beMeterCtrl_GetOrCreateMetaObject();
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)beTargetObj_GetOrCreateMetaObject();
-    temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)beWeapon_GetOrCreateMetaObject();
-    temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)beCameraCtrl_GetOrCreateMetaObject();
-    temp_s2_11 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)bePoint01_GetOrCreateMetaObject();
-    temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)beBkColor_GetOrCreateMetaObject();
-    temp_s2_13 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC));
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)beChangePosTransform_GetOrCreateMetaObject();
-    temp_s2_14 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xD));
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)beShadow01_GetOrCreateMetaObject();
-    temp_s2_15 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xE));
-    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = (int)beGenerater_GetOrCreateMetaObject();
-    temp_s2_16 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xF));
-    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = (int)beHitLandModel_GetOrCreateMetaObject();
-    temp_s2_17 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x10));
-    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)beHitLandDeliv_GetOrCreateMetaObject();
-    temp_s2_18 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11));
-    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)beSound_GetOrCreateMetaObject();
-    temp_s2_19 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x12));
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)beSeCtl_GetOrCreateMetaObject();
-    temp_s2_20 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x13));
-    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)beActionStarter_GetOrCreateMetaObject();
-    temp_s2_21 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x14));
-    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)beLayerCtl_GetOrCreateMetaObject();
-    temp_s2_22 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x15));
-    ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)beFont_GetOrCreateMetaObject();
-    temp_s2_23 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x16));
-    ((igObjectRefMetaField *)temp_s2_23)->_metaObject = (int)beSwitchCtrl_GetOrCreateMetaObject();
-    temp_s2_24 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x17));
-    ((igObjectRefMetaField *)temp_s2_24)->_metaObject = (int)beLightCtrl_GetOrCreateMetaObject();
-    temp_s2_25 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x18));
-    ((igObjectRefMetaField *)temp_s2_25)->_metaObject = (int)beNumberCtrl_GetOrCreateMetaObject();
-    temp_s2_26 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x19));
-    ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)beStaticInfoCtl_GetOrCreateMetaObject();
-    temp_s2_27 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1A));
-    ((igObjectRefMetaField *)temp_s2_27)->_metaObject = (int)beMovie_GetOrCreateMetaObject();
-    temp_s2_28 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1B));
-    ((igObjectRefMetaField *)temp_s2_28)->_metaObject = (int)beDBManager_GetOrCreateMetaObject();
-    temp_s2_29 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1C));
-    ((igObjectRefMetaField *)temp_s2_29)->_metaObject = (int)beSaveUtil_GetOrCreateMetaObject();
-    temp_s2_30 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1D));
-    ((igObjectRefMetaField *)temp_s2_30)->_metaObject = (int)beTextureCtrl_GetOrCreateMetaObject();
-    temp_s2_31 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1E));
-    ((igObjectRefMetaField *)temp_s2_31)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
-    temp_s2_32 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1F));
-    ((igObjectRefMetaField *)temp_s2_32)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
-    temp_s2_33 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x20));
-    ((igObjectRefMetaField *)temp_s2_33)->_metaObject = (int)beFileListInfoManager_GetOrCreateMetaObject();
-    temp_s2_34 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x21));
-    ((igObjectRefMetaField *)temp_s2_34)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
-    temp_s2_35 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x22));
-    ((igObjectRefMetaField *)temp_s2_35)->_metaObject = (int)beCri_GetOrCreateMetaObject();
-    temp_s2_36 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x23));
-    ((igObjectRefMetaField *)temp_s2_36)->_metaObject = (int)be_GetOrCreateMetaObject();
-    temp_s2_37 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x24));
-    ((igObjectRefMetaField *)temp_s2_37)->_metaObject = (int)beDemoManager_GetOrCreateMetaObject();
-    temp_s2_38 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x25));
-    ((igObjectRefMetaField *)temp_s2_38)->_metaObject = (int)beTimer_GetOrCreateMetaObject();
-    temp_s2_39 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x26));
-    ((igObjectRefMetaField *)temp_s2_39)->_metaObject = (int)beMemory_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_libBecRuntimePlugin_fieldTable, g_libBecRuntimePlugin_fieldHandles, g_libBecRuntimePlugin_fieldOffsets, temp_s0);
+    meta = (void *)g_libBecRuntimePlugin_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_libBecRuntimePlugin_ctorTable, 0x27);
+    particleCtrl2 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)particleCtrl2)->_metaObject = (int)beParticleCtrl2_GetOrCreateMetaObject();
+    luaManager = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)luaManager)->_metaObject = (int)beLua_GetOrCreateMetaObject();
+    matCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)matCtrl)->_metaObject = (int)beMatCtrl_GetOrCreateMetaObject();
+    selectCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)selectCtrl)->_metaObject = (int)beSelectCtrl_GetOrCreateMetaObject();
+    waterPlain = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)waterPlain)->_metaObject = (int)beWaterPlain_GetOrCreateMetaObject();
+    action2 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)action2)->_metaObject = (int)beAction2_GetOrCreateMetaObject();
+    meterCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)meterCtrl)->_metaObject = (int)beMeterCtrl_GetOrCreateMetaObject();
+    targetObj = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)targetObj)->_metaObject = (int)beTargetObj_GetOrCreateMetaObject();
+    weapon = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)weapon)->_metaObject = (int)beWeapon_GetOrCreateMetaObject();
+    cameraCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)cameraCtrl)->_metaObject = (int)beCameraCtrl_GetOrCreateMetaObject();
+    point01 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
+    ((igObjectRefMetaField *)point01)->_metaObject = (int)bePoint01_GetOrCreateMetaObject();
+    bkColor = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
+    ((igObjectRefMetaField *)bkColor)->_metaObject = (int)beBkColor_GetOrCreateMetaObject();
+    cpTransform = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    ((igObjectRefMetaField *)cpTransform)->_metaObject = (int)beChangePosTransform_GetOrCreateMetaObject();
+    shadow01 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
+    ((igObjectRefMetaField *)shadow01)->_metaObject = (int)beShadow01_GetOrCreateMetaObject();
+    generater = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
+    ((igObjectRefMetaField *)generater)->_metaObject = (int)beGenerater_GetOrCreateMetaObject();
+    hitLandModel = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
+    ((igObjectRefMetaField *)hitLandModel)->_metaObject = (int)beHitLandModel_GetOrCreateMetaObject();
+    hitLandDeliv = (void *)(igMetaObject_GetFieldAt(meta, base + 0x10));
+    ((igObjectRefMetaField *)hitLandDeliv)->_metaObject = (int)beHitLandDeliv_GetOrCreateMetaObject();
+    sound = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
+    ((igObjectRefMetaField *)sound)->_metaObject = (int)beSound_GetOrCreateMetaObject();
+    seCtl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x12));
+    ((igObjectRefMetaField *)seCtl)->_metaObject = (int)beSeCtl_GetOrCreateMetaObject();
+    actionStarter = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
+    ((igObjectRefMetaField *)actionStarter)->_metaObject = (int)beActionStarter_GetOrCreateMetaObject();
+    layerCtl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x14));
+    ((igObjectRefMetaField *)layerCtl)->_metaObject = (int)beLayerCtl_GetOrCreateMetaObject();
+    font = (void *)(igMetaObject_GetFieldAt(meta, base + 0x15));
+    ((igObjectRefMetaField *)font)->_metaObject = (int)beFont_GetOrCreateMetaObject();
+    switchCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x16));
+    ((igObjectRefMetaField *)switchCtrl)->_metaObject = (int)beSwitchCtrl_GetOrCreateMetaObject();
+    lightCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x17));
+    ((igObjectRefMetaField *)lightCtrl)->_metaObject = (int)beLightCtrl_GetOrCreateMetaObject();
+    numberCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x18));
+    ((igObjectRefMetaField *)numberCtrl)->_metaObject = (int)beNumberCtrl_GetOrCreateMetaObject();
+    staticInfoCtl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x19));
+    ((igObjectRefMetaField *)staticInfoCtl)->_metaObject = (int)beStaticInfoCtl_GetOrCreateMetaObject();
+    movie = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1A));
+    ((igObjectRefMetaField *)movie)->_metaObject = (int)beMovie_GetOrCreateMetaObject();
+    dbManager = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1B));
+    ((igObjectRefMetaField *)dbManager)->_metaObject = (int)beDBManager_GetOrCreateMetaObject();
+    saveUtil = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1C));
+    ((igObjectRefMetaField *)saveUtil)->_metaObject = (int)beSaveUtil_GetOrCreateMetaObject();
+    textureCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1D));
+    ((igObjectRefMetaField *)textureCtrl)->_metaObject = (int)beTextureCtrl_GetOrCreateMetaObject();
+    system = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1E));
+    ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 0x1F));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
+    fileList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x20));
+    ((igObjectRefMetaField *)fileList)->_metaObject = (int)beFileListInfoManager_GetOrCreateMetaObject();
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base + 0x21));
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
+    cri = (void *)(igMetaObject_GetFieldAt(meta, base + 0x22));
+    ((igObjectRefMetaField *)cri)->_metaObject = (int)beCri_GetOrCreateMetaObject();
+    luaInterface = (void *)(igMetaObject_GetFieldAt(meta, base + 0x23));
+    ((igObjectRefMetaField *)luaInterface)->_metaObject = (int)be_GetOrCreateMetaObject();
+    demoManager = (void *)(igMetaObject_GetFieldAt(meta, base + 0x24));
+    ((igObjectRefMetaField *)demoManager)->_metaObject = (int)beDemoManager_GetOrCreateMetaObject();
+    timer = (void *)(igMetaObject_GetFieldAt(meta, base + 0x25));
+    ((igObjectRefMetaField *)timer)->_metaObject = (int)beTimer_GetOrCreateMetaObject();
+    memory = (void *)(igMetaObject_GetFieldAt(meta, base + 0x26));
+    ((igObjectRefMetaField *)memory)->_metaObject = (int)beMemory_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_libBecRuntimePlugin_fieldTable, g_libBecRuntimePlugin_fieldHandles, g_libBecRuntimePlugin_fieldOffsets, base);
 }
 

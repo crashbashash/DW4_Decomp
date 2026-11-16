@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrl40_metaObject;
 igMetaField *g_beNDMWShopCtrl40_selectCursorMetaField;
 
-void beNDMWShopCtrl40_Create(int arg0) {
+void beNDMWShopCtrl40_Create(int allocator) {
     beNDMWShopCtrl40_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrl40_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrl40_metaObject, allocator);
 }
 
 void *beNDMWShopCtrl40_GetMetaObject(void) {
@@ -77,12 +77,12 @@ static int g_beNDMWShopCtrl40_fieldOffsets[] = {
 };
 
 void beNDMWShopCtrl40_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWShopCtrl40_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrl40_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrl40_fieldTable, g_beNDMWShopCtrl40_fieldHandles, g_beNDMWShopCtrl40_fieldOffsets, temp_s1);
+    meta = g_beNDMWShopCtrl40_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWShopCtrl40_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beNDMWShopCtrl40_fieldTable, g_beNDMWShopCtrl40_fieldHandles, g_beNDMWShopCtrl40_fieldOffsets, base);
 }
 

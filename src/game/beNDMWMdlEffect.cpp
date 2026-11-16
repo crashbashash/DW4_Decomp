@@ -4,7 +4,7 @@ extern "C" int strcmp(int, int *);
 extern "C" int beNDMWMdlEffect_IsKind(int dummy0, int arg1);
 extern "C" void beNDMWMdlEffect_RegisterReceiver(void);
 extern "C" int beNDMWMdlEffect_GetMeta(void);
-extern "C" int FUN_00396340(...);
+extern "C" int beModelCtrl__OnGenerateFromParent(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int KIND_EFFECT[4];
@@ -96,7 +96,7 @@ void beNDMWMdlEffect_OnGenerate(EffectReceiverShim *arg0, beBaseInfoRam *arg1) {
     }
     ReleaseRef::go(s1->f20);
     s1->f20 = s0;
-    FUN_00396340(arg0, arg1);
+    beModelCtrl__OnGenerateFromParent(arg0, arg1);
 }
 
 int beNDMWMdlEffect_GetMeta(void)

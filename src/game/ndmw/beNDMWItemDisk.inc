@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWItemDisk_metaObject;
 igMetaField *g_beNDMWItemDisk_kazuMetaField;
 
-void beNDMWItemDisk_Create(int arg0) {
+void beNDMWItemDisk_Create(int allocator) {
     beNDMWItemDisk_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemDisk_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemDisk_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemDisk_GetOrCreateMetaObject(void) {
@@ -70,12 +70,12 @@ static int g_beNDMWItemDisk_fieldOffsets[] = {
 };
 
 void beNDMWItemDisk_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWItemDisk_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWItemDisk_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWItemDisk_fieldTable, g_beNDMWItemDisk_fieldHandles, g_beNDMWItemDisk_fieldOffsets, temp_s1);
+    meta = g_beNDMWItemDisk_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWItemDisk_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beNDMWItemDisk_fieldTable, g_beNDMWItemDisk_fieldHandles, g_beNDMWItemDisk_fieldOffsets, base);
 }
 

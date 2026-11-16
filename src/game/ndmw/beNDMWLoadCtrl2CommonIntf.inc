@@ -15,9 +15,9 @@ igMetaField *g_beNDMWLoadCtrl2CommonIntf_difficultModeMetaField;
 igMetaField *g_beNDMWLoadCtrl2CommonIntf_isTitleMetaField;
 igMetaField *g_beNDMWLoadCtrl2CommonIntf_utilUsePlNoMetaField;
 
-void beNDMWLoadCtrl2CommonIntf_Create(int arg0) {
+void beNDMWLoadCtrl2CommonIntf_Create(int allocator) {
     beNDMWLoadCtrl2CommonIntf_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadCtrl2CommonIntf_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadCtrl2CommonIntf_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject(void) {
@@ -52,57 +52,51 @@ int beNDMWLoadCtrl2CommonIntf_GetVTable(void) {
     obj.f34 = 0;
     temp_s3 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&g_beNDMWLoadCtrl2CommonIntf_vtable[0]);
-    FUN_003b2a10((ObjectRefWord *)&obj.f34, -1);
-    FUN_003c4e80((void **)&obj.f28, (short)(-1));
-    FUN_003c4e00((void **)&obj.f24, (short)(-1));
-    FUN_003c4d80((O *)&obj.f20, (short)(-1));
+    FUN_003b2a10((igSmartPointer<igObject> *)&obj.f34, -1);
+    FUN_003c4e80((igSmartPointer<igObject> *)&obj.f28, -1);
+    FUN_003c4e00((igSmartPointer<igObject> *)&obj.f24, -1);
+    FUN_003c4d80((igSmartPointer<igObject> *)&obj.f20, -1);
     FUN_00344030(&obj, 0);
     return temp_s3;
 }
 
-O *FUN_003c4d80(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+igSmartPointer<igObject> *FUN_003c4d80(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_003c4e00(void **arg0, short arg1) {
-    S_temp_a0_3c4e00 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_3c4e00 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_003c4e00(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_003c4e80(void **arg0, short arg1) {
-    S_temp_a0_3c4e80 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_3c4e80 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_003c4e80(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWLoadCtrl2CommonIntf_EnsureRegistered(void)
@@ -200,51 +194,51 @@ static int g_beNDMWLoadCtrl2CommonIntf_fieldOffsets[] = {
 };
 
 void beNDMWLoadCtrl2CommonIntf_InitFields(void) {
-    void **temp_v0;
-    int temp_s3;
-    int temp_s2;
-    void *temp_s1;
-    igStringMetaField *temp_v0_2;
+    void **inheritedName;
+    int nameIndex;
+    int base;
+    void *meta;
+    igStringMetaField *nameField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (void *)(g_beNDMWLoadCtrl2CommonIntf_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWLoadCtrl2CommonIntf_ctorTable, 0xE);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(((igMetaObject *)temp_s1)->_metaFields, temp_v0);
-    temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "COMMONINTF");
-    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWLoadCtrl2CommonIntf_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
-    if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)(g_beNDMWLoadCtrl2CommonIntf_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadCtrl2CommonIntf_ctorTable, 0xE);
+    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
+    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(nameField, "COMMONINTF");
+    nameField->_externalEnumStorage = (int)(&g_beNDMWLoadCtrl2CommonIntf_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    nameField->_refCount = nameField->_refCount - 1;
+    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(nameField);
     }
-    void *temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    ((igObjectRefMetaField *)temp_s0)->_metaObject = beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0)->_refCounted = 0;
-    void *temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s0_2)->_metaObject = beSystem_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0_2)->_refCounted = 0;
-    void *temp_s0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s0_3)->_metaObject = beBaseInfoRam_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0_3)->_refCounted = 0;
-    void *temp_s0_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s0_4)->_metaObject = igInsightCore_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s0_4)->_refCounted = 0;
-    void *temp_s0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s0_5)->_metaObject = (int)beNDMWLoadSlotPlayerList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s0_5)->_construct = 1;
-    void *temp_s0_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 5));
-    ((igObjectRefMetaField *)temp_s0_6)->_metaObject = (int)beNDMWDegiDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s0_6)->_construct = 1;
-    void *temp_s0_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 6));
-    ((igObjectRefMetaField *)temp_s0_7)->_metaObject = (int)beNDMWLoadSavePlWorkList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s0_7)->_construct = 1;
-    void *temp_s0_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 9));
-    ((igObjectRefMetaField *)temp_s0_8)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s0_8)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadCtrl2CommonIntf_fieldTable, g_beNDMWLoadCtrl2CommonIntf_fieldHandles, g_beNDMWLoadCtrl2CommonIntf_fieldOffsets, temp_s2);
+    void *messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    void *system = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)system)->_metaObject = beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_refCounted = 0;
+    void *inforam = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)inforam)->_metaObject = beBaseInfoRam_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)inforam)->_refCounted = 0;
+    void *insight = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_refCounted = 0;
+    void *slotSaveData = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)slotSaveData)->_metaObject = (int)beNDMWLoadSlotPlayerList_GetOrCreateMetaObject();
+    ((igRefMetaField *)slotSaveData)->_construct = 1;
+    void *gameUseData = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)gameUseData)->_metaObject = (int)beNDMWDegiDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)gameUseData)->_construct = 1;
+    void *flagWork = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)flagWork)->_metaObject = (int)beNDMWLoadSavePlWorkList_GetOrCreateMetaObject();
+    ((igRefMetaField *)flagWork)->_construct = 1;
+    void *mcUtilCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)mcUtilCtrl)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();
+    ((igRefMetaField *)mcUtilCtrl)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadCtrl2CommonIntf_fieldTable, g_beNDMWLoadCtrl2CommonIntf_fieldHandles, g_beNDMWLoadCtrl2CommonIntf_fieldOffsets, base);
 }
 

@@ -17,7 +17,7 @@ int beModelCtrlInfoDataHit_GetVTable(void) {
     union U_353920 u;
     int temp_s1;
     void **q2;
-    S_ref *q5;
+    igObject *q5;
     int *temp_a1;
     int temp_v0;
     void *temp_a0;
@@ -27,15 +27,15 @@ int beModelCtrlInfoDataHit_GetVTable(void) {
     q2 = &u.p[2];
     *q2 = 0;
     u.w[0] = (int)(&g_beModelCtrlInfoDataHit_vtable[0]);
-    q5 = (S_ref *)&u.p[5];
+    q5 = (igObject *)&u.p[5];
     *(int *)q5 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beModelCtrlInfoDataHit_vtable[0]);
     if (q5 != 0) {
-        q5 = *(S_ref **)q5;
+        q5 = *(igObject **)q5;
         if (q5 != 0) {
-            q5->f4 = (int)((int) (q5->f4 - 1));
-            if (((unsigned long long) ((long long) q5->f4 << 0x29) >> 0x29) == 0) {
+            q5->_refCount = (int)q5->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q5->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q5);
             }
         }
@@ -110,28 +110,28 @@ static int g_beModelCtrlInfoDataHit_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoDataHit_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s1;
-    S_ref *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    void *hitBulletAABoxList;
+    void *meta;
+    igStringMetaField *clone;
 
-    temp_s1 = (void *)(((void * *)&g_beModelCtrlInfoDataHit_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoDataHit_ctorTable, 4);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (S_ref *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "HIT");
-    *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_beModelCtrlInfoDataHit_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->f4 = temp_v0_2->f4 - 1;
-    if (((unsigned long long) ((long long) temp_v0_2->f4 << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beModelCtrlInfoDataHit_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataHit_ctorTable, 4);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(clone, "HIT");
+    clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataHit_nameStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    *(int *)((char *)(temp_s0) + 56) = igAABoxList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoDataHit_fieldTable, g_beModelCtrlInfoDataHit_fieldHandles, g_beModelCtrlInfoDataHit_fieldOffsets, temp_s2);
+    hitBulletAABoxList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)hitBulletAABoxList)->_metaObject = igAABoxList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoDataHit_fieldTable, g_beModelCtrlInfoDataHit_fieldHandles, g_beModelCtrlInfoDataHit_fieldOffsets, base);
 }
 

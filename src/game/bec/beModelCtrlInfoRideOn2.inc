@@ -2,9 +2,9 @@ igMetaObject *g_beModelCtrlInfoRideOn2_metaObject;
 int g_beModelCtrlInfoRideOn2_modelRamNoStorage;
 igMetaField *g_beModelCtrlInfoRideOn2_vectorMetaField;
 
-void beModelCtrlInfoRideOn2_Create(int arg0) {
+void beModelCtrlInfoRideOn2_Create(int allocator) {
     beModelCtrlInfoRideOn2_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588A90, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588A90, allocator);
 }
 
 void *beModelCtrlInfoRideOn2_GetMetaObject(void) {
@@ -61,25 +61,25 @@ static int g_beModelCtrlInfoRideOn2_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoRideOn2_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s1;
-    T_351d10 *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    void *meta;
+    igIntMetaField *clone;
 
-    temp_s1 = (void *)(((void * *)&g_beModelCtrlInfoRideOn2_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoRideOn2_ctorTable, 1);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_modelRamNo"));
-    temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
-    temp_v0_2 = (T_351d10 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igIntMetaField_SetDefault(temp_v0_2, 0x66);
-    temp_v0_2->f28 = (int)(&g_beModelCtrlInfoRideOn2_modelRamNoStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->references = temp_v0_2->references - 1;
-    if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (void *)g_beModelCtrlInfoRideOn2_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoRideOn2_ctorTable, 1);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_modelRamNo"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igIntMetaField_SetDefault(clone, 0x66);
+    clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRideOn2_modelRamNoStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoRideOn2_fieldTable, g_beModelCtrlInfoRideOn2_fieldHandles, g_beModelCtrlInfoRideOn2_fieldOffsets, temp_s2);
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoRideOn2_fieldTable, g_beModelCtrlInfoRideOn2_fieldHandles, g_beModelCtrlInfoRideOn2_fieldOffsets, base);
 }
 

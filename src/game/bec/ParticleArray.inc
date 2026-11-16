@@ -123,27 +123,27 @@ static int g_ParticleArray_fieldOffsets[] = {
 };
 
 void ParticleArray_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *vertexArray2;
+    void *vertexArray1;
+    void *meta;
 
-    temp_s0 = (void *)g_ParticleArray_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_ParticleArray_ctorTable, 0xB);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0.0f);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVertexArray_GetOrCreateMetaObject();
-    ((igMetaField *)temp_s1)->_persistent = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igVertexArray_GetOrCreateMetaObject();
-    ((igMetaField *)temp_s1_2)->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, g_ParticleArray_fieldTable, g_ParticleArray_fieldHandles, g_ParticleArray_fieldOffsets, temp_s2);
+    meta = (void *)g_ParticleArray_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_ParticleArray_ctorTable, 0xB);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 1.0f);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), 0.0f);
+    vertexArray1 = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)vertexArray1)->_metaObject = igVertexArray_GetOrCreateMetaObject();
+    ((igMetaField *)vertexArray1)->_persistent = 0;
+    vertexArray2 = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)vertexArray2)->_metaObject = igVertexArray_GetOrCreateMetaObject();
+    ((igMetaField *)vertexArray2)->_persistent = 0;
+    ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 8))->_persistent = 0;
+    ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 9))->_persistent = 0;
+    ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0xA))->_persistent = 0;
+    igMetaObject_NameFields(meta, g_ParticleArray_fieldTable, g_ParticleArray_fieldHandles, g_ParticleArray_fieldOffsets, base);
 }
 

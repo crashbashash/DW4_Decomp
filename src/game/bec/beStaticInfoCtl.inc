@@ -1,9 +1,9 @@
 igMetaObject *g_beStaticInfoCtl_metaObject;
 igMetaField *g_beStaticInfoCtl_staticInfoListMetaField;
 
-void beStaticInfoCtl_CreateInstance(int arg0) {
+void beStaticInfoCtl_CreateInstance(int allocator) {
     beStaticInfoCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587E10, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587E10, allocator);
 }
 
 igMetaObject *beStaticInfoCtl_GetOrCreateMetaObject(void) {
@@ -32,7 +32,7 @@ int beStaticInfoCtl_GetVTable(void) {
     obj.w8 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beStaticInfoCtl_vtable[0];
-    FUN_0033f560((void **)&obj.w8, -1);
+    FUN_0033f560((igSmartPointer<igObject> *)&obj.w8, -1);
     FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
     return t;
 }
@@ -80,16 +80,16 @@ static int g_beStaticInfoCtl_fieldOffsets[] = {
 };
 
 void beStaticInfoCtl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *staticInfoList;
+    void *meta;
 
-    temp_s0 = (void *)g_beStaticInfoCtl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beStaticInfoCtl_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beStaticInfoCtl_fieldTable, g_beStaticInfoCtl_fieldHandles, g_beStaticInfoCtl_fieldOffsets, temp_s2);
+    meta = (void *)g_beStaticInfoCtl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beStaticInfoCtl_ctorTable, 1);
+    staticInfoList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)staticInfoList)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)staticInfoList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beStaticInfoCtl_fieldTable, g_beStaticInfoCtl_fieldHandles, g_beStaticInfoCtl_fieldOffsets, base);
 }
 

@@ -11,9 +11,9 @@ igMetaEnum *g_beNDMWMdlPlayerInfoWork_damageSeqMetaEnum;
 igMetaEnum *g_beNDMWMdlPlayerInfoWork_statusNameMetaEnum;
 igMetaEnum *g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum;
 
-void beNDMWMdlPlayerInfoWork_Create(int arg0) {
+void beNDMWMdlPlayerInfoWork_Create(int allocator) {
     beNDMWMdlPlayerInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMdlPlayerInfoWork_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlPlayerInfoWork_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject(void) {
@@ -172,16 +172,16 @@ static int g_beNDMWMdlPlayerInfoWork_fieldOffsets[] = {
 };
 
 void beNDMWMdlPlayerInfoWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *turnAtkTimer;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWMdlPlayerInfoWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWMdlPlayerInfoWork_ctorTable, 8);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWMdlPlayerInfoWork_fieldTable, g_beNDMWMdlPlayerInfoWork_fieldHandles, g_beNDMWMdlPlayerInfoWork_fieldOffsets, temp_s2);
+    meta = g_beNDMWMdlPlayerInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWMdlPlayerInfoWork_ctorTable, 8);
+    turnAtkTimer = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)turnAtkTimer)->_metaObject = igIntList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWMdlPlayerInfoWork_fieldTable, g_beNDMWMdlPlayerInfoWork_fieldHandles, g_beNDMWMdlPlayerInfoWork_fieldOffsets, base);
 }
 
 static const char *g_beNDMWMdlPlayerInfoWork_damageSeqNames[] = {

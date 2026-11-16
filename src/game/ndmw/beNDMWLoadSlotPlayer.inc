@@ -3,9 +3,9 @@ igMetaField *g_beNDMWLoadSlotPlayer_connectNOMetaField;
 igMetaField *g_beNDMWLoadSlotPlayer_saveDataListMetaField;
 igMetaField *g_beNDMWLoadSlotPlayer_accessPlListMetaField;
 
-void beNDMWLoadSlotPlayer_Create(int arg0) {
+void beNDMWLoadSlotPlayer_Create(int allocator) {
     beNDMWLoadSlotPlayer_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadSlotPlayer_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadSlotPlayer_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadSlotPlayer_GetOrCreateMetaObject(void) {
@@ -89,20 +89,20 @@ static int g_beNDMWLoadSlotPlayer_fieldOffsets[] = {
 };
 
 void beNDMWLoadSlotPlayer_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *accessPlList;
+    void *saveDataList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWLoadSlotPlayer_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWLoadSlotPlayer_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWDegiDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWLoadSlotPlayer_fieldTable, g_beNDMWLoadSlotPlayer_fieldHandles, g_beNDMWLoadSlotPlayer_fieldOffsets, temp_s2);
+    meta = g_beNDMWLoadSlotPlayer_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWLoadSlotPlayer_ctorTable, 3);
+    saveDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)saveDataList)->_metaObject = (int)beNDMWDegiDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)saveDataList)->_construct = 1;
+    accessPlList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)accessPlList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)accessPlList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWLoadSlotPlayer_fieldTable, g_beNDMWLoadSlotPlayer_fieldHandles, g_beNDMWLoadSlotPlayer_fieldOffsets, base);
 }
 

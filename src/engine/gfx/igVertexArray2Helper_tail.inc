@@ -408,7 +408,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_41(igVertexArray2Helper *arg0, int ar
     temp_s1 = g_igUnsignedIntList_metaObject[0];
     if (temp_s1 == temp_v0->f12->vX()) {
         T_15ff10 *a = temp_v0->f12;
-        int r = FUN_001931b0((float *)arg2, 1);
+        int r = igVec4f_PackColor((float *)arg2, 1);
         int v1 = a->f8;
         if (v1 != 0 && arg1 >= 0 && arg1 < v1) {
             a->f16[arg1] = r;
@@ -417,7 +417,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_41(igVertexArray2Helper *arg0, int ar
         temp_s1_2 = g_igVec4ucList_metaObject[0];
         if (temp_s1_2 == temp_v0->f12->vX()) {
             T_15ff10 *a = temp_v0->f12;
-            sp5C.i = FUN_001931b0((float *)arg2, 1);
+            sp5C.i = igVec4f_PackColor((float *)arg2, 1);
             int v1 = a->f8;
             if (v1 != 0 && arg1 >= 0 && arg1 < v1) {
                 unsigned char *d = (unsigned char *)(a->f16 + arg1);

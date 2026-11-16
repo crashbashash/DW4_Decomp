@@ -9,9 +9,9 @@ igMetaField *g_beMatCtrl_wkMatOldOnListMetaField;
 igMetaField *g_beMatCtrl_isLuaCallDispMetaField;
 igMetaField *g_beMatCtrl_luaMetaField;
 
-void beMatCtrl_CreateInstance(int arg0) {
+void beMatCtrl_CreateInstance(int allocator) {
     beMatCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589160, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589160, allocator);
 }
 
 igMetaObject *beMatCtrl_GetOrCreateMetaObject(void) {
@@ -22,11 +22,11 @@ igMetaObject *beMatCtrl_GetOrCreateMetaObject(void) {
 }
 
 void *beMatCtrl_GetMetaObject(void) {
-    struct G *g = ((struct G * *)&g_beMatCtrl_metaObject)[0];
-    if (!g || ((g->f & 4) != 0) == false) {
+    igMetaObject *g = g_beMatCtrl_metaObject;
+    if (!g || ((g->_validity & 4) != 0) == false) {
         beMatCtrl_EnsureRegistered();
     }
-    return ((struct G * *)&g_beMatCtrl_metaObject)[0];
+    return g_beMatCtrl_metaObject;
 }
 
 int beMatCtrl_GetVTable(void) {
@@ -122,25 +122,25 @@ static int g_beMatCtrl_fieldOffsets[] = {
 };
 
 void beMatCtrl_InitFields(void) {
-    igMetaObject *temp_s0;
-    int temp_s2;
-    struct F_35a940 *temp_s1;
-    struct F_35a940 *temp_s1_2;
-    struct F_35a940 *temp_s1_3;
+    igMetaObject *meta;
+    int base;
+    struct F_35a940 *wkMatOnList;
+    struct F_35a940 *wkMatOldOnList;
+    struct F_35a940 *lua;
     struct F_35a940 *t;
 
-    temp_s0 = g_beMatCtrl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMatCtrl_ctorTable, 9);
-    t = ((struct F_35a940 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
+    meta = g_beMatCtrl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMatCtrl_ctorTable, 9);
+    t = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 4));
     t->f52 = 4;
-    temp_s1 = ((struct F_35a940 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
-    temp_s1->f56 = igIntList_GetOrCreateMetaObject();
-    temp_s1_2 = ((struct F_35a940 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
-    temp_s1_2->f56 = igIntList_GetOrCreateMetaObject();
-    temp_s1_3 = ((struct F_35a940 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
-    temp_s1_3->f56 = (int)beLua_GetOrCreateMetaObject();
-    temp_s1_3->f60 = 0;
-    igMetaObject_NameFields(temp_s0, g_beMatCtrl_fieldTable, g_beMatCtrl_fieldHandles, g_beMatCtrl_fieldOffsets, temp_s2);
+    wkMatOnList = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 5));
+    wkMatOnList->f56 = igIntList_GetOrCreateMetaObject();
+    wkMatOldOnList = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 6));
+    wkMatOldOnList->f56 = igIntList_GetOrCreateMetaObject();
+    lua = ((struct F_35a940 *)igMetaObject_GetFieldAt(meta, base + 8));
+    lua->f56 = (int)beLua_GetOrCreateMetaObject();
+    lua->f60 = 0;
+    igMetaObject_NameFields(meta, g_beMatCtrl_fieldTable, g_beMatCtrl_fieldHandles, g_beMatCtrl_fieldOffsets, base);
 }
 

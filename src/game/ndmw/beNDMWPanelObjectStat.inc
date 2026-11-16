@@ -34,7 +34,7 @@ int beNDMWPanelObjectStat_GetVTable(void) {
     u.w[17] = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beNDMWPanelObjectStat_vtable[0]);
-    FUN_003bde80((struct Ref **)(&u.w[17]), (short)(-1));
+    FUN_003bde80((igSmartPointer<igObject> *)(&u.w[17]), -1);
     igSmartPointer_igIntList_Destruct(&u.w[16], -1);
     igSmartPointer_igStringRefList_Destruct(&u.w[15], -1);
     FUN_003be240((Obj_3be240 *)u.b, (short)0);
@@ -109,38 +109,38 @@ static int g_beNDMWPanelObjectStat_fieldOffsets[] = {
 };
 
 void beNDMWPanelObjectStat_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    igObjectRefMetaField *temp_s0;
-    igObjectRefMetaField *temp_s0_2;
-    igObjectRefMetaField *temp_s0_3;
-    igMetaObject *temp_s1;
-    igMetaField *temp_v0_2;
+    int base;
+    int pageIndex;
+    void **inheritedPage;
+    igObjectRefMetaField *listFolder;
+    igObjectRefMetaField *listColor;
+    igObjectRefMetaField *playerWork;
+    igMetaObject *meta;
+    igIntMetaField *pageField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (igMetaObject *)(g_beNDMWPanelObjectStat_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWPanelObjectStat_ctorTable, 3);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_page"));
-    temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
-    temp_v0_2 = (igMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igIntMetaField_SetDefault(temp_v0_2, 2);
-    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWPanelObjectStat_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    *(int *)&temp_v0_2->_refCount = (int)((int) (*(int *)&temp_v0_2->_refCount - 1));
-    if (((unsigned long long) ((long long) *(int *)&temp_v0_2->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (igMetaObject *)(g_beNDMWPanelObjectStat_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectStat_ctorTable, 3);
+    inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
+    pageIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedPage);
+    pageField = (igIntMetaField *)(((DW4VC_84_1 *)(inheritedPage))->vX((int)(1)));
+    igIntMetaField_SetDefault(pageField, 2);
+    pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectStat_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);
+    pageField->_refCount = pageField->_refCount - 1;
+    if (((unsigned long long)(long long)pageField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(pageField);
     }
-    temp_s0 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    temp_s0->_metaObject = igStringRefList_GetOrCreateMetaObject();
-    temp_s0->_construct = 1;
-    temp_s0_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
-    temp_s0_2->_metaObject = igIntList_GetOrCreateMetaObject();
-    temp_s0_2->_construct = 1;
-    temp_s0_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));
-    temp_s0_3->_metaObject = (int)beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWPanelObjectStat_fieldTable, g_beNDMWPanelObjectStat_fieldHandles, g_beNDMWPanelObjectStat_fieldOffsets, temp_s2);
+    listFolder = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
+    listFolder->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    listFolder->_construct = 1;
+    listColor = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 1));
+    listColor->_metaObject = igIntList_GetOrCreateMetaObject();
+    listColor->_construct = 1;
+    playerWork = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 2));
+    playerWork->_metaObject = (int)beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWPanelObjectStat_fieldTable, g_beNDMWPanelObjectStat_fieldHandles, g_beNDMWPanelObjectStat_fieldOffsets, base);
 }
 

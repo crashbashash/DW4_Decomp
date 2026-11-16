@@ -1,9 +1,9 @@
 igMetaObject *g_beDataObjString_metaObject;
 igMetaField *g_beDataObjString_dataMetaField;
 
-void beDataObjString_Create(int arg0) {
+void beDataObjString_Create(int allocator) {
     beDataObjString_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589878, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589878, allocator);
 }
 
 void *beDataObjString_GetMetaObject(void) {
@@ -101,13 +101,13 @@ static int g_beDataObjString_fieldOffsets[] = {
 };
 
 void beDataObjString_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beDataObjString_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beDataObjString_ctorTable, 1);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), 0);
-    igMetaObject_NameFields(temp_s0, g_beDataObjString_fieldTable, g_beDataObjString_fieldHandles, g_beDataObjString_fieldOffsets, temp_s1);
+    meta = (void *)g_beDataObjString_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beDataObjString_ctorTable, 1);
+    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), 0);
+    igMetaObject_NameFields(meta, g_beDataObjString_fieldTable, g_beDataObjString_fieldHandles, g_beDataObjString_fieldOffsets, base);
 }
 

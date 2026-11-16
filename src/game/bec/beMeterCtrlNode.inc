@@ -87,17 +87,17 @@ static int g_beMeterCtrlNode_fieldOffsets[] = {
 };
 
 void beMeterCtrlNode_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *timeList;
+    void *meta;
 
-    temp_s0 = (void *)g_beMeterCtrlNode_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMeterCtrlNode_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igLongList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beMeterCtrlNode_fieldTable, g_beMeterCtrlNode_fieldHandles, g_beMeterCtrlNode_fieldOffsets, temp_s2);
+    meta = (void *)g_beMeterCtrlNode_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMeterCtrlNode_ctorTable, 3);
+    timeList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)timeList)->_metaObject = igLongList_GetOrCreateMetaObject();
+    ((igRefMetaField *)timeList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beMeterCtrlNode_fieldTable, g_beMeterCtrlNode_fieldHandles, g_beMeterCtrlNode_fieldOffsets, base);
 }
 
 void FUN_00356f40(void)

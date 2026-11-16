@@ -85,20 +85,20 @@ static int g_beGeneraterPlayerData_fieldOffsets[] = {
 };
 
 void beGeneraterPlayerData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *itemLastDataList;
+    void *itemDataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beGeneraterPlayerData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beGeneraterPlayerData_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beGeneraterItemDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beGeneraterItemDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beGeneraterPlayerData_fieldTable, g_beGeneraterPlayerData_fieldHandles, g_beGeneraterPlayerData_fieldOffsets, temp_s2);
+    meta = (void *)g_beGeneraterPlayerData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beGeneraterPlayerData_ctorTable, 4);
+    itemDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)itemDataList)->_metaObject = (int)beGeneraterItemDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)itemDataList)->_construct = 1;
+    itemLastDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)itemLastDataList)->_metaObject = (int)beGeneraterItemDataList_GetOrCreateMetaObject();
+    ((igRefMetaField *)itemLastDataList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beGeneraterPlayerData_fieldTable, g_beGeneraterPlayerData_fieldHandles, g_beGeneraterPlayerData_fieldOffsets, base);
 }
 

@@ -21,9 +21,9 @@ igMetaField *g_beAction2InfoWork_blendStateAttrMetaField;
 igMetaField *g_beAction2InfoWork_textureStateAttrMetaField;
 igMetaField *g_beAction2InfoWork_lightingStateAttrMetaField;
 
-void beAction2InfoWork_CreateInstance(int arg0) {
+void beAction2InfoWork_CreateInstance(int allocator) {
     beAction2InfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589E98, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589E98, allocator);
 }
 
 igMetaObject *beAction2InfoWork_GetOrCreateMetaObject(void) {
@@ -67,26 +67,21 @@ int beAction2InfoWork_GetVTable(void) {
     FUN_001d21b0(p184, -1);
     FUN_001aaf00(p180, -1);
     FUN_0019ab10(p176, -1);
-    FUN_0036c450((void **)p104, (short)(-1));
+    FUN_0036c450((igSmartPointer<igObject> *)p104, (short)(-1));
     return temp_s;
 }
 
-void **FUN_0036c450(void **arg0, short arg1) {
-    S_temp_a0_36c450 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_36c450 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0036c450(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beAction2InfoWork_EnsureRegistered(void)
@@ -212,27 +207,27 @@ static int g_beAction2InfoWork_fieldOffsets[] = {
 };
 
 void beAction2InfoWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s1_4;
-    void *temp_s1_5;
-    void *temp_s0;
+    int base;
+    void *comData;
+    void *colorAttr;
+    void *blendStateAttr;
+    void *textureStateAttr;
+    void *lightingStateAttr;
+    void *meta;
 
-    temp_s0 = (void *)g_beAction2InfoWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beAction2InfoWork_ctorTable, 0x15);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beAction2Data_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x11));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igColorAttr_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x12));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igBlendStateAttr_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x13));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igTextureStateAttr_GetOrCreateMetaObject();
-    temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0x14));
-    ((igObjectRefMetaField *)temp_s1_5)->_metaObject = igLightingStateAttr_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beAction2InfoWork_fieldTable, g_beAction2InfoWork_fieldHandles, g_beAction2InfoWork_fieldOffsets, temp_s2);
+    meta = (void *)g_beAction2InfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beAction2InfoWork_ctorTable, 0x15);
+    comData = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)comData)->_metaObject = (int)beAction2Data_GetOrCreateMetaObject();
+    colorAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
+    ((igObjectRefMetaField *)colorAttr)->_metaObject = igColorAttr_GetOrCreateMetaObject();
+    blendStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x12));
+    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = igBlendStateAttr_GetOrCreateMetaObject();
+    textureStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
+    ((igObjectRefMetaField *)textureStateAttr)->_metaObject = igTextureStateAttr_GetOrCreateMetaObject();
+    lightingStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x14));
+    ((igObjectRefMetaField *)lightingStateAttr)->_metaObject = igLightingStateAttr_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beAction2InfoWork_fieldTable, g_beAction2InfoWork_fieldHandles, g_beAction2InfoWork_fieldOffsets, base);
 }
 

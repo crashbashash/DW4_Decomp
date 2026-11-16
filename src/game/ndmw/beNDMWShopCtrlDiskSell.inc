@@ -5,9 +5,9 @@ igMetaField *g_beNDMWShopCtrlDiskSell_maxSellMetaField;
 igMetaField *g_beNDMWShopCtrlDiskSell_kazuMetaField;
 igMetaField *g_beNDMWShopCtrlDiskSell_tankaMetaField;
 
-void beNDMWShopCtrlDiskSell_Create(int arg0) {
+void beNDMWShopCtrlDiskSell_Create(int allocator) {
     beNDMWShopCtrlDiskSell_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlDiskSell_GetMetaObject(void) {
@@ -98,16 +98,16 @@ static int g_beNDMWShopCtrlDiskSell_fieldOffsets[] = {
 };
 
 void beNDMWShopCtrlDiskSell_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *diskIdList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWShopCtrlDiskSell_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlDiskSell_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlDiskSell_fieldTable, g_beNDMWShopCtrlDiskSell_fieldHandles, g_beNDMWShopCtrlDiskSell_fieldOffsets, temp_s2);
+    meta = g_beNDMWShopCtrlDiskSell_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWShopCtrlDiskSell_ctorTable, 5);
+    diskIdList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)diskIdList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)diskIdList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWShopCtrlDiskSell_fieldTable, g_beNDMWShopCtrlDiskSell_fieldHandles, g_beNDMWShopCtrlDiskSell_fieldOffsets, base);
 }
 

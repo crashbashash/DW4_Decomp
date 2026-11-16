@@ -6,7 +6,7 @@ igMetaField *g_beAction2MOTIONSET_loopModeMetaField;
 void *beAction2MOTIONSET_GetMetaObject(void) {
     unsigned char b;
     if (g_beAction2MOTIONSET_metaObject != 0) {
-        b = (*(int *)((char *)(g_beAction2MOTIONSET_metaObject) + 36) & 4) != 0;
+        b = (g_beAction2MOTIONSET_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beAction2MOTIONSET_EnsureRegistered();
@@ -120,12 +120,12 @@ static int g_beAction2MOTIONSET_fieldOffsets[] = {
 };
 
 void beAction2MOTIONSET_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beAction2MOTIONSET_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beAction2MOTIONSET_ctorTable, 3);
-    igMetaObject_NameFields(temp_s0, g_beAction2MOTIONSET_fieldTable, g_beAction2MOTIONSET_fieldHandles, g_beAction2MOTIONSET_fieldOffsets, temp_s1);
+    meta = (void *)g_beAction2MOTIONSET_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beAction2MOTIONSET_ctorTable, 3);
+    igMetaObject_NameFields(meta, g_beAction2MOTIONSET_fieldTable, g_beAction2MOTIONSET_fieldHandles, g_beAction2MOTIONSET_fieldOffsets, base);
 }
 

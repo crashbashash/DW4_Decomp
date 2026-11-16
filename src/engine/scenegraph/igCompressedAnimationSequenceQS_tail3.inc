@@ -264,7 +264,7 @@ void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
                 s4->a[1] = sp70[1];
                 s4->a[2] = sp70[2];
                 s4->a[3] = sp70[3];
-                s4->f60 = FUN_001931b0(sp70, 1);
+                s4->f60 = igVec4f_PackColor(sp70, 1);
                 s4 = DAT_00562660[0];
                 s4->f48 = fptodp(f20);
                 s4->f64 = f20;

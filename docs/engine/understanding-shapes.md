@@ -577,6 +577,38 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `struct S { int a, b, c, d; }; S G; int Garr[16]; void h();` with
     `int k1(int *q) { int x = G.c; *q = 1; int y = G.c; return x + y; }`, the same through `S *p`, with `h()` in
     place of the store, with `int z = a; z = z * a;` in its place, and with `Garr[i]` / `p[i]`.
+- **A load right after a store to the same base and offset becomes a register copy.**
+  - *Symptom:* a squared-distance check against a local vector whose `y` was just set to 0 (`flat = centre;
+    flat.y = 0.0f;`): retail has no load of `y`, the stored zero stands in for it; the plain spelling with `dx`, `dy`
+    and `dz` locals loads it. In a ride-on move, retail has `mov.s $f1,$f3` where the plain spelling has a load.
+  - *Cause:* a peephole (0x5153c0) turns a load into a register copy when the instruction immediately before it is a
+    store to the same base and offset. It runs before register allocation, where the copy is merged away, and again
+    after it, where the `mov.s` survives. A load of another member between the store and it ends the forwarding, and
+    so does an index read through a separate address expression, which puts a temporary between store and load at
+    the first pass. Standalone probes: the forwarding happens when the `y` load comes first and stops as soon as an
+    `x` load sits between the store and it. The GameCube build has the same store and load, so the rule is b52's.
+  - *Spelling:* the distance as one expression with no difference locals, `(a.x - b.x) * (a.x - b.x) + (a.y - b.y) *
+    (a.y - b.y) + …`, which puts the `y` load first after the store. Locals declared in the order `dy`, `dx`, `dz`
+    give the same bytes and are the less natural spelling. The ride-on move reads and stores its vector through the
+    unit's `at(i)` accessor.
+  - *Unit:* `src/game/beChangePosTransform.cpp` (0x37aae0), `src/game/beModelCtrl.cpp` (0x3923c0).
+- **A pointer declared ahead of a branch gives one load and a shared delay slot.** A transform pointer
+  (`float *transformMatrix = ((igTransform *)info->_transform)->_m;`) declared in front of the `if` that guards the
+  arms of a `switch` is the single load before the branch, in a delay slot the branch shares, as in retail. *Unit:*
+  `src/game/beChangePosTransform.cpp` (0x37aae0).
+- **A test then a fetch through the list holder keeps the list read as its own statement.**
+  - *Symptom:* in a loop that tests an element's flag and then fetches the same element in its body, the scaled
+    index is computed before the list is loaded where retail loads the list first, which gives it `a0` (3 words).
+  - *Cause:* the test's `operator->() const` read of the list and the body's are one common subexpression, a
+    temporary used in a block other than its own, so the later `IRO_ExpressionPropagation` leaves it in place. The
+    list load stays a statement ahead of the shared `index << 2`, and in the first scheduling pass the list is live
+    across the shift. With a single read the temporary is folded back into its read and the shift goes first.
+  - *Spelling:* both reads through the holder: `if (((EnemyRamListRef &)work->_enemyRamList)->get(index)->_isRun == 0)
+    { beBaseInfoRam *enemyRam = ((EnemyRamListRef &)work->_enemyRamList)->get(index); … }` with `EnemyRamListRef` an
+    `igSmartPointer` of the list class. The same test-then-fetch through a plain list pointer, a list local, plain
+    field reads in the condition, pointer arithmetic and an `unsigned` index each leave the 3 words; a `const int &`
+    accessor is far worse.
+  - *Unit:* `src/game/beGenerater.cpp` (0x384800).
 
 ### Propagation (b52)
 
@@ -625,6 +657,31 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `length + offset > …capacity()`): the two functions that held the sum with an assignment inside a helper's
     argument (0x2d3be0, 0x30d230) give retail's bytes with it too.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x30e000, 0x2eb6d0, 0x2dd1c0).
+- **A cast self-assignment is not merged, so the variable keeps its own register.**
+  - *Symptom:* a checksum's prologue steps the size parameter in place (`addiu a2,a2,-4`); every plain spelling
+    (`size -= 4`, `size -= sizeof(int)`, `(size - 4) >> 2`) builds `size - 4` in a fresh register that colours `v0`.
+  - *Cause:* `size - sizeof(int)` is computed unsigned and converted back to `int`, so the statement is `size =
+    (cast)((cast)size - 4)`. `IRO_PropagateSelfAssignments` only merges `v = v + constant`, so this one stays, and
+    `size` keeps its register. A merged spelling puts `size - 4` in a temporary that interferes only with `zero` and
+    `a1` (register tracer) and colours `v0`.
+  - *Spelling:* `size = size - sizeof(int); int count = size / sizeof(int); data++; for (int i = 0; i < count; i++)
+    sum += *data++;` with `size` an `int`, as the reflected `_dataSize` field is.
+  - *Unit:* `src/game/beSaveApi.cpp` (0x3a9a50).
+- **A second reaching assignment blocks the first constant-propagation pass.**
+  - *Symptom:* a traversal loop that sets `result = 0` in one branch and tests `result == 1` and `result == 2` in
+    the same pass: retail keeps both tests and the loop test inline at the top; every plain spelling loses the tests
+    and has the loop test copied into a guard after the body.
+  - *Cause:* the first constant-propagation pass replaces `result` with 0 in the tests when that is the only
+    assignment reaching them, and deletes the tests. The loop then has one exit, and the compiler copies its test into
+    a guard placed after the body; a loop with several exits keeps the guard inline. A second assignment to `result`
+    that reaches the next iteration stops the propagation. An inline taking `int &result` does the same and keeps
+    `result` in a register, but its return value turns the `== 2` test into `sltiu`, which retail does not have.
+  - *Spelling:* the subtree's pop in a helper taking the result as a `const int` parameter and returning it,
+    `result = PopSubtree(traversal, attrs, index, result);`: the copy assigned back is the second assignment, and the
+    pop and the time pop stay in the helper. The attribute stack typed `igTDataList<igAttr *> *` (a cast makes the
+    compiler share `stack + 8` inside the loop, where retail reloads `8(s0)`), the number branch's time attribute in
+    a variable of its own (spill slot order) and a note on the x component of the translation carry over.
+  - *Unit:* `src/game/beModelCtrl.cpp` (0x390320).
 
 ### Inlining (b52)
 
@@ -661,6 +718,21 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     the temporary differently from one.
   - *Spelling:* keep the original's constant checks, in place.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator's state checker).
+- **A function past the bottom-up budget leaves its helpers' callees out of line, and their copies follow it.**
+  - *Symptom:* after a very large function retail holds out-of-line copies of the helpers it calls (a clear loop, a
+    release loop, a retained assignment), in the reverse order of their first use. Written as true inline helpers in
+    that function they make it 256 bytes longer than retail's.
+  - *Cause:* in bottom-up mode MWCC stops expanding the calls inside an inlined body once the caller passes
+    `inline_max_total_size` (10000 expression nodes after inlining; [build profiles](build-profiles.md)). Retail's
+    large function is over the limit, so the calls inside its inlined helpers stay out of line; the reverse order
+    of the copies fits inline helpers whose out-of-line copies were emitted after the function that first used them.
+    Bisecting `#pragma inline_max_total_size` puts the source's function at about 6245 nodes, and with the
+    pragma at 6000 the whole unit matches with true inline helpers. The missing nodes were not reconstructed: turning
+    allocator macros into inline calls adds none.
+  - *Spelling:* the clear and release loops written once as `static inline` helpers and the out-of-line functions
+    as one-line wrappers over them, the large function keeping its explicit calls. This reaches retail's bytes
+    without its node count and carries a `matching construct` note.
+  - *Unit:* `src/game/beNDMWListCtrl.cpp` (0x4165d0; the large function is 0x41acf0).
 
 ### Control flow
 
@@ -728,6 +800,48 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   *Probe:* `int F(S *p, S *q) { int x = p->a + q->b; int y = h(x, 1); int z = h(y, x); ASSERT; return z; }` with
   `ASSERT` as `(void)0`, `if (x > 3) {}`, `if (p->a) {}`, `if (x != z) {}`, `if (x > 3) {} else {}` and a `?:` of
   two `(void)0`: one listing for all six.
+- **A loop with an invariant assignment from a `const T &` setter is not rotated.**
+  - *Symptom:* a clear loop keeps its entry in front of the body: an out-of-line `0 < count` block and a jump to the
+    loop test, where a plain loop is rotated. The unit's restore loops, which pass a variable, are rotated.
+  - *Cause (read from the compiler):* `IRO_RotateLoop` (0x538cd0) rotates a loop only when the block before its test
+    ends in a goto and sits directly before the body. An invariant assignment in the loop is moved by
+    `IRO_PullOutInvariantAssignments` into a new preheader block appended at the end of the function, and rotation is
+    then refused. The assignment is the temporary made by binding the literal `0` to a `const` reference parameter.
+  - *Spelling:* a setter taking the stored value by `const` reference, `setItem(ItemList *, int, Item *const &)`,
+    called with `0`; called with a variable it leaves the loop rotated. Confirmed in a probe and in the IR dump.
+  - *Unit:* `src/game/beNDMWListCtrl.cpp` (0x412600).
+- **Open: the add block after the return path of an invariant loop whose operand stays in memory.**
+  - *Symptom:* a vector offset helper (`point + by`) whose three adds sit in a block placed after the function's
+    return path, with folded stack offsets (`208(sp)`, `224(sp)`) and the vector `point` kept in memory.
+  - *Cause (probed):* the block is the preheader `IRO_PullOutInvariantAssignments` appends after the function's last
+    node, as in the entry above: when a `for` or `while` loop is entered by a jump and its body is invariant, the body
+    moves into that node; a known trip count of at least one leaves no guard and the empty loop is removed.
+    `for (int i = 0; i < 1; i++) { r.x = point.x + by[0]; … }` inside the helper puts the block at retail's place,
+    and a loop over the three components with one invariant assignment makes the tail node and the unrolled adds
+    follow it, in retail's order (`point + by`). It is not the inliner: an inline body is entered by a jump to the very
+    next node.
+  - *Open:* retail's block is explicit member code, not an unrolled loop, and `point` stays in memory (the GameCube
+    build too, with dead stores). An invariant loop body with plain member reads scalarises `point` (112 words), and
+    a pointer to `point` keeps it in memory but is not pulled out of a loop. No natural source has both. Loop forms
+    (`for`, `while`, `do`, counting down, a pointer walk), `operator[]`, a `const &` alias, an out-parameter, inline
+    depth, the helper's definition order, ternary contexts and a `goto` layout (74 words) leave at least 41 words.
+    No matched function in the census has an add block after its return path.
+  - *Unit:* `src/game/beGenerater.cpp` (0x384540, not matched).
+- **The code generator opens a new block in front of a loop whenever the block before it falls straight into the
+  header.** The routine is at 0x4c5ad0 (calling 0x4ae730), found under gdb. Every loop of a function then has a
+  block of its own to receive the values the code generator hoists, and retail's order of those preheaders follows
+  from the split; no source construct is needed or available to ask for it. *Unit:* `src/game/beMatCtrl.cpp`
+  (0x38b1f0).
+- **An `if`/`else` is rebuilt into a `?:` only when each branch is a single assignment.**
+  - *Symptom:* a join block that starts with a load where retail's starts with a different instruction (see the label
+    entry under scheduling): retail's `if`/`else` has no label at the join.
+  - *Cause:* the optimizer rebuilds an `if`/`else` into a conditional expression when each branch is one assignment,
+    and the code it generates for it has no label statement. A branch that is a call plus an assignment is never
+    rebuilt.
+  - *Spelling:* the callee returns the vector by value (`Vec3 rotation = count == 2 ? GetVec3(msg, 1) : zero;`), so
+    the call and its temporary are one expression; with an out-parameter the then-branch is a call and an
+    assignment. The unit's vector class needs a copy constructor so the result is built in place.
+  - *Unit:* `src/game/beModelCtrl.cpp` (0x396340).
 
 ### Types and values
 
@@ -752,10 +866,24 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   of a byte-returning function is compared (`f() == 0`, `== 1`), never for a truth test (`if (f())`). Each retail
   `andi 0xff` before a branch is the compare of a function declared `unsigned char` or `bool`; an explicit mask is
   not the source, and an `int` declaration of a byte function drops it. *Unit:* `src/game/beNDMWLoadCtrl2.cpp`.
+- **A `bool` compared `== false` keeps the `andi 0xff`.** `andi v,v,0xff` ahead of the branch on a flag held in a
+  `bool` or `unsigned char`: `if (flag == false)` has it, `if (!flag)` branches on the register. The GameCube build
+  also normalises the flag (`clrlwi.`). The comparison with `0` of a getter that returns `unsigned char` keeps it as
+  well. The compiler pass was not traced. *Units:* `src/game/beChangePosTransform.cpp` (0x37aae0),
+  `src/game/beNDMWShopCtrl00.cpp` (0x438160), `src/game/beNDMWSaveCtrl.cpp` (0x407120),
+  `src/game/beNDMWLogo.cpp` (0x449030), `src/game/beGenerater.cpp` (0x384c40).
+- **A loop index under an `int`-to-`unsigned` conversion keeps its `mult`.** Retail multiplies `i * stride` on every
+  pass of a vertex-array loop: the stride field is `unsigned int` and the local that holds it takes that type, so the
+  index is converted (`(cast)i * stride` in the IR dump) and `IRO_DoStrengthReduction` leaves the multiplication. An
+  `int` stride local and an `unsigned` index are both strength-reduced; reading the field directly reloads it on every
+  pass. *Unit:* `src/game/beWaterPlain.cpp` (0x3a1290).
 - **`const bool &` and `const int &` literal temporaries become data.** A literal passed by `const &` to an inline
-  becomes an anonymous `@N` object per call: a one-byte `.sdata` constant for a `bool`, a `.rodata` word for an
-  `int`. Retail data that looks like a named flag table can be these. *Units:* `src/game/beNDMWMdlPEBase.cpp`
-  (58 int and 34 bool constants), `src/game/beNDMWShopCtrl00.cpp`, `src/game/beNDMWListCtrl.cpp`.
+  becomes an anonymous `@N` object per call: a one-byte `.sdata` constant for a `bool`, a four-byte `.data` word for
+  an `int` (a probe under `-O4,p -sdatathreshold 2` puts one `.data` section per call; the words sit 8 bytes apart in
+  retail). Retail data that looks like a named flag table can be these: the five zero words of a save utility's slot
+  lists were once a named empty slot. *Units:* `src/game/beNDMWMdlPEBase.cpp` (58 int and 34 bool constants),
+  `src/game/beNDMWShopCtrl00.cpp`, `src/game/beNDMWListCtrl.cpp`, `src/game/beSaveUtil.cpp` (0x4c91f8..0x4c9218),
+  `src/game/beMatCtrl.cpp` (zero words 0x4c8f70..0x4c8f80, the `true` byte 0x5549d0).
 - **An inlined `operator+=` gives a frameless function an exception record.** Retail keeps an exception record
   for a leaf with no frame. `*vertex += shift;` through an inline
   `igVec3f &operator+=(const igVec3f &o) { x += o.x; y += o.y; z += o.z; return *this; }` keeps it and explains the
@@ -1003,6 +1131,20 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `extern "C" void E(unsigned int arg) { Th *t = (Th *)(unsigned long)arg; t->_result =
     ((int (*)(int))t->_function)(t->_arg); igPsx2ThreadManager_FinishThread(g_threadManager[0], t); }`, with
     the parameter and the conversion varied as listed.
+- **An enum-typed predicate parameter keeps its conversion and so its id.**
+  - *Symptom:* two registers of a width/height test exchanged (`v0`/`v1`): the particle format pointer takes `v1`
+    where retail has `v0`.
+  - *Cause:* the inline's parameter is assigned from an `int` field with a `(cast)(cast)` conversion, which
+    propagation does not fold into the `if`. It stays an inline variable with an id earlier than the common-subexpression
+    temporary of the format read, so the format colours first and takes `v0`. A plain `int` parameter, the cast
+    without the helper and an enum-typed view without the helper do not reproduce it; an enum view with an enum
+    parameter, or an `int` field cast to the enum parameter, do.
+  - *Spelling:* `static inline bool isAnimated(igGfxParticleCoord coord)` called with the field.
+  - *Unit:* `src/game/ParticleArray.cpp` (0x3a3c10).
+- **A small vector passed by value needs a user copy constructor to be passed by pointer.** A callee taking an
+  `igVec2f` by value is called with a pointer to a copy of the argument on PS2 (the Xbox build passes it on the
+  stack); without a user-defined copy constructor MWCC passes the struct in a register (`ld a2`). The copy also
+  decides the caller's frame slot for the local. *Unit:* `src/game/ParticleArray.cpp` (0x3a3c10).
 
 ### Scheduling (b52)
 
@@ -1045,6 +1187,13 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Spelling:* `igReportNotice(format, (unsigned)block + 8u, 0xBBBBBBBF, *tail)`: the format prints the address
     with `%x`.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x31f480).
+- **Under `-O4,p` every label opens its block with an alignment directive that takes integer pipe 0.**
+  - *Symptom:* a block that starts at a label begins with an integer load where retail's begins with an `lwc1`
+    (two instructions exchanged, no register differences).
+  - *Cause:* every IR label gets a `p2alignl` pcode, which the scheduler issues first in its block, and it occupies
+    integer pipe 0. An `lwc1` needs pipe 0 and an `lw` uses the load/store unit, so an `lwc1` cannot lead a labelled
+    block. Retail's `lwc1` first means its block had no label, which a rebuilt `?:` gives (see the control-flow entry).
+  - *Unit:* `src/game/beModelCtrl.cpp` (0x396340).
 
 ### Scheduling (EE GCC)
 
@@ -1305,6 +1454,14 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `static inline const char *igMemoryPoolInfo_messages(const igMemoryPoolInfo *info)`, every local declared
     where it is first set, the result an `igResult` assigned from the base call.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x3223d0, 0x325940, the arena pool's).
+  - *Also found:* a row pointer the loop reads (`DelayAt(self, i)` in a frozen-delay loop, which no declaration order
+    could fix: the `a1`/`a2` swap), a send time read through `SendTimeOf(const Delay *)` (a plain read becomes `+=` and
+    flips the `daddu` operands), and a list the loop appends to (`TimeListOf(node)` in a meter update: the list lands
+    in `s0` and every saved register follows). *Unit:* `src/game/beMessenger.cpp` (0x38d0a0). In the generator's
+    update the work, the data and the player data go through inline helpers too, and so does the enemy record number
+    inside the setter: the id-order search could not find it because the ids come from where a value is created,
+    with `database` < the model-name temporaries < `recNo` < the reload of `created`, and `ready` < `work` < `data` <
+    `playerData`. *Unit:* `src/game/beGenerater.cpp` (0x384c40).
 - **A decoder's helpers take the cursor and the result by reference, and the results are typed scratch locals.**
   - *Symptom:* a record decoder runs a variable-length-integer loop per field. Retail keeps the read pointer in
     one saved register throughout, the flags word in the next and the slot counter between them; the value and
@@ -1589,8 +1746,13 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 - **An inline's parameter is numbered before its locals.** A string setter inline that takes the object as a
   parameter gives the interned token the first saved register and the object the second; retail has them the
   other way in one of two call sites. The tracer asks for the object's id after the token's; taking the holder
-  by reference and reading the object into a local declared after the token gives it. *Unit:*
-  `src/engine/core/CoreLibrary.cpp` (0x2d1e40).
+  by reference and reading the object into a local declared after the token gives it. In the movie controller's
+  message handler the setter's local takes the interned token directly from the call and is declared before the
+  object pointer, and the setter reads the pointer from a smart pointer it takes by reference: the four values then
+  get ids token 1 < object 1 < token 2 < object 2, all four are pushed in that order in the last scan, and object 2
+  is coloured first (`s1`), token 2 second (`s2`). Each of these alone leaves 13 words: the object pointer declared
+  first, a setter taking the raw pointer, the token returned through an inline instead of the setter's local. *Units:*
+  `src/engine/core/CoreLibrary.cpp` (0x2d1e40), `src/game/beMovie.cpp` (0x3a8b80).
 - **How a call's arguments are lowered (probed under `#pragma schedule off`).** Three steps, in this order:
   - An argument that contains a call, an inline with a statement body included, is evaluated first:
     `f3(p->x, q->y, g())` calls `g` before it loads either field.
@@ -1616,6 +1778,79 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   the order, make one side heavier.
   *Probe:* `int M(int *p, int *q, int pv, int qv) { return (p[0] + p[1]) - (q[0] + q[1] + q[2]); }` and its
   variants, first instruction that reads `a0` or `a1` compared.
+- **Values the code generator hoists take code-selection ids, after the compare temporaries.**
+  - *Symptom:* in a changed-bit scan retail holds the previous word in `a0` and the current compare temporary in
+    `a1`; every spelling has them the other way round (ten words), however its loop, declarations and compares are
+    written.
+  - *Cause:* a value the optimizer hoists is one of its variables and has an id before the compare temporaries. A
+    value the code generator hoists (the data loads, the address adds, the words) takes its id in code selection,
+    after them. Retail's registers need the second kind.
+  - *Spelling:* the mask words read through the holder, `(*(MaskListRef &)current)[material]` with `MaskListRef` an
+    `igSmartPointer<igTDataList<int> >`, using the holder's `operator T *() const` and the list's reference
+    `operator[]` (the idiom of the sound controller): the optimizer then hoists only the two pointer reads, and the
+    reference `operator[]` keeps the address as data first, then offset. A plain read differs by 14 lines, a by-value
+    `get()` by 4. The scan is a plain `for` with `break`. The `li a3,1` shared by `1 << bit` and `_wkChgFlag = 1`
+    comes from the code generator and needs no source.
+  - *Unit:* `src/game/beMatCtrl.cpp` (0x38b1f0).
+- **`!=` between two inline calls expands its right operand first.** `HasPlayer(current[m], bit) !=
+  HasPlayer(previous[m], bit)` makes the right call's temporaries first. The two results as `bool` locals declared
+  in order, `bool now = …; bool was = …; if (now != was)`, give retail's order; without them 4 lines differ. *Unit:*
+  `src/game/beMatCtrl.cpp` (0x38b1f0).
+- **An inlined callee's holders are laid out below the caller's own.**
+  - *Symptom:* two `igSmartPointer<igObject>` holders at frame offsets 140 and 136 and a string reference below
+    them, where retail has the holders at 136 and 132 and the string reference at 140; the exception table's
+    actions (slot 136, slot 132 with the holder destructor, slot 140 with the string reference's) then differ.
+  - *Spelling:* the data-list setup as `static inline ensureDataList(ram)`: its holders are laid out below the
+    caller's own string reference. The same helper replaces the hand-written setup blocks of the unit's other
+    message handler and still matches.
+  - *Unit:* `src/game/beNDMWSaveCtrl.cpp` (0x407120).
+- **A value that stays live across a loop is numbered late when it is read through a getter.**
+  - *Symptom:* two saved registers exchanged (`s0`/`s1`) between an object's ram pointer and a vertex array, in a
+    function with three loops.
+  - *Cause:* the vertex array as a declared local has an id right after the parameters. In the scan before the last
+    one its degree is 26 (19 physical registers, the ram, six values of the third loop) and it only falls below the
+    limit in the final rescan, where the ram (id 32) goes first and is coloured second, so it gets `s1`. With at
+    least two loop locals numbered below the array it is pushed a scan earlier, the ram is pushed last and coloured
+    first (`s0`). Declaring `stride`, `i` and `k` at the top proves it, and only in that order: the order of `i` and
+    `k` decides `a2`/`a1`, and `stride` after `i` moves `a3`.
+  - *Spelling:* the array read through an inline getter, `VertexArray(ram)`, so the value takes the getter's return
+    id after every declared local; every other local is declared where it is first set (`int stride = …`, `for (int
+    i …)`, `for (int k …)`) and the virtual calls cast at the call. The code written out, the getter with a view cast
+    on the initialiser and the getter copied into a view local leave 24 words. `int digit;` is declared before the
+    loop index, at the head of the branch (inside the loop 8 words differ); that line carries a `matching construct`
+    note.
+  - *Unit:* `src/game/beNumberCtrl.cpp` (0x3a4b20).
+- **Open: a physical `a0` that is live across a block in retail and not in the source.**
+  - *Symptom:* in a meter update's hp block every temporary is one register higher in retail (`a1`-`a3` where the
+    source has `a0`-`a2`, 15 words); in a generator update's fill switch retail has `lw a1,52(s3); li v1,116; lb
+    a1,0(a1); beq a1,v1` where the source has `a0` (3 words; the switches of cases 0 and 2 use `a0` in both
+    builds).
+  - *What is known:* replaying the allocator on the meter's graph with physical `a0` made to interfere with those
+    nodes reproduces every one of retail's colours, so in retail `a0` is live across the block. Retail has no read of
+    `a0` there that is not written first, and in this compiler's model the return marker uses `v0` and calls
+    do not define their return register, which is why `v0` already interferes. In the generator the two nodes border
+    only `v0`, `v1`, `s1` and `s3`, no instruction on either path out of the block reads `a0` before redefining it,
+    and `a0` cannot be live at the function's exit, or the other two switches would avoid it too. A construct that
+    leaves a use of `a0` reaching past the block is missing.
+  - *No effect:* meter: `int` locals for the hp values, an hp pointer local, a percent local, the percent as an inline
+    helper (with and without an unused `self`), a shared `nonZero` flag, a variadic conversion call, the implicit
+    conversion; `igTDataList::append` and `static` are worse (88 and 32 lines). Generator: the selector as an `if`,
+    as `unsigned`, through an index, a local, an inline or a variable shared by the three switches; `default:` before
+    or after the case; the timer start as `return`, `break`, an inline or with a time local; case 1 as one inline;
+    `total` placed elsewhere; an explicit or variadic `__fixsfdi`; a variadic `StartTimer`; double constants. A
+    standalone test of the same shape also gives `a0`, and no matched function in the census has the pattern.
+  - *Unit:* `src/game/beMeterCtrl.cpp` (0x38fa50), `src/game/beGenerater.cpp` (0x384c40); neither is matched.
+- **Stack slots: address-taken named locals take the top slots, by-value temporaries the slots below.**
+  - *Symptom:* spill and local slots of a function that builds vectors from calls sit in another order than retail's.
+  - *Rule:* named locals whose address is taken take the top slots in source declaration order, whatever their scope;
+    the temporaries of by-value results come below them in the order they were created. Declaring a vector where it
+    is initialised, rather than at the top, moves its slot.
+  - *Unit:* `src/game/beModelCtrl.cpp` (0x396340).
+- **An argument that contains a call is evaluated with the calls, in order, before plain loads.** Inlines count: a
+  work's sub-command pointer read through an inline accessor is loaded right after the rotation, as in retail, where
+  the same field passed plainly is loaded only at the call. Arguments that contain calls are evaluated left to
+  right, so the parameter order of a call whose float arguments travel in registers can be read from the order of
+  the calls in front of it. *Unit:* `src/game/beModelCtrl.cpp` (0x396340).
 
 ### `asm` and `volatile`
 

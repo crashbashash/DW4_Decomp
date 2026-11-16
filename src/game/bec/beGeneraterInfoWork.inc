@@ -9,9 +9,9 @@ igMetaField *g_beGeneraterInfoWork_geneEnemyNameMetaField;
 igMetaField *g_beGeneraterInfoWork_geneEnemyRecNoMetaField;
 igMetaField *g_beGeneraterInfoWork_geneEnemyMHpMetaField;
 
-void beGeneraterInfoWork_Create(int arg0) {
+void beGeneraterInfoWork_Create(int allocator) {
     beGeneraterInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589478, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589478, allocator);
 }
 
 igMetaObject *beGeneraterInfoWork_GetOrCreateMetaObject(void) {
@@ -36,11 +36,11 @@ int beGeneraterInfoWork_GetVTable(void) {
     char *o;
     int *a1;
     int v0;
-    S_ref *p0, *p1;
+    igObject *p0, *p1;
 
     igObject_InitHeader(u.b);
-    p0 = (S_ref *)&u.b[20];
-    p1 = (S_ref *)&u.b[28];
+    p0 = (igObject *)&u.b[20];
+    p1 = (igObject *)&u.b[28];
     u.vt = (int)&g_beGeneraterInfoWork_vtable[0];
     *(int *)p0 = 0;
     *(int *)p1 = 0;
@@ -58,10 +58,10 @@ int beGeneraterInfoWork_GetVTable(void) {
         }
     }
     if (p0 != 0) {
-        p0 = *(S_ref **)p0;
+        p0 = *(igObject **)p0;
         if (p0 != 0) {
-            p0->f4 = (int)((int) (p0->f4 - 1));
-            if (((unsigned long long) ((long long) p0->f4 << 0x29) >> 0x29) == 0) {
+            p0->_refCount = (int)p0->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)p0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p0);
             }
         }
@@ -144,16 +144,16 @@ static int g_beGeneraterInfoWork_fieldOffsets[] = {
 };
 
 void beGeneraterInfoWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *enemyRamList;
+    void *meta;
 
-    temp_s0 = (void *)g_beGeneraterInfoWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beGeneraterInfoWork_ctorTable, 9);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beGeneraterInfoWork_fieldTable, g_beGeneraterInfoWork_fieldHandles, g_beGeneraterInfoWork_fieldOffsets, temp_s2);
+    meta = (void *)g_beGeneraterInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beGeneraterInfoWork_ctorTable, 9);
+    enemyRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)enemyRamList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
+    ((igRefMetaField *)enemyRamList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beGeneraterInfoWork_fieldTable, g_beGeneraterInfoWork_fieldHandles, g_beGeneraterInfoWork_fieldOffsets, base);
 }
 

@@ -2,9 +2,9 @@ igMetaObject *g_beMovie_metaObject;
 igMetaField *g_beMovie_movieMetaField;
 igMetaField *g_beMovie_playingNameMetaField;
 
-void beMovie_CreateInstance(int arg0) {
+void beMovie_CreateInstance(int allocator) {
     beMovie_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588788, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588788, allocator);
 }
 
 igMetaObject *beMovie_GetOrCreateMetaObject(void) {
@@ -88,16 +88,16 @@ static int g_beMovie_fieldOffsets[] = {
 };
 
 void beMovie_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *movie;
+    void *meta;
 
-    temp_s0 = (void *)g_beMovie_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMovie_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igMovieManager_GetOrCreateMetaObject();
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0);
-    igMetaObject_NameFields(temp_s0, g_beMovie_fieldTable, g_beMovie_fieldHandles, g_beMovie_fieldOffsets, temp_s2);
+    meta = (void *)g_beMovie_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMovie_ctorTable, 2);
+    movie = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)movie)->_metaObject = igMovieManager_GetOrCreateMetaObject();
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 1), 0);
+    igMetaObject_NameFields(meta, g_beMovie_fieldTable, g_beMovie_fieldHandles, g_beMovie_fieldOffsets, base);
 }
 

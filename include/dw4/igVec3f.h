@@ -21,6 +21,8 @@ struct igVec3f {
     }
 
     float operator[](int i) const { return (&x)[i]; }
+    igVec3f operator*(float s) const { return igVec3f(x * s, y * s, z * s); }
+    igVec3f operator+(const igVec3f &o) const { return igVec3f(x + o.x, y + o.y, z + o.z); }
     float dot(const float *o) const { return o[0] * x + o[1] * y + o[2] * z; }
     void set(float x_, float y_, float z_) {
         x = x_;

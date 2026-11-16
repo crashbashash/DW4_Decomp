@@ -1,8 +1,8 @@
 igMetaObject *g_beMeterCtrl_metaObject;
 
-void beMeterCtrl_CreateInstance(int arg0) {
+void beMeterCtrl_CreateInstance(int allocator) {
     beMeterCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588F30, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588F30, allocator);
 }
 
 igMetaObject *beMeterCtrl_GetOrCreateMetaObject(void) {
@@ -14,13 +14,13 @@ igMetaObject *beMeterCtrl_GetOrCreateMetaObject(void) {
 
 void *beMeterCtrl_GetMetaObject(void) {
     unsigned char b;
-    if (((void * *)&g_beMeterCtrl_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)&g_beMeterCtrl_metaObject)[0]) + 36) & 4) != 0;
+    if (g_beMeterCtrl_metaObject != 0) {
+        b = (g_beMeterCtrl_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beMeterCtrl_EnsureRegistered();
 done:
-    return ((void * *)&g_beMeterCtrl_metaObject)[0];
+    return g_beMeterCtrl_metaObject;
 }
 
 int beMeterCtrl_GetVTable(void) {

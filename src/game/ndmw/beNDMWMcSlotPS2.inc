@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWMcSlotPS2_metaObject;
 
-void beNDMWMcSlotPS2_Create(int arg0) {
+void beNDMWMcSlotPS2_Create(int allocator) {
     beNDMWMcSlotPS2_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWMcSlotPS2_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMcSlotPS2_metaObject, allocator);
 }
 
 igMetaObject *beNDMWMcSlotPS2_GetReadyMetaObject(void) {

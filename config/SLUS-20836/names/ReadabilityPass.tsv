@@ -990,3 +990,10 @@
 0x00384540	beGenerater_SpawnEnemies	game
 0x00384800	beGenerater_DropItemsForDead	game
 0x00359900	igSmartPointer_beMatCtrlInfoWork_Destruct	game
+0x0015c230	igParticleArray_Update	engine
+0x0015db00	igPointSpriteExt_SetSize	engine
+0x001931b0	igVec4f_PackColor	engine
+0x00166d40	igVisualContext_FindFirst	engine
+0x003a3bf0	ParticleArray_UsesBaseUpdate	game
+0x003a3c10	ParticleArray_Update	game
+0x00396340	beModelCtrl__OnGenerateFromParent	game

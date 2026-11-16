@@ -101,21 +101,21 @@ static int g_beMatCtrlSearch_fieldOffsets[] = {
 };
 
 void beMatCtrlSearch_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *memberList;
+    void *parent;
+    void *meta;
 
-    temp_s0 = (void *)g_beMatCtrlSearch_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMatCtrlSearch_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beMatCtrlSearch_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    ((igMetaField *)temp_s1)->_persistent = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beMatCtrlSearchList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beMatCtrlSearch_fieldTable, g_beMatCtrlSearch_fieldHandles, g_beMatCtrlSearch_fieldOffsets, temp_s2);
+    meta = (void *)g_beMatCtrlSearch_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMatCtrlSearch_ctorTable, 5);
+    parent = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)parent)->_metaObject = (int)beMatCtrlSearch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)parent)->_refCounted = 0;
+    ((igMetaField *)parent)->_persistent = 0;
+    memberList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)memberList)->_metaObject = (int)beMatCtrlSearchList_GetOrCreateMetaObject();
+    ((igRefMetaField *)memberList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beMatCtrlSearch_fieldTable, g_beMatCtrlSearch_fieldHandles, g_beMatCtrlSearch_fieldOffsets, base);
 }
 

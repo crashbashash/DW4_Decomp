@@ -20,7 +20,7 @@ int beAction2Data_GetVTable(void) {
     union U_36da90 u;
     int temp_s1;
     void **q2;
-    S_ref *q3;
+    igObject *q3;
     int *temp_a1;
     int temp_v0;
     void *temp_a0;
@@ -30,15 +30,15 @@ int beAction2Data_GetVTable(void) {
     q2 = &u.p[2];
     *q2 = 0;
     u.w[0] = (int)(&g_beAction2Data_vtable[0]);
-    q3 = (S_ref *)&u.p[3];
+    q3 = (igObject *)&u.p[3];
     *(int *)q3 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beAction2Data_vtable[0]);
     if (q3 != 0) {
-        q3 = *(S_ref **)q3;
+        q3 = *(igObject **)q3;
         if (q3 != 0) {
-            q3->f4 = (int)((int) (q3->f4 - 1));
-            if (((unsigned long long) ((long long) q3->f4 << 0x29) >> 0x29) == 0) {
+            q3->_refCount = (int)q3->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q3->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q3);
             }
         }
@@ -101,17 +101,17 @@ static int g_beAction2Data_fieldOffsets[] = {
 };
 
 void beAction2Data_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *comList;
+    void *meta;
 
-    temp_s0 = (void *)g_beAction2Data_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beAction2Data_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beAction2Data_fieldTable, g_beAction2Data_fieldHandles, g_beAction2Data_fieldOffsets, temp_s2);
+    meta = (void *)g_beAction2Data_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beAction2Data_ctorTable, 1);
+    comList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)comList)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)comList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beAction2Data_fieldTable, g_beAction2Data_fieldHandles, g_beAction2Data_fieldOffsets, base);
 }
 
 igMetaEnum *g_beAction2Data_msgActionMetaEnum;

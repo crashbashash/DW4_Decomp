@@ -9,13 +9,13 @@ igMetaObject *beMatCtrlSearchList_GetOrCreateMetaObject(void) {
 
 void *beMatCtrlSearchList_GetMetaObject(void) {
     unsigned char b;
-    if (((void * *)&g_beMatCtrlSearchList_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)&g_beMatCtrlSearchList_metaObject)[0]) + 36) & 4) != 0;
+    if (g_beMatCtrlSearchList_metaObject != 0) {
+        b = (g_beMatCtrlSearchList_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beMatCtrlSearchList_EnsureRegistered();
 done:
-    return ((void * *)&g_beMatCtrlSearchList_metaObject)[0];
+    return g_beMatCtrlSearchList_metaObject;
 }
 
 int beMatCtrlSearchList_GetVTable(void) {

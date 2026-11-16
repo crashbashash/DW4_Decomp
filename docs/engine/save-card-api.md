@@ -3,13 +3,19 @@
 The Bec save layer talks to the PS2 memory card through a family of request objects. Each is an
 igObject subclass of `beSaveApi` (`beSvStartApi`, `beSvEndApi`, `beSvGetFreeSizeApi`,
 `beSvUseCheckApi`, `beSvFormatApi`, `beSvFileFindApi`, `beSvFileMakeApi`, `beSvReadMediaApi`,
-`beSvWriteMediaApi`) driven through three virtual slots:
+`beSvWriteMediaApi`) driven through these virtual slots:
 
 | Slot | Role |
 | --- | --- |
 | 21 | start: copy the target connection (`beSvDeliver::_targetConnect`) and platform data, clear the state words `_st0`..`_st3`, set `_result = 1` and raise `g_svCardBusy` |
 | 22 | poll once per frame; returns 1 when finished, 0 while a card request is in flight |
 | 23 | report: copy `_result` into the `beSvDeliver` and set `_isEndOperat` |
+| 24 | `beSaveApi_Checksum(int *data, int size)`, which the base class defines: the sum, with wrap-around, of the 32-bit words after the leading checksum word, `(size - 4) / 4` of them |
+
+A save image is the checksum word, the save version, then the game data. `beSvFileMakeApi_Start` builds it in a
+`beSaveMemoryObj` of the platform's data size and stores the checksum (over that size) in word 0; the load path
+recomputes it for each copy of the image and compares. `size` is a signed `int` because the reflected `_dataSize`
+field is one.
 
 Slot 7 of `beSaveApi` (`beSaveApi_userConstruct`) is shared by the UseCheck, Format and
 FileFind requests, which do not override it.

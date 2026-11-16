@@ -14,9 +14,9 @@ igMetaField *g_beNDMWLoadSavePlWork_sysStat2MetaField;
 igMetaField *g_beNDMWLoadSavePlWork_sysStat3MetaField;
 igMetaField *g_beNDMWLoadSavePlWork_sysCount0MetaField;
 
-void beNDMWLoadSavePlWork_Create(int arg0) {
+void beNDMWLoadSavePlWork_Create(int allocator) {
     beNDMWLoadSavePlWork_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadSavePlWork_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadSavePlWork_metaObject, allocator);
 }
 
 void *beNDMWLoadSavePlWork_ResolveMetaObject(void) {
@@ -130,18 +130,18 @@ static int g_beNDMWLoadSavePlWork_fieldOffsets[] = {
 };
 
 void beNDMWLoadSavePlWork_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *haveSaveData;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWLoadSavePlWork_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWLoadSavePlWork_ctorTable, 0xE);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWLoadSlotPlayer_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beNDMWLoadSavePlWork_fieldTable, g_beNDMWLoadSavePlWork_fieldHandles, g_beNDMWLoadSavePlWork_fieldOffsets, temp_s2);
+    meta = g_beNDMWLoadSavePlWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWLoadSavePlWork_ctorTable, 0xE);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
+    haveSaveData = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)haveSaveData)->_metaObject = (int)beNDMWLoadSlotPlayer_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)haveSaveData)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beNDMWLoadSavePlWork_fieldTable, g_beNDMWLoadSavePlWork_fieldHandles, g_beNDMWLoadSavePlWork_fieldOffsets, base);
 }
 

@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWLoadIntf2DegiStateCtrl_metaObject;
 int g_beNDMWLoadIntf2DegiStateCtrl_nameExternalEnumStorage;
 igMetaField *g_beNDMWLoadIntf2DegiStateCtrl_statDataListMetaField;
 
-void beNDMWLoadIntf2DegiStateCtrl_Create(int arg0) {
+void beNDMWLoadIntf2DegiStateCtrl_Create(int allocator) {
     beNDMWLoadIntf2DegiStateCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiStateCtrl_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadIntf2DegiStateCtrl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2DegiStateCtrl_GetOrCreateMetaObject(void) {
@@ -109,31 +109,31 @@ static int g_beNDMWLoadIntf2DegiStateCtrl_fieldOffsets[] = {
 };
 
 void beNDMWLoadIntf2DegiStateCtrl_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    igObjectRefMetaField *temp_s0;
-    igMetaObject *temp_s1;
-    igStringMetaField *temp_v0_2;
+    int base;
+    int nameIndex;
+    void **inheritedName;
+    igObjectRefMetaField *statDataList;
+    igMetaObject *meta;
+    igStringMetaField *nameField;
 
     /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
 
-    temp_s1 = (igMetaObject *)(g_beNDMWLoadIntf2DegiStateCtrl_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2DegiStateCtrl_ctorTable, 1);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
-    temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "DEGISTATECTRL");
-    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2DegiStateCtrl_nameExternalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = (int)((int) (temp_v0_2->_refCount - 1));
-    if (((unsigned long long) ((long long) (int) temp_v0_2->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (igMetaObject *)(g_beNDMWLoadIntf2DegiStateCtrl_metaObject);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2DegiStateCtrl_ctorTable, 1);
+    inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
+    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(nameField, "DEGISTATECTRL");
+    nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2DegiStateCtrl_nameExternalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
+    nameField->_refCount = nameField->_refCount - 1;
+    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy(nameField);
     }
-    temp_s0 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    temp_s0->_metaObject = (int)beNDMWLoadIntf2DegiStateList_GetOrCreateMetaObject();
-    temp_s0->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2DegiStateCtrl_fieldTable, g_beNDMWLoadIntf2DegiStateCtrl_fieldHandles, g_beNDMWLoadIntf2DegiStateCtrl_fieldOffsets, temp_s2);
+    statDataList = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
+    statDataList->_metaObject = (int)beNDMWLoadIntf2DegiStateList_GetOrCreateMetaObject();
+    statDataList->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadIntf2DegiStateCtrl_fieldTable, g_beNDMWLoadIntf2DegiStateCtrl_fieldHandles, g_beNDMWLoadIntf2DegiStateCtrl_fieldOffsets, base);
 }
 

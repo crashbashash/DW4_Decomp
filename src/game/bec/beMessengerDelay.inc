@@ -29,7 +29,7 @@ int beMessengerDelay_GetVTable(void) {
     u.w[10] = 0;
     temp_s3 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beMessengerDelay_vtable[0]);
-    FUN_00357a90((void **)&u.w[10], -1);
+    FUN_00357a90((igSmartPointer<igObject> *)&u.w[10], -1);
     igStringRef_Destruct(&u.w[9], -1);
     igStringRef_Destruct(&u.w[7], -1);
     igStringRef_Destruct(&u.w[6], -1);
@@ -100,16 +100,16 @@ static int g_beMessengerDelay_fieldOffsets[] = {
 };
 
 void beMessengerDelay_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *argData;
+    void *meta;
 
-    temp_s0 = (void *)g_beMessengerDelay_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMessengerDelay_ctorTable, 7);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beMessengerArgData_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beMessengerDelay_fieldTable, g_beMessengerDelay_fieldHandles, g_beMessengerDelay_fieldOffsets, temp_s2);
+    meta = (void *)g_beMessengerDelay_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMessengerDelay_ctorTable, 7);
+    argData = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)argData)->_metaObject = (int)beMessengerArgData_GetOrCreateMetaObject();
+    ((igRefMetaField *)argData)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beMessengerDelay_fieldTable, g_beMessengerDelay_fieldHandles, g_beMessengerDelay_fieldOffsets, base);
 }
 

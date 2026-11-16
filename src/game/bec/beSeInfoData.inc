@@ -68,15 +68,15 @@ static int g_beSeInfoData_fieldOffsets[] = {
 };
 
 void beSeInfoData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *actionList;
+    void *meta;
 
-    temp_s0 = (void *)g_beSeInfoData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSeInfoData_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSeDataList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beSeInfoData_fieldTable, g_beSeInfoData_fieldHandles, g_beSeInfoData_fieldOffsets, temp_s2);
+    meta = (void *)g_beSeInfoData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSeInfoData_ctorTable, 1);
+    actionList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)actionList)->_metaObject = (int)beSeDataList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beSeInfoData_fieldTable, g_beSeInfoData_fieldHandles, g_beSeInfoData_fieldOffsets, base);
 }
 

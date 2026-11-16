@@ -89,20 +89,20 @@ static int g_beNDMWAfsStageLoad_fieldOffsets[] = {
 };
 
 void beNDMWAfsStageLoad_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    igMetaObject *temp_s0;
+    int base;
+    void *insight;
+    void *stage;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWAfsStageLoad_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWAfsStageLoad_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igInsightCore_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igNamedObject_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWAfsStageLoad_fieldTable, g_beNDMWAfsStageLoad_fieldHandles, g_beNDMWAfsStageLoad_fieldOffsets, temp_s2);
+    meta = g_beNDMWAfsStageLoad_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWAfsStageLoad_ctorTable, 2);
+    insight = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_refCounted = 0;
+    stage = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)stage)->_metaObject = igNamedObject_GetOrCreateMetaObject();
+    ((igRefMetaField *)stage)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWAfsStageLoad_fieldTable, g_beNDMWAfsStageLoad_fieldHandles, g_beNDMWAfsStageLoad_fieldOffsets, base);
 }
 

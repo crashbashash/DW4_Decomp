@@ -12,9 +12,9 @@ igMetaField *g_beFileListInfoManager_importantInfoListMetaField;
 igMetaField *g_beFileListInfoManager_loadedMetaField;
 igMetaField *g_beFileListInfoManager_procMetaField;
 
-void beFileListInfoManager_CreateInstance(int arg0) {
+void beFileListInfoManager_CreateInstance(int allocator) {
     beFileListInfoManager_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5896F8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5896F8, allocator);
 }
 
 igMetaObject *beFileListInfoManager_GetOrCreateMetaObject(void) {
@@ -142,45 +142,45 @@ static int g_beFileListInfoManager_fieldOffsets[] = {
 };
 
 void beFileListInfoManager_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_s2_8;
-    void *temp_s1;
+    int base;
+    void *system;
+    void *messenger;
+    void *sceneInfoManager;
+    void *fnames;
+    void *infoList;
+    void *dirList;
+    void *readInfoList;
+    void *importantInfoList;
+    void *meta;
 
-    temp_s1 = (void *)g_beFileListInfoManager_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beFileListInfoManager_ctorTable, 0xC);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_2)->_refCounted = 0;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_3)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), -1);
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igStringRefList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igDirectoryList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_7)->_construct = 1;
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_beFileListInfoManager_fieldTable, g_beFileListInfoManager_fieldHandles, g_beFileListInfoManager_fieldOffsets, temp_s0);
+    meta = (void *)g_beFileListInfoManager_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beFileListInfoManager_ctorTable, 0xC);
+    system = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_refCounted = 0;
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    sceneInfoManager = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)sceneInfoManager)->_metaObject = igViewerSceneInfoManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)sceneInfoManager)->_refCounted = 0;
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), -1);
+    fnames = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)fnames)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igRefMetaField *)fnames)->_construct = 1;
+    infoList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)infoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)infoList)->_construct = 1;
+    dirList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)dirList)->_metaObject = igDirectoryList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dirList)->_construct = 1;
+    readInfoList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)readInfoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)readInfoList)->_construct = 1;
+    importantInfoList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)importantInfoList)->_metaObject = igInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)importantInfoList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beFileListInfoManager_fieldTable, g_beFileListInfoManager_fieldHandles, g_beFileListInfoManager_fieldOffsets, base);
 }
 

@@ -21,7 +21,7 @@ int beModelCtrlInfoDataTrc_GetVTable(void) {
     union U_3532e0 u;
     int temp_s1;
     void ** q0;
-    S_ref * q1;
+    igObject * q1;
     int *temp_a1;
     int temp_v0;
     void *temp_a0;
@@ -31,15 +31,15 @@ int beModelCtrlInfoDataTrc_GetVTable(void) {
     q0 = (void **)&u.b[8];
     *q0 = 0;
     u.vt = (int)(&g_beModelCtrlInfoDataTrc_vtable[0]);
-    q1 = (S_ref *)&u.b[16];
+    q1 = (igObject *)&u.b[16];
     *(int *)q1 = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)(&g_beModelCtrlInfoDataTrc_vtable[0]);
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)q1->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }
@@ -102,28 +102,28 @@ static int g_beModelCtrlInfoDataTrc_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoDataTrc_InitFields(void) {
-    int temp_s2;
-    int temp_s3;
-    void **temp_v0;
-    void *temp_s0;
-    igMetaObject *temp_s1;
-    igStringMetaField *temp_v0_2;
+    int base;
+    int index;
+    void **found;
+    void *recorderNode;
+    void *meta;
+    igStringMetaField *clone;
 
-    temp_s1 = (igMetaObject *)(((void * *)&g_beModelCtrlInfoDataTrc_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoDataTrc_ctorTable, 1);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
-    temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "TRC");
-    temp_v0_2->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataTrc_nameStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = (int)((int) ((int)temp_v0_2->_refCount - 1));
-    if (((unsigned long long) ((long long) (int)temp_v0_2->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+    meta = (igMetaObject *)(((void * *)&g_beModelCtrlInfoDataTrc_metaObject)[0]);
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataTrc_ctorTable, 1);
+    found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
+    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    igStringMetaField_SetDefaultText(clone, "TRC");
+    clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataTrc_nameStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
+    clone->_refCount = (int)clone->_refCount - 1;
+    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(clone);
     }
-    temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = igTransformRecorder_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoDataTrc_fieldTable, g_beModelCtrlInfoDataTrc_fieldHandles, g_beModelCtrlInfoDataTrc_fieldOffsets, temp_s2);
+    recorderNode = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)recorderNode)->_metaObject = igTransformRecorder_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoDataTrc_fieldTable, g_beModelCtrlInfoDataTrc_fieldHandles, g_beModelCtrlInfoDataTrc_fieldOffsets, base);
 }
 

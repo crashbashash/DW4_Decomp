@@ -1,9 +1,9 @@
 igMetaObject *g_beWeapon_metaObject;
 igMetaField *g_beWeapon_attachDataListMetaField;
 
-void beWeapon_CreateInstance(int arg0) {
+void beWeapon_CreateInstance(int allocator) {
     beWeapon_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587A68, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587A68, allocator);
 }
 
 igMetaObject *beWeapon_GetOrCreateMetaObject(void) {
@@ -32,27 +32,22 @@ int beWeapon_GetVTable(void) {
     u.w[8] = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beWeapon_vtable[0]);
-    beWeapon_igSmartPointer_igObject_Destruct((void **)(&u.w[8]), (short)(-1));
+    beWeapon_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)(&u.w[8]), (short)(-1));
     FUN_0033f5e0((O_33f5e0 *)(&u.w[0]), (short)0);
     return temp_s0;
 }
 
-void **FUN_0033f560(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_0033f560(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 O_33f5e0 *FUN_0033f5e0(O_33f5e0 *arg0, short arg1) {
@@ -96,22 +91,17 @@ O_33f5e0 *FUN_0033f5e0(O_33f5e0 *arg0, short arg1) {
     return arg0;
 }
 
-void **beWeapon_igSmartPointer_igObject_Destruct(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *beWeapon_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beWeapon_EnsureRegistered(void)
@@ -161,15 +151,15 @@ static int g_beWeapon_fieldOffsets[] = {
 };
 
 void beWeapon_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *attachDataList;
+    void *meta;
 
-    temp_s0 = (void *)g_beWeapon_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beWeapon_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beWeaponAttachDataList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beWeapon_fieldTable, g_beWeapon_fieldHandles, g_beWeapon_fieldOffsets, temp_s2);
+    meta = (void *)g_beWeapon_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beWeapon_ctorTable, 1);
+    attachDataList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)attachDataList)->_metaObject = (int)beWeaponAttachDataList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beWeapon_fieldTable, g_beWeapon_fieldHandles, g_beWeapon_fieldOffsets, base);
 }
 

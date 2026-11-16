@@ -3,9 +3,9 @@ igMetaField *g_beSvGetFreeSizeApi_memNeedMetaField;
 igMetaField *g_beSvGetFreeSizeApi_memCapaMetaField;
 igMetaField *g_beSvGetFreeSizeApi_fileCapaMetaField;
 
-void beSvGetFreeSizeApi_Create(int arg0) {
+void beSvGetFreeSizeApi_Create(int allocator) {
     beSvGetFreeSizeApi_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588200, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588200, allocator);
 }
 
 igMetaObject *beSvGetFreeSizeApi_GetMetaObject(void) {
@@ -116,12 +116,12 @@ static int g_beSvGetFreeSizeApi_fieldOffsets[] = {
 };
 
 void beSvGetFreeSizeApi_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beSvGetFreeSizeApi_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSvGetFreeSizeApi_ctorTable, 3);
-    igMetaObject_NameFields(temp_s0, g_beSvGetFreeSizeApi_fieldTable, g_beSvGetFreeSizeApi_fieldHandles, g_beSvGetFreeSizeApi_fieldOffsets, temp_s1);
+    meta = (void *)g_beSvGetFreeSizeApi_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSvGetFreeSizeApi_ctorTable, 3);
+    igMetaObject_NameFields(meta, g_beSvGetFreeSizeApi_fieldTable, g_beSvGetFreeSizeApi_fieldHandles, g_beSvGetFreeSizeApi_fieldOffsets, base);
 }
 

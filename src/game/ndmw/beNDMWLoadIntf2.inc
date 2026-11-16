@@ -4,9 +4,9 @@ igMetaField *g_beNDMWLoadIntf2_systemMetaField;
 igMetaField *g_beNDMWLoadIntf2_kindHardMetaField;
 igMetaField *g_beNDMWLoadIntf2_difficultMaxMetaField;
 
-void beNDMWLoadIntf2_CreateInstance(int arg0) {
+void beNDMWLoadIntf2_CreateInstance(int allocator) {
     beNDMWLoadIntf2_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWLoadIntf2_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadIntf2_metaObject, allocator);
 }
 
 igMetaObject *beNDMWLoadIntf2_GetOrCreateMetaObject(void) {
@@ -95,19 +95,19 @@ static int g_beNDMWLoadIntf2_fieldOffsets[] = {
 };
 
 void beNDMWLoadIntf2_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *system;
+    void *padManager;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWLoadIntf2_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWLoadIntf2_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = bePadManager_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = beSystem_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beNDMWLoadIntf2_fieldTable, g_beNDMWLoadIntf2_fieldHandles, g_beNDMWLoadIntf2_fieldOffsets, temp_s2);
+    meta = g_beNDMWLoadIntf2_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWLoadIntf2_ctorTable, 4);
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)padManager)->_metaObject = bePadManager_GetOrCreateMetaObject();
+    system = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)system)->_metaObject = beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beNDMWLoadIntf2_fieldTable, g_beNDMWLoadIntf2_fieldHandles, g_beNDMWLoadIntf2_fieldOffsets, base);
 }
 

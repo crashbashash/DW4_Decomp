@@ -1,9 +1,9 @@
 igMetaObject *g_beSeCtl_metaObject;
 igMetaField *g_beSeCtl_sndMngMetaField;
 
-void beSeCtl_CreateInstance(int arg0) {
+void beSeCtl_CreateInstance(int allocator) {
     beSeCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587FE8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587FE8, allocator);
 }
 
 igMetaObject *beSeCtl_GetOrCreateMetaObject(void) {
@@ -28,7 +28,7 @@ int beSeCtl_GetVTable(void) {
     union U_3465d0 u;
     int temp_s1;
     void **q2;
-    S_ref *q3;
+    igObject *q3;
     int *temp_a1;
     int temp_v0;
     void *temp_v1;
@@ -37,16 +37,16 @@ int beSeCtl_GetVTable(void) {
     u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     q2 = &u.p[2];
     *q2 = 0;
-    q3 = (S_ref *)&u.b[24];
+    q3 = (igObject *)&u.b[24];
     *(int *)q3 = 0;
     u.w[0] = (int)(&g_beSeCtl_vtable[0]);
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
     if (q3 != 0) {
-        q3 = *(S_ref **)q3;
+        q3 = *(igObject **)q3;
         if (q3 != 0) {
-            q3->f4 = (int)((int) (q3->f4 - 1));
-            if (((unsigned long long) ((long long) q3->f4 << 0x29) >> 0x29) == 0) {
+            q3->_refCount = (int)q3->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q3->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q3);
             }
         }
@@ -109,16 +109,16 @@ static int g_beSeCtl_fieldOffsets[] = {
 };
 
 void beSeCtl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *sndMng;
+    void *meta;
 
-    temp_s0 = (void *)g_beSeCtl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSeCtl_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSound_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beSeCtl_fieldTable, g_beSeCtl_fieldHandles, g_beSeCtl_fieldOffsets, temp_s2);
+    meta = (void *)g_beSeCtl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSeCtl_ctorTable, 1);
+    sndMng = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)sndMng)->_metaObject = (int)beSound_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)sndMng)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beSeCtl_fieldTable, g_beSeCtl_fieldHandles, g_beSeCtl_fieldOffsets, base);
 }
 

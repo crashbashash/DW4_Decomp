@@ -3,7 +3,7 @@ igMetaObject *g_beModelCtrlMSGBOX_metaObject;
 void *beModelCtrlMSGBOX_GetMetaObject(void) {
     unsigned char b;
     if (g_beModelCtrlMSGBOX_metaObject != 0) {
-        b = (*(int *)((char *)(g_beModelCtrlMSGBOX_metaObject) + 36) & 4) != 0;
+        b = (g_beModelCtrlMSGBOX_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beModelCtrlMSGBOX_EnsureRegistered();

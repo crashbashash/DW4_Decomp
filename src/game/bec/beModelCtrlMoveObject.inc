@@ -9,9 +9,9 @@ igMetaField *g_beModelCtrlMoveObject_isSeqStopMetaField;
 igMetaField *g_beModelCtrlMoveObject_stopValueMetaField;
 igMetaField *g_beModelCtrlMoveObject_stopFrameMetaField;
 
-void beModelCtrlMoveObject_Create(int arg0) {
+void beModelCtrlMoveObject_Create(int allocator) {
     beModelCtrlMoveObject_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588B48, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588B48, allocator);
 }
 
 igMetaObject *beModelCtrlMoveObject_GetMetaObject(void) {
@@ -103,16 +103,16 @@ static int g_beModelCtrlMoveObject_fieldOffsets[] = {
 };
 
 void beModelCtrlMoveObject_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlMoveObject_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlMoveObject_ctorTable, 9);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1))), 0.0f);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3))), 0.0f);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4))), 0.0f);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5))), 0.0f);
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlMoveObject_fieldTable, g_beModelCtrlMoveObject_fieldHandles, g_beModelCtrlMoveObject_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlMoveObject_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlMoveObject_ctorTable, 9);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 1))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 3))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 4))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 5))), 0.0f);
+    igMetaObject_NameFields(meta, g_beModelCtrlMoveObject_fieldTable, g_beModelCtrlMoveObject_fieldHandles, g_beModelCtrlMoveObject_fieldOffsets, base);
 }
 

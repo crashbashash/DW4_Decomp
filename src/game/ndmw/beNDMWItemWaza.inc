@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWItemWaza_metaObject;
 igMetaField *g_beNDMWItemWaza_baseNoMetaField;
 
-void beNDMWItemWaza_Create(int arg0) {
+void beNDMWItemWaza_Create(int allocator) {
     beNDMWItemWaza_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void) {
@@ -67,12 +67,12 @@ static int g_beNDMWItemWaza_fieldOffsets[] = {
 };
 
 void beNDMWItemWaza_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWItemWaza_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWItemWaza_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWItemWaza_fieldTable, g_beNDMWItemWaza_fieldHandles, g_beNDMWItemWaza_fieldOffsets, temp_s1);
+    meta = g_beNDMWItemWaza_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWItemWaza_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beNDMWItemWaza_fieldTable, g_beNDMWItemWaza_fieldHandles, g_beNDMWItemWaza_fieldOffsets, base);
 }
 

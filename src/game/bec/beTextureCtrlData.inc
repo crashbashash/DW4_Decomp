@@ -89,15 +89,15 @@ static int g_beTextureCtrlData_fieldOffsets[] = {
 };
 
 void beTextureCtrlData_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *tex;
+    void *meta;
 
-    temp_s0 = (void *)g_beTextureCtrlData_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beTextureCtrlData_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igTextureAttr_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beTextureCtrlData_fieldTable, g_beTextureCtrlData_fieldHandles, g_beTextureCtrlData_fieldOffsets, temp_s2);
+    meta = (void *)g_beTextureCtrlData_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beTextureCtrlData_ctorTable, 1);
+    tex = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)tex)->_metaObject = igTextureAttr_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beTextureCtrlData_fieldTable, g_beTextureCtrlData_fieldHandles, g_beTextureCtrlData_fieldOffsets, base);
 }
 

@@ -1,15 +1,15 @@
 igMetaObject *g_beDataObjBoolList_metaObject;
 igMetaField *g_beDataObjBoolList_dataMetaField;
 
-void beDataObjBoolList_Create(int arg0) {
+void beDataObjBoolList_Create(int allocator) {
     beDataObjBoolList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589888, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589888, allocator);
 }
 
 void *beDataObjBoolList_GetMetaObject(void) {
     unsigned char b;
     if (g_beDataObjBoolList_metaObject != 0) {
-        b = (*(int *)((char *)(g_beDataObjBoolList_metaObject) + 36) & 4) != 0;
+        b = (g_beDataObjBoolList_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beDataObjBoolList_EnsureRegistered();
@@ -20,7 +20,7 @@ done:
 int beDataObjBoolList_GetVTable(void) {
     union U_364dc0 u;
     int temp_s0;
-    S_ref *q0;
+    igObject *q0;
     char *q1;
     int *temp_v1;
     int *temp_a1;
@@ -30,15 +30,15 @@ int beDataObjBoolList_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_beDataObjBoolList_vtable[0];
-    q0 = (S_ref *)&u.b[12];
+    q0 = (igObject *)&u.b[12];
     *(int *)q0 = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beDataObjBoolList_vtable[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)q0->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }
@@ -101,16 +101,16 @@ static int g_beDataObjBoolList_fieldOffsets[] = {
 };
 
 void beDataObjBoolList_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *data;
+    void *meta;
 
-    temp_s0 = (void *)g_beDataObjBoolList_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beDataObjBoolList_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beDataObjBoolList_fieldTable, g_beDataObjBoolList_fieldHandles, g_beDataObjBoolList_fieldOffsets, temp_s2);
+    meta = (void *)g_beDataObjBoolList_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beDataObjBoolList_ctorTable, 1);
+    data = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)data)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igRefMetaField *)data)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beDataObjBoolList_fieldTable, g_beDataObjBoolList_fieldHandles, g_beDataObjBoolList_fieldOffsets, base);
 }
 

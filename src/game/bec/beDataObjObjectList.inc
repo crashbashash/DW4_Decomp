@@ -1,9 +1,9 @@
 igMetaObject *g_beDataObjObjectList_metaObject;
 igMetaField *g_beDataObjObjectList_dataMetaField;
 
-void beDataObjObjectList_Create(int arg0) {
+void beDataObjObjectList_Create(int allocator) {
     beDataObjObjectList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589858, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589858, allocator);
 }
 
 void *beDataObjObjectList_GetMetaObject(void) {
@@ -73,16 +73,16 @@ static int g_beDataObjObjectList_fieldOffsets[] = {
 };
 
 void beDataObjObjectList_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *data;
+    void *meta;
 
-    temp_s0 = (void *)g_beDataObjObjectList_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beDataObjObjectList_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beDataObjObjectList_fieldTable, g_beDataObjObjectList_fieldHandles, g_beDataObjObjectList_fieldOffsets, temp_s2);
+    meta = (void *)g_beDataObjObjectList_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beDataObjObjectList_ctorTable, 1);
+    data = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)data)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)data)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beDataObjObjectList_fieldTable, g_beDataObjObjectList_fieldHandles, g_beDataObjObjectList_fieldOffsets, base);
 }
 

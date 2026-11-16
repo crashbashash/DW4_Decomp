@@ -3,9 +3,9 @@ igMetaField *g_beCriSndf_reqMetaField;
 igMetaField *g_beCriSndf_seqMetaField;
 igMetaField *g_beCriSndf_isPlayingMetaField;
 
-void beCriSndf_Create(int arg0) {
+void beCriSndf_Create(int allocator) {
     beCriSndf_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589AB0, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589AB0, allocator);
 }
 
 igMetaObject *beCriSndf_GetOrCreateMetaObject(void) {
@@ -82,12 +82,12 @@ static int g_beCriSndf_fieldOffsets[] = {
 };
 
 void beCriSndf_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beCriSndf_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beCriSndf_ctorTable, 3);
-    igMetaObject_NameFields(temp_s0, g_beCriSndf_fieldTable, g_beCriSndf_fieldHandles, g_beCriSndf_fieldOffsets, temp_s1);
+    meta = (void *)g_beCriSndf_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beCriSndf_ctorTable, 3);
+    igMetaObject_NameFields(meta, g_beCriSndf_fieldTable, g_beCriSndf_fieldHandles, g_beCriSndf_fieldOffsets, base);
 }
 

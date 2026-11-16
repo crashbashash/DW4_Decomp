@@ -50,9 +50,9 @@ igMetaField *g_beModelCtrlInfoWork_hitParentRamNoMetaField;
 igMetaField *g_beModelCtrlInfoWork_subCommandMetaField;
 igMetaField *g_beModelCtrlInfoWork_baseAABoxMetaField;
 
-void beModelCtrlInfoWork_Create(int arg0) {
+void beModelCtrlInfoWork_Create(int allocator) {
     beModelCtrlInfoWork_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588888, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588888, allocator);
 }
 
 igMetaObject *beModelCtrlInfoWork_GetOrCreateMetaObject(void) {
@@ -118,123 +118,108 @@ void *FUN_00350410(beNDMWMdlPlayer2InfoWork *arg0, long long arg1) {
     return arg0;
 }
 
-void **igSmartPointer_beDataObjInt_Destruct(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_00350b90(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
-        }
-        if (flag > 0) __dl__FPv(self);
-    }
-    return (void **)self;
-}
-
-void **FUN_00350c10(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-O *FUN_00350c90(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_00350d10(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_00350d90(void **arg0, short arg1) {
-    S_temp_a0_350d90 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_350d90 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_00350b90(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_00350e10(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
-        }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if (delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
 
-void **FUN_00350e90(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_00350c10(igSmartPointer<igObject> *self, long long delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_00350c90(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_00350d10(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_00350d90(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_00350e10(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
+}
+
+igSmartPointer<igObject> *FUN_00350e90(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
+    }
+    return self;
 }
 
 int *FUN_00350f10(int *p)
@@ -536,81 +521,81 @@ static int g_beModelCtrlInfoWork_fieldOffsets[] = {
 };
 
 void beModelCtrlInfoWork_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_10;
-    void *temp_s2_11;
-    void *temp_s2_12;
-    void *temp_s2_13;
-    void *temp_s2_14;
-    void *temp_s2_15;
-    void *temp_s2_16;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_s2_8;
-    void *temp_s2_9;
-    int temp_s1;
-    void *temp_s0;
+    void *mHp;
+    void *posLockTrc;
+    void *moveObjectList;
+    void *rideOnData;
+    void *debugHitBoxNode;
+    void *hitBody;
+    void *subCommand;
+    void *baseAABox;
+    void *hp;
+    void *comData;
+    void *labelSeqList;
+    void *labelNameList;
+    void *labelOffsetList;
+    void *pdMoveDataList;
+    void *aI;
+    void *posLockNode;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlInfoWork_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlInfoWork_ctorTable, 0x32);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), -1);
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)beModelCtrlData_GetOrCreateMetaObject();
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igStringRefList_GetOrCreateMetaObject();
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igStringRefList_GetOrCreateMetaObject();
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC), 0);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF), 1);
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igFloatList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_7)->_construct = 1;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12), 0);
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x13));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)beModelCtrlInfoAI_GetOrCreateMetaObject();
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x16), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x17), 0);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x1C), 0.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x20), -1.0f);
-    temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x22));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
-    temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x23));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)beModelCtrlInfoDataTrc_GetOrCreateMetaObject();
-    temp_s2_11 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x27));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)beModelCtrlMoveObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_11)->_construct = 1;
-    temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x28));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)beModelCtrlInfoRideOn_GetOrCreateMetaObject();
-    temp_s2_13 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x29));
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = igGroup_GetOrCreateMetaObject();
-    temp_s2_14 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2A));
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)beModelCtrlInfoHitBody_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2B), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2C), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2D), 1);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2E), 0);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x2F), 0);
-    temp_s2_15 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x30));
-    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = (int)beModelCtrlSubCom_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_15)->_construct = 1;
-    temp_s2_16 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x31));
-    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = igAABox_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlInfoWork_fieldTable, g_beModelCtrlInfoWork_fieldHandles, g_beModelCtrlInfoWork_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlInfoWork_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlInfoWork_ctorTable, 0x32);
+    mHp = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)mHp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
+    ((igRefMetaField *)mHp)->_construct = 1;
+    hp = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)hp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
+    ((igRefMetaField *)hp)->_construct = 1;
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), -1);
+    comData = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)comData)->_metaObject = (int)beModelCtrlData_GetOrCreateMetaObject();
+    labelSeqList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)labelSeqList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    labelNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)labelNameList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    labelOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)labelOffsetList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xB), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xC), 0);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0xF), 1);
+    pdMoveDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
+    ((igObjectRefMetaField *)pdMoveDataList)->_metaObject = igFloatList_GetOrCreateMetaObject();
+    ((igRefMetaField *)pdMoveDataList)->_construct = 1;
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x12), 0);
+    aI = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
+    ((igObjectRefMetaField *)aI)->_metaObject = (int)beModelCtrlInfoAI_GetOrCreateMetaObject();
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x15), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x16), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x17), 0);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0x1C), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0x20), -1.0f);
+    posLockNode = (void *)(igMetaObject_GetFieldAt(meta, base + 0x22));
+    ((igObjectRefMetaField *)posLockNode)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
+    posLockTrc = (void *)(igMetaObject_GetFieldAt(meta, base + 0x23));
+    ((igObjectRefMetaField *)posLockTrc)->_metaObject = (int)beModelCtrlInfoDataTrc_GetOrCreateMetaObject();
+    moveObjectList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x27));
+    ((igObjectRefMetaField *)moveObjectList)->_metaObject = (int)beModelCtrlMoveObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)moveObjectList)->_construct = 1;
+    rideOnData = (void *)(igMetaObject_GetFieldAt(meta, base + 0x28));
+    ((igObjectRefMetaField *)rideOnData)->_metaObject = (int)beModelCtrlInfoRideOn_GetOrCreateMetaObject();
+    debugHitBoxNode = (void *)(igMetaObject_GetFieldAt(meta, base + 0x29));
+    ((igObjectRefMetaField *)debugHitBoxNode)->_metaObject = igGroup_GetOrCreateMetaObject();
+    hitBody = (void *)(igMetaObject_GetFieldAt(meta, base + 0x2A));
+    ((igObjectRefMetaField *)hitBody)->_metaObject = (int)beModelCtrlInfoHitBody_GetOrCreateMetaObject();
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x2B), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x2C), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x2D), 1);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x2E), 0);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0x2F), 0);
+    subCommand = (void *)(igMetaObject_GetFieldAt(meta, base + 0x30));
+    ((igObjectRefMetaField *)subCommand)->_metaObject = (int)beModelCtrlSubCom_GetOrCreateMetaObject();
+    ((igRefMetaField *)subCommand)->_construct = 1;
+    baseAABox = (void *)(igMetaObject_GetFieldAt(meta, base + 0x31));
+    ((igObjectRefMetaField *)baseAABox)->_metaObject = igAABox_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beModelCtrlInfoWork_fieldTable, g_beModelCtrlInfoWork_fieldHandles, g_beModelCtrlInfoWork_fieldOffsets, base);
 }
 

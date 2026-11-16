@@ -25,7 +25,7 @@ int beMessengerGroup_GetVTable(void) {
     obj.w5 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beMessengerGroup_vtable[0];
-    FUN_0033ec00((igObject **)&obj.w5, (short)(-1));
+    FUN_0033ec00((igSmartPointer<igObject> *)&obj.w5, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj.w4, -1);
     igSmartPointer_igStringRefList_Destruct(&obj.w3, -1);
     FUN_00131bc0(&obj, 0);
@@ -80,24 +80,24 @@ static int g_beMessengerGroup_fieldOffsets[] = {
 };
 
 void beMessengerGroup_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *ramList;
+    void *ramNoList;
+    void *infoNameList;
+    void *meta;
 
-    temp_s0 = (void *)g_beMessengerGroup_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMessengerGroup_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igStringRefList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beMessengerGroup_fieldTable, g_beMessengerGroup_fieldHandles, g_beMessengerGroup_fieldOffsets, temp_s2);
+    meta = (void *)g_beMessengerGroup_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMessengerGroup_ctorTable, 3);
+    infoNameList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)infoNameList)->_metaObject = igStringRefList_GetOrCreateMetaObject();
+    ((igRefMetaField *)infoNameList)->_construct = 1;
+    ramNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)ramNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)ramNoList)->_construct = 1;
+    ramList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)ramList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
+    ((igRefMetaField *)ramList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beMessengerGroup_fieldTable, g_beMessengerGroup_fieldHandles, g_beMessengerGroup_fieldOffsets, base);
 }
 

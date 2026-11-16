@@ -20,21 +20,21 @@ int beNDMWAfsSetupInfo_GetVTable(void) {
     o.f[5] = 0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = g_beNDMWAfsSetupInfo_vtable;
-    FUN_003ca610((ObjectRefWord_3ca610 *)(&o.f[5]), -1);
+    FUN_003ca610((igSmartPointer<igObject> *)(&o.f[5]), -1);
     igSmartPointer_igAdxAfsFileList_Destruct(&o.f[4], -1);
     igInfo_Destroy(&o, 0);
     return r;
 }
 
-ObjectRefWord_3ca610 *FUN_003ca610(ObjectRefWord_3ca610 *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget_3ca610 *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_003ca610(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -86,18 +86,18 @@ static int g_beNDMWAfsSetupInfo_fieldOffsets[] = {
 };
 
 void beNDMWAfsSetupInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *dataList;
+    void *insideFiles;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWAfsSetupInfo_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWAfsSetupInfo_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAdxAfsFileList_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beNDMWAfsSetupDataList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWAfsSetupInfo_fieldTable, g_beNDMWAfsSetupInfo_fieldHandles, g_beNDMWAfsSetupInfo_fieldOffsets, temp_s2);
+    meta = g_beNDMWAfsSetupInfo_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWAfsSetupInfo_ctorTable, 2);
+    insideFiles = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)insideFiles)->_metaObject = igAdxAfsFileList_GetOrCreateMetaObject();
+    dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beNDMWAfsSetupDataList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWAfsSetupInfo_fieldTable, g_beNDMWAfsSetupInfo_fieldHandles, g_beNDMWAfsSetupInfo_fieldOffsets, base);
 }
 

@@ -9,13 +9,13 @@ igMetaObject *beAsTargetModelDataList_GetOrCreateMetaObject(void) {
 
 void *beAsTargetModelDataList_GetMetaObject(void) {
     unsigned char b;
-    if (((void * *)&g_beAsTargetModelDataList_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)&g_beAsTargetModelDataList_metaObject)[0]) + 36) & 4) != 0;
+    if (g_beAsTargetModelDataList_metaObject != 0) {
+        b = (g_beAsTargetModelDataList_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beAsTargetModelDataList_EnsureRegistered();
 done:
-    return ((void * *)&g_beAsTargetModelDataList_metaObject)[0];
+    return g_beAsTargetModelDataList_metaObject;
 }
 
 int beAsTargetModelDataList_GetVTable(void) {

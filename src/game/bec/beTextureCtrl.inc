@@ -2,9 +2,9 @@ igMetaObject *g_beTextureCtrl_metaObject;
 igMetaField *g_beTextureCtrl_isFirstTimeMetaField;
 igMetaField *g_beTextureCtrl_workMetaField;
 
-void beTextureCtrl_CreateInstance(int arg0) {
+void beTextureCtrl_CreateInstance(int allocator) {
     beTextureCtrl_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587CB8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587CB8, allocator);
 }
 
 igMetaObject *beTextureCtrl_GetOrCreateMetaObject(void) {
@@ -33,27 +33,22 @@ int beTextureCtrl_GetVTable(void) {
     o.s = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beTextureCtrl_vtable[0];
-    FUN_00342460((void **)&o.s, (short)(-1));
+    FUN_00342460((igSmartPointer<igObject> *)&o.s, (short)(-1));
     FUN_0033f5e0((O_33f5e0 *)&o, (short)0);
     return r;
 }
 
-void **FUN_00342460(void **arg0, short arg1) {
-    S_temp_a0_342460 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_342460 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *FUN_00342460(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beTextureCtrl_EnsureRegistered(void)
@@ -103,15 +98,15 @@ static int g_beTextureCtrl_fieldOffsets[] = {
 };
 
 void beTextureCtrl_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *work;
+    void *meta;
 
-    temp_s0 = (void *)g_beTextureCtrl_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beTextureCtrl_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beTextureCtrlWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beTextureCtrl_fieldTable, g_beTextureCtrl_fieldHandles, g_beTextureCtrl_fieldOffsets, temp_s2);
+    meta = (void *)g_beTextureCtrl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beTextureCtrl_ctorTable, 2);
+    work = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beTextureCtrlWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beTextureCtrl_fieldTable, g_beTextureCtrl_fieldHandles, g_beTextureCtrl_fieldOffsets, base);
 }
 

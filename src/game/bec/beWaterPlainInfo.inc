@@ -3,7 +3,7 @@ igMetaObject *g_beWaterPlainInfo_metaObject;
 void *beWaterPlainInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beWaterPlainInfo_metaObject != 0) {
-        b = (*(int *)((char *)(g_beWaterPlainInfo_metaObject) + 36) & 4) != 0;
+        b = (g_beWaterPlainInfo_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beWaterPlainInfo_EnsureRegistered();

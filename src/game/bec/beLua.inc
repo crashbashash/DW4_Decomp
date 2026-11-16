@@ -4,9 +4,9 @@ igMetaField *g_beLua_infoListMetaField;
 igMetaField *g_beLua_luaStateMetaField;
 igMetaField *g_beLua_luaGlueMetaField;
 
-void beLua_CreateInstance(int arg0) {
+void beLua_CreateInstance(int allocator) {
     beLua_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589208, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589208, allocator);
 }
 
 igMetaObject *beLua_GetOrCreateMetaObject(void) {
@@ -36,39 +36,35 @@ int beLua_GetVTable(void) {
     obj.w[6] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beLua_vtable[0];
-    FUN_0035b940((ObjectRefWord *)(&obj.w[6]), -1);
-    FUN_0035b8c0((void **)(&obj.w[5]), (short)(-1));
-    FUN_0033f560((void **)(&obj.w[4]), -1);
+    FUN_0035b940((igSmartPointer<igObject> *)(&obj.w[6]), -1);
+    FUN_0035b8c0((igSmartPointer<igObject> *)(&obj.w[5]), (short)(-1));
+    FUN_0033f560((igSmartPointer<igObject> *)(&obj.w[4]), -1);
     FUN_00231030(&obj, 0);
     return r;
 }
 
-void **FUN_0035b8c0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_0035b8c0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-ObjectRefWord *FUN_0035b940(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_0035b940(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -128,27 +124,27 @@ static int g_beLua_fieldOffsets[] = {
 };
 
 void beLua_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s1_4;
-    void *temp_s0;
+    int base;
+    void *system;
+    void *infoList;
+    void *luaState;
+    void *luaGlue;
+    void *meta;
 
-    temp_s0 = (void *)g_beLua_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLua_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beLuaState_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igLuaGlue_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beLua_fieldTable, g_beLua_fieldHandles, g_beLua_fieldOffsets, temp_s2);
+    meta = (void *)g_beLua_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLua_ctorTable, 4);
+    system = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)system)->_refCounted = 0;
+    infoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)beBaseInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)infoList)->_construct = 1;
+    luaState = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)luaState)->_metaObject = (int)beLuaState_GetOrCreateMetaObject();
+    luaGlue = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)luaGlue)->_metaObject = igLuaGlue_GetOrCreateMetaObject();
+    ((igRefMetaField *)luaGlue)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beLua_fieldTable, g_beLua_fieldHandles, g_beLua_fieldOffsets, base);
 }
 

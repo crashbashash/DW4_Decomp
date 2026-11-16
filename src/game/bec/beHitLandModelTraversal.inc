@@ -1,9 +1,9 @@
 igMetaObject *g_beHitLandModelTraversal_metaObject;
 igMetaField *g_beHitLandModelTraversal_orderMetaField;
 
-void beHitLandModelTraversal_Create(int arg0) {
+void beHitLandModelTraversal_Create(int allocator) {
     beHitLandModelTraversal_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589380, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589380, allocator);
 }
 
 igMetaObject *beHitLandModelTraversal_GetOrCreateMetaObject(void) {
@@ -38,7 +38,7 @@ int beHitLandModelTraversal_GetVTable(void) {
     *(int *)ps = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beHitLandModelTraversal_vtable[0];
-    FUN_0035d930((void **)ps, -1);
+    FUN_0035d930((igSmartPointer<igObject> *)ps, -1);
     FUN_0019e150(u.b, 0);
     return t;
 }
@@ -90,15 +90,15 @@ static int g_beHitLandModelTraversal_fieldOffsets[] = {
 };
 
 void beHitLandModelTraversal_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *order;
+    void *meta;
 
-    temp_s0 = (void *)g_beHitLandModelTraversal_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beHitLandModelTraversal_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beHitLandModelOrder_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beHitLandModelTraversal_fieldTable, g_beHitLandModelTraversal_fieldHandles, g_beHitLandModelTraversal_fieldOffsets, temp_s2);
+    meta = (void *)g_beHitLandModelTraversal_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beHitLandModelTraversal_ctorTable, 1);
+    order = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)order)->_metaObject = (int)beHitLandModelOrder_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beHitLandModelTraversal_fieldTable, g_beHitLandModelTraversal_fieldHandles, g_beHitLandModelTraversal_fieldOffsets, base);
 }
 

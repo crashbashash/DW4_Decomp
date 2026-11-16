@@ -1,9 +1,9 @@
 igMetaObject *g_beSaveMemoryObj_metaObject;
 igMetaField *g_beSaveMemoryObj_memMetaField;
 
-void beSaveMemoryObj_CreateInstance(int arg0) {
+void beSaveMemoryObj_CreateInstance(int allocator) {
     beSaveMemoryObj_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x5883A0, arg0);
+    igMetaObject_CreateInstance(*(int *)0x5883A0, allocator);
 }
 
 igMetaObject *beSaveMemoryObj_GetOrCreateMetaObject(void) {
@@ -70,15 +70,15 @@ static int g_beSaveMemoryObj_fieldOffsets[] = {
 };
 
 void beSaveMemoryObj_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *mem;
+    void *meta;
 
-    temp_s0 = (void *)g_beSaveMemoryObj_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSaveMemoryObj_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = igCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, g_beSaveMemoryObj_fieldTable, g_beSaveMemoryObj_fieldHandles, g_beSaveMemoryObj_fieldOffsets, temp_s2);
+    meta = (void *)g_beSaveMemoryObj_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSaveMemoryObj_ctorTable, 1);
+    mem = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igMemoryRefMetaField *)mem)->_memType = igCharMetaField_GetDefaultDescriptor();
+    igMetaObject_NameFields(meta, g_beSaveMemoryObj_fieldTable, g_beSaveMemoryObj_fieldHandles, g_beSaveMemoryObj_fieldOffsets, base);
 }
 

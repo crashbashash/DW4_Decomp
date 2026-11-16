@@ -3,9 +3,9 @@ igMetaField *g_beSound_criMetaField;
 igMetaField *g_beSound_currentBGMMetaField;
 igMetaField *g_beSound_playSEsMetaField;
 
-void beSound_CreateInstance(int arg0) {
+void beSound_CreateInstance(int allocator) {
     beSound_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x587EA8, arg0);
+    igMetaObject_CreateInstance(*(int *)0x587EA8, allocator);
 }
 
 igMetaObject *beSound_GetOrCreateMetaObject(void) {
@@ -43,28 +43,24 @@ int beSound_GetVTable(void) {
     o.f[9] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beSound_vtable[0];
-    FUN_00344440((void **)(&o.f[9]), (short)(-1));
+    FUN_00344440((igSmartPointer<igObject> *)(&o.f[9]), (short)(-1));
     igStringRef_Destruct(p17, -1);
-    FUN_0033de20((void **)p16, (short)(-1));
+    FUN_0033de20((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)p16)), (short)(-1));
     FUN_0033f5e0((O_33f5e0 *)&o, (short)0);
     return r;
 }
 
-void **FUN_00344440(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
-            }
+igSmartPointer<igObject> *FUN_00344440(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beSound_EnsureRegistered(void)
@@ -118,19 +114,19 @@ static int g_beSound_fieldOffsets[] = {
 };
 
 void beSound_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s0;
+    int base;
+    void *cri;
+    void *playSEs;
+    void *meta;
 
-    temp_s0 = (void *)g_beSound_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beSound_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beCri_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)bePlaySEList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beSound_fieldTable, g_beSound_fieldHandles, g_beSound_fieldOffsets, temp_s2);
+    meta = (void *)g_beSound_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beSound_ctorTable, 3);
+    cri = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)cri)->_metaObject = (int)beCri_GetOrCreateMetaObject();
+    playSEs = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)playSEs)->_metaObject = (int)bePlaySEList_GetOrCreateMetaObject();
+    ((igRefMetaField *)playSEs)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beSound_fieldTable, g_beSound_fieldHandles, g_beSound_fieldOffsets, base);
 }
 

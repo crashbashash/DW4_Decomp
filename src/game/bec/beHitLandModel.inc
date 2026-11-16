@@ -5,9 +5,9 @@ igMetaField *g_beHitLandModel_probeMetaField;
 igMetaField *g_beHitLandModel_isHitWallMetaField;
 igMetaField *g_beHitLandModel_mat90MetaField;
 
-void beHitLandModel_CreateInstance(int arg0) {
+void beHitLandModel_CreateInstance(int allocator) {
     beHitLandModel_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x589350, arg0);
+    igMetaObject_CreateInstance(*(int *)0x589350, allocator);
 }
 
 igMetaObject *beHitLandModel_GetOrCreateMetaObject(void) {
@@ -30,40 +30,30 @@ int beHitLandModel_GetVTable(void) {
     return *(int *)((char *)&model + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void **FUN_0035d930(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_0035d930(igSmartPointer<igObject> *self, int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_0035d9b0(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *FUN_0035d9b0(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beHitLandModel_EnsureRegistered(void)
@@ -125,22 +115,22 @@ static int g_beHitLandModel_fieldOffsets[] = {
 };
 
 void beHitLandModel_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s0;
+    int base;
+    void *order;
+    void *hitTraversal;
+    void *probe;
+    void *meta;
 
-    temp_s0 = (void *)g_beHitLandModel_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beHitLandModel_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beHitLandModelOrder_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beHitLandModelTraversal_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igProbe_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
-    igMetaObject_NameFields(temp_s0, g_beHitLandModel_fieldTable, g_beHitLandModel_fieldHandles, g_beHitLandModel_fieldOffsets, temp_s2);
+    meta = (void *)g_beHitLandModel_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beHitLandModel_ctorTable, 5);
+    order = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)order)->_metaObject = (int)beHitLandModelOrder_GetOrCreateMetaObject();
+    hitTraversal = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)hitTraversal)->_metaObject = (int)beHitLandModelTraversal_GetOrCreateMetaObject();
+    probe = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)probe)->_metaObject = igProbe_GetOrCreateMetaObject();
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    igMetaObject_NameFields(meta, g_beHitLandModel_fieldTable, g_beHitLandModel_fieldHandles, g_beHitLandModel_fieldOffsets, base);
 }
 

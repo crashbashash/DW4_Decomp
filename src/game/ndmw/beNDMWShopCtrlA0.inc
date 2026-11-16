@@ -2,9 +2,9 @@ igMetaObject *g_beNDMWShopCtrlA0_metaObject;
 igMetaField *g_beNDMWShopCtrlA0_accountMetaField;
 igMetaField *g_beNDMWShopCtrlA0_playerNoListMetaField;
 
-void beNDMWShopCtrlA0_Create(int arg0) {
+void beNDMWShopCtrlA0_Create(int allocator) {
     beNDMWShopCtrlA0_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlA0_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlA0_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlA0_GetMetaObject(void) {
@@ -33,18 +33,22 @@ int beNDMWShopCtrlA0_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beNDMWShopCtrlA0_vtable[0];
     igSmartPointer_igIntList_Destruct(&obj.w22, -1);
-    igSmartPointer_beNDMWStatusTitle03_Destruct((O *)&obj.w21, (short)(-1));
+    igSmartPointer_beNDMWStatusTitle03_Destruct((igSmartPointer<igObject> *)&obj.w21, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return t;
 }
 
-O *igSmartPointer_beNDMWStatusTitle03_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+igSmartPointer<igObject> *igSmartPointer_beNDMWStatusTitle03_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWShopCtrlA0_EnsureRegistered(void)
@@ -94,19 +98,19 @@ static int g_beNDMWShopCtrlA0_fieldOffsets[] = {
 };
 
 void beNDMWShopCtrlA0_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    igMetaObject *temp_s0;
+    int base;
+    void *account;
+    void *playerNoList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWShopCtrlA0_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlA0_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWStatusTitle03_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlA0_fieldTable, g_beNDMWShopCtrlA0_fieldHandles, g_beNDMWShopCtrlA0_fieldOffsets, temp_s2);
+    meta = g_beNDMWShopCtrlA0_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWShopCtrlA0_ctorTable, 2);
+    account = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)account)->_metaObject = (int)beNDMWStatusTitle03_GetOrCreateMetaObject();
+    playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)playerNoList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWShopCtrlA0_fieldTable, g_beNDMWShopCtrlA0_fieldHandles, g_beNDMWShopCtrlA0_fieldOffsets, base);
 }
 

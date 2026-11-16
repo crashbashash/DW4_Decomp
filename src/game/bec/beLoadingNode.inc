@@ -90,13 +90,13 @@ static int g_beLoadingNode_fieldOffsets[] = {
 };
 
 void beLoadingNode_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beLoadingNode_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beLoadingNode_ctorTable, 2);
-    igMetaObject_NameFields(temp_s0, g_beLoadingNode_fieldTable, g_beLoadingNode_fieldHandles, g_beLoadingNode_fieldOffsets, temp_s1);
+    meta = (void *)g_beLoadingNode_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLoadingNode_ctorTable, 2);
+    igMetaObject_NameFields(meta, g_beLoadingNode_fieldTable, g_beLoadingNode_fieldHandles, g_beLoadingNode_fieldOffsets, base);
 }
 
 void FUN_0034e850(void)

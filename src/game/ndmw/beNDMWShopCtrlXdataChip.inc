@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWShopCtrlXdataChip_metaObject;
 igMetaField *g_beNDMWShopCtrlXdataChip_itemBaseListMetaField;
 
-void beNDMWShopCtrlXdataChip_Create(int arg0) {
+void beNDMWShopCtrlXdataChip_Create(int allocator) {
     beNDMWShopCtrlXdataChip_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWShopCtrlXdataChip_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlXdataChip_metaObject, allocator);
 }
 
 void *beNDMWShopCtrlXdataChip_GetMetaObject(void) {
@@ -30,7 +30,7 @@ int beNDMWShopCtrlXdataChip_GetVTable(void) {
     obj.w[23] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beNDMWShopCtrlXdataChip_vtable[0];
-    igSmartPointer_beNDMWItemBaseList_Destruct((void **)(&obj.w[23]), (long long)(-1));
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)(&obj.w[23]), -1);
     FUN_003b6770((int **)&obj, (long long)0);
     return r;
 }
@@ -78,16 +78,16 @@ static int g_beNDMWShopCtrlXdataChip_fieldOffsets[] = {
 };
 
 void beNDMWShopCtrlXdataChip_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *itemBaseList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWShopCtrlXdataChip_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlXdataChip_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlXdataChip_fieldTable, g_beNDMWShopCtrlXdataChip_fieldHandles, g_beNDMWShopCtrlXdataChip_fieldOffsets, temp_s2);
+    meta = g_beNDMWShopCtrlXdataChip_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWShopCtrlXdataChip_ctorTable, 1);
+    itemBaseList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)itemBaseList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    ((igRefMetaField *)itemBaseList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWShopCtrlXdataChip_fieldTable, g_beNDMWShopCtrlXdataChip_fieldHandles, g_beNDMWShopCtrlXdataChip_fieldOffsets, base);
 }
 

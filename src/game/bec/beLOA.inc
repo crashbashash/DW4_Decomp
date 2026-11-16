@@ -128,37 +128,37 @@ static int g_beLOA_fieldOffsets[] = {
 };
 
 void beLOA_InitFields(void) {
-    int sp40[4];
-    int temp_s0;
-    void *temp_a0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s1;
+    int colorDefault[4];
+    int base;
+    void *color;
+    void *overrideAttrList;
+    void *blendStateAttr;
+    void *blendFunctionAttr;
+    void *colorAttr;
+    void *meta;
 
-    temp_s1 = (void *)g_beLOA_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_beLOA_ctorTable, 0xA);
-    temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    sp40[0] = 0x3F800000;
-    sp40[1] = 0x3F800000;
-    sp40[2] = 0x3F800000;
-    sp40[3] = 0x3F800000;
-    FUN_0018e670(temp_a0, sp40);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = igAttrList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igBlendStateAttr_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igBlendFunctionAttr_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igColorAttr_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_beLOA_fieldTable, g_beLOA_fieldHandles, g_beLOA_fieldOffsets, temp_s0);
+    meta = (void *)g_beLOA_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beLOA_ctorTable, 0xA);
+    color = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    colorDefault[0] = 0x3F800000;
+    colorDefault[1] = 0x3F800000;
+    colorDefault[2] = 0x3F800000;
+    colorDefault[3] = 0x3F800000;
+    FUN_0018e670(color, colorDefault);
+    overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    ((igObjectRefMetaField *)overrideAttrList)->_metaObject = igAttrList_GetOrCreateMetaObject();
+    ((igRefMetaField *)overrideAttrList)->_construct = 1;
+    blendStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = igBlendStateAttr_GetOrCreateMetaObject();
+    ((igRefMetaField *)blendStateAttr)->_construct = 1;
+    blendFunctionAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)blendFunctionAttr)->_metaObject = igBlendFunctionAttr_GetOrCreateMetaObject();
+    ((igRefMetaField *)blendFunctionAttr)->_construct = 1;
+    colorAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
+    ((igObjectRefMetaField *)colorAttr)->_metaObject = igColorAttr_GetOrCreateMetaObject();
+    ((igRefMetaField *)colorAttr)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beLOA_fieldTable, g_beLOA_fieldHandles, g_beLOA_fieldOffsets, base);
 }
 
 void FUN_0035d050(void)

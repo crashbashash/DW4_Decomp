@@ -3,7 +3,7 @@ igMetaObject *g_beNumberCtrlInfo_metaObject;
 void *beNumberCtrlInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beNumberCtrlInfo_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNumberCtrlInfo_metaObject) + 36) & 4) != 0;
+        b = (g_beNumberCtrlInfo_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNumberCtrlInfo_EnsureRegistered();

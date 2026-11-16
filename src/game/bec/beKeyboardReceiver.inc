@@ -19,14 +19,14 @@ igMetaObject *beKeyboardReceiver_GetMetaObject(void) {
 int beKeyboardReceiver_GetVTable(void) {
     struct W_35d110 o;
     int r;
-    struct Ref *p;
+    igObject *p;
 
     igObject_InitHeader(&o);
     o.vt = g_beKeyboardReceiver_vtable;
     *(int *)((char *)&o + 8) = 0;
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
     o.vt = g_beKeyboardReceiver_vtable;
-    if (&*(int *)((char *)&o + 8) != 0) { p = *(struct Ref **)((char *)&o + 8); if (p != 0) { p->u.w = p->u.w - 1; if (p->u.b.cnt == 0) igObject_Destroy(p); } }
+    if (&*(int *)((char *)&o + 8) != 0) { p = *(igObject **)((char *)&o + 8); if (p != 0) { p->_refCount = (int)p->_refCount - 1; if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(p); } }
     return r;
 }
 
@@ -73,16 +73,16 @@ static int g_beKeyboardReceiver_fieldOffsets[] = {
 };
 
 void beKeyboardReceiver_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *keyboard;
+    void *meta;
 
-    temp_s0 = (void *)g_beKeyboardReceiver_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beKeyboardReceiver_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beKeyboardReceiver_fieldTable, g_beKeyboardReceiver_fieldHandles, g_beKeyboardReceiver_fieldOffsets, temp_s2);
+    meta = (void *)g_beKeyboardReceiver_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beKeyboardReceiver_ctorTable, 1);
+    keyboard = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)keyboard)->_metaObject = igBoolList_GetOrCreateMetaObject();
+    ((igRefMetaField *)keyboard)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beKeyboardReceiver_fieldTable, g_beKeyboardReceiver_fieldHandles, g_beKeyboardReceiver_fieldOffsets, base);
 }
 

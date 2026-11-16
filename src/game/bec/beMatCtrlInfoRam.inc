@@ -28,13 +28,17 @@ int beMatCtrlInfoRam_GetVTable(void) {
     return r;
 }
 
-O *igSmartPointer_beMatCtrlInfoWork_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+igSmartPointer<igObject> *igSmartPointer_beMatCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+        if (delete_storage > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void beMatCtrlInfoRam_EnsureRegistered(void)
@@ -80,15 +84,15 @@ static int g_beMatCtrlInfoRam_fieldOffsets[] = {
 };
 
 void beMatCtrlInfoRam_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *work;
+    void *meta;
 
-    temp_s0 = (void *)g_beMatCtrlInfoRam_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMatCtrlInfoRam_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beMatCtrlInfoWork_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beMatCtrlInfoRam_fieldTable, g_beMatCtrlInfoRam_fieldHandles, g_beMatCtrlInfoRam_fieldOffsets, temp_s2);
+    meta = (void *)g_beMatCtrlInfoRam_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMatCtrlInfoRam_ctorTable, 1);
+    work = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)work)->_metaObject = (int)beMatCtrlInfoWork_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beMatCtrlInfoRam_fieldTable, g_beMatCtrlInfoRam_fieldHandles, g_beMatCtrlInfoRam_fieldOffsets, base);
 }
 

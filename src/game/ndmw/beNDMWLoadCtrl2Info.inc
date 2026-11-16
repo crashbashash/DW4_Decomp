@@ -75,15 +75,15 @@ static int g_beNDMWLoadCtrl2Info_fieldOffsets[] = {
 };
 
 void beNDMWLoadCtrl2Info_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *nameSelList;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWLoadCtrl2Info_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWLoadCtrl2Info_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWLoadCtrl2Info_fieldTable, g_beNDMWLoadCtrl2Info_fieldHandles, g_beNDMWLoadCtrl2Info_fieldOffsets, temp_s2);
+    meta = g_beNDMWLoadCtrl2Info_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWLoadCtrl2Info_ctorTable, 1);
+    nameSelList = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)nameSelList)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWLoadCtrl2Info_fieldTable, g_beNDMWLoadCtrl2Info_fieldHandles, g_beNDMWLoadCtrl2Info_fieldOffsets, base);
 }
 

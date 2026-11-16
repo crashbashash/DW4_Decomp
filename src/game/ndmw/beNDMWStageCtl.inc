@@ -1,9 +1,9 @@
 igMetaObject *g_beNDMWStageCtl_metaObject;
 igMetaField *g_beNDMWStageCtl_resetTrgTimeMetaField;
 
-void beNDMWStageCtl_CreateInstance(int arg0) {
+void beNDMWStageCtl_CreateInstance(int allocator) {
     beNDMWStageCtl_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStageCtl_GetOrCreateMetaObject(void) {
@@ -97,12 +97,12 @@ static int g_beNDMWStageCtl_fieldOffsets[] = {
 };
 
 void beNDMWStageCtl_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStageCtl_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStageCtl_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_beNDMWStageCtl_fieldTable, g_beNDMWStageCtl_fieldHandles, g_beNDMWStageCtl_fieldOffsets, temp_s1);
+    meta = g_beNDMWStageCtl_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStageCtl_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_beNDMWStageCtl_fieldTable, g_beNDMWStageCtl_fieldHandles, g_beNDMWStageCtl_fieldOffsets, base);
 }
 

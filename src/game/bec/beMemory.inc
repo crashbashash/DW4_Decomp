@@ -108,20 +108,20 @@ static int g_beMemory_fieldOffsets[] = {
 };
 
 void beMemory_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *padManager;
+    void *messenger;
+    void *meta;
 
-    temp_s0 = (void *)g_beMemory_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beMemory_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, g_beMemory_fieldTable, g_beMemory_fieldHandles, g_beMemory_fieldOffsets, temp_s2);
+    meta = (void *)g_beMemory_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beMemory_ctorTable, 5);
+    messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
+    padManager = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padManager)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_beMemory_fieldTable, g_beMemory_fieldHandles, g_beMemory_fieldOffsets, base);
 }
 

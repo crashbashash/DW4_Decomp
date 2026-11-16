@@ -1,8 +1,8 @@
 igMetaObject *g_beNDMWItemImportant_metaObject;
 
-void beNDMWItemImportant_Create(int arg0) {
+void beNDMWItemImportant_Create(int allocator) {
     beNDMWItemImportant_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWItemImportant_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemImportant_metaObject, allocator);
 }
 
 igMetaObject *beNDMWItemImportant_GetReadyMetaObject(void) {

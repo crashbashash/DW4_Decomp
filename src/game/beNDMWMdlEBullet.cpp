@@ -4,7 +4,7 @@ extern "C" int strcmp(int, int *);
 extern "C" int beNDMWMdlEBullet_IsKind(int dummy0, int arg1);
 extern "C" void beNDMWMdlEBullet_RegisterReceiver(void);
 extern "C" int beNDMWMdlEBullet_GetMeta(void);
-extern "C" int FUN_00396340(...);
+extern "C" int beModelCtrl__OnGenerateFromParent(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int KIND_EBULLET[4];
@@ -89,7 +89,7 @@ void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *arg0, beBaseInfoRam *arg1) {
     }
     ReleaseRef::go(s1->value);
     s1->value = s0;
-    FUN_00396340(arg0, arg1);
+    beModelCtrl__OnGenerateFromParent(arg0, arg1);
 }
 
 int beNDMWMdlEBullet_GetMeta(void)

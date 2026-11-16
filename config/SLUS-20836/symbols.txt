@@ -2697,7 +2697,7 @@
 0015b880 0002cc FUN_0015b880
 0015bb50 0000c4 FUN_0015bb50
 0015bc20 000608 FUN_0015bc20
-0015c230 0002f4 Gap__Gfx__igParticleArray__vfunc_28 Gap::Gfx::igParticleArray::vfunc_28
+0015c230 0002f4 igParticleArray_Update
 0015c530 000260 Gap__Bec__ParticleArray__vfunc_27 Gap::Bec::ParticleArray::vfunc_27
 0015c790 000094 Gap__Bec__ParticleArray__vfunc_28 Gap::Bec::ParticleArray::vfunc_28
 0015c830 000008 Gap__Bec__ParticleArray__vfunc_30 Gap::Bec::ParticleArray::vfunc_30
@@ -2726,7 +2726,7 @@
 0015da00 000064 FUN_0015da00
 0015da70 000064 FUN_0015da70
 0015dae0 000014 FUN_0015dae0
-0015db00 000038 FUN_0015db00
+0015db00 000038 igPointSpriteExt_SetSize
 0015db40 000014 FUN_0015db40
 0015db60 000014 FUN_0015db60
 0015db80 000008 Gap__Gfx__igPrimLengthArray1_1__vfunc_20 Gap::Gfx::igPrimLengthArray1_1::vfunc_20
@@ -2851,7 +2851,7 @@
 00166c70 000008 FUN_00166c70
 00166c80 000008 FUN_00166c80
 00166c90 0000b0 FUN_00166c90
-00166d40 00009c FUN_00166d40
+00166d40 00009c igVisualContext_FindFirst
 00166de0 0001a8 FUN_00166de0
 00166f90 000008 FUN_00166f90
 00166fa0 000008 FUN_00166fa0
@@ -3878,7 +3878,7 @@
 00192f50 000070 Vec3f_TransformDirection
 00192fc0 000128 Vec3f_TransformProjective
 001930f0 0000bc FUN_001930f0
-001931b0 000390 FUN_001931b0
+001931b0 000390 igVec4f_PackColor
 00193540 000708 Color4f_Unpack
 00193c50 0000b0 FUN_00193c50
 00193d00 00000c Gap__igVec4ucMetaField__vfunc_22 Gap::igVec4ucMetaField::vfunc_22
@@ -17253,7 +17253,7 @@
 00395b50 000584 beModelCtrl_UpdateRam
 003960e0 000008 beModelCtrl_OnUpdateRam
 003960f0 000244 beModelCtrlInfoWork_FindSeqLabel
-00396340 0003fc FUN_00396340
+00396340 0003fc beModelCtrl__OnGenerateFromParent
 00396740 000200 beModelCtrl__OnGenerate beModelCtrl::OnGenerate
 00396940 00013c beModelCtrl_UpdateBound
 00396a80 00219c beModelCtrl_OnMessageText
@@ -17405,8 +17405,8 @@
 003a3940 00001c ParticleTimer_resetFields
 003a3960 000244 FUN_003a3960
 003a3bb0 000038 ParticleArray_resetFields
-003a3bf0 000020 Gap__Bec__ParticleArray__vfunc_38 Gap::Bec::ParticleArray::vfunc_38
-003a3c10 000cfc Gap__Bec__ParticleArray__vfunc_26 Gap::Bec::ParticleArray::vfunc_26
+003a3bf0 000020 ParticleArray_UsesBaseUpdate
+003a3c10 000cfc ParticleArray_Update
 003a4910 00000c ParticleArray_GetMeta
 003a4920 00000c ParticleTimer_GetMeta
 003a4930 000008 beNumberCtrl_Prepare

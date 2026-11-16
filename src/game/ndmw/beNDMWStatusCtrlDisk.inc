@@ -6,9 +6,9 @@ igMetaField *g_beNDMWStatusCtrlDisk_diskListMetaField;
 igMetaField *g_beNDMWStatusCtrlDisk_sendDiskMetaField;
 igMetaField *g_beNDMWStatusCtrlDisk_sendMaxMetaField;
 
-void beNDMWStatusCtrlDisk_Create(int arg0) {
+void beNDMWStatusCtrlDisk_Create(int allocator) {
     beNDMWStatusCtrlDisk_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlDisk_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlDisk_metaObject, allocator);
 }
 
 igMetaObject *beNDMWStatusCtrlDisk_GetMetaObject(void)
@@ -38,22 +38,22 @@ int beNDMWStatusCtrlDisk_GetVTable(void) {
     obj.w[24] = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_beNDMWStatusCtrlDisk_vtable[0];
-    FUN_003b9ba0((ObjectRefWord *)(&obj.w[24]), -1);
-    igSmartPointer_beNDMWItemBaseList_Destruct((void **)(&obj.w[23]), (long long)(-1));
+    FUN_003b9ba0((igSmartPointer<igObject> *)(&obj.w[24]), -1);
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)(&obj.w[23]), -1);
     igSmartPointer_igIntList_Destruct(&obj.w[21], -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)((int *)&obj), (long long)0);
     return t;
 }
 
-ObjectRefWord *FUN_003b9ba0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+igSmartPointer<igObject> *FUN_003b9ba0(igSmartPointer<igObject> *self,int delete_storage) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if ((short)delete_storage > 0) __dl__FPv(self);
     }
     return self;
 }
@@ -121,23 +121,23 @@ static int g_beNDMWStatusCtrlDisk_fieldOffsets[] = {
 };
 
 void beNDMWStatusCtrlDisk_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    igMetaObject *temp_s0;
+    int base;
+    void *playerNoList;
+    void *diskList;
+    void *sendDisk;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusCtrlDisk_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlDisk_ctorTable, 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)beNDMWItemDisk_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlDisk_fieldTable, g_beNDMWStatusCtrlDisk_fieldHandles, g_beNDMWStatusCtrlDisk_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatusCtrlDisk_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlDisk_ctorTable, 6);
+    playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)playerNoList)->_construct = 1;
+    diskList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)diskList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
+    ((igRefMetaField *)diskList)->_construct = 1;
+    sendDisk = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)sendDisk)->_metaObject = (int)beNDMWItemDisk_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_beNDMWStatusCtrlDisk_fieldTable, g_beNDMWStatusCtrlDisk_fieldHandles, g_beNDMWStatusCtrlDisk_fieldOffsets, base);
 }
 

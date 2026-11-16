@@ -3,9 +3,9 @@ igMetaField *g_beNDMWStatusCtrlSkill_skillMenuMetaField;
 igMetaField *g_beNDMWStatusCtrlSkill_shinkaCtrlMetaField;
 igMetaField *g_beNDMWStatusCtrlSkill_skillListMetaField;
 
-void beNDMWStatusCtrlSkill_Create(int arg0) {
+void beNDMWStatusCtrlSkill_Create(int allocator) {
     beNDMWStatusCtrlSkill_EnsureRegistered();
-    igMetaObject_CreateInstance(g_beNDMWStatusCtrlSkill_metaObject, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlSkill_metaObject, allocator);
 }
 
 void *beNDMWStatusCtrlSkill_GetMetaObject(void) {
@@ -36,7 +36,7 @@ int beNDMWStatusCtrlSkill_GetVTable(void) {
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_beNDMWStatusCtrlSkill_vtable[0];
     igSmartPointer_igIntList_Destruct(&u.b[104], -1);
-    FUN_003b8980((ObjectRefWord *)p1, -1);
+    FUN_003b8980((igSmartPointer<igObject> *)p1, -1);
     FUN_003b6770((int **)u.b, (long long)0);
     return temp_s1;
 }
@@ -92,20 +92,20 @@ static int g_beNDMWStatusCtrlSkill_fieldOffsets[] = {
 };
 
 void beNDMWStatusCtrlSkill_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *skillList;
+    void *shinkaCtrl;
+    igMetaObject *meta;
 
-    temp_s0 = g_beNDMWStatusCtrlSkill_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlSkill_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)beNDMWShinkaCtrl_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlSkill_fieldTable, g_beNDMWStatusCtrlSkill_fieldHandles, g_beNDMWStatusCtrlSkill_fieldOffsets, temp_s2);
+    meta = g_beNDMWStatusCtrlSkill_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlSkill_ctorTable, 3);
+    shinkaCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)shinkaCtrl)->_metaObject = (int)beNDMWShinkaCtrl_GetOrCreateMetaObject();
+    ((igRefMetaField *)shinkaCtrl)->_construct = 1;
+    skillList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)skillList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)skillList)->_construct = 1;
+    igMetaObject_NameFields(meta, g_beNDMWStatusCtrlSkill_fieldTable, g_beNDMWStatusCtrlSkill_fieldHandles, g_beNDMWStatusCtrlSkill_fieldOffsets, base);
 }
 

@@ -5,9 +5,9 @@ igMetaField *g_beModelCtrlHITBOX_lengthMetaField;
 igMetaField *g_beModelCtrlHITBOX_offsetMetaField;
 igMetaField *g_beModelCtrlHITBOX_boxSizeMetaField;
 
-void beModelCtrlHITBOX_Create(int arg0) {
+void beModelCtrlHITBOX_Create(int allocator) {
     beModelCtrlHITBOX_EnsureRegistered();
-    igMetaObject_CreateInstance(*(int *)0x588D20, arg0);
+    igMetaObject_CreateInstance(*(int *)0x588D20, allocator);
 }
 
 igMetaObject *beModelCtrlHITBOX_GetMetaObject(void)
@@ -105,12 +105,12 @@ static int g_beModelCtrlHITBOX_fieldOffsets[] = {
 };
 
 void beModelCtrlHITBOX_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_beModelCtrlHITBOX_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_beModelCtrlHITBOX_ctorTable, 5);
-    igMetaObject_NameFields(temp_s0, g_beModelCtrlHITBOX_fieldTable, g_beModelCtrlHITBOX_fieldHandles, g_beModelCtrlHITBOX_fieldOffsets, temp_s1);
+    meta = (void *)g_beModelCtrlHITBOX_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_beModelCtrlHITBOX_ctorTable, 5);
+    igMetaObject_NameFields(meta, g_beModelCtrlHITBOX_fieldTable, g_beModelCtrlHITBOX_fieldHandles, g_beModelCtrlHITBOX_fieldOffsets, base);
 }
 
