@@ -227,3 +227,28 @@ void sftst_DebInit(void)
     }
 }
 
+/* Appends one line of the timing state under the DAT_004f50d0 header; the log wraps back to its first
+ * line when less than 1 KB is left. */
+void FUN_002b0cf8(SfdTst *tst)
+{
+    char buf[256];
+    int len;
+
+    if (sftst_debout_buf == 0)
+        return;
+    len = sprintf(buf, DAT_004f51e8, tst,
+                  tst->help_time / tst->help_unit,
+                  (long)UTY_MulDiv(1000, tst->help_time, tst->help_unit),
+                  tst->help_time >> 32, tst->help_time, tst->help_time & 0x7FFFFFFF,
+                  tst->mt_max, tst->master_time, tst->out_time,
+                  tst->master_time - tst->out_time, tst->mt_max - tst->out_time,
+                  (long)tst->diff_l_max, (long)tst->diff_l_min, (long)tst->diff_a_max, (long)tst->diff_a_min,
+                  (long)tst->pastat, (long)tst->adjmode, (long)tst->resethist, (long)tst->excesserr,
+                  (long)tst->adj_limit, (long)tst->adj_front, (long)tst->adj_rear,
+                  (long)tst->movave_1st, (long)tst->movave_2nd, (long)sfadxt_stat);
+    strcpy(DAT_004beb4c, buf);
+    DAT_004beb4c += len;
+    if (DAT_004beb4c >= sftst_debout_buf + sftst_debout_siz - 1024)
+        DAT_004beb4c = DAT_004beb50;
+}
+

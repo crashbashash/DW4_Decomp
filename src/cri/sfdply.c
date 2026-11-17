@@ -729,6 +729,48 @@ int FUN_002ab878(void) {
     return -1;
 }
 
+/* Builds a player handle in the caller's work area: the work size must stay the same for every handle
+ * (at most 28208 bytes), and the handle starts at the first 32-byte boundary of the work. */
+SfdPly *FUN_002ab8b8(SfdCrePrm *prm, int arg) {
+    SfdPly *h;
+    char *work = prm->work;
+    unsigned int wksiz = prm->workSize;
+    unsigned int ndw = wksiz >> 2;
+
+    if (work == 0)
+        return 0;
+    if (wksiz == 0 || wksiz > 28208)
+        return 0;
+    if (DAT_004beb20 != 0 && DAT_004beb20 != wksiz)
+        return 0;
+    DAT_004beb20 = wksiz;
+    UTY_MemsetDword(work, 0, ndw);
+    h = (SfdPly *)(((unsigned int)work + 31) & ~31);
+    h->stat = h->reqStat = 0;
+    prm->f4 = (char *)(((unsigned int)prm->f4 + 31) & ~31);
+    h->cre = *prm;
+    h->pause = 0;
+    h->pending = 1;
+    h->pauseCnt = 0;
+    SFHDS_InitFhd(h->blk120);
+    sfply_InitMvInf(&h->rec2316);
+    sfply_InitPlyInf(&h->tmr);
+    sfply_InitTmrInf(&h->tbl);
+    sfd_ClearErr(&h->err);
+    MEM_Copy(&h->cond, &sfd_lib, sizeof(h->cond));
+    MEM_Copy(&h->cond2, &sfd_lib, sizeof(h->cond2));
+    SFTIM_InitHn(h, &h->d28);
+    if (SFBUF_InitHn(h, h->ent, prm) != 0)
+        return 0;
+    SFTRN_InitHn(h, &h->f28, prm, arg);
+    SFSEE_InitHn(&h->recSlot);
+    if (FUN_002abd00(h) != 0)
+        return 0;
+    h->reqStat = 1;
+    h->stat = 1;
+    return h;
+}
+
 void sfply_InitMvInf(SfdRec48 *rec) {
     UTY_MemsetDword(rec, 0, 16);
     rec->f0 = 0;

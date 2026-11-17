@@ -21132,6 +21132,7 @@
       "SFBUF_AddRtotSj": "0x0029e3d0",
       "SFBUF_AringGetWrite": "0x0029e408",
       "SFBUF_AringAddWrite": "0x0029e5b0",
+      "SFBUF_AringGetRead": "0x0029e6a8",
       "SFBUF_AringAddRead": "0x0029e858",
       "SFBUF_VfrmGetWrite": "0x0029e948",
       "SFBUF_VfrmAddWrite": "0x0029e950",
@@ -21391,6 +21392,7 @@
       "sfmpv_ChkTermFlg": "0x002a3b70",
       "sfmpv_SetTermDst": "0x002a3c18",
       "FUN_002a3c38": "0x002a3c38",
+      "FUN_002a3ef8": "0x002a3ef8",
       "sfmpv_CalcDistance": "0x002a40b8",
       "sfmpv_CheckViBufSiz": "0x002a4120",
       "sfmpv_SearchDelim": "0x002a41a8",
@@ -21418,6 +21420,7 @@
       "sfmpv_FirstPicAtr": "0x002a5dc0",
       "sfmpv_SetMpvHd": "0x002a5ef0",
       "sfmpv_SetMvInf": "0x002a6010",
+      "sfmpv_ChkBufSiz": "0x002a6048",
       "sfmpv_IsConcatTimeFix": "0x002a6200",
       "sfmpv_IsSkip": "0x002a6210",
       "sfmpv_IsDefect": "0x002a6308",
@@ -21600,6 +21603,7 @@
       "FUN_002ab778": "0x002ab778",
       "FUN_002ab810": "0x002ab810",
       "FUN_002ab878": "0x002ab878",
+      "FUN_002ab8b8": "0x002ab8b8",
       "sfply_InitMvInf": "0x002abae0",
       "sfply_InitPlyInf": "0x002abb48",
       "FUN_002abbc0": "0x002abbc0",
@@ -21828,14 +21832,17 @@
       "sftst_ModifyHist": "0x002b0ad0",
       "sftst_CalcMovAve": "0x002b0b30",
       "SFDEB_InitTst": "0x002b0b80",
-      "sftst_DebInit": "0x002b0b98"
+      "sftst_DebInit": "0x002b0b98",
+      "FUN_002b0cf8": "0x002b0cf8"
     },
     "data": {
       "sftst_debout_siz": "0x004beb40",
       "sftst_debout_buf": "0x004beb44",
       "DAT_004beb4c": "0x004beb4c",
       "DAT_004beb50": "0x004beb50",
-      "DAT_004f50d0": "0x004f50d0"
+      "DAT_004f50d0": "0x004f50d0",
+      "DAT_004f51e8": "0x004f51e8",
+      "sfadxt_stat": "0x004be8b8"
     }
   },
   "0x002b0ed0": {
@@ -22126,6 +22133,7 @@
       "FUN_002b4bf8": "0x002b4bf8",
       "FUN_002b4c48": "0x002b4c48",
       "sfxcnv_CnvFrmZcmn": "0x002b4c98",
+      "sfxcnv_CnvFrmYcc420plnToZ": "0x002b4dc8",
       "sfxcnv_CnvZbitToCft": "0x002b5068",
       "FUN_002b50c8": "0x002b50c8",
       "FUN_002b50d8": "0x002b50d8"

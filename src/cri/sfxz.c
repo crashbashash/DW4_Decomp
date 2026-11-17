@@ -23,11 +23,35 @@ extern char DAT_004f5928[];
 extern char DAT_004f5958[];
 extern char DAT_004f5990[];
 
+/* The CFT destination image of a conversion: its format, buffer, stride and size. */
+typedef struct CftImage {
+    int f0;
+    int *base;
+    int stride;
+    int f12;
+    int height;
+    int width;
+} CftImage;
+
+/* A planar YCC 4:2:0 source of the CFT conversions: the three plane addresses and their pitches. */
+typedef struct CftYccPln {
+    char *y;
+    char *u;
+    char *v;
+    int ypitch;
+    int upitch;
+    int vpitch;
+    void *f24;
+} CftYccPln;
+
 void *memset(void *dst, int value, unsigned int size);
 int sscanf(const char *s, const char *fmt, ...);
 long long __muldi3(long long n, int k);
 int SJ_SearchTag(SfxMem *in, char *tag, char *endtag, SfxMem *out);
 int SFXINF_GetStmInf(SfxFrame *frm, char *tag);
+void CFT_Ycc420plnToZ16(CftYccPln *src, CftImage *img, int *table);
+void CFT_Ycc420plnToZ32(CftYccPln *src, CftImage *img, int *table);
+void FUN_002b3300(SfxHn *hn, SfxFrame *frm, unsigned int compo);
 
 void sfxzmv_InitLibWork(void);
 SfxZHn *sfxzmv_SearchFreeHn(void);
@@ -338,6 +362,50 @@ void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
     default:
         SFXLIB_Error(hn, frm, DAT_004f5958);
         return;
+    }
+}
+
+void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
+    SfxPlane *py = &frm->plane[0];
+    SfxPlane *pu = &frm->plane[1];
+    SfxPlane *pv = &frm->plane[2];
+    CftYccPln src;
+    CftImage dst;
+    int pitch;
+    int height;
+    int ofs;
+
+    src.f24 = 0;
+    ofs = py->pitch * py->height / 2;
+    src.y = (char *)py->addr + ofs;
+    src.u = (char *)pu->addr + ofs / 2;
+    src.v = (char *)pv->addr + ofs / 2;
+    src.ypitch = py->pitch;
+    src.upitch = pu->pitch;
+    src.vpitch = pv->pitch;
+    if (hn->width == 0)
+        pitch = py->pitch;
+    else
+        pitch = hn->width;
+    if (hn->height == 0)
+        height = py->height / 2;
+    else
+        height = hn->height;
+    dst.f0 = sfxcnv_CnvZbitToCft(zbit);
+    dst.base = (int *)arg;
+    dst.stride = pitch;
+    dst.f12 = height;
+    dst.height = py->pitch;
+    dst.width = py->height / 2;
+    switch (zbit) {
+    case 16:
+        FUN_002b3300(hn, frm, 11);
+        CFT_Ycc420plnToZ16(&src, &dst, (int *)hn->tbl[0]);
+        break;
+    case 32:
+        FUN_002b3300(hn, frm, 13);
+        CFT_Ycc420plnToZ32(&src, &dst, (int *)hn->tbl[0]);
+        break;
     }
 }
 

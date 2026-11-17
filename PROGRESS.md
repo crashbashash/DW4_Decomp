@@ -4,12 +4,12 @@ A snapshot of how much of `game.elf` has been rebuilt as matching source. Regene
 
 ```
 fully matched (C/C++ and approved assembly)
-  functions  ████████████████████████  99.2 %   20,411 / 20,576
-  code bytes ███████████████████████░  94.0 %   3,265,564 / 3,472,700   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
+  functions  ████████████████████████  99.2 %   20,417 / 20,576
+  code bytes ███████████████████████░  94.1 %   3,268,296 / 3,472,700   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
 code bytes identical (verification debt included; see below)
-  functions  ████████████████████████  99.2 %   20,411 / 20,576
-  code bytes ███████████████████████░  94.0 %   3,265,564 / 3,472,700
-fully linked ███████████████████░░░░░  80.2 %   3,640,011 / 4,541,184 bytes of the section linked from C/C++
+  functions  ████████████████████████  99.2 %   20,417 / 20,576
+  code bytes ███████████████████████░  94.1 %   3,268,296 / 3,472,700
+fully linked ███████████████████░░░░░  80.2 %   3,642,743 / 4,541,184 bytes of the section linked from C/C++
 data bytes █████████░░░░░░░░░░░░░░░  37.9 %   492,260 / 1,299,780   (data the source defines, compared with retail by make check)
 data identified ████████████████████████  99.6 %   1,294,797 / 1,299,780   (matched, or classified; 14.2 % of the data only by where a datum starts)
 kernel patches built from source: 4/4   (their bytes match retail in their owner files' .data; 0 of them await owner approval of an asm, volatile or assembly source)
@@ -17,7 +17,7 @@ not counted: 0 asm bodies, 0 code bytes (0.0 %): retail instructions kept as sou
 assembly   : 164 assembly sources, 8,160 code bytes (0.2 %), in the matched figures above: owner-approved `.S` routines (config/assembly-sources.tsv) and MWCC `asm` functions (`asm-function` rows, config/source-approvals.tsv) whose original was assembly
 ```
 
-The function count is flattered by small functions: the ones done have a median size of **72 bytes** against **832** for the rest, so byte coverage is the honest headline.
+The function count is flattered by small functions: the ones done have a median size of **72 bytes** against **856** for the rest, so byte coverage is the honest headline.
 
 ## Verified and debt
 
@@ -25,28 +25,28 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 20,247 | 3,257,404 | 93.8 | code bytes, exception metadata and symbol rules all pass; fully verified |
+| **`match`** | 20,253 | 3,260,136 | 93.9 | code bytes, exception metadata and symbol rules all pass; fully verified |
 | `assembly` | 164 | 8,160 | 0.2 | owner-approved assembly, byte-identical: a hand-written `.S` source (config/assembly-sources.tsv) or an MWCC `asm` function with an `asm-function` row (config/source-approvals.tsv); the original was written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md) |
 
-**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical, **93.8 %** C/C++, because of how the pipeline works: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. The data a unit verifies is placed from its object at the same time (`tools/verify.py` `isolate_unit_data`). The bar counts **20,247 units / 3,640,011 bytes from C/C++**, of them **382,607 bytes of data** (the units' verified data sections and the compiler-generated jump tables), beside **0 units / 0 bytes of asm bodies** and **207,136 code bytes from `asm/`**; `make link` prints the same accounting from the link itself, and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
+**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical, **93.9 %** C/C++, because of how the pipeline works: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. The data a unit verifies is placed from its object at the same time (`tools/verify.py` `isolate_unit_data`). The bar counts **20,253 units / 3,642,743 bytes from C/C++**, of them **382,607 bytes of data** (the units' verified data sections and the compiler-generated jump tables), beside **0 units / 0 bytes of asm bodies** and **204,404 code bytes from `asm/`**; `make link` prints the same accounting from the link itself, and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
 
 ## Readable
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**11,696** of the 20,411 matched functions are readable: **1,696,896** code bytes, **48.9 %** of the code.
+**11,696** of the 20,417 matched functions are readable: **1,696,896** code bytes, **48.9 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,772 | 569,688 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 4,304 | 745,416 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,775 | 571,152 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 4,308 | 747,276 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,206 | 329,672 |
 | it sits in its class or module file, not `src/unmatched/` | 11 | 668 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 2,049 | 508,644 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 2,052 | 510,060 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,126 | 387,456 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,456 | 441,424 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,460 | 443,240 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 557 | 146,400 |
-| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 3,117 | 1,036,516 |
+| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 3,123 | 1,039,248 |
 
 ## Debt
 
@@ -75,14 +75,14 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
-| `unmatched.functions` | 165 | 165 | 0 | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 207,136 | 207,136 | 0 | bytes of those |
+| `unmatched.functions` | 159 | 159 | 0 | functions in the layout with no definition in src/ |
+| `unmatched.bytes` | 204,404 | 204,404 | 0 | bytes of those |
 | `struct.a` | 11 | 11 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py); increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes |
 | `struct.b` | 1 | 1 | 0 | struct-report groups: receiver view disagrees with the reflected class; increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes |
 | `struct.c` | 28 | 28 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 26 | 26 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 262 | 262 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 1,493 | 1,493 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 1,502 | 1,502 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
 | `unapproved.functions` | 0 | 0 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
@@ -92,9 +92,9 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `profile_split.units` | 3 | 3 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build); increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `profile_split.bytes` | 19,492 | 19,492 | 0 | bytes of those; increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `opt_pragma.statements` | 0 | 0 | 0 | optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source |
-| `decl.local_externs` | 2,826 | 2,826 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py); increase recorded: CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations |
+| `decl.local_externs` | 2,828 | 2,828 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py); increase recorded: CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations Sofdec round 7: SDK-shaped functions declare CRI callees that have no header home in the unit that calls them, with that unit's handle types |
 | `decl.varargs` | 881 | 881 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
-| `decl.type_conflicts` | 1,832 | 1,832 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters; increase recorded: CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views |
+| `decl.type_conflicts` | 1,835 | 1,835 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters; increase recorded: CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views Sofdec round 7: SDK-shaped functions declare CRI callees that have no header home in the unit that calls them, with that unit's handle types |
 | `decl.header_conflicts` | 563 | 563 | 0 | symbols declared in two or more headers that disagree on the type |
 
 ## The data half
@@ -139,8 +139,8 @@ A datum compiled into another section kind than the one retail's region holds (a
 | 33–64 | 2,365 | 2,365 | 121,400 | 121,400 | 100.0 |
 | 65–128 | 5,732 | 5,729 | 546,128 | 545,824 | 99.9 |
 | 129–256 | 2,928 | 2,913 | 530,340 | 527,204 | 99.5 |
-| 257–512 | 1,487 | 1,459 | 526,792 | 516,008 | 98.1 |
-| 513–1,024 | 676 | 624 | 482,360 | 444,752 | 92.3 |
+| 257–512 | 1,487 | 1,464 | 526,792 | 518,192 | 98.5 |
+| 513–1,024 | 676 | 625 | 482,360 | 445,300 | 92.5 |
 | 1,025–4,096 | 407 | 348 | 731,244 | 621,000 | 85.5 |
 | 4,097–∞ | 59 | 51 | 426,580 | 381,520 | 86.4 |
 
@@ -155,8 +155,8 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | `0x18a960`–`0x1cfe10` | `████████████████████░░░░` | 83.1 |
 | `0x1cfe10`–`0x2152c0` | `████████████████░░░░░░░░` | 67.8 |
 | `0x2152c0`–`0x25a770` | `████████████████████████` | 98.8 |
-| `0x25a770`–`0x29fc20` | `███████████████████████░` | 97.6 |
-| `0x29fc20`–`0x2e50d0` | `███████████████████████░` | 94.2 |
+| `0x25a770`–`0x29fc20` | `███████████████████████░` | 97.7 |
+| `0x29fc20`–`0x2e50d0` | `███████████████████████░` | 95.0 |
 | `0x2e50d0`–`0x32a580` | `████████████████████████` | 100.0 |
 | `0x32a580`–`0x36fa30` | `████████████████████████` | 100.0 |
 | `0x36fa30`–`0x3b4ee0` | `████████████████████████` | 100.0 |
@@ -187,13 +187,13 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | | |
 | --- | --- |
 | functions with a recovered name (any: role names included) | 17,375 of 20,576 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 11,894 of 20,576 (11,679 of them matched) |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 11,894 of 20,576 (11,682 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 32,581 of 71,438 (45.61 %) |
+| field accesses using a **recovered** type (not an offset cast) | 32,581 of 71,579 (45.52 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

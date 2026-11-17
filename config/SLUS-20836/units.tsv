@@ -284,7 +284,7 @@
 0x002ad8f8	0x002ae00c	cri_sfdcond	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002ae010	0x002afc08	cri_sftim	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002afc08	0x002b0404	cri_sfdtrn	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x002b0408	0x002b0cf4	cri_sfdtst	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x002b0408	0x002b0ed0	cri_sfdtst	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b0ed0	0x002b1410	cri_sfdainf	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b1410	0x002b16e0	cri_sfdout	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x002b16e0	0x002b2ee8	cri_sfh	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file

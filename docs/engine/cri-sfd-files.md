@@ -68,7 +68,26 @@ guesses from what each file does.
   the four volume and pan entries of the output interface share the alias set of the renderer pointer read from the ADXT handle
   (the SDK's `ADXRNA` is `void *`), so `sfadx.c` keeps them untyped; typed pointers reorder the stores.
 - `sfxcnv_CnvFrmYcc420plnToZ` and `sfxcnv_CnvFrmArgb8888mbToZ` of the SDK's `sfx_cnv.o` are `0x2b4dc8` and `0x2b4f58` with
-  only the handle offsets changed; both still differ in where a constant store into the source block is scheduled.
+  only the handle offsets changed. `0x2b4dc8` matches once the planar source block's seventh word is a pointer: the
+  zero stored there then shares no alias set with the plane loads and is scheduled first. `0x2b4f58` still differs in
+  where a constant store into the source block is scheduled.
+- More bodies follow the SDK archive `libmwsfde.a` with only the offsets changed: `SFBUF_AringGetRead` (`sfd_buf.o`),
+  `sfmpv_ChkBufSiz` and `sfmpv_NeedSafeDlmRefresh` (`0x2a3ef8`) of `sfd_mpv.o`, `sftst_DebWrite` (`0x2b0cf8`) of
+  `sfd_tst.o`, which in DW4 also prints the handle and the 64-bit fields as `%ld`, and `sfply_InitHn` (`0x2ab8b8`) of
+  `sfd_ply.o`. The RE4 `sfd_mpv.c`, `sfd_ply.c` and `sfd_tim.c` give the statement order. The delimiter check passes
+  its caller's start-code word as the search's out-parameter. The handle creation matches only when the creation
+  parameters' buffer address at +4 is a pointer: as an `int`, its aligned store and the handle's state stores share
+  an alias set and keep their source order.
+- The frame-buffer check keeps an empty loop over the frame count when no buffer block is given, as retail runs it.
+- `SFTIM_InitHn` follows the RE4 `sfd_tim.c` order and still differs in the order of two stores. Retail reads the
+  stream position back after storing it, and stores the tick count, the external clock's last reading, decoded
+  position and rate in source order: the words of the approved V-sync set (+680, +716, +728, +732, +736). Written as
+  `volatile` accesses, the remaining difference is one store. That store also matches when the wrap value at +740 is a
+  `volatile` store, but no V-sync writer of +740 is known, so that form is not used.
+- The frame-information copy at `0x2a7e30` (SDK `sfmpv_SetFrmInf`) uses a register copy of the destination for its first
+  fields. After the picture-structure branch it reloads the destination pointer before every store and keeps each source
+  load behind the previous store, as it would if those stores could alias the pointer. No field typing found so far does
+  this.
 - `sfmpv_ReadPtsQue` (`0x2a4fb8`) is the SDK's `sfd_mpv.o` member at that position before `sfmpv_InitComplementPts`; the SDK body is an older 32-bit form, so the name is medium.
 - `sfmpv_IsEmptySkip` (`0x2a6510`) is named from the Resident Evil 4 CRI source `sfd_mpv.c` in the Persona 4 decompilation (`src/cri/re4/`), where the same-signature test follows `sfmpv_IsPtypeSkip` in the chunk-accept chain.
 - `SFTIM_GetTime` (`0x2ae968`) is the time-and-unit read that the Resident Evil 4 `sfmpv_IsLateSkip` calls (`sfd_mpv.c` in the Persona 4 decompilation), at the SDK `sfd_tim.o` position before `SFD_GetNowTime`.

@@ -11,7 +11,7 @@ struct SjObj {
 
 typedef struct SfdCrePrm {
     int f0;
-    int f4;
+    char *f4;
     char pad8[52];
     char *work;            /* 60 */
     unsigned int workSize; /* 64 */

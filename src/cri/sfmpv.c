@@ -504,6 +504,62 @@ int FUN_002a3c38(SfdPlayer *player) {
     return status;
 }
 
+/* Whether the delimiter the ring remembers is no longer a safe next start code (1) or still is (0). */
+int FUN_002a3ef8(SfdRingInfo *ring, SfdDelim code, char *dlm) {
+    char tmp[4];
+    int n;
+    char *p;
+
+    if (dlm == 0)
+        return 1;
+    if (dlm == ring->addr0)
+        return 1;
+    if (dlm > ring->addr0) {
+        if (dlm - ring->addr0 < 4)
+            return 1;
+    }
+    if (dlm >= ring->addr0 && dlm < ring->addr0 + ring->len0) {
+        n = dlm + 4 - (ring->addr0 + ring->len0);
+        if (n > 0) {
+            if (n > ring->len1)
+                return 1;
+            memcpy(tmp, dlm, 4 - n);
+            memcpy(tmp + 4 - n, ring->addr1, n);
+        } else {
+            memcpy(tmp, dlm, 4);
+        }
+    } else if (dlm >= ring->addr1 && dlm < ring->addr1 + ring->len1) {
+        n = dlm + 4 - (ring->addr1 + ring->len1);
+        if (n > 0)
+            return 1;
+        memcpy(tmp, dlm, 4);
+    } else {
+        return 1;
+    }
+    switch (MPV_CheckDelim((unsigned char *)tmp)) {
+    case SFD_DLM_SEQ:
+    case SFD_DLM_END:
+        break;
+    case SFD_DLM_GOP:
+        if ((code & SFD_DLM_SEQ) == 0)
+            break;
+        p = sfmpv_SearchDelim(ring, SFD_DLM_GOP, &code);
+        if (p == 0 || p == dlm)
+            return 1;
+        break;
+    case SFD_DLM_PIC:
+        if ((code & (SFD_DLM_SEQ | SFD_DLM_GOP)) == 0)
+            break;
+        p = sfmpv_SearchDelim(ring, SFD_DLM_PIC, &code);
+        if (p == 0 || p == dlm)
+            return 1;
+        break;
+    default:
+        return 1;
+    }
+    return 0;
+}
+
 int sfmpv_CalcDistance(SfdRingInfo *ring, char *addr) {
     int offset;
     if (addr >= ring->addr0 && addr < ring->addr0 + ring->len0) {
@@ -971,6 +1027,42 @@ void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x) {
     geom->f20 = fifth;
     geom->f16 = pts;
     geom->f32 = x;
+}
+
+/* The pictures must fit the frame size the decoder was set up for, and its frame buffers must hold a
+ * picture: a macroblock takes 1024 bytes as ARGB8888 output (format 2), 384 as YCC 4:2:0. */
+int sfmpv_ChkBufSiz(SfdPlayer *player, SfdPicGeom *geom) {
+    SfdMpv *mpv = player->streams.mpv;
+    SfdMpvCond *cond = &mpv->cond;
+    int fmt = player->f56;
+    int count = cond->count;
+    unsigned int frmsize;
+    int buf;
+    int i;
+    int mbw, mbh;
+    int bufmbw, bufmbh;
+
+    if (cond->f8 * cond->f12 < geom->width * geom->height)
+        return sfd_ReportError(player, 0xFF000F17);
+    mbw = geom->width / 16;
+    mbh = geom->height / 16;
+    frmsize = (fmt == 2 ? mbw * mbh * 1024 : mbw * mbh * 384) + 64;
+    bufmbw = cond->f20 / 16;
+    bufmbh = cond->f24 / 16;
+    if ((fmt == 2 ? bufmbw * bufmbh * 1024 : bufmbw * bufmbh * 384) + 64 < frmsize)
+        return sfd_ReportError(player, 0xFF000F18);
+    buf = cond->f32;
+    if (buf != 0) {
+        for (i = 0; i < count; i++) {
+            mpv->bufs.w[i] = buf + i * frmsize;
+        }
+    } else {
+        for (i = 0; i < count; i++) {
+        }
+    }
+    mpv->slotCount = count;
+    sfmpv_InitFrmObj(mpv->slots, mpv->bufs.w, count);
+    return 0;
 }
 
 int sfmpv_IsConcatTimeFix(SfdPlayer *player) {
