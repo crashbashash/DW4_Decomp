@@ -5,12 +5,11 @@
 #include "dw4/bePadData.h"
 #include "dw4/igObject.h"
 #include "dw4/softfloat.h"
+#include <math.h>
 
 typedef void (*TraversalFunction)(void);
 
 extern "C" {
-float sqrtf(float);
-float atan2f(float, float);
 extern int g_igCommonTraversal_travProcs[4];
 
 void bePadData_StickDirections(bePadData *pad, int *directions, float *stick);

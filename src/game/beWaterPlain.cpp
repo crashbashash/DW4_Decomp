@@ -9,11 +9,11 @@
 #include "dw4/igFrustCullTraversal.h"
 #include "dw4/igInsightCore.h"
 #include "dw4/igViewerSceneInfoManager.h"
+#include <math.h>
 
 extern "C" {
 void igMatrix44f_PreMultiply(float *matrix, const float *by);
 void Vec3f_CrossInPlace(float *a, float *b);
-float sqrtf(float);
 int igVertexArrayLock_Init(igVertexArrayLock *lock);
 extern char WATERPLAIN[];
 

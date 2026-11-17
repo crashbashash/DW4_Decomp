@@ -239,16 +239,16 @@
     "value": 585
    },
    "decl.local_externs": {
-    "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
-    "value": 3079
+    "reason": null,
+    "value": 2868
    },
    "decl.type_conflicts": {
-    "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
-    "value": 1966
+    "reason": null,
+    "value": 1854
    },
    "decl.varargs": {
     "reason": null,
-    "value": 932
+    "value": 896
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 1494
+    "value": 1500
    },
    "inline_asm.other": {
     "reason": null,
@@ -332,19 +332,19 @@
    },
    "unapproved.bytes": {
     "reason": null,
-    "value": 320
+    "value": 0
    },
    "unapproved.functions": {
     "reason": null,
-    "value": 5
+    "value": 0
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 211672
+    "value": 208888
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 177
+    "value": 171
    }
   },
   "counters": {
@@ -363,8 +363,8 @@
    "compile.bytes": 0,
    "compile.functions": 0,
    "decl.header_conflicts": 585,
-   "decl.local_externs": 2880,
-   "decl.type_conflicts": 1856,
+   "decl.local_externs": 2868,
+   "decl.type_conflicts": 1854,
    "decl.varargs": 896,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
@@ -492,15 +492,15 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1684984,
+  "bytes": 1690492,
   "failing": {
    "addresses": {
     "bytes": 745292,
     "functions": 4307
    },
    "declarations": {
-    "bytes": 1071152,
-    "functions": 3339
+    "bytes": 1065644,
+    "functions": 3332
    },
    "fields": {
     "bytes": 440328,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 11656,
+  "functions": 11663,
   "matched_functions": 20405
  },
  "regions": [

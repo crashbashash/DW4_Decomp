@@ -106,7 +106,7 @@ void beCriAudio_Release(beCriAudio *self) {
     self->_adxt = 0;
 }
 
-int beCriAudio_PlayFile(beCriAudio *self, const char *name) {
+unsigned char beCriAudio_PlayFile(beCriAudio *self, const char *name) {
     unsigned char ready = 0;
     igAdxAudio *adxt = adxOf(self);
     if (adxt != 0) {

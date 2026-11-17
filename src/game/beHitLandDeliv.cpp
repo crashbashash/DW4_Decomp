@@ -6,6 +6,7 @@
 #include "dw4/beHitLandDelivInfo.h"
 #include "dw4/beMessenger.h"
 #include "dw4/igMatrix44f.h"
+#include <math.h>
 
 extern "C" void beHitLandDeliv_Prepare(void);
 extern "C" igMetaObject *beHitLandDeliv_GetInfoMeta(void);
@@ -13,7 +14,6 @@ extern "C" void beHitLandDeliv_UpdateRam(void);
 extern "C" igMetaObject *beHitLandDeliv_GetMeta(void);
 extern "C" void beHitLandDeliv_OnAddRam(beHitLandDeliv *self, int ram, char *unused);
 extern "C" int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ram, const char *message);
-extern "C" float sqrtf(float);
 
 enum beHitLandDelivMessage {
     HITWALL,

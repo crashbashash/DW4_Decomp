@@ -15,7 +15,7 @@ struct igMetaObject *igAdxAudio_GetOrCreateMetaObject(void);
 int igAdxAudio_Initialize(struct igAdxAudio *audio, int maxChannels, int type, int maxStreams, int maxFrequency);
 int igAdxAudio_CreateHandle(struct igAdxAudio *audio, int maxChannels, int type, int maxStreams, int maxFrequency, int initialize);
 int igAdxAudio_StartMemory(struct igAdxAudio *audio, void *data, int size);
-int igAdxAudio_StartFile(struct igAdxAudio *audio, const char *name);
+unsigned char igAdxAudio_StartFile(struct igAdxAudio *audio, const char *name);
 void igAdxAudio_Stop(struct igAdxAudio *audio);
 void igAdxAudio_Pause(struct igAdxAudio *audio, int pause);
 int igAdxAudio_GetPauseState(struct igAdxAudio *audio);

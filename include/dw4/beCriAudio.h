@@ -10,7 +10,7 @@ extern "C" {
 int beCriAudio_GetStatus(struct beCriAudio *self);
 int beCriAudio_IsPaused(struct beCriAudio *self);
 void beCriAudio_Pause(struct beCriAudio *self, unsigned char pause);
-int beCriAudio_PlayFile(struct beCriAudio *self, const char *name);
+unsigned char beCriAudio_PlayFile(struct beCriAudio *self, const char *name);
 int beCriAudio_PlayMemory(struct beCriAudio *self, void *data, int size);
 int beCriAudio_PlaySfp(struct beCriAudio *self, int requestId, long long sequence);
 void beCriAudio_Release(struct beCriAudio *self);

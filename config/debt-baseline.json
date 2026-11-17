@@ -18,18 +18,12 @@
    "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
    "value": 585
   },
-  "decl.local_externs": {
-   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
-   "value": 3079
-  },
-  "decl.type_conflicts": {
-   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
-   "value": 1966
-  },
-  "decl.varargs": 932,
+  "decl.local_externs": 2868,
+  "decl.type_conflicts": 1854,
+  "decl.varargs": 896,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "fun_dat_refs": 1494,
+  "fun_dat_refs": 1500,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,
@@ -59,10 +53,10 @@
    "value": 1
   },
   "struct.c": 28,
-  "unapproved.bytes": 320,
-  "unapproved.functions": 5,
-  "unmatched.bytes": 211672,
-  "unmatched.functions": 177
+  "unapproved.bytes": 0,
+  "unapproved.functions": 0,
+  "unmatched.bytes": 208888,
+  "unmatched.functions": 171
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

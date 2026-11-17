@@ -1744,7 +1744,7 @@ extern "C" void igReport_ReadSettings(void);
 extern "C" void igReport_RestoreDefaults(void);
 extern "C" int igResource_AddDirectory(int *p, int extra1);
 extern "C" void igResource_AsyncLoadThreadProc(int *arg0, void *arg1);
-extern "C" bool igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory);
+extern "C" unsigned char igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory);
 extern "C" int igResource_GetDefaultResource(void);
 extern "C" int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const char *metaName, int wanted);
 extern "C" void igResource_WrapRootInSceneInfo(int arg0);

@@ -5,15 +5,14 @@
 #include "dw4/beMessenger.h"
 #include "dw4/igDataLists.h"
 #include "dw4/igInsightCore.h"
+#include "dw4/igMathConstants.h"
+#include <math.h>
 #include <string.h>
 #pragma push
 #pragma readonly_strings on
 
-extern "C" void Vec3f_TransformDirection(float *out, int *vector, float *matrix);
+extern "C" void Vec3f_TransformDirection(float *out, const float *vector, float *matrix);
 extern "C" void igMatrix44f_Copy(float *dst, float *src);
-extern "C" float atan2f(float y, float x);
-extern "C" float g_vec3Zero[4];
-extern "C" int g_vec3ZAxis[4];
 
 /* The scene's one target object, and the messenger it asks the actors through. */
 extern "C" {
@@ -212,9 +211,9 @@ extern "C" int beTargetObj_GetPlayerCentre(float *out)
                                     (igIntList *)g_targetObj->_playerRamNoList, "PLAYER", "GETMATRIX");
         if (((igVec3fList *)g_targetObj->_playerPosList)->_count == 0) return 0;
     }
-    out[0] = g_vec3Zero[0];
-    out[1] = g_vec3Zero[1];
-    out[2] = g_vec3Zero[2];
+    out[0] = g_vec3Zero.x;
+    out[1] = g_vec3Zero.y;
+    out[2] = g_vec3Zero.z;
     count = ((igVec3fList *)g_targetObj->_playerPosList)->_count;
     for (i = 0; i < count; i++) {
         igVec3f *p = &((igVec3f *)((igVec3fList *)g_targetObj->_playerPosList)->_data)[i];
@@ -366,7 +365,7 @@ extern "C" float beTargetObj_GetOriginHeading(beTargetObj *self)
     float forward[4];
 
     if (g_targetOriginHeading == TARGET_HEADING_UNSET) {
-        Vec3f_TransformDirection(forward, g_vec3ZAxis, g_targetOriginMatrix.m);
+        Vec3f_TransformDirection(forward, &g_vec3ZAxis.x, g_targetOriginMatrix.m);
         g_targetOriginHeading = atan2f(forward[0], forward[2]);
     }
     return g_targetOriginHeading;

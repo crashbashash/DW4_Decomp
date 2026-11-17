@@ -17,6 +17,7 @@
 #include "dw4/igObject.h"
 #include "dw4/igProbe.h"
 #include "dw4/igSwitch.h"
+#include <math.h>
 #include <string.h>
 
 extern "C" igMetaObject *beHitLandModel_GetInfoMeta(void);
@@ -59,9 +60,6 @@ extern "C" int beHitLandModel_HitProc(beHitLandModelTraversal *traversal, int un
 extern "C" igObject *igRay_CreateInstance(int);
 extern "C" void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2);
 extern "C" void beHitLandModelOrder_Reset(beHitLandModelOrder *order);
-extern "C" float sqrtf(float);
-extern "C" float acosf(float);
-extern "C" float cosf(float);
 extern "C" void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order);
 extern "C" void ObjectList_ResizeRetained(int list, int count);
 extern "C" void igMatrix44f_Copy(float *to, const float *from);

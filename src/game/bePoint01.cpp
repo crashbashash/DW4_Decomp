@@ -3,6 +3,7 @@
 #include "dw4/bePoint01.h"
 #include "dw4/bePoint01Info.h"
 #include "dw4/igBitMask.h"
+#include "dw4/igMathConstants.h"
 
 extern "C" void bePoint01_Prepare(void);
 extern "C" igMetaObject *bePoint01_GetInfoMeta(void);
@@ -11,7 +12,6 @@ extern "C" igMetaObject *bePoint01_GetMeta(void);
 extern "C" int igMatrix44f_Copy(float *, float *);
 extern "C" char PLAYERPOINT_4[];
 extern "C" void bePoint01_OnAddRam(bePoint01 * p0, int p1, char * p2);
-extern "C" int g_matrix44Identity[4];
 extern "C" void bePoint01_GetMatrix(bePoint01 *self, bePoint01Info *info, int pointIndex, int childIndex);
 extern "C" int emptyString[4];
 extern "C" int bePoint01_OnMessage(bePoint01 *self, beBaseInfoRam *ram, beMessengerWork *work);
@@ -47,7 +47,7 @@ void bePoint01_GetMatrix(bePoint01 *self, bePoint01Info *info, int pointIndex, i
         beMessenger_AppendMatrix((beMessenger *)self->_messenger, ((igTransform **)((igObjectList *)keep->_childList)->_data)[childIndex]->_m);
         return;
     }
-    igMatrix44f_Copy(identity, (float *)&g_matrix44Identity[0]);
+    igMatrix44f_Copy(identity, (float *)&g_matrix44Identity);
     beMessenger_AppendMatrix((beMessenger *)self->_messenger, identity);
 }
 

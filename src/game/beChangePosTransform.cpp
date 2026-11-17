@@ -6,12 +6,12 @@
 #include "dw4/beChangePosTransformInfo.h"
 #include "dw4/beMessenger.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igMathConstants.h"
 
 extern "C" void beChangePosTransform_Prepare(void);
 extern "C" igMetaObject *beChangePosTransform_GetInfoMeta(void);
 extern "C" void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTransformInfoRam *info);
 extern "C" igMetaObject *beChangePosTransform_GetMeta(void);
-extern "C" const igVec3f g_vec3Zero;
 
 void beChangePosTransform_Prepare(void)
 {

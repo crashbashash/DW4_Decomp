@@ -209,7 +209,7 @@ igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileVie
  * member itself, an unmarked read the early return's release shares; the shared class's accessors
  * are `const`, and a read through one is not shared with the destructor's (the original accessor
  * left an unmarked read, as a non-const one does). */
-bool igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory) {
+unsigned char igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory) {
     return !directory->_loadPendingState;
 }
 

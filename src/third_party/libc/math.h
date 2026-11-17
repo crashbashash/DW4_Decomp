@@ -25,6 +25,7 @@ float sinf(float);
 float cosf(float);
 float tanf(float);
 float asinf(float);
+float acosf(float);
 float atanf(float);
 float atan2f(float, float);
 float sqrtf(float);

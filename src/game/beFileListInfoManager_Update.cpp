@@ -16,7 +16,7 @@
 extern "C" int igResource_StartAsyncLoading(...);
 extern "C" int igResource_StopAsyncLoading(...);
 extern "C" int igResource_LoadDirectory(...);
-extern "C" int igResource_IsDirectoryLoaded(...);
+extern "C" unsigned char igResource_IsDirectoryLoaded(...);
 extern "C" int igResource_UnloadDirectory(...);
 extern char emptyString[];
 extern char text_notDefined[];
@@ -180,7 +180,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             int j;
             igObjectList *s5;
             s1 = ((int **)((igDirectoryList *)self->_dirList)->_data)[0];
-            if ((igResource_IsDirectoryLoaded(g_globalContext[0], s1) & 0xFF) == 0) {
+            if (igResource_IsDirectoryLoaded(g_globalContext[0], s1) == 0) {
                 break;
             }
             s4 = (igObjectList *)s1[7];
