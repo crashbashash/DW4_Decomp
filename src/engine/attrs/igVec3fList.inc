@@ -3,6 +3,6 @@ int Gap__igVec3fList__vfunc_22(void) {
 }
 
 int igDataList_GetMetaObject_Virtual(void) {
-    return (int)g_igDataList_metaObject[0];
+    return (int)g_igDataList_metaObject;
 }
 

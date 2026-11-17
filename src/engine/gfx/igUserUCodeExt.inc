@@ -35,7 +35,7 @@ void thunk_igUserUCodeExt_GetMetaObject(void) {
 }
 
 int FUN_0014bc40(void) {
-    return g_igContextExt_metaObject[0];
+    return (int)g_igContextExt_metaObject;
 }
 
 void FUN_0014bc50(void) {

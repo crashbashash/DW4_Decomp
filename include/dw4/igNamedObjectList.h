@@ -6,6 +6,7 @@ struct igMetaObject;
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern struct igMetaObject *g_igNamedObjectList_metaObject;
 struct igMetaObject *igNamedObjectList_GetOrCreateMetaObject(void);
 #ifdef __cplusplus
 }

@@ -77,7 +77,7 @@ void thunk_igVisualContext_GetMetaObject(void) {
 }
 
 int FUN_0014a170(void) {
-    return g_igContext_metaObject[0];
+    return (int)g_igContext_metaObject;
 }
 
 static FieldFactory g_igVisualContext_ctorTable[] = {

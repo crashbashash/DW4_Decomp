@@ -30,7 +30,7 @@ public:
     virtual void getFromContext(igObject *context);
 };
 
-extern "C" igObjectPointer igMetaObject_CreateInstanceRef(igMetaObject *meta, int allocator);
+#include "dw4/igMetaObject.h"
 
 /* The object when it is an igAttr, otherwise none. */
 static inline igObject *asAttr(igObject *object) {
@@ -46,7 +46,7 @@ extern "C" igObjectPointer Gap__Attrs__igVisualContextAttrDefaultManager__create
     if (meta == 0 || self->_visualContext == 0) {
         return igObjectPointer(0, kRetainReference);
     }
-    igObjectPointer created = igMetaObject_CreateInstanceRef(meta, (int)igObject_GetAllocator(self));
+    igObjectPointer created = igMetaObject_CreateInstanceRef(meta, igObject_GetAllocator(self));
     igObject *object = asAttr(created.get());
     igObjectPointer attr(object, kRetainReference);
     if (attr != 0) {

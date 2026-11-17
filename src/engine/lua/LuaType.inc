@@ -36,7 +36,7 @@ LuaType::LuaType(int kind, int indirection, int flags, const char *className)
     if (this->indirection < 2) {
         if (this->kind == LUA_KIND_OBJECT) {
             luaClass = LuaClass_FindByName(className);
-            metaObject = luaClass ? luaClass->metaObject : igObjectSystem_FindMetaByNameDefault(className);
+            metaObject = luaClass ? luaClass->metaObject : (igMetaObject *)igObjectSystem_FindMetaByNameDefault(className);
         } else if (this->indirection == 1 && (LuaType_IsNumber(this) || this->kind == LUA_KIND_ENUM)) {
             luaClass = g_luaArrayClasses[this->kind];
         } else if (this->kind == LUA_KIND_ENUM) {

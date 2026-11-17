@@ -13,13 +13,9 @@
 #include "dw4/igStringObj.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/igResource.h"
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
-extern "C" int igResource_StartAsyncLoading(...);
-extern "C" int igResource_StopAsyncLoading(...);
-extern "C" int igResource_LoadDirectory(...);
-extern "C" unsigned char igResource_IsDirectoryLoaded(...);
-extern "C" int igResource_UnloadDirectory(...);
 extern char text_notDefined[];
 extern char text_ld[];
 extern char text_igb_3[];
@@ -47,7 +43,6 @@ extern char text_stagIS08[];
 extern char text_stagIS09[];
 extern char text_stagIS10[];
 extern char text_stagIS12[];
-extern int g_globalContext[4];
 
 /* Retained interned-string share. The stage-name object share (cases 0 and 1) and the interned
  * file-name shares (cases 1, 102, 9) are RAII locals. The copy constructor takes the extra share
@@ -151,7 +146,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 REL_STR(old)
                 s0->_stageName = (int)nw;
             }
-            igResource_StartAsyncLoading(g_globalContext[0]);
+            igResource_StartAsyncLoading(g_globalContext);
             {
             igSmartPointer<igStringObj> stageObj((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
             igStringObj_Set(stageObj.p, (const char *)((beSystem *)self->_system)->_stageName);
@@ -164,7 +159,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 int r;
                 int a2;
                 if (a1 == 0) { a2 = (int)g_stringObjEmptyText; } else { a2 = a1; }
-                r = igResource_LoadDirectory(g_globalContext[0], a2);
+                r = (int)igResource_LoadDirectory((igResource *)g_globalContext, (const char *)a2);
                 ObjectList_AppendRetained((igObjectList *)self->_dirList, (igObject *)r);
             }
             }
@@ -181,14 +176,14 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             int j;
             igObjectList *s5;
             s1 = ((int **)((igDirectoryList *)self->_dirList)->_data)[0];
-            if (igResource_IsDirectoryLoaded(g_globalContext[0], s1) == 0) {
+            if (igResource_IsDirectoryLoaded((igResource *)g_globalContext, (igDirectory *)s1) == 0) {
                 break;
             }
             s4 = (igObjectList *)s1[7];
             for (k = 0; k < s4->_count; k++) {
                 igInsightCore_AddInfo((igInsightCore *)self->_insight, (igObject *)((int *)s4->_data)[k]);
             }
-            igResource_UnloadDirectory(g_globalContext[0], s1[5]);
+            igResource_UnloadDirectory((igResource *)g_globalContext, (const char *)s1[5]);
             CLEAR(igDirectoryList, self->_dirList)
             s5 = (igObjectList *)((beFileListInfo **)((igInfoList *)self->_infoList)->_data)[0]->_fnames;
             if (self->_isReadOnetime == 0) {
@@ -378,7 +373,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     List_RemoveWordAt((igDataList *)l, 0);
                     ((int *)l->_data)[l->_count] = 0;
                 }
-                igResource_StopAsyncLoading(g_globalContext[0]);
+                igResource_StopAsyncLoading(g_globalContext);
                 break;
             }
             break;

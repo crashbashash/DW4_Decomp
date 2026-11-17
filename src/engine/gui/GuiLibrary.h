@@ -107,7 +107,6 @@ extern "C" igMetaObject *g_igGeometryElement_metaObject;
 extern "C" igMetaObject *FUN_0044c030(void);
 extern "C" int FUN_00137850(...);
 extern "C" void igTextElement_InitFields(void);
-extern "C" int g_igModel_vtable[4];
 struct S {
     void *f0;
     char pad[4];
@@ -123,7 +122,6 @@ extern "C" igMetaObject *g_igClearRenderer_metaObject;
 extern "C" igMetaObject *FUN_0044c250(void);
 extern "C" igMetaObject *igClearRenderer_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
-extern "C" int g_igRenderer_vtable[4];
 extern "C" int g_igClearRenderer_vtable[4];
 union U_44c2f0 { int vt; char b[16]; };
 extern "C" int igClearRenderer_GetVTable(void);
@@ -556,7 +554,6 @@ extern "C" igMetaObject *igBitmapFont_GetMetaObject(void);
 struct Obj_452590 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 extern "C" int FUN_0019aa10(...);
 #include "dw4/igFont.h"
-extern "C" int g_igBitmapFont_vtable[4];
 extern "C" int igBitmapFont_GetVTable(void);
 extern "C" igMetaObject *igFont_GetPublishedMetaObject(void);
 extern "C" void thunk_igBitmapFont_GetMetaObject(void);
@@ -968,7 +965,7 @@ typedef struct P_456a60 { char pad28[28]; Q *f28; } P_456a60;
 typedef struct A_456a60 { char pad12[12]; int f12; char pad16[8]; Rc_456a60 *f24; P_456a60 *f28; unsigned char f32; } A_456a60;
 typedef struct R_456a60 { char pad8[8]; Q *f8; } R_456a60;
 typedef struct V3 { int a; int b; int c; int pad[4]; } V3;
-extern "C" int g_igGuiSystemModelMousePositionField[4];
+#include "dw4/igGuiSystemModel.h"
 class Obj_456b80 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void vX(void *); };
 struct P_456b80 { char pad[12]; float x; float y; };
 extern "C" void FUN_00456b80(int *arg0, float *arg1);

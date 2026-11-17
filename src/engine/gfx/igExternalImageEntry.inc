@@ -103,7 +103,7 @@ void thunk_FUN_0014f420(void) {
 }
 
 int FUN_0014f760(void) {
-    return g_igExternalDirEntry_metaObject[0];
+    return (int)g_igExternalDirEntry_metaObject;
 }
 
 igMetaObject *FUN_0014f770(void) {

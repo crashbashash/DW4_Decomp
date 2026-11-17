@@ -6,6 +6,7 @@
 #include "dw4/p2gs.h"
 #include "dw4/renderState.h"
 #include "dw4/p2multipass.h"
+#include "dw4/igMemory.h"
 int *FUN_00202f60(int *arg0, long long arg1);
 int FUN_00202fa0(long long arg0);
 extern int FUN_001f8b50();
@@ -15,8 +16,6 @@ extern int FUN_00204ea0();
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
 void *FUN_00203000();
 extern int DAT_0056ae40[4];
-int Memory_FreeToSelector();
-void *Memory_AllocateAligned16();
 
 /* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
  * entry per combination of that feature's settings (-1: none); the slot's programs points at it and

@@ -35,7 +35,6 @@ extern "C" void igTimer_EnsureRegistered(void);
 extern "C" void FUN_00145de0(void);
 #include "dw4/igVisualContext.h"
 extern "C" void InsightLibrary_MarkRegistered(void);
-extern "C" int g_igRenderer_vtable[4];
 struct S {
     void *f0;
     char pad[4];
@@ -47,7 +46,6 @@ extern "C" igMetaObject *FUN_00231010(void);
 extern "C" igMetaObject *g_igMessage_metaObject;
 extern "C" igMetaObject *FUN_00231020(void);
 #include "dw4/StringPool.h"
-extern "C" int g_igInfoManager_vtable[4];
 #include "dw4/igNamedObject.h"
 extern "C" igMetaObject *g_igInfoManager_metaObject;
 extern "C" igMetaObject *FUN_002310d0(void);
@@ -171,7 +169,6 @@ extern "C" igMetaObject *igMessageReceiver_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igMessageDefaultReceiver_Register(void);
 extern "C" void thunk_igMessageDefaultReceiver_GetMetaObject(void);
 extern "C" igMetaObject *FUN_002323c0(void);
-extern "C" int g_igObject_metaObject[4];
 extern "C" void igMessageDefaultReceiver_InitFields(void);
 extern "C" igMetaObject *FUN_00232470(void);
 extern "C" igMetaObject *igInsightScheduler_GetMetaObject(void);
@@ -257,7 +254,6 @@ extern "C" int **FUN_00233610(int **arg0, long long arg1);
 extern "C" void FUN_002336b0(void);
 extern "C" CallbackArray *igInfoManagerOrderedList_Register(void);
 extern "C" void thunk_igInfoManagerOrderedList_GetMetaObject(void);
-extern "C" int g_igDependencyOrderedList_metaObject[4];
 extern "C" int FUN_00233740(void);
 extern "C" igMetaObject *g_igInfoManagerList_metaObject;
 extern "C" igMetaObject *FUN_00233750(void);
@@ -665,7 +661,6 @@ class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
 struct Instance : public igObject { };
-extern "C" igSmartPointer<Instance> igMetaObject_CreateInstanceRef(int, int);
 extern "C" void FUN_00236ca0(int self);
 class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); };
 extern "C" void FUN_00236dd0(void *arg0, void **arg1);

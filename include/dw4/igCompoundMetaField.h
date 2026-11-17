@@ -8,6 +8,7 @@ struct igMetaObject;
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern struct igMetaObject *g_igCompoundMetaField_metaObject;
 
 extern int g_igCompoundMetaField_vtable[4];
 

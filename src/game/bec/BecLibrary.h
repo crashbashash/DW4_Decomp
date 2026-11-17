@@ -290,9 +290,9 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #include "dw4/igMatrix44fList.h"
 #include "dw4/igRayList.h"
 #include "dw4/igVec3fList.h"
+#include "dw4/igFile.h"
 extern "C" void igIntListList_EnsureRegistered(void);
 extern "C" void igDirectoryList_EnsureRegistered(void);
-extern "C" void igFile_EnsureRegistered(void);
 extern "C" void igCharList_EnsureRegistered(void);
 extern "C" void igShortList_EnsureRegistered(void);
 
@@ -1731,7 +1731,6 @@ extern "C" int beFileChkObj_GetVTable(void);
 extern "C" void beFileChkObj_EnsureRegistered(void);
 extern "C" CallbackArray *beFileChkObj_Register(void);
 extern "C" void beFileChkObj_GetMetaObjectFunction(void);
-extern "C" int igFile_GetOrCreateMetaObject(void);
 extern "C" void beFileChkObj_InitFields(void);
 extern "C" igMetaObject *beDemoManager_GetOrCreateMetaObject(void);
 extern "C" void *beDemoManager_GetMetaObject(void);
@@ -2507,7 +2506,6 @@ extern "C" int g_beWeaponSeqDataList_vtable[4];
 extern "C" igMetaObject *g_beWeaponSeqData_metaObject;
 extern "C" int g_beWeaponSeqData_vtable[4];
 extern "C" int g_beWeapon_vtable[4];
-extern "C" int g_igInfoManager_vtable[4];
 extern "C" igMetaObject *g_beWeaponAttachDataList_metaObject;
 extern "C" igMetaObject *beWeaponAttachDataList_GetMetaObject(void);
 extern "C" int g_beWeaponAttachDataList_vtable[4];
@@ -3309,7 +3307,6 @@ extern "C" igMetaObject *g_beFontImage_metaObject;
 extern "C" igMetaObject *beFontImage_GetMetaObject(void);
 extern "C" int g_beFontImage_vtable[4];
 extern "C" int g_igFont_vtable[4];
-extern "C" int g_igBitmapFont_vtable[4];
 extern "C" igBitmapFont *igBitmapFont_Destroy(igBitmapFont *self, short delete_storage);
 extern "C" int g_beFont_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beFontImageList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
@@ -3415,9 +3412,7 @@ extern "C" int g_beChangePosTransformInfo_vtable[4];
 extern "C" igMetaObject *beChangePosTransform_GetMetaObject(void);
 extern "C" int g_beChangePosTransform_vtable[4];
 extern "C" int g_beCameraMode_vtable[4];
-extern "C" int g_igViewMode_vtable[4];
 extern "C" int g_beCameraCtrlInfo_vtable[4];
-extern "C" int g_igObject_metaObject[4];
 extern "C" int g_beCameraDemoData_vtable[4];
 extern "C" int g_beCameraBoxData_vtable[4];
 extern "C" igMetaObject *g_beCameraCtrlInfoRamShake_metaObject;

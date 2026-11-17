@@ -3,6 +3,6 @@ int Gap__Gfx__igParticleFormat__vfunc_22(void) {
 }
 
 int FUN_00181070(void) {
-    return g_igContextExt_metaObject[0];
+    return (int)g_igContextExt_metaObject;
 }
 

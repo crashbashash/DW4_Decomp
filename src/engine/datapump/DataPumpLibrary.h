@@ -202,7 +202,6 @@ extern "C" void FUN_001e5ab0(void);
 extern "C" CallbackArray *igDataPump_Register(void);
 extern "C" void thunk_igDataPump_GetMetaObject(void);
 extern "C" int igMetaField_GetOrCreateMetaObject(...);
-extern "C" int g_igObject_metaObject[4];
 extern "C" void igDataPump_InitFields(void);
 extern "C" igMetaObject *igBoolObject_GetMetaObject(void);
 struct O { int *vt; char post[12]; };

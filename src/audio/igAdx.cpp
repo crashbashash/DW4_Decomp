@@ -12,7 +12,6 @@ extern "C" {
 #include "dw4/cri/cri_adxt.h"
 }
 #include "dw4/igStringObj.h"
-extern "C" int Memory_GetAllocatorByName(...);
 #include "dw4/libkernl.h"
 extern "C" int SNDF_Finish(...);
 extern "C" int mwPlyFinishSfdFx(...);
@@ -246,7 +245,7 @@ int igAdxAudio_GetStatus(igAdxAudio *audio) {
 }
 
 void igAdx_CreateScratchString(void) {
-    int allocator;
+    igMemoryPoolView *allocator;
     igObject *old;
 
     allocator = Memory_GetAllocatorByName("User0");
@@ -257,11 +256,11 @@ void igAdx_CreateScratchString(void) {
             igObject_Destroy(old);
         }
     }
-    g_adxScratchString.p = (igStringObj *)(igStringObj_Create(allocator));
+    g_adxScratchString.p = (igStringObj *)(igStringObj_Create((int)allocator));
 }
 
 void igAdx_Shutdown(void) {
-    int allocator;
+    igMemoryPoolView *allocator;
     igObject *object;
 
     igAdx_SetPartitionCount(0);
@@ -287,11 +286,11 @@ void igAdx_Shutdown(void) {
     RemoveIntcHandler(2, g_adxVblankHandlerId);
     allocator = Memory_GetAllocatorByName("User0");
     if (g_adxHostFileCache.buf != 0) {
-        Memory_FreeBufferWithAllocator((void *)g_adxHostFileCache.buf, (igMemoryPoolView *)allocator);
+        Memory_FreeBufferWithAllocator((void *)g_adxHostFileCache.buf, allocator);
         g_adxHostFileCache.buf = 0;
     }
     if (g_adxDvdFileCache.buf != 0) {
-        Memory_FreeBufferWithAllocator((void *)g_adxDvdFileCache.buf, (igMemoryPoolView *)allocator);
+        Memory_FreeBufferWithAllocator((void *)g_adxDvdFileCache.buf, allocator);
         g_adxDvdFileCache.buf = 0;
     }
     ADXM_ShutdownThrd();
@@ -362,7 +361,7 @@ int igAdx_SetupIop(void) {
     int sndfiResult;
     char path[512];
     int sndfConfig[4];
-    int allocator;
+    igMemoryPoolView *allocator;
 
     if (g_adxIopReady != 0) {
         return 1;
@@ -420,7 +419,7 @@ int igAdx_SetupIop(void) {
         g_adxHostFileCache.flist = "cdvd.fic";
         g_adxHostFileCache.fnamelen = 0x20;
         g_adxHostFileCache.bufsize = ((g_adxHostFileCache.fnamelen + 1) * 0xD) + 0x68;
-        g_adxHostFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxHostFileCache.bufsize, 0x10, (igMemoryPoolView *)allocator);
+        g_adxHostFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxHostFileCache.bufsize, 0x10, allocator);
         ADXPS2_LoadFcacheHost(&g_adxHostFileCache);
     }
     if (g_adxMediaMode != 0) {
@@ -430,7 +429,7 @@ int igAdx_SetupIop(void) {
             g_adxDvdFileCache.flist = "cdvd.fic";
             g_adxDvdFileCache.fnamelen = 0x20;
             g_adxDvdFileCache.bufsize = ((g_adxDvdFileCache.fnamelen + 1) * 0xD) + 0x68;
-            g_adxDvdFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxDvdFileCache.bufsize, 0x10, (igMemoryPoolView *)allocator);
+            g_adxDvdFileCache.buf = (void *)Memory_AllocateAlignedWithAllocator(g_adxDvdFileCache.bufsize, 0x10, allocator);
             ADXPS2_LoadFcacheDvd(&g_adxDvdFileCache);
         }
     }
@@ -474,7 +473,7 @@ void igAdx_ExecServer(int) {
  * object pointer. */
 void igAdx_SetPartitionCount(int count) {
     int buffer;
-    int allocator;
+    igMemoryPoolView *allocator;
     int clearOffset;
     int freed;
     int freeOffset;
@@ -490,18 +489,18 @@ void igAdx_SetPartitionCount(int count) {
                 do {
                     buffer = *(int *)((int)g_adxPartitionBuffers + freeOffset);
                     if (buffer != 0) {
-                        Memory_FreeBufferWithAllocator((void *)buffer, (igMemoryPoolView *)allocator);
+                        Memory_FreeBufferWithAllocator((void *)buffer, allocator);
                     }
                     freed += 1;
                     freeOffset += 4;
                 } while (freed < g_adxPartitionCount);
             }
         }
-        Memory_FreeBufferWithAllocator((void *)g_adxPartitionBuffers, (igMemoryPoolView *)allocator);
+        Memory_FreeBufferWithAllocator((void *)g_adxPartitionBuffers, allocator);
     }
     g_adxPartitionCount = count;
     if (count > 0) {
-        g_adxPartitionBuffers = (void **)Memory_AllocateAlignedWithAllocator(count * 4, 0x10, (igMemoryPoolView *)allocator);
+        g_adxPartitionBuffers = (void **)Memory_AllocateAlignedWithAllocator(count * 4, 0x10, allocator);
         cleared = 0;
         if (0 < g_adxPartitionCount) {
             clearOffset = 0;
@@ -518,7 +517,7 @@ void igAdx_SetPartitionCount(int count) {
                 igObject_Destroy(object);
             }
         }
-        g_adxPartitionNames.p = (igStringRefList *)igStringRefList_Create(allocator);
+        g_adxPartitionNames.p = (igStringRefList *)igStringRefList_Create((int)allocator);
     }
 }
 
@@ -622,7 +621,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
     if (!g_adxIopReady) return 0;
     size = ((length + 1) * 2 + 282) & ~3;
     if (size > 0) {
-        g_adxPartitionBuffers[stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, ((igMemoryPoolView *)Memory_GetAllocatorByName(((char *)"User0")))));
+        g_adxPartitionBuffers[stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, Memory_GetAllocatorByName("User0")));
     }
     igAdx_AddPartitionName(stream, (char *)path);
     name = StringList_CopyRetained((int)g_adxPartitionNames.p, stream).p;

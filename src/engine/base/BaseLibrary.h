@@ -128,13 +128,12 @@ extern int DAT_00561010[4];
 extern "C" {
 int igUnsignedCharMetaField_GetDefaultDescriptor(...);
 int FUN_0019c8c0(...);
-int Memory_GetDefaultHandleAllocator(...);
+
 int FUN_002fdef0(void *meta, void *field);
 int FUN_00142bb0(void *list, void *key);
 igObject *igMetaObjectList_Create(int allocator);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
-igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(int);
 void *igInfoList_Create(int arg0);
 int FUN_001d6340(...);
 

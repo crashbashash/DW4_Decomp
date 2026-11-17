@@ -32,8 +32,8 @@ void igMemoryPool_ReleaseDefaults(igMemoryPoolView *pool) {
     igMemoryPool_UnregisterPool((void **)pool);
 }
 
-void Memory_GetDefaultHandleAllocator(void) {
-    Memory_GetAllocatorBySelector(1);
+igMemoryPoolView *Memory_GetDefaultHandleAllocator(void) {
+    return Memory_GetAllocatorBySelector(1);
 }
 
 void * Memory_GetDefaultAllocator(void) {

@@ -16,6 +16,7 @@ struct ModelChange {
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern int g_igModel_vtable[4];
 
 struct CallbackArray *igModel_Register(void);
 void igModel_NotifyViews(struct igModel *model, struct ModelChange *change);

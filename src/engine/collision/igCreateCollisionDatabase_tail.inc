@@ -1,4 +1,5 @@
-extern "C" igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(int meta);
+#include "dw4/igAABox.h"
+#include "dw4/igMetaObject.h"
 #include "dw4/igVolume.h"
 extern "C" igObject *FUN_00227460(igMemoryPoolView *allocator);
 extern "C" void FUN_0022ab90(igObject *iterator, igNode *root, igMetaObject *metaObject);
@@ -6,7 +7,6 @@ extern "C" igNode *FUN_0022ac00(igObject *iterator);
 extern "C" void FUN_0022ac70(igObject *iterator, igMetaObject *metaObject);
 extern "C" void FUN_0022b0a0(float *matrix, igObject *iterator);
 
-extern "C" igMetaObject *g_igAABox_metaObject;
 #include "dw4/emptyString.h"
 static inline igAABox *asAABox(igObject *o) {
     if (o != 0 && igObject_IsKindOf(o, g_igAABox_metaObject) != 0) return (igAABox *)o;
@@ -48,7 +48,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
         assignObject(self->_staticGroupType, (igObject *)igCollisionGroup_GetMetaObject());
     }
     if (self->_gridType != 0 && igMetaObject_IsOfType((igMetaObject *)self->_gridType, igCollisionGrid_GetMetaObject()) != 0) {
-        igSmartPointer<igObject> grid = igMetaObject_CreateInstanceDefaultRef(self->_gridType);
+        igSmartPointer<igObject> grid = igMetaObject_CreateInstanceDefaultRef((igMetaObject *)self->_gridType);
         assignObject(self->_grid, grid.get());
     } else {
         createGrid(self->_grid);
@@ -78,7 +78,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
             float world[16];
             FUN_0022b0a0(world, iterator.get());
             FUN_0018d630(sphere.get(), world);
-            igSmartPointer<igCollisionGroup> group = igMetaObject_CreateInstanceDefaultRef(self->_staticGroupType);
+            igSmartPointer<igCollisionGroup> group = igMetaObject_CreateInstanceDefaultRef((igMetaObject *)self->_staticGroupType);
             const char *name = (const char *)geometry->_name;
             igNamedObject_SetName((igNamedObject *)group.get(), name != 0 ? name : emptyString);
             setBound(group.get(), sphere.get());

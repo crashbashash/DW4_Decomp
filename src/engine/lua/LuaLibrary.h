@@ -27,17 +27,12 @@ typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
 typedef void (*igMetaObjectCallback)(void);
 #include "dw4/igObjectRefMetaField.h"
 #include "dw4/igRawRefMetaField.h"
+#include "dw4/igFile.h"
+#include "dw4/igMetaObject.h"
 #include "dw4/list-services.h"
 extern "C" void igMemoryPool_EnsureRegistered(void);
 
 extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
-extern "C" void igMetaObject_RunStaticInit(CallbackArray *(*registerClass)(void));
-extern "C" CallbackArray *igMetaObject_RegisterClass(...);
-extern "C" int igMetaObject_Create(int allocator);
-extern "C" int igMetaObject_GetFieldCount(igMetaObject *meta);
-extern "C" void igMetaObject_CreateFields(igMetaObject *meta, FieldFactory *factories, int count);
-extern "C" igMetaField *igMetaObject_GetFieldAt(igMetaObject *meta, int index);
-extern "C" void igMetaObject_NameFields(igMetaObject *meta, const char **names, igMetaField ***handles, int *offsets, int first);
 extern "C" int Memory_GetAllocatorBySelector(int key);
 
 /* The object system's byte offset of the vtable word inside an object. */
@@ -253,7 +248,6 @@ public:
     virtual int seek(int offset, int origin);                  /* slot 36 */
     virtual int size();                                        /* slot 37 */
 };
-extern "C" igFileView *igFile_Create(int pool);
 
 /* Stock Lua's internals and the C runtime's seek origins, which only the library uses. */
 enum { SEEK_SET = 0, SEEK_END = 2 };
@@ -266,9 +260,6 @@ extern "C" int strcmp(const char *a, const char *b);
 extern "C" char *strstr(const char *haystack, const char *needle);
 extern "C" int sprintf(char *buffer, const char *format, ...);
 extern "C" int vsprintf(char *buffer, const char *format, va_list args);
-extern "C" igObject *igMetaObject_CreateInstanceDefault(igMetaObject *meta);
-extern "C" igMetaField *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
-extern "C" igMetaObject *igObjectSystem_FindMetaByNameDefault(const char *name);
 extern "C" igMetaObject *g_igCharMetaField_metaObject;
 extern "C" igMetaObject *g_igUnsignedCharMetaField_metaObject;
 extern "C" igMetaObject *g_igIntMetaField_metaObject;

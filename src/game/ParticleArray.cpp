@@ -20,13 +20,13 @@
 #include "dw4/igVisualContext.h"
 #include <math.h>
 #include "dw4/igVec4f.h"
+#include "dw4/igCommonTraversal.h"
+extern "C" int g_igCommonTraversal_travProcs;
 
 #pragma push
 #pragma readonly_strings on
 
-extern "C" int igCommonTraversal_TraverseGeometry(igCommonTraversal *traversal, ParticleTimer *timer);
 extern "C" void igVertexArrayLock_Init(igVertexArrayLock *lock);
-extern "C" int g_igCommonTraversal_travProcs;
 
 extern "C" {
 int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node);
@@ -220,7 +220,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     stack = ((igTDataList<igTimeAttr *> **)stack->_data)[stackIndex];
     stack->append(attr);
     igAttrStackManager_MarkStackChanged(stacks, (igAttrStack *)stack, stackIndex);
-    result = igCommonTraversal_TraverseGeometry(traversal, timer);
+    result = igCommonTraversal_TraverseGeometry(traversal, (igGeometry *)timer);
     popIndex = *unitID + ((int *)stacks->_attrStackIndexTable)[*attrIndex];
     popStack = ((igAttrStack **)((igAttrStackList *)stacks->_attrStacks)->_data)[popIndex];
     topIndex = popStack->_count - 1;

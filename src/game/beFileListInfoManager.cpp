@@ -14,6 +14,8 @@
 #include "dw4/igObject.h"
 #include "dw4/igSceneInfo.h"
 #include "dw4/igViewerSceneInfoManager.h"
+#include "dw4/igNamedObjectInfo.h"
+#include "dw4/igResource.h"
 #include "dw4/emptyString.h"
 #define CLEAR(T, src) { \
     T *l = (T *)(src); \
@@ -40,13 +42,9 @@ extern "C" igMetaObject *beFileListInfoManager_GetMeta(void);
 extern "C" void beFileListInfoManager_Activate(beFileListInfoManager *self, int unusedArg);
 extern "C" void beFileListInfoManager_Deactivate(beFileListInfoManager *self, int unusedArg);
 extern "C" void beFileListInfoManager_Start(beFileListInfoManager *self);
-extern "C" igMetaObject *g_igNamedObjectInfo_metaObject;
 extern "C" int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info);
 extern "C" void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self);
-extern "C" int igResource_IsDirectoryLoaded(int resource, igDirectory *directory);
-extern "C" void igResource_UnloadDirectory(int resource, int name);
-extern "C" igObject *igResource_LoadDirectory(int resource, int *name);
-extern "C" int g_globalContext[4];
+
 extern "C" char ROOTATTR_2[];
 
 /* A pooled string held by reference: the count sits at p[-1], the chunk header at p[-2]. */
@@ -224,7 +222,7 @@ void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self) {
     int ownerAllocator = (int)igObject_GetAllocator(self); \
     igObject *old; \
     if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = (int)Memory_GetAllocatorBySelector(selector); } \
-    context = (igResource *)g_globalContext[0]; \
+    context = (igResource *)g_globalContext; \
     if (allocator != 0) ((igObject *)allocator)->_refCount = ((igObject *)allocator)->_refCount + 1; \
     old = (igObject *)context->pool; \
     if (old != 0) { \
@@ -255,7 +253,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
     dirs = (igDirectoryList *)self->_dirList;
     if (dirs->_count != 0) {
         dir = ((igDirectory **)dirs->_data)[0];
-        if (igResource_IsDirectoryLoaded(g_globalContext[0], dir) != 0) {
+        if (igResource_IsDirectoryLoaded((igResource *)g_globalContext, dir)) {
             if (ROOTATTR_2 == 0) {
                 rootName = 0;
             } else {
@@ -322,7 +320,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                     offset += 4;
                 } while (i < infos->_count);
             }
-            igResource_UnloadDirectory(g_globalContext[0], dir->_name);
+            igResource_UnloadDirectory((igResource *)g_globalContext, (const char *)dir->_name);
             CLEAR(igDirectoryList, self->_dirList)
             self->_loaded = self->_loaded + 1;
         }
@@ -339,7 +337,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
             self->_onetimeCount = self->_onetimeCount - 1;
         }
         StringRef fileName(StringList_CopyRetained(fileNames, self->_loaded));
-        ObjectList_AppendRetained((igObjectList *)self->_dirList, igResource_LoadDirectory(g_globalContext[0], fileName.p));
+        ObjectList_AppendRetained((igObjectList *)self->_dirList, igResource_LoadDirectory((igResource *)g_globalContext, (const char *)fileName.p));
     }
     return 0;
 }

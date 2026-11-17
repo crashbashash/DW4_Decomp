@@ -17,6 +17,7 @@
 #include "dw4/igTraversal.h"
 #include <stdio.h>
 #include <string.h>
+extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/emptyString.h"
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
@@ -24,7 +25,6 @@ extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node
 extern "C" void beLua_Stop(void);
 extern "C" void beLua_Update(void);
 extern "C" igMetaObject *beLua_GetMeta(void);
-extern "C" int g_igCommonTraversal_travProcs[4];
 /* Resolves a script name through the interned-string pool (the given name, or "<stage>/lua" when none
  * is given), walks every beLuaInfo in the receiver's info list and every beLuaData in that info's data
  * list, and runs the first data object whose name equals `name` through the Lua state's buffer-run

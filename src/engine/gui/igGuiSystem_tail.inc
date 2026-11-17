@@ -101,7 +101,7 @@ void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
     igGuiSystem_SetMouseCursorVisible(gui, arg0->f32);
     sp30.a = 2;
     sp30.b = 0;
-    sp30.c = g_igGuiSystemModelMousePositionField[0];
+    sp30.c = (int)g_igGuiSystemModel_mousePositionMetaField;
     igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)&sp30);
 }
 

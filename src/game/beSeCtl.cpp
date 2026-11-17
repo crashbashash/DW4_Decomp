@@ -15,6 +15,7 @@
 #include "dw4/igTimeAttr.h"
 #include "dw4/igTraversal.h"
 #include <string.h>
+extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/emptyString.h"
 
 extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
@@ -38,7 +39,6 @@ struct AttrList : igTDataList<igAttr *> {
     }
 };
 extern "C" int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav);
-extern "C" int g_igCommonTraversal_travProcs[4];
 extern "C" void beSeCtl_Prepare(beSeCtl *self);
 extern "C" char ACTION_BROADCAST_3[];
 extern "C" void beSeCtl_OnAddRam(beSeCtl * p0, int p1, char * p2, int p3, int p4);

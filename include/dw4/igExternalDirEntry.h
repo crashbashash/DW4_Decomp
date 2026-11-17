@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern struct igMetaObject *g_igExternalDirEntry_metaObject;
 
 extern int g_igExternalDirEntry_vtable[4];
 

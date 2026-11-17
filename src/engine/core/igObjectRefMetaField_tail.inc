@@ -57,7 +57,7 @@ void igObjectRefMetaField_ConstructValue(igObjectRefMetaField *field,void *objec
     void *allocator;
     if(!field->_construct)return;
     const char *name=(const char *)field->_poolName;
-    if(name&&*name){allocator=Memory_GetAllocatorByName((int)name);if(!allocator)allocator=((void *)igObject_GetAllocator((igObject *)object));}
+    if(name&&*name){allocator=Memory_GetAllocatorByName(name);if(!allocator)allocator=((void *)igObject_GetAllocator((igObject *)object));}
     else allocator=((void *)igObject_GetAllocator((igObject *)object));
     igObject *child=(igObject *)igMetaObject_CreateInstance((igMetaObject *)((void *)field->_metaObject), (igMemoryPoolView *)allocator);
     igObjectRefMetaField_Assign(field,object,child);

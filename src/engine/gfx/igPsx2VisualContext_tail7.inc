@@ -27,7 +27,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_261(int *arg0, int *arg1, int arg2) {
  * Float streams (igVec3fList / igVec2fList) bind as they are; char/short streams set a fixed-point
  * component layout from the entry's shift, which the return value reports. Without an index
  * array the streams are advanced to `firstVertex`. */
-static inline bool isListOf(VC_17e590 *list, int meta) { return meta == list->vX(); }
+static inline bool isListOf(VC_17e590 *list, igMetaObject *meta) { return (int)meta == list->vX(); }
 
 bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *positions, int *normals, int *colors, int *texCoords) {
     igPsx2VisualContext *vc = (igPsx2VisualContext *)context;
@@ -39,25 +39,25 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
     VC_17e590 *other;
 
     entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 1, 0);
-    source = (VC_17e590 *)dw4_cast_or_null((char *)entry->obj, g_igVec3fList_metaObject);
+    source = (VC_17e590 *)dw4_cast_or_null((char *)entry->obj, &g_igVec3fList_metaObject);
     if (source != 0) {
         *positions = source->f16;
         p2SetComponentLayout(0, 0, 0, 0);
     } else {
         source = entry->obj;
-        if (isListOf(source, g_igCharList_metaObject[0])) {
+        if (isListOf(source, g_igCharList_metaObject)) {
             p2SetComponentLayout(0, 1, 7 - entry->f32, entry->f32);
             integerFormat = true;
             *positions = source->f16;
-        } else if (isListOf(source, g_igUnsignedCharList_metaObject[0])) {
+        } else if (isListOf(source, g_igUnsignedCharList_metaObject)) {
             p2SetComponentLayout(0, 0, 8 - entry->f32, entry->f32);
             integerFormat = true;
             *positions = source->f16;
-        } else if (isListOf(source, g_igShortList_metaObject[0])) {
+        } else if (isListOf(source, g_igShortList_metaObject)) {
             p2SetComponentLayout(0, 1, 15 - entry->f32, entry->f32);
             integerFormat = true;
             *positions = source->f16;
-        } else if (isListOf(source, g_igUnsignedShortList_metaObject[0])) {
+        } else if (isListOf(source, g_igUnsignedShortList_metaObject)) {
             p2SetComponentLayout(0, 0, 16 - entry->f32, entry->f32);
             integerFormat = true;
             *positions = source->f16;
@@ -66,7 +66,7 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
     entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 3, 0);
     if (entry != 0) {
         list = entry->obj;
-        if (list != 0 && igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
+        if (list != 0 && igObject_IsKindOf((igObject *)list, g_igVec3fList_metaObject) != 0) {
             floatList = list;
         } else {
             floatList = 0;
@@ -76,19 +76,19 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
             p2SetComponentLayout(1, 0, 0, 0);
         } else {
             other = entry->obj;
-            if (isListOf(other, g_igCharList_metaObject[0])) {
+            if (isListOf(other, g_igCharList_metaObject)) {
                 p2SetComponentLayout(1, 1, 7 - entry->f32, entry->f32);
                 integerFormat = true;
                 *normals = other->f16;
-            } else if (isListOf(other, g_igUnsignedCharList_metaObject[0])) {
+            } else if (isListOf(other, g_igUnsignedCharList_metaObject)) {
                 p2SetComponentLayout(1, 0, 8 - entry->f32, entry->f32);
                 integerFormat = true;
                 *normals = other->f16;
-            } else if (isListOf(other, g_igShortList_metaObject[0])) {
+            } else if (isListOf(other, g_igShortList_metaObject)) {
                 p2SetComponentLayout(1, 1, 15 - entry->f32, entry->f32);
                 integerFormat = true;
                 *normals = other->f16;
-            } else if (isListOf(other, g_igUnsignedShortList_metaObject[0])) {
+            } else if (isListOf(other, g_igUnsignedShortList_metaObject)) {
                 p2SetComponentLayout(1, 0, 16 - entry->f32, entry->f32);
                 integerFormat = true;
                 *normals = other->f16;
@@ -99,9 +99,9 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
     }
     entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 2, 0);
     if (entry != 0) {
-        if (isListOf(entry->obj, g_igUnsignedIntList_metaObject[0])) {
+        if (isListOf(entry->obj, g_igUnsignedIntList_metaObject)) {
             *colors = entry->obj->f16;
-        } else if (isListOf(entry->obj, g_igVec4ucList_metaObject[0])) {
+        } else if (isListOf(entry->obj, g_igVec4ucList_metaObject)) {
             *colors = entry->obj->f16;
         }
     } else {
@@ -110,7 +110,7 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
     entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 4, vc->_texCoordIndex[0]);
     if (entry != 0) {
         list = entry->obj;
-        if (list != 0 && igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+        if (list != 0 && igObject_IsKindOf((igObject *)list, g_igVec2fList_metaObject) != 0) {
             floatList = list;
         } else {
             floatList = 0;
@@ -120,19 +120,19 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
             p2SetComponentLayout(2, 0, 0, 0);
         } else {
             source = entry->obj;
-            if (isListOf(source, g_igCharList_metaObject[0])) {
+            if (isListOf(source, g_igCharList_metaObject)) {
                 p2SetComponentLayout(2, 1, 7 - entry->f32, entry->f32);
                 integerFormat = true;
                 *texCoords = source->f16;
-            } else if (isListOf(source, g_igUnsignedCharList_metaObject[0])) {
+            } else if (isListOf(source, g_igUnsignedCharList_metaObject)) {
                 p2SetComponentLayout(2, 0, 8 - entry->f32, entry->f32);
                 integerFormat = true;
                 *texCoords = source->f16;
-            } else if (isListOf(source, g_igShortList_metaObject[0])) {
+            } else if (isListOf(source, g_igShortList_metaObject)) {
                 p2SetComponentLayout(2, 1, 15 - entry->f32, entry->f32);
                 integerFormat = true;
                 *texCoords = source->f16;
-            } else if (isListOf(source, g_igUnsignedShortList_metaObject[0])) {
+            } else if (isListOf(source, g_igUnsignedShortList_metaObject)) {
                 p2SetComponentLayout(2, 0, 16 - entry->f32, entry->f32);
                 integerFormat = true;
                 *texCoords = source->f16;
@@ -156,28 +156,28 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     bool var_s2 = false;
     Node *n = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 9, 0);
     if (n != 0) {
-        if (n->obj->vX() == g_igFloatList_metaObject[0]) {
+        if (n->obj->vX() == (int)g_igFloatList_metaObject) {
             *arg3 = n->obj->f16;
             p2SetComponentLayout(4, 0, 0, 0);
-        } else if (n->obj->vX() == g_igVec2fList_metaObject[0]) {
+        } else if (n->obj->vX() == (int)g_igVec2fList_metaObject) {
             *arg3 = n->obj->f16;
             p2SetComponentLayout(4, 0, 0, 0);
         } else {
             VC_17e590 *o = n->obj;
-            if (o->vX() == g_igCharList_metaObject[0]) {
+            if (o->vX() == (int)g_igCharList_metaObject) {
                 int a = n->f32;
                 p2SetComponentLayout(4, 1, 7 - a, a);
                 var_s2 = true;
                 *arg3 = o->f16;
-            } else if (o->vX() == g_igUnsignedCharList_metaObject[0]) {
+            } else if (o->vX() == (int)g_igUnsignedCharList_metaObject) {
                 int a = n->f32;
                 p2SetComponentLayout(4, 0, 8 - a, a);
                 *arg3 = o->f16;
-            } else if (o->vX() == g_igShortList_metaObject[0]) {
+            } else if (o->vX() == (int)g_igShortList_metaObject) {
                 int a = n->f32;
                 p2SetComponentLayout(4, 1, 0xF - a, a);
                 *arg3 = o->f16;
-            } else if (o->vX() == g_igUnsignedShortList_metaObject[0]) {
+            } else if (o->vX() == (int)g_igUnsignedShortList_metaObject) {
                 int a = n->f32;
                 p2SetComponentLayout(4, 0, 0x10 - a, a);
                 *arg3 = o->f16;
@@ -189,7 +189,7 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     n2 = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 4, 1);
     if (n2 != 0) {
         s = n2->obj;
-        if (s != 0 && igObject_IsKindOf((igObject *)s, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+        if (s != 0 && igObject_IsKindOf((igObject *)s, g_igVec2fList_metaObject) != 0) {
             r = s;
         } else {
             r = 0;
@@ -198,19 +198,19 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
             *arg4 = r->f16;
         } else {
             o2 = n2->obj;
-            if (o2->vX() == g_igCharList_metaObject[0]) {
+            if (o2->vX() == (int)g_igCharList_metaObject) {
                 int a = n2->f32;
                 p2SetComponentLayout(2, 1, 7 - a, a);
                 *arg4 = o2->f16;
-            } else if (o2->vX() == g_igUnsignedCharList_metaObject[0]) {
+            } else if (o2->vX() == (int)g_igUnsignedCharList_metaObject) {
                 int a = n2->f32;
                 p2SetComponentLayout(2, 0, 8 - a, a);
                 *arg4 = o2->f16;
-            } else if (o2->vX() == g_igShortList_metaObject[0]) {
+            } else if (o2->vX() == (int)g_igShortList_metaObject) {
                 int a = n2->f32;
                 p2SetComponentLayout(2, 1, 0xF - a, a);
                 *arg4 = o2->f16;
-            } else if (o2->vX() == g_igUnsignedShortList_metaObject[0]) {
+            } else if (o2->vX() == (int)g_igUnsignedShortList_metaObject) {
                 int a = n2->f32;
                 p2SetComponentLayout(2, 0, 0x10 - a, a);
                 *arg4 = o2->f16;
@@ -239,7 +239,7 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
             v = 0;
             if (e != 0) {
                 o = e->obj;
-                if (o != 0 && igObject_IsKindOf((igObject *)o, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+                if (o != 0 && igObject_IsKindOf((igObject *)o, g_igVec2fList_metaObject) != 0) {
                     o = (Obj_17e980 *)o;
                 } else {
                     o = 0;
@@ -248,16 +248,16 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
                     v = ((int *)o)[4];
                 } else {
                     o = e->obj;
-                    if (g_igCharList_metaObject[0] == o->meta()) {
+                    if ((int)g_igCharList_metaObject == o->meta()) {
                         p2SetComponentLayout(2, 1, 7 - e->f32, e->f32);
                         v = ((int *)o)[4];
-                    } else if (g_igUnsignedCharList_metaObject[0] == o->meta()) {
+                    } else if ((int)g_igUnsignedCharList_metaObject == o->meta()) {
                         p2SetComponentLayout(2, 0, 8 - e->f32, e->f32);
                         v = ((int *)o)[4];
-                    } else if (g_igShortList_metaObject[0] == o->meta()) {
+                    } else if ((int)g_igShortList_metaObject == o->meta()) {
                         p2SetComponentLayout(2, 1, 15 - e->f32, e->f32);
                         v = ((int *)o)[4];
-                    } else if (g_igUnsignedShortList_metaObject[0] == o->meta()) {
+                    } else if ((int)g_igUnsignedShortList_metaObject == o->meta()) {
                         p2SetComponentLayout(2, 0, 16 - e->f32, e->f32);
                         v = ((int *)o)[4];
                     }

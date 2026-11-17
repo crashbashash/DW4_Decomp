@@ -27,6 +27,7 @@ enum { kReportContinue = 1, kReportIgnoreAlways = 2 };
 
 #include "dw4/igObject.h"
 #include "dw4/igMetaObject.h"
+#include "dw4/igFile.h"
 #include "dw4/igMemory.h"
 #include "dw4/igReport.h"
 #include "dw4/igAdx.h"
@@ -36,7 +37,6 @@ enum { kReportContinue = 1, kReportIgnoreAlways = 2 };
 extern "C" {
 /* CRI ADXF, on the handle in `_adxf` */
 
-void igFile_SetFileName(igObject *file, const char *fileName); /* sets igFile::_fileName */
 int igReport_Printf(const char *format, ...);  /* prints */
 int igReport_Flush(...);
 
@@ -231,7 +231,7 @@ igAdxFile *igAdxFile_OpenFile(igAdxFile *self, const char *fileName, const char 
 {
     bool opened;
 
-    igFile_SetFileName(self, fileName);
+    igFile_SetFileName((igFile *)self, fileName); /* igAdxFile extends igFile; reflected.h derives it from igObject */
     if (strcmp(mode, "rb") == 0) {
         opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kReadBinary) == g_resultSuccess;
     } else if (strcmp(mode, "r") == 0) {

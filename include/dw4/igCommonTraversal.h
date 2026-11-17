@@ -3,6 +3,7 @@
 
 struct igCommonTraversal;
 struct igGeometry;
+struct igTraversalFunctionList;
 
 #ifdef __cplusplus
 extern "C" {

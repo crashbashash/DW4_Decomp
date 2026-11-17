@@ -94,6 +94,18 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/internalNonRefCountedObjectList.h"
 #include "dw4/list-services.h"
 #include "dw4/igVec4f.h"
+#include "dw4/igCharList.h"
+#include "dw4/igContextExt.h"
+#include "dw4/igFile.h"
+#include "dw4/igFloatList.h"
+#include "dw4/igResource.h"
+#include "dw4/igShortList.h"
+#include "dw4/igUnsignedCharList.h"
+#include "dw4/igUnsignedIntList.h"
+#include "dw4/igUnsignedShortList.h"
+#include "dw4/igVec2fList.h"
+#include "dw4/igVec3fList.h"
+#include "dw4/igVec4ucList.h"
 
 extern "C" igMetaObject *g_igVertexArray_metaObject;
 extern "C" igMetaObject *g_igScissorExt_metaObject;
@@ -104,7 +116,6 @@ extern "C" igMetaObject *g_igCapabilityManager_metaObject;
 extern "C" igMetaObject *g_igPsx2LongList_metaObject;
 extern "C" void FUN_001e4820(void);
 extern "C" void igDataList_EnsureRegistered(void);
-extern "C" void igFile_EnsureRegistered(void);
 
 extern "C" void igIntMetaField_EnsureRegistered(void);
 extern "C" void igMemoryPool_EnsureRegistered(void);
@@ -193,7 +204,6 @@ extern "C" igMetaObject *igVisualContext_GetMetaObject(void);
 extern "C" CallbackArray *igContext_Register(void);
 extern "C" CallbackArray *igVisualContext_Register(void);
 extern "C" void thunk_igVisualContext_GetMetaObject(void);
-extern "C" int g_igContext_metaObject[4];
 extern "C" int FUN_0014a170(void);
 extern "C" int FUN_001888e0(...);
 extern "C" int igTimer_GetOrCreateMetaObject(...);
@@ -283,7 +293,6 @@ extern "C" void FUN_0014ab70(void);
 extern "C" CallbackArray *igVertexArray2_Register(void);
 extern "C" void thunk_igVertexArray2_GetMetaObject(void);
 
-extern "C" int g_igObject_metaObject[4];
 extern "C" void igVertexArray2_InitFields(void);
 extern "C" void thunk_FUN_00152200(void);
 extern "C" int FUN_0014ad00(void);
@@ -344,7 +353,6 @@ extern "C" igMetaObject *igContextExt_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igContextExt_Register(void);
 extern "C" CallbackArray *igUserUCodeExt_Register(void);
 extern "C" void thunk_igUserUCodeExt_GetMetaObject(void);
-extern "C" int g_igContextExt_metaObject[4];
 extern "C" int FUN_0014bc40(void);
 extern "C" void FUN_0014bc50(void);
 extern "C" void thunk_igPsx2UserUCodeExt_GetMetaObject(void);
@@ -495,7 +503,6 @@ extern "C" int igTrackedElementMetaField_GetVTable(void);
 
 extern "C" CallbackArray *igTrackedElementMetaField_Register(void);
 extern "C" void thunk_igTrackedElementMetaField_GetMetaObject(void);
-extern "C" int g_igCompoundMetaField_metaObject[4];
 extern "C" int FUN_0014e530(void);
 typedef struct Q { char pad4[4]; int f4; char pad12[10]; short f18; } Q;
 typedef struct R_14e540 { char pad[12]; int f12; } R_14e540;
@@ -571,7 +578,6 @@ extern "C" igMetaObject *igExternalDirEntry_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igExternalDirEntry_Register(void);
 extern "C" CallbackArray *igExternalImageEntry_Register(void);
 extern "C" void thunk_FUN_0014f420(void);
-extern "C" int g_igExternalDirEntry_metaObject[4];
 extern "C" int FUN_0014f760(void);
 extern "C" igMetaObject *FUN_0014f770(void);
 extern "C" igMetaObject *igDisableExt_GetMetaObject(void);
@@ -619,7 +625,6 @@ extern "C" igMetaObject *igImageLoader_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igTgaLoader_Register(void);
 extern "C" void thunk_igTgaLoader_GetMetaObject(void);
 extern "C" igMetaObject *FUN_001502a0(void);
-extern "C" int igFile_GetOrCreateMetaObject(...);
 extern "C" void igTgaLoader_InitFields(void);
 extern "C" int FUN_00150390(int arg0);
 extern "C" igMetaObject *igFileImagePng_GetMetaObject(void);
@@ -923,7 +928,6 @@ typedef struct S0_154e40 { char pad12[12]; int fC; int f10; int f14; int f18; } 
 extern "C" void FUN_00154e40(S0_154e40 *arg0, int arg1);
 extern "C" int Gap__Gfx__igClut__vfunc_23(int arg0, int arg1);
 struct Arr { char pad[8]; int a8; int a12; int a16; void *a20; int a24; };
-extern "C" void *igFile_Create(...);
 
 class DW4VC_100_2 : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int, int); virtual int v24(); virtual int v25(int,int,int);
   };
@@ -967,7 +971,6 @@ extern "C" int FUN_00155490(void);
 struct Ref_1554a0 : public igObject { char *str; int len; };
 
 extern "C" StringRef FUN_001554a0(int arg1);
-extern "C" int g_igObject_metaObject[4];
 extern "C" void *igObject_GetMetaObject_Virtual(void);
 /* An object whose vtable slot 20 answers its igMetaObject (igMetaField and every igObject). */
 class igMetaObjectSource : public igVirtualObject {
@@ -1047,8 +1050,6 @@ struct B { char pad[16]; struct C **tab; };
 struct A_1562d0 { char pad[308]; struct B *b; };
 extern "C" int FUN_001562d0(struct A_1562d0 *arg0, int arg1);
 extern "C" int igMemoryRefMetaField_SetAlignmentType(...);
-extern "C" int igResource_AddAlignment(...);
-extern "C" int g_globalContext[4];
 extern "C" void FUN_00156300(void);
 typedef struct S0_156340 { char pad88[88]; int f58; } S0_156340;
 extern "C" void FUN_00156340(S0_156340 *arg0, void **arg1);
@@ -2185,7 +2186,6 @@ extern "C" void *FUN_0015f510(L *l, int a1, int a2, int a3);
 
 extern "C" void FUN_0015f660(igVertexArray2 *arg0, igSmartPointer<Rc_17f2b0> list);
 struct C_15f730 { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19(); virtual int v20();  };
-extern "C" int g_igVec3fList_metaObject[];
 extern "C" int DAT_005610a8[];
 extern "C" int Gap__Gfx__igVertexArray2__vfunc_25(int arg0, int arg1);
 #define REF_COUNT_MASK 0x7FFFFF
@@ -2195,18 +2195,8 @@ struct VertexArrayFormat;
 extern "C" void *FUN_00189e40(...);
 extern "C" void* FUN_0018a060(...);
 extern "C" void *FUN_0018a2d0(...);
-extern "C" void *igFloatList_Create(...);
-extern "C" void *igUnsignedCharList_Create(...);
 extern "C" int Color4f_Unpack(...);
-extern "C" int g_igVec4ucList_metaObject[4];
 extern "C" int DAT_005610b0[4];
-extern "C" int g_igVec2fList_metaObject[4];
-extern "C" int g_igFloatList_metaObject[4];
-extern "C" int g_igUnsignedCharList_metaObject[4];
-extern "C" int g_igShortList_metaObject[4];
-extern "C" int g_igUnsignedShortList_metaObject[4];
-extern "C" int g_igUnsignedIntList_metaObject[4];
-extern "C" int g_igCharList_metaObject[4];
 /* Builds the stream objects of a new vertex array. When the helper has no igVertexArray2 yet (+12
  * == 0) it creates one and, for every stream kind requested in the layout word *arg1, creates a
  * data list of `arg2` elements and wraps it in a stream record (kind in +16) appended to the
@@ -2259,7 +2249,7 @@ struct V_15ff10 { float x, y, z; };
 struct A28 {
     char pad[8]; int f8; char pad2[4]; V_15ff10 *f16;
     static inline A28 *Cast(A28 *p) {
-        if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
+        if (p != 0 && igObject_IsKindOf((igObject *)p, g_igVec3fList_metaObject) != 0) {
             return p;
         }
         return 0;
@@ -2337,7 +2327,7 @@ struct V53 { float x, y; };
 struct A53 {
     char pad[8]; int f8; char pad2[4]; V53 *f16;
     static inline A53 *Cast(A53 *p) {
-        if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+        if (p != 0 && igObject_IsKindOf((igObject *)p, g_igVec2fList_metaObject) != 0) {
             return p;
         }
         return 0;
@@ -2407,7 +2397,6 @@ template <class T> static inline void igRelease(igTDataList<T> *o) {
 }
 extern "C" igTDataList<signed char> *igCharList_Create(int pool);
 extern "C" igTDataList<short> *igShortList_Create(int pool);
-extern "C" igTDataList<unsigned short> *igUnsignedShortList_Create(int pool);
 extern "C" float Gap__Gfx__igVertexArray2Helper__vfunc_61(igVertexArray2Helper *self, int type, int bytes,
                                                           bool useFixed, bool isSigned, int bits, int index);
 extern "C" ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage);
@@ -2909,8 +2898,6 @@ struct O520;
 struct S0_1690d0;
 struct Oab80;
 struct OB1d0;
-extern "C" void* Memory_ReallocateAlignedAlias(...);
-extern "C" void* Memory_FindBufferOwner(...);
 
 extern "C" int p2CallDisplayList(...);
 
@@ -3483,7 +3470,6 @@ extern "C" unsigned char Gap__Gfx__igPsx2ScissorExt__vfunc_31(igPsx2ScissorExt *
 extern "C" void Gap__Gfx__igPsx2ScissorExt__vfunc_32(igPsx2ScissorExt *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" void Gap__Gfx__igPsx2ScissorExt__vfunc_33(igPsx2ScissorExt *self, int *originX, int *originY, int *width, int *height);
 extern "C" void FUN_00170210(void *arg0);
-extern "C" void Memory_FreeBufferAliasB(void *);
 extern "C" void*DAT_00560858[4];
 extern igMatrix44f g_gfxIdentityMatrix;
 class LightCapsDispatch {
@@ -5327,7 +5313,6 @@ extern "C" igMetaObject *Gap__Gfx__igCustomStateFieldList__vfunc_22(void);
 extern "C" igMetaObject *Gap__Gfx__igTrackedElementMetaField__vfunc_22(void);
 extern "C" int Gap__Gfx__igTrackedElementMetaField__vfunc_23(void);
 extern "C" int Gap__Gfx__igParticleFormat__vfunc_22(void);
-extern "C" int g_igContextExt_metaObject[4];
 extern "C" int FUN_00181070(void);
 extern "C" int Gap__Gfx__igVertexData__vfunc_22(void);
 extern "C" igMetaObject *Gap__Gfx__igVertexDataList__vfunc_22(void);

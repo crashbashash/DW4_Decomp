@@ -6,11 +6,11 @@
 #include "dw4/igObject.h"
 #include "dw4/softfloat.h"
 #include <math.h>
+extern "C" int g_igCommonTraversal_travProcs[4];
 
 typedef void (*TraversalFunction)(void);
 
 extern "C" {
-extern int g_igCommonTraversal_travProcs[4];
 
 void bePadData_StickDirections(bePadData *pad, int *directions, float *stick);
 }

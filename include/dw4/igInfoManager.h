@@ -6,6 +6,7 @@ struct igInfoManager;
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern int g_igInfoManager_vtable[4];
 
 struct CallbackArray *igInfoManager_Register(void);
 /* The destructor: releases the name, and frees the object when `flags` is positive. */

@@ -63,25 +63,25 @@ int Memory_GetAllocatorOrDefault(int extra0) {
     return ((int)Memory_GetDefaultAllocator());
 }
 
-void Memory_AllocateAligned16(int size, int selector) {
-    void **allocator;
+void *Memory_AllocateAligned16(unsigned int size, int selector) {
+    igMemoryPoolView *allocator;
 
-    allocator = (void **)(((void **)Memory_GetAllocatorOrDefault(selector)));
-    ((igMemoryPoolView *)(allocator))->AllocateAligned(size, 0x10);
+    allocator = (igMemoryPoolView *)Memory_GetAllocatorOrDefault(selector);
+    return allocator->AllocateAligned(size, 0x10);
 }
 
-void Memory_FreeToSelector(int block, int selector) {
-    void **allocator;
+void Memory_FreeToSelector(void *block, int selector) {
+    igMemoryPoolView *allocator;
 
-    allocator = (void **)(((void **)Memory_GetAllocatorOrDefault(selector)));
-    ((igMemoryPoolView *)(allocator))->Free((void *)block);
+    allocator = (igMemoryPoolView *)Memory_GetAllocatorOrDefault(selector);
+    allocator->Free(block);
 }
 
-void Memory_ReallocateAligned16(int block, int size, int selector) {
-    void **allocator;
+void *Memory_ReallocateAligned16(void *block, unsigned int size, int selector) {
+    igMemoryPoolView *allocator;
 
-    allocator = (void **)(((void **)Memory_GetAllocatorOrDefault(selector)));
-    ((igMemoryPoolView *)(allocator))->ReallocateAligned((void *)block, size, 0x10);
+    allocator = (igMemoryPoolView *)Memory_GetAllocatorOrDefault(selector);
+    return allocator->ReallocateAligned(block, size, 0x10);
 }
 
 int igPsx2ThreadManager_GetMeta(void) {

@@ -147,7 +147,7 @@ void igLightStateAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00136750();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_v0)->_metaObject = (int)((int) g_igObject_metaObject[0]);
+    ((igObjectRefMetaField *)temp_v0)->_metaObject = (int)g_igObject_metaObject;
     ((igMetaField *)temp_v0)->_persistent = 0;
     igMetaObject_NameFields(temp_s0, g_igLightStateAttr_fieldTable, g_igLightStateAttr_fieldHandles, g_igLightStateAttr_fieldOffsets, temp_s2);
 }

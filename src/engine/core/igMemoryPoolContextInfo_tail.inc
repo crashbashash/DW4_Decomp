@@ -1894,11 +1894,11 @@ igMemoryPoolView *Memory_GetAllocatorBySelector(int selector) {
     return (igMemoryPoolView *)(((MemoryContext *)(context))->GetAllocatorBySelector((int)(selector)));
 }
 
-void * Memory_GetAllocatorByName(int name) {
+igMemoryPoolView *Memory_GetAllocatorByName(const char *name) {
     void **context;
 
     context = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return (void *)(((MemoryContext *)(context))->GetAllocatorByName((int)(name)));
+    return (igMemoryPoolView *)(((MemoryContext *)(context))->GetAllocatorByName((int)(name)));
 }
 
 int Memory_GetPoolNameByIndex(int index) {

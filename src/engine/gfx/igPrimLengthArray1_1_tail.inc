@@ -34,7 +34,7 @@ void FUN_0015df80(S0_15df80 *arg0, int flags) {
 }
 
 void FUN_0015e010(void) {
-    igResource_AddAlignment(g_globalContext[0], "VertexArrayData", 0x10);
+    igResource_AddAlignment((igResource *)g_globalContext, "VertexArrayData", 0x10);
     igMemoryRefMetaField_SetAlignmentType(g_igVertexArray1_1_blendWeightsMetaField, "VertexArrayData");
 }
 

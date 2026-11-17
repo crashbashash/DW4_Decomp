@@ -5,6 +5,7 @@
 #include "dw4/p2swap.h"
 #include "dw4/p2stateCache.h"
 #include "dw4/p2texture.h"
+#include "dw4/igMemory.h"
 
 #define P2_HEAP_TEMPORARY 9
 #define P2_HEAP_DRIVER 25
@@ -22,8 +23,6 @@ typedef struct p2TextureRecord {
     void *memory;
 } p2TextureRecord;
 
-void *Memory_AllocateAligned16(int size, int pool);
-void Memory_FreeToSelector(void *memory, int pool);
 
 /* records per block, by kind */
 extern int p2ImageBlockSize;

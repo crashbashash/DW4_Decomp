@@ -5,6 +5,8 @@
 #include "dw4/ClassRegistration.h"
 #include "dw4/igObject.h"
 #include "dw4/igObjectSystem.h"
+#include "dw4/igMemory.h"
+#include "dw4/igMetaObject.h"
 
 typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
@@ -12,8 +14,6 @@ typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
 /* Library front: the register list, its one registrar and the registration latch. */
 extern "C" void igSearchSceneGraph_EnsureRegistered(void);
 extern "C" void SceneSearchLibrary_MarkRegistered(void);
-extern "C" void igMetaObject_RunStaticInit(...);
-extern "C" int igMetaObject_RegisterClass(...);
 
 /* The igSearchSceneGraph enum field's metaenum (3 values), created on first use. */
 #include "dw4/igEnumMetaField.h"
@@ -25,7 +25,7 @@ extern "C" int FUN_00238d70(void);
 /* igSearchSceneGraph: an igNamedObject, 0x1C bytes. */
 extern "C" igMetaObject *igSearchSceneGraph_GetMetaObject(void);
 extern "C" int igSearchSceneGraph_GetVTable(void);
-extern "C" void igSearchSceneGraph_Register(void);
+extern "C" CallbackArray *igSearchSceneGraph_Register(void);
 extern "C" void thunk_igSearchSceneGraph_GetMetaObject(void);
 extern "C" void igSearchSceneGraph_InitFields(void);
 extern "C" igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void);
@@ -41,17 +41,10 @@ extern "C" int g_igSearchSceneGraph_vtable[4];
 struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
 
 /* InitFields' field tables and field helpers. */
-extern "C" int igMetaObject_GetFieldCount(...);
-extern "C" int igMetaObject_CreateFields(...);
-extern "C" igMetaField *igMetaObject_GetFieldAt(...);
-extern "C" int igMetaObject_NameFields(...);
 extern "C" int FUN_002274a0(void);
-extern "C" int igMetaObject_GetOrCreateMetaObject(void);
 extern "C" void FUN_00227620(void);
-extern "C" void igMetaObject_EnsureRegistered(void);
 
 /* The searched scene and the two matrix arrays sized from it (igActor_SetAnimationSystem). */
-extern "C" int Memory_FreeBuffer(...);
 extern "C" int igMetaField_AllocateArray(...);
 extern "C" int DAT_00562498[4];
 extern "C" int DAT_005624a0[4];

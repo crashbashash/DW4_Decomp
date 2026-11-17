@@ -122,7 +122,7 @@ void *igResource_GetOrLoadDirectory(igResource *self, int path) {
     return igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
 }
 
-void *igResource_LoadDirectory(igResource *self, int path) {
+igDirectory *igResource_LoadDirectory(igResource *self, const char *path) {
     igResult queued;
     igObject *r;
     int v;
@@ -133,10 +133,10 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     igIGBFile *o;
     void *res;
     igObject *t;
-    r = (igObject *)igResource_GetDirectory(self, (const char *)path).p;
+    r = (igObject *)igResource_GetDirectory(self, path).p;
     if (r != 0) {
         igDirectory_AddLoadedRef((igDirectoryView *)r);
-        return r;
+        return (igDirectory *)r;
     }
     igSmartPointer<igIGBFile> file((igIGBFile *)igIGBFile_Create(self->_temporaryMemoryPool));
     file.p->_sharingState = self->_IGBSharingState;
@@ -160,7 +160,7 @@ void *igResource_LoadDirectory(igResource *self, int path) {
         if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
         g_stringPool = (StringPool *)v;
     }
-    v = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
+    v = (int)StringPool_Intern((StringPool *)g_stringPool, path);
     old = (int *)o->_name;
     if (old != 0) {
         hd = old - 2;
@@ -173,12 +173,12 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     igDirectory_AddLoadedRef((igDirectoryView *)file.p);
     igResource_AddDirectory((int *)self, (int)file.p);
     if (self->_asyncLoadState == 0) {
-        return igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
+        return (igDirectory *)igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
     }
     igDirectory_AddLoadedRef((igDirectoryView *)file.p);
     queued = ((igStandardQueueView *)self->_loadQueue)->Insert((int)file.p, 1);
     res = file.p;
-    return res;
+    return (igDirectory *)res;
 }
 
 igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileView *file) {
@@ -209,12 +209,12 @@ igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileVie
  * member itself, an unmarked read the early return's release shares; the shared class's accessors
  * are `const`, and a read through one is not shared with the destructor's (the original accessor
  * left an unmarked read, as a non-const one does). */
-unsigned char igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory) {
+unsigned char igResource_IsDirectoryLoaded(igResource *self, igDirectory *directory) {
     return !directory->_loadPendingState;
 }
 
-void igResource_UnloadDirectory(igResource *self, int name) {
-    igSmartPointer<igObject> found = igResource_GetDirectory(self, (const char *)name);
+void igResource_UnloadDirectory(igResource *self, const char *name) {
+    igSmartPointer<igObject> found = igResource_GetDirectory(self, name);
     igIGBFile *entry = (igIGBFile *)found.p;
     if (entry == 0) {
         return;
@@ -385,7 +385,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
                     igObject *t;
                     igObjectRefMetaField *sceneGraphField, *camerasField, *sceneGraphListField;
                     void *sceneGraphList;
-                    info = (igObject *)igMetaObject_CreateInstanceDefault((void *)infoMeta);
+                    info = (igObject *)igMetaObject_CreateInstanceDefault((igMetaObject *)infoMeta);
                     t = *(igObject **)&info;
                     if (t) t->_refCount = t->_refCount + 1;
                     {

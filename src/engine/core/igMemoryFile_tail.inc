@@ -70,7 +70,7 @@ void igMemoryFile_Close(igMemoryFileView *self) {
 
 igFileView *igMemoryFile_OpenFile(igFileView *self, const char *fileName, int mode) {
     int ok;
-    igFile_SetFileName((int *)self, fileName);
+    igFile_SetFileName((igFile *)self, fileName);
     if (strcmp((const char *)mode, "r") == 0) {
         ok = self->OpenWithMode(0) == g_resultSuccess;
     } else if (strcmp((const char *)mode, (const char *)&((int *)"rb")[0]) == 0) {

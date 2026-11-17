@@ -30,6 +30,7 @@ int ObjectList_AppendRetained(struct igObjectList *list, struct igObject *object
 int igProperty_FindByName(struct igObjectList *list, struct igMetaField *field, const char *name);
 struct CallbackArray *igDataList_Register(void);
 struct igMetaObject *igDataList_GetPublishedMetaObject(void);
+extern struct igMetaObject *g_igDataList_metaObject;
 void ObjectList_ClearRetainedPreserveCount(igTDataList<struct igObject *> *list);
 void List_InsertBytes(struct igDataList *list, int index, int count, const void *src, int stride);
 void List_RemoveAt(struct igDataList *l, int i, int sz);

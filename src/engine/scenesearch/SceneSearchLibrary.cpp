@@ -70,9 +70,9 @@ void igSearchSceneGraph_EnsureRegistered(void) {
 
 static igMetaObjectCallback g_igSearchSceneGraph_callbackList[] = { FUN_00227620, igMetaObject_EnsureRegistered, 0 };
 
-void igSearchSceneGraph_Register(void) {
+CallbackArray *igSearchSceneGraph_Register(void) {
     SceneSearchLibrary_MarkRegistered();
-    igMetaObject_RegisterClass(
+    return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSearchSceneGraph_metaObject,
         igNamedObject_Register,
@@ -122,7 +122,7 @@ void igSearchSceneGraph_InitFields(void) {
     void *enumField;
     void *secondRef;
     void *firstRef;
-    void *meta;
+    igMetaObject *meta;
 
     meta = g_igSearchSceneGraph_metaObject;
     first = igMetaObject_GetFieldCount(meta);
@@ -132,7 +132,7 @@ void igSearchSceneGraph_InitFields(void) {
     *(unsigned char *)((char *)firstRef + 52) = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, first + 1), "");
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);
-    *(int *)((char *)secondRef + 56) = igMetaObject_GetOrCreateMetaObject();
+    *(int *)((char *)secondRef + 56) = (int)igMetaObject_GetOrCreateMetaObject();
     enumField = igMetaObject_GetFieldAt(meta, first + 3);
     igEnumMetaField_SetDefaultValue((igMetaField *)enumField, 0);
     *(int *)((char *)enumField + 52) = (int)&FUN_00238d70;
@@ -166,11 +166,11 @@ void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
     firstCount = ((RefCounted *)self[8])->source->firstMatrixCount();
     secondCount = ((RefCounted *)self[8])->source->secondMatrixCount();
     if (self[9] != 0) {
-        Memory_FreeBuffer(self[9]);
+        Memory_FreeBuffer((void *)self[9]);
         self[9] = 0;
     }
     if (self[10] != 0) {
-        Memory_FreeBuffer(self[10]);
+        Memory_FreeBuffer((void *)self[10]);
         self[10] = 0;
     }
     igMetaField_AllocateArray(&firstArray, DAT_00562498[0], self, firstCount, igObject_GetAllocator((igObject *)self));

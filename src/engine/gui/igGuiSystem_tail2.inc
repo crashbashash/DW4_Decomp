@@ -70,7 +70,7 @@ int Gap__Gui__igGuiSystem__vfunc_24(A_457100 *arg0, float fparg0, float fparg1) 
     temp_v1->f18 = fparg1;
     s.a = 2;
     s.b = 0;
-    s.c = g_igGuiSystemModelMousePositionField[0];
+    s.c = (int)g_igGuiSystemModel_mousePositionMetaField;
     igModel_NotifyViews((igModel *)arg0->fc, (ModelChange *)&s);
     return arg0->fc->fb0 != 0;
 }

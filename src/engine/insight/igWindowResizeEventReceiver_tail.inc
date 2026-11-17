@@ -67,7 +67,7 @@ void FUN_00236ca0(int self) {
     count = igMetaObject_CountTree((igMetaObject *)(meta = (int)igInsightPlugin_GetMetaObject()));
     for (i = 0; i < count; i++) {
         int type = (int)(igMetaObject_GetTreeNode((igMetaObject *)meta, i));
-        igSmartPointer<Instance> plugin(igMetaObject_CreateInstanceRef(type, (int)(igObject_GetAllocator((igObject *)self))).get(), kRetainReference);
+        igSmartPointer<Instance> plugin((Instance *)igMetaObject_CreateInstanceRef((igMetaObject *)type, igObject_GetAllocator((igObject *)self)).get(), kRetainReference);
         if (plugin.get()) {
             FUN_00236dd0((void *)self, (void **)plugin.get());
         }

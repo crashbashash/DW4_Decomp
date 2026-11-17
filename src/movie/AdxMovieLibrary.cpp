@@ -82,6 +82,7 @@ extern "C" void *igFileName_GetMetaObject(void);
 extern "C" int igFileName_GetVTable(void);
 extern "C" void igFileName_EnsureRegistered(void);
 #include "dw4/igNamedObject.h"
+#include "dw4/igFile.h"
 extern "C" CallbackArray *igFileName_Register(void);
 extern "C" void igFileName_GetMetaObjectFunction(void);
 extern "C" int igNamedObjectList_GetOrCreateMetaObject(void);
@@ -89,10 +90,8 @@ extern "C" void igFileName_InitFields(void);
 extern "C" void *igAdxFile_GetMetaObject(void);
 extern "C" int igAdxFile_GetVTable(void);
 extern "C" void igAdxFile_EnsureRegistered(void);
-extern "C" CallbackArray *igFile_Register(void);
 extern "C" CallbackArray *igAdxFile_Register(void);
 extern "C" void igAdxFile_GetMetaObjectFunction(void);
-extern "C" int igFile_GetMetaObjectFunction(void);
 extern "C" void igAdxFile_InitFields(void);
 extern "C" void igAdxFile_StaticInitCallback(void);
 extern "C" void igAdxFile_ExitCallback(void);
@@ -197,9 +196,7 @@ extern "C" int g_igFileName_vtable[4];
 extern "C" igMetaObject *g_igFileNameList_metaObject;
 extern "C" int g_igFileNameList_vtable[4];
 extern "C" igMetaObject *g_igFileName_metaObject;
-extern "C" int igFile_Destroy(igFile *, int);
 extern "C" int g_igAdxFile_vtable[4];
-extern "C" igMetaObject *igFile_GetPublishedMetaObject(void);
 extern "C" int g_igAdxAudio_vtable[4];
 extern "C" igMetaObject *g_igMovieCodecList_metaObject;
 extern "C" int g_igMovieCodecList_vtable[4];
@@ -219,8 +216,6 @@ extern "C" igMetaObject *igTextureBindAttrList_GetMetaObject(void);
 extern "C" int g_igTextureBindAttrList_vtable[4];
 extern "C" int g_igMovieInfo_vtable[4];
 #include "dw4/igInfo.h"
-extern "C" int g_igObject_metaObject[4];
-extern "C" int g_igRenderer_vtable[4];
 extern "C" int g_igMovieRenderer_vtable[4];
 extern "C" igMetaObject *igRenderer_GetPublishedMetaObject(void);
 extern "C" int g_igMovieManager_vtable[4];
@@ -1702,7 +1697,7 @@ void igMovieInfo_InitFields(void) {
     imageFormatField->_persistent = 0;
     imageFormatField->_getMetaEnumFunction = (int)IG_GFX_TEXTURE_FORMAT_GetMetaEnum;
     userdataField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x13);
-    userdataField->_metaObject = (int)((int)g_igObject_metaObject[0]);
+    userdataField->_metaObject = (int)g_igObject_metaObject;
     userdataField->_persistent = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x14), -1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igMovieInfo_fieldTable, g_igMovieInfo_fieldHandles, g_igMovieInfo_fieldOffsets, firstField);

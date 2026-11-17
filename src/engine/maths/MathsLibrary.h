@@ -706,7 +706,6 @@ struct InstanceNode : public igObject { };
 unsigned FUN_002fe2c0(int);
 int FUN_002fe2e0(int, unsigned);
 int FUN_00301ee0(InstanceNode *, unsigned);
-igSmartPointer<InstanceNode> igMetaObject_CreateInstanceRef(int, int);
 struct NodeList : InstanceNode { int count; int capacity; InstanceNode **data; };
 struct InstanceListRef {
     NodeList *p;
@@ -799,7 +798,10 @@ void FUN_00190f50(float *arg0, const float *arg1, float fparg0);
 #include "dw4/igMatrix44fList.h"
 #include "dw4/igRay.h"
 #include "dw4/igRayList.h"
+#include "dw4/igSphere.h"
+#include "dw4/igVec2fList.h"
 #include "dw4/igVec3fList.h"
+#include "dw4/igVec4ucList.h"
 #include "dw4/igVec3fMetaField.h"
 #include "dw4/igVec4f.h"
 #include "dw4/igVolume.h"

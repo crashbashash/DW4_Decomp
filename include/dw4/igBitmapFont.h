@@ -6,6 +6,7 @@ struct igMetaObject;
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern int g_igBitmapFont_vtable[4];
 
 extern struct igMetaObject *g_igBitmapFont_metaObject;
 void igBitmapFont_RunStaticInit(void);

@@ -17,7 +17,7 @@ void igDirectory_ReleaseDefaults(igDirectoryView *self) {
 
     if (self->_managingResource != 0) {
         for (i = 0; i < self->_externalDirectoryList->_count; i++) {
-            igResource_UnloadDirectory(self->_managingResource, self->_externalDirectoryList->_data[i]->_name);
+            igResource_UnloadDirectory(self->_managingResource, (const char *)self->_externalDirectoryList->_data[i]->_name);
         }
     }
     infoCount = igDirectory_GetInfoCount(self);
@@ -347,7 +347,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
         info = obj->GetMeta();
         pool = 0;
         if (self->_forceWriteMemoryPoolInfoFromMetaState != 0 && info != 0 && ((char *)igMetaObject_GetPoolName((int *)info)) != 0) {
-            pool = Memory_GetAllocatorByName((int)(((char *)igMetaObject_GetPoolName((int *)info))));
+            pool = Memory_GetAllocatorByName((char *)igMetaObject_GetPoolName((int *)info));
         }
         if (pool == 0) {
             pool = ((void *)igObject_GetAllocator((igObject *)obj));
@@ -391,7 +391,7 @@ int igDirectory_AddMemoryRef(igDirectoryView *self, int field, int memory, int m
     record.get()->_refCounted = refCounted;
     if (self->_useMemoryPoolAssignmentsState) {
         pool = 0;
-        if (self->_forceWriteMemoryPoolInfoFromMetaState && field && igMemoryRefMetaField_GetPoolName((igMemoryRefMetaField *)field)) pool = (int)Memory_GetAllocatorByName(igMemoryRefMetaField_GetPoolName((igMemoryRefMetaField *)field));
+        if (self->_forceWriteMemoryPoolInfoFromMetaState && field && igMemoryRefMetaField_GetPoolName((igMemoryRefMetaField *)field)) pool = (int)Memory_GetAllocatorByName((const char *)igMemoryRefMetaField_GetPoolName((igMemoryRefMetaField *)field));
         if (pool == 0) pool = (int)Memory_FindOwningAllocator(memory);
         if (pool) {
             poolIndex = ((MemoryContext *)Memory_GetCurrentContextAlias())->IndexOfAllocator((void *)pool);

@@ -52,6 +52,6 @@ void thunk_igNonRefCountedAttrList_GetMetaObject(void) {
 }
 
 int FUN_0013aeb0(void) {
-    return g_igNonRefCountedObjectList_metaObject[0];
+    return (int)g_igNonRefCountedObjectList_metaObject;
 }
 

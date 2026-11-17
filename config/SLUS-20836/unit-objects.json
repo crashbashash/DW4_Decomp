@@ -8071,7 +8071,8 @@
     ],
     "stripped": [
       "__dt__15InstanceListRefFv",
-      "__dt__30igSmartPointer<12InstanceNode>Fv"
+      "__dt__30igSmartPointer<12InstanceNode>Fv",
+      "__dt__25igSmartPointer<8igObject>Fv"
     ],
     "externals": {
       "FUN_002d6790": "0x002d6790",
@@ -15206,6 +15207,7 @@
       "__dt__11igStringRefFv",
       "__dt__16StringRef_237300Fv",
       "__dt__25igSmartPointer<8Instance>Fv",
+      "__dt__25igSmartPointer<8igObject>Fv",
       "__dt__26igSmartPointer<9TextValue>Fv",
       "__dt__29igSmartPointer<11NamedObject>Fv",
       "__dt__29igSmartPointer<11ResizeEvent>Fv",
@@ -28531,7 +28533,6 @@
       "__dt__10ScopedLockFv",
       "__dt__11igStringRefFv",
       "__dt__38igSmartPointer<20igMemoryDirEntryView>Fv",
-      "__dt__25igSmartPointer<8Instance>Fv",
       "__dt__30igSmartPointer<12igFolderView>Fv",
       "__dt__26igSmartPointer<9igIntList>Fv",
       "__dt__28igSmartPointer<10igDirEntry>Fv",
@@ -46464,7 +46465,6 @@
       "g_igWindowSizeObserver_metaObject": "0x0058c3c0",
       "g_igGuiSystemModel_metaObject": "0x0058c3c8",
       "g_igGuiSystemModel_windowSizeMetaField": "0x0058c3d0",
-      "g_igGuiSystemModelMousePositionField": "0x0058c3d8",
       "g_igGuiSystemModel_mousePositionMetaField": "0x0058c3d8",
       "g_igGuiSystemModel_mousePressedMetaField": "0x0058c3e0",
       "g_igGuiSystemModel_viewMatrixMetaField": "0x0058c3e8",
@@ -48071,7 +48071,7 @@
       "g_igCameraMode_metaObject": "0x0058cce0",
       "g_igCamera_metaObject": "0x00561ea0",
       "g_igFlyMode_metaObject": "0x0058cc80",
-      "g_igGuiSystemModelMousePositionField": "0x0058c3d8",
+      "g_igGuiSystemModel_mousePositionMetaField": "0x0058c3d8",
       "g_igPickMode_metaObject": "0x0058cb88",
       "g_igRotateMode_metaObject": "0x0058cbf8",
       "g_igViewMode_metaObject": "0x0058ccf8",

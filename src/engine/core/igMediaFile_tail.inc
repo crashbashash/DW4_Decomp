@@ -138,7 +138,7 @@ void **igMediaFile_OpenFile(void **self, const char *fileName, int mode) {
     igResult appendBinaryResult;
     int status;
 
-    igFile_SetFileName((int *)self, fileName);
+    igFile_SetFileName((igFile *)self, fileName);
     if (strcmp((const char *)mode, "r") == 0) {
         readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         status = readResult.v;

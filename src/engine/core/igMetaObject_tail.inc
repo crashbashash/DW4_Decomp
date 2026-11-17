@@ -1,20 +1,12 @@
-static inline void retain(Instance *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount + 1;
-    }
-}
-
-int igMetaObject_CreateInstanceDefaultRef(Instance **out, int meta) {
-    igSmartPointer<Instance> created((Instance *)igMetaObject_CreateInstanceDefault((void *)meta), kRetainReference);
-    igRelease(created.p);
-    *out = created.p;
-    retain(*out);
-    return 0;
-}
-
 /* The new instance arrives with one reference; the pointer takes its own and drops that one. */
-igSmartPointer<igObject> igMetaObject_CreateInstanceRef(int meta, int pool) {
-    igSmartPointer<igObject> created((igObject *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)pool), kRetainReference);
+igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(igMetaObject *meta) {
+    igSmartPointer<igObject> created(igMetaObject_CreateInstanceDefault(meta), kRetainReference);
+    igRelease(created.get());
+    return created;
+}
+
+igSmartPointer<igObject> igMetaObject_CreateInstanceRef(igMetaObject *meta, igMemoryPoolView *pool) {
+    igSmartPointer<igObject> created(igMetaObject_CreateInstance(meta, pool), kRetainReference);
     igRelease(created.get());
     return created;
 }
@@ -101,7 +93,7 @@ void igMetaObject_ReleaseLists(igMetaObject *meta){
     }
 }
 
-void *igMetaObject_CreateInstanceDefault(void *meta){return (void *)igMetaObject_CreateInstance((igMetaObject *)meta,((igMemoryPoolView *)Memory_GetDefaultAllocator()));}
+igObject *igMetaObject_CreateInstanceDefault(igMetaObject *meta){return igMetaObject_CreateInstance(meta,((igMemoryPoolView *)Memory_GetDefaultAllocator()));}
 
 igObject *igMetaObject_CreateInstance(igMetaObject *self, igMemoryPoolView *pool) {
     char *instance;
@@ -122,7 +114,7 @@ igObject *igMetaObject_CreateInstance(igMetaObject *self, igMemoryPoolView *pool
     if (allocator == 0) {
         poolName = (char *)self->_poolName;
         if ((poolName != 0) && (*poolName != 0)) {
-            allocator = ((igMemoryPoolView *)Memory_GetAllocatorByName((int)poolName));
+            allocator = Memory_GetAllocatorByName(poolName);
             if (allocator == 0) {
                 fallback = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
                 goto use_fallback;
@@ -164,7 +156,7 @@ int igMetaObject_CreateInstanceWithPool(igMetaObject *self, igMemoryPoolView *po
     if (allocator == 0) {
         poolName = (char *)self->_poolName;
         if ((poolName != 0) && (*poolName != 0)) {
-            allocator = ((igMemoryPoolView *)Memory_GetAllocatorByName((int)poolName));
+            allocator = Memory_GetAllocatorByName(poolName);
             if (allocator == 0) {
                 fallback = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
                 goto use_fallback;

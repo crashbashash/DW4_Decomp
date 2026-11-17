@@ -49,7 +49,7 @@ void igObjectRefArrayMetaField_ConstructValue(igObjectRefArrayMetaField *self, i
     if (self->_construct != 0) {
         poolName = (char *)self->_poolName;
         if ((poolName != 0) && (*poolName != 0)) {
-            allocator = ((int)Memory_GetAllocatorByName((int)poolName));
+            allocator = (int)Memory_GetAllocatorByName(poolName);
             if (allocator == 0) {
                 allocator = ((int)igObject_GetAllocator((igObject *)object));
             }

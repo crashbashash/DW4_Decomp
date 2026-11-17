@@ -34,22 +34,18 @@
 #include "dw4/igStringObj.h"
 #include "dw4/igTraversal.h"
 #include <string.h>
+extern "C" int g_igCommonTraversal_travProcs[4];
+#include "dw4/igFile.h"
+#include "dw4/igResource.h"
 #pragma push
 #pragma readonly_strings on
 
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
 extern "C" {
-/* scene graph */
-extern int g_igCommonTraversal_travProcs[4];
-
 /* object system */
 int igMemoryRefMetaField_SetAlignmentType(int field, const char *name);
-int igResource_AddAlignment(int context, const char *name, int alignment);
-extern int g_globalContext[4];
 
-/* the ADX library */
-extern igMetaObject *g_igFile_metaObject;
 
 /* the sound IOP module (kept local: dw4/cri/sndf.h is the C library's internal header, not C++-includable) */
 struct SndfBank;
@@ -1084,7 +1080,7 @@ static inline int AsMemoryRefField(int field) {
 void beCriSfpData_SetupBufferAlignment(void) {
     int field;
 
-    igResource_AddAlignment(g_globalContext[0], "sndfBuffer", 0x20);
+    igResource_AddAlignment((igResource *)g_globalContext, "sndfBuffer", 0x20);
     field = (int)igMetaObject_FindFieldByName(g_beCriSfpData_metaObject, "_dataBuffer");
     field = AsMemoryRefField(field);
     igMemoryRefMetaField_SetAlignmentType(field, "sndfBuffer");

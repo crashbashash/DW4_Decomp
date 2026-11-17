@@ -97,7 +97,7 @@ igMetaObject *Gap__Insight__igInfoManagerOrderedList__vfunc_22(void) {
 }
 
 int Gap__Core__igDependencyOrderedList__vfunc_22(void) {
-    return g_igDependencyOrderedList_metaObject[0];
+    return (int)g_igDependencyOrderedList_metaObject;
 }
 
 igMetaObject *Gap__Insight__igViewportResizedMessage__vfunc_22(void) {

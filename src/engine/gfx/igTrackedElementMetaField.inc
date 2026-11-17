@@ -91,7 +91,7 @@ void thunk_igTrackedElementMetaField_GetMetaObject(void) {
 }
 
 int FUN_0014e530(void) {
-    return g_igCompoundMetaField_metaObject[0];
+    return (int)g_igCompoundMetaField_metaObject;
 }
 
 Q * g_igTrackedElementMetaField_instance;

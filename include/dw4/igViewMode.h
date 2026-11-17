@@ -6,6 +6,7 @@ struct igMetaObject;
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern int g_igViewMode_vtable[4];
 
 extern struct igMetaObject *g_igViewMode_metaObject;
 struct CallbackArray *igViewMode_Register(void);

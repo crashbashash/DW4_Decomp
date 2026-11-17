@@ -128,7 +128,7 @@ void **igPsx2File_OpenFile(void **self, const char *fileName, int modeText) {
     igResult readResult;
     int opened;
 
-    igFile_SetFileName((int *)self, fileName);
+    igFile_SetFileName((igFile *)self, fileName);
     if (strcmp((const char *)modeText, "r") == 0) {
         readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         opened = readResult.v;

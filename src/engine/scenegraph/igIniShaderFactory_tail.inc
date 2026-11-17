@@ -303,7 +303,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     if (meta == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    igSmartPointer<ShaderObject_1ca6c0> object = igMetaObject_CreateInstanceRef(meta, self->allocatorKey);
+    igSmartPointer<igObject> object = igMetaObject_CreateInstanceRef((igMetaObject *)meta, (igMemoryPoolView *)self->allocatorKey);
     if (object.p == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
@@ -316,7 +316,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         if (info == 0) {
             return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
         }
-        if (FUN_001c7680(self, section, field, object.p, info, &flag) == 0) {
+        if (FUN_001c7680(self, section, field, (ShaderObject_1ca6c0 *)object.p, info, &flag) == 0) {
             return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
         }
     }
@@ -329,7 +329,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
         ShaderObject_1ca6c0 *existing = ((ShaderObject_1ca6c0 *)igObjectStringMap_GetObject(cache, (const char *)name));
         if (existing != 0) {
-            if (FUN_00300920(existing, object.p) != 0) {
+            if (FUN_00300920(existing, (ShaderObject_1ca6c0 *)object.p) != 0) {
                 return igSmartPointer<ShaderObject_1ca6c0>(existing, kRetainReference);
             }
             return object;

@@ -7,6 +7,7 @@
 #include "dw4/igObject.h"
 #include "dw4/softfloat.h"
 #include <string.h>
+#include "dw4/igResource.h"
 
 /* Header in front of every interned string token: owning chunk, then a full 32-bit reference
  * count. */
@@ -16,14 +17,7 @@ typedef struct StringTokenHeader {
 } StringTokenHeader;
 
 extern "C" {
-void igResource_StartAsyncLoading(igResource *resource);
-void igResource_StopAsyncLoading(igResource *resource);
-igDirectory *igResource_LoadDirectory(igResource *resource, int name);
-int igResource_IsDirectoryLoaded(igResource *resource, int directory);
-int igResource_UnloadDirectory(igResource *resource, int name);
 
-extern igResource *g_globalContext[4];
-extern int g_resourceLoaderStackSize[4];
 extern int ndmw_igb[4];
 
 void beSystem_Activate(beSystem *self, int unusedArg);
@@ -85,12 +79,12 @@ void beSystem_Start(beSystem *self)
     self->_nextStage = (int)stageToken;
     igRelease((igObject *)self->_bootDirectory);
     self->_bootDirectory = 0;
-    g_resourceLoaderStackSize[0] = 100000;
-    g_globalContext[0]->_useMemoryPoolAssignmentsState = 0;
+    g_resourceLoaderStackSize = 100000;
+    ((igResource *)g_globalContext)->_useMemoryPoolAssignmentsState = 0;
 
     objectPool = igObject_GetAllocator(self);
     objectPool = g_useOwnerAllocator != 0 ? objectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-    objectResource = g_globalContext[0];
+    objectResource = (igResource *)g_globalContext;
     if (objectPool != 0) {
         ((igObject *)objectPool)->_refCount = ((igObject *)objectPool)->_refCount + 1;
     }
@@ -99,7 +93,7 @@ void beSystem_Start(beSystem *self)
 
     pool = igObject_GetAllocator(self);
     pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-    dataResource = g_globalContext[0];
+    dataResource = (igResource *)g_globalContext;
     if (pool != 0) {
         ((igObject *)pool)->_refCount = ((igObject *)pool)->_refCount + 1;
     }
@@ -108,7 +102,7 @@ void beSystem_Start(beSystem *self)
 
     pool = igObject_GetAllocator(self); /* matching construct: manual — the temporary pool reuses the data pool's variable */
     pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
-    temporaryResource = g_globalContext[0];
+    temporaryResource = (igResource *)g_globalContext;
     if (pool != 0) {
         ((igObject *)pool)->_refCount = ((igObject *)pool)->_refCount + 1;
     }
@@ -169,7 +163,7 @@ void beSystem_Update(beSystem *self)
             if (strcmp((const char *)self->_nextStage, (const char *)ndmw_igb) == 0) {
                 ndmwObjectPool = igObject_GetAllocator(self);
                 ndmwObjectPool = g_useOwnerAllocator != 0 ? ndmwObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-                ndmwObjectResource = g_globalContext[0];
+                ndmwObjectResource = (igResource *)g_globalContext;
                 if (ndmwObjectPool != 0) {
                     ((igObject *)ndmwObjectPool)->_refCount = ((igObject *)ndmwObjectPool)->_refCount + 1;
                 }
@@ -177,7 +171,7 @@ void beSystem_Update(beSystem *self)
                 ndmwObjectResource->_objectMemoryPool = (int)ndmwObjectPool;
                 ndmwDataPool = igObject_GetAllocator(self);
                 ndmwDataPool = g_useOwnerAllocator != 0 ? ndmwDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-                ndmwDataResource = g_globalContext[0];
+                ndmwDataResource = (igResource *)g_globalContext;
                 if (ndmwDataPool != 0) {
                     ((igObject *)ndmwDataPool)->_refCount = ((igObject *)ndmwDataPool)->_refCount + 1;
                 }
@@ -186,7 +180,7 @@ void beSystem_Update(beSystem *self)
             } else {
                 defaultObjectPool = igObject_GetAllocator(self);
                 defaultObjectPool = g_useOwnerAllocator != 0 ? defaultObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-                defaultObjectResource = g_globalContext[0];
+                defaultObjectResource = (igResource *)g_globalContext;
                 if (defaultObjectPool != 0) {
                     ((igObject *)defaultObjectPool)->_refCount = ((igObject *)defaultObjectPool)->_refCount + 1;
                 }
@@ -194,15 +188,15 @@ void beSystem_Update(beSystem *self)
                 defaultObjectResource->_objectMemoryPool = (int)defaultObjectPool;
                 defaultDataPool = igObject_GetAllocator(self);
                 defaultDataPool = g_useOwnerAllocator != 0 ? defaultDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-                defaultDataResource = g_globalContext[0];
+                defaultDataResource = (igResource *)g_globalContext;
                 if (defaultDataPool != 0) {
                     ((igObject *)defaultDataPool)->_refCount = ((igObject *)defaultDataPool)->_refCount + 1;
                 }
                 igRelease((igObject *)defaultDataResource->_dataMemoryPool);
                 defaultDataResource->_dataMemoryPool = (int)defaultDataPool;
             }
-            igResource_StartAsyncLoading(g_globalContext[0]);
-            directory = igResource_LoadDirectory(g_globalContext[0], self->_nextStage);
+            igResource_StartAsyncLoading(g_globalContext);
+            directory = igResource_LoadDirectory((igResource *)g_globalContext, (const char *)self->_nextStage);
             if (directory != 0) {
                 directory->_refCount = directory->_refCount + 1;
             }
@@ -227,7 +221,7 @@ void beSystem_Update(beSystem *self)
             }
             self->_nextStage = (int)emptyToken;
         } else if (self->_bootDirectory != 0) {
-            if (igResource_IsDirectoryLoaded(g_globalContext[0], self->_bootDirectory) != 0) {
+            if (igResource_IsDirectoryLoaded((igResource *)g_globalContext, (igDirectory *)self->_bootDirectory)) {
                 infos = (igObjectList *)((igDirectory *)self->_bootDirectory)->_infoList;
                 index = 0;
                 if (0 < infos->_count) {
@@ -238,10 +232,10 @@ void beSystem_Update(beSystem *self)
                         byteOffset += 4;
                     } while (index < infos->_count);
                 }
-                igResource_UnloadDirectory(g_globalContext[0], ((igDirectory *)self->_bootDirectory)->_name);
+                igResource_UnloadDirectory((igResource *)g_globalContext, (const char *)((igDirectory *)self->_bootDirectory)->_name);
                 igRelease((igObject *)self->_bootDirectory);
                 self->_bootDirectory = 0;
-                igResource_StopAsyncLoading(g_globalContext[0]);
+                igResource_StopAsyncLoading(g_globalContext);
             }
         } else {
             /* Unreachable: entering the handshake needs _nextStage or _bootDirectory set. */

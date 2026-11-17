@@ -29,14 +29,8 @@ extern "C" void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, unsigned cha
 #include <math.h>
 #include "dw4/igMathConstants.h"
 #include "dw4/igRay.h"
+#include "dw4/igGuiSystemModel.h"
 extern "C" {
-
-
-
-
-/* igViewModel's field handles, which a change notification names. */
-extern int g_igGuiSystemModelMousePositionField[4];
-
 
 /* The pick mode whose intersect traversal is running, for its hit callback. */
 extern igPickMode *g_pickingMode[4];
@@ -727,7 +721,7 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
         model->_mousePosition[1] += dy;
         event.type = VIEW_MODEL_FIELD_CHANGED;
         event.sender = 0;
-        event.field = (igMetaField *)g_igGuiSystemModelMousePositionField[0];
+        event.field = g_igGuiSystemModel_mousePositionMetaField;
         igModel_NotifyViews((igModel *)model, (ModelChange *)&event);
     }
 }

@@ -6,6 +6,7 @@
 #include "dw4/p2timer.h"
 #include "dw4/eekernel.h"
 #include "dw4/libkernl.h"
+#include "dw4/igMemory.h"
 #define D_CTRL ((unsigned int *)0x1000e000)
 #define D0_CHCR ((unsigned int *)0x10008000)
 #define D0_QWC ((unsigned int *)0x10008020)
@@ -22,14 +23,12 @@ typedef struct p2PredicateName {
     const char *name;
 } p2PredicateName;
 
-int Memory_FreeToSelector();
 int AddDmacHandler(int channel, int (*handler)(int channel), int next);
 
 void p2CompleteDmaPacket(int channel, p2DmaPacket *packet);
 void p2SignalDmaWait(int unused);
 int p2DmaPredicatesSatisfied(int channel);
 void p2FreeDmaCompletions(int channel);
-void *Memory_AllocateAligned16(int size, int pool);
 void FUN_001f7b00(void);
 void FUN_001f7c90(void);
 int p2Vif1DmaHandler(int channel);

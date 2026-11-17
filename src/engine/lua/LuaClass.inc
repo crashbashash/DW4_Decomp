@@ -69,7 +69,7 @@ igLuaGlue::Class::Class(const char *className, const char *baseClassName, lua_CF
                         lua_CFunction peerConstructor, lua_CFunction get, lua_CFunction set,
                         lua_CFunction construct)
     : Hashed<Class, 7>(LuaBinding_HashName(className)), name(className),
-      metaObject(igObjectSystem_FindMetaByNameDefault(className)), base(0), baseName(baseClassName),
+      metaObject((igMetaObject *)igObjectSystem_FindMetaByNameDefault(className)), base(0), baseName(baseClassName),
       indexGetter(0), indexSetter(0), gcHandler(gc), setHandler(set), getHandler(get), constructor(construct),
       peerConstructor(peerConstructor), alternate(0) {
     igMetaObject *meta;

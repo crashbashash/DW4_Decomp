@@ -260,7 +260,6 @@ class igMemoryPoolView;
 void igPsx2IopRpcConnection_EnsureRegistered(void);
 void igThread_EnsureRegistered(void);
 void FUN_00145de0(void);
-extern igMetaObject *g_igDataList_metaObject;
 igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];

@@ -56,6 +56,7 @@ public:
 #include "dw4/igCriMovieCodec.h"
 #include "dw4/cri/adx_ps2.h"
 #include "dw4/cri/cri_adxf.h"
+#include "dw4/igFile.h"
 extern "C" {
 int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called);
 static void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc);
@@ -90,7 +91,6 @@ void mwPlySetMallocFn(void *(*allocate)(igCriMovieCodec *, unsigned int),
                          void (*release)(igCriMovieCodec *, void *), igCriMovieCodec *context);
 void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrmObj *frame);
 
-igFileDispatchView *igFile_Create(igMemoryPoolView *pool);
 float log10f(float x);
 int igReportNotice(const char *format, ...);
 int igReport_Warning(const char *format, ...);
@@ -403,7 +403,7 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
     } else {
         pool = igObject_GetAllocator(self);
         pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-        igSmartPointer<igFileDispatchView> file(igFile_Create(pool));
+        igSmartPointer<igFileDispatchView> file((igFileDispatchView *)igFile_Create((int)pool));
         path = file->MakeCompleteFilename((const char *)movie->_path);
     }
     afsIndex = igAdx_FindAfsFile(path);

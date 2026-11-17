@@ -14,6 +14,7 @@ extern "C" {
 #endif
 
 extern int g_igDependencyOrderedList_vtable[4];
+extern struct igMetaObject *g_igDependencyOrderedList_metaObject;
 struct CallbackArray *igDependencyOrderedList_Register(void);
 struct igMetaObject *igDependencyOrderedList_GetPublishedMetaObject(void);
 void igDependencyOrderedList_AddDependency(struct igDependencyOrderedList *self, void *dependent, void *dependency);

@@ -194,6 +194,7 @@ struct RefCounted { int pad; int _refCount; };
 struct RetainedList { int pad0[2]; void *_words; int pad1[2]; int _count;
 };
 #include "dw4/igDataLists.h"
+#include "dw4/igSphere.h"
 extern "C" void FUN_0023b3b0(RetainedList *list, RefCounted *object);
 extern "C" void FUN_00301ee0(int, int);
 extern "C" void FUN_0023b410(int *arg0, int arg1, int arg2, int arg3);
@@ -222,7 +223,6 @@ struct Tab { char pad[16]; int *f16; };
 struct Grid { char pad[8]; Tab *f8; int f12; int f16; int f20; };
 struct Ent { char pad[16]; int f16; };
 struct Arg1 { char pad[12]; Sph *f12; };
-extern "C" int g_igSphere_metaObject[4];
 extern "C" void FUN_0023b820(Grid *arg0, Arg1 *arg1);
 struct E { char pad[36]; float f36; float f40; float f44; char pad2[12]; float f60; float f64; float f68; char pad3[16]; int f88; };
 struct L { char pad[8]; int count; char pad2[4]; struct E **data; };

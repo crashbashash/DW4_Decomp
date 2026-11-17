@@ -45,7 +45,7 @@ void ***igAdxFile_GetSearchPathHolder(void) {
     return &g_searchFilePath;
 }
 
-void igFile_SetFileName(int *self, const char *name) {
+void igFile_SetFileName(igFile *self, const char *name) {
     int *header;
     int refCount;
     int pool;
@@ -60,7 +60,7 @@ void igFile_SetFileName(int *self, const char *name) {
         g_stringPool = (StringPool *)pool;
     }
     interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, name)));
-    previous = (void *)self[3];
+    previous = (void *)self->_fileName;
     if (previous != 0) {
         header = (int *)((char *)previous - 8);
         refCount = *(int *)((char *)(previous) - 4) - 1;
@@ -69,7 +69,7 @@ void igFile_SetFileName(int *self, const char *name) {
             StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
         }
     }
-    self[3] = (int)interned;
+    self->_fileName = (int)interned;
 }
 
 void igFile_SkipToChar(igFileView *self, long long character) {

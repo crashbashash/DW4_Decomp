@@ -967,13 +967,13 @@ static inline void setValues(igResource *self, const igSmartPointer<igObject> &v
     self->_alignmentValues = (int)held;
 }
 
-void igResource_AddAlignment(igResource *self, int name, int value) {
+void igResource_AddAlignment(igResource *self, const char *name, int value) {
     if (self->_alignmentStrings == 0) {
         setNames(self, igSmartPointer<igObject>((igObject *)igStringObjList_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
         setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
     }
     igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
-    igStringObj_Set(entry.p, (const char *)name);
+    igStringObj_Set(entry.p, name);
     ObjectList_AppendRetained((igObjectList *)self->_alignmentStrings, (igObject *)entry.p);
     igTDataList<int> *values = (igTDataList<int> *)self->_alignmentValues;
     int top = values->count();
@@ -1040,7 +1040,7 @@ void igResource_AsyncLoadThreadProc(int *result, void *file) {
         resource = (int)((igDirectoryView *)file)->_managingResource;
         if (((igDirectoryView *)file)->_loadedRefCount > 1) {
             igResource_ReadFileWithSearchPaths((igResource *)resource, (igIGBFileView *)file);
-            igResource_UnloadDirectory((igResource *)resource, ((igDirectoryView *)file)->_name);
+            igResource_UnloadDirectory((igResource *)resource, (const char *)((igDirectoryView *)file)->_name);
         }
         *result = g_resultSuccess.v;
     }

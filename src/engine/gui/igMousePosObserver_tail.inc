@@ -46,7 +46,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
     int type;
     model = (igGuiSystemModel *)self->_model;
     type = msg->type;
-    if (type == g_igGuiSystemModelMousePositionField[0]) {
+    if (type == (int)g_igGuiSystemModel_mousePositionMetaField) {
         Vec3f_455d80 v(model->_mousePosition[0], model->_mousePosition[1], 0.0f);
         Vec3f_455d80 p;
         Vec3f_TransformProjective((float *)&v, (const float *)&v, self->_inverseProjectionMatrix);

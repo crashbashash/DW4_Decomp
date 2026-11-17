@@ -150,7 +150,7 @@ void igVertexArray2_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0014ae00();
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    ((igObjectRefMetaField *)temp_v0)->_metaObject = (int)((int) g_igObject_metaObject[0]);
+    ((igObjectRefMetaField *)temp_v0)->_metaObject = (int)g_igObject_metaObject;
     ((igMetaField *)temp_v0)->_persistent = 0;
     igMetaObject_NameFields(meta, g_igVertexArray2_fieldTable, g_igVertexArray2_fieldHandles, g_igVertexArray2_fieldOffsets, fieldStart);
     *(int *)((char *)(g_igVertexArray2_metaObject) + 60) = (int)(thunk_FUN_00152200);

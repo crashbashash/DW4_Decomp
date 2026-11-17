@@ -90,6 +90,6 @@ void thunk_igInfoManagerOrderedList_GetMetaObject(void) {
 }
 
 int FUN_00233740(void) {
-    return g_igDependencyOrderedList_metaObject[0];
+    return (int)g_igDependencyOrderedList_metaObject;
 }
 

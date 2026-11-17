@@ -13,7 +13,6 @@
 #include "dw4/igMemory.h"
 
 extern "C" {
-void *Memory_ReallocateBufferAlias(void *block, size_t size);
 }
 
 void *luaM_growaux (lua_State *L, void *block, size_t nelems,

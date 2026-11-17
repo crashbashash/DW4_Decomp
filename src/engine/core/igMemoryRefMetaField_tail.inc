@@ -27,7 +27,7 @@ void igMemoryRefMetaField_ConstructValue(igMemoryRefMetaField *self, int object)
         poolName = (char *)(self->_poolName);
         elementCount = (int)((unsigned int) ((self->_memSize + elementSize) - 1) / elementSize);
         if ((poolName != 0) && (*poolName != 0)) {
-            allocator = ((int)Memory_GetAllocatorByName((int)poolName));
+            allocator = (int)Memory_GetAllocatorByName(poolName);
             if (allocator == 0) {
                 allocator = ((int)igObject_GetAllocator((igObject *)object));
             }

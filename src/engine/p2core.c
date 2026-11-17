@@ -27,6 +27,7 @@
 #include "dw4/p2vu1Symbols.h"
 #include "dw4/p2multipass.h"
 #include "dw4/p2watchdog.h"
+#include "dw4/igMemory.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -181,9 +182,6 @@ void FUN_001f76f0(int count, int *regs);
 int FUN_00202300();
 int FUN_00203500();
 int FUN_00208200();
-int Memory_AllocateAligned16();
-int Memory_FreeToSelector();
-char *Memory_ReallocateAligned16(unsigned int data, int size, int heap);
 p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags);
 
 void p2SetCapability(int capability, int on);
@@ -1912,7 +1910,7 @@ p2DisplayList *p2BeginDisplayList(int mode) {
     list->vertexCount = p2VertexCount;
     list->primitiveCount = p2PrimitiveCount;
     memset(&p2DisplayListPacket, 0, sizeof(p2DmaPacket));
-    p2DisplayListPacket.chain = Memory_AllocateAligned16(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
+    p2DisplayListPacket.chain = (unsigned int)Memory_AllocateAligned16(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
     p2DisplayListPacket.cursor = p2DisplayListPacket.chain;
     p2DisplayListPacket.end = p2DisplayListPacket.chain + P2_DISPLAY_LIST_BLOCK_SIZE - 16;
     p2SavedVif1Packet = p2DmaCurrentPacket[P2_DMA_VIF1];
@@ -1959,7 +1957,7 @@ void p2EndDisplayList(void) {
         p2DisplayListMode = 0;
         p2DmaCurrentPacket[P2_DMA_VIF1] = p2SavedVif1Packet;
         size = block->end - block->data;
-        data = Memory_ReallocateAligned16(block->data, size, P2_HEAP_DISPLAY_LIST);
+        data = Memory_ReallocateAligned16((void *)block->data, size, P2_HEAP_DISPLAY_LIST);
         if ((unsigned int)data != block->data && block->previous) {
             ((p2DmaChainTag *)(block->previous->end - 16))->field.addr = (unsigned int)data;
         }
@@ -1984,7 +1982,7 @@ void p2GrowDisplayList(void) {
     previous->next = block;
     p = (unsigned int *)p2DisplayListPacket.cursor;
     memset(&p2DisplayListPacket, 0, sizeof(p2DmaPacket));
-    p2DisplayListPacket.chain = Memory_AllocateAligned16(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
+    p2DisplayListPacket.chain = (unsigned int)Memory_AllocateAligned16(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
     p2DisplayListPacket.cursor = p2DisplayListPacket.chain;
     p2DisplayListPacket.end = p2DisplayListPacket.chain + P2_DISPLAY_LIST_BLOCK_SIZE - 16;
     p2DisplayListPacket.limit = p2DisplayListPacket.end - P2_DISPLAY_LIST_RESERVE;
@@ -2048,7 +2046,7 @@ void p2FreeDisplayList(p2DisplayList *list) {
     if (next != 0) {
         p2FreeDisplayList(next);
     }
-    Memory_FreeToSelector(list->data, P2_HEAP_DISPLAY_LIST);
+    Memory_FreeToSelector((void *)list->data, P2_HEAP_DISPLAY_LIST);
     p2FreeDisplayListBlock(list);
 }
 

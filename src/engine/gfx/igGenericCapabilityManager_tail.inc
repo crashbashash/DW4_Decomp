@@ -111,7 +111,7 @@ StringRef FUN_001554a0(int arg1) {
 }
 
 
-void *igObject_GetMetaObject_Virtual(void){return (void *)g_igObject_metaObject[0];}
+void *igObject_GetMetaObject_Virtual(void){return g_igObject_metaObject;}
 
 void FUN_00155c00(igResult *out, Owner *owner, int id) {
     int i;
@@ -284,7 +284,7 @@ int FUN_001562d0(struct A_1562d0 *arg0, int arg1) {
 }
 
 void FUN_00156300(void) {
-    igResource_AddAlignment(g_globalContext[0], "ImageData", 0x10);
+    igResource_AddAlignment((igResource *)g_globalContext, "ImageData", 0x10);
     igMemoryRefMetaField_SetAlignmentType(g_igImage_pImageMetaField, "ImageData");
 }
 
@@ -919,7 +919,7 @@ int FUN_00158f50(S_158f50 *arg0, int arg1) {
         }
         return 1;
     }
-    igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)igFile_Create(igObject_GetAllocator((igObject *)arg0)));
+    igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)igFile_Create((int)igObject_GetAllocator((igObject *)arg0)));
     int sp3C;
     if (sp40.p->v23(arg1, "rb") == 0) {
         return 0;

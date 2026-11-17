@@ -6,6 +6,7 @@ struct igUnsignedCharList;
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern struct igMetaObject *g_igUnsignedCharList_metaObject;
 struct igUnsignedCharList *igUnsignedCharList_Create(int allocator);
 #ifdef __cplusplus
 }

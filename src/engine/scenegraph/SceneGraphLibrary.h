@@ -1233,6 +1233,10 @@ extern "C" unsigned char igNode_ComputeBound(igAABox *, igAABox *, int, int, uns
 struct TravObject { int _vtable; unsigned int _refCount; int _id; };
 struct TravObjectList { char pad[8]; int _count; int _capacity; TravObject **_data; };
 struct TravFunctionTable { char pad[16]; int *_data; };
+/* kept local: igCommonTraversal::_travProcs, no C definition. Read as this view (a pointer-typed _data), the cull
+ * traversal's loads keep retail's order; reflected.h's igTraversalFunctionList has an int _data, and every cast of it
+ * tried (to this view, to int *, as an lvalue) moves the load (FUN_001c4c20, FUN_001c5030). */
+extern "C" TravFunctionTable *g_igCommonTraversal_travProcs[4];
 struct TravFlattenView { char pad[40]; TravObjectList *_a; TravObjectList *_b; };
 struct NodeProcEntry { int meta; int proc; };
 struct NodeProcTable { NodeProcEntry e[34]; } __attribute__((aligned(16)));
@@ -1292,7 +1296,6 @@ extern "C" int DAT_005625e0[4];
 extern "C" int DAT_005625e8[4];
 extern "C" void *DAT_005625f0;
 extern "C" VC_1b2fa0 *DAT_00562638[4];
-extern "C" TravFunctionTable *g_igCommonTraversal_travProcs[4];
 extern "C" void FUN_00130a70(void);
 extern "C" void FUN_00130cf0(void);
 extern "C" void FUN_0013b110(void);
@@ -2340,7 +2343,6 @@ struct ShaderProcessorTypes { char pad0[16]; igSmartPointer<DataPumpInfo> dataPu
 struct ShaderProcessorView { char pad0[24]; int kind; int ini; char pad1[12]; int allocatorKey; ShaderProcessorTypes *info; };
 struct ShaderCacheView;
 extern "C" ShaderMetaView *FUN_002fe460(char *);
-extern "C" igSmartPointer<ShaderObject_1ca6c0> igMetaObject_CreateInstanceRef(ShaderMetaView *, int);
 
 extern "C" void *FUN_002fdf20(ShaderMetaView *, char *);
 extern "C" int FUN_001c7680(ShaderProcessorView *, int, char *, ShaderObject_1ca6c0 *, void *, unsigned char *);

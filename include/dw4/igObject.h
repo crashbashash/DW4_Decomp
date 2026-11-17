@@ -13,6 +13,7 @@ struct CallbackArray;
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern struct igMetaObject *g_igObject_metaObject;
 
 struct igObject *igObject_InitHeader(struct igObject *p);
 void igObject_Destroy(struct igObject *object);

@@ -71,7 +71,7 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
         }
     }
     file->stream = (igFileView *)igFile_Create(allocator);
-    igFile_SetFileName((int *)file->stream, file->path);
+    igFile_SetFileName((igFile *)file->stream, file->path);
     if (file->stream->OpenWithMode(4) == g_resultFailure) {
         igReport_Printf((const char *)"Unable to open: %s\n", (int)file->path);
         igReport_Flush();

@@ -24,12 +24,12 @@ igResult igIGBFile_OpenFile(igIGBFileView *self, const char *fileName, int mode)
         if (self->_file == 0) {
             return g_resultFailure;
         }
-        igFile_SetFileName((int *)self->_file, fileName);
+        igFile_SetFileName((igFile *)self->_file, fileName);
         return self->_file->OpenWithMode(mode);
     }
     self->_file->CloseHandle();
     assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)igFile_Create((int)self->_temporaryMemoryPool)));
-    igFile_SetFileName((int *)self->_file, fileName);
+    igFile_SetFileName((igFile *)self->_file, fileName);
     return self->_file->OpenWithMode(mode);
 }
 

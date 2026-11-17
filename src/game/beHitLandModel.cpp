@@ -23,6 +23,8 @@
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
 #include "dw4/igRay.h"
+#include "dw4/igNamedObjectList.h"
+#include "dw4/igStringObjList.h"
 
 extern "C" igMetaObject *beHitLandModel_GetInfoMeta(void);
 extern "C" void beHitLandModel_UpdateRam(void);
@@ -34,8 +36,7 @@ extern "C" int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfo
 extern "C" void beHitLandModel_CheckWall(beHitLandModel *self);
 extern "C" void beHitLandModel_CheckWallFull(beHitLandModel *self);
 static void beHitLandModel_FindLand(beHitLandModel *self);
-extern "C" igMetaObject *g_igStringObjList_metaObject[4];
-extern "C" igMetaObject *g_igNamedObjectList_metaObject[4];
+
 extern "C" void beHitLandModel_Prepare(beHitLandModel *self);
 extern "C" char HITLANDMODEL[];
 extern "C" void beHitLandModel_OnAddRam(beHitLandModel *self, int info, char *, int, int);
@@ -200,7 +201,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
     /* matching construct: register-allocator tracer — i declared before count in each name loop gives retail's i and count registers */
     case MESSAGE_ONHIT:
         if (info->_nameList != 0) {
-            if (g_igStringObjList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
+            if (g_igStringObjList_metaObject == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igStringObjList *names = (igStringObjList *)info->_nameList;
                 int i;
                 int count = names->_count;
@@ -210,7 +211,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                         break;
                     }
                 }
-            } else if (g_igNamedObjectList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
+            } else if (g_igNamedObjectList_metaObject == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igNamedObjectList *names = (igNamedObjectList *)info->_nameList;
                 int i;
                 int count = names->_count;
@@ -225,7 +226,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
         break;
     case MESSAGE_OFFHIT:
         if (info->_nameList != 0) {
-            if (g_igStringObjList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
+            if (g_igStringObjList_metaObject == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igStringObjList *names = (igStringObjList *)info->_nameList;
                 int i;
                 int count = names->_count;
@@ -235,7 +236,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                         break;
                     }
                 }
-            } else if (g_igNamedObjectList_metaObject[0] == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
+            } else if (g_igNamedObjectList_metaObject == ((igObjectDispatchView *)info->_nameList)->GetMeta()) {
                 igNamedObjectList *names = (igNamedObjectList *)info->_nameList;
                 int i;
                 int count = names->_count;

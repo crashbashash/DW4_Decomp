@@ -157,7 +157,7 @@ void FUN_002299c0(ItemRegistry *self) {
             break;
         }
         FUN_0022a9b0((S22a9d0 *)iterator.p);
-        igSmartPointer<igItemBaseDispatchView> item(igMetaObject_CreateInstanceDefaultRef(meta));
+        igSmartPointer<igItemBaseDispatchView> item(igMetaObject_CreateInstanceDefaultRef((igMetaObject *)meta));
         if (item.get() == 0) {
             continue;
         }
@@ -272,7 +272,7 @@ extern "C" igSmartPointer<InterfaceItem> Gap__igItemInterface__vfunc_27(int self
     if (key == 0) {
         return igSmartPointer<InterfaceItem>((InterfaceItem *)0, kRetainReference);
     }
-    igSmartPointer<InterfaceItem> item(igMetaObject_CreateInstanceDefaultRef(key));
+    igSmartPointer<InterfaceItem> item(igMetaObject_CreateInstanceDefaultRef((igMetaObject *)key));
     if (item.get() != 0) {
         igInterface_BindInterfaceFields((igMetaTyped *)self, (igMetaTyped *)item.get());
     }
@@ -538,7 +538,7 @@ int Gap__igLockInterface__vfunc_27(int self, int mode) {
         }
         FUN_0022a9d0((S22a9d0 *)iterator.p);
         LockRef lock;
-        lock.attach((Lock *)igMetaObject_CreateInstanceDefaultRef((int)found).get());
+        lock.attach((Lock *)igMetaObject_CreateInstanceDefaultRef((igMetaObject *)found).get());
         if (lock.get() == 0) {
             continue;
         }

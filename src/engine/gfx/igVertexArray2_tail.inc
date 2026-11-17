@@ -37,7 +37,7 @@ void FUN_0015f660(igVertexArray2 *arg0, igSmartPointer<Rc_17f2b0> list) {
 int Gap__Gfx__igVertexArray2__vfunc_25(int arg0, int arg1) {
     igVertexData *h = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0, 1, arg1);
     if (h != 0) {
-        int t = g_igVec3fList_metaObject[0];
+        int t = (int)g_igVec3fList_metaObject;
         if (t == ((C_15f730 *)h->_data)->v20()) {
             return ((igDataList *)h->_data)->_count;
         }

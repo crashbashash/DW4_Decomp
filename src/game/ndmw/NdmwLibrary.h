@@ -1491,8 +1491,6 @@ extern "C" int g_beNDMWPanelObjectWaza_vtable[4];
 extern "C" igMetaObject *beNDMWPanelObject_ResolveMetaObject(void);
 extern "C" int g_beNDMWPanelWaza_vtable[4];
 extern "C" int g_beNDMWMdlPlayer2_vtable[4];
-/* kept local: no include/dw4 home declares the igInfoManager vtable. */
-extern "C" int g_igInfoManager_vtable[4];
 extern "C" int g_beModelCtrl_vtable[4];
 extern "C" beModelCtrl *beModelCtrl_Destroy(beModelCtrl *self, short flags);
 extern "C" igMetaObject *g_beNDMWMdlPlayer2InfoWork_metaObject;

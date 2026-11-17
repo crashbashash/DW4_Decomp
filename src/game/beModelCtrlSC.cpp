@@ -20,6 +20,7 @@
 #include "dw4/igTraversal.h"
 #include "dw4/softfloat.h"
 #include "dw4/igAABox.h"
+extern "C" int g_igCommonTraversal_travProcs[4];
 #pragma push
 #pragma readonly_strings on
 
@@ -28,7 +29,7 @@ typedef void (*TraversalFunction)(void);
 #include "dw4/emptyString.h"
 extern "C" {
 
-extern int g_igCommonTraversal_travProcs[4];
+
 /* Debug draw colour per bullet mode (RGBA), filled on first use. */
 float g_hitBoxDebugColors[12];
 char g_hitBoxDebugColorsReady;

@@ -403,7 +403,7 @@ int LuaBinding_GetGlobal(lua_State *L) {
         lua_pushusertag(L, g_luaGlobalClass, 0);
         return LuaClass_GetTable(L);
     }
-    meta = igObjectSystem_FindMetaByNameDefault(name);
+    meta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(name);
     if (meta != 0) {
         LuaBinding_SetGlobalUserdata(L, name, meta, g_luaMetaObjectTag);
         lua_settop(L, 0);

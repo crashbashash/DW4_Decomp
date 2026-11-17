@@ -65,6 +65,7 @@
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
 #include "dw4/igAABox.h"
+extern "C" int g_igCommonTraversal_travProcs[4];
 #define SELECT_ALLOCATOR(var, arg) { int base_ = (int)igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
@@ -134,7 +135,6 @@ extern "C" igMetaObject *beModelCtrlInfoRideOn3_GetMeta(void);
 extern "C" igMetaObject *beModelCtrl_GetMeta(void);
 extern "C" int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *data);
 extern "C" int beMeterCtrlNode_TraversalFunction(igCommonTraversal *traversal, void *node);
-extern "C" int g_igCommonTraversal_travProcs[4];
 /* A component of a vector by index, read through the vector's address.
  * matching construct: only this inline read gives the generate handler retail's float registers (the degree
  * factor in $f2, x in $f3); .x/.y/.z, igVec3f::operator[] and the same cast written in place exchange the two.
