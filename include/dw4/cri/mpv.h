@@ -2,7 +2,7 @@
 #ifndef DW4_CRI_MPV_H
 #define DW4_CRI_MPV_H
 
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 
 #define MPV_COND_MAX 16
 #define MPV_COND_CBFN 8   /* the condition holding the decoder's callback */

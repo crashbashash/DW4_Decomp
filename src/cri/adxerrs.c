@@ -1,12 +1,10 @@
 #include <string.h>
+#include "dw4/cri/svm.h"
+#include "dw4/cri/adxerrs.h"
 
-typedef void (*AdxErrFunc)(int obj, char *msg);
-
-void SVM_SetCbErr(void);
-void SVM_CallErr(char *msg);
 
 AdxErrFunc adxerr_func = 0;
-int adxerr_obj = 0;
+void *adxerr_obj = 0;
 char adxerr_msg[256] = {0};
 static char adxerr_digits[32];
 
@@ -24,11 +22,11 @@ void ADXERR_Finish(void)
     adxerr_obj = 0;
 }
 
-void ADXERR_EntryErrFunc(AdxErrFunc func, int obj)
+void ADXERR_EntryErrFunc(AdxErrFunc func, void *obj)
 {
     adxerr_func = func;
     adxerr_obj = obj;
-    SVM_SetCbErr();
+    SVM_SetCbErr(func, obj);
 }
 
 void ADXERR_CallErrFunc1(const char *msg)

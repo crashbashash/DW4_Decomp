@@ -35,14 +35,6 @@ enum { kReportContinue = 1, kReportIgnoreAlways = 2 };
 #include "dw4/igResult.h"
 extern "C" {
 /* CRI ADXF, on the handle in `_adxf` */
-int ADXF_Open(char *fname, int dir);   /* open by name */
-int ADXF_OpenAfs(int ptid, int flid);     /* open an AFS partition entry */
-void ADXF_Close(int adxf);              /* close */
-int ADXF_ReadNw(int adxf, int nsct, char *buf); /* start a read of nsct sectors */
-int ADXF_Seek(int adxf, int nsct, int type);  /* seek */
-int ADXF_Tell(int adxf);               /* tell, in sectors */
-int ADXF_GetFsizeSct(int adxf);               /* file size in sectors */
-int ADXF_GetStat(int adxf);               /* status */
 
 void igFile_SetFileName(igObject *file, const char *fileName); /* sets igFile::_fileName */
 int igReport_Printf(const char *format, ...);  /* prints */
@@ -73,6 +65,7 @@ public:
 };
 
 #include "dw4/igThread.h"
+#include "dw4/cri/cri_adxf.h"
 extern "C" {
 
 void igAdxFile_constructFields(igAdxFile *self, int flags)
@@ -125,7 +118,7 @@ void igAdxFile_userDestruct(igAdxFile *self)
 
 int igAdxFile_GetReadStatus(igAdxFile *self)
 {
-    return ADXF_GetStat(self->_adxf);
+    return ADXF_GetStat((AdxfHandle *)self->_adxf);
 }
 
 int igAdxFile_WaitForReadEnd(igAdxFile *self)
@@ -210,10 +203,10 @@ void igAdxFile_OpenWithMode(igResult *result, igAdxFile *self, OpenMode mode)
         index = igAdx_FindAfsFile((const char *)self->_fileName);
         if (index != -1) {
             entry = ((igAdxAfsFile **)g_adxAfsFileList->_data)[index];
-            self->_adxf = ADXF_OpenAfs(entry->_ptNumber, entry->_fileNumber);
+            self->_adxf = (int)ADXF_OpenAfs(entry->_ptNumber, entry->_fileNumber);
         } else {
             strcpy(fileName, (const char *)self->_fileName);
-            self->_adxf = ADXF_Open(fileName, 0);
+            self->_adxf = (int)ADXF_Open(fileName, 0);
         }
         if (self->_adxf == 0) {
             *result = g_resultFailure;
@@ -230,7 +223,7 @@ void igAdxFile_Close(igAdxFile *self)
     self->_bBufferFilled = 0;
     self->_iBufferPos = 0;
     if (self->_adxf != 0) {
-        ADXF_Close(self->_adxf);
+        ADXF_Close((AdxfHandle *)self->_adxf);
     }
 }
 
@@ -251,7 +244,7 @@ igAdxFile *igAdxFile_OpenFile(igAdxFile *self, const char *fileName, const char 
 
 void igAdxFile_CloseFile(igAdxFile *self)
 {
-    ADXF_Close(self->_adxf);
+    ADXF_Close((AdxfHandle *)self->_adxf);
 }
 
 int igAdxFile_Read(igAdxFile *self, char *dest, int size, int count)
@@ -269,13 +262,13 @@ int igAdxFile_Read(igAdxFile *self, char *dest, int size, int count)
         if (total % self->_iSectorSize != 0) {
             sectors += 1;
         }
-        position = ADXF_Tell(self->_adxf);
-        if (position < ADXF_GetFsizeSct(self->_adxf)) {
-            position = sectors + ADXF_Tell(self->_adxf);
-            if (ADXF_GetFsizeSct(self->_adxf) < position) {
-                sectors = ADXF_GetFsizeSct(self->_adxf) - ADXF_Tell(self->_adxf);
+        position = ADXF_Tell((AdxfHandle *)self->_adxf);
+        if (position < ADXF_GetFsizeSct((AdxfHandle *)self->_adxf)) {
+            position = sectors + ADXF_Tell((AdxfHandle *)self->_adxf);
+            if (ADXF_GetFsizeSct((AdxfHandle *)self->_adxf) < position) {
+                sectors = ADXF_GetFsizeSct((AdxfHandle *)self->_adxf) - ADXF_Tell((AdxfHandle *)self->_adxf);
             }
-            ADXF_ReadNw(self->_adxf, sectors, dest);
+            ADXF_ReadNw((AdxfHandle *)self->_adxf, sectors, dest);
         }
         if (self->_bUseAsync == 0 || self->_bUseAlchemyAsync != 0) {
             igAdxFile_WaitForReadEnd(self);
@@ -284,13 +277,13 @@ int igAdxFile_Read(igAdxFile *self, char *dest, int size, int count)
     }
     if (self->_bBufferFilled == 0) {
         sectors = self->_iBufferSize / self->_iSectorSize;
-        position = ADXF_Tell(self->_adxf);
-        if (position < ADXF_GetFsizeSct(self->_adxf)) {
-            position = sectors + ADXF_Tell(self->_adxf);
-            if (ADXF_GetFsizeSct(self->_adxf) < position) {
-                sectors = ADXF_GetFsizeSct(self->_adxf) - ADXF_Tell(self->_adxf);
+        position = ADXF_Tell((AdxfHandle *)self->_adxf);
+        if (position < ADXF_GetFsizeSct((AdxfHandle *)self->_adxf)) {
+            position = sectors + ADXF_Tell((AdxfHandle *)self->_adxf);
+            if (ADXF_GetFsizeSct((AdxfHandle *)self->_adxf) < position) {
+                sectors = ADXF_GetFsizeSct((AdxfHandle *)self->_adxf) - ADXF_Tell((AdxfHandle *)self->_adxf);
             }
-            ADXF_ReadNw(self->_adxf, sectors, (char *)self->_pBuffer);
+            ADXF_ReadNw((AdxfHandle *)self->_adxf, sectors, (char *)self->_pBuffer);
         }
         if (self->_bUseAsync == 0 || self->_bUseAlchemyAsync != 0) {
             igAdxFile_WaitForReadEnd(self);
@@ -318,13 +311,13 @@ int igAdxFile_Read(igAdxFile *self, char *dest, int size, int count)
     if (0 < total) {
         do {
             sectors = self->_iBufferSize / self->_iSectorSize;
-            position = ADXF_Tell(self->_adxf);
-            if (position < ADXF_GetFsizeSct(self->_adxf)) {
-                position = sectors + ADXF_Tell(self->_adxf);
-                if (ADXF_GetFsizeSct(self->_adxf) < position) {
-                    sectors = ADXF_GetFsizeSct(self->_adxf) - ADXF_Tell(self->_adxf);
+            position = ADXF_Tell((AdxfHandle *)self->_adxf);
+            if (position < ADXF_GetFsizeSct((AdxfHandle *)self->_adxf)) {
+                position = sectors + ADXF_Tell((AdxfHandle *)self->_adxf);
+                if (ADXF_GetFsizeSct((AdxfHandle *)self->_adxf) < position) {
+                    sectors = ADXF_GetFsizeSct((AdxfHandle *)self->_adxf) - ADXF_Tell((AdxfHandle *)self->_adxf);
                 }
-                ADXF_ReadNw(self->_adxf, sectors, (char *)self->_pTmpBuffer);
+                ADXF_ReadNw((AdxfHandle *)self->_adxf, sectors, (char *)self->_pTmpBuffer);
             } else {
                 igReport_Printf("igAdxFile::3 read cancel\n");
                 igReport_Flush();
@@ -404,14 +397,14 @@ int igAdxFile_Seek(igAdxFile *self, int offset, int whence)
     switch (whence) {
     case ADXF_SEEK_SET:
         self->_iSeekPosition = offset;
-        ADXF_Seek(self->_adxf, sector, ADXF_SEEK_SET);
+        ADXF_Seek((AdxfHandle *)self->_adxf, sector, ADXF_SEEK_SET);
         break;
     case ADXF_SEEK_CUR:
         self->_iSeekPosition = self->_iSeekPosition + offset;
-        ADXF_Seek(self->_adxf, sector, ADXF_SEEK_CUR);
+        ADXF_Seek((AdxfHandle *)self->_adxf, sector, ADXF_SEEK_CUR);
         break;
     case ADXF_SEEK_END:
-        end = ADXF_Seek(self->_adxf, sector, ADXF_SEEK_END);
+        end = ADXF_Seek((AdxfHandle *)self->_adxf, sector, ADXF_SEEK_END);
         self->_iSeekPosition = end * self->_iSectorSize;
         break;
     }
@@ -420,7 +413,7 @@ int igAdxFile_Seek(igAdxFile *self, int offset, int whence)
 
 int igAdxFile_Tell(igAdxFile *self)
 {
-    ADXF_Tell(self->_adxf);
+    ADXF_Tell((AdxfHandle *)self->_adxf);
     return self->_iSeekPosition;
 }
 
@@ -432,7 +425,7 @@ int igAdxFile_UngetChar(void)
 int igAdxFile_GetFileSize(igAdxFile *self)
 {
     if (self->_bIsOpen) {
-        return ADXF_GetFsizeSct(self->_adxf) * 0x800 + 0x800;
+        return ADXF_GetFsizeSct((AdxfHandle *)self->_adxf) * 0x800 + 0x800;
     }
     return 0;
 }

@@ -1,7 +1,7 @@
 #include "dw4/cri/m2v.h"
 #include "dw4/cri/mpv.h"
 #include <string.h>
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 
 /* MPEG-2 extension_data() parser of the CRI movie decoder: reads one
  * extension_start_code_identifier and its payload from the video elementary stream (ISO/IEC

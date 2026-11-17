@@ -1,10 +1,11 @@
 /* The ADX file-system server: one pass over the file-reading layers, guarded against re-entry. */
-#include "dw4/cri/adxt.h"
-#include "dw4/cri/cvfs.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/cri_cvfs.h"
+#include "dw4/cri/adxstm.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/cri_adxf.h"
+#include "dw4/cri/cri_srd.h"
 
-void SRD_ExecServer(void);
-void ADXSTM_ExecServer(void);
-void ADXF_ExecServer(void);
 
 /* The step the running pass has reached, 0 when no pass is running. */
 int adxt_fssvr_step = 0;

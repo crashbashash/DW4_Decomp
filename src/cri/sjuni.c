@@ -1,8 +1,7 @@
 /* CRI SJUNI: an SJ whose four lines are lists of chunks, the list nodes drawn from a pool in the caller's
  * work area. The upper-case entry points take the SJ critical section around the lower-case bodies. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
-#include "dw4/cri/adxt.h"
 
 #define SJUNI_MAX_OBJ 64
 #define SJUNI_NLINE 4
@@ -12,8 +11,6 @@ enum SjUniMode {
     SJUNI_MODE_SEPARATE = 0,
     SJUNI_MODE_JOIN = 1   /* a chunk that continues a line's end chunk is merged into it */
 };
-
-typedef void (*SjErrFunc)(void *obj, int code);
 
 typedef struct SjUniNode SjUniNode;
 struct SjUniNode {
@@ -49,10 +46,6 @@ struct SjUniObj {
     SjErrFunc err;
     void *errobj;
 };
-
-void SJCRS_Lock(void);
-void SJCRS_Unlock(void);
-void SJERR_CallErr(const char *message);
 
 void SJUNI_Destroy(SjUniObj *sj);
 const char *SJUNI_GetUuid(SjUniObj *sj);
@@ -122,14 +115,14 @@ void sjuni_Finish(void)
     }
 }
 
-SjUniObj *SJUNI_Create(int mode, char *work, int wksize)
+SfdSj *SJUNI_Create(int mode, char *work, int wksize)
 {
     SjUniObj *sj;
 
     SJCRS_Lock();
     sj = sjuni_Create(mode, work, wksize);
     SJCRS_Unlock();
-    return sj;
+    return (SfdSj *)sj;
 }
 
 SjUniObj *sjuni_Create(int mode, char *work, int wksize)

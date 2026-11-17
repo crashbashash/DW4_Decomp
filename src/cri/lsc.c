@@ -5,13 +5,6 @@
 
 #define LSC_MAX_OBJ 32
 
-enum LscStat {
-    LSC_STAT_STOP = 0,
-    LSC_STAT_WAIT = 1,
-    LSC_STAT_EXEC = 2,
-    LSC_STAT_ERROR = 3
-};
-
 enum LscStmStat {
     LSC_STM_STAT_WAIT = 0,
     LSC_STM_STAT_READ = 1,
@@ -22,26 +15,17 @@ typedef struct LscCrs {
     int word[4];
 } LscCrs;
 
-typedef void (*LscStatFunc)(void *obj, void *usr);
-typedef void (*LscErrFunc)(void *obj, const char *msg);
-
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))
 #define va_end(ap) __builtin_va_end(ap)
 
 int vsprintf(char *buf, const char *format, va_list args);
 
-void SJCRS_Lock(void);
-void SJCRS_Unlock(void);
-
 static LscObj lsc_objs[LSC_MAX_OBJ];
 
 void LSC_LockCrs(LscCrs *crs);
 void LSC_UnlockCrs(LscCrs *crs);
-void LSC_CallErrFunc(const char *format, ...);
-void LSC_Stop(LscObj *lsc);
 void lsc_ExecHndl(LscObj *lsc);
-int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct);
 
 LscObj *lsc_Alloc(void)
 {
@@ -101,12 +85,12 @@ void LSC_SetStmHndl(LscObj *lsc, void *stm)
     lsc->stm = stm;
 }
 
-int LSC_EntryFname(LscObj *lsc, char *fname)
+int LSC_EntryFname(LscObj *lsc, const char *fname)
 {
     return LSC_EntryFileRange(lsc, fname, 0, 0, 0xFFFFF);
 }
 
-int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct)
+int LSC_EntryFileRange(LscObj *lsc, const char *fname, void *dir, int ofst, int nsct)
 {
     LscStm *stm;
     int last;
@@ -259,7 +243,7 @@ int LSC_GetStmId(LscObj *lsc, int no)
     return lsc->stms[slot].id;
 }
 
-char *LSC_GetStmFname(LscObj *lsc, int id)
+const char *LSC_GetStmFname(LscObj *lsc, int id)
 {
     int i;
 
@@ -464,7 +448,7 @@ void LSC_Finish(void)
 void lsc_StatWait(LscObj *lsc)
 {
     LscStm *stm = &lsc->stms[lsc->rpos];
-    char *fname;
+    const char *fname;
     unsigned int len;
     unsigned int i;
     int sum;
@@ -521,7 +505,7 @@ void lsc_StatRead(LscObj *lsc)
 
 void lsc_EndStm(LscObj *lsc)
 {
-    char *fname = 0;
+    const char *fname = 0;
     void *dir = 0;
     int ofst = 0;
     int nsct = 0;

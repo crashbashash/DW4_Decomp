@@ -2,8 +2,12 @@
 #ifndef DW4_CRI_ADXSTM_H
 #define DW4_CRI_ADXSTM_H
 
-#include "dw4/cri/cvfs.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/cri_cvfs.h"
+#include "dw4/cri/sj.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define ADXSTM_MAX_OBJ 40
 #define ADXSTM_SCT_LEN 2048
@@ -46,7 +50,7 @@ typedef struct AdxStmObj {
     signed char opened;
     signed char nrmlflg;        /* taken from the normal handles, not the real-time ones */
     char f75[5];                /* never touched */
-    char *fname;
+    const char *fname;
     void *dir;
     int curpos;                 /* next sector to read */
     int maxsct;                 /* sector to stop at, ADXSTM_NO_MAXSCT for none */
@@ -61,8 +65,8 @@ AdxStmObj *ADXSTMF_CreateCvfs(CvFsHandle *fd, int fofst, int fsize, SfdSj *sj);
 AdxStmObj *ADXSTMF_CreateCvfsRt(CvFsHandle *fd, int fofst, int fsize, SfdSj *sj);
 AdxStmObj *ADXSTM_Create(SfdSj *sj, int maxsct);
 void ADXSTM_Destroy(AdxStmObj *stm);
-void ADXSTM_BindFileNw(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsct);
-void ADXSTM_BindFile(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsct);
+void ADXSTM_BindFileNw(AdxStmObj *stm, const char *fname, void *dir, int ofst, int nsct);
+void ADXSTM_BindFile(AdxStmObj *stm, const char *fname, void *dir, int ofst, int nsct);
 void ADXSTM_ReleaseFileNw(AdxStmObj *stm);
 void ADXSTM_ReleaseFile(AdxStmObj *stm);
 int ADXSTM_IsOpenedFile(AdxStmObj *stm);
@@ -96,5 +100,9 @@ void ADXSTM_SetOfst(AdxStmObj *stm, int ofst);
 void ADXT_SetNumRetry(int num);
 int ADXSTM_GetReadFlg(AdxStmObj *stm);
 void ADXSTM_OpenCvfs(AdxStmObj *stm);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

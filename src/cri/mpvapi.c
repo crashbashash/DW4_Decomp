@@ -1,9 +1,9 @@
 /* MPV error reporting and the handle queries: error callbacks, start-code searches over a buffer or a
  * stream joint, and the picture and VBV values of the last sequence header. */
 #include "dw4/cri/mpv.h"
+#include "dw4/cri/sj.h"
 
 int MPVLIB_CheckHn(MpvHn *mpv);
-SfdSj *SJMEM_Create(void *buf, int size);
 char *MPV_SearchDelim(char *buf, int len, int mask);
 
 void mpv_ResetErr(MpvErrObj *err);

@@ -53,7 +53,7 @@ extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *se
 #include "dw4/igDataLists.h"
 #include "dw4/dmaChannel.h"
 #include "dw4/cri/sndf.h"
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 #include "dw4/StringPool.h"
 #include "dw4/ParticleArray.h"
 #include <math.h>

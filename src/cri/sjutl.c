@@ -1,6 +1,6 @@
 /* CRI SJ utilities: chunk splitting and the tags that frame data inside a chunk. A tag is a 16-byte
  * header: a 7-character id at 0, its content length as seven hex digits at 8, the content from 16. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
 
 #define SJ_TAG_ID_LEN 7

@@ -1,7 +1,7 @@
 #ifndef SFDHN_H
 #define SFDHN_H
 
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 
 /* A stream header's audio stream. */
 typedef struct SfdHdrAudio {

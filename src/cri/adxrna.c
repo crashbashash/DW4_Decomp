@@ -1,96 +1,34 @@
-typedef struct AdxRnaStream AdxRnaStream;
-typedef struct AdxRnaStreamOps {
-    void *slot[9];
-    unsigned int (*query)(AdxRnaStream *stream, int which);
-} AdxRnaStreamOps;
-struct AdxRnaStream {
-    AdxRnaStreamOps *ops;
-};
-typedef struct AdxRnaTrack {
-    int f0;
-    void *handle;
-    AdxRnaStream *stream;
-} AdxRnaTrack;
-typedef struct AdxRnaTrackList {
-    int f0;
-    int f4;
-    AdxRnaTrack *tracks[1];
-} AdxRnaTrackList;
-typedef struct AdxRna {
-    int f0;
-    int f4;
-    int f8;
-    AdxRnaTrackList *tracks;
-} AdxRna;
+/* CRI ADXRNA: the ADX renderer interface, which on the PS2 forwards every call to PS2RNA. */
+#include "dw4/cri/adxrna.h"
+#include "dw4/cri/adxmsg.h"
 
 extern char DAT_004ee378[];
 
-int PS2RNA_SetupVoice();
-int PS2RNA_Init();
-int PS2RNA_SendOutMode();
-int PS2RNA_StartAux();
-int PS2RNA_StopAux();
-int PS2RNA_SetAuxSw();
-int PS2RNA_SetDualSw();
-int PS2RNA_GetDualSw();
-int PS2RNA_OpenPort();
-int PS2RNA_ClosePort();
-int PS2RNA_IsPortOpen();
-int PS2RNA_Finish();
-int PS2RNA_Create();
-int PS2RNA_Destroy();
-int PS2RNA_Start();
-int PS2RNA_Stop();
-int PS2RNA_SetTransSw();
-int PS2RNA_SetPlaySw();
-int PS2RNA_SetOutMode();
-int PS2RNA_GetOutMode();
-int PS2RNA_GetTime();
-int PS2RNA_GetNumData();
-int PS2RNA_GetNumRoom();
-int PS2RNA_ExecServer();
-int PS2RNA_SetStartSmpl();
-int PS2RNA_SetNumChan();
-int PS2RNA_SetSfreq();
-int PS2RNA_SetOutVol();
-int PS2RNA_SetOutPan();
-int PS2RNA_SetOutBalance();
-int PS2RNA_SetBitPerSmpl();
-int PS2RNA_GetSfreq();
-int PS2RNA_GetOutVol();
-int PS2RNA_GetOutPan();
-int PS2RNA_GetOutBalance();
-int PS2RNA_GetBitPerSmpl();
-int PS2RNA_DiscardData();
-int PS2RNA_SetStmHdInfo();
-unsigned int SJRMT_GetNumData(void *handle, int mode);
-void ADXMSG_PrintErr(const char *format, ...);
-
-void ADXPS2_SetupVoice(void) {
-    PS2RNA_SetupVoice();
+void ADXPS2_SetupVoice(int nste, int nmono) {
+    PS2RNA_SetupVoice(nste, nmono);
 }
 
-unsigned int ADXPS2_GetNumDataSjtmp(AdxRna *rna, int ch)
+unsigned int ADXPS2_GetNumDataSjtmp(AdxtObj *adxt, int ch)
 {
-    AdxRnaStream *s = rna->tracks->tracks[ch]->stream;
-    return (unsigned int)s->ops->query(s, 1) >> 1;
+    SfdSj *sj = adxt->rna->psj[ch]->sjuni;
+    return (unsigned int)sj->vtbl->getNumData(sj, SJ_LIN_DATA) >> 1;
 }
 
-unsigned int ADXPS2_GetNumRoomSjtmp(AdxRna *rna, int index) {
-    AdxRnaStream *stream = rna->tracks->tracks[index]->stream;
-    return stream->ops->query(stream, 0) >> 1;
+unsigned int ADXPS2_GetNumRoomSjtmp(AdxtObj *adxt, int ch) {
+    SfdSj *sj = adxt->rna->psj[ch]->sjuni;
+    return (unsigned int)sj->vtbl->getNumData(sj, SJ_LIN_FREE) >> 1;
 }
 
-unsigned int ADXPS2_GetNumDataSjiop(AdxRna *rna, int index) {
-    return SJRMT_GetNumData(rna->tracks->tracks[index]->handle, 1) >> 1;
+unsigned int ADXPS2_GetNumDataSjiop(AdxtObj *adxt, int ch) {
+    return (unsigned int)SJRMT_GetNumData(adxt->rna->psj[ch]->sjrmt, SJ_LIN_DATA) >> 1;
 }
 
-unsigned int ADXPS2_GetNumRoomSjiop(AdxRna *rna, int index) {
-    return SJRMT_GetNumData(rna->tracks->tracks[index]->handle, 0) >> 1;
+unsigned int ADXPS2_GetNumRoomSjiop(AdxtObj *adxt, int ch) {
+    return (unsigned int)SJRMT_GetNumData(adxt->rna->psj[ch]->sjrmt, SJ_LIN_FREE) >> 1;
 }
 
-void FUN_00265b28(void) {
-    PS2RNA_SendOutMode();
+void FUN_00265b28(int outmode) {
+    PS2RNA_SendOutMode(outmode);
 }
 
 void FUN_00265b40(void) {
@@ -101,29 +39,29 @@ void FUN_00265b58(void) {
     PS2RNA_StopAux();
 }
 
-void ADXPS2_RestoreIopSnd(AdxRna *rna) {
-    PS2RNA_SetAuxSw(rna->tracks);
+void ADXPS2_RestoreIopSnd(AdxtObj *adxt, int sw) {
+    PS2RNA_SetAuxSw(adxt->rna, sw);
 }
 
-void ADXPS2_BeginDolbyDigital(AdxRna *rna) {
-    PS2RNA_SetDualSw(rna->tracks);
+void ADXPS2_BeginDolbyDigital(AdxtObj *adxt, int sw) {
+    PS2RNA_SetDualSw(adxt->rna, sw);
 }
 
-void ADXPS2_EndDolbyDigital(AdxRna *rna)
+void ADXPS2_EndDolbyDigital(AdxtObj *adxt)
 {
-    PS2RNA_GetDualSw(rna->tracks);
+    PS2RNA_GetDualSw(adxt->rna);
 }
 
-void FUN_00265bb8(void) {
-    PS2RNA_OpenPort();
+void FUN_00265bb8(unsigned int port) {
+    PS2RNA_OpenPort(port);
 }
 
-void FUN_00265bd0(void) {
-    PS2RNA_ClosePort();
+void FUN_00265bd0(unsigned int port) {
+    PS2RNA_ClosePort(port);
 }
 
-void FUN_00265be8(void) {
-    PS2RNA_IsPortOpen();
+int FUN_00265be8(unsigned int port) {
+    return PS2RNA_IsPortOpen(port);
 }
 
 void ADXRNA_Init(void) {
@@ -134,46 +72,46 @@ void ADXRNA_Finish(void) {
     PS2RNA_Finish();
 }
 
-void ADXRNA_EntryErrFunc(void)
+void ADXRNA_EntryErrFunc(AdxErrFunc func, void *obj)
 {
 }
 
-void ADXRNA_Create(void) {
-    PS2RNA_Create();
+Ps2Rna *ADXRNA_Create(SfdSj **sjo, int maxnch) {
+    return PS2RNA_Create(sjo, maxnch);
 }
 
-void ADXRNA_Destroy(void *handle) {
-    PS2RNA_SetPlaySw(handle, 0);
-    PS2RNA_SetTransSw(handle, 0);
-    PS2RNA_Destroy(handle);
+void ADXRNA_Destroy(Ps2Rna *rna) {
+    PS2RNA_SetPlaySw(rna, 0);
+    PS2RNA_SetTransSw(rna, 0);
+    PS2RNA_Destroy(rna);
 }
 
 void ADXRNA_Start(void) {
     PS2RNA_Start();
 }
 
-void ADXRNA_Stop(void) {
-    PS2RNA_Stop();
+void ADXRNA_Stop(Ps2Rna *rna) {
+    PS2RNA_Stop(rna);
 }
 
-void ADXRNA_SetTransSw(void) {
-    PS2RNA_SetTransSw();
+void ADXRNA_SetTransSw(Ps2Rna *rna, int sw) {
+    PS2RNA_SetTransSw(rna, sw);
 }
 
-void ADXRNA_SetPlaySw(void) {
-    PS2RNA_SetPlaySw();
+void ADXRNA_SetPlaySw(Ps2Rna *rna, int sw) {
+    PS2RNA_SetPlaySw(rna, sw);
 }
 
-void ADXRNA_GetTime(void) {
-    PS2RNA_GetTime();
+void ADXRNA_GetTime(Ps2Rna *rna, int *ncount, int *tscale) {
+    PS2RNA_GetTime(rna, ncount, tscale);
 }
 
-void ADXRNA_GetNumData(void) {
-    PS2RNA_GetNumData();
+int ADXRNA_GetNumData(Ps2Rna *rna) {
+    return PS2RNA_GetNumData(rna);
 }
 
-void ADXRNA_GetNumRoom(void) {
-    PS2RNA_GetNumRoom();
+int ADXRNA_GetNumRoom(Ps2Rna *rna) {
+    return PS2RNA_GetNumRoom(rna);
 }
 
 void ADXRNA_GetStat(void) {
@@ -190,52 +128,52 @@ void FUN_00265d80(void) {
     PS2RNA_SetStartSmpl();
 }
 
-void ADXRNA_SetNumChan(void) {
-    PS2RNA_SetNumChan();
+void ADXRNA_SetNumChan(Ps2Rna *rna, int nch) {
+    PS2RNA_SetNumChan(rna, nch);
 }
 
-void ADXRNA_SetSfreq(void) {
-    PS2RNA_SetSfreq();
+void ADXRNA_SetSfreq(Ps2Rna *rna, int sfreq) {
+    PS2RNA_SetSfreq(rna, sfreq);
 }
 
-void ADXRNA_SetOutVol(void) {
-    PS2RNA_SetOutVol();
+void ADXRNA_SetOutVol(Ps2Rna *rna, int vol) {
+    PS2RNA_SetOutVol(rna, vol);
 }
 
-void ADXRNA_SetOutPan(void) {
-    PS2RNA_SetOutPan();
+void ADXRNA_SetOutPan(Ps2Rna *rna, int ch, int pan) {
+    PS2RNA_SetOutPan(rna, ch, pan);
 }
 
-void ADXRNA_SetOutBalance(void) {
-    PS2RNA_SetOutBalance();
+void ADXRNA_SetOutBalance(Ps2Rna *rna, int balance) {
+    PS2RNA_SetOutBalance(rna, balance);
 }
 
-void ADXRNA_SetBitPerSmpl(void) {
-    PS2RNA_SetBitPerSmpl();
+void ADXRNA_SetBitPerSmpl(Ps2Rna *rna, int bps) {
+    PS2RNA_SetBitPerSmpl(rna, bps);
 }
 
-void FUN_00265e28(void) {
-    PS2RNA_GetSfreq();
+int FUN_00265e28(Ps2Rna *rna) {
+    return PS2RNA_GetSfreq(rna);
 }
 
-void FUN_00265e40(void) {
-    PS2RNA_GetOutVol();
+int FUN_00265e40(Ps2Rna *rna) {
+    return PS2RNA_GetOutVol(rna);
 }
 
-void ADXRNA_GetOutVol(void) {
-    PS2RNA_GetOutPan();
+int ADXRNA_GetOutVol(Ps2Rna *rna, int ch) {
+    return PS2RNA_GetOutPan(rna, ch);
 }
 
-void ADXRNA_GetOutPan(void) {
-    PS2RNA_GetOutBalance();
+int ADXRNA_GetOutPan(Ps2Rna *rna) {
+    return PS2RNA_GetOutBalance(rna);
 }
 
-void ADXRNA_GetBitPerSmpl(void) {
-    PS2RNA_GetBitPerSmpl();
+int ADXRNA_GetBitPerSmpl(void) {
+    return PS2RNA_GetBitPerSmpl();
 }
 
-void ADXRNA_DiscardData(void) {
-    PS2RNA_DiscardData();
+int ADXRNA_DiscardData(Ps2Rna *rna, int nsmpl) {
+    return PS2RNA_DiscardData(rna, nsmpl);
 }
 
 void ADXRNA_ClearBuf(void)
@@ -246,15 +184,15 @@ void ADXRNA_SetPcmType(void)
 {
 }
 
-void ADXRNA_SetOutMode(void) {
-    PS2RNA_SetOutMode();
+void ADXRNA_SetOutMode(int mode) {
+    PS2RNA_SetOutMode(mode);
 }
 
-void ADXRNA_GetOutMode(void) {
-    PS2RNA_GetOutMode();
+int ADXRNA_GetOutMode(void) {
+    return PS2RNA_GetOutMode();
 }
 
-void ADXRNA_SetTotalNumSmpl(void)
+void ADXRNA_SetTotalNumSmpl(Ps2Rna *rna, int nsmpl)
 {
 }
 
@@ -262,7 +200,7 @@ void ADXRNA_SetWavFname(void)
 {
 }
 
-int ADXRNA_SetStmHdInfo(void) {
-    PS2RNA_SetStmHdInfo();
+int ADXRNA_SetStmHdInfo(Ps2Rna *rna, char *info) {
+    PS2RNA_SetStmHdInfo(rna, info);
     return 0;
 }

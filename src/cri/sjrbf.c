@@ -1,23 +1,16 @@
 /* CRI SJRBF: a ring-buffer SJ whose buffer carries an extra area past its end that mirrors its start, so a
  * chunk can run over the wrap point. The upper-case entry points take the SJ critical section around the
  * lower-case bodies. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
 
 #define SJRBF_MAX_OBJ 256
 #define SJ_ERR_PRM (-3)
 
-enum SjLine {
-    SJ_LIN_FREE = 0,
-    SJ_LIN_DATA = 1
-};
-
 enum SjFlow {
     SJ_FLOW_GET = 0,
     SJ_FLOW_PUT = 1
 };
-
-typedef void (*SjErrFunc)(void *obj, int code);
 
 typedef struct SjRbfObj SjRbfObj;
 
@@ -51,10 +44,6 @@ struct SjRbfObj {
 };
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-
-void SJCRS_Lock(void);
-void SJCRS_Unlock(void);
-void SJERR_CallErr(const char *message);
 
 void SJRBF_Destroy(SjRbfObj *sj);
 const char *SJRBF_GetUuid(SjRbfObj *sj);
@@ -119,14 +108,14 @@ void sjrbf_Finish(void)
     }
 }
 
-SjRbfObj *SJRBF_Create(char *buf, int bsize, int xsize)
+SfdSj *SJRBF_Create(char *buf, int bsize, int xsize)
 {
     SjRbfObj *sj;
 
     SJCRS_Lock();
     sj = sjrbf_Create(buf, bsize, xsize);
     SJCRS_Unlock();
-    return sj;
+    return (SfdSj *)sj;
 }
 
 SjRbfObj *sjrbf_Create(char *buf, int bsize, int xsize)
@@ -416,27 +405,27 @@ int sjrbf_IsGetChunk(SjRbfObj *sj, int line, int nbyte, int *rbyte)
     return n == nbyte;
 }
 
-char *SJRBF_GetBufPtr(SjRbfObj *sj)
+char *SJRBF_GetBufPtr(SfdSj *sj)
 {
-    return sj->buf;
+    return ((SjRbfObj *)sj)->buf;
 }
 
-int SJRBF_GetBufSize(SjRbfObj *sj)
+int SJRBF_GetBufSize(SfdSj *sj)
 {
-    return sj->bsize;
+    return ((SjRbfObj *)sj)->bsize;
 }
 
-int SJRBF_GetXtrSize(SjRbfObj *sj)
+int SJRBF_GetXtrSize(SfdSj *sj)
 {
-    return sj->xsize;
+    return ((SjRbfObj *)sj)->xsize;
 }
 
-void SJRBF_SetFlowCnt(SjRbfObj *sj, int line, int flow, int cnt)
+void SJRBF_SetFlowCnt(SfdSj *sj, int line, int flow, int cnt)
 {
-    sj->flowcnt[line][flow] = cnt;
+    ((SjRbfObj *)sj)->flowcnt[line][flow] = cnt;
 }
 
-int SJRBF_GetFlowCnt(SjRbfObj *sj, int line, int flow)
+int SJRBF_GetFlowCnt(SfdSj *sj, int line, int flow)
 {
-    return sj->flowcnt[line][flow];
+    return ((SjRbfObj *)sj)->flowcnt[line][flow];
 }

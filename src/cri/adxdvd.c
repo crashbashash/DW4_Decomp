@@ -1,25 +1,17 @@
 /* CRI ADX on PS2, disc side: the disc and memory devices, the disc read mode and file cache, and memory files named by address. */
-#include "dw4/cri/adxfs.h"
+#include "dw4/cri/adx_ps2.h"
 #include <stdio.h>
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/cri_adxf.h"
+#include "dw4/cri/cri_cvfs.h"
+#include "dw4/cri/dvci.h"
+#include "dw4/cri/mfci.h"
 
-int dvCiLoadDirInfo(const char *flist, void *buf, int bufsize, int fnamelen);
-int dvCiLoadDirInfoMem(const char *list, int listlen, void *buf, int bufsize, int fnamelen);
-void dvCiSetRdMode(int trycount, int spindlctrl, int datapattern, int rdmode);
-void dvCiSetRootDir(const char *rootdir);
-int dvCiIsExistFcache(const char *fname);
-void dvCiSetDvdLayer(unsigned int layer);
-int dvCiGetDvdLayer(void);
-int dvCiSrdSeek(int lsn);
-void ADXT_StartFname(void *adxt, const char *fname);
-void ADXT_EntryFname(void *adxt, const char *fname);
-void *ADXF_Open(const char *fname, void *dir);
-
-CvFsVtbl *dvCiGetInterface(void);
 
 /* the build string in two parts, read so it is linked */
 extern volatile char adxrt_build[16];
 extern volatile char adxrt_build_ver[29];
-extern int adxt_srd_rmode_sw;
 
 void adxps2_err_dvd(void *obj, const char *msg, int code)
 {
@@ -56,7 +48,7 @@ int ADXPS2_LoadFcacheDvd(AdxFcachePrm *prm)
     return size;
 }
 
-int ADXPS2_LoadFcacheDvdMem(AdxFcachePrm *prm, const char *list, int listlen)
+int ADXPS2_LoadFcacheDvdMem(AdxFcachePrm *prm, char *list, int listlen)
 {
     int size = 0;
 

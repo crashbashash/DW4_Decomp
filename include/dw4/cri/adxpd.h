@@ -2,6 +2,10 @@
 #ifndef DW4_CRI_ADXPD_H
 #define DW4_CRI_ADXPD_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define ADXPD_MAX_OBJ 16
 
 enum AdxPdStat {
@@ -58,5 +62,9 @@ void ADXPD_Reset(AdxPdObj *pd);
 int ADXPD_GetNumBlk(AdxPdObj *pd);
 void ADXPD_ExecHndl(AdxPdObj *pd);
 void ADXPD_ExecServer(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -2,7 +2,7 @@
 #ifndef DW4_CRI_MWPLY_H
 #define DW4_CRI_MWPLY_H
 
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 
 typedef struct MwsfdPly MwsfdPly;
 

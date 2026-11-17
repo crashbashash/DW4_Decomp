@@ -1,9 +1,11 @@
 /* CRI SJX: joins an EE-side SJ line to an IOP-side SJ over DTX. On every exchange the send callback
  * gathers the chunks waiting on each joined line into a list for the IOP, and the receive callback puts
  * back the chunks the IOP returns. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
 #include "dw4/cri/sndf.h"
+#include "dw4/cri/dtx.h"
+#include "dw4/cri/adxmsg.h"
 
 #define SJX_MAX_OBJ 32
 #define SJX_MAX_SEND 128
@@ -18,14 +20,14 @@ enum SjxRpc {
     SJX_RPC_START = 3
 };
 
-typedef struct SjxObj {
+struct SjxObj {
     signed char used;
     unsigned short cnt;
     SfdSj *sj;      /* the EE-side SJ */
-    int sjrmt;      /* the IOP-side SJ */
+    void *sjrmt;    /* the IOP-side SJ */
     int line;
     int iopsjx;     /* the IOP's handle for this join */
-} SjxObj;
+};
 
 /* One chunk in an exchange list. The EE sends the IOP's handle, the IOP answers with the SjxObj. */
 typedef struct SjxEntry {
@@ -42,19 +44,6 @@ typedef struct SjxList {
     SjxEntry entry[SJX_MAX_SEND];
 } SjxList;
 
-typedef void (*DtxCbf)(void *obj, SjxList *list, int size);
-
-void SJCRS_Lock(void);
-void SJCRS_Unlock(void);
-void ADXMSG_PrintErr(const char *format, ...);
-void DTX_Init(void);
-void DTX_Finish(void);
-void *DTX_Create(int id, unsigned int eewk, unsigned int iopwk, int wklen);
-void DTX_Destroy(void *dtx);
-void DTX_SetRcvCbf(void *dtx, DtxCbf func, void *obj);
-void DTX_SetSndCbf(void *dtx, DtxCbf func, void *obj);
-int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv);
-void DTX_ExecServer(void);
 
 static char *sjx_build = "\nSJX Ver.1.08 Build:Oct  6 2004 11:47:21\n";
 static int sjx_init_cnt = 0;
@@ -62,12 +51,13 @@ static unsigned int sjx_eewk = 0;
 static int sjx_iopheap = 0;
 static unsigned int sjx_iopwk = 0;
 static SjxObj sjx_obj[SJX_MAX_OBJ] = {0};
-static void *sjx_dtx = 0;
+static DtxObj *sjx_dtx = 0;
 static int sjx_wklen = 0;
 static char sjx_eewkbuf[SJX_EEWK_SIZE] = {0};
 
-void sjx_rcvcbf(void *obj, SjxList *list, int size)
+void sjx_rcvcbf(void *obj, void *buf, int size)
 {
+    SjxList *list = buf;
     SjxEntry *entry;
     SfdSj *sj;
     int n;
@@ -89,8 +79,9 @@ void sjx_rcvcbf(void *obj, SjxList *list, int size)
     SJCRS_Unlock();
 }
 
-void sjx_sndcbf(void *obj, SjxList *list, int size)
+void sjx_sndcbf(void *obj, void *buf, int size)
 {
+    SjxList *list = buf;
     SjxObj *sjx;
     SjxEntry *entry;
     SfdSjChunk ck;
@@ -148,7 +139,7 @@ void SJX_Init(void)
             }
         }
         sjx_iopwk = (sjx_iopheap + SJX_ALIGN) & -SJX_ALIGN;
-        sjx_dtx = DTX_Create(SJX_DTX_ID, sjx_eewk, sjx_iopwk, sjx_wklen);
+        sjx_dtx = DTX_Create(SJX_DTX_ID, (char *)sjx_eewk, sjx_iopwk, sjx_wklen);  /* the work areas are aligned as addresses */
         if (sjx_dtx == 0) {
             ADXMSG_PrintErr("E0100302: SJX_Init can't create DTX\n");
             for (;;) {
@@ -174,7 +165,7 @@ void SJX_Finish(void)
     }
 }
 
-SjxObj *SJX_Create(SfdSj *sj, int sjrmt, int line)
+SjxObj *SJX_Create(SfdSj *sj, void *sjrmt, int line)
 {
     int request[4];
     SjxObj *sjx;
@@ -194,7 +185,7 @@ SjxObj *SJX_Create(SfdSj *sj, int sjrmt, int line)
     sjx->line = line;
     sjx->sjrmt = sjrmt;
     request[0] = (int)sj;
-    request[1] = sjrmt;
+    request[1] = (int)sjrmt;
     request[2] = line;
     request[3] = (int)sjx;
     sjx->iopsjx = DTX_CallUrpc(SJX_RPC_CREATE, request, 4, request, 1);

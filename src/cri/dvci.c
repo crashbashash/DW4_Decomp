@@ -1,23 +1,12 @@
-#include "dw4/cri/cvfs.h"
+#include "dw4/cri/cri_cvfs.h"
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct SrdObj SrdObj;
-
-typedef struct CdReadMode {
-    unsigned char trycount;
-    unsigned char spindlctrl;
-    unsigned char datapattern;
-    unsigned char pad;
-} CdReadMode;
-
-typedef struct sceCdlFILE {
-    unsigned int lsn;
-    unsigned int size;
-    char name[16];
-    unsigned char date[8];
-    unsigned int flag;
-} sceCdlFILE;
+#include "dw4/cri/svm.h"
+#include "dw4/cri/cri_srd.h"
+#include "dw4/cri/dvci.h"
+#include "dw4/cri/htci.h"
+#include "dw4/cri/adxmsg.h"
+#include "dw4/libkernl.h"
 
 typedef struct DvCiFile {
     signed char used;       /* 0x00 */
@@ -32,7 +21,7 @@ typedef struct DvCiFile {
     char *buf;              /* 0x18 */
     SrdObj *stm;            /* 0x1c */
     sceCdlFILE fp;          /* 0x20 */
-    CdReadMode rmode;       /* 0x44 */
+    sceCdRMode rmode;       /* 0x44 */
 } DvCiFile;
 
 typedef struct DvCiFileLoc {
@@ -77,7 +66,7 @@ static CvFsVtbl dvci_vtbl = {
 static DvCiFile dvci_files[40] = {0};
 static char dvci_path[304] = {0};
 static DvCiTable dvci_dir_table = {0};
-static CdReadMode dvci_rdmode = {0};
+static sceCdRMode dvci_rdmode = {0};
 static int dvci_rd_sync = 0;
 static int dvci_option = 0;
 static char dvci_root_dir[264];
@@ -85,25 +74,7 @@ static char dvci_dir_path[128];
 static char dvci_dir_buf[4096];
 
 void FUN_00265928(const char *format, ...);
-void ADXMSG_PrintErr(const char *format, ...);
-void InvalidDCache(void *start, void *end);
-int sceCdSync(int mode);
-int sceCdRead(unsigned int lsn, unsigned int sectors, void *buf, CdReadMode *mode);
-int sceCdLayerSearchFile(sceCdlFILE *fp, const char *name, int layer);
-
-SrdObj *SRD_Create(void);
-void SRD_Destroy(SrdObj *stm);
-int SRD_ReqRdDvd(SrdObj *stm, int lsn, int sectors, void *buf, CdReadMode *mode);
-int SRD_GetStat(SrdObj *stm);
 void FUN_00271a68(SrdObj *stm);
-void SRD_Break(SrdObj *stm);
-void SRD_ExecServer(void);
-void SRD_WaitForExecServer(void);
-void SRD_SetHistory(int marker);
-int htci_load_flist(const char *name, void *buf);
-void SVM_LockVar(void);
-void SVM_UnlockVar(void);
-int SVM_TestAndSet(int *flag);
 
 void dvci_to_large_to_yen(char *path);
 void dvCiStopTr(DvCiFile *h);
@@ -111,7 +82,6 @@ int dvCiGetStat(DvCiFile *h);
 void dvci_conv_fname(const char *name, char *path);
 void get_fp_from_fname(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n);
 int FUN_00274e30(const char *name, sceCdlFILE *fp);
-void dvCiSetRootDir(const char *path);
 
 CvFsVtbl *dvCiGetInterface(void)
 {
@@ -664,7 +634,7 @@ int FUN_00274790(char *buf, char *list, int listlen, int n, int nameLen)
 int load_flist(const char *path, void *buf)
 {
     sceCdlFILE fp;
-    CdReadMode mode;
+    sceCdRMode mode;
     char dev[5];
     memcpy(dev, path, 5);
     dev[4] = 0;

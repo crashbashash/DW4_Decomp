@@ -3,37 +3,15 @@
  * the hooks this file installs in ADXB, ADXSJD and ADXT. */
 #include "dw4/cri/adxb.h"
 #include "dw4/cri/pl2enc.h"
-#include "dw4/cri/adxfs.h"
-
-typedef struct AdxSjdObj {
-    signed char used;
-    signed char stat;
-    signed char nch;
-    signed char end_on_empty;
-    AdxbObj *adxb;          /* 0x04 */
-} AdxSjdObj;
-
-typedef struct AdxtObj {
-    signed char used;
-    signed char stat;
-    signed char pmode;
-    signed char maxnch;     /* 0x03 */
-    AdxSjdObj *sjd;         /* 0x04 */
-} AdxtObj;
-
-void ADXT_Stop(AdxtObj *adxt);
-void ADXM_Lock(void);
-void ADXM_Unlock(void);
-
-extern void (*adxt_detach_pl2)(AdxtObj *adxt);
-extern void (*adxb_pl2_exec_func)(AdxbObj *adxb, short in, short *out_l, short *out_r);
-extern void (*adxb_pl2_reset_func)(AdxbObj *adxb);
-extern void (*adxsjd_header_hook)(AdxbObj *adxb, int sfreq);
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxsjd.h"
+#include "dw4/cri/adxerrs.h"
 
 void adxt_CallDetachPl2(AdxtObj *adxt);
 void adxt_Pl2ErrFunc(void *obj, const char *message);
 void adxt_Pl2Detach(AdxtObj *adxt);
-void adxt_Pl2ExecOneSmpl(AdxbObj *adxb, short in, short *out_l, short *out_r);
+void adxt_Pl2ExecOneSmpl(AdxbObj *adxb, int in, short *out_l, short *out_r);
 void adxt_Pl2Reset(AdxbObj *adxb);
 void adxt_Pl2SetSfreq(AdxbObj *adxb, int sfreq);
 
@@ -117,7 +95,7 @@ void adxt_Pl2Reset(AdxbObj *adxb)
     PL2ENC_Reset(adxb->pl2);
 }
 
-void adxt_Pl2ExecOneSmpl(AdxbObj *adxb, short in, short *out_l, short *out_r)
+void adxt_Pl2ExecOneSmpl(AdxbObj *adxb, int in, short *out_l, short *out_r)
 {
     PL2ENC_ExecOneSmpl(adxb->pl2, in, out_l, out_r);
 }

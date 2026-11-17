@@ -1,22 +1,9 @@
 #include <string.h>
-#include "dw4/cri/adxt.h"
-
-typedef struct CriSjChunk {
-    void *ptr;
-    int len;
-} CriSjChunk;
-
-typedef struct Sj Sj;
-typedef struct SjVtbl {
-    void *pad0[6];
-    void (*get_chunk)(Sj *sj, int id, int nbyte, CriSjChunk *ck);
-    void (*unget_chunk)(Sj *sj, int id, CriSjChunk *ck);
-    void (*put_chunk)(Sj *sj, int id, CriSjChunk *ck);
-    int (*get_num_data)(Sj *sj, int id);
-} SjVtbl;
-struct Sj {
-    SjVtbl *vt;
-};
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxenc.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxdcd.h"
+#include "dw4/cri/skg.h"
 
 typedef struct AdxEncPredictor {
     signed char used;   /* 0x00 */
@@ -46,13 +33,13 @@ typedef struct AdxEncFilter {
     char pad140[4];
 } AdxEncFilter;
 
-typedef struct AdxEnc {
+struct AdxEnc {
     signed char used;           /* 0x00 */
     signed char stat;           /* 0x01 */
     signed char nch_b;          /* 0x02 */
     signed char ended;          /* 0x03 */
-    Sj *in[2];                  /* 0x04 */
-    Sj *out;                    /* 0x0c */
+    SfdSj *in[2];                  /* 0x04 */
+    SfdSj *out;                    /* 0x0c */
     char pad16[24];
     int f40;                    /* 0x28 */
     int total;                  /* 0x2c */
@@ -101,7 +88,7 @@ typedef struct AdxEnc {
     char pad751;
     void *cinf;                 /* 0x2f0 */
     int cinf_len;               /* 0x2f4 */
-} AdxEnc;
+};
 
 extern int skg_init_count;
 extern void (*DAT_004a5d5c)(void *obj, const char *msg);
@@ -111,18 +98,13 @@ extern char *DAT_004a5d6c;
 extern AdxEnc DAT_004a5d70[8];
 extern AdxEncPredictor adxsje_iirflt_obj[16];
 extern AdxEncFilter adxsje_prdflt_obj[16];
-extern const short skg_tbl[1024];
 extern const char DAT_004ee3e8[];
 extern const char DAT_004ee428[];
 
 int abs(int value);
-int ADX_GetCoefficient(short id, int arg, short *first, short *second);
-int ADX_DecodeInfo(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
-
-int ADX_CalcHdrInfoLen(int type, int len, int ofst, unsigned int blk);
 int adxsje_calc_rsig(AdxEnc *e, int ch);
 void adxsje_set_rsig(AdxEnc *e, int ch);
-int adxsje_output_header(AdxEnc *e, Sj *out);
+int adxsje_output_header(AdxEnc *e, SfdSj *out);
 
 int FUN_002674e8(void)
 {
@@ -239,13 +221,13 @@ void ADXSJE_CalcLpInfo(int nch, int len, int len2, int *hdrlen, int *pad, int *s
     *size2 = adxsje_nsmpl_to_ofst(nch, *hdrlen, len2 + *pad);
 }
 
-int ADXSJE_GetInfo(unsigned short *data, int size, int *out_c, int *out_e, int *out_f, int *out_g)
+int ADXSJE_GetInfo(unsigned char *data, int size, int *out_c, int *out_e, int *out_f, int *out_g)
 {
     short value_a;
-    char value_b;
-    char value_c;
-    char value_d;
-    char value_e;
+    signed char value_b;
+    signed char value_c;
+    signed char value_d;
+    signed char value_e;
     int value_h;
     int result;
 
@@ -255,9 +237,9 @@ int ADXSJE_GetInfo(unsigned short *data, int size, int *out_c, int *out_e, int *
     return result;
 }
 
-int adxsje_write68(void *src, int size, int n, Sj *sj)
+int adxsje_write68(void *src, int size, int n, SfdSj *sj)
 {
-    CriSjChunk ck;
+    SfdSjChunk ck;
     int nbyte;
     int i;
     int *s4;
@@ -267,32 +249,32 @@ int adxsje_write68(void *src, int size, int n, Sj *sj)
     int w;
 
     nbyte = size * n;
-    sj->vt->get_chunk(sj, 0, nbyte, &ck);
+    sj->vtbl->getChunk(sj, 0, nbyte, &ck);
     if (ck.len < nbyte) {
-        sj->vt->unget_chunk(sj, 0, &ck);
+        sj->vtbl->ungetChunk(sj, 0, &ck);
         return 0;
     }
     if (size == 4) {
         s4 = src;
-        d4 = ck.ptr;
+        d4 = (int *)ck.data;
         for (i = 0; i < n; i++) {
             w = *s4++;
             *d4++ = ((w >> 24) & 0xff) | ((w >> 8) & 0xff00) | ((w << 8) & 0xff0000) | (w << 24);
         }
     } else if (size == 2) {
         s2 = src;
-        d2 = ck.ptr;
+        d2 = (short *)ck.data;
         for (i = 0; i < n; i++) {
             *d2++ = ((*s2 >> 8) & 0xff) | ((*s2 << 8) & 0xff00);
             s2++;
         }
     } else if (size == 1) {
-        memcpy(ck.ptr, src, (unsigned short)n);
+        memcpy(ck.data, src, (unsigned short)n);
     } else {
         for (;;) {
         }
     }
-    sj->vt->put_chunk(sj, 1, &ck);
+    sj->vtbl->putChunk(sj, 1, &ck);
     return n;
 }
 
@@ -411,7 +393,7 @@ void pflt_calc_coef(AdxEncFilter *f, int id, int arg)
     short first;
     short second;
 
-    ADX_GetCoefficient(id, arg, &first, &second);
+    ADX_GetCoefficient((short)id, arg, &first, &second);  /* the encoder passes the cutoff as a 16-bit value */
     pflt_set_coef(f, first, second);
     iirflt_set_coef(f->pred, first, second);
 }
@@ -495,25 +477,25 @@ void pflt_set_rsig_q(AdxEncFilter *f, int i, signed char v)
 
 int adxsje_get_pcm_data(AdxEnc *x, int pos, int n, short **bufs)
 {
-    CriSjChunk ck;
+    SfdSjChunk ck;
     int i;
     int cnt;
-    Sj **sj;
+    SfdSj **sj;
 
     sj = x->in;
     cnt = 0;
     for (i = 0; i < x->nch; i++) {
-        cnt = sj[i]->vt->get_num_data(sj[i], 1) / sizeof(short);
+        cnt = sj[i]->vtbl->getNumData(sj[i], 1) / sizeof(short);
         if (cnt < n) {
             return 0;
         }
     }
     for (i = 0; i < x->nch; i++) {
         for (cnt = 0; cnt < n;) {
-            sj[i]->vt->get_chunk(sj[i], 1, n * 2, &ck);
-            memcpy(&bufs[i][cnt], ck.ptr, ck.len);
+            sj[i]->vtbl->getChunk(sj[i], 1, n * 2, &ck);
+            memcpy(&bufs[i][cnt], ck.data, ck.len);
             cnt += (short)(ck.len / sizeof(short));
-            sj[i]->vt->put_chunk(sj[i], 0, &ck);
+            sj[i]->vtbl->putChunk(sj[i], 0, &ck);
         }
     }
     return cnt;
@@ -649,7 +631,7 @@ int adxsje_encode_blk(AdxEnc *e)
 int FUN_00268830(AdxEnc *e)
 {
     int *blk;
-    Sj *sj;
+    SfdSj *sj;
     short s;
     char b;
     int total;
@@ -676,13 +658,13 @@ int FUN_00268830(AdxEnc *e)
 
 int adxsje_encode_data(AdxEnc *e)
 {
-    Sj *sj;
+    SfdSj *sj;
     int total;
 
     total = 0;
     sj = e->out;
     do {
-        if (sj->vt->get_num_data(sj, 0) / 18 / e->nch <= 0) {
+        if (sj->vtbl->getNumData(sj, 0) / 18 / e->nch <= 0) {
             break;
         }
         if (adxsje_encode_blk(e) == 0) {
@@ -700,7 +682,7 @@ int adxsje_write_end_code(AdxEnc *e)
     char zero;
     int n;
     int i;
-    Sj *sj;
+    SfdSj *sj;
     int ofst;
 
     sj = e->out;
@@ -711,7 +693,7 @@ int adxsje_write_end_code(AdxEnc *e)
         len = (ofst + e->f80 + 2047) / 2048 * 2048 - ofst;
     }
     n = len - 4;
-    if (sj->vt->get_num_data(sj, 0) < len) {
+    if (sj->vtbl->getNumData(sj, 0) < len) {
         return 0;
     }
     tag = 0x8001;
@@ -734,9 +716,9 @@ int adxsje_write_end_code(AdxEnc *e)
 
 /* Writes the ADX header: the fixed part, the loop records, the AINF and CINF chunks, zero padding and the
  * copyright string. Returns its size, or 0 when the output stream has no room or a write falls short. */
-int adxsje_output_header(AdxEnc *e, Sj *sj)
+int adxsje_output_header(AdxEnc *e, SfdSj *sj)
 {
-    CriSjChunk ck;
+    SfdSjChunk ck;
     int i4;
     unsigned short tag;
     short hdr;
@@ -749,9 +731,9 @@ int adxsje_output_header(AdxEnc *e, Sj *sj)
     int i;
 
     crilen = strlen(DAT_004a5d6c);
-    sj->vt->get_chunk(sj, 0, 0x7fffffff, &ck);
+    sj->vtbl->getChunk(sj, 0, 0x7fffffff, &ck);
     room = ck.len;
-    sj->vt->unget_chunk(sj, 0, &ck);
+    sj->vtbl->ungetChunk(sj, 0, &ck);
     if (room < e->hdrsize + 4) {
         return 0;
     }
@@ -873,7 +855,7 @@ void ADXSJE_Finish(void)
 
 /* Takes a free encoder for nch input streams and one output stream, with the defaults: 4-bit ADX at 44100 Hz
  * in 18-byte blocks, a cutoff of 500 and no loop. */
-AdxEnc *ADXSJE_Create(int nch, Sj **in, Sj *out)
+AdxEnc *ADXSJE_Create(int nch, SfdSj **in, SfdSj *out)
 {
     AdxEnc *e;
     int i;
@@ -951,21 +933,21 @@ void ADXSJE_Destroy(AdxEnc *e)
 
 void ADXSJE_Start(AdxEnc *x)
 {
-    CriSjChunk ck;
+    SfdSjChunk ck;
     int i;
     int len;
 
     for (i = 0; i < x->nch; i++) {
         len = x->nsmpl * 2;
         if (len > 0) {
-            x->in[i]->vt->get_chunk(x->in[i], 0, len, &ck);
+            x->in[i]->vtbl->getChunk(x->in[i], 0, len, &ck);
             if (ck.len != len) {
-                x->in[i]->vt->unget_chunk(x->in[i], 0, &ck);
+                x->in[i]->vtbl->ungetChunk(x->in[i], 0, &ck);
                 for (;;) {
                 }
             }
-            memset(ck.ptr, 0, ck.len);
-            x->in[i]->vt->put_chunk(x->in[i], 1, &ck);
+            memset(ck.data, 0, ck.len);
+            x->in[i]->vtbl->putChunk(x->in[i], 1, &ck);
         }
     }
     x->f40 = 0;
@@ -1156,33 +1138,33 @@ int ADXSJE_GetEncPos(AdxEnc *e)
     return e->pos;
 }
 
-void ADXSJE_SetInSj(AdxEnc *e, unsigned int i, Sj *sj)
+void ADXSJE_SetInSj(AdxEnc *e, unsigned int i, SfdSj *sj)
 {
     if (i < 2) {
         e->in[i] = sj;
     }
 }
 
-void ADXSJE_SetOutSj(AdxEnc *e, Sj *sj)
+void ADXSJE_SetOutSj(AdxEnc *e, SfdSj *sj)
 {
     e->out = sj;
 }
 
 void adxsje_encode_prep(AdxEnc *e)
 {
-    CriSjChunk ck;
-    Sj *out;
+    SfdSjChunk ck;
+    SfdSj *out;
     int i;
     int n;
 
     out = e->out;
     for (i = 0; i < e->nch; i++) {
-        e->in[i]->vt->get_chunk(e->in[i], 1, 2, &ck);
+        e->in[i]->vtbl->getChunk(e->in[i], 1, 2, &ck);
         if (ck.len == 0) {
             break;
         }
-        e->first1[i] = e->first2[i] = *(short *)ck.ptr;
-        e->in[i]->vt->unget_chunk(e->in[i], 1, &ck);
+        e->first1[i] = e->first2[i] = *(short *)ck.data;
+        e->in[i]->vtbl->ungetChunk(e->in[i], 1, &ck);
     }
     if (i < e->nch) {
         return;

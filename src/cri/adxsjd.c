@@ -1,102 +1,26 @@
 /* CRI ADXSJD: decodes an ADX stream from an input SJ into one output SJ per channel through an ADXB handle. */
 #include "dw4/cri/adxb.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/adxsjd.h"
 #include <string.h>
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/adxdcd.h"
 
-#define ADXSJD_MAX_OBJ 16
 #define ADXSJD_MAX_HDR 0xc800
 #define SWAP16(x) ((unsigned short)(((x) << 8) | ((x) >> 8)))
 
-enum AdxSjdStat {
-    ADXSJD_STAT_STOP = 0,
-    ADXSJD_STAT_DECHDR = 1,
-    ADXSJD_STAT_DECODE = 2,
-    ADXSJD_STAT_DECEND = 3,
-    ADXSJD_STAT_ERROR = 4
-};
 
-typedef struct AdxSjdObj {
-    signed char used;
-    signed char stat;
-    signed char nch;
-    signed char end_on_empty;
-    AdxbObj *adxb;
-    SfdSj *sji;
-    SfdSj *sjo[2];
-    SfdSjChunk cki;
-    SfdSjChunk ck[2];
-    int dec_nsmpl;
-    int dec_dtlen;
-    int dec_pos;
-    int max_dec_nsmpl;
-    int trap_nsmpl;
-    int trap_cnt;
-    int trap_dtlen;
-    void (*trap_func)(void *context);
-    void *trap_obj;
-    void (*flt_func)(void *context, int ch, char *data, int len);
-    void *flt_obj;
-    char hdr[64];
-    int hdr_len;
-    int lnksw;
-    int fill;
-    int skip;
-} AdxSjdObj;
-
-void ADXCRS_Lock(void);
-void ADXCRS_Unlock(void);
-void *SJRBF_GetBufPtr(SfdSj *sj);
-int SJRBF_GetBufSize(SfdSj *sj);
-int SJRBF_GetXtrSize(SfdSj *sj);
-void ADXB_SetAc3InSj();
-void ADXB_SetAc3DecSmpl();
-void ADXB_Ac3TermSupply();
-void ADXB_SetAhxInSj();
-void ADXB_SetAhxDecSmpl();
-void ADXB_AhxTermSupply();
-void ADXB_Init(void);
-void adxb_SetDefaultFmt(AdxbObj *adxb);
-int ADXB_DecodeHeader(AdxbObj *adxb, char *hdr, int size);
-AdxbObj *ADXB_Create(int nch, void *buf, int bsize, int xsize);
-void ADXB_Destroy(AdxbObj *adxb);
 void FUN_0025d830(AdxbObj *adxb);
-void ADXB_EntryGetWrFunc();
-int ADXB_GetPcmBuf(AdxbObj *adxb);
-int ADXB_GetFormat(AdxbObj *adxb);
-int ADXB_GetSfreq(AdxbObj *adxb);
-int ADXB_GetNumChan(AdxbObj *adxb);
-int ADXB_GetFmtBps(AdxbObj *adxb);
-int ADXB_GetOutBps(AdxbObj *adxb);
-int ADXB_GetBlkSmpl(AdxbObj *adxb);
-int ADXB_GetBlkLen(AdxbObj *adxb);
-int ADXB_GetTotalNumSmpl(AdxbObj *adxb);
-int ADXB_GetCof(AdxbObj *adxb);
-int ADXB_GetLpInsNsmpl(AdxbObj *adxb);
-int ADXB_GetNumLoop(AdxbObj *adxb);
-int ADXB_GetLpStartPos(AdxbObj *adxb);
 int FUN_0025db48(AdxbObj *adxb);
-int ADXB_GetLpEndPos(AdxbObj *adxb);
-int ADXB_GetLpEndOfst(AdxbObj *adxb);
 int FUN_0025db70(AdxbObj *adxb);
 short FUN_0025db78(AdxbObj *adxb);
-short ADXB_GetDefPan(AdxbObj *adxb, int arg);
 char *FUN_0025db90(AdxbObj *adxb);
-void ADXB_TakeSnapshot(AdxbObj *adxb);
 void FUN_0025dbd8(AdxbObj *adxb);
 void FUN_0025dc18();
 void FUN_0025dc80();
-int ADXB_GetStat(AdxbObj *adxb);
-void ADXB_EntryData(AdxbObj *adxb, char *data, int len);
-void ADXB_Start(AdxbObj *adxb);
-void ADXB_Stop(AdxbObj *adxb);
-int ADXB_GetDecDtLen(AdxbObj *adxb);
-int ADXB_GetDecNumSmpl(AdxbObj *adxb);
-void ADXB_Reset(AdxbObj *adxb);
 void FUN_0025df00();
 void FUN_0025e4b8(AdxbObj *adxb);
-int ADX_DecodeFooter(char *hdr, int size, short *ofst);
-void ADXERR_CallErrFunc2(const char *code, const char *message);
-void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 
 int adxsjd_use_cnt = 0;
 int adxsjd_use_reserved = 0; /* no function reads it */
@@ -104,11 +28,9 @@ void (*adxsjd_header_hook)(AdxbObj *adxb, int rate) = 0;
 AdxSjdObj adxsjd_objs[ADXSJD_MAX_OBJ] = {0};
 
 void adxsjd_decode_prep(AdxSjdObj *sjd);
-int adxsjd_get_wr(AdxSjdObj *sjd, int *offset, int *room, int *until_trap);
+short *adxsjd_get_wr(void *obj, int *offset, int *room, int *until_trap);
 void adxsjd_decexec_start(AdxSjdObj *sjd);
 void adxsjd_decexec_end(AdxSjdObj *sjd);
-int ADXSJD_GetBlkSmpl(AdxSjdObj *sjd);
-int ADXSJD_GetTotalNumSmpl(AdxSjdObj *sjd);
 
 void FUN_00265f28(void)
 {
@@ -216,7 +138,7 @@ char ADXSJD_GetStat(AdxSjdObj *sjd)
 void ADXSJD_SetInSj(AdxSjdObj *sjd, SfdSj *sji)
 {
     sjd->sji = sji;
-    ADXB_SetAhxInSj(sjd->adxb);
+    ADXB_SetAhxInSj(sjd->adxb, sji);
     ADXB_SetAc3InSj(sjd->adxb, sji);
 }
 
@@ -228,7 +150,7 @@ void ADXSJD_SetOutSj(AdxSjdObj *sjd, int ch, SfdSj *sjo)
 void ADXSJD_SetMaxDecSmpl(AdxSjdObj *sjd, int value)
 {
     sjd->max_dec_nsmpl = value;
-    ADXB_SetAhxDecSmpl(sjd->adxb);
+    ADXB_SetAhxDecSmpl(sjd->adxb, value);
     ADXB_SetAc3DecSmpl(sjd->adxb, value);
 }
 
@@ -311,8 +233,9 @@ void adxsjd_decode_prep(AdxSjdObj *sjd)
     sjd->stat = ADXSJD_STAT_DECODE;
 }
 
-int adxsjd_get_wr(AdxSjdObj *sjd, int *offset, int *room, int *until_trap)
+short *adxsjd_get_wr(void *obj, int *offset, int *room, int *until_trap)
 {
+    AdxSjdObj *sjd = obj;
     SfdSj *sjo = sjd->sjo[0];
     int ch;
     int n;
@@ -751,7 +674,7 @@ int ADXSJD_GetAinfLen(AdxSjdObj *sjd)
     return FUN_0025db70(sjd->adxb);
 }
 
-int ADXSJD_GetDefOutVol(AdxSjdObj *sjd)
+short ADXSJD_GetDefOutVol(AdxSjdObj *sjd)
 {
     if (FUN_0025db70(sjd->adxb) > 0 && (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND)) {
         return FUN_0025db78(sjd->adxb);
@@ -759,7 +682,7 @@ int ADXSJD_GetDefOutVol(AdxSjdObj *sjd)
     return 0;
 }
 
-int ADXSJD_GetDefPan(AdxSjdObj *sjd, int arg)
+short ADXSJD_GetDefPan(AdxSjdObj *sjd, int arg)
 {
     if (FUN_0025db70(sjd->adxb) > 0) {
         if (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND) {

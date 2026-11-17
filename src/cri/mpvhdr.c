@@ -3,11 +3,11 @@
 #include "dw4/cri/mpv.h"
 #include "dw4/cri/mpvbits.h"
 #include <string.h>
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/sj.h"
 
 int MPVLIB_CheckHn(MpvHn *mpv);
 int mpv_ReportError(MpvHn *mpv, int code);
-SfdSj *SJMEM_Create(void *buf, int size);
 int MPV_CheckDelim(const unsigned char *p);
 char *MPV_SearchDelim(char *buf, int len, int mask);
 int atoi(const char *s);

@@ -5,7 +5,8 @@
 #include "dw4/igFileDispatchView.h"
 extern "C" {
 #include "dw4/cri/mwsfd.h"
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
+#include <string.h>
 }
 
 /* igMovieInfo::_type: a movie of this type is an ADX audio stream played through ADXT instead of
@@ -53,6 +54,8 @@ public:
 #include "dw4/igAdx.h"
 #include "dw4/igCriMovieData.h"
 #include "dw4/igCriMovieCodec.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/cri_adxf.h"
 extern "C" {
 int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called);
 static void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc);
@@ -86,26 +89,11 @@ int igReportError(const char *format, ...);
 void mwPlySetMallocFn(void *(*allocate)(igCriMovieCodec *, unsigned int),
                          void (*release)(igCriMovieCodec *, void *), igCriMovieCodec *context);
 int mwPlyIsPause(MwsfdPly *ply);
-int ADXT_GetStatPause(AdxtObj *adxt);
-void ADXT_Pause(AdxtObj *adxt, int sw);
-void ADXT_Destroy(AdxtObj *adxt);
-void ADXM_ExecMain(void);
 void MWSFD_ExecVsyncFrame(void);
 void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrmObj *frame);
 void mwPlyRelCurFrm(MwsfdPly *ply);
 
 igFileDispatchView *igFile_Create(igMemoryPoolView *pool);
-int ADXF_Open(const char *fname, int dir);
-int ADXF_OpenAfs(int ptid, int flid);
-void ADXF_Close(int adxf);
-void ADXM_ExecVsyncFrame(void);
-void ADXF_ReadNw(int adxf, int nsct, void *buf);
-int ADXF_GetStat(int adxf);
-void ADXT_GetHdrInfo(void *buf, int size, AdxtHdrInfo *info);
-AdxtObj *ADXT_Create(int maxnch, char *work, int worksize);
-void ADXT_StartAfs(AdxtObj *adxt, int ptid, int flid);
-void ADXT_StartFname(AdxtObj *adxt, char *fname);
-void ADXT_EntryFname(AdxtObj *adxt, char *fname);
 void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *info);
 void mwPlySetTimerCh(int ch);
 int mwPlyCalcWorkCprmSfd(MwsfdCreInf *cprm);
@@ -412,7 +400,7 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
     char *path;
     int afsIndex;
     igMemoryPoolView *pool;
-    int adxf;
+    AdxfHandle *adxf;
     void *header;
     int status;
     unsigned char isAdx;

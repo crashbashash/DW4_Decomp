@@ -3,7 +3,7 @@
  * SFD to be prepared, feeding seamless and SST input, and catching stream errors. */
 #include "dw4/cri/mwply.h"
 #include "dw4/cri/mwsfd.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
 
 typedef __builtin_va_list va_list;

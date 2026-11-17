@@ -1,7 +1,9 @@
-#include "dw4/cri/cvfs.h"
+#include "dw4/cri/cri_cvfs.h"
 #include <string.h>
-
-typedef struct SrdObj SrdObj;
+#include "dw4/cri/svm.h"
+#include "dw4/cri/cri_srd.h"
+#include "dw4/cri/htci.h"
+#include "dw4/cri/adxmsg.h"
 
 typedef struct HtCiFile {
     signed char used;       /* 0x00 */
@@ -67,37 +69,17 @@ static char htci_prefix[40];
 static char htci_dir_buf[4096];
 
 void FUN_00265928(const char *format, ...);
-void ADXMSG_PrintErr(const char *format, ...);
 
-SrdObj *SRD_Create(void);
-void SRD_Destroy(SrdObj *stm);
-int SRD_ReqRdHst(SrdObj *stm, int fd, long pos, unsigned long nbyte, char *buf);
-int SRD_GetStat(SrdObj *stm);
-void SRD_Break(SrdObj *stm);
-void SRD_ExecServer(void);
-void SRD_WaitForExecServer(void);
-void SRD_SetHistory(int marker);
-long SRD_SceLseek(int fd, long offset, int whence);
-int SRD_SceIoctl(int fd, int cmd, int *result);
-int SRD_SceOpen(const char *name, int flags);
-int SRD_SceClose(int fd);
-int SRD_SceRead(int fd, void *buf, int size);
-void SVM_LockVar(void);
-void SVM_UnlockVar(void);
-int SVM_TestAndSet(int *flag);
 
 long htCiGetFileSize64(const char *fname);
 void htCiStopTr(HtCiFile *h);
 int htCiGetStat(HtCiFile *h);
 void htci_conv_fname(const char *name, char *out);
 int FUN_00276440(char *buf, char *list, int n, int nameLen);
-int htci_load_flist(const char *name, void *buf);
 int open_file_all(HtCiFileLoc *files, int n);
 int close_file_all(void);
 void htci_init_flist(void);
 void htci_get_finf(const char *name, HtCiFileLoc *loc);
-void htCiSetRootDir(const char *path);
-void htCiSetAccessName(const char *prefix);
 
 CvFsVtbl *htCiGetInterface(void)
 {

@@ -1,5 +1,7 @@
-int FUN_002725d0();
+#include "dw4/cri/htci.h"
 
-void htCiSetHost64(void) {
-    FUN_002725d0();
+void FUN_002725d0(int mode);
+
+void htCiSetHost64(int sw) {
+    FUN_002725d0(sw);
 }

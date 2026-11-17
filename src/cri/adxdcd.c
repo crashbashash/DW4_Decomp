@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string.h>
+#include "dw4/cri/adxdcd.h"
 
 extern int DAT_00499cd0;
 
@@ -140,7 +141,7 @@ int ADX_DecodeInfoExVer(unsigned char *hdr, int size, unsigned char *ver, unsign
     return 0;
 }
 
-int ADX_DecodeInfoExIdly(unsigned char *hdr, int size, short *start, short *end)
+int ADX_DecodeInfoExIdly(unsigned char *hdr, int size, unsigned short *start, unsigned short *end)
 {
     const unsigned short *words = (const unsigned short *)hdr;
     unsigned char ver;

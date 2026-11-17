@@ -2,15 +2,10 @@
 #include "dw4/libkernl.h"
 #include "dw4/sony/libcdvd.h"
 #include "dw4/sony/sifdev.h"
+#include "dw4/cri/svm.h"
+#include "dw4/cri/cri_srd.h"
 
-typedef struct CdReadMode {
-    unsigned char trycount;
-    unsigned char spindlctrl;
-    unsigned char datapattern;
-    unsigned char pad;
-} CdReadMode;
-
-typedef struct SrdObj {
+struct SrdObj {
     signed char used;        /* 0x00 */
     signed char devtype;     /* 0x01: 1 DVD, 2 host */
     signed char stat;        /* 0x02 */
@@ -19,14 +14,14 @@ typedef struct SrdObj {
     int lsn;                 /* 0x08 */
     int sectors;             /* 0x0c */
     void *buf;               /* 0x10 */
-    CdReadMode rmode;        /* 0x14 */
+    sceCdRMode rmode;        /* 0x14 */
     void *host_buf;          /* 0x18 */
     int pad1c;
-    long host_size;          /* 0x20 */
-    long host_sector;        /* 0x28 */
+    long long host_size;     /* 0x20 */
+    long long host_sector;   /* 0x28 */
     int fd;                  /* 0x30 */
     int error;               /* 0x34 */
-} SrdObj;
+};
 
 extern SrdObj srd_obj;
 extern char *volatile srd_build;
@@ -45,8 +40,6 @@ extern volatile int srd_history_pre;
 extern volatile int srd_history;
 extern int srd_host_mode;
 extern int srd_host_lock;
-extern int srd_spindlctrl_sw;
-extern unsigned char srd_spindlctrl;
 
 extern char DAT_004efbc0[];
 extern char DAT_004efc00[];
@@ -72,26 +65,9 @@ extern char DAT_004efec0[];
 extern char DAT_004efee0[];
 extern char DAT_004eff00[];
 
-int sceCdRead(int lsn, int sectors, void *buf, void *mode);
-int sceCdBreak(void);
-int sceCdSeek(int lsn);
-int sceCdGetError(void);
-int sceIoctl(int fd, int cmd, void *arg);
-long sceLseek64(int fd, long offset, int whence);
-void SVM_Lock(void);
-void SVM_Unlock(void);
-void SVM_LockVar(void);
-void SVM_UnlockVar(void);
-void SVM_LockDev(void);
-void SVM_UnlockDev(void);
-int SVM_TestAndSet(int *lock);
 
-void SRD_SetHistory(int value);
 void srd_sw_lock(void);
 void srd_sw_unlock(void);
-long SRD_SceLseek(int fd, long offset, int whence);
-int SRD_SceIoctl(int fd, int cmd, int *result);
-int SRD_SceRead(int fd, void *buf, int size);
 
 void srd_reset_obj(void)
 {
@@ -133,7 +109,7 @@ void SRD_Destroy(SrdObj *h)
     SVM_UnlockVar();
 }
 
-int SRD_ReqRdDvd(SrdObj *srd, int lsn, int sectors, void *buf, CdReadMode *mode)
+int SRD_ReqRdDvd(SrdObj *srd, int lsn, int sectors, void *buf, sceCdRMode *mode)
 {
     int ret;
     int busy;
@@ -160,7 +136,7 @@ int SRD_ReqRdDvd(SrdObj *srd, int lsn, int sectors, void *buf, CdReadMode *mode)
     return ret;
 }
 
-int SRD_ReqRdHst(SrdObj *srd, int fd, long sector, long size, void *buf)
+int SRD_ReqRdHst(SrdObj *srd, int fd, long long sector, long long size, void *buf)
 {
     int queued = 0;
 
@@ -682,9 +658,9 @@ int FUN_002726f8(int lsn)
 
 /* Seek on a host file: the 64-bit seek when the host mode word is 1, else the 32-bit seek, whose int
    result widens into the long. */
-long SRD_SceLseek(int fd, long offset, int whence)
+long long SRD_SceLseek(int fd, long long offset, int whence)
 {
-    long ret;
+    long long ret;
 
     srd_sw_lock();
     if (srd_host_mode == 1) {
@@ -715,7 +691,7 @@ int SRD_SceIoctl(int fd, int cmd, int *result)
     return ret;
 }
 
-int SRD_SceOpen(int name, int flags)
+int SRD_SceOpen(const char *name, int flags)
 {
     int ret;
 

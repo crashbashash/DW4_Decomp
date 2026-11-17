@@ -1,4 +1,4 @@
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
 
 typedef struct SfdBufInf {
@@ -74,10 +74,6 @@ int sfd_ReportError();
 void sfd_Lock(int *lock);
 void sfd_Unlock(int *lock);
 void FUN_002ac6d0(void *ring);
-SfdSj *SJRBF_Create(void *work, int size, int extra);
-SfdSj *SJMEM_Create(void *work, int size);
-int SJRBF_GetFlowCnt(SfdSj *sj, int a, int b);
-int SJMEM_GetBufSize(SfdSj *sj);
 int FUN_002b0338();
 int FUN_002b03e8(SfdBufHn *h, int n);
 

@@ -2,7 +2,7 @@
  * MWSST_Create builds over a work buffer and binds to the SFD player as the video stream
  * 0xC0 + stmNo; the functions here call through that table for the player's input. */
 #include "dw4/cri/mwply.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 
 typedef struct MwsfdInputCbTbl {
     void (*init)(void);                                        /* 0 */

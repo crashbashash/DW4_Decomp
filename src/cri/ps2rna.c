@@ -2,12 +2,16 @@
  * channels from EE stream joints to IOP ones through DTR transfers; its settings are kept twice,
  * as set and as last sent, and the DTX send callback turns every difference into an IOP command.
  * With voices set up but none to play, the library is off and every entry point does nothing. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/ps2rna.h"
+#include "dw4/cri/dtx.h"
+#include "dw4/cri/dtr.h"
+#include "dw4/cri/cricfg.h"
+#include "dw4/cri/adxmsg.h"
 #include <string.h>
 
 #define PS2RNA_MAX_OBJ 16
 #define PS2RNA_MAX_PSJ 32
-#define PS2RNA_MAX_NCH 2
 #define PS2RNA_DEF_NVOICE 16
 #define PS2RNA_DEF_IOP_WKSIZE 0x41000
 #define PS2RNA_VOICE_IOP_WKSIZE 0x4100 /* PS2RNA_RMT_WKSIZE + PS2RNA_PSJ_BUFSIZE */
@@ -18,8 +22,6 @@
 #define PS2RNA_BIT_PER_SMPL 16
 #define PS2RNA_MIN_OUTVOL (-999)
 #define PS2RNA_MAX_OUTPAN 15
-
-enum { SJ_LIN_FREE = 0 };
 
 /* DTX remote procedures on the IOP side */
 enum {
@@ -37,70 +39,9 @@ enum {
 /* ps2rna_port_mode: which output ports the IOP reported */
 enum { PS2RNA_PORT_BOTH = 2 };
 
-/* One voice's stream path (24 bytes): IOP-side SJ, EE-side SJ and the SJX joining them. */
-typedef struct Ps2RnaPsj {
-    char used;          /* 0x00 */
-    void *sjrmt;        /* 0x04 */
-    SfdSj *sjuni;       /* 0x08 */
-    void *sjx;          /* 0x0c */
-    SfdSjChunk ck;      /* 0x10: the IOP buffer, handed to sjuni as free space */
-} Ps2RnaPsj;
 
-typedef struct DtrObj DtrObj;
-
-/* A PS2RNA handle, 100 bytes. Each sent_ field holds what the IOP was last told. */
-typedef struct Ps2Rna {
-    signed char used;                   /* 0x00 */
-    int maxnch;                         /* 0x04 */
-    Ps2RnaPsj *psj[PS2RNA_MAX_NCH];     /* 0x08 */
-    DtrObj *dtr[PS2RNA_MAX_NCH];        /* 0x10 */
-    SfdSj *sjo[PS2RNA_MAX_NCH];         /* 0x18: the caller's EE joints, one per channel */
-    void *id;                           /* 0x20: the IOP handle */
-    int pad36;
-    int ring_size;                      /* 0x28: the first joint's data and room at creation */
-    int psj_bufsize;                    /* 0x2c: a voice's whole IOP buffer, free */
-    int sfreq;                          /* 0x30 */
-    int sent_sfreq;
-    int outvol;                         /* 0x38: dB/10, -999 to 0 */
-    int sent_outvol;
-    int outpan[PS2RNA_MAX_NCH];         /* 0x40 */
-    int sent_outpan[PS2RNA_MAX_NCH];
-    signed char playsw;                 /* 0x50 */
-    signed char sent_playsw;
-    signed char nch;                    /* 0x52 */
-    signed char sent_nch;
-    signed char auxsw;                  /* 0x54 */
-    signed char sent_auxsw;
-    signed char dualsw;                 /* 0x56 */
-    signed char sent_dualsw;
-    signed char transsw;                /* 0x58 */
-    signed char trans_stopped;          /* 0x59 */
-    signed char sent_stopflag;          /* 0x5a */
-    signed char stopflag;               /* 0x5b */
-    int outbalance;                     /* 0x5c */
-    int sent_outbalance;
-} Ps2Rna;
-
-void ADXMSG_PrintErr(const char *format, ...);
 void *sceSifAllocIopHeap(int size);
 int sceSifFreeIopHeap(void *addr);
-int CRICFG_Read(const char *name, int *value);
-int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv);
-void DTX_Destroy(void *dtx);
-void DTX_Finish(void);
-void DTR_ExecServer(void);
-void DTR_Destroy(DtrObj *dtr);
-void DTR_Stop(DtrObj *dtr);
-void *SJUNI_CreateRmt(int mode, int work, int size);
-void SJRMT_Destroy(void *sjrmt);
-void SJRMT_Finish(void);
-SfdSj *SJUNI_Create(int mode, char *work, int size);
-void *SJX_Create(SfdSj *sjuni, void *sjrmt, int mode);
-void SJX_Destroy(void *sjx);
-void SJX_Finish(void);
-void SJX_ExecServer(void);
-void SJCRS_BeginSvr(void);
-void SJCRS_EndSvr(void);
 
 extern int ps2rna_nvoice;
 extern int ps2rna_iop_wksize;
@@ -122,7 +63,7 @@ extern void *ps2rna_dtx_heap;
 extern Ps2RnaPsj ps2rna_psj[PS2RNA_MAX_PSJ];
 extern char ps2rna_psj_buf[PS2RNA_MAX_PSJ][PS2RNA_UNI_WKSIZE];
 extern Ps2Rna ps2rna_obj[PS2RNA_MAX_OBJ];
-extern void *ps2rna_dtx;
+extern DtxObj *ps2rna_dtx;
 extern char *volatile ps2rna_ver_ptr;
 extern int ps2rna_rna_heap_size;
 extern int ps2rna_rna_work;
@@ -134,20 +75,11 @@ extern char ps2rna_dtx_eebuf[];
 extern char PS2RNA_E01112902_Failed_sceSifAllocIopHeap_d_in_PS2RNA_Init[];
 extern char E0100302_PS2RNA_Init_can_t_create_DTX[];
 extern char E02041101_Failed_sceSifAllocIopHeap_d_in_PS2RNA_Init[];
-void SJRMT_Init(void);
-void SJX_Init(void);
-void DTX_Init(void);
-void *DTX_Create(int id, int eewk, int iopwk, int wksize);
-void DTX_SetRcvCbf(void *dtx, void (*func)(void *obj, int *reply), void *obj);
-void DTX_SetSndCbf(void *dtx, void (*func)(void *obj, int *buf), void *obj);
-void ps2rna_sndcbf(void *obj, int *buf);
+void ps2rna_sndcbf(void *obj, void *buf, int size);
 void ps2rna_init_port(void);
-int DTR_GetStat(DtrObj *dtr);
-DtrObj *DTR_Create(SfdSj *sjs, SfdSj *sjd);
 extern char E1072601_not_enough_PSJ_handle[];
 extern char E0100401_can_t_create_PS2RNA_of_IOP[];
 extern char E1072602_can_t_create_DTR_handle[];
-void DTR_Start(DtrObj *dtr);
 extern char PS2RNA_SetupVoice_Illigal_parameter_nste_d[];
 extern char PS2RNA_SetupVoice_Illigal_parameter_nmono_d[];
 extern char PS2RNA_SetupVoice_The_set_up_value_exceeded_maximum_MAX_d[];
@@ -311,8 +243,9 @@ void ps2rna_release_psj(Ps2RnaPsj *psj)
 }
 
 /* The DTX receive callback: the IOP's reply is a spin count to wait out; no reply hangs. */
-void ps2rna_rcvcbf(void *obj, int *reply)
+void ps2rna_rcvcbf(void *obj, void *buf, int size)
 {
+    int *reply = buf;
     int n;
 
     if (reply == 0) {
@@ -352,8 +285,9 @@ typedef struct Ps2RnaCmd {
     int val2;
 } Ps2RnaCmd;
 
-void ps2rna_sndcbf(void *obj, int *buf)
+void ps2rna_sndcbf(void *obj, void *data, int size)
 {
+    int *buf = data;
     Ps2Rna *rna;
     int i;
     int j;
@@ -517,7 +451,7 @@ void PS2RNA_Init(void)
         }
         ADXMSG_PrintErr(PS2RNA_sceSifAllocIopHeap_d_ret_0x_08x, PS2RNA_DTX_HEAPSIZE, ps2rna_dtx_heap);
         ps2rna_dtx_iopwk = ((int)ps2rna_dtx_heap + 64) & ~63;
-        ps2rna_dtx = DTX_Create(1, ps2rna_dtx_eewk, ps2rna_dtx_iopwk, ps2rna_dtx_bsize);
+        ps2rna_dtx = DTX_Create(1, (char *)ps2rna_dtx_eewk, ps2rna_dtx_iopwk, ps2rna_dtx_bsize);  /* the work areas are aligned as addresses */
         if (ps2rna_dtx == 0) {
             ADXMSG_PrintErr(E0100302_PS2RNA_Init_can_t_create_DTX);
             for (;;) {
@@ -1126,7 +1060,7 @@ void PS2RNA_Flush(void)
 {
 }
 
-int PS2RNA_DiscardData(void)
+int PS2RNA_DiscardData(Ps2Rna *rna, int nsmpl)
 {
     if (PS2RNA_IS_OFF()) {
         return 0;
@@ -1142,7 +1076,7 @@ void PS2RNA_SetTotalNumSmpl(void)
     }
 }
 
-int PS2RNA_SetStmHdInfo(void)
+int PS2RNA_SetStmHdInfo(Ps2Rna *rna, char *info)
 {
     if (PS2RNA_IS_OFF()) {
         return 0;

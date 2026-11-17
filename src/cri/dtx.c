@@ -1,25 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 #include "dw4/eekernel.h"
-
-typedef struct SifDmaData {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
-} SifDmaData;
-
-typedef struct SifClientData {
-    char pad0[36];
-    void *serve;
-} SifClientData;
+#include "dw4/cri/svm.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/dtx.h"
+#include "dw4/cri/adxmsg.h"
+#include "dw4/libkernl.h"
+#include "dw4/sony/sif.h"
 
 typedef struct DtxPeer {
     char pad0[60];
     int count;
 } DtxPeer;
 
-typedef struct DtxObj {
+struct DtxObj {
     signed char used;       /* 0x00 */
     signed char state;      /* 0x01 */
     signed char flag;       /* 0x02 */
@@ -31,13 +25,13 @@ typedef struct DtxObj {
     DtxPeer *peer;          /* 0x14: uncached alias of eewk + size */
     int iopwk;              /* 0x18 */
     int wklen;              /* 0x1c */
-    void (*recv)(int obj, char *buf, int size);     /* 0x20 */
-    int recv_obj;           /* 0x24 */
-    void (*send)(int obj, char *buf, int size);     /* 0x28 */
-    int send_obj;           /* 0x2c */
-    SifDmaData dma;         /* 0x30 */
+    DtxCbf recv;            /* 0x20 */
+    void *recv_obj;         /* 0x24 */
+    DtxCbf send;            /* 0x28 */
+    void *send_obj;         /* 0x2c */
+    sceSifDmaData dma;      /* 0x30 */
     unsigned int dmaid;     /* 0x40 */
-} DtxObj;
+};
 
 extern volatile int DAT_004a9b18;
 extern int dtx_rpc_id;
@@ -47,9 +41,9 @@ extern int DAT_004a9b24;
 extern int DAT_004a9b28;
 extern int dtx_init_cnt;
 extern DtxObj DAT_004a9b30[16];
-extern SifClientData dtx_rpc_client;
-extern char DAT_004aa3d8[];
-extern char DAT_004aa420[];
+extern sceSifClientData dtx_rpc_client;
+extern sceSifServeData DAT_004aa3d8;
+extern sceSifQueueData DAT_004aa420;
 extern char DAT_004aa440[];
 extern void (*DAT_004aa540[64])(int object, int *data, unsigned int words);
 extern int DAT_004aa640[64];
@@ -64,28 +58,11 @@ extern char illeagal_ID_d[];
 extern char DTX_Create_can_t_create_DTX_of_server[];
 extern char E0092101_DTX_Init_bind_errr[];
 
-void ADXMSG_PrintErr(const char *format, ...);
-void SyncDCache(char *start, char *end);
-void InvalidDCache(char *start, char *end);
-unsigned int sceSifSetDma(SifDmaData *sdd, int len);
-int sceSifCallRpc(SifClientData *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize,
-                 void *end, void *endarg);
-int sceSifBindRpc(SifClientData *cd, unsigned int request, unsigned int mode);
-void sceSifSetRpcQueue(void *queue, int thread_id);
-void sceSifRegisterRpc(void *server, int command, void *handler, void *buffer, void *cancel_handler,
-                       void *cancel_buffer, void *queue);
-void sceSifRpcLoop(void *queue);
-void SJCRS_Lock(void);
-void SJCRS_Unlock(void);
-void SVM_Lock(void);
-void SVM_Unlock(void);
 
-DtxObj *DTX_Create(unsigned int id, char *eewk, int iopwk, int wklen);
-void DTX_Destroy(DtxObj *dtx);
-void DTX_ExecServer(void);
-
-int *FUN_00273078(unsigned int command, int *data, unsigned int size)
+void *FUN_00273078(unsigned int command, void *buf, int size)
 {
+    int *data = buf;
+
     switch (command) {
     case 0:
     case 1:
@@ -98,7 +75,7 @@ int *FUN_00273078(unsigned int command, int *data, unsigned int size)
         break;
     default:
         if (command - 0x400 < 64 && DAT_004aa540[command - 0x400] != 0) {
-            DAT_004aa540[command - 0x400](DAT_004aa640[command - 0x400], data, size / 4);
+            DAT_004aa540[command - 0x400](DAT_004aa640[command - 0x400], data, (unsigned int)size / 4);
         }
         break;
     }
@@ -107,10 +84,10 @@ int *FUN_00273078(unsigned int command, int *data, unsigned int size)
 
 int FUN_00273128(void)
 {
-    sceSifSetRpcQueue(DAT_004aa420, GetThreadId());
-    sceSifRegisterRpc(DAT_004aa3d8, dtx_rpc_id, FUN_00273078, DAT_004aa440, 0, 0, DAT_004aa420);
+    sceSifSetRpcQueue(&DAT_004aa420, GetThreadId());
+    sceSifRegisterRpc(&DAT_004aa3d8, dtx_rpc_id, FUN_00273078, DAT_004aa440, 0, 0, &DAT_004aa420);
     DAT_004a9b18 = 1;
-    sceSifRpcLoop(DAT_004aa420);
+    sceSifRpcLoop(&DAT_004aa420);
     return 0;
 }
 
@@ -130,16 +107,16 @@ void dtx_destroy_rmt(int server)
     sceSifCallRpc(&dtx_rpc_client, 3, 0, dtx_sbuf, 4, dtx_rbuf, 0, 0, 0);
 }
 
-void dtx_def_rcvcbf(int obj, char *buf, int size)
+void dtx_def_rcvcbf(void *obj, void *buf, int size)
 {
     DAT_004a9b20++;
 }
 
-void dtx_def_sndcbf(int obj, char *buf, int size)
+void dtx_def_sndcbf(void *obj, void *buf, int size)
 {
     int i;
     for (i = 0; i < size; i++) {
-        buf[i] = 0xAA;
+        ((char *)buf)[i] = 0xAA;
     }
     sprintf(buf, Hello_from_EE_d, DAT_004a9b24);
     DAT_004a9b24++;
@@ -221,14 +198,14 @@ void DTX_Destroy(DtxObj *dtx)
     memset(dtx, 0, sizeof(DtxObj));
 }
 
-void DTX_SetRcvCbf(DtxObj *dtx, void (*recv)(int obj, char *buf, int size), int obj)
+void DTX_SetRcvCbf(DtxObj *dtx, DtxCbf recv, void *obj)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     dtx->recv = recv;
     dtx->recv_obj = obj;
 }
 
-void DTX_SetSndCbf(DtxObj *dtx, void (*send)(int obj, char *buf, int size), int obj)
+void DTX_SetSndCbf(DtxObj *dtx, DtxCbf send, void *obj)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     dtx->send = send;

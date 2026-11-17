@@ -1,7 +1,7 @@
 /* CRI MWSFD player creation (MWSFCRE): work-area sizes, the frame and picture user buffers, the SFD
  * handle set-up and teardown, mwPlyGetHdrInf and the player's work-area allocator (MWSFD_Malloc). */
 #include "dw4/cri/mwsfd.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
 
 #define MWSFD_MALLOC_MAX 32

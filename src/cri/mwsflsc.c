@@ -14,19 +14,6 @@ void MWSFCRE_SetSupplySj(MwsfdPly *ply);
 int SFD_SetConcatPlay(void *sfd);
 int ADXF_GetFnameRangeEx(int patid, int fid, char *fname, void **dir, int *ofst, int *nsct);
 char *ADXF_GetFnameFromPt(int patid);
-int LSC_EntryFname(LscObj *lsc, const char *fname);
-int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct);
-void LSC_Start(LscObj *lsc);
-void LSC_Stop(LscObj *lsc);
-int LSC_GetStat(LscObj *lsc);
-int LSC_GetNumStm(LscObj *lsc);
-int LSC_GetStmId(LscObj *lsc, int no);
-char *LSC_GetStmFname(LscObj *lsc, int id);
-int LSC_GetStmStat(LscObj *lsc, int id);
-int LSC_GetStmRdSct(LscObj *lsc, int id);
-void LSC_SetFlowLimit(LscObj *lsc, int min);
-int LSC_GetFlowLimit(LscObj *lsc);
-void LSC_SetLpFlg(LscObj *lsc, int loop);
 
 void mwPlyLinkStm(void *hn, int sw);
 

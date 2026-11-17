@@ -1,10 +1,6 @@
 /* CRI SKG (SKG/PS2EE Ver.0.64): derives the three 16-bit ADX decryption keys from a key string, and the
  * ADXKEY entry points around it: a key callback the application registers, and one step of the key's seed. */
-
-typedef void (*AdxKeyCbFunc)(void *obj, int arg);
-
-/* The 1024-entry SKG table: entries 256, 512 and 768 start the three keys, entries 128 + c weigh character c. */
-#define SKG_TBL_NUM 1024
+#include "dw4/cri/skg.h"
 
 const char *skg_build = "\nSKG/PS2EE Ver.0.64 Build:Oct  6 2004 11:47:26\n";
 int skg_init_cnt = 0;
@@ -175,7 +171,7 @@ int SKG_Finish(void)
     return 0;
 }
 
-int SKG_GenerateKey(const signed char *str, int len, short *k0, short *k1, short *k2)
+int SKG_GenerateKey(const char *str, int len, unsigned short *k0, unsigned short *k1, unsigned short *k2)
 {
     int i;
     short key0;
@@ -210,7 +206,7 @@ int SKG_GenerateKey(const signed char *str, int len, short *k0, short *k1, short
 }
 
 /* The keys of the default key string "CRI-MW". */
-int SKG_GetDefKey(short *k0, short *k1, short *k2)
+int SKG_GetDefKey(unsigned short *k0, unsigned short *k1, unsigned short *k2)
 {
     if (skg_init_cnt == 0) {
         SKG_Init();

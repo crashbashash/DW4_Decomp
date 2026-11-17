@@ -3,7 +3,7 @@
 Six CRI files that end the ADX block, each compiled as one whole file with Sony EE GCC 2.96 at `-O2 -G0`
 (their rows in `units.tsv` and `unit-objects.json`; [whole-file units](emitted-functions.md#whole-file-units)).
 An SJ (stream joint) is the CRI libraries' byte pipe: an object whose first word is the interface table
-`SfdSjVtbl` (`include/dw4/cri/sfdsj.h`), with a free line (0) and a data line (1) from which chunks are got and
+`SfdSjVtbl` (`include/dw4/cri/sj.h`), with a free line (0) and a data line (1) from which chunks are got and
 to which they are put or given back. SJRBF and SJUNI are two SJ kinds on the EE; SJRMT drives SJs on the IOP;
 SJX links an EE SJ line to an IOP SJ; SVM is the critical section and the server table the CRI threads run.
 

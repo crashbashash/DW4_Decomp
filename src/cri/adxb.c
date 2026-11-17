@@ -1,7 +1,11 @@
 #include "dw4/cri/adxb.h"
 #include <stdio.h>
 #include <string.h>
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxdcd.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/skg.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -13,38 +17,7 @@ static unsigned short adxb_key1 = 0;
 static unsigned short adxb_key2 = 0;
 static AdxbObj adxb_obj[16] = {0};
 
-void SKG_Init(void);
-void SKG_Finish(void);
-void SKG_GenerateKey(const char *text, unsigned int length, unsigned short *first, unsigned short *second,
-                  unsigned short *third);
-int ADX_DecodeInfo(unsigned short *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
-                 signed char *blksize, signed char *nch, int *rate, int *total, int *f16);
-int ADX_DecodeInfoExVer(unsigned short *hdr, int size, unsigned char *ver, unsigned char *flag);
-int ADX_DecodeInfoExADPCM2(unsigned short *hdr, int size, short *out);
-int ADX_DecodeInfoExIdly(unsigned short *hdr, int size, unsigned short *dly1, unsigned short *dly2);
-void ADX_DecodeInfoExLoop(unsigned short *hdr, int size, int *f32, short *f36, short *f38, int *f40, int *f44, int *f48,
-                  int *f52);
-void ADX_DecodeInfoAinf(unsigned short *hdr, int size, int *f204, char *f208, short *f224, short *f226);
 
-int ADXB_CheckSpsd(unsigned short *hdr);
-int ADXB_DecodeHeaderSpsd(AdxbObj *dec, unsigned short *hdr, int size);
-int ADXB_CheckWav(unsigned short *hdr);
-int ADXB_DecodeHeaderWav(AdxbObj *dec, unsigned short *hdr, int size);
-int ADXB_CheckAiff(unsigned short *hdr);
-int ADXB_DecodeHeaderAiff(AdxbObj *dec, unsigned short *hdr, int size);
-int ADXB_CheckAu(unsigned short *hdr);
-int ADXB_DecodeHeaderAu(AdxbObj *dec, unsigned short *hdr, int size);
-int ADXB_CheckAc3(unsigned short *hdr);
-int ADXB_DecodeHeaderAc3(AdxbObj *dec, unsigned short *hdr, int size);
-
-void ADXB_ExecOneAhx(AdxbObj *obj);
-void ADXB_ExecOneSpsd(AdxbObj *obj);
-void ADXB_ExecOneAiff(AdxbObj *obj);
-void ADXB_ExecOneAu(AdxbObj *obj);
-void ADXB_ExecOneWav(AdxbObj *obj);
-void ADXB_ExecOneAc3(AdxbObj *obj);
-
-short *adxb_DefGetWr(AdxbObj *obj, int *wpos, int *room, int *rest);
 void ADXB_Destroy(AdxbObj *p);
 void ADXB_EvokeDecode(AdxbObj *d);
 int adxb_get_key(AdxbObj *adx, unsigned char ver, unsigned char type, int name,
@@ -65,16 +38,20 @@ void ADXB_Finish(void)
     memset(adxb_obj, 0, 0x1040);
 }
 
-short *adxb_DefGetWr(AdxbObj *obj, int *wpos, int *room, int *rest)
+short *adxb_DefGetWr(void *adxb, int *wpos, int *room, int *rest)
 {
+    AdxbObj *obj = adxb;
+
     *wpos = obj->wpos;
     *room = obj->pcmbsize - obj->wpos;
     *rest = obj->total_nsmpl - obj->dec_nsmpl;
     return obj->pcmbuf;
 }
 
-void adxb_DefAddWr(AdxbObj *obj, int a, int b)
+void adxb_DefAddWr(void *adxb, int a, int b)
 {
+    AdxbObj *obj = adxb;
+
     obj->wpos += b;
     obj->dec_nsmpl += b;
 }
@@ -127,7 +104,7 @@ void ADXB_Destroy(AdxbObj *rec)
     }
 }
 
-int ADXB_DecodeHeaderAdx(AdxbObj *obj, unsigned short *hdr, int size)
+int ADXB_DecodeHeaderAdx(AdxbObj *obj, unsigned char *hdr, int size)
 {
     unsigned short dly1[2];
     unsigned short dly2[2];
@@ -235,9 +212,9 @@ void adxb_SetDefaultFmt(AdxbObj *block)
 }
 
 #define SWAP16(x) ((unsigned short)(((x) << 8) | ((x) >> 8)))
-int ADXB_DecodeHeader(AdxbObj *dec, unsigned short *hdr, int size)
+int ADXB_DecodeHeader(AdxbObj *dec, unsigned char *hdr, int size)
 {
-    if (SWAP16(*hdr) == 0x8000) {
+    if (SWAP16(*(unsigned short *)hdr) == 0x8000) {  /* the ADX mark is read as one halfword */
         return ADXB_DecodeHeaderAdx(dec, hdr, size);
     }
     if (ADXB_CheckSpsd(hdr) != 0) {
@@ -258,14 +235,14 @@ int ADXB_DecodeHeader(AdxbObj *dec, unsigned short *hdr, int size)
     return -1;
 }
 
-void ADXB_EntryGetWrFunc(AdxbObj *obj, short *(*cb)(AdxbObj *obj, int *a, int *b, int *c), AdxbObj *arg)
+void ADXB_EntryGetWrFunc(AdxbObj *obj, AdxbGetWrFunc cb, void *arg)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     obj->cb120 = cb;
     obj->obj124 = arg;
 }
 
-void ADXB_EntryAddWrFunc(AdxbObj *obj, void (*cb)(AdxbObj *obj, int a, int b), AdxbObj *arg)
+void ADXB_EntryAddWrFunc(AdxbObj *obj, AdxbAddWrFunc cb, void *arg)
 {
     obj->cb128 = cb;
     obj->obj132 = arg;
@@ -276,7 +253,7 @@ short *ADXB_GetPcmBuf(AdxbObj *obj)
     return obj->pcmbuf;
 }
 
-short ADXB_GetFormat(AdxbObj *obj)
+int ADXB_GetFormat(AdxbObj *obj)
 {
     return obj->format;
 }
@@ -294,7 +271,7 @@ int ADXB_GetNumChan(AdxbObj *obj)
     return obj->nch;
 }
 
-char ADXB_GetFmtBps(AdxbObj *obj)
+int ADXB_GetFmtBps(AdxbObj *obj)
 {
     return obj->fmtbps;
 }
@@ -328,7 +305,7 @@ int ADXB_GetBlkSmpl(AdxbObj *obj)
     return obj->blksmpl;
 }
 
-char ADXB_GetBlkLen(AdxbObj *obj)
+int ADXB_GetBlkLen(AdxbObj *obj)
 {
     return obj->blklen;
 }
@@ -338,7 +315,7 @@ int ADXB_GetTotalNumSmpl(AdxbObj *obj)
     return obj->total_nsmpl;
 }
 
-short ADXB_GetCof(AdxbObj *obj)
+int ADXB_GetCof(AdxbObj *obj)
 {
     return obj->cof;
 }
@@ -348,7 +325,7 @@ int ADXB_GetLpInsNsmpl(AdxbObj *obj)
     return obj->lpins_nsmpl;
 }
 
-short ADXB_GetNumLoop(AdxbObj *obj)
+int ADXB_GetNumLoop(AdxbObj *obj)
 {
     return obj->nloop;
 }
@@ -388,11 +365,9 @@ short FUN_0025db78(AdxbObj *obj)
     return obj->f224;
 }
 
-short ADXB_GetDefPan(int arg0, int arg1)
+short ADXB_GetDefPan(AdxbObj *adxb, int ch)
 {
-    arg1 *= 2;
-    arg1 += arg0;
-    return *(short *)((char *)arg1 + 226);
+    return adxb->f226[ch];
 }
 
 char *FUN_0025db90(AdxbObj *obj)
@@ -461,14 +436,14 @@ int ADXB_GetStat(AdxbObj *obj)
     return obj->stat;
 }
 
-void ADXB_EntryData(AdxbObj *block, int buffer, int bytes)
+void ADXB_EntryData(AdxbObj *block, char *buffer, int bytes)
 {
     if (block->format == 0) {
-        block->buf.ibuf = (char *)buffer;
+        block->buf.ibuf = buffer;
         block->buf.len = bytes / block->blklen;
         block->f116 = 0;
     } else {
-        block->buf.ibuf = (char *)buffer;
+        block->buf.ibuf = buffer;
         block->buf.len = bytes / (block->fmtbps / 8 * block->nch);
         block->f116 = 0;
     }

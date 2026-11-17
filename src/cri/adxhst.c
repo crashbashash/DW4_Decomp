@@ -1,13 +1,10 @@
 /* CRI ADX on PS2, host side: the host and memory devices, the host open mode, root folder and file cache. */
-#include "dw4/cri/adxfs.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/cri_cvfs.h"
+#include "dw4/cri/htci.h"
+#include "dw4/cri/mfci.h"
 
-CvFsVtbl *htCiGetInterface(void);
-void htCiSetOpenMode(int mode);
-void htCiSetRootDir(const char *rootdir);
-int htCiLoadDirInfo(const char *flist, void *buf, int bufsize, int fnamelen);
-int htCiIsExistFcache(const char *fname);
-void htCiSetHost64(int sw);
-void htCiSetHostLock(int sw);
 
 void adxps2_err_host(void *obj, const char *msg, int code)
 {

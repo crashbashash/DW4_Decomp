@@ -219,7 +219,7 @@ int igReportError(const char *format, ...);
 #include "dw4/igGroup.h"
 igResult igMatrix44f_Invert(igMatrix44f *inverse, const igMatrix44f *matrix);
 int snprintf(char *buffer, unsigned int size, const char *format, ...);
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 
 #include "dw4/igMovieManager.h"
 #include "dw4/igMovieRenderer.h"

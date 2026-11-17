@@ -34,7 +34,7 @@ stream and at nominal speed for a real-time one.
 The three setup files register the cvFs devices ADX reads through and pass the setup parameters on to the
 device modules: `AdxDvdFsPrm` (root folder, read mode, try count, spindle control, data pattern),
 `AdxHstFsPrm` (root folder, open mode, the 64-bit host and host-lock switches) and `AdxFcachePrm` (file
-list, longest name, buffer and its size), declared in `include/dw4/cri/adxfs.h`. Each file registers its
+list, longest name, buffer and its size), declared in `include/dw4/cri/adx_ps2.h`. Each file registers its
 own error callback, which passes cvFs's message to `ADXERR_CallErrFunc1`.
 
 ## Open questions

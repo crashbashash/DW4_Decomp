@@ -1,45 +1,34 @@
 /* CRI ADXT server: the per-handle state machine, the loop and link traps, and the error checks. */
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
+#include <string.h>
+#include "dw4/cri/adxrna.h"
+#include "dw4/cri/adxsjd.h"
+#include "dw4/cri/adxstm.h"
+#include "dw4/cri/adxamp.h"
+#include "dw4/cri/adxdcd.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/lsc.h"
+#include "dw4/cri/ps2rna.h"
 
 #define ADXT_MIN_OBUF_NDATA 64      /* output bytes below which a channel counts as drained */
-
-enum { ADXB_FORMAT_SPSD = 2 };
-enum { LSC_STAT_ERROR = 3 };
-
-typedef void (*AdxtDecInfoFunc)(AdxtObj *adxt, int sfreq, int nch, int total_nsmpl);
 
 AdxtDecInfoFunc adxt_decinfo_func = 0;
 int adxt_playing_nch = 0;
 int adxt_playing_ndata = 0;
 int adxt_eos_rna_ndata = 0;
-/* The V-sync count; the vertical-blank interrupt path increments it. */
+/* The V-sync count, defined in adxtinit.c; the vertical-blank interrupt path increments it. It stays
+ * declared here: this unit and adxps2.c read it volatile, adxt.c does not. */
 extern volatile int adxt_vsync_cnt;
 
-int ADX_DecodeFooter(char *buf, int len, short *ftrlen);
-int ADX_ScanInfoCode(char *buf, int len, short *pos);
-void ADXSJD_ExecHndl(AdxSjdObj *sjd);
-int ADXSJD_GetFormat(AdxSjdObj *sjd);
-int ADXSJD_GetNumLoop(AdxSjdObj *sjd);
-int ADXSJD_GetLpEndOfst(AdxSjdObj *sjd);
-char *ADXSJD_GetSpsdInfo(AdxSjdObj *sjd);
-void ADXSJD_TakeSnapshot(AdxSjdObj *sjd);
-void ADXSJD_RestoreSnapshot(AdxSjdObj *sjd);
-int ADXSTM_GetReadFlg(AdxStmObj *stm);
-void ADXSTM_Stop(AdxStmObj *stm);
-int ADXRNA_GetNumRoom(AdxRna *rna);
-void ADXRNA_SetNumChan(AdxRna *rna, int nch);
-void ADXRNA_SetSfreq(AdxRna *rna, int sfreq);
-void ADXRNA_SetBitPerSmpl(AdxRna *rna, int bps);
-void ADXRNA_SetTotalNumSmpl(AdxRna *rna, int nsmpl);
-void ADXRNA_SetStmHdInfo(AdxRna *rna, char *info);
-void ADXAMP_SetSfreq(AdxAmpObj *amp, int sfreq);
-int LSC_GetStat(LscObj *lsc);
 
-void adxt_trap_entry(AdxtObj *adxt);
+void adxt_trap_entry(void *obj);
 
 /* Trap at the loop start: keeps the decoder's history there and arms the loop-end trap. */
-void adxt_trap_entry_lps(AdxtObj *adxt)
+void adxt_trap_entry_lps(void *obj)
 {
+    AdxtObj *adxt = obj;
     AdxSjdObj *sjd = adxt->sjd;
     int lpspos = ADXSJD_GetLpStartPos(sjd);
     int lpsofst = ADXSJD_GetLpStartOfst(sjd);
@@ -55,8 +44,9 @@ void adxt_trap_entry_lps(AdxtObj *adxt)
 }
 
 /* Trap at the loop end: skips the input to the next loop start and restores the decoder's history. */
-void adxt_trap_entry(AdxtObj *adxt)
+void adxt_trap_entry(void *obj)
 {
+    AdxtObj *adxt = obj;
     AdxSjdObj *sjd = adxt->sjd;
     SfdSj *sji = adxt->sji;
     int lpspos;
@@ -91,8 +81,9 @@ void adxt_trap_entry(AdxtObj *adxt)
 }
 
 /* The stream reached the loop end sector: rewind it to the loop start, or let it run on when looping is off. */
-void adxt_eos_entry(AdxtObj *adxt)
+void adxt_eos_entry(void *obj)
 {
+    AdxtObj *adxt = obj;
     AdxStmObj *stm = adxt->stm;
     AdxSjdObj *sjd = adxt->sjd;
     int lpsofst;
@@ -121,8 +112,9 @@ void adxt_set_outpan(AdxtObj *adxt)
 
 /* Trap at the end of a linked stream: drops the footer and the next stream's header from the input
  * (they may straddle two chunks) and restarts the decoder on the next stream. */
-void adxt_nlp_trap_entry(AdxtObj *adxt)
+void adxt_nlp_trap_entry(void *obj)
 {
+    AdxtObj *adxt = obj;
     AdxSjdObj *sjd;
     SfdSj *sj;
     SfdSjChunk ck0;
@@ -210,7 +202,7 @@ void adxt_stat_decinfo(AdxtObj *adxt)
     fxlev = 0;
     adxt->pad_nsmpl = 0;
     if ((adxt->pmode == ADXT_PMODE_FNAME || adxt->pmode == ADXT_PMODE_AFS) && adxt->stm_req == 1) {
-        if (ADXSTM_GetStat(adxt->stm) == ADXSTM_STAT_READING) {
+        if (ADXSTM_GetStat(adxt->stm) == ADXSTM_STAT_READ) {
             return;
         }
         if (adxt->sjf != 0) {
@@ -306,7 +298,7 @@ AdxtDecInfoFunc ADXT_EntryDecInfoFunc(AdxtDecInfoFunc func)
 void adxt_stat_prep(AdxtObj *adxt)
 {
     SfdSjChunk ck;
-    AdxRna *rna;
+    Ps2Rna *rna;
     AdxSjdObj *sjd;
     int ndata;
     int nroom;

@@ -23,7 +23,7 @@ guesses from what each file does.
 | `src/cri/sfdtrn.c` | `0x2afc08` up to `0x2b0408` | the module table and the per-handle stream graph at handle +7976 | its first function is the library's second init; code `0x302` |
 | `src/cri/sfdtst.c` | `0x2b0408` up to `0x2b0ed0` | the time-stamp debug object (`tst`) and its moving averages | its data `0x4beb40` up to `0x4beb54` and its read-only data `0x4f50d0` up to `0x4f5278` (the field-name header and its print format) |
 
-`sfadx.c` and `sfdbuf.c` share `include/dw4/cri/sfdsj.h`; `sfmpv.c` and `sfmpvps2.c` share `include/dw4/cri/sfmpv.h`; `sfdply.c` and `sfdring.c` share
+`sfadx.c` and `sfdbuf.c` share `include/dw4/cri/sj.h`; `sfmpv.c` and `sfmpvps2.c` share `include/dw4/cri/sfmpv.h`; `sfdply.c` and `sfdring.c` share
 `include/dw4/cri/sfdply.h`. The other files declare their types themselves.
 `sftim_Tc2Time29D`, the 29.97 drop-frame time-code converter, is named from the RE4 GameCube symbol table
 ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`, unit `lib/sfd_tim.c`).

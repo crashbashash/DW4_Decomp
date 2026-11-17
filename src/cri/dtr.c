@@ -1,75 +1,47 @@
 #include <string.h>
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/dtr.h"
+#include "dw4/cri/dtx.h"
+#include "dw4/cri/adxmsg.h"
+#include "dw4/libkernl.h"
+#include "dw4/sony/sif.h"
 
-typedef struct SjObj SjObj;
-
-typedef struct SjChunk {
-    char *data;
-    int len;
-} SjChunk;
-
-typedef struct SjVtbl {
-    char pad0[24];
-    void (*GetChunk)(SjObj *sj, int line, int nbyte, SjChunk *ck);
-    void (*UngetChunk)(SjObj *sj, int line, SjChunk *ck);
-    void (*PutChunk)(SjObj *sj, int line, SjChunk *ck);
-} SjVtbl;
-
-struct SjObj {
-    SjVtbl *vtbl;
-};
-
-typedef struct SifDmaData {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
-} SifDmaData;
-
-typedef struct DtrObj {
+struct DtrObj {
     signed char used;       /* 0x00 */
     signed char stat;       /* 0x01 */
     signed char transfer;   /* 0x02 */
     char pad3;
-    SjObj *sjs;             /* 0x04 */
-    SjObj *sjd;             /* 0x08 */
-    SjChunk cks;            /* 0x0c */
-    SjChunk ckd;            /* 0x14 */
-    SifDmaData dma;         /* 0x1c */
+    SfdSj *sjs;             /* 0x04 */
+    SfdSj *sjd;             /* 0x08 */
+    SfdSjChunk cks;            /* 0x0c */
+    SfdSjChunk ckd;            /* 0x14 */
+    sceSifDmaData dma;      /* 0x1c */
     unsigned int dmaid;     /* 0x2c */
     int f48;                /* 0x30 */
     int f52;                /* 0x34 */
     int unit;               /* 0x38 */
     int total;              /* 0x3c */
-} DtrObj;
+};
 
 const char *dtr_build = "\nDTR Ver.1.06 Build:Oct  6 2004 11:47:40\n";
 int dtr_init_cnt = 0;
 DtrObj dtr_obj[32] = {0};
 
-void ADXMSG_PrintErr(const char *format, ...);
-void SyncDCache(char *start, char *end);
-int sceSifDmaStat(unsigned int id);
-unsigned int sceSifSetDma(SifDmaData *sdd, int len);
-void SJCRS_Lock(void);
-void SJCRS_Unlock(void);
-void DTX_ExecServer(void);
-
 void FUN_002729e8(DtrObj *dtr)
 {
-    SjChunk cks;
-    SjChunk cks2;
-    SjChunk ckd;
-    SjChunk ckd2;
+    SfdSjChunk cks;
+    SfdSjChunk cks2;
+    SfdSjChunk ckd;
+    SfdSjChunk ckd2;
     int n;
     if (dtr->stat != 1) {
         return;
     }
     if (dtr->transfer == 1) {
-        dtr->sjs->vtbl->PutChunk(dtr->sjs, 0, &dtr->cks);
+        dtr->sjs->vtbl->putChunk(dtr->sjs, 0, &dtr->cks);
         dtr->cks.data = 0;
         dtr->cks.len = 0;
-        dtr->sjd->vtbl->PutChunk(dtr->sjd, 1, &dtr->ckd);
+        dtr->sjd->vtbl->putChunk(dtr->sjd, 1, &dtr->ckd);
         dtr->ckd.data = 0;
         dtr->ckd.len = 0;
         dtr->total += dtr->cks.len;
@@ -83,14 +55,14 @@ void FUN_002729e8(DtrObj *dtr)
     if (dtr->transfer != 0) {
         return;
     }
-    dtr->sjs->vtbl->GetChunk(dtr->sjs, 1, 0x7fffffff, &cks);
-    dtr->sjd->vtbl->GetChunk(dtr->sjd, 0, 0x7fffffff, &ckd);
+    dtr->sjs->vtbl->getChunk(dtr->sjs, 1, 0x7fffffff, &cks);
+    dtr->sjd->vtbl->getChunk(dtr->sjd, 0, 0x7fffffff, &ckd);
     n = cks.len < ckd.len ? cks.len : ckd.len;
     n = n / dtr->unit * dtr->unit;
     SJ_SplitChunk(&cks, n, &cks, &cks2);
-    dtr->sjs->vtbl->UngetChunk(dtr->sjs, 1, &cks2);
+    dtr->sjs->vtbl->ungetChunk(dtr->sjs, 1, &cks2);
     SJ_SplitChunk(&ckd, n, &ckd, &ckd2);
-    dtr->sjd->vtbl->UngetChunk(dtr->sjd, 0, &ckd2);
+    dtr->sjd->vtbl->ungetChunk(dtr->sjd, 0, &ckd2);
     if (n <= 0) {
         return;
     }
@@ -120,8 +92,8 @@ void FUN_002729e8(DtrObj *dtr)
     dtr->dmaid = sceSifSetDma(&dtr->dma, 1);
     if (dtr->dmaid == 0) {
         ADXMSG_PrintErr("E0101701 DTR_ExecHndl: can't use DMA\n");
-        dtr->sjs->vtbl->UngetChunk(dtr->sjs, 1, &cks);
-        dtr->sjd->vtbl->UngetChunk(dtr->sjd, 0, &ckd);
+        dtr->sjs->vtbl->ungetChunk(dtr->sjs, 1, &cks);
+        dtr->sjd->vtbl->ungetChunk(dtr->sjd, 0, &ckd);
         return;
     }
     dtr->cks = cks;
@@ -167,7 +139,7 @@ void DTR_Finish(void)
     dtr_init_cnt--;
 }
 
-DtrObj *DTR_Create(SjObj *sjs, SjObj *sjd)
+DtrObj *DTR_Create(SfdSj *sjs, SfdSj *sjd)
 {
     DtrObj *dtr;
     int i;
@@ -216,10 +188,10 @@ void DTR_Stop(DtrObj *dtr)
     if (dtr->transfer == 1) {
         while (sceSifDmaStat(dtr->dmaid) >= 0) {
         }
-        dtr->sjs->vtbl->PutChunk(dtr->sjs, 0, &dtr->cks);
+        dtr->sjs->vtbl->putChunk(dtr->sjs, 0, &dtr->cks);
         dtr->cks.data = 0;
         dtr->cks.len = 0;
-        dtr->sjd->vtbl->PutChunk(dtr->sjd, 1, &dtr->ckd);
+        dtr->sjd->vtbl->putChunk(dtr->sjd, 1, &dtr->ckd);
         dtr->ckd.data = 0;
         dtr->ckd.len = 0;
         dtr->total += dtr->cks.len;

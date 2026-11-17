@@ -1,7 +1,7 @@
 /* CRI SJCRS: the critical section the stream joints take, and the count of server passes running. */
+#include "dw4/cri/svm.h"
+#include "dw4/cri/sj.h"
 
-void SVM_Lock(void);
-void SVM_Unlock(void);
 
 extern int sjcrs_svr_cnt;
 extern int D_004b5140;

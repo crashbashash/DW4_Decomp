@@ -1,7 +1,7 @@
 /* CRI ADXB AC-3 glue: hands an ADXB handle's AC-3 stream to the AC-3 decoder through hooks the decoder
  * registers, and reads an AC-3 stream's header. No decoder registers in this game, so the hooks stay null. */
 #include "dw4/cri/adxb.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 
 /* AC-3 frames carry 1536 samples. */
 #define ADXB_AC3_FRMSMPL 1536
@@ -38,7 +38,7 @@ void ADXB_ExecOneAc3(AdxbObj *adxb)
 }
 
 /* AC-3 carries no header ADXB can read: the stream is taken as mono 16-bit 48 kHz in 1536-sample frames. */
-int ADXB_DecodeHeaderAc3(AdxbObj *adxb, unsigned short *hdr, int size)
+int ADXB_DecodeHeaderAc3(AdxbObj *adxb, unsigned char *hdr, int size)
 {
     if (adxb->ac3 == 0) {
         return 0;

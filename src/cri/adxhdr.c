@@ -1,5 +1,6 @@
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 #include <string.h>
+#include "dw4/cri/adxerrs.h"
 
 typedef struct AdxLoopInfo {
     short f0;

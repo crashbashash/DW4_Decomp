@@ -1,6 +1,6 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
-#include "dw4/cri/adxfs.h"
+#include "dw4/cri/adx_ps2.h"
 #include "dw4/igAdx.h"
 #include "dw4/igAdxAudio.h"
 #include "dw4/igAdxFile.h"
@@ -8,22 +8,12 @@
 #pragma readonly_strings on
 #include "dw4/igObject.h"
 #include "dw4/igMemory.h"
-extern "C" int ADXT_Create(int, int, int);
-extern "C" int ADXT_StartMemIdx(int, int, int);
-extern "C" int ADXT_StartAfs(int, short, short);
-extern "C" int ADXT_StartFname(int, const char *);
 extern "C" {
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 }
-extern "C" int ADXT_Pause(int, int);
-extern "C" int ADXT_GetStatPause(int);
-extern "C" int ADXT_Destroy(...);
-extern "C" int ADXT_SetOutVol(int, int);
-extern "C" int ADXT_GetOutVol(int);
 #include "dw4/igStringObj.h"
 extern "C" int Memory_GetAllocatorByName(...);
 #include "dw4/libkernl.h"
-extern "C" int ADXM_ShutdownThrd(...);
 extern "C" int SNDF_Finish(...);
 extern "C" int mwPlyFinishSfdFx(...);
 #include "dw4/eekernel.h"
@@ -34,9 +24,8 @@ extern "C" void Gap__igAdx__userConstruct(igObject *self);
 extern "C" int Gap__igAdx__getMeta(void);
 extern "C" void Gap__igAdx__destructFields(void);
 extern "C" void Gap__igAdx__userDestruct(igObject *self);
-extern "C" void igAdx_ErrorCallback(void);
+extern "C" void igAdx_ErrorCallback(void *obj, char *msg);
 #include <string.h>
-extern "C" int ADXM_ExecVint(void);
 extern "C" {
 #include "dw4/sony/sif.h"
 }
@@ -47,25 +36,13 @@ extern "C" int sceSdRemoteInit(...);
 /* Kept here: its only declaration is in cri/sndf.h, whose own libc and SIF prototypes conflict with the Sony homes. */
 extern "C" int sceSdRemote(int arg, int command, ...);
 #include <stdio.h>
-extern "C" int ADXPS2_SetupDvdFs(int);
-extern "C" int ADXPS2_LoadFcacheDvd(AdxFcachePrm *);
-extern "C" int ADXPS2_SetupHostFs(AdxHstFsPrm *);
-extern "C" int ADXPS2_LoadFcacheHost(AdxFcachePrm *);
-extern "C" int ADXPS2_SetupMemFs(int);
 extern "C" int igPsx2_LoadIopModule(...);
 extern "C" int igAdx_SetupIop(void);
 extern "C" int igAdx_SetupOptional(void);
-extern "C" int ADXT_Init(...);
-extern "C" int ADXM_SetCbErr(void (*)(void), int);
-extern "C" int ADXM_SetupThrd(int);
 extern "C" int SNDF_Start(...);
-extern "C" void ADXM_ExecVsyncFrame(void);
-extern "C" int ADXM_ExecMain(...);
 extern "C" int SNDF_ExecServer(...);
 #include "dw4/igDataLists.h"
 #include "dw4/StringPool.h"
-extern "C" void ADXF_LoadPartitionNw(int stream, const char *name, int mode, void *buffer);
-extern "C" int ADXF_GetPtStatEx(int stream);
 extern "C" unsigned char igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char *name, int maxChannels, int type,
                                                    int maxStreams, int maxFrequency);
 /* The CRI file-system parameters igAdx_SetupIop hands ADXPS2: the host root and the two file-info caches. */
@@ -106,6 +83,7 @@ public:
 #include "dw4/igThread.h"
 extern "C" void igStringObj_ToInt(igStringObj *string, int *value);
 #include "dw4/igNamedObject.h"
+#include "dw4/cri/cri_adxf.h"
 extern "C" int emptyString[4];
 extern "C" void igAdxAfsFile_GetPath(igAdxAfsFile *file, char *path);
 /* The scratch string, the per-partition file names and the AFS files, each released when the program exits. */
@@ -150,7 +128,7 @@ int igAdxAudio_CreateHandle(igAdxAudio *audio, int maxChannels, int type, int ma
         }
     }
     if (audio->_adxt == 0) {
-        audio->_adxt = ADXT_Create(audio->_iMaxChannels, audio->_pWorkArea, audio->_iWorkSize);
+        audio->_adxt = (int)ADXT_Create(audio->_iMaxChannels, (char *)audio->_pWorkArea, audio->_iWorkSize);
         if (audio->_adxt == 0) {
             return 0;
         }
@@ -166,7 +144,7 @@ int igAdxAudio_StartMemory(igAdxAudio *audio, void *data, int size) {
             return 0;
         }
     }
-    ADXT_StartMemIdx(audio->_adxt, (int)data, size);
+    ADXT_StartMemIdx((AdxtObj *)audio->_adxt, (AcxHeader *)data, size);
     return 1;
 }
 
@@ -179,9 +157,9 @@ unsigned char igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char 
     index = igAdx_FindAfsFile(name);
     if (index != -1) {
         file = afsFileAt(g_adxAfsFileList.p, index);
-        ADXT_StartAfs(audio->_adxt, file->_ptNumber, file->_fileNumber);
+        ADXT_StartAfs((AdxtObj *)audio->_adxt, file->_ptNumber, file->_fileNumber);
     } else {
-        ADXT_StartFname(audio->_adxt, name);
+        ADXT_StartFname((AdxtObj *)audio->_adxt, (char *)name);
     }
     return 1;
 }
@@ -194,9 +172,9 @@ unsigned char igAdxAudio_StartFile(igAdxAudio *audio, const char *name) {
         index = igAdx_FindAfsFile(name);
         if (index != -1) {
             file = afsFileAt(g_adxAfsFileList.p, index);
-            ADXT_StartAfs(audio->_adxt, file->_ptNumber, file->_fileNumber);
+            ADXT_StartAfs((AdxtObj *)audio->_adxt, file->_ptNumber, file->_fileNumber);
         } else {
-            ADXT_StartFname(audio->_adxt, name);
+            ADXT_StartFname((AdxtObj *)audio->_adxt, (char *)name);
         }
         return 1;
     }
@@ -216,7 +194,7 @@ void igAdxAudio_Stop(igAdxAudio *audio) {
 void igAdxAudio_Pause(igAdxAudio *audio, int pause) {
     int adxt = audio->_adxt;
     if (adxt != 0) {
-        ADXT_Pause(adxt, pause);
+        ADXT_Pause((AdxtObj *)adxt, pause);
     }
 }
 
@@ -227,12 +205,12 @@ int igAdxAudio_GetPauseState(igAdxAudio *audio) {
     if (adxt == 0) {
         return -1;
     }
-    return ADXT_GetStatPause(adxt);
+    return ADXT_GetStatPause((AdxtObj *)adxt);
 }
 
 void igAdxAudio_Shutdown(igAdxAudio *audio) {
     if (audio->_adxt != 0) {
-        ADXT_Destroy(audio->_adxt);
+        ADXT_Destroy((AdxtObj *)audio->_adxt);
     }
     if (audio->_pWorkArea != 0) {
         Memory_FreeBufferWithAllocator((void *)audio->_pWorkArea, igObject_GetAllocator(audio));
@@ -244,7 +222,7 @@ void igAdxAudio_SetOutVolume(igAdxAudio *audio, int volume) {
 
     adxt = audio->_adxt;
     if (adxt != 0) {
-        ADXT_SetOutVol(adxt, volume);
+        ADXT_SetOutVol((AdxtObj *)adxt, volume);
     }
 }
 
@@ -255,7 +233,7 @@ int igAdxAudio_GetOutVolume(igAdxAudio *audio) {
     if (adxt == 0) {
         return 0;
     }
-    return ADXT_GetOutVol(adxt);
+    return ADXT_GetOutVol((AdxtObj *)adxt);
 }
 
 int igAdxAudio_GetStatus(igAdxAudio *audio) {
@@ -359,7 +337,7 @@ void Gap__igAdx__userDestruct(igObject *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-void igAdx_ErrorCallback(void) {
+void igAdx_ErrorCallback(void *obj, char *msg) {
 
 }
 
@@ -649,7 +627,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
     }
     igAdx_AddPartitionName(stream, (char *)path);
     name = StringList_CopyRetained((int)g_adxPartitionNames.p, stream).p;
-    ADXF_LoadPartitionNw(stream, name, mode, g_adxPartitionBuffers[stream]);
+    ADXF_LoadPartitionNw(stream, name, (void *)mode, (AdxfPtInfo *)g_adxPartitionBuffers[stream]);
     waiting = true;
     do {
         switch (ADXF_GetPtStatEx(stream)) {

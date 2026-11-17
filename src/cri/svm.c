@@ -2,23 +2,13 @@
  * libraries register per server type, which the host's threads run. The lock itself is a pair of
  * callbacks the host registers; every lock records its type, and the outermost unlock checks it. */
 #include <string.h>
+#include "dw4/cri/svm.h"
 
 #define SVM_SVTYPE_NUM 8
 #define SVM_SVR_NUM 6
 #define SVM_BDR_NUM 8
 #define SVM_ERRMSG_LEN 128
 #define SVM_ITOA_DIGITS 32
-
-enum SvmSvType {
-    SVM_SVTYPE_VINT = 0,
-    SVM_SVTYPE_USRVSYNC = 1,
-    SVM_SVTYPE_VSYNC = 2,
-    SVM_SVTYPE_FSVSYNC = 3,
-    SVM_SVTYPE_FS = 4,
-    SVM_SVTYPE_MAIN = 5,
-    SVM_SVTYPE_MWIDLE = 6,
-    SVM_SVTYPE_USRIDLE = 7
-};
 
 enum SvmLockType {
     SVM_LOCK_NONE = 0,
@@ -29,11 +19,6 @@ enum SvmLockType {
     SVM_LOCK_ETC = 5,
     SVM_LOCK_USR = 1000
 };
-
-typedef int (*SvmSvrFunc)(void *obj);
-typedef void (*SvmFunc)(void *obj);
-typedef void (*SvmErrFunc)(void *obj, char *msg);
-typedef int (*SvmTasFunc)(int *flag);
 
 typedef struct SvmSvr {
     SvmSvrFunc func;
@@ -81,8 +66,6 @@ extern char SVM_SetCbSvrId_over_write_callback_function[];
 extern char SVM_ExecSvrFuncId_illegal_id[];
 extern char SVM_ExecSvrFuncId_illegal_svtype[];
 
-void SVM_CallErr(const char *format, ...);
-void SVM_CallErr1(const char *msg);
 void svm_reset_variable(void);
 
 void svm_lock(int type)
@@ -371,44 +354,44 @@ int SVM_ExecSvrFuncId(int svtype, unsigned int id)
     return busy;
 }
 
-void SVM_ExecSvrVint(void)
+int SVM_ExecSvrVint(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_VINT);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_VINT);
 }
 
-void SVM_ExecSvrUsrVsync(void)
+int SVM_ExecSvrUsrVsync(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_USRVSYNC);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_USRVSYNC);
 }
 
-void SVM_ExecSvrVsync(void)
+int SVM_ExecSvrVsync(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_VSYNC);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_VSYNC);
 }
 
-void SVM_ExecSvrVsync1(void)
+int SVM_ExecSvrVsync1(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_FSVSYNC);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_FSVSYNC);
 }
 
-void SVM_ExecSvrFs(void)
+int SVM_ExecSvrFs(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_FS);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_FS);
 }
 
-void SVM_ExecSvrMain(void)
+int SVM_ExecSvrMain(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_MAIN);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_MAIN);
 }
 
-void SVM_ExecSvrMwIdle(void)
+int SVM_ExecSvrMwIdle(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_MWIDLE);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_MWIDLE);
 }
 
-void SVM_ExecSvrUsrIdle(void)
+int SVM_ExecSvrUsrIdle(void)
 {
-    SVM_ExecSvrFunc(SVM_SVTYPE_USRIDLE);
+    return SVM_ExecSvrFunc(SVM_SVTYPE_USRIDLE);
 }
 
 /* matching construct: hand search — the bounds test and the element address are computed before the branch, as retail does */

@@ -1,7 +1,7 @@
 /* MWSFPLY: the MWSFD player's control. The SFD standby and start, the starts from a file, a file
  * range, an AFS entry, memory and an SJ, and the stop and pause. */
 #include "dw4/cri/mwsfd.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <stdio.h>
 
 /* an object that opens a stream by name (vtbl +24) */

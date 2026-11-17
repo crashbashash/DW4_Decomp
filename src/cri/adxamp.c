@@ -1,8 +1,10 @@
 /* CRI ADXAMP: measures the peak amplitude of each channel of decoded samples, one frame at a time, and writes
  * one record per frame to the channel's output stream joint. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxamp.h"
+#include "dw4/cri/adxcrs.h"
 
 #define ADXAMP_MAX_OBJ 16
 #define ADXAMP_MAX_CH 2

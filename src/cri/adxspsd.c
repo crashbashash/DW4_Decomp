@@ -61,13 +61,14 @@ int ADX_DecodeInfoSpsd(AdxbSpsdHeader *hdr, int size, short *hdrlen, signed char
 }
 
 /* matching construct: hill climb — the order of the copies after the call */
-int ADXB_DecodeHeaderSpsd(AdxbObj *adxb, AdxbSpsdHeader *hdr, int size)
+int ADXB_DecodeHeaderSpsd(AdxbObj *adxb, unsigned char *hdr, int size)
 {
     short hdrlen;
 
     adxb->hdr_set = 1;
-    if (ADX_DecodeInfoSpsd(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
-                         &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
+    /* the header is read through its layout */
+    if (ADX_DecodeInfoSpsd((AdxbSpsdHeader *)hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen,
+                           &adxb->nch, &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
         return 0;
     }
     adxb->cof = 0;

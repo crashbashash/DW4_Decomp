@@ -4,7 +4,7 @@ cvFs is CRI's device-independent file layer (`CVFS/PS2EE Ver.2.37 Build:Oct 6 20
 and the other CRI libraries open, read and query files only through its API; a device (the CD/DVD
 driver, the host file system, a volume image) registers a table of entry points under a name, and every
 cvFs call looks the device up by the name prefix of a path (`dev:file`) or uses the default device.
-The source is `src/cri/cvfs.c` with the shared types in `include/dw4/cri/cvfs.h`. It builds with Sony
+The source is `src/cri/cvfs.c` with the shared types in `include/dw4/cri/cri_cvfs.h`. It builds with Sony
 EE GCC 2.96 at `-O2 -G0` like the rest of the CRI blocks, as one whole file ([sd-prologue](sd-prologue.md)),
 but without strict aliasing ([below](#argument-block-and-aliasing)).
 

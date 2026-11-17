@@ -1,4 +1,4 @@
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include "dw4/cri/mcp.h"
 #include <string.h>
 #include "dw4/cri/mps.h"
@@ -143,8 +143,6 @@ void ADXT_SetTimeOfst();
 int ADXT_IsHeader();
 int ADXT_IsEndcode();
 int ADXT_InsertSilence();
-SfdSj *SJRBF_Create();
-int SJ_SplitChunk();
 int UTY_MulDiv();
 int SFBUF_RingGetRead();
 int SFBUF_RingAddRead();

@@ -1,5 +1,8 @@
 /* CRI ADX on PS2, memory side: the memory device alone, and the end-of-stream margin of ADXT's streams. */
-#include "dw4/cri/adxfs.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/cri_cvfs.h"
+#include "dw4/cri/mfci.h"
 
 /* End-of-stream margin handed to each ADXT stream. */
 int adxt_stm_eos = 25;
@@ -9,7 +12,7 @@ void adxps2_err_mem(void *obj, const char *msg, int code)
     ADXERR_CallErrFunc1(msg);
 }
 
-void ADXPS2_SetupMemFs(void)
+void ADXPS2_SetupMemFs(void *prm)
 {
     cvFsEntryErrFunc(adxps2_err_mem, 0);
     cvFsAddDev("MFS", mfCiGetInterface, 0);

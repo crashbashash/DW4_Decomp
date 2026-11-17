@@ -1,7 +1,19 @@
 /* CRI ADXT: creating and destroying playback handles, starting and stopping them, and their settings. */
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 #include <string.h>
 #include "dw4/libkernl.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/adxrna.h"
+#include "dw4/cri/adxsjd.h"
+#include "dw4/cri/adxstm.h"
+#include "dw4/cri/adxamp.h"
+#include "dw4/cri/adxdcd.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/cri_adxf.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/lsc.h"
+#include "dw4/cri/ps2rna.h"
 
 #define ADXT_OBUF_SIZE 8192         /* bytes of output per channel */
 #define ADXT_OBUF_DIST 8288         /* stride between channel buffers, ADXT_OBUF_SIZE plus the extra area */
@@ -20,25 +32,8 @@ enum AdxtTmode {
     ADXT_TMODE_PAL = 2
 };
 
-/* An ACX file: big-endian counts and offsets of the ADX streams it holds. */
-typedef struct AcxEntry {
-    int ofst;
-    int len;
-} AcxEntry;
-
-typedef struct AcxHeader {
-    int id;
-    int count;
-    AcxEntry ent[1];
-} AcxHeader;
-
-typedef void (*AdxtHookFunc)(AdxtObj *adxt);
-typedef void (*AdxtFltFunc)(void *obj, int ch, char *data, int len);
-typedef void (*AdxtDecFunc)(void *obj, int nsmpl, int nbyte);
-typedef void (*AdxtErrFunc)(void *obj, char *message);
-
-extern int adxt_output_mono;
-extern int adxt_stm_eos;
+/* adxtinit.c's V-sync count, read volatile in adxtsvr.c and adxps2.c, plain here */
+extern int adxt_vsync_cnt;
 extern int adxt_time_mode;
 /* The server's phase: 0 idle, 1 entered, 2 handles, 3 renderer; read and written through a full address. */
 extern volatile int adxt_svr_phase;
@@ -47,7 +42,6 @@ extern int adxt_svrfreq;
 extern AdxtHookFunc adxt_detach_ahx;
 extern AdxtHookFunc adxt_detach_mpa;
 extern AdxtHookFunc adxt_stop_func;
-extern AdxtHookFunc adxt_detach_pl2;
 extern int adxt_time_resync_cnt;
 extern int adxt_dbg_time_sw;
 extern int adxt_time_unit;  /* V-syncs per 100 seconds */
@@ -105,67 +99,14 @@ extern char E8101207_can_t_create_sj_ADXT_StartMem[];
 extern char E02080810_ADXT_StartMemIdx_parameter_error[];
 extern char E8101207_can_t_create_sj_ADXT_StartMemIdx[];
 
-SfdSj *PS2RNA_GetSjUni(AdxRna *rna, int ch);
-int PS2RNA_GetSjRmt(AdxRna *rna, int ch);
-int SJRMT_GetNumData(int sjrmt, int line);
-SfdSj *SJRBF_Create(char *buf, int bsize, int xsize);
-SfdSj *SJMEM_Create(char *buf, int size);
-AdxStmObj *ADXSTM_Create(SfdSj *sj, int maxsct);
-void ADXSTM_Destroy(AdxStmObj *stm);
-void ADXSTM_BindFileNw(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsct);
-void ADXSTM_ReleaseFileNw(AdxStmObj *stm);
-void ADXSTM_StopNw(AdxStmObj *stm);
-int ADXSTM_SetBufSize(AdxStmObj *stm, int min, int max);
-AdxSjdObj *ADXSJD_Create(SfdSj *sji, int nch, SfdSj **sjo);
-void ADXSJD_Destroy(AdxSjdObj *sjd);
-int ADXSJD_GetHdrLen(AdxSjdObj *sjd);
-int ADXSJD_GetFmtBps(AdxSjdObj *sjd);
-short ADXSJD_GetDefPan(AdxSjdObj *sjd, int ch);
-char *ADXSJD_GetDataId(AdxSjdObj *sjd);
-int ADXSJD_GetDecDtLen(AdxSjdObj *sjd);
 void ADXSJD_EntryDecFunc(AdxSjdObj *sjd, AdxtDecFunc func, void *obj);
-void ADXSJD_SetLnkSw(AdxSjdObj *sjd, int sw);
-void ADXSJD_SetExtString(AdxSjdObj *sjd, char *str);
-void ADXSJD_SetDefKeyString(char *str);
-void ADXSJD_ResetDefFmt(AdxSjdObj *sjd);
-int ADXSJD_AdjustSmpl(AdxSjdObj *sjd, int nsmpl);
-void ADXSJD_EntryFltFunc(AdxSjdObj *sjd, AdxtFltFunc func, void *obj);
-void ADXSJD_ExecServer(void);
-AdxRna *ADXRNA_Create(SfdSj **sjo, int nch);
-void ADXRNA_Destroy(AdxRna *rna);
-void ADXRNA_GetTime(AdxRna *rna, int *ncount, int *tscale);
-void ADXRNA_ExecServer(void);
-void ADXRNA_SetOutPan(AdxRna *rna, int ch, int pan);
-void ADXRNA_SetOutBalance(AdxRna *rna, int balance);
-int ADXRNA_DiscardData(AdxRna *rna, int nsmpl);
-void ADXRNA_SetOutMode(int mode);
-int ADXRNA_GetOutMode(void);
-void ADXAMP_Destroy(AdxAmpObj *amp);
-void ADXAMP_Start(AdxAmpObj *amp);
-void ADXAMP_Stop(AdxAmpObj *amp);
-LscObj *LSC_Create(SfdSj *sj);
-void LSC_Destroy(LscObj *lsc);
-void LSC_SetStmHndl(LscObj *lsc, AdxStmObj *stm);
-void LSC_Stop(LscObj *lsc);
-void ADXERR_EntryErrFunc(AdxtErrFunc func, void *obj);
-int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
-int ADX_DecodeInfoAinf(unsigned char *hdr, int size, int *ainfsiz, char *dataid, short *volume, short *pan);
-int ADX_DecodeInfo(unsigned char *hdr, int len, short *ofst, signed char *type, signed char *bsize,
-                     signed char *bits, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl);
-void ADXT_AttachPl2(AdxtObj *adxt, char *work, int worksize);
 
-AdxtObj *ADXT_Create(int maxnch, char *work, int worksize);
-void ADXT_Destroy(AdxtObj *adxt);
-void ADXT_GetTime(AdxtObj *adxt, int *ncount, int *tscale);
-int ADXT_GetSfreq(AdxtObj *adxt);
-int ADXT_GetNumSmplObuf(AdxtObj *adxt, int ch);
-void ADXT_ExecServer(void);
 
 /* Prints how much of channel 0's output sits in the EE-side SJ and in the IOP-side SJ. */
 void adxt_disp_rna_stat(AdxtObj *adxt)
 {
-    AdxRna *rna = adxt->rna;
-    int sjrmt = PS2RNA_GetSjRmt(rna, 0);
+    Ps2Rna *rna = adxt->rna;
+    void *sjrmt = PS2RNA_GetSjRmt(rna, 0);
     SfdSj *sjuni = PS2RNA_GetSjUni(rna, 0);
     int ntmp1 = sjuni->vtbl->getNumData(sjuni, SJ_LIN_DATA);
     int ntmp0 = sjuni->vtbl->getNumData(sjuni, SJ_LIN_FREE);
@@ -317,7 +258,7 @@ void ADXT_Destroy(AdxtObj *adxt)
         ADXT_Stop(adxt);
     }
     if (adxt->rna != 0) {
-        AdxRna *rna = adxt->rna;
+        Ps2Rna *rna = adxt->rna;
         adxt->rna = 0;
         ADXRNA_Destroy(rna);
     }
@@ -748,7 +689,7 @@ int ADXT_GetOutBalance(AdxtObj *adxt)
 /* The volume is relative to the one the header asks for. */
 void ADXT_SetOutVol(AdxtObj *adxt, int vol)
 {
-    AdxRna *rna;
+    Ps2Rna *rna;
 
     if (adxt == 0) {
         ADXERR_CallErrFunc1(E02080823_ADXT_SetOutVol_parameter_error);
@@ -1345,7 +1286,7 @@ void ADXT_SetDefKeyString(char *str)
     ADXSJD_SetDefKeyString(str);
 }
 
-AdxRna *ADXT_GetRna(AdxtObj *adxt)
+Ps2Rna *ADXT_GetRna(AdxtObj *adxt)
 {
     return adxt->rna;
 }
@@ -1412,7 +1353,6 @@ void ADXT_StartFname(AdxtObj *adxt, char *fname)
     ADXT_StartFnameRange(adxt, fname, 0, 0xfffff);
 }
 
-void ADXT_StartMem2(AdxtObj *adxt, char *data, int size);
 
 void ADXT_StartMem(AdxtObj *adxt, char *data)
 {

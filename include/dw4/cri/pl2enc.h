@@ -2,6 +2,10 @@
 #ifndef DW4_CRI_PL2ENC_H
 #define DW4_CRI_PL2ENC_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define PL2ENC_MAX_DELAY 96     /* words in each surround delay line */
 #define PL2ENC_BLK_SMPL 32      /* samples PL2ENC_ExecOneBlk encodes */
 
@@ -31,5 +35,9 @@ void PL2ENC_ExecOneSmpl(Pl2Enc *pl2, short in, short *out_l, short *out_r);
 void PL2ENC_ExecOneBlk(Pl2Enc *pl2, short *in, short *out_l, short *out_r);
 void PL2ENC_SetPos(Pl2Enc *pl2, int x, int y);
 void PL2ENC_SetSfreq(Pl2Enc *pl2, int sfreq);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

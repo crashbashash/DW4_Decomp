@@ -1,20 +1,12 @@
 /* CRI SJMEM: a stream joint over a memory block the caller owns. Its data line hands out the block
  * front to back; nothing is ever free to put back. Every entry point takes SJCRS around the work. */
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 #include <string.h>
 
 #define SJMEM_MAX_OBJ 32
 
-/* stream joint lines */
-enum {
-    SJ_LIN_FREE = 0,
-    SJ_LIN_DATA = 1
-};
-
 /* the code a stream joint hands its error callback for a line it does not have */
 #define SJ_ERR_ILLEGAL_LINE (-3)
-
-typedef void (*SjErrFunc)(void *obj, int code);
 
 typedef struct SjMem {
     SfdSjVtbl *vtbl;    /* 0x00 */
@@ -27,10 +19,6 @@ typedef struct SjMem {
     SjErrFunc errfn;    /* 0x1c */
     void *errobj;       /* 0x20 */
 } SjMem;
-
-void SJERR_CallErr(const char *message);
-void SJCRS_Lock(void);
-void SJCRS_Unlock(void);
 
 /* The stream joint's function table: the common slots, then the two this joint adds. */
 typedef struct SjMemVtbl {
@@ -118,14 +106,14 @@ void sjmem_Finish(void)
 
 SjMem *sjmem_Create(char *buf, int bsize);
 
-SjMem *SJMEM_Create(char *buf, int bsize)
+SfdSj *SJMEM_Create(char *buf, int bsize)
 {
     SjMem *sj;
 
     SJCRS_Lock();
     sj = sjmem_Create(buf, bsize);
     SJCRS_Unlock();
-    return sj;
+    return (SfdSj *)sj;
 }
 
 SjMem *sjmem_Create(char *buf, int bsize)
@@ -417,12 +405,12 @@ int sjmem_IsGetChunk(SjMem *sj, int line, int nbyte, int *rbyte)
     return n == nbyte;
 }
 
-char *SJMEM_GetBufPtr(SjMem *sj)
+char *SJMEM_GetBufPtr(SfdSj *sj)
 {
-    return sj->buf;
+    return ((SjMem *)sj)->buf;
 }
 
-int SJMEM_GetBufSize(SjMem *sj)
+int SJMEM_GetBufSize(SfdSj *sj)
 {
-    return sj->bsize;
+    return ((SjMem *)sj)->bsize;
 }

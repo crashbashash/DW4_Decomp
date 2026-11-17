@@ -4,7 +4,7 @@ ADXT is the layer games call to play ADX sound: a handle owns an input ring buff
 (or an SJ the caller supplies, or memory), an ADXSJD decoder writing one output SJ per channel, and an ADXRNA
 renderer that sends those outputs to the IOP. Two files hold it, each compiled as one whole file with Sony EE GCC
 2.96 at `-O2 -G0` (`cri_adxt` and `cri_adxtsvr` in `units.tsv`, their rows in `unit-objects.json`;
-[whole-file units](emitted-functions.md#whole-file-units)). They share `include/dw4/cri/adxt.h`: the handle
+[whole-file units](emitted-functions.md#whole-file-units)). They share `include/dw4/cri/cri_adxt.h`: the handle
 (`AdxtObj`), its states (`AdxtStat`), what it plays from (`AdxtPmode`), the recovery modes (`AdxtRmode`) and the
 error codes.
 

@@ -1,28 +1,9 @@
-#include "dw4/cri/adxfs.h"
-#include "dw4/cri/adxt.h"
-
-typedef struct AdxtSj AdxtSj;
-typedef struct AdxtSjVtbl {
-    void (*slot[6])(AdxtSj *self);
-} AdxtSjVtbl;
-struct AdxtSj {
-    AdxtSjVtbl *vt;
-};
-
-typedef struct AdxtHandle {
-    char f0;
-    char f1;
-    char state;
-    char pad3[13];
-    int f16;
-    AdxtSj *sji;
-    char pad24[38];
-    short sectors;
-    char pad64[84];
-    void *stm;
-    char pad152[24];
-    char *fname;
-} AdxtHandle;
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/cri_adxf.h"
+#include "dw4/cri/lsc.h"
 
 extern char DAT_004ee0d0[];
 extern char DAT_004ee100[];
@@ -35,37 +16,25 @@ extern char DAT_004ee210[];
 extern char DAT_004ee240[];
 extern char DAT_004ee270[];
 
-int LSC_EntryFileRange(void *stm, const char *name, void *dir, int ofst, int nsct);
-void LSC_Stop(void *stm);
-void LSC_SetLpFlg(void *stm, int enable);
-int LSC_GetNumStm(void *stm);
-void LSC_ResetEntry(void *stm);
-void LSC_Start(void *stm);
-void LSC_SetFlowLimit(void *stm, int bytes);
-void ADXT_StopWithoutLsc(void);
-int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
-char *ADXF_GetFnameFromPt(int ptid);
-void ADXT_EntryFnameRange(AdxtHandle *adxt, const char *name, int first, int last);
-void ADXT_EntryAfs(AdxtHandle *adxt, int afs, int fid);
 
-void FUN_00263748(AdxtHandle *adxt, const char *name) {
+void FUN_00263748(AdxtObj *adxt, const char *name) {
     ADXT_EntryFnameRange(adxt, name, 0, 0xFFFFF);
 }
 
-void ADXT_EntryFnameRange(AdxtHandle *adxt, const char *name, int first, int last) {
+void ADXT_EntryFnameRange(AdxtObj *adxt, const char *name, int first, int last) {
     /* the file list is read before the null check (retail loads it in the branch delay slot) */
-    void *stm = adxt->stm;
+    LscObj *lsc = adxt->lsc;
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee0d0);
         return;
     }
-    if (LSC_EntryFileRange(stm, name, 0, first, last) < 0) {
+    if (LSC_EntryFileRange(lsc, name, 0, first, last) < 0) {
         ADXERR_CallErrFunc2(DAT_004ee100, name);
     }
 }
 
-void ADXT_EntryAfs(AdxtHandle *adxt, int afs, int fid) {
-    void *stm = adxt->stm;
+void ADXT_EntryAfs(AdxtObj *adxt, int afs, int fid) {
+    LscObj *lsc = adxt->lsc;
     char text[16];
     void *dir;
     int ofst;
@@ -74,71 +43,70 @@ void ADXT_EntryAfs(AdxtHandle *adxt, int afs, int fid) {
         ADXERR_CallErrFunc1(E02080855_ADXT_EntryAfs_parameter_error);
         return;
     }
-    if (ADXF_GetFnameRangeEx(afs, fid, adxt->fname, &dir, &ofst, &nsct) == 0) {
-        LSC_EntryFileRange(stm, ADXF_GetFnameFromPt(afs), dir, ofst, nsct);
+    if (ADXF_GetFnameRangeEx(afs, fid, adxt->fnbuf, &dir, &ofst, &nsct) == 0) {
+        LSC_EntryFileRange(lsc, ADXF_GetFnameFromPt(afs), dir, ofst, nsct);
     } else {
         ADXERR_ItoA2(afs, fid, text, sizeof(text));
         ADXERR_CallErrFunc2(E0071301_ADXT_EntryAfs_can_t_entry, text);
     }
 }
 
-void ADXT_StartSeamless(AdxtHandle *adxt) {
-    void *stm = adxt->stm;
-    AdxtSj *sji;
+void ADXT_StartSeamless(AdxtObj *adxt) {
+    LscObj *lsc = adxt->lsc;
+    SfdSj *sji;
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee178);
         return;
     }
-    ADXT_StopWithoutLsc();
+    ADXT_StopWithoutLsc(adxt);
     ADXCRS_Lock();
-    adxt_start_sj(adxt, adxt->f16);
+    adxt_start_sj(adxt, adxt->sjf);
     sji = adxt->sji;
-    sji->vt->slot[5](sji);
-    adxt->state = 4;
-    LSC_SetFlowLimit(stm, adxt->sectors << 11);
+    sji->vtbl->reset(sji);
+    adxt->pmode = ADXT_PMODE_SLFILE;
+    LSC_SetFlowLimit(lsc, adxt->minsct << 11);
     ADXCRS_Unlock();
-    LSC_Start(stm);
+    LSC_Start(lsc);
     ADXT_SetLnkSw(adxt, 1);
 }
 
-void ADXT_SetSeamlessLp(AdxtHandle *adxt, int enable) {
+void ADXT_SetSeamlessLp(AdxtObj *adxt, int enable) {
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee1a8);
         return;
     }
-    LSC_SetLpFlg(adxt->stm, enable);
+    LSC_SetLpFlg(adxt->lsc, enable);
 }
 
-void ADXT_StartFnameLp(AdxtHandle *adxt, const char *name, int first, int last);
 
-void ADXT_EntryFname(AdxtHandle *adxt, const char *name)
+void ADXT_EntryFname(AdxtObj *adxt, const char *name)
 {
     ADXT_StartFnameLp(adxt, name, 0, 0xfffff);
 }
 
-void ADXT_StartFnameLp(AdxtHandle *adxt, const char *name, int first, int last) {
-    void *stm;
+void ADXT_StartFnameLp(AdxtObj *adxt, const char *name, int first, int last) {
+    LscObj *lsc;
     if (adxt == 0 || name == 0) {
         ADXERR_CallErrFunc1(DAT_004ee1d8);
         return;
     }
-    stm = adxt->stm;
-    LSC_Stop(stm);
+    lsc = adxt->lsc;
+    LSC_Stop(lsc);
     ADXT_EntryFnameRange(adxt, name, first, last);
-    LSC_SetLpFlg(stm, 1);
+    LSC_SetLpFlg(lsc, 1);
     ADXT_StartSeamless(adxt);
 }
 
-void ADXT_StartAfsLp(AdxtHandle *adxt, int afs, unsigned int fid) {
-    void *stm;
+void ADXT_StartAfsLp(AdxtObj *adxt, int afs, unsigned int fid) {
+    LscObj *lsc;
     if (adxt == 0 || afs >= 1 || fid > 0x10000) {
         ADXERR_CallErrFunc1(DAT_004ee210);
         return;
     }
-    stm = adxt->stm;
-    LSC_Stop(stm);
+    lsc = adxt->lsc;
+    LSC_Stop(lsc);
     ADXT_EntryAfs(adxt, afs, fid);
-    LSC_SetLpFlg(stm, 1);
+    LSC_SetLpFlg(lsc, 1);
     ADXT_StartSeamless(adxt);
 }
 
@@ -146,22 +114,22 @@ void ADXT_ReleaseSeamless(void)
 {
 }
 
-int ADXT_GetNumFiles(AdxtHandle *adxt) {
+int ADXT_GetNumFiles(AdxtObj *adxt) {
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee240);
         return -1;
     }
-    return LSC_GetNumStm(adxt->stm);
+    return LSC_GetNumStm(adxt->lsc);
 }
 
-void ADXT_ResetEntry(AdxtHandle *adxt) {
+void ADXT_ResetEntry(AdxtObj *adxt) {
     if (adxt == 0) {
         ADXERR_CallErrFunc1(DAT_004ee270);
         return;
     }
     /* matching construct: manual — early return (not an if block) lets ee-gcc emit the tail call */
-    if (adxt->f1 != 0) {
+    if (adxt->stat != 0) {
         return;
     }
-    LSC_ResetEntry(adxt->stm);
+    LSC_ResetEntry(adxt->lsc);
 }

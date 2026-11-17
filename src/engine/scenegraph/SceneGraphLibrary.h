@@ -94,7 +94,7 @@
 #include "dw4/igAttrList.h"
 #include "dw4/igAttr.h"
 #include "dw4/cri/sndf.h"
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 #include "dw4/beModelCtrlInfo.h"
 #include "dw4/beHitLandModelTraversal.h"
 #include "dw4/StringPool.h"

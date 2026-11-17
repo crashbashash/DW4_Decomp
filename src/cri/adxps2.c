@@ -1,43 +1,13 @@
 #include "dw4/eekernel.h"
+#include "dw4/cri/svm.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxmsg.h"
 
 typedef struct AdxmCallback {
     void (*func)(void *arg);
     void *arg;
 } AdxmCallback;
-
-/* Thread priorities and the two user-thread stacks, as ADXM_SetupThrdEx takes them. */
-typedef struct AdxmThreadPrmEx {
-    int lockPrio;
-    int safePrio;
-    int usrVsyncPrio;
-    int vsyncPrio;
-    int fsPrio;
-    int mainPrio;
-    int mwIdlePrio;
-    int usrIdlePrio;
-    void *usrVsyncStack;
-    int usrVsyncStackSize;
-    void *usrIdleStack;
-    int usrIdleStackSize;
-} AdxmThreadPrmEx;
-
-/* The priorities ADXM_SetupThrd takes. */
-typedef struct AdxmThreadPrm {
-    int lockPrio;
-    int safePrio;
-    int vsyncPrio;
-    int fsPrio;
-    int mainPrio;
-    int mwIdlePrio;
-} AdxmThreadPrm;
-
-/* The priorities ADXPS2_SetupThrd takes; the FS and MW-idle ones are derived from them. */
-typedef struct Adxps2ThreadPrm {
-    int lockPrio;
-    int safePrio;
-    int vsyncPrio;
-    int mainPrio;
-} Adxps2ThreadPrm;
 
 #define ADXPS2_MWIDLE_PRIO 25
 
@@ -96,28 +66,6 @@ extern AdxmCallback adxm_vsync_frame_cb;
 extern AdxmCallback adxm_mwidle_sleep_cb;
 extern char *volatile adxps2_build;
 
-int SVM_SetCbLock();
-void SVM_SetCbUnlock(void (*func)(void), void *obj);
-void SVM_Init(void);
-void SVM_SetCbBdr(int id, void (*func)(void), void *obj);
-int SVM_Finish();
-void SVM_CallErr1(const char *message);
-int SVM_Lock();
-int SVM_Unlock();
-int SVM_SetCbSvrId();
-int SVM_GotoSvrBorder();
-int SVM_SetCbErr();
-int SVM_ExecSvrUsrVsync();
-int SVM_ExecSvrVsync();
-int SVM_ExecSvrFs();
-int SVM_ExecSvrMain();
-int SVM_ExecSvrMwIdle();
-int SVM_ExecSvrUsrIdle();
-int SVM_ExecVsyncBegin();
-int SVM_ExecVsyncEnd();
-int ADXT_ExecServer();
-int ADXT_ExecFsSvr();
-void ADXMSG_PrintErr(const char *format, ...);
 
 void adxm_WakeupThread(int threadId);
 int adxm_ResumeThread(int threadId);
@@ -126,20 +74,17 @@ void adxm_SleepThread(void);
 int adxm_IsSetupThrdEx(void);
 void adxm_call_mwidle_sleep_cb(void);
 void adxm_call_vsync_frame_cb(void);
+/* adxtinit.c's V-sync count, read volatile here and in adxtsvr.c, plain in adxt.c */
+extern volatile int adxt_vsync_cnt;
 extern volatile int adxps2_exec_vint;
 extern long long adxm_vint_cnt;
 extern int (*adxm_old_cbf)(int arg);
-extern volatile int adxt_vsync_cnt;
-int SVM_ExecSvrVint();
-int ADXPS2_ExecVint(int arg);
-void ADXPS2_WakeupMainThrd(void);
-void ADXM_SetupThrd(AdxmThreadPrm *tprm);
 void adxm_ShutdownMwIdleThrd(void);
 void adxm_ShutdownVsyncThrd(void);
 void adxm_ShutdownFsThrd(void);
 void adxm_ShutdownSafeThrd(void);
 
-void _adxm_lock(void) {
+void _adxm_lock(void *obj) {
     int threadId;
     if (adxm_lock_level == 0) {
         threadId = GetThreadId();
@@ -151,7 +96,7 @@ void _adxm_lock(void) {
     adxm_lock_level++;
 }
 
-void _adxm_unlock(void) {
+void _adxm_unlock(void *obj) {
     if (--adxm_lock_level == 0) {
         adxm_SuspendThread(adxm_safe_thid);
         adxm_safe_thid; /* matching construct: retail re-reads the thread id after the call (dead load) */
@@ -184,11 +129,11 @@ void adxm_goto_svr_border(int threadId, int priority)
     ChangeThreadPriority(threadId, priority);
 }
 
-void adxm_goto_mwidle_border(void) {
+void adxm_goto_mwidle_border(void *obj) {
     adxm_goto_svr_border(adxm_mwidle_thid, adxm_tprm.mwIdlePrio);
 }
 
-void adxm_goto_usridle_border(void) {
+void adxm_goto_usridle_border(void *obj) {
     adxm_goto_svr_border(adxm_usridle_thid, adxm_tprm.usrIdlePrio);
 }
 
@@ -497,8 +442,8 @@ int ADXM_IsSetupThrd(void) {
     return adxm_setup_count != 0;
 }
 
-void ADXM_SetCbErr(void) {
-    SVM_SetCbErr();
+void ADXM_SetCbErr(SvmErrFunc func, void *obj) {
+    SVM_SetCbErr(func, obj);
 }
 
 void ADXM_SetupThrd(AdxmThreadPrm *tprm) {
@@ -842,11 +787,11 @@ void ADXM_ShutdownThrdEx(void) {
     }
 }
 
-void ADXM_SetCbUsrVsync(int func, int object) {
+void ADXM_SetCbUsrVsync(SvmSvrFunc func, void *object) {
     SVM_SetCbSvrId(1, 0, func, object);
 }
 
-void ADXM_SetCbUsrIdle(int func, int object) {
+void ADXM_SetCbUsrIdle(SvmSvrFunc func, void *object) {
     SVM_SetCbSvrId(7, 0, func, object);
 }
 

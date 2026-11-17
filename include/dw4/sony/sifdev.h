@@ -12,6 +12,8 @@ int sceClose(int fd);
 int sceRead(int fd, void *buf, int size);
 int sceWrite(int fd, const void *buf, int size);
 int sceLseek(int fd, int offset, int whence);
+long long sceLseek64(int fd, long long offset, int whence);
+int sceIoctl(int fd, int cmd, void *arg);
 int sceDopen(const char *name);
 int sceDclose(int fd);
 int sceDread(int fd, void *buf);

@@ -1,7 +1,9 @@
-#include "dw4/cri/cvfs.h"
+#include "dw4/cri/cri_cvfs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dw4/cri/svm.h"
+#include "dw4/cri/mfci.h"
 
 typedef struct MfCiFile {
     signed char used;       /* 0x00 */
@@ -18,8 +20,6 @@ typedef struct MfCiFile {
     int len;                /* 0x34 */
 } MfCiFile;
 
-void SVM_Lock(void);
-void SVM_Unlock(void);
 
 void mfCiExecServer(void);
 void mfCiEntryErrFunc(void (*func)(void *context, const char *message, void *detail), void *context);

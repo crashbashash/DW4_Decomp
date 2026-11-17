@@ -1,7 +1,7 @@
 /* CRI ADXB AHX glue: hands an ADXB handle's AHX stream to the AHX decoder through hooks the decoder
  * registers. No decoder registers in this game, so the hooks stay null. */
 #include "dw4/cri/adxb.h"
-#include "dw4/cri/sfdsj.h"
+#include "dw4/cri/sj.h"
 
 /* The AHX decoder works in 96-sample units. */
 #define ADXB_AHX_FRMSMPL 96

@@ -2,6 +2,10 @@
 #ifndef DW4_CRI_CVFS_H
 #define DW4_CRI_CVFS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define CVFS_MAX_HANDLES 40
 #define CVFS_MAX_DEVICES 32
 #define CVFS_DEV_NAME_SIZE 12
@@ -160,5 +164,9 @@ long long cvFsGetNumTr64(CvFsHandle *hdl);
 long long cvFsGetFileSize64(const char *path);
 long long cvFsGetFileSizeEx64(const char *path, int arg);
 int cvFsGetFsys64Info(CvFsHandle *hdl);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

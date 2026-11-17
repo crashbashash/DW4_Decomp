@@ -1,15 +1,15 @@
 /* CRI ADXSTM: file streams that read sectors through cvFs into an SJ, served from the file-system thread. */
 #include "dw4/cri/adxstm.h"
 #include <string.h>
+#include "dw4/cri/svm.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/cri_cvfs.h"
+#include "dw4/cri/cri_srd.h"
+#include "dw4/cri/sj.h"
 
-void ADXCRS_Lock(void);
-void ADXCRS_Unlock(void);
-void SVM_Lock(void);
-void SVM_Unlock(void);
-int SVM_TestAndSet(int *flag);
-void ADXT_ExecFsSvr(void);
-void ADXERR_CallErrFunc2(const char *message, const char *name);
-void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 
 #define CVFS_STAT_COMPLETE 1
 
@@ -24,9 +24,6 @@ static int adxstmf_svr_busy = 0;
 static int adxstm_max_retry = -1;
 static int adxstmf_nosj_cnt = 0;
 /* SRD's spindle override: nonzero makes SRD read at the spindle speed in srd_spindlctrl. */
-extern int adxt_srd_rmode_sw;
-extern int srd_spindlctrl_sw;
-extern unsigned char srd_spindlctrl;
 static AdxStmObj adxstmf_obj[ADXSTM_MAX_OBJ] = {0};
 
 void ADXT_SetupRtimeNumStm(int num)
@@ -149,7 +146,7 @@ void ADXSTM_Destroy(AdxStmObj *stm)
     }
 }
 
-void ADXSTM_BindFileNw(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsct)
+void ADXSTM_BindFileNw(AdxStmObj *stm, const char *fname, void *dir, int ofst, int nsct)
 {
     SVM_Lock();
     stm->fsize = nsct << 11;
@@ -161,7 +158,7 @@ void ADXSTM_BindFileNw(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsc
     SVM_Unlock();
 }
 
-void ADXSTM_BindFile(AdxStmObj *stm, char *fname, void *dir, int ofst, int nsct)
+void ADXSTM_BindFile(AdxStmObj *stm, const char *fname, void *dir, int ofst, int nsct)
 {
     ADXSTM_BindFileNw(stm, fname, dir, ofst, nsct);
     do {

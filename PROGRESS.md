@@ -34,19 +34,19 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**11,905** of the 20,431 matched functions are readable: **1,742,640** code bytes, **50.2 %** of the code.
+**12,286** of the 20,431 matched functions are readable: **1,791,484** code bytes, **51.6 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,772 | 570,312 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 4,310 | 749,848 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,206 | 329,672 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,195 | 324,884 |
 | it sits in its class or module file, not `src/unmatched/` | 11 | 668 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 2,056 | 513,424 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,126 | 387,456 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,468 | 450,116 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,125 | 387,440 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,466 | 449,880 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 557 | 146,400 |
-| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 2,853 | 983,388 |
+| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 2,400 | 921,548 |
 
 ## Debt
 
@@ -77,7 +77,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 145 | 145 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 193,824 | 193,824 | 0 | bytes of those |
-| `struct.a` | 12 | 12 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py); increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes struct.a +1: include/dw4/cri/sfdply.h types the SFTIM work fields (clock callbacks, speed, external clock, PTS-manager entry) that sfply_ResetHn (0x2abfd8) reads; src/cri/sfdrec.c keeps its own untyped SfdD28 copy until it moves to the shared header |
+| `struct.a` | 10 | 10 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 1 | 1 | 0 | struct-report groups: receiver view disagrees with the reflected class; increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes |
 | `struct.c` | 25 | 25 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 26 | 26 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
@@ -92,9 +92,9 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `profile_split.units` | 3 | 3 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build); increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `profile_split.bytes` | 19,492 | 19,492 | 0 | bytes of those; increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `opt_pragma.statements` | 0 | 0 | 0 | optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source |
-| `decl.local_externs` | 2,529 | 2,529 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
-| `decl.varargs` | 874 | 874 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
-| `decl.type_conflicts` | 1,788 | 1,788 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
+| `decl.local_externs` | 2,017 | 2,017 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
+| `decl.varargs` | 820 | 820 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
+| `decl.type_conflicts` | 1,539 | 1,539 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
 | `decl.header_conflicts` | 558 | 558 | 0 | symbols declared in two or more headers that disagree on the type |
 
 ## The data half

@@ -1,7 +1,7 @@
 /* CRI ADXCRS: the critical section the ADX libraries take around shared state. */
+#include "dw4/cri/svm.h"
+#include "dw4/cri/adxcrs.h"
 
-void SVM_Lock(void);
-void SVM_Unlock(void);
 
 extern int adxcrs_lock_cnt;
 

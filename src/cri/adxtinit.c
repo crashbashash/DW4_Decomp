@@ -1,29 +1,21 @@
-#include "dw4/cri/adxt.h"
+#include "dw4/cri/cri_adxt.h"
 #include <string.h>
-
-typedef struct CriSjChunk {
-    void *ptr;
-    int len;
-} CriSjChunk;
-
-typedef struct Sj Sj;
-typedef struct SjVtbl {
-    void *pad0[3];
-    void (*destroy)(Sj *sj);
-    void *pad16[2];
-    void (*get_chunk)(Sj *sj, int id, int nbyte, CriSjChunk *ck);
-    void (*unget_chunk)(Sj *sj, int id, CriSjChunk *ck);
-    void (*put_chunk)(Sj *sj, int id, CriSjChunk *ck);
-} SjVtbl;
-struct Sj {
-    SjVtbl *vt;
-};
+#include "dw4/cri/svm.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/adxrna.h"
+#include "dw4/cri/adxsjd.h"
+#include "dw4/cri/adxstm.h"
+#include "dw4/cri/adxcrs.h"
+#include "dw4/cri/adxerrs.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/lsc.h"
+#include "dw4/cri/adxenc.h"
 
 typedef struct AdxEnc AdxEnc;
 
 typedef struct AdxtObject {
     char pad0[20];
-    Sj *sji;
+    SfdSj *sji;
 } AdxtObject;
 
 int adxt_init_cnt = 0;
@@ -39,55 +31,14 @@ char adxt_enc_obuf[64] = {0};
 static char *volatile adxt_build_ref;
 extern int DAT_004a9b1c;
 
-int ADXT_ExecServer();
-int ADXT_ExecFsSvr();
-int LSC_ExecServer();
-void ADXT_Init(void);
-void ADXT_DestroyAll(void);
-void ADXRNA_Finish(void);
 void FUN_00260b30(void);
-void ADXSTM_Finish(void);
-void LSC_Finish(void);
-void SVM_DelCbSvr(int key, int value);
-void SVM_Finish(void);
-void ADXSJD_Finish(void);
-void ADXERR_Finish(void);
-void SJMEM_Finish(void);
-void SJRBF_Finish(void);
-void SJUNI_Finish(void);
-void ADXSJE_Init(void);
-void ADXSJE_Finish(void);
-AdxEnc *ADXSJE_Create(int nch, Sj **out, Sj *in);
-void ADXSJE_SetConfigSfa(AdxEnc *enc, int nch, int f92, int end);
-void ADXSJE_Start(AdxEnc *enc);
-void ADXSJE_ExecServer(void);
-void ADXSJE_Stop(AdxEnc *enc);
-void ADXSJE_Destroy(AdxEnc *enc);
-Sj *SJRBF_Create(void *buf, int size, int f8);
-Sj *SJMEM_Create(void *buf, int size);
 
-int ADXCRS_Init();
-int SJUNI_Init();
-int SJRBF_Init();
-int SJMEM_Init();
-int ADXERR_Init();
-int ADXSTM_Init();
-int ADXSJD_Init();
 int FUN_00260a60();
-int ADXRNA_Init();
-int LSC_Init();
-int SVM_Init();
-int ADXRNA_EntryErrFunc();
-int LSC_EntryErrFunc();
-int ADXM_IsSetupThrd();
-int SVM_SetCbSvrId();
-int SVM_SetCbSvr();
-int ADXT_SetDefSvrFreq();
 void ADXT_ConfigVsyncSvr(int value) {
     adxt_thrd_svr_sw = value;
 }
 
-void adxini_rnaerr_cbfn(void *unused, const char *message) {
+void adxini_rnaerr_cbfn(void *unused, char *message) {
     ADXERR_CallErrFunc1(message);
 }
 
@@ -189,11 +140,11 @@ void ADXT_Finish(void) {
 
 void FUN_00263548(AdxtObject *adxt, int nch, int f92, int end)
 {
-    Sj *out[2];
-    CriSjChunk ckIn;
-    CriSjChunk ckOut;
-    Sj *in;
-    Sj *dst;
+    SfdSj *out[2];
+    SfdSjChunk ckIn;
+    SfdSjChunk ckOut;
+    SfdSj *in;
+    SfdSj *dst;
     AdxEnc *enc;
     ADXSJE_Init();
     in = SJRBF_Create(adxt_enc_ibuf, 1024, 0);
@@ -204,23 +155,23 @@ void FUN_00263548(AdxtObject *adxt, int nch, int f92, int end)
     ADXSJE_SetConfigSfa(enc, nch, f92, end);
     ADXSJE_Start(enc);
     ADXSJE_ExecServer();
-    in->vt->get_chunk(in, 1, 1024, &ckIn);
+    in->vtbl->getChunk(in, 1, 1024, &ckIn);
     if (ckIn.len == 0) {
         for (;;) {
         }
     }
-    dst->vt->get_chunk(dst, 0, ckIn.len, &ckOut);
+    dst->vtbl->getChunk(dst, 0, ckIn.len, &ckOut);
     if (ckOut.len < ckIn.len) {
         for (;;) {
         }
     }
-    memcpy(ckOut.ptr, ckIn.ptr, ckIn.len);
-    in->vt->put_chunk(in, 0, &ckIn);
-    dst->vt->put_chunk(dst, 1, &ckOut);
+    memcpy(ckOut.data, ckIn.data, ckIn.len);
+    in->vtbl->putChunk(in, 0, &ckIn);
+    dst->vtbl->putChunk(dst, 1, &ckOut);
     ADXSJE_Stop(enc);
     ADXSJE_Destroy(enc);
-    in->vt->destroy(in);
-    out[1]->vt->destroy(out[1]);
-    out[0]->vt->destroy(out[0]);
+    in->vtbl->destroy(in);
+    out[1]->vtbl->destroy(out[1]);
+    out[0]->vtbl->destroy(out[0]);
     ADXSJE_Finish();
 }
