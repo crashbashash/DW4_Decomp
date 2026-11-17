@@ -70,7 +70,7 @@ char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
 char *sfmpv_BsearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
 void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size);
 void sfmpv_InitPicUsr(SfdBufPool *pool);
-void FUN_002a7e30(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out);
+void sfmpv_SetFrmInf(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out);
 void SFMPVP_Init(void);
 int SFMPVP_IsSceMpegUsed(SfdPlayer *player);
 void SFMPVP_Create(SfdPlayer *player);
@@ -509,7 +509,7 @@ int FUN_002a3c38(SfdPlayer *player) {
 }
 
 /* Whether the delimiter the ring remembers is no longer a safe next start code (1) or still is (0). */
-int FUN_002a3ef8(SfdRingInfo *ring, SfdDelim code, char *dlm) {
+int sfmpv_NeedSafeDlmRefresh(SfdRingInfo *ring, SfdDelim code, char *dlm) {
     char tmp[4];
     int n;
     char *p;
@@ -837,7 +837,7 @@ long FUN_002a5208(int count, int rate) {
 }
 
 /* repeat_first_field accounting: the field offset of each picture of the group, kept by temporal reference */
-void FUN_002a5248(SfdPlayer *player, SfdPicInfo *pic, int newGop) {
+void sfmpv_CalcRepeatField(SfdPlayer *player, SfdPicInfo *pic, int newGop) {
     SfdTimer *timer = &player->timer;
     SfdFieldEntry *fields = timer->fields;
     SfdMpv *mpv = player->streams.mpv;
@@ -1528,7 +1528,7 @@ void FUN_002a73f0(SfdChunk *dst, SfdChunk *src) {
     dst->size = src->size;
 }
 
-int FUN_002a7438(SfdPlayer *player, int unused, int mask)
+int sfmpv_GoDdelim(SfdPlayer *player, int unused, int mask)
 {
     SfdRingInfo area;
     SfdDelim code;
@@ -1781,7 +1781,7 @@ int SFMPV_GetRead(SfdPlayer *player, SfdFrameInfo **out) {
         *out = 0;
         return 0;
     }
-    FUN_002a7e30(player, slot, out);
+    sfmpv_SetFrmInf(player, slot, out);
     timer->f636 = (*out)->f20;
     timer->f640 = (*out)->f24;
     return 0;

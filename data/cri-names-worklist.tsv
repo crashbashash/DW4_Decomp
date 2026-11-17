@@ -936,6 +936,7 @@
 0x2a3b70	sfmpv_ChkTermFlg	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a3c18	sfmpv_SetTermDst	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a3cb8	sfmpv_GetActiveSize	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a3ef8	sfmpv_NeedSafeDlmRefresh	high	sdk:libmwsfde.a/sfd_mpv.o member body and position (between sfmpv_GetActiveSize and sfmpv_CalcDistance)
 0x2a40b8	sfmpv_CalcDistance	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
 0x2a4120	sfmpv_CheckViBufSiz	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a41a8	sfmpv_SearchDelim	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
@@ -950,9 +951,11 @@
 0x2a4b68	sfmpv_IsTerm	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
 0x2a4bb0	sfmpv_GetTermSrc	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a4bc8	sfmpv_ChkMpvErr	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a4c60	sfmpv_DecodePicAtr	high	sdk:libmwsfde.a/sfd_mpv.o member body and position
 0x2a4fb8	sfmpv_ReadPtsQue	medium	sdk:libmwsfde.a/sfd_mpv.o by position (between sfmpv_ChkMpvErr and sfmpv_InitComplementPts) and role (reads a PTS queue entry; sfmpv_ComplementPts consumes it); the SDK body is an older 32-bit form so the match is not exact; alternative sfpts_ReadPtsQueSub [recvx-decomp-cri]
 0x2a5060	sfmpv_InitComplementPts	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a5088	sfmpv_ComplementPts	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a5248	sfmpv_CalcRepeatField	high	RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c: sfmpv_CalcRepeatField has the same body and position in sfd_mpv.o) [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a55a0	sfmpv_ReformTc	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a5680	sfmpv_DetectTcErr	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a5838	sfmpv_Pts2Tc	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
@@ -971,8 +974,10 @@
 0x2a6768	sfmpv_GetDtime	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a6780	sfmpv_SkipFrm	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a6870	sfmpv_SetSkipTtu	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a68e8	sfmpv_DecodeFrm	high	sdk:libmwsfde.a/sfd_mpv.o member body and position
 0x2a6b98	sfmpv_SetFrmPara	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a6f28	sfmpv_SetStartTtu	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a7438	sfmpv_GoDdelim	high	sdk:libmwsfde.a/sfd_mpv.o member body and position
 0x2a7598	sfmpv_RingAddRead	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a7610	SFMPV_Create	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a7770	sfmpv_InitInf	medium	sdk:libmwsfde.a/sfd_mpv.o B
@@ -988,6 +993,7 @@
 0x2a7d50	SFMPV_GetWrite	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a7d70	SFMPV_AddWrite	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a7d90	SFMPV_GetRead	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a7e30	sfmpv_SetFrmInf	high	sdk:libmwsfde.a/sfd_mpv.o member body and position
 0x2a8038	SFMPV_AddRead	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
 0x2a8160	SFMPV_Seek	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a81d0	sfmpv_ReprocessShc	medium	sdk:libmwsfde.a/sfd_mpv.o B
@@ -1061,6 +1067,7 @@
 0x2ab598	sfply_IsStagnant	medium	sdk:libmwsfde.a/sfd_ply.o B
 0x2ab5f0	sfply_IsPlayTimeAutoStop	medium	sdk:libmwsfde.a/sfd_ply.o B
 0x2ab6b8	SFPLY_DecideSvrStat	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
+0x2ab8b8	sfply_InitHn	high	sdk:libmwsfde.a/sfd_ply.o member body and position
 0x2abae0	sfply_InitMvInf	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
 0x2abb48	sfply_InitPlyInf	medium	sdk:libmwsfde.a/sfd_ply.o C by order and size
 0x2abbd0	sfply_InitTmrInf	high	sdk:libmwsfde.a/sfd_ply.o A (3s - -)
@@ -1196,6 +1203,7 @@
 0x2b0b30	sftst_CalcMovAve	medium	sdk:libmwsfde.a/sfd_tst.o B
 0x2b0b80	SFDEB_InitTst	high	sdk:libmwsfde.a/sfd_tst.o A (3s - -)
 0x2b0b98	sftst_DebInit	medium	sdk:libmwsfde.a/sfd_tst.o B
+0x2b0cf8	sftst_DebWrite	high	sdk:libmwsfde.a/sfd_tst.o member body and position (after sftst_DebInit)
 0x2b0ed0	SFD_SetSystemUsrSj	medium	sdk:libmwsfde.a/sfd_uo.o B
 0x2b0ff8	SFD_SetUsrSj	medium	sdk:libmwsfde.a/sfd_uo.o B
 0x2b1108	SFUO_Init	high	sdk:libmwsfde.a/sfd_uo.o A (3s - -)

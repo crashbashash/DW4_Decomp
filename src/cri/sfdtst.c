@@ -53,7 +53,7 @@ extern int sftst_debout_siz;
 extern char *sftst_debout_buf;
 extern char *DAT_004beb4c;
 extern char *DAT_004beb50;
-extern SfdTst *DAT_004beb48;
+extern SfdTst *sftst_last;
 
 void *memset();
 char *strcpy();
@@ -64,7 +64,7 @@ int UTY_MulDiv(int value, int scale, int divisor);
 void sftst_ResetHist(SfdTst *tst);
 int sftst_UpdateMovAve(SfdTst *tst, int value);
 void sftst_ModifyHist(SfdTst *tst, int delta);
-void FUN_002b0cf8(SfdTst *tst);
+void sftst_DebWrite(SfdTst *tst);
 int sftst_CalcMovAve(SfdTst *tst);
 void sftst_DebInit(void);
 
@@ -279,8 +279,8 @@ void SFTST_Calc(SfdTst *tst, SfdRatio *mt, SfdRatio *hlp, SfdRatio *out)
         tst->diff_a_max = (tst->diff_a_max > d) ? tst->diff_a_max : d;
         tst->diff_a_min = (tst->diff_a_min < d) ? tst->diff_a_min : d;
     }
-    DAT_004beb48 = tst;
-    FUN_002b0cf8(tst);
+    sftst_last = tst;
+    sftst_DebWrite(tst);
 }
 
 int sftst_UpdateMovAve(SfdTst *tst, int value)
@@ -336,7 +336,7 @@ void sftst_DebInit(void)
 
 /* Appends one line of the timing state under the DAT_004f50d0 header; the log wraps back to its first
  * line when less than 1 KB is left. */
-void FUN_002b0cf8(SfdTst *tst)
+void sftst_DebWrite(SfdTst *tst)
 {
     char buf[256];
     int len;

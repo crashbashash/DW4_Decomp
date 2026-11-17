@@ -159,10 +159,10 @@
    "handle": 0,
    "jtbl": 380,
    "literal": 244,
-   "named": 90931,
+   "named": 90935,
    "pad": 211754,
    "ptr": 3040,
-   "ref": 91196,
+   "ref": 91192,
    "region": 109384,
    "source": 492260,
    "str": 75320,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 1503
+    "value": 1499
    },
    "inline_asm.other": {
     "reason": null,
@@ -368,7 +368,7 @@
    "decl.varargs": 882,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 1503,
+   "fun_dat_refs": 1499,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -396,9 +396,9 @@
   "fully_matched": 20420,
   "fully_verified": 20256,
   "matched": 20256,
-  "named": 17375,
-  "named_semantic": 11894,
-  "named_semantic_matched": 11684,
+  "named": 17383,
+  "named_semantic": 11902,
+  "named_semantic_matched": 11689,
   "total": 20576
  },
  "kernel_patches": {
@@ -495,8 +495,8 @@
   "bytes": 1696896,
   "failing": {
    "addresses": {
-    "bytes": 749048,
-    "functions": 4310
+    "bytes": 746968,
+    "functions": 4306
    },
    "declarations": {
     "bytes": 1039248,
@@ -511,16 +511,16 @@
     "functions": 2126
    },
    "name": {
-    "bytes": 571796,
-    "functions": 4776
+    "bytes": 569340,
+    "functions": 4771
    },
    "placed": {
     "bytes": 668,
     "functions": 11
    },
    "references": {
-    "bytes": 511832,
-    "functions": 2054
+    "bytes": 510544,
+    "functions": 2052
    },
    "types": {
     "bytes": 329672,

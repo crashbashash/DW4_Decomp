@@ -104,7 +104,7 @@ int FUN_002ab680(SfdPly *h);
 int SFPLY_DecideSvrStat(void);
 int FUN_002ab810(SfdCrePrm *prm);
 int FUN_002ab878(void);
-SfdPly *FUN_002ab8b8(SfdCrePrm *prm, int arg);
+SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg);
 void sfply_InitMvInf(SfdRec48 *rec);
 void sfply_InitPlyInf(SfdTimer *tmr);
 void FUN_002abbc0(SfdSub24 *sub);
@@ -703,7 +703,7 @@ SfdPly *FUN_002ab778(SfdCrePrm *prm, int arg) {
         sfd_ReportError(0, 0xFF000206);
         return 0;
     }
-    h = FUN_002ab8b8(prm, arg);
+    h = sfply_InitHn(prm, arg);
     handles[slot] = h;
     return h;
 }
@@ -731,7 +731,7 @@ int FUN_002ab878(void) {
 
 /* Builds a player handle in the caller's work area: the work size must stay the same for every handle
  * (at most 28208 bytes), and the handle starts at the first 32-byte boundary of the work. */
-SfdPly *FUN_002ab8b8(SfdCrePrm *prm, int arg) {
+SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg) {
     SfdPly *h;
     char *work = prm->work;
     unsigned int wksiz = prm->workSize;

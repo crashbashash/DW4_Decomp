@@ -2644,6 +2644,7 @@
 0x004beb24	sfply_vbin_nest	recovered-global
 0x004beb40	sftst_debout_siz	recovered-global
 0x004beb44	sftst_debout_buf	recovered-global
+0x004beb48	sftst_last	recovered-global
 0x004beb58	sfxa_lib	overlay
 0x004bf010	sfxz_work	recovered-global
 0x004bf280	sud_init_cnt	recovered-global
