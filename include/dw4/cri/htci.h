@@ -21,7 +21,6 @@ char *htCiGetAccessName(void);
 void htCiSetOutputDebugLevel(int value);
 int htCiGetOutputDebugLevel(void);
 
-/* htCiSetFileSystem64.c, htCiGetFileSystem64.c, htCiSetLockHost.c, htCiGetLockHost.c: the SRD host switches */
 void htCiSetFileSystem64(int sw);
 int htCiGetFileSystem64(void);
 void htCiSetLockHost(int sw);

@@ -280,7 +280,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 26
+    "value": 22
    },
    "mismatch.bytes": {
     "reason": null,
@@ -373,7 +373,7 @@
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 26,
+   "m2c_idiom.units": 22,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -492,7 +492,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2272528,
+  "bytes": 2273596,
   "failing": {
    "addresses": {
     "bytes": 673740,
@@ -507,8 +507,8 @@
     "functions": 2401
    },
    "idioms": {
-    "bytes": 378996,
-    "functions": 2059
+    "bytes": 377456,
+    "functions": 2047
    },
    "name": {
     "bytes": 546580,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 13803,
+  "functions": 13809,
   "matched_functions": 20431
  },
  "regions": [

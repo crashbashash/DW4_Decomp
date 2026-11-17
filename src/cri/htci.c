@@ -78,6 +78,26 @@ int close_file_all(void);
 void htci_init_flist(void);
 void htci_get_finf(const char *name, HtCiFileLoc *loc);
 
+void htCiSetFileSystem64(int sw)
+{
+    SRD_SetFilesystem64(sw);
+}
+
+int htCiGetFileSystem64(void)
+{
+    return SRD_GetFilesystem64();
+}
+
+void htCiSetLockHost(int sw)
+{
+    SRD_SetLockHost(sw);
+}
+
+int htCiGetLockHost(void)
+{
+    return SRD_GetLockHost();
+}
+
 CvFsVtbl *htCiGetInterface(void)
 {
     htci_build;

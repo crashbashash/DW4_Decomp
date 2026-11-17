@@ -39,6 +39,6 @@ one function's load and test come out in another order.
 - Four helpers that `0x2744f8` calls are defined old-style and called without arguments, as in HTCI: retail
   never loads their argument register at those calls.
 - The five 20-byte SRD wrappers at `0x2752f8` up to `0x27536c` are called from game code and reference
-  nothing that places them. 3rd Strike's order makes the first, `dvCiSetSeekPos`, the end of `dvci_sub` and
-  the other four (`htCiSetFileSystem64`, `htCiGetFileSystem64`, `htCiSetLockHost`, `htCiGetLockHost`, medium
-  by that order and their SRD callees) the start of `htci`.
+  nothing that places them. 3rd Strike's order makes the first, `dvCiSetSeekPos`, the end of `dvci_sub` (it is
+  the last function of `dvci.c`) and the other four (`htCiSetFileSystem64`, `htCiGetFileSystem64`,
+  `htCiSetLockHost`, `htCiGetLockHost`, medium by that order and their SRD callees) the start of `htci`.

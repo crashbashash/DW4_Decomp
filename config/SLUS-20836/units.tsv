@@ -216,10 +216,8 @@
 0x00271640	0x002729e4	cri_srd	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
 0x002729e8	0x00273078	cri_dtr	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
 0x00273078	0x00273988	cri_dtx	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
-0x00273988	0x002752f4	cri_dvci	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
-0x002752f8	0x00275324	cri-adx_2745c0	ee-gcc	-O2 -G0 -Iinclude -Isrc/third_party/libc	off	-	cri-adx block 0x25b248-0x27edb0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x2745c0-0x275324; `sd` prologues (Sony EE GCC); exceptions off: none of 17 non-leaf functions has a retail index record; 18 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 1/1 members
-0x00275328	0x0027536c	cri-adx_275328	ee-gcc	-O2 -G0 -Iinclude -Isrc/third_party/libc	off	-	cri-adx block 0x25b248-0x27edb0 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 15 non-leaf functions has a retail index record; 12 asm bodies not scored; pins 1×ee-gcc -O2 -G0 -Iinclude, 1×default -O3 -Iinclude; ee-gcc -O2 -G0 -Iinclude reproduces 1/2 members; 1 member(s) keep a provisional override
-0x00275370	0x00276e4c	cri_htci	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
+0x00273988	0x0027530c	cri_dvci	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
+0x00275310	0x00276e4c	cri_htci	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
 0x00276e50	0x00277da0	cri_lsc	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
 0x00277da0	0x0027860c	cri_mfci	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file
 0x00278610	0x00278f20	cri_pl2enc	ee-gcc	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file

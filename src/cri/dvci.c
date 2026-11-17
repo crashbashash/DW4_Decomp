@@ -870,5 +870,10 @@ char *dvCiGetRootDir(void)
     return dvci_root_dir;
 }
 
+int dvCiSetSeekPos(int lsn)
+{
+    return SRD_SetDvdSeekPos(lsn);
+}
+
 static char dvci_root_dir[264] = {0};
 static char dvci_dir_path[128] = {0};

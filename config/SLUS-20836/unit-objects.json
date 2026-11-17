@@ -19239,18 +19239,22 @@
       "dvCiIsExistFcache": "0x002751d8",
       "dvCiSetRdMode": "0x00275200",
       "dvCiSetRootDir": "0x00275220",
-      "dvCiGetRootDir": "0x002752e8"
+      "dvCiGetRootDir": "0x002752e8",
+      "dvCiSetSeekPos": "0x002752f8"
     },
     "data": {
+      "@bss": "0x0056e780",
       "@data": "0x004aa740",
-      "@rodata": "0x004f0180",
-      "@bss": "0x0056e780"
-    },
-    "anon": []
+      "@rodata": "0x004f0180"
+    }
   },
-  "0x00275370": {
+  "0x00275310": {
     "whole_file": true,
     "emitted": {
+      "htCiGetFileSystem64": "0x00275328",
+      "htCiSetLockHost": "0x00275340",
+      "htCiGetLockHost": "0x00275358",
+      "htCiGetInterface": "0x00275370",
       "htci_wait": "0x002753a8",
       "htci_call_errfn": "0x002753d8",
       "htci_is_exec_hn": "0x00275408",
@@ -19305,11 +19309,10 @@
       "htCiGetOutputDebugLevel": "0x00276e40"
     },
     "data": {
+      "@bss": "0x0056f780",
       "@data": "0x004ab5d8",
-      "@rodata": "0x004f0590",
-      "@bss": "0x0056f780"
-    },
-    "anon": []
+      "@rodata": "0x004f0590"
+    }
   },
   "0x00276e50": {
     "whole_file": true,

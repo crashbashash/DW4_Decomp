@@ -48,9 +48,9 @@ typedef struct AdxfLogEntry {
     signed char id;
     signed char kind;
     unsigned short count;
-    int arg0;
-    int arg1;
-    int arg2;
+    int prm0;
+    int prm1;
+    int prm2;
 } AdxfLogEntry;
 
 #define ADXF_HANDLE_COUNT 16
@@ -123,7 +123,7 @@ int ADXF_CALC_BYTE2SCT(int bytes) {
 }
 
 /* matching construct: sweep of all 120 orders of the entry stores */
-void adxf_SetCmdHstry(int id, int kind, int arg0, int arg1, int arg2)
+void adxf_SetCmdHstry(int id, int kind, int prm0, int prm1, int prm2)
 {
     AdxfLogEntry *e;
     adxf_log_pos = adxf_log_pos % 16;
@@ -131,9 +131,9 @@ void adxf_SetCmdHstry(int id, int kind, int arg0, int arg1, int arg2)
     if (kind == 0) {
         adxf_log_cnt[id]++;
     }
-    e->arg2 = arg2;
-    e->arg0 = arg0;
-    e->arg1 = arg1;
+    e->prm2 = prm2;
+    e->prm0 = prm0;
+    e->prm1 = prm1;
     e->id = id;
     e->kind = kind;
     adxf_log_pos++;
@@ -490,19 +490,17 @@ int adxf_SetFileInfoEx(AdxfHandle *adxf, const char *fname, void *dir) {
 }
 
 AdxfHandle *ADXF_Open(const char *fname, void *dir) {
-    AdxfHandle *temp_a0;
-    AdxfHandle *var_s0;
+    AdxfHandle *adxf;
     adxf_SetCmdHstry(1, 0, (int)fname, (int)dir, -1);
-    var_s0 = adxf_CreateAdxFs();
-    if (var_s0 != 0) {
-        if (adxf_SetFileInfoEx(var_s0, fname, dir) < 0) {
-            temp_a0 = var_s0;
-            var_s0 = 0;
-            ADXF_Close(temp_a0);
+    adxf = adxf_CreateAdxFs();
+    if (adxf != 0) {
+        if (adxf_SetFileInfoEx(adxf, fname, dir) < 0) {
+            ADXF_Close(adxf);
+            adxf = 0;
         }
     }
     adxf_SetCmdHstry(1, 1, (int)fname, (int)dir, -1);
-    return var_s0;
+    return adxf;
 }
 
 int adxf_SetFileInfoRange(AdxfHandle *adxf, const char *fname, void *dir, int ofst, int nsct) {
@@ -523,19 +521,17 @@ int adxf_SetFileInfoRange(AdxfHandle *adxf, const char *fname, void *dir, int of
 }
 
 AdxfHandle *ADXF_OpenRange(const char *fname, void *dir, int ofst, int nsct) {
-    AdxfHandle *temp_a0;
-    AdxfHandle *var_s2;
+    AdxfHandle *adxf;
     adxf_SetCmdHstry(1, 0, (int)fname, (int)dir, -1);
-    var_s2 = adxf_CreateAdxFs();
-    if (var_s2 != 0) {
-        if (adxf_SetFileInfoRange(var_s2, fname, dir, ofst, nsct) < 0) {
-            temp_a0 = var_s2;
-            var_s2 = 0;
-            ADXF_Close(temp_a0);
+    adxf = adxf_CreateAdxFs();
+    if (adxf != 0) {
+        if (adxf_SetFileInfoRange(adxf, fname, dir, ofst, nsct) < 0) {
+            ADXF_Close(adxf);
+            adxf = 0;
         }
     }
     adxf_SetCmdHstry(1, 1, (int)fname, (int)dir, -1);
-    return var_s2;
+    return adxf;
 }
 
 
@@ -568,19 +564,17 @@ int adxf_SetAfsFileInfo(AdxfHandle *adxf, int afsid, int flid)
 }
 
 AdxfHandle *ADXF_OpenAfs(int afsid, int flid) {
-    AdxfHandle *temp_a0;
-    AdxfHandle *var_s0;
+    AdxfHandle *adxf;
     adxf_SetCmdHstry(2, 0, afsid, flid, -1);
-    var_s0 = adxf_CreateAdxFs();
-    if (var_s0 != 0) {
-        if (adxf_SetAfsFileInfo(var_s0, afsid, flid) < 0) {
-            temp_a0 = var_s0;
-            var_s0 = 0;
-            ADXF_Close(temp_a0);
+    adxf = adxf_CreateAdxFs();
+    if (adxf != 0) {
+        if (adxf_SetAfsFileInfo(adxf, afsid, flid) < 0) {
+            ADXF_Close(adxf);
+            adxf = 0;
         }
     }
     adxf_SetCmdHstry(2, 1, afsid, flid, -1);
-    return var_s0;
+    return adxf;
 }
 
 void adxf_CloseSjStm(AdxfHandle *adxf) {

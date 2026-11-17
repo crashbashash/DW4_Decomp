@@ -4,14 +4,14 @@
 
 int SNDF_Finish(void)
 {
-    int var_a0;
+    int result;
 
-    var_a0 = -1;
+    result = -1;
     if (DAT_004bb104 != 0) {
         DAT_004bb104 = 0;
-        var_a0 = 0;
+        result = 0;
     }
-    return var_a0;
+    return result;
 }
 
 int SNDF_Start(void)
@@ -66,16 +66,16 @@ void FUN_00280e38(void)
 
 int FUN_00280f10(void)
 {
-    int temp_v0;
-    int var_a0;
+    int reply;
+    int result;
 
-    var_a0 = -1;
+    result = -1;
     if (DAT_004bb108 != 0) {
-        temp_v0 = sndf_CallRpc(0x200, 0, 0, 4);
+        reply = sndf_CallRpc(0x200, 0, 0, 4);
         DAT_004bb108 = 0;
-        var_a0 = temp_v0;
+        result = reply;
     }
-    return var_a0;
+    return result;
 }
 
 int SNDF_SetPortSizes(SndfTables *tables)
@@ -321,37 +321,37 @@ int FUN_002817c0(void)
     return sndf_status.f4;
 }
 
-void FUN_002817d0(int *arg0, int *arg1)
+void FUN_002817d0(int *first, int *second)
 {
     int i;
 
     sndf_CallRpc(0xFE00, 0, 0, 0x80);
     for (i = 0; i < 32; i++) {
-        *arg0++ = DAT_00570c00[i];
-        *arg1++ = DAT_00570c00[i + 32];
+        *first++ = DAT_00570c00[i];
+        *second++ = DAT_00570c00[i + 32];
     }
 }
 
-void FUN_00281840(unsigned char *arg0, unsigned char *arg1)
+void FUN_00281840(unsigned char *first, unsigned char *second)
 {
     sndf_CallRpc(0xFC00, 0, 0, 8);
-    *arg0 = DAT_00570c00[0];
-    *arg1 = DAT_00570c00[1];
+    *first = DAT_00570c00[0];
+    *second = DAT_00570c00[1];
 }
 
-void FUN_00281898(int *arg0, int *arg1, int *arg2, int *arg3)
+void FUN_00281898(int *first, int *second, int *third, int *fourth)
 {
     sndf_CallRpc(0xFD00, 0, 0, 0x10);
-    *arg0 = DAT_00570c00[0];
-    *arg1 = DAT_00570c00[1];
-    *arg2 = DAT_00570c00[2];
-    *arg3 = DAT_00570c00[3];
+    *first = DAT_00570c00[0];
+    *second = DAT_00570c00[1];
+    *third = DAT_00570c00[2];
+    *fourth = DAT_00570c00[3];
 }
 
-void FUN_00281918(int *arg0, int *arg1)
+void FUN_00281918(int *first, int *second)
 {
-    *arg0 = sndf_status.f0;
-    *arg1 = sndf_status.f9;
+    *first = sndf_status.f0;
+    *second = sndf_status.f9;
 }
 
 void FUN_00281938(void)

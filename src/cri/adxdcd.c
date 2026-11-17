@@ -22,15 +22,15 @@ extern int adx_decode_output_mono_flag;
 #define RD32(b, o) SWAP32(*(int *)((b) + (o)))
 #define RDB32(b, o) (((b)[o] << 24) | ((b)[(o) + 1] << 16) | ((b)[(o) + 2] << 8) | (b)[(o) + 3])
 
-void ADX_GetCoefficient(int arg0, int arg1, short *arg2, short *arg3) {
+void ADX_GetCoefficient(int highpass_frequency, int sample_rate, short *coef1_ptr, short *coef2_ptr) {
     float a, b, r, s, c;
-s = sqrtf(2.0f);
-c = cosf(((float) arg0 * 6.2831851f) / (float) arg1);
-a = s - c;
-b = sqrtf(2.0f) - 1.0f;
+    s = sqrtf(2.0f);
+    c = cosf(((float) highpass_frequency * 6.2831851f) / (float) sample_rate);
+    a = s - c;
+    b = sqrtf(2.0f) - 1.0f;
     r = (a - sqrtf((a + b) * (a - b))) / b;
-    *arg2 = (short) (int) (2.0f * r * 4096.0f);
-    *arg3 = (short) (int) (-r * r * 4096.0f);
+    *coef1_ptr = (short) (int) (2.0f * r * 4096.0f);
+    *coef2_ptr = (short) (int) (-r * r * 4096.0f);
 }
 
 int ADX_ScanInfoCode(unsigned char *buf, int size, short *pos)

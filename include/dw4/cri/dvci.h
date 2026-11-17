@@ -21,7 +21,6 @@ void dvCiSetRdMode(int trycount, int spindlctrl, int datapattern, int mode);
 void dvCiSetRootDir(const char *path);
 char *dvCiGetRootDir(void);
 
-/* dvCiSetSeekPos.c */
 int dvCiSetSeekPos(int lsn);
 
 #ifdef __cplusplus

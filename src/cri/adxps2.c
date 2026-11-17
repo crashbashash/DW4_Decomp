@@ -799,11 +799,11 @@ void ADXM_GotoUsrIdleBdr(void) {
     SVM_GotoSvrBorder(7);
 }
 
-void ADXM_SetCbVsyncFrame(void (*func0)(void *), void *arg0, void (*func1)(void *), void *arg1) {
-    adxm_vsync_frame_cb.func = func0;
-    adxm_vsync_frame_cb.arg = arg0;
-    adxm_mwidle_sleep_cb.func = func1;
-    adxm_mwidle_sleep_cb.arg = arg1;
+void ADXM_SetCbVsyncFrame(void (*vsync_func)(void *), void *vsync_obj, void (*sleep_func)(void *), void *sleep_obj) {
+    adxm_vsync_frame_cb.func = vsync_func;
+    adxm_vsync_frame_cb.arg = vsync_obj;
+    adxm_mwidle_sleep_cb.func = sleep_func;
+    adxm_mwidle_sleep_cb.arg = sleep_obj;
 }
 
 void adxm_call_vsync_frame_cb(void) {
