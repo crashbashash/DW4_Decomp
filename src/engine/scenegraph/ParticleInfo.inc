@@ -242,7 +242,7 @@ void FUN_001d6a70(void) {
   up.x = 0.0f; up.y = 1.0f; up.z = 0.0f;
   origin.x = 0.0f; origin.y = 0.0f; origin.z = 0.0f;
   eye.x = 0.0f; eye.y = 0.0f; eye.z = 5.0f;
-  igMatrix44f_MakeLookAt((char *)DAT_005629b0[0] + 12, &eye, &origin, &up);
+  igMatrix44f_MakeLookAt((float *)((char *)DAT_005629b0[0] + 12), (const float *)&eye, (const float *)&origin, (const float *)&up);
   {
     Ref_1d6a70 *o = scratch;
     if (o != 0) {

@@ -20,6 +20,7 @@
 #include "dw4/igObject.h"
 #include "dw4/igSwitch.h"
 #include <stdio.h>
+#include "dw4/igAABox.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -52,7 +53,6 @@ typedef igSmartPointer<igTDataList<int> > MaskListRef;
 typedef igSmartPointer<beMatCtrlInfoWork> WorkRef;
 
 extern "C" {
-int igAABox_IntersectPoint(igAABox *box, const float *point);
 
 void beMatCtrl_Prepare(beMatCtrl *self);
 igMetaObject *beMatCtrl_GetInfoMeta(void);

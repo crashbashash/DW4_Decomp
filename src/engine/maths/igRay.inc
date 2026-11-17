@@ -3,9 +3,9 @@ igMetaField *g_igRay_posMetaField;
 igMetaField *g_igRay_dirMetaField;
 igMetaField *g_igRay_lenMetaField;
 
-void igRay_CreateInstance(int arg0) {
+igRay *igRay_CreateInstance(int allocator) {
     igRay_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igRay_metaObject, (igMemoryPoolView *)arg0);
+    return (igRay *)igMetaObject_CreateInstance((igMetaObject *)g_igRay_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *FUN_00188260(void) {

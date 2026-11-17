@@ -27,8 +27,8 @@ void Gap__Attrs__igModelViewMatrixAttr__vfunc_26(void *arg0, void *arg1) {
     ((VB_13f790 *)arg0)->vY(m);
 }
 
-void Gap__Attrs__igModelViewMatrixAttr__vfunc_32(int a0) {
-    igMatrix44f_Copy((char *)a0 + 12);
+void Gap__Attrs__igModelViewMatrixAttr__vfunc_32(igModelViewMatrixAttr *self, const float *matrix) {
+    igMatrix44f_Copy(self->_m, matrix);
 }
 
 void FUN_0013f800(void *arg0, int arg1) {

@@ -13,11 +13,8 @@
 #include "dw4/igObject.h"
 #include "dw4/igSwitch.h"
 
-extern "C" void igMatrix44f_Copy(void *, void *);
 extern "C" igMetaObject *beParticleCtrl2_GetInfoMeta(void);
 extern "C" igMetaObject *beParticleCtrl2_GetMeta(void);
-extern "C" void igMatrix44f_PreRotateAxisAngle(void *, void *, float);
-extern "C" void igMatrix44f_TranslateLocal(void *, void *);
 extern "C" void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram);
 extern "C" void beParticleCtrl2_Prepare(beParticleCtrl2 *self);
 extern "C" int emptyString[4];
@@ -106,7 +103,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
             float matrix[16];
             igMatrix44f_SetIdentity(matrix);
             igMatrix44f_Copy(matrix, ((igTransform *)work->_positionLockNode)->_m);
-            igMatrix44f_TranslateLocal(matrix, work->_positionLockOffset);
+            igMatrix44f_TranslateLocal(matrix, *(const igVec3f *)work->_positionLockOffset);
             ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         }
         switch (StateOf(ram)) {
@@ -226,15 +223,15 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
                 Rel::go((igObject *)ram->_work);
                 ram->_work = (int)held;
             }
-            igMatrix44f_TranslateLocal(matrix, &offset);
+            igMatrix44f_TranslateLocal(matrix, offset);
             if (rotationX != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3XAxis, rotationX);
+                igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3XAxis.x, rotationX);
             }
             if (rotationY != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3YAxis, rotationY);
+                igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3YAxis.x, rotationY);
             }
             if (rotationZ != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3ZAxis, rotationZ);
+                igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3ZAxis.x, rotationZ);
             }
             ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         } else {

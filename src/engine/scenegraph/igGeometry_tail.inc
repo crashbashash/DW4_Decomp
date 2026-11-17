@@ -1,5 +1,4 @@
 int FUN_001ceab0(HitTraversal *self, HitNode *node) {
-    float determinant;
     HitReport volumeReport;
     HitReport segmentReport;
     HitMatrix inverse;
@@ -79,7 +78,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
             int n = stack->count;
             matrix = &stack->data[n - 1];
             if (n > 1) {
-                igMatrix44f_Invert(&determinant, &inverse, matrix);
+                igMatrix44f_Invert((float *)&inverse, (const float *)matrix);
             }
             attrs = node->attrs;
             attrCount = attrs->count;
@@ -91,7 +90,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 unsigned int a;
                 if (self->matrices->count > 1) {
                     igObject_Copy((igObject *)self->scratch, (igObject *)volume, 1);
-                    igRay_Transform((igRay *)self->scratch, (const void *)&inverse);
+                    igRay_Transform((igRay *)self->scratch, (const float *)((const void *)&inverse));
                     volume = self->scratch;
                 }
                 for (a = 0; a < attrCount; a++) {
@@ -110,7 +109,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                             pointReport.matrix = matrix;
                             pointReport.object = segment;
                             pointReport.query = self->query;
-                            Vec3f_TransformProjective(&pointReport.local, &pointReport.point, matrix);
+                            Vec3f_TransformProjective((float *)&pointReport.local, (const float *)&pointReport.point, (const float *)matrix);
                             {
                                 float dx = segment->x - pointReport.local.x;
                                 float dy = segment->y - pointReport.local.y;
@@ -202,7 +201,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
             MatrixStack *s = self->matrices;
             TraversalMatrix m;
             s->count = s->count - 1;
-            igMatrix44f_Copy(&m, &s->data[s->count]);
+            igMatrix44f_Copy((float *)&m, (const float *)&s->data[s->count]);
         }
     }
     {
@@ -243,8 +242,8 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
     SceneTransformNode *child;
     self->setContext(context);
     igMatrix44f_SetIdentity((float *)&world);
-    igMatrix44f_Multiply(&world, &self->local, parent);
-    igMatrix44f_Multiply(self->block + DAT_00562bc8->offset, &self->bind, &world);
+    igMatrix44f_Multiply((float *)&world, (const float *)&self->local, (const float *)parent);
+    igMatrix44f_Multiply((float *)(self->block + DAT_00562bc8->offset), (const float *)&self->bind, (const float *)&world);
     count = 0;
     if (self->children != 0) {
         count = self->children->count;

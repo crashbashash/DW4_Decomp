@@ -55,7 +55,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
             float *r = m->r[i];
             s[i] = sqrtf(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
         }
-        igMatrix44f_Copy(rot, m);
+        igMatrix44f_Copy(rot, (const float *)m);
         if (FUN_00192290(m) < 0.0f) {
             s[0] = -s[0];
             s[1] = -s[1];
@@ -71,7 +71,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
         }
         FUN_00190cb0(rot, inv);
     } else {
-        igMatrix44f_Copy(rot, m);
+        igMatrix44f_Copy(rot, (const float *)m);
     }
     if (o->_drivenChannels & 2) {
         igMatrix44f_GetQuaternion((float *)&o->_quatList->_data[index], rot);
@@ -370,7 +370,7 @@ void igTransformSequence1_5_InterpolateTranslation(igTransformSequence1_5 *self,
     }
     if (method == 1) {
         int keys = ((igVec3fList *)self->_xlateList)->_data;
-        Vec3_Lerp(out, t, (void *)(keys + from * 12), (void *)(keys + to * 12));
+        Vec3_Lerp(out, t, (const float *)(keys + from * 12), (const float *)(keys + to * 12));
         return;
     }
     FUN_001930f0(out, (float *)(((igVec3fList *)self->_xlateList)->_data + from * 12),
@@ -396,7 +396,7 @@ void igTransformSequence1_5_InterpolateRotation(igTransformSequence1_5 *self, fl
     }
     {
         int keys = ((igQuaternionfList *)self->_quatList)->_data;
-        Quaternion_Lerp(out, t, (void *)(keys + from * 16), (void *)(keys + to * 16));
+        Quaternion_Lerp(out, t, (const float *)(keys + from * 16), (const float *)(keys + to * 16));
     }
 }
 

@@ -11,7 +11,7 @@ void Gap__Attrs__igProjectionMatrixAttr__vfunc_26(igProjectionMatrixAttr *self, 
     ((MatrixAttrSlots *)self)->setMatrix(m);
 }
 
-void Gap__Attrs__igProjectionMatrixAttr__vfunc_32(void *arg0) {
-    igMatrix44f_Copy((int)((char *)arg0 + 12));
+void Gap__Attrs__igProjectionMatrixAttr__vfunc_32(igProjectionMatrixAttr *self, const float *matrix) {
+    igMatrix44f_Copy(self->_m, matrix);
 }
 

@@ -133,8 +133,6 @@ int FUN_00142bb0(void *list, void *key);
 igObject *igMetaObjectList_Create(int allocator);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
-int igMatrix44f_Multiply(...);
-int igMatrix44f_Copy(...);
 igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(int);
 void *igInfoList_Create(int arg0);
 int FUN_001d6340(...);

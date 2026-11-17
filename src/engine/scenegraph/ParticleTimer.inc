@@ -263,7 +263,7 @@ void FUN_001c59f0(OO *arg0, int arg1, int arg2, long long arg3) {
         if (igMetaObject_IsOfType((igMetaObject *)(((DW4VC_88_0 *)(e))->vX()), g_igTransform_metaObject) != 0) {
             if (e->f96 == 0) {
                 ((DW4VC_156_2 *)(e))->vX(arg3);
-                igMatrix44f_PreMultiply(arg2, (char *)e + 0x20);
+                igMatrix44f_PreMultiply((float *)arg2, (const float *)((char *)e + 0x20));
             }
         } else if (igMetaObject_IsOfType((igMetaObject *)(((DW4VC_88_0 *)(e))->vX()), (igMetaObject *)DAT_005612d8[0]) != 0) {
             arg3 = ((DW4VC_164_1 *)(e))->vX(arg3);

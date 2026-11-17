@@ -14,6 +14,7 @@
 #include "dw4/igObject.h"
 #include "dw4/igResult.h"
 #include <string.h>
+#include "dw4/igMatrix44f.h"
 
 class StringRef;
 
@@ -26,7 +27,6 @@ int ObjectList_ResizeRetained(void *, int);
 int igMetaEnum_GetValueByName(int *, igMetaEnum *, const char *, int *);
 void StringList_CopyRetained(void *, void *, int);
 void StringList_AppendRetained(void *, const StringRef &);
-void igMatrix44f_Copy(void *, void *);
 
 extern int g_resolveEnumLastMetaEnum[4];
 extern int g_resolveEnumLastName[4];
@@ -1248,12 +1248,12 @@ void beMessenger_AppendMatrix(beMessenger *self, void *value)
         list->_count = index + 1;
     else
         List_Resize(list, index + 1, 64);
-    igMatrix44f_Copy((char *)list->_data + index * 64, value);
+    igMatrix44f_Copy((float *)((char *)list->_data + index * 64), (const float *)value);
 }
 
 void beMessenger_GetMatrix(void *out, beMessenger *self, int index)
 {
-    igMatrix44f_Copy(out, (void *)(((igMatrix44fList *)((beMessengerArgData *)self->_argData)->_matrix44fList)->_data + index * 64));
+    igMatrix44f_Copy((float *)out, (const float *)(((igMatrix44fList *)((beMessengerArgData *)self->_argData)->_matrix44fList)->_data + index * 64));
 }
 
 int beMessenger_GetObjectCount(beMessenger *self) {

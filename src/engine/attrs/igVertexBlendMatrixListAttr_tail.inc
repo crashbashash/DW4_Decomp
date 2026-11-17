@@ -19,8 +19,8 @@ void FUN_001419f0(struct TransformPairView *arg0, float *m, void *arg2) {
     } else {
         arg0->f12 = 0;
     }
-    igMatrix44f_Copy((char *)arg0 + 28, m);
-    igMatrix44f_Copy((char *)arg0 + 92, arg2);
+    igMatrix44f_Copy((float *)((char *)arg0 + 28), (const float *)m);
+    igMatrix44f_Copy((float *)((char *)arg0 + 92), (const float *)arg2);
     arg0->f13 = 1;
 }
 
@@ -38,12 +38,12 @@ void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_24(struct S_141e10 *arg0, ig
     if (arg0->f12 == 0) {
         for (i = 0; i < n; i++) {
             int o = arg0->f24->d[i];
-            igMatrix44f_Multiply(arg0->f16 + (i << 6), (char *)arg0 + 0x1C, o + DAT_00562bc8[0]->f8);
+            igMatrix44f_Multiply((float *)(arg0->f16 + (i << 6)), (const float *)((char *)arg0 + 0x1C), (const float *)(o + DAT_00562bc8[0]->f8));
         }
     } else {
         for (i = 0; i < n; i++) {
             int o = arg0->f24->d[i];
-            igMatrix44f_Copy(arg0->f16 + (i << 6), o + DAT_00562bc8[0]->f8);
+            igMatrix44f_Copy((float *)(arg0->f16 + (i << 6)), (const float *)(o + DAT_00562bc8[0]->f8));
         }
     }
     Gap__Gfx__igPsx2VisualContext__vfunc_197(arg1, n, arg0->f16);

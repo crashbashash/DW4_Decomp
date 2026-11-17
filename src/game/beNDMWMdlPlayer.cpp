@@ -31,15 +31,12 @@
 #include <string.h>
 #include "dw4/beDBManager.h"
 #include <math.h>
+#include "dw4/igVec3f.h"
 
 /* beNDMWMdlPlayer: the model controller of the player's Digimon. It overrides the beModelCtrl
  * slots that resolve its managers, register it as a PLAYER receiver, drive the pad (turn attacks,
  * guard, the panel and lobby buttons), wait for a combo step to finish, create the player's info
  * work on GENERATE and close the status panel when control, freeze, erase or remove arrive. */
-
-/* kept local: no include/dw4 home declares it yet. */
-extern "C" void Vec3f_TransformDirection(float *out, float *v, float *m);
-extern "C" void igMatrix44f_Copy(float *matrix, void *source);
 
 /* kept local: no include/dw4 home declares it yet. */
 extern "C" int emptyString[4];
@@ -67,7 +64,6 @@ unsigned char g_baseIsUseInitial = 1;
 
 
 /* kept local: no include/dw4 home declares it yet. */
-extern "C" igResult igMatrix44f_Invert(void *matrix, int source);
 extern "C" igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 
 extern "C" void beNDMWMdlPlayer_Start(beNDMWMdlPlayer *self);
@@ -224,7 +220,7 @@ void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         if (running >= 8) turnTimersFull = 1;
         igMatrix44f_SetIdentity(cameraMatrix);
-        igMatrix44f_Invert(cameraMatrix, (int)&((igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters)->_viewMatrix);
+        igMatrix44f_Invert(cameraMatrix, (const float *)((int)&((igViewerParameters *)((igViewerSceneInfoManager *)self->_viewerSIManager)->_parameters)->_viewMatrix));
         Vec3f_TransformDirection(cameraForward, (float *)&g_vec3ZAxis, cameraMatrix);
         {
             float cameraYaw = atan2f(cameraForward[0], cameraForward[2]);

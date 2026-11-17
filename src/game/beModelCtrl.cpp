@@ -52,6 +52,7 @@
 #include "dw4/igLod.h"
 #include "dw4/igMathConstants.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igResult.h"
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igNamedObject.h"
 #include "dw4/igObject.h"
@@ -61,6 +62,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include "dw4/igAABox.h"
 #define SELECT_ALLOCATOR(var, arg) { int base_ = (int)igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
@@ -109,7 +111,6 @@ public:
 };
 /* The matrix of a transform node held as a plain reference field. */
 static inline float *NodeMatrix(int node) { return ((igTransform *)node)->_m; }
-extern "C" int thunk_igAABox_Transform(...);
 extern "C" igMetaObject *beModelCtrl_GetInfoMeta(void);
 extern "C" void beModelCtrl_OnWaitCheck(void);
 extern "C" void beModelCtrl_OnUpdateRam(void);
@@ -122,19 +123,10 @@ extern "C" void beModelCtrl_OnRemove(void);
 extern "C" int beModelCtrl_OnPreMessage(void);
 extern "C" int beModelCtrl_AddInfo(beModelCtrl *self, beModelCtrlInfo *info);
 extern "C" void beModelCtrl_RegisterReceiver(void);
-extern "C" int igMatrix44f_Copy(...);
 extern "C" igMetaObject *beModelCtrlInfoRideOn2_GetMeta(void);
-extern "C" int igMatrix44f_TranslateLocal(...);
-extern "C" int Vec3f_TransformDirection(...);
 
 extern "C" void beModelCtrl_UpdateMuteki(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
-extern "C" int igMatrix44f_Multiply(...);
-extern "C" int igMatrix44f_PreMultiply(...);
-extern "C" int igMatrix44f_Invert(...);
 extern "C" void beModelCtrl_UpdateKeyCtrl(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
-extern "C" int igAABox_Transform(...);
-extern "C" bool igAABox_IntersectBox(void *, int);
-extern "C" void igMatrix44f_PreRotateAxisAngle(void *, void *, float);
 extern "C" igMetaObject *beModelCtrlInfoRideOn4_GetMeta(void);
 extern "C" igMetaObject *beModelCtrlInfoRideOn3_GetMeta(void);
 extern "C" igMetaObject *beModelCtrl_GetMeta(void);
@@ -147,8 +139,6 @@ extern "C" int g_igCommonTraversal_travProcs[4];
  * operator[] written this way matches here too, but beWaterPlain_UpdateRam needs its (&x)[i] form. */
 static inline float Component(const igVec3f &v, int i) { return ((const float *)&v)[i]; }
 
-extern "C" igAABox * igAABox_CreateInstance(...);
-extern "C" void igAABox_GetCenter(igAABox *, float *);
 extern "C" char HIT[];
 extern "C" igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, beBaseInfoRam *ram, int matrix, long long time);
 extern "C" void beModelCtrl_Prepare(beModelCtrl *self);
@@ -213,7 +203,6 @@ extern "C" unsigned char beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *se
 extern "C" void beModelCtrlInfoRideOn2_Move(beModelCtrlInfoRideOn2 *self);
 extern "C" void beModelCtrlInfoRideOn3_Move(beModelCtrlInfoRideOn3 *self, void *m);
 extern "C" void beModelCtrlInfoRideOn4_Move(beModelCtrlInfoRideOn4 *self, void *m);
-extern "C" void Vec3_Lerp(void *out, float t, void *from, void *to);
 extern "C" char HITWALL[];
 extern "C" char HITWALLFULL[];
 extern "C" char HITLANDDELIVER[];
@@ -423,7 +412,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
         igMatrix44f_SetIdentity(modelView);
         matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled((igObjectPool *)traversal->_matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
         depth = matrices->_count - 1;
-        igMatrix44f_Copy(modelView, (char *)((void **)matrices->_data)[depth] + 12);
+        igMatrix44f_Copy(modelView, (const float *)((char *)((void **)matrices->_data)[depth] + 12));
         igMatrix44f_GetTranslation((const float *)modelView, (float *)&translation);
         clock = (igTimeAttr *)TakePooled((igObjectPool *)traversal->_timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
         count = ((igObjectList *)meter->_timeList)->_count;
@@ -536,7 +525,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
             float above[3];
             int k;
             for (k = 0; k < 3; k++) { float *a = &dst->_min[k]; float *box = &dst->_max[k]; *a = src->_min[k]; *box = src->_max[k]; }
-            thunk_igAABox_Transform(dst, matrix);
+            thunk_igAABox_Transform(dst, (const float *)matrix);
             center[0] = (dst->_min[0]) * 0.5f + (dst->_max[0]) * 0.5f;
             center[1] = (dst->_min[1]) * 0.5f + (dst->_max[1]) * 0.5f;
             center[2] = (dst->_min[2]) * 0.5f + (dst->_max[2]) * 0.5f;
@@ -1017,7 +1006,7 @@ void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, 
     igObject *oldNode;
     beMessenger_SendNamed((beMessenger *)messenger, MODELCTRL_7, (const char *)modelName, ramNo, GETMATRIX_2);
     node = beMessenger_GetObject((beMessenger *)messenger, 0);
-    igMatrix44f_Copy(matrix, NodeMatrix((int)node));
+    igMatrix44f_Copy((float *)matrix, (const float *)NodeMatrix((int)node));
     if (g_stringPool == 0) {
         value = (int)StringPool_Allocate(16);
         if (value != 0) {
@@ -1047,7 +1036,7 @@ void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, 
             igObject_Destroy((igObject *)oldNode);
     }
     self->_modelNode = (int)node;
-    igMatrix44f_Copy(&self->_oldMatrix, matrix);
+    igMatrix44f_Copy((float *)&self->_oldMatrix, (const float *)matrix);
 }
 
 unsigned char beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *self, int modelName, int ramNo) {
@@ -1158,7 +1147,7 @@ void beModelCtrlInfoRideOn4_Move(beModelCtrlInfoRideOn4 *self, void *m) {
     default: {
         int i;
         igVec3f zero;
-        Vec3_Lerp(&step, self->_scalar, self->_vector, &delta);
+        Vec3_Lerp((float *)&step, self->_scalar, self->_vector, (const float *)&delta);
         zero.x = g_vec3Zero.x;
         zero.y = g_vec3Zero.y;
         zero.z = g_vec3Zero.z;
@@ -1403,7 +1392,7 @@ static inline beModelCtrlMoveObject **MoveObjects(beModelCtrlInfoWork *work) {
 }
 
 void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work) {
-    float step[3];
+    igVec3f step;
     float matrix[16];
     float frames;
     float turn;
@@ -2315,7 +2304,6 @@ pre:
  * in the low 23 bits of _refCount). */
 
 void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
-    int inverted;
     float oldPos[3];
     float newPos[3];
     float delta[3];
@@ -2331,18 +2319,8 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int allocator = (int)igObject_GetAllocator(ram);
         int chosen;
-        igObject *created;
-        igObject *old;
         if (g_useOwnerAllocator != 0) { chosen = allocator; } else { chosen = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
-        igSmartPointer<igObject> ref(beBaseInfoDataList_Create(chosen));
-        created = ref.p;
-        if (created != 0) created->_refCount = created->_refCount + 1;
-        old = (igObject *)ram->_dataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
-        ram->_dataList = (int)created;
+        DataListInstall::make(ram, chosen);
     }
     beModelCtrlInfoRamData *ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3);
     beModelCtrlInfoWork *work = (beModelCtrlInfoWork *)ramData->_work;
@@ -2379,7 +2357,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
         } else {
             if (work->_posLockNode != 0) {
                 igMatrix44f_Copy(lockMatrix, NodeMatrix(work->_posLockNode));
-                igMatrix44f_TranslateLocal(lockMatrix, &work->_posLockOffset[0]);
+                igMatrix44f_TranslateLocal(lockMatrix, *(const igVec3f *)work->_posLockOffset);
                 ((igTransformDispatchView *)ramData->_node)->SetMatrix(lockMatrix);
             } else if (work->_posLockTrc != 0) {
                 ((igTransformDispatchView *)ramData->_node)->SetMatrix((float *)(*(int *)(work->_posLockTrc + 16) + *(int *)((char *)g_igTransformRecorder_mMetaField + 8)));
@@ -2392,7 +2370,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
                     beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_7, (const char *)work->_posLockModelName, ram->_ramNo, GETMATRIX_2);
                     if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) == 1) {
                         beMessenger_GetMatrix(modelMatrix, (beMessenger *)self->_messenger, 0);
-                        igMatrix44f_PreMultiply(modelMatrix, boneMatrix);
+                        igMatrix44f_PreMultiply(modelMatrix, (const float *)boneMatrix);
                         ((igTransformDispatchView *)ramData->_node)->SetMatrix(modelMatrix);
                     }
                 }
@@ -2407,15 +2385,15 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
             delta[0] = newPos[0] - oldPos[0];
             delta[1] = newPos[1] - oldPos[1];
             delta[2] = newPos[2] - oldPos[2];
-            igMatrix44f_Copy(oldRotation, rideOn->_oldMatrix);
-            igMatrix44f_Copy(offset, NodeMatrix(ramData->_node));
+            igMatrix44f_Copy((float *)oldRotation, rideOn->_oldMatrix);
+            igMatrix44f_Copy((float *)offset, (const float *)NodeMatrix(ramData->_node));
             igMatrix44f_SetTranslation((float *)oldRotation, (const float *)&g_vec3Zero.x);
-            igMatrix44f_Invert(&inverted, oldRotation, oldRotation);
+            igMatrix44f_Invert((float *)oldRotation, (const float *)oldRotation);
             igMatrix44f_SetTranslation((float *)offset, (const float *)delta);
             igMatrix44f_SetIdentity((float *)local);
-            igMatrix44f_Multiply(local, offset, oldRotation);
+            igMatrix44f_Multiply((float *)local, (const float *)offset, (const float *)oldRotation);
             igMatrix44f_SetIdentity(world);
-            igMatrix44f_Multiply(world, local, NodeMatrix(rideOn->_modelNode));
+            igMatrix44f_Multiply(world, (const float *)local, (const float *)NodeMatrix(rideOn->_modelNode));
             ((igTransformDispatchView *)ramData->_node)->SetMatrix(world);
             igMatrix44f_Copy(rideOn->_oldMatrix, NodeMatrix(rideOn->_modelNode));
             work->_isHitCheck = 1;
@@ -2575,9 +2553,9 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
     igMatrix44f_SetIdentity(matrix);
     beMessenger_GetMatrix(parentMatrix, (beMessenger *)self->_messenger, 0);
     igMatrix44f_Copy(matrix, parentMatrix);
-    igMatrix44f_TranslateLocal(matrix, &offset);
-    if (rotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3XAxis, rotation.x);
-    if (rotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3YAxis, rotation.y);
+    igMatrix44f_TranslateLocal(matrix, offset);
+    if (rotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3XAxis.x, rotation.x);
+    if (rotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3YAxis.x, rotation.y);
     if (rotation.z != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, (float *)&g_vec3ZAxis, rotation.z);
     ((igTransformDispatchView *)ramData->_node)->SetMatrix(matrix);
     work->_aIHOffsetY = offset.y;
@@ -2713,7 +2691,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         beModelCtrlNode2 *modelNode = MODEL_NODE;
         RELEASE(modelNode->_bound)
         modelNode->_bound = 0;
-        Vec3f_TransformDirection(&startForward, (float *)&g_vec3ZAxis, MODEL_NODE->_m);
+        Vec3f_TransformDirection((float *)&startForward, &g_vec3ZAxis.x, MODEL_NODE->_m);
         float ang = atan2f(startForward.x, startForward.z);
         started->_direction[1] = ang;
         started->_targetDirection[1] = ang;
@@ -2820,7 +2798,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             beMessenger_GetMatrix(setMatrix, (beMessenger *)MESSENGER, 0);
             ((igTransformDispatchView *)ramData->_node)->SetMatrix(setMatrix);
             if (work != 0) {
-                Vec3f_TransformDirection(&setForward, (float *)&g_vec3ZAxis, setMatrix);
+                Vec3f_TransformDirection((float *)&setForward, &g_vec3ZAxis.x, setMatrix);
                 float ang = atan2f(setForward.x, setForward.z);
                 work->_direction[1] = ang;
                 work->_targetDirection[1] = ang;
@@ -2912,8 +2890,8 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             igVec3f moveRotation = beMessenger_GetVec3((beMessenger *)MESSENGER, 1);
             igMatrix44f_SetIdentity(moveMatrix);
             igMatrix44f_FromTranslation(moveMatrix, movePosition);
-            if (moveRotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, (void *)&g_vec3XAxis, 0.017453292f * moveRotation.x);
-            if (moveRotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, (void *)&g_vec3YAxis, 0.017453292f * moveRotation.y);
+            if (moveRotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, &g_vec3XAxis.x, 0.017453292f * moveRotation.x);
+            if (moveRotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, &g_vec3YAxis.x, 0.017453292f * moveRotation.y);
             { float rz = moveRotation.z; if (rz != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, (float *)&g_vec3ZAxis, 0.017453292f * rz); }
             ((igTransformDispatchView *)ramData->_node)->SetMatrix(moveMatrix);
             work->_targetDirection[1] = 0.017453292f * moveRotation.y;
@@ -2975,7 +2953,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             int idx = 0;
             int cnt = boxes->_count;
             for (idx = 0; idx < cnt; idx++) {
-                if (!igAABox_IntersectBox(((void **)boxes->_data)[idx], bullet)) continue;
+                if (!igAABox_IntersectBox((const igAABox *)(((void **)boxes->_data)[idx]), (const igAABox *)bullet)) continue;
                 {
                     hitBox = idx;
                     found = 1;
@@ -3117,7 +3095,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     ObjRef<3> r((igObject *)beModelCtrlInfoRideOn3_Create(a));
                     igVec3f quicksandPos;
                     igMatrix44f_GetTranslation((const float *)MODEL_NODE->_m, (float *)&quicksandPos);
-                    igMatrix44f_Copy(quicksandMatrix, &g_matrix44Identity);
+                    igMatrix44f_Copy(quicksandMatrix, g_matrix44Identity.m);
                     igMatrix44f_SetTranslation((float *)quicksandMatrix, (const float *)&quicksandPos);
                     {
                         ALLOCATOR(b, self)
@@ -3156,7 +3134,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     ObjRef<4> r((igObject *)beModelCtrlInfoRideOn4_Create(a));
                     igVec3f floorPos;
                     igMatrix44f_GetTranslation((const float *)MODEL_NODE->_m, (float *)&floorPos);
-                    igMatrix44f_Copy(floorMatrix, &g_matrix44Identity);
+                    igMatrix44f_Copy(floorMatrix, g_matrix44Identity.m);
                     igMatrix44f_SetTranslation((float *)floorMatrix, (const float *)&floorPos);
                     {
                         ALLOCATOR(b, self)

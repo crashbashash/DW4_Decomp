@@ -28,9 +28,9 @@ void Gap__Sg__igLightSet__vfunc_27(S_1d03b0 *arg0, int arg1) {
     n = arg0->list->n;
     for (i = 0; i < n; i++) {
         o = (LS *)arg0->list->data[i];
-        Vec3f_TransformProjective(sp70, (char *)o + ((D_1d03b0 * *)DAT_0055f0a0)[0]->off, arg1);
+        Vec3f_TransformProjective((float *)sp70, (const float *)((char *)o + ((D_1d03b0 * *)DAT_0055f0a0)[0]->off), (const float *)arg1);
         o->vA(sp70);
-        Vec3f_TransformDirection(sp60, (char *)o + ((D_1d03b0 *)g_igLightAttr_directionMetaField)->off, arg1);
+        Vec3f_TransformDirection((float *)sp60, (const float *)((char *)o + ((D_1d03b0 *)g_igLightAttr_directionMetaField)->off), (const float *)arg1);
         o->vB(sp60);
     }
 }

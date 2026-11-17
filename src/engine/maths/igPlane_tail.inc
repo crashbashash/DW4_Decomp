@@ -39,13 +39,13 @@ void FUN_0018c820(igPlane *plane, const void *matrix) {
 }
 
 int FUN_0018c920(void *arg0, void *arg1) {
-    int buf[4];
+    float corner[4];
 
     if (!(*(float *)((char *)(arg1) + 8) <= *(float *)((char *)(arg1) + 20))) {
         return 0;
     }
-    igAABox_GetCorner((igAABox *)arg1, ~*(int *)((char *)(arg0) + 24) & 7, (V3 *)buf);
-    return FUN_0018d060((P2 *)arg0, (float *)buf) == 2;
+    igAABox_GetCorner((igAABox *)arg1, ~*(int *)((char *)(arg0) + 24) & 7, corner);
+    return FUN_0018d060((P2 *)arg0, corner) == 2;
 }
 
 int FUN_0018c990(void *arg0, void *arg1) {

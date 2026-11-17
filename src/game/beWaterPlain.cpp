@@ -12,8 +12,6 @@
 #include <math.h>
 
 extern "C" {
-void igMatrix44f_PreMultiply(float *matrix, const float *by);
-void Vec3f_CrossInPlace(float *a, float *b);
 int igVertexArrayLock_Init(igVertexArrayLock *lock);
 extern char WATERPLAIN[];
 

@@ -24,12 +24,8 @@ struct InstanceNode;
 typedef struct M { char pad4[4]; int f4; char pad8[10]; short f18; } M;
 typedef struct R { char pad12[12]; int f12; } R;
 struct S;
-struct V3;
-struct B;
 struct B2;
 struct P;
-struct B4;
-struct V;
 struct Box;
 struct Plane;
 struct S2;
@@ -356,7 +352,6 @@ CallbackArray *igIntersectionFunctionList_Register(void);
 void thunk_igIntersectionFunctionList_GetMetaObject(void);
 
 
-void igMatrix44fList_EnsureRegistered(void);
 igMetaObject *igMatrix44fList_GetMetaObject(void);
 
 extern int g_igMatrix44fList_vtable[4];
@@ -422,7 +417,6 @@ extern int igVec2fList_InitFields_0018a430[4];
 void FUN_0018a430(void);
 
 
-void igAABoxList_EnsureRegistered(void);
 igMetaObject *igAABoxList_GetMetaObject(void);
 
 extern int g_igAABoxList_vtable[4];
@@ -447,20 +441,16 @@ void igAABox_InitFields(void);
 
 void FUN_0018a8f0(void);
 int FUN_0018afa0(igAABox *box, igSphere *sphere);
-int igAABox_IntersectBox(struct B *arg0, struct B *arg1);
 int FUN_0018b110(void *arg0, void *arg1);
 int FUN_0018b170(void *volume, igRay *ray);
 int FUN_0018b300(igAABox *box, void *other);
 int FUN_0018b350(struct B2 *arg0, struct B2 *arg1);
 int FUN_0018b450(float *a, float *b);
 int FUN_0018b540(void *parg0, struct P *b);
-int igAABox_IntersectPoint(struct B4 *arg0, struct V *arg1);
 
 void igAABox_ExtendByRay(igAABox *box, igRay *ray);
 
 void FUN_0018b890(struct Box *arg0, float *arg1);
-void thunk_igAABox_Transform(igAABox *box, const float *matrix);
-void igAABox_GetCenter(float *arg0, float *arg1);
 void FUN_0018b730(igAABox *box, igAABox *other);
 void FUN_0018b7d0(igAABox *box, igSphere *sphere);
 void FUN_0018b940(igAABox *box);
@@ -480,10 +470,6 @@ void FUN_0018ff10(int *arg0, int arg1);
 
 typedef struct S { int pad[2]; float f[6]; } S;
 
-typedef struct V3 { float x, y, z; } V3;
-
-struct B { char pad[8]; float f8; float f12; float f16; float f20; float f24; float f28; };
-
 int FUN_0018d060(struct P2 *p, float *v);
 
 enum { kOutside, kInside };
@@ -497,8 +483,6 @@ int FUN_0018ffa0(void **arg0, void **arg1);
 typedef struct B3 { char p0[8]; float f8; char p1[8]; float f20; } B3;
 typedef struct P { char p0[8]; float f8; float f12; float f16; float f20; float f24; float f28; float f32; } P;
 
-struct B4 { char pad[8]; float lox; float loy; float loz; float hix; float hiy; float hiz; };
-struct V { float x; float y; float z; };
 
 struct Box { char pad[8]; float mn[3]; float mx[3]; };
 
@@ -525,7 +509,6 @@ static inline float madd_(float o, float t, float d) { return o + t * d; }
 struct Ray { char pad[8]; V2 o; V2 d; float maxT; };
 
 void FUN_00192dd0(float *arg0, float *arg1, float *arg2);
-void Quaternion_Lerp(float *out, float t, const float *from, const float *to);
 
 static inline float dot(const V2 *a, const V2 *b) { return a->x * b->x + a->y * b->y + a->z * b->z; }
 static inline float dot3(float ax, float ay, float az, float bx, float by, float bz) { return ax * bx + ay * by + az * bz; }
@@ -567,8 +550,6 @@ int FUN_0018cfb0(void *arg0, struct S2 *arg1);
 void FUN_0018d0b0(struct V4 *a, float *b);
 void FUN_0018d1d0(void *arg0, float *arg1);
 
-void Vec3f_TransformDirection(float *out, float *v, float *m);
-void Vec3f_TransformProjective(float *out, float *v, float *m);
 
 int Vec3_GetOctant(const float *normal);
 
@@ -599,9 +580,6 @@ struct S18d110 { char pad[8]; float a; char pad2[8]; float b; };
 
 struct A { char p[8]; float f8; float f12; float f16; };
 struct B5 { char p[8]; float f8; float f12; float f16; float f20; };
-
-typedef struct { float x, y, z; } V33;
-typedef struct { int pad0, pad1; V33 p; V33 d; float len; } S3;
 
 struct igVec3f2 {
     float x;
@@ -807,17 +785,18 @@ int FUN_0018f470(void);
 void FUN_0018f480(void);
 int FUN_0018f490(void);
 
-void igMatrix44f_Copy(float *destination, const float *source);
 
 class ScaleVec { public: float _v[3]; float operator[](int i) const { return _v[i]; } };
 
-void FUN_00190f50(float *arg0, float *arg1, float fparg0);
+void FUN_00190f50(float *arg0, const float *arg1, float fparg0);
 
 }
 
 #include "dw4/igMathConstants.h"
 #include "dw4/igAABox.h"
+#include "dw4/igAABoxList.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igMatrix44fList.h"
 #include "dw4/igRay.h"
 #include "dw4/igRayList.h"
 #include "dw4/igVec3fList.h"
@@ -831,20 +810,18 @@ extern "C" {
 
 typedef union U5 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U5;
 
-void igMatrix44f_PreMultiply(float *matrix, const float *a);
-void igMatrix44f_Multiply(float *product, const float *a, const float *b);
 
 
 
 typedef union U6 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U6;
 void igMatrix44f_Adjugate(float *self, const float *m, float *adjugate);
 
-float FUN_00192290(float *m);
+float FUN_00192290(const float *m);
 
 typedef struct S6 { float f0; char p4[28]; float f32; float f36; float f40; char p44[12]; float f56; } S6;
 
 
-struct CurvePoint4 { int a, b, c, d; };
+struct CurvePoint4 { float x, y, z, w; };
 
 
 typedef struct Color4f { float x, y, z, w; } Color4f;

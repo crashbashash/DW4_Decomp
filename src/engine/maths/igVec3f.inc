@@ -1,17 +1,15 @@
-void Vec3_Lerp(void *arg0, float fparg0, void *arg1, void *arg2) {
-    float temp_f1;
-    float temp_f1_2;
-    float temp_f1_3;
+void Vec3_Lerp(float *out, float t, const float *from, const float *to) {
+    float start;
 
-    temp_f1 = *(float *)((char *)(arg1) + 0);
-    *(float *)((char *)(arg0) + 0) = (float) (temp_f1 + (fparg0 * (*(float *)((char *)(arg2) + 0) - temp_f1)));
-    temp_f1_2 = *(float *)((char *)(arg1) + 4);
-    *(float *)((char *)(arg0) + 4) = (float) (temp_f1_2 + (fparg0 * (*(float *)((char *)(arg2) + 4) - temp_f1_2)));
-    temp_f1_3 = *(float *)((char *)(arg1) + 8);
-    *(float *)((char *)(arg0) + 8) = (float) (temp_f1_3 + (fparg0 * (*(float *)((char *)(arg2) + 8) - temp_f1_3)));
+    start = from[0];
+    out[0] = start + t * (to[0] - start);
+    start = from[1];
+    out[1] = start + t * (to[1] - start);
+    start = from[2];
+    out[2] = start + t * (to[2] - start);
 }
 
-void Vec3f_TransformDirection(float *out, float *v, float *m) {
+void Vec3f_TransformDirection(float *out, const float *v, const float *m) {
     float x = v[0];
     float y = v[1];
     float z = v[2];
@@ -20,7 +18,7 @@ void Vec3f_TransformDirection(float *out, float *v, float *m) {
     out[2] = x * m[2] + y * m[6] + z * m[10];
 }
 
-void Vec3f_TransformProjective(float *out, float *v, float *m) {
+void Vec3f_TransformProjective(float *out, const float *v, const float *m) {
     float x = v[0], y = v[1], z = v[2];
     float w;
     out[0] = m[12] + (x * m[0] + y * m[4] + z * m[8]);
@@ -37,11 +35,11 @@ void Vec3f_TransformProjective(float *out, float *v, float *m) {
 
 void FUN_001930f0(struct CurvePoint4 *out, struct CurvePoint4 *p1, struct CurvePoint4 *p2, struct CurvePoint4 *p3, struct CurvePoint4 *p4, float t) {
     struct CurvePoint4 v1, v2, v3, v4, v5;
-    Vec3_Lerp(&v1, t, p1, p2);
-    Vec3_Lerp(&v2, t, p2, p3);
-    Vec3_Lerp(&v3, t, p3, p4);
-    Vec3_Lerp(&v4, t, &v1, &v2);
-    Vec3_Lerp(&v5, t, &v2, &v3);
-    Vec3_Lerp(out, t, &v4, &v5);
+    Vec3_Lerp(&v1.x, t, &p1->x, &p2->x);
+    Vec3_Lerp(&v2.x, t, &p2->x, &p3->x);
+    Vec3_Lerp(&v3.x, t, &p3->x, &p4->x);
+    Vec3_Lerp(&v4.x, t, &v1.x, &v2.x);
+    Vec3_Lerp(&v5.x, t, &v2.x, &v3.x);
+    Vec3_Lerp(&out->x, t, &v4.x, &v5.x);
 }
 

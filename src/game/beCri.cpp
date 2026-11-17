@@ -39,8 +39,6 @@
 
 extern "C" {
 /* scene graph */
-int igMatrix44f_Multiply(void *result, void *left, void *right);
-int igMatrix44f_Copy(void *to, void *from);
 extern int g_igCommonTraversal_travProcs[4];
 
 /* object system */
@@ -177,7 +175,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     igMatrix44f_SetIdentity(modelView);
     if (stack->_count != 0) {
         depth = stack->_count - 1;
-        igMatrix44f_Multiply(modelView, node->_m, (char *)((void **)stack->_data)[depth] + 12);
+        igMatrix44f_Multiply(modelView, node->_m, (const float *)((char *)((void **)stack->_data)[depth] + 12));
     } else {
         igMatrix44f_SetIdentity(identity);
         igMatrix44f_Multiply(modelView, node->_m, identity);
@@ -244,7 +242,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     igMatrix44f_SetIdentity(modelView);
     if (matrices->_count != 0) {
         depth = matrices->_count - 1;
-        igMatrix44f_Multiply(modelView, node->_m, (char *)((void **)matrices->_data)[depth] + 12);
+        igMatrix44f_Multiply(modelView, node->_m, (const float *)((char *)((void **)matrices->_data)[depth] + 12));
     } else {
         igMatrix44f_SetIdentity(identity);
         igMatrix44f_Multiply(modelView, node->_m, identity);

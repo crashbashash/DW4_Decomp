@@ -71,6 +71,7 @@ extern "C" igMetaObject *igGroup_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igCollisionGroup_Register(void);
 extern "C" void thunk_igCollisionGroup_GetMetaObject(void);
 #include "dw4/igTransform.h"
+#include "dw4/igAABox.h"
 extern "C" void igCollisionGroup_InitFields(void);
 extern "C" igMetaObject *g_igCollisionGridHelper_metaObject;
 extern "C" igMetaObject *igCollisionGridHelper_GetMetaObject(void);
@@ -93,7 +94,6 @@ extern "C" void **FUN_0023a2c0(void **arg0, short arg1);
 extern "C" void FUN_0023a340(void);
 extern "C" CallbackArray *igCollisionGrid_Register(void);
 extern "C" void thunk_igCollisionGrid_GetMetaObject(void);
-extern "C" int igAABox_GetOrCreateMetaObject(...);
 extern "C" void igCollisionGrid_InitFields(void);
 extern "C" igMetaObject *g_igCollisionCellList_metaObject;
 extern "C" igMetaObject *FUN_0023a570(void);

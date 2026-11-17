@@ -20,14 +20,13 @@
 #include <math.h>
 #include <string.h>
 #include "dw4/igStringObj.h"
+#include "dw4/igRay.h"
 
 extern "C" igMetaObject *beHitLandModel_GetInfoMeta(void);
 extern "C" void beHitLandModel_UpdateRam(void);
 extern "C" igMetaObject *beHitLandModel_GetMeta(void);
 extern "C" void beHitLandModel_UpdateBound(beHitLandModel *self, float *bound, float *value, int isMin);
 extern "C" bool beHitLandModel_BoundsOverlapXZ(beHitLandModel *self, float *boundMax, float *rayMax, float *boundMin, float *rayMin);
-extern "C" void Vec3f_TransformDirection(float *, float *, void *);
-extern "C" int igRay_SetFromPoints(int, int, int);
 extern "C" igMetaObject *beHitLandModelOrder_GetMeta(void);
 extern "C" int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, beMessengerWork *work);
 extern "C" void beHitLandModel_CheckWall(beHitLandModel *self);
@@ -57,12 +56,10 @@ struct HitRecord {
 struct ResultRecord { char header[16]; HitRecord hit; };
 extern "C" void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit);
 extern "C" int beHitLandModel_HitProc(beHitLandModelTraversal *traversal, int unused, HitRecord *hit);
-extern "C" igObject *igRay_CreateInstance(int);
 extern "C" void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2);
 extern "C" void beHitLandModelOrder_Reset(beHitLandModelOrder *order);
 extern "C" void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order);
 extern "C" void ObjectList_ResizeRetained(int list, int count);
-extern "C" void igMatrix44f_Copy(float *to, const float *from);
 
 /* beHitLandModelOrder's virtual methods by vtable slot (slot 21 is beHitLandModelOrder_AddRay). */
 class beHitLandModelOrderMethods {
@@ -556,7 +553,7 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             beHitLandModel_UpdateBound(self, &min.x, &end.x, 1);
             beHitLandModel_UpdateBound(self, &min.z, &end.z, 1);
             if (i >= 7) break;
-            Vec3f_TransformDirection(&direction.x, &direction.x, &rotation);
+            Vec3f_TransformDirection(&direction.x, (const float *)&direction.x, (const float *)&rotation);
             Normalize(direction);
         }
         ((igVec3f *)order->_raymax)->set(max.x, position.y, max.z);
@@ -599,7 +596,7 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             beHitLandModel_UpdateBound(self, &min.x, &end.x, 1);
             beHitLandModel_UpdateBound(self, &min.z, &end.z, 1);
             if (i >= 7) break;
-            Vec3f_TransformDirection(&direction.x, &direction.x, &rotation);
+            Vec3f_TransformDirection(&direction.x, (const float *)&direction.x, (const float *)&rotation);
             Normalize(direction);
         }
         ((igVec3f *)order->_raymax)->set(max.x, position.y, max.z);
@@ -952,7 +949,7 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
         igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create((int)alloc));
         ObjectList_AppendRetained((igObjectList *)self->_hitdataList, (igObject *)created);
     }
-    Vec3f_TransformDirection(&hit->normal.x, &hit->normal.x, hit->matrix);
+    Vec3f_TransformDirection(&hit->normal.x, (const float *)&hit->normal.x, (const float *)hit->matrix);
     ((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit = *hit;
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
@@ -1006,7 +1003,7 @@ void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2) {
         /* matching construct: the (void *)(long) cast fixes the argument evaluation order of the append */
         ObjectList_AppendRetained((igObjectList *)((void *)(long)self->_rayList), ray.p);
     }
-    igRay_SetFromPoints(((int *)((igRayList *)self->_rayList)->_data)[self->_rayCount], a1, a2);
+    igRay_SetFromPoints((igRay *)(((int *)((igRayList *)self->_rayList)->_data)[self->_rayCount]), (const float *)a1, (const float *)a2);
     self->_rayCount = self->_rayCount + 1;
 }
 

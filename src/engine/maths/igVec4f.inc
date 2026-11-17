@@ -1,4 +1,4 @@
-int igVec4f_PackColor(float *arg0, unsigned int arg1) {
+int igVec4f_PackColor(const float *arg0, unsigned int arg1) {
     float r, g, b, a;
     int res;
     r = arg0[0]; g = arg0[1]; b = arg0[2]; a = arg0[3];

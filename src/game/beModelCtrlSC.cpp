@@ -19,15 +19,13 @@
 #include "dw4/igObject.h"
 #include "dw4/igTraversal.h"
 #include "dw4/softfloat.h"
+#include "dw4/igAABox.h"
 #pragma push
 #pragma readonly_strings on
 
 typedef void (*TraversalFunction)(void);
 
 extern "C" {
-int igMatrix44f_Multiply(...);
-int thunk_igAABox_Transform(...);
-igAABox *igAABox_CreateInstance(int);
 
 extern int g_igCommonTraversal_travProcs[4];
 extern char emptyString[];

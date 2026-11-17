@@ -47,10 +47,9 @@ void Gap__Sg__igCommonTraversal__vfunc_31(A_1b6e20 *arg0) {
 }
 
 void FUN_001b6ee0(int arg0, int *arg1) {
-    int sp3C;
 
-    igMatrix44f_Copy(arg0 + 0x64);
-    igMatrix44f_Invert(&sp3C, arg0 + 0xA4, arg1);
+    igMatrix44f_Copy((float *)(arg0 + 0x64), (const float *)arg1);
+    igMatrix44f_Invert((float *)(arg0 + 0xA4), (const float *)arg1);
 }
 
 void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
@@ -395,7 +394,7 @@ int FUN_001b7d70(void *arg0, void *arg1) {
     if (*(int *)((char *)(arg1) + 20) & 0x20) {
         return 0;
     }
-    Vec3f_TransformProjective(&sp40, &sp30, var_a2);
+    Vec3f_TransformProjective((float *)&sp40, (const float *)&sp30, (const float *)var_a2);
     dy = sp40.y;
     dx = sp40.x;
     dz = sp40.z;
@@ -487,7 +486,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         ((TextureMatrixAttrView *)attr)->_isProjective = 0;
         attr->setUnitID((short)unit);
         if (parent != 0) {
-            igMatrix44f_Multiply((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset, self->_m, parent);
+            igMatrix44f_Multiply((float *)((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset), self->_m, (const float *)parent);
         } else {
             attr->setMatrix(self->_m);
         }
@@ -503,7 +502,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         attr = (MatrixAttrView *)takePooled(traversal->_blendMatrixPool, (void *)FUN_00130c10);
         attr->setUnitID((short)blendIndex);
         if (parent != 0) {
-            igMatrix44f_Multiply((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset, self->_m, parent);
+            igMatrix44f_Multiply((float *)((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset), self->_m, (const float *)parent);
         } else {
             attr->setMatrix(self->_m);
         }

@@ -134,8 +134,8 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
             igObjectPool *pool;
             char *o;
             FUN_001908f0(sp70, arg1->_viewMatInv);
-            igMatrix44f_Multiply(sp70, sp70, (char *)m + 12);
-            igMatrix44f_Multiply(sp70, sp70, arg1->_viewMat);
+            igMatrix44f_Multiply((float *)sp70, (const float *)sp70, (const float *)((char *)m + 12));
+            igMatrix44f_Multiply((float *)sp70, (const float *)sp70, arg1->_viewMat);
             nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)g_igProjectionMatrixAttr_metaObject)->_id]];
             if (nd->_cachedOverride >= 0) {
                 s5 = (int *)((int *)nd->_data)[nd->_cachedOverride];
@@ -148,7 +148,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
             pool = (igObjectPool *)arg1->_projectionMatrixPool;
             if (pool->_freeIndex >= pool->_count) igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))((void *)&FUN_00134690));
             o = (char *)((int *)pool->_data)[pool->_freeIndex++];
-            igMatrix44f_Multiply(o + 12, sp70, (char *)s5 + 12);
+            igMatrix44f_Multiply((float *)(o + 12), (const float *)sp70, (const float *)((char *)s5 + 12));
             FUN_001b1030((igAttrStackManager *)s1, (igAttr *)o);
             igTraversal_TraverseChildren((igTraversal *)arg1, (igNode *)arg0);
             FUN_001b1100((struct A_1b1100 *)s1, (struct B_1b1100 *)o);

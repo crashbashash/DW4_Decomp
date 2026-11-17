@@ -4,12 +4,12 @@
 #include "dw4/bePoint01Info.h"
 #include "dw4/igBitMask.h"
 #include "dw4/igMathConstants.h"
+#include "dw4/igMatrix44f.h"
 
 extern "C" void bePoint01_Prepare(void);
 extern "C" igMetaObject *bePoint01_GetInfoMeta(void);
 extern "C" void bePoint01_UpdateRam(void);
 extern "C" igMetaObject *bePoint01_GetMeta(void);
-extern "C" int igMatrix44f_Copy(float *, float *);
 extern "C" char PLAYERPOINT_4[];
 extern "C" void bePoint01_OnAddRam(bePoint01 * p0, int p1, char * p2);
 extern "C" void bePoint01_GetMatrix(bePoint01 *self, bePoint01Info *info, int pointIndex, int childIndex);

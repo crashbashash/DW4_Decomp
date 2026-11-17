@@ -214,8 +214,8 @@ void FUN_001e2d60(IgForwardTarget_1e2d60 *o) { o->slot23(); }
 
 void FUN_001e2d70(IgForwardTarget_1e2d70 *o) { o->slot25(); }
 
-void igTransform_SetMatrix(int a0) {
-    igMatrix44f_Copy((char *)a0 + 32);
+void igTransform_SetMatrix(igTransform *self, const float *matrix) {
+    igMatrix44f_Copy(self->_m, matrix);
 }
 
 /* Slot 36, shared by igTransform descendants: store the igTransform::_target field (+96). */

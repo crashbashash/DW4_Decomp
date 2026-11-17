@@ -56,7 +56,16 @@ struct igVec3f {
     }
 };
 
+extern "C" {
 /* Parses three floats from `text`, by `format` when given; nonzero on success. */
-extern "C" int Vec3f_FromString(const char *text, float *vector, const char *format);
+int Vec3f_FromString(const char *text, float *vector, const char *format);
+void Vec3_Lerp(float *out, float t, const float *from, const float *to);
+/* vector = vector x other. */
+void Vec3f_CrossInPlace(float *vector, const float *other);
+/* out = v through the matrix's rotation part (no translation). */
+void Vec3f_TransformDirection(float *out, const float *v, const float *matrix);
+/* out = v through the whole matrix, divided by the resulting w. */
+void Vec3f_TransformProjective(float *out, const float *v, const float *matrix);
+}
 
 #endif

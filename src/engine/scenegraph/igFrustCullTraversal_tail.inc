@@ -61,7 +61,7 @@ void Gap__Sg__igFrustCullTraversal__vfunc_24(igCommonTraversal *self, int arg1) 
 }
 
 void FUN_001c47a0(void *arg0, int arg1, int arg2) {
-    igMatrix44f_Multiply((char *)arg0 + 0x1DC);
+    igMatrix44f_Multiply((float *)((char *)arg0 + 0x1DC), (const float *)arg1, (const float *)arg2);
     *(int *)((char *)(arg0) + 540) = arg1;
     *(int *)((char *)(arg0) + 544) = arg2;
 }

@@ -24,8 +24,8 @@ void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_26(void *arg0, void **arg1) {
     ((V128 *)arg0)->vX(sp30);
 }
 
-void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_32(int a0) {
-    igMatrix44f_Copy((char *)a0 + 12);
+void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_32(igVertexBlendMatrixAttr *self, const float *matrix) {
+    igMatrix44f_Copy(self->_m, matrix);
 }
 
 void Gap__Attrs__igVertexBlendMatrixAttr__vfunc_31(igVertexBlendMatrixAttrView *self, igVisualContextView *context)

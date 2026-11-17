@@ -30,7 +30,8 @@
 #define CHAR_METRICS_ITEM_SIZE 0x28
 
 #include "dw4/ClassRegistration.h"
-extern "C" void igRay_EnsureRegistered(void);
+#include "dw4/igAABox.h"
+#include "dw4/igRay.h"
 extern "C" void FUN_00138160(void);
 #include "dw4/igBoolMetaField.h"
 #include "dw4/igEnumMetaField.h"
@@ -58,8 +59,6 @@ class igMemoryPoolView;
 extern "C" int igDependencyOrderedList_AddDependency(...);
 #include "dw4/igDataLists.h"
 extern "C" int DAT_0058c618[4];
-extern "C" int igMatrix44f_Invert(...);
-extern "C" int Vec3f_TransformProjective(...);
 extern "C" unsigned char g_GuiLibrary_registered;
 extern "C" void GuiLibrary_MarkRegistered(void);
 #include "dw4/igMemoryPoolContext.h"
@@ -302,6 +301,7 @@ extern "C" int FUN_0044ecb0(int arg0);
 extern "C" igMetaObject *g_igMousePosObserver_metaObject;
 extern "C" igMetaObject *igMousePosObserver_GetMetaObject(void);
 #include "dw4/igMatrix44f.h"
+#include "dw4/igResult.h"
 extern "C" int g_igMousePosObserver_vtable[4];
 extern "C" int D_00541090[4];
 extern "C" int igMousePosObserver_GetVTable(void);
@@ -919,7 +919,6 @@ struct S_4559a0 { char pad[28]; unsigned char b; };
 extern "C" void FUN_004559a0(struct S_4559a0 *arg0, unsigned char arg1);
 struct Vec3 { int x; int y; int z; };
 struct Node : igObject { int fc_pad; igObject *child; };
-extern "C" igObject *igAABox_CreateInstance(int);
 extern "C" int FUN_001900d0(igObject *, Vec3 *);
 extern "C" void Gap__Gui__igGuiComponentNode__vfunc_13(Node *self, int flags);
 extern "C" int g_activeMousePosObserver;
@@ -940,8 +939,6 @@ struct Y { char pad[8]; int f8; char pad2[8]; float f20; };
 struct Z { char pad[24]; float f24; unsigned char f28; char pad2[3]; Obj_455f50 *f32; };
 extern "C" void FUN_00455f50(Z *arg0, Y *arg1);
 #include "dw4/igIntersectTraversal.h"
-extern "C" int igRay_SetFromPoints(void *, void *, void *);
-extern "C" int igRay_Transform(void *, void *);
 /* vtable-call shim for the intersect traversal (slot 23 = vtable offset 100); not a data layout */
 struct IntersectTraversalCalls { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(int); };
 extern "C" void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b);
@@ -949,7 +946,6 @@ typedef struct N { int w0, w4, w8, wC; int f10; int f14; struct N *f18; } N;
 extern "C" int FUN_00456540(int arg0, N *arg1, N *arg2, unsigned char arg3);
 extern "C" void *FUN_004565c0(int arg0, void *arg1);
 extern "C" int FUN_001b6ee0(void *, void *);
-extern "C" int igMatrix44f_Copy(void *, void *);
 class Obj_456610 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vX(int); };
 extern "C" void Gap__Gui__igGuiSystemRenderer__vfunc_23(int *arg0);
 extern "C" void igGuiSystemRenderer_ReleaseDrawing(void);

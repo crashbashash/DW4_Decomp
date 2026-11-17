@@ -219,7 +219,6 @@ void igVisualContext_SetImageMemoryPool(int arg0) {
 }
 
 void FUN_00165d30(O_165d30 *arg0, unsigned int arg1, int arg2) {
-    int sp5C;
     int v[3];
     void *s0;
     int off;
@@ -241,7 +240,7 @@ void FUN_00165d30(O_165d30 *arg0, unsigned int arg1, int arg2) {
     s1 = (char *)arg0->f80;
     for (i = 0; i < arg1; i++) {
         off = i << 6;
-        igMatrix44f_Invert(&sp5C, s1, arg0->f84 + off);
+        igMatrix44f_Invert((float *)s1, (const float *)(arg0->f84 + off));
         v[0] = 0;
         v[1] = 0;
         v[2] = 0;
@@ -264,7 +263,7 @@ static inline Obj_165e50 *getAlloc(void *o) {
 
 void *FUN_00165e50(Self *self, Obj_165e50 *src) {
     /* matching construct: random sweep — the order of the local declarations */
-    int k; int nb; Obj_165e50 *dst; Mat *buf; V_165e50 *q; int m; int i; int n; int j; Fl flags; int scratch; V_165e50 acc, t, nacc, nt; Obj_165e50 *al;
+    int k; int nb; Obj_165e50 *dst; Mat *buf; V_165e50 *q; int m; int i; int n; int j; Fl flags; V_165e50 acc, t, nacc, nt; Obj_165e50 *al;
     if (src != 0) {
     dst = (Obj_165e50 *)igVertexArray_Create(FUN_00165cd0((int *)self));
     flags = *src->v100();
@@ -289,7 +288,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
         for (j = 0; j < nb; j++) {
             float w = src->v184(j, i);
             if (!(w <= 0.0f)) {
-                Vec3f_TransformProjective(&t, p, self->mats + (src->v196(j, i)));
+                Vec3f_TransformProjective((float *)&t, (const float *)p, (const float *)(self->mats + (src->v196(j, i))));
                 t -= *p;
                 t *= w;
                 acc += t;
@@ -301,7 +300,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
         buf = getAlloc(self)->v216(self->matCount << 6);
         for (i = 0; i < self->matCount; i++) {
             Mat *b = buf + i;
-            igMatrix44f_Invert(&scratch, b, self->mats + i);
+            igMatrix44f_Invert((float *)b, (const float *)(self->mats + i));
             FUN_001903d0(b);
         }
         for (k = 0; k < n; k++) {
@@ -310,7 +309,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
             for (m = 0; m < nb; m++) {
                 float w = src->v184(m, k);
                 if (!(w <= 0.0f)) {
-                    Vec3f_TransformDirection(&nt, q, buf + (src->v196(m, k)));
+                    Vec3f_TransformDirection((float *)&nt, (const float *)q, (const float *)(buf + (src->v196(m, k))));
                     nt -= *q;
                     nt *= w;
                     nacc += nt;
@@ -566,9 +565,9 @@ int FUN_00167160(int arg0, int arg1)
   return *((int *) (((char *) (new_var + arg0)) + 240));
 }
 
-void FUN_00167170(void *arg0) {
-    igMatrix44f_Copy((char *)arg0 + 0x6C);
-    *(char *)((char *)(arg0) + 236) = 1;
+void FUN_00167170(MatrixInverseCache *self, const float *matrix) {
+    igMatrix44f_Copy(self->matrix, matrix);
+    self->inverseDirty = 1;
 }
 
 void FUN_001671a0(char * arg0, int arg1) {
@@ -577,8 +576,7 @@ void FUN_001671a0(char * arg0, int arg1) {
 
 void FUN_001671b0(MatrixInverseCache *self, float *out) {
     if (self->inverseDirty) {
-        igResult result;
-        igMatrix44f_Invert(&result, self->inverse, self->matrix);
+        igMatrix44f_Invert(self->inverse, self->matrix);
         self->inverseDirty = 0;
     }
     igMatrix44f_Copy(out, self->inverse);

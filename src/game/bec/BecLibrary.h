@@ -283,10 +283,12 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #include "dw4/igVec2fMetaField.h"
 #include "dw4/igVec3fMetaField.h"
 #include "dw4/igVec4fMetaField.h"
-extern "C" void igAABoxList_EnsureRegistered(void);
-extern "C" void igMatrix44fList_EnsureRegistered(void);
+#include "dw4/igAABox.h"
+#include "dw4/igAABoxList.h"
+#include "dw4/igMatrix44fList.h"
+#include "dw4/igRayList.h"
+#include "dw4/igVec3fList.h"
 extern "C" void igIntListList_EnsureRegistered(void);
-extern "C" void igRayList_EnsureRegistered(void);
 extern "C" void igDirectoryList_EnsureRegistered(void);
 extern "C" void igFile_EnsureRegistered(void);
 extern "C" void igCharList_EnsureRegistered(void);
@@ -463,7 +465,6 @@ extern "C" int beWaterMoveData_GetVTable(void);
 extern "C" void beWaterMoveData_EnsureRegistered(void);
 extern "C" CallbackArray *beWaterMoveData_Register(void);
 extern "C" void beWaterMoveData_GetMetaObjectFunction(void);
-extern "C" int igVec3fList_GetOrCreateMetaObject(void);
 extern "C" void beWaterMoveData_InitFields(void);
 extern "C" void *beWaterPlainInfo_GetMetaObject(void);
 extern "C" int beWaterPlainInfo_GetVTable(void);
@@ -1052,7 +1053,6 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Construct(igSma
 extern "C" void beModelCtrlInfoWork_EnsureRegistered(void);
 extern "C" int beModelCtrlInfoWork_GetVTable(void);
 extern "C" void beModelCtrlInfoWork_GetMetaObjectFunction(void);
-extern "C" int igAABox_GetOrCreateMetaObject(void);
 extern "C" void beModelCtrlInfoWork_InitFields(void);
 extern "C" void *beModelCtrlInfoRideOn4_GetMetaObject(void);
 extern "C" int beModelCtrlInfoRideOn4_GetVTable(void);
@@ -1093,7 +1093,6 @@ extern "C" int beModelCtrlInfoHitBody_GetVTable(void);
 extern "C" void beModelCtrlInfoHitBody_EnsureRegistered(void);
 extern "C" CallbackArray *beModelCtrlInfoHitBody_Register(void);
 extern "C" void beModelCtrlInfoHitBody_GetMetaObjectFunction(void);
-extern "C" int igAABoxList_GetOrCreateMetaObject(...);
 extern "C" void beModelCtrlInfoHitBody_InitFields(void);
 extern "C" igMetaObject *beModelCtrlMoveObjectList_GetOrCreateMetaObject(void);
 extern "C" int beModelCtrlMoveObjectList_GetVTable(void);
@@ -1350,7 +1349,6 @@ extern "C" igMetaObject *beMessengerArgData_GetOrCreateMetaObject(void);
 extern "C" int beMessengerArgData_GetVTable(void);
 extern "C" CallbackArray *beMessengerArgData_Register(void);
 extern "C" void beMessengerArgData_GetMetaObjectFunction(void);
-extern "C" int igMatrix44fList_GetOrCreateMetaObject(void);
 extern "C" void beMessengerArgData_InitFields(void);
 extern "C" igMetaObject *beMemory_GetOrCreateMetaObject(void);
 extern "C" void *beMemory_GetMetaObject(void);
@@ -1544,7 +1542,6 @@ extern "C" int beHitLandModelOrder_GetVTable(void);
 extern "C" void beHitLandModelOrder_EnsureRegistered(void);
 extern "C" CallbackArray *beHitLandModelOrder_Register(void);
 extern "C" void beHitLandModelOrder_GetMetaObjectFunction(void);
-extern "C" int igRayList_GetOrCreateMetaObject(void);
 extern "C" void beHitLandModelOrder_InitFields(void);
 extern "C" igMetaObject *beHitLandResultDataList_GetOrCreateMetaObject(void);
 extern "C" void *beHitLandResultDataList_GetMetaObject(void);
@@ -2454,7 +2451,6 @@ extern "C" igMetaObject *beTimerData_GetMeta(void);
 extern "C" igMetaObject *beTimerDataList_GetMeta(void);
 extern "C" igMetaObject *beTimerDataList_GetElementMeta(void);
 extern "C" igMetaObject *beTransformSync_GetMeta(void);
-extern "C" int igMatrix44f_Copy(...);
 extern "C" igMetaObject *beUnicode_GetMeta(void);
 extern "C" igMetaObject *beWaterPlainInfo_GetMeta(void);
 extern "C" igMetaObject *beWaterMoveData_GetMeta(void);

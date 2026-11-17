@@ -1937,8 +1937,7 @@ NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const cha
 extern "C" {
 #define MULT_HI(a,b) ((int)(((long long)(int)(a)*(long long)(int)(b))>>32))
 
-/* kept local: no include/dw4 home declares these (igMatrix44f_Copy is asm-only). */
-void igMatrix44f_Copy(float *matrix, void *source);
+/* kept local: no include/dw4 home declares these. */
 igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 extern char GETMATRIX[];
 extern char GETHP[];
@@ -4690,7 +4689,7 @@ loop_449:
                     igMatrix44f_SetIdentity((float *)&raiseMatrix);
                     beMessenger_SendNamed((beMessenger *)self->_messenger, "PLAYER", (const char *)beNDMWGameRam_igStringRef_Get(&((beDataObjString *)igProperty_GetRecordString((igObject *)magicPlayer, "DIGIMONNAME"))->_data), casterIndex, GETMATRIX);
                     beMessenger_GetMatrix(&raiseSourceMatrix, (beMessenger *)self->_messenger, 0);
-                    igMatrix44f_Copy((float *)&raiseMatrix, &raiseSourceMatrix);
+                    igMatrix44f_Copy((float *)&raiseMatrix, (const float *)&raiseSourceMatrix);
                     igMatrix44f_GetTranslation((const float *)&raiseMatrix, (float *)&raiseCenter);
                     { NearbyListRef nearby = beNDMWGameRam_CollectNearbyNonzeroHp(self, "PLAYER2", -1, &raiseCenter);
                     raiseCount = ((igIntList *)nearby.value)->_count;

@@ -30,6 +30,7 @@
 #include "dw4/igViewerSceneInfoManager.h"
 #include <string.h>
 #include "dw4/beDBManager.h"
+#include "dw4/igVec3f.h"
 #define HOLDER_BODY { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 #define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(sel); }
 #define ALLOC(a, sel) ALLOC_OF(self, a, sel)
@@ -75,9 +76,6 @@ extern "C" void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *
 /* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
 extern "C" char *beNDMWItemBase_GetRecordString(int item, beNDMWMdlItem *ctrl, const char *field);
 extern "C" void beNDMWItemBase_GetRevisionColor(float *color, int item);
-/* kept local: no include/dw4 home declares it yet. */
-extern "C" void igMatrix44f_Copy(float *matrix, void *source);
-extern "C" void Vec3f_TransformProjective(float *out, float *v, float *m);
 extern "C" { beBaseInfoRam *g_mdlEntity; }
 extern "C" { float *g_mdlMatrix; }
 #pragma push

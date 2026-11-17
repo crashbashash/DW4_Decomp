@@ -104,11 +104,11 @@ static inline void *createThird() {
 }
 
 #include "dw4/igViewportAttr.h"
+#include "dw4/igMatrix44f.h"
 int FUN_001b0000(int, int, int, int);
 
 int FUN_001b6ce0(void *, float, float, float, float, float);
 
-int igMatrix44f_Copy(...);
 
 extern int DAT_0058ca20[4];
 
@@ -654,7 +654,7 @@ void igViewerRenderer_UpdateProjection(igViewerRenderer *arg0) {
     igViewerParameters *temp_v1;
     temp_v1 = (igViewerParameters *)arg0->_parameters;
     FUN_001b6ce0((void *)arg0->_sceneTraversal, temp_v1->_hfov, -1.0f, temp_v1->_ratio, temp_v1->_nearPlane, temp_v1->_farPlane);
-    igMatrix44f_Copy(&((igViewerParameters *)arg0->_parameters)->_projectionMatrix[0], (char *)arg0->_sceneTraversal + 0x110);
+    igMatrix44f_Copy(&((igViewerParameters *)arg0->_parameters)->_projectionMatrix[0], (const float *)((char *)arg0->_sceneTraversal + 0x110));
     sp[0] = 2;
     sp[1] = 0;
     sp[2] = DAT_0058ca20[0];
@@ -665,7 +665,7 @@ void igViewerRenderer_UpdateViewMatrix(igViewerRenderer *renderer) {
     CameraLink *arg0 = (CameraLink *)renderer;
     int m[16];
 
-    igMatrix44f_Copy(m, arg0->f12 + 0x6C);
+    igMatrix44f_Copy((float *)m, (const float *)(arg0->f12 + 0x6C));
     FUN_001b6ee0(arg0->f80, m);
     FUN_001b6ee0(arg0->f72, m);
     arg0->f52->vX(arg0->f80 + 0xA4);

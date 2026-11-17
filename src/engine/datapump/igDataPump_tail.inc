@@ -181,7 +181,7 @@ int FUN_001e68e0(Lst *arg0, int arg1) {
         } else {
             List_Resize(arg0, var_s0 + 1, 0x40);
         }
-        igMatrix44f_Copy(arg0->data + var_s0, arg1);
+        igMatrix44f_Copy((float *)(arg0->data + var_s0), (const float *)arg1);
     } else {
         temp_v1 = count_of(arg0);
         if (temp_v1 == 0) {
@@ -193,9 +193,9 @@ int FUN_001e68e0(Lst *arg0, int arg1) {
                 List_Resize(arg0, var_s0 + 1, 0x40);
             }
             d = arg0->data;
-            igMatrix44f_Copy(d + var_s0, d + (var_s0 - 1));
+            igMatrix44f_Copy((float *)(d + var_s0), (const float *)(d + (var_s0 - 1)));
         }
-        igMatrix44f_PreMultiply(arg0->data + (arg0->count - 1), arg1);
+        igMatrix44f_PreMultiply((float *)(arg0->data + (arg0->count - 1)), (const float *)arg1);
     }
     return var_s0;
 }
@@ -215,7 +215,7 @@ int FUN_001e69e0(struct S_1e69e0 *arg0, int arg1) {
         } else {
             List_Resize(arg0, var_s0 + 1, 0x40);
         }
-        igMatrix44f_Copy(arg0->f16 + (var_s0 << 6), arg1);
+        igMatrix44f_Copy((float *)(arg0->f16 + (var_s0 << 6)), (const float *)arg1);
     } else {
         temp_v1 = arg0->f8;
         if (temp_v1 == 0) {
@@ -227,21 +227,21 @@ int FUN_001e69e0(struct S_1e69e0 *arg0, int arg1) {
                 List_Resize(arg0, var_s0 + 1, 0x40);
             }
             temp_a1 = arg0->f16;
-            igMatrix44f_Copy(temp_a1 + (var_s0 << 6), temp_a1 + ((var_s0 - 1) << 6));
+            igMatrix44f_Copy((float *)(temp_a1 + (var_s0 << 6)), (const float *)(temp_a1 + ((var_s0 - 1) << 6)));
         }
         temp_a0 = arg0->f16 + ((arg0->f8 - 1) << 6);
-        igMatrix44f_Multiply(temp_a0, temp_a0, arg1);
+        igMatrix44f_Multiply((float *)temp_a0, (const float *)temp_a0, (const float *)arg1);
     }
     return var_s0;
 }
 
-void FUN_001e6ae0(struct S1e *arg0) {
-    igMatrix44f_PreMultiply(arg0->base + (arg0->cnt - 1) * 64);
+void FUN_001e6ae0(struct S1e *arg0, const float *matrix) {
+    igMatrix44f_PreMultiply((float *)(arg0->base + (arg0->cnt - 1) * 64), matrix);
 }
 
 void FUN_001e6b00(void *arg0, int arg1) {
     int p;
     p = *(int *)((char *)(arg0) + 16) + ((*(int *)((char *)(arg0) + 8) - 1) << 6);
-    igMatrix44f_Multiply(p, p, arg1);
+    igMatrix44f_Multiply((float *)p, (const float *)p, (const float *)arg1);
 }
 

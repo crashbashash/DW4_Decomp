@@ -378,7 +378,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_88(igPsx2VisualContext *self, int arg1
         e->z = arg2[2];
         if (e->f152 != 0) {
             ((C_171100 *)self)->vX(1, sp40);
-            Vec3f_TransformProjective((char *)e + 0x70, arg2, sp40);
+            Vec3f_TransformProjective((float *)((char *)e + 0x70), (const float *)arg2, sp40);
         }
         FUN_00171690(((C_171100 *)self), e);
     }
@@ -908,7 +908,6 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_202(Obj_172910 *o, int k) {
 static inline int n_of(const St_172b00 *list) { return list->n; }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_203(igPsx2VisualContext *self, int arg1, char *arg2) {
-    int sp15C, sp158, sp154, sp150;
     char sp110[64];
     char spD0[64];
     char sp90[64];
@@ -933,28 +932,28 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_203(igPsx2VisualContext *self, int arg
     case 10:
         igMatrix44f_SetIdentity((float *)sp110);
         SETB((St_172b00 *)self->_blendMat0, arg2)
-        igMatrix44f_Invert(&sp15C, sp110, arg2);
+        igMatrix44f_Invert((float *)sp110, (const float *)arg2);
         FUN_001903d0(sp110);
         SET((St_172b00 *)self->_invTransBlendMat0, sp110)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)spD0);
         SETB((St_172b00 *)self->_blendMat1, arg2)
-        igMatrix44f_Invert(&sp158, spD0, arg2);
+        igMatrix44f_Invert((float *)spD0, (const float *)arg2);
         FUN_001903d0(spD0);
         SET((St_172b00 *)self->_invTransBlendMat1, spD0)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)sp90);
         SETB((St_172b00 *)self->_blendMat2, arg2)
-        igMatrix44f_Invert(&sp154, sp90, arg2);
+        igMatrix44f_Invert((float *)sp90, (const float *)arg2);
         FUN_001903d0(sp90);
         SET((St_172b00 *)self->_invTransBlendMat2, sp90)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)sp50);
         SETB((St_172b00 *)self->_blendMat3, arg2)
-        igMatrix44f_Invert(&sp150, sp50, arg2);
+        igMatrix44f_Invert((float *)sp50, (const float *)arg2);
         FUN_001903d0(sp50);
         SET((St_172b00 *)self->_invTransBlendMat3, sp50)
         break;
@@ -962,7 +961,6 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_203(igPsx2VisualContext *self, int arg
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_204(igPsx2VisualContext *self, int arg1, char *arg2) {
-    int det0, det1, det2, det3;
     char inverse0[64];
     char inverse1[64];
     char inverse2[64];
@@ -987,28 +985,28 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_204(igPsx2VisualContext *self, int arg
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
         FUN_001e68e0((St_172b00 *)self->_blendMat0, arg2);
-        igMatrix44f_Invert(&det0, inverse0, arg2);
+        igMatrix44f_Invert((float *)inverse0, (const float *)arg2);
         FUN_001903d0(inverse0);
         SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)inverse1);
         FUN_001e68e0((St_172b00 *)self->_blendMat1, arg2);
-        igMatrix44f_Invert(&det1, inverse1, arg2);
+        igMatrix44f_Invert((float *)inverse1, (const float *)arg2);
         FUN_001903d0(inverse1);
         SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)inverse2);
         FUN_001e68e0((St_172b00 *)self->_blendMat2, arg2);
-        igMatrix44f_Invert(&det2, inverse2, arg2);
+        igMatrix44f_Invert((float *)inverse2, (const float *)arg2);
         FUN_001903d0(inverse2);
         SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)inverse3);
         FUN_001e68e0((St_172b00 *)self->_blendMat3, arg2);
-        igMatrix44f_Invert(&det3, inverse3, arg2);
+        igMatrix44f_Invert((float *)inverse3, (const float *)arg2);
         FUN_001903d0(inverse3);
         SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
         break;
@@ -1016,7 +1014,6 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_204(igPsx2VisualContext *self, int arg
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_205(igPsx2VisualContext *self, int arg1, char *arg2) {
-    int det0, det1, det2, det3;
     char inverse0[64];
     char inverse1[64];
     char inverse2[64];
@@ -1041,28 +1038,28 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_205(igPsx2VisualContext *self, int arg
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
         FUN_001e69e0((St_172b00 *)self->_blendMat0, arg2);
-        igMatrix44f_Invert(&det0, inverse0, arg2);
+        igMatrix44f_Invert((float *)inverse0, (const float *)arg2);
         FUN_001903d0(inverse0);
         SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)inverse1);
         FUN_001e69e0((St_172b00 *)self->_blendMat1, arg2);
-        igMatrix44f_Invert(&det1, inverse1, arg2);
+        igMatrix44f_Invert((float *)inverse1, (const float *)arg2);
         FUN_001903d0(inverse1);
         SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)inverse2);
         FUN_001e69e0((St_172b00 *)self->_blendMat2, arg2);
-        igMatrix44f_Invert(&det2, inverse2, arg2);
+        igMatrix44f_Invert((float *)inverse2, (const float *)arg2);
         FUN_001903d0(inverse2);
         SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)inverse3);
         FUN_001e69e0((St_172b00 *)self->_blendMat3, arg2);
-        igMatrix44f_Invert(&det3, inverse3, arg2);
+        igMatrix44f_Invert((float *)inverse3, (const float *)arg2);
         FUN_001903d0(inverse3);
         SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
         break;

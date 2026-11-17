@@ -284,9 +284,8 @@ extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_33(igGeometryAttr1_5 *self,
     }
     {
         float normalMatrix[16];
-        int invertible;
         igMatrix44f_SetIdentity(normalMatrix);
-        igMatrix44f_Invert(&invertible, normalMatrix, (int)matrix);
+        igMatrix44f_Invert(normalMatrix, (const float *)matrix);
         FUN_001903d0(normalMatrix);
         if (format & 2) {
             FUN_0013dbb0(1, (igVertexArrayView *)self->_vertexArray, normalMatrix);

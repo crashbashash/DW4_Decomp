@@ -9,6 +9,7 @@
 #include "dw4/igGraphPath.h"
 #include "dw4/igModel.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igResult.h"
 #include "dw4/igProbe.h"
 #include "dw4/igIntersectTraversal.h"
 /* Kept here, not dw4/igGuiSystem.h: retail's caller passes the byte unconverted, which an `int` parameter reorders,
@@ -27,17 +28,10 @@ extern "C" void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, unsigned cha
 #include "dw4/igViewerParameters.h"
 #include <math.h>
 #include "dw4/igMathConstants.h"
+#include "dw4/igRay.h"
 extern "C" {
 
 
-int igMatrix44f_Invert(...);
-int igMatrix44f_InvertOrthonormal(int *status, float *out, float *matrix);
-int igMatrix44f_MakeLookAt(...);
-int igMatrix44f_GetEulerAngles(float *matrix, float *x, float *y, float *z);
-int Vec3f_TransformDirection(...);
-int Vec3f_TransformProjective(...);
-int igRay_SetFromPoints(...);
-int igRay_Transform(...);
 
 
 /* igViewModel's field handles, which a change notification names. */
@@ -171,9 +165,8 @@ void igViewMode_OnAttach(void) {
 }
 
 void igViewMode_UpdateInverseMatrix(igViewMode *self) {
-    int status;
 
-    igMatrix44f_Invert(&status, self->_inverseMatrix, ((igViewModel *)self->_model)->_viewMatrix);
+    igMatrix44f_Invert(self->_inverseMatrix, ((igViewModel *)self->_model)->_viewMatrix);
 }
 
 void igViewMode_UpdateModelVectors(igViewMode *self) {
@@ -192,7 +185,7 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     positionChanged.sender = self;
     positionChanged.field = g_igViewModel_positionMetaField;
     igModel_NotifyViews((igModel *)model, (ModelChange *)&positionChanged);
-    Vec3f_TransformDirection(model->_direction, &g_vec3ZAxis, self->_inverseMatrix);
+    Vec3f_TransformDirection(model->_direction, &g_vec3ZAxis.x, self->_inverseMatrix);
     model->_direction[0] = -model->_direction[0];
     model->_direction[1] = -model->_direction[1];
     model->_direction[2] = -model->_direction[2];
@@ -200,7 +193,7 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     directionChanged.sender = self;
     directionChanged.field = g_igViewModel_directionMetaField;
     igModel_NotifyViews((igModel *)model, (ModelChange *)&directionChanged);
-    Vec3f_TransformDirection(model->_viewLeftVector, &g_vec3XAxis, self->_inverseMatrix);
+    Vec3f_TransformDirection(model->_viewLeftVector, &g_vec3XAxis.x, self->_inverseMatrix);
     leftChanged.type = VIEW_MODEL_FIELD_CHANGED;
     leftChanged.sender = self;
     leftChanged.field = g_igViewModel_viewLeftVectorMetaField;
@@ -218,7 +211,7 @@ void igViewMode_UpdateViewMatrix(igViewMode *self) {
     center[0] = center[0] + model->_direction[0];
     center[1] += model->_direction[1];
     center[2] += model->_direction[2];
-    igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, center, model->_viewUpVector, model);
+    igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, center, model->_viewUpVector);
 }
 
 void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
@@ -297,7 +290,6 @@ void igCameraMode_OnAttach(igCameraMode *self) {
 
 void igCameraMode_Update(igCameraMode *self) {
     float x, y, z;
-    int status;
     float translation[4];
     float world[16];
     int changed[4];
@@ -311,7 +303,7 @@ void igCameraMode_Update(igCameraMode *self) {
         igMatrix44f_GetTranslation(world, translation);
         igMatrix44f_MakeEulerRotation(world, x, y, z);
         igMatrix44f_SetTranslation(world, translation);
-        igMatrix44f_InvertOrthonormal(&status, model->_viewMatrix, world);
+        igMatrix44f_InvertOrthonormal(model->_viewMatrix, world);
         changed[0] = VIEW_MODEL_FIELD_CHANGED;
         changed[1] = 0;
         changed[2] = (int)g_igViewModel_viewMatrixMetaField;
@@ -426,7 +418,7 @@ void igFlyMode_ApplyRotation(igFlyMode *self, float seconds) {
     pitch *= seconds;
     igViewModel *model = (igViewModel *)self->_model;
     igVec3f up;
-    Vec3f_TransformDirection(&up, model->_sceneUpVector, model->_viewMatrix);
+    Vec3f_TransformDirection((float *)&up, model->_sceneUpVector, model->_viewMatrix);
     float scale = 1.0f / vecLength(up);
     up.x *= scale;
     up.y *= scale;
@@ -442,7 +434,7 @@ void igFlyMode_ApplyAim(igFlyMode *self) {
         float pitch = 30.0f * (self->_mousePos[1] - self->_lastAim[1]);
         float head = 60.0f * (self->_mousePos[0] - self->_lastAim[0]);
         igVec3f up;
-        Vec3f_TransformDirection(&up, model->_sceneUpVector, model->_viewMatrix);
+        Vec3f_TransformDirection((float *)&up, model->_sceneUpVector, model->_viewMatrix);
         float scale = 1.0f / vecLength(up);
         up.x *= scale;
         up.y *= scale;
@@ -667,7 +659,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
     self->_zoom *= 1.0f - 0.1f * (frames * self->_joystickT[1]);
     if (self->_active) {
         igVec3f center;
-        Vec3f_TransformProjective(&center, model->_selectedCenter, model->_viewMatrix);
+        Vec3f_TransformProjective((float *)&center, model->_selectedCenter, model->_viewMatrix);
         center[0] = -center[0];
         center[1] = -center[1];
         center[2] = -center[2];
@@ -675,7 +667,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
         if (self->_maya) {
             if (self->_head != 0.0f) {
                 igVec3f up;
-                Vec3f_TransformDirection(&up, model->_sceneUpVector, model->_viewMatrix);
+                Vec3f_TransformDirection((float *)&up, model->_sceneUpVector, model->_viewMatrix);
                 float scale = 1.0f / vecLength(up);
                 up.x *= scale;
                 up.y *= scale;
@@ -779,16 +771,14 @@ void igPickMode_OnButtonEvent(igPickMode *self, void *unused, int key, int down)
 }
 
 void igPickMode_OnAttach(igPickMode *pickMode) {
-    struct { int pad; char b; int w; } unprojected;
     igProbe *created;
     igIntList *faceTypes;
     int top;
     igIntersectTraversal *traversal;
     igObject *previous;
     igObject *cursor;
-    igMatrix44f_Invert(&unprojected.w, pickMode->_inverseProjectionMatrix, ((igViewerParameters *)pickMode->_parameters)->_projectionMatrix);
-    unprojected.b = 0;
-    igSmartPointer<igProbe> probe(igProbe_Create(0));
+    igMatrix44f_Invert(pickMode->_inverseProjectionMatrix, ((igViewerParameters *)pickMode->_parameters)->_projectionMatrix);
+    igSmartPointer<igProbe> probe(igProbe_Create(0), AdoptReference());
     created = probe.get();
     ObjectList_AppendRetained((igObjectList *)created->_rays, (igObject *)pickMode->_ray);
     faceTypes = (igIntList *)created->_intersectFaceType;
@@ -853,8 +843,8 @@ void igPickMode_Pick(igPickMode *self) {
     point[1] = y;
     *(int *)&point[2] = 0x3F800000;
     Vec3f_TransformProjective(point, point, self->_inverseProjectionMatrix);
-    igRay_SetFromPoints(self->_ray, &g_vec3Zero, point);
-    igRay_Transform(self->_ray, self->_inverseMatrix);
+    igRay_SetFromPoints((igRay *)self->_ray, &g_vec3Zero.x, point);
+    igRay_Transform((igRay *)self->_ray, self->_inverseMatrix);
     self->_impactLength = ((igRay *)self->_ray)->_len;
     self->_hit = 0;
     previous = (igObject *)self->_hitPath;

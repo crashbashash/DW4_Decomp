@@ -17,7 +17,6 @@
 #include <string.h>
 
 extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
-extern "C" void igMatrix44f_Copy(float *, float *);
 extern "C" igMetaObject *beSeCtl_GetInfoMeta(void);
 extern "C" void beSeCtl_UpdateRam(void);
 extern "C" igMetaObject *beSeCtl_GetMeta(void);

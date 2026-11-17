@@ -46,8 +46,8 @@ extern "C" void FUN_00138160(void);
 #include "dw4/igGeometryAttrList.h"
 extern "C" void FUN_00145de0(void);
 #include "dw4/igVisualContext.h"
+#include "dw4/igRay.h"
 extern "C" void FUN_0014f810(void);
-extern "C" void igRay_EnsureRegistered(void);
 extern "C" void FUN_0019c7b0(void);
 extern "C" void FUN_0019e440(void);
 extern "C" void FUN_001e5280(void);

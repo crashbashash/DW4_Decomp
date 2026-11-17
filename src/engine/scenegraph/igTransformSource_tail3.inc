@@ -17,7 +17,7 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         float *r = m[i];
         s[i] = sqrtf(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
     }
-    igMatrix44f_Copy(rot, m);
+    igMatrix44f_Copy(rot[0], m[0]);
     if (FUN_00192290(m) < 0.0f) {
         s[0] = -s[0];
         s[1] = -s[1];
@@ -51,7 +51,7 @@ void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {
     f20 = v->z;
     if (arg0->f44 == 0.0f && arg0->f48 == 0.0f && arg0->f52 == 0.0f) {
     } else {
-        Vec3f_TransformDirection(&sp50, &arg0->f44, arg2);
+        Vec3f_TransformDirection((float *)&sp50, (const float *)&arg0->f44, (const float *)arg2);
         f22 = f22 - sp50.x;
         f21 = f21 - sp50.y;
         f20 = f20 - sp50.z;
@@ -95,7 +95,7 @@ void FUN_001dd3e0(void *arg0, int arg1) {
     for (i = 0; i < n; i++) {
         igMatrix44f_SetIdentity((float *)sp50);
         ((V_1dd3e0 *)arg0)->vGet(i, sp50);
-        igMatrix44f_Multiply(sp50, sp50, arg1);
+        igMatrix44f_Multiply((float *)sp50, (const float *)sp50, (const float *)arg1);
         ((V_1dd3e0 *)arg0)->vSet(i, sp50);
         ((F_1dd3e0 *)arg0)->a = g_vec3Zero.x;
         ((F_1dd3e0 *)arg0)->b = DAT_004e105c[0];

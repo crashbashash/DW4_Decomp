@@ -11,8 +11,6 @@
 #pragma push
 #pragma readonly_strings on
 
-extern "C" void Vec3f_TransformDirection(float *out, const float *vector, float *matrix);
-extern "C" void igMatrix44f_Copy(float *dst, float *src);
 
 /* The scene's one target object, and the messenger it asks the actors through. */
 extern "C" {

@@ -15,7 +15,7 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
             int parent = info->_parentIdx;
             if (parent == 0) {
                 g = &global[i];
-                igMatrix44f_Copy(g, &local[i]);
+                igMatrix44f_Copy((float *)g, (const float *)&local[i]);
             } else {
                 g = &global[i];
                 FUN_00190470(g, &local[i], &global[parent]);
@@ -33,7 +33,7 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
         SkeletonMatrix *g;
         info = o->_boneInfoList->_data[i];
         off = i << 6;
-        igMatrix44f_Copy(&m, (SkeletonMatrix *)((char *)local + off));
+        igMatrix44f_Copy((float *)&m, (const float *)((char *)local + off));
         for (j = 0; j < n; j++) {
             SkeletonOverrideView *ov = overrides->_data[j];
             if (i == ov->_bone) {
@@ -41,27 +41,27 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
                 SkeletonSourceView *source = ov->_source;
                 source->update(clock->getTime());
                 src = &ov->_source->_matrix;
-                if (ov->_mode == 2) { igMatrix44f_Copy(&m, src); }
+                if (ov->_mode == 2) { igMatrix44f_Copy((float *)&m, (const float *)src); }
                 if (ov->_mode == 3) {
                     igMatrix44f_GetTranslation((float *)&m, translation);
-                    igMatrix44f_Copy(&m, src);
+                    igMatrix44f_Copy((float *)&m, (const float *)src);
                     igMatrix44f_SetTranslation((float *)&m, translation);
                 } else if (ov->_mode == 0) {
-                    igMatrix44f_PreMultiply(&m, src);
+                    igMatrix44f_PreMultiply((float *)&m, (const float *)src);
                 } else if (ov->_mode == 1) {
-                    igMatrix44f_Multiply(&m, &m, src);
+                    igMatrix44f_Multiply((float *)&m, (const float *)&m, (const float *)src);
                 }
             }
         }
         if (info->_parentIdx != 0) {
             g = (SkeletonMatrix *)((char *)global + off);
-            igMatrix44f_Multiply(g, &m, &global[info->_parentIdx]);
+            igMatrix44f_Multiply((float *)g, (const float *)&m, (const float *)&global[info->_parentIdx]);
         } else {
             g = (SkeletonMatrix *)((char *)global + off);
-            igMatrix44f_Copy(g, &m);
+            igMatrix44f_Copy((float *)g, (const float *)&m);
         }
         if (info->_bmIdx != -1) {
-            igMatrix44f_Multiply(&out[info->_bmIdx], inv, g);
+            igMatrix44f_Multiply((float *)&out[info->_bmIdx], (const float *)inv, (const float *)g);
             inv++;
         }
     }

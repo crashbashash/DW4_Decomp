@@ -355,9 +355,9 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     int sp90[4];
     int sp50[16];
 
-    igMatrix44f_Copy(arg4);
-    igMatrix44f_Multiply(arg4, arg4, arg2);
-    igMatrix44f_Multiply(arg4, arg4, arg3);
+    igMatrix44f_Copy((float *)arg4, (const float *)arg1);
+    igMatrix44f_Multiply((float *)arg4, (const float *)arg4, (const float *)arg2);
+    igMatrix44f_Multiply((float *)arg4, (const float *)arg4, (const float *)arg3);
     igMatrix44f_SetIdentity((float *)&sp50[0]);
     spA0[0] = 0x3F000000;
     spA0[2] = 0;
@@ -368,9 +368,9 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     sp90[1] = 0x3F000000;
     igMatrix44f_SetTranslation((float *)&sp50[0], (float *)&sp90[0]);
     if (arg0->f208 != 0) {
-        igMatrix44f_Multiply(&sp50[0], &sp50[0], g_projectiveShadowViewportMatrix.m);
+        igMatrix44f_Multiply((float *)&sp50[0], (const float *)&sp50[0], g_projectiveShadowViewportMatrix.m);
     }
-    igMatrix44f_Multiply(arg4, arg4, &sp50[0]);
+    igMatrix44f_Multiply((float *)arg4, (const float *)arg4, (const float *)&sp50[0]);
 }
 
 void FUN_001d6060(O_1d6060 *arg0, char *arg1) {
@@ -383,7 +383,7 @@ void FUN_001d6060(O_1d6060 *arg0, char *arg1) {
     spF0[0] = arg0->f32 + arg0->f44;
     spF0[1] = arg0->f36 + arg0->f48;
     spF0[2] = arg0->f40 + arg0->f52;
-    igMatrix44f_MakeLookAt(&spB0, &arg0->f32, spF0, (char *)arg0 + 132);
+    igMatrix44f_MakeLookAt((float *)&spB0, (const float *)&arg0->f32, spF0, (const float *)((char *)arg0 + 132));
     if (arg0->f208 != 0) {
         FUN_00191860(&sp70, arg0->f224, arg0->f220, arg0->f216, arg0->f212, arg0->f124, arg0->f128);
     } else {

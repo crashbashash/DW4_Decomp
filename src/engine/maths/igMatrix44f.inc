@@ -91,7 +91,7 @@ void igMatrix44f_GetTranslation(const float *matrix, float *vector) {
     vector[2] = matrix[14];
 }
 
-void igMatrix44f_TranslateLocal(float *m, const ScaleVec &v) {
+void igMatrix44f_TranslateLocal(float *m, const igVec3f &v) {
     m[12] += m[0] * v[0] + m[4] * v[1] + m[8] * v[2];
     m[13] += m[1] * v[0] + m[5] * v[1] + m[9] * v[2];
     m[14] += m[2] * v[0] + m[6] * v[1] + m[10] * v[2];
@@ -150,7 +150,7 @@ void FUN_00190d80(float *m, const ScaleVec &v) {
     m[14] *= v[2];
 }
 
-void FUN_00190e50(void *arg0, float *arg1, float fparg0) {
+void FUN_00190e50(void *arg0, const float *arg1, float fparg0) {
     FUN_00190f50((float *)arg0, arg1, fparg0);
     *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
@@ -174,7 +174,7 @@ void igMatrix44f_MakeEulerRotation(void *arg0, float x, float y, float z) {
 
 /* Axis-angle rotation matrix (Rodrigues); the sign bit is cleared through a byte bit-field union,
  * and partial products are split so the adds keep their operand order. */
-void FUN_00190f50(float *arg0, float *arg1, float fparg0) {
+void FUN_00190f50(float *arg0, const float *arg1, float fparg0) {
     U5 u;
     float p1;
     float p6;
@@ -276,11 +276,11 @@ void igMatrix44f_SetEulerRotation(float *m, float x, float y, float z) {
     m[10] = cx * cy;
 }
 
-void igMatrix44f_PreRotateAxisAngle(int arg0, float *arg1, float fparg0) {
-    int buf[16];
+void igMatrix44f_PreRotateAxisAngle(float *matrix, const float *axis, float angle) {
+    float rotation[16];
 
-    FUN_00190e50(buf, arg1, fparg0);
-    igMatrix44f_PreMultiply((float *)arg0, (float *)buf);
+    FUN_00190e50(rotation, axis, angle);
+    igMatrix44f_PreMultiply(matrix, rotation);
 }
 
 void FUN_001916b0(int arg0, float *arg1, float fparg0) {
@@ -379,7 +379,7 @@ void igMatrix44f_MakePerspective(float *matrix, float a, float b, float c, float
     FUN_00191910(matrix, t23, -t23, t14, -t14, d, e);
 }
 
-void igMatrix44f_InvertOrthonormal(int *r, float *o, float *m) {
+igResult igMatrix44f_InvertOrthonormal(float *o, const float *m) {
     o[0] = m[0]; o[1] = m[4]; o[2] = m[8];
     o[4] = m[1]; o[5] = m[5]; o[6] = m[9];
     o[8] = m[2]; o[9] = m[6]; o[10] = m[10];
@@ -388,21 +388,21 @@ void igMatrix44f_InvertOrthonormal(int *r, float *o, float *m) {
     o[12] = -(m[12] * o[0] + m[13] * o[4] + m[14] * o[8]);
     o[13] = -(m[12] * o[1] + m[13] * o[5] + m[14] * o[9]);
     o[14] = -(m[12] * o[2] + m[13] * o[6] + m[14] * o[10]);
-    *r = g_resultSuccess.v;
+    return g_resultSuccess;
 }
 
 /* The sign bit is cleared through a byte bit-field union. */
-void igMatrix44f_Invert(int *arg0, float *arg1, int arg2) {
+igResult igMatrix44f_Invert(float *inverse, const float *matrix) {
     float tmp[16];
     U6 u;
     float len;
     int i, j;
-    igMatrix44f_Adjugate(arg1, (const float *)arg2, tmp);
-    len = FUN_00192290((float *)arg2);
+    igMatrix44f_Adjugate(inverse, matrix, tmp);
+    len = FUN_00192290(matrix);
     u.f = len;
     u.b.sign = 0;
     if (u.f < 1.1754944e-38f) {
-        *arg0 = g_resultFailure.v;
+        return g_resultFailure;
     } else {
         float inv = 1.0f / len;
         i = 0;
@@ -413,11 +413,11 @@ void igMatrix44f_Invert(int *arg0, float *arg1, int arg2) {
                 int jo = j * 4;
                 float *sv = (float *)((char *)tmp + off + jo);
                 j++;
-                *(float *)((char *)arg1 + off + jo) = inv * *sv;
+                *(float *)((char *)inverse + off + jo) = inv * *sv;
             } while (j < 4);
             i++;
         } while (i < 4);
-        *arg0 = g_resultSuccess.v;
+        return g_resultSuccess;
     }
 }
 
@@ -462,7 +462,7 @@ void igMatrix44f_Adjugate(float *self, const float *m, float *adjugate) {
     adjugate[15] = m00 * (m11 * m22 - m21 * m12) - m01 * (m10 * m22 - m20 * m12) + m02 * (m10 * m21 - m20 * m11);
 }
 
-float FUN_00192290(float *m) {
+float FUN_00192290(const float *m) {
     float B, m10, E2, m02, m20, A, m30, PB, m11, m21, C1, D1, m31, B1, m12, A1, m13, m03, c12, m01, E1, PE, C, c03, m22, D, c13, m32, PD, c02, c01, m00, m23, m33, c23;
     m10 = m[4];
     m02 = m[2];
@@ -737,7 +737,7 @@ void FUN_00192dd0(float *arg0, float *arg1, float *arg2) {
     arg0[2] = a0 * b1 - a1 * b0;
 }
 
-void Vec3f_CrossInPlace(float *arg0, float *arg1) {
+void Vec3f_CrossInPlace(float *arg0, const float *arg1) {
     float b0; float a0; float b1; float a2; float b2; float a1;
     b2 = arg1[2]; a1 = arg0[1]; a0 = arg0[0]; b1 = arg1[1]; a2 = arg0[2]; b0 = arg1[0];
     arg0[0] = a1 * b2 - a2 * b1;

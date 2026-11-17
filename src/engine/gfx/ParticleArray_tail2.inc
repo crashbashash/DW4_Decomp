@@ -237,7 +237,7 @@ void FUN_0015d4d0(S4d0 *s)
     v[1] = 0.5f * (float)sh;
     FUN_00190d80((char*)s + 0x128, v, 0x3f800000);
   }
-  igMatrix44f_Multiply((char*)s + 0xE8, (char*)s + 0x28, (char*)s + 0x128);
+  igMatrix44f_Multiply((float *)((char*)s + 0xE8), (const float *)((char*)s + 0x28), (const float *)((char*)s + 0x128));
 }
 
 void FUN_0015d6c0(void *arg0, int arg1, void *arg2) {

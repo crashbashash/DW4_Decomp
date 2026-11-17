@@ -18,6 +18,7 @@
 #include "dw4/igViewModel.h"
 #include "dw4/igReport.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igResult.h"
 #include "dw4/igNamedObject.h"
 #include <math.h>
 extern "C" {
@@ -88,7 +89,6 @@ typedef struct ViewModelEvent {
     int data;
 } ViewModelEvent;
 extern int DAT_0058cd40;
-int igMatrix44f_Invert(int *, float *, float *);
 extern unsigned char GPR_00554e7c;
 extern unsigned char GPR_00554e80;
 class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vX(int, int, float, float); };
@@ -360,7 +360,6 @@ int igViewManager_OnKeyEvent(void *arg0) {
     return 1;
 }
 
-int igMatrix44f_MakeLookAt(...);
 
 /* Looks at `object` from one and a half of its sizes away, across the scene's up vector. */
 void igViewManager_FrameObject(igViewManager *manager, igNode *object) {
@@ -385,7 +384,7 @@ void igViewManager_FrameObject(igViewManager *manager, igNode *object) {
     eye[0] += center[0];
     eye[1] += center[1];
     eye[2] += center[2];
-    igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, &eye, &center, &up);
+    igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, (const float *)&eye, (const float *)&center, (const float *)&up);
     event.type = 2;
     event.arg = 0;
     event.data = (int)g_igViewModel_viewMatrixMetaField;
@@ -489,10 +488,10 @@ void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
         eye[2] = up[1];
         eye.scale(distance);
         eye.add(center);
-        igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, &eye, &center, &up);
+        igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, (const float *)&eye, (const float *)&center, (const float *)&up);
     } else {
         igViewModel *model = (igViewModel *)manager->_viewModel;
-        igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, &center, model->_viewUpVector);
+        igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, (const float *)&center, model->_viewUpVector);
     }
     event.type = 2;
     event.arg = 0;
@@ -520,7 +519,7 @@ void igViewManager_FitSelection(igViewManager *manager) {
     eye[1] += center[1];
     eye[2] += center[2];
     igViewModel *model = (igViewModel *)manager->_viewModel;
-    igMatrix44f_MakeLookAt(model->_viewMatrix, &eye, &center, model->_viewUpVector);
+    igMatrix44f_MakeLookAt(model->_viewMatrix, (const float *)&eye, (const float *)&center, model->_viewUpVector);
     event.type = 2;
     event.arg = 0;
     event.data = (int)g_igViewModel_viewMatrixMetaField;
@@ -599,7 +598,6 @@ int Gap__Viewer__igViewManager__vfunc_32(igViewManager *self, int width, int hei
 
 void igViewManager_PrintViewMatrix(igViewManager *self) {
     float inverse[16];
-    int status;
     float *m;
     int r;
 
@@ -611,7 +609,7 @@ void igViewManager_PrintViewMatrix(igViewManager *self) {
         if (r != 1 && r == 2) GPR_00554e7c = 1;
     }
     igMatrix44f_SetIdentity(inverse);
-    igMatrix44f_Invert(&status, inverse, ((igViewModel *)self->_viewModel)->_viewMatrix);
+    igMatrix44f_Invert(inverse, ((igViewModel *)self->_viewModel)->_viewMatrix);
     m = inverse;
     if (GPR_00554e80 == 0) {
         r = igReport_Info("current inverse view matrix :\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f\n",

@@ -90,6 +90,7 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/igUnsignedIntArrayMetaField.h"
 #include "dw4/igUnsignedIntMetaField.h"
 #include "dw4/igUnsignedLongMetaField.h"
+#include "dw4/igVec4f.h"
 
 extern "C" igMetaObject *g_igVertexArray_metaObject;
 extern "C" igMetaObject *g_igScissorExt_metaObject;
@@ -1514,8 +1515,6 @@ struct PointSpriteView { char pad[24]; igObject *f24; igObject *getF24() const {
 extern "C" void Gap__Bec__ParticleArray__vfunc_36(ParticleArray *arg0);
 struct OO;
 struct S4d0;
-extern "C" int igMatrix44f_Copy(...);
-extern "C" int igMatrix44f_Multiply(void*,void*,void*);
 extern "C" int FUN_00190d80(void*,float*,int);
 extern "C" int FUN_00191860(void*,float,float,float,float,float,float);
 extern "C" int FUN_00192510(void*,float*,float*,float*,float*,float*,float*);
@@ -2199,7 +2198,6 @@ extern "C" void* FUN_0018a060(...);
 extern "C" void *FUN_0018a2d0(...);
 extern "C" void *igFloatList_Create(...);
 extern "C" void *igUnsignedCharList_Create(...);
-extern "C" int igVec4f_PackColor(...);
 extern "C" int Color4f_Unpack(...);
 extern "C" int g_igVec4ucList_metaObject[4];
 extern "C" int DAT_005610b0[4];
@@ -2518,7 +2516,6 @@ class V1 { public: virtual void a0(); virtual void a1(); virtual void a2(); virt
 class V2_165d30 { public: virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void b22(); virtual void b23(); virtual void b24(); virtual void b25(); virtual void b26(); virtual void b27(); virtual void b28(); virtual void b29(); virtual void b30(); virtual void b31(); virtual void b32(); virtual void b33(); virtual void b34(); virtual void b35(); virtual void b36(); virtual void b37(); virtual void b38(); virtual void b39(); virtual void b40(); virtual void b41(); virtual void b42(); virtual void b43(); virtual void b44(); virtual void b45(); virtual void b46(); virtual void b47(); virtual void b48(); virtual void b49(); virtual void b50(); virtual void b51(); virtual void b52(); virtual void *v220(unsigned int, int); };
 struct O_165d30 { char p72_[72]; unsigned int f72; int f76; void *f80; int f84; unsigned int f88; };
 extern "C" int FUN_001903d0(...);
-extern "C" int igMatrix44f_Invert(...);
 
 extern "C" void FUN_00165d30(O_165d30 *arg0, unsigned int arg1, int arg2);
 extern "C" int FUN_00165e40(void *arg0);
@@ -2594,8 +2591,6 @@ struct V_165e50 { float x, y, z;
 };
 struct Mat { float m[16]; };
 struct Self { char pad[72]; int matCount; char pad2[8]; Mat *mats; };
-extern "C" void Vec3f_TransformProjective(...);
-extern "C" void Vec3f_TransformDirection(V_165e50 *, V_165e50 *, Mat *);
 extern "C" void *FUN_00165e50(Self *self, Obj_165e50 *src);
 /* Resets a visual context to its default render state; the flags select which state groups. Vtable
  * entries are 4 bytes starting at +8, so slot N is at offset 8 + 4*N; slots are named by index
@@ -2763,7 +2758,7 @@ public:
 extern "C" void FUN_00166fe0(SlotOwner_166fe0 *self, SlotObject_166fe0 *object, int index);
 extern "C" igSmartPointer<igObject> FUN_00167130(SlotObject_166fe0 *object);
 extern "C" int FUN_00167160(int arg0, int arg1);
-extern "C" void FUN_00167170(void *arg0);
+extern "C" void FUN_00167170(struct MatrixInverseCache *self, const float *matrix);
 extern "C" void FUN_001671a0(char * arg0, int arg1);
 typedef struct MatrixInverseCache {
     char pad0[108];
@@ -3740,7 +3735,7 @@ struct S_172550 { char pad0[972]; struct N_172550 *f972; struct N_172550 *f976; 
 extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_200(struct S_172550 *arg0, int arg1);
 typedef struct L_172600 { int p0; int p4; int count; int cap; char *data; } L_172600;
 typedef struct S_172600 { char p[972]; L_172600 *l972; L_172600 *l976; L_172600 *l980; int p984; L_172600 *l988; L_172600 *l992; L_172600 *l996; L_172600 *l1000; } S_172600;
-#define PUSH(f) do { int n; L_172600 *l; int v; l = arg0->f; v = count_of_172600(l); if (v != 0) { n = l->count; if (n < l->cap) { l->count = v + 1; } else { List_Resize(l, n + 1, 64); } igMatrix44f_Copy(l->data + (n << 6), l->data + ((n - 1) << 6)); } } while (0)
+#define PUSH(f) do { int n; L_172600 *l; int v; l = arg0->f; v = count_of_172600(l); if (v != 0) { n = l->count; if (n < l->cap) { l->count = v + 1; } else { List_Resize(l, n + 1, 64); } igMatrix44f_Copy((float *)(l->data + (n << 6)), (const float *)(l->data + ((n - 1) << 6))); } } while (0)
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_201(S_172600 *arg0, int arg1);
 typedef struct Mat_172910 { float m[16]; } Mat_172910;
 typedef struct Obj_172910 { char pad[972]; Stk *s[8]; } Obj_172910;
@@ -3755,9 +3750,9 @@ typedef struct St_172b00 { char pad0[8]; int n; int cap; char *data; } St_172b00
         n1 = n + 1; \
         if (n < s->cap) s->n = n_of(s) + 1; \
         else List_Resize(s, n1, 0x40); \
-        igMatrix44f_Copy(s->data + (n << 6), m); \
+        igMatrix44f_Copy((float *)(s->data + (n << 6)), (const float *)(m)); \
     } else { \
-        igMatrix44f_Copy(s->data + ((n_of(s) - 1) << 6), m); \
+        igMatrix44f_Copy((float *)(s->data + ((n_of(s) - 1) << 6)), (const float *)(m)); \
     } }
 #define SETB(l, m) { \
     int n; \
@@ -3768,9 +3763,9 @@ typedef struct St_172b00 { char pad0[8]; int n; int cap; char *data; } St_172b00
         n1 = n + 1; \
         if (n < s->cap) s->n = n_of(s) + 1; \
         else List_Resize(s, n1, 0x40); \
-        igMatrix44f_Copy(s->data + (n << 6), m); \
+        igMatrix44f_Copy((float *)(s->data + (n << 6)), (const float *)(m)); \
     } else { \
-        igMatrix44f_Copy(s->data + ((n_of(s) - 1) << 6), m); \
+        igMatrix44f_Copy((float *)(s->data + ((n_of(s) - 1) << 6)), (const float *)(m)); \
     } }
 extern "C" void FUN_001e68e0(St_172b00 *stack, char *matrix);
 extern "C" void FUN_001e69e0(St_172b00 *stack, char *matrix);

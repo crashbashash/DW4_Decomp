@@ -23,6 +23,8 @@
 #include "dw4/igViewManager.h"
 #include "dw4/igViewerSceneInfoManager.h"
 #include <string.h>
+#include "dw4/igAABox.h"
+#include "dw4/igVec3f.h"
 #pragma push
 #pragma readonly_strings on
 #define SELECT_ALLOCATOR(var, owner) { var = (int)igObject_GetAllocator((igObject *)owner); var = g_useOwnerAllocator ? var : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
@@ -66,10 +68,6 @@ void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram);
 void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path);
 
 int ObjectList_RemoveFirstRetained(...);
-int igAABox_GetCorner(void *, int, float *);
-int igMatrix44f_Copy(void *, void *);
-void *Vec3_Lerp(float *, float, float *, float *);
-void *Quaternion_Lerp(float *, float, float *, float *);
 
 extern char emptyString[];
 /* per shake step: the eye and interest offsets along x and y, indexed by the move code digit */
@@ -262,9 +260,9 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     char *geometries = (char *)OBJECT_LIST(box->_geometryList)->_data;
                     int at = offset;
                     void *bound = (void *)((igNode *)((void **)(geometries + at))[0])->_bound;
-                    igAABox_GetCorner(bound, 0, boxMax);
+                    igAABox_GetCorner((const igAABox *)bound, 0, boxMax);
                     if (!(boxMax[0] < x) && !(boxMax[1] < y) && !(boxMax[2] < z)) {
-                        igAABox_GetCorner(bound, 7, boxMin);
+                        igAABox_GetCorner((const igAABox *)bound, 7, boxMin);
                         if (boxMin[0] <= x && boxMin[1] <= y && boxMin[2] <= z) {
                             camera = i;
                             break;

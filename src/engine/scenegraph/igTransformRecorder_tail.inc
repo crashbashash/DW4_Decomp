@@ -1,9 +1,9 @@
-void Gap__Sg__igTransformRecorder__vfunc_38(int a0) {
-    igMatrix44f_Copy((char *)a0 + 96);
+void Gap__Sg__igTransformRecorder__vfunc_38(igTransformRecorder *self, const float *matrix) {
+    igMatrix44f_Copy(self->_mvm, matrix);
 }
 
-void Gap__Sg__igTransformRecorder__vfunc_37(void *arg0) {
-    igMatrix44f_Copy((int)((char *)arg0 + 32));
+void Gap__Sg__igTransformRecorder__vfunc_37(igTransformRecorder *self, const float *matrix) {
+    igMatrix44f_Copy(self->_m, matrix);
 }
 
 int FUN_001baa10(RecorderTraversalView *o, TransformRecorderVisitor *v) {
@@ -99,7 +99,7 @@ int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1) {
     if (off < 0) {
         return 0;
     }
-    igMatrix44f_Multiply(buf, base + (off << 6), base);
+    igMatrix44f_Multiply((float *)buf, (const float *)(base + (off << 6)), (const float *)base);
     obj->v(buf);
     FUN_001b1030((igAttrStackManager *)x, (igAttr *)obj);
     r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
@@ -145,7 +145,7 @@ int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
     frame->_count = n;
     out = frame->_matrices;
     for (i = 0; i < node->_boneIndices->_count; i++, out += 64) {
-        igMatrix44f_Copy(out, palette + (node->_boneIndices->_data[i] << 6));
+        igMatrix44f_Copy((float *)out, (const float *)(palette + (node->_boneIndices->_data[i] << 6)));
     }
     FUN_001b1030((igAttrStackManager *)state, (igAttr *)frame);
     r = igCommonTraversal_TraverseAttrSet((igCommonTraversal *)o, (igAttrSet *)node);

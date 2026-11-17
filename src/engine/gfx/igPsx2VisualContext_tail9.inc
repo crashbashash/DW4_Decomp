@@ -8,7 +8,6 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_197(igPsx2VisualContext *self, int arg
 }
 
 void FUN_00180060(O_180060 *arg0) {
-    int sp5C;
     int v[3];
     char *s0;
     char *s2;
@@ -27,7 +26,7 @@ void FUN_00180060(O_180060 *arg0) {
         for (i = 0; i < arg0->f72; i++) {
             off = i << 6;
             s2 = arg0->f80 + off;
-            igMatrix44f_Invert(&sp5C, s2, arg0->f84 + off);
+            igMatrix44f_Invert((float *)s2, (const float *)(arg0->f84 + off));
             v[0] = 0;
             v[1] = 0;
             v[2] = 0;

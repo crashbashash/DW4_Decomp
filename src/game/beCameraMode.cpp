@@ -3,6 +3,7 @@
 #include "dw4/beCameraMode.h"
 #include "dw4/igGraphPath.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igResult.h"
 #include "dw4/igModel.h"
 #include "dw4/igViewModel.h"
 
@@ -16,8 +17,6 @@ extern "C" void beCameraMode_OnDetach(beCameraMode *self);
 extern "C" void beCameraMode_OnAttach(beCameraMode *self);
 typedef struct CameraMatrix { float m[16]; } CameraMatrix;
 typedef struct CameraVector4 { float v[4]; } CameraVector4;
-extern "C" void igMatrix44f_GetEulerAngles(CameraMatrix *, float *, float *, float *);
-extern "C" void igMatrix44f_InvertOrthonormal(void *, void *, CameraMatrix *);
 extern "C" void beCameraMode_Update(beCameraMode *self);
 
 void beCameraMode_OnDetach(beCameraMode *self) {
@@ -65,7 +64,6 @@ void beCameraMode_OnAttach(beCameraMode *self) {
 
 void beCameraMode_Update(beCameraMode *self) {
     float a, b, c;
-    int composed;
     CameraVector4 translation;
     CameraMatrix matrix;
     int changed[4];
@@ -91,11 +89,11 @@ void beCameraMode_Update(beCameraMode *self) {
         model = (igViewModel *)self->_model;
         igGraphPath_GetTransform((igGraphPath *)self->_cameraPath, (igMatrix44f *)&matrix, self->_nowTimeL);
         a = 0; b = 0; c = 0;
-        igMatrix44f_GetEulerAngles(&matrix, &a, &b, &c);
-        igMatrix44f_GetTranslation((const float *)&matrix, (float *)&translation);
+        igMatrix44f_GetEulerAngles(matrix.m, &a, &b, &c);
+        igMatrix44f_GetTranslation(matrix.m, translation.v);
         igMatrix44f_MakeEulerRotation(&matrix, a, b, c);
-        igMatrix44f_SetTranslation((float *)&matrix, (const float *)&translation);
-        igMatrix44f_InvertOrthonormal(&composed, model->_viewMatrix, &matrix);
+        igMatrix44f_SetTranslation(matrix.m, translation.v);
+        igMatrix44f_InvertOrthonormal(model->_viewMatrix, matrix.m);
         changed[0] = 2;
         changed[1] = 0;
         changed[2] = (int)g_igViewModel_viewMatrixMetaField;

@@ -524,10 +524,10 @@ void FUN_0022b0a0(int arg0, int *arg1) {
     for (i = 0; i < n; i++) {
         o = ((struct TransformObjectList *)arg1[3])->data[i];
         if (igObject_IsKindOf((igObject *)o, g_igTransform_metaObject) != 0) {
-            igMatrix44f_Multiply(sp60, (int)o + 0x20, sp60);
+            igMatrix44f_Multiply(sp60, (const float *)((int)o + 0x20), sp60);
         }
     }
-    igMatrix44f_Copy(arg0, sp60);
+    igMatrix44f_Copy((float *)arg0, sp60);
 }
 
 void Gap__igListenerInterface__vfunc_13(igInterface *arg0, int flags) {
@@ -1291,7 +1291,7 @@ extern "C" int FUN_0022d460(O_2 *arg0, int arg1, O_2 *arg2, int arg3, int arg4) 
     O_2 *s3 = O_2::Cast(arg0);
     O_2 *s1 = O_2::Cast(arg2);
     if (s3 != 0 && s1 != 0) {
-        igMatrix44f_Copy(arg3 + s1->f8, arg1 + s3->f8);
+        igMatrix44f_Copy((float *)(arg3 + s1->f8), (const float *)(arg1 + s3->f8));
         return 1;
     }
     return 0;

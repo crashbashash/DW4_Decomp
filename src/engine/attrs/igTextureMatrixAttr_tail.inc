@@ -24,8 +24,8 @@ void Gap__Attrs__igTextureMatrixAttr__vfunc_26(igTextureMatrixAttr *self, igObje
     self->_isProjective = FUN_0017c790(context, self->_unitID);
 }
 
-void Gap__Attrs__igTextureMatrixAttr__vfunc_32(int a0) {
-    igMatrix44f_Copy((char *)a0 + 12);
+void Gap__Attrs__igTextureMatrixAttr__vfunc_32(igTextureMatrixAttr *self, const float *matrix) {
+    igMatrix44f_Copy(self->_m, matrix);
 }
 
 void Gap__Attrs__igTextureMatrixAttr__vfunc_31(igTextureMatrixAttrView *self, igVisualContextView *context)

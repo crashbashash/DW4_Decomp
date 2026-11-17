@@ -112,7 +112,7 @@ void igCollisionCell_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0023a080();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igAABox_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCollisionCell_fieldTable, g_igCollisionCell_fieldHandles, g_igCollisionCell_fieldOffsets, temp_s2);
 }

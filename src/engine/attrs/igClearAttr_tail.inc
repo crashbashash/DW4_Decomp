@@ -22,13 +22,13 @@ void Gap__Attrs__igClearAttr__vfunc_26(void *arg0, void **arg1) {
 
 void Gap__Attrs__igClearAttr__vfunc_11(void *arg0) {
     igObject_InitDefaults((igObject *)arg0);
-    *(int *)((char *)(arg0) + 60) = igVec4f_PackColor((char *)arg0 + 0x10, 1);
+    *(int *)((char *)(arg0) + 60) = igVec4f_PackColor((const float *)((char *)arg0 + 0x10), 1);
     *(float *)((char *)(arg0) + 64) = dptofp(*(double *)((char *)(arg0) + 48));
 }
 
 void Gap__Attrs__igClearAttr__vfunc_17(void *arg0) {
     FUN_0013b820(arg0);
-    *(int *)((char *)(arg0) + 60) = igVec4f_PackColor((char *)arg0 + 0x10, 1);
+    *(int *)((char *)(arg0) + 60) = igVec4f_PackColor((const float *)((char *)arg0 + 0x10), 1);
     *(float *)((char *)(arg0) + 64) = dptofp(*(double *)((char *)(arg0) + 48));
 }
 

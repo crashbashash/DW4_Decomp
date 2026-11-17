@@ -1,5 +1,5 @@
 extern "C" igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(int meta);
-extern "C" void igVolume_ExtendBy(void *volume, void *other);
+#include "dw4/igVolume.h"
 extern "C" igObject *FUN_00227460(igMemoryPoolView *allocator);
 extern "C" void FUN_0022ab90(igObject *iterator, igNode *root, igMetaObject *metaObject);
 extern "C" igNode *FUN_0022ac00(igObject *iterator);
@@ -62,7 +62,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
     float *max = &box->v[0] + 3;
     box->v[0] = box->v[1] = box->v[2] = 3.402823466e+38f;
     max[0] = max[1] = max[2] = -3.402823466e+38f;
-    igVolume_ExtendBy(grid->box, bound);
+    igVolume_ExtendBy((void **)grid->box, (void **)bound);
     FUN_0023b430((igCollisionGrid *)self->_grid);
     igMetaObject *geometryMeta = g_igGeometry_metaObject;
     igSmartPointer<igObject> iterator(FUN_00227460(igObject_GetAllocator(self)));

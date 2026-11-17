@@ -217,7 +217,6 @@ int igReportError(const char *format, ...);
 #include "dw4/igVertexArray.h"
 #include "dw4/igNamedObject.h"
 #include "dw4/igGroup.h"
-igResult igMatrix44f_Invert(igMatrix44f *inverse, const igMatrix44f *matrix);
 int snprintf(char *buffer, unsigned int size, const char *format, ...);
 #include "dw4/cri/cri_adxt.h"
 
@@ -766,7 +765,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
 
             igMatrix44f view;
             igMatrix44f_FromTranslation(view.m, igVec3f(0.0f, 0.0f, -1.2f));
-            igMatrix44f_Invert(&view, &view);
+            igMatrix44f_Invert(view.m, view.m);
             igSmartPointer<igCamera> camera(igCamera_CreateInstance(MovieAllocator(self)));
             igNamedObject_SetName((igNamedObject *)camera.p, Movie_camera);
             camera->_nearPlane = 0.0f;

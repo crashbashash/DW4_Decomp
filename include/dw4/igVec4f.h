@@ -5,7 +5,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-int igVec4f_PackColor(float *color, unsigned int format);
+int igVec4f_PackColor(const float *color, unsigned int format);
 #ifdef __cplusplus
 }
 #endif

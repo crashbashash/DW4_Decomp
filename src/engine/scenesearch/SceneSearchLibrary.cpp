@@ -178,14 +178,14 @@ void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
     firstMatrix = self[9];
     i = 0;
     while (i < firstCount) {
-        igMatrix44f_SetIdentity(firstMatrix);
+        igMatrix44f_SetIdentity((float *)firstMatrix);
         firstMatrix += 0x40;
         i += 1;
     }
     secondMatrix = self[10];
     j = 0;
     while (j < secondCount) {
-        igMatrix44f_SetIdentity(secondMatrix);
+        igMatrix44f_SetIdentity((float *)secondMatrix);
         secondMatrix += 0x40;
         j += 1;
     }

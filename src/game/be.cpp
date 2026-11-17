@@ -253,9 +253,6 @@ void LISsetDifficultMax(int maxDifficulty);
 
 /* Other files, with no home yet. */
 StringRef StringList_CopyRetained(igStringRefList *list, int index);
-void igMatrix44f_Copy(float *matrix, const float *source);
-void igMatrix44f_TranslateLocal(float *matrix, const float *offset);
-void Vec3f_TransformDirection(float *out, const float *vector, const float *matrix);
 void igStringObj_ToFloat(igStringObj *string, float *value);
 
 /* The managers be_Start finds, and the be itself. */
@@ -1350,7 +1347,7 @@ const char *MDLgetInfoName(void)
 /* The model's position moved by a local offset, as "V<x,y,z>". */
 char *MDLgetPosStr(float x, float y, float z) {
     float matrix[16];
-    float offset[3];
+    igVec3f offset;
     float position[3];
 
     igMatrix44f_SetIdentity(matrix);
@@ -1605,7 +1602,7 @@ char *PLAYERgetDataStr(int point, int index, float yaw) {
 
 /* A player model's position moved by a local offset, as "V<x,y,z>"; 0 when it has no matrix. */
 char *PLAYERgetPosStr(int ramNo, float x, float y, float z) {
-    float offset[3];
+    igVec3f offset;
     float position[4];
     float matrix[16];
 

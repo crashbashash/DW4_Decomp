@@ -19,6 +19,7 @@
 #include "dw4/igVertexArray.h"
 #include "dw4/igVisualContext.h"
 #include <math.h>
+#include "dw4/igVec4f.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -107,7 +108,6 @@ public:
     virtual void setTexCoord(int unit, unsigned int index, const igVec2f *texCoord);
 };
 
-extern "C" unsigned int igVec4f_PackColor(const igVec4f *color, int format);
 extern "C" void igPointSpriteExt_SetSize(igPointSpriteExt *sprite, unsigned int index, igVec2f size);
 
 /* Stores a new reference to `object` in an object-reference field, releasing the one it held. */
@@ -326,7 +326,7 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
         pointSprite(self)->setPosition(i, &position);
         if (*constantsWritten == 0 || isAnimated((igGfxParticleCoord)particleFormat(self)->_color)) {
             color = particle->color + particle->colorVelocity * age + particle->colorAcceleration * age2;
-            pointSprite(self)->setColor(i, igVec4f_PackColor(&color, 1));
+            pointSprite(self)->setColor(i, igVec4f_PackColor((const float *)&color, 1));
         }
         if (*constantsWritten == 0 || isAnimated((igGfxParticleCoord)particleFormat(self)->_width) || isAnimated((igGfxParticleCoord)particleFormat(self)->_height)) {
             size = particle->size + particle->sizeVelocity * age + particle->sizeAcceleration * age2;

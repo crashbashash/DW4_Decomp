@@ -147,66 +147,66 @@ void FUN_0018aaa0(S *arg0, float *arg1) {
     arg1[23] = arg0->f[5];
 }
 
-void igAABox_GetCorner(igAABox *arg0, unsigned int arg1, V3 *arg2) {
+void igAABox_GetCorner(const igAABox *box, unsigned int index, float *corner) {
     float c, b, a;
-    switch (arg1) {
+    switch (index) {
     case 7:
-        arg2->x = *(float *)&arg0->_min[0];
-        arg2->y = *(float *)&arg0->_min[1];
-        arg2->z = *(float *)&arg0->_min[2];
+        corner[0] = box->_min[0];
+        corner[1] = box->_min[1];
+        corner[2] = box->_min[2];
         break;
     case 6:
-        c = ((float *)&arg0->_max)[2];
-        b = *(float *)&arg0->_min[1];
-        a = *(float *)&arg0->_min[0];
-        arg2->x = a;
-        arg2->y = b;
-        arg2->z = c;
+        c = box->_max[2];
+        b = box->_min[1];
+        a = box->_min[0];
+        corner[0] = a;
+        corner[1] = b;
+        corner[2] = c;
         break;
     case 5:
-        c = *(float *)&arg0->_min[2];
-        b = ((float *)&arg0->_max)[1];
-        a = *(float *)&arg0->_min[0];
-        arg2->x = a;
-        arg2->y = b;
-        arg2->z = c;
+        c = box->_min[2];
+        b = box->_max[1];
+        a = box->_min[0];
+        corner[0] = a;
+        corner[1] = b;
+        corner[2] = c;
         break;
     case 4:
-        c = ((float *)&arg0->_max)[2];
-        b = ((float *)&arg0->_max)[1];
-        a = *(float *)&arg0->_min[0];
-        arg2->x = a;
-        arg2->y = b;
-        arg2->z = c;
+        c = box->_max[2];
+        b = box->_max[1];
+        a = box->_min[0];
+        corner[0] = a;
+        corner[1] = b;
+        corner[2] = c;
         break;
     case 3:
-        c = *(float *)&arg0->_min[2];
-        b = *(float *)&arg0->_min[1];
-        a = ((float *)&arg0->_max)[0];
-        arg2->x = a;
-        arg2->y = b;
-        arg2->z = c;
+        c = box->_min[2];
+        b = box->_min[1];
+        a = box->_max[0];
+        corner[0] = a;
+        corner[1] = b;
+        corner[2] = c;
         break;
     case 2:
-        c = ((float *)&arg0->_max)[2];
-        b = *(float *)&arg0->_min[1];
-        a = ((float *)&arg0->_max)[0];
-        arg2->x = a;
-        arg2->y = b;
-        arg2->z = c;
+        c = box->_max[2];
+        b = box->_min[1];
+        a = box->_max[0];
+        corner[0] = a;
+        corner[1] = b;
+        corner[2] = c;
         break;
     case 1:
-        c = *(float *)&arg0->_min[2];
-        b = ((float *)&arg0->_max)[1];
-        a = ((float *)&arg0->_max)[0];
-        arg2->x = a;
-        arg2->y = b;
-        arg2->z = c;
+        c = box->_min[2];
+        b = box->_max[1];
+        a = box->_max[0];
+        corner[0] = a;
+        corner[1] = b;
+        corner[2] = c;
         break;
     case 0:
-        arg2->x = ((float *)&arg0->_max)[0];
-        arg2->y = ((float *)&arg0->_max)[1];
-        arg2->z = ((float *)&arg0->_max)[2];
+        corner[0] = box->_max[0];
+        corner[1] = box->_max[1];
+        corner[2] = box->_max[2];
         break;
     }
 }
@@ -239,62 +239,62 @@ int FUN_0018afa0(igAABox *box, igSphere *sphere) {
     }
 }
 
-int igAABox_IntersectBox(struct B *arg0, struct B *arg1) {
-    int var_v0;
+int igAABox_IntersectBox(const igAABox *box, const igAABox *other) {
+    int overlap;
 
     /* matching construct: hand enumeration under C++ — int result set then cleared, no bool narrowing */
-    var_v0 = 1;
-    if (!(arg1->f8 <= arg0->f20)) {
-        var_v0 = 0;
+    overlap = 1;
+    if (!(other->_min[0] <= box->_max[0])) {
+        overlap = 0;
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (!(arg0->f8 <= arg1->f20)) {
-            var_v0 = 0;
+    if (overlap != 0) {
+        overlap = 1;
+        if (!(box->_min[0] <= other->_max[0])) {
+            overlap = 0;
         }
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (!(arg1->f12 <= arg0->f24)) {
-            var_v0 = 0;
+    if (overlap != 0) {
+        overlap = 1;
+        if (!(other->_min[1] <= box->_max[1])) {
+            overlap = 0;
         }
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (!(arg0->f12 <= arg1->f24)) {
-            var_v0 = 0;
+    if (overlap != 0) {
+        overlap = 1;
+        if (!(box->_min[1] <= other->_max[1])) {
+            overlap = 0;
         }
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (!(arg1->f16 <= arg0->f28)) {
-            var_v0 = 0;
+    if (overlap != 0) {
+        overlap = 1;
+        if (!(other->_min[2] <= box->_max[2])) {
+            overlap = 0;
         }
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (!(arg0->f16 <= arg1->f28)) {
-            var_v0 = 0;
+    if (overlap != 0) {
+        overlap = 1;
+        if (!(box->_min[2] <= other->_max[2])) {
+            overlap = 0;
         }
     }
-    return var_v0;
+    return overlap;
 }
 
 int FUN_0018b110(void *arg0, void *arg1) {
-    int sp20[4];
+    float corner[4];
 
     if (!(*(float *)((char *)(arg0) + 8) <= *(float *)((char *)(arg0) + 20))) {
         return 0;
     }
-    igAABox_GetCorner((igAABox *)arg0, ~*(int *)((char *)(arg1) + 24) & 7, (V3 *)sp20);
-    return FUN_0018d060((P2 *)arg1, (float *)sp20) == 2;
+    igAABox_GetCorner((igAABox *)arg0, ~*(int *)((char *)(arg1) + 24) & 7, corner);
+    return FUN_0018d060((P2 *)arg1, corner) == 2;
 }
 
 int FUN_0018b170(void *volume, igRay *ray) {
     igAABox *box = (igAABox *)volume;
     float tNear, tFar;
     int i;
-    if (igAABox_IntersectPoint((B4 *)box, (V *)ray->_pos) == 2) {
+    if (igAABox_IntersectPoint(box, ray->_pos) == 2) {
         return 1;
     }
     tNear = -3.402823466e+38f;
@@ -379,27 +379,27 @@ int FUN_0018b540(void *parg0, P *b) {
     float t;
     int s0, v0;
     if (!(((B3 *)a)->f8 <= ((B3 *)a)->f20)) return 0;
-    s0 = igAABox_IntersectPoint((B4 *)a, (V *)&b->f8) != 0;
+    s0 = igAABox_IntersectPoint((igAABox *)a, &b->f8) != 0;
     t = b->f32;
     v[0] = b->f8 + t * b->f20;
     v[1] = b->f12 + t * b->f24;
     v[2] = b->f16 + t * b->f28;
-    v0 = igAABox_IntersectPoint((B4 *)a, (V *)v) != 0;
+    v0 = igAABox_IntersectPoint((igAABox *)a, v) != 0;
     if (s0 != 0 && v0 != 0) return 2;
     if (s0 != 0 || v0 != 0 || FUN_0018b170((void *)a, (igRay *)b) != 0) return 1;
     return 0;
 }
 
-int igAABox_IntersectPoint(struct B4 *arg0, struct V *arg1) {
-    float temp_f1;
-    float temp_f1_2;
-    float temp_f1_3;
-    temp_f1 = arg1->x;
-    if (arg0->lox <= temp_f1 && temp_f1 <= arg0->hix) {
-        temp_f1_2 = arg1->y;
-        if ((arg0->loy <= temp_f1_2) && (temp_f1_2 <= arg0->hiy)) {
-            temp_f1_3 = arg1->z;
-            if ((arg0->loz <= temp_f1_3) && (temp_f1_3 <= arg0->hiz)) {
+int igAABox_IntersectPoint(const igAABox *box, const float *point) {
+    float x;
+    float y;
+    float z;
+    x = point[0];
+    if (box->_min[0] <= x && x <= box->_max[0]) {
+        y = point[1];
+        if ((box->_min[1] <= y) && (y <= box->_max[1])) {
+            z = point[2];
+            if ((box->_min[2] <= z) && (z <= box->_max[2])) {
                 return 2;
             }
         }
@@ -501,10 +501,10 @@ int FUN_0018b970(void *arg0) {
     return var_v0;
 }
 
-void igAABox_GetCenter(float *arg0, float *arg1) {
-    arg1[0] = arg0[2] * 0.5f + arg0[5] * 0.5f;
-    arg1[1] = arg0[3] * 0.5f + arg0[6] * 0.5f;
-    arg1[2] = arg0[4] * 0.5f + arg0[7] * 0.5f;
+void igAABox_GetCenter(const igAABox *box, float *center) {
+    center[0] = box->_min[0] * 0.5f + box->_max[0] * 0.5f;
+    center[1] = box->_min[1] * 0.5f + box->_max[1] * 0.5f;
+    center[2] = box->_min[2] * 0.5f + box->_max[2] * 0.5f;
 }
 
 float FUN_0018b9e0(Ray *ray, V2 *a, V2 *b, V2 *c, V2 *hit, V2 *n, int mode) {
