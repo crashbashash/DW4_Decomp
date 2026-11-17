@@ -30,9 +30,10 @@ int UTY_CmpTime(int id, int arg, int a, int b);
  * prototype sfmpv_SetMpvHd allocates its registers differently from retail. */
 int MEM_Copy(void *dst, void *src, int n);
 void UTY_MemsetDword(void *dst, int value, int size);
-int MPV_CheckDelim();
+int MPV_CheckDelim(const unsigned char *p);
 int MPV_EntryErrFunc(void *handle, void (*callback)(SfdPlayer *, int), SfdPlayer *player);
 char *MPV_SearchDelim(char *data, int size, int mask);
+char *MPV_BsearchDelim(char *end, int len, int mask);
 int MPV_SkipFrmSj(void *handle, int sj);
 int MPV_GetBitRate(void *handle, int *value);
 void MPV_GetVbvBufSiz(void *handle, int *x, int *y, int *z);
@@ -66,6 +67,7 @@ int SFLIB_CheckHn(SfdPlayer *player);
 void sfd_Lock(void *guard);
 void sfd_Unlock(void *guard);
 char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
+char *sfmpv_BsearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
 void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size);
 void sfmpv_InitPicUsr(SfdBufPool *pool);
 void FUN_002a7e30(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out);
@@ -121,6 +123,11 @@ void sfmpv_SetSkipTtu(SfdPlayer *player);
 int sfmpv_IsSeekSkip(SfdPlayer *player);
 int FUN_002a6510(SfdPlayer *player, unsigned int type, SfdChunk *chunk);
 int sfmpv_IsLate(SfdPlayer *player, unsigned int type);
+void sfmpv_GetDtime(SfdPlayer *player, int unused, int *first, int *second);
+void SFTIM_UpdateItime(SfdTimer *tim, int now);
+int SFTIM_GetNextItime(SfdTimer *tim, int now);
+int SFTIM_GetSpeed(SfdPlayer *player);
+int FUN_002ae968(SfdPlayer *player, int *time, int *unit);
 void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind);
 void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot);
 void FUN_002a73f0(SfdChunk *dst, SfdChunk *src);
@@ -556,6 +563,42 @@ char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code) {
     return 0;
 }
 
+/* The same search backwards from the end of the readable data. */
+char *sfmpv_BsearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code) {
+    char tmp[8];
+    char *p;
+    int n1;
+    int n2;
+    int i;
+    int c;
+
+    *code = 0;
+    if (ring->len1 != 0) {
+        p = MPV_BsearchDelim(ring->addr1 + ring->len1, ring->len1, mask);
+        if (p != 0) {
+            *code = MPV_CheckDelim(p);
+            return p;
+        }
+        n1 = (ring->len0 < 3) ? ring->len0 : 3;
+        n2 = (ring->len1 < 3) ? ring->len1 : 3;
+        memcpy(tmp, ring->addr0 + ring->len0 - n1, n1);
+        memcpy(tmp + n1, ring->addr1, n2);
+        for (i = 0; i < n1 + n2 - 3; i++) {
+            c = MPV_CheckDelim(&tmp[i]);
+            if (c & mask) {
+                *code = c;
+                return ring->addr0 + ring->len0 - n1 + i;
+            }
+        }
+    }
+    p = MPV_BsearchDelim(ring->addr0 + ring->len0, ring->len0, mask);
+    if (p != 0) {
+        *code = MPV_CheckDelim(p);
+        return p;
+    }
+    return 0;
+}
+
 void sfmpv_PeekChnk(SfdPlayer *player, SfdChunk *out) {
     SfdRingInfo info;
     if (SFBUF_RingGetRead(player, player->streams.f16, &info) != 0) {
@@ -627,7 +670,7 @@ void sfmpv_DiscardSec(SfdPlayer *player, SfdStream *stream) {
     int buf[4];
     for (;;) {
         stream->ops->read(stream, 1, 4, buf);
-        if (buf[1] != 4 || MPV_CheckDelim(buf[0]) != 128) {
+        if (buf[1] != 4 || MPV_CheckDelim((const unsigned char *)buf[0]) != 128) {
             break;
         }
         stream->ops->skip(stream, 0, buf);
@@ -1061,6 +1104,51 @@ int FUN_002a6510(SfdPlayer *player, unsigned int type, SfdChunk *chunk) {
         r = 0;
     }
     return r;
+}
+
+/* Whether the picture would be shown late: the timer's skip hook decides when one is set, otherwise
+ * its display time against the current time, within the allowed number of skips. */
+int sfmpv_IsLate(SfdPlayer *player, unsigned int type) {
+    SfdMpv *mpv = player->streams.mpv;
+    SfdTimer *timer = &player->timer;
+    SfdTimeStamp *cur = &timer->cur;
+    SfdTimeStamp *ofs = &timer->f280;
+    int time;
+    int unit;
+    int now;
+    int nowUnit;
+    int dnum;
+    int dden;
+
+    if (ofs->done == 0) {
+        time = 0;
+    } else {
+        time = cur->a - ofs->a + timer->base;
+    }
+    unit = cur->b;
+    if (timer->hook != 0) {
+        return timer->hook(player, type, time, unit);
+    }
+    if (type == 1) {
+        SFTIM_UpdateItime(timer, time);
+    }
+    if (type == 1 || type == 2) {
+        time = SFTIM_GetNextItime(timer, time);
+    }
+    if (SFTIM_GetSpeed(player) <= 1000 && mpv->f132 >= player->pending.f152) {
+        return 0;
+    }
+    FUN_002ae968(player, &now, &nowUnit);
+    if (now < 0) {
+        return 0;
+    }
+    sfmpv_GetDtime(player, type, &dnum, &dden);
+    time = time - unit * dnum / dden;
+    if (UTY_CmpTime(now, nowUnit, time, unit) != 0) {
+        return 0;
+    }
+    mpv->f132++;
+    return 1;
 }
 
 void sfmpv_GetDtime(SfdPlayer *player, int unused, int *first, int *second) {

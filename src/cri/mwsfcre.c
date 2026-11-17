@@ -310,7 +310,29 @@ int mwsfcre_GetAlignMargin(void) {
 }
 
 /* the sizes the player's work area is made of: input, MPV work, fixed work and the frame pool */
-int mwPlyCalcWorkSfd(MwsfdCreInf *cprm);
+int mwPlyCalcWorkSfd(MwsfdCreInf *cprm) {
+    int inBuf, f1, xBuf, mpv0, mpv1, mpv2;
+    int frmSize, picBufSize;
+    int fixedA, fixedB;
+    int fixed, margin;
+    int input, frames, size;
+
+    mwsfcre_CalcWorkStmBuf(cprm, &inBuf, &f1, &xBuf, &mpv0, &mpv1, &mpv2);
+    mwsfcre_CalcWorkFrmBuf(cprm, &frmSize, &picBufSize);
+    fixed = mpv_GetFixedWorkSizes(cprm, &fixedA, &fixedB);
+    margin = mwsfcre_GetAlignMargin();
+    /* matching construct: statement-order search — the input and frame sums are formed before the main one */
+    input = inBuf + mpv1;
+    frames = frmSize + 0x40;
+    frames += picBufSize + mpv2;
+    size = f1 + xBuf + mpv0;
+    size += 0x40;
+    size += fixed;
+    size += input;
+    size += frames;
+    size += margin;
+    return size + 0x800;
+}
 
 /* the sfx work and, with additional information on, its SJ buffer */
 int mwPlyCalcWorkCompo(MwsfdCreInf *cprm) {

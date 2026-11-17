@@ -62,3 +62,10 @@ guesses from what each file does.
   GameCube library's map (`sfd_tim.c`), which has the same five in the same sequence; the bodies of `SFTIM_Init` agree with the
   GameCube source. `SFD_SetUsrTimeFn`, `SFD_SetExtClockFn` and `SFD_UpdateTime` (`0x2aed78`, `0x2aee00`, `0x2aeef0`) come from the same
   list: eight consecutive function sizes from `0x2aed60` match.
+- `SFADXT_Create`, `sfmpv_BsearchDelim` and `sfmpv_IsLate` follow the CRI PS2 SDK archive `libmwsfde.a` (recvx-decomp-cri,
+  github.com/SkeletonPicture/recvx-decomp-cri; members `sfd_adxt.o`, `sfd_mpv.o`) and the Resident Evil 4 CRI sources `sfd_adxt.c`
+  and `sfd_mpv.c` kept in the Persona 4 decompilation (github.com/Raikaru/Persona4-Decompilation, `src/cri/re4/`). `SFADXT_Create` matches only when the ADXT handle, the ring, handle slot 7's work and
+  the four volume and pan entries of the output interface share the alias set of the renderer pointer read from the ADXT handle
+  (the SDK's `ADXRNA` is `void *`), so `sfadx.c` keeps them untyped; typed pointers reorder the stores.
+- `sfxcnv_CnvFrmYcc420plnToZ` and `sfxcnv_CnvFrmArgb8888mbToZ` of the SDK's `sfx_cnv.o` are `0x2b4dc8` and `0x2b4f58` with
+  only the handle offsets changed; both still differ in where a constant store into the source block is scheduled.

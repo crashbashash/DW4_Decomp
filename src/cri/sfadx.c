@@ -16,8 +16,8 @@ typedef struct SfdAdxCfg {
 typedef void (*SfdAdxStep)(SfdAdxHn *h, char *buf, int size, int *used);
 
 typedef struct SfdAdxCtx {
-    int adxt;          /* 0 */
-    SfdSj *sj;      /* 4 */
+    void *adxt;        /* 0 */
+    void *sj;          /* 4 */
     SfdAdxCfg cfg;     /* 8 */
     int time;          /* 36 */
     int unit;          /* 40 */
@@ -32,14 +32,22 @@ typedef struct SfdAdxCtx {
     int f76;
 } SfdAdxCtx;
 
+/* The audio output interface a player reads (handle slot 7): the renderer and the volume, pan and speed
+ * functions. Like the handle slots, the entries are untyped. */
 typedef struct SfdAdxIf {
-    int id;            /* 0 */
-    void (*f4)(SfdAdxHn *h);
-    void (*f8)(SfdAdxHn *h);
-    void (*f12)(SfdAdxHn *h);
-    void (*f16)(SfdAdxHn *h);
-    void (*f20)(SfdAdxHn *h, int volume);
+    int rna;           /* 0 */
+    void *setOutPan;   /* 4 */
+    void *getOutPan;   /* 8 */
+    void *setOutVol;   /* 12 */
+    void *getOutVol;   /* 16 */
+    void (*setSpeed)(SfdAdxHn *h, int speed);   /* 20 */
 } SfdAdxIf;
+
+/* The ADXT handle as this file reads it. */
+typedef struct SfdAdxtView {
+    char pad0[12];
+    void *rna;         /* 12 */
+} SfdAdxtView;
 
 typedef struct SfdAdxSub {
     int f0;
@@ -87,7 +95,7 @@ struct SfdAdxHn {
     char blk4120[4060];     /* 4120 */
     SfdAdxSub sub;          /* 8180 */
     char pad8204[256];
-    SfdAdxIf *iface;        /* 8460 */
+    void *iface;            /* 8460: slot 7's work, ifbuf */
     char pad8464[5136];
     SfdAdxCtx ctxbuf;       /* 13600 */
     char pad13680[100];
@@ -101,7 +109,7 @@ extern char sfadx_silent_block[];
 extern SfdAdxCfg sfadxt_para;
 extern int DAT_0057faac;
 extern int sfadxt_stat;
-extern int DAT_004bead8[4];
+extern void *DAT_004bead8[4];
 
 float logf(float);
 int strncmp();
@@ -111,7 +119,7 @@ int ADXT_Finish();
 void FUN_00263548();
 int FUN_00265f28();
 int FUN_00265f40();
-int ADXT_Create();
+void *ADXT_Create();
 int ADXT_Destroy();
 void ADXT_StartSj();
 int ADXT_Stop();
@@ -205,17 +213,17 @@ int sfadxt_GetTermSrc(SfdAdxHn *h);
 int sfadxt_GetTermDst(SfdAdxHn *h);
 void sfadxt_SetTermDst(SfdAdxHn *h, int value);
 void sfadxt_SetAdxtHd(SfdAdxHn *h);
-int sfadxt_IsEndDecinfo(int adxt);
+int sfadxt_IsEndDecinfo(void *adxt);
 void FUN_0029c498(SfdAdxHn *h);
 int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx);
 int SFADXT_Create(SfdAdxHn *h);
-int sfadxt_CreateEx(SfdAdxCfg *cfg);
-int sfadxt_RestoreAdxtHn(void);
+void *sfadxt_CreateEx(SfdAdxCfg *cfg);
+void *sfadxt_RestoreAdxtHn(void);
 void FUN_0029c890(SfdAdxHn *h);
 int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit);
-void sfadxt_GetTimeTst(void *blk, int adxt, int *out0, int *out1);
-int sfadxt_DestroySub(int adxt);
-int sfadxt_SaveAdxtHn(int adxt);
+void sfadxt_GetTimeTst(void *blk, void *adxt, int *out0, int *out1);
+int sfadxt_DestroySub(void *adxt);
+int sfadxt_SaveAdxtHn(void *adxt);
 int SFADXT_Stop(SfdAdxHn *h);
 void sfadxt_WaitStart(SfdAdxHn *h, int value);
 void sfadxt_DoPause(SfdAdxHn *h, int value);
@@ -265,7 +273,7 @@ void SFADXT_GetOutVol(SfdAdxHn *h) {
 }
 
 void FUN_0029b4c8(SfdAdxHn *h, int volume) {
-    int adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
+    void *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
     int hi;
     int lo;
     float t;
@@ -309,7 +317,7 @@ int SFADXT_Finish(void) {
 
 void sfadxt_HeadDecCallBack(SfdAdxHn *h) {
     SfdAdxD28 *d28 = &h->d28;
-    int adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
+    void *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
     int w;
     int ht;
     if (d28->f500 == d28->f504) {
@@ -589,7 +597,7 @@ int sfadxt_IsPrepEnd(SfdAdxHn *h) {
 
 void sfadxt_ChkTermFlg(SfdAdxHn *h, int flag) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    int adxt = ctx->adxt;
+    void *adxt = ctx->adxt;
     void *blk = h->blk4120;
     int st;
     int err;
@@ -670,7 +678,7 @@ void sfadxt_SetTermDst(SfdAdxHn *h, int value) {
 
 void sfadxt_SetAdxtHd(SfdAdxHn *h) {
     SfdAdxInfo *info = sfadxt_GetHd(h);
-    int adxt;
+    void *adxt;
     int n;
     if (info != 0 && info->ready == 0) {
         adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
@@ -686,7 +694,7 @@ void sfadxt_SetAdxtHd(SfdAdxHn *h) {
     }
 }
 
-int sfadxt_IsEndDecinfo(int adxt) {
+int sfadxt_IsEndDecinfo(void *adxt) {
     if ((unsigned int)ADXT_GetStat(adxt) < 2) {
         return 0;
     }
@@ -695,7 +703,7 @@ int sfadxt_IsEndDecinfo(int adxt) {
 
 void FUN_0029c498(SfdAdxHn *h) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    int adxt = ctx->adxt;
+    void *adxt = ctx->adxt;
     int value = SFSET_GetCond(h, 27);
     if (ctx->opt27 != value) {
         ctx->opt27 = value;
@@ -703,7 +711,47 @@ void FUN_0029c498(SfdAdxHn *h) {
     }
 }
 
-int SFADXT_Create(SfdAdxHn *h);
+/* creates the audio driver when audio is on (condition 6): the ADXT, the ring it reads and the output
+ * interface, then starts the ADXT paused on the ring with the audio clock as time source */
+int SFADXT_Create(SfdAdxHn *h) {
+    SfdAdxCtx *ctx = &h->ctxbuf;
+    SfdAdxCfg *cfg = &ctx->cfg;
+    SfdAdxIf *iface;
+    void *adxt;
+    SfdSj *sj;
+    int ret;
+
+    if (SFSET_GetCond(h, 6) == 0) {
+        return 0;
+    }
+    h->sub.ctx = (int)ctx;
+    ret = sfadxt_InitInf(h, ctx);
+    if (ret != 0) {
+        return ret;
+    }
+    adxt = sfadxt_CreateEx(cfg);
+    if (adxt == 0) {
+        return sfd_ReportError(0, 0xFF000C04);
+    }
+    sj = SJRBF_Create(cfg->f8, cfg->f0, cfg->f4);
+    if (sj == 0) {
+        return sfd_ReportError(0, 0xFF000C05);
+    }
+    ctx->adxt = adxt;
+    ctx->sj = sj;
+    iface = &h->ifbuf;
+    h->iface = iface;
+    iface->rna = (int)((SfdAdxtView *)adxt)->rna;
+    iface->setOutPan = SFADXT_SetOutPan;
+    iface->getOutPan = SFADXT_GetOutPan;
+    iface->setOutVol = SFADXT_SetOutVol;
+    iface->getOutVol = SFADXT_GetOutVol;
+    iface->setSpeed = FUN_0029b4c8;
+    ADXT_StartSj(adxt, sj);
+    sfadxt_WaitStart(h, 1);
+    FUN_0029c890(h);
+    return 0;
+}
 
 int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx) {
     SfdAdxPair pair[4];
@@ -742,9 +790,9 @@ int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx) {
     return 0;
 }
 
-int sfadxt_CreateEx(SfdAdxCfg *cfg) {
-    int adxt;
-    int ret;
+void *sfadxt_CreateEx(SfdAdxCfg *cfg) {
+    void *adxt;
+    void *ret;
     if (SFPLY_GetResetFlg() != 1) {
         adxt = ADXT_Create(cfg->f12, cfg->f24, cfg->f20);
     } else {
@@ -758,7 +806,7 @@ int sfadxt_CreateEx(SfdAdxCfg *cfg) {
     return ret;
 }
 
-int sfadxt_RestoreAdxtHn(void) {
+void *sfadxt_RestoreAdxtHn(void) {
     return DAT_004bead8[0];
 }
 
@@ -769,7 +817,7 @@ void FUN_0029c890(SfdAdxHn *h) {
 
 int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    int adxt = ctx->adxt;
+    void *adxt = ctx->adxt;
     void *blk = h->blk4120;
     int nowTime;
     int nowUnit;
@@ -789,7 +837,7 @@ int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit) {
     return 0;
 }
 
-void sfadxt_GetTimeTst(void *blk, int adxt, int *out0, int *out1) {
+void sfadxt_GetTimeTst(void *blk, void *adxt, int *out0, int *out1) {
     SfdAdxPair size;
     SfdAdxPair extra;
     SfdAdxPair result;
@@ -808,7 +856,7 @@ void sfadxt_GetTimeTst(void *blk, int adxt, int *out0, int *out1) {
 
 int SFADXT_Destroy(SfdAdxHn *h) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    int adxt = ctx->adxt;
+    void *adxt = ctx->adxt;
     SfdSj *sj = ctx->sj;
     int ret;
     if (adxt == 0)
@@ -825,12 +873,12 @@ int SFADXT_Destroy(SfdAdxHn *h) {
     return ret;
 }
 
-int sfadxt_DestroySub(int adxt) {
+int sfadxt_DestroySub(void *adxt) {
     ADXT_Destroy(adxt);
     return 0;
 }
 
-int sfadxt_SaveAdxtHn(int adxt) {
+int sfadxt_SaveAdxtHn(void *adxt) {
     DAT_004bead8[0] = adxt;
     return 0;
 }
@@ -852,7 +900,7 @@ int SFADXT_Stop(SfdAdxHn *h) {
 /* matching construct: permuter, reduced by hand: the carry stored last */
 int SFADXT_Pause(SfdAdxHn *h, unsigned int mode) {
     SfdAdxCtx *ctx;
-    int adxt;
+    void *adxt;
     int size;
     int pos;
     int at;
@@ -887,7 +935,7 @@ int SFADXT_Pause(SfdAdxHn *h, unsigned int mode) {
 void sfadxt_WaitStart(SfdAdxHn *h, int value) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
     void *blk = h->blk4120;
-    int adxt;
+    void *adxt;
     ctx->f44 = value;
     adxt = ctx->adxt;
     if (value != 0 || h->f80 != 1) {
@@ -898,13 +946,13 @@ void sfadxt_WaitStart(SfdAdxHn *h, int value) {
 void sfadxt_DoPause(SfdAdxHn *h, int value) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
     void *blk = h->blk4120;
-    int adxt = ctx->adxt;
+    void *adxt = ctx->adxt;
     if (value != 0 || ctx->f44 != 1) {
         sfadxt_WtPause(adxt, blk, value);
     }
 }
 
-void sfadxt_WtPause(int adxt, void *blk, int value) {
+void sfadxt_WtPause(void *adxt, void *blk, int value) {
     ADXT_Pause(adxt, value);
     SFTST_Pause(blk, value);
 }
@@ -935,7 +983,7 @@ void SFADXT_AddRead(SfdAdxHn *h) {
 int SFADXT_Seek(SfdAdxHn *h) {
     SfdAdxInfo *info;
     SfdAdxCtx *ctx;
-    int adxt;
+    void *adxt;
     info = sfadxt_GetHd(h);
     if (info == 0)
         return 0;

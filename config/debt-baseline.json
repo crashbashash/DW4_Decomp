@@ -15,12 +15,18 @@
   "compile.bytes": 0,
   "compile.functions": 0,
   "decl.header_conflicts": 563,
-  "decl.local_externs": 2820,
-  "decl.type_conflicts": 1828,
-  "decl.varargs": 882,
+  "decl.local_externs": {
+   "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views",
+   "value": 2824
+  },
+  "decl.type_conflicts": {
+   "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views",
+   "value": 1832
+  },
+  "decl.varargs": 881,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "fun_dat_refs": 1501,
+  "fun_dat_refs": 1503,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,
@@ -52,8 +58,8 @@
   "struct.c": 28,
   "unapproved.bytes": 0,
   "unapproved.functions": 0,
-  "unmatched.bytes": 208388,
-  "unmatched.functions": 169
+  "unmatched.bytes": 207136,
+  "unmatched.functions": 165
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

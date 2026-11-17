@@ -725,11 +725,11 @@
   "cri": {
    "files": 110,
    "offset_casts": 11,
-   "other_members": 7892,
+   "other_members": 7935,
    "recovered": 0,
    "recovered_pct": 0.0,
-   "synthetic": 369,
-   "total": 8272
+   "synthetic": 373,
+   "total": 8319
   },
   "engine": {
    "files": 49,
@@ -825,7 +825,7 @@
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 3994,
  "recovered": 32581,
- "synthetic": 5812,
- "total": 71391,
+ "synthetic": 5816,
+ "total": 71438,
  "typeable": 262
 }
