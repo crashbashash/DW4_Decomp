@@ -10,13 +10,13 @@ readable source that rebuilds the retail executable byte for byte.
 | Alchemy engine | 1573 KB | 88.4 % | 38.0 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 99.6 % |
 | CRI ADX | 140 KB | 100.0 % | 30.7 % |
-| CRI Sofdec | 209 KB | 91.9 % | 27.2 % |
+| CRI Sofdec | 209 KB | 93.1 % | 27.2 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
 | Sony SDK | 97 KB | 100.0 % | 89.8 % |
 | newlib | 84 KB | 100.0 % | 50.9 % |
 | libgcc | 11 KB | 100.0 % | 98.7 % |
 | Metrowerks runtime | 10 KB | 100.0 % | 97.3 % |
-| **Total** | **3391 KB** | **94.1 %** | **48.9 %** |
+| **Total** | **3391 KB** | **94.2 %** | **48.9 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->

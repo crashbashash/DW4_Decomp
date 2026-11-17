@@ -16,17 +16,20 @@
   "compile.functions": 0,
   "decl.header_conflicts": 563,
   "decl.local_externs": {
-   "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations Sofdec round 7: SDK-shaped functions declare CRI callees that have no header home in the unit that calls them, with that unit's handle types",
-   "value": 2828
+   "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations Sofdec round 7: SDK-shaped functions declare CRI callees that have no header home in the unit that calls them, with that unit's handle types decl.local_externs +1: sfmpv.c declares sfmpv_ReadTcode/SFMPVF_AllocFrm/SFMPVF_EndRefFrm/FUN_002a54d0 for the newly matched bodies; decl.varargs +1: sfadx.c's existing SFTST_Calc() declaration now names a defined function",
+   "value": 2829
   },
   "decl.type_conflicts": {
    "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views Sofdec round 7: SDK-shaped functions declare CRI callees that have no header home in the unit that calls them, with that unit's handle types",
    "value": 1835
   },
-  "decl.varargs": 881,
+  "decl.varargs": {
+   "reason": "decl.local_externs +1: sfmpv.c declares sfmpv_ReadTcode/SFMPVF_AllocFrm/SFMPVF_EndRefFrm/FUN_002a54d0 for the newly matched bodies; decl.varargs +1: sfadx.c's existing SFTST_Calc() declaration now names a defined function",
+   "value": 882
+  },
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "fun_dat_refs": 1502,
+  "fun_dat_refs": 1503,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,
@@ -58,8 +61,8 @@
   "struct.c": 28,
   "unapproved.bytes": 0,
   "unapproved.functions": 0,
-  "unmatched.bytes": 204404,
-  "unmatched.functions": 159
+  "unmatched.bytes": 201856,
+  "unmatched.functions": 156
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

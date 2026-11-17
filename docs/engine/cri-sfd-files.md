@@ -92,3 +92,13 @@ guesses from what each file does.
 - `sfmpv_IsEmptySkip` (`0x2a6510`) is named from the Resident Evil 4 CRI source `sfd_mpv.c` in the Persona 4 decompilation (`src/cri/re4/`), where the same-signature test follows `sfmpv_IsPtypeSkip` in the chunk-accept chain.
 - `SFTIM_GetTime` (`0x2ae968`) is the time-and-unit read that the Resident Evil 4 `sfmpv_IsLateSkip` calls (`sfd_mpv.c` in the Persona 4 decompilation), at the SDK `sfd_tim.o` position before `SFD_GetNowTime`.
 - `SFADXT_SetSpeed` (`0x29b4c8`) is the `SetSpeed` slot of the ADXT output interface that `SFADXT_Create` installs, named from the Resident Evil 4 `sfd_adxt.c` in the Persona 4 decompilation and the SDK `sfd_adxt.o` order.
+- `SFTST_Calc` is the SDK `sfd_tst.o` member with DW4's leading enable word; it matches with the excess error computed
+  before the difference test, the absolute value written on the difference expression, and both time projections
+  written as `base != -1 ? ... : 0`.
+- `sfmpv_SetFrmPara` follows the RE4 `sfd_mpv.c` body with `SFD_CalcYccPlane`'s 64-byte stride arithmetic; its frame
+  parameter block (SDK `SFMPV_MPVFRM`) is `SfdFrmPara`. `0x2a5248` is the RE4 `sfmpv_CalcRepeatField` with the time-code
+  copy and the backward-reference retime moved into calls.
+- Several Sofdec bodies differ only where retail treats an `int` access as outside `int`'s alias set: the transfer slot's
+  input channel read in `sfmpv_GetActiveSize` (matches when read through an enum or pointer lvalue), the group-count
+  increment in `mpvhdec_DecGscSj` (matches through a pointer lvalue), and the frame counters stored by `0x2a68e8`
+  (SDK `sfmpv_DecodeFrm`). None of these has source evidence for a non-`int` type, so they stay unmatched.

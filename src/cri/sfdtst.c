@@ -176,6 +176,113 @@ void SFTST_GoNextFrame(SfdTst *tst, SfdRatio *ratio)
     }
 }
 
+/* Stabilises the output time against the master time: tracks the master's maximum, and once adjusting
+ * keeps a moving average of their difference, nudging the output base when it leaves the tolerance. */
+void SFTST_Calc(SfdTst *tst, SfdRatio *mt, SfdRatio *hlp, SfdRatio *out)
+{
+    long adj;
+    long est;
+    long excess;
+    long ave;
+    long tol;
+    long q;
+    long step;
+    long t;
+    int d;
+
+    if (hlp->den == 1 || tst->f0 == 0) {
+        *out = *mt;
+        return;
+    }
+    mt->num = (tst->mt_max > mt->num) ? tst->mt_max : mt->num;
+    if (tst->pastat == 1) {
+        tst->adjmode = 0;
+    } else if (tst->adjmode == 0) {
+        if (mt->num > tst->mt_max) {
+            tst->adjmode = 1;
+            if (tst->f376 == -1) {
+                adj = mt->den * tst->f344 / tst->f352;
+            } else {
+                adj = mt->den * tst->f360 / tst->f368;
+            }
+            tst->f376 = hlp->num;
+            tst->f384 = mt->num + adj;
+            sftst_ResetHist(tst);
+        } else if (tst->paused == 0) {
+            tst->adjmode = 1;
+        }
+    }
+    tst->mt_max = (tst->mt_max > mt->num) ? tst->mt_max : mt->num;
+    if (tst->f376 != -1) {
+        est = tst->f384 + mt->den * (hlp->num - tst->f376) / hlp->den;
+    } else {
+        est = 0;
+    }
+    if (tst->adjmode == 0) {
+        if (tst->mt_max < est) {
+            if (tst->paused != 0) {
+                tst->f376 = hlp->num;
+                tst->f384 = tst->mt_max;
+            } else {
+                tst->f376 = hlp->num;
+                tst->f384 = tst->out_time;
+            }
+            tst->adj_limit++;
+        }
+    } else if (tst->paused == 1) {
+        excess = mt->den * tst->f328 / tst->f336;
+        if (excess < ((mt->num - est < 0) ? -(mt->num - est) : mt->num - est)) {
+            tst->f376 = hlp->num;
+            tst->f384 = mt->num;
+            sftst_ResetHist(tst);
+            tst->excesserr++;
+        } else {
+            ave = sftst_UpdateMovAve(tst, (int)(mt->num - est));
+            tol = mt->den * tst->f312 / tst->f320;
+            if (tol < ((ave < 0) ? -ave : ave)) {
+                if (tol < ave) {
+                    q = ave * 2 / tol - 1;
+                    tst->adj_front += (int)q;
+                } else {
+                    q = ave * 2 / tol + 1;
+                    tst->adj_rear -= (int)q;
+                }
+                step = q * tol / 2;
+                tst->f376 = hlp->num;
+                tst->f384 = est + step;
+                sftst_ModifyHist(tst, (int)step);
+            }
+        }
+    }
+    if (tst->f376 != -1) {
+        t = tst->f384 + mt->den * (hlp->num - tst->f376) / hlp->den;
+    } else {
+        t = 0;
+    }
+    out->num = t;
+    out->den = mt->den;
+    if (out->num < tst->out_time) {
+        out->num = tst->out_time;
+        out->den = tst->f304;
+    }
+    tst->master_time = mt->num;
+    tst->f272 = mt->den;
+    tst->help_time = hlp->num;
+    tst->help_unit = hlp->den;
+    tst->out_time = out->num;
+    tst->f304 = out->den;
+    d = (int)(mt->num - out->num);
+    if (tst->adjmode == 0) {
+        tst->diff_l_max = (tst->diff_l_max > d) ? tst->diff_l_max : d;
+        tst->diff_l_min = (tst->diff_l_min < d) ? tst->diff_l_min : d;
+    } else {
+        tst->diff_a_max = (tst->diff_a_max > d) ? tst->diff_a_max : d;
+        tst->diff_a_min = (tst->diff_a_min < d) ? tst->diff_a_min : d;
+    }
+    DAT_004beb48 = tst;
+    FUN_002b0cf8(tst);
+}
+
 int sftst_UpdateMovAve(SfdTst *tst, int value)
 {
     int *pos = &tst->pos;

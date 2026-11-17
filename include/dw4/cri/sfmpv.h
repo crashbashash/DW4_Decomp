@@ -119,6 +119,15 @@ typedef struct SfdPicInfo {
     char pad101[27];
 } SfdPicInfo;
 
+/* what one picture decode writes and predicts from (SDK SFMPV_MPVFRM) */
+typedef struct SfdFrmPara {
+    SfdPlanes ref[2];
+    char *dst;
+    SfdPicInfo *pic;
+    int nfrm;
+    int nbyte;
+} SfdFrmPara;
+
 typedef struct SfdUserData {
     char data[512];
     int size;
