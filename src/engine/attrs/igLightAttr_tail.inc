@@ -18,7 +18,7 @@ void Gap__Attrs__igLightAttr__vfunc_24(igLightAttr *self, igObject *context) {
     if (!self->_cacheable || self->_changed) {
         Gap__Gfx__igPsx2VisualContext__vfunc_84((igPsx2VisualContext *)context, self->_lightId, self->_ambient);
         Gap__Gfx__igPsx2VisualContext__vfunc_82((igPsx2VisualContext *)context, self->_lightId, self->_diffuse);
-        Gap__Gfx__igPsx2VisualContext__vfunc_86(context, self->_lightId, self->_specular);
+        Gap__Gfx__igPsx2VisualContext__vfunc_86((igPsx2VisualContext *)context, self->_lightId, self->_specular);
         switch (self->_lightType) {
         case 1:
             Gap__Gfx__igPsx2VisualContext__vfunc_96(context, self->_lightId, self->_attenuation);

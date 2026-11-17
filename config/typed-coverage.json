@@ -498,7 +498,7 @@
   "igGeometryMaskAttr": 1,
   "igGeometrySetAttr": 12,
   "igGraphPath": 8,
-  "igGroup": 32,
+  "igGroup": 33,
   "igGuiComponent": 7,
   "igGuiComponentController": 1,
   "igGuiComponentModel": 4,
@@ -508,6 +508,7 @@
   "igIGBFile": 832,
   "igImage": 191,
   "igImageMipMapList": 1,
+  "igIndexArray": 3,
   "igInfo": 5,
   "igInfoList": 30,
   "igInfoManager": 4,
@@ -534,7 +535,7 @@
   "igLongStack": 2,
   "igLuaState": 2,
   "igMallocMemoryPool": 159,
-  "igMaterialAttr": 18,
+  "igMaterialAttr": 23,
   "igMatrix44fList": 7,
   "igMatrix44fMetaField": 3,
   "igMatrixOptStateAttr": 1,
@@ -570,7 +571,7 @@
   "igNamedObjectList": 11,
   "igNode": 21,
   "igNodeList": 11,
-  "igObject": 1875,
+  "igObject": 1872,
   "igObjectDirEntry": 39,
   "igObjectList": 919,
   "igObjectListList": 4,
@@ -590,6 +591,7 @@
   "igPluginRepository": 10,
   "igPointSpriteExt": 4,
   "igPolygonModeAttr": 1,
+  "igPrimLengthArray": 3,
   "igPrimLengthArray1_1": 3,
   "igProbe": 8,
   "igProgramFile": 9,
@@ -619,7 +621,7 @@
   "igPsx2ThreadManager": 9,
   "igPsx2VertexArray1_1": 30,
   "igPsx2VertexArray2": 5,
-  "igPsx2VisualContext": 320,
+  "igPsx2VisualContext": 347,
   "igPsx2Window": 39,
   "igQuaternionfList": 13,
   "igQueue": 5,
@@ -691,7 +693,7 @@
   "igVec4fArrayMetaField": 2,
   "igVec4fMetaField": 3,
   "igVec4ucMetaField": 1,
-  "igVertexArray": 23,
+  "igVertexArray": 26,
   "igVertexArray1_1": 22,
   "igVertexArray2": 10,
   "igVertexArray2Helper": 28,
@@ -728,29 +730,29 @@
   "cri": {
    "files": 112,
    "offset_casts": 10,
-   "other_members": 7959,
+   "other_members": 8031,
    "recovered": 0,
    "recovered_pct": 0.0,
-   "synthetic": 933,
-   "total": 8902
+   "synthetic": 859,
+   "total": 8900
   },
   "engine": {
    "files": 49,
-   "offset_casts": 3225,
-   "other_members": 12255,
-   "recovered": 12541,
-   "recovered_pct": 37.79,
-   "synthetic": 5167,
-   "total": 33188
+   "offset_casts": 3217,
+   "other_members": 12247,
+   "recovered": 12580,
+   "recovered_pct": 37.93,
+   "synthetic": 5126,
+   "total": 33170
   },
   "game": {
    "files": 85,
-   "offset_casts": 686,
+   "offset_casts": 685,
    "other_members": 2314,
    "recovered": 19683,
-   "recovered_pct": 86.13,
+   "recovered_pct": 86.14,
    "synthetic": 169,
-   "total": 22852
+   "total": 22851
   },
   "libgcc": {
    "files": 7,
@@ -826,9 +828,9 @@
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 3958,
- "recovered": 32742,
- "synthetic": 6282,
- "total": 72020,
- "typeable": 262
+ "offset_casts": 3949,
+ "recovered": 32781,
+ "synthetic": 6167,
+ "total": 71999,
+ "typeable": 258
 }

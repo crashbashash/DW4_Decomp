@@ -29,12 +29,10 @@
 #include "dw4/support/softfloat.h"
 #include <string.h>
 #include "dw4/support/emptyString.h"
+#include "dw4/cri/cri_sndf.h"
 #pragma push
 #pragma readonly_strings on
 
-/* Both read only the handle; retail calls them with the voice type and the ADX-file flag left in the
- * argument registers. */
-extern "C" int SNDF_SeqCommand(int command, unsigned char requestId, int argument);
 extern "C" int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work);
 extern "C" char playSfp_REQUESTID[], playSfp_SNDF_SEQ_SET[], playSfp_SNDF_SEQ_PLAY[];
 extern "C" char stop_REQUESTID[], stop_SNDF_SEQ_GETSTATUS[], stop_SNDF_SEQ_STOP[];

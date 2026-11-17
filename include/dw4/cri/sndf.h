@@ -1,6 +1,8 @@
 #ifndef DW4_CRI_SNDF_H
 #define DW4_CRI_SNDF_H
 
+#include "dw4/cri/cri_sndf.h"
+
 typedef struct SndfQueueEntry {
     unsigned short kind;
     unsigned short arg;
@@ -12,11 +14,6 @@ typedef struct SndfSlot {
     unsigned char playing;
     char pad2[2];
 } SndfSlot;
-
-typedef struct SndfTables {
-    int first[32];
-    int second[32];
-} SndfTables;
 
 typedef struct SndfTransfer {
     char pad0[2];
@@ -167,7 +164,6 @@ void InvalidDCache(char *start, char *end);
 void memset();
 int sndf_CallRpc(int cmd, int *args, int n, int size);
 void FUN_00280e38(void);
-int SNDF_StartTransfer(unsigned int channel, SndfBank *bank);
 void SyncDCache(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
@@ -175,7 +171,6 @@ unsigned int sceSifQueryMaxFreeMemSize(void);
 int sceSdRemote(int arg, int command, ...);
 int FUN_00281420(unsigned int channel, int *start, int *size);
 int sndf_PushCommand(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
-int SNDF_GetTransferStatus(unsigned int channel);
 void FUN_00281df0(unsigned int channel);
 int sndf_SendMessage(unsigned int message);
 void *memcpy();

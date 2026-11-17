@@ -314,7 +314,7 @@ void igPsx2Media_Open(int *result, igPsx2MediaView *media, int slot, int **name,
     strcpy((char *)&command[1], path);
     {
         int *reply = (int *)media->_commandBuffer;
-        igResult sent = igPsx2IopRpcConnection_Call(media->_connection, 2, (int)command, commandSize, (int)reply, 16, 1);
+        igResult sent = igPsx2IopRpcConnection_Call(media->_connection, 2, command, commandSize, reply, 16, 1);
         fd = *reply;
         handle->fd = fd;
     }
@@ -366,7 +366,7 @@ int igPsx2Media_Write(igPsx2MediaView *self, int slot, char *data, int size) {
             request->size = chunk;
             request->reserved = 0;
             SyncDCache(self->_writeBuffer, self->_writeBuffer + chunk);
-            igPsx2IopRpcConnection_Call(self->_connection, 7, (int)request, 0x10, (int)reply, 0x10, 1);
+            igPsx2IopRpcConnection_Call(self->_connection, 7, request, 0x10, reply, 0x10, 1);
             written = *reply;
             if (written != chunk) {
                 if (written < 0) {
@@ -387,7 +387,7 @@ int igPsx2Media_Write(igPsx2MediaView *self, int slot, char *data, int size) {
     request->size = size;
     request->reserved = 0;
     SyncDCache(data, data + size);
-    igPsx2IopRpcConnection_Call(self->_connection, 7, (int)request, 0x10, (int)reply, 0x10, 1);
+    igPsx2IopRpcConnection_Call(self->_connection, 7, request, 0x10, reply, 0x10, 1);
     result = *reply;
     self->_sema->Signal();
     return result;
@@ -410,7 +410,7 @@ int igPsx2Media_SendIoRequest(igPsx2MediaView *self, int handle, int buffer, int
     SyncDCache((void *)buffer, (void *)(buffer + size));
     headAndTail = (int)self->_headAndTailBuffer;
     SyncDCache((void *)headAndTail, (void *)(headAndTail + 0x80));
-    igPsx2IopRpcConnection_Call(self->_connection, 6, (int)request, 0x20, (int)p, 0x10, 1);
+    igPsx2IopRpcConnection_Call(self->_connection, 6, request, 0x20, p, 0x10, 1);
     return *p;
 }
 
@@ -443,7 +443,7 @@ int igPsx2Media_Seek(igPsx2MediaView *self, int slot, int offset, int whence) {
     request[0] = ((MediaHandleRow *)((char *)self->_handlePool->rows + slot * 12))->fd;
     request[1] = offset;
     request[2] = whence;
-    igPsx2IopRpcConnection_Call(self->_connection, 4, (int)request, 16, (int)reply, 16, 1);
+    igPsx2IopRpcConnection_Call(self->_connection, 4, request, 16, reply, 16, 1);
     position = *reply;
     self->_sema->Signal();
     return -(position < 0);
@@ -458,7 +458,7 @@ int igPsx2Media_Tell(igPsx2MediaView *self, int slot) {
     request->buffer = 0;
     request->size = 1;
     slot = (int)&request->kind;
-    igPsx2IopRpcConnection_Call(self->_connection, 4, (int)request, 16, slot, 16, 1);
+    igPsx2IopRpcConnection_Call(self->_connection, 4, request, 16, (void *)slot, 16, 1);
     slot = *(int *)slot;
     self->_sema->Signal();
     return slot;

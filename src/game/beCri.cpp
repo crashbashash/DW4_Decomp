@@ -34,7 +34,7 @@
 #include "dw4/core/igStringObj.h"
 #include "dw4/scenegraph/igTraversal.h"
 #include <string.h>
-/* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
+/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
 extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/core/igFile.h"
 #include "dw4/core/igResource.h"
@@ -43,29 +43,10 @@ extern "C" int g_igCommonTraversal_travProcs[4];
 
 #include "dw4/support/emptyString.h"
 #include "dw4/support/list-services.h"
-extern "C" {
-/* the sound IOP module (kept local: dw4/cri/sndf.h is the C library's internal header, not C++-includable) */
-struct SndfBank;
-int SNDF_StartTransfer(unsigned int channel, struct SndfBank *bank);
-int SNDF_GetTransferStatus(unsigned int channel);
-int SNDF_SetPortSizes(void *sizes);
-int SNDF_FreePort(int port);
-void SNDF_SetMasterParam(int command, int value);
-int SNDF_SendControl(int channel, unsigned int command, int value);
-
-/* the voices */
-
-
-}
-
-/* The two tables handed to the sound IOP module: per port, a bank's table size and its PCM size. */
-struct SfpPortSizes {
-    int tblSize[32];
-    int pcmSize[32];
-};
+#include "dw4/cri/cri_sndf.h"
 extern "C" {
 int g_savedIgFileAbstractProxy;
-SfpPortSizes g_sfpPortSizes;
+SndfTables g_sfpPortSizes;
 int g_sfpTransferState[32];
 }
 

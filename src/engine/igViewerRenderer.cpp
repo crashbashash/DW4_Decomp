@@ -158,14 +158,6 @@ static inline void release(Obj *object) {
         }
     }
 }
-struct RemovedRef {
-    Obj *p;
-    RemovedRef(const RemovedRef &);
-    ~RemovedRef() {
-        release(p);
-    }
-};
-extern "C" RemovedRef igGroup_RemoveChildAt(Hold *, int);
 struct ItemType {};
 static inline Obj *createItem(ItemType) { return FUN_001361b0(0); }
 
@@ -707,7 +699,7 @@ void igViewerRenderer_UpdateScene(igViewerRenderer *renderer) {
         var_v1 = 0;
     }
     if (var_v1 > 0) {
-        igGroup_RemoveChildAt(a1, 0);
+        igGroup_RemoveChildAt((igGroup *)a1, 0);
     }
     CLEAR(arg0->f64)
     CLEAR(arg0->f60)

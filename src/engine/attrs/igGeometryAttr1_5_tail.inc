@@ -73,13 +73,13 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_24(igGeometryAttr1_5 *self, void *cont
     int overlap;
     StripLengths *lengths;
 
-    Gap__Gfx__igPsx2VisualContext__vfunc_59(context, self->_vertexArray);
+    Gap__Gfx__igPsx2VisualContext__vfunc_59((igPsx2VisualContext *)context, (igVertexArray *)self->_vertexArray);
     offset = self->_offset;
     numPrims = self->_numPrims;
     primType = self->_primType;
     lengths = (StripLengths *)self->_stripLengths;
     indexArray = self->_indexArray;
-    if (indexArray != 0) Gap__Gfx__igPsx2VisualContext__vfunc_60(context, indexArray);
+    if (indexArray != 0) Gap__Gfx__igPsx2VisualContext__vfunc_60((igPsx2VisualContext *)context, (igIndexArray *)indexArray);
     if (lengths != 0) {
         if (primType == 2) {
             stripType = 0;
@@ -96,17 +96,17 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_24(igGeometryAttr1_5 *self, void *cont
         case 0:
             break;
         case 1:
-            Gap__Gfx__igPsx2VisualContext__vfunc_71(context, primType, lengths->get(0) - overlap, offset);
+            Gap__Gfx__igPsx2VisualContext__vfunc_71((igPsx2VisualContext *)context, primType, lengths->get(0) - overlap, offset);
             break;
         default:
-            Gap__Gfx__igPsx2VisualContext__vfunc_63(context, lengths);
+            Gap__Gfx__igPsx2VisualContext__vfunc_63((igPsx2VisualContext *)context, (igPrimLengthArray *)lengths);
             Gap__Gfx__igPsx2VisualContext__vfunc_74((igPsx2VisualContext *)context, stripType, numPrims, offset, 0);
         }
-        if (lengths != 0) Gap__Gfx__igPsx2VisualContext__vfunc_63(context, 0);
+        if (lengths != 0) Gap__Gfx__igPsx2VisualContext__vfunc_63((igPsx2VisualContext *)context, 0);
     } else {
-        Gap__Gfx__igPsx2VisualContext__vfunc_71(context, primType, numPrims, offset);
+        Gap__Gfx__igPsx2VisualContext__vfunc_71((igPsx2VisualContext *)context, primType, numPrims, offset);
     }
-    if (indexArray != 0) Gap__Gfx__igPsx2VisualContext__vfunc_60(context, 0);
+    if (indexArray != 0) Gap__Gfx__igPsx2VisualContext__vfunc_60((igPsx2VisualContext *)context, 0);
 }
 
 inline void T_13d460::setBuffer(const igSmartPointer<R_13d460> &buffer) {

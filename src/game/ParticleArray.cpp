@@ -22,7 +22,7 @@
 #include "dw4/maths/igVec4f.h"
 #include "dw4/scenegraph/igCommonTraversal.h"
 #include "dw4/gfx/igPointSpriteExt.h"
-/* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
+/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
 extern "C" int g_igCommonTraversal_travProcs;
 
 #pragma push

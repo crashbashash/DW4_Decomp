@@ -106,13 +106,13 @@ void FUN_001c5e20(T_1c5e20 *arg0) {
     Gap__Core__igObject__vfunc_08__001d3390((igObject *)arg0);
 }
 
-Ref_1c5eb0 igGroup_RemoveChildAt(S_1c5eb0 *host, int idx) {
-    List_1c5eb0 *l0 = host->getList();
+igSmartPointer<igNode> igGroup_RemoveChildAt(igGroup *group, int idx) {
+    List_1c5eb0 *l0 = ((S_1c5eb0 *)group)->getList();
     int n = l0 ? l0->n : 0;
     if (idx < n) {
-        Ref_1c5eb0 obj(host->list->data[idx]);
-        obj.p->vX(host);
-        List_1c5eb0 *l = host->list;
+        igSmartPointer<igNode> obj((igNode *)((S_1c5eb0 *)group)->list->data[idx], kRetainReference);
+        ((Obj_1c5eb0 *)obj.p)->vX((S_1c5eb0 *)group);
+        List_1c5eb0 *l = (List_1c5eb0 *)group->_childList;
         Obj_1c5eb0 *e = l->data[idx];
         if (e) {
             --e->refs;
@@ -120,10 +120,10 @@ Ref_1c5eb0 igGroup_RemoveChildAt(S_1c5eb0 *host, int idx) {
         }
         List_RemoveWordAt((igDataList *)l, idx);
         l->data[l->n] = 0;
-        FUN_001c6110((O_1c6110 *)host, obj.p->f20);
+        FUN_001c6110((O_1c6110 *)group, ((Obj_1c5eb0 *)obj.p)->f20);
         return obj;
     }
-    return Ref_1c5eb0(0);
+    return igSmartPointer<igNode>(0, kRetainReference);
 }
 
 unsigned int igGroup_RemoveChild(igGroup *group, igNode *node) {
@@ -146,7 +146,7 @@ unsigned int igGroup_RemoveChild(igGroup *group, igNode *node) {
         }
     }
     if (found) {
-        igGroup_RemoveChildAt(host, i);
+        igGroup_RemoveChildAt(group, i);
         return i;
     }
     return -1U;

@@ -1,14 +1,44 @@
 #ifndef DW4_IGPSX2VISUALCONTEXT_H
 #define DW4_IGPSX2VISUALCONTEXT_H
 
+#include "dw4/gfx/GfxMetaEnums.h"
+
 struct igMetaObject;
 struct igPsx2VisualContext;
+struct igVertexArray;
+struct igIndexArray;
+struct igPrimLengthArray;
+
+/* What vfunc_46 copies into a new render destination; the render-destination attribute leaves the last
+ * word unset. */
+typedef struct RenderDestinationDesc {
+    int type;
+    int sizeX;
+    int sizeY;
+    int colorBitCount;
+    int alphaBitCount;
+    int depthBitCount;
+    int stencilBitCount;
+    float f28;
+} RenderDestinationDesc;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 extern struct igMetaObject *g_igPsx2VisualContext_metaObject;
+int Gap__Gfx__igPsx2VisualContext__vfunc_46(struct igPsx2VisualContext *self, RenderDestinationDesc *desc);
+void Gap__Gfx__igPsx2VisualContext__vfunc_59(struct igPsx2VisualContext *self, struct igVertexArray *vertexArray);
+void Gap__Gfx__igPsx2VisualContext__vfunc_60(struct igPsx2VisualContext *self, struct igIndexArray *indexArray);
+void Gap__Gfx__igPsx2VisualContext__vfunc_63(struct igPsx2VisualContext *self, struct igPrimLengthArray *stripLengths);
+void Gap__Gfx__igPsx2VisualContext__vfunc_71(struct igPsx2VisualContext *vc, int primitive, unsigned int count, int first);
+void Gap__Gfx__igPsx2VisualContext__vfunc_86(struct igPsx2VisualContext *self, int light, float *color);
+void Gap__Gfx__igPsx2VisualContext__vfunc_112(struct igPsx2VisualContext *self, float *ambient, float *diffuse, float *specular, float *emission, float shininess);
+void Gap__Gfx__igPsx2VisualContext__vfunc_136(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_WRAP wrapS, IG_GFX_TEXTURE_WRAP wrapT);
+void Gap__Gfx__igPsx2VisualContext__vfunc_138(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER minFilter);
+void Gap__Gfx__igPsx2VisualContext__vfunc_140(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER magFilter);
+void Gap__Gfx__igPsx2VisualContext__vfunc_247(struct igPsx2VisualContext *self, float *color);
+int Gap__Gfx__igPsx2VisualContext__vfunc_260(struct igPsx2VisualContext *self, int texture, int videoBuffer);
 void Gap__Gfx__igPsx2VisualContext__vfunc_48(struct igPsx2VisualContext *self, int bufferIndex);
 void Gap__Gfx__igPsx2VisualContext__vfunc_74(struct igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4);
 int Gap__Gfx__igPsx2VisualContext__vfunc_77(struct igPsx2VisualContext *self, int arg1);

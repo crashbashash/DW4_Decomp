@@ -43,20 +43,13 @@ void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self) {
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
-    R_453f70 *sp4C;
     int sp30[7];
     int var_s0;
     T_453f70 *temp_v1;
 
     var_s0 = arg0->f40->count - 1;
     while (var_s0 >= 0) {
-        igGroup_RemoveChildAt(&sp4C, arg0->f12, var_s0);
-        if (sp4C != 0) {
-            sp4C->refs = sp4C->refs - 1;
-            if (((unsigned long long)((long long)sp4C->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)sp4C);
-            }
-        }
+        igGroup_RemoveChildAt((igGroup *)arg0->f12, var_s0);
         var_s0 -= 1;
     }
     temp_v1 = arg0->f8;

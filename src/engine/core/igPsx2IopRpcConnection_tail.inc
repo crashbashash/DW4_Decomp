@@ -30,17 +30,17 @@ igResult igPsx2IopRpcConnection_Bind(igPsx2IopRpcConnectionView *self, int serve
 /* Calls RPC function `function` with the 16-byte-aligned send and receive buffers; a call with
  * neither a receive buffer nor `wait` returns at once and its end callback releases the
  * semaphore. */
-igResult igPsx2IopRpcConnection_Call(igPsx2IopRpcConnectionView *self, int function, int send, int sendSize, int receive, int receiveSize, int wait) {
+igResult igPsx2IopRpcConnection_Call(igPsx2IopRpcConnectionView *self, int function, void *send, int sendSize, void *receive, int receiveSize, int wait) {
     const igResult *result;
     int status;
 
-    if (send & 0xF) {
+    if ((int)send & 0xF) {
         return g_resultFailure;
     }
     if (sendSize & 0xF) {
         return g_resultFailure;
     }
-    if (receive & 0xF) {
+    if ((int)receive & 0xF) {
         return g_resultFailure;
     }
     if (receiveSize & 0xF) {
@@ -48,9 +48,9 @@ igResult igPsx2IopRpcConnection_Call(igPsx2IopRpcConnectionView *self, int funct
     }
     WaitSema(self->_sema);
     if ((receive == 0) && (wait == 0)) {
-        status = sceSifCallRpc(self->_sifData, function, 1, (void *)send, sendSize, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, (void *)self->_sema);
+        status = sceSifCallRpc(self->_sifData, function, 1, send, sendSize, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, (void *)self->_sema);
     } else {
-        status = sceSifCallRpc(self->_sifData, function, 0, (void *)send, sendSize, (void *)receive, receiveSize, 0, 0);
+        status = sceSifCallRpc(self->_sifData, function, 0, send, sendSize, receive, receiveSize, 0, 0);
         SignalSema(self->_sema);
     }
     if (status >= 0) {
@@ -96,23 +96,25 @@ igResult igPsx2IopRpcConnection_CallWithData(igPsx2IopRpcConnectionView *self, i
     return *result;
 }
 
-void igPsx2IopRpcConnection_CallNoData(int *result, igPsx2IopRpcConnectionView *self, int function, int blocking) {
-    const int *status;
-    int callResult;
+/* Calls RPC function `function` with no data; `blocking` waits for the server, otherwise the end
+ * callback releases the semaphore. */
+igResult igPsx2IopRpcConnection_CallNoData(igPsx2IopRpcConnectionView *self, int function, int blocking) {
+    const igResult *result;
+    int status;
 
     WaitSema(self->_sema);
     if (blocking != 0) {
-        callResult = sceSifCallRpc(self->_sifData, function, 2, 0, 0, 0, 0, 0, 0);
+        status = sceSifCallRpc(self->_sifData, function, 2, 0, 0, 0, 0, 0, 0);
         SignalSema(self->_sema);
     } else {
-        callResult = sceSifCallRpc(self->_sifData, function, 3, 0, 0, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, (void *)self->_sema);
+        status = sceSifCallRpc(self->_sifData, function, 3, 0, 0, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, (void *)self->_sema);
     }
-    if (callResult >= 0) {
-        status = &g_resultSuccess.v;
+    if (status >= 0) {
+        result = &g_resultSuccess;
     } else {
-        status = &g_resultFailure.v;
+        result = &g_resultFailure;
     }
-    *result = *status;
+    return *result;
 }
 
 /* The SIF end function of a call that does not wait: its parameter is the connection's semaphore. */

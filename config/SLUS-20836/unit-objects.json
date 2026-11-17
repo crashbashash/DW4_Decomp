@@ -11880,7 +11880,6 @@
     ],
     "stripped": [
       "__dt__10Ref_1b2750Fv",
-      "__dt__10Ref_1c5eb0Fv",
       "__dt__10Ref_1e1ac0Fv",
       "__dt__10SectionRefFv",
       "__dt__10SeqTempRefFv",
@@ -11894,6 +11893,7 @@
       "__dt__16ShadowRef_1d7120Fv",
       "__dt__1KFv",
       "__dt__21igSmartPointer<4Attr>Fv",
+      "__dt__23igSmartPointer<6igNode>Fv",
       "__dt__24igSmartPointer<7AttrObj>Fv",
       "__dt__24igSmartPointer<7igAABox>Fv",
       "__dt__25igSmartPointer<8R_1aea60>Fv",
@@ -46707,6 +46707,7 @@
     "stripped": [
       "__dt__10Ref_4551f0Fv",
       "__dt__22igSmartPointer<5Entry>Fv",
+      "__dt__23igSmartPointer<6igNode>Fv",
       "__dt__25igSmartPointer<8R_456780>Fv",
       "__dt__25igSmartPointer<8igObject>Fv",
       "__dt__26igSmartPointer<9FillLayer>Fv",
@@ -47791,8 +47792,8 @@
       "text_meta": "0x0051fab8"
     },
     "stripped": [
-      "__dt__10RemovedRefFv",
       "__dt__20igSmartPointer<3Obj>Fv",
+      "__dt__23igSmartPointer<6igNode>Fv",
       "__dt__25igSmartPointer<8igObject>Fv"
     ],
     "symbol": "FUN_0045f200",
@@ -47940,6 +47941,7 @@
       "0x0051fba8"
     ],
     "stripped": [
+      "__dt__23igSmartPointer<6igNode>Fv",
       "__dt__25igSmartPointer<8igObject>Fv",
       "__dt__26igSmartPointer<9igFlyMode>Fv",
       "__dt__28igSmartPointer<10igPickMode>Fv",

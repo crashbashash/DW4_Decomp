@@ -624,7 +624,6 @@ typedef struct A { char p[8]; B *b; char q[12]; float dx, dy; } A;
 extern "C" igVec3f FUN_00453b90(A *a);
 extern "C" void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self);
 extern "C" void Gap__Gui__igDefaultAspect__vfunc_25(igDefaultAspect *arg0);
-extern "C" int igGroup_RemoveChildAt(...);
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 typedef struct R_453f70 { int w0; int refs; } R_453f70;

@@ -1417,19 +1417,19 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_134(void) {
     return 0;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_138(TextureContext138 *arg0, int arg1, int arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_138(igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER minFilter) {
     int temp_a3;
 
-    temp_a3 = arg1 * 0x88;
-    if (arg2 == *(int *)((char *)arg0->f324->f16 + temp_a3 + 4)) {
+    temp_a3 = texture * 0x88;
+    if (minFilter == *(int *)((char *)((TextureList138 *)self->_pTexList)->f16 + temp_a3 + 4)) {
         DAT_00560a28[0] += 1;
     }
-    *(int *)((char *)arg0->f324->f16 + temp_a3 + 4) = arg2;
-    *(char *)((char *)arg0->f324->f16 + temp_a3 + 80) = 1;
+    *(int *)((char *)((TextureList138 *)self->_pTexList)->f16 + temp_a3 + 4) = minFilter;
+    *(char *)((char *)((TextureList138 *)self->_pTexList)->f16 + temp_a3 + 80) = 1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_140(struct TextureContext140 *arg0, int arg1, int arg2) {
-    struct TextureEntry140 *e = arg0->tab->arr + arg1; if (arg2 == e->v) { DAT_00560a2c[0] += 1; } e = arg0->tab->arr + arg1; e->v = arg2; e = arg0->tab->arr + arg1; e->flag = 1;
+void Gap__Gfx__igPsx2VisualContext__vfunc_140(igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER magFilter) {
+    struct TextureEntry140 *e = ((struct TextureList140 *)self->_pTexList)->arr + texture; if (magFilter == e->v) { DAT_00560a2c[0] += 1; } e = ((struct TextureList140 *)self->_pTexList)->arr + texture; e->v = magFilter; e = ((struct TextureList140 *)self->_pTexList)->arr + texture; e->flag = 1;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_139(void *arg0, int arg1) {
@@ -1440,7 +1440,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_141(void *arg0, int arg1) {
     return *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 324)) + 16) + (arg1 * 0x88))) + 8);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_136(struct igPsx2VisualContext *arg0, int arg1, int arg2, int arg3) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_136(igPsx2VisualContext *arg0, int arg1, IG_GFX_TEXTURE_WRAP arg2, IG_GFX_TEXTURE_WRAP arg3) {
     int temp_v1;
     temp_v1 = arg1 * 0x88;
     if (arg2 == *(int *)(((struct TextureList136 *)arg0->_pTexList)->e + temp_v1 + 12)) {

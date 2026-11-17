@@ -179,7 +179,6 @@ typedef struct AudioTableOwner {
     char *entries;
 } AudioTableOwner;
 
-struct RpcStatus { int value; bool operator!=(const RpcStatus &o) const { return value != o.value; } };
 struct InitRef { int p0; int rc; };
 struct VoiceList { char p[8]; int count; int cap; int data; };
 struct InitContext { char p[12]; struct InitRef *conn; char q[8]; int f24; char r[4]; int f32; int f36; int f40; };
@@ -260,20 +259,14 @@ class igMemoryPoolView;
 #include "dw4/core/igPsx2File.h"
 #include "dw4/core/igSemaphore.h"
 #include "dw4/sony/sifdev.h"
-void igPsx2IopRpcConnection_EnsureRegistered(void);
+#include "dw4/core/igPsx2IopRpcConnection.h"
 void FUN_00145de0(void);
 igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
 
 int FUN_00145d40(...);
-int igPsx2IopRpcConnection_GetOrCreateMetaObject(...);
-int igPsx2IopRpcConnection_CallNoData(...);
-int igPsx2IopRpcConnection_Call(...);
-int igPsx2IopRpcConnection_CallWithData(...);
 int FUN_00301000(InitContext *);
-int igPsx2IopRpcConnection_Create(int);
-RpcStatus igPsx2IopRpcConnection_Bind(InitRef *, int);
 void *FUN_001435c0(igMemoryPoolView *pool);
 unsigned FUN_00145960(void *context, void *voice);
 int FUN_00145a10(void *arg0, void *voice);

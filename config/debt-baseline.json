@@ -14,10 +14,10 @@
   "code_only.other.functions": 0,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "decl.header_conflicts": 264,
-  "decl.local_externs": 93,
-  "decl.type_conflicts": 404,
-  "decl.varargs": 276,
+  "decl.header_conflicts": 246,
+  "decl.local_externs": 64,
+  "decl.type_conflicts": 378,
+  "decl.varargs": 271,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
   "fun_dat_refs": 772,
@@ -40,7 +40,7 @@
    "reason": "profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile",
    "value": 3
   },
-  "raw_casts.reflected": 262,
+  "raw_casts.reflected": 258,
   "struct.a": 5,
   "struct.b": {
    "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",

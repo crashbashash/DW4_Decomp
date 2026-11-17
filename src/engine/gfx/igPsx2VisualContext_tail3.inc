@@ -67,24 +67,24 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_70(int *arg0, void *arg1)
   *arg0 = new_var;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_59(int *arg0, Obj_16d190 *arg1) {
-    Obj_16d190 *o;
-    if ((Obj_16d190 *)arg0[235] == arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_59(igPsx2VisualContext *self, igVertexArray *vertexArray) {
+    igVertexArray *old;
+    if ((igVertexArray *)self->_pVertexArray == vertexArray) {
         DAT_005608c0[0] += 1;
     }
-    if (arg1) {
-        arg1->refs++;
+    if (vertexArray) {
+        vertexArray->_refCount++;
     }
-    o = (Obj_16d190 *)arg0[235];
-    if (o != 0) {
-        --o->refs;
-        if ((o->refs & 0x7fffff) == 0) {
-            igObject_Destroy((igObject *)o);
+    old = (igVertexArray *)self->_pVertexArray;
+    if (old != 0) {
+        --old->_refCount;
+        if ((old->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0[235] = (int)arg1;
-    if (arg1 != 0) {
-        ((VC_16d190 *)arg0)->vX(0, 0);
+    self->_pVertexArray = (int)vertexArray;
+    if (vertexArray != 0) {
+        ((VC_16d190 *)self)->vX(0, 0);
     }
 }
 
@@ -95,44 +95,44 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_61(igPsx2VisualContext *self) {
     return self->_pVertexArray;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_63(int *arg0, Obj_16d250 *arg1) {
-    Obj_16d250 *o;
-    if ((Obj_16d250 *)arg0[237] == arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_63(igPsx2VisualContext *self, igPrimLengthArray *stripLengths) {
+    igPrimLengthArray *old;
+    if ((igPrimLengthArray *)self->_pStripLengthArray == stripLengths) {
         DAT_005608c4[0] += 1;
     }
-    if (arg1) {
-        arg1->refs++;
+    if (stripLengths) {
+        stripLengths->_refCount++;
     }
-    o = (Obj_16d250 *)arg0[237];
-    if (o != 0) {
-        --o->refs;
-        if ((o->refs & 0x7fffff) == 0) {
-            igObject_Destroy((igObject *)o);
+    old = (igPrimLengthArray *)self->_pStripLengthArray;
+    if (old != 0) {
+        --old->_refCount;
+        if ((old->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0[237] = (int)arg1;
+    self->_pStripLengthArray = (int)stripLengths;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_64(void *arg0) {
     return *(int *)((char *)(arg0) + 948);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_60(int *arg0, Obj_16d300 *arg1) {
-    Obj_16d300 *o;
-    if ((Obj_16d300 *)arg0[236] == arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_60(igPsx2VisualContext *self, igIndexArray *indexArray) {
+    igIndexArray *old;
+    if ((igIndexArray *)self->_pIndexArray == indexArray) {
         DAT_005608c8[0] += 1;
     }
-    if (arg1) {
-        arg1->refs++;
+    if (indexArray) {
+        indexArray->_refCount++;
     }
-    o = (Obj_16d300 *)arg0[236];
-    if (o != 0) {
-        --o->refs;
-        if ((o->refs & 0x7fffff) == 0) {
-            igObject_Destroy((igObject *)o);
+    old = (igIndexArray *)self->_pIndexArray;
+    if (old != 0) {
+        --old->_refCount;
+        if ((old->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0[236] = (int)arg1;
+    self->_pIndexArray = (int)indexArray;
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_62(void *arg0) {

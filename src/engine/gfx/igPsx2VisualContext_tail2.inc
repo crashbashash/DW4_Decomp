@@ -50,12 +50,12 @@ void FUN_00169260(igPsx2VisualContext *arg0, int arg1) {
     arg0->_currentBuf = -1;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_46(Obj46 *arg0, Src *arg1) {
+int Gap__Gfx__igPsx2VisualContext__vfunc_46(igPsx2VisualContext *self, RenderDestinationDesc *desc) {
     Pool46 *p;
     Ent46 *e;
     int s0;
     int i;
-    p = arg0->f868;
+    p = (Pool46 *)self->_pBufList;
     if (p->f4 <= 0) {
         p->f16 = (Ent46 *)Memory_ReallocateAlignedAlias(p->f16, (p->f0 + 4) * 48, 16);
         memset(p->f16 + p->f0, 0, 192);
@@ -74,19 +74,19 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_46(Obj46 *arg0, Src *arg1) {
     }
     s0 = p->f12[p->f4 - 1];
     p->f4 = p->f4 - 1;
-    e = arg0->f868->f16 + s0;
-    e->f28 = arg1->f0;
-    e->f0 = arg1->f4;
-    e->f4 = arg1->f8;
-    e->f8 = arg1->f12;
-    e->f16 = arg1->f16;
-    e->f12 = arg1->f20;
-    e->f20 = arg1->f24;
-    e->f24 = arg1->f28;
+    e = ((Pool46 *)self->_pBufList)->f16 + s0;
+    e->f28 = desc->type;
+    e->f0 = desc->sizeX;
+    e->f4 = desc->sizeY;
+    e->f8 = desc->colorBitCount;
+    e->f16 = desc->alphaBitCount;
+    e->f12 = desc->depthBitCount;
+    e->f20 = desc->stencilBitCount;
+    e->f24 = desc->f28;
     e->f40 = 0;
     e->f44 = 0;
     e->f36 = -1;
-    arg0->f872 = s0;
+    self->_currentBuf = s0;
     return s0;
 }
 

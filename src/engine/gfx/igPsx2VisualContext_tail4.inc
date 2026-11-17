@@ -276,38 +276,38 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_82(igPsx2VisualContext *self, int arg1
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_86(A_170c30 *arg0, int arg1, V4_170c30 *arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_86(igPsx2VisualContext *self, int light, float *color) {
     Tab_170c30 *t;
     E_170c30 *e;
     int same;
     int old;
     int nw;
-    t = arg0->f538;
-    e = (E_170c30 *)(t->f10 + arg1 * 160);
+    t = (Tab_170c30 *)self->_pLightList;
+    e = (E_170c30 *)(t->f10 + light * 160);
     if (e != 0) {
         same = 1;
-        if (e->v.x != arg2->x) { same = 0; }
+        if (e->v.x != color[0]) { same = 0; }
         if (same != 0) {
             same = 1;
-            if (e->v.y != arg2->y) { same = 0; }
+            if (e->v.y != color[1]) { same = 0; }
         }
         if (same != 0) {
             same = 1;
-            if (e->v.z != arg2->z) { same = 0; }
+            if (e->v.z != color[2]) { same = 0; }
         }
         if (same != 0) {
             same = 1;
-            if (e->v.w != arg2->w) { same = 0; }
+            if (e->v.w != color[3]) { same = 0; }
         }
         if (same != 0) {
             DAT_005608d4[0] += 1;
         }
-        e->v.x = arg2->x;
-        e->v.y = arg2->y;
-        e->v.z = arg2->z;
-        e->v.w = arg2->w;
+        e->v.x = color[0];
+        e->v.y = color[1];
+        e->v.z = color[2];
+        e->v.w = color[3];
         old = e->flags;
-        if (arg2->x != 0.0f || arg2->y != 0.0f || arg2->z != 0.0f) {
+        if (color[0] != 0.0f || color[1] != 0.0f || color[2] != 0.0f) {
             e->flags = e->flags | 1;
         } else {
             e->flags = old & ~1;
@@ -316,7 +316,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_86(A_170c30 *arg0, int arg1, V4_170c30
         if (old != nw) {
             e->flags = nw | 8;
         }
-        FUN_00171690(arg0, e);
+        FUN_00171690(self, e);
     }
 }
 
@@ -689,7 +689,13 @@ float Gap__Gfx__igPsx2VisualContext__vfunc_99(void *arg0) {
     return *(float *)((char *)(*(int *)((char *)(arg0) + 1344)) + 64);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_112(O_171cd0 *arg0, V4_171cd0 *arg1, V4_171cd0 *arg2, V4_171cd0 *arg3, V4_171cd0 *arg4, float fparg0) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_112(igPsx2VisualContext *self, float *ambient, float *diffuse, float *specular, float *emission, float shininess) {
+    O_171cd0 *arg0 = (O_171cd0 *)self;
+    V4_171cd0 *arg1 = (V4_171cd0 *)ambient;
+    V4_171cd0 *arg2 = (V4_171cd0 *)diffuse;
+    V4_171cd0 *arg3 = (V4_171cd0 *)specular;
+    V4_171cd0 *arg4 = (V4_171cd0 *)emission;
+    float fparg0 = shininess;
     EQ4(arg0->s, b, arg2, DAT_005608f8);
     EQ4(arg0->s, a, arg1, DAT_005608fc);
     EQ4(arg0->s, d, arg4, DAT_00560900);
@@ -1790,38 +1796,38 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_246(void *arg0) {
     return *(int *)((char *)(arg0) + 1308);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_247(struct O_175220 *arg0, struct V_175220 *arg1) {
-    int var_v0;
-    var_v0 = 1;
-    if (arg0->f0 != arg1->f0) {
-        var_v0 = 0;
+void Gap__Gfx__igPsx2VisualContext__vfunc_247(igPsx2VisualContext *self, float *color) {
+    int same;
+    same = 1;
+    if (self->_fogColor[0] != color[0]) {
+        same = 0;
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (arg0->f4 != arg1->f4) {
-            var_v0 = 0;
+    if (same != 0) {
+        same = 1;
+        if (self->_fogColor[1] != color[1]) {
+            same = 0;
         }
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (arg0->f8 != arg1->f8) {
-            var_v0 = 0;
+    if (same != 0) {
+        same = 1;
+        if (self->_fogColor[2] != color[2]) {
+            same = 0;
         }
     }
-    if (var_v0 != 0) {
-        var_v0 = 1;
-        if (arg0->f12 != arg1->f12) {
-            var_v0 = 0;
+    if (same != 0) {
+        same = 1;
+        if (self->_fogColor[3] != color[3]) {
+            same = 0;
         }
     }
-    if (var_v0 != 0) {
+    if (same != 0) {
         DAT_005609d8[0] += 1;
     }
-    arg0->f0 = arg1->f0;
-    arg0->f4 = arg1->f4;
-    arg0->f8 = arg1->f8;
-    arg0->f12 = arg1->f12;
-    p2SetFogColour(arg1->f0, arg1->f4, arg1->f8);
+    self->_fogColor[0] = color[0];
+    self->_fogColor[1] = color[1];
+    self->_fogColor[2] = color[2];
+    self->_fogColor[3] = color[3];
+    p2SetFogColour(color[0], color[1], color[2]);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_248(void *arg0, void *arg1) {

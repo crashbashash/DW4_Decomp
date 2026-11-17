@@ -56,8 +56,8 @@ void Gap__Attrs__igMaterialAttr__vfunc_34(A_13f3e0 *a, float *b) {
     if (!(a->v[3] <= DAT_004e118c[0])) a->v[3] = DAT_004e118c[0];
 }
 
-void Gap__Attrs__igMaterialAttr__vfunc_24(char * arg0, int arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_112(arg1, (arg0 + 32), (arg0 + 16), (arg0 + 64), (arg0 + 48), *(float *)((char *)(arg0) + 12));
+void Gap__Attrs__igMaterialAttr__vfunc_24(igMaterialAttr *self, igObject *context) {
+    Gap__Gfx__igPsx2VisualContext__vfunc_112((igPsx2VisualContext *)context, self->_ambient, self->_diffuse, self->_specular, self->_emission, self->_shininess);
 }
 
 void Gap__Attrs__igMaterialAttr__vfunc_26(MaterialAttrView *material, MaterialContextView *context) {

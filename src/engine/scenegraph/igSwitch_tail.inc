@@ -18,10 +18,10 @@ int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2) {
 
 igNode *igSwitch_RemoveChildAt(igSwitch *sw, int arg1) {
     S_1dc940 *arg0 = (S_1dc940 *)sw;
-    Obj_1c5eb0 *removed;
+    igNode *removed;
     int var_a1;
 
-    removed = igGroup_RemoveChildAt((S_1c5eb0 *)arg0, arg1).p;
+    removed = igGroup_RemoveChildAt((igGroup *)sw, arg1).p;
     {
         int a0v = arg0->f32;
         if (arg0->f28 != 0) {
@@ -31,7 +31,7 @@ igNode *igSwitch_RemoveChildAt(igSwitch *sw, int arg1) {
         }
         igBitMask_SetBitCount((igBitMask *)a0v, var_a1);
     }
-    return (igNode *)removed;
+    return removed;
 }
 
 void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {

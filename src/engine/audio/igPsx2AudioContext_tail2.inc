@@ -37,7 +37,6 @@ void Gap__igPsx2AudioContext__vfunc_60(int arg0, int arg1, int arg2, int arg3) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_37(int *arg0, void *arg1, int arg2, int arg3) {
-    int sp;
     VoiceFlags37 *p;
     p = (VoiceFlags37 *)(*(int *)((char *)(g_audioTableOwner.p) + 16) + (arg2 * 0x24));
     if (p->b1 != 0) {
@@ -45,7 +44,7 @@ void Gap__igPsx2AudioContext__vfunc_37(int *arg0, void *arg1, int arg2, int arg3
         return;
     }
     if (*(unsigned char *)((char *)arg1 + 8) != 0) {
-        igPsx2IopRpcConnection_CallWithData(&sp, *(int *)((char *)(arg1) + 12), arg2 | 0x260000, arg3, 0, 0);
+        igPsx2IopRpcConnection_CallWithData((igPsx2IopRpcConnectionView *)(*(int *)((char *)(arg1) + 12)), arg2 | 0x260000, arg3, 0, 0);
     } else {
         *(int *)((char *)p + 28) = arg3;
         p->c2 = 1;
@@ -159,17 +158,15 @@ void Gap__igPsx2AudioContext__vfunc_46(igPsx2AudioContext *self) {
         v->state.pending = 0;
     }
     if (sent <= 256 && sent != 0) {
-        int status;
-        igPsx2IopRpcConnection_Call(&status, self->_connection, 0x50000, buffer->commands + buffer->offset, sent * 16, 0, 0, 0);
+        igPsx2IopRpcConnection_Call((igPsx2IopRpcConnectionView *)self->_connection, 0x50000, buffer->commands + buffer->offset, sent * 16, 0, 0, 0);
         buffer->offset = 1024 - buffer->offset;
     }
 }
 
 int Gap__igPsx2AudioContext__vfunc_38(igPsx2AudioContext *arg0, int arg1) {
     int sp1C;
-    int sp18;
 
-    igPsx2IopRpcConnection_CallWithData(&sp18, arg0->_connection, arg1 | 0xB0000, 0, &sp1C, 0);
+    igPsx2IopRpcConnection_CallWithData((igPsx2IopRpcConnectionView *)arg0->_connection, arg1 | 0xB0000, 0, &sp1C, 0);
     return sp1C;
 }
 

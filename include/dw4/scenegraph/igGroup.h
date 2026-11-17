@@ -24,4 +24,10 @@ struct igMetaObject *igGroup_GetPublishedMetaObject(void);
 }
 #endif
 
+#ifdef __cplusplus
+#include "dw4/core/igSmartPointer.h"
+/* The removed child, still holding the reference the group dropped. */
+extern "C" igSmartPointer<igNode> igGroup_RemoveChildAt(igGroup *group, int index);
+#endif
+
 #endif

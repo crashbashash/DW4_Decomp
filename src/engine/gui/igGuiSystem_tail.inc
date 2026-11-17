@@ -61,7 +61,6 @@ void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, int visible) {
 void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
     A_456a60 *arg0 = (A_456a60 *)gui;
     R_456a60 *arg1 = (R_456a60 *)cursor;
-    Rc_456a60 *sp4C;
     V3 sp30;
     int var_v0;
     Rc_456a60 *temp_a0;
@@ -87,13 +86,7 @@ void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
         var_v0 = 0;
     }
     if (var_v0 > 0) {
-        igGroup_RemoveChildAt(&sp4C, temp_a1, 0);
-        if (sp4C != 0) {
-            sp4C->rc = sp4C->rc - 1;
-            if (((unsigned long long)((long long)sp4C->rc << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)sp4C);
-            }
-        }
+        igGroup_RemoveChildAt((igGroup *)temp_a1, 0);
     }
     if (arg1 != 0) {
         igGroup_AppendChild((igGroup *)arg0->f28, (igNode *)arg1->f8->f8);
@@ -149,7 +142,7 @@ void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1) {
 void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
     W *arg0 = (W *)gui;
     T_456cc0 *arg1 = (T_456cc0 *)root;
-    T_456cc0 *sp5C; int sp40[4]; T_456cc0 **p; T_456cc0 *old; int v; LL *l;
+    int sp40[4]; T_456cc0 **p; T_456cc0 *old; int v; LL *l;
     if (arg0->f12->f164 != 0) { arg0->f12->f164->f8 = 0; }
     p = &arg0->f12->f164;
     if (arg1 != 0) { arg1->references = arg1->references + 1; }
@@ -166,11 +159,7 @@ void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }
     if (v > 1) {
-        igGroup_RemoveChildAt(&sp5C, arg0->f20, 0);
-        if (sp5C != 0) {
-        --sp5C->references;
-        if (((unsigned long long)(long long)sp5C->references & 0x7fffffULL) == 0) { igObject_Destroy((igObject *)sp5C); }
-        }
+        igGroup_RemoveChildAt((igGroup *)arg0->f20, 0);
     }
     if (arg1 != 0) { arg0->f20->v140(0, arg1->f28); }
     if (arg1 != 0) { arg1->f8 = (int)arg0; }

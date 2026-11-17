@@ -107,7 +107,6 @@ struct RendererLink {
 void igViewerSceneInfoManager_OnSceneClipped(igViewerSceneInfoManager *self);
 
 
-int igGroup_RemoveChildAt(igObject **removed, igGroup *group, int index);
 
 
 /* Releases every object of `list` and empties it. */
@@ -593,19 +592,11 @@ void igViewerSceneInfoManager_Update(igViewerSceneInfoManager *self) {
 void igViewerSceneInfoManager_RemoveAllInfo(igViewerSceneInfoManager *self) {
     igGroup *scene;
     int index;
-    igObject *removed;
-    igObject *child;
     ModelChange sceneChanged, camerasChanged, beginChanged, endChanged;
     scene = (igGroup *)((igViewerParameters *)self->_parameters)->_scene;
     index = (scene->_childList != 0 ? ((igNodeList *)scene->_childList)->_count : 0) - 1;
     while (index >= 0) {
-        igGroup_RemoveChildAt(&removed, scene, index);
-        child = removed;
-        if (child != 0) {
-            child->_refCount = (int)child->_refCount - 1;
-            child = removed;
-            if (((unsigned long long)((long long)(int)child->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(child);
-        }
+        igGroup_RemoveChildAt(scene, index);
         index -= 1;
     }
     sceneChanged.source = 0;

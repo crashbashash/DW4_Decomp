@@ -3,9 +3,9 @@ igMetaField *g_igPsx2IopRpcConnection_sifDataMetaField;
 igMetaField *g_igPsx2IopRpcConnection_dataMemoryMetaField;
 igMetaField *g_igPsx2IopRpcConnection_semaMetaField;
 
-void igPsx2IopRpcConnection_Create(int pool) {
+igPsx2IopRpcConnectionView *igPsx2IopRpcConnection_Create(int pool) {
     igPsx2IopRpcConnection_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igPsx2IopRpcConnection_metaObject, (igMemoryPoolView *)pool);
+    return (igPsx2IopRpcConnectionView *)igMetaObject_CreateInstance(g_igPsx2IopRpcConnection_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPsx2IopRpcConnection_GetOrCreateMetaObject(void) {

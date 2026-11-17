@@ -86,14 +86,14 @@ int SNDF_SetPortSizes(SndfTables *tables)
 
     sndf_ctx->busy = 1;
     for (i = 0; i < 32; i++) {
-        request.first[i] = tables->first[i];
-        request.second[i] = tables->second[i];
+        request.tblSize[i] = tables->tblSize[i];
+        request.pcmSize[i] = tables->pcmSize[i];
     }
     result = sndf_CallRpc(0x300, (int *)&request, 64, 4);
     if (result == 0) {
         for (i = 0; i < 32; i++) {
-            sndf_ctx->tables.first[i] = tables->first[i];
-            sndf_ctx->tables.second[i] = tables->second[i];
+            sndf_ctx->tables.tblSize[i] = tables->tblSize[i];
+            sndf_ctx->tables.pcmSize[i] = tables->pcmSize[i];
         }
     }
     return result;
@@ -143,10 +143,10 @@ int SNDF_StartTransfer(unsigned int channel, SndfBank *bank)
     if (result < 0) {
         return result;
     }
-    if (sndf_ctx->tables.first[channel] < bank->headerSize) {
+    if (sndf_ctx->tables.tblSize[channel] < bank->headerSize) {
         return -6;
     }
-    if (sndf_ctx->tables.second[channel] < bank->waveSize) {
+    if (sndf_ctx->tables.pcmSize[channel] < bank->waveSize) {
         return -6;
     }
     dma.data = (unsigned int)bank;
@@ -230,21 +230,21 @@ int SNDF_FreePort(unsigned int channel)
 int FUN_00281420(unsigned int channel, int *start, int *size)
 {
     int result = 0;
-    int firstSum = 0;
-    int secondSum = 0;
+    int tblOffset = 0;
+    int pcmOffset = 0;
     unsigned int i;
 
     if (channel >= 32) {
         return -1;
     }
-    if (sndf_ctx->tables.first[channel] != 0 && sndf_ctx->tables.second[channel] != 0) {
+    if (sndf_ctx->tables.tblSize[channel] != 0 && sndf_ctx->tables.pcmSize[channel] != 0) {
         if (sndf_ctx->channelOn[channel] == 0) {
             for (i = 0; i < channel; i++) {
-                firstSum += sndf_ctx->tables.first[i];
-                secondSum += sndf_ctx->tables.second[i];
+                tblOffset += sndf_ctx->tables.tblSize[i];
+                pcmOffset += sndf_ctx->tables.pcmSize[i];
             }
-            *start = sndf_ctx->base + firstSum;
-            *size = secondSum + 0x20000;
+            *start = sndf_ctx->base + tblOffset;
+            *size = pcmOffset + 0x20000;
         } else {
             result = -3;
         }

@@ -21,6 +21,7 @@
 #include "dw4/core/igMemory.h"
 #include "dw4/core/igRegistry.h"
 #include "dw4/core/igResult.h"
+#include "dw4/core/igPsx2IopRpcConnection.h"
 #include "dw4/core/igReport.h"
 #include "dw4/core/igPsx2File.h"
 #include "dw4/core/igThread.h"
@@ -1091,10 +1092,7 @@ extern "C" void igPsx2LongTimer_EnsureRegistered(void);
 extern "C" CallbackArray *igPsx2LongTimer_Register(void);
 extern "C" int igLongTimer_GetPublishedMetaObject(void);
 extern "C" void igPsx2LongTimer_StaticInitCallback(void);
-extern "C" void igPsx2IopRpcConnection_Create(int arg0);
-extern "C" igMetaObject *igPsx2IopRpcConnection_GetOrCreateMetaObject(void);
 extern "C" int igPsx2IopRpcConnection_GetVTable(void);
-extern "C" void igPsx2IopRpcConnection_EnsureRegistered(void);
 extern "C" CallbackArray *igPsx2IopRpcConnection_Register(void);
 extern "C" void igPsx2IopRpcConnection_GetMetaObjectFunction(void);
 extern "C" void igPsx2IopRpcConnection_InitFields(void);
@@ -5014,10 +5012,6 @@ struct FolderSearchList;
 struct igPsx2IopRpcConnectionView : public igObject { sceSifClientData *_sifData; char *_dataMemory; int _sema; };
 extern "C" void igPsx2IopRpcConnection_InitDefaults(igPsx2IopRpcConnectionView *self);
 extern "C" void igPsx2IopRpcConnection_ReleaseDefaults(igPsx2IopRpcConnectionView *arg0);
-extern "C" igResult igPsx2IopRpcConnection_Bind(igPsx2IopRpcConnectionView *self, int serverId);
-extern "C" igResult igPsx2IopRpcConnection_Call(igPsx2IopRpcConnectionView *self, int function, int send, int sendSize, int receive, int receiveSize, int wait);
-extern "C" igResult igPsx2IopRpcConnection_CallWithData(igPsx2IopRpcConnectionView *self, int function, int data, int *reply, int noWait);
-extern "C" void igPsx2IopRpcConnection_CallNoData(int *arg0, igPsx2IopRpcConnectionView *arg1, int arg2, int arg3);
 typedef struct MediaRpcShared { char pad[8]; char *buffer; } MediaRpcShared;
 typedef struct MediaRpcCompletion {
     char pad[12];

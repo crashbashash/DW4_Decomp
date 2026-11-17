@@ -39,19 +39,6 @@ public:
     igSmartPointer<igObject> _vc;
 };
 
-/* What igPsx2VisualContext::vfunc_46 reads to create a render destination. */
-struct RenderDestinationDesc {
-    int type;
-    int sizeX;
-    int sizeY;
-    int colorBitCount;
-    int alphaBitCount;
-    int depthBitCount;
-    int stencilBitCount;
-};
-
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_46(igObject *context, RenderDestinationDesc *desc);
-
 /* apply: create the render destination on first use (copying the current one's format unless
  * `_iCreateMode` is 1, or adopting it when 2), then hold the context. */
 extern "C" void Gap__Attrs__igRenderDestinationAttr__apply(RenderDestinationAttrView *self, igObject *context) {
@@ -83,7 +70,7 @@ extern "C" void Gap__Attrs__igRenderDestinationAttr__apply(RenderDestinationAttr
             desc.depthBitCount = self->_iDepthBitCount;
             desc.stencilBitCount = self->_iStencilBitCount;
             desc.type = self->_iType;
-            self->_iRDHandle = Gap__Gfx__igPsx2VisualContext__vfunc_46(context, &desc);
+            self->_iRDHandle = Gap__Gfx__igPsx2VisualContext__vfunc_46((igPsx2VisualContext *)context, &desc);
         }
     }
     self->_vc = context;
