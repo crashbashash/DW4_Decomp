@@ -2,6 +2,8 @@
 #include "dw4/cri/mps.h"
 #include "dw4/cri/mcp.h"
 #include <string.h>
+#include "dw4/cri/mpv.h"
+#include "dw4/cri/sfd.h"
 
 /* What the start of a stream says it is: which handlers would play it and the movie's parameters. */
 typedef struct SfdAnaInf {
@@ -50,10 +52,6 @@ extern SfdMpaHdr sfana_mpa_hdr;
 extern unsigned char sfana_adx_buf[2048];
 extern SfdHdrInf sfana_hdr;
 
-unsigned char *MPV_SearchDelim(unsigned char *buf, int size, int mask);
-void sfd_Lock(void *guard);
-void sfd_Unlock(void *guard);
-int SFADXT_IsHeader(unsigned char *p, int size, int *hdrSize);
 
 int sfcre_AnalyCreInf(unsigned char *buf, int size, SfdAnaInf *inf);
 void sfcre_SetDflCreInf(SfdAnaInf *inf);
@@ -74,7 +72,7 @@ void sfcre_ReadAauHdr(SfdMpaHdr *hdr, unsigned char *p);
 int sfcre_AnalyMpv(unsigned char *buf, int size, SfdAnaInf *inf);
 
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
-int SFD_AnalyCreInf(unsigned char *buf, int size, SfdAnaInf *inf) {
+void SFD_AnalyCreInf(unsigned char *buf, int size, SfdAnaInf *inf) {
     char guard[16];
 
     sfd_Lock(guard);

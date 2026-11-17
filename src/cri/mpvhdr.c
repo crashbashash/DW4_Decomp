@@ -6,10 +6,6 @@
 #include "dw4/cri/cri_adxt.h"
 #include "dw4/cri/sj.h"
 
-int MPVLIB_CheckHn(MpvHn *mpv);
-int mpv_ReportError(MpvHn *mpv, int code);
-int MPV_CheckDelim(const unsigned char *p);
-char *MPV_SearchDelim(char *buf, int len, int mask);
 int atoi(const char *s);
 
 extern char mpv_tag_idcprec[];  /* "IDCPREC" */
@@ -23,26 +19,25 @@ void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj) {
     ent->obj = obj;
 }
 
-void MPV_SetPicUsrBuf(MpvHn *mpv, int width, int height) {
-    MpvLowSize *low = &mpv->low;
+void MPV_SetPicUsrBuf(MpvHn *mpv, char *buf, int size) {
+    MpvPicUsr *usr = &mpv->picusr;
 
-    low->width = width;
-    low->height = height;
-    low->flag = 0;
+    usr->buf = buf;
+    usr->size = size;
+    usr->len = 0;
 }
 
-void MPV_GetPicUsr(MpvHn *mpv, int *width, int *flag) {
-    MpvLowSize *low = &mpv->low;
+void MPV_GetPicUsr(MpvHn *mpv, char **buf, int *len) {
+    MpvPicUsr *usr = &mpv->picusr;
 
-    if (width != 0) {
-        *width = low->width;
+    if (buf != 0) {
+        *buf = usr->buf;
     }
-    if (flag != 0) {
-        *flag = low->flag;
+    if (len != 0) {
+        *len = usr->len;
     }
 }
 
-int mpv_StartLower(MpvHn *mpv, SfdSj *sj);
 int mpvhdec_GetCodec(MpvHn *mpv, SfdSjChunk *buf);
 int mpvhdec_GetCurDelim(SfdSj *sj);
 int mpvhdec_RecoverSj(MpvHn *mpv, int mask, SfdSj *sj);
@@ -63,7 +58,7 @@ int MPV_DecodePicAtrSj(MpvHn *mpv, SfdSj *sj) {
     if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020C);
     }
-    mpv->low.flag = 0;
+    mpv->picusr.len = 0;
     sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, &ck);
     sj->vtbl->ungetChunk(sj, 1, &ck);
     head.data = ck.data;
@@ -391,13 +386,13 @@ int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len) {
         }
     }
     if (level == 3) {
-        if (mpv->low.width != 0) {
-            n = mpv->low.height;
+        if (mpv->picusr.buf != 0) {
+            n = mpv->picusr.size;
             if (i < n) {
                 n = i;
             }
-            mpv->low.flag = n;
-            memcpy((void *)mpv->low.width, data, n);
+            mpv->picusr.len = n;
+            memcpy(mpv->picusr.buf, data, n);
         }
     }
     if (result != 0) {

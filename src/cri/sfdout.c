@@ -1,19 +1,8 @@
 /* The output handler of stream graph slot 6: the application reads the buffer channel the slot is
  * linked to through its GetRead and AddRead entries, gated by the time block; writing is not
  * supported (0xFF000701). */
+#include "dw4/cri/sfd.h"
 
-int sfd_ReportError();
-int SFSET_GetCond();
-int SFBUF_VfrmGetRead();
-int SFBUF_VfrmAddRead();
-int SFBUF_GetPrepFlg();
-int SFBUF_GetTermFlg();
-int SFTIM_IsGetFrmTime();
-int SFTIM_IsVideoTerm();
-int sftrn_SetFlagA();
-int sftrn_SetFlagB();
-int sftrn_GetFlagA();
-int sftrn_GetFlagB();
 
 #define SFOUT_SLOT 6
 

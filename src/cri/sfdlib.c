@@ -1,6 +1,9 @@
 #include "dw4/cri/sfdhn.h"
 #include "dw4/cri/mcp.h"
 #include "dw4/cri/mps.h"
+#include "dw4/cri/sfd.h"
+#include "dw4/cri/sj.h"
+#include "dw4/cri/svm.h"
 
 #define SFD_HN_SIZE 14072
 
@@ -35,26 +38,12 @@ extern SfdLibInf sfd_lib;
 extern int sfd_cond_defaults[100];
 extern SfdHandle *sfd_cur_hn;
 
-void SJRBF_Init(void);
-void SJRBF_Finish(void);
-void SVM_Lock(void);
-void SVM_Unlock(void);
-void SFTIM_Init(void *tim, int prm);
-void SFTIM_Finish(void *tim);
-void sfbuf_Init(void *buf);
-void SFBUF_Finish(void *buf);
-int SFTRN_Init(void *dst, void *src);
-int SFTRN_Finish(void *modules);
-int SFD_Destroy(SfdHandle *hn);
-void sfmpvps2_Init(void);
 
 long sfd_InitLib(SfdInitPrm *prm);
 void sfd_ClearSvrCnt(SfdLibInf *lib);
 void sfd_InitErr(SfdErrInf *err);
-void sfd_ClearErr(SfdErrInf *err);
 void sfd_RecordError(SfdErrInf *err, int code);
 void sfd_SetErrFn(SfdErrInf *err, void (*func)(void *obj, int code), void *obj);
-int SFLIB_CheckHn(SfdHandle *hn);
 void sfd_InitSj(int size);
 void sfd_FinishSj(void);
 void sfd_InitModules(void);
@@ -158,7 +147,8 @@ void sfd_ClearErr(SfdErrInf *err) {
 
 /* Records an error code on the handle (and makes its state non-positive) or, without a handle, on
  * the library; returns the code. */
-int sfd_ReportError(SfdHandle *hn, int code) {
+int sfd_ReportError(void *sfd, int code) {
+    SfdHandle *hn = sfd;
     int ret = 0;
 
     if (code != 0) {
@@ -215,7 +205,8 @@ int SFD_GetErrInf(SfdHandle *hn, SfdErrInf *out) {
 }
 
 /* Remembers the handle as the current one; 0 when it is live, else -1. */
-int SFLIB_CheckHn(SfdHandle *hn) {
+int SFLIB_CheckHn(void *sfd) {
+    SfdHandle *hn = sfd;
     sfd_cur_hn = hn;
     if (hn == 0) {
         return -1;

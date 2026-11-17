@@ -2,9 +2,10 @@
  * and error report, and runs each player's server step: starting the file read, waiting for the
  * SFD to be prepared, feeding seamless and SST input, and catching stream errors. */
 #include "dw4/cri/mwply.h"
-#include "dw4/cri/mwsfd.h"
+#include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/sj.h"
 #include <string.h>
+#include "dw4/cri/sfd.h"
 
 typedef __builtin_va_list va_list;
 
@@ -40,37 +41,11 @@ int ADXM_IsSetupThrd(void);
 void ADXM_ExecVsyncFrame(void);
 
 /* the rest of MWSFD */
-void mwPlySaveRsc(void);
-void mwPlyRestoreRsc(void);
-void MWSFSEE_ChkSupply(MwsfdPly *ply);
-void MWSFLIB_SetErrCode(int code);
-int MWSFD_IsEnableHndl(MwsfdPly *ply);
-void MWSFCRE_SetSupplySj(MwsfdPly *ply);
-int mwPlySfdStart(MwsfdPly *ply);
-void mwSfdPause(MwsfdPly *ply, int sw);
-void mwPlyChkSupply(MwsfdPly *ply);
 int mwPlyExecSvrHndl(MwsfdPly *ply);
-void mwsfsfx_SetCompoMode(MwsfdPly *ply);
-int MWSFLSC_IsFsStatErr(struct LscObj *lsc);
 int LSC_GetNumStm(struct LscObj *lsc);
-int mwsst_GetStat(MwsfdSst *sst);
-void mwsst_Pause(MwsfdSst *sst, int sw);
-void MWSTM_SetFileRange(void *stm, char *fname, void *dir, int ofst, int nsct);
-int MWSTM_ReqStart(void *stm);
-int MWSTM_GetStat(void *stm);
-int MWSTM_IsFsStatErr(void *stm);
 
 /* SFD */
-int SFD_GetHnStat(void *sfd);
-int SFD_SetConcatPlay(void *sfd);
-int SFD_TermSupply(void *sfd);
-int SFD_ExecOne(void *sfd);
-int SFD_IsHnSvrWait(void *sfd);
-int SFD_IsSvrDone(void);
-void SFD_VsyncSvr(void);
-int SFD_GetSvrStat(void);
 
-extern int mwsfd_init_flag;         /* 1 while MWSFD is initialised */
 extern int mwsfsvr_vint_svr_id;
 extern int mwsfsvr_vsync_svr_id;
 extern int mwsfsvr_mwidle_svr_id;
@@ -84,8 +59,6 @@ void MWSFSVR_CheckForceSvrBdr(MwsfdPly *ply);
 void MWSFD_SetReqSvrBdrHn(MwsfdPly *ply, int sw);
 int MWSFSVR_GetHnMwplySvrFlg(MwsfdPly *ply);
 int MWSFD_GetReqSvrBdrLib(void);
-void MWSFSVR_SetHnMwplySvrFlg(MwsfdPly *ply, int sw);
-void MWSFSVR_SetHnSfdSvrFlg(MwsfdPly *ply, int sw);
 int mwsfd_ExecSvrHndl(MwsfdPly *ply);
 int MWSFSVR_GetMwsfdSvrFlg(void);
 

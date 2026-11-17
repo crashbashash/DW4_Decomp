@@ -1,8 +1,12 @@
 /* MWSFD: the Sofdec player library's core (MWSFD/PS2EE Ver.3.33s281). The version string, the work
  * area and its settings, the library init and finish over SFD and the SFD time hooks. */
-#include "dw4/cri/mwsfd.h"
+#include "dw4/cri/cri_mwsfd.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/cri/sfd.h"
+#include "dw4/cri/cri_adxt.h"
+#include "dw4/cri/lsc.h"
+#include "dw4/cri/sj.h"
 
 /* the parameter block of the SFD library init */
 typedef struct SfdInitPrm {
@@ -34,60 +38,19 @@ extern char *volatile mwsfd_version_ptr;        /* set to mwsfd_version when the
 extern int mwsfd_err_hist[16];         /* the error codes SFD reported, in order (the last slot stays free) */
 extern int mwsfd_err_hist_cnt;
 extern char mwsfd_err_text[];          /* the formatted SFD error report */
-extern int mwsfd_init_flag;
 extern volatile int mwsfsvr_vsync_cnt2; /* bumped by the vsync server */
 
-void ADXT_Init(void);
-void SJRBF_Init(void);
-void SJMEM_Init(void);
-void SJUNI_Init(void);
-int MWSTM_InitStatic(void);
-void MWSFD_InitRsc(void);
-void LSC_Init(void);
 void LSC_EntryErrFunc(void (*fn)(void *obj, const char *msg), void *obj);
-void MWSFSFX_Init(void);
-char *SFD_GetSceErrMessage(void *sfd);
 int mwPlySfdInit(int arg);
-void MWSFSVM_Init(void);
-void MWSFSVM_Error(const char *message, ...);
-void LSC_Finish(void);
-void ADXT_Finish(void);
-void SJMEM_Finish(void);
-void SJRBF_Finish(void);
-void SJUNI_Finish(void);
-void mwSfdDestroy(MwsfdPly *ply);
-void MWSFD_FinishRsc(void);
-void *mwPlyGetSfdHn(MwsfdPly *ply);
-void MWSFD_SetCond(MwsfdPly *ply, int id, int value);
-void MWSFSFX_Finish(void);
-void MWSFSVM_Finish(void);
 void MWSFSVM_EntryIdVfunc(int n, void (*fn)(), int arg);
-void MWSFSVM_DeleteVfunc(void);
 void MWSFSVM_EntryIdleFunc(void (*fn)(), int arg);
-void MWSFSVM_DeleteIdleFunc(void);
 void MWSFSVM_EntryMainFunc(void (*fn)(), int arg);
-void MWSFSVM_DeleteMainFunc(void);
-void mwsfsvr_SetVsyncHooks(void);
-void mwsfsvr_DelVsyncHooks(void);
-void mwsfsvr_VsyncSvr();
-void mwsfsvr_MainSvr();
-void mwsfsvr_IdleSvr();
-void MWSTM_FinishStatic(void);
-int SFD_IsHnSize(const char *version, int size);
-int SFD_Init(SfdInitPrm *prm);
-void SFD_Finish(void);
 int SFD_SetErrFn(int a, void (*fn)(), int b);
-void SFD_SetExtClockFn(void *sfd, int a, int b, int c);
-void SFD_UpdateTime(void *sfd);
 
-void mwPlyInitSfdFx(MwsfdInitPrm *iprm);
-void MWSFLIB_SfdErrFunc(MwsfdPly *ply, int code);
 void mwsflib_LscErrFunc(void *obj, const char *msg);
 void mwsflib_SetSvrFunc(MwsfdInitPrm *iprm);
 void mwsflib_InitLibWork(MwsfdInitPrm *iprm);
 void mwsflib_SetDefCond(MwsfdInitPrm *prm);
-int MWSFD_GetPauseBdr(void);
-int MWSFLIB_SetErrCode(int code);
 int mwPlySfdFinish(void);
 
 char *MWSFD_GetVersionStr(void)
@@ -297,7 +260,6 @@ int mwPlySfdFinish(void)
 
 /* the SFD error callback: keeps the player and SFD handles it was raised for and the code in the history,
  * then reports the code with the text for it */
-void MWSFLIB_SfdErrFunc(MwsfdPly *ply, int code);
 
 int MWSFD_GetErrMwplyHn(void)
 {

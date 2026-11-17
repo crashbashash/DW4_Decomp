@@ -1,9 +1,7 @@
 #include "dw4/cri/m2v.h"
 
-int M2VLIB_CheckHn(void *hn);
-int M2VERR_SetCode(void *hn, int code);
 
-void M2V_GetPicAtr(Mpeg2Ctx *hn, M2vPicAtr *picatr)
+void M2V_GetPicAtr(M2vObj *hn, M2vPicAtr *picatr)
 {
     if (M2VLIB_CheckHn(hn) != 0) {
         M2VERR_SetCode(0, 0xFF03020C);
@@ -12,7 +10,7 @@ void M2V_GetPicAtr(Mpeg2Ctx *hn, M2vPicAtr *picatr)
     *picatr = hn->picatr;
 }
 
-void M2V_GetBitRate(Mpeg2Ctx *hn, int *bit_rate)
+void M2V_GetBitRate(M2vObj *hn, int *bit_rate)
 {
     Mpeg2Ext *h = &hn->ext;
 
@@ -23,7 +21,7 @@ void M2V_GetBitRate(Mpeg2Ctx *hn, int *bit_rate)
     *bit_rate = h->bit_rate;
 }
 
-void M2V_GetVbvBufSiz(Mpeg2Ctx *hn, int *vbv_size, int *vbv_delay, int *reserved)
+void M2V_GetVbvBufSiz(M2vObj *hn, int *vbv_size, int *vbv_delay, int *reserved)
 {
     Mpeg2Ext *h = &hn->ext;
 
@@ -36,7 +34,7 @@ void M2V_GetVbvBufSiz(Mpeg2Ctx *hn, int *vbv_size, int *vbv_delay, int *reserved
     *reserved = -1;
 }
 
-void M2V_GetLinkFlg(Mpeg2Ctx *hn, int *closed_gop, int *broken_link)
+void M2V_GetLinkFlg(M2vObj *hn, int *closed_gop, int *broken_link)
 {
     Mpeg2Ext *h = &hn->ext;
 

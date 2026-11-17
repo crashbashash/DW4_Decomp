@@ -2,6 +2,8 @@
 #include "dw4/cri/sj.h"
 #include "dw4/cri/mcp.h"
 #include "dw4/cri/mps.h"
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sfd.h"
 
 typedef void (*SfdCntFn)(SfdPly *h, int arg, int *counter);
 typedef void (*SfdTmrFn)(SfdPly *h, int arg, SfdTimer *tmr);
@@ -15,67 +17,25 @@ extern SfdCond sfd_lib;
 extern int DAT_004bead4;
 extern void (*DAT_004beb18)(SfdPtsm *ptsm);
 
-int sfd_ReportError();
-int SFLIB_CheckHn(SfdPly *h);
 int FUN_002b0338();
 void FUN_002af428(void);
-int SFTIM_SetSpeed(SfdPly *h, int value);
-int SFAOAP_SetSpeed(SfdPly *h, int value);
-void SFD_SetCond(SfdPly *h, int id, int value);
 void FUN_002ae398(void);
 long FUN_002b5a10(void);
 void FUN_002afbc8(void *acc, long time);
-void SFSEE_ExecServer(SfdPly *h);
-int SFTRN_CallTrSetup(SfdPly *h, int state);
-int sftrn_GetFlagA(SfdPly *h, int id);
-int sftrn_GetFlagB(SfdPly *h, int id);
 int FUN_002b03e8(SfdPly *h, int id);
-int SFBUF_GetRTot(SfdPly *h, int ch);
-int SFBUF_GetWTot(SfdPly *h, int ch);
-void SFSEE_FixAvPlay(SfdPly *h, int req1, int req2);
-void SFSET_SetCond(SfdPly *h, int id, int value);
-int SFSET_GetCond(SfdPly *h, int id);
 int FUN_002b5b38(void);
-void sfd_Lock(void *lock);
-void sfd_Unlock(void *lock);
-int UTY_MulDiv(int a, int b, int c);
-int SFBUF_RingGetDataSiz(SfdPly *h, int id);
-int SFBUF_GetTermFlg(SfdPly *h, int id);
-void SFBUF_SetTermFlg(SfdPly *h, int id, int value);
-int SFTIM_GetTime(SfdPly *h, int *pos, int *len);
-int SFTIM_GetTimeSub(SfdPly *h, int *pos, int *len);
-int SFTIM_IsStagnant(SfdPly *h);
-int SFD_CmpTime(int a, int b, int c, int d);
-int UTY_CmpTime(int a, int b, int c, int d);
-void SFHDS_InitFhd(void *blk);
-void SFHDS_FinishFhd(void *blk);
-void sfd_ClearErr(SfdErrBlk *err);
-void SFTIM_InitHn(SfdPly *h, SfdD28 *d);
-int SFBUF_InitHn(SfdPly *h, SfdStmEnt *ent, SfdCrePrm *prm);
-void SFTRN_InitHn(SfdPly *h, SfdF28 *f, SfdCrePrm *prm, int arg);
-void SFSEE_InitHn(SfdRecSlot *slot);
 void FUN_002afba8(void *acc);
-void SFBUF_DestroySj(SfdPly *h);
 int FUN_002a32b8(SfdPly *h, char *buf, int size);
 void FUN_002a3340(SfdPly *h, char *buf, int size);
 void SFD_SetErrFn(SfdPly *h, SfdErrFn fn, void *obj);
-void SFD_SetUsrTimeFn(SfdPly *h, SfdTimeFn fn);
-void SFD_SetExtClockFn(SfdPly *h, SfdTimeFn fn, int wrap, void *obj);
 void SFD_SetUsrIsSkipFn(SfdPly *h, int (*fn)());
-int SFD_EntrySeek(SfdPly *h, SfdRec *rec);
-void SFD_SetByteRate(SfdPly *h, int a);
-void SFD_SetFileSize(SfdPly *h, int a);
-void SFD_SetTotTime(SfdPly *h, int a, int b);
-void SFD_SetSeekPos(SfdPly *h, int a);
 int FUN_002ac6e8(SfdPly *h, SfdItem *data, int size);
-void SFBUF_SetSupplySj(SfdPly *h, int value);
 
 long FUN_002aa3d0(SfdPly *h, unsigned int mode);
 long FUN_002aa460(SfdPly *h, int mode);
 long FUN_002aa4c8(SfdPly *h, int value);
 int FUN_002aa538(SfdPly *h);
 void sfply_ChkCondDfl(void);
-int SFD_IsHnSvrWait(SfdPly *h);
 void sfply_ExecOne(SfdPly *h);
 void FUN_002aa980(SfdPly *h);
 int FUN_002aa9a8(SfdPly *h);
@@ -102,7 +62,6 @@ int sfply_IsEtrg(SfdPly *h);
 int sfply_IsStagnant(SfdPly *h);
 int sfply_IsPlayTimeAutoStop(SfdPly *h);
 int FUN_002ab680(SfdPly *h);
-int SFPLY_DecideSvrStat(void);
 int FUN_002ab810(SfdCrePrm *prm);
 int FUN_002ab878(void);
 SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg);
@@ -114,15 +73,12 @@ int FUN_002abd00(SfdPly *h);
 int sfply_TrDestroy(SfdPly *h);
 int sfply_Start(SfdPly *h);
 long sfply_TrStart(SfdPly *h);
-int SFPLY_Stop(SfdPly *h);
 void SFPLY_SetResetFlg(int on);
 int sfply_TrStop(SfdPly *h);
 int FUN_002abfd8(SfdPly *h);
-int SFD_GetWritePtr(SfdPly *h, SfdBufStat *inf);
-int SFD_AddWritePtr(SfdPly *h, int a, int b);
-int SFD_TermSupply(SfdPly *h);
 
-int SFD_GetPaStat(SfdPly *h) {
+int SFD_GetPaStat(void *sfd) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000141);
         return 0;
@@ -130,7 +86,8 @@ int SFD_GetPaStat(SfdPly *h) {
     return h->pause;
 }
 
-int SFD_Pause(SfdPly *h, int sw) {
+int SFD_Pause(void *sfd, int sw) {
+    SfdPly *h = sfd;
     int mode;
     int pause;
     if (SFLIB_CheckHn(h) != 0) {
@@ -185,12 +142,12 @@ long FUN_002aa4c8(SfdPly *h, int value) {
     return FUN_002b0338(h, 7, 8, value, 0);
 }
 
-void SFD_Standby(SfdPly *h) {
+int SFD_Standby(void *sfd) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
-        sfd_ReportError(0, 0xFF000143);
-        return;
+        return sfd_ReportError(0, 0xFF000143);
     }
-    FUN_002aa538(h);
+    return FUN_002aa538(h);
 }
 
 int FUN_002aa538(SfdPly *h) {
@@ -198,7 +155,8 @@ int FUN_002aa538(SfdPly *h) {
     return 0;
 }
 
-int SFD_SetSpeed(SfdPly *h, int value) {
+int SFD_SetSpeed(void *sfd, int value) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000144);
     }
@@ -207,17 +165,19 @@ int SFD_SetSpeed(SfdPly *h, int value) {
     return 0;
 }
 
-int SFD_SetAudioCh(SfdPly *h, int value) {
+int SFD_SetAudioCh(void *sfd, int value) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
-        return sfd_ReportError(0, 0xFF000145, value);
+        return sfd_ReportError(0, 0xFF000145);
     }
     SFD_SetCond(h, 30, value);
     return 0;
 }
 
-int SFD_SetVideoCh(SfdPly *h, int value) {
+int SFD_SetVideoCh(void *sfd, int value) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
-        return sfd_ReportError(0, 0xFF000146, value);
+        return sfd_ReportError(0, 0xFF000146);
     }
     SFD_SetCond(h, 29, value);
     return 0;
@@ -241,7 +201,8 @@ void SFD_VsyncSvr(void) {
 void SFD_VbOut(void) {
 }
 
-int SFD_IsHnSvrWait(SfdPly *h) {
+int SFD_IsHnSvrWait(void *sfd) {
+    SfdPly *h = sfd;
     if (h->stat < 1 || h->stat > 4) return 1;
     return h->pending == 0;
 }
@@ -258,7 +219,8 @@ int SFD_IsSvrDone(void) {
     return 1;
 }
 
-int SFD_ExecOne(SfdPly *h) {
+int SFD_ExecOne(void *sfd) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000138);
     }
@@ -835,7 +797,8 @@ void SFPLY_AddDecPic(SfdPly *h, int delta, int arg) {
     }
 }
 
-void SFPLY_AddSkipPic(SfdPly *h, int delta, int arg) {
+void SFPLY_AddSkipPic(void *sfd, int delta, int arg) {
+    SfdPly *h = sfd;
     SfdTimer *t = &h->tmr;
     SfdTmrFn fn;
     t->count2 += delta;
@@ -849,7 +812,8 @@ int FUN_002abd00(SfdPly *h) {
     return SFTRN_CallTrSetup(h, 3);
 }
 
-int SFD_Destroy(SfdPly *h) {
+int SFD_Destroy(void *sfd) {
+    SfdPly *h = sfd;
     int result;
     int i;
     if (SFLIB_CheckHn(h) != 0) {
@@ -873,7 +837,8 @@ int sfply_TrDestroy(SfdPly *h) {
     return SFTRN_CallTrSetup(h, 4);
 }
 
-int SFD_Start(SfdPly *h) {
+int SFD_Start(void *sfd) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000132);
     }
@@ -897,7 +862,8 @@ long sfply_TrStart(SfdPly *h) {
 }
 
 /* matching construct: implicit-int return (declared int, no value returned) — epilogue order */
-int SFD_Stop(SfdPly *h) {
+int SFD_Stop(void *sfd) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF000133);
         return;
@@ -906,7 +872,8 @@ int SFD_Stop(SfdPly *h) {
     h->pending = 1;
 }
 
-int SFPLY_Stop(SfdPly *h) {
+int SFPLY_Stop(void *sfd) {
+    SfdPly *h = sfd;
     int result;
     if (h->stat == 1) {
         return 0;
@@ -1064,21 +1031,24 @@ int FUN_002abfd8(SfdPly *h) {
     return 0;
 }
 
-int SFD_GetWritePtr(SfdPly *h, SfdBufStat *inf) {
+int SFD_GetWritePtr(void *sfd, SfdBufStat *inf) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000134);
     }
     return FUN_002b0338(h, 0, 9, inf, 0);
 }
 
-int SFD_AddWritePtr(SfdPly *h, int a, int b) {
+int SFD_AddWritePtr(void *sfd, int a, int b) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000135);
     }
     return FUN_002b0338(h, 0, 10, a, b);
 }
 
-int SFD_TermSupply(SfdPly *h) {
+int SFD_TermSupply(void *sfd) {
+    SfdPly *h = sfd;
     int id;
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000135);
@@ -1096,12 +1066,13 @@ int SFPLY_IsTermSupply(SfdPly *h) {
     return SFBUF_GetTermFlg(h, h->f28.f20) != 0;
 }
 
-int SFD_GetFrm(SfdPly *h, int *out) {
+int SFD_GetFrm(void *sfd, int *out) {
+    SfdPly *h = sfd;
     int result;
     int value;
     *out = 0;
     if (SFLIB_CheckHn(h) != 0) {
-        return sfd_ReportError(0, 0xFF000136, 11, out, 0);
+        return sfd_ReportError(0, 0xFF000136);
     }
     result = FUN_002b0338(h, 6, 11, out, 0);
     value = *out;
@@ -1114,19 +1085,19 @@ int SFD_GetFrm(SfdPly *h, int *out) {
     return result;
 }
 
-void SFD_RelFrm(SfdPly *h, int value) {
+int SFD_RelFrm(void *sfd, int value) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
-        sfd_ReportError(0, 0xFF000137);
-        return;
+        return sfd_ReportError(0, 0xFF000137);
     }
     h->tmr.f24 = 0;
-    FUN_002b0338(h, 6, 12, value, 0);
+    return FUN_002b0338(h, 6, 12, value, 0);
 }
 
-void SFD_SetSupplySj(SfdPly *h, int value) {
+int SFD_SetSupplySj(void *sfd, struct SfdBufInf *inf) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
-        sfd_ReportError(0, 0xFF000139);
-        return;
+        return sfd_ReportError(0, 0xFF000139);
     }
-    SFBUF_SetSupplySj(h, value);
+    return SFBUF_SetSupplySj(h, inf);
 }

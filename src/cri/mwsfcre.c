@@ -1,8 +1,10 @@
 /* CRI MWSFD player creation (MWSFCRE): work-area sizes, the frame and picture user buffers, the SFD
  * handle set-up and teardown, mwPlyGetHdrInf and the player's work-area allocator (MWSFD_Malloc). */
-#include "dw4/cri/mwsfd.h"
+#include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/sj.h"
 #include <string.h>
+#include "dw4/cri/sfd.h"
+#include "dw4/cri/lsc.h"
 
 #define MWSFD_MALLOC_MAX 32
 #define MWSFD_ADDINF_BUF_SIZE 0x20000
@@ -134,56 +136,17 @@ extern MwsfdSfdPrm mwsfcre_sfdPrmType3;
 extern MwsfdMpvCond mwsfcre_mpvCond;
 extern MwsfdAdxCfg mwsfcre_adxCfg;
 
-void *SFD_GetTrHn(void *sfd, int index, void **out);
 void *mwsfsfx_Create(char *work, int size, int width, int height);
-void MWSFSFX_SetCompoMode(MwsfdPly *ply, int mode);
 struct SjObj *mwsfd_CreateAddInfSj(MwsfdPly *ply);
-int MWSFTAG_SetAinfSj(MwsfdPly *ply);
-void mwsfsfx_ResetAddInf(MwsfdPly *ply);
-void mwply_ResetPicLog(MwsfdPly *ply);
-void mwply_SetPicUsrCb(MwsfdPly *ply);
-void MWSFD_ExecSetSprCbFn(MwsfdPly *ply);
-void MWSFSVR_SetHnMwplySvrFlg(MwsfdPly *ply, int sw);
-void MWSFSVR_SetHnSfdSvrFlg(MwsfdPly *ply, int sw);
-void MWSFPLY_SetFlowLimit(MwsfdPly *ply);
-struct LscObj *LSC_Create(SfdSj *sj);
-void LSC_SetStmHndl(struct LscObj *lsc, void *stm);
-void *MWSTM_Create(SfdSj *sj);
-SfdSj *SJMEM_Create(char *buf, int size);
-int SFD_SetSupplySj(void *sfd, SfdSupplyPrm *prm);
 MwsfdPly *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm);
-void SFD_SetMpvParaTbl(MwsfdMpvCond *cond, MwsfdFrmBufs *bufs, void **frm);
 int FUN_002ab778(MwsfdSfdPrm *prm, int arg);
-void SFD_SetSceMpeg(int enable);
-void SFD_SetAdxtPara(MwsfdAdxCfg *cfg);
 int mwsfcre_CheckCprm(MwsfdCreInf *cprm);
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm);
 void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm);
 int mwsfcre_MallocCompoWork(MwsfdPly *ply);
 int mwsfcre_ConvBufFmtFromMwsfd(int format);
-void mwSfdDestroy(MwsfdPly *ply);
 
-void MWSFSVM_Error(const char *msg);
-void MWSFLIB_SetErrCode(int code);
-int MWSFD_GetUsePicUsr(void);
-void MWSFLIB_SfdErrFunc(void);
-void mwSfdStopDec(MwsfdPly *ply);
-void mwply_GetPicInf(char *buf, int size, MwsfdHdrInf *hdr);
-int MWSFSFX_CalcHnWorkSiz(int width, int height);
-void MWSFSFX_Destroy(void *sfx);
-int MWSFTAG_IsUseAinfSj(MwsfdCreInf *cprm);
-void MWSFTAG_DestroyAinfSj(MwsfdPly *ply);
-void MWSTM_Destroy(void *stm);
-void MWSST_Destroy(MwsfdSst *sst);
-void LSC_Destroy(struct LscObj *lsc);
-SfdSj *SJRBF_Create(char *buf, int size, int xsize);
-int SFD_Destroy(void *sfd);
-int SFD_Stop(void *sfd);
 int SFD_SetErrFn(void *sfd, void (*fn)(void), void *obj);
-void SFD_SetCond(void *sfd, int no, int value);
-void SFD_SetMpvCond(void *sfd, int no, int value);
-void SFD_SetPicUsrBuf(void *sfd, char *addr, int count, int unit);
-void SFD_AnalyCreInf(char *buf, int size, SfdHdrInf *inf);
 
 int mwPlyCalcWorkSfd(MwsfdCreInf *cprm);
 int mwPlyCalcWorkCompo(MwsfdCreInf *cprm);
@@ -626,7 +589,6 @@ SfdSj *mwsfcre_CreateSj(MwsfdPly *ply) {
 /* Creates a player and wires every part of it: the SFD handle, the input SJs, the MWSTM stream, the link
  * controller, the sfx and the additional-information SJ. Any failure reports it and destroys the half-made
  * player. */
-MwsfdPly *mwPlyCreateSofdec(MwsfdCreInf *cprm);
 
 /* -1 when no work area is given and the malloc/free functions are not both set */
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm) {

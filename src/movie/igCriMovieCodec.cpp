@@ -4,7 +4,7 @@
 #include "dw4/igVisualContextDispatchView.h"
 #include "dw4/igFileDispatchView.h"
 extern "C" {
-#include "dw4/cri/mwsfd.h"
+#include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/cri_adxt.h"
 #include <string.h>
 }
@@ -88,21 +88,9 @@ igMetaObject *igCriMovieData_GetMeta(void);
 int igReportError(const char *format, ...);
 void mwPlySetMallocFn(void *(*allocate)(igCriMovieCodec *, unsigned int),
                          void (*release)(igCriMovieCodec *, void *), igCriMovieCodec *context);
-int mwPlyIsPause(MwsfdPly *ply);
-void MWSFD_ExecVsyncFrame(void);
 void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrmObj *frame);
-void mwPlyRelCurFrm(MwsfdPly *ply);
 
 igFileDispatchView *igFile_Create(igMemoryPoolView *pool);
-void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *info);
-void mwPlySetTimerCh(int ch);
-int mwPlyCalcWorkCprmSfd(MwsfdCreInf *cprm);
-MwsfdPly *mwPlyCreateSofdec(MwsfdCreInf *cprm);
-void mwPlySetAudioCh(MwsfdPly *ply, int ch);
-void mwPlyStartAfs(MwsfdPly *ply, int ptid, int flid);
-void mwPlyStartAfsLp(MwsfdPly *ply, int ptid, int flid);
-void mwPlyStartFnameLp(MwsfdPly *ply, char *fname);
-void mwPlyInitSfdFx(MwsfdInitPrm *prm);
 float log10f(float x);
 int igReportNotice(const char *format, ...);
 int igReport_Warning(const char *format, ...);

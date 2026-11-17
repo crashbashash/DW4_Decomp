@@ -1,6 +1,7 @@
 #include "dw4/cri/sfdhn.h"
 #include "dw4/cri/sfh.h"
 #include "dw4/cri/mcp.h"
+#include "dw4/cri/sfd.h"
 
 typedef int (*SfhGetFn)(SfhHn *sfh, int *value);
 typedef int (*SfhGetStmFn)(SfhHn *sfh, unsigned char id, int *value);
@@ -11,45 +12,8 @@ enum {
 
 static SfhHn sfhdr_sfh_work[SFH_MAX_HN];
 
-int SFMPS_GetConcatCnt(SfdHandle *hn);
-void SFH_Init(int maxHn, SfhHn *hns);
-void SFH_Finish(void);
-SfhHn *SFH_Create(char *buf, int size);
-void SFH_Destroy(SfhHn *sfh);
-int SFH_IsSfdHeader(SfhHn *sfh, int *ok);
-int SFH_IsExistStmId(SfhHn *sfh, unsigned char id, int *exist);
-int SFH_IsEffFtrInf(SfhHn *sfh, int id, int *avail);
-int SFH_AnlyHdrToolVer(SfhHn *sfh, int *major, int *minor);
-int SFH_AnlyByteRate(SfhHn *sfh, int *value);
-int SFH_AnlyHdrSiz(SfhHn *sfh, int *value);
-int SFH_AnlyPackType(SfhHn *sfh, int *value);
-int SFH_AnlyPketSizLen(SfhHn *sfh, int *value);
-int SFH_AnlyPackSiz(SfhHn *sfh, int *value);
-int SFH_AnlyNumElemTot(SfhHn *sfh, int *value);
-int SFH_AnlyNumElemAud(SfhHn *sfh, int *value);
-int SFH_AnlyNumElemVid(SfhHn *sfh, int *value);
-int SFH_AnlyNumElemPrv(SfhHn *sfh, int *value);
-int SFH_AnlyMaxPlyLenAud(SfhHn *sfh, int *value);
-int SFH_AnlyMaxPlyLenVid(SfhHn *sfh, int *value);
-int SFH_AnlyMaxFrmNum(SfhHn *sfh, int *value);
-int SFH_AnlyElemCodecAud(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyElemLayer(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyElemChNum(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyElemSmpHz(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyElemCodecVid(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyElemBitRate(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyElemPicSz(SfhHn *sfh, int id, int *width, int *height);
-int SFH_AnlyElemPicRate(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyFtrColType(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyFtrPicType(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyFtrFixFlg(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyFtrShcFixFlg(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyFtrExpand(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyFtrGopN(SfhHn *sfh, unsigned char id, int *value);
-int SFH_AnlyFtrGopM(SfhHn *sfh, unsigned char id, int *value);
 
 int sfhds_IsPrvate2PketStart(unsigned char *p);
-int SFSET_GetCond(SfdHandle *hn, int id);
 int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size);
 int sfhds_ReadLong(unsigned char *p);
 void sfhds_SetHdrSeek(SfdHandle *hn);
@@ -288,12 +252,12 @@ void sfhds_AnlyVideo(SfhHn *sfh, int id, SfdHdrVideo *video) {
 
     video->codec = sfhds_CallS(sfh, id, SFH_AnlyElemCodecVid);
     video->bitRate = sfhds_CallS(sfh, id, SFH_AnlyElemBitRate);
-    if (SFH_AnlyElemPicSz(sfh, id & 0xFF, &video->width, &video->height) == 0) {
+    if (SFH_AnlyElemPicSz(sfh, id, &video->width, &video->height) == 0) {
         video->width = -1;
         video->height = -1;
     }
     video->frameRate = sfhds_CallS(sfh, id, SFH_AnlyElemPicRate);
-    if (SFH_IsEffFtrInf(sfh, id & 0xFF, &avail) == 0) {
+    if (SFH_IsEffFtrInf(sfh, id, &avail) == 0) {
         avail = 0;
     }
     video->avail = avail != 0;
@@ -342,7 +306,8 @@ int SFHDS_GetPketLenField(void) {
 }
 
 /* The header's version times 100, or 0 before a header has been read. */
-int SFHDS_GetMuxVerNum(SfdHandle *hn) {
+int SFHDS_GetMuxVerNum(void *sfd) {
+    SfdHandle *hn = sfd;
     SfdHdrInf *hdr = &hn->hdr;
 
     if (hdr->valid == 0) {
@@ -351,7 +316,8 @@ int SFHDS_GetMuxVerNum(SfdHandle *hn) {
     return hdr->verMajor * 100 + hdr->verMinor;
 }
 
-int SFHDS_GetColType(SfdHandle *hn) {
+int SFHDS_GetColType(void *sfd) {
+    SfdHandle *hn = sfd;
     SfdHdrVideo *video = &hn->hdr.video;
 
     if (hn->hdr.valid == 0) {

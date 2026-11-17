@@ -64,13 +64,6 @@ typedef struct MwsfdMemPool {
     int used;
 } MwsfdMemPool;
 
-typedef enum MwsfdChromaFmt {
-    MWSFD_CHROMA_FMT_0,
-    MWSFD_CHROMA_FMT_1,
-    MWSFD_CHROMA_FMT_2,
-    MWSFD_CHROMA_FMT_3
-} MwsfdChromaFmt;
-
 typedef enum MwsfdChromaPos {
     MWSFD_CHROMA_POS_0,
     MWSFD_CHROMA_POS_1

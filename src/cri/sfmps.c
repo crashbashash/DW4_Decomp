@@ -1,6 +1,7 @@
 #include "dw4/cri/sfdhn.h"
 #include "dw4/cri/mps.h"
 #include "dw4/cri/mcp.h"
+#include "dw4/cri/sfd.h"
 
 enum {
     SFD_COND_DEMUX_SPLIT = 59,
@@ -41,28 +42,6 @@ extern MpsWork sfmps_mps_work;
 extern int sfmps_short_writes;
 extern int (*sfmps_audio_fn)(void *obj, SfmpsWrInf *inf);
 
-int sfd_ReportError(SfdHandle *hn, int code);
-int SFLIB_CheckHn(SfdHandle *hn);
-int SFCON_IsEndcodeSkip(SfdHandle *hn);
-int SFCON_IsSystemEndcodeSkip(SfdHandle *hn);
-int SFSET_GetCond(SfdHandle *hn, int index);
-void SFSET_SetCond(SfdHandle *hn, int index, int value);
-int SFBUF_RingGetWrite(SfdHandle *hn, int ch, SfdBufStat *stat);
-int SFBUF_RingGetRead(SfdHandle *hn, int ch, SfdBufStat *stat);
-int SFBUF_RingAddWrite(SfdHandle *hn, int ch, int len, int tail);
-void SFBUF_RingAddRead(SfdHandle *hn, int ch, int len);
-void SFBUF_GetUoch(SfdHandle *hn, int ch, int id, SfdUoch *uoch);
-int SFBUF_GetWTot(SfdHandle *hn, int ch);
-void SFBUF_SetPrepFlg(SfdHandle *hn, int ch, int value);
-int SFBUF_GetPrepFlg(SfdHandle *hn, int ch);
-int SFBUF_SetTermFlg(SfdHandle *hn, int ch, int value);
-int SFBUF_GetTermFlg(SfdHandle *hn, int ch);
-void sfbuf_GetSjPos(SfdSj *sj, int *total, int *rest);
-long sfbuf_MergeTotal(long total, unsigned int low);
-int sftrn_GetFlagA(SfdHandle *hn, int flag);
-int sfring_IsFull(SfdHandle *hn, int ch);
-int sfring_PutItem(SfdHandle *hn, int ch, SfmpsPts *item, int *full);
-void sfmpvps2_StopIpu(SfdHandle *hn, int value);
 
 int sfmps_ChkFatal(void);
 int sfmps_ExecServerSub(SfdHandle *hn);
@@ -97,13 +76,9 @@ int sfmps_DestroySub(MpsHn *mps);
 void sfmps_SetCustomPketLen(SfdHandle *hn);
 int sfmps_ReprocessHdr(SfdHandle *hn, SfdMpsPrm *prm, SfdPicRec *rec);
 SfdPicRec *sfmps_GetHd(SfdHandle *hn);
-int SFMPS_GetConcatCnt(SfdHandle *hn);
 int sfmps_IsEffectiveEndcode(SfdHandle *hn, int kind);
 void sfmps_ChkInEnd(SfdHandle *hn, int *done);
-int SFBUF_GetRTot(SfdHandle *hn, int ch);
 int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts);
-int SFMPVP_Put(SfdHandle *hn, unsigned char *data, int len);
-int SFMPVP_Unput(SfdHandle *hn, int len);
 void FUN_002aa050(SfdHandle *hn, unsigned char *data, int len);
 int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total);
 void sfmps_SkipNext(SfdHandle *hn, unsigned char *buf, int size, int *skip);
@@ -128,14 +103,16 @@ int SFD_SetStmObject(SfdHandle *hn, int id, void *object, int (*cb)(void *obj, i
     return 0;
 }
 
-int SFD_GetVideoCh(SfdHandle *hn) {
+int SFD_GetVideoCh(void *sfd) {
+    SfdHandle *hn = sfd;
     if (hn == 0) {
         return -1;
     }
     return hn->mps.hn.prm->videoCh;
 }
 
-int SFD_GetAudioCh(SfdHandle *hn) {
+int SFD_GetAudioCh(void *sfd) {
+    SfdHandle *hn = sfd;
     if (hn == 0) {
         return -1;
     }
@@ -1030,7 +1007,8 @@ SfdPicRec *sfmps_GetHd(SfdHandle *hn) {
     return &hn->work->pic;
 }
 
-int SFMPS_GetConcatCnt(SfdHandle *hn) {
+int SFMPS_GetConcatCnt(void *sfd) {
+    SfdHandle *hn = sfd;
     return hn->mps.hn.prm->nPics;
 }
 int sfmps_IsPrepEnd(SfdHandle *hn, int ch) {

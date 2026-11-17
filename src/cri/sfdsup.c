@@ -1,9 +1,6 @@
 #include "dw4/cri/sfdhn.h"
+#include "dw4/cri/sfd.h"
 
-int sfd_ReportError(SfdHandle *hn, int code);
-int SFBUF_SetPrepFlg(SfdHandle *hn, int ch, int value);
-void SFBUF_RingGetWrite(SfdHandle *hn, int ch, SfdBufStat *stat);
-void SFBUF_RingAddWrite(SfdHandle *hn, int ch, int len, int tail);
 
 /* The supply module: the application writes the stream into the supply module's output channel
  * itself, so the handler only answers the write requests and marks the channel at each server call. */

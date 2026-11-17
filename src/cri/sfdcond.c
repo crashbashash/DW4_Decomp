@@ -1,3 +1,5 @@
+#include "dw4/cri/sfd.h"
+
 typedef struct SfdInfo64 {
     char c[64];
 } SfdInfo64;
@@ -52,33 +54,30 @@ typedef struct SfdLib {
 
 extern SfdLib DAT_004bea88;
 
-int sfd_ReportError();
-int SFLIB_CheckHn(SfdHn *hn);
-int SFPLY_DecideSvrStat();
 int FUN_002b03e8(SfdHn *hn, int check);
 
 void sfset_SetCondAll(int index, int value);
-void SFSET_SetCond(SfdHn *hn, int index, int value);
 void sfset_SetUsrCond(SfdHn *hn, int index, int value);
 int sfset_IsCondValid(SfdHn *hn, int index, int value);
-int SFSET_GetCond(SfdHn *hn, int index);
 void FUN_002adf48(char *ctx, int index, int *out);
 
-void SFD_GetSvrStat(void)
+int SFD_GetSvrStat(void)
 {
-    SFPLY_DecideSvrStat();
+    return SFPLY_DecideSvrStat();
 }
 
-int SFD_GetHnStat(SfdHn *hn)
+int SFD_GetHnStat(void *sfd)
 {
+    SfdHn *hn = sfd;
     if (SFLIB_CheckHn(hn) != 0) {
         sfd_ReportError(0, 0xFF000111);
     }
     return hn->state;
 }
 
-int SFD_SetCond(SfdHn *hn, int index, int value)
+int SFD_SetCond(void *sfd, int index, int value)
 {
+    SfdHn *hn = sfd;
     if (hn == 0) {
         sfset_SetCondAll(index, value);
         sfd_lib[index] = value;
@@ -103,8 +102,9 @@ void sfset_SetCondAll(int index, int value)
     }
 }
 
-void SFSET_SetCond(SfdHn *hn, int index, int value)
+void SFSET_SetCond(void *sfd, int index, int value)
 {
+    SfdHn *hn = sfd;
     if (sfset_IsCondValid(hn, index, value) != 0) {
         hn->cond[index] = value;
     }
@@ -128,8 +128,9 @@ int sfset_IsCondValid(SfdHn *hn, int index, int value)
     return 1;
 }
 
-int SFD_GetCondDef(SfdHn *hn, int index, int *out)
+int SFD_GetCondDef(void *sfd, int index, int *out)
 {
+    SfdHn *hn = sfd;
     if (hn == 0) {
         *out = sfd_lib[index];
     } else {
@@ -142,13 +143,15 @@ int SFD_GetCondDef(SfdHn *hn, int index, int *out)
     return 0;
 }
 
-int SFSET_GetCond(SfdHn *hn, int index)
+int SFSET_GetCond(void *sfd, int index)
 {
+    SfdHn *hn = sfd;
     return hn->cond[index];
 }
 
-int SFD_GetHnHdrInf(SfdHn *hn, SfdInfo64 *out)
+int SFD_GetHnHdrInf(void *sfd, SfdInfo64 *out)
 {
+    SfdHn *hn = sfd;
     int r = SFLIB_CheckHn(hn);
     if (r != 0) {
         return sfd_ReportError(0, 0xFF000114);
@@ -157,8 +160,9 @@ int SFD_GetHnHdrInf(SfdHn *hn, SfdInfo64 *out)
     return r;
 }
 
-int SFD_GetPlyInf(SfdHn *hn, SfdStatus160 *out)
+int SFD_GetPlyInf(void *sfd, SfdStatus160 *out)
 {
+    SfdHn *hn = sfd;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000119);
     }
@@ -184,10 +188,11 @@ int SFD_GetTmrInf(SfdHn *hn, SfdReport *report)
     return 0;
 }
 
-int SFD_GetTrHn(SfdHn *hn, int index, int *out)
+int SFD_GetTrHn(void *sfd, int index, int *out)
 {
+    SfdHn *hn = sfd;
     if (SFLIB_CheckHn(hn) != 0) {
-        return sfd_ReportError(0, 0xFF000117, out);
+        return sfd_ReportError(0, 0xFF000117);
     }
     FUN_002adf48((char *)hn, index, out);
     return 0;

@@ -6,17 +6,17 @@ readable source that rebuilds the retail executable byte for byte.
 <!-- progress:start -->
 | Region | Size | Matched | Readable |
 | --- | ---: | ---: | ---: |
-| Game | 1107 KB | 100.0 % | 58.8 % |
+| Game | 1107 KB | 100.0 % | 58.9 % |
 | Alchemy engine | 1573 KB | 88.4 % | 38.3 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 99.6 % |
-| CRI ADX | 140 KB | 100.0 % | 73.3 % |
-| CRI Sofdec | 209 KB | 96.9 % | 30.5 % |
+| CRI ADX | 140 KB | 100.0 % | 73.5 % |
+| CRI Sofdec | 209 KB | 96.9 % | 50.9 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
 | Sony SDK | 97 KB | 100.0 % | 100.0 % |
 | newlib | 84 KB | 100.0 % | 61.8 % |
 | libgcc | 11 KB | 100.0 % | 98.7 % |
 | Metrowerks runtime | 10 KB | 100.0 % | 97.3 % |
-| **Total** | **3391 KB** | **94.4 %** | **51.6 %** |
+| **Total** | **3391 KB** | **94.4 %** | **52.9 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->

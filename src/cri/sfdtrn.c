@@ -1,3 +1,5 @@
+#include "dw4/cri/sfd.h"
+
 typedef int (*SfdTrnFn)();
 
 typedef struct SfdTrnSlot {
@@ -33,8 +35,6 @@ typedef struct SfdTrnModules {
     SfdTrnFn *fns[15];
 } SfdTrnModules;
 
-int sfd_ReportError();
-void SFSET_SetCond(SfdHn *hn, int index, int value);
 
 int sftrn_CallTrEntry(SfdTrnModules *modules, int k);
 void sftrn_InitTrData(SfdTrnSlot *slot, SfdTrnFn *fns);
@@ -50,15 +50,15 @@ void sftrn_ConnTrnBufU(SfdHn *hn, int from, int to);
 void FUN_002b0228(char *ctx, int from, int slot, int to);
 void FUN_002b0268(char *ctx, int from, int to);
 
-void SFTRN_Init(SfdTrnModules *dst, SfdTrnModules *src)
+int SFTRN_Init(SfdTrnModules *dst, SfdTrnModules *src)
 {
     *dst = *src;
-    sftrn_CallTrEntry(src, 0);
+    return sftrn_CallTrEntry(src, 0);
 }
 
-void SFTRN_Finish(SfdTrnModules *modules)
+int SFTRN_Finish(SfdTrnModules *modules)
 {
-    sftrn_CallTrEntry(modules, 1);
+    return sftrn_CallTrEntry(modules, 1);
 }
 
 int sftrn_CallTrEntry(SfdTrnModules *modules, int k)
@@ -75,8 +75,9 @@ int sftrn_CallTrEntry(SfdTrnModules *modules, int k)
     return r;
 }
 
-void SFTRN_InitHn(SfdHn *hn, SfdTrnSlot *s, SfdTrnConfig **pconfig)
+void SFTRN_InitHn(void *sfd, SfdTrnSlot *s, SfdTrnConfig **pconfig, int arg)
 {
+    SfdHn *hn = sfd;
     SfdTrnConfig *config = *pconfig;
     int i;
     for (i = 0; i < 9; i++) {
@@ -222,8 +223,9 @@ void FUN_002b0268(char *ctx, int from, int to)
     ((SfdTrnLink *)(ctx + off74))->to = to;
 }
 
-int SFTRN_CallTrSetup(SfdHn *hn, int k)
+int SFTRN_CallTrSetup(void *sfd, int k)
 {
+    SfdHn *hn = sfd;
     int i;
     int r = 0;
     SfdTrnSlot *s = hn->trn;
@@ -246,26 +248,30 @@ int FUN_002b0338(SfdHn *hn, int index, int k, int a, int b)
     return fns[k](hn, a, b, 0);
 }
 
-void sftrn_SetFlagA(SfdHn *hn, int index, int value)
+void sftrn_SetFlagA(void *sfd, int index, int value)
 {
+    SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     hn->trn[0].f0 = value;
 }
 
-int sftrn_GetFlagA(SfdHn *hn, int index)
+int sftrn_GetFlagA(void *sfd, int index)
 {
+    SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].f0;
 }
 
-void sftrn_SetFlagB(SfdHn *hn, int index, int value)
+void sftrn_SetFlagB(void *sfd, int index, int value)
 {
+    SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     hn->trn[0].f4 = value;
 }
 
-int sftrn_GetFlagB(SfdHn *hn, int index)
+int sftrn_GetFlagB(void *sfd, int index)
 {
+    SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].f4;
 }

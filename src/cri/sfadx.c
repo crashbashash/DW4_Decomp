@@ -2,6 +2,11 @@
 #include "dw4/cri/mcp.h"
 #include <string.h>
 #include "dw4/cri/mps.h"
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sfd.h"
+
+/* kept here: with this declaration in sfd.h, sfmpv.c (which includes it) schedules FUN_002a5c28 differently */
+extern int sfadxt_stat;
 
 typedef struct SfdAdxHn SfdAdxHn;
 
@@ -110,7 +115,6 @@ extern char DAT_004f4b68[];
 extern char sfadx_silent_block[];
 extern SfdAdxCfg sfadxt_para;
 extern int DAT_0057faac;
-extern int sfadxt_stat;
 extern void *DAT_004bead8[4];
 
 float logf(float);
@@ -143,38 +147,8 @@ void ADXT_SetTimeOfst();
 int ADXT_IsHeader();
 int ADXT_IsEndcode();
 int ADXT_InsertSilence();
-int UTY_MulDiv();
-int SFBUF_RingGetRead();
-int SFBUF_RingAddRead();
-int SFBUF_RingGetSj();
-void SFBUF_SetPrepFlg();
-int SFBUF_GetPrepFlg();
-int SFBUF_SetTermFlg();
-int SFBUF_GetTermFlg();
-int sfbuf_GetSjPos();
-long sfbuf_MergeTotal();
-void SFCON_WriteTotSmplQue();
-int SFHDS_GetMuxVerNum();
-int sfd_ReportError();
-int SFPLY_GetResetFlg();
-int SFSET_SetCond();
-int SFSET_GetCond();
-int SFTIM_ChkRegularTime();
-int SFTIM_SetTimeFn();
-int SFTIM_GetTimeOneFrmVideo();
-void SFTST_Create();
 void FUN_002b0528();
-void SFTST_SetTolerance();
-void SFTST_SetExcessErr();
-void SFTST_SetAdjStart();
-void SFTST_SetAdjPoff();
-void SFTST_SetMovaveRange();
-void SFTST_Pause();
-void SFTST_SetAdjFlg();
-void SFTST_GoNextFrame();
-void SFTST_Calc();
 long FUN_002b5a10();
-long UTY_GetTmrUnit();
 int FUN_002b59a0();
 void FUN_002b5848();
 
@@ -193,8 +167,6 @@ void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out);
 void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used);
 int sfadxt_AdjDiscard(char *records, int length, int *found);
 int FUN_002ae6c8();
-int SFTIM_GetVideoStartSample();
-void SFTIM_SetStartTime();
 int sfadxt_InsertSilence(SfdAdxHn *h, int nch, int size);
 void sfadxt_ExcludeHdr(SfdAdxHn *h, char *buf, int size, int *used);
 char *sfadxt_SearchAlign(SfdAdxHn *h, char *buf, int size);
@@ -818,7 +790,7 @@ int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit) {
     void *blk = h->blk4120;
     int nowTime;
     int nowUnit;
-    if (SFTIM_ChkRegularTime(h) == 0)
+    if (SFTIM_ChkRegularTime(h, time, unit) == 0)
         return 0;
     if (h->state == 4) {
         sfadxt_GetTimeTst(blk, adxt, &nowTime, &nowUnit);

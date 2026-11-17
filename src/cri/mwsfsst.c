@@ -3,6 +3,7 @@
  * 0xC0 + stmNo; the functions here call through that table for the player's input. */
 #include "dw4/cri/mwply.h"
 #include "dw4/cri/sj.h"
+#include "dw4/cri/cri_mwsfd.h"
 
 typedef struct MwsfdInputCbTbl {
     void (*init)(void);                                        /* 0 */
@@ -30,11 +31,8 @@ extern char E303111_MWSST_Create_worksize_is_short[];       /* "E303111: MWSST_C
 extern char E303112_MWSST_Create_cant_create_SJ[];          /* "E303112: MWSST_Create: can't create SJ." */
 extern char E303112_MWSST_Create_cant_create_corehn[];      /* "E303112: MWSST_Create: can't create corehn." */
 
-void MWSFSVM_Error(const char *message, ...);
-SfdSj *SJRBF_Create(char *buf, int size, int xsize);
 
 void SFD_SetStmObject(void *sfd, int stmId, SfdSj *sj, int a3, int t0);
-void MWSFSVM_GotoIdleBorder(void);
 
 MwsfdInputCb *mwsst_GetCb(void);
 MwsfdInputCbTbl *mwsst_GetCbTbl(void);

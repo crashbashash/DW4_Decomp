@@ -1,36 +1,13 @@
 /* SFX alpha: the alpha handles an SFX handle keeps (SfxHn.ahn): the parameters of the CFT colour
  * conversion table and the three alpha levels of the alpha tables, and the frame helpers after them. */
+#include "dw4/cri/sfx.h"
 #include <string.h>
-
-void cft_MakeYccTbl(int mode, int lo, int hi, int table);
-void cft_MakeAlpha3Tbl(int table, int alpha0, int alpha1, int alpha2);
-void cft_MakeAlpha3TblBlack(int table, int alpha0, int alpha1, int alpha2);
-void sfx_ClipFrame();
-
-typedef struct SfxaPrm {
-    int mode;
-    int lo;
-    int hi;
-} SfxaPrm;
-
-typedef struct SfxaHn {
-    int used;
-    int changed;              /* the parameters differ from the last colour table built */
-    SfxaPrm prm;
-    unsigned char alpha[3];
-} SfxaHn;
 
 typedef struct SfxaLib {
     int nhn;
     int maxhn;
     SfxaHn hn[8];
 } SfxaLib;
-
-typedef struct SfxaFrame {
-    char pad0[68];
-    int right;
-    int bottom;
-} SfxaFrame;
 
 typedef struct SfxaLineWalk {
     int addr;
@@ -107,18 +84,18 @@ void SFXA_Destroy(volatile int *hn) {
     }
 }
 
-void SFXA_MakeAlpLumiTbl(SfxaHn *hn, int unused, int table) {
+void SFXA_MakeAlpLumiTbl(SfxaHn *hn, int unused, CftEntry *table) {
     SfxaPrm *prm = &hn->prm;
 
     cft_MakeYccTbl(prm->mode, prm->lo, prm->hi, table);
     hn->changed = 0;
 }
 
-void SFXA_MakeAlp3110Tbl(SfxaHn *hn, int unused, int table) {
+void SFXA_MakeAlp3110Tbl(SfxaHn *hn, int unused, CftEntry *table) {
     cft_MakeAlpha3Tbl(table, hn->alpha[0], hn->alpha[1], hn->alpha[2]);
 }
 
-void SFXA_MakeAlp3Tbl(SfxaHn *hn, int unused, int table) {
+void SFXA_MakeAlp3Tbl(SfxaHn *hn, int unused, CftEntry *table) {
     cft_MakeAlpha3TblBlack(table, hn->alpha[0], hn->alpha[1], hn->alpha[2]);
 }
 
@@ -159,10 +136,10 @@ void SFXA_GetAlp3Prm(SfxaHn *hn, unsigned char *alpha0, unsigned char *alpha1, u
     *alpha2 = alpha[2];
 }
 
-void SFX_SetClipping(SfxaFrame *frm, int left, int top, int right, int bottom) {
-    frm->right = right;
-    frm->bottom = bottom;
-    sfx_ClipFrame(frm, left, top, right, bottom);
+void SFX_SetClipping(SfxFrame *frm, int left, int top, int right, int bottom) {
+    frm->width = right;
+    frm->height = bottom;
+    sfx_ClipFrame(frm, left, top);
 }
 
 /* Turns a line walk upside down: start at the last line and step backwards. */

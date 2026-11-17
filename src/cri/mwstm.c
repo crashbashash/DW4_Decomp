@@ -1,6 +1,7 @@
 /* MWSTM: the player's file stream, a thin layer over ADXSTM that reads a file or a sector range
  * of one into the player's SJ. */
 #include "dw4/cri/adxstm.h"
+#include "dw4/cri/cri_mwsfd.h"
 
 
 int MWSTM_Init(void)
@@ -32,7 +33,7 @@ int MWSTM_SetRdSct(AdxStmObj *stm, int nsct)
     return 0;
 }
 
-int MWSTM_SetTrSct(void)
+int MWSTM_SetTrSct(AdxStmObj *stm)
 {
     return 0;
 }

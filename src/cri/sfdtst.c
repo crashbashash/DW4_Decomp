@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sfd.h"
+
+/* kept here: with this declaration in sfd.h, sfmpv.c (which includes it) schedules FUN_002a5c28 differently */
+extern int sfadxt_stat;
 
 typedef struct SfdTst {
     int f0;
@@ -51,14 +56,12 @@ typedef struct SfdTstHeader {
 
 extern SfdTstHeader DAT_004f50d0;
 extern char DAT_004f51e8[];
-extern int sfadxt_stat;
 extern int sftst_debout_siz;
 extern char *sftst_debout_buf;
 extern char *DAT_004beb4c;
 extern char *DAT_004beb50;
 extern SfdTst *sftst_last;
 
-int UTY_MulDiv(int value, int scale, int divisor);
 
 void sftst_ResetHist(SfdTst *tst);
 int sftst_UpdateMovAve(SfdTst *tst, int value);

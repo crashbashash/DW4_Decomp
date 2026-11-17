@@ -1,8 +1,11 @@
 /* MWSFPLY: the MWSFD player's control. The SFD standby and start, the starts from a file, a file
  * range, an AFS entry, memory and an SJ, and the stop and pause. */
-#include "dw4/cri/mwsfd.h"
+#include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/sj.h"
 #include <stdio.h>
+#include "dw4/cri/sfd.h"
+#include "dw4/cri/cri_adxf.h"
+#include "dw4/cri/lsc.h"
 
 /* an object that opens a stream by name (vtbl +24) */
 typedef struct MwsfdNameObj MwsfdNameObj;
@@ -18,51 +21,14 @@ void *memset(void *dst, int c, unsigned int n);
 int strlen(const char *s);
 char *strcpy(char *dst, const char *src);
 char *strncpy(char *dst, const char *src, int n);
-void MWSFSVM_Error(const char *message, ...);
-int ADXF_GetFnameRangeEx(int dir, int ofst, char *fname, void **outDir, int *outOfst, int *outNsct);
-SfdSj *SJMEM_Create(char *buf, int size);
-void LSC_Stop(struct LscObj *lsc);
-void MWSFCRE_SetSupplySj(MwsfdPly *ply);
-int MWSFCRE_ResetSfdHn(MwsfdPly *ply);
-void MWSFSEE_StartFnameSub1(MwsfdPly *ply, int a, int b);
-void MWSFSEE_StartFnameSub2(MwsfdPly *ply, int a, int b);
-void MWSFD_SetFlowLimit(MwsfdPly *ply, int lo, int hi);
-int MWSFD_IsEnableHndl(MwsfdPly *ply);
-SfdSj *mwPlyGetInputSj(MwsfdPly *ply);
-int MWSFTAG_SetAinfSj(MwsfdPly *ply);
-void mwsfsfx_ResetAddInf(MwsfdPly *ply);
-void MWSFTAG_ResetAinfSj(MwsfdPly *ply);
-void mwPlyLinkStm(MwsfdPly *ply, int sw);
-void mwsst_Start(void *input);
-void mwsst_Stop(void *input);
-void mwsst_Pause(void *input, int sw);
-void MWSST_Restart(MwsfdPly *ply);
-void mwlSfdSleepDecSvr(MwsfdPly *ply);
-void MWSTM_ReqStop(void *stm);
-int MWSTM_GetStat(void *stm);
-int SFD_GetPaStat(void *sfd);
-int SFD_Pause(void *sfd, int sw);
-int SFD_Standby(void *sfd);
-int SFD_Start(void *sfd);
-int SFD_Stop(void *sfd);
-void SFD_AddWritePtr(void *sfd, int index);
-void SFD_TermSupply(void *sfd);
-int SFD_GetCondDef(void *sfd, int id, int *value);
-void SFD_GetWritePtr(void *sfd, SfdBufStat *stat);
 
-void mwSfdStopDec(MwsfdPly *ply);
 void mw_sfd_start_ex(MwsfdPly *ply);
 void mwsfd_InitForStart(MwsfdPly *ply);
 int mwPlySfdStandby(MwsfdPly *ply);
-void mwSfdPause(MwsfdPly *ply, int sw);
 void mwSfdStartFnameSub(MwsfdPly *ply, char *fname, int ofst, int nsct);
-void MWSFPLY_RecordFname(MwsfdPly *ply, char *fname);
 void mwply_SetFnameAll(MwsfdPly *ply, char *fname);
 void mwply_SetFnameRange(MwsfdPly *ply, char *fname, int ofst, int nsct);
 void mwply_SetAfsRange(MwsfdPly *ply, int dir, int ofst);
-int MWSFD_GetPauseBdr(void);
-int MWSFLIB_SetErrCode(int code);
-void mwply_ResetPicLog(MwsfdPly *ply);
 
 int mwPlySfdStandby(MwsfdPly *ply)
 {
@@ -99,12 +65,12 @@ void mwPlySfdGetWritePtr(MwsfdPly *ply, char **data, int *len, int *tailLen)
     *tailLen = stat.tailLen;
 }
 
-void mwPlySfdAddWritePtr(MwsfdPly *ply, int index)
+void mwPlySfdAddWritePtr(MwsfdPly *ply, int len1, int len2)
 {
     void *sfd = ply->sfd;
 
-    if (index >= 0) {
-        SFD_AddWritePtr(sfd, index);
+    if (len1 >= 0) {
+        SFD_AddWritePtr(sfd, len1, len2);
     }
 }
 
@@ -314,7 +280,7 @@ void mwPlyChkSupply(MwsfdPly *ply)
     }
 }
 
-void MWSFPLY_RecordFname(MwsfdPly *ply, char *fname)
+void MWSFPLY_RecordFname(MwsfdPly *ply, const char *fname)
 {
     if (ply->fnameMax < strlen(fname)) {
         MWSFSVM_Error("E211121: filename is longer.");

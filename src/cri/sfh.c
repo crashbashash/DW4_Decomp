@@ -166,7 +166,7 @@ void SFH_Finish(void) {
     }
 }
 
-SfhHn *SFH_Create(SfhHdr *hdr, unsigned int size) {
+SfhHn *SFH_Create(void *hdr, unsigned int size) {
     SfhHn *hn = 0;
     int maxHn = sfh_pool.maxHn;
     int nHn = sfh_pool.nHn;
@@ -279,19 +279,20 @@ int SFH_IsSfdHeader(SfhHn *hn, int *ok) {
     return 1;
 }
 
-void SFH_IsExistStmId(SfhHn *hn, unsigned char id, int *exist) {
+int SFH_IsExistStmId(SfhHn *hn, unsigned char id, int *exist) {
     SfhHdr *hdr;
 
     *exist = 0;
     hdr = hn->hdr;
     if (isEffectiveVer(hn) == 0) {
-        return;
+        return 0;
     }
     if (searchStmId(hdr, id) != 0) {
         *exist = 1;
     } else {
         *exist = 0;
     }
+    return 1;
 }
 
 int SFH_IsEffFtrInf(SfhHn *hn, unsigned char id, int *avail) {

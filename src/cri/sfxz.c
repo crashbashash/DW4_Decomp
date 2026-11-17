@@ -1,6 +1,7 @@
 #include "dw4/cri/sfx.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/cri/sj.h"
 
 typedef struct SfxZLib {
     int nhn;
@@ -25,32 +26,7 @@ extern char DAT_004f5928[];
 extern char DAT_004f5958[];
 extern char DAT_004f5990[];
 
-/* The CFT destination image of a conversion: its format, buffer, stride and size. */
-typedef struct CftImage {
-    int f0;
-    int *base;
-    int stride;
-    int f12;
-    int height;
-    int width;
-} CftImage;
-
-/* A planar YCC 4:2:0 source of the CFT conversions: the three plane addresses and their pitches. */
-typedef struct CftYccPln {
-    char *y;
-    char *u;
-    char *v;
-    int ypitch;
-    int upitch;
-    int vpitch;
-    void *f24;
-} CftYccPln;
-
 long long __muldi3(long long n, int k);
-int SJ_SearchTag(SfxMem *in, char *tag, char *endtag, SfxMem *out);
-int SFXINF_GetStmInf(SfxFrame *frm, char *tag);
-void CFT_Ycc420plnToZ16(CftYccPln *src, CftImage *img, int *table);
-void CFT_Ycc420plnToZ32(CftYccPln *src, CftImage *img, int *table);
 void FUN_002b3300(SfxHn *hn, SfxFrame *frm, unsigned int compo);
 
 void sfxzmv_InitLibWork(void);
@@ -63,7 +39,6 @@ void FUN_002b47d8(SfxZHn *zhn, int lo, int hi, unsigned int *buf);
 void sfxzmv_MakeZ16TblFromOrgZ32(SfxZHn *zhn, unsigned int *src, short *dst);
 void FUN_002b4960(SfxZHn *zhn, unsigned int *src, unsigned int *dst);
 int sfxzmv_IsOkZclip(float zmin, float zmax);
-int SFXZ_IsSetZclip(SfxZHn *zhn);
 void SFXZ_SetZbufType(int value);
 int SFXZ_GetZbufType(void);
 void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg);

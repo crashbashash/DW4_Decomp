@@ -1,21 +1,10 @@
-typedef struct CftEntry {
-    short v[4];
-} CftEntry;
+#include "dw4/cri/cft.h"
 
 typedef struct CftPlane {
     unsigned char *base;
     int height;
     int width;
 } CftPlane;
-
-typedef struct CftImage {
-    int f0;
-    int *base;
-    int stride;
-    int f12;
-    int height;
-    int width;
-} CftImage;
 
 /* ARGB8888 destination of the alpha copies: base address and the byte stride of one line. */
 typedef struct CftArgbBuf {
@@ -117,11 +106,11 @@ void CFT_Ycc420plnToA256V(void)
 {
 }
 
-void CFT_Ycc420plnToZ16(void)
+void CFT_Ycc420plnToZ16(CftYccPln *src, CftImage *img, int *table)
 {
 }
 
-void CFT_Ycc420plnToZ32(void)
+void CFT_Ycc420plnToZ32(CftYccPln *src, CftImage *img, int *table)
 {
 }
 

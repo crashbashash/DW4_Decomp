@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sud.h"
+#include "dw4/cri/cricfg.h"
 
 typedef struct SudChars2 {
     char c[2];
@@ -27,7 +30,6 @@ typedef struct SudStats {
 } SudStats;
 
 int atoi(const char *text);
-int CRICFG_Read(const char *name, int *value);
 
 extern char DAT_004f59c0[];
 extern char DAT_004f59f8[];

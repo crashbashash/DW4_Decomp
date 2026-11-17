@@ -1,4 +1,6 @@
 #include "dw4/cri/sfdhn.h"
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sfd.h"
 
 enum {
     SFD_COND_LNKSTM = 49,
@@ -6,16 +8,9 @@ enum {
     SFD_COND_DECODE_END = 57
 };
 
-int sfd_ReportError(SfdHandle *hn, int code);
-int SFLIB_CheckHn(SfdHandle *hn);
-void sfd_Lock(void *guard);
-void sfd_Unlock(void *guard);
-int SFSET_GetCond(SfdHandle *hn, int index);
-void SFSET_SetCond(SfdHandle *hn, int index, int value);
-int SFTIM_GetTimeSub(SfdHandle *hn, int *time, int *unit);
-int UTY_MulDiv(int a, int b, int c);
 
-int SFD_SetConcatPlay(SfdHandle *hn) {
+int SFD_SetConcatPlay(void *sfd) {
+    SfdHandle *hn = sfd;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000161);
     }
@@ -23,18 +18,21 @@ int SFD_SetConcatPlay(SfdHandle *hn) {
     return 0;
 }
 
-int SFCON_IsEndcodeSkip(SfdHandle *hn) {
+int SFCON_IsEndcodeSkip(void *sfd) {
+    SfdHandle *hn = sfd;
     return SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0;
 }
 
-int SFCON_IsSystemEndcodeSkip(SfdHandle *hn) {
+int SFCON_IsSystemEndcodeSkip(void *sfd) {
+    SfdHandle *hn = sfd;
     if (SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFSET_GetCond(hn, SFD_COND_SUPPLY_END) != 0) {
         return 1;
     }
     return 0;
 }
 
-int SFCON_IsVideoEndcodeSkip(SfdHandle *hn) {
+int SFCON_IsVideoEndcodeSkip(void *sfd) {
+    SfdHandle *hn = sfd;
     if (SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFSET_GetCond(hn, SFD_COND_DECODE_END) != 0) {
         return 1;
     }
@@ -42,7 +40,8 @@ int SFCON_IsVideoEndcodeSkip(SfdHandle *hn) {
 }
 
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
-int SFCON_UpdateConcatTime(SfdHandle *hn, int amount) {
+int SFCON_UpdateConcatTime(void *sfd, int amount) {
+    SfdHandle *hn = sfd;
     char guard[16];
     SfdTimView *tim = &hn->tim;
     int total;
@@ -58,7 +57,8 @@ int SFCON_UpdateConcatTime(SfdHandle *hn, int amount) {
     sfd_Unlock(guard);
 }
 
-int SFCON_WriteTotSmplQue(SfdHandle *hn, int pts, int last) {
+int SFCON_WriteTotSmplQue(void *sfd, int pts, int last) {
+    SfdHandle *hn = sfd;
     SfdTimView *tim = &hn->tim;
     char guard[16];
     int ok = 0;

@@ -2,6 +2,8 @@
  * the SFD decoder (ply->sfd), the ADXT audio handle or the file stream (ply->stm). */
 #include "dw4/cri/mwply.h"
 #include "dw4/cri/lsc.h"
+#include "dw4/cri/cri_mwsfd.h"
+#include "dw4/cri/sfd.h"
 
 /* SFD decoder parameters set and read through SFD_SetCond / SFD_GetCondDef */
 #define SFD_COND_VIDEO_SW 5
@@ -57,47 +59,15 @@ typedef struct MwsfdFlowInf {
     long long flow[12];
 } MwsfdFlowInf;
 
-void MWSFSVM_Error(const char *msg);
-void MWSFLIB_SetErrCode(int code);
-int mwPlyGetNumSkipDisp(MwsfdPly *ply);
-void MWSFRNA_SetOutVol(MwsfdPly *ply, int vol);
-int MWSFRNA_GetOutVol(MwsfdPly *ply);
-void MWSFRNA_SetOutPan(MwsfdPly *ply, int channel, int pan);
-int MWSFRNA_GetOutPan(MwsfdPly *ply, int channel);
-void MWSFLSC_SetFlowLimit(MwsfdPly *ply, int limit);
 void mwsst_SetOutVol(MwsfdSst *sst, int vol);
 int mwsst_GetOutVol(MwsfdSst *sst);
-int MWSTM_SetRdSct(void *stm, int value);
-int MWSTM_SetTrSct(void *stm);
-void MWSTM_SetFlowLimit(void *stm, int limit, int cap);
-void MWSTM_GetFlowLimit(void *stm, int *limit, int *cap);
-void MWSTM_GetFsizeByte(void *stm, int *len);
-int SFD_GetVideoCh(void *sfd);
-int SFD_GetAudioCh(void *sfd);
-void SFD_SetMpvCond(void *sfd, int param, int value);
-int SFD_GetNumFrm(void *sfd, int *num);
-void SFD_SetSpeed(void *sfd, int speed);
-int SFD_SetAudioCh(void *sfd, int ch);
-int SFD_SetVideoCh(void *sfd, int ch);
-void SFD_SetCond(void *sfd, int param, int value);
-int SFD_GetCondDef(void *sfd, int param, int *value);
-void SFD_GetHnHdrInf(void *sfd, SfdHdrInf *inf);
-void SFD_GetPlyInf(void *sfd, SfdPlyInf *inf);
-int SFD_GetTime(void *sfd, int *count, int *unit);
-int SFD_GetHnStat(void *sfd);
-void SFD_GetWritePtr(void *sfd, SfdBufStat *stat);
 int SFD_SetStmObject(void *sfd, int id, void *object, int (*cb)(void *obj, int arg), void *cbObj);
-int MWSTM_GetStatRead(void *stm);
 
-int MWSFD_IsEnableHndl(MwsfdPly *ply);
-void *mwPlyGetSfdHn(MwsfdPly *ply);
 void *MWSFD_GetAdxtHn(MwsfdPly *ply);
 int mwPlyGetNumSkipDec(MwsfdPly *ply);
 void mwply_SetPicSkip(MwsfdPly *ply, int mode, int param);
 void MWSFD_GetPlyInf(MwsfdPly *ply, SfdPlyInf *inf);
 void MWSFD_GetMvInf(MwsfdPly *ply, SfdHdrInf *inf);
-void MWSFD_SetCond(MwsfdPly *ply, int param, int value);
-void MWSFD_SetFlowLimit(MwsfdPly *ply, int limit, int cap);
 int mwPlyGetNumSkipEmptyB(MwsfdPly *ply);
 
 void mwPlySetAudioSw(MwsfdPly *ply, int sw) {

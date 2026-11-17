@@ -3,10 +3,7 @@
 #include "dw4/cri/mpv.h"
 #include "dw4/cri/sj.h"
 
-int MPVLIB_CheckHn(MpvHn *mpv);
-char *MPV_SearchDelim(char *buf, int len, int mask);
 
-void mpv_ResetErr(MpvErrObj *err);
 
 MpvErrObj mpv_err_global = {0};
 
@@ -24,7 +21,6 @@ void mpv_ResetErr(MpvErrObj *err) {
     err->skipPicCnt = 0;
 }
 
-int mpv_ReportError(MpvHn *mpv, int code);
 
 void MPV_EntryErrFunc(MpvHn *mpv, int (*fn)(void *arg), void *arg) {
     MpvErrObj *err;
@@ -71,7 +67,6 @@ int mpv_CallErrFn(MpvErrObj *err, int code) {
     return code;
 }
 
-int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, int arg);
 
 /* Decodes a picture from memory through a temporary memory stream joint; *used gets the bytes taken. */
 int MPV_DecodeFrm(MpvHn *mpv, SfdSjChunk *buf, int *used, int arg) {
@@ -119,13 +114,12 @@ int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, int arg) {
 }
 
 /* As MPV_SkipFrm, skipping through a stream joint up to the delimiter. */
-void MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj) {
+int MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj) {
     int code;
     int kind;
 
     if (MPVLIB_CheckHn(mpv) != 0) {
-        mpv_ReportError(0, 0xFF03020A);
-        return;
+        return mpv_ReportError(0, 0xFF03020A);
     }
     code = 0xFF030305;
     for (;;) {
@@ -141,7 +135,7 @@ void MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj) {
             break;
         }
     }
-    mpv_ReportError(mpv, code);
+    return mpv_ReportError(mpv, code);
 }
 
 int MPV_GetPicInf(MpvHn *mpv, MpvPicInf *out) {

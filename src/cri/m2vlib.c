@@ -1,5 +1,6 @@
 #include "dw4/cri/m2v.h"
 #include <string.h>
+#include "dw4/cri/mpv.h"
 
 extern char M2VLIB_version_str[];
 extern char *volatile m2vlib_version_ptr;
@@ -17,16 +18,11 @@ extern M2vObj *m2vlib_m2vobj;
         }                                     \
     } while (0)
 
-char *MPV_SearchDelim(char *buf, int size, int mask);
-int MPV_CheckDelim(char *p);
-int M2VERR_SetCode(void *hn, int code);
-void M2VHDEC_InitHn(M2vObj *hn);
 void m2vlib_SetCondAll(int no, M2vCondFn fn);
 void FUN_00285278();
 M2vObj *m2vlib_SearchFreeHn(void);
 M2vObj *m2vlib_InitHn(M2vObj *hn);
 void m2vlib_InitPicAtr(M2vPicAtr *picatr);
-int M2VLIB_CheckHn(M2vObj *hn);
 void m2vlib_InitObjTbl(void);
 void m2vlib_InitWork(int nobj, char *work, unsigned int size);
 

@@ -1,6 +1,9 @@
 #include "dw4/cri/sfmpv.h"
+#include "dw4/cri/mpv.h"
 #include <string.h>
 #include "dw4/cri/mps.h"
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sfd.h"
 
 /* Start-code kinds: the bit MPV_CheckDelim returns for a delimiter, and the masks the searches take. */
 typedef enum SfdDelim {
@@ -28,69 +31,16 @@ extern int DAT_004f4e50[];
 
 /* kept here: the <string.h> prototype changes the code emitted for the memcmp call in sfmpv_ComplementPts */
 extern int memcmp(const void *a, const void *b, unsigned int size);
-int SJRBF_GetFlowCnt(int sj, int id, int mode);
-int UTY_CmpTime(int id, int arg, int a, int b);
 /* matching construct: MEM_Copy (mcp.h, void) is declared returning int here; with the void
  * prototype sfmpv_SetMpvHd allocates its registers differently from retail. */
 int MEM_Copy(void *dst, void *src, int n);
-int MPV_CheckDelim(const unsigned char *p);
 int MPV_EntryErrFunc(void *handle, void (*callback)(SfdPlayer *, int), SfdPlayer *player);
-char *MPV_SearchDelim(char *data, int size, int mask);
-char *MPV_BsearchDelim(char *end, int len, int mask);
-void MPV_SetPicUsrBuf(void *handle, char *buf, int size);
-int MPV_DecodePicAtrSj(void *handle, int sj);
-int MPV_GetPicInf(void *handle, M2vPicAtr *pic);
-void MPV_GetPicUsr(void *handle, char **buf, int *size);
-int MPV_SkipFrmSj(void *handle, int sj);
-int MPV_GetBitRate(void *handle, int *value);
-void MPV_GetVbvBufSiz(void *handle, int *x, int *y, int *z);
-int MPV_GetLinkFlg(void *handle, int *a, int *b);
-int MPV_SetUsrSj(void *handle, int index, int a, int b, int c);
-int MPV_DecodePicAtr(void *handle, void *chunk, int *result);
-int MPV_Init(int count, void *work);
-int MPV_Finish(void);
-void *MPV_Create(void);
-int MPV_Destroy();
-int MPV_SetCond(void *handle, int index, int value);
-int MPV_GetCond(void *handle, int index, int *value);
-int UTY_MulDiv(int a, int b, int c);
-long long UTY_MulDivRound64(long long a, long long b, long long c);
-int SFBUF_RingGetRead(SfdPlayer *player, int index, SfdRingInfo *info);
-void SFBUF_RingAddRead(SfdPlayer *player, int index, int n);
-int SFBUF_GetRingBufSiz(SfdPlayer *player, int index);
-int SFBUF_GetWTot(SfdPlayer *player, int index);
-int SFBUF_RingGetSj(SfdPlayer *player, int index, int *entry);
-void SFBUF_AddRtotSj(SfdPlayer *player, int index, int amount);
-int SFBUF_SetPrepFlg(SfdPlayer *player, int index, int value);
-int SFBUF_GetPrepFlg(SfdPlayer *player, int index);
-int SFBUF_SetTermFlg(SfdPlayer *player, int index, int value);
-int SFBUF_GetTermFlg(SfdPlayer *player, int index);
-int SFBUF_RingGetDataSiz(SfdPlayer *player, int index);
-void sfbuf_GetSjPos(int entry, int *a, int *b);
-long sfbuf_MergeTotal(long total, int a);
-void SFCON_UpdateConcatTime(SfdPlayer *player, int count);
-int SFHDS_GetColType(SfdPlayer *player);
-int sfd_ReportError();
-int SFLIB_CheckHn(SfdPlayer *player);
-void sfd_Lock(void *guard);
-void sfd_Unlock(void *guard);
 char *sfmpv_SearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
 char *sfmpv_BsearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
 void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size);
 void sfmpv_InitPicUsr(SfdBufPool *pool);
 void sfmpv_SetFrmInf(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out);
-void SFMPVP_Init(void);
-int SFMPVP_IsSceMpegUsed(SfdPlayer *player);
-void SFMPVP_Create(SfdPlayer *player);
 void FUN_002a9bc8(SfdPlayer *player);
-int SFMPVP_GetFrameCount(SfdPlayer *player);
-void SFPLY_AddSkipPic(SfdPlayer *player, int a, int b);
-int SFPLY_GetResetFlg(void);
-int SFSET_SetCond(SfdPlayer *player, int option, int value);
-int SFSET_GetCond(SfdPlayer *player, int option);
-void SFTIM_InitTtu(SfdTimeStamp *stamp, int value);
-void SFTIM_Tc2Time(SfdTimeCode *tc, int *a, int *b);
-int SFTIM_IsGetFrmTimeTunit(SfdPlayer *player, int a, int b);
 int FUN_002b03e8(SfdPlayer *player, int index);
 
 int FUN_002a3558();
@@ -135,15 +85,10 @@ int sfmpv_IsSeekSkip(SfdPlayer *player);
 int sfmpv_IsEmptySkip(SfdPlayer *player, unsigned int type, SfdChunk *chunk);
 int sfmpv_IsLate(SfdPlayer *player, unsigned int type);
 void sfmpv_GetDtime(SfdPlayer *player, int unused, int *first, int *second);
-void SFTIM_UpdateItime(SfdTimer *tim, int now);
-int SFTIM_GetNextItime(SfdTimer *tim, int now);
-int SFTIM_GetSpeed(SfdPlayer *player);
-int SFTIM_GetTime(SfdPlayer *player, int *time, int *unit);
 void FUN_002a6368(SfdPlayer *player, M2vPicAtr *pic, int kind);
 void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot);
 void FUN_002a73f0(SfdChunk *dst, SfdChunk *src);
 void sfmpv_RingAddRead(SfdPlayer *player, int n);
-int SFBUF_GetRTot(SfdPlayer *player, int index);
 int sfmpv_InitInf(SfdPlayer *player, SfdMpv *mpv);
 int sfmpv_CheckMpvPara(void);
 void sfmpv_InitFrmObj(SfdSlot *slot, int *ids, int count);
@@ -169,11 +114,6 @@ void FUN_002a75b8(SfdPlayer *player);
 int sfmpv_NeedSafeDlmRefresh(SfdRingInfo *ring, SfdDelim code, char *dlm);
 int sfmpv_CalcDistance(SfdRingInfo *ring, char *addr);
 int sfmpv_CheckViBufSiz(SfdPlayer *player);
-void SFBUF_RingGetDlm(SfdPlayer *player, int index, char **dlm, char **end);
-void SFBUF_RingSetDlm(SfdPlayer *player, int index, char *dlm, char *end);
-int SFMPVP_IsPscEnough(SfdPlayer *player);
-int SFCON_IsEndcodeSkip(SfdPlayer *player);
-int SFCON_IsVideoEndcodeSkip(SfdPlayer *player);
 void SFMPVF_TermDec(SfdPlayer *player);
 SfdMpv *SFMPVF_SetGopStat(SfdPlayer *player, int value);
 void sfmpv_PeekChnk(SfdPlayer *player, SfdChunk *out);
@@ -242,7 +182,8 @@ void SFD_CalcYccPlane(char *base, int width, int height, SfdPlanes *planes) {
     planes->chroma = planes->luma + ((chromaBlocks * rows) << 9);
 }
 
-void SFD_SetMpvCond(SfdPlayer *player, int mode, int value) {
+void SFD_SetMpvCond(void *sfd, int mode, int value) {
+    SfdPlayer *player = sfd;
     void *h = 0;
     if (player != 0) {
         SfdMpv *mpv;
@@ -292,7 +233,8 @@ void FUN_002a3340(SfdPlayer *player, int *values, int count) {
     }
 }
 
-int SFD_GetNumFrm(SfdPlayer *player, int *out) {
+int SFD_GetNumFrm(void *sfd, int *out) {
+    SfdPlayer *player = sfd;
     *out = 0;
     if (SFLIB_CheckHn(player) != 0) {
         return sfd_ReportError(0, 0xFF000182);
@@ -304,19 +246,20 @@ int SFD_GetNumFrm(SfdPlayer *player, int *out) {
 int SFD_SetVideoUsrSj(SfdPlayer *player, int index, int a, int b, int c) {
     SfdMpv *mpv;
     if (SFLIB_CheckHn(player) != 0) {
-        return sfd_ReportError(0, 0xFF000184, a, b, c);
+        return sfd_ReportError(0, 0xFF000184);
     }
     mpv = player->streams.hn.mpv;
     MPV_SetUsrSj(mpv->handle, index, a, b, c);
     return 0;
 }
 
-void SFD_SetPicUsrBuf(SfdPlayer *player, char *base, int count, int size) {
+void SFD_SetPicUsrBuf(void *sfd, char *base, int count, int size) {
+    SfdPlayer *player = sfd;
     if (SFLIB_CheckHn(player) != 0) {
-        sfd_ReportError(0, 0xFF000185, count, size);
+        sfd_ReportError(0, 0xFF000185);
         return;
     }
-    FUN_002a3558(player, base);
+    FUN_002a3558(player, base, count, size);
 }
 
 int FUN_002a3558(SfdPlayer *player, char *base, int count, int size)
@@ -1577,8 +1520,6 @@ int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind) {
     return value == 0;
 }
 
-int MPV_IsEmptyBpic(unsigned char *buf, int nbyte, int nmb);
-int MPV_IsEmptyPpic(unsigned char *buf, int nbyte, int nmb);
 
 int sfmpv_IsEmptySkip(SfdPlayer *player, unsigned int type, SfdChunk *chunk) {
     SfdDecodeFlags *dec;
@@ -2476,7 +2417,8 @@ SfdSlot *SFMPVF_HoldFrm(SfdPlayer *player, int *out) {
     return best;
 }
 
-void SFD_GetNextPicUsr(SfdPlayer *player, char **data, int *size) {
+void SFD_GetNextPicUsr(void *sfd, char **data, int *size) {
+    SfdPlayer *player = sfd;
     SfdSlot *slot = FUN_002a8998(player);
     SfdChunk *chunk;
     if (slot == 0) {
@@ -2494,7 +2436,8 @@ void SFD_GetNextPicUsr(SfdPlayer *player, char **data, int *size) {
     *size = chunk->size;
 }
 
-int SFD_GetNumRemainFrm(SfdPlayer *player) {
+int SFD_GetNumRemainFrm(void *sfd) {
+    SfdPlayer *player = sfd;
     int refused;
     int count;
     refused = SFLIB_CheckHn(player);
@@ -2530,7 +2473,8 @@ int FUN_002a8878(SfdPlayer *player) {
     return r;
 }
 
-int SFD_IsNextFrmReady(SfdPlayer *player) {
+int SFD_IsNextFrmReady(void *sfd) {
+    SfdPlayer *player = sfd;
     if (SFLIB_CheckHn(player) != 0) {
         sfd_ReportError(0, 0xFF000183);
         return 0;

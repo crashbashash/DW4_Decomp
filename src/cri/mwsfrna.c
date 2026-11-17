@@ -1,11 +1,9 @@
 /* MWSFRNA: the MWSFD player's audio output. The output volume and pan of the movie's sound, passed
  * to SFD. */
 #include "dw4/cri/mwply.h"
+#include "dw4/cri/cri_mwsfd.h"
+#include "dw4/cri/sfd.h"
 
-void SFD_SetOutPan(void *sfd, int ch, int pan);
-int SFD_GetOutPan(void *sfd, int ch);
-void SFD_SetOutVol(void *sfd, int vol);
-int SFD_GetOutVol(void *sfd);
 
 void MWSFRNA_SetOutVol(MwsfdPly *ply, int vol)
 {

@@ -1,5 +1,6 @@
 #include "dw4/cri/sj.h"
 #include <string.h>
+#include "dw4/cri/sfd.h"
 
 typedef struct SfdBufInf {
     char *data;  /* 0 */
@@ -70,9 +71,6 @@ typedef struct SfdBufCrePrm {
 extern int DAT_0057fab0;
 extern int DAT_0057fab4;
 
-int sfd_ReportError();
-void sfd_Lock(int *lock);
-void sfd_Unlock(int *lock);
 void FUN_002ac6d0(void *ring);
 int FUN_002b0338();
 int FUN_002b03e8(SfdBufHn *h, int n);
@@ -99,14 +97,15 @@ int sfbuf_MoveChunk(SfdSj *sj, int id, int len);
 int FUN_0029ec40(SfdSj *sj);
 int FUN_0029ec78(SfdSj *sj);
 
-void sfbuf_Init(void) {
+void sfbuf_Init(void *work) {
     FUN_0029ebb0();
 }
 
-void SFBUF_Finish(void) {
+void SFBUF_Finish(void *work) {
 }
 
-int SFBUF_InitHn(SfdBufHn *h, SfdBufEnt *ents, SfdBufCrePrm *prm) {
+int SFBUF_InitHn(void *sfd, SfdBufEnt *ents, SfdBufCrePrm *prm) {
+    SfdBufHn *h = sfd;
     int *sizes = prm->sizes;
     char *areas[8];
     int ret;
@@ -172,7 +171,7 @@ int FUN_0029d6f8(SfdBufInf *inf, char *data, int size, int extra) {
     inf->buf = data;
     inf->size = len;
     if (len <= 0) {
-        return sfd_ReportError(0, 0xFF00040C, extra);
+        return sfd_ReportError(0, 0xFF00040C);
     }
     inf->xsize = extra;
     inf->p0 = 0;
@@ -184,7 +183,8 @@ int FUN_0029d6f8(SfdBufInf *inf, char *data, int size, int extra) {
     return 0;
 }
 
-void SFBUF_DestroySj(SfdBufHn *h) {
+void SFBUF_DestroySj(void *sfd) {
+    SfdBufHn *h = sfd;
     sfbuf_DestroySjSub(h, 0);
     sfbuf_DestroySjSub(h, 1);
     sfbuf_DestroySjSub(h, 2);
@@ -291,11 +291,11 @@ void sfbuf_InitUoSj(void *body) {
     } while (i >= 0);
 }
 
-void SFBUF_SetSupplySj(SfdBufHn *h, SfdBufInf *inf) {
+int SFBUF_SetSupplySj(void *sfd, SfdBufInf *inf) {
+    SfdBufHn *h = sfd;
     int index;
     if (sfbuf_ChkSupSj(inf) != 0) {
-        sfd_ReportError(h, 0xFF000408);
-        return;
+        return sfd_ReportError(h, 0xFF000408);
     }
     if (FUN_002b03e8(h, 1) != 0) {
         index = 0;
@@ -306,7 +306,7 @@ void SFBUF_SetSupplySj(SfdBufHn *h, SfdBufInf *inf) {
     } else {
         index = 0;
     }
-    sfbuf_SetSupplySjSub(h, inf, index);
+    return sfbuf_SetSupplySjSub(h, inf, index);
 }
 
 int sfbuf_ChkSupSj(SfdBufInf *inf) {
@@ -356,7 +356,8 @@ void sfbuf_InitConti(SfdBufCur *cur) {
     cur->len = 0;
 }
 
-void SFBUF_SetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
+void SFBUF_SetUoch(void *sfd, int index, int slot, void *uoch) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     char *slots = (char *)&ent->body;
@@ -364,7 +365,8 @@ void SFBUF_SetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
     memcpy(slots, uoch, 16);
 }
 
-void SFBUF_GetUoch(SfdBufHn *h, int index, int slot, void *uoch) {
+void SFBUF_GetUoch(void *sfd, int index, int slot, void *uoch) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     char *slots = (char *)&ent->body;
@@ -404,20 +406,24 @@ int sfbuf_GetStat(SfdBufHn *h, int index, SfdBufStat *stat, int id) {
     return 0;
 }
 
-void SFBUF_RingGetWrite(SfdBufHn *h, int index, SfdBufStat *stat) {
-    sfbuf_GetStat(h, index, stat, 0);
+int SFBUF_RingGetWrite(void *sfd, int index, SfdBufStat *stat) {
+    SfdBufHn *h = sfd;
+    return sfbuf_GetStat(h, index, stat, 0);
 }
 
-void SFBUF_RingGetRead(SfdBufHn *h, int index, SfdBufStat *stat) {
-    sfbuf_GetStat(h, index, stat, 1);
+int SFBUF_RingGetRead(void *sfd, int index, SfdBufStat *stat) {
+    SfdBufHn *h = sfd;
+    return sfbuf_GetStat(h, index, stat, 1);
 }
 
-void SFBUF_RingAddWrite(SfdBufHn *h, int index, int len) {
-    sfbuf_RingAddSub(h, index, len, 0);
+int SFBUF_RingAddWrite(void *sfd, int index, int len, int tail) {
+    SfdBufHn *h = sfd;
+    return sfbuf_RingAddSub(h, index, len, 0);
 }
 
-void SFBUF_RingAddRead(SfdBufHn *h, int index, int len) {
-    sfbuf_RingAddSub(h, index, len, 1);
+int SFBUF_RingAddRead(void *sfd, int index, int len) {
+    SfdBufHn *h = sfd;
+    return sfbuf_RingAddSub(h, index, len, 1);
 }
 
 int sfbuf_RingAddSub(SfdBufHn *h, int index, int len, int id) {
@@ -488,7 +494,8 @@ int sfbuf_MoveChunk(SfdSj *sj, int id, int len) {
     return ck.len;
 }
 
-void SFBUF_RingGetDlm(SfdBufHn *h, int index, int *pos, int *len) {
+void SFBUF_RingGetDlm(void *sfd, int index, int *pos, int *len) {
+    SfdBufHn *h = sfd;
     int lock;
     SfdBufCur *cur = &h->ent[index].body.cur;
     sfd_Lock(&lock);
@@ -497,7 +504,8 @@ void SFBUF_RingGetDlm(SfdBufHn *h, int index, int *pos, int *len) {
     sfd_Unlock(&lock);
 }
 
-void SFBUF_RingSetDlm(SfdBufHn *h, int index, int pos, int len) {
+void SFBUF_RingSetDlm(void *sfd, int index, int pos, int len) {
+    SfdBufHn *h = sfd;
     int lock;
     SfdBufCur *cur = &h->ent[index].body.cur;
     sfd_Lock(&lock);
@@ -506,19 +514,22 @@ void SFBUF_RingSetDlm(SfdBufHn *h, int index, int pos, int len) {
     sfd_Unlock(&lock);
 }
 
-int SFBUF_GetRingBufSiz(SfdBufHn *h, int index) {
+int SFBUF_GetRingBufSiz(void *sfd, int index) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->body.inf.size;
 }
 
-int SFBUF_GetRTot(SfdBufHn *h, int index) {
+int SFBUF_GetRTot(void *sfd, int index) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->body.f36;
 }
 
-int SFBUF_GetWTot(SfdBufHn *h, int index) {
+int SFBUF_GetWTot(void *sfd, int index) {
+    SfdBufHn *h = sfd;
     int lock;
     SfdBufBody *body = &h->ent[index].body;
     int count;
@@ -536,7 +547,8 @@ int SFBUF_GetWTot(SfdBufHn *h, int index) {
     return count;
 }
 
-int SFBUF_RingGetSj(SfdBufHn *h, int index, SfdSj **out) {
+int SFBUF_RingGetSj(void *sfd, int index, SfdSj **out) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent;
     *out = 0;
@@ -548,7 +560,8 @@ int SFBUF_RingGetSj(SfdBufHn *h, int index, SfdSj **out) {
     return 0;
 }
 
-void SFBUF_AddRtotSj(SfdBufHn *h, int index, int len) {
+void SFBUF_AddRtotSj(void *sfd, int index, int len) {
+    SfdBufHn *h = sfd;
     SfdBufBody *body = &h->ent[index].body;
     if (body->f36 >= 0) {
         body->f36 += len;
@@ -741,7 +754,8 @@ int SFBUF_VfrmAddWrite(SfdBufHn *h, int index, int len) {
     return 0;
 }
 
-int SFBUF_VfrmGetRead(SfdBufHn *h, int index, int value) {
+int SFBUF_VfrmGetRead(void *sfd, int index, int value) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     if (ent->valid == 0) {
@@ -750,7 +764,8 @@ int SFBUF_VfrmGetRead(SfdBufHn *h, int index, int value) {
     return 0;
 }
 
-int SFBUF_VfrmAddRead(SfdBufHn *h, int index, int value) {
+int SFBUF_VfrmAddRead(void *sfd, int index, int value) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     int result = 0;
@@ -761,31 +776,36 @@ int SFBUF_VfrmAddRead(SfdBufHn *h, int index, int value) {
     return result;
 }
 
-int SFBUF_SetPrepFlg(SfdBufHn *h, int index, int value) {
+int SFBUF_SetPrepFlg(void *sfd, int index, int value) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     ent->f8 = value;
 }
 
-int SFBUF_GetPrepFlg(SfdBufHn *h, int index) {
+int SFBUF_GetPrepFlg(void *sfd, int index) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->f8;
 }
 
-void SFBUF_SetTermFlg(SfdBufHn *h, int index, int value) {
+void SFBUF_SetTermFlg(void *sfd, int index, int value) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     ent->f12 = value;
 }
 
-int SFBUF_GetTermFlg(SfdBufHn *h, int index) {
+int SFBUF_GetTermFlg(void *sfd, int index) {
+    SfdBufHn *h = sfd;
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     return ent->f12;
 }
 
-int SFBUF_RingGetDataSiz(SfdBufHn *h, int index) {
+int SFBUF_RingGetDataSiz(void *sfd, int index) {
+    SfdBufHn *h = sfd;
     SfdBufStat stat;
     SFBUF_RingGetRead(h, index, &stat);
     return stat.ck0.len + stat.ck1.len;

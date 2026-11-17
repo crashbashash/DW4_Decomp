@@ -1,8 +1,10 @@
 #ifndef DW4_CRI_M2V_H
 #define DW4_CRI_M2V_H
 
+struct SfdSj;
+
 /* CRI Sofdec's MPEG-2 video decoder (libmwsfde m2v_*.o): the decoder handle with its sequence, GOP and
- * picture header state (Mpeg2Ctx), the picture attributes handed to callers (M2vPicAtr), the library
+ * picture header state (M2vObj), the picture attributes handed to callers (M2vPicAtr), the library
  * work (M2vLibWork) and the per-handle error record. */
 
 typedef struct M2vErrInf {
@@ -12,10 +14,6 @@ typedef struct M2vErrInf {
     int reserved[2];
 } M2vErrInf;
 
-typedef struct M2vHnErr {
-    int stat;
-    M2vErrInf err;
-} M2vHnErr;
 
 
 typedef struct Mpeg2Ext {
@@ -166,7 +164,7 @@ typedef struct Mpeg2Ext {
     int warning_count;  /* +1276 */
     char pad1280[12];  /* +1280 */
     int field_1292;  /* +1292 */
-    char padend[1480];  /* +1296 */
+    char pad1296[8];  /* +1296 */
 } Mpeg2Ext;
 /* The coded-picture fields of M2vPicAtr are enums in CRI's header, not int: their stores get an
  * alias set of their own, which lets m2vhdec_SetPicAtr's scheduler move the next int load from the
@@ -241,15 +239,22 @@ typedef struct M2vPicUsr {
     int size;
     int len;
 } M2vPicUsr;
-typedef struct Mpeg2Ctx {
-    char pad0[88];
+typedef void (*M2vCondFn)();
+
+/* A decoder handle: its state, error record and conditions, the attributes of the last picture, the user
+ * data streams and the header state. */
+typedef struct M2vObj {
+    int stat;  /* +0: 1 free, 2 in use */
+    M2vErrInf err;  /* +4 */
+    M2vCondFn cond[16];  /* +24 */
     M2vPicAtr picatr;  /* +88 */
     char pad216[64];  /* +216 */
     M2vUsrSj usrsj[4];  /* +280 */
     M2vPicUsr picusr;  /* +328 */
     char pad340[12];  /* +340 */
     Mpeg2Ext ext;  /* +352 */
-} Mpeg2Ctx;
+    char pad1656[8];  /* +1656 */
+} M2vObj;
 extern unsigned char D_004f28a0[];
 extern int tbl_dc_dct_pred_reset[4];
 extern int tbl_intra_dc_mult[4];
@@ -262,16 +267,6 @@ extern void resetQuantiserMatrix(Mpeg2Ext *);
 extern int D_004f2890[];   /* blocks per macroblock, indexed by chroma_format: 0, 6, 8, 12 */
 
 
-typedef void (*M2vCondFn)();
-
-typedef struct M2vObj {
-    int stat;  /* +0: 1 free, 2 in use */
-    char err[20];  /* +4 */
-    M2vCondFn cond[16];  /* +24 */
-    M2vPicAtr picatr;  /* +88 */
-    char work[1448];  /* +216 */
-} M2vObj;
-
 typedef struct M2vLibWork {
     M2vCondFn cond[16];  /* +0: conditions for new handles */
     int nobj;  /* +64 */
@@ -281,7 +276,29 @@ typedef struct M2vLibWork {
 #define M2V_OBJ_WORK_SIZE 0x700
 
 void M2V_Init(int nobj, char *work, unsigned int size);
+void M2V_Finish(void);
+char *M2V_GetVersionStr(void);
+M2vObj *M2V_Create(void);
+void M2V_Destroy(M2vObj *hn);
+void M2V_MbCbFn(void);
+void M2V_SetCond(M2vObj *hn, int no, M2vCondFn fn);
+int M2VLIB_CheckHn(M2vObj *hn);
+
 void M2VERR_Init(void);
+void M2V_SetErrFunc(M2vObj *hn, int (*func)(void *obj), void *obj);
+void M2V_GetErrInf(M2vObj *hn, M2vErrInf *inf);
+int M2VERR_SetCode(M2vObj *hn, int code);
+
+void M2V_SkipFrm(M2vObj *hn, struct SfdSj *sj);
+void M2V_DecodeFrm(void);
+
+void M2V_GetPicAtr(M2vObj *hn, M2vPicAtr *picatr);
+void M2V_GetBitRate(M2vObj *hn, int *bit_rate);
+void M2V_GetVbvBufSiz(M2vObj *hn, int *vbv_size, int *vbv_delay, int *reserved);
+void M2V_GetLinkFlg(M2vObj *hn, int *closed_gop, int *broken_link);
+
 void M2VHDEC_Init(void);
+void M2VHDEC_InitHn(M2vObj *hn);
+int M2V_DecodePicAtr(M2vObj *hn, struct SfdSj *sj);
 
 #endif

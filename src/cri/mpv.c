@@ -2,6 +2,7 @@
  * lower-layer decoder and the 64-bit multiply-divide helpers. */
 #include "dw4/cri/mpv.h"
 #include "dw4/cri/mps.h"
+#include "dw4/cri/uty.h"
 
 extern char cri_mpv_version[];
 extern char *volatile mpv_version_ptr;
@@ -14,27 +15,6 @@ extern int mpv_lower_work[];            /* 0x3840 bytes for the lower layer */
 extern unsigned char mpv_clamp_table[1024];
 extern unsigned char *mpv_clamp;        /* mpv_clamp_table + 384 */
 
-unsigned char *MPV_SearchDelim(unsigned char *data, int size, int code);
-int MPV_CheckDelim(unsigned char *p);
-int mpv_ReportError(void *hn, int error);
-void mpv_ResetErr(MpvErrObj *err);
-void MPV_SetUsrSj(MpvHn *hn, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
-void MPV_SetPicUsrBuf(MpvHn *hn, int a, int b);
-int mpvhook_IsInstalled(void);
-void mpvhook_Init(int n, void *work, int size);
-void mpv_InstallHooks(void);
-void mpvhook_Finish(void);
-int mpvhook_Create(MpvHn *hn);
-void mpvhook_Destroy(int lower);
-void mpvhook_SetCond(int lower, int no, int value);
-void mpvhook_SetBufEnt(int lower, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
-void mpvhook_SetSize(int lower, int width, int height);
-void mpvhook_SetFlagPtr(int lower, int zero, int *flag);
-int mpvhook_Start(int lower, int arg);
-void mpvhook_GetPicInf(int lower, MpvPicInf *inf);
-void mpvhook_GetInf(int lower, int *a);
-void mpvhook_GetRate(int lower, int *a, int *b, int *c);
-void mpvhook_GetDispSize(int lower, int *a, int *b);
 long long __muldi3(long long a, long long b);
 
 int mpv_IsLowerReady(void);
@@ -47,7 +27,6 @@ MpvHn *mpvlib_InitHn(MpvHn *hn);
 int mpvcmc_OneMakeMbTa(MpvHn *hn);
 void mpv_BindHnBuffers(MpvHn *hn);
 void mpv_ResetPicInf(MpvPicInf *inf);
-int MPVLIB_CheckHn(MpvHn *hn);
 void mpvcmc_BiMakeMbTa(MpvHn *hn);
 void MPV_MbCbFn(void);
 void mpvlib_SetCondAll(int no, int value);
@@ -55,7 +34,6 @@ void mpv_SetLowerCond(MpvHn *hn, int no, int value);
 void mpv_GetLowerInf(MpvHn *hn);
 int UTY_MulDiv(int a, int b, int c);
 
-void mpvapi_Init(void);
 void mpv_InitLower(void);
 int MPVLIB_ConvOix(int flags);
 void mpvlib_ChkCacheMode(void);
@@ -64,7 +42,6 @@ void mpvlib_InitObjTbl(void);
 void mpv_InitHw(MpvLib *pool);
 void mpvlib_InitWork(int nhn, char *work);
 int mpvlib_ChkFatal(void);
-void mpv_InitLibErr(void);
 
 char *MPV_GetVersionStr(void) {
     return cri_mpv_version;
@@ -413,7 +390,7 @@ void mpv_FinishLower(void) {
 }
 
 int mpvcmc_OneMakeMbTa(MpvHn *hn) {
-    return mpvhook_Create(hn);
+    return mpvhook_Create();
 }
 
 void mpvcmc_BiMakeMbTa(MpvHn *hn) {
@@ -431,7 +408,7 @@ void mpv_SetLowerCond(MpvHn *hn, int no, int value) {
 
 /* hands the handle's buffers to the lower layer and starts it; -1 without a lower layer, -2 when it
  * refuses */
-int mpv_StartLower(MpvHn *hn, int arg) {
+int mpv_StartLower(MpvHn *hn, SfdSj *sj) {
     MpvBufEnt *ent;
     int i;
 
@@ -440,11 +417,11 @@ int mpv_StartLower(MpvHn *hn, int arg) {
             mpvhook_SetBufEnt(hn->lower, i, ent->sj, ent->fn, ent->obj);
             ent++;
         }
-        mpvhook_SetSize(hn->lower, hn->low.width, hn->low.height);
-        if (mpvhook_Start(hn->lower, arg) != 0) {
+        mpvhook_SetSize(hn->lower, hn->picusr.buf, hn->picusr.size);
+        if (mpvhook_Start(hn->lower, sj) != 0) {
             return -2;
         }
-        mpvhook_SetFlagPtr(hn->lower, 0, &hn->low.flag);
+        mpvhook_SetFlagPtr(hn->lower, 0, &hn->picusr.len);
         mpv_GetLowerInf(hn);
         return 0;
     }

@@ -1,9 +1,8 @@
+#include "dw4/cri/m2v.h"
 #include "dw4/cri/mpv.h"
 
-int M2VLIB_CheckHn(void *hn);
-int M2VERR_SetCode(void *hn, int code);
 
-void M2V_SkipFrm(void *hn, SfdSj *sj)
+void M2V_SkipFrm(M2vObj *hn, SfdSj *sj)
 {
     int err;
     int code;

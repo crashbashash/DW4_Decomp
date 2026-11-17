@@ -3,6 +3,8 @@
 #include <string.h>
 #include "dw4/cri/mps.h"
 #include "dw4/libkernl.h"
+#include "dw4/cri/sfd.h"
+#include "dw4/cri/mpv.h"
 
 #define D_ENABLER ((volatile unsigned int *)0x1000F520)
 #define D_ENABLEW ((volatile unsigned int *)0x1000F590)
@@ -24,27 +26,20 @@ extern int DeleteSema(int sema);
 extern int sceMpegInit(void);
 void sceMpegDelete(SfdMpegCtx *mpeg);
 void sceMpegReset(void);
-int sfd_ReportError();
-int SFPLY_GetResetFlg(void);
 typedef struct SfdPicOut {
     char pad0[32];
     int buf;
 } SfdPicOut;
-int MPV_DecPicSj(int a, int b, SfdPicOut *out);
-int MPV_SkipFrmSj(int a, int b);
 int sceMpegGetPicture(SfdMpegCtx *mpeg, int buf, int mbs);
 int sceMpegGetPictureRAW8(SfdMpegCtx *mpeg, int buf, int mbs);
 void sfmpvp_ConsumePsc(SfdPlayer *player);
 int SFMPVP_DecodeFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player);
-unsigned char *MPV_SearchDelim(unsigned char *data, int size, int code);
-int MPV_CheckDelim(unsigned char *code);
 int FUN_0029ed48(SfdPlayer *player);
 int FUN_0029edb0(SfdPlayer *player);
 
 void FUN_002aa050(SfdPlayer *player, unsigned char *data, int size);
 int sceMpegCreate(SfdMpegCtx *mpeg, int buf, int size);
 int sceMpegAddCallback(SfdMpegCtx *mpeg, int type, void *callback, void *arg);
-void SFMPVP_Create(SfdPlayer *player);
 int mpegError(void *unused, void *record, SfdPlayer *player);
 int sfmpvps2_ExecIpu(int unused0, int unused1, SfdPlayer *player);
 int mpegStopDMA(int unused0, int unused1, SfdPlayer *player);
@@ -64,7 +59,6 @@ int viBufStopDMA(SfdIpuStream *stream);
 int viBufRestartDMA(SfdIpuStream *stream);
 int viBufDelete(SfdIpuStream *stream);
 void viBufFlush(SfdIpuStream *stream);
-int SFMPVP_IsSceMpegUsed(SfdPlayer *player);
 int sfmpvp_PutVibuf(SfdIpuStream *stream, char *src, int pos);
 void sfmpvp_SaveMpvp(SfdPlayer *player);
 int copy2area(char *buf, int size, char *dst, int cap, char *src, int pos, char *data, int len);
@@ -154,7 +148,8 @@ void SFD_SetSceMpeg(int enable) {
     sfmpvp_scempeg_useflag = enable;
 }
 
-int SFMPVP_IsSceMpegUsed(SfdPlayer *player) {
+int SFMPVP_IsSceMpegUsed(void *sfd) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv = player->streams.hn.mpv;
     return mpv->ipu.enabled != 0;
 }
@@ -175,7 +170,8 @@ void SFMPVP_GetViBufInf(SfdPlayer *player, int *bytes, int *position, int *start
     *end = (stream->queuedSct << 11) + stream->restBytes;
 }
 
-int SFD_GetSceErrMessage(SfdPlayer *player) {
+int SFD_GetSceErrMessage(void *sfd) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv = player->streams.hn.mpv;
     return mpv->ipu.event.f4;
 }
@@ -257,7 +253,8 @@ void sfmpvp_RestoreMpvp(SfdPlayer *player) {
     UTY_MemcpyByte(&mpv->ipu.mpeg, &sfmpvp_bkup_buf, 0x48);
 }
 
-int SFMPVP_Put(SfdPlayer *player, char *src, int pos) {
+int SFMPVP_Put(void *sfd, char *src, int pos) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv;
     if (SFMPVP_IsSceMpegUsed(player) == 0) {
         return pos;
@@ -266,7 +263,8 @@ int SFMPVP_Put(SfdPlayer *player, char *src, int pos) {
     return sfmpvp_PutVibuf(&mpv->ipu.stream, src, pos);
 }
 
-int SFMPVP_Unput(SfdPlayer *player, int count) {
+int SFMPVP_Unput(void *sfd, int count) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv;
     if (SFMPVP_IsSceMpegUsed(player) == 0) {
         return count;
@@ -275,7 +273,8 @@ int SFMPVP_Unput(SfdPlayer *player, int count) {
     return viBufUnput(&mpv->ipu.stream, count);
 }
 
-void sfmpvps2_StopIpu(SfdPlayer *player, int value) {
+void sfmpvps2_StopIpu(void *sfd, int value) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv = player->streams.hn.mpv;
     SfdIpuCtl *ctl = &mpv->ipu;
     if (ctl->stopped != 1) {
@@ -342,7 +341,8 @@ int SFMPVP_DecodeFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player) {
     return ipu->endSent ? -3 : result;
 }
 
-int SFMPVP_GetFrameCount(SfdPlayer *player) {
+int SFMPVP_GetFrameCount(void *sfd) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv = player->streams.hn.mpv;
     return mpv->ipu.mpeg.f8;
 }
@@ -412,7 +412,8 @@ void sfmpvp_ConsumePsc(SfdPlayer *player) {
     ctl->f12--;
 }
 
-int SFMPVP_IsPscEnough(SfdPlayer *player) {
+int SFMPVP_IsPscEnough(void *sfd) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv;
     SfdIpuCtl *ctl;
     if (SFMPVP_IsSceMpegUsed(player) == 0) {

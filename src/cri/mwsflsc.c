@@ -4,18 +4,11 @@
 #include "dw4/cri/lsc.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/cri/cri_mwsfd.h"
+#include "dw4/cri/sfd.h"
+#include "dw4/cri/cri_adxf.h"
 
-void MWSFSVM_Error(const char *format, ...);
-int MWSFD_IsEnableHndl(void *ply);
-void mwSfdStartSj(MwsfdPly *ply, SfdSj *sj);
-void MWSFPLY_SetFlowLimit(MwsfdPly *ply);
-void MWSFPLY_RecordFname(MwsfdPly *ply, const char *fname);
-void MWSFCRE_SetSupplySj(MwsfdPly *ply);
-int SFD_SetConcatPlay(void *sfd);
-int ADXF_GetFnameRangeEx(int patid, int fid, char *fname, void **dir, int *ofst, int *nsct);
-char *ADXF_GetFnameFromPt(int patid);
 
-void mwPlyLinkStm(void *hn, int sw);
 
 void mwPlyEntryFname(MwsfdPly *ply, const char *fname)
 {

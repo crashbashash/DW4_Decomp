@@ -1,16 +1,8 @@
 /* The additional-information channel: the handler of stream graph slot 8. It hands up to three
  * user outputs (a memory block or a stream join each) the data of the buffer channel the slot reads;
  * its errors are 0xFF0006xx. */
+#include "dw4/cri/sfd.h"
 
-int SFLIB_CheckHn();
-int sfd_ReportError();
-void SFBUF_SetUoch();
-int SFBUF_GetPrepFlg();
-int SFBUF_GetTermFlg();
-int sftrn_SetFlagA();
-int sftrn_SetFlagB();
-int sftrn_GetFlagA();
-int sftrn_GetFlagB();
 
 #define SFAINF_SLOT 8
 #define SFAINF_NOUT 3
@@ -77,7 +69,8 @@ int SFD_SetSystemUsrSj(SfainfHn *hn, int index, int kind, void *buf, int size) {
     return 0;
 }
 
-int SFD_SetUsrSj(SfainfHn *hn, int index, int kind, void *sj) {
+int SFD_SetUsrSj(void *sfd, int index, int kind, void *sj) {
+    SfainfHn *hn = sfd;
     SfainfTrn *trn = &hn->trn[SFAINF_SLOT];
     int from;
     SfainfOut *out;

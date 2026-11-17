@@ -2,8 +2,13 @@
  * release, the picture types and plane layout converted between SFD and MWSFD, the picture user
  * data, and the per-picture log ring the SFD's picture callback fills. */
 #include "dw4/cri/mwply.h"
+#include "dw4/cri/sfh.h"
 #include "dw4/cri/sfmpv.h"
 #include <string.h>
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sud.h"
+#include "dw4/cri/cri_mwsfd.h"
+#include "dw4/cri/sfd.h"
 
 /* a picture's user data chunk as the SFD frame points at it; its first 4 bytes are a header */
 typedef struct MwsfdUsrChunk {
@@ -112,17 +117,7 @@ typedef struct MwsfdFrmInf {
 } MwsfdFrmInf;
 
 /* the plane layout in the order the SFX conversion takes it */
-typedef struct MwsfdPlanes {
-    char *addr0;
-    char *addr1;
-    char *addr2;
-    int stride0;
-    int stride1;
-    int stride2;
-} MwsfdPlanes;
-
 /* the SFD header handle a picture's header is parsed into */
-typedef struct SfdHdrHn SfdHdrHn;
 
 #define SFD_STM_VIDEO 224
 #define SFD_CB_PICUSR 0x4B    /* the picture user data callback */
@@ -141,41 +136,11 @@ extern char E3122201_mwPlyGetNextPicUsr_inv_hn[]; /* "E3122201: mwPlyGetNextPicU
 extern char E202231_mwPlyGetNumSkipDisp_inv_hn[]; /* "E202231: mwPlyGetNumSkipDisp: handle is invalid." */
 extern char E409171_mwPlyGetNumRemainFrm_inv_hn[]; /* "E409171: mwPlyGetNumRemainFrm: handle is invalid." */
 
-int SFD_GetFrm(void *sfd, void **frm);
-int SFD_GetFps(void *sfd, int *rate);
 void FUN_00297ee8(MwsfdPly *ply, int mode);
 void mwply_UpdateUsrLen(MwsfdPly *ply, MwsfdFrm *frm);
 void mwply_SetFrmInf(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
 void mwply_GetFrmUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
 int mwply_MulDivMs(int a, int b, int sec);
-void mwply_GetPicInf(char *buf, unsigned int size, MwsfdHdrInf *hdr);
-void MWSFSVM_Error(const char *message, ...);
-int MWSFD_GetUsePicUsr(void);
-int MWSFD_IsEnableHndl(MwsfdPly *ply);
-void *mwPlyGetSfdHn(MwsfdPly *ply);
-void MWSFSFX_SetColAdj(MwsfdPly *ply, int flag);
-void MWSFD_SetColAdj(MwsfdPly *ply, int flag);
-void mwsfsfx_UpdateAddInf(MwsfdPly *ply);
-void mwsfsfx_SetPicUsr(MwsfdPly *ply, char *ud, int udsize);
-int MWSFSFX_SetPicUsrDat(MwsfdPly *ply);
-int MWSFD_IsFrmDivField(MwsfdPly *ply);
-int UTY_MulDiv(int a, int b, int c);
-void SFD_CalcYccPlane(int a, int b, int c, SfdPlanes *planes);
-void SFD_GetNextPicUsr(void *sfd, char **addr, int *size);
-int SFD_GetNumRemainFrm(void *sfd);
-int SFD_IsNextFrmReady(void *sfd);
-int SFD_RelFrm(void *sfd, void *frm);
-void SFD_SetCond(void *sfd, int id, void *value);
-SfdHdrHn *SFH_Create(char *buf, unsigned int size);
-void SFH_Destroy(SfdHdrHn *hdr);
-int SFH_IsExistStmId(SfdHdrHn *hdr, int id, int *present);
-int SFH_AnlyNumElemAud(SfdHdrHn *hdr, int *value);
-int SFH_AnlyNumElemVid(SfdHdrHn *hdr, int *value);
-int SFH_AnlyFtrColType(SfdHdrHn *hdr, int id, int *value);
-int SFH_AnlyFtrFxType(SfdHdrHn *hdr, int id, int *value);
-int SFH_IsSfdHeader(SfdHdrHn *hdr, int *present);
-int SFH_AnlyMaxFrmNum(SfdHdrHn *hdr, int *value);
-void SUD_FindTag(char *addr, int size, char **data, int *len);
 
 int MWSFD_GetFrmSync(MwsfdPly *ply);
 int MWSFD_IsEnablePicUsr(MwsfdPly *ply);
@@ -183,11 +148,11 @@ void mwl_convYccPlaneFromSFD(SfdPlanes *src, MwsfdPlanes *dst);
 int mwl_convBufFmtToSFD(unsigned int ptype);
 int mwl_convPtypeToSFD(unsigned int ptype);
 int mwply_GetCurPicHdrInfo(MwsfdPly *ply);
-int mwsffrm_AnalyTotalFrm(SfdHdrHn *hdr);
-int mwply_GetMuxKind1(SfdHdrHn *hdr);
-int mwply_GetMuxKind2(SfdHdrHn *hdr);
-int mwply_GetPicCompoMode(SfdHdrHn *hdr);
-int mwply_IsPicItemType3(SfdHdrHn *hdr);
+int mwsffrm_AnalyTotalFrm(SfhHn *hdr);
+int mwply_GetMuxKind1(SfhHn *hdr);
+int mwply_GetMuxKind2(SfhHn *hdr);
+int mwply_GetPicCompoMode(SfhHn *hdr);
+int mwply_IsPicItemType3(SfhHn *hdr);
 void mwply_LogPic(MwsfdPly *ply, char *buf, unsigned int size);
 int mwply_GetLogItemTypeThree(MwsfdPly *ply, int slot);
 int mwply_GetLogHdrInfo(MwsfdPly *ply, int slot);
@@ -681,7 +646,7 @@ void mwPlyGetCurPicHdrInfo(MwsfdPly *ply)
     mwply_GetCurPicHdrInfo(ply);
 }
 
-int mwsffrm_AnalyTotalFrm(SfdHdrHn *hdr)
+int mwsffrm_AnalyTotalFrm(SfhHn *hdr)
 {
     int value;
 
@@ -695,7 +660,7 @@ int mwsffrm_AnalyTotalFrm(SfdHdrHn *hdr)
  * info, composition mode and the two mux kinds, or -1 for the first two when none parses */
 void mwply_GetPicInf(char *buf, unsigned int size, MwsfdHdrInf *hdr)
 {
-    SfdHdrHn *sfh;
+    SfhHn *sfh;
     int v[2];
     int off;
     int sector;
@@ -736,7 +701,7 @@ int mwPlyGetCurPicCompoMode(MwsfdPly *ply)
 }
 
 /* the composition mode from the video stream's header info value */
-int mwply_GetPicCompoMode(SfdHdrHn *hdr)
+int mwply_GetPicCompoMode(SfhHn *hdr)
 {
     int v;
     int ret;
@@ -753,7 +718,7 @@ int mwply_GetPicCompoMode(SfdHdrHn *hdr)
     return ret;
 }
 
-int mwply_GetMuxKind1(SfdHdrHn *hdr)
+int mwply_GetMuxKind1(SfhHn *hdr)
 {
     int value;
 
@@ -763,7 +728,7 @@ int mwply_GetMuxKind1(SfdHdrHn *hdr)
     return -1;
 }
 
-int mwply_GetMuxKind2(SfdHdrHn *hdr)
+int mwply_GetMuxKind2(SfhHn *hdr)
 {
     int value;
 
@@ -802,7 +767,7 @@ void mwply_SetPicUsrCb(MwsfdPly *ply)
  * header with a video stream, logs the picture in the ring */
 void mwply_LogPic(MwsfdPly *ply, char *buf, unsigned int size)
 {
-    SfdHdrHn *hdr;
+    SfhHn *hdr;
     int v[2];
     int itemTypeThree, hdrInfo, compoMode;
     int i;
@@ -831,7 +796,7 @@ void mwply_LogPic(MwsfdPly *ply, char *buf, unsigned int size)
 }
 
 /* whether the header lists the video stream and its info value is 3 */
-int mwply_IsPicItemType3(SfdHdrHn *hdr)
+int mwply_IsPicItemType3(SfhHn *hdr)
 {
     int v[2];
 

@@ -1,14 +1,11 @@
 #include "dw4/cri/sfx.h"
+#include "dw4/cri/sud.h"
 #include <string.h>
-
-typedef struct SfxPicInf {
-    int pad0[19];
-    int fno;
-} SfxPicInf;
+#include "dw4/cri/sj.h"
 
 typedef struct SfxCbSlot {
-    void (*fn)(int arg, char *msg);
-    int arg;
+    SfxErrFn fn;
+    void *obj;
     int count;
 } SfxCbSlot;
 
@@ -33,28 +30,11 @@ extern char DAT_004f5840[];
 extern char DAT_004f5860[];
 extern char DAT_004f5868[];
 
-int SJ_SearchTag(SfxMem *in, char *tag, char *endtag, SfxMem *out);
 void FUN_00283038();
 void FUN_00283058(void);
-/* matching construct: manual — CFT_Finish declared void (its result is unused) leaves v0 free for the decrement, as in retail */
-void CFT_Finish();
 int FUN_002830a8();
 void FUN_002830d0();
-void CFT_Ycc420rgbToArgb8888(void);
-void SFXA_Init(void);
-int SFXA_Finish();
-void *SFXA_Create(void);
-int SFXA_Destroy();
-int SFXA_SetLumiPrm();
-int SFXA_GetLumiPrm();
-int SFXA_SetAlp3Prm();
-int SFXA_GetAlp3Prm();
-void SFXZ_Destroy();
-int SUD_Init();
-int SUD_Finish();
 int FUN_002b52d8();
-int SUD_AnalyTypeDivField();
-int SUD_AnalyTypeCcs();
 int FUN_002b53a0();
 int FUN_002b5400();
 int FUN_002b5490();
@@ -63,12 +43,15 @@ int FUN_002b5578();
 int FUN_002b55f8();
 int FUN_002b5678();
 
+/* kept here unprototyped: their definitions take volatile pointers, which sfx.h would show to every unit */
+int SFXA_Destroy();
+void SFXZ_Destroy();
+
 char *sfx_GetVersionStr(void);
 void sfx_InitLibWork(void);
 SfxHn *sfx_SearchFreeHn(void);
 void sfx_InitHn(SfxHn *hn, int work, int wksize);
 int sfx_IsEnoughHnWorkSize(int wksize, int a, int b);
-void SFX_Destroy(SfxHn *hn);
 void FUN_002b3b78(int value);
 void SFXSET_SetTblPtn(SfxHn *hn, int value);
 void FUN_002b3e00(SfxHn *hn, int a, int b, int c);
@@ -113,10 +96,10 @@ void SFX_Finish(void) {
     }
 }
 
-void SFX_SetErrFn(void (*fn)(int arg, char *msg), int arg) {
+void SFX_SetErrFn(SfxErrFn fn, void *obj) {
     SfxCbSlot *err = &DAT_004bec28.err;
     err->fn = fn;
-    err->arg = arg;
+    err->obj = obj;
 }
 
 SfxHn *SFX_Create(int work, int wksize, int a2, int a3) {
@@ -204,11 +187,11 @@ void SFX_Destroy(SfxHn *hn) {
 void SFXLIB_Error(void *obj, void *info, char *msg) {
     /* Both callback words are read before the counter is bumped, as in retail. */
     SfxCbSlot *slot = &DAT_004bec28.err;
-    void (*fn)(int arg, char *msg) = slot->fn;
-    int arg = slot->arg;
+    SfxErrFn fn = slot->fn;
+    void *cbobj = slot->obj;
     slot->count++;
     if (fn != 0) {
-        fn(arg, msg);
+        fn(cbobj, msg);
     }
 }
 
@@ -343,16 +326,16 @@ void SFX_GetZclip(SfxHn *hn, float *zmin, float *zmax) {
     SFXZ_GetZclip(hn->zhn, zmin, zmax);
 }
 
-void SFX_GetZfrmRange(SfxHn *hn, SfxPicInf *pic, int *first, int *second) {
-    FUN_002b4498(hn->zhn, pic->fno, first, second);
+void SFX_GetZfrmRange(SfxHn *hn, SfxFrame *frm, int *first, int *second) {
+    FUN_002b4498(hn->zhn, frm->fno, first, second);
 }
 
-void FUN_002b3dd0(SfxHn *hn) {
-    SFXA_SetLumiPrm(hn->ahn);
+void FUN_002b3dd0(SfxHn *hn, int lo, int hi, int mode) {
+    SFXA_SetLumiPrm(hn->ahn, lo, hi, mode);
 }
 
-void SFX_SetALumiPrm(SfxHn *hn) {
-    SFXA_GetLumiPrm(hn->ahn);
+void SFX_SetALumiPrm(SfxHn *hn, int *lo, int *hi, int *mode) {
+    SFXA_GetLumiPrm(hn->ahn, lo, hi, mode);
 }
 
 void FUN_002b3e00(SfxHn *hn, int a, int b, int c) {
@@ -360,8 +343,8 @@ void FUN_002b3e00(SfxHn *hn, int a, int b, int c) {
     SFXSET_SetTblPtn(hn, 0);
 }
 
-void SFX_GetALumiPrm(SfxHn *hn) {
-    SFXA_GetAlp3Prm(hn->ahn);
+void SFX_GetALumiPrm(SfxHn *hn, unsigned char *alpha0, unsigned char *alpha1, unsigned char *alpha2) {
+    SFXA_GetAlp3Prm(hn->ahn, alpha0, alpha1, alpha2);
 }
 
 void FUN_002b3e58(SfxHn *hn, int value) {
@@ -473,13 +456,15 @@ void FUN_002b40d0(SfxHn *hn) {
 void FUN_002b40f0(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    SUD_AnalyTypeDivField(sud[0], sud[1]);
+    /* the handle keeps the user-data header address as a word */
+    SUD_AnalyTypeDivField((char *)sud[0], sud[1]);
 }
 
 void FUN_002b4110(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    SUD_AnalyTypeCcs(sud[0], sud[1]);
+    /* the handle keeps the user-data header address as a word */
+    SUD_AnalyTypeCcs((char *)sud[0], sud[1]);
 }
 
 void FUN_002b4130(SfxHn *hn) {

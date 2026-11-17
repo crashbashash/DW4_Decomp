@@ -67,11 +67,12 @@ typedef struct MpvSeqInf {
 } MpvSeqInf;
 
 /* the size the lower layer decodes at, with its flag */
-typedef struct MpvLowSize {
-    int width;
-    int height;
-    int flag;
-} MpvLowSize;
+/* the buffer the user data in front of a picture is copied to, and the length copied */
+typedef struct MpvPicUsr {
+    char *buf;
+    int size;
+    int len;
+} MpvPicUsr;
 
 /* the motion vector range of one direction of a P or B picture */
 typedef struct MpvMotionRange {
@@ -141,7 +142,7 @@ typedef struct MpvHn {
     int lower;                /* 944: the lower-layer decoder handle */
     MpvUdLevel usrDatLevel;   /* 948: the level the next user data belongs to */
     MpvBufEnt bufEnt[4];      /* 952: the user-data sink of each level */
-    MpvLowSize low;           /* 1000 */
+    MpvPicUsr picusr;         /* 1000 */
     char pad1012[MPV_HN_SIZE - 1012];
     char pad1016[1024 - MPV_HN_SIZE];
 } MpvHn;
@@ -170,5 +171,53 @@ extern MpvErrObj mpv_err_global;  /* 0x4bccb8: the error object when no handle i
 
 int MPV_GoNextDelimSj(SfdSj *sj);
 int MPV_MoveChunk(SfdSj *sj, int id, int n);
+
+int MPV_Init(int count, void *work);
+void MPV_Finish(void);
+MpvHn *MPV_Create(void);
+int MPV_Destroy(MpvHn *hn);
+int MPV_SetCond(MpvHn *hn, int no, int value);
+int MPV_GetCond(MpvHn *hn, int no, int *value);
+int MPVLIB_CheckHn(MpvHn *hn);
+int mpv_StartLower(MpvHn *hn, SfdSj *sj);
+
+void mpv_InitLibErr(void);
+void mpv_ResetErr(MpvErrObj *err);
+int mpv_ReportError(MpvHn *mpv, int code);
+void mpvapi_Init(void);
+int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, int arg);
+int MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj);
+int MPV_GetPicInf(MpvHn *mpv, MpvPicInf *out);
+int MPV_GetBitRate(MpvHn *mpv, int *bitRate);
+int MPV_GetVbvBufSiz(MpvHn *mpv, int *size, int *delay, int *bytes);
+int MPV_GetLinkFlg(MpvHn *mpv, int *inf3, int *inf4);
+
+void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
+void MPV_SetPicUsrBuf(MpvHn *mpv, char *buf, int size);
+void MPV_GetPicUsr(MpvHn *mpv, char **buf, int *len);
+int MPV_DecodePicAtrSj(MpvHn *mpv, SfdSj *sj);
+int MPV_DecodePicAtr(MpvHn *mpv, SfdSjChunk *buf, int *used);
+
+int MPV_CheckDelim(const unsigned char *p);
+char *MPV_SearchDelim(char *buf, int len, int mask);
+char *MPV_BsearchDelim(char *end, int len, int mask);
+int MPV_IsEmptyBpic(unsigned char *buf, int nbyte, int nmb);
+int MPV_IsEmptyPpic(unsigned char *buf, int nbyte, int nmb);
+
+int mpvhook_IsInstalled(void);
+void mpvhook_Init(int nobj, void *work, int size);
+void mpvhook_Finish(void);
+int mpvhook_Create(void);
+void mpvhook_Destroy(int lower);
+void mpvhook_SetCond(int lower, int no, int value);
+void mpvhook_SetBufEnt(int lower, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
+void mpvhook_SetSize(int lower, char *buf, int size);
+void mpvhook_SetFlagPtr(int lower, int index, int *flag);
+int mpvhook_Start(int lower, SfdSj *sj);
+void mpvhook_GetPicInf(int lower, MpvPicInf *inf);
+void mpvhook_GetInf(int lower, int *inf);
+void mpvhook_GetRate(int lower, int *a, int *b, int *c);
+void mpvhook_GetDispSize(int lower, int *width, int *height);
+void mpv_InstallHooks(void);
 
 #endif

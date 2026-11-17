@@ -92,7 +92,6 @@ typedef struct SfdPtsm {
 
 typedef struct SfdPly SfdPly;
 
-typedef int (*SfdTimeFn)(SfdPly *h, int *ncount, int *tscale);
 
 typedef struct SfdD28 {
     int (*timefn[6])(SfdPly *h, int *ncount, int *tscale); /* 0: clock sources; [4] is the user's */

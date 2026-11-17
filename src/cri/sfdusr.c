@@ -1,3 +1,5 @@
+#include "dw4/cri/sfd.h"
+
 typedef struct SfdUsrHn SfdUsrHn;
 
 typedef struct SfdUsrIf {
@@ -18,23 +20,15 @@ struct SfdUsrHn {
     SfdUsrIf ifaceStorage;    /* 13780 */
 };
 
-int sfd_ReportError();
-int SFLIB_CheckHn(SfdUsrHn *h);
-int SFSET_GetCond(SfdUsrHn *h, int option);
 int FUN_002b0338(SfdUsrHn *h, int group, int event, int a, int b);
-void sftrn_SetFlagA(SfdUsrHn *h, int flag, int value);
-int sftrn_GetFlagA(SfdUsrHn *h, int flag);
-void sftrn_SetFlagB(SfdUsrHn *h, int flag, int value);
-int sftrn_GetFlagB(SfdUsrHn *h, int flag);
-int SFBUF_GetPrepFlg(SfdUsrHn *h, int index);
-int SFBUF_GetTermFlg(SfdUsrHn *h, int index);
 
 int sfaoap_OutputServer(SfdUsrHn *h);
 void sfaoap_ChkPrepFlg(SfdUsrHn *h);
 void sfaoap_ChkTermFlg(SfdUsrHn *h);
 void sfaoap_InitInf(SfdUsrIf *iface);
 
-void SFD_SetOutPan(SfdUsrHn *h, int a, int b) {
+void SFD_SetOutPan(void *sfd, int a, int b) {
+    SfdUsrHn *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A1);
         return;
@@ -44,7 +38,8 @@ void SFD_SetOutPan(SfdUsrHn *h, int a, int b) {
     }
 }
 
-int SFD_GetOutPan(SfdUsrHn *h, int a) {
+int SFD_GetOutPan(void *sfd, int a) {
+    SfdUsrHn *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A2);
         return 0;
@@ -55,7 +50,8 @@ int SFD_GetOutPan(SfdUsrHn *h, int a) {
     return h->iface->f8(h, a);
 }
 
-void SFD_SetOutVol(SfdUsrHn *h, int a) {
+void SFD_SetOutVol(void *sfd, int a) {
+    SfdUsrHn *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A3);
         return;
@@ -65,7 +61,8 @@ void SFD_SetOutVol(SfdUsrHn *h, int a) {
     }
 }
 
-int SFD_GetOutVol(SfdUsrHn *h) {
+int SFD_GetOutVol(void *sfd) {
+    SfdUsrHn *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A4);
         return 0;
@@ -76,7 +73,8 @@ int SFD_GetOutVol(SfdUsrHn *h) {
     return h->iface->f16(h);
 }
 
-void SFAOAP_SetSpeed(SfdUsrHn *h, int a) {
+void SFAOAP_SetSpeed(void *sfd, int a) {
+    SfdUsrHn *h = sfd;
     void (*fn)(SfdUsrHn *, int);
     if (SFSET_GetCond(h, 6) != 0) {
         fn = h->iface->f20;

@@ -1,4 +1,6 @@
 #include "dw4/cri/mps.h"
+#include "dw4/cri/uty.h"
+#include "dw4/cri/sfd.h"
 
 typedef struct SjObj SjObj;
 
@@ -288,18 +290,7 @@ typedef struct SfdEntry44 {
     int f32;
 } SfdEntry44;
 
-int UTY_MulDiv(int value, int scale, int divisor);
-void SFHDS_InitFhd(void *blk);
-int SFCON_IsEndcodeSkip(SfdPly *hn);
-int SFHDS_GetMuxVerNum(SfdPly *hn);
-int sfd_ReportError();
-int SFLIB_CheckHn(SfdPly *hn);
 int FUN_002aa538(SfdPly *hn);
-int SFPLY_Stop(SfdPly *hn);
-void SFSET_SetCond(SfdPly *hn, int index, int value);
-int SFSET_GetCond();
-void SFTIM_InitTtu(void *blk, int value);
-int SFTRN_CallTrSetup(SfdPly *hn, int command);
 int FUN_002b03e8();
 
 void sfsee_InitSeekInf(SfdRec *rec);
@@ -381,7 +372,8 @@ void sfsee_InitHeadInf(SfdRec *rec) {
     c->unit = 1; /* matching construct: manual — this store written last keeps retail's store order */
 }
 
-int SFD_EntrySeek(SfdPly *h, SfdRec *rec) {
+int SFD_EntrySeek(void *sfd, SfdRec *rec) {
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000151);
     }
@@ -399,7 +391,7 @@ int SFD_SetSeekPosTbl(SfdPly *h, int value) {
 
 void SFD_StartHeadAnaly(SfdPly *h) {
     if (SFLIB_CheckHn(h) != 0) {
-        sfd_ReportError(0, 0xFF000153, 1);
+        sfd_ReportError(0, 0xFF000153);
         return;
     }
     SFSET_SetCond(h, 47, 1);
@@ -422,8 +414,9 @@ void sfsee_IsHeadAnalyEnd(SfdRec *record, int *running)
     *running = (state ^ 1) == 0 ? state : 0;
 }
 
-void SFSEE_FixAvPlay(SfdPly *hn, int id3512, int id3516)
+void SFSEE_FixAvPlay(void *sfd, int id3512, int id3516)
 {
+    SfdPly *hn = sfd;
     SfdRec *record = hn->recSlot.rec;
     if (record != 0) {
         if (record->id3512 < 0) {
@@ -435,8 +428,9 @@ void SFSEE_FixAvPlay(SfdPly *hn, int id3512, int id3516)
     }
 }
 
-void SFSEE_ExecServer(SfdPly *hn)
+void SFSEE_ExecServer(void *sfd)
 {
+    SfdPly *hn = sfd;
     if (hn->recSlot.rec == 0) {
         return;
     }
@@ -658,8 +652,9 @@ void SFD_Seek(SfdPly *hn, SfdRecSub *settings)
     SFTRN_CallTrSetup(hn, 13);
 }
 
-int SFD_SetFileSize(SfdPly *hn, int value)
+int SFD_SetFileSize(void *sfd, int value)
 {
+    SfdPly *hn = sfd;
     SfdRec *record;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000159);
@@ -673,8 +668,9 @@ int SFD_SetFileSize(SfdPly *hn, int value)
     return 0;
 }
 
-int SFD_SetTotTime(SfdPly *hn, int divisor, int scale)
+int SFD_SetTotTime(void *sfd, int divisor, int scale)
 {
+    SfdPly *hn = sfd;
     SfdRec *timing;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF00015A);
@@ -689,8 +685,9 @@ int SFD_SetTotTime(SfdPly *hn, int divisor, int scale)
     return 0;
 }
 
-int SFD_SetByteRate(SfdPly *hn, int value)
+int SFD_SetByteRate(void *sfd, int value)
 {
+    SfdPly *hn = sfd;
     SfdRec *record;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF00015B);
@@ -704,8 +701,9 @@ int SFD_SetByteRate(SfdPly *hn, int value)
     return 0;
 }
 
-void SFD_SetSeekPos(SfdPly *hn, int offset)
+void SFD_SetSeekPos(void *sfd, int offset)
 {
+    SfdPly *hn = sfd;
     SfdRec *record;
     if (SFLIB_CheckHn(hn) != 0) {
         sfd_ReportError(0, 0xFF00015C);

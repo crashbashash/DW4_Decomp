@@ -1,9 +1,7 @@
 #include "dw4/cri/m2v.h"
 
 /* CRI M2V error information: the library-wide record and each handle's own, and the error-code report. */
-int M2VLIB_CheckHn(void *hn);
 void M2VERR_InitErrInf(M2vErrInf *inf);
-int M2VERR_SetCode(M2vHnErr *hn, int code);
 int m2verr_SetCodeSub(M2vErrInf *inf, int code);
 
 M2vErrInf m2verrinf;
@@ -22,7 +20,7 @@ void M2VERR_InitErrInf(M2vErrInf *inf)
     inf->reserved[1] = 0;
 }
 
-void M2V_SetErrFunc(M2vHnErr *hn, int (*func)(void *obj), void *obj)
+void M2V_SetErrFunc(M2vObj *hn, int (*func)(void *obj), void *obj)
 {
     M2vErrInf *inf;
 
@@ -35,7 +33,7 @@ void M2V_SetErrFunc(M2vHnErr *hn, int (*func)(void *obj), void *obj)
     inf->obj = obj;
 }
 
-void M2V_GetErrInf(M2vHnErr *hn, M2vErrInf *inf)
+void M2V_GetErrInf(M2vObj *hn, M2vErrInf *inf)
 {
     if (M2VLIB_CheckHn(hn) != 0) {
         M2VERR_SetCode(0, 0xFF030204);
@@ -44,7 +42,7 @@ void M2V_GetErrInf(M2vHnErr *hn, M2vErrInf *inf)
     *inf = hn->err;
 }
 
-int M2VERR_SetCode(M2vHnErr *hn, int code)
+int M2VERR_SetCode(M2vObj *hn, int code)
 {
     if (hn == 0) {
         m2verr_SetCodeSub(&m2verrinf, code);

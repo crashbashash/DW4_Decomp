@@ -1,8 +1,7 @@
 #include "dw4/cri/sfdply.h"
 #include <string.h>
+#include "dw4/cri/sfd.h"
 
-int sfd_ReportError();
-int SFLIB_CheckHn(SfdPly *h);
 
 void FUN_002ac770(SfdRing *ring, char *buffer, int size);
 int sfring_Push(SfdRing *ring, SfdItem *item, int *full);
@@ -40,7 +39,8 @@ void FUN_002ac770(SfdRing *ring, char *buffer, int size) {
     ring->rd = 0;
 }
 
-int sfring_PutItem(SfdPly *h, int index, SfdItem *item, int *full) {
+int sfring_PutItem(void *sfd, int index, SfdItem *item, int *full) {
+    SfdPly *h = sfd;
     SfdRing *ring;
     *full = 0;
     if (item->pos < 0) {
@@ -138,7 +138,8 @@ int sfring_FindPos(SfdRing *ring, unsigned int pos, unsigned int base, unsigned 
     return -1;
 }
 
-int sfring_IsFull(SfdPly *h, int index) {
+int sfring_IsFull(void *sfd, int index) {
+    SfdPly *h = sfd;
     SfdRing *ring = &h->ent[index].ring;
     if (ring->items == 0) {
         return 0;

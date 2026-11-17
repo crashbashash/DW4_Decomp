@@ -1,3 +1,4 @@
+#include "dw4/cri/mpv.h"
 #include "dw4/cri/mpvbits.h"
 
 extern short mpvsc_mbaddr_incr_vlc[]; /* macroblock_address_increment codes: (length | code << 8) per increment */
@@ -218,7 +219,6 @@ int MPV_IsEmptyBpic(unsigned char *buf, int nbyte, int nmb) {
     return 1;
 }
 
-char *MPV_SearchDelim(char *buf, int len, int mask);
 
 /* Whether the P picture whose first slice is at buf (nbyte bytes, nmb macroblocks) codes nothing: one slice
  * whose first and last macroblocks are forward-predicted with no coded data and zero vectors, followed within

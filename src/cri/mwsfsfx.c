@@ -1,5 +1,8 @@
 #include "dw4/cri/mwply.h"
+#include "dw4/cri/sfx.h"
 #include <string.h>
+#include "dw4/cri/cri_mwsfd.h"
+#include "dw4/cri/sfd.h"
 #include "dw4/cri/sj.h"
 
 typedef struct SjObj SjObj;
@@ -35,38 +38,6 @@ typedef struct MwsfdFrm {
     int f48;        /* 48 */
 } MwsfdFrm;
 
-typedef struct MwsfdPlane {
-    int addr;   /* 0 */
-    int width;  /* 4 */
-    int height; /* 8 */
-    int f12;
-} MwsfdPlane;
-
-typedef struct MwsfdPicFmt {
-    int pictureStructure;        /* 0 */
-    MwsfdChromaFmt chromaFormat; /* 4 */
-    int f8;
-    int f12;
-    int f16;
-    int chromaPosH;       /* 20 */
-    int chromaPosV;       /* 24 */
-} MwsfdPicFmt;
-
-typedef struct MwsfdCnvPrm {
-    int bufFmt;           /* 0 */
-    MwsfdPlane plane[3];  /* 4 */
-    int f52[4];
-    int width;            /* 68 */
-    int height;           /* 72 */
-    int f76;              /* 76 */
-    int f80;              /* 80 */
-    int f84;              /* 84 */
-    int f88;              /* 88 */
-    int f92;              /* 92 */
-    MwsfdPicFmt fmt;      /* 96 */
-    int f120[5];
-} MwsfdCnvPrm;
-
 extern char DAT_004f4028[];
 extern char DAT_004f4050[];
 extern char DAT_004f4078[];
@@ -100,58 +71,22 @@ extern char DAT_004f4558[];
 extern char DAT_004f4588[];
 extern char DAT_004f45c0[];
 
-void mwSfdDestroy(MwsfdPly *ply);
-void mwPlyCalcYccPlane(int addr, int width, int height, int *out);
-int mwPlyGetCurPicCompoMode(MwsfdPly *ply);
-int MWSFD_IsEnableHndl(MwsfdPly *ply);
-void MWSFSVM_Error(const char *msg);
-int SFD_SetUsrSj(void *sfd, int index, SjObj *sj, int b);
-void SFX_MakeTblZ16(void *sfx, MwsfdCnvPrm *prm);
-void SFX_MakeTblZ32(void *sfx, MwsfdCnvPrm *prm);
-void SFX_Init(void);
-void SFX_Finish(void);
-void SFX_SetErrFn(void (*fn)(void *ctx, const char *msg), void *ctx);
-void SFX_Create(void);
-void SFX_Destroy(void);
 void FUN_002b3b78(void);
 void FUN_002b3b88(void);
 void FUN_002b3bb8(void *sfx, int value);
-void SFX_SetCompoMode(void *sfx, int mode);
-int SFX_GetCompoMode(void *sfx);
-void SFX_SetOutBufSize(void *sfx, int value);
 void FUN_002b3bf8(void *sfx, int a, int b);
-void SFX_GetOutBufSize(void *sfx, int a, int b);
 void FUN_002b3c20(void *sfx, int value);
-void SFX_SetCnvTable(void *sfx);
-void SFX_GetCnvTable(void *sfx);
-void SFX_SetTagInf(void *sfx, char *addr, int size);
-void SFX_GetTagInf(void *sfx, char **data, int *size);
-void SFX_SetOutZscale(void *sfx, int value);
-int SFX_GetOutZscale(void *sfx);
-void SFX_SetOutZoffset(void *sfx, int value);
-int SFX_GetOutZoffset(void *sfx);
-void SFX_SetZclip(void *sfx);
-void SFX_GetZclip(void *sfx);
-void SFX_GetZfrmRange(void *sfx, MwsfdCnvPrm *prm, int a, int b);
 void FUN_002b3dd0(void *sfx, int a, int b, int flag);
-void SFX_SetALumiPrm(void *sfx, int *a, int *b, int *c);
 void FUN_002b3e00(void *sfx, unsigned char a, unsigned char b, unsigned char c);
-void SFX_GetALumiPrm(void *sfx, int a, int b, int c);
-void FUN_002b3e58(void *sfx);
+void FUN_002b3e58(void *sfx, int value);
 void FUN_002b3e60(void *sfx);
-void SFX_SetColAdj(void *sfx);
-void SFX_GetColAdj(void *sfx);
-void SFX_SetSplitField(void *sfx);
-void SFX_GetSplitField(void *sfx);
-void SFX_SetProgOut(void *sfx, int value);
-int SFX_GetProgOut(void *sfx);
 void FUN_002b3ff8(void *sfx, int value);
 int FUN_002b4050(void *sfx);
 void FUN_002b4068(void);
-void FUN_002b40b0(void *sfx);
+void FUN_002b40b0(void *sfx, char *ud, int size);
 void FUN_002b40d0(void *sfx);
-void FUN_002b40f0(void *sfx);
-void FUN_002b4110(void *sfx);
+int FUN_002b40f0(void *sfx);
+int FUN_002b4110(void *sfx);
 void FUN_002b4130(void *sfx);
 void FUN_002b4150(void *sfx);
 void FUN_002b4170(void *sfx);
@@ -159,20 +94,19 @@ void FUN_002b4190(void *sfx);
 void FUN_002b41b0(void *sfx);
 void FUN_002b41d0(void *sfx);
 void FUN_002b41f0(void *sfx);
-void FUN_002b4ba8(void *sfx, MwsfdCnvPrm *prm, int arg);
-void FUN_002b4c48(void *sfx, MwsfdCnvPrm *prm, int arg);
+void FUN_002b4ba8(void *sfx, SfxFrame *prm, int arg);
+void FUN_002b4c48(void *sfx, SfxFrame *prm, int arg);
 
-void mwsfsfx_SfxErrCbFn(void *ctx, const char *msg);
+void mwsfsfx_SfxErrCbFn(void *ctx, char *msg);
 int mwsfsfx_CnvFrmFmtTypeToSfx(unsigned int format);
-void mwsfsfx_SetYcc420plnInfToSfx(MwsfdFrm *frm, MwsfdCnvPrm *prm);
-int mwsfsfx_SetNfrm(MwsfdFrm *frm, MwsfdCnvPrm *prm);
-void mwsfsfx_SetSfxBufInf(MwsfdPlane *plane, int addr, int width, int height);
-void mwsfsfx_SetSfxInfTag(MwsfdPly *ply, MwsfdFrm *frm, MwsfdCnvPrm *prm);
-void FUN_00297a30(MwsfdPly *ply, MwsfdCnvPrm *prm);
+void mwsfsfx_SetYcc420plnInfToSfx(MwsfdFrm *frm, SfxFrame *prm);
+int mwsfsfx_SetNfrm(MwsfdFrm *frm, SfxFrame *prm);
+void mwsfsfx_SetSfxBufInf(SfxPlane *plane, int addr, int pitch, int height);
+void mwsfsfx_SetSfxInfTag(MwsfdPly *ply, MwsfdFrm *frm, SfxFrame *prm);
+void FUN_00297a30(MwsfdPly *ply, SfxFrame *prm);
 int FUN_00297aa8(MwsfdPly *ply);
-MwsfdChromaFmt FUN_00297b18(MwsfdPly *ply);
+SfxChromaFmt FUN_00297b18(MwsfdPly *ply);
 int FUN_00297b88(MwsfdChromaPos position);
-void MWSFSFX_SetCompoMode(MwsfdPly *ply, int mode);
 void mwPlyFxGetOutBufSize(MwsfdPly *ply, int a, int b, int c);
 void mwsfd_GetCriTags(MwsfdPly *ply);
 void mwsftag_GetSFXinfFromAinf(MwsfdPly *ply);
@@ -184,7 +118,7 @@ void MWSFSFX_Init(void)
     SFX_SetErrFn(mwsfsfx_SfxErrCbFn, 0);
 }
 
-void mwsfsfx_SfxErrCbFn(void *ctx, const char *msg)
+void mwsfsfx_SfxErrCbFn(void *ctx, char *msg)
 {
     MWSFSVM_Error(msg);
 }
@@ -194,19 +128,19 @@ void MWSFSFX_Finish(void)
     SFX_Finish();
 }
 
-int MWSFSFX_CalcHnWorkSiz(void)
+int MWSFSFX_CalcHnWorkSiz(int width, int height)
 {
     return 6175;
 }
 
-void MWSFSFX_Create(void)
+SfxHn *MWSFSFX_Create(int work, int wksize, int a2, int a3)
 {
-    SFX_Create();
+    return SFX_Create(work, wksize, a2, a3);
 }
 
-void MWSFSFX_Destroy(void)
+void MWSFSFX_Destroy(void *sfx)
 {
-    SFX_Destroy();
+    SFX_Destroy(sfx);
 }
 
 void *MWSFSFX_GetSfxHn(MwsfdPly *ply)
@@ -219,16 +153,16 @@ void MWSFSFX_SetSfxHn(MwsfdPly *ply, void *sfx)
     ply->sfx = sfx;
 }
 
-void mwsfsfx_CnvFrmInfToSfx(MwsfdPly *ply, MwsfdFrm *frm, MwsfdCnvPrm *prm);
+void mwsfsfx_CnvFrmInfToSfx(MwsfdPly *ply, MwsfdFrm *frm, SfxFrame *prm);
 
-void MWSFD_CnvFrmInfToSfx(MwsfdPly *ply, MwsfdFrm *frm, MwsfdCnvPrm *prm)
+void MWSFD_CnvFrmInfToSfx(MwsfdPly *ply, MwsfdFrm *frm, SfxFrame *prm)
 {
     mwsfsfx_CnvFrmInfToSfx(ply, frm, prm);
 }
 
-void mwsfsfx_CnvFrmInfToSfx(MwsfdPly *ply, MwsfdFrm *frm, MwsfdCnvPrm *prm)
+void mwsfsfx_CnvFrmInfToSfx(MwsfdPly *ply, MwsfdFrm *frm, SfxFrame *prm)
 {
-    prm->bufFmt = mwsfsfx_CnvFrmFmtTypeToSfx(frm->bufFmt);
+    prm->frmfmt = mwsfsfx_CnvFrmFmtTypeToSfx(frm->bufFmt);
     mwsfsfx_SetYcc420plnInfToSfx(frm, prm);
     mwsfsfx_SetNfrm(frm, prm);
     mwsfsfx_SetSfxInfTag(ply, frm, prm);
@@ -257,7 +191,7 @@ int mwsfsfx_CnvFrmFmtTypeToSfx(unsigned int format)
     return result;
 }
 
-void mwsfsfx_SetYcc420plnInfToSfx(MwsfdFrm *frm, MwsfdCnvPrm *prm)
+void mwsfsfx_SetYcc420plnInfToSfx(MwsfdFrm *frm, SfxFrame *prm)
 {
     int out[6];
     int width = frm->width;
@@ -276,20 +210,20 @@ void mwsfsfx_SetYcc420plnInfToSfx(MwsfdFrm *frm, MwsfdCnvPrm *prm)
     mwsfsfx_SetSfxBufInf(&prm->plane[2], out[2], out[5], height);
 }
 
-int mwsfsfx_SetNfrm(MwsfdFrm *frm, MwsfdCnvPrm *prm)
+int mwsfsfx_SetNfrm(MwsfdFrm *frm, SfxFrame *prm)
 {
-    return prm->f76 = frm->f48;
+    return prm->fno = frm->f48;
 }
 
-void mwsfsfx_SetSfxBufInf(MwsfdPlane *plane, int addr, int width, int height)
+void mwsfsfx_SetSfxBufInf(SfxPlane *plane, int addr, int pitch, int height)
 {
     /* matching construct: variant search — stmt order [1, 2, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     plane->addr = addr;
-    plane->width = width;
+    plane->pitch = pitch;
     plane->height = height;
 }
 
-void mwsfsfx_SetSfxInfTag(MwsfdPly *ply, MwsfdFrm *frm, MwsfdCnvPrm *prm)
+void mwsfsfx_SetSfxInfTag(MwsfdPly *ply, MwsfdFrm *frm, SfxFrame *prm)
 {
     char *data;
     int size;
@@ -301,9 +235,9 @@ void mwsfsfx_SetSfxInfTag(MwsfdPly *ply, MwsfdFrm *frm, MwsfdCnvPrm *prm)
     prm->f92 = 0;
 }
 
-void FUN_00297a30(MwsfdPly *ply, MwsfdCnvPrm *prm)
+void FUN_00297a30(MwsfdPly *ply, SfxFrame *prm)
 {
-    MwsfdPicFmt *dst = &prm->fmt;
+    SfxPicFmt *dst = &prm->fmt;
     MwsfdPicInf *src;
 
     dst->pictureStructure = FUN_00297aa8(ply);
@@ -337,9 +271,9 @@ int FUN_00297aa8(MwsfdPly *ply)
     return result;
 }
 
-MwsfdChromaFmt FUN_00297b18(MwsfdPly *ply)
+SfxChromaFmt FUN_00297b18(MwsfdPly *ply)
 {
-    MwsfdChromaFmt result = MWSFD_CHROMA_FMT_1;
+    SfxChromaFmt result = SFX_CHROMA_FMT_1;
 
     switch (ply->pic.chromaFormat) {
     case 1:
@@ -376,19 +310,19 @@ int FUN_00297b88(MwsfdChromaPos position)
     return result;
 }
 
-void MWSFD_SetSfxCnvTbl(MwsfdPly *ply)
+void MWSFD_SetSfxCnvTbl(MwsfdPly *ply, int index, int value)
 {
-    SFX_SetCnvTable(ply->sfx);
+    SFX_SetCnvTable(ply->sfx, index, value);
 }
 
-void MWSFD_GetSfxCnvTbl(MwsfdPly *ply)
+int MWSFD_GetSfxCnvTbl(MwsfdPly *ply, int index)
 {
-    SFX_GetCnvTable(ply->sfx);
+    return SFX_GetCnvTable(ply->sfx, index);
 }
 
 void mwPlyFxCnvFrmZ16(MwsfdPly *ply, MwsfdFrm *frm, int arg)
 {
-    MwsfdCnvPrm prm;
+    SfxFrame prm;
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
@@ -404,7 +338,7 @@ void mwPlyFxCnvFrmZ16(MwsfdPly *ply, MwsfdFrm *frm, int arg)
 
 void mwPlyFxCnvFrmZ32(MwsfdPly *ply, MwsfdFrm *frm, int arg)
 {
-    MwsfdCnvPrm prm;
+    SfxFrame prm;
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
@@ -465,14 +399,14 @@ void FUN_00297ee8(MwsfdPly *ply, int value)
     SFX_SetOutBufSize(MWSFSFX_GetSfxHn(ply), value);
 }
 
-void MWSFSFX_SetColAdj(MwsfdPly *ply)
+void MWSFSFX_SetColAdj(MwsfdPly *ply, int value)
 {
-    FUN_002b3e58(ply->sfx);
+    FUN_002b3e58(ply->sfx, value);
 }
 
-void MWSFD_SetColAdj(MwsfdPly *ply)
+void MWSFD_SetColAdj(MwsfdPly *ply, int value)
 {
-    MWSFSFX_SetColAdj(ply);
+    MWSFSFX_SetColAdj(ply, value);
 }
 
 void MWSFD_GetColAdj(MwsfdPly *ply)
@@ -485,13 +419,13 @@ void FUN_00297f60(MwsfdPly *ply, int a, int b)
     mwPlyFxGetOutBufSize(ply, a, b, 0);
 }
 
-void mwPlyFxSetOutBufSize(MwsfdPly *ply, int a, int b)
+void mwPlyFxSetOutBufSize(MwsfdPly *ply, int *width, int *height)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
         MWSFSVM_Error(DAT_004f4288);
         return;
     }
-    SFX_GetOutBufSize(MWSFSFX_GetSfxHn(ply), a, b);
+    SFX_GetOutBufSize(MWSFSFX_GetSfxHn(ply), width, height);
 }
 
 void FUN_00297ff8(MwsfdPly *ply, int a, int b)
@@ -499,9 +433,9 @@ void FUN_00297ff8(MwsfdPly *ply, int a, int b)
     mwPlyFxGetOutBufSize(ply, a, b, 0);
 }
 
-void FUN_00298010(MwsfdPly *ply, int a, int b)
+void FUN_00298010(MwsfdPly *ply, int *width, int *height)
 {
-    mwPlyFxSetOutBufSize(ply, a, b);
+    mwPlyFxSetOutBufSize(ply, width, height);
 }
 
 void mwPlyFxGetOutBufSize(MwsfdPly *ply, int a, int b, int c)
@@ -741,14 +675,14 @@ int MWSFTAG_ClearUsrSj(MwsfdPly *ply)
     return 0;
 }
 
-void mwPlyFxSetZclip(MwsfdPly *ply)
+void mwPlyFxSetZclip(MwsfdPly *ply, float zmin, float zmax)
 {
-    SFX_SetZclip(ply->sfx);
+    SFX_SetZclip(ply->sfx, zmin, zmax);
 }
 
-void mwPlyFxGetZclip(MwsfdPly *ply)
+void mwPlyFxGetZclip(MwsfdPly *ply, float *zmin, float *zmax)
 {
-    SFX_GetZclip(ply->sfx);
+    SFX_GetZclip(ply->sfx, zmin, zmax);
 }
 
 void MWSFD_GetAinfAll(MwsfdPly *ply, char **addr, int *size)
@@ -768,13 +702,13 @@ void MWSFD_GetAinfFx(MwsfdPly *ply, char **data, int *size)
     *size = zinf.size;
 }
 
-void MWSFD_GetZfrmRange(MwsfdPly *ply, MwsfdFrm *frm, int a, int b)
+void MWSFD_GetZfrmRange(MwsfdPly *ply, MwsfdFrm *frm, int *first, int *second)
 {
-    MwsfdCnvPrm prm;
+    SfxFrame prm;
     void *sfx = MWSFSFX_GetSfxHn(ply);
 
     mwsfsfx_CnvFrmInfToSfx(ply, frm, &prm);
-    SFX_GetZfrmRange(sfx, &prm, a, b);
+    SFX_GetZfrmRange(sfx, &prm, first, second);
 }
 
 void mwPlyFxSetLumiPrm(MwsfdPly *ply, int a, int b, int mode)
@@ -805,14 +739,14 @@ void FUN_002988f0(MwsfdPly *ply, unsigned char a, unsigned char b, unsigned char
     FUN_002b3e00(MWSFSFX_GetSfxHn(ply), a, b, c);
 }
 
-void FUN_00298940(MwsfdPly *ply, int a, int b, int c)
+void FUN_00298940(MwsfdPly *ply, unsigned char *a, unsigned char *b, unsigned char *c)
 {
     SFX_GetALumiPrm(MWSFSFX_GetSfxHn(ply), a, b, c);
 }
 
 void MWSFD_MakeTblZ16(MwsfdPly *ply, MwsfdFrm *frm)
 {
-    MwsfdCnvPrm prm;
+    SfxFrame prm;
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
@@ -830,7 +764,7 @@ void MWSFD_MakeTblZ16(MwsfdPly *ply, MwsfdFrm *frm)
 
 void MWSFD_MakeTblZ32(MwsfdPly *ply, MwsfdFrm *frm)
 {
-    MwsfdCnvPrm prm;
+    SfxFrame prm;
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
@@ -846,14 +780,14 @@ void MWSFD_MakeTblZ32(MwsfdPly *ply, MwsfdFrm *frm)
     SFX_MakeTblZ32(sfx, &prm);
 }
 
-void mwsfsfx_SetPicUsr(MwsfdPly *ply)
+void mwsfsfx_SetPicUsr(MwsfdPly *ply, char *ud, int size)
 {
-    FUN_002b40b0(ply->sfx);
+    FUN_002b40b0(ply->sfx, ud, size);
 }
 
-void MWSFSFX_SetPicUsrDat(MwsfdPly *ply)
+int MWSFSFX_SetPicUsrDat(MwsfdPly *ply)
 {
-    FUN_002b4110(ply->sfx);
+    return FUN_002b4110(ply->sfx);
 }
 
 void MWSFSFX_IsFrmCcs(MwsfdPly *ply)
@@ -861,9 +795,9 @@ void MWSFSFX_IsFrmCcs(MwsfdPly *ply)
     FUN_002b40d0(ply->sfx);
 }
 
-void MWSFD_IsFrmDivField(MwsfdPly *ply)
+int MWSFD_IsFrmDivField(MwsfdPly *ply)
 {
-    FUN_002b40f0(ply->sfx);
+    return FUN_002b40f0(ply->sfx);
 }
 
 void MWSFD_IsFrmCcs(MwsfdPly *ply)
@@ -906,24 +840,24 @@ void FUN_00298bd8(MwsfdPly *ply)
     FUN_002b41f0(ply->sfx);
 }
 
-void MWSFD_SetSplitField(MwsfdPly *ply)
+void MWSFD_SetSplitField(MwsfdPly *ply, int value)
 {
-    SFX_SetColAdj(ply->sfx);
+    SFX_SetColAdj(ply->sfx, value);
 }
 
-void MWSFD_GetSplitField(MwsfdPly *ply)
+int MWSFD_GetSplitField(MwsfdPly *ply)
 {
-    SFX_GetColAdj(ply->sfx);
+    return SFX_GetColAdj(ply->sfx);
 }
 
-void MWSFD_SetProgOut(MwsfdPly *ply)
+void MWSFD_SetProgOut(MwsfdPly *ply, int value)
 {
-    SFX_SetSplitField(ply->sfx);
+    SFX_SetSplitField(ply->sfx, value);
 }
 
-void MWSFD_GetProgOut(MwsfdPly *ply)
+int MWSFD_GetProgOut(MwsfdPly *ply)
 {
-    SFX_GetSplitField(ply->sfx);
+    return SFX_GetSplitField(ply->sfx);
 }
 
 void FUN_00298c50(void)
