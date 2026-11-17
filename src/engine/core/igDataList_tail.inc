@@ -34,7 +34,7 @@ int List_Resize(void *list, int count, int extra2)
 
 static inline int countOf(const igDataList *list) { return list->_count; }
 
-extern "C" void List_InsertBytes(igDataList *list, int index, int count, int src, int stride) {
+extern "C" void List_InsertBytes(igDataList *list, int index, int count, const void *src, int stride) {
     int oldCount;
     int newCount;
     int at;

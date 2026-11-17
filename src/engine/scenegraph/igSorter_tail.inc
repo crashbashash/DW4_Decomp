@@ -176,7 +176,7 @@ void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2) {
         List_Resize((void *)l, n + 1, 4);
     }
     l->data[n] = v;
-    List_AppendWords(((struct LA_1dc400 *)arg0->_lightAttrs)->l, ((igNodeList *)arg1->_childList)->_count, ((igNodeList *)arg1->_childList)->_data);
+    List_AppendWords((igDataList *)(((struct LA_1dc400 *)arg0->_lightAttrs)->l), ((igNodeList *)arg1->_childList)->_count, (const int *)(((igNodeList *)arg1->_childList)->_data));
 }
 
 void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {

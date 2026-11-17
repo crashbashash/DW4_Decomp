@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igEnumMetaField_metaObject;
+void **igEnumMetaField_Create(int pool);
 
 #ifdef __cplusplus
 }

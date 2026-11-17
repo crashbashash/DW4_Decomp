@@ -223,11 +223,11 @@ void DepthOfField_UpdateProjections(DepthOfFieldNode *dof) {
         dof->_fovY = dof->_fovX / dof->_aspect;
     }
     igMatrix44fView nearProjection;
-    igMatrix44f_MakePerspective(&nearProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
+    igMatrix44f_MakePerspective((float *)&nearProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
                  dof->_nearPlane, nearRegionFar(*dof));
     ((ProjectionMatrixAttrView *)g_depthOfFieldNearProjectionAttr)->setMatrix(&nearProjection);
     igMatrix44fView farProjection;
-    igMatrix44f_MakePerspective(&farProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
+    igMatrix44f_MakePerspective((float *)&farProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
                  dof->_focusDistance, dof->_farPlane);
     ((ProjectionMatrixAttrView *)g_depthOfFieldFarProjectionAttr)->setMatrix(&farProjection);
 }

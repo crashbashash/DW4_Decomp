@@ -119,8 +119,8 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         }
         first = m->_numAttrStacks;
         end = first + units;
-        ObjectList_ResizeRetained(m->_attrDefaults, end);
-        ObjectList_ResizeRetained(m->_attrStacks, end);
+        ObjectList_ResizeRetained((igTDataList<igObject *> *)m->_attrDefaults, end);
+        ObjectList_ResizeRetained((igTDataList<igObject *> *)m->_attrStacks, end);
         m->_attrStackIndexTable[id] = first;
         m->_numAttrStacks = end;
         for (i = 0; i < units; i++, first++) {

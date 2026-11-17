@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igBoolMetaField_metaObject;
+void igBoolMetaField_SetDefaultValue(void **self, char value);
 
 #ifdef __cplusplus
 }

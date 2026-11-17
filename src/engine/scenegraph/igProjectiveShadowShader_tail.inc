@@ -14,7 +14,7 @@ void FUN_001d4180(void) {
     DAT_00562850[0] = FUN_001384a0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    g_shadowTextureFunctionAttr0[0] = FUN_00131c60((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_shadowTextureFunctionAttr0[0] = (igTextureFunctionAttr *)FUN_00131c60((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562870[0] = FUN_00131c60((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
@@ -388,7 +388,7 @@ void FUN_001d6060(O_1d6060 *arg0, char *arg1) {
         FUN_00191860(&sp70, arg0->f224, arg0->f220, arg0->f216, arg0->f212, arg0->f124, arg0->f128);
     } else {
         t = 0.0174532924f * (2.0f * arg0->f56);
-        igMatrix44f_MakePerspective(&sp70, t, t, 1.0f, arg0->f124, arg0->f128);
+        igMatrix44f_MakePerspective((float *)&sp70, t, t, 1.0f, arg0->f124, arg0->f128);
     }
     arg0->f88->vX(&spB0);
     arg0->f92->vX(&sp70);
@@ -400,7 +400,7 @@ void FUN_001d6190(struct S_1d6190 *arg0, char *arg1) {
     struct Src_1d6190 *t;
     if (arg0->f104 == 0) {
         igProjectiveShadowShader_ConfigureSharedAttrs();
-        igProjectiveShadowShader_Initialize(arg0);
+        igProjectiveShadowShader_Initialize((igProjectiveShadowShader *)arg0);
         arg0->f104 = 1;
     }
     t = arg0->src;

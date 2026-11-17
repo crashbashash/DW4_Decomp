@@ -1,9 +1,9 @@
 igMetaObject *g_igUnsignedShortList_metaObject;
 int g_igUnsignedShortList_dataDescriptorCell;
 
-void igUnsignedShortList_Create(int pool) {
+igUnsignedShortList *igUnsignedShortList_Create(int pool) {
     igUnsignedShortList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igUnsignedShortList_metaObject, (igMemoryPoolView *)pool);
+    return (igUnsignedShortList *)igMetaObject_CreateInstance(g_igUnsignedShortList_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igUnsignedShortList_GetOrCreateMetaObject(void) {

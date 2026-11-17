@@ -22,22 +22,22 @@ void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
     char *s;
     igSmartPointer<IniValueObject> text(((IniValueObject *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
     for (i = 0; i < igObjectStringMap_GetCount(list); i++) {
-        value = igObjectStringMap_GetObjectAt(list, i);
+        value = (IniValueObject *)igObjectStringMap_GetObjectAt(list, i);
         if (igObject_IsKindOf(value, (igMetaObject *)FUN_001e4e30()) != 0) {
             igStringObj_SetInt((int)text.p, value->value.i, "%d");
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
-            igDriverDatabase_SetSubPropertyValue(target, 10, igObjectStringMap_GetNameAt(list, i), s);
+            igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)target, 10, (const char *)igObjectStringMap_GetNameAt(list, i), s);
         } else if (igObject_IsKindOf(value, (igMetaObject *)FUN_001e4fc0()) != 0) {
-            igStringObj_SetFloat(text.p, "%f", value->value.f);
+            igStringObj_SetFloat((int)text.p, "%f", value->value.f);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
-            igDriverDatabase_SetSubPropertyValue(target, 11, igObjectStringMap_GetNameAt(list, i), s);
+            igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)target, 11, (const char *)igObjectStringMap_GetNameAt(list, i), s);
         } else if (igObject_IsKindOf(value, (igMetaObject *)FUN_001e5c50()) != 0) {
-            igStringObj_SetBool(text.p, value->value.b, 0);
+            igStringObj_SetBool((int)text.p, value->value.b, 0);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
-            igDriverDatabase_SetSubPropertyValue(target, 12, igObjectStringMap_GetNameAt(list, i), s);
+            igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)target, 12, (const char *)igObjectStringMap_GetNameAt(list, i), s);
         }
     }
 }
@@ -47,18 +47,18 @@ void FUN_001cb1f0(void *self, char *name, int ini, int section, DW4VC_96_1 *targ
     if (found.get() != 0) {
         target->vX((int)(found.get()));
         FUN_001cb010(self, (IniValueTarget *)found.get(), values);
-        igDriverDatabase_ApplyToRegistry(found.get(), ini, section, 1);
+        igDriverDatabase_ApplyToRegistry((igDriverDatabase *)(found.get()), ini, section, 1);
     }
 }
 
 void FUN_001cb2d0(void *self, void *types, const char *key, void *target) {
     int index;
 
-    index = igObjectStringMap_GetIndexByName(types, key);
+    index = igObjectStringMap_GetIndexByName((igObjectStringMap *)types, (const char *)key);
     if (index != -1) {
-        igObjectStringMap_RemoveAt(types, index);
+        igObjectStringMap_RemoveAt((igObjectStringMap *)types, index);
     }
-    igObjectStringMap_Add(types, key, *(int *)((char *)(target) + 28));
+    igObjectStringMap_Add((igObjectStringMap *)types, (const char *)key, (void *)(*(int *)((char *)(target) + 28)));
 }
 
 static inline ShaderObject_1ca6c0 *asMaterial(ShaderObject_1ca6c0 *o) {
@@ -121,7 +121,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         return 0;
     }
     igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
-    if (igRegistry_GetValueStringList(self->ini, section, "passes", names.p, 0) == 0) {
+    if (igRegistry_GetValueStringList((void *)self->ini, section, "passes", (igStringRefList *)names.p, 0) == 0) {
         return 0;
     }
     IniStrRef infoName((char *)0);
@@ -133,7 +133,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         infoSection = igRegistry_GetSectionIndex((igRegistry *)self->ini, infoName.p, 0);
         info = igSmartPointer<ShaderObject_1ca6c0>(FUN_001ca6c0(self, infoName.p, 1));
         igSmartPointer<ShaderNameList> pending((ShaderNameList *)igStringRefList_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
-        igRegistry_GetValueStringList(self->ini, infoSection, "fields", pending.p, 0);
+        igRegistry_GetValueStringList((void *)self->ini, infoSection, "fields", (igStringRefList *)pending.p, 0);
         igSmartPointer<ShaderStringObject> value((ShaderStringObject *)igStringObj_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
         igSmartPointer<ShaderStringObject> key((ShaderStringObject *)igStringObj_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
         while (pending.p->count != 0) {

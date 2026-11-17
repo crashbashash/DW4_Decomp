@@ -16,7 +16,7 @@ int FUN_001ce400(IniStringObject **out, char *path) {
         return;
     }
     void *allocator = g_useOwnerAllocator != 0 ? ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent)) : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
-    igSmartPointer<IniFileObject> file(((IniFileObject *)igFile_Create(allocator)));
+    igSmartPointer<IniFileObject> file(((IniFileObject *)igFile_Create((int)allocator)));
     StringObjectRef result(0);
     int opened;
     {

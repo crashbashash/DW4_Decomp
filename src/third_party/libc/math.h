@@ -29,6 +29,7 @@ float acosf(float);
 float atanf(float);
 float atan2f(float, float);
 float sqrtf(float);
+float fmodf(float, float);
 #ifdef __cplusplus
 }
 #endif

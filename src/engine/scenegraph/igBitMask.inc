@@ -51,7 +51,7 @@ void thunk_igBitMask_GetMetaObject(void) {
 }
 
 int FUN_001a4f00(void) {
-    return g_igUnsignedIntList_metaObject[0];
+    return (int)g_igUnsignedIntList_metaObject;
 }
 
 static FieldFactory g_igBitMask_ctorTable[] = {

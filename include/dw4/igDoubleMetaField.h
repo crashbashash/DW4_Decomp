@@ -9,6 +9,8 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igDoubleMetaField_metaObject;
+void igDoubleMetaField_Create(int pool);
+void igDoubleMetaField_SetDefaultDouble(void **field, double value);
 
 #ifdef __cplusplus
 }

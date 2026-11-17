@@ -721,16 +721,16 @@ void igObject_VisitFields(igObjectDispatchView *object,Visitor callback,void *co
     }
 }
 
-void igObject_Copy(int dest, int source, int copyMode) {
+void igObject_Copy(igObject *dest, igObject *source, int copyMode) {
     switch (copyMode) {
     case 1:
         igObject_DeepCopy((igObjectDispatchView *)dest, (igObjectDispatchView *)source);
         break;
     case 0:
-        igObject_ShallowCopy((igObjectDispatchView *)dest, source);
+        igObject_ShallowCopy((igObjectDispatchView *)dest, (int)source);
         break;
     case 2:
-        igObject_CopyFields((igObjectDispatchView *)dest, source);
+        igObject_CopyFields((igObjectDispatchView *)dest, (int)source);
         break;
     }
 }
@@ -745,7 +745,7 @@ int igObject_CloneViaMetadata(void **source, int copyMode) {
 
     metaObject = (int)((igObjectDispatchView *)(source))->GetMeta();
     copy = (int)igMetaObject_CreateInstance((igMetaObject *)metaObject, (igMemoryPoolView *)(igObject_GetAllocator((igObject *)source)));
-    igObject_Copy(copy, (int)source, copyMode);
+    igObject_Copy((igObject *)copy, (igObject *)source, copyMode);
     return copy;
 }
 

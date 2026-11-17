@@ -9,7 +9,7 @@ igSmartPointer<igObject> igPsx2Folder_ListEntries(igPsx2Folder *self) {
     igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
     while (sceDread(handle, &entry) != 0) {
         igStringRef text(entry.bytes + 64);
-        StringList_AppendRetained(list.p, &text);
+        StringList_AppendRetained((igStringRefList *)list.p, (char *const *)&text);
     }
     sceDclose(handle);
     return list;

@@ -5,7 +5,7 @@ int Gap__Bec__ParticleInfo__vfunc_22(ParticleInfo *self, int name) {
     if (strcmp((char *)name, (char *)self->_name) == 0) {
         return self->_sceneGraph;
     }
-    return igObject_GetFieldValueByName(self, name);
+    return igObject_GetFieldValueByName((void **)self, name);
 }
 
 void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
@@ -74,8 +74,8 @@ void igSceneInfo_CollectCameras(igSceneInfo *info) {
 
 void igSceneInfo_ComputeAnimationRange(igSceneInfo *info) {
     ChildOwner *self = (ChildOwner *)info;
-    igSmartPointer<ChildObject> created(igDirectory_Create(igObject_GetAllocator((igObject *)self)));
-    igDirectory_AddObjectRecursive(created.get(), self->f20, 0, 0);
+    igSmartPointer<ChildObject> created((ChildObject *)igDirectory_Create((int)igObject_GetAllocator((igObject *)self)));
+    igDirectory_AddObjectRecursive((int)(created.get()), self->f20, 0, 0);
     FUN_001d6790((OO_1d6790 *)self, (AA *)(created.get()));
 }
 
@@ -93,8 +93,8 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     temp_s3 = arg1->n;
     var_s2 = 0;
     while (var_s2 < temp_s3) {
-        temp_v0 = igDirectory_GetEntry(arg1, var_s2);
-        if (0 != igObject_IsKindOf((igObject *)temp_v0, (igMetaObject *)g_igObjectDirEntry_metaObject[0])) {
+        temp_v0 = (EE_1d6790 *)igDirectory_GetEntry((int *)arg1, var_s2);
+        if (0 != igObject_IsKindOf((igObject *)temp_v0, g_igObjectDirEntry_metaObject)) {
             temp_s6 = temp_v0->f24;
             if (igObject_IsKindOf((igObject *)temp_s6, g_igTransformSource_metaObject) != 0) {
                 temp_s1 = ((DW4VC_124_0_1d6790 *)(temp_s6))->vX();
@@ -195,7 +195,7 @@ void FUN_001d6a70(void) {
   white.x = 1.0f; white.y = 1.0f; white.z = 1.0f; white.w = 1.0f;
   tint = DAT_00562940[0];
   tint->color = white;
-  tint->w60 = igVec4f_PackColor(&white, 1, 0x3f800000, lens);
+  tint->w60 = igVec4f_PackColor((float *)&white, 1);
   DAT_00562940[0]->mode = 3;
   DAT_00562948[0]->set(5);
   DAT_00562948[0]->select(0);
@@ -347,7 +347,7 @@ void FUN_001d7630(void *arg0, float *arg1) {
         FUN_00191860((void *)m2, t->f224, t->f220, t->f216, t->f212, t->f64, t->f68);
     } else {
         float f12 = 0.0174532924f * (2.0f * t->f60);
-        igMatrix44f_MakePerspective((void *)m2, f12, f12, 1.0f, t->f64, t->f68);
+        igMatrix44f_MakePerspective((float *)m2, f12, f12, 1.0f, t->f64, t->f68);
     }
     t->f92->vX(m1);
     t->f96->vX(m2);
@@ -385,8 +385,8 @@ void FUN_001d7910(void) {
     int n;
     int j;
     void **m;
-    igObject_Copy(((void *)DAT_005628e0[0]), ((void *)g_igCommonTraversal_travProcs[0]), 1);
-    igObject_Copy(((void *)DAT_005628e8[0]), ((void *)g_igCommonTraversal_travProcs[0]), 1);
+    igObject_Copy((igObject *)DAT_005628e0[0], (igObject *)g_igCommonTraversal_travProcs[0], 1);
+    igObject_Copy((igObject *)DAT_005628e8[0], (igObject *)g_igCommonTraversal_travProcs[0], 1);
     clearBytes((char *)metas, 28);
     metas[0] = ((void *)g_igLightStateSet_metaObject);
     metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);

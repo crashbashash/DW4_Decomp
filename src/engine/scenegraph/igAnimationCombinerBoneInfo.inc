@@ -140,9 +140,9 @@ void igAnimationCombinerBoneInfo_InitFields(void) {
     *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_00194dd0();
     *(char *)((char *)(temp_s1_2) + 36) = 2;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6)));
-    igIntMetaField_SetDefault(temp_v0, 1);
+    igIntMetaField_SetDefault((void **)temp_v0, 1);
     *(char *)((char *)(temp_v0) + 38) = 0;
-    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7)), -1);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7), -1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationCombinerBoneInfo_fieldTable, g_igAnimationCombinerBoneInfo_fieldHandles, g_igAnimationCombinerBoneInfo_fieldOffsets, temp_s2);
 }
 

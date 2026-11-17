@@ -2,6 +2,7 @@
 #define DW4_IGNONREFCOUNTEDOBJECTLIST_H
 
 /* igNonRefCountedObjectList: the list class's registration. */
+struct CallbackArray;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -9,6 +10,7 @@ extern "C" {
 #endif
 
 struct igMetaObject *igNonRefCountedObjectList_GetPublishedMetaObject(void);
+struct CallbackArray *igNonRefCountedObjectList_Register(void);
 
 #ifdef __cplusplus
 }

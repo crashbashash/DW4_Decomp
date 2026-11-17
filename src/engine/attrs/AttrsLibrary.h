@@ -144,7 +144,6 @@ extern "C" void igViewportAttr_InitFields(void);
 typedef struct StringRefWord { char *value; } StringRefWord;
 
 extern "C" StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage);
-extern "C" igMetaObject *g_igVertexBlendStateAttr_metaObject;
 extern "C" igMetaObject *igVertexBlendStateAttr_GetMetaObject(void);
 struct Obj { int *vt; char pad[12]; };
 extern "C" int g_igVertexBlendStateAttr_vtable[4];
@@ -1126,6 +1125,7 @@ extern "C" void thunk_FUN_0013cf70(void);
 struct Rc { int w0; int refs; };
 extern "C" void *FUN_0014bff0(...);
 #include "dw4/igVertexArrayLock.h"
+#include "dw4/igVertexBlendStateAttr.h"
 extern "C" void FUN_00192360(const float *matrix, float *out, float *in, int count);
 extern "C" void FUN_0013dbb0(int component, igVertexArrayView *vertexArray, const float *matrix);
 extern "C" void FUN_00192430(const float *matrix, float *out, float *in, unsigned int count);

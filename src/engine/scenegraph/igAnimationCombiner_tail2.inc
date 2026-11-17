@@ -31,7 +31,7 @@ void Gap__Sg__igAnimationCombiner__vfunc_17(CombinerView *c) {
             if (c->_boneMatrixArray == 0) {
                 float *m;
                 int k;
-                igMetaField_AllocateArray(&result1, g_igAnimationCombiner_boneMatrixArrayMetaField, c, boneCount, (int)igObject_GetAllocator((igObject *)c));
+                igMetaField_AllocateArray(&result1, (igMemoryRefMetaField *)g_igAnimationCombiner_boneMatrixArrayMetaField, c, boneCount, igObject_GetAllocator((igObject *)c));
                 m = c->_boneMatrixArray;
                 for (k = 0; k < boneCount; k++) {
                     igMatrix44f_SetIdentity(m);
@@ -41,7 +41,7 @@ void Gap__Sg__igAnimationCombiner__vfunc_17(CombinerView *c) {
             if (blendCount != 0 && c->_blendMatrixArray == 0) {
                 float *m;
                 int k;
-                igMetaField_AllocateArray(&result2, g_igAnimationCombiner_blendMatrixArrayMetaField, c, blendCount, (int)igObject_GetAllocator((igObject *)c));
+                igMetaField_AllocateArray(&result2, (igMemoryRefMetaField *)g_igAnimationCombiner_blendMatrixArrayMetaField, c, blendCount, igObject_GetAllocator((igObject *)c));
                 m = c->_blendMatrixArray;
                 for (k = 0; k < blendCount; k++) {
                     igMatrix44f_SetIdentity(m);

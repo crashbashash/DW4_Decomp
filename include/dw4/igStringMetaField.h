@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igStringMetaField_metaObject;
+int igStrcasecmp(const char *s1, const char *s2);
 
 #ifdef __cplusplus
 }

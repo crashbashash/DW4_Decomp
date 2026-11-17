@@ -49,14 +49,12 @@ typedef enum Intersection {
     kDisjoint,
     kIntersecting
 } Intersection;
-int igAABox_Transform(...);
 
 typedef void (*igMetaObjectCallback)();
 igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
 igMetaField *igEnumMetaField_Create(void *);
 igMetaField *igFloatMetaField_Create(void *);
 igMetaField *igIntMetaField_Create(void *);
-igMetaField *igVec3fMetaField_CreateInstance(void *);
 void FUN_00187190(void);
 void FUN_00187450(void);
 void FUN_001877c0(void);
@@ -214,7 +212,6 @@ int igFloatMetaField_SetDefault(int, float);
 void FUN_0018d480(void);
 
 
-void igRayList_EnsureRegistered(void);
 igMetaObject *igRayList_GetMetaObject(void);
 
 extern int g_igRayList_vtable[4];
@@ -223,7 +220,6 @@ CallbackArray *igRayList_Register(void);
 void thunk_igRayList_GetMetaObject(void);
 
 
-void igRay_EnsureRegistered(void);
 
 
 igMetaObject *igRay_GetMetaObject(void);
@@ -466,7 +462,7 @@ int igAABox_IntersectPoint(struct B4 *arg0, struct V *arg1);
 void igAABox_ExtendByRay(igAABox *box, igRay *ray);
 
 void FUN_0018b890(struct Box *arg0, float *arg1);
-int thunk_igAABox_Transform();
+void thunk_igAABox_Transform(igAABox *box, const float *matrix);
 void igAABox_GetCenter(float *arg0, float *arg1);
 void FUN_0018b730(igAABox *box, igAABox *other);
 void FUN_0018b7d0(igAABox *box, igSphere *sphere);
@@ -617,7 +613,6 @@ struct igVec3f2 {
     void subtractInto(float *out, const float *o) const { out[0] = x - o[0]; out[1] = y - o[1]; out[2] = z - o[2]; }
 };
 
-void igRay_Transform(igRay *ray, const void *matrix);
 Intersection FUN_0018d9b0(igSphere *sphere, void *other);
 void FUN_0018dd20(struct S4 *p, struct S4 *q);
 void thunk_FUN_0018d630(igSphere *sphere, const float *matrix);
@@ -824,6 +819,14 @@ void FUN_00190f50(float *arg0, float *arg1, float fparg0);
 }
 
 #include "dw4/igMathConstants.h"
+#include "dw4/igAABox.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igRay.h"
+#include "dw4/igRayList.h"
+#include "dw4/igVec3fList.h"
+#include "dw4/igVec3fMetaField.h"
+#include "dw4/igVec4f.h"
+#include "dw4/igVolume.h"
 
 extern "C" {
 

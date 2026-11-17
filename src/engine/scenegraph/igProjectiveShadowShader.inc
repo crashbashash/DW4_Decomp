@@ -418,16 +418,16 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     v2[0] = 0; v2[1] = -1.0f; v2[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0, v2);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)), 30.0f);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2), 30.0f);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     temp_s2->f56 = (int)igNodeList_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
     temp_s2->f56 = (int)igNodeList_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)), 0.300000012f);
-    igIntMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)), 0x80);
-    igIntMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)), 0x80);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)), 0.5f);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5), 0.300000012f);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6), 0x80);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7), 0x80);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8), 0.5f);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
     temp_s2->f56 = FUN_0013ad40();
     temp_s2->f52 = 1;
@@ -449,7 +449,7 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_v0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE));
-    igIntMetaField_SetDefault(temp_v0, 0);
+    igIntMetaField_SetDefault((void **)temp_v0, 0);
     temp_v0->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF));
     temp_s2->f56 = (int)igGeometry_GetOrCreateMetaObject();
@@ -462,9 +462,9 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2->f56 = (int)igColorAttr_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)), 1);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x13)), 0.100000001f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14)), 1000.0f);
+    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12), 1);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x13), 0.100000001f);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14), 1000.0f);
     temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15));
     v3[0] = 1.0f; v3[1] = 0; v3[2] = 0;
     igVec3fMetaField_SetDefault(temp_a0, v3);
@@ -472,8 +472,8 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2->f56 = FUN_00131800();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x17)), 1);
-    igBoolMetaField_SetDefaultValue(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18)), 1);
+    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x17), 1);
+    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18), 1);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19));
     temp_s2->f56 = FUN_001341f0();
     temp_s2->f52 = 1;
@@ -528,10 +528,10 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2->f56 = FUN_00132850();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x28)), 5.0f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x29)), -5.0f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2A)), 5.0f);
-    igFloatMetaField_SetDefault(((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2B)), -5.0f);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x28), 5.0f);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x29), -5.0f);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2A), 5.0f);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2B), -5.0f);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2C));
     temp_s2->f56 = FUN_00131160();
     temp_s2->f52 = 1;
@@ -541,7 +541,7 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_v0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x2F));
-    igBoolMetaField_SetDefaultValue(temp_v0, 1);
+    igBoolMetaField_SetDefaultValue((void **)temp_v0, 1);
     temp_v0->f38 = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igProjectiveShadowShader_fieldTable, g_igProjectiveShadowShader_fieldHandles, g_igProjectiveShadowShader_fieldOffsets, temp_s1);
 }

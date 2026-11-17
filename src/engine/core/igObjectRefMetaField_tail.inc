@@ -271,12 +271,12 @@ void igObjectRefMetaField_Destruct(igObjectRefMetaField *self) {
     igRefMetaField_Destruct((igRefMetaField *)self);
 }
 
-void igObjectStringMap_Add(igObjectStringMap *self, int name, void *object) {
+void igObjectStringMap_Add(igObjectStringMap *self, const char *name, void *object) {
     igObject *entry;
     igObject *held;
 
     *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)igObject_GetAllocator((igObject *)self))));
-    igNamedObject_SetName((igNamedObject *)entry, (const char *)name);
+    igNamedObject_SetName((igNamedObject *)entry, name);
     ObjectList_AppendRetained((igObjectList *)self->_names, (igObject *)entry);
     ObjectList_AppendRetained((igObjectList *)self->_data, (igObject *)object);
     held = entry;
@@ -288,7 +288,7 @@ void igObjectStringMap_Add(igObjectStringMap *self, int name, void *object) {
     }
 }
 
-int igObjectStringMap_GetObject(void *self, int name) {
+int igObjectStringMap_GetObject(void *self, const char *name) {
     int index;
 
     index = igObjectStringMap_GetIndexByName((igObjectStringMap *)self, name);
@@ -298,8 +298,8 @@ int igObjectStringMap_GetObject(void *self, int name) {
     return ((int *)((igObjectList *)((igObjectStringMap *)self)->_data)->_data)[index];
 }
 
-int igObjectStringMap_GetIndexByName(igObjectStringMap *map, int name) {
-    igObject *field = ((igObject *)igProperty_FindByName((igObjectList *)map->_names, (igMetaField *)g_propertyNameField, (const char *)name));
+int igObjectStringMap_GetIndexByName(igObjectStringMap *map, const char *name) {
+    igObject *field = ((igObject *)igProperty_FindByName((igObjectList *)map->_names, (igMetaField *)g_propertyNameField, name));
     if (field == 0) {
         return -1;
     }

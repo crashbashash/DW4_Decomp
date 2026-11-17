@@ -585,7 +585,7 @@ igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
             continue;
         }
         igStringRef name(entry.name);
-        StringList_AppendRetained(list.p, &name);
+        StringList_AppendRetained((igStringRefList *)list.p, (char *const *)&name);
     }
     sceDclose(handle);
     return list;
@@ -614,7 +614,7 @@ igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
             continue;
         }
         igStringRef name(entry.name);
-        StringList_AppendRetained(list.p, &name);
+        StringList_AppendRetained((igStringRefList *)list.p, (char *const *)&name);
     }
     sceDclose(handle);
     return list;

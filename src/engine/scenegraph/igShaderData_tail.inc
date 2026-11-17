@@ -4,10 +4,10 @@ extern "C" void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count);
 /* Resizes the push, pop and child lists to {count}; child slots past the old count are released and cleared. */
 void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count) {
     int i;
-    ObjectList_ResizeRetained(self->_attrPushLists, count);
-    ObjectList_ResizeRetained(self->_attrPopLists, count);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_attrPushLists, count);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_attrPopLists, count);
     i = self->_childLists->count;
-    ObjectList_ResizeRetained(self->_childLists, count);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_childLists, count);
     /* matching construct: check.py — the loop guard is emitted after the loop and re-enters at the test */
     goto guard;
 next:
@@ -189,8 +189,8 @@ void Gap__Sg__igShaderData__vfunc_17(S0_1d8930 *arg0) {
     temp_a0 = (void *)(arg0->f14);
     temp_a1 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8);
     if (temp_a1 != *(int *)((char *)(temp_a0) + 8)) {
-        ObjectList_ResizeRetained(temp_a0, temp_a1);
-        ObjectList_ClearRetainedPreserveCount(arg0->f14);
+        ObjectList_ResizeRetained((igTDataList<igObject *> *)temp_a0, temp_a1);
+        ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)arg0->f14);
     }
 }
 

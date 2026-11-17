@@ -122,7 +122,7 @@ void igTraversal_InitFields(void) {
     temp_s0 = (void *)g_igTraversal_metaObject;
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTraversal_ctorTable, 5);
-    igLongMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)), -1);
+    igLongMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019a720();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTraversal_fieldTable, g_igTraversal_fieldHandles, g_igTraversal_fieldOffsets, temp_s2);

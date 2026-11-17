@@ -9,6 +9,8 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igUnsignedLongMetaField_metaObject;
+void **igUnsignedLongMetaField_Create(int allocator);
+void igUnsignedLongMetaField_SetDefaultValue(void **field, unsigned long long value);
 
 #ifdef __cplusplus
 }

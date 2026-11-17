@@ -23,6 +23,10 @@ void igStringObj_ToLower(struct igStringObj *self);
 /* Keeps the text from its last dot on, or empties it when a directory separator comes first. */
 void igStringObj_KeepExtension(struct igStringObj *self);
 void igStringObj_StripDirectory(struct igStringObj *self);
+void igStringObj_SetFloat(int string, const char *format, float value);
+void igStringObj_SetBool(int self, int value, int upperCase);
+int igStringObj_HasFileExtension(struct igStringObj *self, char *extension);
+extern struct igMetaObject *g_igStringObj_metaObject;
 
 #ifdef __cplusplus
 }

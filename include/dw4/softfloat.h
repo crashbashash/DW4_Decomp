@@ -30,6 +30,8 @@ long long __fixsfdi(float a);
 unsigned long long __fixunsdfdi(double a);
 unsigned long long __fixunssfdi(float a);
 #endif
+int _dpflt(double a, double b);
+int dptoli(double value);
 
 #ifdef __cplusplus
 }

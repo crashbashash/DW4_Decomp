@@ -2052,7 +2052,6 @@ public:
     virtual void v50(int set, unsigned int index, void *textureCoord);
 };
 /* Home at landing: include/dw4/igObject.h (core declaration slice). */
-extern "C" void igObject_Copy(int dest, int source, int copyMode);
 /* igParticleArray's fields with the types their meta fields give them (reflected.h holds the references as words). */
 struct igParticleArrayRefs : public igObject {
     igSmartPointer<igParticleFormat> _particleFormat;

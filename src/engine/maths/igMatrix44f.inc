@@ -365,7 +365,7 @@ void FUN_00191910(float *m, float l, float r, float b, float t, float n, float f
     m[15] = 0;
 }
 
-void igMatrix44f_MakePerspective(int arg0, float a, float b, float c, float d, float e) {
+void igMatrix44f_MakePerspective(float *matrix, float a, float b, float c, float d, float e) {
     float t23;
     float t14;
 
@@ -376,7 +376,7 @@ void igMatrix44f_MakePerspective(int arg0, float a, float b, float c, float d, f
     }
     t23 = d * -tanf(0.5f * a);
     t14 = d * -tanf(0.5f * b);
-    FUN_00191910((float *)arg0, t23, -t23, t14, -t14, d, e);
+    FUN_00191910(matrix, t23, -t23, t14, -t14, d, e);
 }
 
 void igMatrix44f_InvertOrthonormal(int *r, float *o, float *m) {

@@ -33,7 +33,7 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
             } else {
                 *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
                 held = values;
-                if (igRegistry_GetValueStringList(ini, section, keyText(key), (igStringRefList *)held, 0) == 0) {
+                if (!igRegistry_GetValueStringList(ini, section, keyText(key), (igStringRefList *)held, 0)) {
                     dropValues(values);
                     dropKey(key);
                 } else {

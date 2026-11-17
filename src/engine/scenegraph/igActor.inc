@@ -231,10 +231,10 @@ void igActor_InitFields(void) {
     FUN_0018c640(temp_s2_9, &c1);
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
-    igBoolMetaField_SetDefaultValue(temp_v0, 1);
+    igBoolMetaField_SetDefaultValue((void **)temp_v0, 1);
     ((igMetaField *)temp_v0)->_persistent = 0;
     temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)));
-    igBoolMetaField_SetDefaultValue(temp_v0_2, 1);
+    igBoolMetaField_SetDefaultValue((void **)temp_v0_2, 1);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igActor_fieldTable, g_igActor_fieldHandles, g_igActor_fieldOffsets, temp_s1);
 }

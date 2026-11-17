@@ -1,9 +1,9 @@
 igMetaObject *g_igUnsignedCharList_metaObject;
 int g_igUnsignedCharList_dataDescriptorCell;
 
-void igUnsignedCharList_Create(int allocator) {
+igUnsignedCharList *igUnsignedCharList_Create(int allocator) {
     igUnsignedCharList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igUnsignedCharList_metaObject, (igMemoryPoolView *)allocator);
+    return (igUnsignedCharList *)igMetaObject_CreateInstance(g_igUnsignedCharList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igUnsignedCharList_GetMetaObject(void)

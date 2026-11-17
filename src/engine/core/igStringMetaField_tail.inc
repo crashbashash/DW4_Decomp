@@ -64,7 +64,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
         interned = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text));
     }
     token = interned;
-    igStringMetaField_AssignRetainedToken(self, object, &token);
+    igStringMetaField_AssignRetainedToken(self, (void *)object, (char **)&token);
     if (token != 0) {
         header = (StringTokenHeader *)token - 1;
         count = header->refCount - 1;
@@ -234,7 +234,7 @@ void igStringMetaField_ResetValue(int *self, int object) {
         interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)defaultText));
     }
     token = interned;
-    igStringMetaField_AssignRetainedToken(self, object, &token);
+    igStringMetaField_AssignRetainedToken((igStringMetaField *)self, (void *)object, &token);
     if (token != 0) {
         header = (int *)(token - 8);
         refCount = header[1] - 1;
@@ -254,7 +254,7 @@ void igStringMetaField_CopyValue(igStringMetaField *self, int destination, int s
     if (token != 0) {
         *(int *)((char *)(token) - 4) = (int)((int) (*(int *)((char *)(token) - 4) + 1));
     }
-    igStringMetaField_AssignRetainedToken(self, destination, &token);
+    igStringMetaField_AssignRetainedToken(self, (void *)destination, (char **)&token);
     if (token != 0) {
         header = (int *)((char *)token - 8);
         refCount = *(int *)((char *)(token) - 4) - 1;
@@ -273,7 +273,7 @@ void igStringMetaField_ShallowCopy(igStringArrayMetaField *self, int destination
     if (token != 0) {
         *(int *)((char *)(token) - 4) = (int)((int) (*(int *)((char *)(token) - 4) + 1));
     }
-    igStringMetaField_AssignRetainedToken(self, destination, &token);
+    igStringMetaField_AssignRetainedToken((igStringMetaField *)self, (void *)destination, (char **)&token);
     if (token != 0) {
         header = (int *)((char *)token - 8);
         refCount = *(int *)((char *)(token) - 4) - 1;
@@ -315,7 +315,7 @@ void igStringMetaField_DestructValue(igStringMetaField *self, int object) {
     int count;
     if (self->_destruct != 0) {
         token = 0;
-        igStringMetaField_AssignRetainedToken(self, object, &token);
+        igStringMetaField_AssignRetainedToken(self, (void *)object, (char **)&token);
         if (token != 0) {
             header = (StringTokenHeader *)token - 1;
             count = header->refCount - 1;
@@ -498,8 +498,8 @@ void igStringObj_SetInt(int self, int value, const char *format) {
     igStringObj_Format((igStringObj *)self, format, value);
 }
 
-void igStringObj_SetFloat(int string, void *format, float value) {
-    igStringObj_Format((igStringObj *)string, (const char *)format, value);
+void igStringObj_SetFloat(int string, const char *format, float value) {
+    igStringObj_Format((igStringObj *)string, format, value);
 }
 
 void igStringObj_SetBool(int self, int value, int upperCase) {
@@ -705,7 +705,7 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
                 s = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)p));
             }
             void *sp = s;
-            StringList_AppendRetained(list, &sp);
+            StringList_AppendRetained((igStringRefList *)list, (char *const *)&sp);
             releaseString((const char *)sp);
             p += strlen(p) + 1;
         }

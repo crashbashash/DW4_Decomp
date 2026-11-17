@@ -2,6 +2,7 @@
 #define DW4_IGSTRINGREFLIST_H
 
 /* igStringRefList: the list class's registration. */
+#include "dw4/igTDataList.h"
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -10,6 +11,7 @@ extern "C" {
 
 struct igMetaObject *igStringRefList_GetOrCreateMetaObject(void);
 void igStringRefList_EnsureRegistered(void);
+void StringList_Resize(igTDataList<char *> *list, int count);
 
 #ifdef __cplusplus
 }

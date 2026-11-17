@@ -115,10 +115,10 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
     V4_1dda90 sp64;
     int s0;
     sp216 = ((long long *)((igLongList *)t->_timeListLong)->_data)[idx];
-    List_InsertBytes((igLongList *)t->_timeListLong, idx, 1, &sp216, 8);
+    List_InsertBytes((igDataList *)t->_timeListLong, idx, 1, &sp216, 8);
     if (t->_drivenChannels & 1) {
         sp200 = ((V3_1dda90 *)((igVec3fList *)t->_xlateList)->_data)[idx];
-        List_InsertBytes((igVec3fList *)t->_xlateList, idx, 1, &sp200, 12);
+        List_InsertBytes((igDataList *)t->_xlateList, idx, 1, &sp200, 12);
         if (t->_interpolationDataTranslation != 0) {
             s0 = idx * 2;
             sp184 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataTranslation)->_data)[idx * 2];
@@ -129,7 +129,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
     }
     if (t->_drivenChannels & 8) {
         sp152 = ((V3_1dda90 *)((igVec3fList *)t->_scaleList)->_data)[idx];
-        List_InsertBytes((igVec3fList *)t->_scaleList, idx, 1, &sp152, 12);
+        List_InsertBytes((igDataList *)t->_scaleList, idx, 1, &sp152, 12);
         if (t->_interpolationDataScale != 0) {
             s0 = idx * 2;
             sp136 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataScale)->_data)[idx * 2];
@@ -140,7 +140,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
     }
     if ((t->_drivenChannels & 2) || (t->_drivenChannels & 4)) {
         sp64 = ((V4_1dda90 *)((igQuaternionfList *)t->_quatList)->_data)[idx];
-        List_InsertBytes((igQuaternionfList *)t->_quatList, idx, 1, &sp64, 16);
+        List_InsertBytes((igDataList *)t->_quatList, idx, 1, &sp64, 16);
         if (t->_interpolationDataRotation != 0) {
             s0 = idx * 2;
             sp104 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataRotation)->_data)[idx * 2];
@@ -196,9 +196,9 @@ void FUN_001ddfd0(void) {
     if (g_igTransformSequence1_5_metaObject != 0) {
         temp_v0 = (int)igMetaObject_FindFieldByName(g_igTransformSequence1_5_metaObject, "_interpolationMethod");
         if (temp_v0 != 0) {
-            igCharArrayMetaField_SetDefaultElement(temp_v0, 0, 1);
-            igCharArrayMetaField_SetDefaultElement(temp_v0, 1, 3);
-            igCharArrayMetaField_SetDefaultElement(temp_v0, 2, 1);
+            igCharArrayMetaField_SetDefaultElement((void *)temp_v0, 0, 1);
+            igCharArrayMetaField_SetDefaultElement((void *)temp_v0, 1, 3);
+            igCharArrayMetaField_SetDefaultElement((void *)temp_v0, 2, 1);
         }
     }
 }

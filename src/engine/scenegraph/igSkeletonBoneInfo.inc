@@ -93,7 +93,7 @@ void igSkeletonBoneInfo_InitFields(void) {
     temp_s0 = (void *)g_igSkeletonBoneInfo_metaObject;
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkeletonBoneInfo_ctorTable, 3);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), -1);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), -1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkeletonBoneInfo_fieldTable, g_igSkeletonBoneInfo_fieldHandles, g_igSkeletonBoneInfo_fieldOffsets, temp_s1);
 }
 

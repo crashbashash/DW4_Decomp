@@ -114,7 +114,7 @@ void igAnimationModifier_InitFields(void) {
     temp_s0 = (void *)g_igAnimationModifier_metaObject;
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationModifier_ctorTable, 3);
-    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)), -1);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));

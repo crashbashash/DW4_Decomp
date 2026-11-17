@@ -65,7 +65,7 @@ int igDriverDatabase_GetSubPropertyValue(igDriverDatabase *self, int property, i
         interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     }
     key = interned;
-    idx = igStringRefList_IndexOf(names.p, &key, 0);
+    idx = igStringRefList_IndexOf((igStringRefList *)names.p, (char *const *)&key, 0);
     releaseString((const char *)key);
     if (idx >= 0) {
         StringList_CopyRetained(&value, values.p, idx);

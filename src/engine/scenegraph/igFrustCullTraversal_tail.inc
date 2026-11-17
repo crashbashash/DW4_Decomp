@@ -329,7 +329,7 @@ void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
         BoundVolume *o = (BoundVolume *)arg1->_bound;
         void *var = o;
         if (o != 0) {
-            int t = g_igAABox_metaObject[0];
+            int t = (int)g_igAABox_metaObject;
             if (t == o->ty()) {
                 var = o;
             } else {
@@ -339,7 +339,7 @@ void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
                 float *mx = (float *)&x->_max;
                 mn[0] = mn[1] = mn[2] = 3.4028235e38f;
                 mx[0] = mx[1] = mx[2] = -3.4028235e38f;
-                igVolume_ExtendBy(x, o);
+                igVolume_ExtendBy((void **)x, (void **)o);
             }
             FUN_001c4c20(arg0, arg1, FUN_001c4ac0((CullFrustumView *)arg0, (CullBoundsView *)var));
             return;

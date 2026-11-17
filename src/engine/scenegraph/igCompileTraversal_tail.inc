@@ -277,7 +277,7 @@ int FUN_001bc1e0(igCompileTraversal *self, igGeometry *geometry) {
     }
     if (found) {
         if (self->_bound == 0) {
-            igAABox *box = (igAABox *)igAABox_CreateInstance(igObject_GetAllocator(self));
+            igAABox *box = (igAABox *)igAABox_CreateInstance((int)igObject_GetAllocator(self));
             ((igSmartPointer<igAABox> &)self->_bound) = box;
             *(igVec3f *)((igAABox *)self->_bound)->_min = mn;
             *(igVec3f *)((igAABox *)self->_bound)->_max = mx;
@@ -311,7 +311,7 @@ int FUN_001bc1e0(igCompileTraversal *self, igGeometry *geometry) {
             FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm);
             restore = topAttr(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, listMeta));
             FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)restore);
-        } else if (((BoolAttr_1bc1e0 *)current_1bc1e0(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, (igMetaObject *)g_igVertexBlendStateAttr_metaObject[0])))->_enabled != 0) {
+        } else if (((BoolAttr_1bc1e0 *)current_1bc1e0(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, g_igVertexBlendStateAttr_metaObject)))->_enabled != 0) {
             igTDataList<igObject *> *palettes = (igTDataList<igObject *> *)self->_boneMatrixPaletteList;
             igObject *palette = palettes->_count > 0 ? palettes->get(palettes->_count - 1) : 0;
             if (palette != 0) {
@@ -533,7 +533,6 @@ static inline void appendSlotAttr(CompiledAttrSet *set, CompiledAttr *attr) {
     }
     slotAttrs->_data[n] = attr;
 }
-extern "C" int igObject_IsAlikeShallow(CompiledAttr *a, CompiledAttr *b);
 extern "C" void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *traversal);
 
 void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *traversal) {
@@ -573,7 +572,7 @@ void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *trav
                 int j;
                 for (j = 0; j < shared; j++) {
                     CompiledAttr *other = set->_sharedAttrs->_data[j];
-                    if (igObject_IsAlikeShallow(other, attr) != 0) {
+                    if (igObject_IsAlikeShallow((igObjectDispatchView *)other, (igObjectDispatchView *)attr) != 0) {
                         setValueAt(set->_attributes, i, other);
                         appendSlotAttr(set, other);
                         unique = false;

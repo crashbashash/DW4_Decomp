@@ -260,7 +260,7 @@ void StringList_AppendRetained(igStringRefList *arg0, char *const *value) {
     void *temp_a1;
 
     temp_s0 = arg0->_count;
-    StringList_Resize(arg0, temp_s0 + 1);
+    StringList_Resize((igTDataList<char *> *)arg0, temp_s0 + 1);
     temp_a1 = (void *)*value;
     temp_s0_2 = (void **)(arg0->_data + (temp_s0 * 4));
     if (temp_a1 != 0) {
@@ -308,7 +308,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
-    igRegistry_GetValueStringList(self->ini, section, "fields", names.p, 0);
+    igRegistry_GetValueStringList((void *)self->ini, section, "fields", (igStringRefList *)names.p, 0);
     count = names.p->count;
     for (i = 0; i < count; i++) {
         field = StringList_CopyRetained((igStringRefList *)names.p, i).p;
@@ -328,14 +328,14 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     }
     if (cached != 0) {
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
-        ShaderObject_1ca6c0 *existing = ((ShaderObject_1ca6c0 *)igObjectStringMap_GetObject(cache, name));
+        ShaderObject_1ca6c0 *existing = ((ShaderObject_1ca6c0 *)igObjectStringMap_GetObject(cache, (const char *)name));
         if (existing != 0) {
             if (FUN_00300920(existing, object.p) != 0) {
                 return igSmartPointer<ShaderObject_1ca6c0>(existing, kRetainReference);
             }
             return object;
         }
-        igObjectStringMap_Add(cache, name, object.p);
+        igObjectStringMap_Add((igObjectStringMap *)cache, (const char *)name, object.p);
     }
     return object;
 }

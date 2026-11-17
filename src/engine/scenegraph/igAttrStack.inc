@@ -127,7 +127,7 @@ void igAttrStack_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAttrStack_ctorTable, 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0013b070();
-    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)), -1);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1), -1);
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0013b070();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;

@@ -236,19 +236,19 @@
    },
    "decl.header_conflicts": {
     "reason": null,
-    "value": 558
+    "value": 503
    },
    "decl.local_externs": {
     "reason": null,
-    "value": 1376
+    "value": 1240
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 1161
+    "value": 1083
    },
    "decl.varargs": {
     "reason": null,
-    "value": 695
+    "value": 643
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -362,10 +362,10 @@
    "code_only.other.functions": 0,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "decl.header_conflicts": 558,
-   "decl.local_externs": 1376,
-   "decl.type_conflicts": 1161,
-   "decl.varargs": 695,
+   "decl.header_conflicts": 503,
+   "decl.local_externs": 1240,
+   "decl.type_conflicts": 1083,
+   "decl.varargs": 643,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
    "fun_dat_refs": 772,
@@ -492,23 +492,23 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1878688,
+  "bytes": 1889924,
   "failing": {
    "addresses": {
     "bytes": 674388,
     "functions": 3839
    },
    "declarations": {
-    "bytes": 842988,
-    "functions": 1795
+    "bytes": 795936,
+    "functions": 1680
    },
    "fields": {
     "bytes": 449396,
     "functions": 2459
    },
    "idioms": {
-    "bytes": 387440,
-    "functions": 2125
+    "bytes": 387128,
+    "functions": 2124
    },
    "name": {
     "bytes": 546580,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 13060,
+  "functions": 13098,
   "matched_functions": 20431
  },
  "regions": [

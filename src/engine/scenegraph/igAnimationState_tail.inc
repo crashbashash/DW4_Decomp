@@ -60,6 +60,6 @@ int igAppearance_AttachGraph(igAppearance *appearance, igNode *graph) {
 }
 
 int igAppearance_DetachGraph(igAppearance *appearance, igNode *graph) {
-    return ObjectList_RemoveAllRetained(appearance->_attachedGraphs, graph, 0) > 0;
+    return ObjectList_RemoveAllRetained((igTDataList<igObject *> *)appearance->_attachedGraphs, (igObject *)graph, 0) > 0;
 }
 

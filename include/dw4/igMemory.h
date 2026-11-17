@@ -12,6 +12,7 @@ void Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool);
 int Memory_FreeBuffer(void *buffer);
 int Memory_FreeBufferAliasA(void *buffer);
 unsigned int Memory_GetBufferSize(void *buffer);
+void *Memory_ReallocateAligned(void *buffer, unsigned int size, unsigned short alignment);
 }
 
 #endif

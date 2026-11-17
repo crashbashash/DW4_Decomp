@@ -186,7 +186,7 @@ int FUN_001c5730(int *p, igObject *object)
 
 void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1) {
     ((DW4VC_72_0 *)(arg1->f))->vX();
-    igObject_Copy(arg0->f, arg1->f, 0);
+    igObject_Copy((igObject *)arg0->f, (igObject *)arg1->f, 0);
 }
 
 void igGraphPath_SetNodes(igGraphPath *path, igNodeList *nodes) {
@@ -207,7 +207,7 @@ void igGraphPath_SetNodes(igGraphPath *path, igNodeList *nodes) {
         l->arr[j] = 0;
     }
     l->n = 0;
-    ObjectList_AppendRetainedList((List_1c5790 *)path->_path, nodes);
+    ObjectList_AppendRetainedList((igTDataList<igObject *> *)path->_path, (igTDataList<igObject *> *)nodes);
 }
 
 void FUN_001c5870(void *arg0, int arg1) {

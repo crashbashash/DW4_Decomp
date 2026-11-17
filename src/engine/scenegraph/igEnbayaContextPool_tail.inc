@@ -17,7 +17,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0, int flags) {
     temp_s0 = igRegistry_GetNumValuesInSection(temp_s2, 7);
     var_s1 = 0;
     while (var_s1 < temp_s0) {
-        if (igRegistry_GetKeyName(temp_s2, 7, var_s1, &sp5C) != 0) {
+        if (igRegistry_GetKeyName(temp_s2, 7, var_s1, (igStringObj **)&sp5C)) {
             sp58 = 0;
             var_a2 = *(int *)((char *)(sp5C) + 8);
             var_a2 = (var_a2 == 0) ? ((int)g_stringObjEmptyText) : var_a2;
@@ -111,7 +111,7 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
     n0 = l0->_count;
     if (findIndex(l0, n0, boneCount, i) == -1) {
         PoolListHolder list;
-        list.p = igPointerList_Create((int)igObject_GetAllocator((igObject *)o));
+        list.p = (PoolObject *)igPointerList_Create((int)igObject_GetAllocator((igObject *)o));
         ObjectList_AppendRetained((igObjectList *)o->_poolList, (igObject *)list.p);
         l1 = o->_boneCountList;
         n1 = l1->_count;

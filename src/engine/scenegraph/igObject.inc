@@ -44,7 +44,7 @@ void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2) {
     }
     if (s3 != 0) {
         s3 = (igVec3fList *)((igVertexData *)s3)->_data;
-        if (s3 != 0 && igObject_IsKindOf(s3, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
+        if (s3 != 0 && igObject_IsKindOf(s3, g_igVec3fList_metaObject) != 0) {
             s3 = (igVec3fList *)s3;
         } else {
             s3 = 0;
@@ -76,23 +76,23 @@ void FUN_001b23b0(int *arg0, int *arg1) {
 int FUN_001b23e0(int arg0, Y *arg1) {
     V3_1b23e0 sp40;
     V3_1b23e0 sp30;
-    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance(igObject_GetAllocator((igObject *)arg0))));
+    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0))));
     FUN_001b1fa0((igGeometryAttr *)arg1, (igVec3f *)&sp40, (igVec3f *)&sp30);
     created.get()->a = sp40;
     created.get()->b = sp30;
-    igVolume_ExtendBy(arg0, created.get());
+    igVolume_ExtendBy((void **)arg0, (void **)(created.get()));
     return (((int)((unsigned int) (*arg1->f12->vX() & 0xF0) >> 4)) & 0xFF) <= 0;
 }
 
 int FUN_001b24d0(int arg0, int arg1) {
-    igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance(igObject_GetAllocator((igObject *)arg0))));
+    igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0))));
     BoundsObject *array;
     V3_1b24d0 min;
     V3_1b24d0 max;
     FUN_001b21d0((A_1b21d0 *)arg1, (V3_1b21d0 *)&min, (V3_1b21d0 *)&max);
     bounds.get()->min = min;
     bounds.get()->max = max;
-    igVolume_ExtendBy(arg0, bounds.get());
+    igVolume_ExtendBy((void **)arg0, (void **)(bounds.get()));
     FUN_001b23b0((int *)&array, (int *)arg1);
     int missing = (int)igVertexArray2__FindVertexData((igVertexArray2 *)array, 5, 0);
     if (array != 0) {
@@ -136,7 +136,7 @@ class TransformAtTime { public: virtual void d0(); virtual void d1(); virtual vo
 int igTransform_ExtendBound(int arg0, void *arg1, long long time) {
     if (*(int *)((char *)(arg1) + 96) == 0) {
         ((TransformAtTime *)arg1)->updateAt(time);
-        igAABox_Transform(arg0, (char *)arg1 + 0x20);
+        igAABox_Transform((igAABox *)arg0, (const float *)((char *)arg1 + 0x20));
     }
     return 1;
 }

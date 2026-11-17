@@ -4,6 +4,7 @@
 /* igObject services. igObject_InitHeader writes a stack object's igObject header (vtable and a
  * reference count of 1), the probe every class's GetVTable runs. The storage calls allocate from
  * and free to the pool the object came from. */
+struct igObjectDispatchView;
 struct igObject;
 struct igMetaObject;
 struct igMemoryPoolView;
@@ -41,6 +42,11 @@ void *igObject_ReallocateAligned(struct igObject *object, void *storage, int siz
 void *igObject_MallocAligned(struct igObject *object, int size, unsigned short alignment);
 void igObject_FreeMemory(struct igObject *object, void *storage);
 void igObject_EnsureRegistered(void);
+void igObject_Copy(struct igObject *dest, struct igObject *source, int copyMode);
+void igObject_DeepCopy(struct igObjectDispatchView *self, struct igObjectDispatchView *source);
+int igObject_GetFieldValueByName(void **self, int name);
+void igObject_ResetFields(struct igObjectDispatchView *object);
+int igObject_IsAlikeShallow(struct igObjectDispatchView *a, struct igObjectDispatchView *b);
 
 #ifdef __cplusplus
 }

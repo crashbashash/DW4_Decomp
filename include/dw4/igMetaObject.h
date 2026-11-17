@@ -56,6 +56,7 @@ void igMetaObject_AddExitCallback(int callback);
 void igMetaObject_AddRegistrationCallback(int callback);
 int igObjectSystem_FindMetaByNameDefault(const char *name);
 extern struct igMetaObject *g_igMetaObject_metaObject;
+void igMetaObject_AddFieldAndFinalize(struct igMetaObject *self, void *field);
 }
 
 #endif

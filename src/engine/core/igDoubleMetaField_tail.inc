@@ -31,8 +31,8 @@ int igDoubleMetaField_GetSize(void) {
     return 8;
 }
 
-void igDoubleMetaField_SetDefaultDouble(void **field, long long value) {
-    long long defaultValue;
+void igDoubleMetaField_SetDefaultDouble(void **field, double value) {
+    double defaultValue;
 
     defaultValue = value;
     ((igMetaFieldView *)(field))->SetDefault(&defaultValue);

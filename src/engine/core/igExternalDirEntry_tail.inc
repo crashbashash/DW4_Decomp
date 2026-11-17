@@ -114,7 +114,7 @@ static inline void dropCreationReference(igVirtualObject *object) {
 int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFunction) {
     igMemoryPoolView *pool;
     igResource *resource = g_objectSystem->resource;
-    igSmartPointer<igObject> directory = igResource_GetDirectory(resource, self->_directoryName);
+    igSmartPointer<igObject> directory = igResource_GetDirectory(resource, (const char *)self->_directoryName);
     if (directory.get() == 0) {
         pool = igObject_GetAllocator((igObject *)self);
         directory.release();

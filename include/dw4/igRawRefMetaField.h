@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igRawRefMetaField_metaObject;
+void **igRawRefMetaField_Create(int pool);
 
 #ifdef __cplusplus
 }

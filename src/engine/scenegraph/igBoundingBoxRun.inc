@@ -1,8 +1,8 @@
 int igTransformSequence_ExtendBound(AABoxFields *arg0, TransformInputView *arg1) {
     if (igObject_IsKindOf((igObject *)arg1, g_igTransformSequence_metaObject) != 0) {
-        Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance(FUN_00301000(arg0)));
-        igVolume_ExtendBy(a.o, arg0);
-        Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance(FUN_00301000(arg0)));
+        Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance((int)FUN_00301000(arg0)));
+        igVolume_ExtendBy((void **)a.o, (void **)arg0);
+        Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance((int)FUN_00301000(arg0)));
         AABoxFields *p = b.o;
         p->f8 = p->f12 = p->f16 = 3.402823466e+38f;
         p->f20 = p->f24 = p->f28 = -3.402823466e+38f;
@@ -13,15 +13,15 @@ int igTransformSequence_ExtendBound(AABoxFields *arg0, TransformInputView *arg1)
         for (i = 0; i < n; i++) {
             igMatrix44f_SetIdentity((float *)sp50);
             arg1->get(i, sp50);
-            igAABox_Transform(arg0, sp50);
-            igVolume_ExtendBy(b.o, arg0);
+            igAABox_Transform((igAABox *)arg0, (const float *)sp50);
+            igVolume_ExtendBy((void **)b.o, (void **)arg0);
             arg0->f8 = arg0->f12 = arg0->f16 = 3.402823466e+38f;
             arg0->f20 = arg0->f24 = arg0->f28 = -3.402823466e+38f;
-            igVolume_ExtendBy(arg0, a.o);
+            igVolume_ExtendBy((void **)arg0, (void **)a.o);
         }
         arg0->f8 = arg0->f12 = arg0->f16 = 3.402823466e+38f;
         arg0->f20 = arg0->f24 = arg0->f28 = -3.402823466e+38f;
-        igVolume_ExtendBy(arg0, b.o);
+        igVolume_ExtendBy((void **)arg0, (void **)b.o);
         return 1;
     }
     return 0;
@@ -47,12 +47,12 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
     igAABox *cached = (igAABox *)node->_bound;
     if (cached != 0) {
         if (igObject_IsKindOf(node, g_igPlanarShadowShader_metaObject) != 0) return 0;
-        igVolume_ExtendBy(bound, cached);
+        igVolume_ExtendBy((void **)bound, (void **)cached);
         return 1;
     }
-    igSmartPointer<igAABox> box((igAABox *)igAABox_CreateInstance(igObject_GetAllocator(node)));
+    igSmartPointer<igAABox> box((igAABox *)igAABox_CreateInstance((int)igObject_GetAllocator(node)));
     makeEmpty(box);
-    igSmartPointer<igAABox> uncachedBox((igAABox *)igAABox_CreateInstance(igObject_GetAllocator(node)));
+    igSmartPointer<igAABox> uncachedBox((igAABox *)igAABox_CreateInstance((int)igObject_GetAllocator(node)));
     makeEmpty(uncachedBox);
     unsigned char ok = boundCacheable(node, cacheBound);
     if (igObject_IsKindOf(node, g_igGroup_metaObject) != 0) {
@@ -119,8 +119,8 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
             ok = 0;
         }
     }
-    igVolume_ExtendBy(uncachedBound, uncachedBox.get());
-    igVolume_ExtendBy(bound, box.get());
+    igVolume_ExtendBy((void **)uncachedBound, (void **)(uncachedBox.get()));
+    igVolume_ExtendBy((void **)bound, (void **)(box.get()));
     if (ok && box->_min[0] <= box->_max[0]) {
         (igSmartPointer<igAABox> &)node->_bound = box.get();
     }
@@ -130,7 +130,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
 int FUN_001b2ed0(int arg0, int arg1) {
     int temp_v0;
 
-    temp_v0 = (int)igAABox_CreateInstance(((void *)igObject_GetAllocator((igObject *)arg1)));
+    temp_v0 = (int)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg1));
     FUN_001b2f30((struct O_1b2750 *)arg0, arg1, (struct B_1b2750 *)temp_v0);
     return temp_v0;
 }

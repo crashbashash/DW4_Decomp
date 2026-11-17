@@ -5,6 +5,7 @@
  * missing. `registry` is the igRegistry the object system holds (g_objectSystem->configRegistry).
  * Each reader returns whether the value was found; when it was not, `defaultValue` is stored through
  * the out pointer and, with `create`, written into the registry. */
+struct igStringRefList;
 struct igMetaObject;
 struct igRegistry;
 struct igStringObj;
@@ -25,6 +26,15 @@ int thunk_igRegistry_GetValueString(struct igRegistry *registry, int section, co
 unsigned char thunk_igRegistry_GetValueBool(struct igRegistry *registry, int section, const char *name, unsigned char *value, int defaultValue, int create);
 struct igMetaObject *igRegistry_GetOrCreateMetaObject(void);
 void igRegistry_EnsureRegistered(void);
+int igRegistry_GetNumValuesInSection(int registry, int section);
+bool igRegistry_GetKeyName(int registry, int section, int index, struct igStringObj **key);
+bool igRegistry_GetValueStringList(void *self, int section, const char *key, struct igStringRefList *list, int create);
+void *igRegistry_Create(int pool);
+bool igRegistry_Load(struct igRegistry *self, char *name, char *dir);
+int igRegistry_Merge(void *self, struct igRegistry *inc, int overwrite);
+extern struct igMetaObject *g_igRegistry_metaObject;
+int igRegistry_GetValueEntry(void *self, int index);
+int igRegistry_GetValueCount(void *self);
 }
 
 #endif

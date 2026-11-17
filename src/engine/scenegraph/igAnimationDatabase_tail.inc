@@ -65,18 +65,17 @@ int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDb
     if (list->find(current) != -1) {
         RecordRef named(castToNamed(current));
         if (named.p != 0) {
-            return (unsigned char)igDirectory_AddExternalInfoRef(file, self, nameOf(named.p), object);
+            return (unsigned char)igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)self, (char *)nameOf(named.p), (igObject *)object);
         }
     }
     return 0;
 }
 
 #define CAST_INLINE(NAME, META) static inline AnimDbObject *NAME(AnimDbObject *o) { if (o != 0 && igObject_IsKindOf(o, META) != 0) { return o; } return 0; }
-int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject *obj) {
+bool Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject *obj) {
     char name[4096];
-    int r;
     if ((void *)obj == (void *)db) {
-        return igDirectory_AddExternalInfoRef(file, db, nameOf(db->_name), obj);
+        return igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)db, (char *)nameOf(db->_name), (igObject *)obj);
     }
     if ((unsigned char)FUN_001aedd0(db, (igTDataList<AnimDbRecord *> *)db->_animationList, file, (AnimDbRecord *)obj) == 1) {
         return 1;
@@ -95,7 +94,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
     }
     igSmartPointer<AnimDbObject> held(obj, kRetainReference);
     igSmartPointer<AnimDbObject> skel(castSkeleton(held.p), kRetainReference);
-    if (skel.p != 0 && igDirectory_FindSortedInsertIndex(db->_directory, DAT_00586730, obj) < db->_directory->_count) {
+    if (skel.p != 0 && igDirectory_FindSortedInsertIndex((igDirectoryView *)db->_directory, (igMetaField *)DAT_00586730, (unsigned int)obj) < db->_directory->_count) {
         int i;
         int n;
         if (DAT_00562568 == 0) {
@@ -115,8 +114,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
             for (a = 0; a < total; a++) {
                 if ((AnimDbObject *)list->_data[a]->_source == target) {
                     sprintf(name, "%s %s %d", "__TS__", nameOf(skin.p->_name), a);
-                    r = (unsigned char)igDirectory_AddExternalInfoRef(file, db, name, obj);
-                    return r;
+                    return igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)db, name, (igObject *)obj);
                 }
             }
         }

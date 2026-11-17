@@ -15,10 +15,10 @@ void Gap__Sg__igTransformSequence1_5__vfunc_53(IgForwardTarget_1e28b0 *o) { o->s
 void Gap__Sg__igTransformSequence1_5__vfunc_54(IgForwardTarget_1e28c0 *o) { o->slot25(); }
 
 void Gap__Sg__igTransformSequence1_5__vfunc_36(TransformSequenceChannelView *o, int index) {
-    List_RemoveAt(o->_timeListLong, index, 8);
-    if (o->_drivenChannels & 1) { List_RemoveAt(o->_xlateList, index, 12); }
-    if ((o->_drivenChannels & 2) || (o->_drivenChannels & 4)) { List_RemoveAt(o->_quatList, index, 16); }
-    if (o->_drivenChannels & 8) { List_RemoveAt(o->_scaleList, index, 12); }
+    List_RemoveAt((igDataList *)o->_timeListLong, index, 8);
+    if (o->_drivenChannels & 1) { List_RemoveAt((igDataList *)o->_xlateList, index, 12); }
+    if ((o->_drivenChannels & 2) || (o->_drivenChannels & 4)) { List_RemoveAt((igDataList *)o->_quatList, index, 16); }
+    if (o->_drivenChannels & 8) { List_RemoveAt((igDataList *)o->_scaleList, index, 12); }
 }
 
 void Gap__Sg__igTransformSequence1_5__vfunc_38(struct T_1e2970 *t, int n) {
@@ -643,7 +643,7 @@ int Gap__Sg__igBitMask__vfunc_22(void) {
 }
 
 int Gap__Core__igUnsignedIntList__vfunc_22(void) {
-    return g_igUnsignedIntList_metaObject[0];
+    return (int)g_igUnsignedIntList_metaObject;
 }
 
 igMetaObject *Gap__Sg__igBlendMatrixSelect__vfunc_22(void) {
@@ -819,7 +819,7 @@ igMetaObject *Gap__Sg__igRenderPackageList__vfunc_22(void) {
 }
 
 int Gap__Core__igDoubleList__vfunc_22(void) {
-    return g_igDoubleList_metaObject[0];
+    return (int)g_igDoubleList_metaObject;
 }
 
 igMetaObject *Gap__Sg__igTransformStack__vfunc_22(void) {

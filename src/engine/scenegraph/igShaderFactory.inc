@@ -208,10 +208,10 @@ void igShaderFactory_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igShaderFactory_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = igNamedObjectList_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1) + 56) = (int)igNamedObjectList_GetOrCreateMetaObject();
     *(unsigned char *)((char *)(temp_s1) + 52) = 1;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    *(int *)((char *)(temp_s1_2) + 56) = igNamedObjectList_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1_2) + 56) = (int)igNamedObjectList_GetOrCreateMetaObject();
     *(unsigned char *)((char *)(temp_s1_2) + 52) = 1;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
     igEnumMetaField_SetDefaultValue(temp_v0, 3);

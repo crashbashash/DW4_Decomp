@@ -281,8 +281,8 @@ void igAnimationState_InitFields(void) {
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_001a6bf0();
     ((igMetaField *)temp_s2_2)->_resetMethod = 2;
-    igBoolMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)), 1);
-    igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)), 1.0f);
+    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5), 1);
+    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9), 1.0f);
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)))->_persistent = 0;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)));

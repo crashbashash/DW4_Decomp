@@ -18,6 +18,7 @@ void igMatrix44f_MakeEulerRotation(void *matrix, float x, float y, float z);
 void igMatrix44f_SetEulerRotation(float *m, float x, float y, float z);
 void igMatrix44f_SetQuaternion(float *m, float *q);
 void igMatrix44f_GetQuaternion(float *q, float *m);
+void igMatrix44f_MakePerspective(float *matrix, float fovX, float fovY, float aspect, float nearPlane, float farPlane);
 }
 
 /* Alchemy's 4x4 float matrix. Its constructors are the library's out-of-line identity and

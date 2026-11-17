@@ -385,8 +385,8 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)procs, node, (void *)FUN_001b4bb0);
     }
     DAT_00562638[0] = (VC_1b2fa0 *)self;
-    ObjectList_ResizeRetained(self->_matrices, 0);
-    ObjectList_ResizeRetained(self->_geometries, 0);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_matrices, 0);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_geometries, 0);
     igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     for (i = 0; i < count; i++) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)procs, (igMetaObject *)igMetaObject_GetTreeNode(meta, i), (void *)saved[i]);

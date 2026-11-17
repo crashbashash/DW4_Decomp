@@ -46,7 +46,7 @@ void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {
     int off;
     c = count_of_1dca40(arg0);
     n = arg0->f24 + c;
-    ObjectList_ResizeRetained(arg0, n);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)arg0, n);
     alloc = (int)igObject_GetAllocator((igObject *)arg0);
     i = arg0->f20;
     for (; i < n; i++) {
@@ -76,7 +76,7 @@ void FUN_001dcb80(ObjectPool *pool, igObject *object) {
     int index = pool->find(object);
     if (index >= 0) {
         if (pool->_resetOnRelease != 0) {
-            igObject_ResetFields(object);
+            igObject_ResetFields((igObjectDispatchView *)object);
         }
         pool->_activeCount = pool->_activeCount - 1;
         int last = pool->_activeCount;

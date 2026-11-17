@@ -1,9 +1,9 @@
 igMetaObject *g_igFloatList_metaObject;
 int g_igFloatList_dataStorage;
 
-void igFloatList_Create(int pool) {
+igFloatList *igFloatList_Create(int pool) {
     igFloatList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igFloatList_metaObject, (igMemoryPoolView *)pool);
+    return (igFloatList *)igMetaObject_CreateInstance(g_igFloatList_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igFloatList_GetOrCreateMetaObject(void) {

@@ -285,7 +285,7 @@ void ObjectList_FillRetained(igTDataList<igObject *> *list, igObject *object) {
     }
 }
 
-void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *list, int unused) {
+void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *list) {
     int n;
     int i;
     igObject *o;

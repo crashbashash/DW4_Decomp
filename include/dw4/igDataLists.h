@@ -1,6 +1,7 @@
 #ifndef DW4_IGDATALISTS_H
 #define DW4_IGDATALISTS_H
 
+#include "dw4/igTDataList.h"
 struct igDataList;
 struct igIntList;
 struct igStringRefList;
@@ -29,6 +30,9 @@ int ObjectList_AppendRetained(struct igObjectList *list, struct igObject *object
 int igProperty_FindByName(struct igObjectList *list, struct igMetaField *field, const char *name);
 struct CallbackArray *igDataList_Register(void);
 struct igMetaObject *igDataList_GetPublishedMetaObject(void);
+void ObjectList_ClearRetainedPreserveCount(igTDataList<struct igObject *> *list);
+void List_InsertBytes(struct igDataList *list, int index, int count, const void *src, int stride);
+void List_RemoveAt(struct igDataList *l, int i, int sz);
 
 #ifdef __cplusplus
 }

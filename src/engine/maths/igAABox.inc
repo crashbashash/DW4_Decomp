@@ -2,9 +2,9 @@ igMetaObject *g_igAABox_metaObject;
 igMetaField *g_igAABox_minMetaField;
 igMetaField *g_igAABox_maxMetaField;
 
-void igAABox_CreateInstance(int arg0) {
+igAABox *igAABox_CreateInstance(int arg0) {
     igAABox_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igAABox_metaObject, (igMemoryPoolView *)arg0);
+    return (igAABox *)igMetaObject_CreateInstance((igMetaObject *)g_igAABox_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igAABox_GetOrCreateMetaObject(void) {
@@ -481,9 +481,9 @@ void FUN_0018b890(struct Box *arg0, float *arg1) {
     }
 }
 
-int thunk_igAABox_Transform()
+void thunk_igAABox_Transform(igAABox *box, const float *matrix)
 {
-    return igAABox_Transform();
+    igAABox_Transform(box, matrix);
 }
 
 void FUN_0018b940(igAABox *box) {

@@ -302,7 +302,7 @@ static inline void setStringAt(igStringRefList *l, int i, int **v) {
     }
 }
 
-int igRegistry_GetValueStringList(void *self, int section, const char *key, igStringRefList *list, int create) {
+bool igRegistry_GetValueStringList(void *self, int section, const char *key, igStringRefList *list, int create) {
     igStringObj *a;
     igStringObj *b;
     int *r1;
@@ -554,7 +554,7 @@ int igRegistry_SetValueFloat(int a0, int a1, const char *a2, float x) {
     if (o == 0) {
         return 0;
     }
-    igStringObj_SetFloat(o->_value, (void *)((int)(((char *)"%f"))), x);
+    igStringObj_SetFloat(o->_value, "%f", x);
     return 1;
 }
 
@@ -600,7 +600,7 @@ void igRegistry_Clear(igRegistry *self) {
         l->_data[j] = 0;
     }
     l->_count = 0;
-    ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)self->_valueTable, n2);
+    ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)self->_valueTable);
 }
 
 /* Read registry text: `[section]` lines open a section, `key = value` lines set values (only new ones
@@ -934,11 +934,11 @@ void igReport_RestoreDefaults(void) {
     ((int *)&g_reportLevel)[0] = 5;
 }
 
-igSmartPointer<igObject> igResource_GetDirectory(void *directory, int name) {
-    if (strcmp((const char *)name, "igImageDirectory") == 0) {
+igSmartPointer<igObject> igResource_GetDirectory(void *directory, const char *name) {
+    if (strcmp(name, "igImageDirectory") == 0) {
         return igSmartPointer<igObject>((igObject *)igResource_GetImageDirectory((igResource *)directory), kRetainReference);
     }
-    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((igObjectList *)((igResource *)directory)->_directoryList, (igMetaField *)g_igDirectory_nameField, (const char *)name), kRetainReference);
+    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((igObjectList *)((igResource *)directory)->_directoryList, (igMetaField *)g_igDirectory_nameField, name), kRetainReference);
 }
 
 int igResource_AddDirectory(int *p, int directory)

@@ -72,7 +72,7 @@ void *igResource_GetOrLoadDirectory(igResource *self, int path) {
     igObject *pool;
     int *old;
     int v;
-    o = (igIGBFile *)igResource_GetDirectory(self, path).p;
+    o = (igIGBFile *)igResource_GetDirectory(self, (const char *)path).p;
     if (o != 0) {
         igDirectory_AddLoadedRef((igDirectoryView *)o);
         return o;
@@ -133,7 +133,7 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     igIGBFile *o;
     void *res;
     igObject *t;
-    r = (igObject *)igResource_GetDirectory(self, path).p;
+    r = (igObject *)igResource_GetDirectory(self, (const char *)path).p;
     if (r != 0) {
         igDirectory_AddLoadedRef((igDirectoryView *)r);
         return r;
@@ -214,7 +214,7 @@ unsigned char igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *di
 }
 
 void igResource_UnloadDirectory(igResource *self, int name) {
-    igSmartPointer<igObject> found = igResource_GetDirectory(self, name);
+    igSmartPointer<igObject> found = igResource_GetDirectory(self, (const char *)name);
     igIGBFile *entry = (igIGBFile *)found.p;
     if (entry == 0) {
         return;
@@ -297,7 +297,7 @@ int igResource_GetDefaultResource(void) {
 /* Returns the `wanted`th info object (counting from 0) of the kind named `metaName` in the resource's
  * directory `name`, or 0. */
 int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const char *metaName, int wanted) {
-    igSmartPointer<igObject> directory = igResource_GetDirectory(resource, (int)name);
+    igSmartPointer<igObject> directory = igResource_GetDirectory(resource, (const char *)name);
     igSmartPointer<igObject> meta((igObject *)igObjectSystem_FindMetaByNameDefault(metaName), kRetainReference);
     int found;
     unsigned int i;
@@ -419,7 +419,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
 void igResource_FinishAsyncLoad(igResource *self, int name) {
     igDirectory *directory;
     if (self->_autoCompatibility != 0) {
-        directory = (igDirectory *)igResource_GetDirectory(self, name).p;
+        directory = (igDirectory *)igResource_GetDirectory(self, (const char *)name).p;
         if (directory != 0) {
             igDirectory_ConvertObjectsOfType(directory, (const char *)"igSceneWrapper", (const char *)"igSceneInfo");
             igResource_WrapRootInSceneInfo((int)directory);

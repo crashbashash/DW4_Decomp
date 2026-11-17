@@ -225,7 +225,7 @@ void igDependencyOrderedList_AddCheckPoint(void *self, int name) {
         interned = (void *)(StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
     }
     checkPoint = (void *)(interned);
-    StringList_AppendRetained(((igDependencyOrderedListView *)self)->_checkPoints, &checkPoint);
+    StringList_AppendRetained((igStringRefList *)(((igDependencyOrderedListView *)self)->_checkPoints), (char *const *)&checkPoint);
     if (checkPoint != 0) {
         header = (int *)((char *)checkPoint - 8);
         references = *(int *)((char *)(checkPoint) - 4) - 1;

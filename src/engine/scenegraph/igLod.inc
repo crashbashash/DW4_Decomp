@@ -129,13 +129,13 @@ void igLod_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    igIntMetaField_SetDefault(temp_v0, -1);
+    igIntMetaField_SetDefault((void **)temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
     temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    igFloatMetaField_SetDefault(temp_v0_2, 0.0f);
+    igFloatMetaField_SetDefault((void **)temp_v0_2, 0.0f);
     ((igFloatMetaField *)temp_v0_2)->_persistent = 0;
     temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)));
-    igFloatMetaField_SetDefault(temp_v0_3, 0.0f);
+    igFloatMetaField_SetDefault((void **)temp_v0_3, 0.0f);
     ((igFloatMetaField *)temp_v0_3)->_persistent = 0;
     temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
     sp40[0] = 0;

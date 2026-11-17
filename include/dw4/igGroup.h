@@ -17,6 +17,8 @@ struct igGroup *igGroup_Destroy(struct igGroup *self, short deleteFlag);
 struct igMetaObject *igGroup_GetOrCreateMetaObject(void);
 struct CallbackArray *igGroup_Register(void);
 unsigned int igGroup_RemoveChild(struct igGroup *group, struct igNode *child);
+extern int g_igGroup_vtable[4];
+struct igMetaObject *igGroup_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }
