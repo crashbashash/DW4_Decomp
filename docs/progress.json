@@ -43,8 +43,8 @@
   {
    "hi": 1024,
    "lo": 513,
-   "matched": 635,
-   "matched_bytes": 452228,
+   "matched": 636,
+   "matched_bytes": 452768,
    "total": 676,
    "total_bytes": 482360
   },
@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 3270176,
-    "functions": 20266
+    "bytes": 3270716,
+    "functions": 20267
    },
    "mismatch": {
     "bytes": 0,
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 0,
   "fully_matched": {
-   "bytes": 3278336,
-   "functions": 20430
+   "bytes": 3278876,
+   "functions": 20431
   },
   "fully_verified": {
-   "bytes": 3270176,
-   "functions": 20266
+   "bytes": 3270716,
+   "functions": 20267
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,11 +142,11 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 8160,
-  "fully_matched": 3278336,
-  "fully_verified": 3270176,
+  "fully_matched": 3278876,
+  "fully_verified": 3270716,
   "functions_asm_body": 0,
   "functions_assembly": 164,
-  "matched": 3270176,
+  "matched": 3270716,
   "total": 3472700
  },
  "data_bytes": {
@@ -240,11 +240,11 @@
    },
    "decl.local_externs": {
     "reason": null,
-    "value": 2834
+    "value": 2833
    },
    "decl.type_conflicts": {
-    "reason": null,
-    "value": 1832
+    "reason": "sfdply.c declares SFTIM_InitHn with its own player-handle type (SfdPly *), now in conflict with the definition, as its sibling init functions already are",
+    "value": 1833
    },
    "decl.varargs": {
     "reason": null,
@@ -340,11 +340,11 @@
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 194364
+    "value": 193824
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 146
+    "value": 145
    }
   },
   "counters": {
@@ -363,8 +363,8 @@
    "compile.bytes": 0,
    "compile.functions": 0,
    "decl.header_conflicts": 558,
-   "decl.local_externs": 2834,
-   "decl.type_conflicts": 1832,
+   "decl.local_externs": 2833,
+   "decl.type_conflicts": 1833,
    "decl.varargs": 878,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
@@ -388,17 +388,17 @@
    "struct.c": 25,
    "unapproved.bytes": 0,
    "unapproved.functions": 0,
-   "unmatched.bytes": 194364,
-   "unmatched.functions": 146
+   "unmatched.bytes": 193824,
+   "unmatched.functions": 145
   }
  },
  "functions": {
-  "fully_matched": 20430,
-  "fully_verified": 20266,
-  "matched": 20266,
+  "fully_matched": 20431,
+  "fully_verified": 20267,
+  "matched": 20267,
   "named": 17383,
   "named_semantic": 11902,
-  "named_semantic_matched": 11698,
+  "named_semantic_matched": 11699,
   "total": 20576
  },
  "kernel_patches": {
@@ -459,16 +459,16 @@
   }
  ],
  "link": {
-  "asm_bytes": 194364,
+  "asm_bytes": 193824,
   "data_bytes": 382607,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 8160,
   "from_assembly_units": 164,
-  "from_c_bytes": 3652783,
-  "from_c_pct": 80.44,
-  "from_c_units": 20266,
+  "from_c_bytes": 3653323,
+  "from_c_pct": 80.45,
+  "from_c_units": 20267,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
   "jtbl_bytes": 16444,
@@ -499,12 +499,12 @@
     "functions": 4310
    },
    "declarations": {
-    "bytes": 1045564,
-    "functions": 3127
+    "bytes": 1046104,
+    "functions": 3128
    },
    "fields": {
-    "bytes": 449576,
-    "functions": 2467
+    "bytes": 450116,
+    "functions": 2468
    },
    "idioms": {
     "bytes": 387456,
@@ -532,7 +532,7 @@
    }
   },
   "functions": 11699,
-  "matched_functions": 20430
+  "matched_functions": 20431
  },
  "regions": [
   {
@@ -586,8 +586,8 @@
   {
    "hi": 3035344,
    "lo": 2751520,
-   "matched": 2397,
-   "matched_bytes": 265256,
+   "matched": 2398,
+   "matched_bytes": 265796,
    "total": 2409,
    "total_bytes": 271020
   },
@@ -667,10 +667,10 @@
  "typed": {
   "error": null,
   "offset_casts": 3994,
-  "pct": 45.28,
+  "pct": 45.24,
   "recovered": 32587,
   "synthetic": 5816,
-  "total": 71971,
+  "total": 72024,
   "typeable": 262,
   "typeable_pct": 0.36
  }

@@ -10,8 +10,14 @@ The first two files of the Sofdec block, each compiled as one whole file with So
 
 ## Open questions
 
-- SNDF's init (`0x280b98`) passes the build-string pointer as a third argument to `sceSifInitRpc`, with no
-  value in the second; no C spelling found reproduces that, so it has no source.
+- SNDF's init (`0x280b98`) reads the build-string pointer once and discards it, in the delay slot of the call to
+  `sceSifInitRpc`; the owner approved that read as a `char *volatile` word under
+  [build-string reads](source-approvals.md#build-string-reads), to land once the function matches. Its two
+  bind-wait loops, zero words included, come from plain C (the compiler's loop alignment). The best C still
+  differs in twelve words: retail computes the first RPC client's address into a saved register before the flag
+  store and fills the call's delay slot with the read, where the C computes the address last; and two loads of
+  the parameter copy at the end are swapped. Statement orders, a local client pointer, `do`/`for` loop shapes, an
+  inline bind helper, the real `sceSifInitRpc` prototype and a permuter run left the prologue unchanged.
 - CFT's init stores its version string in a `volatile` word and is `unapproved`
   ([build-string stores](source-approvals.md#build-string-stores)). Two table builders and two alpha-plane loops have no source (store order; a multiply retail
   recomputes on each pass).

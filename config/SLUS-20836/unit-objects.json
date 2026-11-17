@@ -19936,6 +19936,7 @@
       "FUN_00280f10": "0x00280f10",
       "SNDF_SetPortSizes": "0x00280f60",
       "FUN_00281018": "0x00281018",
+      "SNDF_StartTransfer": "0x00281078",
       "FUN_00281300": "0x00281300",
       "FUN_00281368": "0x00281368",
       "SNDF_FreePort": "0x002813c8",
@@ -19960,25 +19961,22 @@
       "SNDF_GetTransferStatus": "0x00281cf8",
       "FUN_00281d80": "0x00281d80",
       "FUN_00281df0": "0x00281df0",
-      "SNDF_ExecServer": "0x00282038",
-      "SNDF_StartTransfer": "0x00281078"
+      "SNDF_ExecServer": "0x00282038"
     },
     "data": {
       "DAT_004bb100": "0x004bb100",
       "DAT_004bb104": "0x004bb104",
       "DAT_004bb108": "0x004bb108",
-      "sndf_version": "0x004bb10c",
       "DAT_004bb110": "0x004bb110",
-      "sndf_ctx": "0x004bb114",
       "DAT_00570c00": "0x00570c00",
       "DAT_00570d00": "0x00570d00",
       "DAT_00571700": "0x00571700",
       "DAT_00571740": "0x00571740",
       "DAT_00571750": "0x00571750",
       "DAT_00571778": "0x00571778",
-      "DAT_005717a0": "0x005717a0",
-      "sndf_status": "0x005717c0",
-      "DAT_00572a00": "0x00572a00"
+      "DAT_00572a00": "0x00572a00",
+      "sndf_ctx": "0x004bb114",
+      "sndf_status": "0x005717c0"
     }
   },
   "0x002823f0": {
@@ -21726,6 +21724,7 @@
     "whole_file": true,
     "emitted": {
       "SFTIM_Finish": "0x002ae020",
+      "SFTIM_InitHn": "0x002ae028",
       "SFTIM_InitTtu": "0x002ae248",
       "SFTIM_InitTcode": "0x002ae290",
       "SFTIM_UpdateItime": "0x002ae2b8",
@@ -21791,12 +21790,16 @@
     },
     "data": {
       "DAT_004bea88": "0x004bea88",
+      "DAT_004bea90": "0x004bea90",
       "DAT_004beb28": "0x004beb28",
       "DAT_004beb30": "0x004beb30",
       "DAT_004beb34": "0x004beb34",
       "DAT_004beb38": "0x004beb38",
       "DAT_004f5060": "0x004f5060",
       "DAT_004f5088": "0x004f5088"
+    },
+    "externals": {
+      "FUN_002916f8": "0x002916f8"
     }
   },
   "0x002afc08": {

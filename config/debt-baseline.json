@@ -15,8 +15,11 @@
   "compile.bytes": 0,
   "compile.functions": 0,
   "decl.header_conflicts": 558,
-  "decl.local_externs": 2834,
-  "decl.type_conflicts": 1832,
+  "decl.local_externs": 2833,
+  "decl.type_conflicts": {
+   "reason": "sfdply.c declares SFTIM_InitHn with its own player-handle type (SfdPly *), now in conflict with the definition, as its sibling init functions already are",
+   "value": 1833
+  },
   "decl.varargs": 878,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
@@ -52,8 +55,8 @@
   "struct.c": 25,
   "unapproved.bytes": 0,
   "unapproved.functions": 0,
-  "unmatched.bytes": 194364,
-  "unmatched.functions": 146
+  "unmatched.bytes": 193824,
+  "unmatched.functions": 145
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

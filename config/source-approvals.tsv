@@ -376,6 +376,7 @@ volatile	sfxzmv_SearchFreeHn	1	#sfx-handle-used-flag
 volatile	SFXA_Destroy	1	#sfx-handle-used-flag
 volatile	SFXZ_Destroy	1	#sfx-handle-used-flag
 volatile	sfply_ExecOne	1	#sfd-play-pending
+volatile	SFTIM_InitHn	6	#sfd-time-counts
 volatile	sftim_CntupHnVbIn	1	#sfd-time-counts
 volatile	sftim_IsVbinStIncre	1	#sfd-time-counts
 volatile	FUN_002af488	2	#sfd-time-counts

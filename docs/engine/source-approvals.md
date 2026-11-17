@@ -280,7 +280,7 @@ delay-slot filler moves the store into the call's delay slot where retail has a 
 ### sfd-time-counts
 
 The SFD timer's stream position (`+680`), tick count (`+716`), decoded position (`+732`), external clock's last
-reading (`+728`) and rate (`+736`), shared between the V-sync callback chain and the game thread. The V-sync server
+reading (`+728`), rate (`+736`) and wrap value (`+740`), shared between the V-sync callback chain and the game thread. The V-sync server
 reaches them through `sftim_HnVbIn`, which calls `sftim_CntupHnVbIn` (adds the step to both of the first two) and
 `sftim_IsVbinStIncre` (reads the count); the timer adjustment at `0x2af488` changes both from the game thread,
 between the library's lock and unlock calls, while the V-sync path writes them too. Stripped,
@@ -296,8 +296,16 @@ path is `mwsfsvr_VsyncProc`, `SFD_VsyncSvr`, the step at `0x2ae398`, `sftim_HnVb
 timer's table, `sftim_GetTimeExtClock`, which writes all three words. The game thread reaches the same getter from
 `mwSfdGetTime`, `SFD_GetTime` and `SFTIM_GetTimeSub`, and from `SFD_UpdateTime`; the ADXM server thread reaches it
 from `sfply_IsPlayTimeAutoStop`; and `sfply_ChkBpa` and `SFD_Pause` add to the decoded position through
-the pause helpers at `0x2af428` and `0x2af4f0`. Four functions read or write the words:
+the pause helpers at `0x2af428` and `0x2af4f0`. Five functions read or write the words:
 
+* `SFTIM_InitHn` has six, the stores that set the count, the last reading, the decoded position, the rate and the
+  external clock's wrap value (`+740`), and the read of the stream position back after its store. The wrap value
+  is written by `SFD_SetExtClockFn` on the game thread (`0x2aee78` and `0x2aeec4`, and again from the reset after
+  a stop at `0x2ac2a4`) and read by `sftim_GetTimeExtClock` (`0x2aebf8`), which adds it when the clock's delta goes
+  negative, on the V-sync chain above. No second build has the field: the 2002 SDK's `sfd_tim.o` predates it (its
+  `SFD_SetExtClockFn` takes no wrap and its timer ends at `+668`). DW4 never installs an external clock, the same
+  limitation as the last reading, decoded position and rate. The callback context beside it (`+744`) is plain: a
+  `volatile` there moves four words. Stripped of the wrap value's keyword, the function differs by five words.
 * `sftim_ResetVtimeTmr` has two keywords, the stream position and the decoded position; stripped it comes out three
   words short.
 * `sftim_GetVtimeTmr` has two, the decoded position and the rate in the branch that reads them; stripped it is one

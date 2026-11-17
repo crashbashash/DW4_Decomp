@@ -79,11 +79,6 @@ guesses from what each file does.
   parameters' buffer address at +4 is a pointer: as an `int`, its aligned store and the handle's state stores share
   an alias set and keep their source order.
 - The frame-buffer check keeps an empty loop over the frame count when no buffer block is given, as retail runs it.
-- `SFTIM_InitHn` follows the RE4 `sfd_tim.c` order and still differs in the order of two stores. Retail reads the
-  stream position back after storing it, and stores the tick count, the external clock's last reading, decoded
-  position and rate in source order: the words of the approved V-sync set (+680, +716, +728, +732, +736). Written as
-  `volatile` accesses, the remaining difference is one store. That store also matches when the wrap value at +740 is a
-  `volatile` store, but no V-sync writer of +740 is known, so that form is not used.
 - The frame-information copy at `0x2a7e30` (SDK `sfmpv_SetFrmInf`) uses a register copy of the destination for its first
   fields. After the picture-structure branch it reloads the destination pointer before every store and keeps each source
   load behind the previous store, as it would if those stores could alias the pointer. No field typing found so far does

@@ -187,6 +187,74 @@ void SFTIM_Finish(void)
 {
 }
 
+void SFTIM_InitHn(SfdHn *hn, SfdTim *tim)
+{
+    int i;
+
+    SFTIM_SetTimeFn(hn, sftim_GetTimeNone, 0);
+    SFTIM_SetTimeFn(hn, sftim_GetTimeVsync, 1);
+    SFTIM_SetTimeFn(hn, 0, 2);
+    SFTIM_SetTimeFn(hn, sftim_GetTimeUfrm, 3);
+    SFTIM_SetTimeFn(hn, 0, 4);
+    SFTIM_SetTimeFn(hn, sftim_GetTimeExtClock, 5);
+    tim->f24 = 0;
+    SFTIM_InitTcode(&tim->tc);
+    SFTIM_InitTtu(&tim->rec192, 0);
+    SFTIM_InitTtu(&tim->rec60, 0x7FFFFFFF);
+    SFTIM_InitTtu(&tim->rec104, -1);
+    SFTIM_InitTtu(&tim->rec148, -1);
+    SFTIM_InitTtu(&tim->rec236, -1);
+    SFTIM_InitTtu(&tim->rec280, 0x7FFFFFFF);
+    tim->f324 = 0;
+    tim->f328 = 0;
+    tim->f336 = -1;
+    tim->f344 = -1;
+    tim->f352 = 0;
+    tim->f356 = 0;
+    tim->f360 = 0;
+    for (i = 0; i < 32; i++) {
+        tim->f364[i] = 0;
+    }
+    tim->f492 = 1;
+    tim->f496 = 0;
+    tim->f500 = 0;
+    tim->f504 = 0;
+    for (i = 0; i < 32; i++) {
+        tim->f508[i] = 0;
+    }
+    tim->base = -5;
+    tim->base_frames = 1;
+    tim->f644 = -5;
+    tim->f648 = 1;
+    tim->cached_pos = -1;
+    tim->cached_rate = 1;
+    tim->last = -5;
+    tim->estimate = 0x7FFFFFFF;
+    tim->largest = 0;
+    tim->smallest = 0x7FFFFFFF;
+    tim->f676 = 0;
+    tim->stream_pos = 0;
+    tim->step = 1000;
+    tim->f688 = 0;
+    tim->f692 = 0;
+    tim->f696 = 1;
+    tim->sync_count = 100;
+    tim->sync_pending = -1.0f;
+    tim->sync_last = 0;
+    tim->sync_time = -1.0f;
+    *(volatile int *)&tim->count = -1;
+    tim->f720 = *(volatile int *)&tim->stream_pos;
+    tim->clock_get = 0;
+    *(volatile int *)&tim->clock_last = -5;
+    *(volatile int *)&tim->decoded_pos = 0;
+    *(volatile int *)&tim->rate = 1;
+    *(volatile int *)&tim->clock_wrap = -1;
+    tim->clock_ctx = 0;
+    tim->f1456 = 0;
+    tim->f1460 = 0;
+    tim->f1464 = 0;
+}
+
 void SFTIM_InitTtu(SfdTimeRec *rec, int time)
 {
     rec->valid = 0;

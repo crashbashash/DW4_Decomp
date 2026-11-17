@@ -10229,6 +10229,7 @@
 002adf78	SFD_GetSofdecHeader	match	-
 002ae010	SFTIM_Init	match	-
 002ae020	SFTIM_Finish	match	-
+002ae028	SFTIM_InitHn	match	-
 002ae248	SFTIM_InitTtu	match	-
 002ae290	SFTIM_InitTcode	match	-
 002ae2b8	SFTIM_UpdateItime	match	-
