@@ -165,7 +165,7 @@ int sceSifInitRpc();
 int sceSifBindRpc();
 void InvalidDCache(char *start, char *end);
 void memset();
-int FUN_00281a00(int cmd, int *args, int n, int size);
+int sndf_CallRpc(int cmd, int *args, int n, int size);
 void FUN_00280e38(void);
 int SNDF_StartTransfer(unsigned int channel, SndfBank *bank);
 void SyncDCache(char *start, char *end);

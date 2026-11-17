@@ -20,7 +20,7 @@ struct SfdUsrHn {
     SfdUsrIf ifaceStorage;    /* 13780 */
 };
 
-int FUN_002b0338(SfdUsrHn *h, int group, int event, int a, int b);
+int SFTRN_CallTrtTrif(SfdUsrHn *h, int group, int event, int a, int b);
 
 int sfaoap_OutputServer(SfdUsrHn *h);
 void sfaoap_ChkPrepFlg(SfdUsrHn *h);
@@ -105,14 +105,14 @@ int sfaoap_OutputServer(SfdUsrHn *h) {
 }
 
 void sfaoap_ChkPrepFlg(SfdUsrHn *h) {
-    if (sftrn_GetFlagA(h, 7) != 1 && SFBUF_GetPrepFlg(h, h->stream) == 1) {
-        sftrn_SetFlagA(h, 7, 1);
+    if (SFTRN_GetPrepFlg(h, 7) != 1 && SFBUF_GetPrepFlg(h, h->stream) == 1) {
+        SFTRN_SetPrepFlg(h, 7, 1);
     }
 }
 
 void sfaoap_ChkTermFlg(SfdUsrHn *h) {
-    if (sftrn_GetFlagB(h, 7) != 1 && SFBUF_GetTermFlg(h, h->stream) == 1) {
-        sftrn_SetFlagB(h, 7, 1);
+    if (SFTRN_GetTermFlg(h, 7) != 1 && SFBUF_GetTermFlg(h, h->stream) == 1) {
+        SFTRN_SetTermFlg(h, 7, 1);
     }
 }
 
@@ -136,26 +136,26 @@ int SFAOAP_Destroy(void) {
 
 int SFAOAP_Standby(SfdUsrHn *h) {
     if (SFSET_GetCond(h, 6) != 0) {
-        FUN_002b0338(h, 3, 5, 0, 0);
+        SFTRN_CallTrtTrif(h, 3, 5, 0, 0);
     }
 }
 
 int SFAOAP_Start(SfdUsrHn *h) {
     if (SFSET_GetCond(h, 6) != 0) {
-        FUN_002b0338(h, 3, 6, 0, 0);
+        SFTRN_CallTrtTrif(h, 3, 6, 0, 0);
     }
 }
 
 int SFAOAP_Stop(SfdUsrHn *h) {
     if (SFSET_GetCond(h, 6) != 0) {
-        FUN_002b0338(h, 3, 7, 0, 0);
+        SFTRN_CallTrtTrif(h, 3, 7, 0, 0);
     }
 }
 
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
 int SFAOAP_Pause(SfdUsrHn *h, int value) {
     if (SFSET_GetCond(h, 6) != 0) {
-        FUN_002b0338(h, 3, 8, value, 0);
+        SFTRN_CallTrtTrif(h, 3, 8, value, 0);
     }
 }
 

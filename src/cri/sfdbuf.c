@@ -68,17 +68,17 @@ typedef struct SfdBufCrePrm {
     int unit;         /* 40 */
 } SfdBufCrePrm;
 
-extern int DAT_0057fab0;
-extern int DAT_0057fab4;
+extern int sfbuf_sjrbf_uuid;
+extern int sfbuf_sjmem_uuid;
 
-void FUN_002ac6d0(void *ring);
-int FUN_002b0338();
-int FUN_002b03e8(SfdBufHn *h, int n);
+void SFPTS_InitPtsQue(void *ring);
+int SFTRN_CallTrtTrif();
+int SFTRN_IsSetup(SfdBufHn *h, int n);
 
-void FUN_0029ebb0(void);
+void sfbuf_InitSjUuid(void);
 void sfbuf_MakeBufPtr(char **areas, int *sizes, char *base);
 int sfbuf_InitRingSj(SfdBufEnt *ents, char **areas, int *sizes, int index, int extra);
-int FUN_0029d6f8(SfdBufInf *inf, char *data, int size, int extra);
+int sfbuf_CreateSj(SfdBufInf *inf, char *data, int size, int extra);
 void sfbuf_DestroySjSub(SfdBufHn *h, int index);
 void sfbuf_InitVfrmBuf(SfdBufHn *h, SfdBufEnt *ents, char **areas, int *sizes, int index);
 void sfbuf_InitAringBuf(SfdBufEnt *ents, char **areas, int *sizes, int index);
@@ -94,11 +94,11 @@ int sfbuf_RingAddSub(SfdBufHn *h, int index, int len, int id);
 void sfbuf_ResetConti(SfdBufBody *body);
 int sfbuf_PeekChunk(SfdSj *sj, int id, SfdSjChunk *first, SfdSjChunk *second);
 int sfbuf_MoveChunk(SfdSj *sj, int id, int len);
-int FUN_0029ec40(SfdSj *sj);
-int FUN_0029ec78(SfdSj *sj);
+int sfbuf_IsSjRbf(SfdSj *sj);
+int sfbuf_IsSjMem(SfdSj *sj);
 
 void sfbuf_Init(void *work) {
-    FUN_0029ebb0();
+    sfbuf_InitSjUuid();
 }
 
 void SFBUF_Finish(void *work) {
@@ -153,7 +153,7 @@ int sfbuf_InitRingSj(SfdBufEnt *ents, char **areas, int *sizes, int index, int e
     } else {
         flag = 1;
         state = 5;
-        status = FUN_0029d6f8(&inf, *areas, size, extra);
+        status = sfbuf_CreateSj(&inf, *areas, size, extra);
         if (status != 0) {
             return status;
         }
@@ -163,7 +163,7 @@ int sfbuf_InitRingSj(SfdBufEnt *ents, char **areas, int *sizes, int index, int e
     return 0;
 }
 
-int FUN_0029d6f8(SfdBufInf *inf, char *data, int size, int extra) {
+int sfbuf_CreateSj(SfdBufInf *inf, char *data, int size, int extra) {
     int len;
     SfdSj *sj;
     len = size - extra;
@@ -297,11 +297,11 @@ int SFBUF_SetSupplySj(void *sfd, SfdBufInf *inf) {
     if (sfbuf_ChkSupSj(inf) != 0) {
         return sfd_ReportError(h, 0xFF000408);
     }
-    if (FUN_002b03e8(h, 1) != 0) {
+    if (SFTRN_IsSetup(h, 1) != 0) {
         index = 0;
-    } else if (FUN_002b03e8(h, 2) != 0) {
+    } else if (SFTRN_IsSetup(h, 2) != 0) {
         index = 1;
-    } else if (FUN_002b03e8(h, 3) != 0) {
+    } else if (SFTRN_IsSetup(h, 3) != 0) {
         index = 2;
     } else {
         index = 0;
@@ -346,7 +346,7 @@ void sfbuf_SetSupSj(SfdBufBody *body, void *src, SfdBufEnt *ent, int flag) {
     sfbuf_InitConti(&body->cur);
     body->f32 = 0;
     body->f36 = 0;
-    FUN_002ac6d0(&body->f40);
+    SFPTS_InitPtsQue(&body->f40);
     sfd_Unlock(&lock);
 }
 
@@ -759,7 +759,7 @@ int SFBUF_VfrmGetRead(void *sfd, int index, int value) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
     if (ent->valid == 0) {
-        return FUN_002b0338(h, ent->f76, 11, value, 0);
+        return SFTRN_CallTrtTrif(h, ent->f76, 11, value, 0);
     }
     return 0;
 }
@@ -770,7 +770,7 @@ int SFBUF_VfrmAddRead(void *sfd, int index, int value) {
     SfdBufEnt *ent = &ents[index];
     int result = 0;
     if (ent->valid == 0) {
-        result = FUN_002b0338(h, ent->f76, 12, value, 0);
+        result = SFTRN_CallTrtTrif(h, ent->f76, 12, value, 0);
     }
     h->dirty = 1;
     return result;
@@ -818,10 +818,10 @@ int SFBUF_RingGetFreeSiz(SfdBufHn *h, int index) {
 }
 
 void sfbuf_GetSjPos(SfdSj *sj, int *first, int *second) {
-    if (FUN_0029ec40(sj) != 0) {
+    if (sfbuf_IsSjRbf(sj) != 0) {
         *first = SJRBF_GetFlowCnt(sj, 1, 1);
         *second = SJRBF_GetFlowCnt(sj, 0, 1);
-    } else if (FUN_0029ec78(sj) != 0) {
+    } else if (sfbuf_IsSjMem(sj) != 0) {
         *first = SJMEM_GetBufSize(sj);
         *second = *first - sj->vtbl->getNumData(sj, 1);
     } else {
@@ -830,23 +830,23 @@ void sfbuf_GetSjPos(SfdSj *sj, int *first, int *second) {
     }
 }
 
-void FUN_0029ebb0(void) {
+void sfbuf_InitSjUuid(void) {
     char work[16];
     SfdSj *sj;
     sj = SJRBF_Create(work, 8, 0);
-    DAT_0057fab0 = sj->vtbl->getUuid(sj);
+    sfbuf_sjrbf_uuid = sj->vtbl->getUuid(sj);
     sj->vtbl->destroy(sj);
     sj = SJMEM_Create(work, 8);
-    DAT_0057fab4 = sj->vtbl->getUuid(sj);
+    sfbuf_sjmem_uuid = sj->vtbl->getUuid(sj);
     sj->vtbl->destroy(sj);
 }
 
-int FUN_0029ec40(SfdSj *sj) {
-    return sj->vtbl->getUuid(sj) == DAT_0057fab0;
+int sfbuf_IsSjRbf(SfdSj *sj) {
+    return sj->vtbl->getUuid(sj) == sfbuf_sjrbf_uuid;
 }
 
-int FUN_0029ec78(SfdSj *sj) {
-    return sj->vtbl->getUuid(sj) == DAT_0057fab4;
+int sfbuf_IsSjMem(SfdSj *sj) {
+    return sj->vtbl->getUuid(sj) == sfbuf_sjmem_uuid;
 }
 
 long sfbuf_MergeTotal(long total, unsigned int low) {

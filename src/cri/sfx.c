@@ -18,17 +18,13 @@ typedef struct SfxLib {
     int pad984[4];
 } SfxLib;
 
-extern int DAT_004bec20;
-extern int DAT_004bec24;
-extern SfxLib DAT_004bec28;
-extern char *volatile DAT_005856a0; /* matching construct: volatile — stored through a materialised address */
+extern int sfx_init_cnt;
+extern int sfxcnv_forcesplit;
+extern SfxLib sfx_libwork;
+extern char *volatile sfx_version_ptr; /* matching construct: volatile — stored through a materialised address */
 
 
 void FUN_00283038();
-void FUN_00283058(void);
-int FUN_002830a8();
-void FUN_002830d0();
-int FUN_002b52d8();
 int FUN_002b53a0();
 int FUN_002b5400();
 int FUN_002b5490();
@@ -46,25 +42,23 @@ void sfx_InitLibWork(void);
 SfxHn *sfx_SearchFreeHn(void);
 void sfx_InitHn(SfxHn *hn, int work, int wksize);
 int sfx_IsEnoughHnWorkSize(int wksize, int a, int b);
-void FUN_002b3b78(int value);
 void SFXSET_SetTblPtn(SfxHn *hn, int value);
-void FUN_002b3e00(SfxHn *hn, int a, int b, int c);
 void sfxset_ShiftBufInfByLine(SfxPlane *plane, int lines);
 void FUN_002b3fd0(SfxPlane *plane, int first, int second);
-void FUN_002b4080(void);
-void FUN_002b4098(void);
+void SFXSUD_Init(void);
+void SFXSUD_Finish(void);
 
 void SFX_Init(void) {
-    int *initialised = &DAT_004bec20;
+    int *initialised = &sfx_init_cnt;
     if (*initialised > 0) {
         return;
     }
-    DAT_005856a0 = sfx_GetVersionStr();
+    sfx_version_ptr = sfx_GetVersionStr();
     sfx_InitLibWork();
-    FUN_002b4080();
+    SFXSUD_Init();
     SFXZ_Init();
     SFXA_Init();
-    DAT_004bec24 = 0;
+    sfxcnv_forcesplit = 0;
     (*initialised)++;
 }
 
@@ -73,25 +67,25 @@ char *sfx_GetVersionStr(void) {
 }
 
 void sfx_InitLibWork(void) {
-    memset(&DAT_004bec28, 0, 1000);
-    DAT_004bec28.maxhn = 8;
-    FUN_002b3b78(1);
-    FUN_00283058();
+    memset(&sfx_libwork, 0, 1000);
+    sfx_libwork.maxhn = 8;
+    SFX_SetCcirFx(1);
+    CFT_Init();
     CFT_Ycc420rgbToArgb8888();
 }
 
 void SFX_Finish(void) {
-    if (DAT_004bec20 > 0) {
+    if (sfx_init_cnt > 0) {
         SFXZ_Finish();
         SFXA_Finish();
-        FUN_002b4098();
+        SFXSUD_Finish();
         CFT_Finish();
-        DAT_004bec20--;
+        sfx_init_cnt--;
     }
 }
 
 void SFX_SetErrFn(SfxErrFn fn, void *obj) {
-    SfxCbSlot *err = &DAT_004bec28.err;
+    SfxCbSlot *err = &sfx_libwork.err;
     err->fn = fn;
     err->obj = obj;
 }
@@ -121,14 +115,14 @@ SfxHn *SFX_Create(int work, int wksize, int a2, int a3) {
         return 0;
     }
     hn->ahn = ahn;
-    DAT_004bec28.nhn++;
+    sfx_libwork.nhn++;
     return hn;
 }
 
 /* matching construct: manual — the in-use word is read through a volatile pointer; retail leaves the loop branch's delay slot empty */
 SfxHn *sfx_SearchFreeHn(void) {
-    int maxhn = DAT_004bec28.maxhn;
-    SfxHn *tbl = DAT_004bec28.hn;
+    int maxhn = sfx_libwork.maxhn;
+    SfxHn *tbl = sfx_libwork.hn;
     volatile SfxHn *hn;
     int i;
 
@@ -174,13 +168,13 @@ void SFX_Destroy(SfxHn *hn) {
         hn->used = 0;
         SFXZ_Destroy(hn->zhn);
         SFXA_Destroy(ahn);
-        DAT_004bec28.nhn -= 1;
+        sfx_libwork.nhn -= 1;
     }
 }
 
 void SFXLIB_Error(void *obj, void *info, char *msg) {
     /* Both callback words are read before the counter is bumped, as in retail. */
-    SfxCbSlot *slot = &DAT_004bec28.err;
+    SfxCbSlot *slot = &sfx_libwork.err;
     SfxErrFn fn = slot->fn;
     void *cbobj = slot->obj;
     slot->count++;
@@ -189,20 +183,20 @@ void SFXLIB_Error(void *obj, void *info, char *msg) {
     }
 }
 
-void FUN_002b3b78(int value) {
-    DAT_004bec28.f20 = value;
+void SFX_SetCcirFx(int value) {
+    sfx_libwork.f20 = value;
 }
 
-int FUN_002b3b88(void) {
-    return DAT_004bec28.f20;
+int SFX_GetCcirFx(void) {
+    return sfx_libwork.f20;
 }
 
-void FUN_002b3b98(int value) {
-    DAT_004bec24 = value;
+void SFX_SetForceSplit(int value) {
+    sfxcnv_forcesplit = value;
 }
 
-int FUN_002b3ba8(void) {
-    return DAT_004bec24;
+int SFX_GetForceSplit(void) {
+    return sfxcnv_forcesplit;
 }
 
 void FUN_002b3bb8(SfxHn *hn, SfxZCbFn fn) {
@@ -221,15 +215,15 @@ int SFX_GetCompoMode(SfxHn *hn) {
     return hn->compo;
 }
 
-void SFX_SetOutBufSize(SfxHn *hn, int value) {
+void SFX_SetFxType(SfxHn *hn, int value) {
     hn->f8 = value;
 }
 
-int FUN_002b3bf0(SfxHn *hn) {
+int SFX_GetFxType(SfxHn *hn) {
     return hn->f8;
 }
 
-void FUN_002b3bf8(SfxHn *hn, int width, int height) {
+void SFX_SetOutBufSize(SfxHn *hn, int width, int height) {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     hn->width = width;
     hn->height = height;
@@ -242,7 +236,7 @@ int SFX_GetOutBufSize(SfxHn *hn, int *width, int *height) {
     return t;
 }
 
-void FUN_002b3c20(SfxHn *hn, int value) {
+void SFX_SetUnitWidth(SfxHn *hn, int value) {
     hn->f20 = value;
 }
 
@@ -321,55 +315,55 @@ void SFX_GetZclip(SfxHn *hn, float *zmin, float *zmax) {
 }
 
 void SFX_GetZfrmRange(SfxHn *hn, SfxFrame *frm, int *first, int *second) {
-    FUN_002b4498(hn->zhn, frm->fno, first, second);
+    SFXZ_GetZfrmRange(hn->zhn, frm->fno, first, second);
 }
 
-void FUN_002b3dd0(SfxHn *hn, int lo, int hi, int mode) {
+void SFX_SetALumiPrm(SfxHn *hn, int lo, int hi, int mode) {
     SFXA_SetLumiPrm(hn->ahn, lo, hi, mode);
 }
 
-void SFX_SetALumiPrm(SfxHn *hn, int *lo, int *hi, int *mode) {
+void SFX_GetALumiPrm(SfxHn *hn, int *lo, int *hi, int *mode) {
     SFXA_GetLumiPrm(hn->ahn, lo, hi, mode);
 }
 
-void FUN_002b3e00(SfxHn *hn, int a, int b, int c) {
+void SFX_SetAlp3Prm(SfxHn *hn, int a, int b, int c) {
     SFXA_SetAlp3Prm(hn->ahn, a & 0xFF, b & 0xFF, c & 0xFF);
     SFXSET_SetTblPtn(hn, 0);
 }
 
-void SFX_GetALumiPrm(SfxHn *hn, unsigned char *alpha0, unsigned char *alpha1, unsigned char *alpha2) {
+void SFX_GetAlp3Prm(SfxHn *hn, unsigned char *alpha0, unsigned char *alpha1, unsigned char *alpha2) {
     SFXA_GetAlp3Prm(hn->ahn, alpha0, alpha1, alpha2);
 }
 
-void FUN_002b3e58(SfxHn *hn, int value) {
+void SFX_SetColAdj(SfxHn *hn, int value) {
     hn->f56 = value;
 }
 
-int FUN_002b3e60(SfxHn *hn) {
+int SFX_GetColAdj(SfxHn *hn) {
     return hn->f56;
 }
 
-void SFX_SetColAdj(SfxHn *hn, int value) {
+void SFX_SetSplitField(SfxHn *hn, int value) {
     hn->f104 = value;
 }
 
-int SFX_GetColAdj(SfxHn *hn) {
+int SFX_GetSplitField(SfxHn *hn) {
     return hn->f104;
 }
 
-void SFX_SetSplitField(SfxHn *hn, int value) {
+void SFX_SetProgOut(SfxHn *hn, int value) {
     hn->f108 = value;
 }
 
-int SFX_GetSplitField(SfxHn *hn) {
+int SFX_GetProgOut(SfxHn *hn) {
     return hn->f108;
 }
 
-void SFX_SetProgOut(SfxHn *hn, int value) {
+void SFX_SetCnvBottomUp(SfxHn *hn, int value) {
     hn->f116 = value;
 }
 
-int SFX_GetProgOut(SfxHn *hn) {
+int SFX_GetCnvBottomUp(SfxHn *hn) {
     return hn->f116;
 }
 
@@ -407,58 +401,58 @@ void FUN_002b3fd0(SfxPlane *plane, int first, int second) {
     plane->addr = plane->addr + first * plane->pitch + second;
 }
 
-void FUN_002b3ff8(SfxHn *hn, int value) {
+void SFX_SetMaxAlpha(SfxHn *hn, int value) {
     unsigned int temp_s0;
     temp_s0 = value & 0xFF;
-    FUN_002830a8(value);
+    CFT_SetMaxAlpha(value);
     SFXSET_SetTblPtn(hn, 0);
-    FUN_002b3e00(hn, 0, temp_s0 >> 1, temp_s0);
+    SFX_SetAlp3Prm(hn, 0, temp_s0 >> 1, temp_s0);
 }
 
-void FUN_002b4050(void) {
-    FUN_002830d0();
+int SFX_GetMaxAlpha(SfxHn *hn) {
+    return CFT_GetMaxAlpha();
 }
 
 void FUN_002b4068(void) {
     FUN_00283038();
 }
 
-void FUN_002b4080(void) {
+void SFXSUD_Init(void) {
     SUD_Init();
 }
 
-void FUN_002b4098(void) {
+void SFXSUD_Finish(void) {
     SUD_Finish();
 }
 
-void FUN_002b40b0(SfxHn *hn, int a, int b) {
+void SFX_SetPicUsrDat(SfxHn *hn, char *ud, int size) {
     int *sud = hn->sud;
-    sud[0] = a;
-    sud[1] = b;
+    sud[0] = (int)ud;
+    sud[1] = size;
 }
 
-int FUN_002b40c0(SfxHn *hn) {
+int SFX_IsEnablePicUsr(SfxHn *hn) {
     return hn->sud[0] != 0;
 }
 
-void FUN_002b40d0(SfxHn *hn) {
+int SFX_GetSudVersion(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b52d8(sud[0], sud[1]);
+    return SUD_AnalyVersion((char *)sud[0], sud[1]);
 }
 
-void FUN_002b40f0(SfxHn *hn) {
+int SFX_GetTypeDivField(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
     /* the handle keeps the user-data header address as a word */
-    SUD_AnalyTypeDivField((char *)sud[0], sud[1]);
+    return SUD_AnalyTypeDivField((char *)sud[0], sud[1]);
 }
 
-void FUN_002b4110(SfxHn *hn) {
+int SFX_GetTypeCcs(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
     /* the handle keeps the user-data header address as a word */
-    SUD_AnalyTypeCcs((char *)sud[0], sud[1]);
+    return SUD_AnalyTypeCcs((char *)sud[0], sud[1]);
 }
 
 void FUN_002b4130(SfxHn *hn) {

@@ -1,51 +1,27 @@
 /* Points the MPEG-2 video decoder hooks (mpvhook.c) at the M2V entry points and marks them installed. */
 #include "dw4/cri/m2v.h"
 #include "dw4/cri/mpv.h"
-void FUN_00285a30();
-void FUN_00285a58();
-void FUN_00285a68();
-void FUN_0028ab10();
-extern void *DAT_004bcbfc;
-extern void *DAT_004bcc00;
-extern void *DAT_004bcc04;
-extern void *DAT_004bcc08;
-extern void *DAT_004bcc0c;
-extern void *DAT_004bcc10;
-extern void *DAT_004bcc14;
-extern void *DAT_004bcc18;
-extern void *DAT_004bcc1c;
-extern void *DAT_004bcc20;
-extern void *DAT_004bcc24;
-extern void *DAT_004bcc28;
-extern void *DAT_004bcc2c;
-extern void *DAT_004bcc30;
-extern void *DAT_004bcc34;
-extern void *DAT_004bcc38;
-extern void *DAT_004bcc3c;
-extern void *DAT_004bcc40;
-extern void *DAT_004bcc44;
-extern void *DAT_004bcc48;
-extern int DAT_004bcbf8;
+#include "dw4/cri/mpvhook.h"
 void mpv_InstallHooks(void) {
-    DAT_004bcbfc = M2V_GetVersionStr;
-    DAT_004bcc00 = FUN_0028ab10;
-    DAT_004bcc04 = M2V_Init;
-    DAT_004bcc08 = M2V_Finish;
-    DAT_004bcc0c = M2V_Create;
-    DAT_004bcc10 = M2V_Destroy;
-    DAT_004bcc14 = M2V_SetCond;
-    DAT_004bcc18 = M2V_MbCbFn;
-    DAT_004bcc1c = M2V_SetErrFunc;
-    DAT_004bcc20 = M2V_GetErrInf;
-    DAT_004bcc24 = M2V_DecodeFrm;
-    DAT_004bcc28 = M2V_SkipFrm;
-    DAT_004bcc2c = FUN_00285a30;
-    DAT_004bcc30 = FUN_00285a58;
-    DAT_004bcc34 = FUN_00285a68;
-    DAT_004bcc38 = M2V_DecodePicAtr;
-    DAT_004bcc3c = M2V_GetPicAtr;
-    DAT_004bcc40 = M2V_GetBitRate;
-    DAT_004bcc44 = M2V_GetVbvBufSiz;
-    DAT_004bcc48 = M2V_GetLinkFlg;
-    DAT_004bcbf8 = 1;
+    mpvhook_fn_GetVersionStr = M2V_GetVersionStr;
+    mpvhook_fn_IsConformable = M2V_IsConformable;
+    mpvhook_fn_Init = M2V_Init;
+    mpvhook_fn_Finish = M2V_Finish;
+    mpvhook_fn_Create = M2V_Create;
+    mpvhook_fn_Destroy = M2V_Destroy;
+    mpvhook_fn_SetCond = M2V_SetCond;
+    mpvhook_fn_MbCbFn = M2V_MbCbFn;
+    mpvhook_fn_SetErrFunc = M2V_SetErrFunc;
+    mpvhook_fn_GetErrInf = M2V_GetErrInf;
+    mpvhook_fn_DecodeFrm = M2V_DecodeFrm;
+    mpvhook_fn_SkipFrm = M2V_SkipFrm;
+    mpvhook_fn_SetUsrSj = M2V_SetUsrSj;
+    mpvhook_fn_SetPicUsrBuf = M2V_SetPicUsrBuf;
+    mpvhook_fn_GetPicUsr = M2V_GetPicUsr;
+    mpvhook_fn_DecodePicAtr = M2V_DecodePicAtr;
+    mpvhook_fn_GetPicAtr = M2V_GetPicAtr;
+    mpvhook_fn_GetBitRate = M2V_GetBitRate;
+    mpvhook_fn_GetVbvBufSiz = M2V_GetVbvBufSiz;
+    mpvhook_fn_GetLinkFlg = M2V_GetLinkFlg;
+    mpvhook_installed = 1;
 }

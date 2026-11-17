@@ -25,7 +25,7 @@ extern CftGifPacket DAT_004bb3f8;
 extern char *volatile DAT_00573ea8;
 
 int *CFT_GetVersionStr(void);
-void FUN_002830a8(int max);
+void CFT_SetMaxAlpha(int max);
 
 void FUN_00283018(char *name)
 {
@@ -47,11 +47,11 @@ int FUN_00283048(void)
     return DAT_004bb3ec;
 }
 
-void FUN_00283058(void)
+void CFT_Init(void)
 {
     DAT_00573ea8 = "\nCRI CFT/PS2EE Ver.1.57 Build:Oct  6 2004 11:36:30\n";
     *CFT_GetVersionStr() = 0;
-    FUN_002830a8(128);
+    CFT_SetMaxAlpha(128);
 }
 
 void CFT_Finish(void)
@@ -63,12 +63,12 @@ int *CFT_GetVersionStr(void)
     return &cft_ver_str;
 }
 
-void FUN_002830a8(int max)
+void CFT_SetMaxAlpha(int max)
 {
     *CFT_GetVersionStr() = max;
 }
 
-int FUN_002830d0(void)
+int CFT_GetMaxAlpha(void)
 {
     return *CFT_GetVersionStr();
 }
@@ -183,7 +183,7 @@ void cft_MakeYccTbl(int mode, int lo, int hi, CftEntry *t)
     CftEntry *tb;
     CftEntry *tr;
 
-    max = FUN_002830d0();
+    max = CFT_GetMaxAlpha();
     i = 0;
     tb = t + 256;
     tr = t + 512;
@@ -324,11 +324,11 @@ void cft_MakeAlpha3TblBlack(CftEntry *t, unsigned char alpha0, unsigned char alp
     }
 }
 
-void FUN_00284dc0(void)
+void CFT_MakeYcc422ColAdjTbl(void)
 {
 }
 
-void FUN_00284dc8(CftGifPacket *dst)
+void CFT_MakeArgb8888ColAdjTbl(CftGifPacket *dst)
 {
     *dst = DAT_004bb3f8;
 }

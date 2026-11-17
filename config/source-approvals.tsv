@@ -42,7 +42,7 @@ volatile	InitAlarm	1	#sony-hardware-registers
 volatile	InitTimer	6	#sony-timer-state
 volatile	StartTimerSystemTime	1	#sony-hardware-registers
 volatile	StopTimerSystemTime	1	#sony-hardware-registers
-volatile	FUN_002a8ba0	3	#sony-hardware-registers
+volatile	sfmpvps2_setD3_CHCR	3	#sony-hardware-registers
 volatile	setD4_CHCR	3	#sony-hardware-registers
 volatile	viBufDelete	3	#sony-hardware-registers
 volatile	viBufReset	3	#sony-hardware-registers
@@ -284,7 +284,7 @@ volatile	SRD_GetReadEndCount	1	#srd-module-words
 volatile	SRD_GetReadBeginCount	1	#srd-module-words
 volatile	SRD_SetHistory	2	#srd-module-words
 volatile	SRD_GetHistory	1	#srd-module-words
-volatile	FUN_002b59a0	2	#sud-timer
+volatile	UTY_FinishTmr	2	#sud-timer
 asm	p2AddDmaPredicate	1	#dma-channel-cop0
 asm	p2AddDmaCompletion	1	#dma-channel-cop0
 asm	p2WaitDmaCondition	1	#dma-channel-cop0
@@ -334,8 +334,8 @@ asm	DIntr	2	#sony-libkernl-cop0-and-syscall
 volatile	DIntr	1	#sony-libkernl-cop0-and-syscall
 volatile	mwPlyExecSvrHndl	1	#mwsfd-handle-used
 volatile	mwsfsvr_VsyncProc	1	#mwsfsvr-vsync-count
-volatile	FUN_002b5848	8	#sud-timer
-volatile	FUN_002b5a10	7	#sud-timer
+volatile	UTY_InitTmr	8	#sud-timer
+volatile	UTY_GetTmr	7	#sud-timer
 volatile	sceTtyHandler	5	#sony-interrupt-shared-state
 volatile	sceTtyWrite	5	#sony-interrupt-shared-state
 volatile	sceTtyRead	5	#sony-interrupt-shared-state
@@ -358,7 +358,7 @@ volatile	igPsx2Semaphore_Signal	1	#psx2-semaphore-interrupt-status
 asm	igPsx2Semaphore_Wait	1	#psx2-semaphore-interrupt-status
 volatile	igPsx2Semaphore_Wait	1	#psx2-semaphore-interrupt-status
 volatile	CRICFG_Init	1	#build-string-stores
-volatile	FUN_00283058	1	#build-string-stores
+volatile	CFT_Init	1	#build-string-stores
 volatile	SFX_Init	1	#build-string-stores
 volatile	SUD_Init	1	#build-string-stores
 volatile	pl2enc_Init	1	#build-string-reads
@@ -379,7 +379,7 @@ volatile	sfply_ExecOne	1	#sfd-play-pending
 volatile	SFTIM_InitHn	6	#sfd-time-counts
 volatile	sftim_CntupHnVbIn	1	#sfd-time-counts
 volatile	sftim_IsVbinStIncre	1	#sfd-time-counts
-volatile	FUN_002af488	2	#sfd-time-counts
+volatile	sftim_AddHnVbIn	2	#sfd-time-counts
 volatile	sftim_ResetVtimeTmr	2	#sfd-time-counts
 volatile	sftim_GetVtimeTmr	2	#sfd-time-counts
 volatile	sftim_GetTimeExtClock	4	#sfd-time-counts

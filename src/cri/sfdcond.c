@@ -54,12 +54,12 @@ typedef struct SfdLib {
 
 extern SfdLib DAT_004bea88;
 
-int FUN_002b03e8(SfdHn *hn, int check);
+int SFTRN_IsSetup(SfdHn *hn, int check);
 
 void sfset_SetCondAll(int index, int value);
 void sfset_SetUsrCond(SfdHn *hn, int index, int value);
 int sfset_IsCondValid(SfdHn *hn, int index, int value);
-void FUN_002adf48(char *ctx, int index, int *out);
+void SFSET_GetTrHn(char *ctx, int index, int *out);
 
 int SFD_GetSvrStat(void)
 {
@@ -119,16 +119,16 @@ void sfset_SetUsrCond(SfdHn *hn, int index, int value)
 
 int sfset_IsCondValid(SfdHn *hn, int index, int value)
 {
-    if (index == 6 && value == 1 && FUN_002b03e8(hn, 3) == 0) {
+    if (index == 6 && value == 1 && SFTRN_IsSetup(hn, 3) == 0) {
         return 0;
     }
-    if (index == 5 && value == 1 && FUN_002b03e8(hn, 2) == 0) {
+    if (index == 5 && value == 1 && SFTRN_IsSetup(hn, 2) == 0) {
         return 0;
     }
     return 1;
 }
 
-int SFD_GetCondDef(void *sfd, int index, int *out)
+int SFD_GetCond(void *sfd, int index, int *out)
 {
     SfdHn *hn = sfd;
     if (hn == 0) {
@@ -149,7 +149,7 @@ int SFSET_GetCond(void *sfd, int index)
     return hn->cond[index];
 }
 
-int SFD_GetHnHdrInf(void *sfd, SfdInfo64 *out)
+int SFD_GetMvInf(void *sfd, SfdInfo64 *out)
 {
     SfdHn *hn = sfd;
     int r = SFLIB_CheckHn(hn);
@@ -194,11 +194,11 @@ int SFD_GetTrHn(void *sfd, int index, int *out)
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000117);
     }
-    FUN_002adf48((char *)hn, index, out);
+    SFSET_GetTrHn((char *)hn, index, out);
     return 0;
 }
 
-void FUN_002adf48(char *ctx, int index, int *out)
+void SFSET_GetTrHn(char *ctx, int index, int *out)
 {
     int *value = ((SfdEntryRef *)(ctx + index * 0x44))->value;
     if (value == 0) {

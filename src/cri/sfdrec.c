@@ -290,8 +290,8 @@ typedef struct SfdEntry44 {
     int f32;
 } SfdEntry44;
 
-int FUN_002aa538(SfdPly *hn);
-int FUN_002b03e8();
+int SFPL2_Standby(SfdPly *hn);
+int SFTRN_IsSetup();
 
 void sfsee_InitSeekInf(SfdRec *rec);
 void sfsee_InitHeadInf(SfdRec *rec);
@@ -307,7 +307,7 @@ void sfsee_SearchTimeToPos(int delegate, int scale, int divisor, int *out);
 void sfsee_CnvPosToTime(SfdRec *record, int value, int *out, int *out_scale);
 void sfsee_SearchPosToTime(int delegate, int value, int *out, int *out_scale);
 void sfsee_ExecFinAnaly(SfdPly *hn);
-int FUN_002ad828(char *ctx);
+int sfsee_GetInSjReadTot(char *ctx);
 int sfsee_UpdateEByteRate(SfdPly *hn);
 
 void SFSEE_InitHn(SfdRecSlot *slot)
@@ -395,7 +395,7 @@ void SFD_StartHeadAnaly(SfdPly *h) {
         return;
     }
     SFSET_SetCond(h, 47, 1);
-    FUN_002aa538(h);
+    SFPL2_Standby(h);
 }
 
 int SFD_IsHeadAnalyEnd(SfdPly *hn, int *running)
@@ -496,7 +496,7 @@ void sfsee_ExecHeadAnaly(SfdPly *hn)
 int sfsee_IsAudioAnalyzing(SfdPly *hn, SfdRecVideoTime *rate, int *status)
 {
     int result;
-    if (FUN_002b03e8(hn, 3) != 0) {
+    if (SFTRN_IsSetup(hn, 3) != 0) {
         result = SFSET_GetCond(hn, 6);
         if (result == 1) {
             *status = result;
@@ -510,7 +510,7 @@ int sfsee_IsAudioAnalyzing(SfdPly *hn, SfdRecVideoTime *rate, int *status)
 int sfsee_IsVideoAnalyzing(SfdPly *hn, SfdRecAudioTime *rate, int *status)
 {
     int result;
-    if (FUN_002b03e8(hn, 2) != 0) {
+    if (SFTRN_IsSetup(hn, 2) != 0) {
         result = SFSET_GetCond(hn, 5);
         if (result == 1) {
             *status = result;
@@ -523,7 +523,7 @@ int sfsee_IsVideoAnalyzing(SfdPly *hn, SfdRecAudioTime *rate, int *status)
 
 int sfsee_IsMpsStream(SfdPly *hn)
 {
-    return FUN_002b03e8(hn, 1) != 0;
+    return SFTRN_IsSetup(hn, 1) != 0;
 }
 
 int SFD_IsSeekAble(SfdPly *hn, int *ready)
@@ -727,7 +727,7 @@ void sfsee_ExecFinAnaly(SfdPly *hn)
         base = 0;
         if (settings->f4 != -3) base = s->offset;
         if (base >= 0) {
-            t = FUN_002ad828((char *)hn);
+            t = sfsee_GetInSjReadTot((char *)hn);
             if (t != -1) {
                 changed = 1;
                 s->default_value = base + t;
@@ -743,7 +743,7 @@ void sfsee_ExecFinAnaly(SfdPly *hn)
     }
 }
 
-int FUN_002ad828(char *ctx)
+int sfsee_GetInSjReadTot(char *ctx)
 {
     char *table = ctx + 7976;
     int value;

@@ -100,7 +100,7 @@ void mw_sfd_start_ex(MwsfdPly *ply)
 {
     void *input;
 
-    mwsflib_GetVersionStr();
+    MWSFLIB_GetLibWorkPtr();
     if (ply->sfd != 0) {
         if (MWSFCRE_ResetSfdHn(ply) != 0) {
             MWSFSVM_Error("E0203263: mw_sfd_start_ex: RESET failed.");
@@ -238,7 +238,7 @@ void mwSfdPause(MwsfdPly *ply, int sw)
     if (ply->pause == 0 && sw == 0)
         return;
     if (MWSFD_GetPauseBdr() == 1 && ply->cre.type == 1) {
-        if (SFD_GetCondDef(sfd, 6, &value) == 0) {
+        if (SFD_GetCond(sfd, 6, &value) == 0) {
             if (value == 1)
                 mwlSfdSleepDecSvr(ply);
         } else

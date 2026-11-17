@@ -58,7 +58,7 @@ char *MWSFD_GetVersionStr(void)
     return mwsfd_version;
 }
 
-MwsfdWork *mwsflib_GetVersionStr(void)
+MwsfdWork *MWSFLIB_GetLibWorkPtr(void)
 {
     return &mwsfd_work;
 }
@@ -131,7 +131,7 @@ void mwsflib_SetSvrFunc(MwsfdInitPrm *iprm)
  * latency 1, no decode server) without them */
 void mwsflib_InitLibWork(MwsfdInitPrm *iprm)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
     MwsfdInitPrm *prm;
 
     memset(work, 0, sizeof(MwsfdWork));
@@ -155,22 +155,22 @@ void mwsflib_InitLibWork(MwsfdInitPrm *iprm)
 
 void MWSFD_SetUsePicUsr(int enable)
 {
-    mwsflib_GetVersionStr()->picUsrEnable = enable;
+    MWSFLIB_GetLibWorkPtr()->picUsrEnable = enable;
 }
 
 int MWSFD_GetUsePicUsr(void)
 {
-    return mwsflib_GetVersionStr()->picUsrEnable;
+    return MWSFLIB_GetLibWorkPtr()->picUsrEnable;
 }
 
 void MWSFD_SetPauseBdr(int wait)
 {
-    mwsflib_GetVersionStr()->waitSvrOnStart = wait;
+    MWSFLIB_GetLibWorkPtr()->waitSvrOnStart = wait;
 }
 
 int MWSFD_GetPauseBdr(void)
 {
-    return mwsflib_GetVersionStr()->waitSvrOnStart;
+    return MWSFLIB_GetLibWorkPtr()->waitSvrOnStart;
 }
 
 void mwsflib_SetDefCond(MwsfdInitPrm *prm)
@@ -190,7 +190,7 @@ void mwPlyResetSfdFx(MwsfdInitPrm *iprm)
 /* drops the init count; at zero, finishes every player in use and shuts the libraries down */
 void mwPlyFinishSfdFx(void)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
     MwsfdPly *ply;
     int i;
 
@@ -222,13 +222,13 @@ void mwPlyFinishSfdFx(void)
 
 int MWSFLIB_SetErrCode(int code)
 {
-    mwsflib_GetVersionStr()->errCode = code;
+    MWSFLIB_GetLibWorkPtr()->errCode = code;
     return code;
 }
 
 int MWSFD_GetErrCode(void)
 {
-    return mwsflib_GetVersionStr()->errCode;
+    return MWSFLIB_GetLibWorkPtr()->errCode;
 }
 
 /* checks the SFD library version, initialises it and installs the error callback */
@@ -268,12 +268,12 @@ int MWSFD_GetErrMwplyHn(void)
 
 void MWSFLIB_SetSeekFlg(int flag)
 {
-    mwsflib_GetVersionStr()->workFlag = flag;
+    MWSFLIB_GetLibWorkPtr()->workFlag = flag;
 }
 
 int MWSFLIB_GetSeekFlg(void)
 {
-    return mwsflib_GetVersionStr()->workFlag;
+    return MWSFLIB_GetLibWorkPtr()->workFlag;
 }
 
 void mwply_SetTimeFn(MwsfdPly *ply, int a, int b, int c)

@@ -19,7 +19,6 @@ extern M2vObj *m2vlib_m2vobj;
     } while (0)
 
 void m2vlib_SetCondAll(int no, M2vCondFn fn);
-void FUN_00285278();
 M2vObj *m2vlib_SearchFreeHn(void);
 M2vObj *m2vlib_InitHn(M2vObj *hn);
 void m2vlib_InitPicAtr(M2vPicAtr *picatr);
@@ -31,7 +30,7 @@ char *M2V_GetVersionStr(void)
     return M2VLIB_version_str;
 }
 
-int FUN_0028ab10(char *buf, int size)
+int M2V_IsConformable(char *buf, int size)
 {
     char *p;
 
@@ -193,7 +192,7 @@ void M2V_SetCond(M2vObj *hn, int no, M2vCondFn fn)
     M2vCondFn *cond;
 
     if (no == 8 && fn == 0) {
-        fn = FUN_00285278;
+        fn = mpvhook_MbCbFn;
     }
     if (hn == 0) {
         m2vlib_SetCondAll(no, fn);

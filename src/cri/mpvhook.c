@@ -1,154 +1,133 @@
 /* Hooks of the MPEG-2 video decoder that mpv_InstallHooks (mpvinst.c) points at the M2V entry points:
- * the word at 0x004bcbf8 says whether they are installed, the pointers after it are the entry points
- * in the order of the install. Each wrapper calls its hook when one is set. */
+ * mpvhook_installed says whether they are installed, and each mpvhook_fn_ pointer holds the M2V entry
+ * point of its name. Each wrapper calls its hook when one is set. */
 #include "dw4/cri/mpv.h"
-
-extern int DAT_004bcbf8[4];
-extern int (*DAT_004bcbfc)(void);
-extern int (*DAT_004bcc00)(void);
-extern int (*DAT_004bcc04)();
-extern int (*DAT_004bcc08)();
-extern int (*DAT_004bcc0c)(void);
-extern int (*DAT_004bcc10)();
-extern int (*DAT_004bcc14)();
-extern int (*DAT_004bcc18)();
-extern int (*DAT_004bcc1c)();
-extern int (*DAT_004bcc20)();
-extern int (*DAT_004bcc24)();
-extern int (*DAT_004bcc28)();
-extern int (*DAT_004bcc2c)();
-extern int (*DAT_004bcc30)();
-extern int (*DAT_004bcc34)();
-extern int (*DAT_004bcc38)();
-extern int (*DAT_004bcc3c)();
-extern int (*DAT_004bcc40)();
-extern int (*DAT_004bcc44)();
-extern int (*DAT_004bcc48)();
+#include "dw4/cri/mpvhook.h"
 
 int mpvhook_IsInstalled(void) {
-    return DAT_004bcbf8[0];
+    return mpvhook_installed;
 }
 
-int FUN_00285170(void) {
-    if (DAT_004bcbfc != 0) {
-        return DAT_004bcbfc();
+int mpvhook_GetVersionStr(void) {
+    if (mpvhook_fn_GetVersionStr != 0) {
+        return mpvhook_fn_GetVersionStr();
     }
     return 0;
 }
 
-int FUN_002851a0(void) {
-    if (DAT_004bcc00 != 0) {
-        return DAT_004bcc00();
+int mpvhook_IsConformable(char *buf, int size) {
+    if (mpvhook_fn_IsConformable != 0) {
+        return mpvhook_fn_IsConformable(buf, size);
     }
     return 0;
 }
 
 void mpvhook_Init(int nobj, void *work, int size) {
-    if (DAT_004bcc04 != 0) {
-        DAT_004bcc04(nobj, work, size);
+    if (mpvhook_fn_Init != 0) {
+        mpvhook_fn_Init(nobj, work, size);
     }
 }
 
 void mpvhook_Finish(void) {
-    if (DAT_004bcc08 != 0) {
-        DAT_004bcc08();
+    if (mpvhook_fn_Finish != 0) {
+        mpvhook_fn_Finish();
     }
 }
 
 int mpvhook_Create(void) {
-    if (DAT_004bcc0c != 0) {
-        return DAT_004bcc0c();
+    if (mpvhook_fn_Create != 0) {
+        return mpvhook_fn_Create();
     }
     return 0;
 }
 
 void mpvhook_Destroy(int lower) {
-    if (DAT_004bcc10 != 0) {
-        DAT_004bcc10(lower);
+    if (mpvhook_fn_Destroy != 0) {
+        mpvhook_fn_Destroy(lower);
     }
 }
 
-void FUN_00285278(void) {
-    if (DAT_004bcc18 != 0) {
-        DAT_004bcc18();
+void mpvhook_MbCbFn(void) {
+    if (mpvhook_fn_MbCbFn != 0) {
+        mpvhook_fn_MbCbFn();
     }
 }
 
 void mpvhook_SetCond(int lower, int no, int value) {
-    if (DAT_004bcc14 != 0) {
-        DAT_004bcc14(lower, no, value);
+    if (mpvhook_fn_SetCond != 0) {
+        mpvhook_fn_SetCond(lower, no, value);
     }
 }
 
-void FUN_002852c8(void) {
-    if (DAT_004bcc1c != 0) {
-        DAT_004bcc1c();
+void mpvhook_SetErrFunc(void) {
+    if (mpvhook_fn_SetErrFunc != 0) {
+        mpvhook_fn_SetErrFunc();
     }
 }
 
-void FUN_002852f0(void) {
-    if (DAT_004bcc20 != 0) {
-        DAT_004bcc20();
+void mpvhook_GetErrInf(void) {
+    if (mpvhook_fn_GetErrInf != 0) {
+        mpvhook_fn_GetErrInf();
     }
 }
 
-void FUN_00285318(void) {
-    if (DAT_004bcc24 != 0) {
-        DAT_004bcc24();
+void mpvhook_DecodeFrm(void) {
+    if (mpvhook_fn_DecodeFrm != 0) {
+        mpvhook_fn_DecodeFrm();
     }
 }
 
-void FUN_00285340(void) {
-    if (DAT_004bcc28 != 0) {
-        DAT_004bcc28();
+void mpvhook_SkipFrm(void) {
+    if (mpvhook_fn_SkipFrm != 0) {
+        mpvhook_fn_SkipFrm();
     }
 }
 
-void mpvhook_SetBufEnt(int lower, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj) {
-    if (DAT_004bcc2c != 0) {
-        DAT_004bcc2c(lower, index, sj, fn, obj);
+void mpvhook_SetUsrSj(int lower, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj) {
+    if (mpvhook_fn_SetUsrSj != 0) {
+        mpvhook_fn_SetUsrSj(lower, index, sj, fn, obj);
     }
 }
 
-void mpvhook_SetSize(int lower, char *buf, int size) {
-    if (DAT_004bcc30 != 0) {
-        DAT_004bcc30(lower, buf, size);
+void mpvhook_SetPicUsrBuf(int lower, char *buf, int size) {
+    if (mpvhook_fn_SetPicUsrBuf != 0) {
+        mpvhook_fn_SetPicUsrBuf(lower, buf, size);
     }
 }
 
-void mpvhook_SetFlagPtr(int lower, int index, int *flag) {
-    if (DAT_004bcc34 != 0) {
-        DAT_004bcc34(lower, index, flag);
+void mpvhook_GetPicUsr(int lower, int index, int *flag) {
+    if (mpvhook_fn_GetPicUsr != 0) {
+        mpvhook_fn_GetPicUsr(lower, index, flag);
     }
 }
 
-int mpvhook_Start(int lower, SfdSj *sj) {
-    if (DAT_004bcc38 != 0) {
-        return DAT_004bcc38(lower, sj);
+int mpvhook_DecodePicAtr(int lower, SfdSj *sj) {
+    if (mpvhook_fn_DecodePicAtr != 0) {
+        return mpvhook_fn_DecodePicAtr(lower, sj);
     }
     return 0;
 }
 
-void mpvhook_GetPicInf(int lower, MpvPicInf *inf) {
-    if (DAT_004bcc3c != 0) {
-        DAT_004bcc3c(lower, inf);
+void mpvhook_GetPicAtr(int lower, MpvPicInf *inf) {
+    if (mpvhook_fn_GetPicAtr != 0) {
+        mpvhook_fn_GetPicAtr(lower, inf);
     }
 }
 
-void mpvhook_GetInf(int lower, int *inf) {
-    if (DAT_004bcc40 != 0) {
-        DAT_004bcc40(lower, inf);
+void mpvhook_GetBitRate(int lower, int *inf) {
+    if (mpvhook_fn_GetBitRate != 0) {
+        mpvhook_fn_GetBitRate(lower, inf);
     }
 }
 
-void mpvhook_GetRate(int lower, int *a, int *b, int *c) {
-    if (DAT_004bcc44 != 0) {
-        DAT_004bcc44(lower, a, b, c);
+void mpvhook_GetVbvBufSiz(int lower, int *a, int *b, int *c) {
+    if (mpvhook_fn_GetVbvBufSiz != 0) {
+        mpvhook_fn_GetVbvBufSiz(lower, a, b, c);
     }
 }
 
-void mpvhook_GetDispSize(int lower, int *width, int *height) {
-    if (DAT_004bcc48 != 0) {
-        DAT_004bcc48(lower, width, height);
+void mpvhook_GetLinkFlg(int lower, int *width, int *height) {
+    if (mpvhook_fn_GetLinkFlg != 0) {
+        mpvhook_fn_GetLinkFlg(lower, width, height);
     }
 }

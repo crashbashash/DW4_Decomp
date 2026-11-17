@@ -14,17 +14,17 @@ extern SfxZLib sfxz_work;
 
 
 long long __muldi3(long long n, int k);
-void FUN_002b3300(SfxHn *hn, SfxFrame *frm, unsigned int compo);
+void SFX_MakeTable(SfxHn *hn, SfxFrame *frm, unsigned int compo);
 
 void sfxzmv_InitLibWork(void);
 SfxZHn *sfxzmv_SearchFreeHn(void);
-void FUN_002b4318(SfxZHn *zhn);
+void sfxzmv_InitHn(SfxZHn *zhn);
 void sfxzmv_SetTagGrp(SfxZHn *zhn);
 void sfxzmv_GetZfrmInf(SfxZHn *zhn, char *tag, char *endtag, char **data, int *size);
 void sfxzmv_MakeOrgZ32Tbl(SfxZHn *zhn, int lo, int hi, unsigned int *tbl);
-void FUN_002b47d8(SfxZHn *zhn, int lo, int hi, unsigned int *buf);
+void sfxzmv_MakeCnvZTbl(SfxZHn *zhn, int lo, int hi, unsigned int *buf);
 void sfxzmv_MakeZ16TblFromOrgZ32(SfxZHn *zhn, unsigned int *src, short *dst);
-void FUN_002b4960(SfxZHn *zhn, unsigned int *src, unsigned int *dst);
+void sfxzmv_MakeZ32TblFromOrgZ32(SfxZHn *zhn, unsigned int *src, unsigned int *dst);
 int sfxzmv_IsOkZclip(float zmin, float zmax);
 void SFXZ_SetZbufType(int value);
 int SFXZ_GetZbufType(void);
@@ -32,7 +32,7 @@ void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 void sfxcnv_CnvFrmArgb8888mbToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 int sfxcnv_CnvZbitToCft(int zbit);
-SfxZHn *FUN_002b50c8(SfxHn *hn, int zbit);
+SfxZHn *SFX_SetZbit(SfxHn *hn, int zbit);
 
 void SFXZ_Init(void) {
     sfxzmv_InitLibWork();
@@ -53,7 +53,7 @@ SfxZHn *SFXZ_Create(void) {
     if (zhn == 0) {
         return 0;
     }
-    FUN_002b4318(zhn);
+    sfxzmv_InitHn(zhn);
     sfxz_work.nhn++;
     zhn->used = 1;
     return zhn;
@@ -76,7 +76,7 @@ SfxZHn *sfxzmv_SearchFreeHn(void) {
 }
 
 /* matching construct: variant search — statement order; the unit compiler (Sony EE GCC 2.96 -O2 -G0) schedules the last independent store of the body into the return delay slot and keeps the rest in source order, so the stores are written in retail's emitted order */
-void FUN_002b4318(SfxZHn *zhn) {
+void sfxzmv_InitHn(SfxZHn *zhn) {
     zhn->zmin = 0;
     zhn->zmax = 0;
     zhn->cbfn = 0;
@@ -142,7 +142,7 @@ void SFXZ_GetTagInf(SfxZHn *zhn, char **data, int *size) {
     *data = value4;
 }
 
-void FUN_002b4498(SfxZHn *zhn, int frame, int *first, int *second) {
+void SFXZ_GetZfrmRange(SfxZHn *zhn, int frame, int *first, int *second) {
     char *p;
     int len;
     long long n;
@@ -194,14 +194,14 @@ void sfxzmv_MakeOrgZ32Tbl(SfxZHn *zhn, int lo, int hi, unsigned int *tbl)
         tbl[i] = 0x7FFFFFFF;
 }
 
-void SFXZ_MakeCnvZ32Tbl(SfxZHn *zhn, int frame, unsigned int *buf) {
+void SFXZ_MakeCnvZTbl(SfxZHn *zhn, int frame, unsigned int *buf) {
     int first;
     int second;
-    FUN_002b4498(zhn, frame, &first, &second);
-    FUN_002b47d8(zhn, first, second, buf);
+    SFXZ_GetZfrmRange(zhn, frame, &first, &second);
+    sfxzmv_MakeCnvZTbl(zhn, first, second, buf);
 }
 
-void FUN_002b47d8(SfxZHn *zhn, int lo, int hi, unsigned int *buf) {
+void sfxzmv_MakeCnvZTbl(SfxZHn *zhn, int lo, int hi, unsigned int *buf) {
     unsigned int *tbl = buf + 0x100;
     SfxZCbFn cbfn;
     memset(buf, 0, 0x400);
@@ -212,7 +212,7 @@ void FUN_002b47d8(SfxZHn *zhn, int lo, int hi, unsigned int *buf) {
             sfxzmv_MakeZ16TblFromOrgZ32(zhn, tbl, (short *)buf);
             return;
         }
-        FUN_002b4960(zhn, tbl, buf);
+        sfxzmv_MakeZ32TblFromOrgZ32(zhn, tbl, buf);
         return;
     }
     cbfn(tbl, buf, zhn->zmin, zhn->zmax);
@@ -229,7 +229,7 @@ void sfxzmv_MakeZ16TblFromOrgZ32(SfxZHn *zhn, unsigned int *src, short *dst) {
     }
 }
 
-void FUN_002b4960(SfxZHn *zhn, unsigned int *src, unsigned int *dst)
+void sfxzmv_MakeZ32TblFromOrgZ32(SfxZHn *zhn, unsigned int *src, unsigned int *dst)
 {
     float scale = zhn->zmax;
     int i;
@@ -290,18 +290,18 @@ int SFXZ_GetZbufType(void) {
     return sfxz_work.f4;
 }
 
-void FUN_002b4ba8(SfxHn *hn, SfxFrame *frm, int arg) {
-    FUN_002b50c8(hn, 16);
+void SFX_CnvFrmZ16(SfxHn *hn, SfxFrame *frm, int arg) {
+    SFX_SetZbit(hn, 16);
     sfxcnv_CnvFrmZcmn(hn, frm, 16, arg);
 }
 
-void FUN_002b4bf8(SfxHn *hn, SfxFrame *frm, int arg) {
-    FUN_002b50c8(hn, 24);
+void SFX_CnvFrmZ24(SfxHn *hn, SfxFrame *frm, int arg) {
+    SFX_SetZbit(hn, 24);
     sfxcnv_CnvFrmZcmn(hn, frm, 24, arg);
 }
 
-void FUN_002b4c48(SfxHn *hn, SfxFrame *frm, int arg) {
-    FUN_002b50c8(hn, 32);
+void SFX_CnvFrmZ32(SfxHn *hn, SfxFrame *frm, int arg) {
+    SFX_SetZbit(hn, 32);
     sfxcnv_CnvFrmZcmn(hn, frm, 32, arg);
 }
 
@@ -361,11 +361,11 @@ void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
     dst.width = py->height / 2;
     switch (zbit) {
     case 16:
-        FUN_002b3300(hn, frm, 11);
+        SFX_MakeTable(hn, frm, 11);
         CFT_Ycc420plnToZ16(&src, &dst, (int *)hn->tbl[0]);
         break;
     case 32:
-        FUN_002b3300(hn, frm, 13);
+        SFX_MakeTable(hn, frm, 13);
         CFT_Ycc420plnToZ32(&src, &dst, (int *)hn->tbl[0]);
         break;
     }
@@ -387,12 +387,12 @@ int sfxcnv_CnvZbitToCft(int zbit) {
 }
 
 /* The pointer must live in v0, so it is returned rather than discarded. */
-SfxZHn *FUN_002b50c8(SfxHn *hn, int zbit) {
+SfxZHn *SFX_SetZbit(SfxHn *hn, int zbit) {
     SfxZHn *zhn = hn->zhn;
     zhn->zbit = zbit;
     return zhn;
 }
 
-int FUN_002b50d8(SfxHn *hn) {
+int SFX_GetZbit(SfxHn *hn) {
     return hn->zhn->zbit;
 }

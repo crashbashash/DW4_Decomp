@@ -57,7 +57,7 @@ struct LscObj;
 extern "C" {
 #endif
 
-MwsfdWork *mwsflib_GetVersionStr(void);
+MwsfdWork *MWSFLIB_GetLibWorkPtr(void);
 void MWSFSVR_SetMwsfdSvrFlg(int lock);
 
 /* player parameters */
@@ -139,6 +139,7 @@ void MWSFSFX_Finish(void);
 int MWSFSFX_CalcHnWorkSiz(int width, int height);
 void MWSFSFX_Destroy(void *sfx);
 void MWSFSFX_SetCompoMode(MwsfdPly *ply, int mode);
+void MWSFSFX_SetFxType(MwsfdPly *ply, int value);
 void MWSFSFX_SetColAdj(MwsfdPly *ply, int value);
 void MWSFD_SetColAdj(MwsfdPly *ply, int value);
 int MWSFTAG_IsUseAinfSj(MwsfdCreInf *cre);
@@ -147,8 +148,8 @@ int MWSFTAG_SetAinfSj(MwsfdPly *ply);
 void mwsfsfx_ResetAddInf(MwsfdPly *ply);
 void MWSFTAG_ResetAinfSj(MwsfdPly *ply);
 void mwsfsfx_UpdateAddInf(MwsfdPly *ply);
-void mwsfsfx_SetPicUsr(MwsfdPly *ply, char *ud, int size);
-int MWSFSFX_SetPicUsrDat(MwsfdPly *ply);
+void MWSFSFX_SetPicUsrDat(MwsfdPly *ply, char *ud, int size);
+int MWSFSFX_IsFrmCcs(MwsfdPly *ply);
 int MWSFD_IsFrmDivField(MwsfdPly *ply);
 void mwsfsfx_SetCompoMode(MwsfdPly *ply);
 

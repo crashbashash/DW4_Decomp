@@ -63,3 +63,22 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
   Persona 4's names proved against other CRI builds: `MPV_GetIqmAdr`/`MPV_GetNqmAdr` (`0x290b18`/`0x290b20`, two identical
   `return 0` stubs: only the list's order separates them), `MPV_IsConformable` (`0x290b38`, same slot and size), `mpvlib_SetCondAll`
   (`0x291318`) and `MWSFCRE_SetCondSfd` (`0x2929a0`, whose body is the GameCube library's condition setup).
+- Each `mpvhook_*` wrapper calls one slot of the hook table and is named after the M2V function `mpv_InstallHooks`
+  stores in that slot (`mpvhook_DecodePicAtr` calls the slot holding `M2V_DecodePicAtr`, and so on). Medium
+  confidence; the earlier guesses `mpvhook_SetBufEnt`, `mpvhook_SetSize`, `mpvhook_SetFlagPtr`, `mpvhook_Start`,
+  `mpvhook_GetPicInf`, `mpvhook_GetInf`, `mpvhook_GetRate` and `mpvhook_GetDispSize` named slots after other
+  functions and are replaced. The alternative is the GameCube library's `MPVM2V_*` spelling, which covers only some
+  of them.
+- The three M2V header-file functions after `M2VHDEC_InitHn` are `M2V_SetUsrSj`, `M2V_SetPicUsrBuf` and
+  `M2V_GetPicUsr` (medium). The [Persona 4 decompilation](https://github.com/Raikaru/Persona4-Decompilation)
+  proves the first and third masked-exact as `MPV_SetUsrSj` and `MPV_GetPicUsr` in Devil Kings, Onimusha and
+  Resident Evil 4 (`docs/cri/proven_names.json`); DW4 also links the MPV library, which keeps those names, so the
+  M2V copies take the M2V prefix the file's other entry points use. `parseSec` and `parseUdsc` hold the SDK
+  `m2v_hdec.o` slots after `parseShc` (medium); `m2vhdec_PutUsrDat` and `m2vhdec_AppendPicUsr`, which hand user
+  data to the user SJ and the picture user buffer, are named from what they do (medium).
+- `M2V_IsConformable` (medium; alternative `M2V_IsMpeg2`) is the M2V library's stream check between
+  `M2V_GetVersionStr` and `M2V_Init`, the slot `MPV_IsConformable` holds in the MPV library (a name the Persona 4
+  decompilation proves for the MPV one). It walks the start codes with the same `MPV_SearchDelim`/`MPV_CheckDelim`
+  calls and accepts the sequence extension (MPEG-2) that `MPV_IsConformable` refuses. Its hook wrapper is
+  `mpvhook_IsConformable` and the slot `mpvhook_fn_IsConformable`; nothing calls the wrapper.
+- The hook table's words are `mpvhook_installed` and `mpvhook_fn_<entry>`, after the M2V function each holds.

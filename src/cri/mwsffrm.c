@@ -136,7 +136,6 @@ extern char E3122201_mwPlyGetNextPicUsr_inv_hn[]; /* "E3122201: mwPlyGetNextPicU
 extern char E202231_mwPlyGetNumSkipDisp_inv_hn[]; /* "E202231: mwPlyGetNumSkipDisp: handle is invalid." */
 extern char E409171_mwPlyGetNumRemainFrm_inv_hn[]; /* "E409171: mwPlyGetNumRemainFrm: handle is invalid." */
 
-void FUN_00297ee8(MwsfdPly *ply, int mode);
 void mwply_UpdateUsrLen(MwsfdPly *ply, MwsfdFrm *frm);
 void mwply_SetFrmInf(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
 void mwply_GetFrmUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
@@ -232,7 +231,7 @@ void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrm *out)
             mwply_ApplyItemType3(ply);
             out->frmType = mwsffrm_DecideFrmType(ply, frm);
             ply->logPos = out->usrLen;
-            FUN_00297ee8(ply, mwply_GetCurPicCompoMode(ply));
+            MWSFSFX_SetFxType(ply, mwply_GetCurPicCompoMode(ply));
             return;
         }
     }
@@ -257,7 +256,7 @@ void mwply_ApplyItemType3(MwsfdPly *ply)
     flag = mwply_IsCurPicItemTypeThree(ply) == on;
     has = MWSFD_IsEnablePicUsr(ply);
     if (has == on) {
-        flag = MWSFSFX_SetPicUsrDat(ply) == has;
+        flag = MWSFSFX_IsFrmCcs(ply) == has;
     }
     MWSFD_SetColAdj(ply, flag);
 }
@@ -427,7 +426,7 @@ void mwply_SetPicInf(MwsfdPly *ply, MwsfdSfdPicHdr *hdr)
     pic->f28 = 0;
 }
 
-/* copies the frame's user data into the player's buffer and passes it on to mwsfsfx_SetPicUsr */
+/* copies the frame's user data into the player's buffer and passes it on to MWSFSFX_SetPicUsrDat */
 void mwply_UpdatePicUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm)
 {
     MwsfdUsrChunk *usr = frm->usr;
@@ -441,7 +440,7 @@ void mwply_UpdatePicUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm)
     if (ply->udbuf == 0)
         return;
     if (addr != 0 && size >= 5)
-        SUD_FindTag(addr + 4, size - 4, &data, &len);
+        SUD_SearchSudDat(addr + 4, size - 4, &data, &len);
     else {
         data = 0;
         len = 0;
@@ -457,7 +456,7 @@ void mwply_UpdatePicUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm)
         ply->ud = 0;
         ply->udsize = 0;
     }
-    mwsfsfx_SetPicUsr(ply, ply->ud, ply->udsize);
+    MWSFSFX_SetPicUsrDat(ply, ply->ud, ply->udsize);
 }
 
 void MWSFD_GetPicUsrDat(MwsfdPly *ply, char **ud, int *udsize)

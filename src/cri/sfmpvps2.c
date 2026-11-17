@@ -37,7 +37,7 @@ int SFMPVP_DecodeFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player);
 int FUN_0029ed48(SfdPlayer *player);
 int FUN_0029edb0(SfdPlayer *player);
 
-void FUN_002aa050(SfdPlayer *player, unsigned char *data, int size);
+void SFMPVP_SearchPsc(SfdPlayer *player, unsigned char *data, int size);
 int sceMpegCreate(SfdMpegCtx *mpeg, int buf, int size);
 int sceMpegAddCallback(SfdMpegCtx *mpeg, int type, void *callback, void *arg);
 int mpegError(void *unused, void *record, SfdPlayer *player);
@@ -70,7 +70,7 @@ int getFIFOindex(SfdIpuStream *stream, int position) {
     return (position - (int)stream->base) / 2048;
 }
 
-void FUN_002a8ba0(unsigned int chcr) {
+void sfmpvps2_setD3_CHCR(unsigned int chcr) {
     DIntr();
     *D_ENABLEW = *D_ENABLER | 0x10000;
     *D3_CHCR = chcr;
@@ -119,7 +119,7 @@ int viBufStopDMA(SfdIpuStream *stream) {
     stream->r40 = REG(0x1000B400);
     while (REG(0x10002010) & 0xF0) {
     }
-    FUN_002a8ba0(0);
+    sfmpvps2_setD3_CHCR(0);
     stream->r44 = REG(0x1000B010);
     stream->r48 = REG(0x1000B020);
     stream->r52 = REG(0x1000B000);
@@ -228,7 +228,7 @@ int mpegRestartDMA(int unused0, int unused1, SfdPlayer *player) {
     return 1;
 }
 
-void FUN_002a9bc8(SfdPlayer *player)
+void SFMPVP_Destroy(SfdPlayer *player)
 {
     SfdMpv *mpv;
     if (SFMPVP_IsSceMpegUsed(player)) {
@@ -347,7 +347,7 @@ int SFMPVP_GetFrameCount(void *sfd) {
     return mpv->ipu.mpeg.f8;
 }
 
-void FUN_002aa050(SfdPlayer *player, unsigned char *data, int size) {
+void SFMPVP_SearchPsc(SfdPlayer *player, unsigned char *data, int size) {
     SfdMpv *mpv = player->streams.hn.mpv;
     SfdIpuCtl *ipu = &mpv->ipu;
     unsigned char win[6];
@@ -594,7 +594,7 @@ int viBufRestartDMA(SfdIpuStream *stream) {
     if (stream->r44 != 0 && stream->r48 != 0) {
         REG(0x1000B010) = stream->r44;
         REG(0x1000B020) = stream->r48;
-        FUN_002a8ba0(stream->r52 | 0x100);
+        sfmpvps2_setD3_CHCR(stream->r52 | 0x100);
     }
     while (REG(0x10002010) < 0) {
     }

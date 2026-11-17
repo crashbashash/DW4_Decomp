@@ -101,7 +101,7 @@ void M2VHDEC_InitHn(M2vObj *hn)
     h->field_1292 = 0;
 }
 
-void FUN_00285a30(M2vObj *hn, int no, void *sj, void (*cb)(int arg, int index), int cbArg)
+void M2V_SetUsrSj(M2vObj *hn, int no, void *sj, void (*cb)(int arg, int index), int cbArg)
 {
     M2vUsrSj *usr = &hn->usrsj[no];
 
@@ -110,7 +110,7 @@ void FUN_00285a30(M2vObj *hn, int no, void *sj, void (*cb)(int arg, int index), 
     usr->cbArg = cbArg;
 }
 
-void FUN_00285a58(M2vObj *hn, void *buf, int size)
+void M2V_SetPicUsrBuf(M2vObj *hn, void *buf, int size)
 {
     M2vPicUsr *usr = &hn->picusr;
 
@@ -118,7 +118,7 @@ void FUN_00285a58(M2vObj *hn, void *buf, int size)
     usr->size = size;
 }
 
-void FUN_00285a68(M2vObj *hn, void **buf, int *size)
+void M2V_GetPicUsr(M2vObj *hn, void **buf, int *size)
 {
     M2vPicUsr *usr = &hn->picusr;
 
@@ -195,8 +195,8 @@ void m2vhdec_SetPicAtr(M2vObj *hn)
 }
 
 char *parseShc(M2vObj *ctx, char *buf);
-char *FUN_00286838(M2vObj *ctx, char *buf);
-char *FUN_00286958(M2vObj *ctx, char *buf);
+char *parseSec(M2vObj *ctx, char *buf);
+char *parseUdsc(M2vObj *ctx, char *buf);
 char *parseEsc(M2vObj *ctx, char *buf);
 char *parseGsc(M2vObj *ctx, char *buf);
 char *parsePsc(M2vObj *ctx, char *buf);
@@ -223,10 +223,10 @@ int m2vhdec_ParseSj(M2vObj *ctx, SfdSj *sj)
             end = parseShc(ctx, ck.data);
             break;
         case 128:
-            end = FUN_00286838(ctx, ck.data);
+            end = parseSec(ctx, ck.data);
             break;
         case 32:
-            end = FUN_00286958(ctx, ck.data);
+            end = parseUdsc(ctx, ck.data);
             break;
         case 16:
             end = parseEsc(ctx, ck.data);
@@ -378,7 +378,7 @@ char *parseShc(M2vObj *ctx, char *buf)
     return buf + ((cnt + (p - buf) * 8 - 57) / 8);
 }
 
-char *FUN_00286838(M2vObj *ctx, char *buf)
+char *parseSec(M2vObj *ctx, char *buf)
 {
     Mpeg2Ext *h = &ctx->ext;
     char *p;
@@ -408,9 +408,9 @@ char *FUN_00286838(M2vObj *ctx, char *buf)
     return buf + ((cnt + (p - buf) * 8 - 57) / 8);
 }
 
-void FUN_00286b70(M2vObj *ctx, char *src, int n);
+void m2vhdec_PutUsrDat(M2vObj *ctx, char *src, int n);
 
-char *FUN_00286958(M2vObj *ctx, char *buf)
+char *parseUdsc(M2vObj *ctx, char *buf)
 {
     Mpeg2Ext *h = &ctx->ext;
     char *p;
@@ -449,16 +449,16 @@ char *FUN_00286958(M2vObj *ctx, char *buf)
             READ_WORD(nxt);
         }
     }
-    FUN_00286b70(ctx, buf, n + 4);
+    m2vhdec_PutUsrDat(ctx, buf, n + 4);
     return buf + ((cnt + (p - buf) * 8 - 57) / 8);
 }
 
-void FUN_00286ce8(M2vObj *ctx, void *src, int len);
+void m2vhdec_AppendPicUsr(M2vObj *ctx, void *src, int len);
 
 /* Hands n bytes of header data to the user stream the current header level selects, in up to two
  * chunks, and runs its callback; with level 3 and a picture user buffer set, the bytes (behind an 8 byte
  * marker when one was recorded) are copied there as well. */
-void FUN_00286b70(M2vObj *ctx, char *src, int n)
+void m2vhdec_PutUsrDat(M2vObj *ctx, char *src, int n)
 {
     int idx = ctx->ext.header_level;
     SfdSj *sj = ctx->usrsj[idx].sj;
@@ -480,14 +480,14 @@ void FUN_00286b70(M2vObj *ctx, char *src, int n)
     }
     if (idx == 3 && ctx->picusr.buf != 0) {
         if (ctx->ext.field_964 != 0) {
-            FUN_00286ce8(ctx, m2vhdec_usrdat_2nd_mark, 8);
+            m2vhdec_AppendPicUsr(ctx, m2vhdec_usrdat_2nd_mark, 8);
         }
-        FUN_00286ce8(ctx, src, n);
+        m2vhdec_AppendPicUsr(ctx, src, n);
     }
 }
 
 /* Appends len bytes to the picture user buffer, as many as still fit. */
-void FUN_00286ce8(M2vObj *ctx, void *src, int len)
+void m2vhdec_AppendPicUsr(M2vObj *ctx, void *src, int len)
 {
     M2vPicUsr *b = &ctx->picusr;
     int n = b->size - b->len;

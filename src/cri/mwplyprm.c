@@ -5,7 +5,7 @@
 #include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/sfd.h"
 
-/* SFD decoder parameters set and read through SFD_SetCond / SFD_GetCondDef */
+/* SFD decoder parameters set and read through SFD_SetCond / SFD_GetCond */
 #define SFD_COND_VIDEO_SW 5
 #define SFD_COND_AUDIO_SW 6
 #define SFD_COND_EMPTY_BPIC_SKIP 7
@@ -19,7 +19,7 @@
 #define MWSFD_SYNC_AUDIO 2
 #define MWSFD_SYNC_EXT 3
 
-/* the decoder's header information (SFD_GetHnHdrInf) */
+/* the decoder's header information (SFD_GetMvInf) */
 typedef struct SfdHdrInf {
     int f0[9];
     int numAudioCh;  /* 36 */
@@ -193,7 +193,7 @@ void MWSFD_GetPlyInf(MwsfdPly *ply, SfdPlyInf *inf) {
 }
 
 void MWSFD_GetMvInf(MwsfdPly *ply, SfdHdrInf *inf) {
-    SFD_GetHnHdrInf(ply->sfd, inf);
+    SFD_GetMvInf(ply->sfd, inf);
 }
 
 void MWSFD_SetCond(MwsfdPly *ply, int param, int value) {
@@ -211,7 +211,7 @@ void MWSFD_GetCond(MwsfdPly *ply, int param, int *value) {
     if (ply != 0) {
         sfd = ply->sfd;
     }
-    SFD_GetCondDef(sfd, param, value);
+    SFD_GetCond(sfd, param, value);
 }
 
 void *MWSFD_GetStmHn(MwsfdPly *ply) {
@@ -348,7 +348,7 @@ int mwPlyGetSyncMode(MwsfdPly *ply) {
         MWSFSVM_Error("E2010802: mwPlyGetSyncMode: handle is invalid.");
         return -1;
     }
-    SFD_GetCondDef(ply->sfd, SFD_COND_SYNC_MODE, &value);
+    SFD_GetCond(ply->sfd, SFD_COND_SYNC_MODE, &value);
     switch (value) {
     case 0:
         mode = MWSFD_SYNC_NONE;
@@ -709,6 +709,6 @@ void mwPlySetTimerCh(int ch) {
 int mwPlyGetTimerCh(void) {
     int ch;
 
-    SFD_GetCondDef(0, SFD_COND_TIMER_CH, &ch);
+    SFD_GetCond(0, SFD_COND_TIMER_CH, &ch);
     return ch;
 }

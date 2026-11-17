@@ -274,11 +274,15 @@ typedef struct M2vLibWork {
 void M2V_Init(int nobj, char *work, unsigned int size);
 void M2V_Finish(void);
 char *M2V_GetVersionStr(void);
+int M2V_IsConformable(char *buf, int size);
 M2vObj *M2V_Create(void);
 void M2V_Destroy(M2vObj *hn);
 void M2V_MbCbFn(void);
 void M2V_SetCond(M2vObj *hn, int no, M2vCondFn fn);
 int M2VLIB_CheckHn(M2vObj *hn);
+void M2V_SetUsrSj(M2vObj *hn, int no, void *sj, void (*cb)(int arg, int index), int cbArg);
+void M2V_SetPicUsrBuf(M2vObj *hn, void *buf, int size);
+void M2V_GetPicUsr(M2vObj *hn, void **buf, int *size);
 
 void M2VERR_Init(void);
 void M2V_SetErrFunc(M2vObj *hn, int (*func)(void *obj), void *obj);

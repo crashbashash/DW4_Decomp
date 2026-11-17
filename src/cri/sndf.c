@@ -19,14 +19,14 @@ int SNDF_Start(void)
 
     if (DAT_004bb104 != 0) {
         sndf_ctx = &DAT_00572a00;
-        FUN_00281a00(0x100, 0, 0, 8);
+        sndf_CallRpc(0x100, 0, 0, 8);
         result = DAT_00570c00[0];
         sndf_ctx->base = DAT_00570c00[1];
         memset(&sndf_status, 0, 0x1240);
         memset(&DAT_00570d00, 0, 0xA40);
         if (result == 0) {
             req[0] = (int)&sndf_status;
-            sndf_ctx->handle = FUN_00281a00(0x1600, req, 1, 4);
+            sndf_ctx->handle = sndf_CallRpc(0x1600, req, 1, 4);
         }
         FUN_00280e38();
         if (result == 0) {
@@ -69,7 +69,7 @@ int FUN_00280f10(void)
 
     var_a0 = -1;
     if (DAT_004bb108 != 0) {
-        temp_v0 = FUN_00281a00(0x200, 0, 0, 4);
+        temp_v0 = sndf_CallRpc(0x200, 0, 0, 4);
         DAT_004bb108 = 0;
         var_a0 = temp_v0;
     }
@@ -87,7 +87,7 @@ int SNDF_SetPortSizes(SndfTables *tables)
         request.first[i] = tables->first[i];
         request.second[i] = tables->second[i];
     }
-    result = FUN_00281a00(0x300, (int *)&request, 64, 4);
+    result = sndf_CallRpc(0x300, (int *)&request, 64, 4);
     if (result == 0) {
         for (i = 0; i < 32; i++) {
             sndf_ctx->tables.first[i] = tables->first[i];
@@ -190,7 +190,7 @@ int FUN_00281300(unsigned int channel, int value)
         return -1;
     }
     request[0] = value;
-    result = FUN_00281a00(channel | 0x800, request, 1, 4);
+    result = sndf_CallRpc(channel | 0x800, request, 1, 4);
     if (result == 0) {
         sndf_ctx->channelOn[channel] = 1;
     }
@@ -204,7 +204,7 @@ int FUN_00281368(unsigned int channel)
     if (channel >= 32) {
         return -1;
     }
-    result = FUN_00281a00(channel | 0xA00, 0, 0, 4);
+    result = sndf_CallRpc(channel | 0xA00, 0, 0, 4);
     if (result == 0) {
         sndf_ctx->channelOn[channel] = 1;
     }
@@ -218,7 +218,7 @@ int SNDF_FreePort(unsigned int channel)
     if (channel >= 32) {
         return -1;
     }
-    result = FUN_00281a00(channel | 0x700, 0, 0, 4);
+    result = sndf_CallRpc(channel | 0x700, 0, 0, 4);
     if (result == 0) {
         sndf_ctx->channelOn[channel] = 0;
     }
@@ -306,12 +306,12 @@ int FUN_002816f8(unsigned int channel)
 
 void FUN_00281770(void)
 {
-    FUN_00281a00(0xE00, 0, 0, 4);
+    sndf_CallRpc(0xE00, 0, 0, 4);
 }
 
 void FUN_00281798(void)
 {
-    FUN_00281a00(0xFB00, 0, 0, 4);
+    sndf_CallRpc(0xFB00, 0, 0, 4);
 }
 
 int FUN_002817c0(void)
@@ -323,7 +323,7 @@ void FUN_002817d0(int *arg0, int *arg1)
 {
     int i;
 
-    FUN_00281a00(0xFE00, 0, 0, 0x80);
+    sndf_CallRpc(0xFE00, 0, 0, 0x80);
     for (i = 0; i < 32; i++) {
         *arg0++ = DAT_00570c00[i];
         *arg1++ = DAT_00570c00[i + 32];
@@ -332,14 +332,14 @@ void FUN_002817d0(int *arg0, int *arg1)
 
 void FUN_00281840(unsigned char *arg0, unsigned char *arg1)
 {
-    FUN_00281a00(0xFC00, 0, 0, 8);
+    sndf_CallRpc(0xFC00, 0, 0, 8);
     *arg0 = DAT_00570c00[0];
     *arg1 = DAT_00570c00[1];
 }
 
 void FUN_00281898(int *arg0, int *arg1, int *arg2, int *arg3)
 {
-    FUN_00281a00(0xFD00, 0, 0, 0x10);
+    sndf_CallRpc(0xFD00, 0, 0, 0x10);
     *arg0 = DAT_00570c00[0];
     *arg1 = DAT_00570c00[1];
     *arg2 = DAT_00570c00[2];
@@ -354,13 +354,13 @@ void FUN_00281918(int *arg0, int *arg1)
 
 void FUN_00281938(void)
 {
-    FUN_00281a00(0xF900, 0, 0, 4);
+    sndf_CallRpc(0xF900, 0, 0, 4);
 }
 
 void FUN_00281960(void (*notify)(int a, int b))
 {
     sndf_ctx->notify = notify;
-    FUN_00281a00(0x1700, 0, 0, 4);
+    sndf_CallRpc(0x1700, 0, 0, 4);
 }
 
 int FUN_00281990(void)
@@ -387,7 +387,7 @@ int FUN_002819a0(int id)
     return result;
 }
 
-int FUN_00281a00(int cmd, int *args, int n, int size)
+int sndf_CallRpc(int cmd, int *args, int n, int size)
 {
     int i;
 

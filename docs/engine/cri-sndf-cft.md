@@ -24,3 +24,15 @@ The first two files of the Sofdec block, each compiled as one whole file with So
 - The SNDF entry points the game calls for its sound banks (port sizes, transfer start and status, freeing a
   port, the control and master-parameter messages) are named from what they do and how the game uses them;
   no string or other build carries the library's own names for them.
+- `sndf_CallRpc` (medium; alternative `sndf_SendCommand`) is named from what it does: it copies the arguments into the
+  shared buffer and sends one command under a busy flag. The rest of SNDF's internal functions (the one-command
+  wrappers, the status-block getters, the port and channel helpers) stay unnamed: the command codes they send
+  (`0x200`, `0x800`, `0xE00`, `0xF900`, `0xFB00` and others) are not named by any string or other build.
+- `CFT_Init` (medium) holds the SDK `cft_lib.o` slot before `CFT_Finish` and stores the CFT build string.
+  `CFT_SetMaxAlpha` and `CFT_GetMaxAlpha` (medium; alternative a `cft_` prefix) keep the word `CFT_Init` sets to 128
+  and `SFX_SetMaxAlpha` forwards to. `CFT_MakeYcc422ColAdjTbl` and `CFT_MakeArgb8888ColAdjTbl` hold the SDK `cftfx.o`
+  slots with the same sizes, and the SFX table makers call them as in the SDK.
+- `CFT_GetVersionStr` (`0x283098`) returns the address of the word that holds the maximum alpha, not a string;
+  `CFT_Init` writes the build string itself. Whether the slot kept the 2002 name is open, as are the four accessors of
+  the name-message pointer and the word after it at the start of the file, and the three YCC-to-ARGB plane loops
+  before `UTY_CmpTime`.

@@ -15,7 +15,7 @@ in the alphabetical order of those names.
   for each picture's user data (installed by `mwply_SetPicUsrCb`); when the data parses as an SFD
   header with a video stream, the picture's item-type-3 flag, time unit and composition mode go into
   slot `logWrite % 8`, and the `mwply_GetCurPic*` readers take slot `logPos % 8`.
-- `src/cri/mwsfd.c`: the core. `MWSFD_GetVersionStr`, the work area (`mwsflib_GetVersionStr`,
+- `src/cri/mwsfd.c`: the core. `MWSFD_GetVersionStr`, the work area (`MWSFLIB_GetLibWorkPtr`,
   `mwsflib_InitLibWork` and the settings getters and setters), the last error code (`MWSFLIB_SetErrCode`), the
   SFD library init and finish (`mwPlySfdInit` checks for SFD version `1.946`; `mwPlyFinishSfdFx` drops the
   init count and, at zero, destroys every player in use and finishes the libraries in order), and the

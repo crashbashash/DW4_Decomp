@@ -139,7 +139,7 @@ extern MwsfdAdxCfg mwsfcre_adxCfg;
 void *mwsfsfx_Create(char *work, int size, int width, int height);
 struct SjObj *mwsfd_CreateAddInfSj(MwsfdPly *ply);
 MwsfdPly *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm);
-int FUN_002ab778(MwsfdSfdPrm *prm, int arg);
+int SFD_Create(MwsfdSfdPrm *prm, int arg);
 int mwsfcre_CheckCprm(MwsfdCreInf *cprm);
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm);
 void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm);
@@ -592,7 +592,7 @@ SfdSj *mwsfcre_CreateSj(MwsfdPly *ply) {
 
 /* -1 when no work area is given and the malloc/free functions are not both set */
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm) {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
     int result = 0;
 
     if (cprm->work == 0) {
@@ -765,7 +765,7 @@ int mwsfdcre_IsPlayableByHdrInf(MwsfdHdrInf *hdr) {
 
 void mwPlySetMallocFn(void *(*mallocFn)(void *obj, int size), void (*freeFn)(void *obj, void *ptr),
                          void *obj) {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
 
     work->mallocFn = mallocFn;
     work->freeFn = freeFn;
@@ -810,7 +810,7 @@ void *mwsfcre_OrgMalloc(MwsfdPly *ply, int size) {
 }
 
 void *mwsfcre_UsrMalloc(int size) {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
 
     return work->mallocFn(work->mallocObj, size);
 }
@@ -829,7 +829,7 @@ void mwsfcre_OrgFree(MwsfdPly *ply, void *ptr) {
 }
 
 void mwsfcre_UsrFree(void *ptr) {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
 
     work->freeFn(work->mallocObj, ptr);
 }

@@ -39,3 +39,17 @@ are known.
   `xori` and `movn`, and no ordering of 48 tried reproduces where it loads the two outputs.
 - `mwsfd_GetCriTags` matches with the tag pointer and size read into `char *` and `int` locals, and
   `mwPlyGetSfxZinf` with its chunk as a local `SjChunk`, which places the `ld ra` as retail does.
+- Names after the SDK `mwsfdsfx.o` and the RE4 GameCube symbol table's `lib/mwsfdsfx.c` order, and the file's own
+  messages: `mwPlyFxGetOutBufPitchHeight` and `MWSFSFX_SetOutBufSize` carry their own error strings and replace the
+  shifted `mwPlyFxSetOutBufSize`/`mwPlyFxGetOutBufSize`; `MWSFSFX_SetPicUsrDat` and `MWSFSFX_IsFrmCcs` call
+  `SFX_SetPicUsrDat` and `SFX_GetTypeCcs` as the SDK's do (and `MWSFD_IsFrmCcs` tail-calls the latter, as in the SDK),
+  so the earlier `mwsfsfx_SetPicUsr` and `MWSFSFX_SetPicUsrDat` moved one slot each. Medium (alternative in brackets
+  where one exists): `MWSFSFX_SetFxType`, `mwPlyFxSetOutBufPitchHeight` and `mwPlyFxSetOutBufSize` (GameCube order),
+  `mwPlyFxGetOutBufSize`, `mwPlyFxSetAlp3Prm`/`mwPlyFxGetAlp3Prm` (`MWSFD_SetAlp3Prm`), `MWSFSFX_GetSudVersion`,
+  `MWSFD_SetMaxAlpha` and `MWSFD_GetMaxAlpha` (both messages say `MWSFD_GetMaxAlpha`; the setter's is a copy), and
+  the picture-format converters `mwsfsfx_SetPicFmtToSfx` (`mwsfsfx_SetFrmDetail`), `mwsfsfx_CnvPicStructToSfx`,
+  `mwsfsfx_CnvChromaFmtToSfx` and `mwsfsfx_CnvChromaPosToSfx`, named from the fields their messages give.
+- `MWSFD_SetCcirFx` and `MWSFD_GetCcirFx` (medium; alternative an `mwPlyFx` prefix) forward to `SFX_SetCcirFx` and
+  `SFX_GetCcirFx`, between `MWSFD_GetProgOut` and `MWSFD_SetMaxAlpha` in the run of `MWSFD_` forwards.
+- Still unnamed: the seven forwards to the SFX user-data analysers after `MWSFD_IsFrmCcs`, the Z-callback forward and
+  the last forward before `mwPlyEntryFname`.

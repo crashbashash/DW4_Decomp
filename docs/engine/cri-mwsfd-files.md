@@ -63,3 +63,8 @@ callback table (`MwsfdInputCbTbl`) is local to the SST file.
   `MWSTM_SeekSct`, `MWSTM_GetFsizeByte`, `MWSTM_SetFname`; by slot only: `MWSTM_SetTrSct`, `MWSTM_Start`,
   `MWSTM_ExecServer`, `MWSTM_GetFlowLimit`, `MWSTM_Stop`. Persona 3's `MWSTM_GetReadFlg` for `0x29b210`
   (`MWSTM_GetStatRead` here) is low confidence and not applied.
+- Four names keep their DW4 spelling against the 2002 SDK's: `mwPlyStartFname` (SDK `mwSfdStartFname`),
+  `mwPlySetLpFlg` (`mwPlySetSeamlessLp`), `mwPlyExecSvrHndl` (`mwSfdExecSvrHndl`) and `MWSFCRE_SetSupplySj`
+  (`mwsfcre_SetSupplySj`). Each function's own 2004 message names it as DW4 does, and the RE4 GameCube symbol
+  table's `lib/mwsfdcre.c` spells `MWSFCRE_SetSupplySj` the same way; the newer build's spelling wins over the SDK
+  body match.

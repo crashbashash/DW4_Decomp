@@ -47,8 +47,8 @@ void sftrn_ConnTrnBuf0(SfdHn *hn, int from, int to);
 void sftrn_ConnTrnBufV(SfdHn *hn, int from, int to);
 void sftrn_ConnTrnBufA(SfdHn *hn, int from, int to);
 void sftrn_ConnTrnBufU(SfdHn *hn, int from, int to);
-void FUN_002b0228(char *ctx, int from, int slot, int to);
-void FUN_002b0268(char *ctx, int from, int to);
+void sftrn_ConnTrnBuf(char *ctx, int from, int slot, int to);
+void sftrn_ConnBufTrn(char *ctx, int from, int to);
 
 int SFTRN_Init(SfdTrnModules *dst, SfdTrnModules *src)
 {
@@ -133,7 +133,7 @@ int sftrn_BuildAll(SfdHn *hn, SfdTrnConfig *config)
 
 void sftrn_BuildSystem(SfdHn *hn, SfdTrnConfig *config)
 {
-    FUN_002b0268((char *)hn, 0, 1);
+    sftrn_ConnBufTrn((char *)hn, 0, 1);
     if (config->fns[2] != 0) {
         sftrn_ConnTrnBufV(hn, 1, 1);
         sftrn_BuildVideo(hn, config);
@@ -156,56 +156,56 @@ void sftrn_BuildSystem(SfdHn *hn, SfdTrnConfig *config)
 
 void sftrn_BuildVideo(SfdHn *hn, SfdTrnConfig *config)
 {
-    FUN_002b0268((char *)hn, 1, 2);
+    sftrn_ConnBufTrn((char *)hn, 1, 2);
     sftrn_ConnTrnBuf0(hn, 2, 3);
     if (config->fns[4] != 0) {
-        FUN_002b0268((char *)hn, 3, 4);
+        sftrn_ConnBufTrn((char *)hn, 3, 4);
         sftrn_ConnTrnBuf0(hn, 4, 5);
-        FUN_002b0268((char *)hn, 5, 6);
+        sftrn_ConnBufTrn((char *)hn, 5, 6);
         return;
     }
-    FUN_002b0268((char *)hn, 3, 6);
+    sftrn_ConnBufTrn((char *)hn, 3, 6);
 }
 
 void sftrn_BuildAudio(SfdHn *hn, SfdTrnConfig *config)
 {
-    FUN_002b0268((char *)hn, 2, 3);
+    sftrn_ConnBufTrn((char *)hn, 2, 3);
     sftrn_ConnTrnBuf0(hn, 3, 4);
     if (config->fns[5] != 0) {
-        FUN_002b0268((char *)hn, 4, 5);
+        sftrn_ConnBufTrn((char *)hn, 4, 5);
         sftrn_ConnTrnBuf0(hn, 5, 6);
-        FUN_002b0268((char *)hn, 6, 7);
+        sftrn_ConnBufTrn((char *)hn, 6, 7);
         return;
     }
-    FUN_002b0268((char *)hn, 4, 7);
+    sftrn_ConnBufTrn((char *)hn, 4, 7);
 }
 
 void sftrn_BuildUsr(SfdHn *hn, SfdTrnConfig *config)
 {
-    FUN_002b0268((char *)hn, 7, 8);
+    sftrn_ConnBufTrn((char *)hn, 7, 8);
 }
 
 void sftrn_ConnTrnBuf0(SfdHn *hn, int from, int to)
 {
-    FUN_002b0228((char *)hn, from, 0, to);
+    sftrn_ConnTrnBuf((char *)hn, from, 0, to);
 }
 
 void sftrn_ConnTrnBufV(SfdHn *hn, int from, int to)
 {
-    FUN_002b0228((char *)hn, from, 0, to);
+    sftrn_ConnTrnBuf((char *)hn, from, 0, to);
 }
 
 void sftrn_ConnTrnBufA(SfdHn *hn, int from, int to)
 {
-    FUN_002b0228((char *)hn, from, 1, to);
+    sftrn_ConnTrnBuf((char *)hn, from, 1, to);
 }
 
 void sftrn_ConnTrnBufU(SfdHn *hn, int from, int to)
 {
-    FUN_002b0228((char *)hn, from, 2, to);
+    sftrn_ConnTrnBuf((char *)hn, from, 2, to);
 }
 
-void FUN_002b0228(char *ctx, int from, int slot, int to)
+void sftrn_ConnTrnBuf(char *ctx, int from, int slot, int to)
 {
     int off44 = from * 0x44;
     ((SfdHn *)(ctx + off44))->trn[0].outputs[slot] = to;
@@ -214,7 +214,7 @@ void FUN_002b0228(char *ctx, int from, int slot, int to)
     ((SfdTrnLink *)ctx)->from = from;
 }
 
-void FUN_002b0268(char *ctx, int from, int to)
+void sftrn_ConnBufTrn(char *ctx, int from, int to)
 {
     /* matching construct: manual — byte offsets in int temporaries keep ctx as the first addu operand */
     int off44 = to * 0x44;
@@ -238,7 +238,7 @@ int SFTRN_CallTrSetup(void *sfd, int k)
     return r;
 }
 
-int FUN_002b0338(SfdHn *hn, int index, int k, int a, int b)
+int SFTRN_CallTrtTrif(SfdHn *hn, int index, int k, int a, int b)
 {
     SfdHn *p = (SfdHn *)((char *)hn + index * 0x44);
     SfdTrnFn *fns = p->trn[0].fns;
@@ -248,35 +248,35 @@ int FUN_002b0338(SfdHn *hn, int index, int k, int a, int b)
     return fns[k](hn, a, b, 0);
 }
 
-void sftrn_SetFlagA(void *sfd, int index, int value)
+void SFTRN_SetPrepFlg(void *sfd, int index, int value)
 {
     SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     hn->trn[0].f0 = value;
 }
 
-int sftrn_GetFlagA(void *sfd, int index)
+int SFTRN_GetPrepFlg(void *sfd, int index)
 {
     SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].f0;
 }
 
-void sftrn_SetFlagB(void *sfd, int index, int value)
+void SFTRN_SetTermFlg(void *sfd, int index, int value)
 {
     SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     hn->trn[0].f4 = value;
 }
 
-int sftrn_GetFlagB(void *sfd, int index)
+int SFTRN_GetTermFlg(void *sfd, int index)
 {
     SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].f4;
 }
 
-int FUN_002b03e8(SfdHn *hn, int index)
+int SFTRN_IsSetup(SfdHn *hn, int index)
 {
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].fns != 0;

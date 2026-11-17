@@ -3,13 +3,13 @@
 #include "dw4/cri/sfd.h"
 
 
-void FUN_002ac770(SfdRing *ring, char *buffer, int size);
-int sfring_Push(SfdRing *ring, SfdItem *item, int *full);
-void FUN_002ac990(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int base, unsigned int span);
-int sfring_FindPos(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span);
+void sfpts_SetupPtsQue(SfdRing *ring, char *buffer, int size);
+int sfpts_WritePtsQueSub(SfdRing *ring, SfdItem *item, int *full);
+void sfpts_ReadPtsQueSub(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int base, unsigned int span);
+int sfpts_SearchPtsQue(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span);
 
 /* matching construct: variant search — statement order; the unit compiler (Sony EE GCC 2.96 -O2 -G0) schedules the last independent store of the body into the return delay slot and keeps the rest in source order, so the stores are written in retail's emitted order */
-void FUN_002ac6d0(SfdRing *ring) {
+void SFPTS_InitPtsQue(SfdRing *ring) {
     ring->items = 0;
     ring->size = 0;
     ring->count = 0;
@@ -17,18 +17,18 @@ void FUN_002ac6d0(SfdRing *ring) {
     ring->rd = 0;
 }
 
-int FUN_002ac6e8(SfdPly *h, void *data, int size) {
+int SFD_SetVideoPts(SfdPly *h, void *data, int size) {
     if (data == 0 || size <= 0) {
         return 0;
     }
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000165);
     }
-    FUN_002ac770(&h->ent[1].ring, data, size);
+    sfpts_SetupPtsQue(&h->ent[1].ring, data, size);
     return 0;
 }
 
-void FUN_002ac770(SfdRing *ring, char *buffer, int size) {
+void sfpts_SetupPtsQue(SfdRing *ring, char *buffer, int size) {
     char *base = (char *)(((int)buffer + 7) & ~7);
     int usable = size - (base - buffer);
     memset(base, 0, usable);
@@ -39,7 +39,7 @@ void FUN_002ac770(SfdRing *ring, char *buffer, int size) {
     ring->rd = 0;
 }
 
-int sfring_PutItem(void *sfd, int index, SfdItem *item, int *full) {
+int SFPTS_WritePtsQue(void *sfd, int index, SfdItem *item, int *full) {
     SfdPly *h = sfd;
     SfdRing *ring;
     *full = 0;
@@ -50,13 +50,13 @@ int sfring_PutItem(void *sfd, int index, SfdItem *item, int *full) {
     if (ring->items == 0) {
         return 0;
     }
-    if (sfring_Push(ring, item, full) == -1) {
+    if (sfpts_WritePtsQueSub(ring, item, full) == -1) {
         return sfd_ReportError(h, 0xFF000421);
     }
     return 0;
 }
 
-int sfring_Push(SfdRing *ring, SfdItem *item, int *full) {
+int sfpts_WritePtsQueSub(SfdRing *ring, SfdItem *item, int *full) {
     int wr;
     if (ring->count == ring->size) {
         *full = 1;
@@ -74,7 +74,7 @@ int sfring_Push(SfdRing *ring, SfdItem *item, int *full) {
     return 0;
 }
 
-int FUN_002ac918(SfdPly *h, int index, unsigned int pos, SfdItem *out) {
+int SFPTS_ReadPtsQue(SfdPly *h, int index, unsigned int pos, SfdItem *out) {
     /* matching construct: table base taken into a local before indexing */
     SfdStmEnt *entries = h->ent;
     SfdStmEnt *entry;
@@ -91,17 +91,17 @@ int FUN_002ac918(SfdPly *h, int index, unsigned int pos, SfdItem *out) {
     if (ring->items == 0) {
         return 0;
     }
-    FUN_002ac990(ring, pos < base + span ? pos : pos - span, out, base, span);
+    sfpts_ReadPtsQueSub(ring, pos < base + span ? pos : pos - span, out, base, span);
     return 0;
 }
 
-void FUN_002ac990(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int base, unsigned int span) {
+void sfpts_ReadPtsQueSub(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int base, unsigned int span) {
     int skip;
     int rd;
     if (ring->count == 0) {
         return;
     }
-    skip = sfring_FindPos(ring, pos, base, span);
+    skip = sfpts_SearchPtsQue(ring, pos, base, span);
     if (skip == -1) {
         return;
     }
@@ -114,7 +114,7 @@ void FUN_002ac990(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned int ba
     *out = ring->items[rd];
 }
 
-int sfring_FindPos(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span) {
+int sfpts_SearchPtsQue(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span) {
     int size = ring->size;
     unsigned int end = base + span;
     int rd = ring->rd;
@@ -138,7 +138,7 @@ int sfring_FindPos(SfdRing *ring, unsigned int pos, unsigned int base, unsigned 
     return -1;
 }
 
-int sfring_IsFull(void *sfd, int index) {
+int SFPTS_IsPtsQueFull(void *sfd, int index) {
     SfdPly *h = sfd;
     SfdRing *ring = &h->ent[index].ring;
     if (ring->items == 0) {

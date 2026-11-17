@@ -458,7 +458,7 @@ int mwsfsvr_IdleSvr(void *obj)
 
 int mwsfsvr_IsDecSvr(void)
 {
-    return (int)mwsflib_GetVersionStr()->prm.decSvr;
+    return (int)MWSFLIB_GetLibWorkPtr()->prm.decSvr;
 }
 
 void mwsfsvr_VsyncProc(void);
@@ -480,7 +480,7 @@ void mwsfsvr_VsyncProc(void)
     mwsfsvr_vsync_cnt2++;
     init = mwsfd_init_flag;
     if (init == 1) {
-        execLock = &mwsflib_GetVersionStr()->execLock;
+        execLock = &MWSFLIB_GetLibWorkPtr()->execLock;
         if (MWSFSVM_Unlock(execLock) != 0) {
             if (mwsfd_init_flag == init) {
                 SFD_VsyncSvr();
@@ -492,7 +492,7 @@ void mwsfsvr_VsyncProc(void)
 
 void mwsfsvr_SetSvrHooks(void (*preFn)(void *obj), void *preObj, void (*postFn)(void *obj), void *postObj)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
 
     work->preSvrFn = preFn;
     work->preSvrObj = preObj;
@@ -502,7 +502,7 @@ void mwsfsvr_SetSvrHooks(void (*preFn)(void *obj), void *preObj, void (*postFn)(
 
 void mwsfsvr_CallPreSvr(void)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
     void (*fn)(void *obj) = work->preSvrFn;
     void *obj = work->preSvrObj;
 
@@ -513,7 +513,7 @@ void mwsfsvr_CallPreSvr(void)
 
 void mwsfsvr_CallPostSvr(void)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
     void *obj = work->postSvrObj;
     void (*fn)(void *obj) = work->postSvrFn;
 
@@ -524,7 +524,7 @@ void mwsfsvr_CallPostSvr(void)
 
 void mwsfsvr_SetIdleHook(void (*fn)(void *obj), void *obj)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
 
     work->idleFn = fn;
     work->idleObj = obj;
@@ -532,7 +532,7 @@ void mwsfsvr_SetIdleHook(void (*fn)(void *obj), void *obj)
 
 void mwsfsvr_CallIdle(void)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
     void *obj = work->idleObj;
     void (*fn)(void *obj) = work->idleFn;
 
@@ -554,7 +554,7 @@ int mwsfsvr_ExecServer(void *obj)
 
     if (mwsfd_init_flag != 1)
         return 0;
-    work = mwsflib_GetVersionStr();
+    work = MWSFLIB_GetLibWorkPtr();
     if (MWSFSVM_Unlock(&work->svrLock) == 0)
         return 0;
     ply = work->ply;
@@ -639,12 +639,12 @@ void mwsfsvr_Exec(void)
 
 void MWSFSVR_SetMwsfdSvrFlg(int lock)
 {
-    mwsflib_GetVersionStr()->svrLock = lock;
+    MWSFLIB_GetLibWorkPtr()->svrLock = lock;
 }
 
 int MWSFSVR_GetMwsfdSvrFlg(void)
 {
-    return mwsflib_GetVersionStr()->svrLock;
+    return MWSFLIB_GetLibWorkPtr()->svrLock;
 }
 
 void MWSFSVR_SetHnMwplySvrFlg(MwsfdPly *ply, int sw)
@@ -678,7 +678,7 @@ int MWSFSVR_IsSvrBdrHndl(MwsfdPly *ply)
 
 void MWSFD_SetReqSvrBdrHn(MwsfdPly *ply, int sw)
 {
-    MwsfdWork *work = mwsflib_GetVersionStr();
+    MwsfdWork *work = MWSFLIB_GetLibWorkPtr();
 
     ply->waitingSvr = sw;
     work->waitingSvr = sw;
@@ -691,7 +691,7 @@ int MWSFD_GetReqSvrBdrHn(MwsfdPly *ply)
 
 int MWSFD_GetReqSvrBdrLib(void)
 {
-    return mwsflib_GetVersionStr()->waitingSvr;
+    return MWSFLIB_GetLibWorkPtr()->waitingSvr;
 }
 
 int mwPlyIsSvrBdr(void)

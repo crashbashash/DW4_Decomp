@@ -4,8 +4,9 @@
 #include "dw4/cri/mps.h"
 #include "dw4/cri/uty.h"
 #include "dw4/cri/sfd.h"
+#include "dw4/cri/cri_adxt.h"
 
-/* kept here: with this declaration in sfd.h, sfmpv.c (which includes it) schedules FUN_002a5c28 differently */
+/* kept here: with this declaration in sfd.h, sfmpv.c (which includes it) schedules sfmpv_SetDecTtu differently */
 extern int sfadxt_stat;
 
 typedef struct SfdAdxHn SfdAdxHn;
@@ -113,48 +114,15 @@ struct SfdAdxHn {
 
 extern char sfadx_silent_block[];
 extern SfdAdxCfg sfadxt_para;
-extern int DAT_0057faac;
-extern void *DAT_004bead8[4];
+extern int sfadxt_adxterr;
+extern AdxtObj *sfadxt_save_hn;
 
 float logf(float);
-int ADXT_Init();
-int ADXT_Finish();
-void ADXT_InsertHdrSfa();
-int SFA_Init();
-int SFA_Finish();
-void *ADXT_Create();
-int ADXT_Destroy();
-void ADXT_StartSj();
-int ADXT_Stop();
-int ADXT_GetStat();
-int ADXT_GetTime();
-int ADXT_GetNumSmpl();
-int ADXT_GetSfreq();
-int ADXT_GetNumChan();
-int ADXT_SetOutPan();
-int ADXT_GetOutPan();
-int ADXT_SetOutVol();
-int ADXT_GetOutVol();
-void ADXT_SetSvrFreq();
-int ADXT_SetAutoRcvr();
-int ADXT_GetErrCode();
-void ADXT_Pause();
-void ADXT_SetTranspose();
-void ADXT_TermSupply();
-int ADXT_DiscardSmpl();
-void ADXT_SetTimeOfst();
-int ADXT_IsHeader();
-int ADXT_IsEndcode();
-int ADXT_InsertSilence();
-void FUN_002b0528();
-long FUN_002b5a10();
-int FUN_002b59a0();
-void FUN_002b5848();
 
-void SFADXT_SetOutPan(SfdAdxHn *h);
-void SFADXT_GetOutPan(SfdAdxHn *h);
-void SFADXT_SetOutVol(SfdAdxHn *h);
-void SFADXT_GetOutVol(SfdAdxHn *h);
+void SFADXT_SetOutPan(SfdAdxHn *h, int ch, int pan);
+int SFADXT_GetOutPan(SfdAdxHn *h, int ch);
+void SFADXT_SetOutVol(SfdAdxHn *h, int vol);
+int SFADXT_GetOutVol(SfdAdxHn *h);
 void SFADXT_SetSpeed(SfdAdxHn *h, int volume);
 void sfadxt_HeadDecCallBack(SfdAdxHn *h);
 int sfadxt_ExecServerSub(SfdAdxHn *h);
@@ -165,7 +133,7 @@ void sfadxt_PutDataChunk(SfdSj *sj, int len, SfdSjChunk *ck);
 void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out);
 void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used);
 int sfadxt_AdjDiscard(char *records, int length, int *found);
-int FUN_002ae6c8();
+int SFTIM_GetAudioStartSample();
 int sfadxt_InsertSilence(SfdAdxHn *h, int nch, int size);
 void sfadxt_ExcludeHdr(SfdAdxHn *h, char *buf, int size, int *used);
 char *sfadxt_SearchAlign(SfdAdxHn *h, char *buf, int size);
@@ -176,22 +144,22 @@ int sfadxt_IsPrepEnd(SfdAdxHn *h);
 void sfadxt_ChkTermFlg(SfdAdxHn *h, int flag);
 int sfadxt_RingGetRead(SfdAdxHn *h, char **addr, int *size);
 int sfadxt_RingAddRead(SfdAdxHn *h, int n);
-void FUN_0029c2c0(SfdAdxHn *h);
+void sfadxt_UpdateFlowCnt(SfdAdxHn *h);
 int sfadxt_GetTermSrc(SfdAdxHn *h);
 int sfadxt_GetTermDst(SfdAdxHn *h);
 void sfadxt_SetTermDst(SfdAdxHn *h, int value);
 void sfadxt_SetAdxtHd(SfdAdxHn *h);
-int sfadxt_IsEndDecinfo(void *adxt);
-void FUN_0029c498(SfdAdxHn *h);
+int sfadxt_IsEndDecinfo(AdxtObj *adxt);
+void sfadxt_SetSvrFreq(SfdAdxHn *h);
 int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx);
 int SFADXT_Create(SfdAdxHn *h);
-void *sfadxt_CreateEx(SfdAdxCfg *cfg);
-void *sfadxt_RestoreAdxtHn(void);
-void FUN_0029c890(SfdAdxHn *h);
+AdxtObj *sfadxt_CreateEx(SfdAdxCfg *cfg);
+AdxtObj *sfadxt_RestoreAdxtHn(void);
+void sfadxt_SetTimeFn(SfdAdxHn *h);
 int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit);
-void sfadxt_GetTimeTst(void *blk, void *adxt, int *out0, int *out1);
-int sfadxt_DestroySub(void *adxt);
-int sfadxt_SaveAdxtHn(void *adxt);
+void sfadxt_GetTimeTst(void *blk, AdxtObj *adxt, int *out0, int *out1);
+int sfadxt_DestroySub(AdxtObj *adxt);
+int sfadxt_SaveAdxtHn(AdxtObj *adxt);
 int SFADXT_Stop(SfdAdxHn *h);
 void sfadxt_WaitStart(SfdAdxHn *h, int value);
 void sfadxt_DoPause(SfdAdxHn *h, int value);
@@ -224,24 +192,24 @@ int SFADXT_IsEndcode(unsigned char *header, int length, int *headerSize) {
     return header[1] == 1;
 }
 
-void SFADXT_SetOutPan(SfdAdxHn *h) {
-    ADXT_SetOutPan(((SfdAdxCtx *)h->sub.ctx)->adxt);
+void SFADXT_SetOutPan(SfdAdxHn *h, int ch, int pan) {
+    ADXT_SetOutPan(((SfdAdxCtx *)h->sub.ctx)->adxt, ch, pan);
 }
 
-void SFADXT_GetOutPan(SfdAdxHn *h) {
-    ADXT_GetOutPan(((SfdAdxCtx *)h->sub.ctx)->adxt);
+int SFADXT_GetOutPan(SfdAdxHn *h, int ch) {
+    return ADXT_GetOutPan(((SfdAdxCtx *)h->sub.ctx)->adxt, ch);
 }
 
-void SFADXT_SetOutVol(SfdAdxHn *h) {
-    ADXT_SetOutVol(((SfdAdxCtx *)h->sub.ctx)->adxt);
+void SFADXT_SetOutVol(SfdAdxHn *h, int vol) {
+    ADXT_SetOutVol(((SfdAdxCtx *)h->sub.ctx)->adxt, vol);
 }
 
-void SFADXT_GetOutVol(SfdAdxHn *h) {
-    ADXT_GetOutVol(((SfdAdxCtx *)h->sub.ctx)->adxt);
+int SFADXT_GetOutVol(SfdAdxHn *h) {
+    return ADXT_GetOutVol(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
 void SFADXT_SetSpeed(SfdAdxHn *h, int volume) {
-    void *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
+    AdxtObj *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
     int hi;
     int lo;
     float t;
@@ -285,7 +253,7 @@ int SFADXT_Finish(void) {
 
 void sfadxt_HeadDecCallBack(SfdAdxHn *h) {
     SfdAdxD28 *d28 = &h->d28;
-    void *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
+    AdxtObj *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
     int w;
     int ht;
     if (d28->f500 == d28->f504) {
@@ -316,7 +284,7 @@ int sfadxt_ExecServerSub(SfdAdxHn *h) {
     sfadxt_ChkPrepFlg(h);
     sfadxt_ChkTermFlg(h, out);
     sfadxt_SetAdxtHd(h);
-    FUN_0029c498(h);
+    sfadxt_SetSvrFreq(h);
     sfadxt_HeadDecCallBack(h);
     return r;
 }
@@ -339,7 +307,7 @@ int sfadxt_SupplyData(SfdAdxHn *h, int *out) {
     ctx->step(h, addr, size, &result);
     if ((ret = sfadxt_RingAddRead(h, result)) != 0)
         return ret;
-    FUN_0029c2c0(h);
+    sfadxt_UpdateFlowCnt(h);
     return 0;
 }
 
@@ -400,7 +368,7 @@ void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used) {
         ctx->step = sfadxt_CopyData;
         return;
     }
-    lo = FUN_002ae6c8(ring, rate);
+    lo = SFTIM_GetAudioStartSample(ring, rate);
     if (lo < 0)
         return;
     if (SFSET_GetCond(h, 5) == 0) {
@@ -460,7 +428,7 @@ int sfadxt_AdjDiscard(char *records, int length, int *found) {
 }
 
 int sfadxt_InsertSilence(SfdAdxHn *h, int nch, int size) {
-    return ADXT_InsertSilence(((SfdAdxCtx *)h->sub.ctx)->adxt);
+    return ADXT_InsertSilence(((SfdAdxCtx *)h->sub.ctx)->adxt, nch, size);
 }
 
 void sfadxt_ExcludeHdr(SfdAdxHn *h, char *buf, int size, int *used) {
@@ -565,14 +533,14 @@ int sfadxt_IsPrepEnd(SfdAdxHn *h) {
 
 void sfadxt_ChkTermFlg(SfdAdxHn *h, int flag) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    void *adxt = ctx->adxt;
+    AdxtObj *adxt = ctx->adxt;
     void *blk = h->blk4120;
     int st;
     int err;
     st = ADXT_GetStat(adxt);
     err = ADXT_GetErrCode(adxt);
     if (err != 0)
-        DAT_0057faac = err;
+        sfadxt_adxterr = err;
     if (SFSET_GetCond(h, 26) == 0)
         err = 0;
     switch (err) {
@@ -615,7 +583,7 @@ int sfadxt_RingAddRead(SfdAdxHn *h, int n) {
     return 0;
 }
 
-void FUN_0029c2c0(SfdAdxHn *h) {
+void sfadxt_UpdateFlowCnt(SfdAdxHn *h) {
     SfdAdxSub *sub = &h->sub;
     SfdAdxCtx *other = (SfdAdxCtx *)sub->ctx;
     SfdSj *entry;
@@ -646,7 +614,7 @@ void sfadxt_SetTermDst(SfdAdxHn *h, int value) {
 
 void sfadxt_SetAdxtHd(SfdAdxHn *h) {
     SfdAdxInfo *info = sfadxt_GetHd(h);
-    void *adxt;
+    AdxtObj *adxt;
     int n;
     if (info != 0 && info->ready == 0) {
         adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
@@ -662,16 +630,16 @@ void sfadxt_SetAdxtHd(SfdAdxHn *h) {
     }
 }
 
-int sfadxt_IsEndDecinfo(void *adxt) {
+int sfadxt_IsEndDecinfo(AdxtObj *adxt) {
     if ((unsigned int)ADXT_GetStat(adxt) < 2) {
         return 0;
     }
     return 1;
 }
 
-void FUN_0029c498(SfdAdxHn *h) {
+void sfadxt_SetSvrFreq(SfdAdxHn *h) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    void *adxt = ctx->adxt;
+    AdxtObj *adxt = ctx->adxt;
     int value = SFSET_GetCond(h, 27);
     if (ctx->opt27 != value) {
         ctx->opt27 = value;
@@ -717,7 +685,7 @@ int SFADXT_Create(SfdAdxHn *h) {
     iface->setSpeed = SFADXT_SetSpeed;
     ADXT_StartSj(adxt, sj);
     sfadxt_WaitStart(h, 1);
-    FUN_0029c890(h);
+    sfadxt_SetTimeFn(h);
     return 0;
 }
 
@@ -748,21 +716,21 @@ int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx) {
     pair[3].a = SFSET_GetCond(h, 66);
     pair[3].b = 1000000;
     SFTST_Create(h->blk4120);
-    FUN_002b0528(h->blk4120, SFSET_GetCond(h, 72));
+    SFTST_SetTstFlg(h->blk4120, SFSET_GetCond(h, 72));
     SFTST_SetTolerance(h->blk4120, &pair[0]);
     SFTST_SetExcessErr(h->blk4120, &pair[1]);
     SFTST_SetAdjStart(h->blk4120, &pair[2]);
     SFTST_SetAdjPoff(h->blk4120, &pair[3]);
     SFTST_SetMovaveRange(h->blk4120, SFSET_GetCond(h, 62));
-    FUN_002b5848(SFSET_GetCond(h, 61));
+    UTY_InitTmr(SFSET_GetCond(h, 61));
     return 0;
 }
 
-void *sfadxt_CreateEx(SfdAdxCfg *cfg) {
-    void *adxt;
-    void *ret;
+AdxtObj *sfadxt_CreateEx(SfdAdxCfg *cfg) {
+    AdxtObj *adxt;
+    AdxtObj *ret;
     if (SFPLY_GetResetFlg() != 1) {
-        adxt = ADXT_Create(cfg->f12, cfg->f24, cfg->f20);
+        adxt = ADXT_Create((int)cfg->f12, (char *)cfg->f24, (int)cfg->f20);
     } else {
         adxt = sfadxt_RestoreAdxtHn();
     }
@@ -774,18 +742,18 @@ void *sfadxt_CreateEx(SfdAdxCfg *cfg) {
     return ret;
 }
 
-void *sfadxt_RestoreAdxtHn(void) {
-    return DAT_004bead8[0];
+AdxtObj *sfadxt_RestoreAdxtHn(void) {
+    return sfadxt_save_hn;
 }
 
-void FUN_0029c890(SfdAdxHn *h) {
+void sfadxt_SetTimeFn(SfdAdxHn *h) {
     SFTIM_SetTimeFn(h, sfadxt_GetTime, 2);
     SFSET_SetCond(h, 15, 2);
 }
 
 int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    void *adxt = ctx->adxt;
+    AdxtObj *adxt = ctx->adxt;
     void *blk = h->blk4120;
     int nowTime;
     int nowUnit;
@@ -805,7 +773,7 @@ int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit) {
     return 0;
 }
 
-void sfadxt_GetTimeTst(void *blk, void *adxt, int *out0, int *out1) {
+void sfadxt_GetTimeTst(void *blk, AdxtObj *adxt, int *out0, int *out1) {
     SfdAdxPair size;
     SfdAdxPair extra;
     SfdAdxPair result;
@@ -813,9 +781,9 @@ void sfadxt_GetTimeTst(void *blk, void *adxt, int *out0, int *out1) {
     int height;
     sfadxt_stat = ADXT_GetStat(adxt);
     ADXT_GetTime(adxt, &width, &height);
-    size.b = height;
     size.a = width;
-    extra.a = FUN_002b5a10();
+    size.b = height;
+    extra.a = UTY_GetTmr();
     extra.b = UTY_GetTmrUnit();
     SFTST_Calc(blk, &size, &extra, &result);
     *out0 = result.a;
@@ -824,7 +792,7 @@ void sfadxt_GetTimeTst(void *blk, void *adxt, int *out0, int *out1) {
 
 int SFADXT_Destroy(SfdAdxHn *h) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    void *adxt = ctx->adxt;
+    AdxtObj *adxt = ctx->adxt;
     SfdSj *sj = ctx->sj;
     int ret;
     if (adxt == 0)
@@ -837,17 +805,17 @@ int SFADXT_Destroy(SfdAdxHn *h) {
         ret = sfadxt_SaveAdxtHn(adxt);
     }
     sj->vtbl->destroy(sj);
-    FUN_002b59a0();
+    UTY_FinishTmr();
     return ret;
 }
 
-int sfadxt_DestroySub(void *adxt) {
+int sfadxt_DestroySub(AdxtObj *adxt) {
     ADXT_Destroy(adxt);
     return 0;
 }
 
-int sfadxt_SaveAdxtHn(void *adxt) {
-    DAT_004bead8[0] = adxt;
+int sfadxt_SaveAdxtHn(AdxtObj *adxt) {
+    sfadxt_save_hn = adxt;
     return 0;
 }
 
@@ -868,7 +836,7 @@ int SFADXT_Stop(SfdAdxHn *h) {
 /* matching construct: permuter, reduced by hand: the carry stored last */
 int SFADXT_Pause(SfdAdxHn *h, unsigned int mode) {
     SfdAdxCtx *ctx;
-    void *adxt;
+    AdxtObj *adxt;
     int size;
     int pos;
     int at;
@@ -903,7 +871,7 @@ int SFADXT_Pause(SfdAdxHn *h, unsigned int mode) {
 void sfadxt_WaitStart(SfdAdxHn *h, int value) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
     void *blk = h->blk4120;
-    void *adxt;
+    AdxtObj *adxt;
     ctx->f44 = value;
     adxt = ctx->adxt;
     if (value != 0 || h->f80 != 1) {
@@ -914,7 +882,7 @@ void sfadxt_WaitStart(SfdAdxHn *h, int value) {
 void sfadxt_DoPause(SfdAdxHn *h, int value) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
     void *blk = h->blk4120;
-    void *adxt = ctx->adxt;
+    AdxtObj *adxt = ctx->adxt;
     if (value != 0 || ctx->f44 != 1) {
         sfadxt_WtPause(adxt, blk, value);
     }
@@ -951,7 +919,7 @@ void SFADXT_AddRead(SfdAdxHn *h) {
 int SFADXT_Seek(SfdAdxHn *h) {
     SfdAdxInfo *info;
     SfdAdxCtx *ctx;
-    void *adxt;
+    AdxtObj *adxt;
     info = sfadxt_GetHd(h);
     if (info == 0)
         return 0;

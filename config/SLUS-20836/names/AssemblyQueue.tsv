@@ -348,15 +348,11 @@
 0x002a0e88	sfd_Unlock	cri
 0x002a0f98	SFD_SetStmObject	cri
 0x002a9ad0	sfmpvps2_ExecIpu	cri
-0x002ac880	sfring_Push	cri
-0x002aca28	sfring_FindPos	cri
 0x002ad910	SFD_GetHnStat	cri
 0x002ae028	SFTIM_InitHn	cri
 0x002ae248	SFTIM_InitTtu	cri
 0x002ae290	SFTIM_InitTcode	cri
 0x002aed78	SFD_SetUsrTimeFn	cri
-0x002b03a0	sftrn_GetFlagA	cri
-0x002b03d0	sftrn_GetFlagB	cri
 0x002b1ae0	SFH_IsExistStmId	cri
 0x002b2448	SFH_AnlyMaxPicSiz	cri
 0x002b2480	SFH_AnlyAvrPicSiz	cri
@@ -1112,14 +1108,6 @@
 0x00285220	mpvhook_Create	cri
 0x00285250	mpvhook_Destroy	cri
 0x002852a0	mpvhook_SetCond	cri
-0x00285368	mpvhook_SetBufEnt	cri
-0x00285390	mpvhook_SetSize	cri
-0x002853b8	mpvhook_SetFlagPtr	cri
-0x002853e0	mpvhook_Start	cri
-0x00285410	mpvhook_GetPicInf	cri
-0x00285438	mpvhook_GetInf	cri
-0x00285460	mpvhook_GetRate	cri
-0x00285488	mpvhook_GetDispSize	cri
 0x0028a958	mpv_InstallHooks	cri
 0x00290b38	MPV_IsConformable	cri
 0x00290bd0	MPV_Init	cri
@@ -1248,7 +1236,6 @@
 0x002971b0	mwPlyGetInputSj	cri
 0x00298378	mwsfsfx_ResetAddInf	cri
 0x00298420	mwsfsfx_UpdateAddInf	cri
-0x00298ad0	mwsfsfx_SetPicUsr	cri
 0x002995e0	mwPlyLinkStm	cri
 0x00299a38	mwsst_Start	cri
 0x00299a90	mwsst_Stop	cri
@@ -1279,7 +1266,6 @@
 0x002abde0	SFD_Start	cri
 0x002ac498	SFD_TermSupply	cri
 0x002ac600	SFD_RelFrm	cri
-0x002adba0	SFD_GetCondDef	cri
 0x002aee00	SFD_SetExtClockFn	cri
 0x002aeef0	SFD_UpdateTime	cri
 0x002b17d8	SFH_Create	cri
@@ -1289,7 +1275,6 @@
 0x002b2250	SFH_AnlyNumElemVid	cri
 0x002b23f8	SFH_AnlyMaxFrmNum	cri
 0x002b2d20	SFH_AnlyFtrFxType	cri
-0x002b5770	SUD_FindTag	cri
 0x00295e58	MWSFD_InitRsc	cri
 0x00295e88	MWRSC_SaveRsc	cri
 0x00295f18	MWRSC_RestoreRsc	cri
@@ -1367,7 +1352,6 @@
 0x002aa548	SFD_SetSpeed	cri
 0x002aa5b8	SFD_SetAudioCh	cri
 0x002aa628	SFD_SetVideoCh	cri
-0x002adc50	SFD_GetHnHdrInf	cri
 0x002add28	SFD_GetPlyInf	cri
 0x002ae7b0	SFD_GetTime	cri
 0x00277010	LSC_EntryFname	cri
@@ -1500,8 +1484,6 @@
 0x002a2c60	sfmps_ErrFn	cri
 0x002a9d70	sfmpvps2_StopIpu	cri
 0x002aa698	sfmpvps2_Init	cri
-0x002ac7f0	sfring_PutItem	cri
-0x002acaf0	sfring_IsFull	cri
 0x002ae010	SFTIM_Init	unmatched
 0x002ae020	SFTIM_Finish	cri
 0x002b1700	SFH_Init	cri
@@ -1534,8 +1516,6 @@
 0x002846c0	cft_MakeYccTbl	cri
 0x00284910	cft_MakeAlpha3Tbl	cri
 0x00284b68	cft_MakeAlpha3TblBlack	cri
-0x002b0388	sftrn_SetFlagA	cri
-0x002b03b8	sftrn_SetFlagB	cri
 0x002b18d0	clearObjInf	cri
 0x002b18e0	initObjInf	cri
 0x002b18f0	initSfhObj	cri

@@ -79,7 +79,7 @@ SfdPicRec *sfmps_GetHd(SfdHandle *hn);
 int sfmps_IsEffectiveEndcode(SfdHandle *hn, int kind);
 void sfmps_ChkInEnd(SfdHandle *hn, int *done);
 int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts);
-void FUN_002aa050(SfdHandle *hn, unsigned char *data, int len);
+void SFMPVP_SearchPsc(SfdHandle *hn, unsigned char *data, int len);
 int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total);
 void sfmps_SkipNext(SfdHandle *hn, unsigned char *buf, int size, int *skip);
 int sfmps_PutPes(SfdHandle *hn, unsigned char *data, int len, int *used, int *result);
@@ -434,7 +434,7 @@ int sfmps_CopyVideo(SfdHandle *hn, int stm, unsigned char *data, int len, long p
     if (ret != 1) {
         SFMPVP_Unput(hn, len);
     } else {
-        FUN_002aa050(hn, data, len);
+        SFMPVP_SearchPsc(hn, data, len);
     }
     return ret;
 }
@@ -559,13 +559,13 @@ int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts) {
     }
     if (ch == 1) {
         if (pts >= 0) {
-            if (sfring_IsFull(hn, 1) != 0) {
+            if (SFPTS_IsPtsQueFull(hn, 1) != 0) {
                 return 0;
             }
             e.pts = pts;
             e.addr = (unsigned char *)addr0;
             e.len = len;
-            ret = sfring_PutItem(hn, 1, &e, &full);
+            ret = SFPTS_WritePtsQue(hn, 1, &e, &full);
             if (ret != 0) {
                 return ret;
             }
@@ -735,13 +735,13 @@ void sfmps_AdjustAvPlay(SfdHandle *hn) {
 
     if (SFSET_GetCond(hn, SFD_COND_AUDIO) != 0 && SFSET_GetCond(hn, SFD_COND_AUDIO_AUTO_OFF) != 0) {
         if (SFBUF_GetWTot(hn, 2) == 0 && prm->audioBound == 0) {
-            if (sftrn_GetFlagA(hn, 6) != 0) {
+            if (SFTRN_GetPrepFlg(hn, 6) != 0) {
                 SFSET_SetCond(hn, SFD_COND_AUDIO, 0);
             }
         }
     }
     if (SFSET_GetCond(hn, SFD_COND_VIDEO) != 0 && SFSET_GetCond(hn, SFD_COND_VIDEO_AUTO_OFF) != 0
-        && SFBUF_GetWTot(hn, 1) == 0 && prm->videoBound == 0 && sftrn_GetFlagA(hn, 7) != 0) {
+        && SFBUF_GetWTot(hn, 1) == 0 && prm->videoBound == 0 && SFTRN_GetPrepFlg(hn, 7) != 0) {
         SFSET_SetCond(hn, SFD_COND_VIDEO, 0);
     }
 }

@@ -414,14 +414,14 @@ int mpv_StartLower(MpvHn *hn, SfdSj *sj) {
 
     if (mpvhook_IsInstalled() != 0) {
         for (i = 0, ent = hn->bufEnt; i < 4; i++) {
-            mpvhook_SetBufEnt(hn->lower, i, ent->sj, ent->fn, ent->obj);
+            mpvhook_SetUsrSj(hn->lower, i, ent->sj, ent->fn, ent->obj);
             ent++;
         }
-        mpvhook_SetSize(hn->lower, hn->picusr.buf, hn->picusr.size);
-        if (mpvhook_Start(hn->lower, sj) != 0) {
+        mpvhook_SetPicUsrBuf(hn->lower, hn->picusr.buf, hn->picusr.size);
+        if (mpvhook_DecodePicAtr(hn->lower, sj) != 0) {
             return -2;
         }
-        mpvhook_SetFlagPtr(hn->lower, 0, &hn->picusr.len);
+        mpvhook_GetPicUsr(hn->lower, 0, &hn->picusr.len);
         mpv_GetLowerInf(hn);
         return 0;
     }
@@ -435,10 +435,10 @@ void mpv_GetLowerInf(MpvHn *hn) {
     int b, c, d;
     int e, f;
 
-    mpvhook_GetPicInf(hn->lower, &inf);
-    mpvhook_GetInf(hn->lower, &a);
-    mpvhook_GetRate(hn->lower, &b, &c, &d);
-    mpvhook_GetDispSize(hn->lower, &e, &f);
+    mpvhook_GetPicAtr(hn->lower, &inf);
+    mpvhook_GetBitRate(hn->lower, &a);
+    mpvhook_GetVbvBufSiz(hn->lower, &b, &c, &d);
+    mpvhook_GetLinkFlg(hn->lower, &e, &f);
     hn->picInf = inf;
     hn->bitRate = a;
     hn->vbvBufferSize = b / 2048;

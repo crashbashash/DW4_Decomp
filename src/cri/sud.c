@@ -33,12 +33,12 @@ int atoi(const char *text);
 
 extern int sud_init_cnt;
 extern long long utytmr_unit;
-extern volatile int DAT_004bf290;
-extern int DAT_004bf294;
-extern int DAT_004bf298;
+extern volatile int utytmr_init_cnt;
+extern int utytmr_ch;
+extern int utytmr_save_mode;
 
 /* matching construct: manual — a volatile store target gives retail's la + sw 0(reg) and keeps the counter load ahead of it */
-extern char *volatile DAT_005856a8;
+extern char *volatile sud_version_ptr;
 extern volatile SudClock DAT_005856b0;
 extern volatile SudClock DAT_005856c0;
 extern volatile SudClock *volatile DAT_005856d0;
@@ -49,7 +49,7 @@ void FUN_002b5ce0(long long rate);
 
 void SUD_Init(void) {
     if (sud_init_cnt <= 0) {
-        DAT_005856a8 = sud_GetVersionStr();
+        sud_version_ptr = sud_GetVersionStr();
         sud_init_cnt++;
     }
 }
@@ -64,7 +64,7 @@ void SUD_Finish(void) {
     }
 }
 
-void FUN_002b51f8(char *dst, int *flags);
+void SUD_SetFmtTypeToBuf(char *dst, int *flags);
 
 void SUD_MakePicUsrDat(char *out, int unused, int *flags) {
     char number[16];
@@ -74,11 +74,11 @@ void SUD_MakePicUsrDat(char *out, int unused, int *flags) {
     field = out + 16;
     strcat(out, number);
     strncpy(field, "02", 2);
-    FUN_002b51f8(field, flags);
+    SUD_SetFmtTypeToBuf(field, flags);
     strcat(field, "\n");
 }
 
-void FUN_002b51f8(char *dst, int *flags) {
+void SUD_SetFmtTypeToBuf(char *dst, int *flags) {
     SudFlagChars a = {{"A", "D"}};
     SudFlagChars b = {{"N", "C"}};
     SudFlagChars c = {{"P", "I"}};
@@ -87,7 +87,7 @@ void FUN_002b51f8(char *dst, int *flags) {
     strncpy(dst + 4, c.s[flags[2]], 1);
 }
 
-unsigned int FUN_002b52d8(char *header, int index) {
+unsigned int SUD_AnalyVersion(char *header, int index) {
     SudChars2 digits;
     if (header == 0 || index < 0) {
         return 0;
@@ -114,7 +114,7 @@ int FUN_002b53a0(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    if (FUN_002b52d8(header, index) == 0) {
+    if (SUD_AnalyVersion(header, index) == 0) {
         return 0;
     }
     return strncmp(header + 20, "I", 1) == 0;
@@ -126,7 +126,7 @@ int FUN_002b5400(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    if (FUN_002b52d8(header, index) < 2) {
+    if (SUD_AnalyVersion(header, index) < 2) {
         return 0;
     }
     field = header + 21;
@@ -142,7 +142,7 @@ int FUN_002b5490(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    if (FUN_002b52d8(header, index) < 2) {
+    if (SUD_AnalyVersion(header, index) < 2) {
         return 0;
     }
     return strncmp(header + 22, "A", 1) != 0;
@@ -154,7 +154,7 @@ int FUN_002b54f8(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    if (FUN_002b52d8(header, index) >= 2) {
+    if (SUD_AnalyVersion(header, index) >= 2) {
         return FUN_002b56f8(header, index, 0x17);
     }
     return 0;
@@ -164,7 +164,7 @@ int FUN_002b5578(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    if (FUN_002b52d8(header, index) >= 2) {
+    if (SUD_AnalyVersion(header, index) >= 2) {
         return FUN_002b56f8(header, index, 0x1A);
     }
     return 0;
@@ -174,7 +174,7 @@ int FUN_002b55f8(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    if (FUN_002b52d8(header, index) >= 2) {
+    if (SUD_AnalyVersion(header, index) >= 2) {
         return FUN_002b56f8(header, index, 0x1D);
     }
     return 0;
@@ -184,7 +184,7 @@ int FUN_002b5678(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    if (FUN_002b52d8(header, index) >= 2) {
+    if (SUD_AnalyVersion(header, index) >= 2) {
         return FUN_002b56f8(header, index, 0x20);
     }
     return 0;
@@ -208,7 +208,7 @@ unsigned long FUN_002b5758(char *text, char **end, int radix) {
 
 int FUN_002b5838(char *header);
 
-void SUD_FindTag(char *text, int length, char **found, int *value) {
+void SUD_SearchSudDat(char *text, int length, char **found, int *value) {
     int i;
     *value = 0;
     *found = 0;
@@ -237,23 +237,23 @@ static volatile unsigned int *const sud_tmr_count[] = {
     (unsigned int *)0x10001000, (unsigned int *)0x10001800,
 };
 
-void FUN_002b5848(int channel) {
+void UTY_InitTmr(int channel) {
     int value;
     if (CRICFG_Read("TMR_CH", &value) == 0) {
         channel = value;
     }
-    DAT_004bf290++;
-    if (DAT_004bf290 >= 2 && DAT_004bf294 == channel) {
+    utytmr_init_cnt++;
+    if (utytmr_init_cnt >= 2 && utytmr_ch == channel) {
         return;
     }
-    DAT_004bf294 = channel;
+    utytmr_ch = channel;
     if (channel == -1) {
         FUN_002b5ce0(1);
         return;
     }
     FUN_002b5ce0(CRICFG_Read("TMR_CLK", &value) == 0 ? (unsigned int)value : 0x8CA00);
-    DAT_004bf298 = *sud_tmr_mode[channel];
-    if ((DAT_004bf298 & 0xC7) != 0x82) {
+    utytmr_save_mode = *sud_tmr_mode[channel];
+    if ((utytmr_save_mode & 0xC7) != 0x82) {
         *sud_tmr_count[channel] = 0;
         *sud_tmr_mode[channel] = 0x82;
     }
@@ -264,27 +264,27 @@ void FUN_002b5848(int channel) {
     DAT_005856d4 = 0;
 }
 
-void FUN_002b59a0(void) {
-    DAT_004bf290--;
-    if (DAT_004bf290 == 0 && DAT_004bf294 != -1 && (DAT_004bf298 & 0xC7) != 0x82) {
-        *sud_tmr_mode[DAT_004bf294] = DAT_004bf298 ^ 0xC00;
+void UTY_FinishTmr(void) {
+    utytmr_init_cnt--;
+    if (utytmr_init_cnt == 0 && utytmr_ch != -1 && (utytmr_save_mode & 0xC7) != 0x82) {
+        *sud_tmr_mode[utytmr_ch] = utytmr_save_mode ^ 0xC00;
     }
-    if (DAT_004bf290 < 0) {
-        DAT_004bf290 = 0;
+    if (utytmr_init_cnt < 0) {
+        utytmr_init_cnt = 0;
     }
 }
 
-long long FUN_002b5a10(void) {
+long long UTY_GetTmr(void) {
     unsigned int count;
     long long now;
-    if (DAT_004bf290 <= 0 || DAT_004bf294 == -1) {
+    if (utytmr_init_cnt <= 0 || utytmr_ch == -1) {
         return 0;
     }
     DAT_005856d4++;
     if (DAT_005856d4 == 1) {
         DAT_005856c0 = DAT_005856b0;
         DAT_005856d0 = &DAT_005856c0;
-        count = *sud_tmr_count[DAT_004bf294] & 0xFFFF;
+        count = *sud_tmr_count[utytmr_ch] & 0xFFFF;
         if (count < DAT_005856b0.last) {
             DAT_005856b0.base += 0x10000;
         }
@@ -292,7 +292,7 @@ long long FUN_002b5a10(void) {
         now = count + DAT_005856b0.base;
         DAT_005856d0 = &DAT_005856b0;
     } else {
-        count = *sud_tmr_count[DAT_004bf294] & 0xFFFF;
+        count = *sud_tmr_count[utytmr_ch] & 0xFFFF;
         now = count + DAT_005856d0->base;
         if (count < DAT_005856d0->last) {
             now += 0x10000;
@@ -302,12 +302,12 @@ long long FUN_002b5a10(void) {
     return now;
 }
 
-int FUN_002b5b38(void) {
-    FUN_002b5a10();
+int UTY_IsTmrVoid(void) {
+    UTY_GetTmr();
     return utytmr_unit == 1;
 }
 
-void FUN_002b5b68(long long rate) {
+void UTY_SetTmrUnit(long long rate) {
     FUN_002b5ce0(rate);
 }
 

@@ -28,7 +28,10 @@ typedef struct CftYccPln {
     void *f24;
 } CftYccPln;
 
+void CFT_Init(void);
 void CFT_Finish(void);
+void CFT_SetMaxAlpha(int max);
+int CFT_GetMaxAlpha(void);
 void CFT_Ycc420rgbToArgb8888(void);
 void CFT_Ycc420plnToZ16(CftYccPln *src, CftImage *img, int *table);
 void CFT_Ycc420plnToZ32(CftYccPln *src, CftImage *img, int *table);

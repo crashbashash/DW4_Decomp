@@ -109,9 +109,9 @@ int SFUO_ExecServer(SfainfHn *hn) {
 }
 
 void sfuo_ChkTermFlg(SfainfHn *hn) {
-    if (sftrn_GetFlagB(hn, SFAINF_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
+    if (SFTRN_GetTermFlg(hn, SFAINF_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
         && sfuo_IsTerm(hn) != 0) {
-        sftrn_SetFlagB(hn, SFAINF_SLOT, 1);
+        SFTRN_SetTermFlg(hn, SFAINF_SLOT, 1);
     }
 }
 
@@ -120,9 +120,9 @@ int sfuo_IsTerm(SfainfHn *hn) {
 }
 
 void sfuo_ChkPrepFlg(SfainfHn *hn) {
-    if (sftrn_GetFlagA(hn, SFAINF_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
+    if (SFTRN_GetPrepFlg(hn, SFAINF_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
         && sfuo_IsPrepEnd(hn) != 0) {
-        sftrn_SetFlagA(hn, SFAINF_SLOT, 1);
+        SFTRN_SetPrepFlg(hn, SFAINF_SLOT, 1);
     }
 }
 

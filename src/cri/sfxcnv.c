@@ -20,20 +20,20 @@ struct SfxCnvTbl {
 };
 
 void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo);
-int FUN_002b3bf0(void *hn);
-void FUN_002b50c8(SfxCnvTbl *tbl, int n);
-int FUN_00284dc8();
-int FUN_00284dc0();
+int SFX_GetFxType(void *hn);
+void SFX_SetZbit(SfxCnvTbl *tbl, int n);
+int CFT_MakeArgb8888ColAdjTbl();
+int CFT_MakeYcc422ColAdjTbl();
 
-void FUN_002b3510(SfxCnvTbl *tbl, SfxFrame *frm);
-void FUN_002b3548(unsigned char *t);
-void FUN_002b3530(SfxCnvTbl *tbl, SfxFrame *frm);
-void FUN_002b3600(SfxCnvTbl *tbl, SfxFrame *frm);
-void FUN_002b3620(SfxCnvTbl *tbl, SfxFrame *frm);
-void FUN_002b3640(SfxCnvTbl *tbl, SfxFrame *frm);
-void FUN_002b3660(SfxCnvTbl *tbl, SfxFrame *frm);
-void FUN_002b3678(SfxCnvTbl *tbl, SfxFrame *frm);
-int FUN_002b3490(SfxCnvTbl *tbl, unsigned int compo);
+void sfxcnv_MakeZTbl(SfxCnvTbl *tbl, SfxFrame *frm);
+void SFXCNV_MakeCcirFromY(unsigned char *t);
+void sfxcnv_MakeCcirTbl(SfxCnvTbl *tbl, SfxFrame *frm);
+void sfxcnv_MakeAlpLumiTbl(SfxCnvTbl *tbl, SfxFrame *frm);
+void sfxcnv_MakeAlp3110Tbl(SfxCnvTbl *tbl, SfxFrame *frm);
+void sfxcnv_MakeAlp3Tbl(SfxCnvTbl *tbl, SfxFrame *frm);
+void sfxcnv_MakeColAdjTbl(SfxCnvTbl *tbl, SfxFrame *frm);
+void sfxcnv_MakeYuv422ColAdjTbl(SfxCnvTbl *tbl, SfxFrame *frm);
+int sfxcnv_IsNeedUpdateTbl(SfxCnvTbl *tbl, unsigned int compo);
 
 int sfxcnv_IsCnvUpHalf(SfxCnvHn *hn) {
     switch (hn->format) {
@@ -67,7 +67,7 @@ int SFX_DecideTableAlph3(void *hn, int compo) {
     if (compo == 97) {
         return 5;
     }
-    frmcompo = FUN_002b3bf0(hn);
+    frmcompo = SFX_GetFxType(hn);
     if (frmcompo == 81) {
         return 4;
     }
@@ -77,37 +77,37 @@ int SFX_DecideTableAlph3(void *hn, int compo) {
     return 5;
 }
 
-void FUN_002b3300(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo) {
+void SFX_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo) {
     sfxcnv_MakeTable(tbl, frm, compo);
 }
 
 void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo)
 {
-    if (FUN_002b3490(tbl, compo) != 1)
+    if (sfxcnv_IsNeedUpdateTbl(tbl, compo) != 1)
         return;
     tbl->compo = compo;
     switch (compo) {
     case 11:
     case 13:
-        FUN_002b3510(tbl, frm);
+        sfxcnv_MakeZTbl(tbl, frm);
         return;
     case 2:
-        FUN_002b3600(tbl, frm);
+        sfxcnv_MakeAlpLumiTbl(tbl, frm);
         return;
     case 4:
-        FUN_002b3620(tbl, frm);
+        sfxcnv_MakeAlp3110Tbl(tbl, frm);
         return;
     case 5:
-        FUN_002b3640(tbl, frm);
+        sfxcnv_MakeAlp3Tbl(tbl, frm);
         return;
     case 21:
-        FUN_002b3660(tbl, frm);
+        sfxcnv_MakeColAdjTbl(tbl, frm);
         return;
     case 22:
-        FUN_002b3678(tbl, frm);
+        sfxcnv_MakeYuv422ColAdjTbl(tbl, frm);
         return;
     case 1:
-        FUN_002b3530(tbl, frm);
+        sfxcnv_MakeCcirTbl(tbl, frm);
         return;
     case 0:
     case 100:
@@ -117,7 +117,7 @@ void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo)
     }
 }
 
-int FUN_002b3490(SfxCnvTbl *tbl, unsigned int compo)
+int sfxcnv_IsNeedUpdateTbl(SfxCnvTbl *tbl, unsigned int compo)
 {
     int ret = 1;
     if (tbl->compo == 100)
@@ -145,15 +145,15 @@ int FUN_002b3490(SfxCnvTbl *tbl, unsigned int compo)
     return ret;
 }
 
-void FUN_002b3510(SfxCnvTbl *tbl, SfxFrame *frm) {
-    SFXZ_MakeCnvZ32Tbl(tbl->zhn, frm->fno, tbl->table);
+void sfxcnv_MakeZTbl(SfxCnvTbl *tbl, SfxFrame *frm) {
+    SFXZ_MakeCnvZTbl(tbl->zhn, frm->fno, tbl->table);
 }
 
-void FUN_002b3530(SfxCnvTbl *tbl, SfxFrame *frm) {
-    FUN_002b3548(tbl->table);
+void sfxcnv_MakeCcirTbl(SfxCnvTbl *tbl, SfxFrame *frm) {
+    SFXCNV_MakeCcirFromY(tbl->table);
 }
 
-void FUN_002b3548(unsigned char *t) {
+void SFXCNV_MakeCcirFromY(unsigned char *t) {
     int i;
     for (i = 0; i < 16; i++) {
         t[i] = 0;
@@ -166,24 +166,24 @@ void FUN_002b3548(unsigned char *t) {
     }
 }
 
-void FUN_002b3600(SfxCnvTbl *tbl, SfxFrame *frm) {
+void sfxcnv_MakeAlpLumiTbl(SfxCnvTbl *tbl, SfxFrame *frm) {
     SFXA_MakeAlpLumiTbl(tbl->ahn, frm->fno, tbl->table);
 }
 
-void FUN_002b3620(SfxCnvTbl *tbl, SfxFrame *frm) {
+void sfxcnv_MakeAlp3110Tbl(SfxCnvTbl *tbl, SfxFrame *frm) {
     SFXA_MakeAlp3110Tbl(tbl->ahn, frm->fno, tbl->table);
 }
 
-void FUN_002b3640(SfxCnvTbl *tbl, SfxFrame *frm) {
+void sfxcnv_MakeAlp3Tbl(SfxCnvTbl *tbl, SfxFrame *frm) {
     SFXA_MakeAlp3Tbl(tbl->ahn, frm->fno, tbl->table);
 }
 
-void FUN_002b3660(SfxCnvTbl *tbl, SfxFrame *frm) {
-    FUN_00284dc8(tbl->table);
+void sfxcnv_MakeColAdjTbl(SfxCnvTbl *tbl, SfxFrame *frm) {
+    CFT_MakeArgb8888ColAdjTbl(tbl->table);
 }
 
-void FUN_002b3678(SfxCnvTbl *tbl, SfxFrame *frm) {
-    FUN_00284dc0(tbl->table);
+void sfxcnv_MakeYuv422ColAdjTbl(SfxCnvTbl *tbl, SfxFrame *frm) {
+    CFT_MakeYcc422ColAdjTbl(tbl->table);
 }
 
 void SFX_MakeTblZ16(SfxCnvTbl *tbl, SfxFrame *frm) {
@@ -191,8 +191,8 @@ void SFX_MakeTblZ16(SfxCnvTbl *tbl, SfxFrame *frm) {
         SFXLIB_Error(tbl, frm, "E202282: SFX_MakeTblZ16 : zclip is not set.");
         return;
     }
-    FUN_002b50c8(tbl, 16);
-    FUN_002b3510(tbl, frm);
+    SFX_SetZbit(tbl, 16);
+    sfxcnv_MakeZTbl(tbl, frm);
 }
 
 void SFX_MakeTblZ32(SfxCnvTbl *tbl, SfxFrame *frm) {
@@ -200,8 +200,8 @@ void SFX_MakeTblZ32(SfxCnvTbl *tbl, SfxFrame *frm) {
         SFXLIB_Error(tbl, frm, "E202281: SFX_MakeTblZ32 : zclip is not set.");
         return;
     }
-    FUN_002b50c8(tbl, 32);
-    FUN_002b3510(tbl, frm);
+    SFX_SetZbit(tbl, 32);
+    sfxcnv_MakeZTbl(tbl, frm);
 }
 
 int SFXINF_GetStmInf(SfxFrame *frm, char *tag)

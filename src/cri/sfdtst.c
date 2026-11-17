@@ -3,7 +3,7 @@
 #include "dw4/cri/uty.h"
 #include "dw4/cri/sfd.h"
 
-/* kept here: with this declaration in sfd.h, sfmpv.c (which includes it) schedules FUN_002a5c28 differently */
+/* kept here: with this declaration in sfd.h, sfmpv.c (which includes it) schedules sfmpv_SetDecTtu differently */
 extern int sfadxt_stat;
 
 typedef struct SfdTst {
@@ -52,8 +52,8 @@ typedef struct SfdRatio {
 
 extern int sftst_debout_siz;
 extern char *sftst_debout_buf;
-extern char *DAT_004beb4c;
-extern char *DAT_004beb50;
+extern char *sftst_debout_write;
+extern char *sftst_debout_round;
 extern SfdTst *sftst_last;
 
 
@@ -111,7 +111,7 @@ void sftst_ResetHist(SfdTst *tst)
     tst->resethist = tst->resethist + 1;
 }
 
-void FUN_002b0528(SfdTst *tst, int value)
+void SFTST_SetTstFlg(SfdTst *tst, int value)
 {
     tst->f0 = value;
 }
@@ -323,10 +323,10 @@ void sftst_DebInit(void)
     char s[] = "tst, help_time_sec, help_time_msec, help_time_64, help_time, mt_max, master_time, out_time,  mt_ot, mtmax_ot,  diff_l_max, diff_l_min, diff_a_max, tst->diff_a_min, pastat, adjmode, resethist, excesserr, adj_limit, adj_front, adj_rear,  movave_1st, movave_2nd,  adxt_stat \n\n";
     if (sftst_debout_buf != 0) {
         memset(sftst_debout_buf, 0, sftst_debout_siz);
-        DAT_004beb4c = sftst_debout_buf;
-        strcpy(DAT_004beb4c, s);
-        DAT_004beb4c += strlen(s);
-        DAT_004beb50 = DAT_004beb4c;
+        sftst_debout_write = sftst_debout_buf;
+        strcpy(sftst_debout_write, s);
+        sftst_debout_write += strlen(s);
+        sftst_debout_round = sftst_debout_write;
     }
 }
 
@@ -349,8 +349,8 @@ void sftst_DebWrite(SfdTst *tst)
                   (long)tst->pastat, (long)tst->adjmode, (long)tst->resethist, (long)tst->excesserr,
                   (long)tst->adj_limit, (long)tst->adj_front, (long)tst->adj_rear,
                   (long)tst->movave_1st, (long)tst->movave_2nd, (long)sfadxt_stat);
-    strcpy(DAT_004beb4c, buf);
-    DAT_004beb4c += len;
-    if (DAT_004beb4c >= sftst_debout_buf + sftst_debout_siz - 1024)
-        DAT_004beb4c = DAT_004beb50;
+    strcpy(sftst_debout_write, buf);
+    sftst_debout_write += len;
+    if (sftst_debout_write >= sftst_debout_buf + sftst_debout_siz - 1024)
+        sftst_debout_write = sftst_debout_round;
 }

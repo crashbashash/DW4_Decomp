@@ -79,9 +79,9 @@ int SFD_GetSvrStat(void);
 int SFD_GetHnStat(void *sfd);
 int SFD_SetCond(void *sfd, int index, int value);
 void SFSET_SetCond(void *sfd, int index, int value);
-int SFD_GetCondDef(void *sfd, int index, int *out);
+int SFD_GetCond(void *sfd, int index, int *out);
 int SFSET_GetCond(void *sfd, int index);
-int SFD_GetHnHdrInf(void *sfd, struct SfdInfo64 *out);
+int SFD_GetMvInf(void *sfd, struct SfdInfo64 *out);
 int SFD_GetPlyInf(void *sfd, struct SfdStatus160 *out);
 int SFD_GetTrHn(void *sfd, int index, int *out);
 
@@ -138,8 +138,8 @@ int SFD_SetByteRate(void *sfd, int value);
 void SFD_SetSeekPos(void *sfd, int offset);
 
 /* the time-stamp rings */
-int sfring_PutItem(void *sfd, int index, struct SfdItem *item, int *full);
-int sfring_IsFull(void *sfd, int index);
+int SFPTS_WritePtsQue(void *sfd, int index, struct SfdItem *item, int *full);
+int SFPTS_IsPtsQueFull(void *sfd, int index);
 
 /* SFCON: concatenated playback */
 int SFD_SetConcatPlay(void *sfd);
@@ -154,13 +154,14 @@ int SFTRN_Init(struct SfdTrnModules *dst, struct SfdTrnModules *src);
 int SFTRN_Finish(struct SfdTrnModules *modules);
 void SFTRN_InitHn(void *sfd, struct SfdTrnSlot *s, struct SfdTrnConfig **pconfig, int arg);
 int SFTRN_CallTrSetup(void *sfd, int k);
-void sftrn_SetFlagA(void *sfd, int index, int value);
-int sftrn_GetFlagA(void *sfd, int index);
-void sftrn_SetFlagB(void *sfd, int index, int value);
-int sftrn_GetFlagB(void *sfd, int index);
+void SFTRN_SetPrepFlg(void *sfd, int index, int value);
+int SFTRN_GetPrepFlg(void *sfd, int index);
+void SFTRN_SetTermFlg(void *sfd, int index, int value);
+int SFTRN_GetTermFlg(void *sfd, int index);
 
 /* SFTST: the time-stamp statistics */
 void SFTST_Create(struct SfdTst *p);
+void SFTST_SetTstFlg(struct SfdTst *tst, int value);
 long SFTST_SetTolerance(struct SfdTst *tst, struct SfdRatio *ratio);
 void SFTST_SetExcessErr(struct SfdTst *tst, struct SfdRatio *ratio);
 void SFTST_SetAdjStart(struct SfdTst *tst, struct SfdRatio *ratio);
@@ -212,6 +213,7 @@ void SFTIM_InitHn(void *sfd, struct SfdTim *tim);
 void SFTIM_InitTtu(struct SfdTimeRec *rec, int time);
 void SFTIM_UpdateItime(struct SfdTim *tim, int now);
 int SFTIM_GetNextItime(struct SfdTim *tim, int now);
+void SFTIM_VbIn(void);
 int SFTIM_IsStagnant(void *sfd);
 int SFTIM_GetVideoStartSample(struct SfdTim *tim, int scale, int *valid);
 void SFTIM_SetStartTime(struct SfdTim *tim, int a, int b);
