@@ -136,7 +136,7 @@ int Gap__igCollisionGrid__vfunc_24(A *arg0) {
         if (o != 0) {
             o->f4 = o->f4 - 1;
             if (((unsigned long long) ((long long) o->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -153,7 +153,7 @@ int Gap__igCollisionGrid__vfunc_24(A *arg0) {
         if (o != 0) {
             o->f4 = o->f4 - 1;
             if (((unsigned long long) ((long long) o->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -170,7 +170,7 @@ int Gap__igCollisionGrid__vfunc_24(A *arg0) {
         if (o != 0) {
             o->f4 = o->f4 - 1;
             if (((unsigned long long) ((long long) o->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }

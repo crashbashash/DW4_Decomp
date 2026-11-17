@@ -47,14 +47,14 @@ int FUN_00167410(Owner_167410 *arg0, int arg1, int arg2, int arg3, void *arg4, v
         o = arg0->f92;
         ((igObject *)o)->_refCount = (int)((int) (((igObject *)o)->_refCount - 1));
         if (((unsigned long long) ((long long) (int) ((igObject *)o)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     o = arg0->f92;
     if (o != 0) {
         ((igObject *)o)->_refCount = (int)((int) (((igObject *)o)->_refCount - 1));
         if (((unsigned long long) ((long long) (int) ((igObject *)o)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0->f92 = 0;

@@ -81,7 +81,7 @@ void FUN_001e6410(S0 *arg0, void **arg1) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f18 = (int)(temp_s0);

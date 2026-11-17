@@ -29,7 +29,7 @@ int igMessenger_GetVTable(void) {
         p = o.ref;
         if (p != 0) {
             p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
         }
     }
     return r;

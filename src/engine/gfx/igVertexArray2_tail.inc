@@ -22,7 +22,7 @@ void FUN_0015f660(igVertexArray2 *arg0, igSmartPointer<Rc_17f2b0> list) {
     ObjectList_ResizeRetained((int)list.p, 0);
     for (i = 0; i < *(int *)(*(int *)((char *)arg0 + 16) + 8); i++) {
         x = (void *)*(int *)(*(int *)(*(int *)((char *)arg0 + 16) + 16) + i * 4);
-        if (x != 0 && igObject_IsKindOf(x, g_igVertexData_metaObject) != 0) {
+        if (x != 0 && igObject_IsKindOf((igObject *)x, g_igVertexData_metaObject) != 0) {
             r = x;
         } else {
             r = 0;

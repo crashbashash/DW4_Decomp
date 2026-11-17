@@ -25,7 +25,7 @@ int igAnimationTransitionPoint_GetVTable(void) {
          if (q != 0) {
              q->f4 -= 1;
              if ((q->f4 & 0x7fffff) == 0) {
-                 igObject_Destroy(q);
+                 igObject_Destroy((igObject *)q);
              }
          }
      }

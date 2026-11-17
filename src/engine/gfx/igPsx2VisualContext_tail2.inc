@@ -530,7 +530,7 @@ void FUN_0016a800(S0_1690d0 *arg0) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f4 = 0;
@@ -653,7 +653,7 @@ void FUN_0016ab80(Oab80 *arg0, int arg1) {
         r = e->f4;
         if (r != 0) {
             --r->refs;
-            if (!(r->refs & 0x7fffff)) igObject_Destroy(r);
+            if (!(r->refs & 0x7fffff)) igObject_Destroy((igObject *)r);
         }
         e->f4 = 0;
         if (e->f16 != 0) {
@@ -752,7 +752,7 @@ void FUN_0016af30(A_1690d0 *arg0, int arg1, RAf30 *arg2) {
     if (t != 0) {
         t->f4 = t->f4 - 1;
         if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     e->f4 = arg2;
@@ -1295,7 +1295,7 @@ done:
         }
         --s2->refs;
         if ((s2->refs & 0x7fffff) == 0) {
-            igObject_Destroy(s2);
+            igObject_Destroy((igObject *)s2);
         }
         FUN_002ed5c0(((T193 *)self->_pDLists)->f16[arg1]);
         ((T193 *)self->_pDLists)->Add(arg1);

@@ -14,7 +14,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
     int child;
     NodeList *children;
     if (node != 0) {
-        if (igObject_IsKindOf(node, g_igGroup_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)node, g_igGroup_metaObject) != 0) {
             children = node->children;
             count = 0;
             if (children != 0) {
@@ -27,7 +27,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
                 FUN_001c58c0((T_1c58c0 *)path);
             }
         }
-        if (igObject_IsKindOf(node, g_igCamera_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)node, g_igCamera_metaObject) != 0) {
             igSmartPointer<PathEntry> entry(((PathEntry *)igGraphPath_Create((int)igObject_GetAllocator((igObject *)collector))));
             FUN_001c5740((U_1c5740 *)entry.p, (T_1c5740 *)path);
             ObjectList_AppendRetained((igObjectList *)collector->children, (igObject *)entry.p);
@@ -94,12 +94,12 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     var_s2 = 0;
     while (var_s2 < temp_s3) {
         temp_v0 = igDirectory_GetEntry(arg1, var_s2);
-        if (0 != igObject_IsKindOf(temp_v0, (igMetaObject *)g_igObjectDirEntry_metaObject[0])) {
+        if (0 != igObject_IsKindOf((igObject *)temp_v0, (igMetaObject *)g_igObjectDirEntry_metaObject[0])) {
             temp_s6 = temp_v0->f24;
-            if (igObject_IsKindOf(temp_s6, g_igTransformSource_metaObject) != 0) {
+            if (igObject_IsKindOf((igObject *)temp_s6, g_igTransformSource_metaObject) != 0) {
                 temp_s1 = ((DW4VC_124_0_1d6790 *)(temp_s6))->vX();
                 var_s0 = ((DW4VC_128_0 *)(temp_s6))->vX();
-                if (igObject_IsKindOf(temp_s6, g_igTransformSequence1_5_metaObject) != 0) {
+                if (igObject_IsKindOf((igObject *)temp_s6, g_igTransformSequence1_5_metaObject) != 0) {
                     temp_v1 = temp_s1 + ((DW4VC_260_0 *)(temp_s6))->vX();
                     if (var_s0 < temp_v1) {
                         var_s0 = temp_v1;
@@ -230,7 +230,7 @@ void FUN_001d6a70(void) {
       Ref_1d6a70 *o = (Ref_1d6a70 *)list->data[i];
       if (o != 0) {
         o->refs = o->refs - 1;
-        if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+        if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)o);
       }
     }
     m = list->count;
@@ -247,7 +247,7 @@ void FUN_001d6a70(void) {
     Ref_1d6a70 *o = scratch;
     if (o != 0) {
       o->refs = o->refs - 1;
-      if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+      if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)o);
     }
   }
   DAT_005629c0[0]->set(0);

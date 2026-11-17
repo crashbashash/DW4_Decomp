@@ -14,13 +14,10 @@
   "code_only.other.functions": 0,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "decl.header_conflicts": 563,
-  "decl.local_externs": {
-   "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations Sofdec round 7: SDK-shaped functions declare CRI callees that have no header home in the unit that calls them, with that unit's handle types decl.local_externs +1: sfmpv.c declares sfmpv_ReadTcode/SFMPVF_AllocFrm/SFMPVF_EndRefFrm/FUN_002a54d0 for the newly matched bodies; decl.varargs +1: sfadx.c's existing SFTST_Calc() declaration now names a defined function sfmpv.c gains sfmpv_GetActiveSize and sfmpv_DecodeOneUnit: five local declarations of other units' functions (SFBUF_RingGetDlm/SetDlm, SFMPVP_IsPscEnough, SFCON_IsEndcodeSkip/IsVideoEndcodeSkip), four of them typed with the player handle and char pointers where the definers use their own handle types, as the file's other SFBUF declarations do CRI Sofdec: sfmpv_DecodePicAtr and sfmps_DemuxChunk/sfmpv_SetFrmInf join with the unit's existing local-extern style (MPV_SetPicUsrBuf, MPV_DecodePicAtrSj, MPV_GetPicInf, MPV_GetPicUsr declared in sfmpv.c with the sfmpv view types void*/M2vPicAtr*; mpv*.c define them with MpvHn*), same pattern as the existing MPV_* declarations there",
-   "value": 2838
-  },
-  "decl.type_conflicts": 1842,
-  "decl.varargs": 881,
+  "decl.header_conflicts": 558,
+  "decl.local_externs": 2834,
+  "decl.type_conflicts": 1832,
+  "decl.varargs": 878,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
   "fun_dat_refs": 1509,

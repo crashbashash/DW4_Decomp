@@ -51,7 +51,7 @@ int igGeometrySetAttr_GetVTable(void) {
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }
@@ -60,7 +60,7 @@ int igGeometrySetAttr_GetVTable(void) {
         if (q1 != 0) {
             q1->f4 = (int)((int) (q1->f4 - 1));
             if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
+                igObject_Destroy((igObject *)q1);
             }
         }
     }
@@ -75,7 +75,7 @@ void **FUN_00136e10(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {

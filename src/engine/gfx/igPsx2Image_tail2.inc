@@ -250,7 +250,7 @@ int Gap__Gfx__igPsx2Image__vfunc_44(Img_16ece0 *arg0, Strm_16ece0 *arg1) {
     arg0->f24 = 0x66;
     *(int *)((char *)arg1 + 4) = *(int *)((char *)arg1 + 4) - 1;
     if ((*(int *)((char *)arg1 + 4) & 0x7FFFFF) == 0) {
-        igObject_Destroy(arg1);
+        igObject_Destroy((igObject *)arg1);
     }
     return 1;
 }

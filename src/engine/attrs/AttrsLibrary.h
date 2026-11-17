@@ -66,7 +66,7 @@ extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *se
 #include "dw4/igMetaObjectList.h"
 #include "dw4/igMathConstants.h"
 #include "dw4/igInfo.h"
-#define REL(pp) if (*(pp) != 0) { (*(pp))->refs = (*(pp))->refs - 1; if (((unsigned long long)(long long)(*(pp))->refs & 0x7fffffULL) == 0) igObject_Destroy(*(pp)); }
+#define REL(pp) if (*(pp) != 0) { (*(pp))->refs = (*(pp))->refs - 1; if (((unsigned long long)(long long)(*(pp))->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)(*(pp))); }
 typedef void (*igMetaObjectCallback)();
 extern "C" igMetaField *igVec4fMetaField_CreateInstance(void *);
 extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);

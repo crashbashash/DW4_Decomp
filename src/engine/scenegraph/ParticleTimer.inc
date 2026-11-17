@@ -91,7 +91,7 @@ void Gap__Bec__ParticleTimer__vfunc_25(ParticleTimer *arg0, int arg1) {
     unsigned int var_s1;
     for (var_s1 = 0; var_s1 < temp_s2; var_s1++) {
         AttributeObjView *temp_s0 = (AttributeObjView *)((int *)temp_s3->_data)[var_s1];
-        if (temp_s0 != 0 && igObject_IsKindOf(temp_s0, g_igGeometryAttr_metaObject) != 0) {
+        if (temp_s0 != 0 && igObject_IsKindOf((igObject *)temp_s0, g_igGeometryAttr_metaObject) != 0) {
             if (!((((unsigned int)(*temp_s0->f12->v100() & 0xF0)) >> 4) & 0xFF)) {
                 ((AttributeVtable *)temp_s0)->v132(arg1);
             }

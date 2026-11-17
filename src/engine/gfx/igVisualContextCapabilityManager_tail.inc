@@ -162,7 +162,7 @@ void FUN_00165bb0(char *arg0) {
     o = *(RefObj **)(arg0 + 56);
     --o->references;
     if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(o);
+        igObject_Destroy((igObject *)o);
     }
     K key(arg0);
     i = Finder::Find(((RefObj *)DAT_00560758), key);
@@ -173,7 +173,7 @@ void FUN_00165bb0(char *arg0) {
     if (l->count == 0) {
         --l->references;
         if (((unsigned long long)((long long)l->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(l);
+            igObject_Destroy((igObject *)l);
         }
         DAT_00560758 = 0;
     }
@@ -497,7 +497,7 @@ igVisualContext *igVisualContext_FindFirst(void) {
     r = 0;
     if (((L_166d40 *)DAT_00560758) != 0) {
         for (i = 0; i < ((L_166d40 *)DAT_00560758)->count; i++) {
-            if (igObject_IsKindOf((void *)(((L_166d40 *)DAT_00560758)->items[i]), g_igVisualContext_metaObject) != 0) {
+            if (igObject_IsKindOf((igObject *)(((L_166d40 *)DAT_00560758)->items[i]), g_igVisualContext_metaObject) != 0) {
                 r = ((L_166d40 *)DAT_00560758)->items[i];
                 break;
             }

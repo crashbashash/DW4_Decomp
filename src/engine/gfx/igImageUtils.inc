@@ -42,7 +42,7 @@ struct R **FUN_0014dd40(struct R **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {

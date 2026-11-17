@@ -85,7 +85,7 @@ int igBlendFunctionAttr_GetVTable(void) {
         if (p != 0) {
             p->f4 = (int)((int) (p->f4 - 1));
             if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
             }
         }
     }

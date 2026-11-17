@@ -1,5 +1,5 @@
 int igTransformSequence_ExtendBound(AABoxFields *arg0, TransformInputView *arg1) {
-    if (igObject_IsKindOf(arg1, g_igTransformSequence_metaObject) != 0) {
+    if (igObject_IsKindOf((igObject *)arg1, g_igTransformSequence_metaObject) != 0) {
         Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance(FUN_00301000(arg0)));
         igVolume_ExtendBy(a.o, arg0);
         Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance(FUN_00301000(arg0)));
@@ -80,7 +80,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
                     unsigned char sequenced = igTransformSequence_ExtendBound((AABoxFields *)box.get(), (TransformInputView *)input);
                     if (igObject_IsKindOf(node, g_unlinkedTransformClass_metaObject) != 0) {
                         /* the parent test is made and its answer discarded: a sequenced child never caches */
-                        if (parentHandle != 0 && igObject_IsKindOf((void *)parentHandle, g_unlinkedTransformClass_metaObject) != 0) {
+                        if (parentHandle != 0 && igObject_IsKindOf((igObject *)parentHandle, g_unlinkedTransformClass_metaObject) != 0) {
                         }
                         sequenced = 0;
                     }

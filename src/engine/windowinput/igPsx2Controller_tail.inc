@@ -70,7 +70,7 @@ int igPsx2Controller_GetVTable(void) {
         if (temp_a0 != 0) {
             *(int *)((char *)(temp_a0) + 4) = (int)((int) (*(int *)((char *)(temp_a0) + 4) - 1));
             if (((unsigned long long) ((long long) *(int *)((char *)(temp_a0) + 4) << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
     }

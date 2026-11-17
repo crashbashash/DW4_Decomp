@@ -54,7 +54,7 @@ void Gap__Sg__igAttrStackManager__vfunc_10(int arg0) {
     if (p->n == 0) {
         p->rc = p->rc - 1;
         if ((p->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(p);
+            igObject_Destroy((igObject *)p);
         }
         ((AttrStackList * *)DAT_00562580)[0] = 0;
     }
@@ -159,7 +159,7 @@ void FUN_001b0000(T_1b0000 *arg0, igMetaObject *arg1, Obj_1b0000 *arg2, Obj_1b00
     if (o != 0) {
         o->references = o->references - 1;
         if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0->f56 = arg2;
@@ -170,7 +170,7 @@ void FUN_001b0000(T_1b0000 *arg0, igMetaObject *arg1, Obj_1b0000 *arg2, Obj_1b00
     if (o != 0) {
         o->references = o->references - 1;
         if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0->f52 = arg3;
@@ -182,7 +182,7 @@ void FUN_001b0000(T_1b0000 *arg0, igMetaObject *arg1, Obj_1b0000 *arg2, Obj_1b00
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -201,7 +201,7 @@ void FUN_001b0000(T_1b0000 *arg0, igMetaObject *arg1, Obj_1b0000 *arg2, Obj_1b00
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }

@@ -35,7 +35,7 @@ void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
     if (old != 0) {
         old->rc = old->rc - 1;
         if (((unsigned long long)((long long)old->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(old);
+            igObject_Destroy((igObject *)old);
         }
     }
     t->f16 = (int)arg2;

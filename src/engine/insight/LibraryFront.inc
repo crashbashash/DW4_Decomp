@@ -18,7 +18,7 @@ void *FUN_00230f70(struct S *arg0, short arg1) {
                 rc = *(int *)((char *)(p) + 4) - 1;
                 *(int *)((char *)(p) + 4) = rc;
                 if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(p);
+                    igObject_Destroy((igObject *)p);
                 }
             }
         }

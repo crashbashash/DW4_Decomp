@@ -158,7 +158,7 @@ void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
         if (a0 != 0) {
             a0[1] = a0[1] - 1;
             if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(a0);
+                igObject_Destroy((igObject *)a0);
             }
         }
         arg0->f48 = (int *)image;
@@ -176,7 +176,7 @@ void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
     if (a0b != 0) {
         a0b[1] = a0b[1] - 1;
         if ((a0b[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy(a0b);
+            igObject_Destroy((igObject *)a0b);
         }
     }
     n = s1->n;
@@ -213,7 +213,7 @@ void Gap__Attrs__igTextureAttr__vfunc_28(S_140c70 *arg0) {
     if (t != 0) {
         t->refs = t->refs - 1;
         if ((t->refs & 0x7fffff) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     arg0->f12 = 0;

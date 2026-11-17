@@ -2,8 +2,7 @@
 #define DW4_IGSMARTPOINTER_H
 #include "dw4/reflected.h"
 #include "dw4/igObjectDispatchView.h"
-
-extern "C" void igObject_Destroy(void *);
+#include "dw4/igObject.h"
 
 /* igObject with its vtable as a real vptr, for classes whose virtual functions are called. */
 class igVirtualObject {
@@ -11,6 +10,8 @@ public:
     virtual void firstSlot();
     unsigned int _refCount;
 };
+
+static inline void igObject_Destroy(igVirtualObject *object) { igObject_Destroy((igObject *)object); }
 
 static inline void igRelease(igObject *o) {
     if (o != 0) {

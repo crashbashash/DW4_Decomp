@@ -79,7 +79,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_59(int *arg0, Obj_16d190 *arg1) {
     if (o != 0) {
         --o->refs;
         if ((o->refs & 0x7fffff) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0[235] = (int)arg1;
@@ -107,7 +107,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_63(int *arg0, Obj_16d250 *arg1) {
     if (o != 0) {
         --o->refs;
         if ((o->refs & 0x7fffff) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0[237] = (int)arg1;
@@ -129,7 +129,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_60(int *arg0, Obj_16d300 *arg1) {
     if (o != 0) {
         --o->refs;
         if ((o->refs & 0x7fffff) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0[236] = (int)arg1;

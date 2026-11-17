@@ -1427,19 +1427,19 @@ igResult igIGBFile_ReadObjects(igIGBFileView *self) {
     }
     n = self->_count;
     for (i = 0; i < n; i++) {
-        if (igObject_IsKindOf(self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
             ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveEntry(self);
         }
     }
     if (self->_magicVersion < 4) {
         for (i = 0; i < n; i++) {
-            if (igObject_IsKindOf(self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+            if (igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
                 ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRefOld(self);
             }
         }
     } else {
         for (i = 0; i < n; i++) {
-            if (igObject_IsKindOf(self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+            if (igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
                 igSmartPointer<igDirEntryView> e((igDirEntryView *)igDirectory_GetEntry((int *)self, i), kRetainReference);
                 e.p->ResolveRef(self);
             }
@@ -1451,19 +1451,19 @@ igResult igIGBFile_ReadObjects(igIGBFileView *self) {
 igResult igIGBFile_ReadMemoryRefs(igIGBFileView *self) {
     int i;
     for (i = 0; i < self->_count; i++) {
-        if (((igObject_IsKindOf(self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
+        if (((igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
             ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveEntry(self);
         }
     }
     if (self->_magicVersion < 4) {
         for (i = 0; i < self->_count; i++) {
-            if (((igObject_IsKindOf(self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
+            if (((igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
                 ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRefOld(self);
             }
         }
     } else {
         for (i = 0; i < self->_count; i++) {
-            if (((igObject_IsKindOf(self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
+            if (((igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
                 ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRef(self);
             }
         }

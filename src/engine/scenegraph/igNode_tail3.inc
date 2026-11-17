@@ -42,7 +42,7 @@ void **igSmartPointer_igInfoList_Destruct(struct Ref **self, short flag) {
         p = *self;
         if (p != 0) {
             p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
         }
         if (flag > 0) operator delete(self);
     }
@@ -70,7 +70,7 @@ void **igSmartPointer_igSceneInfo_Destruct(void **arg0, long long arg1) {
 O *igSmartPointer_igDirectory_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         if (arg1 > 0) operator delete(arg0);
     }
     return arg0;

@@ -151,7 +151,7 @@ void FUN_00155db0(O_155db0 *arg0) {
         if (o != 0) {
             o->refs = o->refs - 1;
             if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -167,7 +167,7 @@ void FUN_00155db0(O_155db0 *arg0) {
         if (o != 0) {
             o->refs = o->refs - 1;
             if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -457,7 +457,7 @@ void FUN_00156b20(S0_156b20 *arg0, S1_156b20 *arg1) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f44 = (int)(arg1);
@@ -1704,7 +1704,7 @@ int FUN_0015adb0(S0_15adb0 *arg0, int arg1, int arg2, int arg3) {
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         arg0->f8 = (V_15adb0 *)temp_v0;

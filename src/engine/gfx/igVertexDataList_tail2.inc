@@ -25,7 +25,7 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
             CountedVertexWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = a4;
@@ -44,7 +44,7 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
             CountedVertexWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = 0;
@@ -135,7 +135,7 @@ void FUN_001818c0(int arg0, unsigned arg1, int arg2, int arg3, B_1818c0 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -154,7 +154,7 @@ void FUN_001818c0(int arg0, unsigned arg1, int arg2, int arg3, B_1818c0 *arg4, B
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -207,7 +207,7 @@ void FUN_00181b60(int n, unsigned int i, int particles, int particleSize, Counte
         if (old != 0) {
             old->refs = old->refs - 1;
             if (((unsigned long long)((long long)(int)old->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         sprite->f24 = array;
@@ -226,7 +226,7 @@ void FUN_00181b60(int n, unsigned int i, int particles, int particleSize, Counte
         if (old2 != 0) {
             old2->refs = old2->refs - 1;
             if (((unsigned long long)((long long)(int)old2->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old2);
+                igObject_Destroy((igObject *)old2);
             }
         }
         sprite->f24 = 0;
@@ -270,7 +270,7 @@ void FUN_00181e30(int cnt, unsigned idx, int base, int stride, A_181e30 *arg4, H
         if (old != 0) {
             old->ref = old->ref - 1;
             if (((unsigned long long)((long long)old->ref << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         arg5->obj = (Obj_181e30*)arg4;
@@ -287,7 +287,7 @@ void FUN_00181e30(int cnt, unsigned idx, int base, int stride, A_181e30 *arg4, H
         if (old != 0) {
             old->ref = old->ref - 1;
             if (((unsigned long long)((long long)old->ref << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         arg5->obj = 0;
@@ -360,7 +360,7 @@ void FUN_00182110(int arg0, unsigned arg1, int arg2, int arg3, B_182110 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -382,7 +382,7 @@ void FUN_00182110(int arg0, unsigned arg1, int arg2, int arg3, B_182110 *arg4, B
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -441,7 +441,7 @@ void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -465,7 +465,7 @@ void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -517,7 +517,7 @@ void FUN_00182800(int arg0, unsigned arg1, int arg2, int arg3, Ref_182800 *arg4,
         if (t != 0) {
             t->refs = t->refs - 1;
             if (((unsigned long long)((long long)t->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -539,7 +539,7 @@ void FUN_00182800(int arg0, unsigned arg1, int arg2, int arg3, Ref_182800 *arg4,
         if (t2 != 0) {
             t2->refs = t2->refs - 1;
             if (((unsigned long long)((long long)t2->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -590,7 +590,7 @@ void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTarget
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -612,7 +612,7 @@ void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTarget
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -660,7 +660,7 @@ void FUN_00182e20(int arg0, unsigned arg1, int arg2, int arg3, B_182e20 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -679,7 +679,7 @@ void FUN_00182e20(int arg0, unsigned arg1, int arg2, int arg3, B_182e20 *arg4, B
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -779,7 +779,7 @@ void FUN_001833c0(int n, unsigned int i, int particles, int particleSize, MeshTa
         if (old != 0) {
             old->f4 = old->f4 - 1;
             if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         sprite->f24 = array;
@@ -797,7 +797,7 @@ void FUN_001833c0(int n, unsigned int i, int particles, int particleSize, MeshTa
         if (old != 0) {
             old->f4 = old->f4 - 1;
             if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         sprite->f24 = 0;
@@ -896,7 +896,7 @@ void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4,
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -914,7 +914,7 @@ void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4,
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = 0;
@@ -949,7 +949,7 @@ void FUN_00183d70(int n, unsigned i, int base, int stride, IndexedValueWriter *a
             IndexedValueWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = a4;
@@ -965,7 +965,7 @@ void FUN_00183d70(int n, unsigned i, int base, int stride, IndexedValueWriter *a
             IndexedValueWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = 0;
@@ -999,7 +999,7 @@ void FUN_00183fd0(int n, unsigned i, int base, int stride, Ref_183fd0 *a4, Ref_1
             Ref_183fd0 *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = a4;
@@ -1018,7 +1018,7 @@ void FUN_00183fd0(int n, unsigned i, int base, int stride, Ref_183fd0 *a4, Ref_1
             Ref_183fd0 *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = 0;
@@ -1054,7 +1054,7 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
             CountedVertexWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = a4;
@@ -1074,7 +1074,7 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
             CountedVertexWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
-                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+                if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
             }
         }
         a5->f24 = 0;
@@ -1109,7 +1109,7 @@ void FUN_001844d0(int arg0, unsigned int arg1, int arg2, int arg3, A4 *arg4, A5 
         if (o != 0) {
             o->refs -= 1;
             if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         arg5->obj = (R_1844d0 *)arg4;
@@ -1130,7 +1130,7 @@ void FUN_001844d0(int arg0, unsigned int arg1, int arg2, int arg3, A4 *arg4, A5 
         if (o != 0) {
             o->refs -= 1;
             if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         arg5->obj = 0;
@@ -1175,7 +1175,7 @@ void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -1195,7 +1195,7 @@ void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -1241,7 +1241,7 @@ void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B_184a30 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -1260,7 +1260,7 @@ void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B_184a30 *arg4, B
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -1359,7 +1359,7 @@ void FUN_00184ff0(int n, unsigned int i, int particles, int particleSize, MeshTa
         if (old != 0) {
             old->f4 = old->f4 - 1;
             if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         sprite->f24 = array;
@@ -1377,7 +1377,7 @@ void FUN_00184ff0(int n, unsigned int i, int particles, int particleSize, MeshTa
         if (old != 0) {
             old->f4 = old->f4 - 1;
             if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
+                igObject_Destroy((igObject *)old);
             }
         }
         sprite->f24 = 0;
@@ -1426,7 +1426,7 @@ void FUN_00185340(int arg0, unsigned arg1, int arg2, int arg3, B_185340 *arg4, B
         if (temp_a0) {
             temp_a0->f4 -= 1;
             if (((unsigned long long)((long long)temp_a0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         arg5->f24 = arg4;
@@ -1448,7 +1448,7 @@ void FUN_00185340(int arg0, unsigned arg1, int arg2, int arg3, B_185340 *arg4, B
         if (temp_a0_2) {
             temp_a0_2->f4 = temp_a0_2->f4 - 1;
             if (0 == ((unsigned long long)((long long)temp_a0_2->f4 << 0x29) >> 0x29)) {
-                igObject_Destroy(temp_a0_2);
+                igObject_Destroy((igObject *)temp_a0_2);
             }
         }
         arg5->f24 = 0;
@@ -1486,7 +1486,7 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
         if (0 != t) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -1504,7 +1504,7 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (0 == ((unsigned long long)((long long)t->f4 << 0x29) >> 0x29)) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = 0;
@@ -1551,7 +1551,7 @@ void FUN_001859c0(int arg0, unsigned arg1, int arg2, int arg3, B_1859c0 *arg4, B
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -1571,7 +1571,7 @@ void FUN_001859c0(int arg0, unsigned arg1, int arg2, int arg3, B_1859c0 *arg4, B
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -1690,7 +1690,7 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
         if (t != 0) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg5->f24 = arg4;
@@ -1713,7 +1713,7 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
         if (t2 != 0) {
             t2->f4 = t2->f4 - 1;
             if (((unsigned long long)((long long)t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
         arg5->f24 = 0;
@@ -1815,7 +1815,7 @@ void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexW
         o = arg5->f24;
         if (o != 0) {
             o->refs = o->refs - 1;
-            if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+            if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)o);
         }
         arg5->f24 = arg4;
         s7 = s5 + arg0;
@@ -1832,7 +1832,7 @@ void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexW
         o = arg5->f24;
         if (o != 0) {
             o->refs = o->refs - 1;
-            if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+            if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)o);
         }
         arg5->f24 = 0;
         return;

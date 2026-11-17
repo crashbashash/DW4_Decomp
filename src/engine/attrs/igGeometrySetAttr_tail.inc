@@ -13,7 +13,7 @@ bool FUN_0013e6e0(igGeometrySetAttr *arg0, int arg1) {
     p = (Item **)((igGeometryAttrList *)arg0->_geometryAttrList)->_data;
     end = p + ((igGeometryAttrList *)arg0->_geometryAttrList)->_count;
     for (; p < end; p++) {
-        if (igObject_IsKindOf(*p, (igMetaObject *)g_igGeometryAttr_metaObject) == 0) {
+        if (igObject_IsKindOf((igObject *)(*p), (igMetaObject *)g_igGeometryAttr_metaObject) == 0) {
             ok = false;
             break;
         }
@@ -107,7 +107,7 @@ void Gap__Attrs__igGeometrySetAttr__vfunc_28(A_13ea20 *arg0) {
     if (h != 0) {
         h->references = h->references - 1;
         if (((unsigned long long)((long long)h->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(h);
+            igObject_Destroy((igObject *)h);
         }
     }
     arg0->f12 = 0;

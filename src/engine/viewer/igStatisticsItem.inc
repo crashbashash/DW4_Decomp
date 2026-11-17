@@ -57,7 +57,7 @@ void **FUN_00458dc0(void **arg0, short arg1) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (arg1 > 0) {
@@ -73,7 +73,7 @@ ObjectRefWord *FUN_00458e40(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }

@@ -319,7 +319,7 @@ int igAnimationCombiner_RemoveAllStates(igAnimationCombiner *combiner) {
         if (o != 0) {
             o->_refCount = o->_refCount - 1;
             if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         List_RemoveWordAt((igDataList *)states, 0);
@@ -346,7 +346,7 @@ int igAnimationCombiner_RemoveAllStates(igAnimationCombiner *combiner) {
             if (o != 0) {
                 o->_refCount = o->_refCount - 1;
                 if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(o);
+                    igObject_Destroy((igObject *)o);
                 }
             }
             List_RemoveWordAt((igDataList *)row, 0);
@@ -379,7 +379,7 @@ void **FUN_001ae1d0(void **arg0, void *arg1) {
     if (temp_a0 != 0) {
         ((igObject *)temp_a0)->_refCount = (int) ((int)((igObject *)temp_a0)->_refCount - 1);
         if (((unsigned long long) ((long long) (int)((igObject *)temp_a0)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     *arg0 = arg1;

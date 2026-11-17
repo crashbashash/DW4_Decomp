@@ -37,7 +37,7 @@ int igMessageFilter_GetVTable(void) {
         if (q3 != 0) {
             q3->f4 = (int)((int) (q3->f4 - 1));
             if (((unsigned long long) ((long long) q3->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q3);
+                igObject_Destroy((igObject *)q3);
             }
         }
     }
@@ -46,7 +46,7 @@ int igMessageFilter_GetVTable(void) {
         if (q2 != 0) {
             q2->f4 = (int)((int) (q2->f4 - 1));
             if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
+                igObject_Destroy((igObject *)q2);
             }
         }
     }

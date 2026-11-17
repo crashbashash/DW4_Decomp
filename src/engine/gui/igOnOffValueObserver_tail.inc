@@ -40,7 +40,7 @@ void FUN_00457ca0(O_457ca0 *arg0, R_457ca0 *arg1) {
         if (a != 0) {
             a->refs = a->refs - 1;
             if ((a->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
+                igObject_Destroy((igObject *)a);
             }
         }
         arg0->r = arg1;

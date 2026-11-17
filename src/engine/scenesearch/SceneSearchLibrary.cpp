@@ -49,13 +49,13 @@ int igSearchSceneGraph_GetVTable(void) {
     SearchSceneGraphFrame obj;
     int vtable;
 
-    igObject_InitHeader(&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj.f8 = 0;
     obj.vt = &g_igSearchSceneGraph_vtable[0];
     obj.fC = 0;
     obj.f10 = 0;
     obj.f14 = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igSearchSceneGraph_vtable[0];
     igSmartPointer_igMetaObject_Destruct(&obj.f14, -1);
     igStringRef_Destruct(&obj.f10, -1);
@@ -159,7 +159,7 @@ void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
     if (old != 0) {
         old->refs = old->refs - 1;
         if ((old->refs & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
+            igObject_Destroy((igObject *)old);
         }
     }
     self[8] = (int)scene;
@@ -173,8 +173,8 @@ void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
         Memory_FreeBuffer(self[10]);
         self[10] = 0;
     }
-    igMetaField_AllocateArray(&firstArray, DAT_00562498[0], self, firstCount, igObject_GetAllocator(self));
-    igMetaField_AllocateArray(&secondArray, DAT_005624a0[0], self, secondCount, igObject_GetAllocator(self));
+    igMetaField_AllocateArray(&firstArray, DAT_00562498[0], self, firstCount, igObject_GetAllocator((igObject *)self));
+    igMetaField_AllocateArray(&secondArray, DAT_005624a0[0], self, secondCount, igObject_GetAllocator((igObject *)self));
     firstMatrix = self[9];
     i = 0;
     while (i < firstCount) {
@@ -200,7 +200,7 @@ void **igSmartPointer_igLightingStateAttr_Destruct(void **ref, short flags) {
         if (held != 0) {
             held->refs = held->refs - 1;
             if ((held->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(held);
+                igObject_Destroy((igObject *)held);
             }
         }
         if (flags > 0) {
@@ -218,7 +218,7 @@ void **FUN_00239280(void **ref, short flags) {
         if (held != 0) {
             held->refs = held->refs - 1;
             if ((held->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(held);
+                igObject_Destroy((igObject *)held);
             }
         }
         if (flags > 0) {
@@ -236,7 +236,7 @@ void **FUN_00239300(void **ref, short flags) {
         if (held != 0) {
             held->refs = held->refs - 1;
             if ((held->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(held);
+                igObject_Destroy((igObject *)held);
             }
         }
         if (flags > 0) {

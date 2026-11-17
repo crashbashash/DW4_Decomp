@@ -74,7 +74,7 @@ O *FUN_0014c440(O *arg0, short arg1) {
         arg0->vt = &g_igPointSpriteExt_vtable[0];
         if (&arg0->m24) {
             S1 *t0 = arg0->m24;
-            if (t0) { t0->f4 -= 1; if ((t0->f4 & 0x7fffff) == 0) igObject_Destroy(t0); }
+            if (t0) { t0->f4 -= 1; if ((t0->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t0); }
         }
         if (arg0) {
             arg0->vt = &DAT_00527020[0];
@@ -82,11 +82,11 @@ O *FUN_0014c440(O *arg0, short arg1) {
                 arg0->vt = &DAT_00530a10[0];
                 if (&arg0->m16) {
                     S1 *t = arg0->m16;
-                    if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+                    if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
                 }
                 if (&arg0->m8) {
                     S1 *t2 = arg0->m8;
-                    if (t2) { t2->f4 -= 1; if ((t2->f4 & 0x7fffff) == 0) igObject_Destroy(t2); }
+                    if (t2) { t2->f4 -= 1; if ((t2->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t2); }
                 }
             }
         }
@@ -102,11 +102,11 @@ O_14c580 *FUN_0014c580(O_14c580 *arg0, short arg1) {
             arg0->vt = &DAT_00530a10[0];
             if (&arg0->m16) {
                 S1 *t = arg0->m16;
-                if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+                if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
             }
             if (&arg0->m8) {
                 S1 *t2 = arg0->m8;
-                if (t2) { t2->f4 -= 1; if ((t2->f4 & 0x7fffff) == 0) igObject_Destroy(t2); }
+                if (t2) { t2->f4 -= 1; if ((t2->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t2); }
             }
         }
         if (arg1 > 0) Memory_FreeBufferAliasC(arg0);

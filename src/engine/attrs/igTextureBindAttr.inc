@@ -40,7 +40,7 @@ int igTextureBindAttr_GetVTable(void) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }
@@ -53,7 +53,7 @@ ObjectRefWord *FUN_00132980(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }

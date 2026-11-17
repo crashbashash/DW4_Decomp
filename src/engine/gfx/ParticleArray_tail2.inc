@@ -74,7 +74,7 @@ int FUN_0015cb60(O_15cb50 *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg
     if (a0 != 0) {
         a0->u.w = a0->u.w - 1;
         if (a0->u.b.cnt == 0) {
-            igObject_Destroy(a0);
+            igObject_Destroy((igObject *)a0);
         }
     }
     arg0->f24 = (Obj2 *)arg1;
@@ -147,7 +147,7 @@ void FUN_0015ce90(OO *arg0) {
     if (old != 0) {
         old->rc = old->rc - 1;
         if ((old->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
+            igObject_Destroy((igObject *)old);
         }
     }
     arg0->f24 = temp_v0;
@@ -174,7 +174,7 @@ void FUN_0015cfb0(Y *arg0) {
     if (temp_a0_3 != 0) {
         temp_a0_3->refs = temp_a0_3->refs - 1;
         if (((unsigned long long)((long long)temp_a0_3->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0_3);
+            igObject_Destroy((igObject *)temp_a0_3);
         }
     }
     arg0->obj = 0;

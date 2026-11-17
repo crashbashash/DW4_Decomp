@@ -39,7 +39,7 @@ int igGuiComponentModel_GetVTable(void) {
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }

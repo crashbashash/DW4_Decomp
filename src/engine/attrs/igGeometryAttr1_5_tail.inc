@@ -42,7 +42,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
         old = arg0->f48;
         if (old != 0) {
             old->refs = old->refs - 1;
-            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
         }
         sp3C = (Rc *)FUN_0014bff0(igObject_GetAllocator((igObject *)arg0));
         s0 = *(Rc **)&sp3C;
@@ -50,7 +50,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
         old = arg0->f48;
         if (old != 0) {
             old->refs = old->refs - 1;
-            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
         }
         arg0->f48 = s0;
         REL(&sp3C)
@@ -311,7 +311,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_40(S_13de80 *arg0, int arg1, int arg2)
         old = arg0->f48;
         if (old != 0) {
             old->refs = old->refs - 1;
-            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
+            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
         }
         arg0->f48 = s0;
         REL(&sp5C)
@@ -425,7 +425,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_17(O_13e230 *arg0) {
             if (a0 != 0) {
                 a0->refs = a0->refs - 1;
                 if ((a0->refs & 0x7fffff) == 0) {
-                    igObject_Destroy(a0);
+                    igObject_Destroy((igObject *)a0);
                 }
             }
             arg0->f44 = 0;
@@ -439,7 +439,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_17(O_13e230 *arg0) {
             if (a0 != 0) {
                 a0->refs = a0->refs - 1;
                 if ((a0->refs & 0x7fffff) == 0) {
-                    igObject_Destroy(a0);
+                    igObject_Destroy((igObject *)a0);
                 }
             }
             arg0->f40 = 0;

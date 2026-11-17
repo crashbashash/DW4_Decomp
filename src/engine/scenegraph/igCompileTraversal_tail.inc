@@ -13,7 +13,7 @@ void FUN_001bb230(void) {
     if (temp_a0 != 0) {
         *(int *)((char *)temp_a0 + 4) = (int) (*(int *)((char *)temp_a0 + 4) - 1);
         if (((unsigned long long) ((long long) *(int *)((char *)temp_a0 + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
 }
@@ -473,7 +473,7 @@ void FUN_001bd170(struct A_1bd170 *arg0, struct B_1bd170 *arg1) {
     n = arg1->list->n;
     for (i = 0; i < n; i++) {
         c = (struct B_1bd170 *)arg1->list->data[i];
-        if (igObject_IsKindOf(c, g_igDisplayListAttr_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)c, g_igDisplayListAttr_metaObject) != 0) {
             FUN_001bd170(arg0, c);
         } else {
             o = arg0->out;
@@ -634,7 +634,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
     int i;
     for (i = 0; i < count; i++) {
         RemapObject *item = o->_items->_data[i];
-        if (igObject_IsKindOf(item, g_igVertexBlendMatrixListAttr_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)item, g_igVertexBlendMatrixListAttr_metaObject) != 0) {
             RemapEntry *e = ((RemapEntry *)FUN_001a2c70((int)(((void *)igObject_GetAllocator((igObject *)ctx)))));
             RemapTable *t;
             unsigned int n;
@@ -655,7 +655,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
                 }
                 t->_data[(unsigned int)j] = r;
             }
-        } else if (igObject_IsKindOf(item, g_igBlendMatrixPaletteAttr_metaObject) != 0) {
+        } else if (igObject_IsKindOf((igObject *)item, g_igBlendMatrixPaletteAttr_metaObject) != 0) {
             RemapEntry *e = ((RemapEntry *)FUN_001a2c70((int)(((void *)igObject_GetAllocator((igObject *)ctx)))));
             ObjectList_AppendRetained((igObjectList *)o->_entries, (igObject *)e);
             releaseRefCounted(e);

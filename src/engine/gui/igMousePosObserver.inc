@@ -65,7 +65,7 @@ ObjectRefWord *FUN_0044ee80(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }

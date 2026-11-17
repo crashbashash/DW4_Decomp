@@ -346,7 +346,7 @@ int Memory_FreeBufferAliasC(void *block)
     return Memory_FreeBuffer(block);
 }
 
-void igObject_Destroy(void *input) {
+void igObject_Destroy(igObject *input) {
     if (g_objectSystem) {
         igObjectDispatchView *object = (igObjectDispatchView *)input;
         if (!g_objectSystem->active) {
@@ -749,7 +749,7 @@ int igObject_CloneViaMetadata(void **source, int copyMode) {
     return copy;
 }
 
-int igObject_IsKindOf(void *object, igMetaObject *kind) {
+int igObject_IsKindOf(igObject *object, igMetaObject *kind) {
     igMetaObject *meta = ((igObjectDispatchView *)object)->GetMeta();
     while (meta != 0) {
         if (meta == kind) return 1;

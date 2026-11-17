@@ -676,7 +676,7 @@ unsigned char beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram
     for (j = 0; j < tracks->_count; j++) {
         void *source = (void *)((igAnimationTrack **)tracks->_data)[j]->_source;
         if (source != 0) {
-            if (igObject_IsKindOf(source, g_igEnbayaTransformSource_metaObject) != 0) {
+            if (igObject_IsKindOf((igObject *)source, g_igEnbayaTransformSource_metaObject) != 0) {
                 igEnbayaAnimationSource *enbaya = (igEnbayaAnimationSource *)((igEnbayaTransformSource *)source)->_enbayaAnimationSource;
                 if (isLoop) enbaya->_playMode = 0; else enbaya->_playMode = 4;
                 break;

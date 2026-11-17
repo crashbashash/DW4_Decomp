@@ -164,7 +164,7 @@ struct Obj {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -237,7 +237,7 @@ struct Obj_14a560 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -268,7 +268,7 @@ struct Obj_14a910 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -706,7 +706,7 @@ struct Obj_1506b0 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -854,7 +854,7 @@ struct Obj_153740 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -878,7 +878,7 @@ struct Obj_153aa0 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -1087,7 +1087,7 @@ typedef struct List { int vt; int r; int count; int cap; Obj_155c00 **data; } Li
 typedef struct Owner { char pad[304]; List *a; List *b; } Owner;
 
 
-#define REL(o) if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy(o);}
+#define REL(o) if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy((igObject *)o);}
 extern "C" void FUN_00155c00(igResult *out, Owner *owner, int id);
 typedef struct Rc { int w0; int refs; } Rc;
 typedef struct Ls { char p0[8]; int cnt; char p1[4]; Rc **data; } Ls;
@@ -2295,7 +2295,7 @@ struct DataList { int vt; int rc; int count; int cap; };
 struct StreamRec { int vt; int rc; int pad8; DataList *list; int kind; int index; int count; };
 /* matching construct: stack smart-pointer slot (empty destructor) */
 struct RP { RC *p; ~RP() {} };
-#define REL_15ff10(x) { RC *q_ = (x); if (q_ != 0) { q_->rc = q_->rc - 1; if (((unsigned long long)((long long)q_->rc << 0x29) >> 0x29) == 0) igObject_Destroy(q_); } }
+#define REL_15ff10(x) { RC *q_ = (x); if (q_ != 0) { q_->rc = q_->rc - 1; if (((unsigned long long)((long long)q_->rc << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q_); } }
 #define SIZE_LIST(lst, n, esz) { DataList *dl_ = (lst); if ((n) >= 0) { if ((n) <= dl_->cap) { dl_->count = (n); } else { List_Resize(dl_, (n), (esz)); } } }
 #define ATTACH(rec, lst) { RC *l_ = (RC *)(lst); StreamRec *r_ = (rec); if (l_ != 0) l_->rc = l_->rc + 1; REL_15ff10((RC *)r_->list) r_->list = (DataList *)l_; }
 extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigned int *arg1, int arg2);
@@ -2330,7 +2330,7 @@ struct V_15ff10 { float x, y, z; };
 struct A28 {
     char pad[8]; int f8; char pad2[4]; V_15ff10 *f16;
     static inline A28 *Cast(A28 *p) {
-        if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
+        if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
             return p;
         }
         return 0;
@@ -2408,7 +2408,7 @@ struct V53 { float x, y; };
 struct A53 {
     char pad[8]; int f8; char pad2[4]; V53 *f16;
     static inline A53 *Cast(A53 *p) {
-        if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+        if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
             return p;
         }
         return 0;
@@ -2513,6 +2513,7 @@ public:
     virtual void vfunc_29();
     unsigned int _refCount; /* +4: 23-bit reference count, flags above it */
 };
+static inline void igObject_Destroy(igObjectSlotView *object) { igObject_Destroy((igObject *)object); }
 /* Only the fields this method touches are named. */
 struct igVisualContextCapabilityManager_164f50 {
     int vtable;
@@ -3238,7 +3239,7 @@ struct Obj35 {
         if (object) {
             --object->references;
             if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         r = 0;
     }
@@ -4912,7 +4913,7 @@ struct StatNode88 { char pad12[12]; StatRefObject *f0c; char pad16[936]; StatNod
 struct StatContext88 { char pad[1552]; StatNode88 *f610; };
 extern "C" void FUN_001788e0(StatContext88 *arg0, int arg1);
 struct O_1778e0 { int p0; int refs; int f8; int f12; };
-extern "C" struct Ref_1778e0 { O_1778e0 *p; Ref_1778e0(O_1778e0 *q) : p(q) {} ~Ref_1778e0() { O_1778e0 *q = p; if (q != 0) { q->refs = q->refs - 1; if (((unsigned long long)(long long)q->refs & 0x7fffffULL) == 0) igObject_Destroy(q); } } operator O_1778e0 *() { return p; } O_1778e0 *operator->() { return p; } };
+extern "C" struct Ref_1778e0 { O_1778e0 *p; Ref_1778e0(O_1778e0 *q) : p(q) {} ~Ref_1778e0() { O_1778e0 *q = p; if (q != 0) { q->refs = q->refs - 1; if (((unsigned long long)(long long)q->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)q); } } operator O_1778e0 *() { return p; } O_1778e0 *operator->() { return p; } };
 struct StatNode { int f0; int f4; int f8; O_1778e0 *f12; char f16; char pad[935]; StatNode *f952; };
 struct StatContext { char pad[1552]; StatNode *f1552; };
 struct G_1778e0 { char pad[56]; int f56; };

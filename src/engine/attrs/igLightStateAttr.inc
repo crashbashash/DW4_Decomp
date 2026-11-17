@@ -43,7 +43,7 @@ int igLightStateAttr_GetVTable(void) {
         if (p1 != 0) {
             p1->f4 = (int)((int) (p1->f4 - 1));
             if (((unsigned long long) ((long long) p1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p1);
+                igObject_Destroy((igObject *)p1);
             }
         }
     }
@@ -52,7 +52,7 @@ int igLightStateAttr_GetVTable(void) {
         if (p0 != 0) {
             p0->f4 = (int)((int) (p0->f4 - 1));
             if (((unsigned long long) ((long long) p0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p0);
+                igObject_Destroy((igObject *)p0);
             }
         }
     }
@@ -65,7 +65,7 @@ ObjectRefWord *FUN_00136370(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }
@@ -78,7 +78,7 @@ ObjectRefWord *igSmartPointer_igObject_Destruct(ObjectRefWord *self,int delete_s
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }

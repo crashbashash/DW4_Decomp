@@ -155,7 +155,7 @@ void FUN_00147840(struct A *arg0) {
         if (p != 0) {
             p->refs = p->refs - 1;
             if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
             }
         }
     }

@@ -91,7 +91,7 @@ int LuaObject_Collect(lua_State *L) {
         object = (LuaBoundObject *)lua_touserdata(L, -1);
         object->_refCount = object->_refCount - 1;
         if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
+            igObject_Destroy((igObject *)object);
         }
         return 0;
     } else {
@@ -99,7 +99,7 @@ int LuaObject_Collect(lua_State *L) {
         object->refBits.scriptHeld = 0;
         object->_refCount = object->_refCount - 1;
         if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
+            igObject_Destroy((igObject *)object);
         }
     }
     return 0;

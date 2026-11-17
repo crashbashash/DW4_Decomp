@@ -1,4 +1,4 @@
-#define REL(p) { IniHeldObject *o = (p); if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy(o);}}
+#define REL(p) { IniHeldObject *o = (p); if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy((igObject *)o);}}
 #define ADD(o) if(o){ ++(o)->refs; }
 bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniHeldObject *a2, int a3) {
     unsigned char ok = 1;
@@ -103,7 +103,7 @@ void Gap__Sg__igIniShaderFactory__vfunc_18(void *arg0) {
         if (o_ != 0) { \
             o_->_refCount = o_->_refCount - 1; \
             if (((unsigned long long)((long long)(int)o_->_refCount << 0x29) >> 0x29) == 0) { \
-                igObject_Destroy(o_); \
+                igObject_Destroy((igObject *)o_); \
             } \
         } \
     } while (0)
@@ -147,7 +147,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
         if (self->mode == 3) {
             IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType(((void *)g_globalContext[0]), text_system, "igShaderInfo", 0);
             IniFieldEntry *entry;
-            if (source == 0 || igObject_IsKindOf(source, g_igShaderInfo_metaObject) == 0) {
+            if (source == 0 || igObject_IsKindOf((igObject *)source, g_igShaderInfo_metaObject) == 0) {
                 SET_OUT(result);
                 FINISH();
             }
@@ -162,7 +162,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
         }
         SLOT(IniDocument, found) = ((IniDocument *)igObjectStringMap_GetObject(cache, name));
         { IniDocument *a_ = found; ADD(a_); }
-        if (found != 0 && igObject_IsKindOf(found, (igMetaObject *)g_igRegistry_metaObject[0]) != 0) {
+        if (found != 0 && igObject_IsKindOf((igObject *)found, (igMetaObject *)g_igRegistry_metaObject[0]) != 0) {
             IniDocument *keep = found;
             ADD(keep);
             DROP(IniDocument, parsed);
@@ -250,7 +250,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
         if (self->mode == 3) {
             IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType(((void *)g_globalContext[0]), text_system, "igShaderInfo", 0);
             IniFieldEntry_1cdbb0 *entry;
-            if (source == 0 || igObject_IsKindOf(source, g_igShaderInfo_metaObject) == 0) {
+            if (source == 0 || igObject_IsKindOf((igObject *)source, g_igShaderInfo_metaObject) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
             entry = ((IniFieldEntry_1cdbb0 *)FUN_003022c0(source->entries, g_igIniShaderFactory_implementationNameMetaField, name));

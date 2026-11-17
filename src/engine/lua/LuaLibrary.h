@@ -4,6 +4,7 @@
 #include "dw4/lua.h"
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igObjectSystem.h"
 #include "dw4/igLuaGlue.h"
 #include "dw4/igLuaState.h"
 #include "dw4/LuaArray.h"
@@ -28,8 +29,6 @@ extern "C" igMetaField *igRawRefMetaField_Create(void *);
 extern "C" igMetaField *igObjectRefMetaField_Create(void *);
 extern "C" void igMemoryPool_EnsureRegistered(void);
 
-extern "C" void igObject_InitHeader(void *object);
-extern "C" void igObject_Destroy(void *object);
 extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
 extern "C" void igMetaObject_RunStaticInit(CallbackArray *(*registerClass)(void));
 extern "C" CallbackArray *igMetaObject_RegisterClass(...);
@@ -41,12 +40,9 @@ extern "C" void igMetaObject_NameFields(igMetaObject *meta, const char **names, 
 extern "C" int Memory_GetAllocatorBySelector(int key);
 
 /* The object system's byte offset of the vtable word inside an object. */
-struct ObjectSystem { char pad[916]; int vtableOffset; };
-extern "C" ObjectSystem *g_objectSystem[4];
+struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
 extern "C" int kIGMemoryPoolHandleMetaData[4];
 
-extern "C" CallbackArray *igObject_Register(void);
-extern "C" igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 extern "C" int igMemoryPool_GetOrCreateMetaObject(void);
 
 extern "C" int g_igLuaState_vtable[4];
@@ -784,7 +780,7 @@ struct LuaSemaphoreLock {
 static inline void LuaSemaphore_ReleaseReference(LuaSemaphoreView *semaphore) {
     semaphore->_refCount = semaphore->_refCount - 1;
     if ((semaphore->_refCount & 0x7FFFFF) == 0) {
-        igObject_Destroy(semaphore);
+        igObject_Destroy((igObject *)semaphore);
     }
 }
 
@@ -802,6 +798,5 @@ extern "C" LuaThreadManagerView *g_threadManager;
 
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" int kIGMemoryPoolHandleLevel;
-extern "C" igObject *igObject_GetAllocator(void *object);
 
 #endif

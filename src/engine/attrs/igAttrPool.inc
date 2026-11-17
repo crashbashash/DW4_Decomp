@@ -38,7 +38,7 @@ int igAttrPool_GetVTable(void) {
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }
@@ -47,7 +47,7 @@ int igAttrPool_GetVTable(void) {
         if (q1 != 0) {
             q1->f4 = (int)((int) (q1->f4 - 1));
             if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
+                igObject_Destroy((igObject *)q1);
             }
         }
     }
@@ -56,7 +56,7 @@ int igAttrPool_GetVTable(void) {
         if (q2 != 0) {
             q2->f4 = (int)((int) (q2->f4 - 1));
             if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
+                igObject_Destroy((igObject *)q2);
             }
         }
     }
@@ -71,7 +71,7 @@ void **FUN_0013a800(void **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
             if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {
@@ -87,7 +87,7 @@ ObjectRefWord *igSmartPointer_igMetaObjectList_Destruct(ObjectRefWord *self,int 
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }

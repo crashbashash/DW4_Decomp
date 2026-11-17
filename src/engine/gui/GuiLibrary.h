@@ -498,7 +498,7 @@ struct Obj_451780 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -858,7 +858,7 @@ struct Ref_4551f0 {
         if (object) {
             --object->rc;
             if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
     }
 };

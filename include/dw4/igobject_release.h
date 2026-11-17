@@ -1,5 +1,6 @@
 #ifndef DW4_IGOBJECT_RELEASE_H
 #define DW4_IGOBJECT_RELEASE_H
+#include "dw4/igObject.h"
 /* The one spelling of the Alchemy reference release that retail expands at every use site (the
  * compiler does not inline functions here, so each release is open-coded in the caller): decrement
  * the count word at +4 (igObject::_refCount) and destroy the object when its low 23 bits reach
@@ -9,15 +10,14 @@
  * -- deliberately: a release of a stack slot whose address escaped to a factory call must re-read
  * the slot after the decrement, exactly as retail does. Release through a local copy (`igObject
  * *held = p; IG_OBJECT_RELEASE(held);`) where the source holds the pointer in a smart-pointer
- * temporary that is read once. Needs a declaration of igObject_Destroy taking the pointer type in
- * use. Kept as a macro in a header because a source file cannot be split around a multi-line macro
- * with an `if (...) {` body. */
+ * temporary that is read once. Kept as a macro in a header because a source file cannot be split
+ * around a multi-line macro with an `if (...) {` body. */
 #define IG_OBJECT_RELEASE(obj)                                                                    \
     do {                                                                                          \
         if ((obj) != 0) {                                                                         \
             (obj)->_refCount = (int)(obj)->_refCount - 1;                                         \
             if (((unsigned long long)((long long)(int)(obj)->_refCount << 0x29) >> 0x29) == 0) { \
-                igObject_Destroy(obj);                                                            \
+                igObject_Destroy((igObject *)(obj));                                              \
             }                                                                                     \
         }                                                                                         \
     } while (0)

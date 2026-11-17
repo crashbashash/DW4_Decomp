@@ -131,7 +131,7 @@ void **igSmartPointer_igTextureList_Destruct(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {

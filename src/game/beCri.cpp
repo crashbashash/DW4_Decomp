@@ -1079,7 +1079,7 @@ void beCri_SetSndfVolume(beCri *self, int volume) {
 }
 
 static inline int AsMemoryRefField(int field) {
-    if (field != 0 && igObject_IsKindOf((void *)field, g_igMemoryRefMetaField_metaObject) != 0) {
+    if (field != 0 && igObject_IsKindOf((igObject *)field, g_igMemoryRefMetaField_metaObject) != 0) {
         return field;
     }
     return 0;

@@ -9,7 +9,7 @@ void **FUN_00137260(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {
@@ -25,7 +25,7 @@ void **FUN_001372e0(struct Ref **self, short flag) {
         p = *self;
         if (p != 0) {
             p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
         }
         if (flag > 0) operator delete(self);
     }
@@ -40,7 +40,7 @@ void **FUN_00137360(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -79,7 +79,7 @@ int igGeometryAttr1_5_GetVTable(void) {
 O *igSmartPointer_igVec3fList_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         if (arg1 > 0) operator delete(arg0);
     }
     return arg0;
@@ -90,23 +90,23 @@ O_137530 *FUN_00137530(O_137530 *arg0, short arg1) {
         arg0->vt = &DAT_00523970[0];
         if (&arg0->m44) {
             S1 *t = arg0->m44;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&arg0->m40) {
             S1 *t = arg0->m40;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&arg0->m32) {
             S1 *t = arg0->m32;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&arg0->m16) {
             S1 *t = arg0->m16;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&arg0->m12) {
             S1 *t = arg0->m12;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (arg1 > 0) Memory_FreeBufferAliasC(arg0);
     }

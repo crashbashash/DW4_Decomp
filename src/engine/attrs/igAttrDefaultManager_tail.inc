@@ -65,7 +65,7 @@ void **igSmartPointer_igAttrList_Destruct(void **arg0, short arg1) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (arg1 > 0) {

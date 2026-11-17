@@ -1044,7 +1044,7 @@ void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, 
     if (oldNode != 0) {
         oldNode->_refCount = oldNode->_refCount - 1;
         if (((unsigned long long)(long long)oldNode->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy((void *)oldNode);
+            igObject_Destroy((igObject *)oldNode);
     }
     self->_modelNode = (int)node;
     igMatrix44f_Copy(&self->_oldMatrix, matrix);

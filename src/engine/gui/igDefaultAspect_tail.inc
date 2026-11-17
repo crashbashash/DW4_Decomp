@@ -54,7 +54,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
         if (sp4C != 0) {
             sp4C->refs = sp4C->refs - 1;
             if (((unsigned long long)((long long)sp4C->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(sp4C);
+                igObject_Destroy((igObject *)sp4C);
             }
         }
         var_s0 -= 1;

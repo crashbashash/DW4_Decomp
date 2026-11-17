@@ -132,14 +132,14 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
     t = self->f116;
     if (t != 0) {
         t->refs = t->refs - 1;
-        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
+        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)t);
     }
     self->f116 = FUN_00133160(alloc);
     alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     t = (Rc_1e1210 *)self->f112;
     if (t != 0) {
         t->refs = t->refs - 1;
-        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
+        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)t);
     }
     self->f112 = ((B_1e1210 *)FUN_00139ed0(alloc));
     self->f112->v30(1);
@@ -148,7 +148,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
     t = self->f120;
     if (t != 0) {
         t->refs = t->refs - 1;
-        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
+        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)t);
     }
     self->f120 = FUN_00135190(alloc);
 }

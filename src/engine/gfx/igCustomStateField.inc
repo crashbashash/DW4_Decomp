@@ -37,7 +37,7 @@ int igCustomStateField_GetVTable(void) {
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }
@@ -64,7 +64,7 @@ void **igSmartPointer_igMetaField_Destruct(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {

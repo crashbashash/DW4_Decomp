@@ -1,6 +1,7 @@
 #ifndef DW4_IGOBJECTDISPATCHVIEW_H
 #define DW4_IGOBJECTDISPATCHVIEW_H
 #include "dw4/reflected.h"
+#include "dw4/igObject.h"
 
 /* igObject's virtual functions: slot n sits at vtable byte offset 8 + 4 * n (the first two words
  * are the class header). The reflected igObject is the same object seen as data. The slots carry
@@ -29,4 +30,7 @@ public:
     virtual igMetaObject *GetMeta();
     unsigned int _refCount;
 };
+
+static inline void igObject_Destroy(igObjectDispatchView *object) { igObject_Destroy((igObject *)object); }
+static inline int igObject_IsKindOf(igObjectDispatchView *object, igMetaObject *kind) { return igObject_IsKindOf((igObject *)object, kind); }
 #endif

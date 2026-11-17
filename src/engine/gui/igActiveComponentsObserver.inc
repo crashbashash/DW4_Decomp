@@ -40,7 +40,7 @@ int igActiveComponentsObserver_GetVTable(void) {
         if (v1 != 0) {
             v1[1] = v1[1] - 1;
             if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
+                igObject_Destroy((igObject *)v1);
             }
         }
     }
@@ -49,7 +49,7 @@ int igActiveComponentsObserver_GetVTable(void) {
         if (v1 != 0) {
             v1[1] = v1[1] - 1;
             if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
+                igObject_Destroy((igObject *)v1);
             }
         }
     }
@@ -58,7 +58,7 @@ int igActiveComponentsObserver_GetVTable(void) {
         if (v1 != 0) {
             v1[1] = v1[1] - 1;
             if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
+                igObject_Destroy((igObject *)v1);
             }
         }
     }

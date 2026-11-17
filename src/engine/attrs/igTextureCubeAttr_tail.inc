@@ -43,7 +43,7 @@ void FUN_00141190(int *arg0, int arg1) {
                 if (p != 0) {
                     p->refs = p->refs - 1;
                     if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(p);
+                        igObject_Destroy((igObject *)p);
                     }
                 }
                 arg0[18 + i] = 0;

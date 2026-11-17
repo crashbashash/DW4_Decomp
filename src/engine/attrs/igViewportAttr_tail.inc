@@ -34,7 +34,7 @@ extern "C" igObjectPointer igMetaObject_CreateInstanceRef(igMetaObject *meta, in
 
 /* The object when it is an igAttr, otherwise none. */
 static inline igObject *asAttr(igObject *object) {
-    if (object != 0 && igObject_IsKindOf((Item *)object, (igMetaObject *)g_igAttr_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf((igObject *)object, (igMetaObject *)g_igAttr_metaObject) != 0) {
         return object;
     }
     return 0;

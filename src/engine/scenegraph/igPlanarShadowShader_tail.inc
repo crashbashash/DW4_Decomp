@@ -36,63 +36,63 @@ void Gap__Sg__igPlanarShadowShader__vfunc_10(T_1d39b0 *arg0)
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627a0)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627a8)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627b0)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627b8)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627c8)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627c0)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627d0)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         o = ((Obj_1d39b0 * *)DAT_005627d8)[0];
         if (o != 0) {
             o->references = o->references - 1;
             if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }

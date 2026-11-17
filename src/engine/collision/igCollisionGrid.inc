@@ -72,7 +72,7 @@ void **FUN_0023a240(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -90,7 +90,7 @@ void **FUN_0023a2c0(void **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
             if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {

@@ -36,7 +36,7 @@ int igPsx2Image_GetVTable(void) {
         if (a0 != 0) {
             a0[1] = a0[1] - 1;
             if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(a0);
+                igObject_Destroy((igObject *)a0);
             }
         }
     }

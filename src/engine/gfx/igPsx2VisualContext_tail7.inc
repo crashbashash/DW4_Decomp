@@ -13,7 +13,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_261(int *arg0, int *arg1, int arg2) {
     if (old != 0) {
         old[1] = old[1] - 1;
         if ((old[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
+            igObject_Destroy((igObject *)old);
         }
     }
     *slot = (int)arg1;
@@ -66,7 +66,7 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
     entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 3, 0);
     if (entry != 0) {
         list = entry->obj;
-        if (list != 0 && igObject_IsKindOf(list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
+        if (list != 0 && igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
             floatList = list;
         } else {
             floatList = 0;
@@ -110,7 +110,7 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
     entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 4, vc->_texCoordIndex[0]);
     if (entry != 0) {
         list = entry->obj;
-        if (list != 0 && igObject_IsKindOf(list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+        if (list != 0 && igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
             floatList = list;
         } else {
             floatList = 0;
@@ -189,7 +189,7 @@ bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     n2 = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 4, 1);
     if (n2 != 0) {
         s = n2->obj;
-        if (s != 0 && igObject_IsKindOf(s, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+        if (s != 0 && igObject_IsKindOf((igObject *)s, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
             r = s;
         } else {
             r = 0;
@@ -239,7 +239,7 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
             v = 0;
             if (e != 0) {
                 o = e->obj;
-                if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+                if (o != 0 && igObject_IsKindOf((igObject *)o, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
                     o = (Obj_17e980 *)o;
                 } else {
                     o = 0;

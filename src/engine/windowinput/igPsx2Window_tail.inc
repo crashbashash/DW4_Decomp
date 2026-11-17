@@ -11,7 +11,7 @@ void Gap__igPsx2Window__vfunc_26(struct A_148b00 *arg0) {
     if (p != 0) {
         p->rc = p->rc - 1;
         if ((p->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(p);
+            igObject_Destroy((igObject *)p);
         }
     }
     arg0->f24 = 0;
@@ -116,7 +116,7 @@ int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width,
             return 0;
         }
         vc->_refCount = vc->_refCount - 1;
-        if ((vc->_refCount & 0x7FFFFF) == 0) igObject_Destroy(vc);
+        if ((vc->_refCount & 0x7FFFFF) == 0) igObject_Destroy((igObject *)vc);
         RenderDestinationDesc desc;
         desc.kind = 1;
         desc.width = width;

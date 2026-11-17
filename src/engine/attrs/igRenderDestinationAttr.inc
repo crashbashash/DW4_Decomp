@@ -91,7 +91,7 @@ int igRenderDestinationAttr_GetVTable(void) {
         if (t1 != 0) {
             t1->f4 = (int)((int) (t1->f4 - 1));
             if (((unsigned long long) ((long long) t1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t1);
+                igObject_Destroy((igObject *)t1);
             }
         }
     }
@@ -100,7 +100,7 @@ int igRenderDestinationAttr_GetVTable(void) {
         if (t2 != 0) {
             t2->f4 = (int)((int) (t2->f4 - 1));
             if (((unsigned long long) ((long long) t2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t2);
+                igObject_Destroy((igObject *)t2);
             }
         }
     }

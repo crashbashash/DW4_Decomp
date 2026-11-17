@@ -5,7 +5,7 @@ void **FUN_001353b0(void **arg0, short arg1) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (arg1 > 0) {
@@ -21,7 +21,7 @@ ObjectRefWord *igSmartPointer_igPointerList_Destruct(ObjectRefWord *self,int del
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }
@@ -36,7 +36,7 @@ struct R_1354b0 **igSmartPointer_igFloatList_Destruct(struct R_1354b0 **arg0, sh
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {

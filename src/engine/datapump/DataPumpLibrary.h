@@ -130,7 +130,7 @@ struct Obj_1e51f0 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -180,7 +180,7 @@ struct Obj_1e5730 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }

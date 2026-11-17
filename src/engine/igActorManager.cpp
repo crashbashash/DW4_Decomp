@@ -98,7 +98,7 @@ void igActorManager_RemoveAllInfo(igActorManager *self) {
 int igActorManager_AddInfo(int arg0, A *arg1) {
     int i;
     int off;
-    if (igObject_IsKindOf(arg1, igActorInfo_GetMetaObject()) != 0) {
+    if (igObject_IsKindOf((igObject *)arg1, igActorInfo_GetMetaObject()) != 0) {
         i = 0;
         if (0 < arg1->f24->n) {
             off = 0;

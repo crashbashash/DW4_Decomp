@@ -11,7 +11,7 @@ void Gap__Gfx__igPsx2UserUCodeExt__vfunc_29(O_17cef0 *arg0, M_17cef0 *arg1) {
     if (temp_a0 != 0) {
         temp_a0->refs = temp_a0->refs - 1;
         if ((temp_a0->refs & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->a = temp_v0;
@@ -23,7 +23,7 @@ void Gap__Gfx__igPsx2UserUCodeExt__vfunc_29(O_17cef0 *arg0, M_17cef0 *arg1) {
     if (temp_a0 != 0) {
         temp_a0->refs = temp_a0->refs - 1;
         if ((temp_a0->refs & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->b = temp_v0;

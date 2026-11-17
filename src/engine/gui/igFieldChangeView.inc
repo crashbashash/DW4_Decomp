@@ -29,7 +29,7 @@ int igFieldChangeView_GetVTable(void) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
     }

@@ -90,7 +90,7 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     if (o != 0) {
         o->rc = o->rc - 1;
         if (((unsigned long long)((long long)o->rc << 41) >> 41) == 0)
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
     }
     arg1->conn = (struct InitRef *)igPsx2IopRpcConnection_Create(s0);
     igPsx2IopRpcConnection_Bind(arg1->conn, 0x12111);
@@ -525,7 +525,7 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
         if (a0 != 0) {
             --a0->references;
             if (((unsigned long long)(long long)a0->references & 0x7fffffULL) == 0) {
-                igObject_Destroy(a0);
+                igObject_Destroy((igObject *)a0);
             }
         }
         arg0->_streamingThread = (int)s0;

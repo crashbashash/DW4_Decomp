@@ -47,7 +47,7 @@ void FUN_0017d170(V_17d170 *arg0) {
         if (o != 0) {
             o->refs = o->refs - 1;
             if ((o->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         arg0->f56 = (Obj_17d170 *)FUN_001527c0(a);
@@ -56,7 +56,7 @@ void FUN_0017d170(V_17d170 *arg0) {
         if (o != 0) {
             o->refs = o->refs - 1;
             if ((o->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         arg0->f48 = igPointerList_Create(a);
@@ -66,7 +66,7 @@ void FUN_0017d170(V_17d170 *arg0) {
             if (o != 0) {
                 o->refs = o->refs - 1;
                 if ((o->refs & 0x7FFFFF) == 0) {
-                    igObject_Destroy(o);
+                    igObject_Destroy((igObject *)o);
                 }
             }
             arg0->f52 = igPointerList_Create(a);
@@ -82,7 +82,7 @@ void FUN_0017d2b0(struct O_17d2b0 *arg0) {
     if (t != 0) {
         t->rc = t->rc - 1;
         if ((t->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     arg0->f56 = 0;
@@ -104,7 +104,7 @@ void FUN_0017d2b0(struct O_17d2b0 *arg0) {
     if (t != 0) {
         t->rc = t->rc - 1;
         if ((t->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     arg0->f48 = 0;
@@ -112,7 +112,7 @@ void FUN_0017d2b0(struct O_17d2b0 *arg0) {
     if (t != 0) {
         t->rc = t->rc - 1;
         if ((t->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     arg0->f52 = 0;

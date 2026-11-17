@@ -32,7 +32,7 @@ void LuaGlue_Shutdown(void) {
     tags = g_luaObjectTags;
     tags->_refCount = tags->_refCount - 1;
     if ((tags->_refCount & 0x7FFFFF) == 0) {
-        igObject_Destroy(tags);
+        igObject_Destroy((igObject *)tags);
     }
     {
         LuaFieldWalker it;

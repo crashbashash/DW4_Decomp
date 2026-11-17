@@ -79,7 +79,7 @@ void **FUN_0044bf10(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -172,7 +172,7 @@ void *FUN_0044c110(struct S *arg0, short arg1) {
                 rc = *(int *)((char *)(p) + 4) - 1;
                 *(int *)((char *)(p) + 4) = rc;
                 if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(p);
+                    igObject_Destroy((igObject *)p);
                 }
             }
         }
@@ -195,7 +195,7 @@ void **FUN_0044c1c0(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {

@@ -115,7 +115,7 @@ bool igGeometry_ExtendBound(int arg0, void *arg1) {
     n = l->count;
     for (i = 0; i < n; i++) {
         e = l->data[i];
-        if (igObject_IsKindOf(e, g_igGeometryAttr_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)e, g_igGeometryAttr_metaObject) != 0) {
             if (FUN_001b23e0(arg0, (Y *)e) == 0) {
                 ok = false;
             }

@@ -30,7 +30,7 @@ int igBoundingSphereMaker_GetVTable(void) {
         if (p != 0) {
             p->f4 = (int)((int) (p->f4 - 1));
             if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
             }
         }
     }
@@ -104,7 +104,7 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
     unsigned int var_s0;
     struct Ls *temp_v0;
 
-    if (igObject_IsKindOf(arg1, g_igGroup_metaObject) != 0) {
+    if (igObject_IsKindOf((igObject *)arg1, g_igGroup_metaObject) != 0) {
         temp_v0 = arg1->f28;
         var_s1 = 0;
         if (temp_v0 != 0) {
@@ -116,17 +116,17 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
             var_s0 += 1;
         }
     }
-    if (igObject_IsKindOf(arg1, g_igGeometry_metaObject) != 0) {
+    if (igObject_IsKindOf((igObject *)arg1, g_igGeometry_metaObject) != 0) {
         FUN_0023ac20(&sp5C, arg0, arg1);
         FUN_0018de10(arg0->f8, sp5C);
         t = sp5C;
         if (t != 0) {
             t->f4 = (int)((int) (t->f4 - 1));
             if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
-    } else if (igObject_IsKindOf(arg1, g_igTransform_metaObject) != 0) {
+    } else if (igObject_IsKindOf((igObject *)arg1, g_igTransform_metaObject) != 0) {
         FUN_0023b110(arg0, arg1);
     }
 }

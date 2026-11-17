@@ -27,7 +27,7 @@ void FUN_0015df80(S0_15df80 *arg0, int flags) {
     if (temp_a0 != 0) {
         temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
         if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f18 = (int)(temp_v0);
@@ -63,7 +63,7 @@ void FUN_0015e050(struct S_arg0_15e050 *arg0) {
         if (temp_a0_2 != 0) {
             temp_a0_2->f4 = temp_a0_2->f4 - 1;
             if ((temp_a0_2->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0_2);
+                igObject_Destroy((igObject *)temp_a0_2);
             }
         }
         arg0->f24 = (int)(temp_v0_2);

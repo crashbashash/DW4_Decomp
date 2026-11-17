@@ -39,7 +39,7 @@ int igViewerDataPumpManager_GetVTable(void) {
         if (q4 != 0) {
             q4->f4 = (int)((int) (q4->f4 - 1));
             if (((unsigned long long) ((long long) q4->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q4);
+                igObject_Destroy((igObject *)q4);
             }
         }
     }
@@ -118,7 +118,7 @@ void FUN_0045c040(void) {
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_v0_2) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+        igObject_Destroy((igObject *)temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2));
     *(int *)((char *)(temp_s0) + 56) = FUN_001e5150();

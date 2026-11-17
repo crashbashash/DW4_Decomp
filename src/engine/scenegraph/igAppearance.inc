@@ -66,7 +66,7 @@ void **FUN_001a6350(struct Ref **self, short flag) {
         p = *self;
         if (p != 0) {
             p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
         }
         if (flag > 0) operator delete(self);
     }

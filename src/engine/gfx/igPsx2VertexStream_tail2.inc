@@ -1,4 +1,4 @@
-static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMemoryRefMetaField_metaObject) != 0) { return o; } return 0; }
+static inline int cast0(int o) { if (o != 0 && igObject_IsKindOf((igObject *)o, (igMetaObject *)g_igMemoryRefMetaField_metaObject) != 0) { return o; } return 0; }
 
 void FUN_0017f5a0(void) {
     int var_s0;

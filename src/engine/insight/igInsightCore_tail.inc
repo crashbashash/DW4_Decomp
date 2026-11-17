@@ -101,7 +101,7 @@ void FUN_00237530(OO *arg0) {
         if (t != 0) {
             t->rc = t->rc - 1;
             if ((t->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg0->f20 = (DW4VC_152 *)s0;
@@ -114,7 +114,7 @@ void FUN_00237530(OO *arg0) {
     if (t != 0) {
         t->rc = t->rc - 1;
         if ((t->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     arg0->f24 = s0;

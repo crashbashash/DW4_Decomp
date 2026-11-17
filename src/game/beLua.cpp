@@ -313,7 +313,7 @@ void beLua_Stop(void)
 }
 
 int beLua_AddInfo(beLua *self, int info) {
-    if (igObject_IsKindOf((void *)info, g_beLuaInfo_metaObject) != 0) {
+    if (igObject_IsKindOf((igObject *)info, g_beLuaInfo_metaObject) != 0) {
         ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
         return 1;
     }

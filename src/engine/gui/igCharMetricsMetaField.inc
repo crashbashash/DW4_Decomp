@@ -30,7 +30,7 @@ int igCharMetricsMetaField_GetVTable(void) {
         if (q0 != 0) {
             q0->f4 = (int)((int) (q0->f4 - 1));
             if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
+                igObject_Destroy((igObject *)q0);
             }
         }
     }
@@ -89,7 +89,7 @@ void FUN_00452b70(void) {
                 void *held = (void *)g_igCharMetricsMetaField_instance;
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
                 if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(held);
+                    igObject_Destroy((igObject *)held);
                 }
             }
             *(short *)((char *)(g_igCharMetricsMetaField_instance) + 18) = (short) (*(int *)((char *)(igMetaField_GetMetaFieldList()) + 12) - 1);
@@ -179,7 +179,7 @@ void FUN_00452ca0(int arg0) {
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1);
     *(int *)((char *)(temp_s1) + 4) = (int)((int) (*(int *)((char *)(temp_s1) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s1);
+        igObject_Destroy((igObject *)temp_s1);
     }
     temp_s1_2 = (void *)(igFloatMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("step" == 0) {
@@ -209,7 +209,7 @@ void FUN_00452ca0(int arg0) {
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_2);
     *(int *)((char *)(temp_s1_2) + 4) = (int)((int) (*(int *)((char *)(temp_s1_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_2) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s1_2);
+        igObject_Destroy((igObject *)temp_s1_2);
     }
     temp_s1_3 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("offset" == 0) {
@@ -239,7 +239,7 @@ void FUN_00452ca0(int arg0) {
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_3);
     *(int *)((char *)(temp_s1_3) + 4) = (int)((int) (*(int *)((char *)(temp_s1_3) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_3) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s1_3);
+        igObject_Destroy((igObject *)temp_s1_3);
     }
     temp_s1_4 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("size" == 0) {
@@ -269,7 +269,7 @@ void FUN_00452ca0(int arg0) {
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_4);
     *(int *)((char *)(temp_s1_4) + 4) = (int)((int) (*(int *)((char *)(temp_s1_4) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_4) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s1_4);
+        igObject_Destroy((igObject *)temp_s1_4);
     }
     temp_s1_5 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("texCoordMin" == 0) {
@@ -299,7 +299,7 @@ void FUN_00452ca0(int arg0) {
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_5);
     *(int *)((char *)(temp_s1_5) + 4) = (int)((int) (*(int *)((char *)(temp_s1_5) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_5) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s1_5);
+        igObject_Destroy((igObject *)temp_s1_5);
     }
     temp_s1_6 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("texCoordMax" == 0) {
@@ -329,7 +329,7 @@ void FUN_00452ca0(int arg0) {
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_6);
     *(int *)((char *)(temp_s1_6) + 4) = (int)((int) (*(int *)((char *)(temp_s1_6) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_6) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s1_6);
+        igObject_Destroy((igObject *)temp_s1_6);
     }
 }
 

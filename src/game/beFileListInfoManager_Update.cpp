@@ -76,7 +76,7 @@ static inline const char *igStringObj_Text(const igStringObj *s) { return (char 
     int *q = (int *)(o); \
     if (q != 0) { \
         ((igObject *)q)->_refCount = (int)((igObject *)q)->_refCount - 1; \
-        if (((unsigned long long)((long long)(int)((igObject *)q)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(q); \
+        if (((unsigned long long)((long long)(int)((igObject *)q)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q); \
     } }
 #define POOL() { \
     if (g_stringPool == 0) { \
@@ -354,7 +354,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             li = (int)lst;
             if (cnt > 0) {
                 igInfoList *il = (igInfoList *)li; int *ob = *(int **)il->_data;
-                if (ob != 0 && igObject_IsKindOf(ob, g_beLoadingNode_metaObject) != 0) { s1 = (int)ob; } else { s1 = 0; }
+                if (ob != 0 && igObject_IsKindOf((igObject *)ob, g_beLoadingNode_metaObject) != 0) { s1 = (int)ob; } else { s1 = 0; }
                 if (s1 != 0) { s3 = beLoadingNode_IsPastPlayLimit((beLoadingNode *)s1); } else { s3 = 1; }
             } else {
                 s3 = 1;

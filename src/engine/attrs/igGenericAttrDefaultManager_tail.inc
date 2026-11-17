@@ -12,7 +12,7 @@ int Gap__Attrs__igGenericAttrDefaultManager__vfunc_24(T **arg0, int arg1, int ar
     if (sp3C != 0) {
         sp3C->references = sp3C->references - 1;
         if (((unsigned long long)(long long)sp3C->references & 0x7fffffULL) == 0) {
-            igObject_Destroy(sp3C);
+            igObject_Destroy((igObject *)sp3C);
         }
     }
     return 0;

@@ -72,7 +72,7 @@ void igPrimLengthArray1_1_InitFields(void) {
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s2, (igMetaField *)temp_s0);
     temp_s0->ref -= 1;
     if ((temp_s0->ref & 0x7fffff) == 0) {
-        igObject_Destroy(temp_s0);
+        igObject_Destroy((igObject *)temp_s0);
     }
 }
 

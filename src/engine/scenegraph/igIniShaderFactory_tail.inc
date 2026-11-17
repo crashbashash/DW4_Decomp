@@ -14,7 +14,7 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
         if (a0 != 0) {
             a0->refs = a0->refs - 1;
             if ((a0->refs & 0x7fffff) == 0) {
-                igObject_Destroy(a0);
+                igObject_Destroy((igObject *)a0);
             }
         }
         arg0->f32 = 0;
@@ -45,7 +45,7 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
         if (a0 != 0) {
             a0->refs = a0->refs - 1;
             if ((a0->refs & 0x7fffff) == 0) {
-                igObject_Destroy(a0);
+                igObject_Destroy((igObject *)a0);
             }
         }
         arg0->f28 = s0;
@@ -55,15 +55,15 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
     if (a0 != 0) {
         a0->refs = a0->refs - 1;
         if ((a0->refs & 0x7fffff) == 0) {
-            igObject_Destroy(a0);
+            igObject_Destroy((igObject *)a0);
         }
     }
     return s0i;
 }
 
-#define REL_OBJ(o) { Obj_1c66c0 *t_ = (o); if (t_ != 0) { t_->u.w = t_->u.w - 1; if (t_->u.b.cnt == 0) igObject_Destroy(t_); } }
+#define REL_OBJ(o) { Obj_1c66c0 *t_ = (o); if (t_ != 0) { t_->u.w = t_->u.w - 1; if (t_->u.b.cnt == 0) igObject_Destroy((igObject *)t_); } }
 #define RET_OBJ(o) { Obj_1c66c0 *t_ = (o); if (t_ != 0) t_->u.w = t_->u.w + 1; }
-#define REL_TMP(o) { if (o != 0) { o->u.w = o->u.w - 1; if (o->u.b.cnt == 0) igObject_Destroy(o); } }
+#define REL_TMP(o) { if (o != 0) { o->u.w = o->u.w - 1; if (o->u.b.cnt == 0) igObject_Destroy((igObject *)o); } }
 #define REL_STR(s) { char *t_ = (s); if (t_ != 0) { int *hd_ = (int *)t_ - 2; int c_ = ((int *)t_)[-1] - 1; ((int *)t_)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader((StringChunk *)*hd_, (StringTokenHeader *)hd_); } }
 #define REL_ALL() { REL_OBJ(sp40.p) REL_OBJ(sp44.p) REL_STR(sp48) REL_STR(sp4C) }
 int FUN_001c66c0(Node *self, int force)
@@ -351,7 +351,7 @@ void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *
             RetainedString fieldName = StringList_CopyRetained((igStringRefList *)fieldNames, index);
             IniFieldView *field;
             field = asObjectRefField((IniFieldView *)igMetaObject_FindFieldByName((igMetaObject *)(target->getMeta()), fieldName.p));
-            if (field != 0 && igObject_IsKindOf(item, (igMetaObject *)field->refMeta) != 0) {
+            if (field != 0 && igObject_IsKindOf((igObject *)item, (igMetaObject *)field->refMeta) != 0) {
                 igObjectRefMetaField_Assign(field, target, item);
             }
             releaseString(fieldName.p);

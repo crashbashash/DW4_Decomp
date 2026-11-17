@@ -604,7 +604,7 @@ void FUN_001788e0(StatContext88 *arg0, int arg1) {
             temp_s0 = temp_s1->f3b8;
             temp_a0->refs = temp_a0->refs - 1;
             if ((temp_a0->refs & 0x7fffff) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
             ((StatAllocator *)FUN_00165d00((int *)arg0))->vX(temp_s1);
         } while (temp_s0 != 0);
@@ -706,7 +706,7 @@ void FUN_0017a180(void *self) {
     if (o != 0) {
         o->references = o->references - 1;
         if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0->f52 = 0;
@@ -714,7 +714,7 @@ void FUN_0017a180(void *self) {
     if (o != 0) {
         o->references = o->references - 1;
         if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0->f48 = 0;
@@ -728,7 +728,7 @@ void FUN_0017a180(void *self) {
                 o->references = r;
                 r = o->references;
                 if (((unsigned long long)((long long)r << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(o);
+                    igObject_Destroy((igObject *)o);
                 }
             }
             *slot = 0;
@@ -804,14 +804,14 @@ void FUN_0017a300(Self_17a070 *self) {
         T *old2 = self->f332;
         if (old2 != 0) {
             --old2->references;
-            if (((unsigned long long)(long long)old2->references & 0x7fffffULL) == 0) igObject_Destroy(old2);
+            if (((unsigned long long)(long long)old2->references & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old2);
         }
     }
     self->f332 = o;
     {
         T *c = self->f332;
         --c->references;
-        if (((unsigned long long)(long long)c->references & 0x7fffffULL) == 0) igObject_Destroy(c);
+        if (((unsigned long long)(long long)c->references & 0x7fffffULL) == 0) igObject_Destroy((igObject *)c);
     }
 }
 

@@ -270,7 +270,7 @@ void FUN_00176a50(O176a50 *arg0, V96 *arg1, int *arg2, int arg3, int arg4) {
     if (a0 != 0) {
         a0->rc = a0->rc - 1;
         if ((a0->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(a0);
+            igObject_Destroy((igObject *)a0);
         }
     }
     arg0->f24 = arg1;

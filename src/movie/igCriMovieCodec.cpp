@@ -179,7 +179,7 @@ static inline AdxtObj *Adxt(igCriMovieData *data)
 
 static inline igCriMovieData *AsCriMovieData(void *object)
 {
-    if (object != 0 && igObject_IsKindOf(object, g_igCriMovieData_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igCriMovieData_metaObject) != 0) {
         return (igCriMovieData *)object;
     }
     return 0;

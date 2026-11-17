@@ -514,7 +514,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
 int igMovieManager_StopMovie(igMovieManager *self, void *object) {
     int index;
     igMovieInfo *movie;
-    if (object != 0 && igObject_IsKindOf(object, g_igMovieInfo_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igMovieInfo_metaObject) != 0) {
         movie = (igMovieInfo *)object;
     } else {
         movie = 0;

@@ -194,7 +194,7 @@ struct R **FUN_004597e0(struct R **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {
@@ -210,7 +210,7 @@ ObjectRefWord *FUN_00459860(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }
@@ -225,7 +225,7 @@ void **FUN_004598e0(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -243,7 +243,7 @@ void **FUN_00459960(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {
@@ -259,7 +259,7 @@ void **FUN_004599e0(struct Ref **self, short flag) {
         p = *self;
         if (p != 0) {
             p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
         }
         if (flag > 0) operator delete(self);
     }
@@ -274,7 +274,7 @@ void **FUN_00459a60(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -287,7 +287,7 @@ void **FUN_00459a60(void **arg0, long long arg1) {
 O *FUN_00459ae0(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         if (arg1 > 0) operator delete(arg0);
     }
     return arg0;
@@ -299,7 +299,7 @@ ObjectRefWord *FUN_00459b60(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }
@@ -314,7 +314,7 @@ void **FUN_00459be0(void **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
             if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {
@@ -330,7 +330,7 @@ ObjectRefWord *FUN_00459c60(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }
@@ -344,7 +344,7 @@ void **FUN_00459ce0(void **arg0, short arg1) {
         if (r != 0) {
             r[1] = r[1] - 1;
             if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy(r);
+                igObject_Destroy((igObject *)r);
             }
         }
         if (arg1 > 0) {
@@ -704,7 +704,7 @@ void FUN_00459ee0(void) {
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_v0_2) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0_2);
+        igObject_Destroy((igObject *)temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2));
     *(int *)((char *)(temp_s0) + 56) = (int)FUN_0045a8c0();

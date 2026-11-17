@@ -40,7 +40,7 @@ int igTgaLoader_GetVTable(void) {
         if (temp_a0 != 0) {
             temp_a0[1] = temp_a0[1] - 1;
             if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
     }
@@ -55,7 +55,7 @@ void **igSmartPointer_igFile_Destruct(void **arg0, short arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if (arg1 > 0) {

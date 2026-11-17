@@ -22,6 +22,9 @@ each section.
   fragments share, so each class has exactly one definition. Reflected data layouts come from the generated
   `include/dw4/reflected.h`; `igTDataList<T>` is `include/dw4/igTDataList.h`, and `igSmartPointer<T>` with
   `igVirtualObject` (an `igObject` whose vtable is a real vptr) is `include/dw4/igSmartPointer.h`.
+  `igObject_Destroy` and `igObject_IsKindOf` take `igObject *` (`include/dw4/igObject.h`); the views with a real
+  vptr (`igVirtualObject`, `igObjectDispatchView` and Gfx's `igObjectSlotView`) have inline overloads next to
+  their class that pass the object on as `igObject *`, and a local view of the object header is cast at the call.
 - **`include/dw4/igMemoryPoolView.h`** is the memory-pool vtable (slots 0-96) as a class. It is shared outside
   core: `src/movie/igCriMovieCodec.cpp` and, through `include/dw4/lua_game_state.h`, the Lua units
   `src/lua/lmem.c` and `src/lua/lstate.c`. Those build with `-Dlong=int`, so the slots with a 64-bit argument or

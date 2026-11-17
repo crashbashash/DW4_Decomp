@@ -218,7 +218,7 @@ int FUN_0045f200(int arg0, X *arg1) {
     if (arg1->f20 & 1) {
         s0 = (int *)g_igTransform_metaObject;
         if ((int *)arg1->v88() == s0 || (s0 = (int *)g_igLightSet_metaObject, (int *)arg1->v88() == s0)) return 0;
-        if (igObject_IsKindOf(arg1, g_igGroup_metaObject) != 0) return 2;
+        if (igObject_IsKindOf((igObject *)arg1, g_igGroup_metaObject) != 0) return 2;
     }
     return 1;
 }
@@ -266,7 +266,7 @@ void igViewerRenderer_Traverse(Q *arg0) {
     if (t != 0) {
         t->rc = t->rc - 1;
         if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     arg0->f76 = 0;
@@ -274,7 +274,7 @@ void igViewerRenderer_Traverse(Q *arg0) {
     if (t != 0) {
         t->rc = t->rc - 1;
         if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(t);
+            igObject_Destroy((igObject *)t);
         }
     }
     arg0->f84 = 0;
@@ -291,7 +291,7 @@ void igViewerRenderer_Traverse(Q *arg0) {
             if (t != 0) {
                 t->rc = t->rc - 1;
                 if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(t);
+                    igObject_Destroy((igObject *)t);
                 }
             }
             arg0->f76 = n;
@@ -309,7 +309,7 @@ void igViewerRenderer_Traverse(Q *arg0) {
         if (t != 0) {
             t->rc = t->rc - 1;
             if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+                igObject_Destroy((igObject *)t);
             }
         }
         arg0->f84 = n;
@@ -325,7 +325,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_23(Q2 *arg0) {
     if (temp_a0_2 != 0) {
         temp_a0_2->rc = temp_a0_2->rc - 1;
         if (((unsigned long long)((long long)temp_a0_2->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0_2);
+            igObject_Destroy((igObject *)temp_a0_2);
         }
     }
     arg0->f88 = temp_v0;

@@ -61,7 +61,7 @@ void Gap__Attrs__igLightAttr__vfunc_28(A_13ece0 *arg0) {
     if (temp_a0 != 0) {
         temp_a0->references = temp_a0->references - 1;
         if (((unsigned long long)((long long)temp_a0->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f140 = 0;

@@ -16,13 +16,13 @@ int igLuaState_GetVTable(void) {
     char **name;
     igObject **memPool;
 
-    igObject_InitHeader(&state);
+    igObject_InitHeader((igObject *)&state);
     name = &state._name;
     *name = 0;
     state.vtable = g_igLuaState_vtable;
     memPool = &state._memPool;
     *memPool = 0;
-    vtable = *(int *)((char *)&state + g_objectSystem[0]->vtableOffset);
+    vtable = *(int *)((char *)&state + g_objectSystem->vtableProbeOffset);
     /* The destructors, each testing its member's address as a member destructor does. */
     state.vtable = g_igLuaState_vtable;
     if (memPool != 0) {

@@ -49,29 +49,29 @@ igIntersectTraversal *igIntersectTraversal_Destroy(igIntersectTraversal *self, s
         self->_vtable = (int)&g_igIntersectTraversal_vtable[0];
         if (&self->_ray) {
             S1 *t = (S1 *)self->_ray;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&self->_volumes) {
             S1 *t = (S1 *)self->_volumes;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&self->_probe) {
             S1 *t = (S1 *)self->_probe;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&self->_nodeStack) {
             S1 *t = (S1 *)self->_nodeStack;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (&self->_matStack) {
             S1 *t = (S1 *)self->_matStack;
-            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+            if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         }
         if (self) {
             self->_vtable = (int)&g_igTraversal_vtable[0];
             if (&self->_travProcs) {
                 S1 *t = (S1 *)self->_travProcs;
-                if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+                if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
             }
         }
         if (deleteFlag > 0) Memory_FreeBufferAliasC(self);

@@ -101,7 +101,7 @@ void **igSmartPointer_igMemoryPool_Destruct(struct Ref **self, short flag) {
         p = *self;
         if (p != 0) {
             p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
         }
         if (flag > 0) operator delete(self);
     }
@@ -116,7 +116,7 @@ void **FUN_00150a70(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {
@@ -159,7 +159,7 @@ ObjectRefWord *igSmartPointer_igIntList_Destruct(ObjectRefWord *self,int delete_
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }
@@ -169,7 +169,7 @@ ObjectRefWord *igSmartPointer_igIntList_Destruct(ObjectRefWord *self,int delete_
 O_1506b0 *FUN_00150f30(O_1506b0 *arg0, short arg1) {
     if (arg0) {
         S_temp_a0_1506b0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
         if (arg1 > 0) operator delete(arg0);
     }
     return arg0;
@@ -181,7 +181,7 @@ ObjectRefWord *FUN_00150fb0(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }

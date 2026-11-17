@@ -9,7 +9,7 @@ void FUN_001ce740(void) {
     if (temp_a0 != 0) {
         *(int *)((char *)temp_a0 + 4) = (int) (*(int *)((char *)temp_a0 + 4) - 1);
         if (((unsigned long long) ((long long) *(int *)((char *)temp_a0 + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
 }
@@ -86,7 +86,7 @@ void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal) {
         if (p != 0) {
             p->rc = p->rc - 1;
             if (((unsigned long long)((long long)p->rc << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
             }
         }
     }

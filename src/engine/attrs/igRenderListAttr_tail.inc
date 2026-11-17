@@ -26,7 +26,7 @@ void Gap__Attrs__igRenderListAttr__vfunc_28(O_13ffd0 *arg0) {
     if (o != 0) {
         o->references = o->references - 1;
         if (((unsigned long long)(long long)o->references & 0x7fffffULL) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
     arg0->obj = 0;

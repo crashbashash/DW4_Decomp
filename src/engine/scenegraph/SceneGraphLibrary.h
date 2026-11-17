@@ -300,7 +300,7 @@ struct Obj_194930 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -330,7 +330,7 @@ struct Obj_195030 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -620,7 +620,7 @@ struct Obj_19fde0 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -828,7 +828,7 @@ struct Obj_1aaf80 {
             if (object) {
                 --object->references;
                 if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
+                    igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -1054,7 +1054,7 @@ struct RecordRef {
         if (object != 0) {
             object->references = object->references - 1;
             if ((object->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
             }
         }
     }
@@ -1281,7 +1281,7 @@ struct Ref_1b2750 {
         if (object) {
             --object->rc;
             if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
     }
 };
@@ -1984,7 +1984,7 @@ struct List_1c0f00 {
             Ref *r = data[i];
             if (r != 0) {
                 r->u.w = r->u.w - 1;
-                if (r->u.b.cnt == 0) igObject_Destroy(r);
+                if (r->u.b.cnt == 0) igObject_Destroy((igObject *)r);
             }
         }
         int n2 = count;
@@ -2375,7 +2375,7 @@ struct S_1c5eb0 { char pad[28]; List_1c5eb0 * list; List_1c5eb0 *getList() const
 static inline void releaseNode(Obj_1c5eb0 *o) {
     if (o) {
         --o->refs;
-        if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) igObject_Destroy(o);
+        if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)o);
     }
 }
 struct Ref_1c5eb0 {
@@ -2473,7 +2473,7 @@ static inline void releaseSection(IniSectionObject *object) {
     if (object != 0) {
         object->_refCount = object->_refCount - 1;
         if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
+            igObject_Destroy((igObject *)object);
         }
     }
 }
@@ -2984,7 +2984,7 @@ struct ShadowRef {
         if (object) {
             --object->refCount;
             if (((unsigned long long)(long long)object->refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
     }
 };
@@ -3171,7 +3171,7 @@ struct ShadowRef_1d7120 {
         if (object) {
             --object->refCount;
             if (((unsigned long long)(long long)object->refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
     }
 };
@@ -3434,7 +3434,7 @@ struct SeqTempRef {
         if (p) {
             --p->refCount;
             if (((unsigned long long)(long long)p->refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
         }
     }
 };
@@ -3607,7 +3607,7 @@ struct Rel { static inline void go(T_1e08b0 *object) {
     if (object) {
         --object->references;
         if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
+            igObject_Destroy((igObject *)object);
     }
 } };
 class DW4VC_128_4 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int vX(int, int, int, int); };
@@ -3644,7 +3644,7 @@ struct EnvMapRef {
         if (object) {
             --object->f4;
             if (((unsigned long long)(long long)object->f4 & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
     }
 };
@@ -3663,7 +3663,7 @@ struct Ref_1e1ac0 {
         if (object) {
             --object->f4;
             if (((unsigned long long)(long long)object->f4 & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
     }
 };
@@ -3682,7 +3682,7 @@ struct EnvMapTempRef {
         if (p) {
             --p->f4;
             if (((unsigned long long)(long long)p->f4 & 0x7fffffULL) == 0)
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
         }
     }
 };
@@ -3823,7 +3823,7 @@ virtual void slot24();
 virtual void slot25();
 };
 struct RO { int vt; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
-struct Rel_1e2ec0 { static inline void go(RO *o) { RO *t = o; if (t != 0) { t->u.w = t->u.w - 1; if (t->u.b.cnt == 0) igObject_Destroy(t); } } };
+struct Rel_1e2ec0 { static inline void go(RO *o) { RO *t = o; if (t != 0) { t->u.w = t->u.w - 1; if (t->u.b.cnt == 0) igObject_Destroy((igObject *)t); } } };
 struct List_1e2ec0 {
     char pad[8]; int n; char pad2[4]; RO **data;
     void clear() {
@@ -5100,7 +5100,7 @@ struct IniItemList { char pad0[8]; int count; char pad1[4]; void **data; };
 struct IniFieldView { char pad0[56]; void *refMeta; };
 extern "C" void igObjectRefMetaField_Assign(IniFieldView *, IniFieldTarget *, void *);
 static inline IniFieldView *asObjectRefField(IniFieldView *f) {
-    if (f != 0 && igObject_IsKindOf(f, g_igObjectRefMetaField_metaObject) != 0) {
+    if (f != 0 && igObject_IsKindOf((igObject *)f, g_igObjectRefMetaField_metaObject) != 0) {
         return f;
     }
     return 0;
@@ -5586,7 +5586,7 @@ static inline void releaseWord(igPoolObject *o) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
         if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
 }
@@ -5635,7 +5635,7 @@ static inline void setBase(CombinerStateView *c, int bone, int value) {
     c->_cacheValid = 0;
 }
 static inline AnimDbRecord *castToNamed(AnimDbRecord *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igNamedObject_metaObject) != 0) {
+    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igNamedObject_metaObject) != 0) {
         return object;
     }
     return 0;
@@ -5827,7 +5827,7 @@ static inline int n_of_1bd170(const struct Arr_1bd170 *list) { return list->n; }
 template <class T> static inline void releaseRefCounted(T *p) {
     p->_refCount = (int)p->_refCount - 1;
     if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(p);
+        igObject_Destroy((igObject *)p);
     }
 }
 template <class T> static inline void retainRefCounted(T *p) {
@@ -5946,7 +5946,7 @@ static inline void dropCurrent(RangeLookup *self) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
         if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+            igObject_Destroy((igObject *)o);
         }
     }
 }
@@ -6002,7 +6002,7 @@ static inline void retain_1d3410(int *slot) {
 static inline void release_1d3410(int *slot) {
     if (*slot != 0) {
         ((NodeSlots *)*slot)->_refCount = ((NodeSlots *)*slot)->_refCount - 1;
-        if ((((NodeSlots *)*slot)->_refCount & 0x7fffff) == 0) { igObject_Destroy((NodeSlots *)*slot); }
+        if ((((NodeSlots *)*slot)->_refCount & 0x7fffff) == 0) { igObject_Destroy((igObject *)*slot); }
     }
 }
 static inline void clearBytes(char *p, unsigned int n) {

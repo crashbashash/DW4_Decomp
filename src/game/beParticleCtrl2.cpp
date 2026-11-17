@@ -64,7 +64,7 @@ void beParticleCtrl2_Prepare(beParticleCtrl2 *self) {
                     if (work != 0) {
                         --work->_refCount;
                         if (((unsigned long long)(long long)work->_refCount & 0x7fffffULL) == 0) {
-                            igObject_Destroy((void *)work);
+                            igObject_Destroy((igObject *)work);
                         }
                     }
                     ram->_work = 0;
@@ -167,7 +167,7 @@ void beParticleCtrl2_OnAddRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
     if (work != 0) {
         work->_refCount = (int)work->_refCount - 1;
         if (((unsigned long long) ((long long) (int)work->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)work);
+            igObject_Destroy((igObject *)work);
         }
     }
     ram->_work = 0;

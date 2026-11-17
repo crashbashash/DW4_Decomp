@@ -3,6 +3,8 @@
 
 #include "dw4/reflected.h"
 #include "dw4/ClassRegistration.h"
+#include "dw4/igObject.h"
+#include "dw4/igObjectSystem.h"
 
 typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(void *);
@@ -29,13 +31,13 @@ extern "C" char igNamedObject_GetPublishedMetaObject[];
 
 /* GetVTable's stack instance and its member destructors. */
 struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
-extern "C" int igObject_InitHeader(...);
 extern "C" int igSmartPointer_igMetaObject_Destruct(...);
 extern "C" int FUN_002293d0(...);
 extern "C" int igNamedObject_Destroy(...);
 extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
-extern "C" void *g_objectSystem[4];
+/* The object system's byte offset of the vtable word inside an object. */
+struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
 
 /* InitFields' field tables and field helpers. */
 extern "C" int igMetaObject_GetFieldCount(...);
@@ -56,8 +58,6 @@ extern "C" void igMetaObject_EnsureRegistered(void);
 extern "C" int igMatrix44f_SetIdentity(...);
 extern "C" int Memory_FreeBuffer(...);
 extern "C" int igMetaField_AllocateArray(...);
-extern "C" int igObject_Destroy(...);
-extern "C" int igObject_GetAllocator(...);
 extern "C" int DAT_00562498[4];
 extern "C" int DAT_005624a0[4];
 

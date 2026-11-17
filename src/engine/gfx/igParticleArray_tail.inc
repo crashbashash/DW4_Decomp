@@ -25,7 +25,7 @@ int igParticleArray_Update(igParticleArray *self, unsigned int num, unsigned int
             if (t != 0) {
                 t->refs = t->refs - 1;
                 if (((unsigned long long)((long long)t->refs << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(t);
+                    igObject_Destroy((igObject *)t);
                 }
             }
             self->_context = (int)a;
@@ -38,7 +38,7 @@ int igParticleArray_Update(igParticleArray *self, unsigned int num, unsigned int
                 if (u != 0) {
                     u->refs = u->refs - 1;
                     if (((unsigned long long)((long long)u->refs << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(u);
+                        igObject_Destroy((igObject *)u);
                     }
                 }
                 self->_pointSpriteInterface = (int)b;

@@ -767,7 +767,7 @@ public:
         object = value;
         if (object) {
             --object->ref;
-            if (((unsigned long long)(long long)object->ref & 0x7fffffULL) == 0) igObject_Destroy(object);
+            if (((unsigned long long)(long long)object->ref & 0x7fffffULL) == 0) igObject_Destroy((igObject *)object);
         }
         value = p;
     }
@@ -775,7 +775,7 @@ public:
         DispatchObj *object = value;
         if (object) {
             --object->ref;
-            if (((unsigned long long)(long long)object->ref & 0x7fffffULL) == 0) igObject_Destroy(object);
+            if (((unsigned long long)(long long)object->ref & 0x7fffffULL) == 0) igObject_Destroy((igObject *)object);
         }
     }
 };

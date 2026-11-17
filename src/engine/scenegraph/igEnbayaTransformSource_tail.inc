@@ -312,7 +312,7 @@ void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1) {
     if (temp_a0 != 0) {
         temp_a0->rc = temp_a0->rc - 1;
         if ((temp_a0->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0);
+            igObject_Destroy((igObject *)temp_a0);
         }
     }
     arg0->f32 = (E_1c2eb0 *)arg1;

@@ -53,7 +53,7 @@ int igDefaultAspectElement_GetVTable(void) {
         if (a != 0) {
             a->rc = a->rc - 1;
             if ((a->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
+                igObject_Destroy((igObject *)a);
             }
         }
     }
@@ -62,7 +62,7 @@ int igDefaultAspectElement_GetVTable(void) {
         if (a != 0) {
             a->rc = a->rc - 1;
             if ((a->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
+                igObject_Destroy((igObject *)a);
             }
         }
     }
@@ -71,7 +71,7 @@ int igDefaultAspectElement_GetVTable(void) {
         if (a != 0) {
             a->rc = a->rc - 1;
             if ((a->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
+                igObject_Destroy((igObject *)a);
             }
         }
     }

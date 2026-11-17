@@ -14,9 +14,9 @@ extern "C" {
 #endif
 
 struct igObject *igObject_InitHeader(struct igObject *p);
-void igObject_Destroy(void *object);
+void igObject_Destroy(struct igObject *object);
 /* Class-membership test: 1 when `kind` is the object's own class or one of its ancestors, else 0. */
-int igObject_IsKindOf(void *object, struct igMetaObject *kind);
+int igObject_IsKindOf(struct igObject *object, struct igMetaObject *kind);
 struct CallbackArray *igObject_Register(void);
 /* The published-metaobject accessor class registrations pass for an igObject parent. */
 struct igMetaObject *igObject_GetMetaObject_ParentAccessor(void);

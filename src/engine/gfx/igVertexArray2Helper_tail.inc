@@ -222,7 +222,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_29(igVertexArray2Helper *arg0, int ar
 
 int Gap__Gfx__igVertexArray2Helper__vfunc_30(struct A30 *arg0, int arg1) {
     struct B_15ff10 *p = (struct B_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->d, 1, 0)->_data;
-    if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
+    if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
         p = (struct B_15ff10 *)p;
     } else {
         p = 0;
@@ -234,7 +234,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_31(struct H31 *arg0, int arg1, float 
     struct M *m = (struct M *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->a, 3, 0)->_data;
     int n;
     float *p;
-    if (m != 0 && igObject_IsKindOf(m, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) { m = (struct M*)m; } else { m = 0; }
+    if (m != 0 && igObject_IsKindOf((igObject *)m, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) { m = (struct M*)m; } else { m = 0; }
     n = m->cnt;
     if (n != 0 && arg1 >= 0 && arg1 < n) {
         p = (float *)(m->data + arg1 * 12);
@@ -250,7 +250,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_32(A_15ff10 *arg0, int arg1, V_15ff10
     Q_15ff10 *t;
 
     t = (Q_15ff10 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 3, 0))->f12;
-    if ((t != 0) && (igObject_IsKindOf(t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
+    if ((t != 0) && (igObject_IsKindOf((igObject *)t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
         var_s0 = t;
     } else {
         var_s0 = 0;
@@ -265,7 +265,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_33(igVertexArray2Helper *arg0, int arg
     void *var_s0;
     void *r;
     var_s0 = (void *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 3, 0)) + 12));
-    if ((var_s0 != 0) && (igObject_IsKindOf(var_s0, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
+    if ((var_s0 != 0) && (igObject_IsKindOf((igObject *)var_s0, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
         r = var_s0;
     } else {
         r = (void *)(0);
@@ -280,7 +280,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_34(A_15ff10 *arg0, int arg1, V_15ff10
     V_15ff10 *p;
 
     t = (Q34 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 7, 0))->f12;
-    if ((t != 0) && (igObject_IsKindOf(t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
+    if ((t != 0) && (igObject_IsKindOf((igObject *)t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
         var_s1 = t;
     } else {
         var_s1 = 0;
@@ -316,7 +316,7 @@ V_15ff10 *Gap__Gfx__igVertexArray2Helper__vfunc_36(A_15ff10 *arg0, int arg1) {
     Q_15ff10 *t;
 
     t = (Q_15ff10 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 7, 0))->f12;
-    if ((t != 0) && (igObject_IsKindOf(t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
+    if ((t != 0) && (igObject_IsKindOf((igObject *)t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
         var_s0 = t;
     } else {
         var_s0 = 0;
@@ -347,7 +347,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_38(igVertexArray2Helper *arg0, int ar
     igVec3fList *t;
 
     var_s0 = (void *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 8, 0)) + 12));
-    if ((var_s0 != 0) && (igObject_IsKindOf(var_s0, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
+    if ((var_s0 != 0) && (igObject_IsKindOf((igObject *)var_s0, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
         t = (igVec3fList *)var_s0;
     } else {
         t = (igVec3fList *)(0);
@@ -363,7 +363,7 @@ V_15ff10 *Gap__Gfx__igVertexArray2Helper__vfunc_39(A_15ff10 *arg0, int arg1) {
     Q_15ff10 *t;
 
     t = (Q_15ff10 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 8, 0))->f12;
-    if ((t != 0) && (igObject_IsKindOf(t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
+    if ((t != 0) && (igObject_IsKindOf((igObject *)t, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) {
         var_s0 = t;
     } else {
         var_s0 = 0;
@@ -638,7 +638,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_48(igVertexArray2Helper *arg0, int ar
     igVec2fList *p;
 
     var_s0 = (void *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 4, arg1)) + 12));
-    if ((var_s0 != 0) && (igObject_IsKindOf(var_s0, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) {
+    if ((var_s0 != 0) && (igObject_IsKindOf((igObject *)var_s0, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) {
         p = (igVec2fList *)var_s0;
     } else {
         p = (igVec2fList *)(0);
@@ -671,7 +671,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_49(igVertexArray2Helper *arg0, int ar
 int Gap__Gfx__igVertexArray2Helper__vfunc_50(igVertexArray2Helper *arg0, int arg1, int arg2) {
     char *var_s0; char *p;
     var_s0 = (char *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 4, arg1)) + 12));
-    if ((var_s0 != 0) && (igObject_IsKindOf(var_s0, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) {
+    if ((var_s0 != 0) && (igObject_IsKindOf((igObject *)var_s0, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) {
         p = var_s0;
     } else {
         p = 0;
@@ -684,7 +684,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_51(A_15ff10 *arg0, int arg1, float fp
     Q51 *t;
 
     t = (Q51 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 9, 0))->f12;
-    if ((t != 0) && (igObject_IsKindOf(t, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) {
+    if ((t != 0) && (igObject_IsKindOf((igObject *)t, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) {
         var_s0 = t;
     } else {
         var_s0 = 0;
@@ -697,7 +697,7 @@ float Gap__Gfx__igVertexArray2Helper__vfunc_52(A_15ff10 *arg0, int arg1) {
     Q51 *t;
 
     t = (Q51 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 9, 0))->f12;
-    if ((t != 0) && (igObject_IsKindOf(t, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) {
+    if ((t != 0) && (igObject_IsKindOf((igObject *)t, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) {
         var_s0 = t;
     } else {
         var_s0 = 0;
@@ -839,7 +839,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_58(H58 *arg0, unsigned int *arg1) {
     }
     if (s0 != 0) {
         x = (void *)s0->_data;
-        if (x != 0 && igObject_IsKindOf(x, (igMetaObject *)g_igFloatList_metaObject[0]) != 0) {
+        if (x != 0 && igObject_IsKindOf((igObject *)x, (igMetaObject *)g_igFloatList_metaObject[0]) != 0) {
             y = x;
         } else {
             y = 0;
@@ -905,13 +905,13 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_59(igVertexArray2Helper *self, int ty
     vd = (VData *)igVertexArray2__FindVertexData((igVertexArray2 *)self->_vertexArray, type, index);
     *out = 1e23f;
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) { scalars = list; } else { scalars = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) { scalars = list; } else { scalars = 0; }
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) { pairs = list; } else { pairs = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) { pairs = list; } else { pairs = 0; }
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) { triples = list; } else { triples = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) { triples = list; } else { triples = 0; }
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)DAT_005610a8[0]) != 0)) { quads = list; } else { quads = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)DAT_005610a8[0]) != 0)) { quads = list; } else { quads = 0; }
     switch (type) {
     case 1:
     case 3:
@@ -1005,13 +1005,13 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_60(igVertexArray2Helper *self, int ty
     vd = (VData *)igVertexArray2__FindVertexData((igVertexArray2 *)self->_vertexArray, type, index);
     *out = -1e23f;
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) { scalars = list; } else { scalars = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igFloatList_metaObject[0]) != 0)) { scalars = list; } else { scalars = 0; }
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) { pairs = list; } else { pairs = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0)) { pairs = list; } else { pairs = 0; }
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) { triples = list; } else { triples = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0)) { triples = list; } else { triples = 0; }
     list = vd->list;
-    if ((list != 0) && (igObject_IsKindOf(list, (igMetaObject *)DAT_005610a8[0]) != 0)) { quads = list; } else { quads = 0; }
+    if ((list != 0) && (igObject_IsKindOf((igObject *)list, (igMetaObject *)DAT_005610a8[0]) != 0)) { quads = list; } else { quads = 0; }
     switch (type) {
     case 1:
     case 3:
@@ -1130,7 +1130,7 @@ ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage) {
         if(object) {
             --object->references;
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy(object);
+                igObject_Destroy((igObject *)object);
         }
         if((short)delete_storage>0) operator delete(self);
     }
@@ -1145,7 +1145,7 @@ struct R **igSmartPointer_igShortList_Destruct(struct R **arg0, short arg1) {
         if (temp_a0 != 0) {
             temp_a0->rc = temp_a0->rc - 1;
             if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+                igObject_Destroy((igObject *)temp_a0);
             }
         }
         if (arg1 > 0) {
@@ -1163,7 +1163,7 @@ void **igSmartPointer_igCharList_Destruct(void **arg0, long long arg1) {
         if (o != 0) {
             *(int *)(o + 4) = *(int *)(o + 4) - 1;
             if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {

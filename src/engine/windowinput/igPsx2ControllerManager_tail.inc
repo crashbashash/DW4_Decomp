@@ -44,7 +44,7 @@ int igPsx2ControllerManager_GetVTable(void) {
         if (q1 != 0) {
             q1->f4 = (int)((int) (q1->f4 - 1));
             if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
+                igObject_Destroy((igObject *)q1);
             }
         }
     }

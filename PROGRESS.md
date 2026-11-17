@@ -34,7 +34,7 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**11,696** of the 20,430 matched functions are readable: **1,696,896** code bytes, **48.9 %** of the code.
+**11,699** of the 20,430 matched functions are readable: **1,697,296** code bytes, **48.9 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
@@ -46,7 +46,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,126 | 387,456 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,467 | 449,576 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 557 | 146,400 |
-| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 3,132 | 1,046,220 |
+| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 3,127 | 1,045,564 |
 
 ## Debt
 
@@ -92,10 +92,10 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `profile_split.units` | 3 | 3 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build); increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `profile_split.bytes` | 19,492 | 19,492 | 0 | bytes of those; increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `opt_pragma.statements` | 0 | 0 | 0 | optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source |
-| `decl.local_externs` | 2,838 | 2,838 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py); increase recorded: CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations Sofdec round 7: SDK-shaped functions declare CRI callees that have no header home in the unit that calls them, with that unit's handle types decl.local_externs +1: sfmpv.c declares sfmpv_ReadTcode/SFMPVF_AllocFrm/SFMPVF_EndRefFrm/FUN_002a54d0 for the newly matched bodies; decl.varargs +1: sfadx.c's existing SFTST_Calc() declaration now names a defined function sfmpv.c gains sfmpv_GetActiveSize and sfmpv_DecodeOneUnit: five local declarations of other units' functions (SFBUF_RingGetDlm/SetDlm, SFMPVP_IsPscEnough, SFCON_IsEndcodeSkip/IsVideoEndcodeSkip), four of them typed with the player handle and char pointers where the definers use their own handle types, as the file's other SFBUF declarations do CRI Sofdec: sfmpv_DecodePicAtr and sfmps_DemuxChunk/sfmpv_SetFrmInf join with the unit's existing local-extern style (MPV_SetPicUsrBuf, MPV_DecodePicAtrSj, MPV_GetPicInf, MPV_GetPicUsr declared in sfmpv.c with the sfmpv view types void*/M2vPicAtr*; mpv*.c define them with MpvHn*), same pattern as the existing MPV_* declarations there |
-| `decl.varargs` | 881 | 881 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
-| `decl.type_conflicts` | 1,842 | 1,842 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
-| `decl.header_conflicts` | 563 | 563 | 0 | symbols declared in two or more headers that disagree on the type |
+| `decl.local_externs` | 2,834 | 2,834 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
+| `decl.varargs` | 878 | 878 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
+| `decl.type_conflicts` | 1,832 | 1,832 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
+| `decl.header_conflicts` | 558 | 558 | 0 | symbols declared in two or more headers that disagree on the type |
 
 ## The data half
 
@@ -193,7 +193,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 32,581 of 71,968 (45.27 %) |
+| field accesses using a **recovered** type (not an offset cast) | 32,587 of 71,971 (45.28 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

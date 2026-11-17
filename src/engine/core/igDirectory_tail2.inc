@@ -320,7 +320,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
     }
     if (obj != 0) {
         obj->TrimCapacity();
-        if (igObject_IsKindOf(self, (igMetaObject *)(((int)g_igIGBFile_metaObject))) != 0) {
+        if (igObject_IsKindOf((igObject *)self, (igMetaObject *)(((int)g_igIGBFile_metaObject))) != 0) {
             if (self->_autoWriteFilePreProcessState == 1) {
                 obj->userWriteFilePreProcess();
             }

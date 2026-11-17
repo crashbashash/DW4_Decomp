@@ -18,7 +18,7 @@ igMetaObject *igLuaGlue_GetMetaObject(void)
 int igLuaGlue_GetVTable(void) {
     igLuaGlue glue;
 
-    return *(int *)((char *)&glue + g_objectSystem[0]->vtableOffset);
+    return *(int *)((char *)&glue + g_objectSystem->vtableProbeOffset);
 }
 
 void igLuaGlue_EnsureRegistered(void)

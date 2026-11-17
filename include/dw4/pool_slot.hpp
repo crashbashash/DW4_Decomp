@@ -4,6 +4,8 @@
  * The 29 dummy virtuals place vfunc_29 at vtable byte +124 = +0x08 + 4*29 (MWCC puts two header words
  * ahead of the slots). The helpers must stay `static inline` in a header so they expand in place. */
 #include "dw4/igobject_release.h"
+#include "dw4/igObject.h"
+#include "dw4/igMemoryPoolContext.h"
 
 class igObjectSlotView {
 public:
@@ -12,13 +14,12 @@ public:
     unsigned int _refCount; /* +4: 23-bit reference count, flags above it */
 };
 
-extern "C" {
-extern unsigned char g_useOwnerAllocator;
-extern int kIGMemoryPoolHandleDefault[4];
-extern void igObject_Destroy(igObjectSlotView *o);
-extern igObjectSlotView *igObject_GetAllocator(void *self);
-extern igObjectSlotView *Memory_GetAllocatorBySelector(int selector);
-}
+static inline void igObject_Destroy(igObjectSlotView *object) { igObject_Destroy((igObject *)object); }
+
+/* The pool allocators, seen through the slot view the manager's slots hold. */
+static inline igObjectSlotView *slot_owner_allocator(void *self) { return (igObjectSlotView *)igObject_GetAllocator((igObject *)self); }
+static inline igObjectSlotView *slot_selector_allocator(int selector) { return (igObjectSlotView *)Memory_GetAllocatorBySelector(selector); }
+
 static inline void retain(igObjectSlotView *o)
 {
     if (o != 0) {
@@ -41,16 +42,16 @@ static inline void fill_pool_slot(void *self, igObjectSlotView **slot, igObjectS
         release(*slot);
         *slot = p;
     } else {
-        igObjectSlotView *a = igObject_GetAllocator(self);
-        a = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(selector[0]);
-        if (a != Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0])) {
-            p = igObject_GetAllocator(self);
-            p = g_useOwnerAllocator != 0 ? p : Memory_GetAllocatorBySelector(selector[0]);
+        igObjectSlotView *a = slot_owner_allocator(self);
+        a = g_useOwnerAllocator != 0 ? a : slot_selector_allocator(selector[0]);
+        if (a != slot_selector_allocator(kIGMemoryPoolHandleDefault)) {
+            p = slot_owner_allocator(self);
+            p = g_useOwnerAllocator != 0 ? p : slot_selector_allocator(selector[0]);
             retain(p);
             release(*slot);
             *slot = p;
         } else {
-            p = igObject_GetAllocator(self);
+            p = slot_owner_allocator(self);
             retain(p);
             release(*slot);
             *slot = p;
@@ -67,7 +68,7 @@ static inline void fill_pool_slot_plain(void *self, igObjectSlotView **slot, igO
         release(*slot);
         *slot = p;
     } else {
-        p = igObject_GetAllocator(self);
+        p = slot_owner_allocator(self);
         retain(p);
         release(*slot);
         *slot = p;

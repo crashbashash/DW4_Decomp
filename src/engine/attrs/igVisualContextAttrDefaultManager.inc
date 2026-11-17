@@ -30,7 +30,7 @@ int igVisualContextAttrDefaultManager_GetVTable(void) {
         if (p != 0) {
             p->f4 = (int)((int) (p->f4 - 1));
             if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
+                igObject_Destroy((igObject *)p);
             }
         }
     }
@@ -45,7 +45,7 @@ void **igSmartPointer_igVisualContext_Destruct(void **arg0, int arg1) {
         if (o != 0) {
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         if ((short)arg1 > 0) {

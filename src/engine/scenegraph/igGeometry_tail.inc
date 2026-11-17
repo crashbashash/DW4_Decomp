@@ -35,7 +35,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 2) {
-        if (igObject_IsKindOf(node, (igMetaObject *)g_igGeometry_metaObject) != 0 || igObject_IsKindOf(node, ((igMetaObject **)DAT_00561ca0)[0]) != 0) {
+        if (igObject_IsKindOf((igObject *)node, (igMetaObject *)g_igGeometry_metaObject) != 0 || igObject_IsKindOf((igObject *)node, ((igMetaObject **)DAT_00561ca0)[0]) != 0) {
             bool hit;
             unsigned int i;
             HitSegmentList *segments;
@@ -67,7 +67,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 4) {
-        if (igObject_IsKindOf(node, g_igGeometry_metaObject) != 0) {
+        if (igObject_IsKindOf((igObject *)node, g_igGeometry_metaObject) != 0) {
             HitMatrix *matrix;
             unsigned int attrCount;
             unsigned int segmentCount;
@@ -96,7 +96,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 }
                 for (a = 0; a < attrCount; a++) {
                     HitAttr *attr = attrs->data[a];
-                    if (igObject_IsKindOf(attr, (igMetaObject *)(((void *)g_igGeometryAttr_metaObject))) != 0 || igObject_IsKindOf(attr, ((igMetaObject **)DAT_0055f158)[0]) != 0) {
+                    if (igObject_IsKindOf((igObject *)attr, (igMetaObject *)(((void *)g_igGeometryAttr_metaObject))) != 0 || igObject_IsKindOf((igObject *)attr, ((igMetaObject **)DAT_0055f158)[0]) != 0) {
                         int *f = &pointReport.first;
                         int *g = &pointReport.second;
                         *f = -1;
@@ -214,7 +214,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
         if (o != 0) {
             o->_refCount = o->_refCount - 1;
             if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
+                igObject_Destroy((igObject *)o);
             }
         }
         List_RemoveWordAt((igDataList *)s, last);
