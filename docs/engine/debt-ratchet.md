@@ -56,7 +56,7 @@ and may rise without a recorded reason, so a byte-matching change is never refus
 
 ## Declarations
 
-The convention: a symbol is declared once, in a header (under `include/dw4/` or the module's own
+The convention: a symbol is declared once, in a header (`include/dw4/<library>/<Module>.h`, in the folder of the library whose unit defines the subject, or the module's own
 header), with the type its definition has, and the file that defines it includes that header. A
 library header that copies other libraries' symbols (`src/engine/core/CoreLibrary.h` and the other
 `*Library.h`) is not their home. `tools/declarations.py` reads every declaration in `src/` and

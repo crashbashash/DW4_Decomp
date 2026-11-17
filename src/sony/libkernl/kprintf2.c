@@ -1,7 +1,7 @@
 /* kprintf2.c - libkernl's formatted kernel output (libkernl.a kprintf2.o). kprintf writes to the
  * serial port, scePrintf to the host console over DECI2; both run one formatter, which sends every
  * character through the current output function. */
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef unsigned long u_long;
 

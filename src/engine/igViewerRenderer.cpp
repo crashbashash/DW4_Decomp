@@ -1,20 +1,20 @@
-#include "dw4/igSmartPointer.h"
-#include "dw4/reflected.h"
-#include "dw4/DisableFeature.h"
-#include "dw4/igVisualContextDispatchView.h"
-#include "dw4/igViewerRenderer.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/support/reflected.h"
+#include "dw4/viewer/DisableFeature.h"
+#include "dw4/gfx/igVisualContextDispatchView.h"
+#include "dw4/viewer/igViewerRenderer.h"
 
-#include "dw4/igObject.h"
-#include "dw4/igTransform.h"
-#include "dw4/igLightSet.h"
-#include "dw4/igGroup.h"
-#include "dw4/igAttrStackManager.h"
-#include "dw4/ViewerOptions.h"
-#include "dw4/igModel.h"
-#include "dw4/StringPool.h"
-#include "dw4/igColorAttr.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igObjectRefMetaField.h"
+#include "dw4/core/igObject.h"
+#include "dw4/scenegraph/igTransform.h"
+#include "dw4/scenegraph/igLightSet.h"
+#include "dw4/scenegraph/igGroup.h"
+#include "dw4/scenegraph/igAttrStackManager.h"
+#include "dw4/viewer/ViewerOptions.h"
+#include "dw4/gui/igModel.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/attrs/igColorAttr.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/igObjectRefMetaField.h"
 extern "C" {
 
 class X { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int v88(); int pad[4]; int f20; };
@@ -103,9 +103,9 @@ static inline void *createThird() {
     return FUN_0019fde0(0, 1);
 }
 
-#include "dw4/igViewportAttr.h"
-#include "dw4/list-services.h"
-#include "dw4/igMatrix44f.h"
+#include "dw4/attrs/igViewportAttr.h"
+#include "dw4/support/list-services.h"
+#include "dw4/maths/igMatrix44f.h"
 int FUN_001b0000(int, int, int, int);
 
 int FUN_001b6ce0(void *, float, float, float, float, float);
@@ -182,9 +182,9 @@ enum PanelMode { kPanelOff, kPanelOn };
 
 class PropertyHolder { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
 struct PropertyList { char pad[32]; int f32; };
-#include "dw4/igMetaObject.h"
+#include "dw4/core/igMetaObject.h"
 extern int text_meta[4];
-#include "dw4/igAttr.h"
+#include "dw4/attrs/igAttr.h"
 int FUN_00460be0(PropertyHolder *arg0, PropertyList *arg1);
 static inline int castToProperty(int object) {
     if (object != 0 && igObject_IsKindOf((igObject *)object, g_igObjectRefMetaField_metaObject) != 0) {

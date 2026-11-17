@@ -88,7 +88,7 @@ def main():
         new = new.replace("struct " + struct, "igMetaObject")    # retype every mention
         for b in bases:
             new = re.sub(r"\b%s\s*->\s*%s\b" % (b, fname), "%s->_%s" % (b, field["name"].lstrip("_")), new)
-        new = INCLUDE_ANCHOR.sub(lambda m: "*/\n#include \"dw4/reflected.h\"\n", new, count=1)
+        new = INCLUDE_ANCHOR.sub(lambda m: "*/\n#include \"dw4/support/reflected.h\"\n", new, count=1)
         new = GUESS.sub("The SHAPE matched; the types come from the recovered\n * reflection metadata (igMetaObject, whose +%d field `%s` this tests)." % (pad, field["name"]), new, count=1)
         converted += len(bases)
         changed.append((path, struct, pad, field["name"], sorted(bases)))

@@ -1,11 +1,11 @@
-#include "dw4/reflected.h"
-#include "dw4/igTDataList.h"
-#include "dw4/igCommonTraversalDispatchView.h"
-#include "dw4/beNodeAnim.h"
-#include "dw4/igAttrStackManager.h"
-#include "dw4/igObjectPool.h"
-#include "dw4/igTimeAttr.h"
-#include "dw4/igTraversal.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/scenegraph/igCommonTraversalDispatchView.h"
+#include "dw4/game/beNodeAnim.h"
+#include "dw4/scenegraph/igAttrStackManager.h"
+#include "dw4/scenegraph/igObjectPool.h"
+#include "dw4/attrs/igTimeAttr.h"
+#include "dw4/scenegraph/igTraversal.h"
 typedef void (*AttrPopProc)(void *attr, int data);
 /* The attribute list of one stack: count and storage of the pushed attributes. */
 typedef igTDataList<igAttr *> AttrList;

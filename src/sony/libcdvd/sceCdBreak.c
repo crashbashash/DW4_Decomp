@@ -1,5 +1,5 @@
 /* sceCdBreak.c - sceCdBreak: aborts the command in flight. */
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/sony/libcdvd.h"
 
 int sceCdBreak(void)

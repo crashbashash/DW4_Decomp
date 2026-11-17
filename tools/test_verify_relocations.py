@@ -11,7 +11,7 @@ import verify
 
 # The alias-pool constructor as it matches at -O3 on its own: a real retail body whose
 # object holds a second .text section once a body is put before it.
-ALIAS_POOL_CONSTRUCT = """#include "dw4/reflected.h"
+ALIAS_POOL_CONSTRUCT = """#include "dw4/support/reflected.h"
 int igAliasMemoryPool_Initialize();
 int FUN_002effb0();
 extern int g_igAliasMemoryPool_vtable[4];

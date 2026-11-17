@@ -21,7 +21,7 @@ class Expansion(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = self.tmp.name
-        write(self.root, "src/engine/lib/Lib.h", 'int shared(void);\n#include "dw4/reflected.h"\n')
+        write(self.root, "src/engine/lib/Lib.h", 'int shared(void);\n#include "dw4/support/reflected.h"\n')
         write(self.root, "src/engine/lib/First.inc", "int first(void) { return 1; }\n")
         write(self.root, "src/engine/lib/Second.inc",
               '#include "src/engine/lib/Nested.inc"\nint second(void) { return 2; }\n')
@@ -40,7 +40,7 @@ class Expansion(unittest.TestCase):
         self.assertNotIn('#include "src/', text)
 
     def test_keeps_other_includes(self):
-        self.assertIn('#include "dw4/reflected.h"', srctext.read(self.unit, root=self.root))
+        self.assertIn('#include "dw4/support/reflected.h"', srctext.read(self.unit, root=self.root))
 
     def test_definitions_seen_through_fragments(self):
         names = [n for n, _s, _e in units.definitions(srctext.read(self.unit, root=self.root))]

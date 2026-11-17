@@ -5,7 +5,7 @@
 #include "dw4/cri/adxerrs.h"
 #include "dw4/cri/adx_ps2.h"
 #include "dw4/cri/cri_cvfs.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/cri/sj.h"
 
 struct AdxfHandle {

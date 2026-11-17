@@ -30,7 +30,7 @@ public:
     virtual void getFromContext(igObject *context);
 };
 
-#include "dw4/igMetaObject.h"
+#include "dw4/core/igMetaObject.h"
 
 /* The object when it is an igAttr, otherwise none. */
 static inline igObject *asAttr(igObject *object) {

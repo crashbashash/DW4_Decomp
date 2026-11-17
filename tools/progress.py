@@ -540,14 +540,14 @@ def debt_struct_counts():
         sys.path.insert(0, os.path.join(ROOT, "scripts"))
         import check_struct_conflicts as csc
         import glob
-        reflected = csc.parse_reflected(os.path.join(ROOT, "include", "dw4", "reflected.h"))
+        reflected = csc.parse_reflected(os.path.join(ROOT, "include", "dw4", "support", "reflected.h"))
         src, inc = os.path.join(ROOT, "src"), os.path.join(ROOT, "include", "dw4")
         files = sorted(glob.glob(os.path.join(src, "**", "*.c"), recursive=True)
                        + glob.glob(os.path.join(src, "**", "*.cpp"), recursive=True)
                        + glob.glob(os.path.join(src, "**", "*.inc"), recursive=True)
                        + [f for f in glob.glob(os.path.join(inc, "**", "*"), recursive=True) if os.path.isfile(f)])
         files = [f for f in files if "/asmbody/" not in f and not os.path.basename(f).startswith("dw4u_")
-                 and os.path.abspath(f) != os.path.abspath(os.path.join(inc, "reflected.h"))]
+                 and os.path.abspath(f) != os.path.abspath(os.path.join(inc, "support", "reflected.h"))]
         views = csc.collect(files, reflected)
         sink = []
         return dict(a=csc.report_a(views, sink), b=csc.report_b(views, reflected, sink), c=csc.report_c(views, sink))

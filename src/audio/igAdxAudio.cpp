@@ -1,12 +1,12 @@
-#include "dw4/reflected.h"
-#include "dw4/igObjectDispatchView.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igObjectDispatchView.h"
 
-#include "dw4/igObject.h"
-#include "dw4/igMetaObject.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igMetaObject.h"
 extern "C" igMetaObject *igAdxAudio_GetMeta(void);
 extern "C" void igAdxAudio_userDestruct(igAdxAudio *self);
 extern "C" void igAdxAudio_userConstruct(igAdxAudio *self);
-#include "dw4/igAdxAudio.h"
+#include "dw4/audio/igAdxAudio.h"
 
 void igAdxAudio_userConstruct(igAdxAudio *self) {
     Gap__Core__igObject__userConstruct(self);

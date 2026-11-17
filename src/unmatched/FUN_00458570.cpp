@@ -1,6 +1,6 @@
 extern "C" {
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
-#include "dw4/igObject.h"
+#include "dw4/core/igObject.h"
 
 void **FUN_00458570(void **arg0, short arg1) {
     S_temp_a0 *temp_a0;

@@ -1,4 +1,4 @@
-#include "dw4/igFont.h"
+#include "dw4/gui/igFont.h"
 
 igMetaObject *g_igFont_metaObject;
 igMetaField *g_igFont_heightMetaField;

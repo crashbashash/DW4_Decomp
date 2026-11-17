@@ -911,8 +911,8 @@ struct ContextText : public igObject {
         return t;
     }
 };
-#include "dw4/p2core.h"
-#include "dw4/p2swap.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2swap.h"
 extern "C" int p2OpenDisplay(int mode, int colorBits, int depthBits, const char *config, const char *symbols, int width, int height);
 extern "C" void FUN_0020c9e0(int mode);
 class OpenResult {

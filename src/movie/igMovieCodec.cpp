@@ -1,5 +1,5 @@
 
-#include "dw4/igMovieCodec.h"
+#include "dw4/movie/igMovieCodec.h"
 extern "C" int igMovieCodec_IsReusable(void);
 extern "C" void igMovieCodec_Initialize(void);
 extern "C" int igMovieCodec_Open(void);

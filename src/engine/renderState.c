@@ -1,12 +1,12 @@
 #include <math.h>
-#include "dw4/p2dma.h"
-#include "dw4/p2core.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2draw.h"
-#include "dw4/p2gs.h"
-#include "dw4/renderState.h"
-#include "dw4/p2multipass.h"
-#include "dw4/igMemory.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2draw.h"
+#include "dw4/p2/p2gs.h"
+#include "dw4/p2/renderState.h"
+#include "dw4/p2/p2multipass.h"
+#include "dw4/core/igMemory.h"
 int *FUN_00202f60(int *arg0, long long arg1);
 int FUN_00202fa0(long long arg0);
 extern int FUN_001f8b50();

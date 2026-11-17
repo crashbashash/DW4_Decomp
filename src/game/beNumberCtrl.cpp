@@ -1,13 +1,13 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igVertexArrayLock.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beNumberCtrl.h"
-#include "dw4/beNumberCtrlInfo.h"
-#include "dw4/beNumberCtrlInfoWork.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObject.h"
-#include "dw4/emptyString.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/gfx/igVertexArrayLock.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/beNumberCtrl.h"
+#include "dw4/game/beNumberCtrlInfo.h"
+#include "dw4/game/beNumberCtrlInfoWork.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObject.h"
+#include "dw4/support/emptyString.h"
 
 extern "C" void beNumberCtrl_Prepare(void);
 extern "C" igMetaObject *beNumberCtrl_GetInfoMeta(void);

@@ -2,7 +2,7 @@
  * program's entry and end in the microcode image. */
 #include <stdlib.h>
 #include <string.h>
-#include "dw4/p2vu1Symbols.h"
+#include "dw4/p2/p2vu1Symbols.h"
 
 extern char p2Vu1SymbolText[];
 int p2Vu1SymbolsUnsplit = 1;

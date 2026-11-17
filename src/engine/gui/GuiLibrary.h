@@ -1,78 +1,78 @@
 #ifndef DW4_GUI_LIBRARY_H
 #define DW4_GUI_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igTDataList.h"
-#include "dw4/igVec3f.h"
-#include "dw4/beFontImage.h"
-#include "dw4/igAction.h"
-#include "dw4/igBasicColorChanger.h"
-#include "dw4/igBitmapFont.h"
-#include "dw4/igBoxComponent.h"
-#include "dw4/igClearRenderer.h"
-#include "dw4/igDefaultAspect.h"
-#include "dw4/igEventDispatcher.h"
-#include "dw4/igEventReceiver.h"
-#include "dw4/igGuiComponent.h"
-#include "dw4/igGuiComponentList.h"
-#include "dw4/igGuiSystem.h"
-#include "dw4/igHotKeyEventReceiver.h"
-#include "dw4/igModel.h"
-#include "dw4/igMouseCursor.h"
-#include "dw4/igOnOffColorChanger.h"
-#include "dw4/igOnOffModel.h"
-#include "dw4/igRadioGroup.h"
-#include "dw4/igRenderer.h"
-#include "dw4/igRendererOrderedList.h"
-#include "dw4/igTextElement.h"
-#include "dw4/igView.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/game/beFontImage.h"
+#include "dw4/gui/igAction.h"
+#include "dw4/gui/igBasicColorChanger.h"
+#include "dw4/gui/igBitmapFont.h"
+#include "dw4/gui/igBoxComponent.h"
+#include "dw4/gui/igClearRenderer.h"
+#include "dw4/gui/igDefaultAspect.h"
+#include "dw4/gui/igEventDispatcher.h"
+#include "dw4/gui/igEventReceiver.h"
+#include "dw4/gui/igGuiComponent.h"
+#include "dw4/gui/igGuiComponentList.h"
+#include "dw4/gui/igGuiSystem.h"
+#include "dw4/gui/igHotKeyEventReceiver.h"
+#include "dw4/gui/igModel.h"
+#include "dw4/gui/igMouseCursor.h"
+#include "dw4/gui/igOnOffColorChanger.h"
+#include "dw4/gui/igOnOffModel.h"
+#include "dw4/gui/igRadioGroup.h"
+#include "dw4/gui/igRenderer.h"
+#include "dw4/gui/igRendererOrderedList.h"
+#include "dw4/gui/igTextElement.h"
+#include "dw4/gui/igView.h"
 #define CHAR_METRICS_ITEM_SIZE 0x28
 
-#include "dw4/ClassRegistration.h"
-#include "dw4/igAABox.h"
-#include "dw4/igRay.h"
+#include "dw4/support/ClassRegistration.h"
+#include "dw4/maths/igAABox.h"
+#include "dw4/maths/igRay.h"
 extern "C" void FUN_00138160(void);
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igEnumMetaField.h"
-#include "dw4/igFloatMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igMatrix44fMetaField.h"
-#include "dw4/igMetaEnum.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igStringMetaField.h"
-#include "dw4/igUnsignedIntMetaField.h"
-#include "dw4/igUnsignedShortMetaField.h"
-#include "dw4/igVec2fMetaField.h"
-#include "dw4/igVec3fMetaField.h"
-#include "dw4/igVec4fMetaField.h"
-#include "dw4/igMetaField.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igEnumMetaField.h"
+#include "dw4/core/igFloatMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/maths/igMatrix44fMetaField.h"
+#include "dw4/core/igMetaEnum.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igStringMetaField.h"
+#include "dw4/core/igUnsignedIntMetaField.h"
+#include "dw4/core/igUnsignedShortMetaField.h"
+#include "dw4/maths/igVec2fMetaField.h"
+#include "dw4/maths/igVec3fMetaField.h"
+#include "dw4/maths/igVec4fMetaField.h"
+#include "dw4/core/igMetaField.h"
 extern "C" void FUN_0019e440(void);
-#include "dw4/igNode.h"
+#include "dw4/scenegraph/igNode.h"
 extern "C" igMetaField *FUN_00187560(void *);
-#include "dw4/igVisualContext.h"
+#include "dw4/gfx/igVisualContext.h"
 extern "C" void FUN_00146700(void);
 extern "C" void FUN_001378f0(void);
 class igMemoryPoolView;
 
-#include "dw4/igMetaObject.h"
-#include "dw4/internalNonRefCountedObjectList.h"
-#include "dw4/list-services.h"
-#include "dw4/igDataLists.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/internalNonRefCountedObjectList.h"
+#include "dw4/support/list-services.h"
+#include "dw4/core/igDataLists.h"
 extern "C" int DAT_0058c618[4];
 extern "C" unsigned char g_GuiLibrary_registered;
 extern "C" void GuiLibrary_MarkRegistered(void);
-#include "dw4/igMemoryPoolContext.h"
+#include "dw4/core/igMemoryPoolContext.h"
 extern "C" igMetaObject *g_igNonRefCountedViewList_metaObject;
 extern "C" igMetaObject *FUN_0044b880(void);
 extern "C" igMetaObject *igNonRefCountedViewList_GetMetaObject(void);
 struct Obj { int *vt; char pad[28]; };
-#include "dw4/igObject.h"
+#include "dw4/core/igObject.h"
 extern "C" int g_igNonRefCountedViewList_vtable[4];
-#include "dw4/igObjectSystem.h"
+#include "dw4/core/igObjectSystem.h"
 extern "C" int igNonRefCountedViewList_GetVTable(void);
 extern "C" void igNonRefCountedViewList_EnsureRegistered(void);
-#include "dw4/igNonRefCountedObjectList.h"
+#include "dw4/core/igNonRefCountedObjectList.h"
 extern "C" CallbackArray *igNonRefCountedViewList_Register(void);
 extern "C" void thunk_igNonRefCountedViewList_GetMetaObject(void);
 extern "C" igMetaObject *g_igViewList_metaObject;
@@ -81,7 +81,7 @@ extern "C" igMetaObject *igViewList_GetMetaObject(void);
 extern "C" int g_igViewList_vtable[4];
 extern "C" int igViewList_GetVTable(void);
 extern "C" void igViewList_EnsureRegistered(void);
-#include "dw4/igObjectList.h"
+#include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igViewList_Register(void);
 extern "C" void thunk_igViewList_GetMetaObject(void);
 extern "C" igMetaObject *g_igView_metaObject;
@@ -132,7 +132,7 @@ extern "C" igMetaObject *igRendererOrderedList_GetMetaObject(void);
 struct Obj_44c570 { int *vt; int w[7]; };
 extern "C" int g_igRendererOrderedList_vtable[4];
 extern "C" int igRendererOrderedList_GetVTable(void);
-#include "dw4/igDependencyOrderedList.h"
+#include "dw4/core/igDependencyOrderedList.h"
 extern "C" int DAT_00541dd0[4];
 extern "C" int **FUN_0044c5e0(int **arg0, long long arg1);
 extern "C" CallbackArray *igRendererOrderedList_Register(void);
@@ -252,8 +252,8 @@ struct O_44e1e0 { S_temp_a0 *m; };
 extern "C" O_44e1e0 *FUN_0044e1e0(O_44e1e0 *arg0, short arg1);
 extern "C" CallbackArray *igGuiSystem_Register(void);
 extern "C" void thunk_igGuiSystem_GetMetaObject(void);
-#include "dw4/igTransform.h"
-#include "dw4/igAttrSet.h"
+#include "dw4/scenegraph/igTransform.h"
+#include "dw4/scenegraph/igAttrSet.h"
 extern "C" void igGuiSystem_InitFields(void);
 extern "C" igMetaObject *g_igMouseCursor_metaObject;
 extern "C" igMetaObject *FUN_0044e430(void);
@@ -292,8 +292,8 @@ extern "C" void igActiveComponentsObserver_InitFields(void);
 extern "C" int FUN_0044ecb0(int arg0);
 extern "C" igMetaObject *g_igMousePosObserver_metaObject;
 extern "C" igMetaObject *igMousePosObserver_GetMetaObject(void);
-#include "dw4/igMatrix44f.h"
-#include "dw4/igResult.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igResult.h"
 extern "C" int g_igMousePosObserver_vtable[4];
 extern "C" int D_00541090[4];
 extern "C" int igMousePosObserver_GetVTable(void);
@@ -306,7 +306,7 @@ extern "C" CallbackArray *igMousePosObserver_Register(void);
 extern "C" void thunk_igMousePosObserver_GetMetaObject(void);
 extern "C" int FUN_00188260(...);
 extern "C" int FUN_0019dfd0(...);
-#include "dw4/igGraphPath.h"
+#include "dw4/scenegraph/igGraphPath.h"
 extern "C" void igMousePosObserver_InitFields(void);
 extern "C" int FUN_0044f0b0(int arg0);
 extern "C" igMetaObject *g_igWindowSizeObserver_metaObject;
@@ -332,7 +332,7 @@ struct Obj_44f5e0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int
 extern "C" int g_igGuiComponentNode_vtable[4];
 extern "C" int igGuiComponentNode_GetVTable(void);
 extern "C" void igGuiComponentNode_RunStaticInit(void);
-#include "dw4/igGroup.h"
+#include "dw4/scenegraph/igGroup.h"
 extern "C" CallbackArray *igGuiComponentNode_Register(void);
 extern "C" void thunk_igGuiComponentNode_GetMetaObject(void);
 extern "C" void igGuiComponentNode_InitFields(void);
@@ -389,14 +389,14 @@ extern "C" igMetaObject *igGeometryElement_GetMetaObject(void);
 extern "C" void igGeometryElement_EnsureRegistered(void);
 extern "C" CallbackArray *igGeometryElement_Register(void);
 extern "C" void thunk_igGeometryElement_GetMetaObject(void);
-#include "dw4/igAttrList.h"
-#include "dw4/igGeometry.h"
+#include "dw4/attrs/igAttrList.h"
+#include "dw4/scenegraph/igGeometry.h"
 extern "C" void igGeometryElement_InitFields(void);
 extern "C" igMetaObject *g_igFont_metaObject;
 extern "C" igMetaObject *FUN_004507f0(void);
 extern "C" igMetaObject *igFont_GetMetaObject(void);
 extern "C" void igFont_EnsureRegistered(void);
-#include "dw4/igNamedObject.h"
+#include "dw4/core/igNamedObject.h"
 extern "C" CallbackArray *igFont_Register(void);
 extern "C" void thunk_igFont_GetMetaObject(void);
 extern "C" void igFont_InitFields(void);
@@ -453,7 +453,7 @@ extern "C" int DAT_00524da0[4];
 extern "C" int g_igEventDispatcher_vtable[4];
 union U_451450 { int vt; int w[5]; char b[20]; };
 extern "C" int igEventDispatcher_GetVTable(void);
-#include "dw4/igInterfaceManager.h"
+#include "dw4/windowinput/igInterfaceManager.h"
 extern "C" CallbackArray *igEventDispatcher_Register(void);
 extern "C" void thunk_igEventDispatcher_GetMetaObject(void);
 extern "C" int FUN_00146660(...);
@@ -493,7 +493,7 @@ extern "C" void thunk_igDefaultAspectElementList_GetMetaObject(void);
 extern "C" igMetaEnum *FUN_00451ac0(void);
 extern "C" igMetaObject *g_igDefaultAspectElement_metaObject;
 extern "C" igMetaObject *igDefaultAspectElement_GetMetaObject(void);
-#include "dw4/StringPool.h"
+#include "dw4/core/StringPool.h"
 union U_451b70 { int vt; int w[5]; void *p[5]; char b[20]; };
 struct Rc { int vt; int rc; };
 extern "C" int g_igDefaultAspectElement_vtable[4];
@@ -545,7 +545,7 @@ extern "C" igMetaObject *FUN_004524f0(void);
 extern "C" igMetaObject *igBitmapFont_GetMetaObject(void);
 struct Obj_452590 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 extern "C" int FUN_0019aa10(...);
-#include "dw4/igFont.h"
+#include "dw4/gui/igFont.h"
 extern "C" int igBitmapFont_GetVTable(void);
 extern "C" igMetaObject *igFont_GetPublishedMetaObject(void);
 extern "C" void thunk_igBitmapFont_GetMetaObject(void);
@@ -566,7 +566,7 @@ class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2
 extern "C" void FUN_00452900(void);
 extern "C" igMetaObject *g_igCharMetricsMetaField_metaObject;
 extern "C" igMetaObject *igCharMetricsMetaField_GetMetaObject(void);
-#include "dw4/igCompoundMetaField.h"
+#include "dw4/core/igCompoundMetaField.h"
 extern "C" int g_igCharMetricsMetaField_vtable[4];
 union U_452a10 { int vt; char b[64]; };
 extern "C" int igCharMetricsMetaField_GetVTable(void);
@@ -605,8 +605,8 @@ extern "C" void FUN_004535d0(beFontImage *arg0, DW4VC_116_2 *arg1, int arg2, P *
 extern "C" int List_BinarySearch(...);
 struct K { short key; char pad[38]; };
 extern "C" int FUN_00453830(beFontImage *arg0, int arg1);
-#include "dw4/igTextureStateAttr.h"
-#include "dw4/igBlendStateAttr.h"
+#include "dw4/attrs/igTextureStateAttr.h"
+#include "dw4/attrs/igBlendStateAttr.h"
 class Layer : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setEnabled(int);
   };
 class FillLayer : public Layer {};
@@ -614,7 +614,7 @@ class OutlineLayer : public Layer {};
 struct FontImage { char pad[20]; int layers; int state; char pad3[4]; int base; };
 extern "C" void Gap__Bec__beFontImage__vfunc_11(FontImage *self, int enable);
 extern "C" void FUN_00453980(int arg0, int arg1);
-#include "dw4/igMathConstants.h"
+#include "dw4/maths/igMathConstants.h"
 extern "C" int *Gap__Gui__igColorChanger__vfunc_23(void);
 extern "C" int Gap__Gui__igBasicColorChanger__vfunc_23(int arg0, void *arg1);
 struct OnOffColorState { unsigned char pad[12]; bool enabled; bool on; unsigned char pad2; bool hilite; unsigned char pad3[20]; bool current; };
@@ -915,13 +915,13 @@ struct ObserverIntListView { int w0; int w4; int cnt; int cap; int *data; };
 struct ObserverEventView : igObject { int w8; int a; ObserverIntListView *list; };
 struct ObserverModelView { char pad[40]; igObject *ref; int flags; int fn; };
 struct MousePosObserverView { char pad[16]; ObserverModelView *m; int f20; };
-#include "dw4/igProbe.h"
+#include "dw4/scenegraph/igProbe.h"
 extern "C" void Gap__Gui__igMousePosObserver__vfunc_13(MousePosObserverView *self, int flags);
 struct Obj_455f50 : public igObject { };
 struct Y { char pad[8]; int f8; char pad2[8]; float f20; };
 struct Z { char pad[24]; float f24; unsigned char f28; char pad2[3]; Obj_455f50 *f32; };
 extern "C" void FUN_00455f50(Z *arg0, Y *arg1);
-#include "dw4/igIntersectTraversal.h"
+#include "dw4/scenegraph/igIntersectTraversal.h"
 /* vtable-call shim for the intersect traversal (slot 23 = vtable offset 100); not a data layout */
 struct IntersectTraversalCalls { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(int); };
 extern "C" void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b);
@@ -956,7 +956,7 @@ typedef struct P_456a60 { char pad28[28]; Q *f28; } P_456a60;
 typedef struct A_456a60 { char pad12[12]; int f12; char pad16[8]; Rc_456a60 *f24; P_456a60 *f28; unsigned char f32; } A_456a60;
 typedef struct R_456a60 { char pad8[8]; Q *f8; } R_456a60;
 typedef struct V3 { int a; int b; int c; int pad[4]; } V3;
-#include "dw4/igGuiSystemModel.h"
+#include "dw4/gui/igGuiSystemModel.h"
 class Obj_456b80 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void vX(void *); };
 struct P_456b80 { char pad[12]; float x; float y; };
 extern "C" void FUN_00456b80(int *arg0, float *arg1);

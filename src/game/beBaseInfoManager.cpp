@@ -1,12 +1,12 @@
-#include "dw4/reflected.h"
-#include "dw4/beBaseInfoManagerDispatchView.h"
-#include "dw4/igobject_release.h"
-#include "dw4/beBaseInfoManager.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beSystem.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igObject.h"
+#include "dw4/support/reflected.h"
+#include "dw4/game/beBaseInfoManagerDispatchView.h"
+#include "dw4/core/igobject_release.h"
+#include "dw4/game/beBaseInfoManager.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/beSystem.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igObject.h"
 
 extern "C" void beBaseInfoManager_Activate(void);
 extern "C" void beBaseInfoManager_Deactivate(void);

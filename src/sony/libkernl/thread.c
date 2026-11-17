@@ -3,8 +3,8 @@
  * signals topThread, a top-priority thread that carries the requests out. DelayThread sleeps on a
  * semaphore a timer alarm signals. */
 
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 
 typedef unsigned int u_int;
 

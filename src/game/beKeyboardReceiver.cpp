@@ -1,5 +1,5 @@
-#include "dw4/beKeyboardReceiver.h"
-#include "dw4/igObject.h"
+#include "dw4/game/beKeyboardReceiver.h"
+#include "dw4/core/igObject.h"
 
 extern "C" void beKeyboardReceiver_userConstruct(struct beKeyboardReceiver *self);
 extern "C" void beKeyboardReceiver_userDestruct(struct beKeyboardReceiver *self);

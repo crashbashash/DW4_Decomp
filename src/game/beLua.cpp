@@ -1,25 +1,25 @@
-#include "dw4/reflected.h"
-#include "dw4/igobject_release.h"
-#include "dw4/igObjectDispatchView.h"
-#include "dw4/beLOA.h"
-#include "dw4/beLua.h"
-#include "dw4/StringPool.h"
-#include "dw4/beLuaInfo.h"
-#include "dw4/beLuaState.h"
-#include "dw4/beSystem.h"
-#include "dw4/igAttrStackManager.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igModelViewMatrixAttr.h"
-#include "dw4/igObject.h"
-#include "dw4/igTraversal.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igobject_release.h"
+#include "dw4/core/igObjectDispatchView.h"
+#include "dw4/game/beLOA.h"
+#include "dw4/game/beLua.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/game/beLuaInfo.h"
+#include "dw4/game/beLuaState.h"
+#include "dw4/game/beSystem.h"
+#include "dw4/scenegraph/igAttrStackManager.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/attrs/igModelViewMatrixAttr.h"
+#include "dw4/core/igObject.h"
+#include "dw4/scenegraph/igTraversal.h"
 #include <stdio.h>
 #include <string.h>
 /* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
 extern "C" int g_igCommonTraversal_travProcs[4];
-#include "dw4/emptyString.h"
+#include "dw4/support/emptyString.h"
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
 extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);

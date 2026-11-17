@@ -1,4 +1,4 @@
-#include "dw4/igBoundingBoxRenderer.h"
+#include "dw4/viewer/igBoundingBoxRenderer.h"
 
 void igBoundingBoxRenderer_Traverse(void) {
 

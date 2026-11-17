@@ -1,24 +1,24 @@
-#include "dw4/igSmartPointer.h"
-#include "dw4/igobject_release.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/core/igobject_release.h"
 #include "dw4/cri/adx_ps2.h"
-#include "dw4/igAdx.h"
-#include "dw4/igAdxAudio.h"
-#include "dw4/igAdxFile.h"
+#include "dw4/audio/igAdx.h"
+#include "dw4/audio/igAdxAudio.h"
+#include "dw4/audio/igAdxFile.h"
 #pragma push
 #pragma readonly_strings on
-#include "dw4/igObject.h"
-#include "dw4/igMemory.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igMemory.h"
 extern "C" {
 #include "dw4/cri/cri_adxt.h"
 }
-#include "dw4/igStringObj.h"
-#include "dw4/libkernl.h"
+#include "dw4/core/igStringObj.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/cri/cri_sndf.h"
 #include "dw4/cri/cri_mwsfd.h"
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 extern "C" void Gap__igAdx__constructFields(igObject *self, int flags);
 extern "C" void Gap__igAdx__resetFields(igObject *self, int flags);
-#include "dw4/igMetaObject.h"
+#include "dw4/core/igMetaObject.h"
 extern "C" void Gap__igAdx__userConstruct(igObject *self);
 extern "C" int Gap__igAdx__getMeta(void);
 extern "C" void Gap__igAdx__destructFields(void);
@@ -34,8 +34,8 @@ extern "C" {
 #include <stdio.h>
 extern "C" int igAdx_SetupIop(void);
 extern "C" int igAdx_SetupOptional(void);
-#include "dw4/igDataLists.h"
-#include "dw4/StringPool.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/StringPool.h"
 extern "C" unsigned char igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char *name, int maxChannels, int type,
                                                    int maxStreams, int maxFrequency);
 /* The CRI file-system parameters igAdx_SetupIop hands ADXPS2: the host root and the two file-info caches. */
@@ -52,7 +52,7 @@ unsigned char g_adxIopReady;
 char g_adxUnusedFlag;
 }
 extern "C" int SNDF_Init(int *config);
-#include "dw4/igPsx2File.h"
+#include "dw4/core/igPsx2File.h"
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -72,11 +72,11 @@ public:
     virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22();
     virtual WaitResult sleep(int microseconds);
 };
-#include "dw4/igThread.h"
-#include "dw4/emptyString.h"
-#include "dw4/igNamedObject.h"
+#include "dw4/core/igThread.h"
+#include "dw4/support/emptyString.h"
+#include "dw4/core/igNamedObject.h"
 #include "dw4/cri/cri_adxf.h"
-#include "dw4/list-services.h"
+#include "dw4/support/list-services.h"
 extern "C" void igAdxAfsFile_GetPath(igAdxAfsFile *file, char *path);
 /* The scratch string, the per-partition file names and the AFS files, each released when the program exits. */
 extern "C" {

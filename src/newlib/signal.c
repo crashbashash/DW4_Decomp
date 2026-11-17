@@ -1,6 +1,6 @@
-#include "dw4/newlib_reent.h"
-#include "dw4/newlib_mallocr.h"
-#include "dw4/newlib_syscalls.h"
+#include "dw4/newlib/newlib_reent.h"
+#include "dw4/newlib/newlib_mallocr.h"
+#include "dw4/newlib/newlib_syscalls.h"
 #include <signal.h>
 
 typedef void (*_sig_func_ptr)(int);

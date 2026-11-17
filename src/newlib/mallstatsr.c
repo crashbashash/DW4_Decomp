@@ -1,5 +1,5 @@
-#include "dw4/newlib_mallocr.h"
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_mallocr.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 typedef struct __sFILE FILE;
 extern const char max_system_bytes_format[], system_bytes_format[], in_use_bytes_format[];

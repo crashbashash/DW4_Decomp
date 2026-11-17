@@ -1,4 +1,4 @@
-#include "dw4/newlib_syscalls.h"
+#include "dw4/newlib/newlib_syscalls.h"
 #include <signal.h>
 
 void abort(void)

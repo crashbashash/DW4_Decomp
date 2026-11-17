@@ -1,5 +1,5 @@
-#include "dw4/fp_bit.h"
-#include "dw4/softfloat.h"
+#include "dw4/support/fp_bit.h"
+#include "dw4/support/softfloat.h"
 
 #define F_D_BITOFF (52 + 8 - (23 + 7))
 

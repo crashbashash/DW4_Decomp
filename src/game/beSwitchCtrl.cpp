@@ -1,8 +1,8 @@
-#include "dw4/reflected.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beSwitchCtrl.h"
-#include "dw4/beSwitchCtrlInfo.h"
-#include "dw4/igSwitch.h"
+#include "dw4/support/reflected.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/beSwitchCtrl.h"
+#include "dw4/game/beSwitchCtrlInfo.h"
+#include "dw4/scenegraph/igSwitch.h"
 
 /* beSwitchCtrl shows or hides a whole igSwitch, its info's _switchNode: the MsgAction message ALLON
  * enables every child of the switch and ALLOF disables every child. */

@@ -6,7 +6,7 @@ Matched C spells the header of every engine object, a vtable word at +0 and a re
 unsigned rc; }`, ... 548 definitions in src/). `config/SLUS-20836/authoritative-fields.tsv` records that layout
 for `igObject` (evidence: the release idiom `--o->refs; if ((refs & 0x7fffff) == 0) igObject_Destroy(o)`
 at hundreds of matched sites, the matched `igObject_Destroy` it calls and `igObject_InitHeader`), and
-`scripts/gen_type_headers.py` emits it into include/dw4/reflected.h. This script then deletes the
+`scripts/gen_type_headers.py` emits it into include/dw4/support/reflected.h. This script then deletes the
 shim definition in a file, retypes its users to `igObject` and renames the count member to `_refCount`.
 
 Every changed file is re-verified function by function with tools/verify.py; a file that does not
@@ -32,7 +32,7 @@ FIRST = {"word0", "w0", "vt", "vtable", "p0", "pad0", "f0", "vptr", "word_0"}
 SECOND = {"refs", "references", "rc", "f4", "refcount", "refCount", "references_"}
 SHIM = re.compile(r"(?:typedef\s+)?struct\s+(\w+)\s*\{\s*(?:int|unsigned(?:\s+int)?)\s+(\w+)\s*;"
                   r"\s*(int|unsigned(?:\s+int)?)\s+(\w+)\s*;\s*\}\s*(\w*)\s*;")
-INCLUDE = '#include "dw4/reflected.h"\n'
+INCLUDE = '#include "dw4/support/reflected.h"\n'
 
 
 def scope_files(scope_tsv, symbols="config/SLUS-20836/symbols.txt"):
@@ -69,7 +69,7 @@ def rewrite(text):
                          lambda m: "(int)%s->_refCount" % m.group(1), new)
             new = re.sub(r"(?<!\(int\))(\(\(igObject \*\)[^()]*\))->_refCount\b(?!\s*=[^=])",
                          lambda m: "(int)%s->_refCount" % m.group(1), new)
-    if "dw4/reflected.h" not in new:
+    if "dw4/support/reflected.h" not in new:
         new = INCLUDE + new
     return new, sorted(shims)
 

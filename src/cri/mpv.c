@@ -3,7 +3,7 @@
 #include "dw4/cri/mpv.h"
 #include "dw4/cri/mps.h"
 #include "dw4/cri/uty.h"
-#include "dw4/softfloat.h"
+#include "dw4/support/softfloat.h"
 
 extern char cri_mpv_version[];
 extern char *volatile mpv_version_ptr;

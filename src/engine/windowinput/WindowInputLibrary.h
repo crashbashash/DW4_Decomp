@@ -1,31 +1,31 @@
 #ifndef DW4_WINDOW_INPUT_LIBRARY_H
 #define DW4_WINDOW_INPUT_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igInterfaceManager.h"
-#include "dw4/igWindow.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/windowinput/igInterfaceManager.h"
+#include "dw4/windowinput/igWindow.h"
 
 struct Rt;
 struct Fld;
 class VisualContext;
-#include "dw4/igMetaObject.h"
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igEnumMetaField.h"
-#include "dw4/igFloatArrayMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igMemoryRefMetaField.h"
-#include "dw4/igMetaEnum.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igRawRefMetaField.h"
-#include "dw4/igStringMetaField.h"
-#include "dw4/igUnsignedCharArrayMetaField.h"
-#include "dw4/igUnsignedShortMetaField.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igEnumMetaField.h"
+#include "dw4/core/igFloatArrayMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igMemoryRefMetaField.h"
+#include "dw4/core/igMetaEnum.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igRawRefMetaField.h"
+#include "dw4/core/igStringMetaField.h"
+#include "dw4/core/igUnsignedCharArrayMetaField.h"
+#include "dw4/core/igUnsignedShortMetaField.h"
 class igMemoryPoolView;
-#include "dw4/igVisualContext.h"
+#include "dw4/gfx/igVisualContext.h"
 extern "C" unsigned char g_WindowInputLibrary_registered;
 extern "C" void WindowInputLibrary_MarkRegistered(void);
-#include "dw4/igMemoryPoolContext.h"
+#include "dw4/core/igMemoryPoolContext.h"
 extern "C" igMetaObject *g_igWindow_metaObject;
 extern "C" igMetaObject *FUN_00145d40(void);
 extern "C" igMetaObject *igWindow_GetMetaObject(void);
@@ -41,7 +41,7 @@ extern "C" igMetaEnum *FUN_00145eb0(void);
 extern "C" igMetaObject *g_igInterfaceManager_metaObject;
 extern "C" igMetaObject *igInterfaceManager_GetMetaObject(void);
 extern "C" void FUN_00145f60(void);
-#include "dw4/igObject.h"
+#include "dw4/core/igObject.h"
 extern "C" void thunk_igInterfaceManager_GetMetaObject(void);
 extern "C" void igInterfaceManager_InitFields(void);
 extern "C" void thunk_FUN_00146470(void);
@@ -50,17 +50,17 @@ extern "C" igMetaObject *FUN_001460b0(void);
 extern "C" igMetaObject *igEventProducerList_GetMetaObject(void);
 struct Obj { int *vt; char pad[28]; };
 extern "C" int g_igEventProducerList_vtable[4];
-#include "dw4/igObjectSystem.h"
+#include "dw4/core/igObjectSystem.h"
 extern "C" int igEventProducerList_GetVTable(void);
 extern "C" void FUN_00146190(void);
-#include "dw4/igObjectList.h"
+#include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igEventProducerList_Register(void);
 extern "C" void thunk_igEventProducerList_GetMetaObject(void);
 extern "C" igMetaObject *igEventProducer_GetMetaObject(void);
 extern "C" void FUN_00146270(void);
 extern "C" CallbackArray *igEventProducer_Register(void);
 extern "C" void thunk_igEventProducer_GetMetaObject(void);
-#include "dw4/igNonRefCountedObjectStack.h"
+#include "dw4/datapump/igNonRefCountedObjectStack.h"
 #include "dw4/sony/libpad.h"
 extern "C" igMetaObject *FUN_001462f0(void);
 extern "C" igMetaObject *g_igControllerList_metaObject;
@@ -101,7 +101,7 @@ extern "C" void igController_InitFields(void);
 extern "C" void thunk_igPsx2Controller_GetMetaObject(void);
 extern "C" igMetaObject *g_igPsx2Window_metaObject;
 extern "C" igMetaObject *FUN_00146a60(void);
-#include "dw4/StringPool.h"
+#include "dw4/core/StringPool.h"
 extern "C" int g_igPsx2Window_vtable[4];
 union U_146ab0 { int vt; char b[64]; };
 extern "C" int igPsx2Window_GetVTable(void);
@@ -161,7 +161,7 @@ extern "C" void Gap__igDefaultInterfaceManager__vfunc_39(igDefaultInterfaceManag
 typedef struct R { int w0; int refs; } R;
 typedef struct L_147840 { char pad[8]; int cnt; char pad2[4]; R **arr; } L_147840;
 struct A { char pad[8]; L_147840 *list; };
-#include "dw4/igDataLists.h"
+#include "dw4/core/igDataLists.h"
 extern "C" void FUN_00147840(struct A *arg0);
 class S;
 class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(S *); };
@@ -170,7 +170,7 @@ class S { public: char pad[8]; L_147930 *list; };
 extern "C" void FUN_00147930(S *arg0);
 extern "C" void FUN_001479b0(igPsx2Controller *arg0);
 extern "C" void Gap__igPsx2Controller__vfunc_11(igPsx2Controller *self);
-#include "dw4/igMemory.h"
+#include "dw4/core/igMemory.h"
 extern "C" void Gap__igPsx2Controller__vfunc_12(void *arg0);
 extern "C" void Gap__igPsx2Controller__vfunc_31(void *arg0, int arg1, float *arg2, float *arg3);
 class ControllerListener {
@@ -195,10 +195,10 @@ class Al { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 class Pd { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void vX(int); };
 class Pe { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void vX(int); };
 struct Rt { char pad[56]; int f56; };
-#include "dw4/igResult.h"
+#include "dw4/core/igResult.h"
 #include <string.h>
-#include "dw4/igStringObj.h"
-#include "dw4/igRegistry.h"
+#include "dw4/core/igStringObj.h"
+#include "dw4/core/igRegistry.h"
 struct PropertyText : igObject { char *chars; };
 extern "C" void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
@@ -280,9 +280,9 @@ extern "C" void Gap__igPsx2Controller__vfunc_27(void *arg0, short arg1);
 extern "C" unsigned short Gap__igPsx2Controller__vfunc_32(void *arg0);
 extern "C" int Gap__igPsx2Controller__vfunc_28(void *arg0, int arg1);
 class O_149230 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(int); };
-#include "dw4/softfloat.h"
+#include "dw4/support/softfloat.h"
 #include "dw4/sony/libmtap.h"
-#include "dw4/igPsx2File.h"
+#include "dw4/core/igPsx2File.h"
 extern "C" float Gap__igPsx2Controller__vfunc_29(O_149230 *arg0, int arg1);
 extern "C" int Gap__igPsx2Controller__vfunc_30(void *arg0);
 extern "C" unsigned char Gap__igPsx2Controller__vfunc_34(igPsx2Controller *self);

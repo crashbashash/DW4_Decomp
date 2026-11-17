@@ -1,4 +1,4 @@
-#include "dw4/ieee_words.h"
+#include "dw4/newlib/ieee_words.h"
 
 extern const double huge_floor;
 #define huge huge_floor

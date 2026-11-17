@@ -1,12 +1,12 @@
-#include "dw4/reflected.h"
+#include "dw4/support/reflected.h"
 #pragma push
 #pragma readonly_strings on
-#include "dw4/igVec3f.h"
-#include "dw4/beChangePosTransform.h"
-#include "dw4/beChangePosTransformInfo.h"
-#include "dw4/beMessenger.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igMathConstants.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/game/beChangePosTransform.h"
+#include "dw4/game/beChangePosTransformInfo.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/maths/igMathConstants.h"
 
 extern "C" void beChangePosTransform_Prepare(void);
 extern "C" igMetaObject *beChangePosTransform_GetInfoMeta(void);

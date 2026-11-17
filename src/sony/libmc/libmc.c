@@ -1,5 +1,5 @@
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/sony/sif.h"
 #include "dw4/sony/libmc.h"
 #include <string.h>

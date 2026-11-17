@@ -1,7 +1,7 @@
 /* CRI ADXT: creating and destroying playback handles, starting and stopping them, and their settings. */
 #include "dw4/cri/cri_adxt.h"
 #include <string.h>
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/cri/adx_ps2.h"
 #include "dw4/cri/adxrna.h"
 #include "dw4/cri/adxsjd.h"

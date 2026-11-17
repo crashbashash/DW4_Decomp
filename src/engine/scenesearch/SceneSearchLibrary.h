@@ -1,12 +1,12 @@
 #ifndef DW4_SCENE_SEARCH_LIBRARY_H
 #define DW4_SCENE_SEARCH_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/ClassRegistration.h"
-#include "dw4/igObject.h"
-#include "dw4/igObjectSystem.h"
-#include "dw4/igMemory.h"
-#include "dw4/igMetaObject.h"
+#include "dw4/support/reflected.h"
+#include "dw4/support/ClassRegistration.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igObjectSystem.h"
+#include "dw4/core/igMemory.h"
+#include "dw4/core/igMetaObject.h"
 
 typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
@@ -16,10 +16,10 @@ extern "C" void igSearchSceneGraph_EnsureRegistered(void);
 extern "C" void SceneSearchLibrary_MarkRegistered(void);
 
 /* The igSearchSceneGraph enum field's metaenum (3 values), created on first use. */
-#include "dw4/igEnumMetaField.h"
-#include "dw4/igMetaEnum.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igStringMetaField.h"
+#include "dw4/core/igEnumMetaField.h"
+#include "dw4/core/igMetaEnum.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igStringMetaField.h"
 extern "C" int FUN_00238d70(void);
 
 /* igSearchSceneGraph: an igNamedObject, 0x1C bytes. */
@@ -32,10 +32,10 @@ extern "C" igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void);
 
 /* GetVTable's stack instance and its member destructors. */
 struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
-#include "dw4/igNamedObject.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igMetaField.h"
+#include "dw4/core/igNamedObject.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igMetaField.h"
 extern "C" int FUN_002293d0(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
 /* The object system's byte offset of the vtable word inside an object. */

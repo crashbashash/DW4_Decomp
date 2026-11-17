@@ -1,5 +1,5 @@
-#include "dw4/newlib_mallocr.h"
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_mallocr.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 extern const char memory_allocation_statistics_format[];
 

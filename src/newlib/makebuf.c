@@ -1,7 +1,7 @@
-#include "dw4/newlib_stdio.h"
-#include "dw4/libkernl.h"
-#include "dw4/newlib_mallocr.h"
-#include "dw4/newlib_syscalls.h"
+#include "dw4/newlib/newlib_stdio.h"
+#include "dw4/sony/libkernl.h"
+#include "dw4/newlib/newlib_mallocr.h"
+#include "dw4/newlib/newlib_syscalls.h"
 
 #define S_IFMT 0170000
 #define S_IFCHR 0020000

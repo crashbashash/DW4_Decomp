@@ -1,4 +1,4 @@
-#include "dw4/newlib_env.h"
+#include "dw4/newlib/newlib_env.h"
 
 void __env_lock(struct _reent *ptr)
 {

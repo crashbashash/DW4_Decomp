@@ -1,4 +1,4 @@
-#include "dw4/igVec3f.h"
+#include "dw4/maths/igVec3f.h"
 extern "C" igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(QSView *o, int index);
 
 igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(QSView *o, int index) {

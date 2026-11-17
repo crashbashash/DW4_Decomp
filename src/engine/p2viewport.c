@@ -1,7 +1,7 @@
-#include "dw4/p2core.h"
-#include "dw4/p2dma.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2viewport.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2viewport.h"
 
 /* The viewport: the rectangle and depth range the VU1 programs map clip space to. p2SetViewport
  * keeps it and derives the VU1 scale and offset constants that p2UploadViewport sends. */

@@ -1,12 +1,12 @@
-#include "dw4/reflected.h"
+#include "dw4/support/reflected.h"
 
-#include "dw4/igInsightCore.h"
-#include "dw4/igMovieManager.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObject.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/movie/igMovieManager.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObject.h"
 extern "C" void igMoviePlugin_Attach(igMoviePlugin *self, igInsightCore *insight);
 extern "C" void igMoviePlugin_Detach(igMoviePlugin *self, igInsightCore *insight);
-#include "dw4/igMoviePlugin.h"
+#include "dw4/movie/igMoviePlugin.h"
 extern "C" igMetaObject *igMoviePlugin_GetMeta(void);
 
 void igMoviePlugin_Attach(igMoviePlugin *self, igInsightCore *insight) {

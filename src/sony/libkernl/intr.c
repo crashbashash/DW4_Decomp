@@ -2,7 +2,7 @@
  * around the kernel call, the i- versions are for handlers, which already run masked. Each ends
  * with a sync so the mask write is done before the caller goes on. */
 
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef unsigned int u_int;
 

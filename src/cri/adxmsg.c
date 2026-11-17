@@ -1,8 +1,8 @@
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/cri/adxmsg.h"
 #include "dw4/cri/dvci.h"
 #include "dw4/cri/htci.h"
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 
 int adxmsg_level = 0;

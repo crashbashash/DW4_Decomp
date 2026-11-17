@@ -1,9 +1,9 @@
-#include "dw4/reflected.h"
-#include "dw4/igTDataList.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beMeterCtrl.h"
-#include "dw4/beMeterCtrlInfo.h"
-#include "dw4/igObject.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/beMeterCtrl.h"
+#include "dw4/game/beMeterCtrlInfo.h"
+#include "dw4/core/igObject.h"
 
 extern "C" void beMeterCtrl_Prepare(void);
 extern "C" void beMeterCtrl_UpdateRam(beMeterCtrl *self, beBaseInfoRam *ram);

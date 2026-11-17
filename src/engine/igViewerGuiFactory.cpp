@@ -1,16 +1,16 @@
 /* igViewerGuiFactory: builds the viewer's menu actions and gives its colour changers their default colours. */
-#include "dw4/igSmartPointer.h"
+#include "dw4/core/igSmartPointer.h"
 
 class igViewerSceneInfoManager;
 typedef void (igViewerSceneInfoManager::*ViewerActionFunction)();
 
-/* The igViewerAction instance (reflected as igViewerAction in dw4/reflected.h, which types _function as a word): the object the action calls and the member function it calls on it. */
+/* The igViewerAction instance (reflected as igViewerAction in dw4/support/reflected.h, which types _function as a word): the object the action calls and the member function it calls on it. */
 struct ViewerAction : public igObject {
     igObject *_ref;
     ViewerActionFunction _function;
 };
 
-/* igViewerGuiFactory with its object references typed (dw4/reflected.h types them as words). */
+/* igViewerGuiFactory with its object references typed (dw4/support/reflected.h types them as words). */
 struct GuiFactory : public igObject {
     igBasicColorChanger *_menuBackColor;
     igBasicColorChanger *_menuItemForeColor;
@@ -22,8 +22,8 @@ struct GuiFactory : public igObject {
     igObject *_font;
 };
 
-#include "dw4/igVec3f.h"
-#include "dw4/igMath.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/maths/igMath.h"
 
 /* A cell of the viewer's 128x128 icon sheet by the values the initialiser gives it: a corner and the
  * extent from it, which together never pass 128. */
@@ -178,10 +178,10 @@ struct ViewerGuiStyle {
 
 ViewerGuiStyle g_viewerGuiStyle;
 
-#include "dw4/igViewerAction.h"
-#include "dw4/igBasicColorChanger.h"
-#include "dw4/igOnOffColorChanger.h"
-#include "dw4/igViewerGuiFactory.h"
+#include "dw4/viewer/igViewerAction.h"
+#include "dw4/gui/igBasicColorChanger.h"
+#include "dw4/gui/igOnOffColorChanger.h"
+#include "dw4/viewer/igViewerGuiFactory.h"
 
 static inline void createAction(igSmartPointer<ViewerAction> &holder, AdoptReference) {
     igRelease(holder.p);

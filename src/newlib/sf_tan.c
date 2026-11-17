@@ -1,5 +1,5 @@
-#include "dw4/ieee_words.h"
-#include "dw4/newlib_math.h"
+#include "dw4/newlib/ieee_words.h"
+#include "dw4/newlib/newlib_math.h"
 
 
 float tanf(float x)

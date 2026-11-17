@@ -3,7 +3,7 @@
  * callbacks the host registers; every lock records its type, and the outermost unlock checks it. */
 #include <string.h>
 #include "dw4/cri/svm.h"
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 #define SVM_SVTYPE_NUM 8
 #define SVM_SVR_NUM 6

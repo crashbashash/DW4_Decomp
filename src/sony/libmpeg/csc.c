@@ -1,6 +1,6 @@
 #include "dw4/sony/libmpeg.h"
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 
 int AddDmacHandler2(int channel, int (*handler)(int, void *), int next, void *arg);
 void _doCSC2(_sceMpegDecoder *dec, unsigned int addr, int count);

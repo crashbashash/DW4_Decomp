@@ -1,6 +1,6 @@
 /* timeralarm.c - one-shot alarms on top of the timer counters: each alarm owns a counter whose
  * handler calls the alarm's callback, and is freed when the callback returns 0. */
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef unsigned long u_long;
 

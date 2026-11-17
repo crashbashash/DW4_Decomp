@@ -39,7 +39,7 @@ records, and `_sceMpegDecoder`, the state `sceMpeg.sys` points at. Every file is
   reads headers until a picture and decodes or skips it through `_decodeOrSkipFrame`/`_decodeOrSkipField`
   against the per-type limits `sceMpegSetDecodeMode` sets, until a picture is output, the stream ends or the abort
   flag `sceMpegGetPictureAbort` sets is seen. `sceMpegAddCallback` stores the caller's `$gp` with the callback
-  (`GetGp()` from `include/dw4/eekernel_gp.h`), and `_sceMpegDispatchMpegCallback` sets it with `SetGp()` around
+  (`GetGp()` from `include/dw4/support/eekernel_gp.h`), and `_sceMpegDispatchMpegCallback` sets it with `SetGp()` around
   the call and restores the caller's afterwards.
 * `error.c` sends an error to the stream's `sceMpegCbError` callback when one is registered, else prints it.
 * `sendipu.c` feeds a bitstream chunk to the IPU through channel 4 with a chain of tags in

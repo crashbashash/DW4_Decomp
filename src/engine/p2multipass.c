@@ -1,11 +1,11 @@
 /* Multipass texturing. With the multipass capability on, each texture stage beyond the first is
  * drawn as a pass of its own in GS context 2, so the GS register sets of the stages and the stage
  * capabilities are read per pass. p2SetPassCount sets how many passes there are. */
-#include "dw4/p2dma.h"
-#include "dw4/p2core.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2draw.h"
-#include "dw4/p2multipass.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2draw.h"
+#include "dw4/p2/p2multipass.h"
 
 /* GS TEX0.TFX, p2TextureFunction */
 enum {

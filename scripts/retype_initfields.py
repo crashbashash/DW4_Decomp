@@ -125,7 +125,7 @@ def load_signatures(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--header", default="include/dw4/reflected.h")
+    ap.add_argument("--header", default="include/dw4/support/reflected.h")
     ap.add_argument("--hierarchy", default="data/class-hierarchy.tsv")
     ap.add_argument("--reflection", default="data/reflection.json")
     ap.add_argument("--signatures", default="config/SLUS-20836/signatures.tsv")
@@ -269,12 +269,12 @@ def main():
         new = text
         for (a, b), repl in sorted(edits, key=lambda e: -e[0][0]):
             new = new[:a] + repl + new[b:]
-        if "#include \"dw4/reflected.h\"" not in new:
+        if "#include \"dw4/support/reflected.h\"" not in new:
             if INCLUDE_ANCHOR.search(new):
-                new = INCLUDE_ANCHOR.sub(lambda mm: "*/\n#include \"dw4/reflected.h\"\n",
+                new = INCLUDE_ANCHOR.sub(lambda mm: "*/\n#include \"dw4/support/reflected.h\"\n",
                                          new, count=1)
             else:
-                new = "#include \"dw4/reflected.h\"\n" + new
+                new = "#include \"dw4/support/reflected.h\"\n" + new
         changed.append((path, sorted(set(classes_here))[0], n_field))
         total += n_field
         if args.apply:

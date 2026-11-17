@@ -1,4 +1,4 @@
-#include "dw4/newlib_mprec.h"
+#include "dw4/newlib/newlib_mprec.h"
 
 double _strtod_r(struct _reent *, const char *, char **);
 typedef int __int32_t;

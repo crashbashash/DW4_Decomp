@@ -1571,10 +1571,10 @@
 0x00312580	igArenaMemoryPool_VerifyHeap	engine	medium	igArenaMemoryPool_CheckHeap then FUN_00310c00(arg)
 0x00315050	igArenaMemoryPool_RemoveFreeChunksInRange	engine	medium	unlinks every binned free chunk lying in [lo,hi) and clears the top chunk if inside
 0x0031cad0	igArenaMemoryPool_Configure	engine	medium	slot 43 vfunc_45(igMemoryPoolInfo*): base step FUN_002f0880 then parses the info options/checking/messages strings
-0x0031cd50	igArenaMemoryPool_Activate	engine	high	include/dw4/igMemoryPoolView.h slot 28 activate()
+0x0031cd50	igArenaMemoryPool_Activate	engine	high	include/dw4/core/igMemoryPoolView.h slot 28 activate()
 0x0031cdf0	igArenaMemoryPool_Reset	engine	medium	slot 29: drops the pool contents (arena clears arena state or trims, stack rewinds _stackPtr, page frees page tables); called by Deactivate
 0x0031ce60	igArenaMemoryPool_Deactivate	engine	high	slot 30: clears _isActive and runs slot 29 (counterpart of activate, slot 28)
-0x0031cea0	igArenaMemoryPool_IsActive	engine	high	include/dw4/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
+0x0031cea0	igArenaMemoryPool_IsActive	engine	high	include/dw4/core/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
 0x0031ceb0	igArenaMemoryPool_GetRawMemory	engine	high	slot 24 getter: returns reflected _rawMemory (page/malloc: 0)
 0x0031cec0	igArenaMemoryPool_SetRawMemory	engine	medium	slot 22 view vfunc_24(buffer,size,owned): when inactive stores _rawMemory, _size, _isAlchemyMemory; else failure
 0x0031cf80	igArenaMemoryPool_IsAlchemyMemory	engine	high	slot 23 getter: returns reflected _isAlchemyMemory (page/malloc: 0)
@@ -1600,13 +1600,13 @@
 0x0031d3f0	igArenaMemoryPool_Lock	engine	high	waits on _allocationLock if set; sibling igAliasMemoryPool_Lock
 0x0031d430	igArenaMemoryPool_Unlock	engine	high	signals _allocationLock if set; sibling igAliasMemoryPool_Unlock
 0x0031d460	igArenaMemoryPool_UnlockAndReturn	engine	high	signals _allocationLock and returns its argument; sibling igAliasMemoryPool_UnlockAndReturn
-0x0031d4a0	igArenaMemoryPool_Allocate	engine	high	include/dw4/igMemoryPoolView.h slot 52 Allocate
-0x0031d4c0	igArenaMemoryPool_AllocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 53 AllocateAligned
+0x0031d4a0	igArenaMemoryPool_Allocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 52 Allocate
+0x0031d4c0	igArenaMemoryPool_AllocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 53 AllocateAligned
 0x0031d4e0	igArenaMemoryPool_Callocate	engine	medium	view slot 54 vfunc_56(count,size): MemoryOperation(count*size) then memset 0 per pool option flags
 0x0031d580	igArenaMemoryPool_CallocateAligned	engine	medium	slot 55: aligned form of slot 54 (count*size, alignment), zero-filled
-0x0031d610	igArenaMemoryPool_Reallocate	engine	high	include/dw4/igMemoryPoolView.h slot 56 Reallocate
-0x0031d630	igArenaMemoryPool_ReallocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 57 ReallocateAligned
-0x0031e020	igArenaMemoryPool_GangAllocAligned	engine	high	include/dw4/igMemoryPoolView.h slot 61 gangAllocAligned
+0x0031d610	igArenaMemoryPool_Reallocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 56 Reallocate
+0x0031d630	igArenaMemoryPool_ReallocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 57 ReallocateAligned
+0x0031e020	igArenaMemoryPool_GangAllocAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 61 gangAllocAligned
 0x0031e0b0	igArenaMemoryPool_AllocateFromSystem	engine	medium	igArenaMemoryPool vtable word 65 (igMemoryPool_AllocateFromSystem override): allocates size+12 from g_activeSystemAllocator, marks the header as a system block, applies the fill and sentinel options; its notices are E82 (malloc failed), E99 and E83 (maximum size); alt AllocateUnpooled
 0x0031e670	igArenaMemoryPool_SetDefaults	engine	medium	view slot 95 "prepares a new pool before activate": resets refcount, statistics and fields to defaults
 0x0031e8b0	igArenaMemoryPool_Shutdown	engine	medium	slot 96: teardown run by Destruct (arena/malloc vfunc_02) and on the root allocator at exit; arena reports leaks and frees blocks
@@ -1614,14 +1614,14 @@
 0x0031ebd0	igArenaMemoryPool_Construct	engine	high	base ctor, stamps the vtable, clears refs, then _Initialize; same as igAliasMemoryPool_Construct
 0x0031ec20	igArenaMemoryPool_CopyConstruct	engine	high	igMemoryPool_CopyConstruct, stamps the class vtable; same as igAliasMemoryPool_CopyConstruct
 0x0031ec60	igArenaMemoryPool_Destruct	engine	high	igObject slot 0 (word 2) = Destruct (igMetaField_Destruct/igMemoryRefMetaField_Destruct); runs vfunc_98 teardown then igObject slot-0 body
-0x0031eca0	igArenaMemoryPool_Free	engine	high	include/dw4/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
-0x0031ecc0	igArenaMemoryPool_OwnsAllocation	engine	high	include/dw4/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
-0x0031edb0	igArenaMemoryPool_GetAllocationSize	engine	high	include/dw4/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
-0x0031ef70	igArenaMemoryPool_GetEventTracker	engine	high	include/dw4/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
+0x0031eca0	igArenaMemoryPool_Free	engine	high	include/dw4/core/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
+0x0031ecc0	igArenaMemoryPool_OwnsAllocation	engine	high	include/dw4/core/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
+0x0031edb0	igArenaMemoryPool_GetAllocationSize	engine	high	include/dw4/core/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
+0x0031ef70	igArenaMemoryPool_GetEventTracker	engine	high	include/dw4/core/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
 0x0031ef80	igArenaMemoryPool_SetEventTracker	engine	high	word 90 sibling igAliasMemoryPool_SetEventTracker; swaps the _eventTracker ref
 0x0031f010	igArenaMemoryPool_Dump	engine	high	word 86 siblings igAliasMemoryPool_Dump / igMallocMemoryPool_Dump
-0x0031f020	igArenaMemoryPool_GetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
-0x0031f030	igArenaMemoryPool_SetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
+0x0031f020	igArenaMemoryPool_GetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
+0x0031f030	igArenaMemoryPool_SetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
 0x0031f060	igArenaMemoryPool_TransferAllocation	engine	medium	view slot 91 vfunc_93(block,pool): rewrites the block header pool index to `pool` when accepted by slot 92
 0x0031f1c0	igArenaMemoryPool_CanTransferTo	engine	medium	view slot 92 "may pool alias this pool": index<0x40 pools refuse pools >=0x40
 0x0031f230	igArenaMemoryPool_GetAllocationPoolIndex	engine	medium	slot 93: decodes the owning pool index (x2) from the block header, -1 for null
@@ -1656,7 +1656,7 @@
 0x003221c0	igElfFile_PrintSymbols	engine	high	ProgramFileView PrintSymbols (slot 30)
 0x00322240	igElfFile_PrintSymbol	engine	high	prints "Symbol [%d]:" and every st_* field (strings 0x4fe7a0..)
 0x003223d0	igMallocMemoryPool_Configure	engine	medium	slot 43 vfunc_45(igMemoryPoolInfo*): base step FUN_002f0880 then parses the info options/checking/messages strings
-0x003224b0	igMallocMemoryPool_Activate	engine	high	include/dw4/igMemoryPoolView.h slot 28 activate()
+0x003224b0	igMallocMemoryPool_Activate	engine	high	include/dw4/core/igMemoryPoolView.h slot 28 activate()
 0x003224c0	igMallocMemoryPool_EnableAllocationLock	engine	high	CoreLibrary.h: slot 32 is vfunc_34, EnableAllocationLock(enable)
 0x003226e0	igMallocMemoryPool_SetSize	engine	high	slot 33 setter: malloc stores _size; others return failure
 0x00322700	igMallocMemoryPool_GetSize	engine	high	slot 34 getter: _size (arena: _size or _systemAllocated; stack _totalSize; page _maxSize)
@@ -1675,31 +1675,31 @@
 0x00322820	igMallocMemoryPool_Lock	engine	high	waits on _allocationLock if set; sibling igAliasMemoryPool_Lock
 0x00322860	igMallocMemoryPool_Unlock	engine	high	signals _allocationLock if set; sibling igAliasMemoryPool_Unlock
 0x00322890	igMallocMemoryPool_UnlockAndReturn	engine	high	signals _allocationLock and returns its argument; sibling igAliasMemoryPool_UnlockAndReturn
-0x003228d0	igMallocMemoryPool_Allocate	engine	high	include/dw4/igMemoryPoolView.h slot 52 Allocate
-0x003228f0	igMallocMemoryPool_AllocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 53 AllocateAligned
+0x003228d0	igMallocMemoryPool_Allocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 52 Allocate
+0x003228f0	igMallocMemoryPool_AllocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 53 AllocateAligned
 0x00322910	igMallocMemoryPool_Callocate	engine	medium	view slot 54 vfunc_56(count,size): MemoryOperation(count*size) then memset 0 per pool option flags
 0x003229b0	igMallocMemoryPool_CallocateAligned	engine	medium	slot 55: aligned form of slot 54 (count*size, alignment), zero-filled
-0x00322a40	igMallocMemoryPool_Reallocate	engine	high	include/dw4/igMemoryPoolView.h slot 56 Reallocate
-0x00322a60	igMallocMemoryPool_ReallocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 57 ReallocateAligned
-0x00323400	igMallocMemoryPool_GangAllocAligned	engine	high	include/dw4/igMemoryPoolView.h slot 61 gangAllocAligned
-0x00323410	igMallocMemoryPool_GangFree	engine	high	include/dw4/igMemoryPoolView.h slot 62 gangFree
+0x00322a40	igMallocMemoryPool_Reallocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 56 Reallocate
+0x00322a60	igMallocMemoryPool_ReallocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 57 ReallocateAligned
+0x00323400	igMallocMemoryPool_GangAllocAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 61 gangAllocAligned
+0x00323410	igMallocMemoryPool_GangFree	engine	high	include/dw4/core/igMemoryPoolView.h slot 62 gangFree
 0x00323490	Gap__Core__igMallocMemoryPool__resetFields	engine	high	igObject slot 11 resetFields hook (cri-movie-codec.md); calls Gap__Core__igObject__resetFields then sets default _poolOptionFlags
 0x003234c0	igMallocMemoryPool_SetDefaults	engine	medium	view slot 95 "prepares a new pool before activate": resets refcount, statistics and fields to defaults
 0x003235c0	igMallocMemoryPool_Initialize	engine	high	igMemoryPool_Initialize, stamps the class vtable (0x530e90), clears lock/tracker; same as igAliasMemoryPool_Initialize
 0x00323600	igMallocMemoryPool_CopyConstruct	engine	high	igMemoryPool_CopyConstruct, stamps the class vtable; same as igAliasMemoryPool_CopyConstruct
 0x00323640	igMallocMemoryPool_Destruct	engine	high	igObject slot 0 (word 2) = Destruct (igMetaField_Destruct/igMemoryRefMetaField_Destruct); runs vfunc_98 teardown then igObject slot-0 body
-0x00323680	igMallocMemoryPool_Free	engine	high	include/dw4/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
-0x003244c0	igMallocMemoryPool_OwnsAllocation	engine	high	include/dw4/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
-0x00324570	igMallocMemoryPool_GetAllocationSize	engine	high	include/dw4/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
+0x00323680	igMallocMemoryPool_Free	engine	high	include/dw4/core/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
+0x003244c0	igMallocMemoryPool_OwnsAllocation	engine	high	include/dw4/core/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
+0x00324570	igMallocMemoryPool_GetAllocationSize	engine	high	include/dw4/core/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
 0x003245f0	igMallocMemoryPool_PrintStatistics	engine	high	word 87 sibling igAliasMemoryPool_PrintStatistics; prints pool statistics
-0x003247a0	igMallocMemoryPool_GetEventTracker	engine	high	include/dw4/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
+0x003247a0	igMallocMemoryPool_GetEventTracker	engine	high	include/dw4/core/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
 0x003247b0	igMallocMemoryPool_SetEventTracker	engine	high	word 90 sibling igAliasMemoryPool_SetEventTracker; swaps the _eventTracker ref
-0x003249a0	igMallocMemoryPool_GetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
-0x003249b0	igMallocMemoryPool_SetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
+0x003249a0	igMallocMemoryPool_GetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
+0x003249b0	igMallocMemoryPool_SetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
 0x003249c0	igMallocMemoryPool_TransferAllocation	engine	medium	view slot 91 vfunc_93(block,pool): rewrites the block header pool index to `pool` when accepted by slot 92
 0x00324ae0	igMallocMemoryPool_CanTransferTo	engine	medium	view slot 92 "may pool alias this pool": index<0x40 pools refuse pools >=0x40
 0x00324b50	igMallocMemoryPool_GetAllocationPoolIndex	engine	medium	slot 93: decodes the owning pool index (x2) from the block header, -1 for null
-0x00324bd0	igMallocMemoryPool_IsActive	engine	high	include/dw4/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
+0x00324bd0	igMallocMemoryPool_IsActive	engine	high	include/dw4/core/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
 0x00324be0	igMallocMemoryPool_AllocateBlock	engine	medium	mallocs a tagged block of size with the pool index in its header (MemoryOperation core path)
 0x00324ec0	igMallocMemoryPool_FreeBlock	engine	medium	frees a tagged block, updating the pool statistics
 0x00325060	igMallocMemoryPool_ReallocateBlock	engine	medium	resizes a tagged block in place or moves it
@@ -1711,10 +1711,10 @@
 0x00325870	Gap__Core__igPageMemoryPool__destructFields	engine	high	igObject slot 2 destructFields hook (cri-movie-codec.md); ends in Gap__Core__igObject__destructFields
 0x00325900	Gap__Core__igPageMemoryPool__resetFields	engine	high	igObject slot 11 resetFields hook (cri-movie-codec.md); calls Gap__Core__igObject__resetFields then sets default _poolOptionFlags
 0x00325940	igPageMemoryPool_Configure	engine	medium	slot 43 vfunc_45(igMemoryPoolInfo*): base step FUN_002f0880 then parses the info options/checking/messages strings
-0x00325b10	igPageMemoryPool_Activate	engine	high	include/dw4/igMemoryPoolView.h slot 28 activate()
+0x00325b10	igPageMemoryPool_Activate	engine	high	include/dw4/core/igMemoryPoolView.h slot 28 activate()
 0x00325b80	igPageMemoryPool_Reset	engine	medium	slot 29: drops the pool contents (arena clears arena state or trims, stack rewinds _stackPtr, page frees page tables); called by Deactivate
 0x00325c10	igPageMemoryPool_Deactivate	engine	high	slot 30: clears _isActive and runs slot 29 (counterpart of activate, slot 28)
-0x00325d20	igPageMemoryPool_IsActive	engine	high	include/dw4/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
+0x00325d20	igPageMemoryPool_IsActive	engine	high	include/dw4/core/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
 0x00325d30	igPageMemoryPool_GetRawMemory	engine	high	slot 24 getter: returns reflected _rawMemory (page/malloc: 0)
 0x00325d40	igPageMemoryPool_SetRawMemory	engine	medium	slot 22 view vfunc_24(buffer,size,owned): when inactive stores _rawMemory, _size, _isAlchemyMemory; else failure
 0x00325d50	igPageMemoryPool_IsAlchemyMemory	engine	high	slot 23 getter: returns reflected _isAlchemyMemory (page/malloc: 0)
@@ -1735,24 +1735,24 @@
 0x00326080	igPageMemoryPool_AllocateElement	engine	high	slot 51: Allocate(_elementSize)
 0x00326090	igPageMemoryPool_Lock	engine	high	waits on _allocationLock if set; sibling igAliasMemoryPool_Lock
 0x003260d0	igPageMemoryPool_UnlockAndReturn	engine	high	signals _allocationLock, returns its argument; sibling igAliasMemoryPool_UnlockAndReturn
-0x00326110	igPageMemoryPool_Allocate	engine	high	include/dw4/igMemoryPoolView.h slot 52 Allocate
-0x00326130	igPageMemoryPool_AllocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 53 AllocateAligned
+0x00326110	igPageMemoryPool_Allocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 52 Allocate
+0x00326130	igPageMemoryPool_AllocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 53 AllocateAligned
 0x00326150	igPageMemoryPool_Callocate	engine	medium	view slot 54 vfunc_56(count,size): MemoryOperation(count*size) then memset 0 per pool option flags
 0x003261f0	igPageMemoryPool_CallocateAligned	engine	medium	slot 55: aligned form of slot 54 (count*size, alignment), zero-filled
-0x00326280	igPageMemoryPool_Reallocate	engine	high	include/dw4/igMemoryPoolView.h slot 56 Reallocate
-0x003262a0	igPageMemoryPool_ReallocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 57 ReallocateAligned
-0x003262b0	igPageMemoryPool_GangAlloc	engine	high	include/dw4/igMemoryPoolView.h slot 60 gangAlloc
-0x003262c0	igPageMemoryPool_GangAllocAligned	engine	high	include/dw4/igMemoryPoolView.h slot 61 gangAllocAligned
-0x003262d0	igPageMemoryPool_GangFree	engine	high	include/dw4/igMemoryPoolView.h slot 62 gangFree
-0x003262e0	igPageMemoryPool_Free	engine	high	include/dw4/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
-0x00326300	igPageMemoryPool_OwnsAllocation	engine	high	include/dw4/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
-0x00326320	igPageMemoryPool_GetAllocationSize	engine	high	include/dw4/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
+0x00326280	igPageMemoryPool_Reallocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 56 Reallocate
+0x003262a0	igPageMemoryPool_ReallocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 57 ReallocateAligned
+0x003262b0	igPageMemoryPool_GangAlloc	engine	high	include/dw4/core/igMemoryPoolView.h slot 60 gangAlloc
+0x003262c0	igPageMemoryPool_GangAllocAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 61 gangAllocAligned
+0x003262d0	igPageMemoryPool_GangFree	engine	high	include/dw4/core/igMemoryPoolView.h slot 62 gangFree
+0x003262e0	igPageMemoryPool_Free	engine	high	include/dw4/core/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
+0x00326300	igPageMemoryPool_OwnsAllocation	engine	high	include/dw4/core/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
+0x00326320	igPageMemoryPool_GetAllocationSize	engine	high	include/dw4/core/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
 0x00326330	igPageMemoryPool_SetPoolOptionFlags	engine	high	stores _poolOptionFlags (+140); sibling igArenaMemoryPool_SetPoolOptionFlags; called by EnableAllocationLock
-0x00326340	igPageMemoryPool_GetEventTracker	engine	high	include/dw4/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
+0x00326340	igPageMemoryPool_GetEventTracker	engine	high	include/dw4/core/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
 0x00326350	igPageMemoryPool_SetEventTracker	engine	high	word 90 sibling igAliasMemoryPool_SetEventTracker; swaps the _eventTracker ref
 0x003263e0	igPageMemoryPool_Dump	engine	high	word 86 siblings igAliasMemoryPool_Dump / igMallocMemoryPool_Dump
-0x003263f0	igPageMemoryPool_GetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
-0x00326400	igPageMemoryPool_SetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
+0x003263f0	igPageMemoryPool_GetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
+0x00326400	igPageMemoryPool_SetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
 0x00326920	igPageMemoryPool_AllocatePages	engine	medium	takes size bytes from g_activeSystemAllocator (aligned when option 8) and marks the pages (word 104)
 0x003269d0	igPageMemoryPool_FreePages	engine	medium	returns pages to g_activeSystemAllocator and clears their page bits
 0x00326a80	igPageMemoryPool_ReallocatePages	engine	medium	reallocates a page run through the system allocator, re-marking the bits
@@ -1773,10 +1773,10 @@
 0x003275c0	igProgramFile_PrintSectionHeaders	engine	high	ProgramFileView PrintSectionHeaders (slot 29)
 0x003275d0	igProgramFile_PrintSymbols	engine	high	ProgramFileView PrintSymbols (slot 30)
 0x003275e0	igStackMemoryPool_Configure	engine	medium	slot 43 vfunc_45(igMemoryPoolInfo*): base step FUN_002f0880 then parses the info options/checking/messages strings
-0x00327610	igStackMemoryPool_Activate	engine	high	include/dw4/igMemoryPoolView.h slot 28 activate()
+0x00327610	igStackMemoryPool_Activate	engine	high	include/dw4/core/igMemoryPoolView.h slot 28 activate()
 0x00327670	igStackMemoryPool_Reset	engine	medium	slot 29: drops the pool contents (arena clears arena state or trims, stack rewinds _stackPtr, page frees page tables); called by Deactivate
 0x003276b0	igStackMemoryPool_Deactivate	engine	high	slot 30: clears _isActive and runs slot 29 (counterpart of activate, slot 28)
-0x003276e0	igStackMemoryPool_IsActive	engine	high	include/dw4/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
+0x003276e0	igStackMemoryPool_IsActive	engine	high	include/dw4/core/igMemoryPoolView.h slot 31 isActive(); CoreLibrary.h: IsActive() returns _isActive
 0x003276f0	igStackMemoryPool_SetSize	engine	high	slot 33 setter: malloc stores _size; others return failure
 0x00327700	igStackMemoryPool_GetSize	engine	high	slot 34 getter: _size (arena: _size or _systemAllocated; stack _totalSize; page _maxSize)
 0x00327710	igStackMemoryPool_SetAlignment	engine	high	slot 35 setter of reflected _alignment
@@ -1790,23 +1790,23 @@
 0x00327850	igStackMemoryPool_GetLocalNetAllocatedWithOverhead	engine	high	slot 46 getter of reflected _localNetAllocatedWithOverhead (stack: total - slot 47 free)
 0x00327890	igStackMemoryPool_GetFreeSize	engine	medium	slot 47: _maxSize - _localNetAllocatedWithOverhead (stack: _nextInt-_stackPtr); stack slot 46 = _totalSize - this
 0x003278c0	igStackMemoryPool_AllocateElement	engine	high	slot 51: Allocate(_elementSize)
-0x00327960	igStackMemoryPool_Allocate	engine	high	include/dw4/igMemoryPoolView.h slot 52 Allocate
-0x003279d0	igStackMemoryPool_AllocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 53 AllocateAligned
+0x00327960	igStackMemoryPool_Allocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 52 Allocate
+0x003279d0	igStackMemoryPool_AllocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 53 AllocateAligned
 0x00327a60	igStackMemoryPool_Callocate	engine	medium	view slot 54 vfunc_56(count,size): MemoryOperation(count*size) then memset 0 per pool option flags
 0x00327b00	igStackMemoryPool_CallocateAligned	engine	medium	slot 55: aligned form of slot 54 (count*size, alignment), zero-filled
-0x00327bb0	igStackMemoryPool_Reallocate	engine	high	include/dw4/igMemoryPoolView.h slot 56 Reallocate
-0x00327c70	igStackMemoryPool_ReallocateAligned	engine	high	include/dw4/igMemoryPoolView.h slot 57 ReallocateAligned
-0x00327d40	igStackMemoryPool_GangAlloc	engine	high	include/dw4/igMemoryPoolView.h slot 60 gangAlloc
-0x00327ed0	igStackMemoryPool_GangAllocAligned	engine	high	include/dw4/igMemoryPoolView.h slot 61 gangAllocAligned
-0x003280e0	igStackMemoryPool_GetAllocationSize	engine	high	include/dw4/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
-0x00328170	igStackMemoryPool_OwnsAllocation	engine	high	include/dw4/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
-0x003281b0	igStackMemoryPool_GangFree	engine	high	include/dw4/igMemoryPoolView.h slot 62 gangFree
-0x003282d0	igStackMemoryPool_Free	engine	high	include/dw4/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
-0x003283e0	igStackMemoryPool_GetEventTracker	engine	high	include/dw4/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
+0x00327bb0	igStackMemoryPool_Reallocate	engine	high	include/dw4/core/igMemoryPoolView.h slot 56 Reallocate
+0x00327c70	igStackMemoryPool_ReallocateAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 57 ReallocateAligned
+0x00327d40	igStackMemoryPool_GangAlloc	engine	high	include/dw4/core/igMemoryPoolView.h slot 60 gangAlloc
+0x00327ed0	igStackMemoryPool_GangAllocAligned	engine	high	include/dw4/core/igMemoryPoolView.h slot 61 gangAllocAligned
+0x003280e0	igStackMemoryPool_GetAllocationSize	engine	high	include/dw4/core/igMemoryPoolView.h slot 82; sibling igAliasMemoryPool_GetAllocationSize
+0x00328170	igStackMemoryPool_OwnsAllocation	engine	high	include/dw4/core/igMemoryPoolView.h slot 83; sibling igAliasMemoryPool_OwnsAllocation
+0x003281b0	igStackMemoryPool_GangFree	engine	high	include/dw4/core/igMemoryPoolView.h slot 62 gangFree
+0x003282d0	igStackMemoryPool_Free	engine	high	include/dw4/core/igMemoryPoolView.h slot 64 Free; sibling igAliasMemoryPool_Free
+0x003283e0	igStackMemoryPool_GetEventTracker	engine	high	include/dw4/core/igMemoryPoolView.h slot 87 getEventTracker; sibling igAliasMemoryPool_GetEventTracker
 0x003283f0	igStackMemoryPool_SetEventTracker	engine	high	word 90 sibling igAliasMemoryPool_SetEventTracker; swaps the _eventTracker ref
 0x00328480	igStackMemoryPool_Dump	engine	high	word 86 siblings igAliasMemoryPool_Dump / igMallocMemoryPool_Dump
-0x003284b0	igStackMemoryPool_GetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
-0x003284c0	igStackMemoryPool_SetPoolIndex	engine	high	include/dw4/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
+0x003284b0	igStackMemoryPool_GetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 89; sibling igAliasMemoryPool_GetPoolIndex
+0x003284c0	igStackMemoryPool_SetPoolIndex	engine	high	include/dw4/core/igMemoryPoolView.h slot 90; sibling igAliasMemoryPool_SetPoolIndex
 0x003284d0	igStackMemoryPool_CollectMemoryRegions	engine	medium	view slot 94 vfunc_96(list): inserts the pool memory range(s) as named region records into a sorted list
 0x00328590	igStandardQueue_InitDefaults	engine	high	igObject slot 9 (word 11) = InitDefaults (igObjectRefMetaField_/igStringMetaField_InitDefaults, post-construction hook); creates the insert/remove locks and the queue semaphore
 0x00328620	igStandardQueue_ReleaseDefaults	engine	medium	igObject slot 10 (word 12), counterpart of InitDefaults (run by igObject_Destroy after userDestruct): releases what word 11 created

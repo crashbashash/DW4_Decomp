@@ -1,5 +1,5 @@
-#include "dw4/ieee_words.h"
-#include "dw4/newlib_reent.h"
+#include "dw4/newlib/ieee_words.h"
+#include "dw4/newlib/newlib_reent.h"
 #include <math.h>
 
 

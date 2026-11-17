@@ -1,4 +1,4 @@
-#include "dw4/newlib_mprec.h"
+#include "dw4/newlib/newlib_mprec.h"
 
 _Bigint *
 _Balloc(struct _reent *ptr, int k)

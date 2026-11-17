@@ -1,4 +1,4 @@
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdlib.h>

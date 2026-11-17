@@ -1,5 +1,5 @@
 #include <string.h>
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/sony/libcdvd.h"
 #include "dw4/sony/sifdev.h"
 #include "dw4/cri/svm.h"

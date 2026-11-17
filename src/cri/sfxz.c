@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dw4/cri/sj.h"
-#include "dw4/softfloat.h"
+#include "dw4/support/softfloat.h"
 
 typedef struct SfxZLib {
     int nhn;

@@ -1,5 +1,5 @@
 #include "src/engine/attrs/AttrsLibrary.h"
-#include "dw4/unregisteredClasses.h"
+#include "dw4/support/unregisteredClasses.h"
 
 unsigned char g_AttrsLibrary_registered;
 short g_igAttr_nextAttrIndex;

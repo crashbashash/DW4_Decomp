@@ -14,7 +14,7 @@
 #include "lstring.h"
 #include "ltable.h"
 #include "ltm.h"
-#include "dw4/lua_game_state.h"
+#include "dw4/lua/lua_game_state.h"
 
 /*
 ** built-in implementation for ERRORMESSAGE. In a "correct" environment

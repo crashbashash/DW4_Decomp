@@ -1,36 +1,36 @@
-#include "dw4/reflected.h"
-#include "dw4/igobject_release.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/DisableFeature.h"
-#include "dw4/igViewerSceneInfoManager.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igobject_release.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/viewer/DisableFeature.h"
+#include "dw4/viewer/igViewerSceneInfoManager.h"
 
 
-#include "dw4/igViewerParameters.h"
-#include "dw4/igViewerRenderer.h"
-#include "dw4/igModel.h"
-#include "dw4/igObject.h"
-#include "dw4/igBitMask.h"
-#include "dw4/ViewerOptions.h"
-#include "dw4/igHotKeyEventReceiver.h"
-#include "dw4/igView.h"
-#include "dw4/StringPool.h"
+#include "dw4/viewer/igViewerParameters.h"
+#include "dw4/viewer/igViewerRenderer.h"
+#include "dw4/gui/igModel.h"
+#include "dw4/core/igObject.h"
+#include "dw4/scenegraph/igBitMask.h"
+#include "dw4/viewer/ViewerOptions.h"
+#include "dw4/gui/igHotKeyEventReceiver.h"
+#include "dw4/gui/igView.h"
+#include "dw4/core/StringPool.h"
 #include <string.h>
-#include "dw4/igInsightCore.h"
-#include "dw4/igParticleAttr.h"
-#include "dw4/igGeometryAttr.h"
-#include "dw4/igDisplayListAttr.h"
-#include "dw4/igViewManager.h"
-#include "dw4/igGroup.h"
-#include "dw4/igSceneInfo.h"
-#include "dw4/igEventDispatcher.h"
-#include "dw4/igGuiComponent.h"
-#include "dw4/igPickMode.h"
-#include "dw4/igRotateMode.h"
-#include "dw4/igFlyMode.h"
-#include "dw4/igCameraMode.h"
-#include "dw4/igMathConstants.h"
-#include "dw4/list-services.h"
-#include "dw4/igViewerGuiFactory.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/attrs/igParticleAttr.h"
+#include "dw4/attrs/igGeometryAttr.h"
+#include "dw4/attrs/igDisplayListAttr.h"
+#include "dw4/viewer/igViewManager.h"
+#include "dw4/scenegraph/igGroup.h"
+#include "dw4/scenegraph/igSceneInfo.h"
+#include "dw4/gui/igEventDispatcher.h"
+#include "dw4/gui/igGuiComponent.h"
+#include "dw4/viewer/igPickMode.h"
+#include "dw4/viewer/igRotateMode.h"
+#include "dw4/viewer/igFlyMode.h"
+#include "dw4/viewer/igCameraMode.h"
+#include "dw4/maths/igMathConstants.h"
+#include "dw4/support/list-services.h"
+#include "dw4/viewer/igViewerGuiFactory.h"
 extern "C" {
 
 /* The igMetaField handles of igViewerParameters' fields; a change notification names its field by one. */
@@ -223,17 +223,17 @@ struct ActionTarget { void run(); };
 typedef void (ActionTarget::*ActionFunction)();
 struct ViewerActionBinding : igObject { ActionTarget *target; ActionFunction function; };
 
-#include "dw4/igViewerAction.h"
+#include "dw4/viewer/igViewerAction.h"
 
 
-#include "dw4/igViewerSceneInfoManagerController.h"
+#include "dw4/viewer/igViewerSceneInfoManagerController.h"
 
 
-#include "dw4/igViewerStatisticsManager.h"
+#include "dw4/viewer/igViewerStatisticsManager.h"
 
-#include "dw4/igStatisticsItem.h"
+#include "dw4/viewer/igStatisticsItem.h"
 
-#include "dw4/igOnOffModel.h"
+#include "dw4/gui/igOnOffModel.h"
 
 void Gap__Viewer__igViewerSceneInfoManagerController__OnModelChange(igViewerSceneInfoManagerController *self, ModelChange *change)
 {
@@ -432,9 +432,9 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
 }
 
 void igViewerSceneInfoManager_OnActivate(void);
-#include "dw4/igGuiSystem.h"
-#include "dw4/igViewportResizedMessage.h"
-#include "dw4/igMessenger.h"
+#include "dw4/gui/igGuiSystem.h"
+#include "dw4/insight/igViewportResizedMessage.h"
+#include "dw4/insight/igMessenger.h"
 
 /* What precedes an interned string's characters: its chunk and its reference count. */
 struct StringHeader {
@@ -485,7 +485,7 @@ struct MessageReceiver : igObject {
         function = f;
     }
 };
-#include "dw4/igMessageDefaultReceiver.h"
+#include "dw4/insight/igMessageDefaultReceiver.h"
 
 /* Registers the manager with the insight core: GUI receivers, the render order of the viewer's
  * renderers between the "Clear done" / "Scenes done" / "Overlays done" markers, the renderer's

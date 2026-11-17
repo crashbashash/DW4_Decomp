@@ -1,11 +1,11 @@
-#include "dw4/reflected.h"
-#include "dw4/beLua.h"
-#include "dw4/bePadManager.h"
-#include "dw4/beSystem.h"
-#include "dw4/beTimer.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igObject.h"
+#include "dw4/support/reflected.h"
+#include "dw4/game/beLua.h"
+#include "dw4/game/bePadManager.h"
+#include "dw4/game/beSystem.h"
+#include "dw4/game/beTimer.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igObject.h"
 #include <string.h>
 
 extern "C" void beTimer_Activate(void);

@@ -1,7 +1,7 @@
 /* srcfile.c - the alarm kernel patch. Linked to run at 0x80076000, where alarm.c copies it, it adds SetAlarm and
  * ReleaseAlarm to a kernel that lacks them: up to 64 one-shot alarms on timer 3, kept in a list sorted by the
  * count each fires at, whose handlers run in user mode when the timer's compare interrupt comes. */
-#include "dw4/libkernl_patch.h"
+#include "dw4/sony/libkernl_patch.h"
 
 typedef unsigned int u_int;
 typedef unsigned short u_short;

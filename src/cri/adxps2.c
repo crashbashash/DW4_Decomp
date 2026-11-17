@@ -1,4 +1,4 @@
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/cri/svm.h"
 #include "dw4/cri/adx_ps2.h"
 #include "dw4/cri/cri_adxt.h"

@@ -1,6 +1,6 @@
 #define __clz_tab __clz_tab_moddi3
-#include "dw4/libgcc_longlong.h"
-#include "dw4/softfloat.h"
+#include "dw4/support/libgcc_longlong.h"
+#include "dw4/support/softfloat.h"
 
 long long __moddi3(long long u, long long v)
 {

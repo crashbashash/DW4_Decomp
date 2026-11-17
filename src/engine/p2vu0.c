@@ -1,9 +1,9 @@
 /* VU0 ownership: code that runs a VU0 microcode program holds the VU0 lock around it (p2LockVu0,
  * whose C++ draft stays a function of its own, waits for it and counts the wait in
  * p2Vu0LockWaitTime). */
-#include "dw4/eekernel.h"
-#include "dw4/p2core.h"
-#include "dw4/p2vu0.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2vu0.h"
 
 #define P2_VU0_REQUESTS 64
 

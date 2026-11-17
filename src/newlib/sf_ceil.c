@@ -1,4 +1,4 @@
-#include "dw4/ieee_words.h"
+#include "dw4/newlib/ieee_words.h"
 
 #define huge ((float)1.0e30)
 

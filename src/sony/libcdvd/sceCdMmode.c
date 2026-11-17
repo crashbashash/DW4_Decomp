@@ -1,5 +1,5 @@
 /* sceCdMmode.c - sceCdMmode: selects the media (CD or DVD) the drive reads. */
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/sony/libcdvd.h"
 
 static int rpc_mmode = 34;

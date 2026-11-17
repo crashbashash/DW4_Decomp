@@ -1,12 +1,12 @@
-#include "dw4/p2dma.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2core.h"
-#include "dw4/p2pool.h"
-#include "dw4/p2swap.h"
-#include "dw4/p2timer.h"
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
-#include "dw4/igMemory.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2pool.h"
+#include "dw4/p2/p2swap.h"
+#include "dw4/p2/p2timer.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
+#include "dw4/core/igMemory.h"
 #define D_CTRL ((unsigned int *)0x1000e000)
 #define D0_CHCR ((unsigned int *)0x10008000)
 #define D0_QWC ((unsigned int *)0x10008020)
@@ -57,7 +57,7 @@ extern int DAT_00569090[P2_DMA_CHANNEL_COUNT];
 extern char DAT_005690a0[P2_DMA_CHANNEL_COUNT];
 extern const char text_p2PreviousFinishFuncDonePredicat[];
 
-#include "dw4/p2core.h"
+#include "dw4/p2/p2core.h"
 
 extern long long DAT_00569148;
 extern long long DAT_00569150;

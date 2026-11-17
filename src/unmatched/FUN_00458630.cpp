@@ -1,4 +1,4 @@
-#include "dw4/igObject.h"
+#include "dw4/core/igObject.h"
 extern "C" {
 extern int DAT_00524950[4];
 extern int DAT_0052cf80[4];

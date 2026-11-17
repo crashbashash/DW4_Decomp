@@ -1,9 +1,9 @@
 #include "dw4/cri/sfmpv.h"
 #include "dw4/sony/libmpeg.h"
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include <string.h>
 #include "dw4/cri/mps.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/cri/sfd.h"
 #include "dw4/cri/mpv.h"
 

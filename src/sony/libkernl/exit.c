@@ -1,6 +1,6 @@
 /* exit.c - leaving the program: ExecPS2, LoadExecPS2, Exit and ExecOSD, which hand the kernel their
  * arguments through the kernel's argument area. */
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include <string.h>
 
 /* argv slots at the start of the argument area; the strings follow them */

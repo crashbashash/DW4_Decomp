@@ -1,7 +1,7 @@
-#include "dw4/eekernel_gp.h"
+#include "dw4/support/eekernel_gp.h"
 #include "dw4/sony/sif.h"
 #include "dw4/sony/libsdr.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef char *ArgList;
 #define ARGS_START(args, last) ((args) = (ArgList)__builtin_next_arg(last) - (8 - __builtin_args_info(0)) * 8)

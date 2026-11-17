@@ -1,11 +1,11 @@
-#include "dw4/reflected.h"
-#include "dw4/beMessenger.h"
-#include "dw4/bePoint01.h"
-#include "dw4/bePoint01Info.h"
-#include "dw4/igBitMask.h"
-#include "dw4/igMathConstants.h"
-#include "dw4/emptyString.h"
-#include "dw4/igMatrix44f.h"
+#include "dw4/support/reflected.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/bePoint01.h"
+#include "dw4/game/bePoint01Info.h"
+#include "dw4/scenegraph/igBitMask.h"
+#include "dw4/maths/igMathConstants.h"
+#include "dw4/support/emptyString.h"
+#include "dw4/maths/igMatrix44f.h"
 
 extern "C" void bePoint01_Prepare(void);
 extern "C" igMetaObject *bePoint01_GetInfoMeta(void);

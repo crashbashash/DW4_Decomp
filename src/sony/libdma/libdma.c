@@ -1,7 +1,7 @@
 /* libdma: the EE DMA controller's channels and their environment (libdma.a's libdma.o). */
 
 #include "dw4/sony/libdma.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 #define D_CTRL (*(volatile unsigned int *)0x1000e000)
 #define D_STAT (*(volatile unsigned int *)0x1000e010)

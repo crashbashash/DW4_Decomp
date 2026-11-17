@@ -1,11 +1,11 @@
-#include "dw4/reflected.h"
-#include "dw4/igObjectDispatchView.h"
-#include "dw4/igTDataList.h"
-#include "dw4/beActionStarter.h"
-#include "dw4/beActionStarterData2.h"
-#include "dw4/beActionStarterInfo.h"
-#include "dw4/beMessenger.h"
-#include "dw4/emptyString.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igObjectDispatchView.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/game/beActionStarter.h"
+#include "dw4/game/beActionStarterData2.h"
+#include "dw4/game/beActionStarterInfo.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/support/emptyString.h"
 
 extern "C" void beActionStarter_Prepare(void);
 extern "C" igMetaObject *beActionStarter_GetInfoMeta(void);

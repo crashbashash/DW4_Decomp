@@ -125,7 +125,7 @@ column count is zero.
 ## Open questions
 
 - The colour type is spelled `igVec3f` with an explicit copy constructor
-  ([igVec3f.h](../../include/dw4/igVec3f.h)); the record proves a class with a non-trivial copy,
+  ([igVec3f.h](../../include/dw4/maths/igVec3f.h)); the record proves a class with a non-trivial copy,
   not its name. `src/engine/maths/MathsLibrary.h` and `src/game/beWaterPlain.cpp` still declare
   their own `igVec3f`.
 - Weapon 276, blue armour 31 and yellow armour 44 are drawn grey whatever their revision; what those

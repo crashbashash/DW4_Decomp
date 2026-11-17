@@ -1,6 +1,6 @@
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 #include <string.h>
-#include "dw4/newlib_env.h"
+#include "dw4/newlib/newlib_env.h"
 
 #define ENV_LOCK __env_lock(reent_ptr)
 #define ENV_UNLOCK __env_unlock(reent_ptr)

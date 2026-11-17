@@ -122,7 +122,7 @@ def load_classes(path):
                 c = out.setdefault(cls, {"handle": "", "fields": [], "by_offset": {}})
                 c["fields"].append((int(off), fname, META_TO_C.get(mtype, "int"), mtype))
                 c["fields"].sort()
-    # Reflection lists only a class's own fields; the generated include/dw4/reflected.h merges the
+    # Reflection lists only a class's own fields; the generated include/dw4/support/reflected.h merges the
     # ancestors' (data/class-hierarchy.tsv), so a member inherited from a base class is typed too.
     base = {}
     hier = os.path.join(os.path.dirname(os.path.abspath(path)), "class-hierarchy.tsv")

@@ -1,5 +1,5 @@
 #include "dw4/sony/sif.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/sony/libmtap.h"
 
 /* mtapman.irx's RPC servers, one per call */

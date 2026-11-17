@@ -1,5 +1,5 @@
 #include "src/engine/scenesearch/SceneSearchLibrary.h"
-#include "dw4/igMath.h"
+#include "dw4/maths/igMath.h"
 
 #pragma push
 #pragma readonly_strings on

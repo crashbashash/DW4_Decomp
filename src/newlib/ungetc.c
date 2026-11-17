@@ -1,6 +1,6 @@
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 #include <string.h>
-#include "dw4/newlib_mallocr.h"
+#include "dw4/newlib/newlib_mallocr.h"
 
 
 int __submore(register FILE *fp)

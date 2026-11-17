@@ -1,12 +1,12 @@
 #pragma push
 #pragma readonly_strings on
 #include <stdio.h>
-#include "dw4/libkernl.h"
-#include "dw4/p2core.h"
-#include "dw4/p2pool.h"
-#include "dw4/p2texture.h"
-#include "dw4/p2multipass.h"
-#include "dw4/dmaChannel.h"
+#include "dw4/sony/libkernl.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2pool.h"
+#include "dw4/p2/p2texture.h"
+#include "dw4/p2/p2multipass.h"
+#include "dw4/p2/dmaChannel.h"
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 void FUN_001f76f0(int count, int *regs);

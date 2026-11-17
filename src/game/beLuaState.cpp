@@ -1,12 +1,12 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igFileDispatchView.h"
-#include "dw4/beFileChkObj.h"
-#include "dw4/beLuaState.h"
-#include "dw4/igAdxFile.h"
-#include "dw4/igMemory.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObject.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/core/igFileDispatchView.h"
+#include "dw4/game/beFileChkObj.h"
+#include "dw4/game/beLuaState.h"
+#include "dw4/audio/igAdxFile.h"
+#include "dw4/core/igMemory.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObject.h"
 
 extern "C" void igLuaState_RunString(void);
 extern "C" int igLuaState_RunBuffer(...);

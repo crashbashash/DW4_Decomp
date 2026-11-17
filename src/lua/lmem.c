@@ -9,8 +9,8 @@
 #include "lmem.h"
 #include "lobject.h"
 #include "lstate.h"
-#include "dw4/lua_game_state.h"
-#include "dw4/igMemory.h"
+#include "dw4/lua/lua_game_state.h"
+#include "dw4/core/igMemory.h"
 
 extern "C" {
 }

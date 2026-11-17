@@ -1,4 +1,4 @@
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 int _printf_r(struct _reent *ptr, const char *fmt, ...)
 {

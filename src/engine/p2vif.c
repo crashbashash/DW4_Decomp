@@ -1,9 +1,9 @@
 /* What the VIF1 row and mask registers hold, so a draw writes STROW or STMASK only when its values
  * differ. p2InitVifRegisters loads both at start-up. */
-#include "dw4/p2core.h"
-#include "dw4/p2dma.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2vif.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2vif.h"
 
 #define VIF1_ERR ((unsigned int *)0x10003c20)
 

@@ -90,7 +90,7 @@ def block_class_map(symfile, header):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbols", default="config/SLUS-20836/symbols.txt")
-    ap.add_argument("--header", default="include/dw4/reflected.h")
+    ap.add_argument("--header", default="include/dw4/support/reflected.h")
     ap.add_argument("--src", default="src")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--game-only", action="store_true",
@@ -135,12 +135,12 @@ def main():
                 new = text
                 for (a, b), repl in sorted(hits, key=lambda h: -h[0][0]):
                     new = new[:a] + repl + new[b:]
-                if '#include "dw4/reflected.h"' not in new:
+                if '#include "dw4/support/reflected.h"' not in new:
                     if INCLUDE_ANCHOR.search(new):
                         new = INCLUDE_ANCHOR.sub(
-                            lambda mm: "*/\n#include \"dw4/reflected.h\"\n", new, count=1)
+                            lambda mm: "*/\n#include \"dw4/support/reflected.h\"\n", new, count=1)
                     else:
-                        new = '#include "dw4/reflected.h"\n' + new
+                        new = '#include "dw4/support/reflected.h"\n' + new
                 changed.append((path, name, cls, len(fn_hits)))
                 total += len(fn_hits)
                 done = True

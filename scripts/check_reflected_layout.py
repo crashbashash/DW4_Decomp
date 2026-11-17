@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check include/dw4/reflected.h with the host C compiler: it must compile as plain C11, every field
+"""Check include/dw4/support/reflected.h with the host C compiler: it must compile as plain C11, every field
 must sit at the offset the reflection metadata recorded, every struct must have the size its class
 registers, and every field's type must be the one its MetaField kind prescribes.
 
@@ -15,7 +15,7 @@ a lone `int`, which made igFogAttr 32 bytes instead of 44), a scalar kind has it
 array kind has its element type. The exceptions the generator records (`typed int: N matched units
 read it as a word`) are accepted as such.
 
-Usage: scripts/check_reflected_layout.py [--header include/dw4/reflected.h] [--cc cc] [--keep FILE]
+Usage: scripts/check_reflected_layout.py [--header include/dw4/support/reflected.h] [--cc cc] [--keep FILE]
 Exit status 0 when the header compiles and all asserts hold.
 """
 import argparse
@@ -57,12 +57,12 @@ def expected_type(kind, ctype, count):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--header", default="include/dw4/reflected.h")
+    ap.add_argument("--header", default="include/dw4/support/reflected.h")
     ap.add_argument("--cc", default=os.environ.get("CC", "cc"))
     ap.add_argument("--keep", help="write the generated check file here instead of a temp file")
     a = ap.parse_args()
     text = open(a.header, errors="replace").read()
-    lines = ['#include <stddef.h>', '#include "dw4/%s"' % os.path.basename(a.header)]
+    lines = ['#include <stddef.h>', '#include "%s"' % os.path.relpath(a.header, "include")]
     n_struct = n_field = n_size = n_type = 0
     type_errors = []
     for m in STRUCT_RE.finditer(text):

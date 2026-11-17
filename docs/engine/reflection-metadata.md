@@ -385,7 +385,7 @@ are typed prototypes, not K&R `int f();`:
   default, combat and 3.0.3 units alike; the output keeps the one-argument-per-line layout with the
   §1 role comments.
 * `tools/initfields_gen.py` retargets the verified `_InitFields` C body: it types every
-  argument expression against the locals, the local structs and `include/dw4/reflected.h` to spell
+  argument expression against the locals, the local structs and `include/dw4/support/reflected.h` to spell
   each callee's prototype (a floating literal keeps the unprototyped promotion through a variadic
   tail, a function passed by address gets a pointer to its own prototype), gives a callee whose
   result is stored into a typed pointer that return type, and rewrites `(void *)` casts on such

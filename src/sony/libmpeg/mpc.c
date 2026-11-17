@@ -1,6 +1,6 @@
 /* libmpeg mpc: macroblock decoding (slices, macroblock modes, motion vectors) and the IPU bit reader. */
 #include "dw4/sony/libmpeg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 #define IPU_CMD (*(volatile unsigned int *)0x10002000)
 #define IPU_CMD64 (*(volatile long long *)0x10002000)

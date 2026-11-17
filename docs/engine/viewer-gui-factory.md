@@ -10,7 +10,7 @@ manager asks for its menu actions and widgets, and the default colours of the co
 | `igViewerGuiFactory_CreateEmpty` | the factory's answer for a widget kind it does not build: an empty reference |
 | `Gap::Viewer::igViewerGuiFactory::resetFields` | the slot igObject calls after its fields are constructed or reset: gives each colour changer (menu back, menu item text, menu mark, icon back, big icon, big icon highlight, small on/off icon) its colour for every state, through `igBasicColorChanger_SetColor` or `igOnOffColorChanger_SetColor` |
 | `igViewerGuiFactory_GetMeta` | slot 20: the class's metaobject |
-| `igVec2f::set`, `ViewerRect::ViewerRect` | out-of-line copies of the inline setter of `igVec2f` (`dw4/igMath.h`) and the inline constructor of the file's two-`igVec2f` cell; only the file's static initialiser calls them |
+| `igVec2f::set`, `ViewerRect::ViewerRect` | out-of-line copies of the inline setter of `igVec2f` (`dw4/maths/igMath.h`) and the inline constructor of the file's two-`igVec2f` cell; only the file's static initialiser calls them |
 | `__sinit_igViewerGuiFactory.cpp` | constructs `g_viewerGuiStyle` (`0x58ced0`, 692 bytes): 28 `ViewerRect` cells, three `igVec3f`, twelve floats and ten `igVec4f` colours, in member order, then runs the constructor body that sets them |
 
 A colour changer keeps one colour per (highlighted, on) pair and one for disabled; `SetColor` takes the two flags,

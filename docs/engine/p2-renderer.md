@@ -24,7 +24,7 @@ at `0x10005000` is the VIF1 FIFO, and `dma_spr` at `0x10003020` is `GIF_STAT`.
 
 ## The DMA channels
 
-`src/engine/dmaChannel.c` holds the channel code; the types are in `include/dw4/p2dma.h`. The layer
+`src/engine/dmaChannel.c` holds the channel code; the types are in `include/dw4/p2/p2dma.h`. The layer
 drives three DMA channels, 0 (VIF0), 1 (VIF1) and 2 (GIF): the shutdown path prints "VIF0/VIF1/GIF already
 disabled" and "Error removing VIF0/VIF1/GIF dmac handler" for channels 0, 1 and 2, and one DMAC handler is
 registered per channel (`p2Vif0DmaHandler`, `p2Vif1DmaHandler`, `p2GifDmaHandler`, ids in `p2DmaHandlerIds`).
@@ -211,7 +211,7 @@ Open questions:
 
 ## State, VU programs, display and display lists
 
-`src/engine/p2core.c` (`0x1e74b0`-`0x1eef70`, types in `include/dw4/p2core.h`) is the layer's front:
+`src/engine/p2core.c` (`0x1e74b0`-`0x1eef70`, types in `include/dw4/p2/p2core.h`) is the layer's front:
 
 * **Capabilities.** `p2EnableCapability`/`p2DisableCapability` set bit `1 << capability` of the current
   program's `p2ProgramFlags` entry and, on a change, run the switch `p2SetCapability`. Capability 9 is
@@ -253,11 +253,11 @@ by its own functions and by nothing else, which is where the cuts come from:
 | range | file | what it holds |
 | --- | --- | --- |
 | `0x1fc310`-`0x1fd5a0` | `p2multipass.c` | multipass stage queries and the pass packet |
-| `0x204100`-`0x204e30` | `p2pool.c` | the typed record pools (`include/dw4/p2pool.h`) |
-| `0x204e30`-`0x206570` | `p2stateCache.c` | the render-state cache (`include/dw4/p2stateCache.h`) |
-| `0x206570`-`0x208170` | `p2swap.c` | frame swap, the FINISH queue and finish sequences (`include/dw4/p2swap.h`) |
+| `0x204100`-`0x204e30` | `p2pool.c` | the typed record pools (`include/dw4/p2/p2pool.h`) |
+| `0x204e30`-`0x206570` | `p2stateCache.c` | the render-state cache (`include/dw4/p2/p2stateCache.h`) |
+| `0x206570`-`0x208170` | `p2swap.c` | frame swap, the FINISH queue and finish sequences (`include/dw4/p2/p2swap.h`) |
 | `0x208170`-`0x20cc10` | `p2texture.c` | texture binding and upload |
-| `0x20cc10`-`0x20d790` | `p2timer.c` | the clock, sleeping and alarms (`include/dw4/p2timer.h`) |
+| `0x20cc10`-`0x20d790` | `p2timer.c` | the clock, sleeping and alarms (`include/dw4/p2/p2timer.h`) |
 | `0x20d790`-`0x20d900` | `p2vu1Symbols.c` | lookups in the VU1 symbol table |
 | `0x20d900`-`0x20df00` | `p2viewport.c` | the viewport, its scale and the depth bias |
 | `0x20df00`-`0x20e080` | `p2vu0.c` | the VU0 lock and request records |
@@ -313,7 +313,7 @@ up when `p2WatchdogTicks`, which `p2SubmitDmaPacket` resets, reaches 60. `p2Watc
 (`0x4965c0`) starts at 1 and nothing clears it. `p2StartWatchdog` copies its thread block from a
 48-byte initializer at `0x4965d0` (twelve words, the last six zero): Sony's `struct ThreadParam` is
 twelve words, of which `CreateThread` reads the first nine and `ReferThreadStatus` fills all twelve.
-ADXPS2 (`src/cri/adxps2.c`) takes the same declaration from `include/dw4/eekernel.h`.
+ADXPS2 (`src/cri/adxps2.c`) takes the same declaration from `include/dw4/support/eekernel.h`.
 
 **Multipass.** With capability 23 on, each texture stage beyond the first draws as a pass of its
 own in GS context 2. `p2WritePassPacket` writes a pass's ALPHA/TEX0/TEX1 (from stage pass-1's

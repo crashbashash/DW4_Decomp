@@ -3,24 +3,24 @@
  * player's bit changes; the Lua MAT bindings read the current and previous masks of the material whose
  * script is running. The MATCTRL messages show or hide a material's switch graph, toggle the Lua call
  * trace and pause or restart a RAM. */
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/listSet.h"
-#include "dw4/igTDataList.h"
-#include "dw4/beMatCtrl.h"
-#include "dw4/be.h"
-#include "dw4/beLua.h"
-#include "dw4/beMatCtrlInfo.h"
-#include "dw4/beMatCtrlInfoWork.h"
-#include "dw4/beMessenger.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObject.h"
-#include "dw4/igSwitch.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/game/ndmw/listSet.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/game/beMatCtrl.h"
+#include "dw4/game/be.h"
+#include "dw4/game/beLua.h"
+#include "dw4/game/beMatCtrlInfo.h"
+#include "dw4/game/beMatCtrlInfoWork.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObject.h"
+#include "dw4/scenegraph/igSwitch.h"
 #include <stdio.h>
-#include "dw4/igAABox.h"
+#include "dw4/maths/igAABox.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -52,7 +52,7 @@ typedef igSmartPointer<igTDataList<int> > MaskListRef;
 /* The RAM's reference to its work. */
 typedef igSmartPointer<beMatCtrlInfoWork> WorkRef;
 
-#include "dw4/emptyString.h"
+#include "dw4/support/emptyString.h"
 extern "C" {
 
 void beMatCtrl_Prepare(beMatCtrl *self);

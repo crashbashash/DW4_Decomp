@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/cri/svm.h"
 #include "dw4/cri/sj.h"
 #include "dw4/cri/dtx.h"
 #include "dw4/cri/adxmsg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/sony/sif.h"
 
 typedef struct DtxPeer {

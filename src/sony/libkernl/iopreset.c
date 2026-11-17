@@ -2,7 +2,7 @@
 
 #include "dw4/sony/sif.h"
 #include "dw4/sony/sifdev.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 /* SIF registers */
 #define SIF_REG_MAINADDR 0x80000000

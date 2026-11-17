@@ -24,7 +24,7 @@ method and the reasons.
    reuses the guard's load", "the count gets `a0`, retail's `a0` is the list", "four bytes short, the delay slot is
    filled". A size difference, an order difference and a register difference have different causes. A frame
    difference is stated slot by slot by [frame slots against retail](#frame-slots-against-retail).
-2. **Read the function and its unit.** Real types from `include/dw4/reflected.h`, what each value is for, how the
+2. **Read the function and its unit.** Real types from `include/dw4/support/reflected.h`, what each value is for, how the
    same class does the same thing elsewhere, and the GameCube and Xbox builds of the function (below). Most
    resisting shapes are an idiom of the original code base (an accessor, a smart pointer, a helper) that the draft
    wrote out by hand.
@@ -489,7 +489,7 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 - **A `const` reference getter reloads.** `const int &getCount() const { return _count; }` loads through the
   returned reference, so a later `_count + 1` reads memory again, and the value lands in the caller's declared
   variable with its early id. It replaced a `volatile` count. The getter is `igTDataList<T>::getCount` in
-  `include/dw4/igTDataList.h`. *Units:* `src/game/beNodeAnim_Traverse.cpp`,
+  `include/dw4/core/igTDataList.h`. *Units:* `src/game/beNodeAnim_Traverse.cpp`,
   `src/engine/scenegraph/SceneGraphLibrary.cpp`.
 - **A constant compared, then copied in the taken branch, is read twice.**
   - *Symptom:* after a call, `lw a1,<object>; lw a0,0(v1); lw v1,<object>; bne a0,v1`, and the taken path stores
@@ -997,7 +997,7 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   back for a store, with no `volatile`: `pushed = item; ... set(count, &pushed);` with
   `void set(int i, T *const *v) { _data[i] = *v; }`. A reference parameter, a by-value parameter with an internal
   `&value`, or a one-field struct are scalarised and lose the slot. The setter is `igTDataList<T>::set` in
-  `include/dw4/igTDataList.h`. *Units:* `src/game/beNodeAnim_Traverse.cpp`,
+  `include/dw4/core/igTDataList.h`. *Units:* `src/game/beNodeAnim_Traverse.cpp`,
   `src/engine/scenegraph/SceneGraphLibrary.cpp`.
 - **A negated flag passed to a `bool` parameter normalises first.** `sltu v0,zero,v0; xori a1,v0,0x1` before a
   call is `!attr->_enabled` passed to a virtual taking `bool`; with an `int` parameter `!x` compiles to a different

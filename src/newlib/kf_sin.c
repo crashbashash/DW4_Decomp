@@ -1,5 +1,5 @@
-#include "dw4/ieee_words.h"
-#include "dw4/newlib_math.h"
+#include "dw4/newlib/ieee_words.h"
+#include "dw4/newlib/newlib_math.h"
 
 #define half ((float)5.0000000000e-01)
 #define S1 ((float)-1.6666667163e-01)

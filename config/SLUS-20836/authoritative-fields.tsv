@@ -1,6 +1,6 @@
 # Authoritative fields whose layout is known but which reflection does not list: the fields of a class reflection
 # lists none for, and the unreflected members of a reflected class.
-# Read by scripts/gen_type_headers.py (emitted into include/dw4/reflected.h, inherited by every
+# Read by scripts/gen_type_headers.py (emitted into include/dw4/support/reflected.h, inherited by every
 # subclass) and tools/typed_coverage.py (a member access through them counts as typed).
 # <class>	<offset>	<MetaField type>	<field>	<evidence>
 igObject	0	igObjectRefMetaField	_vtable	vtable pointer at +0 of every object: every class stamps its vtable at +0 of the receiver (docs/engine/rtti-and-vtables.md; config/SLUS-20836/receiver-classes.tsv `vtable-stamp`)

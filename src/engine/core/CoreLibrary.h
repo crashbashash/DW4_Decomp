@@ -5,82 +5,82 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igObjectDispatchView.h"
-#include "dw4/igTDataList.h"
-#include "dw4/igMemoryPoolView.h"
-#include "dw4/ClassRegistration.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObjectSystem.h"
-#include "dw4/igObject.h"
-#include "dw4/igMetaObject.h"
-#include "dw4/igMetaField.h"
-#include "dw4/igNamedObject.h"
-#include "dw4/igObjectList.h"
-#include "dw4/igMemory.h"
-#include "dw4/igRegistry.h"
-#include "dw4/igResult.h"
-#include "dw4/igReport.h"
-#include "dw4/igPsx2File.h"
-#include "dw4/igThread.h"
-#include "dw4/igTimer.h"
-#include "dw4/igFolder.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igStringObj.h"
-#include "dw4/StringPool.h"
-#include "dw4/igBoolList.h"
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igCharMetaField.h"
-#include "dw4/igCompoundMetaField.h"
-#include "dw4/igContext.h"
-#include "dw4/igDependencyOrderedList.h"
-#include "dw4/igDirEntry.h"
-#include "dw4/igDirectory.h"
-#include "dw4/igDoubleMetaField.h"
-#include "dw4/igEnumMetaField.h"
-#include "dw4/igExternalDirEntry.h"
-#include "dw4/igFloatMetaField.h"
-#include "dw4/igIGBFile.h"
-#include "dw4/igInfo.h"
-#include "dw4/igInfoList.h"
-#include "dw4/igIntList.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igLongMetaField.h"
-#include "dw4/igMatrix44fMetaField.h"
-#include "dw4/igMemoryRefMetaField.h"
-#include "dw4/igMetaObjectList.h"
-#include "dw4/igMetaObjectListList.h"
-#include "dw4/igNonRefCountedObjectList.h"
-#include "dw4/igObjectListList.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igRawRefMetaField.h"
-#include "dw4/igShortMetaField.h"
-#include "dw4/igStringMetaField.h"
-#include "dw4/igStringRefList.h"
-#include "dw4/igStringRefListList.h"
-#include "dw4/igUnsignedCharMetaField.h"
-#include "dw4/igUnsignedIntList.h"
-#include "dw4/igUnsignedIntMetaField.h"
-#include "dw4/igUnsignedLongMetaField.h"
-#include "dw4/igUnsignedShortMetaField.h"
-#include "dw4/igVec2fMetaField.h"
-#include "dw4/igVec3fMetaField.h"
-#include "dw4/igVec4fMetaField.h"
-#include "dw4/igVec4ucMetaField.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/core/igObjectDispatchView.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/core/igMemoryPoolView.h"
+#include "dw4/support/ClassRegistration.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObjectSystem.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/igMetaField.h"
+#include "dw4/core/igNamedObject.h"
+#include "dw4/core/igObjectList.h"
+#include "dw4/core/igMemory.h"
+#include "dw4/core/igRegistry.h"
+#include "dw4/core/igResult.h"
+#include "dw4/core/igReport.h"
+#include "dw4/core/igPsx2File.h"
+#include "dw4/core/igThread.h"
+#include "dw4/core/igTimer.h"
+#include "dw4/core/igFolder.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/igStringObj.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/core/igBoolList.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igCharMetaField.h"
+#include "dw4/core/igCompoundMetaField.h"
+#include "dw4/core/igContext.h"
+#include "dw4/core/igDependencyOrderedList.h"
+#include "dw4/core/igDirEntry.h"
+#include "dw4/core/igDirectory.h"
+#include "dw4/core/igDoubleMetaField.h"
+#include "dw4/core/igEnumMetaField.h"
+#include "dw4/core/igExternalDirEntry.h"
+#include "dw4/core/igFloatMetaField.h"
+#include "dw4/core/igIGBFile.h"
+#include "dw4/core/igInfo.h"
+#include "dw4/core/igInfoList.h"
+#include "dw4/core/igIntList.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igLongMetaField.h"
+#include "dw4/maths/igMatrix44fMetaField.h"
+#include "dw4/core/igMemoryRefMetaField.h"
+#include "dw4/core/igMetaObjectList.h"
+#include "dw4/core/igMetaObjectListList.h"
+#include "dw4/core/igNonRefCountedObjectList.h"
+#include "dw4/core/igObjectListList.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igRawRefMetaField.h"
+#include "dw4/core/igShortMetaField.h"
+#include "dw4/core/igStringMetaField.h"
+#include "dw4/core/igStringRefList.h"
+#include "dw4/core/igStringRefListList.h"
+#include "dw4/core/igUnsignedCharMetaField.h"
+#include "dw4/core/igUnsignedIntList.h"
+#include "dw4/core/igUnsignedIntMetaField.h"
+#include "dw4/core/igUnsignedLongMetaField.h"
+#include "dw4/core/igUnsignedShortMetaField.h"
+#include "dw4/maths/igVec2fMetaField.h"
+#include "dw4/maths/igVec3fMetaField.h"
+#include "dw4/maths/igVec4fMetaField.h"
+#include "dw4/maths/igVec4ucMetaField.h"
 extern "C" {
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/sony/sif.h"
 #define __extension__
 #undef __extension__
 }
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/sony/sifdev.h"
 #include "dw4/sony/libdma.h"
-#include "dw4/softfloat.h"
-#include "dw4/p2timer.h"
-#include "dw4/beFont.h"
-#include "dw4/igRendererOrderedList.h"
+#include "dw4/support/softfloat.h"
+#include "dw4/p2/p2timer.h"
+#include "dw4/game/beFont.h"
+#include "dw4/gui/igRendererOrderedList.h"
 
 /* igSmartPointer's release for a list held as igTDataList<T>. */
 template <class T> static inline void igRelease(igTDataList<T> *o) {
@@ -113,27 +113,27 @@ template <class T> static inline void setCapacity(igTDataList<T> *list, int capa
     }
 }
 
-#include "dw4/igobject_release.h"
-#include "dw4/igCharArrayMetaField.h"
-#include "dw4/igDoubleList.h"
-#include "dw4/igDriverDatabase.h"
-#include "dw4/igFile.h"
-#include "dw4/igFloatList.h"
-#include "dw4/igLongList.h"
-#include "dw4/igMemoryPool.h"
-#include "dw4/igMetaEnum.h"
-#include "dw4/igNamedObjectList.h"
-#include "dw4/igObjectDirEntry.h"
-#include "dw4/igObjectStringMap.h"
-#include "dw4/igPointerList.h"
-#include "dw4/igPointerListList.h"
-#include "dw4/igResource.h"
-#include "dw4/igStringObjList.h"
-#include "dw4/igUnsignedCharArrayMetaField.h"
-#include "dw4/igUnsignedCharList.h"
-#include "dw4/igUnsignedShortList.h"
-#include "dw4/internalNonRefCountedObjectList.h"
-#include "dw4/list-services.h"
+#include "dw4/core/igobject_release.h"
+#include "dw4/core/igCharArrayMetaField.h"
+#include "dw4/core/igDoubleList.h"
+#include "dw4/core/igDriverDatabase.h"
+#include "dw4/core/igFile.h"
+#include "dw4/core/igFloatList.h"
+#include "dw4/core/igLongList.h"
+#include "dw4/core/igMemoryPool.h"
+#include "dw4/core/igMetaEnum.h"
+#include "dw4/core/igNamedObjectList.h"
+#include "dw4/core/igObjectDirEntry.h"
+#include "dw4/core/igObjectStringMap.h"
+#include "dw4/core/igPointerList.h"
+#include "dw4/core/igPointerListList.h"
+#include "dw4/core/igResource.h"
+#include "dw4/core/igStringObjList.h"
+#include "dw4/core/igUnsignedCharArrayMetaField.h"
+#include "dw4/core/igUnsignedCharList.h"
+#include "dw4/core/igUnsignedShortList.h"
+#include "dw4/core/internalNonRefCountedObjectList.h"
+#include "dw4/support/list-services.h"
 #include "dw4/runtime/init_cpp.h"
 #include "dw4/sony/libcdvd_calls.h"
 /* Releases a reference field through a copy, so the field is read once. */
@@ -250,24 +250,24 @@ extern "C" int igVirtualCFuncMetaField_GetVTable(void);
 extern "C" CallbackArray *igVirtualCFuncMetaField_Register(void);
 extern "C" void igVirtualCFuncMetaField_GetMetaObjectFunction(void);
 extern "C" void igVirtualCFuncMetaField_CreateDefaultDescriptor(void);
-#include "dw4/igBoolArrayMetaField.h"
-#include "dw4/igEnumArrayMetaField.h"
-#include "dw4/igFloatArrayMetaField.h"
-#include "dw4/igIntArrayMetaField.h"
-#include "dw4/igObjectRefArrayMetaField.h"
-#include "dw4/igShortArrayMetaField.h"
-#include "dw4/igStructMetaField.h"
-#include "dw4/igUnsignedIntArrayMetaField.h"
-#include "dw4/igUnsignedShortArrayMetaField.h"
-#include "dw4/igCharList.h"
-#include "dw4/igContextExt.h"
-#include "dw4/igNamedObjectInfo.h"
-#include "dw4/igShortList.h"
-#include "dw4/emptyString.h"
-#include "dw4/igSemaphore.h"
-#include "dw4/igMetaFieldList.h"
-#include "dw4/igContextList.h"
-#include "dw4/igPluginHelper.h"
+#include "dw4/core/igBoolArrayMetaField.h"
+#include "dw4/core/igEnumArrayMetaField.h"
+#include "dw4/core/igFloatArrayMetaField.h"
+#include "dw4/core/igIntArrayMetaField.h"
+#include "dw4/core/igObjectRefArrayMetaField.h"
+#include "dw4/core/igShortArrayMetaField.h"
+#include "dw4/core/igStructMetaField.h"
+#include "dw4/core/igUnsignedIntArrayMetaField.h"
+#include "dw4/core/igUnsignedShortArrayMetaField.h"
+#include "dw4/core/igCharList.h"
+#include "dw4/core/igContextExt.h"
+#include "dw4/core/igNamedObjectInfo.h"
+#include "dw4/core/igShortList.h"
+#include "dw4/support/emptyString.h"
+#include "dw4/core/igSemaphore.h"
+#include "dw4/core/igMetaFieldList.h"
+#include "dw4/core/igContextList.h"
+#include "dw4/core/igPluginHelper.h"
 extern "C" int igUnsignedShortMetaField_Clone(int arg0, int arg1);
 extern "C" int igUnsignedShortMetaField_GetVTable(void);
 extern "C" void igUnsignedShortMetaField_EnsureRegistered(void);
@@ -1155,7 +1155,7 @@ extern "C" int igBoolMetaField_GetSize(void);
 extern "C" int igBoolMetaField_GetAlignment(void);
 extern "C" void igCallStackTable_SetCapacity(int a0, int a1);
 class igResult;
-/* igCallStackTable (reflected layout in dw4/reflected.h) with the virtuals its callers use. Its
+/* igCallStackTable (reflected layout in dw4/support/reflected.h) with the virtuals its callers use. Its
  * call stacks are zero-terminated return-address runs packed end to end; the hash index holds
  * their word offsets, -1 for an empty slot. */
 class igCallStackTableView : public igVirtualObject {
@@ -2617,10 +2617,10 @@ extern "C" int DAT_00530d80[4];
 struct ObjectSystemView;
 class igEventTrackerView;
 extern "C" void igObjectSystem_Startup(ObjectSystemView *self);
-#include "dw4/igStringRef.h"
-#include "dw4/igDirectoryList.h"
-#include "dw4/igIntListList.h"
-#include "dw4/igFloatListList.h"
+#include "dw4/core/igStringRef.h"
+#include "dw4/core/igDirectoryList.h"
+#include "dw4/core/igIntListList.h"
+#include "dw4/core/igFloatListList.h"
 extern "C" void igObjectSystem_InitPaths(ObjectSystemView *arg0);
 extern "C" void igObjectSystem_PreExit(ObjectSystemView *arg0);
 extern "C" void igObjectSystem_Exit(ObjectSystemView *arg0);
@@ -2770,7 +2770,7 @@ extern "C" unsigned int igCallStackTable_HashCallStack(igCallStackTableView *sel
 extern "C" int igCallStackTable_InsertHashEntry(igCallStackTableView *self, unsigned int *stack, int offset);
 extern "C" void igCallStackTable_RebuildHashIndex(igCallStackTableView *table, int hashCapacity);
 extern "C" int g_callStackRootAddress[4];
-/* igCallStackTracer (reflected layout in dw4/reflected.h; an igUnsignedIntListNoClean of return
+/* igCallStackTracer (reflected layout in dw4/support/reflected.h; an igUnsignedIntListNoClean of return
  * addresses) with the virtuals its callers use. */
 class igCallStackTracerView : public igVirtualObject {
 public:
@@ -2995,7 +2995,7 @@ extern "C" void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open)
 class igEventTrackerView;
 extern "C" void igEventTracker_SetEventTag(igEventTrackerView *tracker, int tag);
 struct LocationRecord { int address; int name; int offset; int file; int line; };
-/* igLocationTable (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
+/* igLocationTable (reflected layout in dw4/support/reflected.h) with the virtuals its callers use. */
 class igLocationTableView : public igVirtualObject { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
     virtual int FindLocationIndex(int address);
@@ -3015,7 +3015,7 @@ enum igEventType {
     kObjectDetach, kObjectDeallocation, kObjectRead, kObjectWrite, kMemberRead, kMemberWrite, kMarker, kNotification, kCustom
 };
 struct EventRecord { int type; int index; int address; int val; int alignment; int markerType; int markerValue; char *markerName; int notificationType; int notificationCode; char *notificationText; char *group; char *str; char *memberName; char *annotation; char *eventTag; char *poolName; int sourceFile; int line; int *callStack; unsigned int slotStates; int slots[16]; int getType() const { return type; } int getVal() const { return val; } const char *getSourceFile() const { return (const char *)sourceFile; } int *getCallStack() const { return callStack; } int getAddress() const { return address; } int getIndex() const { return index; } int getAlignment() const { return alignment; } int getLine() const { return line; } int getNotificationCode() const { return notificationCode; } };
-/* igEventTracker (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
+/* igEventTracker (reflected layout in dw4/support/reflected.h) with the virtuals its callers use. */
 class igEventTrackerView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
@@ -3483,7 +3483,7 @@ extern "C" void igMemoryDictionary_SetCapacity(igMemoryDictionary *self, int cap
  * slot, -2 for a removed one. */
 struct MemoryDictionaryEntry { int key; int value; };
 /* igMemoryDictionary's entry list (an igUnsignedIntListNoClean); its count is in words, two per entry. */
-/* igMemoryDictionary (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
+/* igMemoryDictionary (reflected layout in dw4/support/reflected.h) with the virtuals its callers use. */
 class igMemoryDictionaryView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
@@ -3586,7 +3586,7 @@ struct ContextRecord {
     igMemoryPoolInfo *descriptor;
     unsigned storageFlags, flags;
 };
-/* igMemoryPoolContextInfo (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
+/* igMemoryPoolContextInfo (reflected layout in dw4/support/reflected.h) with the virtuals its callers use. */
 class igMemoryPoolContextInfoView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();

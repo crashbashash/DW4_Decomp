@@ -6,7 +6,7 @@
 #include "dw4/cri/dvci.h"
 #include "dw4/cri/htci.h"
 #include "dw4/cri/adxmsg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef struct DvCiFile {
     signed char used;       /* 0x00 */

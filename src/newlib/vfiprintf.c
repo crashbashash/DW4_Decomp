@@ -1,6 +1,6 @@
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 #include <string.h>
-#include "dw4/newlib_locale.h"
+#include "dw4/newlib/newlib_locale.h"
 
 typedef int wchar_t;
 typedef unsigned short u_short;

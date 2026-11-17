@@ -1,35 +1,35 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igMath.h"
-#include "dw4/igVec3f.h"
-#include "dw4/igCameraDispatchView.h"
-#include "dw4/igCameraMode.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/maths/igMath.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/scenegraph/igCameraDispatchView.h"
+#include "dw4/viewer/igCameraMode.h"
 
-#include "dw4/igObject.h"
-#include "dw4/igGraphPath.h"
-#include "dw4/igModel.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igResult.h"
-#include "dw4/igProbe.h"
-#include "dw4/igIntersectTraversal.h"
-/* Kept here, not dw4/igGuiSystem.h: retail's caller passes the byte unconverted, which an `int` parameter reorders,
+#include "dw4/core/igObject.h"
+#include "dw4/scenegraph/igGraphPath.h"
+#include "dw4/gui/igModel.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igResult.h"
+#include "dw4/scenegraph/igProbe.h"
+#include "dw4/scenegraph/igIntersectTraversal.h"
+/* Kept here, not dw4/gui/igGuiSystem.h: retail's caller passes the byte unconverted, which an `int` parameter reorders,
  * while the definition's unmasked test needs `int`. */
 struct igGuiSystem;
 struct igMouseCursor;
 extern "C" void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor);
 extern "C" void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, unsigned char visible);
-#include "dw4/igDataLists.h"
-#include "dw4/igViewModel.h"
-#include "dw4/igCamera.h"
-#include "dw4/igPickMode.h"
-#include "dw4/igRotateMode.h"
-#include "dw4/igFlyMode.h"
-#include "dw4/igViewMode.h"
-#include "dw4/igViewerParameters.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/viewer/igViewModel.h"
+#include "dw4/scenegraph/igCamera.h"
+#include "dw4/viewer/igPickMode.h"
+#include "dw4/viewer/igRotateMode.h"
+#include "dw4/viewer/igFlyMode.h"
+#include "dw4/viewer/igViewMode.h"
+#include "dw4/viewer/igViewerParameters.h"
 #include <math.h>
-#include "dw4/igMathConstants.h"
-#include "dw4/igRay.h"
-#include "dw4/igGuiSystemModel.h"
+#include "dw4/maths/igMathConstants.h"
+#include "dw4/maths/igRay.h"
+#include "dw4/gui/igGuiSystemModel.h"
 extern "C" {
 
 /* The pick mode whose intersect traversal is running, for its hit callback. */

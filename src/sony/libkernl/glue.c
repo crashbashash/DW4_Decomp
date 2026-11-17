@@ -1,10 +1,10 @@
 /* glue.c - libkernl's newlib system-call glue: the console reads and writes through the DECI2 tty,
  * the heap grows up to EndOfHeap, files are unsupported. VSync waits on the INTC's vblank bit. */
 
-#include "dw4/eekernel.h"
-#include "dw4/eekernel_intr.h"
-#include "dw4/libkernl.h"
-#include "dw4/newlib_reent.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/support/eekernel_intr.h"
+#include "dw4/sony/libkernl.h"
+#include "dw4/newlib/newlib_reent.h"
 
 /* newlib's struct stat with the EE's 64-bit long */
 struct stat {

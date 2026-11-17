@@ -1,13 +1,13 @@
-#include "dw4/reflected.h"
-#include "dw4/igTDataList.h"
-#include "dw4/beDataBase.h"
-#include "dw4/beDBManager.h"
-#include "dw4/beDBManagerInfo.h"
-#include "dw4/beMessenger.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igNamedObject.h"
-#include "dw4/emptyString.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/game/beDataBase.h"
+#include "dw4/game/beDBManager.h"
+#include "dw4/game/beDBManagerInfo.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igNamedObject.h"
+#include "dw4/support/emptyString.h"
 
 extern "C" void beDBManager_Prepare(void);
 extern "C" igMetaObject *beDBManager_GetInfoMeta(void);

@@ -1,40 +1,40 @@
 #ifndef DW4_DATA_PUMP_LIBRARY_H
 #define DW4_DATA_PUMP_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igDataPumpInfo.h"
-#include "dw4/igVec3f.h"
-#include "dw4/igNonRefCountedObjectStack.h"
-#include "dw4/igRandomNumber.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/datapump/igDataPumpInfo.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/datapump/igNonRefCountedObjectStack.h"
+#include "dw4/datapump/igRandomNumber.h"
 
 
 class igMemoryPoolView;
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igFloatMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igMatrix44fMetaField.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igStringMetaField.h"
-#include "dw4/igUnsignedIntArrayMetaField.h"
-#include "dw4/igObject.h"
-#include "dw4/igMetaField.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igFloatMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/maths/igMatrix44fMetaField.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igStringMetaField.h"
+#include "dw4/core/igUnsignedIntArrayMetaField.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igMetaField.h"
 extern "C" char text_value[];
 
-#include "dw4/igMetaObject.h"
-#include "dw4/igRegistry.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/igRegistry.h"
 extern "C" void DataPumpLibrary_MarkRegistered(void);
-#include "dw4/igMemoryPoolContext.h"
+#include "dw4/core/igMemoryPoolContext.h"
 extern "C" igMetaObject *FUN_001e4010(void);
 extern "C" igMetaObject *igLongStack_GetMetaObject(void);
 struct Obj { int *vt; char pad[28]; };
 extern "C" int g_igLongStack_vtable[4];
-#include "dw4/igObjectSystem.h"
+#include "dw4/core/igObjectSystem.h"
 extern "C" int igLongStack_GetVTable(void);
 extern "C" void FUN_001e40f0(void);
-#include "dw4/igDataLists.h"
-#include "dw4/internalNonRefCountedObjectList.h"
-#include "dw4/igLongMetaField.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/internalNonRefCountedObjectList.h"
+#include "dw4/core/igLongMetaField.h"
 extern "C" void igLongStack_InitFields_001e4180(void);
 extern "C" CallbackArray *igLongStack_Register(void);
 extern "C" void thunk_igLongStack_GetMetaObject(void);
@@ -78,7 +78,7 @@ extern "C" igMetaObject *igNonRefCountedMatrixObjectList_GetMetaObject(void);
 extern "C" int g_igNonRefCountedMatrixObjectList_vtable[4];
 extern "C" int igNonRefCountedMatrixObjectList_GetVTable(void);
 extern "C" void FUN_001e4a50(void);
-#include "dw4/igNonRefCountedObjectList.h"
+#include "dw4/core/igNonRefCountedObjectList.h"
 extern "C" CallbackArray *igNonRefCountedMatrixObjectList_Register(void);
 extern "C" void thunk_igNonRefCountedMatrixObjectList_GetMetaObject(void);
 extern "C" igMetaObject *FUN_001e4ae0(void);
@@ -86,13 +86,13 @@ extern "C" igMetaObject *igMatrixObjectList_GetMetaObject(void);
 extern "C" int g_igMatrixObjectList_vtable[4];
 extern "C" int igMatrixObjectList_GetVTable(void);
 extern "C" void FUN_001e4bc0(void);
-#include "dw4/igObjectList.h"
+#include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igMatrixObjectList_Register(void);
 extern "C" void thunk_igMatrixObjectList_GetMetaObject(void);
 extern "C" void FUN_001e4c50(int arg0);
 extern "C" igMetaObject *igMatrixObject_GetMetaObject(void);
 struct Obj_1e4ce0 { int *vt; char pad[76]; };
-#include "dw4/igMatrix44f.h"
+#include "dw4/maths/igMatrix44f.h"
 extern "C" int g_igMatrixObject_vtable[4];
 extern "C" int igMatrixObject_GetVTable(void);
 extern "C" void FUN_001e4d30(void);
@@ -153,8 +153,8 @@ extern "C" void thunk_igDataPumpInterface_GetMetaObject(void);
 extern "C" void FUN_001e5650(int arg0);
 extern "C" igMetaObject *FUN_001e5690(void);
 extern "C" igMetaObject *igDataPumpInfo_GetMetaObject(void);
-#include "dw4/StringPool.h"
-#include "dw4/igNamedObject.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/core/igNamedObject.h"
 extern "C" int g_igDataPumpInfo_vtable[4];
 struct Obj_1e5730 {
     int *vt; int w0; int *r1; int w2; int w3; T *r4; int w5; int w6;
@@ -185,7 +185,7 @@ struct Obj_1e5730 {
 };
 extern "C" int igDataPumpInfo_GetVTable(void);
 extern "C" void FUN_001e5810(void);
-#include "dw4/igInfo.h"
+#include "dw4/core/igInfo.h"
 extern "C" CallbackArray *igDataPumpInfo_Register(void);
 extern "C" void thunk_igDataPumpInfo_GetMetaObject(void);
 extern "C" void igDataPumpInfo_InitFields(void);
@@ -251,8 +251,8 @@ extern "C" int FUN_0018be80(...);
 extern "C" int FUN_001e6d80(int arg0, int *arg1, const char *format);
 typedef struct FormattedObject : public igObject { int f8; } FormattedObject;
 typedef struct Vector3f { float x, y, z; } Vector3f;
-#include "dw4/igStringObj.h"
-#include "dw4/softfloat.h"
+#include "dw4/core/igStringObj.h"
+#include "dw4/support/softfloat.h"
 
 extern "C" int FUN_001e6de0(int *result, Vector3f *value, const char *format);
 struct QuadNamed : public igObject { int name; };

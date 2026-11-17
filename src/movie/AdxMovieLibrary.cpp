@@ -1,60 +1,60 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/ClassRegistration.h"
-#include "dw4/igAdx.h"
-#include "dw4/igAdxAfsFileList.h"
-#include "dw4/igAdxAudio.h"
-#include "dw4/igAdxFile.h"
-#include "dw4/igCriMovieCodec.h"
-#include "dw4/igCriMovieData.h"
-#include "dw4/igInsightPlugin.h"
-#include "dw4/igMovieCodec.h"
-#include "dw4/igMovieCodecList.h"
-#include "dw4/igMovieInfo.h"
-#include "dw4/igMovieInfoList.h"
-#include "dw4/igMovieManager.h"
-#include "dw4/igMoviePlugin.h"
-#include "dw4/igMovieRenderer.h"
-#include "dw4/igTextureBindAttrList.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/support/ClassRegistration.h"
+#include "dw4/audio/igAdx.h"
+#include "dw4/audio/igAdxAfsFileList.h"
+#include "dw4/audio/igAdxAudio.h"
+#include "dw4/audio/igAdxFile.h"
+#include "dw4/movie/igCriMovieCodec.h"
+#include "dw4/movie/igCriMovieData.h"
+#include "dw4/insight/igInsightPlugin.h"
+#include "dw4/movie/igMovieCodec.h"
+#include "dw4/movie/igMovieCodecList.h"
+#include "dw4/movie/igMovieInfo.h"
+#include "dw4/movie/igMovieInfoList.h"
+#include "dw4/movie/igMovieManager.h"
+#include "dw4/movie/igMoviePlugin.h"
+#include "dw4/movie/igMovieRenderer.h"
+#include "dw4/movie/igTextureBindAttrList.h"
 
 #pragma push
 #pragma readonly_strings on
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 
 class igMemoryPoolView;
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igEnumMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igMetaEnum.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igRawRefMetaField.h"
-#include "dw4/igShortMetaField.h"
-#include "dw4/igStringMetaField.h"
-#include "dw4/igStructMetaField.h"
-#include "dw4/igUnsignedLongMetaField.h"
-#include "dw4/igAudioContext.h"
-#include "dw4/igVisualContext.h"
-#include "dw4/igObject.h"
-#include "dw4/igRendererOrderedList.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igEnumMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igMetaEnum.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igRawRefMetaField.h"
+#include "dw4/core/igShortMetaField.h"
+#include "dw4/core/igStringMetaField.h"
+#include "dw4/core/igStructMetaField.h"
+#include "dw4/core/igUnsignedLongMetaField.h"
+#include "dw4/audio/igAudioContext.h"
+#include "dw4/gfx/igVisualContext.h"
+#include "dw4/core/igObject.h"
+#include "dw4/gui/igRendererOrderedList.h"
 
 extern "C" void AdxMovieLibrary_MarkRegistered(void);
 extern "C" void *igAdx_GetMetaObject(void);
 extern "C" int igAdx_GetVTable(void);
-#include "dw4/igMetaObject.h"
+#include "dw4/core/igMetaObject.h"
 extern "C" void igAdx_EnsureRegistered(void);
 extern "C" CallbackArray *igAdx_Register(void);
 extern "C" void igAdx_GetMetaObjectFunction(void);
 extern "C" void igAdx_InitFields(void);
 extern "C" void igAdx_StaticInitCallback(void);
 extern "C" void igAdx_ExitCallback(void);
-#include "dw4/igMemoryPoolContext.h"
+#include "dw4/core/igMemoryPoolContext.h"
 extern "C" void *igAdxAfsFileList_GetMetaObject(void);
 extern "C" int igAdxAfsFileList_GetVTable(void);
-#include "dw4/igObjectList.h"
+#include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igAdxAfsFileList_Register(void);
 extern "C" void igAdxAfsFileList_GetMetaObjectFunction(void);
 extern "C" void *igAdxAfsFile_GetMetaObject(void);
-#include "dw4/StringPool.h"
+#include "dw4/core/StringPool.h"
 /* Header stored in front of every interned string token. */
 struct StringTokenHeader { int owner; int refCount; };
 static inline void releaseString(const char *string) {
@@ -81,8 +81,8 @@ extern "C" void igFileNameList_GetMetaObjectFunction(void);
 extern "C" void *igFileName_GetMetaObject(void);
 extern "C" int igFileName_GetVTable(void);
 extern "C" void igFileName_EnsureRegistered(void);
-#include "dw4/igNamedObject.h"
-#include "dw4/igFile.h"
+#include "dw4/core/igNamedObject.h"
+#include "dw4/core/igFile.h"
 extern "C" CallbackArray *igFileName_Register(void);
 extern "C" void igFileName_GetMetaObjectFunction(void);
 extern "C" void igFileName_InitFields(void);
@@ -141,21 +141,21 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodec_Destruct(igSmar
 extern "C" void igMovieInfo_EnsureRegistered(void);
 extern "C" CallbackArray *igMovieInfo_Register(void);
 extern "C" void igMovieInfo_GetMetaObjectFunction(void);
-#include "dw4/igTextureList.h"
-#include "dw4/igImage.h"
-#include "dw4/igSceneInfo.h"
-#include "dw4/GfxMetaEnums.h"
+#include "dw4/attrs/igTextureList.h"
+#include "dw4/gfx/igImage.h"
+#include "dw4/scenegraph/igSceneInfo.h"
+#include "dw4/gfx/GfxMetaEnums.h"
 extern "C" void igMovieInfo_InitFields(void);
 extern "C" igMetaObject *igMovieRenderer_GetOrCreateMetaObject(void);
 extern "C" void *igMovieRenderer_GetMetaObject(void);
 extern "C" int igMovieRenderer_GetVTable(void);
 extern "C" void igMovieRenderer_EnsureRegistered(void);
-#include "dw4/igRenderer.h"
+#include "dw4/gui/igRenderer.h"
 extern "C" CallbackArray *igMovieRenderer_Register(void);
 extern "C" void igMovieRenderer_GetMetaObjectFunction(void);
 extern "C" void igMovieRenderer_InitFields(void);
 extern "C" void *igMovieManager_GetMetaObject(void);
-#include "dw4/igInfoManager.h"
+#include "dw4/insight/igInfoManager.h"
 extern "C" int igMovieManager_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodecList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" CallbackArray *igMovieManager_Register(void);
@@ -183,7 +183,7 @@ extern "C" igMetaObject *igAdxAfsFileList_GetMeta(void);
 extern "C" igMetaObject *igAdxAfsFileList_GetElementMeta(void);
 extern "C" unsigned char g_AdxMovieLibrary_registered;
 extern "C" int g_igAdx_vtable[4];
-#include "dw4/igObjectSystem.h"
+#include "dw4/core/igObjectSystem.h"
 struct igMetaObject_334510;
 extern "C" igMetaObject *g_igAdxAfsFileList_metaObject;
 extern "C" int g_igAdxAfsFileList_vtable[4];
@@ -213,14 +213,14 @@ extern "C" igMetaObject *igTextureBindAttrList_GetMetaObject(void);
 /* Stack object, vtable slot read through the object plus a runtime offset. */
 extern "C" int g_igTextureBindAttrList_vtable[4];
 extern "C" int g_igMovieInfo_vtable[4];
-#include "dw4/igInfo.h"
+#include "dw4/core/igInfo.h"
 extern "C" int g_igMovieRenderer_vtable[4];
 extern "C" int g_igMovieManager_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieRenderer_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" int g_igMoviePlugin_vtable[4];
-#include "dw4/igTextureBindAttr.h"
-#include "dw4/igNamedObjectList.h"
+#include "dw4/attrs/igTextureBindAttr.h"
+#include "dw4/core/igNamedObjectList.h"
 
 unsigned char g_AdxMovieLibrary_registered;
 

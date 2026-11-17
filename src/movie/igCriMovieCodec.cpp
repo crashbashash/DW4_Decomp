@@ -1,8 +1,8 @@
-#include "dw4/reflected.h"
-#include "dw4/igMemoryPoolView.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igVisualContextDispatchView.h"
-#include "dw4/igFileDispatchView.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igMemoryPoolView.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/gfx/igVisualContextDispatchView.h"
+#include "dw4/core/igFileDispatchView.h"
 extern "C" {
 #include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/cri_adxt.h"
@@ -46,18 +46,18 @@ public:
     virtual int syncPauseState(igMovieInfo *movie);
 };
 
-#include "dw4/igObject.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igMemory.h"
-#include "dw4/igPsx2VisualContext.h"
-#include "dw4/igMovieInfo.h"
-#include "dw4/igAdx.h"
-#include "dw4/igCriMovieData.h"
-#include "dw4/igCriMovieCodec.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igMemory.h"
+#include "dw4/gfx/igPsx2VisualContext.h"
+#include "dw4/movie/igMovieInfo.h"
+#include "dw4/audio/igAdx.h"
+#include "dw4/movie/igCriMovieData.h"
+#include "dw4/movie/igCriMovieCodec.h"
 #include "dw4/cri/adx_ps2.h"
 #include "dw4/cri/cri_adxf.h"
-#include "dw4/igFile.h"
-#include "dw4/igReport.h"
+#include "dw4/core/igFile.h"
+#include "dw4/core/igReport.h"
 #include <math.h>
 extern "C" {
 int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called);

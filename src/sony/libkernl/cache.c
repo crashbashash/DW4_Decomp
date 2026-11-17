@@ -2,7 +2,7 @@
  * of 64 lines of 64 bytes; each walk reads every line's tag (TagLo, COP0 $28) and writes back or
  * invalidates the lines whose address falls in [start, end]. */
 
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef unsigned int u_int;
 

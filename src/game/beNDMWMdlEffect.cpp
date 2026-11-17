@@ -1,12 +1,12 @@
-#include "dw4/igSmartPointer.h"
-#include "dw4/beBaseInfoDataList.h"
-#include "dw4/beModelCtrl.h"
-#include "dw4/beModelCtrlInfoWork.h"
-#include "dw4/beNDMWMdlEffect.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igNamedObject.h"
-#include "dw4/igObject.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/game/beBaseInfoDataList.h"
+#include "dw4/game/beModelCtrl.h"
+#include "dw4/game/beModelCtrlInfoWork.h"
+#include "dw4/game/ndmw/beNDMWMdlEffect.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igNamedObject.h"
+#include "dw4/core/igObject.h"
 #include <string.h>
 
 extern "C" unsigned char beNDMWMdlEffect_IsKind(int dummy0, int kind);

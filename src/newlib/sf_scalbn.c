@@ -1,4 +1,4 @@
-#include "dw4/ieee_words.h"
+#include "dw4/newlib/ieee_words.h"
 #include <math.h>
 
 #define OVERFLOW_INT 50000

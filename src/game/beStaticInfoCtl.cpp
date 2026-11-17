@@ -1,13 +1,13 @@
-#include "dw4/reflected.h"
-#include "dw4/beBaseInfoManagerDispatchView.h"
-#include "dw4/beBaseInfoManager.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beStaticInfo.h"
-#include "dw4/beStaticInfoCtl.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igObject.h"
-#include "dw4/emptyString.h"
+#include "dw4/support/reflected.h"
+#include "dw4/game/beBaseInfoManagerDispatchView.h"
+#include "dw4/game/beBaseInfoManager.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/beStaticInfo.h"
+#include "dw4/game/beStaticInfoCtl.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igObject.h"
+#include "dw4/support/emptyString.h"
 
 extern "C" igMetaObject *beStaticInfoCtl_GetInfoMeta(void);
 extern "C" void beStaticInfoCtl_UpdateRam(void);

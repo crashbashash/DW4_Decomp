@@ -2,7 +2,7 @@
  * the handler reports it written; the handler queues what the host types, and sceTtyRead takes it out
  * a line at a time. */
 
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef unsigned int u_int;
 typedef unsigned char u_char;

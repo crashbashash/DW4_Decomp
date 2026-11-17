@@ -1,11 +1,11 @@
-#include "dw4/reflected.h"
+#include "dw4/support/reflected.h"
 
 extern "C" {
 
 class W { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(int, int, int, int, float, float); };
-#include "dw4/igInsightCore.h"
-#include "dw4/igObject.h"
-#include "dw4/igViewerSceneInfoManager.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igObject.h"
+#include "dw4/viewer/igViewerSceneInfoManager.h"
 void igActorManager_Start(igActorManager *arg0);
 
 
@@ -14,10 +14,10 @@ typedef struct L { char pad[8]; int n; int p; int *arr; } L;
 typedef struct A { char pad[24]; L *f24; } A;
 struct ActorListOwner;
 void FUN_00467030(struct ActorListOwner *arg0, int arg1);
-#include "dw4/igActorInfo.h"
+#include "dw4/scenegraph/igActorInfo.h"
 #define F24 (*(L **)&arg1->f24)
 
-#include "dw4/igDataLists.h"
+#include "dw4/core/igDataLists.h"
 
 struct ActorList { char pad[8]; int n; int p12; int *arr; };
 struct ActorListOwner { char pad[24]; struct ActorList *f24; };
@@ -38,7 +38,7 @@ static inline int indexOf(struct ActorList *list, const int *value) {
     return -1;
 }
 
-#include "dw4/igActorManager.h"
+#include "dw4/viewer/igActorManager.h"
 
 void igActorManager_Start(igActorManager *arg0) {
     igObject *temp_v0;

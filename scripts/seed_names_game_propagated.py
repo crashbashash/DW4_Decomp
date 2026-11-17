@@ -48,6 +48,7 @@ are not counted as evidence, so it can be re-run after `tools/apply_names.py`.  
 import argparse
 import bisect
 import collections
+import glob
 import json
 import os
 import re
@@ -500,7 +501,7 @@ def view_class(t):
     include/dw4, is the class itself; any other T is returned unchanged."""
     if t.endswith("DispatchView"):
         return t[:-len("DispatchView")]
-    if t.endswith("View") and os.path.exists(os.path.join("include", "dw4", t + ".h")):
+    if t.endswith("View") and glob.glob(os.path.join("include", "dw4", "*", t + ".h")):
         return t[:-len("View")]
     return t
 

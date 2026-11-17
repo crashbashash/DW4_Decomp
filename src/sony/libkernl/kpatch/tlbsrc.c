@@ -1,7 +1,7 @@
 /* tlbsrc.c - the TLB kernel patch. Linked to run at 0x80075000, where tlbfunc.c copies it, it adds the TLB
  * system calls to the kernel. COP0 registers: 0 Index, 2 EntryLo0, 3 EntryLo1, 5 PageMask, 6 Wired,
  * 10 EntryHi. */
-#include "dw4/libkernl_patch.h"
+#include "dw4/sony/libkernl_patch.h"
 
 typedef unsigned int u_int;
 

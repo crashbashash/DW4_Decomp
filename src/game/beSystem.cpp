@@ -1,13 +1,13 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/beSystem.h"
-#include "dw4/StringPool.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObject.h"
-#include "dw4/softfloat.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/game/beSystem.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObject.h"
+#include "dw4/support/softfloat.h"
 #include <string.h>
-#include "dw4/igResource.h"
+#include "dw4/core/igResource.h"
 
 /* Header in front of every interned string token: owning chunk, then a full 32-bit reference
  * count. */

@@ -1,13 +1,13 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igWindowDispatchView.h"
-#include "dw4/StringPool.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beNDMWStageCtl.h"
-#include "dw4/beNDMWStageCtlInfo.h"
-#include "dw4/bePadManager.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igStringObj.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/windowinput/igWindowDispatchView.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/ndmw/beNDMWStageCtl.h"
+#include "dw4/game/ndmw/beNDMWStageCtlInfo.h"
+#include "dw4/game/bePadManager.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igStringObj.h"
 #include <string.h>
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((char *)(s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader((StringChunk *)h_[0], (StringTokenHeader *)h_); }
 #define POOL() if (!g_stringPool) { StringPool *p_ = (StringPool *)StringPool_Allocate(16); if (p_) p_ = StringPool_Construct(p_); g_stringPool = p_; }

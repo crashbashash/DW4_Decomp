@@ -1,5 +1,5 @@
-#include "dw4/newlib_stdio.h"
-#include "dw4/newlib_syscalls.h"
+#include "dw4/newlib/newlib_stdio.h"
+#include "dw4/newlib/newlib_syscalls.h"
 
 
 int __sread(void *cookie, char *buf, int n)

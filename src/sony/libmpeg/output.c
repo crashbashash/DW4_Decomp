@@ -1,7 +1,7 @@
 #include "dw4/sony/libmpeg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include <stdio.h>
-#include "dw4/softfloat.h"
+#include "dw4/support/softfloat.h"
 
 
 /* The fields a frame is shown for, by its repeat_first_field and top_field_first flags. */

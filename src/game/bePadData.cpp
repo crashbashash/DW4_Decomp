@@ -1,10 +1,10 @@
-#include "dw4/reflected.h"
-#include "dw4/igTraversal.h"
-#include "dw4/beLoadingNode.h"
-#include "dw4/beNodeAnim.h"
-#include "dw4/bePadData.h"
-#include "dw4/igObject.h"
-#include "dw4/softfloat.h"
+#include "dw4/support/reflected.h"
+#include "dw4/scenegraph/igTraversal.h"
+#include "dw4/game/beLoadingNode.h"
+#include "dw4/game/beNodeAnim.h"
+#include "dw4/game/bePadData.h"
+#include "dw4/core/igObject.h"
+#include "dw4/support/softfloat.h"
 #include <math.h>
 /* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
 extern "C" int g_igCommonTraversal_travProcs[4];

@@ -1,5 +1,5 @@
 #include "dw4/sony/libmpeg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 
 #define D4_CHCR (*(volatile unsigned int *)0x1000B400)

@@ -1,25 +1,25 @@
-#include "dw4/reflected.h"
-#include "dw4/igTDataList.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igTraversalView.h"
-#include "dw4/igObjectDispatchView.h"
-#include "dw4/beModelCtrlNode2.h"
-#include "dw4/beModelCtrlSubCom.h"
-#include "dw4/StringPool.h"
-#include "dw4/beBaseInfoDataList.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beModelCtrl.h"
-#include "dw4/beModelCtrlSCEffect.h"
-#include "dw4/beModelCtrlSCHitBox.h"
-#include "dw4/beModelCtrlSCSound.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igNamedObject.h"
-#include "dw4/igObject.h"
-#include "dw4/igTraversal.h"
-#include "dw4/softfloat.h"
-#include "dw4/igAABox.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igTDataList.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/scenegraph/igTraversalView.h"
+#include "dw4/core/igObjectDispatchView.h"
+#include "dw4/game/beModelCtrlNode2.h"
+#include "dw4/game/beModelCtrlSubCom.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/game/beBaseInfoDataList.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/beModelCtrl.h"
+#include "dw4/game/beModelCtrlSCEffect.h"
+#include "dw4/game/beModelCtrlSCHitBox.h"
+#include "dw4/game/beModelCtrlSCSound.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igNamedObject.h"
+#include "dw4/core/igObject.h"
+#include "dw4/scenegraph/igTraversal.h"
+#include "dw4/support/softfloat.h"
+#include "dw4/maths/igAABox.h"
 /* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
 extern "C" int g_igCommonTraversal_travProcs[4];
 #pragma push
@@ -27,7 +27,7 @@ extern "C" int g_igCommonTraversal_travProcs[4];
 
 typedef void (*TraversalFunction)(void);
 
-#include "dw4/emptyString.h"
+#include "dw4/support/emptyString.h"
 extern "C" {
 
 

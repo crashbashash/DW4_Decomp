@@ -1,5 +1,5 @@
-#include "dw4/newlib_mallocr.h"
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_mallocr.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 #define RARG struct _reent *reent_ptr,
 #define RCALL reent_ptr,

@@ -1,41 +1,41 @@
 #ifndef DW4_INSIGHT_LIBRARY_H
 #define DW4_INSIGHT_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igVec3f.h"
-#include "dw4/igobject_release.h"
-#include "dw4/fun_00235370_refs.h"
-#include "dw4/ViewerOptions.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igInfoManager.h"
-#include "dw4/igInsightPlugin.h"
-#include "dw4/igMessage.h"
-#include "dw4/igMessageDefaultReceiver.h"
-#include "dw4/igMessenger.h"
-#include "dw4/igViewportResizedMessage.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/core/igobject_release.h"
+#include "dw4/insight/fun_00235370_refs.h"
+#include "dw4/viewer/ViewerOptions.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/insight/igInfoManager.h"
+#include "dw4/insight/igInsightPlugin.h"
+#include "dw4/insight/igMessage.h"
+#include "dw4/insight/igMessageDefaultReceiver.h"
+#include "dw4/insight/igMessenger.h"
+#include "dw4/insight/igViewportResizedMessage.h"
 #define ReleaseObject(obj) do { igObject *held = (obj); IG_OBJECT_RELEASE(held); } while (0)
 #define OPTION_BOOL(name, help, value)  { const char *optionName = name; if (optionName) FUN_002342b0(optionName, help, value); }
 #define OPTION_INT(name, help, value)   { const char *optionName = name; if (optionName) FUN_002342e0(optionName, help, value); }
 #define OPTION_FLOAT(name, help, value) { const char *optionName = name; if (optionName) FUN_00234300(optionName, help, value); }
 
 class igMemoryPoolView;
-#include "dw4/igIntMetaField.h"
-#include "dw4/igLongMetaField.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igStructMetaField.h"
-#include "dw4/igVec2fMetaField.h"
-#include "dw4/igMetaObject.h"
-#include "dw4/igObject.h"
-#include "dw4/igInfoList.h"
-#include "dw4/igRendererOrderedList.h"
-#include "dw4/igEventDispatcher.h"
-#include "dw4/igClearRenderer.h"
-#include "dw4/igTimer.h"
-#include "dw4/igReport.h"
-#include "dw4/igPluginHelper.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igLongMetaField.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igStructMetaField.h"
+#include "dw4/maths/igVec2fMetaField.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igInfoList.h"
+#include "dw4/gui/igRendererOrderedList.h"
+#include "dw4/gui/igEventDispatcher.h"
+#include "dw4/gui/igClearRenderer.h"
+#include "dw4/core/igTimer.h"
+#include "dw4/core/igReport.h"
+#include "dw4/core/igPluginHelper.h"
 extern "C" void FUN_00145de0(void);
-#include "dw4/igVisualContext.h"
+#include "dw4/gfx/igVisualContext.h"
 extern "C" void InsightLibrary_MarkRegistered(void);
 struct S {
     void *f0;
@@ -43,19 +43,19 @@ struct S {
     void *f8;
 };
 extern "C" void *FUN_00230f70(struct S *arg0, short arg1);
-#include "dw4/igRenderer.h"
+#include "dw4/gui/igRenderer.h"
 extern "C" igMetaObject *FUN_00231010(void);
 extern "C" igMetaObject *g_igMessage_metaObject;
 extern "C" igMetaObject *FUN_00231020(void);
-#include "dw4/StringPool.h"
-#include "dw4/igNamedObject.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/core/igNamedObject.h"
 extern "C" igMetaObject *g_igInfoManager_metaObject;
 extern "C" igMetaObject *FUN_002310d0(void);
 extern "C" igMetaObject *g_igSerialScheduler_metaObject;
 extern "C" igMetaObject *igSerialScheduler_GetMetaObject(void);
 struct T { int word0; int references; };
 extern "C" int g_igSerialScheduler_vtable[4];
-#include "dw4/igObjectSystem.h"
+#include "dw4/core/igObjectSystem.h"
 struct Obj {
     int *vt; char p4[4]; T *m8; T *m12; 
     inline void rel8() {
@@ -90,7 +90,7 @@ extern "C" void thunk_igSerialScheduler_GetMetaObject(void);
 extern "C" igMetaObject *g_igInsightScheduler_metaObject;
 extern "C" igMetaObject *FUN_00231330(void);
 extern "C" void igSerialScheduler_InitFields(void);
-#include "dw4/igMemoryPoolContext.h"
+#include "dw4/core/igMemoryPoolContext.h"
 extern "C" igMetaObject *g_igMessenger_metaObject;
 extern "C" igMetaObject *FUN_00231400(void);
 extern "C" igMetaObject *igMessenger_GetMetaObject(void);
@@ -115,7 +115,7 @@ struct Obj_231830 { int *vt; char pad[28]; };
 extern "C" int g_igMessageReceiverList_vtable[4];
 extern "C" int igMessageReceiverList_GetVTable(void);
 extern "C" void FUN_00231870(void);
-#include "dw4/igObjectList.h"
+#include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igMessageReceiverList_Register(void);
 extern "C" void thunk_igMessageReceiverList_GetMetaObject(void);
 extern "C" igMetaObject *g_igMessageReceiver_metaObject;
@@ -225,7 +225,7 @@ extern "C" int g_igWindowResizeEventReceiver_vtable[4];
 struct Obj_233120 { int *vt; char pad[12]; };
 extern "C" int igWindowResizeEventReceiver_GetVTable(void);
 extern "C" void FUN_00233160(void);
-#include "dw4/igEventReceiver.h"
+#include "dw4/gui/igEventReceiver.h"
 extern "C" CallbackArray *igWindowResizeEventReceiver_Register(void);
 extern "C" void thunk_igWindowResizeEventReceiver_GetMetaObject(void);
 extern "C" igMetaObject *FUN_00233200(void);
@@ -246,9 +246,9 @@ typedef struct { int *vt; int w[5]; } Obj_233520;
 extern "C" int g_igInfoManagerOrderedList_vtable[4];
 extern "C" int igInfoManagerOrderedList_GetVTable(void);
 extern "C" int DAT_0052cbc0[4];
-#include "dw4/igDependencyOrderedList.h"
-#include "dw4/list-services.h"
-#include "dw4/igStringRef.h"
+#include "dw4/core/igDependencyOrderedList.h"
+#include "dw4/support/list-services.h"
+#include "dw4/core/igStringRef.h"
 extern "C" int **FUN_00233610(int **arg0, long long arg1);
 extern "C" void FUN_002336b0(void);
 extern "C" CallbackArray *igInfoManagerOrderedList_Register(void);
@@ -429,10 +429,10 @@ extern "C" void FUN_00234ee0(struct FlushSettings *settings, const char *text);
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "dw4/softfloat.h"
+#include "dw4/support/softfloat.h"
 extern "C" int FUN_001e6d80(...);
-#include "dw4/igDataLists.h"
-#include "dw4/igMathConstants.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/maths/igMathConstants.h"
 /* The object smart-pointer destructor: the held pointer is copied once (its slot is a plain field,
  * so it is read once), then released with the shared sequence. */
 
@@ -624,7 +624,7 @@ public:
     virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36();
     virtual int setVisualContext(igVisualContextView *context);
 };
-#include "dw4/igWindow.h"
+#include "dw4/windowinput/igWindow.h"
 class igFlushRendererView {
 public:
     int _vtable;
@@ -633,13 +633,13 @@ public:
 };
 extern "C" void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self);
 struct NamedObject : public igObject { int name; };
-#include "dw4/igFolder.h"
+#include "dw4/core/igFolder.h"
 struct G { char p[76]; int f76; };
 extern "C" void FUN_00236140(void);
 struct TextValue : public igObject { char *text; };
-#include "dw4/igStringObj.h"
+#include "dw4/core/igStringObj.h"
 extern "C" FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options);
-#include "dw4/ViewerSetup.h"
+#include "dw4/viewer/ViewerSetup.h"
 struct ResizeEvent : public igObject { float origin[2]; float size[2]; };
 extern "C" float DAT_004e0fa0[4];
 extern "C" float DAT_004e0fa4[4];
@@ -661,7 +661,7 @@ typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
 typedef struct A { char pad104[104]; L *f68; } A;
 extern "C" void FUN_00236e80(A *arg0);
 extern "C" int FUN_00457ca0(...);
-#include "dw4/igResult.h"
+#include "dw4/core/igResult.h"
 /* An info manager: its virtual slot 20 returns its meta object. */
 struct InfoManagerView { virtual int a0(); virtual int a1(); virtual int a2(); virtual int a3(); virtual int a4(); virtual int a5(); virtual int a6(); virtual int a7(); virtual int a8(); virtual int a9(); virtual int a10(); virtual int a11(); virtual int a12(); virtual int a13(); virtual int a14(); virtual int a15(); virtual int a16(); virtual int a17(); virtual int a18(); virtual int a19(); virtual igMetaObject *getMeta(); };
 extern "C" int FUN_00237010(void);
@@ -828,7 +828,7 @@ extern "C" float DAT_004e117c[4];
  * StoreFloat (thunk_igRegistry_GetValueFloat), StoreInt (thunk_igRegistry_GetValueInt), StoreVec4 (FUN_001e71f0),
  * StoreVec3 (FUN_001e70a0). */
 typedef struct PropertySet { char pad[56]; int props; } PropertySet;
-#include "dw4/igRegistry.h"
+#include "dw4/core/igRegistry.h"
 extern "C" int FUN_001e71f0(int, int, const char *, Vec4 *, Vec4 *, int);
 extern "C" int FUN_001e70a0(int, int, const char *, Vec3 *, Vec3 *, int);
 extern "C" void FUN_002382e0(ViewerOptions_2382e0 *opt, int, int, int, int, int, int, int);

@@ -90,7 +90,7 @@ extern const char *const DAT_004cf5c0[6];
 
 
 def generate():
-    reflected = (ROOT / "include/dw4/reflected.h").read_text()
+    reflected = (ROOT / "include/dw4/support/reflected.h").read_text()
     receiver = re.search(r"typedef struct beNDMWGameRam \{.*?\} beNDMWGameRam;", reflected, re.S)
     if receiver is None:
         raise ValueError("reflected GAMERAM receiver definition is missing")

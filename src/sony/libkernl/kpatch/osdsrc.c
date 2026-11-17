@@ -1,6 +1,6 @@
 /* osdsrc.c - the ExecPS2 kernel patch. Linked to run at 0x80074000, where libosd.c copies it, it replaces
  * the kernel's OSD configuration calls and its ExecPS2. */
-#include "dw4/libkernl_patch.h"
+#include "dw4/sony/libkernl_patch.h"
 
 typedef unsigned int u_int;
 typedef unsigned char u_char;

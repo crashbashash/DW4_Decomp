@@ -1,5 +1,5 @@
 #include "dw4/sony/libmpeg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 void _initSeq(sceMpeg *mp);
 void _setFieldPointers(_sceMpegPicture *p0, _sceMpegPicture *p1, _sceMpegPicture *p2, _sceMpegPicture *p3,

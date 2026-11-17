@@ -1,10 +1,10 @@
-#include "dw4/reflected.h"
-#include "dw4/StringPool.h"
-#include "dw4/beNDMWShopTitle00.h"
-#include "dw4/beNDMWShopTitle01.h"
-#include "dw4/beNDMWShopTitle03.h"
-#include "dw4/beNDMWWindow.h"
-#include "dw4/list-services.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/game/ndmw/beNDMWShopTitle00.h"
+#include "dw4/game/ndmw/beNDMWShopTitle01.h"
+#include "dw4/game/ndmw/beNDMWShopTitle03.h"
+#include "dw4/game/ndmw/beNDMWWindow.h"
+#include "dw4/support/list-services.h"
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \

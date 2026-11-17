@@ -9,19 +9,19 @@
  * the packets submitted after it wait for the GS FINISH handler, which calls the functions queued
  * before them. A finish sequence is a GS SIGNAL id written behind the submitted work: the signal
  * handler records each id the GS reaches, so a thread can wait for everything up to one. */
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
-#include "dw4/p2core.h"
-#include "dw4/p2dma.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2gs.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2gs.h"
 
 #pragma push
 #pragma readonly_strings on
-#include "dw4/p2pool.h"
-#include "dw4/p2swap.h"
-#include "dw4/p2timer.h"
-#include "dw4/p2viewport.h"
+#include "dw4/p2/p2pool.h"
+#include "dw4/p2/p2swap.h"
+#include "dw4/p2/p2timer.h"
+#include "dw4/p2/p2viewport.h"
 
 /* The GS privileged CSR register and its FIELD bit: set while the odd field is shown. */
 enum {

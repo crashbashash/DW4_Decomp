@@ -17,12 +17,12 @@ enum p2Primitive {
     P2_PRIM_TRIANGLE_STRIPS /* a list of triangle strips */
 };
 
-#include "dw4/p2dma.h"
-#include "dw4/p2core.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2draw.h"
-#include "dw4/p2vif.h"
-#include "dw4/renderState.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2draw.h"
+#include "dw4/p2/p2vif.h"
+#include "dw4/p2/renderState.h"
 
 /* Bits of a program's p2ProgramFlags entry, as shifts. */
 enum p2ProgramFlagBit {

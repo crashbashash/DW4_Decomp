@@ -1,4 +1,4 @@
-#include "dw4/newlib_mallocr.h"
+#include "dw4/newlib/newlib_mallocr.h"
 
 #define RARG struct _reent *reent_ptr,
 #define MALLOC_LOCK __malloc_lock(reent_ptr)

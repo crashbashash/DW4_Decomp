@@ -23,7 +23,7 @@ The output is grouped by struct name with file:line pairs.  It is a report, not 
 preprocessor); unknown member types are sized 0 and the view is marked `~` in the report.
 
 Usage: scripts/check_struct_conflicts.py [--src src] [--include include/dw4]
-                                         [--reflected include/dw4/reflected.h] [--only a,b,c]
+                                         [--reflected include/dw4/support/reflected.h] [--only a,b,c]
 """
 import argparse
 import collections
@@ -394,7 +394,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--src", default="src")
     ap.add_argument("--include", default="include/dw4")
-    ap.add_argument("--reflected", default="include/dw4/reflected.h")
+    ap.add_argument("--reflected", default="include/dw4/support/reflected.h")
     ap.add_argument("--only", default="a,b,c", help="which reports to print (default all)")
     a = ap.parse_args(argv)
     reflected = parse_reflected(a.reflected)

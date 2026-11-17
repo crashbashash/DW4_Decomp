@@ -81,8 +81,10 @@ Paths are repository-relative, and commands run from the repository root.
 
 - `src/` recovered source (`src/third_party/` is stock zlib, libpng and Lua, never edited;
   [README](src/third_party/README.md)); `asm/` the retail split, generated from your executable and never
-  committed (`make asm`; `make check` writes it when it is missing or stale); `include/dw4/` shared headers
-  (`reflected.h` is generated); `tools/` build and matching tools ([README](tools/README.md)); `scripts/`
+  committed (`make asm`; `make check` writes it when it is missing or stale); `include/dw4/<library>/` shared headers,
+  one folder per library mirroring `src/` (`core/`, `game/`, `game/ndmw/`, `p2/`, `movie/`, `cri/`, `sony/`, ...; a header lives in the
+  folder of the library whose unit defines its subject, and `support/` holds the project-wide utilities no single library owns;
+  `support/reflected.h` is generated); `tools/` build and matching tools ([README](tools/README.md)); `scripts/`
   analysis; `data/` recovered data; `lua/` the game's Lua scripts decompiled and filed by stage
   (`scripts/lua_tree.py` resolves a pack entry and chunk to its file); `docs/` the documentation
   ([index](docs/README.md), whose Conventions cover how documents are written).
@@ -118,7 +120,7 @@ scratch; what lands is both matched and readable.
   unit, or joining held-out functions to one, makes the touched code readable in the same change: the unit
   is the scope, with one header and one set of types.
 - **A function that resists matching is understood before it is searched.** When the obvious spellings
-  fail, read the function and its unit first: real types from `include/dw4/reflected.h`, what each value
+  fail, read the function and its unit first: real types from `include/dw4/support/reflected.h`, what each value
   is for, names from evidence, the same virtual slot in sibling classes, and the GameCube and Xbox builds.
   Only then run a permuter or a variant search. A spelling whose only reason is the bytes (a temporary
   that holds a stack slot, a one-element array that holds a register, a directive that ends a scheduling
@@ -175,8 +177,8 @@ A function is readable when all of these hold:
    classes alike; a type also needs a real name, not a placeholder such as `S`, `Obj` or `Info176`.
    Strings are named by their text, with no prefix.
 3. No m2c idioms (`temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`) and no raw offset casts where
-   `include/dw4/reflected.h` names the field; real structs, enums and control flow; offset members are
-   decimal `fNN` and temporary, with one shared definition per class under `include/dw4/`. A comment appears
+   `include/dw4/support/reflected.h` names the field; real structs, enums and control flow; offset members are
+   decimal `fNN` and temporary, with one shared definition per class under `include/dw4/<library>/<Module>.h`. A comment appears
    only when it is necessary, for what the code cannot say, and it stands alone: no pointer to another
    document or tool, and no account of how the code was recovered.
 4. A shape found by a permuter, flag sweep or random walk carries

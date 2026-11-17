@@ -26,7 +26,7 @@ from the retail relocations.
 same helpers: `setup` (system call 116, SetSyscall), `Copy` (system call 90), `kCopy` (the copy loop that
 `setup` installs as call 90, so `Copy` runs it in kernel mode) and `GetEntryAddress` (system call 91, the
 kernel's current handler). A patch file installs `kCopy`, copies its kernel code into kernel memory, flushes the
-caches, and installs or restores the calls of its `SysEntry` table (`SyscallEntry` in `include/dw4/libkernl.h`).
+caches, and installs or restores the calls of its `SysEntry` table (`SyscallEntry` in `include/dw4/sony/libkernl.h`).
 Their symbols carry the file as a suffix (`Copy_tlbfunc`, `setup_libosd`); the unit row of a file that begins
 with one names it in `symbol`. `exit.c`'s `kCopy` copies bytes; the others copy words.
 

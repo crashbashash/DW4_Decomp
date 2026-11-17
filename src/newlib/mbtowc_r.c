@@ -1,4 +1,4 @@
-#include "dw4/newlib_locale.h"
+#include "dw4/newlib/newlib_locale.h"
 
 int _mbtowc_r(struct _reent *ptr, int *pwc, const char *s, unsigned int n, int *state)
 {

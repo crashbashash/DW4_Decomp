@@ -1,25 +1,25 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/ViewerSetup.h"
-#include "dw4/igViewManager.h"
-#include "dw4/igVec3f.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igViewerParameters.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/viewer/ViewerSetup.h"
+#include "dw4/viewer/igViewManager.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/viewer/igViewerParameters.h"
 
 #pragma push
 #pragma readonly_strings on
 
-#include "dw4/igViewerSceneInfoManager.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igView.h"
-#include "dw4/igModel.h"
-#include "dw4/ViewerOptions.h"
-#include "dw4/StringPool.h"
-#include "dw4/igViewModel.h"
-#include "dw4/igReport.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igResult.h"
-#include "dw4/igNamedObject.h"
+#include "dw4/viewer/igViewerSceneInfoManager.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/gui/igView.h"
+#include "dw4/gui/igModel.h"
+#include "dw4/viewer/ViewerOptions.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/viewer/igViewModel.h"
+#include "dw4/core/igReport.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igResult.h"
+#include "dw4/core/igNamedObject.h"
 #include <math.h>
 extern "C" {
 

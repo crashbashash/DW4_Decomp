@@ -79,4 +79,4 @@ match with them: 61 `(char *)` occurrences remain and raw `*(int *)((char *)` lo
 not determined (passed to `DW4Fresh::Assign` and `beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref`). The property records (`+12` value), `igDataList` (`_count`), the byte list, the folder-list slots (`+20`
 value) and `beSystem._random` (`+0x30`) are written as members. Several small identical record views (`DW4Property`, `DW4PropRec`,
 `DW4IntProperty`, ...) exist side by side and can be merged into one when the shared types are promoted to
-`include/dw4/reflected.h`.
+`include/dw4/support/reflected.h`.

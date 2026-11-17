@@ -1,5 +1,5 @@
 #include "dw4/sony/libmpeg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include <stdio.h>
 
 void _ErrMessage(char *message) {

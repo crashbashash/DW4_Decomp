@@ -9,7 +9,7 @@
 #include "dw4/cri/adx_ps2.h"
 #include "dw4/cri/lsc.h"
 #include "dw4/cri/svm.h"
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 
 

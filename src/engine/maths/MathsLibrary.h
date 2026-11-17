@@ -1,19 +1,19 @@
 #ifndef DW4_MATHS_LIBRARY_H
 #define DW4_MATHS_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igVec3f.h"
-#include "dw4/ClassRegistration.h"
-#include "dw4/igMetaObject.h"
-#include "dw4/igObject.h"
-#include "dw4/igObjectSystem.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igResult.h"
-#include "dw4/StringPool.h"
-#include "dw4/igMetaField.h"
-#include "dw4/igObjectList.h"
-#include "dw4/igDataLists.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/support/ClassRegistration.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igObjectSystem.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igResult.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/core/igMetaField.h"
+#include "dw4/core/igObjectList.h"
+#include "dw4/core/igDataLists.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -47,13 +47,13 @@ typedef enum Intersection {
 } Intersection;
 
 typedef void (*igMetaObjectCallback)();
-#include "dw4/igEnumMetaField.h"
-#include "dw4/igFloatMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igMetaEnum.h"
-#include "dw4/internalNonRefCountedObjectList.h"
-#include "dw4/list-services.h"
-#include "dw4/igUnsignedCharMetaField.h"
+#include "dw4/core/igEnumMetaField.h"
+#include "dw4/core/igFloatMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igMetaEnum.h"
+#include "dw4/core/internalNonRefCountedObjectList.h"
+#include "dw4/support/list-services.h"
+#include "dw4/core/igUnsignedCharMetaField.h"
 void FUN_00187190(void);
 void FUN_00187450(void);
 void FUN_001877c0(void);
@@ -790,20 +790,20 @@ void FUN_00190f50(float *arg0, const float *arg1, float fparg0);
 
 }
 
-#include "dw4/igMathConstants.h"
-#include "dw4/igAABox.h"
-#include "dw4/igAABoxList.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igMatrix44fList.h"
-#include "dw4/igRay.h"
-#include "dw4/igRayList.h"
-#include "dw4/igSphere.h"
-#include "dw4/igVec2fList.h"
-#include "dw4/igVec3fList.h"
-#include "dw4/igVec4ucList.h"
-#include "dw4/igVec3fMetaField.h"
-#include "dw4/igVec4f.h"
-#include "dw4/igVolume.h"
+#include "dw4/maths/igMathConstants.h"
+#include "dw4/maths/igAABox.h"
+#include "dw4/maths/igAABoxList.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/maths/igMatrix44fList.h"
+#include "dw4/maths/igRay.h"
+#include "dw4/maths/igRayList.h"
+#include "dw4/maths/igSphere.h"
+#include "dw4/maths/igVec2fList.h"
+#include "dw4/maths/igVec3fList.h"
+#include "dw4/maths/igVec4ucList.h"
+#include "dw4/maths/igVec3fMetaField.h"
+#include "dw4/maths/igVec4f.h"
+#include "dw4/maths/igVolume.h"
 
 extern "C" {
 

@@ -1,6 +1,6 @@
-#include "dw4/reflected.h"
-#include "dw4/igObjectDispatchView.h"
-#include "dw4/igAdxFile.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igObjectDispatchView.h"
+#include "dw4/audio/igAdxFile.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -25,15 +25,15 @@ enum { ADXF_SEEK_SET, ADXF_SEEK_CUR, ADXF_SEEK_END };
 /* The warning reporter's answers. */
 enum { kReportContinue = 1, kReportIgnoreAlways = 2 };
 
-#include "dw4/igObject.h"
-#include "dw4/igMetaObject.h"
-#include "dw4/igFile.h"
-#include "dw4/igMemory.h"
-#include "dw4/igReport.h"
-#include "dw4/igAdx.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/igFile.h"
+#include "dw4/core/igMemory.h"
+#include "dw4/core/igReport.h"
+#include "dw4/audio/igAdx.h"
 #include <string.h>
 #include "dw4/cri/sndf.h"
-#include "dw4/igResult.h"
+#include "dw4/core/igResult.h"
 extern "C" {
 /* CRI ADXF, on the handle in `_adxf` */
 
@@ -62,7 +62,7 @@ public:
     virtual igResult sleep(unsigned long long time);
 };
 
-#include "dw4/igThread.h"
+#include "dw4/core/igThread.h"
 #include "dw4/cri/cri_adxf.h"
 extern "C" {
 

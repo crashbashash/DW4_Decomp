@@ -13,7 +13,7 @@ names every field of `<Class>` with an offset.  So
 
 becomes
 
-    #include "dw4/reflected.h"
+    #include "dw4/support/reflected.h"
     int igMetaField_Write(igMetaField *arg0) {
         return -(arg0->_persistent == 0);
     }
@@ -107,7 +107,7 @@ def load_overlay(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--header", default="include/dw4/reflected.h")
+    ap.add_argument("--header", default="include/dw4/support/reflected.h")
     ap.add_argument("--src", default="src")
     ap.add_argument("--overlay", default="config/SLUS-20836/receiver-classes.tsv")
     ap.add_argument("--apply", action="store_true")
@@ -185,12 +185,12 @@ def main():
         new = text
         for (a, b), repl in sorted(hits, key=lambda h: -h[0][0]):
             new = new[:a] + repl + new[b:]
-        if "#include \"dw4/reflected.h\"" not in new:
+        if "#include \"dw4/support/reflected.h\"" not in new:
             if INCLUDE_ANCHOR.search(new):
-                new = INCLUDE_ANCHOR.sub(lambda mm: "*/\n#include \"dw4/reflected.h\"\n",
+                new = INCLUDE_ANCHOR.sub(lambda mm: "*/\n#include \"dw4/support/reflected.h\"\n",
                                          new, count=1)
             else:
-                new = "#include \"dw4/reflected.h\"\n" + new
+                new = "#include \"dw4/support/reflected.h\"\n" + new
         changed.append((path, classes_here[0], n_field, sorted({r for _, r in hits if "->" in r})))
         total += n_field
         if args.apply:

@@ -1,7 +1,7 @@
-#include "dw4/reflected.h"
-#include "dw4/igWindowDispatchView.h"
-#include "dw4/beBkColor.h"
-#include "dw4/beBkColorInfo.h"
+#include "dw4/support/reflected.h"
+#include "dw4/windowinput/igWindowDispatchView.h"
+#include "dw4/game/beBkColor.h"
+#include "dw4/game/beBkColorInfo.h"
 
 extern "C" igMetaObject *beBkColor_GetInfoMeta(void);
 extern "C" igMetaObject *beBkColor_GetMeta(void);

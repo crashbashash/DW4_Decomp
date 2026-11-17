@@ -1,25 +1,25 @@
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igobject_release.h"
-#include "dw4/beBaseInfoManagerDispatchView.h"
-#include "dw4/igSkeletonDispatchView.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beWeapon.h"
-#include "dw4/beWeaponAttachData.h"
-#include "dw4/beWeaponAttachDataList.h"
-#include "dw4/beWeaponInfo.h"
-#include "dw4/beWeaponSeqData.h"
-#include "dw4/igAppearance.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igGroup.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igModelViewMatrixBoneSelect.h"
-#include "dw4/igObject.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/core/igobject_release.h"
+#include "dw4/game/beBaseInfoManagerDispatchView.h"
+#include "dw4/scenegraph/igSkeletonDispatchView.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/beWeapon.h"
+#include "dw4/game/beWeaponAttachData.h"
+#include "dw4/game/beWeaponAttachDataList.h"
+#include "dw4/game/beWeaponInfo.h"
+#include "dw4/game/beWeaponSeqData.h"
+#include "dw4/scenegraph/igAppearance.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/scenegraph/igGroup.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/scenegraph/igModelViewMatrixBoneSelect.h"
+#include "dw4/core/igObject.h"
 
 #pragma push
 #pragma readonly_strings on
 
-#include "dw4/emptyString.h"
+#include "dw4/support/emptyString.h"
 extern "C" {
 
 

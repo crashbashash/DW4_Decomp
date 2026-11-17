@@ -3,19 +3,19 @@
  * name of the BGM it started, and keeps a bePlaySE row per recently played effect so that the same
  * effect does not start again within 50 ms. The voices themselves belong to beCri. See
  * docs/engine/sound-format.md. */
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/StringPool.h"
-#include "dw4/beCri.h"
-#include "dw4/beMessenger.h"
-#include "dw4/bePlaySE.h"
-#include "dw4/beSound.h"
-#include "dw4/beSoundInfo.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igInsightCore.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObject.h"
-#include "dw4/igStringObj.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/game/beCri.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/bePlaySE.h"
+#include "dw4/game/beSound.h"
+#include "dw4/game/beSoundInfo.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igStringObj.h"
 #include <string.h>
 #pragma push
 #pragma readonly_strings on
@@ -49,8 +49,8 @@ enum CriDataType { CRI_DATA_ADX = 0, CRI_DATA_SFP = 1 };
 /* beMessenger_EnqueueSelected delay of the PLAY retried while a stream fades out. */
 #define PLAY_RETRY_DELAY 0xB
 
-#include "dw4/emptyString.h"
-#include "dw4/list-services.h"
+#include "dw4/support/emptyString.h"
+#include "dw4/support/list-services.h"
 extern "C" {
 void beSound_Prepare(beSound *self);
 void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram);

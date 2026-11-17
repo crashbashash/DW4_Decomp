@@ -1,8 +1,8 @@
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 #define __extension__
-#include "dw4/newlib_reent.h"
-#include "dw4/p2timer.h"
+#include "dw4/newlib/newlib_reent.h"
+#include "dw4/p2/p2timer.h"
 
 #pragma push
 #pragma readonly_strings on

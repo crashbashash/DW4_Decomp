@@ -1,8 +1,8 @@
 /* timer.c - the EE timer library on hardware timer 2: a 64-bit system time made of the 16-bit
  * counter and an overflow count, and 128 software counters, each of which may carry a handler
  * that cbTimerHandler calls when the counter reaches its schedule. */
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 #include <string.h>
 
 typedef unsigned long u_long;

@@ -1,6 +1,6 @@
 /* tlbfunc.c - the TLB: the refill and debug exception hooks, the kernel patch that adds the TLB system
  * calls, and the initial TLB of a 32 MB machine. */
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 /* EE exception codes routed through _kTLBException and _kDebugException */
 #define EXC_TLB_MOD 1

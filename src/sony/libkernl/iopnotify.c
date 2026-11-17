@@ -1,7 +1,7 @@
 /* iopnotify.c - the handlers sceSifResetIop and sceSifSyncIop call around an IOP reboot: the
  * library's own 32 and those of a buffer the program supplies. */
-#include "dw4/eekernel_gp.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel_gp.h"
+#include "dw4/sony/libkernl.h"
 #include <string.h>
 
 /* an index with this bit set names a slot of the library's own table */

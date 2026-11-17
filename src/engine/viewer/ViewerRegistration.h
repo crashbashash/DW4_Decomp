@@ -1,52 +1,52 @@
 #ifndef DW4_VIEWER_REGISTRATION_H
 #define DW4_VIEWER_REGISTRATION_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igActorManager.h"
-#include "dw4/igBoundingBoxRenderer.h"
-#include "dw4/igCameraMode.h"
-#include "dw4/igFlyMode.h"
-#include "dw4/igLogoRenderer.h"
-#include "dw4/igNormalsRenderer.h"
-#include "dw4/igPickMode.h"
-#include "dw4/igRotateMode.h"
-#include "dw4/igStatisticsItem.h"
-#include "dw4/igViewManager.h"
-#include "dw4/igViewMode.h"
-#include "dw4/igViewModel.h"
-#include "dw4/igViewerAction.h"
-#include "dw4/igViewerDataPumpManager.h"
-#include "dw4/igViewerGuiFactory.h"
-#include "dw4/igViewerLoadingFileMessage.h"
-#include "dw4/igViewerParameters.h"
-#include "dw4/igViewerRenderer.h"
-#include "dw4/igViewerSceneInfoManager.h"
-#include "dw4/igViewerSceneInfoManagerController.h"
-#include "dw4/igViewerStatisticsManager.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/viewer/igActorManager.h"
+#include "dw4/viewer/igBoundingBoxRenderer.h"
+#include "dw4/viewer/igCameraMode.h"
+#include "dw4/viewer/igFlyMode.h"
+#include "dw4/viewer/igLogoRenderer.h"
+#include "dw4/viewer/igNormalsRenderer.h"
+#include "dw4/viewer/igPickMode.h"
+#include "dw4/viewer/igRotateMode.h"
+#include "dw4/viewer/igStatisticsItem.h"
+#include "dw4/viewer/igViewManager.h"
+#include "dw4/viewer/igViewMode.h"
+#include "dw4/viewer/igViewModel.h"
+#include "dw4/viewer/igViewerAction.h"
+#include "dw4/viewer/igViewerDataPumpManager.h"
+#include "dw4/viewer/igViewerGuiFactory.h"
+#include "dw4/viewer/igViewerLoadingFileMessage.h"
+#include "dw4/viewer/igViewerParameters.h"
+#include "dw4/viewer/igViewerRenderer.h"
+#include "dw4/viewer/igViewerSceneInfoManager.h"
+#include "dw4/viewer/igViewerSceneInfoManagerController.h"
+#include "dw4/viewer/igViewerStatisticsManager.h"
 
 
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igEnumMetaField.h"
-#include "dw4/igFloatMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igLongMetaField.h"
-#include "dw4/igMatrix44fMetaField.h"
-#include "dw4/igMetaEnum.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igStringMetaField.h"
-#include "dw4/igStructMetaField.h"
-#include "dw4/igVec2fMetaField.h"
-#include "dw4/igVec3fMetaField.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igEnumMetaField.h"
+#include "dw4/core/igFloatMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igLongMetaField.h"
+#include "dw4/maths/igMatrix44fMetaField.h"
+#include "dw4/core/igMetaEnum.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igStringMetaField.h"
+#include "dw4/core/igStructMetaField.h"
+#include "dw4/maths/igVec2fMetaField.h"
+#include "dw4/maths/igVec3fMetaField.h"
 class igMemoryPoolView;
-#include "dw4/ClassRegistration.h"
+#include "dw4/support/ClassRegistration.h"
 extern "C" void FUN_00134a20(void);
 extern "C" void FUN_001378f0(void);
 extern "C" void FUN_00138160(void);
-#include "dw4/igGeometryAttrList.h"
+#include "dw4/attrs/igGeometryAttrList.h"
 extern "C" void FUN_00145de0(void);
-#include "dw4/igVisualContext.h"
-#include "dw4/igRay.h"
+#include "dw4/gfx/igVisualContext.h"
+#include "dw4/maths/igRay.h"
 extern "C" void FUN_0014f810(void);
 extern "C" void FUN_0019c7b0(void);
 extern "C" void FUN_0019e440(void);
@@ -65,34 +65,34 @@ extern "C" void FUN_0045d5c0(void);
 extern "C" void FUN_0045d9f0(void);
 extern "C" void FUN_0045e050(void);
 extern "C" void FUN_0045e830(void);
-#include "dw4/igBasicColorChanger.h"
-#include "dw4/igBitmapFont.h"
-#include "dw4/igBoxComponent.h"
-#include "dw4/igDefaultAspect.h"
-#include "dw4/igGuiComponentList.h"
-#include "dw4/igGuiComponent.h"
-#include "dw4/igGuiSystem.h"
-#include "dw4/igHotKeyEventReceiver.h"
-#include "dw4/igMetaFieldList.h"
-#include "dw4/igPointerList.h"
-#include "dw4/igMetaObjectList.h"
-#include "dw4/igMouseCursor.h"
-#include "dw4/igObjectList.h"
-#include "dw4/igOnOffColorChanger.h"
-#include "dw4/igRadioGroup.h"
-#include "dw4/igStringObj.h"
-#include "dw4/igTextElement.h"
+#include "dw4/gui/igBasicColorChanger.h"
+#include "dw4/gui/igBitmapFont.h"
+#include "dw4/gui/igBoxComponent.h"
+#include "dw4/gui/igDefaultAspect.h"
+#include "dw4/gui/igGuiComponentList.h"
+#include "dw4/gui/igGuiComponent.h"
+#include "dw4/gui/igGuiSystem.h"
+#include "dw4/gui/igHotKeyEventReceiver.h"
+#include "dw4/core/igMetaFieldList.h"
+#include "dw4/core/igPointerList.h"
+#include "dw4/core/igMetaObjectList.h"
+#include "dw4/gui/igMouseCursor.h"
+#include "dw4/core/igObjectList.h"
+#include "dw4/gui/igOnOffColorChanger.h"
+#include "dw4/gui/igRadioGroup.h"
+#include "dw4/core/igStringObj.h"
+#include "dw4/gui/igTextElement.h"
 
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igMetaObject.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igMetaObject.h"
 extern "C" igMetaObject *FUN_004586a0(void);
 extern "C" void *igViewerStatisticsManager_GetMetaObject(void);
 struct Obj { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; };
-#include "dw4/igObject.h"
+#include "dw4/core/igObject.h"
 extern "C" int FUN_004583f0(...);
 extern "C" int g_igViewerStatisticsManager_vtable[4];
-#include "dw4/igObjectSystem.h"
-#include "dw4/internalNonRefCountedObjectList.h"
+#include "dw4/core/igObjectSystem.h"
+#include "dw4/core/internalNonRefCountedObjectList.h"
 extern "C" int igViewerStatisticsManager_GetVTable(void);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
@@ -115,7 +115,7 @@ extern "C" int g_igStatisticsItem_vtable[4];
 extern "C" int igStatisticsItem_GetVTable(void);
 extern "C" void **FUN_00458dc0(void **arg0, short arg1);
 extern "C" ObjectRefWord *FUN_00458e40(ObjectRefWord *self,int delete_storage);
-#include "dw4/igView.h"
+#include "dw4/gui/igView.h"
 extern "C" CallbackArray *igStatisticsItem_Register(void);
 extern "C" void thunk_igStatisticsItem_GetMetaObject(void);
 extern "C" int FUN_0044bce0(void);
@@ -126,12 +126,12 @@ extern "C" void *igViewerAction_GetMetaObject(void);
 extern "C" int g_igViewerAction_vtable[4];
 extern "C" int igViewerAction_GetVTable(void);
 extern "C" void FUN_00459190(void);
-#include "dw4/igAction.h"
+#include "dw4/gui/igAction.h"
 extern "C" CallbackArray *igViewerAction_Register(void);
 extern "C" void thunk_igViewerAction_GetMetaObject(void);
 extern "C" void igViewerAction_InitFields(void);
-#include "dw4/igTextureList.h"
-#include "dw4/igInfoManager.h"
+#include "dw4/attrs/igTextureList.h"
+#include "dw4/insight/igInfoManager.h"
 extern "C" int FUN_00233a40(...);
 extern "C" int FUN_0044c1c0(...);
 extern "C" int FUN_0044cdf0(...);
@@ -188,9 +188,9 @@ extern "C" CallbackArray *igViewerSceneInfoManager_Register(void);
 extern "C" void thunk_igViewerSceneInfoManager_GetMetaObject(void);
 extern "C" void FUN_00459ee0(void);
 typedef struct { int *vt; int w[2]; char *s; } Obj_45a450;
-#include "dw4/StringPool.h"
+#include "dw4/core/StringPool.h"
 extern "C" int g_igViewerModeChangeMessage_vtable[4];
-#include "dw4/igMessage.h"
+#include "dw4/insight/igMessage.h"
 extern "C" igMetaObject *FUN_0045a450(void);
 extern "C" igMetaObject *igViewerModeChangeMessage_GetMetaObject(void);
 extern "C" int igViewerModeChangeMessage_GetVTable(void);
@@ -217,7 +217,7 @@ extern "C" void igViewerSceneInfoManagerController_InitFields(void);
 union U_45aaf0 { int vt; int *pv; char b[96]; };
 extern "C" int FUN_00133950(void);
 extern "C" int FUN_00134940(void);
-#include "dw4/igLightingStateAttr.h"
+#include "dw4/attrs/igLightingStateAttr.h"
 extern "C" int FUN_00136040(void);
 extern "C" int FUN_001361f0(void);
 extern "C" int FUN_00136370(...);
@@ -227,7 +227,7 @@ extern "C" int FUN_00137fb0(void);
 extern "C" int FUN_001386d0(void);
 extern "C" int FUN_0013b2b0(void);
 extern "C" int FUN_0014f770(void);
-#include "dw4/igTransform.h"
+#include "dw4/scenegraph/igTransform.h"
 extern "C" int FUN_00197060(...);
 extern "C" int FUN_00197160(...);
 extern "C" int FUN_00197300(...);
@@ -239,14 +239,14 @@ extern "C" int FUN_0019c6a0(void);
 extern "C" int FUN_0019d9e0(...);
 extern "C" int FUN_0019dbb0(void);
 extern "C" int FUN_001a38e0(void);
-#include "dw4/igAttrSet.h"
+#include "dw4/scenegraph/igAttrSet.h"
 extern "C" int FUN_001d3090(...);
 extern "C" int FUN_001d9870(...);
 extern "C" int FUN_00229460(...);
 extern "C" int FUN_00230f70(...);
 extern "C" int FUN_00239280(...);
 extern "C" int g_igViewerRenderer_vtable[4];
-#include "dw4/igRenderer.h"
+#include "dw4/gui/igRenderer.h"
 extern "C" igMetaObject *FUN_0045aaf0(void);
 extern "C" igMetaObject *igViewerRenderer_GetMetaObject(void);
 extern "C" int igViewerRenderer_GetVTable(void);
@@ -272,7 +272,7 @@ extern "C" void thunk_igViewerRenderer_GetMetaObject(void);
 extern "C" void igViewerRenderer_InitFields(void);
 struct SigViewerParameters_GetMetaObject { char pad[36]; unsigned int flags; int ok() { return (flags & 4) != 0; } };
 extern "C" SigViewerParameters_GetMetaObject *igViewerParameters_GetMetaObject(void);
-#include "dw4/igMatrix44f.h"
+#include "dw4/maths/igMatrix44f.h"
 extern "C" int FUN_00196a50(...);
 extern "C" int FUN_0019b1f0(...);
 extern "C" int FUN_001d6560(...);
@@ -281,13 +281,13 @@ extern "C" int g_igViewerParameters_vtable[4];
 extern "C" int DAT_00542090[8];
 union U_45b4c0 { int vt; char b[272]; };
 extern "C" int igViewerParameters_GetVTable(void);
-#include "dw4/igModel.h"
+#include "dw4/gui/igModel.h"
 extern "C" CallbackArray *igViewerParameters_Register(void);
 extern "C" void thunk_igViewerParameters_GetMetaObject(void);
 struct Fld { char p0[52]; char f52; char p53[3]; int f56; };
-#include "dw4/igGroup.h"
+#include "dw4/scenegraph/igGroup.h"
 extern "C" int FUN_0019f4c0(void);
-#include "dw4/igGraphPath.h"
+#include "dw4/scenegraph/igGraphPath.h"
 extern "C" int FUN_001a4d90(void);
 extern "C" void igViewerParameters_InitFields(void);
 extern "C" igMetaObject *FUN_0045b8d0(void);
@@ -308,7 +308,7 @@ extern "C" void FUN_0045be30(int arg0);
 extern "C" void *igViewerDataPumpManager_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U_45bec0 { int vt; int w[8]; void *p[8]; char b[32]; };
-#include "dw4/igNamedObject.h"
+#include "dw4/core/igNamedObject.h"
 extern "C" int g_igViewerDataPumpManager_vtable[4];
 extern "C" int igViewerDataPumpManager_GetVTable(void);
 extern "C" void FUN_0045bfa0(void);
@@ -360,7 +360,7 @@ extern "C" int igCameraMode_GetVTable(void);
 extern "C" void FUN_0045cdc0(void);
 extern "C" CallbackArray *igCameraMode_Register(void);
 extern "C" void thunk_igCameraMode_GetMetaObject(void);
-#include "dw4/igCamera.h"
+#include "dw4/scenegraph/igCamera.h"
 extern "C" void igCameraMode_InitFields(void);
 extern "C" igMetaObject *FUN_0045cf10(void);
 extern "C" void *igViewMode_GetMetaObject(void);
@@ -374,7 +374,7 @@ extern "C" int g_igViewManager_vtable[4];
 extern "C" int DAT_00542680[8];
 union U_45d1a0 { int vt; int w[21]; char b[84]; };
 extern "C" int igViewManager_GetVTable(void);
-#include "dw4/igEventReceiver.h"
+#include "dw4/gui/igEventReceiver.h"
 extern "C" CallbackArray *igViewManager_Register(void);
 extern "C" void thunk_igViewManager_GetMetaObject(void);
 extern "C" void igViewManager_InitFields(void);
@@ -396,8 +396,8 @@ extern "C" int igNormalsRenderer_GetVTable(void);
 extern "C" CallbackArray *igNormalsRenderer_Register(void);
 extern "C" void thunk_igNormalsRenderer_GetMetaObject(void);
 extern "C" int FUN_001356f0(void);
-#include "dw4/igColorAttr.h"
-#include "dw4/igAttrList.h"
+#include "dw4/attrs/igColorAttr.h"
+#include "dw4/attrs/igAttrList.h"
 extern "C" void igNormalsRenderer_InitFields(void);
 extern "C" void FUN_0045dbe0(int arg0);
 struct SigLogoRenderer_GetMetaObject { char pad[36]; unsigned int flags; int ok() { return (flags & 4) != 0; } };
@@ -431,9 +431,9 @@ extern "C" void FUN_0045e4a0(void);
 extern "C" CallbackArray *igActorManager_Register(void);
 extern "C" void thunk_igActorManager_GetMetaObject(void);
 extern "C" int FUN_00130440(...);
-#include "dw4/igNodeList.h"
-#include "dw4/igAppearanceList.h"
-#include "dw4/igActorList.h"
+#include "dw4/scenegraph/igNodeList.h"
+#include "dw4/scenegraph/igAppearanceList.h"
+#include "dw4/scenegraph/igActorList.h"
 extern "C" void igActorManager_InitFields(void);
 extern "C" igMetaObject *FUN_0045e6f0(void);
 extern "C" void *igActorManagerParams_GetMetaObject(void);

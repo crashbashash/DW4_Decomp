@@ -1,4 +1,4 @@
-#include "dw4/newlib_reent.h"
+#include "dw4/newlib/newlib_reent.h"
 #include <stdlib.h>
 
 unsigned long _strtoul_r(struct _reent *, const char *, char **, int);

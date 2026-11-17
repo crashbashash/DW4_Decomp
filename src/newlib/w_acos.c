@@ -1,4 +1,4 @@
-#include "dw4/newlib_math.h"
+#include "dw4/newlib/newlib_math.h"
 
 double acos(double x)
 {

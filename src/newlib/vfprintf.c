@@ -1,7 +1,7 @@
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 #include <string.h>
-#include "dw4/newlib_locale.h"
-#include "dw4/newlib_mprec.h"
+#include "dw4/newlib/newlib_locale.h"
+#include "dw4/newlib/newlib_mprec.h"
 #include <math.h>
 
 char *cvt(struct _reent *, double, int, int, char *, int *, int, int *);

@@ -1,5 +1,5 @@
 /* sceCdRead.c - sceCdRead: starts an asynchronous read from the disc into the caller's buffer. */
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/sony/libcdvd.h"
 
 /* The N-command buffer as the read command lays it out. */

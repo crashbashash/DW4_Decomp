@@ -52,7 +52,7 @@ screens repeat short call sequences instead of sharing one bigger helper.
 
 ## Object model
 
-Recovered from `data/reflection.json` (layouts in `include/dw4/reflected.h`); the
+Recovered from `data/reflection.json` (layouts in `include/dw4/support/reflected.h`); the
 base of every `…CtrlData`/`…Intf` record is `beBaseInfoData` and every interface
 of a manager derives from `beBaseInfoManager`.
 

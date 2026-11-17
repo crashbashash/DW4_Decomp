@@ -439,7 +439,7 @@ instruments that showed it are in [understanding a resisting shape](understandin
   and are not the source. An object reference field is read as its smart pointer by a cast of the field itself; a
   helper that returns that reference compiles alike, but is one inline more than the class had.
 * **A list search stores its key (`b52`).** `sw a1,60(sp)` with the key loaded back before a search loop is
-  `igTDataList<T>::find` in `include/dw4/igTDataList.h`, which takes the key by value. The address of that parameter is
+  `igTDataList<T>::find` in `include/dw4/core/igTDataList.h`, which takes the key by value. The address of that parameter is
   what keeps the key in memory: a reference, or a read of the value itself, folds it into a register. Why the source
   took that address is not known. The executable holds the template's name, as `Gap::Core::igTDataList<...>`.
   Where the key's store comes before the read of the list, assign the list in the call: `(list = owner->_list)->find(key)`.
@@ -450,7 +450,7 @@ instruments that showed it are in [understanding a resisting shape](understandin
   by `const &` to an inline helper takes its address, which is what keeps it in memory:
 
   ```cpp
-  #include "dw4/igSmartPointer.h"
+  #include "dw4/core/igSmartPointer.h"
 
   igSmartPointer<igProbe> held(create());
   setField(owner, held);   // static inline, takes const igSmartPointer<igProbe> &

@@ -17,7 +17,7 @@ docs/engine/build-profiles.md), so the generator resolves the unit profile of th
                         pad the branch target themselves, so no `asm` statement is needed and the body is
                         plain C++ (the `-O3,p` branch-target alignment gives the extra nop).
 
-Both shapes read the slot through `igMetaObject` from include/dw4/reflected.h (its +36 field is `_validity`).  Reads the retail words from asm/NAME.s; writes NAME.cpp into the folder that holds the
+Both shapes read the slot through `igMetaObject` from include/dw4/support/reflected.h (its +36 field is `_validity`).  Reads the retail words from asm/NAME.s; writes NAME.cpp into the folder that holds the
 function today (default src/unmatched), renaming a `.c` twin with `git mv` so one file owns the function.
 Verify afterwards with tools/verify.py (the generator does not claim a match).
 """
@@ -110,7 +110,7 @@ def gen(name, va, syms):
     default = compiler == "3.0-011126"
     variant_b = default and dead_nop
     out = ""
-    out += '#include "dw4/reflected.h"\n'
+    out += '#include "dw4/support/reflected.h"\n'
     out += 'extern "C" {\n'
     out += "void %s(void);\n" % callee
     out += "extern igMetaObject *%s[4];\n" % slot_name

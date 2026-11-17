@@ -122,7 +122,7 @@ the statement back in the counter. `python3 tools/inline_asm.py` prints the appr
 ### umul_ppmm
 
 `__divdi3`, `__moddi3`, `__udivdi3`, `__umoddi3` and `__muldi3` reach one `multu` through `umul_ppmm` in
-`include/dw4/libgcc_longlong.h`. `__muldi3` is the low-by-low product of gcc's `libgcc2.c` (`umul_ppmm` into a
+`include/dw4/support/libgcc_longlong.h`. `__muldi3` is the low-by-low product of gcc's `libgcc2.c` (`umul_ppmm` into a
 double word plus the two cross products added to the high word); its retail code sits at `0x22e440`, the first
 member of the libgcc region.
 
@@ -444,7 +444,7 @@ Sony libkernl functions written in C with instructions C has no spelling for: re
   retail's 164 only because its size stops before the final `jr`'s delay slot.
 * Sony's source text exists for part of it. `delaythread.c` (SDK 3.0.3 source text `r03287`) is `DelayThread`
   statement for statement, including `__asm__ volatile("mfc0 %0, $12" : "=r"(status))`. `eekernel.h` (`r03616`)
-  holds the `DI()` and `EI()` macros `sbrk` uses; `include/dw4/eekernel_intr.h` carries that text exactly.
+  holds the `DI()` and `EI()` macros `sbrk` uses; `include/dw4/support/eekernel_intr.h` carries that text exactly.
 * The system calls in these files are functions of C members, not part of the assembled stub file. The
   `.mdebug` procedure records of SDK `alarm.o`, `tlbfunc.o` and `initsys.o` give `setup`, `Copy`, `GetEntryAddress`,
   `FindAddress` and `_SetTLBEntry`, and `tlbfunc.o` also the eight global TLB calls listed below, frame register 29
@@ -490,7 +490,7 @@ thread calls and `GetTimerSystemTime`.
   the function at `0x10ef70`, whose member (`filestub.o` `scePowerOffHandler`) is a version four bytes shorter, with the same `$gp`
   store.
 * Sony's source text exists. `eekernel.h` (SDK 3.0.3 source text `r03616`) writes `GetGp()` and `SetGp()` as
-  `__asm__ volatile` with a `"memory"` clobber; `include/dw4/eekernel_gp.h` carries that text exactly and the six
+  `__asm__ volatile` with a `"memory"` clobber; `include/dw4/support/eekernel_gp.h` carries that text exactly and the six
   functions reading or swapping `$gp` use it. `libtimer.c` (`r03285`) writes the `$gp` store as
   `__asm__ volatile("sw $28, %0\n" : : "m"(pCounter->gp_value) : "memory")`, and its `ReferHardCounter` block is
   `GetTimerSystemTime`'s statement: two timer-register reads, the overflow count and the prescale shift.
@@ -727,7 +727,7 @@ also uses.
   as `__asm__`: it orders the VIF1 reset with `sync.l`, then sets a bit of VU control register `$vi28` with `cfc2`,
   `ori`, `ctc2` and `sync.p`. Its `libsdr` source (`sdr_main.c`, `r03289`) holds no `__asm__`: `sceSdRemote` calls
   `GetGp()` to record `$gp` beside a registered handler and `SetGp()` to swap it around an RPC call that has an end
-  function, and those statements are `eekernel.h`'s (`r03616`), carried exactly by `include/dw4/eekernel_gp.h`.
+  function, and those statements are `eekernel.h`'s (`r03616`), carried exactly by `include/dw4/support/eekernel_gp.h`.
 * Compiled from Sony's text, with the header's `GetGp`/`SetGp` and only retail symbols and constants mapped, both
   functions are byte-identical to retail. `sceGsResetPath` needs the assembler of its [compiler note](sd-prologue.md).
 * C reaches neither a VU control register nor a move of `$gp`.

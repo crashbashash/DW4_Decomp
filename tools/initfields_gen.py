@@ -16,7 +16,7 @@ What it does, per file:
      data, and the single function definition with its local declarations;
   2. gives every K&R prototype (`int f();`) the parameter list its call sites imply — C++ has no unprototyped
      calls — by typing each argument expression against the locals, structs, externs and the reflected
-     headers (`include/dw4/reflected.h`); sites that disagree fall back to `(...)`; a callee whose result is
+     headers (`include/dw4/support/reflected.h`); sites that disagree fall back to `(...)`; a callee whose result is
      stored in a typed pointer gets that return type, and a `(void *)` cast on such a store becomes the
      target's own pointer type (C++ does not convert `void *` implicitly);
   3. orders the local declarations for the unit compiler (`--order auto`: `temp_sN` names carry the retail
@@ -243,10 +243,10 @@ _REFLECTED = {}
 
 
 def reflected_structs():
-    """{typedef name: Struct} for include/dw4/reflected.h (members carry `/* +off` comments)."""
+    """{typedef name: Struct} for include/dw4/support/reflected.h (members carry `/* +off` comments)."""
     if _REFLECTED:
         return _REFLECTED
-    path = os.path.join(ROOT, "include", "dw4", "reflected.h")
+    path = os.path.join(ROOT, "include", "dw4", "support", "reflected.h")
     if not os.path.exists(path):
         return _REFLECTED
     text = open(path, errors="replace").read()

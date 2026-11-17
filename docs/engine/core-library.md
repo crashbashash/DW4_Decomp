@@ -20,13 +20,13 @@ each section.
   `kIGMemoryPoolHandle*` handles, `g_resultSuccess`/`g_resultFailure` and `g_systemAllocator`).
 - **`CoreLibrary.h`** is the unit's one header: every declaration, struct, view class and inline helper the
   fragments share, so each class has exactly one definition. Reflected data layouts come from the generated
-  `include/dw4/reflected.h`; `igTDataList<T>` is `include/dw4/igTDataList.h`, and `igSmartPointer<T>` with
-  `igVirtualObject` (an `igObject` whose vtable is a real vptr) is `include/dw4/igSmartPointer.h`.
-  `igObject_Destroy` and `igObject_IsKindOf` take `igObject *` (`include/dw4/igObject.h`); the views with a real
+  `include/dw4/support/reflected.h`; `igTDataList<T>` is `include/dw4/core/igTDataList.h`, and `igSmartPointer<T>` with
+  `igVirtualObject` (an `igObject` whose vtable is a real vptr) is `include/dw4/core/igSmartPointer.h`.
+  `igObject_Destroy` and `igObject_IsKindOf` take `igObject *` (`include/dw4/core/igObject.h`); the views with a real
   vptr (`igVirtualObject`, `igObjectDispatchView` and Gfx's `igObjectSlotView`) have inline overloads next to
   their class that pass the object on as `igObject *`, and a local view of the object header is cast at the call.
-- **`include/dw4/igMemoryPoolView.h`** is the memory-pool vtable (slots 0-96) as a class. It is shared outside
-  core: `src/movie/igCriMovieCodec.cpp` and, through `include/dw4/lua_game_state.h`, the Lua units
+- **`include/dw4/core/igMemoryPoolView.h`** is the memory-pool vtable (slots 0-96) as a class. It is shared outside
+  core: `src/movie/igCriMovieCodec.cpp` and, through `include/dw4/lua/lua_game_state.h`, the Lua units
   `src/lua/lmem.c` and `src/lua/lstate.c`. Those build with `-Dlong=int`, so the slots with a 64-bit argument or
   return have an `#ifndef long` arm that keeps the slot without its signature. A change to this header is
   checked against all three users, not core alone.
@@ -60,7 +60,7 @@ change to `igMemoryPoolView.h` also needs the movie codec's and the two Lua unit
 A *view* is a class that spells a reflected class's vtable so callers can make virtual calls; the convention
 is in [RTTI and vtables §7](rtti-and-vtables.md#7-virtual-calls-the-dispatch-views). The views of this library's
 own classes sit in `CoreLibrary.h` (`RESERVED(n)` is its placeholder macro); the ones shared with other
-libraries are `include/dw4/*DispatchView.h`.
+libraries are `include/dw4/<library>/*DispatchView.h` (in the folder of the library that defines the class).
 
 ### Object model
 

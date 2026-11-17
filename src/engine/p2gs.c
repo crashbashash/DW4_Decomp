@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include "dw4/p2dma.h"
-#include "dw4/p2core.h"
-#include "dw4/p2draw.h"
-#include "dw4/p2gs.h"
-#include "dw4/p2lighting.h"
-#include "dw4/p2swap.h"
-#include "dw4/p2timer.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/libkernl.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2draw.h"
+#include "dw4/p2/p2gs.h"
+#include "dw4/p2/p2lighting.h"
+#include "dw4/p2/p2swap.h"
+#include "dw4/p2/p2timer.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/sony/libkernl.h"
 extern long long DAT_00562cc0[4];
 extern int DAT_005690ac[4];
 extern int DAT_005690b0[4];

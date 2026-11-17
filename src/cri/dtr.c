@@ -3,7 +3,7 @@
 #include "dw4/cri/dtr.h"
 #include "dw4/cri/dtx.h"
 #include "dw4/cri/adxmsg.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/sony/sif.h"
 
 struct DtrObj {

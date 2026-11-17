@@ -75,7 +75,7 @@ help:
 	@echo "make typed    — typed-coverage report: how much of src/ speaks in recovered structs"
 	@echo "make typed-check — fail if typed coverage differs from config/typed-coverage.json (CI runs this)"
 	@echo "make typed-scope — typed share of the game layer (config/typed-scope*.tsv)"
-	@echo "make reflected-check — compile include/dw4/reflected.h with the host compiler and verify every field offset, struct size and field type"
+	@echo "make reflected-check — compile include/dw4/support/reflected.h with the host compiler and verify every field offset, struct size and field type"
 	@echo "make vtable-slots-check — fail if a local dummy-vtable view names a slot vfunc_NN at a position other than NN"
 	@echo "make struct-report — report (not a gate) local struct views that disagree with each other or with reflected.h"
 	@echo "make link     — relink the whole section (C + retail remainder) and compare"

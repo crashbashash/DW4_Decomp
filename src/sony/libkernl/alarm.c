@@ -1,5 +1,5 @@
 /* alarm.c - the kernel patch that adds the alarm system calls on kernels without them. */
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 #define ALARM_PATCH_ADDR ((void *)0x80076000)
 #define ALARM_PATCH_SIZE 0x740

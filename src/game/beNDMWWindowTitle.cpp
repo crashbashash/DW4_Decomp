@@ -1,18 +1,18 @@
 /* The title windows of the status screens: the shared beNDMWWindowTitle update, and the model and
  * text setup of beNDMWStatusTitle00..04 (background, Digimon face, account and title plates). */
-#include "dw4/reflected.h"
-#include "dw4/beNDMWStatusTitle01.h"
-#include "dw4/beNDMWStatusTitle03.h"
-#include "dw4/beNDMWWindowSetupDispatchView.h"
-#include "dw4/StringPool.h"
-#include "dw4/beDBManager.h"
-#include "dw4/beMessenger.h"
-#include "dw4/beNDMWStatusTitle00.h"
-#include "dw4/beNDMWStatusTitle02.h"
-#include "dw4/beNDMWStatusTitle04.h"
-#include "dw4/beNDMWWindow.h"
-#include "dw4/beNDMWWindowTitle.h"
-#include "dw4/list-services.h"
+#include "dw4/support/reflected.h"
+#include "dw4/game/ndmw/beNDMWStatusTitle01.h"
+#include "dw4/game/ndmw/beNDMWStatusTitle03.h"
+#include "dw4/game/ndmw/beNDMWWindowSetupDispatchView.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/game/beDBManager.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/game/ndmw/beNDMWStatusTitle00.h"
+#include "dw4/game/ndmw/beNDMWStatusTitle02.h"
+#include "dw4/game/ndmw/beNDMWStatusTitle04.h"
+#include "dw4/game/ndmw/beNDMWWindow.h"
+#include "dw4/game/ndmw/beNDMWWindowTitle.h"
+#include "dw4/support/list-services.h"
 
 
 /* A null-terminated list of the STWINFONT06 text elements a layout switches (font030..font071). */

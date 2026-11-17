@@ -1,8 +1,8 @@
 /* cdvd000.c - libcdvd's EE side: the client of cdvdman's RPC servers. Commands go out as RPCs on the
  * N-command (disc) and S-command (drive) channels, each guarded by a semaphore; the callback thread
  * reports command completion to the game. */
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 #include "dw4/sony/libcdvd.h"
 #include <string.h>
 

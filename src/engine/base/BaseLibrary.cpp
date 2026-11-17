@@ -1,5 +1,5 @@
 #include "src/engine/base/BaseLibrary.h"
-#include "dw4/unregisteredClasses.h"
+#include "dw4/support/unregisteredClasses.h"
 
 #pragma push
 #pragma readonly_strings on

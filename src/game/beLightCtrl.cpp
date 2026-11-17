@@ -1,12 +1,12 @@
-#include "dw4/reflected.h"
-#include "dw4/igVec3f.h"
-#include "dw4/igMath.h"
-#include "dw4/igLightAttrDispatchView.h"
-#include "dw4/beLightCtrl.h"
-#include "dw4/beLightCtrlInfo.h"
-#include "dw4/beMessenger.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igNamedObject.h"
+#include "dw4/support/reflected.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/maths/igMath.h"
+#include "dw4/attrs/igLightAttrDispatchView.h"
+#include "dw4/game/beLightCtrl.h"
+#include "dw4/game/beLightCtrlInfo.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/igNamedObject.h"
 
 extern "C" void beLightCtrl_Prepare(void);
 extern "C" igMetaObject *beLightCtrl_GetInfoMeta(void);

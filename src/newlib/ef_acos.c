@@ -1,5 +1,5 @@
-#include "dw4/ieee_words.h"
-#include "dw4/newlib_math.h"
+#include "dw4/newlib/ieee_words.h"
+#include "dw4/newlib/newlib_math.h"
 
 #define one ((float)1.0000000000e+00)
 #define pi ((float)3.1415925026e+00)

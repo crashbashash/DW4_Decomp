@@ -1,11 +1,11 @@
-#include "dw4/reflected.h"
+#include "dw4/support/reflected.h"
 #pragma push
 #pragma readonly_strings on
-#include "dw4/igVec3f.h"
-#include "dw4/beHitLandDeliv.h"
-#include "dw4/beHitLandDelivInfo.h"
-#include "dw4/beMessenger.h"
-#include "dw4/igMatrix44f.h"
+#include "dw4/maths/igVec3f.h"
+#include "dw4/game/beHitLandDeliv.h"
+#include "dw4/game/beHitLandDelivInfo.h"
+#include "dw4/game/beMessenger.h"
+#include "dw4/maths/igMatrix44f.h"
 #include <math.h>
 
 extern "C" void beHitLandDeliv_Prepare(void);

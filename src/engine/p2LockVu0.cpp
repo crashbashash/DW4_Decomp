@@ -1,10 +1,10 @@
 /* p2LockVu0, held out of src/engine/p2vu0.c: it reproduces only as C++, where the const accessor
  * makes the second load of the lock semaphore, and C++ breaks p2InitVu0's struct copy. */
 extern "C" {
-#include "dw4/eekernel.h"
-#include "dw4/p2core.h"
-#include "dw4/p2timer.h"
-#include "dw4/p2vu0.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2timer.h"
+#include "dw4/p2/p2vu0.h"
 }
 
 /* The VU0 lock: its semaphore and the tag of the code holding it. */

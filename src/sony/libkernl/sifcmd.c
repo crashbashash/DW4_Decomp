@@ -1,9 +1,9 @@
 /* sifcmd.c - libkernl's SIF command layer (libkernl.a sifcmd.o): the handler tables the IOP's
  * commands are dispatched through, the software registers, and sending commands over SIF0/SIF1. */
 #include "dw4/sony/sif.h"
-#include "dw4/eekernel.h"
-#include "dw4/eekernel_gp.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/support/eekernel_gp.h"
+#include "dw4/sony/libkernl.h"
 
 #define DMAC_SIF0 5
 

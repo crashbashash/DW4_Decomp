@@ -1,15 +1,15 @@
-#include "dw4/reflected.h"
+#include "dw4/support/reflected.h"
 
 int FUN_001e68a0(int, int);
-#include "dw4/igInsightCore.h"
-#include "dw4/igObject.h"
+#include "dw4/insight/igInsightCore.h"
+#include "dw4/core/igObject.h"
 
-#include "dw4/igDataPumpInfo.h"
+#include "dw4/datapump/igDataPumpInfo.h"
 
 
 void FUN_001e67a0(int, long long);
 
-#include "dw4/igViewerDataPumpManager.h"
+#include "dw4/viewer/igViewerDataPumpManager.h"
 
 int igViewerDataPumpManager_AddInfo(igViewerDataPumpManager *self, igObject *info) {
     if (igObject_IsKindOf(info, g_igDataPumpInfo_metaObject) != 0) {

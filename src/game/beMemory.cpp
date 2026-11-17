@@ -1,4 +1,4 @@
-#include "dw4/beMemory.h"
+#include "dw4/game/beMemory.h"
 
 extern "C" void beMemory_Activate(void);
 extern "C" void beMemory_Deactivate(void);

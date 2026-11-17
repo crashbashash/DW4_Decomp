@@ -1,5 +1,5 @@
 #include "dw4/sony/libipu.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 #define IPU_CMD (*(volatile unsigned int *)0x10002000)
 #define IPU_CTRL (*(volatile unsigned int *)0x10002010)

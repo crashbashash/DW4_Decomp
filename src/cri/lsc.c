@@ -2,7 +2,7 @@
 #include "dw4/cri/lsc.h"
 #include <string.h>
 #include "dw4/cri/adxstm.h"
-#include "dw4/newlib_stdio.h"
+#include "dw4/newlib/newlib_stdio.h"
 
 #define LSC_MAX_OBJ 32
 

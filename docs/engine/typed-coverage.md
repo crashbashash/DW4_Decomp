@@ -97,7 +97,7 @@ restoring it gives exit 0.
 ## How the types are recovered
 
 `data/reflection.json` holds 659 classes and 3,680 fields with a name, a byte offset and a MetaField
-type. `scripts/gen_type_headers.py` turns that into `include/dw4/reflected.h`: real C structs, with
+type. `scripts/gen_type_headers.py` turns that into `include/dw4/support/reflected.h`: real C structs, with
 these rules that keep them honest:
 
 - **A struct carries its ancestors' fields too** (`data/class-hierarchy.tsv`, recovered from the
@@ -192,7 +192,7 @@ assumed: `make check` must show 0 mismatching and `make link` must be **BYTE-IDE
 typing that changes codegen is a bug, and the build is the test that says so. After a pass that
 adds coverage, the baseline is re-recorded with `make typed-baseline`.
 
-Typed files begin with `#include "dw4/reflected.h"`. `tools/units.py`'s `definitions()` resets the
+Typed files begin with `#include "dw4/support/reflected.h"`. `tools/units.py`'s `definitions()` resets the
 statement start at a top-level preprocessor line, so a leading `#include` is not taken as part of
 the next function's signature (which would skip that function in `extract` and in the `cover`
 count for any unit whose first function has no forward declaration).
@@ -220,7 +220,7 @@ that one, with the field used only through that pointer, with a real class handl
 reflected field of the same width at that offset):
 
 ```c
-#include "dw4/reflected.h"
+#include "dw4/support/reflected.h"
 extern igMetaObject *DAT_005610e0[4];
 igMetaObject *g = DAT_005610e0[0];
 if (!g || !(t = g->_validity & 4)) FUN_XXXXXXXX();
@@ -237,7 +237,7 @@ name, so its first argument *is* that class and its offset casts can become memb
 /* before */  int igMetaField_Method(void *arg0) {
                   return -(*(unsigned char *)((char *)(arg0) + 38) == 0);
               }
-/* after  */  #include "dw4/reflected.h"
+/* after  */  #include "dw4/support/reflected.h"
               int igMetaField_Method(igMetaField *arg0) {
                   return -(arg0->_persistent == 0);
               }
@@ -347,7 +347,7 @@ the receiver rule above.
 ### The 316-file typing pass
 
 The pass replaces raw offsets and private layouts in 316 existing source files with fields
-from `include/dw4/reflected.h`. It claims no new function and no matched code byte.
+from `include/dw4/support/reflected.h`. It claims no new function and no matched code byte.
 
 The edits cover engine receiver fields, object headers, retained list storage, matrix translation
 arrays and field-descriptor initialization. References in the authoritative structs remain four-byte
@@ -378,7 +378,7 @@ source initializer audit is `python3 scripts/retype_initfields.py --check` (abov
 
 Thirty-odd `FUN_` helpers are typed by taking
 each receiver from evidence rather than from the offsets alone: a typed matched caller
-(`dw4/reflected.h` casts or prototypes), the matched dispatcher that passes the object, or an exact
+(`dw4/support/reflected.h` casts or prototypes), the matched dispatcher that passes the object, or an exact
 multi-field offset match against a reflected class. Practical findings, all verified with
 `tools/verify.py`:
 
@@ -388,7 +388,7 @@ multi-field offset match against a reflected class. Practical findings, all veri
   Lua stack of the Lua API dispatcher have no reflected class and keep small private views; they are recorded as unconfirmed, not invented.
 
 An exact offset-and-width scan of every private struct view in `src/unmatched` against
-`include/dw4/reflected.h` returns no further game-region match except one that agrees on widths
+`include/dw4/support/reflected.h` returns no further game-region match except one that agrees on widths
 only. These entries stay untyped for a recorded reason:
 
 | Functions | Why they stay |
@@ -404,10 +404,10 @@ only. These entries stay untyped for a recorded reason:
 
 ## Shared headers and the struct report
 
-- `include/dw4/pool_slot.hpp` names its slot view `igObjectSlotView`, with `_refCount` like the
+- `include/dw4/support/pool_slot.hpp` names its slot view `igObjectSlotView`, with `_refCount` like the
   reflected layout. A `class igObject` there would be incompatible with the reflected
   `struct igObject`.
-- The reference release has one spelling. `include/dw4/igobject_release.h` holds
+- The reference release has one spelling. `include/dw4/core/igobject_release.h` holds
   `IG_OBJECT_RELEASE(obj)`, whose expansion is the retail sequence. The
   argument is evaluated more than once on purpose (a stack slot whose address escaped must be
   re-read, as retail does); a unit whose source holds the pointer in a smart-pointer temporary

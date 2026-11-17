@@ -1,7 +1,7 @@
 /* initsys.c - the library's start-up: its semaphores, the kernel's system call table, and every
  * part of libkernl that patches or starts something before main. */
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 
 /* the kernel memory searched for the system call table */
 #define KSEG0_KERNEL ((int *)0x80000000)

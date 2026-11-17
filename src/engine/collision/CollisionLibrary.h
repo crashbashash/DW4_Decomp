@@ -1,18 +1,18 @@
 #ifndef DW4_COLLISION_LIBRARY_H
 #define DW4_COLLISION_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/ClassRegistration.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/support/ClassRegistration.h"
 
-#include "dw4/igMetaObject.h"
+#include "dw4/core/igMetaObject.h"
 class igMemoryPoolView;
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igFloatMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igStringMetaField.h"
-#include "dw4/igVec3fMetaField.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igFloatMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igStringMetaField.h"
+#include "dw4/maths/igVec3fMetaField.h"
 extern "C" void FUN_00187f30(void);
 struct Rc;
 extern "C" unsigned char g_CollisionLibrary_registered;
@@ -20,13 +20,13 @@ extern "C" void CollisionLibrary_MarkRegistered(void);
 extern "C" igMetaObject *g_igCreateCollisionDatabase_metaObject;
 extern "C" igMetaObject *igCreateCollisionDatabase_GetMetaObject(void);
 struct W { int *vt; int f[19]; };
-#include "dw4/igObject.h"
+#include "dw4/core/igObject.h"
 extern "C" int FUN_00225790(...);
 extern "C" int g_igCreateCollisionDatabase_vtable[4];
-#include "dw4/igObjectSystem.h"
-#include "dw4/igOptBase.h"
-#include "dw4/igIGBFile.h"
-#include "dw4/igDirectory.h"
+#include "dw4/core/igObjectSystem.h"
+#include "dw4/base/igOptBase.h"
+#include "dw4/core/igIGBFile.h"
+#include "dw4/core/igDirectory.h"
 extern "C" int igCreateCollisionDatabase_GetVTable(void);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O { S_temp_a0 *m; };
@@ -40,17 +40,17 @@ extern "C" Rc *FUN_002397a0(int arg0);
 extern "C" igMetaObject *g_igCollisionInfo_metaObject;
 extern "C" igMetaObject *igCollisionInfo_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
-#include "dw4/StringPool.h"
-#include "dw4/igNamedObject.h"
+#include "dw4/core/StringPool.h"
+#include "dw4/core/igNamedObject.h"
 extern "C" int g_igCollisionInfo_vtable[4];
 union U { int vt; char b[32]; };
 extern "C" int igCollisionInfo_GetVTable(void);
 extern "C" void FUN_00239910(void);
-#include "dw4/igInfo.h"
+#include "dw4/core/igInfo.h"
 extern "C" CallbackArray *igCollisionInfo_Register(void);
 extern "C" void thunk_igCollisionInfo_GetMetaObject(void);
 extern "C" void igCollisionInfo_InitFields(void);
-#include "dw4/igMemoryPoolContext.h"
+#include "dw4/core/igMemoryPoolContext.h"
 extern "C" igMetaObject *g_igCollisionGroupList_metaObject;
 extern "C" igMetaObject *FUN_00239a40(void);
 extern "C" igMetaObject *igCollisionGroupList_GetMetaObject(void);
@@ -58,7 +58,7 @@ struct Obj { int *vt; char pad[28]; };
 extern "C" int g_igCollisionGroupList_vtable[4];
 extern "C" int igCollisionGroupList_GetVTable(void);
 extern "C" void FUN_00239b20(void);
-#include "dw4/igObjectList.h"
+#include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igCollisionGroupList_Register(void);
 extern "C" void thunk_igCollisionGroupList_GetMetaObject(void);
 extern "C" igMetaObject *g_igCollisionGroup_metaObject;
@@ -67,11 +67,11 @@ extern "C" int g_igCollisionGroup_vtable[4];
 union U_239c00 { int vt; char b[96]; };
 extern "C" int igCollisionGroup_GetVTable(void);
 extern "C" void FUN_00239c80(void);
-#include "dw4/igGroup.h"
+#include "dw4/scenegraph/igGroup.h"
 extern "C" CallbackArray *igCollisionGroup_Register(void);
 extern "C" void thunk_igCollisionGroup_GetMetaObject(void);
-#include "dw4/igTransform.h"
-#include "dw4/igAABox.h"
+#include "dw4/scenegraph/igTransform.h"
+#include "dw4/maths/igAABox.h"
 extern "C" void igCollisionGroup_InitFields(void);
 extern "C" igMetaObject *g_igCollisionGridHelper_metaObject;
 extern "C" igMetaObject *igCollisionGridHelper_GetMetaObject(void);
@@ -153,7 +153,7 @@ extern "C" int FUN_0018d630(...);
 extern "C" void FUN_0023b110(void *arg0, void *arg1);
 extern "C" int FUN_0018de10(...);
 extern "C" int FUN_0023ac20(...);
-#include "dw4/igNode.h"
+#include "dw4/scenegraph/igNode.h"
 typedef struct S1 { char pad4[4]; int f4; } S1;
 struct Ls { char p[8]; unsigned int n; char q[4]; struct Q **a; };
 struct Q { char p[28]; struct Ls *f28; };
@@ -193,8 +193,8 @@ extern "C" igSmartPointer<igObject> FUN_0023b270(ObjectSlotOwner *owner, int val
 struct RefCounted { int pad; int _refCount; };
 struct RetainedList { int pad0[2]; void *_words; int pad1[2]; int _count;
 };
-#include "dw4/igDataLists.h"
-#include "dw4/igSphere.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/maths/igSphere.h"
 extern "C" void FUN_0023b3b0(RetainedList *list, RefCounted *object);
 extern "C" void FUN_00301ee0(int, int);
 extern "C" void FUN_0023b410(int *arg0, int arg1, int arg2, int arg3);

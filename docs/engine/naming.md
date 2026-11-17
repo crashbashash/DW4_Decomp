@@ -165,13 +165,13 @@ as an offset member (`p->f12`). Two rules: the number is the **decimal** byte of
 (`f12`, never `f0xc` or `f0c`), so one field has one spelling across the tree and
 `tools/typed_coverage.py` can pair it with the reflected layout; and an `fNN` member
 is a temporary form: it is replaced by the recovered field name (through
-`include/dw4/reflected.h` or a hand header) when the struct is typed, and a module
+`include/dw4/support/reflected.h` or a hand header) when the struct is typed, and a module
 with `fNN` members left is not complete.
 
 ### One shared definition per class
 
-A class or struct has **one definition**, under `include/dw4/`: the generated
-`include/dw4/reflected.h` for every reflected class, or a hand-written header for a
+A class or struct has **one definition**, under `include/dw4/<library>/<Module>.h` (the folder of the defining unit's library): the generated
+`include/dw4/support/reflected.h` for every reflected class, or a hand-written header for a
 struct the reflection does not describe. Matched files include that header instead of
 restating the struct. A **local view** (a file-private struct covering only the offsets
 one function touches) is allowed only where ABI dispatch needs it (a receiver whose

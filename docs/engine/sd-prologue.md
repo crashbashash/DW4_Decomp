@@ -131,7 +131,7 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   `config/SLUS-20836/compiler-runtime-symbols.tsv` resolves. Sony's `fp-bit.c` does not round in
   `__pack_d`, `dpmul` or `dpdiv`, flushes denormals to zero, and its `isnan`/`isinf`/`iszero` are inline
   functions (macros change the compare). Each division object carries its own `__clz_tab` copy.
-  A `static __inline__` helper inlines under `tools/check.py` only from a header (`include/dw4/dp_bit.h`,
+  A `static __inline__` helper inlines under `tools/check.py` only from a header (`include/dw4/support/dp_bit.h`,
   `fp_bit.h`, `libgcc_longlong.h`).
   Open question: the name `__thenan_df` at `0x4e83a8` follows upstream gcc 2.96's shared constant; the 2.9-ee
   archive has a per-object `thenan` instead, and no 2.96 `libgcc.a` is available to confirm it.

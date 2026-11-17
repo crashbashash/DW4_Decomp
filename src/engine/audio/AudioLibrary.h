@@ -1,9 +1,9 @@
 #ifndef DW4_AUDIO_LIBRARY_H
 #define DW4_AUDIO_LIBRARY_H
 
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igAudioContext.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/audio/igAudioContext.h"
 
 union AudioContextProbe { int vt; char b[64]; };
 struct SourceListProbe { int *vt; char pad[28]; };
@@ -236,29 +236,29 @@ typedef union VoiceStateWord { VoiceStateBits r; int i; } VoiceStateWord;
 
 extern igSmartPointer<igPsx2AudioSourceList> g_audioTableOwner;
 
-#include "dw4/igObject.h"
-#include "dw4/igDataLists.h"
-#include "dw4/igMemoryPoolContext.h"
-#include "dw4/igObjectSystem.h"
-#include "dw4/igMetaObject.h"
-#include "dw4/igThread.h"
-#include "dw4/libkernl.h"
+#include "dw4/core/igObject.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igObjectSystem.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/core/igThread.h"
+#include "dw4/sony/libkernl.h"
 #include <string.h>
 extern "C" {
 #include "dw4/sony/sif.h"
 }
 #include <math.h>
-#include "dw4/igResult.h"
+#include "dw4/core/igResult.h"
 extern "C" {
 class igMemoryPoolView;
-#include "dw4/igBoolMetaField.h"
-#include "dw4/igIntMetaField.h"
-#include "dw4/igMemoryRefMetaField.h"
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igRawRefMetaField.h"
-#include "dw4/igUnsignedIntMetaField.h"
-#include "dw4/igPsx2File.h"
-#include "dw4/igSemaphore.h"
+#include "dw4/core/igBoolMetaField.h"
+#include "dw4/core/igIntMetaField.h"
+#include "dw4/core/igMemoryRefMetaField.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igRawRefMetaField.h"
+#include "dw4/core/igUnsignedIntMetaField.h"
+#include "dw4/core/igPsx2File.h"
+#include "dw4/core/igSemaphore.h"
 #include "dw4/sony/sifdev.h"
 void igPsx2IopRpcConnection_EnsureRegistered(void);
 void FUN_00145de0(void);

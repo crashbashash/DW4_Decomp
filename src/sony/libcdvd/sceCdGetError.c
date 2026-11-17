@@ -1,5 +1,5 @@
 /* sceCdGetError.c - sceCdGetError: the last error cdvdman reported. */
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/sony/libcdvd.h"
 
 int sceCdGetError(void)

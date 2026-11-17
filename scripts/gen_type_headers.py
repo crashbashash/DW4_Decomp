@@ -27,7 +27,7 @@ Three decisions make the output trustworthy rather than plausible:
     about the recovered metadata.
 
 Usage:
-    scripts/gen_type_headers.py [--out include/dw4/reflected.h] [--asm asm] [--report]
+    scripts/gen_type_headers.py [--out include/dw4/support/reflected.h] [--asm asm] [--report]
 """
 
 import argparse
@@ -245,7 +245,7 @@ def main():
     ap.add_argument("--hierarchy", default="data/class-hierarchy.tsv")
     ap.add_argument("--asm", default="asm",
                     help="assembly split holding <Class>_Register.s (registered instance sizes)")
-    ap.add_argument("--out", default="include/dw4/reflected.h")
+    ap.add_argument("--out", default="include/dw4/support/reflected.h")
     ap.add_argument("--report", action="store_true")
     args = ap.parse_args()
 

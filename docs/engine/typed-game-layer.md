@@ -1,7 +1,7 @@
 # Typed game layer: scope, metric and reference targets
 
 Struct recovery for the game layer. The matched C of the `Gap::Bec` game classes is typed through the generated
-`include/dw4/reflected.h`; every edit is verified codegen-identical with `tools/verify.py` (the dispatcher with
+`include/dw4/support/reflected.h`; every edit is verified codegen-identical with `tools/verify.py` (the dispatcher with
 `tools/dispatcher/full_verify.py`).
 
 ## Scope and metric
@@ -44,7 +44,7 @@ through `(int)`.
 * References stay four-byte `int` and are only named.
 * No new `sizeof(void *) == 4` assumptions; constructs that exist only to steer the matching compiler carry a
   `/* matching construct: <why> */` comment so they can be told from game logic.
-* Reflected classes come only from `#include "dw4/reflected.h"`; helper structs for non-reflected records are named for
+* Reflected classes come only from `#include "dw4/support/reflected.h"`; helper structs for non-reflected records are named for
   what they are.
 * A pointer-typed local declared first is the safe spelling for a followed reference: casting an `int` field at every use
   can change register allocation.
@@ -248,7 +248,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 
 ## Header coverage
 
-`scripts/check_scope_headers.py` (run by `make reflected-check`) verifies that every class named in `config/typed-scope.tsv` has its authoritative struct in `include/dw4/reflected.h`: **460 of 460** in-scope classes (`FUN` and `bePlayer` are not classes).
+`scripts/check_scope_headers.py` (run by `make reflected-check`) verifies that every class named in `config/typed-scope.tsv` has its authoritative struct in `include/dw4/support/reflected.h`: **460 of 460** in-scope classes (`FUN` and `bePlayer` are not classes).
 
 The generator emits a struct for each class in `config/typed-scope.tsv` even when it has no field of its own (`beCountry`,
 `beFile`, `beUnicode` hold the `igObject` header). The two remaining name groups in the scope list are not classes: `FUN`

@@ -1,6 +1,6 @@
-#include "dw4/newlib_reent.h"
+#include "dw4/newlib/newlib_reent.h"
 #include <string.h>
-#include "dw4/newlib_locale.h"
+#include "dw4/newlib/newlib_locale.h"
 
 extern char C_locale[];
 extern char empty_locale[];

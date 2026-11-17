@@ -1,22 +1,22 @@
 #ifndef DW4_LUA_LIBRARY_H
 #define DW4_LUA_LIBRARY_H
 
-#include "dw4/lua.h"
-#include "dw4/reflected.h"
-#include "dw4/igSmartPointer.h"
-#include "dw4/igObjectSystem.h"
-#include "dw4/igLuaGlue.h"
-#include "dw4/igLuaState.h"
-#include "dw4/LuaArray.h"
-#include "dw4/LuaBinding.h"
-#include "dw4/LuaClass.h"
-#include "dw4/LuaFunction.h"
-#include "dw4/LuaGlue.h"
-#include "dw4/LuaHashTables.h"
-#include "dw4/LuaObject.h"
-#include "dw4/LuaType.h"
-#include "dw4/ThreadLocalTable.h"
-#include "dw4/igNamedObject.h"
+#include "dw4/lua/lua.h"
+#include "dw4/support/reflected.h"
+#include "dw4/core/igSmartPointer.h"
+#include "dw4/core/igObjectSystem.h"
+#include "dw4/lua/igLuaGlue.h"
+#include "dw4/lua/igLuaState.h"
+#include "dw4/lua/LuaArray.h"
+#include "dw4/lua/LuaBinding.h"
+#include "dw4/lua/LuaClass.h"
+#include "dw4/lua/LuaFunction.h"
+#include "dw4/lua/LuaGlue.h"
+#include "dw4/lua/LuaHashTables.h"
+#include "dw4/lua/LuaObject.h"
+#include "dw4/lua/LuaType.h"
+#include "dw4/core/ThreadLocalTable.h"
+#include "dw4/core/igNamedObject.h"
 
 /* The library front: the registration latch. */
 extern "C" void LuaLibrary_MarkRegistered(void);
@@ -25,13 +25,13 @@ extern "C" void LuaLibrary_MarkRegistered(void);
  * class registers. */
 typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
 typedef void (*igMetaObjectCallback)(void);
-#include "dw4/igObjectRefMetaField.h"
-#include "dw4/igRawRefMetaField.h"
-#include "dw4/igFile.h"
-#include "dw4/igMetaObject.h"
-#include "dw4/list-services.h"
-#include "dw4/igMemoryPool.h"
-#include "dw4/igSemaphore.h"
+#include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/core/igRawRefMetaField.h"
+#include "dw4/core/igFile.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/support/list-services.h"
+#include "dw4/core/igMemoryPool.h"
+#include "dw4/core/igSemaphore.h"
 
 extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
 extern "C" int Memory_GetAllocatorBySelector(int key);

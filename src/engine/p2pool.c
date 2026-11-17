@@ -1,11 +1,11 @@
-#include "dw4/p2core.h"
-#include "dw4/p2dma.h"
-#include "dw4/dmaChannel.h"
-#include "dw4/p2pool.h"
-#include "dw4/p2swap.h"
-#include "dw4/p2stateCache.h"
-#include "dw4/p2texture.h"
-#include "dw4/igMemory.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2pool.h"
+#include "dw4/p2/p2swap.h"
+#include "dw4/p2/p2stateCache.h"
+#include "dw4/p2/p2texture.h"
+#include "dw4/core/igMemory.h"
 
 #define P2_HEAP_TEMPORARY 9
 #define P2_HEAP_DRIVER 25

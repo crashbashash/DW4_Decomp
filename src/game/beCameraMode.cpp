@@ -1,11 +1,11 @@
-#include "dw4/reflected.h"
-#include "dw4/igCameraDispatchView.h"
-#include "dw4/beCameraMode.h"
-#include "dw4/igGraphPath.h"
-#include "dw4/igMatrix44f.h"
-#include "dw4/igResult.h"
-#include "dw4/igModel.h"
-#include "dw4/igViewModel.h"
+#include "dw4/support/reflected.h"
+#include "dw4/scenegraph/igCameraDispatchView.h"
+#include "dw4/game/beCameraMode.h"
+#include "dw4/scenegraph/igGraphPath.h"
+#include "dw4/maths/igMatrix44f.h"
+#include "dw4/core/igResult.h"
+#include "dw4/gui/igModel.h"
+#include "dw4/viewer/igViewModel.h"
 
 extern "C" igMetaObject *beCameraMode_GetMeta(void);
 extern "C" void igViewMode_OnKeyEvent(void);

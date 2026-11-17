@@ -1,9 +1,9 @@
 /* filestub.c - libkernl's EE side of the IOP file system: each sce* file call packs its arguments into
  * one shared send buffer and calls fileio's RPC server, which writes the result back by SIF DMA. */
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/sony/sif.h"
 #include "dw4/sony/sifdev.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include <string.h>
 
 #define FS_MAX_IOB 32

@@ -1,13 +1,13 @@
-#include "dw4/igAABox.h"
-#include "dw4/igMetaObject.h"
-#include "dw4/igVolume.h"
+#include "dw4/maths/igAABox.h"
+#include "dw4/core/igMetaObject.h"
+#include "dw4/maths/igVolume.h"
 extern "C" igObject *FUN_00227460(igMemoryPoolView *allocator);
 extern "C" void FUN_0022ab90(igObject *iterator, igNode *root, igMetaObject *metaObject);
 extern "C" igNode *FUN_0022ac00(igObject *iterator);
 extern "C" void FUN_0022ac70(igObject *iterator, igMetaObject *metaObject);
 extern "C" void FUN_0022b0a0(float *matrix, igObject *iterator);
 
-#include "dw4/emptyString.h"
+#include "dw4/support/emptyString.h"
 static inline igAABox *asAABox(igObject *o) {
     if (o != 0 && igObject_IsKindOf(o, g_igAABox_metaObject) != 0) return (igAABox *)o;
     return 0;

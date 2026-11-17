@@ -5,7 +5,7 @@ typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float SFtype __attribute__((mode(SF)));
 typedef float DFtype __attribute__((mode(DF)));
 
-#include "dw4/libgcc_longlong.h"
+#include "dw4/support/libgcc_longlong.h"
 
 #define WORD_SIZE (sizeof(SItype) * 8)
 #define HIGH_HALFWORD_COEFF (((UDItype)1) << (WORD_SIZE / 2))

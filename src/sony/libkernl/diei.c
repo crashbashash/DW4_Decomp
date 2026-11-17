@@ -1,6 +1,6 @@
 /* diei.c - turning interrupts off and on, reporting whether they were on. */
 
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 
 typedef unsigned int u_int;
 

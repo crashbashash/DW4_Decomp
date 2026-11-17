@@ -1,5 +1,5 @@
 /* sceCdSeek.c - sceCdSeek: starts an asynchronous seek to a sector. */
-#include "dw4/eekernel.h"
+#include "dw4/support/eekernel.h"
 #include "dw4/sony/libcdvd.h"
 
 int sceCdSeek(unsigned int lbn)

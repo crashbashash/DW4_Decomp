@@ -1,5 +1,5 @@
-#include "dw4/ieee_words.h"
-#include "dw4/newlib_math.h"
+#include "dw4/newlib/ieee_words.h"
+#include "dw4/newlib/newlib_math.h"
 
 static const double two54 = 1.80143985094819840000e+16,
                     ivln10 = 4.34294481903251816668e-01,

@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/support/reflected.h"
 #include <stdlib.h>
 
 class DW4VC_12_1 { public: virtual void d0(); virtual int vX(int); };

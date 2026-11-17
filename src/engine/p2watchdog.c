@@ -4,12 +4,12 @@
  * p2WatchdogTicks, which p2SubmitDmaPacket resets, reaches 60. */
 #include <stdio.h>
 #include <stdlib.h>
-#include "dw4/eekernel.h"
-#include "dw4/p2core.h"
-#include "dw4/p2dma.h"
-#include "dw4/p2timer.h"
-#include "dw4/p2watchdog.h"
-#include "dw4/renderState.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/p2/p2core.h"
+#include "dw4/p2/p2dma.h"
+#include "dw4/p2/p2timer.h"
+#include "dw4/p2/p2watchdog.h"
+#include "dw4/p2/renderState.h"
 
 #pragma push
 #pragma readonly_strings on

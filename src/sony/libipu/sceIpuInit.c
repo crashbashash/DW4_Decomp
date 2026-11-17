@@ -1,5 +1,5 @@
 #include "dw4/sony/libipu.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 typedef int quadword __attribute__((mode(TI)));
 
 

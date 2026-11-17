@@ -1,4 +1,4 @@
-#include "dw4/newlib_reent.h"
+#include "dw4/newlib/newlib_reent.h"
 
 void srand(unsigned int seed)
 {

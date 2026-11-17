@@ -312,7 +312,7 @@ decompiled. Moving a definition into the unit is what the data headline counts. 
   pragma: it is a constant passed to a `const T &` parameter (an enum default's
   `igEnumMetaField_SetDefaultValue(field, 0)`, a list's `set(index, 0)`), which b52 stores as an unnamed
   `.data` temporary (`.sdata` at one byte), zero included. Those temporaries are `anon` addresses
-  (`include/dw4/listSet.h` holds the list helpers). A zero global spelled as a global goes to `.bss`.
+  (`include/dw4/game/ndmw/listSet.h` holds the list helpers). A zero global spelled as a global goes to `.bss`.
 - **Order and naming in the object:** file-scope data in definition order; a function's literals, local
   statics and switch tables directly before its code; one object per distinct literal per translation
   unit, placed by its first use. A named datum is a `data` row and its `data-names.tsv` row goes, and each
@@ -471,7 +471,7 @@ same order with the same sharing. There, the attrs objects are written by virtua
 it with 128 `igCustomVectorState`/`igCustomMatrixState`. The base pair `0x56da90`/`0x56daa8` is written by
 `igStatisticsNodeUsage`. The GameCube gui object is passed as the path a graph search fills, so it is an `igGraphPath`.
 The PS2 build registers none of the three list classes or their owners, so the lists are declared in
-`include/dw4/unregisteredClasses.h`, with the GameCube registrations' bases. The game's own users of retail
+`include/dw4/support/unregisteredClasses.h`, with the GameCube registrations' bases. The game's own users of retail
 `0x150eb0` already call it `igSmartPointer<igIntList>`'s destructor.
 
 ## Verification and placement
@@ -564,7 +564,7 @@ Further holder shapes:
 
 ## One reference holder
 
-Every reference holder is `igSmartPointer<T>` in `include/dw4/igSmartPointer.h`; the executable holds its name, as
+Every reference holder is `igSmartPointer<T>` in `include/dw4/core/igSmartPointer.h`; the executable holds its name, as
 `::~igSmartPointer<`. Its destructor is `igRelease(p)`, an inline taking `igObject *`, and that one text gives both the
 128-byte out-of-line copy retail keeps and every inlined release. Whether an inlined release reloads the held pointer
 after the decrement store depends on the holder, not on the class:

@@ -3,7 +3,7 @@
  * first and sends one 512-byte request, which the reply overwrites. */
 #include "dw4/sony/sif.h"
 #include "dw4/sony/sifdev.h"
-#include "dw4/libkernl.h"
+#include "dw4/sony/libkernl.h"
 #include <string.h>
 
 #define LF_SERVER 0x80000006

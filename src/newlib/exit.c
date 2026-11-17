@@ -1,5 +1,5 @@
-#include "dw4/newlib_reent.h"
-#include "dw4/newlib_syscalls.h"
+#include "dw4/newlib/newlib_reent.h"
+#include "dw4/newlib/newlib_syscalls.h"
 
 
 void exit(int code)

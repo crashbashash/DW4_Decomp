@@ -1,4 +1,4 @@
-#include "dw4/igLogoRenderer.h"
+#include "dw4/viewer/igLogoRenderer.h"
 
 void Gap__Viewer__igLogoRenderer__vfunc_23(void) {
 

@@ -1,9 +1,9 @@
 /* sifrpc.c - libkernl's SIF RPC layer (libkernl.a sifrpc.o): the EE's clients of IOP servers, its own
  * servers the IOP calls, and the packet pools both sides' commands travel in. */
 #include "dw4/sony/sif.h"
-#include "dw4/eekernel.h"
-#include "dw4/eekernel_gp.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/support/eekernel_gp.h"
+#include "dw4/sony/libkernl.h"
 
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
 #define RPC_PACKETS 32

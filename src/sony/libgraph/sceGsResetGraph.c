@@ -1,6 +1,6 @@
 #include "dw4/sony/libgraph.h"
-#include "dw4/eekernel.h"
-#include "dw4/libkernl.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/sony/libkernl.h"
 
 #define GS_CSR (*(volatile unsigned long long *)0x12001000)
 #define GS_CSR_RESET 0x200

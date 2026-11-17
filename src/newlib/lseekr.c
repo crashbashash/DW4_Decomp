@@ -1,5 +1,5 @@
-#include "dw4/newlib_reent.h"
-#include "dw4/libkernl.h"
+#include "dw4/newlib/newlib_reent.h"
+#include "dw4/sony/libkernl.h"
 
 int _lseek_r(struct _reent *ptr, int fd, int offset, int whence)
 {
