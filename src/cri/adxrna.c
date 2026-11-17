@@ -2,8 +2,6 @@
 #include "dw4/cri/adxrna.h"
 #include "dw4/cri/adxmsg.h"
 
-extern char DAT_004ee378[];
-
 void ADXPS2_SetupVoice(int nste, int nmono) {
     PS2RNA_SetupVoice(nste, nmono);
 }
@@ -115,7 +113,7 @@ int ADXRNA_GetNumRoom(Ps2Rna *rna) {
 }
 
 void ADXRNA_GetStat(void) {
-    ADXMSG_PrintErr(DAT_004ee378);
+    ADXMSG_PrintErr("ADXRNA_GetStat: not implemented\n");
     for (;;) {
     }
 }

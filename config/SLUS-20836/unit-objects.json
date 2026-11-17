@@ -18169,16 +18169,7 @@
       "ADXT_ResetEntry": "0x00263b40"
     },
     "data": {
-      "DAT_004ee0d0": "0x004ee0d0",
-      "DAT_004ee100": "0x004ee100",
-      "E02080855_ADXT_EntryAfs_parameter_error": "0x004ee120",
-      "E0071301_ADXT_EntryAfs_can_t_entry": "0x004ee150",
-      "DAT_004ee178": "0x004ee178",
-      "DAT_004ee1a8": "0x004ee1a8",
-      "DAT_004ee1d8": "0x004ee1d8",
-      "DAT_004ee210": "0x004ee210",
-      "DAT_004ee240": "0x004ee240",
-      "DAT_004ee270": "0x004ee270"
+      "@rodata": "0x004ee0d0"
     }
   },
   "0x00263b80": {
@@ -18376,7 +18367,7 @@
       "ADXRNA_SetStmHdInfo": "0x00265f08"
     },
     "data": {
-      "DAT_004ee378": "0x004ee378"
+      "@rodata": "0x004ee378"
     }
   },
   "0x00265f28": {
@@ -19108,7 +19099,7 @@
       "SRD_SceRead": "0x00272970"
     },
     "data": {
-      "@rodata": "0x004efcd0",
+      "@rodata": "0x004efbc0",
       "srd_obj": "0x004a9288",
       "srd_build": "0x004a92c0",
       "srd_enter_fg": "0x004a92c4",
@@ -19127,30 +19118,7 @@
       "srd_host_mode": "0x004a92f8",
       "srd_host_lock": "0x004a92fc",
       "srd_spindlctrl_sw": "0x004a9300",
-      "srd_spindlctrl": "0x004a9304",
-      "DAT_004efbc0": "0x004efbc0",
-      "DAT_004efc00": "0x004efc00",
-      "DAT_004efc20": "0x004efc20",
-      "DAT_004efc40": "0x004efc40",
-      "DAT_004efc60": "0x004efc60",
-      "DAT_004efc78": "0x004efc78",
-      "DAT_004efe28": "0x004efe28",
-      "SRD_sceLseek64_error": "0x004efe60",
-      "SRD_sceLseek_error": "0x004efe80",
-      "DAT_004efea0": "0x004efea0",
-      "DAT_004efec0": "0x004efec0",
-      "DAT_004efee0": "0x004efee0",
-      "DAT_004eff00": "0x004eff00",
-      "D_004efca8": "0x004efca8",
-      "Read_Status_DVD_2_HST_1_d": "0x004efe08",
-      "SRD_Enable_HostLock": "0x004efe48",
-      "SRD_SRD_Info": "0x004efd58",
-      "SRD_SRD_WaitForExecServer_timeout_10sec": "0x004efd28",
-      "srd_debug_geterror_d": "0x004efd88",
-      "srd_enter_fg_d": "0x004efd68",
-      "srd_obj_devtype_DVD": "0x004efdc8",
-      "srd_obj_devtype_HOST": "0x004efde8",
-      "srd_obj_stat_d": "0x004efda8"
+      "srd_spindlctrl": "0x004a9304"
     }
   },
   "0x002729e8": {
@@ -19195,8 +19163,8 @@
       "dtx_rpc_id": "0x004a9b14",
       "DAT_004a9b18": "0x004a9b18",
       "DAT_004a9b1c": "0x004a9b1c",
-      "DAT_004a9b20": "0x004a9b20",
-      "DAT_004a9b24": "0x004a9b24",
+      "dtx_def_rcvcbf_cnt": "0x004a9b20",
+      "dtx_def_sndcbf_cnt": "0x004a9b24",
       "DAT_004a9b28": "0x004a9b28",
       "dtx_init_cnt": "0x004a9b2c",
       "DAT_004a9b30": "0x004a9b30",

@@ -41,31 +41,6 @@ extern volatile int srd_history;
 extern int srd_host_mode;
 extern int srd_host_lock;
 
-extern char DAT_004efbc0[];
-extern char DAT_004efc00[];
-extern char DAT_004efc20[];
-extern char DAT_004efc40[];
-extern char DAT_004efc60[];
-extern char DAT_004efc78[];
-extern char D_004efca8[];
-extern char SRD_SRD_WaitForExecServer_timeout_10sec[];
-extern char SRD_SRD_Info[];
-extern char srd_enter_fg_d[];
-extern char srd_debug_geterror_d[];
-extern char srd_obj_stat_d[];
-extern char srd_obj_devtype_DVD[];
-extern char srd_obj_devtype_HOST[];
-extern char Read_Status_DVD_2_HST_1_d[];
-extern char DAT_004efe28[];
-extern const char SRD_Enable_HostLock[];
-extern char SRD_sceLseek64_error[];
-extern char SRD_sceLseek_error[];
-extern char DAT_004efea0[];
-extern char DAT_004efec0[];
-extern char DAT_004efee0[];
-extern char DAT_004eff00[];
-
-
 void srd_sw_lock(void);
 void srd_sw_unlock(void);
 
@@ -97,10 +72,10 @@ void SRD_Destroy(SrdObj *h)
 {
     SVM_LockVar();
     if (h != &srd_obj) {
-        scePrintf(DAT_004efbc0, h, &srd_obj);
+        scePrintf("SRD: SRD_Destroy, invalidate srd handle. hn=%0x, srd_obj=%08x\r\n", h, &srd_obj);
     } else {
         if (h->stat != 0 && h->stat != 3 && h->stat != 9) {
-            scePrintf(DAT_004efc00);
+            scePrintf("SRD: invalid SRD_Destroy.\r\n");
         }
         srd_reset_obj();
         srd_obj.used = 0;
@@ -198,7 +173,7 @@ void srd_wait_hst(SrdObj *f)
         }
         srd_wait();
         if (++count > 0x9000) {
-            scePrintf(DAT_004efc20);
+            scePrintf("SRD: srd_wait_hst timeout.\r\n");
             return;
         }
     }
@@ -247,9 +222,9 @@ void SRD_Break(SrdObj *object)
 {
     SVM_LockVar();
     if (object == 0) {
-        scePrintf(DAT_004efc40);
+        scePrintf("SRD: SRD_Break handle is NULL\r\n");
     } else if (object->abort_request == 1) {
-        scePrintf(DAT_004efc60);
+        scePrintf("SRD: Already Break!\r\n");
     } else {
         object->abort_request = 1;
     }
@@ -282,7 +257,7 @@ int srd_check_dvd_error(SrdObj *h)
     if (err != 0 && err != -1) {
         if (err != 32) {
             h->error = err;
-            scePrintf(DAT_004efc78, err);
+            scePrintf("SRD: Drive Error (sceCdGetError = 0x%x)\r\n", err);
             return 1;
         }
     }
@@ -321,7 +296,7 @@ void srd_exec_dvd(SrdObj *srd)
             busy = sceCdBreak();
             SRD_SetHistory(0x1601);
             if (busy == 0)
-                scePrintf(D_004efca8, DAT_004a92dc);
+                scePrintf("SRD: sceCdBreak is fail. %d\n", DAT_004a92dc);
             SRD_SetHistory(0x1700);
             sceCdSync(0);
             SRD_SetHistory(0x1701);
@@ -480,7 +455,7 @@ void SRD_WaitForExecServer(void)
     while (srd_enter_fg == 1) {
         DAT_004a92d8++;
         if (DAT_004a92d8 > 0x19640000) {
-            scePrintf(SRD_SRD_WaitForExecServer_timeout_10sec);
+            scePrintf("SRD: SRD_WaitForExecServer timeout.(10sec)\n");
             break;
         }
     }
@@ -559,17 +534,17 @@ int SRD_GetReadStatus(void)
 
 int SRD_DebugPrint(void)
 {
-    scePrintf(SRD_SRD_Info);
-    scePrintf(srd_enter_fg_d, srd_enter_fg);
-    scePrintf(srd_debug_geterror_d, DAT_004a92dc);
-    scePrintf(srd_obj_stat_d, srd_obj.stat);
+    scePrintf("SRD: SRD Info.\n");
+    scePrintf(" srd_enter_fg       = %d\n", srd_enter_fg);
+    scePrintf(" srd_debug_geterror = %d\n", DAT_004a92dc);
+    scePrintf(" srd_obj.stat       = %d\n", srd_obj.stat);
     if (srd_obj.devtype == 1) {
-        scePrintf(srd_obj_devtype_DVD);
+        scePrintf(" srd_obj.devtype    = DVD\n");
     }
     if (srd_obj.devtype == 2) {
-        scePrintf(srd_obj_devtype_HOST);
+        scePrintf(" srd_obj.devtype    = HOST\n");
     }
-    scePrintf(Read_Status_DVD_2_HST_1_d, SRD_GetReadStatus());
+    scePrintf(" Read Status(DVD=2/HST=1) = %d\n", SRD_GetReadStatus());
     return 0;
 }
 
@@ -598,7 +573,7 @@ void FUN_002725d0(int mode)
 {
     srd_host_mode = mode;
     if (mode == 1) {
-        scePrintf(DAT_004efe28);
+        scePrintf("SRD: 64bit Host filesystem.\r\n");
     }
 }
 
@@ -612,7 +587,7 @@ void FUN_00272620(int value)
     srd_hst_exec_locked = (char)value;
     srd_host_lock = srd_hst_exec_locked;
     if (value == 1) {
-        scePrintf(SRD_Enable_HostLock);
+        scePrintf("SRD: Enable HostLock\r\n");
     }
 }
 
@@ -666,12 +641,12 @@ long long SRD_SceLseek(int fd, long long offset, int whence)
     if (srd_host_mode == 1) {
         ret = sceLseek64(fd, offset, whence);
         if (ret < 0) {
-            scePrintf(SRD_sceLseek64_error, ret);
+            scePrintf("SRD: sceLseek64 error = %d\r\n", ret);
         }
     } else {
         ret = sceLseek(fd, offset, whence);
         if (ret < 0) {
-            scePrintf(SRD_sceLseek_error, ret);
+            scePrintf("SRD: sceLseek error = %d\r\n", ret);
         }
     }
     srd_sw_unlock();
@@ -685,7 +660,7 @@ int SRD_SceIoctl(int fd, int cmd, int *result)
     srd_sw_lock();
     ret = sceIoctl(fd, cmd, result);
     if (ret < 0) {
-        scePrintf(DAT_004efea0, ret);
+        scePrintf("SRD: sceIoctl error = %d\r\n", ret);
     }
     srd_sw_unlock();
     return ret;
@@ -698,7 +673,7 @@ int SRD_SceOpen(const char *name, int flags)
     srd_sw_lock();
     ret = sceOpen(name, flags);
     if (ret < 0) {
-        scePrintf(DAT_004efec0, ret);
+        scePrintf("SRD: sceOpen error = %d\r\n", ret);
     }
     srd_sw_unlock();
     return ret;
@@ -711,7 +686,7 @@ int SRD_SceClose(int fd)
     srd_sw_lock();
     ret = sceClose(fd);
     if (ret < 0) {
-        scePrintf(DAT_004efee0, ret);
+        scePrintf("SRD: sceClose error = %d\r\n", ret);
     }
     srd_sw_unlock();
     return ret;
@@ -724,7 +699,7 @@ int SRD_SceRead(int fd, void *buf, int size)
     srd_sw_lock();
     ret = sceRead(fd, buf, size);
     if (ret < 0) {
-        scePrintf(DAT_004eff00, ret);
+        scePrintf("SRD: sceRead error = %d\r\n", ret);
     }
     srd_sw_unlock();
     return ret;

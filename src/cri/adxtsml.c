@@ -5,18 +5,6 @@
 #include "dw4/cri/cri_adxf.h"
 #include "dw4/cri/lsc.h"
 
-extern char DAT_004ee0d0[];
-extern char DAT_004ee100[];
-extern char E02080855_ADXT_EntryAfs_parameter_error[];
-extern char E0071301_ADXT_EntryAfs_can_t_entry[];
-extern char DAT_004ee178[];
-extern char DAT_004ee1a8[];
-extern char DAT_004ee1d8[];
-extern char DAT_004ee210[];
-extern char DAT_004ee240[];
-extern char DAT_004ee270[];
-
-
 void FUN_00263748(AdxtObj *adxt, const char *name) {
     ADXT_EntryFnameRange(adxt, name, 0, 0xFFFFF);
 }
@@ -25,11 +13,11 @@ void ADXT_EntryFnameRange(AdxtObj *adxt, const char *name, int first, int last) 
     /* the file list is read before the null check (retail loads it in the branch delay slot) */
     LscObj *lsc = adxt->lsc;
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(DAT_004ee0d0);
+        ADXERR_CallErrFunc1("E02080848 ADXT_EntryFnameRange: parameter error");
         return;
     }
     if (LSC_EntryFileRange(lsc, name, 0, first, last) < 0) {
-        ADXERR_CallErrFunc2(DAT_004ee100, name);
+        ADXERR_CallErrFunc2("E4063001:Can't entry file ", name);
     }
 }
 
@@ -40,14 +28,14 @@ void ADXT_EntryAfs(AdxtObj *adxt, int afs, int fid) {
     int ofst;
     int nsct;
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(E02080855_ADXT_EntryAfs_parameter_error);
+        ADXERR_CallErrFunc1("E02080855 ADXT_EntryAfs: parameter error");
         return;
     }
     if (ADXF_GetFnameRangeEx(afs, fid, adxt->fnbuf, &dir, &ofst, &nsct) == 0) {
         LSC_EntryFileRange(lsc, ADXF_GetFnameFromPt(afs), dir, ofst, nsct);
     } else {
         ADXERR_ItoA2(afs, fid, text, sizeof(text));
-        ADXERR_CallErrFunc2(E0071301_ADXT_EntryAfs_can_t_entry, text);
+        ADXERR_CallErrFunc2("E0071301 ADXT_EntryAfs: can't entry ", text);
     }
 }
 
@@ -55,7 +43,7 @@ void ADXT_StartSeamless(AdxtObj *adxt) {
     LscObj *lsc = adxt->lsc;
     SfdSj *sji;
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(DAT_004ee178);
+        ADXERR_CallErrFunc1("E02080850 ADXT_StartSeamless: parameter error");
         return;
     }
     ADXT_StopWithoutLsc(adxt);
@@ -72,7 +60,7 @@ void ADXT_StartSeamless(AdxtObj *adxt) {
 
 void ADXT_SetSeamlessLp(AdxtObj *adxt, int enable) {
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(DAT_004ee1a8);
+        ADXERR_CallErrFunc1("E02080851 ADXT_SetSeamlessLp: parameter error");
         return;
     }
     LSC_SetLpFlg(adxt->lsc, enable);
@@ -87,7 +75,7 @@ void ADXT_EntryFname(AdxtObj *adxt, const char *name)
 void ADXT_StartFnameLp(AdxtObj *adxt, const char *name, int first, int last) {
     LscObj *lsc;
     if (adxt == 0 || name == 0) {
-        ADXERR_CallErrFunc1(DAT_004ee1d8);
+        ADXERR_CallErrFunc1("E02080852 ADXT_StartFnameRangeLp: parameter error");
         return;
     }
     lsc = adxt->lsc;
@@ -100,7 +88,7 @@ void ADXT_StartFnameLp(AdxtObj *adxt, const char *name, int first, int last) {
 void ADXT_StartAfsLp(AdxtObj *adxt, int afs, unsigned int fid) {
     LscObj *lsc;
     if (adxt == 0 || afs >= 1 || fid > 0x10000) {
-        ADXERR_CallErrFunc1(DAT_004ee210);
+        ADXERR_CallErrFunc1("E0405100 ADXT_StartAfsLp: parameter error");
         return;
     }
     lsc = adxt->lsc;
@@ -116,7 +104,7 @@ void ADXT_ReleaseSeamless(void)
 
 int ADXT_GetNumFiles(AdxtObj *adxt) {
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(DAT_004ee240);
+        ADXERR_CallErrFunc1("E02080854 ADXT_GetNumFiles: parameter error");
         return -1;
     }
     return LSC_GetNumStm(adxt->lsc);
@@ -124,7 +112,7 @@ int ADXT_GetNumFiles(AdxtObj *adxt) {
 
 void ADXT_ResetEntry(AdxtObj *adxt) {
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(DAT_004ee270);
+        ADXERR_CallErrFunc1("E02080849 ADXT_ResetEntry: parameter error");
         return;
     }
     /* matching construct: manual — early return (not an if block) lets ee-gcc emit the tail call */

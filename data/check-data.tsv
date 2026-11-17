@@ -7478,6 +7478,8 @@
 004ed8c8	1788	.rodata	00260a40	match
 004edfc8	182	.rodata	00262a30	match
 004ee080	53	.rodata	002631c8	match
+004ee0d0	459	.rodata	00263748	match
+004ee378	33	.rodata	00265a20	match
 004ee3a0	65	.rodata	00265f28	match
 004ee448	16	.rodata	002674e8	match
 004ee460	41	.rodata	00269c30	match
@@ -7485,7 +7487,7 @@
 004ee4b0	12	.rodata	0026aff0	match
 004ee4c0	4	.rodata	0026b1d8	match
 004eedd0	177	.rodata	0026da28	match
-004efcd0	88	.rodata	00271640	match
+004efbc0	858	.rodata	00271640	match
 004eff20	349	.rodata	002729e8	match
 004f0180	1031	.rodata	00273988	match
 004f0590	1302	.rodata	00275370	match

@@ -2568,6 +2568,8 @@
 0x004a9300	srd_spindlctrl_sw	recovered-global
 0x004a9304	srd_spindlctrl	recovered-global
 0x004a9b14	dtx_rpc_id	recovered-global
+0x004a9b20	dtx_def_rcvcbf_cnt	recovered-global
+0x004a9b24	dtx_def_sndcbf_cnt	recovered-global
 0x004a9b2c	dtx_init_cnt	recovered-global
 0x004aa3b0	dtx_rpc_client	recovered-global
 0x004b0dd8	pl2enc_ver_str	recovered-global
@@ -3434,8 +3436,6 @@
 0x004ed868	RIFF	string-literal
 0x004ed870	WAVE	string-literal
 0x004eda98	AFS	recovered-global
-0x004ee120	E02080855_ADXT_EntryAfs_parameter_error	recovered-global
-0x004ee150	E0071301_ADXT_EntryAfs_can_t_entry	recovered-global
 0x004ee2d0	text_1060102_Internal_Error_adxm_goto	string-literal
 0x004ee300	ADXM_UsrVsyncThread_Stack_pointe	string-literal
 0x004ee340	ADXM_UsrIdleThread_Stack_pointer	string-literal
@@ -3559,17 +3559,6 @@
 0x004efb38	percent_s_colon_percent_s	string-literal
 0x004efb40	cvFsGetNumTr64_1_handle_error	string-literal
 0x004efb60	cvFsGetFsys64Info_1_handle_error	string-literal
-0x004efd28	SRD_SRD_WaitForExecServer_timeout_10sec	string-literal
-0x004efd58	SRD_SRD_Info	string-literal
-0x004efd68	srd_enter_fg_d	string-literal
-0x004efd88	srd_debug_geterror_d	string-literal
-0x004efda8	srd_obj_stat_d	string-literal
-0x004efdc8	srd_obj_devtype_DVD	string-literal
-0x004efde8	srd_obj_devtype_HOST	string-literal
-0x004efe08	Read_Status_DVD_2_HST_1_d	string-literal
-0x004efe48	SRD_Enable_HostLock	string-literal
-0x004efe60	SRD_sceLseek64_error	recovered-global
-0x004efe80	SRD_sceLseek_error	recovered-global
 0x004f00b0	Hello_from_EE_d	string-literal
 0x004f00c8	eewk_is_not_alignment_64_byte	string-literal
 0x004f00e8	iopwk_is_not_alignment_32_byte	string-literal

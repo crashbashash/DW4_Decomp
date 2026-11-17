@@ -36,8 +36,8 @@ struct DtxObj {
 extern volatile int DAT_004a9b18;
 extern int dtx_rpc_id;
 extern int DAT_004a9b1c;
-extern int DAT_004a9b20;
-extern int DAT_004a9b24;
+extern int dtx_def_rcvcbf_cnt;
+extern int dtx_def_sndcbf_cnt;
 extern int DAT_004a9b28;
 extern int dtx_init_cnt;
 extern DtxObj DAT_004a9b30[16];
@@ -109,7 +109,7 @@ void dtx_destroy_rmt(int server)
 
 void dtx_def_rcvcbf(void *obj, void *buf, int size)
 {
-    DAT_004a9b20++;
+    dtx_def_rcvcbf_cnt++;
 }
 
 void dtx_def_sndcbf(void *obj, void *buf, int size)
@@ -118,8 +118,8 @@ void dtx_def_sndcbf(void *obj, void *buf, int size)
     for (i = 0; i < size; i++) {
         ((char *)buf)[i] = 0xAA;
     }
-    sprintf(buf, Hello_from_EE_d, DAT_004a9b24);
-    DAT_004a9b24++;
+    sprintf(buf, Hello_from_EE_d, dtx_def_sndcbf_cnt);
+    dtx_def_sndcbf_cnt++;
 }
 
 DtxObj *DTX_Open(unsigned int id)
