@@ -62,7 +62,7 @@ void igItemDataBaseList_InitFields(void) {
 
     temp_s1 = g_igItemDataBaseList_metaObject;
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_data"));
-    temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
+    temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
     temp_s0 = (S_obj *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f60 = FUN_00228570();
     temp_s0->f56 = 0;

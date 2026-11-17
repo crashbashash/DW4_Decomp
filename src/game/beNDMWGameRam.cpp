@@ -42,6 +42,9 @@
 #include "dw4/igResult.h"
 #include "dw4/igTDataList.h"
 #include <string.h>
+#include "dw4/igStringRef.h"
+#include "dw4/igStringRefList.h"
+#include "dw4/list-services.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
 #define ALLOC(owner, var) { void *got = ((void *)igObject_GetAllocator(owner)); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0)); }
 #define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) List_Reserve((igDataList *)l, entry->count, SZ); }
@@ -64,9 +67,6 @@ struct StringListProperty { char header[12]; igStringRefList *list; };
 struct IntValues { char header[16]; int *values; };
 struct IntValuesProperty { char header[12]; IntValues *list; };
 /* kept local: no include/dw4 home (only CoreLibrary.h declares these). */
-extern "C" void ObjectList_FillRetained(igTDataList<igObject *> *list, igObject *object);
-extern "C" void ObjectList_ResizeRetained(igTDataList<igObject *> *list, int count);
-extern "C" void StringList_Resize(igTDataList<char *> *list, int count);
 
 extern "C" void beNDMWGameRam_UpdateRam(void);
 extern "C" int beNDMWGameRam_GetMeta(void);
@@ -266,6 +266,7 @@ unsigned char g_boolListSetValue = 1;
 class StringRef {
 public:
     char *p;
+    char *const *ref() const { return &p; }
     StringRef(int s) : p((char *)s) {}
     StringRef(const char *s) : p((char *)s) {}
     StringRef(void *s) : p((char *)s) {}
@@ -350,7 +351,6 @@ template<int I> class RecoveryRef { public:
 };
 extern "C" void beNDMWGameRam_GiveInitialWeapons(beNDMWGameRam *self, int index);
 /* kept local: the retained-string holder type is not shared yet (open item A7). */
-extern "C" int StringList_AppendRetained(int, const StringRef &);
 extern "C" void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply);
 extern "C" unsigned char beNDMWGameRam_HasUsableWeapon(beNDMWGameRam *self, int index, int species);
 extern "C" void beNDMWGameRam_JoinPlayer(beNDMWGameRam *self, int index, const char *modelName);
@@ -1129,7 +1129,7 @@ void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply)
                 } else {
                     interned = StringPool_Intern((StringPool *)(SharedStringPool::get()), model);
                 }
-                StringList_AppendRetained((int)names, StringRef(interned));
+                StringList_AppendRetained((igStringRefList *)names, StringRef(interned).ref());
                 item->_isEquip = 1;
             }
         }
@@ -1199,7 +1199,7 @@ void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply)
             } else {
                 interned = StringPool_Intern((StringPool *)(SharedStringPool::get()), model);
             }
-            StringList_AppendRetained((int)names, StringRef(interned));
+            StringList_AppendRetained((igStringRefList *)names, StringRef(interned).ref());
             chosen->_isEquip = 1;
         }
     }
@@ -1863,7 +1863,7 @@ void beNDMWGameRam_RecomputeStats(beNDMWGameRam *self, int index, unsigned char 
                     interned = StringPool_Intern((StringPool *)(SharedStringPool::get()), model);
                 }
                 StringRef token(interned);
-                StringList_AppendRetained((int)names, (const StringRef &)token);
+                StringList_AppendRetained((igStringRefList *)names, &token.p);
             }
         }
     }
@@ -1949,14 +1949,13 @@ extern unsigned char g_boolListClearValue;
 int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *message);
 }
 /* kept local: the retained-string holder type is not shared yet (open item A7). */
-extern "C" int igStringRef_Assign(void *, const StringRef &);
 /* The data-list reference made from an allocator value: constructed by beNDMWGameRam_CreateDataListRef and released by the shared igSmartPointer destructor, both out of line. */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const AllocatorValue &source); ~RecoveryCopiedRef(); };
 /* Gives `obj` a fresh object from the allocator.
  * matching construct: written in place, the copied reference takes the frame slot below retail's (1028 for 1032);
  * in this inline's own scope it lies where retail has it. */
 struct ObjectRefAssigner { static int *Assign(void *obj, int alloc) { RecoveryCopiedRef c(beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser1, alloc))); return (int *)beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign((ObjectRefTarget **)obj, (ObjectRefTarget **)&c); } };
 /* Stores a retained copy of `v` at list[idx] when idx is in range: the bounds-checked setter of a string list. */
-struct StringListStore { static void SetAt(igStringRefList *list, int idx, const StringRef &v) { if (list->_count != 0 && idx >= 0 && idx < list->_count) igStringRef_Assign((void *)((char *)beNDMWGameRam_igStringRefList_GetData((igDataList *)list) + idx * 4), v); } };
+struct StringListStore { static void SetAt(igStringRefList *list, int idx, const StringRef &v) { if (list->_count != 0 && idx >= 0 && idx < list->_count) igStringRef_Assign((igStringRef *)((char *)beNDMWGameRam_igStringRefList_GetData((igDataList *)list) + idx * 4), (const igStringRef &)v); } };
 /* Appends to an int list, growing it when full; the element buffer is read through the out-of-line accessor. */
 class IntListAppend { public:
  struct Header { int word0; int word1; int count; int capacity; };

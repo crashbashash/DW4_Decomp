@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dw4/beDBManager.h"
+#include "dw4/list-services.h"
 
 
 
@@ -151,13 +152,13 @@ static inline void StringToken_Release(char *token) {
 class StringRef {
 public:
     char *p;
+    char *const *ref() const { return &p; }
     StringRef(char *s) : p(s) {}
     /* takes an extra share of a token already owned elsewhere */
     StringRef(char *s, int retain) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { StringToken_Release(p); }
 };
 /* kept local: the retained-string holder type is not shared yet (open item A7). */
-extern "C" int StringList_AppendRetained(int list, const StringRef &token);
 
 /* Appends a pooled copy of `text` to a window string list; a null text appends a null token. */
 #define INTERN_APPEND(list, text) { \
@@ -168,7 +169,7 @@ extern "C" int StringList_AppendRetained(int list, const StringRef &token);
         token = StringPool_Intern((StringPool *)StringPool_Get(), (text)); \
     } \
     StringRef held(token); \
-    StringList_AppendRetained(list, held); }
+    StringList_AppendRetained((igStringRefList *)(list), &held.p); }
 
 /* A pooled copy of `text`; a null text gives a null token. */
 static inline char *StringPool_InternText(const char *text) {
@@ -194,7 +195,7 @@ void beNDMWShopSelect00_Setup(beNDMWShopSelect00 *self) {
             INTERN_APPEND(self->_textCloseNameList, font000_4)
         } else {
             StringRef held((char *)self->_panelName, 1);
-            StringList_AppendRetained(self->_textCloseNameList, held);
+            StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, (char *const *)&held.p);
         }
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode);
     }
@@ -263,33 +264,33 @@ void beNDMWShopSelect02_Setup(beNDMWShopSelect02 *self) {
         break;
     }
     case 1262: case 1268: case 2003: case 2005: case 2008:
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, self->_entCode);
         self->_selectMax = 2;
         break;
     case 2: case 3: case 4:
         self->_selectMax = 4;
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font04)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font04)).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 2030);
         break;
     case 1:
         self->_selectMax = 3;
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)));
-        StringList_AppendRetained(self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)));
-        StringList_AppendRetained(self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font01)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font02)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(StringPool_InternText(TALKFONT01_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(StringPool_InternText(text_font03)).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_3, 2034);
         break;
     }

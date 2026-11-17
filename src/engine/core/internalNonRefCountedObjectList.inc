@@ -78,9 +78,9 @@ void *ObjectPointerList_FindByStringField(__internalNonRefCountedObjectList *lis
     return 0;
 }
 
-int ObjectPointerList_FindIndex(char *list, int object) {
-    int *d = (int *)((__internalNonRefCountedObjectList *)list)->_data;
-    int n = ((__internalNonRefCountedObjectList *)list)->_count;
+int ObjectPointerList_FindIndex(__internalNonRefCountedObjectList *list, int object) {
+    int *d = (int *)list->_data;
+    int n = list->_count;
     int i;
     int entry;
     for (i = 0; i < n; i++) {

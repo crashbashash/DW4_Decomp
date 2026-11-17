@@ -12,6 +12,7 @@
 #include "dw4/beNDMWStatusTitle04.h"
 #include "dw4/beNDMWWindow.h"
 #include "dw4/beNDMWWindowTitle.h"
+#include "dw4/list-services.h"
 
 
 /* A null-terminated list of the STWINFONT06 text elements a layout switches (font030..font071). */
@@ -48,12 +49,11 @@ static inline void ReleaseToken(int *p) {
 class StringRef {
 public:
     int *p;
+    char *const *ref() const { return (char *const *)&p; }
     StringRef(int *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
     void Set(int *t) { int *cur = p; ReleaseToken(cur); p = t; }
 };
-/* kept local: StringList_AppendRetained's holder type is not shared yet (open item A7; the definer takes IniStrRef). */
-extern "C" int StringList_AppendRetained(int list, StringRef *text);
 
 /* The pooled copy of `text` (null for null), creating the string pool on first use. */
 static inline int *InternString(const char *text) {
@@ -69,7 +69,7 @@ static inline int *InternLiteral(const char *text) {
 /* Appends the pooled copy of `text` to a string list, which takes its own reference. */
 static inline void AppendInterned(const int &list, const char *text) {
     StringRef held(InternString(text));
-    StringList_AppendRetained(list, &held);
+    StringList_AppendRetained((igStringRefList *)(list), held.ref());
 }
 
 /* Empties a string list: every slot is pointed at the pooled empty string, releasing the string it

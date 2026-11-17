@@ -8,6 +8,7 @@
 #include "dw4/igDataLists.h"
 #include "dw4/igInsightCore.h"
 #include "dw4/igObject.h"
+#include "dw4/emptyString.h"
 
 extern "C" void beNDMWAfsSetup_Activate(void);
 extern "C" void beNDMWAfsSetup_Deactivate(void);
@@ -17,7 +18,6 @@ extern "C" int beNDMWAfsSetup_GetMeta(void);
 extern "C" void beNDMWAfsStageLoad_Execute(void);
 extern "C" int beNDMWAfsStageLoad_GetMeta(void);
 extern "C" void beNDMWAfsSetup_Stop(beNDMWAfsSetup *self);
-extern "C" char emptyString[];
 extern "C" char text_stagis08_igb[];
 extern "C" int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info);
 extern "C" void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *self);

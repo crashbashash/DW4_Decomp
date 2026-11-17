@@ -449,7 +449,7 @@
   "igCriMovieCodec": 5,
   "igCriMovieData": 15,
   "igCullFaceAttr": 2,
-  "igDataList": 381,
+  "igDataList": 382,
   "igDataPump": 14,
   "igDataPumpList": 13,
   "igDataPumpManager": 1,
@@ -458,7 +458,7 @@
   "igDefaultAspectElementList": 2,
   "igDefaultInterfaceManager": 16,
   "igDependencyList": 2,
-  "igDependencyOrderedList": 8,
+  "igDependencyOrderedList": 9,
   "igDepthStateAttr": 1,
   "igDepthWriteStateAttr": 1,
   "igDirEntry": 11,
@@ -570,7 +570,7 @@
   "igNamedObjectList": 11,
   "igNode": 21,
   "igNodeList": 11,
-  "igObject": 1877,
+  "igObject": 1875,
   "igObjectDirEntry": 39,
   "igObjectList": 919,
   "igObjectListList": 4,
@@ -736,12 +736,12 @@
   },
   "engine": {
    "files": 49,
-   "offset_casts": 3238,
-   "other_members": 12256,
+   "offset_casts": 3225,
+   "other_members": 12263,
    "recovered": 12538,
    "recovered_pct": 37.77,
-   "synthetic": 5168,
-   "total": 33200
+   "synthetic": 5167,
+   "total": 33193
   },
   "game": {
    "files": 85,
@@ -826,9 +826,9 @@
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 3971,
+ "offset_casts": 3958,
  "recovered": 32738,
- "synthetic": 6283,
- "total": 72031,
+ "synthetic": 6282,
+ "total": 72024,
  "typeable": 262
 }

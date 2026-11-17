@@ -5,12 +5,11 @@
 #include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
+#include "dw4/list-services.h"
 #define RELEASE(p) IG_OBJECT_RELEASE((igObject *)(p));
 #define CHIPS_PER_PAGE 12
 
-struct igResult { int value; };
 /* kept local: no include/dw4 home (only CoreLibrary.h declares these). */
-extern "C" igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start);
 extern "C" void beNDMWShopCtrl50_MoveRowCursor(beNDMWWindow *window, int row);
 /* kept local: no include/dw4 home (CoreLibrary.h declares igBoolList_Create without its result). */
 extern "C" igBoolList *igBoolList_Create(int pool);
@@ -105,6 +104,7 @@ extern "C" char OFFREEZE_3[];
 class StringRef {
 public:
     char *p;
+    char *const *ref() const { return &p; }
     StringRef() : p(0) {}
     StringRef(int s) : p((char *)s) {}
     StringRef(const char *s) : p((char *)s) {}
@@ -114,7 +114,6 @@ public:
     void Set(const char *n) { release(); p = (char *)n; }
 };
 /* kept local: the retained-string holder type is not shared yet (open item A7). */
-extern "C" void StringList_AppendRetained(igStringRefList *list, const StringRef &value);
 extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 extern "C" void beNDMWShopCtrl00_Update(beNDMWShopCtrl00 *);
 
@@ -516,7 +515,7 @@ static inline void ReleaseString(const char *text)
 }
 
 /* Appends the pooled copy of `text` to a string list. */
-#define APPEND_INTERNED(list, text) { StringList_AppendRetained((igStringRefList *)(list), StringRef(InternString((const char *)(text)))); }
+#define APPEND_INTERNED(list, text) { StringList_AppendRetained((igStringRefList *)(list), StringRef(InternString((const char *)(text))).ref()); }
 
 /* The paging virtuals (slots 22..24) a list window shares with beNDMWListCtrl. */
 struct PagedWindow {
@@ -942,15 +941,15 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                             sprintf(remainingText, percent_d, xdata - cost);
                             beNDMWWindow_QueueText((beNDMWWindow *)quote.p, STWINFONT41, font012, remainingText, RIGHT_3);
                             for (j = 0; j < QUOTE_PROMPT_ROWS; j++) {
-                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)));
-                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(statFonts.font[j])));
+                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)).ref());
+                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(statFonts.font[j])).ref());
                             }
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)));
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(font011_3)));
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)));
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(font012)));
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(statFonts.font[2])));
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(font011_3)).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(font012)).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(statFonts.font[2])).ref());
                             quotePrompts = g_xdataStatPromptIds;
                             quote.p->_entCode = quotePrompts.prompt[self->_retCode];
                             self->_st3 = 1;
@@ -1813,8 +1812,8 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                 beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursorright_2, 0, SQ_HIDE_2, SQ_CLOSE_10, rightArrowPos);
                 beMessenger_SendNamed((beMessenger *)self->_messenger, DATABASE_11, conItem_2, 0, GETDATABASE_10);
                 conItems = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13_2)));
-                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_fontNames[0])));
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13_2)).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_fontNames[0])).ref());
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 0x5DD);
                 row = 0;
                 font = g_fontNames;
@@ -1841,8 +1840,8 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     selectWindow->_offsetPos[2] = 0.0f;
                     select.p->_startPoint = self->_cursor;
                     select.p->_selectMax = DISK_ROWS;
-                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
-                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseNameList, StringRef(InternString(font100_3)));
+                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
+                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseNameList, StringRef(InternString(font100_3)).ref());
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)select.p, txt_shop_lua_2, 0x611);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
@@ -1921,8 +1920,8 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     quantityWindow->_offsetPos[0] = 52.0f;
                     quantityWindow->_offsetPos[1] = -69.0f;
                     quantityWindow->_offsetPos[2] = 0.0f;
-                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
-                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, StringRef(InternString(font100_3)));
+                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
+                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, StringRef(InternString(font100_3)).ref());
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 0x624);
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 0x5DE);
                     self->_retCode = (DISK_STACK_MAX - 1) - self->_diskCnt;
@@ -2835,12 +2834,12 @@ void beNDMWShopCtrlA1_ShowFirstAlbumPage(beNDMWShopCtrlA1 *self) {
             {
                 StringRef copy(name.p);
                 RetainString(copy.p);
-                StringList_AppendRetained((igStringRefList *)self->_cardInfoList, copy);
+                StringList_AppendRetained((igStringRefList *)self->_cardInfoList, &copy.p);
             }
             IntList_Append(self->_cardRamNoList, 0);
         } else {
             beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, j_shcard00, slot, beDataBase_GetRecordString((beDataBase *)database, slot, SQALBUM), 0);
-            StringList_AppendRetained((igStringRefList *)self->_cardInfoList, StringRef(InternString(j_shcard00)));
+            StringList_AppendRetained((igStringRefList *)self->_cardInfoList, StringRef(InternString(j_shcard00)).ref());
             IntList_Append(self->_cardRamNoList, slot);
         }
     }
@@ -3714,8 +3713,8 @@ static inline void IntList_Set(igIntList *list, int index, const int &value)
 
 /* Queues a text that the window switches off when it closes. */
 #define QUEUE_TEXT_CLOSE(window, type, name) \
-    StringList_AppendRetained((igStringRefList *)((window)->_textCloseTypeList), StringRef(InternString((const char *)(type)))); \
-    StringList_AppendRetained((igStringRefList *)((window)->_textCloseNameList), StringRef(InternString((const char *)(name))));
+    StringList_AppendRetained((igStringRefList *)((window)->_textCloseTypeList), StringRef(InternString((const char *)(type))).ref()); \
+    StringList_AppendRetained((igStringRefList *)((window)->_textCloseNameList), StringRef(InternString((const char *)(name))).ref());
 
 enum EditBitMode { EDITBIT_DEPOSIT, EDITBIT_WITHDRAW, EDITBIT_JUNK };
 enum EditBitPhase {
@@ -5034,10 +5033,10 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
         rightCursorPos[1] = 25.0f;
         rightCursorPos[2] = 0.0f;
         beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursorright_2, 0, SQ_HIDE_2, SQ_CLOSE_10, rightCursorPos);
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font100_3)));
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13_2)));
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_fontNames[0])));
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font100_3)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13_2)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_fontNames[0])).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 1001);
         disks = PlayerFolder(GetPlayer(self), DISKFOLDER_5);
         for (i = 0; i < disks->_count; i++) {
@@ -5140,8 +5139,8 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                     window->_offsetPos[1] = -104.0f;
                     window->_offsetPos[2] = 0.0f;
                 }
-                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)));
-                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, StringRef(InternString(font100_3)));
+                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
+                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, StringRef(InternString(font100_3)).ref());
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 1572);
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 1505);
                 self->_retCode = self->_maxSell - 1;

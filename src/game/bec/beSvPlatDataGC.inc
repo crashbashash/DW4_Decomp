@@ -145,7 +145,7 @@ void beSvPlatDataGC_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beSvPlatDataGC_ctorTable, 0xD);
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_connectMax"));
-    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault((igMetaField *)clone, 2);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataGC_connectMaxStorage);

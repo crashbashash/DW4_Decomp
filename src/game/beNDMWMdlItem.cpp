@@ -30,6 +30,7 @@
 #include "dw4/igViewerSceneInfoManager.h"
 #include <string.h>
 #include "dw4/beDBManager.h"
+#include "dw4/emptyString.h"
 #include "dw4/igVec3f.h"
 #define HOLDER_BODY { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 #define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(sel); }
@@ -49,7 +50,6 @@ extern "C" void beNDMWMdlItem_RegisterReceiver(beNDMWMdlItem *self, int info);
 extern "C" void beNDMWMdlItem_Start(beNDMWMdlItem *self);
 extern "C" void beNDMWMdlItem_Prepare(beNDMWMdlItem *self);
 /* kept local: no include/dw4 home declares it yet. */
-extern "C" char emptyString[];
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() HOLDER_BODY };
 struct Store {
     static inline void assign(int &slot, igObject *fresh) {

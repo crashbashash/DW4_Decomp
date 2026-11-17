@@ -49,6 +49,8 @@ enum CriDataType { CRI_DATA_ADX = 0, CRI_DATA_SFP = 1 };
 /* beMessenger_EnqueueSelected delay of the PLAY retried while a stream fades out. */
 #define PLAY_RETRY_DELAY 0xB
 
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 extern "C" {
 void beSound_Prepare(beSound *self);
 void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram);
@@ -58,7 +60,6 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
 int beSound_FindData(beSound *self, beBaseInfoRam *ram, const char *name);
 igMetaObject *beSound_GetMeta(void);
 
-extern char emptyString[];
 }
 
 /* An IEEE single split into its magnitude and sign bit. */
@@ -129,13 +130,11 @@ struct GlobalStrRef {
 /* A pooled string with a share taken on it; the reference count is the word before the text. */
 struct StringRef {
     char *p;
+    char *const *ref() const { return &p; }
     StringRef() {}
     StringRef(char *s) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { ReleaseString(p); }
 };
-struct ListResult { int code; };
-extern "C" ListResult ObjectList_RemoveFirstRetained(igObjectList *list, igObject *object, int start);
-extern "C" int StringList_AppendRetained(igStringRefList *list, const StringRef &text);
 extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 
 /* Drops the list's share of every object it holds and empties it. */
@@ -243,7 +242,7 @@ void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram) {
         for (int i = 0; i < ((PlaySEListRef &)self->_playSEs)->getCount(); i++) {
             bePlaySE *playSE = ((PlaySEListRef &)self->_playSEs)->get(i);
             if (playSE->_time < now) {
-                ObjectList_RemoveFirstRetained((PlaySEListRef &)self->_playSEs, (igObject *)playSE, i);
+                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)((PlaySEListRef &)self->_playSEs).p, (igObject *)playSE, i);
                 i--;
             }
         }
@@ -447,7 +446,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
                         }
                     }
                     if (known == false) {
-                        StringList_AppendRetained(banks.p, StringRef(bank.p));
+                        StringList_AppendRetained(banks.p, StringRef(bank.p).ref());
                     }
                 }
             }

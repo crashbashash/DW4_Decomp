@@ -21,14 +21,14 @@ void Gap__Insight__igSerialScheduler__vfunc_23(igSerialScheduler *scheduler) {
     unsigned int count = ((ManagerListView *)scheduler->_managerList)->_list->_count;
     int i;
 
-    ObjectList_ResizeRetained((ManagerArray *)scheduler->_cachedManagerList, count);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)scheduler->_cachedManagerList, count);
     for (i = 0; i < count; i++) {
         setRetained(((ManagerListView *)scheduler->_managerList)->_list->_data[i], (ManagerArray *)scheduler->_cachedManagerList, i);
     }
     for (i = 0; i < count; i++) {
         ((ManagerArray *)scheduler->_cachedManagerList)->_data[i]->update();
     }
-    ObjectList_ResizeRetained((ManagerArray *)scheduler->_cachedManagerList, 0);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)scheduler->_cachedManagerList, 0);
 }
 
 void Gap__Insight__igSerialScheduler__vfunc_24(void *arg0, int arg1) {
@@ -36,8 +36,7 @@ void Gap__Insight__igSerialScheduler__vfunc_24(void *arg0, int arg1) {
 }
 
 void Gap__Insight__igSerialScheduler__vfunc_25(Obj_238020 *arg0, int arg1) {
-    int sp1C;
-    igObjectList_RemoveRetained(&sp1C, arg0->f8, arg1);
+    igObjectList_RemoveRetained((igDependencyOrderedList *)arg0->f8, (igObject *)arg1);
 }
 
 /* Whether the scheduler already holds manager. */
@@ -49,18 +48,16 @@ int Gap__Insight__igSerialScheduler__vfunc_26(igSerialScheduler *scheduler, igOb
     return indexOfItem(list, &item) >= 0;
 }
 
-void Gap__Insight__igSerialScheduler__vfunc_27(int a0) {
-    igDependencyOrderedList_AddDependency(*(int *)((char *)a0 + 8));
+void Gap__Insight__igSerialScheduler__vfunc_27(S0 *arg0, void *arg1, void *arg2) {
+    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)arg0->f8, arg1, arg2);
 }
 
-void Gap__Insight__igSerialScheduler__vfunc_28(S0 *arg0, int arg1, int arg2) {
-    int sp1C;
-
-    igDependencyOrderedList_RemoveDependency(&sp1C, arg0->f8, arg1, arg2);
+void Gap__Insight__igSerialScheduler__vfunc_28(S0 *arg0, void *arg1, void *arg2) {
+    igDependencyOrderedList_RemoveDependency((igDependencyOrderedList *)arg0->f8, arg1, arg2);
 }
 
-void Gap__Insight__igSerialScheduler__vfunc_29(int a0) {
-    igDependencyOrderedList_RemoveDependencies(*(int *)((char *)a0 + 8));
+void Gap__Insight__igSerialScheduler__vfunc_29(S0 *arg0, void *arg1) {
+    igDependencyOrderedList_RemoveDependencies((igDependencyOrderedList *)arg0->f8, arg1);
 }
 
 SharedViewerOptions *ViewerOptions_Construct(SharedViewerOptions *arg0) {

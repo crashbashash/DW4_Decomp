@@ -5,7 +5,7 @@ int igMetaFieldInfo_FindObjectReference(igMetaFieldInfoView *self, int directory
     igMemoryPoolView *allocator = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
     if (field != 0) {
         int name = igMetaField_GetMangledName(field, (void **)allocator);
-        if (ObjectPointerList_FindIndex((char *)(g_objectSystem->metaRegistry), field->_parentMetaObject) != -1 || self->FindByName(name) != 0) {
+        if (ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)g_objectSystem->metaRegistry, field->_parentMetaObject) != -1 || self->FindByName(name) != 0) {
             result = igDirectory_AddExternalInfoRef((igDirectoryView *)directory, (igInfoView *)self, (char *)name, (igObject *)target) & 0xFF;
         }
         allocator->Free((void *)name);

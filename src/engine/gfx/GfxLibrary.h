@@ -90,6 +90,9 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/igUnsignedIntArrayMetaField.h"
 #include "dw4/igUnsignedIntMetaField.h"
 #include "dw4/igUnsignedLongMetaField.h"
+#include "dw4/emptyString.h"
+#include "dw4/internalNonRefCountedObjectList.h"
+#include "dw4/list-services.h"
 #include "dw4/igVec4f.h"
 
 extern "C" igMetaObject *g_igVertexArray_metaObject;
@@ -362,7 +365,6 @@ extern "C" CallbackArray *igPrimLengthArray1_1_Register(void);
 extern "C" void thunk_FUN_0014bde0(void);
 extern "C" igMetaObject *FUN_0014bf00(void);
 extern "C" int igUnsignedIntMetaField_GetDefaultDescriptor(...);
-extern "C" int ObjectPointerList_FindIndex(...);
 
 struct T_14bf10 { int vt; int ref; char pad8[20]; int f28; char pad32[21]; char f53; char pad54[2]; int f56; int f60; char f64; char f65; };
 class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual T_14bf10 *vX(int); };
@@ -498,7 +500,6 @@ extern "C" int FUN_0014e530(void);
 typedef struct Q { char pad4[4]; int f4; char pad12[10]; short f18; } Q;
 typedef struct R_14e540 { char pad[12]; int f12; } R_14e540;
 
-extern "C" int MetaRefList_AppendRetained(...);
 
 extern "C" void FUN_0014e540(void);
 extern "C" int Gap__Gfx__igTrackedElementMetaField__vfunc_25(void);
@@ -1038,7 +1039,6 @@ struct KeyedEntry : public igObject { char *name; };
 struct KeyedEntryList { int w0; int w4; int count; int capacity; KeyedEntry **data; };
 struct KeyedEntryOwner { char pad[308]; KeyedEntryList *entries; };
 struct NamedValue { const char *name; int value; };
-extern "C" char emptyString[];
 extern "C" int FUN_001560b0(KeyedEntryOwner *table, int key);
 extern "C" int FUN_001562b0(void);
 extern "C" int FUN_001562c0(void);
@@ -2183,7 +2183,6 @@ typedef struct O_15f430 { char p[16]; int k0; int k1; } O_15f430;
 extern "C" int *FUN_0015f4a0(struct S_15f430 *s, int a1, int a2);
 extern "C" void *FUN_0015f510(L *l, int a1, int a2, int a3);
 
-extern "C" int ObjectList_ResizeRetained(int, int);
 extern "C" void FUN_0015f660(igVertexArray2 *arg0, igSmartPointer<Rc_17f2b0> list);
 struct C_15f730 { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19(); virtual int v20();  };
 extern "C" int g_igVec3fList_metaObject[];

@@ -53,6 +53,8 @@ enum beCameraCtrlMessage {
     MSG_DBGZOOMOUT,
 };
 
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 extern "C" {
 igMetaObject *beCameraCtrl_GetInfoMeta(void);
 igMetaObject *beCameraCtrl_GetMeta(void);
@@ -67,9 +69,8 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram);
 void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram);
 void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path);
 
-int ObjectList_RemoveFirstRetained(...);
 
-extern char emptyString[];
+
 /* per shake step: the eye and interest offsets along x and y, indexed by the move code digit */
 float g_cameraShakeOffsetX[12] = {0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f};
 float g_cameraShakeOffsetY[12] = {0.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f};
@@ -387,10 +388,10 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         beBaseInfoRam_StartTimer(ram, "SHAKEONE", FramesToTime(shake->_oneTime));
                     }
                     if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEALL")) {
-                        int removed;
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
-                        ObjectList_RemoveFirstRetained(&removed, ram->_dataList, shake, 0);
+                        /* matching construct: a named result takes retail's frame slot (+0x194); an unnamed one lies 4 bytes higher */
+                        igResult removed = ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)ram->_dataList, (igObject *)shake, 0);
                         beBaseInfoRam_RemoveTimer(ram, "SHAKEALL");
                         beBaseInfoRam_RemoveTimer(ram, "SHAKEONE");
                     }

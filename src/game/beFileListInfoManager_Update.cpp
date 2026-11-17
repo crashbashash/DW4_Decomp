@@ -13,12 +13,13 @@
 #include "dw4/igStringObj.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 extern "C" int igResource_StartAsyncLoading(...);
 extern "C" int igResource_StopAsyncLoading(...);
 extern "C" int igResource_LoadDirectory(...);
 extern "C" unsigned char igResource_IsDirectoryLoaded(...);
 extern "C" int igResource_UnloadDirectory(...);
-extern char emptyString[];
 extern char text_notDefined[];
 extern char text_ld[];
 extern char text_igb_3[];
@@ -53,13 +54,13 @@ extern int g_globalContext[4];
  * that StringList_AppendRetained hands to the list. */
 struct StringRef {
     char *p;
+    char *const *ref() const { return &p; }
     StringRef(char *s) : p(s) {}
     StringRef(const StringRef &o) : p(o.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { char *s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); } }
 };
 /* Retained share of the stage-name string object. */
 
-extern "C" int StringList_AppendRetained(void *, const StringRef &);
 
 static inline unsigned int igStringObj_Length(const igStringObj *s) { return s->_length; }
 static inline const char *igStringObj_Text(const igStringObj *s) { return (char *)s->_buffer == 0 ? (char *)g_stringObjEmptyText : (char *)s->_buffer; }
@@ -197,13 +198,13 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     v = (int *)StringPool_Intern(g_stringPool, text_BecText_igb);
                 }
                 StringRef firstName((char *)v);
-                StringList_AppendRetained((void *)self->_fnames, StringRef(firstName));
+                StringList_AppendRetained((igStringRefList *)self->_fnames, StringRef(firstName).ref());
                 if ((char *)text_common_sbiallse_igb == 0) { v = 0; } else {
                     POOL()
                     v = (int *)StringPool_Intern(g_stringPool, text_common_sbiallse_igb);
                 }
                 StringRef secondName((char *)v);
-                StringList_AppendRetained((void *)self->_fnames, StringRef(secondName));
+                StringList_AppendRetained((igStringRefList *)self->_fnames, StringRef(secondName).ref());
                 self->_isReadOnetime = 1;
                 self->_onetimeCount = 2;
             }
@@ -232,7 +233,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     if (idx == -1) { idx = 0; }
                     { int *t10 = (int *)entryName.p;
                     if (((char *)t10)[idx + 1] == 0x73) {
-                        StringList_AppendRetained((void *)self->_fnames, StringRef(entryName));
+                        StringList_AppendRetained((igStringRefList *)self->_fnames, StringRef(entryName).ref());
                         {
                             int *o = ((int **)s5->_data)[i];
                             found = 1;
@@ -313,7 +314,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     }
                     {
                     StringRef entryName((char *)tmp);
-                    StringList_AppendRetained((void *)self->_fnames, StringRef(entryName));
+                    StringList_AppendRetained((igStringRefList *)self->_fnames, StringRef(entryName).ref());
                     }
                     i += 1;
                 } while (i < s3->_count);

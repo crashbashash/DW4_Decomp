@@ -208,6 +208,7 @@ static inline void releaseString(const char *string) {
 #include "dw4/igStringMetaField.h"
 #include "dw4/igUnsignedShortArrayMetaField.h"
 #include "dw4/igVec3fMetaField.h"
+#include "dw4/internalNonRefCountedObjectList.h"
 /* kept local: no include/dw4 home declares it. */
 extern "C" void igIntListList_EnsureRegistered(void);
 
@@ -323,7 +324,6 @@ extern "C" void beNDMWTitle2Option_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWTitle2Option_Register(void);
 extern "C" void beNDMWTitle2Option_GetMetaObjectFunction(void);
 /* kept local: no include/dw4 home declares it. */
-extern "C" int ObjectPointerList_FindIndex(char *list, int object);
 extern "C" void beNDMWTitle2Option_InitFields(void);
 extern "C" void *beNDMWTitle2CtrlData_GetMetaObject(void);
 extern "C" int beNDMWTitle2CtrlData_GetVTable(void);
@@ -1795,7 +1795,6 @@ extern "C" void beNDMWMcUtilCtrl_userConstruct(beNDMWMcUtilCtrl *self);
 extern "C" void beNDMWMcUtilCtrl_userDestruct(beNDMWMcUtilCtrl *self);
 extern "C" void beNDMWLoadCtrl2CommonIntf_userDestruct(beNDMWLoadCtrl2CommonIntf *self);
 /* kept local: no include/dw4 home declares it. */
-extern "C" void StringList_Resize(igTDataList<char *> *list, int count);
 /* Owning stack reference to a pooled string token it is handed (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit, inline. */
 class HeldStringRef {

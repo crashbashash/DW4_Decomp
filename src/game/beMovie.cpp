@@ -28,6 +28,7 @@
 #include "dw4/igViewerSceneInfoManager.h"
 #include "dw4/softfloat.h"
 #include <string.h>
+#include "dw4/emptyString.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -35,7 +36,6 @@
  * argument registers. */
 extern "C" int SNDF_SeqCommand(int command, unsigned char requestId, int argument);
 extern "C" int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work);
-extern "C" char emptyString[];
 extern "C" char playSfp_REQUESTID[], playSfp_SNDF_SEQ_SET[], playSfp_SNDF_SEQ_PLAY[];
 extern "C" char stop_REQUESTID[], stop_SNDF_SEQ_GETSTATUS[], stop_SNDF_SEQ_STOP[];
 extern "C" char setVolume_REQUESTID[], setVolume_SNDF_SEQ_GETSTATUS[], setVolume_SNDF_SEQ_VOLUME[];

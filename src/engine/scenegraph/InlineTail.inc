@@ -259,7 +259,7 @@ int *Gap__Sg__igSkeleton__vfunc_26(void *arg0, int arg1) {
     if (temp_v0 != 0) {
         return temp_v0;
     }
-    return &emptyString[0];
+    return (int *)emptyString;
 }
 
 int Gap__Sg__igSkeleton__vfunc_28(void *arg0, int arg1) {

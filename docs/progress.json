@@ -236,19 +236,19 @@
    },
    "decl.header_conflicts": {
     "reason": null,
-    "value": 377
+    "value": 360
    },
    "decl.local_externs": {
     "reason": null,
-    "value": 731
+    "value": 611
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 687
+    "value": 637
    },
    "decl.varargs": {
     "reason": null,
-    "value": 449
+    "value": 413
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -362,10 +362,10 @@
    "code_only.other.functions": 0,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "decl.header_conflicts": 377,
-   "decl.local_externs": 731,
-   "decl.type_conflicts": 687,
-   "decl.varargs": 449,
+   "decl.header_conflicts": 360,
+   "decl.local_externs": 611,
+   "decl.type_conflicts": 637,
+   "decl.varargs": 413,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
    "fun_dat_refs": 772,
@@ -492,23 +492,23 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1942760,
+  "bytes": 2070248,
   "failing": {
    "addresses": {
     "bytes": 673740,
     "functions": 3834
    },
    "declarations": {
-    "bytes": 672724,
-    "functions": 1212
+    "bytes": 532628,
+    "functions": 1021
    },
    "fields": {
-    "bytes": 446424,
-    "functions": 2428
+    "bytes": 446404,
+    "functions": 2426
    },
    "idioms": {
-    "bytes": 381124,
-    "functions": 2073
+    "bytes": 380768,
+    "functions": 2070
    },
    "name": {
     "bytes": 546580,
@@ -523,15 +523,15 @@
     "functions": 1723
    },
    "types": {
-    "bytes": 320756,
-    "functions": 1173
+    "bytes": 320772,
+    "functions": 1175
    },
    "virtuals": {
     "bytes": 146400,
     "functions": 557
    }
   },
-  "functions": 13309,
+  "functions": 13458,
   "matched_functions": 20431
  },
  "regions": [
@@ -666,11 +666,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3971,
+  "offset_casts": 3958,
   "pct": 45.45,
   "recovered": 32738,
-  "synthetic": 6283,
-  "total": 72031,
+  "synthetic": 6282,
+  "total": 72024,
   "typeable": 262,
   "typeable_pct": 0.36
  }

@@ -283,6 +283,8 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #include "dw4/igVec2fMetaField.h"
 #include "dw4/igVec3fMetaField.h"
 #include "dw4/igVec4fMetaField.h"
+#include "dw4/emptyString.h"
+#include "dw4/internalNonRefCountedObjectList.h"
 #include "dw4/igAABox.h"
 #include "dw4/igAABoxList.h"
 #include "dw4/igMatrix44fList.h"
@@ -553,7 +555,6 @@ extern "C" int beSystem_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igRandomNumber_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" CallbackArray *beSystem_Register(void);
 extern "C" void beSystem_GetMetaObjectFunction(void);
-extern "C" int igStringObj_GetOrCreateMetaObject(void);
 extern "C" void beSystem_InitFields(void);
 extern "C" void *beSwitchCtrlInfo_GetMetaObject(void);
 extern "C" int beSwitchCtrlInfo_GetVTable(void);
@@ -641,7 +642,6 @@ extern "C" int beSelectCtrlInfoRamData_GetVTable(void);
 extern "C" void beSelectCtrlInfoRamData_EnsureRegistered(void);
 extern "C" CallbackArray *beSelectCtrlInfoRamData_Register(void);
 extern "C" void beSelectCtrlInfoRamData_GetMetaObjectFunction(void);
-extern "C" int ObjectPointerList_FindIndex(...);
 extern "C" void beSelectCtrlInfoRamData_InitFields(void);
 extern "C" igMetaObject *beSelectCtrlInfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beSelectCtrlInfoWork_GetMetaObject(void);
@@ -3505,7 +3505,6 @@ extern "C" igMetaObject *ParticleInfo_GetMetaObject(void);
 extern "C" int g_ParticleInfo_vtable[4];
 extern "C" void beBinDataObject_userDestruct(beBinDataObject *self);
 // clang-format off
-extern "C" char emptyString[];
 extern "C" void beLuaDataObject_userDestruct(beLuaDataObject *self);
 extern "C" void beNumVerData_userConstruct(beNumVerData *self, int flag);
 extern "C" void beNumVerData_userDestruct(beNumVerData *self);

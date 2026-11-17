@@ -7,6 +7,7 @@
 #include "dw4/beNumberCtrlInfoWork.h"
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igObject.h"
+#include "dw4/emptyString.h"
 
 extern "C" void beNumberCtrl_Prepare(void);
 extern "C" igMetaObject *beNumberCtrl_GetInfoMeta(void);
@@ -17,7 +18,6 @@ extern "C" void beNumberCtrl_OnAddRam(beNumberCtrl *self, beNumberCtrlInfoRam *r
 extern "C" int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMessengerWork *work);
 extern "C" igMetaObject *beNumberCtrl_GetMeta(void);
 extern "C" int igVertexArrayLock_Init(igVertexArrayLock *lock);
-extern "C" int emptyString[4];
 extern "C" char NUMBERCTRL_4[];
 
 /* The messages a beNumberCtrl answers, in the order of its message enum. */
@@ -185,7 +185,7 @@ int beNumberCtrl_CalcChangeNum(beNumberCtrl *self, int difference) {
 void beNumberCtrl_OnAddRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram) {
     int ramNo = ram->_ramNo;
     int *name = (int *)((beNumberCtrlInfo *)ram->_parentInfo)->_name;
-    name = name != 0 ? name : emptyString;
+    name = name != 0 ? name : (int *)emptyString;
     beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, NUMBERCTRL_4, (const char *)name, ramNo);
 }
 

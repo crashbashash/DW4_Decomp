@@ -78,7 +78,7 @@ void igTransformSequence1_5_InitFields(void) {
     temp_s0->_metaObject = (int)igLongList_GetOrCreateMetaObject();
     temp_s0->_construct = 1;
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_timeList"));
-    temp_s3 = ObjectPointerList_FindIndex((char *)temp_s1->_metaFields, (int)temp_v0);
+    temp_s3 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->_metaFields, (int)temp_v0);
     temp_v0_2 = (igMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)temp_v0_2, (igObject *)0);
     *(char *)((char *)(temp_v0_2) + 52) = 0;

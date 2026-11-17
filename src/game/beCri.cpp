@@ -37,16 +37,16 @@
 #pragma push
 #pragma readonly_strings on
 
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 extern "C" {
 /* scene graph */
 extern int g_igCommonTraversal_travProcs[4];
 
 /* object system */
-int ObjectList_RemoveFirstRetained(...);
 int igMemoryRefMetaField_SetAlignmentType(int field, const char *name);
 int igResource_AddAlignment(int context, const char *name, int alignment);
 extern int g_globalContext[4];
-extern char emptyString[];
 
 /* the ADX library */
 extern igMetaObject *g_igFile_metaObject;
@@ -375,7 +375,6 @@ void beCri_RemoveAllInfo(beCri *self) {
  * stopped, or whose fade to silence has passed audibility, is stopped. The BGM and ambience handles
  * join the effect list for the walk. */
 void beCri_Update(beCri *self) {
-    int removed0, removed1, removed2, removed3, removed4, removed5;
     int i;
     int j;
     int k;
@@ -393,8 +392,8 @@ void beCri_Update(beCri *self) {
                 t = HandleAt(Handles(self), i);
                 if (t->_playID != 0) beCriAudio_Resume((beCriAudio *)t->_audio);
             }
-            ObjectList_RemoveFirstRetained(&removed0, Handles(self), self->_hdBGM, 0);
-            ObjectList_RemoveFirstRetained(&removed1, Handles(self), self->_hdENV, 0);
+            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdBGM, 0);
+            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdENV, 0);
             self->_execDvdErr = 0;
         }
     } else {
@@ -405,8 +404,8 @@ void beCri_Update(beCri *self) {
                 t = HandleAt(Handles(self), j);
                 if (t->_playID != 0) beCriAudio_Suspend((beCriAudio *)t->_audio);
             }
-            ObjectList_RemoveFirstRetained(&removed2, Handles(self), self->_hdBGM, 0);
-            ObjectList_RemoveFirstRetained(&removed3, Handles(self), self->_hdENV, 0);
+            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdBGM, 0);
+            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdENV, 0);
             self->_execDvdErr = 1;
             return;
         }
@@ -445,8 +444,8 @@ void beCri_Update(beCri *self) {
                 break;
             }
         }
-        ObjectList_RemoveFirstRetained(&removed4, Handles(self), self->_hdBGM, 0);
-        ObjectList_RemoveFirstRetained(&removed5, Handles(self), self->_hdENV, 0);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdBGM, 0);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdENV, 0);
     }
 }
 
@@ -1030,9 +1029,6 @@ unsigned char beCri_IsReady(beCri *self, const char *name) {
     int j;
     beCriHandle *handle;
     beCriHandle *each;
-    int removed0;
-    int removed1;
-
     if (strcmp(name, "ALL") == 0) {
         allReady = 1;
         ObjectList_AppendRetained((igObjectList *)self->_hdSEs, (igObject *)self->_hdBGM);
@@ -1044,8 +1040,8 @@ unsigned char beCri_IsReady(beCri *self, const char *name) {
                 break;
             }
         }
-        ObjectList_RemoveFirstRetained(&removed0, self->_hdSEs, self->_hdBGM, 0);
-        ObjectList_RemoveFirstRetained(&removed1, self->_hdSEs, self->_hdENV, 0);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)self->_hdSEs, (igObject *)self->_hdBGM, 0);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)self->_hdSEs, (igObject *)self->_hdENV, 0);
         return allReady;
     }
     ready = 1;

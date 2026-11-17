@@ -25,6 +25,7 @@
 #include "dw4/igTDataList.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/list-services.h"
 
 /* The SUBWND service menu: beNDMWStatus opens one window per _subWndNo (status, XDATA, lab, bank,
  * CNOS, disk, the four shops and the card window), shows the selected player's parameters, and
@@ -109,7 +110,6 @@ enum StatusMessage {
 #define COLUMN_KEY(key, column) { key[0] = column / 10 + '0'; key[1] = column % 10 + '0'; key[2] = 0; }
 
 /* kept local: ObjectList_FillRetained has no include/dw4 home (only CoreLibrary.h declares it). */
-extern "C" void ObjectList_FillRetained(igTDataList<igObject *> *list, igObject *object);
 
 extern "C" void beNDMWStatus_Prepare(beNDMWStatus *self);
 extern "C" int beNDMWStatus__GetInfoMeta(void);

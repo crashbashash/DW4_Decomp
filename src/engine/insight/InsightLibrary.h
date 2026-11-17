@@ -251,10 +251,10 @@ extern "C" int g_igInfoManagerOrderedList_vtable[4];
 extern "C" int igInfoManagerOrderedList_GetVTable(void);
 extern "C" int DAT_0052cbc0[4];
 #include "dw4/igDependencyOrderedList.h"
+#include "dw4/list-services.h"
+#include "dw4/igStringRef.h"
 extern "C" int **FUN_00233610(int **arg0, long long arg1);
 extern "C" void FUN_002336b0(void);
-extern "C" igMetaObject *igDependencyOrderedList_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igDependencyOrderedList_Register(void);
 extern "C" CallbackArray *igInfoManagerOrderedList_Register(void);
 extern "C" void thunk_igInfoManagerOrderedList_GetMetaObject(void);
 extern "C" int g_igDependencyOrderedList_metaObject[4];
@@ -282,10 +282,6 @@ extern "C" int igFlushRenderer_GetVTable(void);
 extern "C" void FUN_00233b80(void);
 extern "C" CallbackArray *igFlushRenderer_Register(void);
 extern "C" void thunk_igFlushRenderer_GetMetaObject(void);
-struct StringTokenHeader {
-    StringChunk *owner;
-    int refCount;
-};
 typedef struct IntList {
     int _unk00[2];
     int count;
@@ -445,8 +441,6 @@ extern "C" double atof(const char *text);
 #include "dw4/softfloat.h"
 extern "C" int FUN_001e6d80(...);
 #include "dw4/igDataLists.h"
-extern "C" int StringList_CopyRetained(...);
-extern "C" int StringList_AppendRetained(...);
 #include "dw4/igMathConstants.h"
 /* The object smart-pointer destructor: the held pointer is copied once (its slot is a plain field,
  * so it is read once), then released with the shared sequence. */
@@ -666,7 +660,6 @@ struct Receiver { char p[8]; WindowInfo *f8; };
 extern "C" int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height);
 extern "C" int FUN_00236b70(igInsightCore *core, igObject *manager);
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
-extern "C" int igObjectList_RemoveRetained(...);
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
@@ -676,7 +669,6 @@ extern "C" igSmartPointer<Instance> igMetaObject_CreateInstanceRef(int, int);
 extern "C" void FUN_00236ca0(int self);
 class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); };
 extern "C" void FUN_00236dd0(void *arg0, void **arg1);
-extern "C" int ObjectList_RemoveFirstRetained(...);
 extern "C" void FUN_00236e20(void *arg0, void **arg1);
 typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
 typedef struct A { char pad104[104]; L *f68; } A;
@@ -702,8 +694,6 @@ class A_237280 { public: virtual void d0(); virtual void d1(); virtual void d2()
 class B { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(); };
 struct Q { int p0; int p1; int count; int p3; B **data; };
 extern "C" void FUN_00237280(int *arg0);
-extern "C" int igDependencyOrderedList_AddDependency(...);
-extern "C" int igDependencyOrderedList_AddCheckPoint(...);
 struct A_237300 { char pad[28]; int f28; int f32; int f36; char pad40[4]; int f44; char pad48[24]; int f72; };
 struct StringRef_237300 {
     int *p;
@@ -790,7 +780,6 @@ public:
     virtual void dispatch(int message, igObject *filter);
 };
 extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_23(FilterDispatcherSlots *self, int message, igObject *target);
-extern "C" int ObjectList_AppendUniqueRetained(...);
 extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_24(void *arg0, void *arg1, void *arg2);
 class DW4VC_108_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int); };
 extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_26(void **arg0, int arg1, int arg2);
@@ -831,18 +820,15 @@ struct ManagerArray {
 struct ManagerListView : igObject {
     ManagerArray *_list;
 };
-extern "C" void ObjectList_ResizeRetained(ManagerArray *list, int count);
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_23(igSerialScheduler *scheduler);
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_24(void *arg0, int arg1);
 typedef struct Obj_238020 { char pad[8]; int f8; } Obj_238020;
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_25(Obj_238020 *arg0, int arg1);
 extern "C" int Gap__Insight__igSerialScheduler__vfunc_26(igSerialScheduler *scheduler, igObject *manager);
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_27(int a0);
 typedef struct S0 { char pad8[8]; int f8; } S0;
-extern "C" int igDependencyOrderedList_RemoveDependency(...);
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_28(S0 *arg0, int arg1, int arg2);
-extern "C" int igDependencyOrderedList_RemoveDependencies(...);
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_29(int a0);
+extern "C" void Gap__Insight__igSerialScheduler__vfunc_27(S0 *arg0, void *arg1, void *arg2);
+extern "C" void Gap__Insight__igSerialScheduler__vfunc_28(S0 *arg0, void *arg1, void *arg2);
+extern "C" void Gap__Insight__igSerialScheduler__vfunc_29(S0 *arg0, void *arg1);
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
 extern "C" float DAT_004e1174[4];

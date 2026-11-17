@@ -140,7 +140,7 @@ void igTransientShaderData_InitFields(void) {
 
     temp_s1 = (M *)(g_igTransientShaderData_metaObject);
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_attrPushLists")));
-    temp_s2 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
+    temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = FUN_0013abd0();
     temp_s0->f52 = 1;
@@ -152,7 +152,7 @@ void igTransientShaderData_InitFields(void) {
         igObject_Destroy((igObject *)temp_s0);
     }
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_attrPopLists")));
-    temp_s2 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
+    temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = FUN_0013abd0();
     temp_s0->f52 = 1;
@@ -164,7 +164,7 @@ void igTransientShaderData_InitFields(void) {
         igObject_Destroy((igObject *)temp_s0);
     }
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_dataPumps")));
-    temp_s2 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
+    temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = FUN_001e5690();
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)temp_s0, (igObject *)0);
@@ -176,7 +176,7 @@ void igTransientShaderData_InitFields(void) {
         igObject_Destroy((igObject *)temp_s0);
     }
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_childLists")));
-    temp_s2 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
+    temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = (int)FUN_0019ca30();
     temp_s0->f52 = 1;

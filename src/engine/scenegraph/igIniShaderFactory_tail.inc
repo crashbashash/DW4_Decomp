@@ -312,7 +312,6 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     count = names.p->count;
     for (i = 0; i < count; i++) {
         field = StringList_CopyRetained((igStringRefList *)names.p, i).p;
-        releaseString(field);
         info = FUN_002fdf20(meta, field);
         if (info == 0) {
             return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
@@ -344,18 +343,16 @@ void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *
     int i;
     for (i = 0; i < items->count; i++) {
         void *item = itemAt(items, i);
-        RetainedString name = StringList_CopyRetained((igStringRefList *)names, i);
+        igStringRef name = StringList_CopyRetained((igStringRefList *)names, i);
         int index;
         index = igStringRefList_IndexOf((igStringRefList *)lookup, IniStrRef(name).ref(), 0);
         if (index != -1) {
-            RetainedString fieldName = StringList_CopyRetained((igStringRefList *)fieldNames, index);
+            igStringRef fieldName = StringList_CopyRetained((igStringRefList *)fieldNames, index);
             IniFieldView *field;
             field = asObjectRefField((IniFieldView *)igMetaObject_FindFieldByName((igMetaObject *)(target->getMeta()), fieldName.p));
             if (field != 0 && igObject_IsKindOf((igObject *)item, (igMetaObject *)field->refMeta) != 0) {
                 igObjectRefMetaField_Assign(field, target, item);
             }
-            releaseString(fieldName.p);
         }
-        releaseString(name.p);
     }
 }

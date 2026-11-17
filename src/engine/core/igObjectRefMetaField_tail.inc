@@ -327,7 +327,7 @@ int *igObjectStringMap_GetNameAt(void *self, int index) {
     if (name != 0) {
         return name;
     }
-    return &emptyString[0];
+    return (int *)emptyString;
 }
 
 void igObjectStringMap_Clear(igObjectStringMap *o) {

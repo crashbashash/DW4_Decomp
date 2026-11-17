@@ -4,6 +4,7 @@
 #include "dw4/bePoint01Info.h"
 #include "dw4/igBitMask.h"
 #include "dw4/igMathConstants.h"
+#include "dw4/emptyString.h"
 #include "dw4/igMatrix44f.h"
 
 extern "C" void bePoint01_Prepare(void);
@@ -13,7 +14,6 @@ extern "C" igMetaObject *bePoint01_GetMeta(void);
 extern "C" char PLAYERPOINT_4[];
 extern "C" void bePoint01_OnAddRam(bePoint01 * p0, int p1, char * p2);
 extern "C" void bePoint01_GetMatrix(bePoint01 *self, bePoint01Info *info, int pointIndex, int childIndex);
-extern "C" int emptyString[4];
 extern "C" int bePoint01_OnMessage(bePoint01 *self, beBaseInfoRam *ram, beMessengerWork *work);
 
 void bePoint01_Prepare(void)
@@ -81,7 +81,7 @@ int bePoint01_OnMessage(bePoint01 *self, beBaseInfoRam *ram, beMessengerWork *wo
             int offset = 0;
             do {
                 int *name = (int *)(((beBaseInfoData *)(*(int *)((char *)points->_data + offset)))->_name);
-                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)(name ? name : &emptyString[0]));
+                beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)(name ? name : (int *)emptyString));
                 i += 1;
                 offset += 4;
             } while (i < count);

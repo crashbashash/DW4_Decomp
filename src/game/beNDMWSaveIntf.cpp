@@ -74,7 +74,6 @@ struct DataListGuard {
 };
 struct AllocatorValue { int allocator; AllocatorValue(const AllocatorValue &o) : allocator(o.allocator) {} };
 /* kept local: igDataList_GetCount has no include/dw4 home (only BaseLibrary.h declares it). */
-extern "C" int igDataList_GetCount(int *p);
 struct ReleasedObject {
     int vtable;
     int refCount;
@@ -168,7 +167,7 @@ static inline int AllEntriesReady(void *works) {
     int entryCount = 0;
     int readyCount = 0;
     int index;
-    for (index = 0; index < igDataList_GetCount((int *)works); index++) {
+    for (index = 0; index < igDataList_GetCount((igDataList *)works); index++) {
         if (beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) == 1) {
             entryCount += 1;
         }
@@ -182,7 +181,7 @@ static inline void EndInterface(beNDMWLoadCtrl2CommonIntf *common) {
     int index = 0;
     common->_intfStat = 3;
     void *works = (void *)(common->_flagWork);
-    for (index = 0; index < igDataList_GetCount((int *)works); index++) {
+    for (index = 0; index < igDataList_GetCount((igDataList *)works); index++) {
         beNDMWLoadSavePlWork__SetIsCtrl((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index), 0);
     }
 }

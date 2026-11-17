@@ -104,6 +104,7 @@ static inline void *createThird() {
 }
 
 #include "dw4/igViewportAttr.h"
+#include "dw4/list-services.h"
 #include "dw4/igMatrix44f.h"
 int FUN_001b0000(int, int, int, int);
 
@@ -168,7 +169,6 @@ extern "C" RemovedRef igGroup_RemoveChildAt(Hold *, int);
 struct ItemType {};
 static inline Obj *createItem(ItemType) { return FUN_001361b0(0); }
 
-int ObjectList_AppendUniqueRetained(...);
 
 struct V3 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(int); virtual void v31(); virtual void v32(void*); };
 void FUN_00460f20(void *arg0, int arg1, int arg2);
@@ -194,15 +194,13 @@ static inline int castToProperty(int object) {
     return 0;
 }
 
-struct igResult { int value; };
 struct ListOwner { char pad[32]; int list; };
 
 igSmartPointer<igObject> FUN_0013ba30(int, igSmartPointer<igObject>);
 int FUN_0013c060(...);
-igResult ObjectList_RemoveFirstRetained(int, int, int);
 
 static inline void removeFromList(int list, int object) {
-    ObjectList_RemoveFirstRetained(list, object, 0);
+    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)object, 0);
 }
 
 /* The ids are held in a pointer-typed local so the compare puts the call result first (beq v0,s0). */
@@ -762,7 +760,7 @@ void FUN_00460790(igViewerRenderer *arg0, igGroup *arg1) {
             if (0 < n) {
                 off = 0;
                 do {
-                    ObjectList_AppendUniqueRetained(arg0->_lightList, *(int *)((char *)((igObjectList *)arg1->_childList)->_data + off));
+                    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)arg0->_lightList, (igObject *)(*(int *)((char *)((igObjectList *)arg1->_childList)->_data + off)));
                     i += 1;
                     off += 4;
                 } while (i < n);
@@ -868,7 +866,7 @@ void FUN_00460d90(void *arg0, void *arg1, int arg2) {
 
     temp_v0 = FUN_00460be0((PropertyHolder *)arg2, (PropertyList *)arg0);
     if (temp_v0 != 0) {
-        ObjectList_RemoveFirstRetained(*(int *)((char *)(arg0) + 32), temp_v0, 0);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg0) + 32)), (igObject *)temp_v0, 0);
         ObjectList_AppendRetained(*(igObjectList **)((char *)(arg1) + 32), (igObject *)temp_v0);
     }
 }

@@ -68,9 +68,7 @@ int igDriverDatabase_GetSubPropertyValue(igDriverDatabase *self, int property, i
     idx = igStringRefList_IndexOf((igStringRefList *)names.p, (char *const *)&key, 0);
     releaseString((const char *)key);
     if (idx >= 0) {
-        StringList_CopyRetained(&value, values.p, idx);
-        r = value;
-        releaseString((const char *)r);
+        r = (int)StringList_CopyRetained((igStringRefList *)values.p, idx).p;
         return r;
     }
     return 0;
@@ -159,9 +157,9 @@ int igDriverDatabase_LoadFromFile(void *self, int text, int fileName) {
     return 1;
 }
 
-int igDriverDatabase_ClearRawDatabase(int *p)
+void igDriverDatabase_ClearRawDatabase(int *p)
 {
-    return igStringObj_Clear((igStringObj *)((igDriverDatabase *)p)->_rawDatabase);
+    igStringObj_Clear((igStringObj *)((igDriverDatabase *)p)->_rawDatabase);
 }
 
 static inline int n_of(const igTDataList<ConfigNode *> *list) { return list->_count; }

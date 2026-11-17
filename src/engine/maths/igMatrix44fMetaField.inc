@@ -76,7 +76,7 @@ void FUN_00188810(void) {
         g_igMatrix44fMetaField_descriptor = (int)(igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         temp_s0 = (void *)(g_igMatrix44fMetaField_descriptor);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
             {
                 void *held = (void *)g_igMatrix44fMetaField_descriptor;
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;

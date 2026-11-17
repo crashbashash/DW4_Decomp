@@ -18,20 +18,20 @@
 
 class StringRef;
 
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 extern "C" {
 void beMessenger_InitializeMemory(beMessenger *);
 void beMessenger_ResetMemory(beMessenger *);
 void beMessengerArgData_Clear(beMessengerArgData *);
 void beMessengerDelay_Clear(beMessengerDelay *);
-int ObjectList_ResizeRetained(void *, int);
 int igMetaEnum_GetValueByName(int *, igMetaEnum *, const char *, int *);
 void StringList_CopyRetained(void *, void *, int);
-void StringList_AppendRetained(void *, const StringRef &);
+
 
 extern int g_resolveEnumLastMetaEnum[4];
 extern int g_resolveEnumLastName[4];
 extern int g_resolveEnumLastValue[4];
-extern char emptyString[];
 extern char SEARCH[], FIND_SPACE_3[];
 
 void beMessenger_Activate(beMessenger *, int);
@@ -53,6 +53,7 @@ static inline int countOf(const igFloatList *l) { return l->_count; }
 class StringRef {
 public:
     int p;
+    char *const *ref() const { return (char *const *)&p; }
     StringRef(int s) : p(s) {}
     StringRef(const char *s) : p((int)s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
@@ -131,7 +132,7 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
 #define GROUP(field, CNT, factory, Ref, T) { \
     igObjectList *list = (igObjectList *)self->field; \
     if (list->_count < (CNT) + 1) List_Reserve((igDataList *)list, CNT, 4); \
-    ObjectList_ResizeRetained((void *)self->field, CNT); \
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->field, CNT); \
     int i; \
     for (i = 0; i < (CNT); i += 1) { \
         int alloc; \
@@ -556,7 +557,7 @@ void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const 
     ObjectList_AppendRetained((igObjectList *)grp.p->_ramList, (igObject *)recv);
     {
         const char *token = Str::intern(text);
-        StringList_AppendRetained((void *)grp.p->_infoNameList, StringRef(token));
+        StringList_AppendRetained((igStringRefList *)grp.p->_infoNameList, StringRef(token).ref());
     }
     l = (igIntList *)grp.p->_ramNoList;
     n = l->_count;
@@ -1326,7 +1327,7 @@ void beMessenger_AppendString(beMessenger *self, const char *text)
         }
         token = (int)StringPool_Intern(g_stringPool, text);
     }
-    StringList_AppendRetained((void *)((beMessengerArgData *)self->_argData)->_stringList, StringRef(token));
+    StringList_AppendRetained((igStringRefList *)((void *)((beMessengerArgData *)self->_argData)->_stringList), StringRef(token).ref());
 }
 
 /* Header in front of every interned string token: the owning chunk, then the token's reference

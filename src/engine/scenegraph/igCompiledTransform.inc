@@ -147,7 +147,7 @@ void igCompiledTransform_InitFields(void) {
     temp_v0->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3))->f38 = 0;
     temp_s1_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4));
-    temp_s1_2->f56 = igStringObj_GetOrCreateMetaObject();
+    temp_s1_2->f56 = (int)igStringObj_GetOrCreateMetaObject();
     temp_s1_2->f52 = 1;
     temp_s1_2->f38 = 0;
     temp_v0_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5));

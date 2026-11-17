@@ -5,19 +5,13 @@ igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *valu
     int index;
     int match;
     int count;
-    int retained;
-    int *header;
 
     if ((igTDataList<char *> *)meta->_names) {
         count = ((igTDataList<char *> *)meta->_names)->_count;
         for (index = 0; index < count; ++index) {
-            StringList_CopyRetained(&retained, (void *)meta->_names, index);
-            match = strcmp((const char *)retained, name) == 0;
-            if (retained) {
-                header = (int *)(retained - 8);
-                if (--*(int *)(retained - 4) == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-                }
+            {
+                igStringRef retained = StringList_CopyRetained((igStringRefList *)meta->_names, index);
+                match = strcmp(retained.p, name) == 0;
             }
             if (match) {
                 *value = ((igTDataList<int> *)meta->_values)->_data[index];
@@ -28,7 +22,7 @@ igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *valu
     return g_resultFailure;
 }
 
-void igMetaEnum_GetNameByValue(int *out, const igMetaEnum *self, int value) {
+igStringRef igMetaEnum_GetNameByValue(const igMetaEnum *self, int value) {
     int i;
     int n;
     int names;
@@ -39,14 +33,13 @@ void igMetaEnum_GetNameByValue(int *out, const igMetaEnum *self, int value) {
         goto test;
 body:
         if (value == ((int *)((igIntList *)self->_values)->_data)[i]) {
-            StringList_CopyRetained(out, names, i);
-            return;
+            return StringList_CopyRetained((igStringRefList *)names, i);
         }
         i++;
 test:
         if (i < n) goto body;
     }
-    *out = 0;
+    return igStringRef();
 }
 
 /* Number of names in the enum: the `_count` of its `_names` list (a list with the igDataList
@@ -56,15 +49,14 @@ int igMetaEnum_GetNameCount(igMetaEnum *self) {
     return ((igDataList *)self->_names)->_count;
 }
 
-void igMetaEnum_GetNameAt(int *out, void *self, int index) {
+igStringRef igMetaEnum_GetNameAt(igMetaEnum *self, int index) {
     igTDataList<char *> *names;
 
-    names = (igTDataList<char *> *)((igMetaEnum *)self)->_names;
+    names = (igTDataList<char *> *)self->_names;
     if ((names != 0) && (index >= 0) && (index < names->_count)) {
-        StringList_CopyRetained(out, names);
-        return;
+        return StringList_CopyRetained((igStringRefList *)names, index);
     }
-    *out = 0;
+    return igStringRef();
 }
 
 int igMetaEnum_GetValueAt(void *self, int index)

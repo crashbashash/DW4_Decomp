@@ -4,6 +4,7 @@
 #include "dw4/beNDMWShopTitle01.h"
 #include "dw4/beNDMWShopTitle03.h"
 #include "dw4/beNDMWWindow.h"
+#include "dw4/list-services.h"
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \
@@ -17,7 +18,7 @@
         tok = StringPool_Intern(g_stringPool, (const char *)(text)); \
     } \
     StringRef held(tok); \
-    StringList_AppendRetained(field, &held); }
+    StringList_AppendRetained((igStringRefList *)(field), held.ref()); }
 
 extern "C" void beNDMWShopTitle00_Setup(beNDMWShopTitle00 *self);
 extern "C" void beNDMWShopTitle03_Setup(beNDMWShopTitle03 *self);
@@ -37,11 +38,10 @@ extern "C" int text_txt_shop_lua[4];
 class StringRef {
 public:
     const char *p;
+    char *const *ref() const { return (char *const *)&p; }
     StringRef(const char *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
 };
-/* kept local: StringList_AppendRetained's holder type is not shared yet (open item A7; the definer takes IniStrRef). */
-extern "C" int StringList_AppendRetained(int, StringRef *);
 extern "C" void beNDMWShopTitle01_Setup(beNDMWShopTitle01 *self);
 extern "C" char text_i_messwn[];
 

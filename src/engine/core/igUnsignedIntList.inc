@@ -59,7 +59,7 @@ void igUnsignedIntList_GetMetaObjectFunction(void) {
 void igUnsignedIntList_InitFields(void) {
     igMetaObject *meta = g_igUnsignedIntList_metaObject;
     igMemoryRefMetaField *field = (igMemoryRefMetaField *)((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
-    int index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
+    int index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)field);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
     field->_memType = igUnsignedIntMetaField_GetDefaultDescriptor();
     field->_memSize = 0;

@@ -1989,7 +1989,7 @@ igMemoryPoolInfo *igMemoryPoolContextInfo_FindMemoryPoolInfoByName(igMemoryPoolC
     for (; i < n; i++) {
         it = ((igMemoryPoolInfo **)((igMemoryPoolInfoList *)self->_memoryPoolInfos)->_data)[i];
         if (it != 0) {
-            infoName = it->_name != 0 ? (int *)it->_name : emptyString;
+            infoName = it->_name != 0 ? (int *)it->_name : (int *)emptyString;
             if (strcmp((const char *)infoName, (const char *)name) == 0) return it;
         }
     }

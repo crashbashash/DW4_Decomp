@@ -14,8 +14,8 @@ int igEnumMetaField_ValueFromString(igEnumMetaField *self, int *value, int text)
     return consumed;
 }
 
-void igEnumMetaField_ValueToString(int result, igEnumArrayMetaField *self, int *value) {
-    igMetaEnum_GetNameByValue((int *)result, (const igMetaEnum *)(((int (*)())self->_getMetaEnumFunction)()), *value);
+igStringRef igEnumMetaField_ValueToString(igEnumArrayMetaField *self, int *value) {
+    return igMetaEnum_GetNameByValue((const igMetaEnum *)(((int (*)())self->_getMetaEnumFunction)()), *value);
 }
 
 int **igEnumMetaField_Construct(int **self, int flags) {

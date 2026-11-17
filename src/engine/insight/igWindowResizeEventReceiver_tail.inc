@@ -23,12 +23,10 @@ void igInsightCore_AddManager(igInsightCore *core, igObject *manager) {
 }
 
 void igInsightCore_RemoveManager(igInsightCore *core, igObject *manager) {
-    int sp3C;
-
     if (FUN_00236b70(core, manager) != 0) {
         ((DW4VC_96_0 *)manager)->vX();
         *(int *)((char *)(manager) + 12) = 0;
-        igObjectList_RemoveRetained(&sp3C, core->_managerList, manager);
+        igObjectList_RemoveRetained((igDependencyOrderedList *)core->_managerList, manager);
     }
 }
 
@@ -82,10 +80,8 @@ void FUN_00236dd0(void *arg0, void **arg1) {
 }
 
 void FUN_00236e20(void *arg0, void **arg1) {
-    int sp3C;
-
     ((DW4VC_96_1 *)(arg1))->vX((int)(arg0));
-    ObjectList_RemoveFirstRetained(&sp3C, *(int *)((char *)(arg0) + 104), arg1, 0);
+    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg0) + 104)), (igObject *)arg1, 0);
 }
 
 void FUN_00236e80(A *arg0) {
@@ -102,9 +98,8 @@ void igInsightCore_AddRenderer(igInsightCore *core, igObject *renderer) {
 }
 
 void igInsightCore_RemoveRenderer(igInsightCore *core, igObject *renderer) {
-    int sp2C;
-    igObjectList_RemoveRetained(&sp2C, core->_rendererList, renderer);
-    if (sp2C == g_resultSuccess.v) {
+    igResult removed = igObjectList_RemoveRetained((igDependencyOrderedList *)core->_rendererList, renderer);
+    if (removed.v == g_resultSuccess.v) {
         FUN_00457ca0(renderer, 0);
     }
 }
@@ -124,6 +119,6 @@ int FUN_00237010(void) {
 
 void igInsightCore_AddRendererOrder(igInsightCore *core, igObject *first, igObject *second)
 {
-    igDependencyOrderedList_AddDependency(core->_rendererList, first, second);
+    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)core->_rendererList, first, second);
 }
 

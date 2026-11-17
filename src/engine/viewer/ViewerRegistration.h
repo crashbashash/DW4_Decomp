@@ -92,6 +92,7 @@ struct Obj { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; in
 extern "C" int FUN_004583f0(...);
 extern "C" int g_igViewerStatisticsManager_vtable[4];
 #include "dw4/igObjectSystem.h"
+#include "dw4/internalNonRefCountedObjectList.h"
 extern "C" int igViewerStatisticsManager_GetVTable(void);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
@@ -99,7 +100,6 @@ extern "C" ObjectRefWord *FUN_00458860(ObjectRefWord *self,int delete_storage);
 extern "C" void ViewerLibrary_MarkRegistered(void);
 extern "C" CallbackArray *igViewerStatisticsManager_Register(void);
 extern "C" void thunk_igViewerStatisticsManager_GetMetaObject(void);
-extern "C" int igStringObj_GetOrCreateMetaObject(...);
 extern "C" int igMetaFieldList_GetOrCreateMetaObject(...);
 extern "C" void igViewerStatisticsManager_InitFields(void);
 extern "C" igMetaObject *FUN_00458ae0(void);
@@ -148,7 +148,6 @@ extern "C" int FUN_00458600(...);
 extern "C" int FUN_00458610(...);
 extern "C" int FUN_00458620(...);
 extern "C" int FUN_00458630(...);
-extern "C" int ObjectPointerList_FindIndex(...);
 extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" int text_name_3[4];
 extern "C" int text_Viewer_scene_manager[4];

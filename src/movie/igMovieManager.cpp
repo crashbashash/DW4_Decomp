@@ -224,9 +224,9 @@ int snprintf(char *buffer, unsigned int size, const char *format, ...);
 #include "dw4/igMovieRenderer.h"
 #include "dw4/igMovieCodec.h"
 #include "dw4/igPlanarShadowShader.h"
+#include "dw4/emptyString.h"
 extern int g_movieDefaultTileWidth;
 extern int g_movieDefaultTileHeight;
-extern char emptyString[];
 extern unsigned char g_movieUnknownCodecMuted;
 extern unsigned char g_movieStartFailedMuted;
 extern unsigned char g_movieSceneFailedMuted;

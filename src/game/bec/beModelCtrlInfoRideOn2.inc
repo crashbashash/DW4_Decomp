@@ -71,7 +71,7 @@ void beModelCtrlInfoRideOn2_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beModelCtrlInfoRideOn2_ctorTable, 1);
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_modelRamNo"));
-    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault((igMetaField *)clone, 0x66);
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRideOn2_modelRamNoStorage);

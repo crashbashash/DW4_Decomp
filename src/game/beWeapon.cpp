@@ -19,6 +19,7 @@
 #pragma push
 #pragma readonly_strings on
 
+#include "dw4/emptyString.h"
 extern "C" {
 
 
@@ -30,7 +31,6 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
 igMetaObject *beWeapon_GetMeta(void);
 
 
-extern char emptyString[];
 }
 
 static inline const char *nameOf(int name) { return name != 0 ? (const char *)name : emptyString; }

@@ -64,7 +64,7 @@ void igShortList_InitFields(void) {
 
     meta = g_igShortList_metaObject;
     found = (void **)igMetaObject_FindFieldByName(meta, data);
-    index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
     field->_memType = igShortMetaField_GetDefaultDescriptor();
     field->_memSize = 0;

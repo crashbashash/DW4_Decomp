@@ -69,7 +69,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
     operator char *() const { return p; }
 };
-extern "C" int StringList_AppendRetained(void *, StringRef *);
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 struct WaitResult { int code; };
 class AdxThread {
@@ -81,10 +80,10 @@ public:
     virtual WaitResult sleep(int microseconds);
 };
 #include "dw4/igThread.h"
-extern "C" void igStringObj_ToInt(igStringObj *string, int *value);
+#include "dw4/emptyString.h"
 #include "dw4/igNamedObject.h"
 #include "dw4/cri/cri_adxf.h"
-extern "C" int emptyString[4];
+#include "dw4/list-services.h"
 extern "C" void igAdxAfsFile_GetPath(igAdxAfsFile *file, char *path);
 /* The scratch string, the per-partition file names and the AFS files, each released when the program exits. */
 extern "C" {
@@ -540,7 +539,7 @@ void igAdx_AddPartitionName(int partition, const char *name) {
         }
         {
             StringRef token(interned);
-            StringList_AppendRetained(g_adxPartitionNames.p, &token);
+            StringList_AppendRetained(g_adxPartitionNames.p, &token.p);
         }
     } else {
         igStringRefList *names;

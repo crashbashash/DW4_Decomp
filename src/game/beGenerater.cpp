@@ -21,6 +21,7 @@
 #include "dw4/igObject.h"
 #include "dw4/softfloat.h"
 #include <string.h>
+#include "dw4/emptyString.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -28,7 +29,6 @@ extern "C" igMetaObject *beGenerater_GetInfoMeta(void);
 extern "C" igMetaObject *beGenerater_GetMeta(void);
 extern "C" void beGenerater_OnAddRam(beGenerater *self, beGeneraterInfoRam *ram);
 extern "C" void beGenerater_Prepare(beGenerater *self);
-extern "C" int emptyString[4];
 extern "C" int GENERATER[4];
 extern "C" void beGenerater_UpdateRam(beGenerater *self, beBaseInfoRam *ram);
 extern "C" char *g_itemDropCategories[];
@@ -71,7 +71,7 @@ igMetaObject *beGenerater_GetInfoMeta(void)
 void beGenerater_OnAddRam(beGenerater *self, beGeneraterInfoRam *ram) {
     int *name = (int *)((beGeneraterInfo *)ram->_parentInfo)->_name;
     int ramNo = ram->_ramNo;
-    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, (const char *)&GENERATER[0], (const char *)(name ? name : &emptyString[0]), ramNo);
+    beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, (const char *)&GENERATER[0], (const char *)(name ? name : (int *)emptyString), ramNo);
 }
 
 /* Sends FIND_SPACE for each enemy still to spawn and GENERATE to the model that answers, at the next spawn point;

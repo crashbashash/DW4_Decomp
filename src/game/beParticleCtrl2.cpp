@@ -12,12 +12,12 @@
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igObject.h"
 #include "dw4/igSwitch.h"
+#include "dw4/emptyString.h"
 
 extern "C" igMetaObject *beParticleCtrl2_GetInfoMeta(void);
 extern "C" igMetaObject *beParticleCtrl2_GetMeta(void);
 extern "C" void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram);
 extern "C" void beParticleCtrl2_Prepare(beParticleCtrl2 *self);
-extern "C" int emptyString[4];
 extern "C" int MODELCTRL_12[4];
 extern "C" void beParticleCtrl2_OnAddRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram);
 extern "C" int GETMATRIX_5[4];

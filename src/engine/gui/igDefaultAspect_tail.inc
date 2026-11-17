@@ -125,18 +125,15 @@ void igEventDispatcher_AddReceiver(igEventDispatcher *dispatcher, igObject *rece
 }
 
 void igEventDispatcher_RemoveReceiver(igEventDispatcher *dispatcher, igObject *receiver) {
-    int sp1C;
-    igObjectList_RemoveRetained(&sp1C, dispatcher->_receivers, receiver);
+    igObjectList_RemoveRetained((igDependencyOrderedList *)dispatcher->_receivers, receiver);
 }
 
 void igEventDispatcher_AddReceiverOrder(igEventDispatcher *dispatcher, igObject *first, igObject *second)
 {
-    igDependencyOrderedList_AddDependency(dispatcher->_receivers, first, second);
+    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)dispatcher->_receivers, first, second);
 }
 
 void igEventDispatcher_RemoveReceiverOrder(igEventDispatcher *dispatcher, igObject *first, igObject *second) {
-    int sp1C;
-
-    igDependencyOrderedList_RemoveDependency(&sp1C, dispatcher->_receivers, first, second);
+    igDependencyOrderedList_RemoveDependency((igDependencyOrderedList *)dispatcher->_receivers, first, second);
 }
 

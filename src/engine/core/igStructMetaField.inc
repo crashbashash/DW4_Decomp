@@ -104,7 +104,7 @@ void igStructMetaField_InitFields(void) {
     int index;
     igMetaObject_CreateFields(meta, g_igStructMetaField_ctorTable, 3);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_size));
-    index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)field);
     field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
     igUnsignedShortMetaField_SetDefaultValue((igMetaField *)field, (short)1);
     field->_persistent = 0;

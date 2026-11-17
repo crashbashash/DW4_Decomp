@@ -7,6 +7,7 @@
 #include "dw4/igDataLists.h"
 #include "dw4/igInsightCore.h"
 #include "dw4/igObject.h"
+#include "dw4/emptyString.h"
 
 extern "C" igMetaObject *beStaticInfoCtl_GetInfoMeta(void);
 extern "C" void beStaticInfoCtl_UpdateRam(void);
@@ -21,7 +22,6 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
 } };
 extern "C" void beStaticInfoCtl_Stop(beStaticInfoCtl *self);
 extern "C" void beStaticInfoCtl_Prepare(beStaticInfoCtl *self);
-extern "C" int emptyString[4];
 extern "C" int STATICINFO_2[4];
 extern "C" void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram);
 extern "C" int beStaticInfoCtl_OnMessage(beStaticInfoCtl *self, beBaseInfoRam *ram, beMessengerWork *work);
@@ -94,7 +94,7 @@ void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram) {
     messenger = self->_messenger;
     name = (int *)info->_name;
     ramNo = ram->_ramNo;
-    name = name != 0 ? name : &emptyString[0];
+    name = name != 0 ? name : (int *)emptyString;
     beMessenger_RegisterReceiver((beMessenger *)messenger, ram, (const char *)&STATICINFO_2[0], (const char *)name, ramNo);
     ObjectList_AppendRetained((igObjectList *)self->_staticInfoList, (igObject *)info);
 }

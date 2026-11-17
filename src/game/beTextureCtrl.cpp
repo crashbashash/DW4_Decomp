@@ -10,16 +10,16 @@
 #include "dw4/igNamedObject.h"
 #include "dw4/igObject.h"
 #include "dw4/igTextureBindAttr.h"
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 
 extern "C" igMetaObject *beTextureCtrl_GetInfoMeta(void);
 extern "C" igMetaObject *beTextureCtrl_GetMeta(void);
 /* kept local: the hidden igResult return slot is passed first; Core's copy is the only declaration */
-extern "C" int ObjectList_RemoveFirstRetained(...);
 extern "C" void beTextureCtrl_Prepare(beTextureCtrl *self);
 extern "C" void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram);
 /* A property record: the name it is found by and its value. */
 struct PropertyRecord { int _vtable; unsigned int _refCount; int _name; igObject *_value; };
-extern "C" char emptyString[];
 extern "C" void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram);
 
 void beTextureCtrl_Prepare(beTextureCtrl *self) {
@@ -135,8 +135,7 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                                 bindMeta = g_igTextureBindAttr_metaObject;
                                 existing = (igObjectDispatchView *)*(int *)(((igAttrList *)attrSet->_attributes)->_data + boundOffset);
                                 if (bindMeta == existing->GetMeta()) {
-                                    int removed; /* matching construct: the removal out-slot is declared after the holder so it lies below it (+0xb8 under +0xbc) as in retail */
-                                    ObjectList_RemoveFirstRetained(&removed, attrSet->_attributes, existing, 0);
+                                    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)attrSet->_attributes, (igObject *)existing, 0);
                                     break;
                                 }
                                 boundIndex++;

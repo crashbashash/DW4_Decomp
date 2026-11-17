@@ -136,7 +136,7 @@ void igStringMetaField_InitFields(void) {
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igStringMetaField_ctorTable, 1);
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, (const char *)&text_shallowCopyMethod[0])));
-    index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     shallowCopyField = (igMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     igCharMetaField_SetDefaultValue((igMetaField *)shallowCopyField, 2);
     shallowCopyField->_externalEnumStorage = (int)(&g_igStringMetaField_shallowCopyMethodCell);
@@ -146,7 +146,7 @@ void igStringMetaField_InitFields(void) {
         igObject_Destroy(shallowCopyField);
     }
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, (const char *)&text_destruct[0])));
-    index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     destructField = (igMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     igBoolMetaField_SetDefaultValue((igMetaField *)destructField, 1);
     destructField->_externalEnumStorage = (int)(&g_igStringMetaField_destructCell);

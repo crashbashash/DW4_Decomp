@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dw4/beDBManager.h"
+#include "dw4/list-services.h"
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define RET(o) { igObject *rt = (o); if (rt != 0) rt->_refCount = rt->_refCount + 1; }
 #define SETP(T, panel, src, field) { igObject *c = (igObject *)(src); T *pp = (T *)(panel); if (c != 0) c->_refCount = c->_refCount + 1; { igObject *o = (igObject *)pp->field; REL(o) } pp->field = (int)c; }
@@ -125,7 +126,6 @@ extern "C" int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaI
 extern "C" void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self);
 extern "C" void beNDMWPanelObjectItem_Fire(beNDMWPanelObjectItem *self, int *label, long long *wait);
 /* kept local: the retained-string holder type is not shared yet (open item A7). */
-extern "C" void StringList_AppendRetained(void *, RecoveryString *);
 extern "C" void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self);
 static inline int listCount(const igIntList *list) { return list->_count; }
 
@@ -713,7 +713,7 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
                         ref = (int)StringPool_Intern(g_stringPool, (const char *)text);
                     }
                     RecoveryString name((void *)ref);
-                    StringList_AppendRetained((void *)self->_listFolder, &name);
+                    StringList_AppendRetained((igStringRefList *)self->_listFolder, (char *const *)&name.p);
                 }
             }
         }

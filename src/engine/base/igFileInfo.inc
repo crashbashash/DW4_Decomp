@@ -157,9 +157,9 @@ int *FUN_00229260(int *p)
     return p;
 }
 
-int *igStringRef_Construct(int *p)
+igStringRef *igStringRef_Construct(igStringRef *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 

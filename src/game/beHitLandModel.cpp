@@ -20,6 +20,8 @@
 #include <math.h>
 #include <string.h>
 #include "dw4/igStringObj.h"
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 #include "dw4/igRay.h"
 
 extern "C" igMetaObject *beHitLandModel_GetInfoMeta(void);
@@ -34,7 +36,6 @@ extern "C" void beHitLandModel_CheckWallFull(beHitLandModel *self);
 static void beHitLandModel_FindLand(beHitLandModel *self);
 extern "C" igMetaObject *g_igStringObjList_metaObject[4];
 extern "C" igMetaObject *g_igNamedObjectList_metaObject[4];
-extern "C" int emptyString[4];
 extern "C" void beHitLandModel_Prepare(beHitLandModel *self);
 extern "C" char HITLANDMODEL[];
 extern "C" void beHitLandModel_OnAddRam(beHitLandModel *self, int info, char *, int, int);
@@ -59,7 +60,7 @@ extern "C" int beHitLandModel_HitProc(beHitLandModelTraversal *traversal, int un
 extern "C" void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2);
 extern "C" void beHitLandModelOrder_Reset(beHitLandModelOrder *order);
 extern "C" void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order);
-extern "C" void ObjectList_ResizeRetained(int list, int count);
+
 
 /* beHitLandModelOrder's virtual methods by vtable slot (slot 21 is beHitLandModelOrder_AddRay). */
 class beHitLandModelOrderMethods {
@@ -830,7 +831,7 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
     int rayCount = order->_rayCount;
     if (rayCount > 0) {
         igProbe *probe = (igProbe *)self->_probe;
-        ObjectList_ResizeRetained(probe->_rays, 0);
+        ObjectList_ResizeRetained((igTDataList<igObject *> *)probe->_rays, 0);
         ((IntList *)probe->_intersectFaceType)->setCount(0);
         for (int i = 0; i < rayCount; i++) {
             igProbe *target = (igProbe *)self->_probe;

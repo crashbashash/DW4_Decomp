@@ -47,6 +47,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
 #include "dw4/beNDMWItemBaseDispatchView.h"
+#include "dw4/list-services.h"
 #define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); int i; if (RESIZE) { if (l->_count > CAP) ObjectList_ResizeRetained((igTDataList<igObject *> *)l, CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
 #define BYTES(DST, FN, REC) { igTDataList<unsigned char> *l = (igTDataList<unsigned char> *)FN((igObject *)props, REC)->_data; int i = 0; if (0 < l->_count) { do { DST[i] = l->_data[i]; i++; } while (i < l->_count); } }
 #define FINDN(DST, REC, N) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data); int a; for (a = 0; a < N; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
@@ -60,7 +61,6 @@
 extern "C" void beFont_ConvertToUnicode(void *result, int font, const void *text);
 extern "C" void beNDMWDegiData__CopyFrom(beNDMWDegiData *dst, beNDMWDegiData *src);
 /* kept local: ObjectList_ResizeRetained has no include/dw4 home (only CoreLibrary.h declares it). */
-extern "C" void ObjectList_ResizeRetained(igTDataList<igObject *> *list, int count);
 extern "C" int beNDMWLoadCtrl2__GetInfoMeta(void);
 extern "C" int beNDMWLoadCtrl2__GetMeta(void);
 extern "C" void TextOrder_Configure(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font, const char *text, int align, int color);

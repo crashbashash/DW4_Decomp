@@ -253,7 +253,7 @@ void LISsetDifficultMax(int maxDifficulty);
 
 /* Other files, with no home yet. */
 StringRef StringList_CopyRetained(igStringRefList *list, int index);
-void igStringObj_ToFloat(igStringObj *string, float *value);
+
 
 /* The managers be_Start finds, and the be itself. */
 extern beSystem *g_beSystem;

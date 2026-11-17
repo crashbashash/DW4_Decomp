@@ -86,6 +86,7 @@
 #include "dw4/igDisplayListAttr.h"
 #include "dw4/igDataLists.h"
 #include "dw4/list-services.h"
+#include "dw4/igStringRef.h"
 #include "dw4/igColorAttr.h"
 #include "dw4/igClearAttr.h"
 #include "dw4/igBlendStateAttr.h"
@@ -187,6 +188,7 @@ extern "C" void FUN_001e5810(void);
 #include "dw4/igMemoryRefMetaField.h"
 #include "dw4/igUnsignedIntMetaField.h"
 #include "dw4/igVec4fMetaField.h"
+#include "dw4/emptyString.h"
 extern igMetaObject *g_igActorInfo_metaObject;
 extern igMetaObject *g_igActorList_metaObject;
 extern igMetaObject *g_igAnimation_metaObject;
@@ -631,7 +633,6 @@ extern "C" int g_igCompiledTransformList_vtable[4];
 union U_1a3620 { int vt; int w[12]; void *p[12]; char b[48]; };
 extern "C" int g_igCompiledTransform_vtable[4];
 struct Fld_1a37a0 { char p0[38]; char f38; char p39[13]; char f52; char p53[3]; int f56; };
-extern "C" int igStringObj_GetOrCreateMetaObject(...);
 struct O_1a38e0 { int vt; char b[468]; };
 struct M_1a38e0 { int m[16]; };
 extern "C" int FUN_00150eb0(...);
@@ -793,7 +794,6 @@ extern "C" igMetaObject *igEnvironmentMapShader2_GetPublishedMetaObject(void);
 extern "C" int FUN_001331a0(...);
 extern "C" int FUN_001351d0(...);
 
-extern "C" int emptyString[4];
 struct E { char pad[8]; int *f8; };
 struct L { char pad[8]; int count; char pad1[4]; E **data; };
 struct S_1ab6c0 { char pad[20]; L *f20; };
@@ -4881,19 +4881,11 @@ extern "C" int Gap__Sg__igNode__vfunc_26(void **arg0);
 extern "C" void FUN_001c6340(int *arg0, int arg1);
 extern "C" void Gap__Sg__igNode__vfunc_27(void);
 extern "C" void FUN_001c63e0(int arg0, int arg1);
-/* A string handed out with a reference already taken; whoever receives it releases it. */
-struct RetainedString {
-    char *p;
-    RetainedString(char *text) : p(text) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
-};
-/* Kept local: the C++ callers' RetainedString return temporaries are load-bearing (the hidden-pointer
- * spelling of the home moves FUN_001cb340's stack slots). */
-extern "C" RetainedString StringList_CopyRetained(igStringRefList *list, int index);
 struct IniStrRef {
     char *p;
     IniStrRef() {}
     IniStrRef(char *text) : p(text) {}
-    IniStrRef(const RetainedString &s) : p(s.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
+    IniStrRef(const igStringRef &s) : p(s.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     IniStrRef(const IniStrRef &o) : p(o.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     static inline void Release(char *s) {
         int *x = (int *)s;

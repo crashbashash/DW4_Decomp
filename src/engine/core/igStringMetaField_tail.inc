@@ -411,7 +411,7 @@ void igStringObj_Set(igStringObj *self, const char *text) {
     igStringObj_Clear(self);
 }
 
-int igStringObj_Clear(igStringObj *self) {
+void igStringObj_Clear(igStringObj *self) {
     int buffer;
 
     buffer = self->_buffer;
@@ -460,8 +460,7 @@ void igStringObj_ToLower(igStringObj *self) {
     }
 }
 
-int igStringObj_ToInt(void *object, int value) {
-    igStringObj *self = (igStringObj *)object;
+int igStringObj_ToInt(igStringObj *self, int *value) {
     int text;
 
     text = self->_buffer;
@@ -471,8 +470,7 @@ int igStringObj_ToInt(void *object, int value) {
     return sscanf((const char *)text, " %i ", value) == 1;
 }
 
-int igStringObj_ToFloat(void *object, int value) {
-    igStringObj *self = (igStringObj *)object;
+int igStringObj_ToFloat(igStringObj *self, float *value) {
     int text;
 
     text = self->_buffer;

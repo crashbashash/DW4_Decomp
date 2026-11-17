@@ -51,6 +51,8 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/igFloatMetaField.h"
 #include "dw4/igIntMetaField.h"
 #include "dw4/igMetaEnum.h"
+#include "dw4/internalNonRefCountedObjectList.h"
+#include "dw4/list-services.h"
 void FUN_00187190(void);
 void FUN_00187450(void);
 void FUN_001877c0(void);
@@ -135,7 +137,6 @@ CallbackArray *igVec4ucMetaField_Register(void);
 extern char thunk_igVec4ucMetaField_GetMetaObject_00187170[];
 
 
-int MetaRefList_AppendRetained(...);
 
 
 igMetaObject *igVec4fMetaField_GetMetaObject(void);
@@ -361,7 +362,6 @@ void thunk_igMatrix44fList_GetMetaObject(void);
 
 extern int igMatrix44fList_InitFields_00189b10[4];
 
-int ObjectPointerList_FindIndex(...);
 
 void FUN_00189b10(void);
 

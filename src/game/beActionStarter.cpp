@@ -5,6 +5,7 @@
 #include "dw4/beActionStarterData2.h"
 #include "dw4/beActionStarterInfo.h"
 #include "dw4/beMessenger.h"
+#include "dw4/emptyString.h"
 
 extern "C" void beActionStarter_Prepare(void);
 extern "C" igMetaObject *beActionStarter_GetInfoMeta(void);
@@ -13,7 +14,6 @@ extern "C" igMetaObject *beActionStarter_GetMeta(void);
 extern "C" int beBaseInfoManager_OnMessageText(void);
 extern "C" char ACTION_BROADCAST_2[];
 extern "C" void beActionStarter_OnAddRam(beActionStarter * p0, int p1, char * p2, int p3, int p4);
-extern "C" int emptyString[4];
 extern "C" int MODELCTRL_10[4];
 extern "C" int SETEFFECT_3[4];
 /* One entry of an info's model list: the model's name and the data list of its commands. */
@@ -55,7 +55,7 @@ int beActionStarter_OnMessage(beActionStarter *self, beActionStarterInfoRam *ram
     igTDataList<ActionStarterModel *> *models = (igTDataList<ActionStarterModel *> *)info->_modelList;
     for (modelIndex = 0; modelIndex < models->count(); modelIndex++) {
         int *name = (int *)models->get(modelIndex)->_name;
-        name = name != 0 ? name : &emptyString[0];
+        name = name != 0 ? name : (int *)emptyString;
         if (infoName == (int)name) {
             found = true;
             break;
@@ -72,12 +72,12 @@ int beActionStarter_OnMessage(beActionStarter *self, beActionStarterInfoRam *ram
             do {
                 beActionStarterData2 *command = ((beActionStarterData2 **)commands->_data)[offsetInList];
                 int *name = (int *)command->_name;
-                name = name != 0 ? name : &emptyString[0];
+                name = name != 0 ? name : (int *)emptyString;
                 if ((int)name == commandName) {
                     int *infoNameString;
                     beMessenger_SelectReceivers((beMessenger *)self->_messenger, (const char *)&MODELCTRL_10[0], (const char *)infoName, ramNo);
                     infoNameString = (int *)info->_name;
-                    infoNameString = infoNameString != 0 ? infoNameString : &emptyString[0];
+                    infoNameString = infoNameString != 0 ? infoNameString : (int *)emptyString;
                     beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)infoNameString);
                     beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)command->_message);
                     beMessenger_AppendFloat((beMessenger *)self->_messenger, (float)command->_delay);

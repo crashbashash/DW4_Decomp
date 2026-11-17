@@ -24,7 +24,7 @@ int Gap__Sg__igShaderInfo__vfunc_23(ShaderFieldTable *self, int arg1, ShaderFiel
         return 0;
     }
     name = e->name;
-    name = name != 0 ? name : &emptyString[0];
+    name = name != 0 ? name : (int *)emptyString;
     igDirectory_AddExternalInfoRef((igDirectoryView *)arg1, (igInfoView *)self, (char *)name, (igObject *)key);
     return 1;
 }

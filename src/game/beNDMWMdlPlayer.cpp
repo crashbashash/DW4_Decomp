@@ -31,6 +31,7 @@
 #include <string.h>
 #include "dw4/beDBManager.h"
 #include <math.h>
+#include "dw4/emptyString.h"
 #include "dw4/igVec3f.h"
 
 /* beNDMWMdlPlayer: the model controller of the player's Digimon. It overrides the beModelCtrl
@@ -39,7 +40,7 @@
  * work on GENERATE and close the status panel when control, freeze, erase or remove arrive. */
 
 /* kept local: no include/dw4 home declares it yet. */
-extern "C" int emptyString[4];
+
 
 #pragma push
 #pragma readonly_strings on
@@ -438,7 +439,7 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             }
             infoName = (int *)info->_name;
             ramNo = ram->_ramNo;
-            infoName = infoName ? infoName : emptyString;
+            infoName = infoName ? infoName : (int *)emptyString;
             beMessenger_SendNamed((beMessenger *)self->_messenger, "ACTION", (const char *)infoName, ramNo, "ISCOMEND");
             if (beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
                 ClearWaitCheck(work);
@@ -458,7 +459,7 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         infoName = (int *)info->_name;
         ramNo = ram->_ramNo;
-        infoName = infoName ? infoName : emptyString;
+        infoName = infoName ? infoName : (int *)emptyString;
         beMessenger_SendNamed((beMessenger *)self->_messenger, "ACTION", (const char *)infoName, ramNo, "ISCOMEND");
         if (beMessenger_GetBool((beMessenger *)self->_messenger, 0)) {
             ClearWaitCheck(work);
@@ -601,7 +602,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
         beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
         infoName = (int *)info->_name;
-        infoName = infoName ? infoName : emptyString;
+        infoName = infoName ? infoName : (int *)emptyString;
         beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)infoName);
         beMessenger_AppendString((beMessenger *)self->_messenger, g_defaultPlayerNames[ram->_ramNo]);
         beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GAMESTART");

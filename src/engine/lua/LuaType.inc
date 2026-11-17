@@ -579,7 +579,7 @@ int LuaObject_StoreField(lua_State *L, igMetaField *field, LuaBoundObject *objec
             break;
         case LUA_KIND_STRING: {
             char *text = internString(value.data.string);
-            igStringMetaField_AssignRetainedToken(field, object, &text);
+            igStringMetaField_AssignRetainedToken((igStringMetaField *)field, object, &text);
             releaseString(text);
             break;
         }

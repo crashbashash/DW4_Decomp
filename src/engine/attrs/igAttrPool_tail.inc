@@ -1,6 +1,6 @@
 int FUN_0013c1b0(int *p, void *meta)
 {
-    return ObjectList_AppendUniqueRetained(*(int *)((char *)p + 12), meta);
+    return ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)p + 12)), (igObject *)meta);
 }
 
 static inline void clearBytes(char *p, unsigned int n) {

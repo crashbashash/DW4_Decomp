@@ -95,7 +95,7 @@ void __internalObjectList_InitFields(void) {
 
     meta = g___internalObjectList_metaObject;
     found = (void **)igMetaObject_FindFieldByName(meta, data);
-    index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     clone = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     clone->_refCounted = 1;
     clone->_externalEnumStorage = (int)(&g___internalObjectList_dataDescriptorCell);

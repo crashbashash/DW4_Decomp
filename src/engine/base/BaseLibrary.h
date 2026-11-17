@@ -58,6 +58,10 @@
 #include "dw4/igSegment.h"
 #include "dw4/ClassRegistration.h"
 #include <stdio.h>
+#include "dw4/emptyString.h"
+#include "dw4/igStringRef.h"
+#include "dw4/internalNonRefCountedObjectList.h"
+#include "dw4/list-services.h"
 
 typedef void (*igMetaObjectCallback)();
 
@@ -115,7 +119,6 @@ extern igMetaObject *g_igFileInfoList_metaObject;
 extern int g_igFileInfoList_vtable[4];
 extern igMetaObject *g_igFileInfo_metaObject;
 extern int g_igFileInfo_vtable[4];
-extern char emptyString[];
 extern int DAT_00560f60[4];
 extern int DAT_00560f68[4];
 extern int DAT_00560f80[4];
@@ -125,8 +128,6 @@ extern int DAT_00561010[4];
 extern "C" {
 int igUnsignedCharMetaField_GetDefaultDescriptor(...);
 int FUN_0019c8c0(...);
-int ObjectPointerList_FindIndex(...);
-int MetaRefList_AppendRetained(...);
 int Memory_GetDefaultHandleAllocator(...);
 int FUN_002fdef0(void *meta, void *field);
 int FUN_00142bb0(void *list, void *key);
@@ -138,7 +139,6 @@ void *igInfoList_Create(int arg0);
 int FUN_001d6340(...);
 
 int FUN_00190330(...);
-int igStringMetaField_AssignRetainedToken(...);
 int igObjectRefMetaField_Assign(...);
 }
 
@@ -562,7 +562,6 @@ CallbackArray *igFileInfo_Register(void);
 void thunk_igFileInfo_GetMetaObject(void);
 void igFileInfo_InitFields(void);
 int *FUN_00229260(int *p);
-int *igStringRef_Construct(int *p);
 igMetaObject *igBase_GetMetaObject(void);
 void FUN_002292d0(void);
 CallbackArray *igBase_Register(void);
@@ -571,7 +570,6 @@ void **FUN_002293d0(void **arg0, int arg1);
 int Gap__igOptInterface__vfunc_29(void);
 void **FUN_00229460(void **arg0, short arg1);
 void Gap__igOptConfiguration__vfunc_23(void);
-int igDataList_GetCount(int *p);
 void FUN_00229500(void *arg0, int arg1, ...);
 void FUN_00229570(void *arg0);
 void FUN_00229580(igInterfaceView *self);
@@ -585,7 +583,6 @@ R_3 Gap__igItemInterface__vfunc_28(Obj_10 *arg1, void *arg2, int arg3);
 int FUN_00229e20(struct L *arg0, int *arg1);
 int FUN_00229f70(int *arg0, int *arg1);
 int FUN_00229f90(int *arg0, int *arg1);
-void **igStringRef_Assign(void **arg0, void **arg1);
 int FUN_0022a030(int *p);
 igSmartPointer<InterfaceItem> Gap__igItemInterface__vfunc_27(int self, const StringRef &name, int kind);
 int FUN_0022a740(int arg0, void **arg1);

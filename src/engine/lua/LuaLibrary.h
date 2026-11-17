@@ -27,6 +27,7 @@ typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
 typedef void (*igMetaObjectCallback)(void);
 #include "dw4/igObjectRefMetaField.h"
 #include "dw4/igRawRefMetaField.h"
+#include "dw4/list-services.h"
 extern "C" void igMemoryPool_EnsureRegistered(void);
 
 extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
@@ -92,7 +93,6 @@ static inline char *internString(const char *text) {
 
 /* A reflected field's setters: a string field takes a reference to a pooled string, an object
  * reference field a reference to the object. */
-extern "C" void igStringMetaField_AssignRetainedToken(igMetaField *field, void *object, char **text);
 extern "C" void igObjectRefMetaField_Assign(igMetaField *field, void *object, void *value);
 
 /* `<Class>_GetVTable` runs a class's inline constructor and destructor on a stack instance and
@@ -737,11 +737,6 @@ struct LuaFieldWalker {
     LuaFieldWalker &operator++(int);
     LuaFieldEntry *get();
     void advance();
-};
-
-/* An Alchemy result code, returned by value. */
-struct igResult {
-    int code;
 };
 
 /* The semaphore that guards the thread-local slots. */

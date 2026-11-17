@@ -8,6 +8,7 @@
 #include "dw4/beNDMWStatusSelectE0.h"
 #include "dw4/beNDMWStatusSelectE1.h"
 #include "dw4/beNDMWWindow.h"
+#include "dw4/list-services.h"
 
 extern "C" char SELECTCTRL[];
 extern "C" char NOCANCEL[];
@@ -63,8 +64,6 @@ public:
     void Assign(char *fresh) { StringToken_Release(p); p = fresh; }
     ~StringRef() { StringToken_Release(p); }
 };
-/* kept local: StringList_AppendRetained's holder type is not shared yet (open item A7; the definer takes IniStrRef). */
-extern "C" int StringList_AppendRetained(int list, StringRef *token);
 
 /* Appends a pooled copy of `text` to a window string list; a null text appends a null token. */
 #define INTERN_APPEND(list, text) { \
@@ -75,7 +74,7 @@ extern "C" int StringList_AppendRetained(int list, StringRef *token);
         token = StringPool_Intern(StringPool_Get(), (text)); \
     } \
     StringRef held(token); \
-    StringList_AppendRetained(list, &held); }
+    StringList_AppendRetained((igStringRefList *)(list), &held.p); }
 
 extern "C" void beNDMWWindowSelect_Update(beNDMWWindowSetupDispatchView *self);
 extern "C" void beNDMWStatusSelect00_Setup(beNDMWStatusSelect00 *self);

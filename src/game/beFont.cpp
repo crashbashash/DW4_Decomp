@@ -98,6 +98,8 @@ struct UnsignedIntListView { char header[8]; int count; int capacity; int *data;
 struct FloatListView { char header[8]; int count; int capacity; float *data; int getCount() const { return count; } };
 union FloatBits { float f; struct { unsigned char b0, b1, b2; unsigned char high : 7; unsigned char sign : 1; } bits; };
 
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 extern "C" {
 void beFont_Start(beFont *self);
 void beFont_Stop(beFont *self);
@@ -118,8 +120,6 @@ igMetaObject *beFont_GetMeta(void);
 void beUnicodeObj_userDestruct(beUnicodeObj *self);
 igMetaObject *beUnicodeObj_GetMeta(void);
 
-void ObjectList_AppendRetainedList(void *, void *);
-int igStringObj_Clear(...);
 int igVertexArrayLock_Init(igVertexArrayLock *);
 void Color4f_Unpack(void *, int, int);
 
@@ -232,7 +232,6 @@ SjisUnicodeTable g_sjisToUnicodeTable = {{
     {0x00cc, 0x88d3}, {0x00d2, 0x88d4}, {0x00d9, 0x88d5}, {0x00b0, 0x88d6},
     {0xffff, 0xffff},
 }};
-extern int emptyString[4];
 }
 
 static inline igNodeView *nodeAt(igObjectList *list, int index) { return ((igNodeView **)list->_data)[index]; }
@@ -349,7 +348,7 @@ void beFont_Prepare(beFont *self) {
             List_Reserve((igDataList *)self->_gaPairList, 0, 4);
         }
     }
-    igStringObj_Clear(self->_convertData);
+    igStringObj_Clear((igStringObj *)self->_convertData);
 }
 
 igMetaObject *beFont_GetInfoMeta(void)
@@ -420,7 +419,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         do {
             category = nodeAt((igObjectList *)categories, i);
             categorySwitch = nodeAt(category->_childList, 0);
-            ObjectList_AppendRetainedList(category->_attributes, (void *)((beFontImage **)((beFontImageList *)self->_fonts)->_data)[beFont_FindFontIndex(self, (int)(categorySwitch->_name ? (const char *)categorySwitch->_name : (const char *)emptyString))]->_attrList);
+            ObjectList_AppendRetainedList((igTDataList<igObject *> *)category->_attributes, (igTDataList<igObject *> *)((void *)((beFontImage **)((beFontImageList *)self->_fonts)->_data)[beFont_FindFontIndex(self, (int)(categorySwitch->_name ? (const char *)categorySwitch->_name : (const char *)emptyString))]->_attrList));
             j = 0;
             while (j < countOf(categorySwitch->_childList)) {
                 panel = asAttrSet(nodeAt(categorySwitch->_childList, j));
@@ -785,7 +784,7 @@ int beFont_FindFontIndex(beFont *self, int name) {
     if (0 < ((beFontImageList *)self->_fonts)->_count) {
         do {
             fontName = (int *)(((beFontImage **)((beFontImageList *)self->_fonts)->_data)[i])->_name;
-            fontName = fontName ? fontName : &emptyString[0];
+            fontName = fontName ? fontName : (int *)emptyString;
             if (strcmp((const char *)name, (const char *)fontName) == 0) {
                 return i;
             }
@@ -830,11 +829,11 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
                 candidate = (beFontGeomAttrPair *)((int *)((char *)list->_data + offset))[0];
                 const int *category = (const int *)entry->_name;
                 const int *categoryName;
-                if (category != 0) categoryName = category; else categoryName = emptyString;
+                if (category != 0) categoryName = category; else categoryName = (const int *)emptyString;
                 if ((int)categoryName == candidate->_category) {
                     const int *panel = (const int *)((igAttrSet *)entry->_attrSet)->_name;
                     const int *panelName;
-                    if (panel != 0) panelName = panel; else panelName = emptyString;
+                    if (panel != 0) panelName = panel; else panelName = (const int *)emptyString;
                     if ((int)panelName == candidate->_panel) { pair = candidate; break; }
                 }
                 list = pairs;

@@ -259,6 +259,7 @@ extern "C" void igVirtualCFuncMetaField_CreateDefaultDescriptor(void);
 #include "dw4/igStructMetaField.h"
 #include "dw4/igUnsignedIntArrayMetaField.h"
 #include "dw4/igUnsignedShortArrayMetaField.h"
+#include "dw4/emptyString.h"
 extern "C" int igUnsignedShortMetaField_Clone(int arg0, int arg1);
 extern "C" int igUnsignedShortMetaField_GetVTable(void);
 extern "C" void igUnsignedShortMetaField_EnsureRegistered(void);
@@ -385,7 +386,6 @@ extern "C" void * igStringObjList_Create(int arg0);
 extern "C" int igStringObjList_GetVTable(void);
 extern "C" CallbackArray *igStringObjList_Register(void);
 extern "C" void igStringObjList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igStringObj_GetOrCreateMetaObject(void);
 extern "C" int igStringObj_GetVTable(void);
 extern "C" CallbackArray *igStringObj_Register(void);
 extern "C" void igStringObj_GetMetaObjectFunction(void);
@@ -723,7 +723,6 @@ extern "C" void igInfo_InitFields(void);
 extern "C" void * igIGBFile_Create(int arg0);
 extern "C" int igSmartPointer_igIntList_Construct(...);
 extern "C" int igSmartPointer_igMetaObjectList_Construct(...);
-extern "C" int igStringRef_Construct(...);
 extern "C" int igIGBFile_GetVTable(void);
 extern "C" int *igSmartPointer_igMemoryPool_Construct(int *p);
 extern "C" int *igSmartPointer_igMetaField_Construct(int *p);
@@ -842,7 +841,6 @@ extern "C" void igDirEntry_GetMetaObjectFunction(void);
 extern "C" void igDirEntry_InitFields(void);
 extern "C" int igDependencyOrderedList_GetVTable(void);
 extern "C" void igDependencyOrderedList_EnsureRegistered(void);
-extern "C" CallbackArray *igDependencyOrderedList_Register(void);
 extern "C" void igDependencyOrderedList_GetMetaObjectFunction(void);
 extern "C" void igDependencyOrderedList_InitFields(void);
 extern "C" igMetaObject *igDependencyList_GetOrCreateMetaObject(void);
@@ -1250,9 +1248,8 @@ extern "C" void FUN_002d6090(void);
 extern "C" int FUN_002d60a0(void);
 extern "C" int igContext_GetMeta(void);
 extern "C" int igDataList_GetElementSize(void);
-extern "C" int igDependencyOrderedList_TopologicalSort(...);
+extern "C" void igDependencyOrderedList_TopologicalSort(igDependencyOrderedList *self);
 extern "C" int FUN_00301000(...);
-extern "C" void igDependencyOrderedList_AddCheckPoint(void *arg0, int arg1);
 extern "C" void igDirEntry_RetainSharedRef(void);
 extern "C" void igDirEntry_ReleaseSharedRef(void);
 extern "C" int igDirEntry_GetSharedEntry(int arg0);
@@ -1294,8 +1291,7 @@ extern "C" int igDoubleMetaField_GetAlignment(void);
 extern "C" void igDriverDatabase_ReleaseDefaults(int self);
 extern "C" void igDriverDatabase_SetCurrentProperty(void *arg0, int arg1, int arg2);
 extern "C" int igDriverDatabase_GetCurrentProperty(void *arg0, int arg1);
-extern "C" int StringList_CopyRetained(...);
-extern "C" int igDriverDatabase_ClearRawDatabase(int *p);
+extern "C" void igDriverDatabase_ClearRawDatabase(int *p);
 extern "C" void *igDriverDatabase_ConfigNode_Destruct(void *arg0, long long arg1);
 extern "C" int FUN_002daab0(void);
 extern "C" void igDriverDatabase_LoadFromString(void *arg0, int arg1);
@@ -1532,7 +1528,7 @@ extern "C" int igMemoryRefArrayMetaField_WriteRawFieldMem(void *arg0, void *arg1
 extern "C" int igMemoryRefMetaField_GetSize(void);
 extern "C" int igMemoryRefMetaField_GetPoolName(igMemoryRefMetaField *self);
 extern "C" void igMemoryRefMetaField_Destruct(igMemoryRefMetaField *self);
-extern "C" void igMetaEnum_GetNameAt(int *arg0, void *arg1, int arg2);
+extern "C" igStringRef igMetaEnum_GetNameAt(igMetaEnum *self, int index);
 extern "C" int igMetaEnum_GetValueAt(void *arg0, int arg1);
 extern "C" int igMetaField_GetAlignment(void);
 extern "C" int igMetaField_GetSize(void);
@@ -1688,9 +1684,6 @@ extern "C" int igStringMetaField_WriteRawValue(void *self, void *value, void *ds
 extern "C" void igStringMetaField_ResetValue(int *arg0, int arg1);
 extern "C" void *igStringMetaField_CopyConstruct(void *object, void *other);
 extern "C" void igStringMetaField_Destruct(igStringMetaField *self);
-extern "C" int igStringObj_ToInt(void *object, int value);
-extern "C" int igStringObj_ToFloat(void *object, int value);
-extern "C" int igStringObj_Format(igStringObj *self, const char *format, ...);
 extern "C" int igStringObj_VFormat(int arg0, int extra1, int extra2);
 extern "C" void StringChunk_ReturnBlock(StringChunk *self, char *block, unsigned int bytes);
 extern "C" StringTable *StringTable_Construct(StringTable *table, StringPool *pool, int capacity);
@@ -2922,7 +2915,7 @@ extern "C" void List_AppendBytes(igDataList *l, int cnt, int src, int sz);
 extern "C" int List_BinarySearch(igDataList *arg0, int arg1, int (*arg2)(int, int), int arg3);
 extern "C" int List_AppendWord(igDataList *list, int value);
 typedef int (*Cmp)(int *, void *);
-struct DependencyPair { int a; int b; };
+struct DependencyPair { void *a; void *b; };
 struct igDependencyOrderedListView {
     int _vtable; unsigned int _refCount;
     igTDataList<igObject *> *_objectList;
@@ -2931,11 +2924,7 @@ struct igDependencyOrderedListView {
     int _checkPoints;
     unsigned char _hasCircularDependencies;
 };
-extern "C" void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *arg0, int arg1, int arg2);
 extern "C" void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner);
-extern "C" igResult igObjectList_RemoveRetained(igDependencyOrderedListView *list, igObject *object);
-extern "C" void igDependencyOrderedList_RemoveDependency(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3);
-extern "C" void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedListView *arg0, int arg1);
 class igSemaphoreView;
 struct igDirectoryView;
 class igDirEntryView;
@@ -3083,7 +3072,7 @@ struct ConfigSectionNode { int kind; int vtable; int id; igStringObj *name; igTD
 extern "C" void *igDriverDatabase_PropertyNode_Destruct(ConfigSectionNode *arg0, long long arg1);
 extern "C" void igEnumArrayMetaField_SwapBytes(igEnumArrayMetaField *self, int buffer, int count);
 extern "C" int igEnumArrayMetaField_GetSize(igEnumArrayMetaField *self);
-extern "C" void igEnumMetaField_ValueToString(int result, igEnumArrayMetaField *self, int *value);
+extern "C" igStringRef igEnumMetaField_ValueToString(igEnumArrayMetaField *self, int *value);
 extern "C" int g_igEnumMetaField_vtable[4];
 class igEventTrackerView;
 extern "C" void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open);
@@ -3434,7 +3423,6 @@ extern "C" void *InternalObjectList_CopyConstruct(__internalObjectList *list, __
 extern "C" void InternalObjectList_Destruct(__internalObjectList *list);
 extern "C" void InternalObjectList_InsertRetained(__internalObjectList *list, int index, igObject *value);
 extern "C" void InternalObjectList_SetCount(__internalObjectList *list,int count);
-extern "C" int MetaRefList_AppendRetained(__internalObjectList *list, igObject *value);
 extern "C" void InternalObjectList_SetAtRetained(__internalObjectList *list, int index, igObject *value);
 extern "C" void StringPool_DestroyChunks(StringPool *pool);
 extern "C" void igLocationTable_Clear(igLocationTableView *table);
@@ -3791,7 +3779,6 @@ extern "C" int DAT_00586ffc[4];
 extern "C" igResult igMemoryPoolContextInfo_PushContext(void *arg1);
 extern "C" igObject *igMemoryPoolContextInfo_PopContext(void);
 extern "C" void igMemoryPoolContextInfo_RemoveMemoryPoolInfo(igMemoryPoolContextInfo *info, igMemoryPoolInfo *poolInfo);
-extern "C" int emptyString[4];
 extern "C" igMemoryPoolInfo *igMemoryPoolContextInfo_FindMemoryPoolInfoByName(igMemoryPoolContextInfo *arg0, int arg1);
 extern "C" igMemoryPoolInfo *igMemoryPoolContextInfo_FindMemoryPoolInfoByHandle(igMemoryPoolContextInfo *arg0, char *arg1);
 extern "C" igResult igMemoryPoolContextInfo_ReadFromRegistry(igMemoryPoolContextInfoView *self, igRegistry *ini, char *section);
@@ -3837,7 +3824,7 @@ extern "C" igRefMetaField *igRefMetaField_CopyConstruct(igRefMetaField *self, ig
 extern "C" igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 /* The parameter is const so the list pointer is reloaded per iteration, the loop is tested at the
  * bottom via goto, and the locals are declared in the order a4, n, i. */
-extern "C" void igMetaEnum_GetNameByValue(int *arg0, const igMetaEnum *arg1, int arg2);
+extern "C" igStringRef igMetaEnum_GetNameByValue(const igMetaEnum *self, int value);
 extern "C" int igMetaEnum_GetNameCount(igMetaEnum *self);
 typedef struct MetaEnumView { char pad[4]; int _refCount; char *name; igTDataList<char *> *names; igTDataList<int> *values; } MetaEnumView;
 extern "C" void *igMetaField_Construct(igMetaField *self);
@@ -3965,9 +3952,6 @@ extern "C" void igObjectDirEntry_RetainRef(igObjectDirEntry *self, igObject *obj
 extern "C" void igObjectDirEntry_ReleaseRef(igObjectDirEntry *self, igObject *object);
 extern "C" void igObjectDirEntry_SetMemoryPoolHandle(igObjectDirEntry *self, int memoryPoolHandle);
 extern "C" int igObjectDirEntry_GetMemoryPoolHandle(igObjectDirEntry *self);
-extern "C" void ObjectList_FillRetained(igTDataList<igObject *> *arg0, igObject *arg1);
-extern "C" igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start);
-extern "C" int ObjectList_AppendUniqueRetained(igTDataList<igObject *> *list, igObject *object);
 extern "C" void igObjectList_SortByField(igTDataList<igObject *> *self, igMetaField *field);
 extern "C" void igObjectRefArrayMetaField_SwapBytes(igObjectRefArrayMetaField *self, int passThrough, int perElement);
 extern "C" void igObjectRefArrayMetaField_SetElement(igObjectRefArrayMetaField *arg0, int arg1, int arg2, igObject *arg3);
@@ -4091,7 +4075,6 @@ extern "C" bool igStringMetaField_IsAlikeDeep(igStringMetaField *field,const voi
 extern "C" bool igStringMetaField_IsAlikeShallow(igStringMetaField *field,const void *one,const void *two);
 extern "C" int g_igStringMetaField_vtable[4];
 extern "C" void igStringObj_SetN(igStringObj *arg0, int arg1, int arg2);
-extern "C" int igStringObj_Clear(igStringObj *arg0);
 /* An igStringObj's text: its buffer, or the shared empty text when it has none. */
 static inline char *igStringObj_Text(igStringObj *s) { return (char *)s->_buffer == 0 ? g_stringObjEmptyText : (char *)s->_buffer; }
 extern "C" bool igStringObj_ParseBool(igStringObj *o, char *out);

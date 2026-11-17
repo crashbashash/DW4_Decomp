@@ -170,7 +170,7 @@ void igViewerStatisticsManager_InitFields(void) {
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)(igBoxComponent_GetOrCreateMetaObject());
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igStringObj_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igMetaObjectList_GetOrCreateMetaObject());

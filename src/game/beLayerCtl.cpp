@@ -14,6 +14,7 @@
 #include "dw4/igSwitch.h"
 #include "dw4/igViewerSceneInfoManager.h"
 #include <string.h>
+#include "dw4/emptyString.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -39,7 +40,6 @@ enum SwtCtl { SWTCTL_CLR, SWTCTL_SET, SWTCTL_FLIP };
 #define LAYERS(self) CHILDREN(LAYER_SWITCH(self))
 #define PICK_ALLOCATOR(allocator, owner, selector) { allocator = igObject_GetAllocator(owner); allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(selector); }
 
-extern "C" char emptyString[];
 
 #define META_OF(node) (((igObjectDispatchView *)(node))->GetMeta())
 

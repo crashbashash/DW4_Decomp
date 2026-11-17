@@ -262,23 +262,11 @@ void FUN_002343d0(const char *arg0, const char *arg1, float *arg2) {
 }
 
 int FUN_00234470(igStringRefList *arg0, int *arg1, const char *arg2) {
-    void *sp3C;
-    int *temp_a1;
-    int temp_s1;
-    int temp_v0;
+    int matched;
 
     if (arg2 != 0) {
-        StringList_CopyRetained(&sp3C, arg0, *arg1);
-        temp_s1 = strcmp((const char *)sp3C, arg2) == 0;
-        if (sp3C != 0) {
-            temp_a1 = (int *)((char *)sp3C - 8);
-            temp_v0 = *(int *)((char *)(sp3C) - 4) - 1;
-            *(int *)((char *)(sp3C) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (StringTokenHeader *)temp_a1);
-            }
-        }
-        if (temp_s1 != 0) {
+        matched = strcmp(StringList_CopyRetained(arg0, *arg1).p, arg2) == 0;
+        if (matched != 0) {
             *arg1 += 1;
             return 1;
         }
@@ -307,35 +295,15 @@ int FUN_00234560(igStringRefList *arg0, int *arg1, const char *arg2, double *arg
 }
 
 int FUN_002345b0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3) {
-    void *sp5C;
-    void *sp58;
     int eq;
     int v1;
     if (arg2 != 0) {
-        StringList_CopyRetained(&sp5C, arg0, *arg1);
-        eq = strcmp((const char *)sp5C, arg2) == 0;
-        if (sp5C != 0) {
-            int *a1 = (int *)((char *)sp5C - 8);
-            int v0 = *(int *)((char *)sp5C - 4) - 1;
-            *(int *)((char *)sp5C - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-            }
-        }
+        eq = strcmp(StringList_CopyRetained(arg0, *arg1).p, arg2) == 0;
         if (eq != 0) {
             v1 = *arg1 + 1;
             if (v1 < arg0->_count) {
                 *arg1 = v1;
-                StringList_CopyRetained(&sp58, arg0, *arg1);
-                *arg3 = sp58;
-                if (sp58 != 0) {
-                    int *a1 = (int *)((char *)sp58 - 8);
-                    int v0 = *(int *)((char *)sp58 - 4) - 1;
-                    *(int *)((char *)sp58 - 4) = v0;
-                    if (v0 == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-                    }
-                }
+                *arg3 = StringList_CopyRetained(arg0, *arg1).p;
                 v1 = *arg1;
                 *arg1 = v1 + 1;
                 return 1;
@@ -623,7 +591,7 @@ void ViewerOptions_ParseCommandLine(App *self, int count, char **names) {
     for (i = 0; i < count; i++) {
         int text = (int)names[i];
         StringRef name(text);
-        StringList_AppendRetained(list.get(), &name);
+        StringList_AppendRetained((igStringRefList *)(list.get()), (char *const *)&name);
     }
     FUN_00235370((ViewerOptions *)self, (igStringRefList *)list.get());
 }
@@ -638,12 +606,6 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
     StringRef modelFile;
     int repeat;
     int index;
-    /* Each smart-pointer temporary of the original has its own stack slot. */
-    char *helpRef;
-    char *optionRef;
-    char *printRef;
-    char *helpRef2;
-    char *currentRef;
     int argc;
     ViewerOptions *applied;
     int slot;
@@ -655,9 +617,10 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
 
     while (index < argc) {
         if (FUN_00234470(args, &index, "--help")) {
-            StringList_CopyRetained(&helpRef, args, 0);
-            FUN_00233c10(helpRef);
-            ReleaseString(helpRef);
+            {
+                igStringRef helpRef = StringList_CopyRetained(args, 0);
+                FUN_00233c10(helpRef.p);
+            }
             ReleaseObject(opts->intList);
             opts->intList = 0;
             ReleaseObject(opts->stringList);
@@ -806,18 +769,21 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
             break;
         } else {
             int isOption;
-            StringList_CopyRetained(&optionRef, args, index);
-            isOption = optionRef[0] == '-';
-            ReleaseString(optionRef);
+            {
+                igStringRef optionRef = StringList_CopyRetained(args, index);
+                isOption = optionRef.p[0] == '-';
+            }
             if (!isOption) {
                 break;
             }
-            StringList_CopyRetained(&printRef, args, index);
-            printf("Unrecognized option : %s\n", printRef);
-            ReleaseString(printRef);
-            StringList_CopyRetained(&helpRef2, args, 0);
-            FUN_00233c10(helpRef2);
-            ReleaseString(helpRef2);
+            {
+                igStringRef printRef = StringList_CopyRetained(args, index);
+                printf("Unrecognized option : %s\n", printRef.p);
+            }
+            {
+                igStringRef helpRef2 = StringList_CopyRetained(args, 0);
+                FUN_00233c10(helpRef2.p);
+            }
             ReleaseObject(opts->intList);
             opts->intList = 0;
             ReleaseObject(opts->stringList);
@@ -828,13 +794,14 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
 
     while (index < argc) {
         if (!FUN_00234510(args, &index, "-n", &repeat)) {
-            StringList_CopyRetained(&currentRef, args, index);
-            if (currentRef != 0) {
-                ((int *)currentRef)[-1]++;
+            {
+                igStringRef current = StringList_CopyRetained(args, index);
+                if (current.p != 0) {
+                    ((int *)current.p)[-1]++;
+                }
+                ReleaseString(modelFile.p);
+                modelFile.p = current.p;
             }
-            ReleaseString(modelFile.p);
-            modelFile.p = currentRef;
-            ReleaseString(currentRef);
             {
                 StringRef argument(modelFile);
                 StringList_AppendRetained((igStringRefList *)opts->stringList, &argument.p);

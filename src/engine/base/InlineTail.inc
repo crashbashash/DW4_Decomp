@@ -24,9 +24,9 @@ void Gap__igOptConfiguration__vfunc_23(void) {
     Memory_GetDefaultHandleAllocator();
 }
 
-int igDataList_GetCount(int *p)
+int igDataList_GetCount(igDataList *list)
 {
-    return *(int *)((char *)p + 8);
+    return list->_count;
 }
 
 void FUN_00229500(void *arg0, int arg1, ...) {
@@ -195,13 +195,13 @@ extern "C" R_3 Gap__igItemInterface__vfunc_28(Obj_10 *arg1, void *arg2, int arg3
 int FUN_00229e20(struct L *arg0, int *arg1) {
     int h;
     int lo, hi, mid, base, res;
-    igStringRef_Construct(&h);
+    igStringRef_Construct((igStringRef *)&h);
     lo = 0;
     hi = arg0->n - 1;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
         base = FUN_0022a030((int *)arg0);
-        igStringRef_Assign((void **)&h, (void **)(base + mid * 4));
+        igStringRef_Assign((igStringRef *)&h, *(igStringRef *)(base + mid * 4));
         if (FUN_00229f90(&h, arg1) != 0) { lo = mid + 1; continue; }
         if (FUN_00229f70(&h, arg1) != 0) { hi = mid - 1; continue; }
         igStringRef_Destruct((igStringRef *)&h, -1);
@@ -213,7 +213,7 @@ int FUN_00229e20(struct L *arg0, int *arg1) {
         res = -1;
     } else {
         base = FUN_0022a030((int *)arg0);
-        igStringRef_Assign((void **)&h, (void **)(base + lo * 4));
+        igStringRef_Assign((igStringRef *)&h, *(igStringRef *)(base + lo * 4));
         if (FUN_00229f90(arg1, &h) != 0 || FUN_00229f70(arg1, &h) != 0) {
             igStringRef_Destruct((igStringRef *)&h, -1);
             res = -1;
@@ -235,27 +235,11 @@ int FUN_00229f90(int *arg0, int *arg1) {
     return (unsigned int) (*arg0 - 8) < (unsigned int) (*arg1 - 8);
 }
 
-void **igStringRef_Assign(void **arg0, void **arg1) {
-    int *temp_a1;
-    int temp_v0;
-    void *temp_v1;
-    void *temp_v1_2;
-
-    temp_v1 = (void *)(*arg1);
-    if (temp_v1 != 0) {
-        *(int *)((char *)(temp_v1) - 4) = (int)((int) (*(int *)((char *)(temp_v1) - 4) + 1));
-    }
-    temp_v1_2 = (void *)(*arg0);
-    if (temp_v1_2 != 0) {
-        temp_a1 = (int *)((char *)temp_v1_2 - 8);
-        temp_v0 = *(int *)((char *)(temp_v1_2) - 4) - 1;
-        *(int *)((char *)(temp_v1_2) - 4) = temp_v0;
-        if (temp_v0 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
-        }
-    }
-    *arg0 = *arg1;
-    return arg0;
+igStringRef *igStringRef_Assign(igStringRef *self, const igStringRef &other) {
+    retainString(other.p);
+    releaseString(self->p);
+    self->p = other.p;
+    return self;
 }
 
 int FUN_0022a030(int *p)
@@ -832,7 +816,7 @@ static inline void *internString(const char *text) {
  * unsigned int, float, bool, string, or a reference to a meta-object by name), and logs the value
  * read. Returns whether the field was set. */
 static inline void assignToken(igMetaField *field, void *object, const RecoveryString &token) {
-    igStringMetaField_AssignRetainedToken(field, object, &token);
+    igStringMetaField_AssignRetainedToken((igStringMetaField *)field, object, (char **)&token);
 }
 
 extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, int section, igMetaField *field, void *object) {
@@ -1401,7 +1385,7 @@ int FUN_0022d8e0(struct M *arg0, int arg1, int arg2, int arg3, int arg4) {
         if (t != 0) {
             *(int *)(t - 4) = *(int *)(t - 4) + 1;
         }
-        igStringMetaField_AssignRetainedToken(arg2, arg3, &sp5C);
+        igStringMetaField_AssignRetainedToken((igStringMetaField *)arg2, (void *)arg3, &sp5C);
         var_v0 = 1;
         t = sp5C;
         if (t != 0) {

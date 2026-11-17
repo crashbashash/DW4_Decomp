@@ -13,6 +13,13 @@ extern "C" {
 int igStringObj_HasFileExtensionText(char *text, char *extension);
 void *igStringObj_Create(int pool);
 void igStringObj_EnsureRegistered(void);
+struct igMetaObject *igStringObj_GetOrCreateMetaObject(void);
+/* Frees the text and leaves the string empty. */
+void igStringObj_Clear(struct igStringObj *self);
+int igStringObj_Format(struct igStringObj *self, const char *format, ...);
+/* Parse the text as an integer / a float into *value; nonzero on success. */
+int igStringObj_ToInt(struct igStringObj *self, int *value);
+int igStringObj_ToFloat(struct igStringObj *self, float *value);
 /* The text an empty igStringObj reads as (its buffer is null). */
 extern char *g_stringObjEmptyText;
 void igStringObj_Set(struct igStringObj *self, const char *text);

@@ -359,7 +359,7 @@ void igObject_Destroy(igObject *input) {
         igMetaObject *type = object->GetMeta();
         type->_instanceCount = (int)((unsigned)type->_instanceCount - 1);
         void *instances = (void *)type->_instances;
-        if (instances) ObjectPointerList_EraseAt((__internalNonRefCountedObjectList *)instances, ObjectPointerList_FindIndex((char *)instances, (int)object));
+        if (instances) ObjectPointerList_EraseAt((__internalNonRefCountedObjectList *)instances, ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)instances, (int)object));
         object->TrimCapacity();
         object->userDestruct();
         object->ReleaseDefaults();

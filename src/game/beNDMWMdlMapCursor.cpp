@@ -13,6 +13,7 @@
 #include "dw4/igVec3f.h"
 #include <string.h>
 #include "dw4/igMathConstants.h"
+#include "dw4/emptyString.h"
 
 extern "C" unsigned char beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind);
 extern "C" int beNDMWMdlMapCursor_GetMeta(void);
@@ -44,7 +45,6 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     }
 } };
 extern "C" void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *self, beBaseInfoRam *ram);
-extern "C" int emptyString[4];
 /* matching construct: inline release helper reproduces the retail inlined release of the previous data list */
 struct RefRelease { static inline void go(igObject *object) {
     if (object) {

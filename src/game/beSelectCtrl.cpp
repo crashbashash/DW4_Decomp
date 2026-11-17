@@ -15,6 +15,7 @@
 #include "dw4/igObject.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/emptyString.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -123,7 +124,6 @@ extern "C" void beSelectCtrl_Prepare(beSelectCtrl *self);
 extern "C" void beSelectCtrl_OnAddRam(beSelectCtrl *self, int info);
 extern "C" void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram);
 extern "C" int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int message);
-extern "C" char emptyString[];
 
 /* Owning stack reference to the work created by GENERATE, released on scope exit. */
 class WorkRef {

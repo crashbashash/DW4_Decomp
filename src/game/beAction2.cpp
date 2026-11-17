@@ -124,8 +124,9 @@ static inline void SetMaskBit(igBitMask *mask, unsigned int n) {
     }
 }
 
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 extern "C" {
-int ObjectList_RemoveFirstRetained(int *result, int list, int object, int start);
 void Color4f_Unpack(Color4f *out, unsigned int format, unsigned int packed);
 int igAnimationCombiner_Update(void *combiner, long long now);
 
@@ -150,7 +151,6 @@ void beBaseInfoManager_OnAddInfo(void);
 int beBaseInfoManager_OnMessage(void);
 
 float g_randomWaitMinimum;
-extern int emptyString[4];
 }
 
 /* Slot 32, called before the manager starts and before it drops its infos: nothing to do here. */
@@ -172,9 +172,6 @@ void beAction2_OnAddRam(beAction2 *self, beAction2InfoRam *ram) {
 
 /* When the FLASH timer runs out, takes the flash's override attributes back off the node. */
 void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
-    int removed2;
-    int removed1;
-    int removed0;
     beAction2InfoWork *work;
     int list;
     igObject *attr;
@@ -186,16 +183,16 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "FLASH")) {
             list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
             if (work->_blendStateAttr == 0) {
-                ObjectList_RemoveFirstRetained(&removed2, list, work->_colorAttr, 0);
+                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_colorAttr, 0);
                 attr = (igObject *)work->_colorAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_colorAttr = 0;
-                ObjectList_RemoveFirstRetained(&removed1, list, work->_lightingStateAttr, 0);
+                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_lightingStateAttr, 0);
                 attr = (igObject *)work->_lightingStateAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_lightingStateAttr = 0;
             }
-            ObjectList_RemoveFirstRetained(&removed0, list, work->_textureStateAttr, 0);
+            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_textureStateAttr, 0);
             attr = (igObject *)work->_textureStateAttr;
             IG_OBJECT_RELEASE(attr);
             work->_textureStateAttr = 0;
@@ -362,7 +359,6 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         Color4f color;
         float *alpha;
         int list;
-        int removed0, removed1, removed2;
         igObject *attr;
         frames = beBaseInfoRam_GetTimerFrameDelta((beBaseInfoRam *)ram, "FADE");
         if (frames != 0.0f) {
@@ -374,16 +370,16 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
             if (*alpha >= fadeLimit(work)) {
                 list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
                 if (work->_textureStateAttr == 0) {
-                    ObjectList_RemoveFirstRetained(&removed0, list, work->_colorAttr, 0);
+                    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_colorAttr, 0);
                     attr = (igObject *)work->_colorAttr;
                     IG_OBJECT_RELEASE(attr);
                     work->_colorAttr = 0;
-                    ObjectList_RemoveFirstRetained(&removed1, list, work->_lightingStateAttr, 0);
+                    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_lightingStateAttr, 0);
                     attr = (igObject *)work->_lightingStateAttr;
                     IG_OBJECT_RELEASE(attr);
                     work->_lightingStateAttr = 0;
                 }
-                ObjectList_RemoveFirstRetained(&removed2, list, work->_blendStateAttr, 0);
+                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_blendStateAttr, 0);
                 attr = (igObject *)work->_blendStateAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_blendStateAttr = 0;

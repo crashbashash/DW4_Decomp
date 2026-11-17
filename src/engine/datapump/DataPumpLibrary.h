@@ -33,11 +33,11 @@ extern "C" int g_igLongStack_vtable[4];
 extern "C" int igLongStack_GetVTable(void);
 extern "C" void FUN_001e40f0(void);
 #include "dw4/igDataLists.h"
+#include "dw4/internalNonRefCountedObjectList.h"
 extern "C" void igLongStack_InitFields_001e4180(void);
 extern "C" CallbackArray *igLongStack_Register(void);
 extern "C" void thunk_igLongStack_GetMetaObject(void);
 extern "C" int igLongMetaField_GetDefaultDescriptor(...);
-extern "C" int ObjectPointerList_FindIndex(...);
 class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual int vX(int); };
 extern "C" void FUN_001e4180(void);
 extern "C" igMetaObject *igRandomNumber_GetMetaObject(void);
@@ -258,7 +258,6 @@ typedef struct FormattedObject : public igObject { int f8; } FormattedObject;
 typedef struct Vector3f { float x, y, z; } Vector3f;
 #include "dw4/igStringObj.h"
 #include "dw4/softfloat.h"
-extern "C" int igStringObj_Format(...);
 
 extern "C" int FUN_001e6de0(int *result, Vector3f *value, const char *format);
 struct QuadNamed : public igObject { int name; };

@@ -489,10 +489,10 @@ int igMetaObject_GetPersistentFieldCount(int self) {
 /* Search the object system's registry; when absent (-1) append the metaobject and search again,
  * since appending can replace the registry. */
 void igMetaObject_AssignTypeId(igMetaObject *meta){
-    meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
+    meta->_index=ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
     if(meta->_index==-1){
         igObjectSystem_AppendMetaObject((*(void * *)&g_objectSystem),meta);
-        meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
+        meta->_index=ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
     }
 }
 

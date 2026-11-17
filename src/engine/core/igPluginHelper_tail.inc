@@ -38,10 +38,9 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
                     dropKey(key);
                 } else {
                     for (j = 0; j < (held = values)->_count; j++) {
-                        StringList_CopyRetained(&string, values, j);
-                        text = string;
+                        igStringRef string = StringList_CopyRetained((igStringRefList *)values, j);
+                        text = string.p;
                         igPluginHelper_AddRepositoryFromConfig((igPluginHelper *)self, (int)(keyText(key)), (const char *)text);
-                        releaseString(string);
                     }
                     dropValues(held);
                     dropKey(key);

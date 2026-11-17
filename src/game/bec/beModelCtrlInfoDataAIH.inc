@@ -115,7 +115,7 @@ void beModelCtrlInfoDataAIH_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beModelCtrlInfoDataAIH_ctorTable, 8);
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
-    index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText((igMetaField *)clone, "AIH");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIH_nameStorage);

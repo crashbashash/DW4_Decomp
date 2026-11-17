@@ -6,8 +6,8 @@ void Gap__Insight__igFilterMessageDispatcher__vfunc_23(FilterDispatcherSlots *se
 }
 
 void Gap__Insight__igFilterMessageDispatcher__vfunc_24(void *arg0, void *arg1, void *arg2) {
-    ObjectList_AppendUniqueRetained(*(int *)((char *)(arg2) + 12));
-    ObjectList_AppendUniqueRetained(*(int *)((char *)(arg0) + 12), arg2);
+    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg2) + 12)), (igObject *)arg1);
+    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg0) + 12)), (igObject *)arg2);
 }
 
 void Gap__Insight__igFilterMessageDispatcher__vfunc_26(void **arg0, int arg1, int arg2) {
@@ -27,14 +27,10 @@ void Gap__Insight__igFilterMessageDispatcher__vfunc_25(V *arg0, int arg1) {
 }
 
 void Gap__Insight__igFilterMessageDispatcher__vfunc_27(S_arg0 *arg0, void *arg1, S_arg2 *arg2) {
-    int sp3C;
-    int sp38;
-    int sp34;
-
-    ObjectList_RemoveFirstRetained(&sp3C, arg2->f12, arg1, 0);
+    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)arg2->f12, (igObject *)arg1, 0);
     if (*(int *)((char *)(arg2->f12) + 8) == 0) {
-        ObjectList_RemoveFirstRetained(&sp38, arg0->f12, arg2, 0);
-        ObjectList_RemoveFirstRetained(&sp34, arg0->f8, arg2, 0);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)arg0->f12, (igObject *)arg2, 0);
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)arg0->f8, (igObject *)arg2, 0);
     }
 }
 

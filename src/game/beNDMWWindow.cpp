@@ -13,6 +13,7 @@
 #include "dw4/igVec3f.h"
 #include <stdio.h>
 #include "dw4/igMathConstants.h"
+#include "dw4/list-services.h"
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \
@@ -26,7 +27,7 @@
         tok = StringPool_Intern(g_stringPool, (const char *)(text)); \
     } \
     StringRef held(tok); \
-    StringList_AppendRetained(field, &held); }
+    StringList_AppendRetained((igStringRefList *)(field), held.ref()); }
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader((StringChunk *)h_[0], (StringTokenHeader *)h_); }
 
 /* kept local: StringList_CopyRetained's result holder is not shared yet (open item A7); retail passes
@@ -37,11 +38,10 @@ extern "C" void StringList_CopyRetained(void *result, igStringRefList *list, int
 class StringRef {
 public:
     const char *p;
+    char *const *ref() const { return (char *const *)&p; }
     StringRef(const char *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
 };
-/* kept local: StringList_AppendRetained's holder type is not shared yet (open item A7; the definer takes IniStrRef). */
-extern "C" int StringList_AppendRetained(int, StringRef *);
 extern "C" void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName);
 struct Clr { static inline void ClearList(igStringRefList *l) {
     int n = l->_count;

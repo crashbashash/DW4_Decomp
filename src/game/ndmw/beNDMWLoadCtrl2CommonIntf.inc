@@ -206,7 +206,7 @@ void beNDMWLoadCtrl2CommonIntf_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadCtrl2CommonIntf_ctorTable, 0xE);
     inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
-    nameIndex = ObjectPointerList_FindIndex((char *)((igMetaObject *)meta)->_metaFields, (int)inheritedName);
+    nameIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText((igMetaField *)nameField, "COMMONINTF");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadCtrl2CommonIntf_nameExternalEnumStorage);

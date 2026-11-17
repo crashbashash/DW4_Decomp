@@ -12,6 +12,7 @@
 #include "dw4/igNamedObject.h"
 #include "dw4/igObject.h"
 #include <string.h>
+#include "dw4/emptyString.h"
 
 /* beNDMWMdlEnemy: the model controller of an enemy Digimon. It answers KIND_ENEMY, registers as an
  * ENEMY receiver, and on GENERATE creates the enemy's info work from the message (database record
@@ -19,7 +20,6 @@
  * back to the enemy's own info after a delay of 60. */
 
 extern "C" int KIND_ENEMY[4];
-extern "C" int emptyString[4];
 extern "C" int ENEMY_3[4];
 extern "C" int DATABASE_8[4];
 extern "C" int enemy_2[4];

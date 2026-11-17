@@ -97,7 +97,7 @@ void igExternalDirEntry_InitFields(void) {
     int fields;
     igMetaObject_CreateFields(meta, g_igExternalDirEntry_ctorTable, 4);
     fields = meta->_metaFields;
-    index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
     field = (igMetaField *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     igMetaField_Configure(field, (const char *)text_ref, &g_igExternalDirEntry_refDescriptorCell, 0x18, meta);
     ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject;

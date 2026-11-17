@@ -96,11 +96,11 @@ void igRendererOrderedList_Append(igDependencyOrderedList *list, igObject *objec
 static inline int count_of(const igTDataList<DependencyPair> *list) { return list->_count; }
 
 /* Index of the dependency (k1, k2), or -1. */
-static inline int findDependency(igTDataList<DependencyPair> *list, int k1, int k2) { int i; for (i = 0; i < list->_count; i++) { DependencyPair *p = &list->_data[i]; int v = (k1 == p->a); if (v) { v = (k2 == p->b); } if (v) { return i; } } return -1; }
+static inline int findDependency(igTDataList<DependencyPair> *list, void *k1, void *k2) { int i; for (i = 0; i < list->_count; i++) { DependencyPair *p = &list->_data[i]; int v = (k1 == p->a); if (v) { v = (k2 == p->b); } if (v) { return i; } } return -1; }
 
-void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *self, int dependent, int dependency) {
+void igDependencyOrderedList_AddDependency(igDependencyOrderedList *self, void *dependent, void *dependency) {
     int n; igTDataList<DependencyPair> *pairs; DependencyPair *pair;
-    pairs = self->_dependencies;
+    pairs = (igTDataList<DependencyPair> *)self->_dependencies;
     n = pairs->_count;
     if (n < pairs->_capacity) {
         pairs->_count = count_of(pairs) + 1;
@@ -111,7 +111,7 @@ void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *self, in
     pair->a = dependent;
     pair->b = dependency;
     igDependencyOrderedList_TopologicalSort(self);
-    igDependencyOrderedList_Rebuild(self);
+    igDependencyOrderedList_Rebuild((igDependencyOrderedListView *)self);
 }
 
 void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
@@ -163,11 +163,12 @@ void igRendererOrderedList_Clear(igDependencyOrderedList *self) {
     list->_count = 0;
 }
 
-igResult igObjectList_RemoveRetained(igDependencyOrderedListView *list, igObject *object) {
-    return ObjectList_RemoveFirstRetained(list->_objectList, object, 0);
+igResult igObjectList_RemoveRetained(igDependencyOrderedList *list, igObject *object) {
+    return ObjectList_RemoveFirstRetained(((igDependencyOrderedListView *)list)->_objectList, object, 0);
 }
 
-void igDependencyOrderedList_RemoveDependency(int *result, igDependencyOrderedListView *self, int dependent, int dependency) {
+igResult igDependencyOrderedList_RemoveDependency(igDependencyOrderedList *list, void *dependent, void *dependency) {
+    igDependencyOrderedListView *self = (igDependencyOrderedListView *)list;
     igTDataList<DependencyPair> *pairs = self->_dependencies;
     int idx = findDependency(pairs, dependent, dependency);
     int status;
@@ -178,21 +179,21 @@ void igDependencyOrderedList_RemoveDependency(int *result, igDependencyOrderedLi
         status = g_resultFailure.v;
     }
     if (self->_hasCircularDependencies != 0) {
-        igDependencyOrderedList_TopologicalSort(self);
+        igDependencyOrderedList_TopologicalSort(list);
         igDependencyOrderedList_Rebuild(self);
     }
-    *result = status;
+    return igResult(status);
 }
 
-void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedListView *self, int object) {
+void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedList *self, void *object) {
     int i;
     igTDataList<DependencyPair> *pairs;
-    int *pair;
-    int a, b;
+    void **pair;
+    void *a, *b;
 
-    for (i = self->_dependencies->_count - 1; i >= 0; i--) {
-        pairs = self->_dependencies;
-        pair = (int *)&pairs->_data[i];
+    for (i = ((igTDataList<DependencyPair> *)self->_dependencies)->_count - 1; i >= 0; i--) {
+        pairs = (igTDataList<DependencyPair> *)self->_dependencies;
+        pair = (void **)&pairs->_data[i];
         b = pair[1];
         a = pair[0];
         if ((a == object) || (b == object)) {
@@ -201,11 +202,11 @@ void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedListView *sel
     }
     if (self->_hasCircularDependencies != 0) {
         igDependencyOrderedList_TopologicalSort(self);
-        igDependencyOrderedList_Rebuild(self);
+        igDependencyOrderedList_Rebuild((igDependencyOrderedListView *)self);
     }
 }
 
-void igDependencyOrderedList_AddCheckPoint(void *self, int name) {
+void igDependencyOrderedList_AddCheckPoint(igDependencyOrderedList *self, const char *name) {
     void *checkPoint;
     int *header;
     int references;
@@ -222,7 +223,7 @@ void igDependencyOrderedList_AddCheckPoint(void *self, int name) {
             }
             g_stringPool = (StringPool *)pool;
         }
-        interned = (void *)(StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
+        interned = (void *)(StringPool_Intern((StringPool *)g_stringPool, name));
     }
     checkPoint = (void *)(interned);
     StringList_AppendRetained((igStringRefList *)(((igDependencyOrderedListView *)self)->_checkPoints), (char *const *)&checkPoint);

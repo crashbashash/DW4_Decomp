@@ -7,7 +7,7 @@ extern "C" void FUN_0022ac70(igObject *iterator, igMetaObject *metaObject);
 extern "C" void FUN_0022b0a0(float *matrix, igObject *iterator);
 
 extern "C" igMetaObject *g_igAABox_metaObject;
-extern "C" char emptyString[];
+#include "dw4/emptyString.h"
 static inline igAABox *asAABox(igObject *o) {
     if (o != 0 && igObject_IsKindOf(o, g_igAABox_metaObject) != 0) return (igAABox *)o;
     return 0;

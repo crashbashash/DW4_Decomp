@@ -15,6 +15,7 @@
 #include "dw4/igTimeAttr.h"
 #include "dw4/igTraversal.h"
 #include <string.h>
+#include "dw4/emptyString.h"
 
 extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
 extern "C" igMetaObject *beSeCtl_GetInfoMeta(void);
@@ -41,7 +42,6 @@ extern "C" int g_igCommonTraversal_travProcs[4];
 extern "C" void beSeCtl_Prepare(beSeCtl *self);
 extern "C" char ACTION_BROADCAST_3[];
 extern "C" void beSeCtl_OnAddRam(beSeCtl * p0, int p1, char * p2, int p3, int p4);
-extern "C" char emptyString[];
 extern "C" char MODELCTRL_13[];
 extern "C" char SETSOUND[];
 extern "C" int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work);

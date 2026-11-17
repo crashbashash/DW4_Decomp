@@ -142,7 +142,7 @@ bool igRegistry_GetValueInt(igRegistry *registry, int section, const char *key, 
 
     found = false;
     value = ((void *)igRegistry_FindValue(registry, section, key, 0));
-    if ((value != 0) && (igStringObj_ToInt((void *)((igRegistryValue *)value)->_value, (int)out) != 0)) {
+    if ((value != 0) && (igStringObj_ToInt((igStringObj *)((void *)((igRegistryValue *)value)->_value), (int *)out) != 0)) {
         found = true;
     }
     if (!found) {
@@ -160,7 +160,7 @@ bool igRegistry_GetValueFloat(igRegistry *registry, int section, const char *key
 
     found = false;
     value = (void *)(((void *)igRegistry_FindValue(registry, section, key, 0)));
-    if ((value != 0) && (igStringObj_ToFloat((void *)((igRegistryValue *)value)->_value, (int)out) != 0)) {
+    if ((value != 0) && (igStringObj_ToFloat((igStringObj *)((void *)((igRegistryValue *)value)->_value), (float *)out) != 0)) {
         found = true;
     }
     if (!found) {
@@ -305,10 +305,6 @@ static inline void setStringAt(igStringRefList *l, int i, int **v) {
 bool igRegistry_GetValueStringList(void *self, int section, const char *key, igStringRefList *list, int create) {
     igStringObj *a;
     igStringObj *b;
-    int *r1;
-    int *tmp;
-    int *r2;
-    int *r3;
     const char *saved;
     int i; igRegistryValue *p; int n; int j; igStringObj *c; char *s2; igStringObj *held; igStringObj *c2; int at; int at2;
 
@@ -318,10 +314,12 @@ bool igRegistry_GetValueStringList(void *self, int section, const char *key, igS
         igStringObj_Split((igStringObj *)p->_value, 0x2C, (igTDataList<char *> *)list);
         *(igStringObj **)&a = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
         for (i = 0; i < list->_count; i++) {
-            StringList_CopyRetained(&r1, list, i);
-            igStringObj_Set(a, (const char *)r1);
-            releaseRef(r1);
+            {
+                igStringRef r1 = StringList_CopyRetained(list, i);
+                igStringObj_Set(a, r1.p);
+            }
             igStringObj_Trim(a);
+            int *tmp;
             *(int **)&tmp = intern(listValueText(a));
             setStringAt(list, i, &tmp);
             releaseRef(tmp);
@@ -337,16 +335,15 @@ bool igRegistry_GetValueStringList(void *self, int section, const char *key, igS
         *(igStringObj **)&b = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
         n = list->_count;
         if (n != 0) {
-            StringList_CopyRetained(&r2, list, 0);
-            igStringObj_Set(b, (const char *)r2);
-            releaseRef(r2);
+            igStringRef r2 = StringList_CopyRetained(list, 0);
+            igStringObj_Set(b, r2.p);
         }
         for (j = 1; j < n; j++) {
             c = b; at = c->_length;
             igStringObj_Insert(c, (char *)",", at, strlen(","));
-            StringList_CopyRetained(&r3, list, j);
-            c2 = b; s2 = (char *)r3; at2 = c2->_length; igStringObj_Insert(c2, s2, at2, strlen(s2));
-            releaseRef(r3);
+            igStringRef r3 = StringList_CopyRetained(list, j);
+            /* matching construct: the word is read through the holder's address; r3.p swaps s0 and s6 */
+            c2 = b; s2 = *(char **)&r3; at2 = c2->_length; igStringObj_Insert(c2, s2, at2, strlen(s2));
         }
         igRegistry_SetValueString(self, section, saved, (const char *)(listValueText(b)));
         held = b;

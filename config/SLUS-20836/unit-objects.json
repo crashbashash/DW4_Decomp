@@ -11885,6 +11885,7 @@
       "__dt__10SeqTempRefFv",
       "__dt__11FieldHolderFv",
       "__dt__11igActorViewFv",
+      "__dt__11igStringRefFv",
       "__dt__12IniStringRefFv",
       "__dt__13EnvMapTempRefFv",
       "__dt__14PoolListHolderFv",
@@ -15202,6 +15203,7 @@
       "g_igEventReceiver_metaObject": "0x0058c570"
     },
     "stripped": [
+      "__dt__11igStringRefFv",
       "__dt__16StringRef_237300Fv",
       "__dt__25igSmartPointer<8Instance>Fv",
       "__dt__26igSmartPointer<9TextValue>Fv",

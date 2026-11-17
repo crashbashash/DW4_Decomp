@@ -33,6 +33,7 @@ struct igMetaObject *igDataList_GetPublishedMetaObject(void);
 void ObjectList_ClearRetainedPreserveCount(igTDataList<struct igObject *> *list);
 void List_InsertBytes(struct igDataList *list, int index, int count, const void *src, int stride);
 void List_RemoveAt(struct igDataList *l, int i, int sz);
+int igDataList_GetCount(struct igDataList *list);
 
 #ifdef __cplusplus
 }

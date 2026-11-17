@@ -83,9 +83,10 @@ static inline char *textOf(ShaderStringObject *o) {
 /* Drops the first string of the list: one release balances the copy, the other drops the list's
  * own reference before the slot is removed. */
 static inline void removeFirst(ShaderNameList *list) {
-    RetainedString removed = StringList_CopyRetained((igStringRefList *)list, 0);
-    releaseString(removed.p);
-    releaseString(removed.p);
+    {
+        igStringRef removed = StringList_CopyRetained((igStringRefList *)list, 0);
+        releaseString(removed.p);
+    }
     List_RemoveWordAt((igDataList *)list, 0);
     list->data[list->count] = 0;
 }
@@ -202,7 +203,6 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
     for (i = 0; i < count; i++) {
         FUN_001d9090((SkeletonBitOwnerView *)target, i, 1);
         passName = StringList_CopyRetained((igStringRefList *)names.p, i).p;
-        releaseString(passName);
         pass = igRegistry_GetSectionIndex((igRegistry *)self->ini, passName, 0);
         if (pass == -1) {
             return 0;

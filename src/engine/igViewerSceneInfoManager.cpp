@@ -29,6 +29,7 @@
 #include "dw4/igFlyMode.h"
 #include "dw4/igCameraMode.h"
 #include "dw4/igMathConstants.h"
+#include "dw4/list-services.h"
 extern "C" {
 
 /* The igMetaField handles of igViewerParameters' fields; a change notification names its field by one. */
@@ -127,7 +128,6 @@ int igGroup_RemoveChildAt(igObject **removed, igGroup *group, int index);
     } \
     l->_count = 0; }
 
-int ObjectList_AppendRetainedList(...);
 
 
 int igViewManager_FrameObject(...);
@@ -687,7 +687,7 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
         upVectorChanged.source = 0;
         upVectorChanged.field = g_igViewerParameters_upVectorMetaField;
         igModel_NotifyViews((igModel *)self->_parameters, (ModelChange *)&upVectorChanged);
-        ObjectList_AppendRetainedList(((igViewerParameters *)self->_parameters)->_cameras, info->_cameras);
+        ObjectList_AppendRetainedList((igTDataList<igObject *> *)(((igViewerParameters *)self->_parameters)->_cameras), (igTDataList<igObject *> *)info->_cameras);
         camerasChanged.type = 2;
         camerasChanged.source = 0;
         camerasChanged.field = g_igViewerParameters_camerasMetaField;

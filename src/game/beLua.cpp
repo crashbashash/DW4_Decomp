@@ -17,6 +17,7 @@
 #include "dw4/igTraversal.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/emptyString.h"
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
 extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);
@@ -44,7 +45,6 @@ public:
 };
 extern "C" char text_s_lua[];
 extern "C" char percent_s_slash_percent_s_2[];
-extern "C" char emptyString[];
 /* stack holder for the interned name: the destructor drops one reference to the pooled string and frees its chunk at zero */
 class LuaStrRef {
 public:

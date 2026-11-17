@@ -7,6 +7,7 @@
 #include "dw4/igDataLists.h"
 #include "dw4/igInsightCore.h"
 #include "dw4/igNamedObject.h"
+#include "dw4/emptyString.h"
 
 extern "C" void beDBManager_Prepare(void);
 extern "C" igMetaObject *beDBManager_GetInfoMeta(void);
@@ -26,7 +27,6 @@ extern "C" igMetaObject *beDBManager_GetMeta(void);
 
 struct igProperty;
 typedef igTDataList<igProperty *> ColumnList;
-extern "C" char emptyString[];
 extern "C" int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *key, ColumnList *columns);
 extern "C" char DATABASE_9[];
 extern "C" void beDBManager_OnAddRam(beDBManager *p0, int p1, char *p2);

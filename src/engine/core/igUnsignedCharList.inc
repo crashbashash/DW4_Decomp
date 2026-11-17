@@ -57,7 +57,7 @@ void igUnsignedCharList_InitFields(void) {
 
     meta = (igMetaObject *)(g_igUnsignedCharList_metaObject);
     found = (void **)(((void **)igMetaObject_FindFieldByName(meta, data)));
-    index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     field->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     field->_memSize = 0;

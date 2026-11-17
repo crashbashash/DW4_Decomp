@@ -104,7 +104,7 @@ void FUN_0014e540(void) {
         g_igTrackedElementMetaField_instance = (Q *)igMetaObject_CreateInstance(g_igTrackedElementMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
         temp_s0 = g_igTrackedElementMetaField_instance;
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
             p = g_igTrackedElementMetaField_instance;
             p->f4 -= 1;
             if ((p->f4 & 0x7fffff) == 0) {

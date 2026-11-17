@@ -208,7 +208,7 @@ int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {
     n = arg0->f20->count;
     for (i = 0; i < n; i++) {
         s = arg0->f20->data[i]->f8;
-        s = s != 0 ? s : &emptyString[0];
+        s = s != 0 ? s : (int *)emptyString;
         if (strcmp((char *)s, (char *)arg1) == 0) {
             return i;
         }

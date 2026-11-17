@@ -66,4 +66,13 @@ struct igStringRef {
     }
 };
 
+/* The out-of-line igStringRef constructor (empty) and assignment other units call by name, and the
+ * list read that hands out an igStringRef with a reference taken for it. */
+struct igStringRefList;
+extern "C" {
+igStringRef *igStringRef_Construct(igStringRef *self);
+igStringRef *igStringRef_Assign(igStringRef *self, const igStringRef &other);
+igStringRef StringList_CopyRetained(struct igStringRefList *list, int index);
+}
+
 #endif

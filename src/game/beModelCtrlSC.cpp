@@ -25,10 +25,10 @@
 
 typedef void (*TraversalFunction)(void);
 
+#include "dw4/emptyString.h"
 extern "C" {
 
 extern int g_igCommonTraversal_travProcs[4];
-extern char emptyString[];
 /* Debug draw colour per bullet mode (RGBA), filled on first use. */
 float g_hitBoxDebugColors[12];
 char g_hitBoxDebugColorsReady;

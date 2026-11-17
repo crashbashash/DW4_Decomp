@@ -30,6 +30,7 @@
 #include "dw4/softfloat.h"
 #include "dw4/sony/sifdev.h"
 #include <string.h>
+#include "dw4/list-services.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -149,6 +150,7 @@ typedef igTDataList<int> NameList;
 extern "C" { int g_defaultNameValue = 1; }
 struct StringRef {
     int *p;
+    char *const *ref() const { return (char *const *)&p; }
     StringRef() {}
     StringRef(int s) : p((int *)s) {}
     static inline void Release(int *x) {
@@ -158,7 +160,6 @@ struct StringRef {
 };
 /* Kept here: the string holder is this file's StringRef, whose destructor copy this file emits; the definitions
  * take and return their own holder classes. */
-extern "C" void StringList_AppendRetained(igStringRefList *list, const StringRef &value);
 extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 extern "C" { Blk *g_activeApp; }
 /* igFolder's virtual functions: slot 24 lists the folder's entries (igFolder_ListEntries).
@@ -549,7 +550,7 @@ void GameMain_ReplaceSceneFile(Blk *app, int text, int fullReload) {
     }
     {
         StringRef name(interned);
-        StringList_AppendRetained(app->modelNames.p, name);
+        StringList_AppendRetained(app->modelNames.p, name.ref());
     }
     resetCounts(app, AdoptReference());
     counts = (NameList *)app->repeatCounts.p;

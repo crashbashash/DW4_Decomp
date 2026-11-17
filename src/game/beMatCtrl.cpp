@@ -52,6 +52,7 @@ typedef igSmartPointer<igTDataList<int> > MaskListRef;
 /* The RAM's reference to its work. */
 typedef igSmartPointer<beMatCtrlInfoWork> WorkRef;
 
+#include "dw4/emptyString.h"
 extern "C" {
 
 void beMatCtrl_Prepare(beMatCtrl *self);
@@ -63,7 +64,6 @@ igMetaObject *beMatCtrl_GetMeta(void);
 void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram);
 
 extern const char MATCTRL[];
-extern const char emptyString[];
 }
 
 /* The mask lists' memory is addressed by byte offset: the queries scale the running material's index

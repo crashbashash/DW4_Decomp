@@ -14,6 +14,7 @@
 #include "dw4/igObject.h"
 #include "dw4/igSceneInfo.h"
 #include "dw4/igViewerSceneInfoManager.h"
+#include "dw4/emptyString.h"
 #define CLEAR(T, src) { \
     T *l = (T *)(src); \
     int n = l->_count; \
@@ -46,7 +47,6 @@ extern "C" int igResource_IsDirectoryLoaded(int resource, igDirectory *directory
 extern "C" void igResource_UnloadDirectory(int resource, int name);
 extern "C" igObject *igResource_LoadDirectory(int resource, int *name);
 extern "C" int g_globalContext[4];
-extern "C" char emptyString[];
 extern "C" char ROOTATTR_2[];
 
 /* A pooled string held by reference: the count sits at p[-1], the chunk header at p[-2]. */

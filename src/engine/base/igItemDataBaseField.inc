@@ -85,7 +85,7 @@ void FUN_002284a0(void) {
         g_igItemDataBaseField_defaultDescriptor = (int)(igMetaObject_CreateInstance(g_igItemDataBaseField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         temp_s0 = (void *)(g_igItemDataBaseField_defaultDescriptor);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
             {
                 void *held = (void *)g_igItemDataBaseField_defaultDescriptor;
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;

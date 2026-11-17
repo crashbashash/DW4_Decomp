@@ -52,7 +52,7 @@ void igNonRefCountedObjectList_InitFields(void) {
 
     meta = (void *)(g_igNonRefCountedObjectList_metaObject);
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, data)));
-    index = ObjectPointerList_FindIndex((char *)((igMetaObject *)meta)->_metaFields, (int)found);
+    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)found);
     field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     field->_memType = igObjectRefMetaField_GetDefaultDescriptor();
     field->_memSize = 0;

@@ -62,6 +62,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include "dw4/emptyString.h"
+#include "dw4/list-services.h"
 #include "dw4/igAABox.h"
 #define SELECT_ALLOCATOR(var, arg) { int base_ = (int)igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
@@ -147,7 +149,6 @@ extern "C" char HITPLAYERBULLET_2[];
 extern "C" char HITPLAYERTALK_2[];
 extern "C" char HITENEMYBULLET_2[];
 extern "C" void beModelCtrl_OnAddRam(beModelCtrl *self, beBaseInfoRam *ram);
-extern "C" char emptyString[];
 extern "C" char ONE_3[];
 extern "C" char AITIMER[];
 extern "C" char NEAR[];
@@ -295,7 +296,6 @@ extern "C" char SQ_ERAS_2[];
 extern "C" char REMOVE_2[];
 extern "C" char GETBONEMATRIX[];
 extern "C" void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram);
-extern "C" int igStringRefList_IndexOf(int list, StringRef *key, int);
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 extern "C" int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *work);
 extern "C" void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox *box);
@@ -1654,7 +1654,6 @@ unsigned char beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beMod
     return 1;
 }
 
-extern "C" int StringList_AppendRetained(igStringRefList *, StringRef *);
 static inline int intListCount(const igIntList *list) { return list->_count; }
 /* Holder of the label lists created on first use; the table names its own out-of-line destructor copy. */
 struct LabelListRef { igObject *p; LabelListRef() { p = 0; } ~LabelListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
@@ -1751,7 +1750,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
     }
     {
         StringRef key((char *)token);
-        idx = igStringRefList_IndexOf((int)seqList, &key, 0);
+        idx = igStringRefList_IndexOf((igStringRefList *)seqList, (char *const *)&key, 0);
     }
     if (idx != -1) {
         if (seqName == 0) {
@@ -1825,7 +1824,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         }
         {
             StringRef newSeq((char *)token);
-            StringList_AppendRetained(seqList, &newSeq);
+            StringList_AppendRetained(seqList, &newSeq.p);
         }
         if (labelName == 0) {
             token = 0;
@@ -1839,7 +1838,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         }
         {
             StringRef newLabel((char *)token);
-            StringList_AppendRetained(labelList, &newLabel);
+            StringList_AppendRetained(labelList, &newLabel.p);
         }
         k = intListCount(offsetList);
         if (k < offsetList->_capacity) {
@@ -2435,7 +2434,7 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
         }
         {
             StringRef key((char *)token);
-            slot = igStringRefList_IndexOf(work->_labelSeqList, &key, 0);
+            slot = igStringRefList_IndexOf((igStringRefList *)work->_labelSeqList, (char *const *)&key, 0);
         }
         if (slot != -1) {
             index = ((int *)((igIntList *)work->_labelOffsetList)->_data)[slot];

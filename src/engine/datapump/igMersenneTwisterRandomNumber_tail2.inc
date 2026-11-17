@@ -54,7 +54,7 @@ int FUN_001e6de0(int *result, Vector3f *value, const char *format) {
     igSmartPointer<FormattedObject> formatted((FormattedObject *)igStringObj_Create(0), AdoptReference());
     double x = fptodp(value->x);
     double y = fptodp(value->y);
-    igStringObj_Format(formatted.p, format, x, y, fptodp(value->z));
+    igStringObj_Format((igStringObj *)formatted.p, format, x, y, fptodp(value->z));
     name = formatted.p->f8;
     if (name == 0) {
         name = (int)g_stringObjEmptyText;
@@ -85,7 +85,7 @@ int FUN_001e6f10(int *result, Quad *quad, const char *kind) {
     s3 = fptodp(quad->x);
     s2 = fptodp(quad->y);
     s1 = fptodp(quad->z);
-    igStringObj_Format(named.p, kind, s3, s2, s1, fptodp(quad->w));
+    igStringObj_Format((igStringObj *)named.p, kind, s3, s2, s1, fptodp(quad->w));
     name = named.get()->name;
     if (name == 0) {
         name = (int)g_stringObjEmptyText;

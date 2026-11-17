@@ -10,7 +10,7 @@
         if (_s != 0) { \
             StringTokenHeader *_h = (StringTokenHeader *)_s - 1; \
             if (--_h->refCount == 0) { \
-                StringChunk_ReleaseHeader(_h->owner, _h); \
+                StringChunk_ReleaseHeader((StringChunk *)_h->owner, _h); \
             } \
         } \
     } while (0)
