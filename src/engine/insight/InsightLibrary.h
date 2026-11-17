@@ -3,7 +3,6 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
 #include "dw4/fun_00235370_refs.h"

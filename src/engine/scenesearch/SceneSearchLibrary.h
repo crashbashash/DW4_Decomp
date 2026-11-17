@@ -33,7 +33,7 @@ extern "C" igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void);
 /* GetVTable's stack instance and its member destructors. */
 struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
 #include "dw4/igNamedObject.h"
-#include "dw4/igSmartPointerDestruct.h"
+#include "dw4/igSmartPointer.h"
 extern "C" int FUN_002293d0(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
 /* The object system's byte offset of the vtable word inside an object. */

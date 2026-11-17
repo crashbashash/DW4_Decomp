@@ -3,7 +3,6 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/typecast.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igMetaObject.h"

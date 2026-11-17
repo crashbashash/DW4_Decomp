@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/igAdx.h"
 #include "dw4/igAdxAfsFileList.h"

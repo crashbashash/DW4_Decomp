@@ -7,7 +7,6 @@
 #include <ctype.h>
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igMemoryPoolView.h"

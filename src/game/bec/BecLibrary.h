@@ -3,7 +3,6 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
-#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igTransformDispatchView.h"
 #include "dw4/ClassRegistration.h"

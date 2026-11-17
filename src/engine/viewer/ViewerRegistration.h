@@ -2,7 +2,7 @@
 #define DW4_VIEWER_REGISTRATION_H
 
 #include "dw4/reflected.h"
-#include "dw4/igSmartPointerDestruct.h"
+#include "dw4/igSmartPointer.h"
 #include "dw4/igActorManager.h"
 #include "dw4/igBoundingBoxRenderer.h"
 #include "dw4/igCameraMode.h"
