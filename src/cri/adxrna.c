@@ -152,19 +152,19 @@ void ADXRNA_SetBitPerSmpl(Ps2Rna *rna, int bps) {
     PS2RNA_SetBitPerSmpl(rna, bps);
 }
 
-int FUN_00265e28(Ps2Rna *rna) {
+int ADXRNA_GetSfreq(Ps2Rna *rna) {
     return PS2RNA_GetSfreq(rna);
 }
 
-int FUN_00265e40(Ps2Rna *rna) {
+int ADXRNA_GetOutVol(Ps2Rna *rna) {
     return PS2RNA_GetOutVol(rna);
 }
 
-int ADXRNA_GetOutVol(Ps2Rna *rna, int ch) {
+int ADXRNA_GetOutPan(Ps2Rna *rna, int ch) {
     return PS2RNA_GetOutPan(rna, ch);
 }
 
-int ADXRNA_GetOutPan(Ps2Rna *rna) {
+int ADXRNA_GetOutBalance(Ps2Rna *rna) {
     return PS2RNA_GetOutBalance(rna);
 }
 

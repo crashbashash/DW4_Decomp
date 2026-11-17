@@ -34,12 +34,12 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**12,684** of the 20,431 matched functions are readable: **1,836,744** code bytes, **52.9 %** of the code.
+**12,686** of the 20,431 matched functions are readable: **1,836,784** code bytes, **52.9 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,772 | 570,312 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 4,310 | 749,848 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,770 | 570,272 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 4,308 | 749,808 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,195 | 324,884 |
 | it sits in its class or module file, not `src/unmatched/` | 11 | 668 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 2,056 | 513,424 |
@@ -186,8 +186,8 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 17,383 of 20,576 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 11,902 of 20,576 (11,699 of them matched) |
+| functions with a recovered name (any: role names included) | 17,385 of 20,576 |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 11,904 of 20,576 (11,701 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |

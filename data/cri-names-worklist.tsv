@@ -157,8 +157,10 @@
 0x265c88	ADXRNA_Start	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
 0x265ca0	ADXRNA_Stop	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
 0x265d30	ADXRNA_GetStat	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
-0x265e58	ADXRNA_GetOutVol	high	sdk:libadxe.a/adx_rnap.o A (3s ADXRNA_GetOutPan D)
-0x265e70	ADXRNA_GetOutPan	high	sdk:libadxe.a/adx_rnap.o A (3s ADXRNA_GetOutBalance D)
+0x265e28	ADXRNA_GetSfreq	high	sdk:libadxe.a/adx_rnap.o (ADXRNA_GetSfreq is in the 2002 SDK member and forwards to PS2RNA_GetSfreq, as 0x265e28 does)
+0x265e40	ADXRNA_GetOutVol	high	sdk:libadxe.a/adx_rnap.o (ADXRNA_GetOutVol is in the 2002 SDK member and forwards to PS2RNA_GetOutVol, as 0x265e40 does)
+0x265e58	ADXRNA_GetOutPan	high	sdk:libadxe.a/adx_rnap.o (ADXRNA_GetOutPan is in the 2002 SDK member; 0x265e58 forwards to PS2RNA_GetOutPan)
+0x265e70	ADXRNA_GetOutBalance	high	3s:adx_rnap D (not in the 2002 SDK member; 0x265e70 forwards to PS2RNA_GetOutBalance, the pair of ADXRNA_SetOutBalance)
 0x265e88	ADXRNA_GetBitPerSmpl	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap D agree
 0x265eb8	ADXRNA_ClearBuf	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
 0x265ec0	ADXRNA_SetPcmType	high	sdk:libadxe.a/adx_rnap.o A + 3s:adx_rnap A agree
