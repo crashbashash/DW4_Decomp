@@ -26,7 +26,7 @@ CallbackArray *beCopyTransform_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCopyTransform_metaObject,
-        (igMetaObjectRegisterFunction)igTransform_Register,
+        igTransform_Register,
         igTransform_GetPublishedMetaObject,
         beCopyTransform_GetMetaObjectFunction,
         "beCopyTransform",

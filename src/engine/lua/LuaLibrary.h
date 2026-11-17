@@ -15,6 +15,7 @@
 #include "dw4/LuaObject.h"
 #include "dw4/LuaType.h"
 #include "dw4/ThreadLocalTable.h"
+#include "dw4/igNamedObject.h"
 
 /* The library front: the registration latch. */
 extern "C" void LuaLibrary_MarkRegistered(void);
@@ -30,8 +31,8 @@ extern "C" void igMemoryPool_EnsureRegistered(void);
 extern "C" void igObject_InitHeader(void *object);
 extern "C" void igObject_Destroy(void *object);
 extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
-extern "C" void igMetaObject_RunStaticInit(void *(*registerClass)(void));
-extern "C" void *igMetaObject_RegisterClass(...);
+extern "C" void igMetaObject_RunStaticInit(CallbackArray *(*registerClass)(void));
+extern "C" CallbackArray *igMetaObject_RegisterClass(...);
 extern "C" int igMetaObject_Create(int allocator);
 extern "C" int igMetaObject_GetFieldCount(igMetaObject *meta);
 extern "C" void igMetaObject_CreateFields(igMetaObject *meta, FieldFactory *factories, int count);
@@ -44,13 +45,9 @@ struct ObjectSystem { char pad[916]; int vtableOffset; };
 extern "C" ObjectSystem *g_objectSystem[4];
 extern "C" int kIGMemoryPoolHandleMetaData[4];
 
-extern "C" void *igObject_Register(void);
-extern "C" void *igObject_GetMetaObject_ParentAccessor(void);
-extern "C" void *igNamedObject_Register(void);
-extern "C" void *igNamedObject_GetPublishedMetaObject(void);
+extern "C" CallbackArray *igObject_Register(void);
+extern "C" igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 extern "C" int igMemoryPool_GetOrCreateMetaObject(void);
-
-extern "C" int g_igNamedObject_vtable[4];
 
 extern "C" int g_igLuaState_vtable[4];
 
@@ -242,8 +239,6 @@ struct ThreadLocalWalker {
     }
 };
 
-extern "C" void *Memory_AllocateDefaultBuffer(unsigned int size);
-extern "C" void Memory_FreeBufferAliasA(void *buffer);
 extern "C" void *memset(void *buffer, int value, unsigned int size);
 
 /* The game reads script files through Alchemy's igFile instead of stdio. */
@@ -275,8 +270,6 @@ extern "C" int strcmp(const char *a, const char *b);
 extern "C" char *strstr(const char *haystack, const char *needle);
 extern "C" int sprintf(char *buffer, const char *format, ...);
 extern "C" int vsprintf(char *buffer, const char *format, va_list args);
-extern "C" void *Memory_AllocateBufferDirect(unsigned int size, igObject *pool);
-extern "C" void Memory_FreeBufferWithAllocator(void *buffer, igObject *pool);
 extern "C" igObject *igMetaObject_CreateInstanceDefault(igMetaObject *meta);
 extern "C" igMetaField *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
 extern "C" igMetaObject *igObjectSystem_FindMetaByNameDefault(const char *name);
@@ -352,7 +345,7 @@ struct LuaEnum : Hashed<LuaEnum, 4> {
     igLuaGlue::Class *owner;
 
     void operator delete(void *memory) {
-        Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
+        Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
     }
 };
 
@@ -389,7 +382,7 @@ struct LuaFieldEntry {
     LuaFieldEntry(igMetaObject *meta, igMetaField *field);
     ~LuaFieldEntry();
     void operator delete(void *memory) {
-        Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
+        Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
     }
 };
 
@@ -449,7 +442,7 @@ inline Hashed<LuaFunction, 8>::~Hashed() {
 }
 
 inline void LuaFunction::operator delete(void *memory) {
-    Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
+    Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
 }
 
 /* Holds the class table still while it lives, as LuaFieldTableLock does the field table. */
@@ -697,7 +690,7 @@ inline void *operator new(unsigned int, void *memory) {
 }
 
 inline void *operator new(unsigned int size, igObject *pool) {
-    return Memory_AllocateBufferDirect(size, pool);
+    return Memory_AllocateBufferDirect(size, (igMemoryPoolView *)pool);
 }
 
 /* The hash of a name in the binding's tables. */

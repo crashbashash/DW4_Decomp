@@ -75,7 +75,7 @@ void **FUN_0013a800(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -89,7 +89,7 @@ ObjectRefWord *igSmartPointer_igMetaObjectList_Destruct(ObjectRefWord *self,int 
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }

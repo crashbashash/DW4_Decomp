@@ -204,7 +204,7 @@ void **igSmartPointer_igLightingStateAttr_Destruct(void **ref, short flags) {
             }
         }
         if (flags > 0) {
-            __dl__FPv(ref);
+            operator delete(ref);
         }
     }
     return ref;
@@ -222,7 +222,7 @@ void **FUN_00239280(void **ref, short flags) {
             }
         }
         if (flags > 0) {
-            __dl__FPv(ref);
+            operator delete(ref);
         }
     }
     return ref;
@@ -240,7 +240,7 @@ void **FUN_00239300(void **ref, short flags) {
             }
         }
         if (flags > 0) {
-            __dl__FPv(ref);
+            operator delete(ref);
         }
     }
     return ref;

@@ -157,7 +157,7 @@ void **FUN_0019d0a0(void **arg0, long long arg1) {
         a = (struct Rc *)*arg0;
         if (a != 0) { a->rc = a->rc - 1; if ((a->rc & 0x7FFFFF) == 0) { igObject_Destroy((igObject *)a); } }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -217,7 +217,7 @@ void **igSmartPointer_igIntListList_Destruct(void **arg0, int arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

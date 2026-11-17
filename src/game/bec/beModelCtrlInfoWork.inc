@@ -139,7 +139,7 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Destruct(igSmartPointer
     return self;
 }
 
-igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -147,7 +147,7 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Destruct(igSmartPoint
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if ((short)delete_storage > 0) operator delete(self);
+        if (delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -165,7 +165,7 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoDataTrc_Destruct(igSmart
     return self;
 }
 
-igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -173,7 +173,7 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSm
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if ((short)delete_storage > 0) operator delete(self);
+        if (delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -191,7 +191,7 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoRideOn_Destruct(igSmartP
     return self;
 }
 
-igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -199,7 +199,7 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Destruct(igSmart
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if ((short)delete_storage > 0) operator delete(self);
+        if (delete_storage > 0) operator delete(self);
     }
     return self;
 }

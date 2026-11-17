@@ -62,7 +62,7 @@ ObjectRefWord *FUN_0019a890(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy((igObject *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -79,7 +79,7 @@ void **FUN_0019a910(void **arg0, int arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -97,7 +97,7 @@ void **FUN_0019a990(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -111,7 +111,7 @@ void **FUN_0019aa10(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return (void **)self;
 }
@@ -128,7 +128,7 @@ void **FUN_0019aa90(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -138,7 +138,7 @@ O *igSmartPointer_igColorAttr_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+        if (arg1 > 0) operator delete(arg0);
     }
     return arg0;
 }
@@ -151,7 +151,7 @@ ObjectRefWord *FUN_0019ab90(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy((igObject *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }

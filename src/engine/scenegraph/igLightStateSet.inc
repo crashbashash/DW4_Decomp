@@ -39,7 +39,7 @@ void **FUN_0019d9e0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

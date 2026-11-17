@@ -110,7 +110,7 @@ ObjectRefWord *igSmartPointer_igMatrix44fList_Destruct(ObjectRefWord *self,int d
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy((igObject *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -127,7 +127,7 @@ struct R **FUN_00199970(struct R **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

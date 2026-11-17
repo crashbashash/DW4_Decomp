@@ -66,7 +66,6 @@ extern "C" int SNDF_ExecServer(...);
 #include "dw4/StringPool.h"
 extern "C" void ADXF_LoadPartitionNw(int stream, const char *name, int mode, void *buffer);
 extern "C" int ADXF_GetPtStatEx(int stream);
-extern "C" void __dl__FPv(void *);
 extern "C" unsigned char igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char *name, int maxChannels, int type,
                                                    int maxStreams, int maxFrequency);
 /* The CRI file-system parameters igAdx_SetupIop hands ADXPS2: the host root and the two file-info caches. */

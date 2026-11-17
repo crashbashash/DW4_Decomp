@@ -98,7 +98,6 @@ extern "C" int g_igTextElement_vtable[4];
 extern "C" int igTextElement_GetVTable(void);
 extern "C" int DAT_00541e90[4];
 extern "C" void *FUN_0044be30(igGeometryElement *arg0, short arg1);
-extern "C" int __dl__FPv(...);
 extern "C" void **FUN_0044bf10(void **arg0, long long arg1);
 extern "C" igMetaObject *igGeometryElement_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igTextElement_Register(void);

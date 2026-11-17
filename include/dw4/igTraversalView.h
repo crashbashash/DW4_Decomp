@@ -2,8 +2,12 @@
 #define DW4_IGTRAVERSALVIEW_H
 
 #include "dw4/reflected.h"
+#include "dw4/igAttrStackManager.h"
 #include "dw4/igCommonTraversalDispatchView.h"
+#include "dw4/igModelViewMatrixAttr.h"
 #include "dw4/igModelViewMatrixAttrDispatchView.h"
+#include "dw4/igObjectPool.h"
+#include "dw4/igTimeAttr.h"
 
 /* The scene-graph traversal calls the game's node callbacks make (beCopyModelCtrl2, beCopyTransform,
  * beMeterCtrlNode, beModelCtrlNode2): the pool and attribute-stack helpers, and the two steps every
@@ -11,13 +15,8 @@
 
 typedef void (*AttrPopProc)(void *attr, int data);
 
-extern "C" int igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index);
-extern "C" int igObjectPool_Grow(igObjectPool *pool, void *create);
-extern "C" int igModelViewMatrixAttr_CreateInstance(...);
-extern "C" int igTimeAttr_CreateInstance(...);
-
 /* The next free object of a traversal's pool, which `create` grows when it is used up. */
-static inline void *TakePooled(igObjectPool *pool, void *create) {
+static inline void *TakePooled(igObjectPool *pool, igObject *(*create)(int allocator)) {
     if (pool->_freeIndex >= pool->_count) {
         igObjectPool_Grow(pool, create);
     }

@@ -266,7 +266,6 @@ igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
 
-int __dl__FPv(...);
 int igBoolMetaField_SetDefaultValue(...);
 int FUN_00145d40(...);
 int igUnsignedIntMetaField_GetDefaultDescriptor(...);

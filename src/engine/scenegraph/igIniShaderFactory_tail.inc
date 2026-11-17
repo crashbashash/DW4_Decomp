@@ -222,7 +222,7 @@ ObjectRefWord *FUN_001c7600(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy((igObject *)object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }

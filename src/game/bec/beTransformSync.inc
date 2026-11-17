@@ -39,7 +39,7 @@ CallbackArray *beTransformSync_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beTransformSync_metaObject,
-        (igMetaObjectRegisterFunction)igTransform_Register,
+        igTransform_Register,
         igTransform_GetPublishedMetaObject,
         beTransformSync_GetMetaObjectFunction,
         "beTransformSync",

@@ -27,7 +27,6 @@ extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igCreateCollisionDatabase_vtable[4];
 #include "dw4/igObjectSystem.h"
 extern "C" int igCreateCollisionDatabase_GetVTable(void);
-extern "C" int __dl__FPv(void *);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O { S_temp_a0 *m; };
 extern "C" O *FUN_00239530(O *arg0, short arg1);

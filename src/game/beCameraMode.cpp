@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igCameraDispatchView.h"
 #include "dw4/beCameraMode.h"
+#include "dw4/igGraphPath.h"
 #include "dw4/igMatrix44f.h"
 #include "dw4/igModel.h"
 #include "dw4/igViewModel.h"
@@ -17,8 +18,6 @@ typedef struct CameraMatrix { float m[16]; } CameraMatrix;
 typedef struct CameraVector4 { float v[4]; } CameraVector4;
 extern "C" void igMatrix44f_GetEulerAngles(CameraMatrix *, float *, float *, float *);
 extern "C" void igMatrix44f_InvertOrthonormal(void *, void *, CameraMatrix *);
-/* kept local: retail loads the time with ld (a 64-bit igTime); the igGraphPath.h home takes int */
-extern "C" void igGraphPath_GetTransform(struct igGraphPath *path, struct igMatrix44f *matrix, long long time);
 extern "C" void beCameraMode_Update(beCameraMode *self);
 
 void beCameraMode_OnDetach(beCameraMode *self) {

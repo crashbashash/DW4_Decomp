@@ -1132,7 +1132,7 @@ ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -1149,7 +1149,7 @@ struct R **igSmartPointer_igShortList_Destruct(struct R **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -1167,7 +1167,7 @@ void **igSmartPointer_igCharList_Destruct(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

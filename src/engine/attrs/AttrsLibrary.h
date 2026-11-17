@@ -110,7 +110,6 @@ extern "C" int g_igVisualContextAttrDefaultManager_vtable[4];
 
 union U { int vt; char b[16]; };
 extern "C" int igVisualContextAttrDefaultManager_GetVTable(void);
-extern "C" int __dl__FPv(...);
 extern "C" void **igSmartPointer_igVisualContext_Destruct(void **arg0, int arg1);
 extern "C" void FUN_001301c0(void);
 extern "C" igMetaObject *igAttrDefaultManager_GetPublishedMetaObject(void);

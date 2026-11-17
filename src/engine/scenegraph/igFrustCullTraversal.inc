@@ -48,7 +48,7 @@ struct R **FUN_0019ff10(struct R **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -65,7 +65,7 @@ struct T_19fde0 **FUN_0019ff90(struct T_19fde0 **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -83,7 +83,7 @@ void **FUN_001a0010(void **arg0, int arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -101,7 +101,7 @@ void **FUN_001a0090(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -115,7 +115,7 @@ void **FUN_001a0110(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return (void **)self;
 }
@@ -132,7 +132,7 @@ void **FUN_001a0190(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -142,7 +142,7 @@ O *FUN_001a0210(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+        if (arg1 > 0) operator delete(arg0);
     }
     return arg0;
 }
@@ -159,7 +159,7 @@ void **FUN_001a0290(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -177,7 +177,7 @@ void **FUN_001a0310(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -191,7 +191,7 @@ ObjectRefWord *FUN_001a0390(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -207,7 +207,7 @@ void **FUN_001a0410(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -221,7 +221,7 @@ ObjectRefWord *FUN_001a0490(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -234,7 +234,7 @@ ObjectRefWord *FUN_001a0590(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -251,7 +251,7 @@ void **FUN_001a0610(void **arg0, int arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -269,7 +269,7 @@ void **FUN_001a0690(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -283,7 +283,7 @@ void **FUN_001a0710(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return (void **)self;
 }
@@ -300,7 +300,7 @@ void **igSmartPointer_igStringObjList_Destruct(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -310,7 +310,7 @@ O *FUN_001a0810(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+        if (arg1 > 0) operator delete(arg0);
     }
     return arg0;
 }
@@ -323,7 +323,7 @@ ObjectRefWord *FUN_001a0890(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -379,7 +379,7 @@ void **FUN_001a1000(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

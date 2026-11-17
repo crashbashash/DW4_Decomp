@@ -3,6 +3,7 @@
 #include "dw4/lua.h"
 #include "dw4/LuaBinding.h"
 
+struct CallbackArray;
 class LuaSemaphoreView;
 namespace Gap { namespace Lua { class igLuaState; } }
 
@@ -12,7 +13,7 @@ extern igMetaObject *g_igLuaState_metaObject;
 igMetaObject *igLuaState_GetMetaObject(void);
 int igLuaState_GetVTable(void);
 void igLuaState_EnsureRegistered(void);
-void *igLuaState_Register(void);
+CallbackArray *igLuaState_Register(void);
 void thunk_igLuaState_GetMetaObject(void);
 void igLuaState_InitFields(void);
 extern LuaErrorHandler g_luaErrorHandler;

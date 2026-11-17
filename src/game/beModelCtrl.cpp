@@ -61,8 +61,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-/* Kept local: igTraversalView.h (S2) declares the matrix-attr pool functions differently from igModelViewMatrixAttr.h. */
-extern "C" igMetaObject *g_igModelViewMatrixAttr_metaObject;
 #define SELECT_ALLOCATOR(var, arg) { int base_ = (int)igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
@@ -404,7 +402,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
             time = ((long long *)times->_data)[0];
             timePool = (igObjectPool *)traversal->_timePool;
             if (timePool->_freeIndex >= timePool->_count) {
-                igObjectPool_Grow(timePool, (void *)&igTimeAttr_CreateInstance);
+                igObjectPool_Grow(timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
             }
             slot = timePool->_freeIndex;
             timePool->_freeIndex = slot + 1;
@@ -423,11 +421,11 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
     } else {
         firstChild = ((void **)((igObjectList *)((beMeterCtrlNode *)data)->_childList)->_data)[0];
         igMatrix44f_SetIdentity(modelView);
-        matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled((igObjectPool *)traversal->_matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+        matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled((igObjectPool *)traversal->_matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
         depth = matrices->_count - 1;
         igMatrix44f_Copy(modelView, (char *)((void **)matrices->_data)[depth] + 12);
         igMatrix44f_GetTranslation((const float *)modelView, (float *)&translation);
-        clock = (igTimeAttr *)TakePooled((igObjectPool *)traversal->_timePool, (void *)&igTimeAttr_CreateInstance);
+        clock = (igTimeAttr *)TakePooled((igObjectPool *)traversal->_timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
         count = ((igObjectList *)meter->_timeList)->_count;
         for (i = 0; i < count; i++) {
             time = ((long long *)((igObjectList *)meter->_timeList)->_data)[i];

@@ -2,6 +2,8 @@
 #define DW4_IGLUAGLUE_H
 #include "dw4/lua.h"
 
+struct CallbackArray;
+
 extern "C" {
 
 extern igMetaObject *g_igLuaGlue_metaObject;
@@ -9,7 +11,7 @@ igMetaObject *igLuaGlue_GetOrCreateMetaObject(void);
 igMetaObject *igLuaGlue_GetMetaObject(void);
 int igLuaGlue_GetVTable(void);
 void igLuaGlue_EnsureRegistered(void);
-void *igLuaGlue_Register(void);
+CallbackArray *igLuaGlue_Register(void);
 void thunk_igLuaGlue_GetMetaObject(void);
 
 }

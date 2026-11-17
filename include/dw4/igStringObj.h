@@ -20,7 +20,9 @@ void igStringObj_SetInt(int self, int value, const char *format);
 void igStringObj_Insert(struct igStringObj *self, char *insert, unsigned int at, unsigned int n);
 int igStringObj_Erase(struct igStringObj *self, unsigned int pos, unsigned int len);
 void igStringObj_ToLower(struct igStringObj *self);
-void igStringObj_StripDirectory(int *self);
+/* Keeps the text from its last dot on, or empties it when a directory separator comes first. */
+void igStringObj_KeepExtension(struct igStringObj *self);
+void igStringObj_StripDirectory(struct igStringObj *self);
 
 #ifdef __cplusplus
 }

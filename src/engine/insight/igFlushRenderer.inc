@@ -561,7 +561,7 @@ void *FUN_00234b90(struct App *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -600,7 +600,7 @@ static inline void releaseSharedOptions(void) {
                         }
                     }
                 }
-                __dl__FPv(f);
+                operator delete(f);
             }
             g_sharedViewerOptions = 0;
         }

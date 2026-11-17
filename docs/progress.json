@@ -235,20 +235,20 @@
     "value": 0
    },
    "decl.header_conflicts": {
-    "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
-    "value": 585
+    "reason": null,
+    "value": 563
    },
    "decl.local_externs": {
-    "reason": "sfmpv_ComplementPts calls memcmp; src/cri/sfmpv.c builds with EE GCC, whose profile has no libc include path, so it is declared locally beside the file's memcpy and memset",
-    "value": 2869
+    "reason": null,
+    "value": 2820
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 1854
+    "value": 1828
    },
    "decl.varargs": {
     "reason": null,
-    "value": 896
+    "value": 882
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -362,10 +362,10 @@
    "code_only.other.functions": 0,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "decl.header_conflicts": 585,
-   "decl.local_externs": 2869,
-   "decl.type_conflicts": 1854,
-   "decl.varargs": 896,
+   "decl.header_conflicts": 563,
+   "decl.local_externs": 2820,
+   "decl.type_conflicts": 1828,
+   "decl.varargs": 882,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
    "fun_dat_refs": 1501,
@@ -492,15 +492,15 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1690492,
+  "bytes": 1696668,
   "failing": {
    "addresses": {
     "bytes": 745792,
     "functions": 4309
    },
    "declarations": {
-    "bytes": 1066024,
-    "functions": 3333
+    "bytes": 1035444,
+    "functions": 3114
    },
    "fields": {
     "bytes": 440708,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 11663,
+  "functions": 11693,
   "matched_functions": 20407
  },
  "regions": [
@@ -668,9 +668,9 @@
   "error": null,
   "offset_casts": 3994,
   "pct": 45.64,
-  "recovered": 32579,
+  "recovered": 32581,
   "synthetic": 5812,
-  "total": 71389,
+  "total": 71391,
   "typeable": 262,
   "typeable_pct": 0.37
  }

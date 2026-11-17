@@ -141,7 +141,7 @@ StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage) {
             int *header=(int *)(value-8);
             if(--header[1]==0) StringChunk_ReleaseHeader((StringChunk *)((void *)header[0]), (StringTokenHeader *)header);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }

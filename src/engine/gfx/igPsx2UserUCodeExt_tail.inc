@@ -70,7 +70,7 @@ ObjectRefWord *FUN_00152c10(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -86,7 +86,7 @@ void **FUN_00152c90(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

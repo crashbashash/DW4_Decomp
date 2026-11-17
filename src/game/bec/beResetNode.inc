@@ -36,7 +36,7 @@ CallbackArray *beResetNode_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beResetNode_metaObject,
-        (igMetaObjectRegisterFunction)igGroup_Register,
+        igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beResetNode_GetMetaObjectFunction,
         "beResetNode",

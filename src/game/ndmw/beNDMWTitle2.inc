@@ -40,7 +40,7 @@ int beNDMWTitle2_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWTitle2_vtable[0];
     igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
-    igSmartPointer_bePadManager_Destruct(&obj._padManager, -1);
+    igSmartPointer_bePadManager_Destruct((igSmartPointer<igObject> *)&obj._padManager, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);
     return vtable;
 }

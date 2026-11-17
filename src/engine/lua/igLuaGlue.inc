@@ -26,7 +26,7 @@ void igLuaGlue_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLuaGlue_Register);
 }
 
-void *igLuaGlue_Register(void) {
+CallbackArray *igLuaGlue_Register(void) {
     LuaLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

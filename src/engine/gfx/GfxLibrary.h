@@ -288,7 +288,6 @@ struct Obj_14a910 {
 };
 extern "C" Obj_14a910 *FUN_0014a910(Obj_14a910 *arg0, short arg1);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
-extern "C" void __dl__FPv(...);
 extern "C" void **igSmartPointer_igObjectList_Destruct(void **arg0, short arg1);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;

@@ -59,7 +59,7 @@ void **igSmartPointer_igFile_Destruct(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

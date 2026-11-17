@@ -158,22 +158,22 @@ int igViewerSceneInfoManager_GetVTable(void) {
     FUN_00458570(&u.b[124], -1);
     FUN_00458570(&u.b[120], -1);
     FUN_00458570(&u.b[116], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[112], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[108], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[104], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[100], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[96], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[112], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[108], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[104], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[100], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[96], -1);
     igSmartPointer_igGuiComponent_Destruct(&u.b[92], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[88], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[84], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[80], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[76], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[72], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[88], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[84], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[80], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[76], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[72], -1);
     igSmartPointer_igGuiComponent_Destruct(&u.b[68], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[64], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[64], -1);
     igSmartPointer_igGuiComponent_Destruct(&u.b[60], -1);
     igSmartPointer_igGuiComponent_Destruct(&u.b[56], -1);
-    GameMain_igSmartPointer_igObject_Destruct(&u.b[52], -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[52], -1);
     FUN_004583f0(&u.b[48], -1);
     FUN_00459ae0((O *)&u.b[44], -1);
     FUN_00459a60((void **)&u.b[36], -1);
@@ -198,7 +198,7 @@ struct R **FUN_004597e0(struct R **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -212,7 +212,7 @@ ObjectRefWord *FUN_00459860(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -229,7 +229,7 @@ void **FUN_004598e0(void **arg0, int arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -247,7 +247,7 @@ void **FUN_00459960(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -261,7 +261,7 @@ void **FUN_004599e0(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return (void **)self;
 }
@@ -278,7 +278,7 @@ void **FUN_00459a60(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -288,7 +288,7 @@ O *FUN_00459ae0(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+        if (arg1 > 0) operator delete(arg0);
     }
     return arg0;
 }
@@ -301,7 +301,7 @@ ObjectRefWord *FUN_00459b60(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -318,7 +318,7 @@ void **FUN_00459be0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -332,7 +332,7 @@ ObjectRefWord *FUN_00459c60(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }
@@ -348,7 +348,7 @@ void **FUN_00459ce0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

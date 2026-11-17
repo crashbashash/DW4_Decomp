@@ -14,16 +14,10 @@
   "code_only.other.functions": 0,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "decl.header_conflicts": {
-   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
-   "value": 585
-  },
-  "decl.local_externs": {
-   "reason": "sfmpv_ComplementPts calls memcmp; src/cri/sfmpv.c builds with EE GCC, whose profile has no libc include path, so it is declared locally beside the file's memcpy and memset",
-   "value": 2869
-  },
-  "decl.type_conflicts": 1854,
-  "decl.varargs": 896,
+  "decl.header_conflicts": 563,
+  "decl.local_externs": 2820,
+  "decl.type_conflicts": 1828,
+  "decl.varargs": 882,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
   "fun_dat_refs": 1501,

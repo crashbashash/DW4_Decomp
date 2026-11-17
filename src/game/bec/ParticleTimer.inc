@@ -47,7 +47,7 @@ CallbackArray *ParticleTimer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_ParticleTimer_metaObject,
-        (igMetaObjectRegisterFunction)igGeometry_Register,
+        igGeometry_Register,
         igGeometry_GetPublishedMetaObject,
         ParticleTimer_GetMetaObjectFunction,
         "ParticleTimer",

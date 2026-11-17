@@ -54,7 +54,7 @@ void **FUN_001a62d0(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;
@@ -68,7 +68,7 @@ void **FUN_001a6350(struct Ref **self, short flag) {
             p->u.w = p->u.w - 1;
             if (p->u.b.cnt == 0) igObject_Destroy(p);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return (void **)self;
 }
@@ -85,7 +85,7 @@ void **FUN_001a63d0(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

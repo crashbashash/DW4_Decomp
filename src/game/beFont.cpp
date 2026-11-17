@@ -15,6 +15,7 @@
 #include "dw4/igDataLists.h"
 #include "dw4/igGeometryAttr.h"
 #include "dw4/igGroup.h"
+#include "dw4/igMatrix44f.h"
 #include "dw4/igMemory.h"
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igObject.h"
@@ -121,7 +122,6 @@ void ObjectList_AppendRetainedList(void *, void *);
 int igStringObj_Clear(...);
 int igVertexArrayLock_Init(igVertexArrayLock *);
 void Color4f_Unpack(void *, int, int);
-void igMatrix44f_SetTranslation(void *, void *);
 
 SjisUnicodeTable g_sjisToUnicodeTable = {{
     {0x0020, 0x0020}, {0x3000, 0x8140}, {0x0030, 0x0030}, {0x0031, 0x0031},
@@ -578,7 +578,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             if (index != -1) {
                 do {
                     igNodeView *attrSet = (igNodeView *)((beFontInfoData **)((igObjectList *)info->_dataList)->_data)[index]->_attrSet;
-                    igMatrix44f_SetTranslation(((igTransform *)nodeAt(attrSet->_childList, 0))->_m, &position);
+                    igMatrix44f_SetTranslation(((igTransform *)nodeAt(attrSet->_childList, 0))->_m, &position.x);
                     index = beFont_FindNextLayoutEntry(self, ram);
                 } while (index != -1);
             }

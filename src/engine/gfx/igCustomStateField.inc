@@ -68,7 +68,7 @@ void **igSmartPointer_igMetaField_Destruct(void **arg0, int arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

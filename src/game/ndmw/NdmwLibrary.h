@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/beLoadIntf2ComMdlData.h"
 #include "dw4/beNDMWAfsSetup.h"
@@ -335,8 +336,6 @@ extern "C" void beNDMWTitle2CtrlData_GetMetaObjectFunction(void);
 extern "C" void beNDMWTitle2CtrlData_InitFields(void);
 extern "C" igMetaObject *beNDMWTitle2_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWTitle2_GetMetaObject(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
-extern "C" int igSmartPointer_bePadManager_Destruct(...);
 extern "C" int beNDMWTitle2_GetVTable(void);
 extern "C" void beNDMWTitle2_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWTitle2_Register(void);
@@ -346,7 +345,7 @@ extern "C" void *beNDMWShopTitle03_GetMetaObject(void);
 extern "C" int beNDMWShopTitle03_GetVTable(void);
 extern "C" igSmartPointer<igObject> *beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWWindowList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
+/* kept local: their engine definers still take view types, so igSmartPointerDestruct.h does not declare them yet. */
 extern "C" int igSmartPointer_igStringRefList_Destruct(...);
 extern "C" int igSmartPointer_igIntList_Destruct(...);
 extern "C" beNDMWWindowTitle *beNDMWWindowTitle_Destroy(beNDMWWindowTitle *self, short flags);
@@ -434,7 +433,7 @@ extern "C" void beNDMWShopSelect01_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopSelect01_Register(void);
 extern "C" void beNDMWShopSelect01_GetMetaObjectFunction(void);
 extern "C" void *beNDMWShopSelect00_GetMetaObject(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
+/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
 extern "C" int igStringRef_Destruct(...);
 extern "C" int beNDMWShopSelect00_GetVTable(void);
 extern "C" void beNDMWShopSelect00_EnsureRegistered(void);
@@ -503,7 +502,7 @@ extern "C" CallbackArray *beNDMWShopCtrlXdataChip_Register(void);
 extern "C" void beNDMWShopCtrlXdataChip_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlXdataChip_InitFields(void);
 extern "C" void *beNDMWShopCtrlSales_GetMetaObject(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
+/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
 extern "C" int igSmartPointer_igBoolList_Destruct(...);
 extern "C" int beNDMWShopCtrlSales_GetVTable(void);
 extern "C" void beNDMWShopCtrlSales_EnsureRegistered(void);
@@ -532,7 +531,7 @@ extern "C" void beNDMWShopCtrlEditBit_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopCtrlEditBit_Register(void);
 extern "C" void beNDMWShopCtrlEditBit_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlEditBit_InitFields(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
+/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
 extern "C" int igSmartPointer_igIntListList_Destruct(int *, int);
 extern "C" int beNDMWShopCtrlDigilabo_GetVTable(void);
 extern "C" void beNDMWShopCtrlDigilabo_EnsureRegistered(void);
@@ -781,7 +780,7 @@ extern "C" void beNDMWPanelObjectStat_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWPanelObject_GetPublishedMetaObject(void);
 extern "C" void beNDMWPanelObjectStat_InitFields(void);
 extern "C" igMetaObject *beNDMWPanelObjectItem_GetOrCreateMetaObject(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
+/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
 extern "C" int igSmartPointer_igObjectList_Destruct(...);
 extern "C" int beNDMWPanelObjectItem_GetVTable(void);
 extern "C" void beNDMWPanelObjectItem_EnsureRegistered(void);
@@ -830,19 +829,10 @@ extern "C" igMetaObject *beNDMWMdlPEBase_GetPublishedMetaObject(void);
 extern "C" void beNDMWMdlPlayer_InitFields(void);
 extern "C" igMetaObject *beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject(void);
 extern "C" int beNDMWMdlPlayerInfoWork_GetVTable(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
+/* kept local: their engine definers still take view types, so igSmartPointerDestruct.h does not declare them yet. */
 extern "C" void igSmartPointer_igFloatList_Destruct(void *, int);
 extern "C" void igSmartPointer_igAABox_Destruct(void *, int);
 extern "C" void igSmartPointer_igGroup_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlNode2_Destruct(void *, int);
-extern "C" void igSmartPointer_beDataObjInt_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlData_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlInfoAI_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlInfoDataTrc_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlMoveObjectList_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlInfoRideOn_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlInfoHitBody_Destruct(void *, int);
-extern "C" void igSmartPointer_beModelCtrlSubCom_Destruct(void *, int);
 extern "C" void beNDMWMdlPlayerInfoWork_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWMdlPlayerInfoWork_Register(void);
 extern "C" void beNDMWMdlPlayerInfoWork_GetMetaObject(void);
@@ -1215,8 +1205,6 @@ extern "C" CallbackArray *beNDMWShinkaObject_Register(void);
 extern "C" void beNDMWShinkaObject_GetMetaObject(void);
 extern "C" void beNDMWShinkaObject_InitFields(void);
 extern "C" igMetaObject *beNDMWGameRam_GetOrCreateMetaObject(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
-extern "C" int igSmartPointer_beDataBase_Destruct(int *, int);
 extern "C" int beNDMWGameRam_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDataObjListList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" void beNDMWGameRam_EnsureRegistered(void);
@@ -1263,9 +1251,8 @@ extern "C" igMetaObject *igNamedObject_GetOrCreateMetaObject(void);
 extern "C" void beNDMWAfsStageLoad_InitFields(void);
 extern "C" igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWAfsSetup_ResolveMetaObject(void);
-/* kept local: the smart-pointer destructors have no include/dw4 home yet (igSmartPointerDestruct.h, S2). */
+/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
 extern "C" int igSmartPointer_igInfoList_Destruct(void *, int);
-extern "C" int GameMain_igSmartPointer_igObject_Destruct(void *, int);
 extern "C" int beNDMWAfsSetup_GetVTable(void);
 extern "C" void beNDMWAfsSetup_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWAfsSetup_Register(void);

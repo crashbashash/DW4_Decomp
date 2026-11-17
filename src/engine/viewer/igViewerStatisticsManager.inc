@@ -24,8 +24,8 @@ int igViewerStatisticsManager_GetVTable(void) {
     igSmartPointer_igMetaFieldList_Destruct(&obj.w10, -1);
     igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
     igSmartPointer_igStringObj_Destruct(&obj.w7, -1);
-    GameMain_igSmartPointer_igObject_Destruct(&obj.w6, -1);
-    GameMain_igSmartPointer_igObject_Destruct(&obj.w5, -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
+    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     FUN_004583f0(&obj.w4, -1);
     igSmartPointer_igVisualContext_Destruct(&obj.w3, -1);
     FUN_00458860((ObjectRefWord *)&obj.w2, -1);
@@ -41,7 +41,7 @@ ObjectRefWord *FUN_00458860(ObjectRefWord *self,int delete_storage) {
             if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
                 igObject_Destroy(object);
         }
-        if((short)delete_storage>0) __dl__FPv(self);
+        if((short)delete_storage>0) operator delete(self);
     }
     return self;
 }

@@ -55,7 +55,7 @@ CallbackArray *beHitLandModelTraversal_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beHitLandModelTraversal_metaObject,
-        (igMetaObjectRegisterFunction)igIntersectTraversal_Register,
+        igIntersectTraversal_Register,
         igIntersectTraversal_GetPublishedMetaObject,
         beHitLandModelTraversal_GetMetaObjectFunction,
         "beHitLandModelTraversal",

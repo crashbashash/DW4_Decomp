@@ -42,8 +42,6 @@ extern "C" {
 int igMatrix44f_Multiply(void *result, void *left, void *right);
 int igMatrix44f_Copy(void *to, void *from);
 extern int g_igCommonTraversal_travProcs[4];
-/* kept local: igTraversalView.h (S2) declares igModelViewMatrixAttr_CreateInstance differently from igModelViewMatrixAttr.h */
-extern igMetaObject *g_igModelViewMatrixAttr_metaObject;
 
 /* object system */
 int ObjectList_RemoveFirstRetained(...);
@@ -185,10 +183,10 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
         igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
     matrixAttr->setMatrix(modelView);
     timePool = (igObjectPool *)traversal->_timePool;
-    timeAttr = (igTimeAttr *)TakePooled(timePool, (void *)&igTimeAttr_CreateInstance);
+    timeAttr = (igTimeAttr *)TakePooled(timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
     timeAttr->_time = time;
     ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
     matrixAttrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
@@ -252,7 +250,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
         igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
     matrixAttr->setMatrix(modelView);
     attrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
     unitID = &((igAttr *)matrixAttr)->_cachedUnitID;
@@ -591,8 +589,8 @@ long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue) {
         name = NameOf(((igNamedObject **)names->_data)[cue->_fnameIdx]->_name);
         igSmartPointer<igStringObj> bankName((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
         igStringObj_Set(bankName.p, name);
-        igStringObj_StripDirectory((int *)bankName.p);
-        igStringObj_ToLower((igStringObj *)bankName.p);
+        igStringObj_StripDirectory(bankName.p);
+        igStringObj_ToLower(bankName.p);
         found = -1;
         for (i = 0; i < Banks(self)->_count; i++) {
             bank = BankAt(Banks(self), i);

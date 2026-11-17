@@ -118,7 +118,6 @@ extern "C" CallbackArray *igMovieCodec_Register(void);
 extern "C" void igMovieCodec_GetMetaObjectFunction(void);
 extern "C" int igSmartPointer_igVisualContext_Destruct(int *, int);
 extern "C" int igCriMovieCodec_GetVTable(void);
-extern "C" int __dl__FPv(...);
 extern "C" void igCriMovieCodec_EnsureRegistered(void);
 extern "C" CallbackArray *igCriMovieCodec_Register(void);
 extern "C" void igCriMovieCodec_GetMetaObjectFunction(void);
@@ -1100,7 +1099,7 @@ igSmartPointer<igObject> *igSmartPointer_igAudioContext_Destruct(igSmartPointer<
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return self;
 }
@@ -1519,7 +1518,7 @@ igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartP
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return self;
 }
@@ -1532,7 +1531,7 @@ igSmartPointer<igObject> *igSmartPointer_igMovieCodec_Destruct(igSmartPointer<ig
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return self;
 }
@@ -1769,7 +1768,7 @@ igSmartPointer<igObject> *igSmartPointer_igMovieManager_Destruct(igSmartPointer<
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return self;
 }
@@ -1892,7 +1891,7 @@ igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return self;
 }
@@ -1905,7 +1904,7 @@ igSmartPointer<igObject> *igSmartPointer_igMovieCodecList_Destruct(igSmartPointe
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return self;
 }
@@ -1918,7 +1917,7 @@ igSmartPointer<igObject> *igSmartPointer_igMovieRenderer_Destruct(igSmartPointer
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy(object);
         }
-        if (flag > 0) __dl__FPv(self);
+        if (flag > 0) operator delete(self);
     }
     return self;
 }

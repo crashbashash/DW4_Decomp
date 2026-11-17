@@ -652,7 +652,7 @@
   "igStencilFunctionAttr": 18,
   "igStringArrayMetaField": 9,
   "igStringMetaField": 130,
-  "igStringObj": 129,
+  "igStringObj": 131,
   "igStringObjList": 7,
   "igStringRefList": 92,
   "igStringTable": 47,
@@ -725,29 +725,29 @@
   "cri": {
    "files": 110,
    "offset_casts": 11,
-   "other_members": 7773,
+   "other_members": 7867,
    "recovered": 0,
    "recovered_pct": 0.0,
-   "synthetic": 367,
-   "total": 8151
+   "synthetic": 369,
+   "total": 8247
   },
   "engine": {
    "files": 49,
    "offset_casts": 3260,
    "other_members": 12288,
-   "recovered": 12372,
+   "recovered": 12374,
    "recovered_pct": 37.29,
    "synthetic": 5261,
-   "total": 33181
+   "total": 33183
   },
   "game": {
    "files": 85,
    "offset_casts": 686,
-   "other_members": 2313,
+   "other_members": 2314,
    "recovered": 19689,
    "recovered_pct": 86.14,
    "synthetic": 169,
-   "total": 22857
+   "total": 22858
   },
   "libgcc": {
    "files": 7,
@@ -824,8 +824,8 @@
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 3994,
- "recovered": 32579,
- "synthetic": 5810,
- "total": 71267,
+ "recovered": 32581,
+ "synthetic": 5812,
+ "total": 71366,
  "typeable": 262
 }

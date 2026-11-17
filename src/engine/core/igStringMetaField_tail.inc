@@ -585,16 +585,16 @@ void igStringObj_RemovePathFilename(igStringObj *p) {
     }
 }
 
-void igStringObj_StripDirectory(int *self) {
+void igStringObj_StripDirectory(igStringObj *self) {
     char *p;
     unsigned int start;
-    start = self[2];
+    start = self->_buffer;
     if (start != 0) {
-        p = (char *)(start + self[3]);
+        p = (char *)(start + self->_length);
         while (--p, start < (unsigned int)p) {
             char c = *p;
             if (c == 0x5C || c == 0x2F) {
-                igStringObj_Set((igStringObj *)self, p + 1);
+                igStringObj_Set(self, p + 1);
                 return;
             }
         }

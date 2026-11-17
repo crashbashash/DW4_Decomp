@@ -291,7 +291,6 @@ extern "C" int g_igTransientShaderData_vtable[4];
 extern "C" int FUN_0013a800(...);
 extern "C" int g_igShaderData_vtable[4];
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
-extern "C" int __dl__FPv(...);
 struct T { int word0; int references; };
 struct Obj_194930 {
     int *vt; char p4[4]; T *m8; T *m12; T *m16; T *m20;

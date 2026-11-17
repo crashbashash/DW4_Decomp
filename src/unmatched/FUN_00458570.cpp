@@ -1,6 +1,5 @@
 extern "C" {
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
-int __dl__FPv(void **);
 #include "dw4/igObject.h"
 
 void **FUN_00458570(void **arg0, short arg1) {
@@ -15,7 +14,7 @@ void **FUN_00458570(void **arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

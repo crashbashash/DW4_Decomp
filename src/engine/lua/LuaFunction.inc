@@ -313,7 +313,8 @@ void LuaClass_BindFunctions(igLuaGlue::Class *owner, lua_CFunction method, lua_C
     for (i = 0; i < count; i++) {
         code = *codes++;
         argCount = (code >> 8) & 31;
-        bound = new (Memory_AllocateBufferDirect(argCount * sizeof(LuaType) + sizeof(LuaFunction), g_luaGluePool))
+        bound = new (Memory_AllocateBufferDirect(argCount * sizeof(LuaType) + sizeof(LuaFunction),
+                                                 (igMemoryPoolView *)g_luaGluePool))
             LuaFunction(((code >> 30) & 1) ? method : function, code & 0xff, names[(code >> 13) & 0x1ffff],
                         LuaType(names, *codes++), owner, ((code >> 31) & 1) != 0, argCount);
         if (byId != 0 && bound->isMethod) byId[bound->id] = bound;

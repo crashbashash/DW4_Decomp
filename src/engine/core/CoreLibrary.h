@@ -4279,7 +4279,6 @@ extern "C" int igStringObj_Clear(igStringObj *arg0);
 /* An igStringObj's text: its buffer, or the shared empty text when it has none. */
 static inline char *igStringObj_Text(igStringObj *s) { return (char *)s->_buffer == 0 ? g_stringObjEmptyText : (char *)s->_buffer; }
 extern "C" bool igStringObj_ParseBool(igStringObj *o, char *out);
-extern "C" void igStringObj_KeepExtension(igStringObj *o);
 extern "C" void igStringObj_RemovePathFilename(igStringObj *p);
 extern "C" void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *list);
 extern "C" void igStringObj_Trim(igStringObj *self);

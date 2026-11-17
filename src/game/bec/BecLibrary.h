@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igTransformDispatchView.h"
 #include "dw4/ClassRegistration.h"
@@ -219,6 +220,8 @@
 #include "dw4/igIntersectTraversal.h"
 #include "dw4/igLightSet.h"
 #include "dw4/igLightingStateAttr.h"
+#include "dw4/igLuaGlue.h"
+#include "dw4/igLuaState.h"
 #include "dw4/igMatrix44f.h"
 #include "dw4/igMemory.h"
 #include "dw4/igMemoryPoolContext.h"
@@ -248,12 +251,6 @@
 #include "dw4/igViewerParameters.h"
 #include "dw4/igViewerSceneInfoManager.h"
 #include <string.h>
-/* Kept local: igLuaGlue.h and igLuaState.h include lua.h, whose igObject * pool copy of
- * Memory_FreeBufferWithAllocator conflicts with igMemory.h. */
-extern "C" void igLuaGlue_EnsureRegistered(void);
-extern "C" igMetaObject *igLuaGlue_GetOrCreateMetaObject(void);
-extern "C" void *igLuaState_Register(void);
-extern "C" igMetaObject *g_igLuaState_metaObject;
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #define RELEASE_OBJ(o) { \
     if (o) { \
@@ -905,7 +902,6 @@ extern "C" void beParticleCtrl2InfoRam_InitFields(void);
 extern "C" igMetaObject *beParticleCtrl2InfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beParticleCtrl2InfoWork_GetMetaObject(void);
 extern "C" int beParticleCtrl2InfoWork_GetVTable(void);
-extern "C" void **igSmartPointer_beModelCtrlNode2_Destruct(void **arg0, short arg1);
 extern "C" void beParticleCtrl2InfoWork_EnsureRegistered(void);
 extern "C" CallbackArray *beParticleCtrl2InfoWork_Register(void);
 extern "C" void beParticleCtrl2InfoWork_GetMetaObjectFunction(void);
@@ -1072,10 +1068,6 @@ extern "C" void beModelCtrlNode2_InitFields(void);
 extern "C" void beModelCtrlNode2_StaticInitCallback(void);
 extern "C" igMetaObject *beModelCtrlInfoWork_GetOrCreateMetaObject(void);
 extern "C" void *beModelCtrlInfoWork_GetMetaObject(void);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Destruct(igSmartPointer<igObject> *self, long long delete_storage);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoRideOn_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Construct(igSmartPointer<igObject> *self);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Construct(igSmartPointer<igObject> *self);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igGroup_Construct(igSmartPointer<igObject> *self);
@@ -1886,7 +1878,6 @@ extern "C" int igShortList_GetOrCreateMetaObject(void);
 extern "C" int igCharList_GetOrCreateMetaObject(void);
 extern "C" void beDataBase_InitFields(void);
 extern "C" int beDBManagerInfo_GetVTable(void);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beDataBase_Destruct(igSmartPointer<igObject> *self, long long delete_storage);
 extern "C" void beDBManagerInfo_EnsureRegistered(void);
 extern "C" CallbackArray *beDBManagerInfo_Register(void);
 extern "C" void beDBManagerInfo_GetMetaObjectFunction(void);
@@ -2556,7 +2547,6 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_beMovie_Destruct(igSmartPoin
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDBManager_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beSaveUtil_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMessenger_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igSmartPointer<igObject> *igSmartPointer_bePadManager_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beDemoManager_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beMemory_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" int g_igInsightPlugin_vtable[4];
@@ -3018,10 +3008,6 @@ struct ModelCtrlInfoWorkView : igObjectView, ModelCtrlInfoWorkVtable {
     ModelCtrlInfoWorkView() : ModelCtrlInfoWorkVtable(&vtable) { }
     ~ModelCtrlInfoWorkView() { vtable = g_beModelCtrlInfoWork_vtable; }
 };
-extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoDataTrc_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Destruct(igSmartPointer<igObject> *self, int delete_storage);
 extern "C" int g_beModelCtrlInfoRideOn_vtable[4];
 extern "C" int g_beModelCtrlInfoRideOn4_vtable[4];
 struct ModelNameField {

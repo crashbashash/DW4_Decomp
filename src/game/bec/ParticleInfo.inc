@@ -120,7 +120,7 @@ CallbackArray *ParticleInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_ParticleInfo_metaObject,
-        (igMetaObjectRegisterFunction)igSceneInfo_Register,
+        igSceneInfo_Register,
         igSceneInfo_GetPublishedMetaObject,
         ParticleInfo_GetMetaObjectFunction,
         "ParticleInfo",

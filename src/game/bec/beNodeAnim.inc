@@ -44,7 +44,7 @@ CallbackArray *beNodeAnim_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNodeAnim_metaObject,
-        (igMetaObjectRegisterFunction)igGroup_Register,
+        igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beNodeAnim_GetMetaObject,
         "beNodeAnim",

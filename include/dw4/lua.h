@@ -6,6 +6,7 @@
 #ifndef DW4_LUA_H
 #define DW4_LUA_H
 
+#include "dw4/igMemory.h"
 #include "dw4/reflected.h"
 
 /* Stock Lua 4.0.1's API (lua.h, lualib.h), compiled as C++ like the rest of Lua. */
@@ -232,9 +233,8 @@ struct igLuaGlue::Class : Hashed<igLuaGlue::Class, 7> {
 }
 }
 
-/* The pool bound classes are allocated from. */
+/* The pool bound classes are allocated from: a memory pool, held through its object header. */
 extern "C" igObject *g_luaGluePool;
-extern "C" void Memory_FreeBufferWithAllocator(void *buffer, igObject *pool);
 extern "C" void LuaClassTable_Remove(LuaHashLink *link);
 
 /* A class leaves the class table when destroyed, and goes back to the glue's pool. */
@@ -244,7 +244,7 @@ inline Hashed<igLuaGlue::Class, 7>::~Hashed() {
 }
 
 inline void igLuaGlue::Class::operator delete(void *memory) {
-    Memory_FreeBufferWithAllocator(memory, g_luaGluePool);
+    Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
 }
 
 /* A class a start-up hook creates when the glue starts: static instances link themselves in. */

@@ -52,7 +52,7 @@ CallbackArray *ParticleArray_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_ParticleArray_metaObject,
-        (igMetaObjectRegisterFunction)igParticleArray_Register,
+        igParticleArray_Register,
         igParticleArray_GetPublishedMetaObject,
         ParticleArray_GetMetaObjectFunction,
         "ParticleArray",

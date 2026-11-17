@@ -64,21 +64,21 @@ beNDMWMdlPEBaseInfoWork *beNDMWMdlPEBaseInfoWork_Destroy(beNDMWMdlPEBaseInfoWork
         if (self) {
             *(int **)&self->_vtable = g_beModelCtrlInfoWork_vtable;
             igSmartPointer_igAABox_Destruct(&self->_baseAABox, -1);
-            igSmartPointer_beModelCtrlSubCom_Destruct(&self->_subCommand, -1);
+            igSmartPointer_beModelCtrlSubCom_Destruct((igSmartPointer<igObject> *)&self->_subCommand, -1);
             igStringRef_Destruct(&self->_hitParentName, -1);
-            igSmartPointer_beModelCtrlInfoHitBody_Destruct(&self->_hitBody, -1);
+            igSmartPointer_beModelCtrlInfoHitBody_Destruct((igSmartPointer<igObject> *)&self->_hitBody, -1);
             igSmartPointer_igGroup_Destruct(&self->_debugHitBoxNode, -1);
-            igSmartPointer_beModelCtrlInfoRideOn_Destruct(&self->_rideOnData, -1);
-            igSmartPointer_beModelCtrlMoveObjectList_Destruct(&self->_moveObjectList, -1);
+            igSmartPointer_beModelCtrlInfoRideOn_Destruct((igSmartPointer<igObject> *)&self->_rideOnData, -1);
+            igSmartPointer_beModelCtrlMoveObjectList_Destruct((igSmartPointer<igObject> *)&self->_moveObjectList, -1);
             igStringRef_Destruct(&self->_posLockBoneName, -1);
             igStringRef_Destruct(&self->_posLockModelName, -1);
-            igSmartPointer_beModelCtrlInfoDataTrc_Destruct(&self->_posLockTrc, -1);
-            igSmartPointer_beModelCtrlNode2_Destruct(&self->_posLockNode, -1);
+            igSmartPointer_beModelCtrlInfoDataTrc_Destruct((igSmartPointer<igObject> *)&self->_posLockTrc, -1);
+            igSmartPointer_beModelCtrlNode2_Destruct((igSmartPointer<igObject> *)&self->_posLockNode, -1);
             igStringRef_Destruct(&self->_keyEventName, -1);
             igStringRef_Destruct(&self->_targetSpc1, -1);
             igStringRef_Destruct(&self->_targetKind, -1);
             igStringRef_Destruct(&self->_targetMode, -1);
-            igSmartPointer_beModelCtrlInfoAI_Destruct(&self->_aI, -1);
+            igSmartPointer_beModelCtrlInfoAI_Destruct((igSmartPointer<igObject> *)&self->_aI, -1);
             igStringRef_Destruct(&self->_wCheckName, -1);
             igSmartPointer_igFloatList_Destruct(&self->_pdMoveDataList, -1);
             igStringRef_Destruct(&self->_luaFHit, -1);
@@ -87,10 +87,10 @@ beNDMWMdlPEBaseInfoWork *beNDMWMdlPEBaseInfoWork_Destroy(beNDMWMdlPEBaseInfoWork
             igSmartPointer_igIntList_Destruct(&self->_labelOffsetList, -1);
             igSmartPointer_igStringRefList_Destruct(&self->_labelNameList, -1);
             igSmartPointer_igStringRefList_Destruct(&self->_labelSeqList, -1);
-            igSmartPointer_beModelCtrlData_Destruct(&self->_comData, -1);
+            igSmartPointer_beModelCtrlData_Destruct((igSmartPointer<igObject> *)&self->_comData, -1);
             igStringRef_Destruct(&self->_seqCodeName, -1);
-            igSmartPointer_beDataObjInt_Destruct(&self->_hp, -1);
-            igSmartPointer_beDataObjInt_Destruct(&self->_mHp, -1);
+            igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&self->_hp, -1);
+            igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&self->_mHp, -1);
         }
         if (flags > 0) {
             Memory_FreeBufferAliasC(self);

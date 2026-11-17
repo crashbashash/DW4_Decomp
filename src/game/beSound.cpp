@@ -15,6 +15,7 @@
 #include "dw4/igInsightCore.h"
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igObject.h"
+#include "dw4/igStringObj.h"
 #include <string.h>
 #pragma push
 #pragma readonly_strings on
@@ -49,16 +50,6 @@ enum CriDataType { CRI_DATA_ADX = 0, CRI_DATA_SFP = 1 };
 #define PLAY_RETRY_DELAY 0xB
 
 extern "C" {
-/* kept local: igStringObj.h types Set's object and text as int, and the int conversions move
- * OnMessage's spilled reload (3784 vs 3792 B); the home is an open S1 retype */
-void igStringObj_Set(igStringObj *string, const char *text);
-void igStringObj_ToLower(igStringObj *string);
-void igStringObj_KeepExtension(igStringObj *string);
-void igStringObj_StripDirectory(igStringObj *string);
-int igStringObj_Erase(igStringObj *string, unsigned int position, unsigned int length);
-
-
-
 void beSound_Prepare(beSound *self);
 void beSound_OnAddRam(beSound *self, beBaseInfoRam *ram);
 igMetaObject *beSound_GetInfoMeta(void);
@@ -67,7 +58,6 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
 int beSound_FindData(beSound *self, beBaseInfoRam *ram, const char *name);
 igMetaObject *beSound_GetMeta(void);
 
-extern char *g_stringObjEmptyText[];
 extern char emptyString[];
 }
 
@@ -82,7 +72,7 @@ static inline float Abs(float value) {
 /* The text of a string object; an empty one has no buffer. */
 static inline char *TextOf(igStringObj *string) {
     char *text = (char *)string->_buffer;
-    if (text == 0) return g_stringObjEmptyText[0];
+    if (text == 0) return g_stringObjEmptyText;
     return text;
 }
 

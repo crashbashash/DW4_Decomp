@@ -26,13 +26,9 @@ typedef void (*TraversalFunction)(void);
 
 extern "C" {
 int igMatrix44f_Multiply(...);
-/* kept local: igTraversalView.h (S2) declares MarkStackChanged and the pool functions differently from igAttrStackManager.h and igModelViewMatrixAttr.h */
-void igAttrStackManager_PushOverrideAttr(struct igAttrStackManager *manager, struct igAttr *attr);
-void igAttrStackManager_PopOverrideAttr(struct igAttrStackManager *manager, struct igAttr *attr);
 int thunk_igAABox_Transform(...);
 igAABox *igAABox_CreateInstance(int);
 
-extern igMetaObject *g_igModelViewMatrixAttr_metaObject;
 extern int g_igCommonTraversal_travProcs[4];
 extern char emptyString[];
 /* Debug draw colour per bullet mode (RGBA), filled on first use. */
@@ -136,9 +132,9 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
         igMatrix44f_SetIdentity(identity);
         igMatrix44f_Multiply(m, node->_m, identity);
     }
-    matAttr = (igModelViewMatrixAttr *)TakePooled((igObjectPool *)trav->_matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    matAttr = (igModelViewMatrixAttr *)TakePooled((igObjectPool *)trav->_matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
     ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
-    timeAttr = (igTimeAttr *)TakePooled((igObjectPool *)trav->_timePool, (void *)&igTimeAttr_CreateInstance);
+    timeAttr = (igTimeAttr *)TakePooled((igObjectPool *)trav->_timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
     timeAttr->_time = time;
     ((igCommonTraversalDispatchView *)trav)->pushTime(time);
 

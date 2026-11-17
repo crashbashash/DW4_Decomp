@@ -42,7 +42,7 @@ void igLuaState_EnsureRegistered(void)
 
 static igMetaObjectCallback g_igLuaState_callbackList[] = {igMemoryPool_EnsureRegistered, 0};
 
-void *igLuaState_Register(void) {
+CallbackArray *igLuaState_Register(void) {
     LuaLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */

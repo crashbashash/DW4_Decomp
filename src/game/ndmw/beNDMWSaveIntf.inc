@@ -34,7 +34,7 @@ int beNDMWSaveIntf_GetVTable(void) {
     obj._padManager = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWSaveIntf_vtable[0];
-    igSmartPointer_bePadManager_Destruct(&obj._padManager, -1);
+    igSmartPointer_bePadManager_Destruct((igSmartPointer<igObject> *)&obj._padManager, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);
     return vtable;
 }

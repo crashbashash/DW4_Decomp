@@ -1,5 +1,4 @@
 extern "C" {
-int __dl__FPv(void **);
 #include "dw4/igObject.h"
 
 void **FUN_004583f0(void **arg0, long long arg1) {
@@ -14,7 +13,7 @@ void **FUN_004583f0(void **arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+            operator delete(arg0);
         }
     }
     return arg0;

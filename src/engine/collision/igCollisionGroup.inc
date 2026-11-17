@@ -48,7 +48,7 @@ CallbackArray *igCollisionGroup_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionGroup_metaObject,
-        (igMetaObjectRegisterFunction)igGroup_Register,
+        igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igCollisionGroup_GetMetaObject,
         "igCollisionGroup",

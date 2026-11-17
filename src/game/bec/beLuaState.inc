@@ -52,7 +52,7 @@ CallbackArray *beLuaState_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLuaState_metaObject,
-        (igMetaObjectRegisterFunction)igLuaState_Register,
+        igLuaState_Register,
         igLuaState_GetPublishedMetaObject,
         beLuaState_GetMetaObjectFunction,
         "beLuaState",

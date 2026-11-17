@@ -44,7 +44,7 @@ CallbackArray *beModelCtrlNode2_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlNode2_metaObject,
-        (igMetaObjectRegisterFunction)igTransform_Register,
+        igTransform_Register,
         igTransform_GetPublishedMetaObject,
         beModelCtrlNode2_GetMetaObject,
         "beModelCtrlNode2",

@@ -82,7 +82,6 @@ struct Obj {
     }
 };
 extern "C" int igSerialScheduler_GetVTable(void);
-extern "C" int __dl__FPv(...);
 extern "C" void **FUN_00231210(void **arg0, long long arg1);
 extern "C" void FUN_00231290(void);
 extern "C" igMetaObject *igInsightScheduler_GetPublishedMetaObject(void);

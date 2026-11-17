@@ -22,12 +22,12 @@ int beDBManagerInfo_GetVTable(void) {
     obj._dataBase = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDBManagerInfo_vtable[0];
-    igSmartPointer_beDataBase_Destruct((igSmartPointer<igObject> *)&obj._dataBase, (long long)(-1));
+    igSmartPointer_beDataBase_Destruct((igSmartPointer<igObject> *)&obj._dataBase, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_beDataBase_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beDataBase_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -35,7 +35,7 @@ igSmartPointer<igObject> *igSmartPointer_beDataBase_Destruct(igSmartPointer<igOb
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if ((short)delete_storage > 0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

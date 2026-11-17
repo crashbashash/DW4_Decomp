@@ -2,6 +2,7 @@
 #define DW4_VIEWER_REGISTRATION_H
 
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igActorManager.h"
 #include "dw4/igBoundingBoxRenderer.h"
 #include "dw4/igCameraMode.h"
@@ -91,14 +92,12 @@ extern "C" int igSmartPointer_igVisualContext_Destruct(...);
 extern "C" int igSmartPointer_igMetaObjectList_Destruct(...);
 extern "C" int igSmartPointer_igStringObj_Destruct(...);
 extern "C" int igSmartPointer_igMetaFieldList_Destruct(...);
-extern "C" int GameMain_igSmartPointer_igObject_Destruct(...);
 extern "C" int FUN_004583f0(...);
 extern "C" int g_igViewerStatisticsManager_vtable[4];
 #include "dw4/igObjectSystem.h"
 extern "C" int igViewerStatisticsManager_GetVTable(void);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" int __dl__FPv(...);
 extern "C" ObjectRefWord *FUN_00458860(ObjectRefWord *self,int delete_storage);
 extern "C" void ViewerLibrary_MarkRegistered(void);
 extern "C" CallbackArray *igViewerStatisticsManager_Register(void);

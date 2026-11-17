@@ -20,6 +20,7 @@
 #include "dw4/igInsightCore.h"
 #include "dw4/igMathConstants.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igMemory.h"
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igNamedObject.h"
 #include "dw4/igObject.h"
@@ -28,10 +29,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-
-/* Kept local: lua.h declares Memory_FreeBufferWithAllocator with an igObject pool, so igMemory.h
- * cannot be included next to it. */
-extern "C" void *Memory_AllocateBufferDirect(unsigned int size, igObject *pool);
 
 /* A reference-counted string: the text follows its chunk owner and its count. */
 static inline void releaseString(char *text) {
@@ -101,8 +98,12 @@ namespace Gap {
 namespace Bec {
 /* The Lua class `be`, the object scripts call the native API through. */
 struct beLuaWrapper : igLuaGlue::Class {
-    static void *operator new(unsigned int size, igObject *pool) { return Memory_AllocateBufferDirect(size, pool); }
-    static void operator delete(void *memory, igObject *) { Memory_FreeBufferWithAllocator(memory, g_luaGluePool); }
+    static void *operator new(unsigned int size, igObject *pool) {
+        return Memory_AllocateBufferDirect(size, (igMemoryPoolView *)pool);
+    }
+    static void operator delete(void *memory, igObject *) {
+        Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
+    }
     beLuaWrapper();
     void registerFunctions();
 };
@@ -110,8 +111,12 @@ struct beLuaWrapper : igLuaGlue::Class {
 
 /* The Lua class `Bec`, the namespace the game's classes are bound under. */
 struct BecLuaWrapper : igLuaGlue::Class {
-    static void *operator new(unsigned int size, igObject *pool) { return Memory_AllocateBufferDirect(size, pool); }
-    static void operator delete(void *memory, igObject *) { Memory_FreeBufferWithAllocator(memory, g_luaGluePool); }
+    static void *operator new(unsigned int size, igObject *pool) {
+        return Memory_AllocateBufferDirect(size, (igMemoryPoolView *)pool);
+    }
+    static void operator delete(void *memory, igObject *) {
+        Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
+    }
     BecLuaWrapper();
 };
 }
