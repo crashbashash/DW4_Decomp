@@ -184,8 +184,9 @@ def main(argv=None):
     ap.add_argument("--verify-only", action="store_true")
     ap.add_argument("--no-c", action="store_true",
                     help="use retail bytes for every code unit (ignore src/)")
-    ap.add_argument("--jobs", type=int, default=os.cpu_count() or 1,
-                    help="worker processes for object building (default: all cores; tools/forkpool.py)")
+    ap.add_argument("--jobs", type=int, default=forkpool.default_jobs(),
+                    help="worker processes for object building (default: the cores free memory can hold; "
+                         "tools/forkpool.py)")
     ap.add_argument("--no-cache", action="store_true",
                     help="rebuild every object and write no cache (also DW4_NOCACHE=1). Objects are otherwise reused when their "
                          "inputs are unchanged (build/cache/, tools/buildcache.py)")
@@ -535,6 +536,13 @@ def main(argv=None):
             if literal_errors:
                 os.remove(stage)
                 return va, {"fatal": f"{name}: {literal_errors[0]}"}
+        if group:
+            # A member's object still carries its whole unit's symbol table (thousands of names around
+            # a few hundred bytes of code): about 10k such objects came to 2 GB, all read by ld, and each
+            # member's undefined list named every one of the unit's externals, which the parent held for
+            # the whole sweep (4.7 GB). Symbols no relocation uses go; code, relocations and the defined
+            # globals stay byte for byte.
+            subprocess.run(["mipsel-linux-gnu-objcopy", "--strip-unneeded", stage], check=True)
         shutil.copyfile(stage, obj)
         # MWCC's .text is exact-size; only its alignment (16) needs overriding,
         # which the linker script's SUBALIGN(1) does.

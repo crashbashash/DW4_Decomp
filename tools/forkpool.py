@@ -18,12 +18,44 @@ The caller must hold no lock and run no other thread when it calls `imap` (a for
 the lock held). One job, or one item, runs in the calling process with no fork. The workers use the
 caller's scratch folder (tools/cc.py), which is created first, so a temporary file named in a result
 outlives the worker.
+
+Each worker grows towards the caller's size as it touches the caller's objects (CPython's reference counts
+copy every page it reads), so the worker count is bounded by memory as well as cores: `default_jobs()`
+takes the smaller of the core count and what the free memory holds at `DW4_JOB_MB` per worker (500 MB),
+after keeping `DW4_RESERVE_MB` (8000 MB) for the rest of the machine. `DW4_JOBS` overrides both. A link
+worker measured about 300 MB of its own memory (PSS); unbounded, every core at once once came to about
+60 GB, when each result still carried its whole unit's undefined symbols (tools/linkgen.py).
 """
 import multiprocessing
+import os
 
 import cc
 
 _TASK = None
+
+
+def _available_mb():
+    try:
+        with open("/proc/meminfo") as fh:
+            for line in fh:
+                if line.startswith("MemAvailable:"):
+                    return int(line.split()[1]) // 1024
+    except OSError:
+        pass
+    return None
+
+
+def default_jobs():
+    """Worker processes for a sweep: DW4_JOBS if set, else the cores the free memory can hold."""
+    if os.environ.get("DW4_JOBS"):
+        return max(1, int(os.environ["DW4_JOBS"]))
+    cores = os.cpu_count() or 1
+    available = _available_mb()
+    if available is None:
+        return cores
+    per_job = int(os.environ.get("DW4_JOB_MB", "500"))
+    reserve = int(os.environ.get("DW4_RESERVE_MB", "8000"))
+    return max(1, min(cores, (available - reserve) // per_job))
 
 
 def _start():

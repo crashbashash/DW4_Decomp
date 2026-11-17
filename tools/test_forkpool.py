@@ -85,5 +85,33 @@ class Shared(unittest.TestCase):
         self.assertIs(pickle.loads(pickle.dumps(verify._NOT_SHARED)), verify._NOT_SHARED)
 
 
+class DefaultJobs(unittest.TestCase):
+    def jobs(self, available_mb, cores=16, **env):
+        with mock.patch.dict(os.environ, {k: v for k, v in env.items()}, clear=False), \
+                mock.patch.object(forkpool, "_available_mb", return_value=available_mb), \
+                mock.patch.object(forkpool.os, "cpu_count", return_value=cores):
+            for name in ("DW4_JOBS", "DW4_JOB_MB", "DW4_RESERVE_MB"):
+                if name not in env:
+                    os.environ.pop(name, None)
+            return forkpool.default_jobs()
+
+    def test_memory_not_cores_bounds_the_workers(self):
+        # 6 GB free: (6000 - 3000) // 500 = 6, not 16
+        self.assertEqual(self.jobs(6000, DW4_RESERVE_MB="3000"), 6)
+
+    def test_a_32gb_host_runs_every_core(self):
+        # 26 GB free: (26000 - 8000) // 500 = 36, so the 16 cores bound it
+        self.assertEqual(self.jobs(26000), 16)
+
+    def test_low_memory_still_runs_one_worker(self):
+        self.assertEqual(self.jobs(5000), 1)
+
+    def test_cores_bound_a_large_host(self):
+        self.assertEqual(self.jobs(512000, cores=8), 8)
+
+    def test_dw4_jobs_overrides(self):
+        self.assertEqual(self.jobs(26000, DW4_JOBS="5"), 5)
+
+
 if __name__ == "__main__":
     unittest.main()

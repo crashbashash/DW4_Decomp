@@ -206,6 +206,27 @@ def tool_versions():
         out.append((r.stdout or r.stderr).splitlines()[0] if (r.stdout or r.stderr) else "?")
     return "|".join(out)
 
+class _InternedMemo(forkpool.Memo):
+    """A forkpool.Memo whose equal values are one object. Every member of a whole-file unit carries its
+    unit's data spans, the same list thousands of times over: held as copies, they took gigabytes in the
+    caller and in each worker, which keeps every entry it computes."""
+
+    def __init__(self):
+        super().__init__()
+        self._pool = {}
+
+    def _intern(self, value):
+        value = tuple(tuple(item) for item in value)
+        return self._pool.setdefault(value, value)
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, self._intern(value))
+
+    def merge(self, taken):
+        for key, value in taken:
+            dict.__setitem__(self, key, self._intern(value))
+
+
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
@@ -224,9 +245,9 @@ def main(argv=None):
     ap.add_argument("--flags", default=FLAGS_DEFAULT)
     ap.add_argument("--split-only", action="store_true")
     ap.add_argument("--split-limit", type=int, default=0)
-    ap.add_argument("--jobs", type=int, default=os.cpu_count() or 1,
+    ap.add_argument("--jobs", type=int, default=forkpool.default_jobs(),
                     help="worker processes for the split and coverage sweeps "
-                         "(default: all cores; 1 = serial; tools/forkpool.py)")
+                         "(default: the cores free memory can hold; 1 = serial; tools/forkpool.py)")
     ap.add_argument("--function", help="single VA to check against --cand")
     ap.add_argument("--cand", help="C file for --function")
     ap.add_argument("--list-mismatch", action="store_true")
@@ -352,7 +373,7 @@ def main(argv=None):
         unit's data sections (named rows, anonymous data, its switch tables) and a group's jump tables."""
         return [[found.group(1) or "jump-table", int(found.group(3), 16), int(found.group(4))]
                 for found in map(data_line.match, report.splitlines()) if found]
-    unit_data = forkpool.Memo()    # name -> data_spans of its report
+    unit_data = _InternedMemo()    # name -> data_spans of its report
 
     def classify(ok, report):
         """(category, exc, diagnostic, override) from a verify report; see the docstring.
