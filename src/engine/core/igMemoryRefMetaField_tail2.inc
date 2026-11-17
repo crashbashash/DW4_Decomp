@@ -5,7 +5,7 @@ static inline void dropNames(igTDataList<igStringObj *> *o) {
 static inline int countOf(igTDataList<igStringObj *> *l) { if (l != 0) { return l->_count; } return 0; }
 
 
-void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, char *name) {
+void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, const char *name) {
     igTDataList<igStringObj *> *names;
     igTDataList<igStringObj *> *held;
     int n;
@@ -144,7 +144,7 @@ int igMemoryRefMetaField_IsAlikeShallow(igMemoryRefMetaField *self, int objectA,
     return 1;
 }
 
-void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, int name) {
+void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, const char *name) {
     int *header;
     int references;
     int pool;
@@ -158,7 +158,7 @@ void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, int name) {
         }
         g_stringPool = (StringPool *)pool;
     }
-    interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
+    interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, name));
     previous = (char *)self->_poolName;
     if (previous != 0) {
         header = (int *)(previous - 8);

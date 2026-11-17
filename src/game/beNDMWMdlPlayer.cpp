@@ -33,6 +33,7 @@
 #include <math.h>
 #include "dw4/emptyString.h"
 #include "dw4/igVec3f.h"
+#include "dw4/igMetaEnum.h"
 
 /* beNDMWMdlPlayer: the model controller of the player's Digimon. It overrides the beModelCtrl
  * slots that resolve its managers, register it as a PLAYER receiver, drive the pad (turn attacks,
@@ -64,8 +65,6 @@ unsigned char g_baseIsUseInitial = 1;
 }
 
 
-/* kept local: no include/dw4 home declares it yet. */
-extern "C" igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 
 extern "C" void beNDMWMdlPlayer_Start(beNDMWMdlPlayer *self);
 extern "C" unsigned char beNDMWMdlPlayer_IsKind(int self, int kind);

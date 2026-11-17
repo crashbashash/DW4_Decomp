@@ -285,7 +285,7 @@ int FUN_001562d0(struct A_1562d0 *arg0, int arg1) {
 
 void FUN_00156300(void) {
     igResource_AddAlignment((igResource *)g_globalContext, "ImageData", 0x10);
-    igMemoryRefMetaField_SetAlignmentType(g_igImage_pImageMetaField, "ImageData");
+    igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)g_igImage_pImageMetaField, "ImageData");
 }
 
 void FUN_00156340(S0_156340 *arg0, void **arg1) {

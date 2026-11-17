@@ -20,12 +20,12 @@ class StringRef;
 
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
+#include "dw4/igMetaEnum.h"
 extern "C" {
 void beMessenger_InitializeMemory(beMessenger *);
 void beMessenger_ResetMemory(beMessenger *);
 void beMessengerArgData_Clear(beMessengerArgData *);
 void beMessengerDelay_Clear(beMessengerDelay *);
-int igMetaEnum_GetValueByName(int *, igMetaEnum *, const char *, int *);
 void StringList_CopyRetained(void *, void *, int);
 
 
@@ -509,12 +509,10 @@ void beMessenger_SetFreezeTime(beMessenger *self, int frozen) {
 
 unsigned int beMessenger_ResolveEnumValue(beMessenger *self, igMetaEnum *metaEnum, const char *name) {
     int value;
-    int found;
     if ((g_resolveEnumLastMetaEnum[0] == (int)metaEnum) && (strcmp((const char *)&g_resolveEnumLastName[0], name) == 0)) {
         return g_resolveEnumLastValue[0];
     }
-    igMetaEnum_GetValueByName(&found, metaEnum, name, &value);
-    if (*(int *)(unsigned)&found == g_resultSuccess.v) {
+    if (igMetaEnum_GetValueByName(metaEnum, name, &value) == g_resultSuccess) {
         g_resolveEnumLastMetaEnum[0] = (int)metaEnum;
         strcpy((char *)&g_resolveEnumLastName[0], name);
         g_resolveEnumLastValue[0] = value;

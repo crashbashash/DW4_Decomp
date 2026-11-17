@@ -345,11 +345,12 @@ void FUN_0015dae0(igPointSpriteExtView *self, unsigned int index, float value)
     self->_vertexArray->vfunc_51(index, value);
 }
 
-void igPointSpriteExt_SetSize(Sdb00 *arg0, int arg1, igVec2f arg2) {
+void igPointSpriteExt_SetSize(igPointSpriteExt *self, int index, igVec2f size) {
     V2f v;
-    v.x = arg2.x;
-    v.y = arg2.y;
-    arg0->o->vX(arg1, &v);
+    v.x = size.x;
+    v.y = size.y;
+    /* Sdb00: stand-in view of the extension's vertex array and its size slot */
+    ((Sdb00 *)self)->o->vX(index, &v);
 }
 
 void FUN_0015db40(igPointSpriteExtView *self)

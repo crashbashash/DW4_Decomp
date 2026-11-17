@@ -4,15 +4,15 @@
 void Gap__Gfx__igPrimLengthArray1_1__vfunc_20(igPrimLengthArray1_1 *self) {
 }
 
-void *igVertexArrayLock_Init(void *arg0) {
-    *(int *)((char *)arg0 + 0) = 0;
-    *(int *)((char *)arg0 + 4) = 0;
-    *(int *)((char *)arg0 + 8) = 0;
-    *(int *)((char *)arg0 + 12) = 0;
-    *(int *)((char *)arg0 + 16) = 0;
-    *(int *)((char *)arg0 + 20) = 0;
-    *(int *)((char *)arg0 + 24) = 0;
-    return arg0;
+igVertexArrayLock *igVertexArrayLock_Init(igVertexArrayLock *lock) {
+    lock->firstVertex = 0;
+    lock->component = 0;
+    lock->componentIndex = 0;
+    lock->count = 0;
+    lock->data = 0;
+    lock->stride = 0;
+    lock->reserved = 0;
+    return lock;
 }
 
 void FUN_0015df80(S0_15df80 *arg0, int flags) {
@@ -35,7 +35,7 @@ void FUN_0015df80(S0_15df80 *arg0, int flags) {
 
 void FUN_0015e010(void) {
     igResource_AddAlignment((igResource *)g_globalContext, "VertexArrayData", 0x10);
-    igMemoryRefMetaField_SetAlignmentType(g_igVertexArray1_1_blendWeightsMetaField, "VertexArrayData");
+    igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)g_igVertexArray1_1_blendWeightsMetaField, "VertexArrayData");
 }
 
 void FUN_0015e050(struct S_arg0_15e050 *arg0) {

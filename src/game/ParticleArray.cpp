@@ -21,12 +21,13 @@
 #include <math.h>
 #include "dw4/igVec4f.h"
 #include "dw4/igCommonTraversal.h"
+#include "dw4/igPointSpriteExt.h"
+/* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
 extern "C" int g_igCommonTraversal_travProcs;
 
 #pragma push
 #pragma readonly_strings on
 
-extern "C" void igVertexArrayLock_Init(igVertexArrayLock *lock);
 
 extern "C" {
 int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node);
@@ -108,7 +109,6 @@ public:
     virtual void setTexCoord(int unit, unsigned int index, const igVec2f *texCoord);
 };
 
-extern "C" void igPointSpriteExt_SetSize(igPointSpriteExt *sprite, unsigned int index, igVec2f size);
 
 /* Stores a new reference to `object` in an object-reference field, releasing the one it held. */
 static inline void assignReference(int &field, igObject *object) {

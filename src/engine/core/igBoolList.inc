@@ -1,9 +1,9 @@
 igMetaObject *g_igBoolList_metaObject;
 int g_igBoolList_dataDescriptorCell;
 
-void igBoolList_Create(int pool) {
+igBoolList *igBoolList_Create(int pool) {
     igBoolList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igBoolList_metaObject, (igMemoryPoolView *)pool);
+    return (igBoolList *)igMetaObject_CreateInstance(g_igBoolList_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igBoolList_GetOrCreateMetaObject(void) {

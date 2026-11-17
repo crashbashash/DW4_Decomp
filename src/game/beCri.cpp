@@ -34,6 +34,7 @@
 #include "dw4/igStringObj.h"
 #include "dw4/igTraversal.h"
 #include <string.h>
+/* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
 extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/igFile.h"
 #include "dw4/igResource.h"
@@ -43,10 +44,6 @@ extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
 extern "C" {
-/* object system */
-int igMemoryRefMetaField_SetAlignmentType(int field, const char *name);
-
-
 /* the sound IOP module (kept local: dw4/cri/sndf.h is the C library's internal header, not C++-includable) */
 struct SndfBank;
 int SNDF_StartTransfer(unsigned int channel, struct SndfBank *bank);
@@ -1083,7 +1080,7 @@ void beCriSfpData_SetupBufferAlignment(void) {
     igResource_AddAlignment((igResource *)g_globalContext, "sndfBuffer", 0x20);
     field = (int)igMetaObject_FindFieldByName(g_beCriSfpData_metaObject, "_dataBuffer");
     field = AsMemoryRefField(field);
-    igMemoryRefMetaField_SetAlignmentType(field, "sndfBuffer");
+    igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)field, "sndfBuffer");
 }
 
 igMetaObject *beCri_GetMeta(void)

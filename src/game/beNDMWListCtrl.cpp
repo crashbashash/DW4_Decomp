@@ -90,6 +90,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dw4/list-services.h"
+#include "dw4/igBoolList.h"
 /* The element count of a list, read through a const view. */
 template <class List> static inline int ListCount(const List *list) { return list->_count; }
 /* The list index of a row shown on a page: the index of the page's first entry plus the row. */
@@ -337,8 +338,6 @@ extern "C" char TXT_2[];
 extern "C" void beNDMWStatusPowerSocket_ShowSlotDescription(beNDMWStatusPowerSocket *a);
 extern "C" void beNDMWStatusPowerSocket_OpenSlotList(beNDMWStatusPowerSocket *self);
 extern "C" void beNDMWStatusPowerSocket_RefreshPocket(beNDMWStatusPowerSocket *self);
-/* kept local: no include/dw4 home (CoreLibrary.h declares igBoolList_Create without its result). */
-extern "C" igBoolList *igBoolList_Create(int pool);
 extern "C" char CANCELCOLOR_2[];
 extern "C" void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self);
 extern "C" void beNDMWStatusPowerSocket_OnSlotMenuDecided(beNDMWStatusPowerSocket *self);

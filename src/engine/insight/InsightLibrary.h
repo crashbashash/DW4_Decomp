@@ -225,7 +225,6 @@ extern "C" int g_igWindowResizeEventReceiver_vtable[4];
 struct Obj_233120 { int *vt; char pad[12]; };
 extern "C" int igWindowResizeEventReceiver_GetVTable(void);
 extern "C" void FUN_00233160(void);
-extern "C" igMetaObject *igEventReceiver_GetPublishedMetaObject(void);
 #include "dw4/igEventReceiver.h"
 extern "C" CallbackArray *igWindowResizeEventReceiver_Register(void);
 extern "C" void thunk_igWindowResizeEventReceiver_GetMetaObject(void);

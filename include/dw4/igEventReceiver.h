@@ -9,6 +9,7 @@ extern "C" {
 
 extern struct igMetaObject *g_igEventReceiver_metaObject;
 struct CallbackArray *igEventReceiver_Register(void);
+struct igMetaObject *igEventReceiver_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -100,6 +100,7 @@ union FloatBits { float f; struct { unsigned char b0, b1, b2; unsigned char high
 
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
+#include "dw4/igVec4f.h"
 extern "C" {
 void beFont_Start(beFont *self);
 void beFont_Stop(beFont *self);
@@ -120,8 +121,6 @@ igMetaObject *beFont_GetMeta(void);
 void beUnicodeObj_userDestruct(beUnicodeObj *self);
 igMetaObject *beUnicodeObj_GetMeta(void);
 
-int igVertexArrayLock_Init(igVertexArrayLock *);
-void Color4f_Unpack(void *, int, int);
 
 SjisUnicodeTable g_sjisToUnicodeTable = {{
     {0x0020, 0x0020}, {0x3000, 0x8140}, {0x0030, 0x0030}, {0x0031, 0x0031},
@@ -613,7 +612,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                         attribute = ((igNodeView **)attributes->_data)[a];
                         if (g_igColorAttr_metaObject == attribute->GetMeta()) {
                             igColor4f color;
-                            Color4f_Unpack(&color, 1, ((igColorAttr *)attribute)->_colorPacked);
+                            Color4f_Unpack((Color4f *)&color, 1, ((igColorAttr *)attribute)->_colorPacked);
                             color.r = red;
                             color.g = green;
                             color.b = blue;

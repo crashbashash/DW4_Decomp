@@ -11,8 +11,6 @@
 
 /* kept local: no include/dw4 home (only CoreLibrary.h declares these). */
 extern "C" void beNDMWShopCtrl50_MoveRowCursor(beNDMWWindow *window, int row);
-/* kept local: no include/dw4 home (CoreLibrary.h declares igBoolList_Create without its result). */
-extern "C" igBoolList *igBoolList_Create(int pool);
 #include "dw4/beNDMWWindowSelect.h"
 #include "dw4/StringPool.h"
 #include "dw4/beDBManager.h"
@@ -72,6 +70,7 @@ extern "C" igBoolList *igBoolList_Create(int pool);
 #include "dw4/igStringObj.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/igBoolList.h"
 extern "C" void beNDMWShopCtrlDigilabo_PresentMessageWindow(void *window);
 extern "C" void beNDMWShopCtrlSell_MoveRowCursor(beNDMWWindow *window, int row);
 extern "C" void beNDMWShopCtrlSales_MoveRowCursor(beNDMWWindow *window, int row);

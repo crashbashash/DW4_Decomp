@@ -4636,7 +4636,6 @@ extern "C" void FUN_001b4500(struct O4500 *o, struct S4500 *s, int b);
 extern "C" int FUN_001b4bb0(igCommonTraversal *arg0, int arg1);
 struct LightingTexGenView;
 extern "C" void FUN_001b4570(LightingTexGenView *self, igCommonTraversal *traversal);
-extern "C" void igVertexArrayLock_Init(igVertexArrayLock *lock);
 extern "C" void FUN_001903d0(float *matrix);
 extern "C" void FUN_001b68b0(int arg0);
 extern "C" void FUN_001b68c0(void *self, void *meta);

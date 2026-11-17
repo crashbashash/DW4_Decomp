@@ -413,7 +413,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_180(void *arg0) {
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_179(Obj179 *arg0, void *arg1) {
-    Color4f_Unpack(arg1, 1, arg0->f896);
+    Color4f_Unpack((Color4f *)arg1, 1, arg0->f896);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_181(igPsx2VisualContext *self, float fparg0) {

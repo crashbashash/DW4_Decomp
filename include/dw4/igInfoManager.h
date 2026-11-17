@@ -2,6 +2,8 @@
 #define DW4_IGINFOMANAGER_H
 
 struct igInfoManager;
+struct igMetaObject;
+struct CallbackArray;
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,6 +13,7 @@ extern int g_igInfoManager_vtable[4];
 struct CallbackArray *igInfoManager_Register(void);
 /* The destructor: releases the name, and frees the object when `flags` is positive. */
 void *igInfoManager_Destroy(struct igInfoManager *manager, short flags);
+struct igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }

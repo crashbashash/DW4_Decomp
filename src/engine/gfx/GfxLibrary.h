@@ -107,6 +107,8 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/igVec2fList.h"
 #include "dw4/igVec3fList.h"
 #include "dw4/igVec4ucList.h"
+#include "dw4/igVertexArrayLock.h"
+#include "dw4/igPointSpriteExt.h"
 #include "dw4/igMemoryPool.h"
 #include "dw4/igPointerList.h"
 #include "dw4/igReport.h"
@@ -339,7 +341,6 @@ extern "C" igMetaObject *igVertexArray_GetMetaObject(void);
 
 extern "C" CallbackArray *igVertexArray_Register(void);
 extern "C" void thunk_igVertexArray_GetMetaObject(void);
-extern "C" int igMemoryRefMetaField_GetDefaultDescriptor(...);
 extern "C" void igVertexArray_InitFields(void);
 extern "C" igMetaObject *igUserUCodeExt_GetMetaObject(void);
 extern "C" void FUN_0014bbb0(void);
@@ -481,7 +482,6 @@ extern "C" void thunk_igFileImage_GetMetaObject(void);
 extern "C" igMetaObject *igImage_GetMetaObject(void);
 extern "C" CallbackArray *igImage_Register(void);
 extern "C" void thunk_igImage_GetMetaObject(void);
-extern "C" int igMemoryRefMetaField_SetPoolName(...);
 extern "C" void igImage_InitFields(void);
 extern "C" void thunk_igPsx2Image_GetMetaObject(void);
 extern "C" void thunk_FUN_00156300(void);
@@ -779,7 +779,6 @@ extern "C" int g_igPsx2ParticleArray_vtable[4];
 union U_1533f0 { int vt; char b[128]; };
 extern "C" int igPsx2ParticleArray_GetVTable(void);
 extern "C" void FUN_00153460(void);
-extern "C" igMetaObject *igParticleArray_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPsx2ParticleArray_Register(void);
 extern "C" igMetaObject *FUN_001534e0(void);
 extern "C" void igPsx2ParticleArray_InitFields(void);
@@ -1029,7 +1028,6 @@ struct C { int f0; int f4; int f8; int fc; };
 struct B { char pad[16]; struct C **tab; };
 struct A_1562d0 { char pad[308]; struct B *b; };
 extern "C" int FUN_001562d0(struct A_1562d0 *arg0, int arg1);
-extern "C" int igMemoryRefMetaField_SetAlignmentType(...);
 extern "C" void FUN_00156300(void);
 typedef struct S0_156340 { char pad88[88]; int f58; } S0_156340;
 extern "C" void FUN_00156340(S0_156340 *arg0, void **arg1);
@@ -1098,7 +1096,6 @@ class V_157140 { public: virtual void d0(); virtual void d1(); virtual void d2()
 struct P { char pad[12]; int f12; };
 struct O_157140 { char pad[8]; int f8; int f12; char pad2[8]; int f24; char pad3[16]; int f44; char pad4[20]; P *f68; };
 extern "C" bool FUN_00157140(O_157140 *arg0, int arg1, igSmartPointer<igImageConvertRows> converter);
-extern "C" StringRef igMetaEnum_GetNameByValue(int metaEnum, int value);
 extern "C" int FUN_00157980(void);
 typedef struct S_arg0 { char p0[8]; unsigned int f8; unsigned int f12; int f16; char p1[8]; int f28; int f32; int f36; int f40; int f44; char p2[16]; int f64; char p3[4]; int f72; char p4[8]; int f84; } S_arg0;
 /* The bit depths of an igImage pixel format: intensity, index, red, green, blue, alpha, depth. */
@@ -1424,8 +1421,8 @@ public:
     virtual void d22();
     virtual void d23();
     virtual void d24();
-    virtual int v108(int *, int);
-    virtual int v112(int *, int);
+    virtual int v108(igVertexArrayLock *, int);
+    virtual int v112(igVertexArrayLock *, int);
 };
 class PA {
 public:
@@ -1537,7 +1534,7 @@ class V164 { public: virtual void d0(); virtual void d1(); virtual void d2(); vi
 struct S740 { char pad24[24]; V164 *f24; };
 class V168 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual int vX(int, int); };
 struct S7c0 { char pad24[24]; V168 *f24; };
-class igVertexArrayView {
+class igPointSpriteVertexArrayView {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
@@ -1558,7 +1555,7 @@ public:
     int _vtable;
     unsigned int _refCount;
     char _pad8[16];
-    igVertexArrayView *_vertexArray;
+    igPointSpriteVertexArrayView *_vertexArray;
 };
 class T_15cb50 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual int m200(int, int, ...); virtual int m204(int, int, ...); };
 struct O880 { char pad24[24]; T_15cb50 *p; };
@@ -1585,11 +1582,9 @@ extern "C" void FUN_0015d880(O880 *arg0, int arg1, int arg2, float *arg3);
 extern "C" void FUN_0015da00(void *arg0, int arg1, int arg2);
 extern "C" void FUN_0015da70(void *arg0, int arg1, int arg2);
 extern "C" void FUN_0015dae0(igPointSpriteExtView *self, unsigned int index, float value);
-extern "C" void igPointSpriteExt_SetSize(Sdb00 *arg0, int arg1, igVec2f arg2);
 extern "C" void FUN_0015db40(igPointSpriteExtView *self);
 extern "C" void FUN_0015db60(igPointSpriteExtView *self);
 extern "C" void Gap__Gfx__igPrimLengthArray1_1__vfunc_20(igPrimLengthArray1_1 *self);
-extern "C" void *igVertexArrayLock_Init(void *arg0);
 typedef struct S0_15df80 { char pad24[24]; int f18; } S0_15df80;
 typedef struct S_temp_v0 { char pad4[4]; int f4; } S_temp_v0;
 
@@ -2173,7 +2168,6 @@ struct VertexArrayFormat;
 extern "C" void *FUN_00189e40(...);
 extern "C" void* FUN_0018a060(...);
 extern "C" void *FUN_0018a2d0(...);
-extern "C" int Color4f_Unpack(...);
 extern "C" int DAT_005610b0[4];
 /* Builds the stream objects of a new vertex array. When the helper has no igVertexArray2 yet (+12
  * == 0) it creates one and, for every stream kind requested in the layout word *arg1, creates a
@@ -2373,8 +2367,6 @@ template <class T> static inline void igRelease(igTDataList<T> *o) {
         if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
     }
 }
-extern "C" igTDataList<signed char> *igCharList_Create(int pool);
-extern "C" igTDataList<short> *igShortList_Create(int pool);
 extern "C" float Gap__Gfx__igVertexArray2Helper__vfunc_61(igVertexArray2Helper *self, int type, int bytes,
                                                           bool useFixed, bool isSigned, int bits, int index);
 extern "C" ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage);

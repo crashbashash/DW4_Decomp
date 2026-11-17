@@ -196,13 +196,9 @@ class Pd { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 class Pe { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void vX(int); };
 struct Rt { char pad[56]; int f56; };
 #include "dw4/igResult.h"
-struct LoadStatus { int v; bool ok() const { return v == g_resultSuccess.v; } };
 #include <string.h>
-extern "C" int sceMtapInit(...);
 #include "dw4/igStringObj.h"
 #include "dw4/igRegistry.h"
-extern "C" LoadStatus igPsx2_LoadIopModule(...);
-extern "C" int sceMtapPortOpen(...);
 struct PropertyText : igObject { char *chars; };
 extern "C" void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
@@ -285,6 +281,8 @@ extern "C" unsigned short Gap__igPsx2Controller__vfunc_32(void *arg0);
 extern "C" int Gap__igPsx2Controller__vfunc_28(void *arg0, int arg1);
 class O_149230 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(int); };
 #include "dw4/softfloat.h"
+#include "dw4/sony/libmtap.h"
+#include "dw4/igPsx2File.h"
 extern "C" float Gap__igPsx2Controller__vfunc_29(O_149230 *arg0, int arg1);
 extern "C" int Gap__igPsx2Controller__vfunc_30(void *arg0);
 extern "C" unsigned char Gap__igPsx2Controller__vfunc_34(igPsx2Controller *self);

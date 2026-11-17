@@ -15,6 +15,7 @@
 #include "dw4/igTimeAttr.h"
 #include "dw4/igTraversal.h"
 #include <string.h>
+/* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
 extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/emptyString.h"
 

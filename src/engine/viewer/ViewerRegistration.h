@@ -145,7 +145,6 @@ extern "C" int FUN_00458600(...);
 extern "C" int FUN_00458610(...);
 extern "C" int FUN_00458620(...);
 extern "C" int FUN_00458630(...);
-extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" int text_name_3[4];
 extern "C" int text_Viewer_scene_manager[4];
 extern "C" int g_igViewerSceneInfoManager_vtable[4];
@@ -375,7 +374,6 @@ extern "C" int g_igViewManager_vtable[4];
 extern "C" int DAT_00542680[8];
 union U_45d1a0 { int vt; int w[21]; char b[84]; };
 extern "C" int igViewManager_GetVTable(void);
-extern "C" igMetaObject *igEventReceiver_GetPublishedMetaObject(void);
 #include "dw4/igEventReceiver.h"
 extern "C" CallbackArray *igViewManager_Register(void);
 extern "C" void thunk_igViewManager_GetMetaObject(void);

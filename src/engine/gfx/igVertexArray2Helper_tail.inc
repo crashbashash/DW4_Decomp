@@ -459,12 +459,12 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_43(igVertexArray2Helper *arg0, int ar
     temp_v0 = (S43 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 2, 0));
     temp_s1 = (int)g_igUnsignedIntList_metaObject;
     if (temp_s1 == ((DW4VC_88_0 *)(temp_v0->f12))->vX()) {
-        Color4f_Unpack(arg2, 1, temp_v0->f12->f16[arg1]);
+        Color4f_Unpack((Color4f *)arg2, 1, temp_v0->f12->f16[arg1]);
         return;
     }
     temp_s1_2 = (int)g_igVec4ucList_metaObject;
     if (temp_s1_2 == ((DW4VC_88_0 *)(temp_v0->f12))->vX()) {
-        Color4f_Unpack(arg2, 1, temp_v0->f12->f16[arg1]);
+        Color4f_Unpack((Color4f *)arg2, 1, temp_v0->f12->f16[arg1]);
     }
 }
 

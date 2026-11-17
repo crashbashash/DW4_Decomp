@@ -17,7 +17,6 @@ extern "C" int beNumberCtrl_CalcChangeNum(beNumberCtrl *self, int difference);
 extern "C" void beNumberCtrl_OnAddRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram);
 extern "C" int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMessengerWork *work);
 extern "C" igMetaObject *beNumberCtrl_GetMeta(void);
-extern "C" int igVertexArrayLock_Init(igVertexArrayLock *lock);
 extern "C" char NUMBERCTRL_4[];
 
 /* The messages a beNumberCtrl answers, in the order of its message enum. */

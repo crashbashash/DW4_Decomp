@@ -183,7 +183,7 @@ void igImage_InitFields(void) {
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0xA), -2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));
     *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
-    igMemoryRefMetaField_SetPoolName(temp_s1, "Image");
+    igMemoryRefMetaField_SetPoolName((igMemoryRefMetaField *)temp_s1, "Image");
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC));
     *(int *)((char *)(temp_s1_2) + 60) = igCharMetaField_GetDefaultDescriptor();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 0xD), 1);

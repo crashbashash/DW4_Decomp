@@ -6,6 +6,7 @@
 #include "dw4/igObject.h"
 #include "dw4/softfloat.h"
 #include <math.h>
+/* kept local: no include/dw4 home; SceneGraph reads igCommonTraversal::_travProcs through its own load-bearing view. */
 extern "C" int g_igCommonTraversal_travProcs[4];
 
 typedef void (*TraversalFunction)(void);

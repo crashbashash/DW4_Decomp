@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dw4/emptyString.h"
+#include "dw4/igBoolList.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -119,7 +120,6 @@ enum PadBits {
 
 extern "C" igMetaObject *beSelectCtrl_GetInfoMeta(void);
 extern "C" igMetaObject *beSelectCtrl_GetMeta(void);
-extern "C" int igBoolList_Create(int);
 extern "C" void beSelectCtrl_Prepare(beSelectCtrl *self);
 extern "C" void beSelectCtrl_OnAddRam(beSelectCtrl *self, int info);
 extern "C" void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram);

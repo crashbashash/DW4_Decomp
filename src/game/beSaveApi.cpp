@@ -22,6 +22,9 @@
 #include "dw4/igObject.h"
 #include <stdio.h>
 #include <string.h>
+#include "dw4/sony/libmc.h"
+#include "dw4/igPsx2File.h"
+#include "dw4/sony/libmtap.h"
 #pragma push
 #pragma readonly_strings on
 
@@ -95,20 +98,6 @@ struct CardSlot { int port; int slot; };
 
 extern "C" void beSaveMemoryObj_userDestruct(beSaveMemoryObj *self);
 extern "C" igMetaObject *beSaveMemoryObj_GetMeta(void);
-extern "C" int sceMcFormat(int, int);
-extern "C" int sceMcGetInfo(...);
-extern "C" int sceMcOpen(int, int, char *, int);
-extern "C" int sceMcClose(int);
-extern "C" int sceMcSeek(int, int, int);
-extern "C" int sceMcRead(int, int, int);
-extern "C" int sceMcWrite(int, int, int);
-extern "C" int sceMcFlush(int);
-extern "C" int sceMcInit(...);
-extern "C" int igPsx2_LoadIopModule(int *, const char *, int, int, int);
-extern "C" int sceMtapGetConnection(int);
-extern "C" int sceMtapPortOpen(int);
-extern "C" int sceMtapPortClose(int);
-extern "C" int sceMcSync(...);
 extern "C" int beSvConnectCheck_ProbeSlot(int check, int slot);
 extern "C" int beSvConnectCheck_ProbeSlots(int check, int onlyPresent);
 extern "C" void beSvConnectCheck_Start(void);
@@ -258,12 +247,6 @@ struct beSvFileMakeApiWork : igObject {
 };
 
 
-/* libmc directory record sceMcGetDir fills: 32 bytes of dates, size and attributes, then the entry name. */
-struct sceMcTblGetDir {
-    unsigned char header[32];
-    char EntryName[32];
-};
-
 /* beSvFileFindApi with the retry counter at +60 and the file being looked for at +68, which the
  * registered metadata does not list: 0 icon.sys, 1..3 the icon files, 4 the save file. */
 struct beSvFileFindApiWork : igObject {
@@ -287,10 +270,7 @@ struct beSvFileFindApiWork : igObject {
     int _stage;
 };
 
-extern "C" int sceMcMkdir(int, int, char *);
-extern "C" int sceMcDelete(int, int, char *);
 extern "C" int beSvFileMakeApi_Update(beSvFileMakeApiWork *self);
-extern "C" int sceMcGetDir(int, int, char *, unsigned int, int, sceMcTblGetDir *);
 extern "C" sceMcTblGetDir g_svDirEntries[8];
 extern "C" int beSvFileFindApi_Update(beSvFileFindApiWork *self);
 
@@ -703,7 +683,7 @@ int beSvFileMakeApi_Update(beSvFileMakeApiWork *self) {
             SV_NEXT_STEP(self);
             break;
         case 1:
-            if (sceMcWrite(g_svSaveFd[0], platformImage(platform, self->_fileIndex)->_data, platformImage(platform, self->_fileIndex)->_dataSize) >= 0) {
+            if (sceMcWrite(g_svSaveFd[0], (void *)platformImage(platform, self->_fileIndex)->_data, platformImage(platform, self->_fileIndex)->_dataSize) >= 0) {
                 g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
@@ -878,7 +858,7 @@ int beSvFileMakeApi_Update(beSvFileMakeApiWork *self) {
                 SV_NEXT_SUB(self);
                 break;
             case 1:
-                if (sceMcWrite(g_svSaveFd[0], self->_saveWork->_mem, platform->_dataSize) >= 0) {
+                if (sceMcWrite(g_svSaveFd[0], (void *)self->_saveWork->_mem, platform->_dataSize) >= 0) {
                     g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
                     SV_NEXT_SUB(self);
                 }
@@ -1065,7 +1045,7 @@ int beSvFileMakeApi_Update(beSvFileMakeApiWork *self) {
             SV_NEXT_STEP(self);
             break;
         case 1:
-            if (sceMcWrite(g_svSaveFd[0], (int)&self->_iconSys, sizeof(sceMcIconSys)) >= 0) {
+            if (sceMcWrite(g_svSaveFd[0], &self->_iconSys, sizeof(sceMcIconSys)) >= 0) {
                 g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
@@ -1287,14 +1267,14 @@ int beSvFileFindApi_Update(beSvFileFindApiWork *self) {
                     for (i = 0; i < res; i++) {
                         switch (self->_stage) {
                         case 0:
-                            if (strcmp("icon.sys", g_svDirEntries[i].EntryName) == 0) {
+                            if (strcmp("icon.sys", (const char *)g_svDirEntries[i].EntryName) == 0) {
                                 self->_stage = 1;
                                 SV_RETRY_STEP(self);
                                 found = 1;
                             }
                             break;
                         case 1:
-                            if (strcmp((const char *)platform->_fnameIcon0, g_svDirEntries[i].EntryName) == 0) {
+                            if (strcmp((const char *)platform->_fnameIcon0, (const char *)g_svDirEntries[i].EntryName) == 0) {
                                 if (platform->_iconCount >= 3) {
                                     self->_stage = 2;
                                     SV_RETRY_STEP(self);
@@ -1306,21 +1286,21 @@ int beSvFileFindApi_Update(beSvFileFindApiWork *self) {
                             }
                             break;
                         case 2:
-                            if (strcmp((const char *)platform->_fnameIcon1, g_svDirEntries[i].EntryName) == 0) {
+                            if (strcmp((const char *)platform->_fnameIcon1, (const char *)g_svDirEntries[i].EntryName) == 0) {
                                 self->_stage = 3;
                                 found = 1;
                                 SV_RETRY_STEP(self);
                             }
                             break;
                         case 3:
-                            if (strcmp((const char *)platform->_fnameIcon2, g_svDirEntries[i].EntryName) == 0) {
+                            if (strcmp((const char *)platform->_fnameIcon2, (const char *)g_svDirEntries[i].EntryName) == 0) {
                                 self->_stage = 4;
                                 found = 1;
                                 SV_RETRY_STEP(self);
                             }
                             break;
                         case 4:
-                            if (strcmp((const char *)platform->_dirName, g_svDirEntries[i].EntryName) == 0) {
+                            if (strcmp((const char *)platform->_dirName, (const char *)g_svDirEntries[i].EntryName) == 0) {
                                 self->_result = 2;
                                 found = 1;
                                 self->_isEnd = 1;
@@ -1705,7 +1685,7 @@ int beSvReadMediaApi_Update(beSvReadMediaApiWork *self) {
             SV_NEXT_STEP(self);
             break;
         case 1:
-            if (sceMcRead(g_svSaveFd[0], loadBuffer(self, self->_readPass)->_mem, platform->_dataSize) >= 0) {
+            if (sceMcRead(g_svSaveFd[0], (void *)loadBuffer(self, self->_readPass)->_mem, platform->_dataSize) >= 0) {
                 g_svMcRequestState[SCE_MC_FUNC_READ] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
@@ -2000,7 +1980,7 @@ int beSvWriteMediaApi_Update(beSvWriteMediaApiWork *self)
             SV_NEXT_STEP(self);
             break;
         case 1:
-            if (sceMcWrite(g_svSaveFd[0], self->_saveWork->_mem, platform->_dataSize) >= 0) {
+            if (sceMcWrite(g_svSaveFd[0], (void *)self->_saveWork->_mem, platform->_dataSize) >= 0) {
                 g_svMcRequestState[SCE_MC_FUNC_WRITE] = SV_MC_REQUEST_ISSUED;
                 SV_NEXT_STEP(self);
             }
@@ -2269,13 +2249,10 @@ void beSvGetFreeSizeApi_Report(beSvGetFreeSizeApiWork *self, beSvDeliver *delive
 }
 
 void beSvStartApi_Start(beSvApiWork *self, beSvDeliver *deliver) {
-    int mcmanId;
-    int mcservId;
-
     self->_isEnd = 0;
     if (g_svMcModulesLoaded == 0) {
-        igPsx2_LoadIopModule(&mcmanId, "mcman.irx", 1, 0, 0);
-        igPsx2_LoadIopModule(&mcservId, "mcserv.irx", 1, 0, 0);
+        igPsx2_LoadIopModule("mcman.irx", 1, 0, 0);
+        igPsx2_LoadIopModule("mcserv.irx", 1, 0, 0);
         sceMcInit();
         g_svMcModulesLoaded = 1;
     }

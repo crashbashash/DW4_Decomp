@@ -11,6 +11,8 @@ extern unsigned char g_igPsx2_resetIopServices;
 /* Takes the "atfile:<host>," prefix from a program argument as the default file prefix; fails for
  * any other argument. */
 igResult igPsx2_SetAtfilePrefix(const char *path);
+/* Loads an IOP module from the directory `kind` selects, passing `argLength` bytes of `args`. */
+igResult igPsx2_LoadIopModule(char *name, int kind, int argLength, const char *args);
 }
 
 #endif

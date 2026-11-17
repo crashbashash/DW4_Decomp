@@ -26,9 +26,9 @@
 #include "dw4/igResult.h"
 #include <string.h>
 #include "dw4/beDBManager.h"
+#include "dw4/igBoolList.h"
+#include "dw4/igMetaEnum.h"
 
-/* kept local: no include/dw4 home (CoreLibrary.h declares igBoolList_Create without its result). */
-extern "C" igBoolList *igBoolList_Create(int pool);
 
 extern "C" void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self);
 extern "C" void beNDMWShinkaObject_Load(beNDMWShinkaObject *self, beNDMWGameRam *gameRam, int playerNo, int form);
@@ -87,8 +87,6 @@ enum { METAL_STEP = 4, METAL_DELAY_SCALE = 120 };
 /* Timers run in nanoseconds; durations arrive in frames at 60 per second. */
 static inline long long FramesToTime(int frames) { return (long long)frames * 1000000000 / 60; }
 
-/* kept local: no include/dw4 home declares it yet. */
-extern "C" igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 
 /* Stores a new reference to `object` in an object-reference field, releasing the one it held. */
 static inline void AssignReference(int &field, igObject *object) {

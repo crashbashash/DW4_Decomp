@@ -209,8 +209,8 @@ static inline void releaseString(const char *string) {
 #include "dw4/igUnsignedShortArrayMetaField.h"
 #include "dw4/igVec3fMetaField.h"
 #include "dw4/internalNonRefCountedObjectList.h"
-/* kept local: no include/dw4 home declares it. */
-extern "C" void igIntListList_EnsureRegistered(void);
+#include "dw4/igIntListList.h"
+#include "dw4/igCharMetaField.h"
 
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 
@@ -525,8 +525,6 @@ extern "C" int beNDMWShopCtrlDigilabo_GetVTable(void);
 extern "C" void beNDMWShopCtrlDigilabo_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopCtrlDigilabo_Register(void);
 extern "C" void beNDMWShopCtrlDigilabo_GetMetaObjectFunction(void);
-/* kept local: no include/dw4 home declares it. */
-extern "C" igMetaObject *igIntListList_GetOrCreateMetaObject(void);
 extern "C" void beNDMWShopCtrlDigilabo_InitFields(void);
 extern "C" int beNDMWShopCtrlA2_GetVTable(void);
 extern "C" void beNDMWShopCtrlA2_EnsureRegistered(void);
@@ -1054,8 +1052,6 @@ extern "C" int beNDMWDegiData_GetVTable(void);
 extern "C" void beNDMWDegiData_RunStaticInit(void);
 extern "C" CallbackArray *beNDMWDegiData_Register(void);
 extern "C" void beNDMWDegiData_GetMetaObject(void);
-/* kept local: no include/dw4 home declares it. */
-extern "C" int igCharMetaField_GetDefaultDescriptor(void);
 extern "C" void beNDMWDegiData_InitFields(void);
 extern "C" igMetaObject *beNDMWLoadIntf2MesWin_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWLoadIntf2MesWin_GetReadyMetaObject(void);
@@ -1205,8 +1201,6 @@ extern "C" void *beNDMWAfsSetupInfo_ResolveMetaObject(void);
 extern "C" int igSmartPointer_igAdxAfsFileList_Destruct(void *, int);
 extern "C" int beNDMWAfsSetupInfo_GetVTable(void);
 extern "C" void beNDMWAfsSetupInfo_EnsureRegistered(void);
-/* kept local: no include/dw4 home declares it. */
-extern "C" CallbackArray *igInfo_Register(void);
 extern "C" CallbackArray *beNDMWAfsSetupInfo_Register(void);
 extern "C" void beNDMWAfsSetupInfo_GetMetaObject(void);
 extern "C" void beNDMWAfsSetupInfo_InitFields(void);
@@ -1227,8 +1221,6 @@ extern "C" void beNDMWAfsStageLoad_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWAfsStageLoad_Register(void);
 extern "C" void beNDMWAfsStageLoad_GetMetaObject(void);
 extern "C" igMetaObject *igAction_GetPublishedMetaObject(void);
-/* kept local: no include/dw4 home declares it. */
-extern "C" igMetaObject *igNamedObject_GetOrCreateMetaObject(void);
 extern "C" void beNDMWAfsStageLoad_InitFields(void);
 extern "C" igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWAfsSetup_ResolveMetaObject(void);
@@ -1784,8 +1776,6 @@ extern "C" int g_beNDMWAfsSetupData_vtable[4];
 extern "C" igMetaObject *beNDMWAfsStageLoad_ResolveMetaObject(void);
 extern "C" int g_beNDMWAfsStageLoad_vtable[4];
 extern "C" int g_beNDMWAfsSetup_vtable[4];
-/* kept local: no include/dw4 home (asm-only). */
-extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" void beNDMWDegiData_userConstruct(beNDMWDegiData *self, int flag);
 extern "C" void beNDMWDegiData_userDestruct(beNDMWDegiData *self);
 extern "C" void beNDMWLoadSlotPlayer_userDestruct(beNDMWLoadSlotPlayer *self);

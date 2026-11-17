@@ -80,7 +80,7 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     struct InitRef *o;
     int s0; int *buf; int n; struct VoiceList *l;
     if (sceSifSearchModuleByName("Intrinsic_Sound_Module") < 0) {
-        if (igPsx2_LoadIopModule("igAudio.irx", 2, 0, 0) != *(RpcStatus *)&g_resultSuccess) {
+        if (igPsx2_LoadIopModule("igAudio.irx", 2, 0, 0) != g_resultSuccess) {
             *arg0 = g_resultFailure.v;
             return;
         }

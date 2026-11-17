@@ -85,7 +85,6 @@ extern "C" void igFileName_EnsureRegistered(void);
 #include "dw4/igFile.h"
 extern "C" CallbackArray *igFileName_Register(void);
 extern "C" void igFileName_GetMetaObjectFunction(void);
-extern "C" int igNamedObjectList_GetOrCreateMetaObject(void);
 extern "C" void igFileName_InitFields(void);
 extern "C" void *igAdxFile_GetMetaObject(void);
 extern "C" int igAdxFile_GetVTable(void);
@@ -140,7 +139,6 @@ extern "C" int igMovieInfo_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodec_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" void igMovieInfo_EnsureRegistered(void);
-extern "C" CallbackArray *igInfo_Register(void);
 extern "C" CallbackArray *igMovieInfo_Register(void);
 extern "C" void igMovieInfo_GetMetaObjectFunction(void);
 #include "dw4/igTextureList.h"
@@ -220,9 +218,9 @@ extern "C" int g_igMovieRenderer_vtable[4];
 extern "C" int g_igMovieManager_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieRenderer_Destruct(igSmartPointer<igObject> *self, short flag);
-extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" int g_igMoviePlugin_vtable[4];
 #include "dw4/igTextureBindAttr.h"
+#include "dw4/igNamedObjectList.h"
 
 unsigned char g_AdxMovieLibrary_registered;
 
@@ -600,7 +598,7 @@ void igFileName_InitFields(void) {
     firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igFileName_ctorTable, 1);
     pathListField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField));
-    ((igObjectRefMetaField *)pathListField)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)pathListField)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igFileName_fieldTable, g_igFileName_fieldHandles, g_igFileName_fieldOffsets, firstField);
 }
 

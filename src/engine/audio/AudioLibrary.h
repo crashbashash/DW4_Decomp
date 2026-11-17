@@ -257,6 +257,7 @@ class igMemoryPoolView;
 #include "dw4/igObjectRefMetaField.h"
 #include "dw4/igRawRefMetaField.h"
 #include "dw4/igUnsignedIntMetaField.h"
+#include "dw4/igPsx2File.h"
 #include "dw4/igSemaphore.h"
 #include "dw4/sony/sifdev.h"
 void igPsx2IopRpcConnection_EnsureRegistered(void);
@@ -270,7 +271,6 @@ int igPsx2IopRpcConnection_GetOrCreateMetaObject(...);
 int igPsx2IopRpcConnection_CallNoData(...);
 int igPsx2IopRpcConnection_Call(...);
 int igPsx2IopRpcConnection_CallWithData(...);
-RpcStatus igPsx2_LoadIopModule(const char *, int, int, int);
 int FUN_00301000(InitContext *);
 int igPsx2IopRpcConnection_Create(int);
 RpcStatus igPsx2IopRpcConnection_Bind(InitRef *, int);

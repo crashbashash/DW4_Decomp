@@ -38,7 +38,7 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
             x = FUN_00181850(p);
             FUN_00181810((float *)&B, (float *)x, (float *)(FUN_00181840(p)), f);
             a5->v144(i, A);
-            igPointSpriteExt_SetSize((Sdb00 *)a5, i, B);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)a5, i, B);
         }
         {
             CountedVertexWriter *old = a5->f24;
@@ -220,7 +220,7 @@ void FUN_00181b60(int n, unsigned int i, int particles, int particleSize, Counte
             sizeVel = FUN_00181840(particle);
             FUN_00181df0((float *)&size, (float *)sizePos, (float *)sizeVel, (float *)FUN_00181b50(particle), time, timeSquared);
             sprite->v144(i, position);
-            igPointSpriteExt_SetSize((Sdb00 *)sprite, i, size);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)sprite, i, size);
         }
         old2 = sprite->f24;
         if (old2 != 0) {
@@ -459,7 +459,7 @@ void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B
             FUN_00181810((float *)&spC8, (float *)a, (float *)b, fparg0);
             arg5->v144(arg1, spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)spA0, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -606,7 +606,7 @@ void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTarget
             FUN_00181df0((float *)&spB8, (float *)temp_s1_3, (float *)temp_s2_2, (float *)(FUN_00181b50(temp_s2)), fparg0, temp_f20);
             arg5->v144(arg1, spC0);
             arg5->v152(arg1, igVec4f_PackColor((float *)sp90, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spB8);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spB8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -791,7 +791,7 @@ void FUN_001833c0(int n, unsigned int i, int particles, int particleSize, MeshTa
             FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
             sprite->v144(i, &position);
             sprite->v152(i, igVec4f_PackColor((float *)&color, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)sprite, i, size);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)sprite, i, size);
         }
         old = sprite->f24;
         if (old != 0) {
@@ -908,7 +908,7 @@ void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4,
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
             arg5->v144(arg1, &spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)&spA0, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
         }
         t = arg5->f24;
         if (t != 0) {
@@ -1068,7 +1068,7 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
             x = FUN_00181850(p);
             FUN_00181810((float *)&B, (float *)x, (float *)(FUN_00181840(p)), f);
             a5->v144(i, A);
-            igPointSpriteExt_SetSize((Sdb00 *)a5, i, B);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)a5, i, B);
         }
         {
             CountedVertexWriter *old = a5->f24;
@@ -1189,7 +1189,7 @@ void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B
             b = FUN_00181840(p);
             FUN_00181df0((float *)&spB8, (float *)a, (float *)b, (float *)(FUN_00181b50(p)), fparg0, sq);
             arg5->v144(arg1, spC0);
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spB8);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spB8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -1371,7 +1371,7 @@ void FUN_00184ff0(int n, unsigned int i, int particles, int particleSize, MeshTa
             FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
             sprite->v144(i, &position);
             sprite->v152(i, igVec4f_PackColor((float *)&color, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)sprite, i, size);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)sprite, i, size);
         }
         old = sprite->f24;
         if (old != 0) {
@@ -1498,7 +1498,7 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
             arg5->v144(arg1, &spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)&spA0, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
         }
         t = arg5->f24;
         if (t != 0) {
@@ -1707,7 +1707,7 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
             FUN_00181810((float *)&spC8, (float *)f1, (float *)(FUN_00181840(i1)), fparg0);
             arg5->v144(arg1, spD0);
             arg5->v152(arg1, igVec4f_PackColor(spA0, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -1826,7 +1826,7 @@ void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexW
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(s1)), (float *)(FUN_00181840(s1)), (float *)(FUN_00181b50(s1)), fparg0, f20);
             arg5->v144(s5, spD0);
             arg5->v152(s5, igVec4f_PackColor((float *)spA0, 1));
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, s5, spC8);
+            igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, s5, spC8);
             s5 += 1;
         }
         o = arg5->f24;

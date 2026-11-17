@@ -49,7 +49,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         s3 = 0;
         if (arg0->_multitap != 0) {
             if (arg0->_loadIRXs != 0) {
-                if (igPsx2_LoadIopModule("mtapman.irx", 1, 0, 0).ok()) {
+                if (igPsx2_LoadIopModule("mtapman.irx", 1, 0, 0) == g_resultSuccess) {
                     sceMtapInit();
                     if (arg0->_multitap & 1) sceMtapPortOpen(0);
                     if (arg0->_multitap & 2) sceMtapPortOpen(1);

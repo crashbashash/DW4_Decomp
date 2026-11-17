@@ -6,7 +6,7 @@ void FUN_0017f5a0(void) {
     igResource_AddAlignment((igResource *)g_globalContext, "DMABuffer_PS2", 0x10);
     var_s0 = (int)igMetaObject_FindFieldByName(g_igPsx2VertexStream_metaObject, "_dmaBuffer");
     var_s0 = cast0(var_s0);
-    igMemoryRefMetaField_SetAlignmentType(var_s0, "DMABuffer_PS2");
+    igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)var_s0, "DMABuffer_PS2");
 }
 
 void Gap__Gfx__igPsx2VertexStream__vfunc_15(S0_17f630 *arg0) {

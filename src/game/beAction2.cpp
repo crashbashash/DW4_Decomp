@@ -126,8 +126,8 @@ static inline void SetMaskBit(igBitMask *mask, unsigned int n) {
 
 #include "dw4/emptyString.h"
 #include "dw4/list-services.h"
+#include "dw4/igVec4f.h"
 extern "C" {
-void Color4f_Unpack(Color4f *out, unsigned int format, unsigned int packed);
 int igAnimationCombiner_Update(void *combiner, long long now);
 
 void beAction2_Prepare(void);

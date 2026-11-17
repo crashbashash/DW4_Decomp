@@ -364,7 +364,7 @@ unsigned int Gap__Attrs__igGeometryAttr1_5__vfunc_42(GeometryPrimitiveView *self
 }
 
 void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1, float *arg2) {
-    VertexRangeAccess acc;
+    igVertexArrayLock acc;
     float mz = 1e20f;
     float my = mz;
     float mx = mz;
@@ -372,13 +372,13 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1
     float ny = nz;
     float nx = nz;
     unsigned int i;
-        igVertexArrayLock_Init(&acc);
-    acc.f4 = 0;
-    acc.f0 = 0;
-    acc.f8 = arg0->f28;
-    acc.cnt = 0;
+    igVertexArrayLock_Init(&acc);
+    acc.component = 0;
+    acc.firstVertex = 0;
+    acc.componentIndex = arg0->f28;
+    acc.count = 0;
     arg0->f12->v108(&acc, 0);
-    for (i = 0; i < acc.cnt; i++) {
+    for (i = 0; i < acc.count; i++) {
         BoundsVertex *p = (BoundsVertex *)(acc.data + i * acc.stride);
         if (!(mx <= p->x)) { mx = p->x; }
         if (!(my <= p->y)) { my = p->y; }

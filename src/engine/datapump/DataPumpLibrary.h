@@ -186,7 +186,6 @@ struct Obj_1e5730 {
 extern "C" int igDataPumpInfo_GetVTable(void);
 extern "C" void FUN_001e5810(void);
 #include "dw4/igInfo.h"
-extern "C" CallbackArray *igInfo_Register(void);
 extern "C" CallbackArray *igDataPumpInfo_Register(void);
 extern "C" void thunk_igDataPumpInfo_GetMetaObject(void);
 extern "C" void igDataPumpInfo_InitFields(void);

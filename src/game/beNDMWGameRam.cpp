@@ -45,6 +45,7 @@
 #include "dw4/igStringRef.h"
 #include "dw4/igStringRefList.h"
 #include "dw4/list-services.h"
+#include "dw4/igMetaEnum.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
 #define ALLOC(owner, var) { void *got = ((void *)igObject_GetAllocator(owner)); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0)); }
 #define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) List_Reserve((igDataList *)l, entry->count, SZ); }
@@ -1936,8 +1937,6 @@ NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const cha
 extern "C" {
 #define MULT_HI(a,b) ((int)(((long long)(int)(a)*(long long)(int)(b))>>32))
 
-/* kept local: no include/dw4 home declares these. */
-igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 extern char GETMATRIX[];
 extern char GETHP[];
 extern char GETDATABASE_5[];

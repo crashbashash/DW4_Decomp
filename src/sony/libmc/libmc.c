@@ -1,28 +1,8 @@
 #include "dw4/eekernel.h"
 #include "dw4/libkernl.h"
 #include "dw4/sony/sif.h"
+#include "dw4/sony/libmc.h"
 #include <string.h>
-
-typedef struct sceMcStDateTime {
-    unsigned char Resv2;
-    unsigned char Sec;
-    unsigned char Min;
-    unsigned char Hour;
-    unsigned char Day;
-    unsigned char Month;
-    unsigned short Year;
-} sceMcStDateTime;
-
-typedef struct sceMcTblGetDir {
-    sceMcStDateTime _Create;
-    sceMcStDateTime _Modify;
-    unsigned int FileSizeByte;
-    unsigned short AttrFile;
-    unsigned short Reserve1;
-    unsigned int Reserve2;
-    unsigned int PdaAplNo;
-    unsigned char EntryName[32];
-} sceMcTblGetDir;
 
 /* mcserv.irx's RPC function numbers; also the value of mcRunCmdNo while a call is outstanding */
 #define sceMcFuncNoCardInfo (1)
@@ -105,8 +85,6 @@ typedef union McApdx {
     McReadApdx read;
     unsigned char raw[192];
 } McApdx;
-
-int sceMcSync(int mode, int *cmd, int *result);
 
 static char __ps2_libinfo__[16] = "PsIIlibmc   2810";
 static int mcRunCmdNo = 0;

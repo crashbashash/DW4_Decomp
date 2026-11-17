@@ -1,5 +1,5 @@
 int igParticleArray_Update(igParticleArray *self, unsigned int num, unsigned int offset, int *status, float time) {
-    int sp70[8];
+    igVertexArrayLock lock;
     int temp_s0;
     O44 *a;
     O44 *t;
@@ -57,11 +57,11 @@ L24:
     self->_particleNum = num;
     self->_aliveParticleNum = num;
     self->_particleOffset = offset;
-    igVertexArrayLock_Init(sp70);
-    sp70[1] = 0;
-    sp70[0] = 0;
-    ((O40 *)self->_internalVertexArray)->v108(sp70, 1);
-    ((O40 *)self->_internalVertexArray)->v112(sp70, 2);
+    igVertexArrayLock_Init(&lock);
+    lock.component = 0;
+    lock.firstVertex = 0;
+    ((O40 *)self->_internalVertexArray)->v108(&lock, 1);
+    ((O40 *)self->_internalVertexArray)->v112(&lock, 2);
     temp_s0 = ((HI *)self->_particleFormat)->f44 > 0;
     if (self->_setConstant == 0 && temp_s0 == 0) {
         FUN_0015b880((igParticleArrayRefs *)self);

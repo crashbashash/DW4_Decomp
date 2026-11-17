@@ -8,8 +8,16 @@ struct igMetaObject;
 extern "C" {
 #endif
 extern struct igMetaObject *g_igShortList_metaObject;
+struct igMetaObject *igShortList_GetOrCreateMetaObject(void);
+void igShortList_EnsureRegistered(void);
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef __cplusplus
+struct igMemoryPoolView;
+template <class T> class igTDataList;
+extern "C" igTDataList<short> *igShortList_Create(struct igMemoryPoolView *pool);
 #endif
 
 #endif

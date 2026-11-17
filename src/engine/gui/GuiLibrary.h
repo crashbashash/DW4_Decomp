@@ -213,7 +213,6 @@ extern "C" igMetaObject *igHotKeyEventReceiver_GetMetaObject(void);
 extern "C" int g_igHotKeyEventReceiver_vtable[4];
 union U_44d8e0 { int vt; char b[16]; };
 extern "C" int igHotKeyEventReceiver_GetVTable(void);
-extern "C" igMetaObject *igEventReceiver_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igHotKeyEventReceiver_Register(void);
 extern "C" void thunk_igHotKeyEventReceiver_GetMetaObject(void);
 extern "C" void igHotKeyEventReceiver_InitFields(void);
@@ -333,7 +332,6 @@ struct Obj_44f5e0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int
 extern "C" int g_igGuiComponentNode_vtable[4];
 extern "C" int igGuiComponentNode_GetVTable(void);
 extern "C" void igGuiComponentNode_RunStaticInit(void);
-extern "C" igMetaObject *igGroup_GetPublishedMetaObject(void);
 #include "dw4/igGroup.h"
 extern "C" CallbackArray *igGuiComponentNode_Register(void);
 extern "C" void thunk_igGuiComponentNode_GetMetaObject(void);

@@ -47,7 +47,6 @@ union U { int vt; char b[32]; };
 extern "C" int igCollisionInfo_GetVTable(void);
 extern "C" void FUN_00239910(void);
 #include "dw4/igInfo.h"
-extern "C" CallbackArray *igInfo_Register(void);
 extern "C" CallbackArray *igCollisionInfo_Register(void);
 extern "C" void thunk_igCollisionInfo_GetMetaObject(void);
 extern "C" void igCollisionInfo_InitFields(void);
@@ -68,7 +67,6 @@ extern "C" int g_igCollisionGroup_vtable[4];
 union U_239c00 { int vt; char b[96]; };
 extern "C" int igCollisionGroup_GetVTable(void);
 extern "C" void FUN_00239c80(void);
-extern "C" igMetaObject *igGroup_GetPublishedMetaObject(void);
 #include "dw4/igGroup.h"
 extern "C" CallbackArray *igCollisionGroup_Register(void);
 extern "C" void thunk_igCollisionGroup_GetMetaObject(void);

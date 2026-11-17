@@ -32,7 +32,6 @@ extern "C" {
 #include "dw4/sony/libsdr.h"
 }
 #include <stdio.h>
-extern "C" int igPsx2_LoadIopModule(...);
 extern "C" int igAdx_SetupIop(void);
 extern "C" int igAdx_SetupOptional(void);
 #include "dw4/igDataLists.h"
@@ -351,9 +350,6 @@ void igAdx_SetHostRootPath(const char *path) {
 }
 
 int igAdx_SetupIop(void) {
-    int sdrdrvResult;
-    int adxiResult;
-    int sndfiResult;
     char path[512];
     int sndfConfig[4];
     igMemoryPoolView *allocator;
@@ -373,7 +369,7 @@ int igAdx_SetupIop(void) {
         break;
     }
     g_igPsx2_resetIopServices = 0;
-    igPsx2_LoadIopModule(&sdrdrvResult, "sdrdrv.irx", 1, 0, 0);
+    igPsx2_LoadIopModule("sdrdrv.irx", 1, 0, 0);
     sceSdRemoteInit();
     sceSdRemote(1, 0x8000, 0);
     sceSdRemote(1, 0x8010, 0x980, 0x3FFF);
@@ -387,13 +383,13 @@ int igAdx_SetupIop(void) {
     } else {
         sprintf(path, "/usr/local/cri/ps2/mwlib/iop/drv/cri_adxi.irx");
     }
-    igPsx2_LoadIopModule(&adxiResult, path, 0, 0x13, "sdinit=0\0spucore=1");
+    igPsx2_LoadIopModule(path, 0, 0x13, "sdinit=0\0spucore=1");
     if (g_adxModulePath[0] != 0) {
         sprintf(path, "%s/sndfi.irx", &g_adxModulePath[0]);
     } else {
         sprintf(path, "/cri/ps2/iop/modules/sndfi.irx");
     }
-    igPsx2_LoadIopModule(&sndfiResult, path, 0, 0, 0);
+    igPsx2_LoadIopModule(path, 0, 0, 0);
     memset(sndfConfig, 0, 0x10);
     sndfConfig[0] = 0x30000;
     sndfConfig[1] = 0;

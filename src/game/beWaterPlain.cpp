@@ -12,7 +12,6 @@
 #include <math.h>
 
 extern "C" {
-int igVertexArrayLock_Init(igVertexArrayLock *lock);
 extern char WATERPLAIN[];
 
 bool beWaterPlain_IsBoxVisible(beWaterPlain *self, const float *boxMin, const float *boxMax);

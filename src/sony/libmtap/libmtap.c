@@ -1,5 +1,6 @@
 #include "dw4/sony/sif.h"
 #include "dw4/libkernl.h"
+#include "dw4/sony/libmtap.h"
 
 /* mtapman.irx's RPC servers, one per call */
 #define MTAP_PORT_OPEN 0x80000901
@@ -10,8 +11,6 @@
 
 #define LIBMTAP_VERSION_MAJOR 3
 #define LIBMTAP_VERSION_MINOR 0
-
-int sceMtapGetModVersion(void);
 
 static sceSifClientData open_client;
 static sceSifClientData close_client;

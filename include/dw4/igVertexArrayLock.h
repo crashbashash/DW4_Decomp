@@ -15,6 +15,8 @@ struct igVertexArrayLock {
     unsigned int getStride() { return stride; }
 };
 
+extern "C" igVertexArrayLock *igVertexArrayLock_Init(igVertexArrayLock *lock);
+
 /* An igVertexArray subclass instance: slot 22 sets the vertex format and count, slots 25 and 26 lock
  * and unlock one vertex component. */
 class igVertexArrayView {
