@@ -9,8 +9,9 @@ debt ratchet (docs/engine/debt-ratchet.md) and fails a function's `declarations`
 symbol its body uses carries one of the first three:
 
 local extern   a declaration, in a unit's own text, of a symbol another unit defines. A unit's own text is
-               its file (`.c`, `.cpp`), the `.inc` fragments it includes and any header no other unit
-               includes (a library's unity header such as CoreLibrary.h); a declaration there is a
+               its file (`.c`, `.cpp`), the `.inc` fragments it includes and any header outside
+               `include/` no other unit includes (a library's unity header such as CoreLibrary.h); a
+               header under `include/` is a subject home even while one unit includes it. A declaration there is a
                function prototype, `extern` data at file scope, or `extern` inside a function body. A
                prototype of the unit's own symbol (a C++ unit's `extern "C"` linkage line, a library
                header's own prototypes) is not one. Neither is a declaration of an unnamed placeholder
@@ -653,8 +654,10 @@ class Index:
             if self.stock(rel):
                 continue
             if rel.endswith(HEADER_EXT):
-                # a header only one unit includes (a library's unity header) is that unit's own text
-                units_here = tuple(header_units[rel]) if len(header_units.get(rel, ())) == 1 else ()
+                # a header outside include/ that only one unit includes (a library's unity header) is
+                # that unit's own text; a header under include/ is a home however many units include it
+                single = len(header_units.get(rel, ())) == 1 and not rel.startswith("include/")
+                units_here = tuple(header_units[rel]) if single else ()
             else:
                 units_here = tuple(self.unit_of.get(rel, ()))
             own = set().union(*(self.unit_defs[u] for u in units_here)) if units_here else set()

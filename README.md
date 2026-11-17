@@ -14,7 +14,7 @@ readable source that rebuilds the retail executable byte for byte.
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
 | Sony SDK | 97 KB | 100.0 % | 100.0 % |
 | newlib | 84 KB | 100.0 % | 90.1 % |
-| libgcc | 11 KB | 100.0 % | 98.7 % |
+| libgcc | 11 KB | 100.0 % | 99.2 % |
 | Metrowerks runtime | 10 KB | 100.0 % | 97.3 % |
 | **Total** | **3391 KB** | **94.4 %** | **61.2 %** |
 

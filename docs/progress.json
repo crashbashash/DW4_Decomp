@@ -240,7 +240,7 @@
    },
    "decl.local_externs": {
     "reason": null,
-    "value": 357
+    "value": 330
    },
    "decl.type_conflicts": {
     "reason": null,
@@ -363,7 +363,7 @@
    "compile.bytes": 0,
    "compile.functions": 0,
    "decl.header_conflicts": 321,
-   "decl.local_externs": 357,
+   "decl.local_externs": 330,
    "decl.type_conflicts": 505,
    "decl.varargs": 354,
    "foreign_profile.bytes": 0,
@@ -492,15 +492,15 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2126180,
+  "bytes": 2126240,
   "failing": {
    "addresses": {
     "bytes": 673740,
     "functions": 3834
    },
    "declarations": {
-    "bytes": 438544,
-    "functions": 735
+    "bytes": 438484,
+    "functions": 734
    },
    "fields": {
     "bytes": 446392,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 13618,
+  "functions": 13619,
   "matched_functions": 20431
  },
  "regions": [

@@ -52,6 +52,10 @@ TREE = {
                         "DItype __muldi3(DItype u, DItype v) { return u * v; }\n",
     "include/dw4/soft.h": "long long __muldi3(long long, long long);\n",
     "src/game/narrow.c": "int __muldi3(int, int);\nint Narrow_Mul(int a) { return __muldi3(a, a); }\n",
+    # a home under include/ that only one unit includes so far is still a home, not that unit's text
+    "include/dw4/pnglike.h": "int Png_Read(int);\n",
+    "src/game/pnglib.c": "int Png_Read(int n) { return n; }\n",
+    "src/game/reader.c": "#include \"dw4/pnglike.h\"\nint Reader_Go(void) { return Png_Read(1); }\n",
 }
 
 
@@ -99,6 +103,9 @@ class Declarations(unittest.TestCase):
 
     def test_header_conflicts(self):
         self.assertEqual(self.idx.header_conflicts, ["Shared_Get"])
+
+    def test_a_one_includer_home_under_include_is_not_own_text(self):
+        self.assertNotIn("Png_Read", {d.name for d in self.idx.local})
 
     def test_old_style_definition_is_a_definition(self):
         old = self.idx.definition["Old_Add"]
