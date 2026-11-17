@@ -439,8 +439,12 @@ def main(argv=None):
                                                              symbols=a.symbols))
             hit = cover_store.get(key)
             if isinstance(hit, dict):
-                unit_data[nm] = hit.get("data", [])
-                return (nm, hit["category"], hit.get("exc"), hit.get("diagnostic", "-"), hit.get("override"))
+                # the data spans are stored once per distinct list (every member of a whole-file unit
+                # carries its unit's): an entry names its list, which a hit must also find
+                spans = hit.get("data") if "data" in hit else cover_store.get("spans:" + hit.get("data_ref", ""))
+                if spans is not None:
+                    unit_data[nm] = spans
+                    return (nm, hit["category"], hit.get("exc"), hit.get("diagnostic", "-"), hit.get("override"))
         src, tmp = units.standalone(path, nm, symbols=a.symbols, unit_objects=a.unit_objects)
         try:
             ok, report = vfy.verify_one(va, src, flags=a.flags, elf=a.elf,
@@ -454,8 +458,10 @@ def main(argv=None):
         unit_data[nm] = data_spans(report)
         if key and kind != "compile":
             # the category is the cached answer, so a hit reproduces the same lines
+            ref = buildcache.sha("spans", repr(unit_data[nm]))
+            cover_store.put("spans:" + ref, [list(span) for span in unit_data[nm]])
             cover_store.put(key, {"category": kind, "exc": exc, "diagnostic": diagnostic, "override": override,
-                                  "data": unit_data[nm]})
+                                  "data_ref": ref})
         return (nm, kind, exc, diagnostic, override)
 
     def graded(item):
