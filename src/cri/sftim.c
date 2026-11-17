@@ -125,7 +125,6 @@ typedef struct SfdStat64 {
 } SfdStat64;
 
 extern SfdLib DAT_004bea88;
-extern int SFTIM_prate[];
 extern SfdTcFn sftim_tc2time[][2];
 extern long sftim_as_pts;
 extern int sftim_a_sample;
@@ -134,7 +133,6 @@ extern int sftim_v_sample;
 extern int DAT_004bea90;
 
 int FUN_002916f8(int value);
-long __muldi3(long a, long b);
 
 void SFTIM_InitTcode(SfdTimeCode *tc);
 void sftim_HnVbIn(SfdHn *hn);
@@ -414,8 +412,9 @@ int sftim_IsAudioStagnant(SfdHn *hn)
     return threshold < pos / rate;
 }
 
-int SFTIM_GetAudioStartSample(SfdTim *tim, int scale)
+int SFTIM_GetAudioStartSample(void *timp, int scale)
 {
+    SfdTim *tim = timp;
     long value = tim->f344;
     int result;
     if (value < 0) {
@@ -786,8 +785,9 @@ void sftim_Tc2Time29D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
     *out_rate = rate;
 }
 
-void SFTIM_Pause(SfdHn *hn, unsigned int kind)
+void SFTIM_Pause(void *sfd, unsigned int kind)
 {
+    SfdHn *hn = sfd;
     int pos;
     int rate;
     switch (kind) {
@@ -1039,16 +1039,18 @@ int SFTIM_GetSpeed(void *sfd)
     return *(int *)((char *)hn + 4052);
 }
 
-void SFTMR_InitTsum(SfdStat64 *stat)
+void SFTMR_InitTsum(void *acc)
 {
+    SfdStat64 *stat = acc;
     stat->sum = 0;
     stat->min = 0x7FFFFFFFFFFFFFFFL;
     stat->max = 0;
     stat->count = 0;
 }
 
-void SFTMR_AddTsum(SfdStat64 *stat, long time)
+void SFTMR_AddTsum(void *acc, long time)
 {
+    SfdStat64 *stat = acc;
     stat->sum += time;
     stat->min = (time < stat->min) ? time : stat->min;
     stat->max = (stat->max < time) ? time : stat->max;

@@ -1,9 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-void __malloc_lock(struct _reent *ptr);
-void __malloc_unlock(struct _reent *ptr);
-extern long __malloc_trim_threshold;
-extern long __malloc_top_pad;
+#include "dw4/newlib_mallocr.h"
 
 #define M_TRIM_THRESHOLD -1
 #define M_TOP_PAD -2

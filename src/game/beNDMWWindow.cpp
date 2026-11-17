@@ -30,8 +30,9 @@
     StringList_AppendRetained((igStringRefList *)(field), held.ref()); }
 #define STR_RELEASE(s) if (s) { int *h_ = (int *)((s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader((StringChunk *)h_[0], (StringTokenHeader *)h_); }
 
-/* kept local: StringList_CopyRetained's result holder is not shared yet (open item A7); retail passes
- * the result slot as the hidden first argument. */
+/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at
+ * 0x130720; the shared igStringRef holder would break that row. Retail passes the result slot as the hidden first
+ * argument. */
 extern "C" void StringList_CopyRetained(void *result, igStringRefList *list, int index);
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */

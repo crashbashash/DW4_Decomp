@@ -139,7 +139,6 @@ extern MwsfdAdxCfg mwsfcre_adxCfg;
 void *mwsfsfx_Create(char *work, int size, int width, int height);
 struct SjObj *mwsfd_CreateAddInfSj(MwsfdPly *ply);
 MwsfdPly *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm);
-int SFD_Create(MwsfdSfdPrm *prm, int arg);
 int mwsfcre_CheckCprm(MwsfdCreInf *cprm);
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm);
 void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm);

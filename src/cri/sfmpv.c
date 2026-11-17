@@ -24,7 +24,6 @@ extern int DAT_004beb0c;
 extern int DAT_004f4e70[];
 extern int sfmpv_picusr_buf1siz;
 extern int sfmpv_discard_wsiz;
-extern int SFTIM_prate[];
 extern int sfmpv_fps_round[];
 extern int sfmpv_conv_29_97[];
 extern int sfmpv_conv_59_94[];
@@ -40,8 +39,6 @@ char *sfmpv_BsearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code);
 void FUN_002a7278(SfdStream *source, int *kind, char **data, int *size);
 void sfmpv_InitPicUsr(SfdBufPool *pool);
 void sfmpv_SetFrmInf(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out);
-void SFMPVP_Destroy(SfdPlayer *player);
-int SFTRN_IsSetup(SfdPlayer *player, int index);
 
 int sfmpv_SetPicUsrBuf(SfdPlayer *player, char *base, int count, int size);
 int sfmpv_ChkFatal(void);
@@ -200,7 +197,8 @@ void SFD_SetMpvCond(void *sfd, int mode, int value) {
     }
 }
 
-int SFMPV_SaveCond(SfdPlayer *player, int *values, unsigned int size) {
+int SFMPV_SaveCond(void *sfd, int *values, unsigned int size) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
     int count;
@@ -215,7 +213,8 @@ int SFMPV_SaveCond(SfdPlayer *player, int *values, unsigned int size) {
     return count;
 }
 
-void SFMPV_RestoreCond(SfdPlayer *player, int *values, int count) {
+void SFMPV_RestoreCond(void *sfd, int *values, int count) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv;
     int *value;
     int index;

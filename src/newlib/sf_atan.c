@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include <math.h>
 
-extern float fabsf(float);
 static const float atanhi[] = {
     4.6364760399e-01F,
     7.8539812565e-01F,

@@ -3251,7 +3251,6 @@ extern "C" float DAT_004e1060[4];
 class V_1dd3e0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void vSet(int, int *); virtual void vGet(int, int *); virtual void e0(); virtual void e1(); virtual void e2(); virtual int vCount(); };
 struct F_1dd3e0 { char p[44]; float a; float b; float c; };
 
-extern "C" long long __muldi3(...);
 extern "C" long long DAT_00562a18[4];
 extern "C" long long DAT_00562a20[4];
 extern "C" int DAT_00562a28[4];

@@ -58,6 +58,16 @@ typedef union {
 
 typedef int (*sceMpegCallback)(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData);
 
+/* The calls made from outside the library. */
+int sceMpegInit(void);
+int sceMpegCreate(sceMpeg *mp, unsigned char *work_area, int work_area_size);
+int sceMpegDelete(sceMpeg *mp);
+int sceMpegReset(sceMpeg *mp);
+int sceMpegGetPicture(sceMpeg *mp, unsigned int image, int image_size);
+int sceMpegGetPictureRAW8(sceMpeg *mp, unsigned int image, int image_size);
+void sceMpegGetPictureAbort(sceMpeg *mp);
+sceMpegCallback sceMpegAddCallback(sceMpeg *mp, sceMpegCbType type, sceMpegCallback callback, void *anyData);
+
 typedef struct {
     sceMpegCallback func;
     void *data;

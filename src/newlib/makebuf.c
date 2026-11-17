@@ -1,6 +1,7 @@
 #include "dw4/newlib_stdio.h"
 #include "dw4/libkernl.h"
 #include "dw4/newlib_mallocr.h"
+#include "dw4/newlib_syscalls.h"
 
 #define S_IFMT 0170000
 #define S_IFCHR 0020000
@@ -24,9 +25,6 @@ struct stat {
     long st_blocks;
     long st_spare4[2];
 };
-int _fstat_r(struct _reent *, int, struct stat *);
-_fpos_t __sseek(void *, _fpos_t, int);
-void _cleanup_r(struct _reent *);
 
 void __smakebuf(register FILE *fp)
 {

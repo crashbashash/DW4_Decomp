@@ -38,6 +38,7 @@ extern char *volatile mwsfd_version_ptr;        /* set to mwsfd_version when the
 extern int mwsfd_err_hist[16];         /* the error codes SFD reported, in order (the last slot stays free) */
 extern int mwsfd_err_hist_cnt;
 extern char mwsfd_err_text[];          /* the formatted SFD error report */
+/* kept here: the approved volatile (the vsync server writes it); declared in a header it would apply to every includer */
 extern volatile int mwsfsvr_vsync_cnt2; /* bumped by the vsync server */
 
 void LSC_EntryErrFunc(void (*fn)(void *obj, const char *msg), void *obj);

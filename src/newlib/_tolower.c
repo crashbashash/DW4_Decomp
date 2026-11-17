@@ -1,4 +1,4 @@
-extern const char _ctype_[];
+#include <ctype.h>
 
 int _tolower(int c) {
     return ((_ctype_ + 1)[c] & 1) ? c + ('a' - 'A') : c;

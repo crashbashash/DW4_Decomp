@@ -1,6 +1,6 @@
 #include "dw4/newlib_reent.h"
+#include "dw4/newlib_syscalls.h"
 
-void _exit(int code);
 
 void exit(int code)
 {

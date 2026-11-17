@@ -251,7 +251,8 @@ int BLPgetPowerDownTime(const char *effectKey);
 int BLPcalcKoukaMagic(void);
 void LISsetDifficultMax(int maxDifficulty);
 
-/* Other files, with no home yet. */
+/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at
+ * 0x130720; the shared igStringRef holder would break that row. */
 StringRef StringList_CopyRetained(igStringRefList *list, int index);
 
 

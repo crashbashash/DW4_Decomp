@@ -1,4 +1,4 @@
-long strtol(const char *s, char **end, int base);
+#include <stdlib.h>
 
 int atoi(const char *s)
 {

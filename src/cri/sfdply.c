@@ -13,25 +13,17 @@ extern void (*sfply_vbin_nest)(SfdPly *h, int value);
 extern SfdPly *sfply_handles[8];
 extern int sfply_sys_stat;
 extern unsigned int sfply_last_hnctrl_wksiz;
+/* kept here: this unit, sfdcond.c and sfdlib.c each read the library block through their own view, and the types disagree */
 extern SfdCond sfd_lib;
 extern int sfply_reset_flg;
 extern void (*SFPLY_ResetPtsm)(SfdPtsm *ptsm);
 
-int SFTRN_CallTrtTrif();
-void SFTIM_Pause(void);
-void SFTMR_AddTsum(void *acc, long time);
-int SFTRN_IsSetup(SfdPly *h, int id);
-void SFTMR_InitTsum(void *acc);
-int SFMPV_SaveCond(SfdPly *h, char *buf, int size);
-void SFMPV_RestoreCond(SfdPly *h, char *buf, int size);
 void SFD_SetErrFn(SfdPly *h, SfdErrFn fn, void *obj);
 void SFD_SetUsrIsSkipFn(SfdPly *h, int (*fn)());
-int SFD_SetVideoPts(SfdPly *h, SfdItem *data, int size);
 
 long SFPL2_Pause(SfdPly *h, unsigned int mode);
 long sfpl2_PauseExec(SfdPly *h, int mode);
 long sfpl2_TrPause(SfdPly *h, int value);
-int SFPL2_Standby(SfdPly *h);
 void sfply_ChkCondDfl(void);
 void sfply_ExecOne(SfdPly *h);
 void sfply_ExecOneSub(SfdPly *h);
@@ -129,7 +121,7 @@ long sfpl2_PauseExec(SfdPly *h, int mode) {
     if (h->reqStat != 3 && h->reqStat != 4) {
         return 0;
     }
-    SFTIM_Pause();
+    SFTIM_Pause(h, mode);
     return sfpl2_TrPause(h, mode);
 }
 
@@ -147,7 +139,8 @@ int SFD_Standby(void *sfd) {
     return SFPL2_Standby(h);
 }
 
-int SFPL2_Standby(SfdPly *h) {
+int SFPL2_Standby(void *sfd) {
+    SfdPly *h = sfd;
     h->reqStat = 3;
     return 0;
 }
@@ -651,7 +644,7 @@ int SFPLY_DecideSvrStat(void) {
     return kind;
 }
 
-SfdPly *SFD_Create(SfdCrePrm *prm, int arg) {
+void *SFD_Create(SfdCrePrm *prm, int arg) {
     SfdPly **handles = sfply_handles;
     int slot;
     SfdPly *h;

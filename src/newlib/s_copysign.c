@@ -1,4 +1,5 @@
 #include "dw4/ieee_words.h"
+#include <math.h>
 
 double copysign(double x, double y)
 {

@@ -37,18 +37,18 @@ void Gap__Gfx__igPrimLengthArray1_1__vfunc_25(void) {
 
 }
 
-void *FUN_00167310(void *png, int size) {
+void *FUN_00167310(png_structp png, int size) {
     return igObject_AllocateStorage((igObject *)DAT_00560840, size);
 }
 
-void FUN_00167320(void *png, void *storage) {
+void FUN_00167320(png_structp png, void *storage) {
     igObject_FreeMemory((igObject *)DAT_00560840, storage);
 }
 
-void FUN_00167330(int dummy0, int arg1, int arg2) {
+void FUN_00167330(png_structp png, int arg1, int arg2) {
     void **temp_v0;
 
-    temp_v0 = (void **)(png_get_io_ptr());
+    temp_v0 = (void **)(png_get_io_ptr(png));
     ((DW4VC_108_3 *)(temp_v0))->vX((int)(arg1), (int)(1), (int)(arg2));
 }
 

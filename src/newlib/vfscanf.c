@@ -1,16 +1,11 @@
 #include "dw4/newlib_stdio.h"
+#include <stdlib.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 extern const short basefix[17];
 extern const char exponent_format[];
-extern const char _ctype_[];
 typedef int wchar_t;
-int ungetc (int, FILE *);
-size_t fread (void *, size_t _size, size_t _n, FILE *);
-int sprintf (char *, const char *, ...);
-double atof (const char *__nptr);
-long atol (const char *__nptr);
-long strtol (const char *__n, char **_end_PTR, int __base);
-unsigned long strtoul (const char *_n_PTR, char **_end_PTR, int __base);
 char *__sccl ();
 
 int __svfscanf(register FILE *fp, char const *fmt0, va_list ap)

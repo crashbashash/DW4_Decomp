@@ -2,6 +2,7 @@
 #define SFMPV_H
 
 #include "dw4/cri/m2v.h"
+#include "dw4/sony/libmpeg.h"
 
 typedef struct SfdPlanes {
     char *luma;
@@ -154,13 +155,6 @@ typedef struct SfdMpvFrameBufs {
     int w[16];
 } SfdMpvFrameBufs;
 
-typedef struct SfdMpegCtx {
-    int f0;
-    int f4;
-    int f8;
-    char pad12[60];
-} SfdMpegCtx;
-
 typedef struct SfdIpuEntry {
     long f0;
     long f8;
@@ -220,7 +214,7 @@ typedef struct SfdIpuCtl {
     int stopped;
     int value;
     int pad36;
-    SfdMpegCtx mpeg;     /* 40 */
+    sceMpeg mpeg;        /* 40 */
     SfdIpuStream stream; /* 112 */
     SfdIpuEvent event;   /* 208 */
 } SfdIpuCtl;

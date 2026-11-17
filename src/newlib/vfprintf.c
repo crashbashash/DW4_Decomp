@@ -1,10 +1,9 @@
 #include "dw4/newlib_stdio.h"
 #include <string.h>
+#include "dw4/newlib_locale.h"
+#include "dw4/newlib_mprec.h"
+#include <math.h>
 
-struct lconv {
-    char *decimal_point;
-};
-struct lconv *localeconv(void);
 char *cvt(struct _reent *, double, int, int, char *, int *, int, int *);
 int exponent(char *, int, int);
 typedef unsigned int __uint32_t;
@@ -12,16 +11,6 @@ typedef int wchar_t;
 typedef unsigned short u_short;
 typedef unsigned int u_int;
 typedef unsigned long u_long;
-extern int __mb_cur_max;
-int _mbtowc_r (struct _reent *, wchar_t *, const char *, size_t, int *);
-char * _dtoa_r (struct _reent *, double, int, int, int *, int*, char**);
-int isnan (double);
-int isinf (double);
-union double_union
-{
-  double d;
-  __uint32_t i[2];
-};
 
 int __sprint(FILE *fp, register struct __suio *uio)
 {

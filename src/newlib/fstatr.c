@@ -1,7 +1,8 @@
 #include "dw4/newlib_reent.h"
 #include "dw4/libkernl.h"
+#include "dw4/newlib_syscalls.h"
 
-int _fstat_r(struct _reent *ptr, int fd, void *st)
+int _fstat_r(struct _reent *ptr, int fd, struct stat *st)
 {
     int ret;
 

@@ -25,6 +25,10 @@ int sceSifLoadFileReset(void);
 int sceSifSyncIop(void);
 int sceSifRebootIop(const char *arg);
 
+/* IOP heap: carve a block out of the IOP's memory (0 when none is left) and give it back. */
+void *sceSifAllocIopHeap(unsigned int size);
+int sceSifFreeIopHeap(void *addr);
+
 #ifdef __cplusplus
 }
 #endif

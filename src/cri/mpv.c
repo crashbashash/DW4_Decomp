@@ -3,6 +3,7 @@
 #include "dw4/cri/mpv.h"
 #include "dw4/cri/mps.h"
 #include "dw4/cri/uty.h"
+#include "dw4/softfloat.h"
 
 extern char cri_mpv_version[];
 extern char *volatile mpv_version_ptr;
@@ -15,7 +16,6 @@ extern int mpv_lower_work[];            /* 0x3840 bytes for the lower layer */
 extern unsigned char mpv_clamp_table[1024];
 extern unsigned char *mpv_clamp;        /* mpv_clamp_table + 384 */
 
-long long __muldi3(long long a, long long b);
 
 int mpv_IsLowerReady(void);
 void mpv_BuildClampTable(void);

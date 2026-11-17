@@ -172,8 +172,6 @@ void SyncDCache(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);
 unsigned int sceSifQueryMaxFreeMemSize(void);
-void *sceSifAllocIopHeap(int size);
-int sceSifFreeIopHeap(void *addr);
 int sceSdRemote(int arg, int command, ...);
 int FUN_00281420(unsigned int channel, int *start, int *size);
 int sndf_PushCommand(unsigned short kind, unsigned short arg, int a, int b, int c, int d);

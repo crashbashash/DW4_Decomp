@@ -1,8 +1,10 @@
 #include "dw4/newlib_reent.h"
+#include <stdlib.h>
 
 long _strtol_r(struct _reent *, const char *, char **, int);
 #define LONG_MAX_64 0x7fffffffffffffffL
 #define LONG_MIN_64 (-0x7fffffffffffffffL - 1)
+/* unsigned char, not the libc header's char: the character-class lookups stay unsigned (bytes) */
 extern const unsigned char _ctype_[];
 #define CT(c) (_ctype_ + 1)[c]
 #define CT_UPPER 0x1

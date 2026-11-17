@@ -5,11 +5,6 @@
 #define NDYNAMIC 4
 #define ENOMEM 12
 
-int __sread(void *, char *, int);
-int __swrite(void *, const char *, int);
-long __sseek(void *, long, int);
-int __sclose(void *);
-void _cleanup_r(struct _reent *);
 void std(FILE *, int, int, struct _reent *);
 
 void std(FILE *ptr, int flags, int file, struct _reent *data)

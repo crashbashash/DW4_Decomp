@@ -5,8 +5,8 @@
 #include <string.h>
 #include "dw4/cri/cri_adxt.h"
 #include "dw4/cri/sj.h"
+#include <stdlib.h>
 
-int atoi(const char *s);
 
 extern char mpv_tag_idcprec[];  /* "IDCPREC" */
 extern char mpv_tag_stccode[];  /* "STCCODE" */

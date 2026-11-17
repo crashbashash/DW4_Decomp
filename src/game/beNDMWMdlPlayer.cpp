@@ -142,7 +142,7 @@ public:
     StringRef(int *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
 };
-/* kept local: the retained-string holder type is not shared yet (open item A7). */
+/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
 extern "C" StringRef StringList_CopyRetained(igStringObjList *, int);
 
 /* matching construct: slot order. The data list's holder is a local of this static inline member, allocated below

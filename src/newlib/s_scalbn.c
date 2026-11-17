@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include <math.h>
 
-extern double copysign(double, double);
 static const double
 two54   =  1.80143985094819840000e+16, 
 twom54  =  5.55111512312578270212e-17, 

@@ -3,6 +3,7 @@
  * callbacks the host registers; every lock records its type, and the outermost unlock checks it. */
 #include <string.h>
 #include "dw4/cri/svm.h"
+#include "dw4/newlib_stdio.h"
 
 #define SVM_SVTYPE_NUM 8
 #define SVM_SVR_NUM 6
@@ -35,11 +36,7 @@ typedef struct SvmErrCb {
     void *obj;
 } SvmErrCb;
 
-typedef __builtin_va_list va_list;
-#define va_start(ap, last) __builtin_stdarg_start((ap), (last))
-#define va_end(ap) __builtin_va_end(ap)
 
-int vsprintf(char *buf, const char *format, va_list args);
 
 extern volatile int svm_init_cnt;
 extern volatile int svm_lock_level;

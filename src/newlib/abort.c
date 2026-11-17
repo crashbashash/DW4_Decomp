@@ -1,5 +1,5 @@
-int raise(int sig);
-void _exit(int status) __attribute__((noreturn));
+#include "dw4/newlib_syscalls.h"
+#include <signal.h>
 
 void abort(void)
 {

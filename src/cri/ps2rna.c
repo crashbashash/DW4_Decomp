@@ -9,6 +9,7 @@
 #include "dw4/cri/cricfg.h"
 #include "dw4/cri/adxmsg.h"
 #include <string.h>
+#include "dw4/sony/sifdev.h"
 
 #define PS2RNA_MAX_OBJ 16
 #define PS2RNA_MAX_PSJ 32
@@ -40,8 +41,6 @@ enum {
 enum { PS2RNA_PORT_BOTH = 2 };
 
 
-void *sceSifAllocIopHeap(int size);
-int sceSifFreeIopHeap(void *addr);
 
 extern int ps2rna_nvoice;
 extern int ps2rna_iop_wksize;

@@ -19,6 +19,7 @@ double litodp(int value);
 
 /* The 64-bit routines; `long` is redefined by the Lua units, which call none of them. */
 #ifndef long
+long long __muldi3(long long u, long long v);
 long long __divdi3(long long u, long long v);
 long long __moddi3(long long u, long long v);
 unsigned long long __udivdi3(unsigned long long n, unsigned long long d);

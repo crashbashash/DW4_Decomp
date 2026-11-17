@@ -290,8 +290,6 @@ typedef struct SfdEntry44 {
     int f32;
 } SfdEntry44;
 
-int SFPL2_Standby(SfdPly *hn);
-int SFTRN_IsSetup();
 
 void sfsee_InitSeekInf(SfdRec *rec);
 void sfsee_InitHeadInf(SfdRec *rec);

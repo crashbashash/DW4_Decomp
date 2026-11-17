@@ -2,7 +2,6 @@
 #include "dw4/newlib_math.h"
 #include <math.h>
 
-extern double scalbn(double, int);
 static const int init_jk[] = {2,3,4,6};
 static const double PIo2[] = {
   1.57079625129699707031e+00, 

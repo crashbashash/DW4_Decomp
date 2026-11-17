@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dw4/cri/sj.h"
+#include "dw4/softfloat.h"
 
 typedef struct SfxZLib {
     int nhn;
@@ -13,8 +14,6 @@ typedef struct SfxZLib {
 extern SfxZLib sfxz_work;
 
 
-long long __muldi3(long long n, int k);
-void SFX_MakeTable(SfxHn *hn, SfxFrame *frm, unsigned int compo);
 
 void sfxzmv_InitLibWork(void);
 SfxZHn *sfxzmv_SearchFreeHn(void);
@@ -32,7 +31,6 @@ void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 void sfxcnv_CnvFrmArgb8888mbToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 int sfxcnv_CnvZbitToCft(int zbit);
-SfxZHn *SFX_SetZbit(SfxHn *hn, int zbit);
 
 void SFXZ_Init(void) {
     sfxzmv_InitLibWork();
@@ -387,7 +385,8 @@ int sfxcnv_CnvZbitToCft(int zbit) {
 }
 
 /* The pointer must live in v0, so it is returned rather than discarded. */
-SfxZHn *SFX_SetZbit(SfxHn *hn, int zbit) {
+void *SFX_SetZbit(void *sfx, int zbit) {
+    SfxHn *hn = sfx;
     SfxZHn *zhn = hn->zhn;
     zhn->zbit = zbit;
     return zhn;

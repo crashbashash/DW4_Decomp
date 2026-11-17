@@ -6,10 +6,12 @@
 #include "dw4/cri/sj.h"
 #include <string.h>
 #include "dw4/cri/sfd.h"
+#include "dw4/cri/adx_ps2.h"
+#include "dw4/cri/lsc.h"
+#include "dw4/cri/svm.h"
+#include "dw4/newlib_stdio.h"
 
-typedef __builtin_va_list va_list;
 
-int vsprintf(char *buf, const char *format, va_list args);
 
 /* SVM: server manager */
 enum {
@@ -18,31 +20,9 @@ enum {
     SVM_SVR_MAIN = 5,
     SVM_SVR_MWIDLE = 6
 };
-void SVM_Init(void);
-void SVM_Finish(void);
-int SVM_SetCbSvr(int svtype, void (*fn)(void *obj), void *obj);
-void SVM_SetCbSvrId(int svtype, int id, void (*fn)(void *obj), void *obj);
-void SVM_DelCbSvr(int svtype, int id);
-void SVM_SetCbVsyncBegin(void (*fn)(void *obj), void *obj);
-void SVM_SetCbVsyncEnd(void (*fn)(void *obj), void *obj);
-void SVM_LockVar(void);
-void SVM_UnlockVar(void);
-void SVM_LockSync(void);
-void SVM_UnlockSync(void);
-void SVM_LockDev(void);
-void SVM_UnlockDev(void);
-void SVM_LockThrd(void);
-void SVM_UnlockThrd(void);
-int SVM_TestAndSet(int *flag);
-void SVM_GotoSvrBorder(int id);
-void SVM_CallErr1(const char *msg);
-void ADXM_SetCbErr(void (*fn)(void *obj, const char *msg), void *obj);
-int ADXM_IsSetupThrd(void);
-void ADXM_ExecVsyncFrame(void);
 
 /* the rest of MWSFD */
 int mwPlyExecSvrHndl(MwsfdPly *ply);
-int LSC_GetNumStm(struct LscObj *lsc);
 
 /* SFD */
 
@@ -51,6 +31,7 @@ extern int mwsfsvr_vsync_svr_id;
 extern int mwsfsvr_mwidle_svr_id;
 extern int mwsfsvr_main_svr_id;
 extern int mwsfsvr_vsync_cnt;
+/* kept here: the approved volatile (the vsync server writes it); declared in a header it would apply to every includer */
 extern volatile int mwsfsvr_vsync_cnt2;
 extern MwsfdPly *mwsfsvr_cur_ply;  /* the player the server is executing */
 extern char mwsfd_err_msg[256];
@@ -86,12 +67,12 @@ void MWSFSVM_DeleteVint(void)
     SVM_DelCbSvr(SVM_SVR_VINT, mwsfsvr_vint_svr_id);
 }
 
-void MWSFSVM_EntryVfunc(void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryVfunc(SvmSvrFunc fn, void *obj)
 {
     mwsfsvr_vsync_svr_id = SVM_SetCbSvr(SVM_SVR_VSYNC, fn, obj);
 }
 
-void MWSFSVM_EntryIdVfunc(int id, void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryIdVfunc(int id, SvmSvrFunc fn, void *obj)
 {
     SVM_SetCbSvrId(SVM_SVR_VSYNC, id, fn, obj);
     mwsfsvr_vsync_svr_id = id;
@@ -102,7 +83,7 @@ void MWSFSVM_DeleteVfunc(void)
     SVM_DelCbSvr(SVM_SVR_VSYNC, mwsfsvr_vsync_svr_id);
 }
 
-void MWSFSVM_EntryIdleFunc(void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryIdleFunc(SvmSvrFunc fn, void *obj)
 {
     mwsfsvr_mwidle_svr_id = SVM_SetCbSvr(SVM_SVR_MWIDLE, fn, obj);
 }
@@ -112,7 +93,7 @@ void MWSFSVM_DeleteIdleFunc(void)
     SVM_DelCbSvr(SVM_SVR_MWIDLE, mwsfsvr_mwidle_svr_id);
 }
 
-void MWSFSVM_EntryMainFunc(void (*fn)(void *obj), void *obj)
+void MWSFSVM_EntryMainFunc(SvmSvrFunc fn, void *obj)
 {
     mwsfsvr_main_svr_id = SVM_SetCbSvr(SVM_SVR_MAIN, fn, obj);
 }

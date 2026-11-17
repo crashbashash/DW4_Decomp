@@ -912,7 +912,6 @@ AdxEnc *ADXSJE_Create(int nch, SfdSj **in, SfdSj *out)
 }
 
 /* matching construct: statement-order sweep of the five trailing stores */
-void ADXCRS_Lock(void);
 
 void ADXSJE_Destroy(AdxEnc *e)
 {

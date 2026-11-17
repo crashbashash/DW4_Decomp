@@ -9,7 +9,8 @@ void sfpts_ReadPtsQueSub(SfdRing *ring, unsigned int pos, SfdItem *out, unsigned
 int sfpts_SearchPtsQue(SfdRing *ring, unsigned int pos, unsigned int base, unsigned int span);
 
 /* matching construct: variant search — statement order; the unit compiler (Sony EE GCC 2.96 -O2 -G0) schedules the last independent store of the body into the return delay slot and keeps the rest in source order, so the stores are written in retail's emitted order */
-void SFPTS_InitPtsQue(SfdRing *ring) {
+void SFPTS_InitPtsQue(void *ringp) {
+    SfdRing *ring = ringp;
     ring->items = 0;
     ring->size = 0;
     ring->count = 0;
@@ -17,7 +18,8 @@ void SFPTS_InitPtsQue(SfdRing *ring) {
     ring->rd = 0;
 }
 
-int SFD_SetVideoPts(SfdPly *h, void *data, int size) {
+int SFD_SetVideoPts(void *sfd, void *data, int size) {
+    SfdPly *h = sfd;
     if (data == 0 || size <= 0) {
         return 0;
     }

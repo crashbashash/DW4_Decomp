@@ -34,6 +34,7 @@ typedef struct SfdLibInf {
 } SfdLibInf;
 
 extern char cri_sfd_version[];
+/* kept here: this unit, sfdcond.c and sfdply.c each read the library block through their own view, and the types disagree */
 extern SfdLibInf sfd_lib;
 extern int sfd_cond_defaults[100];
 extern SfdHandle *sfd_cur_hn;

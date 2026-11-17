@@ -2,7 +2,6 @@
 #include "dw4/newlib_math.h"
 #include <math.h>
 
-extern float fabsf(float);
 #define tiny ((float)1.0e-30)
 #define zero ((float)0.0)
 #define pi_o_4 ((float)7.8539818525e-01)

@@ -1,4 +1,5 @@
 #include "dw4/cri/sndf.h"
+#include "dw4/sony/sifdev.h"
 
 int SNDF_Finish(void)
 {

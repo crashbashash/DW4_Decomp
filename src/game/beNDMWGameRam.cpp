@@ -350,7 +350,6 @@ template<int I> class RecoveryRef { public:
  ~RecoveryRef() { RecoveryTarget::release((RecoveryTarget *)value); }
 };
 extern "C" void beNDMWGameRam_GiveInitialWeapons(beNDMWGameRam *self, int index);
-/* kept local: the retained-string holder type is not shared yet (open item A7). */
 extern "C" void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply);
 extern "C" unsigned char beNDMWGameRam_HasUsableWeapon(beNDMWGameRam *self, int index, int species);
 extern "C" void beNDMWGameRam_JoinPlayer(beNDMWGameRam *self, int index, const char *modelName);
@@ -1948,7 +1947,6 @@ extern char DATABASE_6[];
 extern unsigned char g_boolListClearValue;
 int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *message);
 }
-/* kept local: the retained-string holder type is not shared yet (open item A7). */
 /* The data-list reference made from an allocator value: constructed by beNDMWGameRam_CreateDataListRef and released by the shared igSmartPointer destructor, both out of line. */ class RecoveryCopiedRef { public: void *value; RecoveryCopiedRef(const AllocatorValue &source); ~RecoveryCopiedRef(); };
 /* Gives `obj` a fresh object from the allocator.
  * matching construct: written in place, the copied reference takes the frame slot below retail's (1028 for 1032);

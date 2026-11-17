@@ -1,4 +1,6 @@
-int _mbtowc_r(void *ptr, int *pwc, const char *s, unsigned int n)
+#include "dw4/newlib_locale.h"
+
+int _mbtowc_r(struct _reent *ptr, int *pwc, const char *s, unsigned int n, int *state)
 {
     int dummy;
     const unsigned char *t = (const unsigned char *)s;

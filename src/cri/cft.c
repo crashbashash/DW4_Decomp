@@ -324,12 +324,13 @@ void cft_MakeAlpha3TblBlack(CftEntry *t, unsigned char alpha0, unsigned char alp
     }
 }
 
-void CFT_MakeYcc422ColAdjTbl(void)
+void CFT_MakeYcc422ColAdjTbl(void *dst)
 {
 }
 
-void CFT_MakeArgb8888ColAdjTbl(CftGifPacket *dst)
+void CFT_MakeArgb8888ColAdjTbl(void *dstp)
 {
+    CftGifPacket *dst = dstp;
     *dst = DAT_004bb3f8;
 }
 

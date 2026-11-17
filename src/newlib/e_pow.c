@@ -2,7 +2,6 @@
 #include "dw4/newlib_math.h"
 #include <math.h>
 
-extern double scalbn(double, int);
 static const double 
 bp[] = {1.0, 1.5,},
 dp_h[] = { 0.0, 5.84962487220764160156e-01,}, 

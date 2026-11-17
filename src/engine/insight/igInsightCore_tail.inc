@@ -142,7 +142,7 @@ void FUN_00237730(S_237730 *arg0) {
     long long t = arg0->f48->vX();
     arg0->f64 = t - arg0->f56;
     arg0->f56 = t;
-    arg0->f80 = arg0->f80 + (__muldi3(arg0->f64, arg0->f72) >> 18);
+    arg0->f80 = arg0->f80 + ((arg0->f64 * arg0->f72) >> 18);
     arg0->f32->vX();
     arg0->f12->vX();
 }

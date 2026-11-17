@@ -20,10 +20,6 @@ struct SfxCnvTbl {
 };
 
 void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo);
-int SFX_GetFxType(void *hn);
-void SFX_SetZbit(SfxCnvTbl *tbl, int n);
-int CFT_MakeArgb8888ColAdjTbl();
-int CFT_MakeYcc422ColAdjTbl();
 
 void sfxcnv_MakeZTbl(SfxCnvTbl *tbl, SfxFrame *frm);
 void SFXCNV_MakeCcirFromY(unsigned char *t);

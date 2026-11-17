@@ -43,6 +43,7 @@ typedef struct SfdEntryRef {
     int *value;
 } SfdEntryRef;
 
+/* kept here: sfdcond.c, sfdlib.c and sfdply.c each read the library block through their own view, and the types disagree */
 extern int sfd_lib[];
 typedef struct SfdLib {
     int counter;
@@ -54,7 +55,6 @@ typedef struct SfdLib {
 
 extern SfdLib DAT_004bea88;
 
-int SFTRN_IsSetup(SfdHn *hn, int check);
 
 void sfset_SetCondAll(int index, int value);
 void sfset_SetUsrCond(SfdHn *hn, int index, int value);

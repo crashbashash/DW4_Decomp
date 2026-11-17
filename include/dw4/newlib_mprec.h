@@ -86,6 +86,7 @@ double _b2d(_Bigint *, int *);
 _Bigint *_d2b(struct _reent *, double, int *, int *);
 double _ratio(_Bigint *, _Bigint *);
 double _mprec_log10(int);
+char *_dtoa_r(struct _reent *, double, int, int, int *, int *, char **);
 
 extern const double __mprec_tens[];
 extern const double __mprec_bigtens[];

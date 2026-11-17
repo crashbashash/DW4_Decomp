@@ -6,6 +6,7 @@
 #include "dw4/cri/sndf.h"
 #include "dw4/cri/dtx.h"
 #include "dw4/cri/adxmsg.h"
+#include "dw4/sony/sifdev.h"
 
 #define SJX_MAX_OBJ 32
 #define SJX_MAX_SEND 128

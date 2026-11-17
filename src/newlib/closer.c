@@ -1,5 +1,6 @@
 #include "dw4/newlib_reent.h"
 #include "dw4/libkernl.h"
+#include "dw4/newlib_syscalls.h"
 
 int _close_r(struct _reent *ptr, int fd)
 {

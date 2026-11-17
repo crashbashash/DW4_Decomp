@@ -2,6 +2,7 @@
  * into it. Every call is one RPC with its arguments in a small send buffer and its answer in the
  * first word of the receive buffer. */
 #include "dw4/sony/sif.h"
+#include "dw4/sony/sifdev.h"
 
 /* the IOP heap server's RPC functions */
 #define IH_ALLOC_HEAP 1

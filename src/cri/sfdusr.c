@@ -20,7 +20,6 @@ struct SfdUsrHn {
     SfdUsrIf ifaceStorage;    /* 13780 */
 };
 
-int SFTRN_CallTrtTrif(SfdUsrHn *h, int group, int event, int a, int b);
 
 int sfaoap_OutputServer(SfdUsrHn *h);
 void sfaoap_ChkPrepFlg(SfdUsrHn *h);

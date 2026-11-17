@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include <math.h>
 
-extern float copysignf(float, float);
 #define OVERFLOW_INT 50000
 #define two25 ((float)3.355443200e+07)
 #define twom25 ((float)2.9802322388e-08)

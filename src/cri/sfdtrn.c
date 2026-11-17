@@ -238,8 +238,9 @@ int SFTRN_CallTrSetup(void *sfd, int k)
     return r;
 }
 
-int SFTRN_CallTrtTrif(SfdHn *hn, int index, int k, int a, int b)
+int SFTRN_CallTrtTrif(void *sfd, int index, int k, int a, int b)
 {
+    SfdHn *hn = sfd;
     SfdHn *p = (SfdHn *)((char *)hn + index * 0x44);
     SfdTrnFn *fns = p->trn[0].fns;
     if (fns == 0) {
@@ -276,8 +277,9 @@ int SFTRN_GetTermFlg(void *sfd, int index)
     return hn->trn[0].f4;
 }
 
-int SFTRN_IsSetup(SfdHn *hn, int index)
+int SFTRN_IsSetup(void *sfd, int index)
 {
+    SfdHn *hn = sfd;
     hn = (SfdHn *)((char *)hn + index * 0x44);
     return hn->trn[0].fns != 0;
 }

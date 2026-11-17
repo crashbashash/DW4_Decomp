@@ -1,9 +1,6 @@
 #include "dw4/newlib_stdio.h"
+#include "dw4/newlib_syscalls.h"
 
-long _read_r(struct _reent *ptr, int fd, void *buf, int count);
-long _write_r(struct _reent *ptr, int fd, const void *buf, int count);
-long _lseek_r(struct _reent *ptr, int fd, long offset, int whence);
-int _close_r(struct _reent *ptr, int fd);
 
 int __sread(void *cookie, char *buf, int n)
 {
@@ -29,6 +26,10 @@ int __swrite(void *cookie, const char *buf, int n)
     fp->_flags &= ~__SOFF;
     return _write_r(fp->_data, fp->_file, buf, n);
 }
+
+/* kept local: the definition takes and returns int, but this caller is compiled against the long form (an int prototype adds
+ * the 64-bit conversions) */
+long _lseek_r(struct _reent *ptr, int fd, long offset, int whence);
 
 long __sseek(void *cookie, long offset, int whence)
 {

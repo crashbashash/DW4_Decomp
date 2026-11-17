@@ -278,7 +278,7 @@ int FUN_00234510(igStringRefList *a0, int *a1, const char *a2, int *arg3) {
     void *sp2C;
 
     if (FUN_002345b0(a0, a1, a2, &sp2C) != 0) {
-        *arg3 = atoi(sp2C);
+        *arg3 = atoi((const char *)sp2C);
         return 1;
     }
     return 0;

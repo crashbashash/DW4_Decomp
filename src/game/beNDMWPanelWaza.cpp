@@ -57,7 +57,7 @@ char g_textColorRgbReady;
 float g_textColorRgb[12];
 }
 struct RecoveryString { void *p; RecoveryString() {} RecoveryString(void *q) { p = q; } ~RecoveryString() { if (p != 0) { int *t = (int *)((char *)p - 8); int v = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = v; if (v == 0) StringChunk_ReleaseHeader((StringChunk *)*t, (StringTokenHeader *)t); } } };
-/* kept local: the retained-string holder type is not shared yet (open item A7). */
+/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
 extern "C" RecoveryString StringList_CopyRetained(void *, int);
 struct SetOp { static inline void go(igStringRefList *L, int idx, const RecoveryString &r) { int cnt; int *slot; int *t; int *a1; int c; cnt = L->_count; if (cnt != 0 && idx >= 0 && idx < cnt) { slot = (int *)L->_data + idx; t = (int *)r.p; if (t != 0) t[-1] = t[-1] + 1; t = (int *)(*slot); if (t != 0) { a1 = t - 2; c = t[-1] - 1; t[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1); } *slot = (int)r.p; } } };
 extern "C" void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *name, int val);
@@ -125,7 +125,6 @@ extern "C" void beNDMWPanelWaza_OpenPanel(int self, beNDMWPanelWazaInfoRam *ram,
 extern "C" int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *message);
 extern "C" void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self);
 extern "C" void beNDMWPanelObjectItem_Fire(beNDMWPanelObjectItem *self, int *label, long long *wait);
-/* kept local: the retained-string holder type is not shared yet (open item A7). */
 extern "C" void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self);
 static inline int listCount(const igIntList *list) { return list->_count; }
 

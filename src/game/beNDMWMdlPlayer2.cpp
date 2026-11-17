@@ -242,7 +242,7 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
 }
 
 
-/* kept local: the retained-string holder type is not shared yet (open item A7). */
+/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
 extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 extern "C" char GENERATE_15[];
 extern "C" char REMOVE_6[];

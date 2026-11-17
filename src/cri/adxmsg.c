@@ -2,14 +2,11 @@
 #include "dw4/cri/adxmsg.h"
 #include "dw4/cri/dvci.h"
 #include "dw4/cri/htci.h"
+#include "dw4/newlib_stdio.h"
 
-typedef __builtin_va_list va_list;
-#define va_start(ap, last) __builtin_stdarg_start((ap), (last))
-#define va_end(ap) __builtin_va_end(ap)
 
 int adxmsg_level = 0;
 
-int vsprintf(char *buffer, const char *format, va_list args);
 
 int ADXPS2_GetOutputDebugLevel(void) {
     return adxmsg_level;

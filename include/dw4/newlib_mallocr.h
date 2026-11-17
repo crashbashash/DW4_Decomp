@@ -23,6 +23,12 @@ extern char *_sbrk_r(struct _reent *, int);
 extern void __malloc_lock(struct _reent *);
 extern void __malloc_unlock(struct _reent *);
 extern int _malloc_trim_r(struct _reent *, unsigned int);
+extern void *_calloc_r(struct _reent *, unsigned int, unsigned int);
+extern void *_realloc_r(struct _reent *, void *, unsigned int);
+extern int _mallopt_r(struct _reent *, int, long);
+extern void _malloc_stats_r(struct _reent *);
+extern struct mallinfo _mallinfo_r(struct _reent *);
+extern void __malloc_update_mallinfo(void);
 
 #define SIZE_SZ 4
 #define PREV_INUSE 0x1

@@ -30,6 +30,7 @@ struct SfdTim;
 struct SfdTimeRec;
 struct SfdTcDesc;
 struct SfdTimeSpan;
+struct SfdCrePrm;
 
 /* A clock source: the time of the handle as a count of units. */
 typedef int (*SfdTimeFn)(void *sfd, int *time, int *unit);
@@ -158,6 +159,23 @@ void SFTRN_SetPrepFlg(void *sfd, int index, int value);
 int SFTRN_GetPrepFlg(void *sfd, int index);
 void SFTRN_SetTermFlg(void *sfd, int index, int value);
 int SFTRN_GetTermFlg(void *sfd, int index);
+int SFTRN_CallTrtTrif(void *sfd, int index, int k, int a, int b);
+int SFTRN_IsSetup(void *sfd, int index);
+
+/* the pass-through wrappers between the SFD files */
+void SFPTS_InitPtsQue(void *ring);
+int SFD_SetVideoPts(void *sfd, void *data, int size);
+void SFTMR_InitTsum(void *stat);
+void SFTMR_AddTsum(void *stat, long time);
+int SFMPV_SaveCond(void *sfd, int *values, unsigned int size);
+void SFMPV_RestoreCond(void *sfd, int *values, int count);
+int SFPL2_Standby(void *sfd);
+void SFMPVP_SearchPsc(void *sfd, unsigned char *data, int size);
+void SFMPVP_Destroy(void *sfd);
+int SFTIM_GetAudioStartSample(void *tim, int scale);
+void SFTIM_Pause(void *sfd, unsigned int kind);
+void *SFD_Create(struct SfdCrePrm *prm, int arg);
+extern int SFTIM_prate[];
 
 /* SFTST: the time-stamp statistics */
 void SFTST_Create(struct SfdTst *p);

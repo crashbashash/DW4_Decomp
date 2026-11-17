@@ -1,10 +1,6 @@
 #include "dw4/newlib_mallocr.h"
+#include "dw4/newlib_stdio.h"
 
-typedef struct __sFILE FILE;
-int fiprintf(FILE *fp, const char *fmt, ...);
-int _mallopt_r(struct _reent *ptr, int param, int value);
-void _malloc_stats_r(struct _reent *ptr);
-struct mallinfo _mallinfo_r(struct _reent *ptr);
 extern const char memory_allocation_statistics_format[];
 
 struct mallinfo mallinfo(void)

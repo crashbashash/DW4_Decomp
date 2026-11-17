@@ -1,5 +1,5 @@
 /* matching construct: sweep of about 30 spellings — the combined null test */
-void FUN_001673a0(void *png_ptr, void *row_info, unsigned char *data) {
+void FUN_001673a0(png_structp png_ptr, png_row_infop row_info, png_bytep data) {
     if (png_ptr == 0 || row_info == 0) {
         return;
     }
@@ -18,10 +18,10 @@ igMetaObject *FUN_00167400(void) {
     return g_igImage_metaObject;
 }
 
-int FUN_00167410(Owner_167410 *arg0, int arg1, int arg2, int arg3, void *arg4, void *arg5, int arg6, int arg7) {
-    int sp5C;
-    int sp58;
-    int sp54;
+int FUN_00167410(Owner_167410 *arg0, png_structp arg1, png_infop arg2, png_infop arg3, void *arg4, void *arg5, int arg6, int arg7) {
+    png_infop sp5C;
+    png_infop sp58;
+    png_structp sp54;
     Obj_167410 *o;
 
     sp54 = arg1;
@@ -147,9 +147,9 @@ int FUN_00167540(void *png, int bitDepth, int colorType, PngSignificantBits *bit
 }
 
 
-int FUN_001681c0(igImage *self, void *png, void *info) {
-    int sp5C;
-    int sp58;
+int FUN_001681c0(igImage *self, png_structp png, png_infop info) {
+    png_uint_32 sp5C;
+    png_uint_32 sp58;
     int sp54;
     int sp50;
     int sp4C;

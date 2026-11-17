@@ -11,6 +11,7 @@
 #include "dw4/ClassRegistration.h"
 #include "dw4/igVisualContext.h"
 #include "dw4/igDirEntry.h"
+#include "dw4/png.h"
 #include "dw4/igImage.h"
 #include "dw4/igParticleArray.h"
 #include "dw4/igPsx2VisualContext.h"
@@ -2775,26 +2776,22 @@ extern "C" int Gap__Gfx__igPrimLengthArray1_1__vfunc_27(igPrimLengthArray1_1 *se
 extern "C" int Gap__Gfx__igPrimLengthArray1_1__vfunc_24(igPrimLengthArray1_1 *arg0, int dummy1, int arg2);
 extern "C" void Gap__Gfx__igPrimLengthArray1_1__vfunc_25(void);
 extern "C" int DAT_00560840;
-extern "C" void *FUN_00167310(void *png, int size);
-extern "C" void FUN_00167320(void *png, void *storage);
-extern "C" void **png_get_io_ptr(...);
+extern "C" void *FUN_00167310(png_structp png, int size);
+extern "C" void FUN_00167320(png_structp png, void *storage);
 class DW4VC_108_3 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int, int); };
-extern "C" void FUN_00167330(int dummy0, int arg1, int arg2);
+extern "C" void FUN_00167330(png_structp png, int arg1, int arg2);
 extern "C" void FUN_00167380(void);
 extern "C" void FUN_00167390(void);
-extern "C" void FUN_001673a0(void *png_ptr, void *row_info, unsigned char *data);
+extern "C" void FUN_001673a0(png_structp png_ptr, png_row_infop row_info, png_bytep data);
 extern "C" void thunk_FUN_001592c0(LongListStorageView *self);
 /* igImage copy: dimensions, format, name and bit depths from `source`; pixels and palette only when `deep`. A self
  * copy only makes borrowed pixels local. */
 extern "C" void FUN_001563b0(igImage *self, igImage *source, int deep);
 extern "C" void Gap__Gfx__igFileImagePng__vfunc_23(igImage *self, void **source, int deep);
 extern "C" igMetaObject *FUN_00167400(void);
-extern "C" int png_destroy_info_struct(...);
-extern "C" int png_destroy_read_struct(...);
-extern "C" int png_destroy_write_struct(...);
 class Obj_167410 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
 struct Owner_167410 { char pad[92]; Obj_167410 *f92; };
-extern "C" int FUN_00167410(Owner_167410 *arg0, int arg1, int arg2, int arg3, void *arg4, void *arg5, int arg6, int arg7);
+extern "C" int FUN_00167410(Owner_167410 *arg0, png_structp arg1, png_infop arg2, png_infop arg3, void *arg4, void *arg5, int arg6, int arg7);
 typedef struct PngSignificantBits {
     unsigned char red;
     unsigned char green;
@@ -2803,27 +2800,6 @@ typedef struct PngSignificantBits {
     unsigned char alpha;
 } PngSignificantBits;
 extern "C" int FUN_00167540(void *png, int bitDepth, int colorType, PngSignificantBits *bits, int *format);
-extern "C" int png_get_valid(...);
-extern "C" int png_get_IHDR(...);
-extern "C" int png_set_strip_16(...);
-extern "C" int png_set_gray_1_2_4_to_8(...);
-extern "C" int png_set_tRNS_to_alpha(...);
-extern "C" int png_set_read_user_transform_fn(...);
-extern "C" int png_set_packing(...);
-extern "C" int png_sig_cmp(...);
-extern "C" void *png_create_read_struct_2(...);
-extern "C" void png_set_sig_bytes(...);
-extern "C" void png_set_mem_fn(...);
-extern "C" void *png_create_info_struct(...);
-extern "C" void png_set_read_fn(...);
-extern "C" void png_read_info(...);
-extern "C" void png_read_update_info(...);
-extern "C" int png_get_sBIT(...);
-extern "C" int png_get_PLTE(...);
-extern "C" int png_get_tRNS(...);
-extern "C" unsigned int png_get_rowbytes(...);
-extern "C" void png_read_row(...);
-extern "C" void png_read_end(...);
 /* libpng's palette entry (png_color). */
 struct PngColor {
     unsigned char red;
@@ -2847,7 +2823,7 @@ struct igFileImagePngView : public igImage {
 };
 extern "C" int Gap__Gfx__igFileImagePng__vfunc_33(igFileImagePngView *self, int name);
 /* Sets libpng's read transforms for an image (16-bit stripped, small palettes and grey unpacked, tRNS to alpha). */
-extern "C" int FUN_001681c0(igImage *self, void *png, void *info);
+extern "C" int FUN_001681c0(igImage *self, png_structp png, png_infop info);
 extern "C" int Gap__Gfx__igFileImagePng__vfunc_45(void);
 extern "C" void Gap__Gfx__igTgaLoader__vfunc_12(igObject *self);
 class O_1682e0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(); int rc; };

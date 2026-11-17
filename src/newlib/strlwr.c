@@ -1,4 +1,4 @@
-extern const char _ctype_[];
+#include <ctype.h>
 #define CTYPE_UPPER 0x01
 #define IS_UPPER(c) ((_ctype_ + 1)[(int)(c)] & CTYPE_UPPER)
 

@@ -158,7 +158,6 @@ public:
     StringRef(char *s, int retain) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { StringToken_Release(p); }
 };
-/* kept local: the retained-string holder type is not shared yet (open item A7). */
 
 /* Appends a pooled copy of `text` to a window string list; a null text appends a null token. */
 #define INTERN_APPEND(list, text) { \

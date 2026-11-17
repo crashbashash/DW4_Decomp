@@ -35,6 +35,8 @@ int CFT_GetMaxAlpha(void);
 void CFT_Ycc420rgbToArgb8888(void);
 void CFT_Ycc420plnToZ16(CftYccPln *src, CftImage *img, int *table);
 void CFT_Ycc420plnToZ32(CftYccPln *src, CftImage *img, int *table);
+void CFT_MakeArgb8888ColAdjTbl(void *dst);
+void CFT_MakeYcc422ColAdjTbl(void *dst);
 void cft_MakeYccTbl(int mode, int lo, int hi, CftEntry *t);
 void cft_MakeAlpha3Tbl(CftEntry *t, unsigned char alpha0, unsigned char alpha1, unsigned char alpha2);
 void cft_MakeAlpha3TblBlack(CftEntry *t, unsigned char alpha0, unsigned char alpha1, unsigned char alpha2);

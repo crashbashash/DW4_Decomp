@@ -3,51 +3,6 @@
 #include "dw4/sony/libdma.h"
 #include "dw4/libkernl.h"
 
-typedef struct {
-    unsigned int DIR : 1;
-    unsigned int p0 : 1;
-    unsigned int MOD : 2;
-    unsigned int ASP : 2;
-    unsigned int TTE : 1;
-    unsigned int TIE : 1;
-    unsigned int STR : 1;
-} tD_CHCR;
-
-typedef union {
-    tD_CHCR f;
-    unsigned int word;
-} uD_CHCR;
-
-/* One channel's register block in the 0x10008000.. DMAC space. */
-typedef struct {
-    uD_CHCR chcr;
-    unsigned int p0[3];
-    unsigned int madr;
-    unsigned int p1[3];
-    unsigned int qwc;
-    unsigned int p2[3];
-    unsigned int tadr;
-    unsigned int p3[3];
-    unsigned int as0;
-    unsigned int p4[3];
-    unsigned int as1;
-    unsigned int p5[11];
-    unsigned int sadr;
-} sceDmaChan;
-
-typedef struct {
-    unsigned char sts;
-    unsigned char std;
-    unsigned char mfd;
-    unsigned char rcycle;
-    unsigned short express;
-    unsigned short notify;
-    unsigned short sqwc;
-    unsigned short tqwc;
-    void *rbadr;
-    unsigned int rbmsk;
-} sceDmaEnv;
-
 #define D_CTRL (*(volatile unsigned int *)0x1000e000)
 #define D_STAT (*(volatile unsigned int *)0x1000e010)
 #define D_PCR (*(volatile unsigned int *)0x1000e020)
@@ -306,7 +261,7 @@ void sceDmaRecvI(sceDmaChan *d, void *addr, int qwc)
 }
 
 /* mode 1 polls once: nonzero while the channel runs; otherwise waits for it. */
-int sceDmaSync(sceDmaChan *d, int mode)
+int sceDmaSync(sceDmaChan *d, int mode, int timeout)
 {
     if (mode == 1) {
         return (d->chcr.word >> 8) & 1;

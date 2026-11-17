@@ -2,6 +2,7 @@
 #include "dw4/cri/lsc.h"
 #include <string.h>
 #include "dw4/cri/adxstm.h"
+#include "dw4/newlib_stdio.h"
 
 #define LSC_MAX_OBJ 32
 
@@ -15,11 +16,7 @@ typedef struct LscCrs {
     int word[4];
 } LscCrs;
 
-typedef __builtin_va_list va_list;
-#define va_start(ap, last) __builtin_stdarg_start((ap), (last))
-#define va_end(ap) __builtin_va_end(ap)
 
-int vsprintf(char *buf, const char *format, va_list args);
 
 static LscObj lsc_objs[LSC_MAX_OBJ];
 

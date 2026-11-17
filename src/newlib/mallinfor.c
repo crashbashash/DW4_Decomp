@@ -3,7 +3,6 @@
 #define RONEARG struct _reent *reent_ptr
 #define MALLOC_LOCK __malloc_lock(reent_ptr)
 #define MALLOC_UNLOCK __malloc_unlock(reent_ptr)
-void __malloc_update_mallinfo(void);
 #define malloc_update_mallinfo __malloc_update_mallinfo
 
 void __malloc_update_mallinfo(void)

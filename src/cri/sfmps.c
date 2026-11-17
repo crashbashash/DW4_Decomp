@@ -79,7 +79,6 @@ SfdPicRec *sfmps_GetHd(SfdHandle *hn);
 int sfmps_IsEffectiveEndcode(SfdHandle *hn, int kind);
 void sfmps_ChkInEnd(SfdHandle *hn, int *done);
 int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts);
-void SFMPVP_SearchPsc(SfdHandle *hn, unsigned char *data, int len);
 int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total);
 void sfmps_SkipNext(SfdHandle *hn, unsigned char *buf, int size, int *skip);
 int sfmps_PutPes(SfdHandle *hn, unsigned char *data, int len, int *used, int *result);

@@ -2,8 +2,6 @@
 #include <string.h>
 #include "dw4/newlib_mallocr.h"
 
-int ungetc (int, FILE *);
-void * _realloc_r (struct _reent *, void *, size_t);
 
 int __submore(register FILE *fp)
 {

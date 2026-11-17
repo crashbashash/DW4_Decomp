@@ -172,6 +172,9 @@ int SFX_GetTypeCcs(SfxHn *hn);
 void SFX_CnvFrmZ16(SfxHn *hn, SfxFrame *frm, int arg);
 void SFX_CnvFrmZ32(SfxHn *hn, SfxFrame *frm, int arg);
 
+int SFX_GetFxType(SfxHn *hn);
+void *SFX_SetZbit(void *sfx, int zbit);
+void SFX_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo);
 void SFX_MakeTblZ16(SfxCnvTbl *tbl, SfxFrame *frm);
 void SFX_MakeTblZ32(SfxCnvTbl *tbl, SfxFrame *frm);
 int SFXINF_GetStmInf(SfxFrame *frm, char *tag);

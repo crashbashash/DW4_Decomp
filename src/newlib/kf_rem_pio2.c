@@ -1,8 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern float floorf(float);
-extern float scalbnf(float, int);
 static const int init_jk[] = {4,7,9};
 static const float PIo2[] = {
   1.5703125000e+00, 

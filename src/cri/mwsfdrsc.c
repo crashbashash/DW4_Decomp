@@ -3,16 +3,12 @@
 #include <string.h>
 #include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/adx_ps2.h"
+#include "dw4/sony/libdma.h"
 
 #define MWSFD_SPR_SIZE 0x4000
 #define MWSFD_SPR_ADDR 0x70000000
 #define DMA_CH_FROM_SPR 8
 #define DMA_CH_TO_SPR 9
-
-typedef struct DmaChan {
-    char pad0[128];
-    int sadr; /* 128: scratchpad address of the transfer */
-} DmaChan;
 
 /* Called with each new player handle and the scratchpad-swap enable. */
 typedef void (*MwsfdCreateCb)(void *ply, int sprEnable);
@@ -23,11 +19,6 @@ static int mwsfd_spr_swapped = 0;
 static int mwsfd_spr_cpu_copy = 0;
 static char mwsfd_spr_save_buf[MWSFD_SPR_SIZE];
 static char mwsfd_spr_work_buf[MWSFD_SPR_SIZE];
-
-DmaChan *sceDmaGetChan(int id);
-int sceDmaSync(DmaChan *ch, int mode, int timeout);
-void sceDmaRecvN(DmaChan *ch, void *data, int qwc);
-void sceDmaSendN(DmaChan *ch, void *data, int qwc);
 
 void mwsfrsc_InitVal(void);
 int MWSFD_GetUseSPR(void);
@@ -121,7 +112,7 @@ int MWSPR_SaveSprByCpu(int sprOfs, int size, void *dst) {
 }
 
 int MWSPR_SaveSprByDma(int sprOfs, int size, void *dst) {
-    DmaChan *ch = sceDmaGetChan(DMA_CH_FROM_SPR);
+    sceDmaChan *ch = sceDmaGetChan(DMA_CH_FROM_SPR);
     ch->sadr = sprOfs;
     sceDmaRecvN(ch, dst, size / 16);
     return 0;
@@ -145,7 +136,7 @@ int MWSPR_RestoreSprByCpu(void *src, int size, int sprOfs) {
 }
 
 int MWSPR_RestoreSprByDma(void *src, int size, int sprOfs) {
-    DmaChan *ch = sceDmaGetChan(DMA_CH_TO_SPR);
+    sceDmaChan *ch = sceDmaGetChan(DMA_CH_TO_SPR);
     ch->sadr = sprOfs;
     sceDmaSendN(ch, src, size / 16);
     return 0;
@@ -161,7 +152,7 @@ int MWSFD_GetSprCpMode(void) {
 }
 
 void MWDMA_WaitEnd(int id) {
-    DmaChan *ch = sceDmaGetChan(id);
+    sceDmaChan *ch = sceDmaGetChan(id);
     while (sceDmaSync(ch, 1, 30) != 0) {
     }
 }

@@ -1,7 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern float fabsf(float);
 static const float 
 one   =  1.0000000000e+00, 
 pio4  =  7.8539812565e-01, 

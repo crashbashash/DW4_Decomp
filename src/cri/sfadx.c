@@ -1,6 +1,7 @@
 #include "dw4/cri/sj.h"
 #include "dw4/cri/mcp.h"
 #include <string.h>
+#include <math.h>
 #include "dw4/cri/mps.h"
 #include "dw4/cri/uty.h"
 #include "dw4/cri/sfd.h"
@@ -117,7 +118,6 @@ extern SfdAdxCfg sfadxt_para;
 extern int sfadxt_adxterr;
 extern AdxtObj *sfadxt_save_hn;
 
-float logf(float);
 
 void SFADXT_SetOutPan(SfdAdxHn *h, int ch, int pan);
 int SFADXT_GetOutPan(SfdAdxHn *h, int ch);
@@ -133,7 +133,6 @@ void sfadxt_PutDataChunk(SfdSj *sj, int len, SfdSjChunk *ck);
 void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out);
 void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used);
 int sfadxt_AdjDiscard(char *records, int length, int *found);
-int SFTIM_GetAudioStartSample();
 int sfadxt_InsertSilence(SfdAdxHn *h, int nch, int size);
 void sfadxt_ExcludeHdr(SfdAdxHn *h, char *buf, int size, int *used);
 char *sfadxt_SearchAlign(SfdAdxHn *h, char *buf, int size);

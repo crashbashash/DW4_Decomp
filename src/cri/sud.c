@@ -29,7 +29,6 @@ typedef struct SudStats {
     int count;
 } SudStats;
 
-int atoi(const char *text);
 
 extern int sud_init_cnt;
 extern long long utytmr_unit;

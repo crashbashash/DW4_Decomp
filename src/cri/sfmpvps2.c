@@ -1,4 +1,5 @@
 #include "dw4/cri/sfmpv.h"
+#include "dw4/sony/libmpeg.h"
 #include "dw4/eekernel.h"
 #include <string.h>
 #include "dw4/cri/mps.h"
@@ -18,33 +19,24 @@
 #define PHYSICAL(address) ((address) & 0x0FFFFFFF)
 
 extern int sfmpvp_scempeg_useflag;
-extern SfdMpegCtx sfmpvp_bkup_buf;
+extern sceMpeg sfmpvp_bkup_buf;
 extern int DAT_00585678;
 extern char DAT_00585680[8];
 
 extern int DeleteSema(int sema);
-extern int sceMpegInit(void);
-void sceMpegDelete(SfdMpegCtx *mpeg);
-void sceMpegReset(void);
 typedef struct SfdPicOut {
     char pad0[32];
     int buf;
 } SfdPicOut;
-int sceMpegGetPicture(SfdMpegCtx *mpeg, int buf, int mbs);
-int sceMpegGetPictureRAW8(SfdMpegCtx *mpeg, int buf, int mbs);
 void sfmpvp_ConsumePsc(SfdPlayer *player);
 int SFMPVP_DecodeFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player);
 int FUN_0029ed48(SfdPlayer *player);
 int FUN_0029edb0(SfdPlayer *player);
 
-void SFMPVP_SearchPsc(SfdPlayer *player, unsigned char *data, int size);
-int sceMpegCreate(SfdMpegCtx *mpeg, int buf, int size);
-int sceMpegAddCallback(SfdMpegCtx *mpeg, int type, void *callback, void *arg);
 int mpegError(void *unused, void *record, SfdPlayer *player);
 int sfmpvps2_ExecIpu(int unused0, int unused1, SfdPlayer *player);
 int mpegStopDMA(int unused0, int unused1, SfdPlayer *player);
 int mpegRestartDMA(int unused0, int unused1, SfdPlayer *player);
-void sceMpegGetPictureAbort(SfdMpegCtx *mpeg);
 
 extern char sfmpv_seqend_codes[16];
 
@@ -228,8 +220,9 @@ int mpegRestartDMA(int unused0, int unused1, SfdPlayer *player) {
     return 1;
 }
 
-void SFMPVP_Destroy(SfdPlayer *player)
+void SFMPVP_Destroy(void *sfd)
 {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv;
     if (SFMPVP_IsSceMpegUsed(player)) {
         mpv = player->streams.hn.mpv;
@@ -237,7 +230,7 @@ void SFMPVP_Destroy(SfdPlayer *player)
         if (SFPLY_GetResetFlg() != 1) {
             sceMpegDelete(&mpv->ipu.mpeg);
         } else {
-            sceMpegReset();
+            sceMpegReset(&mpv->ipu.mpeg);
             sfmpvp_SaveMpvp(player);
         }
     }
@@ -344,10 +337,11 @@ int SFMPVP_DecodeFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player) {
 int SFMPVP_GetFrameCount(void *sfd) {
     SfdPlayer *player = sfd;
     SfdMpv *mpv = player->streams.hn.mpv;
-    return mpv->ipu.mpeg.f8;
+    return mpv->ipu.mpeg.frameCount;
 }
 
-void SFMPVP_SearchPsc(SfdPlayer *player, unsigned char *data, int size) {
+void SFMPVP_SearchPsc(void *sfd, unsigned char *data, int size) {
+    SfdPlayer *player = sfd;
     SfdMpv *mpv = player->streams.hn.mpv;
     SfdIpuCtl *ipu = &mpv->ipu;
     unsigned char win[6];
@@ -428,7 +422,7 @@ int SFMPVP_IsPscEnough(void *sfd) {
     return 1;
 }
 
-SfdMpegCtx *FUN_002aa2d8(SfdPlayer *player) {
+sceMpeg *FUN_002aa2d8(SfdPlayer *player) {
     SfdMpv *mpv = player->streams.hn.mpv;
     return &mpv->ipu.mpeg;
 }

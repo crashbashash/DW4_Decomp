@@ -1,6 +1,8 @@
 #include "dw4/newlib_reent.h"
+#include <stdlib.h>
 
 unsigned long _strtoul_r(struct _reent *, const char *, char **, int);
+/* unsigned char, not the libc header's char: the character-class lookups stay unsigned (bytes) */
 extern const unsigned char _ctype_[];
 #define CT(c) (_ctype_ + 1)[c]
 #define CT_UPPER 0x1

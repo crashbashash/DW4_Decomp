@@ -71,9 +71,6 @@ typedef struct SfdBufCrePrm {
 extern int sfbuf_sjrbf_uuid;
 extern int sfbuf_sjmem_uuid;
 
-void SFPTS_InitPtsQue(void *ring);
-int SFTRN_CallTrtTrif();
-int SFTRN_IsSetup(SfdBufHn *h, int n);
 
 void sfbuf_InitSjUuid(void);
 void sfbuf_MakeBufPtr(char **areas, int *sizes, char *base);

@@ -1,4 +1,4 @@
-extern const char _ctype_[];
+#include <ctype.h>
 #define _U 01
 #define isupper(c) ((_ctype_+1)[(unsigned)(c)]&_U)
 #define tolower(c) \
